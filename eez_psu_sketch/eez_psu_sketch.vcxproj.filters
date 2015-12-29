@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{1662ecc1-55d5-43f9-8cc6-cf397f6c1549}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scpi">
+      <UniqueIdentifier>{f95df052-7ced-4e87-802f-c87f498e7ea6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="board">
+      <UniqueIdentifier>{9020a84c-2563-442a-aaa1-118c8dcdd282}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scpi\commands">
+      <UniqueIdentifier>{47bf6e48-0d4d-4c32-a671-c466211d8afc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="eez_psu_sketch.ino" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="__vm\.eez_psu_sketch.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="calibration.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="channel.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="persist_conf.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="adc.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="dac.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="eeprom.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="ethernet.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="ioexp.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="rtc.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="serial_psu.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_psu.h">
+      <Filter>scpi</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_user_config.h">
+      <Filter>scpi</Filter>
+    </ClInclude>
+    <ClInclude Include="Visual Micro\.eez_psu_sketch.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bp.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="psu.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="arduino_psu.h" />
+    <ClInclude Include="conf.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="temperature.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="temp_sensor.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="board.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="datetime.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="buzzer.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="profile.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_appl.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_cal.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_core.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_diag.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_inst.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_meas.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_mem.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_outp.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_sour.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_stat.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_syst.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_params.h">
+      <Filter>scpi</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_regs.h">
+      <Filter>scpi</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_debug.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="conf_advanced.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="conf_channel.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="conf_user.h">
+      <Filter>core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="calibration.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="channel.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="persist_conf.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="adc.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="dac.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="eeprom.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="ethernet.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="ioexp.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="rtc.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="serial_psu.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_psu.cpp">
+      <Filter>scpi</Filter>
+    </ClCompile>
+    <ClCompile Include="bp.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="psu.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="temperature.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="temp_sensor.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="board.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="datetime.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="buzzer.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="profile.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_appl.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_cal.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_core.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_diag.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_inst.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_meas.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_mem.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_outp.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_sour.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_stat.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_syst.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_regs.cpp">
+      <Filter>scpi</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_params.cpp">
+      <Filter>scpi</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_debug.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

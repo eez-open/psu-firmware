@@ -1,0 +1,443 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="scpi">
+      <UniqueIdentifier>{da33c085-d41d-44ad-b94c-056a9c69e9f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scpi\parser">
+      <UniqueIdentifier>{ed505970-2616-4620-9d31-b284b257736b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scpi\parser\src">
+      <UniqueIdentifier>{80e721b3-4893-44f2-8903-dfc765377c0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scpi\parser\inc">
+      <UniqueIdentifier>{3326a0f8-18c4-42a6-84b6-17a6bddf08df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="simulator">
+      <UniqueIdentifier>{73b245b7-2c39-4e25-9781-b25c0bb80e04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="simulator\arduino">
+      <UniqueIdentifier>{0ebc5aae-960f-421d-ba01-8f12b092a9b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scpi\commands">
+      <UniqueIdentifier>{49978119-1f29-4e9e-ba22-bbe08d6af79c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="simulator\front_panel">
+      <UniqueIdentifier>{8c488323-e5c6-4265-b68b-cd03e241bdba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="board">
+      <UniqueIdentifier>{de644a76-2b68-4eee-a95d-1d411b9ac8e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{53ee3999-baae-4725-8332-16bda5a45471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="simulator\chips">
+      <UniqueIdentifier>{89ce1644-c80f-4d50-b52d-e26aad51b65a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="simulator\ethernet">
+      <UniqueIdentifier>{25e172cb-9054-4230-b5b2-7a0b1bf6d039}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\calibration.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\channel.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\debug.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\persist_conf.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\util.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\scpi\config.h">
+      <Filter>scpi\parser\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\scpi\constants.h">
+      <Filter>scpi\parser\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\scpi\error.h">
+      <Filter>scpi\parser\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\scpi\expression.h">
+      <Filter>scpi\parser\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\scpi\ieee488.h">
+      <Filter>scpi\parser\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\scpi\minimal.h">
+      <Filter>scpi\parser\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\scpi\parser.h">
+      <Filter>scpi\parser\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\scpi\scpi.h">
+      <Filter>scpi\parser\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\scpi\scpi_user_config.h">
+      <Filter>scpi\parser\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\scpi\types.h">
+      <Filter>scpi\parser\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\scpi\units.h">
+      <Filter>scpi\parser\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\scpi\utils.h">
+      <Filter>scpi\parser\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\impl\fifo_private.h">
+      <Filter>scpi\parser\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\impl\lexer_private.h">
+      <Filter>scpi\parser\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\impl\parser_private.h">
+      <Filter>scpi\parser\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\impl\utils_private.h">
+      <Filter>scpi\parser\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_psu.h">
+      <Filter>scpi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_user_config.h">
+      <Filter>scpi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\conf.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\adc.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\bp.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\dac.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\eeprom.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\ethernet.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\ioexp.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\rtc.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\serial_psu.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\simulator_psu.h">
+      <Filter>simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\psu.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\temperature.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\temp_sensor.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\board.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\datetime.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\sound.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\buzzer.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\profile.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\simulator_conf.h">
+      <Filter>simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\main_loop.h">
+      <Filter>simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\eez_psu.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\arduino\Arduino.h">
+      <Filter>simulator\arduino</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\arduino\SPI.h">
+      <Filter>simulator\arduino</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\arduino\arduino_internal.h">
+      <Filter>simulator\arduino</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dll.h">
+      <Filter>simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_appl.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_cal.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_core.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_diag.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_inst.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_meas.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_mem.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_outp.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\scpi_simu.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_sour.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_stat.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_syst.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_params.h">
+      <Filter>scpi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_regs.h">
+      <Filter>scpi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\front_panel\data.h">
+      <Filter>simulator\front_panel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\front_panel\render.h">
+      <Filter>simulator\front_panel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\front_panel\control.h">
+      <Filter>simulator\front_panel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_debug.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\conf_advanced.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\conf_user.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\conf_channel.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\chips\chips.h">
+      <Filter>simulator\chips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ethernet\ethernet_platform.h">
+      <Filter>simulator\ethernet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ethernet\UIPClient.h">
+      <Filter>simulator\ethernet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ethernet\UIPEthernet.h">
+      <Filter>simulator\ethernet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ethernet\UIPServer.h">
+      <Filter>simulator\ethernet</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main_loop.cpp">
+      <Filter>simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\calibration.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\channel.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\debug.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\persist_conf.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\util.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\error.c">
+      <Filter>scpi\parser\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\expression.c">
+      <Filter>scpi\parser\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\fifo.c">
+      <Filter>scpi\parser\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\ieee488.c">
+      <Filter>scpi\parser\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\lexer.c">
+      <Filter>scpi\parser\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\minimal.c">
+      <Filter>scpi\parser\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\parser.c">
+      <Filter>scpi\parser\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\units.c">
+      <Filter>scpi\parser\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\utils.c">
+      <Filter>scpi\parser\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_psu.cpp">
+      <Filter>scpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\main.cpp" />
+    <ClCompile Include="..\..\..\src\simulator_psu.cpp">
+      <Filter>simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\psu.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\temperature.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\datetime.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\sound.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\profile.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\adc.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\board.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\bp.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\buzzer.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\dac.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\eeprom.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\ethernet.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\ioexp.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\rtc.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\serial_psu.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\temp_sensor.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\eez_psu_lib\src\eez_psu.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\arduino\arduino_impl.cpp">
+      <Filter>simulator\arduino</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_appl.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_cal.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_core.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_diag.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_inst.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_meas.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_mem.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_outp.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\scpi_simu.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_sour.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_stat.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_syst.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_params.cpp">
+      <Filter>scpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_regs.cpp">
+      <Filter>scpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\front_panel\data.cpp">
+      <Filter>simulator\front_panel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\front_panel\render.cpp">
+      <Filter>simulator\front_panel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\front_panel\control.cpp">
+      <Filter>simulator\front_panel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_debug.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\chips\chips.cpp">
+      <Filter>simulator\chips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ethernet\uipethernet_impl.cpp">
+      <Filter>simulator\ethernet</Filter>
+    </ClCompile>
+    <ClCompile Include="ethernet_win32.cpp">
+      <Filter>simulator\ethernet</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="eez_psu_sim.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\images\eez.ico" />
+  </ItemGroup>
+</Project>

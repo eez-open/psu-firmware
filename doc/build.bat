@@ -1,0 +1,1 @@
+dot -Tpng components.dot -o components.png

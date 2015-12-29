@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4F847A6A-0E2D-4DE0-B628-F17E5164B914}</ProjectGuid>
+    <RootNamespace>eez_psu_sketch</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega;C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch;C:\Users\martin\Documents\Arduino\libraries\eez_psu_lib\src;C:\Users\martin\Documents\Arduino\libraries\eez_psu_lib\src\utility;C:\Users\martin\Documents\Arduino\libraries\scpi-parser\src;C:\Users\martin\Documents\Arduino\libraries\scpi-parser\src\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\utility;C:\Users\martin\Documents\Arduino\libraries\UIPEthernet\src;C:\Users\martin\Documents\Arduino\libraries\UIPEthernet\src\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\owktvod1.gkd\Micro Platforms\default\debuggers;C:\Users\martin\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch\__vm\.eez_psu_sketch.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <PreprocessorDefinitions>__AVR_ATmega2560__;F_CPU=16000000L;ARDUINO=166;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega;C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch;C:\Users\martin\Documents\Arduino\libraries\eez_psu_lib\src;C:\Users\martin\Documents\Arduino\libraries\eez_psu_lib\src\utility;C:\Users\martin\Documents\Arduino\libraries\scpi-parser\src;C:\Users\martin\Documents\Arduino\libraries\scpi-parser\src\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\utility;C:\Users\martin\Documents\Arduino\libraries\UIPEthernet\src;C:\Users\martin\Documents\Arduino\libraries\UIPEthernet\src\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\nd2ouzm3.i0i\Micro Platforms\default\debuggers;C:\Users\martin\Documents\Arduino\libraries;C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega;C:\Users\martin\Documents\Arduino\libraries\eez_psu_lib\src;C:\Users\martin\Documents\Arduino\libraries\scpi-parser\src;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Users\martin\Documents\Arduino\libraries\UIPEthernet\src;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\nd2ouzm3.i0i\Micro Platforms\default\debuggers;C:\Users\martin\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch\__vm\.eez_psu_sketch.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PreprocessorDefinitions>__AVR_ATmega2560__;F_CPU=16000000L;ARDUINO=10606;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="eez_psu_sketch.ino">
+      <FileType>CppCode</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="adc.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="arduino_psu.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="buzzer.h" />
+    <ClInclude Include="conf_advanced.h" />
+    <ClInclude Include="conf_channel.h" />
+    <ClInclude Include="conf_user.h" />
+    <ClInclude Include="profile.h" />
+    <ClInclude Include="scpi_debug.h" />
+    <ClInclude Include="scpi_mem.h" />
+    <ClInclude Include="scpi_params.h" />
+    <ClInclude Include="scpi_regs.h" />
+    <ClInclude Include="sound.h" />
+    <ClInclude Include="board.h" />
+    <ClInclude Include="datetime.h" />
+    <ClInclude Include="bp.h" />
+    <ClInclude Include="calibration.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="channel.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="conf.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="dac.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="eeprom.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="ethernet.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="ioexp.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="persist_conf.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="psu.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="rtc.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="scpi_appl.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="scpi_cal.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="scpi_core.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="scpi_diag.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="scpi_inst.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="scpi_meas.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="scpi_outp.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="scpi_psu.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="scpi_sour.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="scpi_stat.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="scpi_syst.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="scpi_user_config.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="serial_psu.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="temperature.h" />
+    <ClInclude Include="temp_sensor.h" />
+    <ClInclude Include="util.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Visual Micro\.eez_psu_sketch.vsarduino.h" />
+    <ClInclude Include="__vm\.eez_psu_sketch.vsarduino.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="adc.cpp" />
+    <ClCompile Include="buzzer.cpp" />
+    <ClCompile Include="profile.cpp" />
+    <ClCompile Include="scpi_debug.cpp" />
+    <ClCompile Include="scpi_mem.cpp" />
+    <ClCompile Include="scpi_params.cpp" />
+    <ClCompile Include="scpi_regs.cpp" />
+    <ClCompile Include="sound.cpp" />
+    <ClCompile Include="board.cpp" />
+    <ClCompile Include="datetime.cpp" />
+    <ClCompile Include="bp.cpp" />
+    <ClCompile Include="calibration.cpp" />
+    <ClCompile Include="channel.cpp" />
+    <ClCompile Include="dac.cpp" />
+    <ClCompile Include="debug.cpp" />
+    <ClCompile Include="eeprom.cpp" />
+    <ClCompile Include="ethernet.cpp" />
+    <ClCompile Include="ioexp.cpp" />
+    <ClCompile Include="persist_conf.cpp" />
+    <ClCompile Include="psu.cpp" />
+    <ClCompile Include="rtc.cpp" />
+    <ClCompile Include="scpi_appl.cpp" />
+    <ClCompile Include="scpi_cal.cpp" />
+    <ClCompile Include="scpi_core.cpp" />
+    <ClCompile Include="scpi_diag.cpp" />
+    <ClCompile Include="scpi_inst.cpp" />
+    <ClCompile Include="scpi_meas.cpp" />
+    <ClCompile Include="scpi_outp.cpp" />
+    <ClCompile Include="scpi_psu.cpp" />
+    <ClCompile Include="scpi_sour.cpp" />
+    <ClCompile Include="scpi_stat.cpp" />
+    <ClCompile Include="scpi_syst.cpp" />
+    <ClCompile Include="serial_psu.cpp" />
+    <ClCompile Include="temperature.cpp" />
+    <ClCompile Include="temp_sensor.cpp" />
+    <ClCompile Include="util.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties arduino.upload.maximum_size="253952" arduino.upload.speed="115200" visualmicro.package.name="arduino" arduino.board.property_bag="name=Arduino Mega w/ ATmega2560 (Mega 2560)&#xD;&#xA;vid.0=0x2341&#xD;&#xA;pid.0=0x0010&#xD;&#xA;vid.1=0x2341&#xD;&#xA;pid.1=0x0042&#xD;&#xA;vid.2=0x2A03&#xD;&#xA;pid.2=0x0010&#xD;&#xA;vid.3=0x2A03&#xD;&#xA;pid.3=0x0042&#xD;&#xA;upload.tool=avrdude&#xD;&#xA;upload.maximum_data_size=8192&#xD;&#xA;bootloader.tool=avrdude&#xD;&#xA;bootloader.low_fuses=0xFF&#xD;&#xA;bootloader.unlock_bits=0x3F&#xD;&#xA;bootloader.lock_bits=0x0F&#xD;&#xA;build.f_cpu=16000000L&#xD;&#xA;build.core=arduino&#xD;&#xA;build.variant=mega&#xD;&#xA;build.board=AVR_MEGA2560&#xD;&#xA;menu.cpu.atmega2560=ATmega2560 (Mega 2560)&#xD;&#xA;menu.cpu.atmega2560.upload.protocol=wiring&#xD;&#xA;menu.cpu.atmega2560.upload.maximum_size=253952&#xD;&#xA;menu.cpu.atmega2560.upload.speed=115200&#xD;&#xA;menu.cpu.atmega2560.bootloader.high_fuses=0xD8&#xD;&#xA;menu.cpu.atmega2560.bootloader.extended_fuses=0xFD&#xD;&#xA;menu.cpu.atmega2560.bootloader.file=stk500v2/stk500boot_v2_mega2560.hex&#xD;&#xA;menu.cpu.atmega2560.build.mcu=atmega2560&#xD;&#xA;menu.cpu.atmega2560.build.board=AVR_MEGA2560&#xD;&#xA;menu.cpu.atmega1280=ATmega1280&#xD;&#xA;menu.cpu.atmega1280.upload.protocol=arduino&#xD;&#xA;menu.cpu.atmega1280.upload.maximum_size=126976&#xD;&#xA;menu.cpu.atmega1280.upload.speed=57600&#xD;&#xA;menu.cpu.atmega1280.bootloader.high_fuses=0xDA&#xD;&#xA;menu.cpu.atmega1280.bootloader.extended_fuses=0xF5&#xD;&#xA;menu.cpu.atmega1280.bootloader.file=atmega/ATmegaBOOT_168_atmega1280.hex&#xD;&#xA;menu.cpu.atmega1280.build.mcu=atmega1280&#xD;&#xA;menu.cpu.atmega1280.build.board=AVR_MEGA&#xD;&#xA;runtime.ide.path=C:\Users\Martin\Desktop\arduino-1.6.5-r2&#xD;&#xA;build.system.path=C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\system&#xD;&#xA;runtime.ide.version=165&#xD;&#xA;target_package=arduino&#xD;&#xA;target_platform=avr&#xD;&#xA;runtime.hardware.path=C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino&#xD;&#xA;originalid=mega&#xD;&#xA;intellisense.tools.path={runtime.tools.avr-gcc.path}/&#xD;&#xA;intellisense.include.paths={intellisense.tools.path}avr/include/;{intellisense.tools.path}/avr/include/avr/;{intellisense.tools.path}lib\gcc\avr\4.8.1\include&#xD;&#xA;tools.atprogram.cmd.path=%AVRSTUDIO_EXE_PATH%\atbackend\atprogram&#xD;&#xA;tools.atprogram.cmd.setwinpath=true&#xD;&#xA;tools.atprogram.program.params.verbose=-v&#xD;&#xA;tools.atprogram.program.params.quiet=-q&#xD;&#xA;tools.atprogram.program.pattern=&quot;{cmd.path}&quot; -d {build.mcu} {program.verbose} {program.extra_params} program -c -f &quot;{build.path}\{build.project_name}.hex&quot;&#xD;&#xA;tools.atprogram.program.xpattern=&quot;{cmd.path}&quot; {AVRSTUDIO_BACKEND_CONNECTION} -d {build.mcu} {program.verbose} {program.extra_params} program -c -f &quot;{build.path}\{build.project_name}.hex&quot;&#xD;&#xA;tools.atprogram.erase.params.verbose=-v&#xD;&#xA;tools.atprogram.erase.params.quiet=-q&#xD;&#xA;tools.atprogram.bootloader.params.verbose=-v&#xD;&#xA;tools.atprogram.bootloader.params.quiet=-q&#xD;&#xA;tools.atprogram.bootloader.pattern=&quot;{cmd.path}&quot; -d {build.mcu} {bootloader.verbose}  program -c -f &quot;{runtime.ide.path}/hardware/arduino/avr/bootloaders/{bootloader.file}&quot;&#xD;&#xA;version=1.6.7&#xD;&#xA;compiler.warning_flags=-w&#xD;&#xA;compiler.warning_flags.none=-w&#xD;&#xA;compiler.warning_flags.default=&#xD;&#xA;compiler.warning_flags.more=-Wall&#xD;&#xA;compiler.warning_flags.all=-Wall -Wextra&#xD;&#xA;compiler.path={runtime.tools.avr-gcc.path}/bin/&#xD;&#xA;compiler.c.cmd=avr-gcc&#xD;&#xA;compiler.c.flags=-c -g -Os {compiler.warning_flags} -ffunction-sections -fdata-sections -MMD&#xD;&#xA;compiler.c.elf.flags={compiler.warning_flags} -Os -Wl,--gc-sections&#xD;&#xA;compiler.c.elf.cmd=avr-gcc&#xD;&#xA;compiler.S.flags=-c -g -x assembler-with-cpp&#xD;&#xA;compiler.cpp.cmd=avr-g++&#xD;&#xA;compiler.cpp.flags=-c -g -Os {compiler.warning_flags} -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD&#xD;&#xA;compiler.ar.cmd=avr-ar&#xD;&#xA;compiler.ar.flags=rcs&#xD;&#xA;compiler.objcopy.cmd=avr-objcopy&#xD;&#xA;compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0&#xD;&#xA;compiler.elf2hex.flags=-O ihex -R .eeprom&#xD;&#xA;compiler.elf2hex.cmd=avr-objcopy&#xD;&#xA;compiler.ldflags=&#xD;&#xA;compiler.size.cmd=avr-size&#xD;&#xA;build.extra_flags=&#xD;&#xA;compiler.c.extra_flags=&#xD;&#xA;compiler.c.elf.extra_flags=&#xD;&#xA;compiler.S.extra_flags=&#xD;&#xA;compiler.cpp.extra_flags=&#xD;&#xA;compiler.ar.extra_flags=&#xD;&#xA;compiler.objcopy.eep.extra_flags=&#xD;&#xA;compiler.elf2hex.extra_flags=&#xD;&#xA;recipe.c.o.pattern=&quot;{compiler.path}{compiler.c.cmd}&quot; {compiler.c.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {includes} &quot;{source_file}&quot; -o &quot;{object_file}&quot;&#xD;&#xA;recipe.cpp.o.pattern=&quot;{compiler.path}{compiler.cpp.cmd}&quot; {compiler.cpp.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} &quot;{source_file}&quot; -o &quot;{object_file}&quot;&#xD;&#xA;recipe.S.o.pattern=&quot;{compiler.path}{compiler.c.cmd}&quot; {compiler.S.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {includes} &quot;{source_file}&quot; -o &quot;{object_file}&quot;&#xD;&#xA;recipe.ar.pattern=&quot;{compiler.path}{compiler.ar.cmd}&quot; {compiler.ar.flags} {compiler.ar.extra_flags} &quot;{build.path}/{archive_file}&quot; &quot;{object_file}&quot;&#xD;&#xA;recipe.c.combine.pattern=&quot;{compiler.path}{compiler.c.elf.cmd}&quot; {compiler.c.elf.flags} -mmcu={build.mcu} {compiler.c.elf.extra_flags} -o &quot;{build.path}/{build.project_name}.elf&quot; {object_files} &quot;{build.path}/{archive_file}&quot; &quot;-L{build.path}&quot; -lm&#xD;&#xA;recipe.objcopy.eep.pattern=&quot;{compiler.path}{compiler.objcopy.cmd}&quot; {compiler.objcopy.eep.flags} {compiler.objcopy.eep.extra_flags} &quot;{build.path}/{build.project_name}.elf&quot; &quot;{build.path}/{build.project_name}.eep&quot;&#xD;&#xA;recipe.objcopy.hex.pattern=&quot;{compiler.path}{compiler.elf2hex.cmd}&quot; {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} &quot;{build.path}/{build.project_name}.elf&quot; &quot;{build.path}/{build.project_name}.hex&quot;&#xD;&#xA;recipe.output.tmp_file={build.project_name}.hex&#xD;&#xA;recipe.output.save_file={build.project_name}.{build.variant}.hex&#xD;&#xA;recipe.size.pattern=&quot;{compiler.path}{compiler.size.cmd}&quot; -A &quot;{build.path}/{build.project_name}.elf&quot;&#xD;&#xA;recipe.size.regex=^(?:\.text|\.data|\.bootloader)\s+([0-9]+).*&#xD;&#xA;recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*&#xD;&#xA;recipe.size.regex.eeprom=^(?:\.eeprom)\s+([0-9]+).*&#xD;&#xA;tools.avrdude.path={runtime.tools.avrdude.path}&#xD;&#xA;tools.avrdude.cmd.path={path}/bin/avrdude&#xD;&#xA;tools.avrdude.config.path={path}/etc/avrdude.conf&#xD;&#xA;tools.avrdude.upload.params.verbose=-v&#xD;&#xA;tools.avrdude.upload.params.quiet=-q -q&#xD;&#xA;tools.avrdude.upload.pattern=&quot;{cmd.path}&quot; &quot;-C{config.path}&quot; {upload.verbose} -p{build.mcu} -c{upload.protocol} -P{serial.port} -b{upload.speed} -D &quot;-Uflash:w:{build.path}/{build.project_name}.hex:i&quot;&#xD;&#xA;tools.avrdude.program.params.verbose=-v&#xD;&#xA;tools.avrdude.program.params.quiet=-q -q&#xD;&#xA;tools.avrdude.program.pattern=&quot;{cmd.path}&quot; &quot;-C{config.path}&quot; {program.verbose} -p{build.mcu} -c{protocol} {program.extra_params} &quot;-Uflash:w:{build.path}/{build.project_name}.hex:i&quot;&#xD;&#xA;tools.avrdude.erase.params.verbose=-v&#xD;&#xA;tools.avrdude.erase.params.quiet=-q -q&#xD;&#xA;tools.avrdude.erase.pattern=&quot;{cmd.path}&quot; &quot;-C{config.path}&quot; {erase.verbose} -p{build.mcu} -c{protocol} {program.extra_params} -e -Ulock:w:{bootloader.unlock_bits}:m -Uefuse:w:{bootloader.extended_fuses}:m -Uhfuse:w:{bootloader.high_fuses}:m -Ulfuse:w:{bootloader.low_fuses}:m&#xD;&#xA;tools.avrdude.bootloader.params.verbose=-v&#xD;&#xA;tools.avrdude.bootloader.params.quiet=-q -q&#xD;&#xA;tools.avrdude.bootloader.pattern=&quot;{cmd.path}&quot; &quot;-C{config.path}&quot; {bootloader.verbose} -p{build.mcu} -c{protocol} {program.extra_params} &quot;-Uflash:w:{runtime.platform.path}/bootloaders/{bootloader.file}:i&quot; -Ulock:w:{bootloader.lock_bits}:m&#xD;&#xA;build.usb_manufacturer=&quot;Unknown&quot;&#xD;&#xA;build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'&#xD;&#xA;vm.platform.root.path=C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\1wi1bsuq.rmv\Micro Platforms\arduino16x&#xD;&#xA;runtime.tools.arm-none-eabi-gcc.path=C:\Users\Martin\AppData\Roaming\arduino15\packages\arduino\tools\arm-none-eabi-gcc\4.8.3-2014q1&#xD;&#xA;runtime.tools.arm-none-eabi-gcc-4.8.3-2014q1.path=C:\Users\Martin\AppData\Roaming\arduino15\packages\arduino\tools\arm-none-eabi-gcc\4.8.3-2014q1&#xD;&#xA;runtime.tools.avrdude.path=C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\tools\avr&#xD;&#xA;runtime.tools.avrdude-6.0.1-arduino5.path=C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\tools\avr&#xD;&#xA;runtime.tools.avr-gcc.path=C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\tools\avr&#xD;&#xA;runtime.tools.avr-gcc-4.8.1-arduino5.path=C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\tools\avr&#xD;&#xA;runtime.tools.bossac.path=C:\Users\Martin\AppData\Roaming\arduino15\packages\arduino\tools\bossac\1.3a-arduino&#xD;&#xA;runtime.tools.bossac-1.3a-arduino.path=C:\Users\Martin\AppData\Roaming\arduino15\packages\arduino\tools\bossac\1.3a-arduino&#xD;&#xA;upload.protocol=wiring&#xD;&#xA;upload.maximum_size=253952&#xD;&#xA;upload.speed=115200&#xD;&#xA;bootloader.high_fuses=0xD8&#xD;&#xA;bootloader.extended_fuses=0xFD&#xD;&#xA;bootloader.file=stk500v2/stk500boot_v2_mega2560.hex&#xD;&#xA;build.mcu=atmega2560&#xD;&#xA;ide.hint=For use with Arduino.cc 1.6.2+ ide&#xD;&#xA;ide.location.key=Arduino16x&#xD;&#xA;ide.location.ide.winreg=Arduino 1.6.x Application&#xD;&#xA;ide.location.sketchbook.winreg=Arduino 1.6.x Sketchbook&#xD;&#xA;ide.location.sketchbook.preferences=sketchbook.path&#xD;&#xA;ide.default.version=160&#xD;&#xA;ide.default.package=arduino&#xD;&#xA;ide.default.platform=avr&#xD;&#xA;ide.multiplatform=true&#xD;&#xA;ide.includes=arduino.h&#xD;&#xA;ide.exe_name=arduino&#xD;&#xA;ide.platformswithoutpackage=false&#xD;&#xA;ide.includes.fallback=wprogram.h&#xD;&#xA;ide.extension=ino&#xD;&#xA;ide.extension.fallback=pde&#xD;&#xA;ide.versionGTEQ=160&#xD;&#xA;ide.exe=arduino.exe&#xD;&#xA;ide.hosts=atmel&#xD;&#xA;ide.url=http://arduino.cc/en/Main/Software&#xD;&#xA;ide.help.reference.path=reference\arduino.cc\en\Reference&#xD;&#xA;ide.help.reference.path2=reference\www.arduino.cc\en\Reference&#xD;&#xA;ide.help.reference.serial=reference\www.arduino.cc\en\Serial&#xD;&#xA;vm.debug=true&#xD;&#xA;software=ARDUINO&#xD;&#xA;ssh.user.name=root&#xD;&#xA;ssh.user.default.password=arduino&#xD;&#xA;ssh.host.wwwfiles.path=/www/sd&#xD;&#xA;build.working_directory={runtime.ide.path}&#xD;&#xA;ide.location.preferences.portable={runtime.ide.path}\portable&#xD;&#xA;ide.location.preferences=%VM_APPDATA_ROAMING%\arduino15\preferences.txt&#xD;&#xA;ide.location.preferences_fallback=%VM_APPDATA_LOCAL%\arduino15\preferences.txt&#xD;&#xA;ide.location.contributions=%VM_APPDATA_LOCAL%\arduino15&#xD;&#xA;ide.location.contributions_fallback=%VM_APPDATA_ROAMING%\arduino15&#xD;&#xA;ide.contributions.boards.allow=true&#xD;&#xA;ide.contributions.boards.ignore_unless_rewrite_found=true&#xD;&#xA;ide.contributions.libraries.allow=true&#xD;&#xA;ide.contributions.boards.support.urls.wiki=https://github.com/arduino/Arduino/wiki/Unofficial-list-of-3rd-party-boards-support-urls&#xD;&#xA;ide.appid=arduino16x&#xD;&#xA;location.sketchbook=C:\Users\Martin\Documents\Arduino&#xD;&#xA;vm.core.include=arduino.h&#xD;&#xA;vm.boardsource.path=C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr&#xD;&#xA;runtime.platform.path=C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr&#xD;&#xA;vm.platformname.name=avr&#xD;&#xA;build.arch=AVR&#xD;&#xA;build.architecture=avr&#xD;&#xA;vmresolved.compiler.path=C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\tools\avr\bin\&#xD;&#xA;vmresolved.tools.path=C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\tools\avr&#xD;&#xA;vm.runtime.compiler.showwarnings=true&#xD;&#xA;serial.port.file=COM9&#xD;&#xA;serial.port=COM9&#xD;&#xA;serial.port.num=9&#xD;&#xA;build.source.path=C:\Users\Martin\Dropbox\Code\EEZ\PSU\eez_psu_sketch\eez_psu_sketch.ino&#xD;&#xA;extra.time.local=53599762&#xD;&#xA;includes= -I&quot;C:\Users\Martin\Dropbox\Code\EEZ\PSU\eez_psu_sketch&quot;  -I&quot;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\cores\arduino&quot;  -I&quot;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\variants\mega&quot;  -I&quot;C:\Users\Martin\Documents\Arduino\libraries\eez_psu_lib\src&quot;  -I&quot;C:\Users\Martin\Documents\Arduino\libraries\scpi-parser\src&quot;  -I&quot;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\libraries\SPI&quot;  -I&quot;C:\Users\Martin\Documents\Arduino\libraries\UIPEthernet\src&quot;  -I&quot;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\1wi1bsuq.rmv\Micro Platforms\default\debuggers\VM_DBG&quot;  -I&quot;C:\Users\Martin\Desktop\arduino-1.6.5-r2\libraries&quot;  -I&quot;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\libraries&quot;  -I&quot;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\1wi1bsuq.rmv\Micro Platforms\default\debuggers&quot;  -I&quot;C:\Users\Martin\Documents\Arduino\libraries&quot; &#xD;&#xA;build.path=C:\Users\Martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560&#xD;&#xA;build.project_name=eez_psu_sketch&#xD;&#xA;build.variant.path=C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\variants\mega&#xD;&#xA;build.core.path=C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\cores\arduino&#xD;&#xA;archive_file=core.a&#xD;&#xA;build.path_sketch=C:\Users\Martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560&#xD;&#xA;build.path_core=C:\Users\Martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560&#xD;&#xA;build.path_libraries=C:\Users\Martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560&#xD;&#xA;object_file=C:\Users\Martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\VM_DBG\VM_DBG.cpp.o&#xD;&#xA;source_file=C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\1wi1bsuq.rmv\Micro Platforms\default\debuggers\VM_DBG\VM_DBG.cpp&#xD;&#xA;" visualmicro.application.name="arduino16x" arduino.build.mcu="atmega2560" arduino.upload.protocol="wiring" arduino.build.f_cpu="16000000L" arduino.board.desc="Arduino Mega w/ ATmega2560 (Mega 2560)" arduino.board.name="mega_atmega2560" arduino.upload.port="COM9" visualmicro.platform.name="avr" arduino.build.core="arduino" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
