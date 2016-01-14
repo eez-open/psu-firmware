@@ -18,6 +18,9 @@
  
 #pragma once
 
+#define clear_bit(reg, bitmask) *reg &= ~bitmask
+#define set_bit(reg, bitmask) *reg |= bitmask
+
 namespace eez {
 namespace psu {
 

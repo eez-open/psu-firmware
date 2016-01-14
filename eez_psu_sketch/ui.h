@@ -1,4 +1,4 @@
-/**
+/*
  * EEZ PSU Firmware
  * Copyright (C) 2015 Envox d.o.o.
  *
@@ -15,23 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#include "SPI.h"
-#include <UIPEthernet.h>
-#include <UIPServer.h>
-#include <UIPClient.h>
-#include <scpi-parser.h>
-#include <eez_psu.h>
-#include "UTFT.h"
-#include "UTouch.h"
 
-void PSU_boot();
-void PSU_tick();
+#pragma once
 
-void setup() {
-    PSU_boot();
+namespace eez {
+namespace psu {
+namespace ui {
+
+void init();
+
 }
-
-void loop() {
-    PSU_tick();
 }
+} // namespace eez::psu::ui

@@ -1,4 +1,4 @@
-/**
+/*
  * EEZ PSU Firmware
  * Copyright (C) 2015 Envox d.o.o.
  *
@@ -15,23 +15,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#include "SPI.h"
-#include <UIPEthernet.h>
-#include <UIPServer.h>
-#include <UIPClient.h>
-#include <scpi-parser.h>
-#include <eez_psu.h>
+
+#pragma once
+
 #include "UTFT.h"
-#include "UTouch.h"
+#include "font.h"
 
-void PSU_boot();
-void PSU_tick();
+namespace eez {
+namespace psu {
+namespace ui {
+namespace lcd {
 
-void setup() {
-    PSU_boot();
+class EEZ_UTFT : public UTFT {
+public:
+    EEZ_UTFT(byte model, int RS, int WR, int CS, int RST, int SER = 0);
+
+    void drawStr(int x, int y, const char *text, font::Font &font);
+    int measureStr(const char *text, font::Font &font);
+
+private:
+    font::Font *p_font;
+
+    int8_t drawGlyph(int x, int y, uint8_t encoding);
+    int8_t measureGlyph(uint8_t encoding);
+};
+
+extern EEZ_UTFT lcd;
+
+void init();
+   
 }
-
-void loop() {
-    PSU_tick();
 }
+}
+} // namespace eez::psu::ui::lcd

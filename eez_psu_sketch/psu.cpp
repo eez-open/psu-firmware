@@ -32,6 +32,7 @@
 #include "eeprom.h"
 #include "calibration.h"
 #include "profile.h"
+#include "ui.h"
 
 #ifdef EEZ_PSU_SIMULATOR
 #include "front_panel/control.h"
@@ -156,6 +157,8 @@ void boot() {
     DebugTrace("%d", offsetof(ProtectionConfiguration, level));
     DebugTrace("%d", offsetof(ProtectionConfiguration, state));
     */
+
+    ui::init();
 }
 
 bool powerUp() {

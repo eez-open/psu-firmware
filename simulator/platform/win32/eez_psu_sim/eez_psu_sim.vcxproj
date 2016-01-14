@@ -169,6 +169,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\adc.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\arduino_util.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\board.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\bp.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\buzzer.h" />
@@ -183,7 +184,9 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\debug.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\eeprom.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\ethernet.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\font.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\ioexp.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\lcd.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\persist_conf.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\profile.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\psu.h" />
@@ -208,6 +211,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\sound.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\temperature.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\temp_sensor.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\ui.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\util.h" />
     <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\eez_psu.h" />
     <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\impl\fifo_private.h" />
@@ -229,6 +233,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\src\arduino\Arduino.h" />
     <ClInclude Include="..\..\..\src\arduino\arduino_internal.h" />
     <ClInclude Include="..\..\..\src\arduino\SPI.h" />
+    <ClInclude Include="..\..\..\src\arduino\UTFT.h" />
     <ClInclude Include="..\..\..\src\chips\chips.h" />
     <ClInclude Include="..\..\..\src\dll.h" />
     <ClInclude Include="..\..\..\src\ethernet\ethernet_platform.h" />
@@ -246,6 +251,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\adc.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\arduino_util.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\board.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\bp.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\buzzer.cpp" />
@@ -256,7 +262,9 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\debug.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\eeprom.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\ethernet.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\font.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\ioexp.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\lcd.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\persist_conf.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\profile.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\psu.cpp" />
@@ -280,6 +288,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\sound.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\temperature.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\temp_sensor.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\ui.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\util.cpp" />
     <ClCompile Include="..\..\..\..\libraries\eez_psu_lib\src\eez_psu.cpp" />
     <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\error.c" />
@@ -292,6 +301,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\units.c" />
     <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\utils.c" />
     <ClCompile Include="..\..\..\src\arduino\arduino_impl.cpp" />
+    <ClCompile Include="..\..\..\src\arduino\UTFT.cpp" />
     <ClCompile Include="..\..\..\src\chips\chips.cpp" />
     <ClCompile Include="..\..\..\src\ethernet\uipethernet_impl.cpp" />
     <ClCompile Include="..\..\..\src\front_panel\control.cpp" />

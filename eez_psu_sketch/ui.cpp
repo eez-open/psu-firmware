@@ -1,4 +1,4 @@
-/**
+/*
  * EEZ PSU Firmware
  * Copyright (C) 2015 Envox d.o.o.
  *
@@ -15,23 +15,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#include "SPI.h"
-#include <UIPEthernet.h>
-#include <UIPServer.h>
-#include <UIPClient.h>
-#include <scpi-parser.h>
-#include <eez_psu.h>
-#include "UTFT.h"
-#include "UTouch.h"
 
-void PSU_boot();
-void PSU_tick();
+#include "psu.h"
+#include "lcd.h"
+#include "font.h"
 
-void setup() {
-    PSU_boot();
+namespace eez {
+namespace psu {
+namespace ui {
+
+void init() {
+    lcd::init();
+
+    lcd::lcd.setBackColor(255, 255, 255);
+    
+    lcd::lcd.setColor(255, 255, 255);
+    lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
+    
+    lcd::lcd.setColor(0, 0, 255);
+    lcd::lcd.drawRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
+
+    lcd::lcd.setColor(0, 0, 0);
+    lcd::lcd.drawStr(100, 100, "hello", font::MEDIUM_FONT);
 }
 
-void loop() {
-    PSU_tick();
 }
+}
+} // namespace eez::psu::ui

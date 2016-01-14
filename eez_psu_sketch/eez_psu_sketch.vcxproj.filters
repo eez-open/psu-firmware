@@ -21,6 +21,9 @@
     <Filter Include="scpi\commands">
       <UniqueIdentifier>{47bf6e48-0d4d-4c32-a671-c466211d8afc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{1ffe9454-3555-4c47-95d7-54018eb43534}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="eez_psu_sketch.ino" />
@@ -156,6 +159,18 @@
     <ClInclude Include="conf_user.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="lcd.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="font.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="arduino_util.h">
+      <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="ui.h">
+      <Filter>ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="calibration.cpp">
@@ -265,6 +280,18 @@
     </ClCompile>
     <ClCompile Include="scpi_debug.cpp">
       <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="lcd.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="font.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="arduino_util.cpp">
+      <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="ui.cpp">
+      <Filter>ui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

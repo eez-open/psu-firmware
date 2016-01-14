@@ -37,6 +37,9 @@
     <Filter Include="simulator\ethernet">
       <UniqueIdentifier>{25e172cb-9054-4230-b5b2-7a0b1bf6d039}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{6f7bf7bb-8d4e-4c08-88cc-1daf07b09165}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\calibration.h">
@@ -262,6 +265,21 @@
     <ClInclude Include="..\..\..\src\ethernet\UIPServer.h">
       <Filter>simulator\ethernet</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\font.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\lcd.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\ui.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\arduino\UTFT.h">
+      <Filter>simulator\arduino</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\arduino_util.h">
+      <Filter>board</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -432,6 +450,21 @@
     </ClCompile>
     <ClCompile Include="ethernet_win32.cpp">
       <Filter>simulator\ethernet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\font.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\lcd.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\ui.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\arduino\UTFT.cpp">
+      <Filter>simulator\arduino</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\arduino_util.cpp">
+      <Filter>board</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
