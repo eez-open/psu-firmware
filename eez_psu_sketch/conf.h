@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-/** @file conf_example.h
+/** @file conf.h
 @brief Compile time configuration.
 */
 
@@ -24,24 +24,30 @@
 @brief Compile time configuration.
 This file is used to define compile time configuration options.
 Use `conf_user.h` file to override anything from here.
-option.
 */
 
 #pragma once
 
 #include "conf_channel.h"
 
-/// Wait until serial port is ready before starting firmware.
-#define CONF_WAIT_SERIAL  0
+/* 
+ * PSU settings
+ */
 
-// Data rate in bits per second (baud) for serial data transmission.
-#define SERIAL_SPEED 9600
+/// Maximum number of channels existing.
+#define CH_MAX 2
 
-/// Enable all debug trace to the serial port. 
-#define CONF_DEBUG        1
+/// Number of channels visible (less then or equal to CH_MAX)
+#define CH_NUM 2
 
-/// Enable only some of the debug trace to the serial port. 
-#define CONF_DEBUG_LATEST 1
+/// Channel capability
+#define CHANNELS \
+    CHANNEL(1, CH_PINS_1, CH_PARAMS_50V_3A), \
+    CHANNEL(2, CH_PINS_2, CH_PARAMS_50V_3A) \
+
+/* 
+ * Ardiuno shield SPI peripherals
+ */
 
 /// Is Ethernet present?
 #define OPTION_ETHERNET   1
@@ -58,32 +64,28 @@ option.
 /// Is binding post present?
 #define OPTION_BP         1
 
-/// Maximum number of channels existing.
-#define CH_MAX 2
-
-/// Number of channels visible (less then or equal to CH_MAX)
-#define CH_NUM 2
-
-/// Channels configuration.
-/// 
-#define CHANNELS \
-    CHANNEL(1, CH_PINS_1, CH_PARAMS_50V_3A), \
-    CHANNEL(2, CH_PINS_2, CH_PARAMS_50V_3A) \
-
 /// Min. delay between power down and power up.
 #define MIN_POWER_UP_DELAY 5
 
-/// Default calibration password.
-#define CALIBRATION_PASSWORD_DEFAULT "eezpsu"
+/* 
+ * Over-temperature protection (OTP) parameters
+ */
 
 /// Is OTP enabled by default?
 #define OTP_MAIN_DEFAULT_STATE 1
 
-/// Default OTP delay
+/// Default OTP delay in seconds
 #define OTP_MAIN_DEFAULT_DELAY 10.0f
 
-/// Default OTP level
+/// Default OTP threshold in oC 
 #define OTP_MAIN_DEFAULT_LEVEL 70.0f
+
+/* 
+ * Serial communication settings
+ */
+
+/// Data rate in bits per second (baud) for serial data transmission.
+#define SERIAL_SPEED 9600
 
 #include "conf_advanced.h"
 #include "conf_user.h"

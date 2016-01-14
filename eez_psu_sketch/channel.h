@@ -187,44 +187,109 @@ public:
     uint8_t cc_led_pin;
     uint8_t cv_led_pin;
 
+    /// MINimum constant value in volts
     float U_MIN;
-    float U_DEF;
-    float U_MAX;
-    float U_MIN_STEP;
-    float U_DEF_STEP;
-    float U_MAX_STEP;
-    float U_CAL_VAL_MIN;
-    float U_CAL_VAL_MID;
-    float U_CAL_VAL_MAX;
-    float U_CURR_CAL; // voltage level during current calibration
 
+    /// DEFault constant value in volts
+    float U_DEF;
+    
+    /// MAXimum constant value in volts
+    float U_MAX;
+
+    /// MINimum voltage step constant value in volts
+    float U_MIN_STEP;
+
+    /// DEFault voltage step constant value in volts
+    float U_DEF_STEP;
+
+    /// MAXimum voltage step constant value in volts
+    float U_MAX_STEP;
+
+    /// Programmed output voltage in volts when MINimum LEVel in calibration state is selected 
+    float U_CAL_VAL_MIN;
+
+    /// Programmed output voltage in volts when MIDdle LEVel in calibration state is selected 
+    float U_CAL_VAL_MID;
+
+    /// Programmed output voltage in volts when MAXimum LEVel in calibration state is selected   
+    float U_CAL_VAL_MAX;
+
+    /// Programmed output voltage in volts during calibration of current
+    float U_CURR_CAL;
+    
+    /// default OVP state
     bool OVP_DEFAULT_STATE;
+
+    /// OVP MINimum constant value in seconds
     float OVP_MIN_DELAY;
+
+    /// OVP DEFault constant value in seconds
     float OVP_DEFAULT_DELAY;
+
+    /// OVP MAXimum constant value in seconds
     float OVP_MAX_DELAY;
 
+    /// MINimum constant value in amperes
     float I_MIN;
+
+    /// DEFault constant value in amperes
     float I_DEF;
+
+    /// MAXimum constant value in amperes
     float I_MAX;
+
+    /// MINimum current step constant value in amperes
     float I_MIN_STEP;
+
+    /// DEFault current step constant value in amperes
     float I_DEF_STEP;
+
+    /// MAXimum current step constant value in amperes
     float I_MAX_STEP;
+
+    /// Programmed output current in amperes when MINimum LEVel in calibration state is selected
     float I_CAL_VAL_MIN;
+
+    /// Programmed output current in amperes when MIDdle LEVel in calibration state is selected
     float I_CAL_VAL_MID;
+
+    /// Programmed output current in amperes when MAXimum LEVel in calibration state is selected
     float I_CAL_VAL_MAX;
+
+    /// Programmed output current in amperes during calibration of voltage (has to be greater then 0 A!)
     float I_VOLT_CAL; // current level during voltage calibration
 
+    /// default OCP state
     bool OCP_DEFAULT_STATE;
-    float OCP_MIN_DELAY;
-    float OCP_DEFAULT_DELAY;
-    float OCP_MAX_DELAY;
 
+    /// OCP MINimum constant value in seconds
+    float OCP_MIN_DELAY;
+
+    /// OCP DEFault constant value in seconds 
+    float OCP_DEFAULT_DELAY;
+
+    /// OCP MAXimum constant value in seconds
+    float OCP_MAX_DELAY;
+    
+    /// default OPP state
     bool OPP_DEFAULT_STATE;
+
+    /// OPP MINimum constant value in watts
     float OPP_MIN_DELAY;
+
+    /// OPP DEFault constant value in watts
     float OPP_DEFAULT_DELAY;
+
+    /// OPP MAXimum constant value in watts
     float OPP_MAX_DELAY;
+
+    /// OPP MINimum LEVel constant value in watts 
     float OPP_MIN_LEVEL;
+
+    /// OPP DEFault LEVel constant value in watts 
     float OPP_DEFAULT_LEVEL;
+
+    /// OPP MAXimum LEVel constant value in watts 
     float OPP_MAX_LEVEL;
 
     IOExpander ioexp;
