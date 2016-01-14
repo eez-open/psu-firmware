@@ -1,3 +1,5 @@
+from __future__ import (print_function)
+
 '''
 EEZ PSU Firmware
 Copyright (C) 2015 Envox d.o.o.
@@ -22,7 +24,6 @@ As a convinience, it also copies a newly create library into arduino libraries
 directory so any Arduino sketch can see it.
 Execute this script if scpi-parser is changed or scpi_user_config.h (from this directory) is changed.
 '''
-from __future__ import (print_function)
 
 import os
 import platform
