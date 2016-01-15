@@ -36,7 +36,7 @@ void init() {
     lcd::lcd.drawRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
 
     lcd::lcd.setColor(0, 0, 0);
-    lcd::lcd.drawStr(100, 100, "hello", font::MEDIUM_FONT);
+    lcd::lcd.drawStr(10, 150, "Hello, world!", font::MEDIUM_FONT);
 }
 
 }

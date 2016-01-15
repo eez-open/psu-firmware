@@ -61,6 +61,10 @@ void Window::addImage(int x, int y, int w, int h, const char *image) {
 	impl->addImage(x, y, w, h, image);
 }
 
+void Window::addImageBuffer(int x, int y, int w, int h, unsigned char *image_buffer) {
+    impl->addImageBuffer(x, y, w, h, image_buffer);
+}
+
 void Window::addOnOffImage(int x, int y, int w, int h, bool value, const char *on_image, const char *off_image) {
 	impl->addOnOffImage(x, y, w, h, value, on_image, off_image);
 }
@@ -206,6 +210,16 @@ void WindowImpl::addImage(int x, int y, int w, int h, const char *image) {
 	y += window_definition->content_padding;
 
 	getTexture(image)->render(renderer, x, y);
+}
+
+void WindowImpl::addImageBuffer(int x, int y, int w, int h, unsigned char *image_buffer) {
+	x += window_definition->content_padding;
+	y += window_definition->content_padding;
+
+	Texture tex;
+    if (tex.loadFromImageBuffer(image_buffer, w, h, renderer)) {
+        tex.render(renderer, x, y);
+    }
 }
 
 void WindowImpl::addOnOffImage(int x, int y, int w, int h, bool value, const char *on_image, const char *off_image) {

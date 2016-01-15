@@ -46,6 +46,7 @@ public:
 	virtual void beginUpdate();
 
 	virtual void addImage(int x, int y, int w, int h, const char *image);
+    virtual void addImageBuffer(int x, int y, int w, int h, unsigned char *image_buffer);
 	virtual void addOnOffImage(int x, int y, int w, int h, bool value, const char *on_image, const char *off_image);
 	virtual void addText(int x, int y, int w, int h, const char *text);
 	virtual bool addButton(int x, int y, int w, int h, const char *normal_image, const char *pressed_image);

@@ -98,7 +98,7 @@ private:
 extern SimulatorSerial Serial;
 
 #define PROGMEM
-#define pgm_read_byte_near(address_short) *address_short
+#define pgm_read_byte_near(address_short) (*(address_short))
 
 }
 }

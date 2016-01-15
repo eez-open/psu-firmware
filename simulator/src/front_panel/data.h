@@ -31,7 +31,6 @@ struct ChannelData {
     bool sense_minus;
     bool out_minus;
     const char *load_text;
-
 };
 
 /// Data presented in GUI front panel.
@@ -42,6 +41,8 @@ struct Data {
     ChannelData ch2;
 
     bool reset;
+
+    unsigned char *local_control_buffer;
 };
 
 void fillData(Data *data);

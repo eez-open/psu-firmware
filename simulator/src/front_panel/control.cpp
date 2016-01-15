@@ -50,6 +50,7 @@ static bool g_lib_loaded = false;
 static eez_dll_lib_t g_lib = 0;
 static create_window_ptr_t g_create_window_ptr = 0;
 static Window* g_window;
+static Data g_data;
 
 static beep_ptr_t g_beep_ptr = 0;
 
@@ -108,12 +109,11 @@ void tick() {
         if (g_window->pollEvent()) {
             g_window->beginUpdate();
 
-            Data data;
-            fillData(&data);
+            fillData(&g_data);
 
-            render(g_window, &data);
+            render(g_window, &g_data);
 
-            processData(&data);
+            processData(&g_data);
 
             g_window->endUpdate();
         }

@@ -22,6 +22,7 @@
 #include "arduino_internal.h"
 #include "chips.h"
 #include "bp.h"
+#include "lcd.h"
 
 namespace eez {
 namespace psu {
@@ -85,6 +86,29 @@ void fillChannelData(ChannelData *data, int ch) {
     }
 }
 
+void fillLocalControlBuffer(Data *data) {
+    if (!data->local_control_buffer) {
+        data->local_control_buffer = new unsigned char[240 * 320 * 4];
+    }
+
+    word *src = ui::lcd::lcd.buffer;
+    unsigned char *dst = data->local_control_buffer;
+
+    for (int x = 0; x < 240; ++x) {
+        for (int y = 0; y < 320; ++y) {
+            word color = *src++;
+
+            // rrrrrggggggbbbbb
+
+            *dst++ = (unsigned char)((color >> 11) << 3);
+            *dst++ = (unsigned char)(((color >> 5) << 2) & 0xFF);
+            *dst++ = (unsigned char)((color << 3) & 0xFF);
+
+            *dst++ = 255;
+        }
+    }
+}
+
 void fillData(Data *data) {
     uint16_t bp_value = chips::bp_chip.getValue();
 
@@ -92,6 +116,8 @@ void fillData(Data *data) {
 
     fillChannelData(&data->ch1, 1);
     fillChannelData(&data->ch2, 2);
+
+    fillLocalControlBuffer(data);
 }
 
 void processData(Data *data) {

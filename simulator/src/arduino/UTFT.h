@@ -97,6 +97,8 @@ public:
 	void setPixel(word color);
 	void setXY(word x1_, word y1_, word x2_, word y2_);
 	void clrXY();
+	void drawHLine(int x, int y, int l);
+	void drawVLine(int x, int y, int l);
 };
 
 }

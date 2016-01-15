@@ -44,7 +44,10 @@ public:
 	//Creates image from font string
 	bool loadFromRenderedText(std::string textureText, SDL_Color textColor, SDL_Renderer *renderer, TTF_Font *font);
 
-	//Deallocates texture
+	//Creates image from image buffer
+	bool loadFromImageBuffer(unsigned char *image_buffer, int width, int height, SDL_Renderer *renderer);
+
+    //Deallocates texture
 	void free();
 
 	//Set color modulation
