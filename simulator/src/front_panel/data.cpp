@@ -96,13 +96,11 @@ void fillLocalControlBuffer(Data *data) {
 
     for (int x = 0; x < 240; ++x) {
         for (int y = 0; y < 320; ++y) {
-            word color = *src++;
+            word color = *src++; // rrrrrggggggbbbbb
 
-            // rrrrrggggggbbbbb
-
-            *dst++ = (unsigned char)((color >> 11) << 3);
-            *dst++ = (unsigned char)(((color >> 5) << 2) & 0xFF);
-            *dst++ = (unsigned char)((color << 3) & 0xFF);
+            *dst++ = (unsigned char)((color << 3) & 0xFF);        // blue
+            *dst++ = (unsigned char)(((color >> 5) << 2) & 0xFF); // green
+            *dst++ = (unsigned char)((color >> 11) << 3);         // red
 
             *dst++ = 255;
         }

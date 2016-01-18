@@ -20,6 +20,8 @@
 #include "lcd.h"
 #include "font.h"
 
+#include "channel.h"
+
 namespace eez {
 namespace psu {
 namespace ui {
@@ -32,11 +34,38 @@ void init() {
     lcd::lcd.setColor(255, 255, 255);
     lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
     
-    lcd::lcd.setColor(0, 0, 255);
-    lcd::lcd.drawRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
+    //lcd::lcd.setColor(0, 0, 255);
+    //lcd::lcd.drawRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
 
-    lcd::lcd.setColor(0, 0, 0);
-    lcd::lcd.drawStr(10, 150, "Hello, world!", font::MEDIUM_FONT);
+    //lcd::lcd.setColor(0, 0, 0);
+    //lcd::lcd.drawStr(10, 150, "Hello, world!", font::MEDIUM_FONT);
+}
+
+void tick(unsigned long tick_usec) {
+    static char str[16] = { 0 };
+
+    if (!str[0]) {
+        lcd::lcd.setColor(255, 255, 255);
+        lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
+
+        lcd::lcd.setColor(255, 0, 0);
+        lcd::lcd.drawHLine(0, 150, 240);
+    }
+
+    char new_str[16] = { 0 };
+    util::strcatVoltage(new_str, Channel::get(0).u.mon);
+
+    int x1 = lcd::lcd.measureStr("-", font::MEDIUM_FONT);
+    int x2 = lcd::lcd.measureStr("0", font::MEDIUM_FONT);
+
+    if (strcmp(new_str, str)) {
+
+        lcd::lcd.setColor(0, 0, 0);
+        lcd::lcd.drawStr(10, 150, str, font::MEDIUM_FONT);
+
+        strcpy(str, new_str);
+    }
+
 }
 
 }

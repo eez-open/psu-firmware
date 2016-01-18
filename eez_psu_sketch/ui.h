@@ -23,6 +23,7 @@ namespace psu {
 namespace ui {
 
 void init();
+void tick(unsigned long tick_usec);
 
 }
 }

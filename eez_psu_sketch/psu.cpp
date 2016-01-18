@@ -396,6 +396,7 @@ void tick() {
     ethernet::tick(tick_usec);
     sound::tick(tick_usec);
     profile::tick(tick_usec);
+    ui::tick(tick_usec);
 }
 
 void setEsrBits(int bit_mask) {
