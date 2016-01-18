@@ -41,6 +41,8 @@
 #include "simulator_conf.h"
 #endif
 
+#include <scpi-parser.h>
+
 #include "debug.h"
 #include "util.h"
 #include "channel.h"

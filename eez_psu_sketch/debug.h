@@ -47,8 +47,6 @@ void Trace(char *format, ...);
 
 #if CONF_DEBUG
 
-#include <scpi-parser.h>
-
 namespace eez {
 namespace psu {
 namespace debug {
