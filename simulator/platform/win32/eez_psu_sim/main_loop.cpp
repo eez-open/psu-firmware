@@ -55,6 +55,10 @@ int main_loop() {
 		case WAIT_OBJECT_0:
 			while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
 			{
+                if (msg.message == WM_PAINT) {
+                    break;
+                }
+
 				switch (msg.message) {
 				case NEW_INPUT_MESSAGE:
                     Serial.put(msg.wParam);

@@ -26,6 +26,12 @@ namespace eez {
 namespace psu {
 namespace ui {
 
+#define HORZ_ALIGN_LEFT   1
+#define HORZ_ALIGN_RIGHT  2
+#define HORZ_ALIGN_CENTER 3
+
+using namespace lcd;
+
 void init() {
     lcd::init();
 
@@ -42,30 +48,43 @@ void init() {
 }
 
 void tick(unsigned long tick_usec) {
-    static char str[16] = { 0 };
+    char str[16] = { 0 };
+    util::strcatVoltage(str, Channel::get(0).u.mon);
 
-    if (!str[0]) {
-        lcd::lcd.setColor(255, 255, 255);
-        lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
+    font::Font &font = font::SMALL_FONT;
 
-        lcd::lcd.setColor(255, 0, 0);
-        lcd::lcd.drawHLine(0, 150, 240);
-    }
+    int vertPadding = 4;
+    int horzPadding = 8;
+    int align = HORZ_ALIGN_CENTER;
 
-    char new_str[16] = { 0 };
-    util::strcatVoltage(new_str, Channel::get(0).u.mon);
+    int x1 = 0;
+    int x2 = lcd::lcd.getDisplayXSize() - 1;
 
-    int x1 = lcd::lcd.measureStr("-", font::MEDIUM_FONT);
-    int x2 = lcd::lcd.measureStr("0", font::MEDIUM_FONT);
+    int y1 = 0;
+    int yBaseLine = y1 + vertPadding + font.getAscent();
+    int y2 = yBaseLine + font.getDescent() + vertPadding;
+    
+    lcd::lcd.setColor(255, 255, 255);
+    lcd::lcd.fillRect(x1, y1, x2, y2);
 
-    if (strcmp(new_str, str)) {
+    lcd::lcd.setColor(0, 255, 0);
+    lcd::lcd.drawRect(x1, y1, x2, y2);
+    lcd::lcd.drawRect(x1 + horzPadding, y1 + vertPadding, x2 - horzPadding, y2 - vertPadding);
 
-        lcd::lcd.setColor(0, 0, 0);
-        lcd::lcd.drawStr(10, 150, str, font::MEDIUM_FONT);
+    int width = lcd::lcd.measureStr(str, font);
 
-        strcpy(str, new_str);
-    }
+    int xOffset;
+    if (align == HORZ_ALIGN_LEFT) xOffset = horzPadding;
+    else if (align == HORZ_ALIGN_RIGHT) xOffset = x2 - horzPadding - width;
+    else xOffset = x1 + ((x2 - x1) - width) / 2;
 
+    lcd::lcd.setColor(255, 0, 0);
+    lcd::lcd.drawHLine(xOffset, yBaseLine, width);
+
+    lcd::lcd.setColor(0, 0, 0);
+    lcd::lcd.drawStr(xOffset, yBaseLine, str, font);
+
+    strcpy(str, str);
 }
 
 }
