@@ -425,7 +425,9 @@ void generateError(int16_t error) {
 #define PLATFORM "Due"
 #endif
 
-#define MODEL_NUM_CHARS (CH_NUM * sizeof("X/XX/XX") + sizeof(PLATFORM) + 1)
+#define DEVICE_NAME "PSU"
+
+#define MODEL_NUM_CHARS (sizeof(DEVICE_NAME) + CH_NUM * sizeof("X/XX/XX") + sizeof(PLATFORM) + 1)
 
 /*
 We are auto generating model name from the channels definition:
@@ -443,7 +445,7 @@ const char *getModelName() {
     static char model_name[MODEL_NUM_CHARS + 1];
 
     if (*model_name == 0) {
-        strcat(model_name, "PSU");
+        strcat(model_name, DEVICE_NAME);
 
         char *p = model_name + strlen(model_name);
 
