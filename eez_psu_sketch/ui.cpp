@@ -205,7 +205,7 @@ void tick(unsigned long tick_usec) {
     gesture::push_pointer(tick_usec, touch::is_down, touch::x, touch::y);
 
     for (int i = 0; i < CH_NUM; ++i) {
-        Channel &channel = Channel::get(0);
+        Channel &channel = Channel::get(i);
 
         for (int j = 0; j < 3; ++j) {
             channel_state[i][j].text[0] = 0;
