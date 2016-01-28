@@ -18,39 +18,45 @@
 
 #pragma once
 
-#include "imgui/window.h"
+#define PORTRAIT			0
+#define LANDSCAPE			1
+
+#define PREC_LOW			1
+#define PREC_MEDIUM			2
+#define PREC_HI				3
+#define PREC_EXTREME		4
 
 namespace eez {
 namespace psu {
 namespace simulator {
-namespace front_panel {
+namespace arduino {
 
-struct ChannelData {
-    bool cv;
-    bool cc;
-    bool out_plus;
-    bool sense_plus;
-    bool sense_minus;
-    bool out_minus;
-    const char *load_text;
+typedef uint16_t word;
+typedef uint8_t regtype;
+typedef uint8_t regsize;
+
+class UTouch {
+public:
+    UTouch(byte tclk, byte tcs, byte tdin, byte dout, byte irq);
+
+    void	InitTouch(byte orientation = LANDSCAPE);
+    void	read();
+    bool	dataAvailable();
+    int16_t	getX();
+    int16_t	getY();
+    void	setPrecision(byte precision);
+
+    static void setData(bool is_down, int x_, int y_);
+
+private:
+    static bool is_down;
+    static int x;
+    static int y;
 };
 
-/// Data presented in GUI front panel.
-struct Data {
-    bool standby;
-
-    ChannelData ch1;
-    ChannelData ch2;
-
-    bool reset;
-
-    imgui::UserWidget local_control_widget;
-};
-
-void fillData(Data *data);
-void processData(Data *data);
-
 }
 }
 }
-} // namespace eez::psu::simulator::front_panel;
+} // namespace eez::psu::simulator::arduino;
+
+using namespace eez::psu::simulator::arduino;

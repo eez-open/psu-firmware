@@ -171,6 +171,12 @@
     <ClInclude Include="ui.h">
       <Filter>ui</Filter>
     </ClInclude>
+    <ClInclude Include="touch.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="gesture.h">
+      <Filter>ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="calibration.cpp">
@@ -291,6 +297,12 @@
       <Filter>board</Filter>
     </ClCompile>
     <ClCompile Include="ui.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="touch.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="gesture.cpp">
       <Filter>ui</Filter>
     </ClCompile>
   </ItemGroup>

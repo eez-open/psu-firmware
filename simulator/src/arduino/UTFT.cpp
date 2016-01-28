@@ -61,14 +61,14 @@ void UTFT::setBackColor(byte r, byte g, byte b) {
 	_transparent=false;
 }
 
-void UTFT::setBackColor(uint32_t color) {
+void UTFT::setBackColor(word color) {
 	if (color == VGA_TRANSPARENT) {
-		_transparent=true;
+		_transparent = true;
     }
     else {
-		bch=byte(color>>8);
-		bcl=byte(color & 0xFF);
-		_transparent=false;
+		bch = byte(color>>8);
+		bcl = byte(color & 0xFF);
+		_transparent = false;
 	}
 }
 

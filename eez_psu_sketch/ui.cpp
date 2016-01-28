@@ -19,6 +19,8 @@
 #include "psu.h"
 #include "lcd.h"
 #include "font.h"
+#include "touch.h"
+#include "gesture.h"
 
 #include "channel.h"
 
@@ -26,65 +28,204 @@ namespace eez {
 namespace psu {
 namespace ui {
 
-#define HORZ_ALIGN_LEFT   1
-#define HORZ_ALIGN_RIGHT  2
-#define HORZ_ALIGN_CENTER 3
-
 using namespace lcd;
 
+#define BOX_FLAGS_BORDER            1 << 0
+
+#define BOX_FLAGS_HORZ_ALIGN        3 << 1
+#define BOX_FLAGS_HORZ_ALIGN_LEFT   0 << 1
+#define BOX_FLAGS_HORZ_ALIGN_RIGHT  1 << 1
+#define BOX_FLAGS_HORZ_ALIGN_CENTER 2 << 1
+
+#define BOX_FLAGS_VERT_ALIGN        3 << 3
+#define BOX_FLAGS_VERT_ALIGN_TOP    0 << 3
+#define BOX_FLAGS_VERT_ALIGN_BOTTOM 1 << 3
+#define BOX_FLAGS_VERT_ALIGN_CENTER 2 << 3
+
+struct Style {
+    uint16_t flags;
+    int horz_padding;
+    int vert_padding;
+    uint16_t back_color;
+    uint16_t border_color;
+    uint16_t color;
+    font::Font *font;
+
+    bool hasBorder() {
+        return flags & BOX_FLAGS_BORDER;
+    }
+
+    bool isHorzAlignLeft() {
+        return (flags & BOX_FLAGS_HORZ_ALIGN) == BOX_FLAGS_HORZ_ALIGN_LEFT;
+    }
+
+    bool isHorzAlignRight() {
+        return (flags & BOX_FLAGS_HORZ_ALIGN) == BOX_FLAGS_HORZ_ALIGN_RIGHT;
+    }
+
+    bool isVertAlignTop() {
+        return (flags & BOX_FLAGS_VERT_ALIGN) == BOX_FLAGS_VERT_ALIGN_TOP;
+    }
+
+    bool isVertAlignBottom() {
+        return (flags & BOX_FLAGS_VERT_ALIGN) == BOX_FLAGS_VERT_ALIGN_BOTTOM;
+    }
+};
+
+struct Box {
+    Style *style;
+    int x1;
+    int y1;
+    int x2;
+    int y2;
+};
+
+struct State {
+    char old_text[16];
+    int old_x_offset;
+    int old_y_offset;
+    int old_width;
+    char text[16];
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+Style style1 = {
+    BOX_FLAGS_BORDER | BOX_FLAGS_HORZ_ALIGN_CENTER | BOX_FLAGS_VERT_ALIGN_CENTER,
+    8,
+    4,
+    VGA_WHITE,
+    VGA_GRAY,
+    VGA_BLACK,
+    &font::MEDIUM_FONT
+};
+
+Style style2 = {
+    BOX_FLAGS_BORDER | BOX_FLAGS_HORZ_ALIGN_CENTER | BOX_FLAGS_VERT_ALIGN_CENTER,
+    8,
+    4,
+    VGA_WHITE,
+    VGA_GRAY,
+    VGA_BLACK,
+    &font::MEDIUM_FONT
+};
+
+Box mon_box = {
+    &style1,
+    0,
+    0,
+    240 - 1,
+    80 - 1
+};
+
+Box u_set_box = {
+    &style2,
+    0,
+    80,
+    120 - 1,
+    160 - 1
+};
+
+Box i_set_box = {
+    &style2,
+    120,
+    80,
+    240 - 1,
+    160 - 1
+};
+
+Box *channel_controls[] = { &mon_box, &u_set_box, &i_set_box };
+
+State channel_state[2][3];
+
+////////////////////////////////////////////////////////////////////////////////
+
+void draw(int x, int y, Box *box, State *state) {
+    Style *style = box->style;
+
+    const int x1 = x + box->x1;
+    const int y1 = y + box->y1;
+    const int x2 = x + box->x2;
+    const int y2 = y + box->y2;
+    
+    char *old_text = state->old_text;
+    char *text = state->text;
+
+    int width = lcd::lcd.measureStr(text, *style->font);
+    int height = style->font->getHeight();
+
+    int x_offset;
+    if (style->isHorzAlignLeft()) x_offset = x1 + style->horz_padding;
+    else if (style->isHorzAlignRight()) x_offset = x2 - style->horz_padding - width;
+    else x_offset = x1 + ((x2 - x1) - width) / 2;
+
+    int y_offset;
+    if (style->isVertAlignTop()) y_offset = y1 + style->vert_padding;
+    else if (style->isVertAlignBottom()) y_offset = y2 - style->vert_padding -height;
+    else y_offset = y1 + ((y2 - y1) - height) / 2;
+
+    if (state->old_width == 0) {
+        lcd::lcd.setColor(style->back_color);
+        lcd::lcd.fillRect(x1, y1, x2, y2);
+        
+        if (style->hasBorder()) {
+            lcd::lcd.setColor(style->border_color);
+            lcd::lcd.drawRect(x1, y1, x2, y2);
+        }
+    } else {
+        lcd::lcd.setColor(style->back_color);
+        lcd::lcd.fillRect(state->old_x_offset, state->old_y_offset, state->old_x_offset + state->old_width - 1, state->old_y_offset + height - 1);
+    }
+
+    lcd::lcd.setBackColor(style->back_color);
+    lcd::lcd.setColor(style->color);
+    lcd::lcd.drawStr(x_offset, y_offset + style->font->getAscent(), text, *style->font);
+
+    strcpy(old_text, text);
+    state->old_x_offset = x_offset;
+    state->old_y_offset = y_offset;
+    state->old_width = width;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 void init() {
+    touch::init();
+
     lcd::init();
 
-    lcd::lcd.setBackColor(255, 255, 255);
-    
-    lcd::lcd.setColor(255, 255, 255);
+    lcd::lcd.setBackColor(VGA_WHITE);
+    lcd::lcd.setColor(VGA_WHITE);
     lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
-    
-    //lcd::lcd.setColor(0, 0, 255);
-    //lcd::lcd.drawRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
-
-    //lcd::lcd.setColor(0, 0, 0);
-    //lcd::lcd.drawStr(10, 150, "Hello, world!", font::MEDIUM_FONT);
 }
 
 void tick(unsigned long tick_usec) {
-    char str[16] = { 0 };
-    util::strcatVoltage(str, Channel::get(0).u.mon);
+    touch::tick();
 
-    font::Font &font = font::SMALL_FONT;
+    gesture::push_pointer(tick_usec, touch::is_down, touch::x, touch::y);
 
-    int vertPadding = 4;
-    int horzPadding = 8;
-    int align = HORZ_ALIGN_CENTER;
+    for (int i = 0; i < CH_NUM; ++i) {
+        Channel &channel = Channel::get(0);
 
-    int x1 = 0;
-    int x2 = lcd::lcd.getDisplayXSize() - 1;
+        for (int j = 0; j < 3; ++j) {
+            channel_state[i][j].text[0] = 0;
+        }
 
-    int y1 = 0;
-    int yBaseLine = y1 + vertPadding + font.getAscent();
-    int y2 = yBaseLine + font.getDescent() + vertPadding;
-    
-    lcd::lcd.setColor(255, 255, 255);
-    lcd::lcd.fillRect(x1, y1, x2, y2);
+        if (channel.isCvMode()) {
+            util::strcatCurrent(channel_state[i][0].text, channel.i.mon);
+        } else {
+            util::strcatVoltage(channel_state[i][0].text, channel.u.mon);
+        }
 
-    lcd::lcd.setColor(0, 255, 0);
-    lcd::lcd.drawRect(x1, y1, x2, y2);
-    lcd::lcd.drawRect(x1 + horzPadding, y1 + vertPadding, x2 - horzPadding, y2 - vertPadding);
+        util::strcatVoltage(channel_state[i][1].text, channel.u.set);
+        util::strcatCurrent(channel_state[i][2].text, channel.i.set);
 
-    int width = lcd::lcd.measureStr(str, font);
-
-    int xOffset;
-    if (align == HORZ_ALIGN_LEFT) xOffset = horzPadding;
-    else if (align == HORZ_ALIGN_RIGHT) xOffset = x2 - horzPadding - width;
-    else xOffset = x1 + ((x2 - x1) - width) / 2;
-
-    lcd::lcd.setColor(255, 0, 0);
-    lcd::lcd.drawHLine(xOffset, yBaseLine, width);
-
-    lcd::lcd.setColor(0, 0, 0);
-    lcd::lcd.drawStr(xOffset, yBaseLine, str, font);
-
-    strcpy(str, str);
+        for (int j = 0; j < 3; ++j) {
+            if (strcmp(channel_state[i][j].old_text, channel_state[i][j].text) != 0) {
+                draw(0, i * 160, channel_controls[j], &channel_state[i][j]);
+            }
+        }
+    }
 }
 
 }

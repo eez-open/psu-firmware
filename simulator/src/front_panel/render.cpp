@@ -70,7 +70,12 @@ void render(Window *window, Data *data) {
 
     data->reset = window->addButton(509, 398, 18, 18, "reset-normal.png", "reset-pressed.png");
 
-    window->addImageBuffer(594, 94, 240, 320, data->local_control_buffer);
+    data->local_control_widget.x = 594;
+    data->local_control_widget.y = 94;
+    data->local_control_widget.w = 240;
+    data->local_control_widget.h = 320;
+
+    window->addUserWidget(&data->local_control_widget);
 }
 
 }

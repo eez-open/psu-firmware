@@ -61,10 +61,6 @@ void Window::addImage(int x, int y, int w, int h, const char *image) {
 	impl->addImage(x, y, w, h, image);
 }
 
-void Window::addImageBuffer(int x, int y, int w, int h, unsigned char *image_buffer) {
-    impl->addImageBuffer(x, y, w, h, image_buffer);
-}
-
 void Window::addOnOffImage(int x, int y, int w, int h, bool value, const char *on_image, const char *off_image) {
 	impl->addOnOffImage(x, y, w, h, value, on_image, off_image);
 }
@@ -75,6 +71,10 @@ void Window::addText(int x, int y, int w, int h, const char *text) {
 
 bool Window::addButton(int x, int y, int w, int h, const char *normal_image, const char *pressed_image) {
 	return impl->addButton(x, y, w, h, normal_image, pressed_image);
+}
+
+void Window::addUserWidget(UserWidget *user_widget) {
+    impl->addUserWidget(user_widget);
 }
 
 void Window::endUpdate() {
@@ -89,6 +89,9 @@ WindowImpl::WindowImpl(WindowDefinition *window_definition_)
 	, renderer(0)
 	, font(0)
 {
+    mouse_data.is_down = false;
+    mouse_data.is_pressed = false;
+    mouse_data.is_up = false;
 }
 
 WindowImpl::~WindowImpl() {
@@ -170,18 +173,18 @@ bool WindowImpl::pollEvent() {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) {
-			SDL_GetMouseState(&mouse_x, &mouse_y);
+			SDL_GetMouseState(&mouse_data.x, &mouse_data.y);
 			if (event.type == SDL_MOUSEBUTTONDOWN) {
-				mouse_down_x = mouse_x;
-				mouse_down_y = mouse_y;
-				mouse_is_down = true;
-				mouse_pressed = true;
+				mouse_data.down_x = mouse_data.x;
+				mouse_data.down_y = mouse_data.y;
+				mouse_data.is_down = true;
+				mouse_data.is_pressed = true;
 			}
 			else if (event.type == SDL_MOUSEBUTTONUP) {
-				mouse_up_x = mouse_x;
-				mouse_up_y = mouse_y;
-				mouse_is_up = true;
-				mouse_pressed = false;
+				mouse_data.up_x = mouse_data.x;
+				mouse_data.up_y = mouse_data.y;
+				mouse_data.is_up = true;
+				mouse_data.is_pressed = false;
 			}
 		}
 
@@ -201,8 +204,8 @@ void WindowImpl::endUpdate() {
 	// Update screen
 	SDL_RenderPresent(renderer);
 
-	mouse_is_down = false;
-	mouse_is_up = false;
+	mouse_data.is_down = false;
+	mouse_data.is_up = false;
 }
 
 void WindowImpl::addImage(int x, int y, int w, int h, const char *image) {
@@ -210,16 +213,6 @@ void WindowImpl::addImage(int x, int y, int w, int h, const char *image) {
 	y += window_definition->content_padding;
 
 	getTexture(image)->render(renderer, x, y);
-}
-
-void WindowImpl::addImageBuffer(int x, int y, int w, int h, unsigned char *image_buffer) {
-	x += window_definition->content_padding;
-	y += window_definition->content_padding;
-
-	Texture tex;
-    if (tex.loadFromImageBuffer(image_buffer, w, h, renderer)) {
-        tex.render(renderer, x, y);
-    }
 }
 
 void WindowImpl::addOnOffImage(int x, int y, int w, int h, bool value, const char *on_image, const char *off_image) {
@@ -267,9 +260,9 @@ bool WindowImpl::addButton(int x, int y, int w, int h, const char *normal_image,
 	x += window_definition->content_padding;
 	y += window_definition->content_padding;
 
-	bool is_pressed = mouse_pressed &&
-		pointInRect(mouse_down_x, mouse_down_y, x, y, w, h) &&
-		pointInRect(mouse_x, mouse_y, x, y, w, h);
+	bool is_pressed = mouse_data.is_pressed &&
+		pointInRect(mouse_data.down_x, mouse_data.down_y, x, y, w, h) &&
+		pointInRect(mouse_data.x, mouse_data.y, x, y, w, h);
 
 	if (is_pressed) {
 		getTexture(pressed_image)->render(renderer, x, y);
@@ -278,9 +271,9 @@ bool WindowImpl::addButton(int x, int y, int w, int h, const char *normal_image,
 		getTexture(normal_image)->render(renderer, x, y);
 	}
 
-	bool is_clicked = mouse_is_up &&
-		pointInRect(mouse_down_x, mouse_down_y, x, y, w, h) &&
-		pointInRect(mouse_up_x, mouse_up_y, x, y, w, h);
+	bool is_clicked = mouse_data.is_up &&
+		pointInRect(mouse_data.down_x, mouse_data.down_y, x, y, w, h) &&
+		pointInRect(mouse_data.up_x, mouse_data.up_y, x, y, w, h);
 
 	return is_clicked;
 }
@@ -304,6 +297,27 @@ Texture *WindowImpl::getTexture(const char *path) {
 
 bool WindowImpl::pointInRect(int px, int py, int x, int y, int w, int h) {
 	return px >= x && px < x + w && py >= y && py <= y + h;
+}
+
+void WindowImpl::addUserWidget(UserWidget *user_widget) {
+    int x = user_widget->x + window_definition->content_padding;
+    int y = user_widget->y + window_definition->content_padding;
+
+	Texture tex;
+    if (tex.loadFromImageBuffer(user_widget->pixels, user_widget->w, user_widget->h, renderer)) {
+        tex.render(renderer, x, y);
+    }
+
+    memcpy(&user_widget->mouse_data, &mouse_data, sizeof(MouseData));
+    
+    user_widget->mouse_data.x -= x;
+    user_widget->mouse_data.y -= y;
+
+    user_widget->mouse_data.down_x -= x;
+    user_widget->mouse_data.down_y -= y;
+
+    user_widget->mouse_data.up_x -= x;
+    user_widget->mouse_data.up_y -= y;
 }
 
 }

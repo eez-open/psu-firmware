@@ -280,6 +280,15 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\arduino_util.h">
       <Filter>board</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\touch.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\arduino\UTouch.h">
+      <Filter>simulator\arduino</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gesture.h">
+      <Filter>ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -465,6 +474,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\arduino_util.cpp">
       <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\touch.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\arduino\UTouch.cpp">
+      <Filter>simulator\arduino</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gesture.cpp">
+      <Filter>ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

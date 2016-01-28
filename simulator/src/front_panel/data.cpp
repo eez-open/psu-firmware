@@ -24,6 +24,8 @@
 #include "bp.h"
 #include "lcd.h"
 
+#include "UTouch.h"
+
 namespace eez {
 namespace psu {
 namespace simulator {
@@ -87,12 +89,12 @@ void fillChannelData(ChannelData *data, int ch) {
 }
 
 void fillLocalControlBuffer(Data *data) {
-    if (!data->local_control_buffer) {
-        data->local_control_buffer = new unsigned char[240 * 320 * 4];
+    if (!data->local_control_widget.pixels) {
+        data->local_control_widget.pixels = new unsigned char[240 * 320 * 4];
     }
 
     word *src = ui::lcd::lcd.buffer;
-    unsigned char *dst = data->local_control_buffer;
+    unsigned char *dst = data->local_control_widget.pixels;
 
     for (int x = 0; x < 240; ++x) {
         for (int y = 0; y < 320; ++y) {
@@ -123,6 +125,23 @@ void processData(Data *data) {
         DebugTrace("Reset");
         reset();
     }
+
+    bool is_down = false;
+    int x = -1;
+    int y = -1;
+
+    if (data->local_control_widget.mouse_data.is_pressed &&
+        data->local_control_widget.mouse_data.down_x >= 0 &&
+        data->local_control_widget.mouse_data.down_x < data->local_control_widget.w &&
+        data->local_control_widget.mouse_data.down_y >= 0 &&
+        data->local_control_widget.mouse_data.down_y < data->local_control_widget.h) 
+    {
+        is_down = true;
+        x = data->local_control_widget.mouse_data.x;
+        y = data->local_control_widget.mouse_data.y;
+    }
+
+    UTouch::setData(is_down, x, y);
 }
 
 }

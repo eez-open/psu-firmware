@@ -31,6 +31,22 @@ struct WindowDefinition {
 	const char *icon_path;
 };
 
+struct MouseData {
+    bool is_down;
+    bool is_pressed;
+    bool is_up;
+    int x, y, down_x, down_y, up_x, up_y;
+};
+
+struct UserWidget {
+    int x;
+    int y;
+    int w;
+    int h;
+    unsigned char *pixels;
+    MouseData mouse_data;
+};
+
 class WindowImpl;
 
 /// Top level window, high level interface.
@@ -46,10 +62,10 @@ public:
 	virtual void beginUpdate();
 
 	virtual void addImage(int x, int y, int w, int h, const char *image);
-    virtual void addImageBuffer(int x, int y, int w, int h, unsigned char *image_buffer);
 	virtual void addOnOffImage(int x, int y, int w, int h, bool value, const char *on_image, const char *off_image);
 	virtual void addText(int x, int y, int w, int h, const char *text);
 	virtual bool addButton(int x, int y, int w, int h, const char *normal_image, const char *pressed_image);
+    virtual void addUserWidget(UserWidget *user_widget);
 
 	virtual void endUpdate();
 

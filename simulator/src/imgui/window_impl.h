@@ -44,10 +44,10 @@ public:
     void beginUpdate();
 
     void addImage(int x, int y, int w, int h, const char *image);
-    void addImageBuffer(int x, int y, int w, int h, unsigned char *image_buffer);
     void addOnOffImage(int x, int y, int w, int h, bool value, const char *on_image, const char *off_image);
     void addText(int x, int y, int w, int h, const char *text);
     bool addButton(int x, int y, int w, int h, const char *normal_image, const char *pressed_image);
+    void addUserWidget(UserWidget *user_widget);
 
     void endUpdate();
 
@@ -61,10 +61,7 @@ private:
     typedef std::map<std::string, Texture *> TextureMap;
     TextureMap textures;
 
-    bool mouse_is_down;
-    bool mouse_pressed;
-    bool mouse_is_up;
-    int mouse_x, mouse_y, mouse_down_x, mouse_down_y, mouse_up_x, mouse_up_y;
+    MouseData mouse_data;
 
     bool pointInRect(int px, int py, int x, int y, int w, int h);
 };

@@ -69,7 +69,7 @@ public:
 	void	setColor(word color);
 	word	getColor();
 	void	setBackColor(byte r, byte g, byte b);
-	void	setBackColor(uint32_t color);
+	void	setBackColor(word color);
 	word	getBackColor();
 	void	setContrast(char c);
 	int		getDisplayXSize();
@@ -86,7 +86,7 @@ public:
 */
 	byte	fch, fcl, bch, bcl;
 	byte	orient;
-	long	disp_x_size, disp_y_size;
+	int	disp_x_size, disp_y_size;
     regtype CS;
 	regtype	*P_CS;
 	regsize	B_CS;

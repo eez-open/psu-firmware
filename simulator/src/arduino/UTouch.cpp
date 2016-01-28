@@ -1,4 +1,4 @@
-/*
+ /*
  * EEZ PSU Firmware
  * Copyright (C) 2015 Envox d.o.o.
  *
@@ -16,41 +16,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
-
-#include "imgui/window.h"
+#include "psu.h"
+#include "UTouch.h"
 
 namespace eez {
 namespace psu {
 namespace simulator {
-namespace front_panel {
+namespace arduino {
 
-struct ChannelData {
-    bool cv;
-    bool cc;
-    bool out_plus;
-    bool sense_plus;
-    bool sense_minus;
-    bool out_minus;
-    const char *load_text;
-};
+bool UTouch::is_down;
+int UTouch::x;
+int UTouch::y;
 
-/// Data presented in GUI front panel.
-struct Data {
-    bool standby;
+UTouch::UTouch(byte tclk, byte tcs, byte tdin, byte dout, byte irq)
+{
+}
 
-    ChannelData ch1;
-    ChannelData ch2;
+void UTouch::InitTouch(byte orientation) {
+}
 
-    bool reset;
+void UTouch::read() {
+}
 
-    imgui::UserWidget local_control_widget;
-};
+bool UTouch::dataAvailable() {
+    return is_down;
+}
 
-void fillData(Data *data);
-void processData(Data *data);
+int16_t	UTouch::getX() {
+    return x;
+}
+
+int16_t	UTouch::getY() {
+    return y;
+}
+
+void UTouch::setPrecision(byte precision) {
+}
+
+void UTouch::setData(bool is_down_, int x_, int y_) {
+    is_down = is_down_;
+    x = x_;
+    y = y_;
+}
 
 }
 }
 }
-} // namespace eez::psu::simulator::front_panel;
+} // namespace eez::psu::simulator::arduino;

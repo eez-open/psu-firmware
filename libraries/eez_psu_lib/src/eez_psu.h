@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #ifndef EEZ_PSU_H
 #define EEZ_PSU_H
 
@@ -90,7 +90,7 @@ static const uint8_t LCD_RESET = 38;
 static const uint8_t LCD_CS = 39;
 static const uint8_t LCD_WR = 40;
 static const uint8_t LCD_RS = 41;
-static const uint8_t TOUCH_DIN = 41;
+static const uint8_t TOUCH_DIN = 42;
 static const uint8_t TOUCH_CS = 43;
 static const uint8_t TOUCH_SCLK = 44;
 static const uint8_t ISOLATOR2_EN = 45;
@@ -148,7 +148,7 @@ static const uint8_t LCD_RESET = 38;
 static const uint8_t LCD_CS = 39;
 static const uint8_t LCD_WR = 40;
 static const uint8_t LCD_RS = 41;
-static const uint8_t TOUCH_DIN = 41;
+static const uint8_t TOUCH_DIN = 42;
 static const uint8_t TOUCH_CS = 43;
 static const uint8_t TOUCH_SCLK = 44;
 static const uint8_t ISOLATOR2_EN = 45;
@@ -204,7 +204,7 @@ static const uint8_t LCD_RESET = 38;
 static const uint8_t LCD_CS = 39;
 static const uint8_t LCD_WR = 40;
 static const uint8_t LCD_RS = 41;
-static const uint8_t TOUCH_DIN = 41;
+static const uint8_t TOUCH_DIN = 42;
 static const uint8_t TOUCH_CS = 43;
 static const uint8_t TOUCH_SCLK = 44;
 static const uint8_t ISOLATOR2_EN = 45;
