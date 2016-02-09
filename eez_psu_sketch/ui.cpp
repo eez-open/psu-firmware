@@ -238,7 +238,7 @@ void dump_widgets(uint8_t *start, List widgets) {
     }
 }
 
-void init() {
+void dump() {
     Document *doc = (Document *)document;
     DebugTrace("%d", (int)doc->pages.count);
 
@@ -247,11 +247,12 @@ void init() {
     DebugTrace("%d", (int)page->height);
 
     dump_widgets(document, page->widgets);
+}
 
+void init() {
     touch::init();
 
     lcd::init();
-
     lcd::lcd.setBackColor(VGA_WHITE);
     lcd::lcd.setColor(VGA_WHITE);
     lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
@@ -264,6 +265,7 @@ void tick(unsigned long tick_usec) {
 
     gesture::push_pointer(tick_usec, touch::is_down, touch::x, touch::y);
 
+    /*
     for (int i = 0; i < CH_NUM; ++i) {
         Channel &channel = Channel::get(i);
 
@@ -286,6 +288,7 @@ void tick(unsigned long tick_usec) {
             }
         }
     }
+    */
 }
 
 }
