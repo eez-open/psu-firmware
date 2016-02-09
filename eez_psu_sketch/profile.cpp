@@ -133,12 +133,10 @@ bool saveAtLocation(int location) {
         memset(profile.name, 0, sizeof(profile.name));
         if (location > 0) {
             if (!currentProfile.is_valid || strncmp_P(currentProfile.name, PSTR("Saved at "), 9) == 0) {
-                uint8_t year, month, day, hour, minute, second;
-                if (datetime::getDate(year, month, day) && datetime::getTime(hour, minute, second)) {
-                    char buffer[16] = { 0 };
-                    sprintf_P(profile.name, PSTR("Saved at %d-%02d-%02d %02d:%02d:%02d"),
-                        (int)(year + 2000), (int)month, (int)day,
-                        (int)hour, (int)minute, (int)second);
+                char datetime_buffer[20] = { 0 };
+                if (datetime::getDateTimeAsString(datetime_buffer)) {
+                    strcpy_P(profile.name, PSTR("Saved at "));
+                    strcat(profile.name, datetime_buffer);
                 }
             }
             else {

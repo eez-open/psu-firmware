@@ -42,6 +42,7 @@ void init(scpi_t &scpi_context,
 
 void input(scpi_t &scpi_context, char ch);
 
+void printError(int_fast16_t err);
 }
 }
 } // namespace eez::psu::scpi

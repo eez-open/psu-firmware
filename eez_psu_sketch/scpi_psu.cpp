@@ -32,6 +32,9 @@
 #include "scpi_stat.h"
 #include "scpi_syst.h"
 
+#include "sound.h"
+#include "datetime.h"
+
 #ifdef EEZ_PSU_SIMULATOR 
 #include "scpi_simu.h"
 #endif
@@ -117,6 +120,21 @@ void input(scpi_t &scpi_context, char ch) {
         // input buffer is now empty, feed it
         SCPI_Input(&scpi_context, &ch, 1);
     }
+}
+
+void printError(int_fast16_t err) {
+    sound::playBeep();
+
+    char errorOutputBuffer[256];
+
+    char datetime_buffer[20] = { 0 };
+    if (datetime::getDateTimeAsString(datetime_buffer)) {
+        sprintf_P(errorOutputBuffer, PSTR("**ERROR [%s]: %d,\"%s\"\r\n"), datetime_buffer, (int16_t)err, SCPI_ErrorTranslate(err));
+    } else {
+        sprintf_P(errorOutputBuffer, PSTR("**ERROR: %d,\"%s\"\r\n"), (int16_t)err, SCPI_ErrorTranslate(err));
+    }
+
+    Serial.println(errorOutputBuffer);
 }
 
 }

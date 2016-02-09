@@ -17,6 +17,7 @@
  */
  
 #include "psu.h"
+#include "datetime.h"
 
 #if CONF_DEBUG
 
@@ -92,7 +93,17 @@ void Trace(char *format, ...) {
     va_start(args, format);
     vsnprintf(buffer, sizeof(buffer), format, args);
 
-    Serial.print("**TRACE: ");
+    Serial.print("**TRACE");
+    
+    char datetime_buffer[20] = { 0 };
+    if (datetime::getDateTimeAsString(datetime_buffer)) {
+        Serial.print(" [");
+        Serial.print(datetime_buffer);
+        Serial.print("]: ");
+    } else {
+        Serial.print(": ");
+    }
+
     Serial.println(buffer);
 }
 

@@ -64,9 +64,9 @@ void boot() {
 
     persist_conf::loadDevice(); // loads global configuration parameters
 
-    success &= ethernet::init();
     success &= rtc::init();
     success &= datetime::init();
+    success &= ethernet::init();
 
     // load channels calibration parameters
     for (int i = 0; i < CH_NUM; ++i) {
