@@ -150,6 +150,17 @@ bool setTime(uint8_t hour, uint8_t minute, uint8_t second) {
     return false;
 }
 
+bool getDateTimeAsString(char *buffer) {
+    uint8_t year, month, day, hour, minute, second;
+    if (datetime::getDate(year, month, day) && datetime::getTime(hour, minute, second)) {
+        sprintf_P(buffer, PSTR("%d-%02d-%02d %02d:%02d:%02d"),
+            (int)(year + 2000), (int)month, (int)day,
+            (int)hour, (int)minute, (int)second);
+        return true;
+    }
+    return false;
+}
+
 }
 }
 }; // namespace eez::psu::datetime

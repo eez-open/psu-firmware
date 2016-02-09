@@ -36,6 +36,11 @@ bool isValidTime(uint8_t hour, uint8_t minute, uint8_t second);
 bool getTime(uint8_t &hour, uint8_t &minute, uint8_t &second);
 bool setTime(uint8_t hour, uint8_t minute, uint8_t second);
 
+/// Returns date time as string in format YYYY-MM-DD HH:MM:SS.
+/// \param buffer Pointer to the buffer of at least 20 characters. 
+/// \returns true if successful.
+bool getDateTimeAsString(char *buffer);
+
 }
 }
 }; // namespace eez::psu::datetime

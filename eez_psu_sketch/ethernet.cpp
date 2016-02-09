@@ -17,7 +17,6 @@
  */
  
 #include "psu.h"
-#include "sound.h"
 
 #include <UIPEthernet.h>
 #include <UIPServer.h>
@@ -57,7 +56,7 @@ size_t ethernet_client_write_str(EthernetClient &client, const char *str) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-size_t SCPI_Write(scpi_t * context, const char * data, size_t len) {
+size_t SCPI_Write(scpi_t *context, const char * data, size_t len) {
     return ethernet_client_write(firstClient, data, len);
 }
 
@@ -65,31 +64,27 @@ scpi_result_t SCPI_Flush(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-int SCPI_Error(scpi_t * context, int_fast16_t err) {
+int SCPI_Error(scpi_t *context, int_fast16_t err) {
     if (err != 0) {
-        sound::playBeep();
-
-        char errorOutputBuffer[256];
-        sprintf(errorOutputBuffer, "**ERROR: %d,\"%s\"\r\n", (int16_t)err, SCPI_ErrorTranslate(err));
-        Serial.println(errorOutputBuffer);
+        scpi::printError(err);
     }
     return 0;
 }
 
-scpi_result_t SCPI_Control(scpi_t * context, scpi_ctrl_name_t ctrl, scpi_reg_val_t val) {
+scpi_result_t SCPI_Control(scpi_t *context, scpi_ctrl_name_t ctrl, scpi_reg_val_t val) {
     char errorOutputBuffer[256];
     if (SCPI_CTRL_SRQ == ctrl) {
-        sprintf(errorOutputBuffer, "**SRQ: 0x%X (%d)\r\n", val, val);
+        sprintf_P(errorOutputBuffer, PSTR("**SRQ: 0x%X (%d)\r\n"), val, val);
     }
     else {
-        sprintf(errorOutputBuffer, "**CTRL %02x: 0x%X (%d)\r\n", ctrl, val, val);
+        sprintf_P(errorOutputBuffer, PSTR("**CTRL %02x: 0x%X (%d)\r\n"), ctrl, val, val);
     }
     Serial.println(errorOutputBuffer);
 
     return SCPI_RES_OK;
 }
 
-scpi_result_t SCPI_Reset(scpi_t * context) {
+scpi_result_t SCPI_Reset(scpi_t *context) {
     char errorOutputBuffer[256];
     sprintf(errorOutputBuffer, "**Reset\r\n");
     Serial.println(errorOutputBuffer);
