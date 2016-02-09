@@ -1,0 +1,90 @@
+{
+  "name": "EEZ PSU Default",
+  "description": "Default UI for the EEZ PSU",
+  "styles": [
+    {
+      "name": "default",
+      "font": "medium",
+      "align-horizontal": "center",
+      "align-vertical": "center",
+      "color": "black",
+      "background-color": "white",
+      "border-size": "0",
+      "padding-horizontal": 4,
+      "padding-vertical": 2
+    },
+    {
+      "name": "style1",
+      "border-size": "1",
+      "border-color": "blue"
+    },
+    {
+      "name": "style2",
+      "font": "large",
+      "border-size": "1",
+      "border-color": "green"
+    }
+  ],
+  "pages": [
+    {
+      "name": "Page 1",
+      "width": 240,
+      "height": 320,
+      "widgets": [
+        {
+          "type": "List",
+          "value": "channels",
+          "x": 0,
+          "y": 0,
+          "w": 240,
+          "h": 320,
+          "widgets": [
+            {
+              "type": "switch_case",
+              "value": "mode",
+              "switch_case": {
+                "CV": {
+                  "type": "display",
+                  "style":  "style2",
+                  "value": "i_mon"
+                },
+                "CC": {
+                  "type": "display",
+                  "style":  "style2",
+                  "value": "u_mon"
+                },
+                "UR": {
+                  "type": "display",
+                  "style":  "style2",
+                  "value": "$Unregulated"
+                }
+              },
+              "x": 0,
+              "y": 0,
+              "w": 240,
+              "h": 80
+            },
+            {
+              "type": "edit",
+              "value": "u_set",
+              "style":  "style1",
+              "x": 0,
+              "y": 80,
+              "w": 120,
+              "h": 80
+            },
+            {
+              "type": "edit",
+              "value": "i_set",
+              "style":  "style1",
+              "x": 120,
+              "y": 80,
+              "w": 120,
+              "h": 80
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

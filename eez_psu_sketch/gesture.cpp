@@ -26,10 +26,10 @@ void recognize() {
     if (time > MIN_SLIDE_DURATION) {
         DebugTrace("Gesture recognize time passed");
 
-        if (distance_x > MIN_SLIDE_DISTANCE && abs(distance_x) > abs(distance_y)) gesture = GESTURE_SLIDE_RIGHT;
-        if (distance_x < -MIN_SLIDE_DISTANCE && abs(distance_x) > abs(distance_y)) gesture = GESTURE_SLIDE_LEFT;
-        if (distance_y > MIN_SLIDE_DISTANCE && abs(distance_y) > abs(distance_x)) gesture = GESTURE_SLIDE_DOWN;
         if (distance_y < -MIN_SLIDE_DISTANCE && abs(distance_y) > abs(distance_x)) gesture = GESTURE_SLIDE_UP;
+        if (distance_x > MIN_SLIDE_DISTANCE && abs(distance_x) > abs(distance_y)) gesture = GESTURE_SLIDE_RIGHT;
+        if (distance_y > MIN_SLIDE_DISTANCE && abs(distance_y) > abs(distance_x)) gesture = GESTURE_SLIDE_DOWN;
+        if (distance_x < -MIN_SLIDE_DISTANCE && abs(distance_x) > abs(distance_y)) gesture = GESTURE_SLIDE_LEFT;
     }
 
     if (gesture != GESTURE_NONE) {

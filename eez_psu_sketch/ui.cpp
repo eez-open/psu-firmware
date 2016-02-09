@@ -189,7 +189,65 @@ void draw(int x, int y, Box *box, State *state) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#pragma pack(push, 1)
+
+typedef uint16_t OBJ_OFFSET;
+
+struct List {
+    uint16_t count;
+    OBJ_OFFSET first;
+};
+
+struct Document {
+    List pages;
+};
+
+struct Widget {
+    uint16_t x;
+    uint16_t y;
+    uint16_t w;
+    uint16_t h;
+    List widgets;
+};
+
+struct Page {
+    uint16_t width;
+    uint16_t height;
+    List widgets;
+};
+
+uint8_t document[] = {
+    0x01, 0x00, 0x04, 0x00, 0xF0, 0x00, 0x40, 0x01, 0x01, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0xF0, 0x00, 0x40, 0x01, 0x03, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x00, 0x50, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x50, 0x00, 0x78, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x78, 0x00, 0x50, 0x00, 0x78, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00
+};
+
+#pragma pack(pop)
+
+////////////////////////////////////////////////////////////////////////////////
+
+void dump_widgets(uint8_t *start, List widgets) {
+    for (int i = 0; i < widgets.count; ++i) {
+        Widget *widget = (Widget *)(start + widgets.first) + i;
+        DebugTrace("%d", (int)widget->x);
+        DebugTrace("%d", (int)widget->y);
+        DebugTrace("%d", (int)widget->w);
+        DebugTrace("%d", (int)widget->h);
+        dump_widgets(start, widget->widgets);
+    }
+}
+
 void init() {
+    Document *doc = (Document *)document;
+    DebugTrace("%d", (int)doc->pages.count);
+
+    Page *page = (Page *)(document + doc->pages.first);
+    DebugTrace("%d", (int)page->width);
+    DebugTrace("%d", (int)page->height);
+
+    dump_widgets(document, page->widgets);
+
     touch::init();
 
     lcd::init();
@@ -198,6 +256,8 @@ void init() {
     lcd::lcd.setColor(VGA_WHITE);
     lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 void tick(unsigned long tick_usec) {
     touch::tick();

@@ -35,7 +35,7 @@ option.
 #define CONF_WAIT_SERIAL  0
 
 // Data rate in bits per second (baud) for serial data transmission.
-#define SERIAL_SPEED 9600
+#define SERIAL_SPEED 115200
 
 /// Enable all debug trace to the serial port. 
 #define CONF_DEBUG        1

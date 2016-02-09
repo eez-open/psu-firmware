@@ -10,10 +10,10 @@ namespace gesture {
 enum GestureType {
     GESTURE_NONE = 0,
 
-    GESTURE_SLIDE_LEFT = 1,
+    GESTURE_SLIDE_UP = 1,
     GESTURE_SLIDE_RIGHT = 2,
-    GESTURE_SLIDE_UP = 3,
-    GESTURE_SLIDE_DOWN = 4,
+    GESTURE_SLIDE_DOWN = 3,
+    GESTURE_SLIDE_LEFT = 4,
 };
 
 extern GestureType gesture;
