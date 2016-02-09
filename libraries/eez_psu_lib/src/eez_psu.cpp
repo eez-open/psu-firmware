@@ -104,6 +104,13 @@ void eez_psu_init() {
 
     pinMode(LED_CV2, OUTPUT);
     digitalWrite(LED_CV2, LOW);
+    
+    // Address issue with lack of proper SPI connection on PCB r1B9
+#if defined(_VARIANT_ARDUINO_DUE_X_)
+    pinMode(50, INPUT);
+    pinMode(51, INPUT);
+    pinMode(52, INPUT);
+#endif
 
     SPI.begin(); // wake up the SPI bus
 }    
