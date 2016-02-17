@@ -265,7 +265,6 @@ void tick(unsigned long tick_usec) {
 
     gesture::push_pointer(tick_usec, touch::is_down, touch::x, touch::y);
 
-    /*
     for (int i = 0; i < CH_NUM; ++i) {
         Channel &channel = Channel::get(i);
 
@@ -288,7 +287,6 @@ void tick(unsigned long tick_usec) {
             }
         }
     }
-    */
 }
 
 }
