@@ -58,18 +58,11 @@ word UTFT::getColor() {
 void UTFT::setBackColor(byte r, byte g, byte b) {
 	bch=((r&248)|g>>5);
 	bcl=((g&28)<<3|b>>3);
-	_transparent=false;
 }
 
 void UTFT::setBackColor(word color) {
-	if (color == VGA_TRANSPARENT) {
-		_transparent = true;
-    }
-    else {
-		bch = byte(color>>8);
-		bcl = byte(color & 0xFF);
-		_transparent = false;
-	}
+	bch = byte(color>>8);
+	bcl = byte(color & 0xFF);
 }
 
 word UTFT::getBackColor() {

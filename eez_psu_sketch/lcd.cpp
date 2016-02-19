@@ -22,7 +22,7 @@
 
 namespace eez {
 namespace psu {
-namespace ui {
+namespace gui {
 namespace lcd {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -33,31 +33,74 @@ EEZ_UTFT lcd(ITDB32S, LCD_RS, LCD_WR, LCD_CS, LCD_RESET);
 
 EEZ_UTFT::EEZ_UTFT(byte model, int RS, int WR, int CS, int RST, int SER)
 	: UTFT(model, RS, WR, CS, RST, SER)
-	, p_font(&font::MEDIUM_FONT)
+	, p_font(&font::medium_font)
 {
 }
 
-int8_t EEZ_UTFT::drawGlyph(int x, int y, uint8_t encoding) {
+int8_t EEZ_UTFT::drawGlyph(int x1, int y1, uint8_t encoding) {
 	font::Glyph glyph;
 	p_font->getGlyph(encoding, glyph);
 	if (!glyph.isFound())
 		return 0;
 
-	x += glyph.x;
-	y -= glyph.y + glyph.height;
+    int x2 = x1 + glyph.dx - 1;
+    int y2 = y1 + p_font->getHeight() - 1;
 
+    int x_glyph = x1 + glyph.x;
+    int y_glyph = y1 + p_font->getAscent() - (glyph.y + glyph.height);
+
+    // clear pixels around glyph
+    word color = getColor();
+
+    setColor(getBackColor());
+
+    if (x1 < x_glyph) {
+        fillRect(x1, y1, x_glyph - 1, y2);
+    }
+
+    if (x_glyph + glyph.width <= x2) {
+        fillRect(x_glyph + glyph.width, y1, x2, y2);
+    }
+
+    if (y1 < y_glyph) {
+        fillRect(x1, y1, x2, y_glyph - 1);
+    }
+
+    if (y_glyph + glyph.height <= y2) {
+        fillRect(x1, y_glyph + glyph.height, x2, y2);
+    }
+
+    setColor(color);
+    
+    // draw glyph pixels
 	uint8_t widthInBytes = (glyph.width + 7) / 8;
 
 	clear_bit(P_CS, B_CS);
 
-	if (!_transparent) {
-		if (orient == PORTRAIT) {
-			setXY(x, y, x + glyph.width - 1, y + glyph.height - 1);
-			for (int iRow = 0, offset = font::GLYPH_HEADER_SIZE; iRow < glyph.height; ++iRow) {
-				for (int iByte = 0, iCol = 0; iByte < widthInBytes; ++iByte, ++offset) {
-					uint8_t data = arduino_util::prog_read_byte(glyph.data + offset);
-					for (uint8_t mask = 0x80; mask != 0 && iCol < glyph.width; mask >>= 1, ++iCol) {
-						if (data & mask) {
+	if (orient == PORTRAIT) {
+		setXY(x_glyph, y_glyph, x_glyph + glyph.width - 1, y_glyph + glyph.height - 1);
+		for (int iRow = 0, offset = font::GLYPH_HEADER_SIZE; iRow < glyph.height; ++iRow) {
+			for (int iByte = 0, iCol = 0; iByte < widthInBytes; ++iByte, ++offset) {
+				uint8_t data = arduino_util::prog_read_byte(glyph.data + offset);
+				for (uint8_t mask = 0x80; mask != 0 && iCol < glyph.width; mask >>= 1, ++iCol) {
+					if (data & mask) {
+						setPixel((fch << 8) | fcl);
+					}
+					else {
+						setPixel((bch << 8) | bcl);
+					}
+				}
+			}
+		}
+	}
+	else {
+		for (int iRow = 0, offset = font::GLYPH_HEADER_SIZE; iRow < glyph.height; ++iRow) {
+			setXY(x_glyph, y_glyph + iRow, x_glyph + glyph.width - 1, y_glyph + iRow);
+			for (int iByte = widthInBytes - 1; iByte >= 0; --iByte) {
+				uint8_t data = arduino_util::prog_read_byte(glyph.data + offset + iByte);
+				for (int iBit = 7; iBit >= 0; --iBit) {
+					if (iByte * 8 + iBit < glyph.width) {
+						if (data & (0x80 >> iBit)) {
 							setPixel((fch << 8) | fcl);
 						}
 						else {
@@ -66,39 +109,8 @@ int8_t EEZ_UTFT::drawGlyph(int x, int y, uint8_t encoding) {
 					}
 				}
 			}
-		}
-		else {
-			for (int iRow = 0, offset = font::GLYPH_HEADER_SIZE; iRow < glyph.height; ++iRow) {
-				setXY(x, y + iRow, x + glyph.width - 1, y + iRow);
-				for (int iByte = widthInBytes - 1; iByte >= 0; --iByte) {
-					uint8_t data = arduino_util::prog_read_byte(glyph.data + offset + iByte);
-					for (int iBit = 7; iBit >= 0; --iBit) {
-						if (iByte * 8 + iBit < glyph.width) {
-							if (data & (0x80 >> iBit)) {
-								setPixel((fch << 8) | fcl);
-							}
-							else {
-								setPixel((bch << 8) | bcl);
-							}
-						}
-					}
-				}
 
-				offset += widthInBytes;
-			}
-		}
-	}
-	else {
-		for (int iRow = 0, offset = font::GLYPH_HEADER_SIZE; iRow < glyph.height; ++iRow) {
-			for (int iByte = 0, iCol = 0; iByte < widthInBytes; ++iByte, ++offset) {
-				uint8_t data = arduino_util::prog_read_byte(glyph.data + offset);
-				for (uint8_t mask = 0x80; mask != 0 && iCol < glyph.width; mask >>= 1, ++iCol) {
-					if (data & mask) {
-						setXY(x + iCol, y + iRow, x + iCol + 1, y + iRow + 1);
-						setPixel((fch << 8) | fcl);
-					}
-				}
-			}
+			offset += widthInBytes;
 		}
 	}
 
@@ -108,7 +120,7 @@ int8_t EEZ_UTFT::drawGlyph(int x, int y, uint8_t encoding) {
 	return glyph.dx;
 }
 
-void EEZ_UTFT::drawStr(int x, int y, const char *text, font::Font &font) {
+void EEZ_UTFT::drawStr(const char *text, int x, int y, font::Font &font) {
 	p_font = &font;
 
 	char encoding;

@@ -48,7 +48,6 @@ namespace arduino {
 #define VGA_NAVY		0x0010
 #define VGA_FUCHSIA		0xF81F
 #define VGA_PURPLE		0x8010
-#define VGA_TRANSPARENT	0xFFFFFFFF
 
 typedef uint16_t word;
 typedef void* bitmapdatatype;
@@ -90,7 +89,6 @@ public:
     regtype CS;
 	regtype	*P_CS;
 	regsize	B_CS;
-	bool	_transparent;
     word    x, y, x1, y1, x2, y2;
     word    *buffer;
 

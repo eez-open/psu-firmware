@@ -32,7 +32,7 @@
 #include "eeprom.h"
 #include "calibration.h"
 #include "profile.h"
-#include "ui.h"
+#include "gui.h"
 
 #ifdef EEZ_PSU_SIMULATOR
 #include "front_panel/control.h"
@@ -158,7 +158,7 @@ void boot() {
     DebugTrace("%d", offsetof(ProtectionConfiguration, state));
     */
 
-    ui::init();
+    gui::init();
 }
 
 bool powerUp() {
@@ -396,7 +396,7 @@ void tick() {
     ethernet::tick(tick_usec);
     sound::tick(tick_usec);
     profile::tick(tick_usec);
-    ui::tick(tick_usec);
+    gui::tick(tick_usec);
 }
 
 void setEsrBits(int bit_mask) {

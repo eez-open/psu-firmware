@@ -20,7 +20,7 @@
 
 namespace eez {
 namespace psu {
-namespace ui {
+namespace gui {
 namespace font {
 
 static const int GLYPH_HEADER_SIZE = 5;
@@ -60,9 +60,9 @@ private:
 	const uint8_t *fontData PROGMEM;
 };
 
-extern Font SMALL_FONT;
-extern Font MEDIUM_FONT;
-extern Font LARGE_FONT;
+extern Font small_font;
+extern Font medium_font;
+extern Font large_font;
 
 }
 }

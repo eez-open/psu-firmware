@@ -186,6 +186,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\ethernet.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\font.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gesture.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_data.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\ioexp.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\lcd.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\persist_conf.h" />
@@ -213,7 +214,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\temperature.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\temp_sensor.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\touch.h" />
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\ui.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\util.h" />
     <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\eez_psu.h" />
     <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\impl\fifo_private.h" />
@@ -267,6 +268,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\ethernet.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\font.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gesture.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_data.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\ioexp.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\lcd.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\persist_conf.cpp" />
@@ -293,7 +295,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\temperature.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\temp_sensor.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\touch.cpp" />
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\ui.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\util.cpp" />
     <ClCompile Include="..\..\..\..\libraries\eez_psu_lib\src\eez_psu.cpp" />
     <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\error.c" />

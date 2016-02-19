@@ -39,10 +39,12 @@ declare_const('STYLE_FLAGS_VERT_ALIGN_CENTER', 2 << 3)
 #-------------------------------------------------------------------------------
 
 declare_const('WIDGET_TYPE_NONE', 0)
-declare_const('WIDGET_TYPE_LIST', 1)
-declare_const('WIDGET_TYPE_SWITCH_CASE', 2)
-declare_const('WIDGET_TYPE_DISPLAY', 3)
-declare_const('WIDGET_TYPE_EDIT', 4)
+declare_const('WIDGET_TYPE_CONTAINER', 1)
+declare_const('WIDGET_TYPE_LIST', 2)
+declare_const('WIDGET_TYPE_SELECT', 3)
+declare_const('WIDGET_TYPE_DISPLAY', 4)
+declare_const('WIDGET_TYPE_DISPLAY_STRING', 5)
+declare_const('WIDGET_TYPE_EDIT', 6)
 
 #-------------------------------------------------------------------------------
 
@@ -76,6 +78,18 @@ def get_color(color_str):
         r, g, b = HTMLColorToRGB(color_str)
     # rrrrrggggggbbbbb
     return ((r >> 3) << 11) | ((g >> 2) << 5) | (b>>3)
+
+#-------------------------------------------------------------------------------
+
+DEFAULT_STYLE = {
+    'font': DEFAULT_FONT,
+    'flags': 0,
+    'background_color': get_color('white'),
+    'color': get_color('black'),
+    'border_color': get_color('black'),
+    'padding_horizontal': 0,
+    'padding_vertical': 0
+}
 
 #-------------------------------------------------------------------------------
 
@@ -113,25 +127,36 @@ class Field:
     def __init__(self, name):
         self.name = name
 
+    def enum_objects(self, objects):
+        pass
+
+    def finish(self):
+        pass
+
 class Struct(Field):
     def __init__(self, name, struct_name):
         super().__init__(name)
         self.fields = []
         self.struct_name = struct_name
+        self.size = 2
 
     def addField(self, field):
         self.fields.append(field)
 
-    def finish(self, objects):
-        objects.append(self)
+    def find_field(self, name):
+        for field in self.fields:
+            if field.name == name:
+                return field
 
+    def enum_objects(self, objects):
+        for field in self.fields:
+            field.enum_objects(objects)
+
+    def finish(self):
         offset = 0
         for field in self.fields:
             field.offset = offset
-            field.finish(objects)
             offset += field.size
-
-        self.size = 2
         self.object_size = offset
 
     def pack(self):
@@ -150,11 +175,11 @@ class StructPtr(Field):
     def __init__(self, name, value):
         super().__init__(name)
         self.value = value
-
-    def finish(self, objects):
-        if self.value:
-            self.value.finish(objects)
         self.size = 2
+
+    def enum_objects(self, objects):
+        if self.value:
+            objects.append(self.value)
 
     def pack(self):
         return struct.pack(BYTE_ORDER + 'H', self.value.object_offset if self.value else 0)
@@ -162,19 +187,25 @@ class StructPtr(Field):
     def c_type(self):
         return 'OBJ_OFFSET'
 
+class StructWeakPtr(StructPtr):
+    def __init__(self, name, value):
+        super().__init__(name, value)
+
+    def enum_objects(self, objects):
+        pass
+
 class List(Field):
     def __init__(self, name):
         super().__init__(name)
         self.items = []
+        self.size = 4
 
     def addItem(self, item):
         self.items.append(item)
 
-    def finish(self, objects):
+    def enum_objects(self, objects):
         for item in self.items:
-            item.finish(objects)
-
-        self.size = 4
+            objects.append(item)
 
     def pack(self):
         return struct.pack(BYTE_ORDER + 'HH', len(self.items), self.items[0].object_offset if len(self.items) > 0 else 0)
@@ -186,18 +217,20 @@ class String(Field):
     def __init__(self, name, value):
         super().__init__(name)
         self.value = value
-
-    def finish(self, objects):
-        objects.append(self)
         self.size = 2
         self.object_size = len(self.value) + 1
+        self.ap = False
+
+    def enum_objects(self, objects):
+        if not self.ap:
+            objects.append(self)
+            self.ap = True
 
     def pack(self):
         return struct.pack(BYTE_ORDER + 'H', self.object_offset)
 
     def pack_object(self):
-        packed_data = self.value.encode()
-        packed_data.append(0)
+        packed_data = (self.value + chr(0)).encode()
         return packed_data
 
     def c_type(self):
@@ -207,8 +240,6 @@ class UInt8(Field):
     def __init__(self, name, value):
         super().__init__(name)
         self.value = value
-
-    def finish(self, objects):
         self.size = 1
 
     def pack(self):
@@ -221,8 +252,6 @@ class UInt16(Field):
     def __init__(self, name, value):
         super().__init__(name)
         self.value = value
-
-    def finish(self, objects):
         self.size = 2
 
     def pack(self):
@@ -234,19 +263,19 @@ class UInt16(Field):
 #-------------------------------------------------------------------------------
 
 class Parser:
-    def __init__(self, model_file_path, view_file_path):
+    def __init__(self, data_file_path, view_file_path):
         self.trace = Output()
 
         try:
-            file = open(model_file_path)
+            file = open(data_file_path)
         except Exception as e:
-            self.trace.error("model file open error: %s" % e)
+            self.trace.error("data file open error: %s" % e)
             return
 
         try:
-            model = json.loads(file.read())
+            data = json.loads(file.read())
         except Exception as e:
-            self.trace.error("model file format error: %s" % e)
+            self.trace.error("data file format error: %s" % e)
             return
 
         try:
@@ -261,7 +290,7 @@ class Parser:
             self.trace.error("view file format error: %s" % e)
             return
 
-        self.model = model
+        self.data = data
         self.view = view
 
         self.styles = {}
@@ -273,6 +302,46 @@ class Parser:
 
     def num_warnings(self):
         return self.trace.num_warnings
+
+    def addUInt16Field(self, struct, collection, name, default_value, mandatory=True, parent=None):
+        if name in collection:
+            value = collection[name]
+            if not isinstance(value, int):
+                self.trace.error(name + " is not an integer")
+                value = default_value
+        elif parent:
+            value = parent.find_field(name).value
+        else:
+                if mandatory:
+                    self.trace.error(name + " is missing")
+                value = default_value
+        struct.addField(UInt16(name, value))
+
+    def addColorField(self, struct, collection, name, default_value, mandatory=True):
+        if name in collection:
+            color_str = collection[name]
+            if color_exists(color_str):
+                value = get_color(color_str)
+            else:
+                self.trace.error("%s: unknown color '%s'" % (name, color_str))
+                value = default_value
+        else:
+            if mandatory:
+                self.trace.error(name + " is missing")
+            value = default_value
+        struct.addField(UInt16(name, value))
+
+    def addStringField(self, struct, collection, name, default_value, mandatory=True):
+        if name in collection:
+            value = collection[name]
+            if not isinstance(value, str):
+                self.trace.error(name + " is not an string")
+                value = default_value
+        else:
+            if mandatory:
+                self.trace.error(name + " is missing")
+            value = default_value
+        struct.addField(String(name, value))
 
     def parse_document(self):
         self.document = Struct('document', 'Document')
@@ -287,6 +356,19 @@ class Parser:
             pages.addItem(self.parse_page(page))
         self.document.addField(pages)
 
+    def get_style(self, style_name):
+        return self.styles.get(style_name.lower())
+
+    def get_default_style(self):
+        return self.get_style('default')
+
+    def get_style_default(self, name):
+        default_style = self.get_default_style()
+        if default_style:
+            return default_style.find_field(name).value
+        else:
+            return DEFAULT_STYLE[name]
+
     def parse_style(self, style):
         result = Struct('style', 'Style')
 
@@ -298,11 +380,13 @@ class Parser:
 
         self.trace.indent()
 
+        default_style = self.get_default_style()
+
         # font
         if 'font' in style:
             font_str = style['font'].lower()
             if font_str == 'small':
-                fotn = SMALL_FONT
+                font = SMALL_FONT
             elif font_str == 'medium':
                 font = MEDIUM_FONT
             elif font_str == 'large':
@@ -311,20 +395,22 @@ class Parser:
                 self.trace.error("unknown font '%s'" % style['font'])
                 font = DEFAULT_FONT
         else:
-            font = DEFAULT_FONT
+            font = self.get_style_default('font')
         result.addField(UInt8('font', font))
 
         # flags
-        flags = 0
-        if 'border-size' in style:
-            if style['border-size'] == 0:
+        flags = self.get_style_default('flags')
+        if 'border_size' in style:
+            flags &= ~STYLE_FLAGS_BORDER
+            if style['border_size'] == 0:
                 pass
-            elif style['border-size'] == 1:
+            elif style['border_size'] == 1:
                 flags |= STYLE_FLAGS_BORDER
             else:
-                self.trace.error("only border-size 0 or 1 is supported")
-        if 'align-horizontal' in  style:
-            align_str = style['align-horizontal'].lower()
+                self.trace.error("only border_size 0 or 1 is supported")
+        if 'align_horizontal' in  style:
+            flags &= ~STYLE_FLAGS_HORZ_ALIGN
+            align_str = style['align_horizontal'].lower()
             if align_str == 'left':
                 pass
             elif align_str == 'right':
@@ -332,9 +418,10 @@ class Parser:
             elif align_str == 'center':
                 flags |= STYLE_FLAGS_HORZ_ALIGN_CENTER
             else:
-                self.trace.error("only align-horizontal left, right or center is allowed")
-        if 'align-vertical' in  style:
-            align_str = style['align-vertical'].lower()
+                self.trace.error("only align_horizontal left, right or center is allowed")
+        if 'align_vertical' in  style:
+            flags &= ~STYLE_FLAGS_VERT_ALIGN
+            align_str = style['align_vertical'].lower()
             if align_str == 'top':
                 pass
             elif align_str == 'bottom':
@@ -342,70 +429,21 @@ class Parser:
             elif align_str == 'center':
                 flags |= STYLE_FLAGS_VERT_ALIGN_CENTER
             else:
-                self.trace.error("only align-vertical top, bottom or center is allowed")
+                self.trace.error("only align_vertical top, bottom or center is allowed")
         result.addField(UInt16('flags', flags))
 
-        # background color
-        if 'background-color' in style:
-            color_str = style['background-color']
-            if color_exists(color_str):
-                background_color = get_color(color_str)
-            else:
-                self.trace.error("unknown background color '%s'" % color_str)
-                background_color = get_color('white')
-        else:
-            background_color = get_color('white')
-        result.addField(UInt16('background_color', background_color))
+        self.addColorField(result, style, 'background_color', self.get_style_default('background_color'), False)
+        self.addColorField(result, style, 'color', self.get_style_default('color'), False)
+        self.addColorField(result, style, 'border_color', self.get_style_default('border_color'), False)
 
-        # color
-        if 'color' in style:
-            color_str = style['background-color']
-            if color_exists(color_str):
-                color = get_color(color_str)
-            else:
-                self.trace.error("unknown color '%s'" % color_str)
-                color = get_color('black')
-        else:
-            color = get_color('black')
-        result.addField(UInt16('color', color))
-
-        # border color
-        if 'border-color' in style:
-            color_str = style['border-color']
-            if color_exists(color_str):
-                border_color = get_color(color_str)
-            else:
-                self.trace.error("unknown border-color '%s'" % color_str)
-                border_color = get_color('black')
-        else:
-            border_color = get_color('black')
-        result.addField(UInt16('border_color', border_color))
-
-        # horizontal padding
-        if "padding-horizontal" in style:
-            padding_horizontal = style['padding-horizontal']
-        else:
-            padding_horizontal = 0
-        result.addField(UInt16('padding_horizontal', padding_horizontal))
-
-        # vertical padding
-        if "padding-vertical" in style:
-            padding_vertical = style['padding-vertical']
-        else:
-            padding_vertical = 0
-        result.addField(UInt16('padding_vertical', padding_vertical))
+        self.addUInt16Field(result, style, 'padding_horizontal', self.get_style_default('padding_horizontal'), False)
+        self.addUInt16Field(result, style, 'padding_vertical', self.get_style_default('padding_vertical'), False)
 
         self.trace.unindent()
 
         self.styles[style['name'].lower()] = result
 
         return result
-
-    def get_style(self, style_name):
-        return self.styles.get(style_name.lower())
-
-    def get_default_style(self):
-        return self.get_style('default')
 
     def parse_page(self, page):
         if 'name' in page:
@@ -420,15 +458,8 @@ class Parser:
 
         result = Struct('page', 'Page')
 
-        if 'width' in page:
-            result.addField(UInt16('width', page['width']))
-        else:
-            self.trace.error("width is missing")
-
-        if 'height' in page:
-            result.addField(UInt16('height', page['height']))
-        else:
-            self.trace.error("height is missing")
+        self.addUInt16Field(result, page, 'w', 0)
+        self.addUInt16Field(result, page, 'h', 0)
 
         if not 'widgets' in page:
             self.trace.error("widgets is missing")
@@ -442,11 +473,48 @@ class Parser:
 
         return result
 
-    def parse_widget(self, index, widget):
+    def parse_widget(self, index, widget, parent=None):
         self.trace.info("Widget %d" % index)
         self.trace.indent()
 
         result = Struct('widget', 'Widget')
+
+        if "type" in widget:
+            type_str = widget['type'].lower()
+            if type_str == 'container':
+                widget_type = WIDGET_TYPE_CONTAINER
+            elif type_str == 'list':
+                widget_type = WIDGET_TYPE_LIST
+            elif type_str == 'select':
+                widget_type = WIDGET_TYPE_SELECT
+            elif type_str == 'display':
+                widget_type = WIDGET_TYPE_DISPLAY
+            elif type_str == 'display_string':
+                widget_type = WIDGET_TYPE_DISPLAY_STRING
+            elif type_str == 'edit':
+                widget_type = WIDGET_TYPE_EDIT
+            else:
+                self.trace.error("unkown type '%s'" % type_str)
+                widget_type = WIDGET_TYPE_NONE
+        else:
+            self.trace.error("type is missing")
+            widget_type = WIDGET_TYPE_NONE
+
+        result.addField(UInt8("type", widget_type))
+
+        if widget_type == WIDGET_TYPE_CONTAINER:
+            # data is always 0
+            result.addField(UInt16('data', 0))
+        elif widget_type == WIDGET_TYPE_DISPLAY_STRING:
+            # data is string
+            self.addStringField(result, widget, 'data', "")
+        else:
+            self.addUInt16Field(result, widget, 'data', 0)
+
+        self.addUInt16Field(result, widget, 'x', 0, parent=parent)
+        self.addUInt16Field(result, widget, 'y', 0, parent=parent)
+        self.addUInt16Field(result, widget, 'w', 0, parent=parent)
+        self.addUInt16Field(result, widget, 'h', 0, parent=parent)
 
         if "style" in widget:
             style = self.get_style(widget['style'])
@@ -455,58 +523,20 @@ class Parser:
                 style = self.get_default_style()
         else:
             style = self.get_default_style()
-        result.addField(StructPtr('style', style))
+        result.addField(StructWeakPtr('style', style))
 
-        if 'x' in widget:
-            result.addField(UInt16('x', widget['x']))
+        if widget_type == WIDGET_TYPE_CONTAINER or widget_type == WIDGET_TYPE_LIST or widget_type == WIDGET_TYPE_SELECT:
+            specific_widget_data = Struct(None, 'ContainerWidget')
+
+            select_widgets = List('widgets')
+            if 'widgets' in widget:
+                for index, w in enumerate(widget['widgets']):
+                    select_widgets.addItem(self.parse_widget(index, w, result))
+            specific_widget_data.addField(select_widgets)
         else:
-            self.trace.error("x is missing")
-
-        if 'y' in widget:
-            result.addField(UInt16('y', widget['y']))
-        else:
-            self.trace.error("y is missing")
-
-        if 'w' in widget:
-            result.addField(UInt16('w', widget['w']))
-        else:
-            self.trace.error("w is missing")
-
-        if 'h' in widget:
-            result.addField(UInt16('h', widget['h']))
-        else:
-            self.trace.error("h is missing")
-
-        if "type" in widget:
-            type_str = widget['type'].lower()
-            if type_str == 'list':
-                widget_type = WIDGET_TYPE_LIST
-                specific_widget_data = Struct(None, 'ListWidget')
-
-                list_widgets = List('widgets')
-                if 'widgets' in widget:
-                    for index, w in enumerate(widget['widgets']):
-                        list_widgets.addItem(self.parse_widget(index, w))
-                specific_widget_data.addField(list_widgets)
-            elif type_str == 'switch_case':
-                widget_type = WIDGET_TYPE_SWITCH_CASE
-                specific_widget_data = Struct(None, 'SwitchCaseWidget')
-            elif type_str == 'display':
-                widget_type = WIDGET_TYPE_DISPLAY
-                specific_widget_data = Struct(None, 'DisplayWidget')
-            elif type_str == 'edit':
-                widget_type = WIDGET_TYPE_EDIT
-                specific_widget_data = Struct(None, 'EditWidget')
-            else:
-                self.trace.error("unkown type '%s'" % type_str)
-                widget_type = WIDGET_TYPE_NONE
-                specific_widget_data = 0
-        else:
-            self.trace.error("type is missing")
-            widget_type = WIDGET_TYPE_NONE
             specific_widget_data = 0
-        result.addField(UInt8("widget_type", widget_type))
-        result.addField(StructPtr("specific_widget_data", specific_widget_data))
+
+        result.addField(StructPtr("specific", specific_widget_data))
 
         self.trace.unindent()
 
@@ -516,7 +546,19 @@ class Parser:
 
 def finish(document):
     objects = []
-    document.finish(objects)
+
+    current_objects = [document]
+    while True:
+        objects.extend(current_objects);
+        new_objects = []
+        for object in current_objects:
+            object.enum_objects(new_objects)
+        if len(new_objects) == 0:
+            break
+        current_objects = new_objects
+
+    for object in objects:
+        object.finish();
     
     object_offset = 0
     for object in objects:
@@ -526,7 +568,7 @@ def finish(document):
     return objects
 
 def generate_source_code(objects, tab):
-    result = ''
+    result = '#pragma pack(push, 1)\n\n'
 
     #generate constants
     for constant in constants:
@@ -554,6 +596,8 @@ def generate_source_code(objects, tab):
             result += tab + field.c_type() + ' ' + field.name + ';\n'
         result += '};\n\n'
 
+    result += '#pragma pack(pop)\n\n'
+
     return result
 
 def pack(objects):
@@ -580,7 +624,7 @@ def to_c_buffer(self, tab, num_columns):
     
 #-------------------------------------------------------------------------------
 
-parser = Parser('./model.json', './view.json')
+parser = Parser('./data.json', './view.json')
 print("\n%d errors, %d warnings" % (parser.num_errors(), parser.num_warnings()))
 
 if parser.num_errors() == 0:

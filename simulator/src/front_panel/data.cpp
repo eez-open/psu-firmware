@@ -93,7 +93,7 @@ void fillLocalControlBuffer(Data *data) {
         data->local_control_widget.pixels = new unsigned char[240 * 320 * 4];
     }
 
-    word *src = ui::lcd::lcd.buffer;
+    word *src = gui::lcd::lcd.buffer;
     unsigned char *dst = data->local_control_widget.pixels;
 
     for (int x = 0; x < 240; ++x) {

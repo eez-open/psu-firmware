@@ -6,7 +6,7 @@
 
 namespace eez {
 namespace psu {
-namespace ui {
+namespace gui {
 namespace gesture {
 
 unsigned long last_tick_usec;

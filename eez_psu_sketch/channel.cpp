@@ -634,5 +634,11 @@ void Channel::setOperBits(int bit_mask, bool on) {
         reg_set_oper_isum_bit(&ethernet::scpi_context, this, bit_mask, on);
 }
 
+char *Channel::getCvModeStr() {
+    if (isCvMode()) return "CV";
+    else if (isCcMode()) return "CC";
+    else return "UR";
+}
+
 }
 } // namespace eez::psu

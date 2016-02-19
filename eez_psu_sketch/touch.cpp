@@ -3,7 +3,7 @@
 
 namespace eez {
 namespace psu {
-namespace ui {
+namespace gui {
 namespace touch {
 
 // Initialize touchscreen

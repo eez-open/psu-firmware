@@ -23,20 +23,20 @@
 
 namespace eez {
 namespace psu {
-namespace ui {
+namespace gui {
 namespace lcd {
 
 class EEZ_UTFT : public UTFT {
 public:
     EEZ_UTFT(byte model, int RS, int WR, int CS, int RST, int SER = 0);
 
-    void drawStr(int x, int y, const char *text, font::Font &font);
+    void drawStr(const char *text, int x, int y, font::Font &font);
     int measureStr(const char *text, font::Font &font);
 
 private:
     font::Font *p_font;
 
-    int8_t drawGlyph(int x, int y, uint8_t encoding);
+    int8_t drawGlyph(int x1, int y1, uint8_t encoding);
     int8_t measureGlyph(uint8_t encoding);
 };
 

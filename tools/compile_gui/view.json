@@ -5,82 +5,110 @@
     {
       "name": "default",
       "font": "medium",
-      "align-horizontal": "center",
-      "align-vertical": "center",
+      "align_horizontal": "center",
+      "align_vertical": "center",
       "color": "black",
-      "background-color": "white",
-      "border-size": "0",
-      "padding-horizontal": 4,
-      "padding-vertical": 2
+      "background_color": "white",
+      "border_size": 1,
+      "border_color": "lightgray",
+      "padding_horizontal": 4,
+      "padding_vertical": 2
     },
     {
-      "name": "style1",
-      "border-size": "1",
-      "border-color": "blue"
+      "name": "style1"
     },
     {
       "name": "style2",
-      "font": "large",
-      "border-size": "1",
-      "border-color": "green"
+      "font": "large"
+    },
+    {
+      "name": "style3",
+      "color": "red"
     }
   ],
   "pages": [
     {
       "name": "Page 1",
-      "width": 240,
-      "height": 320,
+      "w": 240,
+      "h": 320,
       "widgets": [
         {
           "type": "List",
-          "value": "channels",
+          "data": 1,
           "x": 0,
           "y": 0,
-          "w": 240,
-          "h": 320,
+          "w": 0,
+          "h": 160,
           "widgets": [
             {
-              "type": "switch_case",
-              "value": "mode",
-              "switch_case": {
-                "CV": {
-                  "type": "display",
-                  "style":  "style2",
-                  "value": "i_mon"
-                },
-                "CC": {
-                  "type": "display",
-                  "style":  "style2",
-                  "value": "u_mon"
-                },
-                "UR": {
-                  "type": "display",
-                  "style":  "style2",
-                  "value": "$Unregulated"
-                }
-              },
+              "type": "select",
               "x": 0,
               "y": 0,
               "w": 240,
-              "h": 80
-            },
-            {
-              "type": "edit",
-              "value": "u_set",
-              "style":  "style1",
-              "x": 0,
-              "y": 80,
-              "w": 120,
-              "h": 80
-            },
-            {
-              "type": "edit",
-              "value": "i_set",
-              "style":  "style1",
-              "x": 120,
-              "y": 80,
-              "w": 120,
-              "h": 80
+              "h": 160,
+              "data": 2,
+              "widgets": [
+                {
+                  "type": "display_string",
+                  "data": "OFF",
+                  "x": 0,
+                  "y": 0,
+                  "w": 240,
+                  "h": 160
+                },
+                {
+                  "type": "container",
+                  "x": 0,
+                  "y": 0,
+                  "w": 240,
+                  "h": 160,
+                  "widgets": [
+                    {
+                      "type": "select",
+                      "data": 3,
+                      "x": 0,
+                      "y": 0,
+                      "w": 240,
+                      "h": 100,
+                      "widgets": [
+                        {
+                          "type": "display",
+                          "style": "style2",
+                          "data": 5
+                        },
+                        {
+                          "type": "display",
+                          "style": "style2",
+                          "data": 4
+                        },
+                        {
+                          "type": "display_string",
+                          "style": "style3",
+                          "data": "Unregulated"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "edit",
+                      "data": 6,
+                      "style": "style1",
+                      "x": 0,
+                      "y": 100,
+                      "w": 120,
+                      "h": 60
+                    },
+                    {
+                      "type": "edit",
+                      "data": 7,
+                      "style": "style1",
+                      "x": 120,
+                      "y": 100,
+                      "w": 120,
+                      "h": 60
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

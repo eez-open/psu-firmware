@@ -35,12 +35,7 @@ scpi_result_t scpi_outp_ModeQ(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    if (channel->isCvMode())
-        SCPI_ResultText(context, "CV");
-    else if (channel->isCcMode())
-        SCPI_ResultText(context, "CC");
-    else
-        SCPI_ResultText(context, "UR");
+    SCPI_ResultText(context, channel->getCvModeStr());
 
     return SCPI_RES_OK;
 }

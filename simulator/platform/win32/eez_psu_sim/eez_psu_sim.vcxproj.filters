@@ -37,7 +37,7 @@
     <Filter Include="simulator\ethernet">
       <UniqueIdentifier>{25e172cb-9054-4230-b5b2-7a0b1bf6d039}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ui">
+    <Filter Include="gui">
       <UniqueIdentifier>{6f7bf7bb-8d4e-4c08-88cc-1daf07b09165}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -266,13 +266,10 @@
       <Filter>simulator\ethernet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\font.h">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\lcd.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\ui.h">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\arduino\UTFT.h">
       <Filter>simulator\arduino</Filter>
@@ -281,13 +278,19 @@
       <Filter>board</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\touch.h">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\arduino\UTouch.h">
       <Filter>simulator\arduino</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gesture.h">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_data.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui.h">
+      <Filter>gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -461,13 +464,10 @@
       <Filter>simulator\ethernet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\font.cpp">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\lcd.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\ui.cpp">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\arduino\UTFT.cpp">
       <Filter>simulator\arduino</Filter>
@@ -476,13 +476,19 @@
       <Filter>board</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\touch.cpp">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\arduino\UTouch.cpp">
       <Filter>simulator\arduino</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gesture.cpp">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_data.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui.cpp">
+      <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

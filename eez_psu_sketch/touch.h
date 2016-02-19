@@ -4,7 +4,7 @@
 
 namespace eez {
 namespace psu {
-namespace ui {
+namespace gui {
 namespace touch {
 
 extern void init();

@@ -20,7 +20,7 @@
 
 namespace eez {
 namespace psu {
-namespace ui {
+namespace gui {
 
 void init();
 void tick(unsigned long tick_usec);

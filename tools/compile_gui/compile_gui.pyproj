@@ -25,9 +25,7 @@
     <Compile Include="compile_gui.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="model.json">
-      <SubType>Code</SubType>
-    </Content>
+    <Content Include="data.json" />
     <Content Include="view.json">
       <SubType>Code</SubType>
     </Content>

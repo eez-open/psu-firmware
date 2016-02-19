@@ -347,6 +347,9 @@ public:
     /// Is channel in CC (constant current) mode?
     bool isCcMode() { return flags.cc_mode && !flags.cv_mode; }
 
+    /// Returns "CC", "CV" or "UR"
+    char *getCvModeStr();
+
     /// Remap ADC data value to actual voltage value (use calibration if configured).
     float remapAdcDataToVoltage(int16_t adc_data);
 
