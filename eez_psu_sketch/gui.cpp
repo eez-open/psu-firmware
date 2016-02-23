@@ -155,14 +155,12 @@ void draw_three_state_indicator_widget(uint8_t *start, Widget *widget, int x, in
     int state = (int)data::get(widget->data);
     if (state != 0) {
         ThreeStateIndicatorWidget *three_state_indicator_widget = ((ThreeStateIndicatorWidget *)(start + widget->specific));
+
         OBJ_OFFSET style;
-        if (state == 1) {
-            style = widget->style;
-        } else if (state == 2) {
-            style = three_state_indicator_widget->style1;
-        } else if (state == 3) {
-            style = three_state_indicator_widget->style2;
-        }
+        if (state == 1) style = widget->style;
+        else if (state == 2) style = three_state_indicator_widget->style1;
+        else style = three_state_indicator_widget->style2;
+
         char *text = (char *)(start + three_state_indicator_widget->text);
         drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(start + style));
     }
