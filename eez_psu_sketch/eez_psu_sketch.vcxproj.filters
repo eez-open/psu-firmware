@@ -21,7 +21,7 @@
     <Filter Include="scpi\commands">
       <UniqueIdentifier>{47bf6e48-0d4d-4c32-a671-c466211d8afc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ui">
+    <Filter Include="gui">
       <UniqueIdentifier>{1ffe9454-3555-4c47-95d7-54018eb43534}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -160,22 +160,25 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="lcd.h">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="font.h">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="arduino_util.h">
       <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="ui.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="touch.h">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="gesture.h">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_data.h">
+      <Filter>gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -288,22 +291,25 @@
       <Filter>scpi\commands</Filter>
     </ClCompile>
     <ClCompile Include="lcd.cpp">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="font.cpp">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="arduino_util.cpp">
       <Filter>board</Filter>
     </ClCompile>
-    <ClCompile Include="ui.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="touch.cpp">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="gesture.cpp">
-      <Filter>ui</Filter>
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_data.cpp">
+      <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

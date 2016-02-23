@@ -45,6 +45,7 @@ declare_const('WIDGET_TYPE_SELECT', 3)
 declare_const('WIDGET_TYPE_DISPLAY', 4)
 declare_const('WIDGET_TYPE_DISPLAY_STRING', 5)
 declare_const('WIDGET_TYPE_EDIT', 6)
+declare_const('WIDGET_TYPE_THREE_STATE_INDICATOR', 7)
 
 #-------------------------------------------------------------------------------
 
@@ -362,7 +363,9 @@ class Parser:
     def get_default_style(self):
         return self.get_style('default')
 
-    def get_style_default(self, name):
+    def get_style_property(self, style, name):
+        if style:
+            return style.find_field(name).value
         default_style = self.get_default_style()
         if default_style:
             return default_style.find_field(name).value
@@ -380,7 +383,14 @@ class Parser:
 
         self.trace.indent()
 
-        default_style = self.get_default_style()
+        if 'base' in style:
+            default_style = self.get_style(style['base'])
+            if not default_style:
+                self.trace.error("unknown base style '%s'" % style['base'])
+        else:
+            default_style = None
+        if not default_style:
+            default_style = self.get_default_style()
 
         # font
         if 'font' in style:
@@ -395,11 +405,11 @@ class Parser:
                 self.trace.error("unknown font '%s'" % style['font'])
                 font = DEFAULT_FONT
         else:
-            font = self.get_style_default('font')
+            font = self.get_style_property(default_style, 'font')
         result.addField(UInt8('font', font))
 
         # flags
-        flags = self.get_style_default('flags')
+        flags = self.get_style_property(default_style, 'flags')
         if 'border_size' in style:
             flags &= ~STYLE_FLAGS_BORDER
             if style['border_size'] == 0:
@@ -432,12 +442,12 @@ class Parser:
                 self.trace.error("only align_vertical top, bottom or center is allowed")
         result.addField(UInt16('flags', flags))
 
-        self.addColorField(result, style, 'background_color', self.get_style_default('background_color'), False)
-        self.addColorField(result, style, 'color', self.get_style_default('color'), False)
-        self.addColorField(result, style, 'border_color', self.get_style_default('border_color'), False)
+        self.addColorField(result, style, 'background_color', self.get_style_property(default_style, 'background_color'), False)
+        self.addColorField(result, style, 'color', self.get_style_property(default_style, 'color'), False)
+        self.addColorField(result, style, 'border_color', self.get_style_property(default_style, 'border_color'), False)
 
-        self.addUInt16Field(result, style, 'padding_horizontal', self.get_style_default('padding_horizontal'), False)
-        self.addUInt16Field(result, style, 'padding_vertical', self.get_style_default('padding_vertical'), False)
+        self.addUInt16Field(result, style, 'padding_horizontal', self.get_style_property(default_style, 'padding_horizontal'), False)
+        self.addUInt16Field(result, style, 'padding_vertical', self.get_style_property(default_style, 'padding_vertical'), False)
 
         self.trace.unindent()
 
@@ -493,6 +503,8 @@ class Parser:
                 widget_type = WIDGET_TYPE_DISPLAY_STRING
             elif type_str == 'edit':
                 widget_type = WIDGET_TYPE_EDIT
+            elif type_str == 'three_state_indicator':
+                widget_type = WIDGET_TYPE_THREE_STATE_INDICATOR
             else:
                 self.trace.error("unkown type '%s'" % type_str)
                 widget_type = WIDGET_TYPE_NONE
@@ -533,6 +545,24 @@ class Parser:
                 for index, w in enumerate(widget['widgets']):
                     select_widgets.addItem(self.parse_widget(index, w, result))
             specific_widget_data.addField(select_widgets)
+        elif widget_type == WIDGET_TYPE_THREE_STATE_INDICATOR:
+            specific_widget_data = Struct(None, 'ThreeStateIndicatorWidget')
+
+            if "style1" in widget:
+                style1 = self.get_style(widget['style1'])
+                if not style1:
+                    self.trace.error("style1 '%s' not found" % widget['style1'])
+                    style1 = self.get_default_style()
+            specific_widget_data.addField(StructWeakPtr('style1', style1))
+
+            if "style2" in widget:
+                style2 = self.get_style(widget['style2'])
+                if not style2:
+                    self.trace.error("style2 '%s' not found" % widget['style2'])
+                    style2 = self.get_default_style()
+            specific_widget_data.addField(StructWeakPtr('style2', style2))
+
+            self.addStringField(specific_widget_data, widget, 'text', "")
         else:
             specific_widget_data = 0
 
@@ -630,9 +660,34 @@ print("\n%d errors, %d warnings" % (parser.num_errors(), parser.num_warnings()))
 if parser.num_errors() == 0:
     objects = finish(parser.document)
 
+    if len(sys.argv) == 2:
+        output_file = open(sys.argv[1], "w")
+    else:
+        output_file = sys.stdout
+
+    output_file.write("""/*
+ * EEZ PSU Firmware
+ * Copyright (C) 2015 Envox d.o.o.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */\n\n""")
+
     c_structs = generate_source_code(objects, '    ')
-    print(c_structs, end='')
+    output_file.write(c_structs)
 
     packed_data = pack(objects)
     c_buffer = to_c_buffer(packed_data, '    ', 16)
-    print('uint8_t document[%d] = %s;' % (len(packed_data), c_buffer))
+    output_file.write('uint8_t document[%d] = %s;\n' % (len(packed_data), c_buffer))
+
+    output_file.close()

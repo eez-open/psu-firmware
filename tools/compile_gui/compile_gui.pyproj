@@ -12,6 +12,9 @@
     <OutputPath>.</OutputPath>
     <Name>compile_gui</Name>
     <RootNamespace>compile_gui</RootNamespace>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <CommandLineArguments>..\..\eez_psu_sketch\gui_view.h</CommandLineArguments>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>

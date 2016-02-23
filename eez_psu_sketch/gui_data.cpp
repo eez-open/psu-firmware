@@ -28,6 +28,10 @@
 #define DATA_ID_MEAS_CURR 5
 #define DATA_ID_VOLT 6
 #define DATA_ID_CURR 7
+#define DATA_ID_OVP 8
+#define DATA_ID_OCP 9
+#define DATA_ID_OPP 10
+#define DATA_ID_OTP 11
 
 namespace eez {
 namespace psu {
@@ -96,6 +100,22 @@ char *get(uint16_t id) {
         if (strcmp(selected_channel_last_state->i_set, value) == 0) return 0;
         strcpy(selected_channel_last_state->i_set, value);
         return value;
+    } else if (id == DATA_ID_OVP) {
+        if (!selected_channel->prot_conf.flags.u_state) return 0;
+        if (!selected_channel->ovp.flags.tripped) return (char *)1;
+        return (char *)2;
+    } else if (id == DATA_ID_OCP) {
+        if (!selected_channel->prot_conf.flags.i_state) return 0;
+        if (!selected_channel->ocp.flags.tripped) return (char *)1;
+        return (char *)2;
+    } else if (id == DATA_ID_OPP) {
+        if (!selected_channel->prot_conf.flags.p_state) return 0;
+        if (!selected_channel->opp.flags.tripped) return (char *)1;
+        return (char *)2;
+    } else if (id == DATA_ID_OTP) {
+        if (!temperature::prot_conf[temp_sensor::MAIN].state) return 0;
+        if (!temperature::isSensorTripped(temp_sensor::MAIN)) return (char *)1;
+        return (char *)2;
     }
 
     return 0;

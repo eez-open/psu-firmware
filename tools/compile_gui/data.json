@@ -25,13 +25,33 @@
     "operation": "get"
   },
   {
-    "id": 7,
+    "id": 6,
     "description": "scpi: volt? and volt",
     "operations": "get,set"
   },
   {
-    "id": 8,
+    "id": 7,
     "description": "scpi: curr? and curr",
     "operations": "get,set"
+  },
+  {
+    "id": 8,
+    "description": "scpi: volt:prot:stat? volt:prot:trip?",
+    "operations": "get"
+  },
+  {
+    "id": 9,
+    "description": "scpi: curr:prot:stat? curr:prot:trip?",
+    "operations": "get"
+  },
+  {
+    "id": 10,
+    "description": "scpi: pow:prot:stat? pow:prot:trip?",
+    "operations": "get"
+  },
+  {
+    "id": 11,
+    "description": "scpi: syst:temp:prot:stat? syst:temp:prot:trip?",
+    "operations": "get"
   }
 ]

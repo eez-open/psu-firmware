@@ -143,6 +143,8 @@
     <ClInclude Include="conf_user.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="gesture.h" />
+    <ClInclude Include="gui.h" />
+    <ClInclude Include="gui_data.h" />
     <ClInclude Include="lcd.h" />
     <ClInclude Include="profile.h" />
     <ClInclude Include="scpi_debug.h" />
@@ -228,7 +230,6 @@
     <ClInclude Include="temperature.h" />
     <ClInclude Include="temp_sensor.h" />
     <ClInclude Include="touch.h" />
-    <ClInclude Include="ui.h" />
     <ClInclude Include="util.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -241,6 +242,8 @@
     <ClCompile Include="buzzer.cpp" />
     <ClCompile Include="font.cpp" />
     <ClCompile Include="gesture.cpp" />
+    <ClCompile Include="gui.cpp" />
+    <ClCompile Include="gui_data.cpp" />
     <ClCompile Include="lcd.cpp" />
     <ClCompile Include="profile.cpp" />
     <ClCompile Include="scpi_debug.cpp" />
@@ -276,7 +279,6 @@
     <ClCompile Include="temperature.cpp" />
     <ClCompile Include="temp_sensor.cpp" />
     <ClCompile Include="touch.cpp" />
-    <ClCompile Include="ui.cpp" />
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

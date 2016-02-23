@@ -7,12 +7,12 @@
       "font": "medium",
       "align_horizontal": "center",
       "align_vertical": "center",
-      "color": "black",
-      "background_color": "white",
-      "border_size": 1,
+      "color": "#FFFF00",
+      "background_color": "#52B5D3",
+      "border_size": 0,
       "border_color": "lightgray",
-      "padding_horizontal": 4,
-      "padding_vertical": 2
+      "padding_horizontal": 0,
+      "padding_vertical": 0
     },
     {
       "name": "style1"
@@ -24,6 +24,26 @@
     {
       "name": "style3",
       "color": "red"
+    },
+    {
+      "name": "prot_indicator",
+      "font": "small",
+      "color": "#808080"
+    },
+    {
+      "base": "prot_indicator",
+      "name": "prot_indicator_set",
+      "color": "green"
+    },
+    {
+      "base": "prot_indicator",
+      "name": "prot_indicator_trip",
+      "color": "red"
+    },
+    {
+      "name": "menu",
+      "font": "small",
+      "color": "white"
     }
   ],
   "pages": [
@@ -38,14 +58,14 @@
           "x": 0,
           "y": 0,
           "w": 0,
-          "h": 160,
+          "h": 138,
           "widgets": [
             {
               "type": "select",
               "x": 0,
               "y": 0,
               "w": 240,
-              "h": 160,
+              "h": 138,
               "data": 2,
               "widgets": [
                 {
@@ -54,22 +74,79 @@
                   "x": 0,
                   "y": 0,
                   "w": 240,
-                  "h": 160
+                  "h": 138
                 },
                 {
                   "type": "container",
                   "x": 0,
                   "y": 0,
                   "w": 240,
-                  "h": 160,
+                  "h": 138,
                   "widgets": [
+                    {
+                      "type": "three_state_indicator",
+                      "data": 8,
+                      "x": 0,
+                      "y": 0,
+                      "w": 44,
+                      "h": 26,
+                      "style": "prot_indicator",
+                      "style1": "prot_indicator_set",
+                      "style2": "prot_indicator_trip",
+                      "text": "OVP"
+                    },
+                    {
+                      "type": "three_state_indicator",
+                      "data": 9,
+                      "x": 44,
+                      "y": 0,
+                      "w": 44,
+                      "h": 26,
+                      "style": "prot_indicator",
+                      "style1": "prot_indicator_set",
+                      "style2": "prot_indicator_trip",
+                      "text": "OCP"
+                    },
+                    {
+                      "type": "three_state_indicator",
+                      "data": 10,
+                      "x": 88,
+                      "y": 0,
+                      "w": 44,
+                      "h": 26,
+                      "style": "prot_indicator",
+                      "style1": "prot_indicator_set",
+                      "style2": "prot_indicator_trip",
+                      "text": "OPP"
+                    },
+                    {
+                      "type": "three_state_indicator",
+                      "data": 11,
+                      "x": 132,
+                      "y": 0,
+                      "w": 44,
+                      "h": 26,
+                      "style": "prot_indicator",
+                      "style1": "prot_indicator_set",
+                      "style2": "prot_indicator_trip",
+                      "text": "OTP"
+                    },
+                    {
+                      "type": "display_string",
+                      "data": "DP off",
+                      "x": 176,
+                      "y": 0,
+                      "w": 64,
+                      "h": 26,
+                      "style": "prot_indicator"
+                    },
                     {
                       "type": "select",
                       "data": 3,
                       "x": 0,
-                      "y": 0,
+                      "y": 26,
                       "w": 240,
-                      "h": 100,
+                      "h": 72,
                       "widgets": [
                         {
                           "type": "display",
@@ -93,24 +170,33 @@
                       "data": 6,
                       "style": "style1",
                       "x": 0,
-                      "y": 100,
+                      "y": 98,
                       "w": 120,
-                      "h": 60
+                      "h": 40
                     },
                     {
                       "type": "edit",
                       "data": 7,
                       "style": "style1",
                       "x": 120,
-                      "y": 100,
+                      "y": 98,
                       "w": 120,
-                      "h": 60
+                      "h": 40
                     }
                   ]
                 }
               ]
             }
           ]
+        },
+        {
+          "type": "display_string",
+          "data": "Main | Off | Remote",
+          "x": 0,
+          "y": 276,
+          "w": 240,
+          "h": 44,
+          "style": "menu"
         }
       ]
     }

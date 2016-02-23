@@ -292,6 +292,9 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui.h">
       <Filter>gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_view.h">
+      <Filter>gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -484,10 +487,10 @@
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gesture.cpp">
       <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_data.cpp">
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui.cpp">
       <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui.cpp">
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_data.cpp">
       <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>

@@ -31,93 +31,7 @@ namespace gui {
 
 using namespace lcd;
 
-////////////////////////////////////////////////////////////////////////////////
-
-#pragma pack(push, 1)
-
-#define SMALL_FONT 1
-#define MEDIUM_FONT 2
-#define LARGE_FONT 3
-#define STYLE_FLAGS_BORDER 1
-#define STYLE_FLAGS_HORZ_ALIGN 6
-#define STYLE_FLAGS_HORZ_ALIGN_LEFT 0
-#define STYLE_FLAGS_HORZ_ALIGN_RIGHT 2
-#define STYLE_FLAGS_HORZ_ALIGN_CENTER 4
-#define STYLE_FLAGS_VERT_ALIGN 24
-#define STYLE_FLAGS_VERT_ALIGN_TOP 0
-#define STYLE_FLAGS_VERT_ALIGN_BOTTOM 8
-#define STYLE_FLAGS_VERT_ALIGN_CENTER 16
-#define WIDGET_TYPE_NONE 0
-#define WIDGET_TYPE_CONTAINER 1
-#define WIDGET_TYPE_LIST 2
-#define WIDGET_TYPE_SELECT 3
-#define WIDGET_TYPE_DISPLAY 4
-#define WIDGET_TYPE_DISPLAY_STRING 5
-#define WIDGET_TYPE_EDIT 6
-
-typedef uint16_t OBJ_OFFSET;
-
-struct List {
-    uint16_t count;
-    OBJ_OFFSET first;
-};
-
-struct Page {
-    uint16_t w;
-    uint16_t h;
-    List widgets;
-};
-
-struct ContainerWidget {
-    List widgets;
-};
-
-struct Style {
-    uint8_t font;
-    uint16_t flags;
-    uint16_t background_color;
-    uint16_t color;
-    uint16_t border_color;
-    uint16_t padding_horizontal;
-    uint16_t padding_vertical;
-};
-
-struct Widget {
-    uint8_t type;
-    OBJ_OFFSET data;
-    uint16_t x;
-    uint16_t y;
-    uint16_t w;
-    uint16_t h;
-    OBJ_OFFSET style;
-    OBJ_OFFSET specific;
-};
-
-struct Document {
-    List styles;
-    List pages;
-};
-
-#pragma pack(pop)
-
-uint8_t document[250] = {
-    0x04, 0x00, 0x08, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x02, 0x15, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x9A,
-    0xD6, 0x04, 0x00, 0x02, 0x00, 0x02, 0x15, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x9A, 0xD6, 0x04, 0x00,
-    0x02, 0x00, 0x03, 0x15, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x9A, 0xD6, 0x04, 0x00, 0x02, 0x00, 0x02,
-    0x15, 0x00, 0xFF, 0xFF, 0x00, 0xF8, 0x9A, 0xD6, 0x04, 0x00, 0x02, 0x00, 0xF0, 0x00, 0x40, 0x01,
-    0x01, 0x00, 0x44, 0x00, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xA0, 0x00, 0x08,
-    0x00, 0x53, 0x00, 0x01, 0x00, 0x57, 0x00, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x00,
-    0xA0, 0x00, 0x08, 0x00, 0x66, 0x00, 0x02, 0x00, 0x6A, 0x00, 0x05, 0x88, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0xF0, 0x00, 0xA0, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xF0, 0x00, 0xA0, 0x00, 0x08, 0x00, 0x8C, 0x00, 0x4F, 0x46, 0x46, 0x00, 0x03, 0x00, 0x90, 0x00,
-    0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x00, 0x64, 0x00, 0x08, 0x00, 0xBD, 0x00, 0x06,
-    0x06, 0x00, 0x00, 0x00, 0x64, 0x00, 0x78, 0x00, 0x3C, 0x00, 0x15, 0x00, 0x00, 0x00, 0x06, 0x07,
-    0x00, 0x78, 0x00, 0x64, 0x00, 0x78, 0x00, 0x3C, 0x00, 0x15, 0x00, 0x00, 0x00, 0x03, 0x00, 0xC1,
-    0x00, 0x04, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x00, 0x64, 0x00, 0x22, 0x00, 0x00, 0x00,
-    0x04, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x00, 0x64, 0x00, 0x22, 0x00, 0x00, 0x00, 0x05,
-    0xEE, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x00, 0x64, 0x00, 0x2F, 0x00, 0x00, 0x00, 0x55, 0x6E,
-    0x72, 0x65, 0x67, 0x75, 0x6C, 0x61, 0x74, 0x65, 0x64, 0x00
-};
+#include "gui_view.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -178,14 +92,18 @@ void drawText(char *text, int x, int y, int w, int h, Style *style) {
 
     lcd::lcd.setColor(style->background_color);
 
-    lcd::lcd.fillRect(x1, y1, x_offset, y2);
-    lcd::lcd.fillRect(x_offset + width, y1, x2, y2);
-    lcd::lcd.fillRect(x_offset, y1, x_offset + width - 1, y_offset - 1);
-    lcd::lcd.fillRect(x_offset, y_offset + height, x_offset + width - 1, y2);
+    if (x1 <= x_offset && y1 <= y2)
+        lcd::lcd.fillRect(x1, y1, x_offset, y2);
+    if (x_offset + width <= x2 && y1 <= y2)
+        lcd::lcd.fillRect(x_offset + width, y1, x2, y2);
+    if (x_offset <= x_offset + width - 1 && y1 <= y_offset - 1)
+        lcd::lcd.fillRect(x_offset, y1, x_offset + width - 1, y_offset - 1);
+    if (x_offset <= x_offset + width - 1 && y_offset + height <= y2)
+        lcd::lcd.fillRect(x_offset, y_offset + height, x_offset + width - 1, y2);
 
     lcd::lcd.setBackColor(style->background_color);
     lcd::lcd.setColor(style->color);
-    lcd::lcd.drawStr(text, x_offset, y_offset, *font);
+    lcd::lcd.drawStr(text, x_offset, y_offset, x1, y1, x2, y2, *font);
 }
 
 void draw_widget(uint8_t *start, Widget *widget, int x, int y);
@@ -233,6 +151,23 @@ void draw_display_string_widget(uint8_t *start, Widget *widget, int x, int y) {
     drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(start + widget->style));
 }
 
+void draw_three_state_indicator_widget(uint8_t *start, Widget *widget, int x, int y) {
+    int state = (int)data::get(widget->data);
+    if (state != 0) {
+        ThreeStateIndicatorWidget *three_state_indicator_widget = ((ThreeStateIndicatorWidget *)(start + widget->specific));
+        OBJ_OFFSET style;
+        if (state == 1) {
+            style = widget->style;
+        } else if (state == 2) {
+            style = three_state_indicator_widget->style1;
+        } else if (state == 3) {
+            style = three_state_indicator_widget->style2;
+        }
+        char *text = (char *)(start + three_state_indicator_widget->text);
+        drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(start + style));
+    }
+}
+
 void draw_widget(uint8_t *start, Widget *widget, int x, int y) {
     if (widget->type == WIDGET_TYPE_LIST) {
         draw_list_widget(start, widget, x, y);
@@ -246,6 +181,8 @@ void draw_widget(uint8_t *start, Widget *widget, int x, int y) {
         draw_display_string_widget(start, widget, x, y);
     } else if (widget->type == WIDGET_TYPE_EDIT) {
         draw_edit_widget(start, widget, x, y);
+    } else if (widget->type == WIDGET_TYPE_THREE_STATE_INDICATOR) {
+        draw_three_state_indicator_widget(start, widget, x, y);
     }
 }
 
