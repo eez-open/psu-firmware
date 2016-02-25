@@ -301,7 +301,8 @@ class Parser:
 
         self.styles = {}
 
-        self.parse_document()
+        self.parse_data()
+        self.parse_view()
 
     def num_errors(self):
         return self.trace.num_errors
@@ -386,7 +387,42 @@ class Parser:
             style = self.get_default_style()
         struct.addField(StructWeakPtr(name, style))
 
-    def parse_document(self):
+    def addDataField(self, struct, collection, name, default_value, mandatory=True):
+        if name in collection:
+            data_item_name = collection[name]
+            if isinstance(data_item_name, str):
+                if data_item_name in self.data_items:
+                    value = self.data_items[data_item_name]
+                else:
+                    self.trace.error("%s: invalid value '%s'" % (name, data_item_name))
+                    value = default_value
+            else:
+                self.trace.error("%s: not a string" % name)
+                value = default_value
+        else:
+            if mandatory:
+                self.trace.error("%s: missing" % name)
+            value = default_value
+        struct.addField(UInt8(name, value))
+
+    def parse_data(self):
+        self.data_items = {}
+
+        if not isinstance(self.data, list):
+            self.trace.error("data is not a JSON list")
+            return
+
+        data_item_id = 1
+        for data_item in self.data:
+            if not 'name' in data_item:
+                self.trace.error("unnamed data item found")
+                continue
+            data_item_name = data_item["name"]
+            self.data_items[data_item_name] = data_item_id
+            declare_const("DATA_ID_" + data_item_name.upper(), data_item_id)
+            data_item_id += 1
+
+    def parse_view(self):
         self.document = Struct('document', 'Document')
 
         styles = List('styles')
@@ -510,6 +546,8 @@ class Parser:
 
         result = Struct('page', 'Page')
 
+        self.addStyleField(result, page, 'style', mandatory=False)
+
         self.addDisplayPositionOrSizeField(result, page, 'w', 0)
         self.addDisplayPositionOrSizeField(result, page, 'h', 0)
 
@@ -558,14 +596,12 @@ class Parser:
 
         result.addField(UInt8("type", widget_type))
 
-        if widget_type == WIDGET_TYPE_CONTAINER:
-            # data is always 0
-            result.addField(UInt16('data', 0))
-        elif widget_type == WIDGET_TYPE_DISPLAY_STRING:
-            # data is string
-            self.addStringField(result, widget, 'data', "")
+        # data
+        if widget_type == WIDGET_TYPE_CONTAINER or widget_type == WIDGET_TYPE_DISPLAY_STRING:
+            # data not used
+            result.addField(UInt8('data', 0))
         else:
-            self.addUInt16Field(result, widget, 'data', 0)
+            self.addDataField(result, widget, 'data', 0)
 
         self.addDisplayPositionOrSizeField(result, widget, 'x', 0, parent=parent)
         self.addDisplayPositionOrSizeField(result, widget, 'y', 0, parent=parent)
@@ -588,6 +624,9 @@ class Parser:
             self.addStyleField(specific_widget_data, widget, 'style1')
             self.addStyleField(specific_widget_data, widget, 'style2')
 
+            self.addStringField(specific_widget_data, widget, 'text', "")
+        elif widget_type == WIDGET_TYPE_DISPLAY_STRING:
+            specific_widget_data = Struct(None, 'DisplayStringWidget')
             self.addStringField(specific_widget_data, widget, 'text', "")
         elif widget_type == WIDGET_TYPE_DISPLAY_STRING_SELECT:
             specific_widget_data = Struct(None, 'DisplayStringSelectWidget')

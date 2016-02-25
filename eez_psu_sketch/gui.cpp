@@ -33,6 +33,8 @@ using namespace lcd;
 
 #include "gui_view.h"
 
+static bool page_refresh = true;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 bool styleHasBorder(Style *style) {
@@ -97,73 +99,81 @@ void drawText(char *text, int x, int y, int w, int h, Style *style) {
 
     lcd::lcd.setColor(style->background_color);
 
-    if (x1 <= x_offset && y1 <= y2)
-        lcd::lcd.fillRect(x1, y1, x_offset, y2);
-    if (x_offset + width <= x2 && y1 <= y2)
-        lcd::lcd.fillRect(x_offset + width, y1, x2, y2);
-    if (x_offset <= x_offset + width - 1 && y1 <= y_offset - 1)
-        lcd::lcd.fillRect(x_offset, y1, x_offset + width - 1, y_offset - 1);
-    if (x_offset <= x_offset + width - 1 && y_offset + height <= y2)
-        lcd::lcd.fillRect(x_offset, y_offset + height, x_offset + width - 1, y2);
+    if (!page_refresh) {
+        if (x1 <= x_offset && y1 <= y2)
+            lcd::lcd.fillRect(x1, y1, x_offset, y2);
+        if (x_offset + width <= x2 && y1 <= y2)
+            lcd::lcd.fillRect(x_offset + width, y1, x2, y2);
+        if (x_offset <= x_offset + width - 1 && y1 <= y_offset - 1)
+            lcd::lcd.fillRect(x_offset, y1, x_offset + width - 1, y_offset - 1);
+        if (x_offset <= x_offset + width - 1 && y_offset + height <= y2)
+            lcd::lcd.fillRect(x_offset, y_offset + height, x_offset + width - 1, y2);
+    }
 
     lcd::lcd.setBackColor(style->background_color);
     lcd::lcd.setColor(style->color);
-    lcd::lcd.drawStr(text, x_offset, y_offset, x1, y1, x2, y2, *font);
+    lcd::lcd.drawStr(text, x_offset, y_offset, x1, y1, x2, y2, *font, !page_refresh);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void draw_widget(uint8_t *start, Widget *widget, int x, int y);
-void draw_widgets(uint8_t *start, List widgets, int x, int y);
+void draw_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh);
+void draw_widgets(uint8_t *start, List widgets, int x, int y, bool refresh);
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void draw_list_widget(uint8_t *start, Widget *widget, int x, int y) {
+void draw_list_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
     for (int index = 0; index < data::count(widget->data); ++index) {
         data::select(widget->data, index);
 
-        draw_widgets(start, ((ContainerWidget *)(start + widget->specific))->widgets, x, y);
+        draw_widgets(start, ((ContainerWidget *)(start + widget->specific))->widgets, x, y, refresh);
 
         x += widget->w;
         y += widget->h;
     }
 }
 
-void draw_container_widget(uint8_t *start, Widget *widget, int x, int y) {
-    draw_widgets(start, ((ContainerWidget *)(start + widget->specific))->widgets, x, y);
+void draw_container_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
+    draw_widgets(start, ((ContainerWidget *)(start + widget->specific))->widgets, x, y, refresh);
 }
 
-void draw_select_widget(uint8_t *start, Widget *widget, int x, int y) {
-    int index = (int)data::get(widget->data);
+void draw_select_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
+    bool changed;
+    int index = (int)data::get(widget->data, changed);
     data::select(widget->data, index);
     ContainerWidget *select_widget = ((ContainerWidget *)(start + widget->specific));
     Widget *selected_widget = (Widget *)(start + select_widget->widgets.first) + index;
-    draw_widget(start, selected_widget, x, y);
+    draw_widget(start, selected_widget, x, y, changed || refresh);
 }
 
-void draw_edit_widget(uint8_t *start, Widget *widget, int x, int y) {
-    char *text = data::get(widget->data);
-    if (text) {
+void draw_edit_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
+    bool changed;
+    char *text = data::get(widget->data, changed);
+    if (changed || refresh) {
         drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(start + widget->style));
     }
 }
 
-void draw_display_widget(uint8_t *start, Widget *widget, int x, int y) {
-    char *text = data::get(widget->data);
-    if (text) {
+void draw_display_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
+    bool changed;
+    char *text = data::get(widget->data, changed);
+    if (changed || refresh) {
         drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(start + widget->style));
     }
 }
 
-void draw_display_string_widget(uint8_t *start, Widget *widget, int x, int y) {
-    char *text = (char *)(start + widget->data);
-    // TODO improve performace because we are redrawing all the time
-    drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(start + widget->style));
+void draw_display_string_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
+    if (refresh) {
+        DisplayStringWidget *display_string_widget = ((DisplayStringWidget *)(start + widget->specific));
+        char *text = (char *)(start + display_string_widget->text);
+        drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(start + widget->style));
+    }
 }
 
-void draw_display_string_select_widget(uint8_t *start, Widget *widget, int x, int y) {
-    int state = (int)data::get(widget->data);
-    if (state != 0) {
+void draw_display_string_select_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
+    bool changed;
+    int state = (int)data::get(widget->data, changed);
+    if (changed || refresh) {
         DisplayStringSelectWidget *display_string_select_widget = ((DisplayStringSelectWidget *)(start + widget->specific));
         char *text;
         Style *style;
@@ -178,9 +188,10 @@ void draw_display_string_select_widget(uint8_t *start, Widget *widget, int x, in
     }
 }
 
-void draw_three_state_indicator_widget(uint8_t *start, Widget *widget, int x, int y) {
-    int state = (int)data::get(widget->data);
-    if (state != 0) {
+void draw_three_state_indicator_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
+    bool changed;
+    int state = (int)data::get(widget->data, changed);
+    if (changed || refresh) {
         ThreeStateIndicatorWidget *three_state_indicator_widget = ((ThreeStateIndicatorWidget *)(start + widget->specific));
 
         OBJ_OFFSET style;
@@ -195,37 +206,45 @@ void draw_three_state_indicator_widget(uint8_t *start, Widget *widget, int x, in
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void draw_widget(uint8_t *start, Widget *widget, int x, int y) {
+void draw_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
     if (widget->type == WIDGET_TYPE_LIST) {
-        draw_list_widget(start, widget, x, y);
+        draw_list_widget(start, widget, x, y, refresh);
     } else if (widget->type == WIDGET_TYPE_CONTAINER) {
-        draw_container_widget(start, widget, x, y);
+        draw_container_widget(start, widget, x, y, refresh);
     } else if (widget->type == WIDGET_TYPE_SELECT) {
-        draw_select_widget(start, widget, x, y);
+        draw_select_widget(start, widget, x, y, refresh);
     } else if (widget->type == WIDGET_TYPE_DISPLAY) {
-        draw_display_widget(start, widget, x, y);
+        draw_display_widget(start, widget, x, y, refresh);
     } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING) {
-        draw_display_string_widget(start, widget, x, y);
+        draw_display_string_widget(start, widget, x, y, refresh);
     } else if (widget->type == WIDGET_TYPE_EDIT) {
-        draw_edit_widget(start, widget, x, y);
+        draw_edit_widget(start, widget, x, y, refresh);
     } else if (widget->type == WIDGET_TYPE_THREE_STATE_INDICATOR) {
-        draw_three_state_indicator_widget(start, widget, x, y);
+        draw_three_state_indicator_widget(start, widget, x, y, refresh);
     } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING_SELECT) {
-        draw_display_string_select_widget(start, widget, x, y);
+        draw_display_string_select_widget(start, widget, x, y, refresh);
     }
 }
 
-void draw_widgets(uint8_t *start, List widgets, int x, int y) {
+void draw_widgets(uint8_t *start, List widgets, int x, int y, bool refresh) {
     for (int i = 0; i < widgets.count; ++i) {
         Widget *widget = (Widget *)(start + widgets.first) + i;
-        draw_widget(start, widget, x + (int)widget->x, y + (int)widget->y);
+        draw_widget(start, widget, x + (int)widget->x, y + (int)widget->y, refresh);
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void draw_page(uint8_t *start, Page *page) {
-    draw_widgets(start, page->widgets, 0, 0);
+    if (page_refresh) {
+        Style *style = (Style *)(start + page->style);
+        lcd::lcd.setColor(style->background_color);
+        lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
+    }
+
+    draw_widgets(start, page->widgets, 0, 0, page_refresh);
+
+    page_refresh = false;
 }
 
 void draw() {

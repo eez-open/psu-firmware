@@ -15,15 +15,19 @@
       "padding_vertical": 0
     },
     {
-      "name": "style1"
+      "name": "mon_value",
+      "font": "large",
+      "align_horizontal": "right",
+      "padding_horizontal": 12
     },
     {
-      "name": "style2",
-      "font": "large"
-    },
-    {
-      "name": "style3",
+      "name": "mon_value_ur",
+      "base": "mon_value",
       "color": "red"
+    },
+    {
+      "name": "channel_off",
+      "font": "large"
     },
     {
       "name": "prot_indicator",
@@ -32,13 +36,13 @@
       "color": "#808080"
     },
     {
-      "base": "prot_indicator",
       "name": "prot_indicator_set",
+      "base": "prot_indicator",
       "color": "green"
     },
     {
-      "base": "prot_indicator",
       "name": "prot_indicator_trip",
+      "base": "prot_indicator",
       "color": "red"
     },
     {
@@ -55,7 +59,7 @@
       "widgets": [
         {
           "type": "List",
-          "data": 1,
+          "data": "channels",
           "x": 0,
           "y": 0,
           "w": 0,
@@ -63,7 +67,7 @@
           "widgets": [
             {
               "type": "three_state_indicator",
-              "data": 8,
+              "data": "ovp",
               "x": 0,
               "y": 0,
               "w": 44,
@@ -75,7 +79,7 @@
             },
             {
               "type": "three_state_indicator",
-              "data": 9,
+              "data": "ocp",
               "x": 44,
               "y": 0,
               "w": 44,
@@ -87,7 +91,7 @@
             },
             {
               "type": "three_state_indicator",
-              "data": 10,
+              "data": "opp",
               "x": 88,
               "y": 0,
               "w": 44,
@@ -99,7 +103,7 @@
             },
             {
               "type": "three_state_indicator",
-              "data": 11,
+              "data": "otp",
               "x": 132,
               "y": 0,
               "w": 44,
@@ -111,7 +115,7 @@
             },
             {
               "type": "display_string_select",
-              "data": 12,
+              "data": "dp",
               "x": 176,
               "y": 0,
               "w": 64,
@@ -127,20 +131,20 @@
               "y": 26,
               "w": 240,
               "h": 72,
-              "data": 2,
+              "data": "output_state",
               "widgets": [
                 {
                   "type": "display_string",
-                  "style": "style2",
-                  "data": "OFF",
+                  "style": "channel_off",
                   "x": 0,
                   "y": 26,
                   "w": 240,
-                  "h": 72
+                  "h": 72,
+                  "text": "OFF"
                 },
                 {
                   "type": "select",
-                  "data": 3,
+                  "data": "output_mode",
                   "x": 0,
                   "y": 26,
                   "w": 240,
@@ -148,18 +152,13 @@
                   "widgets": [
                     {
                       "type": "display",
-                      "style": "style2",
-                      "data": 5
+                      "style": "mon_value",
+                      "data": "mon_value"
                     },
                     {
                       "type": "display",
-                      "style": "style2",
-                      "data": 4
-                    },
-                    {
-                      "type": "display_string",
-                      "style": "style3",
-                      "data": "Unregulated"
+                      "style": "mon_value_ur",
+                      "data": "mon_value"
                     }
                   ]
                 }
@@ -167,8 +166,7 @@
             },
             {
               "type": "edit",
-              "data": 6,
-              "style": "style1",
+              "data": "volt",
               "x": 0,
               "y": 98,
               "w": 120,
@@ -176,8 +174,7 @@
             },
             {
               "type": "edit",
-              "data": 7,
-              "style": "style1",
+              "data": "curr",
               "x": 120,
               "y": 98,
               "w": 120,
@@ -187,12 +184,12 @@
         },
         {
           "type": "display_string",
-          "data": "Main | Off | Remote",
           "x": 0,
           "y": 276,
           "w": 240,
           "h": 44,
-          "style": "menu"
+          "style": "menu",
+          "text": "Main | Off | Remote"
         }
       ]
     }

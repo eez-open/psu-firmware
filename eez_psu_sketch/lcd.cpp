@@ -37,7 +37,7 @@ EEZ_UTFT::EEZ_UTFT(byte model, int RS, int WR, int CS, int RST, int SER)
 {
 }
 
-int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int clip_y2, uint8_t encoding) {
+int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int clip_y2, uint8_t encoding, bool fill_background) {
 	font::Glyph glyph;
 	p_font->getGlyph(encoding, glyph);
 	if (!glyph.isFound())
@@ -49,33 +49,35 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
     int x_glyph = x1 + glyph.x;
     int y_glyph = y1 + p_font->getAscent() - (glyph.y + glyph.height);
 
-    // clear pixels around glyph
-    word color = getColor();
+    if (fill_background) {
+        // clear pixels around glyph
+        word color = getColor();
 
-    setColor(getBackColor());
+        setColor(getBackColor());
 
-    if (x1 < clip_x1) x1 = clip_x1;
-    if (y1 < clip_y1) y1 = clip_y1;
-    if (x2 > clip_x2) x2 = clip_x2;
-    if (y2 > clip_y2) y2 = clip_y2;
+        if (x1 < clip_x1) x1 = clip_x1;
+        if (y1 < clip_y1) y1 = clip_y1;
+        if (x2 > clip_x2) x2 = clip_x2;
+        if (y2 > clip_y2) y2 = clip_y2;
 
-    if (x1 < x_glyph && y1 <= y2) {
-        fillRect(x1, y1, x_glyph - 1, y2);
+        if (x1 < x_glyph && y1 <= y2) {
+            fillRect(x1, y1, x_glyph - 1, y2);
+        }
+
+        if (x_glyph + glyph.width <= x2 && y1 <= y2) {
+            fillRect(x_glyph + glyph.width, y1, x2, y2);
+        }
+
+        if (x1 <= x2 && y1 < y_glyph) {
+            fillRect(x1, y1, x2, y_glyph - 1);
+        }
+
+        if (x1 <= x2 && y_glyph + glyph.height <= y2) {
+            fillRect(x1, y_glyph + glyph.height, x2, y2);
+        }
+
+        setColor(color);
     }
-
-    if (x_glyph + glyph.width <= x2 && y1 <= y2) {
-        fillRect(x_glyph + glyph.width, y1, x2, y2);
-    }
-
-    if (x1 <= x2 && y1 < y_glyph) {
-        fillRect(x1, y1, x2, y_glyph - 1);
-    }
-
-    if (x1 <= x2 && y_glyph + glyph.height <= y2) {
-        fillRect(x1, y_glyph + glyph.height, x2, y2);
-    }
-
-    setColor(color);
     
     // draw glyph pixels
 	uint8_t widthInBytes = (glyph.width + 7) / 8;
@@ -125,12 +127,12 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
 	return glyph.dx;
 }
 
-void EEZ_UTFT::drawStr(const char *text, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font) {
+void EEZ_UTFT::drawStr(const char *text, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background) {
 	p_font = &font;
 
 	char encoding;
 	while ((encoding = *text++) != 0) {
-		x += drawGlyph(x, y, clip_x1, clip_y1, clip_x2, clip_y2, encoding);
+		x += drawGlyph(x, y, clip_x1, clip_y1, clip_x2, clip_y2, encoding, fill_background);
 	}
 }
 
