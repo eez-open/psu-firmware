@@ -53,5 +53,10 @@
     "id": 11,
     "description": "scpi: syst:temp:prot:stat? syst:temp:prot:trip?",
     "operations": "get"
+  },
+  {
+    "id": 12,
+    "description": "DP on or DP off",
+    "operations": "get"
   }
 ]

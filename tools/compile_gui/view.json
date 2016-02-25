@@ -27,6 +27,7 @@
     },
     {
       "name": "prot_indicator",
+      "align_horizontal": "left",
       "font": "small",
       "color": "#808080"
     },
@@ -61,131 +62,126 @@
           "h": 138,
           "widgets": [
             {
-              "type": "select",
+              "type": "three_state_indicator",
+              "data": 8,
               "x": 0,
               "y": 0,
+              "w": 44,
+              "h": 26,
+              "style": "prot_indicator",
+              "style1": "prot_indicator_set",
+              "style2": "prot_indicator_trip",
+              "text": "OVP"
+            },
+            {
+              "type": "three_state_indicator",
+              "data": 9,
+              "x": 44,
+              "y": 0,
+              "w": 44,
+              "h": 26,
+              "style": "prot_indicator",
+              "style1": "prot_indicator_set",
+              "style2": "prot_indicator_trip",
+              "text": "OCP"
+            },
+            {
+              "type": "three_state_indicator",
+              "data": 10,
+              "x": 88,
+              "y": 0,
+              "w": 44,
+              "h": 26,
+              "style": "prot_indicator",
+              "style1": "prot_indicator_set",
+              "style2": "prot_indicator_trip",
+              "text": "OPP"
+            },
+            {
+              "type": "three_state_indicator",
+              "data": 11,
+              "x": 132,
+              "y": 0,
+              "w": 44,
+              "h": 26,
+              "style": "prot_indicator",
+              "style1": "prot_indicator_set",
+              "style2": "prot_indicator_trip",
+              "text": "OTP"
+            },
+            {
+              "type": "display_string_select",
+              "data": 12,
+              "x": 176,
+              "y": 0,
+              "w": 64,
+              "h": 26,
+              "style1": "prot_indicator_set",
+              "text1": "DP on",
+              "style2": "prot_indicator",
+              "text2": "DP off"
+            },
+            {
+              "type": "select",
+              "x": 0,
+              "y": 26,
               "w": 240,
-              "h": 138,
+              "h": 72,
               "data": 2,
               "widgets": [
                 {
                   "type": "display_string",
+                  "style": "style2",
                   "data": "OFF",
                   "x": 0,
-                  "y": 0,
+                  "y": 26,
                   "w": 240,
-                  "h": 138
+                  "h": 72
                 },
                 {
-                  "type": "container",
+                  "type": "select",
+                  "data": 3,
                   "x": 0,
-                  "y": 0,
+                  "y": 26,
                   "w": 240,
-                  "h": 138,
+                  "h": 72,
                   "widgets": [
                     {
-                      "type": "three_state_indicator",
-                      "data": 8,
-                      "x": 0,
-                      "y": 0,
-                      "w": 44,
-                      "h": 26,
-                      "style": "prot_indicator",
-                      "style1": "prot_indicator_set",
-                      "style2": "prot_indicator_trip",
-                      "text": "OVP"
+                      "type": "display",
+                      "style": "style2",
+                      "data": 5
                     },
                     {
-                      "type": "three_state_indicator",
-                      "data": 9,
-                      "x": 44,
-                      "y": 0,
-                      "w": 44,
-                      "h": 26,
-                      "style": "prot_indicator",
-                      "style1": "prot_indicator_set",
-                      "style2": "prot_indicator_trip",
-                      "text": "OCP"
-                    },
-                    {
-                      "type": "three_state_indicator",
-                      "data": 10,
-                      "x": 88,
-                      "y": 0,
-                      "w": 44,
-                      "h": 26,
-                      "style": "prot_indicator",
-                      "style1": "prot_indicator_set",
-                      "style2": "prot_indicator_trip",
-                      "text": "OPP"
-                    },
-                    {
-                      "type": "three_state_indicator",
-                      "data": 11,
-                      "x": 132,
-                      "y": 0,
-                      "w": 44,
-                      "h": 26,
-                      "style": "prot_indicator",
-                      "style1": "prot_indicator_set",
-                      "style2": "prot_indicator_trip",
-                      "text": "OTP"
+                      "type": "display",
+                      "style": "style2",
+                      "data": 4
                     },
                     {
                       "type": "display_string",
-                      "data": "DP off",
-                      "x": 176,
-                      "y": 0,
-                      "w": 64,
-                      "h": 26,
-                      "style": "prot_indicator"
-                    },
-                    {
-                      "type": "select",
-                      "data": 3,
-                      "x": 0,
-                      "y": 26,
-                      "w": 240,
-                      "h": 72,
-                      "widgets": [
-                        {
-                          "type": "display",
-                          "style": "style2",
-                          "data": 5
-                        },
-                        {
-                          "type": "display",
-                          "style": "style2",
-                          "data": 4
-                        },
-                        {
-                          "type": "display_string",
-                          "style": "style3",
-                          "data": "Unregulated"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "edit",
-                      "data": 6,
-                      "style": "style1",
-                      "x": 0,
-                      "y": 98,
-                      "w": 120,
-                      "h": 40
-                    },
-                    {
-                      "type": "edit",
-                      "data": 7,
-                      "style": "style1",
-                      "x": 120,
-                      "y": 98,
-                      "w": 120,
-                      "h": 40
+                      "style": "style3",
+                      "data": "Unregulated"
                     }
                   ]
                 }
               ]
+            },
+            {
+              "type": "edit",
+              "data": 6,
+              "style": "style1",
+              "x": 0,
+              "y": 98,
+              "w": 120,
+              "h": 40
+            },
+            {
+              "type": "edit",
+              "data": 7,
+              "style": "style1",
+              "x": 120,
+              "y": 98,
+              "w": 120,
+              "h": 40
             }
           ]
         },

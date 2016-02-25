@@ -44,8 +44,13 @@ declare_const('WIDGET_TYPE_LIST', 2)
 declare_const('WIDGET_TYPE_SELECT', 3)
 declare_const('WIDGET_TYPE_DISPLAY', 4)
 declare_const('WIDGET_TYPE_DISPLAY_STRING', 5)
-declare_const('WIDGET_TYPE_EDIT', 6)
-declare_const('WIDGET_TYPE_THREE_STATE_INDICATOR', 7)
+declare_const('WIDGET_TYPE_DISPLAY_STRING_SELECT', 6)
+declare_const('WIDGET_TYPE_EDIT', 7)
+declare_const('WIDGET_TYPE_THREE_STATE_INDICATOR', 8)
+
+#-------------------------------------------------------------------------------
+
+declare_const('DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER', 2)
 
 #-------------------------------------------------------------------------------
 
@@ -199,7 +204,7 @@ class List(Field):
     def __init__(self, name):
         super().__init__(name)
         self.items = []
-        self.size = 4
+        self.size = 3
 
     def addItem(self, item):
         self.items.append(item)
@@ -209,7 +214,7 @@ class List(Field):
             objects.append(item)
 
     def pack(self):
-        return struct.pack(BYTE_ORDER + 'HH', len(self.items), self.items[0].object_offset if len(self.items) > 0 else 0)
+        return struct.pack(BYTE_ORDER + 'BH', len(self.items), self.items[0].object_offset if len(self.items) > 0 else 0)
 
     def c_type(self):
         return 'List'
@@ -304,18 +309,44 @@ class Parser:
     def num_warnings(self):
         return self.trace.num_warnings
 
+    def addDisplayPositionOrSizeField(self, struct, collection, name, default_value, mandatory=True, parent=None):
+        if name in collection:
+            value = collection[name]
+            if not isinstance(value, int):
+                self.trace.error("%s: not an integer" % name)
+                value = default_value
+            if value % DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER != 0:
+                self.trace.error("%s: should be divisible by %d" % (name, DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER))
+                value = default_value
+            value = int(value / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER)
+            if value < 0 or value > 255:
+                self.trace.error("%s: value out of range" % name)
+                if value < 0: value = 0
+                elif value > 255: value = 255
+        elif parent:
+            value = parent.find_field(name).value
+        else:
+            if mandatory:
+                self.trace.error("%s: missing" % name)
+            value = default_value
+        struct.addField(UInt8(name, value))
+
     def addUInt16Field(self, struct, collection, name, default_value, mandatory=True, parent=None):
         if name in collection:
             value = collection[name]
             if not isinstance(value, int):
-                self.trace.error(name + " is not an integer")
+                self.trace.error("%s: not an integer" % name)
                 value = default_value
+            if value < 0 or value > 65535:
+                self.trace.error("%s: value out of range" % name)
+                if value < 0: value = 0
+                elif value > 65535: value = 65535
         elif parent:
             value = parent.find_field(name).value
         else:
-                if mandatory:
-                    self.trace.error(name + " is missing")
-                value = default_value
+            if mandatory:
+                self.trace.error("%s: missing" % name)
+            value = default_value
         struct.addField(UInt16(name, value))
 
     def addColorField(self, struct, collection, name, default_value, mandatory=True):
@@ -328,7 +359,7 @@ class Parser:
                 value = default_value
         else:
             if mandatory:
-                self.trace.error(name + " is missing")
+                self.trace.error("%s: missing" % name)
             value = default_value
         struct.addField(UInt16(name, value))
 
@@ -340,9 +371,20 @@ class Parser:
                 value = default_value
         else:
             if mandatory:
-                self.trace.error(name + " is missing")
+                self.trace.error("%s: missing" % name)
             value = default_value
         struct.addField(String(name, value))
+
+    def addStyleField(self, struct, collection, name, mandatory=True):
+        if name in collection:
+            style = self.get_style(collection[name])
+            if not style:
+                if mandatory:
+                    self.trace.error("%s: style '%s' not found" % (name, collection[name]))
+                style = self.get_default_style()
+        else:
+            style = self.get_default_style()
+        struct.addField(StructWeakPtr(name, style))
 
     def parse_document(self):
         self.document = Struct('document', 'Document')
@@ -468,8 +510,8 @@ class Parser:
 
         result = Struct('page', 'Page')
 
-        self.addUInt16Field(result, page, 'w', 0)
-        self.addUInt16Field(result, page, 'h', 0)
+        self.addDisplayPositionOrSizeField(result, page, 'w', 0)
+        self.addDisplayPositionOrSizeField(result, page, 'h', 0)
 
         if not 'widgets' in page:
             self.trace.error("widgets is missing")
@@ -501,6 +543,8 @@ class Parser:
                 widget_type = WIDGET_TYPE_DISPLAY
             elif type_str == 'display_string':
                 widget_type = WIDGET_TYPE_DISPLAY_STRING
+            elif type_str == 'display_string_select':
+                widget_type = WIDGET_TYPE_DISPLAY_STRING_SELECT
             elif type_str == 'edit':
                 widget_type = WIDGET_TYPE_EDIT
             elif type_str == 'three_state_indicator':
@@ -523,19 +567,12 @@ class Parser:
         else:
             self.addUInt16Field(result, widget, 'data', 0)
 
-        self.addUInt16Field(result, widget, 'x', 0, parent=parent)
-        self.addUInt16Field(result, widget, 'y', 0, parent=parent)
-        self.addUInt16Field(result, widget, 'w', 0, parent=parent)
-        self.addUInt16Field(result, widget, 'h', 0, parent=parent)
+        self.addDisplayPositionOrSizeField(result, widget, 'x', 0, parent=parent)
+        self.addDisplayPositionOrSizeField(result, widget, 'y', 0, parent=parent)
+        self.addDisplayPositionOrSizeField(result, widget, 'w', 0, parent=parent)
+        self.addDisplayPositionOrSizeField(result, widget, 'h', 0, parent=parent)
 
-        if "style" in widget:
-            style = self.get_style(widget['style'])
-            if not style:
-                self.trace.error("style '%s' not found" % widget['style'])
-                style = self.get_default_style()
-        else:
-            style = self.get_default_style()
-        result.addField(StructWeakPtr('style', style))
+        self.addStyleField(result, widget, 'style', mandatory=False)
 
         if widget_type == WIDGET_TYPE_CONTAINER or widget_type == WIDGET_TYPE_LIST or widget_type == WIDGET_TYPE_SELECT:
             specific_widget_data = Struct(None, 'ContainerWidget')
@@ -548,21 +585,16 @@ class Parser:
         elif widget_type == WIDGET_TYPE_THREE_STATE_INDICATOR:
             specific_widget_data = Struct(None, 'ThreeStateIndicatorWidget')
 
-            if "style1" in widget:
-                style1 = self.get_style(widget['style1'])
-                if not style1:
-                    self.trace.error("style1 '%s' not found" % widget['style1'])
-                    style1 = self.get_default_style()
-            specific_widget_data.addField(StructWeakPtr('style1', style1))
-
-            if "style2" in widget:
-                style2 = self.get_style(widget['style2'])
-                if not style2:
-                    self.trace.error("style2 '%s' not found" % widget['style2'])
-                    style2 = self.get_default_style()
-            specific_widget_data.addField(StructWeakPtr('style2', style2))
+            self.addStyleField(specific_widget_data, widget, 'style1')
+            self.addStyleField(specific_widget_data, widget, 'style2')
 
             self.addStringField(specific_widget_data, widget, 'text', "")
+        elif widget_type == WIDGET_TYPE_DISPLAY_STRING_SELECT:
+            specific_widget_data = Struct(None, 'DisplayStringSelectWidget')
+            self.addStyleField(specific_widget_data, widget, 'style1', mandatory=False)
+            self.addStringField(specific_widget_data, widget, 'text1', "")
+            self.addStyleField(specific_widget_data, widget, 'style2', mandatory=False)
+            self.addStringField(specific_widget_data, widget, 'text2', "")
         else:
             specific_widget_data = 0
 
@@ -609,7 +641,7 @@ def generate_source_code(objects, tab):
     result += 'typedef uint16_t OBJ_OFFSET;\n\n'
 
     result += 'struct List {\n'
-    result += tab + 'uint16_t count;\n'
+    result += tab + 'uint8_t count;\n'
     result += tab + 'OBJ_OFFSET first;\n'
     result += '};\n\n'
 

@@ -32,6 +32,7 @@
 #define DATA_ID_OCP 9
 #define DATA_ID_OPP 10
 #define DATA_ID_OTP 11
+#define DATA_ID_DP 12
 
 namespace eez {
 namespace psu {
@@ -40,15 +41,20 @@ namespace data {
 
 static Channel *selected_channel;
 
+struct ChannelStateFlags {
+    unsigned ovp:2;
+    unsigned ocp:2;
+    unsigned opp:2;
+    unsigned otp:2;
+    unsigned dp:2;
+};
+
 struct ChannelState {
     char u_mon[8];
     char i_mon[8];
     char u_set[8];
     char i_set[8];
-    uint8_t ovp;
-    uint8_t ocp;
-    uint8_t opp;
-    uint8_t otp;
+    ChannelStateFlags flags;
 };
 
 
@@ -110,8 +116,8 @@ char *get(uint16_t id) {
         if (!selected_channel->prot_conf.flags.u_state) value = 1;
         else if (!selected_channel->ovp.flags.tripped) value = 2;
         else value = 3;
-        if (value != selected_channel_last_state->ovp) {
-            selected_channel_last_state->ovp = value;
+        if (value != selected_channel_last_state->flags.ovp) {
+            selected_channel_last_state->flags.ovp = value;
             return (char *)value;
         }
     } else if (id == DATA_ID_OCP) {
@@ -119,8 +125,8 @@ char *get(uint16_t id) {
         if (!selected_channel->prot_conf.flags.i_state) value = 1;
         else if (!selected_channel->ocp.flags.tripped) value = 2;
         else value = 3;
-        if (value != selected_channel_last_state->ocp) {
-            selected_channel_last_state->ocp = value;
+        if (value != selected_channel_last_state->flags.ocp) {
+            selected_channel_last_state->flags.ocp = value;
             return (char *)value;
         }
     } else if (id == DATA_ID_OPP) {
@@ -128,8 +134,8 @@ char *get(uint16_t id) {
         if (!selected_channel->prot_conf.flags.p_state) value = 1;
         else if (!selected_channel->opp.flags.tripped) value = 2;
         else value = 3;
-        if (value != selected_channel_last_state->opp) {
-            selected_channel_last_state->opp = value;
+        if (value != selected_channel_last_state->flags.opp) {
+            selected_channel_last_state->flags.opp = value;
             return (char *)value;
         }
     } else if (id == DATA_ID_OTP) {
@@ -137,8 +143,14 @@ char *get(uint16_t id) {
         if (!temperature::prot_conf[temp_sensor::MAIN].state) value = 1;
         else if (!temperature::isSensorTripped(temp_sensor::MAIN)) value = 2;
         else value = 3;
-        if (value != selected_channel_last_state->otp) {
-            selected_channel_last_state->otp = value;
+        if (value != selected_channel_last_state->flags.otp) {
+            selected_channel_last_state->flags.otp = value;
+            return (char *)value;
+        }
+    } else if (id == DATA_ID_DP) {
+        uint8_t value = selected_channel->flags.dp_on ? 1 : 2;
+        if (value != selected_channel_last_state->flags.dp) {
+            selected_channel_last_state->flags.dp = value;
             return (char *)value;
         }
     }

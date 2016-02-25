@@ -198,6 +198,7 @@ void Channel::onPowerDown() {
 
 void Channel::reset() {
     flags.output_enabled = 0;
+    flags.dp_on = 0;
     flags.sense_enabled = 0;
 
     flags.cv_mode = 0;
@@ -489,6 +490,7 @@ void Channel::doDpEnable(bool enable) {
     // DP bit is active low
     ioexp.change_bit(IOExpander::IO_BIT_OUT_DP_ENABLE, !enable);
     setOperBits(OPER_ISUM_DP_OFF, !enable);
+    flags.dp_on = enable;
 }
 
 void Channel::updateOutputEnable() {

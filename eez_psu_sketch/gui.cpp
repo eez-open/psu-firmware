@@ -35,8 +35,6 @@ using namespace lcd;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void draw_widgets(uint8_t *start, List widgets, int x, int y);
-
 bool styleHasBorder(Style *style) {
     return style->flags & STYLE_FLAGS_BORDER;
 }
@@ -57,7 +55,14 @@ bool styleIsVertAlignBottom(Style *style) {
     return (style->flags & STYLE_FLAGS_VERT_ALIGN) == STYLE_FLAGS_VERT_ALIGN_BOTTOM;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 void drawText(char *text, int x, int y, int w, int h, Style *style) {
+    x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    w *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    h *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+
     int x1 = x;
     int y1 = y;
     int x2 = x + w - 1;
@@ -106,7 +111,12 @@ void drawText(char *text, int x, int y, int w, int h, Style *style) {
     lcd::lcd.drawStr(text, x_offset, y_offset, x1, y1, x2, y2, *font);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 void draw_widget(uint8_t *start, Widget *widget, int x, int y);
+void draw_widgets(uint8_t *start, List widgets, int x, int y);
+
+////////////////////////////////////////////////////////////////////////////////
 
 void draw_list_widget(uint8_t *start, Widget *widget, int x, int y) {
     for (int index = 0; index < data::count(widget->data); ++index) {
@@ -151,6 +161,23 @@ void draw_display_string_widget(uint8_t *start, Widget *widget, int x, int y) {
     drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(start + widget->style));
 }
 
+void draw_display_string_select_widget(uint8_t *start, Widget *widget, int x, int y) {
+    int state = (int)data::get(widget->data);
+    if (state != 0) {
+        DisplayStringSelectWidget *display_string_select_widget = ((DisplayStringSelectWidget *)(start + widget->specific));
+        char *text;
+        Style *style;
+        if (state == 1) {
+            text = (char *)(start + display_string_select_widget->text1);
+            style = (Style *)(start + display_string_select_widget->style1);
+        } else {
+            text = (char *)(start + display_string_select_widget->text2);
+            style = (Style *)(start + display_string_select_widget->style2);
+        }
+        drawText(text, x, y, (int)widget->w, (int)widget->h, style);
+    }
+}
+
 void draw_three_state_indicator_widget(uint8_t *start, Widget *widget, int x, int y) {
     int state = (int)data::get(widget->data);
     if (state != 0) {
@@ -165,6 +192,8 @@ void draw_three_state_indicator_widget(uint8_t *start, Widget *widget, int x, in
         drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(start + style));
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 void draw_widget(uint8_t *start, Widget *widget, int x, int y) {
     if (widget->type == WIDGET_TYPE_LIST) {
@@ -181,6 +210,8 @@ void draw_widget(uint8_t *start, Widget *widget, int x, int y) {
         draw_edit_widget(start, widget, x, y);
     } else if (widget->type == WIDGET_TYPE_THREE_STATE_INDICATOR) {
         draw_three_state_indicator_widget(start, widget, x, y);
+    } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING_SELECT) {
+        draw_display_string_select_widget(start, widget, x, y);
     }
 }
 
@@ -190,6 +221,8 @@ void draw_widgets(uint8_t *start, List widgets, int x, int y) {
         draw_widget(start, widget, x + (int)widget->x, y + (int)widget->y);
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 void draw_page(uint8_t *start, Page *page) {
     draw_widgets(start, page->widgets, 0, 0);

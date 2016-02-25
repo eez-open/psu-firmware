@@ -117,6 +117,7 @@ public:
     /// Channel binary flags like output enabled, sense enabled, ...
     struct Flags {
         unsigned output_enabled : 1;
+        unsigned dp_on : 1;
         unsigned sense_enabled : 1;
         unsigned cv_mode : 1;
         unsigned cc_mode : 1;
