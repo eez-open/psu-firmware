@@ -73,6 +73,12 @@ void UTouch::InitTouch(byte orientation)
 	sbi(P_CLK, B_CLK);
 	sbi(P_DIN, B_DIN);
 	sbi(P_IRQ, B_IRQ);
+
+    // Command for reading X position. This also sets bit 0 (PD0) and bit 1 (PD1) to zero,
+    // which enables PENIRQ (see table 8. in XPT2046 datasheet).
+    cbi(P_CS, B_CS);
+    touch_WriteData(0x90);
+    sbi(P_CS, B_CS);
 }
 
 void UTouch::read()
