@@ -34,6 +34,8 @@ using namespace lcd;
 #include "gui_view.h"
 
 static bool page_refresh = true;
+static Widget *widget_selected;
+bool draw_blue_border;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -70,8 +72,19 @@ void drawText(char *text, int x, int y, int w, int h, Style *style) {
     int x2 = x + w - 1;
     int y2 = y + h - 1;
 
-    if (styleHasBorder(style)) {
-        lcd::lcd.setColor(style->border_color);
+    if (styleHasBorder(style) || draw_blue_border) {
+        if (draw_blue_border) {
+            lcd::lcd.setColor(VGA_RED);
+        } else {
+            lcd::lcd.setColor(style->border_color);
+        }
+        lcd::lcd.drawRect(x1, y1, x2, y2);
+        ++x1;
+        ++y1;
+        --x2;
+        --y2;
+    } else {
+        lcd::lcd.setColor(style->background_color);
         lcd::lcd.drawRect(x1, y1, x2, y2);
         ++x1;
         ++y1;
@@ -139,7 +152,7 @@ void draw_container_widget(uint8_t *start, Widget *widget, int x, int y, bool re
 
 void draw_select_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
     bool changed;
-    int index = (int)data::get(widget->data, changed);
+    int index = data::get(widget->data, changed).getInt();
     data::select(widget->data, index);
     ContainerWidget *select_widget = ((ContainerWidget *)(start + widget->specific));
     Widget *selected_widget = (Widget *)(start + select_widget->widgets.first) + index;
@@ -148,16 +161,20 @@ void draw_select_widget(uint8_t *start, Widget *widget, int x, int y, bool refre
 
 void draw_edit_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
     bool changed;
-    char *text = data::get(widget->data, changed);
+    data::Value value = data::get(widget->data, changed);
     if (changed || refresh) {
+        char text[32];
+        value.toText(text);
         drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(start + widget->style));
     }
 }
 
 void draw_display_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
     bool changed;
-    char *text = data::get(widget->data, changed);
+    data::Value value = data::get(widget->data, changed);
     if (changed || refresh) {
+        char text[32];
+        value.toText(text);
         drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(start + widget->style));
     }
 }
@@ -172,7 +189,7 @@ void draw_display_string_widget(uint8_t *start, Widget *widget, int x, int y, bo
 
 void draw_display_string_select_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
     bool changed;
-    int state = (int)data::get(widget->data, changed);
+    int state = data::get(widget->data, changed).getInt();
     if (changed || refresh) {
         DisplayStringSelectWidget *display_string_select_widget = ((DisplayStringSelectWidget *)(start + widget->specific));
         char *text;
@@ -190,7 +207,7 @@ void draw_display_string_select_widget(uint8_t *start, Widget *widget, int x, in
 
 void draw_three_state_indicator_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
     bool changed;
-    int state = (int)data::get(widget->data, changed);
+    int state = data::get(widget->data, changed).getInt();
     if (changed || refresh) {
         ThreeStateIndicatorWidget *three_state_indicator_widget = ((ThreeStateIndicatorWidget *)(start + widget->specific));
 
@@ -213,16 +230,30 @@ void draw_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
         draw_container_widget(start, widget, x, y, refresh);
     } else if (widget->type == WIDGET_TYPE_SELECT) {
         draw_select_widget(start, widget, x, y, refresh);
-    } else if (widget->type == WIDGET_TYPE_DISPLAY) {
-        draw_display_widget(start, widget, x, y, refresh);
-    } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING) {
-        draw_display_string_widget(start, widget, x, y, refresh);
-    } else if (widget->type == WIDGET_TYPE_EDIT) {
-        draw_edit_widget(start, widget, x, y, refresh);
-    } else if (widget->type == WIDGET_TYPE_THREE_STATE_INDICATOR) {
-        draw_three_state_indicator_widget(start, widget, x, y, refresh);
-    } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING_SELECT) {
-        draw_display_string_select_widget(start, widget, x, y, refresh);
+    } else {
+        if (gesture::gesture == gesture::GESTURE_TAP
+            && touch::x >= x * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER && touch::x < (x + widget->w) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER
+            && touch::y >= y * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER && touch::y < (y + widget->h) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER) {
+            widget_selected = widget;
+        } else {
+            widget_selected = 0;
+        }
+        
+        draw_blue_border = widget == widget_selected;
+
+        if (widget->type == WIDGET_TYPE_DISPLAY) {
+            draw_display_widget(start, widget, x, y, refresh);
+        } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING) {
+            draw_display_string_widget(start, widget, x, y, refresh);
+        } else if (widget->type == WIDGET_TYPE_EDIT) {
+            draw_edit_widget(start, widget, x, y, refresh);
+        } else if (widget->type == WIDGET_TYPE_THREE_STATE_INDICATOR) {
+            draw_three_state_indicator_widget(start, widget, x, y, refresh);
+        } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING_SELECT) {
+            draw_display_string_select_widget(start, widget, x, y, refresh);
+        }
+
+        widget_selected = 0;
     }
 }
 
@@ -240,6 +271,11 @@ void draw_page(uint8_t *start, Page *page) {
         Style *style = (Style *)(start + page->style);
         lcd::lcd.setColor(style->background_color);
         lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
+    }
+
+    if (gesture::gesture == gesture::GESTURE_TAP) {
+        widget_selected = 0;
+        page_refresh = true;
     }
 
     draw_widgets(start, page->widgets, 0, 0, page_refresh);
@@ -270,6 +306,10 @@ void tick(unsigned long tick_usec) {
     touch::tick();
 
     gesture::push_pointer(tick_usec, touch::is_down, touch::x, touch::y);
+
+    if (gesture::gesture == gesture::GESTURE_TAP) {
+        DebugTrace("P: %d, %d", touch::x, touch::y);
+    }
 
     draw();
 }

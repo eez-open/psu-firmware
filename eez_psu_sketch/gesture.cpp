@@ -4,6 +4,10 @@
 #define MIN_SLIDE_DURATION 100 * 1000UL
 #define MIN_SLIDE_DISTANCE 50
 
+#define MIN_TAP_DURATION 0 * 1000UL
+#define MAX_TAP_DURATION 250 * 1000UL
+#define MAX_TAP_DISTANCE 50
+
 namespace eez {
 namespace psu {
 namespace gui {
@@ -23,19 +27,23 @@ GestureType gesture = GESTURE_NONE;
 void recognize() {
     DebugTrace("Start gesture recognize %ul", time);
     
+    // sliding
     if (time > MIN_SLIDE_DURATION) {
-        DebugTrace("Gesture recognize time passed");
-
         if (distance_y < -MIN_SLIDE_DISTANCE && abs(distance_y) > abs(distance_x)) gesture = GESTURE_SLIDE_UP;
         if (distance_x > MIN_SLIDE_DISTANCE && abs(distance_x) > abs(distance_y)) gesture = GESTURE_SLIDE_RIGHT;
         if (distance_y > MIN_SLIDE_DISTANCE && abs(distance_y) > abs(distance_x)) gesture = GESTURE_SLIDE_DOWN;
         if (distance_x < -MIN_SLIDE_DISTANCE && abs(distance_x) > abs(distance_y)) gesture = GESTURE_SLIDE_LEFT;
     }
 
+    // tap
+    if (time >= MIN_TAP_DURATION && time <= MAX_TAP_DURATION && distance_x < MAX_TAP_DISTANCE && distance_y < MAX_TAP_DISTANCE) {
+        gesture = GESTURE_TAP;
+    }
+    
     if (gesture != GESTURE_NONE) {
         DebugTrace("Gesture: %d", gesture);
     }
-    
+
     DebugTrace("End gesture recognize");
 }
 

@@ -28,6 +28,22 @@ namespace psu {
 namespace gui {
 namespace data {
 
+void Value::toText(char *text) {
+    text[0] = 0;
+
+    util::strcatFloat(text, float_);
+
+    switch (unit_) {
+    case UNIT_VOLT:
+        strcat(text, " V");
+        break;
+    
+    case UNIT_AMPER:
+        strcat(text, " A");
+        break;
+    }
+}
+
 static Channel *selected_channel;
 
 struct ChannelStateFlags {
@@ -41,12 +57,11 @@ struct ChannelStateFlags {
 };
 
 struct ChannelState {
-    char mon_value[8];
-    char u_set[8];
-    char i_set[8];
+    Value mon_value;
+    float u_set;
+    float i_set;
     ChannelStateFlags flags;
 };
-
 
 static ChannelState channel_last_state[CH_NUM];
 static ChannelState *selected_channel_last_state;
@@ -65,140 +80,119 @@ void select(uint16_t id, int index) {
     }
 }
 
-char *get(uint16_t id, bool &changed) {
-    static char value[8];
+Value get(uint16_t id, bool &changed) {
+    Value value;
 
     changed = false;
 
     if (id == DATA_ID_OUTPUT_STATE) {
-        uint8_t value = selected_channel->isOutputEnabled() ? 1 : 0;
-        if (value != selected_channel_last_state->flags.state) {
-            selected_channel_last_state->flags.state = value;
+        uint8_t state = selected_channel->isOutputEnabled() ? 1 : 0;
+        if (state != selected_channel_last_state->flags.state) {
+            selected_channel_last_state->flags.state = state;
             changed = true;
         }
-        return (char *)value;
-    }
-    
-    if (id == DATA_ID_OUTPUT_MODE) {
+        value = Value(state);
+    } else if (id == DATA_ID_OUTPUT_MODE) {
         char *mode_str = selected_channel->getCvModeStr();
-        uint8_t value = strcmp(mode_str, "UR") == 0 ? 1 : 0;
-        if (value != selected_channel_last_state->flags.mode) {
-            selected_channel_last_state->flags.mode = value;
+        uint8_t mode = strcmp(mode_str, "UR") == 0 ? 1 : 0;
+        if (mode != selected_channel_last_state->flags.mode) {
+            selected_channel_last_state->flags.mode = mode;
             changed = true;
         }
-        return (char *)value;
-    }
-    
-    if (id == DATA_ID_MON_VALUE) {
-        value[0] = 0;
+        value = Value(mode);
+    } else if (id == DATA_ID_MON_VALUE) {
+        float mon_value;
+        Unit unit;
         char *mode_str = selected_channel->getCvModeStr();
         if (strcmp(mode_str, "CC") != 0) {
             // CC -> volt
-            util::strcatVoltage(value, selected_channel->u.mon);
+            mon_value = selected_channel->u.mon;
+            unit = UNIT_VOLT;
         } else if (strcmp(mode_str, "CV") != 0) {
             // CV -> curr
-            util::strcatCurrent(value, selected_channel->i.mon);
+            mon_value = selected_channel->i.mon;
+            unit = UNIT_AMPER;
         } else {
             // UR ->
             if (selected_channel->u.mon < selected_channel->i.mon) {
                 // min(volt, curr)
-                util::strcatVoltage(value, selected_channel->u.mon);
+                mon_value = selected_channel->u.mon;
+                unit = UNIT_VOLT;
             } else {
                 // or curr if equal
-                util::strcatCurrent(value, selected_channel->i.mon);
+                mon_value = selected_channel->i.mon;
+                unit = UNIT_AMPER;
             }
         }
-        if (strcmp(selected_channel_last_state->mon_value, value) != 0) {
-            strcpy(selected_channel_last_state->mon_value, value);
+        value = Value(mon_value, unit);
+        if (selected_channel_last_state->mon_value != value) {
+            selected_channel_last_state->mon_value = value;
             changed = true;
         }
-        return value;
-    }
-    
-    if (id == DATA_ID_VOLT) {
-        value[0] = 0;
-        util::strcatVoltage(value, selected_channel->u.set);
-        if (strcmp(selected_channel_last_state->u_set, value) == 0) {
-            strcpy(selected_channel_last_state->u_set, value);
+    } else if (id == DATA_ID_VOLT) {
+        float u_set = selected_channel->u.set;
+        if (selected_channel_last_state->u_set != u_set) {
+            selected_channel_last_state->u_set = u_set;
             changed = true;
         }
-        return value;
-    }
-    
-    if (id == DATA_ID_CURR) {
-        value[0] = 0;
-        util::strcatCurrent(value, selected_channel->i.set);
-        if (strcmp(selected_channel_last_state->i_set, value) != 0) {
-            strcpy(selected_channel_last_state->i_set, value);
-            changed = true;
-        }
-        return value;
-    }
-    
-    if (id == DATA_ID_OVP) {
-        uint8_t value;
-        if (!selected_channel->prot_conf.flags.u_state) value = 1;
-        else if (!selected_channel->ovp.flags.tripped) value = 2;
-        else value = 3;
-        if (value != selected_channel_last_state->flags.ovp) {
-            selected_channel_last_state->flags.ovp = value;
-            changed = true;
-        }
-        return (char *)value;
-    }
-    
-    if (id == DATA_ID_OCP) {
-        uint8_t value;
-        if (!selected_channel->prot_conf.flags.i_state) value = 1;
-        else if (!selected_channel->ocp.flags.tripped) value = 2;
-        else value = 3;
-        if (value != selected_channel_last_state->flags.ocp) {
-            selected_channel_last_state->flags.ocp = value;
-            changed = true;
-        }
-        return (char *)value;
-    }
-    
-    if (id == DATA_ID_OPP) {
-        uint8_t value;
-        if (!selected_channel->prot_conf.flags.p_state) value = 1;
-        else if (!selected_channel->opp.flags.tripped) value = 2;
-        else value = 3;
-        if (value != selected_channel_last_state->flags.opp) {
-            selected_channel_last_state->flags.opp = value;
-            changed = true;
-        }
-        return (char *)value;
-    }
-    
-    if (id == DATA_ID_OTP) {
-        uint8_t value;
-        if (!temperature::prot_conf[temp_sensor::MAIN].state) value = 1;
-        else if (!temperature::isSensorTripped(temp_sensor::MAIN)) value = 2;
-        else value = 3;
-        if (value != selected_channel_last_state->flags.otp) {
-            selected_channel_last_state->flags.otp = value;
-            changed = true;
-        }
-        return (char *)value;
-    } 
-    
-    if (id == DATA_ID_DP) {
-        uint8_t value = selected_channel->flags.dp_on ? 1 : 2;
-        if (value != selected_channel_last_state->flags.dp) {
-            selected_channel_last_state->flags.dp = value;
-            changed = true;
-        }
-        return (char *)value;
-    }
-
-    return 0;
-}
-
-void set(uint16_t id, const char *value) {
-    if (id == DATA_ID_VOLT) {
+        value = Value(u_set, UNIT_VOLT);
     } else if (id == DATA_ID_CURR) {
+        float i_set = selected_channel->i.set;
+        if (selected_channel_last_state->i_set != selected_channel->i.set) {
+            selected_channel_last_state->i_set = selected_channel->i.set;
+            changed = true;
+        }
+        value = Value(i_set, UNIT_AMPER);
+    } else if (id == DATA_ID_OVP) {
+        uint8_t ovp;
+        if (!selected_channel->prot_conf.flags.u_state) ovp = 1;
+        else if (!selected_channel->ovp.flags.tripped) ovp = 2;
+        else ovp = 3;
+        if (selected_channel_last_state->flags.ovp != ovp) {
+            selected_channel_last_state->flags.ovp = ovp;
+            changed = true;
+        }
+        value = Value(ovp);
+    } else if (id == DATA_ID_OCP) {
+        uint8_t ocp;
+        if (!selected_channel->prot_conf.flags.i_state) ocp = 1;
+        else if (!selected_channel->ocp.flags.tripped) ocp = 2;
+        else ocp = 3;
+        if (selected_channel_last_state->flags.ocp != ocp) {
+            selected_channel_last_state->flags.ocp = ocp;
+            changed = true;
+        }
+        value = Value(ocp);
+    } else if (id == DATA_ID_OPP) {
+        uint8_t opp;
+        if (!selected_channel->prot_conf.flags.p_state) opp = 1;
+        else if (!selected_channel->opp.flags.tripped) opp = 2;
+        else opp = 3;
+        if (selected_channel_last_state->flags.opp != opp) {
+            selected_channel_last_state->flags.opp = opp;
+            changed = true;
+        }
+        value = Value(opp);
+    } else if (id == DATA_ID_OTP) {
+        uint8_t otp;
+        if (!temperature::prot_conf[temp_sensor::MAIN].state) otp = 1;
+        else if (!temperature::isSensorTripped(temp_sensor::MAIN)) otp = 2;
+        else otp = 3;
+        if (selected_channel_last_state->flags.otp != otp) {
+            selected_channel_last_state->flags.otp = otp;
+            changed = true;
+        }
+        value = Value(otp);
+    } else if (id == DATA_ID_DP) {
+        uint8_t dp = selected_channel->flags.dp_on ? 1 : 2;
+        if (selected_channel_last_state->flags.dp != dp) {
+            selected_channel_last_state->flags.dp = dp;
+            changed = true;
+        }
+        value = Value(dp);
     }
+
+    return value;
 }
 
 }

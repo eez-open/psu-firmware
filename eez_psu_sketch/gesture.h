@@ -14,6 +14,8 @@ enum GestureType {
     GESTURE_SLIDE_RIGHT = 2,
     GESTURE_SLIDE_DOWN = 3,
     GESTURE_SLIDE_LEFT = 4,
+
+    GESTURE_TAP = 5,
 };
 
 extern GestureType gesture;
