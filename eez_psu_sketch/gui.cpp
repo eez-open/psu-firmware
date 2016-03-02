@@ -431,26 +431,35 @@ void tick(unsigned long tick_usec) {
 
     gesture::push_pointer(tick_usec, touch::is_down, touch::x, touch::y);
 
-    if (gesture::gesture == gesture::GESTURE_DOWN) {
+    WidgetCursor old_selected_widget = selected_widget;
+
+    if (touch::is_down) {
         EnumWidgets enum_widgets(document, find_widget);
         enum_widgets.start(true);
         enum_widgets.next();
+    } else if (gesture::gesture == gesture::GESTURE_UP) {
+        selected_widget = 0;
+    }
+
+    if (old_selected_widget != selected_widget) {
+        if (old_selected_widget) {
+            data::setCursor(old_selected_widget.cursor);
+
+            Widget *widget = old_selected_widget.widget;
+            int x = old_selected_widget.x;
+            int y = old_selected_widget.y;
+
+            old_selected_widget = 0;
+
+            widget_refresh = true;
+            draw_widget(document, widget, x, y, true);
+            widget_refresh = false;
+        }
 
         if (selected_widget) {
             data::setCursor(selected_widget.cursor);
             widget_refresh = true;
             draw_widget(document, selected_widget.widget, selected_widget.x, selected_widget.y, true);
-            widget_refresh = false;
-        }
-    } else if (gesture::gesture == gesture::GESTURE_UP) {
-        if (selected_widget) {
-            data::setCursor(selected_widget.cursor);
-            Widget *widget = selected_widget.widget;
-            int x = selected_widget.x;
-            int y = selected_widget.y;
-            selected_widget = 0;
-            widget_refresh = true;
-            draw_widget(document, widget, x, y, true);
             widget_refresh = false;
         }
     }
