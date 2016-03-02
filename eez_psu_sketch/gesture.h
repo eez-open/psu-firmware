@@ -10,18 +10,17 @@ namespace gesture {
 enum GestureType {
     GESTURE_NONE,
 
-    GESTURE_DOWN,
-    GESTURE_UP,
+    GESTURE_TAP,
 
     GESTURE_SLIDE_UP,
     GESTURE_SLIDE_RIGHT,
     GESTURE_SLIDE_DOWN,
-    GESTURE_SLIDE_LEFT,
-
-    GESTURE_TAP,
+    GESTURE_SLIDE_LEFT
 };
 
 extern GestureType gesture;
+extern int start_x;
+extern int start_y;
 
 void push_pointer(unsigned long tick_usec, bool is_down, int x, int y);
 

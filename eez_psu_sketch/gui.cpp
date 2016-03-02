@@ -386,6 +386,13 @@ void draw() {
     }
 }
 
+void refresh_widget(WidgetCursor widget_cursor) {
+    data::setCursor(widget_cursor.cursor);
+    widget_refresh = true;
+    draw_widget(document, widget_cursor.widget, widget_cursor.x, widget_cursor.y, true);
+    widget_refresh = false;
+}
+
 void refreshPage() {
     page_refresh = true;
 
@@ -400,9 +407,12 @@ void refreshPage() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+static int find_widget_x;
+static int find_widget_y;
+
 bool find_widget(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
-    if (touch::x >= x * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER && touch::x < (x + widget->w) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER
-        && touch::y >= y * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER && touch::y < (y + widget->h) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER) 
+    if (find_widget_x >= x * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER && find_widget_x < (x + widget->w) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER
+        && find_widget_y >= y * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER && find_widget_y < (y + widget->h) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER) 
     {
         selected_widget.widget = widget;
         selected_widget.x = x;
@@ -429,15 +439,16 @@ void init() {
 void tick(unsigned long tick_usec) {
     touch::tick();
 
-    gesture::push_pointer(tick_usec, touch::is_down, touch::x, touch::y);
-
+    /*
     WidgetCursor old_selected_widget = selected_widget;
 
     if (touch::is_down) {
+        find_widget_x = touch::x;
+        find_widget_y = touch::y;
         EnumWidgets enum_widgets(document, find_widget);
         enum_widgets.start(true);
         enum_widgets.next();
-    } else if (gesture::gesture == gesture::GESTURE_UP) {
+    } else {
         selected_widget = 0;
     }
 
@@ -445,31 +456,52 @@ void tick(unsigned long tick_usec) {
         data::Cursor saved_cursor = data::getCursor();
 
         if (old_selected_widget) {
-            data::setCursor(old_selected_widget.cursor);
-
-            Widget *widget = old_selected_widget.widget;
-            int x = old_selected_widget.x;
-            int y = old_selected_widget.y;
-
-            old_selected_widget = 0;
-
-            widget_refresh = true;
-            draw_widget(document, widget, x, y, true);
-            widget_refresh = false;
+            refresh_widget(old_selected_widget);
         }
 
         if (selected_widget) {
-            data::setCursor(selected_widget.cursor);
-
-            widget_refresh = true;
-            draw_widget(document, selected_widget.widget, selected_widget.x, selected_widget.y, true);
-            widget_refresh = false;
+            refresh_widget(selected_widget);
         }
 
         data::setCursor(saved_cursor);
     } else {
         draw();
     }
+
+    return;
+    */
+    
+    gesture::push_pointer(tick_usec, touch::is_down, touch::x, touch::y);
+
+    static unsigned long tap_time;
+
+    if (gesture::gesture == gesture::GESTURE_TAP) {
+        if (selected_widget) {
+            selected_widget = 0;
+            refresh_widget(selected_widget);
+        }
+
+        find_widget_x = gesture::start_x;
+        find_widget_y = gesture::start_y;
+        EnumWidgets enum_widgets(document, find_widget);
+        enum_widgets.start(true);
+        enum_widgets.next();
+
+        if (selected_widget) {
+            refresh_widget(selected_widget);
+            tap_time = micros();
+        }
+    } else {
+        if (selected_widget) {
+            if (tick_usec - tap_time > 250000) {
+                WidgetCursor old_selected_widget = selected_widget;
+                selected_widget = 0;
+                refresh_widget(old_selected_widget);
+            }
+        }
+    }
+
+    draw();
 }
 
 }
