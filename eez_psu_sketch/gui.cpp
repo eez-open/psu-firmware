@@ -442,6 +442,8 @@ void tick(unsigned long tick_usec) {
     }
 
     if (old_selected_widget != selected_widget) {
+        data::Cursor saved_cursor = data::getCursor();
+
         if (old_selected_widget) {
             data::setCursor(old_selected_widget.cursor);
 
@@ -462,6 +464,8 @@ void tick(unsigned long tick_usec) {
             draw_widget(document, selected_widget.widget, selected_widget.x, selected_widget.y, true);
             widget_refresh = false;
         }
+
+        data::setCursor(saved_cursor);
     }
 
     draw();
