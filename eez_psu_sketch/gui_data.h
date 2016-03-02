@@ -45,9 +45,21 @@ private:
     };
 };
 
+struct Cursor {
+    Channel *selected_channel;
+
+    bool operator != (const Cursor& rhs) const {
+        return selected_channel != rhs.selected_channel;
+    }
+};
+
+Cursor getCursor();
+void setCursor(Cursor cursor_);
+
 int count(uint16_t id);
 void select(uint16_t id, int index);
 Value get(uint16_t id, bool &changed);
+
 
 }
 }

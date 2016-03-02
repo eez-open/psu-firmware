@@ -17,7 +17,6 @@
  */
  
 #include "psu.h"
-#include <scpi-parser.h>
 #include "scpi_psu.h"
 #include "scpi_appl.h"
 
@@ -89,7 +88,7 @@ scpi_result_t scpi_appl_ApplyQ(scpi_t * context) {
         }
 
         // return both current and voltage
-        sprintf(buffer, "CH%d:", channel->index);
+        sprintf_P(buffer, PSTR("CH%d:"), channel->index);
         util::strcatVoltage(buffer, channel->U_MAX);
         strcat(buffer, "/");
         util::strcatCurrent(buffer, channel->I_MAX);

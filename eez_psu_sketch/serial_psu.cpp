@@ -56,7 +56,7 @@ scpi_result_t SCPI_Control(scpi_t *context, scpi_ctrl_name_t ctrl, scpi_reg_val_
 
 scpi_result_t SCPI_Reset(scpi_t *context) {
     char errorOutputBuffer[256];
-    sprintf(errorOutputBuffer, "**Reset\r\n");
+    strcpy_P(errorOutputBuffer, PSTR("**Reset\r\n"));
     Serial.println(errorOutputBuffer);
 
     return psu::reset() ? SCPI_RES_OK : SCPI_RES_ERR;

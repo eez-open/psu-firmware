@@ -17,7 +17,6 @@
  */
  
 #include "psu.h"
-#include <scpi-parser.h>
 #include "scpi_psu.h"
 #include "scpi_debug.h"
 
@@ -38,24 +37,27 @@ scpi_result_t debug_scpi_commandQ(scpi_t *context) {
     char buffer[512] = { 0 };
     char *p = buffer;
 
-    sprintf(p, "max_loop_duration: %lu\n", max_loop_duration);
+    sprintf_P(p, PSTR("max_loop_duration: %lu\n"), max_loop_duration);
     p += strlen(p);
 
-    sprintf(p, "last_loop_duration: %lu\n", last_loop_duration);
+    sprintf_P(p, PSTR("last_loop_duration: %lu\n"), last_loop_duration);
     p += strlen(p);
 
-    sprintf(p, "total_ioexp_int_counter: %lu\n", total_ioexp_int_counter);
+    sprintf_P(p, PSTR("avg_loop_duration: %lu\n"), avg_loop_duration);
     p += strlen(p);
 
-    sprintf(p, "last_ioexp_int_counter: %lu\n", last_ioexp_int_counter);
+    sprintf_P(p, PSTR("total_ioexp_int_counter: %lu\n"), total_ioexp_int_counter);
     p += strlen(p);
 
-    sprintf(p, "CH1: u_dac=%u, u_mon_dac=%d, u_mon=%d, i_dac=%u, i_mon_dac=%d, i_mon=%d\n",
+    sprintf_P(p, PSTR("last_ioexp_int_counter: %lu\n"), last_ioexp_int_counter);
+    p += strlen(p);
+
+    sprintf_P(p, PSTR("CH1: u_dac=%u, u_mon_dac=%d, u_mon=%d, i_dac=%u, i_mon_dac=%d, i_mon=%d\n"),
         (unsigned int)u_dac[0], (int)u_mon_dac[0], (int)u_mon[0],
         (unsigned int)i_dac[0], (int)i_mon_dac[0], (int)i_mon[0]);
     p += strlen(p);
 
-    sprintf(p, "CH2: u_dac=%u, u_mon_dac=%d, u_mon=%d, i_dac=%u, i_mon_dac=%d, i_mon=%d\n",
+    sprintf_P(p, PSTR("CH2: u_dac=%u, u_mon_dac=%d, u_mon=%d, i_dac=%u, i_mon_dac=%d, i_mon=%d\n"),
         (unsigned int)u_dac[1], (int)u_mon_dac[1], (int)u_mon[1],
         (unsigned int)i_dac[1], (int)i_mon_dac[1], (int)i_mon[1]);
     p += strlen(p);

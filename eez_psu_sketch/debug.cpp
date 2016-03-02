@@ -21,6 +21,8 @@
 
 #if CONF_DEBUG
 
+#define AVG_LOOP_DURATION_N 10
+
 namespace eez {
 namespace psu {
 namespace debug {
@@ -36,6 +38,11 @@ static unsigned long previous_tick_count = 0;
 unsigned long last_loop_duration = 0;
 unsigned long max_loop_duration = 0;
 
+static unsigned long avg_loop_duration_counter = 0;
+static unsigned long avg_loop_duration_total = 0;
+unsigned long avg_loop_duration = 0;
+
+
 static unsigned long ioexp_previous_tick_count = 0;
 static unsigned long current_ioexp_int_counter = 0;
 unsigned long total_ioexp_int_counter = 0;
@@ -46,6 +53,14 @@ void tick(unsigned long tick_usec) {
         last_loop_duration = tick_usec - previous_tick_count;
         if (last_loop_duration > max_loop_duration) {
             max_loop_duration = last_loop_duration;
+        }
+
+        if (avg_loop_duration_counter++ < AVG_LOOP_DURATION_N) {
+            avg_loop_duration_total += last_loop_duration;
+        } else {
+            avg_loop_duration = avg_loop_duration_total / AVG_LOOP_DURATION_N;
+            avg_loop_duration_total = 0;
+            avg_loop_duration_counter = 0;
         }
     }
 
@@ -87,11 +102,11 @@ namespace eez {
 namespace psu {
 namespace debug {
 
-void Trace(char *format, ...) {
+void Trace(const char *format, ...) {
     char buffer[256];
     va_list args;
     va_start(args, format);
-    vsnprintf(buffer, sizeof(buffer), format, args);
+    vsnprintf_P(buffer, sizeof(buffer), format, args);
 
     Serial.print("**TRACE");
     

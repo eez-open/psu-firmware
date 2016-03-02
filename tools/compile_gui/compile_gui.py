@@ -40,7 +40,7 @@ declare_const('STYLE_FLAGS_VERT_ALIGN_CENTER', 2 << 3)
 
 declare_const('WIDGET_TYPE_NONE', 0)
 declare_const('WIDGET_TYPE_CONTAINER', 1)
-declare_const('WIDGET_TYPE_LIST', 2)
+declare_const('WIDGET_TYPE_VERTICAL_LIST', 2)
 declare_const('WIDGET_TYPE_SELECT', 3)
 declare_const('WIDGET_TYPE_DISPLAY', 4)
 declare_const('WIDGET_TYPE_DISPLAY_STRING', 5)
@@ -431,8 +431,8 @@ class Parser:
         self.document.addField(styles)
 
         pages = List('pages')
-        for page in self.view['pages']:
-            pages.addItem(self.parse_page(page))
+        for index, page in enumerate(self.view['pages']):
+            pages.addItem(self.parse_widget(index, page))
         self.document.addField(pages)
 
     def get_style(self, style_name):
@@ -533,36 +533,6 @@ class Parser:
 
         return result
 
-    def parse_page(self, page):
-        if 'name' in page:
-            self.trace.info("Page '%s'" % page['name'])
-        else:
-            self.trace.info("Page '<noname>'")
-
-        self.trace.indent()
-
-        if not 'name' in page:
-            self.trace.warning("unnamed page found")
-
-        result = Struct('page', 'Page')
-
-        self.addStyleField(result, page, 'style', mandatory=False)
-
-        self.addDisplayPositionOrSizeField(result, page, 'w', 0)
-        self.addDisplayPositionOrSizeField(result, page, 'h', 0)
-
-        if not 'widgets' in page:
-            self.trace.error("widgets is missing")
-        else:
-            widgets = List('widgets')
-            for index, widget in enumerate(page['widgets']):
-                widgets.addItem(self.parse_widget(index, widget))
-            result.addField(widgets)
-
-        self.trace.unindent()
-
-        return result
-
     def parse_widget(self, index, widget, parent=None):
         self.trace.info("Widget %d" % index)
         self.trace.indent()
@@ -573,8 +543,8 @@ class Parser:
             type_str = widget['type'].lower()
             if type_str == 'container':
                 widget_type = WIDGET_TYPE_CONTAINER
-            elif type_str == 'list':
-                widget_type = WIDGET_TYPE_LIST
+            elif type_str == 'vertical_list':
+                widget_type = WIDGET_TYPE_VERTICAL_LIST
             elif type_str == 'select':
                 widget_type = WIDGET_TYPE_SELECT
             elif type_str == 'display':
@@ -610,14 +580,30 @@ class Parser:
 
         self.addStyleField(result, widget, 'style', mandatory=False)
 
-        if widget_type == WIDGET_TYPE_CONTAINER or widget_type == WIDGET_TYPE_LIST or widget_type == WIDGET_TYPE_SELECT:
+        if widget_type == WIDGET_TYPE_CONTAINER:
             specific_widget_data = Struct(None, 'ContainerWidget')
+
+            container_widgets = List('widgets')
+            if 'widgets' in widget:
+                for index, w in enumerate(widget['widgets']):
+                    container_widgets.addItem(self.parse_widget(index, w, result))
+            specific_widget_data.addField(container_widgets)
+        elif widget_type == WIDGET_TYPE_SELECT:
+            specific_widget_data = Struct(None, 'SelectWidget')
 
             select_widgets = List('widgets')
             if 'widgets' in widget:
                 for index, w in enumerate(widget['widgets']):
                     select_widgets.addItem(self.parse_widget(index, w, result))
             specific_widget_data.addField(select_widgets)
+        elif widget_type == WIDGET_TYPE_VERTICAL_LIST:
+            specific_widget_data = Struct(None, 'VerticalListWidget')
+
+            if 'item_widget' in widget:
+                specific_widget_data.addField(StructPtr("item_widget", self.parse_widget(0, widget['item_widget'], result)))
+            else:
+                self.trace.error("item_widget is missing")
+                specific_widget_data.addField(StructPtr("item_widget", 0))
         elif widget_type == WIDGET_TYPE_THREE_STATE_INDICATOR:
             specific_widget_data = Struct(None, 'ThreeStateIndicatorWidget')
 

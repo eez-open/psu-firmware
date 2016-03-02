@@ -17,7 +17,6 @@
  */
  
 #include "psu.h"
-#include <scpi-parser.h>
 #include "scpi_psu.h"
 #include "scpi_cal.h"
 
@@ -56,7 +55,7 @@ scpi_result_t scpi_inst_SelectQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     char buffer[256] = { 0 };
-    sprintf(buffer, "CH%d", (int)psu_context->selected_channel_index);
+    sprintf_P(buffer, PSTR("CH%d"), (int)psu_context->selected_channel_index);
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;

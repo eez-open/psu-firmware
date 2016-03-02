@@ -74,13 +74,13 @@ bool DigitalAnalogConverter::test() {
     test_result = psu::TEST_OK;
 
     if (channel.ioexp.test_result != psu::TEST_OK) {
-        DebugTrace("Ch%d DAC test skipped because of IO expander", channel.index);
+        DebugTraceF("Ch%d DAC test skipped because of IO expander", channel.index);
         test_result = psu::TEST_SKIPPED;
         return true;
     }
 
     if (channel.adc.test_result != psu::TEST_OK) {
-        DebugTrace("Ch%d DAC test skipped because of ADC", channel.index);
+        DebugTraceF("Ch%d DAC test skipped because of ADC", channel.index);
         test_result = psu::TEST_SKIPPED;
         return true;
     }
@@ -113,7 +113,7 @@ bool DigitalAnalogConverter::test() {
     if (fabsf(u_diff) > u_set * DAC_TEST_TOLERANCE / 100) {
         test_result = psu::TEST_FAILED;
 
-        DebugTrace("Ch%d DAC test, U_set failure: expected=%d, got=%d, abs diff=%d",
+        DebugTraceF("Ch%d DAC test, U_set failure: expected=%d, got=%d, abs diff=%d",
             channel.index,
             (int)(u_set * 100),
             (int)(u_mon * 100),
@@ -125,7 +125,7 @@ bool DigitalAnalogConverter::test() {
     if (fabsf(i_diff) > i_set * DAC_TEST_TOLERANCE / 100) {
         test_result = psu::TEST_FAILED;
 
-        DebugTrace("Ch%d DAC test, I_set failure: expected=%d, got=%d, abs diff=%d",
+        DebugTraceF("Ch%d DAC test, I_set failure: expected=%d, got=%d, abs diff=%d",
             channel.index,
             (int)(i_set * 100),
             (int)(i_mon * 100),

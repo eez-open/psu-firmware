@@ -53,140 +53,134 @@
   ],
   "pages": [
     {
-      "name": "Page 1",
+      "type": "container",
+      "x": 0,
+      "y": 0,
       "w": 240,
       "h": 320,
       "widgets": [
         {
-          "type": "List",
+          "type": "vertical_list",
           "data": "channels",
           "x": 0,
           "y": 0,
-          "w": 0,
-          "h": 138,
-          "widgets": [
-            {
-              "type": "three_state_indicator",
-              "data": "ovp",
-              "x": 0,
-              "y": 0,
-              "w": 44,
-              "h": 26,
-              "style": "prot_indicator",
-              "style1": "prot_indicator_set",
-              "style2": "prot_indicator_trip",
-              "text": "OVP"
-            },
-            {
-              "type": "three_state_indicator",
-              "data": "ocp",
-              "x": 44,
-              "y": 0,
-              "w": 44,
-              "h": 26,
-              "style": "prot_indicator",
-              "style1": "prot_indicator_set",
-              "style2": "prot_indicator_trip",
-              "text": "OCP"
-            },
-            {
-              "type": "three_state_indicator",
-              "data": "opp",
-              "x": 88,
-              "y": 0,
-              "w": 44,
-              "h": 26,
-              "style": "prot_indicator",
-              "style1": "prot_indicator_set",
-              "style2": "prot_indicator_trip",
-              "text": "OPP"
-            },
-            {
-              "type": "three_state_indicator",
-              "data": "otp",
-              "x": 132,
-              "y": 0,
-              "w": 44,
-              "h": 26,
-              "style": "prot_indicator",
-              "style1": "prot_indicator_set",
-              "style2": "prot_indicator_trip",
-              "text": "OTP"
-            },
-            {
-              "type": "display_string_select",
-              "data": "dp",
-              "x": 176,
-              "y": 0,
-              "w": 64,
-              "h": 26,
-              "style1": "prot_indicator_set",
-              "text1": "DP on",
-              "style2": "prot_indicator",
-              "text2": "DP off"
-            },
-            {
-              "type": "select",
-              "x": 0,
-              "y": 26,
-              "w": 240,
-              "h": 72,
-              "data": "output_state",
-              "widgets": [
-                {
-                  "type": "display_string",
-                  "style": "channel_off",
-                  "x": 0,
-                  "y": 26,
-                  "w": 240,
-                  "h": 72,
-                  "text": "OFF"
-                },
-                {
-                  "type": "select",
-                  "data": "output_mode",
-                  "x": 0,
-                  "y": 26,
-                  "w": 240,
-                  "h": 72,
-                  "widgets": [
-                    {
-                      "type": "display",
-                      "style": "mon_value",
-                      "data": "mon_value"
-                    },
-                    {
-                      "type": "display",
-                      "style": "mon_value_ur",
-                      "data": "mon_value"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "edit",
-              "data": "volt",
-              "x": 0,
-              "y": 98,
-              "w": 120,
-              "h": 40
-            },
-            {
-              "type": "edit",
-              "data": "curr",
-              "x": 120,
-              "y": 98,
-              "w": 120,
-              "h": 40
-            }
-          ]
+          "item_widget": {
+            "type": "container",
+            "h": 138,
+            "widgets": [
+              {
+                "type": "three_state_indicator",
+                "data": "ovp",
+                "x": 0,
+                "y": 0,
+                "w": 44,
+                "h": 26,
+                "style": "prot_indicator",
+                "style1": "prot_indicator_set",
+                "style2": "prot_indicator_trip",
+                "text": "OVP"
+              },
+              {
+                "type": "three_state_indicator",
+                "data": "ocp",
+                "x": 44,
+                "y": 0,
+                "w": 44,
+                "h": 26,
+                "style": "prot_indicator",
+                "style1": "prot_indicator_set",
+                "style2": "prot_indicator_trip",
+                "text": "OCP"
+              },
+              {
+                "type": "three_state_indicator",
+                "data": "opp",
+                "x": 88,
+                "y": 0,
+                "w": 44,
+                "h": 26,
+                "style": "prot_indicator",
+                "style1": "prot_indicator_set",
+                "style2": "prot_indicator_trip",
+                "text": "OPP"
+              },
+              {
+                "type": "three_state_indicator",
+                "data": "otp",
+                "x": 132,
+                "y": 0,
+                "w": 44,
+                "h": 26,
+                "style": "prot_indicator",
+                "style1": "prot_indicator_set",
+                "style2": "prot_indicator_trip",
+                "text": "OTP"
+              },
+              {
+                "type": "display_string_select",
+                "data": "dp",
+                "x": 176,
+                "y": 0,
+                "w": 64,
+                "h": 26,
+                "style1": "prot_indicator_set",
+                "text1": "DP on",
+                "style2": "prot_indicator",
+                "text2": "DP off"
+              },
+              {
+                "type": "select",
+                "x": 0,
+                "y": 26,
+                "h": 72,
+                "data": "output_state",
+                "widgets": [
+                  {
+                    "type": "display_string",
+                    "style": "channel_off",
+                    "text": "OFF"
+                  },
+                  {
+                    "type": "select",
+                    "data": "output_mode",
+                    "widgets": [
+                      {
+                        "type": "display",
+                        "style": "mon_value",
+                        "data": "mon_value"
+                      },
+                      {
+                        "type": "display",
+                        "style": "mon_value_ur",
+                        "data": "mon_value"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "edit",
+                "data": "volt",
+                "x": 0,
+                "y": 98,
+                "w": 120,
+                "h": 40
+              },
+              {
+                "type": "edit",
+                "data": "curr",
+                "x": 120,
+                "y": 98,
+                "w": 120,
+                "h": 40
+              }
+            ]
+          }
         },
         {
           "type": "display_string",
           "x": 0,
           "y": 276,
-          "w": 240,
           "h": 44,
           "style": "menu",
           "text": "Main | Off | Remote"

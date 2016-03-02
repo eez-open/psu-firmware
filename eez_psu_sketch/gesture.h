@@ -8,14 +8,17 @@ namespace gui {
 namespace gesture {
 
 enum GestureType {
-    GESTURE_NONE = 0,
+    GESTURE_NONE,
 
-    GESTURE_SLIDE_UP = 1,
-    GESTURE_SLIDE_RIGHT = 2,
-    GESTURE_SLIDE_DOWN = 3,
-    GESTURE_SLIDE_LEFT = 4,
+    GESTURE_DOWN,
+    GESTURE_UP,
 
-    GESTURE_TAP = 5,
+    GESTURE_SLIDE_UP,
+    GESTURE_SLIDE_RIGHT,
+    GESTURE_SLIDE_DOWN,
+    GESTURE_SLIDE_LEFT,
+
+    GESTURE_TAP,
 };
 
 extern GestureType gesture;

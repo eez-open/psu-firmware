@@ -25,8 +25,6 @@ unsigned long time;
 GestureType gesture = GESTURE_NONE;
 
 void recognize() {
-    DebugTrace("Start gesture recognize %ul", time);
-    
     // sliding
     if (time > MIN_SLIDE_DURATION) {
         if (distance_y < -MIN_SLIDE_DISTANCE && abs(distance_y) > abs(distance_x)) gesture = GESTURE_SLIDE_UP;
@@ -39,24 +37,17 @@ void recognize() {
     if (time >= MIN_TAP_DURATION && time <= MAX_TAP_DURATION && distance_x < MAX_TAP_DISTANCE && distance_y < MAX_TAP_DISTANCE) {
         gesture = GESTURE_TAP;
     }
-    
-    if (gesture != GESTURE_NONE) {
-        DebugTrace("Gesture: %d", gesture);
-    }
-
-    DebugTrace("End gesture recognize");
 }
 
 void push_pointer(unsigned long tick_usec, bool is_down, int x, int y) {
     gesture = GESTURE_NONE;
 
     if (is_down) {
-        DebugTrace("%d, %d", x, y);
-
         if (!last_is_down) {
             distance_x = 0;
             distance_y = 0;
             time = 0;
+            gesture = GESTURE_DOWN;
         } else {
             distance_x += x - last_x;
             distance_y += y - last_y;
@@ -64,7 +55,8 @@ void push_pointer(unsigned long tick_usec, bool is_down, int x, int y) {
         }
     } else {
         if (last_is_down) {
-            recognize();
+            gesture = GESTURE_UP;
+            //recognize();
         }
     }
 

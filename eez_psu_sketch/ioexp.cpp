@@ -87,7 +87,7 @@ bool IOExpander::test() {
             uint8_t value = reg_read(REG_VALUES[i]);
 
             if (value != REG_VALUES[i + 1]) {
-                DebugTrace("Ch%d IO expander reg check failure: reg=%d, expected=%d, got=%d",
+                DebugTraceF("Ch%d IO expander reg check failure: reg=%d, expected=%d, got=%d",
                     channel.index, (int)REG_VALUES[i], (int)REG_VALUES[i + 1], (int)value);
 
                 test_result = psu::TEST_FAILED;
@@ -99,7 +99,7 @@ bool IOExpander::test() {
     if (test_result == psu::TEST_OK) {
         channel.flags.power_ok = test_bit(IO_BIT_IN_PWRGOOD);
         if (!channel.flags.power_ok) {
-            DebugTrace("Ch%d power fault", channel.index);
+            DebugTraceF("Ch%d power fault", channel.index);
             psu::generateError(SCPI_ERROR_CHANNEL_FAULT_DETECTED);
         }
     }

@@ -66,12 +66,12 @@ bool test() {
         test_result = psu::TEST_OK;
 
         if (ctrl_reg_values[0] != CONTROL_1_VALUE) {
-            DebugTrace("RTC test failed Control 1: w=%d, r=%d", (int)CONTROL_1_VALUE, (int)ctrl_reg_values[0]);
+            DebugTraceF("RTC test failed Control 1: w=%d, r=%d", (int)CONTROL_1_VALUE, (int)ctrl_reg_values[0]);
             test_result = psu::TEST_FAILED;
         }
 
         if (ctrl_reg_values[1] != CONTROL_2_VALUE) {
-            DebugTrace("RTC test failed Control 2: w=%d, r=%d", (int)CONTROL_2_VALUE, (int)ctrl_reg_values[1]);
+            DebugTraceF("RTC test failed Control 2: w=%d, r=%d", (int)CONTROL_2_VALUE, (int)ctrl_reg_values[1]);
             test_result = psu::TEST_FAILED;
         }
     }

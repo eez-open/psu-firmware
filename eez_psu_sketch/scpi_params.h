@@ -18,8 +18,6 @@
  
 #pragma once
 
-#include <scpi-parser.h>
-
 namespace eez {
 namespace psu {
 namespace scpi {

@@ -44,7 +44,7 @@ void Value::toText(char *text) {
     }
 }
 
-static Channel *selected_channel;
+static Cursor cursor;
 
 struct ChannelStateFlags {
     unsigned mode : 2;
@@ -75,7 +75,7 @@ int count(uint16_t id) {
 
 void select(uint16_t id, int index) {
     if (id == DATA_ID_CHANNELS) {
-        selected_channel = &Channel::get(index);
+        cursor.selected_channel = &Channel::get(index);
         selected_channel_last_state = channel_last_state + index;
     }
 }
@@ -86,14 +86,14 @@ Value get(uint16_t id, bool &changed) {
     changed = false;
 
     if (id == DATA_ID_OUTPUT_STATE) {
-        uint8_t state = selected_channel->isOutputEnabled() ? 1 : 0;
+        uint8_t state = cursor.selected_channel->isOutputEnabled() ? 1 : 0;
         if (state != selected_channel_last_state->flags.state) {
             selected_channel_last_state->flags.state = state;
             changed = true;
         }
         value = Value(state);
     } else if (id == DATA_ID_OUTPUT_MODE) {
-        char *mode_str = selected_channel->getCvModeStr();
+        char *mode_str = cursor.selected_channel->getCvModeStr();
         uint8_t mode = strcmp(mode_str, "UR") == 0 ? 1 : 0;
         if (mode != selected_channel_last_state->flags.mode) {
             selected_channel_last_state->flags.mode = mode;
@@ -103,24 +103,24 @@ Value get(uint16_t id, bool &changed) {
     } else if (id == DATA_ID_MON_VALUE) {
         float mon_value;
         Unit unit;
-        char *mode_str = selected_channel->getCvModeStr();
+        char *mode_str = cursor.selected_channel->getCvModeStr();
         if (strcmp(mode_str, "CC") != 0) {
             // CC -> volt
-            mon_value = selected_channel->u.mon;
+            mon_value = cursor.selected_channel->u.mon;
             unit = UNIT_VOLT;
         } else if (strcmp(mode_str, "CV") != 0) {
             // CV -> curr
-            mon_value = selected_channel->i.mon;
+            mon_value = cursor.selected_channel->i.mon;
             unit = UNIT_AMPER;
         } else {
             // UR ->
-            if (selected_channel->u.mon < selected_channel->i.mon) {
+            if (cursor.selected_channel->u.mon < cursor.selected_channel->i.mon) {
                 // min(volt, curr)
-                mon_value = selected_channel->u.mon;
+                mon_value = cursor.selected_channel->u.mon;
                 unit = UNIT_VOLT;
             } else {
                 // or curr if equal
-                mon_value = selected_channel->i.mon;
+                mon_value = cursor.selected_channel->i.mon;
                 unit = UNIT_AMPER;
             }
         }
@@ -130,23 +130,23 @@ Value get(uint16_t id, bool &changed) {
             changed = true;
         }
     } else if (id == DATA_ID_VOLT) {
-        float u_set = selected_channel->u.set;
+        float u_set = cursor.selected_channel->u.set;
         if (selected_channel_last_state->u_set != u_set) {
             selected_channel_last_state->u_set = u_set;
             changed = true;
         }
         value = Value(u_set, UNIT_VOLT);
     } else if (id == DATA_ID_CURR) {
-        float i_set = selected_channel->i.set;
-        if (selected_channel_last_state->i_set != selected_channel->i.set) {
-            selected_channel_last_state->i_set = selected_channel->i.set;
+        float i_set = cursor.selected_channel->i.set;
+        if (selected_channel_last_state->i_set != cursor.selected_channel->i.set) {
+            selected_channel_last_state->i_set = cursor.selected_channel->i.set;
             changed = true;
         }
         value = Value(i_set, UNIT_AMPER);
     } else if (id == DATA_ID_OVP) {
         uint8_t ovp;
-        if (!selected_channel->prot_conf.flags.u_state) ovp = 1;
-        else if (!selected_channel->ovp.flags.tripped) ovp = 2;
+        if (!cursor.selected_channel->prot_conf.flags.u_state) ovp = 1;
+        else if (!cursor.selected_channel->ovp.flags.tripped) ovp = 2;
         else ovp = 3;
         if (selected_channel_last_state->flags.ovp != ovp) {
             selected_channel_last_state->flags.ovp = ovp;
@@ -155,8 +155,8 @@ Value get(uint16_t id, bool &changed) {
         value = Value(ovp);
     } else if (id == DATA_ID_OCP) {
         uint8_t ocp;
-        if (!selected_channel->prot_conf.flags.i_state) ocp = 1;
-        else if (!selected_channel->ocp.flags.tripped) ocp = 2;
+        if (!cursor.selected_channel->prot_conf.flags.i_state) ocp = 1;
+        else if (!cursor.selected_channel->ocp.flags.tripped) ocp = 2;
         else ocp = 3;
         if (selected_channel_last_state->flags.ocp != ocp) {
             selected_channel_last_state->flags.ocp = ocp;
@@ -165,8 +165,8 @@ Value get(uint16_t id, bool &changed) {
         value = Value(ocp);
     } else if (id == DATA_ID_OPP) {
         uint8_t opp;
-        if (!selected_channel->prot_conf.flags.p_state) opp = 1;
-        else if (!selected_channel->opp.flags.tripped) opp = 2;
+        if (!cursor.selected_channel->prot_conf.flags.p_state) opp = 1;
+        else if (!cursor.selected_channel->opp.flags.tripped) opp = 2;
         else opp = 3;
         if (selected_channel_last_state->flags.opp != opp) {
             selected_channel_last_state->flags.opp = opp;
@@ -184,7 +184,7 @@ Value get(uint16_t id, bool &changed) {
         }
         value = Value(otp);
     } else if (id == DATA_ID_DP) {
-        uint8_t dp = selected_channel->flags.dp_on ? 1 : 2;
+        uint8_t dp = cursor.selected_channel->flags.dp_on ? 1 : 2;
         if (selected_channel_last_state->flags.dp != dp) {
             selected_channel_last_state->flags.dp = dp;
             changed = true;
@@ -193,6 +193,14 @@ Value get(uint16_t id, bool &changed) {
     }
 
     return value;
+}
+
+Cursor getCursor() {
+    return cursor;
+}
+
+void setCursor(Cursor cursor_) {
+    cursor = cursor_;
 }
 
 }

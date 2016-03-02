@@ -72,17 +72,17 @@ bool AnalogDigitalConverter::test() {
     test_result = psu::TEST_OK;
 
     if (reg1 != ADC_REG1_VAL) {
-        DebugTrace("Ch%d ADC test failed reg1: expected=%d, got=%d", channel.index, ADC_REG1_VAL, reg1);
+        DebugTraceF("Ch%d ADC test failed reg1: expected=%d, got=%d", channel.index, ADC_REG1_VAL, reg1);
         test_result = psu::TEST_FAILED;
     }
 
     if (reg2 != ADC_REG2_VAL) {
-        DebugTrace("Ch%d ADC test failed reg2: expected=%d, got=%d", channel.index, ADC_REG2_VAL, reg2);
+        DebugTraceF("Ch%d ADC test failed reg2: expected=%d, got=%d", channel.index, ADC_REG2_VAL, reg2);
         test_result = psu::TEST_FAILED;
     }
 
     if (reg3 != ADC_REG3_VAL) {
-        DebugTrace("Ch%d ADC test failed reg3: expected=%d, got=%d", channel.index, ADC_REG3_VAL, reg3);
+        DebugTraceF("Ch%d ADC test failed reg3: expected=%d, got=%d", channel.index, ADC_REG3_VAL, reg3);
         test_result = psu::TEST_FAILED;
     }
 
@@ -111,7 +111,7 @@ void AnalogDigitalConverter::tick(unsigned long tick_usec) {
             if (adc_timeout_recovery_attempts_counter < MAX_ADC_TIMEOUT_RECOVERY_ATTEMPTS) {
                 ++adc_timeout_recovery_attempts_counter;
 
-                DebugTrace("ADC timeout (%lu) detected on CH%d, recovery attempt no. %d", diff, channel.index, adc_timeout_recovery_attempts_counter);
+                DebugTraceF("ADC timeout (%lu) detected on CH%d, recovery attempt no. %d", diff, channel.index, adc_timeout_recovery_attempts_counter);
 
                 if (channel.init()) {
                     start(ADC_REG0_READ_U_MON);

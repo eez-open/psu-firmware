@@ -323,7 +323,7 @@ bool get_duration_from_param(scpi_t *context, const scpi_number_t &param, float 
         }
     }
     else {
-        if (param.unit != SCPI_UNIT_NONE && param.unit != SCPI_UNIT_SECONDS) {
+        if (param.unit != SCPI_UNIT_NONE && param.unit != SCPI_UNIT_SECOND) {
             SCPI_ErrorPush(context, SCPI_ERROR_INVALID_SUFFIX);
             return false;
         }

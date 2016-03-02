@@ -148,10 +148,10 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
                     cpv.flags.alarmed = 0;
 
                     if (IS_OVP_VALUE(this, cpv)) {
-                        DebugTrace("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA", (int)flags.cv_mode, (int)flags.cc_mode, (int)(fabs(i.mon - i.set) * 1000));
+                        DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA", (int)flags.cv_mode, (int)flags.cc_mode, (int)(fabs(i.mon - i.set) * 1000));
                     }
                     else if (IS_OCP_VALUE(this, cpv)) {
-                        DebugTrace("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.cc_mode, (int)flags.cv_mode, (int)(fabs(u.mon - u.set) * 1000));
+                        DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.cc_mode, (int)flags.cv_mode, (int)(fabs(u.mon - u.set) * 1000));
                     }
 
                     protectionEnter(cpv);
@@ -457,7 +457,7 @@ void Channel::event(uint8_t gpio, int16_t adc_data) {
     if (!psu::isPowerUp()) return;
 
     if (!(gpio & (1 << IOExpander::IO_BIT_IN_PWRGOOD))) {
-        DebugTrace("Ch%d PWRGOOD bit changed to 0", index);
+        DebugTraceF("Ch%d PWRGOOD bit changed to 0", index);
         flags.power_ok = 0;
         psu::generateError(SCPI_ERROR_CHANNEL_FAULT_DETECTED);
         psu::powerDownBySensor();

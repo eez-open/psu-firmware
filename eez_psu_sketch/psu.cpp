@@ -91,71 +91,71 @@ void boot() {
     /*
     using namespace persist_conf;
 
-    DebugTrace("%d", sizeof(BlockHeader));                                         // 6
-    DebugTrace("%d", offsetof(BlockHeader, checksum));                             // 0
-    DebugTrace("%d", offsetof(BlockHeader, version));                              // 4
-    DebugTrace("%d", sizeof(DeviceFlags));                                         // 2
-    DebugTrace("%d", sizeof(DeviceConfiguration));                                 // 32
-    DebugTrace("%d", offsetof(DeviceConfiguration, header));                       // 0
-    DebugTrace("%d", offsetof(DeviceConfiguration, calibration_password));         // 6
-    DebugTrace("%d", offsetof(DeviceConfiguration, flags));                        // 23
-    DebugTrace("%d", offsetof(DeviceConfiguration, date_year));                    // 25
-    DebugTrace("%d", offsetof(DeviceConfiguration, date_month));                   // 26
-    DebugTrace("%d", offsetof(DeviceConfiguration, date_day));                     // 27
-    DebugTrace("%d", offsetof(DeviceConfiguration, time_hour));                    // 28
-    DebugTrace("%d", offsetof(DeviceConfiguration, time_minute));                  // 29
-    DebugTrace("%d", offsetof(DeviceConfiguration, time_second));                  // 30
-    DebugTrace("%d", offsetof(DeviceConfiguration, profile_auto_recall_location)); // 31
+    DebugTraceF("%d", sizeof(BlockHeader));                                         // 6
+    DebugTraceF("%d", offsetof(BlockHeader, checksum));                             // 0
+    DebugTraceF("%d", offsetof(BlockHeader, version));                              // 4
+    DebugTraceF("%d", sizeof(DeviceFlags));                                         // 2
+    DebugTraceF("%d", sizeof(DeviceConfiguration));                                 // 32
+    DebugTraceF("%d", offsetof(DeviceConfiguration, header));                       // 0
+    DebugTraceF("%d", offsetof(DeviceConfiguration, calibration_password));         // 6
+    DebugTraceF("%d", offsetof(DeviceConfiguration, flags));                        // 23
+    DebugTraceF("%d", offsetof(DeviceConfiguration, date_year));                    // 25
+    DebugTraceF("%d", offsetof(DeviceConfiguration, date_month));                   // 26
+    DebugTraceF("%d", offsetof(DeviceConfiguration, date_day));                     // 27
+    DebugTraceF("%d", offsetof(DeviceConfiguration, time_hour));                    // 28
+    DebugTraceF("%d", offsetof(DeviceConfiguration, time_minute));                  // 29
+    DebugTraceF("%d", offsetof(DeviceConfiguration, time_second));                  // 30
+    DebugTraceF("%d", offsetof(DeviceConfiguration, profile_auto_recall_location)); // 31
 
     typedef Channel::CalibrationConfiguration CalibrationConfiguration;
     typedef Channel::CalibrationValueConfiguration CalibrationValueConfiguration;
     typedef Channel::CalibrationValuePointConfiguration CalibrationValuePointConfiguration;
 
-    DebugTrace("%d", sizeof(CalibrationConfiguration));
-    DebugTrace("%d", offsetof(CalibrationConfiguration, flags));
-    DebugTrace("%d", offsetof(CalibrationConfiguration, u));
-    DebugTrace("%d", offsetof(CalibrationConfiguration, i));
-    DebugTrace("%d", offsetof(CalibrationConfiguration, calibration_date));
-    DebugTrace("%d", offsetof(CalibrationConfiguration, calibration_remark));
+    DebugTraceF("%d", sizeof(CalibrationConfiguration));
+    DebugTraceF("%d", offsetof(CalibrationConfiguration, flags));
+    DebugTraceF("%d", offsetof(CalibrationConfiguration, u));
+    DebugTraceF("%d", offsetof(CalibrationConfiguration, i));
+    DebugTraceF("%d", offsetof(CalibrationConfiguration, calibration_date));
+    DebugTraceF("%d", offsetof(CalibrationConfiguration, calibration_remark));
 
-    DebugTrace("%d", sizeof(CalibrationValueConfiguration));
-    DebugTrace("%d", offsetof(CalibrationValueConfiguration, min));
-    DebugTrace("%d", offsetof(CalibrationValueConfiguration, max));
-    DebugTrace("%d", offsetof(CalibrationValueConfiguration, mid));
+    DebugTraceF("%d", sizeof(CalibrationValueConfiguration));
+    DebugTraceF("%d", offsetof(CalibrationValueConfiguration, min));
+    DebugTraceF("%d", offsetof(CalibrationValueConfiguration, max));
+    DebugTraceF("%d", offsetof(CalibrationValueConfiguration, mid));
 
-    DebugTrace("%d", sizeof(CalibrationValuePointConfiguration));
-    DebugTrace("%d", offsetof(CalibrationValuePointConfiguration, dac));
-    DebugTrace("%d", offsetof(CalibrationValuePointConfiguration, val));
-    DebugTrace("%d", offsetof(CalibrationValuePointConfiguration, adc));
+    DebugTraceF("%d", sizeof(CalibrationValuePointConfiguration));
+    DebugTraceF("%d", offsetof(CalibrationValuePointConfiguration, dac));
+    DebugTraceF("%d", offsetof(CalibrationValuePointConfiguration, val));
+    DebugTraceF("%d", offsetof(CalibrationValuePointConfiguration, adc));
 
     using namespace profile;
 
-    DebugTrace("%d", sizeof(Parameters));
-    DebugTrace("%d", offsetof(Parameters, header));
-    DebugTrace("%d", offsetof(Parameters, is_valid));
-    DebugTrace("%d", offsetof(Parameters, name));
-    DebugTrace("%d", offsetof(Parameters, power_is_up));
-    DebugTrace("%d", offsetof(Parameters, channels));
-    DebugTrace("%d", offsetof(Parameters, temp_prot));
+    DebugTraceF("%d", sizeof(Parameters));
+    DebugTraceF("%d", offsetof(Parameters, header));
+    DebugTraceF("%d", offsetof(Parameters, is_valid));
+    DebugTraceF("%d", offsetof(Parameters, name));
+    DebugTraceF("%d", offsetof(Parameters, power_is_up));
+    DebugTraceF("%d", offsetof(Parameters, channels));
+    DebugTraceF("%d", offsetof(Parameters, temp_prot));
 
-    DebugTrace("%d", sizeof(ChannelParameters));
-    DebugTrace("%d", offsetof(ChannelParameters, flags));
-    DebugTrace("%d", offsetof(ChannelParameters, u_set));
-    DebugTrace("%d", offsetof(ChannelParameters, u_step));
-    DebugTrace("%d", offsetof(ChannelParameters, i_set));
-    DebugTrace("%d", offsetof(ChannelParameters, i_step));
-    DebugTrace("%d", offsetof(ChannelParameters, u_delay));
-    DebugTrace("%d", offsetof(ChannelParameters, i_delay));
-    DebugTrace("%d", offsetof(ChannelParameters, p_delay));
-    DebugTrace("%d", offsetof(ChannelParameters, p_level));
+    DebugTraceF("%d", sizeof(ChannelParameters));
+    DebugTraceF("%d", offsetof(ChannelParameters, flags));
+    DebugTraceF("%d", offsetof(ChannelParameters, u_set));
+    DebugTraceF("%d", offsetof(ChannelParameters, u_step));
+    DebugTraceF("%d", offsetof(ChannelParameters, i_set));
+    DebugTraceF("%d", offsetof(ChannelParameters, i_step));
+    DebugTraceF("%d", offsetof(ChannelParameters, u_delay));
+    DebugTraceF("%d", offsetof(ChannelParameters, i_delay));
+    DebugTraceF("%d", offsetof(ChannelParameters, p_delay));
+    DebugTraceF("%d", offsetof(ChannelParameters, p_level));
 
     using namespace temperature;
 
-    DebugTrace("%d", sizeof(ProtectionConfiguration));
-    DebugTrace("%d", offsetof(ProtectionConfiguration, sensor));
-    DebugTrace("%d", offsetof(ProtectionConfiguration, delay));
-    DebugTrace("%d", offsetof(ProtectionConfiguration, level));
-    DebugTrace("%d", offsetof(ProtectionConfiguration, state));
+    DebugTraceF("%d", sizeof(ProtectionConfiguration));
+    DebugTraceF("%d", offsetof(ProtectionConfiguration, sensor));
+    DebugTraceF("%d", offsetof(ProtectionConfiguration, delay));
+    DebugTraceF("%d", offsetof(ProtectionConfiguration, level));
+    DebugTraceF("%d", offsetof(ProtectionConfiguration, state));
     */
 
     gui::init();
@@ -477,7 +477,7 @@ const char *getModelName() {
                     *p++ += '-';
                 }
 
-                p += sprintf(p, "%d/%02d/%02d", count, (int)floor(Channel::get(i).U_MAX), (int)floor(Channel::get(i).I_MAX));
+                p += sprintf_P(p, PSTR("%d/%02d/%02d"), count, (int)floor(Channel::get(i).U_MAX), (int)floor(Channel::get(i).I_MAX));
             }
         }
 

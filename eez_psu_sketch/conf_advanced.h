@@ -22,15 +22,6 @@
 
 #pragma once
 
-/// Wait until serial port is ready before starting firmware.
-#define CONF_WAIT_SERIAL  0
-
-/// Enable all debug trace to the serial port. 
-#define CONF_DEBUG        1
-
-/// Enable only some of the debug trace to the serial port. 
-#define CONF_DEBUG_LATEST 1
-
 /// PSU serial number.
 #define PSU_SERIAL   "123456789"
 

@@ -151,7 +151,7 @@ bool test() {
         test_result = psu::TEST_OK;
         for (uint16_t i = 0; i < EEPROM_TEST_BUFFER_SIZE; ++i) {
             if (test_buffer[i] != i % 32) {
-                DebugTrace("EEPROM test failed at index: %d", i);
+                DebugTraceF("EEPROM test failed at index: %d", i);
                 test_result = psu::TEST_FAILED;
                 break;
             }

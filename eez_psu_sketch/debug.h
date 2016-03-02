@@ -29,14 +29,15 @@ namespace psu {
 /// Everything used for the debugging purposes.
 namespace debug {
 
-void Trace(char *format, ...);
+void Trace(const char *format, ...);
 
 }
 }
 } // namespace eez::psu::debug
 
 
-#define DebugTrace(...) debug::Trace(__VA_ARGS__)
+#define DebugTrace(message) debug::Trace(PSTR(message))
+#define DebugTraceF(format, ...) debug::Trace(PSTR(format), __VA_ARGS__)
 
 #else // NO DEBUG
 
@@ -46,8 +47,6 @@ void Trace(char *format, ...);
 
 
 #if CONF_DEBUG
-
-#include <scpi-parser.h>
 
 namespace eez {
 namespace psu {
@@ -62,6 +61,7 @@ extern int16_t i_mon_dac[2];
 
 extern unsigned long last_loop_duration;
 extern unsigned long max_loop_duration;
+extern unsigned long avg_loop_duration;
 
 extern unsigned long total_ioexp_int_counter;
 extern unsigned long last_ioexp_int_counter;
