@@ -460,15 +460,16 @@ void tick(unsigned long tick_usec) {
 
         if (selected_widget) {
             data::setCursor(selected_widget.cursor);
+
             widget_refresh = true;
             draw_widget(document, selected_widget.widget, selected_widget.x, selected_widget.y, true);
             widget_refresh = false;
         }
 
         data::setCursor(saved_cursor);
+    } else {
+        draw();
     }
-
-    draw();
 }
 
 }

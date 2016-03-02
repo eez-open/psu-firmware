@@ -24,7 +24,7 @@ int y;
 
 void init() {
 	utouch.InitTouch(PORTRAIT);
-	utouch.setPrecision(PREC_MEDIUM);
+	utouch.setPrecision(PREC_HI);
 }
 
 void tick() {
