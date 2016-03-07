@@ -41,6 +41,10 @@
 #include "simulator_conf.h"
 #endif
 
+#ifdef EEZ_PSU_ARDUINO_DUE
+#define vsnprintf_P vsnprintf
+#endif
+
 #include <scpi-parser.h>
 
 #include "debug.h"
