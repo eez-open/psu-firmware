@@ -41,6 +41,7 @@ static int page_index = 0;
 Style *page_style;
 static data::Cursor slider_data_cursor;
 static int slider_data_id;
+static int SLIDER_HEIGHT = 320;
 
 struct WidgetCursor {
     Widget *widget;
@@ -424,6 +425,8 @@ bool draw_vertical_slider_widget(uint8_t *document, Widget *widget, int x, int y
             fill_rect(x, y_offset + fontHeight, (int)widget->w, y + (int)widget->h - fontHeight - (y_offset + fontHeight));
         }
 
+        SLIDER_HEIGHT = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widget->h - 3 * fontHeight);
+
         return true;
     }
 
@@ -563,7 +566,7 @@ void tick(unsigned long tick_usec) {
         } else if (touch::event_type == touch::TOUCH_MOVE) {
             data::Value min_value = data::getMin(slider_data_id);
             data::Value max_value = data::getMax(slider_data_id);
-            float value = start_value.getFloat() + (start_y - touch::y) * (max_value.getFloat() - min_value.getFloat()) / 320;
+            float value = start_value.getFloat() + (start_y - touch::y) * (max_value.getFloat() - min_value.getFloat()) / SLIDER_HEIGHT;
             if (value < min_value.getFloat()) value = min_value.getFloat();
             if (value > max_value.getFloat()) value = max_value.getFloat();
             data::set(slider_data_id, data::Value(value, min_value.getUnit()));
