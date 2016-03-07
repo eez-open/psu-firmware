@@ -415,12 +415,12 @@ bool draw_vertical_slider_widget(uint8_t *document, Widget *widget, int x, int y
         }
         
         if (y + fontHeight < y_offset) {
-            lcd::lcd.setColor(VGA_RED);
+            lcd::lcd.setColor(0xD0, 0xD0, 0xD0);
             fill_rect(x, y + fontHeight, (int)widget->w, y_offset - (y + fontHeight));
         }
 
         if (y_offset + fontHeight < y + (int)widget->h - fontHeight) {
-            lcd::lcd.setColor(VGA_GREEN);
+            lcd::lcd.setColor(0x50, 0x50, 0x50);
             fill_rect(x, y_offset + fontHeight, (int)widget->w, y + (int)widget->h - fontHeight - (y_offset + fontHeight));
         }
 
