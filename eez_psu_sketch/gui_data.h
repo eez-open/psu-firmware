@@ -33,9 +33,12 @@ public:
         return memcmp(this, &other, sizeof(Value)) != 0;
     }
 
+    float getFloat() { return float_; }
+    Unit getUnit() { return (Unit)unit_; }
     uint8_t getInt() { return int_; }
 
     void toText(char *text);
+    void toTextNoUnit(char *text);
 
 private:
     int int_;
@@ -59,6 +62,9 @@ void setCursor(Cursor cursor_);
 int count(uint16_t id);
 void select(uint16_t id, int index);
 Value get(uint16_t id, bool &changed);
+Value getMin(uint16_t id);
+Value getMax(uint16_t id);
+void set(uint16_t id, Value value);
 
 
 }

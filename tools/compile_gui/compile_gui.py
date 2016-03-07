@@ -47,6 +47,7 @@ declare_const('WIDGET_TYPE_DISPLAY_STRING', 5)
 declare_const('WIDGET_TYPE_DISPLAY_STRING_SELECT', 6)
 declare_const('WIDGET_TYPE_EDIT', 7)
 declare_const('WIDGET_TYPE_THREE_STATE_INDICATOR', 8)
+declare_const('WIDGET_TYPE_VERTICAL_SLIDER', 9)
 
 #-------------------------------------------------------------------------------
 
@@ -557,6 +558,8 @@ class Parser:
                 widget_type = WIDGET_TYPE_EDIT
             elif type_str == 'three_state_indicator':
                 widget_type = WIDGET_TYPE_THREE_STATE_INDICATOR
+            elif type_str == 'vertical_slider':
+                widget_type = WIDGET_TYPE_VERTICAL_SLIDER
             else:
                 self.trace.error("unkown type '%s'" % type_str)
                 widget_type = WIDGET_TYPE_NONE
@@ -567,7 +570,7 @@ class Parser:
         result.addField(UInt8("type", widget_type))
 
         # data
-        if widget_type == WIDGET_TYPE_CONTAINER or widget_type == WIDGET_TYPE_DISPLAY_STRING:
+        if widget_type == WIDGET_TYPE_CONTAINER or widget_type == WIDGET_TYPE_DISPLAY_STRING or widget_type == WIDGET_TYPE_VERTICAL_SLIDER:
             # data not used
             result.addField(UInt8('data', 0))
         else:

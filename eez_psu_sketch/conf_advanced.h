@@ -54,7 +54,11 @@
 
 /// How many times per second will ADC take snapshot value?
 /// 0: 20 SPS, 1: 45 SPS, 2: 90 SPS, 3: 175 SPS, 4: 330 SPS, 5: 600 SPS, 6: 1000 SPS
+#ifdef EEZ_PSU_ARDUINO_MEGA
+#define ADC_SPS 3
+#else
 #define ADC_SPS 5
+#endif
 
 /// Duration, in milliseconds, from the last ADC interrupt
 /// after which ADC timeout condition is declared.  

@@ -18,11 +18,11 @@ enum GestureType {
     GESTURE_SLIDE_LEFT
 };
 
-extern GestureType gesture;
+extern GestureType gesture_type;
 extern int start_x;
 extern int start_y;
 
-void push_pointer(unsigned long tick_usec, bool is_down, int x, int y);
+void tick(unsigned long tick_usec);
 
 }
 }

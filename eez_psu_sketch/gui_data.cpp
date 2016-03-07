@@ -44,6 +44,12 @@ void Value::toText(char *text) {
     }
 }
 
+void Value::toTextNoUnit(char *text) {
+    text[0] = 0;
+
+    util::strcatFloat(text, float_);
+}
+
 static Cursor cursor;
 
 struct ChannelStateFlags {
@@ -193,6 +199,34 @@ Value get(uint16_t id, bool &changed) {
     }
 
     return value;
+}
+
+Value getMin(uint16_t id) {
+    Value value;
+    if (id == DATA_ID_VOLT) {
+        value = Value(cursor.selected_channel->U_MIN, UNIT_VOLT);
+    } else if (id == DATA_ID_CURR) {
+        value = Value(cursor.selected_channel->I_MIN, UNIT_AMPER);
+    }
+    return value;
+}
+
+Value getMax(uint16_t id) {
+    Value value;
+    if (id == DATA_ID_VOLT) {
+        value = Value(cursor.selected_channel->U_MAX, UNIT_VOLT);
+    } else if (id == DATA_ID_CURR) {
+        value = Value(cursor.selected_channel->I_MAX, UNIT_AMPER);
+    }
+    return value;
+}
+
+void set(uint16_t id, Value value) {
+    if (id == DATA_ID_VOLT) {
+        cursor.selected_channel->setVoltage(value.getFloat());
+    } else if (id == DATA_ID_CURR) {
+        cursor.selected_channel->setCurrent(value.getFloat());
+    }
 }
 
 Cursor getCursor() {

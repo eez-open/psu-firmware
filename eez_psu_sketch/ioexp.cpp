@@ -26,12 +26,12 @@ namespace psu {
 ////////////////////////////////////////////////////////////////////////////////
 
 #define IODIR   0B01111101 // pins 1 and 7 set as output
-#define IPOL    0B00100100 // pins 2 and 5 are set as inverted
+#define IPOL    0B00000000 // no pin is inverted
 #define GPINTEN 0B00000001 // enable interrupt for pin 0
 #define DEVAL   0B00000000 // 
 #define INTCON  0B00000000 // 
 #define IOCON   0B00100000 // sequential operation disabled, hw addressing disabled
-#define GPPU    0B00000000 // do not pull up with 100K resistor
+#define GPPU    0B00100100 // pull up with 100K resistor pins 2 and 5
 #define GPIO    0B00000010 // 
 
 static const uint8_t REG_VALUES[] = {

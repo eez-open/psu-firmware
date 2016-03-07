@@ -15,6 +15,10 @@
       "padding_vertical": 0
     },
     {
+      "name": "small",
+      "font": "small"
+    },
+    {
       "name": "mon_value",
       "font": "large",
       "align_horizontal": "right",
@@ -26,8 +30,23 @@
       "color": "red"
     },
     {
+      "name": "mon_value_medium",
+      "font": "medium",
+      "align_horizontal": "right",
+      "padding_horizontal": 12
+    },
+    {
+      "name": "mon_value_medium_ur",
+      "base": "mon_value_medium",
+      "color": "red"
+    },
+    {
       "name": "channel_off",
       "font": "large"
+    },
+    {
+      "name": "channel_off_medium",
+      "font": "medium"
     },
     {
       "name": "prot_indicator",
@@ -49,6 +68,13 @@
       "name": "menu",
       "font": "small",
       "color": "white"
+    },
+    {
+      "name": "slider",
+      "font": "small",
+      "align_horizontal": "left",
+      "color": "#000000",
+      "background_color": "#FFFFFF"
     }
   ],
   "pages": [
@@ -184,6 +210,152 @@
           "h": 44,
           "style": "menu",
           "text": "Main | Off | Remote"
+        }
+      ]
+    },
+    {
+      "type": "container",
+      "x": 0,
+      "y": 0,
+      "w": 240,
+      "h": 320,
+      "widgets": [
+        {
+          "type": "vertical_slider",
+          "x": 0,
+          "y": 0,
+          "w": 60,
+          "style": "slider"
+        },
+        {
+          "type": "vertical_list",
+          "data": "channels",
+          "x": 60,
+          "w": 180,
+          "y": 0,
+          "item_widget": {
+            "type": "container",
+            "h": 138,
+            "widgets": [
+              {
+                "type": "three_state_indicator",
+                "data": "ovp",
+                "x": 60,
+                "y": 0,
+                "w": 32,
+                "h": 26,
+                "style": "prot_indicator",
+                "style1": "prot_indicator_set",
+                "style2": "prot_indicator_trip",
+                "text": "V"
+              },
+              {
+                "type": "three_state_indicator",
+                "data": "ocp",
+                "x": 92,
+                "y": 0,
+                "w": 32,
+                "h": 26,
+                "style": "prot_indicator",
+                "style1": "prot_indicator_set",
+                "style2": "prot_indicator_trip",
+                "text": "C"
+              },
+              {
+                "type": "three_state_indicator",
+                "data": "opp",
+                "x": 124,
+                "y": 0,
+                "w": 32,
+                "h": 26,
+                "style": "prot_indicator",
+                "style1": "prot_indicator_set",
+                "style2": "prot_indicator_trip",
+                "text": "P"
+              },
+              {
+                "type": "three_state_indicator",
+                "data": "otp",
+                "x": 156,
+                "y": 0,
+                "w": 32,
+                "h": 26,
+                "style": "prot_indicator",
+                "style1": "prot_indicator_set",
+                "style2": "prot_indicator_trip",
+                "text": "T"
+              },
+              {
+                "type": "display_string_select",
+                "data": "dp",
+                "x": 188,
+                "y": 0,
+                "w": 52,
+                "h": 26,
+                "style1": "prot_indicator_set",
+                "text1": "DP",
+                "style2": "prot_indicator",
+                "text2": "DP"
+              },
+              {
+                "type": "select",
+                "x": 60,
+                "y": 26,
+                "h": 72,
+                "data": "output_state",
+                "widgets": [
+                  {
+                    "type": "display_string",
+                    "style": "channel_off_medium",
+                    "text": "OFF"
+                  },
+                  {
+                    "type": "select",
+                    "data": "output_mode",
+                    "widgets": [
+                      {
+                        "type": "display",
+                        "style": "mon_value_medium",
+                        "data": "mon_value"
+                      },
+                      {
+                        "type": "display",
+                        "style": "mon_value_medium_ur",
+                        "data": "mon_value"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "edit",
+                "style": "small",
+                "data": "volt",
+                "x": 60,
+                "y": 98,
+                "w": 90,
+                "h": 40
+              },
+              {
+                "type": "edit",
+                "style": "small",
+                "data": "curr",
+                "x": 150,
+                "y": 98,
+                "w": 90,
+                "h": 40
+              }
+            ]
+          }
+        },
+        {
+          "type": "display_string",
+          "x": 60,
+          "y": 276,
+          "w": 180,
+          "h": 44,
+          "style": "menu",
+          "text": "Exit"
         }
       ]
     }

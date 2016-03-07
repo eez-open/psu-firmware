@@ -23,10 +23,10 @@ PSU 0-50V/3A I/O expander pinout:
 
 Pin 0  In, ADC interrupt/DRDY
 Pin 1  Out, DP enable (active low)
-Pin 2  In, CV_ACTIVE
+Pin 2  In, CC_ACTIVE
 Pin 3  In, Temp sensor (V/F)
 Pin 4  --, not in use
-Pin 5  In, CC_ACTIVE
+Pin 5  In, CV_ACTIVE
 Pin 6  In, PWRGOOD
 Pin 7  Out, OUTPUT_ENABLE
 */
@@ -40,9 +40,9 @@ class Channel;
 class IOExpander {
 public:
     static const uint8_t IO_BIT_IN_ADC_DRDY = 0;
-    static const uint8_t IO_BIT_IN_CV_ACTIVE = 2;
+    static const uint8_t IO_BIT_IN_CC_ACTIVE = 2;
     static const uint8_t IO_BIT_IN_TEMP_SENSOR = 3;
-    static const uint8_t IO_BIT_IN_CC_ACTIVE = 5;
+    static const uint8_t IO_BIT_IN_CV_ACTIVE = 5;
     static const uint8_t IO_BIT_IN_PWRGOOD = 6;
 
     static const uint8_t IO_BIT_OUT_DP_ENABLE = 1;

@@ -37,12 +37,18 @@ using namespace lcd;
 
 static bool page_refresh;
 static bool widget_refresh;
+static int page_index = 0;
+Style *page_style;
+static data::Cursor slider_data_cursor;
+static int slider_data_id;
 
 struct WidgetCursor {
     Widget *widget;
     int x;
     int y;
     data::Cursor cursor;
+
+    WidgetCursor() : widget(0) {}
 
     WidgetCursor& operator=(int) {
         widget = 0;
@@ -82,12 +88,12 @@ public:
         this->document = document;
     }
 
-    void start(bool refresh) {
-        stack[0].widget = (Widget *)(document + ((Document *)document)->pages.first);
+    void start(int pageIndex, int x, int y, bool refresh) {
+        stack[0].widget = (Widget *)(document + ((Document *)document)->pages.first) + pageIndex;
         stack[0].index = 0;
         stack_index = 0;
-        stack[0].x = 0;
-        stack[0].y = 0;
+        stack[0].x = x;
+        stack[0].y = y;
         stack[0].refresh = refresh;
     }
 
@@ -219,6 +225,14 @@ bool styleIsVertAlignBottom(Style *style) {
     return (style->flags & STYLE_FLAGS_VERT_ALIGN) == STYLE_FLAGS_VERT_ALIGN_BOTTOM;
 }
 
+font::Font *styleGetFont(Style *style) {
+    font::Font *font;
+    if (style->font == LARGE_FONT) font = &font::large_font;
+    else if (style->font == SMALL_FONT) font = &font::small_font;
+    else font = &font::medium_font;
+    return font;
+}
+
 void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse) {
     x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
     y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
@@ -238,10 +252,7 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
         --y2;
     }
 
-    font::Font *font;
-    if (style->font == LARGE_FONT) font = &font::large_font;
-    else if (style->font == SMALL_FONT) font = &font::small_font;
-    else font = &font::medium_font;
+    font::Font *font = styleGetFont(style);
     
     int width = lcd::lcd.measureStr(text, *font);
     int height = font->getHeight();
@@ -256,17 +267,19 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
     else if (styleIsVertAlignBottom(style)) y_offset = y2 - style->padding_vertical -height;
     else y_offset = y1 + ((y2 - y1) - height) / 2;
 
+    uint16_t background_color;
+
     if (inverse) {
-        lcd::lcd.setColor(style->color);
+        background_color = style->color;
     } else {
-        lcd::lcd.setColor(style->background_color);
+        background_color = style->background_color;
     }
+
+    lcd::lcd.setColor(background_color);
 
     if (widget_refresh) {
         lcd::lcd.fillRect(x1, y1, x2, y2);
-    }
-
-    if (!page_refresh && !widget_refresh) {
+    } else if (!page_refresh || page_style->background_color != background_color) {
         if (x1 <= x_offset && y1 <= y2)
             lcd::lcd.fillRect(x1, y1, x_offset, y2);
         if (x_offset + width <= x2 && y1 <= y2)
@@ -284,7 +297,7 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
         lcd::lcd.setBackColor(style->background_color);
         lcd::lcd.setColor(style->color);
     }
-    lcd::lcd.drawStr(text, x_offset, y_offset, x1, y1, x2, y2, *font, !page_refresh && !widget_refresh);
+    lcd::lcd.drawStr(text, x_offset, y_offset, x1, y1, x2, y2, *font, !page_refresh && !widget_refresh || page_style->background_color != background_color);
 }
 
 bool draw_edit_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
@@ -321,6 +334,24 @@ bool draw_display_string_widget(uint8_t *document, Widget *widget, int x, int y,
     return false;
 }
 
+bool draw_three_state_indicator_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
+    bool changed;
+    int state = data::get(widget->data, changed).getInt();
+    if (changed || refresh) {
+        ThreeStateIndicatorWidget *three_state_indicator_widget = ((ThreeStateIndicatorWidget *)(document + widget->specific));
+
+        OBJ_OFFSET style;
+        if (state == 1) style = widget->style;
+        else if (state == 2) style = three_state_indicator_widget->style1;
+        else style = three_state_indicator_widget->style2;
+
+        char *text = (char *)(document + three_state_indicator_widget->text);
+        drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + style), inverse);
+        return true;
+    }
+    return false;
+}
+
 bool draw_display_string_select_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
     bool changed;
     int state = data::get(widget->data, changed).getInt();
@@ -341,21 +372,63 @@ bool draw_display_string_select_widget(uint8_t *document, Widget *widget, int x,
     return false;
 }
 
-bool draw_three_state_indicator_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
+void fill_rect(int x, int y, int w, int h) {
+    x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    w *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    h *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+
+    lcd::lcd.fillRect(x, y, x + w - 1, y + h - 1);
+}
+
+bool draw_vertical_slider_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
+    data::Cursor saved_cursor = data::getCursor();
+    data::setCursor(slider_data_cursor);
+
     bool changed;
-    int state = data::get(widget->data, changed).getInt();
+    data::Value value = data::get(slider_data_id, changed);
     if (changed || refresh) {
-        ThreeStateIndicatorWidget *three_state_indicator_widget = ((ThreeStateIndicatorWidget *)(document + widget->specific));
+        data::Value minValue = data::getMin(slider_data_id);
+        data::Value maxValue = data::getMax(slider_data_id);
 
-        OBJ_OFFSET style;
-        if (state == 1) style = widget->style;
-        else if (state == 2) style = three_state_indicator_widget->style1;
-        else style = three_state_indicator_widget->style2;
+        char text[32];
 
-        char *text = (char *)(document + three_state_indicator_widget->text);
-        drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + style), inverse);
+        Style *style = (Style *)(document + widget->style);
+        font::Font *font = styleGetFont(style);
+        int fontHeight = font->getAscent() / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+
+        maxValue.toTextNoUnit(text);
+        drawText(text, x, y, (int)widget->w, fontHeight, style, inverse);
+
+        minValue.toTextNoUnit(text);
+        drawText(text, x, y + (int)widget->h - fontHeight, (int)widget->w, fontHeight, style, inverse);
+
+        int y_offset = (int)round(y+ widget->h - 2 * fontHeight - (widget->h - 3 * fontHeight) * (value.getFloat() - minValue.getFloat()) / (maxValue.getFloat() - minValue.getFloat()));
+
+        value.toTextNoUnit(text);
+        drawText(text, x, y_offset , (int)widget->w, fontHeight, style, inverse);
+
+        if (inverse) {
+            lcd::lcd.setColor(style->color);
+        } else {
+            lcd::lcd.setColor(style->background_color);
+        }
+        
+        if (y + fontHeight < y_offset) {
+            lcd::lcd.setColor(VGA_RED);
+            fill_rect(x, y + fontHeight, (int)widget->w, y_offset - (y + fontHeight));
+        }
+
+        if (y_offset + fontHeight < y + (int)widget->h - fontHeight) {
+            lcd::lcd.setColor(VGA_GREEN);
+            fill_rect(x, y_offset + fontHeight, (int)widget->w, y + (int)widget->h - fontHeight - (y_offset + fontHeight));
+        }
+
         return true;
     }
+
+    data::setCursor(saved_cursor);
+
     return false;
 }
 
@@ -372,6 +445,8 @@ bool draw_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh) 
         return draw_three_state_indicator_widget(document, widget, x, y, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING_SELECT) {
         return draw_display_string_select_widget(document, widget, x, y, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_VERTICAL_SLIDER) {
+        return draw_vertical_slider_widget(document, widget, x, y, refresh, inverse);
     }
 
     return false;
@@ -381,7 +456,7 @@ static EnumWidgets draw_enum_widgets(document, draw_widget);
 
 void draw() {
     if (!draw_enum_widgets.next()) {
-        draw_enum_widgets.start(false);
+        draw_enum_widgets.start(page_index, 0, 0, false);
         page_refresh = false;
     }
 }
@@ -393,16 +468,17 @@ void refresh_widget(WidgetCursor widget_cursor) {
     widget_refresh = false;
 }
 
-void refreshPage() {
+void refresh_page() {
     page_refresh = true;
 
     // clear screen with background color
-    Widget *page = (Widget *)(document + ((Document *)document)->pages.first);
+    Widget *page = (Widget *)(document + ((Document *)document)->pages.first) + page_index;
     Style *style = (Style *)(document + page->style);
+    page_style = style;
     lcd::lcd.setColor(style->background_color);
     lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
 
-    draw_enum_widgets.start(true);
+    draw_enum_widgets.start(page_index, 0, 0, true);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -433,16 +509,16 @@ void init() {
     lcd::lcd.setColor(VGA_WHITE);
     lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
 
-    refreshPage();
+    refresh_page();
 }
 
 void tick(unsigned long tick_usec) {
-    touch::tick();
+    touch::tick(tick_usec);
 
     /*
     WidgetCursor old_selected_widget = selected_widget;
 
-    if (touch::is_down) {
+    if (touch::x != -1 && touch::y != -1) {
         find_widget_x = touch::x;
         find_widget_y = touch::y;
         EnumWidgets enum_widgets(document, find_widget);
@@ -470,36 +546,84 @@ void tick(unsigned long tick_usec) {
 
     return;
     */
+
+    if (page_index == 1) {
+        static int start_x;
+        static int start_y;
+        static data::Value start_value;
+
+        data::Cursor saved_cursor = data::getCursor();
+        data::setCursor(slider_data_cursor);
+
+        if (touch::event_type == touch::TOUCH_DOWN) {
+            bool changed;
+            start_value = data::get(slider_data_id, changed);
+            start_x = touch::x;
+            start_y = touch::y;
+        } else if (touch::event_type == touch::TOUCH_MOVE) {
+            data::Value min_value = data::getMin(slider_data_id);
+            data::Value max_value = data::getMax(slider_data_id);
+            float value = start_value.getFloat() + (start_y - touch::y) * (max_value.getFloat() - min_value.getFloat()) / 320;
+            if (value < min_value.getFloat()) value = min_value.getFloat();
+            if (value > max_value.getFloat()) value = max_value.getFloat();
+            data::set(slider_data_id, data::Value(value, min_value.getUnit()));
+        }
+
+        data::setCursor(saved_cursor);
+    }
     
-    gesture::push_pointer(tick_usec, touch::is_down, touch::x, touch::y);
+    gesture::tick(tick_usec);
 
     static unsigned long tap_time;
 
-    if (gesture::gesture == gesture::GESTURE_TAP) {
+    data::Cursor saved_cursor = data::getCursor();
+
+    if (gesture::gesture_type == gesture::GESTURE_TAP) {
         if (selected_widget) {
+            WidgetCursor old_selected_widget = selected_widget;
             selected_widget = 0;
-            refresh_widget(selected_widget);
+            refresh_widget(old_selected_widget);
         }
 
         find_widget_x = gesture::start_x;
         find_widget_y = gesture::start_y;
         EnumWidgets enum_widgets(document, find_widget);
-        enum_widgets.start(true);
+        enum_widgets.start(page_index, 0, 0, true);
         enum_widgets.next();
 
         if (selected_widget) {
-            refresh_widget(selected_widget);
-            tap_time = micros();
+            if (page_index == 0 || selected_widget.widget->type == WIDGET_TYPE_DISPLAY_STRING && DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * selected_widget.widget->y == 276) {
+                refresh_widget(selected_widget);
+                tap_time = micros();
+            }
         }
     } else {
         if (selected_widget) {
-            if (tick_usec - tap_time > 250000) {
+            if (tick_usec - tap_time > 100000) {
                 WidgetCursor old_selected_widget = selected_widget;
+
                 selected_widget = 0;
-                refresh_widget(old_selected_widget);
+
+                if (page_index == 0) {
+                    if (old_selected_widget.widget->type == WIDGET_TYPE_EDIT) {
+                        page_index = 1;
+                        slider_data_cursor = old_selected_widget.cursor;
+                        slider_data_id = old_selected_widget.widget->data;
+                        refresh_page();
+                    } else {
+                        refresh_widget(old_selected_widget);
+                    }
+                } else {
+                    if (old_selected_widget.widget->type == WIDGET_TYPE_DISPLAY_STRING && DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * old_selected_widget.widget->y == 276) {
+                        page_index = 0;
+                        refresh_page();
+                    }
+                }
             }
         }
     }
+
+    data::setCursor(saved_cursor);
 
     draw();
 }
