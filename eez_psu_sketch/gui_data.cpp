@@ -50,56 +50,50 @@ void Value::toTextNoUnit(char *text) {
     util::strcatFloat(text, float_);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 static Cursor cursor;
 
-struct ChannelStateFlags {
-    unsigned mode : 2;
-    unsigned state : 2;
-    unsigned ovp : 2;
-    unsigned ocp : 2;
-    unsigned opp : 2;
-    unsigned otp : 2;
-    unsigned dp : 2;
-};
+Cursor getCursor() {
+    return cursor;
+}
 
-struct ChannelState {
-    Value mon_value;
-    float u_set;
-    float i_set;
-    ChannelStateFlags flags;
-};
+void setCursor(Cursor cursor_) {
+    cursor = cursor_;
+}
 
-static ChannelState channel_last_state[CH_NUM];
-static ChannelState *selected_channel_last_state;
+////////////////////////////////////////////////////////////////////////////////
 
-int count(uint16_t id) {
+int count(uint8_t id) {
     if (id == DATA_ID_CHANNELS) {
         return CH_NUM;
     }
     return 0;
 }
 
-void select(uint16_t id, int index) {
+void select(uint8_t id, int index) {
     if (id == DATA_ID_CHANNELS) {
-        cursor.selected_channel = &Channel::get(index);
-        selected_channel_last_state = channel_last_state + index;
+        cursor.selected_channel_index = index;
     }
 }
 
-Value get(uint16_t id, bool &changed) {
+Value get(uint8_t id, bool &changed) {
+    Channel *selected_channel = &Channel::get(cursor.selected_channel_index);
+    ChannelState *selected_channel_last_state = &cursor.channel_last_state[cursor.selected_channel_index];
+
     Value value;
 
     changed = false;
 
     if (id == DATA_ID_OUTPUT_STATE) {
-        uint8_t state = cursor.selected_channel->isOutputEnabled() ? 1 : 0;
+        uint8_t state = selected_channel->isOutputEnabled() ? 1 : 0;
         if (state != selected_channel_last_state->flags.state) {
             selected_channel_last_state->flags.state = state;
             changed = true;
         }
         value = Value(state);
     } else if (id == DATA_ID_OUTPUT_MODE) {
-        char *mode_str = cursor.selected_channel->getCvModeStr();
+        char *mode_str = selected_channel->getCvModeStr();
         uint8_t mode = strcmp(mode_str, "UR") == 0 ? 1 : 0;
         if (mode != selected_channel_last_state->flags.mode) {
             selected_channel_last_state->flags.mode = mode;
@@ -109,24 +103,24 @@ Value get(uint16_t id, bool &changed) {
     } else if (id == DATA_ID_MON_VALUE) {
         float mon_value;
         Unit unit;
-        char *mode_str = cursor.selected_channel->getCvModeStr();
+        char *mode_str = selected_channel->getCvModeStr();
         if (strcmp(mode_str, "CC") != 0) {
             // CC -> volt
-            mon_value = cursor.selected_channel->u.mon;
+            mon_value = selected_channel->u.mon;
             unit = UNIT_VOLT;
         } else if (strcmp(mode_str, "CV") != 0) {
             // CV -> curr
-            mon_value = cursor.selected_channel->i.mon;
+            mon_value = selected_channel->i.mon;
             unit = UNIT_AMPER;
         } else {
             // UR ->
-            if (cursor.selected_channel->u.mon < cursor.selected_channel->i.mon) {
+            if (selected_channel->u.mon < selected_channel->i.mon) {
                 // min(volt, curr)
-                mon_value = cursor.selected_channel->u.mon;
+                mon_value = selected_channel->u.mon;
                 unit = UNIT_VOLT;
             } else {
                 // or curr if equal
-                mon_value = cursor.selected_channel->i.mon;
+                mon_value = selected_channel->i.mon;
                 unit = UNIT_AMPER;
             }
         }
@@ -136,23 +130,23 @@ Value get(uint16_t id, bool &changed) {
             changed = true;
         }
     } else if (id == DATA_ID_VOLT) {
-        float u_set = cursor.selected_channel->u.set;
+        float u_set = selected_channel->u.set;
         if (selected_channel_last_state->u_set != u_set) {
             selected_channel_last_state->u_set = u_set;
             changed = true;
         }
         value = Value(u_set, UNIT_VOLT);
     } else if (id == DATA_ID_CURR) {
-        float i_set = cursor.selected_channel->i.set;
-        if (selected_channel_last_state->i_set != cursor.selected_channel->i.set) {
-            selected_channel_last_state->i_set = cursor.selected_channel->i.set;
+        float i_set = selected_channel->i.set;
+        if (selected_channel_last_state->i_set != selected_channel->i.set) {
+            selected_channel_last_state->i_set = selected_channel->i.set;
             changed = true;
         }
         value = Value(i_set, UNIT_AMPER);
     } else if (id == DATA_ID_OVP) {
         uint8_t ovp;
-        if (!cursor.selected_channel->prot_conf.flags.u_state) ovp = 1;
-        else if (!cursor.selected_channel->ovp.flags.tripped) ovp = 2;
+        if (!selected_channel->prot_conf.flags.u_state) ovp = 1;
+        else if (!selected_channel->ovp.flags.tripped) ovp = 2;
         else ovp = 3;
         if (selected_channel_last_state->flags.ovp != ovp) {
             selected_channel_last_state->flags.ovp = ovp;
@@ -161,8 +155,8 @@ Value get(uint16_t id, bool &changed) {
         value = Value(ovp);
     } else if (id == DATA_ID_OCP) {
         uint8_t ocp;
-        if (!cursor.selected_channel->prot_conf.flags.i_state) ocp = 1;
-        else if (!cursor.selected_channel->ocp.flags.tripped) ocp = 2;
+        if (!selected_channel->prot_conf.flags.i_state) ocp = 1;
+        else if (!selected_channel->ocp.flags.tripped) ocp = 2;
         else ocp = 3;
         if (selected_channel_last_state->flags.ocp != ocp) {
             selected_channel_last_state->flags.ocp = ocp;
@@ -171,8 +165,8 @@ Value get(uint16_t id, bool &changed) {
         value = Value(ocp);
     } else if (id == DATA_ID_OPP) {
         uint8_t opp;
-        if (!cursor.selected_channel->prot_conf.flags.p_state) opp = 1;
-        else if (!cursor.selected_channel->opp.flags.tripped) opp = 2;
+        if (!selected_channel->prot_conf.flags.p_state) opp = 1;
+        else if (!selected_channel->opp.flags.tripped) opp = 2;
         else opp = 3;
         if (selected_channel_last_state->flags.opp != opp) {
             selected_channel_last_state->flags.opp = opp;
@@ -190,7 +184,7 @@ Value get(uint16_t id, bool &changed) {
         }
         value = Value(otp);
     } else if (id == DATA_ID_DP) {
-        uint8_t dp = cursor.selected_channel->flags.dp_on ? 1 : 2;
+        uint8_t dp = selected_channel->flags.dp_on ? 1 : 2;
         if (selected_channel_last_state->flags.dp != dp) {
             selected_channel_last_state->flags.dp = dp;
             changed = true;
@@ -201,40 +195,46 @@ Value get(uint16_t id, bool &changed) {
     return value;
 }
 
-Value getMin(uint16_t id) {
+Value getMin(uint8_t id) {
+    Channel *selected_channel = &Channel::get(cursor.selected_channel_index);
+
     Value value;
     if (id == DATA_ID_VOLT) {
-        value = Value(cursor.selected_channel->U_MIN, UNIT_VOLT);
+        value = Value(selected_channel->U_MIN, UNIT_VOLT);
     } else if (id == DATA_ID_CURR) {
-        value = Value(cursor.selected_channel->I_MIN, UNIT_AMPER);
+        value = Value(selected_channel->I_MIN, UNIT_AMPER);
     }
     return value;
 }
 
-Value getMax(uint16_t id) {
+Value getMax(uint8_t id) {
+    Channel *selected_channel = &Channel::get(cursor.selected_channel_index);
+
     Value value;
     if (id == DATA_ID_VOLT) {
-        value = Value(cursor.selected_channel->U_MAX, UNIT_VOLT);
+        value = Value(selected_channel->U_MAX, UNIT_VOLT);
     } else if (id == DATA_ID_CURR) {
-        value = Value(cursor.selected_channel->I_MAX, UNIT_AMPER);
+        value = Value(selected_channel->I_MAX, UNIT_AMPER);
     }
     return value;
 }
 
-void set(uint16_t id, Value value) {
+void set(uint8_t id, Value value) {
+    Channel *selected_channel = &Channel::get(cursor.selected_channel_index);
+
     if (id == DATA_ID_VOLT) {
-        cursor.selected_channel->setVoltage(value.getFloat());
+        selected_channel->setVoltage(value.getFloat());
     } else if (id == DATA_ID_CURR) {
-        cursor.selected_channel->setCurrent(value.getFloat());
+        selected_channel->setCurrent(value.getFloat());
     }
 }
 
-Cursor getCursor() {
-    return cursor;
-}
+void do_action(uint8_t id) {
+    Channel *selected_channel = &Channel::get(cursor.selected_channel_index);
 
-void setCursor(Cursor cursor_) {
-    cursor = cursor_;
+    if (id == ACTION_ID_TOGGLE_CHANNEL) {
+        selected_channel->outputEnable(!selected_channel->isOutputEnabled());
+    }
 }
 
 }

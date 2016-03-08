@@ -48,23 +48,42 @@ private:
     };
 };
 
+struct ChannelStateFlags {
+    unsigned mode : 2;
+    unsigned state : 2;
+    unsigned ovp : 2;
+    unsigned ocp : 2;
+    unsigned opp : 2;
+    unsigned otp : 2;
+    unsigned dp : 2;
+};
+
+struct ChannelState {
+    Value mon_value;
+    float u_set;
+    float i_set;
+    ChannelStateFlags flags;
+};
+
 struct Cursor {
-    Channel *selected_channel;
+    int selected_channel_index;
+    ChannelState channel_last_state[CH_NUM];
 
     bool operator != (const Cursor& rhs) const {
-        return selected_channel != rhs.selected_channel;
+        return selected_channel_index != rhs.selected_channel_index;
     }
 };
 
 Cursor getCursor();
 void setCursor(Cursor cursor_);
 
-int count(uint16_t id);
-void select(uint16_t id, int index);
-Value get(uint16_t id, bool &changed);
-Value getMin(uint16_t id);
-Value getMax(uint16_t id);
-void set(uint16_t id, Value value);
+int count(uint8_t id);
+void select(uint8_t id, int index);
+Value get(uint8_t id, bool &changed);
+Value getMin(uint8_t id);
+Value getMax(uint8_t id);
+void set(uint8_t id, Value value);
+void do_action(uint8_t id);
 
 
 }

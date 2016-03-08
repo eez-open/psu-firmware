@@ -160,6 +160,7 @@
                 "y": 26,
                 "h": 72,
                 "data": "output_state",
+                "action": "toggle_channel",
                 "widgets": [
                   {
                     "type": "display_string",
@@ -185,16 +186,18 @@
                 ]
               },
               {
-                "type": "edit",
+                "type": "display",
                 "data": "volt",
+                "action": "slider",
                 "x": 0,
                 "y": 98,
                 "w": 120,
                 "h": 40
               },
               {
-                "type": "edit",
+                "type": "display",
                 "data": "curr",
+                "action": "slider",
                 "x": 120,
                 "y": 98,
                 "w": 120,
@@ -328,7 +331,7 @@
                 ]
               },
               {
-                "type": "edit",
+                "type": "display",
                 "style": "small",
                 "data": "volt",
                 "x": 60,
@@ -337,7 +340,7 @@
                 "h": 40
               },
               {
-                "type": "edit",
+                "type": "display",
                 "style": "small",
                 "data": "curr",
                 "x": 150,
@@ -350,6 +353,7 @@
         },
         {
           "type": "display_string",
+          "action": "exit",
           "x": 60,
           "y": 276,
           "w": 180,

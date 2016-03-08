@@ -45,9 +45,8 @@ declare_const('WIDGET_TYPE_SELECT', 3)
 declare_const('WIDGET_TYPE_DISPLAY', 4)
 declare_const('WIDGET_TYPE_DISPLAY_STRING', 5)
 declare_const('WIDGET_TYPE_DISPLAY_STRING_SELECT', 6)
-declare_const('WIDGET_TYPE_EDIT', 7)
-declare_const('WIDGET_TYPE_THREE_STATE_INDICATOR', 8)
-declare_const('WIDGET_TYPE_VERTICAL_SLIDER', 9)
+declare_const('WIDGET_TYPE_THREE_STATE_INDICATOR', 7)
+declare_const('WIDGET_TYPE_VERTICAL_SLIDER', 8)
 
 #-------------------------------------------------------------------------------
 
@@ -406,22 +405,60 @@ class Parser:
             value = default_value
         struct.addField(UInt8(name, value))
 
+    def addActionField(self, struct, collection, name, default_value, parent):
+        if name in collection:
+            action_name = collection[name]
+            if isinstance(action_name, str):
+                if action_name in self.actions:
+                    value = self.actions[action_name]
+                else:
+                    self.trace.error("%s: invalid value '%s'" % (name, action_name))
+                    value = default_value
+            else:
+                self.trace.error("%s: not a string" % name)
+                value = default_value
+        elif parent:
+            value = parent.find_field(name).value
+        else:
+            value = default_value
+        struct.addField(UInt8(name, value))
+
     def parse_data(self):
         self.data_items = {}
 
-        if not isinstance(self.data, list):
-            self.trace.error("data is not a JSON list")
-            return
+        if 'data_items' in self.data:
+            if isinstance(self.data['data_items'], list):
+                data_item_id = 1
+                for data_item in self.data['data_items']:
+                    if not 'name' in data_item:
+                        self.trace.error("data: unnamed data item found")
+                        continue
+                    data_item_name = data_item["name"]
+                    self.data_items[data_item_name] = data_item_id
+                    declare_const("DATA_ID_" + data_item_name.upper(), data_item_id)
+                    data_item_id += 1
+            else:
+                self.trace.error("data: data_items is not a JSON list")
+        else:
+            self.trace.error("data: data_items is missing")
 
-        data_item_id = 1
-        for data_item in self.data:
-            if not 'name' in data_item:
-                self.trace.error("unnamed data item found")
-                continue
-            data_item_name = data_item["name"]
-            self.data_items[data_item_name] = data_item_id
-            declare_const("DATA_ID_" + data_item_name.upper(), data_item_id)
-            data_item_id += 1
+        self.actions = {}
+
+        if 'actions' in self.data:
+            if isinstance(self.data['actions'], list):
+                action_id = 1
+                for action in self.data['actions']:
+                    if not 'name' in action:
+                        self.trace.error("data: unnamed action found")
+                        continue
+                    action_name = action["name"]
+                    self.actions[action_name] = action_id
+                    declare_const("ACTION_ID_" + action_name.upper(), action_id)
+                    action_id += 1
+            else:
+                self.trace.error("data: actions is not a JSON list")
+        else:
+            self.trace.error("data: actions is missing")
 
     def parse_view(self):
         self.document = Struct('document', 'Document')
@@ -554,8 +591,6 @@ class Parser:
                 widget_type = WIDGET_TYPE_DISPLAY_STRING
             elif type_str == 'display_string_select':
                 widget_type = WIDGET_TYPE_DISPLAY_STRING_SELECT
-            elif type_str == 'edit':
-                widget_type = WIDGET_TYPE_EDIT
             elif type_str == 'three_state_indicator':
                 widget_type = WIDGET_TYPE_THREE_STATE_INDICATOR
             elif type_str == 'vertical_slider':
@@ -576,6 +611,10 @@ class Parser:
         else:
             self.addDataField(result, widget, 'data', 0)
 
+        # action
+        self.addActionField(result, widget, 'action', 0, parent)
+
+        #
         self.addDisplayPositionOrSizeField(result, widget, 'x', 0, parent=parent)
         self.addDisplayPositionOrSizeField(result, widget, 'y', 0, parent=parent)
         self.addDisplayPositionOrSizeField(result, widget, 'w', 0, parent=parent)
