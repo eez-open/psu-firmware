@@ -1,3 +1,21 @@
+COPYRIGHT_NOTICE = """/*
+ * EEZ PSU Firmware
+ * Copyright (C) 2015 Envox d.o.o.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */"""
+
 import json
 import struct
 import sys
@@ -759,34 +777,35 @@ print("\n%d errors, %d warnings" % (parser.num_errors(), parser.num_warnings()))
 if parser.num_errors() == 0:
     objects = finish(parser.document)
 
-    if len(sys.argv) == 2:
+    # write header file
+    if len(sys.argv) >= 2:
         output_file = open(sys.argv[1], "w")
     else:
         output_file = sys.stdout
 
-    output_file.write("""/*
- * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */\n\n""")
+    output_file.write(COPYRIGHT_NOTICE + "\n\nnamespace eez {\nnamespace psu {\nnamespace gui {\n\n")
 
     c_structs = generate_source_code(objects, '    ')
     output_file.write(c_structs)
+
+    output_file.write("extern uint8_t document[];\n\n}\n}\n} // namespace eez::psu::gui\n")
+
+    if len(sys.argv) >= 2:
+        output_file.close()
+
+    # write cpp file
+    if len(sys.argv) >= 3:
+        output_file = open(sys.argv[2], "w")
+    else:
+        output_file = sys.stdout
+
+    output_file.write(COPYRIGHT_NOTICE + "\n\n#include \"psu.h\"\n\nnamespace eez {\nnamespace psu {\nnamespace gui {\n\n")
 
     packed_data = pack(objects)
     c_buffer = to_c_buffer(packed_data, '    ', 16)
     output_file.write('uint8_t document[%d] = %s;\n' % (len(packed_data), c_buffer))
 
-    output_file.close()
+    output_file.write("\n}\n}\n} // namespace eez::psu::gui\n")
+
+    if len(sys.argv) >= 3:
+        output_file.close()

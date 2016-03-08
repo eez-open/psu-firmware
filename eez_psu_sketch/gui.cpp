@@ -17,15 +17,13 @@
  */
 
 #include "psu.h"
-#include "lcd.h"
-#include "font.h"
-#include "touch.h"
-#include "gesture.h"
-#include "gui_data.h"
+#include "gui.h"
+#include "gui_internal.h"
+#include "gui_slider.h"
 
 #include "channel.h"
 
-#define CONF_SLIDER_PRECISION_FACTOR 2
+#define CONF_ENUM_WIDGETS_STACK_SIZE 5
 
 namespace eez {
 namespace psu {
@@ -33,53 +31,21 @@ namespace gui {
 
 using namespace lcd;
 
-#include "gui_view.h"
-
 ////////////////////////////////////////////////////////////////////////////////
 
 static bool page_refresh;
 static bool widget_refresh;
-static int page_index = 0;
+int page_index = 0;
 Style *page_style;
-static data::Cursor slider_data_cursor;
-static int slider_data_id;
-static int slider_height;
-
-struct WidgetCursor {
-    Widget *widget;
-    int x;
-    int y;
-    data::Cursor cursor;
-
-    WidgetCursor() : widget(0) {}
-
-    WidgetCursor& operator=(int) {
-        widget = 0;
-        return *this;
-    }
-
-    bool operator != (const Widget* rhs) const {
-        return widget != rhs || cursor != data::getCursor();
-    }
-    bool operator == (const Widget* rhs) const {
-        return !(*this != rhs);
-    }
-
-    bool operator != (const WidgetCursor& rhs) const {
-        return widget != rhs.widget || x != rhs.x || y != rhs.y || cursor != rhs.cursor;
-    }
-
-    operator bool() {
-        return widget != 0;
-    }
-};
 
 static WidgetCursor selected_widget;
 static WidgetCursor found_widget_at_down;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#define ENUM_WIDGETS_STACK_SIZE 5
+void refresh_page();
+
+////////////////////////////////////////////////////////////////////////////////
 
 typedef bool(*EnumWidgetsCallback)(uint8_t *start, Widget *widget, int x, int y, bool refresh);
 
@@ -102,7 +68,7 @@ public:
     }
 
     bool next() {
-        if (stack_index == ENUM_WIDGETS_STACK_SIZE) {
+        if (stack_index == CONF_ENUM_WIDGETS_STACK_SIZE) {
             return false;
         }
 
@@ -163,12 +129,12 @@ private:
         bool refresh;
     };
 
-    StackItem stack[ENUM_WIDGETS_STACK_SIZE];
+    StackItem stack[CONF_ENUM_WIDGETS_STACK_SIZE];
     int stack_index;
 
     bool push(Widget *widget, int x, int y, bool refresh) {
         if (widget->type == WIDGET_TYPE_CONTAINER || widget->type == WIDGET_TYPE_VERTICAL_LIST) {
-            if (++stack_index == ENUM_WIDGETS_STACK_SIZE) {
+            if (++stack_index == CONF_ENUM_WIDGETS_STACK_SIZE) {
                 return false;
             }
 
@@ -237,6 +203,8 @@ font::Font *styleGetFont(Style *style) {
     return font;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse) {
     x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
     y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
@@ -304,6 +272,17 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
     lcd::lcd.drawStr(text, x_offset, y_offset, x1, y1, x2, y2, *font, !page_refresh && !widget_refresh || page_style->background_color != background_color);
 }
 
+void fill_rect(int x, int y, int w, int h) {
+    x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    w *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    h *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+
+    lcd::lcd.fillRect(x, y, x + w - 1, y + h - 1);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 bool draw_display_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
     bool changed;
     data::Value value = data::get(widget->data, changed);
@@ -364,68 +343,6 @@ bool draw_display_string_select_widget(uint8_t *document, Widget *widget, int x,
     return false;
 }
 
-void fill_rect(int x, int y, int w, int h) {
-    x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    w *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    h *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-
-    lcd::lcd.fillRect(x, y, x + w - 1, y + h - 1);
-}
-
-bool draw_vertical_slider_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
-    data::Cursor saved_cursor = data::getCursor();
-    data::setCursor(slider_data_cursor);
-
-    bool changed;
-    data::Value value = data::get(slider_data_id, changed);
-    if (changed || refresh) {
-        data::Value minValue = data::getMin(slider_data_id);
-        data::Value maxValue = data::getMax(slider_data_id);
-
-        char text[32];
-
-        Style *style = (Style *)(document + widget->style);
-        font::Font *font = styleGetFont(style);
-        int fontHeight = font->getAscent() / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-
-        maxValue.toTextNoUnit(text);
-        drawText(text, x, y, (int)widget->w, fontHeight, style, inverse);
-
-        minValue.toTextNoUnit(text);
-        drawText(text, x, y + (int)widget->h - fontHeight, (int)widget->w, fontHeight, style, inverse);
-
-        int y_offset = (int)round(y+ widget->h - 2 * fontHeight - (widget->h - 3 * fontHeight) * (value.getFloat() - minValue.getFloat()) / (maxValue.getFloat() - minValue.getFloat()));
-
-        value.toTextNoUnit(text);
-        drawText(text, x, y_offset , (int)widget->w, fontHeight, style, inverse);
-
-        if (inverse) {
-            lcd::lcd.setColor(style->color);
-        } else {
-            lcd::lcd.setColor(style->background_color);
-        }
-        
-        if (y + fontHeight < y_offset) {
-            lcd::lcd.setColor(0xD0, 0xD0, 0xD0);
-            fill_rect(x, y + fontHeight, (int)widget->w, y_offset - (y + fontHeight));
-        }
-
-        if (y_offset + fontHeight < y + (int)widget->h - fontHeight) {
-            lcd::lcd.setColor(0x50, 0x50, 0x50);
-            fill_rect(x, y_offset + fontHeight, (int)widget->w, y + (int)widget->h - fontHeight - (y_offset + fontHeight));
-        }
-
-        slider_height = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widget->h - 3 * fontHeight);
-
-        return true;
-    }
-
-    data::setCursor(saved_cursor);
-
-    return false;
-}
-
 bool draw_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh) {
     bool inverse = selected_widget == widget;
 
@@ -438,7 +355,7 @@ bool draw_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh) 
     } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING_SELECT) {
         return draw_display_string_select_widget(document, widget, x, y, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_VERTICAL_SLIDER) {
-        return draw_vertical_slider_widget(document, widget, x, y, refresh, inverse);
+        return slider::draw(document, widget, x, y, refresh, inverse);
     }
 
     return false;
@@ -519,63 +436,11 @@ void deselect_widget() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void enter_slider(const WidgetCursor &widget_cursor) {
-    if (page_index == 0) {
-        page_index = 1;
-        slider_data_cursor = widget_cursor.cursor;
-        slider_data_id = widget_cursor.widget->data;
-        refresh_page();
-    }
-}
-
-void exit_slider() {
-    if (page_index == 1) {
-        page_index = 0;
-        refresh_page();
-    }
-}
-
-static int slider_start_x;
-static int slider_start_y;
-static data::Value slider_start_value;
-
-void slider_down() {
-    data::Cursor saved_cursor = data::getCursor();
-    data::setCursor(slider_data_cursor);
-
-    bool changed;
-    slider_start_value = data::get(slider_data_id, changed);
-    slider_start_x = touch::x;
-    slider_start_y = touch::y;
-
-    data::setCursor(saved_cursor);
-}
-
-void slider_move() {
-    data::Cursor saved_cursor = data::getCursor();
-    data::setCursor(slider_data_cursor);
-
-    data::Value min_value = data::getMin(slider_data_id);
-    data::Value max_value = data::getMax(slider_data_id);
-    float value = slider_start_value.getFloat() + (slider_start_y - touch::y) *
-        (max_value.getFloat() - min_value.getFloat()) / (CONF_SLIDER_PRECISION_FACTOR * slider_height);
-    if (value < min_value.getFloat()) value = min_value.getFloat();
-    if (value > max_value.getFloat()) value = max_value.getFloat();
-    data::set(slider_data_id, data::Value(value, min_value.getUnit()));
-
-    data::setCursor(saved_cursor);
-}
-
-void slider_up() {
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 void do_action(int action_id, const WidgetCursor &widget_cursor) {
     if (action_id == ACTION_ID_SLIDER) {
-        enter_slider(widget_cursor);
+        slider::enter_modal_mode(widget_cursor);
     } else if (action_id == ACTION_ID_EXIT) {
-        exit_slider();
+        slider::exit_modal_mode();
     } else {
         data::Cursor saved_cursor = data::getCursor();
         data::setCursor(widget_cursor.cursor);
@@ -605,51 +470,26 @@ void tick(unsigned long tick_usec) {
         if (found_widget && !found_widget.widget->action) {
             found_widget = 0;
         }
-
         found_widget_at_down = found_widget;
-
         if (found_widget_at_down) {
             select_widget(found_widget_at_down);
         } else {
             if (page_index == 1) {
-                slider_down();
+                slider::touch_down();
             }
         }
     } else if (touch::event_type == touch::TOUCH_MOVE) {
-        if (found_widget_at_down) {
-            /*
-            find_widget(touch::x, touch::y);
-            if (found_widget == found_widget_at_down) {
-                if (!selected_widget) {
-                    select_widget(found_widget);
-                }
-            } else {
-                if (selected_widget) {
-                    deselect_widget();
-                }
-            }
-            */
-        } else {
+        if (!found_widget_at_down) {
             if (page_index == 1) {
-                slider_move();
+                slider::touch_move();
             }
         }
     } else if (touch::event_type == touch::TOUCH_UP) {
         if (found_widget_at_down) {
-            /*
-            if (selected_widget) {
-                deselect_widget();
-            }
-
-            find_widget(touch::x, touch::y);
-            if (found_widget == found_widget_at_down) {
-                do_action(found_widget_at_down.widget->action, found_widget_at_down);
-            }
-            */
             do_action(found_widget_at_down.widget->action, found_widget_at_down);
         } else {
             if (page_index == 1) {
-                slider_up();
+                slider::touch_up();
             }
         }
     }

@@ -13,7 +13,7 @@
     <Name>compile_gui</Name>
     <RootNamespace>compile_gui</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>..\..\eez_psu_sketch\gui_view.h</CommandLineArguments>
+    <CommandLineArguments>..\..\eez_psu_sketch\gui_view.h ..\..\eez_psu_sketch\gui_view.cpp</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
