@@ -24,7 +24,6 @@ namespace psu {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static const uint8_t ADC_REG1_VAL = (ADC_SPS << 5) | 0B00000000; // Register 01h: 256KHz modulator clock, Single shot, disable temp sensor, Current sources off
 static const uint8_t ADC_REG2_VAL = 0B01100000; // Register 02h: External Vref, 50Hz rejection, PSW off, IDAC off
 static const uint8_t ADC_REG3_VAL = 0B00000000; // Register 03h: IDAC1 disabled, IDAC2 disabled, dedicated DRDY
 
@@ -32,6 +31,12 @@ static const uint8_t ADC_REG3_VAL = 0B00000000; // Register 03h: IDAC1 disabled,
 
 AnalogDigitalConverter::AnalogDigitalConverter(Channel &channel_) : channel(channel_) {
     test_result = psu::TEST_SKIPPED;
+
+    current_sps = ADC_SPS;
+}
+
+uint8_t AnalogDigitalConverter::getReg1Val() {
+    return (current_sps << 5) | 0B00000000; // Register 01h: 256KHz modulator clock, Single shot, disable temp sensor, Current sources off
 }
 
 bool AnalogDigitalConverter::init() {
@@ -44,7 +49,10 @@ bool AnalogDigitalConverter::init() {
     delayMicroseconds(100); // Guard time
 
     SPI.transfer(ADC_WR3S1);
-    SPI.transfer(ADC_REG1_VAL);
+
+    uint8_t reg1_val = (current_sps << 5) | 0B00000000; // Register 01h: 256KHz modulator clock, Single shot, disable temp sensor, Current sources off
+    SPI.transfer(reg1_val);
+    
     SPI.transfer(ADC_REG2_VAL);
     SPI.transfer(ADC_REG3_VAL);
 
@@ -71,8 +79,8 @@ bool AnalogDigitalConverter::test() {
 
     test_result = psu::TEST_OK;
 
-    if (reg1 != ADC_REG1_VAL) {
-        DebugTraceF("Ch%d ADC test failed reg1: expected=%d, got=%d", channel.index, ADC_REG1_VAL, reg1);
+    if (reg1 != getReg1Val()) {
+        DebugTraceF("Ch%d ADC test failed reg1: expected=%d, got=%d", channel.index, getReg1Val(), reg1);
         test_result = psu::TEST_FAILED;
     }
 
@@ -143,8 +151,18 @@ void AnalogDigitalConverter::start(uint8_t reg0) {
     digitalWrite(channel.isolator_pin, LOW);
     digitalWrite(channel.adc_pin, LOW);
 
-    SPI.transfer(ADC_WR1S0);
-    SPI.transfer(reg0);
+    uint8_t sps = psu::isTimeCriticalMode() ? ADC_SPS_TIME_CRITICAL : ADC_SPS;
+    if (sps != current_sps) {
+        current_sps = sps;
+        SPI.transfer(ADC_WR4S0);
+        SPI.transfer(reg0);
+        SPI.transfer(getReg1Val());
+        SPI.transfer(ADC_REG2_VAL);
+        SPI.transfer(ADC_REG3_VAL);
+    } else {
+        SPI.transfer(ADC_WR1S0);
+        SPI.transfer(reg0);
+    }
 
     start_reg0 = reg0;
     start_time = micros();

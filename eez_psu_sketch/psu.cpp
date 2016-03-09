@@ -46,6 +46,7 @@ using namespace scpi;
 static bool g_power_is_up = false;
 static bool g_test_power_up_delay = false;
 static unsigned long g_power_down_time;
+static bool g_is_time_critical_mode;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -491,6 +492,19 @@ const char *getModelName() {
 
     return model_name;
 }
+
+void enterTimeCriticalMode() {
+    g_is_time_critical_mode = true;
+}
+
+bool isTimeCriticalMode() {
+    return g_is_time_critical_mode;
+}
+
+void leaveTimeCriticalMode() {
+    g_is_time_critical_mode = false;
+}
+
 
 }
 } // namespace eez::psu

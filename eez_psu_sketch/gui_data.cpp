@@ -104,11 +104,11 @@ Value get(uint8_t id, bool &changed) {
         float mon_value;
         Unit unit;
         char *mode_str = selected_channel->getCvModeStr();
-        if (strcmp(mode_str, "CC") != 0) {
+        if (strcmp(mode_str, "CC") == 0) {
             // CC -> volt
             mon_value = selected_channel->u.mon;
             unit = UNIT_VOLT;
-        } else if (strcmp(mode_str, "CV") != 0) {
+        } else if (strcmp(mode_str, "CV") == 0) {
             // CV -> curr
             mon_value = selected_channel->i.mon;
             unit = UNIT_AMPER;

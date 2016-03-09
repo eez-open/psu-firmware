@@ -34,6 +34,7 @@ public:
     static const uint8_t ADC_WR3S1 = 0B01000110;
     static const uint8_t ADC_RD3S1 = 0B00100110;
     static const uint8_t ADC_WR1S0 = 0B01000000;
+    static const uint8_t ADC_WR4S0 = 0B01000011;
 
     static const uint8_t ADC_REG0_READ_U_MON = 0x91; // B10010001: [7:4] AINP = AIN1, AINN = AVSS, [3:1] Gain = 1, [0] PGA disabled and bypassed
     static const uint8_t ADC_REG0_READ_I_MON = 0xA1; // B10100001: [7:4] AINP = AIN2, AINN = AVSS, [3:1] Gain = 1, [0] PGA disabled and bypassed
@@ -56,10 +57,13 @@ public:
 
 private:
     Channel &channel;
+    uint8_t current_sps;
 
     unsigned long start_time;
 
     uint8_t adc_timeout_recovery_attempts_counter;
+
+    uint8_t getReg1Val();
 };
 
 }

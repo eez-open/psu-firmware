@@ -84,5 +84,9 @@ void generateError(int16_t error);
 
 const char *getModelName();
 
+extern void enterTimeCriticalMode();
+extern bool isTimeCriticalMode();
+extern void leaveTimeCriticalMode();
+
 }
 } // namespace eez::psu
