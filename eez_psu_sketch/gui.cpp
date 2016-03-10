@@ -22,6 +22,7 @@
 #include "gui_slider.h"
 
 #include "channel.h"
+#include "touch_filter.h"
 
 #define CONF_ENUM_WIDGETS_STACK_SIZE 5
 
@@ -447,50 +448,165 @@ void do_action(int action_id, const WidgetCursor &widget_cursor) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#define CONF_TOUCH_SCREEN_CALIBRATION_M 16
+
+static enum {
+    TOUCH_CAL_START,
+    TOUCH_CAL_POINT_TL,
+    TOUCH_CAL_POINT_BR,
+    TOUCH_CAL_POINT_TR,
+    TOUCH_CAL_FINISHED
+
+} touch_cal_mode;
+
+int touch_cal_point_tlx;
+int touch_cal_point_tly;
+
+int touch_cal_point_brx;
+int touch_cal_point_bry;
+
+int touch_cal_point_trx;
+int touch_cal_point_try;
+
+int *touch_cal_point_x;
+int *touch_cal_point_y;
+
+void touch_cal_draw_point(int x, int y) {
+    const int RECT_SIZE = 2 * CONF_TOUCH_SCREEN_CALIBRATION_M;
+    
+    if (x == lcd::lcd.getDisplayXSize()) x -= RECT_SIZE;
+    if (y == lcd::lcd.getDisplayYSize()) y -= RECT_SIZE;
+    
+    lcd::lcd.setColor(VGA_BLACK);
+    lcd::lcd.clrScr();
+    lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
+    
+    lcd::lcd.setColor(VGA_WHITE);
+    lcd::lcd.drawVLine(x + RECT_SIZE / 2, y, RECT_SIZE);
+    lcd::lcd.drawVLine(x + RECT_SIZE / 2 + 1, y, RECT_SIZE);
+    lcd::lcd.drawHLine(x, y + RECT_SIZE / 2, RECT_SIZE);
+    lcd::lcd.drawHLine(x, y + RECT_SIZE / 2 + 1, RECT_SIZE);
+
+    lcd::lcd.setColor(VGA_BLACK);
+    lcd::lcd.fillRect(x + RECT_SIZE / 2 - 2, y + RECT_SIZE / 2 - 2, x + RECT_SIZE / 2 + 3, y + RECT_SIZE / 2 + 3);
+}
+
+bool touch_call_read_point() {
+    if (touch::event_type == touch::TOUCH_DOWN) {
+        *touch_cal_point_x = touch::x;
+        *touch_cal_point_y = touch::y;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 void init() {
     touch::init();
-
     lcd::init();
-    lcd::lcd.setBackColor(VGA_WHITE);
-    lcd::lcd.setColor(VGA_WHITE);
-    lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
 
-    refresh_page();
+    bool touch_cal_success = touch::calibrate(
+        persist_conf::dev_conf.touch_screen_cal_tlx,
+        persist_conf::dev_conf.touch_screen_cal_tly, 
+        persist_conf::dev_conf.touch_screen_cal_brx,
+        persist_conf::dev_conf.touch_screen_cal_bry, 
+        persist_conf::dev_conf.touch_screen_cal_trx,
+        persist_conf::dev_conf.touch_screen_cal_try, 
+        CONF_TOUCH_SCREEN_CALIBRATION_M
+    );
+    if (!touch_cal_success) {
+        touch_cal_mode = TOUCH_CAL_START;
+    } else {
+        touch_cal_mode = TOUCH_CAL_FINISHED;
+        refresh_page();
+    }
 }
 
 void tick(unsigned long tick_usec) {
     touch::tick(tick_usec);
 
-    if (touch::event_type == touch::TOUCH_DOWN) {
-        find_widget(touch::x, touch::y);
-        if (found_widget && !found_widget.widget->action) {
-            found_widget = 0;
-        }
-        found_widget_at_down = found_widget;
-        if (found_widget_at_down) {
-            select_widget(found_widget_at_down);
-        } else {
-            if (page_index == 1) {
-                slider::touch_down();
+    if (touch_cal_mode != TOUCH_CAL_FINISHED) {
+        if (touch_cal_mode == TOUCH_CAL_START) {
+            touch_cal_point_x = &touch_cal_point_tlx;
+            touch_cal_point_y = &touch_cal_point_tly;
+            touch_cal_draw_point(0, 0);
+            touch_cal_mode = TOUCH_CAL_POINT_TL;
+        } else if (touch_cal_mode == TOUCH_CAL_POINT_TL) {
+            if (touch_call_read_point()) {
+                touch_cal_point_x = &touch_cal_point_brx;
+                touch_cal_point_y = &touch_cal_point_bry;
+                touch_cal_draw_point(lcd::lcd.getDisplayXSize(), lcd::lcd.getDisplayYSize());
+                touch_cal_mode = TOUCH_CAL_POINT_BR;
             }
-        }
-    } else if (touch::event_type == touch::TOUCH_MOVE) {
-        if (!found_widget_at_down) {
-            if (page_index == 1) {
-                slider::touch_move();
+        } else if (touch_cal_mode == TOUCH_CAL_POINT_BR) {
+            if (touch_call_read_point()) {
+                touch_cal_point_x = &touch_cal_point_trx;
+                touch_cal_point_y = &touch_cal_point_try;
+                touch_cal_draw_point(lcd::lcd.getDisplayXSize(), 0);
+                touch_cal_mode = TOUCH_CAL_POINT_TR;
             }
-        }
-    } else if (touch::event_type == touch::TOUCH_UP) {
-        if (found_widget_at_down) {
-            do_action(found_widget_at_down.widget->action, found_widget_at_down);
-        } else {
-            if (page_index == 1) {
-                slider::touch_up();
-            }
-        }
-    }
+        } else if (touch_cal_mode == TOUCH_CAL_POINT_TR) {
+            if (touch_call_read_point()) {
+                bool touch_cal_success = touch::calibrate(
+                    touch_cal_point_tlx,
+                    touch_cal_point_tly, 
+                    touch_cal_point_brx,
+                    touch_cal_point_bry, 
+                    touch_cal_point_trx,
+                    touch_cal_point_try,
+                    CONF_TOUCH_SCREEN_CALIBRATION_M
+                );
+                if (touch_cal_success) {
+                    persist_conf::dev_conf.touch_screen_cal_tlx = touch_cal_point_tlx;
+                    persist_conf::dev_conf.touch_screen_cal_tly = touch_cal_point_tly;
+                    persist_conf::dev_conf.touch_screen_cal_brx = touch_cal_point_brx;
+                    persist_conf::dev_conf.touch_screen_cal_bry = touch_cal_point_bry;
+                    persist_conf::dev_conf.touch_screen_cal_trx = touch_cal_point_trx;
+                    persist_conf::dev_conf.touch_screen_cal_try = touch_cal_point_try;
 
-    draw();
+                    persist_conf::saveDevice();
+
+                    touch_cal_mode = TOUCH_CAL_FINISHED;
+                    refresh_page();
+                } else {
+                    touch_cal_mode = TOUCH_CAL_START;
+                }
+            }
+        }
+    } else {
+        if (touch::event_type == touch::TOUCH_DOWN) {
+            find_widget(touch::x, touch::y);
+            if (found_widget && !found_widget.widget->action) {
+                found_widget = 0;
+            }
+            found_widget_at_down = found_widget;
+            if (found_widget_at_down) {
+                select_widget(found_widget_at_down);
+            } else {
+                if (page_index == 1) {
+                    slider::touch_down();
+                }
+            }
+        } else if (touch::event_type == touch::TOUCH_MOVE) {
+            if (!found_widget_at_down) {
+                if (page_index == 1) {
+                    slider::touch_move();
+                }
+            }
+        } else if (touch::event_type == touch::TOUCH_UP) {
+            if (found_widget_at_down) {
+                do_action(found_widget_at_down.widget->action, found_widget_at_down);
+            } else {
+                if (page_index == 1) {
+                    slider::touch_up();
+                }
+            }
+        }
+
+        draw();
+    }
 }
 
 }

@@ -1,4 +1,4 @@
- /*
+/*
  * EEZ PSU Firmware
  * Copyright (C) 2015 Envox d.o.o.
  *
@@ -16,50 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "psu.h"
-#include "UTouch.h"
+#pragma once
 
 namespace eez {
 namespace psu {
-namespace simulator {
-namespace arduino {
+namespace gui {
+namespace touch {
 
-bool UTouch::is_down;
-int UTouch::x;
-int UTouch::y;
-
-UTouch::UTouch(byte tclk, byte tcs, byte tdin, byte dout, byte irq)
-{
-}
-
-void UTouch::InitTouch(byte orientation) {
-}
-
-void UTouch::read() {
-}
-
-bool UTouch::dataAvailable() {
-    return is_down;
-}
-
-int16_t	UTouch::getX() {
-    return x;
-}
-
-int16_t	UTouch::getY() {
-    return y;
-}
-
-void UTouch::setPrecision(byte precision) {
-}
-
-void UTouch::setData(bool is_down_, int x_, int y_) {
-    is_down = is_down_;
-    x = x_;
-    y = y_;
-}
+bool calibrate(int tl_x, int tl_y, int br_x, int br_y, int tr_x, int tr_y, int margin);
+bool filter(bool is_pressed, int& x, int& y);
+void transform(int& x, int& y);
 
 }
 }
 }
-} // namespace eez::psu::simulator::arduino;
+} // namespace eez::psu::ui::touch

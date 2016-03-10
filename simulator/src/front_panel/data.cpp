@@ -23,8 +23,7 @@
 #include "chips.h"
 #include "bp.h"
 #include "lcd.h"
-
-#include "UTouch.h"
+#include "touch.h"
 
 namespace eez {
 namespace psu {
@@ -141,7 +140,7 @@ void processData(Data *data) {
         y = data->local_control_widget.mouse_data.y;
     }
 
-    UTouch::setData(is_down, x, y);
+    gui::touch::touch_write(is_down, x, y);
 }
 
 }

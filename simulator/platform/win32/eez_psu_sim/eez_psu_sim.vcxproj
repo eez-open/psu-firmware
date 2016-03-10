@@ -218,6 +218,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\temp_sensor.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\touch.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\touch_filter.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\util.h" />
     <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\eez_psu.h" />
     <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\impl\fifo_private.h" />
@@ -240,7 +241,6 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\src\arduino\arduino_internal.h" />
     <ClInclude Include="..\..\..\src\arduino\SPI.h" />
     <ClInclude Include="..\..\..\src\arduino\UTFT.h" />
-    <ClInclude Include="..\..\..\src\arduino\UTouch.h" />
     <ClInclude Include="..\..\..\src\chips\chips.h" />
     <ClInclude Include="..\..\..\src\dll.h" />
     <ClInclude Include="..\..\..\src\ethernet\ethernet_platform.h" />
@@ -301,6 +301,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\temp_sensor.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\touch.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\touch_filter.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\util.cpp" />
     <ClCompile Include="..\..\..\..\libraries\eez_psu_lib\src\eez_psu.cpp" />
     <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\error.c" />
@@ -314,7 +315,6 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\utils.c" />
     <ClCompile Include="..\..\..\src\arduino\arduino_impl.cpp" />
     <ClCompile Include="..\..\..\src\arduino\UTFT.cpp" />
-    <ClCompile Include="..\..\..\src\arduino\UTouch.cpp" />
     <ClCompile Include="..\..\..\src\chips\chips.cpp" />
     <ClCompile Include="..\..\..\src\ethernet\uipethernet_impl.cpp" />
     <ClCompile Include="..\..\..\src\front_panel\control.cpp" />

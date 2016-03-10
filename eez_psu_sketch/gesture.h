@@ -1,7 +1,5 @@
 #pragma once
 
-#include "UTouch.h"
-
 namespace eez {
 namespace psu {
 namespace gui {

@@ -280,9 +280,6 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\touch.h">
       <Filter>gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\arduino\UTouch.h">
-      <Filter>simulator\arduino</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gesture.h">
       <Filter>gui</Filter>
     </ClInclude>
@@ -299,6 +296,9 @@
       <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_internal.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\touch_filter.h">
       <Filter>gui</Filter>
     </ClInclude>
   </ItemGroup>
@@ -487,9 +487,6 @@
     <ClCompile Include="..\..\..\..\eez_psu_sketch\touch.cpp">
       <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\arduino\UTouch.cpp">
-      <Filter>simulator\arduino</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gesture.cpp">
       <Filter>gui</Filter>
     </ClCompile>
@@ -503,6 +500,9 @@
       <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_view.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\touch_filter.cpp">
       <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>

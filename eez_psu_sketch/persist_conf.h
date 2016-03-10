@@ -76,6 +76,12 @@ struct DeviceConfiguration {
     uint8_t time_minute;
     uint8_t time_second;
     int8_t profile_auto_recall_location;
+    int16_t touch_screen_cal_tlx;
+    int16_t touch_screen_cal_tly;
+    int16_t touch_screen_cal_brx;
+    int16_t touch_screen_cal_bry;
+    int16_t touch_screen_cal_trx;
+    int16_t touch_screen_cal_try;
 #ifdef EEZ_PSU_SIMULATOR
     bool gui_opened;
 #endif // EEZ_PSU_SIMULATOR

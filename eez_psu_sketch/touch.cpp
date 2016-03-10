@@ -1,116 +1,218 @@
+/*
+ * EEZ PSU Firmware
+ * Copyright (C) 2015 Envox d.o.o.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "psu.h"
 #include "touch.h"
+#include "touch_filter.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 namespace touch {
 
-UTouch utouch(TOUCH_SCLK, TOUCH_CS, TOUCH_DIN, TOUCH_DOUT, TOUCH_IRQ);
+////////////////////////////////////////////////////////////////////////////////
+
+bool touch_is_pressed;
+int touch_x;
+int touch_y;
+
+#ifdef EEZ_PSU_ARDUINO
+
+#define swap(type, i, j) {type t = i; i = j; j = t;}
+
+#define cbi(reg, bitmask) *reg &= ~bitmask
+#define sbi(reg, bitmask) *reg |= bitmask
+#define rbi(reg, bitmask) ((*reg) & bitmask)
+
+#define pulse_high(reg, bitmask) sbi(reg, bitmask); cbi(reg, bitmask);
+#define pulse_low(reg, bitmask) cbi(reg, bitmask); sbi(reg, bitmask);
+
+#if defined(__AVR__)
+    #define regtype volatile uint8_t
+    #define regsize uint8_t
+#else
+    #define regtype volatile uint32_t
+    #define regsize uint32_t
+#endif
+
+regtype *P_CLK, *P_CS, *P_DIN, *P_DOUT, *P_IRQ;
+regsize B_CLK, B_CS, B_DIN, B_DOUT, B_IRQ;
+
+#if defined(__AVR__)
+    void touch_WriteData(byte data) {
+        byte temp = data;
+        cbi(P_CLK, B_CLK);
+        for (byte count = 0; count < 8; count++) {
+            if (temp & 0x80)
+                sbi(P_DIN, B_DIN);
+            else
+                cbi(P_DIN, B_DIN);
+            temp = temp << 1; 
+            cbi(P_CLK, B_CLK);                
+            sbi(P_CLK, B_CLK);
+        }
+    }
+
+    word touch_ReadData() {
+        word data = 0;
+        for (byte count = 0; count < 12; count++) {
+            data <<= 1;
+            sbi(P_CLK, B_CLK);
+            cbi(P_CLK, B_CLK);                
+            if (rbi(P_DOUT, B_DOUT))
+                data++;
+        }
+        return(data);
+    }
+#else
+    void touch_WriteData(byte data) {
+        byte temp = data;
+        cbi(P_CLK, B_CLK);
+        for (byte count = 0; count < 8; count++) {
+            if(temp & 0x80)
+                digitalWrite(TOUCH_DIN, HIGH);
+            else
+                digitalWrite(TOUCH_DIN, LOW);
+            temp = temp << 1; 
+            digitalWrite(TOUCH_SCLK, LOW);
+            digitalWrite(TOUCH_SCLK, HIGH);
+        }
+    }
+
+    word touch_ReadData() {
+        word data = 0;
+        for (byte count = 0; count < 12; count++) {
+            data <<= 1;
+            digitalWrite(TOUCH_SCLK, HIGH);
+            digitalWrite(TOUCH_SCLK, LOW);
+            if (digitalRead(TOUCH_DOUT))
+                data++;
+        }
+        return(data);
+    }
+#endif
+
+void touch_init() {
+	P_CLK	= portOutputRegister(digitalPinToPort(TOUCH_SCLK));
+	B_CLK	= digitalPinToBitMask(TOUCH_SCLK);
+	P_CS	= portOutputRegister(digitalPinToPort(TOUCH_CS));
+	B_CS	= digitalPinToBitMask(TOUCH_CS);
+	P_DIN	= portOutputRegister(digitalPinToPort(TOUCH_DIN));
+	B_DIN	= digitalPinToBitMask(TOUCH_DIN);
+	P_DOUT	= portInputRegister(digitalPinToPort(TOUCH_DOUT));
+	B_DOUT	= digitalPinToBitMask(TOUCH_DOUT);
+	P_IRQ	= portInputRegister(digitalPinToPort(TOUCH_IRQ));
+	B_IRQ	= digitalPinToBitMask(TOUCH_IRQ);
+
+	pinMode(TOUCH_SCLK,  OUTPUT);
+    pinMode(TOUCH_CS,   OUTPUT);
+    pinMode(TOUCH_DIN,  OUTPUT);
+    pinMode(TOUCH_DOUT, INPUT);
+    pinMode(TOUCH_IRQ,  OUTPUT);
+
+	sbi(P_CS, B_CS);
+	sbi(P_CLK, B_CLK);
+	sbi(P_DIN, B_DIN);
+	sbi(P_IRQ, B_IRQ);
+
+    // Command for reading X position. This also sets bit 0 (PD0) and bit 1 (PD1) to zero,
+    // which enables PENIRQ (see table 8. in XPT2046 datasheet).
+    cbi(P_CS, B_CS);
+    touch_WriteData(0x90);
+    sbi(P_CS, B_CS);
+}
+
+void touch_read() {
+	cbi(P_CS, B_CS);                    
+
+    // read pressure
+    touch_is_pressed = !rbi(P_IRQ, B_IRQ); 
+
+    if (touch_is_pressed) {
+        // read X
+        touch_WriteData(0x90);        
+        pulse_high(P_CLK, B_CLK);
+        touch_x = touch_ReadData();
+
+        // read Y
+        touch_WriteData(0xD0);      
+        pulse_high(P_CLK, B_CLK);
+        touch_y = touch_ReadData();
+
+        if (touch_x == -1) {
+            touch_is_pressed = false;
+            touch_y == -1;
+        } else if (touch_y == -1) {
+            touch_is_pressed = false;
+            touch_x == -1;
+        } else {
+            touch_x = 4095 - touch_x;
+        }
+    } else {
+        touch_x = -1;
+        touch_y = -1;
+    }
+    
+	sbi(P_CS, B_CS);
+}
+
+#else
+
+void touch_init() {
+}
+
+void touch_read() {
+}
+
+void touch_write(bool is_pressed, int x, int y) {
+    touch_is_pressed = is_pressed;
+    touch_x = x;
+    touch_y = y;
+}
+
+#endif
+
+////////////////////////////////////////////////////////////////////////////////
 
 EventType event_type = TOUCH_NONE;
 int x;
 int y;
-int last_x;
-int last_y;
-
-#ifdef EEZ_PSU_SIMULATOR
-#define ELIMINATE_NOISE 0
-#define CONF_TOUCH_INERTIA 1
-#else
-#define ELIMINATE_NOISE 1
-#define CONF_TOUCH_INERTIA 0.2
-#endif
-
-#if ELIMINATE_NOISE
-#define TEST_BUF_SIZE 5
-#define TEST_TOLERANCE 5
-
-static int test_buf_x[TEST_BUF_SIZE];
-static int test_buf_y[TEST_BUF_SIZE];
-static int test_buf_i;
-#endif
 
 void init() {
-	utouch.InitTouch(PORTRAIT);
-	utouch.setPrecision(PREC_HI);
+    touch_init();
 }
 
 void tick(unsigned long tick_usec) {
-	if (utouch.dataAvailable()) {
-		utouch.read();
+	touch_read();
 
-        x = utouch.getX();
-        y = utouch.getY();
+    if (filter(touch_is_pressed, touch_x, touch_y)) {
+        transform(touch_x, touch_y);
+
+        x = touch_x;
+        y = touch_y;
 
         if (x != -1 && y != -1) {
             if (event_type == TOUCH_NONE || event_type == TOUCH_UP) {
-#if ELIMINATE_NOISE
-                test_buf_x[0] = x;
-                test_buf_y[0] = y;
-                test_buf_i = 1;
-                event_type = TOUCH_DOWN_TEST;
-#else
                 event_type = TOUCH_DOWN;
-                last_x = x;
-                last_y = y;
-#endif
-#if ELIMINATE_NOISE
-            } else if (event_type == TOUCH_DOWN_TEST) {
-                test_buf_x[test_buf_i] = x;
-                test_buf_y[test_buf_i] = y;
-                if (++test_buf_i == TEST_BUF_SIZE) {
-                    int max_count = 0;
-                    int found_start = -1;
-                    int found_end = -1;
-                    for (int i = 0; i < TEST_BUF_SIZE - 1 && max_count <= TEST_BUF_SIZE / 2; ++i) {
-                        int k = i;
-                        int count = 0;
-                        for (int j = i + 1; j < TEST_BUF_SIZE; ++j) {
-                            long dx = abs(test_buf_x[j] - test_buf_x[k]);
-                            long dy = abs(test_buf_y[j] - test_buf_y[k]);
-                            if (dx <= TEST_TOLERANCE && dy <= TEST_TOLERANCE) {
-                                ++count;
-                                k = j;
-                            }
-                        }
-                        if (count > max_count) {
-                            max_count = count;
-                            found_start = i;
-                            found_end = k;
-                        }
-                    }
-
-                    if (max_count > TEST_BUF_SIZE / 2) {
-                        x = test_buf_x[found_start];
-                        y = test_buf_y[found_start];
-            
-                        event_type = TOUCH_DOWN;
-
-                        last_x = x;
-                        last_y = y;
-                    } else {
-                        for (int i = 1; i < TEST_BUF_SIZE; ++i) {
-                            test_buf_x[i-1] = test_buf_x[i];
-                            test_buf_y[i-1] = test_buf_y[i];
-                        }
-                        --test_buf_i;
-                    }
-                }
-#endif
             } else {
                 if (event_type == TOUCH_DOWN) {
                     event_type = TOUCH_MOVE;
                 }
-
-                int dx = x - last_x;
-                int dy = y - last_y;
-
-                x = (int)round(last_x + CONF_TOUCH_INERTIA * dx);
-                y = (int)round(last_y + CONF_TOUCH_INERTIA * dy);
-
-                last_x = x;
-                last_y = y;
             }
             return;
         }
@@ -118,7 +220,7 @@ void tick(unsigned long tick_usec) {
 
     if (event_type == TOUCH_DOWN || event_type == TOUCH_MOVE) {
         event_type = TOUCH_UP;
-    } else if (event_type == TOUCH_UP || event_type == TOUCH_DOWN_TEST) {
+    } else if (event_type == TOUCH_UP) {
         event_type = TOUCH_NONE;
     }
 }
