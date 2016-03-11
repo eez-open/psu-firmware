@@ -43,7 +43,6 @@
 
 #ifdef EEZ_PSU_ARDUINO_DUE
 #define vsnprintf_P vsnprintf
-#define strncpy_P strncpy
 #endif
 
 #include <scpi-parser.h>
