@@ -23,9 +23,20 @@
 // Thanks to: http://dlbeer.co.nz/articles/tsf.html
 //
 
+#ifdef EEZ_PSU_ARDUINO
 #define CONF_TOUCH_FILTER_N 7
 #define CONF_TOUCH_FILTER_D 10
+#ifdef EEZ_PSU_ARDUINO_DUE
+#define CONF_TOUCH_FILTER_P 20
+#else
 #define CONF_TOUCH_FILTER_P 10
+#endif
+#else
+#define CONF_TOUCH_FILTER_N 1
+#define CONF_TOUCH_FILTER_D 2
+#define CONF_TOUCH_FILTER_P 5
+#endif
+
 
 namespace eez {
 namespace psu {

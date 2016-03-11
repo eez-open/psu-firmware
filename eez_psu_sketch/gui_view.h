@@ -71,13 +71,23 @@ struct List {
     OBJ_OFFSET first;
 };
 
+struct ThreeStateIndicatorWidget {
+    OBJ_OFFSET style1;
+    OBJ_OFFSET style2;
+    OBJ_OFFSET text;
+};
+
+struct VerticalListWidget {
+    OBJ_OFFSET item_widget;
+};
+
+struct ContainerWidget {
+    List widgets;
+};
+
 struct Document {
     List styles;
     List pages;
-};
-
-struct SelectWidget {
-    List widgets;
 };
 
 struct Style {
@@ -90,8 +100,8 @@ struct Style {
     uint16_t padding_vertical;
 };
 
-struct DisplayStringWidget {
-    OBJ_OFFSET text;
+struct SelectWidget {
+    List widgets;
 };
 
 struct Widget {
@@ -113,17 +123,7 @@ struct DisplayStringSelectWidget {
     OBJ_OFFSET text2;
 };
 
-struct VerticalListWidget {
-    OBJ_OFFSET item_widget;
-};
-
-struct ContainerWidget {
-    List widgets;
-};
-
-struct ThreeStateIndicatorWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET style2;
+struct DisplayStringWidget {
     OBJ_OFFSET text;
 };
 
