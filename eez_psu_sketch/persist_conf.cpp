@@ -107,6 +107,15 @@ void initDevice() {
     dev_conf.touch_screen_cal_trx = 0;
     dev_conf.touch_screen_cal_try = 0;
 
+    DebugTraceF("%d, %d, %d, %d, %d, %d",
+        dev_conf.touch_screen_cal_tlx,
+        dev_conf.touch_screen_cal_tly,
+        dev_conf.touch_screen_cal_brx,
+        dev_conf.touch_screen_cal_bry,
+        dev_conf.touch_screen_cal_trx,
+        dev_conf.touch_screen_cal_try
+        );
+
 #ifdef EEZ_PSU_SIMULATOR
     dev_conf.gui_opened = false;
 #endif // EEZ_PSU_SIMULATOR
