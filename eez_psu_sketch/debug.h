@@ -42,6 +42,7 @@ void Trace(const char *format, ...);
 #else // NO DEBUG
 
 #define DebugTrace(...) 0
+#define DebugTraceF(...) 0
 
 #endif
 
