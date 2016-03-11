@@ -60,14 +60,24 @@ namespace gui {
 #define ACTION_ID_EXIT 2
 #define ACTION_ID_TOGGLE_CHANNEL 3
 #define ACTION_ID_TOUCH_SCREEN_CALIBRATION 4
-#define ACTION_ID_ALERT_YES 5
-#define ACTION_ID_ALERT_NO 6
+#define ACTION_ID_YES 5
+#define ACTION_ID_NO 6
+#define ACTION_ID_CANCEL 7
 
 typedef uint16_t OBJ_OFFSET;
 
 struct List {
     uint8_t count;
     OBJ_OFFSET first;
+};
+
+struct Document {
+    List styles;
+    List pages;
+};
+
+struct SelectWidget {
+    List widgets;
 };
 
 struct Style {
@@ -80,8 +90,8 @@ struct Style {
     uint16_t padding_vertical;
 };
 
-struct VerticalListWidget {
-    OBJ_OFFSET item_widget;
+struct DisplayStringWidget {
+    OBJ_OFFSET text;
 };
 
 struct Widget {
@@ -103,27 +113,18 @@ struct DisplayStringSelectWidget {
     OBJ_OFFSET text2;
 };
 
-struct ThreeStateIndicatorWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET style2;
-    OBJ_OFFSET text;
-};
-
-struct DisplayStringWidget {
-    OBJ_OFFSET text;
-};
-
-struct SelectWidget {
-    List widgets;
-};
-
-struct Document {
-    List styles;
-    List pages;
+struct VerticalListWidget {
+    OBJ_OFFSET item_widget;
 };
 
 struct ContainerWidget {
     List widgets;
+};
+
+struct ThreeStateIndicatorWidget {
+    OBJ_OFFSET style1;
+    OBJ_OFFSET style2;
+    OBJ_OFFSET text;
 };
 
 #pragma pack(pop)

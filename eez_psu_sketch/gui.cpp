@@ -41,8 +41,9 @@ Style *page_style;
 static WidgetCursor selected_widget;
 static WidgetCursor found_widget_at_down;
 
-static void (*alert_yes_callback)();
-static void (*alert_no_callback)();
+static void (*dialog_yes_callback)();
+static void (*dialog_no_callback)();
+static void (*dialog_cancel_callback)();
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -442,10 +443,12 @@ void do_action(int action_id, const WidgetCursor &widget_cursor) {
         slider::exit_modal_mode();
     } else if (action_id == ACTION_ID_TOUCH_SCREEN_CALIBRATION) {
         touch::calibration::enter_calibration_mode();
-    } else if (action_id == ACTION_ID_ALERT_YES) {
-        alert_yes_callback();
-    } else if (action_id == ACTION_ID_ALERT_NO) {
-        alert_no_callback();
+    } else if (action_id == ACTION_ID_YES) {
+        //dialog_yes_callback();
+    } else if (action_id == ACTION_ID_NO) {
+        //dialog_no_callback();
+    } else if (action_id == ACTION_ID_CANCEL) {
+        //dialog_cancel_callback();
     } else {
         data::Cursor saved_cursor = data::getCursor();
         data::setCursor(widget_cursor.cursor);
@@ -507,12 +510,14 @@ void tick(unsigned long tick_usec) {
     }
 }
 
-void alert(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)()) {
+void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
     data::set(DATA_ID_ALERT_MESSAGE, data::Value(message));
-    alert_yes_callback = yes_callback;
-    alert_no_callback = no_callback;
 
-    page_index = PAGE_ALERT;
+    dialog_yes_callback = yes_callback;
+    dialog_no_callback = no_callback;
+    dialog_cancel_callback = cancel_callback;
+
+    page_index = PAGE_YESNO;
     refresh_page();
 }
 

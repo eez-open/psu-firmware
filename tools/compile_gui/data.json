@@ -77,12 +77,16 @@
       "description": "touch screen calibration"
     },
     {
-      "name": "alert_yes",
-      "description":  "Yes action in Yes/No alert"
+      "name": "yes",
+      "description":  "Yes action in Yes/No dialog"
     },
     {
-      "name": "alert_no",
-      "description":  "No action in Yes/No alert"
+      "name": "no",
+      "description":  "No action in Yes/No dialog"
+    },
+    {
+      "name": "cancel",
+      "description":  "Cancel action in dialog"
     }
   ]
 }

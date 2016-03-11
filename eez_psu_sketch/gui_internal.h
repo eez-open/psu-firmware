@@ -61,7 +61,7 @@ struct WidgetCursor {
 
 #define PAGE_MAIN  0
 #define PAGE_EDIT  1
-#define PAGE_ALERT 2
+#define PAGE_YESNO 2
 
 extern int page_index;
 
@@ -69,7 +69,7 @@ void refresh_page();
 font::Font *styleGetFont(Style *style);
 void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse);
 void fill_rect(int x, int y, int w, int h);
-void alert(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)());
+void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());
 
 }
 }

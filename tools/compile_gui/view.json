@@ -410,23 +410,33 @@
         },
         {
           "type": "display_string",
-          "action": "alert_yes",
-          "x": 42,
+          "action": "yes",
+          "x": 20,
           "y": 220,
-          "w": 60,
+          "w": 48,
           "h": 40,
           "style": "menu",
           "text": "Yes"
         },
         {
           "type": "display_string",
-          "action": "alert_no",
-          "x": 138,
+          "action": "no",
+          "x": 80,
           "y": 220,
-          "w": 60,
+          "w": 50,
           "h": 40,
           "style": "menu",
           "text": "No"
+        },
+        {
+          "type": "display_string",
+          "action": "cancel",
+          "x": 134,
+          "y": 220,
+          "w": 88,
+          "h": 40,
+          "style": "menu",
+          "text": "Cancel"
         }
       ]
     }
