@@ -34,7 +34,7 @@ static float start_value;
 
 static int last_draw_y_offset;
 
-static int last_precision_factor;
+static int last_scale;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -142,17 +142,6 @@ bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool in
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int get_precision_factor(int x) {
-    x = (x / 20) * 20;
-    if (x < width) {
-        return 1;
-    } else {
-        return 1 + (int)exp((x - width) * log(2000) / (240 - width));
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 void touch_down() {
     data::Cursor saved_cursor = data::getCursor();
     data::setCursor(data_cursor);
@@ -161,7 +150,7 @@ void touch_down() {
     start_value = data::get(data_id, changed).getFloat();
     start_y = touch::y;
 
-    last_precision_factor = 1;
+    last_scale = 1;
 
     data::setCursor(saved_cursor);
 }
@@ -177,17 +166,27 @@ void touch_move() {
     float min = minValue.getFloat();
     float max = data::getMax(data_id).getFloat();
 
-    int precision_factor = get_precision_factor(touch::x);
-    DebugTraceF("%d", precision_factor);
-    if (precision_factor != last_precision_factor) {
+    int scale;
+
+    int x = (touch::x / 20) * 20;
+    if (x < width) {
+        scale = 1;
+    }
+    else {
+        int num_bars = (max - min) >= 10 ? 9 : 5;
+        int bar_width = (240 - width) / num_bars;
+        scale = 1 << (1 + (x - width) / bar_width);
+    }
+
+    if (scale != last_scale) {
         bool changed;
         start_value = data::get(data_id, changed).getFloat();
         start_y = touch::y;
-        last_precision_factor = precision_factor;
+        last_scale = scale;
     }
 
     float value = start_value + (start_y - touch::y) *
-        (max - min) / (precision_factor * height);
+        (max - min) / (scale * height);
 
     if (value < min) value = min;
     if (value > max) value = max;
