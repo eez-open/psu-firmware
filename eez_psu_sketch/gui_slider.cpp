@@ -29,11 +29,12 @@ static int data_id;
 static int width;
 static int height;
 
-static int start_x;
 static int start_y;
 static float start_value;
 
 static int last_draw_y_offset;
+
+static int last_precision_factor;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -141,21 +142,32 @@ bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool in
 
 ////////////////////////////////////////////////////////////////////////////////
 
+int get_precision_factor(int x) {
+    x = (x / 16) * 16;
+    if (x < width) {
+        return 1;
+    } else {
+        return 1 + (int)exp((x - width) * log(5000) / (240 - width));
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 void touch_down() {
     data::Cursor saved_cursor = data::getCursor();
     data::setCursor(data_cursor);
 
     bool changed;
     start_value = data::get(data_id, changed).getFloat();
-    start_x = touch::x;
     start_y = touch::y;
+
+    last_precision_factor = 1;
 
     data::setCursor(saved_cursor);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////
 
 void touch_move() {
     data::Cursor saved_cursor = data::getCursor();
@@ -165,14 +177,14 @@ void touch_move() {
     float min = minValue.getFloat();
     float max = data::getMax(data_id).getFloat();
 
-    int precision_factor;
-    if (touch::x < width) {
-        precision_factor = 1;
-    } else {
-        precision_factor = 1 + (int)exp((touch::x - width) * log(240) / (240 - width));
+    int precision_factor = get_precision_factor(touch::x);
+    DebugTraceF("%d", precision_factor);
+    if (precision_factor != last_precision_factor) {
+        bool changed;
+        start_value = data::get(data_id, changed).getFloat();
+        start_y = touch::y;
+        last_precision_factor = precision_factor;
     }
-
-    DebugTraceF("Precision factor: %d", precision_factor);
 
     float value = start_value + (start_y - touch::y) *
         (max - min) / (precision_factor * height);

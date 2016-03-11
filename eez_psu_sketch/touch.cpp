@@ -20,6 +20,8 @@
 #include "touch.h"
 #include "touch_filter.h"
 
+#define CONF_TOUCH_READ_FREQ_USEC 10 * 1000
+
 namespace eez {
 namespace psu {
 namespace gui {
@@ -27,9 +29,9 @@ namespace touch {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool touch_is_pressed;
-int touch_x;
-int touch_y;
+bool touch_is_pressed = false;
+int touch_x = -1;
+int touch_y = -1;
 
 #ifdef EEZ_PSU_ARDUINO
 
@@ -193,19 +195,30 @@ EventType event_type = TOUCH_NONE;
 int x = -1;
 int y = -1;
 
+unsigned long last_tick_usec = 0;
+
 void init() {
     touch_init();
     calibration::init();
 }
 
 void tick(unsigned long tick_usec) {
-	touch_read();
+    if (last_tick_usec == 0 || tick_usec > last_tick_usec + CONF_TOUCH_READ_FREQ_USEC) {
+    	touch_read();
 
-    if (filter(touch_is_pressed, touch_x, touch_y)) {
-        transform(touch_x, touch_y);
+        touch_is_pressed = filter(touch_is_pressed, touch_x, touch_y);
+        if (touch_is_pressed) {
+            transform(touch_x, touch_y);
+        }
+
+        last_tick_usec = tick_usec;
+    }
+
+    if (touch_is_pressed) {
         if (touch_x != -1 && touch_y != -1) {
             x = touch_x;
             y = touch_y;
+
             if (event_type == TOUCH_NONE || event_type == TOUCH_UP) {
                 event_type = TOUCH_DOWN;
             } else {

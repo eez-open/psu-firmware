@@ -491,8 +491,19 @@ void tick(unsigned long tick_usec) {
                 if (page_index == PAGE_EDIT) {
                     slider::touch_move();
                 } else if (page_index == PAGE_YESNO) {
+#ifdef CONF_DEBUG
                     lcd::lcd.setColor(VGA_WHITE);
+
+                    int x = touch::x;
+                    if (x < 1) x = 1;
+                    else if (x > lcd::lcd.getDisplayXSize() - 2) x = lcd::lcd.getDisplayXSize() - 2;
+
+                    int y = touch::y;
+                    if (y < 1) y = 1;
+                    else if (y > lcd::lcd.getDisplayYSize() - 2) y = lcd::lcd.getDisplayYSize() - 2;
+
                     lcd::lcd.fillRect(touch::x-1, touch::y-1, touch::x+1, touch::y+1);
+#endif
                 }
             }
         } else if (touch::event_type == touch::TOUCH_UP) {

@@ -152,7 +152,7 @@ public:
         return on();
     }
 
-//private:
+private:
     int s;
 };
 
@@ -160,6 +160,10 @@ template<int N, int D, int P>
 class SampleFilter {
 public:
     Sample operator()(const Sample& s) {
+        //bool was_on = p.on();
+        //bool on = p(s.p);
+        //bool rst = !was_on && on;
+        //return Sample(Point(x(s.l.x, rst), y(s.l.y, rst)), on);
         const bool rst = !p.on();
 
         return Sample(Point(x(s.l.x, rst), y(s.l.y, rst)), p(s.p));
