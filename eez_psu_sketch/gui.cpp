@@ -490,6 +490,9 @@ void tick(unsigned long tick_usec) {
             if (!found_widget_at_down) {
                 if (page_index == PAGE_EDIT) {
                     slider::touch_move();
+                } else if (page_index == PAGE_YESNO) {
+                    lcd::lcd.setColor(VGA_WHITE);
+                    lcd::lcd.fillRect(touch::x-1, touch::y-1, touch::x+1, touch::y+1);
                 }
             }
         } else if (touch::event_type == touch::TOUCH_UP) {
