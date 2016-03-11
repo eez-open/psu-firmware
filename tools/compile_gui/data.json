@@ -67,6 +67,10 @@
     {
       "name": "toggle_channel",
       "description": "turn channel on/off"
+    },
+    {
+      "name": "touch_screen_calibration",
+      "description": "touch screen calibration"
     }
   ]
 }

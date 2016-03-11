@@ -18,31 +18,18 @@
 
 #pragma once
 
-#include "touch_calibration.h"
-
 namespace eez {
 namespace psu {
 namespace gui {
 namespace touch {
+namespace calibration {
 
-extern void init();
-extern void tick(unsigned long tick_usec);
+void init();
+void enter_calibration_mode();
+bool is_calibrated();
+void tick(unsigned long tick_usec);
 
-enum EventType {
-    TOUCH_NONE,
-    TOUCH_DOWN,
-    TOUCH_MOVE,
-    TOUCH_UP
-};
-
-extern EventType event_type;
-extern int x;
-extern int y;
-
-#ifdef EEZ_PSU_SIMULATOR
-void touch_write(bool is_pressed, int x, int y);
-#endif
-
+}
 }
 }
 }

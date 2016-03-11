@@ -195,6 +195,7 @@ int y;
 
 void init() {
     touch_init();
+    calibration::init();
 }
 
 void tick(unsigned long tick_usec) {

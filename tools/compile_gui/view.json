@@ -210,9 +210,38 @@
           "type": "display_string",
           "x": 0,
           "y": 276,
+          "w": 50,
           "h": 44,
           "style": "menu",
-          "text": "Main | Off | Remote"
+          "text": "Main"
+        },
+        {
+          "type": "display_string",
+          "x": 50,
+          "y": 276,
+          "w": 50,
+          "h": 44,
+          "style": "menu",
+          "text": "Off"
+        },
+        {
+          "type": "display_string",
+          "x": 100,
+          "y": 276,
+          "w": 70,
+          "h": 44,
+          "style": "menu",
+          "text": "Remote"
+        },
+        {
+          "type": "display_string",
+          "action": "touch_screen_calibration",
+          "x": 170,
+          "y": 276,
+          "w": 70,
+          "h": 44,
+          "style": "menu",
+          "text": "Cal."
         }
       ]
     },
