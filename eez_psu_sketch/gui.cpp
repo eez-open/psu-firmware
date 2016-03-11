@@ -444,11 +444,11 @@ void do_action(int action_id, const WidgetCursor &widget_cursor) {
     } else if (action_id == ACTION_ID_TOUCH_SCREEN_CALIBRATION) {
         touch::calibration::enter_calibration_mode();
     } else if (action_id == ACTION_ID_YES) {
-        //dialog_yes_callback();
+        dialog_yes_callback();
     } else if (action_id == ACTION_ID_NO) {
-        //dialog_no_callback();
+        dialog_no_callback();
     } else if (action_id == ACTION_ID_CANCEL) {
-        //dialog_cancel_callback();
+        dialog_cancel_callback();
     } else {
         data::Cursor saved_cursor = data::getCursor();
         data::setCursor(widget_cursor.cursor);
