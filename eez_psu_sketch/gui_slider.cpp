@@ -143,11 +143,11 @@ bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool in
 ////////////////////////////////////////////////////////////////////////////////
 
 int get_precision_factor(int x) {
-    x = (x / 16) * 16;
+    x = (x / 20) * 20;
     if (x < width) {
         return 1;
     } else {
-        return 1 + (int)exp((x - width) * log(5000) / (240 - width));
+        return 1 + (int)exp((x - width) * log(2000) / (240 - width));
     }
 }
 
