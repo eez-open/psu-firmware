@@ -50,10 +50,10 @@ static bool last_draw_scale_overflow;
 ////////////////////////////////////////////////////////////////////////////////
 
 void enter_modal_mode(const WidgetCursor &widget_cursor) {
-    if (page_index == 0) {
+    if (page_index == PAGE_MAIN) {
         psu::enterTimeCriticalMode();
 
-        page_index = 1;
+        page_index = PAGE_EDIT;
 
         data_cursor = widget_cursor.cursor;
         data_id = widget_cursor.widget->data;
@@ -72,10 +72,10 @@ void enter_modal_mode(const WidgetCursor &widget_cursor) {
 }
 
 void exit_modal_mode() {
-    if (page_index == 1) {
+    if (page_index == PAGE_EDIT) {
         psu::leaveTimeCriticalMode();
 
-        page_index = 0;
+        page_index = PAGE_MAIN;
 
         refresh_page();
     }

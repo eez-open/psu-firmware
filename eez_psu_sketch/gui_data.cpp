@@ -28,7 +28,7 @@ namespace psu {
 namespace gui {
 namespace data {
 
-void Value::toText(char *text) {
+void Value::toText(char *text, int count) {
     text[0] = 0;
 
     util::strcatFloat(text, float_);
@@ -40,6 +40,11 @@ void Value::toText(char *text) {
     
     case UNIT_AMPER:
         strcat(text, " A");
+        break;
+
+    case UNIT_STR:
+        strncpy_P(text, str_, count - 1);
+        text[count - 1] = 0;
         break;
     }
 }
@@ -53,6 +58,7 @@ void Value::toTextNoUnit(char *text) {
 ////////////////////////////////////////////////////////////////////////////////
 
 static Cursor cursor;
+static Value alert_message;
 
 Cursor getCursor() {
     return cursor;
@@ -190,6 +196,8 @@ Value get(uint8_t id, bool &changed) {
             changed = true;
         }
         value = Value(dp);
+    } else if (id == DATA_ID_ALERT_MESSAGE) {
+        value = alert_message;
     }
 
     return value;
@@ -226,6 +234,8 @@ void set(uint8_t id, Value value) {
         selected_channel->setVoltage(value.getFloat());
     } else if (id == DATA_ID_CURR) {
         selected_channel->setCurrent(value.getFloat());
+    } else if (id == DATA_ID_ALERT_MESSAGE) {
+        alert_message = value;
     }
 }
 

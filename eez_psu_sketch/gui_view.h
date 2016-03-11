@@ -55,10 +55,13 @@ namespace gui {
 #define DATA_ID_OPP 9
 #define DATA_ID_OTP 10
 #define DATA_ID_DP 11
+#define DATA_ID_ALERT_MESSAGE 12
 #define ACTION_ID_SLIDER 1
 #define ACTION_ID_EXIT 2
 #define ACTION_ID_TOGGLE_CHANNEL 3
 #define ACTION_ID_TOUCH_SCREEN_CALIBRATION 4
+#define ACTION_ID_ALERT_YES 5
+#define ACTION_ID_ALERT_NO 6
 
 typedef uint16_t OBJ_OFFSET;
 
@@ -67,23 +70,18 @@ struct List {
     OBJ_OFFSET first;
 };
 
-struct ThreeStateIndicatorWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET style2;
-    OBJ_OFFSET text;
+struct Style {
+    uint8_t font;
+    uint16_t flags;
+    uint16_t background_color;
+    uint16_t color;
+    uint16_t border_color;
+    uint16_t padding_horizontal;
+    uint16_t padding_vertical;
 };
 
 struct VerticalListWidget {
     OBJ_OFFSET item_widget;
-};
-
-struct ContainerWidget {
-    List widgets;
-};
-
-struct Document {
-    List styles;
-    List pages;
 };
 
 struct Widget {
@@ -98,16 +96,6 @@ struct Widget {
     OBJ_OFFSET specific;
 };
 
-struct Style {
-    uint8_t font;
-    uint16_t flags;
-    uint16_t background_color;
-    uint16_t color;
-    uint16_t border_color;
-    uint16_t padding_horizontal;
-    uint16_t padding_vertical;
-};
-
 struct DisplayStringSelectWidget {
     OBJ_OFFSET style1;
     OBJ_OFFSET text1;
@@ -115,11 +103,26 @@ struct DisplayStringSelectWidget {
     OBJ_OFFSET text2;
 };
 
+struct ThreeStateIndicatorWidget {
+    OBJ_OFFSET style1;
+    OBJ_OFFSET style2;
+    OBJ_OFFSET text;
+};
+
 struct DisplayStringWidget {
     OBJ_OFFSET text;
 };
 
 struct SelectWidget {
+    List widgets;
+};
+
+struct Document {
+    List styles;
+    List pages;
+};
+
+struct ContainerWidget {
     List widgets;
 };
 

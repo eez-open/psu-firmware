@@ -391,6 +391,44 @@
           "text": "Exit"
         }
       ]
+    },
+    {
+      "type": "container",
+      "x": 0,
+      "y": 0,
+      "w": 240,
+      "h": 320,
+      "widgets": [
+        {
+          "type": "display",
+          "data": "alert_message",
+          "x": 0,
+          "y": 0,
+          "w": 240,
+          "h": 160,
+          "style": "menu"
+        },
+        {
+          "type": "display_string",
+          "action": "alert_yes",
+          "x": 42,
+          "y": 220,
+          "w": 60,
+          "h": 40,
+          "style": "menu",
+          "text": "Yes"
+        },
+        {
+          "type": "display_string",
+          "action": "alert_no",
+          "x": 138,
+          "y": 220,
+          "w": 60,
+          "h": 40,
+          "style": "menu",
+          "text": "No"
+        }
+      ]
     }
   ]
 }

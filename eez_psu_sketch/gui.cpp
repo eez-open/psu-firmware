@@ -35,11 +35,14 @@ using namespace lcd;
 
 static bool page_refresh;
 static bool widget_refresh;
-int page_index = 0;
+int page_index;
 Style *page_style;
 
 static WidgetCursor selected_widget;
 static WidgetCursor found_widget_at_down;
+
+static void (*alert_yes_callback)();
+static void (*alert_no_callback)();
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -284,7 +287,7 @@ bool draw_display_widget(uint8_t *document, Widget *widget, int x, int y, bool r
     data::Value value = data::get(widget->data, changed);
     if (changed || refresh) {
         char text[32];
-        value.toText(text);
+        value.toText(text, 32);
         drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + widget->style), inverse);
         return true;
     }
@@ -439,6 +442,10 @@ void do_action(int action_id, const WidgetCursor &widget_cursor) {
         slider::exit_modal_mode();
     } else if (action_id == ACTION_ID_TOUCH_SCREEN_CALIBRATION) {
         touch::calibration::enter_calibration_mode();
+    } else if (action_id == ACTION_ID_ALERT_YES) {
+        alert_yes_callback();
+    } else if (action_id == ACTION_ID_ALERT_NO) {
+        alert_no_callback();
     } else {
         data::Cursor saved_cursor = data::getCursor();
         data::setCursor(widget_cursor.cursor);
@@ -472,13 +479,13 @@ void tick(unsigned long tick_usec) {
             if (found_widget_at_down) {
                 select_widget(found_widget_at_down);
             } else {
-                if (page_index == 1) {
+                if (page_index == PAGE_EDIT) {
                     slider::touch_down();
                 }
             }
         } else if (touch::event_type == touch::TOUCH_MOVE) {
             if (!found_widget_at_down) {
-                if (page_index == 1) {
+                if (page_index == PAGE_EDIT) {
                     slider::touch_move();
                 }
             }
@@ -488,7 +495,7 @@ void tick(unsigned long tick_usec) {
                 do_action(found_widget_at_down.widget->action, found_widget_at_down);
                 found_widget_at_down = 0;
             } else {
-                if (page_index == 1) {
+                if (page_index == PAGE_EDIT) {
                     slider::touch_up();
                 }
             }
@@ -498,6 +505,15 @@ void tick(unsigned long tick_usec) {
     } else {
         touch::calibration::tick(tick_usec);
     }
+}
+
+void alert(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)()) {
+    data::set(DATA_ID_ALERT_MESSAGE, data::Value(message));
+    alert_yes_callback = yes_callback;
+    alert_no_callback = no_callback;
+
+    page_index = PAGE_ALERT;
+    refresh_page();
 }
 
 }

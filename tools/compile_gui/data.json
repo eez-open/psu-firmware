@@ -53,6 +53,10 @@
       "name": "dp",
       "description": "DP on or DP off",
       "operations": "get"
+    },
+    {
+      "name": "alert_message",
+      "description":  "Message in alert dialog"
     }
   ],
   "actions": [
@@ -71,6 +75,14 @@
     {
       "name": "touch_screen_calibration",
       "description": "touch screen calibration"
+    },
+    {
+      "name": "alert_yes",
+      "description":  "Yes action in Yes/No alert"
+    },
+    {
+      "name": "alert_no",
+      "description":  "No action in Yes/No alert"
     }
   ]
 }

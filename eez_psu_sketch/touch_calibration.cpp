@@ -74,6 +74,9 @@ void touch_cal_draw_point(int x, int y) {
 }
 
 bool touch_call_read_point() {
+    if (touch::event_type != touch::TOUCH_NONE)
+        DebugTraceF("Calibration point: %d, %d", touch::x, touch::y);
+
     if (touch::event_type == touch::TOUCH_UP) {
         *touch_cal_point_x = touch::x;
         *touch_cal_point_y = touch::y;
@@ -103,12 +106,29 @@ void init() {
 
 void enter_calibration_mode() {
     touch::reset_transform_calibration();
-
     touch_cal_mode = TOUCH_CAL_START;
 }
 
 bool is_calibrated() {
     return touch_cal_mode == TOUCH_CAL_FINISHED;
+}
+
+void onYes() {
+    persist_conf::dev_conf.touch_screen_cal_tlx = touch_cal_point_tlx;
+    persist_conf::dev_conf.touch_screen_cal_tly = touch_cal_point_tly;
+    persist_conf::dev_conf.touch_screen_cal_brx = touch_cal_point_brx;
+    persist_conf::dev_conf.touch_screen_cal_bry = touch_cal_point_bry;
+    persist_conf::dev_conf.touch_screen_cal_trx = touch_cal_point_trx;
+    persist_conf::dev_conf.touch_screen_cal_try = touch_cal_point_try;
+
+    persist_conf::saveDevice();
+
+    page_index = PAGE_MAIN;
+    refresh_page();
+}
+
+void onNo() {
+    enter_calibration_mode();
 }
 
 void tick(unsigned long tick_usec) {
@@ -144,17 +164,8 @@ void tick(unsigned long tick_usec) {
                     CONF_TOUCH_SCREEN_CALIBRATION_M
                 );
                 if (touch_cal_success) {
-                    persist_conf::dev_conf.touch_screen_cal_tlx = touch_cal_point_tlx;
-                    persist_conf::dev_conf.touch_screen_cal_tly = touch_cal_point_tly;
-                    persist_conf::dev_conf.touch_screen_cal_brx = touch_cal_point_brx;
-                    persist_conf::dev_conf.touch_screen_cal_bry = touch_cal_point_bry;
-                    persist_conf::dev_conf.touch_screen_cal_trx = touch_cal_point_trx;
-                    persist_conf::dev_conf.touch_screen_cal_try = touch_cal_point_try;
-
-                    persist_conf::saveDevice();
-
                     touch_cal_mode = TOUCH_CAL_FINISHED;
-                    refresh_page();
+                    alert(PSTR("Save changes?"), onYes, onNo);
                 } else {
                     touch_cal_mode = TOUCH_CAL_START;
                 }

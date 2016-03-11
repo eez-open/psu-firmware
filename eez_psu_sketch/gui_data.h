@@ -8,11 +8,11 @@ namespace data {
 enum Unit {
     UNIT_NONE,
     UNIT_VOLT,
-    UNIT_AMPER
+    UNIT_AMPER,
+    UNIT_STR
 };
 
-union Value {
-public:
+struct Value {
     Value() {
         memset(this, 0, sizeof(Value));
     }
@@ -23,6 +23,11 @@ public:
     Value(float value, Unit unit) {
         float_ = value;
         unit_ = unit;
+    }
+
+    Value(const char *str PROGMEM) {
+        str_ = str;
+        unit_ = UNIT_STR;
     }
 
     bool operator ==(Value other) {
@@ -37,14 +42,15 @@ public:
     Unit getUnit() { return (Unit)unit_; }
     uint8_t getInt() { return int_; }
 
-    void toText(char *text);
+    void toText(char *text, int count);
     void toTextNoUnit(char *text);
 
 private:
-    int int_;
-    struct {
+    uint8_t unit_;
+    union {
+        int int_;
+        const char *str_ PROGMEM;
         float float_;
-        uint8_t unit_;
     };
 };
 

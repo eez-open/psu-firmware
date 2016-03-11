@@ -190,8 +190,8 @@ void touch_write(bool is_pressed, int x, int y) {
 ////////////////////////////////////////////////////////////////////////////////
 
 EventType event_type = TOUCH_NONE;
-int x;
-int y;
+int x = -1;
+int y = -1;
 
 void init() {
     touch_init();
@@ -203,11 +203,9 @@ void tick(unsigned long tick_usec) {
 
     if (filter(touch_is_pressed, touch_x, touch_y)) {
         transform(touch_x, touch_y);
-
-        x = touch_x;
-        y = touch_y;
-
-        if (x != -1 && y != -1) {
+        if (touch_x != -1 && touch_y != -1) {
+            x = touch_x;
+            y = touch_y;
             if (event_type == TOUCH_NONE || event_type == TOUCH_UP) {
                 event_type = TOUCH_DOWN;
             } else {
@@ -223,6 +221,8 @@ void tick(unsigned long tick_usec) {
         event_type = TOUCH_UP;
     } else if (event_type == TOUCH_UP) {
         event_type = TOUCH_NONE;
+        x = -1;
+        y = -1;
     }
 }
 

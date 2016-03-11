@@ -33,6 +33,7 @@
 
 #define PSTR(U) U
 #define strcpy_P strcpy
+#define strncpy_P strncpy
 #define strcat_P strcat
 #define sprintf_P sprintf
 #define vsnprintf_P vsnprintf
