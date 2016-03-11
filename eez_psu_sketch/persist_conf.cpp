@@ -36,7 +36,7 @@ enum PersistConfSection {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static const uint16_t DEV_CONF_VERSION = 0x0004L;
+static const uint16_t DEV_CONF_VERSION = 0x0005L;
 static const uint16_t CH_CAL_CONF_VERSION = 0x0001L;
 static const uint16_t PROFILE_VERSION = 0x0003L;
 
@@ -99,6 +99,13 @@ void initDevice() {
 
     dev_conf.flags.profile_auto_recall = 1;
     dev_conf.profile_auto_recall_location = 0;
+
+    dev_conf.touch_screen_cal_tlx = 0;
+    dev_conf.touch_screen_cal_tly = 0;
+    dev_conf.touch_screen_cal_brx = 0;
+    dev_conf.touch_screen_cal_bry = 0;
+    dev_conf.touch_screen_cal_trx = 0;
+    dev_conf.touch_screen_cal_try = 0;
 
 #ifdef EEZ_PSU_SIMULATOR
     dev_conf.gui_opened = false;
