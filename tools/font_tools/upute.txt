@@ -1,2 +1,0 @@
-1) TTF2BDF.EXE c:\Windows\Fonts\tahoma.ttf -p 37 -o tahoma37.bdf
-2) python bdf2bytes.py fonts\arialbd12.bdf fonts\arialbd12.txt
