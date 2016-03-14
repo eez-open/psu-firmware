@@ -59,11 +59,11 @@ struct WidgetCursor {
     }
 };
 
-#define PAGE_MAIN  0
-#define PAGE_EDIT  1
-#define PAGE_YESNO 2
-
+extern bool is_page_refresh;
 extern int page_index;
+
+extern data::Cursor edit_data_cursor;
+extern int edit_data_id;
 
 void refresh_page();
 font::Font *styleGetFont(Style *style);

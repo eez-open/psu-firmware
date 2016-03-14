@@ -137,7 +137,7 @@ void dialogYes() {
 
     persist_conf::saveDevice();
 
-    page_index = PAGE_MAIN;
+    page_index = PAGE_ID_MAIN;
     refresh_page();
 }
 
@@ -146,7 +146,7 @@ void dialogNo() {
 }
 
 void dialogCancel() {
-    page_index = PAGE_MAIN;
+    page_index = PAGE_ID_MAIN;
     refresh_page();
 }
 

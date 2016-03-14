@@ -1,92 +1,122 @@
 {
   "data_items": [
     {
-      "name": "channels",
+      "id": "channels",
       "description": "list of channels"
     },
     {
-      "name": "output_state",
+      "id": "output_state",
       "description": "scpi: outp?, values: 0 if output off, 1 if output on",
       "operation": "get"
     },
     {
-      "name": "output_mode",
+      "id": "output_mode",
       "description": "scpi: outp:mode?, values: 0 if CC or CV, 1 if UR",
       "operation": "get"
     },
     {
-      "name": "mon_value",
+      "id": "mon_value",
       "description": "scpi: meas:volt? if CC, meas:curr? if CV, min(meas:curr?, meas:volt?) or meas:curr? if equal )",
       "operation": "get"
     },
     {
-      "name": "volt",
+      "id": "volt",
       "description": "scpi: volt? and volt",
       "operations": "get,set"
     },
     {
-      "name": "curr",
+      "id": "curr",
       "description": "scpi: curr? and curr",
       "operations": "get,set"
     },
     {
-      "name": "ovp",
+      "id": "ovp",
       "description": "scpi: volt:prot:stat? volt:prot:trip?",
       "operations": "get"
     },
     {
-      "name": "ocp",
+      "id": "ocp",
       "description": "scpi: curr:prot:stat? curr:prot:trip?",
       "operations": "get"
     },
     {
-      "name": "opp",
+      "id": "opp",
       "description": "scpi: pow:prot:stat? pow:prot:trip?",
       "operations": "get"
     },
     {
-      "name": "otp",
+      "id": "otp",
       "description": "scpi: syst:temp:prot:stat? syst:temp:prot:trip?",
       "operations": "get"
     },
     {
-      "name": "dp",
+      "id": "dp",
       "description": "DP on or DP off",
       "operations": "get"
     },
     {
-      "name": "alert_message",
+      "id": "alert_message",
       "description":  "Message in alert dialog"
     }
   ],
   "actions": [
     {
-      "name": "slider",
-      "description": "enter slider modal mode"
+      "id": "edit",
+      "description": "enter edit modal mode"
     },
     {
-      "name": "exit",
+      "id": "edit_with_slider",
+      "description": "enter edit with slider modal mode"
+    },
+    {
+      "id": "edit_with_step",
+      "description": "enter edit with step modal mode"
+    },
+    {
+      "id": "edit_with_keypad",
+      "description": "enter edit with keypad modal mode"
+    },
+    {
+      "id": "exit",
       "description": "exit from slider or any other modal mode"
     },
     {
-      "name": "toggle_channel",
+      "id": "toggle_channel",
       "description": "turn channel on/off"
     },
     {
-      "name": "touch_screen_calibration",
+      "id": "touch_screen_calibration",
       "description": "touch screen calibration"
     },
     {
-      "name": "yes",
-      "description":  "Yes action in Yes/No dialog"
+      "id": "yes",
+      "description": "Yes action in Yes/No dialog"
     },
     {
-      "name": "no",
-      "description":  "No action in Yes/No dialog"
+      "id": "no",
+      "description": "No action in Yes/No dialog"
     },
     {
-      "name": "cancel",
-      "description":  "Cancel action in dialog"
+      "id": "cancel",
+      "description": "Cancel action in dialog"
     }
+  ],
+  "pages": [
+    {
+      "id": "main"
+    },
+    {
+      "id": "edit_with_slider"
+    },
+    {
+      "id": "edit_with_step"
+    },
+    {
+      "id": "edit_with_keypad"
+    },
+    {
+      "id": "yes_no"
+    }
+
   ]
 }

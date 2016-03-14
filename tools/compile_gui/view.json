@@ -70,20 +70,26 @@
       "color": "white"
     },
     {
-      "name": "slider",
+      "name": "tab_page",
       "font": "small",
-      "align_horizontal": "left",
-      "color": "#000000",
-      "background_color": "#FFFFFF"
+      "color": "black",
+      "background_color": "lightgray"
+    },
+    {
+      "name": "tab_page_selected",
+      "font": "small"
+    },
+    {
+      "name": "exit",
+      "font": "small",
+      "color": "black",
+      "background_color": "lightgray",
+      "horizontal_align": "right"
     }
   ],
   "pages": [
     {
-      "type": "container",
-      "x": 0,
-      "y": 0,
-      "w": 240,
-      "h": 320,
+      "id": "main",
       "widgets": [
         {
           "type": "vertical_list",
@@ -188,7 +194,7 @@
               {
                 "type": "display",
                 "data": "volt",
-                "action": "slider",
+                "action": "edit",
                 "x": 0,
                 "y": 98,
                 "w": 120,
@@ -197,7 +203,7 @@
               {
                 "type": "display",
                 "data": "curr",
-                "action": "slider",
+                "action": "edit",
                 "x": 120,
                 "y": 98,
                 "w": 120,
@@ -246,18 +252,14 @@
       ]
     },
     {
-      "type": "container",
-      "x": 0,
-      "y": 0,
-      "w": 240,
-      "h": 320,
+      "id": "edit_with_slider",
       "widgets": [
         {
           "type": "vertical_slider",
           "x": 0,
           "y": 0,
-          "w": 60,
-          "style": "slider"
+          "w": 44,
+          "h": 276
         },
         {
           "type": "vertical_list",
@@ -382,22 +384,138 @@
         },
         {
           "type": "display_string",
-          "action": "exit",
-          "x": 60,
+          "action": "edit_with_slider",
+          "x": 0,
           "y": 276,
-          "w": 180,
+          "w": 44,
           "h": 44,
-          "style": "menu",
+          "style": "tab_page_selected",
+          "text": "S"
+        },
+        {
+          "type": "display_string",
+          "action": "edit_with_step",
+          "x": 44,
+          "y": 276,
+          "w": 44,
+          "h": 44,
+          "style": "tab_page",
+          "text": "M"
+        },
+        {
+          "type": "display_string",
+          "action": "edit_with_keypad",
+          "x": 88,
+          "y": 276,
+          "w": 44,
+          "h": 44,
+          "style": "tab_page",
+          "text": "K"
+        },
+        {
+          "type": "display_string",
+          "action": "exit",
+          "x": 132,
+          "y": 276,
+          "w": 108,
+          "h": 44,
+          "style": "exit",
           "text": "Exit"
         }
       ]
     },
     {
-      "type": "container",
-      "x": 0,
-      "y": 0,
-      "w": 240,
-      "h": 320,
+      "id": "edit_with_step",
+      "widgets": [
+        {
+          "type": "display_string",
+          "action": "edit_with_slider",
+          "x": 0,
+          "y": 276,
+          "w": 44,
+          "h": 44,
+          "style": "tab_page",
+          "text": "S"
+        },
+        {
+          "type": "display_string",
+          "action": "edit_with_step",
+          "x": 44,
+          "y": 276,
+          "w": 44,
+          "h": 44,
+          "style": "tab_page_selected",
+          "text": "M"
+        },
+        {
+          "type": "display_string",
+          "action": "edit_with_keypad",
+          "x": 88,
+          "y": 276,
+          "w": 44,
+          "h": 44,
+          "style": "tab_page",
+          "text": "K"
+        },
+        {
+          "type": "display_string",
+          "action": "exit",
+          "x": 132,
+          "y": 276,
+          "w": 108,
+          "h": 44,
+          "style": "exit",
+          "text": "Exit"
+        }
+      ]
+    },
+    {
+      "id": "edit_with_keypad",
+      "widgets": [
+        {
+          "type": "display_string",
+          "action": "edit_with_slider",
+          "x": 0,
+          "y": 276,
+          "w": 44,
+          "h": 44,
+          "style": "tab_page",
+          "text": "S"
+        },
+        {
+          "type": "display_string",
+          "action": "edit_with_step",
+          "x": 44,
+          "y": 276,
+          "w": 44,
+          "h": 44,
+          "style": "tab_page",
+          "text": "M"
+        },
+        {
+          "type": "display_string",
+          "action": "edit_with_keypad",
+          "x": 88,
+          "y": 276,
+          "w": 44,
+          "h": 44,
+          "style": "tab_page_selected",
+          "text": "K"
+        },
+        {
+          "type": "display_string",
+          "action": "exit",
+          "x": 132,
+          "y": 276,
+          "w": 108,
+          "h": 44,
+          "style": "exit",
+          "text": "Exit"
+        }
+      ]
+    },
+    {
+      "id": "yes_no",
       "widgets": [
         {
           "type": "display",

@@ -56,13 +56,21 @@ namespace gui {
 #define DATA_ID_OTP 10
 #define DATA_ID_DP 11
 #define DATA_ID_ALERT_MESSAGE 12
-#define ACTION_ID_SLIDER 1
-#define ACTION_ID_EXIT 2
-#define ACTION_ID_TOGGLE_CHANNEL 3
-#define ACTION_ID_TOUCH_SCREEN_CALIBRATION 4
-#define ACTION_ID_YES 5
-#define ACTION_ID_NO 6
-#define ACTION_ID_CANCEL 7
+#define ACTION_ID_EDIT 1
+#define ACTION_ID_EDIT_WITH_SLIDER 2
+#define ACTION_ID_EDIT_WITH_STEP 3
+#define ACTION_ID_EDIT_WITH_KEYPAD 4
+#define ACTION_ID_EXIT 5
+#define ACTION_ID_TOGGLE_CHANNEL 6
+#define ACTION_ID_TOUCH_SCREEN_CALIBRATION 7
+#define ACTION_ID_YES 8
+#define ACTION_ID_NO 9
+#define ACTION_ID_CANCEL 10
+#define PAGE_ID_MAIN 0
+#define PAGE_ID_EDIT_WITH_SLIDER 1
+#define PAGE_ID_EDIT_WITH_STEP 2
+#define PAGE_ID_EDIT_WITH_KEYPAD 3
+#define PAGE_ID_YES_NO 4
 
 typedef uint16_t OBJ_OFFSET;
 
@@ -71,37 +79,16 @@ struct List {
     OBJ_OFFSET first;
 };
 
-struct ThreeStateIndicatorWidget {
+struct DisplayStringSelectWidget {
     OBJ_OFFSET style1;
+    OBJ_OFFSET text1;
     OBJ_OFFSET style2;
-    OBJ_OFFSET text;
-};
-
-struct VerticalListWidget {
-    OBJ_OFFSET item_widget;
-};
-
-struct ContainerWidget {
-    List widgets;
+    OBJ_OFFSET text2;
 };
 
 struct Document {
     List styles;
     List pages;
-};
-
-struct Style {
-    uint8_t font;
-    uint16_t flags;
-    uint16_t background_color;
-    uint16_t color;
-    uint16_t border_color;
-    uint16_t padding_horizontal;
-    uint16_t padding_vertical;
-};
-
-struct SelectWidget {
-    List widgets;
 };
 
 struct Widget {
@@ -116,15 +103,36 @@ struct Widget {
     OBJ_OFFSET specific;
 };
 
-struct DisplayStringSelectWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET text1;
-    OBJ_OFFSET style2;
-    OBJ_OFFSET text2;
+struct VerticalListWidget {
+    OBJ_OFFSET item_widget;
+};
+
+struct Style {
+    uint8_t font;
+    uint16_t flags;
+    uint16_t background_color;
+    uint16_t color;
+    uint16_t border_color;
+    uint16_t padding_horizontal;
+    uint16_t padding_vertical;
 };
 
 struct DisplayStringWidget {
     OBJ_OFFSET text;
+};
+
+struct ContainerWidget {
+    List widgets;
+};
+
+struct ThreeStateIndicatorWidget {
+    OBJ_OFFSET style1;
+    OBJ_OFFSET style2;
+    OBJ_OFFSET text;
+};
+
+struct SelectWidget {
+    List widgets;
 };
 
 #pragma pack(pop)

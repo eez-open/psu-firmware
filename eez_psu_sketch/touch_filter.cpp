@@ -88,13 +88,9 @@ public:
     }
 
 private:
-    static inline void swap(int &a, int &b) {
-        int temp = a; a = b; b = a;
-    }
-
     static inline void cmp_swap(int& a, int& b) {
         if (a > b)
-            swap(a, b);
+            util_swap(int, a, b);
     }
 
     int s[5];

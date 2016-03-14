@@ -43,7 +43,7 @@ void strcatInt(char *str, int value) {
 
 void strcatFloat(char *str, float value) {
     // mitigate "-0.00" case
-    float min = 1.0f / pow(10, FLOAT_TO_STR_PREC);
+    float min = (float) (1.0f / pow(10, FLOAT_TO_STR_PREC));
     if (abs(value) < min) {
         value = 0;
     }

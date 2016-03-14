@@ -35,8 +35,6 @@ int touch_y = -1;
 
 #ifdef EEZ_PSU_ARDUINO
 
-#define swap(type, i, j) {type t = i; i = j; j = t;}
-
 #define cbi(reg, bitmask) *reg &= ~bitmask
 #define sbi(reg, bitmask) *reg |= bitmask
 #define rbi(reg, bitmask) ((*reg) & bitmask)
@@ -203,7 +201,7 @@ void init() {
 }
 
 void tick(unsigned long tick_usec) {
-    if (last_tick_usec == 0 || tick_usec > last_tick_usec + CONF_TOUCH_READ_FREQ_USEC) {
+    if (last_tick_usec == 0 || tick_usec - last_tick_usec > CONF_TOUCH_READ_FREQ_USEC) {
     	touch_read();
 
         touch_is_pressed = filter(touch_is_pressed, touch_x, touch_y);

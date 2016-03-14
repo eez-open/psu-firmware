@@ -33,7 +33,7 @@ using namespace lcd;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static bool page_refresh;
+bool is_page_refresh;
 static bool widget_refresh;
 int page_index;
 Style *page_style;
@@ -44,6 +44,10 @@ static WidgetCursor found_widget_at_down;
 static void (*dialog_yes_callback)();
 static void (*dialog_no_callback)();
 static void (*dialog_cancel_callback)();
+
+static int edit_mode_page_index = PAGE_ID_EDIT_WITH_SLIDER;
+data::Cursor edit_data_cursor;
+int edit_data_id;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -251,7 +255,7 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
 
     if (widget_refresh) {
         lcd::lcd.fillRect(x1, y1, x2, y2);
-    } else if (!page_refresh || page_style->background_color != background_color) {
+    } else if (!is_page_refresh || page_style->background_color != background_color) {
         if (x1 <= x_offset && y1 <= y2)
             lcd::lcd.fillRect(x1, y1, x_offset, y2);
         if (x_offset + width <= x2 && y1 <= y2)
@@ -269,7 +273,7 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
         lcd::lcd.setBackColor(style->background_color);
         lcd::lcd.setColor(style->color);
     }
-    lcd::lcd.drawStr(text, x_offset, y_offset, x1, y1, x2, y2, *font, !page_refresh && !widget_refresh || page_style->background_color != background_color);
+    lcd::lcd.drawStr(text, x_offset, y_offset, x1, y1, x2, y2, *font, !is_page_refresh && !widget_refresh || page_style->background_color != background_color);
 }
 
 void fill_rect(int x, int y, int w, int h) {
@@ -366,7 +370,7 @@ static EnumWidgets draw_enum_widgets(document, draw_widget);
 void draw() {
     if (!draw_enum_widgets.next()) {
         draw_enum_widgets.start(page_index, 0, 0, false);
-        page_refresh = false;
+        is_page_refresh = false;
     }
 }
 
@@ -378,7 +382,7 @@ void refresh_widget(WidgetCursor widget_cursor) {
 }
 
 void refresh_page() {
-    page_refresh = true;
+    is_page_refresh = true;
 
     // clear screen with background color
     Widget *page = (Widget *)(document + ((Document *)document)->pages.first) + page_index;
@@ -413,11 +417,13 @@ void find_widget(int x, int y) {
     found_widget = 0;
 
     data::Cursor saved_cursor = data::getCursor();
+
     find_widget_at_x = touch::x;
     find_widget_at_y = touch::y;
     EnumWidgets enum_widgets(document, find_widget_step);
     enum_widgets.start(page_index, 0, 0, true);
     enum_widgets.next();
+
     data::setCursor(saved_cursor);
 }
 
@@ -436,11 +442,49 @@ void deselect_widget() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void enter_edit_mode(const WidgetCursor &widget_cursor) {
+    if (page_index != edit_mode_page_index) {
+        if (page_index == PAGE_ID_MAIN) {
+            edit_data_cursor = widget_cursor.cursor;
+            edit_data_id = widget_cursor.widget->data;
+        }
+
+        page_index = edit_mode_page_index;
+
+        if (page_index == ACTION_ID_EDIT_WITH_SLIDER) {
+            psu::enterTimeCriticalMode();
+        }
+
+        refresh_page();
+    }
+}
+
+void exit_edit_mode() {
+    if (page_index != PAGE_ID_MAIN) {
+        if (page_index == ACTION_ID_EDIT_WITH_SLIDER) {
+            psu::leaveTimeCriticalMode();
+        }
+        page_index = PAGE_ID_MAIN;
+        refresh_page();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 void do_action(int action_id, const WidgetCursor &widget_cursor) {
-    if (action_id == ACTION_ID_SLIDER) {
-        slider::enter_modal_mode(widget_cursor);
+    if (action_id == ACTION_ID_EDIT) {
+        enter_edit_mode(widget_cursor);
+    } if (action_id == ACTION_ID_EDIT_WITH_SLIDER) {
+        edit_mode_page_index = PAGE_ID_EDIT_WITH_SLIDER;
+        enter_edit_mode(widget_cursor);
+    } if (action_id == ACTION_ID_EDIT_WITH_STEP) {
+        edit_mode_page_index = PAGE_ID_EDIT_WITH_STEP;
+        enter_edit_mode(widget_cursor);
+    } if (action_id == ACTION_ID_EDIT_WITH_KEYPAD) {
+        edit_mode_page_index = PAGE_ID_EDIT_WITH_KEYPAD;
+        enter_edit_mode(widget_cursor);
     } else if (action_id == ACTION_ID_EXIT) {
-        slider::exit_modal_mode();
+        exit_edit_mode();
     } else if (action_id == ACTION_ID_TOUCH_SCREEN_CALIBRATION) {
         touch::calibration::enter_calibration_mode();
     } else if (action_id == ACTION_ID_YES) {
@@ -452,7 +496,9 @@ void do_action(int action_id, const WidgetCursor &widget_cursor) {
     } else {
         data::Cursor saved_cursor = data::getCursor();
         data::setCursor(widget_cursor.cursor);
+
         data::do_action(action_id);
+
         data::setCursor(saved_cursor);
     }
 }
@@ -482,15 +528,15 @@ void tick(unsigned long tick_usec) {
             if (found_widget_at_down) {
                 select_widget(found_widget_at_down);
             } else {
-                if (page_index == PAGE_EDIT) {
+                if (page_index == PAGE_ID_EDIT_WITH_SLIDER) {
                     slider::touch_down();
                 }
             }
         } else if (touch::event_type == touch::TOUCH_MOVE) {
             if (!found_widget_at_down) {
-                if (page_index == PAGE_EDIT) {
+                if (page_index == PAGE_ID_EDIT_WITH_SLIDER) {
                     slider::touch_move();
-                } else if (page_index == PAGE_YESNO) {
+                } else if (page_index == PAGE_ID_YES_NO) {
 #ifdef CONF_DEBUG
                     lcd::lcd.setColor(VGA_WHITE);
 
@@ -512,7 +558,7 @@ void tick(unsigned long tick_usec) {
                 do_action(found_widget_at_down.widget->action, found_widget_at_down);
                 found_widget_at_down = 0;
             } else {
-                if (page_index == PAGE_EDIT) {
+                if (page_index == PAGE_ID_EDIT_WITH_SLIDER) {
                     slider::touch_up();
                 }
             }
@@ -531,7 +577,7 @@ void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_
     dialog_no_callback = no_callback;
     dialog_cancel_callback = cancel_callback;
 
-    page_index = PAGE_YESNO;
+    page_index = PAGE_ID_YES_NO;
     refresh_page();
 }
 

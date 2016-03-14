@@ -20,7 +20,7 @@ import json
 import struct
 import sys
 
-BYTE_ORDER = '<'
+BYTE_ORDER = "<"
 
 #-------------------------------------------------------------------------------
 
@@ -28,56 +28,56 @@ constants = []
 
 def declare_const(name, value):
     constants.append({
-        'name': name,
-        'value': value
+        "name": name,
+        "value": value
     })
     globals()[name] = value
 
 #-------------------------------------------------------------------------------
 
-declare_const('SMALL_FONT', 1)
-declare_const('MEDIUM_FONT', 2)
-declare_const('LARGE_FONT', 3)
+declare_const("SMALL_FONT", 1)
+declare_const("MEDIUM_FONT", 2)
+declare_const("LARGE_FONT", 3)
 DEFAULT_FONT = MEDIUM_FONT
 
 #-------------------------------------------------------------------------------
 
-declare_const('STYLE_FLAGS_BORDER', 1 << 0)
+declare_const("STYLE_FLAGS_BORDER", 1 << 0)
 
-declare_const('STYLE_FLAGS_HORZ_ALIGN', 3 << 1)
-declare_const('STYLE_FLAGS_HORZ_ALIGN_LEFT', 0 << 1)
-declare_const('STYLE_FLAGS_HORZ_ALIGN_RIGHT', 1 << 1)
-declare_const('STYLE_FLAGS_HORZ_ALIGN_CENTER', 2 << 1)
+declare_const("STYLE_FLAGS_HORZ_ALIGN", 3 << 1)
+declare_const("STYLE_FLAGS_HORZ_ALIGN_LEFT", 0 << 1)
+declare_const("STYLE_FLAGS_HORZ_ALIGN_RIGHT", 1 << 1)
+declare_const("STYLE_FLAGS_HORZ_ALIGN_CENTER", 2 << 1)
 
-declare_const('STYLE_FLAGS_VERT_ALIGN', 3 << 3)
-declare_const('STYLE_FLAGS_VERT_ALIGN_TOP', 0 << 3)
-declare_const('STYLE_FLAGS_VERT_ALIGN_BOTTOM', 1 << 3)
-declare_const('STYLE_FLAGS_VERT_ALIGN_CENTER', 2 << 3)
-
-#-------------------------------------------------------------------------------
-
-declare_const('WIDGET_TYPE_NONE', 0)
-declare_const('WIDGET_TYPE_CONTAINER', 1)
-declare_const('WIDGET_TYPE_VERTICAL_LIST', 2)
-declare_const('WIDGET_TYPE_SELECT', 3)
-declare_const('WIDGET_TYPE_DISPLAY', 4)
-declare_const('WIDGET_TYPE_DISPLAY_STRING', 5)
-declare_const('WIDGET_TYPE_DISPLAY_STRING_SELECT', 6)
-declare_const('WIDGET_TYPE_THREE_STATE_INDICATOR', 7)
-declare_const('WIDGET_TYPE_VERTICAL_SLIDER', 8)
+declare_const("STYLE_FLAGS_VERT_ALIGN", 3 << 3)
+declare_const("STYLE_FLAGS_VERT_ALIGN_TOP", 0 << 3)
+declare_const("STYLE_FLAGS_VERT_ALIGN_BOTTOM", 1 << 3)
+declare_const("STYLE_FLAGS_VERT_ALIGN_CENTER", 2 << 3)
 
 #-------------------------------------------------------------------------------
 
-declare_const('DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER', 2)
+declare_const("WIDGET_TYPE_NONE", 0)
+declare_const("WIDGET_TYPE_CONTAINER", 1)
+declare_const("WIDGET_TYPE_VERTICAL_LIST", 2)
+declare_const("WIDGET_TYPE_SELECT", 3)
+declare_const("WIDGET_TYPE_DISPLAY", 4)
+declare_const("WIDGET_TYPE_DISPLAY_STRING", 5)
+declare_const("WIDGET_TYPE_DISPLAY_STRING_SELECT", 6)
+declare_const("WIDGET_TYPE_THREE_STATE_INDICATOR", 7)
+declare_const("WIDGET_TYPE_VERTICAL_SLIDER", 8)
 
 #-------------------------------------------------------------------------------
 
-COLOR_NAME_TO_HEX = {'aliceblue': 'F0F8FF', 'antiquewhite': 'FAEBD7', 'aquamarine': '7FFFD4', 'azure': 'F0FFFF', 'beige': 'F5F5DC', 'bisque': 'FFE4C4', 'black': '000000', 'blanchedalmond': 'FFEBCD', 'blue': '0000FF', 'blueviolet': '8A2BE2', 'brown': 'A52A2A', 'burlywood': 'DEB887', 'cadetblue': '5F9EA0', 'chartreuse': '7FFF00', 'chocolate': 'D2691E', 'coral': 'FF7F50', 'cornflowerblue': '6495ED', 'cornsilk': 'FFF8DC', 'cyan': '00FFFF', 'darkgoldenrod': 'B8860B', 'darkgreen': '006400', 'darkkhaki': 'BDB76B', 'darkolivegreen': '556B2F', 'darkorange': 'FF8C00', 'darkorchid': '9932CC', 'darksalmon': 'E9967A', 'darkseagreen': '8FBC8F', 'darkslateblue': '483D8B', 'darkslategray': '2F4F4F', 'darkturquoise': '00CED1', 'darkviolet': '9400D3', 'deeppink': 'FF1493', 'deepskyblue': '00BFFF', 'dimgray': '696969', 'dodgerblue': '1E90FF', 'firebrick': 'B22222', 'floralwhite': 'FFFAF0', 'forestgreen': '228B22', 'gainsboro': 'DCDCDC', 'ghostwhite': 'F8F8FF', 'gold': 'FFD700', 'goldenrod': 'DAA520', 'gray': '808080', 'green': '008000', 'greenyellow': 'ADFF2F', 'honeydew': 'F0FFF0', 'hotpink': 'FF69B4', 'indianred': 'CD5C5C', 'ivory': 'FFFFF0', 'khaki': 'F0E68C', 'lavender': 'E6E6FA', 'lavenderblush': 'FFF0F5', 'lawngreen': '7CFC00', 'lemonchiffon': 'FFFACD', 'lightblue': 'ADD8E6', 'lightcoral': 'F08080', 'lightcyan': 'E0FFFF', 'lightgoldenrod': 'EEDD82', 'lightgoldenrodyellow': 'FAFAD2', 'lightgray': 'D3D3D3', 'lightpink': 'FFB6C1', 'lightsalmon': 'FFA07A', 'lightseagreen': '20B2AA', 'lightskyblue': '87CEFA', 'lightslate': '8470FF', 'lightslategray': '778899', 'lightsteelblue': 'B0C4DE', 'lightyellow': 'FFFFE0', 'limegreen': '32CD32', 'linen': 'FAF0E6', 'magenta': 'FF00FF', 'maroon': 'B03060', 'mediumaquamarine': '66CDAA', 'mediumblue': '0000CD', 'mediumorchid': 'BA55D3', 'mediumpurple': '9370DB', 'mediumseagreen': '3CB371', 'mediumslateblue': '7B68EE', 'mediumspringgreen': '00FA9A', 'mediumturquoise': '48D1CC', 'mediumviolet': 'C71585', 'midnightblue': '191970', 'mintcream': 'F5FFFA', 'mistyrose': 'FFE4E1', 'moccasin': 'FFE4B5', 'navajowhite': 'FFDEAD', 'navy': '000080', 'oldlace': 'FDF5E6', 'olivedrab': '6B8E23', 'orange': 'FFA500', 'orangered': 'FF4500', 'orchid': 'DA70D6', 'palegoldenrod': 'EEE8AA', 'palegreen': '98FB98', 'paleturquoise': 'AFEEEE', 'palevioletred': 'DB7093', 'papayawhip': 'FFEFD5', 'peachpuff': 'FFDAB9', 'peru': 'CD853F', 'pink': 'FFC0CB', 'plum': 'DDA0DD', 'powderblue': 'B0E0E6', 'purple': 'A020F0', 'red': 'FF0000', 'rosybrown': 'BC8F8F', 'royalblue': '4169E1', 'saddlebrown': '8B4513', 'salmon': 'FA8072', 'sandybrown': 'F4A460', 'seagreen': '2E8B57', 'seashell': 'FFF5EE', 'sienna': 'A0522D', 'skyblue': '87CEEB', 'slateblue': '6A5ACD', 'slategray': '708090', 'snow': 'FFFAFA', 'springgreen': '00FF7F', 'steelblue': '4682B4', 'tan': 'D2B48C', 'thistle': 'D8BFD8', 'tomato': 'FF6347', 'turquoise': '40E0D0', 'violet': 'EE82EE', 'violetred': 'D02090', 'wheat': 'F5DEB3', 'white': 'FFFFFF', 'whitesmoke': 'F5F5F5', 'yellow': 'FFFF00', 'yellowgreen': '9ACD32'}
+declare_const("DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER", 2)
+
+#-------------------------------------------------------------------------------
+
+COLOR_NAME_TO_HEX = {"aliceblue": "F0F8FF", "antiquewhite": "FAEBD7", "aquamarine": "7FFFD4", "azure": "F0FFFF", "beige": "F5F5DC", "bisque": "FFE4C4", "black": "000000", "blanchedalmond": "FFEBCD", "blue": "0000FF", "blueviolet": "8A2BE2", "brown": "A52A2A", "burlywood": "DEB887", "cadetblue": "5F9EA0", "chartreuse": "7FFF00", "chocolate": "D2691E", "coral": "FF7F50", "cornflowerblue": "6495ED", "cornsilk": "FFF8DC", "cyan": "00FFFF", "darkgoldenrod": "B8860B", "darkgreen": "006400", "darkkhaki": "BDB76B", "darkolivegreen": "556B2F", "darkorange": "FF8C00", "darkorchid": "9932CC", "darksalmon": "E9967A", "darkseagreen": "8FBC8F", "darkslateblue": "483D8B", "darkslategray": "2F4F4F", "darkturquoise": "00CED1", "darkviolet": "9400D3", "deeppink": "FF1493", "deepskyblue": "00BFFF", "dimgray": "696969", "dodgerblue": "1E90FF", "firebrick": "B22222", "floralwhite": "FFFAF0", "forestgreen": "228B22", "gainsboro": "DCDCDC", "ghostwhite": "F8F8FF", "gold": "FFD700", "goldenrod": "DAA520", "gray": "808080", "green": "008000", "greenyellow": "ADFF2F", "honeydew": "F0FFF0", "hotpink": "FF69B4", "indianred": "CD5C5C", "ivory": "FFFFF0", "khaki": "F0E68C", "lavender": "E6E6FA", "lavenderblush": "FFF0F5", "lawngreen": "7CFC00", "lemonchiffon": "FFFACD", "lightblue": "ADD8E6", "lightcoral": "F08080", "lightcyan": "E0FFFF", "lightgoldenrod": "EEDD82", "lightgoldenrodyellow": "FAFAD2", "lightgray": "D3D3D3", "lightpink": "FFB6C1", "lightsalmon": "FFA07A", "lightseagreen": "20B2AA", "lightskyblue": "87CEFA", "lightslate": "8470FF", "lightslategray": "778899", "lightsteelblue": "B0C4DE", "lightyellow": "FFFFE0", "limegreen": "32CD32", "linen": "FAF0E6", "magenta": "FF00FF", "maroon": "B03060", "mediumaquamarine": "66CDAA", "mediumblue": "0000CD", "mediumorchid": "BA55D3", "mediumpurple": "9370DB", "mediumseagreen": "3CB371", "mediumslateblue": "7B68EE", "mediumspringgreen": "00FA9A", "mediumturquoise": "48D1CC", "mediumviolet": "C71585", "midnightblue": "191970", "mintcream": "F5FFFA", "mistyrose": "FFE4E1", "moccasin": "FFE4B5", "navajowhite": "FFDEAD", "navy": "000080", "oldlace": "FDF5E6", "olivedrab": "6B8E23", "orange": "FFA500", "orangered": "FF4500", "orchid": "DA70D6", "palegoldenrod": "EEE8AA", "palegreen": "98FB98", "paleturquoise": "AFEEEE", "palevioletred": "DB7093", "papayawhip": "FFEFD5", "peachpuff": "FFDAB9", "peru": "CD853F", "pink": "FFC0CB", "plum": "DDA0DD", "powderblue": "B0E0E6", "purple": "A020F0", "red": "FF0000", "rosybrown": "BC8F8F", "royalblue": "4169E1", "saddlebrown": "8B4513", "salmon": "FA8072", "sandybrown": "F4A460", "seagreen": "2E8B57", "seashell": "FFF5EE", "sienna": "A0522D", "skyblue": "87CEEB", "slateblue": "6A5ACD", "slategray": "708090", "snow": "FFFAFA", "springgreen": "00FF7F", "steelblue": "4682B4", "tan": "D2B48C", "thistle": "D8BFD8", "tomato": "FF6347", "turquoise": "40E0D0", "violet": "EE82EE", "violetred": "D02090", "wheat": "F5DEB3", "white": "FFFFFF", "whitesmoke": "F5F5F5", "yellow": "FFFF00", "yellowgreen": "9ACD32"}
 
 def HTMLColorToRGB(color_str):
     """ convert #RRGGBB to an (R, G, B) tuple """
     color_str = color_str.strip()
-    if color_str[0] == '#': color_str = color_str[1:]
+    if color_str[0] == "#": color_str = color_str[1:]
     if len(color_str) != 6:
         raise ValueError("input #%s is not in #RRGGBB format" % color_str)
     r, g, b = color_str[:2], color_str[2:4], color_str[4:]
@@ -106,21 +106,21 @@ def get_color(color_str):
 #-------------------------------------------------------------------------------
 
 DEFAULT_STYLE = {
-    'font': DEFAULT_FONT,
-    'flags': 0,
-    'background_color': get_color('white'),
-    'color': get_color('black'),
-    'border_color': get_color('black'),
-    'padding_horizontal': 0,
-    'padding_vertical': 0
+    "font": DEFAULT_FONT,
+    "flags": 0,
+    "background_color": get_color("white"),
+    "color": get_color("black"),
+    "border_color": get_color("black"),
+    "padding_horizontal": 0,
+    "padding_vertical": 0
 }
 
 #-------------------------------------------------------------------------------
 
 class Output:
-    def __init__(self, single_indent='    '):
+    def __init__(self, single_indent="    "):
         self.single_indent = single_indent
-        self.total_indent = ''
+        self.total_indent = ""
         self.num_errors = 0
         self.num_warnings = 0
 
@@ -184,7 +184,7 @@ class Struct(Field):
         self.object_size = offset
 
     def pack(self):
-        return struct.pack(BYTE_ORDER + 'H', self.object_offset)
+        return struct.pack(BYTE_ORDER + "H", self.object_offset)
 
     def pack_object(self):
         packed_data = []
@@ -193,7 +193,7 @@ class Struct(Field):
         return packed_data
 
     def c_type(self):
-        return 'OBJ_OFFSET'
+        return "OBJ_OFFSET"
 
 class StructPtr(Field):
     def __init__(self, name, value):
@@ -206,10 +206,10 @@ class StructPtr(Field):
             objects.append(self.value)
 
     def pack(self):
-        return struct.pack(BYTE_ORDER + 'H', self.value.object_offset if self.value else 0)
+        return struct.pack(BYTE_ORDER + "H", self.value.object_offset if self.value else 0)
 
     def c_type(self):
-        return 'OBJ_OFFSET'
+        return "OBJ_OFFSET"
 
 class StructWeakPtr(StructPtr):
     def __init__(self, name, value):
@@ -232,10 +232,10 @@ class List(Field):
             objects.append(item)
 
     def pack(self):
-        return struct.pack(BYTE_ORDER + 'BH', len(self.items), self.items[0].object_offset if len(self.items) > 0 else 0)
+        return struct.pack(BYTE_ORDER + "BH", len(self.items), self.items[0].object_offset if len(self.items) > 0 else 0)
 
     def c_type(self):
-        return 'List'
+        return "List"
 
 class String(Field):
     def __init__(self, name, value):
@@ -251,14 +251,14 @@ class String(Field):
             self.ap = True
 
     def pack(self):
-        return struct.pack(BYTE_ORDER + 'H', self.object_offset)
+        return struct.pack(BYTE_ORDER + "H", self.object_offset)
 
     def pack_object(self):
         packed_data = (self.value + chr(0)).encode()
         return packed_data
 
     def c_type(self):
-        return 'OBJ_OFFSET'
+        return "OBJ_OFFSET"
 
 class UInt8(Field):
     def __init__(self, name, value):
@@ -267,10 +267,10 @@ class UInt8(Field):
         self.size = 1
 
     def pack(self):
-        return struct.pack(BYTE_ORDER + 'B', self.value)
+        return struct.pack(BYTE_ORDER + "B", self.value)
 
     def c_type(self):
-        return 'uint8_t'
+        return "uint8_t"
 
 class UInt16(Field):
     def __init__(self, name, value):
@@ -279,10 +279,10 @@ class UInt16(Field):
         self.size = 2
 
     def pack(self):
-        return struct.pack(BYTE_ORDER + 'H', self.value)
+        return struct.pack(BYTE_ORDER + "H", self.value)
 
     def c_type(self):
-        return 'uint16_t'
+        return "uint16_t"
     
 #-------------------------------------------------------------------------------
 
@@ -398,10 +398,11 @@ class Parser:
         if name in collection:
             style = self.get_style(collection[name])
             if not style:
-                if mandatory:
-                    self.trace.error("%s: style '%s' not found" % (name, collection[name]))
+                self.trace.error("%s: style '%s' not found" % (name, collection[name]))
                 style = self.get_default_style()
         else:
+            if mandatory:
+                self.trace.error("%s: missing" % name)
             style = self.get_default_style()
         struct.addField(StructWeakPtr(name, style))
 
@@ -441,53 +442,59 @@ class Parser:
             value = default_value
         struct.addField(UInt8(name, value))
 
+    def parse_data_section(self, section_name, start_id_number, const_prefix, section_dict):
+        if section_name in self.data:
+            if isinstance(self.data[section_name], list):
+                id_number = start_id_number
+                for item in self.data[section_name]:
+                    if not "id" in item:
+                        self.trace.error("data: id is missing in %s", section_name)
+                        continue
+                    id = item["id"]
+                    section_dict[id] = id_number
+                    declare_const(const_prefix + id.upper(), id_number)
+                    id_number += 1
+            else:
+                self.trace.error("data: %s is not a JSON list" % section_name)
+        else:
+            self.trace.error("data: %s is missing" % section_name)
+
     def parse_data(self):
         self.data_items = {}
-
-        if 'data_items' in self.data:
-            if isinstance(self.data['data_items'], list):
-                data_item_id = 1
-                for data_item in self.data['data_items']:
-                    if not 'name' in data_item:
-                        self.trace.error("data: unnamed data item found")
-                        continue
-                    data_item_name = data_item["name"]
-                    self.data_items[data_item_name] = data_item_id
-                    declare_const("DATA_ID_" + data_item_name.upper(), data_item_id)
-                    data_item_id += 1
-            else:
-                self.trace.error("data: data_items is not a JSON list")
-        else:
-            self.trace.error("data: data_items is missing")
+        self.parse_data_section("data_items", 1, "DATA_ID_", self.data_items)
 
         self.actions = {}
+        self.parse_data_section("actions", 1, "ACTION_ID_", self.actions)
 
-        if 'actions' in self.data:
-            if isinstance(self.data['actions'], list):
-                action_id = 1
-                for action in self.data['actions']:
-                    if not 'name' in action:
-                        self.trace.error("data: unnamed action found")
-                        continue
-                    action_name = action["name"]
-                    self.actions[action_name] = action_id
-                    declare_const("ACTION_ID_" + action_name.upper(), action_id)
-                    action_id += 1
-            else:
-                self.trace.error("data: actions is not a JSON list")
-        else:
-            self.trace.error("data: actions is missing")
+        self.pages = {}
+        self.parse_data_section("pages", 0, "PAGE_ID_", self.pages)
 
     def parse_view(self):
-        self.document = Struct('document', 'Document')
+        self.document = Struct("document", "Document")
 
-        styles = List('styles')
-        for style in self.view['styles']:
+        styles = List("styles")
+        for style in self.view["styles"]:
             styles.addItem(self.parse_style(style))
         self.document.addField(styles)
 
-        pages = List('pages')
-        for index, page in enumerate(self.view['pages']):
+        pages = List("pages")
+        for index, page in enumerate(self.view["pages"]):
+            if not "id" in page:
+                self.trace.error("page: missing id")
+                continue
+            id = page["id"]
+            if not isinstance(id, str):
+                self.trace.error("page: id is not string")
+                continue
+            if not id in self.pages:
+                self.trace.error("page: unknown page id '%s'" % id)
+                continue
+
+            page["type"] = "container"
+            page["x"] = 0
+            page["y"] = 0
+            page["w"] = 240
+            page["h"] = 320
             pages.addItem(self.parse_widget(index, page))
         self.document.addField(pages)
 
@@ -495,7 +502,7 @@ class Parser:
         return self.styles.get(style_name.lower())
 
     def get_default_style(self):
-        return self.get_style('default')
+        return self.get_style("default")
 
     def get_style_property(self, style, name):
         if style:
@@ -507,85 +514,85 @@ class Parser:
             return DEFAULT_STYLE[name]
 
     def parse_style(self, style):
-        result = Struct('style', 'Style')
+        result = Struct("style", "Style")
 
-        if not 'name' in style:
+        if not "name" in style:
             self.trace.error("unnamed style found")
             return result
 
-        self.trace.info("Style '%s'" % style['name'])
+        self.trace.info("Style '%s'" % style["name"])
 
         self.trace.indent()
 
-        if 'base' in style:
-            default_style = self.get_style(style['base'])
+        if "base" in style:
+            default_style = self.get_style(style["base"])
             if not default_style:
-                self.trace.error("unknown base style '%s'" % style['base'])
+                self.trace.error("unknown base style '%s'" % style["base"])
         else:
             default_style = None
         if not default_style:
             default_style = self.get_default_style()
 
         # font
-        if 'font' in style:
-            font_str = style['font'].lower()
-            if font_str == 'small':
+        if "font" in style:
+            font_str = style["font"].lower()
+            if font_str == "small":
                 font = SMALL_FONT
-            elif font_str == 'medium':
+            elif font_str == "medium":
                 font = MEDIUM_FONT
-            elif font_str == 'large':
+            elif font_str == "large":
                 font = LARGE_FONT
             else:
-                self.trace.error("unknown font '%s'" % style['font'])
+                self.trace.error("unknown font '%s'" % style["font"])
                 font = DEFAULT_FONT
         else:
-            font = self.get_style_property(default_style, 'font')
-        result.addField(UInt8('font', font))
+            font = self.get_style_property(default_style, "font")
+        result.addField(UInt8("font", font))
 
         # flags
-        flags = self.get_style_property(default_style, 'flags')
-        if 'border_size' in style:
+        flags = self.get_style_property(default_style, "flags")
+        if "border_size" in style:
             flags &= ~STYLE_FLAGS_BORDER
-            if style['border_size'] == 0:
+            if style["border_size"] == 0:
                 pass
-            elif style['border_size'] == 1:
+            elif style["border_size"] == 1:
                 flags |= STYLE_FLAGS_BORDER
             else:
                 self.trace.error("only border_size 0 or 1 is supported")
-        if 'align_horizontal' in  style:
+        if "align_horizontal" in  style:
             flags &= ~STYLE_FLAGS_HORZ_ALIGN
-            align_str = style['align_horizontal'].lower()
-            if align_str == 'left':
+            align_str = style["align_horizontal"].lower()
+            if align_str == "left":
                 pass
-            elif align_str == 'right':
+            elif align_str == "right":
                 flags |= STYLE_FLAGS_HORZ_ALIGN_RIGHT
-            elif align_str == 'center':
+            elif align_str == "center":
                 flags |= STYLE_FLAGS_HORZ_ALIGN_CENTER
             else:
                 self.trace.error("only align_horizontal left, right or center is allowed")
-        if 'align_vertical' in  style:
+        if "align_vertical" in  style:
             flags &= ~STYLE_FLAGS_VERT_ALIGN
-            align_str = style['align_vertical'].lower()
-            if align_str == 'top':
+            align_str = style["align_vertical"].lower()
+            if align_str == "top":
                 pass
-            elif align_str == 'bottom':
+            elif align_str == "bottom":
                 flags |= STYLE_FLAGS_VERT_ALIGN_BOTTOM
-            elif align_str == 'center':
+            elif align_str == "center":
                 flags |= STYLE_FLAGS_VERT_ALIGN_CENTER
             else:
                 self.trace.error("only align_vertical top, bottom or center is allowed")
-        result.addField(UInt16('flags', flags))
+        result.addField(UInt16("flags", flags))
 
-        self.addColorField(result, style, 'background_color', self.get_style_property(default_style, 'background_color'), False)
-        self.addColorField(result, style, 'color', self.get_style_property(default_style, 'color'), False)
-        self.addColorField(result, style, 'border_color', self.get_style_property(default_style, 'border_color'), False)
+        self.addColorField(result, style, "background_color", self.get_style_property(default_style, "background_color"), False)
+        self.addColorField(result, style, "color", self.get_style_property(default_style, "color"), False)
+        self.addColorField(result, style, "border_color", self.get_style_property(default_style, "border_color"), False)
 
-        self.addUInt16Field(result, style, 'padding_horizontal', self.get_style_property(default_style, 'padding_horizontal'), False)
-        self.addUInt16Field(result, style, 'padding_vertical', self.get_style_property(default_style, 'padding_vertical'), False)
+        self.addUInt16Field(result, style, "padding_horizontal", self.get_style_property(default_style, "padding_horizontal"), False)
+        self.addUInt16Field(result, style, "padding_vertical", self.get_style_property(default_style, "padding_vertical"), False)
 
         self.trace.unindent()
 
-        self.styles[style['name'].lower()] = result
+        self.styles[style["name"].lower()] = result
 
         return result
 
@@ -593,25 +600,25 @@ class Parser:
         self.trace.info("Widget %d" % index)
         self.trace.indent()
 
-        result = Struct('widget', 'Widget')
+        result = Struct("widget", "Widget")
 
         if "type" in widget:
-            type_str = widget['type'].lower()
-            if type_str == 'container':
+            type_str = widget["type"].lower()
+            if type_str == "container":
                 widget_type = WIDGET_TYPE_CONTAINER
-            elif type_str == 'vertical_list':
+            elif type_str == "vertical_list":
                 widget_type = WIDGET_TYPE_VERTICAL_LIST
-            elif type_str == 'select':
+            elif type_str == "select":
                 widget_type = WIDGET_TYPE_SELECT
-            elif type_str == 'display':
+            elif type_str == "display":
                 widget_type = WIDGET_TYPE_DISPLAY
-            elif type_str == 'display_string':
+            elif type_str == "display_string":
                 widget_type = WIDGET_TYPE_DISPLAY_STRING
-            elif type_str == 'display_string_select':
+            elif type_str == "display_string_select":
                 widget_type = WIDGET_TYPE_DISPLAY_STRING_SELECT
-            elif type_str == 'three_state_indicator':
+            elif type_str == "three_state_indicator":
                 widget_type = WIDGET_TYPE_THREE_STATE_INDICATOR
-            elif type_str == 'vertical_slider':
+            elif type_str == "vertical_slider":
                 widget_type = WIDGET_TYPE_VERTICAL_SLIDER
             else:
                 self.trace.error("unkown type '%s'" % type_str)
@@ -625,61 +632,61 @@ class Parser:
         # data
         if widget_type == WIDGET_TYPE_CONTAINER or widget_type == WIDGET_TYPE_DISPLAY_STRING or widget_type == WIDGET_TYPE_VERTICAL_SLIDER:
             # data not used
-            result.addField(UInt8('data', 0))
+            result.addField(UInt8("data", 0))
         else:
-            self.addDataField(result, widget, 'data', 0)
+            self.addDataField(result, widget, "data", 0)
 
         # action
-        self.addActionField(result, widget, 'action', 0, parent)
+        self.addActionField(result, widget, "action", 0, parent)
 
         #
-        self.addDisplayPositionOrSizeField(result, widget, 'x', 0, parent=parent)
-        self.addDisplayPositionOrSizeField(result, widget, 'y', 0, parent=parent)
-        self.addDisplayPositionOrSizeField(result, widget, 'w', 0, parent=parent)
-        self.addDisplayPositionOrSizeField(result, widget, 'h', 0, parent=parent)
+        self.addDisplayPositionOrSizeField(result, widget, "x", 0, parent=parent)
+        self.addDisplayPositionOrSizeField(result, widget, "y", 0, parent=parent)
+        self.addDisplayPositionOrSizeField(result, widget, "w", 0, parent=parent)
+        self.addDisplayPositionOrSizeField(result, widget, "h", 0, parent=parent)
 
-        self.addStyleField(result, widget, 'style', mandatory=False)
+        self.addStyleField(result, widget, "style", mandatory=False)
 
         if widget_type == WIDGET_TYPE_CONTAINER:
-            specific_widget_data = Struct(None, 'ContainerWidget')
+            specific_widget_data = Struct(None, "ContainerWidget")
 
-            container_widgets = List('widgets')
-            if 'widgets' in widget:
-                for index, w in enumerate(widget['widgets']):
+            container_widgets = List("widgets")
+            if "widgets" in widget:
+                for index, w in enumerate(widget["widgets"]):
                     container_widgets.addItem(self.parse_widget(index, w, result))
             specific_widget_data.addField(container_widgets)
         elif widget_type == WIDGET_TYPE_SELECT:
-            specific_widget_data = Struct(None, 'SelectWidget')
+            specific_widget_data = Struct(None, "SelectWidget")
 
-            select_widgets = List('widgets')
-            if 'widgets' in widget:
-                for index, w in enumerate(widget['widgets']):
+            select_widgets = List("widgets")
+            if "widgets" in widget:
+                for index, w in enumerate(widget["widgets"]):
                     select_widgets.addItem(self.parse_widget(index, w, result))
             specific_widget_data.addField(select_widgets)
         elif widget_type == WIDGET_TYPE_VERTICAL_LIST:
-            specific_widget_data = Struct(None, 'VerticalListWidget')
+            specific_widget_data = Struct(None, "VerticalListWidget")
 
-            if 'item_widget' in widget:
-                specific_widget_data.addField(StructPtr("item_widget", self.parse_widget(0, widget['item_widget'], result)))
+            if "item_widget" in widget:
+                specific_widget_data.addField(StructPtr("item_widget", self.parse_widget(0, widget["item_widget"], result)))
             else:
                 self.trace.error("item_widget is missing")
                 specific_widget_data.addField(StructPtr("item_widget", 0))
         elif widget_type == WIDGET_TYPE_THREE_STATE_INDICATOR:
-            specific_widget_data = Struct(None, 'ThreeStateIndicatorWidget')
+            specific_widget_data = Struct(None, "ThreeStateIndicatorWidget")
 
-            self.addStyleField(specific_widget_data, widget, 'style1')
-            self.addStyleField(specific_widget_data, widget, 'style2')
+            self.addStyleField(specific_widget_data, widget, "style1")
+            self.addStyleField(specific_widget_data, widget, "style2")
 
-            self.addStringField(specific_widget_data, widget, 'text', "")
+            self.addStringField(specific_widget_data, widget, "text", "")
         elif widget_type == WIDGET_TYPE_DISPLAY_STRING:
-            specific_widget_data = Struct(None, 'DisplayStringWidget')
-            self.addStringField(specific_widget_data, widget, 'text', "")
+            specific_widget_data = Struct(None, "DisplayStringWidget")
+            self.addStringField(specific_widget_data, widget, "text", "")
         elif widget_type == WIDGET_TYPE_DISPLAY_STRING_SELECT:
-            specific_widget_data = Struct(None, 'DisplayStringSelectWidget')
-            self.addStyleField(specific_widget_data, widget, 'style1', mandatory=False)
-            self.addStringField(specific_widget_data, widget, 'text1', "")
-            self.addStyleField(specific_widget_data, widget, 'style2', mandatory=False)
-            self.addStringField(specific_widget_data, widget, 'text2', "")
+            specific_widget_data = Struct(None, "DisplayStringSelectWidget")
+            self.addStyleField(specific_widget_data, widget, "style1", mandatory=False)
+            self.addStringField(specific_widget_data, widget, "text1", "")
+            self.addStyleField(specific_widget_data, widget, "style2", mandatory=False)
+            self.addStringField(specific_widget_data, widget, "text2", "")
         else:
             specific_widget_data = 0
 
@@ -715,20 +722,20 @@ def finish(document):
     return objects
 
 def generate_source_code(objects, tab):
-    result = '#pragma pack(push, 1)\n\n'
+    result = "#pragma pack(push, 1)\n\n"
 
     #generate constants
     for constant in constants:
-        result += '#define ' + constant['name'] + ' ' + str(constant['value']) + '\n'
-    result += '\n'
+        result += "#define " + constant["name"] + " " + str(constant["value"]) + "\n"
+    result += "\n"
 
     #
-    result += 'typedef uint16_t OBJ_OFFSET;\n\n'
+    result += "typedef uint16_t OBJ_OFFSET;\n\n"
 
-    result += 'struct List {\n'
-    result += tab + 'uint8_t count;\n'
-    result += tab + 'OBJ_OFFSET first;\n'
-    result += '};\n\n'
+    result += "struct List {\n"
+    result += tab + "uint8_t count;\n"
+    result += tab + "OBJ_OFFSET first;\n"
+    result += "};\n\n"
 
     # generate structures
     structs = {}
@@ -738,12 +745,12 @@ def generate_source_code(objects, tab):
             structs[object.struct_name] = object
 
     for struct in structs.values():
-        result += 'struct ' + struct.struct_name + ' {\n'
+        result += "struct " + struct.struct_name + " {\n"
         for field in struct.fields:
-            result += tab + field.c_type() + ' ' + field.name + ';\n'
-        result += '};\n\n'
+            result += tab + field.c_type() + " " + field.name + ";\n"
+        result += "};\n\n"
 
-    result += '#pragma pack(pop)\n\n'
+    result += "#pragma pack(pop)\n\n"
 
     return result
 
@@ -755,23 +762,23 @@ def pack(objects):
     return packed_data
 
 def to_c_buffer(self, tab, num_columns):
-    c_buffer = '{'
+    c_buffer = "{"
     column_index = 0
     for byte in packed_data:
         if (column_index % num_columns) == 0:
             if column_index > 0:
-                c_buffer += ','
-            c_buffer += '\n' + tab
+                c_buffer += ","
+            c_buffer += "\n" + tab
         else:
-            c_buffer += ', '
-        c_buffer += '0x%0.2X' % byte
+            c_buffer += ", "
+        c_buffer += "0x%0.2X" % byte
         column_index += 1
-    c_buffer += '\n}'
+    c_buffer += "\n}"
     return c_buffer
     
 #-------------------------------------------------------------------------------
 
-parser = Parser('./data.json', './view.json')
+parser = Parser("./data.json", "./view.json")
 print("\n%d errors, %d warnings" % (parser.num_errors(), parser.num_warnings()))
 
 if parser.num_errors() == 0:
@@ -785,7 +792,7 @@ if parser.num_errors() == 0:
 
     output_file.write(COPYRIGHT_NOTICE + "\n\nnamespace eez {\nnamespace psu {\nnamespace gui {\n\n")
 
-    c_structs = generate_source_code(objects, '    ')
+    c_structs = generate_source_code(objects, "    ")
     output_file.write(c_structs)
 
     output_file.write("extern uint8_t document[];\n\n}\n}\n} // namespace eez::psu::gui\n")
@@ -802,8 +809,8 @@ if parser.num_errors() == 0:
     output_file.write(COPYRIGHT_NOTICE + "\n\n#include \"psu.h\"\n\nnamespace eez {\nnamespace psu {\nnamespace gui {\n\n")
 
     packed_data = pack(objects)
-    c_buffer = to_c_buffer(packed_data, '    ', 16)
-    output_file.write('uint8_t document[%d] = %s;\n' % (len(packed_data), c_buffer))
+    c_buffer = to_c_buffer(packed_data, "    ", 16)
+    output_file.write("uint8_t document[%d] = %s;\n" % (len(packed_data), c_buffer))
 
     output_file.write("\n}\n}\n} // namespace eez::psu::gui\n")
 

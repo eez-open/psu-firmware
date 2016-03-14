@@ -19,123 +19,152 @@
 #include "psu.h"
 #include "gui_slider.h"
 
+#define CONF_SLIDER_THUMB_HEIGHT 9
+#define CONF_SLIDER_THUMB_COLOR VGA_BLACK
+#define CONF_SLIDER_MIN_MAX_MARKS_COLOR VGA_RED
+#define CONF_SLIDER_TICKS_COLOR 0xE0, 0xE0, 0xE0
+
 namespace eez {
 namespace psu {
 namespace gui {
 namespace slider {
 
-static data::Cursor data_cursor;
-static int data_id;
 static int width;
-static int height;
+static float height;
 
 static int start_y;
 static float start_value;
 
-static int last_draw_y_offset;
+static int last_y_value;
 
 static int last_scale;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void enter_modal_mode(const WidgetCursor &widget_cursor) {
-    if (page_index == PAGE_MAIN) {
-        psu::enterTimeCriticalMode();
+void draw_scale(Widget *widget, int y_from, int y_to, int y_min, int y_max, int y_value, int f, int d) {
+    Style *style = (Style *)(document + widget->style);
 
-        page_index = PAGE_EDIT;
+    int x1 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->x;
+    int l1 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w / 2;
 
-        data_cursor = widget_cursor.cursor;
-        data_id = widget_cursor.widget->data;
-        last_draw_y_offset = -1;
+    int x2 = x1 + l1;
+    int l2 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w - l1;
 
-        data::Cursor saved_cursor = data::getCursor();
-        data::setCursor(data_cursor);
-        data::setCursor(saved_cursor);
-        
-        refresh_page();
+    int s = 10 * f / d;
+
+    for (int y_i = y_from; y_i <= y_to; ++y_i) {
+        int y = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widget->y + widget->h) - 1 - y_i;
+
+        // draw ticks
+        if (y_i == y_min || y_i == y_max) {
+            lcd::lcd.setColor(CONF_SLIDER_MIN_MAX_MARKS_COLOR);
+            lcd::lcd.drawHLine(x1, y, l1);
+        }
+        else if (y_i % s == 0) {
+            lcd::lcd.setColor(CONF_SLIDER_TICKS_COLOR);
+            lcd::lcd.drawHLine(x1, y, l1);
+        }
+        else if (y_i % (s / 2) == 0) {
+            lcd::lcd.setColor(CONF_SLIDER_TICKS_COLOR);
+            lcd::lcd.drawHLine(x1, y, l1 / 2);
+        }
+        else if (y_i % (s / 10) == 0) {
+            lcd::lcd.setColor(CONF_SLIDER_TICKS_COLOR);
+            lcd::lcd.drawHLine(x1, y, l1 / 4);
+        }
+        else {
+            lcd::lcd.setColor(style->background_color);
+            lcd::lcd.drawHLine(x1, y, l1);
+        }
+
+        int d = abs(y_i - y_value);
+        if (d <= CONF_SLIDER_THUMB_HEIGHT / 2) {
+            // draw thumb
+            lcd::lcd.setColor(CONF_SLIDER_THUMB_COLOR);
+            lcd::lcd.drawHLine(x2 + d, y, l2 - d);
+            if (y_i != y_value) {
+                lcd::lcd.setColor(style->background_color);
+                lcd::lcd.drawHLine(x2, y, d);
+            }
+        }
+        else {
+            // erase
+            lcd::lcd.setColor(style->background_color);
+            lcd::lcd.drawHLine(x2, y, l2);
+        }
     }
 }
-
-void exit_modal_mode() {
-    if (page_index == PAGE_EDIT) {
-        psu::leaveTimeCriticalMode();
-
-        page_index = PAGE_MAIN;
-
-        refresh_page();
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////
 
 bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
     data::Cursor saved_cursor = data::getCursor();
-    data::setCursor(data_cursor);
+    data::setCursor(edit_data_cursor);
 
     bool changed;
-    data::Value value = data::get(data_id, changed);
+    float value = data::get(edit_data_id, changed).getFloat();
+
+
+    float min = data::getMin(edit_data_id).getFloat();
+    float max = data::getMax(edit_data_id).getFloat();
+
+    edit_data_cursor = data::getCursor();
+    data::setCursor(saved_cursor);
 
     if (changed || refresh) {
-        // draw scale min and max
-        data::Value min = data::getMin(data_id);
-        data::Value max = data::getMax(data_id);
-
-        char text[32];
 
         Style *style = (Style *)(document + widget->style);
         font::Font *font = styleGetFont(style);
         int fontHeight = font->getAscent() / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
 
-        max.toTextNoUnit(text);
-        drawText(text, x, y, (int)widget->w, fontHeight, style, inverse);
+        int f = (int)floor(DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->h / max);
+        int d;
+        if (max > 10) {
+            d = 1;
+        }
+        else {
+            f = 10 * (f / 10);
+            d = 10;
+        }
 
-        min.toTextNoUnit(text);
-        drawText(text, x, y + (int)widget->h - fontHeight, (int)widget->w, fontHeight, style, inverse);
+        int y_min = (int)round(min * f);
+        int y_max = (int)round(max * f);
+        int y_value = (int)round(value * f);
 
-        // draw value
-        int y_offset = (int)round(y+ widget->h - 2 * fontHeight - (widget->h - 3 * fontHeight) * (value.getFloat() - min.getFloat()) / (max.getFloat() - min.getFloat()));
-
-        value.toTextNoUnit(text);
-        drawText(text, x, y_offset , (int)widget->w, fontHeight, style, inverse);
-
-        // draw slider decorations
-        if (inverse) {
-            lcd::lcd.setColor(style->color);
+        if (is_page_refresh) {
+            draw_scale(widget, 0, DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->h, y_min, y_max, y_value, f, d);
         } else {
-            lcd::lcd.setColor(style->background_color);
-        }
+            int last_y_value_from = last_y_value - CONF_SLIDER_THUMB_HEIGHT / 2;
+            int last_y_value_to = last_y_value + CONF_SLIDER_THUMB_HEIGHT / 2;
+            int y_value_from = y_value - CONF_SLIDER_THUMB_HEIGHT / 2;
+            int y_value_to = y_value + CONF_SLIDER_THUMB_HEIGHT / 2;
 
-        if (y + fontHeight < y_offset) {
-            lcd::lcd.setColor(0xD0, 0xD0, 0xD0);
-            if (last_draw_y_offset == -1) {
-                fill_rect(x, y + fontHeight, (int)widget->w, y_offset - (y + fontHeight));
-            } else {
-                if (y_offset > last_draw_y_offset) {
-                    fill_rect(x, y + last_draw_y_offset, (int)widget->w, y_offset - (y + last_draw_y_offset));
+            if (last_y_value_from != y_value_from) {
+                if (last_y_value_from > y_value_from) {
+                    util_swap(int, last_y_value_from, y_value_from);
+                    util_swap(int, last_y_value_to, y_value_to);
+                }
+
+                if (last_y_value_from < 0) 
+                    last_y_value_from = 0;
+
+                if (y_value_to > DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->h - 1)
+                    y_value_to = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->h - 1;
+
+                if (last_y_value_to + 1 < y_value_from) {
+                    draw_scale(widget, last_y_value_from, last_y_value_to, y_min, y_max, y_value, f, d);
+                    draw_scale(widget, y_value_from, y_value_to, y_min, y_max, y_value, f, d);
+                } else {
+                    draw_scale(widget, last_y_value_from, y_value_to, y_min, y_max, y_value, f, d);
                 }
             }
         }
 
-        if (y_offset + fontHeight < y + (int)widget->h - fontHeight) {
-            lcd::lcd.setColor(0x50, 0x50, 0x50);
-            if (last_draw_y_offset == -1) {
-                fill_rect(x, y_offset + fontHeight, (int)widget->w, y + (int)widget->h - fontHeight - (y_offset + fontHeight));
-            } else {
-                if (y_offset < last_draw_y_offset) {
-                    fill_rect(x, y_offset + fontHeight, (int)widget->w, last_draw_y_offset - y_offset);
-                }
-            }
-        }
-
-        last_draw_y_offset = y_offset;
+        last_y_value = y_value;
 
         width = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w;
-        height = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widget->h - 3 * fontHeight);
+        height = (max - min) * f;
 
         return true;
     }
-
-    data::setCursor(saved_cursor);
 
     return false;
 }
@@ -144,10 +173,10 @@ bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool in
 
 void touch_down() {
     data::Cursor saved_cursor = data::getCursor();
-    data::setCursor(data_cursor);
+    data::setCursor(edit_data_cursor);
 
     bool changed;
-    start_value = data::get(data_id, changed).getFloat();
+    start_value = data::get(edit_data_id, changed).getFloat();
     start_y = touch::y;
 
     last_scale = 1;
@@ -157,14 +186,13 @@ void touch_down() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
 void touch_move() {
     data::Cursor saved_cursor = data::getCursor();
-    data::setCursor(data_cursor);
+    data::setCursor(edit_data_cursor);
 
-    data::Value minValue = data::getMin(data_id);
+    data::Value minValue = data::getMin(edit_data_id);
     float min = minValue.getFloat();
-    float max = data::getMax(data_id).getFloat();
+    float max = data::getMax(edit_data_id).getFloat();
 
     int scale;
 
@@ -180,18 +208,18 @@ void touch_move() {
 
     if (scale != last_scale) {
         bool changed;
-        start_value = data::get(data_id, changed).getFloat();
+        start_value = data::get(edit_data_id, changed).getFloat();
         start_y = touch::y;
         last_scale = scale;
     }
 
-    float value = start_value + (start_y - touch::y) *
-        (max - min) / (scale * height);
+    float value = start_value + (start_y - touch::y) * (max - min) / (scale * height);
 
     if (value < min) value = min;
     if (value > max) value = max;
 
-    data::set(data_id, data::Value(value, minValue.getUnit()));
+    data::set(edit_data_id, data::Value(value, minValue.getUnit()));
+
     data::setCursor(saved_cursor);
 }
 

@@ -25,9 +25,6 @@ namespace psu {
 namespace gui {
 namespace slider {
 
-void enter_modal_mode(const WidgetCursor &widget_cursor);
-void exit_modal_mode();
-
 bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse);
 
 void touch_down();

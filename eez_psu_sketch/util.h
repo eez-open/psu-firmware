@@ -21,6 +21,8 @@
 #define clear_bit(reg, bitmask) *reg &= ~bitmask
 #define set_bit(reg, bitmask) *reg |= bitmask
 
+#define util_swap(type, i, j) {type t = i; i = j; j = t;}
+
 namespace eez {
 namespace psu {
 

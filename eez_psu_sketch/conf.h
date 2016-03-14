@@ -68,7 +68,7 @@ option.
 /// 
 #define CHANNELS \
     CHANNEL(1, CH_PINS_1, CH_PARAMS_50V_3A), \
-    CHANNEL(2, CH_PINS_2, CH_PARAMS_50V_3A) \
+    CHANNEL(2, CH_PINS_2, CH_PARAMS_40V_5A) \
 
 /// Min. delay between power down and power up.
 #define MIN_POWER_UP_DELAY 5
