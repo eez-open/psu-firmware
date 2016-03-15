@@ -95,9 +95,32 @@ struct List {
     OBJ_OFFSET first;
 };
 
-struct Document {
-    List styles;
-    List pages;
+struct ThreeStateIndicatorWidget {
+    OBJ_OFFSET style1;
+    OBJ_OFFSET style2;
+    OBJ_OFFSET text;
+};
+
+struct ContainerWidget {
+    List widgets;
+};
+
+struct SelectWidget {
+    List widgets;
+};
+
+struct Style {
+    uint8_t font;
+    uint16_t flags;
+    uint16_t background_color;
+    uint16_t color;
+    uint16_t border_color;
+    uint16_t padding_horizontal;
+    uint16_t padding_vertical;
+};
+
+struct VerticalListWidget {
+    OBJ_OFFSET item_widget;
 };
 
 struct DisplayStringWidget {
@@ -116,14 +139,6 @@ struct Widget {
     OBJ_OFFSET specific;
 };
 
-struct VerticalListWidget {
-    OBJ_OFFSET item_widget;
-};
-
-struct SelectWidget {
-    List widgets;
-};
-
 struct DisplayStringSelectWidget {
     OBJ_OFFSET style1;
     OBJ_OFFSET text1;
@@ -131,24 +146,9 @@ struct DisplayStringSelectWidget {
     OBJ_OFFSET text2;
 };
 
-struct ContainerWidget {
-    List widgets;
-};
-
-struct ThreeStateIndicatorWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET style2;
-    OBJ_OFFSET text;
-};
-
-struct Style {
-    uint8_t font;
-    uint16_t flags;
-    uint16_t background_color;
-    uint16_t color;
-    uint16_t border_color;
-    uint16_t padding_horizontal;
-    uint16_t padding_vertical;
+struct Document {
+    List styles;
+    List pages;
 };
 
 #pragma pack(pop)
