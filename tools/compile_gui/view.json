@@ -90,8 +90,19 @@
     {
       "name": "edit_info",
       "font": "small",
-      "color": "lightgray"
+      "color": "white"
+    },
+    {
+      "name": "edit_value",
+      "font": "medium",
+      "color": "white"
+    },
+    {
+      "name": "edit_value_ur",
+      "base": "edit_value",
+      "color": "red"
     }
+
   ],
   "pages": [
     {
@@ -287,7 +298,7 @@
                 "widgets": [
                   {
                     "type": "display_string",
-                    "style": "channel_off_medium",
+                    "style": "edit_value",
                     "text": "OFF"
                   },
                   {
@@ -296,12 +307,12 @@
                     "widgets": [
                       {
                         "type": "display",
-                        "style": "mon_value_medium",
+                        "style": "edit_value",
                         "data": "mon_value"
                       },
                       {
                         "type": "display",
-                        "style": "mon_value_medium_ur",
+                        "style": "edit_value_ur",
                         "data": "mon_value"
                       }
                     ]
@@ -310,6 +321,7 @@
               },
               {
                 "type": "display",
+                "style": "edit_value",
                 "data": "volt",
                 "x": 0,
                 "y": 98,
@@ -318,6 +330,7 @@
               },
               {
                 "type": "display",
+                "style": "edit_value",
                 "data": "curr",
                 "x": 90,
                 "y": 98,
@@ -429,9 +442,9 @@
         {
           "type": "display_string",
           "action": "key_7",
-          "x": 48,
+          "x": 0,
           "y": 32,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "style": "key",
           "text": "7"
@@ -439,9 +452,9 @@
         {
           "type": "display_string",
           "action": "key_8",
-          "x": 96,
+          "x": 60,
           "y": 32,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "style": "key",
           "text": "8"
@@ -449,9 +462,9 @@
         {
           "type": "display_string",
           "action": "key_9",
-          "x": 144,
+          "x": 120,
           "y": 32,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "style": "key",
           "text": "9"
@@ -459,18 +472,18 @@
         {
           "type": "display_string",
           "action": "key_back",
-          "x": 192,
+          "x": 180,
           "y": 32,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "text": "<"
         },
         {
           "type": "display_string",
           "action": "key_4",
-          "x": 48,
+          "x": 0,
           "y": 68,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "style": "key",
           "text": "4"
@@ -478,9 +491,9 @@
         {
           "type": "display_string",
           "action": "key_5",
-          "x": 96,
+          "x": 60,
           "y": 68,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "style": "key",
           "text": "5"
@@ -488,9 +501,9 @@
         {
           "type": "display_string",
           "action": "key_6",
-          "x": 144,
+          "x": 120,
           "y": 68,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "style": "key",
           "text": "6"
@@ -498,18 +511,18 @@
         {
           "type": "display_string",
           "action": "key_c",
-          "x": 192,
+          "x": 180,
           "y": 68,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "text": "C"
         },
         {
           "type": "display_string",
           "action": "key_1",
-          "x": 48,
+          "x": 0,
           "y": 104,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "style": "key",
           "text": "1"
@@ -517,9 +530,9 @@
         {
           "type": "display_string",
           "action": "key_2",
-          "x": 96,
+          "x": 60,
           "y": 104,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "style": "key",
           "text": "2"
@@ -527,9 +540,9 @@
         {
           "type": "display_string",
           "action": "key_3",
-          "x": 144,
+          "x": 120,
           "y": 104,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "style": "key",
           "text": "3"
@@ -537,18 +550,18 @@
         {
           "type": "display_string",
           "action": "key_ok",
-          "x": 192,
+          "x": 180,
           "y": 104,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "text": "OK"
         },
         {
           "type": "display_string",
           "action": "key_0",
-          "x": 48,
+          "x": 0,
           "y": 140,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "style": "key",
           "text": "0"
@@ -556,9 +569,9 @@
         {
           "type": "display_string",
           "action": "key_dot",
-          "x": 96,
+          "x": 60,
           "y": 140,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "style": "key",
           "text": "."
@@ -566,9 +579,9 @@
         {
           "type": "display_string",
           "action": "key_sign",
-          "x": 144,
+          "x": 120,
           "y": 140,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "style": "key",
           "text": "-"
@@ -576,9 +589,9 @@
         {
           "type": "display_string",
           "action": "key_ma",
-          "x": 192,
+          "x": 180,
           "y": 140,
-          "w": 48,
+          "w": 60,
           "h": 36,
           "text": "mA"
         },
@@ -602,7 +615,7 @@
                 "widgets": [
                   {
                     "type": "display_string",
-                    "style": "channel_off_medium",
+                    "style": "edit_value",
                     "text": "OFF"
                   },
                   {
@@ -611,12 +624,12 @@
                     "widgets": [
                       {
                         "type": "display",
-                        "style": "mon_value_medium",
+                        "style": "edit_value",
                         "data": "mon_value"
                       },
                       {
                         "type": "display",
-                        "style": "mon_value_medium_ur",
+                        "style": "edit_value_ur",
                         "data": "mon_value"
                       }
                     ]
@@ -625,6 +638,7 @@
               },
               {
                 "type": "display",
+                "style": "edit_value",
                 "data": "volt",
                 "x": 0,
                 "y": 36,
@@ -632,6 +646,7 @@
               },
               {
                 "type": "display",
+                "style": "edit_value",
                 "data": "curr",
                 "x": 0,
                 "y": 72,
