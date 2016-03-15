@@ -96,19 +96,28 @@ public:
                     }
                 }
             }
-            else if (widget->type == WIDGET_TYPE_VERTICAL_LIST) {
+            else if (widget->type == WIDGET_TYPE_VERTICAL_LIST || widget->type == WIDGET_TYPE_HORIZONTAL_LIST) {
                 if (stack[stack_index].index < data::count(widget->data)) {
                     data::select(widget->data, stack[stack_index].index);
 
-                    Widget *child_widget = (Widget *)(document + ((VerticalListWidget *)(document + widget->specific))->item_widget);
+                    Widget *child_widget = (Widget *)(document + ((ListWidget *)(document + widget->specific))->item_widget);
 
                     ++stack[stack_index].index;
 
-                    int y = stack[stack_index].y;
-                    stack[stack_index].y += child_widget->h;
+                    if (widget->type == WIDGET_TYPE_VERTICAL_LIST) {
+                        int y = stack[stack_index].y;
+                        stack[stack_index].y += child_widget->h;
 
-                    if (!push(child_widget, stack[stack_index].x, y, stack[stack_index].refresh)) {
-                        return true;
+                        if (!push(child_widget, stack[stack_index].x, y, stack[stack_index].refresh)) {
+                            return true;
+                        }
+                    } else {
+                        int x = stack[stack_index].x;
+                        stack[stack_index].x += child_widget->w;
+
+                        if (!push(child_widget, x, stack[stack_index].y, stack[stack_index].refresh)) {
+                            return true;
+                        }
                     }
                 }
                 else {
@@ -137,8 +146,8 @@ private:
     int stack_index;
 
     bool push(Widget *widget, int x, int y, bool refresh) {
-        if (widget->type == WIDGET_TYPE_CONTAINER || widget->type == WIDGET_TYPE_VERTICAL_LIST) {
-            if (++stack_index == CONF_ENUM_WIDGETS_STACK_SIZE) {
+        if (widget->type == WIDGET_TYPE_CONTAINER || widget->type == WIDGET_TYPE_VERTICAL_LIST || widget->type == WIDGET_TYPE_HORIZONTAL_LIST) {
+             if (++stack_index == CONF_ENUM_WIDGETS_STACK_SIZE) {
                 return false;
             }
 
@@ -146,8 +155,8 @@ private:
 
             stack[stack_index].widget = widget;
             stack[stack_index].index = 0;
-            stack[stack_index].x = x;
-            stack[stack_index].y = y;
+            stack[stack_index].x = x + widget->x;
+            stack[stack_index].y = y + widget->y;
             stack[stack_index].refresh = refresh;
 
             return true;
@@ -221,6 +230,7 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
     int y2 = y + h - 1;
 
     if (styleHasBorder(style)) {
+        lcd::lcd.setColor(style->border_color);
         lcd::lcd.drawRect(x1, y1, x2, y2);
         ++x1;
         ++y1;

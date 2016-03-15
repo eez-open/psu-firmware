@@ -59,12 +59,13 @@ declare_const("STYLE_FLAGS_VERT_ALIGN_CENTER", 2 << 3)
 declare_const("WIDGET_TYPE_NONE", 0)
 declare_const("WIDGET_TYPE_CONTAINER", 1)
 declare_const("WIDGET_TYPE_VERTICAL_LIST", 2)
-declare_const("WIDGET_TYPE_SELECT", 3)
-declare_const("WIDGET_TYPE_DISPLAY", 4)
-declare_const("WIDGET_TYPE_DISPLAY_STRING", 5)
-declare_const("WIDGET_TYPE_DISPLAY_STRING_SELECT", 6)
-declare_const("WIDGET_TYPE_THREE_STATE_INDICATOR", 7)
-declare_const("WIDGET_TYPE_VERTICAL_SLIDER", 8)
+declare_const("WIDGET_TYPE_HORIZONTAL_LIST", 3)
+declare_const("WIDGET_TYPE_SELECT", 4)
+declare_const("WIDGET_TYPE_DISPLAY", 5)
+declare_const("WIDGET_TYPE_DISPLAY_STRING", 6)
+declare_const("WIDGET_TYPE_DISPLAY_STRING_SELECT", 7)
+declare_const("WIDGET_TYPE_THREE_STATE_INDICATOR", 8)
+declare_const("WIDGET_TYPE_VERTICAL_SLIDER", 9)
 
 #-------------------------------------------------------------------------------
 
@@ -608,6 +609,8 @@ class Parser:
                 widget_type = WIDGET_TYPE_CONTAINER
             elif type_str == "vertical_list":
                 widget_type = WIDGET_TYPE_VERTICAL_LIST
+            elif type_str == "horizontal_list":
+                widget_type = WIDGET_TYPE_HORIZONTAL_LIST
             elif type_str == "select":
                 widget_type = WIDGET_TYPE_SELECT
             elif type_str == "display":
@@ -663,8 +666,8 @@ class Parser:
                 for index, w in enumerate(widget["widgets"]):
                     select_widgets.addItem(self.parse_widget(index, w, result))
             specific_widget_data.addField(select_widgets)
-        elif widget_type == WIDGET_TYPE_VERTICAL_LIST:
-            specific_widget_data = Struct(None, "VerticalListWidget")
+        elif widget_type == WIDGET_TYPE_VERTICAL_LIST or widget_type == WIDGET_TYPE_HORIZONTAL_LIST:
+            specific_widget_data = Struct(None, "ListWidget")
 
             if "item_widget" in widget:
                 specific_widget_data.addField(StructPtr("item_widget", self.parse_widget(0, widget["item_widget"], result)))

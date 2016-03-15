@@ -20,9 +20,7 @@
     },
     {
       "name": "mon_value",
-      "font": "large",
-      "align_horizontal": "right",
-      "padding_horizontal": 12
+      "font": "large"
     },
     {
       "name": "mon_value_ur",
@@ -31,9 +29,7 @@
     },
     {
       "name": "mon_value_medium",
-      "font": "medium",
-      "align_horizontal": "right",
-      "padding_horizontal": 12
+      "font": "medium"
     },
     {
       "name": "mon_value_medium_ur",
@@ -87,7 +83,14 @@
     {
       "name": "key",
       "color": "#52B5D3",
-      "background_color": "#FFFF00"
+      "background_color": "#FFFF00",
+      "border_color": "#52B5D3",
+      "border_size": 1
+    },
+    {
+      "name": "edit_info",
+      "font": "small",
+      "color": "lightgray"
     }
   ],
   "pages": [
@@ -272,11 +275,12 @@
           "y": 0,
           "item_widget": {
             "type": "container",
+            "x": 0,
             "h": 138,
             "widgets": [
               {
                 "type": "select",
-                "x": 60,
+                "x": 0,
                 "y": 26,
                 "h": 72,
                 "data": "output_state",
@@ -306,18 +310,16 @@
               },
               {
                 "type": "display",
-                "style": "small",
                 "data": "volt",
-                "x": 60,
+                "x": 0,
                 "y": 98,
                 "w": 90,
                 "h": 40
               },
               {
                 "type": "display",
-                "style": "small",
                 "data": "curr",
-                "x": 150,
+                "x": 90,
                 "y": 98,
                 "w": 90,
                 "h": 40
@@ -371,13 +373,6 @@
       "id": "edit_with_step",
       "widgets": [
         {
-          "type": "vertical_slider",
-          "x": 0,
-          "y": 0,
-          "w": 48,
-          "h": 284
-        },
-        {
           "type": "display_string",
           "action": "edit_with_slider",
           "x": 0,
@@ -423,11 +418,13 @@
       "id": "edit_with_keypad",
       "widgets": [
         {
-          "type": "vertical_slider",
+          "type": "display_string",
           "x": 0,
           "y": 0,
-          "w": 48,
-          "h": 284
+          "w": 230,
+          "h": 32,
+          "style": "edit_info",
+          "text": "Set Ch2 current [0-5 A]"
         },
         {
           "type": "display_string",
@@ -584,6 +581,64 @@
           "w": 48,
           "h": 36,
           "text": "mA"
+        },
+        {
+          "type": "horizontal_list",
+          "data": "channels",
+          "x": 0,
+          "y": 176,
+          "h": 108,
+          "item_widget": {
+            "type": "container",
+            "y": 0,
+            "w": 120,
+            "widgets": [
+              {
+                "type": "select",
+                "x": 0,
+                "y": 0,
+                "h": 36,
+                "data": "output_state",
+                "widgets": [
+                  {
+                    "type": "display_string",
+                    "style": "channel_off_medium",
+                    "text": "OFF"
+                  },
+                  {
+                    "type": "select",
+                    "data": "output_mode",
+                    "widgets": [
+                      {
+                        "type": "display",
+                        "style": "mon_value_medium",
+                        "data": "mon_value"
+                      },
+                      {
+                        "type": "display",
+                        "style": "mon_value_medium_ur",
+                        "data": "mon_value"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "display",
+                "data": "volt",
+                "x": 0,
+                "y": 36,
+                "h": 36
+              },
+              {
+                "type": "display",
+                "data": "curr",
+                "x": 0,
+                "y": 72,
+                "h": 36
+              }
+            ]
+          }
         },
         {
           "type": "display_string",

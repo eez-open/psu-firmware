@@ -37,12 +37,13 @@ namespace gui {
 #define WIDGET_TYPE_NONE 0
 #define WIDGET_TYPE_CONTAINER 1
 #define WIDGET_TYPE_VERTICAL_LIST 2
-#define WIDGET_TYPE_SELECT 3
-#define WIDGET_TYPE_DISPLAY 4
-#define WIDGET_TYPE_DISPLAY_STRING 5
-#define WIDGET_TYPE_DISPLAY_STRING_SELECT 6
-#define WIDGET_TYPE_THREE_STATE_INDICATOR 7
-#define WIDGET_TYPE_VERTICAL_SLIDER 8
+#define WIDGET_TYPE_HORIZONTAL_LIST 3
+#define WIDGET_TYPE_SELECT 4
+#define WIDGET_TYPE_DISPLAY 5
+#define WIDGET_TYPE_DISPLAY_STRING 6
+#define WIDGET_TYPE_DISPLAY_STRING_SELECT 7
+#define WIDGET_TYPE_THREE_STATE_INDICATOR 8
+#define WIDGET_TYPE_VERTICAL_SLIDER 9
 #define DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER 2
 #define DATA_ID_CHANNELS 1
 #define DATA_ID_OUTPUT_STATE 2
@@ -101,30 +102,12 @@ struct ThreeStateIndicatorWidget {
     OBJ_OFFSET text;
 };
 
-struct ContainerWidget {
-    List widgets;
-};
-
-struct SelectWidget {
-    List widgets;
-};
-
-struct Style {
-    uint8_t font;
-    uint16_t flags;
-    uint16_t background_color;
-    uint16_t color;
-    uint16_t border_color;
-    uint16_t padding_horizontal;
-    uint16_t padding_vertical;
-};
-
-struct VerticalListWidget {
-    OBJ_OFFSET item_widget;
-};
-
 struct DisplayStringWidget {
     OBJ_OFFSET text;
+};
+
+struct ListWidget {
+    OBJ_OFFSET item_widget;
 };
 
 struct Widget {
@@ -139,6 +122,20 @@ struct Widget {
     OBJ_OFFSET specific;
 };
 
+struct Style {
+    uint8_t font;
+    uint16_t flags;
+    uint16_t background_color;
+    uint16_t color;
+    uint16_t border_color;
+    uint16_t padding_horizontal;
+    uint16_t padding_vertical;
+};
+
+struct ContainerWidget {
+    List widgets;
+};
+
 struct DisplayStringSelectWidget {
     OBJ_OFFSET style1;
     OBJ_OFFSET text1;
@@ -149,6 +146,10 @@ struct DisplayStringSelectWidget {
 struct Document {
     List styles;
     List pages;
+};
+
+struct SelectWidget {
+    List widgets;
 };
 
 #pragma pack(pop)
