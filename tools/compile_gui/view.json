@@ -275,14 +275,14 @@
           "type": "vertical_slider",
           "x": 0,
           "y": 0,
-          "w": 48,
-          "h": 284
+          "w": 40,
+          "h": 296
         },
         {
           "type": "vertical_list",
           "data": "channels",
-          "x": 60,
-          "w": 180,
+          "x": 40,
+          "w": 200,
           "y": 0,
           "item_widget": {
             "type": "container",
@@ -325,16 +325,16 @@
                 "data": "volt",
                 "x": 0,
                 "y": 98,
-                "w": 90,
+                "w": 100,
                 "h": 40
               },
               {
                 "type": "display",
                 "style": "edit_value",
                 "data": "curr",
-                "x": 90,
+                "x": 100,
                 "y": 98,
-                "w": 90,
+                "w": 100,
                 "h": 40
               }
             ]

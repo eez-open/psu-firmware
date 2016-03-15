@@ -45,15 +45,15 @@ void draw_scale(Widget *widget, int y_from, int y_to, int y_min, int y_max, int 
     Style *style = (Style *)(document + widget->style);
 
     int x1 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->x;
-    int l1 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w / 2 - 1;
+    int l1 = 5 * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w / 12 - 1;
 
     int x2 = x1 + l1 + 2;
-    int l2 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w - l1 - 4;
+    int l2 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w - l1 - 2;
 
     int s = 10 * f / d;
 
     int y_offset = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widget->y + widget->h) - 1 -
-        (DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->h - (y_max - y_min)) / 2;
+        (DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->h - (y_max - y_min)) / 2 - CONF_SLIDER_THUMB_HEIGHT / 2;
 
     for (int y_i = y_from; y_i <= y_to; ++y_i) {
         int y = y_offset - y_i;
@@ -116,7 +116,7 @@ bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool in
         font::Font *font = styleGetFont(style);
         int fontHeight = font->getAscent() / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
 
-        int f = (int)floor(DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->h / max);
+        int f = (int)floor(DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widget->h - CONF_SLIDER_THUMB_HEIGHT) / max);
         int d;
         if (max > 10) {
             d = 1;
