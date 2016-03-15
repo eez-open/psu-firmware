@@ -19,10 +19,10 @@
 #include "psu.h"
 #include "gui_slider.h"
 
-#define CONF_SLIDER_THUMB_HEIGHT 9
-#define CONF_SLIDER_THUMB_COLOR VGA_BLACK
-#define CONF_SLIDER_MIN_MAX_MARKS_COLOR VGA_RED
-#define CONF_SLIDER_TICKS_COLOR 0xE0, 0xE0, 0xE0
+// TODO this should go in view.json
+#define CONF_SLIDER_THUMB_HEIGHT 11
+#define CONF_SLIDER_THUMB_COLOR 0xFF, 0xFF, 0x00
+#define CONF_SLIDER_TICKS_COLOR 0xFF, 0xFF, 0xFF
 
 namespace eez {
 namespace psu {
@@ -45,36 +45,37 @@ void draw_scale(Widget *widget, int y_from, int y_to, int y_min, int y_max, int 
     Style *style = (Style *)(document + widget->style);
 
     int x1 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->x;
-    int l1 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w / 2;
+    int l1 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w / 2 - 1;
 
-    int x2 = x1 + l1;
-    int l2 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w - l1;
+    int x2 = x1 + l1 + 2;
+    int l2 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w - l1 - 4;
 
     int s = 10 * f / d;
 
+    int y_offset = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widget->y + widget->h) - 1 -
+        (DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->h - (y_max - y_min)) / 2;
+
     for (int y_i = y_from; y_i <= y_to; ++y_i) {
-        int y = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widget->y + widget->h) - 1 - y_i;
+        int y = y_offset - y_i;
 
         // draw ticks
-        if (y_i == y_min || y_i == y_max) {
-            lcd::lcd.setColor(CONF_SLIDER_MIN_MAX_MARKS_COLOR);
-            lcd::lcd.drawHLine(x1, y, l1);
-        }
-        else if (y_i % s == 0) {
-            lcd::lcd.setColor(CONF_SLIDER_TICKS_COLOR);
-            lcd::lcd.drawHLine(x1, y, l1);
-        }
-        else if (y_i % (s / 2) == 0) {
-            lcd::lcd.setColor(CONF_SLIDER_TICKS_COLOR);
-            lcd::lcd.drawHLine(x1, y, l1 / 2);
-        }
-        else if (y_i % (s / 10) == 0) {
-            lcd::lcd.setColor(CONF_SLIDER_TICKS_COLOR);
-            lcd::lcd.drawHLine(x1, y, l1 / 4);
-        }
-        else {
-            lcd::lcd.setColor(style->background_color);
-            lcd::lcd.drawHLine(x1, y, l1);
+        if (y_i >= y_min && y_i <= y_max) {
+            if (y_i % s == 0) {
+                lcd::lcd.setColor(CONF_SLIDER_TICKS_COLOR);
+                lcd::lcd.drawHLine(x1, y, l1);
+            }
+            else if (y_i % (s / 2) == 0) {
+                lcd::lcd.setColor(CONF_SLIDER_TICKS_COLOR);
+                lcd::lcd.drawHLine(x1, y, l1 / 2);
+            }
+            else if (y_i % (s / 10) == 0) {
+                lcd::lcd.setColor(CONF_SLIDER_TICKS_COLOR);
+                lcd::lcd.drawHLine(x1, y, l1 / 4);
+            }
+            else {
+                lcd::lcd.setColor(style->background_color);
+                lcd::lcd.drawHLine(x1, y, l1);
+            }
         }
 
         int d = abs(y_i - y_value);
@@ -129,8 +130,11 @@ bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool in
         int y_max = (int)round(max * f);
         int y_value = (int)round(value * f);
 
+        int y_from_min = y_min - CONF_SLIDER_THUMB_HEIGHT / 2;
+        int y_from_max = y_max + CONF_SLIDER_THUMB_HEIGHT / 2;
+
         if (is_page_refresh) {
-            draw_scale(widget, 0, DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->h, y_min, y_max, y_value, f, d);
+            draw_scale(widget, y_from_min, y_from_max, y_min, y_max, y_value, f, d);
         } else {
             int last_y_value_from = last_y_value - CONF_SLIDER_THUMB_HEIGHT / 2;
             int last_y_value_to = last_y_value + CONF_SLIDER_THUMB_HEIGHT / 2;
@@ -143,11 +147,11 @@ bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool in
                     util_swap(int, last_y_value_to, y_value_to);
                 }
 
-                if (last_y_value_from < 0) 
-                    last_y_value_from = 0;
+                if (last_y_value_from < y_from_min)
+                    last_y_value_from = y_from_min;
 
-                if (y_value_to > DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->h - 1)
-                    y_value_to = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->h - 1;
+                if (y_value_to > y_from_max)
+                    y_value_to = y_from_max;
 
                 if (last_y_value_to + 1 < y_value_from) {
                     draw_scale(widget, last_y_value_from, last_y_value_to, y_min, y_max, y_value, f, d);

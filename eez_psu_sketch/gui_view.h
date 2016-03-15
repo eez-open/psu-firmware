@@ -66,6 +66,22 @@ namespace gui {
 #define ACTION_ID_YES 8
 #define ACTION_ID_NO 9
 #define ACTION_ID_CANCEL 10
+#define ACTION_ID_KEY_0 11
+#define ACTION_ID_KEY_1 12
+#define ACTION_ID_KEY_2 13
+#define ACTION_ID_KEY_3 14
+#define ACTION_ID_KEY_4 15
+#define ACTION_ID_KEY_5 16
+#define ACTION_ID_KEY_6 17
+#define ACTION_ID_KEY_7 18
+#define ACTION_ID_KEY_8 19
+#define ACTION_ID_KEY_9 20
+#define ACTION_ID_KEY_DOT 21
+#define ACTION_ID_KEY_SIGN 22
+#define ACTION_ID_KEY_BACK 23
+#define ACTION_ID_KEY_C 24
+#define ACTION_ID_KEY_OK 25
+#define ACTION_ID_KEY_MA 26
 #define PAGE_ID_MAIN 0
 #define PAGE_ID_EDIT_WITH_SLIDER 1
 #define PAGE_ID_EDIT_WITH_STEP 2
@@ -79,40 +95,12 @@ struct List {
     OBJ_OFFSET first;
 };
 
-struct Style {
-    uint8_t font;
-    uint16_t flags;
-    uint16_t background_color;
-    uint16_t color;
-    uint16_t border_color;
-    uint16_t padding_horizontal;
-    uint16_t padding_vertical;
-};
-
-struct ContainerWidget {
-    List widgets;
-};
-
 struct Document {
     List styles;
     List pages;
 };
 
-struct SelectWidget {
-    List widgets;
-};
-
-struct VerticalListWidget {
-    OBJ_OFFSET item_widget;
-};
-
 struct DisplayStringWidget {
-    OBJ_OFFSET text;
-};
-
-struct ThreeStateIndicatorWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET style2;
     OBJ_OFFSET text;
 };
 
@@ -128,11 +116,39 @@ struct Widget {
     OBJ_OFFSET specific;
 };
 
+struct VerticalListWidget {
+    OBJ_OFFSET item_widget;
+};
+
+struct SelectWidget {
+    List widgets;
+};
+
 struct DisplayStringSelectWidget {
     OBJ_OFFSET style1;
     OBJ_OFFSET text1;
     OBJ_OFFSET style2;
     OBJ_OFFSET text2;
+};
+
+struct ContainerWidget {
+    List widgets;
+};
+
+struct ThreeStateIndicatorWidget {
+    OBJ_OFFSET style1;
+    OBJ_OFFSET style2;
+    OBJ_OFFSET text;
+};
+
+struct Style {
+    uint8_t font;
+    uint16_t flags;
+    uint16_t background_color;
+    uint16_t color;
+    uint16_t border_color;
+    uint16_t padding_horizontal;
+    uint16_t padding_vertical;
 };
 
 #pragma pack(pop)

@@ -81,10 +81,15 @@
     },
     {
       "name": "exit",
-      "font": "small",
       "color": "black",
       "background_color": "lightgray",
-      "horizontal_align": "right"
+      "align_horizontal": "right",
+      "padding_horizontal": 4
+    },
+    {
+      "name": "key",
+      "color": "#52B5D3",
+      "background_color": "#FFFF00"
     }
   ],
   "pages": [
@@ -258,8 +263,8 @@
           "type": "vertical_slider",
           "x": 0,
           "y": 0,
-          "w": 44,
-          "h": 276
+          "w": 48,
+          "h": 284
         },
         {
           "type": "vertical_list",
@@ -326,39 +331,39 @@
           "type": "display_string",
           "action": "edit_with_slider",
           "x": 0,
-          "y": 276,
-          "w": 44,
-          "h": 44,
+          "y": 284,
+          "w": 48,
+          "h": 36,
           "style": "tab_page_selected",
           "text": "S"
         },
         {
           "type": "display_string",
           "action": "edit_with_step",
-          "x": 44,
-          "y": 276,
-          "w": 44,
-          "h": 44,
+          "x": 48,
+          "y": 284,
+          "w": 48,
+          "h": 36,
           "style": "tab_page",
           "text": "M"
         },
         {
           "type": "display_string",
           "action": "edit_with_keypad",
-          "x": 88,
-          "y": 276,
-          "w": 44,
-          "h": 44,
+          "x": 96,
+          "y": 284,
+          "w": 48,
+          "h": 36,
           "style": "tab_page",
           "text": "K"
         },
         {
           "type": "display_string",
           "action": "exit",
-          "x": 132,
-          "y": 276,
-          "w": 108,
-          "h": 44,
+          "x": 144,
+          "y": 284,
+          "w": 96,
+          "h": 36,
           "style": "exit",
           "text": "Exit"
         }
@@ -368,42 +373,49 @@
       "id": "edit_with_step",
       "widgets": [
         {
+          "type": "vertical_slider",
+          "x": 0,
+          "y": 0,
+          "w": 48,
+          "h": 284
+        },
+        {
           "type": "display_string",
           "action": "edit_with_slider",
           "x": 0,
-          "y": 276,
-          "w": 44,
-          "h": 44,
+          "y": 284,
+          "w": 48,
+          "h": 36,
           "style": "tab_page",
           "text": "S"
         },
         {
           "type": "display_string",
           "action": "edit_with_step",
-          "x": 44,
-          "y": 276,
-          "w": 44,
-          "h": 44,
+          "x": 48,
+          "y": 284,
+          "w": 48,
+          "h": 36,
           "style": "tab_page_selected",
           "text": "M"
         },
         {
           "type": "display_string",
           "action": "edit_with_keypad",
-          "x": 88,
-          "y": 276,
-          "w": 44,
-          "h": 44,
+          "x": 96,
+          "y": 284,
+          "w": 48,
+          "h": 36,
           "style": "tab_page",
           "text": "K"
         },
         {
           "type": "display_string",
           "action": "exit",
-          "x": 132,
-          "y": 276,
-          "w": 108,
-          "h": 44,
+          "x": 144,
+          "y": 284,
+          "w": 96,
+          "h": 36,
           "style": "exit",
           "text": "Exit"
         }
@@ -413,42 +425,205 @@
       "id": "edit_with_keypad",
       "widgets": [
         {
+          "type": "vertical_slider",
+          "x": 0,
+          "y": 0,
+          "w": 48,
+          "h": 284
+        },
+        {
+          "type": "display_string",
+          "action": "key_7",
+          "x": 48,
+          "y": 32,
+          "w": 48,
+          "h": 36,
+          "style": "key",
+          "text": "7"
+        },
+        {
+          "type": "display_string",
+          "action": "key_8",
+          "x": 96,
+          "y": 32,
+          "w": 48,
+          "h": 36,
+          "style": "key",
+          "text": "8"
+        },
+        {
+          "type": "display_string",
+          "action": "key_9",
+          "x": 144,
+          "y": 32,
+          "w": 48,
+          "h": 36,
+          "style": "key",
+          "text": "9"
+        },
+        {
+          "type": "display_string",
+          "action": "key_back",
+          "x": 192,
+          "y": 32,
+          "w": 48,
+          "h": 36,
+          "text": "<"
+        },
+        {
+          "type": "display_string",
+          "action": "key_4",
+          "x": 48,
+          "y": 68,
+          "w": 48,
+          "h": 36,
+          "style": "key",
+          "text": "4"
+        },
+        {
+          "type": "display_string",
+          "action": "key_5",
+          "x": 96,
+          "y": 68,
+          "w": 48,
+          "h": 36,
+          "style": "key",
+          "text": "5"
+        },
+        {
+          "type": "display_string",
+          "action": "key_6",
+          "x": 144,
+          "y": 68,
+          "w": 48,
+          "h": 36,
+          "style": "key",
+          "text": "6"
+        },
+        {
+          "type": "display_string",
+          "action": "key_c",
+          "x": 192,
+          "y": 68,
+          "w": 48,
+          "h": 36,
+          "text": "C"
+        },
+        {
+          "type": "display_string",
+          "action": "key_1",
+          "x": 48,
+          "y": 104,
+          "w": 48,
+          "h": 36,
+          "style": "key",
+          "text": "1"
+        },
+        {
+          "type": "display_string",
+          "action": "key_2",
+          "x": 96,
+          "y": 104,
+          "w": 48,
+          "h": 36,
+          "style": "key",
+          "text": "2"
+        },
+        {
+          "type": "display_string",
+          "action": "key_3",
+          "x": 144,
+          "y": 104,
+          "w": 48,
+          "h": 36,
+          "style": "key",
+          "text": "3"
+        },
+        {
+          "type": "display_string",
+          "action": "key_ok",
+          "x": 192,
+          "y": 104,
+          "w": 48,
+          "h": 36,
+          "text": "OK"
+        },
+        {
+          "type": "display_string",
+          "action": "key_0",
+          "x": 48,
+          "y": 140,
+          "w": 48,
+          "h": 36,
+          "style": "key",
+          "text": "0"
+        },
+        {
+          "type": "display_string",
+          "action": "key_dot",
+          "x": 96,
+          "y": 140,
+          "w": 48,
+          "h": 36,
+          "style": "key",
+          "text": "."
+        },
+        {
+          "type": "display_string",
+          "action": "key_sign",
+          "x": 144,
+          "y": 140,
+          "w": 48,
+          "h": 36,
+          "style": "key",
+          "text": "-"
+        },
+        {
+          "type": "display_string",
+          "action": "key_ma",
+          "x": 192,
+          "y": 140,
+          "w": 48,
+          "h": 36,
+          "text": "mA"
+        },
+        {
           "type": "display_string",
           "action": "edit_with_slider",
           "x": 0,
-          "y": 276,
-          "w": 44,
-          "h": 44,
+          "y": 284,
+          "w": 48,
+          "h": 36,
           "style": "tab_page",
           "text": "S"
         },
         {
           "type": "display_string",
           "action": "edit_with_step",
-          "x": 44,
-          "y": 276,
-          "w": 44,
-          "h": 44,
+          "x": 48,
+          "y": 284,
+          "w": 48,
+          "h": 36,
           "style": "tab_page",
           "text": "M"
         },
         {
           "type": "display_string",
           "action": "edit_with_keypad",
-          "x": 88,
-          "y": 276,
-          "w": 44,
-          "h": 44,
+          "x": 96,
+          "y": 284,
+          "w": 48,
+          "h": 36,
           "style": "tab_page_selected",
           "text": "K"
         },
         {
           "type": "display_string",
           "action": "exit",
-          "x": 132,
-          "y": 276,
-          "w": 108,
-          "h": 44,
+          "x": 144,
+          "y": 284,
+          "w": 96,
+          "h": 36,
           "style": "exit",
           "text": "Exit"
         }

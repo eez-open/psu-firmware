@@ -99,6 +99,54 @@
     {
       "id": "cancel",
       "description": "Cancel action in dialog"
+    },
+    {
+      "id": "key_0"
+    },
+    {
+      "id": "key_1"
+    },
+    {
+      "id": "key_2"
+    },
+    {
+      "id": "key_3"
+    },
+    {
+      "id": "key_4"
+    },
+    {
+      "id": "key_5"
+    },
+    {
+      "id": "key_6"
+    },
+    {
+      "id": "key_7"
+    },
+    {
+      "id": "key_8"
+    },
+    {
+      "id": "key_9"
+    },
+    {
+      "id": "key_dot"
+    },
+    {
+      "id": "key_sign"
+    },
+    {
+      "id": "key_back"
+    },
+    {
+      "id": "key_c"
+    },
+    {
+      "id": "key_ok"
+    },
+    {
+      "id": "key_ma"
     }
   ],
   "pages": [
