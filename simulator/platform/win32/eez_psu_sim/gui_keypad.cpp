@@ -68,32 +68,46 @@ bool isMilli() {
 float get_value() {
     float value = 0;
 
-    if (state >= D0) {
-        value += d0 * 1000.0f;
-    }
-
-    if (state >= D1) {
-        value += d1 * 100.0f;
-    }
-
-    if (state >= D2) {
-        value += d2 * 10.0f;
-    }
-
-    if (state >= D3) {
-        value += d3;
-    }
-
     if (isMilli()) {
-        value /= 1000.0f;
-    } 
-    else {
-        value /= 100.0f;
+        if (state >= D0) {
+            value = d0 * 1.0f;
+        }
 
+        if (state >= D1) {
+            value = value * 10 + d1;
+        }
+
+        if (state >= D2) {
+            value = value * 10 + d2;
+        }
+
+        if (state >= D3) {
+            value = value * 10 + d3;
+        }
+
+        value /= 1000.0f;
+    }
+    else {
+        if (state >= D0) {
+            value += d0 * 1000.0f;
+        }
+
+        if (state >= D1) {
+            value += d1 * 100.0f;
+        }
+
+        if (state >= D2) {
+            value += d2 * 10.0f;
+        }
+
+        if (state >= D3) {
+            value += d3;
+        }
+
+        value /= 100.0f;
     }
 
     value *= sign;
-
     return value;
 }
 
