@@ -36,14 +36,16 @@ static char value_text[32];
 
 static data::Unit edit_unit = data::UNIT_NONE;
 
-static enum {
+enum State {
     START,
     D0,
     D1,
     DOT,
     D2,
     D3
-} state;
+};
+
+static State state;
 
 int sign = 1;
 
@@ -68,15 +70,15 @@ bool isMilli() {
 float get_value() {
     float value = 0;
 
+    if (state >= D0) {
+        value = d0 * 1.0f;
+    }
+
+    if (state >= D1) {
+        value = value * 10 + d1;
+    }
+
     if (isMilli()) {
-        if (state >= D0) {
-            value = d0 * 1.0f;
-        }
-
-        if (state >= D1) {
-            value = value * 10 + d1;
-        }
-
         if (state >= D2) {
             value = value * 10 + d2;
         }
@@ -88,16 +90,10 @@ float get_value() {
         value /= 1000.0f;
     }
     else {
-        if (state >= D0) {
-            value += d0 * 1000.0f;
-        }
-
-        if (state >= D1) {
-            value += d1 * 100.0f;
-        }
+        value *= 100.0f;
 
         if (state >= D2) {
-            value += d2 * 10.0f;
+            value += d2 * 10;
         }
 
         if (state >= D3) {
@@ -206,44 +202,41 @@ void do_action(int action_id) {
         if (state == START) {
             int saved = d0;
             d0 = d;
-            if (is_value_valid()) {
-                state = D0;
-            }
-            else {
+            state = D0;
+            if (!is_value_valid()) {
                 d0 = saved;
+                state = START;
                 sound::playBeep();
             }
         }
         else if (state == D0) {
             int saved = d1;
             d1 = d;
-            if (is_value_valid()) {
-                state = D1;
-            }
-            else {
+            state = D1;
+            if (!is_value_valid()) {
                 d1 = saved;
+                state = D1;
                 sound::playBeep();
             }
         }
         else if (state == DOT || isMilli() && state == D1) {
+            State saved_state = state;
             int saved = d2;
             d2 = d;
-            if (is_value_valid()) {
-                state = D2;
-            }
-            else {
+            state = D2;
+            if (!is_value_valid()) {
                 d2 = saved;
+                state = saved_state;
                 sound::playBeep();
             }
         }
         else if (state == D2) {
             int saved = d3;
             d3 = d;
-            if (is_value_valid()) {
-                state = D3;
-            }
-            else {
+            state = D3;
+            if (!is_value_valid()) {
                 d3 = saved;
+                state = D2;
                 sound::playBeep();
             }
         }
