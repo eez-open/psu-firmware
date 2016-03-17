@@ -9,6 +9,8 @@ enum Unit {
     UNIT_NONE,
     UNIT_VOLT,
     UNIT_AMPER,
+    UNIT_MILLI_VOLT,
+    UNIT_MILLI_AMPER,
     UNIT_STR
 };
 
@@ -76,7 +78,11 @@ struct Cursor {
     ChannelState channel_last_state[CH_NUM];
 
     bool operator != (const Cursor& rhs) const {
-        return selected_channel_index != rhs.selected_channel_index;
+        return !(*this == rhs);
+    }
+
+    bool operator == (const Cursor& rhs) const {
+        return selected_channel_index == rhs.selected_channel_index;
     }
 };
 
@@ -88,9 +94,9 @@ void select(uint8_t id, int index);
 Value get(uint8_t id, bool &changed);
 Value getMin(uint8_t id);
 Value getMax(uint8_t id);
+Unit getUnit(uint8_t id);
 void set(uint8_t id, Value value);
 void do_action(uint8_t id);
-
 
 }
 }

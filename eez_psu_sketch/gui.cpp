@@ -20,6 +20,7 @@
 #include "gui.h"
 #include "gui_internal.h"
 #include "gui_slider.h"
+#include "gui_keypad.h"
 
 #include "channel.h"
 
@@ -299,15 +300,36 @@ void fill_rect(int x, int y, int w, int h) {
 ////////////////////////////////////////////////////////////////////////////////
 
 bool draw_display_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
-    bool changed;
-    data::Value value = data::get(widget->data, changed);
-    if (changed || refresh) {
-        char text[32];
-        value.toText(text, 32);
-        drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + widget->style), inverse);
-        return true;
+    bool edit = data::getCursor() == edit_data_cursor && widget->data == edit_data_id;
+    if (edit && page_index == PAGE_ID_EDIT_WITH_KEYPAD) {
+        bool changed;
+        char *text = keypad::get_value_text(changed);
+        if (changed || refresh) {
+            drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + ((Document *)document)->styles.first) + STYLE_ID_EDIT_VALUE_ACTIVE, inverse);
+            return true;
+        }
+        return false;
     }
-    return false;
+    else {
+        bool changed;
+        data::Value value = data::get(widget->data, changed);
+        if (changed || refresh) {
+            char text[32];
+            value.toText(text, 32);
+
+            Style *style;
+            if (edit) {
+                style = (Style *)(document + ((Document *)document)->styles.first) + STYLE_ID_EDIT_VALUE_ACTIVE;
+            }
+            else {
+                style = (Style *)(document + widget->style);
+            }
+
+            drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + widget->style), inverse);
+            return true;
+        }
+        return false;
+    }
 }
 
 bool draw_display_string_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
@@ -462,8 +484,11 @@ void enter_edit_mode(const WidgetCursor &widget_cursor) {
 
         page_index = edit_mode_page_index;
 
-        if (page_index == ACTION_ID_EDIT_WITH_SLIDER) {
+        if (page_index == PAGE_ID_EDIT_WITH_SLIDER) {
             psu::enterTimeCriticalMode();
+        }
+        else if (page_index == PAGE_ID_EDIT_WITH_KEYPAD) {
+            keypad::reset();
         }
 
         refresh_page();
@@ -475,6 +500,9 @@ void exit_edit_mode() {
         if (page_index == ACTION_ID_EDIT_WITH_SLIDER) {
             psu::leaveTimeCriticalMode();
         }
+
+        edit_data_id = -1;
+
         page_index = PAGE_ID_MAIN;
         refresh_page();
     }
@@ -504,6 +532,9 @@ void do_action(int action_id, const WidgetCursor &widget_cursor) {
         dialog_no_callback();
     } else if (action_id == ACTION_ID_CANCEL) {
         dialog_cancel_callback();
+    }
+    else if (action_id >= ACTION_ID_KEY_0 && action_id <= ACTION_ID_KEY_UNIT) {
+        keypad::do_action(action_id);
     } else {
         data::Cursor saved_cursor = data::getCursor();
         data::setCursor(widget_cursor.cursor);

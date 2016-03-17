@@ -223,7 +223,6 @@ void touch_move() {
     if (value > max) value = max;
 
     data::set(edit_data_id, data::Value(value, minValue.getUnit()));
-
     data::setCursor(saved_cursor);
 }
 

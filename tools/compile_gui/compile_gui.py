@@ -596,6 +596,7 @@ class Parser:
 
         self.trace.unindent()
 
+        declare_const("STYLE_ID_" + style["name"].upper(), len(self.styles))
         self.styles[style["name"].lower()] = result
 
         return result
@@ -796,7 +797,7 @@ if parser.num_errors() == 0:
     else:
         output_file = sys.stdout
 
-    output_file.write(COPYRIGHT_NOTICE + "\n\nnamespace eez {\nnamespace psu {\nnamespace gui {\n\n")
+    output_file.write(COPYRIGHT_NOTICE + "\n\n#pragma once\n\nnamespace eez {\nnamespace psu {\nnamespace gui {\n\n")
 
     c_structs = generate_source_code(objects, "    ")
     output_file.write(c_structs)

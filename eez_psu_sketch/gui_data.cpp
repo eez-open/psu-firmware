@@ -22,6 +22,7 @@
 #include "channel.h"
 
 #include "gui_view.h"
+#include "gui_keypad.h"
 
 namespace eez {
 namespace psu {
@@ -59,6 +60,7 @@ void Value::toTextNoUnit(char *text) {
 
 static Cursor cursor;
 static Value alert_message;
+static Unit last_edit_unit;
 
 Cursor getCursor() {
     return cursor;
@@ -199,6 +201,19 @@ Value get(uint8_t id, bool &changed) {
     } else if (id == DATA_ID_ALERT_MESSAGE) {
         value = alert_message;
     }
+    else if (id == DATA_ID_EDIT_UNIT) {
+        Unit edit_unit = keypad::get_edit_unit();
+        changed = edit_unit != last_edit_unit;
+        last_edit_unit = edit_unit;
+        if (edit_unit == UNIT_VOLT)
+            value = "mV";
+        else if (edit_unit == UNIT_MILLI_VOLT)
+            value = "V";
+        else if (edit_unit == UNIT_AMPER)
+            value = "mA";
+        else if (edit_unit == UNIT_MILLI_AMPER)
+            value = "A";
+    }
 
     return value;
 }
@@ -225,6 +240,16 @@ Value getMax(uint8_t id) {
         value = Value(selected_channel->I_MAX, UNIT_AMPER);
     }
     return value;
+}
+
+Unit getUnit(uint8_t id) {
+    if (id == DATA_ID_VOLT) {
+        return UNIT_VOLT;
+    }
+    else if (id == DATA_ID_CURR) {
+        return UNIT_AMPER;
+    }
+    return UNIT_NONE;
 }
 
 void set(uint8_t id, Value value) {

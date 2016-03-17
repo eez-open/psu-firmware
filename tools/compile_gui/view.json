@@ -90,6 +90,11 @@
       "border_size": 1
     },
     {
+      "name": "key_icons",
+      "base": "key",
+      "font": "icons"
+    },
+    {
       "name": "edit_info",
       "font": "small",
       "color": "white"
@@ -103,8 +108,12 @@
       "name": "edit_value_ur",
       "base": "edit_value",
       "color": "red"
+    },
+    {
+      "name": "edit_value_active",
+      "base": "edit_value",
+      "color": "#FFFF00"
     }
-
   ],
   "pages": [
     {
@@ -442,170 +451,10 @@
           "text": "Set Ch2 current [0-5 A]"
         },
         {
-          "type": "display_string",
-          "action": "key_7",
-          "x": 0,
-          "y": 32,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "7"
-        },
-        {
-          "type": "display_string",
-          "action": "key_8",
-          "x": 60,
-          "y": 32,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "8"
-        },
-        {
-          "type": "display_string",
-          "action": "key_9",
-          "x": 120,
-          "y": 32,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "9"
-        },
-        {
-          "type": "display_string",
-          "action": "key_back",
-          "x": 180,
-          "y": 32,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "<"
-        },
-        {
-          "type": "display_string",
-          "action": "key_4",
-          "x": 0,
-          "y": 68,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "4"
-        },
-        {
-          "type": "display_string",
-          "action": "key_5",
-          "x": 60,
-          "y": 68,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "5"
-        },
-        {
-          "type": "display_string",
-          "action": "key_6",
-          "x": 120,
-          "y": 68,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "6"
-        },
-        {
-          "type": "display_string",
-          "action": "key_c",
-          "x": 180,
-          "y": 68,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "C"
-        },
-        {
-          "type": "display_string",
-          "action": "key_1",
-          "x": 0,
-          "y": 104,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "1"
-        },
-        {
-          "type": "display_string",
-          "action": "key_2",
-          "x": 60,
-          "y": 104,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "2"
-        },
-        {
-          "type": "display_string",
-          "action": "key_3",
-          "x": 120,
-          "y": 104,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "3"
-        },
-        {
-          "type": "display_string",
-          "action": "key_ok",
-          "x": 180,
-          "y": 104,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "OK"
-        },
-        {
-          "type": "display_string",
-          "action": "key_0",
-          "x": 0,
-          "y": 140,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "0"
-        },
-        {
-          "type": "display_string",
-          "action": "key_dot",
-          "x": 60,
-          "y": 140,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "."
-        },
-        {
-          "type": "display_string",
-          "action": "key_sign",
-          "x": 120,
-          "y": 140,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "-"
-        },
-        {
-          "type": "display_string",
-          "action": "key_ma",
-          "x": 180,
-          "y": 140,
-          "w": 60,
-          "h": 36,
-          "style": "key",
-          "text": "mA"
-        },
-        {
           "type": "horizontal_list",
           "data": "channels",
           "x": 0,
-          "y": 176,
+          "y": 32,
           "h": 108,
           "item_widget": {
             "type": "container",
@@ -660,6 +509,175 @@
               }
             ]
           }
+        },
+        {
+          "type": "container",
+          "x": 0,
+          "y": 140,
+          "w": 240,
+          "h": 144,
+          "widgets": [
+            {
+              "type": "display_string",
+              "action": "key_7",
+              "x": 0,
+              "y": 0,
+              "w": 60,
+              "h": 36,
+              "style": "key",
+              "text": "7"
+            },
+            {
+              "type": "display_string",
+              "action": "key_8",
+              "x": 60,
+              "y": 0,
+              "w": 60,
+              "h": 36,
+              "style": "key",
+              "text": "8"
+            },
+            {
+              "type": "display_string",
+              "action": "key_9",
+              "x": 120,
+              "y": 0,
+              "w": 60,
+              "h": 36,
+              "style": "key",
+              "text": "9"
+            },
+            {
+              "type": "display_string",
+              "action": "key_back",
+              "x": 180,
+              "y": 0,
+              "w": 60,
+              "h": 36,
+              "style": "key_icons",
+              "text": "<"
+            },
+            {
+              "type": "display_string",
+              "action": "key_4",
+              "x": 0,
+              "y": 36,
+              "w": 60,
+              "h": 36,
+              "style": "key",
+              "text": "4"
+            },
+            {
+              "type": "display_string",
+              "action": "key_5",
+              "x": 60,
+              "y": 36,
+              "w": 60,
+              "h": 36,
+              "style": "key",
+              "text": "5"
+            },
+            {
+              "type": "display_string",
+              "action": "key_6",
+              "x": 120,
+              "y": 36,
+              "w": 60,
+              "h": 36,
+              "style": "key",
+              "text": "6"
+            },
+            {
+              "type": "display_string",
+              "action": "key_c",
+              "x": 180,
+              "y": 36,
+              "w": 60,
+              "h": 36,
+              "style": "key_icons",
+              "text": "C"
+            },
+            {
+              "type": "display_string",
+              "action": "key_1",
+              "x": 0,
+              "y": 72,
+              "w": 60,
+              "h": 36,
+              "style": "key",
+              "text": "1"
+            },
+            {
+              "type": "display_string",
+              "action": "key_2",
+              "x": 60,
+              "y": 72,
+              "w": 60,
+              "h": 36,
+              "style": "key",
+              "text": "2"
+            },
+            {
+              "type": "display_string",
+              "action": "key_3",
+              "x": 120,
+              "y": 72,
+              "w": 60,
+              "h": 36,
+              "style": "key",
+              "text": "3"
+            },
+            {
+              "type": "display_string",
+              "action": "key_ok",
+              "x": 180,
+              "y": 72,
+              "w": 60,
+              "h": 36,
+              "style": "key_icons",
+              "text": "O"
+            },
+            {
+              "type": "display_string",
+              "action": "key_0",
+              "x": 0,
+              "y": 108,
+              "w": 60,
+              "h": 36,
+              "style": "key",
+              "text": "0"
+            },
+            {
+              "type": "display_string",
+              "action": "key_dot",
+              "x": 60,
+              "y": 108,
+              "w": 60,
+              "h": 36,
+              "style": "key",
+              "text": "."
+            },
+            {
+              "type": "display_string",
+              "action": "key_sign",
+              "x": 120,
+              "y": 108,
+              "w": 60,
+              "h": 36,
+              "style": "key_icons",
+              "text": "-"
+            },
+            {
+              "type": "display",
+              "data": "edit_unit",
+              "action": "key_unit",
+              "x": 180,
+              "y": 108,
+              "w": 60,
+              "h": 36,
+              "style": "key"
+            }
+          ]
         },
         {
           "type": "display_string",

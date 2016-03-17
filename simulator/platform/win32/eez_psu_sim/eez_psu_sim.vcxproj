@@ -256,6 +256,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\src\scpi_simu.h" />
     <ClInclude Include="..\..\..\src\simulator_conf.h" />
     <ClInclude Include="..\..\..\src\simulator_psu.h" />
+    <ClInclude Include="gui_keypad.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -328,6 +329,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\src\scpi_simu.cpp" />
     <ClCompile Include="..\..\..\src\simulator_psu.cpp" />
     <ClCompile Include="ethernet_win32.cpp" />
+    <ClCompile Include="gui_keypad.cpp" />
     <ClCompile Include="main_loop.cpp" />
   </ItemGroup>
   <ItemGroup>

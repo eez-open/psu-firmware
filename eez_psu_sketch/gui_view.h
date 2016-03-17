@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
+
 namespace eez {
 namespace psu {
 namespace gui {
@@ -58,6 +60,7 @@ namespace gui {
 #define DATA_ID_OTP 10
 #define DATA_ID_DP 11
 #define DATA_ID_ALERT_MESSAGE 12
+#define DATA_ID_EDIT_UNIT 13
 #define ACTION_ID_EDIT 1
 #define ACTION_ID_EDIT_WITH_SLIDER 2
 #define ACTION_ID_EDIT_WITH_STEP 3
@@ -83,12 +86,33 @@ namespace gui {
 #define ACTION_ID_KEY_BACK 23
 #define ACTION_ID_KEY_C 24
 #define ACTION_ID_KEY_OK 25
-#define ACTION_ID_KEY_MA 26
+#define ACTION_ID_KEY_UNIT 26
 #define PAGE_ID_MAIN 0
 #define PAGE_ID_EDIT_WITH_SLIDER 1
 #define PAGE_ID_EDIT_WITH_STEP 2
 #define PAGE_ID_EDIT_WITH_KEYPAD 3
 #define PAGE_ID_YES_NO 4
+#define STYLE_ID_DEFAULT 0
+#define STYLE_ID_SMALL 1
+#define STYLE_ID_MON_VALUE 2
+#define STYLE_ID_MON_VALUE_UR 3
+#define STYLE_ID_MON_VALUE_MEDIUM 4
+#define STYLE_ID_MON_VALUE_MEDIUM_UR 5
+#define STYLE_ID_CHANNEL_OFF 6
+#define STYLE_ID_CHANNEL_OFF_MEDIUM 7
+#define STYLE_ID_PROT_INDICATOR 8
+#define STYLE_ID_PROT_INDICATOR_SET 9
+#define STYLE_ID_PROT_INDICATOR_TRIP 10
+#define STYLE_ID_MENU 11
+#define STYLE_ID_TAB_PAGE 12
+#define STYLE_ID_TAB_PAGE_SELECTED 13
+#define STYLE_ID_EXIT 14
+#define STYLE_ID_KEY 15
+#define STYLE_ID_KEY_ICONS 16
+#define STYLE_ID_EDIT_INFO 17
+#define STYLE_ID_EDIT_VALUE 18
+#define STYLE_ID_EDIT_VALUE_UR 19
+#define STYLE_ID_EDIT_VALUE_ACTIVE 20
 
 typedef uint16_t OBJ_OFFSET;
 
@@ -99,6 +123,21 @@ struct List {
 
 struct ContainerWidget {
     List widgets;
+};
+
+struct ThreeStateIndicatorWidget {
+    OBJ_OFFSET style1;
+    OBJ_OFFSET style2;
+    OBJ_OFFSET text;
+};
+
+struct SelectWidget {
+    List widgets;
+};
+
+struct Document {
+    List styles;
+    List pages;
 };
 
 struct Widget {
@@ -113,30 +152,8 @@ struct Widget {
     OBJ_OFFSET specific;
 };
 
-struct ThreeStateIndicatorWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET style2;
-    OBJ_OFFSET text;
-};
-
-struct SelectWidget {
-    List widgets;
-};
-
 struct ListWidget {
     OBJ_OFFSET item_widget;
-};
-
-struct DisplayStringSelectWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET text1;
-    OBJ_OFFSET style2;
-    OBJ_OFFSET text2;
-};
-
-struct Document {
-    List styles;
-    List pages;
 };
 
 struct Style {
@@ -147,6 +164,13 @@ struct Style {
     uint16_t border_color;
     uint16_t padding_horizontal;
     uint16_t padding_vertical;
+};
+
+struct DisplayStringSelectWidget {
+    OBJ_OFFSET style1;
+    OBJ_OFFSET text1;
+    OBJ_OFFSET style2;
+    OBJ_OFFSET text2;
 };
 
 struct DisplayStringWidget {

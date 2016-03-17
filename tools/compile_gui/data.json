@@ -56,7 +56,10 @@
     },
     {
       "id": "alert_message",
-      "description":  "Message in alert dialog"
+      "description": "Message in alert dialog"
+    },
+    {
+      "id": "edit_unit"
     }
   ],
   "actions": [
@@ -146,7 +149,7 @@
       "id": "key_ok"
     },
     {
-      "id": "key_ma"
+      "id": "key_unit"
     }
   ],
   "pages": [
