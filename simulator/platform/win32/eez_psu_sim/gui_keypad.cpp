@@ -200,42 +200,33 @@ void do_action(int action_id) {
     if (action_id >= ACTION_ID_KEY_0 && action_id <= ACTION_ID_KEY_9) {
         int d = action_id - ACTION_ID_KEY_0;
         if (state == START) {
-            int saved = d0;
             d0 = d;
             state = D0;
             if (!is_value_valid()) {
-                d0 = saved;
-                state = START;
-                sound::playBeep();
+                reset();
             }
         }
         else if (state == D0) {
-            int saved = d1;
             d1 = d;
             state = D1;
             if (!is_value_valid()) {
-                d1 = saved;
                 state = D1;
                 sound::playBeep();
             }
         }
         else if (state == DOT || isMilli() && state == D1) {
             State saved_state = state;
-            int saved = d2;
             d2 = d;
             state = D2;
             if (!is_value_valid()) {
-                d2 = saved;
                 state = saved_state;
                 sound::playBeep();
             }
         }
         else if (state == D2) {
-            int saved = d3;
             d3 = d;
             state = D3;
             if (!is_value_valid()) {
-                d3 = saved;
                 state = D2;
                 sound::playBeep();
             }
@@ -306,8 +297,7 @@ void do_action(int action_id) {
             state = D0;
         }
         else if (state == D0) {
-            state = START;
-            sign = 1;
+            reset();
         }
         else {
             sound::playBeep();
@@ -315,8 +305,7 @@ void do_action(int action_id) {
     }
     else if (action_id == ACTION_ID_KEY_C) {
         if (state != START) {
-            state = START;
-            sign = 1;
+            reset();
         }
         else {
             sound::playBeep();
@@ -329,8 +318,7 @@ void do_action(int action_id) {
             data::set(edit_data_id, data::Value(get_value(), data::getUnit(edit_data_id)));
             data::setCursor(saved_cursor);
 
-            state = START;
-            sign = 1;
+            reset();
         }
         else {
             sound::playBeep();
