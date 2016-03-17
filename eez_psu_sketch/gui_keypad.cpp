@@ -210,7 +210,7 @@ void do_action(int action_id) {
             d1 = d;
             state = D1;
             if (!is_value_valid()) {
-                state = D1;
+                state = D0;
                 sound::playBeep();
             }
         }
