@@ -121,7 +121,7 @@ void fillData(Data *data) {
 
 void processData(Data *data) {
     if (data->reset) {
-        DebugTraceF("Reset");
+        DebugTrace("Reset");
         reset();
     }
 

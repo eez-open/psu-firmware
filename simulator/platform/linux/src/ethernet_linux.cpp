@@ -49,12 +49,12 @@ bool bind(int port) {
     sockaddr_in serv_addr;
     listen_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (listen_socket < 0) {
-        DebugTrace("EHTERNET: socket failed with error %d", errno);
+        DebugTraceF("EHTERNET: socket failed with error %d", errno);
         return false;
     }
 
     if (!enable_non_blocking(listen_socket)) {
-        DebugTrace("EHTERNET: ioctl on listen socket failed with error %d", errno);
+        DebugTraceF("EHTERNET: ioctl on listen socket failed with error %d", errno);
         close(listen_socket);
         listen_socket = -1;
         return false;
@@ -65,14 +65,14 @@ bool bind(int port) {
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons(port);
     if (::bind(listen_socket, (sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-        DebugTrace("EHTERNET: bind failed with error %d", errno);
+        DebugTraceF("EHTERNET: bind failed with error %d", errno);
         close(listen_socket);
         listen_socket = -1;
         return false;
     }
 
     if (listen(listen_socket, 5) < 0) {
-        DebugTrace("EHTERNET: listen failed with error %d", errno);
+        DebugTraceF("EHTERNET: listen failed with error %d", errno);
         close(listen_socket);
         listen_socket = -1;
         return false;
@@ -96,14 +96,14 @@ bool client_available() {
             return false;
         }
 
-        DebugTrace("EHTERNET: accept failed with error %d", errno);
+        DebugTraceF("EHTERNET: accept failed with error %d", errno);
         close(listen_socket);
         listen_socket = -1;
         return false;
     }
 
     if (!enable_non_blocking(client_socket)) {
-        DebugTrace("EHTERNET: ioctl on client socket failed with error %d", errno);
+        DebugTraceF("EHTERNET: ioctl on client socket failed with error %d", errno);
         close(client_socket);
         listen_socket = -1;
         return false;
@@ -166,7 +166,7 @@ int write(const char *buffer, int buffer_size) {
 void stop() {    
     int result = shutdown(client_socket, SHUT_WR);
     if (result < 0) {
-        DebugTrace("ETHERNET shutdown failed with error %d\n", errno);
+        DebugTraceF("ETHERNET shutdown failed with error %d\n", errno);
     }
     close(client_socket);
     client_socket = -1;
