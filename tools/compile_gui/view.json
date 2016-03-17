@@ -67,11 +67,13 @@
     },
     {
       "name": "tab_page",
+      "font": "icons",
       "color": "black",
       "background_color": "lightgray"
     },
     {
-      "name": "tab_page_selected"
+      "name": "tab_page_selected",
+      "font": "icons"
     },
     {
       "name": "exit",

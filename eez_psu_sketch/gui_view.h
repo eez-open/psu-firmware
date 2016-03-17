@@ -25,6 +25,7 @@ namespace gui {
 #define SMALL_FONT 1
 #define MEDIUM_FONT 2
 #define LARGE_FONT 3
+#define ICONS_FONT 4
 #define STYLE_FLAGS_BORDER 1
 #define STYLE_FLAGS_HORZ_ALIGN 6
 #define STYLE_FLAGS_HORZ_ALIGN_LEFT 0
@@ -96,40 +97,8 @@ struct List {
     OBJ_OFFSET first;
 };
 
-struct SelectWidget {
+struct ContainerWidget {
     List widgets;
-};
-
-struct Style {
-    uint8_t font;
-    uint16_t flags;
-    uint16_t background_color;
-    uint16_t color;
-    uint16_t border_color;
-    uint16_t padding_horizontal;
-    uint16_t padding_vertical;
-};
-
-struct ListWidget {
-    OBJ_OFFSET item_widget;
-};
-
-struct ThreeStateIndicatorWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET style2;
-    OBJ_OFFSET text;
-};
-
-struct Document {
-    List styles;
-    List pages;
-};
-
-struct DisplayStringSelectWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET text1;
-    OBJ_OFFSET style2;
-    OBJ_OFFSET text2;
 };
 
 struct Widget {
@@ -144,8 +113,40 @@ struct Widget {
     OBJ_OFFSET specific;
 };
 
-struct ContainerWidget {
+struct ThreeStateIndicatorWidget {
+    OBJ_OFFSET style1;
+    OBJ_OFFSET style2;
+    OBJ_OFFSET text;
+};
+
+struct SelectWidget {
     List widgets;
+};
+
+struct ListWidget {
+    OBJ_OFFSET item_widget;
+};
+
+struct DisplayStringSelectWidget {
+    OBJ_OFFSET style1;
+    OBJ_OFFSET text1;
+    OBJ_OFFSET style2;
+    OBJ_OFFSET text2;
+};
+
+struct Document {
+    List styles;
+    List pages;
+};
+
+struct Style {
+    uint8_t font;
+    uint16_t flags;
+    uint16_t background_color;
+    uint16_t color;
+    uint16_t border_color;
+    uint16_t padding_horizontal;
+    uint16_t padding_vertical;
 };
 
 struct DisplayStringWidget {

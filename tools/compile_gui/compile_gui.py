@@ -38,6 +38,7 @@ def declare_const(name, value):
 declare_const("SMALL_FONT", 1)
 declare_const("MEDIUM_FONT", 2)
 declare_const("LARGE_FONT", 3)
+declare_const("ICONS_FONT", 4)
 DEFAULT_FONT = MEDIUM_FONT
 
 #-------------------------------------------------------------------------------
@@ -543,6 +544,8 @@ class Parser:
                 font = MEDIUM_FONT
             elif font_str == "large":
                 font = LARGE_FONT
+            elif font_str == "icons":
+                font = ICONS_FONT
             else:
                 self.trace.error("unknown font '%s'" % style["font"])
                 font = DEFAULT_FONT

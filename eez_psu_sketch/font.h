@@ -59,12 +59,9 @@ private:
 
 	const uint8_t *fontData PROGMEM;
 };
-
-extern Font small_font;
-extern Font medium_font;
-extern Font large_font;
-
 }
 }
 }
 } // namespace eez::psu::ui::font
+
+#include "fonts.h"

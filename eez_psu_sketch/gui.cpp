@@ -212,6 +212,7 @@ font::Font *styleGetFont(Style *style) {
     font::Font *font;
     if (style->font == LARGE_FONT) font = &font::large_font;
     else if (style->font == SMALL_FONT) font = &font::small_font;
+    else if (style->font == ICONS_FONT) font = &font::icons_font;
     else font = &font::medium_font;
     return font;
 }

@@ -304,6 +304,9 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\touch_calibration.h">
       <Filter>gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\fonts.h">
+      <Filter>gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -509,6 +512,9 @@
       <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\touch_calibration.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\fonts.cpp">
       <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>
