@@ -21,7 +21,9 @@
 
 #include "sound.h"
 
-#define CONF_KEYPAD_CURSOR_BLINK_TIME 500 * 1000
+#define CONF_KEYPAD_CURSOR_BLINK_TIME 500000UL
+#define CONF_KEYPAD_CURSOR_ON "|"
+#define CONF_KEYPAD_CURSOR_OFF " "
 
 namespace eez {
 namespace psu {
@@ -29,7 +31,7 @@ namespace gui {
 namespace keypad {
 
 static bool cursor;
-static unsigned long last_cursor_change_time;
+static unsigned long last_cursor_change_time = 0;
 
 static char old_value_text[32];
 static char value_text[32];
@@ -38,6 +40,7 @@ static data::Unit edit_unit = data::UNIT_NONE;
 
 enum State {
     START,
+    EMPTY,
     D0,
     D1,
     DOT,
@@ -47,21 +50,12 @@ enum State {
 
 static State state;
 
-int sign = 1;
-
 int d0;
 int d1;
 int d2;
 int d3;
 
-bool d0_skipped;
-
-void reset() {
-    state = START;
-    sign = 1;
-    d0_skipped = false;
-    edit_unit = data::getUnit(edit_data_id);
-}
+////////////////////////////////////////////////////////////////////////////////
 
 bool isMilli() {
     return edit_unit == data::UNIT_MILLI_VOLT || edit_unit == data::UNIT_MILLI_AMPER;
@@ -83,10 +77,6 @@ float get_value() {
             value = value * 10 + d2;
         }
 
-        if (state >= D3) {
-            value = value * 10 + d3;
-        }
-
         value /= 1000.0f;
     }
     else {
@@ -103,13 +93,83 @@ float get_value() {
         value /= 100.0f;
     }
 
-    value *= sign;
     return value;
+}
+
+bool set_value(float fvalue) {
+    if (isMilli()) {
+        long value = (long)floor(fvalue * 1000);
+        
+        if (value > 999) {
+            return false;
+        }
+
+        if (value >= 100) {
+            d0 = value / 100;
+            value = value % 100;
+            d1 = value / 10;
+            d2 = value % 10;
+            state = D2;
+        } else if (value >= 10) {
+            d0 = value / 10;
+            d1 = value % 10;
+            state = D1;
+        } else {
+            d0  = value;
+            state = D0;
+        }
+    } else {
+        long value = (long)round(fvalue * 100);
+        
+        d3 = value % 10;
+        if (d3 != 0) {
+            state = D3;
+            
+            value /= 10;
+            d2 = value % 10;
+            
+            value /= 10;
+            d1 = value % 10;
+
+            value /= 10;
+            d0 = value % 10;
+
+        } else {
+            value /= 10;
+            d2 = value % 10;
+            if (d2 != 0) {
+                state = D2;
+
+                value /= 10;
+                d1 = value % 10;
+
+                value /= 10;
+                d0 = value % 10;
+            } else {
+                value /= 10;
+                d1 = value % 10;
+
+                d0 = value / 10;
+                if (d0 == 0) {
+                    d0 = d1;
+                    state = D0;
+                } else {
+                    state = D1;
+                }
+            }
+        }
+    }
+
+    return true;
 }
 
 bool is_value_valid() {
     data::Cursor saved_cursor = data::getCursor();
     data::setCursor(edit_data_cursor);
+
+    if (state == EMPTY) {
+        return false;
+    }
 
     float value = get_value();
     bool is_valid = value >= data::getMin(edit_data_id).getFloat() && value <= data::getMax(edit_data_id).getFloat();
@@ -132,11 +192,7 @@ void update_value_text() {
     else {
         int i = 0;
 
-        if (sign == -1) {
-            value_text[i++] = '-';
-        }
-
-        if (state >= D0 && !d0_skipped) {
+        if (state >= D0 && (d0 != 0 || state < DOT)) {
             value_text[i++] = d0 + '0';
         }
 
@@ -159,34 +215,61 @@ void update_value_text() {
         value_text[i] = 0;
 
         if (cursor) {
-            strcat(value_text, "_");
+            strcat_P(value_text, PSTR(CONF_KEYPAD_CURSOR_ON));
         }
         else {
-            strcat(value_text, " ");
+            strcat_P(value_text, PSTR(CONF_KEYPAD_CURSOR_OFF));
         }
 
         if (edit_unit == data::UNIT_VOLT)
-            strcat(value_text, "V");
+            strcat_P(value_text, PSTR("V"));
         else if (edit_unit == data::UNIT_MILLI_VOLT)
-            strcat(value_text, "mV");
+            strcat_P(value_text, PSTR("mV"));
         else if (edit_unit == data::UNIT_AMPER)
-            strcat(value_text, "A");
+            strcat_P(value_text, PSTR("A"));
         else if (edit_unit == data::UNIT_MILLI_AMPER)
-            strcat(value_text, "mA");
+            strcat_P(value_text, PSTR("mA"));
     }
 }
 
+void toggle_edit_unit() {
+    if (edit_unit == data::UNIT_VOLT) {
+        edit_unit = data::UNIT_MILLI_VOLT;
+    }
+    else if (edit_unit == data::UNIT_MILLI_VOLT) {
+        edit_unit = data::UNIT_VOLT;
+    }
+    else if (edit_unit == data::UNIT_AMPER) {
+        edit_unit = data::UNIT_MILLI_AMPER;
+    }
+    else if (edit_unit == data::UNIT_MILLI_AMPER) {
+        edit_unit = data::UNIT_AMPER;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void reset() {
+    state = START;
+    edit_unit = data::getUnit(edit_data_id);
+    update_value_text();
+}
+
 char *get_value_text(bool &changed) {
+    changed = false;
+
     if (strcmp(old_value_text, value_text) != 0) {
         changed = true;
     }
 
-    unsigned long current_time = micros();
-    if (current_time - last_cursor_change_time > CONF_KEYPAD_CURSOR_BLINK_TIME) {
-        cursor = !cursor;
-        last_cursor_change_time = current_time;
-        update_value_text();
-        changed = true;
+    if (state != START) {
+        unsigned long current_time = micros();
+        if (current_time - last_cursor_change_time > CONF_KEYPAD_CURSOR_BLINK_TIME) {
+            cursor = !cursor;
+            last_cursor_change_time = current_time;
+            update_value_text();
+            changed = true;
+        }
     }
 
     if (changed) {
@@ -199,11 +282,15 @@ char *get_value_text(bool &changed) {
 void do_action(int action_id) {
     if (action_id >= ACTION_ID_KEY_0 && action_id <= ACTION_ID_KEY_9) {
         int d = action_id - ACTION_ID_KEY_0;
-        if (state == START) {
+        if (state == START || state == EMPTY) {
             d0 = d;
             state = D0;
             if (!is_value_valid()) {
+                toggle_edit_unit();
+            } 
+            if (!is_value_valid()) {
                 reset();
+                sound::playBeep();
             }
         }
         else if (state == D0) {
@@ -223,7 +310,7 @@ void do_action(int action_id) {
                 sound::playBeep();
             }
         }
-        else if (state == D2) {
+        else if (state == D2 && !isMilli()) {
             d3 = d;
             state = D3;
             if (!is_value_valid()) {
@@ -239,16 +326,14 @@ void do_action(int action_id) {
         if (isMilli()) {
             sound::playBeep();
         } else {
-            if (state == START) {
+            if (state == START || state == EMPTY) {
                 d0 = 0;
                 d1 = 0;
-                d0_skipped = true;
                 state = DOT;
             }
             else if (state == D0) {
                 d1 = d0;
                 d0 = 0;
-                d0_skipped = true;
                 state = DOT;
             }
             else if (state == D1) {
@@ -260,16 +345,8 @@ void do_action(int action_id) {
         }
     }
     else if (action_id == ACTION_ID_KEY_SIGN) {
-        if (state != START) {
-            sign *= -1;
-            if (!is_value_valid()) {
-                sign *= -1;
-                sound::playBeep();
-            }
-        }
-        else {
-            sound::playBeep();
-        }
+        // not supported
+        sound::playBeep();
     }
     else if (action_id == ACTION_ID_KEY_BACK) {
         if (state == D3) {
@@ -284,8 +361,7 @@ void do_action(int action_id) {
             }
         }
         else if (state == DOT) {
-            if (d0_skipped) {
-                d0_skipped = false;
+            if (d0 == 0) {
                 d0 = d1;
                 state = D0;
             }
@@ -297,7 +373,7 @@ void do_action(int action_id) {
             state = D0;
         }
         else if (state == D0) {
-            reset();
+            state = EMPTY;
         }
         else {
             sound::playBeep();
@@ -312,7 +388,7 @@ void do_action(int action_id) {
         }
     }
     else if (action_id == ACTION_ID_KEY_OK) {
-        if (state != START) {
+        if (state != START && state != EMPTY) {
             data::Cursor saved_cursor = data::getCursor();
             data::setCursor(edit_data_cursor);
             data::set(edit_data_id, data::Value(get_value(), data::getUnit(edit_data_id)));
@@ -325,35 +401,18 @@ void do_action(int action_id) {
         }
     }
     else if (action_id == ACTION_ID_KEY_UNIT) {
-        if (state != START) {
-            if (edit_unit == data::UNIT_VOLT) {
-                edit_unit = data::UNIT_MILLI_VOLT;
-            }
-            else if (edit_unit == data::UNIT_MILLI_VOLT) {
-                edit_unit = data::UNIT_VOLT;
-            }
-            else if (edit_unit == data::UNIT_AMPER) {
-                edit_unit = data::UNIT_MILLI_AMPER;
-            }
-            else if (edit_unit == data::UNIT_MILLI_AMPER) {
-                edit_unit = data::UNIT_AMPER;
-            }
+        float value = get_value();
+        data::Unit saved_edit_unit = edit_unit;
 
-            if (isMilli()) {
-                if (state >= DOT) {
-                    if (d0_skipped) {
-                        d0_skipped = false;
-                        d0 = d1;
-                        state = D0;
-                    }
-                    else {
-                        state = D1;
-                    }
-                }
+        toggle_edit_unit();
+
+        if (state == START) {
+            state = EMPTY;
+        } else {
+            if (state != EMPTY && !set_value(value)) {
+                edit_unit = saved_edit_unit;
+                sound::playBeep();
             }
-        }
-        else {
-            sound::playBeep();
         }
     }
 

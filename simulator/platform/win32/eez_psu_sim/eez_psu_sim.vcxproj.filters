@@ -307,7 +307,7 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\fonts.h">
       <Filter>gui</Filter>
     </ClInclude>
-    <ClInclude Include="gui_keypad.h">
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_keypad.h">
       <Filter>gui</Filter>
     </ClInclude>
   </ItemGroup>
@@ -520,7 +520,7 @@
     <ClCompile Include="..\..\..\..\eez_psu_sketch\fonts.cpp">
       <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="gui_keypad.cpp">
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_keypad.cpp">
       <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>

@@ -82,47 +82,83 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
     // draw glyph pixels
 	uint8_t widthInBytes = (glyph.width + 7) / 8;
 
-	clear_bit(P_CS, B_CS);
+    int iStartByte = 0;
+    int iStartCol = 0;
+    if (x_glyph < clip_x1) {
+        int dx_off = clip_x1 - x_glyph;
+        iStartByte = dx_off / 8;
+        iStartCol = dx_off % 8;
+        x_glyph = clip_x1;
+    }
 
-	if (orient == PORTRAIT) {
-		setXY(x_glyph, y_glyph, x_glyph + glyph.width - 1, y_glyph + glyph.height - 1);
-		for (int iRow = 0, offset = font::GLYPH_HEADER_SIZE; iRow < glyph.height; ++iRow) {
-			for (int iByte = 0, iCol = 0; iByte < widthInBytes; ++iByte, ++offset) {
-				uint8_t data = arduino_util::prog_read_byte(glyph.data + offset);
-				for (uint8_t mask = 0x80; mask != 0 && iCol < glyph.width; mask >>= 1, ++iCol) {
-					if (data & mask) {
-						setPixel((fch << 8) | fcl);
-					}
-					else {
-						setPixel((bch << 8) | bcl);
-					}
-				}
-			}
-		}
-	}
-	else {
-		for (int iRow = 0, offset = font::GLYPH_HEADER_SIZE; iRow < glyph.height; ++iRow) {
-			setXY(x_glyph, y_glyph + iRow, x_glyph + glyph.width - 1, y_glyph + iRow);
-			for (int iByte = widthInBytes - 1; iByte >= 0; --iByte) {
-				uint8_t data = arduino_util::prog_read_byte(glyph.data + offset + iByte);
-				for (int iBit = 7; iBit >= 0; --iBit) {
-					if (iByte * 8 + iBit < glyph.width) {
-						if (data & (0x80 >> iBit)) {
-							setPixel((fch << 8) | fcl);
-						}
-						else {
-							setPixel((bch << 8) | bcl);
-						}
-					}
-				}
-			}
+    int offset = font::GLYPH_HEADER_SIZE;
+    if (y_glyph < clip_y1) {
+        int dy_off = clip_y1 - y_glyph;
+        offset += dy_off * widthInBytes;
+        y_glyph = clip_y1;
+    }
 
-			offset += widthInBytes;
-		}
-	}
+    int width;
+    if (x_glyph + glyph.width - 1 > clip_x2) {
+        width = clip_x2 - x_glyph + 1;
+    } else {
+        width = glyph.width;
+    }
 
-	set_bit(P_CS, B_CS);
-	clrXY();
+    int height;
+    if (y_glyph + glyph.height - 1 > clip_y2) {
+        height = clip_y2 - y_glyph + 1;
+    } else {
+        height = glyph.height;
+    }
+
+    if (width > 0 && height > 0) {
+	    clear_bit(P_CS, B_CS);
+
+	    if (orient == PORTRAIT) {
+		    setXY(x_glyph, y_glyph, x_glyph + width - 1, y_glyph + height - 1);
+		    for (int iRow = 0; iRow < height; ++iRow) {
+			    for (int iByte = iStartByte, iCol = iStartCol; iByte < widthInBytes; ++iByte) {
+				    uint8_t data = arduino_util::prog_read_byte(glyph.data + offset + iByte);
+				    for (uint8_t mask = 0x80; mask != 0 && iCol < width; mask >>= 1, ++iCol) {
+                        if (iCol >= iStartCol) {
+					        if (data & mask) {
+						        setPixel((fch << 8) | fcl);
+					        }
+					        else {
+						        setPixel((bch << 8) | bcl);
+					        }
+                        }
+				    }
+			    }
+                offset += widthInBytes;
+		    }
+	    }
+	    else {
+		    for (int iRow = 0; iRow < height; ++iRow) {
+			    setXY(x_glyph, y_glyph + iRow, x_glyph + width - 1, y_glyph + iRow);
+			    for (int iByte = iStartByte; iByte >= iStartByte; --iByte) {
+				    uint8_t data = arduino_util::prog_read_byte(glyph.data + offset + iByte);
+				    for (int iBit = 7; iBit >= 0; --iBit) {
+                        int iPixel = iByte * 8 + iBit;
+					    if (iPixel >= iStartCol && iPixel < width) {
+						    if (data & (0x80 >> iBit)) {
+							    setPixel((fch << 8) | fcl);
+						    }
+						    else {
+							    setPixel((bch << 8) | bcl);
+						    }
+					    }
+				    }
+			    }
+
+			    offset += widthInBytes;
+		    }
+	    }
+
+	    set_bit(P_CS, B_CS);
+	    clrXY();
+    }
 
 	return glyph.dx;
 }

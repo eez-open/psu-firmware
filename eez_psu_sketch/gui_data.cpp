@@ -206,13 +206,13 @@ Value get(uint8_t id, bool &changed) {
         changed = edit_unit != last_edit_unit;
         last_edit_unit = edit_unit;
         if (edit_unit == UNIT_VOLT)
-            value = "mV";
+            value = PSTR("mV");
         else if (edit_unit == UNIT_MILLI_VOLT)
-            value = "V";
+            value = PSTR("V");
         else if (edit_unit == UNIT_AMPER)
-            value = "mA";
+            value = PSTR("mA");
         else if (edit_unit == UNIT_MILLI_AMPER)
-            value = "A";
+            value = PSTR("A");
     }
 
     return value;
