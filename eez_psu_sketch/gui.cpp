@@ -285,7 +285,7 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
         lcd::lcd.setBackColor(style->background_color);
         lcd::lcd.setColor(style->color);
     }
-    lcd::lcd.drawStr(text, x_offset, y_offset, x1, y1, x2, y2, *font, !is_page_refresh && !widget_refresh || page_style->background_color != background_color);
+    lcd::lcd.drawStr(text, x_offset, y_offset, x1, y1, x2, y2, *font, (!is_page_refresh && !widget_refresh) || page_style->background_color != background_color);
 }
 
 void fill_rect(int x, int y, int w, int h) {
@@ -325,7 +325,7 @@ bool draw_display_widget(uint8_t *document, Widget *widget, int x, int y, bool r
                 style = (Style *)(document + widget->style);
             }
 
-            drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + widget->style), inverse);
+            drawText(text, x, y, (int)widget->w, (int)widget->h, style, inverse);
             return true;
         }
         return false;

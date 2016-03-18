@@ -301,7 +301,7 @@ void do_action(int action_id) {
                 sound::playBeep();
             }
         }
-        else if (state == DOT || isMilli() && state == D1) {
+        else if (state == DOT || (isMilli() && state == D1)) {
             State saved_state = state;
             d2 = d;
             state = D2;
