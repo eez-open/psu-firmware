@@ -255,14 +255,7 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
     else if (styleIsVertAlignBottom(style)) y_offset = y2 - style->padding_vertical -height;
     else y_offset = y1 + ((y2 - y1) - height) / 2;
 
-    uint16_t background_color;
-
-    if (inverse) {
-        background_color = style->color;
-    } else {
-        background_color = style->background_color;
-    }
-
+    uint16_t background_color = inverse ? style->color : style->background_color;
     lcd::lcd.setColor(background_color);
 
     if (widget_refresh) {
@@ -288,6 +281,138 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
     lcd::lcd.drawStr(text, x_offset, y_offset, x1, y1, x2, y2, *font, (!is_page_refresh && !widget_refresh) || page_style->background_color != background_color);
 }
 
+void drawMultilineText(char *text, int x, int y, int w, int h, Style *style, bool inverse) {
+    x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    w *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    h *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+
+    int x1 = x;
+    int y1 = y;
+    int x2 = x + w - 1;
+    int y2 = y + h - 1;
+
+    if (styleHasBorder(style)) {
+        lcd::lcd.setColor(style->border_color);
+        lcd::lcd.drawRect(x1, y1, x2, y2);
+        ++x1;
+        ++y1;
+        --x2;
+        --y2;
+    }
+
+    font::Font *font = styleGetFont(style);
+    int height = font->getHeight();
+    
+    font::Glyph space_glyph;
+    font->getGlyph(' ', space_glyph);
+    int space_width = space_glyph.dx;
+
+    bool clear_background = false;
+
+    uint16_t background_color = inverse ? style->color : style->background_color;
+    lcd::lcd.setColor(background_color);
+    if (widget_refresh) {
+        lcd::lcd.fillRect(x1, y1, x2, y2);
+    } else {
+        clear_background = !is_page_refresh || page_style->background_color != background_color;
+        if (clear_background) {
+            if (style->padding_horizontal > 0) {
+                lcd::lcd.fillRect(x1, y1, x1 + style->padding_horizontal - 1, y2);
+                lcd::lcd.fillRect(x2 - style->padding_horizontal + 1, y1, x2, y2);
+            }
+            if (y1 < y) {
+                lcd::lcd.fillRect(x1, y1, x2, y1 + style->padding_vertical - 1);
+                lcd::lcd.fillRect(x1, y2 - style->padding_vertical + 1, x2, y2);
+            }
+        }
+    }
+
+    x1 += style->padding_horizontal;
+    x2 -= style->padding_horizontal;
+    y1 += style->padding_vertical;
+    y2 -= style->padding_vertical;
+
+    x = x1;
+    y = y1;
+
+    int i = 0;
+    while (true) {
+        int j = i;
+        while (text[i] != 0 && text[i] != ' ' && text[i] != '\n')
+            ++i;
+
+        char save = text[i];
+
+        text[i] = 0;
+        int width = lcd::lcd.measureStr(text + j, *font);
+        text[i] = save;
+
+        while (width > x2 - x + 1) {
+            if (clear_background) {
+                lcd::lcd.setColor(background_color);
+                lcd::lcd.fillRect(x, y, x2, y + height - 1);
+            }
+
+            y += height;
+            if (y + height > y2) {
+                break;
+            }
+
+            x = x1;
+        }
+
+        if (y + height > y2) {
+            break;
+        }
+
+        if (inverse) {
+            lcd::lcd.setBackColor(style->color);
+            lcd::lcd.setColor(style->background_color);
+        }
+        else {
+            lcd::lcd.setBackColor(style->background_color);
+            lcd::lcd.setColor(style->color);
+        }
+
+        text[i] = 0;
+        lcd::lcd.drawStr(text + j, x, y, x1, y1, x2, y2, *font, (!is_page_refresh && !widget_refresh) || page_style->background_color != background_color);
+        text[i] = save;
+
+        x += width;
+
+        if (text[i] == ' ') {
+            x += space_width;
+            while (text[i] == ' ')
+                ++i;
+        }
+
+        if (text[i] == 0 || text[i] == '\n') {
+            if (clear_background) {
+                uint16_t background_color = inverse ? style->color : style->background_color;
+                lcd::lcd.fillRect(x, y, x2, y + height - 1);
+            }
+
+            if (text[i] == 0) {
+                break;
+            }
+
+            ++i;
+
+            y += (int)(1.1 * height);
+            if (y + height > y2) {
+                break;
+            }
+            x = x1;
+        }
+    }
+
+    if (clear_background) {
+        lcd::lcd.setColor(background_color);
+        lcd::lcd.fillRect(x1, y, x2, y2);
+    }
+}
+
 void fill_rect(int x, int y, int w, int h) {
     x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
     y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
@@ -299,13 +424,19 @@ void fill_rect(int x, int y, int w, int h) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+Style *get_active_style(Widget *widget) {
+    int widget_style_id = (Style *)(document + widget->style) - (Style *)(document + ((Document *)document)->styles.first);
+    int active_style_id = widget_style_id == STYLE_ID_EDIT_VALUE_SMALL ? STYLE_ID_EDIT_VALUE_ACTIVE_SMALL : STYLE_ID_EDIT_VALUE_ACTIVE;
+    return (Style *)(document + ((Document *)document)->styles.first) + active_style_id;
+}
+
 bool draw_display_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
     bool edit = data::getCursor() == edit_data_cursor && widget->data == edit_data_id;
     if (edit && page_index == PAGE_ID_EDIT_WITH_KEYPAD) {
         bool changed;
         char *text = keypad::get_value_text(changed);
         if (changed || refresh) {
-            drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + ((Document *)document)->styles.first) + STYLE_ID_EDIT_VALUE_ACTIVE, inverse);
+            drawText(text, x, y, (int)widget->w, (int)widget->h, get_active_style(widget), inverse);
             return true;
         }
         return false;
@@ -318,12 +449,10 @@ bool draw_display_widget(uint8_t *document, Widget *widget, int x, int y, bool r
             value.toText(text, 32);
 
             Style *style;
-            if (edit) {
-                style = (Style *)(document + ((Document *)document)->styles.first) + STYLE_ID_EDIT_VALUE_ACTIVE;
-            }
-            else {
+            if (edit)
+                style = get_active_style(widget);
+            else
                 style = (Style *)(document + widget->style);
-            }
 
             drawText(text, x, y, (int)widget->w, (int)widget->h, style, inverse);
             return true;
@@ -337,6 +466,16 @@ bool draw_display_string_widget(uint8_t *document, Widget *widget, int x, int y,
         DisplayStringWidget *display_string_widget = ((DisplayStringWidget *)(document + widget->specific));
         char *text = (char *)(document + display_string_widget->text);
         drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + widget->style), inverse);
+        return true;
+    }
+    return false;
+}
+
+bool draw_display_multiline_string_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
+    if (refresh) {
+        DisplayStringWidget *display_string_widget = ((DisplayStringWidget *)(document + widget->specific));
+        char *text = (char *)(document + display_string_widget->text);
+        drawMultilineText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + widget->style), inverse);
         return true;
     }
     return false;
@@ -391,6 +530,8 @@ bool draw_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh) 
         return draw_three_state_indicator_widget(document, widget, x, y, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING_SELECT) {
         return draw_display_string_select_widget(document, widget, x, y, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING) {
+        return draw_display_multiline_string_widget(document, widget, x, y, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_VERTICAL_SLIDER) {
         return slider::draw(document, widget, x, y, refresh, inverse);
     }
@@ -613,7 +754,7 @@ void tick(unsigned long tick_usec) {
 }
 
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
-    data::set(DATA_ID_ALERT_MESSAGE, data::Value(message));
+    data::set(DATA_ID_ALERT_MESSAGE, data::Value::ConstStr(message));
 
     dialog_yes_callback = yes_callback;
     dialog_no_callback = no_callback;

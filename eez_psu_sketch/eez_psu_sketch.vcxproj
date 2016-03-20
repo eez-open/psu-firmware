@@ -74,10 +74,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega;C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch;C:\Users\martin\Documents\Arduino\libraries\eez_psu_lib\src;C:\Users\martin\Documents\Arduino\libraries\eez_psu_lib\src\utility;C:\Users\martin\Documents\Arduino\libraries\scpi-parser\src;C:\Users\martin\Documents\Arduino\libraries\scpi-parser\src\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\utility;C:\Users\martin\Documents\Arduino\libraries\UIPEthernet\src;C:\Users\martin\Documents\Arduino\libraries\UIPEthernet\src\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\owktvod1.gkd\Micro Platforms\default\debuggers;C:\Users\martin\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch\__vm\.eez_psu_sketch.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\cores\arduino;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\variants\mega;C:\Users\Martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch;C:\Users\Martin\Documents\Arduino\libraries\eez_psu_lib\src;C:\Users\Martin\Documents\Arduino\libraries\eez_psu_lib\src\utility;C:\Users\Martin\Documents\Arduino\libraries\scpi-parser\src;C:\Users\Martin\Documents\Arduino\libraries\scpi-parser\src\utility;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\libraries\SPI;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\libraries\SPI\utility;C:\Users\Martin\Documents\Arduino\libraries\UIPEthernet\src;C:\Users\Martin\Documents\Arduino\libraries\UIPEthernet\src\utility;C:\Users\Martin\Documents\Arduino\libraries\UTFT;C:\Users\Martin\Documents\Arduino\libraries\UTFT\utility;C:\Users\Martin\Documents\Arduino\libraries\UTouch;C:\Users\Martin\Documents\Arduino\libraries\UTouch\utility;C:\Users\Martin\Desktop\arduino-1.6.5-r2\libraries;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\1wi1bsuq.rmv\Micro Platforms\default\debuggers;C:\Users\Martin\Documents\Arduino\libraries;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\tools\avr/avr/include/;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\tools\avr//avr/include/avr/;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\Users\Martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch\__vm\.eez_psu_sketch.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__AVR_ATmega2560__;F_CPU=16000000L;ARDUINO=166;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__AVR_ATmega2560__;F_CPU=16000000L;ARDUINO=165;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -142,9 +142,13 @@
     <ClInclude Include="conf_channel.h" />
     <ClInclude Include="conf_user.h" />
     <ClInclude Include="font.h" />
+    <ClInclude Include="fonts.h" />
     <ClInclude Include="gesture.h" />
     <ClInclude Include="gui.h" />
     <ClInclude Include="gui_data.h" />
+    <ClInclude Include="gui_keypad.h" />
+    <ClInclude Include="gui_slider.h" />
+    <ClInclude Include="gui_view.h" />
     <ClInclude Include="lcd.h" />
     <ClInclude Include="profile.h" />
     <ClInclude Include="scpi_debug.h" />
@@ -230,6 +234,8 @@
     <ClInclude Include="temperature.h" />
     <ClInclude Include="temp_sensor.h" />
     <ClInclude Include="touch.h" />
+    <ClInclude Include="touch_calibration.h" />
+    <ClInclude Include="touch_filter.h" />
     <ClInclude Include="util.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -241,9 +247,13 @@
     <ClCompile Include="arduino_util.cpp" />
     <ClCompile Include="buzzer.cpp" />
     <ClCompile Include="font.cpp" />
+    <ClCompile Include="fonts.cpp" />
     <ClCompile Include="gesture.cpp" />
     <ClCompile Include="gui.cpp" />
     <ClCompile Include="gui_data.cpp" />
+    <ClCompile Include="gui_keypad.cpp" />
+    <ClCompile Include="gui_slider.cpp" />
+    <ClCompile Include="gui_view.cpp" />
     <ClCompile Include="lcd.cpp" />
     <ClCompile Include="profile.cpp" />
     <ClCompile Include="scpi_debug.cpp" />
@@ -279,6 +289,8 @@
     <ClCompile Include="temperature.cpp" />
     <ClCompile Include="temp_sensor.cpp" />
     <ClCompile Include="touch.cpp" />
+    <ClCompile Include="touch_calibration.cpp" />
+    <ClCompile Include="touch_filter.cpp" />
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -180,6 +180,24 @@
     <ClInclude Include="gui_data.h">
       <Filter>gui</Filter>
     </ClInclude>
+    <ClInclude Include="fonts.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_keypad.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_slider.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_view.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="touch_calibration.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="touch_filter.h">
+      <Filter>gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="calibration.cpp">
@@ -309,6 +327,24 @@
       <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="gui_data.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="fonts.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_keypad.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_slider.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_view.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="touch_calibration.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="touch_filter.cpp">
       <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>

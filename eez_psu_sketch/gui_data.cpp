@@ -17,12 +17,9 @@
  */
 
 #include "psu.h"
-#include "gui_data.h"
-
-#include "channel.h"
-
-#include "gui_view.h"
+#include "gui_internal.h"
 #include "gui_keypad.h"
+#include "channel.h"
 
 namespace eez {
 namespace psu {
@@ -43,17 +40,16 @@ void Value::toText(char *text, int count) {
         strcat(text, " A");
         break;
 
+    case UNIT_CONST_STR:
+        strncpy_P(text, const_str_, count - 1);
+        text[count - 1] = 0;
+        break;
+
     case UNIT_STR:
-        strncpy_P(text, str_, count - 1);
+        strncpy(text, str_, count - 1);
         text[count - 1] = 0;
         break;
     }
-}
-
-void Value::toTextNoUnit(char *text) {
-    text[0] = 0;
-
-    util::strcatFloat(text, float_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -61,6 +57,9 @@ void Value::toTextNoUnit(char *text) {
 static Cursor cursor;
 static Value alert_message;
 static Unit last_edit_unit;
+static char edit_info[32];
+static char last_edit_info[32];
+static float last_edit_value;
 
 Cursor getCursor() {
     return cursor;
@@ -200,19 +199,49 @@ Value get(uint8_t id, bool &changed) {
         value = Value(dp);
     } else if (id == DATA_ID_ALERT_MESSAGE) {
         value = alert_message;
-    }
-    else if (id == DATA_ID_EDIT_UNIT) {
+    } else if (id == DATA_ID_EDIT_VALUE) {
+        Channel *selected_channel = &Channel::get(edit_data_cursor.selected_channel_index);
+        if (edit_data_id == DATA_ID_VOLT)
+            value = Value(selected_channel->u.set, UNIT_VOLT);
+        else
+            value = Value(selected_channel->i.set, UNIT_AMPER);
+
+        if (value.getFloat() != last_edit_value) {
+            last_edit_value = value.getFloat();
+            changed = true;
+        }
+    } else if (id == DATA_ID_EDIT_UNIT) {
         Unit edit_unit = keypad::get_edit_unit();
         changed = edit_unit != last_edit_unit;
         last_edit_unit = edit_unit;
         if (edit_unit == UNIT_VOLT)
-            value = PSTR("mV");
+            value = Value::ConstStr("mV");
         else if (edit_unit == UNIT_MILLI_VOLT)
-            value = PSTR("V");
+            value = Value::ConstStr("V");
         else if (edit_unit == UNIT_AMPER)
-            value = PSTR("mA");
+            value = Value::ConstStr("mA");
         else if (edit_unit == UNIT_MILLI_AMPER)
-            value = PSTR("A");
+            value = Value::ConstStr("A");
+    } else if (id == DATA_ID_EDIT_INFO) {
+        Channel *selected_channel = &Channel::get(edit_data_cursor.selected_channel_index);
+
+        if (edit_data_id == DATA_ID_VOLT) {
+            sprintf_P(edit_info, PSTR("Set Ch%d voltage [%d-%d V]"), selected_channel->index,
+                (int)selected_channel->U_MIN,
+                (int)selected_channel->U_MAX);
+        }
+        else {
+            sprintf_P(edit_info, PSTR("Set Ch%d current [%d-%d A]"), selected_channel->index,
+                (int)selected_channel->I_MIN,
+                (int)selected_channel->I_MAX);
+        }
+
+        if (strcmp(edit_info, last_edit_info) != 0) {
+            strcpy(last_edit_info, edit_info);
+            changed = true;
+        }
+
+        value = edit_info;
     }
 
     return value;

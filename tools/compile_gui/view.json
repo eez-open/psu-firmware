@@ -97,7 +97,12 @@
     {
       "name": "edit_info",
       "font": "small",
-      "color": "white"
+      "color": "#C8E7F1"
+    },
+    {
+      "name": "edit_value_large",
+      "font": "large",
+      "color": "FFFF00"
     },
     {
       "name": "edit_value",
@@ -112,6 +117,21 @@
     {
       "name": "edit_value_active",
       "base": "edit_value",
+      "color": "#FFFF00"
+    },
+    {
+      "name": "edit_value_small",
+      "font": "small",
+      "color": "white"
+    },
+    {
+      "name": "edit_value_ur_small",
+      "base": "edit_value_small",
+      "color": "red"
+    },
+    {
+      "name": "edit_value_active_small",
+      "base": "edit_value_small",
       "color": "#FFFF00"
     }
   ],
@@ -283,6 +303,15 @@
       "id": "edit_with_slider",
       "widgets": [
         {
+          "type": "display",
+          "data": "edit_info",
+          "x": 40,
+          "y": 0,
+          "w": 200,
+          "h": 32,
+          "style": "edit_info"
+        },
+        {
           "type": "vertical_slider",
           "x": 0,
           "y": 0,
@@ -290,26 +319,35 @@
           "h": 296
         },
         {
+          "type": "display",
+          "data": "edit_value",
+          "x": 40,
+          "y": 32,
+          "w": 200,
+          "h": 72,
+          "style": "edit_value_large"
+        },
+        {
           "type": "vertical_list",
           "data": "channels",
-          "x": 40,
-          "w": 200,
-          "y": 0,
+          "x": 180,
+          "w": 60,
+          "y": 104,
           "item_widget": {
             "type": "container",
             "x": 0,
-            "h": 138,
+            "y": 0,
+            "h": 90,
             "widgets": [
               {
                 "type": "select",
-                "x": 0,
-                "y": 26,
-                "h": 72,
+                "y": 0,
+                "h": 30,
                 "data": "output_state",
                 "widgets": [
                   {
                     "type": "display_string",
-                    "style": "edit_value",
+                    "style": "edit_value_small",
                     "text": "OFF"
                   },
                   {
@@ -318,12 +356,12 @@
                     "widgets": [
                       {
                         "type": "display",
-                        "style": "edit_value",
+                        "style": "edit_value_small",
                         "data": "mon_value"
                       },
                       {
                         "type": "display",
-                        "style": "edit_value_ur",
+                        "style": "edit_value_ur_small",
                         "data": "mon_value"
                       }
                     ]
@@ -332,24 +370,29 @@
               },
               {
                 "type": "display",
-                "style": "edit_value",
+                "style": "edit_value_small",
                 "data": "volt",
-                "x": 0,
-                "y": 98,
-                "w": 100,
-                "h": 40
+                "y": 30,
+                "h": 30
               },
               {
                 "type": "display",
-                "style": "edit_value",
+                "style": "edit_value_small",
                 "data": "curr",
-                "x": 100,
-                "y": 98,
-                "w": 100,
-                "h": 40
+                "y": 60,
+                "h": 30
               }
             ]
           }
+        },
+        {
+          "type": "display_multiline_string",
+          "style": "edit_info",
+          "x": 40,
+          "y": 104,
+          "w": 140,
+          "h": 180,
+          "text": "Interactive mode: Move up/down to change value.\nUse leftmost pos. for coarse and righmost pos. for fine adjustment."
         },
         {
           "type": "display_string",
@@ -397,6 +440,15 @@
       "id": "edit_with_step",
       "widgets": [
         {
+          "type": "display",
+          "data": "edit_info",
+          "x": 0,
+          "y": 0,
+          "w": 240,
+          "h": 32,
+          "style": "edit_info"
+        },
+        {
           "type": "display_string",
           "action": "edit_with_slider",
           "x": 0,
@@ -442,13 +494,13 @@
       "id": "edit_with_keypad",
       "widgets": [
         {
-          "type": "display_string",
+          "type": "display",
+          "data": "edit_info",
           "x": 0,
           "y": 0,
-          "w": 230,
+          "w": 240,
           "h": 32,
-          "style": "edit_info",
-          "text": "Set Ch2 current [0-5 A]"
+          "style": "edit_info"
         },
         {
           "type": "horizontal_list",

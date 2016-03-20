@@ -65,8 +65,9 @@ declare_const("WIDGET_TYPE_SELECT", 4)
 declare_const("WIDGET_TYPE_DISPLAY", 5)
 declare_const("WIDGET_TYPE_DISPLAY_STRING", 6)
 declare_const("WIDGET_TYPE_DISPLAY_STRING_SELECT", 7)
-declare_const("WIDGET_TYPE_THREE_STATE_INDICATOR", 8)
-declare_const("WIDGET_TYPE_VERTICAL_SLIDER", 9)
+declare_const("WIDGET_TYPE_DISPLAY_MULTILINE_STRING", 8)
+declare_const("WIDGET_TYPE_THREE_STATE_INDICATOR", 9)
+declare_const("WIDGET_TYPE_VERTICAL_SLIDER", 10)
 
 #-------------------------------------------------------------------------------
 
@@ -623,6 +624,8 @@ class Parser:
                 widget_type = WIDGET_TYPE_DISPLAY_STRING
             elif type_str == "display_string_select":
                 widget_type = WIDGET_TYPE_DISPLAY_STRING_SELECT
+            elif type_str == "display_multiline_string":
+                widget_type = WIDGET_TYPE_DISPLAY_MULTILINE_STRING
             elif type_str == "three_state_indicator":
                 widget_type = WIDGET_TYPE_THREE_STATE_INDICATOR
             elif type_str == "vertical_slider":
@@ -637,7 +640,7 @@ class Parser:
         result.addField(UInt8("type", widget_type))
 
         # data
-        if widget_type == WIDGET_TYPE_CONTAINER or widget_type == WIDGET_TYPE_DISPLAY_STRING or widget_type == WIDGET_TYPE_VERTICAL_SLIDER:
+        if widget_type == WIDGET_TYPE_CONTAINER or widget_type == WIDGET_TYPE_DISPLAY_STRING or widget_type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING or widget_type == WIDGET_TYPE_VERTICAL_SLIDER:
             # data not used
             result.addField(UInt8("data", 0))
         else:
@@ -685,7 +688,7 @@ class Parser:
             self.addStyleField(specific_widget_data, widget, "style2")
 
             self.addStringField(specific_widget_data, widget, "text", "")
-        elif widget_type == WIDGET_TYPE_DISPLAY_STRING:
+        elif widget_type == WIDGET_TYPE_DISPLAY_STRING or widget_type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING:
             specific_widget_data = Struct(None, "DisplayStringWidget")
             self.addStringField(specific_widget_data, widget, "text", "")
         elif widget_type == WIDGET_TYPE_DISPLAY_STRING_SELECT:

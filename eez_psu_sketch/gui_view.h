@@ -45,8 +45,9 @@ namespace gui {
 #define WIDGET_TYPE_DISPLAY 5
 #define WIDGET_TYPE_DISPLAY_STRING 6
 #define WIDGET_TYPE_DISPLAY_STRING_SELECT 7
-#define WIDGET_TYPE_THREE_STATE_INDICATOR 8
-#define WIDGET_TYPE_VERTICAL_SLIDER 9
+#define WIDGET_TYPE_DISPLAY_MULTILINE_STRING 8
+#define WIDGET_TYPE_THREE_STATE_INDICATOR 9
+#define WIDGET_TYPE_VERTICAL_SLIDER 10
 #define DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER 2
 #define DATA_ID_CHANNELS 1
 #define DATA_ID_OUTPUT_STATE 2
@@ -60,7 +61,9 @@ namespace gui {
 #define DATA_ID_OTP 10
 #define DATA_ID_DP 11
 #define DATA_ID_ALERT_MESSAGE 12
-#define DATA_ID_EDIT_UNIT 13
+#define DATA_ID_EDIT_VALUE 13
+#define DATA_ID_EDIT_UNIT 14
+#define DATA_ID_EDIT_INFO 15
 #define ACTION_ID_EDIT 1
 #define ACTION_ID_EDIT_WITH_SLIDER 2
 #define ACTION_ID_EDIT_WITH_STEP 3
@@ -110,9 +113,13 @@ namespace gui {
 #define STYLE_ID_KEY 15
 #define STYLE_ID_KEY_ICONS 16
 #define STYLE_ID_EDIT_INFO 17
-#define STYLE_ID_EDIT_VALUE 18
-#define STYLE_ID_EDIT_VALUE_UR 19
-#define STYLE_ID_EDIT_VALUE_ACTIVE 20
+#define STYLE_ID_EDIT_VALUE_LARGE 18
+#define STYLE_ID_EDIT_VALUE 19
+#define STYLE_ID_EDIT_VALUE_UR 20
+#define STYLE_ID_EDIT_VALUE_ACTIVE 21
+#define STYLE_ID_EDIT_VALUE_SMALL 22
+#define STYLE_ID_EDIT_VALUE_UR_SMALL 23
+#define STYLE_ID_EDIT_VALUE_ACTIVE_SMALL 24
 
 typedef uint16_t OBJ_OFFSET;
 
@@ -121,23 +128,20 @@ struct List {
     OBJ_OFFSET first;
 };
 
-struct ContainerWidget {
-    List widgets;
-};
-
-struct ThreeStateIndicatorWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET style2;
-    OBJ_OFFSET text;
-};
-
-struct SelectWidget {
-    List widgets;
-};
-
 struct Document {
     List styles;
     List pages;
+};
+
+struct ListWidget {
+    OBJ_OFFSET item_widget;
+};
+
+struct DisplayStringSelectWidget {
+    OBJ_OFFSET style1;
+    OBJ_OFFSET text1;
+    OBJ_OFFSET style2;
+    OBJ_OFFSET text2;
 };
 
 struct Widget {
@@ -152,8 +156,18 @@ struct Widget {
     OBJ_OFFSET specific;
 };
 
-struct ListWidget {
-    OBJ_OFFSET item_widget;
+struct ThreeStateIndicatorWidget {
+    OBJ_OFFSET style1;
+    OBJ_OFFSET style2;
+    OBJ_OFFSET text;
+};
+
+struct DisplayStringWidget {
+    OBJ_OFFSET text;
+};
+
+struct SelectWidget {
+    List widgets;
 };
 
 struct Style {
@@ -166,15 +180,8 @@ struct Style {
     uint16_t padding_vertical;
 };
 
-struct DisplayStringSelectWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET text1;
-    OBJ_OFFSET style2;
-    OBJ_OFFSET text2;
-};
-
-struct DisplayStringWidget {
-    OBJ_OFFSET text;
+struct ContainerWidget {
+    List widgets;
 };
 
 #pragma pack(pop)

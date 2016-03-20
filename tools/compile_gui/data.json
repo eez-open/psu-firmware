@@ -59,7 +59,13 @@
       "description": "Message in alert dialog"
     },
     {
+      "id": "edit_value"
+    },
+    {
       "id": "edit_unit"
+    },
+    {
+      "id": "edit_info"
     }
   ],
   "actions": [

@@ -11,6 +11,7 @@ enum Unit {
     UNIT_AMPER,
     UNIT_MILLI_VOLT,
     UNIT_MILLI_AMPER,
+    UNIT_CONST_STR,
     UNIT_STR
 };
 
@@ -27,9 +28,16 @@ struct Value {
         unit_ = unit;
     }
 
-    Value(const char *str PROGMEM) {
+    Value(char *str) {
         str_ = str;
         unit_ = UNIT_STR;
+    }
+
+    static Value ConstStr(const char *pstr PROGMEM) {
+        Value value;
+        value.const_str_ = pstr;
+        value.unit_ = UNIT_CONST_STR;
+        return value;
     }
 
     bool operator ==(Value other) {
@@ -45,13 +53,13 @@ struct Value {
     uint8_t getInt() { return int_; }
 
     void toText(char *text, int count);
-    void toTextNoUnit(char *text);
 
 private:
     uint8_t unit_;
     union {
         int int_;
-        const char *str_ PROGMEM;
+        const char *const_str_ PROGMEM;
+        const char *str_;
         float float_;
     };
 };
