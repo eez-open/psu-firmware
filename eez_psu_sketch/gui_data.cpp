@@ -56,10 +56,8 @@ void Value::toText(char *text, int count) {
 
 static Cursor cursor;
 static Value alert_message;
-static Unit last_edit_unit;
-static char edit_info[32];
-static char last_edit_info[32];
-static float last_edit_value;
+int edit_interactive_mode = 0;
+char edit_info[32];
 
 Cursor getCursor() {
     return cursor;
@@ -206,14 +204,14 @@ Value get(uint8_t id, bool &changed) {
         else
             value = Value(selected_channel->i.set, UNIT_AMPER);
 
-        if (value.getFloat() != last_edit_value) {
-            last_edit_value = value.getFloat();
+        if (value.getFloat() != cursor.edit_value) {
+            cursor.edit_value = value.getFloat();
             changed = true;
         }
     } else if (id == DATA_ID_EDIT_UNIT) {
         Unit edit_unit = keypad::get_edit_unit();
-        changed = edit_unit != last_edit_unit;
-        last_edit_unit = edit_unit;
+        changed = edit_unit != cursor.edit_unit;
+        cursor.edit_unit = edit_unit;
         if (edit_unit == UNIT_VOLT)
             value = Value::ConstStr("mV");
         else if (edit_unit == UNIT_MILLI_VOLT)
@@ -226,22 +224,26 @@ Value get(uint8_t id, bool &changed) {
         Channel *selected_channel = &Channel::get(edit_data_cursor.selected_channel_index);
 
         if (edit_data_id == DATA_ID_VOLT) {
-            sprintf_P(edit_info, PSTR("Set Ch%d voltage [%d-%d V]"), selected_channel->index,
+            sprintf_P(cursor.edit_info, PSTR("Set Ch%d voltage [%d-%d V]"), selected_channel->index,
                 (int)selected_channel->U_MIN,
                 (int)selected_channel->U_MAX);
         }
         else {
-            sprintf_P(edit_info, PSTR("Set Ch%d current [%d-%d A]"), selected_channel->index,
+            sprintf_P(cursor.edit_info, PSTR("Set Ch%d current [%d-%d A]"), selected_channel->index,
                 (int)selected_channel->I_MIN,
                 (int)selected_channel->I_MAX);
         }
 
-        if (strcmp(edit_info, last_edit_info) != 0) {
-            strcpy(last_edit_info, edit_info);
+        if (strcmp(cursor.edit_info, cursor.edit_info) != 0) {
+            strcpy(cursor.edit_info, cursor.edit_info);
             changed = true;
         }
 
-        value = edit_info;
+        value = cursor.edit_info;
+    } else if (id == DATA_ID_EDIT_INTERACTIVE_MODE) {
+        changed = cursor.edit_interactive_mode != cursor.edit_interactive_mode;
+        cursor.edit_interactive_mode = cursor.edit_interactive_mode;
+        value = cursor.edit_interactive_mode;
     }
 
     return value;
@@ -290,6 +292,16 @@ void set(uint8_t id, Value value) {
         selected_channel->setCurrent(value.getFloat());
     } else if (id == DATA_ID_ALERT_MESSAGE) {
         alert_message = value;
+    }
+}
+
+void toggle(uint8_t id) {
+    Channel *selected_channel = &Channel::get(cursor.selected_channel_index);
+
+    if (id == DATA_ID_EDIT_INTERACTIVE_MODE) {
+        cursor.edit_interactive_mode = cursor.edit_interactive_mode == 1 ? 0 : 1;
+        // TODO this is hack, remove this after refactoring
+        refresh_page();
     }
 }
 

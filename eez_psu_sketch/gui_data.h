@@ -84,6 +84,10 @@ struct ChannelState {
 struct Cursor {
     int selected_channel_index;
     ChannelState channel_last_state[CH_NUM];
+    int edit_interactive_mode = 1;
+    Unit edit_unit;
+    char edit_info[32];
+    float edit_value;
 
     bool operator != (const Cursor& rhs) const {
         return !(*this == rhs);
@@ -104,6 +108,7 @@ Value getMin(uint8_t id);
 Value getMax(uint8_t id);
 Unit getUnit(uint8_t id);
 void set(uint8_t id, Value value);
+void toggle(uint8_t id);
 void do_action(uint8_t id);
 
 }

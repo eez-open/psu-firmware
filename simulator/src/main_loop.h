@@ -18,7 +18,7 @@
 
 #pragma once
 
-#define TICK_TIMEOUT 20
+#define TICK_TIMEOUT 1
 
 int main_loop();
 void main_loop_exit();

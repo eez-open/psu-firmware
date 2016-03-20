@@ -68,18 +68,18 @@
     {
       "name": "tab_page",
       "font": "icons",
-      "color": "black",
-      "background_color": "lightgray"
+      "color": "#FFFF7F",
+      "background_color": "#A8DAE9"
     },
     {
       "name": "tab_page_selected",
       "font": "icons"
     },
     {
-      "name": "exit",
-      "color": "black",
-      "background_color": "lightgray",
-      "align_horizontal": "right",
+      "name": "bottom_button",
+      "font": "icons",
+      "color": "#2F2F2F",
+      "background_color": "#E9F5F9",
       "padding_horizontal": 4
     },
     {
@@ -122,6 +122,7 @@
     {
       "name": "edit_value_small",
       "font": "small",
+      "horizontal_align": "right",
       "color": "white"
     },
     {
@@ -133,6 +134,12 @@
       "name": "edit_value_active_small",
       "base": "edit_value_small",
       "color": "#FFFF00"
+    },
+    {
+      "name": "non_interactive_button",
+      "base": "small",
+      "color": "#FFFFFF",
+      "background_color": "#193841"
     }
   ],
   "pages": [
@@ -319,80 +326,194 @@
           "h": 296
         },
         {
-          "type": "display",
-          "data": "edit_value",
+          "type": "select",
           "x": 40,
           "y": 32,
           "w": 200,
-          "h": 72,
-          "style": "edit_value_large"
-        },
-        {
-          "type": "vertical_list",
-          "data": "channels",
-          "x": 180,
-          "w": 60,
-          "y": 104,
-          "item_widget": {
-            "type": "container",
-            "x": 0,
-            "y": 0,
-            "h": 90,
-            "widgets": [
-              {
-                "type": "select",
-                "y": 0,
-                "h": 30,
-                "data": "output_state",
-                "widgets": [
-                  {
-                    "type": "display_string",
-                    "style": "edit_value_small",
-                    "text": "OFF"
-                  },
-                  {
-                    "type": "select",
-                    "data": "output_mode",
+          "h": 172,
+          "data": "edit_interactive_mode",
+          "widgets": [
+            {
+              "type": "container",
+              "widgets": [
+                {
+                  "type": "display",
+                  "data": "edit_value",
+                  "x": 0,
+                  "y": 0,
+                  "h": 72,
+                  "style": "edit_value_large"
+                },
+                {
+                  "type": "vertical_list",
+                  "data": "channels",
+                  "x": 140,
+                  "w": 60,
+                  "y": 72,
+                  "item_widget": {
+                    "type": "container",
+                    "x": 0,
+                    "y": 0,
+                    "h": 90,
                     "widgets": [
                       {
-                        "type": "display",
-                        "style": "edit_value_small",
-                        "data": "mon_value"
+                        "type": "select",
+                        "y": 0,
+                        "h": 30,
+                        "data": "output_state",
+                        "widgets": [
+                          {
+                            "type": "display_string",
+                            "style": "edit_value_small",
+                            "text": "OFF"
+                          },
+                          {
+                            "type": "select",
+                            "data": "output_mode",
+                            "widgets": [
+                              {
+                                "type": "display",
+                                "style": "edit_value_small",
+                                "data": "mon_value"
+                              },
+                              {
+                                "type": "display",
+                                "style": "edit_value_ur_small",
+                                "data": "mon_value"
+                              }
+                            ]
+                          }
+                        ]
                       },
                       {
                         "type": "display",
-                        "style": "edit_value_ur_small",
-                        "data": "mon_value"
+                        "style": "edit_value_small",
+                        "data": "volt",
+                        "y": 30,
+                        "h": 30
+                      },
+                      {
+                        "type": "display",
+                        "style": "edit_value_small",
+                        "data": "curr",
+                        "y": 60,
+                        "h": 30
                       }
                     ]
                   }
-                ]
-              },
-              {
-                "type": "display",
-                "style": "edit_value_small",
-                "data": "volt",
-                "y": 30,
-                "h": 30
-              },
-              {
-                "type": "display",
-                "style": "edit_value_small",
-                "data": "curr",
-                "y": 60,
-                "h": 30
-              }
-            ]
-          }
-        },
-        {
-          "type": "display_multiline_string",
-          "style": "edit_info",
-          "x": 40,
-          "y": 104,
-          "w": 140,
-          "h": 180,
-          "text": "Interactive mode: Move up/down to change value.\nUse leftmost pos. for coarse and righmost pos. for fine adjustment."
+                },
+                {
+                  "type": "display_multiline_string",
+                  "style": "edit_info",
+                  "x": 0,
+                  "y": 72,
+                  "w": 140,
+                  "h": 180,
+                  "text": "Interactive mode: Move up/down to change value.\nUse leftmost pos. for coarse and righmost pos. for fine adjustment."
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "widgets": [
+                {
+                  "type": "display",
+                  "data": "edit_value",
+                  "x": 0,
+                  "y": 0,
+                  "h": 64,
+                  "style": "edit_value_large"
+                },
+                {
+                  "type": "vertical_list",
+                  "data": "channels",
+                  "x": 140,
+                  "w": 60,
+                  "y": 64,
+                  "item_widget": {
+                    "type": "container",
+                    "x": 0,
+                    "y": 0,
+                    "h": 78,
+                    "widgets": [
+                      {
+                        "type": "select",
+                        "y": 0,
+                        "h": 26,
+                        "data": "output_state",
+                        "widgets": [
+                          {
+                            "type": "display_string",
+                            "style": "edit_value_small",
+                            "text": "OFF"
+                          },
+                          {
+                            "type": "select",
+                            "data": "output_mode",
+                            "widgets": [
+                              {
+                                "type": "display",
+                                "style": "edit_value_small",
+                                "data": "mon_value"
+                              },
+                              {
+                                "type": "display",
+                                "style": "edit_value_ur_small",
+                                "data": "mon_value"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "display",
+                        "style": "edit_value_small",
+                        "data": "volt",
+                        "y": 26,
+                        "h": 26
+                      },
+                      {
+                        "type": "display",
+                        "style": "edit_value_small",
+                        "data": "curr",
+                        "y": 52,
+                        "h": 26
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "display_multiline_string",
+                  "style": "edit_info",
+                  "x": 0,
+                  "y": 64,
+                  "w": 140,
+                  "h": 156,
+                  "text": "Non-interactive mode: Move up/down to change value.\nSelect Enter to confirm."
+                },
+                {
+                  "type": "display_string",
+                  "action": "non_interactive_enter",
+                  "style": "non_interactive_button",
+                  "x": 10,
+                  "y": 220,
+                  "w": 92,
+                  "h": 28,
+                  "text": "Enter"
+                },
+                {
+                  "type": "display_string",
+                  "action": "non_interactive_cancel",
+                  "style": "non_interactive_button",
+                  "x": 106,
+                  "y": 220,
+                  "w": 92,
+                  "h": 28,
+                  "text": "Cancel"
+                }
+              ]
+            }
+          ]
         },
         {
           "type": "display_string",
@@ -425,14 +546,26 @@
           "text": "K"
         },
         {
-          "type": "display_string",
-          "action": "exit",
+          "type": "toggle_button",
+          "data": "edit_interactive_mode",
+          "action": "toggle",
           "x": 144,
           "y": 284,
-          "w": 96,
+          "w": 48,
           "h": 36,
-          "style": "exit",
-          "text": "Exit"
+          "style": "bottom_button",
+          "text1": "I",
+          "text2": "J"
+        },
+        {
+          "type": "display_string",
+          "action": "exit",
+          "x": 192,
+          "y": 284,
+          "w": 48,
+          "h": 36,
+          "style": "bottom_button",
+          "text": "X"
         }
       ]
     },
@@ -479,14 +612,26 @@
           "text": "K"
         },
         {
-          "type": "display_string",
-          "action": "exit",
+          "type": "toggle_button",
+          "data": "edit_interactive_mode",
+          "action": "toggle",
           "x": 144,
           "y": 284,
-          "w": 96,
+          "w": 48,
           "h": 36,
-          "style": "exit",
-          "text": "Exit"
+          "style": "bottom_button",
+          "text1": "I",
+          "text2": "J"
+        },
+        {
+          "type": "display_string",
+          "action": "exit",
+          "x": 192,
+          "y": 284,
+          "w": 48,
+          "h": 36,
+          "style": "bottom_button",
+          "text": "X"
         }
       ]
     },
@@ -763,13 +908,22 @@
         },
         {
           "type": "display_string",
-          "action": "exit",
           "x": 144,
           "y": 284,
-          "w": 96,
+          "w": 48,
           "h": 36,
-          "style": "exit",
-          "text": "Exit"
+          "style": "bottom_button",
+          "text": ""
+        },
+        {
+          "type": "display_string",
+          "action": "exit",
+          "x": 192,
+          "y": 284,
+          "w": 48,
+          "h": 36,
+          "style": "bottom_button",
+          "text": "X"
         }
       ]
     },

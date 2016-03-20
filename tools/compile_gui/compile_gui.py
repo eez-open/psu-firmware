@@ -68,6 +68,7 @@ declare_const("WIDGET_TYPE_DISPLAY_STRING_SELECT", 7)
 declare_const("WIDGET_TYPE_DISPLAY_MULTILINE_STRING", 8)
 declare_const("WIDGET_TYPE_THREE_STATE_INDICATOR", 9)
 declare_const("WIDGET_TYPE_VERTICAL_SLIDER", 10)
+declare_const("WIDGET_TYPE_TOGGLE_BUTTON", 11)
 
 #-------------------------------------------------------------------------------
 
@@ -630,6 +631,8 @@ class Parser:
                 widget_type = WIDGET_TYPE_THREE_STATE_INDICATOR
             elif type_str == "vertical_slider":
                 widget_type = WIDGET_TYPE_VERTICAL_SLIDER
+            elif type_str == "toggle_button":
+                widget_type = WIDGET_TYPE_TOGGLE_BUTTON
             else:
                 self.trace.error("unkown type '%s'" % type_str)
                 widget_type = WIDGET_TYPE_NONE
@@ -696,6 +699,10 @@ class Parser:
             self.addStyleField(specific_widget_data, widget, "style1", mandatory=False)
             self.addStringField(specific_widget_data, widget, "text1", "")
             self.addStyleField(specific_widget_data, widget, "style2", mandatory=False)
+            self.addStringField(specific_widget_data, widget, "text2", "")
+        elif widget_type == WIDGET_TYPE_TOGGLE_BUTTON:
+            specific_widget_data = Struct(None, "ToggleButtonWidget")
+            self.addStringField(specific_widget_data, widget, "text1", "")
             self.addStringField(specific_widget_data, widget, "text2", "")
         else:
             specific_widget_data = 0

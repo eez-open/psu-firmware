@@ -66,6 +66,9 @@
     },
     {
       "id": "edit_info"
+    },
+    {
+      "id": "edit_interactive_mode"
     }
   ],
   "actions": [
@@ -156,6 +159,15 @@
     },
     {
       "id": "key_unit"
+    },
+    {
+      "id": "toggle"
+    },
+    {
+      "id": "non_interactive_enter"
+    },
+    {
+      "id": "non_interactive_cancel"
     }
   ],
   "pages": [

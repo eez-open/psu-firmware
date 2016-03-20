@@ -48,7 +48,7 @@ void draw_scale(Widget *widget, int y_from, int y_to, int y_min, int y_max, int 
     int l1 = 5 * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w / 12 - 1;
 
     int x2 = x1 + l1 + 2;
-    int l2 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w - l1 - 2;
+    int l2 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w - l1 - 3;
 
     int s = 10 * f / d;
 

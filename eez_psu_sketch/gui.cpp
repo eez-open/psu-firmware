@@ -302,7 +302,7 @@ void drawMultilineText(char *text, int x, int y, int w, int h, Style *style, boo
     }
 
     font::Font *font = styleGetFont(style);
-    int height = font->getHeight();
+    int height = (int)(0.9 * font->getHeight());
     
     font::Glyph space_glyph;
     font->getGlyph(' ', space_glyph);
@@ -381,17 +381,22 @@ void drawMultilineText(char *text, int x, int y, int w, int h, Style *style, boo
 
         x += width;
 
-        if (text[i] == ' ') {
+        while (text[i] == ' ') {
+            if (clear_background) {
+                lcd::lcd.setColor(background_color);
+                lcd::lcd.fillRect(x, y, x + space_width - 1, y + height - 1);
+            }
             x += space_width;
-            while (text[i] == ' ')
-                ++i;
+            ++i;
         }
 
         if (text[i] == 0 || text[i] == '\n') {
             if (clear_background) {
-                uint16_t background_color = inverse ? style->color : style->background_color;
+                lcd::lcd.setColor(background_color);
                 lcd::lcd.fillRect(x, y, x2, y + height - 1);
             }
+
+            y += height;
 
             if (text[i] == 0) {
                 break;
@@ -399,7 +404,15 @@ void drawMultilineText(char *text, int x, int y, int w, int h, Style *style, boo
 
             ++i;
 
-            y += (int)(1.1 * height);
+            int extraHeightBetweenParagraphs = (int)(0.2 * height);
+
+            if (extraHeightBetweenParagraphs > 0 && clear_background) {
+                lcd::lcd.setColor(background_color);
+                lcd::lcd.fillRect(x1, y, x2, y + extraHeightBetweenParagraphs - 1);
+            }
+
+            y += extraHeightBetweenParagraphs;
+
             if (y + height > y2) {
                 break;
             }
@@ -519,6 +532,18 @@ bool draw_display_string_select_widget(uint8_t *document, Widget *widget, int x,
     return false;
 }
 
+bool draw_toggle_button_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
+    bool changed;
+    int state = data::get(widget->data, changed).getInt();
+    if (changed || refresh) {
+        ToggleButtonWidget *toggle_button_widget = ((ToggleButtonWidget *)(document + widget->specific));
+        char *text = (char *)(document + (state == 0 ? toggle_button_widget->text1 : toggle_button_widget->text2));
+        drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + widget->style), inverse);
+        return true;
+    }
+    return false;
+}
+
 bool draw_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh) {
     bool inverse = selected_widget == widget;
 
@@ -534,6 +559,8 @@ bool draw_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh) 
         return draw_display_multiline_string_widget(document, widget, x, y, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_VERTICAL_SLIDER) {
         return slider::draw(document, widget, x, y, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_TOGGLE_BUTTON) {
+        return draw_toggle_button_widget(document, widget, x, y, refresh, inverse);
     }
 
     return false;
@@ -654,13 +681,13 @@ void exit_edit_mode() {
 void do_action(int action_id, const WidgetCursor &widget_cursor) {
     if (action_id == ACTION_ID_EDIT) {
         enter_edit_mode(widget_cursor);
-    } if (action_id == ACTION_ID_EDIT_WITH_SLIDER) {
+    } else if (action_id == ACTION_ID_EDIT_WITH_SLIDER) {
         edit_mode_page_index = PAGE_ID_EDIT_WITH_SLIDER;
         enter_edit_mode(widget_cursor);
-    } if (action_id == ACTION_ID_EDIT_WITH_STEP) {
+    } else if (action_id == ACTION_ID_EDIT_WITH_STEP) {
         edit_mode_page_index = PAGE_ID_EDIT_WITH_STEP;
         enter_edit_mode(widget_cursor);
-    } if (action_id == ACTION_ID_EDIT_WITH_KEYPAD) {
+    } else if (action_id == ACTION_ID_EDIT_WITH_KEYPAD) {
         edit_mode_page_index = PAGE_ID_EDIT_WITH_KEYPAD;
         enter_edit_mode(widget_cursor);
     } else if (action_id == ACTION_ID_EXIT) {
@@ -673,9 +700,10 @@ void do_action(int action_id, const WidgetCursor &widget_cursor) {
         dialog_no_callback();
     } else if (action_id == ACTION_ID_CANCEL) {
         dialog_cancel_callback();
-    }
-    else if (action_id >= ACTION_ID_KEY_0 && action_id <= ACTION_ID_KEY_UNIT) {
+    } else if (action_id >= ACTION_ID_KEY_0 && action_id <= ACTION_ID_KEY_UNIT) {
         keypad::do_action(action_id);
+    } else if (action_id == ACTION_ID_TOGGLE) {
+        data::toggle(widget_cursor.widget->data);
     } else {
         data::Cursor saved_cursor = data::getCursor();
         data::setCursor(widget_cursor.cursor);
