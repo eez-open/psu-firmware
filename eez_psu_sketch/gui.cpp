@@ -231,7 +231,11 @@ font::Font *styleGetFont(Style *style) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+int trtmrt;
+
 void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse) {
+    ++trtmrt;
+
     x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
     y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
     w *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
@@ -293,6 +297,8 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
 }
 
 void drawMultilineText(char *text, int x, int y, int w, int h, Style *style, bool inverse) {
+    ++trtmrt;
+
     x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
     y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
     w *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
@@ -599,6 +605,8 @@ void draw() {
         previousDataSnapshot = currentDataSnapshot;
         currentDataSnapshot.takeSnapshot();
         draw_enum_widgets.start(page_index, 0, 0, false);
+        DebugTraceF("%d", trtmrt);
+        trtmrt = 0;
         is_page_refresh = false;
     }
 }

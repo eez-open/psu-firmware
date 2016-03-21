@@ -134,6 +134,10 @@ struct List {
     OBJ_OFFSET first;
 };
 
+struct ContainerWidget {
+    List widgets;
+};
+
 struct Style {
     uint8_t font;
     uint16_t flags;
@@ -142,6 +146,19 @@ struct Style {
     uint16_t border_color;
     uint16_t padding_horizontal;
     uint16_t padding_vertical;
+};
+
+struct DisplayStringWidget {
+    OBJ_OFFSET text;
+};
+
+struct SelectWidget {
+    List widgets;
+};
+
+struct ToggleButtonWidget {
+    OBJ_OFFSET text1;
+    OBJ_OFFSET text2;
 };
 
 struct Widget {
@@ -156,13 +173,11 @@ struct Widget {
     OBJ_OFFSET specific;
 };
 
-struct ToggleButtonWidget {
+struct DisplayStringSelectWidget {
+    OBJ_OFFSET style1;
     OBJ_OFFSET text1;
+    OBJ_OFFSET style2;
     OBJ_OFFSET text2;
-};
-
-struct DisplayStringWidget {
-    OBJ_OFFSET text;
 };
 
 struct ThreeStateIndicatorWidget {
@@ -173,21 +188,6 @@ struct ThreeStateIndicatorWidget {
 
 struct ListWidget {
     OBJ_OFFSET item_widget;
-};
-
-struct ContainerWidget {
-    List widgets;
-};
-
-struct SelectWidget {
-    List widgets;
-};
-
-struct DisplayStringSelectWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET text1;
-    OBJ_OFFSET style2;
-    OBJ_OFFSET text2;
 };
 
 struct Document {

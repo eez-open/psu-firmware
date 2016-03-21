@@ -138,8 +138,8 @@
     {
       "name": "non_interactive_button",
       "base": "small",
-      "color": "#FFFFFF",
-      "background_color": "#193841"
+      "color": "#2F2F2F",
+      "background_color": "#E9F5F9"
     }
   ],
   "pages": [
