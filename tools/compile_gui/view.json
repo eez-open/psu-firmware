@@ -345,6 +345,15 @@
                   "style": "edit_value_large"
                 },
                 {
+                  "type": "display_multiline_string",
+                  "style": "edit_info",
+                  "x": 0,
+                  "y": 72,
+                  "w": 140,
+                  "h": 180,
+                  "text": "Interactive mode: Move up/down to change value.\nUse leftmost pos. for coarse and righmost pos. for fine adjustment."
+                },
+                {
                   "type": "vertical_list",
                   "data": "channels",
                   "x": 140,
@@ -401,15 +410,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "type": "display_multiline_string",
-                  "style": "edit_info",
-                  "x": 0,
-                  "y": 72,
-                  "w": 140,
-                  "h": 180,
-                  "text": "Interactive mode: Move up/down to change value.\nUse leftmost pos. for coarse and righmost pos. for fine adjustment."
                 }
               ]
             },
@@ -421,15 +421,24 @@
                   "data": "edit_value",
                   "x": 0,
                   "y": 0,
-                  "h": 64,
+                  "h": 60,
                   "style": "edit_value_large"
+                },
+                {
+                  "type": "display_multiline_string",
+                  "style": "edit_info",
+                  "x": 0,
+                  "y": 60,
+                  "w": 140,
+                  "h": 156,
+                  "text": "Non-interactive mode: Move up/down to change value.\nSelect Enter to confirm."
                 },
                 {
                   "type": "vertical_list",
                   "data": "channels",
                   "x": 140,
                   "w": 60,
-                  "y": 64,
+                  "y": 60,
                   "item_widget": {
                     "type": "container",
                     "x": 0,
@@ -483,33 +492,32 @@
                   }
                 },
                 {
-                  "type": "display_multiline_string",
-                  "style": "edit_info",
+                  "type": "display_string",
                   "x": 0,
-                  "y": 64,
-                  "w": 140,
-                  "h": 156,
-                  "text": "Non-interactive mode: Move up/down to change value.\nSelect Enter to confirm."
+                  "y": 216,
+                  "w": 8,
+                  "h": 36,
+                  "text": ""
                 },
                 {
                   "type": "display_string",
                   "action": "non_interactive_enter",
                   "style": "non_interactive_button",
-                  "x": 10,
-                  "y": 220,
-                  "w": 92,
-                  "h": 28,
-                  "text": "Enter"
+                  "x": 8,
+                  "y": 216,
+                  "w": 96,
+                  "h": 36,
+                  "text": "\u007E Enter"
                 },
                 {
                   "type": "display_string",
                   "action": "non_interactive_cancel",
                   "style": "non_interactive_button",
-                  "x": 106,
-                  "y": 220,
-                  "w": 92,
-                  "h": 28,
-                  "text": "Cancel"
+                  "x": 104,
+                  "y": 216,
+                  "w": 96 ,
+                  "h": 36,
+                  "text": "\u007F Cancel"
                 }
               ]
             }

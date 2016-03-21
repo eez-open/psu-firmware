@@ -26,6 +26,10 @@ namespace psu {
 namespace gui {
 namespace data {
 
+static Value alertMessage;
+
+////////////////////////////////////////////////////////////////////////////////
+
 void Value::toText(char *text, int count) {
     text[0] = 0;
 
@@ -54,17 +58,109 @@ void Value::toText(char *text, int count) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static Cursor cursor;
-static Value alert_message;
-int edit_interactive_mode = 0;
-char edit_info[32];
+void Snapshot::takeSnapshot() {
+    for (int i = 0; i < CH_NUM; ++i) {
+        Channel &channel = Channel::get(i);
 
-Cursor getCursor() {
-    return cursor;
+        channelStates[i].flags.state = channel.isOutputEnabled() ? 1 : 0;
+
+        char *mode_str = channel.getCvModeStr();
+        channelStates[i].flags.mode = 0;
+        float uMon = channel.u.mon;
+        float iMon = channel.i.mon;
+        if (strcmp(mode_str, "CC") == 0) {
+            channelStates[i].mon_value = Value(uMon, UNIT_VOLT);
+        } else if (strcmp(mode_str, "CV") == 0) {
+            channelStates[i].mon_value = Value(iMon, UNIT_AMPER);
+        } else {
+            channelStates[i].flags.mode = 1;
+            if (uMon < iMon) {
+                channelStates[i].mon_value = Value(uMon, UNIT_VOLT);
+            } else {
+                channelStates[i].mon_value = Value(iMon, UNIT_AMPER);
+            }
+        }
+
+        channelStates[i].u_set = channel.u.set;
+        channelStates[i].i_set = channel.i.set;
+
+        if (!channel.prot_conf.flags.u_state) channelStates[i].flags.ovp = 1;
+        else if (!channel.ovp.flags.tripped) channelStates[i].flags.ovp = 2;
+        else channelStates[i].flags.ovp = 3;
+        
+        if (!channel.prot_conf.flags.i_state) channelStates[i].flags.ocp = 1;
+        else if (!channel.ocp.flags.tripped) channelStates[i].flags.ocp = 2;
+        else channelStates[i].flags.ocp = 3;
+
+        if (!channel.prot_conf.flags.p_state) channelStates[i].flags.opp = 1;
+        else if (!channel.opp.flags.tripped) channelStates[i].flags.opp = 2;
+        else channelStates[i].flags.opp = 3;
+
+        if (!temperature::prot_conf[temp_sensor::MAIN].state) channelStates[i].flags.otp = 1;
+        else if (!temperature::isSensorTripped(temp_sensor::MAIN)) channelStates[i].flags.otp = 2;
+        else channelStates[i].flags.otp = 3;
+
+        channelStates[i].flags.dp = channel.flags.dp_on ? 1 : 2;
+    }
+
+    alertMessage = alertMessage;
+
+    if (edit_data_cursor) {
+        editValue = edit_value;
+
+        Channel &channel = Channel::get(edit_data_cursor.iChannel);
+        if (edit_data_id == DATA_ID_VOLT) {
+            sprintf_P(editInfo, PSTR("Set Ch%d voltage [%d-%d V]"), channel.index, (int)channel.U_MIN, (int)channel.U_MAX);
+        } else {
+            sprintf_P(editInfo, PSTR("Set Ch%d current [%d-%d A]"), channel.index, (int)channel.I_MIN, (int)channel.I_MAX);
+        }
+    
+        switch (keypad::get_edit_unit()) {
+        case UNIT_VOLT: editUnit = Value::ConstStr("mV"); break;
+        case UNIT_MILLI_VOLT: editUnit = Value::ConstStr("V"); break;
+        case UNIT_AMPER: editUnit = Value::ConstStr("mA"); break;
+        default: editUnit = Value::ConstStr("A");
+        }
+
+        this->editInteractiveMode = isEditInteractiveMode ? 0 : 1;
+    }
+
+    keypad::get_text(keypadText);
 }
 
-void setCursor(Cursor cursor_) {
-    cursor = cursor_;
+Value Snapshot::get(const Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_OUTPUT_STATE) {
+        return Value(channelStates[cursor.iChannel].flags.state);
+    } else if (id == DATA_ID_OUTPUT_MODE) {
+        return Value(channelStates[cursor.iChannel].flags.mode);
+    } else if (id == DATA_ID_MON_VALUE) {
+        return channelStates[cursor.iChannel].mon_value;
+    } else if (id == DATA_ID_VOLT) {
+        return Value(channelStates[cursor.iChannel].u_set, UNIT_VOLT);
+    } else if (id == DATA_ID_CURR) {
+        return Value(channelStates[cursor.iChannel].i_set, UNIT_AMPER);
+    } else if (id == DATA_ID_OVP) {
+        return Value(channelStates[cursor.iChannel].flags.ovp);
+    } else if (id == DATA_ID_OCP) {
+        return Value(channelStates[cursor.iChannel].flags.ocp);
+    } else if (id == DATA_ID_OPP) {
+        return Value(channelStates[cursor.iChannel].flags.opp);
+    } else if (id == DATA_ID_OTP) {
+        return Value(channelStates[cursor.iChannel].flags.otp);
+    } else if (id == DATA_ID_DP) {
+        return Value(channelStates[cursor.iChannel].flags.dp);
+    } else if (id == DATA_ID_ALERT_MESSAGE) {
+        return alertMessage;
+    } else if (id == DATA_ID_EDIT_VALUE) {
+       return editValue;
+    } else if (id == DATA_ID_EDIT_UNIT) {
+        return editUnit;
+    } else if (id == DATA_ID_EDIT_INFO) {
+        return editInfo;
+    } else if (id == DATA_ID_EDIT_INTERACTIVE_MODE) {
+        return editInteractiveMode;
+    }
+    return Value();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -76,240 +172,58 @@ int count(uint8_t id) {
     return 0;
 }
 
-void select(uint8_t id, int index) {
+void select(Cursor &cursor, uint8_t id, int index) {
     if (id == DATA_ID_CHANNELS) {
-        cursor.selected_channel_index = index;
+        cursor.iChannel = index;
     }
 }
 
-Value get(uint8_t id, bool &changed) {
-    Channel *selected_channel = &Channel::get(cursor.selected_channel_index);
-    ChannelState *selected_channel_last_state = &cursor.channel_last_state[cursor.selected_channel_index];
-
-    Value value;
-
-    changed = false;
-
-    if (id == DATA_ID_OUTPUT_STATE) {
-        uint8_t state = selected_channel->isOutputEnabled() ? 1 : 0;
-        if (state != selected_channel_last_state->flags.state) {
-            selected_channel_last_state->flags.state = state;
-            changed = true;
-        }
-        value = Value(state);
-    } else if (id == DATA_ID_OUTPUT_MODE) {
-        char *mode_str = selected_channel->getCvModeStr();
-        uint8_t mode = strcmp(mode_str, "UR") == 0 ? 1 : 0;
-        if (mode != selected_channel_last_state->flags.mode) {
-            selected_channel_last_state->flags.mode = mode;
-            changed = true;
-        }
-        value = Value(mode);
-    } else if (id == DATA_ID_MON_VALUE) {
-        float mon_value;
-        Unit unit;
-        char *mode_str = selected_channel->getCvModeStr();
-        if (strcmp(mode_str, "CC") == 0) {
-            // CC -> volt
-            mon_value = selected_channel->u.mon;
-            unit = UNIT_VOLT;
-        } else if (strcmp(mode_str, "CV") == 0) {
-            // CV -> curr
-            mon_value = selected_channel->i.mon;
-            unit = UNIT_AMPER;
-        } else {
-            // UR ->
-            if (selected_channel->u.mon < selected_channel->i.mon) {
-                // min(volt, curr)
-                mon_value = selected_channel->u.mon;
-                unit = UNIT_VOLT;
-            } else {
-                // or curr if equal
-                mon_value = selected_channel->i.mon;
-                unit = UNIT_AMPER;
-            }
-        }
-        value = Value(mon_value, unit);
-        if (selected_channel_last_state->mon_value != value) {
-            selected_channel_last_state->mon_value = value;
-            changed = true;
-        }
-    } else if (id == DATA_ID_VOLT) {
-        float u_set = selected_channel->u.set;
-        if (selected_channel_last_state->u_set != u_set) {
-            selected_channel_last_state->u_set = u_set;
-            changed = true;
-        }
-        value = Value(u_set, UNIT_VOLT);
-    } else if (id == DATA_ID_CURR) {
-        float i_set = selected_channel->i.set;
-        if (selected_channel_last_state->i_set != selected_channel->i.set) {
-            selected_channel_last_state->i_set = selected_channel->i.set;
-            changed = true;
-        }
-        value = Value(i_set, UNIT_AMPER);
-    } else if (id == DATA_ID_OVP) {
-        uint8_t ovp;
-        if (!selected_channel->prot_conf.flags.u_state) ovp = 1;
-        else if (!selected_channel->ovp.flags.tripped) ovp = 2;
-        else ovp = 3;
-        if (selected_channel_last_state->flags.ovp != ovp) {
-            selected_channel_last_state->flags.ovp = ovp;
-            changed = true;
-        }
-        value = Value(ovp);
-    } else if (id == DATA_ID_OCP) {
-        uint8_t ocp;
-        if (!selected_channel->prot_conf.flags.i_state) ocp = 1;
-        else if (!selected_channel->ocp.flags.tripped) ocp = 2;
-        else ocp = 3;
-        if (selected_channel_last_state->flags.ocp != ocp) {
-            selected_channel_last_state->flags.ocp = ocp;
-            changed = true;
-        }
-        value = Value(ocp);
-    } else if (id == DATA_ID_OPP) {
-        uint8_t opp;
-        if (!selected_channel->prot_conf.flags.p_state) opp = 1;
-        else if (!selected_channel->opp.flags.tripped) opp = 2;
-        else opp = 3;
-        if (selected_channel_last_state->flags.opp != opp) {
-            selected_channel_last_state->flags.opp = opp;
-            changed = true;
-        }
-        value = Value(opp);
-    } else if (id == DATA_ID_OTP) {
-        uint8_t otp;
-        if (!temperature::prot_conf[temp_sensor::MAIN].state) otp = 1;
-        else if (!temperature::isSensorTripped(temp_sensor::MAIN)) otp = 2;
-        else otp = 3;
-        if (selected_channel_last_state->flags.otp != otp) {
-            selected_channel_last_state->flags.otp = otp;
-            changed = true;
-        }
-        value = Value(otp);
-    } else if (id == DATA_ID_DP) {
-        uint8_t dp = selected_channel->flags.dp_on ? 1 : 2;
-        if (selected_channel_last_state->flags.dp != dp) {
-            selected_channel_last_state->flags.dp = dp;
-            changed = true;
-        }
-        value = Value(dp);
-    } else if (id == DATA_ID_ALERT_MESSAGE) {
-        value = alert_message;
-    } else if (id == DATA_ID_EDIT_VALUE) {
-        Channel *selected_channel = &Channel::get(edit_data_cursor.selected_channel_index);
-        if (edit_data_id == DATA_ID_VOLT)
-            value = Value(selected_channel->u.set, UNIT_VOLT);
-        else
-            value = Value(selected_channel->i.set, UNIT_AMPER);
-
-        if (value.getFloat() != cursor.edit_value) {
-            cursor.edit_value = value.getFloat();
-            changed = true;
-        }
-    } else if (id == DATA_ID_EDIT_UNIT) {
-        Unit edit_unit = keypad::get_edit_unit();
-        changed = edit_unit != cursor.edit_unit;
-        cursor.edit_unit = edit_unit;
-        if (edit_unit == UNIT_VOLT)
-            value = Value::ConstStr("mV");
-        else if (edit_unit == UNIT_MILLI_VOLT)
-            value = Value::ConstStr("V");
-        else if (edit_unit == UNIT_AMPER)
-            value = Value::ConstStr("mA");
-        else if (edit_unit == UNIT_MILLI_AMPER)
-            value = Value::ConstStr("A");
-    } else if (id == DATA_ID_EDIT_INFO) {
-        Channel *selected_channel = &Channel::get(edit_data_cursor.selected_channel_index);
-
-        if (edit_data_id == DATA_ID_VOLT) {
-            sprintf_P(cursor.edit_info, PSTR("Set Ch%d voltage [%d-%d V]"), selected_channel->index,
-                (int)selected_channel->U_MIN,
-                (int)selected_channel->U_MAX);
-        }
-        else {
-            sprintf_P(cursor.edit_info, PSTR("Set Ch%d current [%d-%d A]"), selected_channel->index,
-                (int)selected_channel->I_MIN,
-                (int)selected_channel->I_MAX);
-        }
-
-        if (strcmp(cursor.edit_info, cursor.edit_info) != 0) {
-            strcpy(cursor.edit_info, cursor.edit_info);
-            changed = true;
-        }
-
-        value = cursor.edit_info;
-    } else if (id == DATA_ID_EDIT_INTERACTIVE_MODE) {
-        changed = cursor.edit_interactive_mode != cursor.edit_interactive_mode;
-        cursor.edit_interactive_mode = cursor.edit_interactive_mode;
-        value = cursor.edit_interactive_mode;
-    }
-
-    return value;
-}
-
-Value getMin(uint8_t id) {
-    Channel *selected_channel = &Channel::get(cursor.selected_channel_index);
-
-    Value value;
+Value getMin(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_VOLT) {
-        value = Value(selected_channel->U_MIN, UNIT_VOLT);
+        return Value(Channel::get(cursor.iChannel).U_MIN, UNIT_VOLT);
     } else if (id == DATA_ID_CURR) {
-        value = Value(selected_channel->I_MIN, UNIT_AMPER);
+        return Value(Channel::get(cursor.iChannel).I_MIN, UNIT_AMPER);
     }
-    return value;
+    return Value();
 }
 
-Value getMax(uint8_t id) {
-    Channel *selected_channel = &Channel::get(cursor.selected_channel_index);
-
-    Value value;
-    if (id == DATA_ID_VOLT) {
-        value = Value(selected_channel->U_MAX, UNIT_VOLT);
-    } else if (id == DATA_ID_CURR) {
-        value = Value(selected_channel->I_MAX, UNIT_AMPER);
-    }
-    return value;
+Value getMax(const Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_VOLT)
+        return Value(Channel::get(cursor.iChannel).U_MAX, UNIT_VOLT);
+    else if (id == DATA_ID_CURR)
+        return Value(Channel::get(cursor.iChannel).I_MAX, UNIT_AMPER);
+    return Value();
 }
 
-Unit getUnit(uint8_t id) {
-    if (id == DATA_ID_VOLT) {
+Unit getUnit(const Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_VOLT)
         return UNIT_VOLT;
-    }
-    else if (id == DATA_ID_CURR) {
+    else if (id == DATA_ID_CURR)
         return UNIT_AMPER;
-    }
     return UNIT_NONE;
 }
 
-void set(uint8_t id, Value value) {
-    Channel *selected_channel = &Channel::get(cursor.selected_channel_index);
-
-    if (id == DATA_ID_VOLT) {
-        selected_channel->setVoltage(value.getFloat());
-    } else if (id == DATA_ID_CURR) {
-        selected_channel->setCurrent(value.getFloat());
-    } else if (id == DATA_ID_ALERT_MESSAGE) {
-        alert_message = value;
-    }
+void set(const Cursor &cursor, uint8_t id, Value value) {
+    if (id == DATA_ID_VOLT)
+        Channel::get(cursor.iChannel).setVoltage(value.getFloat());
+    else if (id == DATA_ID_CURR)
+        Channel::get(cursor.iChannel).setCurrent(value.getFloat());
+    else if (id == DATA_ID_ALERT_MESSAGE)
+        alertMessage = value;
 }
 
 void toggle(uint8_t id) {
-    Channel *selected_channel = &Channel::get(cursor.selected_channel_index);
-
     if (id == DATA_ID_EDIT_INTERACTIVE_MODE) {
-        cursor.edit_interactive_mode = cursor.edit_interactive_mode == 1 ? 0 : 1;
-        // TODO this is hack, remove this after refactoring
-        refresh_page();
+        isEditInteractiveMode = !isEditInteractiveMode;
+        if (!isEditInteractiveMode) {
+            edit_value_saved = edit_value;
+        }
     }
 }
 
-void do_action(uint8_t id) {
-    Channel *selected_channel = &Channel::get(cursor.selected_channel_index);
-
+void doAction(const Cursor &cursor, uint8_t id) {
     if (id == ACTION_ID_TOGGLE_CHANNEL) {
-        selected_channel->outputEnable(!selected_channel->isOutputEnabled());
+        Channel::get(cursor.iChannel).outputEnable(!Channel::get(cursor.iChannel).isOutputEnabled());
     }
 }
 

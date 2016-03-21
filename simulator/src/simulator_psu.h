@@ -37,6 +37,7 @@
 #define strcat_P strcat
 #define sprintf_P sprintf
 #define vsnprintf_P vsnprintf
+#define strcmp_P strcmp
 #define strncmp_P strncmp
 
 extern void eez_psu_init();

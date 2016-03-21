@@ -23,7 +23,6 @@
 #include <scpi-parser.h>
 #include <eez_psu.h>
 #include "UTFT.h"
-#include "UTouch.h"
 
 void PSU_boot();
 void PSU_tick();

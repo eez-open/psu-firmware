@@ -96,27 +96,22 @@ void draw_scale(Widget *widget, int y_from, int y_to, int y_min, int y_max, int 
     }
 }
 
-bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
-    data::Cursor saved_cursor = data::getCursor();
-    data::setCursor(edit_data_cursor);
+bool draw(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
+    data::Value value = currentDataSnapshot.editValue;
+    if (!refresh) {
+        data::Value previousValue = previousDataSnapshot.editValue;
+        refresh = previousValue != value;
+    }
 
-    bool changed;
-    float value = data::get(edit_data_id, changed).getFloat();
+    if (refresh) {
+        float min = data::getMin(edit_data_cursor, edit_data_id).getFloat();
+        float max = data::getMax(edit_data_cursor, edit_data_id).getFloat();
 
-
-    float min = data::getMin(edit_data_id).getFloat();
-    float max = data::getMax(edit_data_id).getFloat();
-
-    edit_data_cursor = data::getCursor();
-    data::setCursor(saved_cursor);
-
-    if (changed || refresh) {
-
-        Style *style = (Style *)(document + widget->style);
+        Style *style = (Style *)(document + widgetCursor.widget->style);
         font::Font *font = styleGetFont(style);
         int fontHeight = font->getAscent() / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
 
-        int f = (int)floor(DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widget->h - CONF_SLIDER_THUMB_HEIGHT) / max);
+        int f = (int)floor(DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widgetCursor.widget->h - CONF_SLIDER_THUMB_HEIGHT) / max);
         int d;
         if (max > 10) {
             d = 1;
@@ -128,13 +123,13 @@ bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool in
 
         int y_min = (int)round(min * f);
         int y_max = (int)round(max * f);
-        int y_value = (int)round(value * f);
+        int y_value = (int)round(value.getFloat() * f);
 
         int y_from_min = y_min - CONF_SLIDER_THUMB_HEIGHT / 2;
         int y_from_max = y_max + CONF_SLIDER_THUMB_HEIGHT / 2;
 
         if (is_page_refresh) {
-            draw_scale(widget, y_from_min, y_from_max, y_min, y_max, y_value, f, d);
+            draw_scale(widgetCursor.widget, y_from_min, y_from_max, y_min, y_max, y_value, f, d);
         } else {
             int last_y_value_from = last_y_value - CONF_SLIDER_THUMB_HEIGHT / 2;
             int last_y_value_to = last_y_value + CONF_SLIDER_THUMB_HEIGHT / 2;
@@ -154,17 +149,17 @@ bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool in
                     y_value_to = y_from_max;
 
                 if (last_y_value_to + 1 < y_value_from) {
-                    draw_scale(widget, last_y_value_from, last_y_value_to, y_min, y_max, y_value, f, d);
-                    draw_scale(widget, y_value_from, y_value_to, y_min, y_max, y_value, f, d);
+                    draw_scale(widgetCursor.widget, last_y_value_from, last_y_value_to, y_min, y_max, y_value, f, d);
+                    draw_scale(widgetCursor.widget, y_value_from, y_value_to, y_min, y_max, y_value, f, d);
                 } else {
-                    draw_scale(widget, last_y_value_from, y_value_to, y_min, y_max, y_value, f, d);
+                    draw_scale(widgetCursor.widget, last_y_value_from, y_value_to, y_min, y_max, y_value, f, d);
                 }
             }
         }
 
         last_y_value = y_value;
 
-        width = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w;
+        width = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widgetCursor.widget->w;
         height = (max - min) * f;
 
         return true;
@@ -176,27 +171,18 @@ bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool in
 ////////////////////////////////////////////////////////////////////////////////
 
 void touch_down() {
-    data::Cursor saved_cursor = data::getCursor();
-    data::setCursor(edit_data_cursor);
-
-    bool changed;
-    start_value = data::get(edit_data_id, changed).getFloat();
+    start_value = edit_value.getFloat();
     start_y = touch::y;
 
     last_scale = 1;
-
-    data::setCursor(saved_cursor);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void touch_move() {
-    data::Cursor saved_cursor = data::getCursor();
-    data::setCursor(edit_data_cursor);
-
-    data::Value minValue = data::getMin(edit_data_id);
+    data::Value minValue = data::getMin(edit_data_cursor, edit_data_id);
     float min = minValue.getFloat();
-    float max = data::getMax(edit_data_id).getFloat();
+    float max = data::getMax(edit_data_cursor, edit_data_id).getFloat();
 
     int scale;
 
@@ -211,8 +197,7 @@ void touch_move() {
     }
 
     if (scale != last_scale) {
-        bool changed;
-        start_value = data::get(edit_data_id, changed).getFloat();
+        start_value = edit_value.getFloat();
         start_y = touch::y;
         last_scale = scale;
     }
@@ -222,8 +207,11 @@ void touch_move() {
     if (value < min) value = min;
     if (value > max) value = max;
 
-    data::set(edit_data_id, data::Value(value, minValue.getUnit()));
-    data::setCursor(saved_cursor);
+    edit_value = data::Value(value, minValue.getUnit());
+
+    if (isEditInteractiveMode) {
+        data::set(edit_data_cursor, edit_data_id, edit_value);
+    }
 }
 
 void touch_up() {

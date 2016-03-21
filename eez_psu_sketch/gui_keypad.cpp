@@ -33,9 +33,6 @@ namespace keypad {
 static bool cursor;
 static unsigned long last_cursor_change_time = 0;
 
-static char old_value_text[32];
-static char value_text[32];
-
 static data::Unit edit_unit = data::UNIT_NONE;
 
 enum State {
@@ -164,72 +161,16 @@ bool set_value(float fvalue) {
 }
 
 bool is_value_valid() {
-    data::Cursor saved_cursor = data::getCursor();
-    data::setCursor(edit_data_cursor);
-
     if (state == EMPTY) {
         return false;
     }
 
     float value = get_value();
-    bool is_valid = value >= data::getMin(edit_data_id).getFloat() && value <= data::getMax(edit_data_id).getFloat();
-
-    data::setCursor(saved_cursor);
+    bool is_valid = 
+        value >= data::getMin(edit_data_cursor, edit_data_id).getFloat() && 
+        value <= data::getMax(edit_data_cursor, edit_data_id).getFloat();
 
     return is_valid;
-}
-
-void update_value_text() {
-    if (state == START) {
-        data::Cursor saved_cursor = data::getCursor();
-        data::setCursor(edit_data_cursor);
-
-        bool changed;
-        data::get(edit_data_id, changed).toText(value_text, sizeof(value_text));
-
-        data::setCursor(saved_cursor);
-    }
-    else {
-        int i = 0;
-
-        if (state >= D0 && (d0 != 0 || state < DOT)) {
-            value_text[i++] = d0 + '0';
-        }
-
-        if (state >= D1) {
-            value_text[i++] = d1 + '0';
-        }
-
-        if (!isMilli() && state >= DOT) {
-            value_text[i++] = '.';
-        }
-
-        if (state >= D2) {
-            value_text[i++] = d2 + '0';
-        }
-
-        if (state >= D3) {
-            value_text[i++] = d3 + '0';
-        }
-
-        value_text[i] = 0;
-
-        if (cursor) {
-            strcat_P(value_text, PSTR(CONF_KEYPAD_CURSOR_ON));
-        }
-        else {
-            strcat_P(value_text, PSTR(CONF_KEYPAD_CURSOR_OFF));
-        }
-
-        if (edit_unit == data::UNIT_VOLT)
-            strcat_P(value_text, PSTR("V"));
-        else if (edit_unit == data::UNIT_MILLI_VOLT)
-            strcat_P(value_text, PSTR("mV"));
-        else if (edit_unit == data::UNIT_AMPER)
-            strcat_P(value_text, PSTR("A"));
-        else if (edit_unit == data::UNIT_MILLI_AMPER)
-            strcat_P(value_text, PSTR("mA"));
-    }
 }
 
 void toggle_edit_unit() {
@@ -251,32 +192,54 @@ void toggle_edit_unit() {
 
 void reset() {
     state = START;
-    edit_unit = data::getUnit(edit_data_id);
-    update_value_text();
+    edit_unit = data::getUnit(edit_data_cursor, edit_data_id);
 }
 
-char *get_value_text(bool &changed) {
-    changed = false;
-
-    if (strcmp(old_value_text, value_text) != 0) {
-        changed = true;
+void get_text(char *text) {
+    if (state == START) {
+        currentDataSnapshot.get(edit_data_cursor, edit_data_id).toText(text, sizeof(text));
     }
+    else {
+        int i = 0;
 
-    if (state != START) {
-        unsigned long current_time = micros();
-        if (current_time - last_cursor_change_time > CONF_KEYPAD_CURSOR_BLINK_TIME) {
-            cursor = !cursor;
-            last_cursor_change_time = current_time;
-            update_value_text();
-            changed = true;
+        if (state >= D0 && (d0 != 0 || state < DOT)) {
+            text[i++] = d0 + '0';
         }
-    }
 
-    if (changed) {
-        strcpy(old_value_text, value_text);
-    }
+        if (state >= D1) {
+            text[i++] = d1 + '0';
+        }
 
-    return old_value_text;
+        if (!isMilli() && state >= DOT) {
+            text[i++] = '.';
+        }
+
+        if (state >= D2) {
+            text[i++] = d2 + '0';
+        }
+
+        if (state >= D3) {
+            text[i++] = d3 + '0';
+        }
+
+        text[i] = 0;
+
+        if (cursor) {
+            strcat_P(text, PSTR(CONF_KEYPAD_CURSOR_ON));
+        }
+        else {
+            strcat_P(text, PSTR(CONF_KEYPAD_CURSOR_OFF));
+        }
+
+        if (edit_unit == data::UNIT_VOLT)
+            strcat_P(text, PSTR("V"));
+        else if (edit_unit == data::UNIT_MILLI_VOLT)
+            strcat_P(text, PSTR("mV"));
+        else if (edit_unit == data::UNIT_AMPER)
+            strcat_P(text, PSTR("A"));
+        else if (edit_unit == data::UNIT_MILLI_AMPER)
+            strcat_P(text, PSTR("mA"));
+    }
 }
 
 void do_action(int action_id) {
@@ -389,11 +352,7 @@ void do_action(int action_id) {
     }
     else if (action_id == ACTION_ID_KEY_OK) {
         if (state != START && state != EMPTY) {
-            data::Cursor saved_cursor = data::getCursor();
-            data::setCursor(edit_data_cursor);
-            data::set(edit_data_id, data::Value(get_value(), data::getUnit(edit_data_id)));
-            data::setCursor(saved_cursor);
-
+            data::set(edit_data_cursor, edit_data_id, data::Value(get_value(), data::getUnit(edit_data_cursor, edit_data_id)));
             reset();
         }
         else {
@@ -415,8 +374,6 @@ void do_action(int action_id) {
             }
         }
     }
-
-    update_value_text();
 }
 
 data::Unit get_edit_unit() {

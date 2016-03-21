@@ -38,20 +38,19 @@ struct WidgetCursor {
 
     WidgetCursor() : widget(0) {}
 
+    WidgetCursor(Widget *widget_, int x_, int y_, const data::Cursor &cursor_) : widget(widget_), x(x_), y(y_), cursor(cursor_) {}
+
     WidgetCursor& operator=(int) {
         widget = 0;
         return *this;
     }
 
-    bool operator != (const Widget* rhs) const {
-        return widget != rhs || cursor != data::getCursor();
-    }
-    bool operator == (const Widget* rhs) const {
-        return !(*this != rhs);
-    }
-
     bool operator != (const WidgetCursor& rhs) const {
         return widget != rhs.widget || x != rhs.x || y != rhs.y || cursor != rhs.cursor;
+    }
+
+    bool operator == (const WidgetCursor& rhs) const {
+        return !(*this != rhs);
     }
 
     operator bool() {
@@ -62,8 +61,14 @@ struct WidgetCursor {
 extern bool is_page_refresh;
 extern int page_index;
 
+extern data::Snapshot currentDataSnapshot;
+extern data::Snapshot previousDataSnapshot;
+
 extern data::Cursor edit_data_cursor;
 extern int edit_data_id;
+extern data::Value edit_value;
+extern data::Value edit_value_saved;
+extern bool isEditInteractiveMode;
 
 void refresh_page();
 font::Font *styleGetFont(Style *style);

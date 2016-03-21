@@ -26,7 +26,7 @@ namespace gui {
 namespace keypad {
 
 void reset();
-char *get_value_text(bool &changed);
+void get_text(char *text);
 void do_action(int action_id);
 data::Unit get_edit_unit();
 

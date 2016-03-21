@@ -25,7 +25,7 @@ namespace psu {
 namespace gui {
 namespace slider {
 
-bool draw(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse);
+bool draw(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse);
 
 void touch_down();
 void touch_move();

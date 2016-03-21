@@ -39,6 +39,9 @@ static bool widget_refresh;
 int page_index;
 Style *page_style;
 
+data::Snapshot currentDataSnapshot;
+data::Snapshot previousDataSnapshot;
+
 static WidgetCursor selected_widget;
 static WidgetCursor found_widget_at_down;
 
@@ -49,10 +52,13 @@ static void (*dialog_cancel_callback)();
 static int edit_mode_page_index = PAGE_ID_EDIT_WITH_SLIDER;
 data::Cursor edit_data_cursor;
 int edit_data_id;
+bool isEditInteractiveMode = true;
+data::Value edit_value;
+data::Value edit_value_saved;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-typedef bool(*EnumWidgetsCallback)(uint8_t *start, Widget *widget, int x, int y, bool refresh);
+typedef bool(*EnumWidgetsCallback)(uint8_t *start, const WidgetCursor &widgetCursor, bool refresh);
 
 int g_sp = 0;
 
@@ -99,7 +105,7 @@ public:
             }
             else if (widget->type == WIDGET_TYPE_VERTICAL_LIST || widget->type == WIDGET_TYPE_HORIZONTAL_LIST) {
                 if (stack[stack_index].index < data::count(widget->data)) {
-                    data::select(widget->data, stack[stack_index].index);
+                    data::select(cursor, widget->data, stack[stack_index].index);
 
                     Widget *child_widget = (Widget *)(document + ((ListWidget *)(document + widget->specific))->item_widget);
 
@@ -133,6 +139,8 @@ public:
 private:
     uint8_t *document;
 
+    data::Cursor cursor;
+
     EnumWidgetsCallback callback;
 
     struct StackItem {
@@ -163,18 +171,21 @@ private:
             return true;
         }
         else if (widget->type == WIDGET_TYPE_SELECT) {
-            bool changed;
-
-            int index = data::get(widget->data, changed).getInt();
-            data::select(widget->data, index);
+            int index = currentDataSnapshot.get(cursor, widget->data).getInt();
+            data::select(cursor, widget->data, index);
 
             ContainerWidget *select_widget = ((ContainerWidget *)(document + widget->specific));
             Widget *selected_widget = (Widget *)(document + select_widget->widgets.first) + index;
 
-            return push(selected_widget, x, y, changed || refresh);
+            if (!refresh) {
+                int previousIndex = previousDataSnapshot.get(cursor, widget->data).getInt();
+                refresh = index != previousIndex;
+            }
+
+            return push(selected_widget, x, y, refresh);
         }
         else {
-            return !callback(document, widget, x + widget->x, y + widget->y, refresh);
+            return !callback(document, WidgetCursor(widget, x + widget->x, y + widget->y, cursor), refresh);
         }
     }
 
@@ -443,80 +454,92 @@ Style *get_active_style(Widget *widget) {
     return (Style *)(document + ((Document *)document)->styles.first) + active_style_id;
 }
 
-bool draw_display_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
-    bool edit = data::getCursor() == edit_data_cursor && widget->data == edit_data_id;
+bool draw_display_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
+    bool edit = widgetCursor.cursor == edit_data_cursor && widgetCursor.widget->data == edit_data_id;
     if (edit && page_index == PAGE_ID_EDIT_WITH_KEYPAD) {
-        bool changed;
-        char *text = keypad::get_value_text(changed);
-        if (changed || refresh) {
-            drawText(text, x, y, (int)widget->w, (int)widget->h, get_active_style(widget), inverse);
+        char *text = currentDataSnapshot.keypadText;
+        if (!refresh) {
+            char *previousText = previousDataSnapshot.keypadText;
+            refresh = strcmp(text, previousText) != 0;
+        }
+        if (refresh) {
+            drawText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, get_active_style(widgetCursor.widget), inverse);
             return true;
         }
         return false;
     }
     else {
-        bool changed;
-        data::Value value = data::get(widget->data, changed);
-        if (changed || refresh) {
+        data::Value value = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+        if (!refresh) {
+            data::Value previousValue = previousDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+            refresh = value != previousValue;
+        }
+        if (refresh) {
             char text[32];
             value.toText(text, 32);
 
             Style *style;
             if (edit)
-                style = get_active_style(widget);
+                style = get_active_style(widgetCursor.widget);
             else
-                style = (Style *)(document + widget->style);
+                style = (Style *)(document + widgetCursor.widget->style);
 
-            drawText(text, x, y, (int)widget->w, (int)widget->h, style, inverse);
+            drawText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, style, inverse);
             return true;
         }
         return false;
     }
 }
 
-bool draw_display_string_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
+bool draw_display_string_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
     if (refresh) {
-        DisplayStringWidget *display_string_widget = ((DisplayStringWidget *)(document + widget->specific));
+        DisplayStringWidget *display_string_widget = ((DisplayStringWidget *)(document + widgetCursor.widget->specific));
         char *text = (char *)(document + display_string_widget->text);
-        drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + widget->style), inverse);
+        drawText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, (Style *)(document + widgetCursor.widget->style), inverse);
         return true;
     }
     return false;
 }
 
-bool draw_display_multiline_string_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
+bool draw_display_multiline_string_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
     if (refresh) {
-        DisplayStringWidget *display_string_widget = ((DisplayStringWidget *)(document + widget->specific));
+        DisplayStringWidget *display_string_widget = ((DisplayStringWidget *)(document + widgetCursor.widget->specific));
         char *text = (char *)(document + display_string_widget->text);
-        drawMultilineText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + widget->style), inverse);
+        drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, (Style *)(document + widgetCursor.widget->style), inverse);
         return true;
     }
     return false;
 }
 
-bool draw_three_state_indicator_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
-    bool changed;
-    int state = data::get(widget->data, changed).getInt();
-    if (changed || refresh) {
-        ThreeStateIndicatorWidget *three_state_indicator_widget = ((ThreeStateIndicatorWidget *)(document + widget->specific));
+bool draw_three_state_indicator_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
+    int state = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+    if (!refresh) {
+        int previousState = previousDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+        refresh = state != previousState;
+    }
+    if (refresh) {
+        ThreeStateIndicatorWidget *three_state_indicator_widget = ((ThreeStateIndicatorWidget *)(document + widgetCursor.widget->specific));
 
         OBJ_OFFSET style;
-        if (state == 1) style = widget->style;
+        if (state == 1) style = widgetCursor.widget->style;
         else if (state == 2) style = three_state_indicator_widget->style1;
         else style = three_state_indicator_widget->style2;
 
         char *text = (char *)(document + three_state_indicator_widget->text);
-        drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + style), inverse);
+        drawText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, (Style *)(document + style), inverse);
         return true;
     }
     return false;
 }
 
-bool draw_display_string_select_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
-    bool changed;
-    int state = data::get(widget->data, changed).getInt();
-    if (changed || refresh) {
-        DisplayStringSelectWidget *display_string_select_widget = ((DisplayStringSelectWidget *)(document + widget->specific));
+bool draw_display_string_select_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
+    int state = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+    if (!refresh) {
+        int previousState = previousDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+        refresh = state != previousState;
+    }
+    if (refresh) {
+        DisplayStringSelectWidget *display_string_select_widget = ((DisplayStringSelectWidget *)(document + widgetCursor.widget->specific));
         char *text;
         Style *style;
         if (state == 1) {
@@ -526,41 +549,44 @@ bool draw_display_string_select_widget(uint8_t *document, Widget *widget, int x,
             text = (char *)(document + display_string_select_widget->text2);
             style = (Style *)(document + display_string_select_widget->style2);
         }
-        drawText(text, x, y, (int)widget->w, (int)widget->h, style, inverse);
+        drawText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, style, inverse);
         return true;
     }
     return false;
 }
 
-bool draw_toggle_button_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh, bool inverse) {
-    bool changed;
-    int state = data::get(widget->data, changed).getInt();
-    if (changed || refresh) {
-        ToggleButtonWidget *toggle_button_widget = ((ToggleButtonWidget *)(document + widget->specific));
+bool draw_toggle_button_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
+    int state = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+    if (!refresh) {
+        int previousState = previousDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+        refresh = state != previousState;
+    }
+    if (refresh) {
+        ToggleButtonWidget *toggle_button_widget = ((ToggleButtonWidget *)(document + widgetCursor.widget->specific));
         char *text = (char *)(document + (state == 0 ? toggle_button_widget->text1 : toggle_button_widget->text2));
-        drawText(text, x, y, (int)widget->w, (int)widget->h, (Style *)(document + widget->style), inverse);
+        drawText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, (Style *)(document + widgetCursor.widget->style), inverse);
         return true;
     }
     return false;
 }
 
-bool draw_widget(uint8_t *document, Widget *widget, int x, int y, bool refresh) {
-    bool inverse = selected_widget == widget;
+bool draw_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh) {
+    bool inverse = selected_widget == widgetCursor;
 
-    if (widget->type == WIDGET_TYPE_DISPLAY) {
-        return draw_display_widget(document, widget, x, y, refresh, inverse);
-    } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING) {
-        return draw_display_string_widget(document, widget, x, y, refresh, inverse);
-    } else if (widget->type == WIDGET_TYPE_THREE_STATE_INDICATOR) {
-        return draw_three_state_indicator_widget(document, widget, x, y, refresh, inverse);
-    } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING_SELECT) {
-        return draw_display_string_select_widget(document, widget, x, y, refresh, inverse);
-    } else if (widget->type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING) {
-        return draw_display_multiline_string_widget(document, widget, x, y, refresh, inverse);
-    } else if (widget->type == WIDGET_TYPE_VERTICAL_SLIDER) {
-        return slider::draw(document, widget, x, y, refresh, inverse);
-    } else if (widget->type == WIDGET_TYPE_TOGGLE_BUTTON) {
-        return draw_toggle_button_widget(document, widget, x, y, refresh, inverse);
+    if (widgetCursor.widget->type == WIDGET_TYPE_DISPLAY) {
+        return draw_display_widget(document, widgetCursor, refresh, inverse);
+    } else if (widgetCursor.widget->type == WIDGET_TYPE_DISPLAY_STRING) {
+        return draw_display_string_widget(document, widgetCursor, refresh, inverse);
+    } else if (widgetCursor.widget->type == WIDGET_TYPE_THREE_STATE_INDICATOR) {
+        return draw_three_state_indicator_widget(document, widgetCursor, refresh, inverse);
+    } else if (widgetCursor.widget->type == WIDGET_TYPE_DISPLAY_STRING_SELECT) {
+        return draw_display_string_select_widget(document, widgetCursor, refresh, inverse);
+    } else if (widgetCursor.widget->type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING) {
+        return draw_display_multiline_string_widget(document, widgetCursor, refresh, inverse);
+    } else if (widgetCursor.widget->type == WIDGET_TYPE_VERTICAL_SLIDER) {
+        return slider::draw(document, widgetCursor, refresh, inverse);
+    } else if (widgetCursor.widget->type == WIDGET_TYPE_TOGGLE_BUTTON) {
+        return draw_toggle_button_widget(document, widgetCursor, refresh, inverse);
     }
 
     return false;
@@ -570,15 +596,16 @@ static EnumWidgets draw_enum_widgets(document, draw_widget);
 
 void draw() {
     if (!draw_enum_widgets.next()) {
+        previousDataSnapshot = currentDataSnapshot;
+        currentDataSnapshot.takeSnapshot();
         draw_enum_widgets.start(page_index, 0, 0, false);
         is_page_refresh = false;
     }
 }
 
 void refresh_widget(WidgetCursor widget_cursor) {
-    data::setCursor(widget_cursor.cursor);
     widget_refresh = true;
-    draw_widget(document, widget_cursor.widget, widget_cursor.x, widget_cursor.y, true);
+    draw_widget(document, widget_cursor, true);
     widget_refresh = false;
 }
 
@@ -592,6 +619,7 @@ void refresh_page() {
     lcd::lcd.setColor(style->background_color);
     lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
 
+    currentDataSnapshot.takeSnapshot();
     draw_enum_widgets.start(page_index, 0, 0, true);
 }
 
@@ -601,31 +629,29 @@ static int find_widget_at_x;
 static int find_widget_at_y;
 static WidgetCursor found_widget;
 
-bool find_widget_step(uint8_t *start, Widget *widget, int x, int y, bool refresh) {
-    if (find_widget_at_x >= x * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER && find_widget_at_x < (x + widget->w) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER
-        && find_widget_at_y >= y * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER && find_widget_at_y < (y + widget->h) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER) 
-    {
-        found_widget.widget = widget;
-        found_widget.x = x;
-        found_widget.y = y;
-        found_widget.cursor = data::getCursor();
+bool find_widget_step(uint8_t *start, const WidgetCursor &widgetCursor, bool refresh) {
+    bool inside = 
+        find_widget_at_x >= widgetCursor.x * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER &&
+        find_widget_at_x < (widgetCursor.x + widgetCursor.widget->w) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER &&
+        find_widget_at_y >= widgetCursor.y * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER &&
+        find_widget_at_y < (widgetCursor.y + widgetCursor.widget->h) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+
+    if (inside) {
+        found_widget = widgetCursor;
         return true;
     }
+
     return false;
 }
 
 void find_widget(int x, int y) {
     found_widget = 0;
 
-    data::Cursor saved_cursor = data::getCursor();
-
     find_widget_at_x = touch::x;
     find_widget_at_y = touch::y;
     EnumWidgets enum_widgets(document, find_widget_step);
     enum_widgets.start(page_index, 0, 0, true);
     enum_widgets.next();
-
-    data::setCursor(saved_cursor);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -648,6 +674,13 @@ void enter_edit_mode(const WidgetCursor &widget_cursor) {
         if (page_index == PAGE_ID_MAIN) {
             edit_data_cursor = widget_cursor.cursor;
             edit_data_id = widget_cursor.widget->data;
+
+            Channel &channel = Channel::get(edit_data_cursor.iChannel);
+            if (edit_data_id == DATA_ID_VOLT) {
+                edit_value = data::Value(channel.u.set, data::UNIT_VOLT);
+            } else {
+                edit_value = data::Value(channel.i.set, data::UNIT_AMPER);
+            }
         }
 
         page_index = edit_mode_page_index;
@@ -678,7 +711,7 @@ void exit_edit_mode() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void do_action(int action_id, const WidgetCursor &widget_cursor) {
+void do_action(int action_id, WidgetCursor &widget_cursor) {
     if (action_id == ACTION_ID_EDIT) {
         enter_edit_mode(widget_cursor);
     } else if (action_id == ACTION_ID_EDIT_WITH_SLIDER) {
@@ -704,13 +737,13 @@ void do_action(int action_id, const WidgetCursor &widget_cursor) {
         keypad::do_action(action_id);
     } else if (action_id == ACTION_ID_TOGGLE) {
         data::toggle(widget_cursor.widget->data);
+    } else if (action_id == ACTION_ID_NON_INTERACTIVE_ENTER) {
+        data::set(edit_data_cursor, edit_data_id, edit_value);
+    } else if (action_id == ACTION_ID_NON_INTERACTIVE_CANCEL) {
+        edit_value = edit_value_saved;
+        data::set(edit_data_cursor, edit_data_id, edit_value_saved);
     } else {
-        data::Cursor saved_cursor = data::getCursor();
-        data::setCursor(widget_cursor.cursor);
-
-        data::do_action(action_id);
-
-        data::setCursor(saved_cursor);
+        data::doAction(widget_cursor.cursor, action_id);
     }
 }
 
@@ -782,7 +815,7 @@ void tick(unsigned long tick_usec) {
 }
 
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
-    data::set(DATA_ID_ALERT_MESSAGE, data::Value::ConstStr(message));
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ConstStr(message));
 
     dialog_yes_callback = yes_callback;
     dialog_no_callback = no_callback;

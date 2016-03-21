@@ -5,6 +5,8 @@ namespace psu {
 namespace gui {
 namespace data {
 
+////////////////////////////////////////////////////////////////////////////////
+
 enum Unit {
     UNIT_NONE,
     UNIT_VOLT,
@@ -40,12 +42,18 @@ struct Value {
         return value;
     }
 
-    bool operator ==(Value other) {
-        return memcmp(this, &other, sizeof(Value)) == 0;
+    bool operator ==(const Value &other) {
+        if (unit_ == UNIT_STR) {
+            return strcmp(str_, other.str_) == 0;
+        } else if (unit_ == UNIT_CONST_STR) {
+            return strcmp_P(str_, other.str_) == 0;
+        } else {
+            return memcmp(this, &other, sizeof(Value)) == 0;
+        }
     }
 
-    bool operator !=(Value other) {
-        return memcmp(this, &other, sizeof(Value)) != 0;
+    bool operator !=(const Value &other) {
+        return !(*this == other);
     }
 
     float getFloat() { return float_; }
@@ -64,6 +72,34 @@ private:
     };
 };
 
+////////////////////////////////////////////////////////////////////////////////
+
+struct Cursor {
+    int iChannel;
+
+    Cursor() {
+        iChannel = -1;
+    }
+
+    Cursor(int i) {
+        iChannel = i;
+    }
+
+    operator bool() {
+        return iChannel != -1;
+    }
+
+    bool operator != (const Cursor& rhs) const {
+        return !(*this == rhs);
+    }
+
+    bool operator == (const Cursor& rhs) const {
+        return iChannel == rhs.iChannel;
+    }
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
 struct ChannelStateFlags {
     unsigned mode : 2;
     unsigned state : 2;
@@ -81,35 +117,33 @@ struct ChannelState {
     ChannelStateFlags flags;
 };
 
-struct Cursor {
-    int selected_channel_index;
-    ChannelState channel_last_state[CH_NUM];
-    int edit_interactive_mode = 1;
-    Unit edit_unit;
-    char edit_info[32];
-    float edit_value;
+struct Snapshot {
+    ChannelState channelStates[CH_NUM];
+    Value alertMessage;
 
-    bool operator != (const Cursor& rhs) const {
-        return !(*this == rhs);
-    }
+    Value editValue;
+    Value editUnit;
+    char editInfo[32];
+    int editInteractiveMode;
+    char keypadText[10];
 
-    bool operator == (const Cursor& rhs) const {
-        return selected_channel_index == rhs.selected_channel_index;
-    }
+    void takeSnapshot();
+
+    Value get(const Cursor &cursor, uint8_t id);
 };
 
-Cursor getCursor();
-void setCursor(Cursor cursor_);
+////////////////////////////////////////////////////////////////////////////////
 
 int count(uint8_t id);
-void select(uint8_t id, int index);
-Value get(uint8_t id, bool &changed);
-Value getMin(uint8_t id);
-Value getMax(uint8_t id);
-Unit getUnit(uint8_t id);
-void set(uint8_t id, Value value);
+void select(Cursor &cursor, uint8_t id, int index);
+
+Value getMin(const Cursor &cursor, uint8_t id);
+Value getMax(const Cursor &cursor, uint8_t id);
+Unit getUnit(const Cursor &cursor, uint8_t id);
+
+void set(const Cursor &cursor, uint8_t id, Value value);
 void toggle(uint8_t id);
-void do_action(uint8_t id);
+void doAction(const Cursor &cursor, uint8_t id);
 
 }
 }
