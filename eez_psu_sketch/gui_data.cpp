@@ -222,9 +222,8 @@ void set(const Cursor &cursor, uint8_t id, Value value) {
 void toggle(uint8_t id) {
     if (id == DATA_ID_EDIT_INTERACTIVE_MODE) {
         isEditInteractiveMode = !isEditInteractiveMode;
-        if (!isEditInteractiveMode) {
-            edit_value_saved = edit_value;
-        }
+        edit_value = currentDataSnapshot.get(edit_data_cursor, edit_data_id);
+        edit_value_saved = edit_value;
     }
 }
 

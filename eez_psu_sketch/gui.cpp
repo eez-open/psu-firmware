@@ -699,14 +699,9 @@ void enter_edit_mode(const WidgetCursor &widget_cursor) {
         if (page_index == PAGE_ID_MAIN) {
             edit_data_cursor = widget_cursor.cursor;
             edit_data_id = widget_cursor.widget->data;
-
-            Channel &channel = Channel::get(edit_data_cursor.iChannel);
-            if (edit_data_id == DATA_ID_VOLT) {
-                edit_value = data::Value(channel.u.set, data::UNIT_VOLT);
-            } else {
-                edit_value = data::Value(channel.i.set, data::UNIT_AMPER);
-            }
         }
+        edit_value = currentDataSnapshot.get(edit_data_cursor, edit_data_id);
+        edit_value_saved = edit_value;
 
         page_index = edit_mode_page_index;
 
