@@ -43,6 +43,10 @@ struct Value {
     }
 
     bool operator ==(const Value &other) {
+        if (unit_ != other.unit_) {
+            return false;
+        }
+
         if (unit_ == UNIT_STR) {
             return strcmp(str_, other.str_) == 0;
         } else if (unit_ == UNIT_CONST_STR) {
@@ -130,6 +134,7 @@ struct Snapshot {
     void takeSnapshot();
 
     Value get(const Cursor &cursor, uint8_t id);
+    bool isBlinking(const Cursor &cursor, uint8_t id);
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -24,6 +24,7 @@
 
 #include "channel.h"
 
+#define CONF_BLINK_TIME 400000UL
 #define CONF_ENUM_WIDGETS_STACK_SIZE 5
 
 namespace eez {
@@ -56,11 +57,14 @@ bool isEditInteractiveMode = true;
 data::Value edit_value;
 data::Value edit_value_saved;
 
+static bool wasBlinkTime;
+static bool isBlinkTime;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 typedef bool(*EnumWidgetsCallback)(uint8_t *start, const WidgetCursor &widgetCursor, bool refresh);
 
-int g_sp = 0;
+//int g_sp_max_counter = 0;
 
 class EnumWidgets {
 public:
@@ -160,7 +164,7 @@ private:
                 return false;
             }
 
-            if (stack_index > g_sp) g_sp = stack_index;
+            //if (stack_index > g_sp_max_counter) g_sp_max_counter = stack_index;
 
             stack[stack_index].widget = widget;
             stack[stack_index].index = 0;
@@ -231,10 +235,10 @@ font::Font *styleGetFont(Style *style) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int trtmrt;
+//int draw_counter;
 
 void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse) {
-    ++trtmrt;
+    //++draw_counter;
 
     x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
     y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
@@ -297,7 +301,7 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
 }
 
 void drawMultilineText(char *text, int x, int y, int w, int h, Style *style, bool inverse) {
-    ++trtmrt;
+    //++draw_counter;
 
     x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
     y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
@@ -476,6 +480,13 @@ bool draw_display_widget(uint8_t *document, const WidgetCursor &widgetCursor, bo
     }
     else {
         data::Value value = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+        bool isBlinking = currentDataSnapshot.isBlinking(widgetCursor.cursor, widgetCursor.widget->data);
+        if (isBlinkTime && isBlinking) {
+            value = data::Value("");
+        } else {
+            value = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+        }
+        refresh = refresh || (wasBlinkTime != isBlinkTime);
         if (!refresh) {
             data::Value previousValue = previousDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
             refresh = value != previousValue;
@@ -600,13 +611,19 @@ bool draw_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refre
 
 static EnumWidgets draw_enum_widgets(document, draw_widget);
 
-void draw() {
+void draw_tick(unsigned long tick_usec) {
     if (!draw_enum_widgets.next()) {
+        wasBlinkTime = isBlinkTime;
+        isBlinkTime = (micros() % (2 * CONF_BLINK_TIME)) > CONF_BLINK_TIME;
+
         previousDataSnapshot = currentDataSnapshot;
         currentDataSnapshot.takeSnapshot();
+
         draw_enum_widgets.start(page_index, 0, 0, false);
-        DebugTraceF("%d", trtmrt);
-        trtmrt = 0;
+
+        //DebugTraceF("%d", draw_counter);
+        //draw_counter = 0;
+
         is_page_refresh = false;
     }
 }
@@ -816,7 +833,7 @@ void tick(unsigned long tick_usec) {
             }
         }
 
-        draw();
+        draw_tick(tick_usec);
     } else {
         touch::calibration::tick(tick_usec);
     }

@@ -163,6 +163,13 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
     return Value();
 }
 
+bool Snapshot::isBlinking(const Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_EDIT_VALUE) {
+        return !isEditInteractiveMode && editValue != get(edit_data_cursor, edit_data_id);
+    }
+    return false;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 int count(uint8_t id) {
