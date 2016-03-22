@@ -25,16 +25,37 @@ namespace psu {
 namespace gui {
 namespace edit_mode {
 
-extern int tab_index;
-extern data::Cursor data_cursor;
-extern int data_id;
-extern data::Value value;
-extern data::Value value_saved;
-extern bool is_interactive_mode;
+struct Snapshot {
+    data::Value editValue;
+    char infoText[32];
+    int interactiveModeSelector;
 
-void enter(const WidgetCursor &widget_cursor);
+    int step_index;
+
+    data::Value keypadUnit;
+    char keypadText[10];
+
+    void takeSnapshot();
+    data::Value get(uint8_t id);
+    bool isBlinking(uint8_t id, bool &result);
+};
+
+bool isActive();
+void enter(const WidgetCursor &widgetCursor);
 void exit();
-bool doAction(int action_id, WidgetCursor &widget_cursor);
+bool doAction(int action_id, WidgetCursor &widgetCursor);
+bool isInteractiveMode();
+void toggleInteractiveMode();
+
+const data::Value& getEditValue();
+data::Value getCurrentValue();
+const data::Value& getMin();
+const data::Value& getMax();
+data::Unit getUnit();
+void setValue(float value);
+
+bool isEditWidget(const WidgetCursor &widgetCursor);
+void getInfoText(char *infoText);
 
 }
 }

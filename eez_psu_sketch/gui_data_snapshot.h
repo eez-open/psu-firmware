@@ -18,19 +18,46 @@
 
 #pragma once
 
-#include "gui_internal.h"
+#include "gui_data.h"
+#include "gui_edit_mode.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
-namespace edit_mode_keypad {
+namespace data {
 
-void reset();
-void getText(char *text, int count);
-void doAction(int action_id);
-data::Unit getEditUnit();
+struct ChannelSnapshotFlags {
+    unsigned mode : 2;
+    unsigned state : 2;
+    unsigned ovp : 2;
+    unsigned ocp : 2;
+    unsigned opp : 2;
+    unsigned otp : 2;
+    unsigned dp : 2;
+};
+
+struct ChannelSnapshot {
+    Value mon_value;
+    float u_set;
+    float i_set;
+    ChannelSnapshotFlags flags;
+};
+
+struct Snapshot {
+    ChannelSnapshot channelSnapshots[CH_NUM];
+    edit_mode::Snapshot editModeSnapshot;
+    Value alertMessage;
+
+    void takeSnapshot();
+
+    Value get(const Cursor &cursor, uint8_t id);
+    bool isBlinking(const Cursor &cursor, uint8_t id);
+};
+
+extern Snapshot currentSnapshot;
+extern Snapshot previousSnapshot;
 
 }
 }
 }
-} // namespace eez::psu::gui::edit_mode_keypad
+} // namespace eez::psu::ui::data

@@ -122,7 +122,7 @@
     {
       "name": "edit_value_small",
       "font": "small",
-      "horizontal_align": "right",
+      "align_horizontal": "right",
       "color": "white"
     },
     {
@@ -318,7 +318,7 @@
         {
           "type": "display",
           "data": "edit_info",
-          "x": 40,
+          "x": 38,
           "y": 0,
           "w": 200,
           "h": 32,
@@ -329,19 +329,19 @@
           "data": "edit_value",
           "x": 0,
           "y": 0,
-          "w": 40,
-          "h": 296,
+          "w": 38,
+          "h": 284,
           "style": "edit_mode_slider_scale",
           "ticks_color": "#FFFFFF",
           "needle_height": 11
         },
         {
           "type": "select",
-          "x": 40,
+          "x": 38,
           "y": 32,
-          "w": 200,
+          "w": 202,
           "h": 172,
-          "data": "edit_interactive_mode",
+          "data": "edit_mode_interactive_mode_selector",
           "widgets": [
             {
               "type": "container",
@@ -565,7 +565,7 @@
         },
         {
           "type": "toggle_button",
-          "data": "edit_interactive_mode",
+          "data": "edit_mode_interactive_mode_selector",
           "action": "toggle",
           "x": 144,
           "y": 284,
@@ -593,28 +593,28 @@
         {
           "type": "display",
           "data": "edit_info",
-          "x": 40,
+          "x": 38,
           "y": 0,
           "w": 200,
           "h": 32,
           "style": "edit_info"
         },
         {
-          "type": "vertical_slider",
-          "data": "edit_step",
+          "type": "button_group",
+          "data": "edit_steps",
           "x": 0,
           "y": 0,
-          "w": 40,
-          "h": 296,
-          "style": "edit_mode_step_vertical_slider"
+          "w": 36,
+          "h": 284,
+          "style": "small"
         },
         {
           "type": "select",
-          "x": 40,
+          "x": 38,
           "y": 32,
-          "w": 200,
+          "w": 202,
           "h": 172,
-          "data": "edit_interactive_mode",
+          "data": "edit_mode_interactive_mode_selector",
           "widgets": [
             {
               "type": "container",
@@ -838,7 +838,7 @@
         },
         {
           "type": "toggle_button",
-          "data": "edit_interactive_mode",
+          "data": "edit_mode_interactive_mode_selector",
           "action": "toggle",
           "x": 144,
           "y": 284,

@@ -17,8 +17,10 @@
 */
 
 #include "psu.h"
+#include "gui_data_snapshot.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_slider.h"
+#include "gui_edit_mode_step.h"
 #include "gui_edit_mode_keypad.h"
 
 namespace eez {
@@ -26,98 +28,202 @@ namespace psu {
 namespace gui {
 namespace edit_mode {
 
-int tab_index = PAGE_ID_EDIT_MODE_SLIDER;
-data::Cursor data_cursor;
-int data_id;
-data::Value value;
-data::Value value_saved;
-bool is_interactive_mode = true;
+static int tab_index = PAGE_ID_EDIT_MODE_SLIDER;
+static data::Cursor data_cursor;
+static int data_id = -1;
+static data::Value edit_value;
+static data::Value undo_value;
+static data::Value minValue;
+static data::Value maxValue;
+static bool is_interactive_mode = true;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void enter(const WidgetCursor &widget_cursor) {
-    if (page_index != tab_index) {
-        if (page_index == PAGE_ID_MAIN) {
-            data_cursor = widget_cursor.cursor;
-            data_id = widget_cursor.widget->data;
+void Snapshot::takeSnapshot() {
+    if (edit_mode::isActive()) {
+        editValue = edit_mode::getEditValue();
+
+        getInfoText(infoText);
+
+        interactiveModeSelector = isInteractiveMode() ? 0 : 1;
+
+        step_index = edit_mode_step::getStepIndex();
+
+        switch (edit_mode_keypad::getEditUnit()) {
+        case data::UNIT_VOLT: keypadUnit = data::Value::ConstStr("mV"); break;
+        case data::UNIT_MILLI_VOLT: keypadUnit = data::Value::ConstStr("V"); break;
+        case data::UNIT_AMPER: keypadUnit = data::Value::ConstStr("mA"); break;
+        default: keypadUnit = data::Value::ConstStr("A");
         }
-        value = currentDataSnapshot.get(data_cursor, data_id);
-        value_saved = value;
 
-        page_index = tab_index;
+        edit_mode_keypad::getText(keypadText, sizeof(keypadText));
+    }
+}
 
-        if (page_index == PAGE_ID_EDIT_MODE_SLIDER) {
+data::Value Snapshot::get(uint8_t id) {
+    if (id == DATA_ID_EDIT_VALUE) {
+       return editValue;
+    } else if (id == DATA_ID_EDIT_INFO) {
+        return infoText;
+    } else if (id == DATA_ID_EDIT_UNIT) {
+        return keypadUnit;
+    } else if (id == DATA_ID_EDIT_MODE_INTERACTIVE_MODE_SELECTOR) {
+        return interactiveModeSelector;
+    } else if (id == DATA_ID_EDIT_STEPS) {
+        return step_index;
+    }
+
+    return data::Value();
+}
+
+bool Snapshot::isBlinking(uint8_t id, bool &result) {
+    if (id == DATA_ID_EDIT_VALUE) {
+        result = !edit_mode::isInteractiveMode() && editValue != edit_mode::getCurrentValue();
+        return true;
+    }
+    return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool isActive() {
+    return data_id != -1;
+}
+
+void enter(const WidgetCursor &widgetCursor) {
+    if (getActivePage() != tab_index) {
+        if (getActivePage() == PAGE_ID_MAIN) {
+            data_cursor = widgetCursor.cursor;
+            data_id = widgetCursor.widget->data;
+        }
+
+        edit_value = data::currentSnapshot.get(data_cursor, data_id);
+        undo_value = edit_value;
+        minValue = data::getMin(data_cursor, data_id);
+        maxValue = data::getMax(data_cursor, data_id);
+
+        if (tab_index == PAGE_ID_EDIT_MODE_SLIDER) {
             psu::enterTimeCriticalMode();
         }
-        else if (page_index == PAGE_ID_EDIT_MODE_KEYPAD) {
+        else if (tab_index == PAGE_ID_EDIT_MODE_KEYPAD) {
             edit_mode_keypad::reset();
         }
 
-        refresh_page();
+        showPage(tab_index);
     }
 }
 
 void exit() {
-    if (page_index != PAGE_ID_MAIN) {
-        if (page_index == ACTION_ID_EDIT_MODE_SLIDER) {
+    if (getActivePage() != PAGE_ID_MAIN) {
+        if (getActivePage() == ACTION_ID_EDIT_MODE_SLIDER) {
             psu::leaveTimeCriticalMode();
         }
 
         data_id = -1;
 
-        page_index = PAGE_ID_MAIN;
-        refresh_page();
+        showPage(PAGE_ID_MAIN);
     }
 }
 
-bool doAction(int action_id, WidgetCursor &widget_cursor) {
+bool doAction(int action_id, WidgetCursor &widgetCursor) {
     if (action_id == ACTION_ID_EDIT) {
-        edit_mode::enter(widget_cursor);
+        enter(widgetCursor);
         return true;
     }
     
     if (action_id == ACTION_ID_EDIT_MODE_SLIDER) {
-        edit_mode::tab_index = PAGE_ID_EDIT_MODE_SLIDER;
-        edit_mode::enter(widget_cursor);
+        tab_index = PAGE_ID_EDIT_MODE_SLIDER;
+        enter(widgetCursor);
         return true;
     }
     
     if (action_id == ACTION_ID_EDIT_MODE_STEP) {
-        edit_mode::tab_index = PAGE_ID_EDIT_MODE_STEP;
-        edit_mode::enter(widget_cursor);
+        tab_index = PAGE_ID_EDIT_MODE_STEP;
+        enter(widgetCursor);
         return true;
     }
     
     if (action_id == ACTION_ID_EDIT_MODE_KEYPAD) {
-        edit_mode::tab_index = PAGE_ID_EDIT_MODE_KEYPAD;
-        edit_mode::enter(widget_cursor);
+        tab_index = PAGE_ID_EDIT_MODE_KEYPAD;
+        enter(widgetCursor);
         return true;
     }
 
     if (action_id == ACTION_ID_EXIT) {
-        if (data_id != -1) {
-            edit_mode::exit();
+        if (isActive()) {
+            exit();
             return true;
         }
     }
 
     if (action_id >= ACTION_ID_KEY_0 && action_id <= ACTION_ID_KEY_UNIT) {
-        edit_mode_keypad::do_action(action_id);
+        edit_mode_keypad::doAction(action_id);
         return true;
     }
 
     if (action_id == ACTION_ID_NON_INTERACTIVE_ENTER) {
-        data::set(edit_mode::data_cursor, edit_mode::data_id, edit_mode::value);
+        data::set(data_cursor, data_id, edit_value);
         return true;
     }
     
     if (action_id == ACTION_ID_NON_INTERACTIVE_CANCEL) {
-        edit_mode::value = edit_mode::value_saved;
-        data::set(edit_mode::data_cursor, edit_mode::data_id, edit_mode::value_saved);
+        edit_value = undo_value;
+        data::set(data_cursor, data_id, undo_value);
         return true;
     }
     
     return false;
+}
+
+bool isInteractiveMode() {
+    return is_interactive_mode;
+}
+
+void toggleInteractiveMode() {
+    is_interactive_mode = !is_interactive_mode;
+    edit_value = data::currentSnapshot.get(data_cursor, data_id);
+    undo_value = edit_value;
+}
+
+const data::Value& getEditValue() {
+    return edit_value;
+}
+
+data::Value getCurrentValue() {
+    return data::currentSnapshot.get(data_cursor, data_id);
+}
+
+const data::Value& getMin() {
+    return minValue;
+}
+
+const data::Value& getMax() {
+    return maxValue;
+}
+
+data::Unit getUnit() {
+    return edit_value.getUnit();
+}
+
+void setValue(float value_) {
+    edit_value = data::Value(value_, getUnit());
+
+    if (is_interactive_mode) {
+        data::set(data_cursor, data_id, edit_value);
+    }
+}
+
+bool isEditWidget(const WidgetCursor &widgetCursor) {
+    return widgetCursor.cursor == data_cursor && widgetCursor.widget->data == data_id;
+}
+
+void getInfoText(char *infoText) {
+    Channel &channel = Channel::get(data_cursor.iChannel);
+    if (data_id == DATA_ID_VOLT) {
+        sprintf_P(infoText, PSTR("Set Ch%d voltage [%d-%d V]"), channel.index, (int)minValue.getFloat(), (int)maxValue.getFloat());
+    } else {
+        sprintf_P(infoText, PSTR("Set Ch%d current [%d-%d A]"), channel.index, (int)minValue.getFloat(), (int)maxValue.getFloat());
+    }
 }
 
 }

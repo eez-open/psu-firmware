@@ -68,10 +68,11 @@
       "id": "edit_info"
     },
     {
-      "id": "edit_interactive_mode"
+      "id": "edit_mode_interactive_mode_selector",
+      "description": "0: interactive mode, 1: non-interactive mode" 
     },
     {
-      "id": "edit_step"
+      "id": "edit_steps"
     }
   ],
   "actions": [

@@ -69,7 +69,7 @@ declare_const("WIDGET_TYPE_DISPLAY_MULTILINE_STRING", 8)
 declare_const("WIDGET_TYPE_THREE_STATE_INDICATOR", 9)
 declare_const("WIDGET_TYPE_SCALE", 10)
 declare_const("WIDGET_TYPE_TOGGLE_BUTTON", 11)
-declare_const("WIDGET_TYPE_VERTICAL_SLIDER", 12)
+declare_const("WIDGET_TYPE_BUTTON_GROUP", 12)
 
 #-------------------------------------------------------------------------------
 
@@ -650,8 +650,8 @@ class Parser:
                 widget_type = WIDGET_TYPE_SCALE
             elif type_str == "toggle_button":
                 widget_type = WIDGET_TYPE_TOGGLE_BUTTON
-            elif type_str == "vertical_slider":
-                widget_type = WIDGET_TYPE_VERTICAL_SLIDER
+            elif type_str == "button_group":
+                widget_type = WIDGET_TYPE_BUTTON_GROUP
             else:
                 self.trace.error("unkown type '%s'" % type_str)
                 widget_type = WIDGET_TYPE_NONE

@@ -31,7 +31,7 @@ public:
     EEZ_UTFT(byte model, int RS, int WR, int CS, int RST, int SER = 0);
 
     void drawStr(const char *text, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background);
-    int measureStr(const char *text, font::Font &font);
+    int measureStr(const char *text, font::Font &font, int max_width = 0);
 
 private:
     font::Font *p_font;

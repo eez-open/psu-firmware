@@ -58,16 +58,12 @@ struct WidgetCursor {
     }
 };
 
-extern bool is_page_refresh;
-extern int page_index;
+int getActivePage();
+void showPage(int index);
 
-extern data::Snapshot currentDataSnapshot;
-extern data::Snapshot previousDataSnapshot;
-
-void refresh_page();
 font::Font *styleGetFont(Style *style);
 void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse);
-void fill_rect(int x, int y, int w, int h);
+void fillRect(int x, int y, int w, int h);
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());
 
 }

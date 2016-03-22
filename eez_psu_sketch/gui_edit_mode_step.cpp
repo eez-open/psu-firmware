@@ -17,60 +17,108 @@
 */
 
 #include "psu.h"
+#include "gui_data.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_step.h"
 
-#define CONF_GUI_EDIT_MODE_STEP_THRESHOLD_PX 10
+#define CONF_GUI_EDIT_MODE_STEP_THRESHOLD_PX 5
+
+using eez::psu::gui::data::Value;
+using eez::psu::gui::data::UNIT_VOLT;
+using eez::psu::gui::data::UNIT_AMPER;
+
+const Value CONF_GUI_U_STEPS[] = {
+    Value(5.0f, UNIT_VOLT),
+    Value(2.0f, UNIT_VOLT),
+    Value(1.0f, UNIT_VOLT),
+    Value(0.5f, UNIT_VOLT),
+    Value(0.1f, UNIT_VOLT)
+};
+
+const Value CONF_GUI_I_STEPS[] = {
+    Value(0.5f, UNIT_AMPER),
+    Value(0.25f, UNIT_AMPER),
+    Value(0.1f, UNIT_AMPER),
+    Value(0.05f, UNIT_AMPER),
+    Value(0.01f, UNIT_AMPER)
+};
+
 
 namespace eez {
 namespace psu {
 namespace gui {
 namespace edit_mode_step {
 
-static float step_value = 0.1f;
+static int step_index = 2;
 
 static bool changed;
 static int start_y;
 
-void touch_down() {
-    start_y = touch::y;
-    changed = false;
+float getStepValue() {
+    if (edit_mode::getUnit() == UNIT_VOLT) {
+        return CONF_GUI_U_STEPS[step_index].getFloat();
+    } else {
+        return CONF_GUI_I_STEPS[step_index].getFloat();
+    }
 }
 
-void touch_move() {
+int getStepIndex() {
+    return step_index;
+}
+
+void getStepValues(const data::Value **labels, int &count) {
+    if (edit_mode::getUnit() == UNIT_VOLT) {
+        *labels = CONF_GUI_U_STEPS;
+        count = sizeof(CONF_GUI_U_STEPS) / sizeof(Value);
+    } else {
+        *labels = CONF_GUI_I_STEPS;
+        count = sizeof(CONF_GUI_I_STEPS) / sizeof(Value);
+    }
+}
+
+void setStepIndex(int value) {
+    step_index = value;
+}
+
+void test() {
     if (!changed) {
         int d = start_y - touch::y;
         if (abs(d) >= CONF_GUI_EDIT_MODE_STEP_THRESHOLD_PX) {
-            data::Value minValue = data::getMin(edit_mode::data_cursor, edit_mode::data_id);
-            float min = minValue.getFloat();
-            float max = data::getMax(edit_mode::data_cursor, edit_mode::data_id).getFloat();
+            float min = edit_mode::getMin().getFloat();
+            float max = edit_mode::getMax().getFloat();
 
-            float value = edit_mode::value.getFloat();
+            float value = edit_mode::getEditValue().getFloat();
 
             if (d > 0) {
-                value += step_value;
+                value += getStepValue();
                 if (value > max) {
                     value = max;
                 }
             } else {
-                value -= step_value;
+                value -= getStepValue();
                 if (value < min) {
                     value = min;
                 }
             }
 
-            edit_mode::value = data::Value(value, minValue.getUnit());
-
-            if (edit_mode::is_interactive_mode) {
-                data::set(edit_mode::data_cursor, edit_mode::data_id, edit_mode::value);
-            }
+            edit_mode::setValue(value);
 
             changed = true;
         }
     }
 }
 
-void touch_up() {
+void onTouchDown() {
+    start_y = touch::y;
+    changed = false;
+}
+
+void onTouchMove() {
+    test();
+}
+
+void onTouchUp() {
+    test();
 }
 
 }

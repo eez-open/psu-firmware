@@ -23,9 +23,14 @@ namespace psu {
 namespace gui {
 namespace edit_mode_step {
 
-void touch_down();
-void touch_move();
-void touch_up();
+int getStepIndex();
+void getStepValues(const data::Value **labels, int &count);
+
+void setStepIndex(int value);
+
+void onTouchDown();
+void onTouchMove();
+void onTouchUp();
 
 }
 }

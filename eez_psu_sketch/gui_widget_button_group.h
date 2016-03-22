@@ -23,14 +23,13 @@
 namespace eez {
 namespace psu {
 namespace gui {
-namespace edit_mode_keypad {
+namespace widget_button_group {
 
-void reset();
-void getText(char *text, int count);
-void doAction(int action_id);
-data::Unit getEditUnit();
+bool draw(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse);
+
+void onTouchDown(const WidgetCursor &widgetCursor);
 
 }
 }
 }
-} // namespace eez::psu::gui::edit_mode_keypad
+} // namespace eez::psu::gui::widget_button_group

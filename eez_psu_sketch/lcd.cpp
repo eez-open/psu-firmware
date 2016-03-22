@@ -98,9 +98,13 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
         y_glyph = clip_y1;
     }
 
+    bool paintEnabled = true;
+
     int width;
     if (x_glyph + glyph.width - 1 > clip_x2) {
         width = clip_x2 - x_glyph + 1;
+        // if glyph doesn't fit, don't paint it
+        paintEnabled = false;
     } else {
         width = glyph.width;
     }
@@ -122,7 +126,7 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
 				    uint8_t data = arduino_util::prog_read_byte(glyph.data + offset + iByte);
 				    for (uint8_t mask = 0x80; mask != 0 && iCol < width; mask >>= 1, ++iCol) {
                         if (iCol >= iStartCol) {
-					        if (data & mask) {
+					        if (paintEnabled && (data & mask)) {
 						        setPixel((fch << 8) | fcl);
 					        }
 					        else {
@@ -142,7 +146,7 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
 				    for (int iBit = 7; iBit >= 0; --iBit) {
                         int iPixel = iByte * 8 + iBit;
 					    if (iPixel >= iStartCol && iPixel < width) {
-						    if (data & (0x80 >> iBit)) {
+						    if (paintEnabled && (data & (0x80 >> iBit))) {
 							    setPixel((fch << 8) | fcl);
 						    }
 						    else {
@@ -181,14 +185,18 @@ int8_t EEZ_UTFT::measureGlyph(uint8_t encoding) {
 	return glyph.dx;
 }
 
-int EEZ_UTFT::measureStr(const char *text, font::Font &font) {
+int EEZ_UTFT::measureStr(const char *text, font::Font &font, int max_width) {
 	p_font = &font;
 
 	int width = 0;
 
 	char encoding;
 	while ((encoding = *text++) != 0) {
-		width += measureGlyph(encoding);
+		int glyph_width = measureGlyph(encoding);
+        if (max_width > 0 && width + glyph_width > max_width) {
+            break;
+        }
+        width += glyph_width;
 	}
 
 	return width;

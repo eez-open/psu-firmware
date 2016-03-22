@@ -59,7 +59,7 @@ bool isMilli() {
     return edit_unit == data::UNIT_MILLI_VOLT || edit_unit == data::UNIT_MILLI_AMPER;
 }
 
-float get_value() {
+float getValue() {
     float value = 0;
 
     if (state >= D0) {
@@ -165,13 +165,8 @@ bool is_value_valid() {
     if (state == EMPTY) {
         return false;
     }
-
-    float value = get_value();
-    bool is_valid = 
-        value >= data::getMin(edit_mode::data_cursor, edit_mode::data_id).getFloat() &&
-        value <= data::getMax(edit_mode::data_cursor, edit_mode::data_id).getFloat();
-
-    return is_valid;
+    float value = getValue();
+    return (value >= edit_mode::getMin().getFloat() && value <= edit_mode::getMax().getFloat());
 }
 
 void toggle_edit_unit() {
@@ -193,12 +188,12 @@ void toggle_edit_unit() {
 
 void reset() {
     state = START;
-    edit_unit = data::getUnit(edit_mode::data_cursor, edit_mode::data_id);
+    edit_unit = edit_mode::getUnit();
 }
 
-void get_text(char *text) {
+void getText(char *text, int count) {
     if (state == START) {
-        currentDataSnapshot.get(edit_mode::data_cursor, edit_mode::data_id).toText(text, sizeof(text));
+        edit_mode::getCurrentValue().toText(text, count);
     }
     else {
         int i = 0;
@@ -225,6 +220,12 @@ void get_text(char *text) {
 
         text[i] = 0;
 
+        unsigned long current_time = micros();
+        if (current_time - last_cursor_change_time > CONF_KEYPAD_CURSOR_BLINK_TIME) {
+            cursor = !cursor;
+            last_cursor_change_time = current_time;
+        }
+
         if (cursor) {
             strcat_P(text, PSTR(CONF_KEYPAD_CURSOR_ON));
         }
@@ -243,7 +244,7 @@ void get_text(char *text) {
     }
 }
 
-void do_action(int action_id) {
+void doAction(int action_id) {
     if (action_id >= ACTION_ID_KEY_0 && action_id <= ACTION_ID_KEY_9) {
         int d = action_id - ACTION_ID_KEY_0;
         if (state == START || state == EMPTY) {
@@ -353,7 +354,7 @@ void do_action(int action_id) {
     }
     else if (action_id == ACTION_ID_KEY_OK) {
         if (state != START && state != EMPTY) {
-            data::set(edit_mode::data_cursor, edit_mode::data_id, data::Value(get_value(), data::getUnit(edit_mode::data_cursor, edit_mode::data_id)));
+            edit_mode::setValue(getValue());
             reset();
         }
         else {
@@ -361,7 +362,7 @@ void do_action(int action_id) {
         }
     }
     else if (action_id == ACTION_ID_KEY_UNIT) {
-        float value = get_value();
+        float value = getValue();
         data::Unit saved_edit_unit = edit_unit;
 
         toggle_edit_unit();
@@ -377,7 +378,7 @@ void do_action(int action_id) {
     }
 }
 
-data::Unit get_edit_unit() {
+data::Unit getEditUnit() {
     return edit_unit;
 }
 

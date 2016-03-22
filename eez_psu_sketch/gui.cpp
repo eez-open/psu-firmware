@@ -19,10 +19,12 @@
 #include "psu.h"
 #include "gui.h"
 #include "gui_internal.h"
+#include "gui_data_snapshot.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_slider.h"
 #include "gui_edit_mode_step.h"
 #include "gui_edit_mode_keypad.h"
+#include "gui_widget_button_group.h"
 
 #include "channel.h"
 
@@ -41,13 +43,12 @@ using namespace lcd;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool is_page_refresh;
-static bool widget_refresh;
-int page_index;
-Style *page_style;
+static int active_page_id;
 
-data::Snapshot currentDataSnapshot;
-data::Snapshot previousDataSnapshot;
+static bool is_page_refresh;
+static bool widget_refresh;
+
+static Style *page_style;
 
 static WidgetCursor selected_widget;
 static WidgetCursor found_widget_at_down;
@@ -174,14 +175,14 @@ private:
             return true;
         }
         else if (widget->type == WIDGET_TYPE_SELECT) {
-            int index = currentDataSnapshot.get(cursor, widget->data).getInt();
+            int index = data::currentSnapshot.get(cursor, widget->data).getInt();
             data::select(cursor, widget->data, index);
 
             ContainerWidget *select_widget = ((ContainerWidget *)(document + widget->specific));
             Widget *selected_widget = (Widget *)(document + select_widget->widgets.first) + index;
 
             if (!refresh) {
-                int previousIndex = previousDataSnapshot.get(cursor, widget->data).getInt();
+                int previousIndex = data::previousSnapshot.get(cursor, widget->data).getInt();
                 refresh = index != previousIndex;
             }
 
@@ -260,18 +261,20 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
 
     font::Font *font = styleGetFont(style);
     
-    int width = lcd::lcd.measureStr(text, *font);
+    int width = lcd::lcd.measureStr(text, *font, x2 - x1 + 1);
     int height = font->getHeight();
 
     int x_offset;
     if (styleIsHorzAlignLeft(style)) x_offset = x1 + style->padding_horizontal;
     else if (styleIsHorzAlignRight(style)) x_offset = x2 - style->padding_horizontal - width;
     else x_offset = x1 + ((x2 - x1) - width) / 2;
+    if (x_offset < 0) x_offset = x1;
 
     int y_offset;
     if (styleIsVertAlignTop(style)) y_offset = y1 + style->padding_vertical;
     else if (styleIsVertAlignBottom(style)) y_offset = y2 - style->padding_vertical -height;
     else y_offset = y1 + ((y2 - y1) - height) / 2;
+    if (y_offset < 0) y_offset = y1;
 
     uint16_t background_color = inverse ? style->color : style->background_color;
     lcd::lcd.setColor(background_color);
@@ -279,14 +282,17 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
     if (widget_refresh) {
         lcd::lcd.fillRect(x1, y1, x2, y2);
     } else if (!is_page_refresh || page_style->background_color != background_color) {
-        if (x1 <= x_offset && y1 <= y2)
-            lcd::lcd.fillRect(x1, y1, x_offset, y2);
+        if (x1 <= x_offset - 1 && y1 <= y2)
+            lcd::lcd.fillRect(x1, y1, x_offset - 1, y2);
         if (x_offset + width <= x2 && y1 <= y2)
             lcd::lcd.fillRect(x_offset + width, y1, x2, y2);
-        if (x_offset <= x_offset + width - 1 && y1 <= y_offset - 1)
-            lcd::lcd.fillRect(x_offset, y1, x_offset + width - 1, y_offset - 1);
-        if (x_offset <= x_offset + width - 1 && y_offset + height <= y2)
-            lcd::lcd.fillRect(x_offset, y_offset + height, x_offset + width - 1, y2);
+
+        int right = min(x_offset + width - 1, x2);
+
+        if (x_offset <= right && y1 <= y_offset - 1)
+            lcd::lcd.fillRect(x_offset, y1, right, y_offset - 1);
+        if (x_offset <= right && y_offset + height <= y2)
+            lcd::lcd.fillRect(x_offset, y_offset + height, right, y2);
     }
 
     if (inverse) {
@@ -446,7 +452,7 @@ void drawMultilineText(char *text, int x, int y, int w, int h, Style *style, boo
     }
 }
 
-void fill_rect(int x, int y, int w, int h) {
+void fillRect(int x, int y, int w, int h) {
     x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
     y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
     w *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
@@ -464,11 +470,11 @@ Style *get_active_style(Widget *widget) {
 }
 
 bool draw_display_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
-    bool edit = widgetCursor.cursor == edit_mode::data_cursor && widgetCursor.widget->data == edit_mode::data_id;
-    if (edit && page_index == PAGE_ID_EDIT_MODE_KEYPAD) {
-        char *text = currentDataSnapshot.keypadText;
+    bool edit = edit_mode::isEditWidget(widgetCursor);
+    if (edit && active_page_id == PAGE_ID_EDIT_MODE_KEYPAD) {
+        char *text = data::currentSnapshot.editModeSnapshot.keypadText;
         if (!refresh) {
-            char *previousText = previousDataSnapshot.keypadText;
+            char *previousText = data::previousSnapshot.editModeSnapshot.keypadText;
             refresh = strcmp(text, previousText) != 0;
         }
         if (refresh) {
@@ -478,16 +484,16 @@ bool draw_display_widget(uint8_t *document, const WidgetCursor &widgetCursor, bo
         return false;
     }
     else {
-        data::Value value = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
-        bool isBlinking = currentDataSnapshot.isBlinking(widgetCursor.cursor, widgetCursor.widget->data);
+        data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+        bool isBlinking = data::currentSnapshot.isBlinking(widgetCursor.cursor, widgetCursor.widget->data);
         if (isBlinkTime && isBlinking) {
             value = data::Value("");
         } else {
-            value = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+            value = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
         }
         refresh = refresh || (wasBlinkTime != isBlinkTime);
         if (!refresh) {
-            data::Value previousValue = previousDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+            data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
             refresh = value != previousValue;
         }
         if (refresh) {
@@ -528,9 +534,9 @@ bool draw_display_multiline_string_widget(uint8_t *document, const WidgetCursor 
 }
 
 bool draw_three_state_indicator_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
-    int state = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+    int state = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
     if (!refresh) {
-        int previousState = previousDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+        int previousState = data::previousSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
         refresh = state != previousState;
     }
     if (refresh) {
@@ -549,9 +555,9 @@ bool draw_three_state_indicator_widget(uint8_t *document, const WidgetCursor &wi
 }
 
 bool draw_display_string_select_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
-    int state = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+    int state = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
     if (!refresh) {
-        int previousState = previousDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+        int previousState = data::previousSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
         refresh = state != previousState;
     }
     if (refresh) {
@@ -628,9 +634,9 @@ void draw_scale(Widget *widget, int y_from, int y_to, int y_min, int y_max, int 
 }
 
 bool draw_scale_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
-    data::Value value = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
     if (!refresh) {
-        data::Value previousValue = previousDataSnapshot.editValue;
+        data::Value previousValue = data::previousSnapshot.editModeSnapshot.editValue;
         refresh = previousValue != value;
     }
 
@@ -713,9 +719,9 @@ bool draw_scale_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool
 }
 
 bool draw_toggle_button_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
-    int state = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+    int state = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
     if (!refresh) {
-        int previousState = previousDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+        int previousState = data::previousSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
         refresh = state != previousState;
     }
     if (refresh) {
@@ -744,6 +750,8 @@ bool draw_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refre
         return draw_scale_widget(document, widgetCursor, refresh, inverse);
     } else if (widgetCursor.widget->type == WIDGET_TYPE_TOGGLE_BUTTON) {
         return draw_toggle_button_widget(document, widgetCursor, refresh, inverse);
+    } else if (widgetCursor.widget->type == WIDGET_TYPE_BUTTON_GROUP) {
+        return widget_button_group::draw(document, widgetCursor, refresh, inverse);
     }
 
     return false;
@@ -756,10 +764,10 @@ void draw_tick(unsigned long tick_usec) {
         wasBlinkTime = isBlinkTime;
         isBlinkTime = (micros() % (2 * CONF_BLINK_TIME)) > CONF_BLINK_TIME;
 
-        previousDataSnapshot = currentDataSnapshot;
-        currentDataSnapshot.takeSnapshot();
+        data::previousSnapshot = data::currentSnapshot;
+        data::currentSnapshot.takeSnapshot();
 
-        draw_enum_widgets.start(page_index, 0, 0, false);
+        draw_enum_widgets.start(active_page_id, 0, 0, false);
 
         //DebugTraceF("%d", draw_counter);
         //draw_counter = 0;
@@ -778,14 +786,23 @@ void refresh_page() {
     is_page_refresh = true;
 
     // clear screen with background color
-    Widget *page = (Widget *)(document + ((Document *)document)->pages.first) + page_index;
+    Widget *page = (Widget *)(document + ((Document *)document)->pages.first) + active_page_id;
     Style *style = (Style *)(document + page->style);
     page_style = style;
     lcd::lcd.setColor(style->background_color);
     lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
 
-    currentDataSnapshot.takeSnapshot();
-    draw_enum_widgets.start(page_index, 0, 0, true);
+    data::currentSnapshot.takeSnapshot();
+    draw_enum_widgets.start(active_page_id, 0, 0, true);
+}
+
+int getActivePage() {
+    return active_page_id;
+}
+
+void showPage(int index) {
+    active_page_id = index;
+    refresh_page();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -815,7 +832,7 @@ void find_widget(int x, int y) {
     find_widget_at_x = touch::x;
     find_widget_at_y = touch::y;
     EnumWidgets enum_widgets(document, find_widget_step);
-    enum_widgets.start(page_index, 0, 0, true);
+    enum_widgets.start(active_page_id, 0, 0, true);
     enum_widgets.next();
 }
 
@@ -878,26 +895,29 @@ void tick(unsigned long tick_usec) {
     if (touch::calibration::is_calibrated()) {
         if (touch::event_type == touch::TOUCH_DOWN) {
             find_widget(touch::x, touch::y);
-            if (found_widget && !found_widget.widget->action) {
-                found_widget = 0;
+            if (found_widget && found_widget.widget->action) {
+                found_widget_at_down = found_widget;
+            } else {
+                found_widget_at_down = 0;
             }
-            found_widget_at_down = found_widget;
             if (found_widget_at_down) {
                 select_widget(found_widget_at_down);
             } else {
-                if (page_index == PAGE_ID_EDIT_MODE_SLIDER) {
-                    edit_mode_slider::touch_down();
-                } else if (page_index == PAGE_ID_EDIT_MODE_STEP) {
-                    edit_mode_step::touch_down();
+                if (found_widget && found_widget.widget->type == WIDGET_TYPE_BUTTON_GROUP) {
+                    widget_button_group::onTouchDown(found_widget);
+                } else if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
+                    edit_mode_slider::onTouchDown();
+                } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
+                    edit_mode_step::onTouchDown();
                 }
             }
         } else if (touch::event_type == touch::TOUCH_MOVE) {
             if (!found_widget_at_down) {
-                if (page_index == PAGE_ID_EDIT_MODE_SLIDER) {
-                    edit_mode_slider::touch_move();
-                } else if (page_index == PAGE_ID_EDIT_MODE_STEP) {
-                    edit_mode_step::touch_move();
-                } else if (page_index == PAGE_ID_YES_NO) {
+                if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
+                    edit_mode_slider::onTouchMove();
+                } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
+                    edit_mode_step::onTouchMove();
+                } else if (active_page_id == PAGE_ID_YES_NO) {
 #ifdef CONF_DEBUG
                     lcd::lcd.setColor(VGA_WHITE);
 
@@ -919,10 +939,10 @@ void tick(unsigned long tick_usec) {
                 do_action(found_widget_at_down.widget->action, found_widget_at_down);
                 found_widget_at_down = 0;
             } else {
-                if (page_index == PAGE_ID_EDIT_MODE_SLIDER) {
-                    edit_mode_slider::touch_up();
-                } else if (page_index == PAGE_ID_EDIT_MODE_STEP) {
-                    edit_mode_step::touch_up();
+                if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
+                    edit_mode_slider::onTouchUp();
+                } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
+                    edit_mode_step::onTouchUp();
                 }
             }
         }
@@ -940,10 +960,10 @@ void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_
     dialog_no_callback = no_callback;
     dialog_cancel_callback = cancel_callback;
 
-    page_index = PAGE_ID_YES_NO;
+    active_page_id = PAGE_ID_YES_NO;
     refresh_page();
 }
 
 }
 }
-} // namespace eez::psu::ui
+} // namespace eez::psu::gui

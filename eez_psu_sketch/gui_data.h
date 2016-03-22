@@ -1,3 +1,21 @@
+/*
+* EEZ PSU Firmware
+* Copyright (C) 2015 Envox d.o.o.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #pragma once
 
 namespace eez {
@@ -56,11 +74,13 @@ struct Value {
         return !(*this == other);
     }
 
-    float getFloat() { return float_; }
-    Unit getUnit() { return (Unit)unit_; }
-    uint8_t getInt() { return int_; }
+    float getFloat() const { return float_; }
+    
+    Unit getUnit() const { return (Unit)unit_; }
 
-    void toText(char *text, int count);
+    uint8_t getInt() const { return int_; }
+
+    void toText(char *text, int count) const;
 
 private:
     uint8_t unit_;
@@ -100,47 +120,15 @@ struct Cursor {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-struct ChannelStateFlags {
-    unsigned mode : 2;
-    unsigned state : 2;
-    unsigned ovp : 2;
-    unsigned ocp : 2;
-    unsigned opp : 2;
-    unsigned otp : 2;
-    unsigned dp : 2;
-};
-
-struct ChannelState {
-    Value mon_value;
-    float u_set;
-    float i_set;
-    ChannelStateFlags flags;
-};
-
-struct Snapshot {
-    ChannelState channelStates[CH_NUM];
-    Value alertMessage;
-
-    Value editValue;
-    Value editUnit;
-    char editInfo[32];
-    int editInteractiveMode;
-    char keypadText[10];
-
-    void takeSnapshot();
-
-    Value get(const Cursor &cursor, uint8_t id);
-    bool isBlinking(const Cursor &cursor, uint8_t id);
-};
-
-////////////////////////////////////////////////////////////////////////////////
-
 int count(uint8_t id);
 void select(Cursor &cursor, uint8_t id, int index);
 
 Value getMin(const Cursor &cursor, uint8_t id);
 Value getMax(const Cursor &cursor, uint8_t id);
 Unit getUnit(const Cursor &cursor, uint8_t id);
+
+
+void getButtonLabels(const Cursor &cursor, uint8_t id, const Value **labels, int &count);
 
 void set(const Cursor &cursor, uint8_t id, Value value);
 void toggle(uint8_t id);
@@ -149,4 +137,4 @@ void doAction(const Cursor &cursor, uint8_t id);
 }
 }
 }
-} // namespace eez::psu::ui
+} // namespace eez::psu::ui::data

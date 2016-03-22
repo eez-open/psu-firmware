@@ -28,9 +28,9 @@ namespace edit_mode_slider {
 extern int scale_width;
 extern float scale_height;
 
-void touch_down();
-void touch_move();
-void touch_up();
+void onTouchDown();
+void onTouchMove();
+void onTouchUp();
 
 }
 }

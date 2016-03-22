@@ -137,8 +137,7 @@ void dialogYes() {
 
     persist_conf::saveDevice();
 
-    page_index = PAGE_ID_MAIN;
-    refresh_page();
+    showPage(PAGE_ID_MAIN);
 }
 
 void dialogNo() {
@@ -146,8 +145,7 @@ void dialogNo() {
 }
 
 void dialogCancel() {
-    page_index = PAGE_ID_MAIN;
-    refresh_page();
+    showPage(PAGE_ID_MAIN);
 }
 
 void tick(unsigned long tick_usec) {

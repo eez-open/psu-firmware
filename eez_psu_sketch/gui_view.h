@@ -49,7 +49,7 @@ namespace gui {
 #define WIDGET_TYPE_THREE_STATE_INDICATOR 9
 #define WIDGET_TYPE_SCALE 10
 #define WIDGET_TYPE_TOGGLE_BUTTON 11
-#define WIDGET_TYPE_VERTICAL_SLIDER 12
+#define WIDGET_TYPE_BUTTON_GROUP 12
 #define DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER 2
 #define DATA_ID_CHANNELS 1
 #define DATA_ID_OUTPUT_STATE 2
@@ -66,8 +66,8 @@ namespace gui {
 #define DATA_ID_EDIT_VALUE 13
 #define DATA_ID_EDIT_UNIT 14
 #define DATA_ID_EDIT_INFO 15
-#define DATA_ID_EDIT_INTERACTIVE_MODE 16
-#define DATA_ID_EDIT_STEP 17
+#define DATA_ID_EDIT_MODE_INTERACTIVE_MODE_SELECTOR 16
+#define DATA_ID_EDIT_STEPS 17
 #define ACTION_ID_EDIT 1
 #define ACTION_ID_EDIT_MODE_SLIDER 2
 #define ACTION_ID_EDIT_MODE_STEP 3
@@ -138,32 +138,25 @@ struct List {
     OBJ_OFFSET first;
 };
 
-struct ContainerWidget {
+struct SelectWidget {
     List widgets;
 };
 
-struct Style {
-    uint8_t font;
-    uint16_t flags;
-    uint16_t background_color;
-    uint16_t color;
-    uint16_t border_color;
-    uint16_t padding_horizontal;
-    uint16_t padding_vertical;
+struct DisplayStringWidget {
+    OBJ_OFFSET text;
 };
 
 struct ListWidget {
     OBJ_OFFSET item_widget;
 };
 
-struct ToggleButtonWidget {
-    OBJ_OFFSET text1;
-    OBJ_OFFSET text2;
+struct ScaleWidget {
+    uint16_t ticks_color;
+    uint8_t needle_height;
 };
 
-struct Document {
-    List styles;
-    List pages;
+struct ContainerWidget {
+    List widgets;
 };
 
 struct DisplayStringSelectWidget {
@@ -173,14 +166,9 @@ struct DisplayStringSelectWidget {
     OBJ_OFFSET text2;
 };
 
-struct ThreeStateIndicatorWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET style2;
-    OBJ_OFFSET text;
-};
-
-struct DisplayStringWidget {
-    OBJ_OFFSET text;
+struct Document {
+    List styles;
+    List pages;
 };
 
 struct Widget {
@@ -195,13 +183,25 @@ struct Widget {
     OBJ_OFFSET specific;
 };
 
-struct ScaleWidget {
-    uint16_t ticks_color;
-    uint8_t needle_height;
+struct ToggleButtonWidget {
+    OBJ_OFFSET text1;
+    OBJ_OFFSET text2;
 };
 
-struct SelectWidget {
-    List widgets;
+struct ThreeStateIndicatorWidget {
+    OBJ_OFFSET style1;
+    OBJ_OFFSET style2;
+    OBJ_OFFSET text;
+};
+
+struct Style {
+    uint8_t font;
+    uint16_t flags;
+    uint16_t background_color;
+    uint16_t color;
+    uint16_t border_color;
+    uint16_t padding_horizontal;
+    uint16_t padding_vertical;
 };
 
 #pragma pack(pop)

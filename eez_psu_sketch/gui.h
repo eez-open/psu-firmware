@@ -27,4 +27,4 @@ void tick(unsigned long tick_usec);
 
 }
 }
-} // namespace eez::psu::ui
+} // namespace eez::psu::gui

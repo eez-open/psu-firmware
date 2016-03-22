@@ -34,17 +34,16 @@ static int last_scale;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void touch_down() {
-    start_value = edit_mode::value.getFloat();
+void onTouchDown() {
+    start_value = edit_mode::getEditValue().getFloat();
     start_y = touch::y;
 
     last_scale = 1;
 }
 
-void touch_move() {
-    data::Value minValue = data::getMin(edit_mode::data_cursor, edit_mode::data_id);
-    float min = minValue.getFloat();
-    float max = data::getMax(edit_mode::data_cursor, edit_mode::data_id).getFloat();
+void onTouchMove() {
+    float min = edit_mode::getMin().getFloat();
+    float max = edit_mode::getMax().getFloat();
 
     int scale;
 
@@ -59,7 +58,7 @@ void touch_move() {
     }
 
     if (scale != last_scale) {
-        start_value = edit_mode::value.getFloat();
+        start_value = edit_mode::getEditValue().getFloat();
         start_y = touch::y;
         last_scale = scale;
     }
@@ -73,14 +72,10 @@ void touch_move() {
         value = max;
     }
 
-    edit_mode::value = data::Value(value, minValue.getUnit());
-
-    if (edit_mode::is_interactive_mode) {
-        data::set(edit_mode::data_cursor, edit_mode::data_id, edit_mode::value);
-    }
+    edit_mode::setValue(value);
 }
 
-void touch_up() {
+void onTouchUp() {
 }
 
 }
