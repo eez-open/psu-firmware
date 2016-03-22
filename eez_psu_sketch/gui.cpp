@@ -19,10 +19,16 @@
 #include "psu.h"
 #include "gui.h"
 #include "gui_internal.h"
-#include "gui_slider.h"
-#include "gui_keypad.h"
+#include "gui_edit_mode.h"
+#include "gui_edit_mode_slider.h"
+#include "gui_edit_mode_step.h"
+#include "gui_edit_mode_keypad.h"
 
 #include "channel.h"
+
+#ifdef EEZ_PSU_SIMULATOR
+#include "front_panel/control.h"
+#endif
 
 #define CONF_BLINK_TIME 400000UL
 #define CONF_ENUM_WIDGETS_STACK_SIZE 5
@@ -49,13 +55,6 @@ static WidgetCursor found_widget_at_down;
 static void (*dialog_yes_callback)();
 static void (*dialog_no_callback)();
 static void (*dialog_cancel_callback)();
-
-static int edit_mode_page_index = PAGE_ID_EDIT_WITH_SLIDER;
-data::Cursor edit_data_cursor;
-int edit_data_id;
-bool isEditInteractiveMode = true;
-data::Value edit_value;
-data::Value edit_value_saved;
 
 static bool wasBlinkTime;
 static bool isBlinkTime;
@@ -465,8 +464,8 @@ Style *get_active_style(Widget *widget) {
 }
 
 bool draw_display_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
-    bool edit = widgetCursor.cursor == edit_data_cursor && widgetCursor.widget->data == edit_data_id;
-    if (edit && page_index == PAGE_ID_EDIT_WITH_KEYPAD) {
+    bool edit = widgetCursor.cursor == edit_mode::data_cursor && widgetCursor.widget->data == edit_mode::data_id;
+    if (edit && page_index == PAGE_ID_EDIT_MODE_KEYPAD) {
         char *text = currentDataSnapshot.keypadText;
         if (!refresh) {
             char *previousText = previousDataSnapshot.keypadText;
@@ -572,6 +571,147 @@ bool draw_display_string_select_widget(uint8_t *document, const WidgetCursor &wi
     return false;
 }
 
+void draw_scale(Widget *widget, int y_from, int y_to, int y_min, int y_max, int y_value, int f, int d) {
+    Style *style = (Style *)(document + widget->style);
+    ScaleWidget *scale_widget = ((ScaleWidget *)(document + widget->specific));
+
+    int x1 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->x;
+    int l1 = 5 * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w / 12 - 1;
+
+    int x2 = x1 + l1 + 2;
+    int l2 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w - l1 - 3;
+
+    int s = 10 * f / d;
+
+    int y_offset = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widget->y + widget->h) - 1 -
+        (DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->h - (y_max - y_min)) / 2 - scale_widget->needle_height / 2;
+
+    for (int y_i = y_from; y_i <= y_to; ++y_i) {
+        int y = y_offset - y_i;
+
+        // draw ticks
+        if (y_i >= y_min && y_i <= y_max) {
+            if (y_i % s == 0) {
+                lcd::lcd.setColor(style->border_color);
+                lcd::lcd.drawHLine(x1, y, l1);
+            }
+            else if (y_i % (s / 2) == 0) {
+                lcd::lcd.setColor(style->border_color);
+                lcd::lcd.drawHLine(x1, y, l1 / 2);
+            }
+            else if (y_i % (s / 10) == 0) {
+                lcd::lcd.setColor(style->border_color);
+                lcd::lcd.drawHLine(x1, y, l1 / 4);
+            }
+            else {
+                lcd::lcd.setColor(style->background_color);
+                lcd::lcd.drawHLine(x1, y, l1);
+            }
+        }
+
+        int d = abs(y_i - y_value);
+        if (d <= scale_widget->needle_height / 2) {
+            // draw thumb
+            lcd::lcd.setColor(style->color);
+            lcd::lcd.drawHLine(x2 + d, y, l2 - d);
+            if (y_i != y_value) {
+                lcd::lcd.setColor(style->background_color);
+                lcd::lcd.drawHLine(x2, y, d);
+            }
+        }
+        else {
+            // erase
+            lcd::lcd.setColor(style->background_color);
+            lcd::lcd.drawHLine(x2, y, l2);
+        }
+    }
+}
+
+bool draw_scale_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
+    data::Value value = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+    if (!refresh) {
+        data::Value previousValue = previousDataSnapshot.editValue;
+        refresh = previousValue != value;
+    }
+
+    if (refresh) {
+        float min = data::getMin(widgetCursor.cursor, widgetCursor.widget->data).getFloat();
+        float max = data::getMax(widgetCursor.cursor, widgetCursor.widget->data).getFloat();
+
+        Style *style = (Style *)(document + widgetCursor.widget->style);
+        font::Font *font = styleGetFont(style);
+        int fontHeight = font->getAscent() / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+
+        ScaleWidget *scale_widget = ((ScaleWidget *)(document + widgetCursor.widget->specific));
+
+        int f = (int)floor(DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widgetCursor.widget->h - scale_widget->needle_height) / max);
+        int d;
+        if (max > 10) {
+            d = 1;
+        }
+        else {
+            f = 10 * (f / 10);
+            d = 10;
+        }
+
+        int y_min = (int)round(min * f);
+        int y_max = (int)round(max * f);
+        int y_value = (int)round(value.getFloat() * f);
+
+        int y_from_min = y_min - scale_widget->needle_height / 2;
+        int y_from_max = y_max + scale_widget->needle_height / 2;
+
+        static int edit_mode_slider_scale_last_y_value;
+
+        if (is_page_refresh || widgetCursor.widget->data == DATA_ID_EDIT_VALUE) {
+            // draw entire scale 
+            draw_scale(widgetCursor.widget, y_from_min, y_from_max, y_min, y_max, y_value, f, d);
+        }
+        else {
+            // optimization for the scale in edit with slider mode:
+            // draw only part of the scale that is changed
+            if (widgetCursor.widget->data == DATA_ID_EDIT_VALUE) {
+                int last_y_value_from = edit_mode_slider_scale_last_y_value - scale_widget->needle_height / 2;
+                int last_y_value_to = edit_mode_slider_scale_last_y_value + scale_widget->needle_height / 2;
+                int y_value_from = y_value - scale_widget->needle_height / 2;
+                int y_value_to = y_value + scale_widget->needle_height / 2;
+
+                if (last_y_value_from != y_value_from) {
+                    if (last_y_value_from > y_value_from) {
+                        util_swap(int, last_y_value_from, y_value_from);
+                        util_swap(int, last_y_value_to, y_value_to);
+                    }
+
+                    if (last_y_value_from < y_from_min)
+                        last_y_value_from = y_from_min;
+
+                    if (y_value_to > y_from_max)
+                        y_value_to = y_from_max;
+
+                    if (last_y_value_to + 1 < y_value_from) {
+                        draw_scale(widgetCursor.widget, last_y_value_from, last_y_value_to, y_min, y_max, y_value, f, d);
+                        draw_scale(widgetCursor.widget, y_value_from, y_value_to, y_min, y_max, y_value, f, d);
+                    }
+                    else {
+                        draw_scale(widgetCursor.widget, last_y_value_from, y_value_to, y_min, y_max, y_value, f, d);
+                    }
+                }
+            }
+        }
+
+        edit_mode_slider_scale_last_y_value = y_value;
+
+        if (widgetCursor.widget->data == DATA_ID_EDIT_VALUE) {
+            edit_mode_slider::scale_width = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widgetCursor.widget->w;
+            edit_mode_slider::scale_height = (max - min) * f;
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
 bool draw_toggle_button_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
     int state = currentDataSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
     if (!refresh) {
@@ -600,8 +740,8 @@ bool draw_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refre
         return draw_display_string_select_widget(document, widgetCursor, refresh, inverse);
     } else if (widgetCursor.widget->type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING) {
         return draw_display_multiline_string_widget(document, widgetCursor, refresh, inverse);
-    } else if (widgetCursor.widget->type == WIDGET_TYPE_VERTICAL_SLIDER) {
-        return slider::draw(document, widgetCursor, refresh, inverse);
+    } else if (widgetCursor.widget->type == WIDGET_TYPE_SCALE) {
+        return draw_scale_widget(document, widgetCursor, refresh, inverse);
     } else if (widgetCursor.widget->type == WIDGET_TYPE_TOGGLE_BUTTON) {
         return draw_toggle_button_widget(document, widgetCursor, refresh, inverse);
     }
@@ -694,58 +834,12 @@ void deselect_widget() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void enter_edit_mode(const WidgetCursor &widget_cursor) {
-    if (page_index != edit_mode_page_index) {
-        if (page_index == PAGE_ID_MAIN) {
-            edit_data_cursor = widget_cursor.cursor;
-            edit_data_id = widget_cursor.widget->data;
-        }
-        edit_value = currentDataSnapshot.get(edit_data_cursor, edit_data_id);
-        edit_value_saved = edit_value;
-
-        page_index = edit_mode_page_index;
-
-        if (page_index == PAGE_ID_EDIT_WITH_SLIDER) {
-            psu::enterTimeCriticalMode();
-        }
-        else if (page_index == PAGE_ID_EDIT_WITH_KEYPAD) {
-            keypad::reset();
-        }
-
-        refresh_page();
-    }
-}
-
-void exit_edit_mode() {
-    if (page_index != PAGE_ID_MAIN) {
-        if (page_index == ACTION_ID_EDIT_WITH_SLIDER) {
-            psu::leaveTimeCriticalMode();
-        }
-
-        edit_data_id = -1;
-
-        page_index = PAGE_ID_MAIN;
-        refresh_page();
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 void do_action(int action_id, WidgetCursor &widget_cursor) {
-    if (action_id == ACTION_ID_EDIT) {
-        enter_edit_mode(widget_cursor);
-    } else if (action_id == ACTION_ID_EDIT_WITH_SLIDER) {
-        edit_mode_page_index = PAGE_ID_EDIT_WITH_SLIDER;
-        enter_edit_mode(widget_cursor);
-    } else if (action_id == ACTION_ID_EDIT_WITH_STEP) {
-        edit_mode_page_index = PAGE_ID_EDIT_WITH_STEP;
-        enter_edit_mode(widget_cursor);
-    } else if (action_id == ACTION_ID_EDIT_WITH_KEYPAD) {
-        edit_mode_page_index = PAGE_ID_EDIT_WITH_KEYPAD;
-        enter_edit_mode(widget_cursor);
-    } else if (action_id == ACTION_ID_EXIT) {
-        exit_edit_mode();
-    } else if (action_id == ACTION_ID_TOUCH_SCREEN_CALIBRATION) {
+    if (edit_mode::doAction(action_id, widget_cursor)) {
+        return;
+    }
+
+    if (action_id == ACTION_ID_TOUCH_SCREEN_CALIBRATION) {
         touch::calibration::enter_calibration_mode();
     } else if (action_id == ACTION_ID_YES) {
         dialog_yes_callback();
@@ -753,16 +847,9 @@ void do_action(int action_id, WidgetCursor &widget_cursor) {
         dialog_no_callback();
     } else if (action_id == ACTION_ID_CANCEL) {
         dialog_cancel_callback();
-    } else if (action_id >= ACTION_ID_KEY_0 && action_id <= ACTION_ID_KEY_UNIT) {
-        keypad::do_action(action_id);
     } else if (action_id == ACTION_ID_TOGGLE) {
         data::toggle(widget_cursor.widget->data);
-    } else if (action_id == ACTION_ID_NON_INTERACTIVE_ENTER) {
-        data::set(edit_data_cursor, edit_data_id, edit_value);
-    } else if (action_id == ACTION_ID_NON_INTERACTIVE_CANCEL) {
-        edit_value = edit_value_saved;
-        data::set(edit_data_cursor, edit_data_id, edit_value_saved);
-    } else {
+    } else  {
         data::doAction(widget_cursor.cursor, action_id);
     }
 }
@@ -780,6 +867,12 @@ void init() {
 }
 
 void tick(unsigned long tick_usec) {
+#ifdef EEZ_PSU_SIMULATOR
+    if (!simulator::front_panel::isOpened()) {
+        return;
+    }
+#endif
+
     touch::tick(tick_usec);
 
     if (touch::calibration::is_calibrated()) {
@@ -792,14 +885,18 @@ void tick(unsigned long tick_usec) {
             if (found_widget_at_down) {
                 select_widget(found_widget_at_down);
             } else {
-                if (page_index == PAGE_ID_EDIT_WITH_SLIDER) {
-                    slider::touch_down();
+                if (page_index == PAGE_ID_EDIT_MODE_SLIDER) {
+                    edit_mode_slider::touch_down();
+                } else if (page_index == PAGE_ID_EDIT_MODE_STEP) {
+                    edit_mode_step::touch_down();
                 }
             }
         } else if (touch::event_type == touch::TOUCH_MOVE) {
             if (!found_widget_at_down) {
-                if (page_index == PAGE_ID_EDIT_WITH_SLIDER) {
-                    slider::touch_move();
+                if (page_index == PAGE_ID_EDIT_MODE_SLIDER) {
+                    edit_mode_slider::touch_move();
+                } else if (page_index == PAGE_ID_EDIT_MODE_STEP) {
+                    edit_mode_step::touch_move();
                 } else if (page_index == PAGE_ID_YES_NO) {
 #ifdef CONF_DEBUG
                     lcd::lcd.setColor(VGA_WHITE);
@@ -822,8 +919,10 @@ void tick(unsigned long tick_usec) {
                 do_action(found_widget_at_down.widget->action, found_widget_at_down);
                 found_widget_at_down = 0;
             } else {
-                if (page_index == PAGE_ID_EDIT_WITH_SLIDER) {
-                    slider::touch_up();
+                if (page_index == PAGE_ID_EDIT_MODE_SLIDER) {
+                    edit_mode_slider::touch_up();
+                } else if (page_index == PAGE_ID_EDIT_MODE_STEP) {
+                    edit_mode_step::touch_up();
                 }
             }
         }

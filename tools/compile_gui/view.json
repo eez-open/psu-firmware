@@ -140,6 +140,12 @@
       "base": "small",
       "color": "#2F2F2F",
       "background_color": "#E9F5F9"
+    },
+    {
+      "name": "edit_mode_slider_scale"
+    },
+    {
+      "name": "edit_mode_step_vertical_slider"
     }
   ],
   "pages": [
@@ -307,7 +313,7 @@
       ]
     },
     {
-      "id": "edit_with_slider",
+      "id": "edit_mode_slider",
       "widgets": [
         {
           "type": "display",
@@ -319,11 +325,15 @@
           "style": "edit_info"
         },
         {
-          "type": "vertical_slider",
+          "type": "scale",
+          "data": "edit_value",
           "x": 0,
           "y": 0,
           "w": 40,
-          "h": 296
+          "h": 296,
+          "style": "edit_mode_slider_scale",
+          "ticks_color": "#FFFFFF",
+          "needle_height": 11
         },
         {
           "type": "select",
@@ -525,7 +535,7 @@
         },
         {
           "type": "display_string",
-          "action": "edit_with_slider",
+          "action": "edit_mode_slider",
           "x": 0,
           "y": 284,
           "w": 48,
@@ -535,7 +545,7 @@
         },
         {
           "type": "display_string",
-          "action": "edit_with_step",
+          "action": "edit_mode_step",
           "x": 48,
           "y": 284,
           "w": 48,
@@ -545,7 +555,7 @@
         },
         {
           "type": "display_string",
-          "action": "edit_with_keypad",
+          "action": "edit_mode_keypad",
           "x": 96,
           "y": 284,
           "w": 48,
@@ -578,20 +588,227 @@
       ]
     },
     {
-      "id": "edit_with_step",
+      "id": "edit_mode_step",
       "widgets": [
         {
           "type": "display",
           "data": "edit_info",
-          "x": 0,
+          "x": 40,
           "y": 0,
-          "w": 240,
+          "w": 200,
           "h": 32,
           "style": "edit_info"
         },
         {
+          "type": "vertical_slider",
+          "data": "edit_step",
+          "x": 0,
+          "y": 0,
+          "w": 40,
+          "h": 296,
+          "style": "edit_mode_step_vertical_slider"
+        },
+        {
+          "type": "select",
+          "x": 40,
+          "y": 32,
+          "w": 200,
+          "h": 172,
+          "data": "edit_interactive_mode",
+          "widgets": [
+            {
+              "type": "container",
+              "widgets": [
+                {
+                  "type": "display",
+                  "data": "edit_value",
+                  "x": 0,
+                  "y": 0,
+                  "h": 72,
+                  "style": "edit_value_large"
+                },
+                {
+                  "type": "display_multiline_string",
+                  "style": "edit_info",
+                  "x": 0,
+                  "y": 72,
+                  "w": 140,
+                  "h": 180,
+                  "text": "Interactive mode: Move up/down to change value step in a time."
+                },
+                {
+                  "type": "vertical_list",
+                  "data": "channels",
+                  "x": 140,
+                  "w": 60,
+                  "y": 72,
+                  "item_widget": {
+                    "type": "container",
+                    "x": 0,
+                    "y": 0,
+                    "h": 90,
+                    "widgets": [
+                      {
+                        "type": "select",
+                        "y": 0,
+                        "h": 30,
+                        "data": "output_state",
+                        "widgets": [
+                          {
+                            "type": "display_string",
+                            "style": "edit_value_small",
+                            "text": "OFF"
+                          },
+                          {
+                            "type": "select",
+                            "data": "output_mode",
+                            "widgets": [
+                              {
+                                "type": "display",
+                                "style": "edit_value_small",
+                                "data": "mon_value"
+                              },
+                              {
+                                "type": "display",
+                                "style": "edit_value_ur_small",
+                                "data": "mon_value"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "display",
+                        "style": "edit_value_small",
+                        "data": "volt",
+                        "y": 30,
+                        "h": 30
+                      },
+                      {
+                        "type": "display",
+                        "style": "edit_value_small",
+                        "data": "curr",
+                        "y": 60,
+                        "h": 30
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "widgets": [
+                {
+                  "type": "display",
+                  "data": "edit_value",
+                  "x": 0,
+                  "y": 0,
+                  "h": 60,
+                  "style": "edit_value_large"
+                },
+                {
+                  "type": "display_multiline_string",
+                  "style": "edit_info",
+                  "x": 0,
+                  "y": 60,
+                  "w": 140,
+                  "h": 156,
+                  "text": "Non-interactive mode: Move up/down to change value.\nSelect Enter to confirm."
+                },
+                {
+                  "type": "vertical_list",
+                  "data": "channels",
+                  "x": 140,
+                  "w": 60,
+                  "y": 60,
+                  "item_widget": {
+                    "type": "container",
+                    "x": 0,
+                    "y": 0,
+                    "h": 78,
+                    "widgets": [
+                      {
+                        "type": "select",
+                        "y": 0,
+                        "h": 26,
+                        "data": "output_state",
+                        "widgets": [
+                          {
+                            "type": "display_string",
+                            "style": "edit_value_small",
+                            "text": "OFF"
+                          },
+                          {
+                            "type": "select",
+                            "data": "output_mode",
+                            "widgets": [
+                              {
+                                "type": "display",
+                                "style": "edit_value_small",
+                                "data": "mon_value"
+                              },
+                              {
+                                "type": "display",
+                                "style": "edit_value_ur_small",
+                                "data": "mon_value"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "display",
+                        "style": "edit_value_small",
+                        "data": "volt",
+                        "y": 26,
+                        "h": 26
+                      },
+                      {
+                        "type": "display",
+                        "style": "edit_value_small",
+                        "data": "curr",
+                        "y": 52,
+                        "h": 26
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "display_string",
+                  "x": 0,
+                  "y": 216,
+                  "w": 8,
+                  "h": 36,
+                  "text": ""
+                },
+                {
+                  "type": "display_string",
+                  "action": "non_interactive_enter",
+                  "style": "non_interactive_button",
+                  "x": 8,
+                  "y": 216,
+                  "w": 96,
+                  "h": 36,
+                  "text": "\u007E Enter"
+                },
+                {
+                  "type": "display_string",
+                  "action": "non_interactive_cancel",
+                  "style": "non_interactive_button",
+                  "x": 104,
+                  "y": 216,
+                  "w": 96 ,
+                  "h": 36,
+                  "text": "\u007F Cancel"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "type": "display_string",
-          "action": "edit_with_slider",
+          "action": "edit_mode_slider",
           "x": 0,
           "y": 284,
           "w": 48,
@@ -601,7 +818,7 @@
         },
         {
           "type": "display_string",
-          "action": "edit_with_step",
+          "action": "edit_mode_step",
           "x": 48,
           "y": 284,
           "w": 48,
@@ -611,7 +828,7 @@
         },
         {
           "type": "display_string",
-          "action": "edit_with_keypad",
+          "action": "edit_mode_keypad",
           "x": 96,
           "y": 284,
           "w": 48,
@@ -644,7 +861,7 @@
       ]
     },
     {
-      "id": "edit_with_keypad",
+      "id": "edit_mode_keypad",
       "widgets": [
         {
           "type": "display",
@@ -886,7 +1103,7 @@
         },
         {
           "type": "display_string",
-          "action": "edit_with_slider",
+          "action": "edit_mode_slider",
           "x": 0,
           "y": 284,
           "w": 48,
@@ -896,7 +1113,7 @@
         },
         {
           "type": "display_string",
-          "action": "edit_with_step",
+          "action": "edit_mode_step",
           "x": 48,
           "y": 284,
           "w": 48,
@@ -906,7 +1123,7 @@
         },
         {
           "type": "display_string",
-          "action": "edit_with_keypad",
+          "action": "edit_mode_keypad",
           "x": 96,
           "y": 284,
           "w": 48,

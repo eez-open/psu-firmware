@@ -18,19 +18,16 @@
 
 #pragma once
 
-#include "gui_internal.h"
-
 namespace eez {
 namespace psu {
 namespace gui {
-namespace keypad {
+namespace edit_mode_step {
 
-void reset();
-void get_text(char *text);
-void do_action(int action_id);
-data::Unit get_edit_unit();
+void touch_down();
+void touch_move();
+void touch_up();
 
 }
 }
 }
-} // namespace eez::psu::gui::slider
+} // namespace eez::psu::gui::edit_mode_step

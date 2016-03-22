@@ -9,31 +9,23 @@ namespace data {
 
 enum Unit {
     UNIT_NONE,
+
+    UNIT_INT,
+
     UNIT_VOLT,
     UNIT_AMPER,
     UNIT_MILLI_VOLT,
     UNIT_MILLI_AMPER,
+
     UNIT_CONST_STR,
     UNIT_STR
 };
 
 struct Value {
-    Value() {
-        memset(this, 0, sizeof(Value));
-    }
-
-    Value(int value) : int_(value) {
-    }
-    
-    Value(float value, Unit unit) {
-        float_ = value;
-        unit_ = unit;
-    }
-
-    Value(char *str) {
-        str_ = str;
-        unit_ = UNIT_STR;
-    }
+    Value() : unit_(UNIT_NONE) { }
+    Value(int value) : unit_(UNIT_INT), int_(value)  {}
+    Value(float value, Unit unit) : unit_(unit), float_(value) {}
+    Value(char *str) : unit_(UNIT_STR), str_(str) {}
 
     static Value ConstStr(const char *pstr PROGMEM) {
         Value value;
@@ -47,12 +39,16 @@ struct Value {
             return false;
         }
 
-        if (unit_ == UNIT_STR) {
+        if (unit_ == UNIT_NONE) {
+            return true;
+        } else if (unit_ == UNIT_STR) {
             return strcmp(str_, other.str_) == 0;
         } else if (unit_ == UNIT_CONST_STR) {
             return strcmp_P(str_, other.str_) == 0;
+        } else if (unit_ == UNIT_INT) {
+            return int_ == other.int_;
         } else {
-            return memcmp(this, &other, sizeof(Value)) == 0;
+            return float_ == other.float_;
         }
     }
 
@@ -70,9 +66,9 @@ private:
     uint8_t unit_;
     union {
         int int_;
+        float float_;
         const char *const_str_ PROGMEM;
         const char *str_;
-        float float_;
     };
 };
 

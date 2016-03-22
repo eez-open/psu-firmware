@@ -64,12 +64,6 @@ extern int page_index;
 extern data::Snapshot currentDataSnapshot;
 extern data::Snapshot previousDataSnapshot;
 
-extern data::Cursor edit_data_cursor;
-extern int edit_data_id;
-extern data::Value edit_value;
-extern data::Value edit_value_saved;
-extern bool isEditInteractiveMode;
-
 void refresh_page();
 font::Font *styleGetFont(Style *style);
 void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse);

@@ -24,6 +24,7 @@ namespace simulator {
 /// GUI front panel for the simulator.
 namespace front_panel {
 
+bool isOpened();
 bool open();
 void close();
 void tick();

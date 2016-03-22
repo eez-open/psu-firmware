@@ -69,6 +69,9 @@
     },
     {
       "id": "edit_interactive_mode"
+    },
+    {
+      "id": "edit_step"
     }
   ],
   "actions": [
@@ -77,15 +80,15 @@
       "description": "enter edit modal mode"
     },
     {
-      "id": "edit_with_slider",
+      "id": "edit_mode_slider",
       "description": "enter edit with slider modal mode"
     },
     {
-      "id": "edit_with_step",
+      "id": "edit_mode_step",
       "description": "enter edit with step modal mode"
     },
     {
-      "id": "edit_with_keypad",
+      "id": "edit_mode_keypad",
       "description": "enter edit with keypad modal mode"
     },
     {
@@ -175,13 +178,13 @@
       "id": "main"
     },
     {
-      "id": "edit_with_slider"
+      "id": "edit_mode_slider"
     },
     {
-      "id": "edit_with_step"
+      "id": "edit_mode_step"
     },
     {
-      "id": "edit_with_keypad"
+      "id": "edit_mode_keypad"
     },
     {
       "id": "yes_no"

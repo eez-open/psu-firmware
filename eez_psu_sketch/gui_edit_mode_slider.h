@@ -23,9 +23,10 @@
 namespace eez {
 namespace psu {
 namespace gui {
-namespace slider {
+namespace edit_mode_slider {
 
-bool draw(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse);
+extern int scale_width;
+extern float scale_height;
 
 void touch_down();
 void touch_move();
@@ -34,4 +35,4 @@ void touch_up();
 }
 }
 }
-} // namespace eez::psu::gui::slider
+} // namespace eez::psu::gui::edit_mode_slider

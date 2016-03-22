@@ -18,7 +18,8 @@
 
 #include "psu.h"
 #include "gui_internal.h"
-#include "gui_keypad.h"
+#include "gui_edit_mode.h"
+#include "gui_edit_mode_keypad.h"
 #include "channel.h"
 
 namespace eez {
@@ -105,27 +106,27 @@ void Snapshot::takeSnapshot() {
 
     alertMessage = alertMessage;
 
-    if (edit_data_cursor) {
-        editValue = edit_value;
+    if (edit_mode::data_cursor) {
+        editValue = edit_mode::value;
 
-        Channel &channel = Channel::get(edit_data_cursor.iChannel);
-        if (edit_data_id == DATA_ID_VOLT) {
+        Channel &channel = Channel::get(edit_mode::data_cursor.iChannel);
+        if (edit_mode::data_id == DATA_ID_VOLT) {
             sprintf_P(editInfo, PSTR("Set Ch%d voltage [%d-%d V]"), channel.index, (int)channel.U_MIN, (int)channel.U_MAX);
         } else {
             sprintf_P(editInfo, PSTR("Set Ch%d current [%d-%d A]"), channel.index, (int)channel.I_MIN, (int)channel.I_MAX);
         }
     
-        switch (keypad::get_edit_unit()) {
+        switch (edit_mode_keypad::get_edit_unit()) {
         case UNIT_VOLT: editUnit = Value::ConstStr("mV"); break;
         case UNIT_MILLI_VOLT: editUnit = Value::ConstStr("V"); break;
         case UNIT_AMPER: editUnit = Value::ConstStr("mA"); break;
         default: editUnit = Value::ConstStr("A");
         }
 
-        this->editInteractiveMode = isEditInteractiveMode ? 0 : 1;
+        this->editInteractiveMode = edit_mode::is_interactive_mode ? 0 : 1;
     }
 
-    keypad::get_text(keypadText);
+    edit_mode_keypad::get_text(keypadText);
 }
 
 Value Snapshot::get(const Cursor &cursor, uint8_t id) {
@@ -165,7 +166,7 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 
 bool Snapshot::isBlinking(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_EDIT_VALUE) {
-        return !isEditInteractiveMode && editValue != get(edit_data_cursor, edit_data_id);
+        return !edit_mode::is_interactive_mode && editValue != get(edit_mode::data_cursor, edit_mode::data_id);
     }
     return false;
 }
@@ -190,15 +191,20 @@ Value getMin(const Cursor &cursor, uint8_t id) {
         return Value(Channel::get(cursor.iChannel).U_MIN, UNIT_VOLT);
     } else if (id == DATA_ID_CURR) {
         return Value(Channel::get(cursor.iChannel).I_MIN, UNIT_AMPER);
+    } else if (id == DATA_ID_EDIT_VALUE) {
+        return getMin(edit_mode::data_cursor, edit_mode::data_id);
     }
     return Value();
 }
 
 Value getMax(const Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_VOLT)
+    if (id == DATA_ID_VOLT) {
         return Value(Channel::get(cursor.iChannel).U_MAX, UNIT_VOLT);
-    else if (id == DATA_ID_CURR)
+    } else if (id == DATA_ID_CURR) {
         return Value(Channel::get(cursor.iChannel).I_MAX, UNIT_AMPER);
+    } else if (id == DATA_ID_EDIT_VALUE) {
+        return getMax(edit_mode::data_cursor, edit_mode::data_id);
+    }
     return Value();
 }
 
@@ -221,9 +227,9 @@ void set(const Cursor &cursor, uint8_t id, Value value) {
 
 void toggle(uint8_t id) {
     if (id == DATA_ID_EDIT_INTERACTIVE_MODE) {
-        isEditInteractiveMode = !isEditInteractiveMode;
-        edit_value = currentDataSnapshot.get(edit_data_cursor, edit_data_id);
-        edit_value_saved = edit_value;
+        edit_mode::is_interactive_mode = !edit_mode::is_interactive_mode;
+        edit_mode::value = currentDataSnapshot.get(edit_mode::data_cursor, edit_mode::data_id);
+        edit_mode::value_saved = edit_mode::value;
     }
 }
 

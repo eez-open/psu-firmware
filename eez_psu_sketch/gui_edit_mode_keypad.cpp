@@ -17,7 +17,8 @@
 */
 
 #include "psu.h"
-#include "gui_keypad.h"
+#include "gui_edit_mode.h"
+#include "gui_edit_mode_keypad.h"
 
 #include "sound.h"
 
@@ -28,7 +29,7 @@
 namespace eez {
 namespace psu {
 namespace gui {
-namespace keypad {
+namespace edit_mode_keypad {
 
 static bool cursor;
 static unsigned long last_cursor_change_time = 0;
@@ -167,8 +168,8 @@ bool is_value_valid() {
 
     float value = get_value();
     bool is_valid = 
-        value >= data::getMin(edit_data_cursor, edit_data_id).getFloat() && 
-        value <= data::getMax(edit_data_cursor, edit_data_id).getFloat();
+        value >= data::getMin(edit_mode::data_cursor, edit_mode::data_id).getFloat() &&
+        value <= data::getMax(edit_mode::data_cursor, edit_mode::data_id).getFloat();
 
     return is_valid;
 }
@@ -192,12 +193,12 @@ void toggle_edit_unit() {
 
 void reset() {
     state = START;
-    edit_unit = data::getUnit(edit_data_cursor, edit_data_id);
+    edit_unit = data::getUnit(edit_mode::data_cursor, edit_mode::data_id);
 }
 
 void get_text(char *text) {
     if (state == START) {
-        currentDataSnapshot.get(edit_data_cursor, edit_data_id).toText(text, sizeof(text));
+        currentDataSnapshot.get(edit_mode::data_cursor, edit_mode::data_id).toText(text, sizeof(text));
     }
     else {
         int i = 0;
@@ -352,7 +353,7 @@ void do_action(int action_id) {
     }
     else if (action_id == ACTION_ID_KEY_OK) {
         if (state != START && state != EMPTY) {
-            data::set(edit_data_cursor, edit_data_id, data::Value(get_value(), data::getUnit(edit_data_cursor, edit_data_id)));
+            data::set(edit_mode::data_cursor, edit_mode::data_id, data::Value(get_value(), data::getUnit(edit_mode::data_cursor, edit_mode::data_id)));
             reset();
         }
         else {
@@ -383,4 +384,4 @@ data::Unit get_edit_unit() {
 }
 }
 }
-} // namespace eez::psu::gui::keypad
+} // namespace eez::psu::gui::edit_mode_keypad

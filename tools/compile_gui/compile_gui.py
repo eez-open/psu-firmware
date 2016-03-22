@@ -67,8 +67,9 @@ declare_const("WIDGET_TYPE_DISPLAY_STRING", 6)
 declare_const("WIDGET_TYPE_DISPLAY_STRING_SELECT", 7)
 declare_const("WIDGET_TYPE_DISPLAY_MULTILINE_STRING", 8)
 declare_const("WIDGET_TYPE_THREE_STATE_INDICATOR", 9)
-declare_const("WIDGET_TYPE_VERTICAL_SLIDER", 10)
+declare_const("WIDGET_TYPE_SCALE", 10)
 declare_const("WIDGET_TYPE_TOGGLE_BUTTON", 11)
+declare_const("WIDGET_TYPE_VERTICAL_SLIDER", 12)
 
 #-------------------------------------------------------------------------------
 
@@ -354,6 +355,22 @@ class Parser:
             value = default_value
         struct.addField(UInt8(name, value))
 
+    def addUInt8Field(self, struct, collection, name, default_value, mandatory=True):
+        if name in collection:
+            value = collection[name]
+            if not isinstance(value, int):
+                self.trace.error("%s: not an integer" % name)
+                value = default_value
+            if value < 0 or value > 255:
+                self.trace.error("%s: value out of range" % name)
+                if value < 0: value = 0
+                elif value > 255: value = 255
+        else:
+            if mandatory:
+                self.trace.error("%s: missing" % name)
+            value = default_value
+        struct.addField(UInt8(name, value))
+
     def addUInt16Field(self, struct, collection, name, default_value, mandatory=True, parent=None):
         if name in collection:
             value = collection[name]
@@ -629,10 +646,12 @@ class Parser:
                 widget_type = WIDGET_TYPE_DISPLAY_MULTILINE_STRING
             elif type_str == "three_state_indicator":
                 widget_type = WIDGET_TYPE_THREE_STATE_INDICATOR
-            elif type_str == "vertical_slider":
-                widget_type = WIDGET_TYPE_VERTICAL_SLIDER
+            elif type_str == "scale":
+                widget_type = WIDGET_TYPE_SCALE
             elif type_str == "toggle_button":
                 widget_type = WIDGET_TYPE_TOGGLE_BUTTON
+            elif type_str == "vertical_slider":
+                widget_type = WIDGET_TYPE_VERTICAL_SLIDER
             else:
                 self.trace.error("unkown type '%s'" % type_str)
                 widget_type = WIDGET_TYPE_NONE
@@ -643,7 +662,7 @@ class Parser:
         result.addField(UInt8("type", widget_type))
 
         # data
-        if widget_type == WIDGET_TYPE_CONTAINER or widget_type == WIDGET_TYPE_DISPLAY_STRING or widget_type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING or widget_type == WIDGET_TYPE_VERTICAL_SLIDER:
+        if widget_type == WIDGET_TYPE_CONTAINER or widget_type == WIDGET_TYPE_DISPLAY_STRING or widget_type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING:
             # data not used
             result.addField(UInt8("data", 0))
         else:
@@ -700,6 +719,10 @@ class Parser:
             self.addStringField(specific_widget_data, widget, "text1", "")
             self.addStyleField(specific_widget_data, widget, "style2", mandatory=False)
             self.addStringField(specific_widget_data, widget, "text2", "")
+        elif widget_type == WIDGET_TYPE_SCALE:
+            specific_widget_data = Struct(None, "ScaleWidget")
+            self.addColorField(specific_widget_data, widget, "ticks_color", "#000000", True)
+            self.addUInt8Field(specific_widget_data, widget, "needle_height", 0)
         elif widget_type == WIDGET_TYPE_TOGGLE_BUTTON:
             specific_widget_data = Struct(None, "ToggleButtonWidget")
             self.addStringField(specific_widget_data, widget, "text1", "")

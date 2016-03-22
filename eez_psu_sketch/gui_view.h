@@ -47,8 +47,9 @@ namespace gui {
 #define WIDGET_TYPE_DISPLAY_STRING_SELECT 7
 #define WIDGET_TYPE_DISPLAY_MULTILINE_STRING 8
 #define WIDGET_TYPE_THREE_STATE_INDICATOR 9
-#define WIDGET_TYPE_VERTICAL_SLIDER 10
+#define WIDGET_TYPE_SCALE 10
 #define WIDGET_TYPE_TOGGLE_BUTTON 11
+#define WIDGET_TYPE_VERTICAL_SLIDER 12
 #define DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER 2
 #define DATA_ID_CHANNELS 1
 #define DATA_ID_OUTPUT_STATE 2
@@ -66,10 +67,11 @@ namespace gui {
 #define DATA_ID_EDIT_UNIT 14
 #define DATA_ID_EDIT_INFO 15
 #define DATA_ID_EDIT_INTERACTIVE_MODE 16
+#define DATA_ID_EDIT_STEP 17
 #define ACTION_ID_EDIT 1
-#define ACTION_ID_EDIT_WITH_SLIDER 2
-#define ACTION_ID_EDIT_WITH_STEP 3
-#define ACTION_ID_EDIT_WITH_KEYPAD 4
+#define ACTION_ID_EDIT_MODE_SLIDER 2
+#define ACTION_ID_EDIT_MODE_STEP 3
+#define ACTION_ID_EDIT_MODE_KEYPAD 4
 #define ACTION_ID_EXIT 5
 #define ACTION_ID_TOGGLE_CHANNEL 6
 #define ACTION_ID_TOUCH_SCREEN_CALIBRATION 7
@@ -96,9 +98,9 @@ namespace gui {
 #define ACTION_ID_NON_INTERACTIVE_ENTER 28
 #define ACTION_ID_NON_INTERACTIVE_CANCEL 29
 #define PAGE_ID_MAIN 0
-#define PAGE_ID_EDIT_WITH_SLIDER 1
-#define PAGE_ID_EDIT_WITH_STEP 2
-#define PAGE_ID_EDIT_WITH_KEYPAD 3
+#define PAGE_ID_EDIT_MODE_SLIDER 1
+#define PAGE_ID_EDIT_MODE_STEP 2
+#define PAGE_ID_EDIT_MODE_KEYPAD 3
 #define PAGE_ID_YES_NO 4
 #define STYLE_ID_DEFAULT 0
 #define STYLE_ID_SMALL 1
@@ -126,6 +128,8 @@ namespace gui {
 #define STYLE_ID_EDIT_VALUE_UR_SMALL 23
 #define STYLE_ID_EDIT_VALUE_ACTIVE_SMALL 24
 #define STYLE_ID_NON_INTERACTIVE_BUTTON 25
+#define STYLE_ID_EDIT_MODE_SLIDER_SCALE 26
+#define STYLE_ID_EDIT_MODE_STEP_VERTICAL_SLIDER 27
 
 typedef uint16_t OBJ_OFFSET;
 
@@ -148,12 +152,8 @@ struct Style {
     uint16_t padding_vertical;
 };
 
-struct DisplayStringWidget {
-    OBJ_OFFSET text;
-};
-
-struct SelectWidget {
-    List widgets;
+struct ListWidget {
+    OBJ_OFFSET item_widget;
 };
 
 struct ToggleButtonWidget {
@@ -161,16 +161,9 @@ struct ToggleButtonWidget {
     OBJ_OFFSET text2;
 };
 
-struct Widget {
-    uint8_t type;
-    uint8_t data;
-    uint8_t action;
-    uint8_t x;
-    uint8_t y;
-    uint8_t w;
-    uint8_t h;
-    OBJ_OFFSET style;
-    OBJ_OFFSET specific;
+struct Document {
+    List styles;
+    List pages;
 };
 
 struct DisplayStringSelectWidget {
@@ -186,13 +179,29 @@ struct ThreeStateIndicatorWidget {
     OBJ_OFFSET text;
 };
 
-struct ListWidget {
-    OBJ_OFFSET item_widget;
+struct DisplayStringWidget {
+    OBJ_OFFSET text;
 };
 
-struct Document {
-    List styles;
-    List pages;
+struct Widget {
+    uint8_t type;
+    uint8_t data;
+    uint8_t action;
+    uint8_t x;
+    uint8_t y;
+    uint8_t w;
+    uint8_t h;
+    OBJ_OFFSET style;
+    OBJ_OFFSET specific;
+};
+
+struct ScaleWidget {
+    uint16_t ticks_color;
+    uint8_t needle_height;
+};
+
+struct SelectWidget {
+    List widgets;
 };
 
 #pragma pack(pop)

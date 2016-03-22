@@ -71,6 +71,10 @@ void load_lib() {
     }
 }
 
+bool isOpened() {
+    return g_window ? true : false;
+}
+
 bool open() {
     if (g_window) {
         return true;
