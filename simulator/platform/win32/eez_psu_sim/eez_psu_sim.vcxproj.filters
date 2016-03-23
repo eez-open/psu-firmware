@@ -322,6 +322,9 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_widget_button_group.h">
       <Filter>gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_edit_mode_snapshot.h">
+      <Filter>gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">

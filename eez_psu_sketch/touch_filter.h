@@ -23,8 +23,8 @@ namespace psu {
 namespace gui {
 namespace touch {
 
-bool calibrate_transform(int tl_x, int tl_y, int br_x, int br_y, int tr_x, int tr_y, int margin);
-void reset_transform_calibration();
+bool calibrateTransform(int tl_x, int tl_y, int br_x, int br_y, int tr_x, int tr_y, int margin);
+void resetTransformCalibration();
 bool filter(bool is_pressed, int& x, int& y);
 void transform(int& x, int& y);
 

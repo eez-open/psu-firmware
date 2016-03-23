@@ -25,6 +25,9 @@ namespace gui {
 void init();
 void tick(unsigned long tick_usec);
 
+void showEnteringStandby();
+void showLeavingStandby();
+
 }
 }
 } // namespace eez::psu::gui

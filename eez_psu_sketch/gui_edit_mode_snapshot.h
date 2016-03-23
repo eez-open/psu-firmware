@@ -18,17 +18,34 @@
 
 #pragma once
 
-#include "gui_internal.h"
+#include "gui_data.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
-namespace widget_button_group {
 
-bool draw(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse);
-void onTouchDown(const WidgetCursor &widgetCursor);
+namespace data {
+    struct Snapshot;
+}
+
+namespace edit_mode {
+
+struct Snapshot {
+    data::Value editValue;
+    char infoText[32];
+    int interactiveModeSelector;
+
+    int step_index;
+
+    data::Value keypadUnit;
+    char keypadText[10];
+
+    void takeSnapshot();
+    data::Value get(uint8_t id);
+    bool isBlinking(data::Snapshot& snapshot, uint8_t id, bool &result);
+};
 
 }
 }
 }
-} // namespace eez::psu::gui::widget_button_group
+} // namespace eez::psu::ui::edit_mode

@@ -18,11 +18,80 @@
 
 #include "psu.h"
 #include "gui_data_snapshot.h"
+#include "gui_view.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 namespace data {
+
+/*
+We are auto generating model name from the channels definition:
+
+<cnt>/<volt>/<curr>[-<cnt2>/<volt2>/<curr2>] (<platform>)
+
+Where is:
+
+<cnt>      - number of the equivalent channels
+<volt>     - max. voltage
+<curr>     - max. curr
+<platform> - Mega, Due, Simulator or Unknown
+*/
+const char *getModelInfo() {
+    static char model_info[CH_NUM * (sizeof("XX V / XX A") - 1) + (CH_NUM - 1) * (sizeof(" - ") - 1) + 1];
+
+    if (*model_info == 0) {
+        char *p = model_info;
+
+        bool ch_used[CH_NUM];
+
+        for (int i = 0; i < CH_NUM; ++i) {
+            ch_used[i] = false;
+        }
+
+        bool first_channel = true;
+
+        for (int i = 0; i < CH_NUM; ++i) {
+            if (!ch_used[i]) {
+                int count = 1;
+                for (int j = i + 1; j < CH_NUM; ++j) {
+                    if (Channel::get(i).U_MAX == Channel::get(j).U_MAX && Channel::get(i).I_MAX == Channel::get(j).I_MAX) {
+                        ch_used[j] = true;
+                        ++count;
+                    }
+                }
+
+                if (first_channel) {
+                    first_channel = false;
+                }
+                else {
+                    *p++ += ' ';
+                    *p++ += '-';
+                    *p++ += ' ';
+                }
+
+                p += sprintf_P(p, PSTR("%d V / %d A"), (int)floor(Channel::get(i).U_MAX), (int)floor(Channel::get(i).I_MAX));
+            }
+        }
+
+        *p = 0;
+    }
+
+    return model_info;
+}
+
+const char *getFirmwareInfo() {
+    static const char FIRMWARE_LABEL[] PROGMEM = "Firmware: ";
+    static char firmware_info[sizeof(FIRMWARE_LABEL) - 1 + sizeof(FIRMWARE) - 1 + 1];
+
+    if (*firmware_info == 0) {
+        strcat_P(firmware_info, FIRMWARE_LABEL);
+        strcat_P(firmware_info, PSTR(FIRMWARE));
+    }
+
+    return firmware_info;
+}
+
 
 Snapshot currentSnapshot;
 Snapshot previousSnapshot;
@@ -74,7 +143,7 @@ void Snapshot::takeSnapshot() {
 
     editModeSnapshot.takeSnapshot();
 
-    alertMessage = alertMessage;
+    alertMessage = g_alertMessage;
 }
 
 Value Snapshot::get(const Cursor &cursor, uint8_t id) {
@@ -100,7 +169,11 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
         return Value(channelSnapshots[cursor.iChannel].flags.dp);
     } else if (id == DATA_ID_ALERT_MESSAGE) {
         return alertMessage;
-    } 
+    } else if (id == DATA_ID_MODEL_INFO) {
+        return Value(getModelInfo());
+    } else if (id == DATA_ID_FIRMWARE_INFO) {
+        return Value(getFirmwareInfo());
+    }
     
     Value value = editModeSnapshot.get(id);
     if (value.getUnit() != UNIT_NONE) {
@@ -112,7 +185,7 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 
 bool Snapshot::isBlinking(const Cursor &cursor, uint8_t id) {
     bool result;
-    if (editModeSnapshot.isBlinking(id, result)) {
+    if (editModeSnapshot.isBlinking(*this, id, result)) {
         return result;
     }
 

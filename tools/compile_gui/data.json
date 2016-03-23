@@ -73,6 +73,12 @@
     },
     {
       "id": "edit_steps"
+    },
+    {
+      "id": "model_info"
+    },
+    {
+      "id": "firmware_info"
     }
   ],
   "actions": [
@@ -172,9 +178,27 @@
     },
     {
       "id": "non_interactive_cancel"
+    },
+    {
+      "id": "channel_settings"
+    },
+    {
+      "id": "turn_off"
     }
   ],
   "pages": [
+    {
+      "id": "welcome"
+    },
+    {
+      "id": "entering_standby"
+    },
+    {
+      "id": "standby"
+    },
+    {
+      "id": "leaving_standby"
+    },
     {
       "id": "main"
     },
@@ -190,6 +214,5 @@
     {
       "id": "yes_no"
     }
-
   ]
 }

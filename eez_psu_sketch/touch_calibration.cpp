@@ -101,7 +101,7 @@ bool read_point() {
 }
 
 void init() {
-    bool success = touch::calibrate_transform(
+    bool success = touch::calibrateTransform(
         persist_conf::dev_conf.touch_screen_cal_tlx,
         persist_conf::dev_conf.touch_screen_cal_tly, 
         persist_conf::dev_conf.touch_screen_cal_brx,
@@ -118,12 +118,12 @@ void init() {
     }
 }
 
-void enter_calibration_mode() {
-    touch::reset_transform_calibration();
+void enterCalibrationMode() {
+    touch::resetTransformCalibration();
     mode = MODE_START;
 }
 
-bool is_calibrated() {
+bool isCalibrated() {
     return mode == MODE_FINISHED;
 }
 
@@ -141,7 +141,7 @@ void dialogYes() {
 }
 
 void dialogNo() {
-    enter_calibration_mode();
+    enterCalibrationMode();
 }
 
 void dialogCancel() {
@@ -171,7 +171,7 @@ void tick(unsigned long tick_usec) {
             }
         } else if (mode == MODE_POINT_TR) {
             if (read_point()) {
-                bool success = touch::calibrate_transform(
+                bool success = touch::calibrateTransform(
                     point_tlx, point_tly,  point_brx, point_bry,  point_trx, point_try,
                     CONF_TOUCH_SCREEN_CALIBRATION_M);
                 if (success) {

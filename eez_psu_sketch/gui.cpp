@@ -34,6 +34,8 @@
 
 #define CONF_BLINK_TIME 400000UL
 #define CONF_ENUM_WIDGETS_STACK_SIZE 5
+#define CONF_GUI_WELCOME_PAGE_TIMEOUT 2000000UL
+#define CONF_GUI_LONG_PRESS_TIMEOUT 1000000UL
 
 namespace eez {
 namespace psu {
@@ -57,8 +59,11 @@ static void (*dialog_yes_callback)();
 static void (*dialog_no_callback)();
 static void (*dialog_cancel_callback)();
 
-static bool wasBlinkTime;
 static bool isBlinkTime;
+static bool wasBlinkTime;
+
+static unsigned long initTime;
+static unsigned long touchDownTime;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -484,18 +489,29 @@ bool draw_display_widget(uint8_t *document, const WidgetCursor &widgetCursor, bo
         return false;
     }
     else {
-        data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+        data::Value value;
+
         bool isBlinking = data::currentSnapshot.isBlinking(widgetCursor.cursor, widgetCursor.widget->data);
-        if (isBlinkTime && isBlinking) {
-            value = data::Value("");
+        if (isBlinking) {
+            if (isBlinkTime) {
+                value = data::Value("");
+            } else {
+                value = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+            }
+            refresh = refresh || (isBlinkTime != wasBlinkTime);
         } else {
             value = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
         }
-        refresh = refresh || (wasBlinkTime != isBlinkTime);
+
         if (!refresh) {
-            data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
-            refresh = value != previousValue;
+            bool wasBlinking = data::previousSnapshot.isBlinking(widgetCursor.cursor, widgetCursor.widget->data);
+            refresh = isBlinking != wasBlinking;
+            if (!refresh) {
+                data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+                refresh = value != previousValue;
+            }
         }
+
         if (refresh) {
             char text[32];
             value.toText(text, 32);
@@ -509,6 +525,7 @@ bool draw_display_widget(uint8_t *document, const WidgetCursor &widgetCursor, bo
             drawText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, style, inverse);
             return true;
         }
+
         return false;
     }
 }
@@ -528,50 +545,6 @@ bool draw_display_multiline_string_widget(uint8_t *document, const WidgetCursor 
         DisplayStringWidget *display_string_widget = ((DisplayStringWidget *)(document + widgetCursor.widget->specific));
         char *text = (char *)(document + display_string_widget->text);
         drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, (Style *)(document + widgetCursor.widget->style), inverse);
-        return true;
-    }
-    return false;
-}
-
-bool draw_three_state_indicator_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
-    int state = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
-    if (!refresh) {
-        int previousState = data::previousSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
-        refresh = state != previousState;
-    }
-    if (refresh) {
-        ThreeStateIndicatorWidget *three_state_indicator_widget = ((ThreeStateIndicatorWidget *)(document + widgetCursor.widget->specific));
-
-        OBJ_OFFSET style;
-        if (state == 1) style = widgetCursor.widget->style;
-        else if (state == 2) style = three_state_indicator_widget->style1;
-        else style = three_state_indicator_widget->style2;
-
-        char *text = (char *)(document + three_state_indicator_widget->text);
-        drawText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, (Style *)(document + style), inverse);
-        return true;
-    }
-    return false;
-}
-
-bool draw_display_string_select_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
-    int state = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
-    if (!refresh) {
-        int previousState = data::previousSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
-        refresh = state != previousState;
-    }
-    if (refresh) {
-        DisplayStringSelectWidget *display_string_select_widget = ((DisplayStringSelectWidget *)(document + widgetCursor.widget->specific));
-        char *text;
-        Style *style;
-        if (state == 1) {
-            text = (char *)(document + display_string_select_widget->text1);
-            style = (Style *)(document + display_string_select_widget->style1);
-        } else {
-            text = (char *)(document + display_string_select_widget->text2);
-            style = (Style *)(document + display_string_select_widget->style2);
-        }
-        drawText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, style, inverse);
         return true;
     }
     return false;
@@ -740,10 +713,6 @@ bool draw_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refre
         return draw_display_widget(document, widgetCursor, refresh, inverse);
     } else if (widgetCursor.widget->type == WIDGET_TYPE_DISPLAY_STRING) {
         return draw_display_string_widget(document, widgetCursor, refresh, inverse);
-    } else if (widgetCursor.widget->type == WIDGET_TYPE_THREE_STATE_INDICATOR) {
-        return draw_three_state_indicator_widget(document, widgetCursor, refresh, inverse);
-    } else if (widgetCursor.widget->type == WIDGET_TYPE_DISPLAY_STRING_SELECT) {
-        return draw_display_string_select_widget(document, widgetCursor, refresh, inverse);
     } else if (widgetCursor.widget->type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING) {
         return draw_display_multiline_string_widget(document, widgetCursor, refresh, inverse);
     } else if (widgetCursor.widget->type == WIDGET_TYPE_SCALE) {
@@ -759,7 +728,7 @@ bool draw_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refre
 
 static EnumWidgets draw_enum_widgets(document, draw_widget);
 
-void draw_tick(unsigned long tick_usec) {
+void draw_tick() {
     if (!draw_enum_widgets.next()) {
         wasBlinkTime = isBlinkTime;
         isBlinkTime = (micros() % (2 * CONF_BLINK_TIME)) > CONF_BLINK_TIME;
@@ -796,6 +765,18 @@ void refresh_page() {
     draw_enum_widgets.start(active_page_id, 0, 0, true);
 }
 
+void flush() {
+    while (is_page_refresh) {
+        draw_tick();
+    }
+
+#ifdef EEZ_PSU_SIMULATOR
+    if (simulator::front_panel::isOpened()) {
+        simulator::front_panel::tick();
+    }
+#endif
+}
+
 int getActivePage() {
     return active_page_id;
 }
@@ -804,6 +785,17 @@ void showPage(int index) {
     active_page_id = index;
     refresh_page();
 }
+
+void showEnteringStandby() {
+    showPage(PAGE_ID_ENTERING_STANDBY);
+    flush();
+}
+
+void showLeavingStandby() {
+    showPage(PAGE_ID_LEAVING_STANDBY);
+    flush();
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -857,7 +849,7 @@ void do_action(int action_id, WidgetCursor &widget_cursor) {
     }
 
     if (action_id == ACTION_ID_TOUCH_SCREEN_CALIBRATION) {
-        touch::calibration::enter_calibration_mode();
+        touch::calibration::enterCalibrationMode();
     } else if (action_id == ACTION_ID_YES) {
         dialog_yes_callback();
     } else if (action_id == ACTION_ID_NO) {
@@ -874,13 +866,20 @@ void do_action(int action_id, WidgetCursor &widget_cursor) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void init() {
+    initTime = micros();
+
     lcd::init();
 
-    touch::init();
-
-    if (touch::calibration::is_calibrated()) {
-        refresh_page();
+#ifdef EEZ_PSU_SIMULATOR
+    if (persist_conf::dev_conf.gui_opened) {
+        simulator::front_panel::open();
     }
+#endif
+
+    showPage(PAGE_ID_WELCOME);
+    gui::flush();
+
+    touch::init();
 }
 
 void tick(unsigned long tick_usec) {
@@ -892,69 +891,104 @@ void tick(unsigned long tick_usec) {
 
     touch::tick(tick_usec);
 
-    if (touch::calibration::is_calibrated()) {
-        if (touch::event_type == touch::TOUCH_DOWN) {
-            find_widget(touch::x, touch::y);
-            if (found_widget && found_widget.widget->action) {
-                found_widget_at_down = found_widget;
-            } else {
-                found_widget_at_down = 0;
+    if (touch::calibration::isCalibrated()) {
+        if (active_page_id == PAGE_ID_WELCOME) {
+            if (tick_usec - initTime < CONF_GUI_WELCOME_PAGE_TIMEOUT) {
+                return;
             }
-            if (found_widget_at_down) {
-                select_widget(found_widget_at_down);
-            } else {
-                if (found_widget && found_widget.widget->type == WIDGET_TYPE_BUTTON_GROUP) {
-                    widget_button_group::onTouchDown(found_widget);
-                } else if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
-                    edit_mode_slider::onTouchDown();
-                } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
-                    edit_mode_step::onTouchDown();
+
+            showPage(psu::isPowerUp() ? PAGE_ID_MAIN : PAGE_ID_STANDBY);
+        }
+
+        if (psu::isPowerUp()) {
+            if (active_page_id == PAGE_ID_STANDBY || active_page_id == PAGE_ID_LEAVING_STANDBY) {
+                showPage(PAGE_ID_MAIN);
+            }
+        } else {
+            if (active_page_id != PAGE_ID_STANDBY) {
+                showPage(PAGE_ID_STANDBY);
+            }
+        }
+
+        if (touch::event_type == touch::TOUCH_DOWN) {
+            touchDownTime = tick_usec;
+            if (active_page_id != PAGE_ID_STANDBY) {
+                find_widget(touch::x, touch::y);
+                if (found_widget && found_widget.widget->action) {
+                    found_widget_at_down = found_widget;
+                } else {
+                    found_widget_at_down = 0;
+                }
+                if (found_widget_at_down) {
+                    select_widget(found_widget_at_down);
+                } else {
+                    if (found_widget && found_widget.widget->type == WIDGET_TYPE_BUTTON_GROUP) {
+                        widget_button_group::onTouchDown(found_widget);
+                    } else if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
+                        edit_mode_slider::onTouchDown();
+                    } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
+                        edit_mode_step::onTouchDown();
+                    }
                 }
             }
         } else if (touch::event_type == touch::TOUCH_MOVE) {
-            if (!found_widget_at_down) {
-                if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
-                    edit_mode_slider::onTouchMove();
-                } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
-                    edit_mode_step::onTouchMove();
-                } else if (active_page_id == PAGE_ID_YES_NO) {
-#ifdef CONF_DEBUG
-                    lcd::lcd.setColor(VGA_WHITE);
+            if (active_page_id != PAGE_ID_STANDBY) {
+                if (found_widget_at_down) {
+                    if (found_widget_at_down.widget->action == ACTION_ID_TURN_OFF) {
+                        if (tick_usec - touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
+                            psu::changePowerState(false);
+                        }
+                    }
+                } else {
+                    if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
+                        edit_mode_slider::onTouchMove();
+                    } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
+                        edit_mode_step::onTouchMove();
+                    } else if (active_page_id == PAGE_ID_YES_NO) {
+    #ifdef CONF_DEBUG
+                        lcd::lcd.setColor(VGA_WHITE);
 
-                    int x = touch::x;
-                    if (x < 1) x = 1;
-                    else if (x > lcd::lcd.getDisplayXSize() - 2) x = lcd::lcd.getDisplayXSize() - 2;
+                        int x = touch::x;
+                        if (x < 1) x = 1;
+                        else if (x > lcd::lcd.getDisplayXSize() - 2) x = lcd::lcd.getDisplayXSize() - 2;
 
-                    int y = touch::y;
-                    if (y < 1) y = 1;
-                    else if (y > lcd::lcd.getDisplayYSize() - 2) y = lcd::lcd.getDisplayYSize() - 2;
+                        int y = touch::y;
+                        if (y < 1) y = 1;
+                        else if (y > lcd::lcd.getDisplayYSize() - 2) y = lcd::lcd.getDisplayYSize() - 2;
 
-                    lcd::lcd.fillRect(touch::x-1, touch::y-1, touch::x+1, touch::y+1);
-#endif
+                        lcd::lcd.fillRect(touch::x-1, touch::y-1, touch::x+1, touch::y+1);
+    #endif
+                    }
+                }
+            } else {
+                if (tick_usec - touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
+                    psu::changePowerState(true);
                 }
             }
         } else if (touch::event_type == touch::TOUCH_UP) {
-            if (found_widget_at_down) {
-                deselect_widget();
-                do_action(found_widget_at_down.widget->action, found_widget_at_down);
-                found_widget_at_down = 0;
-            } else {
-                if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
-                    edit_mode_slider::onTouchUp();
-                } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
-                    edit_mode_step::onTouchUp();
+            if (active_page_id != PAGE_ID_STANDBY) {
+                if (found_widget_at_down) {
+                    deselect_widget();
+                    do_action(found_widget_at_down.widget->action, found_widget_at_down);
+                    found_widget_at_down = 0;
+                } else {
+                    if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
+                        edit_mode_slider::onTouchUp();
+                    } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
+                        edit_mode_step::onTouchUp();
+                    }
                 }
             }
         }
 
-        draw_tick(tick_usec);
+        draw_tick();
     } else {
         touch::calibration::tick(tick_usec);
     }
 }
 
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
-    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ConstStr(message));
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message));
 
     dialog_yes_callback = yes_callback;
     dialog_no_callback = no_callback;

@@ -50,10 +50,10 @@ void Snapshot::takeSnapshot() {
         step_index = edit_mode_step::getStepIndex();
 
         switch (edit_mode_keypad::getEditUnit()) {
-        case data::UNIT_VOLT: keypadUnit = data::Value::ConstStr("mV"); break;
-        case data::UNIT_MILLI_VOLT: keypadUnit = data::Value::ConstStr("V"); break;
-        case data::UNIT_AMPER: keypadUnit = data::Value::ConstStr("mA"); break;
-        default: keypadUnit = data::Value::ConstStr("A");
+        case data::UNIT_VOLT: keypadUnit = data::Value::ProgmemStr("mV"); break;
+        case data::UNIT_MILLI_VOLT: keypadUnit = data::Value::ProgmemStr("V"); break;
+        case data::UNIT_AMPER: keypadUnit = data::Value::ProgmemStr("mA"); break;
+        default: keypadUnit = data::Value::ProgmemStr("A");
         }
 
         edit_mode_keypad::getText(keypadText, sizeof(keypadText));
@@ -76,9 +76,9 @@ data::Value Snapshot::get(uint8_t id) {
     return data::Value();
 }
 
-bool Snapshot::isBlinking(uint8_t id, bool &result) {
+bool Snapshot::isBlinking(data::Snapshot& snapshot, uint8_t id, bool &result) {
     if (id == DATA_ID_EDIT_VALUE) {
-        result = !edit_mode::isInteractiveMode() && editValue != edit_mode::getCurrentValue();
+        result = (interactiveModeSelector == 1) && (editValue != edit_mode::getCurrentValue(snapshot));
         return true;
     }
     return false;
@@ -189,8 +189,8 @@ const data::Value& getEditValue() {
     return edit_value;
 }
 
-data::Value getCurrentValue() {
-    return data::currentSnapshot.get(data_cursor, data_id);
+data::Value getCurrentValue(data::Snapshot snapshot) {
+    return snapshot.get(data_cursor, data_id);
 }
 
 const data::Value& getMin() {

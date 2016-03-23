@@ -19,26 +19,12 @@
 #pragma once
 
 #include "gui_internal.h"
+#include "gui_data_snapshot.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 namespace edit_mode {
-
-struct Snapshot {
-    data::Value editValue;
-    char infoText[32];
-    int interactiveModeSelector;
-
-    int step_index;
-
-    data::Value keypadUnit;
-    char keypadText[10];
-
-    void takeSnapshot();
-    data::Value get(uint8_t id);
-    bool isBlinking(uint8_t id, bool &result);
-};
 
 bool isActive();
 void enter(const WidgetCursor &widgetCursor);
@@ -48,7 +34,7 @@ bool isInteractiveMode();
 void toggleInteractiveMode();
 
 const data::Value& getEditValue();
-data::Value getCurrentValue();
+data::Value getCurrentValue(data::Snapshot snapshot);
 const data::Value& getMin();
 const data::Value& getMax();
 data::Unit getUnit();

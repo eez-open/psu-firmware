@@ -43,9 +43,9 @@ struct Value {
     Value() : unit_(UNIT_NONE) { }
     Value(int value) : unit_(UNIT_INT), int_(value)  {}
     Value(float value, Unit unit) : unit_(unit), float_(value) {}
-    Value(char *str) : unit_(UNIT_STR), str_(str) {}
+    Value(const char *str) : unit_(UNIT_STR), str_(str) {}
 
-    static Value ConstStr(const char *pstr PROGMEM) {
+    static Value ProgmemStr(const char *pstr PROGMEM) {
         Value value;
         value.const_str_ = pstr;
         value.unit_ = UNIT_CONST_STR;
@@ -119,6 +119,8 @@ struct Cursor {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+
+extern Value g_alertMessage;
 
 int count(uint8_t id);
 void select(Cursor &cursor, uint8_t id, int index);

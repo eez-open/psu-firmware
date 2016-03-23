@@ -59,11 +59,14 @@ void boot() {
 
     // initialize shield
     eez_psu_init();
+
     bp::init();
     serial::init();
     success &= eeprom::init();
 
     persist_conf::loadDevice(); // loads global configuration parameters
+
+    gui::init();
 
     success &= rtc::init();
     success &= datetime::init();
@@ -158,8 +161,6 @@ void boot() {
     DebugTraceF("%d", offsetof(ProtectionConfiguration, level));
     DebugTraceF("%d", offsetof(ProtectionConfiguration, state));
     */
-
-    gui::init();
 }
 
 bool powerUp() {
@@ -227,6 +228,8 @@ bool changePowerState(bool up) {
             g_test_power_up_delay = false;
         }
 
+        gui::showLeavingStandby();
+
         if (!powerUp()) {
             return false;
         }
@@ -238,6 +241,8 @@ bool changePowerState(bool up) {
         }
     }
     else {
+        gui::showEnteringStandby();
+
         powerDown();
 
         g_test_power_up_delay = true;

@@ -19,7 +19,7 @@
 #pragma once
 
 #include "gui_data.h"
-#include "gui_edit_mode.h"
+#include "gui_edit_mode_snapshot.h"
 
 namespace eez {
 namespace psu {

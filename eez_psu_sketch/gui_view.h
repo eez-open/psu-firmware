@@ -44,12 +44,10 @@ namespace gui {
 #define WIDGET_TYPE_SELECT 4
 #define WIDGET_TYPE_DISPLAY 5
 #define WIDGET_TYPE_DISPLAY_STRING 6
-#define WIDGET_TYPE_DISPLAY_STRING_SELECT 7
-#define WIDGET_TYPE_DISPLAY_MULTILINE_STRING 8
-#define WIDGET_TYPE_THREE_STATE_INDICATOR 9
-#define WIDGET_TYPE_SCALE 10
-#define WIDGET_TYPE_TOGGLE_BUTTON 11
-#define WIDGET_TYPE_BUTTON_GROUP 12
+#define WIDGET_TYPE_DISPLAY_MULTILINE_STRING 7
+#define WIDGET_TYPE_SCALE 8
+#define WIDGET_TYPE_TOGGLE_BUTTON 9
+#define WIDGET_TYPE_BUTTON_GROUP 10
 #define DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER 2
 #define DATA_ID_CHANNELS 1
 #define DATA_ID_OUTPUT_STATE 2
@@ -68,6 +66,8 @@ namespace gui {
 #define DATA_ID_EDIT_INFO 15
 #define DATA_ID_EDIT_MODE_INTERACTIVE_MODE_SELECTOR 16
 #define DATA_ID_EDIT_STEPS 17
+#define DATA_ID_MODEL_INFO 18
+#define DATA_ID_FIRMWARE_INFO 19
 #define ACTION_ID_EDIT 1
 #define ACTION_ID_EDIT_MODE_SLIDER 2
 #define ACTION_ID_EDIT_MODE_STEP 3
@@ -97,39 +97,47 @@ namespace gui {
 #define ACTION_ID_TOGGLE 27
 #define ACTION_ID_NON_INTERACTIVE_ENTER 28
 #define ACTION_ID_NON_INTERACTIVE_CANCEL 29
-#define PAGE_ID_MAIN 0
-#define PAGE_ID_EDIT_MODE_SLIDER 1
-#define PAGE_ID_EDIT_MODE_STEP 2
-#define PAGE_ID_EDIT_MODE_KEYPAD 3
-#define PAGE_ID_YES_NO 4
+#define ACTION_ID_CHANNEL_SETTINGS 30
+#define ACTION_ID_TURN_OFF 31
+#define PAGE_ID_WELCOME 0
+#define PAGE_ID_ENTERING_STANDBY 1
+#define PAGE_ID_STANDBY 2
+#define PAGE_ID_LEAVING_STANDBY 3
+#define PAGE_ID_MAIN 4
+#define PAGE_ID_EDIT_MODE_SLIDER 5
+#define PAGE_ID_EDIT_MODE_STEP 6
+#define PAGE_ID_EDIT_MODE_KEYPAD 7
+#define PAGE_ID_YES_NO 8
 #define STYLE_ID_DEFAULT 0
 #define STYLE_ID_SMALL 1
-#define STYLE_ID_MON_VALUE 2
-#define STYLE_ID_MON_VALUE_UR 3
-#define STYLE_ID_MON_VALUE_MEDIUM 4
-#define STYLE_ID_MON_VALUE_MEDIUM_UR 5
-#define STYLE_ID_CHANNEL_OFF 6
-#define STYLE_ID_CHANNEL_OFF_MEDIUM 7
-#define STYLE_ID_PROT_INDICATOR 8
-#define STYLE_ID_PROT_INDICATOR_SET 9
-#define STYLE_ID_PROT_INDICATOR_TRIP 10
-#define STYLE_ID_MENU 11
-#define STYLE_ID_TAB_PAGE 12
-#define STYLE_ID_TAB_PAGE_SELECTED 13
-#define STYLE_ID_BOTTOM_BUTTON 14
-#define STYLE_ID_KEY 15
-#define STYLE_ID_KEY_ICONS 16
-#define STYLE_ID_EDIT_INFO 17
-#define STYLE_ID_EDIT_VALUE_LARGE 18
-#define STYLE_ID_EDIT_VALUE 19
-#define STYLE_ID_EDIT_VALUE_UR 20
-#define STYLE_ID_EDIT_VALUE_ACTIVE 21
-#define STYLE_ID_EDIT_VALUE_SMALL 22
-#define STYLE_ID_EDIT_VALUE_UR_SMALL 23
-#define STYLE_ID_EDIT_VALUE_ACTIVE_SMALL 24
-#define STYLE_ID_NON_INTERACTIVE_BUTTON 25
-#define STYLE_ID_EDIT_MODE_SLIDER_SCALE 26
-#define STYLE_ID_EDIT_MODE_STEP_VERTICAL_SLIDER 27
+#define STYLE_ID_LARGE 2
+#define STYLE_ID_MON_VALUE 3
+#define STYLE_ID_MON_VALUE_UR 4
+#define STYLE_ID_MON_VALUE_MEDIUM 5
+#define STYLE_ID_MON_VALUE_MEDIUM_UR 6
+#define STYLE_ID_CHANNEL_OFF 7
+#define STYLE_ID_CHANNEL_OFF_MEDIUM 8
+#define STYLE_ID_PROT_INDICATOR 9
+#define STYLE_ID_PROT_INDICATOR_SET 10
+#define STYLE_ID_PROT_INDICATOR_TRIP 11
+#define STYLE_ID_MENU 12
+#define STYLE_ID_TAB_PAGE 13
+#define STYLE_ID_TAB_PAGE_SELECTED 14
+#define STYLE_ID_BOTTOM_BUTTON 15
+#define STYLE_ID_KEY 16
+#define STYLE_ID_KEY_ICONS 17
+#define STYLE_ID_EDIT_INFO 18
+#define STYLE_ID_EDIT_VALUE_LARGE 19
+#define STYLE_ID_EDIT_VALUE 20
+#define STYLE_ID_EDIT_VALUE_UR 21
+#define STYLE_ID_EDIT_VALUE_ACTIVE 22
+#define STYLE_ID_EDIT_VALUE_SMALL 23
+#define STYLE_ID_EDIT_VALUE_UR_SMALL 24
+#define STYLE_ID_EDIT_VALUE_ACTIVE_SMALL 25
+#define STYLE_ID_NON_INTERACTIVE_BUTTON 26
+#define STYLE_ID_EDIT_MODE_SLIDER_SCALE 27
+#define STYLE_ID_EDIT_MODE_STEP_VERTICAL_SLIDER 28
+#define STYLE_ID_TOP_BAR 29
 
 typedef uint16_t OBJ_OFFSET;
 
@@ -138,16 +146,14 @@ struct List {
     OBJ_OFFSET first;
 };
 
-struct SelectWidget {
-    List widgets;
-};
-
-struct DisplayStringWidget {
-    OBJ_OFFSET text;
-};
-
-struct ListWidget {
-    OBJ_OFFSET item_widget;
+struct Style {
+    uint8_t font;
+    uint16_t flags;
+    uint16_t background_color;
+    uint16_t color;
+    uint16_t border_color;
+    uint16_t padding_horizontal;
+    uint16_t padding_vertical;
 };
 
 struct ScaleWidget {
@@ -155,20 +161,21 @@ struct ScaleWidget {
     uint8_t needle_height;
 };
 
-struct ContainerWidget {
+struct SelectWidget {
     List widgets;
 };
 
-struct DisplayStringSelectWidget {
-    OBJ_OFFSET style1;
+struct ToggleButtonWidget {
     OBJ_OFFSET text1;
-    OBJ_OFFSET style2;
     OBJ_OFFSET text2;
 };
 
-struct Document {
-    List styles;
-    List pages;
+struct DisplayStringWidget {
+    OBJ_OFFSET text;
+};
+
+struct ContainerWidget {
+    List widgets;
 };
 
 struct Widget {
@@ -183,25 +190,13 @@ struct Widget {
     OBJ_OFFSET specific;
 };
 
-struct ToggleButtonWidget {
-    OBJ_OFFSET text1;
-    OBJ_OFFSET text2;
+struct ListWidget {
+    OBJ_OFFSET item_widget;
 };
 
-struct ThreeStateIndicatorWidget {
-    OBJ_OFFSET style1;
-    OBJ_OFFSET style2;
-    OBJ_OFFSET text;
-};
-
-struct Style {
-    uint8_t font;
-    uint16_t flags;
-    uint16_t background_color;
-    uint16_t color;
-    uint16_t border_color;
-    uint16_t padding_horizontal;
-    uint16_t padding_vertical;
+struct Document {
+    List styles;
+    List pages;
 };
 
 #pragma pack(pop)

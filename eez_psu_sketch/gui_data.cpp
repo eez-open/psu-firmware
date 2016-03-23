@@ -28,7 +28,7 @@ namespace psu {
 namespace gui {
 namespace data {
 
-static Value alertMessage;
+Value g_alertMessage;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -116,7 +116,7 @@ void set(const Cursor &cursor, uint8_t id, Value value) {
     } else if (id == DATA_ID_CURR) {
         Channel::get(cursor.iChannel).setCurrent(value.getFloat());
     } else if (id == DATA_ID_ALERT_MESSAGE) {
-        alertMessage = value;
+        g_alertMessage = value;
     } else if (id == DATA_ID_EDIT_STEPS) {
         edit_mode_step::setStepIndex(value.getInt());
     }

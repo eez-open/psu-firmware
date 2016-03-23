@@ -45,8 +45,6 @@ namespace simulator {
 
 float temperature[temp_sensor::COUNT];
 
-bool firstTick = true;
-
 void init() {
     for (int i = 0; i < temp_sensor::COUNT; ++i) {
         temperature[i] = 25.0f;
@@ -57,13 +55,6 @@ void tick() {
     chips::tick();
     psu::tick();
     front_panel::tick();
-
-    if (firstTick) {
-        if (persist_conf::dev_conf.gui_opened) {
-            simulator::front_panel::open();
-        }
-        firstTick = false;
-    }
 }
 
 void setTemperature(temp_sensor::Type sensor, float value) {

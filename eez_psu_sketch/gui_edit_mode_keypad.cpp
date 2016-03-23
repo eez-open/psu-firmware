@@ -193,7 +193,7 @@ void reset() {
 
 void getText(char *text, int count) {
     if (state == START) {
-        edit_mode::getCurrentValue().toText(text, count);
+        edit_mode::getCurrentValue(data::currentSnapshot).toText(text, count);
     }
     else {
         int i = 0;

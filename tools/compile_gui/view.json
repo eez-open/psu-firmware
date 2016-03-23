@@ -7,7 +7,7 @@
       "font": "medium",
       "align_horizontal": "center",
       "align_vertical": "center",
-      "color": "#FFFF00",
+      "color": "#FFFFFF",
       "background_color": "#52B5D3",
       "border_size": 0,
       "border_color": "lightgray",
@@ -19,7 +19,12 @@
       "font": "small"
     },
     {
+      "name": "large",
+      "font": "large"
+    },
+    {
       "name": "mon_value",
+      "color": "#FFFF00",
       "font": "large"
     },
     {
@@ -29,6 +34,7 @@
     },
     {
       "name": "mon_value_medium",
+      "color": "#FFFF00",
       "font": "medium"
     },
     {
@@ -38,6 +44,7 @@
     },
     {
       "name": "channel_off",
+      "color": "#FFFF00",
       "font": "large"
     },
     {
@@ -73,6 +80,7 @@
     },
     {
       "name": "tab_page_selected",
+      "color": "#FFFF00",
       "font": "icons"
     },
     {
@@ -146,9 +154,114 @@
     },
     {
       "name": "edit_mode_step_vertical_slider"
+    },
+    {
+      "name": "top_bar",
+      "font": "small",
+      "color": "#2F2F2F",
+      "background_color": "#E9F5F9",
+      "padding_horizontal": 4
     }
   ],
   "pages": [
+    {
+      "id": "welcome",
+      "widgets": [
+        {
+          "type": "display_string",
+          "x": 0,
+          "y": 38,
+          "w": 240,
+          "h": 40,
+          "text": "Welcome to"
+        },
+        {
+          "type": "display_string",
+          "x": 0,
+          "y": 78,
+          "w": 240,
+          "h": 40,
+          "text": "EEZ PSU"
+        },
+        {
+          "type": "display_string",
+          "x": 0,
+          "y": 128,
+          "w": 240,
+          "h": 80,
+          "style": "large",
+          "text": "\u007F"
+        },
+        {
+          "type": "display",
+          "data": "model_info",
+          "x": 0,
+          "y": 208,
+          "w": 240,
+          "h": 30,
+          "style": "small"
+        },
+        {
+          "type": "display",
+          "data": "firmware_info",
+          "x": 0,
+          "y": 238,
+          "w": 240,
+          "h": 30,
+          "style": "small"
+        }
+      ]
+    },
+    {
+      "id": "entering_standby",
+      "widgets": [
+        {
+          "type": "display_string",
+          "x": 0,
+          "y": 0,
+          "w": 240,
+          "h": 320,
+          "style":  "small",
+          "text": "Entering stand-by mode..."
+        }
+      ]
+    },
+    {
+      "id": "standby",
+      "widgets": [
+        {
+          "type": "display_string",
+          "x": 0,
+          "y": 60,
+          "w": 240,
+          "h": 40,
+          "text": "Stand-by mode"
+        },
+        {
+          "type": "display_multiline_string",
+          "x": 28,
+          "y": 240,
+          "w": 200,
+          "h": 70,
+          "style":  "small",
+          "text": "Press and hold anywhere on the screen to wake up."
+        }
+      ]
+    },
+    {
+      "id": "leaving_standby",
+      "widgets": [
+        {
+          "type": "display_string",
+          "x": 0,
+          "y": 0,
+          "w": 240,
+          "h": 320,
+          "style":  "small",
+          "text": "Leaving stand-by mode..."
+        }
+      ]
+    },
     {
       "id": "main",
       "widgets": [
@@ -156,76 +269,17 @@
           "type": "vertical_list",
           "data": "channels",
           "x": 0,
-          "y": 0,
+          "y": 16,
           "item_widget": {
             "type": "container",
-            "h": 138,
+            "y": 0,
+            "h": 126,
             "widgets": [
-              {
-                "type": "three_state_indicator",
-                "data": "ovp",
-                "x": 0,
-                "y": 0,
-                "w": 44,
-                "h": 26,
-                "style": "prot_indicator",
-                "style1": "prot_indicator_set",
-                "style2": "prot_indicator_trip",
-                "text": "OVP"
-              },
-              {
-                "type": "three_state_indicator",
-                "data": "ocp",
-                "x": 44,
-                "y": 0,
-                "w": 44,
-                "h": 26,
-                "style": "prot_indicator",
-                "style1": "prot_indicator_set",
-                "style2": "prot_indicator_trip",
-                "text": "OCP"
-              },
-              {
-                "type": "three_state_indicator",
-                "data": "opp",
-                "x": 88,
-                "y": 0,
-                "w": 44,
-                "h": 26,
-                "style": "prot_indicator",
-                "style1": "prot_indicator_set",
-                "style2": "prot_indicator_trip",
-                "text": "OPP"
-              },
-              {
-                "type": "three_state_indicator",
-                "data": "otp",
-                "x": 132,
-                "y": 0,
-                "w": 44,
-                "h": 26,
-                "style": "prot_indicator",
-                "style1": "prot_indicator_set",
-                "style2": "prot_indicator_trip",
-                "text": "OTP"
-              },
-              {
-                "type": "display_string_select",
-                "data": "dp",
-                "x": 176,
-                "y": 0,
-                "w": 64,
-                "h": 26,
-                "style1": "prot_indicator_set",
-                "text1": "DP on",
-                "style2": "prot_indicator",
-                "text2": "DP off"
-              },
               {
                 "type": "select",
                 "x": 0,
-                "y": 26,
-                "h": 72,
+                "y": 0,
+                "h": 86,
                 "data": "output_state",
                 "action": "toggle_channel",
                 "widgets": [
@@ -257,58 +311,80 @@
                 "data": "volt",
                 "action": "edit",
                 "x": 0,
-                "y": 98,
-                "w": 120,
-                "h": 40
+                "y": 86,
+                "w": 106,
+                "h": 40,
+                "style": "mon_value_medium"
               },
               {
                 "type": "display",
                 "data": "curr",
                 "action": "edit",
-                "x": 120,
-                "y": 98,
-                "w": 120,
-                "h": 40
+                "x": 106,
+                "y": 86,
+                "w": 106,
+                "h": 40,
+                "style": "mon_value_medium"
+              },
+              {
+                "type": "display_string",
+                "action": "channel_settings",
+                "x": 212,
+                "y": 86,
+                "w": 28,
+                "h": 40,
+                "style": "small",
+                "text": "`"
               }
             ]
           }
         },
         {
           "type": "display_string",
-          "x": 0,
-          "y": 276,
-          "w": 50,
-          "h": 44,
-          "style": "menu",
-          "text": "Main"
-        },
-        {
-          "type": "display_string",
-          "x": 50,
-          "y": 276,
-          "w": 50,
-          "h": 44,
-          "style": "menu",
-          "text": "Off"
-        },
-        {
-          "type": "display_string",
-          "x": 100,
-          "y": 276,
-          "w": 70,
-          "h": 44,
-          "style": "menu",
-          "text": "Remote"
-        },
-        {
-          "type": "display_string",
           "action": "touch_screen_calibration",
-          "x": 170,
-          "y": 276,
-          "w": 70,
-          "h": 44,
-          "style": "menu",
-          "text": "Cal."
+          "x": 0,
+          "y": 284,
+          "w": 48,
+          "h": 36,
+          "style": "bottom_button",
+          "text": "P"
+        },
+        {
+          "type": "display_string",
+          "x": 48,
+          "y": 284,
+          "w": 48,
+          "h": 36,
+          "style": "bottom_button",
+          "text": ""
+        },
+        {
+          "type": "display_string",
+          "x": 96,
+          "y": 284,
+          "w": 48,
+          "h": 36,
+          "style": "bottom_button",
+          "text": ""
+        },
+        {
+          "type": "display_string",
+          "x": 144,
+          "y": 284,
+          "w": 48,
+          "h": 36,
+          "style": "bottom_button",
+          "text": ""
+        },
+        {
+          "type": "display_string",
+          "action": "turn_off",
+          "x": 192,
+          "y": 284,
+          "w": 48,
+          "h": 36,
+          "style": "bottom_button",
+          "text": "Q"
         }
       ]
     },
@@ -525,7 +601,7 @@
                   "style": "non_interactive_button",
                   "x": 104,
                   "y": 216,
-                  "w": 96 ,
+                  "w": 96,
                   "h": 36,
                   "text": "\u007F Cancel"
                 }
@@ -798,7 +874,7 @@
                   "style": "non_interactive_button",
                   "x": 104,
                   "y": 216,
-                  "w": 96 ,
+                  "w": 96,
                   "h": 36,
                   "text": "\u007F Cancel"
                 }

@@ -190,6 +190,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_data.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_data_snapshot.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_edit_mode.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_edit_mode_snapshot.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_edit_mode_step.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_internal.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_edit_mode_keypad.h" />

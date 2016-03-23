@@ -64,12 +64,10 @@ declare_const("WIDGET_TYPE_HORIZONTAL_LIST", 3)
 declare_const("WIDGET_TYPE_SELECT", 4)
 declare_const("WIDGET_TYPE_DISPLAY", 5)
 declare_const("WIDGET_TYPE_DISPLAY_STRING", 6)
-declare_const("WIDGET_TYPE_DISPLAY_STRING_SELECT", 7)
-declare_const("WIDGET_TYPE_DISPLAY_MULTILINE_STRING", 8)
-declare_const("WIDGET_TYPE_THREE_STATE_INDICATOR", 9)
-declare_const("WIDGET_TYPE_SCALE", 10)
-declare_const("WIDGET_TYPE_TOGGLE_BUTTON", 11)
-declare_const("WIDGET_TYPE_BUTTON_GROUP", 12)
+declare_const("WIDGET_TYPE_DISPLAY_MULTILINE_STRING", 7)
+declare_const("WIDGET_TYPE_SCALE", 8)
+declare_const("WIDGET_TYPE_TOGGLE_BUTTON", 9)
+declare_const("WIDGET_TYPE_BUTTON_GROUP", 10)
 
 #-------------------------------------------------------------------------------
 
@@ -640,12 +638,8 @@ class Parser:
                 widget_type = WIDGET_TYPE_DISPLAY
             elif type_str == "display_string":
                 widget_type = WIDGET_TYPE_DISPLAY_STRING
-            elif type_str == "display_string_select":
-                widget_type = WIDGET_TYPE_DISPLAY_STRING_SELECT
             elif type_str == "display_multiline_string":
                 widget_type = WIDGET_TYPE_DISPLAY_MULTILINE_STRING
-            elif type_str == "three_state_indicator":
-                widget_type = WIDGET_TYPE_THREE_STATE_INDICATOR
             elif type_str == "scale":
                 widget_type = WIDGET_TYPE_SCALE
             elif type_str == "toggle_button":
@@ -703,22 +697,9 @@ class Parser:
             else:
                 self.trace.error("item_widget is missing")
                 specific_widget_data.addField(StructPtr("item_widget", 0))
-        elif widget_type == WIDGET_TYPE_THREE_STATE_INDICATOR:
-            specific_widget_data = Struct(None, "ThreeStateIndicatorWidget")
-
-            self.addStyleField(specific_widget_data, widget, "style1")
-            self.addStyleField(specific_widget_data, widget, "style2")
-
-            self.addStringField(specific_widget_data, widget, "text", "")
         elif widget_type == WIDGET_TYPE_DISPLAY_STRING or widget_type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING:
             specific_widget_data = Struct(None, "DisplayStringWidget")
             self.addStringField(specific_widget_data, widget, "text", "")
-        elif widget_type == WIDGET_TYPE_DISPLAY_STRING_SELECT:
-            specific_widget_data = Struct(None, "DisplayStringSelectWidget")
-            self.addStyleField(specific_widget_data, widget, "style1", mandatory=False)
-            self.addStringField(specific_widget_data, widget, "text1", "")
-            self.addStyleField(specific_widget_data, widget, "style2", mandatory=False)
-            self.addStringField(specific_widget_data, widget, "text2", "")
         elif widget_type == WIDGET_TYPE_SCALE:
             specific_widget_data = Struct(None, "ScaleWidget")
             self.addColorField(specific_widget_data, widget, "ticks_color", "#000000", True)

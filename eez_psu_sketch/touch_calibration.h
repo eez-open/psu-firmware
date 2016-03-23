@@ -25,8 +25,8 @@ namespace touch {
 namespace calibration {
 
 void init();
-void enter_calibration_mode();
-bool is_calibrated();
+void enterCalibrationMode();
+bool isCalibrated();
 void tick(unsigned long tick_usec);
 
 }
