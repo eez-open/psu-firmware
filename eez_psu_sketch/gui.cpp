@@ -34,7 +34,9 @@
 
 #define CONF_BLINK_TIME 400000UL
 #define CONF_ENUM_WIDGETS_STACK_SIZE 5
-#define CONF_GUI_TRANSITIONAL_PAGE_TIMEOUT 2000000UL
+#define CONF_GUI_STANDBY_PAGE_TIMEOUT 10000000UL
+#define CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT 5000000UL
+#define CONF_GUI_WELCOME_PAGE_TIMEOUT 2000000UL
 #define CONF_GUI_LONG_PRESS_TIMEOUT 1000000UL
 
 namespace eez {
@@ -782,10 +784,6 @@ int getActivePage() {
     return active_page_id;
 }
 
-bool isTransitionalPage() {
-    return active_page_id == PAGE_ID_WELCOME || active_page_id == PAGE_ID_STANDBY || active_page_id == PAGE_ID_ENTERING_STANDBY;
-}
-
 void showPage(int index) {
     lcd::turnOn();
     active_page_id = index;
@@ -916,8 +914,12 @@ void tick(unsigned long tick_usec) {
         return;
     }
 
-    // wait for transitional pages some time
-    if (isTransitionalPage() && tick_usec - showPageTime < CONF_GUI_TRANSITIONAL_PAGE_TIMEOUT) {
+    // wait some time for transitional pages
+    if (active_page_id == PAGE_ID_STANDBY && tick_usec - showPageTime < CONF_GUI_STANDBY_PAGE_TIMEOUT) {
+        return;
+    } else if (active_page_id == PAGE_ID_ENTERING_STANDBY && tick_usec - showPageTime < CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT) {
+        return;
+    } else if (active_page_id == PAGE_ID_WELCOME && tick_usec - showPageTime < CONF_GUI_WELCOME_PAGE_TIMEOUT) {
         return;
     }
 
@@ -935,7 +937,7 @@ void tick(unsigned long tick_usec) {
     }
 
     // go to the main page after transitional page
-    if (isTransitionalPage()) {
+    if (active_page_id == PAGE_ID_WELCOME || active_page_id == PAGE_ID_STANDBY || active_page_id == PAGE_ID_ENTERING_STANDBY) {
         showPage(PAGE_ID_MAIN);
         return;
     }
