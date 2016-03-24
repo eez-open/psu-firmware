@@ -43,6 +43,7 @@ namespace psu {
 
 using namespace scpi;
 
+static bool g_is_booted = false;
 static bool g_power_is_up = false;
 static bool g_test_power_up_delay = false;
 static unsigned long g_power_down_time;
@@ -161,9 +162,13 @@ void boot() {
     DebugTraceF("%d", offsetof(ProtectionConfiguration, level));
     DebugTraceF("%d", offsetof(ProtectionConfiguration, state));
     */
+
+    g_is_booted = true;
 }
 
 bool powerUp() {
+    gui::showWelcomePage();
+
     if (g_power_is_up) return true;
     if (temperature::isSensorTripped(temp_sensor::MAIN)) return false;
 
@@ -198,6 +203,12 @@ bool powerUp() {
 }
 
 void powerDown() {
+    if (g_is_booted) {
+        gui::showEnteringStandbyPage();
+    } else {
+        gui::showStandbyPage();
+    }
+
     if (!g_power_is_up) return;
 
     for (int i = 0; i < CH_NUM; ++i) {
@@ -228,8 +239,6 @@ bool changePowerState(bool up) {
             g_test_power_up_delay = false;
         }
 
-        gui::showLeavingStandby();
-
         if (!powerUp()) {
             return false;
         }
@@ -241,8 +250,6 @@ bool changePowerState(bool up) {
         }
     }
     else {
-        gui::showEnteringStandby();
-
         powerDown();
 
         g_test_power_up_delay = true;

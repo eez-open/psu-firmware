@@ -43,6 +43,9 @@ private:
 extern EEZ_UTFT lcd;
 
 void init();
+bool isOn();
+void turnOn();
+void turnOff();
    
 }
 }

@@ -25,8 +25,9 @@ namespace gui {
 void init();
 void tick(unsigned long tick_usec);
 
-void showEnteringStandby();
-void showLeavingStandby();
+void showWelcomePage();
+void showStandbyPage();
+void showEnteringStandbyPage();
 
 }
 }

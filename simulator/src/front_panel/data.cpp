@@ -120,9 +120,14 @@ void fillData(Data *data) {
 }
 
 void processData(Data *data) {
+    static bool reseting = false;
+
     if (data->reset) {
-        DebugTrace("Reset");
-        reset();
+        if (!reseting) {
+            reseting = true;
+            reset();
+            reseting = false;
+        }
     }
 
     bool is_down = false;

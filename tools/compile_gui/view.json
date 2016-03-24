@@ -218,11 +218,20 @@
         {
           "type": "display_string",
           "x": 0,
-          "y": 0,
+          "y": 60,
           "w": 240,
-          "h": 320,
+          "h": 40,
           "style":  "small",
           "text": "Entering stand-by mode..."
+        },
+        {
+          "type": "display_multiline_string",
+          "x": 28,
+          "y": 240,
+          "w": 200,
+          "h": 70,
+          "style":  "small",
+          "text": "Press and hold anywhere on the screen to wake up."
         }
       ]
     },
@@ -245,20 +254,6 @@
           "h": 70,
           "style":  "small",
           "text": "Press and hold anywhere on the screen to wake up."
-        }
-      ]
-    },
-    {
-      "id": "leaving_standby",
-      "widgets": [
-        {
-          "type": "display_string",
-          "x": 0,
-          "y": 0,
-          "w": 240,
-          "h": 320,
-          "style":  "small",
-          "text": "Leaving stand-by mode..."
         }
       ]
     },

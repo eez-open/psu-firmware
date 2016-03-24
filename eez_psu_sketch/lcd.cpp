@@ -204,11 +204,32 @@ int EEZ_UTFT::measureStr(const char *text, font::Font &font, int max_width) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+static bool g_isOn = false;
+
 void init() {
 	lcd.InitLCD(PORTRAIT);
+    
+    // make sure the screen is off on the beginning
+    g_isOn = true;
+	turnOff();
+}
 
-	lcd.setContrast(64);
-	lcd.setBrightness(16);
+void turnOn() {
+    if (!g_isOn) {
+	    lcd.setContrast(64);
+	    lcd.setBrightness(16);
+        g_isOn = true;
+    }
+}
+
+void turnOff() {
+    if (g_isOn) {
+	    lcd.setContrast(0);
+	    lcd.setBrightness(0);
+        lcd.setColor(VGA_BLACK);
+        lcd.fillRect(0, 0, lcd.getDisplayXSize()-1, lcd.getDisplayYSize()-1);
+        g_isOn = false;
+    }
 }
 
 }

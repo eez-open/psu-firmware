@@ -34,7 +34,7 @@
 
 #define CONF_BLINK_TIME 400000UL
 #define CONF_ENUM_WIDGETS_STACK_SIZE 5
-#define CONF_GUI_WELCOME_PAGE_TIMEOUT 2000000UL
+#define CONF_GUI_TRANSITIONAL_PAGE_TIMEOUT 2000000UL
 #define CONF_GUI_LONG_PRESS_TIMEOUT 1000000UL
 
 namespace eez {
@@ -62,8 +62,9 @@ static void (*dialog_cancel_callback)();
 static bool isBlinkTime;
 static bool wasBlinkTime;
 
-static unsigned long initTime;
+static unsigned long showPageTime;
 static unsigned long touchDownTime;
+static bool touchActionExecuted;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -781,21 +782,31 @@ int getActivePage() {
     return active_page_id;
 }
 
+bool isTransitionalPage() {
+    return active_page_id == PAGE_ID_WELCOME || active_page_id == PAGE_ID_STANDBY || active_page_id == PAGE_ID_ENTERING_STANDBY;
+}
+
 void showPage(int index) {
+    lcd::turnOn();
     active_page_id = index;
+    showPageTime = micros();
     refresh_page();
 }
 
-void showEnteringStandby() {
+void showWelcomePage() {
+    showPage(PAGE_ID_WELCOME);
+    flush();
+}
+
+void showStandbyPage() {
+    showPage(PAGE_ID_STANDBY);
+    flush();
+}
+
+void showEnteringStandbyPage() {
     showPage(PAGE_ID_ENTERING_STANDBY);
     flush();
 }
-
-void showLeavingStandby() {
-    showPage(PAGE_ID_LEAVING_STANDBY);
-    flush();
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -866,8 +877,6 @@ void do_action(int action_id, WidgetCursor &widget_cursor) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void init() {
-    initTime = micros();
-
     lcd::init();
 
 #ifdef EEZ_PSU_SIMULATOR
@@ -876,10 +885,9 @@ void init() {
     }
 #endif
 
-    showPage(PAGE_ID_WELCOME);
-    gui::flush();
-
     touch::init();
+
+    active_page_id = -1;
 }
 
 void tick(unsigned long tick_usec) {
@@ -891,100 +899,117 @@ void tick(unsigned long tick_usec) {
 
     touch::tick(tick_usec);
 
-    if (touch::calibration::isCalibrated()) {
-        if (active_page_id == PAGE_ID_WELCOME) {
-            if (tick_usec - initTime < CONF_GUI_WELCOME_PAGE_TIMEOUT) {
-                return;
-            }
-
-            showPage(psu::isPowerUp() ? PAGE_ID_MAIN : PAGE_ID_STANDBY);
-        }
-
-        if (psu::isPowerUp()) {
-            if (active_page_id == PAGE_ID_STANDBY || active_page_id == PAGE_ID_LEAVING_STANDBY) {
-                showPage(PAGE_ID_MAIN);
-            }
-        } else {
-            if (active_page_id != PAGE_ID_STANDBY) {
-                showPage(PAGE_ID_STANDBY);
-            }
-        }
-
+    if (active_page_id == -1) {
+        // touch handling in power off:
+        // wait for long press anywhere on the screen and then turn power on
         if (touch::event_type == touch::TOUCH_DOWN) {
             touchDownTime = tick_usec;
-            if (active_page_id != PAGE_ID_STANDBY) {
-                find_widget(touch::x, touch::y);
-                if (found_widget && found_widget.widget->action) {
-                    found_widget_at_down = found_widget;
-                } else {
-                    found_widget_at_down = 0;
-                }
-                if (found_widget_at_down) {
-                    select_widget(found_widget_at_down);
-                } else {
-                    if (found_widget && found_widget.widget->type == WIDGET_TYPE_BUTTON_GROUP) {
-                        widget_button_group::onTouchDown(found_widget);
-                    } else if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
-                        edit_mode_slider::onTouchDown();
-                    } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
-                        edit_mode_step::onTouchDown();
-                    }
-                }
-            }
+            touchActionExecuted = false;
         } else if (touch::event_type == touch::TOUCH_MOVE) {
-            if (active_page_id != PAGE_ID_STANDBY) {
-                if (found_widget_at_down) {
-                    if (found_widget_at_down.widget->action == ACTION_ID_TURN_OFF) {
-                        if (tick_usec - touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
-                            psu::changePowerState(false);
-                        }
-                    }
-                } else {
-                    if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
-                        edit_mode_slider::onTouchMove();
-                    } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
-                        edit_mode_step::onTouchMove();
-                    } else if (active_page_id == PAGE_ID_YES_NO) {
-    #ifdef CONF_DEBUG
-                        lcd::lcd.setColor(VGA_WHITE);
-
-                        int x = touch::x;
-                        if (x < 1) x = 1;
-                        else if (x > lcd::lcd.getDisplayXSize() - 2) x = lcd::lcd.getDisplayXSize() - 2;
-
-                        int y = touch::y;
-                        if (y < 1) y = 1;
-                        else if (y > lcd::lcd.getDisplayYSize() - 2) y = lcd::lcd.getDisplayYSize() - 2;
-
-                        lcd::lcd.fillRect(touch::x-1, touch::y-1, touch::x+1, touch::y+1);
-    #endif
-                    }
-                }
-            } else {
-                if (tick_usec - touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
+            if (tick_usec - touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
+                if (!touchActionExecuted) {
+                    touchActionExecuted = true;
                     psu::changePowerState(true);
                 }
             }
-        } else if (touch::event_type == touch::TOUCH_UP) {
-            if (active_page_id != PAGE_ID_STANDBY) {
-                if (found_widget_at_down) {
-                    deselect_widget();
-                    do_action(found_widget_at_down.widget->action, found_widget_at_down);
-                    found_widget_at_down = 0;
-                } else {
-                    if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
-                        edit_mode_slider::onTouchUp();
-                    } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
-                        edit_mode_step::onTouchUp();
+        }
+        return;
+    }
+
+    // wait for transitional pages some time
+    if (isTransitionalPage() && tick_usec - showPageTime < CONF_GUI_TRANSITIONAL_PAGE_TIMEOUT) {
+        return;
+    }
+
+    // turn the screen off if power is down
+    if (!psu::isPowerUp()) {
+        active_page_id = -1;
+        turnOff();
+        return;
+    }
+
+    // do the touch screen calibration if not calibrated
+    if (!touch::calibration::isCalibrated()) {
+        touch::calibration::tick(tick_usec);
+        return;
+    }
+
+    // go to the main page after transitional page
+    if (isTransitionalPage()) {
+        showPage(PAGE_ID_MAIN);
+        return;
+    }
+
+    // touch handling
+    if (touch::event_type == touch::TOUCH_DOWN) {
+        touchDownTime = tick_usec;
+        touchActionExecuted = false;
+        find_widget(touch::x, touch::y);
+        if (found_widget && found_widget.widget->action) {
+            found_widget_at_down = found_widget;
+        } else {
+            found_widget_at_down = 0;
+        }
+        if (found_widget_at_down) {
+            select_widget(found_widget_at_down);
+        } else {
+            if (found_widget && found_widget.widget->type == WIDGET_TYPE_BUTTON_GROUP) {
+                widget_button_group::onTouchDown(found_widget);
+            } else if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
+                edit_mode_slider::onTouchDown();
+            } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
+                edit_mode_step::onTouchDown();
+            }
+        }
+    } else if (touch::event_type == touch::TOUCH_MOVE) {
+        if (found_widget_at_down) {
+            if (found_widget_at_down.widget->action == ACTION_ID_TURN_OFF) {
+                if (tick_usec - touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
+                    if (!touchActionExecuted) {
+                        deselect_widget();
+                        found_widget_at_down = 0;
+                        touchActionExecuted = true;
+                        psu::changePowerState(false);
                     }
                 }
             }
-        }
+        } else {
+            if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
+                edit_mode_slider::onTouchMove();
+            } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
+                edit_mode_step::onTouchMove();
+            } else if (active_page_id == PAGE_ID_YES_NO) {
+#ifdef CONF_DEBUG
+                lcd::lcd.setColor(VGA_WHITE);
 
-        draw_tick();
-    } else {
-        touch::calibration::tick(tick_usec);
+                int x = touch::x;
+                if (x < 1) x = 1;
+                else if (x > lcd::lcd.getDisplayXSize() - 2) x = lcd::lcd.getDisplayXSize() - 2;
+
+                int y = touch::y;
+                if (y < 1) y = 1;
+                else if (y > lcd::lcd.getDisplayYSize() - 2) y = lcd::lcd.getDisplayYSize() - 2;
+
+                lcd::lcd.fillRect(touch::x-1, touch::y-1, touch::x+1, touch::y+1);
+#endif
+            }
+        }
+    } else if (touch::event_type == touch::TOUCH_UP) {
+        if (found_widget_at_down) {
+            deselect_widget();
+            do_action(found_widget_at_down.widget->action, found_widget_at_down);
+            found_widget_at_down = 0;
+        } else {
+            if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
+                edit_mode_slider::onTouchUp();
+            } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
+                edit_mode_step::onTouchUp();
+            }
+        }
     }
+
+    // update screen
+    draw_tick();
 }
 
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {

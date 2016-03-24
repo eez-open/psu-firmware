@@ -102,12 +102,11 @@ namespace gui {
 #define PAGE_ID_WELCOME 0
 #define PAGE_ID_ENTERING_STANDBY 1
 #define PAGE_ID_STANDBY 2
-#define PAGE_ID_LEAVING_STANDBY 3
-#define PAGE_ID_MAIN 4
-#define PAGE_ID_EDIT_MODE_SLIDER 5
-#define PAGE_ID_EDIT_MODE_STEP 6
-#define PAGE_ID_EDIT_MODE_KEYPAD 7
-#define PAGE_ID_YES_NO 8
+#define PAGE_ID_MAIN 3
+#define PAGE_ID_EDIT_MODE_SLIDER 4
+#define PAGE_ID_EDIT_MODE_STEP 5
+#define PAGE_ID_EDIT_MODE_KEYPAD 6
+#define PAGE_ID_YES_NO 7
 #define STYLE_ID_DEFAULT 0
 #define STYLE_ID_SMALL 1
 #define STYLE_ID_LARGE 2
@@ -146,14 +145,16 @@ struct List {
     OBJ_OFFSET first;
 };
 
-struct Style {
-    uint8_t font;
-    uint16_t flags;
-    uint16_t background_color;
-    uint16_t color;
-    uint16_t border_color;
-    uint16_t padding_horizontal;
-    uint16_t padding_vertical;
+struct Widget {
+    uint8_t type;
+    uint8_t data;
+    uint8_t action;
+    uint8_t x;
+    uint8_t y;
+    uint8_t w;
+    uint8_t h;
+    OBJ_OFFSET style;
+    OBJ_OFFSET specific;
 };
 
 struct ScaleWidget {
@@ -161,8 +162,13 @@ struct ScaleWidget {
     uint8_t needle_height;
 };
 
-struct SelectWidget {
-    List widgets;
+struct ListWidget {
+    OBJ_OFFSET item_widget;
+};
+
+struct Document {
+    List styles;
+    List pages;
 };
 
 struct ToggleButtonWidget {
@@ -178,25 +184,18 @@ struct ContainerWidget {
     List widgets;
 };
 
-struct Widget {
-    uint8_t type;
-    uint8_t data;
-    uint8_t action;
-    uint8_t x;
-    uint8_t y;
-    uint8_t w;
-    uint8_t h;
-    OBJ_OFFSET style;
-    OBJ_OFFSET specific;
+struct Style {
+    uint8_t font;
+    uint16_t flags;
+    uint16_t background_color;
+    uint16_t color;
+    uint16_t border_color;
+    uint16_t padding_horizontal;
+    uint16_t padding_vertical;
 };
 
-struct ListWidget {
-    OBJ_OFFSET item_widget;
-};
-
-struct Document {
-    List styles;
-    List pages;
+struct SelectWidget {
+    List widgets;
 };
 
 #pragma pack(pop)
