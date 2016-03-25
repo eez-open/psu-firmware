@@ -116,4 +116,4 @@ void Font::getGlyph(uint8_t requested_encoding, Glyph &glyph) {
 }
 }
 }
-} // namespace eez::psu::ui::font
+} // namespace eez::psu::gui::font

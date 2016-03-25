@@ -216,6 +216,9 @@
     <ClInclude Include="gui_edit_mode_snapshot.h">
       <Filter>gui</Filter>
     </ClInclude>
+    <ClInclude Include="bitmaps.h">
+      <Filter>gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="calibration.cpp">
@@ -375,6 +378,9 @@
       <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="gui_widget_button_group.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="bitmaps.cpp">
       <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>

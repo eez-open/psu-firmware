@@ -137,6 +137,7 @@
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="arduino_util.h" />
+    <ClInclude Include="bitmaps.h" />
     <ClInclude Include="buzzer.h" />
     <ClInclude Include="conf_advanced.h" />
     <ClInclude Include="conf_channel.h" />
@@ -251,6 +252,7 @@
   <ItemGroup>
     <ClCompile Include="adc.cpp" />
     <ClCompile Include="arduino_util.cpp" />
+    <ClCompile Include="bitmaps.cpp" />
     <ClCompile Include="buzzer.cpp" />
     <ClCompile Include="font.cpp" />
     <ClCompile Include="fonts.cpp" />

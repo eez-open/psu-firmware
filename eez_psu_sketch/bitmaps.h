@@ -18,19 +18,17 @@
 
 #pragma once
 
-#include "font.h"
-
 namespace eez {
 namespace psu {
 namespace gui {
-namespace font {
 
-extern Font small_font;
-extern Font medium_font;
-extern Font large_font;
-extern Font icons_font;
+struct Bitmap {
+    uint8_t w;
+    uint8_t h;
+    const unsigned short *pixels PROGMEM;
+};
+extern Bitmap bitmaps[];
 
 }
 }
-}
-} // namespace eez::psu::gui::font
+} // namespace eez::psu::gui

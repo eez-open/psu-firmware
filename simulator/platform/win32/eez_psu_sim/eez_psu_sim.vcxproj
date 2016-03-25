@@ -170,6 +170,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
   <ItemGroup>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\adc.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\arduino_util.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\bitmaps.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\board.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\bp.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\buzzer.h" />
@@ -267,6 +268,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
   <ItemGroup>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\adc.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\arduino_util.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\bitmaps.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\board.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\bp.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\buzzer.cpp" />

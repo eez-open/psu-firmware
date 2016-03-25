@@ -18,6 +18,7 @@
 
 #include "psu.h"
 #include "UTFT.h"
+#include "arduino_util.h"
 
 namespace eez {
 namespace psu {
@@ -147,6 +148,15 @@ void UTFT::drawVLine(int x, int y, int l) {
     setXY(x, y, x, y + l);
     for (int i = 0; i < l; ++i) {
         setPixel((fch << 8) | fcl);
+    }
+}
+
+void UTFT::drawBitmap(int x, int y, int sx, int sy, bitmapdatatype data, int scale) {
+    setXY(x, y, x + sx - 1, y + sy - 1);
+    for (int i = 0; i < sx * sy; ++i) {
+        unsigned char l = arduino_util::prog_read_byte(((uint8_t *)data) + 2 * i + 0);
+        unsigned char h = arduino_util::prog_read_byte(((uint8_t *)data) + 2 * i + 1);
+        setPixel((h << 8) + l);
     }
 }
 

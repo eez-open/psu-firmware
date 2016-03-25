@@ -62,6 +62,6 @@ private:
 }
 }
 }
-} // namespace eez::psu::ui::font
+} // namespace eez::psu::gui::font
 
 #include "fonts.h"

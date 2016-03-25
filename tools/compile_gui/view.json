@@ -170,7 +170,7 @@
         {
           "type": "display_string",
           "x": 0,
-          "y": 38,
+          "y": 44,
           "w": 240,
           "h": 40,
           "text": "Welcome to"
@@ -178,25 +178,24 @@
         {
           "type": "display_string",
           "x": 0,
-          "y": 78,
+          "y": 84,
           "w": 240,
           "h": 40,
           "text": "EEZ PSU"
         },
         {
-          "type": "display_string",
+          "type": "display_bitmap",
           "x": 0,
-          "y": 128,
+          "y": 120,
           "w": 240,
           "h": 80,
-          "style": "large",
-          "text": "\u007F"
+          "bitmap": "logo"
         },
         {
           "type": "display",
           "data": "model_info",
           "x": 0,
-          "y": 208,
+          "y": 198,
           "w": 240,
           "h": 30,
           "style": "small"
@@ -205,7 +204,7 @@
           "type": "display",
           "data": "firmware_info",
           "x": 0,
-          "y": 238,
+          "y": 228,
           "w": 240,
           "h": 30,
           "style": "small"

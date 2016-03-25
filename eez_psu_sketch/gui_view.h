@@ -28,6 +28,7 @@ namespace gui {
 #define MEDIUM_FONT 2
 #define LARGE_FONT 3
 #define ICONS_FONT 4
+#define BITMAP_LOGO 0
 #define STYLE_FLAGS_BORDER 1
 #define STYLE_FLAGS_HORZ_ALIGN 6
 #define STYLE_FLAGS_HORZ_ALIGN_LEFT 0
@@ -48,6 +49,7 @@ namespace gui {
 #define WIDGET_TYPE_SCALE 8
 #define WIDGET_TYPE_TOGGLE_BUTTON 9
 #define WIDGET_TYPE_BUTTON_GROUP 10
+#define WIDGET_TYPE_DISPLAY_BITMAP 11
 #define DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER 2
 #define DATA_ID_CHANNELS 1
 #define DATA_ID_OUTPUT_STATE 2
@@ -145,33 +147,16 @@ struct List {
     OBJ_OFFSET first;
 };
 
-struct Widget {
-    uint8_t type;
-    uint8_t data;
-    uint8_t action;
-    uint8_t x;
-    uint8_t y;
-    uint8_t w;
-    uint8_t h;
-    OBJ_OFFSET style;
-    OBJ_OFFSET specific;
-};
-
-struct ScaleWidget {
-    uint16_t ticks_color;
-    uint8_t needle_height;
-};
-
-struct ListWidget {
-    OBJ_OFFSET item_widget;
-};
-
-struct ToggleButtonWidget {
-    OBJ_OFFSET text1;
-    OBJ_OFFSET text2;
+struct Document {
+    List styles;
+    List pages;
 };
 
 struct SelectWidget {
+    List widgets;
+};
+
+struct ContainerWidget {
     List widgets;
 };
 
@@ -189,13 +174,34 @@ struct Style {
     uint16_t padding_vertical;
 };
 
-struct Document {
-    List styles;
-    List pages;
+struct ListWidget {
+    OBJ_OFFSET item_widget;
 };
 
-struct ContainerWidget {
-    List widgets;
+struct ScaleWidget {
+    uint16_t ticks_color;
+    uint8_t needle_height;
+};
+
+struct ToggleButtonWidget {
+    OBJ_OFFSET text1;
+    OBJ_OFFSET text2;
+};
+
+struct Widget {
+    uint8_t type;
+    uint8_t data;
+    uint8_t action;
+    uint8_t x;
+    uint8_t y;
+    uint8_t w;
+    uint8_t h;
+    OBJ_OFFSET style;
+    OBJ_OFFSET specific;
+};
+
+struct DisplayBitmapWidget {
+    uint8_t bitmap;
 };
 
 #pragma pack(pop)

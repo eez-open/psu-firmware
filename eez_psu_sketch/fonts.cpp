@@ -45,4 +45,4 @@ Font icons_font(icons_font_data);
 }
 }
 }
-} // namespace eez::psu::ui::font
+} // namespace eez::psu::gui::font

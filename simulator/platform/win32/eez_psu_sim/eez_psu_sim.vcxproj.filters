@@ -325,6 +325,9 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_edit_mode_snapshot.h">
       <Filter>gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\bitmaps.h">
+      <Filter>gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -548,6 +551,9 @@
       <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_widget_button_group.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\bitmaps.cpp">
       <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>

@@ -43,6 +43,11 @@ DEFAULT_FONT = MEDIUM_FONT
 
 #-------------------------------------------------------------------------------
 
+declare_const("BITMAP_LOGO", 0)
+DEFAULT_FONT = MEDIUM_FONT
+
+#-------------------------------------------------------------------------------
+
 declare_const("STYLE_FLAGS_BORDER", 1 << 0)
 
 declare_const("STYLE_FLAGS_HORZ_ALIGN", 3 << 1)
@@ -68,6 +73,7 @@ declare_const("WIDGET_TYPE_DISPLAY_MULTILINE_STRING", 7)
 declare_const("WIDGET_TYPE_SCALE", 8)
 declare_const("WIDGET_TYPE_TOGGLE_BUTTON", 9)
 declare_const("WIDGET_TYPE_BUTTON_GROUP", 10)
+declare_const("WIDGET_TYPE_DISPLAY_BITMAP", 11)
 
 #-------------------------------------------------------------------------------
 
@@ -461,6 +467,20 @@ class Parser:
             value = default_value
         struct.addField(UInt8(name, value))
 
+    def addBitmapField(self, struct, collection, name):
+        # font
+        if name in collection:
+            bitmap_const_name = 'BITMAP_' + collection[name].upper()
+            if bitmap_const_name in globals():
+                bitmap = globals()[bitmap_const_name]
+            else:
+                self.trace.error("%s: unknown bitmap" % name)
+                bitmap = 0
+        else:
+            self.trace.error("%s: missing" % name)
+            bitmap = 0
+        struct.addField(UInt8("bitmap", bitmap))
+
     def parse_data_section(self, section_name, start_id_number, const_prefix, section_dict):
         if section_name in self.data:
             if isinstance(self.data[section_name], list):
@@ -646,6 +666,8 @@ class Parser:
                 widget_type = WIDGET_TYPE_TOGGLE_BUTTON
             elif type_str == "button_group":
                 widget_type = WIDGET_TYPE_BUTTON_GROUP
+            elif type_str == "display_bitmap":
+                widget_type = WIDGET_TYPE_DISPLAY_BITMAP
             else:
                 self.trace.error("unkown type '%s'" % type_str)
                 widget_type = WIDGET_TYPE_NONE
@@ -656,7 +678,7 @@ class Parser:
         result.addField(UInt8("type", widget_type))
 
         # data
-        if widget_type == WIDGET_TYPE_CONTAINER or widget_type == WIDGET_TYPE_DISPLAY_STRING or widget_type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING:
+        if widget_type == WIDGET_TYPE_CONTAINER or widget_type == WIDGET_TYPE_DISPLAY_STRING or widget_type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING or widget_type == WIDGET_TYPE_DISPLAY_BITMAP:
             # data not used
             result.addField(UInt8("data", 0))
         else:
@@ -708,6 +730,9 @@ class Parser:
             specific_widget_data = Struct(None, "ToggleButtonWidget")
             self.addStringField(specific_widget_data, widget, "text1", "")
             self.addStringField(specific_widget_data, widget, "text2", "")
+        elif widget_type == WIDGET_TYPE_DISPLAY_BITMAP:
+            specific_widget_data = Struct(None, "DisplayBitmapWidget")
+            self.addBitmapField(specific_widget_data, widget, "bitmap")
         else:
             specific_widget_data = 0
 

@@ -50,7 +50,7 @@ namespace arduino {
 #define VGA_PURPLE		0x8010
 
 typedef uint16_t word;
-typedef void* bitmapdatatype;
+typedef const unsigned short *bitmapdatatype PROGMEM;
 typedef uint8_t regtype;
 typedef uint8_t regsize;
 
@@ -64,6 +64,7 @@ public:
 	void	clrScr();
 	void	drawRect(int x1, int y1, int x2, int y2);
 	void	fillRect(int x1, int y1, int x2, int y2);
+    void    drawBitmap(int x, int y, int sx, int sy, bitmapdatatype data, int scale);
 	void	setColor(byte r, byte g, byte b);
 	void	setColor(word color);
 	word	getColor();

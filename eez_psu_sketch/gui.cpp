@@ -25,6 +25,7 @@
 #include "gui_edit_mode_step.h"
 #include "gui_edit_mode_keypad.h"
 #include "gui_widget_button_group.h"
+#include "bitmaps.h"
 
 #include "channel.h"
 
@@ -470,6 +471,76 @@ void fillRect(int x, int y, int w, int h) {
     lcd::lcd.fillRect(x, y, x + w - 1, y + h - 1);
 }
 
+void drawBitmap(int bitmapID, int textLength, int x, int y, int w, int h, const Style *style, bool inverse) {
+    //++draw_counter;
+
+    x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    w *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+    h *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+
+    int x1 = x;
+    int y1 = y;
+    int x2 = x + w - 1;
+    int y2 = y + h - 1;
+
+    if (styleHasBorder(style)) {
+        lcd::lcd.setColor(style->border_color);
+        lcd::lcd.drawRect(x1, y1, x2, y2);
+        ++x1;
+        ++y1;
+        --x2;
+        --y2;
+    }
+
+    font::Font *font = styleGetFont(style);
+    
+    Bitmap &bitmap = bitmaps[bitmapID];
+
+    int width = bitmap.w;
+    int height = bitmap.h;
+
+    int x_offset;
+    if (styleIsHorzAlignLeft(style)) x_offset = x1 + style->padding_horizontal;
+    else if (styleIsHorzAlignRight(style)) x_offset = x2 - style->padding_horizontal - width;
+    else x_offset = x1 + ((x2 - x1) - width) / 2;
+    if (x_offset < 0) x_offset = x1;
+
+    int y_offset;
+    if (styleIsVertAlignTop(style)) y_offset = y1 + style->padding_vertical;
+    else if (styleIsVertAlignBottom(style)) y_offset = y2 - style->padding_vertical -height;
+    else y_offset = y1 + ((y2 - y1) - height) / 2;
+    if (y_offset < 0) y_offset = y1;
+
+    uint16_t background_color = inverse ? style->color : style->background_color;
+    lcd::lcd.setColor(background_color);
+
+    if (widget_refresh) {
+        lcd::lcd.fillRect(x1, y1, x2, y2);
+    } else if (!is_page_refresh || page_style->background_color != background_color) {
+        if (x1 <= x_offset - 1 && y1 <= y2)
+            lcd::lcd.fillRect(x1, y1, x_offset - 1, y2);
+        if (x_offset + width <= x2 && y1 <= y2)
+            lcd::lcd.fillRect(x_offset + width, y1, x2, y2);
+
+        int right = min(x_offset + width - 1, x2);
+
+        if (x_offset <= right && y1 <= y_offset - 1)
+            lcd::lcd.fillRect(x_offset, y1, right, y_offset - 1);
+        if (x_offset <= right && y_offset + height <= y2)
+            lcd::lcd.fillRect(x_offset, y_offset + height, right, y2);
+    }
+
+    if (inverse) {
+        lcd::lcd.setBackColor(style->color);
+        lcd::lcd.setColor(style->background_color);
+    } else {
+        lcd::lcd.setBackColor(style->background_color);
+        lcd::lcd.setColor(style->color);
+    }
+    lcd::lcd.drawBitmap(x_offset, y_offset, width, height, (bitmapdatatype)bitmap.pixels, 1);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 int getActiveStyleId(const Widget *widget) {
@@ -714,6 +785,16 @@ bool draw_toggle_button_widget(const WidgetCursor &widgetCursor, const Widget *w
     return false;
 }
 
+bool draw_display_bitmap_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    if (refresh) {
+        DECL_WIDGET_SPECIFIC(DisplayBitmapWidget, display_bitmap_widget, widget);
+        DECL_WIDGET_STYLE(style, widget);
+        drawBitmap(display_bitmap_widget->bitmap, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+        return true;
+    }
+    return false;
+}
+
 bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
@@ -731,6 +812,8 @@ bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
         return draw_toggle_button_widget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_BUTTON_GROUP) {
         return widget_button_group::draw(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_DISPLAY_BITMAP) {
+        return draw_display_bitmap_widget(widgetCursor, widget, refresh, inverse);
     }
 
     return false;
