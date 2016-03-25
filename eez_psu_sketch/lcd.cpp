@@ -167,13 +167,20 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
 	return glyph.dx;
 }
 
-void EEZ_UTFT::drawStr(const char *text, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background) {
+void EEZ_UTFT::drawStr(const char *text, int textLength, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background) {
 	p_font = &font;
 
-	char encoding;
-	while ((encoding = *text++) != 0) {
-		x += drawGlyph(x, y, clip_x1, clip_y1, clip_x2, clip_y2, encoding, fill_background);
-	}
+    if (textLength == -1) {
+	    char encoding;
+	    while ((encoding = *text++) != 0) {
+		    x += drawGlyph(x, y, clip_x1, clip_y1, clip_x2, clip_y2, encoding, fill_background);
+	    }
+    } else {
+        for (int i = 0; i < textLength && text[i]; ++i) {
+            char encoding = text[i];
+		    x += drawGlyph(x, y, clip_x1, clip_y1, clip_x2, clip_y2, encoding, fill_background);
+	    }
+    }
 }
 
 int8_t EEZ_UTFT::measureGlyph(uint8_t encoding) {
@@ -185,19 +192,30 @@ int8_t EEZ_UTFT::measureGlyph(uint8_t encoding) {
 	return glyph.dx;
 }
 
-int EEZ_UTFT::measureStr(const char *text, font::Font &font, int max_width) {
+int EEZ_UTFT::measureStr(const char *text, int textLength, font::Font &font, int max_width) {
 	p_font = &font;
 
 	int width = 0;
 
-	char encoding;
-	while ((encoding = *text++) != 0) {
-		int glyph_width = measureGlyph(encoding);
-        if (max_width > 0 && width + glyph_width > max_width) {
-            break;
+    if (textLength == -1) {
+    	char encoding;
+	    while ((encoding = *text++) != 0) {
+		    int glyph_width = measureGlyph(encoding);
+            if (max_width > 0 && width + glyph_width > max_width) {
+                break;
+            }
+            width += glyph_width;
+	    }
+    } else {
+        for (int i = 0; i < textLength && text[i]; ++i) {
+            char encoding = text[i];
+		    int glyph_width = measureGlyph(encoding);
+            if (max_width > 0 && width + glyph_width > max_width) {
+                break;
+            }
+            width += glyph_width;
         }
-        width += glyph_width;
-	}
+    }
 
 	return width;
 }

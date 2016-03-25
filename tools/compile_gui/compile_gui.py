@@ -816,7 +816,7 @@ if parser.num_errors() == 0:
     c_structs = generate_source_code(objects, "    ")
     output_file.write(c_structs)
 
-    output_file.write("extern uint8_t document[];\n\n}\n}\n} // namespace eez::psu::gui\n")
+    output_file.write("extern const uint8_t document[] PROGMEM;\n\n}\n}\n} // namespace eez::psu::gui\n")
 
     if len(sys.argv) >= 2:
         output_file.close()
@@ -827,11 +827,11 @@ if parser.num_errors() == 0:
     else:
         output_file = sys.stdout
 
-    output_file.write(COPYRIGHT_NOTICE + "\n\n#include \"psu.h\"\n\nnamespace eez {\nnamespace psu {\nnamespace gui {\n\n")
+    output_file.write(COPYRIGHT_NOTICE + "\n\n#include \"psu.h\"\n#include \"gui_view.h\"\n\nnamespace eez {\nnamespace psu {\nnamespace gui {\n\n")
 
     packed_data = pack(objects)
     c_buffer = to_c_buffer(packed_data, "    ", 16)
-    output_file.write("uint8_t document[%d] = %s;\n" % (len(packed_data), c_buffer))
+    output_file.write("const uint8_t document[%d] PROGMEM = %s;\n" % (len(packed_data), c_buffer))
 
     output_file.write("\n}\n}\n} // namespace eez::psu::gui\n")
 

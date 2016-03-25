@@ -166,22 +166,17 @@ struct ListWidget {
     OBJ_OFFSET item_widget;
 };
 
-struct Document {
-    List styles;
-    List pages;
-};
-
 struct ToggleButtonWidget {
     OBJ_OFFSET text1;
     OBJ_OFFSET text2;
 };
 
-struct DisplayStringWidget {
-    OBJ_OFFSET text;
+struct SelectWidget {
+    List widgets;
 };
 
-struct ContainerWidget {
-    List widgets;
+struct DisplayStringWidget {
+    OBJ_OFFSET text;
 };
 
 struct Style {
@@ -194,13 +189,18 @@ struct Style {
     uint16_t padding_vertical;
 };
 
-struct SelectWidget {
+struct Document {
+    List styles;
+    List pages;
+};
+
+struct ContainerWidget {
     List widgets;
 };
 
 #pragma pack(pop)
 
-extern uint8_t document[];
+extern const uint8_t document[] PROGMEM;
 
 }
 }

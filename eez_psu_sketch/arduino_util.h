@@ -24,6 +24,7 @@ namespace arduino_util {
 
 uint8_t prog_read_byte(const uint8_t *p PROGMEM);
 uint16_t prog_read_word(const uint8_t *p PROGMEM);
+void prog_read_buffer(const uint8_t *src PROGMEM, uint8_t *dest, int length);
 
 }
 }

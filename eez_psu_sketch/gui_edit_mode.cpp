@@ -50,10 +50,10 @@ void Snapshot::takeSnapshot() {
         step_index = edit_mode_step::getStepIndex();
 
         switch (edit_mode_keypad::getEditUnit()) {
-        case data::UNIT_VOLT: keypadUnit = data::Value::ProgmemStr("mV"); break;
-        case data::UNIT_MILLI_VOLT: keypadUnit = data::Value::ProgmemStr("V"); break;
-        case data::UNIT_AMPER: keypadUnit = data::Value::ProgmemStr("mA"); break;
-        default: keypadUnit = data::Value::ProgmemStr("A");
+        case data::UNIT_VOLT: keypadUnit = data::Value::ProgmemStr(PSTR("mV")); break;
+        case data::UNIT_MILLI_VOLT: keypadUnit = data::Value::ProgmemStr(PSTR("V")); break;
+        case data::UNIT_AMPER: keypadUnit = data::Value::ProgmemStr(PSTR("mA")); break;
+        default: keypadUnit = data::Value::ProgmemStr(PSTR("A"));
         }
 
         edit_mode_keypad::getText(keypadText, sizeof(keypadText));
@@ -94,7 +94,8 @@ void enter(const WidgetCursor &widgetCursor) {
     if (getActivePage() != tab_index) {
         if (getActivePage() == PAGE_ID_MAIN) {
             data_cursor = widgetCursor.cursor;
-            data_id = widgetCursor.widget->data;
+            DECL_WIDGET(widget, widgetCursor.widgetOffset);
+            data_id = widget->data;
         }
 
         edit_value = data::currentSnapshot.get(data_cursor, data_id);
@@ -207,14 +208,14 @@ data::Unit getUnit() {
 
 void setValue(float value_) {
     edit_value = data::Value(value_, getUnit());
-
     if (is_interactive_mode) {
         data::set(data_cursor, data_id, edit_value);
     }
 }
 
 bool isEditWidget(const WidgetCursor &widgetCursor) {
-    return widgetCursor.cursor == data_cursor && widgetCursor.widget->data == data_id;
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+    return widgetCursor.cursor == data_cursor && widget->data == data_id;
 }
 
 void getInfoText(char *infoText) {

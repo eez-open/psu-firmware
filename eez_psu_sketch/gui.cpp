@@ -47,12 +47,17 @@ using namespace lcd;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+Document *g_doc;
+#if defined(EEZ_PSU_ARDUINO_MEGA)
+static Document doc_buffer;
+#endif
+
 static int active_page_id;
 
 static bool is_page_refresh;
 static bool widget_refresh;
 
-static Style *page_style;
+static const Style *page_style;
 
 static WidgetCursor selected_widget;
 static WidgetCursor found_widget_at_down;
@@ -70,19 +75,18 @@ static bool touchActionExecuted;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-typedef bool(*EnumWidgetsCallback)(uint8_t *start, const WidgetCursor &widgetCursor, bool refresh);
+typedef bool(*EnumWidgetsCallback)(const WidgetCursor &widgetCursor, bool refresh);
 
 //int g_sp_max_counter = 0;
 
 class EnumWidgets {
 public:
-    EnumWidgets(uint8_t *document, EnumWidgetsCallback callback) {
+    EnumWidgets(EnumWidgetsCallback callback) {
         this->callback = callback;
-        this->document = document;
     }
 
     void start(int pageIndex, int x, int y, bool refresh) {
-        stack[0].widget = (Widget *)(document + ((Document *)document)->pages.first) + pageIndex;
+        stack[0].widgetOffset = getPageOffset(pageIndex);
         stack[0].index = 0;
         stack_index = 0;
         stack[0].x = x;
@@ -96,16 +100,14 @@ public:
         }
 
         while (true) {
-            Widget *widget = stack[stack_index].widget;
+            DECL_WIDGET(widget, stack[stack_index].widgetOffset);
 
             if (widget->type == WIDGET_TYPE_CONTAINER) {
-                ContainerWidget *container = (ContainerWidget *)(document + widget->specific);
+                DECL_WIDGET_SPECIFIC(ContainerWidget, container, widget);
                 if (stack[stack_index].index < container->widgets.count) {
-                    Widget *child_widget = (Widget *)(document + container->widgets.first) + stack[stack_index].index;
-
+                    OBJ_OFFSET childWidgetOffset = getListItemOffset(container->widgets, stack[stack_index].index);
                     ++stack[stack_index].index;
-
-                    if (!push(child_widget, stack[stack_index].x, stack[stack_index].y, stack[stack_index].refresh)) {
+                    if (!push(childWidgetOffset, stack[stack_index].x, stack[stack_index].y, stack[stack_index].refresh)) {
                         return true;
                     }
                 }
@@ -119,22 +121,27 @@ public:
                 if (stack[stack_index].index < data::count(widget->data)) {
                     data::select(cursor, widget->data, stack[stack_index].index);
 
-                    Widget *child_widget = (Widget *)(document + ((ListWidget *)(document + widget->specific))->item_widget);
+                    DECL_WIDGET_SPECIFIC(ListWidget, listWidget, widget);
+                    OBJ_OFFSET childWidgetOffset = listWidget->item_widget;
 
                     ++stack[stack_index].index;
 
                     if (widget->type == WIDGET_TYPE_VERTICAL_LIST) {
                         int y = stack[stack_index].y;
-                        stack[stack_index].y += child_widget->h;
+    
+                        DECL_WIDGET(childWidget, childWidgetOffset);
+                        stack[stack_index].y += childWidget->h;
 
-                        if (!push(child_widget, stack[stack_index].x, y, stack[stack_index].refresh)) {
+                        if (!push(childWidgetOffset, stack[stack_index].x, y, stack[stack_index].refresh)) {
                             return true;
                         }
                     } else {
                         int x = stack[stack_index].x;
-                        stack[stack_index].x += child_widget->w;
 
-                        if (!push(child_widget, x, stack[stack_index].y, stack[stack_index].refresh)) {
+                        DECL_WIDGET(childWidget, childWidgetOffset);
+                        stack[stack_index].x += childWidget->w;
+
+                        if (!push(childWidgetOffset, x, stack[stack_index].y, stack[stack_index].refresh)) {
                             return true;
                         }
                     }
@@ -149,14 +156,12 @@ public:
     }
 
 private:
-    uint8_t *document;
-
     data::Cursor cursor;
 
     EnumWidgetsCallback callback;
 
     struct StackItem {
-        Widget *widget;
+        OBJ_OFFSET widgetOffset;
         int index;
         int x;
         int y;
@@ -166,7 +171,9 @@ private:
     StackItem stack[CONF_ENUM_WIDGETS_STACK_SIZE];
     int stack_index;
 
-    bool push(Widget *widget, int x, int y, bool refresh) {
+    bool push(OBJ_OFFSET widgetOffset, int x, int y, bool refresh) {
+        DECL_WIDGET(widget, widgetOffset);
+
         if (widget->type == WIDGET_TYPE_CONTAINER || widget->type == WIDGET_TYPE_VERTICAL_LIST || widget->type == WIDGET_TYPE_HORIZONTAL_LIST) {
              if (++stack_index == CONF_ENUM_WIDGETS_STACK_SIZE) {
                 return false;
@@ -174,7 +181,7 @@ private:
 
             //if (stack_index > g_sp_max_counter) g_sp_max_counter = stack_index;
 
-            stack[stack_index].widget = widget;
+            stack[stack_index].widgetOffset = widgetOffset;
             stack[stack_index].index = 0;
             stack[stack_index].x = x + widget->x;
             stack[stack_index].y = y + widget->y;
@@ -186,18 +193,18 @@ private:
             int index = data::currentSnapshot.get(cursor, widget->data).getInt();
             data::select(cursor, widget->data, index);
 
-            ContainerWidget *select_widget = ((ContainerWidget *)(document + widget->specific));
-            Widget *selected_widget = (Widget *)(document + select_widget->widgets.first) + index;
+            DECL_WIDGET_SPECIFIC(ContainerWidget, containerWidget, widget);
+            OBJ_OFFSET selectedWidgetOffset = getListItemOffset(containerWidget->widgets, index);
 
             if (!refresh) {
                 int previousIndex = data::previousSnapshot.get(cursor, widget->data).getInt();
                 refresh = index != previousIndex;
             }
 
-            return push(selected_widget, x, y, refresh);
+            return push(selectedWidgetOffset, x, y, refresh);
         }
         else {
-            return !callback(document, WidgetCursor(widget, x + widget->x, y + widget->y, cursor), refresh);
+            return !callback(WidgetCursor(widgetOffset, x + widget->x, y + widget->y, cursor), refresh);
         }
     }
 
@@ -212,27 +219,27 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool styleHasBorder(Style *style) {
+bool styleHasBorder(const Style *style) {
     return style->flags & STYLE_FLAGS_BORDER;
 }
 
-bool styleIsHorzAlignLeft(Style *style) {
+bool styleIsHorzAlignLeft(const Style *style) {
     return (style->flags & STYLE_FLAGS_HORZ_ALIGN) == STYLE_FLAGS_HORZ_ALIGN_LEFT;
 }
 
-bool styleIsHorzAlignRight(Style *style) {
+bool styleIsHorzAlignRight(const Style *style) {
     return (style->flags & STYLE_FLAGS_HORZ_ALIGN) == STYLE_FLAGS_HORZ_ALIGN_RIGHT;
 }
 
-bool styleIsVertAlignTop(Style *style) {
+bool styleIsVertAlignTop(const Style *style) {
     return (style->flags & STYLE_FLAGS_VERT_ALIGN) == STYLE_FLAGS_VERT_ALIGN_TOP;
 }
 
-bool styleIsVertAlignBottom(Style *style) {
+bool styleIsVertAlignBottom(const Style *style) {
     return (style->flags & STYLE_FLAGS_VERT_ALIGN) == STYLE_FLAGS_VERT_ALIGN_BOTTOM;
 }
 
-font::Font *styleGetFont(Style *style) {
+font::Font *styleGetFont(const Style *style) {
     font::Font *font;
     if (style->font == LARGE_FONT) font = &font::large_font;
     else if (style->font == SMALL_FONT) font = &font::small_font;
@@ -245,7 +252,7 @@ font::Font *styleGetFont(Style *style) {
 
 //int draw_counter;
 
-void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse) {
+void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse) {
     //++draw_counter;
 
     x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
@@ -269,7 +276,7 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
 
     font::Font *font = styleGetFont(style);
     
-    int width = lcd::lcd.measureStr(text, *font, x2 - x1 + 1);
+    int width = lcd::lcd.measureStr(text, textLength, *font, x2 - x1 + 1);
     int height = font->getHeight();
 
     int x_offset;
@@ -310,10 +317,10 @@ void drawText(char *text, int x, int y, int w, int h, Style *style, bool inverse
         lcd::lcd.setBackColor(style->background_color);
         lcd::lcd.setColor(style->color);
     }
-    lcd::lcd.drawStr(text, x_offset, y_offset, x1, y1, x2, y2, *font, (!is_page_refresh && !widget_refresh) || page_style->background_color != background_color);
+    lcd::lcd.drawStr(text, textLength, x_offset, y_offset, x1, y1, x2, y2, *font, (!is_page_refresh && !widget_refresh) || page_style->background_color != background_color);
 }
 
-void drawMultilineText(char *text, int x, int y, int w, int h, Style *style, bool inverse) {
+void drawMultilineText(const char *text, int x, int y, int w, int h, const Style *style, bool inverse) {
     //++draw_counter;
 
     x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
@@ -376,11 +383,7 @@ void drawMultilineText(char *text, int x, int y, int w, int h, Style *style, boo
         while (text[i] != 0 && text[i] != ' ' && text[i] != '\n')
             ++i;
 
-        char save = text[i];
-
-        text[i] = 0;
-        int width = lcd::lcd.measureStr(text + j, *font);
-        text[i] = save;
+        int width = lcd::lcd.measureStr(text + j, i - j, *font);
 
         while (width > x2 - x + 1) {
             if (clear_background) {
@@ -409,9 +412,7 @@ void drawMultilineText(char *text, int x, int y, int w, int h, Style *style, boo
             lcd::lcd.setColor(style->color);
         }
 
-        text[i] = 0;
-        lcd::lcd.drawStr(text + j, x, y, x1, y1, x2, y2, *font, (!is_page_refresh && !widget_refresh) || page_style->background_color != background_color);
-        text[i] = save;
+        lcd::lcd.drawStr(text + j, i - j, x, y, x1, y1, x2, y2, *font, (!is_page_refresh && !widget_refresh) || page_style->background_color != background_color);
 
         x += width;
 
@@ -471,13 +472,11 @@ void fillRect(int x, int y, int w, int h) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Style *get_active_style(Widget *widget) {
-    int widget_style_id = (Style *)(document + widget->style) - (Style *)(document + ((Document *)document)->styles.first);
-    int active_style_id = widget_style_id == STYLE_ID_EDIT_VALUE_SMALL ? STYLE_ID_EDIT_VALUE_ACTIVE_SMALL : STYLE_ID_EDIT_VALUE_ACTIVE;
-    return (Style *)(document + ((Document *)document)->styles.first) + active_style_id;
+int getActiveStyleId(const Widget *widget) {
+    return getWidgetStyleId(widget) == STYLE_ID_EDIT_VALUE_SMALL ? STYLE_ID_EDIT_VALUE_ACTIVE_SMALL : STYLE_ID_EDIT_VALUE_ACTIVE;
 }
 
-bool draw_display_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
+bool draw_display_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     bool edit = edit_mode::isEditWidget(widgetCursor);
     if (edit && active_page_id == PAGE_ID_EDIT_MODE_KEYPAD) {
         char *text = data::currentSnapshot.editModeSnapshot.keypadText;
@@ -486,7 +485,8 @@ bool draw_display_widget(uint8_t *document, const WidgetCursor &widgetCursor, bo
             refresh = strcmp(text, previousText) != 0;
         }
         if (refresh) {
-            drawText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, get_active_style(widgetCursor.widget), inverse);
+            DECL_STYLE(style, getActiveStyleId(widget));
+            drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
             return true;
         }
         return false;
@@ -494,23 +494,23 @@ bool draw_display_widget(uint8_t *document, const WidgetCursor &widgetCursor, bo
     else {
         data::Value value;
 
-        bool isBlinking = data::currentSnapshot.isBlinking(widgetCursor.cursor, widgetCursor.widget->data);
+        bool isBlinking = data::currentSnapshot.isBlinking(widgetCursor.cursor, widget->data);
         if (isBlinking) {
             if (isBlinkTime) {
                 value = data::Value("");
             } else {
-                value = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+                value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
             }
             refresh = refresh || (isBlinkTime != wasBlinkTime);
         } else {
-            value = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+            value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
         }
 
         if (!refresh) {
-            bool wasBlinking = data::previousSnapshot.isBlinking(widgetCursor.cursor, widgetCursor.widget->data);
+            bool wasBlinking = data::previousSnapshot.isBlinking(widgetCursor.cursor, widget->data);
             refresh = isBlinking != wasBlinking;
             if (!refresh) {
-                data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+                data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
                 refresh = value != previousValue;
             }
         }
@@ -519,13 +519,15 @@ bool draw_display_widget(uint8_t *document, const WidgetCursor &widgetCursor, bo
             char text[32];
             value.toText(text, 32);
 
-            Style *style;
-            if (edit)
-                style = get_active_style(widgetCursor.widget);
-            else
-                style = (Style *)(document + widgetCursor.widget->style);
+            if (edit) {
+                DECL_STYLE(style, getActiveStyleId(widget));
+                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            }
+            else {
+                DECL_WIDGET_STYLE(style, widget);
+                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            }
 
-            drawText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, style, inverse);
             return true;
         }
 
@@ -533,29 +535,31 @@ bool draw_display_widget(uint8_t *document, const WidgetCursor &widgetCursor, bo
     }
 }
 
-bool draw_display_string_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
+bool draw_display_string_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
-        DisplayStringWidget *display_string_widget = ((DisplayStringWidget *)(document + widgetCursor.widget->specific));
-        char *text = (char *)(document + display_string_widget->text);
-        drawText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, (Style *)(document + widgetCursor.widget->style), inverse);
+        DECL_WIDGET_SPECIFIC(DisplayStringWidget, display_string_widget, widget);
+        DECL_STRING(text, display_string_widget->text);
+        DECL_WIDGET_STYLE(style, widget);
+        drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
         return true;
     }
     return false;
 }
 
-bool draw_display_multiline_string_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
+bool draw_display_multiline_string_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
-        DisplayStringWidget *display_string_widget = ((DisplayStringWidget *)(document + widgetCursor.widget->specific));
-        char *text = (char *)(document + display_string_widget->text);
-        drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, (Style *)(document + widgetCursor.widget->style), inverse);
+        DECL_WIDGET_SPECIFIC(DisplayStringWidget, display_string_widget, widget);
+        DECL_STRING(text, display_string_widget->text);
+        DECL_WIDGET_STYLE(style, widget);
+        drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
         return true;
     }
     return false;
 }
 
-void draw_scale(Widget *widget, int y_from, int y_to, int y_min, int y_max, int y_value, int f, int d) {
-    Style *style = (Style *)(document + widget->style);
-    ScaleWidget *scale_widget = ((ScaleWidget *)(document + widget->specific));
+void draw_scale(const Widget *widget, int y_from, int y_to, int y_min, int y_max, int y_value, int f, int d) {
+    DECL_WIDGET_STYLE(style, widget);
+    DECL_WIDGET_SPECIFIC(ScaleWidget, scale_widget, widget);
 
     int x1 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->x;
     int l1 = 5 * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w / 12 - 1;
@@ -609,24 +613,24 @@ void draw_scale(Widget *widget, int y_from, int y_to, int y_min, int y_max, int 
     }
 }
 
-bool draw_scale_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
-    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data);
+bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
     if (!refresh) {
         data::Value previousValue = data::previousSnapshot.editModeSnapshot.editValue;
         refresh = previousValue != value;
     }
 
     if (refresh) {
-        float min = data::getMin(widgetCursor.cursor, widgetCursor.widget->data).getFloat();
-        float max = data::getMax(widgetCursor.cursor, widgetCursor.widget->data).getFloat();
+        float min = data::getMin(widgetCursor.cursor, widget->data).getFloat();
+        float max = data::getMax(widgetCursor.cursor, widget->data).getFloat();
 
-        Style *style = (Style *)(document + widgetCursor.widget->style);
+        DECL_WIDGET_STYLE(style, widget);
         font::Font *font = styleGetFont(style);
         int fontHeight = font->getAscent() / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
 
-        ScaleWidget *scale_widget = ((ScaleWidget *)(document + widgetCursor.widget->specific));
+        DECL_WIDGET_SPECIFIC(ScaleWidget, scale_widget, widget);
 
-        int f = (int)floor(DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widgetCursor.widget->h - scale_widget->needle_height) / max);
+        int f = (int)floor(DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widget->h - scale_widget->needle_height) / max);
         int d;
         if (max > 10) {
             d = 1;
@@ -645,14 +649,14 @@ bool draw_scale_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool
 
         static int edit_mode_slider_scale_last_y_value;
 
-        if (is_page_refresh || widgetCursor.widget->data == DATA_ID_EDIT_VALUE) {
+        if (is_page_refresh || widget->data == DATA_ID_EDIT_VALUE) {
             // draw entire scale 
-            draw_scale(widgetCursor.widget, y_from_min, y_from_max, y_min, y_max, y_value, f, d);
+            draw_scale(widget, y_from_min, y_from_max, y_min, y_max, y_value, f, d);
         }
         else {
             // optimization for the scale in edit with slider mode:
             // draw only part of the scale that is changed
-            if (widgetCursor.widget->data == DATA_ID_EDIT_VALUE) {
+            if (widget->data == DATA_ID_EDIT_VALUE) {
                 int last_y_value_from = edit_mode_slider_scale_last_y_value - scale_widget->needle_height / 2;
                 int last_y_value_to = edit_mode_slider_scale_last_y_value + scale_widget->needle_height / 2;
                 int y_value_from = y_value - scale_widget->needle_height / 2;
@@ -671,11 +675,11 @@ bool draw_scale_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool
                         y_value_to = y_from_max;
 
                     if (last_y_value_to + 1 < y_value_from) {
-                        draw_scale(widgetCursor.widget, last_y_value_from, last_y_value_to, y_min, y_max, y_value, f, d);
-                        draw_scale(widgetCursor.widget, y_value_from, y_value_to, y_min, y_max, y_value, f, d);
+                        draw_scale(widget, last_y_value_from, last_y_value_to, y_min, y_max, y_value, f, d);
+                        draw_scale(widget, y_value_from, y_value_to, y_min, y_max, y_value, f, d);
                     }
                     else {
-                        draw_scale(widgetCursor.widget, last_y_value_from, y_value_to, y_min, y_max, y_value, f, d);
+                        draw_scale(widget, last_y_value_from, y_value_to, y_min, y_max, y_value, f, d);
                     }
                 }
             }
@@ -683,8 +687,8 @@ bool draw_scale_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool
 
         edit_mode_slider_scale_last_y_value = y_value;
 
-        if (widgetCursor.widget->data == DATA_ID_EDIT_VALUE) {
-            edit_mode_slider::scale_width = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widgetCursor.widget->w;
+        if (widget->data == DATA_ID_EDIT_VALUE) {
+            edit_mode_slider::scale_width = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w;
             edit_mode_slider::scale_height = (max - min) * f;
         }
 
@@ -694,42 +698,45 @@ bool draw_scale_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool
     return false;
 }
 
-bool draw_toggle_button_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
-    int state = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+bool draw_toggle_button_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    int state = data::currentSnapshot.get(widgetCursor.cursor, widget->data).getInt();
     if (!refresh) {
-        int previousState = data::previousSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+        int previousState = data::previousSnapshot.get(widgetCursor.cursor, widget->data).getInt();
         refresh = state != previousState;
     }
     if (refresh) {
-        ToggleButtonWidget *toggle_button_widget = ((ToggleButtonWidget *)(document + widgetCursor.widget->specific));
-        char *text = (char *)(document + (state == 0 ? toggle_button_widget->text1 : toggle_button_widget->text2));
-        drawText(text, widgetCursor.x, widgetCursor.y, (int)widgetCursor.widget->w, (int)widgetCursor.widget->h, (Style *)(document + widgetCursor.widget->style), inverse);
+        DECL_WIDGET_SPECIFIC(ToggleButtonWidget, toggle_button_widget, widget);
+        DECL_STRING(text, (state == 0 ? toggle_button_widget->text1 : toggle_button_widget->text2));
+        DECL_WIDGET_STYLE(style, widget);
+        drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
         return true;
     }
     return false;
 }
 
-bool draw_widget(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh) {
+bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+
     bool inverse = selected_widget == widgetCursor;
 
-    if (widgetCursor.widget->type == WIDGET_TYPE_DISPLAY) {
-        return draw_display_widget(document, widgetCursor, refresh, inverse);
-    } else if (widgetCursor.widget->type == WIDGET_TYPE_DISPLAY_STRING) {
-        return draw_display_string_widget(document, widgetCursor, refresh, inverse);
-    } else if (widgetCursor.widget->type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING) {
-        return draw_display_multiline_string_widget(document, widgetCursor, refresh, inverse);
-    } else if (widgetCursor.widget->type == WIDGET_TYPE_SCALE) {
-        return draw_scale_widget(document, widgetCursor, refresh, inverse);
-    } else if (widgetCursor.widget->type == WIDGET_TYPE_TOGGLE_BUTTON) {
-        return draw_toggle_button_widget(document, widgetCursor, refresh, inverse);
-    } else if (widgetCursor.widget->type == WIDGET_TYPE_BUTTON_GROUP) {
-        return widget_button_group::draw(document, widgetCursor, refresh, inverse);
+    if (widget->type == WIDGET_TYPE_DISPLAY) {
+        return draw_display_widget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING) {
+        return draw_display_string_widget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING) {
+        return draw_display_multiline_string_widget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_SCALE) {
+        return draw_scale_widget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_TOGGLE_BUTTON) {
+        return draw_toggle_button_widget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_BUTTON_GROUP) {
+        return widget_button_group::draw(widgetCursor, widget, refresh, inverse);
     }
 
     return false;
 }
 
-static EnumWidgets draw_enum_widgets(document, draw_widget);
+static EnumWidgets draw_enum_widgets(draw_widget);
 
 void draw_tick() {
     if (!draw_enum_widgets.next()) {
@@ -750,7 +757,7 @@ void draw_tick() {
 
 void refresh_widget(WidgetCursor widget_cursor) {
     widget_refresh = true;
-    draw_widget(document, widget_cursor, true);
+    draw_widget(widget_cursor, true);
     widget_refresh = false;
 }
 
@@ -758,8 +765,8 @@ void refresh_page() {
     is_page_refresh = true;
 
     // clear screen with background color
-    Widget *page = (Widget *)(document + ((Document *)document)->pages.first) + active_page_id;
-    Style *style = (Style *)(document + page->style);
+    DECL_WIDGET(page, getPageOffset(active_page_id));
+    DECL_WIDGET_STYLE(style, page);
     page_style = style;
     lcd::lcd.setColor(style->background_color);
     lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
@@ -812,12 +819,14 @@ static int find_widget_at_x;
 static int find_widget_at_y;
 static WidgetCursor found_widget;
 
-bool find_widget_step(uint8_t *start, const WidgetCursor &widgetCursor, bool refresh) {
+bool find_widget_step(const WidgetCursor &widgetCursor, bool refresh) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+
     bool inside = 
         find_widget_at_x >= widgetCursor.x * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER &&
-        find_widget_at_x < (widgetCursor.x + widgetCursor.widget->w) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER &&
+        find_widget_at_x < (widgetCursor.x + widget->w) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER &&
         find_widget_at_y >= widgetCursor.y * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER &&
-        find_widget_at_y < (widgetCursor.y + widgetCursor.widget->h) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+        find_widget_at_y < (widgetCursor.y + widget->h) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
 
     if (inside) {
         found_widget = widgetCursor;
@@ -832,7 +841,7 @@ void find_widget(int x, int y) {
 
     find_widget_at_x = touch::x;
     find_widget_at_y = touch::y;
-    EnumWidgets enum_widgets(document, find_widget_step);
+    EnumWidgets enum_widgets(find_widget_step);
     enum_widgets.start(active_page_id, 0, 0, true);
     enum_widgets.next();
 }
@@ -852,8 +861,8 @@ void deselect_widget() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void do_action(int action_id, WidgetCursor &widget_cursor) {
-    if (edit_mode::doAction(action_id, widget_cursor)) {
+void do_action(int action_id, WidgetCursor &widgetCursor) {
+    if (edit_mode::doAction(action_id, widgetCursor)) {
         return;
     }
 
@@ -866,9 +875,10 @@ void do_action(int action_id, WidgetCursor &widget_cursor) {
     } else if (action_id == ACTION_ID_CANCEL) {
         dialog_cancel_callback();
     } else if (action_id == ACTION_ID_TOGGLE) {
-        data::toggle(widget_cursor.widget->data);
+        DECL_WIDGET(widget, widgetCursor.widgetOffset);
+        data::toggle(widget->data);
     } else  {
-        data::doAction(widget_cursor.cursor, action_id);
+        data::doAction(widgetCursor.cursor, action_id);
     }
 }
 
@@ -886,6 +896,13 @@ void init() {
     touch::init();
 
     active_page_id = -1;
+
+#if defined(EEZ_PSU_ARDUINO_MEGA)
+    arduino_util::prog_read_buffer(document, (uint8_t *)&doc_buffer, sizeof(Document));
+    g_doc = &doc_buffer;
+#else
+    g_doc = (Document *)document;
+#endif
 }
 
 void tick(unsigned long tick_usec) {
@@ -947,7 +964,8 @@ void tick(unsigned long tick_usec) {
         touchDownTime = tick_usec;
         touchActionExecuted = false;
         find_widget(touch::x, touch::y);
-        if (found_widget && found_widget.widget->action) {
+        DECL_WIDGET(widget, found_widget.widgetOffset);
+        if (found_widget && widget->action) {
             found_widget_at_down = found_widget;
         } else {
             found_widget_at_down = 0;
@@ -955,7 +973,8 @@ void tick(unsigned long tick_usec) {
         if (found_widget_at_down) {
             select_widget(found_widget_at_down);
         } else {
-            if (found_widget && found_widget.widget->type == WIDGET_TYPE_BUTTON_GROUP) {
+            DECL_WIDGET(widget, found_widget.widgetOffset);
+            if (found_widget && widget->type == WIDGET_TYPE_BUTTON_GROUP) {
                 widget_button_group::onTouchDown(found_widget);
             } else if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
                 edit_mode_slider::onTouchDown();
@@ -965,7 +984,8 @@ void tick(unsigned long tick_usec) {
         }
     } else if (touch::event_type == touch::TOUCH_MOVE) {
         if (found_widget_at_down) {
-            if (found_widget_at_down.widget->action == ACTION_ID_TURN_OFF) {
+            DECL_WIDGET(widget, found_widget_at_down.widgetOffset);
+            if (widget->action == ACTION_ID_TURN_OFF) {
                 if (tick_usec - touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
                     if (!touchActionExecuted) {
                         deselect_widget();
@@ -999,7 +1019,8 @@ void tick(unsigned long tick_usec) {
     } else if (touch::event_type == touch::TOUCH_UP) {
         if (found_widget_at_down) {
             deselect_widget();
-            do_action(found_widget_at_down.widget->action, found_widget_at_down);
+            DECL_WIDGET(widget, found_widget_at_down.widgetOffset);
+            do_action(widget->action, found_widget_at_down);
             found_widget_at_down = 0;
         } else {
             if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {

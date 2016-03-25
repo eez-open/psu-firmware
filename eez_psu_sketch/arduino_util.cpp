@@ -31,6 +31,13 @@ uint16_t prog_read_word(const uint8_t *p PROGMEM) {
     return (((uint16_t)pgm_read_byte_near(p)) << 8) + pgm_read_byte_near(p + 1);
 }
 
+void prog_read_buffer(const uint8_t *src PROGMEM, uint8_t *dest, int length) {
+    for (int i = 0; i < length; ++i) {
+        *dest++ = pgm_read_byte_near(src);
+        ++src;
+    }
+}
+
 }
 }
 } // namespace eez::psu::arduino_util

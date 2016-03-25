@@ -25,70 +25,71 @@ namespace psu {
 namespace gui {
 namespace widget_button_group {
 
-void drawButtons(const WidgetCursor &widgetCursor, Style *style, int selectedButton, const data::Value *labels, int count) {
-    int x = widgetCursor.x;
-    int y = widgetCursor.y;
-    if (widgetCursor.widget->w > widgetCursor.widget->h) {
+void drawButtons(const Widget* widget, int x, int y, const Style *style, int selectedButton, const data::Value *labels, int count) {
+    if (widget->w > widget->h) {
         // horizontal orientation
-        int w = widgetCursor.widget->w / count;
-        x += (widgetCursor.widget->w - w * count) / 2;
-        int h = widgetCursor.widget->h;
+        int w = widget->w / count;
+        x += (widget->w - w * count) / 2;
+        int h = widget->h;
         for (int i = 0; i < count; ++i) {
             char text[32];
             labels[i].toText(text, 32);
-            drawText(text, x, y, w, h, style, i == selectedButton);
+            drawText(text, -1, x, y, w, h, style, i == selectedButton);
             x += w;
         }
     } else {
         // vertical orientation
-        int w = widgetCursor.widget->w;
-        int h = widgetCursor.widget->h / count;
-        y += (widgetCursor.widget->h - h * count) / 2;
+        int w = widget->w;
+        int h = widget->h / count;
+        y += (widget->h - h * count) / 2;
         for (int i = 0; i < count; ++i) {
             char text[32];
             labels[i].toText(text, 32);
-            drawText(text, x, y + (h - min(w, h)) / 2, w, min(w, h), style, i == selectedButton);
+            drawText(text, -1, x, y + (h - min(w, h)) / 2, w, min(w, h), style, i == selectedButton);
             y += h;
         }
 
     }
 }
 
-bool draw(uint8_t *document, const WidgetCursor &widgetCursor, bool refresh, bool inverse) {
-    int selectedButton = data::currentSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+bool draw(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    int selectedButton = data::currentSnapshot.get(widgetCursor.cursor, widget->data).getInt();
     if (!refresh) {
-        int previousSelectedButton = data::previousSnapshot.get(widgetCursor.cursor, widgetCursor.widget->data).getInt();
+        int previousSelectedButton = data::previousSnapshot.get(widgetCursor.cursor, widget->data).getInt();
         refresh = selectedButton != previousSelectedButton;
     }
     if (refresh) {
         const data::Value *labels;
         int count;
-        data::getButtonLabels(widgetCursor.cursor, widgetCursor.widget->data, &labels, count);
-        drawButtons(widgetCursor, (Style *)(document + widgetCursor.widget->style), selectedButton, labels, count);
+        data::getButtonLabels(widgetCursor.cursor, widget->data, &labels, count);
+        DECL_WIDGET_STYLE(style, widget);
+        drawButtons(widget, widgetCursor.x, widgetCursor.y, style, selectedButton, labels, count);
         return true;
     }
     return false;
 }
 
 void onTouchDown(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+
     const data::Value *labels;
     int count;
-    data::getButtonLabels(widgetCursor.cursor, widgetCursor.widget->data, &labels, count);
+    data::getButtonLabels(widgetCursor.cursor, widget->data, &labels, count);
 
     int selectedButton;
-    if (widgetCursor.widget->w > widgetCursor.widget->h) {
-        int w = widgetCursor.widget->w / count;
-        int x = widgetCursor.x + (widgetCursor.widget->w - w * count) / 2;
+    if (widget->w > widget->h) {
+        int w = widget->w / count;
+        int x = widgetCursor.x + (widget->w - w * count) / 2;
 
         selectedButton = (touch::x / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER - x) / w;
     } else {
-        int h = widgetCursor.widget->h / count;
-        int y = widgetCursor.y + (widgetCursor.widget->h - h * count) / 2;
+        int h = widget->h / count;
+        int y = widgetCursor.y + (widget->h - h * count) / 2;
         selectedButton = (touch::y / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER - y) / h;
     }
 
     if (selectedButton >= 0 && selectedButton < count) {
-        data::set(widgetCursor.cursor, widgetCursor.widget->data, selectedButton);
+        data::set(widgetCursor.cursor, widget->data, selectedButton);
     }
 }
 
