@@ -125,20 +125,21 @@ namespace gui {
 #define STYLE_ID_TAB_PAGE 13
 #define STYLE_ID_TAB_PAGE_SELECTED 14
 #define STYLE_ID_BOTTOM_BUTTON 15
-#define STYLE_ID_KEY 16
-#define STYLE_ID_KEY_ICONS 17
-#define STYLE_ID_EDIT_INFO 18
-#define STYLE_ID_EDIT_VALUE_LARGE 19
-#define STYLE_ID_EDIT_VALUE 20
-#define STYLE_ID_EDIT_VALUE_UR 21
-#define STYLE_ID_EDIT_VALUE_ACTIVE 22
-#define STYLE_ID_EDIT_VALUE_SMALL 23
-#define STYLE_ID_EDIT_VALUE_UR_SMALL 24
-#define STYLE_ID_EDIT_VALUE_ACTIVE_SMALL 25
-#define STYLE_ID_NON_INTERACTIVE_BUTTON 26
-#define STYLE_ID_EDIT_MODE_SLIDER_SCALE 27
-#define STYLE_ID_EDIT_MODE_STEP_VERTICAL_SLIDER 28
-#define STYLE_ID_TOP_BAR 29
+#define STYLE_ID_BOTTOM_BUTTON_DISABLED 16
+#define STYLE_ID_KEY 17
+#define STYLE_ID_KEY_ICONS 18
+#define STYLE_ID_EDIT_INFO 19
+#define STYLE_ID_EDIT_VALUE_LARGE 20
+#define STYLE_ID_EDIT_VALUE 21
+#define STYLE_ID_EDIT_VALUE_UR 22
+#define STYLE_ID_EDIT_VALUE_ACTIVE 23
+#define STYLE_ID_EDIT_VALUE_SMALL 24
+#define STYLE_ID_EDIT_VALUE_UR_SMALL 25
+#define STYLE_ID_EDIT_VALUE_ACTIVE_SMALL 26
+#define STYLE_ID_NON_INTERACTIVE_BUTTON 27
+#define STYLE_ID_EDIT_MODE_SLIDER_SCALE 28
+#define STYLE_ID_EDIT_MODE_STEP_VERTICAL_SLIDER 29
+#define STYLE_ID_TOP_BAR 30
 
 typedef uint16_t OBJ_OFFSET;
 
@@ -147,8 +148,14 @@ struct List {
     OBJ_OFFSET first;
 };
 
-struct DisplayStringWidget {
-    OBJ_OFFSET text;
+struct Document {
+    List styles;
+    List pages;
+};
+
+struct ScaleWidget {
+    uint16_t ticks_color;
+    uint8_t needle_height;
 };
 
 struct DisplayBitmapWidget {
@@ -165,8 +172,17 @@ struct Style {
     uint16_t padding_vertical;
 };
 
-struct ListWidget {
-    OBJ_OFFSET item_widget;
+struct ContainerWidget {
+    List widgets;
+};
+
+struct ToggleButtonWidget {
+    OBJ_OFFSET text1;
+    OBJ_OFFSET text2;
+};
+
+struct DisplayStringWidget {
+    OBJ_OFFSET text;
 };
 
 struct Widget {
@@ -185,23 +201,8 @@ struct SelectWidget {
     List widgets;
 };
 
-struct ScaleWidget {
-    uint16_t ticks_color;
-    uint8_t needle_height;
-};
-
-struct ToggleButtonWidget {
-    OBJ_OFFSET text1;
-    OBJ_OFFSET text2;
-};
-
-struct Document {
-    List styles;
-    List pages;
-};
-
-struct ContainerWidget {
-    List widgets;
+struct ListWidget {
+    OBJ_OFFSET item_widget;
 };
 
 #pragma pack(pop)

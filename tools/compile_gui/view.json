@@ -91,6 +91,11 @@
       "padding_horizontal": 4
     },
     {
+      "name": "bottom_button_disabled",
+      "base":  "bottom_button",
+      "color": "#CDCDCD"
+    },
+    {
       "name": "key",
       "color": "#52B5D3",
       "background_color": "#FFFF00",
@@ -349,7 +354,7 @@
           "y": 284,
           "w": 48,
           "h": 36,
-          "style": "bottom_button",
+          "style": "bottom_button_disabled",
           "text": "?"
         },
         {
@@ -358,7 +363,7 @@
           "y": 284,
           "w": 48,
           "h": 36,
-          "style": "bottom_button",
+          "style": "bottom_button_disabled",
           "text": "!"
         },
         {
@@ -367,7 +372,7 @@
           "y": 284,
           "w": 48,
           "h": 36,
-          "style": "bottom_button",
+          "style": "bottom_button_disabled",
           "text": "L"
         },
         {
