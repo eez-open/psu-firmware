@@ -20,7 +20,7 @@
 #include "touch.h"
 #include "touch_filter.h"
 
-#define CONF_TOUCH_READ_FREQ_USEC 1 * 1000
+#define CONF_TOUCH_READ_FREQ_USEC 10 * 1000
 
 namespace eez {
 namespace psu {
