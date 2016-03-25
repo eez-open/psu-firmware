@@ -80,6 +80,7 @@ bool load(int location, Parameters *profile);
 
 bool enableSave(bool enable);
 void save();
+void saveImmediately();
 bool saveAtLocation(int location);
 
 bool deleteLocation(int location);

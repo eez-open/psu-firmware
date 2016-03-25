@@ -350,7 +350,7 @@
           "w": 48,
           "h": 36,
           "style": "bottom_button",
-          "text": ""
+          "text": "?"
         },
         {
           "type": "display_string",
@@ -359,7 +359,7 @@
           "w": 48,
           "h": 36,
           "style": "bottom_button",
-          "text": ""
+          "text": "!"
         },
         {
           "type": "display_string",
@@ -368,7 +368,7 @@
           "w": 48,
           "h": 36,
           "style": "bottom_button",
-          "text": ""
+          "text": "L"
         },
         {
           "type": "display_string",

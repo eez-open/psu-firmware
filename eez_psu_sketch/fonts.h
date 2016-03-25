@@ -33,4 +33,4 @@ extern Font icons_font;
 }
 }
 }
-} // namespace eez::psu::gui::font
+} // namespace eez::psu::ui::font

@@ -118,6 +118,10 @@ void save() {
     g_save_profile = true;
 }
 
+void saveImmediately() {
+    saveAtLocation(0);
+}
+
 bool saveAtLocation(int location) {
     if (location >= 0 && location < NUM_PROFILE_LOCATIONS) {
         Parameters currentProfile;

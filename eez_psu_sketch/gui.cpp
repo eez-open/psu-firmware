@@ -967,6 +967,24 @@ void do_action(int action_id, WidgetCursor &widgetCursor) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void standbyTouchHandling(unsigned long tick_usec) {
+    // touch handling in power off:
+    // wait for long press anywhere on the screen and then turn power on
+    if (touch::event_type == touch::TOUCH_DOWN) {
+        touchDownTime = tick_usec;
+        touchActionExecuted = false;
+    } else if (touch::event_type == touch::TOUCH_MOVE) {
+        if (tick_usec - touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
+            if (!touchActionExecuted) {
+                touchActionExecuted = true;
+                psu::changePowerState(true);
+            }
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 void init() {
     lcd::init();
 
@@ -998,26 +1016,20 @@ void tick(unsigned long tick_usec) {
     touch::tick(tick_usec);
 
     if (active_page_id == -1) {
-        // touch handling in power off:
-        // wait for long press anywhere on the screen and then turn power on
-        if (touch::event_type == touch::TOUCH_DOWN) {
-            touchDownTime = tick_usec;
-            touchActionExecuted = false;
-        } else if (touch::event_type == touch::TOUCH_MOVE) {
-            if (tick_usec - touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
-                if (!touchActionExecuted) {
-                    touchActionExecuted = true;
-                    psu::changePowerState(true);
-                }
-            }
-        }
+        standbyTouchHandling(tick_usec);
         return;
     }
 
     // wait some time for transitional pages
     if (active_page_id == PAGE_ID_STANDBY && tick_usec - showPageTime < CONF_GUI_STANDBY_PAGE_TIMEOUT) {
+        standbyTouchHandling(tick_usec);
         return;
     } else if (active_page_id == PAGE_ID_ENTERING_STANDBY && tick_usec - showPageTime < CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT) {
+        if (!psu::isPowerUp()) {
+            unsigned long saved_showPageTime = showPageTime;
+            showStandbyPage();
+            showPageTime = saved_showPageTime - (CONF_GUI_STANDBY_PAGE_TIMEOUT - CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT);
+        }
         return;
     } else if (active_page_id == PAGE_ID_WELCOME && tick_usec - showPageTime < CONF_GUI_WELCOME_PAGE_TIMEOUT) {
         return;
@@ -1025,6 +1037,7 @@ void tick(unsigned long tick_usec) {
 
     // turn the screen off if power is down
     if (!psu::isPowerUp()) {
+        standbyTouchHandling(tick_usec);
         active_page_id = -1;
         turnOff();
         return;

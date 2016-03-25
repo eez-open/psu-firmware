@@ -248,15 +248,23 @@ bool changePowerState(bool up) {
         if (persist_conf::isProfileAutoRecallEnabled() && profile::load(persist_conf::getProfileAutoRecallLocation(), &profile)) {
             profile::recallChannelsFromProfile(&profile);
         }
+    
+        profile::save();
     }
     else {
+        g_power_is_up = false;
+        profile::saveImmediately();
+        g_power_is_up = true;
+
+        profile::enableSave(false);
+
         powerDown();
+
+        profile::enableSave(true);
 
         g_test_power_up_delay = true;
         g_power_down_time = millis();
     }
-
-    profile::save();
 
     return true;
 }
