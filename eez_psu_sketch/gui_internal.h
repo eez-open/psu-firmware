@@ -115,7 +115,7 @@ inline const int getWidgetStyleId(const Widget *widget) {
     const type *var = &var##_buffer
 
 #define DECL_STRING(var, offset) \
-    char var##_buffer[64]; \
+    char var##_buffer[128]; \
     strncpy_P(var##_buffer, (const char *)(document + (offset)), sizeof(var##_buffer) - 1); \
     var##_buffer[sizeof(var##_buffer) - 1] = 0; \
     const char *var = var##_buffer
