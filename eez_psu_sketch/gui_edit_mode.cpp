@@ -103,12 +103,11 @@ void enter(const WidgetCursor &widgetCursor) {
         minValue = data::getMin(data_cursor, data_id);
         maxValue = data::getMax(data_cursor, data_id);
 
-        if (tab_index == PAGE_ID_EDIT_MODE_SLIDER) {
-            psu::enterTimeCriticalMode();
-        }
-        else if (tab_index == PAGE_ID_EDIT_MODE_KEYPAD) {
+        if (tab_index == PAGE_ID_EDIT_MODE_KEYPAD) {
             edit_mode_keypad::reset();
         }
+
+        psu::enterTimeCriticalMode();
 
         showPage(tab_index);
     }
@@ -116,11 +115,9 @@ void enter(const WidgetCursor &widgetCursor) {
 
 void exit() {
     if (getActivePage() != PAGE_ID_MAIN) {
-        if (getActivePage() == ACTION_ID_EDIT_MODE_SLIDER) {
-            psu::leaveTimeCriticalMode();
-        }
-
         data_id = -1;
+
+        psu::leaveTimeCriticalMode();
 
         showPage(PAGE_ID_MAIN);
     }

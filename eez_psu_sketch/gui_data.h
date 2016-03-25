@@ -62,7 +62,7 @@ struct Value {
         } else if (unit_ == UNIT_STR) {
             return strcmp(str_, other.str_) == 0;
         } else if (unit_ == UNIT_CONST_STR) {
-            return strcmp_P(str_, other.str_) == 0;
+            return const_str_ == other.const_str_;
         } else if (unit_ == UNIT_INT) {
             return int_ == other.int_;
         } else {

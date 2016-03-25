@@ -47,7 +47,7 @@ static bool g_is_booted = false;
 static bool g_power_is_up = false;
 static bool g_test_power_up_delay = false;
 static unsigned long g_power_down_time;
-static bool g_is_time_critical_mode;
+static bool g_is_time_critical_mode = false;
 
 ////////////////////////////////////////////////////////////////////////////////
 

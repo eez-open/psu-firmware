@@ -39,6 +39,7 @@
 #define CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT 5000000UL
 #define CONF_GUI_WELCOME_PAGE_TIMEOUT 2000000UL
 #define CONF_GUI_LONG_PRESS_TIMEOUT 1000000UL
+#define CONF_GUI_DRAW_TICK_ITERATIONS 4
 
 namespace eez {
 namespace psu {
@@ -629,6 +630,8 @@ bool draw_display_multiline_string_widget(const WidgetCursor &widgetCursor, cons
 }
 
 void draw_scale(const Widget *widget, int y_from, int y_to, int y_min, int y_max, int y_value, int f, int d) {
+    //++draw_counter;
+
     DECL_WIDGET_STYLE(style, widget);
     DECL_WIDGET_SPECIFIC(ScaleWidget, scale_widget, widget);
 
@@ -822,19 +825,23 @@ bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
 static EnumWidgets draw_enum_widgets(draw_widget);
 
 void draw_tick() {
-    if (!draw_enum_widgets.next()) {
-        wasBlinkTime = isBlinkTime;
-        isBlinkTime = (micros() % (2 * CONF_BLINK_TIME)) > CONF_BLINK_TIME;
+    for (int i = 0; i < CONF_GUI_DRAW_TICK_ITERATIONS; ++i) {
+        if (!draw_enum_widgets.next()) {
+            wasBlinkTime = isBlinkTime;
+            isBlinkTime = (micros() % (2 * CONF_BLINK_TIME)) > CONF_BLINK_TIME;
 
-        data::previousSnapshot = data::currentSnapshot;
-        data::currentSnapshot.takeSnapshot();
+            data::previousSnapshot = data::currentSnapshot;
+            data::currentSnapshot.takeSnapshot();
 
-        draw_enum_widgets.start(active_page_id, 0, 0, false);
+            draw_enum_widgets.start(active_page_id, 0, 0, false);
 
-        //DebugTraceF("%d", draw_counter);
-        //draw_counter = 0;
+            //DebugTraceF("%d", draw_counter);
+            //draw_counter = 0;
 
-        is_page_refresh = false;
+            is_page_refresh = false;
+
+            break;
+        }
     }
 }
 
@@ -876,7 +883,9 @@ int getActivePage() {
 
 void showPage(int index) {
     lcd::turnOn();
+
     active_page_id = index;
+
     showPageTime = micros();
     refresh_page();
 }
@@ -1098,8 +1107,6 @@ void tick(unsigned long tick_usec) {
                 edit_mode_step::onTouchMove();
             } else if (active_page_id == PAGE_ID_YES_NO) {
 #ifdef CONF_DEBUG
-                lcd::lcd.setColor(VGA_WHITE);
-
                 int x = touch::x;
                 if (x < 1) x = 1;
                 else if (x > lcd::lcd.getDisplayXSize() - 2) x = lcd::lcd.getDisplayXSize() - 2;
@@ -1108,6 +1115,7 @@ void tick(unsigned long tick_usec) {
                 if (y < 1) y = 1;
                 else if (y > lcd::lcd.getDisplayYSize() - 2) y = lcd::lcd.getDisplayYSize() - 2;
 
+                lcd::lcd.setColor(VGA_WHITE);
                 lcd::lcd.fillRect(touch::x-1, touch::y-1, touch::x+1, touch::y+1);
 #endif
             }

@@ -39,6 +39,8 @@ extern EventType event_type;
 extern int x;
 extern int y;
 
+extern bool directIsPressed();
+
 #ifdef EEZ_PSU_SIMULATOR
 void touch_write(bool is_pressed, int x, int y);
 #endif
