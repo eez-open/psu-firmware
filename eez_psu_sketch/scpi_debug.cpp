@@ -30,6 +30,13 @@ using namespace debug;
 namespace scpi {
 
 scpi_result_t debug_scpi_command(scpi_t *context) {
+    scpi_number_t param;
+    if (SCPI_ParamNumber(context, 0, &param, false)) {
+        delay((uint32_t) round(param.value * 1000));
+    } else {
+        delay(1000);
+    }
+
     return SCPI_RES_OK;
 }
 
