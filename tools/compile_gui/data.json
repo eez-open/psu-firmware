@@ -5,6 +5,11 @@
       "description": "list of channels"
     },
     {
+      "id": "channel_ok",
+      "description": "scpi: outp?, values: 0 if there is channel error, 1 if channel is ok",
+      "operation": "get"
+    },
+    {
       "id": "output_state",
       "description": "scpi: outp?, values: 0 if output off, 1 if output on",
       "operation": "get"

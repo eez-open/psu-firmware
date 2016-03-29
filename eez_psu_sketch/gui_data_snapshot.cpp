@@ -100,6 +100,8 @@ void Snapshot::takeSnapshot() {
     for (int i = 0; i < CH_NUM; ++i) {
         Channel &channel = Channel::get(i);
 
+        channelSnapshots[i].flags.ok = channel.isOk() ? 1 : 0;
+
         channelSnapshots[i].flags.state = channel.isOutputEnabled() ? 1 : 0;
 
         char *mode_str = channel.getCvModeStr();
@@ -147,7 +149,9 @@ void Snapshot::takeSnapshot() {
 }
 
 Value Snapshot::get(const Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_OUTPUT_STATE) {
+    if (id == DATA_ID_CHANNEL_OK) {
+        return Value(channelSnapshots[cursor.iChannel].flags.ok);
+    } else if (id == DATA_ID_OUTPUT_STATE) {
         return Value(channelSnapshots[cursor.iChannel].flags.state);
     } else if (id == DATA_ID_OUTPUT_MODE) {
         return Value(channelSnapshots[cursor.iChannel].flags.mode);

@@ -629,7 +629,7 @@ bool draw_display_multiline_string_widget(const WidgetCursor &widgetCursor, cons
     return false;
 }
 
-void draw_scale(const Widget *widget, int y_from, int y_to, int y_min, int y_max, int y_value, int f, int d) {
+void draw_scale(const Widget *widget, int y_from, int y_to, int y_min, int y_max, int y_value, int f, int d, bool drawTicks) {
     //++draw_counter;
 
     DECL_WIDGET_STYLE(style, widget);
@@ -649,23 +649,25 @@ void draw_scale(const Widget *widget, int y_from, int y_to, int y_min, int y_max
     for (int y_i = y_from; y_i <= y_to; ++y_i) {
         int y = y_offset - y_i;
 
-        // draw ticks
-        if (y_i >= y_min && y_i <= y_max) {
-            if (y_i % s == 0) {
-                lcd::lcd.setColor(style->border_color);
-                lcd::lcd.drawHLine(x1, y, l1);
-            }
-            else if (y_i % (s / 2) == 0) {
-                lcd::lcd.setColor(style->border_color);
-                lcd::lcd.drawHLine(x1, y, l1 / 2);
-            }
-            else if (y_i % (s / 10) == 0) {
-                lcd::lcd.setColor(style->border_color);
-                lcd::lcd.drawHLine(x1, y, l1 / 4);
-            }
-            else {
-                lcd::lcd.setColor(style->background_color);
-                lcd::lcd.drawHLine(x1, y, l1);
+        if (drawTicks) {
+            // draw ticks
+            if (y_i >= y_min && y_i <= y_max) {
+                if (y_i % s == 0) {
+                    lcd::lcd.setColor(style->border_color);
+                    lcd::lcd.drawHLine(x1, y, l1);
+                }
+                else if (y_i % (s / 2) == 0) {
+                    lcd::lcd.setColor(style->border_color);
+                    lcd::lcd.drawHLine(x1, y, l1 / 2);
+                }
+                else if (y_i % (s / 10) == 0) {
+                    lcd::lcd.setColor(style->border_color);
+                    lcd::lcd.drawHLine(x1, y, l1 / 4);
+                }
+                else {
+                    lcd::lcd.setColor(style->background_color);
+                    lcd::lcd.drawHLine(x1, y, l1);
+                }
             }
         }
 
@@ -723,9 +725,9 @@ bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, b
 
         static int edit_mode_slider_scale_last_y_value;
 
-        if (is_page_refresh || widget->data == DATA_ID_EDIT_VALUE) {
+        if (is_page_refresh || widget->data != DATA_ID_EDIT_VALUE) {
             // draw entire scale 
-            draw_scale(widget, y_from_min, y_from_max, y_min, y_max, y_value, f, d);
+            draw_scale(widget, y_from_min, y_from_max, y_min, y_max, y_value, f, d, true);
         }
         else {
             // optimization for the scale in edit with slider mode:
@@ -749,11 +751,11 @@ bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, b
                         y_value_to = y_from_max;
 
                     if (last_y_value_to + 1 < y_value_from) {
-                        draw_scale(widget, last_y_value_from, last_y_value_to, y_min, y_max, y_value, f, d);
-                        draw_scale(widget, y_value_from, y_value_to, y_min, y_max, y_value, f, d);
+                        draw_scale(widget, last_y_value_from, last_y_value_to, y_min, y_max, y_value, f, d, false);
+                        draw_scale(widget, y_value_from, y_value_to, y_min, y_max, y_value, f, d, false);
                     }
                     else {
-                        draw_scale(widget, last_y_value_from, y_value_to, y_min, y_max, y_value, f, d);
+                        draw_scale(widget, last_y_value_from, y_value_to, y_min, y_max, y_value, f, d, false);
                     }
                 }
             }

@@ -119,23 +119,58 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
     if (width > 0 && height > 0) {
 	    clear_bit(P_CS, B_CS);
 
+        word fc = (fch << 8) | fcl;
+        word bc = (bch << 8) | bcl;
+
 	    if (orient == PORTRAIT) {
 		    setXY(x_glyph, y_glyph, x_glyph + width - 1, y_glyph + height - 1);
-		    for (int iRow = 0; iRow < height; ++iRow) {
+		    for (int iRow = 0; iRow < height; ++iRow, offset += widthInBytes) {
 			    for (int iByte = iStartByte, iCol = iStartCol; iByte < widthInBytes; ++iByte) {
 				    uint8_t data = arduino_util::prog_read_byte(glyph.data + offset + iByte);
-				    for (uint8_t mask = 0x80; mask != 0 && iCol < width; mask >>= 1, ++iCol) {
-                        if (iCol >= iStartCol) {
-					        if (paintEnabled && (data & mask)) {
-						        setPixel((fch << 8) | fcl);
-					        }
-					        else {
-						        setPixel((bch << 8) | bcl);
-					        }
+                    if (paintEnabled) {
+                        if (iCol + 8 <= width) {
+                            setPixel(data & 0x80 ? fc : bc);
+                            setPixel(data & 0x40 ? fc : bc);
+                            setPixel(data & 0x20 ? fc : bc);
+                            setPixel(data & 0x10 ? fc : bc);
+                            setPixel(data & 0x08 ? fc : bc);
+                            setPixel(data & 0x04 ? fc : bc);
+                            setPixel(data & 0x02 ? fc : bc);
+                            setPixel(data & 0x01 ? fc : bc);
+                            iCol += 8;
+                        } else {
+                            if (iCol++ >= width) break; setPixel(data & 0x80 ? fc : bc);
+                            if (iCol++ >= width) break; setPixel(data & 0x40 ? fc : bc);
+                            if (iCol++ >= width) break; setPixel(data & 0x20 ? fc : bc);
+                            if (iCol++ >= width) break; setPixel(data & 0x10 ? fc : bc);
+                            if (iCol++ >= width) break; setPixel(data & 0x08 ? fc : bc);
+                            if (iCol++ >= width) break; setPixel(data & 0x04 ? fc : bc);
+                            if (iCol++ >= width) break; setPixel(data & 0x02 ? fc : bc);
+                            if (iCol++ >= width) break; setPixel(data & 0x01 ? fc : bc);
                         }
-				    }
+                    } else {
+                        if (iCol + 8 <= width) {
+                            setPixel(bc);
+                            setPixel(bc);
+                            setPixel(bc);
+                            setPixel(bc);
+                            setPixel(bc);
+                            setPixel(bc);
+                            setPixel(bc);
+                            setPixel(bc);
+                            iCol += 8;
+                        } else {
+                            if (iCol++ >= width) break; setPixel(bc);
+                            if (iCol++ >= width) break; setPixel(bc);
+                            if (iCol++ >= width) break; setPixel(bc);
+                            if (iCol++ >= width) break; setPixel(bc);
+                            if (iCol++ >= width) break; setPixel(bc);
+                            if (iCol++ >= width) break; setPixel(bc);
+                            if (iCol++ >= width) break; setPixel(bc);
+                            if (iCol++ >= width) break; setPixel(bc);
+                        }
+                    }
 			    }
-                offset += widthInBytes;
 		    }
 	    }
 	    else {
@@ -146,12 +181,7 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
 				    for (int iBit = 7; iBit >= 0; --iBit) {
                         int iPixel = iByte * 8 + iBit;
 					    if (iPixel >= iStartCol && iPixel < width) {
-						    if (paintEnabled && (data & (0x80 >> iBit))) {
-							    setPixel((fch << 8) | fcl);
-						    }
-						    else {
-							    setPixel((bch << 8) | bcl);
-						    }
+							setPixel(paintEnabled && (data & (0x80 >> iBit)) ? fc : bc);
 					    }
 				    }
 			    }

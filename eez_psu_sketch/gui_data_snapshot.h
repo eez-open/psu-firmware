@@ -27,8 +27,9 @@ namespace gui {
 namespace data {
 
 struct ChannelSnapshotFlags {
-    unsigned mode : 2;
-    unsigned state : 2;
+    unsigned ok : 1;
+    unsigned mode : 1;
+    unsigned state : 1;
     unsigned ovp : 2;
     unsigned ocp : 2;
     unsigned opp : 2;

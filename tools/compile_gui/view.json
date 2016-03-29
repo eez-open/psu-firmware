@@ -48,6 +48,10 @@
       "font": "large"
     },
     {
+      "name": "channel_error",
+      "color": "red"
+    },
+    {
       "name": "channel_off_medium",
       "font": "medium"
     },
@@ -92,7 +96,7 @@
     },
     {
       "name": "bottom_button_disabled",
-      "base":  "bottom_button",
+      "base": "bottom_button",
       "color": "#CDCDCD"
     },
     {
@@ -225,7 +229,7 @@
           "y": 60,
           "w": 240,
           "h": 40,
-          "style":  "small",
+          "style": "small",
           "text": "Entering stand-by mode..."
         },
         {
@@ -234,7 +238,7 @@
           "y": 240,
           "w": 200,
           "h": 70,
-          "style":  "small",
+          "style": "small",
           "text": "Press and hold anywhere on the screen to wake up."
         }
       ]
@@ -256,7 +260,7 @@
           "y": 240,
           "w": 200,
           "h": 70,
-          "style":  "small",
+          "style": "small",
           "text": "Press and hold anywhere on the screen to wake up."
         }
       ]
@@ -270,70 +274,81 @@
           "x": 0,
           "y": 16,
           "item_widget": {
-            "type": "container",
+            "type": "select",
+            "data": "channel_ok",
             "y": 0,
             "h": 126,
             "widgets": [
               {
-                "type": "select",
-                "x": 0,
-                "y": 0,
-                "h": 86,
-                "data": "output_state",
-                "action": "toggle_channel",
+                "type": "display_string",
+                "style": "channel_error",
+                "text": "ERROR"
+              },
+              {
+                "type": "container",
                 "widgets": [
                   {
-                    "type": "display_string",
-                    "style": "channel_off",
-                    "text": "OFF"
-                  },
-                  {
                     "type": "select",
-                    "data": "output_mode",
+                    "x": 0,
+                    "y": 0,
+                    "h": 86,
+                    "data": "output_state",
+                    "action": "toggle_channel",
                     "widgets": [
                       {
-                        "type": "display",
-                        "style": "mon_value",
-                        "data": "mon_value"
+                        "type": "display_string",
+                        "style": "channel_off",
+                        "text": "OFF"
                       },
                       {
-                        "type": "display",
-                        "style": "mon_value_ur",
-                        "data": "mon_value"
+                        "type": "select",
+                        "data": "output_mode",
+                        "widgets": [
+                          {
+                            "type": "display",
+                            "style": "mon_value",
+                            "data": "mon_value"
+                          },
+                          {
+                            "type": "display",
+                            "style": "mon_value_ur",
+                            "data": "mon_value"
+                          }
+                        ]
                       }
                     ]
+                  },
+                  {
+                    "type": "display",
+                    "data": "volt",
+                    "action": "edit",
+                    "x": 0,
+                    "y": 86,
+                    "w": 106,
+                    "h": 40,
+                    "style": "mon_value_medium"
+                  },
+                  {
+                    "type": "display",
+                    "data": "curr",
+                    "action": "edit",
+                    "x": 106,
+                    "y": 86,
+                    "w": 106,
+                    "h": 40,
+                    "style": "mon_value_medium"
+                  },
+                  {
+                    "type": "display_string",
+                    "action": "channel_settings",
+                    "x": 212,
+                    "y": 86,
+                    "w": 28,
+                    "h": 40,
+                    "style": "small",
+                    "text": "`"
                   }
                 ]
-              },
-              {
-                "type": "display",
-                "data": "volt",
-                "action": "edit",
-                "x": 0,
-                "y": 86,
-                "w": 106,
-                "h": 40,
-                "style": "mon_value_medium"
-              },
-              {
-                "type": "display",
-                "data": "curr",
-                "action": "edit",
-                "x": 106,
-                "y": 86,
-                "w": 106,
-                "h": 40,
-                "style": "mon_value_medium"
-              },
-              {
-                "type": "display_string",
-                "action": "channel_settings",
-                "x": 212,
-                "y": 86,
-                "w": 28,
-                "h": 40,
-                "style": "small",
-                "text": "`"
               }
             ]
           }
