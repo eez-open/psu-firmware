@@ -828,7 +828,7 @@ void draw_tick() {
     for (int i = 0; i < CONF_GUI_DRAW_TICK_ITERATIONS; ++i) {
         if (!draw_enum_widgets.next()) {
             wasBlinkTime = isBlinkTime;
-            isBlinkTime = (micros() % (2 * CONF_BLINK_TIME)) > CONF_BLINK_TIME;
+            isBlinkTime = (micros() % (2 * CONF_BLINK_TIME)) > CONF_BLINK_TIME && touch::event_type == touch::TOUCH_NONE;
 
             data::previousSnapshot = data::currentSnapshot;
             data::currentSnapshot.takeSnapshot();

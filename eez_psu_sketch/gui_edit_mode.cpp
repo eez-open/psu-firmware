@@ -205,7 +205,7 @@ data::Unit getUnit() {
 
 void setValue(float value_) {
     edit_value = data::Value(value_, getUnit());
-    if (is_interactive_mode) {
+    if (is_interactive_mode || tab_index == PAGE_ID_EDIT_MODE_KEYPAD) {
         data::set(data_cursor, data_id, edit_value);
     }
 }
