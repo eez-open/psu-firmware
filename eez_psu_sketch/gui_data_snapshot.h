@@ -49,6 +49,8 @@ struct Snapshot {
     edit_mode::Snapshot editModeSnapshot;
     Value alertMessage;
 
+    unsigned long lastSnapshotTime;
+
     void takeSnapshot();
 
     Value get(const Cursor &cursor, uint8_t id);

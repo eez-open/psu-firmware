@@ -20,6 +20,8 @@
 #include "gui_data_snapshot.h"
 #include "gui_view.h"
 
+#define CONF_GUI_REFRESH_EVERY_MS 250
+
 namespace eez {
 namespace psu {
 namespace gui {
@@ -97,6 +99,13 @@ Snapshot currentSnapshot;
 Snapshot previousSnapshot;
 
 void Snapshot::takeSnapshot() {
+    bool timeout = false;
+    unsigned long currentTime = micros();
+    if (currentTime - lastSnapshotTime >= CONF_GUI_REFRESH_EVERY_MS * 1000UL) {
+        timeout = true;
+        lastSnapshotTime = currentTime;
+    }
+
     for (int i = 0; i < CH_NUM; ++i) {
         Channel &channel = Channel::get(i);
 
@@ -104,20 +113,22 @@ void Snapshot::takeSnapshot() {
 
         channelSnapshots[i].flags.state = channel.isOutputEnabled() ? 1 : 0;
 
-        char *mode_str = channel.getCvModeStr();
-        channelSnapshots[i].flags.mode = 0;
-        float uMon = channel.u.mon;
-        float iMon = channel.i.mon;
-        if (strcmp(mode_str, "CC") == 0) {
-            channelSnapshots[i].mon_value = Value(uMon, UNIT_VOLT);
-        } else if (strcmp(mode_str, "CV") == 0) {
-            channelSnapshots[i].mon_value = Value(iMon, UNIT_AMPER);
-        } else {
-            channelSnapshots[i].flags.mode = 1;
-            if (uMon < iMon) {
+        if (timeout) {
+            char *mode_str = channel.getCvModeStr();
+            channelSnapshots[i].flags.mode = 0;
+            float uMon = channel.u.mon;
+            float iMon = channel.i.mon;
+            if (strcmp(mode_str, "CC") == 0) {
                 channelSnapshots[i].mon_value = Value(uMon, UNIT_VOLT);
-            } else {
+            } else if (strcmp(mode_str, "CV") == 0) {
                 channelSnapshots[i].mon_value = Value(iMon, UNIT_AMPER);
+            } else {
+                channelSnapshots[i].flags.mode = 1;
+                if (uMon < iMon) {
+                    channelSnapshots[i].mon_value = Value(uMon, UNIT_VOLT);
+                } else {
+                    channelSnapshots[i].mon_value = Value(iMon, UNIT_AMPER);
+                }
             }
         }
 

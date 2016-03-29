@@ -22,7 +22,7 @@
 #include "lcd.h"
 #include "gui_internal.h"
 
-#define CONF_TOUCH_SCREEN_CALIBRATION_M 16
+#define CONF_GUI_TOUCH_SCREEN_CALIBRATION_M 16
 
 namespace eez {
 namespace psu {
@@ -30,7 +30,7 @@ namespace gui {
 namespace touch {
 namespace calibration {
 
-const int RECT_SIZE = 2 * CONF_TOUCH_SCREEN_CALIBRATION_M;
+const int RECT_SIZE = 2 * CONF_GUI_TOUCH_SCREEN_CALIBRATION_M;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -108,7 +108,7 @@ void init() {
         persist_conf::dev_conf.touch_screen_cal_bry, 
         persist_conf::dev_conf.touch_screen_cal_trx,
         persist_conf::dev_conf.touch_screen_cal_try, 
-        CONF_TOUCH_SCREEN_CALIBRATION_M
+        CONF_GUI_TOUCH_SCREEN_CALIBRATION_M
     );
 
     if (!success) {
@@ -173,7 +173,7 @@ void tick(unsigned long tick_usec) {
             if (read_point()) {
                 bool success = touch::calibrateTransform(
                     point_tlx, point_tly,  point_brx, point_bry,  point_trx, point_try,
-                    CONF_TOUCH_SCREEN_CALIBRATION_M);
+                    CONF_GUI_TOUCH_SCREEN_CALIBRATION_M);
                 if (success) {
                     mode = MODE_FINISHED;
                     yesNoDialog(PSTR("Save changes?"), dialogYes, dialogNo, dialogCancel);

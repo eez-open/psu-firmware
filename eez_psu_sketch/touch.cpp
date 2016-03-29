@@ -20,7 +20,7 @@
 #include "touch.h"
 #include "touch_filter.h"
 
-#define CONF_TOUCH_READ_FREQ_USEC 10 * 1000
+#define CONF_GUI_TOUCH_READ_FREQ_MS 10
 
 namespace eez {
 namespace psu {
@@ -201,7 +201,7 @@ void init() {
 }
 
 void tick(unsigned long tick_usec) {
-    if (last_tick_usec == 0 || tick_usec - last_tick_usec > CONF_TOUCH_READ_FREQ_USEC) {
+    if (last_tick_usec == 0 || tick_usec - last_tick_usec > CONF_GUI_TOUCH_READ_FREQ_MS * 1000UL) {
     	touch_read();
 
         touch_is_pressed = filter(touch_is_pressed, touch_x, touch_y);

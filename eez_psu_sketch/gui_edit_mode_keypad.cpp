@@ -22,9 +22,9 @@
 
 #include "sound.h"
 
-#define CONF_KEYPAD_CURSOR_BLINK_TIME 500000UL
-#define CONF_KEYPAD_CURSOR_ON "|"
-#define CONF_KEYPAD_CURSOR_OFF " "
+#define CONF_GUI_KEYPAD_CURSOR_BLINK_TIME 500000UL
+#define CONF_GUI_KEYPAD_CURSOR_ON "|"
+#define CONF_GUI_KEYPAD_CURSOR_OFF " "
 
 namespace eez {
 namespace psu {
@@ -221,16 +221,16 @@ void getText(char *text, int count) {
         text[i] = 0;
 
         unsigned long current_time = micros();
-        if (current_time - last_cursor_change_time > CONF_KEYPAD_CURSOR_BLINK_TIME) {
+        if (current_time - last_cursor_change_time > CONF_GUI_KEYPAD_CURSOR_BLINK_TIME) {
             cursor = !cursor;
             last_cursor_change_time = current_time;
         }
 
         if (cursor) {
-            strcat_P(text, PSTR(CONF_KEYPAD_CURSOR_ON));
+            strcat_P(text, PSTR(CONF_GUI_KEYPAD_CURSOR_ON));
         }
         else {
-            strcat_P(text, PSTR(CONF_KEYPAD_CURSOR_OFF));
+            strcat_P(text, PSTR(CONF_GUI_KEYPAD_CURSOR_OFF));
         }
 
         if (edit_unit == data::UNIT_VOLT)

@@ -24,17 +24,17 @@
 //
 
 #ifdef EEZ_PSU_ARDUINO
-#define CONF_TOUCH_FILTER_N 5
-#define CONF_TOUCH_FILTER_D 10
+#define CONF_GUI_TOUCH_FILTER_N 5
+#define CONF_GUI_TOUCH_FILTER_D 10
 #ifdef EEZ_PSU_ARDUINO_DUE
-#define CONF_TOUCH_FILTER_P 10
+#define CONF_GUI_TOUCH_FILTER_P 10
 #else
-#define CONF_TOUCH_FILTER_P 10
+#define CONF_GUI_TOUCH_FILTER_P 10
 #endif
 #else
-#define CONF_TOUCH_FILTER_N 0
-#define CONF_TOUCH_FILTER_D 1
-#define CONF_TOUCH_FILTER_P 5
+#define CONF_GUI_TOUCH_FILTER_N 0
+#define CONF_GUI_TOUCH_FILTER_D 1
+#define CONF_GUI_TOUCH_FILTER_P 5
 #endif
 
 
@@ -171,7 +171,7 @@ private:
     ChannelFilter<N, D> y;
 };
 
-typedef SampleFilter<CONF_TOUCH_FILTER_N, CONF_TOUCH_FILTER_D, CONF_TOUCH_FILTER_P> DefaultSampleFilter;
+typedef SampleFilter<CONF_GUI_TOUCH_FILTER_N, CONF_GUI_TOUCH_FILTER_D, CONF_GUI_TOUCH_FILTER_P> DefaultSampleFilter;
 
 ////////////////////////////////////////////////////////////////////////////////
 

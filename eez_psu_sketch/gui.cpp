@@ -33,8 +33,8 @@
 #include "front_panel/control.h"
 #endif
 
-#define CONF_BLINK_TIME 400000UL
-#define CONF_ENUM_WIDGETS_STACK_SIZE 5
+#define CONF_GUI_BLINK_TIME 400000UL
+#define CONF_GUI_ENUM_WIDGETS_STACK_SIZE 5
 #define CONF_GUI_STANDBY_PAGE_TIMEOUT 10000000UL
 #define CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT 5000000UL
 #define CONF_GUI_WELCOME_PAGE_TIMEOUT 2000000UL
@@ -97,7 +97,7 @@ public:
     }
 
     bool next() {
-        if (stack_index == CONF_ENUM_WIDGETS_STACK_SIZE) {
+        if (stack_index == CONF_GUI_ENUM_WIDGETS_STACK_SIZE) {
             return false;
         }
 
@@ -170,14 +170,14 @@ private:
         bool refresh;
     };
 
-    StackItem stack[CONF_ENUM_WIDGETS_STACK_SIZE];
+    StackItem stack[CONF_GUI_ENUM_WIDGETS_STACK_SIZE];
     int stack_index;
 
     bool push(OBJ_OFFSET widgetOffset, int x, int y, bool refresh) {
         DECL_WIDGET(widget, widgetOffset);
 
         if (widget->type == WIDGET_TYPE_CONTAINER || widget->type == WIDGET_TYPE_VERTICAL_LIST || widget->type == WIDGET_TYPE_HORIZONTAL_LIST) {
-             if (++stack_index == CONF_ENUM_WIDGETS_STACK_SIZE) {
+             if (++stack_index == CONF_GUI_ENUM_WIDGETS_STACK_SIZE) {
                 return false;
             }
 
@@ -830,7 +830,7 @@ void draw_tick() {
     for (int i = 0; i < CONF_GUI_DRAW_TICK_ITERATIONS; ++i) {
         if (!draw_enum_widgets.next()) {
             wasBlinkTime = isBlinkTime;
-            isBlinkTime = (micros() % (2 * CONF_BLINK_TIME)) > CONF_BLINK_TIME && touch::event_type == touch::TOUCH_NONE;
+            isBlinkTime = (micros() % (2 * CONF_GUI_BLINK_TIME)) > CONF_GUI_BLINK_TIME && touch::event_type == touch::TOUCH_NONE;
 
             data::previousSnapshot = data::currentSnapshot;
             data::currentSnapshot.takeSnapshot();
