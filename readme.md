@@ -59,7 +59,7 @@ Here are the steps to build simulator on Linux:
 
 ```
 sudo apt-get install -y git libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
-git clone https://bitbucket.org/eez-open/psu-firmware
+git clone https://github.com/eez-open/psu-firmware
 cd psu-firmware/simulator/platform/linux/
 make
 ```
@@ -80,7 +80,7 @@ Here are the steps to build simulator on Mac:
 
 ```
 brew install sdl2 sdl2_image sdl2_ttf
-git clone https://bitbucket.org/eez-open/psu-firmware
+git clone https://github.com/eez-open/psu-firmware
 cd psu-firmware/simulator/platform/linux/
 make
 ```
