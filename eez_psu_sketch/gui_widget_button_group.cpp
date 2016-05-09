@@ -81,11 +81,11 @@ void onTouchDown(const WidgetCursor &widgetCursor) {
         int w = widget->w / count;
         int x = widgetCursor.x + (widget->w - w * count) / 2;
 
-        selectedButton = (touch::x / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER - x) / w;
+        selectedButton = (touch::x - x) / w;
     } else {
         int h = widget->h / count;
         int y = widgetCursor.y + (widget->h - h * count) / 2;
-        selectedButton = (touch::y / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER - y) / h;
+        selectedButton = (touch::y - y) / h;
     }
 
     if (selectedButton >= 0 && selectedButton < count) {

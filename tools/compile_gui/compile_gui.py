@@ -20,6 +20,7 @@ import json
 import struct
 import sys
 
+# little-endian
 BYTE_ORDER = "<"
 
 #-------------------------------------------------------------------------------
@@ -74,10 +75,6 @@ declare_const("WIDGET_TYPE_SCALE", 8)
 declare_const("WIDGET_TYPE_TOGGLE_BUTTON", 9)
 declare_const("WIDGET_TYPE_BUTTON_GROUP", 10)
 declare_const("WIDGET_TYPE_DISPLAY_BITMAP", 11)
-
-#-------------------------------------------------------------------------------
-
-declare_const("DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER", 2)
 
 #-------------------------------------------------------------------------------
 
@@ -343,21 +340,17 @@ class Parser:
             if not isinstance(value, int):
                 self.trace.error("%s: not an integer" % name)
                 value = default_value
-            if value % DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER != 0:
-                self.trace.error("%s: should be divisible by %d" % (name, DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER))
-                value = default_value
-            value = int(value / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER)
-            if value < 0 or value > 255:
+            if value < 0 or value > 65535:
                 self.trace.error("%s: value out of range" % name)
                 if value < 0: value = 0
-                elif value > 255: value = 255
+                elif value > 65535: value = 65535
         elif parent:
             value = parent.find_field(name).value
         else:
             if mandatory:
                 self.trace.error("%s: missing" % name)
             value = default_value
-        struct.addField(UInt8(name, value))
+        struct.addField(UInt16(name, value))
 
     def addUInt8Field(self, struct, collection, name, default_value, mandatory=True):
         if name in collection:
@@ -628,8 +621,8 @@ class Parser:
         self.addColorField(result, style, "color", self.get_style_property(default_style, "color"), False)
         self.addColorField(result, style, "border_color", self.get_style_property(default_style, "border_color"), False)
 
-        self.addUInt16Field(result, style, "padding_horizontal", self.get_style_property(default_style, "padding_horizontal"), False)
-        self.addUInt16Field(result, style, "padding_vertical", self.get_style_property(default_style, "padding_vertical"), False)
+        self.addUInt8Field(result, style, "padding_horizontal", self.get_style_property(default_style, "padding_horizontal"), False)
+        self.addUInt8Field(result, style, "padding_vertical", self.get_style_property(default_style, "padding_vertical"), False)
 
         self.trace.unindent()
 
@@ -724,7 +717,6 @@ class Parser:
             self.addStringField(specific_widget_data, widget, "text", "")
         elif widget_type == WIDGET_TYPE_SCALE:
             specific_widget_data = Struct(None, "ScaleWidget")
-            self.addColorField(specific_widget_data, widget, "ticks_color", "#000000", True)
             self.addUInt8Field(specific_widget_data, widget, "needle_height", 0)
         elif widget_type == WIDGET_TYPE_TOGGLE_BUTTON:
             specific_widget_data = Struct(None, "ToggleButtonWidget")

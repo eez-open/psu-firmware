@@ -257,11 +257,6 @@ font::Font *styleGetFont(const Style *style) {
 void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse) {
     //++draw_counter;
 
-    x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    w *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    h *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-
     int x1 = x;
     int y1 = y;
     int x2 = x + w - 1;
@@ -324,11 +319,6 @@ void drawText(const char *text, int textLength, int x, int y, int w, int h, cons
 
 void drawMultilineText(const char *text, int x, int y, int w, int h, const Style *style, bool inverse) {
     //++draw_counter;
-
-    x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    w *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    h *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
 
     int x1 = x;
     int y1 = y;
@@ -464,21 +454,11 @@ void drawMultilineText(const char *text, int x, int y, int w, int h, const Style
 }
 
 void fillRect(int x, int y, int w, int h) {
-    x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    w *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    h *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-
     lcd::lcd.fillRect(x, y, x + w - 1, y + h - 1);
 }
 
 void drawBitmap(int bitmapID, int textLength, int x, int y, int w, int h, const Style *style, bool inverse) {
     //++draw_counter;
-
-    x *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    y *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    w *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
-    h *= DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
 
     int x1 = x;
     int y1 = y;
@@ -494,8 +474,6 @@ void drawBitmap(int bitmapID, int textLength, int x, int y, int w, int h, const 
         --y2;
     }
 
-    font::Font *font = styleGetFont(style);
-    
     Bitmap &bitmap = bitmaps[bitmapID];
 
     int width = bitmap.w;
@@ -635,16 +613,16 @@ void draw_scale(const Widget *widget, int y_from, int y_to, int y_min, int y_max
     DECL_WIDGET_STYLE(style, widget);
     DECL_WIDGET_SPECIFIC(ScaleWidget, scale_widget, widget);
 
-    int x1 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->x;
-    int l1 = 5 * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w / 12 - 1;
+    int x1 = widget->x;
+    int l1 = 5 * widget->w / 12 - 1;
 
     int x2 = x1 + l1 + 2;
-    int l2 = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w - l1 - 3;
+    int l2 = widget->w - l1 - 3;
 
     int s = 10 * f / d;
 
-    int y_offset = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widget->y + widget->h) - 1 -
-        (DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->h - (y_max - y_min)) / 2 - scale_widget->needle_height / 2;
+    int y_offset = (widget->y + widget->h) - 1 -
+        (widget->h - (y_max - y_min)) / 2 - scale_widget->needle_height / 2;
 
     for (int y_i = y_from; y_i <= y_to; ++y_i) {
         int y = y_offset - y_i;
@@ -702,11 +680,11 @@ bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, b
 
         DECL_WIDGET_STYLE(style, widget);
         font::Font *font = styleGetFont(style);
-        int fontHeight = font->getAscent() / DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+        int fontHeight = font->getAscent();
 
         DECL_WIDGET_SPECIFIC(ScaleWidget, scale_widget, widget);
 
-        int f = (int)floor(DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * (widget->h - scale_widget->needle_height) / max);
+        int f = (int)floor((widget->h - scale_widget->needle_height) / max);
         int d;
         if (max > 10) {
             d = 1;
@@ -764,7 +742,7 @@ bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, b
         edit_mode_slider_scale_last_y_value = y_value;
 
         if (widget->data == DATA_ID_EDIT_VALUE) {
-            edit_mode_slider::scale_width = DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER * widget->w;
+            edit_mode_slider::scale_width = widget->w;
             edit_mode_slider::scale_height = (max - min) * f;
         }
 
@@ -917,10 +895,10 @@ bool find_widget_step(const WidgetCursor &widgetCursor, bool refresh) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
     bool inside = 
-        find_widget_at_x >= widgetCursor.x * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER &&
-        find_widget_at_x < (widgetCursor.x + widget->w) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER &&
-        find_widget_at_y >= widgetCursor.y * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER &&
-        find_widget_at_y < (widgetCursor.y + widget->h) * DISPLAY_POSITION_OR_SIZE_FIELD_MULTIPLIER;
+        find_widget_at_x >= widgetCursor.x&&
+        find_widget_at_x < widgetCursor.x + widget->w &&
+        find_widget_at_y >= widgetCursor.y &&
+        find_widget_at_y < widgetCursor.y + widget->h;
 
     if (inside) {
         found_widget = widgetCursor;
