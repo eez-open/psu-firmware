@@ -25,7 +25,6 @@
 #include "gui_edit_mode_step.h"
 #include "gui_edit_mode_keypad.h"
 #include "gui_widget_button_group.h"
-#include "bitmaps.h"
 
 #include "channel.h"
 
@@ -203,7 +202,7 @@ private:
                 refresh = index != previousIndex;
             }
 
-            return push(selectedWidgetOffset, x, y, refresh);
+            return push(selectedWidgetOffset, x + widget->x, y + widget->y, refresh);
         }
         else {
             return !callback(WidgetCursor(widgetOffset, x + widget->x, y + widget->y, cursor), refresh);
@@ -241,13 +240,8 @@ bool styleIsVertAlignBottom(const Style *style) {
     return (style->flags & STYLE_FLAGS_VERT_ALIGN) == STYLE_FLAGS_VERT_ALIGN_BOTTOM;
 }
 
-font::Font *styleGetFont(const Style *style) {
-    font::Font *font;
-    if (style->font == LARGE_FONT) font = &font::large_font;
-    else if (style->font == SMALL_FONT) font = &font::small_font;
-    else if (style->font == ICONS_FONT) font = &font::icons_font;
-    else font = &font::medium_font;
-    return font;
+font::Font styleGetFont(const Style *style) {
+    return font::Font(style->font > 0 ? fonts[style->font - 1] : 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -271,10 +265,10 @@ void drawText(const char *text, int textLength, int x, int y, int w, int h, cons
         --y2;
     }
 
-    font::Font *font = styleGetFont(style);
+    font::Font font = styleGetFont(style);
     
-    int width = lcd::lcd.measureStr(text, textLength, *font, x2 - x1 + 1);
-    int height = font->getHeight();
+    int width = lcd::lcd.measureStr(text, textLength, font, x2 - x1 + 1);
+    int height = font.getHeight();
 
     int x_offset;
     if (styleIsHorzAlignLeft(style)) x_offset = x1 + style->padding_horizontal;
@@ -314,7 +308,7 @@ void drawText(const char *text, int textLength, int x, int y, int w, int h, cons
         lcd::lcd.setBackColor(style->background_color);
         lcd::lcd.setColor(style->color);
     }
-    lcd::lcd.drawStr(text, textLength, x_offset, y_offset, x1, y1, x2, y2, *font, (!is_page_refresh && !widget_refresh) || page_style->background_color != background_color);
+    lcd::lcd.drawStr(text, textLength, x_offset, y_offset, x1, y1, x2, y2, font, (!is_page_refresh && !widget_refresh) || page_style->background_color != background_color);
 }
 
 void drawMultilineText(const char *text, int x, int y, int w, int h, const Style *style, bool inverse) {
@@ -334,11 +328,11 @@ void drawMultilineText(const char *text, int x, int y, int w, int h, const Style
         --y2;
     }
 
-    font::Font *font = styleGetFont(style);
-    int height = (int)(0.9 * font->getHeight());
+    font::Font font = styleGetFont(style);
+    int height = (int)(0.9 * font.getHeight());
     
     font::Glyph space_glyph;
-    font->getGlyph(' ', space_glyph);
+    font.getGlyph(' ', space_glyph);
     int space_width = space_glyph.dx;
 
     bool clear_background = false;
@@ -375,7 +369,7 @@ void drawMultilineText(const char *text, int x, int y, int w, int h, const Style
         while (text[i] != 0 && text[i] != ' ' && text[i] != '\n')
             ++i;
 
-        int width = lcd::lcd.measureStr(text + j, i - j, *font);
+        int width = lcd::lcd.measureStr(text + j, i - j, font);
 
         while (width > x2 - x + 1) {
             if (clear_background) {
@@ -404,7 +398,7 @@ void drawMultilineText(const char *text, int x, int y, int w, int h, const Style
             lcd::lcd.setColor(style->color);
         }
 
-        lcd::lcd.drawStr(text + j, i - j, x, y, x1, y1, x2, y2, *font, (!is_page_refresh && !widget_refresh) || page_style->background_color != background_color);
+        lcd::lcd.drawStr(text + j, i - j, x, y, x1, y1, x2, y2, font, (!is_page_refresh && !widget_refresh) || page_style->background_color != background_color);
 
         x += width;
 
@@ -457,8 +451,13 @@ void fillRect(int x, int y, int w, int h) {
     lcd::lcd.fillRect(x, y, x + w - 1, y + h - 1);
 }
 
-void drawBitmap(int bitmapID, int textLength, int x, int y, int w, int h, const Style *style, bool inverse) {
+void drawBitmap(uint8_t bitmapIndex, int textLength, int x, int y, int w, int h, const Style *style, bool inverse) {
     //++draw_counter;
+
+    if (bitmapIndex == 0) {
+        return;
+    }
+    Bitmap &bitmap = bitmaps[bitmapIndex - 1];
 
     int x1 = x;
     int y1 = y;
@@ -473,8 +472,6 @@ void drawBitmap(int bitmapID, int textLength, int x, int y, int w, int h, const 
         --x2;
         --y2;
     }
-
-    Bitmap &bitmap = bitmaps[bitmapID];
 
     int width = bitmap.w;
     int height = bitmap.h;
@@ -587,7 +584,7 @@ bool draw_display_widget(const WidgetCursor &widgetCursor, const Widget *widget,
 
 bool draw_display_string_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
-        DECL_WIDGET_SPECIFIC(DisplayStringWidget, display_string_widget, widget);
+        DECL_WIDGET_SPECIFIC(TextWidget, display_string_widget, widget);
         DECL_STRING(text, display_string_widget->text);
         DECL_WIDGET_STYLE(style, widget);
         drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
@@ -598,7 +595,7 @@ bool draw_display_string_widget(const WidgetCursor &widgetCursor, const Widget *
 
 bool draw_display_multiline_string_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
-        DECL_WIDGET_SPECIFIC(DisplayStringWidget, display_string_widget, widget);
+        DECL_WIDGET_SPECIFIC(MultilineTextWidget, display_string_widget, widget);
         DECL_STRING(text, display_string_widget->text);
         DECL_WIDGET_STYLE(style, widget);
         drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
@@ -679,8 +676,8 @@ bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, b
         float max = data::getMax(widgetCursor.cursor, widget->data).getFloat();
 
         DECL_WIDGET_STYLE(style, widget);
-        font::Font *font = styleGetFont(style);
-        int fontHeight = font->getAscent();
+        font::Font font = styleGetFont(style);
+        int fontHeight = font.getAscent();
 
         DECL_WIDGET_SPECIFIC(ScaleWidget, scale_widget, widget);
 
@@ -770,7 +767,7 @@ bool draw_toggle_button_widget(const WidgetCursor &widgetCursor, const Widget *w
 
 bool draw_display_bitmap_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
-        DECL_WIDGET_SPECIFIC(DisplayBitmapWidget, display_bitmap_widget, widget);
+        DECL_WIDGET_SPECIFIC(BitmapWidget, display_bitmap_widget, widget);
         DECL_WIDGET_STYLE(style, widget);
         drawBitmap(display_bitmap_widget->bitmap, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
         return true;
@@ -783,11 +780,11 @@ bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
 
     bool inverse = selected_widget == widgetCursor;
 
-    if (widget->type == WIDGET_TYPE_DISPLAY) {
+    if (widget->type == WIDGET_TYPE_DISPLAY_DATA) {
         return draw_display_widget(widgetCursor, widget, refresh, inverse);
-    } else if (widget->type == WIDGET_TYPE_DISPLAY_STRING) {
+    } else if (widget->type == WIDGET_TYPE_TEXT) {
         return draw_display_string_widget(widgetCursor, widget, refresh, inverse);
-    } else if (widget->type == WIDGET_TYPE_DISPLAY_MULTILINE_STRING) {
+    } else if (widget->type == WIDGET_TYPE_MULTILINE_TEXT) {
         return draw_display_multiline_string_widget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_SCALE) {
         return draw_scale_widget(widgetCursor, widget, refresh, inverse);
@@ -795,7 +792,7 @@ bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
         return draw_toggle_button_widget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_BUTTON_GROUP) {
         return widget_button_group::draw(widgetCursor, widget, refresh, inverse);
-    } else if (widget->type == WIDGET_TYPE_DISPLAY_BITMAP) {
+    } else if (widget->type == WIDGET_TYPE_BITMAP) {
         return draw_display_bitmap_widget(widgetCursor, widget, refresh, inverse);
     }
 
@@ -895,10 +892,10 @@ bool find_widget_step(const WidgetCursor &widgetCursor, bool refresh) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
     bool inside = 
-        find_widget_at_x >= widgetCursor.x&&
-        find_widget_at_x < widgetCursor.x + widget->w &&
+        find_widget_at_x >= widgetCursor.x &&
+        find_widget_at_x < widgetCursor.x + (int)widget->w &&
         find_widget_at_y >= widgetCursor.y &&
-        find_widget_at_y < widgetCursor.y + widget->h;
+        find_widget_at_y < widgetCursor.y + (int)widget->h;
 
     if (inside) {
         found_widget = widgetCursor;

@@ -40,6 +40,9 @@ offset
 
 ////////////////////////////////////////////////////////////////////////////////
 
+Font::Font() : fontData(0) {
+}
+
 Font::Font(const uint8_t *data PROGMEM) : fontData(data) {
 }
 

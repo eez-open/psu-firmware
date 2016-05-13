@@ -33,21 +33,20 @@ EEZ_UTFT lcd(ITDB32S, LCD_RS, LCD_WR, LCD_CS, LCD_RESET);
 
 EEZ_UTFT::EEZ_UTFT(byte model, int RS, int WR, int CS, int RST, int SER)
 	: UTFT(model, RS, WR, CS, RST, SER)
-	, p_font(&font::medium_font)
 {
 }
 
 int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int clip_y2, uint8_t encoding, bool fill_background) {
 	font::Glyph glyph;
-	p_font->getGlyph(encoding, glyph);
+	font.getGlyph(encoding, glyph);
 	if (!glyph.isFound())
 		return 0;
 
     int x2 = x1 + glyph.dx - 1;
-    int y2 = y1 + p_font->getHeight() - 1;
+    int y2 = y1 + font.getHeight() - 1;
 
     int x_glyph = x1 + glyph.x;
-    int y_glyph = y1 + p_font->getAscent() - (glyph.y + glyph.height);
+    int y_glyph = y1 + font.getAscent() - (glyph.y + glyph.height);
 
     if (fill_background) {
         // clear pixels around glyph
@@ -198,7 +197,7 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
 }
 
 void EEZ_UTFT::drawStr(const char *text, int textLength, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background) {
-	p_font = &font;
+	this->font = font;
 
     if (textLength == -1) {
 	    char encoding;
@@ -215,7 +214,7 @@ void EEZ_UTFT::drawStr(const char *text, int textLength, int x, int y, int clip_
 
 int8_t EEZ_UTFT::measureGlyph(uint8_t encoding) {
     font::Glyph glyph;
-	p_font->getGlyph(encoding, glyph);
+	font.getGlyph(encoding, glyph);
 	if (!glyph.isFound())
 		return 0;
 
@@ -223,7 +222,7 @@ int8_t EEZ_UTFT::measureGlyph(uint8_t encoding) {
 }
 
 int EEZ_UTFT::measureStr(const char *text, int textLength, font::Font &font, int max_width) {
-	p_font = &font;
+	this->font = font;
 
 	int width = 0;
 

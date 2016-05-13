@@ -19,6 +19,7 @@
 #include "psu.h"
 #include "gui_data_snapshot.h"
 #include "gui_view.h"
+#include "gui_document.h"
 
 #define CONF_GUI_REFRESH_EVERY_MS 250
 

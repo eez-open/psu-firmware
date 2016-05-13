@@ -26,6 +26,8 @@
 #include "gui_data.h"
 #include "gui_view.h"
 
+#include "gui_document.h"
+
 #if defined(EEZ_PSU_ARDUINO_MEGA)
 #include "arduino_util.h"
 #endif
@@ -70,7 +72,7 @@ struct WidgetCursor {
 int getActivePage();
 void showPage(int index);
 
-font::Font *styleGetFont(const Style *style);
+font::Font styleGetFont(const Style *style);
 void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse);
 void fillRect(int x, int y, int w, int h);
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());
@@ -120,14 +122,19 @@ inline const int getWidgetStyleId(const Widget *widget) {
     var##_buffer[sizeof(var##_buffer) - 1] = 0; \
     const char *var = var##_buffer
 
+#define DECL_BITMAP(var, offset) \
+    Bitmap var##_buffer; \
+    arduino_util::prog_read_buffer(document + (offset), (uint8_t *)&var##_buffer, sizeof(Bitmap)); \
+    const Bitmap *var = &var##_buffer
+
 #else
 
 #define DECL_WIDGET(var, widgetOffset) const Widget *var = (const Widget *)(document + (widgetOffset))
-#define DECL_WIDGET_STYLE(var, widget) const Style *style = (const Style *)(document + (widget)->style)
+#define DECL_WIDGET_STYLE(var, widget) const Style *var = (const Style *)(document + (widget)->style)
 #define DECL_WIDGET_SPECIFIC(type, var, widget) const type *var = (const type *)(document + (widget)->specific)
-#define DECL_STYLE(var, styleId) const Style *style = (const Style *)(document + g_doc->styles.first + (styleId) * sizeof(Style))
+#define DECL_STYLE(var, styleId) const Style *var = (const Style *)(document + g_doc->styles.first + (styleId) * sizeof(Style))
 #define DECL_STRING(var, offset) const char *var = (const char *)(document + (offset))
-
+#define DECL_BITMAP(var, offset) const Bitmap *var = (const Bitmap *)(document + (offset))
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////

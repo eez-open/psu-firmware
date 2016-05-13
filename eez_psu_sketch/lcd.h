@@ -34,7 +34,7 @@ public:
     int measureStr(const char *text, int textLength, font::Font &font, int max_width = 0);
 
 private:
-    font::Font *p_font;
+    font::Font font;
 
     int8_t drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int clip_y2, uint8_t encoding, bool fill_background);
     int8_t measureGlyph(uint8_t encoding);
@@ -43,7 +43,6 @@ private:
 extern EEZ_UTFT lcd;
 
 void init();
-bool isOn();
 void turnOn();
 void turnOff();
    

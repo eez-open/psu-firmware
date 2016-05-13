@@ -37,8 +37,10 @@ struct Glyph {
 	bool isFound() { return data != 0; }
 };
 
-class Font {
-public:
+struct Font {
+	const uint8_t *fontData PROGMEM;
+
+    Font();
 	Font(const uint8_t *data PROGMEM);
 
 	void getGlyph(uint8_t requested_encoding, Glyph &glyph);
@@ -56,12 +58,8 @@ private:
 
 	const uint8_t * PROGMEM findGlyphData(uint8_t requested_encoding);
 	void fillGlyphParameters(Glyph &glyph);
-
-	const uint8_t *fontData PROGMEM;
 };
 }
 }
 }
 } // namespace eez::psu::gui::font
-
-#include "fonts.h"

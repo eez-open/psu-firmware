@@ -301,9 +301,6 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\touch_calibration.h">
       <Filter>gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\fonts.h">
-      <Filter>gui</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_edit_mode_keypad.h">
       <Filter>gui</Filter>
     </ClInclude>
@@ -325,7 +322,7 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_edit_mode_snapshot.h">
       <Filter>gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\bitmaps.h">
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_document.h">
       <Filter>gui</Filter>
     </ClInclude>
   </ItemGroup>
@@ -532,9 +529,6 @@
     <ClCompile Include="..\..\..\..\eez_psu_sketch\touch_calibration.cpp">
       <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\fonts.cpp">
-      <Filter>gui</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_edit_mode_keypad.cpp">
       <Filter>gui</Filter>
     </ClCompile>
@@ -553,7 +547,7 @@
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_widget_button_group.cpp">
       <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\bitmaps.cpp">
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_document.cpp">
       <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>

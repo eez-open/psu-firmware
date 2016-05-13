@@ -140,33 +140,41 @@ void touch_init() {
 void touch_read() {
 	cbi(P_CS, B_CS);                    
 
+    pinMode(TOUCH_IRQ,  INPUT);
+
     // read pressure
     touch_is_pressed = !rbi(P_IRQ, B_IRQ); 
-
     if (touch_is_pressed) {
         // read X
         touch_WriteData(0x90);        
         pulse_high(P_CLK, B_CLK);
         touch_x = touch_ReadData();
 
-        // read Y
-        touch_WriteData(0xD0);      
-        pulse_high(P_CLK, B_CLK);
-        touch_y = touch_ReadData();
+        touch_is_pressed = !rbi(P_IRQ, B_IRQ);
+        if (touch_is_pressed) {
+            // read Y
+            touch_WriteData(0xD0);      
+            pulse_high(P_CLK, B_CLK);
+            touch_y = touch_ReadData();
 
-        if (touch_x == -1) {
-            touch_is_pressed = false;
-            touch_y == -1;
-        } else if (touch_y == -1) {
-            touch_is_pressed = false;
-            touch_x == -1;
+            if (touch_x == -1) {
+                touch_is_pressed = false;
+                touch_y = -1;
+            } else if (touch_y == -1) {
+                touch_is_pressed = false;
+                touch_x = -1;
+            } else {
+                touch_x = 4095 - touch_x;
+            }
         } else {
-            touch_x = 4095 - touch_x;
+            touch_x = -1;
+            touch_y = -1;
         }
     } else {
         touch_x = -1;
         touch_y = -1;
     }
+    pinMode(TOUCH_IRQ, OUTPUT);
     
 	sbi(P_CS, B_CS);
 }
@@ -198,6 +206,8 @@ unsigned long last_tick_usec = 0;
 void init() {
     touch_init();
     calibration::init();
+
+    DebugTrace("Touch modification ENABLED");
 }
 
 void tick(unsigned long tick_usec) {
