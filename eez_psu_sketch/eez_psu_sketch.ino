@@ -21,6 +21,7 @@
 #include <UIPServer.h>
 #include <UIPClient.h>
 #include <scpi-parser.h>
+#include <eez_psu_rev.h>
 #include <eez_psu.h>
 #include "UTFT.h"
 

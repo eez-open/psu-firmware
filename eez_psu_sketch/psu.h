@@ -29,11 +29,11 @@
 #include "Arduino.h"
 #include "SPI.h"
 
+#include "eez_psu_rev.h"
+
 #ifdef EEZ_PSU_ARDUINO
 #include "arduino_psu.h"
 #endif
-
-#include "eez_psu.h"
 
 #include "conf.h"
 
@@ -41,10 +41,7 @@
 #include "simulator_conf.h"
 #endif
 
-#ifdef EEZ_PSU_ARDUINO_DUE
-#define vsnprintf_P vsnprintf
-#define strncpy_P strncpy
-#endif
+#include "eez_psu.h"
 
 #include <scpi-parser.h>
 

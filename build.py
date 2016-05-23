@@ -39,7 +39,3 @@ build_arduino_library.copy_lib(eez_psu_lib_dir, 'eez_psu_lib')
 # UTFT
 utft_dir = os.path.join(os.path.dirname(__file__), 'libraries/UTFT')
 build_arduino_library.copy_lib(utft_dir, 'UTFT')
-
-# UTouch
-utouch_dir = os.path.join(os.path.dirname(__file__), 'libraries/UTouch')
-build_arduino_library.copy_lib(utouch_dir, 'UTouch')

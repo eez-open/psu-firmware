@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2016-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,25 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#pragma once
 
-#define SCPI_SIMU_COMMANDS
+#ifndef EEZ_PSU_REV_H
+#define EEZ_PSU_REV_H
 
-#pragma GCC diagnostic ignored "-Wunused-variable"
+#define EEZ_PSU_REVISION_R1B9 1
+#define EEZ_PSU_REVISION_R2B6 2
 
-#if defined(EEZ_PSU_ARDUINO_DUE)
-
-#ifndef strncmp_P
-#define strncmp_P(a, b, c) strncmp((a), (b), (c))
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+#define EEZ_PSU_ARDUINO_MEGA
+#elif defined(_VARIANT_ARDUINO_DUE_X_)
+#define EEZ_PSU_ARDUINO_DUE
 #endif
 
-#ifndef vsnprintf_P
-#define vsnprintf_P vsnprintf
-#endif
-
-#ifndef strncpy_P
-#define strncpy_P strncpy
-#endif
-
-#endif
+#endif // EEZ_PSU_REV_H
