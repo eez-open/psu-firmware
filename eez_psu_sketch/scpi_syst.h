@@ -49,4 +49,4 @@
     SCPI_COMMAND("SYSTem:CPU:INFOrmation:ETHernet:TYPE?", scpi_syst_CpuInformationEhternetTypeQ) \
     SCPI_COMMAND("SYSTem:CPU:INFOrmation:TYPE?", scpi_syst_CpuInformationTypeQ) \
     SCPI_COMMAND("SYSTem:CPU:MODel?", scpi_syst_CpuModelQ) \
-    SCPI_COMMAND("SYSTem:CPU:OPTION?", scpi_syst_CpuOptionQ)
+    SCPI_COMMAND("SYSTem:CPU:OPTion?", scpi_syst_CpuOptionQ)
