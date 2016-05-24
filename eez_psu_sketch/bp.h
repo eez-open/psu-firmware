@@ -18,6 +18,8 @@
  
 #pragma once
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+
 #define BP_LED_OUT1_PLUS      (1 <<  7)
 #define BP_LED_OUT1_PLUS_RED  (1 <<  6)
 #define BP_LED_SENSE1_PLUS    (1 <<  5)
@@ -38,6 +40,34 @@
 
 #define BP_STANDBY            (1 << 15)
 
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+
+#define BP_LED_OUT1           (1 <<  3)
+#define BP_LED_OUT1_RED       (1 <<  2)
+#define BP_LED_SENSE1         (1 <<  5)
+
+#define BP_LED_OUT2           (1 << 13)
+#define BP_LED_SENSE2         (1 << 12)
+
+#define BP_RELAY_SENSE1       (1 <<  1)
+#define BP_RELAY_SENSE2       (1 << 14)
+
+#define BP_K_PAR              (1 <<  9)
+#define BP_K_SER              (1 <<  8)
+
+#define BP_STANDBY            (1 << 15)
+
+#define BP_LED_CV1            (1 <<  0)
+#define BP_LED_CC1            (1 <<  6)
+
+#define BP_LED_CV2            (1 <<  7)
+#define BP_LED_CC2            (1 << 10)
+
+#define BP_LED_PROG1          (1 <<  4)
+#define BP_LED_PROG2          (1 << 11)
+
+#endif
+
 namespace eez {
 namespace psu {
 namespace bp {
@@ -47,6 +77,11 @@ void init();
 void switchStandby(bool on);
 void switchOutput(Channel *channel, bool on);
 void switchSense(Channel *channel, bool on);
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+void cvLedSwitch(Channel *channel, bool on);
+void ccLedSwitch(Channel *channel, bool on);
+#endif
 
 }
 }

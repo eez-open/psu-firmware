@@ -37,6 +37,8 @@ void powerDown() {
     digitalWrite(PWR_DIRECT, LOW);
 }
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+
 void cvLedSwitch(Channel *channel, bool on) {
     digitalWrite(channel->cv_led_pin, on);
 }
@@ -44,6 +46,8 @@ void cvLedSwitch(Channel *channel, bool on) {
 void ccLedSwitch(Channel *channel, bool on) {
     digitalWrite(channel->cc_led_pin, on);
 }
+
+#endif
 
 }
 }

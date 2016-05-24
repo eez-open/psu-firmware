@@ -180,10 +180,15 @@ public:
     uint8_t convend_pin;
     uint8_t adc_pin;
     uint8_t dac_pin;
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     uint16_t bp_led_out_plus;
     uint16_t bp_led_out_minus;
     uint16_t bp_led_sense_plus;
     uint16_t bp_led_sense_minus;
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+    uint16_t bp_led_out;
+    uint16_t bp_led_sense;
+#endif
     uint16_t bp_relay_sense;
     uint8_t cc_led_pin;
     uint8_t cv_led_pin;
@@ -251,7 +256,11 @@ public:
     Channel(
         int8_t index,
         uint8_t isolator_pin, uint8_t ioexp_pin, uint8_t convend_pin, uint8_t adc_pin, uint8_t dac_pin,
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
         uint16_t bp_led_out_plus, uint16_t bp_led_out_minus, uint16_t bp_led_sense_plus, uint16_t bp_led_sense_minus, uint16_t bp_relay_sense,
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+        uint16_t bp_led_out, uint16_t bp_led_sense, uint16_t bp_relay_sense,
+#endif
         uint8_t cc_led_pin, uint8_t cv_led_pin,
         float U_MIN, float U_DEF, float U_MAX, float U_MIN_STEP, float U_DEF_STEP, float U_MAX_STEP, float U_CAL_VAL_MIN, float U_CAL_VAL_MID, float U_CAL_VAL_MAX, float U_CURR_CAL,
         bool OVP_DEFAULT_STATE, float OVP_MIN_DELAY, float OVP_DEFAULT_DELAY, float OVP_MAX_DELAY,
@@ -376,7 +385,7 @@ private:
     void adcDataIsReady(int16_t data);
     void setCcMode(bool cc_mode);
     void setCvMode(bool cv_mode);
-    void updateBoardCcAndCvSwitch();
+    void updateCcAndCvSwitch();
     void doOutputEnable(bool enable);
     void doRemoteSensingEnable(bool enable);
     void doDpEnable(bool enable);

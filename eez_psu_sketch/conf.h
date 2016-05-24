@@ -31,7 +31,7 @@ option.
 
 /// Selected EEZ PSU revison, possible values are:
 /// EEZ_PSU_REVISION_R1B9 or EEZ_PSU_REVISION_R2B6.
-#define EEZ_PSU_SELECTED_REVISION EEZ_PSU_REVISION_R1B9
+#define EEZ_PSU_SELECTED_REVISION EEZ_PSU_REVISION_R2B6
 
 #include "conf_channel.h"
 

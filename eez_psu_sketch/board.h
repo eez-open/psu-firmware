@@ -25,8 +25,10 @@ namespace board {
 void powerUp();
 void powerDown();
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 void cvLedSwitch(Channel *channel, bool on);
 void ccLedSwitch(Channel *channel, bool on);
+#endif
 
 }
 } 

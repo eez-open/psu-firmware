@@ -1,6 +1,6 @@
 /*
 * EEZ PSU Firmware
-* Copyright (C) 2015 Envox d.o.o.
+* Copyright (C) 2015-present, Envox d.o.o.
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
 * GNU General Public License for more details.
 
 * You should have received a copy of the GNU General Public License
-* along with this program.  If not, see .
+* along with this program.  If not, see http://www.gnu.org/licenses.
 */
 
 #pragma once

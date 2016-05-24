@@ -83,7 +83,11 @@ float Channel::Simulator::getLoad() {
 Channel::Channel(
     int8_t index_,
     uint8_t isolator_pin_, uint8_t ioexp_pin_, uint8_t convend_pin_, uint8_t adc_pin_, uint8_t dac_pin_,
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     uint16_t bp_led_out_plus_, uint16_t bp_led_out_minus_, uint16_t bp_led_sense_plus_, uint16_t bp_led_sense_minus_, uint16_t bp_relay_sense_,
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+    uint16_t bp_led_out_, uint16_t bp_led_sense_, uint16_t bp_relay_sense_,
+#endif
     uint8_t cc_led_pin_, uint8_t cv_led_pin_,
     float U_MIN_, float U_DEF_, float U_MAX_, float U_MIN_STEP_, float U_DEF_STEP_, float U_MAX_STEP_, float U_CAL_VAL_MIN_, float U_CAL_VAL_MID_, float U_CAL_VAL_MAX_, float U_CURR_CAL_,
     bool OVP_DEFAULT_STATE_, float OVP_MIN_DELAY_, float OVP_DEFAULT_DELAY_, float OVP_MAX_DELAY_,
@@ -94,7 +98,11 @@ Channel::Channel(
     :
     index(index_),
     isolator_pin(isolator_pin_), ioexp_pin(ioexp_pin_), convend_pin(convend_pin_), adc_pin(adc_pin_), dac_pin(dac_pin_),
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     bp_led_out_plus(bp_led_out_plus_), bp_led_out_minus(bp_led_out_minus_), bp_led_sense_plus(bp_led_sense_plus_), bp_led_sense_minus(bp_led_sense_minus_), bp_relay_sense(bp_relay_sense_),
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+    bp_led_out(bp_led_out_), bp_led_sense(bp_led_sense_), bp_relay_sense(bp_relay_sense_),
+#endif
     cc_led_pin(cc_led_pin_), cv_led_pin(cv_led_pin_),
     U_MIN(U_MIN_), U_DEF(U_DEF_), U_MAX(U_MAX_), U_MIN_STEP(U_MIN_STEP_), U_DEF_STEP(U_DEF_STEP_), U_MAX_STEP(U_MAX_STEP_), U_CAL_VAL_MIN(U_CAL_VAL_MIN_), U_CAL_VAL_MID(U_CAL_VAL_MID_), U_CAL_VAL_MAX(U_CAL_VAL_MAX_), U_CURR_CAL(U_CURR_CAL_),
     OVP_DEFAULT_STATE(OVP_DEFAULT_STATE_), OVP_MIN_DELAY(OVP_MIN_DELAY_), OVP_DEFAULT_DELAY(OVP_DEFAULT_DELAY_), OVP_MAX_DELAY(OVP_MAX_DELAY_),
@@ -414,9 +422,14 @@ void Channel::adcDataIsReady(int16_t data) {
     }
 }
 
-void Channel::updateBoardCcAndCvSwitch() {
+void Channel::updateCcAndCvSwitch() {
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     board::cvLedSwitch(this, isCvMode());
     board::ccLedSwitch(this, isCcMode());
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+    bp::cvLedSwitch(this, isCvMode());
+    bp::ccLedSwitch(this, isCcMode());
+#endif
 }
 
 void Channel::setCcMode(bool cc_mode) {
@@ -427,7 +440,7 @@ void Channel::setCcMode(bool cc_mode) {
     if (cc_mode != flags.cc_mode) {
         flags.cc_mode = cc_mode;
 
-        updateBoardCcAndCvSwitch();
+        updateCcAndCvSwitch();
 
         setOperBits(OPER_ISUM_CC, cc_mode);
         setQuesBits(QUES_ISUM_VOLT, cc_mode);
@@ -444,7 +457,7 @@ void Channel::setCvMode(bool cv_mode) {
     if (cv_mode != flags.cv_mode) {
         flags.cv_mode = cv_mode;
 
-        updateBoardCcAndCvSwitch();
+        updateCcAndCvSwitch();
 
         setOperBits(OPER_ISUM_CV, cv_mode);
         setQuesBits(QUES_ISUM_CURR, cv_mode);
