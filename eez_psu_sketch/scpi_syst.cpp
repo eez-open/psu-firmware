@@ -428,6 +428,57 @@ scpi_result_t scpi_syst_ChannelModelQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t scpi_syst_CpuInformationEhternetTypeQ(scpi_t * context) {
+    SCPI_ResultText(context, getCpuEthernetType());
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_CpuInformationTypeQ(scpi_t * context) {
+    SCPI_ResultText(context, getCpuType());
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_CpuModelQ(scpi_t * context) {
+    SCPI_ResultText(context, getCpuModel());
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_CpuOptionQ(scpi_t * context) {
+    char strFeatures[128] = {0};
+
+#if OPTION_BP
+    if (strFeatures[0]) {
+        strcat(strFeatures, ", ");
+    }
+    strcat(strFeatures, "BPost");
+#endif
+
+#if OPTION_EXT_EEPROM
+    if (strFeatures[0]) {
+        strcat(strFeatures, ", ");
+    }
+    strcat(strFeatures, "EEPROM");
+#endif
+
+#if OPTION_EXT_RTC
+    if (strFeatures[0]) {
+        strcat(strFeatures, ", ");
+    }
+    strcat(strFeatures, "RTC");
+#endif
+
+#if OPTION_SD_CARD
+    if (strFeatures[0]) {
+        strcat(strFeatures, ", ");
+    }
+    strcat(strFeatures, "SDcard");
+#endif
+
+    SCPI_ResultText(context, strFeatures);
+
+    return SCPI_RES_OK;
+}
+
 }
 }
 } // namespace eez::psu::scpi

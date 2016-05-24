@@ -523,6 +523,34 @@ const char *getModelName() {
     return model_name;
 }
 
+const char *getCpuModel() {
+#if defined(EEZ_PSU_ARDUINO)
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+    return "Arduino, R1B9";
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+    return "Arduino, R2B6";
+#endif
+#else
+    return "Simulator, M2.0";
+#endif
+}
+
+const char *getCpuType() {
+    return PLATFORM;
+}
+
+const char *getCpuEthernetType() {
+#if defined(EEZ_PSU_ARDUINO)
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+    return "ENC28J60";
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+    return "W5500";
+#endif
+#else
+    return "Simulator";
+#endif
+}
+
 void enterTimeCriticalMode() {
     g_is_time_critical_mode = true;
 }

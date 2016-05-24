@@ -81,6 +81,9 @@ void setQuesBits(int bit_mask, bool on);
 void generateError(int16_t error);
 
 const char *getModelName();
+const char *getCpuModel();
+const char *getCpuType();
+const char *getCpuEthernetType();
 
 extern void enterTimeCriticalMode();
 extern bool isTimeCriticalMode();

@@ -45,4 +45,8 @@
     SCPI_COMMAND("SYSTem:CHANnel:INFOrmation:POWer?", scpi_syst_ChannelInformationPowerQ) \
     SCPI_COMMAND("SYSTem:CHANnel:INFOrmation:PROGram?", scpi_syst_ChannelInformationProgramQ) \
     SCPI_COMMAND("SYSTem:CHANnel:INFOrmation:VOLTage?", scpi_syst_ChannelInformationVoltageQ) \
-    SCPI_COMMAND("SYSTem:CHANnel:MODel?", scpi_syst_ChannelModelQ)
+    SCPI_COMMAND("SYSTem:CHANnel:MODel?", scpi_syst_ChannelModelQ) \
+    SCPI_COMMAND("SYSTem:CPU:INFOrmation:ETHernet:TYPE?", scpi_syst_CpuInformationEhternetTypeQ) \
+    SCPI_COMMAND("SYSTem:CPU:INFOrmation:TYPE?", scpi_syst_CpuInformationTypeQ) \
+    SCPI_COMMAND("SYSTem:CPU:MODel?", scpi_syst_CpuModelQ) \
+    SCPI_COMMAND("SYSTem:CPU:OPTION?", scpi_syst_CpuOptionQ)
