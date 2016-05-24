@@ -22,7 +22,9 @@
 
 #include "simulator_psu.h"
 #include "chips.h"
+#if OPTION_DISPLAY
 #include "front_panel/control.h"
+#endif
 
 namespace eez {
 namespace psu {
@@ -241,12 +243,17 @@ scpi_result_t scpi_simu_TemperatureQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_simu_GUI(scpi_t *context) {
+#if OPTION_DISPLAY
     if (!simulator::front_panel::open()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_simu_Exit(scpi_t *context) {

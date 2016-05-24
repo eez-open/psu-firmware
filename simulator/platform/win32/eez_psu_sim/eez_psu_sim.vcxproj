@@ -179,6 +179,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\conf.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\conf_advanced.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\conf_user.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\conf_user_revision.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\dac.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\datetime.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\debug.h" />

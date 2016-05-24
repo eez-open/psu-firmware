@@ -317,6 +317,117 @@ scpi_result_t scpi_syst_TempProtectionTrippedQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t scpi_syst_ChannelCountQ(scpi_t * context) {
+    SCPI_ResultInt(context, CH_NUM);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_ChannelInformationCurrentQ(scpi_t * context) {
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultFloat(context, channel->I_MAX);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_ChannelInformationPowerQ(scpi_t * context) {
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultFloat(context, channel->I_MAX * channel->U_MAX);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_ChannelInformationProgramQ(scpi_t * context) {
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    uint16_t features = channel->getFeatures();
+    
+    char strFeatures[64] = {0};
+
+    if (features & CH_FEATURE_VOLT) {
+        strcat(strFeatures, "Volt");
+    }
+
+    if (features & CH_FEATURE_CURRENT) {
+        if (strFeatures[0]) {
+            strcat(strFeatures, ", ");
+        }
+        strcat(strFeatures, "Current");
+    }
+
+    if (features & CH_FEATURE_POWER) {
+        if (strFeatures[0]) {
+            strcat(strFeatures, ", ");
+        }
+        strcat(strFeatures, "Power");
+    }
+
+    if (features & CH_FEATURE_OE) {
+        if (strFeatures[0]) {
+            strcat(strFeatures, ", ");
+        }
+        strcat(strFeatures, "OE");
+    }
+
+    if (features & CH_FEATURE_DPROG) {
+        if (strFeatures[0]) {
+            strcat(strFeatures, ", ");
+        }
+        strcat(strFeatures, "DProg");
+    }
+
+    if (features & CH_FEATURE_LRIPPLE) {
+        if (strFeatures[0]) {
+            strcat(strFeatures, ", ");
+        }
+        strcat(strFeatures, "LRipple");
+    }
+
+    if (features & CH_FEATURE_RPROG) {
+        if (strFeatures[0]) {
+            strcat(strFeatures, ", ");
+        }
+        strcat(strFeatures, "Rprog");
+    }
+
+    SCPI_ResultText(context, strFeatures);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_ChannelInformationVoltageQ(scpi_t * context) {
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultFloat(context, channel->U_MAX);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_ChannelModelQ(scpi_t * context) {
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultText(context, channel->getBoardRevisionName());
+
+    return SCPI_RES_OK;
+}
+
 }
 }
 } // namespace eez::psu::scpi

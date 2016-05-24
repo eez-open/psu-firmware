@@ -18,7 +18,9 @@
 
 #include "psu.h"
 #include "main_loop.h"
+#if OPTION_DISPLAY
 #include "front_panel/control.h"
+#endif
 
 using namespace eez::psu;
 
@@ -26,6 +28,8 @@ int main() {
     simulator::init();
     boot();
 	main_loop();
+#if OPTION_DISPLAY
     simulator::front_panel::close();
+#endif
     return 0;
 }

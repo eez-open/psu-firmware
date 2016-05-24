@@ -29,9 +29,7 @@ option.
 
 #pragma once
 
-/// Selected EEZ PSU revison, possible values are:
-/// EEZ_PSU_REVISION_R1B9 or EEZ_PSU_REVISION_R2B6.
-#define EEZ_PSU_SELECTED_REVISION EEZ_PSU_REVISION_R2B6
+#include "conf_user_revision.h"
 
 #include "conf_channel.h"
 
@@ -62,6 +60,9 @@ option.
 /// Is binding post present?
 #define OPTION_BP         1
 
+/// Is display present?
+#define OPTION_DISPLAY    1
+
 /// Maximum number of channels existing.
 #define CH_MAX 2
 
@@ -71,8 +72,8 @@ option.
 /// Channels configuration.
 /// 
 #define CHANNELS \
-    CHANNEL(1, CH_PINS_1, CH_PARAMS_50V_3A), \
-    CHANNEL(2, CH_PINS_2, CH_PARAMS_40V_5A) \
+    CHANNEL(1, CH_BOARD_REVISION_R4B43A, CH_PINS_1, CH_PARAMS_50V_3A), \
+    CHANNEL(2, CH_BOARD_REVISION_R4B43A, CH_PINS_2, CH_PARAMS_40V_5A) \
 
 /// Min. delay between power down and power up.
 #define MIN_POWER_UP_DELAY 5

@@ -18,7 +18,9 @@
 
 #include "psu.h"
 #include "chips.h"
+#if OPTION_DISPLAY
 #include "front_panel/control.h"
+#endif
 
 #include "main_loop.h"
 
@@ -54,7 +56,9 @@ void init() {
 void tick() {
     chips::tick();
     psu::tick();
+#if OPTION_DISPLAY
     front_panel::tick();
+#endif
 }
 
 void setTemperature(temp_sensor::Type sensor, float value) {

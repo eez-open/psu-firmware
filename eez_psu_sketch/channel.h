@@ -30,6 +30,16 @@
 namespace eez {
 namespace psu {
 
+enum ChannelFeatures {
+    CH_FEATURE_VOLT = (1 << 1),
+    CH_FEATURE_CURRENT = (1 << 2),
+    CH_FEATURE_POWER = (1 << 3),
+    CH_FEATURE_OE = (1 << 4),
+    CH_FEATURE_DPROG = (1 << 5),
+    CH_FEATURE_LRIPPLE = (1 << 6),
+    CH_FEATURE_RPROG = (1 << 7)
+};
+
 /// PSU channel.
 class Channel {
 public:
@@ -173,7 +183,9 @@ public:
     static Channel &get(int channel_index);
 
     /// Channel index. Starts from 1.
-    int8_t index;
+    uint8_t index;
+
+    uint8_t boardRevision;
 
     uint8_t isolator_pin;
     uint8_t ioexp_pin;
@@ -181,15 +193,15 @@ public:
     uint8_t adc_pin;
     uint8_t dac_pin;
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-    uint16_t bp_led_out_plus;
-    uint16_t bp_led_out_minus;
-    uint16_t bp_led_sense_plus;
-    uint16_t bp_led_sense_minus;
+    uint8_t bp_led_out_plus;
+    uint8_t bp_led_out_minus;
+    uint8_t bp_led_sense_plus;
+    uint8_t bp_led_sense_minus;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-    uint16_t bp_led_out;
-    uint16_t bp_led_sense;
+    uint8_t bp_led_out;
+    uint8_t bp_led_sense;
 #endif
-    uint16_t bp_relay_sense;
+    uint8_t bp_relay_sense;
     uint8_t cc_led_pin;
     uint8_t cv_led_pin;
 
@@ -254,12 +266,13 @@ public:
 #endif // EEZ_PSU_SIMULATOR
 
     Channel(
-        int8_t index,
+        uint8_t index,
+        uint8_t boardRevision,
         uint8_t isolator_pin, uint8_t ioexp_pin, uint8_t convend_pin, uint8_t adc_pin, uint8_t dac_pin,
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-        uint16_t bp_led_out_plus, uint16_t bp_led_out_minus, uint16_t bp_led_sense_plus, uint16_t bp_led_sense_minus, uint16_t bp_relay_sense,
+        uint8_t bp_led_out_plus, uint8_t bp_led_out_minus, uint8_t bp_led_sense_plus, uint8_t bp_led_sense_minus, uint8_t bp_relay_sense,
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-        uint16_t bp_led_out, uint16_t bp_led_sense, uint16_t bp_relay_sense,
+        uint8_t bp_led_out, uint8_t bp_led_sense, uint8_t bp_relay_sense,
 #endif
         uint8_t cc_led_pin, uint8_t cv_led_pin,
         float U_MIN, float U_DEF, float U_MAX, float U_MIN_STEP, float U_DEF_STEP, float U_MAX_STEP, float U_CAL_VAL_MIN, float U_CAL_VAL_MID, float U_CAL_VAL_MAX, float U_CURR_CAL,
@@ -371,6 +384,12 @@ public:
 
     /// Remap current value to ADC data value (use calibration if configured).
     int16_t remapCurrentToAdcData(float value);
+
+    /// Returns name of the board revison of this channel.
+    const char *getBoardRevisionName();
+
+    /// Returns features present (check ChannelFeatures) in board revision of this channel.
+    uint16_t getFeatures();
 
 private:
     bool delayed_dp_off;

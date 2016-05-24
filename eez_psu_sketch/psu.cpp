@@ -32,7 +32,9 @@
 #include "eeprom.h"
 #include "calibration.h"
 #include "profile.h"
+#if OPTION_DISPLAY
 #include "gui.h"
+#endif
 
 #ifdef EEZ_PSU_SIMULATOR
 #include "front_panel/control.h"
@@ -67,7 +69,9 @@ void boot() {
 
     persist_conf::loadDevice(); // loads global configuration parameters
 
+#if OPTION_DISPLAY
     gui::init();
+#endif
 
     success &= rtc::init();
     success &= datetime::init();
@@ -167,7 +171,9 @@ void boot() {
 }
 
 bool powerUp() {
+#if OPTION_DISPLAY
     gui::showWelcomePage();
+#endif
 
     if (g_power_is_up) return true;
     if (temperature::isSensorTripped(temp_sensor::MAIN)) return false;
@@ -203,11 +209,13 @@ bool powerUp() {
 }
 
 void powerDown() {
+#if OPTION_DISPLAY
     if (g_is_booted) {
         gui::showEnteringStandbyPage();
     } else {
         gui::showStandbyPage();
     }
+#endif
 
     if (!g_power_is_up) return;
 
@@ -417,7 +425,9 @@ void tick() {
     ethernet::tick(tick_usec);
     sound::tick(tick_usec);
     profile::tick(tick_usec);
+#if OPTION_DISPLAY
     gui::tick(tick_usec);
+#endif
 }
 
 void setEsrBits(int bit_mask) {

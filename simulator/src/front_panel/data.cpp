@@ -38,34 +38,34 @@ void fillChannelData(ChannelData *data, int ch) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
             data->cv = pins[LED_CV1] ? true : false;
             data->cc = pins[LED_CC1] ? true : false;
-            data->out_plus = chips::bp_chip.getValue() & BP_LED_OUT1_PLUS ? true : false;
-            data->sense_plus = chips::bp_chip.getValue() & BP_LED_SENSE1_PLUS ? true : false;
-            data->sense_minus = chips::bp_chip.getValue() & BP_LED_SENSE1_MINUS ? true : false;
-            data->out_minus = chips::bp_chip.getValue() & BP_LED_OUT1_MINUS ? true : false;
+            data->out_plus = chips::bp_chip.getValue() & (1 << BP_LED_OUT1_PLUS) ? true : false;
+            data->sense_plus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE1_PLUS) ? true : false;
+            data->sense_minus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE1_MINUS) ? true : false;
+            data->out_minus = chips::bp_chip.getValue() & (1 << BP_LED_OUT1_MINUS) ? true : false;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-            data->cv = chips::bp_chip.getValue() & BP_LED_CV1 ? true : false;
-            data->cc = chips::bp_chip.getValue() & BP_LED_CC1 ? true : false;
-            data->out_plus = chips::bp_chip.getValue() & BP_LED_OUT1 ? true : false;
-            data->sense_plus = chips::bp_chip.getValue() & BP_LED_SENSE1 ? true : false;
-            data->sense_minus = chips::bp_chip.getValue() & BP_LED_SENSE1 ? true : false;
-            data->out_minus = chips::bp_chip.getValue() & BP_LED_OUT1 ? true : false;
+            data->cv = chips::bp_chip.getValue() & (1 << BP_LED_CV1) ? true : false;
+            data->cc = chips::bp_chip.getValue() & (1 << BP_LED_CC1) ? true : false;
+            data->out_plus = chips::bp_chip.getValue() & (1 << BP_LED_OUT1) ? true : false;
+            data->sense_plus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE1) ? true : false;
+            data->sense_minus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE1) ? true : false;
+            data->out_minus = chips::bp_chip.getValue() & (1 << BP_LED_OUT1) ? true : false;
 #endif
         }
         else {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
             data->cv = pins[LED_CV2] ? true : false;
             data->cc = pins[LED_CC2] ? true : false;
-            data->out_plus = chips::bp_chip.getValue() & BP_LED_OUT2_PLUS ? true : false;
-            data->sense_plus = chips::bp_chip.getValue() & BP_LED_SENSE2_PLUS ? true : false;
-            data->sense_minus = chips::bp_chip.getValue() & BP_LED_SENSE2_MINUS ? true : false;
-            data->out_minus = chips::bp_chip.getValue() & BP_LED_OUT2_MINUS ? true : false;
+            data->out_plus = chips::bp_chip.getValue() & (1 << BP_LED_OUT2_PLUS) ? true : false;
+            data->sense_plus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE2_PLUS) ? true : false;
+            data->sense_minus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE2_MINUS) ? true : false;
+            data->out_minus = chips::bp_chip.getValue() & (1 << BP_LED_OUT2_MINUS) ? true : false;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-            data->cv = chips::bp_chip.getValue() & BP_LED_CV2 ? true : false;
-            data->cc = chips::bp_chip.getValue() & BP_LED_CC2 ? true : false;
-            data->out_plus = chips::bp_chip.getValue() & BP_LED_OUT2 ? true : false;
-            data->sense_plus = chips::bp_chip.getValue() & BP_LED_SENSE2 ? true : false;
-            data->sense_minus = chips::bp_chip.getValue() & BP_LED_SENSE2 ? true : false;
-            data->out_minus = chips::bp_chip.getValue() & BP_LED_OUT2 ? true : false;
+            data->cv = chips::bp_chip.getValue() & (1 << BP_LED_CV2) ? true : false;
+            data->cc = chips::bp_chip.getValue() & (1 << BP_LED_CC2) ? true : false;
+            data->out_plus = chips::bp_chip.getValue() & (1 << BP_LED_OUT2) ? true : false;
+            data->sense_plus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE2) ? true : false;
+            data->sense_minus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE2) ? true : false;
+            data->out_minus = chips::bp_chip.getValue() & (1 << BP_LED_OUT2) ? true : false;
 #endif
         }
 
@@ -129,7 +129,7 @@ void fillLocalControlBuffer(Data *data) {
 void fillData(Data *data) {
     uint16_t bp_value = chips::bp_chip.getValue();
 
-    data->standby = bp_value & BP_STANDBY ? true : false;
+    data->standby = bp_value & (1 << BP_STANDBY) ? true : false;
 
     fillChannelData(&data->ch1, 1);
     fillChannelData(&data->ch2, 2);

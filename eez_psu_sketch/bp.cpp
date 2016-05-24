@@ -48,10 +48,10 @@ void bp_switch(uint16_t mask, bool on) {
     if (on) {
         conf |= mask;
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-        if (mask & BP_LED_OUT1_PLUS) conf &= ~BP_LED_OUT1_PLUS_RED;
-        if (mask & BP_LED_OUT1_MINUS) conf &= ~BP_LED_OUT1_MINUS_RED;
+        if (mask & (1 << BP_LED_OUT1_PLUS)) conf &= ~(1 << BP_LED_OUT1_PLUS_RED);
+        if (mask & (1 << BP_LED_OUT1_MINUS)) conf &= ~(1 << BP_LED_OUT1_MINUS_RED);
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-        if (mask & BP_LED_OUT1) conf &= ~BP_LED_OUT1_RED;
+        if (mask & (1 << BP_LED_OUT1)) conf &= ~(1 << BP_LED_OUT1_RED);
 #endif
     }
     else {
@@ -70,36 +70,36 @@ void init() {
 }
 
 void switchStandby(bool on) {
-    set(on ? BP_STANDBY : 0);
+    set(on ? (1 << BP_STANDBY) : 0);
 }
 
 void switchOutput(Channel *channel, bool on) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-    bp_switch(channel->bp_led_out_plus |
-        channel->bp_led_out_minus, on);
+    bp_switch((1 << channel->bp_led_out_plus) |
+        (1 << channel->bp_led_out_minus), on);
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-    bp_switch(channel->bp_led_out, on);
+    bp_switch((1 << channel->bp_led_out), on);
 #endif
 }
 
 void switchSense(Channel *channel, bool on) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-    bp_switch(channel->bp_led_sense_plus |
-        channel->bp_led_sense_minus |
-        channel->bp_relay_sense, on);
+    bp_switch((1 << channel->bp_led_sense_plus) |
+        (1 << channel->bp_led_sense_minus) |
+        (1 << channel->bp_relay_sense), on);
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-    bp_switch(channel->bp_led_sense | channel->bp_relay_sense, on);
+    bp_switch((1 << channel->bp_led_sense) | (1 << channel->bp_relay_sense), on);
 #endif
 }
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
 
 void cvLedSwitch(Channel *channel, bool on) {
-    bp_switch(channel->cv_led_pin, on);
+    bp_switch(1 << channel->cv_led_pin, on);
 }
 
 void ccLedSwitch(Channel *channel, bool on) {
-    bp_switch(channel->cc_led_pin, on);
+    bp_switch(1 << channel->cc_led_pin, on);
 }
 
 #endif

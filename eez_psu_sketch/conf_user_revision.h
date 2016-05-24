@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2016-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,16 +17,12 @@
  */
  
 /** @file conf_user.h
-@brief Configuration overrided by the user.
-Use this header file to override anything from conf.h or conf_advanced.h.
+@brief EEZ PSU revision specification.
+Use this header file to specify EEZ PSU revision.
 */
 
 #pragma once
 
-// Example: redefine channels
-/*
-#undef CHANNELS
-#define CHANNELS \
-    CHANNEL(1, CH_BOARD_REVISION_R4B43A, CH_PINS_1, CH_PARAMS_50V_3A), \
-    CHANNEL(2, CH_BOARD_REVISION_R4B43A, CH_PINS_2, CH_PARAMS_30V_3A)
-*/
+/// Selected EEZ PSU revison, possible values are:
+/// EEZ_PSU_REVISION_R1B9 or EEZ_PSU_REVISION_R2B6.
+#define EEZ_PSU_SELECTED_REVISION EEZ_PSU_REVISION_R1B9

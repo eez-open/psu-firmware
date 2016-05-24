@@ -121,7 +121,7 @@ uint32_t crc32(const uint8_t *mem_block, size_t block_size) {
         uint32_t byte = mem_block[i];            // Get next byte.
         crc = crc ^ byte;
         for (int j = 0; j < 8; ++j) {    // Do eight times.
-            uint32_t mask = -(crc & 1);
+            uint32_t mask = -((int32_t)crc & 1);
             crc = (crc >> 1) ^ (0xEDB88320 & mask);
         }
     }

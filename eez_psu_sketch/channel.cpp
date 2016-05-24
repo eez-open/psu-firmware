@@ -37,7 +37,23 @@ using namespace scpi;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#define CHANNEL(INDEX, PINS, PARAMS) Channel(INDEX, PINS, PARAMS)
+const char *CH_BOARD_REVISION_NAMES[] = {
+    // CH_BOARD_REVISION_R4B43A
+    "Power_r4b43a",
+    // CH_BOARD_REVISION_R5B6B
+    "Power_r5B6b"
+};
+
+uint16_t CH_BOARD_REVISION_FEATURES[] = {
+    // CH_BOARD_REVISION_R4B43A
+    CH_FEATURE_VOLT | CH_FEATURE_CURRENT | CH_FEATURE_OE, 
+    // CH_BOARD_REVISION_R5B6B
+    CH_FEATURE_VOLT | CH_FEATURE_CURRENT | CH_FEATURE_POWER | CH_FEATURE_OE | CH_FEATURE_DPROG | CH_FEATURE_LRIPPLE | CH_FEATURE_RPROG
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+#define CHANNEL(INDEX, BOARD_REVISION, PINS, PARAMS) Channel(INDEX, BOARD_REVISION, PINS, PARAMS)
 Channel channels[CH_MAX] = { CHANNELS };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -81,12 +97,13 @@ float Channel::Simulator::getLoad() {
 ////////////////////////////////////////////////////////////////////////////////
 
 Channel::Channel(
-    int8_t index_,
+    uint8_t index_,
+    uint8_t boardRevision_,
     uint8_t isolator_pin_, uint8_t ioexp_pin_, uint8_t convend_pin_, uint8_t adc_pin_, uint8_t dac_pin_,
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-    uint16_t bp_led_out_plus_, uint16_t bp_led_out_minus_, uint16_t bp_led_sense_plus_, uint16_t bp_led_sense_minus_, uint16_t bp_relay_sense_,
+    uint8_t bp_led_out_plus_, uint8_t bp_led_out_minus_, uint8_t bp_led_sense_plus_, uint8_t bp_led_sense_minus_, uint8_t bp_relay_sense_,
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-    uint16_t bp_led_out_, uint16_t bp_led_sense_, uint16_t bp_relay_sense_,
+    uint8_t bp_led_out_, uint8_t bp_led_sense_, uint8_t bp_relay_sense_,
 #endif
     uint8_t cc_led_pin_, uint8_t cv_led_pin_,
     float U_MIN_, float U_DEF_, float U_MAX_, float U_MIN_STEP_, float U_DEF_STEP_, float U_MAX_STEP_, float U_CAL_VAL_MIN_, float U_CAL_VAL_MID_, float U_CAL_VAL_MAX_, float U_CURR_CAL_,
@@ -97,6 +114,7 @@ Channel::Channel(
     )
     :
     index(index_),
+    boardRevision(boardRevision_),
     isolator_pin(isolator_pin_), ioexp_pin(ioexp_pin_), convend_pin(convend_pin_), adc_pin(adc_pin_), dac_pin(dac_pin_),
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     bp_led_out_plus(bp_led_out_plus_), bp_led_out_minus(bp_led_out_minus_), bp_led_sense_plus(bp_led_sense_plus_), bp_led_sense_minus(bp_led_sense_minus_), bp_relay_sense(bp_relay_sense_),
@@ -653,6 +671,14 @@ char *Channel::getCvModeStr() {
     if (isCvMode()) return "CV";
     else if (isCcMode()) return "CC";
     else return "UR";
+}
+
+const char *Channel::getBoardRevisionName() {
+    return CH_BOARD_REVISION_NAMES[this->boardRevision];
+}
+
+uint16_t Channel::getFeatures() {
+    return CH_BOARD_REVISION_FEATURES[this->boardRevision];
 }
 
 }

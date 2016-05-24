@@ -337,6 +337,9 @@
     <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\R2B6\R2B6_pins.h">
       <Filter>board\R2B6</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\conf_user_revision.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
