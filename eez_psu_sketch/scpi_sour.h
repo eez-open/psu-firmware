@@ -46,4 +46,6 @@
     SCPI_COMMAND("[SOURce#]:VOLTage:PROTection:TRIPped?", scpi_source_VoltageProtectionTrippedQ) \
     SCPI_COMMAND("[SOURce#]:VOLTage:SENSe[:SOURce]", scpi_source_VoltageSenseSource) \
     SCPI_COMMAND("[SOURce#]:VOLTage:SENSe[:SOURce]?", scpi_source_VoltageSenseSourceQ) \
+    SCPI_COMMAND("[SOURce#]:VOLTage:PROGram[:SOURce]", scpi_source_VoltageProgramSource) \
+    SCPI_COMMAND("[SOURce#]:VOLTage:PROGram[:SOURce]?", scpi_source_VoltageProgramSourceQ) \
 

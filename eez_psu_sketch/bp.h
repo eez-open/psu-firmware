@@ -79,6 +79,7 @@ void switchOutput(Channel *channel, bool on);
 void switchSense(Channel *channel, bool on);
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+void switchProg(Channel *channel, bool on);
 void cvLedSwitch(Channel *channel, bool on);
 void ccLedSwitch(Channel *channel, bool on);
 #endif

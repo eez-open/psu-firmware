@@ -21,14 +21,28 @@
 /*
 PSU 0-50V/3A I/O expander pinout:
 
+EEZ_PSU_REVISION_R1B9 (Post-regulator board r4B43a)
+
 Pin 0  In, ADC interrupt/DRDY
 Pin 1  Out, DP enable (active low)
 Pin 2  In, CC_ACTIVE
 Pin 3  In, Temp sensor (V/F)
-Pin 4  --, not in use
+Pin 4  In, Battery NTC sensor temperature presented as frequency
 Pin 5  In, CV_ACTIVE
 Pin 6  In, PWRGOOD
 Pin 7  Out, OUTPUT_ENABLE
+
+EEZ_PSU_REVISION_R2B6 (Power board r5B6b)
+
+Pin 0  In, ADC interrupt/DRDY
+Pin 1  Out, DP enable (active low)
+Pin 2  In, CC_ACTIVE
+Pin 3  Out, SET_100%
+Pin 4  Out, EXT_PROG
+Pin 5  In, CV_ACTIVE
+Pin 6  In, PWRGOOD
+Pin 7  Out, OUTPUT_ENABLE
+
 */
 
 namespace eez {
@@ -46,6 +60,9 @@ public:
     static const uint8_t IO_BIT_IN_PWRGOOD = 6;
 
     static const uint8_t IO_BIT_OUT_DP_ENABLE = 1;
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+    static const uint8_t IO_BIT_OUT_EXT_PROG = 4;
+#endif
     static const uint8_t IO_BIT_OUT_OUTPUT_ENABLE = 7;
 
     static const uint8_t IOEXP_READ = 0B01000001;

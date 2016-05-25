@@ -71,6 +71,10 @@ namespace scpi {
 #define OPER_ISUM_DP_OFF   (1 << 11)  /* Down Programmer OFF */
 #define OPER_ISUM_RSENS_ON (1 << 12)  /* Remote SENSe ON */
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#define OPER_ISUM_RPROG_ON (1 << 13)  /* Remote PROGram ON */
+#endif
+
 //
 // PSU registers
 //

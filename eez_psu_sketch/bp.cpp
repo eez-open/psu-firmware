@@ -94,6 +94,10 @@ void switchSense(Channel *channel, bool on) {
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
 
+void switchProg(Channel *channel, bool on) {
+    bp_switch(1 << channel->bp_led_prog, on);
+}
+
 void cvLedSwitch(Channel *channel, bool on) {
     bp_switch(1 << channel->cv_led_pin, on);
 }

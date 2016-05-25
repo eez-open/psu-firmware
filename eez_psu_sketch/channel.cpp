@@ -103,7 +103,7 @@ Channel::Channel(
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     uint8_t bp_led_out_plus_, uint8_t bp_led_out_minus_, uint8_t bp_led_sense_plus_, uint8_t bp_led_sense_minus_, uint8_t bp_relay_sense_,
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-    uint8_t bp_led_out_, uint8_t bp_led_sense_, uint8_t bp_relay_sense_,
+    uint8_t bp_led_out_, uint8_t bp_led_sense_, uint8_t bp_relay_sense_, uint8_t bp_led_prog_,
 #endif
     uint8_t cc_led_pin_, uint8_t cv_led_pin_,
     float U_MIN_, float U_DEF_, float U_MAX_, float U_MIN_STEP_, float U_DEF_STEP_, float U_MAX_STEP_, float U_CAL_VAL_MIN_, float U_CAL_VAL_MID_, float U_CAL_VAL_MAX_, float U_CURR_CAL_,
@@ -119,7 +119,7 @@ Channel::Channel(
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     bp_led_out_plus(bp_led_out_plus_), bp_led_out_minus(bp_led_out_minus_), bp_led_sense_plus(bp_led_sense_plus_), bp_led_sense_minus(bp_led_sense_minus_), bp_relay_sense(bp_relay_sense_),
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-    bp_led_out(bp_led_out_), bp_led_sense(bp_led_sense_), bp_relay_sense(bp_relay_sense_),
+    bp_led_out(bp_led_out_), bp_led_sense(bp_led_sense_), bp_relay_sense(bp_relay_sense_), bp_led_prog(bp_led_prog_),
 #endif
     cc_led_pin(cc_led_pin_), cv_led_pin(cv_led_pin_),
     U_MIN(U_MIN_), U_DEF(U_DEF_), U_MAX(U_MAX_), U_MIN_STEP(U_MIN_STEP_), U_DEF_STEP(U_DEF_STEP_), U_MAX_STEP(U_MAX_STEP_), U_CAL_VAL_MIN(U_CAL_VAL_MIN_), U_CAL_VAL_MID(U_CAL_VAL_MID_), U_CAL_VAL_MAX(U_CAL_VAL_MAX_), U_CURR_CAL(U_CURR_CAL_),
@@ -218,6 +218,9 @@ void Channel::onPowerDown() {
 
     outputEnable(false);
     remoteSensingEnable(false);
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+    remoteProgrammingEnable(false);
+#endif
 
     profile::enableSave(last_save_enabled);
 }
@@ -226,6 +229,7 @@ void Channel::reset() {
     flags.output_enabled = 0;
     flags.dp_on = 0;
     flags.sense_enabled = 0;
+    flags.rprog_enabled = 0;
 
     flags.cv_mode = 0;
     flags.cc_mode = 0;
@@ -250,8 +254,13 @@ void Channel::reset() {
     // [SOUR[n]]:POW:PROT:TRIP? 0
     clearProtection();
 
-    // OUTP:SENS OFF
+    // [SOUR[n]]:VOLT:SENS INTernal
     remoteSensingEnable(false);
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+    // [SOUR[n]]:VOLT:PROG INTernal
+    remoteProgrammingEnable(false);
+#endif
 
     // [SOUR[n]]:VOLT:PROT:DEL 
     // [SOUR[n]]:VOLT:PROT:STAT
@@ -302,6 +311,9 @@ bool Channel::test() {
 
     outputEnable(false);
     remoteSensingEnable(false);
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+    remoteProgrammingEnable(false);
+#endif
 
     ioexp.test();
     adc.test();
@@ -572,6 +584,20 @@ void Channel::doRemoteSensingEnable(bool enable) {
     setOperBits(OPER_ISUM_RSENS_ON, enable);
 }
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+void Channel::doRemoteProgrammingEnable(bool enable) {
+    if (enable && !isOk()) {
+        return;
+    }
+    flags.rprog_enabled = enable;
+    if (enable) {
+        setVoltage(0);
+    }
+    ioexp.change_bit(IOExpander::IO_BIT_OUT_EXT_PROG, enable);
+    bp::switchProg(this, enable);
+    setOperBits(OPER_ISUM_RPROG_ON, enable);
+}
+#endif
 
 void Channel::update() {
     bool last_save_enabled = profile::enableSave(false);
@@ -580,6 +606,9 @@ void Channel::update() {
     setCurrent(i.set);
     doOutputEnable(flags.output_enabled);
     doRemoteSensingEnable(flags.sense_enabled);
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+    doRemoteProgrammingEnable(flags.rprog_enabled);
+#endif
 
     profile::enableSave(last_save_enabled);
 }
@@ -605,6 +634,18 @@ void Channel::remoteSensingEnable(bool enable) {
 bool Channel::isRemoteSensingEnabled() {
     return flags.sense_enabled;
 }
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+void Channel::remoteProgrammingEnable(bool enable) {
+    if (enable != flags.rprog_enabled) {
+        doRemoteProgrammingEnable(enable);
+    }
+}
+
+bool Channel::isRemoteProgrammingEnabled() {
+    return flags.rprog_enabled;
+}
+#endif
 
 void Channel::setVoltage(float value) {
     u.set = value;

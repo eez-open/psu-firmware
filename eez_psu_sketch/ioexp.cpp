@@ -25,7 +25,12 @@ namespace psu {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 #define IODIR   0B01111101 // pins 1 and 7 set as output
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#define IODIR   0B01100101 // pins 1, 3, 4 and 7 set as output
+#endif
+
 #define IPOL    0B00000000 // no pin is inverted
 #define GPINTEN 0B00000001 // enable interrupt for pin 0
 #define DEVAL   0B00000000 // 
