@@ -77,4 +77,7 @@ static const uint8_t PWD_RST = 67;
 static const uint8_t LED_CC2 = 68;
 static const uint8_t LED_CV2 = 69;
 
+#define ISOLATOR_DISABLE HIGH
+#define ISOLATOR_ENABLE  LOW
+
 #endif // EEZ_PSU_R1B9_PINS_H

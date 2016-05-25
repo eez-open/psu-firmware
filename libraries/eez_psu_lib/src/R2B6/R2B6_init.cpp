@@ -60,9 +60,9 @@ void eez_psu_R2B6_init() {
     digitalWrite(BP_OE, HIGH); // Deselect TLC5925 OE
 
     pinMode(ISOLATOR1_EN, OUTPUT);
-    digitalWrite(ISOLATOR1_EN, LOW); // Disable MISO on ch 1 isolators
+    digitalWrite(ISOLATOR1_EN, ISOLATOR_DISABLE); // Disable MISO on ch 1 isolators
     pinMode(ISOLATOR2_EN, OUTPUT);
-    digitalWrite(ISOLATOR2_EN, LOW); // Disable MISO on ch 2 isolators
+    digitalWrite(ISOLATOR2_EN, ISOLATOR_DISABLE); // Disable MISO on ch 2 isolators
 
     pinMode(CONVEND1, INPUT_PULLUP); // ADC DRDY for ch1
     pinMode(CONVEND2, INPUT_PULLUP); // ADC DRDY for ch2

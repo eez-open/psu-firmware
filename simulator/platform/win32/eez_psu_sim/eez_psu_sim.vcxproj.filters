@@ -340,6 +340,9 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\conf_user_revision.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\eez_psu_rev.h">
+      <Filter>board</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">

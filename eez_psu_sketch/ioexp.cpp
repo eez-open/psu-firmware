@@ -157,13 +157,13 @@ void IOExpander::on_interrupt() {
 
 uint8_t IOExpander::reg_read_write(uint8_t opcode, uint8_t reg, uint8_t val) {
     SPI.beginTransaction(MCP23S08_SPI);
-    digitalWrite(channel.isolator_pin, LOW);
+    digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.ioexp_pin, LOW);
     SPI.transfer(opcode);
     SPI.transfer(reg);
     uint8_t result = SPI.transfer(val);
     digitalWrite(channel.ioexp_pin, HIGH);
-    digitalWrite(channel.isolator_pin, HIGH);
+    digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
     SPI.endTransaction();
     return result;
 }

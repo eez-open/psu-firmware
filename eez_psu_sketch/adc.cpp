@@ -41,7 +41,7 @@ uint8_t AnalogDigitalConverter::getReg1Val() {
 
 bool AnalogDigitalConverter::init() {
     SPI.beginTransaction(ADS1120_SPI);
-    digitalWrite(channel.isolator_pin, LOW);
+    digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.adc_pin, LOW);
 
     // Send RESET command
@@ -57,7 +57,7 @@ bool AnalogDigitalConverter::init() {
     SPI.transfer(ADC_REG3_VAL);
 
     digitalWrite(channel.adc_pin, HIGH);
-    digitalWrite(channel.isolator_pin, HIGH);
+    digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
     SPI.endTransaction();
 
     return test();
@@ -65,7 +65,7 @@ bool AnalogDigitalConverter::init() {
 
 bool AnalogDigitalConverter::test() {
     SPI.beginTransaction(ADS1120_SPI);
-    digitalWrite(channel.isolator_pin, LOW);
+    digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.adc_pin, LOW);
 
     SPI.transfer(ADC_RD3S1);
@@ -74,7 +74,7 @@ bool AnalogDigitalConverter::test() {
     byte reg3 = SPI.transfer(0);
 
     digitalWrite(channel.adc_pin, HIGH);
-    digitalWrite(channel.isolator_pin, HIGH);
+    digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
     SPI.endTransaction();
 
     test_result = psu::TEST_OK;
@@ -148,7 +148,7 @@ void AnalogDigitalConverter::tick(unsigned long tick_usec) {
 
 void AnalogDigitalConverter::start(uint8_t reg0) {
     SPI.beginTransaction(ADS1120_SPI);
-    digitalWrite(channel.isolator_pin, LOW);
+    digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.adc_pin, LOW);
 
     uint8_t sps = psu::isTimeCriticalMode() ? ADC_SPS_TIME_CRITICAL : ADC_SPS;
@@ -171,14 +171,14 @@ void AnalogDigitalConverter::start(uint8_t reg0) {
     SPI.transfer(ADC_START);
 
     digitalWrite(channel.adc_pin, HIGH);
-    digitalWrite(channel.isolator_pin, HIGH);
+    digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
     SPI.endTransaction();
 }
 
 
 int16_t AnalogDigitalConverter::read() {
     SPI.beginTransaction(ADS1120_SPI);
-    digitalWrite(channel.isolator_pin, LOW);
+    digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.adc_pin, LOW);
 
     // Read conversion data
@@ -187,7 +187,7 @@ int16_t AnalogDigitalConverter::read() {
     uint16_t dlsb = SPI.transfer(0);
 
     digitalWrite(channel.adc_pin, HIGH);
-    digitalWrite(channel.isolator_pin, HIGH);
+    digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
     SPI.endTransaction();
 
     return (int16_t)((dmsb << 8) | dlsb);

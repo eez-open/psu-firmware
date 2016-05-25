@@ -75,4 +75,7 @@ static const uint8_t NTC2 = 60;
 static const uint8_t EXT_TRIG = 61;
 static const uint8_t PWD_RST = 67;
 
+#define ISOLATOR_DISABLE LOW
+#define ISOLATOR_ENABLE  HIGH
+
 #endif // EEZ_PSU_R2B6_PINS_H

@@ -230,6 +230,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\touch_filter.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\util.h" />
     <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\eez_psu.h" />
+    <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\eez_psu_rev.h" />
     <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\R1B9\R1B9_pins.h" />
     <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\R2B6\R2B6_pins.h" />
     <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\impl\fifo_private.h" />
