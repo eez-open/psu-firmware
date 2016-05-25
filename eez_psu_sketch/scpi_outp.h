@@ -21,8 +21,6 @@
 #define SCPI_OUTP_COMMANDS \
     SCPI_COMMAND("OUTPut:MODE?", scpi_outp_ModeQ) \
     SCPI_COMMAND("OUTPut:PROTection:CLEar", scpi_outp_ProtectionClear) \
-    SCPI_COMMAND("OUTPut:SENSe", scpi_outp_Sense) \
-    SCPI_COMMAND("OUTPut:SENSe?", scpi_outp_SenseQ) \
     SCPI_COMMAND("OUTPut[:STATe]", scpi_outp_State) \
     SCPI_COMMAND("OUTPut[:STATe]?", scpi_outp_StateQ) \
 

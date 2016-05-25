@@ -50,45 +50,6 @@ scpi_result_t scpi_outp_ProtectionClear(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_outp_Sense(scpi_t * context) {
-    if (!OPTION_BP) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
-        return SCPI_RES_ERR;
-    }
-
-    bool enable;
-    if (!SCPI_ParamBool(context, &enable, TRUE)) {
-        return SCPI_RES_ERR;
-    }
-
-    Channel *channel = param_channel(context);
-    if (!channel) {
-        return SCPI_RES_ERR;
-    }
-
-    if (enable != channel->isRemoteSensingEnabled()) {
-        channel->remoteSensingEnable(enable);
-    }
-
-    return SCPI_RES_OK;
-}
-
-scpi_result_t scpi_outp_SenseQ(scpi_t * context) {
-    if (!OPTION_BP) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
-        return SCPI_RES_ERR;
-    }
-
-    Channel *channel = param_channel(context);
-    if (!channel) {
-        return SCPI_RES_ERR;
-    }
-
-    SCPI_ResultBool(context, channel->isRemoteSensingEnabled());
-
-    return SCPI_RES_OK;
-}
-
 scpi_result_t scpi_outp_State(scpi_t * context) {
     bool enable;
     if (!SCPI_ParamBool(context, &enable, TRUE)) {

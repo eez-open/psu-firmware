@@ -25,6 +25,7 @@ namespace scpi {
 extern scpi_choice_def_t main_temp_sensor_choice[];
 extern scpi_choice_def_t channel_temp_sensor_choice[];
 extern scpi_choice_def_t all_temp_sensor_choice[];
+extern scpi_choice_def_t internal_external_choice[];
 
 Channel *param_channel(scpi_t *context, scpi_bool_t mandatory = FALSE, scpi_bool_t skip_channel_check = FALSE);
 bool check_channel(scpi_t *context, int32_t ch);

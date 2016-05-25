@@ -72,7 +72,7 @@ option.
 /// Channels configuration.
 /// 
 #define CHANNELS \
-    CHANNEL(1, CH_BOARD_REVISION_R4B43A, CH_PINS_1, CH_PARAMS_50V_3A), \
+    CHANNEL(1, CH_BOARD_REVISION_R4B43A, CH_PINS_1, CH_PARAMS_40V_5A), \
     CHANNEL(2, CH_BOARD_REVISION_R4B43A, CH_PINS_2, CH_PARAMS_40V_5A) \
 
 /// Min. delay between power down and power up.

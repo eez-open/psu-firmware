@@ -55,6 +55,12 @@ scpi_choice_def_t all_temp_sensor_choice[] = {
     SCPI_CHOICE_LIST_END /* termination of option list */
 };
 
+scpi_choice_def_t internal_external_choice[] = {
+    { "INTernal", 0 },
+    { "EXTernal", 1 },
+    SCPI_CHOICE_LIST_END /* termination of option list */
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 
 bool check_channel(scpi_t *context, int32_t ch) {

@@ -423,6 +423,43 @@ scpi_result_t scpi_source_VoltageProtectionTrippedQ(scpi_t * context) {
     return get_tripped(context, channel->ovp);
 }
 
+scpi_result_t scpi_source_VoltageSenseSource(scpi_t * context) {
+    if (!OPTION_BP) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    int32_t choice;
+    if (!SCPI_ParamChoice(context, internal_external_choice, &choice, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel->remoteSensingEnable(choice == 0 ? false : true);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_VoltageSenseSourceQ(scpi_t * context) {
+    if (!OPTION_BP) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultBool(context, channel->isRemoteSensingEnabled());
+
+    return SCPI_RES_OK;
+}
+
 }
 }
 } // namespace eez::psu::scpi

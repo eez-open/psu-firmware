@@ -130,7 +130,7 @@ void AnalogDigitalConverter::tick(unsigned long tick_usec) {
                     psu::generateError(SCPI_ERROR_CH1_ADC_TIMEOUT_DETECTED);
                 }
                 else if (channel.index == 2) {
-                    psu::generateError(SCPI_ERROR_CH1_ADC_TIMEOUT_DETECTED);
+                    psu::generateError(SCPI_ERROR_CH2_ADC_TIMEOUT_DETECTED);
                 }
                 else {
                     // TODO
