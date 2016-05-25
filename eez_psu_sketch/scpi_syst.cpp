@@ -324,7 +324,7 @@ scpi_result_t scpi_syst_ChannelCountQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_syst_ChannelInformationCurrentQ(scpi_t * context) {
-    Channel *channel = param_channel(context);
+    Channel *channel = param_channel(context, false, true);
     if (!channel) {
         return SCPI_RES_ERR;
     }
@@ -335,7 +335,7 @@ scpi_result_t scpi_syst_ChannelInformationCurrentQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_syst_ChannelInformationPowerQ(scpi_t * context) {
-    Channel *channel = param_channel(context);
+    Channel *channel = param_channel(context, false, true);
     if (!channel) {
         return SCPI_RES_ERR;
     }
@@ -346,7 +346,7 @@ scpi_result_t scpi_syst_ChannelInformationPowerQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_syst_ChannelInformationProgramQ(scpi_t * context) {
-    Channel *channel = param_channel(context);
+    Channel *channel = param_channel(context, false, true);
     if (!channel) {
         return SCPI_RES_ERR;
     }
@@ -407,7 +407,7 @@ scpi_result_t scpi_syst_ChannelInformationProgramQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_syst_ChannelInformationVoltageQ(scpi_t * context) {
-    Channel *channel = param_channel(context);
+    Channel *channel = param_channel(context, false, true);
     if (!channel) {
         return SCPI_RES_ERR;
     }
@@ -418,7 +418,7 @@ scpi_result_t scpi_syst_ChannelInformationVoltageQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_syst_ChannelModelQ(scpi_t * context) {
-    Channel *channel = param_channel(context);
+    Channel *channel = param_channel(context, false, true);
     if (!channel) {
         return SCPI_RES_ERR;
     }
@@ -472,6 +472,20 @@ scpi_result_t scpi_syst_CpuOptionQ(scpi_t * context) {
         strcat(strFeatures, ", ");
     }
     strcat(strFeatures, "SDcard");
+#endif
+
+#if OPTION_ETHERNET
+    if (strFeatures[0]) {
+        strcat(strFeatures, ", ");
+    }
+    strcat(strFeatures, "Ethernet");
+#endif
+
+#if OPTION_DISPLAY
+    if (strFeatures[0]) {
+        strcat(strFeatures, ", ");
+    }
+    strcat(strFeatures, "Display");
 #endif
 
     SCPI_ResultText(context, strFeatures);
