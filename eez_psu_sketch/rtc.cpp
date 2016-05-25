@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,7 +112,7 @@ bool readTime(uint8_t &hour, uint8_t &minute, uint8_t &second) {
     if (test_result != psu::TEST_OK) return false;
     uint8_t data[3];
     readRegisters(RD_SECONDS, sizeof(data), data);
-    second = util::fromBCD(data[0]);
+    second = util::fromBCD(data[0] & 0x7F);
     minute = util::fromBCD(data[1]);
     hour = util::fromBCD(data[2]);
     return true;
@@ -133,7 +133,7 @@ bool readDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, ui
     if (test_result != psu::TEST_OK) return false;
     uint8_t data[7];
     readRegisters(RD_SECONDS, sizeof(data), data);
-    second = util::fromBCD(data[0]);
+    second = util::fromBCD(data[0] & 0x7F);
     minute = util::fromBCD(data[1]);
     hour = util::fromBCD(data[2]);
     day = util::fromBCD(data[3]);
