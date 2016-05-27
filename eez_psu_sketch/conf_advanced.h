@@ -145,3 +145,6 @@
 
 /// Text returned by the SYStem:CAPability command
 #define STR_SYST_CAP "DCSUPPLY WITH (MEASURE|MULTIPLE|TRIGGER)"
+
+/// Select type of TFT touch display, possible values are: TFT_320QVT_1289 and TFT_320QVT_9341
+#define DISPLAY_TYPE TFT_320QVT_1289
