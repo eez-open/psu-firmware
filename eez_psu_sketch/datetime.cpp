@@ -68,7 +68,7 @@ bool test() {
             }
             else {
                 test_result = psu::TEST_WARNING;
-                DebugTraceF("RTC test failed, RTC time (%d-%02d-%02d %02d:%02d:%02d) older then EEPROM time (%d-%02d-%02d %02d:%02d:%02d)",
+                DebugTraceF("RTC test failed, RTC time (%d-%02d-%02d %02d:%02d:%02d) older then or equal to EEPROM time (%d-%02d-%02d %02d:%02d:%02d)",
                     (int)(2000 + rtc_year), (int)rtc_month, (int)rtc_day, (int)rtc_hour, (int)rtc_minute, (int)rtc_second,
                     (int)(2000 + year), (int)month, (int)day, (int)hour, (int)minute, (int)second);
             }
