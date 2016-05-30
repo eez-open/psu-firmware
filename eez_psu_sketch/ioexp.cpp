@@ -25,12 +25,6 @@ namespace psu {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-#define IODIR   0B01111101 // pins 1 and 7 set as output
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-#define IODIR   0B01100101 // pins 1, 3, 4 and 7 set as output
-#endif
-
 #define IPOL    0B00000000 // no pin is inverted
 #define GPINTEN 0B00000001 // enable interrupt for pin 0
 #define DEVAL   0B00000000 // 
@@ -41,7 +35,7 @@ namespace psu {
 
 static const uint8_t REG_VALUES[] = {
     // reg                   value    test
-    IOExpander::REG_IODIR,   IODIR,   1,
+    IOExpander::REG_IODIR,   0,       1,
     IOExpander::REG_IPOL,    IPOL,    1,
     IOExpander::REG_GPINTEN, GPINTEN, 1,
     IOExpander::REG_DEVAL,   DEVAL,   1,
@@ -70,7 +64,11 @@ IOExpander::IOExpander(Channel &channel_) : channel(channel_) {
 
 bool IOExpander::init() {
     for (int i = 0; REG_VALUES[i] != 0xFF; i += 3) {
-        reg_write(REG_VALUES[i], REG_VALUES[i + 1]);
+        if (REG_VALUES[i] == IOExpander::REG_IODIR) {
+            reg_write(IOExpander::REG_IODIR, channel.ioexp_iodir);
+        } else {
+            reg_write(REG_VALUES[i], REG_VALUES[i + 1]);
+        }
     }
 
     int intNum = digitalPinToInterrupt(channel.convend_pin);
@@ -88,10 +86,12 @@ bool IOExpander::test() {
     test_result = psu::TEST_OK;
 
     for (int i = 0; REG_VALUES[i] != 0xFF; i += 3) {
-        if (REG_VALUES[i + 2]) {
+        if (REG_VALUES[i] == IOExpander::REG_IODIR || REG_VALUES[i + 2]) {
             uint8_t value = reg_read(REG_VALUES[i]);
 
-            if (value != REG_VALUES[i + 1]) {
+            uint8_t compare_with_value = REG_VALUES[i] == IOExpander::REG_IODIR ? channel.ioexp_iodir : REG_VALUES[i + 1];
+
+            if (value != compare_with_value) {
                 DebugTraceF("Ch%d IO expander reg check failure: reg=%d, expected=%d, got=%d",
                     channel.index, (int)REG_VALUES[i], (int)REG_VALUES[i + 1], (int)value);
 

@@ -64,9 +64,11 @@ void recallChannelsFromProfile(Parameters *profile) {
         Channel::get(i).flags.cal_enabled = profile->channels[i].flags.cal_enabled && Channel::get(i).isCalibrationExists() ? 1 : 0;
         Channel::get(i).flags.output_enabled = profile->channels[i].flags.output_enabled;
         Channel::get(i).flags.sense_enabled = profile->channels[i].flags.sense_enabled;
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-        Channel::get(i).flags.rprog_enabled = profile->channels[i].flags.rprog_enabled;
-#endif
+        if (Channel::get(i).getFeatures() & CH_FEATURE_RPROG) {
+            Channel::get(i).flags.rprog_enabled = profile->channels[i].flags.rprog_enabled;
+        } else {
+            Channel::get(i).flags.rprog_enabled = 0;
+        }
 
         Channel::get(i).update();
     }
@@ -159,9 +161,11 @@ bool saveAtLocation(int location) {
             profile.channels[i].flags.cal_enabled = Channel::get(i).flags.cal_enabled;
             profile.channels[i].flags.output_enabled = Channel::get(i).flags.output_enabled;
             profile.channels[i].flags.sense_enabled = Channel::get(i).flags.sense_enabled;
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-            profile.channels[i].flags.rprog_enabled = Channel::get(i).flags.rprog_enabled;
-#endif
+            if (Channel::get(i).getFeatures() & CH_FEATURE_RPROG) {
+                profile.channels[i].flags.rprog_enabled = Channel::get(i).flags.rprog_enabled;
+            } else {
+                profile.channels[i].flags.rprog_enabled = 0;
+            }
 
             profile.channels[i].flags.u_state = Channel::get(i).prot_conf.flags.u_state;
             profile.channels[i].flags.i_state = Channel::get(i).prot_conf.flags.i_state;

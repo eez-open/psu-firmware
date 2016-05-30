@@ -190,6 +190,7 @@ public:
 
     uint8_t isolator_pin;
     uint8_t ioexp_pin;
+    uint8_t ioexp_iodir;
     uint8_t convend_pin;
     uint8_t adc_pin;
     uint8_t dac_pin;
@@ -201,11 +202,9 @@ public:
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
     uint8_t bp_led_out;
     uint8_t bp_led_sense;
-#endif
-    uint8_t bp_relay_sense;
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
     uint8_t bp_led_prog;
 #endif
+    uint8_t bp_relay_sense;
     uint8_t cc_led_pin;
     uint8_t cv_led_pin;
 
@@ -271,7 +270,7 @@ public:
 
     Channel(
         uint8_t index,
-        uint8_t boardRevision,
+        uint8_t boardRevision, uint8_t ioexp_iodir,
         uint8_t isolator_pin, uint8_t ioexp_pin, uint8_t convend_pin, uint8_t adc_pin, uint8_t dac_pin,
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
         uint8_t bp_led_out_plus, uint8_t bp_led_out_minus, uint8_t bp_led_sense_plus, uint8_t bp_led_sense_minus, uint8_t bp_relay_sense,
@@ -347,13 +346,11 @@ public:
     /// Is remote sensing enabled?
     bool isRemoteSensingEnabled();
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
     /// Enable/disable remote programming.
     void remoteProgrammingEnable(bool enable);
 
     /// Is remote programming enabled?
     bool isRemoteProgrammingEnabled();
-#endif
 
     /// Set channel voltage level.
     void setVoltage(float voltage);
@@ -419,9 +416,7 @@ private:
     void updateCcAndCvSwitch();
     void doOutputEnable(bool enable);
     void doRemoteSensingEnable(bool enable);
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
     void doRemoteProgrammingEnable(bool enable);
-#endif
     void doDpEnable(bool enable);
 };
 

@@ -21,7 +21,7 @@
 /*
 PSU 0-50V/3A I/O expander pinout:
 
-EEZ_PSU_REVISION_R1B9 (Post-regulator board r4B43a)
+CH_BOARD_REVISION_R4B43A
 
 Pin 0  In, ADC interrupt/DRDY
 Pin 1  Out, DP enable (active low)
@@ -32,7 +32,7 @@ Pin 5  In, CV_ACTIVE
 Pin 6  In, PWRGOOD
 Pin 7  Out, OUTPUT_ENABLE
 
-EEZ_PSU_REVISION_R2B6 (Power board r5B6b)
+CH_BOARD_REVISION_R5B6B
 
 Pin 0  In, ADC interrupt/DRDY
 Pin 1  Out, DP enable (active low)
@@ -60,9 +60,7 @@ public:
     static const uint8_t IO_BIT_IN_PWRGOOD = 6;
 
     static const uint8_t IO_BIT_OUT_DP_ENABLE = 1;
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
     static const uint8_t IO_BIT_OUT_EXT_PROG = 4;
-#endif
     static const uint8_t IO_BIT_OUT_OUTPUT_ENABLE = 7;
 
     static const uint8_t IOEXP_READ = 0B01000001;

@@ -461,10 +461,6 @@ scpi_result_t scpi_source_VoltageSenseSourceQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_source_VoltageProgramSource(scpi_t * context) {
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
-    return SCPI_RES_ERR;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -483,14 +479,9 @@ scpi_result_t scpi_source_VoltageProgramSource(scpi_t * context) {
     channel->remoteProgrammingEnable(choice == 0 ? false : true);
 
     return SCPI_RES_OK;
-#endif
 }
 
 scpi_result_t scpi_source_VoltageProgramSourceQ(scpi_t * context) {
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
-    return SCPI_RES_ERR;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -504,7 +495,6 @@ scpi_result_t scpi_source_VoltageProgramSourceQ(scpi_t * context) {
     SCPI_ResultBool(context, channel->isRemoteProgrammingEnabled());
 
     return SCPI_RES_OK;
-#endif
 }
 
 }

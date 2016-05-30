@@ -31,11 +31,7 @@ struct ChannelFlags {
     unsigned i_state : 1;
     unsigned p_state : 1;
     unsigned cal_enabled : 1;
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-    unsigned reserverd6 : 1;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
     unsigned rprog_enabled : 1;
-#endif
     unsigned reserverd7 : 1;
     unsigned reserverd8 : 1;
     unsigned reserverd9 : 1;
