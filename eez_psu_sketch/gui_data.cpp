@@ -110,16 +110,27 @@ void getButtonLabels(const Cursor &cursor, uint8_t id, const Value **labels, int
     }
 }
 
-void set(const Cursor &cursor, uint8_t id, Value value) {
+bool set(const Cursor &cursor, uint8_t id, Value value) {
     if (id == DATA_ID_VOLT) {
+        if (value.getFloat() * Channel::get(cursor.iChannel).i.set > Channel::get(cursor.iChannel).PTOT) {
+            return false;
+        }
         Channel::get(cursor.iChannel).setVoltage(value.getFloat());
+        return true;
     } else if (id == DATA_ID_CURR) {
+        if (value.getFloat() * Channel::get(cursor.iChannel).u.set > Channel::get(cursor.iChannel).PTOT) {
+            return false;
+        }
         Channel::get(cursor.iChannel).setCurrent(value.getFloat());
+        return true;
     } else if (id == DATA_ID_ALERT_MESSAGE) {
         g_alertMessage = value;
+        return true;
     } else if (id == DATA_ID_EDIT_STEPS) {
         edit_mode_step::setStepIndex(value.getInt());
+        return true;
     }
+    return false;
 }
 
 void toggle(uint8_t id) {

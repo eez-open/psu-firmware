@@ -179,6 +179,11 @@ scpi_result_t scpi_source_Current(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
+    if (current * channel->u.set > channel->PTOT) {
+        SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
+        return SCPI_RES_ERR;
+    }
+
     channel->setCurrent(current);
 
     return SCPI_RES_OK;
@@ -201,6 +206,11 @@ scpi_result_t scpi_source_Voltage(scpi_t * context) {
 
     float voltage;
     if (!get_voltage_param(context, voltage, channel, &channel->u)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (voltage * channel->i.set > channel->PTOT) {
+        SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
     }
 

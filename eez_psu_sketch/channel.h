@@ -254,6 +254,8 @@ public:
     float SOA_PREG_CURR;
     float SOA_POSTREG_PTOT;
 
+    float PTOT;
+
     IOExpander ioexp;
     AnalogDigitalConverter adc;
     DigitalAnalogConverter dac;
@@ -289,7 +291,7 @@ public:
         float I_MIN, float I_DEF, float I_MAX, float I_MIN_STEP, float I_DEF_STEP, float I_MAX_STEP, float I_CAL_VAL_MIN, float I_CAL_VAL_MID, float I_CAL_VAL_MAX, float I_VOLT_CAL,
         bool OCP_DEFAULT_STATE, float OCP_MIN_DELAY, float OCP_DEFAULT_DELAY, float OCP_MAX_DELAY,
         bool OPP_DEFAULT_STATE, float OPP_MIN_DELAY, float OPP_DEFAULT_DELAY, float OPP_MAX_DELAY, float OPP_MIN_LEVEL, float OPP_DEFAULT_LEVEL, float OPP_MAX_LEVEL,
-        float SOA_VIN, float SOA_PREG_CURR, float SOA_POSTREG_PTOT);
+        float SOA_VIN, float SOA_PREG_CURR, float SOA_POSTREG_PTOT, float PTOT);
 
     /// Initialize channel and underlying hardware.
     /// Makes a required tests, for example ADC, DAC and IO Expander tests.

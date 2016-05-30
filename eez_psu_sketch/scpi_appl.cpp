@@ -62,6 +62,11 @@ scpi_result_t scpi_appl_Apply(scpi_t *context) {
         call_set_current = true;
     }
 
+    if (voltage * (call_set_current ? current : channel->i.set) > channel->PTOT) {
+        SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
+        return SCPI_RES_ERR;
+    }
+
     // set voltage
     channel->setVoltage(voltage);
 
