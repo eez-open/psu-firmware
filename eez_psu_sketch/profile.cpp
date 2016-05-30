@@ -64,10 +64,19 @@ void recallChannelsFromProfile(Parameters *profile) {
         Channel::get(i).flags.cal_enabled = profile->channels[i].flags.cal_enabled && Channel::get(i).isCalibrationExists() ? 1 : 0;
         Channel::get(i).flags.output_enabled = profile->channels[i].flags.output_enabled;
         Channel::get(i).flags.sense_enabled = profile->channels[i].flags.sense_enabled;
+
         if (Channel::get(i).getFeatures() & CH_FEATURE_RPROG) {
             Channel::get(i).flags.rprog_enabled = profile->channels[i].flags.rprog_enabled;
         } else {
             Channel::get(i).flags.rprog_enabled = 0;
+        }
+
+        if (Channel::get(i).getFeatures() & CH_FEATURE_LRIPPLE) {
+            Channel::get(i).flags.lripple_enabled = profile->channels[i].flags.lripple_enabled;
+            Channel::get(i).flags.lripple_auto_enabled = profile->channels[i].flags.lripple_auto_enabled;
+        } else {
+            Channel::get(i).flags.lripple_enabled = 0;
+            Channel::get(i).flags.lripple_auto_enabled = 0;
         }
 
         Channel::get(i).update();
@@ -161,10 +170,19 @@ bool saveAtLocation(int location) {
             profile.channels[i].flags.cal_enabled = Channel::get(i).flags.cal_enabled;
             profile.channels[i].flags.output_enabled = Channel::get(i).flags.output_enabled;
             profile.channels[i].flags.sense_enabled = Channel::get(i).flags.sense_enabled;
+
             if (Channel::get(i).getFeatures() & CH_FEATURE_RPROG) {
                 profile.channels[i].flags.rprog_enabled = Channel::get(i).flags.rprog_enabled;
             } else {
                 profile.channels[i].flags.rprog_enabled = 0;
+            }
+
+            if (Channel::get(i).getFeatures() & CH_FEATURE_LRIPPLE) {
+                profile.channels[i].flags.lripple_enabled = Channel::get(i).flags.lripple_enabled;
+                profile.channels[i].flags.lripple_auto_enabled = Channel::get(i).flags.lripple_auto_enabled;
+            } else {
+                profile.channels[i].flags.lripple_enabled = 0;
+                profile.channels[i].flags.lripple_auto_enabled = 0;
             }
 
             profile.channels[i].flags.u_state = Channel::get(i).prot_conf.flags.u_state;

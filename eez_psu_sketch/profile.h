@@ -32,8 +32,8 @@ struct ChannelFlags {
     unsigned p_state : 1;
     unsigned cal_enabled : 1;
     unsigned rprog_enabled : 1;
-    unsigned reserverd7 : 1;
-    unsigned reserverd8 : 1;
+    unsigned lripple_enabled : 1;
+    unsigned lripple_auto_enabled : 1;
     unsigned reserverd9 : 1;
     unsigned reserverd10 : 1;
     unsigned reserverd11 : 1;

@@ -497,6 +497,83 @@ scpi_result_t scpi_source_VoltageProgramSourceQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t scpi_source_LRipple(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_LRIPPLE)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+	bool enable;
+	if (!SCPI_ParamBool(context, &enable, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+    if (!channel->lowRippleEnable(enable)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_LRippleQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultBool(context, channel->isLowRippleEnabled());
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_LRippleAuto(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+	bool enable;
+	if (!SCPI_ParamBool(context, &enable, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+    channel->lowRippleAutoEnable(enable);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_LRippleAutoQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultBool(context, channel->isLowRippleAutoEnabled());
+
+    return SCPI_RES_OK;
+}
+
 }
 }
 } // namespace eez::psu::scpi

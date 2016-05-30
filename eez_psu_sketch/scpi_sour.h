@@ -48,4 +48,8 @@
     SCPI_COMMAND("[SOURce#]:VOLTage:SENSe[:SOURce]?", scpi_source_VoltageSenseSourceQ) \
     SCPI_COMMAND("[SOURce#]:VOLTage:PROGram[:SOURce]", scpi_source_VoltageProgramSource) \
     SCPI_COMMAND("[SOURce#]:VOLTage:PROGram[:SOURce]?", scpi_source_VoltageProgramSourceQ) \
+    SCPI_COMMAND("[SOURce#]:LRIPple", scpi_source_LRipple) \
+    SCPI_COMMAND("[SOURce#]:LRIPple?", scpi_source_LRippleQ) \
+    SCPI_COMMAND("[SOURce#]:LRIPple:AUTO", scpi_source_LRippleAuto) \
+    SCPI_COMMAND("[SOURce#]:LRIPple:AUTO?", scpi_source_LRippleAutoQ) \
 

@@ -110,7 +110,8 @@ Channel::Channel(
     bool OVP_DEFAULT_STATE_, float OVP_MIN_DELAY_, float OVP_DEFAULT_DELAY_, float OVP_MAX_DELAY_,
     float I_MIN_, float I_DEF_, float I_MAX_, float I_MIN_STEP_, float I_DEF_STEP_, float I_MAX_STEP_, float I_CAL_VAL_MIN_, float I_CAL_VAL_MID_, float I_CAL_VAL_MAX_, float I_VOLT_CAL_,
     bool OCP_DEFAULT_STATE_, float OCP_MIN_DELAY_, float OCP_DEFAULT_DELAY_, float OCP_MAX_DELAY_,
-    bool OPP_DEFAULT_STATE_, float OPP_MIN_DELAY_, float OPP_DEFAULT_DELAY_, float OPP_MAX_DELAY_, float OPP_MIN_LEVEL_, float OPP_DEFAULT_LEVEL_, float OPP_MAX_LEVEL_
+    bool OPP_DEFAULT_STATE_, float OPP_MIN_DELAY_, float OPP_DEFAULT_DELAY_, float OPP_MAX_DELAY_, float OPP_MIN_LEVEL_, float OPP_DEFAULT_LEVEL_, float OPP_MAX_LEVEL_,
+    float SOA_VIN_, float SOA_PREG_CURR_, float SOA_POSTREG_PTOT_
     )
     :
     index(index_),
@@ -127,6 +128,7 @@ Channel::Channel(
     I_MIN(I_MIN_), I_DEF(I_DEF_), I_MAX(I_MAX_), I_MIN_STEP(I_MIN_STEP_), I_DEF_STEP(I_DEF_STEP_), I_MAX_STEP(I_MAX_STEP_), I_CAL_VAL_MIN(I_CAL_VAL_MIN_), I_CAL_VAL_MID(I_CAL_VAL_MID_), I_CAL_VAL_MAX(I_CAL_VAL_MAX_), I_VOLT_CAL(I_VOLT_CAL_),
     OCP_DEFAULT_STATE(OCP_DEFAULT_STATE_), OCP_MIN_DELAY(OCP_MIN_DELAY_), OCP_DEFAULT_DELAY(OCP_DEFAULT_DELAY_), OCP_MAX_DELAY(OCP_MAX_DELAY_),
     OPP_DEFAULT_STATE(OPP_DEFAULT_STATE_), OPP_MIN_DELAY(OPP_MIN_DELAY_), OPP_DEFAULT_DELAY(OPP_DEFAULT_DELAY_), OPP_MAX_DELAY(OPP_MAX_DELAY_), OPP_MIN_LEVEL(OPP_MIN_LEVEL_), OPP_DEFAULT_LEVEL(OPP_DEFAULT_LEVEL_), OPP_MAX_LEVEL(OPP_MAX_LEVEL_),
+    SOA_VIN(SOA_VIN_), SOA_PREG_CURR(SOA_PREG_CURR_), SOA_POSTREG_PTOT(SOA_POSTREG_PTOT_),
     ioexp(*this),
     adc(*this),
     dac(*this)
@@ -195,6 +197,8 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     else {
         cpv.flags.alarmed = 0;
     }
+
+    lowRippleCheck();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -220,6 +224,9 @@ void Channel::onPowerDown() {
     remoteSensingEnable(false);
     if (getFeatures() & CH_FEATURE_RPROG) {
         remoteProgrammingEnable(false);
+    }
+    if (getFeatures() & CH_FEATURE_LRIPPLE) {
+        lowRippleEnable(false);
     }
 
     profile::enableSave(last_save_enabled);
@@ -260,6 +267,11 @@ void Channel::reset() {
     if (getFeatures() & CH_FEATURE_RPROG) {
         // [SOUR[n]]:VOLT:PROG INTernal
         remoteProgrammingEnable(false);
+    }
+
+    if (getFeatures() & CH_FEATURE_LRIPPLE) {
+        // [SOUR[n]]:VOLT:PROG INTernal
+        lowRippleEnable(false);
     }
 
     // [SOUR[n]]:VOLT:PROT:DEL 
@@ -312,6 +324,9 @@ bool Channel::test() {
     outputEnable(false);
     remoteSensingEnable(false);
     if (getFeatures() & CH_FEATURE_RPROG) {
+        remoteProgrammingEnable(false);
+    }
+    if (getFeatures() & CH_FEATURE_LRIPPLE) {
         remoteProgrammingEnable(false);
     }
 
@@ -597,6 +612,55 @@ void Channel::doRemoteProgrammingEnable(bool enable) {
     setOperBits(OPER_ISUM_RPROG_ON, enable);
 }
 
+bool Channel::isLowRippleAllowed() {
+    if (i.mon > SOA_PREG_CURR || i.mon > SOA_POSTREG_PTOT / (SOA_VIN - u.mon)) {
+        return false;
+    }
+
+    if (i.mon * (SOA_VIN - u.mon) > SOA_POSTREG_PTOT) {
+        return false;
+    }
+
+    return true;
+}
+
+void Channel::lowRippleCheck() {
+    if (getFeatures() & CH_FEATURE_LRIPPLE) {
+        if (isLowRippleAllowed()) {
+            if (!flags.lripple_enabled && flags.lripple_auto_enabled) {
+                doLowRippleEnable(true, false);
+            }
+        } else {
+            if (flags.lripple_enabled) {
+                doLowRippleEnable(false);
+            }
+        }
+    }
+}
+
+bool Channel::doLowRippleEnable(bool enable, bool check_is_allowed) {
+    if (enable) {
+        if (!check_is_allowed || isLowRippleAllowed()) {
+            flags.lripple_enabled = true;
+            ioexp.change_bit(IOExpander::IO_BIT_OUT_SET_100_PERCENT, true);
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        flags.lripple_enabled = false;
+        ioexp.change_bit(IOExpander::IO_BIT_OUT_SET_100_PERCENT, true);
+        return true;
+    }
+}
+
+void Channel::doLowRippleAutoEnable(bool enable) {
+    if (enable && !isOk()) {
+        return;
+    }
+    flags.lripple_auto_enabled = enable;
+}
+
 void Channel::update() {
     bool last_save_enabled = profile::enableSave(false);
 
@@ -606,6 +670,13 @@ void Channel::update() {
     doRemoteSensingEnable(flags.sense_enabled);
     if (getFeatures() & CH_FEATURE_RPROG) {
         doRemoteProgrammingEnable(flags.rprog_enabled);
+    }
+    if (getFeatures() & CH_FEATURE_LRIPPLE) {
+        if (flags.lripple_enabled && isLowRippleAllowed()) {
+            doRemoteProgrammingEnable(true);
+        } else {
+            doRemoteProgrammingEnable(false);
+        }
     }
 
     profile::enableSave(last_save_enabled);
@@ -641,6 +712,27 @@ void Channel::remoteProgrammingEnable(bool enable) {
 
 bool Channel::isRemoteProgrammingEnabled() {
     return flags.rprog_enabled;
+}
+
+bool Channel::lowRippleEnable(bool enable) {
+    if (enable != flags.lripple_enabled) {
+        return doLowRippleEnable(enable);
+    }
+    return true;
+}
+
+bool Channel::isLowRippleEnabled() {
+    return flags.lripple_enabled;
+}
+
+void Channel::lowRippleAutoEnable(bool enable) {
+    if (enable != flags.lripple_auto_enabled) {
+        doLowRippleAutoEnable(enable);
+    }
+}
+
+bool Channel::isLowRippleAutoEnabled() {
+    return flags.lripple_auto_enabled;
 }
 
 void Channel::setVoltage(float value) {

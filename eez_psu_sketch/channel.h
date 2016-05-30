@@ -134,6 +134,8 @@ public:
         unsigned power_ok : 1;
         unsigned cal_enabled : 1;
         unsigned rprog_enabled: 1;
+        unsigned lripple_enabled: 1;
+        unsigned lripple_auto_enabled: 1;
     };
 
     /// Voltage and current data set and measured during runtime.
@@ -248,6 +250,10 @@ public:
     float OPP_DEFAULT_LEVEL;
     float OPP_MAX_LEVEL;
 
+    float SOA_VIN;
+    float SOA_PREG_CURR;
+    float SOA_POSTREG_PTOT;
+
     IOExpander ioexp;
     AnalogDigitalConverter adc;
     DigitalAnalogConverter dac;
@@ -282,7 +288,8 @@ public:
         bool OVP_DEFAULT_STATE, float OVP_MIN_DELAY, float OVP_DEFAULT_DELAY, float OVP_MAX_DELAY,
         float I_MIN, float I_DEF, float I_MAX, float I_MIN_STEP, float I_DEF_STEP, float I_MAX_STEP, float I_CAL_VAL_MIN, float I_CAL_VAL_MID, float I_CAL_VAL_MAX, float I_VOLT_CAL,
         bool OCP_DEFAULT_STATE, float OCP_MIN_DELAY, float OCP_DEFAULT_DELAY, float OCP_MAX_DELAY,
-        bool OPP_DEFAULT_STATE, float OPP_MIN_DELAY, float OPP_DEFAULT_DELAY, float OPP_MAX_DELAY, float OPP_MIN_LEVEL, float OPP_DEFAULT_LEVEL, float OPP_MAX_LEVEL);
+        bool OPP_DEFAULT_STATE, float OPP_MIN_DELAY, float OPP_DEFAULT_DELAY, float OPP_MAX_DELAY, float OPP_MIN_LEVEL, float OPP_DEFAULT_LEVEL, float OPP_MAX_LEVEL,
+        float SOA_VIN, float SOA_PREG_CURR, float SOA_POSTREG_PTOT);
 
     /// Initialize channel and underlying hardware.
     /// Makes a required tests, for example ADC, DAC and IO Expander tests.
@@ -352,6 +359,18 @@ public:
     /// Is remote programming enabled?
     bool isRemoteProgrammingEnabled();
 
+    /// Enable/disable low ripple mode.
+    bool lowRippleEnable(bool enable);
+
+    /// Is low ripple mode enabled?
+    bool isLowRippleEnabled();
+
+    /// Enable/disable low ripple auto mode.
+    void lowRippleAutoEnable(bool enable);
+
+    /// Is low ripple auto mode enabled?
+    bool isLowRippleAutoEnabled();
+
     /// Set channel voltage level.
     void setVoltage(float voltage);
 
@@ -417,6 +436,10 @@ private:
     void doOutputEnable(bool enable);
     void doRemoteSensingEnable(bool enable);
     void doRemoteProgrammingEnable(bool enable);
+    void lowRippleCheck();
+    bool isLowRippleAllowed();
+    bool doLowRippleEnable(bool enable, bool check_is_allowed = true);
+    void doLowRippleAutoEnable(bool enable);
     void doDpEnable(bool enable);
 };
 
