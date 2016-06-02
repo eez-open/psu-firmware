@@ -27,9 +27,6 @@ namespace lcd {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#define TFT_320QVT_1289 ITDB32S
-#define TFT_320QVT_9341 ITDB32WC
-
 EEZ_UTFT lcd(DISPLAY_TYPE, LCD_RS, LCD_WR, LCD_CS, LCD_RESET);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -178,7 +175,7 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
 	    else {
 		    for (int iRow = 0; iRow < height; ++iRow) {
 			    setXY(x_glyph, y_glyph + iRow, x_glyph + width - 1, y_glyph + iRow);
-			    for (int iByte = iStartByte; iByte >= iStartByte; --iByte) {
+			    for (int iByte = iStartByte + (width + 7) / 8; iByte >= iStartByte; --iByte) {
 				    uint8_t data = arduino_util::prog_read_byte(glyph.data + offset + iByte);
 				    for (int iBit = 7; iBit >= 0; --iBit) {
                         int iPixel = iByte * 8 + iBit;
@@ -257,7 +254,7 @@ int EEZ_UTFT::measureStr(const char *text, int textLength, font::Font &font, int
 static bool g_isOn = false;
 
 void init() {
-	lcd.InitLCD(PORTRAIT);
+	lcd.InitLCD(DISPLAY_ORIENTATION);
     
     // make sure the screen is off on the beginning
     g_isOn = true;

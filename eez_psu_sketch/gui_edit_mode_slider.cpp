@@ -53,7 +53,7 @@ void onTouchMove() {
     }
     else {
         int num_bars = (max - min) >= 10 ? 9 : 5;
-        int bar_width = (240 - scale_width) / num_bars;
+        int bar_width = (lcd::lcd.getDisplayXSize() - scale_width) / num_bars;
         scale = 1 << (1 + (x - scale_width) / bar_width);
     }
 

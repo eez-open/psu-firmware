@@ -85,13 +85,22 @@ void UTFT::setBrightness(byte br) {
 }
 
 void UTFT::setPixel(word color) {
-    if (x >= 0 && x < getDisplayXSize() && y >= 0 && y < getDisplayYSize()) {
-        *(buffer + y * getDisplayXSize() + x) = color;
-    }
-    if (++x > x2) {
-        x = x1;
-        if (++y > y2) {
-            y = y1;
+    if (orient == PORTRAIT) {
+        if (x >= 0 && x < getDisplayXSize() && y >= 0 && y < getDisplayYSize()) {
+            *(buffer + y * getDisplayXSize() + x) = color;
+        }
+        if (++x > x2) {
+            x = x1;
+            if (++y > y2) {
+                y = y1;
+            }
+        }
+    } else {
+        if (x >= 0 && x < getDisplayXSize() && y >= 0 && y < getDisplayYSize()) {
+            *(buffer + (disp_y_size - x) * getDisplayYSize() + y) = color;
+        }
+        if (--x < x1) {
+            x = x2;
         }
     }
 }
@@ -102,8 +111,13 @@ void UTFT::setXY(word x1_, word y1_, word x2_, word y2_) {
     x2 = x2_;
     y2 = y2_;
 
-    x = x1;
-    y = y1;
+    if (orient == PORTRAIT) {
+        x = x1;
+        y = y1;
+    } else {
+        x = x2;
+        y = y1;
+    }
 }
 
 void UTFT::clrXY() {
@@ -131,9 +145,18 @@ void UTFT::drawRect(int x1, int y1, int x2, int y2) {
 }
 
 void UTFT::fillRect(int x1, int y1, int x2, int y2) {
-    setXY(x1, y1, x2, y2);
-    for (int i = 0; i < (x2 - x1 + 1) * (y2 - y1 + 1); ++i) {
-        setPixel((fch << 8) | fcl);
+    if (orient == PORTRAIT) {
+        setXY(x1, y1, x2, y2);
+        for (int i = 0; i < (x2 - x1 + 1) * (y2 - y1 + 1); ++i) {
+            setPixel((fch << 8) | fcl);
+        }
+    } else {
+        for (int iy = y1; iy <= y2; ++iy) {
+            setXY(x1, iy, x2, iy);
+            for (int ix = x2; ix >= x1; --ix) {
+                setPixel((fch << 8) | fcl);
+            }
+        }
     }
 }
 
@@ -145,18 +168,36 @@ void UTFT::drawHLine(int x, int y, int l) {
 }
 
 void UTFT::drawVLine(int x, int y, int l) {
-    setXY(x, y, x, y + l);
-    for (int i = 0; i < l; ++i) {
-        setPixel((fch << 8) | fcl);
+    if (orient == PORTRAIT) {
+        setXY(x, y, x, y + l);
+        for (int i = 0; i < l; ++i) {
+            setPixel((fch << 8) | fcl);
+        }
+    } else {
+        for (int i = 0; i < l; ++i) {
+            setXY(x, y + i, x, y + i);
+            setPixel((fch << 8) | fcl);
+        }
     }
 }
 
 void UTFT::drawBitmap(int x, int y, int sx, int sy, bitmapdatatype data, int scale) {
-    setXY(x, y, x + sx - 1, y + sy - 1);
-    for (int i = 0; i < sx * sy; ++i) {
-        unsigned char l = arduino_util::prog_read_byte(((uint8_t *)data) + 2 * i + 0);
-        unsigned char h = arduino_util::prog_read_byte(((uint8_t *)data) + 2 * i + 1);
-        setPixel((h << 8) + l);
+    if (orient == PORTRAIT) {
+        setXY(x, y, x + sx - 1, y + sy - 1);
+        for (int i = 0; i < sx * sy; ++i) {
+            unsigned char l = arduino_util::prog_read_byte(((uint8_t *)data) + 2 * i + 0);
+            unsigned char h = arduino_util::prog_read_byte(((uint8_t *)data) + 2 * i + 1);
+            setPixel((h << 8) + l);
+        }
+    } else {
+        for (int iy = 0; iy < sy; ++iy) {
+            setXY(x, y + iy, x + sx - 1, y + iy);
+            for (int ix = sx - 1; ix >= 0; --ix) {
+                unsigned char l = arduino_util::prog_read_byte(((uint8_t *)data) + 2 * (iy * sx + ix) + 0);
+                unsigned char h = arduino_util::prog_read_byte(((uint8_t *)data) + 2 * (iy * sx + ix) + 1);
+                setPixel((h << 8) + l);
+            }
+        }
     }
 }
 

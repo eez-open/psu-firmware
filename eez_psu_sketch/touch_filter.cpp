@@ -156,10 +156,6 @@ template<int N, int D, int P>
 class SampleFilter {
 public:
     Sample operator()(const Sample& s) {
-        //bool was_on = p.on();
-        //bool on = p(s.p);
-        //bool rst = !was_on && on;
-        //return Sample(Point(x(s.l.x, rst), y(s.l.y, rst)), on);
         const bool rst = !p.on();
 
         return Sample(Point(x(s.l.x, rst), y(s.l.y, rst)), p(s.p));
@@ -254,9 +250,9 @@ private:
 static DefaultSampleFilter g_filter;
 static ScreenTransform g_transform;
 
-bool calibrateTransform(int tl_x, int tl_y, int br_x, int br_y, int tr_x, int tr_y, int margin) {
+bool calibrateTransform(int tl_x, int tl_y, int br_x, int br_y, int tr_x, int tr_y, int margin, int width, int height) {
     DebugTraceF("Touch screen calibration points: %d, %d, %d, %d, %d, %d", tl_x, tl_y, br_x, br_y, tr_x, tr_y);
-    return g_transform.calibrate(Point(tl_x, tl_y), Point(br_x, br_y), Point(tr_x, tr_y), margin, Point(240, 320));
+    return g_transform.calibrate(Point(tl_x, tl_y), Point(br_x, br_y), Point(tr_x, tr_y), margin, Point(width, height));
 }
 
 void resetTransformCalibration() {

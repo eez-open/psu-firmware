@@ -42,8 +42,8 @@
 
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
 
-#define BP_LED_OUT1           3
-#define BP_LED_OUT1_RED       2
+#define BP_LED_OUT1           2
+#define BP_LED_OUT1_RED       3
 #define BP_LED_SENSE1         5
 
 #define BP_LED_OUT2           13
@@ -57,10 +57,10 @@
 
 #define BP_STANDBY            15
 
-#define BP_LED_CV1            0
+#define BP_LED_CV1            7
 #define BP_LED_CC1            6
 
-#define BP_LED_CV2            7
+#define BP_LED_CV2            0
 #define BP_LED_CC2            10
 
 #define BP_LED_PROG1          4

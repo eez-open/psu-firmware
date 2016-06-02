@@ -100,6 +100,7 @@ void initDevice() {
     dev_conf.flags.profile_auto_recall = 1;
     dev_conf.profile_auto_recall_location = 0;
 
+    dev_conf.touch_screen_cal_orientation = -1;
     dev_conf.touch_screen_cal_tlx = 0;
     dev_conf.touch_screen_cal_tly = 0;
     dev_conf.touch_screen_cal_brx = 0;
