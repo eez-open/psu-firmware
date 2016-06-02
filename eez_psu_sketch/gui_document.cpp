@@ -17,6 +17,7 @@
 */
 
 #include "psu.h"
+#include "lcd.h"
 #include "gui_document.h"
 
 namespace eez {
