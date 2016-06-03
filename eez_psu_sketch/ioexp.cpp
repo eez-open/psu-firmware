@@ -93,7 +93,7 @@ bool IOExpander::test() {
 
             if (value != compare_with_value) {
                 DebugTraceF("Ch%d IO expander reg check failure: reg=%d, expected=%d, got=%d",
-                    channel.index, (int)REG_VALUES[i], (int)REG_VALUES[i + 1], (int)value);
+                    channel.index, (int)REG_VALUES[i], (int)compare_with_value, (int)value);
 
                 test_result = psu::TEST_FAILED;
                 break;

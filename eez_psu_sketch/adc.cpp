@@ -138,6 +138,8 @@ void AnalogDigitalConverter::tick(unsigned long tick_usec) {
 
                 channel.outputEnable(false);
                 channel.remoteSensingEnable(false);
+				channel.remoteProgrammingEnable(false);
+				channel.lowRippleEnable(false);
             }
         }
         else {

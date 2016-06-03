@@ -221,12 +221,12 @@ void Channel::onPowerDown() {
     bool last_save_enabled = profile::enableSave(false);
 
     outputEnable(false);
-    remoteSensingEnable(false);
+    doRemoteSensingEnable(false);
     if (getFeatures() & CH_FEATURE_RPROG) {
-        remoteProgrammingEnable(false);
+        doRemoteProgrammingEnable(false);
     }
     if (getFeatures() & CH_FEATURE_LRIPPLE) {
-        lowRippleEnable(false);
+        doLowRippleEnable(false);
     }
 
     profile::enableSave(last_save_enabled);
@@ -262,16 +262,16 @@ void Channel::reset() {
     clearProtection();
 
     // [SOUR[n]]:VOLT:SENS INTernal
-    remoteSensingEnable(false);
+    doRemoteSensingEnable(false);
 
     if (getFeatures() & CH_FEATURE_RPROG) {
         // [SOUR[n]]:VOLT:PROG INTernal
-        remoteProgrammingEnable(false);
+        doRemoteProgrammingEnable(false);
     }
 
     if (getFeatures() & CH_FEATURE_LRIPPLE) {
         // [SOUR[n]]:VOLT:PROG INTernal
-        lowRippleEnable(false);
+        doLowRippleEnable(false);
     }
 
     // [SOUR[n]]:VOLT:PROT:DEL 
@@ -322,12 +322,12 @@ bool Channel::test() {
     bool last_save_enabled = profile::enableSave(false);
 
     outputEnable(false);
-    remoteSensingEnable(false);
+    doRemoteSensingEnable(false);
     if (getFeatures() & CH_FEATURE_RPROG) {
-        remoteProgrammingEnable(false);
+        doRemoteProgrammingEnable(false);
     }
     if (getFeatures() & CH_FEATURE_LRIPPLE) {
-        remoteProgrammingEnable(false);
+        doLowRippleEnable(false);
     }
 
     ioexp.test();
@@ -709,6 +709,7 @@ bool Channel::isRemoteSensingEnabled() {
 void Channel::remoteProgrammingEnable(bool enable) {
     if (enable != flags.rprog_enabled) {
         doRemoteProgrammingEnable(enable);
+		profile::save();
     }
 }
 
@@ -719,6 +720,7 @@ bool Channel::isRemoteProgrammingEnabled() {
 bool Channel::lowRippleEnable(bool enable) {
     if (enable != flags.lripple_enabled) {
         return doLowRippleEnable(enable);
+		profile::save();
     }
     return true;
 }
