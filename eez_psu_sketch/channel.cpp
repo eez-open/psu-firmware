@@ -98,7 +98,7 @@ float Channel::Simulator::getLoad() {
 
 Channel::Channel(
     uint8_t index_,
-    uint8_t boardRevision_, uint8_t ioexp_iodir_,
+    uint8_t boardRevision_, uint8_t ioexp_iodir_, uint8_t ioexp_gpio_init_,
     uint8_t isolator_pin_, uint8_t ioexp_pin_, uint8_t convend_pin_, uint8_t adc_pin_, uint8_t dac_pin_,
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     uint8_t bp_led_out_plus_, uint8_t bp_led_out_minus_, uint8_t bp_led_sense_plus_, uint8_t bp_led_sense_minus_, uint8_t bp_relay_sense_,
@@ -115,7 +115,7 @@ Channel::Channel(
     )
     :
     index(index_),
-    boardRevision(boardRevision_), ioexp_iodir(ioexp_iodir_),
+    boardRevision(boardRevision_), ioexp_iodir(ioexp_iodir_), ioexp_gpio_init(ioexp_gpio_init_),
     isolator_pin(isolator_pin_), ioexp_pin(ioexp_pin_), convend_pin(convend_pin_), adc_pin(adc_pin_), dac_pin(dac_pin_),
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     bp_led_out_plus(bp_led_out_plus_), bp_led_out_minus(bp_led_out_minus_), bp_led_sense_plus(bp_led_sense_plus_), bp_led_sense_minus(bp_led_sense_minus_), bp_relay_sense(bp_relay_sense_),

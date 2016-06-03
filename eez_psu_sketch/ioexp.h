@@ -37,7 +37,7 @@ CH_BOARD_REVISION_R5B6B
 Pin 0  In, ADC interrupt/DRDY
 Pin 1  Out, DP enable (active low)
 Pin 2  In, CC_ACTIVE
-Pin 3  Out, SET_100%
+Pin 3  Out, SET_100% (active low)
 Pin 4  Out, EXT_PROG
 Pin 5  In, CV_ACTIVE
 Pin 6  In, PWRGOOD
@@ -97,7 +97,9 @@ public:
 
 private:
     Channel &channel;
+	uint8_t gpio;
 
+	uint8_t getRegInitValue(int i);
     uint8_t reg_read_write(uint8_t opcode, uint8_t reg, uint8_t val);
     uint8_t reg_read(uint8_t reg);
     void reg_write(uint8_t reg, uint8_t val);

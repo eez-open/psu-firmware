@@ -31,7 +31,6 @@ namespace psu {
 #define INTCON  0B00000000 // 
 #define IOCON   0B00100000 // sequential operation disabled, hw addressing disabled
 #define GPPU    0B00100100 // pull up with 100K resistor pins 2 and 5
-#define GPIO    0B00000010 // 
 
 static const uint8_t REG_VALUES[] = {
     // reg                   value    test
@@ -42,7 +41,7 @@ static const uint8_t REG_VALUES[] = {
     IOExpander::REG_INTCON,  INTCON,  1,
     IOExpander::REG_IOCON,   IOCON,   1,
     IOExpander::REG_GPPU,    GPPU,    1,
-    IOExpander::REG_GPIO,    GPIO,    0,
+    IOExpander::REG_GPIO,    0,       0,
     0xFF
 };
 
@@ -60,15 +59,22 @@ static void ioexp_interrupt_ch2() {
 
 IOExpander::IOExpander(Channel &channel_) : channel(channel_) {
     test_result = psu::TEST_SKIPPED;
+	gpio = channel.ioexp_gpio_init;
+}
+
+uint8_t IOExpander::getRegInitValue(int i) {
+	if (REG_VALUES[i] == IOExpander::REG_IODIR) {
+        return channel.ioexp_iodir;
+    } else if (REG_VALUES[i] == IOExpander::REG_GPIO) {
+        return channel.ioexp_gpio_init;
+    } else {
+        return REG_VALUES[i + 1];
+    }
 }
 
 bool IOExpander::init() {
     for (int i = 0; REG_VALUES[i] != 0xFF; i += 3) {
-        if (REG_VALUES[i] == IOExpander::REG_IODIR) {
-            reg_write(IOExpander::REG_IODIR, channel.ioexp_iodir);
-        } else {
-            reg_write(REG_VALUES[i], REG_VALUES[i + 1]);
-        }
+		reg_write(REG_VALUES[i], getRegInitValue(i));
     }
 
     int intNum = digitalPinToInterrupt(channel.convend_pin);
@@ -88,9 +94,7 @@ bool IOExpander::test() {
     for (int i = 0; REG_VALUES[i] != 0xFF; i += 3) {
         if (REG_VALUES[i] == IOExpander::REG_IODIR || REG_VALUES[i + 2]) {
             uint8_t value = reg_read(REG_VALUES[i]);
-
-            uint8_t compare_with_value = REG_VALUES[i] == IOExpander::REG_IODIR ? channel.ioexp_iodir : REG_VALUES[i + 1];
-
+            uint8_t compare_with_value = getRegInitValue(i);
             if (value != compare_with_value) {
                 DebugTraceF("Ch%d IO expander reg check failure: reg=%d, expected=%d, got=%d",
                     channel.index, (int)REG_VALUES[i], (int)compare_with_value, (int)value);
@@ -136,10 +140,11 @@ bool IOExpander::test_bit(int io_bit) {
 }
 
 void IOExpander::change_bit(int io_bit, bool set) {
-    uint8_t value = reg_read(REG_GPIO);
-    uint8_t newValue = set ? (value | (1 << io_bit)) : (value & ~(1 << io_bit));
-	DebugTraceF("gpio %d", (int)newValue);
-    reg_write(REG_GPIO, newValue);
+    uint8_t newValue = set ? (gpio | (1 << io_bit)) : (gpio & ~(1 << io_bit));
+	if (gpio != newValue) {
+		reg_write(REG_GPIO, newValue);
+		gpio = newValue;
+	}
 }
 
 void IOExpander::on_interrupt() {
@@ -175,6 +180,9 @@ uint8_t IOExpander::reg_read(uint8_t reg) {
 
 void IOExpander::reg_write(uint8_t reg, uint8_t val) {
     reg_read_write(IOEXP_WRITE, reg, val);
+	if (reg == REG_GPIO) {
+		DebugTraceF("Ch%d GPIO 0x%02x", (int)channel.index, (int)val);
+	}
 }
 
 }
