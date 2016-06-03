@@ -66,6 +66,12 @@
 
 #define CH_PARAMS_OPP_DELAY    1.0f, 10.0f, 300.0f
 
+// Pre-regulator's PMOS SOA:
+//
+// SUD19P06-60  Imax=0.6 A
+// SUD50P06-15  Imax=1.0 A 
+// NVD5117PL    Imax=2.0 A
+
 #define CH_PARAMS_30V_3A    CH_PARAMS_U_30V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY, 10.0f,  60.0f,  90.0f, 42.0f, 1.0f, 20.0f, 90.0f
 #define CH_PARAMS_40V_3A    CH_PARAMS_U_40V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY, 10.0f,  80.0f, 120.0f, 42.0f, 1.0f, 20.0f, 120.0f
 #define CH_PARAMS_50V_3A    CH_PARAMS_U_50V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY, 10.0f, 100.0f, 150.0f, 42.0f, 1.0f, 20.0f, 150.0f
