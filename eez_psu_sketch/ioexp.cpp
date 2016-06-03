@@ -138,6 +138,7 @@ bool IOExpander::test_bit(int io_bit) {
 void IOExpander::change_bit(int io_bit, bool set) {
     uint8_t value = reg_read(REG_GPIO);
     uint8_t newValue = set ? (value | (1 << io_bit)) : (value & ~(1 << io_bit));
+	DebugTraceF("gpio %d", (int)newValue);
     reg_write(REG_GPIO, newValue);
 }
 

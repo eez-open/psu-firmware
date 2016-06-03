@@ -645,7 +645,6 @@ bool Channel::doLowRippleEnable(bool enable, bool callIsAllowed) {
         if (!callIsAllowed || isLowRippleAllowed()) {
             flags.lripple_enabled = true;
             ioexp.change_bit(IOExpander::IO_BIT_OUT_SET_100_PERCENT, !flags.lripple_enabled);
-			DebugTraceF("low ripple %d", (int)!flags.lripple_enabled);
             return true;
         } else {
             return false;
@@ -653,7 +652,6 @@ bool Channel::doLowRippleEnable(bool enable, bool callIsAllowed) {
     } else {
         flags.lripple_enabled = false;
         ioexp.change_bit(IOExpander::IO_BIT_OUT_SET_100_PERCENT, !flags.lripple_enabled);
-		DebugTraceF("low ripple %d", (int)!flags.lripple_enabled);
         return true;
     }
 }
