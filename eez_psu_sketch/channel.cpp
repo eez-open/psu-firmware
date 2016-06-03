@@ -638,18 +638,18 @@ void Channel::lowRippleCheck() {
     }
 }
 
-bool Channel::doLowRippleEnable(bool enable, bool check_is_allowed) {
+bool Channel::doLowRippleEnable(bool enable, bool callIsAllowed) {
     if (enable) {
-        if (!check_is_allowed || isLowRippleAllowed()) {
+        if (!callIsAllowed || isLowRippleAllowed()) {
             flags.lripple_enabled = true;
-            ioexp.change_bit(IOExpander::IO_BIT_OUT_SET_100_PERCENT, true);
+            ioexp.change_bit(IOExpander::IO_BIT_OUT_SET_100_PERCENT, !flags.lripple_enabled);
             return true;
         } else {
             return false;
         }
     } else {
         flags.lripple_enabled = false;
-        ioexp.change_bit(IOExpander::IO_BIT_OUT_SET_100_PERCENT, true);
+        ioexp.change_bit(IOExpander::IO_BIT_OUT_SET_100_PERCENT, !flags.lripple_enabled);
         return true;
     }
 }

@@ -440,7 +440,7 @@ private:
     void doRemoteProgrammingEnable(bool enable);
     void lowRippleCheck();
     bool isLowRippleAllowed();
-    bool doLowRippleEnable(bool enable, bool check_is_allowed = true);
+    bool doLowRippleEnable(bool enable, bool callIsAllowed = true);
     void doLowRippleAutoEnable(bool enable);
     void doDpEnable(bool enable);
 };
