@@ -60,7 +60,7 @@ public:
     static const uint8_t IO_BIT_IN_PWRGOOD = 6;
 
     static const uint8_t IO_BIT_OUT_DP_ENABLE = 1;
-    static const uint8_t IO_BIT_OUT_SET_100_PERCENT = 4;
+    static const uint8_t IO_BIT_OUT_SET_100_PERCENT = 3;
     static const uint8_t IO_BIT_OUT_EXT_PROG = 4;
     static const uint8_t IO_BIT_OUT_OUTPUT_ENABLE = 7;
 
