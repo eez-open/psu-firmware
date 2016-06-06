@@ -479,8 +479,6 @@ Where is:
 const char *getModelName() {
     static char model_name[MODEL_NUM_CHARS + 1];
 
-	DebugTraceF("%d", (int)MODEL_NUM_CHARS);
-
     if (*model_name == 0) {
         strcat(model_name, MODEL_PREFIX);
 
