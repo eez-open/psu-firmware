@@ -340,7 +340,7 @@ scpi_result_t scpi_syst_ChannelInformationPowerQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    SCPI_ResultFloat(context, channel->I_MAX * channel->U_MAX);
+    SCPI_ResultFloat(context, channel->PTOT);
 
     return SCPI_RES_OK;
 }
