@@ -118,7 +118,7 @@ public:
                     }
                 }
             }
-            else if (widget->type == WIDGET_TYPE_VERTICAL_LIST || widget->type == WIDGET_TYPE_HORIZONTAL_LIST) {
+            else if (widget->type == WIDGET_TYPE_LIST) {
                 if (stack[stack_index].index < data::count(widget->data)) {
                     data::select(cursor, widget->data, stack[stack_index].index);
 
@@ -127,7 +127,7 @@ public:
 
                     ++stack[stack_index].index;
 
-                    if (widget->type == WIDGET_TYPE_VERTICAL_LIST) {
+                    if (listWidget->listType == LIST_TYPE_VERTICAL) {
                         int y = stack[stack_index].y;
     
                         DECL_WIDGET(childWidget, childWidgetOffset);
@@ -175,8 +175,8 @@ private:
     bool push(OBJ_OFFSET widgetOffset, int x, int y, bool refresh) {
         DECL_WIDGET(widget, widgetOffset);
 
-        if (widget->type == WIDGET_TYPE_CONTAINER || widget->type == WIDGET_TYPE_VERTICAL_LIST || widget->type == WIDGET_TYPE_HORIZONTAL_LIST) {
-             if (++stack_index == CONF_GUI_ENUM_WIDGETS_STACK_SIZE) {
+        if (widget->type == WIDGET_TYPE_CONTAINER || widget->type == WIDGET_TYPE_LIST) {
+			if (++stack_index == CONF_GUI_ENUM_WIDGETS_STACK_SIZE) {
                 return false;
             }
 
