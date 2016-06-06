@@ -452,6 +452,8 @@ void generateError(int16_t error) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#define MODEL_PREFIX "PSU"
+
 #if defined(EEZ_PSU_SIMULATOR)
 #define PLATFORM "Simulator"
 #elif defined(EEZ_PSU_ARDUINO_MEGA)
@@ -460,7 +462,7 @@ void generateError(int16_t error) {
 #define PLATFORM "Due"
 #endif
 
-#define MODEL_NUM_CHARS (CH_NUM * sizeof("X/XX/XX") + sizeof(PLATFORM) + 1)
+#define MODEL_NUM_CHARS (sizeof(MODEL_PREFIX) - 1 + CH_NUM * sizeof("X/XX/XX") + 2 + sizeof(PLATFORM))
 
 /*
 We are auto generating model name from the channels definition:
@@ -477,8 +479,10 @@ Where is:
 const char *getModelName() {
     static char model_name[MODEL_NUM_CHARS + 1];
 
+	DebugTraceF("%d", (int)MODEL_NUM_CHARS);
+
     if (*model_name == 0) {
-        strcat(model_name, "PSU");
+        strcat(model_name, MODEL_PREFIX);
 
         char *p = model_name + strlen(model_name);
 
