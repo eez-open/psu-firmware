@@ -410,7 +410,7 @@ scpi_result_t scpi_source_VoltageProtectionLevelQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
     
-    return get_source_value(context, channel->getVoltageProtectionLevel(),
+    return get_source_value(context, channel->prot_conf.u_level,
         channel->u.set, channel->U_MAX, channel->U_MAX);
 }
 

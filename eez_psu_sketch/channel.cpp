@@ -154,10 +154,10 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     bool state;
     bool condition;
     float delay;
-
+    
     if (IS_OVP_VALUE(this, cpv)) {
         state = flags.rprog_enabled || prot_conf.flags.u_state;
-        condition = flags.cv_mode && (u.mon >= getVoltageProtectionLevel()) && (!flags.cc_mode || fabs(i.mon - i.set) >= 0.01);
+        condition = flags.cv_mode && (u.mon >= prot_conf.u_level) && (!flags.cc_mode || fabs(i.mon - i.set) >= 0.01);
 
         delay = prot_conf.u_delay;
         delay -= PROT_DELAY_CORRECTION;
@@ -617,6 +617,7 @@ void Channel::doRemoteProgrammingEnable(bool enable) {
     flags.rprog_enabled = enable;
     if (enable) {
         setVoltage(0);
+        prot_conf.u_level = U_MAX;
     }
     ioexp.change_bit(IOExpander::IO_BIT_OUT_EXT_PROG, enable);
     bp::switchProg(this, enable);
@@ -752,6 +753,10 @@ void Channel::setVoltage(float value) {
     u.set = value;
     u.mon_dac = 0;
 
+    if (prot_conf.u_level < u.set) {
+        prot_conf.u_level = u.set;
+    }
+
     if (flags.cal_enabled) {
         value = util::remap(value, cal_conf.u.min.val, cal_conf.u.min.dac, cal_conf.u.max.val, cal_conf.u.max.dac);
     }
@@ -821,18 +826,6 @@ const char *Channel::getBoardRevisionName() {
 
 uint16_t Channel::getFeatures() {
     return CH_BOARD_REVISION_FEATURES[this->boardRevision];
-}
-
-float Channel::getVoltageProtectionLevel() {
-    if (flags.rprog_enabled) {
-        return U_MAX;
-    }
-
-    if (prot_conf.u_level >= u.set) {
-        return prot_conf.u_level;
-    }
-    
-    return u.set;
 }
 
 }

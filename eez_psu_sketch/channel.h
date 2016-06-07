@@ -423,9 +423,6 @@ public:
     /// Returns features present (check ChannelFeatures) in board revision of this channel.
     uint16_t getFeatures();
 
-    /// Returns voltage protection level, i.e. prot_conf.u_level or U_MAX if RPROG is enabled
-    float getVoltageProtectionLevel();
-
 private:
     bool delayed_dp_off;
     uint32_t delayed_dp_off_start;
