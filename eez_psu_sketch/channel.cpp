@@ -619,6 +619,7 @@ void Channel::doRemoteProgrammingEnable(bool enable) {
     if (enable) {
         setVoltage(0);
         prot_conf.u_level = U_MAX;
+		prot_conf.flags.u_state = true;
     }
     ioexp.change_bit(IOExpander::IO_BIT_OUT_EXT_PROG, enable);
     bp::switchProg(this, enable);
