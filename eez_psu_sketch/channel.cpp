@@ -414,6 +414,9 @@ float Channel::readingToCalibratedValue(Value *cv, float mon_reading) {
 
 void Channel::valueAddReading(Value *cv, float value) {
     cv->mon = readingToCalibratedValue(cv, value);
+    if (cv == &u) {
+        protectionCheck(ovp);
+    }
     protectionCheck(opp);
 }
 
