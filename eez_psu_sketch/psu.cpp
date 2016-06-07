@@ -154,6 +154,7 @@ void boot() {
     DebugTraceF("%d", offsetof(ChannelParameters, i_set));
     DebugTraceF("%d", offsetof(ChannelParameters, i_step));
     DebugTraceF("%d", offsetof(ChannelParameters, u_delay));
+    DebugTraceF("%d", offsetof(ChannelParameters, u_level));
     DebugTraceF("%d", offsetof(ChannelParameters, i_delay));
     DebugTraceF("%d", offsetof(ChannelParameters, p_delay));
     DebugTraceF("%d", offsetof(ChannelParameters, p_level));

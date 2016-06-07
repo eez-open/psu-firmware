@@ -42,13 +42,49 @@ static unsigned long avg_loop_duration_counter = 0;
 static unsigned long avg_loop_duration_total = 0;
 unsigned long avg_loop_duration = 0;
 
-
 static unsigned long ioexp_previous_tick_count = 0;
 static unsigned long current_ioexp_int_counter = 0;
 unsigned long total_ioexp_int_counter = 0;
 unsigned long last_ioexp_int_counter = 0;
 
+void ioexpIntTick(unsigned long tick_usec) {
+    ++current_ioexp_int_counter;
+}
+
+}
+}
+} // namespace eez::psu::debug
+
+#endif // CONF_DEBUG
+
+
+#if CONF_DEBUG || CONF_DEBUG_LATEST
+
+namespace eez {
+namespace psu {
+namespace debug {
+
+static char traceBuffer[256];
+static bool dumptTraceBufferOnNextTick = false;
+static bool insideInterruptHandler = false;
+
+void DumpTraceBuffer() {
+    Serial.print("**TRACE");
+    
+    char datetime_buffer[20] = { 0 };
+    if (datetime::getDateTimeAsString(datetime_buffer)) {
+        Serial.print(" [");
+        Serial.print(datetime_buffer);
+        Serial.print("]: ");
+    } else {
+        Serial.print(": ");
+    }
+
+    Serial.println(traceBuffer);
+}
+
 void tick(unsigned long tick_usec) {
+#if CONF_DEBUG
     if (previous_tick_count != 0) {
         last_loop_duration = tick_usec - previous_tick_count;
         if (last_loop_duration > max_loop_duration) {
@@ -83,43 +119,32 @@ void tick(unsigned long tick_usec) {
     }
 
     previous_tick_count = tick_usec;
+#endif
+
+    if (dumptTraceBufferOnNextTick) {
+        DumpTraceBuffer();
+        dumptTraceBufferOnNextTick = false;
+    }
 }
-
-void ioexpIntTick(unsigned long tick_usec) {
-    ++current_ioexp_int_counter;
-}
-
-}
-}
-} // namespace eez::psu::debug
-
-#endif // CONF_DEBUG
-
-
-#if CONF_DEBUG || CONF_DEBUG_LATEST
-
-namespace eez {
-namespace psu {
-namespace debug {
 
 void Trace(const char *format, ...) {
-    char buffer[256];
     va_list args;
     va_start(args, format);
-    vsnprintf_P(buffer, sizeof(buffer), format, args);
+    vsnprintf_P(traceBuffer, sizeof(traceBuffer), format, args);
 
-    Serial.print("**TRACE");
-    
-    char datetime_buffer[20] = { 0 };
-    if (datetime::getDateTimeAsString(datetime_buffer)) {
-        Serial.print(" [");
-        Serial.print(datetime_buffer);
-        Serial.print("]: ");
+    if (insideInterruptHandler) {
+        dumptTraceBufferOnNextTick = true;
     } else {
-        Serial.print(": ");
+        DumpTraceBuffer();
     }
+}
 
-    Serial.println(buffer);
+void interruptHandlerStarted() {
+    insideInterruptHandler = true;
+}
+
+void interruptHandlerFinished() {
+    insideInterruptHandler = false;
 }
 
 }

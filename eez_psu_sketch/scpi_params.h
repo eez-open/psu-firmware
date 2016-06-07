@@ -32,12 +32,14 @@ bool check_channel(scpi_t *context, int32_t ch);
 extern Channel *set_channel_from_command_number(scpi_t *context);
 
 bool get_voltage_param(scpi_t *context, float &value, const Channel *channel, const Channel::Value *cv);
+bool get_voltage_protection_level_param(scpi_t *context, float &value, float min, float max, float def);
 bool get_current_param(scpi_t *context, float &value, const Channel *channel, const Channel::Value *cv);
 bool get_power_param(scpi_t *context, float &value, float min, float max, float def);
 bool get_temperature_param(scpi_t *context, float &value, float min, float max, float def);
 bool get_duration_param(scpi_t *context, float &value, float min, float max, float def);
 
 bool get_voltage_from_param(scpi_t *context, const scpi_number_t &param, float &value, const Channel *channel, const Channel::Value *cv);
+bool get_voltage_protection_level_from_param(scpi_t *context, const scpi_number_t &param, float &value, float min, float max, float def);
 bool get_current_from_param(scpi_t *context, const scpi_number_t &param, float &value, const Channel *channel, const Channel::Value *cv);
 bool get_power_from_param(scpi_t *context, const scpi_number_t &param, float &value, float min, float max, float def);
 bool get_temperature_from_param(scpi_t *context, const scpi_number_t &param, float &value, float min, float max, float def);

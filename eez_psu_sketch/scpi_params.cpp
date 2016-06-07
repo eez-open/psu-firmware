@@ -132,6 +132,15 @@ bool get_voltage_param(scpi_t *context, float &value, const Channel *channel, co
     return get_voltage_from_param(context, param, value, channel, cv);
 }
 
+bool get_voltage_protection_level_param(scpi_t *context, float &value, float min, float max, float def) {
+    scpi_number_t param;
+    if (!SCPI_ParamNumber(context, scpi_special_numbers_def, &param, true)) {
+        return false;
+    }
+
+    return get_voltage_protection_level_from_param(context, param, value, min, max, def);
+}
+
 bool get_current_param(scpi_t *context, float &value, const Channel *channel, const Channel::Value *cv) {
     scpi_number_t param;
     if (!SCPI_ParamNumber(context, scpi_special_numbers_def, &param, true)) {
@@ -206,6 +215,37 @@ bool get_voltage_from_param(scpi_t *context, const scpi_number_t &param, float &
         }
     }
 
+    return true;
+}
+
+bool get_voltage_protection_level_from_param(scpi_t *context, const scpi_number_t &param, float &value, float min, float max, float def) {
+    if (param.special) {
+        if (param.tag == SCPI_NUM_MAX) {
+            value = max;
+        }
+        else if (param.tag == SCPI_NUM_MIN) {
+            value = min;
+        }
+        else if (param.tag == SCPI_NUM_DEF) {
+            value = def;
+        }
+        else {
+            SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+            return false;
+        }
+    }
+    else {
+        if (param.unit != SCPI_UNIT_NONE && param.unit != SCPI_UNIT_VOLT) {
+            SCPI_ErrorPush(context, SCPI_ERROR_INVALID_SUFFIX);
+            return false;
+        }
+
+        value = (float)param.value;
+        if (value < min || value > max) {
+            SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
+            return false;
+        }
+    }
     return true;
 }
 

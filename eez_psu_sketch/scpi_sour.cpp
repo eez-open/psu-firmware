@@ -387,6 +387,33 @@ scpi_result_t scpi_source_PowerProtectionTrippedQ(scpi_t * context) {
     return get_tripped(context, channel->opp);
 }
 
+scpi_result_t scpi_source_VoltageProtectionLevel(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+	}
+
+    float voltage;
+    if (!get_voltage_protection_level_param(context, voltage, channel->u.set, channel->U_MAX, channel->U_MAX)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel->prot_conf.u_level = voltage;
+    profile::save();
+
+	return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_VoltageProtectionLevelQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+    
+    return get_source_value(context, channel->getVoltageProtectionLevel(),
+        channel->u.set, channel->U_MAX, channel->U_MAX);
+}
+
 scpi_result_t scpi_source_VoltageProtectionDelay(scpi_t * context) {
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {

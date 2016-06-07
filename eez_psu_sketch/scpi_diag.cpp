@@ -158,6 +158,11 @@ scpi_result_t scpi_diag_InformationProtectionQ(scpi_t * context) {
         util::strcatDuration(buffer, channel->prot_conf.u_delay);
         SCPI_ResultText(context, buffer);
 
+        sprintf_P(buffer, PSTR("CH%d u_level="), channel->index);
+        util::strcatFloat(buffer, channel->prot_conf.u_level);
+        strcat_P(buffer, PSTR(" V"));
+        SCPI_ResultText(context, buffer);
+
         // current
         sprintf_P(buffer, PSTR("CH%d i_tripped=%d" ), channel->index, (int)channel->ocp.flags.tripped         ); SCPI_ResultText(context, buffer);
         sprintf_P(buffer, PSTR("CH%d i_state=%d"   ), channel->index, (int)channel->prot_conf.flags.i_state   ); SCPI_ResultText(context, buffer);

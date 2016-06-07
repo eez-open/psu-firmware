@@ -39,6 +39,8 @@
     SCPI_COMMAND("[SOURce#]:POWer:PROTection:STATe", scpi_source_PowerProtectionState) \
     SCPI_COMMAND("[SOURce#]:POWer:PROTection:STATe?", scpi_source_PowerProtectionStateQ) \
     SCPI_COMMAND("[SOURce#]:POWer:PROTection:TRIPped?", scpi_source_PowerProtectionTrippedQ) \
+    SCPI_COMMAND("[SOURce#]:VOLTage:PROTection[:LEVel]", scpi_source_VoltageProtectionLevel) \
+    SCPI_COMMAND("[SOURce#]:VOLTage:PROTection[:LEVel]?", scpi_source_VoltageProtectionLevelQ) \
     SCPI_COMMAND("[SOURce#]:VOLTage:PROTection:DELay[:TIME]", scpi_source_VoltageProtectionDelay) \
     SCPI_COMMAND("[SOURce#]:VOLTage:PROTection:DELay[:TIME]?", scpi_source_VoltageProtectionDelayQ) \
     SCPI_COMMAND("[SOURce#]:VOLTage:PROTection:STATe", scpi_source_VoltageProtectionState) \

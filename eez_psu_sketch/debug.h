@@ -29,7 +29,12 @@ namespace psu {
 /// Everything used for the debugging purposes.
 namespace debug {
 
+void tick(unsigned long tick_usec);
+
 void Trace(const char *format, ...);
+
+void interruptHandlerStarted();
+void interruptHandlerFinished();
 
 }
 }
@@ -67,7 +72,6 @@ extern unsigned long avg_loop_duration;
 extern unsigned long total_ioexp_int_counter;
 extern unsigned long last_ioexp_int_counter;
 
-void tick(unsigned long tick_usec);
 void ioexpIntTick(unsigned long tick_usec);
 
 }

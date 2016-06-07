@@ -51,6 +51,7 @@ struct ChannelParameters {
     float i_set;
     float i_step;
     float u_delay;
+    float u_level;
     float i_delay;
     float p_delay;
     float p_level;

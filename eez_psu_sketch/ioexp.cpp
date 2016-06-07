@@ -148,6 +148,10 @@ void IOExpander::change_bit(int io_bit, bool set) {
 }
 
 void IOExpander::on_interrupt() {
+#if CONF_DEBUG || CONF_DEBUG_LATEST
+    debug::interruptHandlerStarted();
+#endif
+
     // IMPORTANT!
     // Read ADC first, then INTF and GPIO.
     // Otherwise, it will generate 2 interrupts for single ADC start shot!
@@ -158,6 +162,10 @@ void IOExpander::on_interrupt() {
 
 #if CONF_DEBUG
     debug::ioexpIntTick(micros());
+#endif
+
+#if CONF_DEBUG || CONF_DEBUG_LATEST
+    debug::interruptHandlerFinished();
 #endif
 }
 

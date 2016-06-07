@@ -42,6 +42,7 @@ void recallChannelsFromProfile(Parameters *profile) {
 
     for (int i = 0; i < CH_MAX; ++i) {
         Channel::get(i).prot_conf.u_delay = profile->channels[i].u_delay;
+        Channel::get(i).prot_conf.u_level = profile->channels[i].u_level;
         Channel::get(i).prot_conf.i_delay = profile->channels[i].i_delay;
         Channel::get(i).prot_conf.p_delay = profile->channels[i].p_delay;
         Channel::get(i).prot_conf.p_level = profile->channels[i].p_level;
@@ -196,6 +197,7 @@ bool saveAtLocation(int location) {
             profile.channels[i].i_step = Channel::get(i).i.step;
 
             profile.channels[i].u_delay = Channel::get(i).prot_conf.u_delay;
+            profile.channels[i].u_level = Channel::get(i).prot_conf.u_level;
             profile.channels[i].i_delay = Channel::get(i).prot_conf.i_delay;
             profile.channels[i].p_delay = Channel::get(i).prot_conf.p_delay;
             profile.channels[i].p_level = Channel::get(i).prot_conf.p_level;
