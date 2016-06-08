@@ -167,8 +167,8 @@ void processData(Data *data) {
         data->local_control_widget.mouse_data.down_y < data->local_control_widget.h) 
     {
         is_down = true;
-        x = data->local_control_widget.mouse_data.x;
-        y = data->local_control_widget.mouse_data.y;
+        x = (int)round(data->local_control_widget.mouse_data.x / (1.0 * data->local_control_widget.w / data->local_control_widget.pixels_w));
+        y = (int)round(data->local_control_widget.mouse_data.y / (1.0 * data->local_control_widget.h / data->local_control_widget.pixels_h));
     }
 
     gui::touch::touch_write(is_down, x, y);

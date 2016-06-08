@@ -31,7 +31,7 @@ namespace psu {
 namespace simulator {
 namespace front_panel {
 
-imgui::WindowDefinition *getWindowDefinition();
+imgui::WindowDefinition *getWindowDefinition(int w, int h);
 void render(imgui::Window *window, Data *data);
 
 }

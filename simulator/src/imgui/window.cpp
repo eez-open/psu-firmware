@@ -327,6 +327,23 @@ void WindowImpl::addUserWidget(UserWidget *user_widget) {
 
 using namespace eez::imgui;
 
+EEZ_DLL_EXPORT int eez_imgui_get_desktop_resolution(int *w, int *h) {
+	SDL_Init(SDL_INIT_VIDEO);
+
+	SDL_DisplayMode dm;
+	if (SDL_GetDesktopDisplayMode(0, &dm) == 0) {
+		*w = dm.w;
+		*h = dm.h;
+
+		return 1;
+	}
+
+	*w = -1;
+	*h = -1;
+
+	return 0;
+}
+
 EEZ_DLL_EXPORT Window *eez_imgui_create_window(WindowDefinition *windowDefinition) {
     Window *window = new Window(windowDefinition);
 

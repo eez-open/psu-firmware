@@ -78,6 +78,7 @@ private:
 };
 
 typedef Window *(*create_window_ptr_t)(WindowDefinition *windowDefinition);
+typedef int (*get_desktop_resolution_ptr_t)(int *w, int *h);
 
 }
 } // namespace eez::imgui

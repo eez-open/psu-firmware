@@ -49,6 +49,7 @@ namespace front_panel {
 static bool g_lib_loaded = false;
 static eez_dll_lib_t g_lib = 0;
 static create_window_ptr_t g_create_window_ptr = 0;
+static get_desktop_resolution_ptr_t g_get_desktop_resolution_ptr = 0;
 static Window* g_window;
 static Data g_data;
 
@@ -62,6 +63,7 @@ void load_lib() {
             if (!g_create_window_ptr) {
                 printf("Incompatible GUI library!\n");
             }
+			g_get_desktop_resolution_ptr = (get_desktop_resolution_ptr_t)eez_dll_get_proc_address(g_lib, "eez_imgui_get_desktop_resolution");
             g_beep_ptr = (beep_ptr_t)eez_dll_get_proc_address(g_lib, "eez_imgui_beep");
         }
         else {
@@ -85,8 +87,11 @@ bool open() {
     if (!g_create_window_ptr) {
         return false;
     }
+
+	int w, h;
+	g_get_desktop_resolution_ptr(&w, &h);
     
-    g_window = g_create_window_ptr(getWindowDefinition());
+    g_window = g_create_window_ptr(getWindowDefinition(w, h));
 
     if (!persist_conf::dev_conf.gui_opened) {
         persist_conf::dev_conf.gui_opened = true;
