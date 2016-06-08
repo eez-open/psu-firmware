@@ -44646,8 +44646,8 @@
                         "text": "OFF",
                         "x": 0,
                         "y": 0,
-                        "width": 120,
-                        "height": 36
+                        "width": 76,
+                        "height": 30
                       },
                       {
                         "type": "Select",
@@ -44669,18 +44669,18 @@
                             "x": 0,
                             "y": 0,
                             "width": 76,
-                            "height": 36
+                            "height": 30
                           }
                         ],
                         "x": 0,
                         "y": 0,
-                        "width": 80,
-                        "height": 36,
+                        "width": 76,
+                        "height": 30,
                         "style": "default"
                       }
                     ],
-                    "width": 120,
-                    "height": 36,
+                    "width": 76,
+                    "height": 30,
                     "style": "default"
                   },
                   {
@@ -44852,5 +44852,5 @@
       "destinationFolder": "eez_psu_sketch"
     }
   },
-  "selectedBuildConfiguration": "R1B9"
+  "selectedBuildConfiguration": "R2B6"
 }
