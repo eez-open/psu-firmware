@@ -304,8 +304,8 @@ void WindowImpl::addUserWidget(UserWidget *user_widget) {
     int y = user_widget->y + window_definition->content_padding;
 
 	Texture tex;
-    if (tex.loadFromImageBuffer(user_widget->pixels, user_widget->w, user_widget->h, renderer)) {
-        tex.render(renderer, x, y);
+    if (tex.loadFromImageBuffer(user_widget->pixels, user_widget->pixels_w, user_widget->pixels_h, renderer)) {
+        tex.render(renderer, x, y, user_widget->w, user_widget->h);
     }
 
     memcpy(&user_widget->mouse_data, &mouse_data, sizeof(MouseData));

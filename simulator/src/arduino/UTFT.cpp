@@ -97,9 +97,10 @@ void UTFT::setPixel(word color) {
         }
     } else {
         if (x >= 0 && x < getDisplayXSize() && y >= 0 && y < getDisplayYSize()) {
-            *(buffer + (disp_y_size - x) * getDisplayYSize() + y) = color;
+            *(buffer + y * getDisplayXSize() + x) = color;
         }
-        if (--x < x1) {
+
+		if (--x < x1) {
             x = x2;
         }
     }

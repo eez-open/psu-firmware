@@ -28,10 +28,16 @@ namespace front_panel {
 struct ChannelData {
     bool cv;
     bool cc;
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     bool out_plus;
     bool sense_plus;
     bool sense_minus;
     bool out_minus;
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+    bool out;
+	bool sense;
+	bool prog;
+#endif
     const char *load_text;
 };
 

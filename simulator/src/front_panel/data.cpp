@@ -16,9 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "front_panel/data.h"
-
 #include "psu.h"
+#include "front_panel/data.h"
 #include "arduino_internal.h"
 #include "chips.h"
 #include "bp.h"
@@ -45,10 +44,9 @@ void fillChannelData(ChannelData *data, int ch) {
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
             data->cv = chips::bp_chip.getValue() & (1 << BP_LED_CV1) ? true : false;
             data->cc = chips::bp_chip.getValue() & (1 << BP_LED_CC1) ? true : false;
-            data->out_plus = chips::bp_chip.getValue() & (1 << BP_LED_OUT1) ? true : false;
-            data->sense_plus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE1) ? true : false;
-            data->sense_minus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE1) ? true : false;
-            data->out_minus = chips::bp_chip.getValue() & (1 << BP_LED_OUT1) ? true : false;
+            data->out = chips::bp_chip.getValue() & (1 << BP_LED_OUT1) ? true : false;
+            data->sense = chips::bp_chip.getValue() & (1 << BP_LED_SENSE1) ? true : false;
+            data->prog = chips::bp_chip.getValue() & (1 << BP_LED_PROG1) ? true : false;
 #endif
         }
         else {
@@ -62,10 +60,9 @@ void fillChannelData(ChannelData *data, int ch) {
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
             data->cv = chips::bp_chip.getValue() & (1 << BP_LED_CV2) ? true : false;
             data->cc = chips::bp_chip.getValue() & (1 << BP_LED_CC2) ? true : false;
-            data->out_plus = chips::bp_chip.getValue() & (1 << BP_LED_OUT2) ? true : false;
-            data->sense_plus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE2) ? true : false;
-            data->sense_minus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE2) ? true : false;
-            data->out_minus = chips::bp_chip.getValue() & (1 << BP_LED_OUT2) ? true : false;
+            data->out = chips::bp_chip.getValue() & (1 << BP_LED_OUT2) ? true : false;
+            data->sense = chips::bp_chip.getValue() & (1 << BP_LED_SENSE2) ? true : false;
+            data->prog = chips::bp_chip.getValue() & (1 << BP_LED_PROG2) ? true : false;
 #endif
         }
 
@@ -95,6 +92,7 @@ void fillChannelData(ChannelData *data, int ch) {
         }
     }
     else {
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
         data->cv = false;
         data->cc = false;
         data->out_plus = false;
@@ -102,19 +100,29 @@ void fillChannelData(ChannelData *data, int ch) {
         data->sense_minus = false;
         data->out_minus = false;
         data->load_text = 0;
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+        data->cv = false;
+        data->cc = false;
+        data->out = false;
+        data->sense = false;
+        data->prog = false;
+        data->load_text = 0;
+#endif
     }
 }
 
 void fillLocalControlBuffer(Data *data) {
     if (!data->local_control_widget.pixels) {
-        data->local_control_widget.pixels = new unsigned char[240 * 320 * 4];
+		data->local_control_widget.pixels_w = gui::lcd::lcd.getDisplayXSize();
+		data->local_control_widget.pixels_h = gui::lcd::lcd.getDisplayYSize();
+        data->local_control_widget.pixels = new unsigned char[data->local_control_widget.pixels_w * data->local_control_widget.pixels_h * 4];
     }
 
     word *src = gui::lcd::lcd.buffer;
     unsigned char *dst = data->local_control_widget.pixels;
 
-    for (int x = 0; x < 240; ++x) {
-        for (int y = 0; y < 320; ++y) {
+    for (int x = 0; x < data->local_control_widget.pixels_w; ++x) {
+        for (int y = 0; y < data->local_control_widget.pixels_h; ++y) {
             word color = *src++; // rrrrrggggggbbbbb
 
             *dst++ = (unsigned char)((color << 3) & 0xFF);        // blue

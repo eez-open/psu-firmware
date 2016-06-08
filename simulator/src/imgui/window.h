@@ -43,8 +43,12 @@ struct UserWidget {
     int y;
     int w;
     int h;
-    unsigned char *pixels;
-    MouseData mouse_data;
+
+	int pixels_w;
+	int pixels_h;
+	unsigned char *pixels;
+
+	MouseData mouse_data;
 };
 
 class WindowImpl;
