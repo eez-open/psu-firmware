@@ -172,12 +172,16 @@ public:
         float i_set;
         float i_dac;
         float temperature[temp_sensor::COUNT];
+		float voltProgExt;
 
         void setLoadEnabled(bool value);
         bool getLoadEnabled();
 
         void setLoad(float value);
         float getLoad();
+
+		void setVoltProgExt(float value);
+		float getVoltProgExt();
     };
 #endif // EEZ_PSU_SIMULATOR
 
@@ -191,10 +195,10 @@ public:
 
     uint8_t boardRevision;
 
-    uint8_t isolator_pin;
-    uint8_t ioexp_pin;
     uint8_t ioexp_iodir;
 	uint8_t ioexp_gpio_init;
+    uint8_t isolator_pin;
+    uint8_t ioexp_pin;
     uint8_t convend_pin;
     uint8_t adc_pin;
     uint8_t dac_pin;

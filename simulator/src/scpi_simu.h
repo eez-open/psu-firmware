@@ -23,6 +23,9 @@
     SCPI_COMMAND("SIMUlator:LOAD:STATe?", scpi_simu_LoadStateQ) \
     SCPI_COMMAND("SIMUlator:LOAD", scpi_simu_Load) \
     SCPI_COMMAND("SIMUlator:LOAD?", scpi_simu_LoadQ) \
+    SCPI_COMMAND("SIMUlator:VOLTage:PROGram:EXTernal", scpi_simu_VoltageProgramExternal) \
+	SCPI_COMMAND("SIMUlator:VOLTage:PROGram:EXTernal?", scpi_simu_VoltageProgramExternalQ) \
+    SCPI_COMMAND("SIMUlator:LOAD?", scpi_simu_LoadQ) \
     SCPI_COMMAND("SIMUlator:PWRGood", scpi_simu_Pwrgood) \
     SCPI_COMMAND("SIMUlator:PWRGood?", scpi_simu_PwrgoodQ) \
     SCPI_COMMAND("SIMUlator:TEMPerature", scpi_simu_Temperature) \

@@ -60,6 +60,7 @@ void recallChannelsFromProfile(Parameters *profile) {
 #ifdef EEZ_PSU_SIMULATOR
         Channel::get(i).simulator.load_enabled = profile->channels[i].load_enabled;
         Channel::get(i).simulator.load = profile->channels[i].load;
+		Channel::get(i).simulator.voltProgExt = profile->channels[i].voltProgExt;
 #endif
 
         Channel::get(i).flags.cal_enabled = profile->channels[i].flags.cal_enabled && Channel::get(i).isCalibrationExists() ? 1 : 0;
@@ -205,6 +206,7 @@ bool saveAtLocation(int location) {
 #ifdef EEZ_PSU_SIMULATOR
             profile.channels[i].load_enabled = Channel::get(i).simulator.load_enabled;
             profile.channels[i].load = Channel::get(i).simulator.load;
+			profile.channels[i].voltProgExt = Channel::get(i).simulator.voltProgExt;
 #endif
         }
 

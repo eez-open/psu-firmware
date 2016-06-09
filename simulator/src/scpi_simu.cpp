@@ -158,6 +158,41 @@ scpi_result_t scpi_simu_LoadQ(scpi_t *context) {
     return result_float(context, value);
 }
 
+scpi_result_t scpi_simu_VoltageProgramExternal(scpi_t *context) {
+	float value;
+	if (!get_voltage_param(context, value, 0, 0)) {
+		return SCPI_RES_ERR;
+	}
+	
+    Channel *channel = param_channel(context, FALSE, TRUE);
+	if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    channel->simulator.setVoltProgExt(value);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_simu_VoltageProgramExternalQ(scpi_t *context) {
+    Channel *channel = param_channel(context, FALSE, TRUE);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    return result_float(context, channel->simulator.getVoltProgExt());
+}
+
 scpi_result_t scpi_simu_Pwrgood(scpi_t *context) {
     bool on;
     if (!SCPI_ParamBool(context, &on, TRUE)) {

@@ -180,27 +180,32 @@ bool get_duration_param(scpi_t *context, float &value, float min, float max, flo
 
 bool get_voltage_from_param(scpi_t *context, const scpi_number_t &param, float &value, const Channel *channel, const Channel::Value *cv) {
     if (param.special) {
-        if (param.tag == SCPI_NUM_MAX) {
-            value = channel->U_MAX;
-        }
-        else if (param.tag == SCPI_NUM_MIN) {
-            value = channel->U_MIN;
-        }
-        else if (param.tag == SCPI_NUM_DEF) {
-            value = channel->U_DEF;
-        }
-        else if (param.tag == SCPI_NUM_UP && cv) {
-            value = cv->set + cv->step;
-            if (value > channel->U_MAX) value = channel->U_MAX;
-        }
-        else if (param.tag == SCPI_NUM_DOWN && cv) {
-            value = cv->set - cv->step;
-            if (value < channel->U_MIN) value = channel->U_MIN;
-        }
-        else {
-            SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
-            return false;
-        }
+		if (channel) {
+			if (param.tag == SCPI_NUM_MAX) {
+				value = channel->U_MAX;
+			}
+			else if (param.tag == SCPI_NUM_MIN) {
+				value = channel->U_MIN;
+			}
+			else if (param.tag == SCPI_NUM_DEF) {
+				value = channel->U_DEF;
+			}
+			else if (param.tag == SCPI_NUM_UP && cv) {
+				value = cv->set + cv->step;
+				if (value > channel->U_MAX) value = channel->U_MAX;
+			}
+			else if (param.tag == SCPI_NUM_DOWN && cv) {
+				value = cv->set - cv->step;
+				if (value < channel->U_MIN) value = channel->U_MIN;
+			}
+			else {
+				SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+				return false;
+			}
+		} else {
+			SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+			return false;
+		}
     }
     else {
         if (param.unit != SCPI_UNIT_NONE && param.unit != SCPI_UNIT_VOLT) {
@@ -209,10 +214,13 @@ bool get_voltage_from_param(scpi_t *context, const scpi_number_t &param, float &
         }
 
         value = (float)param.value;
-        if (value < channel->U_MIN || value > channel->U_MAX) {
-            SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
-            return false;
-        }
+		
+		if (channel) {
+			if (value < channel->U_MIN || value > channel->U_MAX) {
+				SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
+				return false;
+			}
+		}
     }
 
     return true;

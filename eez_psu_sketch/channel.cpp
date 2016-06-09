@@ -92,6 +92,15 @@ float Channel::Simulator::getLoad() {
     return load;
 }
 
+void Channel::Simulator::setVoltProgExt(float value) {
+	voltProgExt = value;
+	profile::save();
+}
+
+float Channel::Simulator::getVoltProgExt() {
+	return voltProgExt;
+}
+
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////

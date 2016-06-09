@@ -58,8 +58,8 @@ static int F = 1;
 #define D(x) (F * x)
 #define RECT(x, y, w, h) D(x), D(y), D(w), D(h)
 
-#define R1B9_IMAGE(IMAGE) "r1b9/"##IMAGE##".png"
-#define R2B6_IMAGE(IMAGE) (F == 1 ? "r2b6/small/"##IMAGE##".png" : "r2b6/large/"##IMAGE##".png")
+#define R1B9_IMAGE(IMAGE) "r1b9/" IMAGE ".png"
+#define R2B6_IMAGE(IMAGE) (F == 1 ? "r2b6/small/" IMAGE ".png" : "r2b6/large/" IMAGE ".png")
 
 imgui::WindowDefinition *getWindowDefinition(int w, int h) {
 	if (w >= SIM_FRONT_PANEL_LARGE_MODE_MIN_WIDTH) {

@@ -58,6 +58,7 @@ struct ChannelParameters {
 #ifdef EEZ_PSU_SIMULATOR
     bool load_enabled;
     float load;
+	float voltProgExt;
 #endif
 };
 
