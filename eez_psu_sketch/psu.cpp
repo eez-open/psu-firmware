@@ -172,12 +172,12 @@ void boot() {
 }
 
 bool powerUp() {
+    if (g_power_is_up) return true;
+	if (temperature::isSensorTripped(temp_sensor::MAIN)) return false;
+
 #if OPTION_DISPLAY
     gui::showWelcomePage();
 #endif
-
-    if (g_power_is_up) return true;
-    if (temperature::isSensorTripped(temp_sensor::MAIN)) return false;
 
     // reset channels
     for (int i = 0; i < CH_NUM; ++i) {
