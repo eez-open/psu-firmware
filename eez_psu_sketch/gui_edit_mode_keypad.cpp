@@ -244,136 +244,139 @@ void getText(char *text, int count) {
     }
 }
 
-void doAction(int action_id) {
-    if (action_id >= ACTION_ID_KEY_0 && action_id <= ACTION_ID_KEY_9) {
-        int d = action_id - ACTION_ID_KEY_0;
-        if (state == START || state == EMPTY) {
-            d0 = d;
+void digit(int d) {
+    if (state == START || state == EMPTY) {
+        d0 = d;
+        state = D0;
+        if (!is_value_valid()) {
+            toggle_edit_unit();
+        } 
+        if (!is_value_valid()) {
+            reset();
+            sound::playBeep();
+        }
+    }
+    else if (state == D0) {
+        d1 = d;
+        state = D1;
+        if (!is_value_valid()) {
             state = D0;
-            if (!is_value_valid()) {
-                toggle_edit_unit();
-            } 
-            if (!is_value_valid()) {
-                reset();
-                sound::playBeep();
-            }
+            sound::playBeep();
         }
-        else if (state == D0) {
-            d1 = d;
-            state = D1;
-            if (!is_value_valid()) {
-                state = D0;
-                sound::playBeep();
-            }
+    }
+    else if (state == DOT || (isMilli() && state == D1)) {
+        State saved_state = state;
+        d2 = d;
+        state = D2;
+        if (!is_value_valid()) {
+            state = saved_state;
+            sound::playBeep();
         }
-        else if (state == DOT || (isMilli() && state == D1)) {
-            State saved_state = state;
-            d2 = d;
+    }
+    else if (state == D2 && !isMilli()) {
+        d3 = d;
+        state = D3;
+        if (!is_value_valid()) {
             state = D2;
-            if (!is_value_valid()) {
-                state = saved_state;
-                sound::playBeep();
-            }
-        }
-        else if (state == D2 && !isMilli()) {
-            d3 = d;
-            state = D3;
-            if (!is_value_valid()) {
-                state = D2;
-                sound::playBeep();
-            }
-        }
-        else {
             sound::playBeep();
         }
     }
-    else if (action_id == ACTION_ID_KEY_DOT) {
-        if (isMilli()) {
-            sound::playBeep();
-        } else {
-            if (state == START || state == EMPTY) {
-                d0 = 0;
-                d1 = 0;
-                state = DOT;
-            }
-            else if (state == D0) {
-                d1 = d0;
-                d0 = 0;
-                state = DOT;
-            }
-            else if (state == D1) {
-                state = DOT;
-            }
-            else {
-                sound::playBeep();
-            }
-        }
-    }
-    else if (action_id == ACTION_ID_KEY_SIGN) {
-        // not supported
+    else {
         sound::playBeep();
     }
-    else if (action_id == ACTION_ID_KEY_BACK) {
-        if (state == D3) {
-            state = D2;
-        }
-        else if (state == D2) {
-            if (isMilli()) {
-                state = D1;
-            }
-            else {
-                state = DOT;
-            }
-        }
-        else if (state == DOT) {
-            if (d0 == 0) {
-                d0 = d1;
-                state = D0;
-            }
-            else {
-                state = D1;
-            }
-        }
-        else if (state == D1) {
-            state = D0;
+}
+
+void dot() {
+    if (isMilli()) {
+        sound::playBeep();
+    } else {
+        if (state == START || state == EMPTY) {
+            d0 = 0;
+            d1 = 0;
+            state = DOT;
         }
         else if (state == D0) {
-            state = EMPTY;
+            d1 = d0;
+            d0 = 0;
+            state = DOT;
+        }
+        else if (state == D1) {
+            state = DOT;
         }
         else {
             sound::playBeep();
         }
     }
-    else if (action_id == ACTION_ID_KEY_C) {
-        if (state != START) {
-            reset();
-        }
-        else {
-            sound::playBeep();
-        }
-    }
-    else if (action_id == ACTION_ID_KEY_OK) {
-        if (state != START && state != EMPTY) {
-            edit_mode::setValue(getValue());
-            reset();
-        }
-        else {
-            sound::playBeep();
-        }
-    }
-    else if (action_id == ACTION_ID_KEY_UNIT) {
-        float value = getValue();
-        data::Unit saved_edit_unit = edit_unit;
+}
 
-        toggle_edit_unit();
+void sign() {
+    // not supported
+    sound::playBeep();
+}
 
-        if (state == START) {
-            state = EMPTY;
-        } else {
-            if (state != EMPTY && !set_value(value)) {
-                edit_unit = saved_edit_unit;
-                sound::playBeep();
-            }
+void back() {
+    if (state == D3) {
+        state = D2;
+    }
+    else if (state == D2) {
+        if (isMilli()) {
+            state = D1;
+        }
+        else {
+            state = DOT;
+        }
+    }
+    else if (state == DOT) {
+        if (d0 == 0) {
+            d0 = d1;
+            state = D0;
+        }
+        else {
+            state = D1;
+        }
+    }
+    else if (state == D1) {
+        state = D0;
+    }
+    else if (state == D0) {
+        state = EMPTY;
+    }
+    else {
+        sound::playBeep();
+    }
+}
+
+void clear() {
+    if (state != START) {
+        reset();
+    }
+    else {
+        sound::playBeep();
+    }
+}
+
+void ok() {
+	if (state != START && state != EMPTY) {
+		edit_mode::setValue(getValue());
+		reset();
+	}
+	else {
+		sound::playBeep();
+	}
+}
+
+void unit() {
+    float value = getValue();
+    data::Unit saved_edit_unit = edit_unit;
+
+    toggle_edit_unit();
+
+    if (state == START) {
+        state = EMPTY;
+    } else {
+        if (state != EMPTY && !set_value(value)) {
+            edit_unit = saved_edit_unit;
+            sound::playBeep();
         }
     }
 }

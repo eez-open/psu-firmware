@@ -27,6 +27,7 @@
 #include "gui_widget_button_group.h"
 
 #include "channel.h"
+#include "actions.h"
 
 #ifdef EEZ_PSU_SIMULATOR
 #include "front_panel/control.h"
@@ -61,11 +62,11 @@ static bool widget_refresh;
 static const Style *page_style;
 
 static WidgetCursor selected_widget;
-static WidgetCursor found_widget_at_down;
+WidgetCursor found_widget_at_down;
 
-static void (*dialog_yes_callback)();
-static void (*dialog_no_callback)();
-static void (*dialog_cancel_callback)();
+void (*dialog_yes_callback)();
+void (*dialog_no_callback)();
+void (*dialog_cancel_callback)();
 
 static bool isBlinkTime;
 static bool wasBlinkTime;
@@ -73,6 +74,8 @@ static bool wasBlinkTime;
 static unsigned long showPageTime;
 static unsigned long touchDownTime;
 static bool touchActionExecuted;
+
+WidgetCursor actionWidgetCursor;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -451,7 +454,7 @@ void fillRect(int x, int y, int w, int h) {
     lcd::lcd.fillRect(x, y, x + w - 1, y + h - 1);
 }
 
-void drawBitmap(uint8_t bitmapIndex, int textLength, int x, int y, int w, int h, const Style *style, bool inverse) {
+void drawBitmap(uint8_t bitmapIndex, int x, int y, int w, int h, const Style *style, bool inverse) {
     //++draw_counter;
 
     if (bitmapIndex == 0) {
@@ -517,13 +520,35 @@ void drawBitmap(uint8_t bitmapIndex, int textLength, int x, int y, int w, int h,
     lcd::lcd.drawBitmap(x_offset, y_offset, width, height, (bitmapdatatype)bitmap.pixels, 1);
 }
 
+void drawRectangle(int x, int y, int w, int h, const Style *style, bool inverse) {
+    //++draw_counter;
+
+    int x1 = x;
+    int y1 = y;
+    int x2 = x + w - 1;
+    int y2 = y + h - 1;
+
+    if (styleHasBorder(style)) {
+        lcd::lcd.setColor(style->border_color);
+        lcd::lcd.drawRect(x1, y1, x2, y2);
+        ++x1;
+        ++y1;
+        --x2;
+        --y2;
+    }
+
+    uint16_t color = inverse ? style->background_color : style->color;
+    lcd::lcd.setColor(color);
+    lcd::lcd.fillRect(x1, y1, x2, y2);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 int getActiveStyleId(const Widget *widget) {
     return getWidgetStyleId(widget) == STYLE_ID_EDIT_VALUE_SMALL ? STYLE_ID_EDIT_VALUE_ACTIVE_SMALL : STYLE_ID_EDIT_VALUE_ACTIVE;
 }
 
-bool draw_display_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+bool draw_display_data_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     bool edit = edit_mode::isEditWidget(widgetCursor);
     if (edit && active_page_id == PAGE_ID_EDIT_MODE_KEYPAD) {
         char *text = data::currentSnapshot.editModeSnapshot.keypadText;
@@ -582,7 +607,7 @@ bool draw_display_widget(const WidgetCursor &widgetCursor, const Widget *widget,
     }
 }
 
-bool draw_display_string_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+bool draw_text_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
         DECL_WIDGET_SPECIFIC(TextWidget, display_string_widget, widget);
         DECL_STRING(text, display_string_widget->text);
@@ -593,7 +618,7 @@ bool draw_display_string_widget(const WidgetCursor &widgetCursor, const Widget *
     return false;
 }
 
-bool draw_display_multiline_string_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+bool draw_multiline_text_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
         DECL_WIDGET_SPECIFIC(MultilineTextWidget, display_string_widget, widget);
         DECL_STRING(text, display_string_widget->text);
@@ -765,11 +790,20 @@ bool draw_toggle_button_widget(const WidgetCursor &widgetCursor, const Widget *w
     return false;
 }
 
-bool draw_display_bitmap_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+bool draw_rectangle_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    if (refresh) {
+        DECL_WIDGET_STYLE(style, widget);
+        drawRectangle(widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+        return true;
+    }
+    return false;
+}
+
+bool draw_bitmap_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
         DECL_WIDGET_SPECIFIC(BitmapWidget, display_bitmap_widget, widget);
         DECL_WIDGET_STYLE(style, widget);
-        drawBitmap(display_bitmap_widget->bitmap, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+        drawBitmap(display_bitmap_widget->bitmap, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
         return true;
     }
     return false;
@@ -781,20 +815,22 @@ bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
     bool inverse = selected_widget == widgetCursor;
 
     if (widget->type == WIDGET_TYPE_DISPLAY_DATA) {
-        return draw_display_widget(widgetCursor, widget, refresh, inverse);
+        return draw_display_data_widget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_TEXT) {
-        return draw_display_string_widget(widgetCursor, widget, refresh, inverse);
+        return draw_text_widget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_MULTILINE_TEXT) {
-        return draw_display_multiline_string_widget(widgetCursor, widget, refresh, inverse);
-    } else if (widget->type == WIDGET_TYPE_SCALE) {
-        return draw_scale_widget(widgetCursor, widget, refresh, inverse);
+        return draw_multiline_text_widget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_RECTANGLE) {
+        return draw_rectangle_widget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_BITMAP) {
+        return draw_bitmap_widget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_TOGGLE_BUTTON) {
         return draw_toggle_button_widget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_BUTTON_GROUP) {
         return widget_button_group::draw(widgetCursor, widget, refresh, inverse);
-    } else if (widget->type == WIDGET_TYPE_BITMAP) {
-        return draw_display_bitmap_widget(widgetCursor, widget, refresh, inverse);
-    }
+    } else if (widget->type == WIDGET_TYPE_SCALE) {
+        return draw_scale_widget(widgetCursor, widget, refresh, inverse);
+    } 
 
     return false;
 }
@@ -930,25 +966,8 @@ void deselect_widget() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void do_action(int action_id, WidgetCursor &widgetCursor) {
-    if (edit_mode::doAction(action_id, widgetCursor)) {
-        return;
-    }
-
-    if (action_id == ACTION_ID_TOUCH_SCREEN_CALIBRATION) {
-        touch::calibration::enterCalibrationMode();
-    } else if (action_id == ACTION_ID_YES) {
-        dialog_yes_callback();
-    } else if (action_id == ACTION_ID_NO) {
-        dialog_no_callback();
-    } else if (action_id == ACTION_ID_CANCEL) {
-        dialog_cancel_callback();
-    } else if (action_id == ACTION_ID_TOGGLE) {
-        DECL_WIDGET(widget, widgetCursor.widgetOffset);
-        data::toggle(widget->data);
-    } else  {
-        data::doAction(widgetCursor.cursor, action_id);
-    }
+void do_action(int action_id) {
+	actions[action_id]();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1101,7 +1120,7 @@ void tick(unsigned long tick_usec) {
         if (found_widget_at_down) {
             deselect_widget();
             DECL_WIDGET(widget, found_widget_at_down.widgetOffset);
-            do_action(widget->action, found_widget_at_down);
+            do_action(widget->action);
             found_widget_at_down = 0;
         } else {
             if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {

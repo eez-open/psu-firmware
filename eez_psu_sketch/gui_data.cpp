@@ -133,18 +133,6 @@ bool set(const Cursor &cursor, uint8_t id, Value value) {
     return false;
 }
 
-void toggle(uint8_t id) {
-    if (id == DATA_ID_EDIT_MODE_INTERACTIVE_MODE_SELECTOR) {
-        edit_mode::toggleInteractiveMode();
-    }
-}
-
-void doAction(const Cursor &cursor, uint8_t id) {
-    if (id == ACTION_ID_TOGGLE_CHANNEL) {
-        Channel::get(cursor.iChannel).outputEnable(!Channel::get(cursor.iChannel).isOutputEnabled());
-    }
-}
-
 }
 }
 }

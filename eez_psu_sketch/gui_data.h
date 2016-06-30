@@ -129,12 +129,9 @@ Value getMin(const Cursor &cursor, uint8_t id);
 Value getMax(const Cursor &cursor, uint8_t id);
 Unit getUnit(const Cursor &cursor, uint8_t id);
 
-
 void getButtonLabels(const Cursor &cursor, uint8_t id, const Value **labels, int &count);
 
 bool set(const Cursor &cursor, uint8_t id, Value value);
-void toggle(uint8_t id);
-void doAction(const Cursor &cursor, uint8_t id);
 
 }
 }

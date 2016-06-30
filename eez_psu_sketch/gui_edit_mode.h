@@ -27,9 +27,8 @@ namespace gui {
 namespace edit_mode {
 
 bool isActive();
-void enter(const WidgetCursor &widgetCursor);
+void enter(int tab_index_ = -1);
 void exit();
-bool doAction(int action_id, WidgetCursor &widgetCursor);
 bool isInteractiveMode();
 void toggleInteractiveMode();
 
@@ -42,6 +41,9 @@ void setValue(float value);
 
 bool isEditWidget(const WidgetCursor &widgetCursor);
 void getInfoText(char *infoText);
+
+void nonInteractiveSet();
+void nonInteractiveDiscard();
 
 }
 }

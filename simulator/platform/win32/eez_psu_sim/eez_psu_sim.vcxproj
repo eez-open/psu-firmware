@@ -168,6 +168,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\actions.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\adc.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\arduino_util.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\board.h" />
@@ -269,6 +270,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\actions.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\adc.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\arduino_util.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\board.cpp" />

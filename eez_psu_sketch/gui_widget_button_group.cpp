@@ -41,14 +41,18 @@ void drawButtons(const Widget* widget, int x, int y, const Style *style, int sel
         // vertical orientation
         int w = widget->w;
         int h = widget->h / count;
-        y += (widget->h - h * count) / 2;
-        for (int i = 0; i < count; ++i) {
+
+		y += (widget->h - h * count) / 2;
+
+		int labelHeight = min(w, h);
+		int yOffset = (h - labelHeight) / 2;
+
+		for (int i = 0; i < count; ++i) {
             char text[32];
             labels[i].toText(text, 32);
-            drawText(text, -1, x, y + (h - min(w, h)) / 2, w, min(w, h), style, i == selectedButton);
+            drawText(text, -1, x, y + yOffset, w, labelHeight , style, i == selectedButton);
             y += h;
         }
-
     }
 }
 

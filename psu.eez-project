@@ -100,7 +100,8 @@
     },
     {
       "name": "edit_steps",
-      "defaultValue": "TODO edit_steps"
+      "defaultValue": "2",
+      "buttonLabels": "[\"5.00\", \"2.00\", \"1.00\", \"0.50\", \"0.10\"]"
     },
     {
       "name": "model_info",
@@ -113,107 +114,173 @@
   ],
   "actions": [
     {
+      "name": "toggle_channel",
+      "description": "turn channel on/off",
+      "implementationType": "native",
+      "implementation": "Channel& channel = Channel::get(found_widget_at_down.cursor.iChannel);\nchannel.outputEnable(!channel .isOutputEnabled());\n"
+    },
+    {
+      "name": "channel_settings",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CHANNEL_SETTINGS);"
+    },
+    {
+      "name": "show_main_page",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_MAIN);"
+    },
+    {
       "name": "edit",
-      "description": "enter edit modal mode"
+      "description": "enter edit modal mode",
+      "implementationType": "native",
+      "implementation": "edit_mode::enter();\n"
     },
     {
       "name": "edit_mode_slider",
-      "description": "enter edit with slider modal mode"
+      "description": "enter edit with slider modal mode",
+      "implementationType": "native",
+      "implementation": "edit_mode::enter(PAGE_ID_EDIT_MODE_SLIDER);\n"
     },
     {
       "name": "edit_mode_step",
-      "description": "enter edit with step modal mode"
+      "description": "enter edit with step modal mode",
+      "implementationType": "native",
+      "implementation": "edit_mode::enter(PAGE_ID_EDIT_MODE_STEP);\n"
     },
     {
       "name": "edit_mode_keypad",
-      "description": "enter edit with keypad modal mode"
+      "description": "enter edit with keypad modal mode",
+      "implementationType": "native",
+      "implementation": "edit_mode::enter(PAGE_ID_EDIT_MODE_KEYPAD);\n"
     },
     {
-      "name": "exit",
-      "description": "exit from slider or any other modal mode"
+      "name": "exit_edit_mode",
+      "description": "exit from slider or any other modal mode",
+      "implementationType": "native",
+      "implementation": "if (edit_mode::isActive()) {\n    edit_mode::exit();\n}\n"
     },
     {
-      "name": "toggle_channel",
-      "description": "turn channel on/off"
+      "name": "toggle_interactive_mode",
+      "implementationType": "native",
+      "implementation": "edit_mode::toggleInteractiveMode();"
+    },
+    {
+      "name": "non_interactive_enter",
+      "implementationType": "native",
+      "implementation": "edit_mode::nonInteractiveSet();\n"
+    },
+    {
+      "name": "non_interactive_discard",
+      "implementationType": "native",
+      "implementation": "edit_mode::nonInteractiveDiscard();"
+    },
+    {
+      "name": "key_0",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::digit(0);"
+    },
+    {
+      "name": "key_1",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::digit(1);"
+    },
+    {
+      "name": "key_2",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::digit(2);"
+    },
+    {
+      "name": "key_3",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::digit(3);"
+    },
+    {
+      "name": "key_4",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::digit(4);"
+    },
+    {
+      "name": "key_5",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::digit(5);"
+    },
+    {
+      "name": "key_6",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::digit(6);"
+    },
+    {
+      "name": "key_7",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::digit(7);"
+    },
+    {
+      "name": "key_8",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::digit(8);"
+    },
+    {
+      "name": "key_9",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::digit(9);"
+    },
+    {
+      "name": "key_dot",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::dot();"
+    },
+    {
+      "name": "key_sign",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::sign();"
+    },
+    {
+      "name": "key_back",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::back();"
+    },
+    {
+      "name": "key_c",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::clear();"
+    },
+    {
+      "name": "key_ok",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::ok();"
+    },
+    {
+      "name": "key_unit",
+      "implementationType": "native",
+      "implementation": "edit_mode_keypad::unit();"
     },
     {
       "name": "touch_screen_calibration",
-      "description": "touch screen calibration"
+      "description": "touch screen calibration",
+      "implementationType": "native",
+      "implementation": "touch::calibration::enterCalibrationMode();"
     },
     {
       "name": "yes",
-      "description": "Yes action in Yes/No dialog"
+      "description": "Yes action in Yes/No dialog",
+      "implementationType": "native",
+      "implementation": "dialog_yes_callback();"
     },
     {
       "name": "no",
-      "description": "No action in Yes/No dialog"
+      "description": "No action in Yes/No dialog",
+      "implementationType": "native",
+      "implementation": "dialog_no_callback();"
     },
     {
       "name": "cancel",
-      "description": "Cancel action in dialog"
+      "description": "Cancel action in dialog",
+      "implementationType": "native",
+      "implementation": "dialog_cancel_callback();"
     },
     {
-      "name": "key_0"
-    },
-    {
-      "name": "key_1"
-    },
-    {
-      "name": "key_2"
-    },
-    {
-      "name": "key_3"
-    },
-    {
-      "name": "key_4"
-    },
-    {
-      "name": "key_5"
-    },
-    {
-      "name": "key_6"
-    },
-    {
-      "name": "key_7"
-    },
-    {
-      "name": "key_8"
-    },
-    {
-      "name": "key_9"
-    },
-    {
-      "name": "key_dot"
-    },
-    {
-      "name": "key_sign"
-    },
-    {
-      "name": "key_back"
-    },
-    {
-      "name": "key_c"
-    },
-    {
-      "name": "key_ok"
-    },
-    {
-      "name": "key_unit"
-    },
-    {
-      "name": "toggle"
-    },
-    {
-      "name": "non_interactive_enter"
-    },
-    {
-      "name": "non_interactive_cancel"
-    },
-    {
-      "name": "channel_settings"
-    },
-    {
-      "name": "turn_off"
+      "name": "turn_off",
+      "implementationType": ""
     }
   ],
   "gui": {
@@ -41896,6 +41963,18 @@
         "_paddingVertical": 0
       },
       {
+        "name": "bottom_button_background",
+        "_font": "icons",
+        "_color": "#e9f5f9",
+        "_backgroundColor": "#2f2f2f",
+        "_paddingHorizontal": 4,
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingVertical": 0
+      },
+      {
         "name": "key",
         "_color": "#52B5D3",
         "_backgroundColor": "#FFFF00",
@@ -42550,14 +42629,12 @@
               "height": 36
             },
             {
-              "type": "Text",
-              "action": "",
+              "type": "Rectangle",
               "x": 192,
               "y": 204,
-              "style": "bottom_button",
-              "text": "",
               "width": 80,
-              "height": 36
+              "height": 36,
+              "style": "bottom_button_background"
             },
             {
               "type": "List",
@@ -42955,7 +43032,7 @@
                     },
                     {
                       "type": "Text",
-                      "action": "non_interactive_cancel",
+                      "action": "non_interactive_discard",
                       "style": "non_interactive_button",
                       "x": 100,
                       "y": 216,
@@ -43006,7 +43083,7 @@
             {
               "type": "ToggleButton",
               "data": "edit_mode_interactive_mode_selector",
-              "action": "toggle",
+              "action": "toggle_interactive_mode",
               "x": 144,
               "y": 284,
               "style": "bottom_button",
@@ -43017,7 +43094,7 @@
             },
             {
               "type": "Text",
-              "action": "exit",
+              "action": "exit_edit_mode",
               "x": 192,
               "y": 284,
               "style": "bottom_button",
@@ -43066,7 +43143,7 @@
             {
               "type": "ToggleButton",
               "data": "edit_mode_interactive_mode_selector",
-              "action": "toggle",
+              "action": "toggle_interactive_mode",
               "x": 144,
               "y": 204,
               "style": "bottom_button",
@@ -43076,17 +43153,16 @@
               "height": 36
             },
             {
-              "type": "Text",
-              "text": "",
+              "type": "Rectangle",
               "x": 192,
               "y": 204,
               "width": 80,
               "height": 36,
-              "style": "bottom_button"
+              "style": "bottom_button_background"
             },
             {
               "type": "Text",
-              "action": "exit",
+              "action": "exit_edit_mode",
               "x": 272,
               "y": 204,
               "style": "bottom_button",
@@ -43356,7 +43432,7 @@
                     },
                     {
                       "type": "Text",
-                      "action": "non_interactive_cancel",
+                      "action": "non_interactive_discard",
                       "style": "non_interactive_button",
                       "x": 106,
                       "y": 136,
@@ -43646,7 +43722,7 @@
                     },
                     {
                       "type": "Text",
-                      "action": "non_interactive_cancel",
+                      "action": "non_interactive_discard",
                       "style": "non_interactive_button",
                       "x": 104,
                       "y": 216,
@@ -43697,7 +43773,7 @@
             {
               "type": "ToggleButton",
               "data": "edit_mode_interactive_mode_selector",
-              "action": "toggle",
+              "action": "toggle_interactive_mode",
               "x": 144,
               "y": 284,
               "style": "bottom_button",
@@ -43708,7 +43784,7 @@
             },
             {
               "type": "Text",
-              "action": "exit",
+              "action": "exit_edit_mode",
               "x": 192,
               "y": 284,
               "style": "bottom_button",
@@ -43757,7 +43833,7 @@
             {
               "type": "ToggleButton",
               "data": "edit_mode_interactive_mode_selector",
-              "action": "toggle",
+              "action": "toggle_interactive_mode",
               "x": 144,
               "y": 204,
               "style": "bottom_button",
@@ -43768,7 +43844,7 @@
             },
             {
               "type": "Text",
-              "action": "exit",
+              "action": "exit_edit_mode",
               "x": 272,
               "y": 204,
               "style": "bottom_button",
@@ -43777,13 +43853,12 @@
               "height": 36
             },
             {
-              "type": "Text",
-              "text": "",
+              "type": "Rectangle",
               "x": 192,
               "y": 204,
               "width": 80,
               "height": 36,
-              "style": "bottom_button"
+              "style": "bottom_button_background"
             },
             {
               "type": "ButtonGroup",
@@ -44046,7 +44121,7 @@
                     },
                     {
                       "type": "Text",
-                      "action": "non_interactive_cancel",
+                      "action": "non_interactive_discard",
                       "style": "non_interactive_button",
                       "x": 106,
                       "y": 136,
@@ -44372,18 +44447,16 @@
               "height": 36
             },
             {
-              "type": "Text",
-              "action": "",
+              "type": "Rectangle",
               "x": 144,
               "y": 284,
-              "style": "bottom_button",
-              "text": "",
               "width": 48,
-              "height": 36
+              "height": 36,
+              "style": "bottom_button_background"
             },
             {
               "type": "Text",
-              "action": "exit",
+              "action": "exit_edit_mode",
               "x": 192,
               "y": 284,
               "style": "bottom_button",
@@ -44600,18 +44673,16 @@
               "height": 36
             },
             {
-              "type": "Text",
-              "action": "",
+              "type": "Rectangle",
               "x": 144,
               "y": 204,
-              "style": "bottom_button",
-              "text": "",
               "width": 128,
-              "height": 36
+              "height": 36,
+              "style": "bottom_button_background"
             },
             {
               "type": "Text",
-              "action": "exit",
+              "action": "exit_edit_mode",
               "x": 272,
               "y": 204,
               "style": "bottom_button",
@@ -44723,6 +44794,71 @@
         }
       },
       {
+        "name": "channel_settings",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "TODO",
+              "x": 0,
+              "y": 40,
+              "width": 240,
+              "height": 83,
+              "style": "default"
+            },
+            {
+              "type": "Local.NotificationBar",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 40,
+              "style": "default"
+            }
+          ]
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "TODO",
+              "x": 0,
+              "y": 71,
+              "width": 320,
+              "height": 83,
+              "style": "default"
+            }
+          ]
+        }
+      },
+      {
         "name": "yes_no",
         "portrait": {
           "widgets": [
@@ -44825,6 +44961,69 @@
         "name": "logo",
         "image": "data:image/png;base64,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"
       }
+    ],
+    "widgets": [
+      {
+        "name": "NotificationBar",
+        "width": 240,
+        "height": 40,
+        "widgets": [
+          {
+            "type": "Text",
+            "text": "A",
+            "x": 0,
+            "y": 0,
+            "width": 40,
+            "height": 40,
+            "style": "default"
+          },
+          {
+            "type": "Text",
+            "text": "B",
+            "x": 40,
+            "y": 0,
+            "width": 40,
+            "height": 40,
+            "style": "default"
+          },
+          {
+            "type": "Text",
+            "text": "C",
+            "x": 80,
+            "y": 0,
+            "width": 40,
+            "height": 40,
+            "style": "default"
+          },
+          {
+            "type": "Text",
+            "text": "D",
+            "x": 120,
+            "y": 0,
+            "width": 40,
+            "height": 40,
+            "style": "default"
+          },
+          {
+            "type": "Text",
+            "text": "E",
+            "x": 160,
+            "y": 0,
+            "width": 40,
+            "height": 40,
+            "style": "default"
+          },
+          {
+            "type": "Text",
+            "text": "F",
+            "x": 200,
+            "y": 0,
+            "width": 40,
+            "height": 40,
+            "style": "default"
+          }
+        ]
+      }
     ]
   },
   "settings": {
@@ -44841,8 +45040,16 @@
       ],
       "files": [
         {
+          "fileName": "actions.h",
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#pragma once\n\nnamespace eez {\nnamespace psu {\n\n//${eez-studio ACTIONS_ENUM}\n\n//${eez-studio ACTIONS_ARRAY_DECL}\n\n}\n} // namespace eez::psu::gui\n"
+        },
+        {
+          "fileName": "actions.cpp",
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"gui_internal.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
+        },
+        {
           "fileName": "gui_document.h",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2015-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#pragma once\n\nnamespace eez {\nnamespace psu {\nnamespace gui {\n\n//${eez-studio DATA_ENUM}\n\n//${eez-studio ACTIONS_ENUM}\n\n//${eez-studio GUI_FONTS_ENUM}\n\n//${eez-studio GUI_BITMAPS_ENUM}\n\n//${eez-studio GUI_STYLES_ENUM}\n\n//${eez-studio GUI_PAGES_ENUM}\n\n//${eez-studio GUI_FONTS_DECL}\n\n//${eez-studio GUI_BITMAPS_DECL}\n\n//${eez-studio GUI_DOCUMENT_DECL}\n\n}\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2015-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#pragma once\n\nnamespace eez {\nnamespace psu {\nnamespace gui {\n\n//${eez-studio DATA_ENUM}\n\n//${eez-studio GUI_FONTS_ENUM}\n\n//${eez-studio GUI_BITMAPS_ENUM}\n\n//${eez-studio GUI_STYLES_ENUM}\n\n//${eez-studio GUI_PAGES_ENUM}\n\n//${eez-studio GUI_FONTS_DECL}\n\n//${eez-studio GUI_BITMAPS_DECL}\n\n//${eez-studio GUI_DOCUMENT_DECL}\n\n}\n}\n} // namespace eez::psu::gui\n"
         },
         {
           "fileName": "gui_document.cpp",
@@ -44852,5 +45059,5 @@
       "destinationFolder": "eez_psu_sketch"
     }
   },
-  "selectedBuildConfiguration": "R2B6"
+  "selectedBuildConfiguration": "R1B9"
 }

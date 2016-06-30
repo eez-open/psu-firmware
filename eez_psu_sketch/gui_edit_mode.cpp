@@ -90,11 +90,15 @@ bool isActive() {
     return data_id != -1;
 }
 
-void enter(const WidgetCursor &widgetCursor) {
+void enter(int tab_index_) {
+	if (tab_index_ != -1) {
+		tab_index = tab_index_;
+	}
+
     if (getActivePage() != tab_index) {
         if (getActivePage() == PAGE_ID_MAIN) {
-            data_cursor = widgetCursor.cursor;
-            DECL_WIDGET(widget, widgetCursor.widgetOffset);
+            data_cursor = found_widget_at_down.cursor;
+            DECL_WIDGET(widget, found_widget_at_down.widgetOffset);
             data_id = widget->data;
         }
 
@@ -123,54 +127,13 @@ void exit() {
     }
 }
 
-bool doAction(int action_id, WidgetCursor &widgetCursor) {
-    if (action_id == ACTION_ID_EDIT) {
-        enter(widgetCursor);
-        return true;
-    }
-    
-    if (action_id == ACTION_ID_EDIT_MODE_SLIDER) {
-        tab_index = PAGE_ID_EDIT_MODE_SLIDER;
-        enter(widgetCursor);
-        return true;
-    }
-    
-    if (action_id == ACTION_ID_EDIT_MODE_STEP) {
-        tab_index = PAGE_ID_EDIT_MODE_STEP;
-        enter(widgetCursor);
-        return true;
-    }
-    
-    if (action_id == ACTION_ID_EDIT_MODE_KEYPAD) {
-        tab_index = PAGE_ID_EDIT_MODE_KEYPAD;
-        enter(widgetCursor);
-        return true;
-    }
+void nonInteractiveSet() {
+    data::set(data_cursor, data_id, edit_value);
+}
 
-    if (action_id == ACTION_ID_EXIT) {
-        if (isActive()) {
-            exit();
-            return true;
-        }
-    }
-
-    if (action_id >= ACTION_ID_KEY_0 && action_id <= ACTION_ID_KEY_UNIT) {
-        edit_mode_keypad::doAction(action_id);
-        return true;
-    }
-
-    if (action_id == ACTION_ID_NON_INTERACTIVE_ENTER) {
-        data::set(data_cursor, data_id, edit_value);
-        return true;
-    }
-    
-    if (action_id == ACTION_ID_NON_INTERACTIVE_CANCEL) {
-        edit_value = undo_value;
-        data::set(data_cursor, data_id, undo_value);
-        return true;
-    }
-    
-    return false;
+void nonInteractiveDiscard() {
+    edit_value = undo_value;
+    data::set(data_cursor, data_id, undo_value);
 }
 
 bool isInteractiveMode() {
