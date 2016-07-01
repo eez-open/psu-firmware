@@ -267,7 +267,7 @@ void init() {
 void turnOn() {
     if (!g_isOn) {
 	    lcd.setContrast(64);
-	    lcd.setBrightness(16);
+	    analogWrite(LCD_BRIGHTNESS, 50);
         g_isOn = true;
     }
 }
@@ -275,7 +275,7 @@ void turnOn() {
 void turnOff() {
     if (g_isOn) {
 	    lcd.setContrast(0);
-	    lcd.setBrightness(0);
+	    analogWrite(LCD_BRIGHTNESS, 255);
         lcd.setColor(VGA_BLACK);
         lcd.fillRect(0, 0, lcd.getDisplayXSize()-1, lcd.getDisplayYSize()-1);
         g_isOn = false;
