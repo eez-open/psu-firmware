@@ -112,6 +112,8 @@ bool IOExpander::test() {
             DebugTraceF("Ch%d power fault", channel.index);
             psu::generateError(SCPI_ERROR_CHANNEL_FAULT_DETECTED);
         }
+#else
+		channel.flags.power_ok = 1;
 #endif
     }
     else {
