@@ -66,6 +66,10 @@ void boot() {
     // initialize shield
     eez_psu_init();
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+	fan::test_start();
+#endif
+
     bp::init();
     serial::init();
     success &= eeprom::init();
@@ -76,9 +80,6 @@ void boot() {
     gui::init();
 #endif
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-	success &= fan::init();
-#endif
     success &= rtc::init();
     success &= datetime::init();
     success &= ethernet::init();
@@ -97,6 +98,10 @@ void boot() {
         // ... reset
         success &= psu_reset(true);
     }
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+	success &= fan::init();
+#endif
 
     // play beep if there is an error during boot procedure
     if (!success) {
@@ -396,14 +401,19 @@ static bool test_shield() {
     bool result = true;
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-	result &= fan::test();
+	fan::test_start();
 #endif
-    result &= rtc::test();
+
+	result &= rtc::test();
     result &= datetime::test();
     result &= eeprom::test();
     result &= ethernet::test();
 
     result &= test_channels();
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+	result &= fan::test();
+#endif
 
     return result;
 }

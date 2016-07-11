@@ -25,6 +25,7 @@ namespace fan {
 extern psu::TestResult test_result;
 
 bool init();
+void test_start();
 bool test();
 void tick(unsigned long tick_usec);
 

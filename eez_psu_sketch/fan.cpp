@@ -25,8 +25,10 @@ namespace fan {
 
 TestResult test_result = psu::TEST_FAILED;
 
-int fan_speed = 0;
-int rpm = 0;
+static int fan_speed = 0;
+static int rpm = 0;
+
+static unsigned long test_start_time;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -37,10 +39,10 @@ enum RpmMeasureState {
 	RPM_MEASURE_STATE_FINISHED,
 };
 
-int rpm_measure_interrupt_number;
-RpmMeasureState rpm_measure_state = RPM_MEASURE_STATE_FINISHED;
-unsigned long rpm_measure_t1;
-unsigned long rpm_measure_t2;
+static int rpm_measure_interrupt_number;
+static RpmMeasureState rpm_measure_state = RPM_MEASURE_STATE_FINISHED;
+static unsigned long rpm_measure_t1;
+static unsigned long rpm_measure_t2;
 
 void finish_rpm_measure();
 void rpm_measure_interrupt_handler();
@@ -50,7 +52,7 @@ void start_rpm_measure() {
 	rpm_measure_t1 = 0;
 	rpm_measure_t2 = 0;
 
-	digitalWrite (FAN_PWM, 1);
+	digitalWrite(FAN_PWM, 1);
 	delay(2);
 	attachInterrupt(rpm_measure_interrupt_number, rpm_measure_interrupt_handler, CHANGE);
 }
@@ -79,8 +81,8 @@ void finish_rpm_measure() {
 		dt *= 2; // 2 impulse per revolution
 		rpm = (int)(60L * 1000 * 1000 / dt);
 	} else {
-		rpm = 0;
 		rpm_measure_state = RPM_MEASURE_STATE_FINISHED;
+		rpm = 0;
 	}
 }
 
@@ -92,11 +94,21 @@ bool init() {
 	return test();
 }
 
+void test_start() {
+	if (OPTION_FAN) {
+		digitalWrite(FAN_PWM, 1);
+		test_start_time = millis();
+	}
+}
+
 bool test() {
 	if (OPTION_FAN) {
-		if (rpm_measure_state == RPM_MEASURE_STATE_FINISHED) {
-			start_rpm_measure();
+		unsigned long time_since_test_start = millis() - test_start_time;
+		if (time_since_test_start < 250) {
+			delay(300 - time_since_test_start);
 		}
+
+		start_rpm_measure();
 
 		for (int i = 0; i < 25 && rpm_measure_state != RPM_MEASURE_STATE_FINISHED; ++i) {
 			delay(1);
@@ -104,11 +116,11 @@ bool test() {
 
 		if (rpm_measure_state != RPM_MEASURE_STATE_FINISHED) {
 			finish_rpm_measure();
+			test_result = psu::TEST_FAILED;
+		} else {
+			test_result = psu::TEST_OK;
+			DebugTraceF("Fan RPM: %d", rpm);
 		}
-
-		DebugTraceF("Fan RPM: %d", rpm);
-
-		test_result = rpm > 0 ? psu::TEST_OK : psu::TEST_FAILED;
 	} else {
 		test_result = psu::TEST_SKIPPED;
 	}
