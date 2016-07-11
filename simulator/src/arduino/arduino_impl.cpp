@@ -64,6 +64,10 @@ void attachInterrupt(uint8_t interrupt_no, InterruptCallback interrupt_callback,
     interrupt_callbacks[interrupt_no] = interrupt_callback;
 }
 
+void detachInterrupt(uint8_t interrupt_no) {
+    interrupt_callbacks[interrupt_no] = 0;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 SimulatorSerial Serial;

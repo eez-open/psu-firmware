@@ -64,6 +64,7 @@ extern "C" {
     X(SCPI_ERROR_CH1_ADC_TIMEOUT_DETECTED,                   270, "CH1 ADC timeout detected")                     \
     X(SCPI_ERROR_CH2_ADC_TIMEOUT_DETECTED,                   271, "CH2 ADC timeout detected")                     \
     X(SCPI_ERROR_OPTION_NOT_INSTALLED,                       302, "Option not installed")                         \
+	X(SCPI_ERROR_FAN_TEST_FAILED,                            630, "Fan test failed")                              \
 
 // strtoull is not defined on some arduino boards
 // TODO mvladic:find better way to do this

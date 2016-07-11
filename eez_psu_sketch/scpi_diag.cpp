@@ -25,6 +25,9 @@
 #include "ethernet.h"
 #include "rtc.h"
 #include "datetime.h"
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#include "fan.h"
+#endif
 
 namespace eez {
 namespace psu {
@@ -237,7 +240,12 @@ scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
         psu::TEST_SKIPPED, get_installed_str(OPTION_BP), get_test_result_str(psu::TEST_SKIPPED));
     SCPI_ResultText(context, buffer);
 
-    if (psu::isPowerUp()) {
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+    sprintf_P(buffer, PSTR("%d, Fan, %s, %s"),
+        fan::test_result, get_installed_str(OPTION_FAN), get_test_result_str(fan::test_result));
+    SCPI_ResultText(context, buffer);
+#endif
+	if (psu::isPowerUp()) {
         for (int i = 0; i < CH_NUM; ++i) {
             Channel *channel = &Channel::get(i);
 

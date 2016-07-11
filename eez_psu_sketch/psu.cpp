@@ -35,6 +35,9 @@
 #if OPTION_DISPLAY
 #include "gui.h"
 #endif
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#include "fan.h"
+#endif
 
 #ifdef EEZ_PSU_SIMULATOR
 #include "front_panel/control.h"
@@ -73,6 +76,9 @@ void boot() {
     gui::init();
 #endif
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+	success &= fan::init();
+#endif
     success &= rtc::init();
     success &= datetime::init();
     success &= ethernet::init();
@@ -389,6 +395,9 @@ static bool test_channels() {
 static bool test_shield() {
     bool result = true;
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+	result &= fan::test();
+#endif
     result &= rtc::test();
     result &= datetime::test();
     result &= eeprom::test();

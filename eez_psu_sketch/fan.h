@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015-present, Envox d.o.o.
+ * Copyright (C) 2016-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,31 +20,14 @@
 
 namespace eez {
 namespace psu {
-namespace temp_sensor {
+namespace fan {
 
-static const int MIN_ADC = 0;
-static const int MIN_U = 0;
-static const int MAX_ADC = 1023;
-static const int MAX_U = 5;
+extern psu::TestResult test_result;
 
-enum Type {
-    MAIN,
-	AUX,
-    CH1,
-    CH2,
-    BATT,
-
-	COUNT,
-
-	// TODO: remove this
-	S1 = CH1,
-	S2 = CH2,
-	BAT1 = BATT,
-	BAT2 = BATT
-};
-
-float read(Type sensor);
+bool init();
+bool test();
+void tick(unsigned long tick_usec);
 
 }
 }
-} // namespace eez::psu::temp_sensor
+} // namespace eez::psu::fan

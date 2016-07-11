@@ -63,6 +63,9 @@ option.
 /// Is display present?
 #define OPTION_DISPLAY    1
 
+/// Is fan present?
+#define OPTION_FAN        1
+
 /// Maximum number of channels existing.
 #define CH_MAX 2
 
