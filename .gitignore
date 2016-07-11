@@ -1,2 +1,3 @@
 *.pyc
 doc/html
+.vscode/.browse.VC.db

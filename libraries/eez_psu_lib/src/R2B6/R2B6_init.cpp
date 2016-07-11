@@ -86,5 +86,8 @@ void eez_psu_R2B6_init() {
     pinMode(52, INPUT);
 #endif
 
+    pinMode(FAN_PWM, OUTPUT);
+    pinMode(FAN_SENSE, INPUT);
+
     SPI.begin(); // wake up the SPI bus
 }

@@ -29,6 +29,7 @@ static const uint8_t BP_SELECT = 9;
 static const uint8_t BP_OE = 10;
 static const uint8_t ETH_SELECT = 11;
 static const uint8_t BUZZER = 12;
+static const uint8_t FAN_SENSE = 13;
 static const uint8_t ISOLATOR1_EN = 14;
 static const uint8_t ADC1_SELECT = 15;
 static const uint8_t DAC1_SELECT = 16;
