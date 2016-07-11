@@ -90,6 +90,12 @@ void UTFT::LCD_Writ_Bus(char VH,char VL, byte mode)
 	}
 }
 
+void UTFT::LCD_Write_Bus_8(char VL)
+{
+    PORTD = VL;
+    pulse_low(P_WR, B_WR);
+}
+
 void UTFT::_set_direction_registers(byte mode)
 {
 	DDRD = 0xFF;

@@ -103,6 +103,15 @@ void UTFT::LCD_Writ_Bus(char VH,char VL, byte mode)
 	}
 }
 
+void UTFT::LCD_Write_Bus_8(char VL)
+{
+    cport (PORTD, 0xF0);
+    sport (PORTD, (VL & 0x0F));
+    cport (PORTB, 0xF0);
+    sport (PORTB, (VL & 0xF0)>>4);
+    pulse_low(P_WR, B_WR);
+}
+
 void UTFT::_set_direction_registers(byte mode)
 {
 	DDRB |= 0x0F;

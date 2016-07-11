@@ -119,6 +119,17 @@ void UTFT::LCD_Writ_Bus(char VH,char VL, byte mode)
 	}
 }
 
+void UTFT::LCD_Write_Bus_8(char VL)
+{
+    cport(PORTC, 0xBF);
+    cport(PORTD, 0x60);
+    cport(PORTE, 0xBF);
+    PORTC += ((VL & 0x20)<<1);
+    PORTD += ((VL & 0x40)<<1) + (VL & 0x10) + ((VL & 0x08)>>3) + ((VL & 0x04)>>1) + ((VL & 0x03)<<2);
+    PORTE += ((VL & 0x80)>>1);
+    pulse_low(P_WR, B_WR);		
+}
+
 void UTFT::_set_direction_registers(byte mode)
 {
 	switch (mode)

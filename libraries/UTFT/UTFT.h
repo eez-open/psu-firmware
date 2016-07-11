@@ -81,6 +81,9 @@
 #define CPLD			29
 #define HX8353C			30
 #define ST7735_ALT		31
+#define ILI9341_8       32
+#define ILI9341_16      33
+
 
 #define ITDB32			0	// HX8347-A (16bit)
 #define ITDB32WC		1	// ILI9327  (16bit)
@@ -140,6 +143,11 @@
 #define CTE70CPLD		29	// CPLD		(16bit)
 #define DMTFT18101      30  // HX8353C  (Serial 5Pin)
 #define TFT18SHLD		31	// ST7735	(Serial 5Pin) Alternative Init
+
+#define ITDB28_V2       32  // ILI9341	(8bit)
+#define ITDB24E_V2_8    32  // ILI9341	(8bit) 
+#define ITDB24E_V2_16   33  // ILI9341	(16bit)
+#define ITDB32S_V2      33  // ILI9341	(16bit)
 
 #define SERIAL_4PIN		4
 #define SERIAL_5PIN		5
@@ -252,8 +260,13 @@ class UTFT
 		void LCD_Writ_Bus(char VH,char VL, byte mode);
 		void LCD_Write_COM(char VL);
 		void LCD_Write_DATA(char VH,char VL);
-		void LCD_Write_DATA(char VL);
-		void LCD_Write_COM_DATA(char com1,int dat1);
+		void LCD_Write_DATA(char VL);    
+		void LCD_Write_COM_DATA(char com1,int dat1);	
+		
+		void LCD_Write_Bus_8(char VL);
+		void LCD_Write_DATA_8(char VL);		
+		void LCD_Write_COM_8(char VL);
+
 		void _hw_special_init();
 		void setPixel(word color);
 		void drawHLine(int x, int y, int l);
