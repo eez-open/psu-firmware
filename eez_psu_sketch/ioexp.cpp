@@ -106,11 +106,13 @@ bool IOExpander::test() {
     }
 
     if (test_result == psu::TEST_OK) {
+#if !CONF_SKIP_PWRGOOD_TEST
         channel.flags.power_ok = test_bit(IO_BIT_IN_PWRGOOD);
         if (!channel.flags.power_ok) {
             DebugTraceF("Ch%d power fault", channel.index);
             psu::generateError(SCPI_ERROR_CHANNEL_FAULT_DETECTED);
         }
+#endif
     }
     else {
         channel.flags.power_ok = 0;
