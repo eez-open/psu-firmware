@@ -533,7 +533,7 @@ void Channel::setCvMode(bool cv_mode) {
 void Channel::event(uint8_t gpio, int16_t adc_data) {
     if (!psu::isPowerUp()) return;
 
-#ifdef CONF_SKIP_PWRGOOD_TEST
+#if !CONF_SKIP_PWRGOOD_TEST
     if (!(gpio & (1 << IOExpander::IO_BIT_IN_PWRGOOD))) {
         DebugTraceF("Ch%d PWRGOOD bit changed to 0", index);
         flags.power_ok = 0;
