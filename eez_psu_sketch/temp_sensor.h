@@ -18,6 +18,20 @@
  
 #pragma once
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+
+#define TEMP_SENSORS \
+	TEMP_SENSOR(MAIN, TEMP_ANALOG, MAIN_TEMP_SENSOR_CALIBRATION_POINTS, -1, QUES_TEMP)
+
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+
+#define TEMP_SENSORS \
+	TEMP_SENSOR(MAIN, TEMP_ANALOG, MAIN_TEMP_SENSOR_CALIBRATION_POINTS, -1, QUES_TEMP) \
+	TEMP_SENSOR(CH1, NTC1, CH1_TEMP_SENSOR_CALIBRATION_POINTS, 0, QUES_ISUM_TEMP) \
+	TEMP_SENSOR(CH2, NTC2, CH2_TEMP_SENSOR_CALIBRATION_POINTS, 1, QUES_ISUM_TEMP)
+
+#endif
+
 namespace eez {
 namespace psu {
 namespace temp_sensor {
@@ -27,21 +41,16 @@ static const int MIN_U = 0;
 static const int MAX_ADC = 1023;
 static const int MAX_U = 5;
 
+static const int MAX_NUM_TEMP_SENSORS = 5;
+
+#define TEMP_SENSOR(NAME, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) NAME,
+
 enum Type {
-    MAIN,
-	AUX,
-    CH1,
-    CH2,
-    BATT,
-
-	COUNT,
-
-	// TODO: remove this
-	S1 = CH1,
-	S2 = CH2,
-	BAT1 = BATT,
-	BAT2 = BATT
+TEMP_SENSORS
+TEMP_SENSORS_COUNT
 };
+
+#undef TEMP_SENSOR
 
 float read(Type sensor);
 

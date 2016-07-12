@@ -341,7 +341,7 @@ static bool psu_reset(bool power_on) {
     // TEMP:PROT[MAIN]
     // TEMP:PROT:DEL
     // TEMP:PROT:STAT[MAIN]
-    for (int i = 0; i < temp_sensor::COUNT; ++i) {
+    for (int i = 0; i < temp_sensor::TEMP_SENSORS_COUNT; ++i) {
         temperature::ProtectionConfiguration *temp_prot = &temperature::prot_conf[i];
 
         temp_prot->sensor = (temp_sensor::Type)i;

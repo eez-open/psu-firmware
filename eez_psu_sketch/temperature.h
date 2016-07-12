@@ -37,7 +37,7 @@ struct ProtectionConfiguration {
     bool state;
 };
 
-extern ProtectionConfiguration prot_conf[temp_sensor::COUNT];
+extern ProtectionConfiguration prot_conf[temp_sensor::TEMP_SENSORS_COUNT];
 
 void tick(unsigned long tick_usec);
 

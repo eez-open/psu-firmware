@@ -67,7 +67,7 @@ scpi_result_t scpi_meas_VoltageQ(scpi_t * context) {
 
 scpi_result_t scpi_meas_TemperatureQ(scpi_t * context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, all_temp_sensor_choice, &sensor, FALSE)) {
+    if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, FALSE)) {
         if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }

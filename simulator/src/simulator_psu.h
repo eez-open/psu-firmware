@@ -47,8 +47,6 @@ extern void eez_psu_init();
 #define interrupts() 0
 #define noInterrupts() 0
 
-#include "temp_sensor.h"
-
 namespace eez {
 namespace psu {
 /// Firmware simulator.
@@ -57,8 +55,8 @@ namespace simulator {
 void init();
 void tick();
 
-void setTemperature(temp_sensor::Type sensor, float value);
-float getTemperature(temp_sensor::Type sensor);
+void setTemperature(int sensor, float value);
+float getTemperature(int sensor);
 
 char *getConfFilePath(char *file_name);
 

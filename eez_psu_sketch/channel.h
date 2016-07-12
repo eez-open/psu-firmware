@@ -171,7 +171,7 @@ public:
         float u_dac;
         float i_set;
         float i_dac;
-        float temperature[temp_sensor::COUNT];
+        float temperature[temp_sensor::TEMP_SENSORS_COUNT];
 		float voltProgExt;
 
         void setLoadEnabled(bool value);

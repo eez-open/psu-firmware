@@ -102,6 +102,9 @@ void test_start() {
 }
 
 bool test() {
+#ifdef EEZ_PSU_SIMULATOR
+	test_result = psu::TEST_SKIPPED;
+#else
 	if (OPTION_FAN) {
 		unsigned long time_since_test_start = millis() - test_start_time;
 		if (time_since_test_start < 250) {
@@ -124,6 +127,7 @@ bool test() {
 	} else {
 		test_result = psu::TEST_SKIPPED;
 	}
+#endif
 
 	if (test_result == psu::TEST_FAILED) {
 		psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);

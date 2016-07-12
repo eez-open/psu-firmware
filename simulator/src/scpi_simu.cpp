@@ -227,7 +227,7 @@ scpi_result_t scpi_simu_Temperature(scpi_t *context) {
     }
 
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, all_temp_sensor_choice, &sensor, false)) {
+    if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
@@ -241,7 +241,7 @@ scpi_result_t scpi_simu_Temperature(scpi_t *context) {
 
 scpi_result_t scpi_simu_TemperatureQ(scpi_t *context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, all_temp_sensor_choice, &sensor, false)) {
+    if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }

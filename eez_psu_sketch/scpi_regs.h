@@ -57,7 +57,7 @@ namespace scpi {
 #define QUES_ISUM_OVP  (1 <<  8)  /* OVP */
 #define QUES_ISUM_OCP  (1 <<  9)  /* OVP */
 #define QUES_ISUM_OPP  (1 << 10)  /* OPP */
-#define QUES_ISUM_BAT  (1 << 11)  /* BAT */
+
 
 //
 // OPERation INSTrument ISUMmary register bits
@@ -110,7 +110,6 @@ scpi_reg_val_t reg_get(scpi_t * context, scpi_psu_reg_name_t name);
 void reg_set(scpi_t * context, scpi_psu_reg_name_t name, scpi_reg_val_t val);
 
 int reg_get_ques_isum_bit_mask_for_channel_protection_value(Channel *channel, Channel::ProtectionValue &cpv);
-int reg_get_ques_isum_bit_mask_for_channel_protection_value(temp_sensor::Type sensor);
 
 void reg_set_ques_bit(scpi_t *context, int bit_mask, bool on);
 void reg_set_ques_isum_bit(scpi_t * context, Channel *channel, int bit_mask, bool on);

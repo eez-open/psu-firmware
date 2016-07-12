@@ -95,17 +95,20 @@
 /// Temperature reading interval.
 #define TEMP_SENSOR_READ_EVERY_MS 1000
 
-/// Voltage value of the first temperature calibration point 
-#define MAIN_TEMP_COEF_P1_U 1.6f
+/// Temperature sensors calibration points.
+/// There are 2 points. For each point there are two values.
+/// First value is Voltage[V] and second value is Temperature[oC].
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 
-/// Temperature(oC) value of the first temperature calibration point 
-#define MAIN_TEMP_COEF_P1_T 25.0f
+#define MAIN_TEMP_SENSOR_CALIBRATION_POINTS 1.6f, 25.0f, 4.07f, 85.0f
 
-/// Voltage value of the second temperature calibration point 
-#define MAIN_TEMP_COEF_P2_U 4.07f
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
 
-/// Temperature(oC) value of the second temperature calibration point 
-#define MAIN_TEMP_COEF_P2_T 85.0f
+#define MAIN_TEMP_SENSOR_CALIBRATION_POINTS 1.6f, 25.0f, 4.07f, 85.0f
+#define CH1_TEMP_SENSOR_CALIBRATION_POINTS 1.6f, 25.0f, 4.07f, 85.0f
+#define CH2_TEMP_SENSOR_CALIBRATION_POINTS 1.6f, 25.0f, 4.07f, 85.0f
+
+#endif
 
 /// Minimum OTP delay
 #define OTP_MAIN_MIN_DELAY     0.0f

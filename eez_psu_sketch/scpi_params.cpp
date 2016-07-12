@@ -18,6 +18,7 @@
  
 #include "psu.h"
 #include "scpi_psu.h"
+#include "temp_sensor.h"
 
 namespace eez {
 namespace psu {
@@ -31,29 +32,14 @@ static scpi_choice_def_t channel_choice[] = {
     SCPI_CHOICE_LIST_END /* termination of option list */
 };
 
-#define MAIN_TEMP_SENSOR_CHOICE { "MAIN", temp_sensor::MAIN }
+#define TEMP_SENSOR(NAME, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) { #NAME, temp_sensor::NAME },
 
-scpi_choice_def_t main_temp_sensor_choice[] = {
-    MAIN_TEMP_SENSOR_CHOICE,
+scpi_choice_def_t temp_sensor_choice[] = {
+	TEMP_SENSORS
     SCPI_CHOICE_LIST_END /* termination of option list */
 };
 
-#define CHANNEL_TEMP_SENSOR_CHOICE \
-    { "S1",   temp_sensor::S1   }, \
-    { "S2",   temp_sensor::S2   }, \
-    { "BAT1", temp_sensor::BAT1 }, \
-    { "BAT2", temp_sensor::BAT2 }  \
-
-scpi_choice_def_t channel_temp_sensor_choice[] = {
-    CHANNEL_TEMP_SENSOR_CHOICE,
-    SCPI_CHOICE_LIST_END /* termination of option list */
-};
-
-scpi_choice_def_t all_temp_sensor_choice[] = {
-    MAIN_TEMP_SENSOR_CHOICE,
-    CHANNEL_TEMP_SENSOR_CHOICE,
-    SCPI_CHOICE_LIST_END /* termination of option list */
-};
+#undef TEMP_SENSOR
 
 scpi_choice_def_t internal_external_choice[] = {
     { "INTernal", 0 },

@@ -47,13 +47,20 @@ void digitalWrite(uint8_t pin, uint8_t state) {
 }
 
 int analogRead(uint8_t pin) {
-    if (pin == TEMP_ANALOG) {
-        float cels = simulator::getTemperature(temp_sensor::MAIN);
-        float volt = util::remap(cels, MAIN_TEMP_COEF_P1_T, MAIN_TEMP_COEF_P1_U, MAIN_TEMP_COEF_P2_T, MAIN_TEMP_COEF_P2_U);
-        float adc = util::remap(volt, (float)temp_sensor::MIN_U, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_U, (float)temp_sensor::MAX_ADC);
-        return (int)util::clamp(adc, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_ADC);
+
+#define TEMP_SENSOR(NAME, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) \
+    if (pin == PIN) { \
+        float cels = simulator::getTemperature(temp_sensor::NAME); \
+        float volt = util::remap(cels, CAL_POINTS); \
+        float adc = util::remap(volt, (float)temp_sensor::MIN_U, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_U, (float)temp_sensor::MAX_ADC); \
+        return (int)util::clamp(adc, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_ADC); \
     }
-    return pins[pin];
+
+	TEMP_SENSORS
+
+#undef TEMP_SENSOR
+
+	return pins[pin];
 }
 
 void analogWrite(uint8_t pin, int state) {

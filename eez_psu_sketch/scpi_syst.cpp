@@ -191,7 +191,7 @@ scpi_result_t scpi_syst_BeeperStateQ(scpi_t * context) {
 
 scpi_result_t scpi_syst_TempProtectionClear(scpi_t * context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
+    if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
@@ -210,7 +210,7 @@ scpi_result_t scpi_syst_TempProtectionLevel(scpi_t * context) {
     }
 
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
+    if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
@@ -225,7 +225,7 @@ scpi_result_t scpi_syst_TempProtectionLevel(scpi_t * context) {
 
 scpi_result_t scpi_syst_TempProtectionLevelQ(scpi_t * context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
+    if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
@@ -242,7 +242,7 @@ scpi_result_t scpi_syst_TempProtectionState(scpi_t * context) {
     }
 
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
+    if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
@@ -257,7 +257,7 @@ scpi_result_t scpi_syst_TempProtectionState(scpi_t * context) {
 
 scpi_result_t scpi_syst_TempProtectionStateQ(scpi_t * context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
+    if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
@@ -276,7 +276,7 @@ scpi_result_t scpi_syst_TempProtectionDelay(scpi_t * context) {
     }
 
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
+    if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
@@ -291,7 +291,7 @@ scpi_result_t scpi_syst_TempProtectionDelay(scpi_t * context) {
 
 scpi_result_t scpi_syst_TempProtectionDelayQ(scpi_t * context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
+    if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
@@ -305,7 +305,7 @@ scpi_result_t scpi_syst_TempProtectionDelayQ(scpi_t * context) {
 
 scpi_result_t scpi_syst_TempProtectionTrippedQ(scpi_t * context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
+    if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }

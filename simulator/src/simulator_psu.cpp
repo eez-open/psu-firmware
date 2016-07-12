@@ -45,10 +45,10 @@ namespace eez {
 namespace psu {
 namespace simulator {
 
-float temperature[temp_sensor::COUNT];
+float temperature[temp_sensor::TEMP_SENSORS_COUNT];
 
 void init() {
-    for (int i = 0; i < temp_sensor::COUNT; ++i) {
+    for (int i = 0; i < temp_sensor::TEMP_SENSORS_COUNT; ++i) {
         temperature[i] = 25.0f;
     }
 }
@@ -61,11 +61,11 @@ void tick() {
 #endif
 }
 
-void setTemperature(temp_sensor::Type sensor, float value) {
+void setTemperature(int sensor, float value) {
     temperature[sensor] = value;
 }
 
-float getTemperature(temp_sensor::Type sensor) {
+float getTemperature(int sensor) {
     return temperature[sensor];
 }
 

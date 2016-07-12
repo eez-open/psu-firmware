@@ -69,7 +69,7 @@ struct Parameters {
     char name[PROFILE_NAME_MAX_LENGTH + 1];
     bool power_is_up;
     ChannelParameters channels[CH_MAX];
-    temperature::ProtectionConfiguration temp_prot[temp_sensor::COUNT];
+    temperature::ProtectionConfiguration temp_prot[temp_sensor::MAX_NUM_TEMP_SENSORS];
 };
 
 void tick(unsigned long tick_usec);

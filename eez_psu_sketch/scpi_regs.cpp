@@ -205,13 +205,6 @@ int reg_get_ques_isum_bit_mask_for_channel_protection_value(Channel *channel, Ch
     return QUES_ISUM_OPP;
 }
 
-int reg_get_ques_isum_bit_mask_for_channel_protection_value(temp_sensor::Type sensor) {
-    if (sensor == temp_sensor::S1 || sensor == temp_sensor::S2)
-        return QUES_ISUM_TEMP;
-    else
-        return QUES_ISUM_BAT;
-}
-
 void reg_set_ques_bit(scpi_t *context, int bit_mask, bool on) {
     scpi_reg_val_t val = reg_get(context, SCPI_PSU_REG_QUES_COND);
     if (on) {

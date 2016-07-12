@@ -29,39 +29,52 @@ using namespace scpi;
 
 namespace temperature {
 
-ProtectionConfiguration prot_conf[temp_sensor::COUNT];
+ProtectionConfiguration prot_conf[temp_sensor::TEMP_SENSORS_COUNT];
 
-static unsigned long sensor_temperature_last_measured_tick[temp_sensor::COUNT];
-static float sensor_temperature[temp_sensor::COUNT];
-static bool sensor_otp_alarmed[temp_sensor::COUNT];
-static unsigned long sensor_otp_alarmed_started_tick[temp_sensor::COUNT];
-static bool sensor_otp_tripped[temp_sensor::COUNT];
+static unsigned long sensor_temperature_last_measured_tick[temp_sensor::TEMP_SENSORS_COUNT];
+static float sensor_temperature[temp_sensor::TEMP_SENSORS_COUNT];
+static bool sensor_otp_alarmed[temp_sensor::TEMP_SENSORS_COUNT];
+static unsigned long sensor_otp_alarmed_started_tick[temp_sensor::TEMP_SENSORS_COUNT];
+static bool sensor_otp_tripped[temp_sensor::TEMP_SENSORS_COUNT];
 
 ////////////////////////////////////////////////////////////////////////////////
 
 static void set_otp_reg(temp_sensor::Type sensor, bool on) {
-    if (sensor == temp_sensor::MAIN) {
-        psu::setQuesBits(QUES_TEMP, on);
+
+#define TEMP_SENSOR(NAME, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) \
+    if (sensor == temp_sensor::NAME) { \
+		if (CH_NUM >= 0) { \
+			Channel::get(CH_NUM).setQuesBits(QUES_REG_BIT, on); \
+		} else { \
+			psu::setQuesBits(QUES_REG_BIT, on); \
+		} \
+		return; \
     }
-    else {
-        int bit_mask = reg_get_ques_isum_bit_mask_for_channel_protection_value(sensor);
-        Channel::get(sensor == temp_sensor::S1 || sensor == temp_sensor::BAT1 ? 0 : 1).setQuesBits(bit_mask, on);
-    }
+
+	TEMP_SENSORS
+
+#undef TEMP_SENSOR
 }
 
 static void sensor_protection_enter(temp_sensor::Type sensor) {
     sensor_otp_tripped[sensor] = true;
 
-    if (sensor == temp_sensor::MAIN) {
-        for (int i = 0; i < CH_NUM; ++i) {
-            Channel::get(i).outputEnable(false);
-        }
+#define TEMP_SENSOR(NAME, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) \
+    if (sensor == temp_sensor::NAME) { \
+		if (CH_NUM >= 0) { \
+			Channel::get(CH_NUM).outputEnable(false); \
+		} \
+		else { \
+			for (int i = 0; i < CH_NUM; ++i) { \
+				Channel::get(i).outputEnable(false); \
+			} \
+			psu::powerDownBySensor(); \
+		} \
+	}
+	
+	TEMP_SENSORS
 
-        psu::powerDownBySensor();
-    }
-    else {
-        Channel::get(sensor == temp_sensor::S1 || sensor == temp_sensor::BAT1 ? 0 : 1).outputEnable(false);
-    }
+#undef TEMP_SENSOR
 
     set_otp_reg(sensor, true);
 
@@ -99,11 +112,13 @@ static void sensor_protection_check(unsigned long tick_usec, temp_sensor::Type s
 ////////////////////////////////////////////////////////////////////////////////
 
 void tick(unsigned long tick_usec) {
-    if (tick_usec - sensor_temperature_last_measured_tick[temp_sensor::MAIN] >= TEMP_SENSOR_READ_EVERY_MS * 1000L) {
-        sensor_temperature_last_measured_tick[temp_sensor::MAIN] = tick_usec;
-        sensor_temperature[temp_sensor::MAIN] = temp_sensor::read(temp_sensor::MAIN);
-        sensor_protection_check(tick_usec, temp_sensor::MAIN);
-    }
+	for (int i = 0; i < temp_sensor::TEMP_SENSORS_COUNT; ++i) {
+		if (tick_usec - sensor_temperature_last_measured_tick[i] >= TEMP_SENSOR_READ_EVERY_MS * 1000L) {
+			sensor_temperature_last_measured_tick[i] = tick_usec;
+			sensor_temperature[i] = temp_sensor::read((temp_sensor::Type)i);
+			sensor_protection_check(tick_usec, (temp_sensor::Type)i);
+		}
+	}
 }
 
 float measure(temp_sensor::Type sensor) {
@@ -121,18 +136,20 @@ bool isSensorTripped(temp_sensor::Type sensor) {
 }
 
 bool isChannelTripped(Channel *channel) {
-    if (sensor_otp_tripped[temp_sensor::MAIN])
-        return true;
+#define TEMP_SENSOR(NAME, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) \
+	if (CH_NUM >= 0) { \
+		if (channel->index == CH_NUM + 1) { \
+			if (sensor_otp_tripped[temp_sensor::NAME]) \
+				return true; \
+		} \
+	} else { \
+		if (sensor_otp_tripped[temp_sensor::MAIN]) \
+			return true; \
+	}
 
-    if (channel->index == 1) {
-        if (sensor_otp_tripped[temp_sensor::S1] || sensor_otp_tripped[temp_sensor::BAT1])
-            return true;
-    }
-    else {
-        if (sensor_otp_tripped[temp_sensor::S2] || sensor_otp_tripped[temp_sensor::BAT2])
-            return true;
+	TEMP_SENSORS
 
-    }
+#undef TEMP_SENSOR
 
     return false;
 }

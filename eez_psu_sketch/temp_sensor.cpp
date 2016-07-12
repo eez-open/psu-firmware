@@ -24,19 +24,18 @@ namespace psu {
 namespace temp_sensor {
 
 float read(Type sensor) {
-    if (sensor == MAIN) {
-        float value = (float)analogRead(TEMP_ANALOG);
-
-        // convert to voltage
-        value = util::remap(value, (float)MIN_ADC, (float)MIN_U, (float)MAX_ADC, (float)MAX_U);
-
-        // MAIN_TEMP_COEF_P1, MAIN_TEMP_COEF_P2 are defined in conf.h
-        return util::remap(value, MAIN_TEMP_COEF_P1_U, MAIN_TEMP_COEF_P1_T, MAIN_TEMP_COEF_P2_U, MAIN_TEMP_COEF_P2_T);
+#define TEMP_SENSOR(NAME, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) \
+    if (sensor == NAME) { \
+        float value = (float)analogRead(PIN); \
+        value = util::remap(value, (float)MIN_ADC, (float)MIN_U, (float)MAX_ADC, (float)MAX_U); \
+        return util::remap(value, CAL_POINTS); \
     }
-    else {
-        // return NaN
-        return NAN;
-    }
+
+	TEMP_SENSORS
+
+#undef TEMP_SENSOR
+
+    return NAN;
 }
 
 }
