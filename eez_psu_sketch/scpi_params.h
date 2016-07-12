@@ -27,7 +27,9 @@ extern scpi_choice_def_t internal_external_choice[];
 
 Channel *param_channel(scpi_t *context, scpi_bool_t mandatory = FALSE, scpi_bool_t skip_channel_check = FALSE);
 bool check_channel(scpi_t *context, int32_t ch);
-extern Channel *set_channel_from_command_number(scpi_t *context);
+Channel *set_channel_from_command_number(scpi_t *context);
+
+bool param_temp_sensor(scpi_t *context, int &sensor);
 
 bool get_voltage_param(scpi_t *context, float &value, const Channel *channel, const Channel::Value *cv);
 bool get_voltage_protection_level_param(scpi_t *context, float &value, float min, float max, float def);

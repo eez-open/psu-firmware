@@ -109,6 +109,27 @@ Channel *set_channel_from_command_number(scpi_t *context) {
     return &Channel::get(ch - 1);
 }
 
+bool param_temp_sensor(scpi_t *context, int &sensor) {
+    if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, FALSE)) {
+#if OPTION_MAIN_TEMP_SENSOR
+        if (SCPI_ParamErrorOccurred(context)) {
+            return SCPI_RES_ERR;
+        }
+        sensor = temp_sensor::MAIN;
+#else
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+		return false;
+#endif
+    }
+
+	if (!temp_sensor::sensors[sensor].installed) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+		return false;
+	}
+
+	return true;
+}
+
 bool get_voltage_param(scpi_t *context, float &value, const Channel *channel, const Channel::Value *cv) {
     scpi_number_t param;
     if (!SCPI_ParamNumber(context, scpi_special_numbers_def, &param, true)) {
