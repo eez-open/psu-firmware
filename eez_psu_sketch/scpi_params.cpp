@@ -109,7 +109,7 @@ Channel *set_channel_from_command_number(scpi_t *context) {
     return &Channel::get(ch - 1);
 }
 
-bool param_temp_sensor(scpi_t *context, int &sensor) {
+bool param_temp_sensor(scpi_t *context, int32_t &sensor) {
     if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, FALSE)) {
 #if OPTION_MAIN_TEMP_SENSOR
         if (SCPI_ParamErrorOccurred(context)) {
