@@ -205,6 +205,9 @@ void tick(unsigned long tick_usec) {
 			float fanSpeed = util::remap(maxTemperature, FAN_MIN_TEMP, FAN_MIN_PWM, FAN_MAX_TEMP, FAN_MAX_PWM);
 			fan_speed_pwm = (int)util::clamp(fanSpeed, FAN_MIN_PWM, FAN_MAX_PWM);
 			analogWrite(FAN_PWM, fan_speed_pwm);
+		} else if (fan_speed_pwm != 0) {
+			fan_speed_pwm = 0;
+			analogWrite(FAN_PWM, fan_speed_pwm);
 		}
 
 		if (tick_usec - fan_speed_last_measured_tick >= TEMP_SENSOR_READ_EVERY_MS * 1000L) {
