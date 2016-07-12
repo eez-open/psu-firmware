@@ -73,7 +73,7 @@ float TempSensor::read() {
 	if (installed) {
 		float value = (float)analogRead(pin);
 		value = util::remap(value, (float)MIN_ADC, (float)MIN_U, (float)MAX_ADC, (float)MAX_U);
-		return util::remap(value, p1_volt, p2_cels, p2_volt, p2_cels);
+		return util::remap(value, p1_volt, p1_cels, p2_volt, p2_cels);
 	}
 
 	return NAN;
