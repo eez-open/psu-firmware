@@ -186,6 +186,7 @@ scpi_result_t scpi_diag_InformationProtectionQ(scpi_t * context) {
         SCPI_ResultText(context, buffer);
     }
 
+#if OPTION_MAIN_TEMP_SENSOR
     // main temperature
     sprintf_P(buffer, PSTR("tmain_tripped=%d"), (int)temperature::isSensorTripped(temp_sensor::MAIN)); SCPI_ResultText(context, buffer);
     sprintf_P(buffer, PSTR("tmain_state=%d"  ), (int)temperature::prot_conf[temp_sensor::MAIN].state); SCPI_ResultText(context, buffer);
@@ -197,6 +198,7 @@ scpi_result_t scpi_diag_InformationProtectionQ(scpi_t * context) {
     util::strcatFloat(buffer, temperature::prot_conf[temp_sensor::MAIN].level);
     strcat_P(buffer, PSTR(" oC"));
     SCPI_ResultText(context, buffer);
+#endif
 
     return SCPI_RES_OK;
 }

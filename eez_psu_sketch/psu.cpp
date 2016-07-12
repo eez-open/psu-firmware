@@ -184,7 +184,10 @@ void boot() {
 
 bool powerUp() {
     if (g_power_is_up) return true;
+
+#if OPTION_MAIN_TEMP_SENSOR
 	if (temperature::isSensorTripped(temp_sensor::MAIN)) return false;
+#endif
 
 #if OPTION_DISPLAY
     gui::showWelcomePage();
@@ -346,18 +349,9 @@ static bool psu_reset(bool power_on) {
 
         temp_prot->sensor = (temp_sensor::Type)i;
 
-        switch (temp_prot->sensor) {
-        case temp_sensor::MAIN:
-            temp_prot->delay = OTP_MAIN_DEFAULT_DELAY;
-            temp_prot->level = OTP_MAIN_DEFAULT_LEVEL;
-            temp_prot->state = OTP_MAIN_DEFAULT_STATE;
-            break;
-
-        default:
-            temp_prot->delay = OTP_MAIN_DEFAULT_DELAY;
-            temp_prot->level = OTP_MAIN_DEFAULT_LEVEL;
-            temp_prot->state = 0;
-        }
+        temp_prot->delay = OTP_MAIN_DEFAULT_DELAY;
+        temp_prot->level = OTP_MAIN_DEFAULT_LEVEL;
+        temp_prot->state = OTP_MAIN_DEFAULT_STATE;
     }
 
     // CAL[:MODE] OFF

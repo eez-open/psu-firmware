@@ -17,6 +17,20 @@
  */
 
 #include "psu.h"
+
+#define FAN_NOMINAL_RPM 4500 // nazivni broj okretaja u minuti za PWM=255
+
+#define FAN_MIN_TEMP 45 // temperatura ukljuèivanja fana (45oC)
+#define FAN_MAX_TEMP 75 // max. dopuštena temperatura (75oC) koja ako ostane više od FAN_MAX_TEMP_DELAY sekundi gasi se glavno napajanje
+#define FAN_MIN_PWM 12 //  PWM vrijednost za min. brzinu (12) 
+#define FAN_MAX_PWM 255 // PWM vrijednost za max. brzinu (255)
+
+#define FAN_ERR_CURRENT 1 //  max. dozvoljena izlazna struja u amperima ako je fan ili temp. senzor u kvaru
+#define FAN_MAX_TEMP_DELAY 30 // definira nakon koliko sekundi æe se gasiti glavno napajanje
+#define FAN_MAX_TEMP_DROP 15 // definira koliko stupnjeva mora pasti temperatura ispod FAN_MAX_TEMP da bi se ponovno moglo upaliti glavno napajanje. Prijevremeni pokušaj paljenja javljati æe grešku -200
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+
 #include "fan.h"
 
 namespace eez {
@@ -25,10 +39,29 @@ namespace fan {
 
 TestResult test_result = psu::TEST_FAILED;
 
-static int fan_speed = 0;
+static int fan_speed_pwm = 0;
 static int rpm = 0;
 
 static unsigned long test_start_time;
+
+////////////////////////////////////////////////////////////////////////////////
+
+int dt_to_rpm(unsigned long dt) {
+	dt *= 2; // duty cycle is 50%
+	dt *= 2; // 2 impulse per revolution
+	return (int)(60L * 1000 * 1000 / dt);
+}
+
+unsigned long rpm_to_dt(int rpm) {
+	unsigned long dt = 60L * 1000 * 1000 / rpm;
+	dt /= 2;
+	dt /= 2;
+	return dt;
+}
+
+int pwm_to_rpm(int pwm) {
+	return (int)util::remap((float)pwm, FAN_MIN_PWM, 0, FAN_MAX_PWM, FAN_NOMINAL_RPM);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -52,9 +85,16 @@ void start_rpm_measure() {
 	rpm_measure_t1 = 0;
 	rpm_measure_t2 = 0;
 
-	digitalWrite(FAN_PWM, 1);
+	analogWrite(FAN_PWM, FAN_MAX_PWM);
 	delay(2);
 	attachInterrupt(rpm_measure_interrupt_number, rpm_measure_interrupt_handler, CHANGE);
+
+#ifdef EEZ_PSU_SIMULATOR
+	rpm_measure_t1 = 0;
+	rpm_measure_t2 = rpm_to_dt(pwm_to_rpm(analogRead(FAN_PWM)));
+	rpm_measure_state = RPM_MEASURE_STATE_FINISHED;
+	finish_rpm_measure();
+#endif
 }
 
 void rpm_measure_interrupt_handler() {
@@ -73,13 +113,10 @@ void rpm_measure_interrupt_handler() {
 
 void finish_rpm_measure() {
 	detachInterrupt(rpm_measure_interrupt_number);
-	analogWrite(FAN_PWM, fan_speed);
+	analogWrite(FAN_PWM, fan_speed_pwm);
 
 	if (rpm_measure_state == RPM_MEASURE_STATE_FINISHED) {
-		unsigned long dt = rpm_measure_t2 - rpm_measure_t1;
-		dt *= 2; // duty cycle is 50%
-		dt *= 2; // 2 impulse per revolution
-		rpm = (int)(60L * 1000 * 1000 / dt);
+		rpm = dt_to_rpm(rpm_measure_t2 - rpm_measure_t1);
 	} else {
 		rpm_measure_state = RPM_MEASURE_STATE_FINISHED;
 		rpm = 0;
@@ -96,15 +133,12 @@ bool init() {
 
 void test_start() {
 	if (OPTION_FAN) {
-		digitalWrite(FAN_PWM, 1);
+		analogWrite(FAN_PWM, FAN_MAX_PWM);
 		test_start_time = millis();
 	}
 }
 
 bool test() {
-#ifdef EEZ_PSU_SIMULATOR
-	test_result = psu::TEST_SKIPPED;
-#else
 	if (OPTION_FAN) {
 		unsigned long time_since_test_start = millis() - test_start_time;
 		if (time_since_test_start < 250) {
@@ -127,7 +161,6 @@ bool test() {
 	} else {
 		test_result = psu::TEST_SKIPPED;
 	}
-#endif
 
 	if (test_result == psu::TEST_FAILED) {
 		psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
@@ -142,3 +175,5 @@ void tick(unsigned long tick_usec) {
 }
 }
 } // namespace eez::psu::fan
+
+#endif

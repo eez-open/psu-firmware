@@ -143,7 +143,7 @@ bool isChannelTripped(Channel *channel) {
 				return true; \
 		} \
 	} else { \
-		if (sensor_otp_tripped[temp_sensor::MAIN]) \
+		if (sensor_otp_tripped[temp_sensor::NAME]) \
 			return true; \
 	}
 

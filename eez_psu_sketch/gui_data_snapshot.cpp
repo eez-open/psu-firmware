@@ -148,9 +148,11 @@ void Snapshot::takeSnapshot() {
         else if (!channel.opp.flags.tripped) channelSnapshots[i].flags.opp = 2;
         else channelSnapshots[i].flags.opp = 3;
 
+#if OPTION_MAIN_TEMP_SENSOR
         if (!temperature::prot_conf[temp_sensor::MAIN].state) channelSnapshots[i].flags.otp = 1;
         else if (!temperature::isSensorTripped(temp_sensor::MAIN)) channelSnapshots[i].flags.otp = 2;
         else channelSnapshots[i].flags.otp = 3;
+#endif
 
         channelSnapshots[i].flags.dp = channel.flags.dp_on ? 1 : 2;
     }

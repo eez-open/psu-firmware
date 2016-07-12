@@ -34,37 +34,40 @@ option.
 #include "conf_channel.h"
 
 /// Wait until serial port is ready before starting firmware.
-#define CONF_WAIT_SERIAL  0
+#define CONF_WAIT_SERIAL 0
 
 // Data rate in bits per second (baud) for serial data transmission.
 #define SERIAL_SPEED 9600
 
 /// Enable all debug trace to the serial port. 
-#define CONF_DEBUG        1
+#define CONF_DEBUG 1
 
 /// Enable only some of the debug trace to the serial port. 
 #define CONF_DEBUG_LATEST 1
 
 /// Is Ethernet present?
-#define OPTION_ETHERNET   1
+#define OPTION_ETHERNET 1
 
 /// Is RTC present?
-#define OPTION_EXT_RTC    1
+#define OPTION_EXT_RTC 1
 
 /// Is SD card present?
-#define OPTION_SD_CARD    0
+#define OPTION_SD_CARD 0
 
 /// Is external EEPROM present?
 #define OPTION_EXT_EEPROM 1
 
 /// Is binding post present?
-#define OPTION_BP         1
+#define OPTION_BP 1
 
 /// Is display present?
-#define OPTION_DISPLAY    1
+#define OPTION_DISPLAY 1
 
 /// Is fan present?
-#define OPTION_FAN        1
+#define OPTION_FAN 1
+
+/// Is main temperature sensor present?
+#define OPTION_MAIN_TEMP_SENSOR 1
 
 /// Maximum number of channels existing.
 #define CH_MAX 2

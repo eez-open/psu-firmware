@@ -56,10 +56,12 @@ scpi_result_t scpi_syst_Power(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
+#if OPTION_MAIN_TEMP_SENSOR
     if (temperature::isSensorTripped(temp_sensor::MAIN)) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_EXECUTE_BEFORE_CLEARING_PROTECTION);
         return SCPI_RES_ERR;
     }
+#endif
 
     if (!psu::changePowerState(up)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
@@ -192,11 +194,15 @@ scpi_result_t scpi_syst_BeeperStateQ(scpi_t * context) {
 scpi_result_t scpi_syst_TempProtectionClear(scpi_t * context) {
     int32_t sensor;
     if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
+#if OPTION_MAIN_TEMP_SENSOR
+		if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
         sensor = temp_sensor::MAIN;
-    }
+#else
+		return SCPI_RES_ERR;
+#endif
+	}
 
     temperature::clearProtection((temp_sensor::Type)sensor);
 
@@ -211,10 +217,14 @@ scpi_result_t scpi_syst_TempProtectionLevel(scpi_t * context) {
 
     int32_t sensor;
     if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
+#if OPTION_MAIN_TEMP_SENSOR
+		if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
         sensor = temp_sensor::MAIN;
+#else
+		return SCPI_RES_ERR;
+#endif
     }
 
     temperature::prot_conf[sensor].level = level;
@@ -226,10 +236,14 @@ scpi_result_t scpi_syst_TempProtectionLevel(scpi_t * context) {
 scpi_result_t scpi_syst_TempProtectionLevelQ(scpi_t * context) {
     int32_t sensor;
     if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
+#if OPTION_MAIN_TEMP_SENSOR
+		if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
         sensor = temp_sensor::MAIN;
+#else
+		return SCPI_RES_ERR;
+#endif
     }
 
     return result_float(context, temperature::prot_conf[sensor].level);
@@ -243,10 +257,14 @@ scpi_result_t scpi_syst_TempProtectionState(scpi_t * context) {
 
     int32_t sensor;
     if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
+#if OPTION_MAIN_TEMP_SENSOR
+		if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
         sensor = temp_sensor::MAIN;
+#else
+		return SCPI_RES_ERR;
+#endif
     }
 
     temperature::prot_conf[sensor].state = state;
@@ -258,10 +276,14 @@ scpi_result_t scpi_syst_TempProtectionState(scpi_t * context) {
 scpi_result_t scpi_syst_TempProtectionStateQ(scpi_t * context) {
     int32_t sensor;
     if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
+#if OPTION_MAIN_TEMP_SENSOR
+		if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
         sensor = temp_sensor::MAIN;
+#else
+		return SCPI_RES_ERR;
+#endif
     }
 
     SCPI_ResultBool(context, temperature::prot_conf[sensor].state);
@@ -277,10 +299,14 @@ scpi_result_t scpi_syst_TempProtectionDelay(scpi_t * context) {
 
     int32_t sensor;
     if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
+#if OPTION_MAIN_TEMP_SENSOR
+		if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
         sensor = temp_sensor::MAIN;
+#else
+		return SCPI_RES_ERR;
+#endif
     }
 
     temperature::prot_conf[sensor].delay = delay;
@@ -292,10 +318,14 @@ scpi_result_t scpi_syst_TempProtectionDelay(scpi_t * context) {
 scpi_result_t scpi_syst_TempProtectionDelayQ(scpi_t * context) {
     int32_t sensor;
     if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
+#if OPTION_MAIN_TEMP_SENSOR
+		if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
         sensor = temp_sensor::MAIN;
+#else
+		return SCPI_RES_ERR;
+#endif
     }
 
     SCPI_ResultFloat(context, temperature::prot_conf[sensor].delay);
@@ -306,10 +336,14 @@ scpi_result_t scpi_syst_TempProtectionDelayQ(scpi_t * context) {
 scpi_result_t scpi_syst_TempProtectionTrippedQ(scpi_t * context) {
     int32_t sensor;
     if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
+#if OPTION_MAIN_TEMP_SENSOR
+		if (SCPI_ParamErrorOccurred(context)) {
             return SCPI_RES_ERR;
         }
         sensor = temp_sensor::MAIN;
+#else
+		return SCPI_RES_ERR;
+#endif
     }
 
     SCPI_ResultBool(context, temperature::isSensorTripped((temp_sensor::Type)sensor));

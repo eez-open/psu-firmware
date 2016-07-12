@@ -36,7 +36,7 @@
 #define DISABLE_S1D19122  		1	// ITDB25H
 #define DISABLE_S6D0164			1	// CTE22 / DMTFT22102
 #define DISABLE_S6D1121			1	// ITDB24E	- This single define will disable both 8bit and 16bit mode for this controller
-#define DISABLE_SSD1289			1	// ITDB32S / TFT01_32 / ELEE32_REVA / ELEE32_REVB / CTE32	- This single define will disable both 8bit, 16bit and latched mode for this controller
+//#define DISABLE_SSD1289			1	// ITDB32S / TFT01_32 / ELEE32_REVA / ELEE32_REVB / CTE32	- This single define will disable both 8bit, 16bit and latched mode for this controller
 #define DISABLE_SSD1963_480		1	// ITDB43 / TFT01_43
 #define DISABLE_SSD1963_800		1	// ITDB50 / TFT01_50 / CTE50 / EHOUSE50
 #define DISABLE_SSD1963_800_ALT	1	// TFT01_70 / CTE70 / EHOUSE70

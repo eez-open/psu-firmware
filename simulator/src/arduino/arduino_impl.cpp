@@ -46,12 +46,18 @@ void digitalWrite(uint8_t pin, uint8_t state) {
     chips::select(pin, state);
 }
 
+float temp_sensor_cels_to_volt(float cels, float p1_volt, float p1_cels, float p2_volt, float p2_cels) {
+	return util::remap(cels, p1_cels, p1_volt, p2_cels, p2_volt);
+}
+
 int analogRead(uint8_t pin) {
+
+#define INVERT_CAL_POINTS() P1_C, P1_V, P2_C, P2_V
 
 #define TEMP_SENSOR(NAME, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) \
     if (pin == PIN) { \
         float cels = simulator::getTemperature(temp_sensor::NAME); \
-        float volt = util::remap(cels, CAL_POINTS); \
+        float volt = temp_sensor_cels_to_volt(cels, CAL_POINTS); \
         float adc = util::remap(volt, (float)temp_sensor::MIN_U, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_U, (float)temp_sensor::MAX_ADC); \
         return (int)util::clamp(adc, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_ADC); \
     }
