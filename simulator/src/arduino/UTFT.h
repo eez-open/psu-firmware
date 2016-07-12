@@ -26,8 +26,8 @@ namespace arduino {
 #define PORTRAIT 0
 #define LANDSCAPE 1
 
-#define ITDB32WC        1
 #define ITDB32S			2	// SSD1289  (16bit)
+#define ITDB32S_V2      33  // ILI9341	(16bit)
 
 //*********************************
 // COLORS
