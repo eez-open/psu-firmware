@@ -57,7 +57,7 @@ bool TempSensor::init() {
 
 bool TempSensor::test() {
 	if (installed) {
-		if (read() > -5) {
+		if (read() > TEMP_SENSOR_MIN_VALID_TEMPERATURE) {
 			test_result = psu::TEST_OK;
 		} else {
 			test_result = psu::TEST_FAILED;

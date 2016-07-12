@@ -283,6 +283,16 @@ scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t scpi_diag_InformationFanQ(scpi_t * context) {
+#if OPTION_FAN
+	SCPI_ResultInt(context, fan::rpm);
+#else
+	SCPI_ResultInt(context, -1);
+#endif
+
+    return SCPI_RES_OK;
+}
+
 }
 }
 } // namespace eez::psu::scpi

@@ -23,4 +23,5 @@
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:CALibration?", scpi_diag_InformationCalibrationQ) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:PROTection?",  scpi_diag_InformationProtectionQ) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:TEST?",        scpi_diag_InformationTestQ) \
+	SCPI_COMMAND("DIAGnostic[:INFOrmation]:FAN?",         scpi_diag_InformationFanQ) \
 

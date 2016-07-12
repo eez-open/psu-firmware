@@ -113,7 +113,7 @@ bool param_temp_sensor(scpi_t *context, int &sensor) {
     if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, FALSE)) {
 #if OPTION_MAIN_TEMP_SENSOR
         if (SCPI_ParamErrorOccurred(context)) {
-            return SCPI_RES_ERR;
+            return false;
         }
         sensor = temp_sensor::MAIN;
 #else

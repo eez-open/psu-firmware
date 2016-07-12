@@ -178,3 +178,9 @@
 
 /// Set to 1 to skip the test of PWRGOOD signal
 #define CONF_SKIP_PWRGOOD_TEST 0
+
+/// Minimal temperature (in oC) for sensor to be declared as valid.
+#define TEMP_SENSOR_MIN_VALID_TEMPERATURE -5
+
+/// Interval at which fan speed should be measured
+#define FAN_SPEED_MEASURMENT_INTERVAL 5000

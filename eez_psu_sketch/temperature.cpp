@@ -22,6 +22,7 @@
 #include "persist_conf.h"
 #include "sound.h"
 #include "temperature.h"
+#include "fan.h"
 
 namespace eez {
 namespace psu {
@@ -38,6 +39,8 @@ TempSensorTemperature sensors[temp_sensor::NUM_TEMP_SENSORS] = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+static unsigned long last_measured_tick;
+
 bool init() {
 	return test();
 }
@@ -53,8 +56,14 @@ bool test() {
 }
 
 void tick(unsigned long tick_usec) {
-	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
-		sensors[i].tick(tick_usec);
+	if (tick_usec - last_measured_tick >= TEMP_SENSOR_READ_EVERY_MS * 1000L) {
+		last_measured_tick = tick_usec;
+
+		for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+			sensors[i].tick(tick_usec);
+		}
+
+		fan::tick(tick_usec);
 	}
 }
 
@@ -77,11 +86,8 @@ TempSensorTemperature::TempSensorTemperature(int sensorIndex_)
 
 void TempSensorTemperature::tick(unsigned long tick_usec) {
 	if (temp_sensor::sensors[sensorIndex].installed) {
-		if (tick_usec - last_measured_tick >= TEMP_SENSOR_READ_EVERY_MS * 1000L) {
-			last_measured_tick = tick_usec;
-			temperature = temp_sensor::sensors[sensorIndex].read();
-			protection_check(tick_usec);
-		}
+		temperature = temp_sensor::sensors[sensorIndex].read();
+		protection_check(tick_usec);
 	}
 }
 

@@ -45,6 +45,7 @@ bool isChannelTripped(Channel *channel);
 class TempSensorTemperature {
 public:
 	ProtectionConfiguration prot_conf;
+	float temperature;
 
 	TempSensorTemperature(int sensorIndex);
 
@@ -57,8 +58,6 @@ public:
 private:
 	int sensorIndex;
 
-	unsigned long last_measured_tick;
-	float temperature;
 	bool otp_alarmed;
 	unsigned long otp_alarmed_started_tick;
 	bool otp_tripped;
