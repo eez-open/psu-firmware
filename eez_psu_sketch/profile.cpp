@@ -92,7 +92,9 @@ bool recallFromProfile(Parameters *profile) {
 
     bool result = true;
 
-    memcpy(temperature::prot_conf, profile->temp_prot, temp_sensor::TEMP_SENSORS_COUNT * sizeof(temperature::ProtectionConfiguration));
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		memcpy(&temperature::sensors[i].prot_conf, profile->temp_prot + i, sizeof(temperature::ProtectionConfiguration));
+	}
 
     if (profile->power_is_up) result &= psu::powerUp();
     else psu::powerDown();
@@ -210,7 +212,9 @@ bool saveAtLocation(int location) {
 #endif
         }
 
-        memcpy(profile.temp_prot, temperature::prot_conf, temp_sensor::TEMP_SENSORS_COUNT * sizeof(temperature::ProtectionConfiguration));
+		for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+			memcpy(profile.temp_prot + i, &temperature::sensors[i].prot_conf, sizeof(temperature::ProtectionConfiguration));
+		}
 
         interrupts();
 

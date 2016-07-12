@@ -83,6 +83,7 @@ void boot() {
     success &= rtc::init();
     success &= datetime::init();
     success &= ethernet::init();
+	success &= temperature::init();
 
     // load channels calibration parameters
     for (int i = 0; i < CH_NUM; ++i) {
@@ -186,7 +187,7 @@ bool powerUp() {
     if (g_power_is_up) return true;
 
 #if OPTION_MAIN_TEMP_SENSOR
-	if (temperature::isSensorTripped(temp_sensor::MAIN)) return false;
+	if (temperature::sensors[temp_sensor::MAIN].isTripped()) return false;
 #endif
 
 #if OPTION_DISPLAY
@@ -344,14 +345,12 @@ static bool psu_reset(bool power_on) {
     // TEMP:PROT[MAIN]
     // TEMP:PROT:DEL
     // TEMP:PROT:STAT[MAIN]
-    for (int i = 0; i < temp_sensor::TEMP_SENSORS_COUNT; ++i) {
-        temperature::ProtectionConfiguration *temp_prot = &temperature::prot_conf[i];
-
-        temp_prot->sensor = (temp_sensor::Type)i;
-
-        temp_prot->delay = OTP_MAIN_DEFAULT_DELAY;
-        temp_prot->level = OTP_MAIN_DEFAULT_LEVEL;
-        temp_prot->state = OTP_MAIN_DEFAULT_STATE;
+    for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+        temperature::ProtectionConfiguration &temp_prot = temperature::sensors[i].prot_conf;
+        temp_prot.sensor = i;
+        temp_prot.delay = OTP_MAIN_DEFAULT_DELAY;
+        temp_prot.level = OTP_MAIN_DEFAULT_LEVEL;
+        temp_prot.state = OTP_MAIN_DEFAULT_STATE;
     }
 
     // CAL[:MODE] OFF
@@ -402,8 +401,9 @@ static bool test_shield() {
     result &= datetime::test();
     result &= eeprom::test();
     result &= ethernet::test();
+	result &= temperature::test();
 
-    result &= test_channels();
+	result &= test_channels();
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
 	result &= fan::test();

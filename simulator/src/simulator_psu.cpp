@@ -45,10 +45,10 @@ namespace eez {
 namespace psu {
 namespace simulator {
 
-float temperature[temp_sensor::TEMP_SENSORS_COUNT];
+float temperature[temp_sensor::NUM_TEMP_SENSORS];
 
 void init() {
-    for (int i = 0; i < temp_sensor::TEMP_SENSORS_COUNT; ++i) {
+    for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
         temperature[i] = 25.0f;
     }
 }

@@ -51,20 +51,15 @@ float temp_sensor_cels_to_volt(float cels, float p1_volt, float p1_cels, float p
 }
 
 int analogRead(uint8_t pin) {
-
-#define INVERT_CAL_POINTS() P1_C, P1_V, P2_C, P2_V
-
-#define TEMP_SENSOR(NAME, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) \
-    if (pin == PIN) { \
-        float cels = simulator::getTemperature(temp_sensor::NAME); \
-        float volt = temp_sensor_cels_to_volt(cels, CAL_POINTS); \
-        float adc = util::remap(volt, (float)temp_sensor::MIN_U, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_U, (float)temp_sensor::MAX_ADC); \
-        return (int)util::clamp(adc, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_ADC); \
-    }
-
-	TEMP_SENSORS
-
-#undef TEMP_SENSOR
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		temp_sensor::TempSensor &tempSensor = temp_sensor::sensors[i];
+		if (tempSensor.installed && tempSensor.pin == pin) {
+			float cels = simulator::getTemperature(i);
+			float volt = util::remap(cels, tempSensor.p1_cels, tempSensor.p1_volt, tempSensor.p2_cels, tempSensor.p2_volt);
+			float adc = util::remap(volt, (float)temp_sensor::MIN_U, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_U, (float)temp_sensor::MAX_ADC); \
+			return (int)util::clamp(adc, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_ADC); \
+		}
+	}
 
 	return pins[pin];
 }

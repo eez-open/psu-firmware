@@ -21,137 +21,147 @@
 #include "ethernet.h"
 #include "persist_conf.h"
 #include "sound.h"
+#include "temperature.h"
 
 namespace eez {
 namespace psu {
-
-using namespace scpi;
-
 namespace temperature {
 
-ProtectionConfiguration prot_conf[temp_sensor::TEMP_SENSORS_COUNT];
+#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) \
+	TempSensorTemperature(temp_sensor::NAME),
 
-static unsigned long sensor_temperature_last_measured_tick[temp_sensor::TEMP_SENSORS_COUNT];
-static float sensor_temperature[temp_sensor::TEMP_SENSORS_COUNT];
-static bool sensor_otp_alarmed[temp_sensor::TEMP_SENSORS_COUNT];
-static unsigned long sensor_otp_alarmed_started_tick[temp_sensor::TEMP_SENSORS_COUNT];
-static bool sensor_otp_tripped[temp_sensor::TEMP_SENSORS_COUNT];
+TempSensorTemperature sensors[temp_sensor::NUM_TEMP_SENSORS] = {
+	TEMP_SENSORS
+};
+
+#undef TEMP_SENSOR
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static void set_otp_reg(temp_sensor::Type sensor, bool on) {
-
-#define TEMP_SENSOR(NAME, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) \
-    if (sensor == temp_sensor::NAME) { \
-		if (CH_NUM >= 0) { \
-			Channel::get(CH_NUM).setQuesBits(QUES_REG_BIT, on); \
-		} else { \
-			psu::setQuesBits(QUES_REG_BIT, on); \
-		} \
-		return; \
-    }
-
-	TEMP_SENSORS
-
-#undef TEMP_SENSOR
+bool init() {
+	return test();
 }
 
-static void sensor_protection_enter(temp_sensor::Type sensor) {
-    sensor_otp_tripped[sensor] = true;
+bool test() {
+	bool success = true;
 
-#define TEMP_SENSOR(NAME, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) \
-    if (sensor == temp_sensor::NAME) { \
-		if (CH_NUM >= 0) { \
-			Channel::get(CH_NUM).outputEnable(false); \
-		} \
-		else { \
-			for (int i = 0; i < CH_NUM; ++i) { \
-				Channel::get(i).outputEnable(false); \
-			} \
-			psu::powerDownBySensor(); \
-		} \
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		success &= temp_sensor::sensors[i].test();
 	}
-	
-	TEMP_SENSORS
 
-#undef TEMP_SENSOR
-
-    set_otp_reg(sensor, true);
-
-    sound::playBeep();
+	return success;
 }
-
-static void sensor_protection_check(unsigned long tick_usec, temp_sensor::Type sensor) {
-    if (sensor_otp_tripped[sensor]) {
-        return;
-    }
-
-    if (prot_conf[sensor].state && sensor_temperature[sensor] >= prot_conf[sensor].level) {
-        float delay = prot_conf[sensor].delay;
-        if (delay > 0) {
-            if (sensor_otp_alarmed[sensor]) {
-                if (tick_usec - sensor_otp_alarmed_started_tick[sensor] >= delay * 1000000UL) {
-                    sensor_otp_alarmed[sensor] = 0;
-                    sensor_protection_enter(sensor);
-                }
-            }
-            else {
-                sensor_otp_alarmed[sensor] = 1;
-                sensor_otp_alarmed_started_tick[sensor] = tick_usec;
-            }
-        }
-        else {
-            sensor_protection_enter(sensor);
-        }
-    }
-    else {
-        sensor_otp_alarmed[sensor] = 0;
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////
 
 void tick(unsigned long tick_usec) {
-	for (int i = 0; i < temp_sensor::TEMP_SENSORS_COUNT; ++i) {
-		if (tick_usec - sensor_temperature_last_measured_tick[i] >= TEMP_SENSOR_READ_EVERY_MS * 1000L) {
-			sensor_temperature_last_measured_tick[i] = tick_usec;
-			sensor_temperature[i] = temp_sensor::read((temp_sensor::Type)i);
-			sensor_protection_check(tick_usec, (temp_sensor::Type)i);
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		sensors[i].tick(tick_usec);
+	}
+}
+
+bool isChannelTripped(Channel *channel) {
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		if (sensors[i].isChannelTripped(channel)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+TempSensorTemperature::TempSensorTemperature(int sensorIndex_)
+	: sensorIndex(sensorIndex_)
+{
+}
+
+void TempSensorTemperature::tick(unsigned long tick_usec) {
+	if (temp_sensor::sensors[sensorIndex].installed) {
+		if (tick_usec - last_measured_tick >= TEMP_SENSOR_READ_EVERY_MS * 1000L) {
+			last_measured_tick = tick_usec;
+			temperature = temp_sensor::sensors[sensorIndex].read();
+			protection_check(tick_usec);
 		}
 	}
 }
 
-float measure(temp_sensor::Type sensor) {
-    sensor_temperature[sensor] = temp_sensor::read(sensor);
-    return sensor_temperature[sensor];
-}
-
-void clearProtection(temp_sensor::Type sensor) {
-    sensor_otp_tripped[sensor] = false;
-    set_otp_reg(sensor, false);
-}
-
-bool isSensorTripped(temp_sensor::Type sensor) {
-    return sensor_otp_tripped[sensor];
-}
-
-bool isChannelTripped(Channel *channel) {
-#define TEMP_SENSOR(NAME, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) \
-	if (CH_NUM >= 0) { \
-		if (channel->index == CH_NUM + 1) { \
-			if (sensor_otp_tripped[temp_sensor::NAME]) \
-				return true; \
-		} \
-	} else { \
-		if (sensor_otp_tripped[temp_sensor::NAME]) \
-			return true; \
+bool TempSensorTemperature::isChannelTripped(Channel *channel) {
+	if (
+		temp_sensor::sensors[sensorIndex].installed && (
+			temp_sensor::sensors[sensorIndex].ch_num < 0 ||
+			channel->index == temp_sensor::sensors[sensorIndex].ch_num + 1
+		)
+	) {
+		return otp_tripped;
 	}
 
-	TEMP_SENSORS
-
-#undef TEMP_SENSOR
-
     return false;
+}
+
+float TempSensorTemperature::measure() {
+    temperature = temp_sensor::sensors[sensorIndex].read();
+    return temperature;
+}
+
+void TempSensorTemperature::clearProtection() {
+    otp_tripped = false;
+    set_otp_reg(false);
+}
+
+bool TempSensorTemperature::isTripped() {
+    return otp_tripped;
+}
+
+void TempSensorTemperature::set_otp_reg(bool on) {
+	if (temp_sensor::sensors[sensorIndex].ch_num >= 0) {
+		Channel::get(temp_sensor::sensors[sensorIndex].ch_num).setQuesBits(temp_sensor::sensors[sensorIndex].ques_bit, on);
+	} else {
+		psu::setQuesBits(temp_sensor::sensors[sensorIndex].ques_bit, on);
+	}
+}
+
+void TempSensorTemperature::protection_check(unsigned long tick_usec) {
+	if (temp_sensor::sensors[sensorIndex].installed) {
+		if (otp_tripped) {
+			return;
+		}
+
+		if (prot_conf.state && temperature >= prot_conf.level) {
+			float delay = prot_conf.delay;
+			if (delay > 0) {
+				if (otp_alarmed) {
+					if (tick_usec - otp_alarmed_started_tick >= delay * 1000000UL) {
+						otp_alarmed = 0;
+						protection_enter();
+					}
+				} else {
+					otp_alarmed = 1;
+					otp_alarmed_started_tick = tick_usec;
+				}
+			} else {
+				protection_enter();
+			}
+		} else {
+			otp_alarmed = 0;
+		}
+	}
+}
+
+void TempSensorTemperature::protection_enter() {
+    otp_tripped = true;
+
+	if (temp_sensor::sensors[sensorIndex].ch_num >= 0) {
+		Channel::get(temp_sensor::sensors[sensorIndex].ch_num).outputEnable(false);
+	} else {
+		for (int i = 0; i < CH_NUM; ++i) {
+			Channel::get(i).outputEnable(false);
+		}
+		psu::powerDownBySensor();
+	}
+	
+    set_otp_reg(true);
+
+    sound::playBeep();
 }
 
 }

@@ -18,6 +18,8 @@
  
 #pragma once
 
+#include "temperature.h"
+
 namespace eez {
 namespace psu {
 /// PSU configuration profiles (save, recall, ...).

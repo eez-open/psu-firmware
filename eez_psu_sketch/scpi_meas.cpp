@@ -19,6 +19,7 @@
 #include "psu.h"
 #include "scpi_psu.h"
 #include "scpi_core.h"
+#include "temperature.h"
 
 namespace eez {
 namespace psu {
@@ -79,7 +80,7 @@ scpi_result_t scpi_meas_TemperatureQ(scpi_t * context) {
     }
 
     char buffer[256] = { 0 };
-    util::strcatFloat(buffer, temperature::measure((temp_sensor::Type)sensor));
+    util::strcatFloat(buffer, temperature::sensors[sensor].measure());
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;

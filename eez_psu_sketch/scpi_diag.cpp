@@ -25,6 +25,7 @@
 #include "ethernet.h"
 #include "rtc.h"
 #include "datetime.h"
+#include "temperature.h"
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
 #include "fan.h"
 #endif
@@ -149,7 +150,7 @@ scpi_result_t scpi_diag_InformationCalibrationQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_diag_InformationProtectionQ(scpi_t * context) {
-    char buffer[128] = { 0 };
+    char buffer[256] = { 0 };
 
     for (int i = 0; i < CH_NUM; ++i) {
         Channel *channel = &Channel::get(i);
@@ -186,19 +187,25 @@ scpi_result_t scpi_diag_InformationProtectionQ(scpi_t * context) {
         SCPI_ResultText(context, buffer);
     }
 
-#if OPTION_MAIN_TEMP_SENSOR
-    // main temperature
-    sprintf_P(buffer, PSTR("tmain_tripped=%d"), (int)temperature::isSensorTripped(temp_sensor::MAIN)); SCPI_ResultText(context, buffer);
-    sprintf_P(buffer, PSTR("tmain_state=%d"  ), (int)temperature::prot_conf[temp_sensor::MAIN].state); SCPI_ResultText(context, buffer);
-    strcpy_P(buffer, PSTR("tmain_delay="));
-    util::strcatDuration(buffer, temperature::prot_conf[temp_sensor::MAIN].delay);
-    SCPI_ResultText(context, buffer);
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		temp_sensor::TempSensor &sensor = temp_sensor::sensors[i];
+		temperature::TempSensorTemperature &sensorTemperature = temperature::sensors[i];
 
-    strcpy_P(buffer, PSTR("tmain_level="));
-    util::strcatFloat(buffer, temperature::prot_conf[temp_sensor::MAIN].level);
-    strcat_P(buffer, PSTR(" oC"));
-    SCPI_ResultText(context, buffer);
-#endif
+		sprintf_P(buffer, PSTR("t%s_tripped=%d"), sensor.name, (int)sensorTemperature.isTripped());
+		SCPI_ResultText(context, buffer);
+
+		sprintf_P(buffer, PSTR("t%s_state=%d"  ), sensor.name, (int)sensorTemperature.prot_conf.state);
+		SCPI_ResultText(context, buffer);
+
+		sprintf_P(buffer, PSTR("t%s_delay="), sensor.name);
+		util::strcatDuration(buffer, sensorTemperature.prot_conf.delay);
+		SCPI_ResultText(context, buffer);
+
+		strcpy_P(buffer, PSTR("t%s_level="));
+		util::strcatFloat(buffer, sensorTemperature.prot_conf.level);
+		strcat_P(buffer, PSTR(" oC"));
+		SCPI_ResultText(context, buffer);
+	}
 
     return SCPI_RES_OK;
 }
@@ -242,11 +249,19 @@ scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
         psu::TEST_SKIPPED, get_installed_str(OPTION_BP), get_test_result_str(psu::TEST_SKIPPED));
     SCPI_ResultText(context, buffer);
 
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		temp_sensor::TempSensor &sensor = temp_sensor::sensors[i];
+		sprintf_P(buffer, PSTR("%d, %s temp, %s, %s"), \
+			sensor.test_result, sensor.name, get_installed_str(sensor.installed ? true : false), get_test_result_str(sensor.test_result)); \
+		SCPI_ResultText(context, buffer);
+	}
+
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
     sprintf_P(buffer, PSTR("%d, Fan, %s, %s"),
         fan::test_result, get_installed_str(OPTION_FAN), get_test_result_str(fan::test_result));
     SCPI_ResultText(context, buffer);
 #endif
+
 	if (psu::isPowerUp()) {
         for (int i = 0; i < CH_NUM; ++i) {
             Channel *channel = &Channel::get(i);

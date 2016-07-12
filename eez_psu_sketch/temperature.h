@@ -28,25 +28,47 @@ class Channel;
 /// Temperature measurement and protection.
 namespace temperature {
 
-
 /// Configuration data for the temperature protection.
 struct ProtectionConfiguration {
-    temp_sensor::Type sensor;
+    int sensor;
     float delay;
     float level;
     bool state;
 };
 
-extern ProtectionConfiguration prot_conf[temp_sensor::TEMP_SENSORS_COUNT];
-
+bool init();
+bool test();
 void tick(unsigned long tick_usec);
 
-float measure(temp_sensor::Type sensor);
-
-void clearProtection(temp_sensor::Type sensor);
-bool isSensorTripped(temp_sensor::Type sensor);
-
 bool isChannelTripped(Channel *channel);
+
+class TempSensorTemperature {
+public:
+	ProtectionConfiguration prot_conf;
+
+	TempSensorTemperature(int sensorIndex);
+
+	void tick(unsigned long tick_usec);
+	bool isChannelTripped(Channel *channel);
+	float measure();
+	void clearProtection();
+	bool isTripped();
+
+private:
+	int sensorIndex;
+
+	unsigned long last_measured_tick;
+	float temperature;
+	bool otp_alarmed;
+	unsigned long otp_alarmed_started_tick;
+	bool otp_tripped;
+
+	void set_otp_reg(bool on);
+	void protection_check(unsigned long tick_usec);
+	void protection_enter();
+};
+
+extern TempSensorTemperature sensors[temp_sensor::NUM_TEMP_SENSORS];
 
 }
 }

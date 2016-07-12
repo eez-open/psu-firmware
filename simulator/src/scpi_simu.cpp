@@ -238,7 +238,7 @@ scpi_result_t scpi_simu_Temperature(scpi_t *context) {
 #endif
     }
 
-    simulator::setTemperature((temp_sensor::Type)sensor, value);
+    simulator::setTemperature(sensor, value);
 
     return SCPI_RES_OK;
 }
@@ -264,7 +264,7 @@ scpi_result_t scpi_simu_TemperatureQ(scpi_t *context) {
             return SCPI_RES_ERR;
         }
 
-        value = simulator::getTemperature((temp_sensor::Type)sensor);
+        value = simulator::getTemperature(sensor);
     }
     else {
         if (spec == SCPI_NUM_MIN) {

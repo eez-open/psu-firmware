@@ -22,6 +22,7 @@
 #include "ioexp.h"
 #include "adc.h"
 #include "dac.h"
+#include "temp_sensor.h"
 
 #define IS_OVP_VALUE(channel, cpv) (&cpv == &channel->ovp)
 #define IS_OCP_VALUE(channel, cpv) (&cpv == &channel->ocp)
@@ -171,7 +172,7 @@ public:
         float u_dac;
         float i_set;
         float i_dac;
-        float temperature[temp_sensor::TEMP_SENSORS_COUNT];
+        float temperature[temp_sensor::NUM_TEMP_SENSORS];
 		float voltProgExt;
 
         void setLoadEnabled(bool value);

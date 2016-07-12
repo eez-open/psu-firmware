@@ -45,12 +45,6 @@
 
 #include <scpi-parser.h>
 
-#include "debug.h"
-#include "util.h"
-#include "channel.h"
-
-#define CHANNEL_VALUE_PRECISION (1.0f / powf(10.0f, FLOAT_TO_STR_PREC))
-
 /// Namespace for the everything from the EEZ.
 namespace eez {
 /// PSU firmware.
@@ -93,3 +87,9 @@ extern void leaveTimeCriticalMode();
 
 }
 } // namespace eez::psu
+
+#include "debug.h"
+#include "util.h"
+#include "channel.h"
+
+#define CHANNEL_VALUE_PRECISION (1.0f / powf(10.0f, FLOAT_TO_STR_PREC))

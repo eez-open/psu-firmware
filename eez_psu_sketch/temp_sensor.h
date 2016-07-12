@@ -18,23 +18,17 @@
  
 #pragma once
 
-#if OPTION_MAIN_TEMP_SENSOR
-#define MAIN_SENSOR TEMP_SENSOR(MAIN, TEMP_ANALOG, MAIN_TEMP_SENSOR_CALIBRATION_POINTS, -1, QUES_TEMP)
-#else
-#define MAIN_SENSOR
-#endif
-
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 
 #define TEMP_SENSORS \
-	MAIN_SENSOR
+	TEMP_SENSOR(MAIN, OPTION_MAIN_TEMP_SENSOR, TEMP_ANALOG, MAIN_TEMP_SENSOR_CALIBRATION_POINTS, -1, QUES_TEMP)
 
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
 
 #define TEMP_SENSORS \
-	MAIN_SENSOR \
-	TEMP_SENSOR(CH1, NTC1, CH1_TEMP_SENSOR_CALIBRATION_POINTS, 0, QUES_ISUM_TEMP) \
-	TEMP_SENSOR(CH2, NTC2, CH2_TEMP_SENSOR_CALIBRATION_POINTS, 1, QUES_ISUM_TEMP)
+	TEMP_SENSOR(MAIN, OPTION_MAIN_TEMP_SENSOR, TEMP_ANALOG, MAIN_TEMP_SENSOR_CALIBRATION_POINTS, -1, QUES_TEMP) \
+	TEMP_SENSOR(CH1, 1, NTC1, CH1_TEMP_SENSOR_CALIBRATION_POINTS, 0, QUES_ISUM_TEMP) \
+	TEMP_SENSOR(CH2, 1, NTC2, CH2_TEMP_SENSOR_CALIBRATION_POINTS, 1, QUES_ISUM_TEMP)
 
 #endif
 
@@ -47,18 +41,45 @@ static const int MIN_U = 0;
 static const int MAX_ADC = 1023;
 static const int MAX_U = 5;
 
+////////////////////////////////////////////////////////////////////////////////
+
 static const int MAX_NUM_TEMP_SENSORS = 5;
 
-#define TEMP_SENSOR(NAME, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) NAME,
+////////////////////////////////////////////////////////////////////////////////
 
+#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) NAME,
 enum Type {
-TEMP_SENSORS
-TEMP_SENSORS_COUNT
+	TEMP_SENSORS
+	NUM_TEMP_SENSORS
 };
-
 #undef TEMP_SENSOR
 
-float read(Type sensor);
+////////////////////////////////////////////////////////////////////////////////
+
+class TempSensor {
+public:
+	TempSensor(const char *name, int installed, int pin, float p1_volt, float p1_cels, float p2_volt, float p2_cels, int ch_num, int ques_bit);
+
+	psu::TestResult test_result;
+	const char *name;
+	int installed;
+	int pin;
+	float p1_volt;
+	float p1_cels;
+	float p2_volt;
+	float p2_cels;
+	int ch_num;
+	int ques_bit;
+
+	bool init();
+	bool test();
+
+	float read();
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+extern TempSensor sensors[NUM_TEMP_SENSORS];
 
 }
 }

@@ -57,7 +57,7 @@ scpi_result_t scpi_syst_Power(scpi_t * context) {
     }
 
 #if OPTION_MAIN_TEMP_SENSOR
-    if (temperature::isSensorTripped(temp_sensor::MAIN)) {
+    if (temperature::sensors[temp_sensor::MAIN].isTripped()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_EXECUTE_BEFORE_CLEARING_PROTECTION);
         return SCPI_RES_ERR;
     }
@@ -204,7 +204,7 @@ scpi_result_t scpi_syst_TempProtectionClear(scpi_t * context) {
 #endif
 	}
 
-    temperature::clearProtection((temp_sensor::Type)sensor);
+    temperature::sensors[sensor].clearProtection();
 
     return SCPI_RES_OK;
 }
@@ -227,7 +227,7 @@ scpi_result_t scpi_syst_TempProtectionLevel(scpi_t * context) {
 #endif
     }
 
-    temperature::prot_conf[sensor].level = level;
+    temperature::sensors[sensor].prot_conf.level = level;
     profile::save();
 
     return SCPI_RES_OK;
@@ -246,7 +246,7 @@ scpi_result_t scpi_syst_TempProtectionLevelQ(scpi_t * context) {
 #endif
     }
 
-    return result_float(context, temperature::prot_conf[sensor].level);
+    return result_float(context, temperature::sensors[sensor].prot_conf.level);
 }
 
 scpi_result_t scpi_syst_TempProtectionState(scpi_t * context) {
@@ -267,7 +267,7 @@ scpi_result_t scpi_syst_TempProtectionState(scpi_t * context) {
 #endif
     }
 
-    temperature::prot_conf[sensor].state = state;
+    temperature::sensors[sensor].prot_conf.state = state;
     profile::save();
 
     return SCPI_RES_OK;
@@ -286,7 +286,7 @@ scpi_result_t scpi_syst_TempProtectionStateQ(scpi_t * context) {
 #endif
     }
 
-    SCPI_ResultBool(context, temperature::prot_conf[sensor].state);
+    SCPI_ResultBool(context, temperature::sensors[sensor].prot_conf.state);
 
     return SCPI_RES_OK;
 }
@@ -309,7 +309,7 @@ scpi_result_t scpi_syst_TempProtectionDelay(scpi_t * context) {
 #endif
     }
 
-    temperature::prot_conf[sensor].delay = delay;
+    temperature::sensors[sensor].prot_conf.delay = delay;
     profile::save();
 
     return SCPI_RES_OK;
@@ -328,7 +328,7 @@ scpi_result_t scpi_syst_TempProtectionDelayQ(scpi_t * context) {
 #endif
     }
 
-    SCPI_ResultFloat(context, temperature::prot_conf[sensor].delay);
+    SCPI_ResultFloat(context, temperature::sensors[sensor].prot_conf.delay);
 
     return SCPI_RES_OK;
 }
@@ -346,7 +346,7 @@ scpi_result_t scpi_syst_TempProtectionTrippedQ(scpi_t * context) {
 #endif
     }
 
-    SCPI_ResultBool(context, temperature::isSensorTripped((temp_sensor::Type)sensor));
+    SCPI_ResultBool(context, temperature::sensors[sensor].isTripped());
 
     return SCPI_RES_OK;
 }
