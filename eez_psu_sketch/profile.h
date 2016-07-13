@@ -50,11 +50,14 @@ struct ChannelParameters {
     ChannelFlags flags;
     float u_set;
     float u_step;
-    float i_set;
-    float i_step;
+	float u_limit;
     float u_delay;
     float u_level;
+    float i_set;
+    float i_step;
+	float i_limit;
     float i_delay;
+	float p_limit;
     float p_delay;
     float p_level;
 #ifdef EEZ_PSU_SIMULATOR

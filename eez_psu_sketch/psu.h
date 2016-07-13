@@ -85,6 +85,9 @@ extern void enterTimeCriticalMode();
 extern bool isTimeCriticalMode();
 extern void leaveTimeCriticalMode();
 
+extern void setCurrentMaxLimit(float value);
+extern float getCurrentMaxLimit();
+
 }
 } // namespace eez::psu
 

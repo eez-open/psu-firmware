@@ -54,6 +54,8 @@ static bool g_test_power_up_delay = false;
 static unsigned long g_power_down_time;
 static bool g_is_time_critical_mode = false;
 
+static float g_current_max_limit = NAN;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 static bool psu_reset(bool power_on);
@@ -430,6 +432,7 @@ void tick() {
 #endif
 
     temperature::tick(tick_usec);
+	fan::tick(tick_usec);
 
     for (int i = 0; i < CH_NUM; ++i) {
         Channel::get(i).tick(tick_usec);
@@ -579,6 +582,19 @@ void leaveTimeCriticalMode() {
     g_is_time_critical_mode = false;
 }
 
+extern void setCurrentMaxLimit(float value) {
+	g_current_max_limit = value;
+
+    for (int i = 0; i < CH_NUM; ++i) {
+		if (g_current_max_limit < Channel::get(i).getCurrentLimit()) {
+	        Channel::get(i).setCurrentLimit(g_current_max_limit);
+		}
+    }
+}
+
+extern float getCurrentMaxLimit() {
+	return g_current_max_limit;
+}
 
 }
 } // namespace eez::psu

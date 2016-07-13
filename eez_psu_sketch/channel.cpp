@@ -64,11 +64,12 @@ Channel &Channel::get(int channel_index) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Channel::Value::init(float def_step) {
+void Channel::Value::init(float def_step, float def_limit) {
     set = 0;
     mon_dac = 0;
     mon = 0;
     step = def_step;
+	limit = def_limit;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -302,8 +303,10 @@ void Channel::reset() {
     // [SOUR[n]]:CURR:STEP
     // [SOUR[n]]:VOLT
     // [SOUR[n]]:VOLT:STEP -> set all to default
-    u.init(U_DEF_STEP);
-    i.init(I_DEF_STEP);
+    u.init(U_DEF_STEP, U_MAX);
+    i.init(I_DEF_STEP, I_MAX);
+
+	p_limit = PTOT;
 }
 
 void Channel::clearCalibrationConf() {
@@ -837,6 +840,56 @@ const char *Channel::getBoardRevisionName() {
 
 uint16_t Channel::getFeatures() {
     return CH_BOARD_REVISION_FEATURES[this->boardRevision];
+}
+
+float Channel::getVoltageLimit() const {
+	return u.limit;
+}
+
+float Channel::getMaxVoltageLimit() const {
+	return U_MAX;
+}
+
+void Channel::setVoltageLimit(float limit) {
+	u.limit = limit;
+	if (u.set > u.limit) {
+		setVoltage(u.limit);
+	}
+}
+
+float Channel::getCurrentLimit() const {
+	return i.limit;
+}
+
+float Channel::getMaxCurrentLimit() const {
+	float psu_max_limit = psu::getCurrentMaxLimit();
+	if (psu_max_limit != NAN) {
+		return min(I_MAX, psu_max_limit);
+	}
+	return I_MAX;
+}
+
+void Channel::setCurrentLimit(float limit) {
+	i.limit = limit;
+	if (i.set > i.limit) {
+		setCurrent(i.limit);
+	}
+}
+
+float Channel::getPowerLimit() const {
+	return p_limit;
+}
+
+float Channel::getMaxPowerLimit() const {
+	return PTOT;
+}
+
+void Channel::setPowerLimit(float limit) {
+	p_limit = limit;
+	if (u.set * i.set > p_limit) {
+		//setVoltage(p_limit / i.set);
+		setCurrent(p_limit / u.set);
+	}
 }
 
 }

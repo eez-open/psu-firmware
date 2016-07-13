@@ -22,13 +22,12 @@
 #include "persist_conf.h"
 #include "sound.h"
 #include "temperature.h"
-#include "fan.h"
 
 namespace eez {
 namespace psu {
 namespace temperature {
 
-#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) \
+#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) \
 	TempSensorTemperature(temp_sensor::NAME),
 
 TempSensorTemperature sensors[temp_sensor::NUM_TEMP_SENSORS] = {
@@ -62,8 +61,6 @@ void tick(unsigned long tick_usec) {
 		for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
 			sensors[i].tick(tick_usec);
 		}
-
-		fan::tick(tick_usec);
 	}
 }
 

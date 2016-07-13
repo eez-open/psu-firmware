@@ -179,7 +179,12 @@ scpi_result_t scpi_source_Current(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (current * channel->u.set > channel->PTOT) {
+	if (current > channel->getCurrentLimit()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
+        return SCPI_RES_ERR;
+	}
+
+    if (current * channel->u.set > channel->getPowerLimit()) {
         SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
     }
@@ -209,7 +214,12 @@ scpi_result_t scpi_source_Voltage(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (voltage * channel->i.set > channel->PTOT) {
+	if (voltage > channel->getVoltageLimit()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
+        return SCPI_RES_ERR;
+	}
+
+	if (voltage * channel->i.set > channel->getPowerLimit()) {
         SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
     }
@@ -609,6 +619,81 @@ scpi_result_t scpi_source_LRippleAutoQ(scpi_t * context) {
     SCPI_ResultBool(context, channel->isLowRippleAutoEnabled());
 
     return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_CurrentLimit(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    float limit;
+    if (!get_current_limit_param(context, limit, channel, &channel->i)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel->setCurrentLimit(limit);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_CurrentLimitQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    return get_source_value(context, channel->getCurrentLimit(), 0, channel->getMaxCurrentLimit(), channel->getMaxCurrentLimit());
+}
+
+scpi_result_t scpi_source_VoltageLimit(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    float limit;
+    if (!get_voltage_limit_param(context, limit, channel, &channel->i)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel->setVoltageLimit(limit);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_VoltageLimitQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    return get_source_value(context, channel->getVoltageLimit(), 0, channel->getMaxVoltageLimit(), channel->getMaxVoltageLimit());
+}
+
+scpi_result_t scpi_source_PowerLimit(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    float limit;
+    if (!get_power_limit_param(context, limit, channel, &channel->i)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel->setPowerLimit(limit);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_PowerLimitQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    return get_source_value(context, channel->getPowerLimit(), 0, channel->getMaxPowerLimit(), channel->getMaxPowerLimit());
 }
 
 }

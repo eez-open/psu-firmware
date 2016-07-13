@@ -20,15 +20,15 @@
 #include "temperature.h"
 #include "scpi_psu.h"
 
-#define FAN_MIN_TEMP 45 // temperatura ukljuèivanja fana (45oC)
-#define FAN_MAX_TEMP 75 // max. dopuštena temperatura (75oC) koja ako ostane više od FAN_MAX_TEMP_DELAY sekundi gasi se glavno napajanje
-#define FAN_MIN_PWM 12 //  PWM vrijednost za min. brzinu (12) 
-#define FAN_MAX_PWM 255 // PWM vrijednost za max. brzinu (255)
+#define FAN_MIN_TEMP 45 // Fan switch-on temperature (in oC)
+#define FAN_MAX_TEMP 75 // Max. allowed temperature (in oC), if it stays more then FAN_MAX_TEMP_DELAY seconds then main power will be turned off.
+#define FAN_MIN_PWM 12 //  PWM value for min. fan speed (12) 
+#define FAN_MAX_PWM 255 // PWM value for max. fan speed (255)
 
-#define FAN_ERR_CURRENT 1 //  max. dozvoljena izlazna struja u amperima ako je fan ili temp. senzor u kvaru
-#define FAN_NOMINAL_RPM 4500 // nazivni broj okretaja u minuti za PWM=255
-#define FAN_MAX_TEMP_DELAY 30 // definira nakon koliko sekundi æe se gasiti glavno napajanje
-#define FAN_MAX_TEMP_DROP 15 // definira koliko stupnjeva mora pasti temperatura ispod FAN_MAX_TEMP da bi se ponovno moglo upaliti glavno napajanje. Prijevremeni pokušaj paljenja javljati æe grešku -200
+#define FAN_ERR_CURRENT 1 // Max. allowed output current (in ampers) if fan or temp. sensor is invalid.
+#define FAN_NOMINAL_RPM 4500 // Nominal fan RPM (for PWM=255).
+#define FAN_MAX_TEMP_DELAY 30 // Number of seconds after which main power will be turned off.
+#define FAN_MAX_TEMP_DROP 15 // Temperature drop (in oC) below FAN_MAX_TEMP to turn again main power on. Premature attempt to turn power on will report error -200.
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
 
@@ -126,7 +126,8 @@ void finish_rpm_measure() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static unsigned long fan_speed_last_measured_tick;
+static unsigned long fan_speed_last_measured_tick = 0;
+static unsigned long fan_speed_last_adjusted_tick = 0;
 
 bool init() {
 	rpm_measure_interrupt_number = digitalPinToInterrupt(FAN_SENSE);
@@ -183,8 +184,10 @@ bool test() {
 }
 
 void tick(unsigned long tick_usec) {
-	if (test_result == psu::TEST_OK) {
-		bool limitCurrent = false;
+	if (test_result != psu::TEST_OK) return;
+
+	// adjust fan speed
+	if (tick_usec - fan_speed_last_adjusted_tick >= FAN_SPEED_ADJUSTMENT_INTERVAL * 1000L) {
 		float maxTemperature = FAN_MIN_TEMP - 1;
 
 		for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
@@ -196,7 +199,7 @@ void tick(unsigned long tick_usec) {
 						maxTemperature = sensorTemperature.temperature;
 					}
 				} else if (sensor.test_result == psu::TEST_FAILED) {
-					limitCurrent = true;
+					psu::setCurrentMaxLimit(FAN_ERR_CURRENT);
 				}
 			}
 		}
@@ -209,7 +212,10 @@ void tick(unsigned long tick_usec) {
 			fan_speed_pwm = 0;
 			analogWrite(FAN_PWM, fan_speed_pwm);
 		}
+	}
 
+	// measure fan speed
+	if (fan_speed_pwm != 0 || rpm != 0) {
 		if (tick_usec - fan_speed_last_measured_tick >= TEMP_SENSOR_READ_EVERY_MS * 1000L) {
 			fan_speed_last_measured_tick = tick_usec;
 			start_rpm_measure();
@@ -220,9 +226,12 @@ void tick(unsigned long tick_usec) {
 				if (rpm_measure_state != RPM_MEASURE_STATE_FINISHED) {
 					finish_rpm_measure();
 
-					test_result = psu::TEST_FAILED;
-					psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
-					psu::setQuesBits(QUES_FAN, true);
+					if (fan_speed_pwm != 0) {
+						test_result = psu::TEST_FAILED;
+						psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
+						psu::setQuesBits(QUES_FAN, true);
+						psu::setCurrentMaxLimit(FAN_ERR_CURRENT);
+					}
 				}
 			}
 		}

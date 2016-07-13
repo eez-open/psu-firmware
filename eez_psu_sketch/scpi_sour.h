@@ -54,4 +54,10 @@
     SCPI_COMMAND("[SOURce#]:LRIPple?", scpi_source_LRippleQ) \
     SCPI_COMMAND("[SOURce#]:LRIPple:AUTO", scpi_source_LRippleAuto) \
     SCPI_COMMAND("[SOURce#]:LRIPple:AUTO?", scpi_source_LRippleAutoQ) \
+    SCPI_COMMAND("[SOURce#]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]", scpi_source_CurrentLimit) \
+    SCPI_COMMAND("[SOURce#]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]?", scpi_source_CurrentLimitQ) \
+    SCPI_COMMAND("[SOURce#]:VOLTage:LIMit[:POSitive][:IMMediate][:AMPLitude]", scpi_source_VoltageLimit) \
+    SCPI_COMMAND("[SOURce#]:VOLTage:LIMit[:POSitive][:IMMediate][:AMPLitude]?", scpi_source_VoltageLimitQ) \
+    SCPI_COMMAND("[SOURce#]:POWer:LIMit", scpi_source_PowerLimit) \
+    SCPI_COMMAND("[SOURce#]:POWer:LIMit?", scpi_source_PowerLimitQ) \
 

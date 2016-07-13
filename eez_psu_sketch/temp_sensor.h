@@ -18,20 +18,6 @@
  
 #pragma once
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-
-#define TEMP_SENSORS \
-	TEMP_SENSOR(MAIN, OPTION_MAIN_TEMP_SENSOR, TEMP_ANALOG, MAIN_TEMP_SENSOR_CALIBRATION_POINTS, -1, QUES_TEMP)
-
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-
-#define TEMP_SENSORS \
-	TEMP_SENSOR(MAIN, OPTION_MAIN_TEMP_SENSOR, TEMP_ANALOG, MAIN_TEMP_SENSOR_CALIBRATION_POINTS, -1, QUES_TEMP) \
-	TEMP_SENSOR(CH1, CH_NUM >= 1, NTC1, CH1_TEMP_SENSOR_CALIBRATION_POINTS, 0, QUES_ISUM_TEMP) \
-	TEMP_SENSOR(CH2, CH_NUM >= 2, NTC2, CH2_TEMP_SENSOR_CALIBRATION_POINTS, 1, QUES_ISUM_TEMP)
-
-#endif
-
 namespace eez {
 namespace psu {
 namespace temp_sensor {
@@ -47,7 +33,7 @@ static const int MAX_NUM_TEMP_SENSORS = 5;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) NAME,
+#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) NAME,
 enum Type {
 	TEMP_SENSORS
 	NUM_TEMP_SENSORS
@@ -58,7 +44,7 @@ enum Type {
 
 class TempSensor {
 public:
-	TempSensor(const char *name, int installed, int pin, float p1_volt, float p1_cels, float p2_volt, float p2_cels, int ch_num, int ques_bit);
+	TempSensor(const char *name, int installed, int pin, float p1_volt, float p1_cels, float p2_volt, float p2_cels, int ch_num, int ques_bit, int scpi_error);
 
 	psu::TestResult test_result;
 	const char *name;
@@ -70,6 +56,7 @@ public:
 	float p2_cels;
 	int ch_num;
 	int ques_bit;
+	int scpi_error;
 
 	bool init();
 	bool test();

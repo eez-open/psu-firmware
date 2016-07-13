@@ -32,7 +32,7 @@ static scpi_choice_def_t channel_choice[] = {
     SCPI_CHOICE_LIST_END /* termination of option list */
 };
 
-#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT) { #NAME, temp_sensor::NAME },
+#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) { #NAME, temp_sensor::NAME },
 
 scpi_choice_def_t temp_sensor_choice[] = {
 	TEMP_SENSORS
@@ -183,7 +183,6 @@ bool get_duration_param(scpi_t *context, float &value, float min, float max, flo
 
     return get_duration_from_param(context, param, value, min, max, def);
 }
-
 
 bool get_voltage_from_param(scpi_t *context, const scpi_number_t &param, float &value, const Channel *channel, const Channel::Value *cv) {
     if (param.special) {
@@ -391,6 +390,129 @@ bool get_duration_from_param(scpi_t *context, const scpi_number_t &param, float 
 
         value = (float)param.value;
         if (value < min || value > max) {
+            SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool get_voltage_limit_param(scpi_t *context, float &value, const Channel *channel, const Channel::Value *cv) {
+    scpi_number_t param;
+    if (!SCPI_ParamNumber(context, scpi_special_numbers_def, &param, true)) {
+        return false;
+    }
+
+    return get_voltage_limit_from_param(context, param, value, channel, cv);
+}
+
+bool get_current_limit_param(scpi_t *context, float &value, const Channel *channel, const Channel::Value *cv) {
+    scpi_number_t param;
+    if (!SCPI_ParamNumber(context, scpi_special_numbers_def, &param, true)) {
+        return false;
+    }
+
+    return get_current_limit_from_param(context, param, value, channel, cv);
+}
+
+bool get_power_limit_param(scpi_t *context, float &value, const Channel *channel, const Channel::Value *cv) {
+    scpi_number_t param;
+    if (!SCPI_ParamNumber(context, scpi_special_numbers_def, &param, true)) {
+        return false;
+    }
+
+    return get_power_limit_from_param(context, param, value, channel, cv);
+}
+
+bool get_voltage_limit_from_param(scpi_t *context, const scpi_number_t &param, float &value, const Channel *channel, const Channel::Value *cv) {
+    if (param.special) {
+		if (channel) {
+			if (param.tag == SCPI_NUM_MAX) {
+				value = channel->getMaxVoltageLimit();
+			}
+			else if (param.tag == SCPI_NUM_MIN) {
+				value = channel->U_MIN;
+			}
+			else if (param.tag == SCPI_NUM_DEF) {
+				value = channel->getMaxVoltageLimit();
+			}
+			else {
+				SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+				return false;
+			}
+		} else {
+			SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+			return false;
+		}
+    }
+    else {
+        if (param.unit != SCPI_UNIT_NONE && param.unit != SCPI_UNIT_VOLT) {
+            SCPI_ErrorPush(context, SCPI_ERROR_INVALID_SUFFIX);
+            return false;
+        }
+
+        value = (float)param.value;
+		
+		if (channel) {
+			if (value < channel->U_MIN || value > channel->getMaxVoltageLimit()) {
+				SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
+				return false;
+			}
+		}
+    }
+
+    return true;
+}
+
+bool get_current_limit_from_param(scpi_t *context, const scpi_number_t &param, float &value, const Channel *channel, const Channel::Value *cv) {
+    if (param.special) {
+        if (param.tag == SCPI_NUM_MAX) {
+            value = channel->getMaxCurrentLimit();
+        }
+        else if (param.tag == SCPI_NUM_MIN) {
+            value = channel->I_MIN;
+        }
+        else if (param.tag == SCPI_NUM_DEF) {
+            value = channel->getMaxCurrentLimit();
+        }
+    }
+    else {
+        if (param.unit != SCPI_UNIT_NONE && param.unit != SCPI_UNIT_AMPER) {
+            SCPI_ErrorPush(context, SCPI_ERROR_INVALID_SUFFIX);
+            return false;
+        }
+
+        value = (float)param.value;
+        if (value < channel->I_MIN || value > channel->getMaxCurrentLimit()) {
+            SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool get_power_limit_from_param(scpi_t *context, const scpi_number_t &param, float &value, const Channel *channel, const Channel::Value *cv) {
+    if (param.special) {
+        if (param.tag == SCPI_NUM_MAX) {
+            value = channel->getMaxPowerLimit();
+        }
+        else if (param.tag == SCPI_NUM_MIN) {
+            value = 0;
+        }
+        else if (param.tag == SCPI_NUM_DEF) {
+            value = channel->getMaxPowerLimit();
+        }
+    }
+    else {
+        if (param.unit != SCPI_UNIT_NONE) {
+            SCPI_ErrorPush(context, SCPI_ERROR_INVALID_SUFFIX);
+            return false;
+        }
+
+        value = (float)param.value;
+        if (value < 0 || value > channel->getMaxPowerLimit()) {
             SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
             return false;
         }

@@ -146,8 +146,9 @@ public:
         float mon_dac;
         float mon;
         float step;
+		float limit;
 
-        void init(float def_step);
+        void init(float def_step, float def_limit);
     };
 
     /// Runtime protection binary flags (alarmed, tripped)
@@ -271,6 +272,8 @@ public:
 
     Value u;
     Value i;
+
+	float p_limit;
 
     CalibrationConfiguration cal_conf;
     ChannelProtectionConfiguration prot_conf;
@@ -427,6 +430,33 @@ public:
 
     /// Returns features present (check ChannelFeatures) in board revision of this channel.
     uint16_t getFeatures();
+
+	/// Returns currently set voltage limit
+	float getVoltageLimit() const;
+
+	/// Returns max. voltage limit
+	float getMaxVoltageLimit() const;
+
+	/// Change voltage limit, it will adjust U_SET if necessary.
+	void setVoltageLimit(float limit);
+
+	/// Returns currently set current limit
+	float getCurrentLimit() const;
+
+	/// Returns max. current limit
+	float getMaxCurrentLimit() const;
+
+	/// Change current limit, it will adjust I_SET if necessary.
+	void setCurrentLimit(float limit);
+
+	/// Returns currently set power limit
+	float getPowerLimit() const;
+
+	/// Returns max. power limit
+	float getMaxPowerLimit() const;
+
+	/// Change power limit, it will adjust U_SET or I_SET if necessary.
+	void setPowerLimit(float limit);
 
 private:
     bool delayed_dp_off;

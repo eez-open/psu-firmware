@@ -112,13 +112,19 @@ void getButtonLabels(const Cursor &cursor, uint8_t id, const Value **labels, int
 
 bool set(const Cursor &cursor, uint8_t id, Value value) {
     if (id == DATA_ID_VOLT) {
-        if (value.getFloat() * Channel::get(cursor.iChannel).i.set > Channel::get(cursor.iChannel).PTOT) {
+		if (value.getFloat() > Channel::get(cursor.iChannel).getVoltageLimit()) {
+			return false;
+		}
+        if (value.getFloat() * Channel::get(cursor.iChannel).i.set > Channel::get(cursor.iChannel).getPowerLimit()) {
             return false;
         }
         Channel::get(cursor.iChannel).setVoltage(value.getFloat());
         return true;
     } else if (id == DATA_ID_CURR) {
-        if (value.getFloat() * Channel::get(cursor.iChannel).u.set > Channel::get(cursor.iChannel).PTOT) {
+		if (value.getFloat() > Channel::get(cursor.iChannel).getCurrentLimit()) {
+			return false;
+		}
+        if (value.getFloat() * Channel::get(cursor.iChannel).u.set > Channel::get(cursor.iChannel).getPowerLimit()) {
             return false;
         }
         Channel::get(cursor.iChannel).setCurrent(value.getFloat());

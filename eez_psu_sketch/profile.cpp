@@ -53,9 +53,13 @@ void recallChannelsFromProfile(Parameters *profile) {
 
         Channel::get(i).u.set = profile->channels[i].u_set;
         Channel::get(i).u.step = profile->channels[i].u_step;
+		Channel::get(i).u.limit = profile->channels[i].u_limit;
 
         Channel::get(i).i.set = profile->channels[i].i_set;
         Channel::get(i).i.step = profile->channels[i].i_step;
+		Channel::get(i).i.limit = profile->channels[i].i_limit;
+
+		Channel::get(i).p_limit = profile->channels[i].p_limit;
 
 #ifdef EEZ_PSU_SIMULATOR
         Channel::get(i).simulator.load_enabled = profile->channels[i].load_enabled;
@@ -195,9 +199,13 @@ bool saveAtLocation(int location) {
 
             profile.channels[i].u_set = Channel::get(i).u.set;
             profile.channels[i].u_step = Channel::get(i).u.step;
+			profile.channels[i].u_limit = Channel::get(i).u.limit;
 
             profile.channels[i].i_set = Channel::get(i).i.set;
             profile.channels[i].i_step = Channel::get(i).i.step;
+			profile.channels[i].i_limit = Channel::get(i).i.limit;
+
+			profile.channels[i].p_limit = Channel::get(i).p_limit;
 
             profile.channels[i].u_delay = Channel::get(i).prot_conf.u_delay;
             profile.channels[i].u_level = Channel::get(i).prot_conf.u_level;
