@@ -20,16 +20,6 @@
 #include "temperature.h"
 #include "scpi_psu.h"
 
-#define FAN_MIN_TEMP 45 // Fan switch-on temperature (in oC)
-#define FAN_MAX_TEMP 75 // Max. allowed temperature (in oC), if it stays more then FAN_MAX_TEMP_DELAY seconds then main power will be turned off.
-#define FAN_MIN_PWM 12 //  PWM value for min. fan speed (12) 
-#define FAN_MAX_PWM 255 // PWM value for max. fan speed (255)
-
-#define FAN_ERR_CURRENT 1 // Max. allowed output current (in ampers) if fan or temp. sensor is invalid.
-#define FAN_NOMINAL_RPM 4500 // Nominal fan RPM (for PWM=255).
-#define FAN_MAX_TEMP_DELAY 30 // Number of seconds after which main power will be turned off.
-#define FAN_MAX_TEMP_DROP 15 // Temperature drop (in oC) below FAN_MAX_TEMP to turn again main power on. Premature attempt to turn power on will report error -200.
-
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
 
 #include "fan.h"
@@ -186,26 +176,11 @@ bool test() {
 void tick(unsigned long tick_usec) {
 	if (test_result != psu::TEST_OK) return;
 
-	// adjust fan speed
+	// adjust fan speed depending on max. channel temperature
 	if (tick_usec - fan_speed_last_adjusted_tick >= FAN_SPEED_ADJUSTMENT_INTERVAL * 1000L) {
-		float maxTemperature = FAN_MIN_TEMP - 1;
-
-		for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
-			temp_sensor::TempSensor &sensor = temp_sensor::sensors[i];
-			if (sensor.ch_num >= 0) {
-				if (sensor.test_result == psu::TEST_OK) {
-					temperature::TempSensorTemperature &sensorTemperature = temperature::sensors[i];
-					if (sensorTemperature.temperature > maxTemperature) {
-						maxTemperature = sensorTemperature.temperature;
-					}
-				} else if (sensor.test_result == psu::TEST_FAILED) {
-					psu::setCurrentMaxLimit(FAN_ERR_CURRENT);
-				}
-			}
-		}
-
-		if (maxTemperature >= FAN_MIN_TEMP) {
-			float fanSpeed = util::remap(maxTemperature, FAN_MIN_TEMP, FAN_MIN_PWM, FAN_MAX_TEMP, FAN_MAX_PWM);
+		float max_channel_temperature = temperature::getMaxChannelTemperature();
+		if (max_channel_temperature >= FAN_MIN_TEMP) {
+			float fanSpeed = util::remap(max_channel_temperature, FAN_MIN_TEMP, FAN_MIN_PWM, FAN_MAX_TEMP, FAN_MAX_PWM);
 			fan_speed_pwm = (int)util::clamp(fanSpeed, FAN_MIN_PWM, FAN_MAX_PWM);
 			analogWrite(FAN_PWM, fan_speed_pwm);
 		} else if (fan_speed_pwm != 0) {

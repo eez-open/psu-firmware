@@ -188,9 +188,7 @@ void boot() {
 bool powerUp() {
     if (g_power_is_up) return true;
 
-#if OPTION_MAIN_TEMP_SENSOR
-	if (temperature::sensors[temp_sensor::MAIN].isTripped()) return false;
-#endif
+	if (!temperature::isAllowedToPowerUp()) return false;
 
 #if OPTION_DISPLAY
     gui::showWelcomePage();

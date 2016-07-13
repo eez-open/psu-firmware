@@ -41,6 +41,8 @@ bool test();
 void tick(unsigned long tick_usec);
 
 bool isChannelTripped(Channel *channel);
+float getMaxChannelTemperature();
+bool isAllowedToPowerUp();
 
 class TempSensorTemperature {
 public:

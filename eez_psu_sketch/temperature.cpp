@@ -39,6 +39,9 @@ TempSensorTemperature sensors[temp_sensor::NUM_TEMP_SENSORS] = {
 ////////////////////////////////////////////////////////////////////////////////
 
 static unsigned long last_measured_tick;
+static float last_max_channel_temperature;
+static unsigned long max_temp_start_tick;
+static float force_power_down = false;
 
 bool init() {
 	return test();
@@ -61,6 +64,40 @@ void tick(unsigned long tick_usec) {
 		for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
 			sensors[i].tick(tick_usec);
 		}
+
+		// find max. channel temperature
+		float max_channel_temperature = FAN_MIN_TEMP - 1;
+
+		for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+			temp_sensor::TempSensor &sensor = temp_sensor::sensors[i];
+			if (sensor.ch_num >= 0) {
+				if (sensor.test_result == psu::TEST_OK) {
+					temperature::TempSensorTemperature &sensorTemperature = temperature::sensors[i];
+					if (sensorTemperature.temperature > max_channel_temperature) {
+						max_channel_temperature = sensorTemperature.temperature;
+					}
+				} else if (sensor.test_result == psu::TEST_FAILED) {
+					psu::setCurrentMaxLimit(FAN_ERR_CURRENT);
+				}
+			}
+		}
+
+		// check if max_channel_temperature is too high
+		if (max_channel_temperature > FAN_MAX_TEMP) {
+			if (last_max_channel_temperature <= FAN_MAX_TEMP) {
+				max_temp_start_tick = tick_usec;
+			}
+
+			if (tick_usec - max_temp_start_tick > FAN_MAX_TEMP_DELAY * 1000000L) {
+				// turn off power
+				force_power_down = true;
+				psu::changePowerState(false);
+			}
+		} else if (max_channel_temperature <= FAN_MAX_TEMP - FAN_MAX_TEMP_DROP) {
+			force_power_down = false;
+		}
+
+		last_max_channel_temperature = max_channel_temperature;
 	}
 }
 
@@ -72,6 +109,18 @@ bool isChannelTripped(Channel *channel) {
 	}
 
 	return false;
+}
+
+float getMaxChannelTemperature() {
+	return last_max_channel_temperature;
+}
+
+bool isAllowedToPowerUp() {
+#if OPTION_MAIN_TEMP_SENSOR
+	if (temperature::sensors[temp_sensor::MAIN].isTripped()) return false;
+#endif
+
+	return force_power_down;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
