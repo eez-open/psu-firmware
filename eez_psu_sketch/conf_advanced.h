@@ -211,3 +211,9 @@
 
 /// Temperature drop (in oC) below FAN_MAX_TEMP to turn again main power on. Premature attempt to turn power on will report error -200.
 #define FAN_MAX_TEMP_DROP 15 
+
+/// Interval (in milliseconds) at which watchdog impulse will be sent
+#define WATCHDOG_INTERVAL 1000
+
+/// Interval (in minutes) at which "on time" will be written to EEPROM
+#define WRITE_ONTIME_INTERVAL 10

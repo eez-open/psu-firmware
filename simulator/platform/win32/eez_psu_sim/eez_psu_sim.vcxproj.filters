@@ -349,6 +349,15 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\fan.h">
       <Filter>board</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\watchdog.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\timer.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\ontime.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -585,6 +594,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\fan.cpp">
       <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\watchdog.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\timer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\ontime.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -41,7 +41,7 @@ TempSensorTemperature sensors[temp_sensor::NUM_TEMP_SENSORS] = {
 static unsigned long last_measured_tick;
 static float last_max_channel_temperature;
 static unsigned long max_temp_start_tick;
-static float force_power_down = false;
+static bool force_power_down = false;
 
 bool init() {
 	return test();
@@ -120,7 +120,7 @@ bool isAllowedToPowerUp() {
 	if (temperature::sensors[temp_sensor::MAIN].isTripped()) return false;
 #endif
 
-	return force_power_down;
+	return !force_power_down;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

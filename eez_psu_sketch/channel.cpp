@@ -141,7 +141,8 @@ Channel::Channel(
     SOA_VIN(SOA_VIN_), SOA_PREG_CURR(SOA_PREG_CURR_), SOA_POSTREG_PTOT(SOA_POSTREG_PTOT_), PTOT(PTOT_),
     ioexp(*this),
     adc(*this),
-    dac(*this)
+    dac(*this),
+	onTimeCounter(index_)
 {
 }
 
@@ -227,6 +228,7 @@ bool Channel::init() {
     result &= ioexp.init();
     result &= adc.init();
     result &= dac.init();
+	onTimeCounter.init();
 
     profile::enableSave(last_save_enabled);
 
@@ -387,12 +389,20 @@ bool Channel::isOk() {
 void Channel::tick(unsigned long tick_usec) {
     ioexp.tick(tick_usec);
     adc.tick(tick_usec);
+	onTimeCounter.tick(tick_usec);
 
     // turn off DP after delay
     if (delayed_dp_off && tick_usec - delayed_dp_off_start >= DP_OFF_DELAY_PERIOD * 1000000L) {
         delayed_dp_off = false;
         doDpEnable(false);
     }
+
+	// If channel output is off then test PWRGOOD here, otherwise it is tested in Channel::event method.
+#if !CONF_SKIP_PWRGOOD_TEST
+	if (!isOutputEnabled()) {
+		testPwrgood(ioexp.read_gpio());
+	}
+#endif
 }
 
 float Channel::remapAdcDataToVoltage(int16_t adc_data) {
@@ -537,13 +547,7 @@ void Channel::event(uint8_t gpio, int16_t adc_data) {
     if (!psu::isPowerUp()) return;
 
 #if !CONF_SKIP_PWRGOOD_TEST
-    if (!(gpio & (1 << IOExpander::IO_BIT_IN_PWRGOOD))) {
-        DebugTraceF("Ch%d PWRGOOD bit changed to 0", index);
-        flags.power_ok = 0;
-        psu::generateError(SCPI_ERROR_CHANNEL_FAULT_DETECTED);
-        psu::powerDownBySensor();
-        return;
-    }
+	testPwrgood(gpio);
 #endif
 
     adcDataIsReady(adc_data);
@@ -585,6 +589,12 @@ void Channel::doOutputEnable(bool enable) {
     }
 
     flags.output_enabled = enable;
+
+	if (enable) {
+		onTimeCounter.start();
+	} else {
+		onTimeCounter.stop();
+	}
 
     ioexp.change_bit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, enable);
 
@@ -891,6 +901,18 @@ void Channel::setPowerLimit(float limit) {
 		setCurrent(p_limit / u.set);
 	}
 }
+
+#if !CONF_SKIP_PWRGOOD_TEST
+void Channel::testPwrgood(uint8_t gpio) {
+    if (!(gpio & (1 << IOExpander::IO_BIT_IN_PWRGOOD))) {
+        DebugTraceF("Ch%d PWRGOOD bit changed to 0", index);
+        flags.power_ok = 0;
+        psu::generateError(SCPI_ERROR_CHANNEL_FAULT_DETECTED);
+        psu::powerDownBySensor();
+        return;
+    }
+}
+#endif
 
 }
 } // namespace eez::psu

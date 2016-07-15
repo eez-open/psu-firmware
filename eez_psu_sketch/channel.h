@@ -282,6 +282,8 @@ public:
     ProtectionValue ocp;
     ProtectionValue opp;
 
+	ontime::Counter onTimeCounter;
+
 #ifdef EEZ_PSU_SIMULATOR
     Simulator simulator;
 #endif // EEZ_PSU_SIMULATOR
@@ -480,6 +482,9 @@ private:
     bool doLowRippleEnable(bool enable, bool callIsAllowed = true);
     void doLowRippleAutoEnable(bool enable);
     void doDpEnable(bool enable);
+#if !CONF_SKIP_PWRGOOD_TEST
+	void testPwrgood(uint8_t gpio);
+#endif
 };
 
 }

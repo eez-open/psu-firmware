@@ -36,6 +36,7 @@
 #include "gui.h"
 #endif
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#include "watchdog.h"
 #include "fan.h"
 #endif
 
@@ -56,6 +57,8 @@ static bool g_is_time_critical_mode = false;
 
 static float g_current_max_limit = NAN;
 
+ontime::Counter g_powerOnTimeCounter(ontime::ON_TIME_COUNTER_POWER);
+
 ////////////////////////////////////////////////////////////////////////////////
 
 static bool psu_reset(bool power_on);
@@ -69,12 +72,15 @@ void boot() {
     eez_psu_init();
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+	watchdog::init();
 	fan::test_start();
 #endif
 
     bp::init();
     serial::init();
     success &= eeprom::init();
+
+	g_powerOnTimeCounter.init();
 
     persist_conf::loadDevice(); // loads global configuration parameters
 
@@ -218,6 +224,7 @@ bool powerUp() {
 
     // play power up tune on success
     if (success) {
+		g_powerOnTimeCounter.start();
         sound::playPowerUp();
     }
 
@@ -246,6 +253,7 @@ void powerDown() {
 
     g_power_is_up = false;
 
+	g_powerOnTimeCounter.stop();
     sound::playPowerDown();
 }
 
@@ -429,6 +437,7 @@ void tick() {
     debug::tick(tick_usec);
 #endif
 
+	watchdog::tick(tick_usec);
     temperature::tick(tick_usec);
 	fan::tick(tick_usec);
 
@@ -440,6 +449,9 @@ void tick() {
     ethernet::tick(tick_usec);
     sound::tick(tick_usec);
     profile::tick(tick_usec);
+
+	g_powerOnTimeCounter.tick(tick_usec);
+
 #if OPTION_DISPLAY
     gui::tick(tick_usec);
 #endif

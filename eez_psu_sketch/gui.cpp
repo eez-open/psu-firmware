@@ -545,7 +545,7 @@ void drawRectangle(int x, int y, int w, int h, const Style *style, bool inverse)
 ////////////////////////////////////////////////////////////////////////////////
 
 int getActiveStyleId(const Widget *widget) {
-    return getWidgetStyleId(widget) == STYLE_ID_EDIT_VALUE_SMALL ? STYLE_ID_EDIT_VALUE_ACTIVE_SMALL : STYLE_ID_EDIT_VALUE_ACTIVE;
+    return STYLE_ID_EDIT_VALUE_ACTIVE_S_RIGHT;
 }
 
 bool draw_display_data_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {

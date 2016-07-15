@@ -90,6 +90,8 @@ public:
 
     void tick(unsigned long tick_usec);
 
+	uint8_t read_gpio();
+
     bool test_bit(int io_bit);
     void change_bit(int io_bit, bool set);
 

@@ -33,7 +33,7 @@ void action_toggle_channel() {
 }
 
 void action_channel_settings() {
-    showPage(PAGE_ID_CHANNEL_SETTINGS);
+
 }
 
 void action_show_main_page() {

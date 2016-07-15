@@ -51,6 +51,7 @@ static const uint16_t PERSIST_CONF_PROFILE_BLOCK_SIZE = 1024;
 ////////////////////////////////////////////////////////////////////////////////
 
 DeviceConfiguration dev_conf;
+uint8_t last_total_ontime_address_index;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -224,6 +225,47 @@ bool loadProfile(int location, profile::Parameters *profile) {
 
 bool saveProfile(int location, profile::Parameters *profile) {
     return save((BlockHeader *)profile, sizeof(profile::Parameters), get_profile_address(location), PROFILE_VERSION);
+}
+
+uint32_t readTotalOnTime(int type) {
+	uint32_t buffer[4];
+
+	eeprom::read((uint8_t *)buffer, sizeof(buffer),
+		eeprom::EEPROM_ONTIME_START_ADDRESS +
+		type * 4 * sizeof(uint32_t));
+
+	if (buffer[0] == buffer[1]) {
+		if (buffer[2] == buffer[3]) {
+			if (buffer[2] > buffer[0]) {
+				last_total_ontime_address_index = 1;
+				return buffer[2];
+			}
+		}
+		last_total_ontime_address_index = 0;
+		return buffer[0];
+	}
+	
+	if (buffer[2] == buffer[3]) {
+		last_total_ontime_address_index = 1;
+		return buffer[2];
+	}
+
+	return 0;
+}
+
+bool writeTotalOnTime(int type, uint32_t time) {
+	uint32_t buffer[2];
+
+	buffer[0] = time;
+	buffer[1] = time;
+
+	if (last_total_ontime_address_index == 0) last_total_ontime_address_index = 1;
+	else last_total_ontime_address_index = 0;
+
+	return eeprom::write((uint8_t *)buffer, sizeof(buffer),
+		eeprom::EEPROM_ONTIME_START_ADDRESS +
+		type * 4 * sizeof(uint32_t) +
+		last_total_ontime_address_index * 2 * sizeof(uint32_t));
 }
 
 }

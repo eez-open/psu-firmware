@@ -138,8 +138,12 @@ bool IOExpander::test() {
 void IOExpander::tick(unsigned long tick_usec) {
 }
 
+uint8_t IOExpander::read_gpio() {
+	return reg_read(REG_GPIO);
+}
+
 bool IOExpander::test_bit(int io_bit) {
-    uint8_t value = reg_read(REG_GPIO);
+    uint8_t value = read_gpio();
     return value & (1 << io_bit) ? true : false;
 }
 

@@ -45,6 +45,8 @@
 
 #include <scpi-parser.h>
 
+#include "ontime.h"
+
 /// Namespace for the everything from the EEZ.
 namespace eez {
 /// PSU firmware.
@@ -81,12 +83,14 @@ const char *getCpuModel();
 const char *getCpuType();
 const char *getCpuEthernetType();
 
-extern void enterTimeCriticalMode();
-extern bool isTimeCriticalMode();
-extern void leaveTimeCriticalMode();
+void enterTimeCriticalMode();
+bool isTimeCriticalMode();
+void leaveTimeCriticalMode();
 
-extern void setCurrentMaxLimit(float value);
-extern float getCurrentMaxLimit();
+void setCurrentMaxLimit(float value);
+float getCurrentMaxLimit();
+
+extern ontime::Counter g_powerOnTimeCounter;
 
 }
 } // namespace eez::psu

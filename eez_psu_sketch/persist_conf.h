@@ -113,6 +113,9 @@ bool saveChannelCalibration(Channel *channel);
 bool loadProfile(int location, profile::Parameters *profile);
 bool saveProfile(int location, profile::Parameters *profile);
 
+uint32_t readTotalOnTime(int type);
+bool writeTotalOnTime(int type, uint32_t time);
+
 }
 }
 } // namespace eez::psu::persist_conf
