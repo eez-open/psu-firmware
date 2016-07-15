@@ -437,9 +437,12 @@ void tick() {
     debug::tick(tick_usec);
 #endif
 
-	watchdog::tick(tick_usec);
     temperature::tick(tick_usec);
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+	watchdog::tick(tick_usec);
 	fan::tick(tick_usec);
+#endif
 
     for (int i = 0; i < CH_NUM; ++i) {
         Channel::get(i).tick(tick_usec);

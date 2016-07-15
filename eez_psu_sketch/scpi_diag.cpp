@@ -284,7 +284,7 @@ scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_diag_InformationFanQ(scpi_t * context) {
-#if OPTION_FAN
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6 && OPTION_FAN
 	SCPI_ResultInt(context, fan::rpm);
 #else
 	SCPI_ResultInt(context, -1);

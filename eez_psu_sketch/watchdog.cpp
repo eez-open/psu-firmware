@@ -20,6 +20,8 @@
 #include "watchdog.h"
 #include "timer.h"
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+
 namespace eez {
 namespace psu {
 namespace watchdog {
@@ -40,3 +42,5 @@ void tick(unsigned long tick_usec) {
 }
 }
 } // namespace eez::psu::watchdog
+
+#endif
