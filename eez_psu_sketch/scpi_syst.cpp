@@ -401,7 +401,7 @@ scpi_result_t scpi_syst_ChannelInformationOnTimeTotalQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    SCPI_ResultUInt32(context, channel->onTimeCounter.getTotalTime());
+    outputOnTime(context, channel->onTimeCounter.getTotalTime());
 
     return SCPI_RES_OK;
 }
@@ -412,7 +412,7 @@ scpi_result_t scpi_syst_ChannelInformationOnTimeLastQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    SCPI_ResultUInt32(context, channel->onTimeCounter.getLastTime());
+    outputOnTime(context, channel->onTimeCounter.getLastTime());
 
     return SCPI_RES_OK;
 }
@@ -439,12 +439,12 @@ scpi_result_t scpi_syst_CpuInformationTypeQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_syst_CpuInformationOnTimeTotalQ(scpi_t * context) {
-	SCPI_ResultUInt32(context, g_powerOnTimeCounter.getTotalTime());
+	outputOnTime(context, g_powerOnTimeCounter.getTotalTime());
     return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_syst_CpuInformationOnTimeLastQ(scpi_t * context) {
-	SCPI_ResultUInt32(context, g_powerOnTimeCounter.getLastTime());
+	outputOnTime(context, g_powerOnTimeCounter.getLastTime());
     return SCPI_RES_OK;
 }
 

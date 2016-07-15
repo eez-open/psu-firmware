@@ -55,6 +55,8 @@ bool get_power_limit_from_param(scpi_t *context, const scpi_number_t &param, flo
 scpi_result_t result_float(scpi_t * context, float value);
 bool get_profile_location_param(scpi_t * context, int &location, bool all_locations = false);
 
+void outputOnTime(scpi_t* context, uint32_t time);
+
 }
 }
 } // namespace eez::psu::scpi
