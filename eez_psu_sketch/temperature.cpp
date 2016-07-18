@@ -66,7 +66,7 @@ void tick(unsigned long tick_usec) {
 		}
 
 		// find max. channel temperature
-		float max_channel_temperature = FAN_MIN_TEMP - 1;
+		float max_channel_temperature = FLT_MIN;
 
 		for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
 			temp_sensor::TempSensor &sensor = temp_sensor::sensors[i];

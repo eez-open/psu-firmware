@@ -190,6 +190,8 @@ void tick(unsigned long tick_usec) {
 			DebugTrace("FAN control - fan_speed_pwm set to zero");
 			analogWrite(FAN_PWM, fan_speed_pwm);
 		}
+
+		fan_speed_last_adjusted_tick = tick_usec;
 	}
 
 	// measure fan speed
