@@ -184,6 +184,7 @@ void tick(unsigned long tick_usec) {
 			float fanSpeed = util::remap(max_channel_temperature, FAN_MIN_TEMP, FAN_MIN_PWM, FAN_MAX_TEMP, FAN_MAX_PWM);
 			fan_speed_pwm = (int)util::clamp(fanSpeed, FAN_MIN_PWM, FAN_MAX_PWM);
 			DebugTraceF("FAN control - fan_speed_pwm=%d", fan_speed_pwm);
+			fan_speed_last_measured_tick = tick_usec;
 			analogWrite(FAN_PWM, fan_speed_pwm);
 		} else if (fan_speed_pwm != 0) {
 			fan_speed_pwm = 0;
@@ -196,16 +197,13 @@ void tick(unsigned long tick_usec) {
 
 	// measure fan speed
 	if (fan_speed_pwm != 0 || rpm != 0) {
-		if (tick_usec - fan_speed_last_measured_tick >= TEMP_SENSOR_READ_EVERY_MS * 1000L) {
+		if (tick_usec - fan_speed_last_measured_tick >= FAN_SPEED_MEASURMENT_INTERVAL * 1000L) {
 			fan_speed_last_measured_tick = tick_usec;
 			start_rpm_measure();
 		} else {
-			if (tick_usec - fan_speed_last_measured_tick >= FAN_SPEED_MEASURMENT_INTERVAL * 1000L) {
-				finish_rpm_measure();
-			} else if (tick_usec - fan_speed_last_measured_tick >= 50 * 1000L) {
+			if (tick_usec - fan_speed_last_measured_tick >= 50 * 1000L) {
 				if (rpm_measure_state != RPM_MEASURE_STATE_FINISHED) {
 					finish_rpm_measure();
-
 					if (fan_speed_pwm != 0) {
 						test_result = psu::TEST_FAILED;
 						psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
