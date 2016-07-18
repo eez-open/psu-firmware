@@ -79,6 +79,7 @@ void tick(unsigned long tick_usec) {
 						max_channel_temperature = sensorTemperature.temperature;
 					}
 				} else if (sensor.test_result == psu::TEST_FAILED) {
+					// set channel current max. limit to FAN_ERR_CURRENT if sensor is faulty
 					Channel::get(sensor.ch_num - 1).setCurrentMaxLimit(FAN_ERR_CURRENT);
 				}
 			}

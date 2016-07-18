@@ -27,6 +27,7 @@ void powerUp() {
     digitalWrite(PWR_SSTART, HIGH);
     delay(700);
 
+	DebugTrace("PWR_DIRECT -> HIGH");
     digitalWrite(PWR_DIRECT, HIGH);
     delay(100);
 
@@ -34,6 +35,7 @@ void powerUp() {
 }
 
 void powerDown() {
+	DebugTrace("PWR_DIRECT -> LOW");
     digitalWrite(PWR_DIRECT, LOW);
 }
 
