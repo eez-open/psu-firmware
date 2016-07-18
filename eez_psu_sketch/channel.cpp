@@ -308,6 +308,7 @@ void Channel::reset() {
     u.init(U_DEF_STEP, U_MAX);
     i.init(I_DEF_STEP, I_MAX);
 
+	i_max_limit = NAN;
 	p_limit = PTOT;
 }
 
@@ -856,7 +857,7 @@ float Channel::getVoltageLimit() const {
 	return u.limit;
 }
 
-float Channel::getMaxVoltageLimit() const {
+float Channel::getVoltageMaxLimit() const {
 	return U_MAX;
 }
 
@@ -871,12 +872,22 @@ float Channel::getCurrentLimit() const {
 	return i.limit;
 }
 
-float Channel::getMaxCurrentLimit() const {
-	float psu_max_limit = psu::getCurrentMaxLimit();
-	if (psu_max_limit != NAN) {
-		return min(I_MAX, psu_max_limit);
+float Channel::getCurrentMaxLimit() const {
+	float limit = psu::getCurrentMaxLimit();
+	if (limit != NAN) {
+		return limit;
+	}
+	if (i_max_limit != NAN) {
+		return i_max_limit;
 	}
 	return I_MAX;
+}
+
+void Channel::setCurrentMaxLimit(float value) {
+	if (i_max_limit != value) {
+		i_max_limit = value;
+		setCurrentLimit(i_max_limit);
+	}
 }
 
 void Channel::setCurrentLimit(float limit) {
@@ -890,7 +901,7 @@ float Channel::getPowerLimit() const {
 	return p_limit;
 }
 
-float Channel::getMaxPowerLimit() const {
+float Channel::getPowerMaxLimit() const {
 	return PTOT;
 }
 

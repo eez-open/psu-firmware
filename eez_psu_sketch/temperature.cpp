@@ -79,7 +79,7 @@ void tick(unsigned long tick_usec) {
 						max_channel_temperature = sensorTemperature.temperature;
 					}
 				} else if (sensor.test_result == psu::TEST_FAILED) {
-					psu::setCurrentMaxLimit(FAN_ERR_CURRENT);
+					Channel::get(sensor.ch_num - 1).setCurrentMaxLimit(FAN_ERR_CURRENT);
 				}
 			}
 		}
@@ -133,9 +133,11 @@ TempSensorTemperature::TempSensorTemperature(int sensorIndex_)
 }
 
 void TempSensorTemperature::tick(unsigned long tick_usec) {
-	if (temp_sensor::sensors[sensorIndex].installed) {
+	if (temp_sensor::sensors[sensorIndex].installed && temp_sensor::sensors[sensorIndex].test_result == TEST_OK) {
 		temperature = temp_sensor::sensors[sensorIndex].read();
-		protection_check(tick_usec);
+		if (temp_sensor::sensors[sensorIndex].test_result == TEST_OK) {
+			protection_check(tick_usec);
+		}
 	}
 }
 

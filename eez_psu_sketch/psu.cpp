@@ -372,6 +372,8 @@ static bool psu_reset(bool power_on) {
         return true;
     }
 
+	setCurrentMaxLimit(NAN);
+
     return false;
 }
 
@@ -596,13 +598,15 @@ void leaveTimeCriticalMode() {
 }
 
 extern void setCurrentMaxLimit(float value) {
-	g_current_max_limit = value;
+	if (g_current_max_limit != value) {
+		g_current_max_limit = value;
 
-    for (int i = 0; i < CH_NUM; ++i) {
-		if (g_current_max_limit < Channel::get(i).getCurrentLimit()) {
-	        Channel::get(i).setCurrentLimit(g_current_max_limit);
+		for (int i = 0; i < CH_NUM; ++i) {
+			if (g_current_max_limit < Channel::get(i).getCurrentLimit()) {
+				Channel::get(i).setCurrentLimit(g_current_max_limit);
+			}
 		}
-    }
+	}
 }
 
 extern float getCurrentMaxLimit() {

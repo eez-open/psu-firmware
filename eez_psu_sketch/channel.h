@@ -273,6 +273,7 @@ public:
     Value u;
     Value i;
 
+	float i_max_limit;
 	float p_limit;
 
     CalibrationConfiguration cal_conf;
@@ -437,7 +438,7 @@ public:
 	float getVoltageLimit() const;
 
 	/// Returns max. voltage limit
-	float getMaxVoltageLimit() const;
+	float getVoltageMaxLimit() const;
 
 	/// Change voltage limit, it will adjust U_SET if necessary.
 	void setVoltageLimit(float limit);
@@ -446,7 +447,10 @@ public:
 	float getCurrentLimit() const;
 
 	/// Returns max. current limit
-	float getMaxCurrentLimit() const;
+	float getCurrentMaxLimit() const;
+
+	/// Returns max. current limit
+	void setCurrentMaxLimit(float value);
 
 	/// Change current limit, it will adjust I_SET if necessary.
 	void setCurrentLimit(float limit);
@@ -455,7 +459,7 @@ public:
 	float getPowerLimit() const;
 
 	/// Returns max. power limit
-	float getMaxPowerLimit() const;
+	float getPowerMaxLimit() const;
 
 	/// Change power limit, it will adjust U_SET or I_SET if necessary.
 	void setPowerLimit(float limit);

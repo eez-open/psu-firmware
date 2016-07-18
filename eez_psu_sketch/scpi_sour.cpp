@@ -643,7 +643,7 @@ scpi_result_t scpi_source_CurrentLimitQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, channel->getCurrentLimit(), 0, channel->getMaxCurrentLimit(), channel->getMaxCurrentLimit());
+    return get_source_value(context, channel->getCurrentLimit(), 0, channel->getCurrentMaxLimit(), channel->getCurrentMaxLimit());
 }
 
 scpi_result_t scpi_source_VoltageLimit(scpi_t * context) {
@@ -668,7 +668,7 @@ scpi_result_t scpi_source_VoltageLimitQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, channel->getVoltageLimit(), 0, channel->getMaxVoltageLimit(), channel->getMaxVoltageLimit());
+    return get_source_value(context, channel->getVoltageLimit(), 0, channel->getVoltageMaxLimit(), channel->getVoltageMaxLimit());
 }
 
 scpi_result_t scpi_source_PowerLimit(scpi_t * context) {
@@ -693,7 +693,7 @@ scpi_result_t scpi_source_PowerLimitQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, channel->getPowerLimit(), 0, channel->getMaxPowerLimit(), channel->getMaxPowerLimit());
+    return get_source_value(context, channel->getPowerLimit(), 0, channel->getPowerMaxLimit(), channel->getPowerMaxLimit());
 }
 
 }
