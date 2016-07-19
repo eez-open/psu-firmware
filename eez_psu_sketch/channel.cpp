@@ -400,7 +400,7 @@ void Channel::tick(unsigned long tick_usec) {
 
 	// If channel output is off then test PWRGOOD here, otherwise it is tested in Channel::event method.
 #if !CONF_SKIP_PWRGOOD_TEST
-	if (!isOutputEnabled()) {
+	if (!isOutputEnabled() && psu::isPowerUp()) {
 		testPwrgood(ioexp.read_gpio());
 	}
 #endif
