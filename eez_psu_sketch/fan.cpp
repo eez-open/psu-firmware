@@ -168,6 +168,7 @@ bool test() {
 	if (test_result == psu::TEST_FAILED) {
 		psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
 		psu::setQuesBits(QUES_FAN, true);
+		psu::setCurrentMaxLimit(FAN_ERR_CURRENT);
 	}
 
 	return test_result != psu::TEST_FAILED;
