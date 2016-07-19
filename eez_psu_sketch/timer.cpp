@@ -29,10 +29,12 @@ Interval::Interval(unsigned long interval_msec)
 }
 
 bool Interval::test(unsigned long tick_usec) {
-	if (tick_usec > next_tick_usec) {
+	long diff = tick_usec - next_tick_usec;
+	if (diff > 0) {
 		do {
 			next_tick_usec += interval_usec;
-		} while (tick_usec > next_tick_usec);
+			diff = tick_usec - next_tick_usec;
+		} while (diff > 0);
 
 		return true;
 	}
