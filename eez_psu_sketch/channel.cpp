@@ -352,7 +352,12 @@ bool Channel::test() {
         doLowRippleEnable(false);
     }
 
-    ioexp.test();
+	for (int i = 0; i < 3; ++i) {
+		DebugTraceF("IOEXP test try #d", i);
+		if (ioexp.test()) {
+			break;
+		}
+	}
     adc.test();
     dac.test();
 
