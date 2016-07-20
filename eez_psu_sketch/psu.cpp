@@ -215,6 +215,7 @@ bool powerUp() {
     // turn power on
     board::powerUp();
     g_power_is_up = true;
+	g_powerOnTimeCounter.start();
 
     // turn off standby blue LED
     bp::switchStandby(false);
@@ -241,11 +242,10 @@ bool powerUp() {
 
     // play power up tune on success
     if (success) {
-		g_powerOnTimeCounter.start();
         sound::playPowerUp();
     }
 
-    return success;
+    return true;
 }
 
 void powerDown() {
