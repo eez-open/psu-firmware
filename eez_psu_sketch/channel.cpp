@@ -341,7 +341,7 @@ void Channel::clearProtectionConf() {
 }
 
 bool Channel::test() {
-	DebugTrace("Channel::test in");
+	DebugTrace("Channel::test in"
 
 	bool last_save_enabled = profile::enableSave(false);
 
@@ -359,7 +359,7 @@ bool Channel::test() {
 	DebugTrace("Channel::test t2");
 
 	for (int i = 0; i < 3; ++i) {
-		DebugTraceF("IOEXP test try #d", i);
+		DebugTraceF("IOEXP test try %d", i);
 		if (ioexp.test()) {
 			break;
 		}
