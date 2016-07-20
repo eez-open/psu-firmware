@@ -401,10 +401,6 @@ static bool test_channels() {
 static bool test_shield() {
     bool result = true;
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-	fan::test_start();
-#endif
-
 	result &= rtc::test();
     result &= datetime::test();
     result &= eeprom::test();
@@ -413,21 +409,28 @@ static bool test_shield() {
 
 	result &= test_channels();
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-	result &= fan::test();
-#endif
-
     return result;
 }
 
 bool test() {
     bool result = true;
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+	fan::test_start();
+#endif
+
     result &= test_shield();
     result &= test_channels();
-    if (!result) {
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+	result &= fan::test();
+#endif
+
+	if (!result) {
         sound::playBeep();
     }
-    return result;
+
+	return result;
 }
 
 void tick() {
