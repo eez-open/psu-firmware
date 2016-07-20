@@ -133,17 +133,11 @@ void test_start() {
 }
 
 bool test() {
-	DebugTrace("FAN TEST 0");
-
 	if (OPTION_FAN) {
-		DebugTrace("FAN TEST 1");
 		unsigned long time_since_test_start = millis() - test_start_time;
 		if (time_since_test_start < 250) {
-			DebugTrace("FAN TEST 2");
 			delay(300 - time_since_test_start);
 		}
-
-		DebugTrace("FAN TEST 3");
 
 #ifdef EEZ_PSU_SIMULATOR
 		int saved_fan_speed_pwm = fan_speed_pwm;
@@ -151,8 +145,6 @@ bool test() {
 #endif
 
 		start_rpm_measure();
-
-		DebugTrace("FAN TEST 4");
 
 #ifdef EEZ_PSU_SIMULATOR
 		fan_speed_pwm = saved_fan_speed_pwm;
@@ -162,10 +154,7 @@ bool test() {
 			delay(1);
 		}
 
-		DebugTrace("FAN TEST 5");
-
 		if (rpm_measure_state != RPM_MEASURE_STATE_FINISHED) {
-			DebugTrace("FAN TEST 6");
 			finish_rpm_measure();
 			test_result = psu::TEST_FAILED;
 		} else {
@@ -173,23 +162,16 @@ bool test() {
 			DebugTraceF("Fan RPM: %d", rpm);
 		}
 	} else {
-		DebugTrace("FAN TEST 7");
 		test_result = psu::TEST_SKIPPED;
 	}
 
-	DebugTrace("FAN TEST 8");
-
 	if (test_result == psu::TEST_FAILED) {
-		DebugTrace("FAN TEST 9");
 		psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
 		psu::setQuesBits(QUES_FAN, true);
 		psu::setCurrentMaxLimit(FAN_ERR_CURRENT);
 	} else {
-		DebugTrace("FAN TEST 10");
 		psu::setCurrentMaxLimit(NAN);
 	}
-
-	DebugTrace("FAN TEST 11");
 
 	return test_result != psu::TEST_FAILED;
 }
