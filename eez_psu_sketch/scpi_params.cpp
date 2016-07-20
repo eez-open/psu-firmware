@@ -550,7 +550,7 @@ void outputOnTime(scpi_t* context, uint32_t time) {
 	if (time >= 24 * 60) {
 		uint32_t d = time / (24 * 60);
 		time -= d * (24 * 60);
-		sprintf_P(text, PSTR("%dd %dh %dm"), d, int (time / 60), int(time % 60));
+		sprintf_P(text, PSTR("%dd %dh %dm"), int(d), int(time / 60), int(time % 60));
 	} else if (time >= 60) {
 		sprintf_P(text, PSTR("%dh %dm"), int(time / 60), int(time % 60));
 	} else {

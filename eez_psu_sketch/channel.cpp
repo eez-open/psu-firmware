@@ -225,7 +225,14 @@ bool Channel::init() {
 
     bool last_save_enabled = profile::enableSave(false);
 
-    result &= ioexp.init();
+	for (int i = 0; i < 3; ++i) {
+		DebugTraceF("ioexp.init %d", i);
+	    result &= ioexp.init();
+		if (result) {
+			break;
+		}
+	}
+
     result &= adc.init();
     result &= dac.init();
 	onTimeCounter.init();
@@ -341,11 +348,7 @@ void Channel::clearProtectionConf() {
 }
 
 bool Channel::test() {
-	DebugTrace("Channel::test in"
-
 	bool last_save_enabled = profile::enableSave(false);
-
-	DebugTrace("Channel::test t1");
 
     outputEnable(false);
     doRemoteSensingEnable(false);
@@ -356,30 +359,17 @@ bool Channel::test() {
         doLowRippleEnable(false);
     }
 
-	DebugTrace("Channel::test t2");
-
-	for (int i = 0; i < 3; ++i) {
-		DebugTraceF("IOEXP test try %d", i);
-		if (ioexp.test()) {
-			break;
-		}
-	}
+	ioexp.test();
     adc.test();
     dac.test();
-
-	DebugTrace("Channel::test t3");
 
     if (isOk()) {
         setVoltage(U_DEF);
         setCurrent(I_DEF);
     }
 
-	DebugTrace("Channel::test t4");
-
     profile::enableSave(last_save_enabled);
     profile::save();
-
-	DebugTrace("Channel::test out");
 
 	return isOk();
 }

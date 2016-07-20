@@ -62,6 +62,7 @@ ontime::Counter g_powerOnTimeCounter(ontime::ON_TIME_COUNTER_POWER);
 ////////////////////////////////////////////////////////////////////////////////
 
 static bool psu_reset(bool power_on);
+static bool test_shield();
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -200,6 +201,12 @@ bool powerUp() {
     gui::showWelcomePage();
 #endif
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+	if (g_is_booted) {
+		fan::test_start();
+	}
+#endif
+
     // reset channels
     for (int i = 0; i < CH_NUM; ++i) {
         Channel::get(i).reset();
@@ -214,10 +221,20 @@ bool powerUp() {
 
     bool success = true;
 
+	if (g_is_booted) {
+		success &= test_shield();
+	}
+
     // init channels
     for (int i = 0; i < CH_NUM; ++i) {
         success &= Channel::get(i).init();
     }
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+	if (g_is_booted) {
+		success &= fan::test();
+	}
+#endif
 
     // turn on Power On (PON) bit of ESE register
     setEsrBits(ESR_PON);
@@ -406,8 +423,6 @@ static bool test_shield() {
     result &= eeprom::test();
     result &= ethernet::test();
 	result &= temperature::test();
-
-	result &= test_channels();
 
     return result;
 }
