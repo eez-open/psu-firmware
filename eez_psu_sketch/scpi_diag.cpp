@@ -191,17 +191,17 @@ scpi_result_t scpi_diag_InformationProtectionQ(scpi_t * context) {
 		temp_sensor::TempSensor &sensor = temp_sensor::sensors[i];
 		temperature::TempSensorTemperature &sensorTemperature = temperature::sensors[i];
 
-		sprintf_P(buffer, PSTR("t%s_tripped=%d"), sensor.name, (int)sensorTemperature.isTripped());
+		sprintf_P(buffer, PSTR("temp_%s_tripped=%d"), sensor.name, (int)sensorTemperature.isTripped());
 		SCPI_ResultText(context, buffer);
 
-		sprintf_P(buffer, PSTR("t%s_state=%d"  ), sensor.name, (int)sensorTemperature.prot_conf.state);
+		sprintf_P(buffer, PSTR("temp_%s_state=%d"  ), sensor.name, (int)sensorTemperature.prot_conf.state);
 		SCPI_ResultText(context, buffer);
 
-		sprintf_P(buffer, PSTR("t%s_delay="), sensor.name);
+		sprintf_P(buffer, PSTR("temp_%s_delay="), sensor.name);
 		util::strcatDuration(buffer, sensorTemperature.prot_conf.delay);
 		SCPI_ResultText(context, buffer);
 
-		strcpy_P(buffer, PSTR("t%s_level="));
+		sprintf_P(buffer, PSTR("temp_%s_level="), sensor.name);
 		util::strcatFloat(buffer, sensorTemperature.prot_conf.level);
 		strcat_P(buffer, PSTR(" oC"));
 		SCPI_ResultText(context, buffer);

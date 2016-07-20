@@ -372,8 +372,6 @@ static bool psu_reset(bool power_on) {
         return true;
     }
 
-	setCurrentMaxLimit(NAN);
-
     return false;
 }
 
@@ -601,9 +599,11 @@ extern void setCurrentMaxLimit(float value) {
 	if (g_current_max_limit != value) {
 		g_current_max_limit = value;
 
-		for (int i = 0; i < CH_NUM; ++i) {
-			if (g_current_max_limit < Channel::get(i).getCurrentLimit()) {
-				Channel::get(i).setCurrentLimit(g_current_max_limit);
+		if (g_current_max_limit != NAN) {
+			for (int i = 0; i < CH_NUM; ++i) {
+				if (g_current_max_limit < Channel::get(i).getCurrentLimit()) {
+					Channel::get(i).setCurrentLimit(g_current_max_limit);
+				}
 			}
 		}
 	}

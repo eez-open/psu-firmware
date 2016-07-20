@@ -886,7 +886,11 @@ float Channel::getCurrentMaxLimit() const {
 void Channel::setCurrentMaxLimit(float value) {
 	if (i_max_limit != value) {
 		i_max_limit = value;
-		setCurrentLimit(i_max_limit);
+
+		float max_limit = getCurrentMaxLimit();
+		if (max_limit < i.limit) {
+			setCurrentLimit(max_limit);
+		}
 	}
 }
 

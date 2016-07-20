@@ -68,8 +68,17 @@ bool TempSensor::test() {
 	}
 
     if (test_result == psu::TEST_FAILED) {
-        psu::generateError(scpi_error);
-    }
+		if (ch_num >= 0) {
+			// set channel current max. limit to FAN_ERR_CURRENT if sensor is faulty
+			Channel::get(ch_num).setCurrentMaxLimit(FAN_ERR_CURRENT);
+		}
+
+		psu::generateError(scpi_error);
+    } else {
+		if (ch_num >= 0) {
+			Channel::get(ch_num).setCurrentMaxLimit(NAN);
+		}
+	}
 
 	return test_result != psu::TEST_FAILED;
 }
@@ -82,7 +91,13 @@ float TempSensor::read() {
 
 		if (value <= TEMP_SENSOR_MIN_VALID_TEMPERATURE) {
 			test_result = psu::TEST_FAILED;
-	        psu::generateError(scpi_error);
+
+			if (ch_num >= 0) {
+				// set channel current max. limit to FAN_ERR_CURRENT if sensor is faulty
+				Channel::get(ch_num).setCurrentMaxLimit(FAN_ERR_CURRENT);
+			}
+
+			psu::generateError(scpi_error);
 		}
 
 		return value;
