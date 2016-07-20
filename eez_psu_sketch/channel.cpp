@@ -227,7 +227,7 @@ bool Channel::init() {
 
 	for (int i = 0; i < 3; ++i) {
 		DebugTraceF("ioexp.init %d", i);
-	    result &= ioexp.init();
+	    result = ioexp.init();
 		if (result) {
 			break;
 		}
