@@ -717,9 +717,9 @@ void Channel::update() {
     }
     if (getFeatures() & CH_FEATURE_LRIPPLE) {
         if (flags.lripple_enabled && isLowRippleAllowed()) {
-            doRemoteProgrammingEnable(true);
+            doLowRippleEnable(true);
         } else {
-            doRemoteProgrammingEnable(false);
+            doLowRippleEnable(false);
         }
     }
 
