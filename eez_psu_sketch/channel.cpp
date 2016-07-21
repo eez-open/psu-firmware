@@ -208,8 +208,6 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
             }
         }
         else {
-			DebugTraceF("Delay: %ul", unsigned long(delay * 1000000UL));
-
             if (IS_OVP_VALUE(this, cpv)) {
                 DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA", (int)flags.cv_mode, (int)flags.cc_mode, (int)(fabs(i.mon - i.set) * 1000));
             }
