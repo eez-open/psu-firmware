@@ -169,7 +169,7 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     if (IS_OVP_VALUE(this, cpv)) {
         state = flags.rprog_enabled || prot_conf.flags.u_state;
 		//condition = flags.cv_mode && (!flags.cc_mode || fabs(i.mon - i.set) >= CHANNEL_VALUE_PRECISION) && (prot_conf.u_level <= u.set);
-		condition = u.mon >= prot_conf.u_level;
+		condition = util::greaterOrEqual(u.mon, prot_conf.u_level, CHANNEL_VALUE_PRECISION);
         delay = prot_conf.u_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
@@ -177,6 +177,7 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
         state = prot_conf.flags.i_state;
         //condition = flags.cc_mode && (!flags.cv_mode || fabs(u.mon - u.set) >= CHANNEL_VALUE_PRECISION);
 		condition = i.mon >= i.set;
+		condition = util::greaterOrEqual(i.mon, i.set, CHANNEL_VALUE_PRECISION);
         delay = prot_conf.i_delay;
         delay -= PROT_DELAY_CORRECTION;
     }

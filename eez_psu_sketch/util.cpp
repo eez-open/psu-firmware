@@ -136,6 +136,10 @@ uint8_t fromBCD(uint8_t bcd) {
     return ((bcd >> 4) & 0xF) * 10 + (bcd & 0xF);
 }
 
+bool greaterOrEqual(float a, float b, float prec) {
+	return a > b || fabs(a - b) <= prec;
+}
+
 }
 }
 } // namespace eez::psu::util

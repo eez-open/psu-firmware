@@ -44,6 +44,8 @@ uint32_t crc32(const uint8_t *message, size_t size);
 uint8_t toBCD(uint8_t bin);
 uint8_t fromBCD(uint8_t bcd);
 
+bool greaterOrEqual(float a, float b, float prec);
+
 }
 }
 } // namespace eez::psu::util
