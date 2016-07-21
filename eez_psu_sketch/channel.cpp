@@ -168,13 +168,15 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     
     if (IS_OVP_VALUE(this, cpv)) {
         state = flags.rprog_enabled || prot_conf.flags.u_state;
-		condition = flags.cv_mode && (!flags.cc_mode || fabs(i.mon - i.set) >= CHANNEL_VALUE_PRECISION) && (i.mon > 0);
+		//condition = flags.cv_mode && (!flags.cc_mode || fabs(i.mon - i.set) >= CHANNEL_VALUE_PRECISION) && (prot_conf.u_level <= u.set);
+		condition = u.mon >= prot_conf.u_level;
         delay = prot_conf.u_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
     else if (IS_OCP_VALUE(this, cpv)) {
         state = prot_conf.flags.i_state;
-        condition = flags.cc_mode && (!flags.cv_mode || fabs(u.mon - u.set) >= CHANNEL_VALUE_PRECISION);
+        //condition = flags.cc_mode && (!flags.cv_mode || fabs(u.mon - u.set) >= CHANNEL_VALUE_PRECISION);
+		condition = i.mon >= i.set;
         delay = prot_conf.i_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
@@ -191,7 +193,7 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
                     cpv.flags.alarmed = 0;
 
                     if (IS_OVP_VALUE(this, cpv)) {
-                        DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA", (int)flags.cv_mode, (int)flags.cc_mode, (int)(fabs(i.mon - i.set) * 1000));
+                        DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA, I MON=%d mA", (int)flags.cv_mode, (int)flags.cc_mode, (int)(fabs(i.mon - i.set) * 1000), (int)(i.mon * 1000));
                     }
                     else if (IS_OCP_VALUE(this, cpv)) {
                         DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.cc_mode, (int)flags.cv_mode, (int)(fabs(u.mon - u.set) * 1000));
