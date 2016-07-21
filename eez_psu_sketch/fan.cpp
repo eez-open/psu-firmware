@@ -196,7 +196,7 @@ void tick(unsigned long tick_usec) {
 	}
 
 	// measure fan speed
-	if (fan_speed_pwm != 0 || rpm != 0) {
+	if (fan_speed_pwm != 0) {
 		if (tick_usec - fan_speed_last_measured_tick >= FAN_SPEED_MEASURMENT_INTERVAL * 1000L) {
 			fan_speed_last_measured_tick = tick_usec;
 			start_rpm_measure();
@@ -213,6 +213,8 @@ void tick(unsigned long tick_usec) {
 				}
 			}
 		}
+	} else {
+		rpm = 0;
 	}
 }
 
