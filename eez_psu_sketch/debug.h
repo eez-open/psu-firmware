@@ -65,6 +65,8 @@ extern int16_t u_mon_dac[2];
 extern int16_t i_mon[2];
 extern int16_t i_mon_dac[2];
 
+extern unsigned long g_set_voltage_or_current_time_start;
+
 extern unsigned long last_loop_duration;
 extern unsigned long max_loop_duration;
 extern unsigned long avg_loop_duration;
