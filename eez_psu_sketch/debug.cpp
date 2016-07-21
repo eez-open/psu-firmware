@@ -65,7 +65,7 @@ namespace psu {
 namespace debug {
 
 static char traceBuffer[256];
-static bool dumptTraceBufferOnNextTick = false;
+static bool dumpTraceBufferOnNextTick = false;
 static bool insideInterruptHandler = false;
 
 void DumpTraceBuffer() {
@@ -121,19 +121,21 @@ void tick(unsigned long tick_usec) {
     previous_tick_count = tick_usec;
 #endif
 
-    if (dumptTraceBufferOnNextTick) {
+    if (dumpTraceBufferOnNextTick) {
         DumpTraceBuffer();
-        dumptTraceBufferOnNextTick = false;
+        dumpTraceBufferOnNextTick = false;
     }
 }
 
 void Trace(const char *format, ...) {
+	if (dumpTraceBufferOnNextTick) return;
+
     va_list args;
     va_start(args, format);
     vsnprintf_P(traceBuffer, sizeof(traceBuffer), format, args);
 
     if (insideInterruptHandler) {
-        dumptTraceBufferOnNextTick = true;
+        dumpTraceBufferOnNextTick = true;
     } else {
         DumpTraceBuffer();
     }

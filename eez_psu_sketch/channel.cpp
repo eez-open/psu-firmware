@@ -208,7 +208,16 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
             }
         }
         else {
-            protectionEnter(cpv);
+			DebugTraceF("Delay: %ul", unsigned long(delay * 1000000UL));
+
+            if (IS_OVP_VALUE(this, cpv)) {
+                DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA", (int)flags.cv_mode, (int)flags.cc_mode, (int)(fabs(i.mon - i.set) * 1000));
+            }
+            else if (IS_OCP_VALUE(this, cpv)) {
+                DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.cc_mode, (int)flags.cv_mode, (int)(fabs(u.mon - u.set) * 1000));
+            }
+
+			protectionEnter(cpv);
         }
     }
     else {
@@ -761,7 +770,7 @@ bool Channel::isRemoteProgrammingEnabled() {
 
 bool Channel::lowRippleEnable(bool enable) {
     if (enable != flags.lripple_enabled) {
-        return doLowRippleEnable(enable);
+        doLowRippleEnable(enable);
 		profile::save();
     }
     return true;
