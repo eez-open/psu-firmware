@@ -269,9 +269,9 @@ void powerDown() {
     bp::switchStandby(true);
 
     g_power_is_up = false;
-
 	g_powerOnTimeCounter.stop();
-    sound::playPowerDown();
+
+	sound::playPowerDown();
 }
 
 bool isPowerUp() {
