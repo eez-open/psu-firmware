@@ -20,63 +20,90 @@
 #include "R2B6_pins.h"
 
 void eez_psu_R2B6_init() {
+    // set pinMode for all the pins
+    pinMode(TOUCH_IRQ, INPUT);
+    pinMode(TOUCH_DOUT, INPUT);
+    pinMode(WATCHDOG, OUTPUT);
+    pinMode(FAN_PWM, OUTPUT);
+    pinMode(LCD_BRIGHTNESS, OUTPUT);
+    pinMode(RTC_SELECT, OUTPUT);
+    pinMode(BP_SELECT, OUTPUT);
+    pinMode(BP_OE, OUTPUT);
+    pinMode(ETH_SELECT, OUTPUT);
+    pinMode(BUZZER, OUTPUT);
+    pinMode(FAN_SENSE, INPUT);
+    pinMode(ISOLATOR1_EN, OUTPUT);
+    pinMode(ADC1_SELECT, OUTPUT);
+    pinMode(DAC1_SELECT, OUTPUT);
+    pinMode(IO_EXPANDER1, OUTPUT);
+    pinMode(ETH_IRQ, INPUT);
+    pinMode(RTC_IRQ, INPUT);
+    pinMode(CONVEND2, INPUT_PULLUP);
+    pinMode(CONVEND1, INPUT_PULLUP);
+    pinMode(LCD_DB8, OUTPUT);
+    pinMode(LCD_DB9, OUTPUT);
+    pinMode(LCD_DB10, OUTPUT);
+    pinMode(LCD_DB11, OUTPUT);
+    pinMode(LCD_DB12, OUTPUT);
+    pinMode(LCD_DB13, OUTPUT);
+    pinMode(LCD_DB14, OUTPUT);
+    pinMode(LCD_DB15, OUTPUT);
+    pinMode(LCD_DB7, OUTPUT);
+    pinMode(LCD_DB6, OUTPUT);
+    pinMode(LCD_DB5, OUTPUT);
+    pinMode(LCD_DB4, OUTPUT);
+    pinMode(LCD_DB3, OUTPUT);
+    pinMode(LCD_DB2, OUTPUT);
+    pinMode(LCD_DB1, OUTPUT);
+    pinMode(LCD_DB0, OUTPUT);
+    pinMode(LCD_RESET, OUTPUT);
+    pinMode(LCD_CS, OUTPUT);
+    pinMode(LCD_WR, OUTPUT);
+    pinMode(LCD_RS, OUTPUT);
+    pinMode(TOUCH_DIN, INPUT);
+    pinMode(TOUCH_CS, OUTPUT);
+    pinMode(TOUCH_SCLK, OUTPUT);
+    pinMode(ISOLATOR2_EN, OUTPUT);
+    pinMode(IO_EXPANDER2, OUTPUT);
+    pinMode(DAC2_SELECT, OUTPUT);
+    pinMode(ADC2_SELECT, OUTPUT);
+    pinMode(EEPROM_SELECT, OUTPUT);
+    pinMode(LCDSD_CS, OUTPUT);
+    pinMode(TEMP_ANALOG, INPUT);
     pinMode(PWR_DIRECT, OUTPUT);
-    digitalWrite(PWR_DIRECT, LOW);
-
     pinMode(PWR_SSTART, OUTPUT);
+    pinMode(BATT_NTC, INPUT);
+    pinMode(NTC1, INPUT);
+    pinMode(NTC2, INPUT);
+    pinMode(EXT_TRIG, INPUT);
+    pinMode(PWD_RST, INPUT);
+
+    //
+    digitalWrite(PWR_DIRECT, LOW);
     digitalWrite(PWR_SSTART, LOW);
 
-    pinMode(SS, OUTPUT);
-
     // Deselect devices that share same SPI bus on the PSU post-regulator board
-    pinMode(ADC1_SELECT, OUTPUT);
     digitalWrite(ADC1_SELECT, HIGH); // Deselect ADS1120
-    pinMode(ADC2_SELECT, OUTPUT);
     digitalWrite(ADC2_SELECT, HIGH); // Deselect ADS1120
 
-    pinMode(DAC1_SELECT, OUTPUT);
     digitalWrite(DAC1_SELECT, HIGH); // Deselect DAC8552
-    pinMode(DAC2_SELECT, OUTPUT);
     digitalWrite(DAC2_SELECT, HIGH); // Deselect DAC8552
 
-    pinMode(IO_EXPANDER1, OUTPUT);
     digitalWrite(IO_EXPANDER1, HIGH); // Deselect MCP23S08
-    pinMode(IO_EXPANDER2, OUTPUT);
     digitalWrite(IO_EXPANDER2, HIGH); // Deselect MCP23S08
 
-    pinMode(EEPROM_SELECT, OUTPUT);
     digitalWrite(EEPROM_SELECT, HIGH); // Deselect EEPROM
-
-    pinMode(RTC_SELECT, OUTPUT);
     digitalWrite(RTC_SELECT, LOW); // Deselect PCA21125
-
-    pinMode(ETH_SELECT, OUTPUT);
     digitalWrite(ETH_SELECT, HIGH); // Deselect ENC28J60
-
-    pinMode(BP_SELECT, OUTPUT);
     digitalWrite(BP_SELECT, HIGH); // Deselect TLC5925
-
-    pinMode(BP_OE, OUTPUT);
     digitalWrite(BP_OE, HIGH); // Deselect TLC5925 OE
 
-    pinMode(ISOLATOR1_EN, OUTPUT);
     digitalWrite(ISOLATOR1_EN, ISOLATOR_DISABLE); // Disable MISO on ch 1 isolators
-    pinMode(ISOLATOR2_EN, OUTPUT);
     digitalWrite(ISOLATOR2_EN, ISOLATOR_DISABLE); // Disable MISO on ch 2 isolators
 
-    pinMode(CONVEND1, INPUT_PULLUP); // ADC DRDY for ch1
-    pinMode(CONVEND2, INPUT_PULLUP); // ADC DRDY for ch2
-
-    pinMode(LCD_CS, OUTPUT);
     digitalWrite(LCD_CS, LOW); // deselect LCD
-
-    pinMode(TOUCH_CS, OUTPUT);
     digitalWrite(TOUCH_CS, LOW); // deselect LCD
-
-    pinMode(LCD_BRIGHTNESS, OUTPUT); // Arduino Pin 11 is PB7 (pin 12) assigned to LCD_BRIGHTNESS
     analogWrite(LCD_BRIGHTNESS, 200); // (value from 0 to 255, 0=dark)
-
-    pinMode(LCDSD_CS, OUTPUT);
     digitalWrite(LCDSD_CS, HIGH);
 
     // Address issue with lack of proper SPI connection on PCB r1B9
@@ -85,11 +112,6 @@ void eez_psu_R2B6_init() {
     pinMode(51, INPUT);
     pinMode(52, INPUT);
 #endif
-
-    pinMode(FAN_PWM, OUTPUT);
-    pinMode(FAN_SENSE, INPUT);
-
-    pinMode(WATCHDOG, OUTPUT);
 
     SPI.begin(); // wake up the SPI bus
 }
