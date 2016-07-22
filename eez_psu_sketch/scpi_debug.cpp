@@ -74,6 +74,23 @@ scpi_result_t debug_scpi_commandQ(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t debug_scpi_Watchdog(scpi_t * context) {
+    bool enable;
+    if (!SCPI_ParamBool(context, &enable, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+	debug::g_debug_watchdog = enable;
+    
+    return SCPI_RES_OK;
+}
+
+scpi_result_t debug_scpi_WatchdogQ(scpi_t * context) {
+    SCPI_ResultBool(context, debug::g_debug_watchdog);
+    
+    return SCPI_RES_OK;
+}
+
 }
 }
 } // namespace eez::psu::scpi

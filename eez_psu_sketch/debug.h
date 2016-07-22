@@ -76,6 +76,8 @@ extern unsigned long last_ioexp_int_counter;
 
 void ioexpIntTick(unsigned long tick_usec);
 
+extern bool g_debug_watchdog;
+
 }
 }
 } // namespace eez::psu::debug

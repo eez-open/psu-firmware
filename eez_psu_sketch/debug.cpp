@@ -49,6 +49,8 @@ unsigned long last_ioexp_int_counter = 0;
 
 unsigned long g_set_voltage_or_current_time_start = 0;
 
+bool g_debug_watchdog = true;
+
 void ioexpIntTick(unsigned long tick_usec) {
     ++current_ioexp_int_counter;
 }

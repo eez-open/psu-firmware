@@ -23,6 +23,8 @@
 #define SCPI_DEBUG_COMMANDS \
     SCPI_COMMAND("DEBUG", debug_scpi_command) \
     SCPI_COMMAND("DEBUG?", debug_scpi_commandQ) \
+	SCPI_COMMAND("DEBUG:WDOG", debug_scpi_Watchdog) \
+	SCPI_COMMAND("DEBUG:WDOG?", debug_scpi_WatchdogQ) \
 
 #else // NO DEBUG
 
