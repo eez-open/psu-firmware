@@ -455,6 +455,8 @@ void tick() {
     debug::tick(tick_usec);
 #endif
 
+	g_powerOnTimeCounter.tick(tick_usec);
+
     temperature::tick(tick_usec);
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
@@ -470,8 +472,6 @@ void tick() {
     ethernet::tick(tick_usec);
     sound::tick(tick_usec);
     profile::tick(tick_usec);
-
-	g_powerOnTimeCounter.tick(tick_usec);
 
 #if OPTION_DISPLAY
     gui::tick(tick_usec);
