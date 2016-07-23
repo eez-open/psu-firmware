@@ -25,6 +25,7 @@
     SCPI_COMMAND("DEBUG?", debug_scpi_commandQ) \
 	SCPI_COMMAND("DEBUG:WDOG", debug_scpi_Watchdog) \
 	SCPI_COMMAND("DEBUG:WDOG?", debug_scpi_WatchdogQ) \
+	SCPI_COMMAND("DEBUG:ONTime?", debug_scpi_OntimeQ) \
 
 #else // NO DEBUG
 

@@ -91,6 +91,25 @@ scpi_result_t debug_scpi_WatchdogQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t debug_scpi_OntimeQ(scpi_t *context) {
+    char buffer[512] = { 0 };
+    char *p = buffer;
+
+    sprintf_P(p, PSTR("power active: %d\n"), (int)g_powerOnTimeCounter.isActive);
+    p += strlen(p);
+
+	for (int i = 0; i < CH_NUM; ++i) {
+	    Channel& channel = Channel::get(i);
+
+		sprintf_P(p, PSTR("CH%d active: %d\n"), channel.index, (int)channel.onTimeCounter.isActive);
+		p += strlen(p);
+	}
+
+    SCPI_ResultCharacters(context, buffer, strlen(buffer));
+
+    return SCPI_RES_OK;
+}
+
 }
 }
 } // namespace eez::psu::scpi

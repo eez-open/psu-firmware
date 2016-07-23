@@ -32,6 +32,8 @@ enum {
 
 class Counter {
 public:
+	bool isActive;
+
 	Counter(int type);
 
 	void start();
@@ -47,7 +49,6 @@ private:
 	int type;
 	unsigned long totalTime;
 	unsigned long lastTime;
-	bool isActive;
 	unsigned long lastTick;
 	unsigned long fractionTime;
 	Interval writeInterval;
