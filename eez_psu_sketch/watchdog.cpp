@@ -29,6 +29,7 @@ namespace watchdog {
 static Interval watchdogInterval(WATCHDOG_INTERVAL);
 
 void init() {
+	pinMode(WATCHDOG, OUTPUT);
 }
 
 void tick(unsigned long tick_usec) {

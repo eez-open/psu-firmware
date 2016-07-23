@@ -73,7 +73,6 @@ void boot() {
     eez_psu_init();
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-	watchdog::init();
 	fan::test_start();
 #endif
 
@@ -190,6 +189,10 @@ void boot() {
     */
 
     g_is_booted = true;
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+	watchdog::init();
+#endif
 }
 
 bool powerUp() {

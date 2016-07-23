@@ -23,7 +23,10 @@ void eez_psu_R2B6_init() {
     // set pinMode for all the pins
     pinMode(TOUCH_IRQ, INPUT);
     pinMode(TOUCH_DOUT, INPUT);
-    pinMode(WATCHDOG, OUTPUT);
+
+    // WATCHDOG pin must not be defined here! 
+    //pinMode(WATCHDOG, OUTPUT);
+
     pinMode(FAN_PWM, OUTPUT);
     pinMode(LCD_BRIGHTNESS, OUTPUT);
     pinMode(RTC_SELECT, OUTPUT);
