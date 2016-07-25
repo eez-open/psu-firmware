@@ -222,7 +222,7 @@ scpi_result_t scpi_simu_PwrgoodQ(scpi_t *context) {
 
 scpi_result_t scpi_simu_Temperature(scpi_t *context) {
     float value;
-    if (!get_temperature_param(context, value, 0.0f, 100.0f, 25.0f)) {
+    if (!get_temperature_param(context, value, -100.0f, 200.0f, 25.0f)) {
         return SCPI_RES_ERR;
     }
 

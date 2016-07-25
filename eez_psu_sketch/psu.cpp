@@ -620,9 +620,9 @@ extern void setCurrentMaxLimit(float value) {
 	if (g_current_max_limit != value) {
 		g_current_max_limit = value;
 
-		if (g_current_max_limit != NAN) {
+		if (!util::isNaN(g_current_max_limit)) {
 			for (int i = 0; i < CH_NUM; ++i) {
-				if (value != NAN && Channel::get(i).isOutputEnabled() && Channel::get(i).i.mon > value) {
+				if (Channel::get(i).isOutputEnabled() && Channel::get(i).i.mon > value) {
 					Channel::get(i).setCurrent(0);
 				}
 

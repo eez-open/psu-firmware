@@ -140,6 +140,10 @@ bool greaterOrEqual(float a, float b, float prec) {
 	return a > b || fabs(a - b) <= prec;
 }
 
+bool isNaN(float x) {
+	return x != x;
+}
+
 }
 }
 } // namespace eez::psu::util

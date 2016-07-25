@@ -889,17 +889,17 @@ float Channel::getCurrentLimit() const {
 
 float Channel::getCurrentMaxLimit() const {
 	float limit = psu::getCurrentMaxLimit();
-	if (limit != NAN) {
+	if (!util::isNaN(limit)) {
 		return limit;
 	}
-	if (i_max_limit != NAN) {
+	if (!util::isNaN(i_max_limit)) {
 		return i_max_limit;
 	}
 	return I_MAX;
 }
 
 void Channel::setCurrentMaxLimit(float value) {
-	if (value != NAN && isOutputEnabled() && i.mon > value) {
+	if (!util::isNaN(value) && isOutputEnabled() && i.mon > value) {
 		setCurrent(0);
 	}
 

@@ -46,6 +46,8 @@ uint8_t fromBCD(uint8_t bcd);
 
 bool greaterOrEqual(float a, float b, float prec);
 
+bool isNaN(float x);
+
 }
 }
 } // namespace eez::psu::util
