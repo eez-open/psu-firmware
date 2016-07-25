@@ -899,6 +899,10 @@ float Channel::getCurrentMaxLimit() const {
 }
 
 void Channel::setCurrentMaxLimit(float value) {
+	if (value != NAN && i.set > value) {
+		setCurrent(0);
+	}
+
 	if (i_max_limit != value) {
 		i_max_limit = value;
 
