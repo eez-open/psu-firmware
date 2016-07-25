@@ -899,7 +899,7 @@ float Channel::getCurrentMaxLimit() const {
 }
 
 void Channel::setCurrentMaxLimit(float value) {
-	if (value != NAN && i.set > value) {
+	if (value != NAN && isOutputEnabled() && i.mon > value) {
 		setCurrent(0);
 	}
 
