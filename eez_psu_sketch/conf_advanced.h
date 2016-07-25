@@ -201,7 +201,7 @@
 #define FAN_MAX_PWM 255
 
 /// Max. allowed output current (in ampers) if fan or temp. sensor is invalid.
-#define FAN_ERR_CURRENT 1 
+#define ERR_MAX_CURRENT 1 
 
 /// Nominal fan RPM (for PWM=255).
 #define FAN_NOMINAL_RPM 4500 

@@ -69,8 +69,8 @@ bool TempSensor::test() {
 
     if (test_result == psu::TEST_FAILED) {
 		if (ch_num >= 0) {
-			// set channel current max. limit to FAN_ERR_CURRENT if sensor is faulty
-			Channel::get(ch_num).setCurrentMaxLimit(FAN_ERR_CURRENT);
+			// set channel current max. limit to ERR_MAX_CURRENT if sensor is faulty
+			Channel::get(ch_num).setCurrentMaxLimit(ERR_MAX_CURRENT);
 		}
 
 		psu::generateError(scpi_error);
@@ -93,8 +93,8 @@ float TempSensor::read() {
 			test_result = psu::TEST_FAILED;
 
 			if (ch_num >= 0) {
-				// set channel current max. limit to FAN_ERR_CURRENT if sensor is faulty
-				Channel::get(ch_num).setCurrentMaxLimit(FAN_ERR_CURRENT);
+				// set channel current max. limit to ERR_MAX_CURRENT if sensor is faulty
+				Channel::get(ch_num).setCurrentMaxLimit(ERR_MAX_CURRENT);
 			}
 
 			psu::generateError(scpi_error);
