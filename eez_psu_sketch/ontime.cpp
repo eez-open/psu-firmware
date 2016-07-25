@@ -50,6 +50,7 @@ void Counter::stop() {
 	if (isActive) {
 		fractionTime += millis() - lastTick;
 		isActive = false;
+		totalTime += lastTime;
 		lastTime = 0;
 	}
 }

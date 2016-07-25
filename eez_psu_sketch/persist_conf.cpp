@@ -48,7 +48,7 @@ static const uint16_t PERSIST_CONF_CH_CAL_BLOCK_SIZE = 512;
 static const uint16_t PERSIST_CONF_FIRST_PROFILE_ADDRESS = 4096;
 static const uint16_t PERSIST_CONF_PROFILE_BLOCK_SIZE = 1024;
 
-static const uint32_t ONTIME_MAGIC = 0xC4FC1BA0L;
+static const uint32_t ONTIME_MAGIC = 0xA7F11B3CL;
 
 ////////////////////////////////////////////////////////////////////////////////
 
