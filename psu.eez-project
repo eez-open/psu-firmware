@@ -53587,14 +53587,140 @@
             "type": "Text",
             "text": "Notification line",
             "x": 0,
-            "y": -43,
+            "y": 0,
             "width": 240,
             "height": 24,
             "style": "default_S"
           }
         ]
       }
-    ]
+    ],
+    "storyboard": {
+      "pages": [
+        {
+          "x": -633,
+          "y": -315,
+          "page": "welcome",
+          "width": 320,
+          "height": 240
+        },
+        {
+          "x": -211,
+          "y": -187,
+          "page": "main",
+          "width": 320,
+          "height": 240
+        },
+        {
+          "x": -633,
+          "y": 69,
+          "page": "entering_standby",
+          "width": 320,
+          "height": 240
+        },
+        {
+          "x": -633,
+          "y": 412,
+          "page": "standby",
+          "width": 320,
+          "height": 240
+        },
+        {
+          "x": 221,
+          "y": -681,
+          "page": "edit_mode_slider",
+          "width": 320,
+          "height": 240
+        },
+        {
+          "x": 221,
+          "y": -375,
+          "page": "edit_mode_step",
+          "width": 320,
+          "height": 240
+        },
+        {
+          "x": 229,
+          "y": -47,
+          "page": "edit_mode_keypad",
+          "width": 320,
+          "height": 240
+        },
+        {
+          "x": 229,
+          "y": 412,
+          "page": "ch_settings_disp",
+          "width": 320,
+          "height": 240
+        }
+      ],
+      "lines": [
+        {
+          "source": {
+            "page": "welcome"
+          },
+          "target": {
+            "page": "main"
+          }
+        },
+        {
+          "source": {
+            "page": "welcome"
+          },
+          "target": {
+            "page": "entering_standby"
+          }
+        },
+        {
+          "source": {
+            "page": "entering_standby"
+          },
+          "target": {
+            "page": "standby"
+          }
+        },
+        {
+          "source": {
+            "page": "main"
+          },
+          "target": {
+            "page": "entering_standby"
+          }
+        },
+        {
+          "source": {
+            "page": "main"
+          },
+          "target": {
+            "page": "edit_mode_slider"
+          }
+        },
+        {
+          "source": {
+            "page": "main"
+          },
+          "target": {
+            "page": "edit_mode_step"
+          }
+        },
+        {
+          "source": {
+            "page": "main"
+          },
+          "target": {
+            "page": "edit_mode_keypad"
+          }
+        },
+        {
+          "source": {
+            "page": "main"
+          },
+          "target": {
+            "page": "ch_settings_disp"
+          }
+        }
+      ]
+    }
   },
   "settings": {
     "build": {
