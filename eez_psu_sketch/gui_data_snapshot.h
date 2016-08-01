@@ -30,10 +30,11 @@ struct ChannelSnapshotFlags {
     unsigned ok : 1;
     unsigned mode : 1;
     unsigned state : 1;
+	unsigned lrip : 1;
     unsigned ovp : 2;
     unsigned ocp : 2;
     unsigned opp : 2;
-    unsigned otp : 2;
+    unsigned otp_ch : 2;
     unsigned dp : 2;
 };
 
@@ -44,10 +45,15 @@ struct ChannelSnapshot {
     ChannelSnapshotFlags flags;
 };
 
+struct SnapshotFlags {
+    unsigned otp : 2;
+};
+
 struct Snapshot {
     ChannelSnapshot channelSnapshots[CH_NUM];
     edit_mode::Snapshot editModeSnapshot;
     Value alertMessage;
+	SnapshotFlags flags;
 
     unsigned long lastSnapshotTime;
 

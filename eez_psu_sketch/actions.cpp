@@ -32,8 +32,8 @@ void action_toggle_channel() {
     channel.outputEnable(!channel .isOutputEnabled());
 }
 
-void action_channel_settings() {
-
+void action_show_channel_settings() {
+    showPage(PAGE_ID_CH_SETTINGS_PROT);
 }
 
 void action_show_main_page() {
@@ -158,11 +158,19 @@ void action_turn_off() {
 
 }
 
+void action_show_sys_settings() {
+    showPage(PAGE_ID_SYS_SETTINGS);
+}
+
+void action_show_main_help_page() {
+    showPage(PAGE_ID_MAIN_HELP);
+}
+
 
 ACTION actions[] = {
     0,
     action_toggle_channel,
-    action_channel_settings,
+    action_show_channel_settings,
     action_show_main_page,
     action_edit,
     action_edit_mode_slider,
@@ -192,7 +200,9 @@ ACTION actions[] = {
     action_yes,
     action_no,
     action_cancel,
-    action_turn_off
+    action_turn_off,
+    action_show_sys_settings,
+    action_show_main_help_page
 };
 
 }

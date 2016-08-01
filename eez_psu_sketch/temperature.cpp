@@ -130,8 +130,16 @@ TempSensorTemperature::TempSensorTemperature(int sensorIndex_)
 {
 }
 
+bool TempSensorTemperature::isInstalled() {
+	return temp_sensor::sensors[sensorIndex].installed ? true : false;
+}
+
+bool TempSensorTemperature::isTestOK() {
+	return temp_sensor::sensors[sensorIndex].test_result == TEST_OK;
+}
+
 void TempSensorTemperature::tick(unsigned long tick_usec) {
-	if (temp_sensor::sensors[sensorIndex].installed && temp_sensor::sensors[sensorIndex].test_result == TEST_OK) {
+	if (isInstalled() && isTestOK()) {
 		temperature = temp_sensor::sensors[sensorIndex].read();
 		if (temp_sensor::sensors[sensorIndex].test_result == TEST_OK) {
 			protection_check(tick_usec);

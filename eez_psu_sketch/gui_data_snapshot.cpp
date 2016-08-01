@@ -137,20 +137,32 @@ void Snapshot::takeSnapshot() {
         channelSnapshots[i].u_set = channel.u.set;
         channelSnapshots[i].i_set = channel.i.set;
 
-        if (!channel.prot_conf.flags.u_state) channelSnapshots[i].flags.ovp = 1;
-        else if (!channel.ovp.flags.tripped) channelSnapshots[i].flags.ovp = 2;
-        else channelSnapshots[i].flags.ovp = 3;
+		channelSnapshots[i].flags.lrip = channel.flags.lripple_enabled ? 1 : 0;
+
+		if (!channel.prot_conf.flags.i_state) channelSnapshots[i].flags.ocp = 0;
+        else if (!channel.ocp.flags.tripped) channelSnapshots[i].flags.ocp = 1;
+        else channelSnapshots[i].flags.ocp = 2;
+
+		if (!channel.prot_conf.flags.u_state) channelSnapshots[i].flags.ovp = 0;
+        else if (!channel.ovp.flags.tripped) channelSnapshots[i].flags.ovp = 1;
+        else channelSnapshots[i].flags.ovp = 2;
         
-        if (!channel.prot_conf.flags.i_state) channelSnapshots[i].flags.ocp = 1;
-        else if (!channel.ocp.flags.tripped) channelSnapshots[i].flags.ocp = 2;
-        else channelSnapshots[i].flags.ocp = 3;
+        if (!channel.prot_conf.flags.p_state) channelSnapshots[i].flags.opp = 0;
+        else if (!channel.opp.flags.tripped) channelSnapshots[i].flags.opp = 1;
+        else channelSnapshots[i].flags.opp = 2;
 
-        if (!channel.prot_conf.flags.p_state) channelSnapshots[i].flags.opp = 1;
-        else if (!channel.opp.flags.tripped) channelSnapshots[i].flags.opp = 2;
-        else channelSnapshots[i].flags.opp = 3;
+		temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + i];
+        if (!tempSensor.isInstalled() || !tempSensor.isTestOK() || !tempSensor.prot_conf.state) channelSnapshots[i].flags.otp_ch = 0;
+        else if (!tempSensor.isTripped()) channelSnapshots[i].flags.otp_ch = 1;
+        else channelSnapshots[i].flags.otp_ch = 2;
 
-        channelSnapshots[i].flags.dp = channel.flags.dp_on ? 1 : 2;
+		channelSnapshots[i].flags.dp = channel.flags.dp_on ? 1 : 0;
     }
+
+	temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::MAIN];
+	if (!tempSensor.prot_conf.state) flags.otp = 0;
+    else if (!tempSensor.isTripped()) flags.otp = 1;
+    else flags.otp = 2;
 
     editModeSnapshot.takeSnapshot();
 
@@ -170,6 +182,8 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
         return Value(channelSnapshots[cursor.iChannel].u_set, UNIT_VOLT);
     } else if (id == DATA_ID_CURR) {
         return Value(channelSnapshots[cursor.iChannel].i_set, UNIT_AMPER);
+    } else if (id == DATA_ID_LRIP) {
+        return Value(channelSnapshots[cursor.iChannel].flags.lrip);
     } else if (id == DATA_ID_OVP) {
         return Value(channelSnapshots[cursor.iChannel].flags.ovp);
     } else if (id == DATA_ID_OCP) {
@@ -177,7 +191,9 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
     } else if (id == DATA_ID_OPP) {
         return Value(channelSnapshots[cursor.iChannel].flags.opp);
     } else if (id == DATA_ID_OTP) {
-        return Value(channelSnapshots[cursor.iChannel].flags.otp);
+        return Value(flags.otp);
+    } else if (id == DATA_ID_OTP_CH) {
+        return Value(channelSnapshots[cursor.iChannel].flags.otp_ch);
     } else if (id == DATA_ID_DP) {
         return Value(channelSnapshots[cursor.iChannel].flags.dp);
     } else if (id == DATA_ID_ALERT_MESSAGE) {

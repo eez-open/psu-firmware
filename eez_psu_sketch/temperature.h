@@ -51,6 +51,8 @@ public:
 
 	TempSensorTemperature(int sensorIndex);
 
+	bool isInstalled();
+	bool isTestOK();
 	void tick(unsigned long tick_usec);
 	bool isChannelTripped(Channel *channel);
 	float measure();

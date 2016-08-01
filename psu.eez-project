@@ -45,6 +45,10 @@
       "defaultValue": "1.00A"
     },
     {
+      "name": "lrip",
+      "defaultValue": "0"
+    },
+    {
       "name": "ovp",
       "description": "scpi: volt:prot:stat? volt:prot:trip?",
       "operations": "get",
@@ -64,6 +68,12 @@
     },
     {
       "name": "otp",
+      "description": "scpi: syst:temp:prot:stat? syst:temp:prot:trip?",
+      "operations": "get",
+      "defaultValue": 0
+    },
+    {
+      "name": "otp_ch",
       "description": "scpi: syst:temp:prot:stat? syst:temp:prot:trip?",
       "operations": "get",
       "defaultValue": 0
@@ -120,9 +130,9 @@
       "implementation": "Channel& channel = Channel::get(found_widget_at_down.cursor.iChannel);\nchannel.outputEnable(!channel .isOutputEnabled());\n"
     },
     {
-      "name": "channel_settings",
+      "name": "show_channel_settings",
       "implementationType": "native",
-      "implementation": ""
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT);"
     },
     {
       "name": "show_main_page",
@@ -281,6 +291,16 @@
     {
       "name": "turn_off",
       "implementationType": ""
+    },
+    {
+      "name": "show_sys_settings",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_SYS_SETTINGS);"
+    },
+    {
+      "name": "show_main_help_page",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_MAIN_HELP);"
     }
   ],
   "gui": {
@@ -43978,7 +43998,7 @@
                       },
                       {
                         "type": "Text",
-                        "action": "channel_settings",
+                        "action": "show_channel_settings",
                         "x": 212,
                         "y": 86,
                         "style": "default_S",
@@ -44208,7 +44228,7 @@
                       },
                       {
                         "type": "Text",
-                        "action": "channel_settings",
+                        "action": "show_channel_settings",
                         "x": 0,
                         "y": 148,
                         "style": "default_S",
@@ -46469,7 +46489,7 @@
                       },
                       {
                         "type": "Text",
-                        "action": "channel_settings",
+                        "action": "show_channel_settings",
                         "x": 212,
                         "y": 86,
                         "style": "default_S",
@@ -46550,61 +46570,6 @@
         "landscape": {
           "widgets": [
             {
-              "type": "Text",
-              "x": 144,
-              "y": 204,
-              "style": "bottom_button_disabled",
-              "text": "L",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 96,
-              "y": 204,
-              "style": "bottom_button_disabled",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "R",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "turn_off",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "Q",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "touch_screen_calibration",
-              "x": 0,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "P",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Rectangle",
-              "x": 240,
-              "y": 204,
-              "width": 32,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
               "type": "List",
               "listType": "horizontal",
               "itemWidget": {
@@ -46650,9 +46615,9 @@
                                 "style": "mon_value_landscape_L_right",
                                 "data": "mon_value",
                                 "x": 0,
-                                "y": -16,
+                                "y": 0,
                                 "width": 160,
-                                "height": 89,
+                                "height": 70,
                                 "action": "toggle_channel"
                               },
                               {
@@ -46698,59 +46663,195 @@
                         "height": 40
                       },
                       {
-                        "type": "Text",
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "LRip",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "LRip",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
                         "x": 0,
-                        "y": 116,
-                        "style": "prot_indicator_S",
-                        "text": "OVP",
+                        "y": 70,
                         "width": 48,
-                        "height": 24
+                        "height": 24,
+                        "data": "lrip",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "OCP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "OCP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_trip_S",
+                            "text": "OCP",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 0,
+                        "y": 94,
+                        "width": 48,
+                        "height": 24,
+                        "data": "ocp",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "OVP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "OVP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_trip_S",
+                            "text": "OVP",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 0,
+                        "y": 118,
+                        "width": 48,
+                        "height": 24,
+                        "data": "ovp",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "OTP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "OTP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_trip_S",
+                            "text": "OTP",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 0,
+                        "y": 142,
+                        "width": 48,
+                        "height": 24,
+                        "data": "otp_ch",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "OPP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "OPP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_trip_S",
+                            "text": "OPP",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 0,
+                        "y": 166,
+                        "width": 48,
+                        "height": 24,
+                        "data": "opp",
+                        "style": "default"
                       },
                       {
                         "type": "Text",
-                        "x": 0,
-                        "y": 92,
-                        "style": "prot_indicator_S",
-                        "text": "OCP",
-                        "width": 48,
-                        "height": 24
-                      },
-                      {
-                        "type": "Text",
-                        "x": 0,
-                        "y": 164,
-                        "style": "prot_indicator_set_S",
-                        "text": "OPP",
-                        "width": 48,
-                        "height": 24
-                      },
-                      {
-                        "type": "Text",
-                        "action": "channel_settings",
+                        "action": "show_channel_settings",
                         "x": 48,
-                        "y": 148,
+                        "y": 150,
                         "style": "edit_S",
                         "text": "`  Settings",
                         "width": 112,
                         "height": 40
-                      },
-                      {
-                        "type": "Text",
-                        "x": 0,
-                        "y": 140,
-                        "style": "prot_indicator_trip_S",
-                        "text": "OTP",
-                        "width": 48,
-                        "height": 24
-                      },
-                      {
-                        "type": "Text",
-                        "x": 0,
-                        "y": 62,
-                        "style": "default_S",
-                        "text": "LRip",
-                        "width": 48,
-                        "height": 30
                       }
                     ],
                     "x": 0,
@@ -46766,11 +46867,48 @@
                 "style": "default"
               },
               "x": 0,
-              "y": 16,
+              "y": 14,
               "width": 320,
-              "height": 188,
+              "height": 190,
               "data": "channels",
               "style": "default"
+            },
+            {
+              "type": "Text",
+              "action": "show_sys_settings",
+              "x": 0,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "P",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 48,
+              "y": 204,
+              "style": "bottom_button_disabled",
+              "text": "R",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 96,
+              "y": 204,
+              "style": "bottom_button_disabled",
+              "text": "?",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 144,
+              "y": 204,
+              "style": "bottom_button_disabled",
+              "text": "L",
+              "width": 48,
+              "height": 36
             },
             {
               "type": "Text",
@@ -46778,6 +46916,25 @@
               "y": 204,
               "style": "bottom_button",
               "text": "H",
+              "width": 48,
+              "height": 36,
+              "action": "show_main_help_page"
+            },
+            {
+              "type": "Rectangle",
+              "x": 240,
+              "y": 204,
+              "width": 32,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "turn_off",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "Q",
               "width": 48,
               "height": 36
             }
@@ -47363,7 +47520,7 @@
                       },
                       {
                         "type": "Text",
-                        "action": "channel_settings",
+                        "action": "show_channel_settings",
                         "x": 212,
                         "y": 86,
                         "style": "default_S",
@@ -51593,7 +51750,7 @@
                       },
                       {
                         "type": "Text",
-                        "action": "channel_settings",
+                        "action": "show_channel_settings",
                         "x": 212,
                         "y": 86,
                         "style": "default_S",
@@ -51698,7 +51855,8 @@
               "y": 30,
               "width": 180,
               "height": 32,
-              "style": "edit_value_active_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "touch_screen_calibration"
             },
             {
               "type": "Text",
@@ -51942,7 +52100,7 @@
                       },
                       {
                         "type": "Text",
-                        "action": "channel_settings",
+                        "action": "show_channel_settings",
                         "x": 212,
                         "y": 86,
                         "style": "default_S",
@@ -52250,7 +52408,7 @@
                       },
                       {
                         "type": "Text",
-                        "action": "channel_settings",
+                        "action": "show_channel_settings",
                         "x": 212,
                         "y": 86,
                         "style": "default_S",
@@ -52513,7 +52671,7 @@
                       },
                       {
                         "type": "Text",
-                        "action": "channel_settings",
+                        "action": "show_channel_settings",
                         "x": 212,
                         "y": 86,
                         "style": "default_S",
@@ -52776,7 +52934,7 @@
                       },
                       {
                         "type": "Text",
-                        "action": "channel_settings",
+                        "action": "show_channel_settings",
                         "x": 212,
                         "y": 86,
                         "style": "default_S",
@@ -53181,7 +53339,7 @@
                       },
                       {
                         "type": "Text",
-                        "action": "channel_settings",
+                        "action": "show_channel_settings",
                         "x": 212,
                         "y": 86,
                         "style": "default_S",
@@ -53426,7 +53584,7 @@
                       },
                       {
                         "type": "Text",
-                        "action": "channel_settings",
+                        "action": "show_channel_settings",
                         "x": 212,
                         "y": 86,
                         "style": "default_S",
@@ -53598,60 +53756,124 @@
     "storyboard": {
       "pages": [
         {
-          "x": -633,
-          "y": -315,
-          "page": "welcome",
-          "width": 320,
-          "height": 240
+          "x": -212,
+          "y": -1166,
+          "page": "welcome"
         },
         {
-          "x": -211,
-          "y": -187,
-          "page": "main",
-          "width": 320,
-          "height": 240
+          "x": -212,
+          "y": -736,
+          "page": "main"
         },
         {
-          "x": -633,
-          "y": 69,
-          "page": "entering_standby",
-          "width": 320,
-          "height": 240
+          "x": 486,
+          "y": 248,
+          "page": "ch_settings_prot"
         },
         {
-          "x": -633,
-          "y": 412,
-          "page": "standby",
-          "width": 320,
-          "height": 240
+          "x": 1669,
+          "y": 248,
+          "page": "ch_settings_info"
         },
         {
-          "x": 221,
-          "y": -681,
-          "page": "edit_mode_slider",
-          "width": 320,
-          "height": 240
+          "x": 1279,
+          "y": 248,
+          "page": "ch_settings_disp"
         },
         {
-          "x": 221,
-          "y": -375,
-          "page": "edit_mode_step",
-          "width": 320,
-          "height": 240
+          "x": 885,
+          "y": 248,
+          "page": "ch_settings_adv"
         },
         {
-          "x": 229,
-          "y": -47,
-          "page": "edit_mode_keypad",
-          "width": 320,
-          "height": 240
+          "x": 486,
+          "y": 715,
+          "page": "ch_settings_prot_set_pwr"
         },
         {
-          "x": 229,
-          "y": 412,
-          "page": "ch_settings_disp",
-          "width": 320,
-          "height": 240
+          "x": 118,
+          "y": 715,
+          "page": "ch_settings_prot_clear"
+        },
+        {
+          "x": 655,
+          "y": 1160,
+          "page": "ch_settings_adv_lripple"
+        },
+        {
+          "x": 1026,
+          "y": 1160,
+          "page": "ch_settings_adv_limits"
+        },
+        {
+          "x": 1389,
+          "y": 1160,
+          "page": "ch_settings_adv_rsense"
+        },
+        {
+          "x": 1758,
+          "y": 1160,
+          "page": "ch_settings_adv_rprog"
+        },
+        {
+          "x": 484,
+          "y": -736.0000000000001,
+          "page": "entering_standby"
+        },
+        {
+          "x": 910,
+          "y": -735.9999999999999,
+          "page": "standby"
+        },
+        {
+          "x": -840,
+          "y": -172,
+          "page": "edit_mode_slider"
+        },
+        {
+          "x": -467,
+          "y": -172,
+          "page": "edit_mode_step"
+        },
+        {
+          "x": -87,
+          "y": -172,
+          "page": "edit_mode_keypad"
+        },
+        {
+          "x": -1705,
+          "y": -172,
+          "page": "sys_settings"
+        },
+        {
+          "x": -1705,
+          "y": 258,
+          "page": "sys_settings_cal"
+        },
+        {
+          "x": -1705,
+          "y": 598,
+          "page": "sys_settings_cal_wiz1"
+        },
+        {
+          "x": -1705,
+          "y": 938.0000000000001,
+          "page": "sys_settings_cal_wiz2"
+        },
+        {
+          "x": -1705,
+          "y": 1283,
+          "page": "sys_settings_cal_wiz3"
+        },
+        {
+          "x": -980,
+          "y": -736,
+          "page": "main_help"
+        },
+        {
+          "x": -1260,
+          "y": -172,
+          "page": "sys_profiles"
         }
       ],
       "lines": [
@@ -53717,6 +53939,134 @@
           },
           "target": {
             "page": "ch_settings_disp"
+          }
+        },
+        {
+          "source": {
+            "page": "main"
+          },
+          "target": {
+            "page": "sys_profiles"
+          }
+        },
+        {
+          "source": {
+            "page": "main"
+          },
+          "target": {
+            "page": "sys_settings"
+          }
+        },
+        {
+          "source": {
+            "page": "main"
+          },
+          "target": {
+            "page": "main_help"
+          }
+        },
+        {
+          "source": {
+            "page": "sys_settings"
+          },
+          "target": {
+            "page": "sys_settings_cal"
+          }
+        },
+        {
+          "source": {
+            "page": "sys_settings_cal"
+          },
+          "target": {
+            "page": "sys_settings_cal_wiz1"
+          }
+        },
+        {
+          "source": {
+            "page": "sys_settings_cal_wiz1"
+          },
+          "target": {
+            "page": "sys_settings_cal_wiz2"
+          }
+        },
+        {
+          "source": {
+            "page": "sys_settings_cal_wiz2"
+          },
+          "target": {
+            "page": "sys_settings_cal_wiz3"
+          }
+        },
+        {
+          "source": {
+            "page": "main"
+          },
+          "target": {
+            "page": "ch_settings_prot"
+          }
+        },
+        {
+          "source": {
+            "page": "main"
+          },
+          "target": {
+            "page": "ch_settings_adv"
+          }
+        },
+        {
+          "source": {
+            "page": "main"
+          },
+          "target": {
+            "page": "ch_settings_info"
+          }
+        },
+        {
+          "source": {
+            "page": "ch_settings_prot"
+          },
+          "target": {
+            "page": "ch_settings_prot_clear"
+          }
+        },
+        {
+          "source": {
+            "page": "ch_settings_prot"
+          },
+          "target": {
+            "page": "ch_settings_prot_set_pwr"
+          }
+        },
+        {
+          "source": {
+            "page": "ch_settings_adv"
+          },
+          "target": {
+            "page": "ch_settings_adv_lripple"
+          }
+        },
+        {
+          "source": {
+            "page": "ch_settings_adv"
+          },
+          "target": {
+            "page": "ch_settings_adv_limits"
+          }
+        },
+        {
+          "source": {
+            "page": "ch_settings_adv"
+          },
+          "target": {
+            "page": "ch_settings_adv_rsense"
+          }
+        },
+        {
+          "source": {
+            "page": "ch_settings_adv"
+          },
+          "target": {
+            "page": "ch_settings_adv_rprog"
           }
         }
       ]
