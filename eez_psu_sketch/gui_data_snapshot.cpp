@@ -20,7 +20,9 @@
 #include "gui_data_snapshot.h"
 #include "gui_view.h"
 #include "gui_document.h"
+#include "gui_internal.h"
 #include "temperature.h"
+#include "devices.h"
 
 #define CONF_GUI_REFRESH_EVERY_MS 250
 
@@ -151,10 +153,14 @@ void Snapshot::takeSnapshot() {
         else if (!channel.opp.flags.tripped) channelSnapshots[i].flags.opp = 1;
         else channelSnapshots[i].flags.opp = 2;
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+		channelSnapshots[i].flags.otp_ch = 0;
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
 		temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + i];
         if (!tempSensor.isInstalled() || !tempSensor.isTestOK() || !tempSensor.prot_conf.state) channelSnapshots[i].flags.otp_ch = 0;
         else if (!tempSensor.isTripped()) channelSnapshots[i].flags.otp_ch = 1;
         else channelSnapshots[i].flags.otp_ch = 2;
+#endif
 
 		channelSnapshots[i].flags.dp = channel.flags.dp_on ? 1 : 0;
     }
@@ -163,6 +169,17 @@ void Snapshot::takeSnapshot() {
 	if (!tempSensor.prot_conf.state) flags.otp = 0;
     else if (!tempSensor.isTripped()) flags.otp = 1;
     else flags.otp = 2;
+
+	if (getActivePage() == PAGE_ID_SELF_TEST_RESULT) {
+		if (!selfTestResult) {
+			selfTestResult = devices::getSelfTestResultString();
+		}
+	} else {
+		if (selfTestResult) {
+			free(selfTestResult);
+			selfTestResult = 0;
+		}
+	}
 
     editModeSnapshot.takeSnapshot();
 
@@ -202,7 +219,9 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
         return Value(getModelInfo());
     } else if (id == DATA_ID_FIRMWARE_INFO) {
         return Value(getFirmwareInfo());
-    }
+    } else if (id == DATA_ID_SELF_TEST_RESULT) {
+		return Value(selfTestResult);
+	}
     
     Value value = editModeSnapshot.get(id);
     if (value.getUnit() != UNIT_NONE) {

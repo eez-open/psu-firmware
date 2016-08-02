@@ -32,10 +32,10 @@ static scpi_choice_def_t channel_choice[] = {
     SCPI_CHOICE_LIST_END /* termination of option list */
 };
 
-#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) { #NAME, temp_sensor::NAME },
+#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) { #NAME, temp_sensor::NAME }
 
 scpi_choice_def_t temp_sensor_choice[] = {
-	TEMP_SENSORS
+	TEMP_SENSORS,
     SCPI_CHOICE_LIST_END /* termination of option list */
 };
 

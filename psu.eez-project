@@ -123,7 +123,7 @@
     },
     {
       "name": "self_test_result",
-      "defaultValue": "- FAN\n- CH1 temp sensor"
+      "defaultValue": "- FAN failed\n- CH1 temp sensor failed"
     }
   ],
   "actions": [
@@ -43994,7 +43994,7 @@
             },
             {
               "type": "Text",
-              "text": "Self test failed for the following:",
+              "text": "Self Test",
               "x": 0,
               "y": 0,
               "width": 240,
@@ -44008,7 +44008,8 @@
               "y": 280,
               "width": 40,
               "height": 40,
-              "style": "default_ICONS"
+              "style": "default_ICONS",
+              "action": "show_main_page"
             }
           ]
         },
@@ -44035,11 +44036,12 @@
               "y": 200,
               "width": 40,
               "height": 40,
-              "style": "default_ICONS"
+              "style": "default_ICONS",
+              "action": "show_main_page"
             },
             {
               "type": "Text",
-              "text": "Self test failed for the following:",
+              "text": "Self Test",
               "x": 0,
               "y": 0,
               "width": 320,

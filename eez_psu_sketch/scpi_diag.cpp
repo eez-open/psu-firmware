@@ -21,10 +21,7 @@
 #include "scpi_diag.h"
 
 #include "calibration.h"
-#include "eeprom.h"
-#include "ethernet.h"
-#include "rtc.h"
-#include "datetime.h"
+#include "devices.h"
 #include "temperature.h"
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
 #include "fan.h"
@@ -210,75 +207,67 @@ scpi_result_t scpi_diag_InformationProtectionQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-const char *get_installed_str(bool installed) {
-    if (installed)
-        return "installed";
-    return "not installed";
-}
-
-const char *get_test_result_str(psu::TestResult test_result) {
-    if (test_result == psu::TEST_OK)
-        return "passed";
-    if (test_result == psu::TEST_SKIPPED)
-        return "skipped";
-    if (test_result == psu::TEST_WARNING)
-        return "warning";
-    return "failed";
-}
-
 scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
     char buffer[128] = { 0 };
 
-    sprintf_P(buffer, PSTR("%d, EEPROM, %s, %s"),
-        eeprom::test_result, get_installed_str(OPTION_EXT_EEPROM), get_test_result_str(eeprom::test_result));
-    SCPI_ResultText(context, buffer);
-    
-    sprintf_P(buffer, PSTR("%d, Ethernet, %s, %s"),
-        ethernet::test_result, get_installed_str(OPTION_ETHERNET), get_test_result_str(ethernet::test_result));
-    SCPI_ResultText(context, buffer);
+	for (int i = 0; i < devices::numDevices; ++i) {
+		devices::Device &device = devices::devices[i];
 
-    sprintf_P(buffer, PSTR("%d, RTC, %s, %s"),
-        rtc::test_result, get_installed_str(OPTION_EXT_RTC), get_test_result_str(rtc::test_result));
-    SCPI_ResultText(context, buffer);
-    
-    sprintf_P(buffer, PSTR("%d, DateTime, %s, %s"),
-        datetime::test_result, get_installed_str(true), get_test_result_str(datetime::test_result));
-    SCPI_ResultText(context, buffer);
-
-    sprintf_P(buffer, PSTR("%d, BP option, %s, %s"),
-        psu::TEST_SKIPPED, get_installed_str(OPTION_BP), get_test_result_str(psu::TEST_SKIPPED));
-    SCPI_ResultText(context, buffer);
-
-	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
-		temp_sensor::TempSensor &sensor = temp_sensor::sensors[i];
-		sprintf_P(buffer, PSTR("%d, %s temp, %s, %s"), \
-			sensor.test_result, sensor.name, get_installed_str(sensor.installed ? true : false), get_test_result_str(sensor.test_result)); \
+		sprintf_P(buffer, PSTR("%d, %s, %s, %s"),
+			(int)*device.testResult, device.deviceName, devices::getInstalledString(device.installed), devices::getTestResultString(*device.testResult));
 		SCPI_ResultText(context, buffer);
 	}
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-    sprintf_P(buffer, PSTR("%d, Fan, %s, %s"),
-        fan::test_result, get_installed_str(OPTION_FAN), get_test_result_str(fan::test_result));
-    SCPI_ResultText(context, buffer);
-#endif
-
-	if (psu::isPowerUp()) {
-        for (int i = 0; i < CH_NUM; ++i) {
-            Channel *channel = &Channel::get(i);
-
-            sprintf_P(buffer, PSTR("%d, CH%d IOEXP, installed, %s"),
-                channel->ioexp.test_result, channel->index, get_test_result_str((psu::TestResult)channel->ioexp.test_result));
-            SCPI_ResultText(context, buffer);
-
-            sprintf_P(buffer, PSTR("%d, CH%d DAC, installed, %s"),
-                channel->dac.test_result, channel->index, get_test_result_str((psu::TestResult)channel->dac.test_result));
-            SCPI_ResultText(context, buffer);
-
-            sprintf_P(buffer, PSTR("%d, CH%d ADC, installed, %s"),
-                channel->adc.test_result, channel->index, get_test_result_str((psu::TestResult)channel->adc.test_result));
-            SCPI_ResultText(context, buffer);
-        }
-    }
+//    sprintf_P(buffer, PSTR("%d, EEPROM, %s, %s"),
+//        eeprom::test_result, get_installed_str(OPTION_EXT_EEPROM), get_test_result_str(eeprom::test_result));
+//    SCPI_ResultText(context, buffer);
+//    
+//    sprintf_P(buffer, PSTR("%d, Ethernet, %s, %s"),
+//        ethernet::test_result, get_installed_str(OPTION_ETHERNET), get_test_result_str(ethernet::test_result));
+//    SCPI_ResultText(context, buffer);
+//
+//    sprintf_P(buffer, PSTR("%d, RTC, %s, %s"),
+//        rtc::test_result, get_installed_str(OPTION_EXT_RTC), get_test_result_str(rtc::test_result));
+//    SCPI_ResultText(context, buffer);
+//    
+//    sprintf_P(buffer, PSTR("%d, DateTime, %s, %s"),
+//        datetime::test_result, get_installed_str(true), get_test_result_str(datetime::test_result));
+//    SCPI_ResultText(context, buffer);
+//
+//    sprintf_P(buffer, PSTR("%d, BP option, %s, %s"),
+//        psu::TEST_SKIPPED, get_installed_str(OPTION_BP), get_test_result_str(psu::TEST_SKIPPED));
+//    SCPI_ResultText(context, buffer);
+//
+//	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+//		temp_sensor::TempSensor &sensor = temp_sensor::sensors[i];
+//		sprintf_P(buffer, PSTR("%d, %s temp, %s, %s"), \
+//			sensor.test_result, sensor.name, get_installed_str(sensor.installed ? true : false), get_test_result_str(sensor.test_result)); \
+//		SCPI_ResultText(context, buffer);
+//	}
+//
+//#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+//    sprintf_P(buffer, PSTR("%d, Fan, %s, %s"),
+//        fan::test_result, get_installed_str(OPTION_FAN), get_test_result_str(fan::test_result));
+//    SCPI_ResultText(context, buffer);
+//#endif
+//
+//	if (psu::isPowerUp()) {
+//        for (int i = 0; i < CH_NUM; ++i) {
+//            Channel *channel = &Channel::get(i);
+//
+//            sprintf_P(buffer, PSTR("%d, CH%d IOEXP, installed, %s"),
+//                channel->ioexp.test_result, channel->index, get_test_result_str((psu::TestResult)channel->ioexp.test_result));
+//            SCPI_ResultText(context, buffer);
+//
+//            sprintf_P(buffer, PSTR("%d, CH%d DAC, installed, %s"),
+//                channel->dac.test_result, channel->index, get_test_result_str((psu::TestResult)channel->dac.test_result));
+//            SCPI_ResultText(context, buffer);
+//
+//            sprintf_P(buffer, PSTR("%d, CH%d ADC, installed, %s"),
+//                channel->adc.test_result, channel->index, get_test_result_str((psu::TestResult)channel->adc.test_result));
+//            SCPI_ResultText(context, buffer);
+//        }
+//    }
 
     return SCPI_RES_OK;
 }

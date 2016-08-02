@@ -33,9 +33,9 @@ static const int MAX_NUM_TEMP_SENSORS = 5;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) NAME,
+#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) NAME
 enum Type {
-	TEMP_SENSORS
+	TEMP_SENSORS,
 	NUM_TEMP_SENSORS
 };
 #undef TEMP_SENSOR

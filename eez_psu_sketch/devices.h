@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015-present, Envox d.o.o.
+ * Copyright (C) 2016-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,31 +20,23 @@
 
 namespace eez {
 namespace psu {
+namespace devices {
 
-/// Digital to analog converter HW used by the channel.
-class DigitalAnalogConverter {
-public:
-    static const uint8_t DATA_BUFFER_A = 0B00010000;
-    static const uint8_t DATA_BUFFER_B = 0B00100100;
-
-    static const uint16_t DAC_MIN = 0;
-    static const uint16_t DAC_MAX = (1L << DAC_RES) - 1;
-
-    psu::TestResult test_result;
-
-    DigitalAnalogConverter(Channel &channel);
-
-    bool init();
-    bool test();
-
-    void set_voltage(float voltage);
-    void set_current(float voltage);
-
-private:
-    Channel &channel;
-
-    void set_value(uint8_t buffer, float value);
+struct Device {
+	const char *deviceName;
+	bool installed;
+	TestResult* testResult;
 };
 
+extern Device devices[];
+extern int numDevices;
+
+bool anyFailedOrWarning();
+char *getSelfTestResultString();
+
+const char *getInstalledString(bool installed);
+const char *getTestResultString(psu::TestResult test_result);
+
 }
-} // namespace eez::psu
+}
+} // namespace eez::psu::devices

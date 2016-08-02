@@ -30,7 +30,7 @@ namespace psu {
 namespace temperature {
 
 #define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) \
-	TempSensorTemperature(temp_sensor::NAME),
+	TempSensorTemperature(temp_sensor::NAME)
 
 TempSensorTemperature sensors[temp_sensor::NUM_TEMP_SENSORS] = {
 	TEMP_SENSORS

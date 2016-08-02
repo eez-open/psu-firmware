@@ -54,6 +54,7 @@ struct Snapshot {
     edit_mode::Snapshot editModeSnapshot;
     Value alertMessage;
 	SnapshotFlags flags;
+	char *selfTestResult;
 
     unsigned long lastSnapshotTime;
 

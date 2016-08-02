@@ -358,6 +358,9 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\ontime.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\devices.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -602,6 +605,9 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\ontime.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\devices.cpp">
       <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>

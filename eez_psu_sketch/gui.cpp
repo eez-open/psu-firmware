@@ -28,6 +28,7 @@
 
 #include "channel.h"
 #include "actions.h"
+#include "devices.h"
 
 #ifdef EEZ_PSU_SIMULATOR
 #include "front_panel/control.h"
@@ -610,22 +611,48 @@ bool draw_display_data_widget(const WidgetCursor &widgetCursor, const Widget *wi
 
 bool draw_text_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
-        DECL_WIDGET_SPECIFIC(TextWidget, display_string_widget, widget);
-        DECL_STRING(text, display_string_widget->text);
         DECL_WIDGET_STYLE(style, widget);
-        drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
-        return true;
+
+		if (widget->data) {
+			data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+			if (value.isString()) {
+	            drawText(value.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+			} else {
+				char text[32];
+				value.toText(text, 32);
+				drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+			}
+		} else {
+			DECL_WIDGET_SPECIFIC(TextWidget, display_string_widget, widget);
+			DECL_STRING(text, display_string_widget->text);
+			drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+		}
+
+		return true;
     }
     return false;
 }
 
 bool draw_multiline_text_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
-        DECL_WIDGET_SPECIFIC(MultilineTextWidget, display_string_widget, widget);
-        DECL_STRING(text, display_string_widget->text);
         DECL_WIDGET_STYLE(style, widget);
-        drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
-        return true;
+
+		if (widget->data) {
+			data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+			if (value.isString()) {
+				drawMultilineText(value.asString(), widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+			} else {
+				char text[32];
+				value.toText(text, 32);
+				drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+			}
+		} else {
+			DECL_WIDGET_SPECIFIC(MultilineTextWidget, display_string_widget, widget);
+			DECL_STRING(text, display_string_widget->text);
+			drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+		}
+
+		return true;
     }
     return false;
 }
@@ -909,6 +936,11 @@ void showWelcomePage() {
     flush();
 }
 
+void showSelfTestResultPage() {
+    showPage(PAGE_ID_SELF_TEST_RESULT);
+    flush();
+}
+
 void showStandbyPage() {
     showPage(PAGE_ID_STANDBY);
     flush();
@@ -1055,9 +1087,13 @@ void tick(unsigned long tick_usec) {
         return;
     }
 
-    // go to the main page after transitional page
+    // go to the main page (or self test result) after transitional page
     if (active_page_id == PAGE_ID_WELCOME || active_page_id == PAGE_ID_STANDBY || active_page_id == PAGE_ID_ENTERING_STANDBY) {
-        showPage(PAGE_ID_MAIN);
+		if (devices::anyFailedOrWarning()) {
+			showPage(PAGE_ID_SELF_TEST_RESULT);
+		} else {
+			showPage(PAGE_ID_MAIN);
+		}
         return;
     }
 

@@ -72,6 +72,8 @@ namespace eez {
 namespace psu {
 namespace bp {
 
+extern psu::TestResult test_result;
+
 void init();
 
 void switchStandby(bool on);

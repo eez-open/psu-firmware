@@ -82,6 +82,9 @@ struct Value {
 
     void toText(char *text, int count) const;
 
+	bool isString() { return unit_ == UNIT_STR; }
+	const char *asString() { return str_; }
+
 private:
     uint8_t unit_;
     union {

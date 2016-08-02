@@ -55,6 +55,7 @@ uint16_t CH_BOARD_REVISION_FEATURES[] = {
 
 #define CHANNEL(INDEX, BOARD_REVISION, PINS, PARAMS) Channel(INDEX, BOARD_REVISION, PINS, PARAMS)
 Channel channels[CH_MAX] = { CHANNELS };
+#undef CHANNEL
 
 ////////////////////////////////////////////////////////////////////////////////
 

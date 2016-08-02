@@ -23,6 +23,8 @@ namespace eez {
 namespace psu {
 namespace bp {
 
+psu::TestResult test_result = psu::TEST_SKIPPED;
+
 static uint16_t last_conf;
 
 ////////////////////////////////////////////////////////////////////////////////
