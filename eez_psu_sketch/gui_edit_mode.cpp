@@ -28,11 +28,11 @@ namespace psu {
 namespace gui {
 namespace edit_mode {
 
-static int tab_index = PAGE_ID_EDIT_MODE_SLIDER;
-static data::Cursor data_cursor;
-static int data_id = -1;
-static data::Value edit_value;
-static data::Value undo_value;
+static int tabIndex = PAGE_ID_EDIT_MODE_SLIDER;
+static data::Cursor dataCursor;
+static int dataId = -1;
+static data::Value editValue;
+static data::Value undoValue;
 static data::Value minValue;
 static data::Value maxValue;
 static bool is_interactive_mode = true;
@@ -87,39 +87,39 @@ bool Snapshot::isBlinking(data::Snapshot& snapshot, uint8_t id, bool &result) {
 ////////////////////////////////////////////////////////////////////////////////
 
 bool isActive() {
-    return data_id != -1;
+    return dataId != -1;
 }
 
-void enter(int tab_index_) {
-	if (tab_index_ != -1) {
-		tab_index = tab_index_;
+void enter(int tabIndex_) {
+	if (tabIndex_ != -1) {
+		tabIndex = tabIndex_;
 	}
 
-    if (getActivePage() != tab_index) {
+    if (getActivePage() != tabIndex) {
         if (getActivePage() == PAGE_ID_MAIN) {
-            data_cursor = found_widget_at_down.cursor;
+            dataCursor = found_widget_at_down.cursor;
             DECL_WIDGET(widget, found_widget_at_down.widgetOffset);
-            data_id = widget->data;
+            dataId = widget->data;
         }
 
-        edit_value = data::currentSnapshot.get(data_cursor, data_id);
-        undo_value = edit_value;
-        minValue = data::getMin(data_cursor, data_id);
-        maxValue = data::getMax(data_cursor, data_id);
+        editValue = data::currentSnapshot.get(dataCursor, dataId);
+        undoValue = editValue;
+        minValue = data::getMin(dataCursor, dataId);
+        maxValue = data::getMax(dataCursor, dataId);
 
-        if (tab_index == PAGE_ID_EDIT_MODE_KEYPAD) {
+        if (tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
             edit_mode_keypad::reset();
         }
 
         psu::enterTimeCriticalMode();
 
-        showPage(tab_index);
+        showPage(tabIndex);
     }
 }
 
 void exit() {
     if (getActivePage() != PAGE_ID_MAIN) {
-        data_id = -1;
+        dataId = -1;
 
         psu::leaveTimeCriticalMode();
 
@@ -128,12 +128,12 @@ void exit() {
 }
 
 void nonInteractiveSet() {
-    data::set(data_cursor, data_id, edit_value);
+    data::set(dataCursor, dataId, editValue);
 }
 
 void nonInteractiveDiscard() {
-    edit_value = undo_value;
-    data::set(data_cursor, data_id, undo_value);
+    editValue = undoValue;
+    data::set(dataCursor, dataId, undoValue);
 }
 
 bool isInteractiveMode() {
@@ -142,16 +142,16 @@ bool isInteractiveMode() {
 
 void toggleInteractiveMode() {
     is_interactive_mode = !is_interactive_mode;
-    edit_value = data::currentSnapshot.get(data_cursor, data_id);
-    undo_value = edit_value;
+    editValue = data::currentSnapshot.get(dataCursor, dataId);
+    undoValue = editValue;
 }
 
 const data::Value& getEditValue() {
-    return edit_value;
+    return editValue;
 }
 
 data::Value getCurrentValue(data::Snapshot snapshot) {
-    return snapshot.get(data_cursor, data_id);
+    return snapshot.get(dataCursor, dataId);
 }
 
 const data::Value& getMin() {
@@ -163,27 +163,27 @@ const data::Value& getMax() {
 }
 
 data::Unit getUnit() {
-    return edit_value.getUnit();
+    return editValue.getUnit();
 }
 
 void setValue(float value_) {
     data::Value value = data::Value(value_, getUnit());
-    if (is_interactive_mode || tab_index == PAGE_ID_EDIT_MODE_KEYPAD) {
-        if (!data::set(data_cursor, data_id, value)) {
+    if (is_interactive_mode || tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
+        if (!data::set(dataCursor, dataId, value)) {
             return;
         }
     }
-    edit_value = value;
+    editValue = value;
 }
 
 bool isEditWidget(const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
-    return widgetCursor.cursor == data_cursor && widget->data == data_id;
+    return widgetCursor.cursor == dataCursor && widget->data == dataId;
 }
 
 void getInfoText(char *infoText) {
-    Channel &channel = Channel::get(data_cursor.iChannel);
-    if (data_id == DATA_ID_VOLT) {
+    Channel &channel = Channel::get(dataCursor.iChannel);
+    if (dataId == DATA_ID_VOLT) {
         sprintf_P(infoText, PSTR("Set Ch%d voltage [%d-%d V]"), channel.index, (int)minValue.getFloat(), (int)maxValue.getFloat());
     } else {
         sprintf_P(infoText, PSTR("Set Ch%d current [%d-%d A]"), channel.index, (int)minValue.getFloat(), (int)maxValue.getFloat());

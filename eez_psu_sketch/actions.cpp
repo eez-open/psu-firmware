@@ -166,6 +166,62 @@ void action_show_main_help_page() {
     showPage(PAGE_ID_MAIN_HELP);
 }
 
+void action_show_ch_settings() {
+    showPage(PAGE_ID_CH_SETTINGS_PROT);
+}
+
+void action_show_ch_settings_prot() {
+    showPage(PAGE_ID_CH_SETTINGS_PROT);
+}
+
+void action_show_ch_settings_prot_clear() {
+    showPage(PAGE_ID_CH_SETTINGS_PROT_CLEAR);
+}
+
+void action_show_ch_settings_prot_ocp() {
+    showPage(PAGE_ID_CH_SETTINGS_PROT_OCP);
+}
+
+void action_show_ch_settings_prot_ovp() {
+    showPage(PAGE_ID_CH_SETTINGS_PROT_OVP);
+}
+
+void action_show_ch_settings_prot_opp() {
+    showPage(PAGE_ID_CH_SETTINGS_PROT_OPP);
+}
+
+void action_show_ch_settings_prot_otp() {
+    showPage(PAGE_ID_CH_SETTINGS_PROT_OTP);
+}
+
+void action_show_ch_settings_adv() {
+    showPage(PAGE_ID_CH_SETTINGS_ADV);
+}
+
+void action_show_ch_settings_adv_lripple() {
+    showPage(PAGE_ID_CH_SETTINGS_ADV_LRIPPLE);
+}
+
+void action_show_ch_settings_adv_limits() {
+    showPage(PAGE_ID_CH_SETTINGS_ADV_LIMITS);
+}
+
+void action_show_ch_settings_adv_rsense() {
+    showPage(PAGE_ID_CH_SETTINGS_ADV_RSENSE);
+}
+
+void action_show_ch_settings_adv_rprog() {
+    showPage(PAGE_ID_CH_SETTINGS_ADV_RPROG);
+}
+
+void action_show_ch_settings_disp() {
+    showPage(PAGE_ID_CH_SETTINGS_DISP);
+}
+
+void action_show_ch_settings_info() {
+    showPage(PAGE_ID_CH_SETTINGS_INFO);
+}
+
 
 ACTION actions[] = {
     0,
@@ -202,7 +258,21 @@ ACTION actions[] = {
     action_cancel,
     action_turn_off,
     action_show_sys_settings,
-    action_show_main_help_page
+    action_show_main_help_page,
+    action_show_ch_settings,
+    action_show_ch_settings_prot,
+    action_show_ch_settings_prot_clear,
+    action_show_ch_settings_prot_ocp,
+    action_show_ch_settings_prot_ovp,
+    action_show_ch_settings_prot_opp,
+    action_show_ch_settings_prot_otp,
+    action_show_ch_settings_adv,
+    action_show_ch_settings_adv_lripple,
+    action_show_ch_settings_adv_limits,
+    action_show_ch_settings_adv_rsense,
+    action_show_ch_settings_adv_rprog,
+    action_show_ch_settings_disp,
+    action_show_ch_settings_info
 };
 
 }

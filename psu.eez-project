@@ -120,6 +120,10 @@
     {
       "name": "firmware_info",
       "defaultValue": "Firmware: M2"
+    },
+    {
+      "name": "self_test_result",
+      "defaultValue": "- FAN\n- CH1 temp sensor"
     }
   ],
   "actions": [
@@ -301,6 +305,76 @@
       "name": "show_main_help_page",
       "implementationType": "native",
       "implementation": "showPage(PAGE_ID_MAIN_HELP);"
+    },
+    {
+      "name": "show_ch_settings",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT);"
+    },
+    {
+      "name": "show_ch_settings_prot",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT);"
+    },
+    {
+      "name": "show_ch_settings_prot_clear",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_CLEAR);"
+    },
+    {
+      "name": "show_ch_settings_prot_ocp",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OCP);"
+    },
+    {
+      "name": "show_ch_settings_prot_ovp",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OVP);"
+    },
+    {
+      "name": "show_ch_settings_prot_opp",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OPP);"
+    },
+    {
+      "name": "show_ch_settings_prot_otp",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OTP);"
+    },
+    {
+      "name": "show_ch_settings_adv",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_ADV);"
+    },
+    {
+      "name": "show_ch_settings_adv_lripple",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_ADV_LRIPPLE);"
+    },
+    {
+      "name": "show_ch_settings_adv_limits",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_ADV_LIMITS);"
+    },
+    {
+      "name": "show_ch_settings_adv_rsense",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_ADV_RSENSE);"
+    },
+    {
+      "name": "show_ch_settings_adv_rprog",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_ADV_RPROG);"
+    },
+    {
+      "name": "show_ch_settings_disp",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_DISP);"
+    },
+    {
+      "name": "show_ch_settings_info",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_INFO);"
     }
   ],
   "gui": {
@@ -43207,6 +43281,11 @@
         "inheritFrom": "default"
       },
       {
+        "name": "default_ICONS",
+        "inheritFrom": "default",
+        "_font": "icons"
+      },
+      {
         "name": "prot_indicator_S",
         "_alignHorizontal": "center",
         "_font": "small",
@@ -43304,7 +43383,6 @@
       },
       {
         "name": "prot_indicator_set_S",
-        "_color": "#000000",
         "_font": "small",
         "_alignHorizontal": "center",
         "_alignVertical": "center",
@@ -43894,6 +43972,81 @@
           "y": 0,
           "width": 320,
           "height": 240
+        }
+      },
+      {
+        "name": "self_test_result",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": [
+            {
+              "type": "MultilineText",
+              "text": "",
+              "x": 0,
+              "y": 40,
+              "width": 240,
+              "height": 240,
+              "style": "default_S",
+              "data": "self_test_result"
+            },
+            {
+              "type": "Text",
+              "text": "Self test failed for the following:",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 32,
+              "style": "default_S"
+            },
+            {
+              "type": "Text",
+              "text": "X",
+              "x": 100,
+              "y": 280,
+              "width": 40,
+              "height": 40,
+              "style": "default_ICONS"
+            }
+          ]
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "MultilineText",
+              "text": "",
+              "x": 0,
+              "y": 40,
+              "width": 320,
+              "height": 160,
+              "style": "default_S",
+              "data": "self_test_result"
+            },
+            {
+              "type": "Text",
+              "text": "X",
+              "x": 140,
+              "y": 200,
+              "width": 40,
+              "height": 40,
+              "style": "default_ICONS"
+            },
+            {
+              "type": "Text",
+              "text": "Self test failed for the following:",
+              "x": 0,
+              "y": 0,
+              "width": 320,
+              "height": 32,
+              "style": "default_S"
+            }
+          ]
         }
       },
       {
@@ -46773,7 +46926,7 @@
                           {
                             "type": "Text",
                             "x": 0,
-                            "y": 0,
+                            "y": 24,
                             "style": "prot_indicator_S",
                             "text": "OTP",
                             "width": 48,
@@ -46811,7 +46964,7 @@
                           {
                             "type": "Text",
                             "x": 0,
-                            "y": 0,
+                            "y": -24,
                             "style": "prot_indicator_S",
                             "text": "OPP",
                             "width": 48,
@@ -49343,7 +49496,8 @@
               "y": 32,
               "width": 180,
               "height": 32,
-              "style": "edit_value_active_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_clear"
             },
             {
               "type": "Text",
@@ -49352,7 +49506,8 @@
               "y": 64,
               "width": 180,
               "height": 32,
-              "style": "edit_value_active_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_ocp"
             },
             {
               "type": "Text",
@@ -49361,32 +49516,795 @@
               "y": 96,
               "width": 180,
               "height": 32,
-              "style": "edit_value_active_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_ovp"
             },
             {
               "type": "Text",
               "text": "Temperature (OTP)",
               "x": 12,
-              "y": 128,
+              "y": 160,
               "width": 180,
               "height": 34,
-              "style": "edit_value_active_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_otp"
             },
             {
               "type": "Text",
               "text": "Power (OPP)",
               "x": 12,
-              "y": 162,
+              "y": 128,
               "width": 180,
               "height": 32,
-              "style": "edit_value_active_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_opp"
             }
           ]
         },
         "description": "Clear, disable and define channel's protection parameters"
       },
       {
-        "name": "ch_settings_prot_set_pwr",
+        "name": "ch_settings_prot_clear",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "TODO",
+              "x": 0,
+              "y": 40,
+              "width": 240,
+              "height": 83,
+              "style": "default"
+            },
+            {
+              "type": "Local.NotificationBar",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 40,
+              "style": "default"
+            }
+          ]
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "output_state",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "output_mode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 76,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "volt",
+                    "x": 0,
+                    "y": 30,
+                    "width": 76,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "curr",
+                    "x": 0,
+                    "y": 60,
+                    "width": 76,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 80,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 240,
+              "y": 0,
+              "width": 80,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
+            },
+            {
+              "type": "DisplayData",
+              "data": "edit_info",
+              "x": 0,
+              "y": 0,
+              "style": "edit_info_S",
+              "width": 240,
+              "height": 32
+            },
+            {
+              "type": "Rectangle",
+              "x": 192,
+              "y": 204,
+              "width": 80,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "MultilineText",
+              "text": "Make sure that load is disconnected before clear tripped protection(s).",
+              "x": 16,
+              "y": 32,
+              "width": 224,
+              "height": 80,
+              "style": "edit_value_S_right"
+            },
+            {
+              "type": "Text",
+              "text": "Clear",
+              "x": 12,
+              "y": 117,
+              "width": 180,
+              "height": 32,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Clear and disable",
+              "x": 12,
+              "y": 149,
+              "width": 180,
+              "height": 32,
+              "style": "edit_value_active_S_left"
+            }
+          ]
+        },
+        "description": "Clear and/or disable selected channel's protection(s)"
+      },
+      {
+        "name": "ch_settings_prot_ocp",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "TODO",
+              "x": 0,
+              "y": 40,
+              "width": 240,
+              "height": 83,
+              "style": "default"
+            },
+            {
+              "type": "Local.NotificationBar",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 40,
+              "style": "default"
+            }
+          ]
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "output_state",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "output_mode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 76,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "volt",
+                    "x": 0,
+                    "y": 30,
+                    "width": 76,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "curr",
+                    "x": 0,
+                    "y": 60,
+                    "width": 76,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 80,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 240,
+              "y": 0,
+              "width": 80,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
+            },
+            {
+              "type": "DisplayData",
+              "data": "edit_info",
+              "x": 0,
+              "y": 0,
+              "style": "edit_info_S",
+              "width": 240,
+              "height": 32
+            },
+            {
+              "type": "Rectangle",
+              "x": 192,
+              "y": 204,
+              "width": 80,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "State:",
+              "x": 16,
+              "y": 32,
+              "width": 130,
+              "height": 42,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Text",
+              "text": "ON",
+              "x": 146,
+              "y": 32,
+              "width": 60,
+              "height": 42,
+              "style": "edit_value_active_left"
+            },
+            {
+              "type": "Text",
+              "text": "Delay [s]:",
+              "x": 16,
+              "y": 74,
+              "width": 130,
+              "height": 42,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Text",
+              "text": "0.5",
+              "x": 146,
+              "y": 74,
+              "width": 94,
+              "height": 42,
+              "style": "edit_value_active_left"
+            },
+            {
+              "type": "Text",
+              "action": "non_interactive_discard",
+              "style": "non_interactive_button_S",
+              "x": 117,
+              "y": 160,
+              "text": " Discard",
+              "width": 96,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "non_interactive_enter",
+              "style": "non_interactive_button_S",
+              "x": 16,
+              "y": 160,
+              "text": "~ Set",
+              "width": 101,
+              "height": 36
+            }
+          ]
+        },
+        "description": "Define selected protection values\n"
+      },
+      {
+        "name": "ch_settings_prot_ovp",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "TODO",
+              "x": 0,
+              "y": 40,
+              "width": 240,
+              "height": 83,
+              "style": "default"
+            },
+            {
+              "type": "Local.NotificationBar",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 40,
+              "style": "default"
+            }
+          ]
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "output_state",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "output_mode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 76,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "volt",
+                    "x": 0,
+                    "y": 30,
+                    "width": 76,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "curr",
+                    "x": 0,
+                    "y": 60,
+                    "width": 76,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 80,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 240,
+              "y": 0,
+              "width": 80,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
+            },
+            {
+              "type": "DisplayData",
+              "data": "edit_info",
+              "x": 0,
+              "y": 0,
+              "style": "edit_info_S",
+              "width": 240,
+              "height": 32
+            },
+            {
+              "type": "Rectangle",
+              "x": 192,
+              "y": 204,
+              "width": 80,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "State:",
+              "x": 16,
+              "y": 32,
+              "width": 130,
+              "height": 42,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Text",
+              "text": "OFF",
+              "x": 146,
+              "y": 32,
+              "width": 60,
+              "height": 42,
+              "style": "edit_value_active_left"
+            },
+            {
+              "type": "Text",
+              "text": "Level [V]:",
+              "x": 16,
+              "y": 74,
+              "width": 130,
+              "height": 42,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Text",
+              "text": "40.00",
+              "x": 146,
+              "y": 74,
+              "width": 94,
+              "height": 42,
+              "style": "edit_value_active_left"
+            },
+            {
+              "type": "Text",
+              "text": "Delay [s]:",
+              "x": 16,
+              "y": 114,
+              "width": 130,
+              "height": 42,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Text",
+              "text": "0.05",
+              "x": 146,
+              "y": 114,
+              "width": 94,
+              "height": 42,
+              "style": "edit_value_active_left"
+            },
+            {
+              "type": "Text",
+              "action": "non_interactive_discard",
+              "style": "non_interactive_button_S",
+              "x": 117,
+              "y": 160,
+              "text": " Discard",
+              "width": 96,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "non_interactive_enter",
+              "style": "non_interactive_button_S",
+              "x": 16,
+              "y": 160,
+              "text": "~ Set",
+              "width": 101,
+              "height": 36
+            }
+          ]
+        },
+        "description": "Define selected protection values\n"
+      },
+      {
+        "name": "ch_settings_prot_opp",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -49661,7 +50579,7 @@
         "description": "Define selected protection values\n"
       },
       {
-        "name": "ch_settings_prot_clear",
+        "name": "ch_settings_prot_otp",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -49858,35 +50776,82 @@
               "height": 36
             },
             {
-              "type": "MultilineText",
-              "text": "Make sure that load is disconnected before clear tripped protection(s).",
+              "type": "Text",
+              "text": "State:",
               "x": 16,
               "y": 32,
-              "width": 224,
-              "height": 80,
-              "style": "edit_value_S_right"
+              "width": 130,
+              "height": 42,
+              "style": "edit_value_left"
             },
             {
               "type": "Text",
-              "text": "Clear",
-              "x": 12,
-              "y": 117,
-              "width": 180,
-              "height": 32,
-              "style": "edit_value_active_S_left"
+              "text": "ON",
+              "x": 146,
+              "y": 32,
+              "width": 60,
+              "height": 42,
+              "style": "edit_value_active_left"
             },
             {
               "type": "Text",
-              "text": "Clear and disable",
-              "x": 12,
-              "y": 149,
-              "width": 180,
-              "height": 32,
-              "style": "edit_value_active_S_left"
+              "text": "Level [oC]:",
+              "x": 16,
+              "y": 74,
+              "width": 130,
+              "height": 42,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Text",
+              "text": "75.00",
+              "x": 146,
+              "y": 74,
+              "width": 94,
+              "height": 42,
+              "style": "edit_value_active_left"
+            },
+            {
+              "type": "Text",
+              "text": "Delay [s]:",
+              "x": 16,
+              "y": 114,
+              "width": 130,
+              "height": 42,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Text",
+              "text": "10.00",
+              "x": 146,
+              "y": 114,
+              "width": 94,
+              "height": 42,
+              "style": "edit_value_active_left"
+            },
+            {
+              "type": "Text",
+              "action": "non_interactive_discard",
+              "style": "non_interactive_button_S",
+              "x": 117,
+              "y": 160,
+              "text": " Discard",
+              "width": 96,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "non_interactive_enter",
+              "style": "non_interactive_button_S",
+              "x": 16,
+              "y": 160,
+              "text": "~ Set",
+              "width": 101,
+              "height": 36
             }
           ]
         },
-        "description": "Clear and/or disable selected channel's protection(s)"
+        "description": "Define selected protection values\n"
       },
       {
         "name": "ch_settings_adv",
@@ -50092,7 +51057,8 @@
               "y": 30,
               "width": 180,
               "height": 32,
-              "style": "edit_value_active_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_adv_lripple"
             },
             {
               "type": "Text",
@@ -50101,7 +51067,8 @@
               "y": 96,
               "width": 180,
               "height": 32,
-              "style": "edit_value_active_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_adv_rsense"
             },
             {
               "type": "Text",
@@ -50110,7 +51077,8 @@
               "y": 128,
               "width": 180,
               "height": 32,
-              "style": "edit_value_active_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_adv_rprog"
             },
             {
               "type": "Text",
@@ -50128,7 +51096,8 @@
               "y": 62,
               "width": 180,
               "height": 34,
-              "style": "edit_value_active_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_adv_limits"
             }
           ]
         },
@@ -53757,7 +54726,7 @@
       "pages": [
         {
           "x": -212,
-          "y": -1166,
+          "y": -1158,
           "page": "welcome"
         },
         {
@@ -53766,53 +54735,53 @@
           "page": "main"
         },
         {
-          "x": 486,
-          "y": 248,
+          "x": 419,
+          "y": 316,
           "page": "ch_settings_prot"
         },
         {
-          "x": 1669,
-          "y": 248,
+          "x": 1925,
+          "y": -446,
           "page": "ch_settings_info"
         },
         {
-          "x": 1279,
-          "y": 248,
+          "x": 1440,
+          "y": -304,
           "page": "ch_settings_disp"
         },
         {
-          "x": 885,
-          "y": 248,
+          "x": 948,
+          "y": -239,
           "page": "ch_settings_adv"
         },
         {
-          "x": 486,
+          "x": 824,
           "y": 715,
-          "page": "ch_settings_prot_set_pwr"
+          "page": "ch_settings_prot_opp"
         },
         {
-          "x": 118,
+          "x": -284,
           "y": 715,
           "page": "ch_settings_prot_clear"
         },
         {
-          "x": 655,
-          "y": 1160,
+          "x": 871,
+          "y": 286,
           "page": "ch_settings_adv_lripple"
         },
         {
-          "x": 1026,
-          "y": 1160,
+          "x": 1242,
+          "y": 286,
           "page": "ch_settings_adv_limits"
         },
         {
-          "x": 1389,
-          "y": 1160,
+          "x": 1605,
+          "y": 286,
           "page": "ch_settings_adv_rsense"
         },
         {
-          "x": 1758,
-          "y": 1160,
+          "x": 1974,
+          "y": 286,
           "page": "ch_settings_adv_rprog"
         },
         {
@@ -53874,17 +54843,29 @@
           "x": -1260,
           "y": -172,
           "page": "sys_profiles"
+        },
+        {
+          "x": 89,
+          "y": 715,
+          "page": "ch_settings_prot_ocp"
+        },
+        {
+          "x": 456,
+          "y": 715,
+          "page": "ch_settings_prot_ovp"
+        },
+        {
+          "x": 1194,
+          "y": 715,
+          "page": "ch_settings_prot_otp"
+        },
+        {
+          "x": -701,
+          "y": -1036,
+          "page": "self_test_result"
         }
       ],
       "lines": [
-        {
-          "source": {
-            "page": "welcome"
-          },
-          "target": {
-            "page": "main"
-          }
-        },
         {
           "source": {
             "page": "welcome"
@@ -54034,7 +55015,7 @@
             "page": "ch_settings_prot"
           },
           "target": {
-            "page": "ch_settings_prot_set_pwr"
+            "page": "ch_settings_prot_opp"
           }
         },
         {
@@ -54067,6 +55048,46 @@
           },
           "target": {
             "page": "ch_settings_adv_rprog"
+          }
+        },
+        {
+          "source": {
+            "page": "ch_settings_prot"
+          },
+          "target": {
+            "page": "ch_settings_prot_ocp"
+          }
+        },
+        {
+          "source": {
+            "page": "ch_settings_prot"
+          },
+          "target": {
+            "page": "ch_settings_prot_ovp"
+          }
+        },
+        {
+          "source": {
+            "page": "ch_settings_prot"
+          },
+          "target": {
+            "page": "ch_settings_prot_otp"
+          }
+        },
+        {
+          "source": {
+            "page": "welcome"
+          },
+          "target": {
+            "page": "self_test_result"
+          }
+        },
+        {
+          "source": {
+            "page": "self_test_result"
+          },
+          "target": {
+            "page": "main"
           }
         }
       ]
