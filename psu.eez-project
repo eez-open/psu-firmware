@@ -43984,7 +43984,7 @@
           "widgets": [
             {
               "type": "MultilineText",
-              "text": "",
+              "text": "<self-test error text will be displayed here>",
               "x": 0,
               "y": 40,
               "width": 240,
@@ -43994,22 +43994,12 @@
             },
             {
               "type": "Text",
-              "text": "Self Test",
+              "text": "Selt-test is not passed:",
               "x": 0,
               "y": 0,
               "width": 240,
               "height": 32,
-              "style": "default_S"
-            },
-            {
-              "type": "Text",
-              "text": "X",
-              "x": 100,
-              "y": 280,
-              "width": 40,
-              "height": 40,
-              "style": "default_ICONS",
-              "action": "show_main_page"
+              "style": "edit_info_S"
             }
           ]
         },
@@ -44023,399 +44013,40 @@
               "type": "MultilineText",
               "text": "",
               "x": 0,
-              "y": 40,
+              "y": 34,
               "width": 320,
-              "height": 160,
+              "height": 170,
               "style": "default_S",
               "data": "self_test_result"
             },
             {
               "type": "Text",
               "text": "X",
-              "x": 140,
-              "y": 200,
+              "x": 280,
+              "y": 204,
               "width": 40,
-              "height": 40,
-              "style": "default_ICONS",
+              "height": 36,
+              "style": "bottom_button",
               "action": "show_main_page"
             },
             {
               "type": "Text",
-              "text": "Self Test",
+              "text": "Selt-test is not passed:",
               "x": 0,
               "y": 0,
               "width": 320,
-              "height": 32,
-              "style": "default_S"
-            }
-          ]
-        }
-      },
-      {
-        "name": "main_old",
-        "portrait": {
-          "widgets": [
-            {
-              "type": "List",
-              "listType": "vertical",
-              "data": "channels",
-              "x": 0,
-              "y": 16,
-              "itemWidget": {
-                "type": "Select",
-                "data": "channel_ok",
-                "y": 0,
-                "widgets": [
-                  {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
-                    "x": 0,
-                    "y": 0,
-                    "width": 240,
-                    "height": 126
-                  },
-                  {
-                    "type": "Container",
-                    "widgets": [
-                      {
-                        "type": "Select",
-                        "x": 0,
-                        "y": 0,
-                        "data": "output_state",
-                        "action": "",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "style": "channel_off_L",
-                            "text": "OFF",
-                            "x": 0,
-                            "y": 0,
-                            "width": 240,
-                            "height": 86,
-                            "action": "toggle_channel"
-                          },
-                          {
-                            "type": "Select",
-                            "data": "output_mode",
-                            "widgets": [
-                              {
-                                "type": "DisplayData",
-                                "style": "mon_value_L",
-                                "data": "mon_value",
-                                "x": 0,
-                                "y": 0,
-                                "width": 240,
-                                "height": 86,
-                                "action": "toggle_channel"
-                              },
-                              {
-                                "type": "DisplayData",
-                                "style": "mon_value_L_ur",
-                                "data": "mon_value",
-                                "x": 0,
-                                "y": 0,
-                                "width": 240,
-                                "height": 86,
-                                "action": "toggle_channel"
-                              }
-                            ],
-                            "x": 0,
-                            "y": 0,
-                            "width": 240,
-                            "height": 86,
-                            "style": "default"
-                          }
-                        ],
-                        "width": 240,
-                        "height": 86,
-                        "style": "default"
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "volt",
-                        "action": "edit",
-                        "x": 0,
-                        "y": 86,
-                        "style": "mon_value",
-                        "width": 106,
-                        "height": 40
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "curr",
-                        "action": "edit",
-                        "x": 106,
-                        "y": 86,
-                        "style": "mon_value",
-                        "width": 106,
-                        "height": 40
-                      },
-                      {
-                        "type": "Text",
-                        "action": "show_channel_settings",
-                        "x": 212,
-                        "y": 86,
-                        "style": "default_S",
-                        "text": "`",
-                        "width": 28,
-                        "height": 40
-                      }
-                    ],
-                    "x": 0,
-                    "y": 0,
-                    "width": 240,
-                    "height": 126,
-                    "style": "default"
-                  }
-                ],
-                "x": 0,
-                "width": 240,
-                "height": 126,
-                "style": "default"
-              },
-              "width": 240,
-              "height": 320,
-              "style": "default"
-            },
-            {
-              "type": "Text",
-              "action": "touch_screen_calibration",
-              "x": 0,
-              "y": 284,
-              "style": "bottom_button",
-              "text": "P",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 96,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "!",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 144,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "L",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "turn_off",
-              "x": 192,
-              "y": 284,
-              "style": "bottom_button",
-              "text": "Q",
-              "width": 48,
-              "height": 36
-            }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320
-        },
-        "landscape": {
-          "widgets": [
-            {
-              "type": "Text",
-              "x": 144,
-              "y": 204,
-              "style": "bottom_button_disabled",
-              "text": "L",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 96,
-              "y": 204,
-              "style": "bottom_button_disabled",
-              "text": "!",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 204,
-              "style": "bottom_button_disabled",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "turn_off",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "Q",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "touch_screen_calibration",
-              "x": 0,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "P",
-              "width": 48,
-              "height": 36
+              "height": 24,
+              "style": "edit_info_S"
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 0,
               "y": 204,
-              "width": 80,
+              "width": 280,
               "height": 36,
               "style": "bottom_button_background"
-            },
-            {
-              "type": "List",
-              "listType": "horizontal",
-              "itemWidget": {
-                "type": "Select",
-                "data": "channel_ok",
-                "y": 0,
-                "widgets": [
-                  {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
-                    "x": 0,
-                    "y": 0,
-                    "width": 160,
-                    "height": 70
-                  },
-                  {
-                    "type": "Container",
-                    "widgets": [
-                      {
-                        "type": "Select",
-                        "x": 0,
-                        "y": 0,
-                        "data": "output_state",
-                        "action": "",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "style": "channel_off_landscape",
-                            "text": "OFF",
-                            "x": 0,
-                            "y": 0,
-                            "width": 160,
-                            "height": 70,
-                            "action": "toggle_channel"
-                          },
-                          {
-                            "type": "Select",
-                            "data": "output_mode",
-                            "widgets": [
-                              {
-                                "type": "DisplayData",
-                                "style": "mon_value_landscape_L_right",
-                                "data": "mon_value",
-                                "x": 0,
-                                "y": 0,
-                                "width": 160,
-                                "height": 70,
-                                "action": "toggle_channel"
-                              },
-                              {
-                                "type": "DisplayData",
-                                "style": "mon_value_ur_landscape_L_right",
-                                "data": "mon_value",
-                                "x": 0,
-                                "y": 0,
-                                "width": 160,
-                                "height": 70,
-                                "action": "toggle_channel"
-                              }
-                            ],
-                            "x": 0,
-                            "y": 0,
-                            "width": 160,
-                            "height": 70,
-                            "style": "default"
-                          }
-                        ],
-                        "width": 160,
-                        "height": 70,
-                        "style": "default"
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "volt",
-                        "action": "edit",
-                        "x": 0,
-                        "y": 73,
-                        "style": "mon_value",
-                        "width": 160,
-                        "height": 40
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "curr",
-                        "action": "edit",
-                        "x": 0,
-                        "y": 113,
-                        "style": "mon_value",
-                        "width": 160,
-                        "height": 40
-                      },
-                      {
-                        "type": "Text",
-                        "action": "show_channel_settings",
-                        "x": 0,
-                        "y": 148,
-                        "style": "default_S",
-                        "text": "`  Settings",
-                        "width": 160,
-                        "height": 40
-                      }
-                    ],
-                    "x": 0,
-                    "y": 0,
-                    "width": 160,
-                    "height": 70,
-                    "style": "default"
-                  }
-                ],
-                "x": 0,
-                "width": 160,
-                "height": 70,
-                "style": "default"
-              },
-              "x": 0,
-              "y": 16,
-              "width": 320,
-              "height": 188,
-              "data": "channels",
-              "style": "default"
             }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240
+          ]
         }
       },
       {
@@ -46928,7 +46559,7 @@
                           {
                             "type": "Text",
                             "x": 0,
-                            "y": 24,
+                            "y": 0,
                             "style": "prot_indicator_S",
                             "text": "OTP",
                             "width": 48,
@@ -46966,7 +46597,7 @@
                           {
                             "type": "Text",
                             "x": 0,
-                            "y": -24,
+                            "y": 0,
                             "style": "prot_indicator_S",
                             "text": "OPP",
                             "width": 48,
@@ -49453,7 +49084,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_prot",
               "x": 0,
               "y": 204,
               "style": "tab_page_selected",
@@ -49463,7 +49094,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_disp",
               "x": 96,
               "y": 204,
               "style": "tab_page",
@@ -49473,7 +49104,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_adv",
               "x": 48,
               "y": 204,
               "style": "tab_page",
@@ -49483,7 +49114,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_info",
               "x": 144,
               "y": 204,
               "style": "tab_page",
@@ -49704,17 +49335,7 @@
             },
             {
               "type": "Text",
-              "action": "",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "E",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_disp",
               "x": 96,
               "y": 204,
               "style": "tab_page",
@@ -49724,7 +49345,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_adv",
               "x": 48,
               "y": 204,
               "style": "tab_page",
@@ -49734,7 +49355,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_info",
               "x": 144,
               "y": 204,
               "style": "tab_page",
@@ -49768,6 +49389,16 @@
               "width": 180,
               "height": 32,
               "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "E",
+              "width": 48,
+              "height": 36
             }
           ]
         },
@@ -49932,46 +49563,6 @@
             },
             {
               "type": "Text",
-              "action": "",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "E",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page",
-              "text": "G",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 144,
-              "y": 204,
-              "style": "tab_page",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "text": "State:",
               "x": 16,
               "y": 32,
@@ -50024,6 +49615,46 @@
               "y": 160,
               "text": "~ Set",
               "width": 101,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_disp",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
               "height": 36
             }
           ]
@@ -50189,46 +49820,6 @@
             },
             {
               "type": "Text",
-              "action": "",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "E",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page",
-              "text": "G",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 144,
-              "y": 204,
-              "style": "tab_page",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "text": "State:",
               "x": 16,
               "y": 32,
@@ -50299,6 +49890,46 @@
               "y": 160,
               "text": "~ Set",
               "width": 101,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_disp",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
               "height": 36
             }
           ]
@@ -50464,46 +50095,6 @@
             },
             {
               "type": "Text",
-              "action": "",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "E",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page",
-              "text": "G",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 144,
-              "y": 204,
-              "style": "tab_page",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "text": "State:",
               "x": 16,
               "y": 32,
@@ -50574,6 +50165,46 @@
               "y": 160,
               "text": "~ Set",
               "width": 101,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_disp",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
               "height": 36
             }
           ]
@@ -50739,46 +50370,6 @@
             },
             {
               "type": "Text",
-              "action": "",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "E",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page",
-              "text": "G",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 144,
-              "y": 204,
-              "style": "tab_page",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "text": "State:",
               "x": 16,
               "y": 32,
@@ -50849,6 +50440,46 @@
               "y": 160,
               "text": "~ Set",
               "width": 101,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_disp",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
               "height": 36
             }
           ]
@@ -51014,7 +50645,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_prot",
               "x": 0,
               "y": 204,
               "style": "tab_page",
@@ -51024,7 +50655,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_disp",
               "x": 96,
               "y": 204,
               "style": "tab_page",
@@ -51034,7 +50665,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_adv",
               "x": 48,
               "y": 204,
               "style": "tab_page_selected",
@@ -51044,7 +50675,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_info",
               "x": 144,
               "y": 204,
               "style": "tab_page",
@@ -51264,46 +50895,6 @@
             },
             {
               "type": "Text",
-              "action": "",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page",
-              "text": "E",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "G",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 144,
-              "y": 204,
-              "style": "tab_page",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "text": "Max. current [A]:",
               "x": 16,
               "y": 30,
@@ -51393,6 +50984,46 @@
               "width": 62,
               "height": 42,
               "style": "edit_value_active_left"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_disp",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
+              "height": 36
             }
           ]
         },
@@ -51557,46 +51188,6 @@
             },
             {
               "type": "Text",
-              "action": "",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page",
-              "text": "E",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "G",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 144,
-              "y": 204,
-              "style": "tab_page",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "text": "Voltage [V]:",
               "x": 16,
               "y": 32,
@@ -51648,6 +51239,46 @@
               "width": 131,
               "height": 40,
               "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_disp",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
+              "height": 36
             }
           ]
         },
@@ -51812,46 +51443,6 @@
             },
             {
               "type": "Text",
-              "action": "",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page",
-              "text": "E",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "G",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 144,
-              "y": 204,
-              "style": "tab_page",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "text": "Status:",
               "x": 16,
               "y": 118,
@@ -51876,6 +51467,46 @@
               "width": 224,
               "height": 82,
               "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_disp",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
+              "height": 36
             }
           ]
         },
@@ -52040,46 +51671,6 @@
             },
             {
               "type": "Text",
-              "action": "",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page",
-              "text": "E",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "G",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 144,
-              "y": 204,
-              "style": "tab_page",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "text": "Status:",
               "x": 16,
               "y": 118,
@@ -52104,6 +51695,46 @@
               "width": 224,
               "height": 67,
               "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_disp",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
+              "height": 36
             }
           ]
         },
@@ -52268,7 +51899,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_prot",
               "x": 0,
               "y": 204,
               "style": "tab_page",
@@ -52278,7 +51909,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_disp",
               "x": 96,
               "y": 204,
               "style": "tab_page_selected",
@@ -52288,7 +51919,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_adv",
               "x": 48,
               "y": 204,
               "style": "tab_page",
@@ -52298,7 +51929,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_info",
               "x": 144,
               "y": 204,
               "style": "tab_page",
@@ -52496,7 +52127,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_prot",
               "x": 0,
               "y": 204,
               "style": "tab_page",
@@ -52506,7 +52137,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_disp",
               "x": 96,
               "y": 204,
               "style": "tab_page",
@@ -52516,7 +52147,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_adv",
               "x": 48,
               "y": 204,
               "style": "tab_page",
@@ -52526,7 +52157,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_ch_settings_info",
               "x": 144,
               "y": 204,
               "style": "tab_page_selected",
@@ -52581,27 +52212,9 @@
             },
             {
               "type": "Text",
-              "text": "Self-test result:",
-              "x": 12,
-              "y": 90,
-              "width": 137,
-              "height": 30,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "Passed",
-              "x": 149,
-              "y": 90,
-              "width": 91,
-              "height": 30,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
               "text": "Calib. params:",
               "x": 12,
-              "y": 120,
+              "y": 90,
               "width": 137,
               "height": 30,
               "style": "edit_value_S_left"
@@ -52610,7 +52223,7 @@
               "type": "Text",
               "text": "Corrupted",
               "x": 149,
-              "y": 120,
+              "y": 90,
               "width": 91,
               "height": 30,
               "style": "edit_value_active_S_left"
@@ -52825,7 +52438,7 @@
               "x": 12,
               "y": 30,
               "width": 180,
-              "height": 32,
+              "height": 28,
               "style": "edit_value_active_S_left",
               "action": "touch_screen_calibration"
             },
@@ -52833,36 +52446,36 @@
               "type": "Text",
               "text": "Channel's calibration",
               "x": 12,
-              "y": 62,
+              "y": 58,
               "width": 180,
-              "height": 34,
+              "height": 28,
               "style": "edit_value_active_S_left"
             },
             {
               "type": "Text",
               "text": "Sound",
               "x": 12,
-              "y": 96,
+              "y": 86,
               "width": 180,
-              "height": 32,
+              "height": 28,
               "style": "edit_value_active_S_left"
             },
             {
               "type": "Text",
               "text": "Display backlight",
               "x": 12,
-              "y": 128,
+              "y": 114,
               "width": 180,
-              "height": 32,
+              "height": 28,
               "style": "edit_value_active_S_left"
             },
             {
               "type": "Text",
               "text": "Communications",
               "x": 12,
-              "y": 160,
+              "y": 170,
               "width": 180,
-              "height": 34,
+              "height": 28,
               "style": "default_disabled_S_left"
             },
             {
@@ -52960,6 +52573,15 @@
               "style": "edit_info_S",
               "width": 240,
               "height": 32
+            },
+            {
+              "type": "Text",
+              "text": "Diagnostics",
+              "x": 12,
+              "y": 142,
+              "width": 180,
+              "height": 28,
+              "style": "edit_value_active_S_left"
             }
           ],
           "x": 0,
@@ -54728,7 +54350,7 @@
       "pages": [
         {
           "x": -212,
-          "y": -1158,
+          "y": -1319,
           "page": "welcome"
         },
         {
@@ -54862,8 +54484,8 @@
           "page": "ch_settings_prot_otp"
         },
         {
-          "x": -701,
-          "y": -1036,
+          "x": -212,
+          "y": -1024,
           "page": "self_test_result"
         }
       ],
