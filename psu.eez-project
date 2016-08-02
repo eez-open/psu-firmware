@@ -44000,6 +44000,24 @@
               "width": 240,
               "height": 32,
               "style": "edit_info_S"
+            },
+            {
+              "type": "Text",
+              "action": "exit_edit_mode",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 284,
+              "width": 192,
+              "height": 36,
+              "style": "bottom_button_background"
             }
           ]
         },
@@ -54750,5 +54768,5 @@
       "destinationFolder": "eez_psu_sketch"
     }
   },
-  "selectedBuildConfiguration": "R2B6"
+  "selectedBuildConfiguration": "R1B9"
 }
