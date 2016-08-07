@@ -43,9 +43,10 @@ namespace gui {
 #define WIDGET_TYPE_MULTILINE_TEXT 6
 #define WIDGET_TYPE_RECTANGLE 7
 #define WIDGET_TYPE_BITMAP 8
-#define WIDGET_TYPE_TOGGLE_BUTTON 9
-#define WIDGET_TYPE_BUTTON_GROUP 10
-#define WIDGET_TYPE_SCALE 11
+#define WIDGET_TYPE_BUTTON 9
+#define WIDGET_TYPE_TOGGLE_BUTTON 10
+#define WIDGET_TYPE_BUTTON_GROUP 11
+#define WIDGET_TYPE_SCALE 12
 
 #define LIST_TYPE_VERTICAL   1
 #define LIST_TYPE_HORIZONTAL 2
@@ -67,10 +68,12 @@ struct Style {
     uint8_t padding_vertical;
 };
 
+typedef uint8_t ActionType;
+
 struct Widget {
     uint8_t type;
     uint8_t data;
-    uint8_t action;
+    ActionType action;
     int16_t x;
     int16_t y;
     uint16_t w;
@@ -92,6 +95,10 @@ struct SelectWidget {
     List widgets;
 };
 
+struct DisplayDataWidget {
+    OBJ_OFFSET editStyle;
+};
+
 struct TextWidget {
     OBJ_OFFSET text;
 };
@@ -102,6 +109,12 @@ struct MultilineTextWidget {
 
 struct BitmapWidget {
     uint8_t bitmap;
+};
+
+struct ButtonWidget {
+	OBJ_OFFSET text;
+	uint8_t enabled;
+	OBJ_OFFSET disabledStyle;
 };
 
 struct ToggleButtonWidget {

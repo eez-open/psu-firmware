@@ -22,6 +22,7 @@
 #include "gui_edit_mode_slider.h"
 #include "gui_edit_mode_step.h"
 #include "gui_edit_mode_keypad.h"
+#include "gui_numeric_keypad.h"
 
 namespace eez {
 namespace psu {
@@ -39,7 +40,7 @@ static bool is_interactive_mode = true;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Snapshot::takeSnapshot() {
+void Snapshot::takeSnapshot(data::Snapshot *snapshot) {
     if (edit_mode::isActive()) {
         editValue = edit_mode::getEditValue();
 
@@ -49,14 +50,7 @@ void Snapshot::takeSnapshot() {
 
         step_index = edit_mode_step::getStepIndex();
 
-        switch (edit_mode_keypad::getEditUnit()) {
-        case data::UNIT_VOLT: keypadUnit = data::Value::ProgmemStr(PSTR("mV")); break;
-        case data::UNIT_MILLI_VOLT: keypadUnit = data::Value::ProgmemStr(PSTR("V")); break;
-        case data::UNIT_AMPER: keypadUnit = data::Value::ProgmemStr(PSTR("mA")); break;
-        default: keypadUnit = data::Value::ProgmemStr(PSTR("A"));
-        }
-
-        edit_mode_keypad::getText(keypadText, sizeof(keypadText));
+        edit_mode_keypad::getText(snapshot->keypadSnapshot.text, sizeof(snapshot->keypadSnapshot.text));
     }
 }
 
@@ -65,8 +59,6 @@ data::Value Snapshot::get(uint8_t id) {
        return editValue;
     } else if (id == DATA_ID_EDIT_INFO) {
         return infoText;
-    } else if (id == DATA_ID_EDIT_UNIT) {
-        return keypadUnit;
     } else if (id == DATA_ID_EDIT_MODE_INTERACTIVE_MODE_SELECTOR) {
         return interactiveModeSelector;
     } else if (id == DATA_ID_EDIT_STEPS) {
@@ -90,6 +82,10 @@ bool isActive() {
     return dataId != -1;
 }
 
+void onKeypadOk(float value) {
+	edit_mode::setValue(value);
+}
+
 void enter(int tabIndex_) {
 	if (tabIndex_ != -1) {
 		tabIndex = tabIndex_;
@@ -108,7 +104,7 @@ void enter(int tabIndex_) {
         maxValue = data::getMax(dataCursor, dataId);
 
         if (tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
-            edit_mode_keypad::reset();
+            numeric_keypad::init(0, editValue.getType(), minValue.getFloat(), maxValue.getFloat(), onKeypadOk, 0);
         }
 
         psu::enterTimeCriticalMode();
@@ -162,8 +158,8 @@ const data::Value& getMax() {
     return maxValue;
 }
 
-data::Unit getUnit() {
-    return editValue.getUnit();
+data::ValueType getUnit() {
+    return editValue.getType();
 }
 
 void setValue(float value_) {

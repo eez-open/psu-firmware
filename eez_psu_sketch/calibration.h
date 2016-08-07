@@ -59,6 +59,7 @@ struct Value {
     void  setLevel(int8_t level);
     void setData(float data, float adc);
 
+	bool checkRange(float value, float adc);
     bool checkMid();
 };
 
@@ -82,6 +83,9 @@ const char *getRemark();
 
 /// Set calibration remark.
 void setRemark(const char *value, size_t len);
+
+/// Are all calibration parameters entered?
+bool canSave(int16_t &scpiErr);
 
 /// Save calibration parameters entered during calibration procedure.
 bool save();

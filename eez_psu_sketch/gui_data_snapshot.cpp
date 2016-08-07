@@ -17,10 +17,13 @@
  */
 
 #include "psu.h"
+#include "calibration.h"
 #include "gui_data_snapshot.h"
 #include "gui_view.h"
 #include "gui_document.h"
 #include "gui_internal.h"
+#include "gui_keypad.h"
+#include "gui_calibration.h"
 #include "temperature.h"
 #include "devices.h"
 
@@ -123,15 +126,15 @@ void Snapshot::takeSnapshot() {
             float uMon = channel.u.mon;
             float iMon = channel.i.mon;
             if (strcmp(mode_str, "CC") == 0) {
-                channelSnapshots[i].mon_value = Value(uMon, UNIT_VOLT);
+                channelSnapshots[i].mon_value = Value(uMon, VALUE_TYPE_FLOAT_VOLT);
             } else if (strcmp(mode_str, "CV") == 0) {
-                channelSnapshots[i].mon_value = Value(iMon, UNIT_AMPER);
+                channelSnapshots[i].mon_value = Value(iMon, VALUE_TYPE_FLOAT_AMPER);
             } else {
                 channelSnapshots[i].flags.mode = 1;
                 if (uMon < iMon) {
-                    channelSnapshots[i].mon_value = Value(uMon, UNIT_VOLT);
+                    channelSnapshots[i].mon_value = Value(uMon, VALUE_TYPE_FLOAT_VOLT);
                 } else {
-                    channelSnapshots[i].mon_value = Value(iMon, UNIT_AMPER);
+                    channelSnapshots[i].mon_value = Value(iMon, VALUE_TYPE_FLOAT_AMPER);
                 }
             }
         }
@@ -181,7 +184,8 @@ void Snapshot::takeSnapshot() {
 		}
 	}
 
-    editModeSnapshot.takeSnapshot();
+	keypadSnapshot.takeSnapshot(this);
+    editModeSnapshot.takeSnapshot(this);
 
     alertMessage = g_alertMessage;
 }
@@ -196,9 +200,9 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
     } else if (id == DATA_ID_MON_VALUE) {
         return channelSnapshots[cursor.iChannel].mon_value;
     } else if (id == DATA_ID_VOLT) {
-        return Value(channelSnapshots[cursor.iChannel].u_set, UNIT_VOLT);
+        return Value(channelSnapshots[cursor.iChannel].u_set, VALUE_TYPE_FLOAT_VOLT);
     } else if (id == DATA_ID_CURR) {
-        return Value(channelSnapshots[cursor.iChannel].i_set, UNIT_AMPER);
+        return Value(channelSnapshots[cursor.iChannel].i_set, VALUE_TYPE_FLOAT_AMPER);
     } else if (id == DATA_ID_LRIP) {
         return Value(channelSnapshots[cursor.iChannel].flags.lrip);
     } else if (id == DATA_ID_OVP) {
@@ -222,11 +226,21 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
     } else if (id == DATA_ID_SELF_TEST_RESULT) {
 		return Value(selfTestResult);
 	}
-    
-    Value value = editModeSnapshot.get(id);
-    if (value.getUnit() != UNIT_NONE) {
+
+	Value value = keypadSnapshot.get(id);
+    if (value.getType() != VALUE_TYPE_NONE) {
         return value;
     }
+
+    value = editModeSnapshot.get(id);
+    if (value.getType() != VALUE_TYPE_NONE) {
+        return value;
+    }
+
+	value = gui::calibration::getData(cursor, id);
+    if (value.getType() != VALUE_TYPE_NONE) {
+		return value;
+	}
 
     return Value();
 }

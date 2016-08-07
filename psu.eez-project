@@ -124,6 +124,68 @@
     {
       "name": "self_test_result",
       "defaultValue": "- FAN failed\n- CH1 temp sensor failed"
+    },
+    {
+      "name": "calibration.passwordStatus",
+      "description": "0 - not set\n1 - set",
+      "defaultValue": "0"
+    },
+    {
+      "name": "calibration.channel.label",
+      "description": "Channel label, i.e. \"Channel 1:\", \"Channel 2:\", etc.",
+      "defaultValue": "Channel X:"
+    },
+    {
+      "name": "calibration.channel.status",
+      "description": "0 - not calibrated\n1 - calibrated",
+      "defaultValue": "0"
+    },
+    {
+      "name": "calibration.channel.date",
+      "defaultValue": "<date>"
+    },
+    {
+      "name": "calibration.channel.remark",
+      "defaultValue": "<remark>"
+    },
+    {
+      "name": "calibration.channel.paramsEnabled",
+      "description": "0 - calibration params not enabled\n1 - calibration params enebled",
+      "defaultValue": "0"
+    },
+    {
+      "name": "calibration.channel.stepNum",
+      "defaultValue": "0",
+      "description": "0 - U min\n1 - U mid\n2 - U max\n3 - I min\n4 - I mid\n5 - I max"
+    },
+    {
+      "name": "calibration.channel.stepStatus",
+      "defaultValue": "0",
+      "description": "0 - calibration value is not defined\n1 - calibration value is defined"
+    },
+    {
+      "name": "calibration.channel.stepValue",
+      "defaultValue": "0.12 V"
+    },
+    {
+      "name": "calibration.channel.stepPrevEnabled",
+      "defaultValue": "0",
+      "description": "Is previous step enabled?\n0 - No\n1 - Yes"
+    },
+    {
+      "name": "calibration.channel.stepNextEnabled",
+      "defaultValue": "1",
+      "description": "Is next step enabled?\n0 - No\n1 - Yes"
+    },
+    {
+      "name": "keypad_text",
+      "defaultValue": "abc123|",
+      "description": "Contains the text entered in keypad."
+    },
+    {
+      "name": "keypad_caps",
+      "defaultValue": "0",
+      "description": "0 - lower case\n1 - upper case"
     }
   ],
   "actions": [
@@ -189,84 +251,49 @@
       "implementation": "edit_mode::nonInteractiveDiscard();"
     },
     {
-      "name": "key_0",
+      "name": "keypad_key",
       "implementationType": "native",
-      "implementation": "edit_mode_keypad::digit(0);"
+      "implementation": "keypad::key();"
     },
     {
-      "name": "key_1",
+      "name": "keypad_space",
       "implementationType": "native",
-      "implementation": "edit_mode_keypad::digit(1);"
+      "implementation": "keypad::space();"
     },
     {
-      "name": "key_2",
+      "name": "keypad_back",
       "implementationType": "native",
-      "implementation": "edit_mode_keypad::digit(2);"
+      "implementation": "keypad::back();"
     },
     {
-      "name": "key_3",
+      "name": "keypad_clear",
       "implementationType": "native",
-      "implementation": "edit_mode_keypad::digit(3);"
+      "implementation": "keypad::clear();"
     },
     {
-      "name": "key_4",
+      "name": "keypad_caps",
       "implementationType": "native",
-      "implementation": "edit_mode_keypad::digit(4);"
+      "implementation": "keypad::caps();"
     },
     {
-      "name": "key_5",
+      "name": "keypad_ok",
       "implementationType": "native",
-      "implementation": "edit_mode_keypad::digit(5);"
+      "implementation": "keypad::ok();"
     },
     {
-      "name": "key_6",
+      "name": "keypad_cancel",
       "implementationType": "native",
-      "implementation": "edit_mode_keypad::digit(6);"
+      "implementation": "keypad::cancel();"
     },
     {
-      "name": "key_7",
+      "name": "keypad_sign",
       "implementationType": "native",
-      "implementation": "edit_mode_keypad::digit(7);"
+      "implementation": "keypad::sign();"
     },
     {
-      "name": "key_8",
+      "name": "keypad_unit",
       "implementationType": "native",
-      "implementation": "edit_mode_keypad::digit(8);"
-    },
-    {
-      "name": "key_9",
-      "implementationType": "native",
-      "implementation": "edit_mode_keypad::digit(9);"
-    },
-    {
-      "name": "key_dot",
-      "implementationType": "native",
-      "implementation": "edit_mode_keypad::dot();"
-    },
-    {
-      "name": "key_sign",
-      "implementationType": "native",
-      "implementation": "edit_mode_keypad::sign();"
-    },
-    {
-      "name": "key_back",
-      "implementationType": "native",
-      "implementation": "edit_mode_keypad::back();"
-    },
-    {
-      "name": "key_c",
-      "implementationType": "native",
-      "implementation": "edit_mode_keypad::clear();"
-    },
-    {
-      "name": "key_ok",
-      "implementationType": "native",
-      "implementation": "edit_mode_keypad::ok();"
-    },
-    {
-      "name": "key_unit",
-      "implementationType": "native",
-      "implementation": "edit_mode_keypad::unit();"
+      "implementation": "keypad::unit();"
     },
     {
       "name": "touch_screen_calibration",
@@ -287,10 +314,20 @@
       "implementation": "dialog_no_callback();"
     },
     {
+      "name": "ok",
+      "implementationType": "native",
+      "implementation": "dialog_ok_callback();"
+    },
+    {
       "name": "cancel",
       "description": "Cancel action in dialog",
       "implementationType": "native",
       "implementation": "dialog_cancel_callback();"
+    },
+    {
+      "name": "show_previous_page",
+      "implementationType": "native",
+      "implementation": "showPreviousPage();"
     },
     {
       "name": "turn_off",
@@ -375,6 +412,60 @@
       "name": "show_ch_settings_info",
       "implementationType": "native",
       "implementation": "showPage(PAGE_ID_CH_SETTINGS_INFO);"
+    },
+    {
+      "name": "show_sys_settings_cal",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_SYS_SETTINGS_CAL);"
+    },
+    {
+      "name": "show_sys_settings_cal_ch",
+      "implementationType": "native",
+      "implementation": "calibration::selectChannel();\nshowPage(PAGE_ID_SYS_SETTINGS_CAL_CH);"
+    },
+    {
+      "name": "sys_settings_cal_edit_password",
+      "implementationType": "native",
+      "implementation": "calibration::editPassword();"
+    },
+    {
+      "name": "sys_settings_cal_ch_params_enabled",
+      "implementationType": "native"
+    },
+    {
+      "name": "sys_settings_cal_ch_wiz_start",
+      "implementationType": "native",
+      "implementation": "calibration::start();"
+    },
+    {
+      "name": "sys_settings_cal_ch_wiz_step_previous",
+      "implementationType": "native",
+      "implementation": "calibration::previousStep();"
+    },
+    {
+      "name": "sys_settings_cal_ch_wiz_step_next",
+      "implementationType": "native",
+      "implementation": "calibration::nextStep();"
+    },
+    {
+      "name": "sys_settings_cal_ch_wiz_stop_and_show_previous_page",
+      "implementationType": "native",
+      "implementation": "calibration::stop();\nshowPreviousPage();"
+    },
+    {
+      "name": "sys_settings_cal_ch_wiz_stop_and_show_main_page",
+      "implementationType": "native",
+      "implementation": "calibration::stop();\nshowPage(PAGE_ID_MAIN);"
+    },
+    {
+      "name": "sys_settings_cal_ch_wiz_step_set",
+      "implementationType": "native",
+      "implementation": "calibration::set();"
+    },
+    {
+      "name": "sys_settings_cal_ch_wiz_save",
+      "implementationType": "native",
+      "implementation": "calibration::save();\n"
     }
   ],
   "gui": {
@@ -30968,11 +31059,183 @@
           },
           {
             "encoding": 85,
-            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAjCAYAAABVcWC0AAAAD0lEQVQIW2NkAALGIUMAAAz9ACRF5/SBAAAAAElFTkSuQmCC",
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAjCAYAAAAaLGNkAAABBUlEQVRYR+2Y4Q7DIAiE6/s/9JY2s2EdcAdqtcn2tww/4Thty7bAryzAsEmI1wSgY/0KMQOg7rnsEDMBDpClIUYK9qfyWiVGAlQdfIH8Ic7xUKZDa0ctX6RV3n/C7dBG2INh4rtASKOTRmt5zhU6DLEvwiRnYpqmw3NVZHiexkzHtPqdsXcqV9QnIiC0eKMQnj6kQNEop4R5vWogjaCrSTME05KhlWAApBtbFUlXIgKAQFIQSAPouaspdjoYN2Ri0o6ZTi6233x2MKciOsSaIaRBodHTYLqeHciAIs9T0xFZgIl9BoR1a2J2yMRQ7x1Moq4x6FbUdTEr2TJv5aqV3lKCz6eJN/bEVQfomi2vAAAAAElFTkSuQmCC",
             "source": {
               "filePath": "fonts/bdf/webhostinghub-glyphs.24.bdf",
-              "encoding": 85
-            }
+              "encoding": 62225
+            },
+            "x": 0,
+            "y": 0,
+            "width": 33,
+            "height": 33,
+            "dx": 33,
+            "pixels": [
+              63,
+              255,
+              255,
+              254,
+              0,
+              127,
+              255,
+              255,
+              255,
+              0,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              248,
+              0,
+              0,
+              15,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              240,
+              96,
+              3,
+              7,
+              128,
+              240,
+              248,
+              15,
+              135,
+              128,
+              240,
+              252,
+              31,
+              135,
+              128,
+              240,
+              126,
+              63,
+              7,
+              128,
+              240,
+              127,
+              127,
+              7,
+              128,
+              240,
+              63,
+              254,
+              7,
+              128,
+              240,
+              31,
+              252,
+              7,
+              128,
+              240,
+              15,
+              248,
+              7,
+              128,
+              240,
+              7,
+              240,
+              7,
+              128,
+              240,
+              15,
+              248,
+              7,
+              128,
+              240,
+              31,
+              252,
+              7,
+              128,
+              240,
+              63,
+              254,
+              7,
+              128,
+              240,
+              127,
+              127,
+              7,
+              128,
+              240,
+              126,
+              63,
+              7,
+              128,
+              240,
+              252,
+              31,
+              135,
+              128,
+              240,
+              248,
+              15,
+              135,
+              128,
+              240,
+              96,
+              3,
+              7,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              248,
+              0,
+              0,
+              15,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              127,
+              255,
+              255,
+              255,
+              0,
+              63,
+              255,
+              255,
+              254,
+              0
+            ]
           },
           {
             "encoding": 86,
@@ -43268,6 +43531,11 @@
         "inheritFrom": "default"
       },
       {
+        "name": "default_active_S",
+        "inheritFrom": "default_S",
+        "_color": "#ffff00"
+      },
+      {
         "name": "default_L",
         "_font": "large",
         "_alignHorizontal": "center",
@@ -43486,6 +43754,23 @@
         "_paddingHorizontal": 0,
         "_paddingVertical": 0,
         "inheritFrom": "default_edit_inverse"
+      },
+      {
+        "name": "key_spec",
+        "_backgroundColor": "#e9f5f9",
+        "_borderSize": 1,
+        "_font": "medium",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default_edit_inverse",
+        "_color": "#2f2f2f"
+      },
+      {
+        "name": "key_spec_icons",
+        "_font": "icons",
+        "inheritFrom": "key_spec"
       },
       {
         "name": "key_icons",
@@ -43752,6 +44037,26 @@
         "_borderColor": "#D3D3D3",
         "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance.",
         "inheritFrom": "default"
+      },
+      {
+        "name": "error_alert",
+        "_backgroundColor": "#e3624f",
+        "inheritFrom": "default_S"
+      },
+      {
+        "name": "error_alert_button",
+        "inheritFrom": "error_alert",
+        "_color": "#ffff00"
+      },
+      {
+        "name": "info_alert",
+        "_backgroundColor": "#5fd3b4",
+        "inheritFrom": "default_S"
+      },
+      {
+        "name": "info_alert_button",
+        "inheritFrom": "info_alert",
+        "_color": "#ffff00"
       }
     ],
     "pages": [
@@ -44555,7 +44860,8 @@
                                     "x": 0,
                                     "y": 0,
                                     "width": 76,
-                                    "height": 30
+                                    "height": 30,
+                                    "activeStyle": "edit_value_active_S_right"
                                   },
                                   {
                                     "type": "DisplayData",
@@ -44586,7 +44892,8 @@
                             "y": 30,
                             "x": 0,
                             "width": 76,
-                            "height": 30
+                            "height": 30,
+                            "activeStyle": "edit_value_active_S_right"
                           },
                           {
                             "type": "DisplayData",
@@ -44595,7 +44902,8 @@
                             "y": 60,
                             "x": 0,
                             "width": 76,
-                            "height": 30
+                            "height": 30,
+                            "activeStyle": "edit_value_active_S_right"
                           }
                         ],
                         "width": 80,
@@ -45244,7 +45552,8 @@
                                     "x": 0,
                                     "y": 0,
                                     "width": 76,
-                                    "height": 30
+                                    "height": 30,
+                                    "activeStyle": "edit_value_active_S_right"
                                   },
                                   {
                                     "type": "DisplayData",
@@ -45275,7 +45584,8 @@
                             "y": 30,
                             "x": 0,
                             "width": 76,
-                            "height": 30
+                            "height": 30,
+                            "activeStyle": "edit_value_active_S_right"
                           },
                           {
                             "type": "DisplayData",
@@ -45284,7 +45594,8 @@
                             "y": 60,
                             "x": 0,
                             "width": 76,
-                            "height": 30
+                            "height": 30,
+                            "activeStyle": "edit_value_active_S_right"
                           }
                         ],
                         "width": 80,
@@ -45554,7 +45865,7 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "key_7",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 0,
                   "style": "key",
@@ -45564,7 +45875,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_8",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 0,
                   "style": "key",
@@ -45574,7 +45885,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_9",
+                  "action": "keypad_key",
                   "x": 120,
                   "y": 0,
                   "style": "key",
@@ -45584,7 +45895,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_back",
+                  "action": "keypad_back",
                   "x": 180,
                   "y": 0,
                   "style": "key_icons",
@@ -45594,7 +45905,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_4",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 36,
                   "style": "key",
@@ -45604,7 +45915,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_5",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 36,
                   "style": "key",
@@ -45614,7 +45925,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_6",
+                  "action": "keypad_key",
                   "x": 120,
                   "y": 36,
                   "style": "key",
@@ -45624,7 +45935,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_c",
+                  "action": "keypad_clear",
                   "x": 180,
                   "y": 36,
                   "style": "key_icons",
@@ -45634,7 +45945,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_1",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 72,
                   "style": "key",
@@ -45644,7 +45955,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_2",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 72,
                   "style": "key",
@@ -45654,7 +45965,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_3",
+                  "action": "keypad_key",
                   "x": 120,
                   "y": 72,
                   "style": "key",
@@ -45664,7 +45975,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_ok",
+                  "action": "keypad_ok",
                   "x": 180,
                   "y": 72,
                   "style": "key_icons",
@@ -45674,7 +45985,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_0",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 108,
                   "style": "key",
@@ -45684,7 +45995,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_dot",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 108,
                   "style": "key",
@@ -45694,7 +46005,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_sign",
+                  "action": "keypad_sign",
                   "x": 120,
                   "y": 108,
                   "style": "key_icons",
@@ -45705,7 +46016,7 @@
                 {
                   "type": "DisplayData",
                   "data": "edit_unit",
-                  "action": "key_unit",
+                  "action": "keypad_unit",
                   "x": 180,
                   "y": 108,
                   "style": "key",
@@ -45780,7 +46091,7 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "key_7",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 2,
                   "style": "key",
@@ -45790,7 +46101,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_8",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 2,
                   "style": "key",
@@ -45800,7 +46111,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_9",
+                  "action": "keypad_key",
                   "x": 120,
                   "y": 2,
                   "style": "key",
@@ -45810,7 +46121,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_back",
+                  "action": "keypad_back",
                   "x": 180,
                   "y": 2,
                   "style": "key_icons",
@@ -45820,7 +46131,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_4",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 45,
                   "style": "key",
@@ -45830,7 +46141,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_5",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 45,
                   "style": "key",
@@ -45840,7 +46151,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_6",
+                  "action": "keypad_key",
                   "x": 120,
                   "y": 45,
                   "style": "key",
@@ -45850,7 +46161,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_c",
+                  "action": "keypad_clear",
                   "x": 180,
                   "y": 45,
                   "style": "key_icons",
@@ -45860,7 +46171,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_1",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 88,
                   "style": "key",
@@ -45870,7 +46181,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_2",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 88,
                   "style": "key",
@@ -45880,7 +46191,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_3",
+                  "action": "keypad_key",
                   "x": 120,
                   "y": 88,
                   "style": "key",
@@ -45890,7 +46201,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_ok",
+                  "action": "keypad_ok",
                   "x": 180,
                   "y": 88,
                   "style": "key_icons",
@@ -45900,7 +46211,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_0",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 131,
                   "style": "key",
@@ -45910,7 +46221,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_dot",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 131,
                   "style": "key",
@@ -45920,7 +46231,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_sign",
+                  "action": "keypad_sign",
                   "x": 120,
                   "y": 131,
                   "style": "key_icons",
@@ -45931,7 +46242,7 @@
                 {
                   "type": "DisplayData",
                   "data": "edit_unit",
-                  "action": "key_unit",
+                  "action": "keypad_unit",
                   "x": 180,
                   "y": 131,
                   "style": "key",
@@ -46032,7 +46343,8 @@
                             "x": 0,
                             "y": 0,
                             "width": 76,
-                            "height": 30
+                            "height": 30,
+                            "activeStyle": "edit_value_active_S_right"
                           },
                           {
                             "type": "DisplayData",
@@ -46062,7 +46374,8 @@
                     "x": 0,
                     "y": 30,
                     "width": 76,
-                    "height": 30
+                    "height": 30,
+                    "activeStyle": "edit_value_active_S_right"
                   },
                   {
                     "type": "DisplayData",
@@ -46071,7 +46384,8 @@
                     "x": 0,
                     "y": 60,
                     "width": 76,
-                    "height": 30
+                    "height": 30,
+                    "activeStyle": "edit_value_active_S_right"
                   }
                 ],
                 "x": 0,
@@ -46092,6 +46406,126 @@
           "y": 0,
           "width": 320,
           "height": 240
+        }
+      },
+      {
+        "name": "info_alert",
+        "portrait": {
+          "x": 0,
+          "y": 104,
+          "width": 240,
+          "height": 112,
+          "widgets": [
+            {
+              "type": "Text",
+              "text": "OK",
+              "x": 90,
+              "y": 72,
+              "width": 60,
+              "height": 32,
+              "style": "default_active_S",
+              "action": "yes"
+            },
+            {
+              "type": "MultilineText",
+              "text": "Multiline text",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 64,
+              "style": "error_alert"
+            }
+          ],
+          "style": "error_alert"
+        },
+        "landscape": {
+          "x": 0,
+          "y": 76,
+          "width": 320,
+          "height": 88,
+          "widgets": [
+            {
+              "type": "Text",
+              "text": "",
+              "x": 0,
+              "y": 8,
+              "width": 320,
+              "height": 32,
+              "style": "info_alert",
+              "data": "alert_message"
+            },
+            {
+              "type": "Text",
+              "text": "OK",
+              "x": 130,
+              "y": 48,
+              "width": 60,
+              "height": 32,
+              "style": "info_alert_button",
+              "action": "ok"
+            }
+          ],
+          "style": "info_alert"
+        }
+      },
+      {
+        "name": "error_alert",
+        "portrait": {
+          "x": 0,
+          "y": 104,
+          "width": 240,
+          "height": 112,
+          "widgets": [
+            {
+              "type": "Text",
+              "text": "OK",
+              "x": 90,
+              "y": 72,
+              "width": 60,
+              "height": 32,
+              "style": "default_active_S",
+              "action": "yes"
+            },
+            {
+              "type": "MultilineText",
+              "text": "Multiline text",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 64,
+              "style": "error_alert"
+            }
+          ],
+          "style": "error_alert"
+        },
+        "landscape": {
+          "x": 0,
+          "y": 76,
+          "width": 320,
+          "height": 88,
+          "widgets": [
+            {
+              "type": "Text",
+              "text": "",
+              "x": 0,
+              "y": 8,
+              "width": 320,
+              "height": 32,
+              "style": "error_alert",
+              "data": "alert_message"
+            },
+            {
+              "type": "Text",
+              "text": "OK",
+              "x": 130,
+              "y": 48,
+              "width": 60,
+              "height": 32,
+              "style": "error_alert_button",
+              "action": "ok"
+            }
+          ],
+          "style": "error_alert"
         }
       },
       {
@@ -47536,7 +47970,498 @@
         "description": "Redefined main menu"
       },
       {
-        "name": "edit_numeric",
+        "name": "keypad",
+        "portrait": {
+          "widgets": [],
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320
+        },
+        "landscape": {
+          "widgets": [
+            {
+              "type": "DisplayData",
+              "data": "keypad_text",
+              "x": 0,
+              "y": 0,
+              "style": "edit_value_S_left",
+              "width": 320,
+              "height": 32,
+              "activeStyle": "edit_value_active_S_left"
+            },
+            {
+              "type": "Container",
+              "x": 0,
+              "y": 32,
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 0,
+                  "y": 2,
+                  "style": "key",
+                  "text": "1",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 32,
+                  "y": 2,
+                  "style": "key",
+                  "text": "2",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 64,
+                  "y": 2,
+                  "style": "key",
+                  "text": "3",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 96,
+                  "y": 2,
+                  "style": "key",
+                  "text": "4",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 128,
+                  "y": 2,
+                  "style": "key",
+                  "text": "5",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 160,
+                  "y": 2,
+                  "style": "key",
+                  "text": "6",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 192,
+                  "y": 2,
+                  "style": "key",
+                  "text": "7",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 224,
+                  "y": 2,
+                  "style": "key",
+                  "text": "8",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 256,
+                  "y": 2,
+                  "style": "key",
+                  "text": "9",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 288,
+                  "y": 2,
+                  "style": "key",
+                  "text": "0",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 0,
+                  "y": 44,
+                  "style": "key",
+                  "text": "Q",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 32,
+                  "y": 44,
+                  "style": "key",
+                  "text": "W",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 64,
+                  "y": 44,
+                  "style": "key",
+                  "text": "E",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 96,
+                  "y": 44,
+                  "style": "key",
+                  "text": "R",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 128,
+                  "y": 44,
+                  "style": "key",
+                  "text": "T",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 160,
+                  "y": 44,
+                  "style": "key",
+                  "text": "Y",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 192,
+                  "y": 44,
+                  "style": "key",
+                  "text": "U",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 224,
+                  "y": 44,
+                  "style": "key",
+                  "text": "I",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 256,
+                  "y": 44,
+                  "style": "key",
+                  "text": "O",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 288,
+                  "y": 44,
+                  "style": "key",
+                  "text": "P",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 0,
+                  "y": 85,
+                  "style": "key",
+                  "text": "A",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 32,
+                  "y": 85,
+                  "style": "key",
+                  "text": "S",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 64,
+                  "y": 85,
+                  "style": "key",
+                  "text": "D",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 96,
+                  "y": 85,
+                  "style": "key",
+                  "text": "F",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 128,
+                  "y": 85,
+                  "style": "key",
+                  "text": "G",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 160,
+                  "y": 85,
+                  "style": "key",
+                  "text": "H",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 192,
+                  "y": 85,
+                  "style": "key",
+                  "text": "J",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 224,
+                  "y": 85,
+                  "style": "key",
+                  "text": "K",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 256,
+                  "y": 85,
+                  "style": "key",
+                  "text": "L",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 288,
+                  "y": 85,
+                  "style": "key",
+                  "text": "#",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 0,
+                  "y": 127,
+                  "style": "key",
+                  "text": "Z",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 32,
+                  "y": 127,
+                  "style": "key",
+                  "text": "X",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 64,
+                  "y": 127,
+                  "style": "key",
+                  "text": "C",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 96,
+                  "y": 127,
+                  "style": "key",
+                  "text": "V",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 128,
+                  "y": 127,
+                  "style": "key",
+                  "text": "B",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 160,
+                  "y": 127,
+                  "style": "key",
+                  "text": "N",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 192,
+                  "y": 127,
+                  "style": "key",
+                  "text": "M",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 224,
+                  "y": 127,
+                  "style": "key",
+                  "text": ",",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 256,
+                  "y": 127,
+                  "style": "key",
+                  "text": ".",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_key",
+                  "x": 288,
+                  "y": 127,
+                  "style": "key",
+                  "text": "/",
+                  "width": 32,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_back",
+                  "x": 0,
+                  "y": 168,
+                  "style": "key_spec_icons",
+                  "text": "<",
+                  "width": 64,
+                  "height": 42
+                },
+                {
+                  "type": "ToggleButton",
+                  "x": 64,
+                  "y": 168,
+                  "width": 64,
+                  "height": 42,
+                  "style": "key_spec",
+                  "action": "keypad_caps",
+                  "text1": "abc",
+                  "text2": "ABC",
+                  "data": "keypad_caps"
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_space",
+                  "x": 128,
+                  "y": 168,
+                  "style": "key",
+                  "text": "SP",
+                  "width": 64,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_cancel",
+                  "x": 192,
+                  "y": 168,
+                  "style": "key_spec_icons",
+                  "text": "U",
+                  "width": 64,
+                  "height": 42
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_ok",
+                  "x": 256,
+                  "y": 168,
+                  "style": "key_spec_icons",
+                  "text": "I",
+                  "width": 64,
+                  "height": 42
+                }
+              ],
+              "width": 320,
+              "height": 210,
+              "style": "default"
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240
+        },
+        "description": "Enter generic text string"
+      },
+      {
+        "name": "numeric_keypad",
         "portrait": {
           "widgets": [
             {
@@ -47642,7 +48567,7 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "key_7",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 0,
                   "style": "key",
@@ -47652,7 +48577,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_8",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 0,
                   "style": "key",
@@ -47662,7 +48587,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_9",
+                  "action": "keypad_key",
                   "x": 120,
                   "y": 0,
                   "style": "key",
@@ -47672,7 +48597,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_back",
+                  "action": "keypad_back",
                   "x": 180,
                   "y": 0,
                   "style": "key_icons",
@@ -47682,7 +48607,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_4",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 36,
                   "style": "key",
@@ -47692,7 +48617,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_5",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 36,
                   "style": "key",
@@ -47702,7 +48627,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_6",
+                  "action": "keypad_key",
                   "x": 120,
                   "y": 36,
                   "style": "key",
@@ -47712,7 +48637,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_c",
+                  "action": "keypad_clear",
                   "x": 180,
                   "y": 36,
                   "style": "key_icons",
@@ -47722,7 +48647,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_1",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 72,
                   "style": "key",
@@ -47732,7 +48657,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_2",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 72,
                   "style": "key",
@@ -47742,7 +48667,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_3",
+                  "action": "keypad_key",
                   "x": 120,
                   "y": 72,
                   "style": "key",
@@ -47752,7 +48677,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_ok",
+                  "action": "keypad_ok",
                   "x": 180,
                   "y": 72,
                   "style": "key_icons",
@@ -47762,7 +48687,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_0",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 108,
                   "style": "key",
@@ -47772,7 +48697,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_dot",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 108,
                   "style": "key",
@@ -47782,7 +48707,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_sign",
+                  "action": "keypad_sign",
                   "x": 120,
                   "y": 108,
                   "style": "key_icons",
@@ -47793,7 +48718,7 @@
                 {
                   "type": "DisplayData",
                   "data": "edit_unit",
-                  "action": "key_unit",
+                  "action": "keypad_unit",
                   "x": 180,
                   "y": 108,
                   "style": "key",
@@ -47862,13 +48787,23 @@
         "landscape": {
           "widgets": [
             {
+              "type": "DisplayData",
+              "data": "keypad_text",
+              "x": 0,
+              "y": 0,
+              "style": "edit_value_S_left",
+              "width": 240,
+              "height": 32,
+              "activeStyle": "edit_value_active_S_left"
+            },
+            {
               "type": "Container",
               "x": 0,
               "y": 30,
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "key_7",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 2,
                   "style": "key",
@@ -47878,7 +48813,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_8",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 2,
                   "style": "key",
@@ -47888,7 +48823,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_9",
+                  "action": "keypad_key",
                   "x": 120,
                   "y": 2,
                   "style": "key",
@@ -47898,7 +48833,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_back",
+                  "action": "keypad_back",
                   "x": 180,
                   "y": 2,
                   "style": "key_icons",
@@ -47908,7 +48843,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_4",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 45,
                   "style": "key",
@@ -47918,7 +48853,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_5",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 45,
                   "style": "key",
@@ -47928,7 +48863,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_6",
+                  "action": "keypad_key",
                   "x": 120,
                   "y": 45,
                   "style": "key",
@@ -47938,7 +48873,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_c",
+                  "action": "keypad_clear",
                   "x": 180,
                   "y": 45,
                   "style": "key_icons",
@@ -47948,7 +48883,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_1",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 88,
                   "style": "key",
@@ -47958,7 +48893,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_2",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 88,
                   "style": "key",
@@ -47968,7 +48903,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_3",
+                  "action": "keypad_key",
                   "x": 120,
                   "y": 88,
                   "style": "key",
@@ -47978,17 +48913,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_ok",
-                  "x": 180,
-                  "y": 88,
-                  "style": "key_icons",
-                  "text": "O",
-                  "width": 60,
-                  "height": 86
-                },
-                {
-                  "type": "Text",
-                  "action": "key_0",
+                  "action": "keypad_key",
                   "x": 0,
                   "y": 131,
                   "style": "key",
@@ -47998,7 +48923,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_dot",
+                  "action": "keypad_key",
                   "x": 60,
                   "y": 131,
                   "style": "key",
@@ -48008,11 +48933,21 @@
                 },
                 {
                   "type": "Text",
-                  "action": "key_sign",
+                  "action": "keypad_sign",
                   "x": 120,
                   "y": 131,
                   "style": "key_icons",
                   "text": "-",
+                  "width": 60,
+                  "height": 43
+                },
+                {
+                  "type": "DisplayData",
+                  "data": "edit_unit",
+                  "action": "keypad_unit",
+                  "x": 180,
+                  "y": 88,
+                  "style": "key",
                   "width": 60,
                   "height": 43
                 }
@@ -48020,16 +48955,6 @@
               "width": 240,
               "height": 174,
               "style": "default"
-            },
-            {
-              "type": "Text",
-              "action": "exit_edit_mode",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "B",
-              "width": 48,
-              "height": 36
             },
             {
               "type": "List",
@@ -48122,27 +49047,29 @@
               "type": "Rectangle",
               "x": 0,
               "y": 204,
-              "width": 272,
+              "width": 224,
               "height": 36,
               "style": "bottom_button_background"
             },
             {
               "type": "Text",
-              "text": "???",
-              "x": 180,
-              "y": 0,
-              "width": 60,
-              "height": 32,
-              "style": "edit_value_S_left"
+              "action": "keypad_cancel",
+              "x": 224,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "U",
+              "width": 48,
+              "height": 36
             },
             {
               "type": "Text",
-              "text": "Enter new value:",
-              "x": 2,
-              "y": 0,
-              "width": 178,
-              "height": 32,
-              "style": "edit_value_S_left"
+              "action": "keypad_ok",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "I",
+              "width": 48,
+              "height": 36
             }
           ],
           "x": 0,
@@ -48151,797 +49078,6 @@
           "height": 240
         },
         "description": "Enter generic numeric value"
-      },
-      {
-        "name": "edit_alpha",
-        "portrait": {
-          "widgets": [
-            {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
-              "type": "List",
-              "listType": "horizontal",
-              "data": "channels",
-              "x": 0,
-              "y": 32,
-              "itemWidget": {
-                "type": "Container",
-                "y": 0,
-                "widgets": [
-                  {
-                    "type": "Select",
-                    "x": 0,
-                    "y": 0,
-                    "data": "output_state",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "style": "edit_value",
-                        "text": "OFF",
-                        "x": 0,
-                        "y": 0,
-                        "width": 120,
-                        "height": 36
-                      },
-                      {
-                        "type": "Select",
-                        "data": "output_mode",
-                        "widgets": [
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 120,
-                            "height": 36
-                          },
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_ur",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 120,
-                            "height": 36
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 120,
-                        "height": 36,
-                        "style": "default"
-                      }
-                    ],
-                    "width": 120,
-                    "height": 36,
-                    "style": "default"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value",
-                    "data": "volt",
-                    "x": 0,
-                    "y": 36,
-                    "width": 120,
-                    "height": 36
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value",
-                    "data": "curr",
-                    "x": 0,
-                    "y": 72,
-                    "width": 120,
-                    "height": 36
-                  }
-                ],
-                "x": 0,
-                "width": 120,
-                "height": 108,
-                "style": "default"
-              },
-              "width": 240,
-              "height": 108,
-              "style": "default"
-            },
-            {
-              "type": "Container",
-              "x": 0,
-              "y": 140,
-              "widgets": [
-                {
-                  "type": "Text",
-                  "action": "key_7",
-                  "x": 0,
-                  "y": 0,
-                  "style": "key",
-                  "text": "7",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_8",
-                  "x": 60,
-                  "y": 0,
-                  "style": "key",
-                  "text": "8",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_9",
-                  "x": 120,
-                  "y": 0,
-                  "style": "key",
-                  "text": "9",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_back",
-                  "x": 180,
-                  "y": 0,
-                  "style": "key_icons",
-                  "text": "<",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_4",
-                  "x": 0,
-                  "y": 36,
-                  "style": "key",
-                  "text": "4",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_5",
-                  "x": 60,
-                  "y": 36,
-                  "style": "key",
-                  "text": "5",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_6",
-                  "x": 120,
-                  "y": 36,
-                  "style": "key",
-                  "text": "6",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_c",
-                  "x": 180,
-                  "y": 36,
-                  "style": "key_icons",
-                  "text": "C",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_1",
-                  "x": 0,
-                  "y": 72,
-                  "style": "key",
-                  "text": "1",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_2",
-                  "x": 60,
-                  "y": 72,
-                  "style": "key",
-                  "text": "2",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_3",
-                  "x": 120,
-                  "y": 72,
-                  "style": "key",
-                  "text": "3",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_ok",
-                  "x": 180,
-                  "y": 72,
-                  "style": "key_icons",
-                  "text": "O",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_0",
-                  "x": 0,
-                  "y": 108,
-                  "style": "key",
-                  "text": "0",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_dot",
-                  "x": 60,
-                  "y": 108,
-                  "style": "key",
-                  "text": ".",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "Text",
-                  "action": "key_sign",
-                  "x": 120,
-                  "y": 108,
-                  "style": "key_icons",
-                  "text": "-",
-                  "width": 60,
-                  "height": 36
-                },
-                {
-                  "type": "DisplayData",
-                  "data": "edit_unit",
-                  "action": "key_unit",
-                  "x": 180,
-                  "y": 108,
-                  "style": "key",
-                  "width": 60,
-                  "height": 36
-                }
-              ],
-              "width": 240,
-              "height": 144,
-              "style": "default"
-            },
-            {
-              "type": "Text",
-              "action": "edit_mode_slider",
-              "x": 0,
-              "y": 284,
-              "style": "tab_page",
-              "text": "S",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "edit_mode_step",
-              "x": 48,
-              "y": 284,
-              "style": "tab_page",
-              "text": "M",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "edit_mode_keypad",
-              "x": 96,
-              "y": 284,
-              "style": "tab_page_selected",
-              "text": "K",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Rectangle",
-              "x": 144,
-              "y": 284,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "exit_edit_mode",
-              "x": 192,
-              "y": 284,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320
-        },
-        "landscape": {
-          "widgets": [
-            {
-              "type": "Container",
-              "x": 0,
-              "y": 30,
-              "widgets": [
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 0,
-                  "y": 42,
-                  "style": "key",
-                  "text": "Q",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 32,
-                  "y": 42,
-                  "style": "key",
-                  "text": "W",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 64,
-                  "y": 42,
-                  "style": "key",
-                  "text": "E",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 96,
-                  "y": 42,
-                  "style": "key",
-                  "text": "R",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 128,
-                  "y": 42,
-                  "style": "key",
-                  "text": "T",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 160,
-                  "y": 42,
-                  "style": "key",
-                  "text": "Y",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 192,
-                  "y": 42,
-                  "style": "key",
-                  "text": "U",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 224,
-                  "y": 42,
-                  "style": "key",
-                  "text": "I",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 256,
-                  "y": 42,
-                  "style": "key",
-                  "text": "O",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 288,
-                  "y": 42,
-                  "style": "key",
-                  "text": "P",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 0,
-                  "y": 82,
-                  "style": "key",
-                  "text": "A",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 32,
-                  "y": 82,
-                  "style": "key",
-                  "text": "S",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 64,
-                  "y": 82,
-                  "style": "key",
-                  "text": "D",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 96,
-                  "y": 82,
-                  "style": "key",
-                  "text": "F",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 128,
-                  "y": 82,
-                  "style": "key",
-                  "text": "G",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 160,
-                  "y": 82,
-                  "style": "key",
-                  "text": "H",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 192,
-                  "y": 82,
-                  "style": "key",
-                  "text": "J",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 224,
-                  "y": 82,
-                  "style": "key",
-                  "text": "K",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 256,
-                  "y": 82,
-                  "style": "key",
-                  "text": "L",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 288,
-                  "y": 82,
-                  "style": "key",
-                  "text": "#",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 0,
-                  "y": 122,
-                  "style": "key",
-                  "text": "Z",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 32,
-                  "y": 122,
-                  "style": "key",
-                  "text": "X",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 64,
-                  "y": 122,
-                  "style": "key",
-                  "text": "C",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 96,
-                  "y": 122,
-                  "style": "key",
-                  "text": "V",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 128,
-                  "y": 122,
-                  "style": "key",
-                  "text": "B",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 160,
-                  "y": 122,
-                  "style": "key",
-                  "text": "N",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 192,
-                  "y": 122,
-                  "style": "key",
-                  "text": "M",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 224,
-                  "y": 122,
-                  "style": "key",
-                  "text": ",",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 256,
-                  "y": 122,
-                  "style": "key",
-                  "text": ".",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 288,
-                  "y": 122,
-                  "style": "key",
-                  "text": "/",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 0,
-                  "y": 2,
-                  "style": "key",
-                  "text": "1",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 32,
-                  "y": 2,
-                  "style": "key",
-                  "text": "2",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 64,
-                  "y": 2,
-                  "style": "key",
-                  "text": "3",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 96,
-                  "y": 2,
-                  "style": "key",
-                  "text": "4",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 128,
-                  "y": 2,
-                  "style": "key",
-                  "text": "5",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 160,
-                  "y": 2,
-                  "style": "key",
-                  "text": "6",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 192,
-                  "y": 2,
-                  "style": "key",
-                  "text": "7",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 224,
-                  "y": 2,
-                  "style": "key",
-                  "text": "8",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 256,
-                  "y": 2,
-                  "style": "key",
-                  "text": "9",
-                  "width": 32,
-                  "height": 40
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 288,
-                  "y": 2,
-                  "style": "key",
-                  "text": "0",
-                  "width": 32,
-                  "height": 40
-                }
-              ],
-              "width": 320,
-              "height": 174,
-              "style": "default"
-            },
-            {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
-              "type": "Rectangle",
-              "x": 160,
-              "y": 204,
-              "width": 64,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 0,
-              "y": 204,
-              "style": "bottom_button_textual",
-              "text": "Space",
-              "width": 96,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "exit_edit_mode",
-              "x": 224,
-              "y": 204,
-              "style": "bottom_button_textual",
-              "text": "Enter",
-              "width": 96,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 96,
-              "y": 204,
-              "style": "bottom_button_textual",
-              "text": "Del",
-              "width": 64,
-              "height": 36
-            }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240
-        },
-        "description": "Enter generic text string"
       },
       {
         "name": "ch_settings_prot",
@@ -52467,7 +52603,8 @@
               "y": 58,
               "width": 180,
               "height": 28,
-              "style": "edit_value_active_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "show_sys_settings_cal"
             },
             {
               "type": "Text",
@@ -52614,6 +52751,267 @@
         "portrait": {
           "widgets": [
             {
+              "type": "Text",
+              "text": "Password:",
+              "x": 0,
+              "y": 0,
+              "width": 120,
+              "height": 32,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Change",
+              "x": 120,
+              "y": 0,
+              "width": 120,
+              "height": 32,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Text",
+                    "text": "",
+                    "x": 0,
+                    "y": 0,
+                    "width": 120,
+                    "height": 32,
+                    "style": "edit_value_S_left",
+                    "data": "calibration.channel.label"
+                  },
+                  {
+                    "type": "Select",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "text": "Calibrated",
+                        "x": 0,
+                        "y": 0,
+                        "width": 120,
+                        "height": 32,
+                        "style": "edit_value_active_S_left",
+                        "action": "show_sys_settings_cal_ch"
+                      },
+                      {
+                        "type": "Text",
+                        "text": "Not calibrated",
+                        "x": 0,
+                        "y": 0,
+                        "width": 120,
+                        "height": 32,
+                        "style": "edit_value_active_S_left",
+                        "action": "show_sys_settings_cal_ch"
+                      }
+                    ],
+                    "x": 120,
+                    "y": 0,
+                    "width": 120,
+                    "height": 32,
+                    "style": "default",
+                    "data": "calibration.channel.status",
+                    "action": "show_sys_settings_cal_ch"
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 240,
+                "height": 32,
+                "style": "default",
+                "data": "",
+                "action": ""
+              },
+              "x": 0,
+              "y": 66,
+              "width": 240,
+              "height": 64,
+              "style": "default",
+              "data": "channels"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 269,
+              "width": 168,
+              "height": 51,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 168,
+              "y": 269,
+              "style": "bottom_button",
+              "text": "B",
+              "width": 36,
+              "height": 51
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 204,
+              "y": 269,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 36,
+              "height": 51
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320
+        },
+        "landscape": {
+          "widgets": [
+            {
+              "type": "Text",
+              "text": "Calibration password:",
+              "x": 16,
+              "y": 16,
+              "width": 162,
+              "height": 32,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Change",
+              "x": 190,
+              "y": 16,
+              "width": 114,
+              "height": 32,
+              "style": "edit_value_active_S_left",
+              "action": "sys_settings_cal_edit_password"
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Text",
+                    "text": "",
+                    "x": 0,
+                    "y": 0,
+                    "width": 157,
+                    "height": 30,
+                    "style": "edit_value_S_left",
+                    "data": "calibration.channel.label"
+                  },
+                  {
+                    "type": "Select",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "text": "Not calibrated",
+                        "x": 0,
+                        "y": 0,
+                        "width": 130,
+                        "height": 32,
+                        "style": "edit_value_active_S_left",
+                        "action": "show_sys_settings_cal_ch"
+                      },
+                      {
+                        "type": "Text",
+                        "text": "Calibrated",
+                        "x": 0,
+                        "y": 0,
+                        "width": 114,
+                        "height": 32,
+                        "style": "edit_value_active_S_left",
+                        "action": "show_sys_settings_cal_ch"
+                      }
+                    ],
+                    "x": 174,
+                    "y": 0,
+                    "width": 117,
+                    "height": 32,
+                    "style": "default",
+                    "data": "calibration.channel.status",
+                    "action": ""
+                  },
+                  {
+                    "type": "Text",
+                    "text": "Date",
+                    "x": 15,
+                    "y": 30,
+                    "width": 64,
+                    "height": 32,
+                    "style": "edit_value_S_left",
+                    "data": "calibration.channel.date"
+                  },
+                  {
+                    "type": "Text",
+                    "text": "Remark",
+                    "x": 107,
+                    "y": 30,
+                    "width": 183,
+                    "height": 32,
+                    "style": "edit_value_S_left",
+                    "data": "calibration.channel.remark"
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 286,
+                "height": 65,
+                "style": "default",
+                "data": "",
+                "action": ""
+              },
+              "x": 16,
+              "y": 62,
+              "width": 304,
+              "height": 60,
+              "style": "default",
+              "data": "channels"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 224,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "B",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240
+        },
+        "description": "Calibration general information, active calibration settings (CAL:STAT), change password (CAL:PASS:NEW) and enter wizard."
+      },
+      {
+        "name": "sys_settings_cal_ch",
+        "portrait": {
+          "widgets": [
+            {
               "type": "List",
               "listType": "vertical",
               "data": "channels",
@@ -52793,33 +53191,6 @@
           "widgets": [
             {
               "type": "Text",
-              "action": "",
-              "x": 224,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "B",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 224,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 320,
-              "height": 32
-            },
-            {
-              "type": "Text",
               "text": "Last calibrated:",
               "x": 16,
               "y": 32,
@@ -52829,12 +53200,13 @@
             },
             {
               "type": "Text",
-              "text": "Never",
+              "text": "",
               "x": 186,
               "y": 32,
-              "width": 91,
+              "width": 134,
               "height": 30,
-              "style": "edit_value_S_left"
+              "style": "edit_value_S_left",
+              "data": "calibration.channel.date"
             },
             {
               "type": "Text",
@@ -52850,9 +53222,10 @@
               "text": "<none>",
               "x": 186,
               "y": 62,
-              "width": 55,
+              "width": 134,
               "height": 30,
-              "style": "edit_value_S_left"
+              "style": "edit_value_S_left",
+              "data": "calibration.channel.remark"
             },
             {
               "type": "Text",
@@ -52864,13 +53237,36 @@
               "style": "edit_value_S_left"
             },
             {
-              "type": "Text",
-              "text": "OFF",
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "OFF",
+                  "x": 0,
+                  "y": 0,
+                  "width": 55,
+                  "height": 30,
+                  "style": "edit_value_active_S_left",
+                  "data": "",
+                  "action": "sys_settings_cal_ch_params_enabled"
+                },
+                {
+                  "type": "Text",
+                  "text": "ON",
+                  "x": 0,
+                  "y": 0,
+                  "width": 55,
+                  "height": 30,
+                  "style": "edit_value_active_S_left",
+                  "data": ""
+                }
+              ],
               "x": 186,
               "y": 92,
               "width": 55,
               "height": 30,
-              "style": "edit_value_active_S_left"
+              "style": "default",
+              "data": "calibration.channel.paramsEnabled"
             },
             {
               "type": "Text",
@@ -52879,7 +53275,26 @@
               "y": 165,
               "width": 256,
               "height": 25,
-              "style": "edit_value_active_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "sys_settings_cal_ch_wiz_start"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 224,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "B",
+              "width": 48,
+              "height": 36
             },
             {
               "type": "Text",
@@ -52890,24 +53305,6 @@
               "text": "X",
               "width": 48,
               "height": 36
-            },
-            {
-              "type": "Text",
-              "text": "Calibration password:",
-              "x": 16,
-              "y": 122,
-              "width": 170,
-              "height": 30,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "Change",
-              "x": 186,
-              "y": 122,
-              "width": 55,
-              "height": 30,
-              "style": "edit_value_active_S_left"
             }
           ],
           "x": 0,
@@ -52918,7 +53315,7 @@
         "description": "Calibration general information, active calibration settings (CAL:STAT), change password (CAL:PASS:NEW) and enter wizard."
       },
       {
-        "name": "sys_settings_cal_wiz1",
+        "name": "sys_settings_cal_ch_wiz_step",
         "portrait": {
           "widgets": [
             {
@@ -53100,8 +53497,189 @@
         "landscape": {
           "widgets": [
             {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "U min.",
+                  "x": 0,
+                  "y": 0,
+                  "width": 304,
+                  "height": 32,
+                  "style": "edit_value_S_left",
+                  "data": ""
+                },
+                {
+                  "type": "Text",
+                  "text": "U mid.",
+                  "x": 0,
+                  "y": 0,
+                  "width": 304,
+                  "height": 32,
+                  "style": "edit_value_S_left",
+                  "data": ""
+                },
+                {
+                  "type": "Text",
+                  "text": "U max.",
+                  "x": 0,
+                  "y": 0,
+                  "width": 304,
+                  "height": 32,
+                  "style": "edit_value_S_left",
+                  "data": ""
+                },
+                {
+                  "type": "Text",
+                  "text": "I min.",
+                  "x": 0,
+                  "y": 0,
+                  "width": 304,
+                  "height": 32,
+                  "style": "edit_value_S_left",
+                  "data": ""
+                },
+                {
+                  "type": "Text",
+                  "text": "I mid.",
+                  "x": 0,
+                  "y": 0,
+                  "width": 304,
+                  "height": 32,
+                  "style": "edit_value_S_left",
+                  "data": ""
+                },
+                {
+                  "type": "Text",
+                  "text": "I max.",
+                  "x": 0,
+                  "y": 0,
+                  "width": 304,
+                  "height": 32,
+                  "style": "edit_value_S_left",
+                  "data": ""
+                },
+                {
+                  "type": "Text",
+                  "text": "Remark",
+                  "x": 0,
+                  "y": 0,
+                  "width": 304,
+                  "height": 32,
+                  "style": "edit_value_S_left",
+                  "data": ""
+                }
+              ],
+              "x": 16,
+              "y": 16,
+              "width": 304,
+              "height": 32,
+              "style": "default",
+              "data": "calibration.channel.stepNum"
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "<not set>",
+                  "x": 0,
+                  "y": 0,
+                  "width": 304,
+                  "height": 32,
+                  "style": "edit_value_S_left",
+                  "data": ""
+                },
+                {
+                  "type": "Text",
+                  "text": "Text",
+                  "x": 0,
+                  "y": 0,
+                  "width": 304,
+                  "height": 32,
+                  "style": "edit_value_S_left",
+                  "data": "calibration.channel.stepValue"
+                }
+              ],
+              "x": 16,
+              "y": 48,
+              "width": 304,
+              "height": 32,
+              "style": "default",
+              "data": "calibration.channel.stepStatus"
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "Set",
+                  "x": 0,
+                  "y": 0,
+                  "width": 80,
+                  "height": 32,
+                  "style": "edit_value_active_S_left",
+                  "data": "",
+                  "action": "sys_settings_cal_ch_wiz_step_set"
+                },
+                {
+                  "type": "Text",
+                  "text": "Change",
+                  "x": 0,
+                  "y": 0,
+                  "width": 80,
+                  "height": 32,
+                  "style": "edit_value_active_S_left",
+                  "data": "",
+                  "action": "sys_settings_cal_ch_wiz_step_set"
+                }
+              ],
+              "x": 16,
+              "y": 80,
+              "width": 80,
+              "height": 32,
+              "style": "default",
+              "data": "calibration.channel.stepStatus"
+            },
+            {
+              "type": "Button",
+              "x": 0,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "Disabled style:": "bottom_button_disabled",
+              "text": "(",
+              "Enabled": "calibration.channel.stepPrevEnabled",
+              "disabledStyle": "bottom_button_disabled",
+              "enabled": "calibration.channel.stepPrevEnabled",
+              "action": "sys_settings_cal_ch_wiz_step_previous"
+            },
+            {
+              "type": "Button",
+              "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "Disabled style:": "bottom_button_disabled",
+              "text": ")",
+              "Enabled": "calibration.channel.stepNextEnabled",
+              "disabledStyle": "bottom_button_disabled",
+              "enabled": "calibration.channel.stepNextEnabled",
+              "action": "sys_settings_cal_ch_wiz_step_next"
+            },
+            {
+              "type": "Rectangle",
+              "x": 96,
+              "y": 204,
+              "width": 128,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
               "type": "Text",
-              "action": "",
+              "action": "sys_settings_cal_ch_wiz_stop_and_show_previous_page",
               "x": 224,
               "y": 204,
               "style": "bottom_button",
@@ -53110,67 +53688,14 @@
               "height": 36
             },
             {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 224,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 320,
-              "height": 32
-            },
-            {
               "type": "Text",
-              "action": "show_main_page",
+              "action": "sys_settings_cal_ch_wiz_stop_and_show_main_page",
               "x": 272,
               "y": 204,
               "style": "bottom_button",
               "text": "X",
               "width": 48,
               "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 0,
-              "y": 204,
-              "style": "bottom_button_disabled",
-              "text": "(",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 204,
-              "style": "bottom_button_disabled",
-              "text": ")",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "text": "Channel 1",
-              "x": 48,
-              "y": 65,
-              "width": 155,
-              "height": 42,
-              "style": "edit_value_active_left"
-            },
-            {
-              "type": "Text",
-              "text": "Channel 2",
-              "x": 48,
-              "y": 107,
-              "width": 155,
-              "height": 42,
-              "style": "edit_value_active_left"
             }
           ],
           "x": 0,
@@ -53181,7 +53706,7 @@
         "description": "Calibration wizard step 1: select channel"
       },
       {
-        "name": "sys_settings_cal_wiz2",
+        "name": "sys_settings_cal_ch_wiz_finish",
         "portrait": {
           "widgets": [
             {
@@ -53364,7 +53889,44 @@
           "widgets": [
             {
               "type": "Text",
-              "action": "",
+              "text": "Save calibration parameters?",
+              "x": 0,
+              "y": 52,
+              "width": 320,
+              "height": 32,
+              "style": "default_S"
+            },
+            {
+              "type": "Text",
+              "action": "sys_settings_cal_ch_wiz_save",
+              "style": "non_interactive_button_S",
+              "x": 58,
+              "y": 116,
+              "text": "~ Save",
+              "width": 101,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "sys_settings_cal_ch_wiz_stop_and_show_previous_page",
+              "style": "non_interactive_button_S",
+              "x": 159,
+              "y": 116,
+              "text": " Discard",
+              "width": 96,
+              "height": 36
+            },
+            {
+              "type": "Rectangle",
+              "x": 48,
+              "y": 204,
+              "width": 176,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "sys_settings_cal_ch_wiz_stop_and_show_previous_page",
               "x": 224,
               "y": 204,
               "style": "bottom_button",
@@ -53373,25 +53935,8 @@
               "height": 36
             },
             {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 224,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 320,
-              "height": 32
-            },
-            {
               "type": "Text",
-              "action": "show_main_page",
+              "action": "sys_settings_cal_ch_wiz_stop_and_show_main_page",
               "x": 272,
               "y": 204,
               "style": "bottom_button",
@@ -53400,445 +53945,18 @@
               "height": 36
             },
             {
-              "type": "Text",
+              "type": "Button",
               "x": 0,
               "y": 204,
-              "style": "bottom_button",
-              "text": "(",
               "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 204,
-              "style": "bottom_button_disabled",
-              "text": ")",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "text": "Voltage",
-              "x": 48,
-              "y": 65,
-              "width": 155,
-              "height": 42,
-              "style": "edit_value_active_left"
-            },
-            {
-              "type": "Text",
-              "text": "Current",
-              "x": 48,
-              "y": 107,
-              "width": 155,
-              "height": 42,
-              "style": "edit_value_active_left"
-            }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240
-        },
-        "description": "Calibration wizard step 2: select voltage or current"
-      },
-      {
-        "name": "sys_settings_cal_wiz3",
-        "portrait": {
-          "widgets": [
-            {
-              "type": "List",
-              "listType": "vertical",
-              "data": "channels",
-              "x": 0,
-              "y": 16,
-              "itemWidget": {
-                "type": "Select",
-                "data": "channel_ok",
-                "y": 0,
-                "widgets": [
-                  {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
-                    "x": 0,
-                    "y": 0,
-                    "width": 240,
-                    "height": 126
-                  },
-                  {
-                    "type": "Container",
-                    "widgets": [
-                      {
-                        "type": "Select",
-                        "x": 0,
-                        "y": 0,
-                        "data": "output_state",
-                        "action": "",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "style": "channel_off_L",
-                            "text": "OFF",
-                            "x": 0,
-                            "y": 0,
-                            "width": 240,
-                            "height": 86,
-                            "action": "toggle_channel"
-                          },
-                          {
-                            "type": "Select",
-                            "data": "output_mode",
-                            "widgets": [
-                              {
-                                "type": "DisplayData",
-                                "style": "mon_value_L",
-                                "data": "mon_value",
-                                "x": 0,
-                                "y": 0,
-                                "width": 240,
-                                "height": 86,
-                                "action": "toggle_channel"
-                              },
-                              {
-                                "type": "DisplayData",
-                                "style": "mon_value_L_ur",
-                                "data": "mon_value",
-                                "x": 0,
-                                "y": 0,
-                                "width": 240,
-                                "height": 86,
-                                "action": "toggle_channel"
-                              }
-                            ],
-                            "x": 0,
-                            "y": 0,
-                            "width": 240,
-                            "height": 86,
-                            "style": "default"
-                          }
-                        ],
-                        "width": 240,
-                        "height": 86,
-                        "style": "default"
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "volt",
-                        "action": "edit",
-                        "x": 0,
-                        "y": 86,
-                        "style": "mon_value",
-                        "width": 106,
-                        "height": 40
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "curr",
-                        "action": "edit",
-                        "x": 106,
-                        "y": 86,
-                        "style": "mon_value",
-                        "width": 106,
-                        "height": 40
-                      },
-                      {
-                        "type": "Text",
-                        "action": "show_channel_settings",
-                        "x": 212,
-                        "y": 86,
-                        "style": "default_S",
-                        "text": "`",
-                        "width": 28,
-                        "height": 40
-                      }
-                    ],
-                    "x": 0,
-                    "y": 0,
-                    "width": 240,
-                    "height": 126,
-                    "style": "default"
-                  }
-                ],
-                "x": 0,
-                "width": 240,
-                "height": 126,
-                "style": "default"
-              },
-              "width": 240,
-              "height": 320,
-              "style": "default"
-            },
-            {
-              "type": "Text",
-              "action": "touch_screen_calibration",
-              "x": 0,
-              "y": 284,
-              "style": "bottom_button",
-              "text": "P",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 96,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "!",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 144,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "L",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "turn_off",
-              "x": 192,
-              "y": 284,
-              "style": "bottom_button",
-              "text": "Q",
-              "width": 48,
-              "height": 36
-            }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320
-        },
-        "landscape": {
-          "widgets": [
-            {
-              "type": "Text",
-              "action": "",
-              "x": 224,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "B",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 224,
               "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 320,
-              "height": 32
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
               "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 0,
-              "y": 204,
-              "style": "bottom_button",
+              "Disabled style:": "bottom_button_disabled",
               "text": "(",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 204,
-              "style": "bottom_button_disabled",
-              "text": ")",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Container",
-              "x": 0,
-              "y": 30,
-              "widgets": [
-                {
-                  "type": "Text",
-                  "action": "key_7",
-                  "x": 0,
-                  "y": 2,
-                  "style": "key",
-                  "text": "7",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "key_8",
-                  "x": 60,
-                  "y": 2,
-                  "style": "key",
-                  "text": "8",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "key_9",
-                  "x": 120,
-                  "y": 2,
-                  "style": "key",
-                  "text": "9",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "key_back",
-                  "x": 180,
-                  "y": 2,
-                  "style": "key_icons",
-                  "text": "<",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "key_4",
-                  "x": 0,
-                  "y": 45,
-                  "style": "key",
-                  "text": "4",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "key_5",
-                  "x": 60,
-                  "y": 45,
-                  "style": "key",
-                  "text": "5",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "key_6",
-                  "x": 120,
-                  "y": 45,
-                  "style": "key",
-                  "text": "6",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "key_c",
-                  "x": 180,
-                  "y": 45,
-                  "style": "key_icons",
-                  "text": "C",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "key_1",
-                  "x": 0,
-                  "y": 88,
-                  "style": "key",
-                  "text": "1",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "key_2",
-                  "x": 60,
-                  "y": 88,
-                  "style": "key",
-                  "text": "2",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "key_3",
-                  "x": 120,
-                  "y": 88,
-                  "style": "key",
-                  "text": "3",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "key_ok",
-                  "x": 180,
-                  "y": 88,
-                  "style": "key_icons",
-                  "text": "O",
-                  "width": 60,
-                  "height": 86
-                },
-                {
-                  "type": "Text",
-                  "action": "key_0",
-                  "x": 0,
-                  "y": 131,
-                  "style": "key",
-                  "text": "0",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "key_dot",
-                  "x": 60,
-                  "y": 131,
-                  "style": "key",
-                  "text": ".",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "key_sign",
-                  "x": 120,
-                  "y": 131,
-                  "style": "key_icons",
-                  "text": "-",
-                  "width": 60,
-                  "height": 43
-                }
-              ],
-              "width": 240,
-              "height": 174,
-              "style": "default"
+              "Enabled": "calibration.channel.stepPrevEnabled",
+              "disabledStyle": "bottom_button_disabled",
+              "enabled": "calibration.channel.stepPrevEnabled",
+              "action": "sys_settings_cal_ch_wiz_step_previous"
             }
           ],
           "x": 0,
@@ -53846,497 +53964,7 @@
           "width": 320,
           "height": 240
         },
-        "description": "Calibration wizard step 3: calibrate min. value"
-      },
-      {
-        "name": "sys_settings_cal_wiz???",
-        "portrait": {
-          "widgets": [
-            {
-              "type": "List",
-              "listType": "vertical",
-              "data": "channels",
-              "x": 0,
-              "y": 16,
-              "itemWidget": {
-                "type": "Select",
-                "data": "channel_ok",
-                "y": 0,
-                "widgets": [
-                  {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
-                    "x": 0,
-                    "y": 0,
-                    "width": 240,
-                    "height": 126
-                  },
-                  {
-                    "type": "Container",
-                    "widgets": [
-                      {
-                        "type": "Select",
-                        "x": 0,
-                        "y": 0,
-                        "data": "output_state",
-                        "action": "",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "style": "channel_off_L",
-                            "text": "OFF",
-                            "x": 0,
-                            "y": 0,
-                            "width": 240,
-                            "height": 86,
-                            "action": "toggle_channel"
-                          },
-                          {
-                            "type": "Select",
-                            "data": "output_mode",
-                            "widgets": [
-                              {
-                                "type": "DisplayData",
-                                "style": "mon_value_L",
-                                "data": "mon_value",
-                                "x": 0,
-                                "y": 0,
-                                "width": 240,
-                                "height": 86,
-                                "action": "toggle_channel"
-                              },
-                              {
-                                "type": "DisplayData",
-                                "style": "mon_value_L_ur",
-                                "data": "mon_value",
-                                "x": 0,
-                                "y": 0,
-                                "width": 240,
-                                "height": 86,
-                                "action": "toggle_channel"
-                              }
-                            ],
-                            "x": 0,
-                            "y": 0,
-                            "width": 240,
-                            "height": 86,
-                            "style": "default"
-                          }
-                        ],
-                        "width": 240,
-                        "height": 86,
-                        "style": "default"
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "volt",
-                        "action": "edit",
-                        "x": 0,
-                        "y": 86,
-                        "style": "mon_value",
-                        "width": 106,
-                        "height": 40
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "curr",
-                        "action": "edit",
-                        "x": 106,
-                        "y": 86,
-                        "style": "mon_value",
-                        "width": 106,
-                        "height": 40
-                      },
-                      {
-                        "type": "Text",
-                        "action": "show_channel_settings",
-                        "x": 212,
-                        "y": 86,
-                        "style": "default_S",
-                        "text": "`",
-                        "width": 28,
-                        "height": 40
-                      }
-                    ],
-                    "x": 0,
-                    "y": 0,
-                    "width": 240,
-                    "height": 126,
-                    "style": "default"
-                  }
-                ],
-                "x": 0,
-                "width": 240,
-                "height": 126,
-                "style": "default"
-              },
-              "width": 240,
-              "height": 320,
-              "style": "default"
-            },
-            {
-              "type": "Text",
-              "action": "touch_screen_calibration",
-              "x": 0,
-              "y": 284,
-              "style": "bottom_button",
-              "text": "P",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 96,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "!",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 144,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "L",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "turn_off",
-              "x": 192,
-              "y": 284,
-              "style": "bottom_button",
-              "text": "Q",
-              "width": 48,
-              "height": 36
-            }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320
-        },
-        "landscape": {
-          "widgets": [
-            {
-              "type": "Text",
-              "action": "",
-              "x": 224,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "B",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 224,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 320,
-              "height": 32
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 0,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "(",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 204,
-              "style": "bottom_button_disabled",
-              "text": ")",
-              "width": 48,
-              "height": 36
-            }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240
-        },
-        "description": "Calibration wizard step ???: enter callibration remark"
-      },
-      {
-        "name": "sys_settings_cal_wiz??? (1)",
-        "portrait": {
-          "widgets": [
-            {
-              "type": "List",
-              "listType": "vertical",
-              "data": "channels",
-              "x": 0,
-              "y": 16,
-              "itemWidget": {
-                "type": "Select",
-                "data": "channel_ok",
-                "y": 0,
-                "widgets": [
-                  {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
-                    "x": 0,
-                    "y": 0,
-                    "width": 240,
-                    "height": 126
-                  },
-                  {
-                    "type": "Container",
-                    "widgets": [
-                      {
-                        "type": "Select",
-                        "x": 0,
-                        "y": 0,
-                        "data": "output_state",
-                        "action": "",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "style": "channel_off_L",
-                            "text": "OFF",
-                            "x": 0,
-                            "y": 0,
-                            "width": 240,
-                            "height": 86,
-                            "action": "toggle_channel"
-                          },
-                          {
-                            "type": "Select",
-                            "data": "output_mode",
-                            "widgets": [
-                              {
-                                "type": "DisplayData",
-                                "style": "mon_value_L",
-                                "data": "mon_value",
-                                "x": 0,
-                                "y": 0,
-                                "width": 240,
-                                "height": 86,
-                                "action": "toggle_channel"
-                              },
-                              {
-                                "type": "DisplayData",
-                                "style": "mon_value_L_ur",
-                                "data": "mon_value",
-                                "x": 0,
-                                "y": 0,
-                                "width": 240,
-                                "height": 86,
-                                "action": "toggle_channel"
-                              }
-                            ],
-                            "x": 0,
-                            "y": 0,
-                            "width": 240,
-                            "height": 86,
-                            "style": "default"
-                          }
-                        ],
-                        "width": 240,
-                        "height": 86,
-                        "style": "default"
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "volt",
-                        "action": "edit",
-                        "x": 0,
-                        "y": 86,
-                        "style": "mon_value",
-                        "width": 106,
-                        "height": 40
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "curr",
-                        "action": "edit",
-                        "x": 106,
-                        "y": 86,
-                        "style": "mon_value",
-                        "width": 106,
-                        "height": 40
-                      },
-                      {
-                        "type": "Text",
-                        "action": "show_channel_settings",
-                        "x": 212,
-                        "y": 86,
-                        "style": "default_S",
-                        "text": "`",
-                        "width": 28,
-                        "height": 40
-                      }
-                    ],
-                    "x": 0,
-                    "y": 0,
-                    "width": 240,
-                    "height": 126,
-                    "style": "default"
-                  }
-                ],
-                "x": 0,
-                "width": 240,
-                "height": 126,
-                "style": "default"
-              },
-              "width": 240,
-              "height": 320,
-              "style": "default"
-            },
-            {
-              "type": "Text",
-              "action": "touch_screen_calibration",
-              "x": 0,
-              "y": 284,
-              "style": "bottom_button",
-              "text": "P",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 96,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "!",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 144,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "L",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "turn_off",
-              "x": 192,
-              "y": 284,
-              "style": "bottom_button",
-              "text": "Q",
-              "width": 48,
-              "height": 36
-            }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320
-        },
-        "landscape": {
-          "widgets": [
-            {
-              "type": "Text",
-              "action": "",
-              "x": 224,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "B",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 224,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 320,
-              "height": 32
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 0,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "(",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 204,
-              "style": "bottom_button_disabled",
-              "text": ")",
-              "width": 48,
-              "height": 36
-            }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240
-        },
-        "description": "Calibration wizard step ???: final step, params are stored and an error or confirmation message is displayed."
+        "description": "Calibration wizard step 1: select channel"
       }
     ],
     "bitmaps": [
@@ -54464,7 +54092,7 @@
         {
           "x": -1705,
           "y": 598,
-          "page": "sys_settings_cal_wiz1"
+          "page": "sys_settings_cal_ch_wiz_step"
         },
         {
           "x": -1705,
@@ -54601,12 +54229,12 @@
             "page": "sys_settings_cal"
           },
           "target": {
-            "page": "sys_settings_cal_wiz1"
+            "page": "sys_settings_cal_ch_wiz_step"
           }
         },
         {
           "source": {
-            "page": "sys_settings_cal_wiz1"
+            "page": "sys_settings_cal_ch_wiz_step"
           },
           "target": {
             "page": "sys_settings_cal_wiz2"
@@ -54754,7 +54382,7 @@
         },
         {
           "fileName": "actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"gui_internal.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
         },
         {
           "fileName": "gui_document.h",

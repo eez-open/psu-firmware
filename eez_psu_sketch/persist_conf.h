@@ -91,6 +91,7 @@ extern DeviceConfiguration dev_conf;
 void loadDevice();
 bool saveDevice();
 
+bool isPasswordValid(const char *new_password, size_t new_password_len, int16_t &err);
 bool changePassword(const char *new_password, size_t new_password_len);
 
 void enableBeep(bool enable);

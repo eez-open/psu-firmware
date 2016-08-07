@@ -52,6 +52,7 @@ struct WidgetCursor {
 
     WidgetCursor& operator=(int) {
         widgetOffset = 0;
+		cursor.iChannel = -1;
         return *this;
     }
 
@@ -71,16 +72,21 @@ struct WidgetCursor {
 };
 
 int getActivePage();
-void showPage(int index);
+void showPage(int index, bool pushOnStack = true);
+void showPreviousPage();
+void refreshPage();
 
 font::Font styleGetFont(const Style *style);
 void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse);
 void fillRect(int x, int y, int w, int h);
+void infoMessage(const char *message PROGMEM, void (*ok_callback)() = 0);
+void errorMessage(const char *message PROGMEM, void (*ok_callback)() = 0);
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());
 
 extern void (*dialog_yes_callback)();
 extern void (*dialog_no_callback)();
 extern void (*dialog_cancel_callback)();
+void dialog_ok_callback();
 
 extern WidgetCursor found_widget_at_down;
 
@@ -138,6 +144,7 @@ inline const int getWidgetStyleId(const Widget *widget) {
 
 #define DECL_WIDGET(var, widgetOffset) const Widget *var = (const Widget *)(document + (widgetOffset))
 #define DECL_WIDGET_STYLE(var, widget) const Style *var = (const Style *)(document + (widget)->style)
+#define DECL_STYLE_WITH_OFFSET(var, styleOffset) const Style *var = (const Style *)(document + (styleOffset))
 #define DECL_WIDGET_SPECIFIC(type, var, widget) const type *var = (const type *)(document + (widget)->specific)
 #define DECL_STYLE(var, styleId) const Style *var = (const Style *)(document + g_doc->styles.first + (styleId) * sizeof(Style))
 #define DECL_STRING(var, offset) const char *var = (const char *)(document + (offset))

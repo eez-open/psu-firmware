@@ -132,6 +132,20 @@ bool saveDevice() {
     return save((BlockHeader *)&dev_conf, sizeof(DeviceConfiguration), get_address(PERSIST_CONF_BLOCK_DEVICE), DEV_CONF_VERSION);
 }
 
+bool isPasswordValid(const char *new_password, size_t new_password_len, int16_t &err) {
+    if (new_password_len < PASSWORD_MIN_LENGTH) {
+		err = SCPI_ERROR_CAL_PASSWORD_TOO_SHORT;
+		return false;
+    }
+
+    if (new_password_len > PASSWORD_MAX_LENGTH) {
+		err = SCPI_ERROR_CAL_PASSWORD_TOO_LONG;
+        return false;
+    }
+
+	return true;
+}
+
 bool changePassword(const char *new_password, size_t new_password_len) {
     memset(&dev_conf.calibration_password, 0, sizeof(dev_conf.calibration_password));
     strncpy(dev_conf.calibration_password, new_password, new_password_len);

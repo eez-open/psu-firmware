@@ -19,6 +19,7 @@
 #pragma once
 
 #include "gui_data.h"
+#include "gui_keypad.h"
 #include "gui_edit_mode_snapshot.h"
 
 namespace eez {
@@ -51,6 +52,7 @@ struct SnapshotFlags {
 
 struct Snapshot {
     ChannelSnapshot channelSnapshots[CH_NUM];
+	keypad::Snapshot keypadSnapshot;
     edit_mode::Snapshot editModeSnapshot;
     Value alertMessage;
 	SnapshotFlags flags;

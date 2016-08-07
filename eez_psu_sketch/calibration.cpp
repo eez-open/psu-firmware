@@ -56,6 +56,25 @@ float Value::getRange() {
         (channel->I_CAL_VAL_MAX - channel->I_CAL_VAL_MIN);
 }
 
+bool Value::checkRange(float value, float adc) {
+	float levelValue = getLevelValue();
+    float range = getRange();
+
+    float diff;
+
+    diff = (float)(levelValue - value);
+    if (fabsf(diff) >= range * CALIBRATION_DATA_TOLERANCE / 100) {
+        return false;
+    }
+
+    diff = levelValue - adc;
+    if (fabsf(diff) >= range * CALIBRATION_DATA_TOLERANCE / 100) {
+        return false;
+    }
+
+	return true;
+}
+
 float Value::getLevelValue() {
     if (voltOrCurr) {
         if (level == LEVEL_MIN) {
@@ -156,6 +175,7 @@ void start(Channel *channel_) {
     channel->flags.cal_enabled = 0;
 
     resetChannelToZero();
+	channel->outputEnable(true);
 
     channel->setOperBits(OPER_ISUM_CALI, true);
 }
@@ -186,6 +206,55 @@ void setRemark(const char *value, size_t len) {
     remark_set = true;
     memset(remark, 0, sizeof(remark));
     strncpy(remark, value, len);
+}
+
+static bool checkCalibrationValue(calibration::Value &calibrationValue, int16_t &scpiErr) {
+    if (calibrationValue.min >= calibrationValue.max) {
+        scpiErr = SCPI_ERROR_INVALID_CAL_DATA;
+        return false;
+    }
+
+    if (!calibrationValue.checkMid()) {
+        scpiErr = SCPI_ERROR_INVALID_CAL_DATA;
+        return false;
+    }
+
+    return true;
+}
+
+bool canSave(int16_t &scpiErr) {
+    if (!isEnabled()) {
+        scpiErr = SCPI_ERROR_CALIBRATION_STATE_IS_OFF;
+        return false;
+    }
+
+    if (!isRemarkSet()) {
+        scpiErr = SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS;
+        return false;
+    }
+
+    bool u_calibrated = false;
+    if (voltage.min_set && voltage.mid_set && voltage.max_set) {
+        if (!checkCalibrationValue(calibration::voltage, scpiErr)) {
+            return false;
+        }
+        u_calibrated = true;
+    }
+
+    bool i_calibrated = false;
+    if (current.min_set && current.mid_set && current.max_set) {
+        if (!checkCalibrationValue(current, scpiErr)) {
+            return false;
+        }
+        i_calibrated = true;
+    }
+
+    if (!u_calibrated && !i_calibrated) {
+        scpiErr = SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS;
+        return false;
+    }
+
+	return true;
 }
 
 bool save() {

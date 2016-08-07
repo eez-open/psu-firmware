@@ -19,8 +19,10 @@
 #include "psu.h"
 #include "actions.h"
 #include "gui_internal.h"
+#include "gui_keypad.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_keypad.h"
+#include "gui_calibration.h"
 
 namespace eez {
 namespace psu {
@@ -74,68 +76,40 @@ void action_non_interactive_discard() {
     edit_mode::nonInteractiveDiscard();
 }
 
-void action_key_0() {
-    edit_mode_keypad::digit(0);
+void action_keypad_key() {
+    keypad::key();
 }
 
-void action_key_1() {
-    edit_mode_keypad::digit(1);
+void action_keypad_space() {
+    keypad::space();
 }
 
-void action_key_2() {
-    edit_mode_keypad::digit(2);
+void action_keypad_back() {
+    keypad::back();
 }
 
-void action_key_3() {
-    edit_mode_keypad::digit(3);
+void action_keypad_clear() {
+    keypad::clear();
 }
 
-void action_key_4() {
-    edit_mode_keypad::digit(4);
+void action_keypad_caps() {
+    keypad::caps();
 }
 
-void action_key_5() {
-    edit_mode_keypad::digit(5);
+void action_keypad_ok() {
+    keypad::ok();
 }
 
-void action_key_6() {
-    edit_mode_keypad::digit(6);
+void action_keypad_cancel() {
+    keypad::cancel();
 }
 
-void action_key_7() {
-    edit_mode_keypad::digit(7);
+void action_keypad_sign() {
+    keypad::sign();
 }
 
-void action_key_8() {
-    edit_mode_keypad::digit(8);
-}
-
-void action_key_9() {
-    edit_mode_keypad::digit(9);
-}
-
-void action_key_dot() {
-    edit_mode_keypad::dot();
-}
-
-void action_key_sign() {
-    edit_mode_keypad::sign();
-}
-
-void action_key_back() {
-    edit_mode_keypad::back();
-}
-
-void action_key_c() {
-    edit_mode_keypad::clear();
-}
-
-void action_key_ok() {
-    edit_mode_keypad::ok();
-}
-
-void action_key_unit() {
-    edit_mode_keypad::unit();
+void action_keypad_unit() {
+    keypad::unit();
 }
 
 void action_touch_screen_calibration() {
@@ -150,8 +124,16 @@ void action_no() {
     dialog_no_callback();
 }
 
+void action_ok() {
+    dialog_ok_callback();
+}
+
 void action_cancel() {
     dialog_cancel_callback();
+}
+
+void action_show_previous_page() {
+    showPreviousPage();
 }
 
 void action_turn_off() {
@@ -222,6 +204,53 @@ void action_show_ch_settings_info() {
     showPage(PAGE_ID_CH_SETTINGS_INFO);
 }
 
+void action_show_sys_settings_cal() {
+    showPage(PAGE_ID_SYS_SETTINGS_CAL);
+}
+
+void action_show_sys_settings_cal_ch() {
+    calibration::selectChannel();
+    showPage(PAGE_ID_SYS_SETTINGS_CAL_CH);
+}
+
+void action_sys_settings_cal_edit_password() {
+    calibration::editPassword();
+}
+
+void action_sys_settings_cal_ch_params_enabled() {
+
+}
+
+void action_sys_settings_cal_ch_wiz_start() {
+    calibration::start();
+}
+
+void action_sys_settings_cal_ch_wiz_step_previous() {
+    calibration::previousStep();
+}
+
+void action_sys_settings_cal_ch_wiz_step_next() {
+    calibration::nextStep();
+}
+
+void action_sys_settings_cal_ch_wiz_stop_and_show_previous_page() {
+    calibration::stop();
+    showPreviousPage();
+}
+
+void action_sys_settings_cal_ch_wiz_stop_and_show_main_page() {
+    calibration::stop();
+    showPage(PAGE_ID_MAIN);
+}
+
+void action_sys_settings_cal_ch_wiz_step_set() {
+    calibration::set();
+}
+
+void action_sys_settings_cal_ch_wiz_save() {
+    calibration::save();
+}
+
 
 ACTION actions[] = {
     0,
@@ -236,26 +265,21 @@ ACTION actions[] = {
     action_toggle_interactive_mode,
     action_non_interactive_enter,
     action_non_interactive_discard,
-    action_key_0,
-    action_key_1,
-    action_key_2,
-    action_key_3,
-    action_key_4,
-    action_key_5,
-    action_key_6,
-    action_key_7,
-    action_key_8,
-    action_key_9,
-    action_key_dot,
-    action_key_sign,
-    action_key_back,
-    action_key_c,
-    action_key_ok,
-    action_key_unit,
+    action_keypad_key,
+    action_keypad_space,
+    action_keypad_back,
+    action_keypad_clear,
+    action_keypad_caps,
+    action_keypad_ok,
+    action_keypad_cancel,
+    action_keypad_sign,
+    action_keypad_unit,
     action_touch_screen_calibration,
     action_yes,
     action_no,
+    action_ok,
     action_cancel,
+    action_show_previous_page,
     action_turn_off,
     action_show_sys_settings,
     action_show_main_help_page,
@@ -272,7 +296,18 @@ ACTION actions[] = {
     action_show_ch_settings_adv_rsense,
     action_show_ch_settings_adv_rprog,
     action_show_ch_settings_disp,
-    action_show_ch_settings_info
+    action_show_ch_settings_info,
+    action_show_sys_settings_cal,
+    action_show_sys_settings_cal_ch,
+    action_sys_settings_cal_edit_password,
+    action_sys_settings_cal_ch_params_enabled,
+    action_sys_settings_cal_ch_wiz_start,
+    action_sys_settings_cal_ch_wiz_step_previous,
+    action_sys_settings_cal_ch_wiz_step_next,
+    action_sys_settings_cal_ch_wiz_stop_and_show_previous_page,
+    action_sys_settings_cal_ch_wiz_stop_and_show_main_page,
+    action_sys_settings_cal_ch_wiz_step_set,
+    action_sys_settings_cal_ch_wiz_save
 };
 
 }

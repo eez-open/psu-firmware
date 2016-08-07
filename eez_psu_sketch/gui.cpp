@@ -41,6 +41,7 @@
 #define CONF_GUI_WELCOME_PAGE_TIMEOUT 2000000UL
 #define CONF_GUI_LONG_PRESS_TIMEOUT 1000000UL
 #define CONF_GUI_DRAW_TICK_ITERATIONS 4
+#define CONF_GUI_PAGE_NAVIGATION_STACK_SIZE 5
 
 namespace eez {
 namespace psu {
@@ -55,7 +56,11 @@ Document *g_doc;
 static Document doc_buffer;
 #endif
 
-static int active_page_id;
+static int g_activePageId;
+static int g_lastActivePageId;
+static bool g_pushActivePageOnStack;
+static int g_pageNavigationStack[CONF_GUI_PAGE_NAVIGATION_STACK_SIZE];
+static int g_pageNavigationStackPointer = 0;
 
 static bool is_page_refresh;
 static bool widget_refresh;
@@ -91,6 +96,7 @@ public:
     }
 
     void start(int pageIndex, int x, int y, bool refresh) {
+		cursor.iChannel = -1;
         stack[0].widgetOffset = getPageOffset(pageIndex);
         stack[0].index = 0;
         stack_index = 0;
@@ -545,21 +551,18 @@ void drawRectangle(int x, int y, int w, int h, const Style *style, bool inverse)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int getActiveStyleId(const Widget *widget) {
-	//return STYLE_ID_EDIT_VALUE_ACTIVE_SMALL;
-	return STYLE_ID_EDIT_VALUE_ACTIVE_S_RIGHT;
-}
-
 bool draw_display_data_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
-    bool edit = edit_mode::isEditWidget(widgetCursor);
-    if (edit && active_page_id == PAGE_ID_EDIT_MODE_KEYPAD) {
-        char *text = data::currentSnapshot.editModeSnapshot.keypadText;
+	DECL_WIDGET_SPECIFIC(DisplayDataWidget, display_data_widget, widget);
+
+	bool edit = edit_mode::isEditWidget(widgetCursor);
+    if (edit && g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD || widget->data == DATA_ID_KEYPAD_TEXT) {
+        char *text = data::currentSnapshot.keypadSnapshot.text;
         if (!refresh) {
-            char *previousText = data::previousSnapshot.editModeSnapshot.keypadText;
+            char *previousText = data::previousSnapshot.keypadSnapshot.text;
             refresh = strcmp(text, previousText) != 0;
         }
         if (refresh) {
-            DECL_STYLE(style, getActiveStyleId(widget));
+            DECL_STYLE_WITH_OFFSET(style, display_data_widget->editStyle);
             drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
             return true;
         }
@@ -594,7 +597,7 @@ bool draw_display_data_widget(const WidgetCursor &widgetCursor, const Widget *wi
             value.toText(text, 32);
 
             if (edit) {
-                DECL_STYLE(style, getActiveStyleId(widget));
+                DECL_STYLE_WITH_OFFSET(style, display_data_widget->editStyle);
                 drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
             }
             else {
@@ -802,6 +805,25 @@ bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, b
     return false;
 }
 
+bool draw_button_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    DECL_WIDGET_SPECIFIC(ButtonWidget, button_widget, widget);
+
+	int state = data::currentSnapshot.get(widgetCursor.cursor, button_widget->enabled).getInt();
+    if (!refresh) {
+        int previousState = data::previousSnapshot.get(widgetCursor.cursor, button_widget->enabled).getInt();
+        refresh = state != previousState;
+    }
+
+	if (refresh) {
+        DECL_STRING(text, button_widget->text);
+        DECL_STYLE_WITH_OFFSET(style, state ? widget->style : button_widget->disabledStyle);
+        drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+        return true;
+    }
+    
+	return false;
+}
+
 bool draw_toggle_button_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     int state = data::currentSnapshot.get(widgetCursor.cursor, widget->data).getInt();
     if (!refresh) {
@@ -852,6 +874,8 @@ bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
         return draw_rectangle_widget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_BITMAP) {
         return draw_bitmap_widget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_BUTTON) {
+        return draw_button_widget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_TOGGLE_BUTTON) {
         return draw_toggle_button_widget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_BUTTON_GROUP) {
@@ -874,7 +898,8 @@ void draw_tick() {
             data::previousSnapshot = data::currentSnapshot;
             data::currentSnapshot.takeSnapshot();
 
-            draw_enum_widgets.start(active_page_id, 0, 0, false);
+		    DECL_WIDGET(page, getPageOffset(g_activePageId));
+            draw_enum_widgets.start(g_activePageId, page->x, page->y, false);
 
             //DebugTraceF("%d", draw_counter);
             //draw_counter = 0;
@@ -892,18 +917,18 @@ void refresh_widget(WidgetCursor widget_cursor) {
     widget_refresh = false;
 }
 
-void refresh_page() {
+void refreshPage() {
     is_page_refresh = true;
 
     // clear screen with background color
-    DECL_WIDGET(page, getPageOffset(active_page_id));
+    DECL_WIDGET(page, getPageOffset(g_activePageId));
     DECL_WIDGET_STYLE(style, page);
     page_style = style;
     lcd::lcd.setColor(style->background_color);
-    lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
+    lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
 
     data::currentSnapshot.takeSnapshot();
-    draw_enum_widgets.start(active_page_id, 0, 0, true);
+    draw_enum_widgets.start(g_activePageId, page->x, page->y, true);
 }
 
 void flush() {
@@ -919,16 +944,48 @@ void flush() {
 }
 
 int getActivePage() {
-    return active_page_id;
+    return g_activePageId;
 }
 
-void showPage(int index) {
+void doShowPage(int index) {
     lcd::turnOn();
 
-    active_page_id = index;
+	g_activePageId = index;
 
     showPageTime = micros();
-    refresh_page();
+    refreshPage();
+}
+
+void showPage(int index, bool pushOnStack) {
+	if (index == PAGE_ID_MAIN) {
+		g_pageNavigationStackPointer = -1;
+	} else if (g_activePageId == PAGE_ID_MAIN) {
+		g_pageNavigationStackPointer = 0;
+	} else if (g_pageNavigationStackPointer >= 0 && g_pushActivePageOnStack) {
+		if (g_pageNavigationStackPointer == CONF_GUI_PAGE_NAVIGATION_STACK_SIZE) {
+			for (int i = 1; i < CONF_GUI_PAGE_NAVIGATION_STACK_SIZE; ++i) {
+				g_pageNavigationStack[i - 1] = g_pageNavigationStack[i];
+			}
+			--g_pageNavigationStackPointer;
+		}
+		g_pageNavigationStack[g_pageNavigationStackPointer++] = g_activePageId;
+	}
+
+	g_pushActivePageOnStack = pushOnStack;
+
+	doShowPage(index);
+}
+
+void showPreviousPage() {
+	if (g_pageNavigationStackPointer >= 0) {
+		--g_pageNavigationStackPointer;
+		if (g_pageNavigationStackPointer >= 0) {
+			g_pushActivePageOnStack = true;
+			doShowPage(g_pageNavigationStack[g_pageNavigationStackPointer]);
+		} else {
+			doShowPage(PAGE_ID_MAIN);
+		}
+	}
 }
 
 void showWelcomePage() {
@@ -980,7 +1037,8 @@ void find_widget(int x, int y) {
     find_widget_at_x = touch::x;
     find_widget_at_y = touch::y;
     EnumWidgets enum_widgets(find_widget_step);
-    enum_widgets.start(active_page_id, 0, 0, true);
+    DECL_WIDGET(page, getPageOffset(g_activePageId));
+    enum_widgets.start(g_activePageId, page->x, page->y, true);
     enum_widgets.next();
 }
 
@@ -1034,7 +1092,7 @@ void init() {
 
     touch::init();
 
-    active_page_id = -1;
+    g_activePageId = -1;
 
 #if defined(EEZ_PSU_ARDUINO_MEGA)
     arduino_util::prog_read_buffer(document, (uint8_t *)&doc_buffer, sizeof(Document));
@@ -1053,30 +1111,30 @@ void tick(unsigned long tick_usec) {
 
     touch::tick(tick_usec);
 
-    if (active_page_id == -1) {
+    if (g_activePageId == -1) {
         standbyTouchHandling(tick_usec);
         return;
     }
 
     // wait some time for transitional pages
-    if (active_page_id == PAGE_ID_STANDBY && tick_usec - showPageTime < CONF_GUI_STANDBY_PAGE_TIMEOUT) {
+    if (g_activePageId == PAGE_ID_STANDBY && tick_usec - showPageTime < CONF_GUI_STANDBY_PAGE_TIMEOUT) {
         standbyTouchHandling(tick_usec);
         return;
-    } else if (active_page_id == PAGE_ID_ENTERING_STANDBY && tick_usec - showPageTime < CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT) {
+    } else if (g_activePageId == PAGE_ID_ENTERING_STANDBY && tick_usec - showPageTime < CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT) {
         if (!psu::isPowerUp()) {
             unsigned long saved_showPageTime = showPageTime;
             showStandbyPage();
             showPageTime = saved_showPageTime - (CONF_GUI_STANDBY_PAGE_TIMEOUT - CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT);
         }
         return;
-    } else if (active_page_id == PAGE_ID_WELCOME && tick_usec - showPageTime < CONF_GUI_WELCOME_PAGE_TIMEOUT) {
+    } else if (g_activePageId == PAGE_ID_WELCOME && tick_usec - showPageTime < CONF_GUI_WELCOME_PAGE_TIMEOUT) {
         return;
     }
 
     // turn the screen off if power is down
     if (!psu::isPowerUp()) {
         standbyTouchHandling(tick_usec);
-        active_page_id = -1;
+        g_activePageId = -1;
         turnOff();
         return;
     }
@@ -1088,7 +1146,7 @@ void tick(unsigned long tick_usec) {
     }
 
     // go to the main page (or self test result) after transitional page
-    if (active_page_id == PAGE_ID_WELCOME || active_page_id == PAGE_ID_STANDBY || active_page_id == PAGE_ID_ENTERING_STANDBY) {
+    if (g_activePageId == PAGE_ID_WELCOME || g_activePageId == PAGE_ID_STANDBY || g_activePageId == PAGE_ID_ENTERING_STANDBY) {
 		if (devices::anyFailedOrWarning()) {
 			showPage(PAGE_ID_SELF_TEST_RESULT);
 		} else {
@@ -1114,9 +1172,9 @@ void tick(unsigned long tick_usec) {
             DECL_WIDGET(widget, found_widget.widgetOffset);
             if (found_widget && widget->type == WIDGET_TYPE_BUTTON_GROUP) {
                 widget_button_group::onTouchDown(found_widget);
-            } else if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
+            } else if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
                 edit_mode_slider::onTouchDown();
-            } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
+            } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
                 edit_mode_step::onTouchDown();
             }
         }
@@ -1134,11 +1192,11 @@ void tick(unsigned long tick_usec) {
                 }
             }
         } else {
-            if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
+            if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
                 edit_mode_slider::onTouchMove();
-            } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
+            } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
                 edit_mode_step::onTouchMove();
-            } else if (active_page_id == PAGE_ID_YES_NO) {
+            } else if (g_activePageId == PAGE_ID_YES_NO) {
 #ifdef CONF_DEBUG
                 int x = touch::x;
                 if (x < 1) x = 1;
@@ -1160,9 +1218,9 @@ void tick(unsigned long tick_usec) {
             do_action(widget->action);
             found_widget_at_down = 0;
         } else {
-            if (active_page_id == PAGE_ID_EDIT_MODE_SLIDER) {
+            if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
                 edit_mode_slider::onTouchUp();
-            } else if (active_page_id == PAGE_ID_EDIT_MODE_STEP) {
+            } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
                 edit_mode_step::onTouchUp();
             }
         }
@@ -1172,6 +1230,35 @@ void tick(unsigned long tick_usec) {
     draw_tick();
 }
 
+void dialog_ok_callback() {
+	if (dialog_yes_callback) {
+		dialog_yes_callback();
+	} else {
+		g_activePageId = g_lastActivePageId;
+		refreshPage();
+	}
+}
+
+void infoMessage(const char *message PROGMEM, void (*ok_callback)()) {
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message));
+
+    dialog_yes_callback = ok_callback;
+
+	g_lastActivePageId = g_activePageId;
+    g_activePageId = PAGE_ID_INFO_ALERT;
+    refreshPage();
+}
+
+void errorMessage(const char *message PROGMEM, void (*ok_callback)()) {
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message));
+
+    dialog_yes_callback = ok_callback;
+
+	g_lastActivePageId = g_activePageId;
+    g_activePageId = PAGE_ID_ERROR_ALERT;
+    refreshPage();
+}
+
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
     data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message));
 
@@ -1179,8 +1266,8 @@ void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_
     dialog_no_callback = no_callback;
     dialog_cancel_callback = cancel_callback;
 
-    active_page_id = PAGE_ID_YES_NO;
-    refresh_page();
+    g_activePageId = PAGE_ID_YES_NO;
+    refreshPage();
 }
 
 }

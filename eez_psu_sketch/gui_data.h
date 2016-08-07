@@ -25,45 +25,49 @@ namespace data {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-enum Unit {
-    UNIT_NONE,
+enum ValueType {
+    VALUE_TYPE_NONE,
 
-    UNIT_INT,
+    VALUE_TYPE_INT,
 
-    UNIT_VOLT,
-    UNIT_AMPER,
-    UNIT_MILLI_VOLT,
-    UNIT_MILLI_AMPER,
+	VALUE_TYPE_FLOAT,
+    VALUE_TYPE_FLOAT_VOLT,
+    VALUE_TYPE_FLOAT_AMPER,
+    VALUE_TYPE_FLOAT_MILLI_VOLT,
+    VALUE_TYPE_FLOAT_MILLI_AMPER,
 
-    UNIT_CONST_STR,
-    UNIT_STR
+    VALUE_TYPE_CONST_STR,
+    VALUE_TYPE_STR,
+
+    VALUE_TYPE_CHANNEL_LABEL,
 };
 
 struct Value {
-    Value() : unit_(UNIT_NONE) { }
-    Value(int value) : unit_(UNIT_INT), int_(value)  {}
-    Value(float value, Unit unit) : unit_(unit), float_(value) {}
-    Value(const char *str) : unit_(UNIT_STR), str_(str) {}
+    Value() : type_(VALUE_TYPE_NONE) { }
+    Value(int value) : type_(VALUE_TYPE_INT), int_(value)  {}
+	Value(int value, ValueType type) : type_(type), int_(value)  {}
+    Value(float value, ValueType type) : type_(type), float_(value) {}
+    Value(const char *str) : type_(VALUE_TYPE_STR), str_(str) {}
 
     static Value ProgmemStr(const char *pstr PROGMEM) {
         Value value;
         value.const_str_ = pstr;
-        value.unit_ = UNIT_CONST_STR;
+        value.type_ = VALUE_TYPE_CONST_STR;
         return value;
     }
 
     bool operator ==(const Value &other) {
-        if (unit_ != other.unit_) {
+        if (type_ != other.type_) {
             return false;
         }
 
-        if (unit_ == UNIT_NONE) {
+        if (type_ == VALUE_TYPE_NONE) {
             return true;
-        } else if (unit_ == UNIT_STR) {
+        } else if (type_ == VALUE_TYPE_STR) {
             return strcmp(str_, other.str_) == 0;
-        } else if (unit_ == UNIT_CONST_STR) {
+        } else if (type_ == VALUE_TYPE_CONST_STR) {
             return const_str_ == other.const_str_;
-        } else if (unit_ == UNIT_INT) {
+        } else if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_LABEL) {
             return int_ == other.int_;
         } else {
             return float_ == other.float_;
@@ -76,17 +80,17 @@ struct Value {
 
     float getFloat() const { return float_; }
     
-    Unit getUnit() const { return (Unit)unit_; }
+    ValueType getType() const { return (ValueType)type_; }
 
     uint8_t getInt() const { return int_; }
 
     void toText(char *text, int count) const;
 
-	bool isString() { return unit_ == UNIT_STR; }
+	bool isString() { return type_ == VALUE_TYPE_STR; }
 	const char *asString() { return str_; }
 
 private:
-    uint8_t unit_;
+    uint8_t type_;
     union {
         int int_;
         float float_;
@@ -130,7 +134,7 @@ void select(Cursor &cursor, uint8_t id, int index);
 
 Value getMin(const Cursor &cursor, uint8_t id);
 Value getMax(const Cursor &cursor, uint8_t id);
-Unit getUnit(const Cursor &cursor, uint8_t id);
+ValueType getUnit(const Cursor &cursor, uint8_t id);
 
 void getButtonLabels(const Cursor &cursor, uint8_t id, const Value **labels, int &count);
 

@@ -35,27 +35,45 @@ Value g_alertMessage;
 void Value::toText(char *text, int count) const {
     text[0] = 0;
 
-    util::strcatFloat(text, float_);
+	switch (type_) {
+	case VALUE_TYPE_NONE:
+		break;
 
-    switch (unit_) {
-    case UNIT_VOLT:
-        strcat(text, " V");
-        break;
+	case VALUE_TYPE_INT:
+		util::strcatInt(text, int_);
+		break;
+
+	case VALUE_TYPE_CONST_STR:
+		strncpy_P(text, const_str_, count - 1);
+		text[count - 1] = 0;
+		break;
+
+	case VALUE_TYPE_STR:
+		strncpy(text, str_, count - 1);
+		text[count - 1] = 0;
+		break;
+
+	case VALUE_TYPE_CHANNEL_LABEL:
+		snprintf_P(text, count-1, PSTR("Channel %d:"), int_);
+		text[count - 1] = 0;
+		break;
+
+	default:
+		{
+			util::strcatFloat(text, float_);
+
+			switch (type_) {
+			case VALUE_TYPE_FLOAT_VOLT:
+				strcat(text, " V");
+				break;
     
-    case UNIT_AMPER:
-        strcat(text, " A");
-        break;
-
-    case UNIT_CONST_STR:
-        strncpy_P(text, const_str_, count - 1);
-        text[count - 1] = 0;
-        break;
-
-    case UNIT_STR:
-        strncpy(text, str_, count - 1);
-        text[count - 1] = 0;
-        break;
-    }
+			case VALUE_TYPE_FLOAT_AMPER:
+				strcat(text, " A");
+				break;
+			}
+		}
+		break;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,9 +93,9 @@ void select(Cursor &cursor, uint8_t id, int index) {
 
 Value getMin(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_VOLT) {
-        return Value(Channel::get(cursor.iChannel).U_MIN, UNIT_VOLT);
+        return Value(Channel::get(cursor.iChannel).U_MIN, VALUE_TYPE_FLOAT_VOLT);
     } else if (id == DATA_ID_CURR) {
-        return Value(Channel::get(cursor.iChannel).I_MIN, UNIT_AMPER);
+        return Value(Channel::get(cursor.iChannel).I_MIN, VALUE_TYPE_FLOAT_AMPER);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMin();
     }
@@ -86,22 +104,22 @@ Value getMin(const Cursor &cursor, uint8_t id) {
 
 Value getMax(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_VOLT) {
-        return Value(Channel::get(cursor.iChannel).U_MAX, UNIT_VOLT);
+        return Value(Channel::get(cursor.iChannel).U_MAX, VALUE_TYPE_FLOAT_VOLT);
     } else if (id == DATA_ID_CURR) {
-        return Value(Channel::get(cursor.iChannel).I_MAX, UNIT_AMPER);
+        return Value(Channel::get(cursor.iChannel).I_MAX, VALUE_TYPE_FLOAT_AMPER);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMax();
     }
     return Value();
 }
 
-Unit getUnit(const Cursor &cursor, uint8_t id) {
+ValueType getUnit(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_VOLT) {
-        return UNIT_VOLT;
+        return VALUE_TYPE_FLOAT_VOLT;
     } else if (id == DATA_ID_CURR) {
-        return UNIT_AMPER;
+        return VALUE_TYPE_FLOAT_AMPER;
     }
-    return UNIT_NONE;
+    return VALUE_TYPE_NONE;
 }
 
 void getButtonLabels(const Cursor &cursor, uint8_t id, const Value **labels, int &count) {

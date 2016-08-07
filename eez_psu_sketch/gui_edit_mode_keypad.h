@@ -25,19 +25,7 @@ namespace psu {
 namespace gui {
 namespace edit_mode_keypad {
 
-void reset();
 void getText(char *text, int count);
-void doAction(int action_id);
-
-void digit(int d);
-void dot();
-void sign();
-void back();
-void clear();
-void ok();
-void unit();
-
-data::Unit getEditUnit();
 
 }
 }

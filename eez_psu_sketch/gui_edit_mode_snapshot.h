@@ -37,10 +37,7 @@ struct Snapshot {
 
     int step_index;
 
-    data::Value keypadUnit;
-    char keypadText[10];
-
-    void takeSnapshot();
+    void takeSnapshot(data::Snapshot *snapshot);
     data::Value get(uint8_t id);
     bool isBlinking(data::Snapshot& snapshot, uint8_t id, bool &result);
 };

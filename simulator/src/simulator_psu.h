@@ -38,6 +38,7 @@
 #define strncpy_P strncpy
 #define strcat_P strcat
 #define sprintf_P sprintf
+#define snprintf_P snprintf
 #define vsnprintf_P vsnprintf
 #define strcmp_P strcmp
 #define strncmp_P strncmp

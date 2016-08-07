@@ -361,6 +361,15 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\devices.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_calibration.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_keypad.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_numeric_keypad.h">
+      <Filter>gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -609,6 +618,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\devices.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_calibration.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_keypad.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_numeric_keypad.cpp">
+      <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

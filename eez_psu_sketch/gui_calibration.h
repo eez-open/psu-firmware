@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2016-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,26 +18,26 @@
  
 #pragma once
 
-#define SCPI_SIMU_COMMANDS
+#include "gui_internal.h"
 
-#pragma GCC diagnostic ignored "-Wunused-variable"
+namespace eez {
+namespace psu {
+namespace gui {
+namespace calibration {
 
-#if defined(EEZ_PSU_ARDUINO_DUE)
+const int MAX_STEP_NUM = 7;
 
-#ifndef strncmp_P
-#define strncmp_P(a, b, c) strncmp((a), (b), (c))
-#endif
+void editPassword();
+void selectChannel();
+void start();
+data::Value getData(const data::Cursor &cursor, uint8_t id);
+void set();
+void previousStep();
+void nextStep();
+void save();
+void stop();
 
-#ifndef snprintf_P
-#define snprintf_P snprintf
-#endif
-
-#ifndef vsnprintf_P
-#define vsnprintf_P vsnprintf
-#endif
-
-#ifndef strncpy_P
-#define strncpy_P strncpy
-#endif
-
-#endif
+}
+}
+}
+} // namespace eez::psu::gui::calibration

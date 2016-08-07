@@ -24,23 +24,23 @@
 #define CONF_GUI_EDIT_MODE_STEP_THRESHOLD_PX 5
 
 using eez::psu::gui::data::Value;
-using eez::psu::gui::data::UNIT_VOLT;
-using eez::psu::gui::data::UNIT_AMPER;
+using eez::psu::gui::data::VALUE_TYPE_FLOAT_VOLT;
+using eez::psu::gui::data::VALUE_TYPE_FLOAT_AMPER;
 
 const Value CONF_GUI_U_STEPS[] = {
-    Value(5.0f, UNIT_VOLT),
-    Value(2.0f, UNIT_VOLT),
-    Value(1.0f, UNIT_VOLT),
-    Value(0.5f, UNIT_VOLT),
-    Value(0.1f, UNIT_VOLT)
+    Value(5.0f, VALUE_TYPE_FLOAT_VOLT),
+    Value(2.0f, VALUE_TYPE_FLOAT_VOLT),
+    Value(1.0f, VALUE_TYPE_FLOAT_VOLT),
+    Value(0.5f, VALUE_TYPE_FLOAT_VOLT),
+    Value(0.1f, VALUE_TYPE_FLOAT_VOLT)
 };
 
 const Value CONF_GUI_I_STEPS[] = {
-    Value(0.5f, UNIT_AMPER),
-    Value(0.25f, UNIT_AMPER),
-    Value(0.1f, UNIT_AMPER),
-    Value(0.05f, UNIT_AMPER),
-    Value(0.01f, UNIT_AMPER)
+    Value(0.5f, VALUE_TYPE_FLOAT_AMPER),
+    Value(0.25f, VALUE_TYPE_FLOAT_AMPER),
+    Value(0.1f, VALUE_TYPE_FLOAT_AMPER),
+    Value(0.05f, VALUE_TYPE_FLOAT_AMPER),
+    Value(0.01f, VALUE_TYPE_FLOAT_AMPER)
 };
 
 
@@ -55,7 +55,7 @@ static bool changed;
 static int start_y;
 
 float getStepValue() {
-    if (edit_mode::getUnit() == UNIT_VOLT) {
+    if (edit_mode::getUnit() == VALUE_TYPE_FLOAT_VOLT) {
         return CONF_GUI_U_STEPS[step_index].getFloat();
     } else {
         return CONF_GUI_I_STEPS[step_index].getFloat();
@@ -67,7 +67,7 @@ int getStepIndex() {
 }
 
 void getStepValues(const data::Value **labels, int &count) {
-    if (edit_mode::getUnit() == UNIT_VOLT) {
+    if (edit_mode::getUnit() == VALUE_TYPE_FLOAT_VOLT) {
         *labels = CONF_GUI_U_STEPS;
         count = sizeof(CONF_GUI_U_STEPS) / sizeof(Value);
     } else {

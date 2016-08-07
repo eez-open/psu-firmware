@@ -217,3 +217,5 @@
 
 /// Interval (in minutes) at which "on time" will be written to EEPROM
 #define WRITE_ONTIME_INTERVAL 10
+
+/// Maximum allowed length (including label) of the keypad text.
