@@ -58,6 +58,11 @@ void Value::toText(char *text, int count) const {
 		text[count - 1] = 0;
 		break;
 
+	case VALUE_TYPE_CHANNEL_SHORT_LABEL:
+		snprintf_P(text, count-1, PSTR("Ch%d:"), int_);
+		text[count - 1] = 0;
+		break;
+
 	default:
 		{
 			util::strcatFloat(text, float_);

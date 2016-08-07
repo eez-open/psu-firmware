@@ -175,7 +175,6 @@ void start(Channel *channel_) {
     channel->flags.cal_enabled = 0;
 
     resetChannelToZero();
-	channel->outputEnable(true);
 
     channel->setOperBits(OPER_ISUM_CALI, true);
 }

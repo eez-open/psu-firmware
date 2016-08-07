@@ -107,6 +107,24 @@ void selectChannel() {
 
 void onStartPasswordOk() {
 	psu::calibration::start(g_channel);
+
+	g_channel->outputEnable(false);
+	
+	g_channel->clearProtection();
+	g_channel->prot_conf.flags.u_state = 0;
+    g_channel->prot_conf.flags.i_state = 0;
+    g_channel->prot_conf.flags.p_state = 0;
+
+	if (g_channel->getFeatures() & CH_FEATURE_RPROG) {
+        g_channel->remoteProgrammingEnable(false);
+    }
+    if (g_channel->getFeatures() & CH_FEATURE_LRIPPLE) {
+        g_channel->lowRippleEnable(false);
+		g_channel->lowRippleAutoEnable(false);
+    }
+
+	g_channel->outputEnable(true);
+
 	g_stepNum = 0;
 	showPage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP, false);
 }
@@ -119,15 +137,39 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
 	if (id == DATA_ID_CALIBRATION_CHANNEL_LABEL) {
 		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
 		return data::Value(channel.index, data::VALUE_TYPE_CHANNEL_LABEL);
+	} else if (id == DATA_ID_CALIBRATION_CHANNEL_SHORT_LABEL) {
+		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		return data::Value(channel.index, data::VALUE_TYPE_CHANNEL_SHORT_LABEL);
 	} else if (id == DATA_ID_CALIBRATION_CHANNEL_STATUS) {
 		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
 		return data::Value(channel.isCalibrationExists() ? 1 : 0);
+	} else if (id == DATA_ID_CALIBRATION_CHANNEL_STATE) {
+		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		return data::Value(channel.flags.cal_enabled ? 1 : 0);
 	} else if (id == DATA_ID_CALIBRATION_CHANNEL_DATE) {
 		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
 		return data::Value(channel.cal_conf.calibration_date);
 	} else if (id == DATA_ID_CALIBRATION_CHANNEL_REMARK) {
 		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
 		return data::Value(channel.cal_conf.calibration_remark);
+	} else if (id == DATA_ID_CAL_CH_U_MIN) {
+		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		return data::Value(channel.cal_conf.u.min.val, data::VALUE_TYPE_FLOAT_VOLT);
+	} else if (id == DATA_ID_CAL_CH_U_MID) {
+		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		return data::Value(channel.cal_conf.u.mid.val, data::VALUE_TYPE_FLOAT_VOLT);
+	} else if (id == DATA_ID_CAL_CH_U_MAX) {
+		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		return data::Value(channel.cal_conf.u.max.val, data::VALUE_TYPE_FLOAT_VOLT);
+	} else if (id == DATA_ID_CAL_CH_I_MIN) {
+		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		return data::Value(channel.cal_conf.i.min.val, data::VALUE_TYPE_FLOAT_AMPER);
+	} else if (id == DATA_ID_CAL_CH_I_MID) {
+		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		return data::Value(channel.cal_conf.i.mid.val, data::VALUE_TYPE_FLOAT_AMPER);
+	} else if (id == DATA_ID_CAL_CH_I_MAX) {
+		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		return data::Value(channel.cal_conf.i.max.val, data::VALUE_TYPE_FLOAT_AMPER);
 	} else if (id == DATA_ID_CALIBRATION_CHANNEL_STEP_NUM) {
 		return data::Value(g_stepNum);
 	} else if (id == DATA_ID_CALIBRATION_CHANNEL_STEP_VALUE) {
@@ -255,6 +297,18 @@ void save() {
 
 void stop() {
 	psu::calibration::stop();
+
+	g_channel->outputEnable(false);
+	
+	g_channel->prot_conf.flags.u_state = g_channel->OVP_DEFAULT_STATE;
+    g_channel->prot_conf.flags.i_state = g_channel->OCP_DEFAULT_STATE;
+    g_channel->prot_conf.flags.p_state = g_channel->OPP_DEFAULT_STATE;
+}
+
+void toggleEnable() {
+	Channel &channel = g_channel ? *g_channel : Channel::get(found_widget_at_down.cursor.iChannel);
+	channel.flags.cal_enabled = !channel.flags.cal_enabled;
+	refreshPage();
 }
 
 }

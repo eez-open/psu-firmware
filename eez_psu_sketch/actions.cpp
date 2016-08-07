@@ -251,6 +251,10 @@ void action_sys_settings_cal_ch_wiz_save() {
     calibration::save();
 }
 
+void action_sys_settings_cal_toggle_enable() {
+    calibration::toggleEnable();
+}
+
 
 ACTION actions[] = {
     0,
@@ -307,7 +311,8 @@ ACTION actions[] = {
     action_sys_settings_cal_ch_wiz_stop_and_show_previous_page,
     action_sys_settings_cal_ch_wiz_stop_and_show_main_page,
     action_sys_settings_cal_ch_wiz_step_set,
-    action_sys_settings_cal_ch_wiz_save
+    action_sys_settings_cal_ch_wiz_save,
+    action_sys_settings_cal_toggle_enable
 };
 
 }

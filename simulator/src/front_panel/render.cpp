@@ -114,7 +114,7 @@ void render(Window *window, Data *data) {
 
     window->addOnOffImage(RECT(689, 61, 17, 17), data->ch1.cv, R2B6_IMAGE("led-yellow"), R2B6_IMAGE("led-off"));
     window->addOnOffImage(RECT(689, 95, 17, 17), data->ch1.cc, R2B6_IMAGE("led-red"), R2B6_IMAGE("led-off"));
-    window->addOnOffImage(RECT(713, 243, 17, 17), data->ch1.out, R2B6_IMAGE("led-green"), R2B6_IMAGE("led-off"));
+    window->addOnOffImage(RECT(713, 267, 17, 17), data->ch1.out, R2B6_IMAGE("led-green"), R2B6_IMAGE("led-off"));
     window->addOnOffImage(RECT(689, 128, 17, 17), data->ch1.sense, R2B6_IMAGE("led-yellow"), R2B6_IMAGE("led-off"));
     window->addOnOffImage(RECT(650, 128, 17, 17), data->ch1.prog, R2B6_IMAGE("led-red"), R2B6_IMAGE("led-off"));
     if (data->ch1.load_text) {
@@ -124,7 +124,7 @@ void render(Window *window, Data *data) {
 
     window->addOnOffImage(RECT(918, 61, 17, 17), data->ch2.cv, R2B6_IMAGE("led-yellow"), R2B6_IMAGE("led-off"));
     window->addOnOffImage(RECT(918, 95, 17, 17), data->ch2.cc, R2B6_IMAGE("led-red"), R2B6_IMAGE("led-off"));
-    window->addOnOffImage(RECT(894, 243, 17, 17), data->ch2.out, R2B6_IMAGE("led-green"), R2B6_IMAGE("led-off"));
+    window->addOnOffImage(RECT(894, 267, 17, 17), data->ch2.out, R2B6_IMAGE("led-green"), R2B6_IMAGE("led-off"));
     window->addOnOffImage(RECT(918, 128, 17, 17), data->ch2.sense, R2B6_IMAGE("led-yellow"), R2B6_IMAGE("led-off"));
     window->addOnOffImage(RECT(879, 128, 17, 17), data->ch2.prog, R2B6_IMAGE("led-red"), R2B6_IMAGE("led-off"));
     if (data->ch2.load_text) {

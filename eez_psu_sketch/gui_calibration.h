@@ -36,6 +36,7 @@ void previousStep();
 void nextStep();
 void save();
 void stop();
+void toggleEnable();
 
 }
 }
