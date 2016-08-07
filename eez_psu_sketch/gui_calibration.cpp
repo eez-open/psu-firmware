@@ -106,8 +106,6 @@ void selectChannel() {
 }
 
 void onStartPasswordOk() {
-	psu::calibration::start(g_channel);
-
 	g_channel->outputEnable(false);
 	
 	g_channel->clearProtection();
@@ -124,6 +122,8 @@ void onStartPasswordOk() {
     }
 
 	g_channel->outputEnable(true);
+
+	psu::calibration::start(g_channel);
 
 	g_stepNum = 0;
 	showPage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP, false);
@@ -222,15 +222,24 @@ void onSetOk(float value) {
 	}
 }
 
+void showCurrentStep() {
+	if (g_stepNum < 7) {
+		showPage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP, false);
+	} else {
+		showPage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_FINISH, false);
+	}
+}
+
 void onSetRemarkOk(char *remark) {
 	psu::calibration::setRemark(remark, strlen(remark));
-	showPreviousPage();
 	if (g_stepNum < 6) {
 		nextStep();
 	} else {
 		int16_t scpiErr;
 		if (psu::calibration::canSave(scpiErr)) {
 			nextStep();
+		} else {
+			showCurrentStep();
 		}
 	}
 }
@@ -249,12 +258,12 @@ void set() {
 		psu::calibration::Value *calibrationValue = getCalibrationValue();
 
 		if (calibrationValue == &psu::calibration::voltage) {
-			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_VOLT, g_channel->U_MIN, g_channel->U_MAX, onSetOk, showPreviousPage);
+			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_VOLT, g_channel->U_MIN, g_channel->U_MAX, onSetOk, showCurrentStep);
 		} else {
-			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_AMPER, g_channel->I_MIN, g_channel->I_MAX, onSetOk, showPreviousPage);
+			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_AMPER, g_channel->I_MIN, g_channel->I_MAX, onSetOk, showCurrentStep);
 		}
 	} else if (g_stepNum == 6) {
-		keypad::start(0, psu::calibration::isRemarkSet() ? psu::calibration::getRemark() : 0, 32, false, onSetRemarkOk, showPreviousPage);
+		keypad::start(0, psu::calibration::isRemarkSet() ? psu::calibration::getRemark() : 0, 32, false, onSetRemarkOk, showCurrentStep);
 	}
 }
 
@@ -280,11 +289,7 @@ void nextStep() {
 
 	++g_stepNum;
 
-	if (g_stepNum < 7) {
-		showPage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP, false);
-	} else {
-		showPage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_FINISH, false);
-	}
+	showCurrentStep();
 }
 
 void save() {
