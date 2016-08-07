@@ -247,7 +247,7 @@ void nextStep() {
 
 void save() {
 	if (psu::calibration::save()) {
-		errorMessage(PSTR("Calibration data saved!"), showPreviousPage);
+		infoMessage(PSTR("Calibration data saved!"), showPreviousPage);
 	} else {
 		errorMessage(PSTR("Save failed!"));
 	}
