@@ -219,3 +219,4 @@
 #define WRITE_ONTIME_INTERVAL 10
 
 /// Maximum allowed length (including label) of the keypad text.
+#define MAX_KEYPAD_TEXT_LENGTH 128
