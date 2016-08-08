@@ -43548,6 +43548,15 @@
         "inheritFrom": "default"
       },
       {
+        "name": "default_edit_inverse",
+        "_font": "medium",
+        "_color": "#5080ff",
+        "_backgroundColor": "#ffffff",
+        "_borderColor": "#D3D3D3",
+        "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance.",
+        "inheritFrom": "default"
+      },
+      {
         "name": "default_inverse",
         "_font": "medium",
         "_color": "#5080ff",
@@ -43825,19 +43834,7 @@
       {
         "name": "edit_info_S",
         "_font": "small",
-        "_color": "#C8E7F1",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "edit_value_L",
-        "_font": "large",
-        "_color": "#FFFF00",
+        "_color": "#c8e7f0",
         "_alignHorizontal": "center",
         "_alignVertical": "center",
         "_borderSize": 0,
@@ -43850,6 +43847,30 @@
         "name": "edit_value",
         "_font": "medium",
         "_color": "#FFFFFF",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "edit_value_left",
+        "_font": "medium",
+        "_color": "#FFFFFF",
+        "_alignHorizontal": "left",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "edit_value_L",
+        "_font": "large",
+        "_color": "#FFFF00",
         "_alignHorizontal": "center",
         "_alignVertical": "center",
         "_borderSize": 0,
@@ -43883,6 +43904,54 @@
         "inheritFrom": "default"
       },
       {
+        "name": "edit_value_active_left",
+        "_color": "#FFFF00",
+        "_font": "medium",
+        "_alignHorizontal": "left",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "edit_value_active_S_left",
+        "_color": "#FFFF00",
+        "_font": "small",
+        "_alignHorizontal": "left",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "edit_value_active_S_right",
+        "_color": "#FFFF00",
+        "_font": "small",
+        "_alignHorizontal": "right",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "edit_value_S_left",
+        "_font": "small",
+        "_alignHorizontal": "left",
+        "_color": "#FFFFFF",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
         "name": "edit_value_S_right",
         "_font": "small",
         "_alignHorizontal": "right",
@@ -43897,18 +43966,6 @@
       {
         "name": "edit_value_ur_S_right",
         "_color": "#FF0000",
-        "_font": "small",
-        "_alignHorizontal": "right",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "edit_value_active_S_right",
-        "_color": "#FFFF00",
         "_font": "small",
         "_alignHorizontal": "right",
         "_alignVertical": "center",
@@ -44009,54 +44066,6 @@
         "_color": "#ffff00"
       },
       {
-        "name": "edit_value_active_S_left",
-        "_color": "#FFFF00",
-        "_font": "small",
-        "_alignHorizontal": "left",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "edit_value_S_left",
-        "_font": "small",
-        "_alignHorizontal": "left",
-        "_color": "#FFFFFF",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "edit_value_left",
-        "_font": "medium",
-        "_color": "#FFFFFF",
-        "_alignHorizontal": "left",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "edit_value_active_left",
-        "_color": "#FFFF00",
-        "_font": "medium",
-        "_alignHorizontal": "left",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
         "name": "bottom_button_textual",
         "_font": "medium",
         "_color": "#2F2F2F",
@@ -44069,17 +44078,8 @@
         "_paddingVertical": 0
       },
       {
-        "name": "default_edit_inverse",
-        "_font": "medium",
-        "_color": "#5080ff",
-        "_backgroundColor": "#ffffff",
-        "_borderColor": "#D3D3D3",
-        "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance.",
-        "inheritFrom": "default"
-      },
-      {
         "name": "error_alert",
-        "_backgroundColor": "#e3624f",
+        "_backgroundColor": "#e02020",
         "inheritFrom": "default_S"
       },
       {
@@ -44096,6 +44096,33 @@
         "name": "info_alert_button",
         "inheritFrom": "info_alert",
         "_color": "#ffff00"
+      },
+      {
+        "name": "value",
+        "_font": "medium",
+        "inheritFrom": "default",
+        "_color": "#c8e7f0",
+        "_alignHorizontal": "left"
+      },
+      {
+        "name": "value_S",
+        "_font": "small",
+        "inheritFrom": "default",
+        "_color": "#c8e7f0",
+        "_alignHorizontal": "left"
+      },
+      {
+        "name": "value_L",
+        "_font": "large",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_color": "#c8e7f0",
+        "_backgroundColor": "#5080ff",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
       }
     ],
     "pages": [
@@ -46478,9 +46505,9 @@
           "style": "error_alert"
         },
         "landscape": {
-          "x": 0,
+          "x": 20,
           "y": 76,
-          "width": 320,
+          "width": 280,
           "height": 88,
           "widgets": [
             {
@@ -46488,7 +46515,7 @@
               "text": "",
               "x": 0,
               "y": 8,
-              "width": 320,
+              "width": 280,
               "height": 32,
               "style": "info_alert",
               "data": "alert_message"
@@ -46496,7 +46523,7 @@
             {
               "type": "Text",
               "text": "OK",
-              "x": 130,
+              "x": 110,
               "y": 48,
               "width": 60,
               "height": 32,
@@ -46538,9 +46565,9 @@
           "style": "error_alert"
         },
         "landscape": {
-          "x": 0,
+          "x": 20,
           "y": 76,
-          "width": 320,
+          "width": 280,
           "height": 88,
           "widgets": [
             {
@@ -46548,7 +46575,7 @@
               "text": "",
               "x": 0,
               "y": 8,
-              "width": 320,
+              "width": 280,
               "height": 32,
               "style": "error_alert",
               "data": "alert_message"
@@ -46556,7 +46583,7 @@
             {
               "type": "Text",
               "text": "OK",
-              "x": 130,
+              "x": 110,
               "y": 48,
               "width": 60,
               "height": 32,
@@ -47680,7 +47707,7 @@
               "y": 30,
               "width": 76,
               "height": 30,
-              "style": "edit_value_S_left"
+              "style": "value_S"
             },
             {
               "type": "Text",
@@ -47689,7 +47716,7 @@
               "y": 60,
               "width": 91,
               "height": 30,
-              "style": "edit_value_S_left"
+              "style": "value_S"
             }
           ]
         },
@@ -51102,7 +51129,7 @@
               "y": 32,
               "width": 46,
               "height": 24,
-              "style": "edit_value_S_left"
+              "style": "value_S"
             },
             {
               "type": "Text",
@@ -51158,7 +51185,7 @@
               "y": 54,
               "width": 46,
               "height": 24,
-              "style": "edit_value_S_left"
+              "style": "value_S"
             },
             {
               "type": "Text",
@@ -52392,7 +52419,7 @@
               "y": 30,
               "width": 91,
               "height": 30,
-              "style": "edit_value_S_left"
+              "style": "value_S"
             },
             {
               "type": "Text",
@@ -52401,7 +52428,7 @@
               "y": 60,
               "width": 91,
               "height": 30,
-              "style": "edit_value_S_left"
+              "style": "value_S"
             },
             {
               "type": "Text",
@@ -52647,7 +52674,7 @@
               "type": "Text",
               "text": "Screen calibration",
               "x": 12,
-              "y": 30,
+              "y": 58,
               "width": 180,
               "height": 28,
               "style": "edit_value_active_S_left",
@@ -52657,7 +52684,7 @@
               "type": "Text",
               "text": "Channel's calibration",
               "x": 12,
-              "y": 58,
+              "y": 86,
               "width": 180,
               "height": 28,
               "style": "edit_value_active_S_left",
@@ -52667,8 +52694,17 @@
               "type": "Text",
               "text": "Sound",
               "x": 12,
-              "y": 86,
-              "width": 180,
+              "y": 30,
+              "width": 51,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "OFF",
+              "x": 63,
+              "y": 30,
+              "width": 51,
               "height": 28,
               "style": "edit_value_active_S_left"
             },
@@ -53021,21 +53057,21 @@
                           {
                             "type": "Text",
                             "text": "Date",
-                            "x": -32,
+                            "x": -42,
                             "y": 30,
                             "width": 96,
                             "height": 32,
-                            "style": "edit_value_S_left",
+                            "style": "value_S",
                             "data": "calibration.channel.date"
                           },
                           {
                             "type": "Text",
                             "text": "Remark",
-                            "x": 68,
+                            "x": 54,
                             "y": 30,
                             "width": 194,
                             "height": 32,
-                            "style": "edit_value_S_left",
+                            "style": "value_S",
                             "data": "calibration.channel.remark"
                           }
                         ],
@@ -53293,37 +53329,37 @@
               "text": "Last calibrated:",
               "x": 16,
               "y": 16,
-              "width": 157,
+              "width": 120,
               "height": 30,
               "style": "edit_value_S_left"
             },
             {
               "type": "Text",
               "text": "",
-              "x": 186,
+              "x": 138,
               "y": 16,
               "width": 134,
               "height": 30,
-              "style": "edit_value_S_left",
+              "style": "value_S",
               "data": "calibration.channel.date"
             },
             {
               "type": "Text",
-              "text": "Calibration remark:",
+              "text": "Remark:",
               "x": 16,
               "y": 46,
-              "width": 157,
+              "width": 66,
               "height": 30,
               "style": "edit_value_S_left"
             },
             {
               "type": "Text",
               "text": "<none>",
-              "x": 186,
+              "x": 83,
               "y": 46,
-              "width": 134,
+              "width": 230,
               "height": 30,
-              "style": "edit_value_S_left",
+              "style": "value_S",
               "data": "calibration.channel.remark"
             },
             {
@@ -53345,7 +53381,7 @@
                       "text": "Calibration params:",
                       "x": 0,
                       "y": 0,
-                      "width": 304,
+                      "width": 290,
                       "height": 30,
                       "style": "edit_value_S_left"
                     },
@@ -53356,7 +53392,7 @@
                       "y": 30,
                       "width": 64,
                       "height": 30,
-                      "style": "edit_value_S_left",
+                      "style": "value_S",
                       "data": "cal_ch_u_min"
                     },
                     {
@@ -53366,7 +53402,7 @@
                       "y": 30,
                       "width": 64,
                       "height": 30,
-                      "style": "edit_value_S_left",
+                      "style": "value_S",
                       "data": "cal_ch_u_mid"
                     },
                     {
@@ -53376,7 +53412,7 @@
                       "y": 30,
                       "width": 64,
                       "height": 30,
-                      "style": "edit_value_S_left",
+                      "style": "value_S",
                       "data": "cal_ch_u_max"
                     },
                     {
@@ -53386,7 +53422,7 @@
                       "y": 62,
                       "width": 60,
                       "height": 30,
-                      "style": "edit_value_S_left",
+                      "style": "value_S",
                       "data": "cal_ch_i_min"
                     },
                     {
@@ -53396,7 +53432,7 @@
                       "y": 62,
                       "width": 60,
                       "height": 30,
-                      "style": "edit_value_S_left",
+                      "style": "value_S",
                       "data": "cal_ch_i_mid"
                     },
                     {
@@ -53406,7 +53442,7 @@
                       "y": 62,
                       "width": 60,
                       "height": 30,
-                      "style": "edit_value_S_left",
+                      "style": "value_S",
                       "data": "cal_ch_i_max"
                     }
                   ],
@@ -53428,7 +53464,7 @@
               "type": "Text",
               "text": "Start calibration wizard",
               "x": 16,
-              "y": 166,
+              "y": 171,
               "width": 256,
               "height": 25,
               "style": "edit_value_active_S_left",
@@ -53656,71 +53692,65 @@
               "type": "Select",
               "widgets": [
                 {
-                  "type": "Text",
-                  "text": "U min.",
+                  "type": "MultilineText",
+                  "text": "Voltage MIN point calibration    Enter output value measured with external precision instrument",
                   "x": 0,
                   "y": 0,
-                  "width": 304,
-                  "height": 32,
-                  "style": "edit_value_S_left",
-                  "data": ""
+                  "width": 275,
+                  "height": 76,
+                  "style": "default_S"
+                },
+                {
+                  "type": "MultilineText",
+                  "text": "Voltage MID point calibration    Enter output value measured with external precision instrument",
+                  "x": 0,
+                  "y": 0,
+                  "width": 275,
+                  "height": 76,
+                  "style": "default_S"
+                },
+                {
+                  "type": "MultilineText",
+                  "text": "Voltage MAX point calibration    Enter output value measured with external precision instrument",
+                  "x": 0,
+                  "y": 0,
+                  "width": 275,
+                  "height": 76,
+                  "style": "default_S"
+                },
+                {
+                  "type": "MultilineText",
+                  "text": "Current MIN point calibration    Enter output value measured with external precision instrument",
+                  "x": 0,
+                  "y": 0,
+                  "width": 275,
+                  "height": 76,
+                  "style": "default_S"
+                },
+                {
+                  "type": "MultilineText",
+                  "text": "Current MID point calibration    Enter output value measured with external precision instrument",
+                  "x": 0,
+                  "y": 0,
+                  "width": 275,
+                  "height": 76,
+                  "style": "default_S"
+                },
+                {
+                  "type": "MultilineText",
+                  "text": "Current MAX point calibration    Enter output value measured with external precision instrument",
+                  "x": 0,
+                  "y": 0,
+                  "width": 275,
+                  "height": 76,
+                  "style": "default_S"
                 },
                 {
                   "type": "Text",
-                  "text": "U mid.",
+                  "text": "Calibration remark (max. 32 char.)",
                   "x": 0,
                   "y": 0,
-                  "width": 304,
-                  "height": 32,
-                  "style": "edit_value_S_left",
-                  "data": ""
-                },
-                {
-                  "type": "Text",
-                  "text": "U max.",
-                  "x": 0,
-                  "y": 0,
-                  "width": 304,
-                  "height": 32,
-                  "style": "edit_value_S_left",
-                  "data": ""
-                },
-                {
-                  "type": "Text",
-                  "text": "I min.",
-                  "x": 0,
-                  "y": 0,
-                  "width": 304,
-                  "height": 32,
-                  "style": "edit_value_S_left",
-                  "data": ""
-                },
-                {
-                  "type": "Text",
-                  "text": "I mid.",
-                  "x": 0,
-                  "y": 0,
-                  "width": 304,
-                  "height": 32,
-                  "style": "edit_value_S_left",
-                  "data": ""
-                },
-                {
-                  "type": "Text",
-                  "text": "I max.",
-                  "x": 0,
-                  "y": 0,
-                  "width": 304,
-                  "height": 32,
-                  "style": "edit_value_S_left",
-                  "data": ""
-                },
-                {
-                  "type": "Text",
-                  "text": "Remark",
-                  "x": 0,
-                  "y": 0,
-                  "width": 304,
+                  "width": 290,
                   "height": 32,
                   "style": "edit_value_S_left",
                   "data": ""
@@ -53728,8 +53758,8 @@
               ],
               "x": 16,
               "y": 16,
-              "width": 304,
-              "height": 32,
+              "width": 290,
+              "height": 76,
               "style": "default",
               "data": "calibration.channel.stepNum"
             },
@@ -53741,9 +53771,9 @@
                   "text": "<not set>",
                   "x": 0,
                   "y": 0,
-                  "width": 304,
-                  "height": 32,
-                  "style": "edit_value_S_left",
+                  "width": 290,
+                  "height": 40,
+                  "style": "value",
                   "data": ""
                 },
                 {
@@ -53751,16 +53781,16 @@
                   "text": "Text",
                   "x": 0,
                   "y": 0,
-                  "width": 304,
-                  "height": 32,
-                  "style": "edit_value_S_left",
+                  "width": 300,
+                  "height": 40,
+                  "style": "value",
                   "data": "calibration.channel.stepValue"
                 }
               ],
               "x": 16,
-              "y": 48,
-              "width": 304,
-              "height": 32,
+              "y": 92,
+              "width": 290,
+              "height": 40,
               "style": "default",
               "data": "calibration.channel.stepStatus"
             },
@@ -53773,8 +53803,8 @@
                   "x": 0,
                   "y": 0,
                   "width": 80,
-                  "height": 32,
-                  "style": "edit_value_active_S_left",
+                  "height": 40,
+                  "style": "edit_value_active_left",
                   "data": "",
                   "action": "sys_settings_cal_ch_wiz_step_set"
                 },
@@ -53783,17 +53813,17 @@
                   "text": "Change",
                   "x": 0,
                   "y": 0,
-                  "width": 80,
-                  "height": 32,
-                  "style": "edit_value_active_S_left",
+                  "width": 118,
+                  "height": 40,
+                  "style": "edit_value_active_left",
                   "data": "",
                   "action": "sys_settings_cal_ch_wiz_step_set"
                 }
               ],
               "x": 16,
-              "y": 80,
+              "y": 132,
               "width": 80,
-              "height": 32,
+              "height": 40,
               "style": "default",
               "data": "calibration.channel.stepStatus"
             },
@@ -54251,16 +54281,6 @@
           "page": "sys_settings_cal_ch_wiz_step"
         },
         {
-          "x": -1705,
-          "y": 938.0000000000001,
-          "page": "sys_settings_cal_wiz2"
-        },
-        {
-          "x": -1705,
-          "y": 1283,
-          "page": "sys_settings_cal_wiz3"
-        },
-        {
           "x": -980,
           "y": -736,
           "page": "main_help"
@@ -54289,6 +54309,11 @@
           "x": -212,
           "y": -1024,
           "page": "self_test_result"
+        },
+        {
+          "x": -1705,
+          "y": 938,
+          "page": "sys_settings_cal_ch_wiz_finish"
         }
       ],
       "lines": [
@@ -54514,6 +54539,14 @@
           },
           "target": {
             "page": "main"
+          }
+        },
+        {
+          "source": {
+            "page": "sys_settings_cal_ch_wiz_step"
+          },
+          "target": {
+            "page": "sys_settings_cal_ch_wiz_finish"
           }
         }
       ]
