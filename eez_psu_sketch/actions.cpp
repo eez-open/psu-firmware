@@ -23,6 +23,7 @@
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_keypad.h"
 #include "gui_calibration.h"
+#include "gui_protection.h"
 
 namespace eez {
 namespace psu {
@@ -35,6 +36,7 @@ void action_toggle_channel() {
 }
 
 void action_show_channel_settings() {
+    gui::selectChannel();
     showPage(PAGE_ID_CH_SETTINGS_PROT);
 }
 
@@ -148,10 +150,6 @@ void action_show_main_help_page() {
     showPage(PAGE_ID_MAIN_HELP);
 }
 
-void action_show_ch_settings() {
-    showPage(PAGE_ID_CH_SETTINGS_PROT);
-}
-
 void action_show_ch_settings_prot() {
     showPage(PAGE_ID_CH_SETTINGS_PROT);
 }
@@ -161,19 +159,19 @@ void action_show_ch_settings_prot_clear() {
 }
 
 void action_show_ch_settings_prot_ocp() {
-    showPage(PAGE_ID_CH_SETTINGS_PROT_OCP);
+    protection::editOCP();
 }
 
 void action_show_ch_settings_prot_ovp() {
-    showPage(PAGE_ID_CH_SETTINGS_PROT_OVP);
+    protection::editOVP();
 }
 
 void action_show_ch_settings_prot_opp() {
-    showPage(PAGE_ID_CH_SETTINGS_PROT_OPP);
+    protection::editOPP();
 }
 
 void action_show_ch_settings_prot_otp() {
-    showPage(PAGE_ID_CH_SETTINGS_PROT_OTP);
+    protection::editOTP();
 }
 
 void action_show_ch_settings_adv() {
@@ -209,7 +207,7 @@ void action_show_sys_settings_cal() {
 }
 
 void action_show_sys_settings_cal_ch() {
-    calibration::selectChannel();
+    gui::selectChannel();
     showPage(PAGE_ID_SYS_SETTINGS_CAL_CH);
 }
 
@@ -255,6 +253,35 @@ void action_sys_settings_cal_toggle_enable() {
     calibration::toggleEnable();
 }
 
+void action_ch_settings_prot_clear() {
+    protection::clear();
+}
+
+void action_ch_settings_prot_clear_and_disable() {
+    protection::clear();
+    protection::disable();
+}
+
+void action_ch_settings_prot_toggle_state() {
+    protection::toggleState();
+}
+
+void action_ch_settings_prot_edit_level() {
+    protection::editLevel();
+}
+
+void action_ch_settings_prot_edit_delay() {
+    protection::editDelay();
+}
+
+void action_ch_settings_prot_set() {
+    protection::set();
+}
+
+void action_ch_settings_prot_discard() {
+    protection::discard();
+}
+
 
 ACTION actions[] = {
     0,
@@ -287,7 +314,6 @@ ACTION actions[] = {
     action_turn_off,
     action_show_sys_settings,
     action_show_main_help_page,
-    action_show_ch_settings,
     action_show_ch_settings_prot,
     action_show_ch_settings_prot_clear,
     action_show_ch_settings_prot_ocp,
@@ -312,7 +338,14 @@ ACTION actions[] = {
     action_sys_settings_cal_ch_wiz_stop_and_show_main_page,
     action_sys_settings_cal_ch_wiz_step_set,
     action_sys_settings_cal_ch_wiz_save,
-    action_sys_settings_cal_toggle_enable
+    action_sys_settings_cal_toggle_enable,
+    action_ch_settings_prot_clear,
+    action_ch_settings_prot_clear_and_disable,
+    action_ch_settings_prot_toggle_state,
+    action_ch_settings_prot_edit_level,
+    action_ch_settings_prot_edit_delay,
+    action_ch_settings_prot_set,
+    action_ch_settings_prot_discard
 };
 
 }

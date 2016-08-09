@@ -18,14 +18,15 @@
 
 #include "psu.h"
 #include "calibration.h"
+#include "temperature.h"
+#include "devices.h"
 #include "gui_data_snapshot.h"
 #include "gui_view.h"
 #include "gui_document.h"
 #include "gui_internal.h"
 #include "gui_keypad.h"
 #include "gui_calibration.h"
-#include "temperature.h"
-#include "devices.h"
+#include "gui_protection.h"
 
 #define CONF_GUI_REFRESH_EVERY_MS 250
 
@@ -191,32 +192,42 @@ void Snapshot::takeSnapshot() {
 }
 
 Value Snapshot::get(const Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_CHANNEL_OK) {
-        return Value(channelSnapshots[cursor.iChannel].flags.ok);
-    } else if (id == DATA_ID_OUTPUT_STATE) {
-        return Value(channelSnapshots[cursor.iChannel].flags.state);
-    } else if (id == DATA_ID_OUTPUT_MODE) {
-        return Value(channelSnapshots[cursor.iChannel].flags.mode);
-    } else if (id == DATA_ID_MON_VALUE) {
-        return channelSnapshots[cursor.iChannel].mon_value;
-    } else if (id == DATA_ID_VOLT) {
-        return Value(channelSnapshots[cursor.iChannel].u_set, VALUE_TYPE_FLOAT_VOLT);
-    } else if (id == DATA_ID_CURR) {
-        return Value(channelSnapshots[cursor.iChannel].i_set, VALUE_TYPE_FLOAT_AMPER);
-    } else if (id == DATA_ID_LRIP) {
-        return Value(channelSnapshots[cursor.iChannel].flags.lrip);
-    } else if (id == DATA_ID_OVP) {
-        return Value(channelSnapshots[cursor.iChannel].flags.ovp);
-    } else if (id == DATA_ID_OCP) {
-        return Value(channelSnapshots[cursor.iChannel].flags.ocp);
-    } else if (id == DATA_ID_OPP) {
-        return Value(channelSnapshots[cursor.iChannel].flags.opp);
-    } else if (id == DATA_ID_OTP) {
+	if (cursor.iChannel >= 0 || g_channel != 0) {
+		int iChannel = cursor.iChannel >= 0 ? cursor.iChannel : g_channel->index - 1;
+
+		if (id == DATA_ID_CHANNEL_OK) {
+			return Value(channelSnapshots[iChannel].flags.ok);
+		} else if (id == DATA_ID_OUTPUT_STATE) {
+			return Value(channelSnapshots[iChannel].flags.state);
+		} else if (id == DATA_ID_OUTPUT_MODE) {
+			return Value(channelSnapshots[iChannel].flags.mode);
+		} else if (id == DATA_ID_MON_VALUE) {
+			return channelSnapshots[iChannel].mon_value;
+		} else if (id == DATA_ID_VOLT) {
+			return Value(channelSnapshots[iChannel].u_set, VALUE_TYPE_FLOAT_VOLT);
+		} else if (id == DATA_ID_CURR) {
+			return Value(channelSnapshots[iChannel].i_set, VALUE_TYPE_FLOAT_AMPER);
+		} else if (id == DATA_ID_LRIP) {
+			return Value(channelSnapshots[iChannel].flags.lrip);
+		} else if (id == DATA_ID_OVP) {
+			return Value(channelSnapshots[iChannel].flags.ovp);
+		} else if (id == DATA_ID_OCP) {
+			return Value(channelSnapshots[iChannel].flags.ocp);
+		} else if (id == DATA_ID_OPP) {
+			return Value(channelSnapshots[iChannel].flags.opp);
+		} else if (id == DATA_ID_OTP_CH) {
+			return Value(channelSnapshots[iChannel].flags.otp_ch);
+		} else if (id == DATA_ID_DP) {
+			return Value(channelSnapshots[iChannel].flags.dp);
+		} else if (id == DATA_ID_CHANNEL_LABEL) {
+			return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_LABEL);
+		} else if (id == DATA_ID_CHANNEL_SHORT_LABEL) {
+			return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_SHORT_LABEL);
+		}
+	}
+	
+	if (id == DATA_ID_OTP) {
         return Value(flags.otp);
-    } else if (id == DATA_ID_OTP_CH) {
-        return Value(channelSnapshots[cursor.iChannel].flags.otp_ch);
-    } else if (id == DATA_ID_DP) {
-        return Value(channelSnapshots[cursor.iChannel].flags.dp);
     } else if (id == DATA_ID_ALERT_MESSAGE) {
         return alertMessage;
     } else if (id == DATA_ID_MODEL_INFO) {
@@ -225,19 +236,24 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
         return Value(getFirmwareInfo());
     } else if (id == DATA_ID_SELF_TEST_RESULT) {
 		return Value(selfTestResult);
-	}
+	} 
 
 	Value value = keypadSnapshot.get(id);
     if (value.getType() != VALUE_TYPE_NONE) {
         return value;
     }
 
-    value = editModeSnapshot.get(id);
+    value = editModeSnapshot.getData(id);
     if (value.getType() != VALUE_TYPE_NONE) {
         return value;
     }
 
 	value = gui::calibration::getData(cursor, id);
+    if (value.getType() != VALUE_TYPE_NONE) {
+		return value;
+	}
+
+	value = gui::protection::getData(cursor, id);
     if (value.getType() != VALUE_TYPE_NONE) {
 		return value;
 	}

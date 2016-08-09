@@ -40,7 +40,17 @@ bool init();
 bool test();
 void tick(unsigned long tick_usec);
 
+bool isChannelSensorInstalled(Channel *channel);
+bool getChannelSensorState(Channel *channel);
+void setChannelSensorState(Channel *channel, bool state);
+float getChannelSensorLevel(Channel *channel);
+void setChannelSensorLevel(Channel *channel, float value);
+float getChannelSensorDelay(Channel *channel);
+void setChannelSensorDelay(Channel *channel, float value);
 bool isChannelTripped(Channel *channel);
+void clearChannelProtection(Channel *channel);
+void disableChannelProtection(Channel *channel);
+
 float getMaxChannelTemperature();
 bool isAllowedToPowerUp();
 
@@ -54,6 +64,7 @@ public:
 	bool isInstalled();
 	bool isTestOK();
 	void tick(unsigned long tick_usec);
+	bool isChannelSensor(Channel *channel);
 	bool isChannelTripped(Channel *channel);
 	float measure();
 	void clearProtection();

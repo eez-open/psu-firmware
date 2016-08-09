@@ -83,6 +83,8 @@ static bool touchActionExecuted;
 
 WidgetCursor actionWidgetCursor;
 
+Channel *g_channel;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 typedef bool(*EnumWidgetsCallback)(const WidgetCursor &widgetCursor, bool refresh);
@@ -1010,6 +1012,12 @@ void showEnteringStandbyPage() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void selectChannel() {
+	g_channel = &Channel::get(found_widget_at_down.cursor.iChannel);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 static int find_widget_at_x;
 static int find_widget_at_y;
 static WidgetCursor found_widget;
@@ -1239,24 +1247,30 @@ void dialog_ok_callback() {
 	}
 }
 
-void infoMessage(const char *message PROGMEM, void (*ok_callback)()) {
-    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message));
+void alertMessage(int alertPageId, data::Value &message, void (*ok_callback)()) {
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, message);
 
     dialog_yes_callback = ok_callback;
 
 	g_lastActivePageId = g_activePageId;
-    g_activePageId = PAGE_ID_INFO_ALERT;
+    g_activePageId = alertPageId;
     refreshPage();
 }
 
-void errorMessage(const char *message PROGMEM, void (*ok_callback)()) {
-    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message));
+void infoMessage(data::Value &value, void (*ok_callback)()) {
+	alertMessage(PAGE_ID_INFO_ALERT, value, ok_callback);
+}
 
-    dialog_yes_callback = ok_callback;
+void infoMessageP(const char *message PROGMEM, void (*ok_callback)()) {
+	alertMessage(PAGE_ID_INFO_ALERT, data::Value::ProgmemStr(message), ok_callback);
+}
 
-	g_lastActivePageId = g_activePageId;
-    g_activePageId = PAGE_ID_ERROR_ALERT;
-    refreshPage();
+void errorMessage(data::Value &value, void (*ok_callback)()) {
+	alertMessage(PAGE_ID_ERROR_ALERT, value, ok_callback);
+}
+
+void errorMessageP(const char *message PROGMEM, void (*ok_callback)()) {
+	alertMessage(PAGE_ID_ERROR_ALERT, data::Value::ProgmemStr(message), ok_callback);
 }
 
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {

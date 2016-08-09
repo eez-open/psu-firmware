@@ -401,7 +401,10 @@ public:
     /// Clear channel protection tripp state.
     void clearProtection();
 
-    /// Turn on/off bit in SCPI Questinable Instrument Isummary register for this channel.
+    /// Disable protection for this channel
+    void disableProtection();
+
+	/// Turn on/off bit in SCPI Questinable Instrument Isummary register for this channel.
     void setQuesBits(int bit_mask, bool on);
 
     /// Turn on/off bit in SCPI Operational Instrument Isummary register for this channel.

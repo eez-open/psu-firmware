@@ -54,7 +54,7 @@ void Snapshot::takeSnapshot(data::Snapshot *snapshot) {
     }
 }
 
-data::Value Snapshot::get(uint8_t id) {
+data::Value Snapshot::getData(uint8_t id) {
     if (id == DATA_ID_EDIT_VALUE) {
        return editValue;
     } else if (id == DATA_ID_EDIT_INFO) {
@@ -104,7 +104,7 @@ void enter(int tabIndex_) {
         maxValue = data::getMax(dataCursor, dataId);
 
         if (tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
-            numeric_keypad::init(0, editValue.getType(), minValue.getFloat(), maxValue.getFloat(), onKeypadOk, 0);
+            numeric_keypad::init(0, editValue.getType(), minValue.getFloat(), maxValue.getFloat(), onKeypadOk, 0, false);
         }
 
         psu::enterTimeCriticalMode();

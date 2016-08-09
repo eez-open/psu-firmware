@@ -26,6 +26,10 @@
 #include "gui_keypad.h"
 #include "gui_numeric_keypad.h"
 
+#ifdef _MSC_VER
+#pragma warning(disable:4996)
+#endif
+
 #define CONF_GUI_KEYPAD_CURSOR_BLINK_TIME 750000UL
 #define CONF_GUI_KEYPAD_CURSOR_ON "|"
 #define CONF_GUI_KEYPAD_CURSOR_OFF " "
@@ -38,9 +42,9 @@ namespace gui {
 namespace keypad {
 
 static const char *g_label;
-static int g_maxChars;
+int g_maxChars;
 
-static char g_keypadText[sizeof(Snapshot::text)];
+char g_keypadText[sizeof(Snapshot::text)];
 static bool g_isUpperCase = false;
 
 static bool g_isPassword = false;
@@ -104,7 +108,8 @@ void Snapshot::takeSnapshot(data::Snapshot *snapshot) {
         case data::VALUE_TYPE_FLOAT_VOLT: keypadUnit = data::Value::ProgmemStr(PSTR("mV")); break;
         case data::VALUE_TYPE_FLOAT_MILLI_VOLT: keypadUnit = data::Value::ProgmemStr(PSTR("V")); break;
         case data::VALUE_TYPE_FLOAT_AMPER: keypadUnit = data::Value::ProgmemStr(PSTR("mA")); break;
-        default: keypadUnit = data::Value::ProgmemStr(PSTR("A"));
+		case data::VALUE_TYPE_FLOAT_MILLI_AMPER: keypadUnit = data::Value::ProgmemStr(PSTR("V")); break;
+        default: keypadUnit = data::Value::ProgmemStr(PSTR(""));
         }
 	}
 }
@@ -192,6 +197,8 @@ void back() {
 		int n = strlen(g_keypadText);
 		if (n > 0) {
 			g_keypadText[n - 1] = 0;
+		} else {
+			sound::playBeep();
 		}
 	}
 }

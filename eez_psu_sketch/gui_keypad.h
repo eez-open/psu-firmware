@@ -41,6 +41,8 @@ struct Snapshot {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+extern char g_keypadText[sizeof(Snapshot::text)];
+extern int g_maxChars;
 extern void (*g_okCallback)(char *);
 extern void (*g_cancelCallback)();
 
@@ -57,8 +59,8 @@ void unit();
 void ok();
 void cancel();
 
+void appendChar(char c);
 void appendCursor(char *text);
-
 
 }
 }

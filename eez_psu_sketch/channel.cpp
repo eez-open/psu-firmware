@@ -841,6 +841,17 @@ void Channel::clearProtection() {
     opp.flags.tripped = 0;
     opp.flags.alarmed = 0;
     setQuesBits(QUES_ISUM_OPP, false);
+
+	temperature::clearChannelProtection(this);
+}
+
+void Channel::disableProtection() {
+	if (!isTripped()) {
+		prot_conf.flags.u_state = 0;
+		prot_conf.flags.i_state = 0;
+		prot_conf.flags.p_state = 0;
+		temperature::disableChannelProtection(this);
+	}
 }
 
 void Channel::setQuesBits(int bit_mask, bool on) {

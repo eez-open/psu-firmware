@@ -131,59 +131,59 @@
       "defaultValue": "0"
     },
     {
-      "name": "calibration.channel.label",
+      "name": "channel.label",
       "description": "Channel label, i.e. \"Channel 1:\", \"Channel 2:\", etc.",
       "defaultValue": "Channel X:"
     },
     {
-      "name": "calibration.channel.shortLabel",
+      "name": "channel.shortLabel",
       "description": "Short channel label, i.e. \"CH1:\", \"CH2:\", etc.",
       "defaultValue": "Ch1:"
     },
     {
-      "name": "calibration.channel.status",
+      "name": "channel.calibration.status",
       "description": "0 - not calibrated\n1 - calibrated",
       "defaultValue": "1"
     },
     {
-      "name": "calibration.channel.state",
+      "name": "channel.calibration.state",
       "description": "0 - not enabled\n1 - enabled",
       "defaultValue": "0"
     },
     {
-      "name": "calibration.channel.date",
+      "name": "channel.calibration.date",
       "defaultValue": "2016-12-31"
     },
     {
-      "name": "calibration.channel.remark",
+      "name": "channel.calibration.remark",
       "defaultValue": "<remark>"
     },
     {
-      "name": "calibration.channel.paramsEnabled",
+      "name": "channel.calibration.paramsEnabled",
       "description": "0 - calibration params not enabled\n1 - calibration params enebled",
       "defaultValue": "0"
     },
     {
-      "name": "calibration.channel.stepNum",
+      "name": "channel.calibration.step.num",
       "defaultValue": "0",
       "description": "0 - U min\n1 - U mid\n2 - U max\n3 - I min\n4 - I mid\n5 - I max"
     },
     {
-      "name": "calibration.channel.stepStatus",
+      "name": "channel.calibration.step.status",
       "defaultValue": "0",
       "description": "0 - calibration value is not defined\n1 - calibration value is defined"
     },
     {
-      "name": "calibration.channel.stepValue",
+      "name": "channel.calibration.step.value",
       "defaultValue": "0.12 V"
     },
     {
-      "name": "calibration.channel.stepPrevEnabled",
+      "name": "channel.calibration.step.prevEnabled",
       "defaultValue": "0",
       "description": "Is previous step enabled?\n0 - No\n1 - Yes"
     },
     {
-      "name": "calibration.channel.stepNextEnabled",
+      "name": "channel.calibration.step.nextEnabled",
       "defaultValue": "1",
       "description": "Is next step enabled?\n0 - No\n1 - Yes"
     },
@@ -220,6 +220,54 @@
     {
       "name": "cal_ch_i_max",
       "defaultValue": "3.01 A"
+    },
+    {
+      "name": "channel.protection.ovp.state",
+      "defaultValue": "1"
+    },
+    {
+      "name": "channel.protection.ovp.level",
+      "defaultValue": "40.00 V"
+    },
+    {
+      "name": "channel.protection.ovp.delay",
+      "defaultValue": "0.05 s"
+    },
+    {
+      "name": "channel.protection.ocp.state",
+      "defaultValue": "1"
+    },
+    {
+      "name": "channel.protection.ocp.delay",
+      "defaultValue": "0.5 s"
+    },
+    {
+      "name": "channel.protection.opp.state",
+      "defaultValue": "0"
+    },
+    {
+      "name": "channel.protection.opp.level",
+      "defaultValue": "150.00 W"
+    },
+    {
+      "name": "channel.protection.opp.delay",
+      "defaultValue": "60 s"
+    },
+    {
+      "name": "channel.protection.otp.installed",
+      "defaultValue": "1"
+    },
+    {
+      "name": "channel.protection.otp.state",
+      "defaultValue": "1"
+    },
+    {
+      "name": "channel.protection.otp.level",
+      "defaultValue": "125.00 oC"
+    },
+    {
+      "name": "channel.protection.otp.delay",
+      "defaultValue": "10 s"
     }
   ],
   "actions": [
@@ -232,7 +280,7 @@
     {
       "name": "show_channel_settings",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT);"
+      "implementation": "gui::selectChannel();\nshowPage(PAGE_ID_CH_SETTINGS_PROT);"
     },
     {
       "name": "show_main_page",
@@ -378,11 +426,6 @@
       "implementation": "showPage(PAGE_ID_MAIN_HELP);"
     },
     {
-      "name": "show_ch_settings",
-      "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT);"
-    },
-    {
       "name": "show_ch_settings_prot",
       "implementationType": "native",
       "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT);"
@@ -395,22 +438,22 @@
     {
       "name": "show_ch_settings_prot_ocp",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OCP);"
+      "implementation": "protection::editOCP();"
     },
     {
       "name": "show_ch_settings_prot_ovp",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OVP);"
+      "implementation": "protection::editOVP();"
     },
     {
       "name": "show_ch_settings_prot_opp",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OPP);"
+      "implementation": "protection::editOPP();"
     },
     {
       "name": "show_ch_settings_prot_otp",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OTP);"
+      "implementation": "protection::editOTP();"
     },
     {
       "name": "show_ch_settings_adv",
@@ -455,7 +498,7 @@
     {
       "name": "show_sys_settings_cal_ch",
       "implementationType": "native",
-      "implementation": "calibration::selectChannel();\nshowPage(PAGE_ID_SYS_SETTINGS_CAL_CH);"
+      "implementation": "gui::selectChannel();\nshowPage(PAGE_ID_SYS_SETTINGS_CAL_CH);"
     },
     {
       "name": "sys_settings_cal_edit_password",
@@ -505,6 +548,41 @@
       "name": "sys_settings_cal_toggle_enable",
       "implementationType": "native",
       "implementation": "calibration::toggleEnable();\n"
+    },
+    {
+      "name": "ch_settings_prot_clear",
+      "implementationType": "native",
+      "implementation": "protection::clear();"
+    },
+    {
+      "name": "ch_settings_prot_clear_and_disable",
+      "implementationType": "native",
+      "implementation": "protection::clear();\nprotection::disable();"
+    },
+    {
+      "name": "ch_settings_prot_toggle_state",
+      "implementationType": "native",
+      "implementation": "protection::toggleState();"
+    },
+    {
+      "name": "ch_settings_prot_edit_level",
+      "implementationType": "native",
+      "implementation": "protection::editLevel();"
+    },
+    {
+      "name": "ch_settings_prot_edit_delay",
+      "implementationType": "native",
+      "implementation": "protection::editDelay();"
+    },
+    {
+      "name": "ch_settings_prot_set",
+      "implementationType": "native",
+      "implementation": "protection::set();"
+    },
+    {
+      "name": "ch_settings_prot_discard",
+      "implementationType": "native",
+      "implementation": "protection::discard();"
     }
   ],
   "gui": {
@@ -48978,6 +49056,16 @@
                   "height": 43
                 },
                 {
+                  "type": "DisplayData",
+                  "data": "edit_unit",
+                  "action": "keypad_unit",
+                  "x": 180,
+                  "y": 88,
+                  "style": "key",
+                  "width": 60,
+                  "height": 43
+                },
+                {
                   "type": "Text",
                   "action": "keypad_key",
                   "x": 0,
@@ -49004,16 +49092,6 @@
                   "y": 131,
                   "style": "key_icons",
                   "text": "-",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "DisplayData",
-                  "data": "edit_unit",
-                  "action": "keypad_unit",
-                  "x": 180,
-                  "y": 88,
-                  "style": "key",
                   "width": 60,
                   "height": 43
                 }
@@ -49189,16 +49267,6 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            },
-            {
               "type": "List",
               "listType": "vertical",
               "itemWidget": {
@@ -49293,14 +49361,6 @@
               "style": "edit_info_S",
               "width": 240,
               "height": 32
-            },
-            {
-              "type": "Rectangle",
-              "x": 192,
-              "y": 204,
-              "width": 80,
-              "height": 36,
-              "style": "bottom_button_background"
             },
             {
               "type": "Text",
@@ -49374,16 +49434,6 @@
             },
             {
               "type": "Text",
-              "text": "Temperature (OTP)",
-              "x": 12,
-              "y": 160,
-              "width": 180,
-              "height": 34,
-              "style": "edit_value_active_S_left",
-              "action": "show_ch_settings_prot_otp"
-            },
-            {
-              "type": "Text",
               "text": "Power (OPP)",
               "x": 12,
               "y": 128,
@@ -49391,6 +49441,55 @@
               "height": 32,
               "style": "edit_value_active_S_left",
               "action": "show_ch_settings_prot_opp"
+            },
+            {
+              "type": "Rectangle",
+              "x": 192,
+              "y": 204,
+              "width": 80,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "Temp. (OTP) not installed",
+                  "x": 0,
+                  "y": 0,
+                  "width": 228,
+                  "height": 34,
+                  "style": "edit_value_S_left",
+                  "action": ""
+                },
+                {
+                  "type": "Text",
+                  "text": "Temperature (OTP)",
+                  "x": 0,
+                  "y": 0,
+                  "width": 180,
+                  "height": 34,
+                  "style": "edit_value_active_S_left",
+                  "action": "show_ch_settings_prot_otp"
+                }
+              ],
+              "x": 12,
+              "y": 160,
+              "width": 180,
+              "height": 34,
+              "style": "default",
+              "data": "channel.protection.otp.installed"
             }
           ]
         },
@@ -49440,103 +49539,6 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "List",
-              "listType": "vertical",
-              "itemWidget": {
-                "type": "Container",
-                "widgets": [
-                  {
-                    "type": "Select",
-                    "x": 0,
-                    "y": 0,
-                    "data": "output_state",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "style": "edit_value_S_right",
-                        "text": "OFF",
-                        "x": 0,
-                        "y": 0,
-                        "width": 76,
-                        "height": 30
-                      },
-                      {
-                        "type": "Select",
-                        "data": "output_mode",
-                        "widgets": [
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 76,
-                            "height": 30
-                          },
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 76,
-                            "height": 30
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 76,
-                        "height": 30,
-                        "style": "default"
-                      }
-                    ],
-                    "width": 76,
-                    "height": 30,
-                    "style": "default"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "volt",
-                    "x": 0,
-                    "y": 30,
-                    "width": 76,
-                    "height": 30
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "curr",
-                    "x": 0,
-                    "y": 60,
-                    "width": 76,
-                    "height": 30
-                  }
-                ],
-                "x": 0,
-                "y": 0,
-                "width": 80,
-                "height": 112,
-                "style": "default"
-              },
-              "x": 240,
-              "y": 0,
-              "width": 80,
-              "height": 204,
-              "data": "channels",
-              "style": "default"
-            },
-            {
               "type": "DisplayData",
               "data": "edit_info",
               "x": 0,
@@ -49544,44 +49546,6 @@
               "style": "edit_info_S",
               "width": 240,
               "height": 32
-            },
-            {
-              "type": "Rectangle",
-              "x": 192,
-              "y": 204,
-              "width": 80,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_adv",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page",
-              "text": "G",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_info",
-              "x": 144,
-              "y": 204,
-              "style": "tab_page",
-              "text": "?",
-              "width": 48,
-              "height": 36
             },
             {
               "type": "MultilineText",
@@ -49599,7 +49563,8 @@
               "y": 117,
               "width": 180,
               "height": 32,
-              "style": "edit_value_active_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "ch_settings_prot_clear"
             },
             {
               "type": "Text",
@@ -49608,74 +49573,8 @@
               "y": 149,
               "width": 180,
               "height": 32,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_prot",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "E",
-              "width": 48,
-              "height": 36
-            }
-          ]
-        },
-        "description": "Clear and/or disable selected channel's protection(s)"
-      },
-      {
-        "name": "ch_settings_prot_ocp",
-        "portrait": {
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320,
-          "widgets": [
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 192,
-              "y": 284,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "text": "TODO",
-              "x": 0,
-              "y": 40,
-              "width": 240,
-              "height": 83,
-              "style": "default"
-            },
-            {
-              "type": "Local.NotificationBar",
-              "x": 0,
-              "y": 0,
-              "width": 240,
-              "height": 40,
-              "style": "default"
-            }
-          ]
-        },
-        "landscape": {
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240,
-          "widgets": [
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
+              "style": "edit_value_active_S_left",
+              "action": "ch_settings_prot_clear_and_disable"
             },
             {
               "type": "List",
@@ -49765,79 +49664,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
-              "type": "Rectangle",
-              "x": 192,
-              "y": 204,
-              "width": 80,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "text": "State:",
-              "x": 16,
-              "y": 32,
-              "width": 130,
-              "height": 42,
-              "style": "edit_value_left"
-            },
-            {
-              "type": "Text",
-              "text": "ON",
-              "x": 146,
-              "y": 32,
-              "width": 60,
-              "height": 42,
-              "style": "edit_value_active_left"
-            },
-            {
-              "type": "Text",
-              "text": "Delay [s]:",
-              "x": 16,
-              "y": 74,
-              "width": 130,
-              "height": 42,
-              "style": "edit_value_left"
-            },
-            {
-              "type": "Text",
-              "text": "0.5",
-              "x": 146,
-              "y": 74,
-              "width": 94,
-              "height": 42,
-              "style": "edit_value_active_left"
-            },
-            {
-              "type": "Text",
-              "action": "non_interactive_discard",
-              "style": "non_interactive_button_S",
-              "x": 117,
-              "y": 160,
-              "text": " Discard",
-              "width": 96,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "non_interactive_enter",
-              "style": "non_interactive_button_S",
-              "x": 16,
-              "y": 160,
-              "text": "~ Set",
-              "width": 101,
-              "height": 36
-            },
-            {
               "type": "Text",
               "action": "show_ch_settings_prot",
               "x": 0,
@@ -49876,10 +49702,28 @@
               "text": "?",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Rectangle",
+              "x": 192,
+              "y": 204,
+              "width": 80,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
             }
           ]
         },
-        "description": "Define selected protection values\n"
+        "description": "Clear and/or disable selected channel's protection(s)"
       },
       {
         "name": "ch_settings_prot_ovp",
@@ -50043,58 +49887,82 @@
               "text": "State:",
               "x": 16,
               "y": 32,
-              "width": 130,
+              "width": 84,
               "height": 42,
               "style": "edit_value_left"
             },
             {
-              "type": "Text",
-              "text": "OFF",
-              "x": 146,
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "OFF",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "action": "ch_settings_prot_toggle_state"
+                },
+                {
+                  "type": "Text",
+                  "text": "ON",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "action": "ch_settings_prot_toggle_state"
+                }
+              ],
+              "x": 104,
               "y": 32,
               "width": 60,
               "height": 42,
-              "style": "edit_value_active_left"
+              "style": "default",
+              "data": "channel.protection.ovp.state"
             },
             {
               "type": "Text",
-              "text": "Level [V]:",
+              "text": "Level:",
               "x": 16,
               "y": 74,
-              "width": 130,
+              "width": 84,
               "height": 42,
               "style": "edit_value_left"
             },
             {
-              "type": "Text",
-              "text": "40.00",
-              "x": 146,
+              "type": "DisplayData",
+              "data": "channel.protection.ovp.level",
+              "x": 104,
               "y": 74,
-              "width": 94,
+              "width": 136,
               "height": 42,
-              "style": "edit_value_active_left"
+              "style": "edit_value_active_left",
+              "action": "ch_settings_prot_edit_level"
             },
             {
               "type": "Text",
-              "text": "Delay [s]:",
+              "text": "Delay:",
               "x": 16,
               "y": 114,
-              "width": 130,
+              "width": 84,
               "height": 42,
               "style": "edit_value_left"
             },
             {
-              "type": "Text",
-              "text": "0.05",
-              "x": 146,
+              "type": "DisplayData",
+              "data": "channel.protection.ovp.delay",
+              "x": 104,
               "y": 114,
-              "width": 94,
+              "width": 136,
               "height": 42,
-              "style": "edit_value_active_left"
+              "style": "edit_value_active_left",
+              "action": "ch_settings_prot_edit_delay"
             },
             {
               "type": "Text",
-              "action": "non_interactive_discard",
+              "action": "ch_settings_prot_discard",
               "style": "non_interactive_button_S",
               "x": 117,
               "y": 160,
@@ -50104,7 +49972,287 @@
             },
             {
               "type": "Text",
-              "action": "non_interactive_enter",
+              "action": "ch_settings_prot_set",
+              "style": "non_interactive_button_S",
+              "x": 16,
+              "y": 160,
+              "text": "~ Set",
+              "width": 101,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_disp",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
+              "height": 36
+            }
+          ]
+        },
+        "description": "Define selected protection values\n"
+      },
+      {
+        "name": "ch_settings_prot_ocp",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "TODO",
+              "x": 0,
+              "y": 40,
+              "width": 240,
+              "height": 83,
+              "style": "default"
+            },
+            {
+              "type": "Local.NotificationBar",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 40,
+              "style": "default"
+            }
+          ]
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "output_state",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "output_mode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 76,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "volt",
+                    "x": 0,
+                    "y": 30,
+                    "width": 76,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "curr",
+                    "x": 0,
+                    "y": 60,
+                    "width": 76,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 80,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 240,
+              "y": 0,
+              "width": 80,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
+            },
+            {
+              "type": "DisplayData",
+              "data": "edit_info",
+              "x": 0,
+              "y": 0,
+              "style": "edit_info_S",
+              "width": 240,
+              "height": 32
+            },
+            {
+              "type": "Rectangle",
+              "x": 192,
+              "y": 204,
+              "width": 80,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "text": "State:",
+              "x": 16,
+              "y": 32,
+              "width": 84,
+              "height": 42,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "OFF",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "action": "ch_settings_prot_toggle_state"
+                },
+                {
+                  "type": "Text",
+                  "text": "ON",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "action": "ch_settings_prot_toggle_state"
+                }
+              ],
+              "x": 104,
+              "y": 32,
+              "width": 60,
+              "height": 42,
+              "style": "default",
+              "data": "channel.protection.ocp.state"
+            },
+            {
+              "type": "Text",
+              "text": "Delay:",
+              "x": 16,
+              "y": 74,
+              "width": 84,
+              "height": 42,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.protection.ocp.delay",
+              "x": 104,
+              "y": 74,
+              "width": 136,
+              "height": 42,
+              "style": "edit_value_active_left",
+              "action": "ch_settings_prot_edit_delay"
+            },
+            {
+              "type": "Text",
+              "action": "ch_settings_prot_discard",
+              "style": "non_interactive_button_S",
+              "x": 117,
+              "y": 160,
+              "text": " Discard",
+              "width": 96,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "ch_settings_prot_set",
               "style": "non_interactive_button_S",
               "x": 16,
               "y": 160,
@@ -50318,58 +50466,82 @@
               "text": "State:",
               "x": 16,
               "y": 32,
-              "width": 130,
+              "width": 84,
               "height": 42,
               "style": "edit_value_left"
             },
             {
-              "type": "Text",
-              "text": "OFF",
-              "x": 146,
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "OFF",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "action": "ch_settings_prot_toggle_state"
+                },
+                {
+                  "type": "Text",
+                  "text": "ON",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "action": "ch_settings_prot_toggle_state"
+                }
+              ],
+              "x": 104,
               "y": 32,
               "width": 60,
               "height": 42,
-              "style": "edit_value_active_left"
+              "style": "default",
+              "data": "channel.protection.opp.state"
             },
             {
               "type": "Text",
-              "text": "Level [W]:",
+              "text": "Level:",
               "x": 16,
               "y": 74,
-              "width": 130,
+              "width": 84,
               "height": 42,
               "style": "edit_value_left"
             },
             {
-              "type": "Text",
-              "text": "150.00",
-              "x": 146,
+              "type": "DisplayData",
+              "data": "channel.protection.opp.level",
+              "x": 104,
               "y": 74,
-              "width": 94,
+              "width": 136,
               "height": 42,
-              "style": "edit_value_active_left"
+              "style": "edit_value_active_left",
+              "action": "ch_settings_prot_edit_level"
             },
             {
               "type": "Text",
-              "text": "Delay [s]:",
+              "text": "Delay:",
               "x": 16,
               "y": 114,
-              "width": 130,
+              "width": 84,
               "height": 42,
               "style": "edit_value_left"
             },
             {
-              "type": "Text",
-              "text": "60.00",
-              "x": 146,
+              "type": "DisplayData",
+              "data": "channel.protection.opp.delay",
+              "x": 104,
               "y": 114,
-              "width": 94,
+              "width": 136,
               "height": 42,
-              "style": "edit_value_active_left"
+              "style": "edit_value_active_left",
+              "action": "ch_settings_prot_edit_delay"
             },
             {
               "type": "Text",
-              "action": "non_interactive_discard",
+              "action": "ch_settings_prot_discard",
               "style": "non_interactive_button_S",
               "x": 117,
               "y": 160,
@@ -50379,7 +50551,7 @@
             },
             {
               "type": "Text",
-              "action": "non_interactive_enter",
+              "action": "ch_settings_prot_set",
               "style": "non_interactive_button_S",
               "x": 16,
               "y": 160,
@@ -50593,58 +50765,82 @@
               "text": "State:",
               "x": 16,
               "y": 32,
-              "width": 130,
+              "width": 84,
               "height": 42,
               "style": "edit_value_left"
             },
             {
-              "type": "Text",
-              "text": "ON",
-              "x": 146,
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "OFF",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "action": "ch_settings_prot_toggle_state"
+                },
+                {
+                  "type": "Text",
+                  "text": "ON",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "action": "ch_settings_prot_toggle_state"
+                }
+              ],
+              "x": 104,
               "y": 32,
               "width": 60,
               "height": 42,
-              "style": "edit_value_active_left"
+              "style": "default",
+              "data": "channel.protection.otp.state"
             },
             {
               "type": "Text",
-              "text": "Level [oC]:",
+              "text": "Level:",
               "x": 16,
               "y": 74,
-              "width": 130,
+              "width": 84,
               "height": 42,
               "style": "edit_value_left"
             },
             {
-              "type": "Text",
-              "text": "75.00",
-              "x": 146,
+              "type": "DisplayData",
+              "data": "channel.protection.otp.level",
+              "x": 104,
               "y": 74,
-              "width": 94,
+              "width": 136,
               "height": 42,
-              "style": "edit_value_active_left"
+              "style": "edit_value_active_left",
+              "action": "ch_settings_prot_edit_level"
             },
             {
               "type": "Text",
-              "text": "Delay [s]:",
+              "text": "Delay:",
               "x": 16,
               "y": 114,
-              "width": 130,
+              "width": 84,
               "height": 42,
               "style": "edit_value_left"
             },
             {
-              "type": "Text",
-              "text": "10.00",
-              "x": 146,
+              "type": "DisplayData",
+              "data": "channel.protection.otp.delay",
+              "x": 104,
               "y": 114,
-              "width": 94,
+              "width": 136,
               "height": 42,
-              "style": "edit_value_active_left"
+              "style": "edit_value_active_left",
+              "action": "ch_settings_prot_edit_delay"
             },
             {
               "type": "Text",
-              "action": "non_interactive_discard",
+              "action": "ch_settings_prot_discard",
               "style": "non_interactive_button_S",
               "x": 117,
               "y": 160,
@@ -50654,7 +50850,7 @@
             },
             {
               "type": "Text",
-              "action": "non_interactive_enter",
+              "action": "ch_settings_prot_set",
               "style": "non_interactive_button_S",
               "x": 16,
               "y": 160,
@@ -52875,7 +53071,7 @@
                     "width": 120,
                     "height": 32,
                     "style": "edit_value_S_left",
-                    "data": "calibration.channel.label"
+                    "data": "channel.label"
                   },
                   {
                     "type": "Select",
@@ -52906,7 +53102,7 @@
                     "width": 120,
                     "height": 32,
                     "style": "default",
-                    "data": "calibration.channel.status",
+                    "data": "channel.calibration.status",
                     "action": "show_sys_settings_cal_ch"
                   }
                 ],
@@ -52994,7 +53190,7 @@
                     "width": 42,
                     "height": 30,
                     "style": "edit_value_S_left",
-                    "data": "calibration.channel.shortLabel"
+                    "data": "channel.shortLabel"
                   },
                   {
                     "type": "Select",
@@ -53051,7 +53247,7 @@
                             "width": 117,
                             "height": 32,
                             "style": "default",
-                            "data": "calibration.channel.state",
+                            "data": "channel.calibration.state",
                             "action": ""
                           },
                           {
@@ -53062,7 +53258,7 @@
                             "width": 96,
                             "height": 32,
                             "style": "value_S",
-                            "data": "calibration.channel.date"
+                            "data": "channel.calibration.date"
                           },
                           {
                             "type": "Text",
@@ -53072,7 +53268,7 @@
                             "width": 194,
                             "height": 32,
                             "style": "value_S",
-                            "data": "calibration.channel.remark"
+                            "data": "channel.calibration.remark"
                           }
                         ],
                         "x": 0,
@@ -53087,7 +53283,7 @@
                     "width": 117,
                     "height": 32,
                     "style": "default",
-                    "data": "calibration.channel.status",
+                    "data": "channel.calibration.status",
                     "action": ""
                   }
                 ],
@@ -53341,7 +53537,7 @@
               "width": 134,
               "height": 30,
               "style": "value_S",
-              "data": "calibration.channel.date"
+              "data": "channel.calibration.date"
             },
             {
               "type": "Text",
@@ -53360,7 +53556,7 @@
               "width": 230,
               "height": 30,
               "style": "value_S",
-              "data": "calibration.channel.remark"
+              "data": "channel.calibration.remark"
             },
             {
               "type": "Select",
@@ -53458,7 +53654,7 @@
               "width": 304,
               "height": 93,
               "style": "default",
-              "data": "calibration.channel.status"
+              "data": "channel.calibration.status"
             },
             {
               "type": "Text",
@@ -53761,7 +53957,7 @@
               "width": 290,
               "height": 76,
               "style": "default",
-              "data": "calibration.channel.stepNum"
+              "data": "channel.calibration.step.num"
             },
             {
               "type": "Select",
@@ -53784,7 +53980,7 @@
                   "width": 300,
                   "height": 40,
                   "style": "value",
-                  "data": "calibration.channel.stepValue"
+                  "data": "channel.calibration.step.value"
                 }
               ],
               "x": 16,
@@ -53792,7 +53988,7 @@
               "width": 290,
               "height": 40,
               "style": "default",
-              "data": "calibration.channel.stepStatus"
+              "data": "channel.calibration.step.status"
             },
             {
               "type": "Select",
@@ -53825,7 +54021,7 @@
               "width": 80,
               "height": 40,
               "style": "default",
-              "data": "calibration.channel.stepStatus"
+              "data": "channel.calibration.step.status"
             },
             {
               "type": "Button",
@@ -53838,7 +54034,7 @@
               "text": "(",
               "Enabled": "calibration.channel.stepPrevEnabled",
               "disabledStyle": "bottom_button_disabled",
-              "enabled": "calibration.channel.stepPrevEnabled",
+              "enabled": "channel.calibration.step.prevEnabled",
               "action": "sys_settings_cal_ch_wiz_step_previous"
             },
             {
@@ -53852,7 +54048,7 @@
               "text": ")",
               "Enabled": "calibration.channel.stepNextEnabled",
               "disabledStyle": "bottom_button_disabled",
-              "enabled": "calibration.channel.stepNextEnabled",
+              "enabled": "channel.calibration.step.nextEnabled",
               "action": "sys_settings_cal_ch_wiz_step_next"
             },
             {
@@ -54141,7 +54337,7 @@
               "text": "(",
               "Enabled": "calibration.channel.stepPrevEnabled",
               "disabledStyle": "bottom_button_disabled",
-              "enabled": "calibration.channel.stepPrevEnabled",
+              "enabled": "channel.calibration.step.prevEnabled",
               "action": "sys_settings_cal_ch_wiz_step_previous"
             }
           ],
@@ -54571,7 +54767,7 @@
         },
         {
           "fileName": "actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_protection.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
         },
         {
           "fileName": "gui_document.h",

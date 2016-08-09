@@ -79,8 +79,13 @@ void refreshPage();
 font::Font styleGetFont(const Style *style);
 void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse);
 void fillRect(int x, int y, int w, int h);
-void infoMessage(const char *message PROGMEM, void (*ok_callback)() = 0);
-void errorMessage(const char *message PROGMEM, void (*ok_callback)() = 0);
+
+void infoMessage(data::Value &value, void (*ok_callback)() = 0);
+void infoMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);
+
+void errorMessage(data::Value &value, void (*ok_callback)() = 0);
+void errorMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);
+
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());
 
 extern void (*dialog_yes_callback)();
@@ -89,6 +94,9 @@ extern void (*dialog_cancel_callback)();
 void dialog_ok_callback();
 
 extern WidgetCursor found_widget_at_down;
+
+void selectChannel();
+extern Channel *g_channel;
 
 ////////////////////////////////////////////////////////////////////////////////
 // GUI definition document accessor functions

@@ -36,7 +36,6 @@ static void (*g_checkPasswordInvalidCallback)();
 
 static char g_newPassword[PASSWORD_MAX_LENGTH];
 
-Channel *g_channel;
 int g_stepNum;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -48,7 +47,7 @@ void checkPasswordOkCallback(char *text) {
 		g_checkPasswordOkCallback();
 	} else {
 		// entered password doesn't match, 
-		errorMessage(PSTR("Invalid password!"), g_checkPasswordInvalidCallback);
+		errorMessageP(PSTR("Invalid password!"), g_checkPasswordInvalidCallback);
 	}
 }
 
@@ -63,18 +62,18 @@ void checkPassword(const char *label, void (*ok)(), void (*invalid)()) {
 void onRetypeNewPasswordOk(char *text) {
 	if (strncmp(g_newPassword, text, strlen(text)) != 0) {
 		// retyped new password doesn't match
-		errorMessage(PSTR("Password doesn't match!"), showPreviousPage);
+		errorMessageP(PSTR("Password doesn't match!"), showPreviousPage);
 		return;
 	}
 	
 	if (!persist_conf::changePassword(g_newPassword, strlen(g_newPassword))) {
 		// failed to save changed password
-		errorMessage(PSTR("Failed to change password!"), showPreviousPage);
+		errorMessageP(PSTR("Failed to change password!"), showPreviousPage);
 		return;
 	}
 
 	// success
-	infoMessage(PSTR("Password changed!"), showPreviousPage);
+	infoMessageP(PSTR("Password changed!"), showPreviousPage);
 }
 
 void onNewPasswordOk(char *text) {
@@ -83,7 +82,7 @@ void onNewPasswordOk(char *text) {
 	int16_t err;
 	if (!persist_conf::isPasswordValid(text, textLength, err)) {
 		// invalid password (probably too short), return to keypad
-		errorMessage(PSTR("Password too short!"));
+		errorMessageP(PSTR("Password too short!"));
 		return;
 	}
 
@@ -100,10 +99,6 @@ void editPassword() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
-void selectChannel() {
-	g_channel = &Channel::get(found_widget_at_down.cursor.iChannel);
-}
 
 void onStartPasswordOk() {
 	g_channel->outputEnable(false);
@@ -134,22 +129,16 @@ void start() {
 }
 
 data::Value getData(const data::Cursor &cursor, uint8_t id) {
-	if (id == DATA_ID_CALIBRATION_CHANNEL_LABEL) {
-		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
-		return data::Value(channel.index, data::VALUE_TYPE_CHANNEL_LABEL);
-	} else if (id == DATA_ID_CALIBRATION_CHANNEL_SHORT_LABEL) {
-		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
-		return data::Value(channel.index, data::VALUE_TYPE_CHANNEL_SHORT_LABEL);
-	} else if (id == DATA_ID_CALIBRATION_CHANNEL_STATUS) {
+	if (id == DATA_ID_CHANNEL_CALIBRATION_STATUS) {
 		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
 		return data::Value(channel.isCalibrationExists() ? 1 : 0);
-	} else if (id == DATA_ID_CALIBRATION_CHANNEL_STATE) {
+	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STATE) {
 		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
 		return data::Value(channel.flags.cal_enabled ? 1 : 0);
-	} else if (id == DATA_ID_CALIBRATION_CHANNEL_DATE) {
+	} else if (id == DATA_ID_CHANNEL_CALIBRATION_DATE) {
 		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
 		return data::Value(channel.cal_conf.calibration_date);
-	} else if (id == DATA_ID_CALIBRATION_CHANNEL_REMARK) {
+	} else if (id == DATA_ID_CHANNEL_CALIBRATION_REMARK) {
 		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
 		return data::Value(channel.cal_conf.calibration_remark);
 	} else if (id == DATA_ID_CAL_CH_U_MIN) {
@@ -170,9 +159,9 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
 	} else if (id == DATA_ID_CAL_CH_I_MAX) {
 		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
 		return data::Value(channel.cal_conf.i.max.val, data::VALUE_TYPE_FLOAT_AMPER);
-	} else if (id == DATA_ID_CALIBRATION_CHANNEL_STEP_NUM) {
+	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_NUM) {
 		return data::Value(g_stepNum);
-	} else if (id == DATA_ID_CALIBRATION_CHANNEL_STEP_VALUE) {
+	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_VALUE) {
 		switch (g_stepNum) {
 		case 0: return data::Value(psu::calibration::voltage.min, data::VALUE_TYPE_FLOAT_VOLT);
 		case 1: return data::Value(psu::calibration::voltage.mid, data::VALUE_TYPE_FLOAT_VOLT);
@@ -182,7 +171,7 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
 		case 5: return data::Value(psu::calibration::current.max, data::VALUE_TYPE_FLOAT_AMPER);
 		case 6: return data::Value(psu::calibration::getRemark());
 		}
-	} else if (id == DATA_ID_CALIBRATION_CHANNEL_STEP_STATUS) {
+	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_STATUS) {
 		switch (g_stepNum) {
 		case 0: return data::Value(psu::calibration::voltage.min_set ? 1 : 0);
 		case 1: return data::Value(psu::calibration::voltage.mid_set ? 1 : 0);
@@ -192,9 +181,9 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
 		case 5: return data::Value(psu::calibration::current.max_set ? 1 : 0);
 		case 6: return data::Value(psu::calibration::isRemarkSet() ? 1 : 0);
 		}
-	} else if (id == DATA_ID_CALIBRATION_CHANNEL_STEP_PREV_ENABLED) {
+	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_PREV_ENABLED) {
 		return data::Value(g_stepNum > 0 ? 1 : 0);
-	} else if (id == DATA_ID_CALIBRATION_CHANNEL_STEP_NEXT_ENABLED) {
+	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_NEXT_ENABLED) {
 		return data::Value(g_stepNum < MAX_STEP_NUM ? 1 : 0);
 	}
 
@@ -218,7 +207,7 @@ void onSetOk(float value) {
 		showPreviousPage();
 		nextStep();
 	} else {
-		errorMessage(PSTR("Value out of range!"));
+		errorMessageP(PSTR("Value out of range!"));
 	}
 }
 
@@ -258,9 +247,9 @@ void set() {
 		psu::calibration::Value *calibrationValue = getCalibrationValue();
 
 		if (calibrationValue == &psu::calibration::voltage) {
-			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_VOLT, g_channel->U_MIN, g_channel->U_MAX, onSetOk, showCurrentStep);
+			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_VOLT, g_channel->U_MIN, g_channel->U_MAX, onSetOk, showCurrentStep, false);
 		} else {
-			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_AMPER, g_channel->I_MIN, g_channel->I_MAX, onSetOk, showCurrentStep);
+			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_AMPER, g_channel->I_MIN, g_channel->I_MAX, onSetOk, showCurrentStep, false);
 		}
 	} else if (g_stepNum == 6) {
 		keypad::start(0, psu::calibration::isRemarkSet() ? psu::calibration::getRemark() : 0, 32, false, onSetRemarkOk, showCurrentStep);
@@ -279,9 +268,9 @@ void nextStep() {
 		int16_t scpiErr;
 		if (!psu::calibration::canSave(scpiErr)) {
 			if (scpiErr == SCPI_ERROR_INVALID_CAL_DATA) {
-				errorMessage(PSTR("Invalid calibration data!"));
+				errorMessageP(PSTR("Invalid calibration data!"));
 			} else {
-				errorMessage(PSTR("Missing calibration data!"));
+				errorMessageP(PSTR("Missing calibration data!"));
 			}
 			return;
 		}
@@ -294,9 +283,9 @@ void nextStep() {
 
 void save() {
 	if (psu::calibration::save()) {
-		infoMessage(PSTR("Calibration data saved!"), showPreviousPage);
+		infoMessageP(PSTR("Calibration data saved!"), showPreviousPage);
 	} else {
-		errorMessage(PSTR("Save failed!"));
+		errorMessageP(PSTR("Save failed!"));
 	}
 }
 

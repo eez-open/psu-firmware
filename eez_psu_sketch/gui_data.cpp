@@ -63,18 +63,39 @@ void Value::toText(char *text, int count) const {
 		text[count - 1] = 0;
 		break;
 
+	case VALUE_TYPE_LESS_THEN_MIN:
+		snprintf_P(text, count-1, PSTR("Value is less then %.2f"), float_);
+		text[count - 1] = 0;
+		break;
+
+	case VALUE_TYPE_GREATER_THEN_MAX:
+		snprintf_P(text, count-1, PSTR("Value is greater then %.2f"), float_);
+		text[count - 1] = 0;
+		break;
+
 	default:
 		{
 			util::strcatFloat(text, float_);
 
+			const char *unit;
+
 			switch (type_) {
 			case VALUE_TYPE_FLOAT_VOLT:
-				strcat(text, " V");
+				unit = "V";
 				break;
-    
 			case VALUE_TYPE_FLOAT_AMPER:
-				strcat(text, " A");
+				unit = "A";
 				break;
+			case VALUE_TYPE_FLOAT_WATT:
+				unit = "W";
+				break;
+			case VALUE_TYPE_FLOAT_SECOND:
+				unit = "s";
+				break;
+			}
+
+			if (unit) {
+				strcat(text, unit);
 			}
 		}
 		break;

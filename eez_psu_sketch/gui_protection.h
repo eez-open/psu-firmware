@@ -18,26 +18,28 @@
  
 #pragma once
 
-#include "gui_internal.h"
-
 namespace eez {
 namespace psu {
 namespace gui {
-namespace calibration {
+namespace protection {
 
-const int MAX_STEP_NUM = 7;
+void clear();
+void disable();
 
-void editPassword();
-void start();
+void editOVP();
+void editOCP();
+void editOPP();
+void editOTP();
+
 data::Value getData(const data::Cursor &cursor, uint8_t id);
+
+void toggleState();
+void editLevel();
+void editDelay();
 void set();
-void previousStep();
-void nextStep();
-void save();
-void stop();
-void toggleEnable();
+void discard();
 
 }
 }
 }
-} // namespace eez::psu::gui::calibration
+} // namespace eez::psu::gui::protection

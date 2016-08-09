@@ -101,6 +101,34 @@ void tick(unsigned long tick_usec) {
 	}
 }
 
+bool isChannelSensorInstalled(Channel *channel) {
+	return sensors[temp_sensor::CH1 + channel->index - 1].isInstalled();
+}
+
+bool getChannelSensorState(Channel *channel) {
+	return sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.state;
+}
+
+void setChannelSensorState(Channel *channel, bool state) {
+	sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.state = state;
+}
+
+float getChannelSensorLevel(Channel *channel) {
+	return sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.level;
+}
+
+void setChannelSensorLevel(Channel *channel, float value) {
+	sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.level = value;
+}
+
+float getChannelSensorDelay(Channel *channel) {
+	return sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.delay;
+}
+
+void setChannelSensorDelay(Channel *channel, float value) {
+	sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.delay = value;
+}
+
 bool isChannelTripped(Channel *channel) {
 	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
 		if (sensors[i].isChannelTripped(channel)) {
@@ -109,6 +137,22 @@ bool isChannelTripped(Channel *channel) {
 	}
 
 	return false;
+}
+
+void clearChannelProtection(Channel *channel) {
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		if (sensors[i].isChannelSensor(channel)) {
+			sensors[i].clearProtection();
+		}
+	}
+}
+
+void disableChannelProtection(Channel *channel) {
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		if (sensors[i].isChannelSensor(channel)) {
+			sensors[i].prot_conf.state = 0;
+		}
+	}
 }
 
 float getMaxChannelTemperature() {
@@ -147,17 +191,15 @@ void TempSensorTemperature::tick(unsigned long tick_usec) {
 	}
 }
 
-bool TempSensorTemperature::isChannelTripped(Channel *channel) {
-	if (
-		temp_sensor::sensors[sensorIndex].installed && (
-			temp_sensor::sensors[sensorIndex].ch_num < 0 ||
-			channel->index == temp_sensor::sensors[sensorIndex].ch_num + 1
-		)
-	) {
-		return otp_tripped;
-	}
+bool TempSensorTemperature::isChannelSensor(Channel *channel) {
+	return temp_sensor::sensors[sensorIndex].installed && (
+		temp_sensor::sensors[sensorIndex].ch_num < 0 ||
+		channel->index == temp_sensor::sensors[sensorIndex].ch_num + 1
+	);
+}
 
-    return false;
+bool TempSensorTemperature::isChannelTripped(Channel *channel) {
+    return isChannelSensor(channel) && otp_tripped;
 }
 
 float TempSensorTemperature::measure() {
