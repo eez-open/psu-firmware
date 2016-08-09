@@ -44,11 +44,16 @@ static float maxDelay;
 
 void clear() {
 	g_channel->clearProtection();
+
+	infoMessageP(PSTR("Cleared!"), 0);
 }
 
-void disable() {
+void clearAndDisable() {
+	g_channel->clearProtection();
 	g_channel->disableProtection();
 	profile::save();
+
+	infoMessageP(PSTR("Cleared and disabled!"), 0);
 }
 
 void editOVP() {

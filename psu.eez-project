@@ -275,7 +275,7 @@
       "name": "toggle_channel",
       "description": "turn channel on/off",
       "implementationType": "native",
-      "implementation": "Channel& channel = Channel::get(found_widget_at_down.cursor.iChannel);\nif (channel.isTripped()) {\n    infoMessageP(PSTR(\"Channel is tripped!\"), 0);\n} else {\n    channel.outputEnable(!channel.isOutputEnabled());\n}\n"
+      "implementation": "Channel& channel = Channel::get(found_widget_at_down.cursor.iChannel);\nif (channel.isTripped()) {\n    errorMessageP(PSTR(\"Channel is tripped!\"), 0);\n} else {\n    channel.outputEnable(!channel.isOutputEnabled());\n}\n"
     },
     {
       "name": "show_channel_settings",
@@ -557,7 +557,7 @@
     {
       "name": "ch_settings_prot_clear_and_disable",
       "implementationType": "native",
-      "implementation": "protection::clear();\nprotection::disable();"
+      "implementation": "protection::clearAndDisable();"
     },
     {
       "name": "ch_settings_prot_toggle_state",

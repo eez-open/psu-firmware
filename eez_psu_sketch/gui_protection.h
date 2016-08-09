@@ -24,7 +24,7 @@ namespace gui {
 namespace protection {
 
 void clear();
-void disable();
+void clearAndDisable();
 
 void editOVP();
 void editOCP();

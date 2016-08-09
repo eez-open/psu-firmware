@@ -33,7 +33,7 @@ using namespace gui;
 void action_toggle_channel() {
     Channel& channel = Channel::get(found_widget_at_down.cursor.iChannel);
     if (channel.isTripped()) {
-        infoMessageP(PSTR("Channel is tripped!"), 0);
+        errorMessageP(PSTR("Channel is tripped!"), 0);
     } else {
         channel.outputEnable(!channel.isOutputEnabled());
     }
@@ -262,8 +262,7 @@ void action_ch_settings_prot_clear() {
 }
 
 void action_ch_settings_prot_clear_and_disable() {
-    protection::clear();
-    protection::disable();
+    protection::clearAndDisable();
 }
 
 void action_ch_settings_prot_toggle_state() {

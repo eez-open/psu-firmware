@@ -17,6 +17,12 @@
  */
 
 #include "psu.h"
+
+#include "channel.h"
+#include "actions.h"
+#include "devices.h"
+#include "sound.h"
+
 #include "gui.h"
 #include "gui_internal.h"
 #include "gui_data_snapshot.h"
@@ -25,10 +31,6 @@
 #include "gui_edit_mode_step.h"
 #include "gui_edit_mode_keypad.h"
 #include "gui_widget_button_group.h"
-
-#include "channel.h"
-#include "actions.h"
-#include "devices.h"
 
 #ifdef EEZ_PSU_SIMULATOR
 #include "front_panel/control.h"
@@ -1255,6 +1257,10 @@ void alertMessage(int alertPageId, data::Value message, void (*ok_callback)()) {
 	g_lastActivePageId = g_activePageId;
     g_activePageId = alertPageId;
     refreshPage();
+
+	if (alertPageId == PAGE_ID_ERROR_ALERT) {
+		sound::playBeep();
+	}
 }
 
 void infoMessage(data::Value value, void (*ok_callback)()) {
