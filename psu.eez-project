@@ -10,7 +10,7 @@
     },
     {
       "name": "channel_ok",
-      "description": "scpi: outp?, values: 0 if there is channel error, 1 if channel is ok",
+      "description": "0: if there is channel error\n1: if channel is ok",
       "operations": "get",
       "defaultValue": 1
     },
@@ -275,7 +275,7 @@
       "name": "toggle_channel",
       "description": "turn channel on/off",
       "implementationType": "native",
-      "implementation": "Channel& channel = Channel::get(found_widget_at_down.cursor.iChannel);\nchannel.outputEnable(!channel .isOutputEnabled());\n"
+      "implementation": "Channel& channel = Channel::get(found_widget_at_down.cursor.iChannel);\nif (channel.isTripped()) {\n    infoMessageP(PSTR(\"Channel is tripped!\"), 0);\n} else {\n    channel.outputEnable(!channel.isOutputEnabled());\n}\n"
     },
     {
       "name": "show_channel_settings",

@@ -32,7 +32,11 @@ using namespace gui;
 
 void action_toggle_channel() {
     Channel& channel = Channel::get(found_widget_at_down.cursor.iChannel);
-    channel.outputEnable(!channel .isOutputEnabled());
+    if (channel.isTripped()) {
+        infoMessageP(PSTR("Channel is tripped!"), 0);
+    } else {
+        channel.outputEnable(!channel.isOutputEnabled());
+    }
 }
 
 void action_show_channel_settings() {
