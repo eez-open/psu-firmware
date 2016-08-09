@@ -80,10 +80,10 @@ font::Font styleGetFont(const Style *style);
 void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse);
 void fillRect(int x, int y, int w, int h);
 
-void infoMessage(data::Value &value, void (*ok_callback)() = 0);
+void infoMessage(data::Value value, void (*ok_callback)() = 0);
 void infoMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);
 
-void errorMessage(data::Value &value, void (*ok_callback)() = 0);
+void errorMessage(data::Value value, void (*ok_callback)() = 0);
 void errorMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);
 
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());

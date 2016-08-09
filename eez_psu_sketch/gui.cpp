@@ -1247,7 +1247,7 @@ void dialog_ok_callback() {
 	}
 }
 
-void alertMessage(int alertPageId, data::Value &message, void (*ok_callback)()) {
+void alertMessage(int alertPageId, data::Value message, void (*ok_callback)()) {
     data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, message);
 
     dialog_yes_callback = ok_callback;
@@ -1257,7 +1257,7 @@ void alertMessage(int alertPageId, data::Value &message, void (*ok_callback)()) 
     refreshPage();
 }
 
-void infoMessage(data::Value &value, void (*ok_callback)()) {
+void infoMessage(data::Value value, void (*ok_callback)()) {
 	alertMessage(PAGE_ID_INFO_ALERT, value, ok_callback);
 }
 
@@ -1265,7 +1265,7 @@ void infoMessageP(const char *message PROGMEM, void (*ok_callback)()) {
 	alertMessage(PAGE_ID_INFO_ALERT, data::Value::ProgmemStr(message), ok_callback);
 }
 
-void errorMessage(data::Value &value, void (*ok_callback)()) {
+void errorMessage(data::Value value, void (*ok_callback)()) {
 	alertMessage(PAGE_ID_ERROR_ALERT, value, ok_callback);
 }
 
