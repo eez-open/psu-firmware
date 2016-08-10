@@ -49354,15 +49354,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Text",
               "action": "show_ch_settings_prot",
               "x": 0,
@@ -49490,6 +49481,15 @@
               "height": 34,
               "style": "default",
               "data": "channel.protection.otp.installed"
+            },
+            {
+              "type": "Text",
+              "text": "Channel protections",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ]
         },
@@ -49539,15 +49539,6 @@
           "height": 240,
           "widgets": [
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "MultilineText",
               "text": "Make sure that load is disconnected before clear tripped protection(s).",
               "x": 16,
@@ -49559,9 +49550,9 @@
             {
               "type": "Text",
               "text": "Clear",
-              "x": 12,
+              "x": 16,
               "y": 117,
-              "width": 180,
+              "width": 143,
               "height": 32,
               "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_clear"
@@ -49569,9 +49560,9 @@
             {
               "type": "Text",
               "text": "Clear and disable",
-              "x": 12,
+              "x": 16,
               "y": 149,
-              "width": 180,
+              "width": 143,
               "height": 32,
               "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_clear_and_disable"
@@ -49720,6 +49711,15 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Clear channel protections",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ]
         },
@@ -49866,15 +49866,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Rectangle",
               "x": 192,
               "y": 204,
@@ -50019,6 +50010,15 @@
               "text": "?",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Set over-voltage protection",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ]
         },
@@ -50165,15 +50165,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Rectangle",
               "x": 192,
               "y": 204,
@@ -50299,6 +50290,15 @@
               "text": "?",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Set over-current protection",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ]
         },
@@ -50445,15 +50445,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Rectangle",
               "x": 192,
               "y": 204,
@@ -50598,6 +50589,15 @@
               "text": "?",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Set over-power protection",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ]
         },
@@ -50744,15 +50744,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Rectangle",
               "x": 192,
               "y": 204,
@@ -50897,6 +50888,15 @@
               "text": "?",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Set temperature protection",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ]
         },
@@ -51043,15 +51043,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Rectangle",
               "x": 192,
               "y": 204,
@@ -51147,6 +51138,15 @@
               "height": 34,
               "style": "edit_value_active_S_left",
               "action": "show_ch_settings_adv_limits"
+            },
+            {
+              "type": "Text",
+              "text": "Channel advanced settings",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ]
         },
@@ -51293,15 +51293,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Rectangle",
               "x": 192,
               "y": 204,
@@ -51440,6 +51431,15 @@
               "text": "?",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Set channel low ripple mode",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ]
         },
@@ -51586,15 +51586,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Rectangle",
               "x": 192,
               "y": 204,
@@ -51695,6 +51686,15 @@
               "text": "?",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Set programming limits",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ]
         },
@@ -51841,15 +51841,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Rectangle",
               "x": 192,
               "y": 204,
@@ -51923,6 +51914,15 @@
               "text": "?",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Set remote voltage sense",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ]
         },
@@ -52069,15 +52069,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Rectangle",
               "x": 192,
               "y": 204,
@@ -52151,6 +52142,15 @@
               "text": "?",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Set remote programming",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ]
         },
@@ -52297,15 +52297,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Rectangle",
               "x": 192,
               "y": 204,
@@ -52379,6 +52370,15 @@
               "width": 228,
               "height": 34,
               "style": "default_disabled_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Set channel display",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ]
         },
@@ -52525,15 +52525,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Rectangle",
               "x": 192,
               "y": 204,
@@ -52587,80 +52578,107 @@
               "x": 12,
               "y": 170,
               "width": 228,
-              "height": 30,
+              "height": 28,
               "style": "default_disabled_S_left"
             },
             {
               "type": "Text",
               "text": "Temperature [oC]:",
               "x": 12,
-              "y": 60,
+              "y": 86,
               "width": 137,
-              "height": 30,
+              "height": 28,
               "style": "edit_value_S_left"
             },
             {
               "type": "Text",
-              "text": "Output active:",
+              "text": "Total On time:",
               "x": 12,
               "y": 30,
               "width": 137,
-              "height": 30,
+              "height": 28,
               "style": "edit_value_S_left"
             },
             {
               "type": "Text",
-              "text": "323h 33:10",
+              "text": "323:33:10",
               "x": 149,
               "y": 30,
               "width": 91,
-              "height": 30,
+              "height": 28,
               "style": "value_S"
             },
             {
               "type": "Text",
               "text": "45.5",
               "x": 149,
-              "y": 60,
+              "y": 86,
               "width": 91,
-              "height": 30,
+              "height": 28,
               "style": "value_S"
             },
             {
               "type": "Text",
               "text": "Calib. params:",
               "x": 12,
-              "y": 90,
+              "y": 114,
               "width": 137,
-              "height": 30,
+              "height": 28,
               "style": "edit_value_S_left"
             },
             {
               "type": "Text",
               "text": "Recalibrate",
               "x": 149,
-              "y": 90,
+              "y": 114,
               "width": 91,
-              "height": 30,
+              "height": 28,
               "style": "edit_value_active_S_left"
             },
             {
               "type": "Text",
               "text": "Calib. enabled:",
               "x": 12,
-              "y": 120,
+              "y": 142,
               "width": 137,
-              "height": 30,
+              "height": 28,
               "style": "edit_value_S_left"
             },
             {
               "type": "Text",
               "text": "Disable",
               "x": 149,
-              "y": 120,
+              "y": 142,
               "width": 91,
-              "height": 30,
+              "height": 28,
               "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Channel information",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Last On time:",
+              "x": 12,
+              "y": 58,
+              "width": 137,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "300:01:10",
+              "x": 149,
+              "y": 58,
+              "width": 91,
+              "height": 28,
+              "style": "value_S"
             }
           ]
         },
@@ -52878,7 +52896,7 @@
             },
             {
               "type": "Text",
-              "text": "Channel's calibration",
+              "text": "Channel calibration",
               "x": 12,
               "y": 86,
               "width": 180,
@@ -52891,16 +52909,7 @@
               "text": "Sound",
               "x": 12,
               "y": 30,
-              "width": 51,
-              "height": 28,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "OFF",
-              "x": 63,
-              "y": 30,
-              "width": 51,
+              "width": 102,
               "height": 28,
               "style": "edit_value_active_S_left"
             },
@@ -53010,15 +53019,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Text",
               "text": "Diagnostics",
               "x": 12,
@@ -53026,6 +53026,15 @@
               "width": 180,
               "height": 28,
               "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "System settings",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ],
           "x": 0,
@@ -53161,18 +53170,18 @@
               "type": "Text",
               "text": "Calibration password:",
               "x": 16,
-              "y": 16,
+              "y": 32,
               "width": 162,
-              "height": 32,
+              "height": 30,
               "style": "edit_value_S_left"
             },
             {
               "type": "Text",
               "text": "Change",
               "x": 190,
-              "y": 16,
+              "y": 32,
               "width": 114,
-              "height": 32,
+              "height": 30,
               "style": "edit_value_active_S_left",
               "action": "sys_settings_cal_edit_password"
             },
@@ -53201,7 +53210,7 @@
                         "x": 0,
                         "y": 0,
                         "width": 74,
-                        "height": 32,
+                        "height": 30,
                         "style": "edit_value_active_S_left",
                         "action": "show_sys_settings_cal_ch"
                       },
@@ -53211,10 +53220,10 @@
                           {
                             "type": "Text",
                             "text": "Recalibrate",
-                            "x": 0,
+                            "x": 76,
                             "y": 0,
                             "width": 90,
-                            "height": 32,
+                            "height": 30,
                             "style": "edit_value_active_S_left",
                             "action": "show_sys_settings_cal_ch"
                           },
@@ -53227,7 +53236,7 @@
                                 "x": 0,
                                 "y": 0,
                                 "width": 60,
-                                "height": 32,
+                                "height": 30,
                                 "style": "edit_value_active_S_left",
                                 "action": "sys_settings_cal_toggle_enable"
                               },
@@ -53237,15 +53246,15 @@
                                 "x": 0,
                                 "y": 0,
                                 "width": 60,
-                                "height": 32,
+                                "height": 30,
                                 "style": "edit_value_active_S_left",
                                 "action": "sys_settings_cal_toggle_enable"
                               }
                             ],
-                            "x": 100,
+                            "x": 0,
                             "y": 0,
-                            "width": 117,
-                            "height": 32,
+                            "width": 62,
+                            "height": 30,
                             "style": "default",
                             "data": "channel.calibration.state",
                             "action": ""
@@ -53256,7 +53265,7 @@
                             "x": -42,
                             "y": 30,
                             "width": 96,
-                            "height": 32,
+                            "height": 30,
                             "style": "value_S",
                             "data": "channel.calibration.date"
                           },
@@ -53266,7 +53275,7 @@
                             "x": 54,
                             "y": 30,
                             "width": 194,
-                            "height": 32,
+                            "height": 30,
                             "style": "value_S",
                             "data": "channel.calibration.remark"
                           }
@@ -53274,21 +53283,21 @@
                         "x": 0,
                         "y": 0,
                         "width": 262,
-                        "height": 32,
+                        "height": 30,
                         "style": "default"
                       }
                     ],
                     "x": 42,
                     "y": 0,
                     "width": 117,
-                    "height": 32,
+                    "height": 30,
                     "style": "default",
                     "data": "channel.calibration.status",
                     "action": ""
                   }
                 ],
                 "x": 0,
-                "y": 0,
+                "y": 11,
                 "width": 286,
                 "height": 65,
                 "style": "default",
@@ -53329,6 +53338,15 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Callibration settings",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             }
           ],
           "x": 0,
@@ -53524,18 +53542,18 @@
               "type": "Text",
               "text": "Last calibrated:",
               "x": 16,
-              "y": 16,
+              "y": 28,
               "width": 120,
-              "height": 30,
+              "height": 26,
               "style": "edit_value_S_left"
             },
             {
               "type": "Text",
               "text": "",
-              "x": 138,
-              "y": 16,
+              "x": 136,
+              "y": 28,
               "width": 134,
-              "height": 30,
+              "height": 26,
               "style": "value_S",
               "data": "channel.calibration.date"
             },
@@ -53543,18 +53561,18 @@
               "type": "Text",
               "text": "Remark:",
               "x": 16,
-              "y": 46,
+              "y": 54,
               "width": 66,
-              "height": 30,
+              "height": 26,
               "style": "edit_value_S_left"
             },
             {
               "type": "Text",
               "text": "<none>",
-              "x": 83,
-              "y": 46,
+              "x": 82,
+              "y": 54,
               "width": 230,
-              "height": 30,
+              "height": 26,
               "style": "value_S",
               "data": "channel.calibration.remark"
             },
@@ -53574,7 +53592,7 @@
                   "widgets": [
                     {
                       "type": "Text",
-                      "text": "Calibration params:",
+                      "text": "Calibration parameters:",
                       "x": 0,
                       "y": 0,
                       "width": 290,
@@ -53650,7 +53668,7 @@
                 }
               ],
               "x": 16,
-              "y": 76,
+              "y": 80,
               "width": 304,
               "height": 93,
               "style": "default",
@@ -53660,7 +53678,7 @@
               "type": "Text",
               "text": "Start calibration wizard",
               "x": 16,
-              "y": 171,
+              "y": 172,
               "width": 256,
               "height": 25,
               "style": "edit_value_active_S_left",
@@ -53693,6 +53711,15 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Chanel callibration settings",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 28,
+              "style": "value_S"
             }
           ],
           "x": 0,
