@@ -44311,7 +44311,8 @@
           "y": 0,
           "width": 320,
           "height": 240
-        }
+        },
+        "description": "Welcome screen, display channels and firmware revision"
       },
       {
         "name": "entering_standby",
@@ -44366,7 +44367,8 @@
           "y": 0,
           "width": 320,
           "height": 240
-        }
+        },
+        "description": "Information about entering stand-by mode"
       },
       {
         "name": "standby",
@@ -44421,7 +44423,8 @@
           "y": 0,
           "width": 320,
           "height": 240
-        }
+        },
+        "description": "Stand-by mode page that is displayed when power is applied and last known PSU state was stand-by."
       },
       {
         "name": "self_test_result",
@@ -44514,7 +44517,8 @@
               "style": "bottom_button_background"
             }
           ]
-        }
+        },
+        "description": "List of error detected during power on self test procedure"
       },
       {
         "name": "edit_mode_slider",
@@ -45208,7 +45212,8 @@
           "y": 0,
           "width": 320,
           "height": 240
-        }
+        },
+        "description": "Value edit mode: slider"
       },
       {
         "name": "edit_mode_step",
@@ -45900,7 +45905,8 @@
           "y": 0,
           "width": 320,
           "height": 240
-        }
+        },
+        "description": "Value edit mode: step"
       },
       {
         "name": "edit_mode_keypad",
@@ -46267,7 +46273,7 @@
                   "type": "Text",
                   "action": "keypad_back",
                   "x": 180,
-                  "y": 2,
+                  "y": 45,
                   "style": "key_icons",
                   "text": "<",
                   "width": 60,
@@ -46307,7 +46313,7 @@
                   "type": "Text",
                   "action": "keypad_clear",
                   "x": 180,
-                  "y": 45,
+                  "y": 88,
                   "style": "key_icons",
                   "text": "C",
                   "width": 60,
@@ -46347,7 +46353,7 @@
                   "type": "Text",
                   "action": "keypad_ok",
                   "x": 180,
-                  "y": 88,
+                  "y": 131,
                   "style": "key_icons",
                   "text": "O",
                   "width": 60,
@@ -46388,7 +46394,7 @@
                   "data": "edit_unit",
                   "action": "keypad_unit",
                   "x": 180,
-                  "y": 131,
+                  "y": 2,
                   "style": "key",
                   "width": 60,
                   "height": 43
@@ -46550,7 +46556,8 @@
           "y": 0,
           "width": 320,
           "height": 240
-        }
+        },
+        "description": "Value edit mode: keypad"
       },
       {
         "name": "info_alert",
@@ -46583,8 +46590,8 @@
           "style": "error_alert"
         },
         "landscape": {
-          "x": 20,
-          "y": 76,
+          "x": 0,
+          "y": 0,
           "width": 280,
           "height": 88,
           "widgets": [
@@ -46610,7 +46617,8 @@
             }
           ],
           "style": "info_alert"
-        }
+        },
+        "description": "Info message"
       },
       {
         "name": "error_alert",
@@ -46643,8 +46651,8 @@
           "style": "error_alert"
         },
         "landscape": {
-          "x": 20,
-          "y": 76,
+          "x": 0,
+          "y": 0,
           "width": 280,
           "height": 88,
           "widgets": [
@@ -46670,7 +46678,8 @@
             }
           ],
           "style": "error_alert"
-        }
+        },
+        "description": "Error message"
       },
       {
         "name": "yes_no",
@@ -47326,7 +47335,7 @@
           "width": 320,
           "height": 240
         },
-        "description": "Redefined main menu"
+        "description": "Main menu"
       },
       {
         "name": "sys_profiles",
@@ -47604,7 +47613,7 @@
         "description": "User profiles information and settings"
       },
       {
-        "name": "sys_info (not finished)",
+        "name": "sys_info",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -47744,15 +47753,6 @@
               "style": "default"
             },
             {
-              "type": "DisplayData",
-              "data": "edit_info",
-              "x": 0,
-              "y": 0,
-              "style": "edit_info_S",
-              "width": 240,
-              "height": 32
-            },
-            {
               "type": "Rectangle",
               "x": 0,
               "y": 204,
@@ -47762,39 +47762,120 @@
             },
             {
               "type": "Text",
-              "text": "Description:",
+              "text": "Temp. MAIN:",
               "x": 12,
-              "y": 60,
+              "y": 142,
+              "width": 128,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Total On time:",
+              "x": 12,
+              "y": 30,
               "width": 137,
-              "height": 30,
+              "height": 28,
               "style": "edit_value_S_left"
             },
             {
               "type": "Text",
-              "text": "Active profile:",
+              "text": "323:33:10",
+              "x": 140,
+              "y": 30,
+              "width": 100,
+              "height": 28,
+              "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "45.5 oC",
+              "x": 140,
+              "y": 142,
+              "width": 100,
+              "height": 28,
+              "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "System information",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Last On time:",
               "x": 12,
-              "y": 30,
-              "width": 152,
-              "height": 30,
+              "y": 58,
+              "width": 137,
+              "height": 28,
               "style": "edit_value_S_left"
             },
             {
               "type": "Text",
-              "text": "M2.xx",
-              "x": 164,
-              "y": 30,
-              "width": 76,
-              "height": 30,
+              "text": "300:01:10",
+              "x": 140,
+              "y": 58,
+              "width": 100,
+              "height": 28,
               "style": "value_S"
             },
             {
               "type": "Text",
-              "text": "45.5",
-              "x": 149,
-              "y": 60,
-              "width": 91,
-              "height": 30,
+              "text": "Firmware:",
+              "x": 12,
+              "y": 86,
+              "width": 137,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "M2",
+              "x": 140,
+              "y": 86,
+              "width": 100,
+              "height": 28,
               "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Serial No.:",
+              "x": 12,
+              "y": 114,
+              "width": 137,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "00004",
+              "x": 140,
+              "y": 114,
+              "width": 100,
+              "height": 28,
+              "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Not installed",
+              "x": 140,
+              "y": 170,
+              "width": 100,
+              "height": 28,
+              "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Temp. AUX:",
+              "x": 12,
+              "y": 170,
+              "width": 128,
+              "height": 28,
+              "style": "edit_value_S_left"
             }
           ]
         },
@@ -48979,7 +49060,7 @@
                   "type": "Text",
                   "action": "keypad_back",
                   "x": 180,
-                  "y": 2,
+                  "y": 45,
                   "style": "key_icons",
                   "text": "<",
                   "width": 60,
@@ -49019,7 +49100,7 @@
                   "type": "Text",
                   "action": "keypad_clear",
                   "x": 180,
-                  "y": 45,
+                  "y": 88,
                   "style": "key_icons",
                   "text": "C",
                   "width": 60,
@@ -49060,7 +49141,7 @@
                   "data": "edit_unit",
                   "action": "keypad_unit",
                   "x": 180,
-                  "y": 88,
+                  "y": 2,
                   "style": "key",
                   "width": 60,
                   "height": 43
@@ -49395,21 +49476,21 @@
             },
             {
               "type": "Text",
-              "text": "Clear / Disable",
+              "text": "Shutdown when trip",
               "x": 12,
-              "y": 32,
-              "width": 180,
-              "height": 32,
-              "style": "edit_value_active_S_left",
+              "y": 175,
+              "width": 155,
+              "height": 29,
+              "style": "edit_value_S_left",
               "action": "show_ch_settings_prot_clear"
             },
             {
               "type": "Text",
               "text": "Current (OCP)",
               "x": 12,
-              "y": 64,
+              "y": 59,
               "width": 180,
-              "height": 32,
+              "height": 29,
               "style": "edit_value_active_S_left",
               "action": "show_ch_settings_prot_ocp"
             },
@@ -49417,9 +49498,9 @@
               "type": "Text",
               "text": "Voltage (OVP)",
               "x": 12,
-              "y": 96,
+              "y": 88,
               "width": 180,
-              "height": 32,
+              "height": 29,
               "style": "edit_value_active_S_left",
               "action": "show_ch_settings_prot_ovp"
             },
@@ -49427,9 +49508,9 @@
               "type": "Text",
               "text": "Power (OPP)",
               "x": 12,
-              "y": 128,
+              "y": 117,
               "width": 180,
-              "height": 32,
+              "height": 29,
               "style": "edit_value_active_S_left",
               "action": "show_ch_settings_prot_opp"
             },
@@ -49460,7 +49541,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 228,
-                  "height": 34,
+                  "height": 29,
                   "style": "edit_value_S_left",
                   "action": ""
                 },
@@ -49470,15 +49551,15 @@
                   "x": 0,
                   "y": 0,
                   "width": 180,
-                  "height": 34,
+                  "height": 29,
                   "style": "edit_value_active_S_left",
                   "action": "show_ch_settings_prot_otp"
                 }
               ],
               "x": 12,
-              "y": 160,
+              "y": 146,
               "width": 180,
-              "height": 34,
+              "height": 29,
               "style": "default",
               "data": "channel.protection.otp.installed"
             },
@@ -49488,8 +49569,28 @@
               "x": 6,
               "y": 0,
               "width": 228,
-              "height": 32,
+              "height": 30,
               "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Clear / Disable",
+              "x": 12,
+              "y": 30,
+              "width": 180,
+              "height": 29,
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_clear"
+            },
+            {
+              "type": "Text",
+              "text": "OFF",
+              "x": 167,
+              "y": 175,
+              "width": 73,
+              "height": 29,
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_clear"
             }
           ]
         },
@@ -52886,19 +52987,9 @@
             },
             {
               "type": "Text",
-              "text": "Screen calibration",
-              "x": 12,
-              "y": 58,
-              "width": 180,
-              "height": 28,
-              "style": "edit_value_active_S_left",
-              "action": "touch_screen_calibration"
-            },
-            {
-              "type": "Text",
               "text": "Channel calibration",
               "x": 12,
-              "y": 86,
+              "y": 58,
               "width": 180,
               "height": 28,
               "style": "edit_value_active_S_left",
@@ -52917,19 +53008,10 @@
               "type": "Text",
               "text": "Display backlight",
               "x": 12,
-              "y": 114,
+              "y": 86,
               "width": 180,
               "height": 28,
               "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "Communications",
-              "x": 12,
-              "y": 170,
-              "width": 180,
-              "height": 28,
-              "style": "default_disabled_S_left"
             },
             {
               "type": "List",
@@ -53022,19 +53104,435 @@
               "type": "Text",
               "text": "Diagnostics",
               "x": 12,
-              "y": 142,
+              "y": 114,
               "width": 180,
               "height": 28,
               "style": "edit_value_active_S_left"
             },
             {
               "type": "Text",
-              "text": "System settings",
+              "text": "System settings (1)",
               "x": 6,
               "y": 0,
               "width": 228,
               "height": 32,
               "style": "value_S"
+            },
+            {
+              "type": "Button",
+              "x": 0,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "Disabled style:": "bottom_button_disabled",
+              "text": "(",
+              "Enabled": "calibration.channel.stepPrevEnabled",
+              "disabledStyle": "bottom_button_disabled",
+              "enabled": "channel.calibration.step.prevEnabled",
+              "action": "sys_settings_cal_ch_wiz_step_previous"
+            },
+            {
+              "type": "Button",
+              "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "Disabled style:": "bottom_button_disabled",
+              "text": ")",
+              "Enabled": "calibration.channel.stepNextEnabled",
+              "disabledStyle": "bottom_button_disabled",
+              "enabled": "channel.calibration.step.nextEnabled",
+              "action": "sys_settings_cal_ch_wiz_step_next"
+            },
+            {
+              "type": "Text",
+              "text": "System password",
+              "x": 12,
+              "y": 142,
+              "width": 180,
+              "height": 28,
+              "style": "default_disabled_S_left"
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240
+        },
+        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right."
+      },
+      {
+        "name": "sys_settings2",
+        "portrait": {
+          "widgets": [
+            {
+              "type": "List",
+              "listType": "vertical",
+              "data": "channels",
+              "x": 0,
+              "y": 16,
+              "itemWidget": {
+                "type": "Select",
+                "data": "channel_ok",
+                "y": 0,
+                "widgets": [
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126
+                  },
+                  {
+                    "type": "Container",
+                    "widgets": [
+                      {
+                        "type": "Select",
+                        "x": 0,
+                        "y": 0,
+                        "data": "output_state",
+                        "action": "",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "style": "channel_off_L",
+                            "text": "OFF",
+                            "x": 0,
+                            "y": 0,
+                            "width": 240,
+                            "height": 86,
+                            "action": "toggle_channel"
+                          },
+                          {
+                            "type": "Select",
+                            "data": "output_mode",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "style": "mon_value_L",
+                                "data": "mon_value",
+                                "x": 0,
+                                "y": 0,
+                                "width": 240,
+                                "height": 86,
+                                "action": "toggle_channel"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "style": "mon_value_L_ur",
+                                "data": "mon_value",
+                                "x": 0,
+                                "y": 0,
+                                "width": 240,
+                                "height": 86,
+                                "action": "toggle_channel"
+                              }
+                            ],
+                            "x": 0,
+                            "y": 0,
+                            "width": 240,
+                            "height": 86,
+                            "style": "default"
+                          }
+                        ],
+                        "width": 240,
+                        "height": 86,
+                        "style": "default"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "data": "volt",
+                        "action": "edit",
+                        "x": 0,
+                        "y": 86,
+                        "style": "mon_value",
+                        "width": 106,
+                        "height": 40
+                      },
+                      {
+                        "type": "DisplayData",
+                        "data": "curr",
+                        "action": "edit",
+                        "x": 106,
+                        "y": 86,
+                        "style": "mon_value",
+                        "width": 106,
+                        "height": 40
+                      },
+                      {
+                        "type": "Text",
+                        "action": "show_channel_settings",
+                        "x": 212,
+                        "y": 86,
+                        "style": "default_S",
+                        "text": "`",
+                        "width": 28,
+                        "height": 40
+                      }
+                    ],
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126,
+                    "style": "default"
+                  }
+                ],
+                "x": 0,
+                "width": 240,
+                "height": 126,
+                "style": "default"
+              },
+              "width": 240,
+              "height": 320,
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "action": "touch_screen_calibration",
+              "x": 0,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "P",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 48,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "?",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 96,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "!",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 144,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "L",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "turn_off",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "Q",
+              "width": 48,
+              "height": 36
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320
+        },
+        "landscape": {
+          "widgets": [
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 272,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Screen calibration",
+              "x": 12,
+              "y": 144,
+              "width": 189,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "action": "touch_screen_calibration"
+            },
+            {
+              "type": "Text",
+              "text": "Ethernet settings",
+              "x": 12,
+              "y": 86,
+              "width": 189,
+              "height": 28,
+              "style": "default_disabled_S_left",
+              "action": "show_sys_settings_cal"
+            },
+            {
+              "type": "Text",
+              "text": "Formats",
+              "x": 12,
+              "y": 30,
+              "width": 180,
+              "height": 28,
+              "style": "default_disabled_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "NTP server",
+              "x": 12,
+              "y": 114,
+              "width": 189,
+              "height": 28,
+              "style": "default_disabled_S_left"
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "output_state",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "output_mode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 76,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "volt",
+                    "x": 0,
+                    "y": 30,
+                    "width": 76,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "curr",
+                    "x": 0,
+                    "y": 60,
+                    "width": 76,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 80,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 240,
+              "y": 0,
+              "width": 80,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "text": "Serial (via USB) settings",
+              "x": 12,
+              "y": 58,
+              "width": 189,
+              "height": 28,
+              "style": "default_disabled_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "System settings (2)",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
+            },
+            {
+              "type": "Button",
+              "x": 0,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "Disabled style:": "bottom_button_disabled",
+              "text": "(",
+              "Enabled": "calibration.channel.stepPrevEnabled",
+              "disabledStyle": "bottom_button_disabled",
+              "enabled": "channel.calibration.step.prevEnabled",
+              "action": "sys_settings_cal_ch_wiz_step_previous"
+            },
+            {
+              "type": "Button",
+              "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "Disabled style:": "bottom_button_disabled",
+              "text": ")",
+              "Enabled": "calibration.channel.stepNextEnabled",
+              "disabledStyle": "bottom_button_disabled",
+              "enabled": "channel.calibration.step.nextEnabled",
+              "action": "sys_settings_cal_ch_wiz_step_next"
             }
           ],
           "x": 0,
@@ -54374,6 +54872,824 @@
           "height": 240
         },
         "description": "Calibration wizard step 1: select channel"
+      },
+      {
+        "name": "sys_settings_sound",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "TODO",
+              "x": 0,
+              "y": 40,
+              "width": 240,
+              "height": 83,
+              "style": "default"
+            },
+            {
+              "type": "Local.NotificationBar",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 40,
+              "style": "default"
+            }
+          ]
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "output_state",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "output_mode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 76,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "volt",
+                    "x": 0,
+                    "y": 30,
+                    "width": 76,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "curr",
+                    "x": 0,
+                    "y": 60,
+                    "width": 76,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 80,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 240,
+              "y": 0,
+              "width": 80,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
+            },
+            {
+              "type": "Rectangle",
+              "x": 192,
+              "y": 204,
+              "width": 80,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "text": "Sound:",
+              "x": 16,
+              "y": 32,
+              "width": 101,
+              "height": 42,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Text",
+              "text": "OFF",
+              "x": 178,
+              "y": 32,
+              "width": 62,
+              "height": 42,
+              "style": "edit_value_active_left"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_disp",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Sound control",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Click sound:",
+              "x": 16,
+              "y": 74,
+              "width": 156,
+              "height": 42,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Text",
+              "text": "OFF",
+              "x": 178,
+              "y": 74,
+              "width": 62,
+              "height": 42,
+              "style": "edit_value_active_left"
+            }
+          ]
+        },
+        "description": "Output voltage remote programming information and settings"
+      },
+      {
+        "name": "sys_settings_display",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "TODO",
+              "x": 0,
+              "y": 40,
+              "width": 240,
+              "height": 83,
+              "style": "default"
+            },
+            {
+              "type": "Local.NotificationBar",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 40,
+              "style": "default"
+            }
+          ]
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "output_state",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "output_mode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 76,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "volt",
+                    "x": 0,
+                    "y": 30,
+                    "width": 76,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "curr",
+                    "x": 0,
+                    "y": 60,
+                    "width": 76,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 80,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 240,
+              "y": 0,
+              "width": 80,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
+            },
+            {
+              "type": "Rectangle",
+              "x": 192,
+              "y": 204,
+              "width": 80,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "text": "Backlight:",
+              "x": 16,
+              "y": 32,
+              "width": 144,
+              "height": 42,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Text",
+              "text": "60",
+              "x": 160,
+              "y": 32,
+              "width": 62,
+              "height": 42,
+              "style": "edit_value_active_left"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_disp",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Display settings",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
+            }
+          ]
+        },
+        "description": "Output voltage remote programming information and settings"
+      },
+      {
+        "name": "sys_settings_diag",
+        "portrait": {
+          "widgets": [
+            {
+              "type": "List",
+              "listType": "vertical",
+              "data": "channels",
+              "x": 0,
+              "y": 16,
+              "itemWidget": {
+                "type": "Select",
+                "data": "channel_ok",
+                "y": 0,
+                "widgets": [
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126
+                  },
+                  {
+                    "type": "Container",
+                    "widgets": [
+                      {
+                        "type": "Select",
+                        "x": 0,
+                        "y": 0,
+                        "data": "output_state",
+                        "action": "",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "style": "channel_off_L",
+                            "text": "OFF",
+                            "x": 0,
+                            "y": 0,
+                            "width": 240,
+                            "height": 86,
+                            "action": "toggle_channel"
+                          },
+                          {
+                            "type": "Select",
+                            "data": "output_mode",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "style": "mon_value_L",
+                                "data": "mon_value",
+                                "x": 0,
+                                "y": 0,
+                                "width": 240,
+                                "height": 86,
+                                "action": "toggle_channel"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "style": "mon_value_L_ur",
+                                "data": "mon_value",
+                                "x": 0,
+                                "y": 0,
+                                "width": 240,
+                                "height": 86,
+                                "action": "toggle_channel"
+                              }
+                            ],
+                            "x": 0,
+                            "y": 0,
+                            "width": 240,
+                            "height": 86,
+                            "style": "default"
+                          }
+                        ],
+                        "width": 240,
+                        "height": 86,
+                        "style": "default"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "data": "volt",
+                        "action": "edit",
+                        "x": 0,
+                        "y": 86,
+                        "style": "mon_value",
+                        "width": 106,
+                        "height": 40
+                      },
+                      {
+                        "type": "DisplayData",
+                        "data": "curr",
+                        "action": "edit",
+                        "x": 106,
+                        "y": 86,
+                        "style": "mon_value",
+                        "width": 106,
+                        "height": 40
+                      },
+                      {
+                        "type": "Text",
+                        "action": "show_channel_settings",
+                        "x": 212,
+                        "y": 86,
+                        "style": "default_S",
+                        "text": "`",
+                        "width": 28,
+                        "height": 40
+                      }
+                    ],
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126,
+                    "style": "default"
+                  }
+                ],
+                "x": 0,
+                "width": 240,
+                "height": 126,
+                "style": "default"
+              },
+              "width": 240,
+              "height": 320,
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "action": "touch_screen_calibration",
+              "x": 0,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "P",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 48,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "?",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 96,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "!",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 144,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "L",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "turn_off",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "Q",
+              "width": 48,
+              "height": 36
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320
+        },
+        "landscape": {
+          "widgets": [
+            {
+              "type": "Text",
+              "text": "Last calibrated:",
+              "x": 16,
+              "y": 28,
+              "width": 120,
+              "height": 26,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "",
+              "x": 136,
+              "y": 28,
+              "width": 134,
+              "height": 26,
+              "style": "value_S",
+              "data": "channel.calibration.date"
+            },
+            {
+              "type": "Text",
+              "text": "Remark:",
+              "x": 16,
+              "y": 54,
+              "width": 66,
+              "height": 26,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "<none>",
+              "x": 82,
+              "y": 54,
+              "width": 230,
+              "height": 26,
+              "style": "value_S",
+              "data": "channel.calibration.remark"
+            },
+            {
+              "type": "Text",
+              "text": "Start calibration wizard",
+              "x": 16,
+              "y": 172,
+              "width": 224,
+              "height": 25,
+              "style": "edit_value_active_S_left",
+              "action": "sys_settings_cal_ch_wiz_start"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 224,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "B",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "System diagnostics",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 28,
+              "style": "value_S"
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "output_state",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "output_mode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 76,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "volt",
+                    "x": 0,
+                    "y": 30,
+                    "width": 76,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "curr",
+                    "x": 0,
+                    "y": 60,
+                    "width": 76,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 80,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 240,
+              "y": 0,
+              "width": 80,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240
+        },
+        "description": "Calibration general information, active calibration settings (CAL:STAT), change password (CAL:PASS:NEW) and enter wizard."
       }
     ],
     "bitmaps": [
