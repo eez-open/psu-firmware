@@ -35,7 +35,7 @@
 #if OPTION_DISPLAY
 #include "gui.h"
 #endif
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 #include "watchdog.h"
 #include "fan.h"
 #endif
@@ -72,7 +72,7 @@ void boot() {
     // initialize shield
     eez_psu_init();
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	fan::test_start();
 #endif
 
@@ -108,7 +108,7 @@ void boot() {
         success &= psu_reset(true);
     }
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	success &= fan::init();
 #endif
 
@@ -190,7 +190,7 @@ void boot() {
 
     g_is_booted = true;
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	watchdog::init();
 #endif
 }
@@ -204,7 +204,7 @@ bool powerUp() {
     gui::showWelcomePage();
 #endif
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	if (g_is_booted) {
 		fan::test_start();
 	}
@@ -234,7 +234,7 @@ bool powerUp() {
         success &= Channel::get(i).init();
     }
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	if (g_is_booted) {
 		success &= fan::test();
 	}
@@ -433,14 +433,14 @@ static bool test_shield() {
 bool test() {
     bool result = true;
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	fan::test_start();
 #endif
 
     result &= test_shield();
     result &= test_channels();
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	result &= fan::test();
 #endif
 
@@ -462,7 +462,7 @@ void tick() {
 
     temperature::tick(tick_usec);
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	watchdog::tick(tick_usec);
 	fan::tick(tick_usec);
 #endif
@@ -580,8 +580,8 @@ const char *getCpuModel() {
 #if defined(EEZ_PSU_ARDUINO)
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     return "Arduino, R1B9";
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-    return "Arduino, R2B6";
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+    return "Arduino, R3B4";
 #endif
 #else
     return "Simulator, M2.0";
@@ -596,7 +596,7 @@ const char *getCpuEthernetType() {
 #if defined(EEZ_PSU_ARDUINO)
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     return "ENC28J60";
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
     return "W5500";
 #endif
 #else

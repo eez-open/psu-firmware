@@ -60,8 +60,8 @@ public:
     static const uint8_t IO_BIT_IN_PWRGOOD = 6;
 
     static const uint8_t IO_BIT_OUT_DP_ENABLE = 1;
-    static const uint8_t IO_BIT_OUT_SET_100_PERCENT = 3;
-    static const uint8_t IO_BIT_OUT_EXT_PROG = 4;
+    uint8_t IO_BIT_OUT_SET_100_PERCENT;
+    uint8_t IO_BIT_OUT_EXT_PROG;
     static const uint8_t IO_BIT_OUT_OUTPUT_ENABLE = 7;
 
     static const uint8_t IOEXP_READ = 0B01000001;
@@ -83,7 +83,10 @@ public:
 
     psu::TestResult test_result;
 
-    IOExpander(Channel &channel);
+    IOExpander(Channel &channel, 
+        uint8_t IO_BIT_OUT_SET_100_PERCENT_,
+        uint8_t IO_BIT_OUT_EXT_PROG_
+    );
 
     bool init();
     bool test();

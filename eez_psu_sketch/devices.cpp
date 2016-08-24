@@ -25,7 +25,7 @@
 #include "datetime.h"
 #include "bp.h"
 #include "temp_sensor.h"
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 #include "fan.h"
 #endif
 
@@ -46,7 +46,7 @@ Device devices[] = {
 	{ "RTC", OPTION_EXT_RTC, &rtc::test_result },
 	{ "DateTime", true, &datetime::test_result },
 	{ "BP option", OPTION_BP, &bp::test_result },
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	{ "Fan", OPTION_FAN, &fan::test_result },
 #endif
 	TEMP_SENSORS,

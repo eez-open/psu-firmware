@@ -43,7 +43,7 @@
     <Filter Include="board\R1B9">
       <UniqueIdentifier>{d60cb4a4-30c9-46ad-8009-44bcaf12ab05}</UniqueIdentifier>
     </Filter>
-    <Filter Include="board\R2B6">
+    <Filter Include="board\R3B4">
       <UniqueIdentifier>{b92159b7-8ef1-40a8-b0fd-c7b91adc2eb6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -334,8 +334,8 @@
     <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\R1B9\R1B9_pins.h">
       <Filter>board\R1B9</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\R2B6\R2B6_pins.h">
-      <Filter>board\R2B6</Filter>
+    <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\R3B4\R3B4_pins.h">
+      <Filter>board\R3B4</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\conf_user_revision.h">
       <Filter>core</Filter>
@@ -601,8 +601,8 @@
     <ClCompile Include="..\..\..\..\libraries\eez_psu_lib\src\R1B9\R1B9_init.cpp">
       <Filter>board\R1B9</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\libraries\eez_psu_lib\src\R2B6\R2B6_init.cpp">
-      <Filter>board\R2B6</Filter>
+    <ClCompile Include="..\..\..\..\libraries\eez_psu_lib\src\R3B4\R3B4_init.cpp">
+      <Filter>board\R3B4</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\actions.cpp">
       <Filter>gui</Filter>

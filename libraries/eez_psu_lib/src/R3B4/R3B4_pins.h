@@ -16,11 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EEZ_PSU_R2B6_PINS_H
-#define EEZ_PSU_R2B6_PINS_H
+#ifndef EEZ_PSU_R3B4_PINS_H
+#define EEZ_PSU_R3B4_PINS_H
 
 static const uint8_t TOUCH_IRQ = 2;
 static const uint8_t TOUCH_DOUT = 3;
+static const uint8_t WIFI_CE = 4;
 static const uint8_t WATCHDOG = 5;
 static const uint8_t FAN_PWM = 6;
 static const uint8_t LCD_BRIGHTNESS = 7;
@@ -74,9 +75,11 @@ static const uint8_t BATT_NTC = 58;
 static const uint8_t NTC1 = 59;
 static const uint8_t NTC2 = 60;
 static const uint8_t EXT_TRIG = 61;
+static const uint8_t ENC_A = 63;
+static const uint8_t ENC_B = 64;
 static const uint8_t PWD_RST = 67;
 
 #define ISOLATOR_DISABLE LOW
 #define ISOLATOR_ENABLE  HIGH
 
-#endif // EEZ_PSU_R2B6_PINS_H
+#endif // EEZ_PSU_R3B4_PINS_H

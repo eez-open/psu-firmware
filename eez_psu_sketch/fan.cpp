@@ -20,7 +20,7 @@
 #include "temperature.h"
 #include "scpi_psu.h"
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 
 #include "fan.h"
 

@@ -17,15 +17,17 @@
  */
 
 #include <SPI.h>
-#include "R2B6_pins.h"
+#include "R3B4_pins.h"
 
-void eez_psu_R2B6_init() {
+void eez_psu_R3B4_init() {
     // set pinMode for all the pins
     pinMode(TOUCH_IRQ, INPUT);
     pinMode(TOUCH_DOUT, INPUT);
 
     // WATCHDOG pin must not be defined here! 
     //pinMode(WATCHDOG, OUTPUT);
+
+    pinMode(WIFI_CE, OUTPUT);
 
     pinMode(FAN_PWM, OUTPUT);
     pinMode(LCD_BRIGHTNESS, OUTPUT);
@@ -79,6 +81,8 @@ void eez_psu_R2B6_init() {
     pinMode(NTC1, INPUT);
     pinMode(NTC2, INPUT);
     pinMode(EXT_TRIG, INPUT);
+    pinMode(ENC_A, INPUT);
+    pinMode(ENC_B, INPUT);
     pinMode(PWD_RST, INPUT);
 
     //

@@ -32,11 +32,11 @@
     
     extern void eez_psu_R1B9_init();
     #define eez_psu_init eez_psu_R1B9_init
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-    #include "R2B6/R2B6_pins.h"
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+    #include "R3B4/R3B4_pins.h"
     
-    extern void eez_psu_R2B6_init();
-    #define eez_psu_init eez_psu_R2B6_init
+    extern void eez_psu_R3B4_init();
+    #define eez_psu_init eez_psu_R3B4_init
 #else
     #error "Unknown EEZ PSU Revision"
 #endif

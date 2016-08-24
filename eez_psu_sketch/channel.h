@@ -209,7 +209,7 @@ public:
     uint8_t bp_led_out_minus;
     uint8_t bp_led_sense_plus;
     uint8_t bp_led_sense_minus;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
     uint8_t bp_led_out;
     uint8_t bp_led_sense;
     uint8_t bp_led_prog;
@@ -291,11 +291,11 @@ public:
 
     Channel(
         uint8_t index,
-        uint8_t boardRevision, uint8_t ioexp_iodir, uint8_t ioexp_gpio_init,
+        uint8_t boardRevision, uint8_t ioexp_iodir, uint8_t ioexp_gpio_init, uint8_t IO_BIT_OUT_SET_100_PERCENT_, uint8_t IO_BIT_OUT_EXT_PROG_,
         uint8_t isolator_pin, uint8_t ioexp_pin, uint8_t convend_pin, uint8_t adc_pin, uint8_t dac_pin,
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
         uint8_t bp_led_out_plus, uint8_t bp_led_out_minus, uint8_t bp_led_sense_plus, uint8_t bp_led_sense_minus, uint8_t bp_relay_sense,
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
         uint8_t bp_led_out, uint8_t bp_led_sense, uint8_t bp_relay_sense, uint8_t bp_led_prog,
 #endif
         uint8_t cc_led_pin, uint8_t cv_led_pin,

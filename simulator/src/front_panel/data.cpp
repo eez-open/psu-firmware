@@ -41,7 +41,7 @@ void fillChannelData(ChannelData *data, int ch) {
             data->sense_plus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE1_PLUS) ? true : false;
             data->sense_minus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE1_MINUS) ? true : false;
             data->out_minus = chips::bp_chip.getValue() & (1 << BP_LED_OUT1_MINUS) ? true : false;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
             data->cv = chips::bp_chip.getValue() & (1 << BP_LED_CV1) ? true : false;
             data->cc = chips::bp_chip.getValue() & (1 << BP_LED_CC1) ? true : false;
             data->out = chips::bp_chip.getValue() & (1 << BP_LED_OUT1) ? true : false;
@@ -57,7 +57,7 @@ void fillChannelData(ChannelData *data, int ch) {
             data->sense_plus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE2_PLUS) ? true : false;
             data->sense_minus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE2_MINUS) ? true : false;
             data->out_minus = chips::bp_chip.getValue() & (1 << BP_LED_OUT2_MINUS) ? true : false;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
             data->cv = chips::bp_chip.getValue() & (1 << BP_LED_CV2) ? true : false;
             data->cc = chips::bp_chip.getValue() & (1 << BP_LED_CC2) ? true : false;
             data->out = chips::bp_chip.getValue() & (1 << BP_LED_OUT2) ? true : false;
@@ -100,7 +100,7 @@ void fillChannelData(ChannelData *data, int ch) {
         data->sense_minus = false;
         data->out_minus = false;
         data->load_text = 0;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
         data->cv = false;
         data->cc = false;
         data->out = false;

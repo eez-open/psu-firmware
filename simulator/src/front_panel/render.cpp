@@ -37,7 +37,7 @@ static WindowDefinition window_definition_small = {
 };
 
 static WindowDefinition window_definition_large = window_definition_small;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 static WindowDefinition window_definition_small = {
 	"EEZ Software Simulator",
 	1081, 366,
@@ -59,7 +59,7 @@ static int F = 1;
 #define RECT(x, y, w, h) D(x), D(y), D(w), D(h)
 
 #define R1B9_IMAGE(IMAGE) "r1b9/" IMAGE ".png"
-#define R2B6_IMAGE(IMAGE) (F == 1 ? "r2b6/small/" IMAGE ".png" : "r2b6/large/" IMAGE ".png")
+#define R3B4_IMAGE(IMAGE) (F == 1 ? "r3b4/small/" IMAGE ".png" : "r3b4/large/" IMAGE ".png")
 
 imgui::WindowDefinition *getWindowDefinition(int w, int h) {
 	if (w >= SIM_FRONT_PANEL_LARGE_MODE_MIN_WIDTH) {
@@ -107,32 +107,32 @@ void render(Window *window, Data *data) {
     data->local_control_widget.h = 320;
 
     window->addUserWidget(&data->local_control_widget);
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
-    window->addImage(RECT(0, 0, 1081, 366), R2B6_IMAGE("front-panel"));
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+    window->addImage(RECT(0, 0, 1081, 366), R3B4_IMAGE("front-panel"));
 
-    window->addOnOffImage(RECT(131, 243, 17, 17), data->standby, R2B6_IMAGE("led-blue"), R2B6_IMAGE("led-off"));
+    window->addOnOffImage(RECT(131, 243, 17, 17), data->standby, R3B4_IMAGE("led-blue"), R3B4_IMAGE("led-off"));
 
-    window->addOnOffImage(RECT(689, 61, 17, 17), data->ch1.cv, R2B6_IMAGE("led-yellow"), R2B6_IMAGE("led-off"));
-    window->addOnOffImage(RECT(689, 95, 17, 17), data->ch1.cc, R2B6_IMAGE("led-red"), R2B6_IMAGE("led-off"));
-    window->addOnOffImage(RECT(713, 267, 17, 17), data->ch1.out, R2B6_IMAGE("led-green"), R2B6_IMAGE("led-off"));
-    window->addOnOffImage(RECT(689, 128, 17, 17), data->ch1.sense, R2B6_IMAGE("led-yellow"), R2B6_IMAGE("led-off"));
-    window->addOnOffImage(RECT(650, 128, 17, 17), data->ch1.prog, R2B6_IMAGE("led-red"), R2B6_IMAGE("led-off"));
+    window->addOnOffImage(RECT(689, 61, 17, 17), data->ch1.cv, R3B4_IMAGE("led-yellow"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(RECT(689, 95, 17, 17), data->ch1.cc, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(RECT(713, 267, 17, 17), data->ch1.out, R3B4_IMAGE("led-green"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(RECT(689, 128, 17, 17), data->ch1.sense, R3B4_IMAGE("led-yellow"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(RECT(650, 128, 17, 17), data->ch1.prog, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
     if (data->ch1.load_text) {
-        window->addImage(RECT(652, 294, 138, 66), R2B6_IMAGE("load"));
+        window->addImage(RECT(652, 294, 138, 66), R3B4_IMAGE("load"));
         window->addText(RECT(677, 326, 88, 29), data->ch1.load_text);
     }
 
-    window->addOnOffImage(RECT(918, 61, 17, 17), data->ch2.cv, R2B6_IMAGE("led-yellow"), R2B6_IMAGE("led-off"));
-    window->addOnOffImage(RECT(918, 95, 17, 17), data->ch2.cc, R2B6_IMAGE("led-red"), R2B6_IMAGE("led-off"));
-    window->addOnOffImage(RECT(894, 267, 17, 17), data->ch2.out, R2B6_IMAGE("led-green"), R2B6_IMAGE("led-off"));
-    window->addOnOffImage(RECT(918, 128, 17, 17), data->ch2.sense, R2B6_IMAGE("led-yellow"), R2B6_IMAGE("led-off"));
-    window->addOnOffImage(RECT(879, 128, 17, 17), data->ch2.prog, R2B6_IMAGE("led-red"), R2B6_IMAGE("led-off"));
+    window->addOnOffImage(RECT(918, 61, 17, 17), data->ch2.cv, R3B4_IMAGE("led-yellow"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(RECT(918, 95, 17, 17), data->ch2.cc, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(RECT(894, 267, 17, 17), data->ch2.out, R3B4_IMAGE("led-green"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(RECT(918, 128, 17, 17), data->ch2.sense, R3B4_IMAGE("led-yellow"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(RECT(879, 128, 17, 17), data->ch2.prog, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
     if (data->ch2.load_text) {
-        window->addImage(RECT(834, 294, 138, 66), R2B6_IMAGE("load"));
+        window->addImage(RECT(834, 294, 138, 66), R3B4_IMAGE("load"));
         window->addText(RECT(859, 326, 88, 29), data->ch2.load_text);
     }
 
-	data->reset = window->addButton(RECT(129, 165, 20, 20), R2B6_IMAGE("reset-normal"), R2B6_IMAGE("reset-pressed"));
+	data->reset = window->addButton(RECT(129, 165, 20, 20), R3B4_IMAGE("reset-normal"), R3B4_IMAGE("reset-pressed"));
 
     data->local_control_widget.x = D(211);
     data->local_control_widget.y = D(57);

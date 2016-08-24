@@ -41,13 +41,17 @@ const char *CH_BOARD_REVISION_NAMES[] = {
     // CH_BOARD_REVISION_R4B43A
     "Power_r4b43a",
     // CH_BOARD_REVISION_R5B6B
-    "Power_r5B6b"
+    "Power_r5B6b",
+    // CH_BOARD_REVISION_R5B9
+    "Power_r5B9"
 };
 
 uint16_t CH_BOARD_REVISION_FEATURES[] = {
     // CH_BOARD_REVISION_R4B43A
     CH_FEATURE_VOLT | CH_FEATURE_CURRENT | CH_FEATURE_OE, 
     // CH_BOARD_REVISION_R5B6B
+    CH_FEATURE_VOLT | CH_FEATURE_CURRENT | CH_FEATURE_POWER | CH_FEATURE_OE | CH_FEATURE_DPROG | CH_FEATURE_LRIPPLE | CH_FEATURE_RPROG,
+    // CH_BOARD_REVISION_R5B9
     CH_FEATURE_VOLT | CH_FEATURE_CURRENT | CH_FEATURE_POWER | CH_FEATURE_OE | CH_FEATURE_DPROG | CH_FEATURE_LRIPPLE | CH_FEATURE_RPROG
 };
 
@@ -109,11 +113,11 @@ float Channel::Simulator::getVoltProgExt() {
 
 Channel::Channel(
     uint8_t index_,
-    uint8_t boardRevision_, uint8_t ioexp_iodir_, uint8_t ioexp_gpio_init_,
+    uint8_t boardRevision_, uint8_t ioexp_iodir_, uint8_t ioexp_gpio_init_, uint8_t IO_BIT_OUT_SET_100_PERCENT_, uint8_t IO_BIT_OUT_EXT_PROG_,
     uint8_t isolator_pin_, uint8_t ioexp_pin_, uint8_t convend_pin_, uint8_t adc_pin_, uint8_t dac_pin_,
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     uint8_t bp_led_out_plus_, uint8_t bp_led_out_minus_, uint8_t bp_led_sense_plus_, uint8_t bp_led_sense_minus_, uint8_t bp_relay_sense_,
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
     uint8_t bp_led_out_, uint8_t bp_led_sense_, uint8_t bp_relay_sense_, uint8_t bp_led_prog_,
 #endif
     uint8_t cc_led_pin_, uint8_t cv_led_pin_,
@@ -130,7 +134,7 @@ Channel::Channel(
     isolator_pin(isolator_pin_), ioexp_pin(ioexp_pin_), convend_pin(convend_pin_), adc_pin(adc_pin_), dac_pin(dac_pin_),
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     bp_led_out_plus(bp_led_out_plus_), bp_led_out_minus(bp_led_out_minus_), bp_led_sense_plus(bp_led_sense_plus_), bp_led_sense_minus(bp_led_sense_minus_), bp_relay_sense(bp_relay_sense_),
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
     bp_led_out(bp_led_out_), bp_led_sense(bp_led_sense_), bp_relay_sense(bp_relay_sense_), bp_led_prog(bp_led_prog_),
 #endif
     cc_led_pin(cc_led_pin_), cv_led_pin(cv_led_pin_),
@@ -140,7 +144,7 @@ Channel::Channel(
     OCP_DEFAULT_STATE(OCP_DEFAULT_STATE_), OCP_MIN_DELAY(OCP_MIN_DELAY_), OCP_DEFAULT_DELAY(OCP_DEFAULT_DELAY_), OCP_MAX_DELAY(OCP_MAX_DELAY_),
     OPP_DEFAULT_STATE(OPP_DEFAULT_STATE_), OPP_MIN_DELAY(OPP_MIN_DELAY_), OPP_DEFAULT_DELAY(OPP_DEFAULT_DELAY_), OPP_MAX_DELAY(OPP_MAX_DELAY_), OPP_MIN_LEVEL(OPP_MIN_LEVEL_), OPP_DEFAULT_LEVEL(OPP_DEFAULT_LEVEL_), OPP_MAX_LEVEL(OPP_MAX_LEVEL_),
     SOA_VIN(SOA_VIN_), SOA_PREG_CURR(SOA_PREG_CURR_), SOA_POSTREG_PTOT(SOA_POSTREG_PTOT_), PTOT(PTOT_),
-    ioexp(*this),
+    ioexp(*this, IO_BIT_OUT_SET_100_PERCENT_, IO_BIT_OUT_EXT_PROG_),
     adc(*this),
     dac(*this),
 	onTimeCounter(index_)
@@ -520,7 +524,7 @@ void Channel::updateCcAndCvSwitch() {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     board::cvLedSwitch(this, isCvMode());
     board::ccLedSwitch(this, isCcMode());
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
     bp::cvLedSwitch(this, isCvMode());
     bp::ccLedSwitch(this, isCcMode());
 #endif
@@ -660,7 +664,7 @@ void Channel::doRemoteProgrammingEnable(bool enable) {
         prot_conf.u_level = U_MAX;
 		prot_conf.flags.u_state = true;
     }
-    ioexp.change_bit(IOExpander::IO_BIT_OUT_EXT_PROG, enable);
+    ioexp.change_bit(ioexp.IO_BIT_OUT_EXT_PROG, enable);
     bp::switchProg(this, enable);
     setOperBits(OPER_ISUM_RPROG_ON, enable);
 }
@@ -695,14 +699,14 @@ bool Channel::doLowRippleEnable(bool enable, bool callIsAllowed) {
     if (enable) {
         if (!callIsAllowed || isLowRippleAllowed()) {
             flags.lripple_enabled = true;
-            ioexp.change_bit(IOExpander::IO_BIT_OUT_SET_100_PERCENT, !flags.lripple_enabled);
+            ioexp.change_bit(ioexp.IO_BIT_OUT_SET_100_PERCENT, !flags.lripple_enabled);
             return true;
         } else {
             return false;
         }
     } else {
         flags.lripple_enabled = false;
-        ioexp.change_bit(IOExpander::IO_BIT_OUT_SET_100_PERCENT, !flags.lripple_enabled);
+        ioexp.change_bit(ioexp.IO_BIT_OUT_SET_100_PERCENT, !flags.lripple_enabled);
         return true;
     }
 }

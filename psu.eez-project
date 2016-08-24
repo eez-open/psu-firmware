@@ -49060,7 +49060,7 @@
                   "type": "Text",
                   "action": "keypad_back",
                   "x": 180,
-                  "y": 45,
+                  "y": 2,
                   "style": "key_icons",
                   "text": "<",
                   "width": 60,
@@ -49093,16 +49093,6 @@
                   "y": 45,
                   "style": "key",
                   "text": "6",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "keypad_clear",
-                  "x": 180,
-                  "y": 88,
-                  "style": "key_icons",
-                  "text": "C",
                   "width": 60,
                   "height": 43
                 },
@@ -49141,7 +49131,7 @@
                   "data": "edit_unit",
                   "action": "keypad_unit",
                   "x": 180,
-                  "y": 2,
+                  "y": 45,
                   "style": "key",
                   "width": 60,
                   "height": 43
@@ -49173,6 +49163,26 @@
                   "y": 131,
                   "style": "key_icons",
                   "text": "-",
+                  "width": 60,
+                  "height": 43
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_clear",
+                  "x": 180,
+                  "y": 131,
+                  "style": "key",
+                  "text": "def",
+                  "width": 60,
+                  "height": 43
+                },
+                {
+                  "type": "Text",
+                  "action": "keypad_clear",
+                  "x": 180,
+                  "y": 88,
+                  "style": "key",
+                  "text": "max",
                   "width": 60,
                   "height": 43
                 }
@@ -49476,17 +49486,7 @@
             },
             {
               "type": "Text",
-              "text": "Shutdown when trip",
-              "x": 12,
-              "y": 175,
-              "width": 155,
-              "height": 29,
-              "style": "edit_value_S_left",
-              "action": "show_ch_settings_prot_clear"
-            },
-            {
-              "type": "Text",
-              "text": "Current (OCP)",
+              "text": "Current limit and OCP",
               "x": 12,
               "y": 59,
               "width": 180,
@@ -49496,7 +49496,7 @@
             },
             {
               "type": "Text",
-              "text": "Voltage (OVP)",
+              "text": "Voltage limit and OVP",
               "x": 12,
               "y": 88,
               "width": 180,
@@ -49506,7 +49506,7 @@
             },
             {
               "type": "Text",
-              "text": "Power (OPP)",
+              "text": "Power limit and OPP",
               "x": 12,
               "y": 117,
               "width": 180,
@@ -49578,16 +49578,6 @@
               "x": 12,
               "y": 30,
               "width": 180,
-              "height": 29,
-              "style": "edit_value_active_S_left",
-              "action": "show_ch_settings_prot_clear"
-            },
-            {
-              "type": "Text",
-              "text": "OFF",
-              "x": 167,
-              "y": 175,
-              "width": 73,
               "height": 29,
               "style": "edit_value_active_S_left",
               "action": "show_ch_settings_prot_clear"
@@ -49976,11 +49966,11 @@
             },
             {
               "type": "Text",
-              "text": "State:",
+              "text": "OVP:",
               "x": 16,
-              "y": 32,
+              "y": 67,
               "width": 84,
-              "height": 42,
+              "height": 40,
               "style": "edit_value_left"
             },
             {
@@ -49992,7 +49982,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 42,
+                  "height": 40,
                   "style": "edit_value_active_left",
                   "action": "ch_settings_prot_toggle_state"
                 },
@@ -50002,54 +49992,54 @@
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 42,
+                  "height": 40,
                   "style": "edit_value_active_left",
                   "action": "ch_settings_prot_toggle_state"
                 }
               ],
               "x": 104,
-              "y": 32,
+              "y": 67,
               "width": 60,
-              "height": 42,
+              "height": 40,
               "style": "default",
               "data": "channel.protection.ovp.state"
             },
             {
               "type": "Text",
               "text": "Level:",
-              "x": 16,
-              "y": 74,
-              "width": 84,
-              "height": 42,
-              "style": "edit_value_left"
+              "x": 35,
+              "y": 107,
+              "width": 59,
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.ovp.level",
               "x": 104,
-              "y": 74,
-              "width": 136,
-              "height": 42,
-              "style": "edit_value_active_left",
+              "y": 107,
+              "width": 109,
+              "height": 28,
+              "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_level"
             },
             {
               "type": "Text",
               "text": "Delay:",
-              "x": 16,
-              "y": 114,
-              "width": 84,
-              "height": 42,
-              "style": "edit_value_left"
+              "x": 35,
+              "y": 135,
+              "width": 59,
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.ovp.delay",
               "x": 104,
-              "y": 114,
-              "width": 136,
-              "height": 42,
-              "style": "edit_value_active_left",
+              "y": 135,
+              "width": 109,
+              "height": 28,
+              "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_delay"
             },
             {
@@ -50057,7 +50047,7 @@
               "action": "ch_settings_prot_discard",
               "style": "non_interactive_button_S",
               "x": 117,
-              "y": 160,
+              "y": 163,
               "text": " Discard",
               "width": 96,
               "height": 36
@@ -50067,7 +50057,7 @@
               "action": "ch_settings_prot_set",
               "style": "non_interactive_button_S",
               "x": 16,
-              "y": 160,
+              "y": 163,
               "text": "~ Set",
               "width": 101,
               "height": 36
@@ -50114,12 +50104,30 @@
             },
             {
               "type": "Text",
-              "text": "Set over-voltage protection",
+              "text": "Set voltage protection",
               "x": 6,
               "y": 0,
               "width": 228,
-              "height": 32,
+              "height": 27,
               "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Limit:",
+              "x": 16,
+              "y": 27,
+              "width": 84,
+              "height": 40,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Text",
+              "text": "30.50 V",
+              "x": 104,
+              "y": 30,
+              "width": 136,
+              "height": 32,
+              "style": "edit_value_active_left"
             }
           ]
         },
@@ -50275,11 +50283,11 @@
             },
             {
               "type": "Text",
-              "text": "State:",
+              "text": "OCP:",
               "x": 16,
-              "y": 32,
+              "y": 67,
               "width": 84,
-              "height": 42,
+              "height": 40,
               "style": "edit_value_left"
             },
             {
@@ -50291,7 +50299,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 42,
+                  "height": 40,
                   "style": "edit_value_active_left",
                   "action": "ch_settings_prot_toggle_state"
                 },
@@ -50301,23 +50309,23 @@
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 42,
+                  "height": 40,
                   "style": "edit_value_active_left",
                   "action": "ch_settings_prot_toggle_state"
                 }
               ],
               "x": 104,
-              "y": 32,
+              "y": 67,
               "width": 60,
-              "height": 42,
+              "height": 40,
               "style": "default",
               "data": "channel.protection.ocp.state"
             },
             {
               "type": "Text",
               "text": "Delay:",
-              "x": 16,
-              "y": 74,
+              "x": 35,
+              "y": 107,
               "width": 84,
               "height": 42,
               "style": "edit_value_left"
@@ -50325,9 +50333,9 @@
             {
               "type": "DisplayData",
               "data": "channel.protection.ocp.delay",
-              "x": 104,
-              "y": 74,
-              "width": 136,
+              "x": 121,
+              "y": 107,
+              "width": 119,
               "height": 42,
               "style": "edit_value_active_left",
               "action": "ch_settings_prot_edit_delay"
@@ -50337,7 +50345,7 @@
               "action": "ch_settings_prot_discard",
               "style": "non_interactive_button_S",
               "x": 117,
-              "y": 160,
+              "y": 163,
               "text": " Discard",
               "width": 96,
               "height": 36
@@ -50347,7 +50355,7 @@
               "action": "ch_settings_prot_set",
               "style": "non_interactive_button_S",
               "x": 16,
-              "y": 160,
+              "y": 163,
               "text": "~ Set",
               "width": 101,
               "height": 36
@@ -50394,12 +50402,30 @@
             },
             {
               "type": "Text",
-              "text": "Set over-current protection",
+              "text": "Set current protection",
               "x": 6,
               "y": 0,
               "width": 228,
-              "height": 32,
+              "height": 27,
               "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Limit:",
+              "x": 16,
+              "y": 27,
+              "width": 84,
+              "height": 40,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Text",
+              "text": "5.00 A",
+              "x": 104,
+              "y": 30,
+              "width": 136,
+              "height": 32,
+              "style": "edit_value_active_left"
             }
           ]
         },
@@ -50555,11 +50581,11 @@
             },
             {
               "type": "Text",
-              "text": "State:",
+              "text": "OPP:",
               "x": 16,
-              "y": 32,
+              "y": 67,
               "width": 84,
-              "height": 42,
+              "height": 40,
               "style": "edit_value_left"
             },
             {
@@ -50571,7 +50597,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 42,
+                  "height": 40,
                   "style": "edit_value_active_left",
                   "action": "ch_settings_prot_toggle_state"
                 },
@@ -50581,13 +50607,13 @@
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 42,
+                  "height": 40,
                   "style": "edit_value_active_left",
                   "action": "ch_settings_prot_toggle_state"
                 }
               ],
               "x": 104,
-              "y": 32,
+              "y": 67,
               "width": 60,
               "height": 42,
               "style": "default",
@@ -50596,39 +50622,39 @@
             {
               "type": "Text",
               "text": "Level:",
-              "x": 16,
-              "y": 74,
-              "width": 84,
-              "height": 42,
-              "style": "edit_value_left"
+              "x": 37,
+              "y": 107,
+              "width": 59,
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.opp.level",
               "x": 104,
-              "y": 74,
-              "width": 136,
-              "height": 42,
-              "style": "edit_value_active_left",
+              "y": 107,
+              "width": 109,
+              "height": 28,
+              "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_level"
             },
             {
               "type": "Text",
               "text": "Delay:",
-              "x": 16,
-              "y": 114,
-              "width": 84,
-              "height": 42,
-              "style": "edit_value_left"
+              "x": 37,
+              "y": 135,
+              "width": 59,
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.opp.delay",
               "x": 104,
-              "y": 114,
-              "width": 136,
-              "height": 42,
-              "style": "edit_value_active_left",
+              "y": 135,
+              "width": 109,
+              "height": 28,
+              "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_delay"
             },
             {
@@ -50636,7 +50662,7 @@
               "action": "ch_settings_prot_discard",
               "style": "non_interactive_button_S",
               "x": 117,
-              "y": 160,
+              "y": 163,
               "text": " Discard",
               "width": 96,
               "height": 36
@@ -50646,7 +50672,7 @@
               "action": "ch_settings_prot_set",
               "style": "non_interactive_button_S",
               "x": 16,
-              "y": 160,
+              "y": 163,
               "text": "~ Set",
               "width": 101,
               "height": 36
@@ -50693,12 +50719,30 @@
             },
             {
               "type": "Text",
-              "text": "Set over-power protection",
+              "text": "Set power protection",
               "x": 6,
               "y": 0,
               "width": 228,
-              "height": 32,
+              "height": 27,
               "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Limit:",
+              "x": 16,
+              "y": 27,
+              "width": 84,
+              "height": 40,
+              "style": "edit_value_left"
+            },
+            {
+              "type": "Text",
+              "text": "100 W",
+              "x": 104,
+              "y": 30,
+              "width": 136,
+              "height": 32,
+              "style": "edit_value_active_left"
             }
           ]
         },
@@ -50854,9 +50898,9 @@
             },
             {
               "type": "Text",
-              "text": "State:",
+              "text": "OTP:",
               "x": 16,
-              "y": 32,
+              "y": 27,
               "width": 84,
               "height": 42,
               "style": "edit_value_left"
@@ -50870,7 +50914,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 42,
+                  "height": 40,
                   "style": "edit_value_active_left",
                   "action": "ch_settings_prot_toggle_state"
                 },
@@ -50880,41 +50924,41 @@
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 42,
+                  "height": 40,
                   "style": "edit_value_active_left",
                   "action": "ch_settings_prot_toggle_state"
                 }
               ],
-              "x": 104,
-              "y": 32,
+              "x": 112,
+              "y": 27,
               "width": 60,
-              "height": 42,
+              "height": 40,
               "style": "default",
               "data": "channel.protection.otp.state"
             },
             {
               "type": "Text",
               "text": "Level:",
-              "x": 16,
-              "y": 74,
+              "x": 35,
+              "y": 69,
               "width": 84,
-              "height": 42,
+              "height": 40,
               "style": "edit_value_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.otp.level",
-              "x": 104,
-              "y": 74,
+              "x": 112,
+              "y": 69,
               "width": 136,
-              "height": 42,
+              "height": 40,
               "style": "edit_value_active_left",
               "action": "ch_settings_prot_edit_level"
             },
             {
               "type": "Text",
               "text": "Delay:",
-              "x": 16,
+              "x": 35,
               "y": 114,
               "width": 84,
               "height": 42,
@@ -50923,9 +50967,9 @@
             {
               "type": "DisplayData",
               "data": "channel.protection.otp.delay",
-              "x": 104,
+              "x": 112,
               "y": 114,
-              "width": 136,
+              "width": 119,
               "height": 42,
               "style": "edit_value_active_left",
               "action": "ch_settings_prot_edit_delay"
@@ -50935,7 +50979,7 @@
               "action": "ch_settings_prot_discard",
               "style": "non_interactive_button_S",
               "x": 117,
-              "y": 160,
+              "y": 163,
               "text": " Discard",
               "width": 96,
               "height": 36
@@ -50945,7 +50989,7 @@
               "action": "ch_settings_prot_set",
               "style": "non_interactive_button_S",
               "x": 16,
-              "y": 160,
+              "y": 163,
               "text": "~ Set",
               "width": 101,
               "height": 36
@@ -50996,7 +51040,7 @@
               "x": 6,
               "y": 0,
               "width": 228,
-              "height": 32,
+              "height": 27,
               "style": "value_S"
             }
           ]
@@ -51205,7 +51249,7 @@
               "type": "Text",
               "text": "Remote sensing",
               "x": 12,
-              "y": 96,
+              "y": 60,
               "width": 180,
               "height": 32,
               "style": "edit_value_active_S_left",
@@ -51215,7 +51259,7 @@
               "type": "Text",
               "text": "Remote programming",
               "x": 12,
-              "y": 128,
+              "y": 92,
               "width": 180,
               "height": 32,
               "style": "edit_value_active_S_left",
@@ -51225,20 +51269,10 @@
               "type": "Text",
               "text": "Coupling / Tracking",
               "x": 12,
-              "y": 160,
+              "y": 124,
               "width": 180,
               "height": 34,
               "style": "default_disabled_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "Output limits",
-              "x": 12,
-              "y": 62,
-              "width": 180,
-              "height": 34,
-              "style": "edit_value_active_S_left",
-              "action": "show_ch_settings_adv_limits"
             },
             {
               "type": "Text",
@@ -53154,6 +53188,26 @@
               "width": 180,
               "height": 28,
               "style": "default_disabled_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Shutdown when trip",
+              "x": 12,
+              "y": 170,
+              "width": 155,
+              "height": 29,
+              "style": "edit_value_S_left",
+              "action": "show_ch_settings_prot_clear"
+            },
+            {
+              "type": "Text",
+              "text": "OFF",
+              "x": 167,
+              "y": 170,
+              "width": 73,
+              "height": 29,
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_clear"
             }
           ],
           "x": 0,
@@ -55730,7 +55784,7 @@
           "page": "main"
         },
         {
-          "x": 419,
+          "x": 422,
           "y": 316,
           "page": "ch_settings_prot"
         },
@@ -56099,7 +56153,7 @@
           "screenOrientation": "portrait"
         },
         {
-          "name": "R2B6",
+          "name": "R3B4",
           "screenOrientation": "landscape"
         }
       ],

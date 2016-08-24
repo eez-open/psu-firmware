@@ -159,7 +159,7 @@ void Snapshot::takeSnapshot() {
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 		channelSnapshots[i].flags.otp_ch = 0;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 		temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + i];
         if (!tempSensor.isInstalled() || !tempSensor.isTestOK() || !tempSensor.prot_conf.state) channelSnapshots[i].flags.otp_ch = 0;
         else if (!tempSensor.isTripped()) channelSnapshots[i].flags.otp_ch = 1;

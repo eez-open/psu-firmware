@@ -40,7 +40,7 @@
 
 #define BP_STANDBY            15
 
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 
 #define BP_LED_OUT1           2
 #define BP_LED_OUT1_RED       3
@@ -82,7 +82,7 @@ void switchSense(Channel *channel, bool on);
 
 void switchProg(Channel *channel, bool on);
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 void cvLedSwitch(Channel *channel, bool on);
 void ccLedSwitch(Channel *channel, bool on);
 #endif

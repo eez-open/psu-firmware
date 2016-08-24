@@ -33,7 +33,7 @@ struct ChannelData {
     bool sense_plus;
     bool sense_minus;
     bool out_minus;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R2B6
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
     bool out;
 	bool sense;
 	bool prog;

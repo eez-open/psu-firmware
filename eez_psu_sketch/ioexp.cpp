@@ -57,7 +57,15 @@ static void ioexp_interrupt_ch2() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-IOExpander::IOExpander(Channel &channel_) : channel(channel_) {
+IOExpander::IOExpander(
+    Channel &channel_, 
+    uint8_t IO_BIT_OUT_SET_100_PERCENT_,
+    uint8_t IO_BIT_OUT_EXT_PROG_
+)
+    : channel(channel_)
+    , IO_BIT_OUT_SET_100_PERCENT(IO_BIT_OUT_SET_100_PERCENT_)
+    , IO_BIT_OUT_EXT_PROG(IO_BIT_OUT_EXT_PROG_)
+{
     test_result = psu::TEST_SKIPPED;
 	gpio = channel.ioexp_gpio_init;
 }
