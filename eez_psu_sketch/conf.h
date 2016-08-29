@@ -69,6 +69,9 @@ option.
 /// Is main temperature sensor present?
 #define OPTION_MAIN_TEMP_SENSOR 1
 
+/// Generate square wave of frequency 330kHz on SYNC_MASTER pin
+#define OPTION_SYNC_MASTER 1
+
 /// Maximum number of channels existing.
 #define CH_MAX 2
 

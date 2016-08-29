@@ -89,6 +89,8 @@ void init() {
     while (!Serial);
 #endif
 
+	while (Serial.available());
+
 #ifdef EEZ_PSU_SIMULATOR
     Serial.print("EEZ PSU software simulator ver. ");
     Serial.println(FIRMWARE);

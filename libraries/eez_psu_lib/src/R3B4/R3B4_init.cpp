@@ -27,7 +27,7 @@ void eez_psu_R3B4_init() {
     // WATCHDOG pin must not be defined here! 
     //pinMode(WATCHDOG, OUTPUT);
 
-    pinMode(WIFI_CE, OUTPUT);
+    //pinMode(WIFI_CE, OUTPUT);
 
     pinMode(FAN_PWM, OUTPUT);
     pinMode(LCD_BRIGHTNESS, OUTPUT);

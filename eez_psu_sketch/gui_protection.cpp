@@ -98,6 +98,7 @@ void editOPP() {
 }
 
 void editOTP() {
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	state = temperature::getChannelSensorState(g_channel) ? 1 : 0;
 
 	level = data::Value(temperature::getChannelSensorLevel(g_channel), data::VALUE_TYPE_FLOAT_SECOND);
@@ -110,6 +111,7 @@ void editOTP() {
 
 	editPage = PAGE_ID_CH_SETTINGS_PROT_OTP;
 	showPage(editPage);
+#endif
 }
 
 data::Value getData(const data::Cursor &cursor, uint8_t id) {
@@ -175,11 +177,14 @@ void set() {
 		g_channel->prot_conf.flags.p_state = state;
 		g_channel->prot_conf.p_level = level.getFloat();
 		g_channel->prot_conf.p_delay = delay.getFloat();
-	} else if (editPage == PAGE_ID_CH_SETTINGS_PROT_OTP) {
+	} 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4	
+	else if (editPage == PAGE_ID_CH_SETTINGS_PROT_OTP) {
 		temperature::setChannelSensorState(g_channel, state ? true : false);
 		temperature::setChannelSensorLevel(g_channel, level.getFloat());
 		temperature::setChannelSensorDelay(g_channel, delay.getFloat());
 	}
+#endif
 	
 	profile::save();
 	

@@ -127,6 +127,11 @@ inline const int getWidgetStyleId(const Widget *widget) {
     arduino_util::prog_read_buffer(document + (widget)->style, (uint8_t *)&var##_buffer, sizeof(Style)); \
     const Style *var = &var##_buffer
 
+#define DECL_STYLE_WITH_OFFSET(var, styleOffset) \
+    Style var##_buffer; \
+    arduino_util::prog_read_buffer(document + (styleOffset), (uint8_t *)&var##_buffer, sizeof(Style)); \
+    const Style *var = &var##_buffer
+
 #define DECL_STYLE(var, styleId) \
     Style var##_buffer; \
     arduino_util::prog_read_buffer(document + g_doc->styles.first + (styleId) * sizeof(Style), (uint8_t *)&var##_buffer, sizeof(Style)); \

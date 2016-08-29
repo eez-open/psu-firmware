@@ -21,7 +21,8 @@
 
 static const uint8_t TOUCH_IRQ = 2;
 static const uint8_t TOUCH_DOUT = 3;
-static const uint8_t WIFI_CE = 4;
+//static const uint8_t WIFI_CE = 4;
+static const uint8_t SYNC_MASTER = 4;
 static const uint8_t WATCHDOG = 5;
 static const uint8_t FAN_PWM = 6;
 static const uint8_t LCD_BRIGHTNESS = 7;
