@@ -897,6 +897,7 @@ void Channel::setVoltageLimit(float limit) {
 	if (u.set > u.limit) {
 		setVoltage(u.limit);
 	}
+	profile::save();
 }
 
 float Channel::getCurrentLimit() const {
@@ -934,6 +935,7 @@ void Channel::setCurrentLimit(float limit) {
 	if (i.set > i.limit) {
 		setCurrent(i.limit);
 	}
+	profile::save();
 }
 
 float Channel::getPowerLimit() const {
@@ -950,6 +952,7 @@ void Channel::setPowerLimit(float limit) {
 		//setVoltage(p_limit / i.set);
 		setCurrent(p_limit / u.set);
 	}
+	profile::save();
 }
 
 #if !CONF_SKIP_PWRGOOD_TEST

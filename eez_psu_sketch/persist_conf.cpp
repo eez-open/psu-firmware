@@ -38,7 +38,7 @@ enum PersistConfSection {
 
 static const uint16_t DEV_CONF_VERSION = 0x0005L;
 static const uint16_t CH_CAL_CONF_VERSION = 0x0001L;
-static const uint16_t PROFILE_VERSION = 0x0003L;
+static const uint16_t PROFILE_VERSION = 0x0004L;
 
 static const uint16_t PERSIST_CONF_DEVICE_ADDRESS = 1024;
 
