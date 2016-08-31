@@ -118,6 +118,14 @@ void action_keypad_unit() {
     keypad::unit();
 }
 
+void action_keypad_max() {
+    keypad::setMaxValue();
+}
+
+void action_keypad_def() {
+    keypad::setDefaultValue();
+}
+
 void action_touch_screen_calibration() {
     touch::calibration::enterCalibrationMode();
 }
@@ -308,6 +316,8 @@ ACTION actions[] = {
     action_keypad_cancel,
     action_keypad_sign,
     action_keypad_unit,
+    action_keypad_max,
+    action_keypad_def,
     action_touch_screen_calibration,
     action_yes,
     action_no,

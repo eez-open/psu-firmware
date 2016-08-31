@@ -198,6 +198,16 @@
       "description": "0 - lower case\n1 - upper case"
     },
     {
+      "name": "keypad_max_enabled",
+      "defaultValue": "1",
+      "description": "Is \"max\" key on numeric keypad enabled?"
+    },
+    {
+      "name": "keypad_def_enabled",
+      "defaultValue": "1",
+      "description": "Is \"def\" key on numeric keypad enabled?"
+    },
+    {
       "name": "cal_ch_u_min",
       "defaultValue": "0.12 V"
     },
@@ -376,6 +386,16 @@
       "name": "keypad_unit",
       "implementationType": "native",
       "implementation": "keypad::unit();"
+    },
+    {
+      "name": "keypad_max",
+      "implementationType": "native",
+      "implementation": "keypad::setMaxValue();"
+    },
+    {
+      "name": "keypad_def",
+      "implementationType": "native",
+      "implementation": "keypad::setDefaultValue();"
     },
     {
       "name": "touch_screen_calibration",
@@ -43882,6 +43902,12 @@
         "inheritFrom": "default_edit_inverse"
       },
       {
+        "name": "key_disabled",
+        "_backgroundColor": "#ffff00",
+        "inheritFrom": "key",
+        "_color": "#ffff00"
+      },
+      {
         "name": "key_spec",
         "_backgroundColor": "#e9f5f9",
         "_borderSize": 1,
@@ -46590,8 +46616,8 @@
           "style": "error_alert"
         },
         "landscape": {
-          "x": 0,
-          "y": 0,
+          "x": 20,
+          "y": 76,
           "width": 280,
           "height": 88,
           "widgets": [
@@ -46651,8 +46677,8 @@
           "style": "error_alert"
         },
         "landscape": {
-          "x": 0,
-          "y": 0,
+          "x": 20,
+          "y": 76,
           "width": 280,
           "height": 88,
           "widgets": [
@@ -49097,6 +49123,16 @@
                   "height": 43
                 },
                 {
+                  "type": "DisplayData",
+                  "data": "edit_unit",
+                  "action": "keypad_unit",
+                  "x": 180,
+                  "y": 45,
+                  "style": "key",
+                  "width": 60,
+                  "height": 43
+                },
+                {
                   "type": "Text",
                   "action": "keypad_key",
                   "x": 0,
@@ -49127,14 +49163,16 @@
                   "height": 43
                 },
                 {
-                  "type": "DisplayData",
-                  "data": "edit_unit",
-                  "action": "keypad_unit",
+                  "type": "Button",
                   "x": 180,
-                  "y": 45,
-                  "style": "key",
+                  "y": 88,
                   "width": 60,
-                  "height": 43
+                  "height": 43,
+                  "style": "key",
+                  "text": "max",
+                  "action": "keypad_max",
+                  "enabled": "keypad_max_enabled",
+                  "disabledStyle": "key_disabled"
                 },
                 {
                   "type": "Text",
@@ -49167,24 +49205,16 @@
                   "height": 43
                 },
                 {
-                  "type": "Text",
-                  "action": "keypad_clear",
+                  "type": "Button",
                   "x": 180,
                   "y": 131,
+                  "width": 60,
+                  "height": 43,
                   "style": "key",
                   "text": "def",
-                  "width": 60,
-                  "height": 43
-                },
-                {
-                  "type": "Text",
-                  "action": "keypad_clear",
-                  "x": 180,
-                  "y": 88,
-                  "style": "key",
-                  "text": "max",
-                  "width": 60,
-                  "height": 43
+                  "action": "keypad_def",
+                  "enabled": "keypad_def_enabled",
+                  "disabledStyle": "key_disabled"
                 }
               ],
               "width": 240,

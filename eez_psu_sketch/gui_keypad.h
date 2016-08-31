@@ -56,6 +56,8 @@ void back();
 void clear();
 void sign();
 void unit();
+void setMaxValue();
+void setDefaultValue();
 void ok();
 void cancel();
 

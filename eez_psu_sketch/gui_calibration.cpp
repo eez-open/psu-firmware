@@ -247,9 +247,9 @@ void set() {
 		psu::calibration::Value *calibrationValue = getCalibrationValue();
 
 		if (calibrationValue == &psu::calibration::voltage) {
-			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_VOLT, g_channel->U_MIN, g_channel->U_MAX, onSetOk, showCurrentStep, false);
+			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_VOLT, g_channel->U_MIN, g_channel->U_MAX, false, 0, false, onSetOk, showCurrentStep, false);
 		} else {
-			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_AMPER, g_channel->I_MIN, g_channel->I_MAX, onSetOk, showCurrentStep, false);
+			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_AMPER, g_channel->I_MIN, g_channel->I_MAX, false, 0, false, onSetOk, showCurrentStep, false);
 		}
 	} else if (g_stepNum == 6) {
 		keypad::start(0, psu::calibration::isRemarkSet() ? psu::calibration::getRemark() : 0, 32, false, onSetRemarkOk, showCurrentStep);

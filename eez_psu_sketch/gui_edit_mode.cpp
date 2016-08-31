@@ -104,7 +104,7 @@ void enter(int tabIndex_) {
         maxValue = data::getMax(dataCursor, dataId);
 
         if (tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
-            numeric_keypad::init(0, editValue.getType(), minValue.getFloat(), maxValue.getFloat(), onKeypadOk, 0, false);
+            numeric_keypad::init(0, editValue.getType(), minValue.getFloat(), maxValue.getFloat(), false, 0, false, onKeypadOk, 0, false);
         }
 
         psu::enterTimeCriticalMode();

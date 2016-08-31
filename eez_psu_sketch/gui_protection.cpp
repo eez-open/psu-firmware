@@ -37,10 +37,12 @@ static int state;
 static data::Value level;
 static float minLevel;
 static float maxLevel;
+static float defLevel;
 
 static data::Value delay;
 static float minDelay;
 static float maxDelay;
+static float defaultDelay;
 
 void clear() {
 	g_channel->clearProtection();
@@ -62,10 +64,12 @@ void editOVP() {
 	level = data::Value(g_channel->prot_conf.u_level, data::VALUE_TYPE_FLOAT_VOLT);
 	minLevel = g_channel->u.set;
 	maxLevel = g_channel->U_MAX;
+	defLevel = g_channel->U_MAX;
 
 	delay = data::Value(g_channel->prot_conf.u_delay, data::VALUE_TYPE_FLOAT_SECOND);
 	minDelay = g_channel->OVP_MIN_DELAY;
 	maxDelay = g_channel->OVP_MAX_DELAY;
+	defaultDelay = g_channel->OVP_DEFAULT_DELAY;
 
 	editPage = PAGE_ID_CH_SETTINGS_PROT_OVP;
 	showPage(editPage);
@@ -77,6 +81,7 @@ void editOCP() {
 	delay = data::Value(g_channel->prot_conf.i_delay, data::VALUE_TYPE_FLOAT_SECOND);
 	minDelay = g_channel->OCP_MIN_DELAY;
 	maxDelay = g_channel->OCP_MAX_DELAY;
+	defaultDelay = g_channel->OCP_DEFAULT_DELAY;
 
 	editPage = PAGE_ID_CH_SETTINGS_PROT_OCP;
 	showPage(editPage);
@@ -88,10 +93,12 @@ void editOPP() {
 	level = data::Value(g_channel->prot_conf.p_level, data::VALUE_TYPE_FLOAT_WATT);
 	minLevel = g_channel->OPP_MIN_LEVEL;
 	maxLevel = g_channel->OPP_MAX_LEVEL;
+	defLevel = g_channel->OPP_DEFAULT_LEVEL;
 
 	delay = data::Value(g_channel->prot_conf.p_delay, data::VALUE_TYPE_FLOAT_SECOND);
 	minDelay = g_channel->OPP_MIN_DELAY;
 	maxDelay = g_channel->OPP_MAX_DELAY;
+	defaultDelay = g_channel->OPP_DEFAULT_DELAY;
 
 	editPage = PAGE_ID_CH_SETTINGS_PROT_OPP;
 	showPage(editPage);
@@ -104,10 +111,12 @@ void editOTP() {
 	level = data::Value(temperature::getChannelSensorLevel(g_channel), data::VALUE_TYPE_FLOAT_CELSIUS);
 	minLevel = OTP_MAIN_MIN_LEVEL;
 	maxLevel = OTP_MAIN_MAX_LEVEL;
+	defLevel = OTP_MAIN_DEFAULT_LEVEL;
 
 	delay = data::Value(temperature::getChannelSensorDelay(g_channel), data::VALUE_TYPE_FLOAT_SECOND);
 	minDelay = OTP_MAIN_MIN_DELAY;
 	maxDelay = OTP_MAIN_MAX_DELAY;
+	defaultDelay = OTP_MAIN_DEFAULT_DELAY;
 
 	editPage = PAGE_ID_CH_SETTINGS_PROT_OTP;
 	showPage(editPage);
@@ -153,7 +162,7 @@ void onLevelSet(float value) {
 }
 
 void editLevel() {
-	numeric_keypad::start(0, level.getType(), minLevel, maxLevel, onLevelSet, showPreviousPage, true);
+	numeric_keypad::start(0, level.getType(), minLevel, maxLevel, true, defLevel, true, onLevelSet, showPreviousPage, true);
 }
 
 void onDelaySet(float value) {
@@ -162,7 +171,7 @@ void onDelaySet(float value) {
 }
 
 void editDelay() {
-	numeric_keypad::start(0, delay.getType(), minDelay, maxDelay, onDelaySet, showPreviousPage, true);
+	numeric_keypad::start(0, delay.getType(), minDelay, maxDelay, true, defaultDelay, true, onDelaySet, showPreviousPage, true);
 }
 
 void set() {

@@ -119,7 +119,12 @@ data::Value Snapshot::get(uint8_t id) {
 		return isUpperCase ? 1 : 0;
 	} else if (id == DATA_ID_EDIT_UNIT) {
         return keypadUnit;
-    } 
+    } else if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+		data::Value value = numeric_keypad::getData(id);
+		if (value.getType() != data::VALUE_TYPE_NONE) {
+			return value;
+		}
+	}
 
 	return data::Value();
 }
@@ -221,6 +226,20 @@ void sign() {
 void unit() {
 	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
 		numeric_keypad::unit();
+	} else {
+	}
+}
+
+void setMaxValue() {
+	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+		numeric_keypad::setMaxValue();
+	} else {
+	}
+}
+
+void setDefaultValue() {
+	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+		numeric_keypad::setDefaultValue();
 	} else {
 	}
 }

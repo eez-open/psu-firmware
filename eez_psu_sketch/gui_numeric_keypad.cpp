@@ -55,6 +55,9 @@ static data::ValueType g_editUnit = data::VALUE_TYPE_NONE;
 
 static float g_min;
 static float g_max;
+static bool g_maxButtonEnabled;
+static float g_def;
+static bool g_defButtonEnabled;
 static bool g_genericNumberKeypad;
 
 bool isMilli();
@@ -63,12 +66,15 @@ void reset();
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void init(const char *label, data::ValueType editUnit, float min, float max, void (*ok)(float), void (*cancel)(), bool genericNumberKeypad) {
+void init(const char *label, data::ValueType editUnit, float min, float max, bool maxButtonEnabled, float def, bool defButtonEnabled, void (*ok)(float), void (*cancel)(), bool genericNumberKeypad) {
 	keypad::init(label, (void (*)(char *))ok, cancel);
 
 	g_editUnit = editUnit;
 	g_min = min;
 	g_max = max;
+	g_maxButtonEnabled = maxButtonEnabled;
+	g_def = def;
+	g_defButtonEnabled = defButtonEnabled;
 	g_genericNumberKeypad = genericNumberKeypad;
 	if (g_genericNumberKeypad) {
 		g_maxChars = 16;
@@ -77,8 +83,8 @@ void init(const char *label, data::ValueType editUnit, float min, float max, voi
 	reset();
 }
 
-void start(const char *label, data::ValueType editUnit, float min, float max, void (*ok)(float), void (*cancel)(), bool genericNumberKeypad) {
-	init(label, editUnit, min, max, ok, cancel, genericNumberKeypad);
+void start(const char *label, data::ValueType editUnit, float min, float max, bool maxButtonEnabled, float def, bool defButtonEnabled, void (*ok)(float), void (*cancel)(), bool genericNumberKeypad) {
+	init(label, editUnit, min, max, maxButtonEnabled, def, defButtonEnabled, ok, cancel, genericNumberKeypad);
 	showPage(PAGE_ID_NUMERIC_KEYPAD, false);
 }
 
@@ -140,6 +146,15 @@ bool getText(char *text, int count) {
 	}
 
 	return true;
+}
+data::Value getData(uint8_t id) {
+	if (id == DATA_ID_KEYPAD_MAX_ENABLED) {
+		return data::Value(g_maxButtonEnabled ? 1 : 0);
+	} else if (id == DATA_ID_KEYPAD_DEF_ENABLED) {
+		return data::Value(g_defButtonEnabled ? 1 : 0);
+	}
+
+	return data::Value();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -497,6 +512,18 @@ void unit() {
 				sound::playBeep();
 			}
 		}
+	}
+}
+
+void setMaxValue() {
+	if (g_maxButtonEnabled) {
+		((void (*)(float))g_okCallback)(g_max);
+	}
+}
+
+void setDefaultValue() {
+	if (g_defButtonEnabled) {
+		((void (*)(float))g_okCallback)(g_def);
 	}
 }
 
