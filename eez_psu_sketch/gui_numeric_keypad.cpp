@@ -135,6 +135,8 @@ bool getText(char *text, int count) {
 		strcat_P(text, PSTR("W"));
 	} else if (g_editUnit == data::VALUE_TYPE_FLOAT_SECOND) {
 		strcat_P(text, PSTR("s"));
+	} else if (g_editUnit == data::VALUE_TYPE_FLOAT_CELSIUS) {
+		strcat_P(text, PSTR("oC"));
 	}
 
 	return true;

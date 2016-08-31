@@ -101,7 +101,7 @@ void editOTP() {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	state = temperature::getChannelSensorState(g_channel) ? 1 : 0;
 
-	level = data::Value(temperature::getChannelSensorLevel(g_channel), data::VALUE_TYPE_FLOAT_SECOND);
+	level = data::Value(temperature::getChannelSensorLevel(g_channel), data::VALUE_TYPE_FLOAT_CELSIUS);
 	minLevel = OTP_MAIN_MIN_LEVEL;
 	maxLevel = OTP_MAIN_MAX_LEVEL;
 

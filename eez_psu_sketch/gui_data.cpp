@@ -92,6 +92,9 @@ void Value::toText(char *text, int count) const {
 			case VALUE_TYPE_FLOAT_SECOND:
 				unit = "s";
 				break;
+			case VALUE_TYPE_FLOAT_CELSIUS:
+				unit = "oC";
+				break;
 			}
 
 			if (unit) {

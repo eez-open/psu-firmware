@@ -108,7 +108,7 @@ void Snapshot::takeSnapshot(data::Snapshot *snapshot) {
         case data::VALUE_TYPE_FLOAT_VOLT: keypadUnit = data::Value::ProgmemStr(PSTR("mV")); break;
         case data::VALUE_TYPE_FLOAT_MILLI_VOLT: keypadUnit = data::Value::ProgmemStr(PSTR("V")); break;
         case data::VALUE_TYPE_FLOAT_AMPER: keypadUnit = data::Value::ProgmemStr(PSTR("mA")); break;
-		case data::VALUE_TYPE_FLOAT_MILLI_AMPER: keypadUnit = data::Value::ProgmemStr(PSTR("V")); break;
+		case data::VALUE_TYPE_FLOAT_MILLI_AMPER: keypadUnit = data::Value::ProgmemStr(PSTR("A")); break;
         default: keypadUnit = data::Value::ProgmemStr(PSTR(""));
         }
 	}
