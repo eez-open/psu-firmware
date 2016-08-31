@@ -38,7 +38,8 @@ extern "C" {
     X(SCPI_ERROR_DATA_OUT_OF_RANGE,                         -222, "Data out of range")                            \
     X(SCPI_ERROR_TOO_MUCH_DATA,                             -223, "Too much data")                                \
     X(SCPI_ERROR_HARDWARE_ERROR,                            -240, "Hardware error")                               \
-    X(SCPI_ERROR_CHANNEL_FAULT_DETECTED,                    -242, "Channel fault detected")                       \
+    X(SCPI_ERROR_CH1_FAULT_DETECTED,                        -242, "CH1 fault detected")                           \
+	X(SCPI_ERROR_CH2_FAULT_DETECTED,                        -243, "CH2 fault detected")                           \
     X(SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE,                  -114, "Header suffix out of range")                   \
     X(SCPI_ERROR_CHANNEL_NOT_FOUND,                          100, "Channel not found")                            \
     X(SCPI_ERROR_CALIBRATION_STATE_IS_OFF,                   101, "Calibration state is off")                     \
