@@ -540,8 +540,9 @@ void ok() {
 				((void (*)(float))g_okCallback)(value);
 			}
 		} else {
-			((void (*)(float))g_okCallback)(getValue());
-			reset();
+			if (((bool (*)(float))g_okCallback)(getValue())) {
+				reset();
+			}
 		}
 	}
 	else {

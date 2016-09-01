@@ -37,7 +37,7 @@ data::Value getCurrentValue(data::Snapshot snapshot);
 const data::Value& getMin();
 const data::Value& getMax();
 data::ValueType getUnit();
-void setValue(float value);
+bool setValue(float value);
 
 bool isEditWidget(const WidgetCursor &widgetCursor);
 void getInfoText(char *infoText);

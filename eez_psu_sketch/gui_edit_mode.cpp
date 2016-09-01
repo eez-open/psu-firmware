@@ -82,8 +82,8 @@ bool isActive() {
     return dataId != -1;
 }
 
-void onKeypadOk(float value) {
-	edit_mode::setValue(value);
+bool onKeypadOk(float value) {
+	return edit_mode::setValue(value);
 }
 
 void enter(int tabIndex_) {
@@ -104,7 +104,7 @@ void enter(int tabIndex_) {
         maxValue = data::getMax(dataCursor, dataId);
 
         if (tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
-            numeric_keypad::init(0, editValue.getType(), minValue.getFloat(), maxValue.getFloat(), false, 0, false, onKeypadOk, 0, false);
+            numeric_keypad::init(0, editValue.getType(), minValue.getFloat(), maxValue.getFloat(), false, 0, false, (void (*)(float))onKeypadOk, 0, false);
         }
 
         psu::enterTimeCriticalMode();
@@ -124,7 +124,9 @@ void exit() {
 }
 
 void nonInteractiveSet() {
-    data::set(dataCursor, dataId, editValue);
+	if (!data::set(dataCursor, dataId, editValue)) {
+		errorMessageP(PSTR("Limit exceeded!"), 0);
+	}
 }
 
 void nonInteractiveDiscard() {
@@ -162,14 +164,16 @@ data::ValueType getUnit() {
     return editValue.getType();
 }
 
-void setValue(float value_) {
+bool setValue(float value_) {
     data::Value value = data::Value(value_, getUnit());
     if (is_interactive_mode || tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
         if (!data::set(dataCursor, dataId, value)) {
-            return;
+			errorMessageP(PSTR("Limit exceeded!"), 0);
+            return false;
         }
     }
     editValue = value;
+	return true;
 }
 
 bool isEditWidget(const WidgetCursor &widgetCursor) {

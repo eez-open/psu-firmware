@@ -101,9 +101,9 @@ void test() {
                 }
             }
 
-            edit_mode::setValue(value);
-
-            changed = true;
+            if (edit_mode::setValue(value)) {
+	            changed = true;
+			}
         }
     }
 }
