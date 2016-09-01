@@ -34,6 +34,7 @@ void editOTP();
 data::Value getData(const data::Cursor &cursor, uint8_t id);
 
 void toggleState();
+void editLimit();
 void editLevel();
 void editDelay();
 void set();

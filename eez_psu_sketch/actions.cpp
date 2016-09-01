@@ -277,6 +277,10 @@ void action_ch_settings_prot_toggle_state() {
     protection::toggleState();
 }
 
+void action_ch_settings_prot_edit_limit() {
+    protection::editLimit();
+}
+
 void action_ch_settings_prot_edit_level() {
     protection::editLevel();
 }
@@ -355,6 +359,7 @@ ACTION actions[] = {
     action_ch_settings_prot_clear,
     action_ch_settings_prot_clear_and_disable,
     action_ch_settings_prot_toggle_state,
+    action_ch_settings_prot_edit_limit,
     action_ch_settings_prot_edit_level,
     action_ch_settings_prot_edit_delay,
     action_ch_settings_prot_set,
