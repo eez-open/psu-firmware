@@ -272,7 +272,7 @@ void TempSensorTemperature::protection_enter() {
 	
     set_otp_reg(true);
 
-	char message[16];
+	char message[32];
 	snprintf_P(message, sizeof(message), PSTR("%s OTP tripped"), temp_sensor::sensors[sensorIndex].name);
 	message[sizeof(message) - 1] = 0;
 	event_queue::pushEvent(event_queue::EVENT_TYPE_ERROR, message);

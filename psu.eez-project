@@ -54374,7 +54374,7 @@
                   }
                 ],
                 "x": 0,
-                "y": 11,
+                "y": 0,
                 "width": 286,
                 "height": 65,
                 "style": "default",
@@ -54382,9 +54382,9 @@
                 "action": ""
               },
               "x": 16,
-              "y": 62,
-              "width": 304,
-              "height": 60,
+              "y": 73,
+              "width": 286,
+              "height": 130,
               "style": "default",
               "data": "channels"
             },

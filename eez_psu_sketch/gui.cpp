@@ -145,8 +145,8 @@ public:
                     if (listWidget->listType == LIST_TYPE_VERTICAL) {
                         int y = stack[stack_index].y;
 
-						if (y < widget->h) {
-							DECL_WIDGET(childWidget, childWidgetOffset);
+						DECL_WIDGET(childWidget, childWidgetOffset);
+						if ((stack[stack_index].index - 1) * childWidget->h < widget->h) {
 							stack[stack_index].y += childWidget->h;
 
 							if (!push(childWidgetOffset, stack[stack_index].x, y, stack[stack_index].refresh)) {
@@ -161,8 +161,8 @@ public:
                     } else {
                         int x = stack[stack_index].x;
 
-						if (x < widget->w) {
-							DECL_WIDGET(childWidget, childWidgetOffset);
+						DECL_WIDGET(childWidget, childWidgetOffset);
+						if ((stack[stack_index].index - 1) * childWidget->w < widget->w) {
 							stack[stack_index].x += childWidget->w;
 
 							if (!push(childWidgetOffset, x, stack[stack_index].y, stack[stack_index].refresh)) {
