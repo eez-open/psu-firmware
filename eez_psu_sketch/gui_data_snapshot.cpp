@@ -286,7 +286,7 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_MESSAGE) {
 			return Value(&lastEvent);
 		}
-	} 
+	}
 	
 	if (cursor.iChannel >= 0) {
 		if (id == DATA_ID_EVENT_QUEUE_EVENTS_TYPE) {

@@ -22,6 +22,7 @@
 #include "actions.h"
 #include "devices.h"
 #include "sound.h"
+#include "event_queue.h"
 
 #include "gui.h"
 #include "gui_internal.h"
@@ -601,11 +602,12 @@ bool draw_display_data_widget(const WidgetCursor &widgetCursor, const Widget *wi
             value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
         }
 
+		data::Value previousValue;
         if (!refresh) {
             bool wasBlinking = data::previousSnapshot.isBlinking(widgetCursor.cursor, widget->data);
             refresh = isBlinking != wasBlinking;
             if (!refresh) {
-                data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
+                previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
                 refresh = value != previousValue;
             }
         }
@@ -967,6 +969,10 @@ int getActivePage() {
 
 void doShowPage(int index) {
     lcd::turnOn();
+
+	if (g_activePageId == PAGE_ID_EVENT_QUEUE && index == PAGE_ID_MAIN) {
+		event_queue::clear();
+	}
 
 	g_activePageId = index;
 

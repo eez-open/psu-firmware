@@ -91,8 +91,6 @@ void boot() {
     serial::init();
     success &= eeprom::init();
 
-	event_queue::init();
-
 	g_powerOnTimeCounter.init();
 
     persist_conf::loadDevice(); // loads global configuration parameters
@@ -102,8 +100,11 @@ void boot() {
 #endif
 
     success &= rtc::init();
-    success &= datetime::init();
-    success &= ethernet::init();
+	success &= datetime::init();
+
+	event_queue::init();
+
+	success &= ethernet::init();
 	success &= temperature::init();
 
     // load channels calibration parameters

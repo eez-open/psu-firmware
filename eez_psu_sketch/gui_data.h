@@ -82,6 +82,8 @@ struct Value {
             return const_str_ == other.const_str_;
         } else if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL) {
             return int_ == other.int_;
+        } else if (type_ == VALUE_TYPE_EVENT) {
+            return event_->type == other.event_->type && event_->dateTime == other.event_->dateTime && strcmp(event_->message, other.event_->message) == 0;
         } else {
             return float_ == other.float_;
         }

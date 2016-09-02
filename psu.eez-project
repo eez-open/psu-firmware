@@ -293,8 +293,8 @@
     },
     {
       "name": "EventQueue.lastEvent.type",
-      "defaultValue": "2",
-      "description": "0: info\n1: warning\n2: error"
+      "defaultValue": "3",
+      "description": "0: none\n1: info\n2: warning\n3: error"
     },
     {
       "name": "EventQueue.lastEvent.message",
@@ -310,8 +310,8 @@
     },
     {
       "name": "EventQueue.events.type",
-      "description": "0: info\n1: warning\n2: error",
-      "defaultValue": "2"
+      "description": "0: none\n1: info\n2: warning\n3: error",
+      "defaultValue": "3"
     },
     {
       "name": "EventQueue.events.message",
@@ -47264,6 +47264,14 @@
               "type": "Select",
               "widgets": [
                 {
+                  "type": "Rectangle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 0,
+                  "height": 0,
+                  "style": "default"
+                },
+                {
                   "type": "DisplayData",
                   "data": "EventQueue.lastEvent.message",
                   "x": 0,
@@ -47705,6 +47713,14 @@
               "itemWidget": {
                 "type": "Select",
                 "widgets": [
+                  {
+                    "type": "Rectangle",
+                    "x": 0,
+                    "y": 0,
+                    "width": 0,
+                    "height": 0,
+                    "style": "default"
+                  },
                   {
                     "type": "DisplayData",
                     "data": "EventQueue.events.message",

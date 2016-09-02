@@ -22,10 +22,10 @@ namespace eez {
 namespace psu {
 namespace event_queue {
 
-static const int EVENT_TYPE_NONE = -1;
-static const int EVENT_TYPE_INFO = 0;
-static const int EVENT_TYPE_WARNING = 1;
-static const int EVENT_TYPE_ERROR = 2;
+static const int EVENT_TYPE_NONE = 0;
+static const int EVENT_TYPE_INFO = 1;
+static const int EVENT_TYPE_WARNING = 2;
+static const int EVENT_TYPE_ERROR = 3;
 
 struct Event {
 	uint32_t dateTime;
@@ -39,6 +39,8 @@ int getNumEvents();
 void getEvent(int i, Event *e);
 
 void pushEvent(uint8_t type,  const char *message);
+
+void clear();
 
 }
 }

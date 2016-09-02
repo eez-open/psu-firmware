@@ -85,7 +85,7 @@ void Value::toText(char *text, int count) const {
 			if (yearNow == year && monthNow == month && dayNow == day) {
 				snprintf_P(text, count-1, PSTR("%c [%02d:%02d:%02d] %s"), 128 + event_->type, hour, minute, second, event_->message);
 			} else {
-				snprintf_P(text, count-1, PSTR("%c [%02d-%02d-%02d] %s"), 128 + event_->type, day, month, year % 1000, event_->message);
+				snprintf_P(text, count-1, PSTR("%c [%02d-%02d-%02d] %s"), 128 + event_->type, day, month, year % 1100, event_->message);
 			}
 
 			text[count - 1] = 0;

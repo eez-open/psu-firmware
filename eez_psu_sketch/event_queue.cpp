@@ -82,6 +82,12 @@ void pushEvent(uint8_t type,  const char *message) {
 	eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
 }
 
+void clear() {
+	eventQueue.head = 0;
+	eventQueue.size = 0;
+	eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
+}
+
 }
 }
 } // namespace eez::psu::event_queue
