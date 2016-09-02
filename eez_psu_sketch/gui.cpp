@@ -971,7 +971,7 @@ void doShowPage(int index) {
     lcd::turnOn();
 
 	if (g_activePageId == PAGE_ID_EVENT_QUEUE && index == PAGE_ID_MAIN) {
-		event_queue::clear();
+		event_queue::markAsRead();
 	}
 
 	g_activePageId = index;

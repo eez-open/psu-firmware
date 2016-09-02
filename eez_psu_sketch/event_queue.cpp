@@ -39,6 +39,8 @@ struct EventQueueHeader {
 
 static EventQueueHeader eventQueue;
 
+bool g_unread = false;
+
 void init() {
 	eeprom::read((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
 
@@ -80,12 +82,12 @@ void pushEvent(uint8_t type,  const char *message) {
 	}
 
 	eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
+
+	g_unread = true;
 }
 
-void clear() {
-	eventQueue.head = 0;
-	eventQueue.size = 0;
-	eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
+void markAsRead() {
+	g_unread = false;
 }
 
 }

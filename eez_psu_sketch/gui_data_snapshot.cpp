@@ -278,7 +278,7 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 		return Value(selfTestResult);
 	} 
 	
-	if (lastEvent.type != event_queue::EVENT_TYPE_NONE) {
+	if (event_queue::g_unread) {
 		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_TYPE) {
 			return Value(lastEvent.type);
 		}
@@ -286,6 +286,10 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_MESSAGE) {
 			return Value(&lastEvent);
 		}
+	} else {
+		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_TYPE) {
+			return Value(event_queue::EVENT_TYPE_NONE);
+		} 
 	}
 	
 	if (cursor.iChannel >= 0) {
@@ -298,6 +302,7 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 			return Value(&lastEvent);
 		}
 	}
+
 
 	Value value = keypadSnapshot.get(id);
     if (value.getType() != VALUE_TYPE_NONE) {

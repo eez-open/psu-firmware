@@ -33,6 +33,8 @@ struct Event {
 	char message[35];
 };
 
+extern bool g_unread;
+
 void init();
 
 int getNumEvents();
@@ -40,7 +42,7 @@ void getEvent(int i, Event *e);
 
 void pushEvent(uint8_t type,  const char *message);
 
-void clear();
+void markAsRead();
 
 }
 }
