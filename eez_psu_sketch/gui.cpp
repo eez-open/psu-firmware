@@ -143,22 +143,36 @@ public:
 
                     if (listWidget->listType == LIST_TYPE_VERTICAL) {
                         int y = stack[stack_index].y;
-    
-                        DECL_WIDGET(childWidget, childWidgetOffset);
-                        stack[stack_index].y += childWidget->h;
 
-                        if (!push(childWidgetOffset, stack[stack_index].x, y, stack[stack_index].refresh)) {
-                            return true;
-                        }
+						if (y < widget->h) {
+							DECL_WIDGET(childWidget, childWidgetOffset);
+							stack[stack_index].y += childWidget->h;
+
+							if (!push(childWidgetOffset, stack[stack_index].x, y, stack[stack_index].refresh)) {
+								return true;
+							}
+						} else {
+							// TODO: add vertical scroll
+
+							// stop iteration
+							stack[stack_index].index = data::count(widget->data);
+						}
                     } else {
                         int x = stack[stack_index].x;
 
-                        DECL_WIDGET(childWidget, childWidgetOffset);
-                        stack[stack_index].x += childWidget->w;
+						if (x < widget->w) {
+							DECL_WIDGET(childWidget, childWidgetOffset);
+							stack[stack_index].x += childWidget->w;
 
-                        if (!push(childWidgetOffset, x, stack[stack_index].y, stack[stack_index].refresh)) {
-                            return true;
-                        }
+							if (!push(childWidgetOffset, x, stack[stack_index].y, stack[stack_index].refresh)) {
+								return true;
+							}
+						} else {
+							// TODO: add horizontal scroll
+							
+							// stop iteration
+							stack[stack_index].index = data::count(widget->data);
+						}
                     }
                 }
                 else {

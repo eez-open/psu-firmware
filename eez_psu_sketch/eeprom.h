@@ -24,7 +24,10 @@
 
 |Address|Size|Description                               |
 |-------|----|------------------------------------------|
-|0      |1024|Not used                                  |
+|0      |  64|Not used                                  |
+|64     |  24|[Total ON-time counter](#ontime-counter)  |
+|88     |  24|[CH1 ON-time counter](#ontime-counter)    |
+|112    |  24|[CH2 ON-time counter](#ontime-counter)    |
 |1024   |  32|[Device configuration](#device)           |
 |2048   | 121|CH1 [calibration parameters](#calibration)|
 |2560   | 121|CH2 [calibration parameters](#calibration)|
@@ -38,6 +41,18 @@
 |11264  | 164|[Profile](#profile) 7                     |
 |12288  | 164|[Profile](#profile) 8                     |
 |13312  | 164|[Profile](#profile) 9                     |
+|16384  |4010|[Event Queue](#event-queue)               |
+
+## <a name="ontime-counter">ON-time counter</a>
+
+|Offset|Size|Type                     |Description                  |
+|------|----|-------------------------|-----------------------------|
+|0     |4   |int                      |1st magic number             |
+|4     |4   |int                      |1st counter                  |
+|8     |4   |int                      |1st counter (copy)           |
+|12    |4   |int                      |2nd magic number             |
+|16    |4   |int                      |2nd counter                  |
+|20    |4   |int                      |2bd counter (copy)           |
 
 ## <a name="device">Device configuration</a>
 
@@ -182,6 +197,25 @@
 |------|----|----|-----------|
 |0     |4   |int |Checksum   |
 |4     |2   |int |Version    |
+
+## <a name="event-queue">Event queue</a>
+
+|Offset|Size|Type                     |Description                  |
+|------|----|-------------------------|-----------------------------|
+|0     |4   |int                      |Magic number                 |
+|4     |2   |int                      |Version                      |
+|6     |2   |int                      |Queue head                   |
+|8     |2   |int                      |Queue size                   |
+|10    |4000|[struct](#event)         |Max. 100 events              |	
+
+## <a name="event">Event</a>
+
+|Offset|Size|Type                     |Description                  |
+|------|----|-------------------------|-----------------------------|
+|0     |4   |datetime                 |Event date and time          |
+|4     |1   |int                      |Event type                   |
+|5     |35  |string                   |Event message                |
+
 */
 
 
@@ -202,6 +236,8 @@ static const uint8_t WRITE = 2;
 
 static const uint16_t EEPROM_ONTIME_START_ADDRESS = 64;
 static const uint16_t EEPROM_START_ADDRESS = 1024;
+
+static const uint16_t EEPROM_EVENT_QUEUE_START_ADDRESS = 16384;
 
 bool init();
 bool test();

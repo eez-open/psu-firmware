@@ -373,6 +373,9 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_protection.h">
       <Filter>gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\event_queue.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -633,6 +636,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_protection.cpp">
       <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\event_queue.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -70,7 +70,6 @@ namespace debug {
 
 static char traceBuffer[256];
 static bool dumpTraceBufferOnNextTick = false;
-static bool insideInterruptHandler = false;
 
 void DumpTraceBuffer() {
     Serial.print("**TRACE");
@@ -138,19 +137,11 @@ void Trace(const char *format, ...) {
     va_start(args, format);
     vsnprintf_P(traceBuffer, sizeof(traceBuffer), format, args);
 
-    if (insideInterruptHandler) {
+    if (g_insideInterruptHandler) {
         dumpTraceBufferOnNextTick = true;
     } else {
         DumpTraceBuffer();
     }
-}
-
-void interruptHandlerStarted() {
-    insideInterruptHandler = true;
-}
-
-void interruptHandlerFinished() {
-    insideInterruptHandler = false;
 }
 
 }

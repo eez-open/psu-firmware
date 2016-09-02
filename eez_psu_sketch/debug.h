@@ -33,9 +33,6 @@ void tick(unsigned long tick_usec);
 
 void Trace(const char *format, ...);
 
-void interruptHandlerStarted();
-void interruptHandlerFinished();
-
 }
 }
 } // namespace eez::psu::debug

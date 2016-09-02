@@ -17,6 +17,7 @@
  */
 
 #include "psu.h"
+#include "datetime.h"
 #include "gui_internal.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_keypad.h"
@@ -73,6 +74,24 @@ void Value::toText(char *text, int count) const {
 		text[count - 1] = 0;
 		break;
 
+	case VALUE_TYPE_EVENT: 
+		{
+			int year, month, day, hour, minute, second;
+			datetime::breakTime(event_->dateTime, year, month, day, hour, minute, second);
+
+			int yearNow, monthNow, dayNow, hourNow, minuteNow, secondNow;
+			datetime::breakTime(datetime::now(), yearNow, monthNow, dayNow, hourNow, minuteNow, secondNow);
+
+			if (yearNow == year && monthNow == month && dayNow == day) {
+				snprintf_P(text, count-1, PSTR("%c [%02d:%02d:%02d] %s"), 128 + event_->type, hour, minute, second, event_->message);
+			} else {
+				snprintf_P(text, count-1, PSTR("%c [%02d-%02d-%02d] %s"), 128 + event_->type, day, month, year % 1000, event_->message);
+			}
+
+			text[count - 1] = 0;
+		}
+		break;
+
 	default:
 		{
 			util::strcatFloat(text, float_);
@@ -110,14 +129,18 @@ void Value::toText(char *text, int count) const {
 int count(uint8_t id) {
     if (id == DATA_ID_CHANNELS) {
         return CH_NUM;
-    }
+    } else if (id == DATA_ID_EVENT_QUEUE_EVENTS) {
+        return event_queue::getNumEvents();
+    } 
     return 0;
 }
 
 void select(Cursor &cursor, uint8_t id, int index) {
     if (id == DATA_ID_CHANNELS) {
         cursor.iChannel = index;
-    }
+    } else if (id == DATA_ID_EVENT_QUEUE_EVENTS) {
+		cursor.iChannel = index;
+	}
 }
 
 Value getMin(const Cursor &cursor, uint8_t id) {

@@ -41,6 +41,10 @@ bool setTime(uint8_t hour, uint8_t minute, uint8_t second);
 /// \returns true if successful.
 bool getDateTimeAsString(char *buffer);
 
+uint32_t now();
+uint32_t makeTime(int year, int month, int day, int hour, int minute, int second);
+void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay, int &resultHour, int &resultMinute, int &resultSecond);
+
 }
 }
 }; // namespace eez::psu::datetime

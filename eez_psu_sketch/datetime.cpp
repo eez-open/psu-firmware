@@ -170,6 +170,100 @@ bool getDateTimeAsString(char *buffer) {
     return false;
 }
 
+#define SECONDS_PER_MINUTE 60UL
+#define SECONDS_PER_HOUR (SECONDS_PER_MINUTE * 60)
+#define SECONDS_PER_DAY (SECONDS_PER_HOUR * 24)
+
+// leap year calulator expects year argument as years offset from 1970
+#define LEAP_YEAR(Y) ( ((1970+Y)>0) && !((1970+Y)%4) && ( ((1970+Y)%100) || !((1970+Y)%400) ) )
+
+// API starts months from 1, this array starts from 0
+static const uint8_t monthDays[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+ 
+uint32_t now() {
+	uint8_t year, month, day, hour, minute, second;
+	rtc::readDateTime(year, month, day, hour, minute, second);
+	return makeTime(2000 + year, month, day, hour, minute, second);
+}
+
+uint32_t makeTime(int year, int month, int day, int hour, int minute, int second) {
+	// seconds from 1970 till 1 jan 00:00:00 of the given year
+	year -= 1970;
+
+	uint32_t seconds = year * 365 * SECONDS_PER_DAY;
+
+	for (int i = 0; i < year; i++) {
+		if (LEAP_YEAR(i)) {
+			seconds += SECONDS_PER_DAY; // add extra days for leap years
+		}
+	}
+  
+	// add days for this year, months start from 1
+	for (int i = 1; i < month; i++) {
+		if ((i == 2) && LEAP_YEAR(year)) { 
+			seconds += SECONDS_PER_DAY * 29;
+		} else {
+			seconds += SECONDS_PER_DAY * monthDays[i - 1];  // monthDay array starts from 0
+		}
+	}
+	seconds += (day-1) * SECONDS_PER_DAY;
+	seconds += hour * SECONDS_PER_HOUR;
+	seconds += minute * SECONDS_PER_MINUTE;
+	seconds += second;
+	
+	return seconds; 
+}
+
+void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay, int &resultHour, int &resultMinute, int &resultSecond) {
+	// break the given time_t into time components
+	uint8_t year;
+	uint8_t month, monthLength;
+	unsigned long days;
+
+	resultSecond = time % 60;
+	time /= 60; // now it is minutes
+
+	resultMinute = time % 60;
+	time /= 60; // now it is hours
+
+	resultHour = time % 24;
+	time /= 24; // now it is days
+  
+	year = 0;  
+	days = 0;
+	while ((unsigned)(days += (LEAP_YEAR(year) ? 366 : 365)) <= time) {
+		year++;
+	}
+	resultYear = year + 1970; // year is offset from 1970 
+  
+	days -= LEAP_YEAR(year) ? 366 : 365;
+	time -= days; // now it is days in this year, starting at 0
+  
+	days = 0;
+	month = 0;
+	monthLength = 0;
+	for (month = 0; month < 12; ++month) {
+		if (month == 1) { // february
+			if (LEAP_YEAR(year)) {
+				monthLength = 29;
+			} else {
+				monthLength = 28;
+			}
+		} else {
+			monthLength = monthDays[month];
+		}
+    
+		if (time >= monthLength) {
+			time -= monthLength;
+		} else {
+			break;
+		}
+	}
+
+	resultMonth = month + 1;  // jan is month 1  
+	resultDay = time + 1;     // day of month
+}
+
 }
 }
 }; // namespace eez::psu::datetime

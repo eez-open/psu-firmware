@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include "event_queue.h"
 #include "gui_data.h"
 #include "gui_keypad.h"
 #include "gui_edit_mode_snapshot.h"
@@ -57,6 +58,7 @@ struct Snapshot {
     Value alertMessage;
 	SnapshotFlags flags;
 	char *selfTestResult;
+	event_queue::Event lastEvent;
 
     unsigned long lastSnapshotTime;
 

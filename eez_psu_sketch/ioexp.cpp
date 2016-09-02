@@ -164,9 +164,7 @@ void IOExpander::change_bit(int io_bit, bool set) {
 }
 
 void IOExpander::on_interrupt() {
-#if CONF_DEBUG || CONF_DEBUG_LATEST
-    debug::interruptHandlerStarted();
-#endif
+	g_insideInterruptHandler = true;
 
     // IMPORTANT!
     // Read ADC first, then INTF and GPIO.
@@ -180,9 +178,7 @@ void IOExpander::on_interrupt() {
     debug::ioexpIntTick(micros());
 #endif
 
-#if CONF_DEBUG || CONF_DEBUG_LATEST
-    debug::interruptHandlerFinished();
-#endif
+	g_insideInterruptHandler = false;
 }
 
 uint8_t IOExpander::reg_read_write(uint8_t opcode, uint8_t reg, uint8_t val) {

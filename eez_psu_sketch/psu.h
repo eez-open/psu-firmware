@@ -91,6 +91,7 @@ void setCurrentMaxLimit(float value);
 float getCurrentMaxLimit();
 
 extern ontime::Counter g_powerOnTimeCounter;
+extern bool g_insideInterruptHandler;
 
 }
 } // namespace eez::psu

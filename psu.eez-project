@@ -290,6 +290,32 @@
     {
       "name": "channel.protection.otp.delay",
       "defaultValue": "10 s"
+    },
+    {
+      "name": "EventQueue.lastEvent.type",
+      "defaultValue": "2",
+      "description": "0: info\n1: warning\n2: error"
+    },
+    {
+      "name": "EventQueue.lastEvent.message",
+      "defaultValue": "[2m ago] Ch1 OTP tripped"
+    },
+    {
+      "name": "EventQueue.events",
+      "description": "list of events in event queue",
+      "defaultValue": [
+        {},
+        {}
+      ]
+    },
+    {
+      "name": "EventQueue.events.type",
+      "description": "0: info\n1: warning\n2: error",
+      "defaultValue": "2"
+    },
+    {
+      "name": "EventQueue.events.message",
+      "defaultValue": "[2m ago] Ch1 OTP tripped"
     }
   ],
   "actions": [
@@ -620,6 +646,11 @@
       "name": "ch_settings_prot_discard",
       "implementationType": "native",
       "implementation": "protection::discard();"
+    },
+    {
+      "name": "show_event_queue",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_EVENT_QUEUE);"
     }
   ],
   "gui": {
@@ -3769,6 +3800,216 @@
               "filePath": "fonts/bdf/Oswald-Medium.14.bdf",
               "encoding": 127
             }
+          },
+          {
+            "encoding": 128,
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAiUlEQVQ4T72UUQ7AIAhDx/0PvQUTDBIoZVnmp8DDKlWuD5cA1g1iaV22iSCRf9RHWAWyvCy+GR7WgexUJRB1tGL69AxMoUyeaNLkwuEgdTBW4moygbUKfoONJHYymRk8HgTJfAVTOrSJi8PmlOfCcJW2Q1ImD7ByuwLKRpWJq/urbAT/M180/mkf2RwiDkLF+moAAAAASUVORK5CYII=",
+            "source": {
+              "filePath": "fonts\\bdf\\webhostinghub-glyphs.14.bdf",
+              "encoding": 62229
+            },
+            "x": 0,
+            "y": -2,
+            "width": 19,
+            "height": 19,
+            "dx": 19,
+            "pixels": [
+              3,
+              248,
+              0,
+              15,
+              254,
+              0,
+              31,
+              159,
+              0,
+              63,
+              15,
+              128,
+              127,
+              15,
+              192,
+              127,
+              159,
+              192,
+              255,
+              255,
+              224,
+              254,
+              31,
+              224,
+              254,
+              63,
+              224,
+              254,
+              63,
+              224,
+              252,
+              63,
+              224,
+              252,
+              127,
+              224,
+              252,
+              127,
+              224,
+              124,
+              111,
+              192,
+              124,
+              15,
+              192,
+              60,
+              63,
+              128,
+              30,
+              127,
+              0,
+              15,
+              254,
+              0,
+              3,
+              248,
+              0
+            ]
+          },
+          {
+            "encoding": 129,
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAfklEQVQ4T72TUQ7AIAhD9f6H3mQJxhhoy+Lmr+VRivZ28PSDrKbCrtGUaqlgQAzkB+p/ha2uqDvkLAJBoAJbNd4grMtgWehwGZ/D9qyiMcPsdmdse/BegZkL02XbnQw0QuXbPhwVhpxNjsPUBwp1rGNlVBhsCcS29ApWLsoKbtjvGRKBTH/HAAAAAElFTkSuQmCC",
+            "source": {
+              "filePath": "fonts\\bdf\\webhostinghub-glyphs.14.bdf",
+              "encoding": 62230
+            },
+            "x": 0,
+            "y": -1,
+            "width": 19,
+            "height": 17,
+            "dx": 19,
+            "pixels": [
+              0,
+              64,
+              0,
+              0,
+              224,
+              0,
+              0,
+              224,
+              0,
+              1,
+              240,
+              0,
+              3,
+              248,
+              0,
+              3,
+              24,
+              0,
+              7,
+              28,
+              0,
+              7,
+              28,
+              0,
+              15,
+              30,
+              0,
+              31,
+              31,
+              0,
+              31,
+              191,
+              0,
+              63,
+              255,
+              128,
+              63,
+              191,
+              128,
+              127,
+              31,
+              192,
+              255,
+              255,
+              224,
+              255,
+              255,
+              224,
+              255,
+              255,
+              224
+            ]
+          },
+          {
+            "encoding": 130,
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAiUlEQVQ4T72UUQ7AIAhDx/0PvQUTDBIoZVnmp8DDKlWuD5cA1g1iaV22iSCRf9RHWAWyvCy+GR7WgexUJRB1tGL69AxMoUyeaNLkwuEgdTBW4moygbUKfoONJHYymRk8HgTJfAVTOrSJi8PmlOfCcJW2Q1ImD7ByuwLKRpWJq/urbAT/M180/mkf2RwiDkLF+moAAAAASUVORK5CYII=",
+            "source": {
+              "filePath": "fonts\\bdf\\webhostinghub-glyphs.14.bdf",
+              "encoding": 62229
+            },
+            "x": 0,
+            "y": -2,
+            "width": 19,
+            "height": 19,
+            "dx": 19,
+            "pixels": [
+              3,
+              248,
+              0,
+              15,
+              254,
+              0,
+              31,
+              159,
+              0,
+              63,
+              15,
+              128,
+              127,
+              15,
+              192,
+              127,
+              159,
+              192,
+              255,
+              255,
+              224,
+              254,
+              31,
+              224,
+              254,
+              63,
+              224,
+              254,
+              63,
+              224,
+              252,
+              63,
+              224,
+              252,
+              127,
+              224,
+              252,
+              127,
+              224,
+              124,
+              111,
+              192,
+              124,
+              15,
+              192,
+              60,
+              63,
+              128,
+              30,
+              127,
+              0,
+              15,
+              254,
+              0,
+              3,
+              248,
+              0
+            ]
           }
         ]
       },
@@ -44244,6 +44485,22 @@
         "_paddingHorizontal": 0,
         "_paddingVertical": 0,
         "inheritFrom": "default"
+      },
+      {
+        "name": "event_info",
+        "inheritFrom": "default_S",
+        "_alignHorizontal": "left",
+        "_color": "#80ff80"
+      },
+      {
+        "name": "event_warning",
+        "inheritFrom": "event_info",
+        "_color": "#ff8040"
+      },
+      {
+        "name": "event_error",
+        "inheritFrom": "event_info",
+        "_color": "#ff0000"
       }
     ],
     "pages": [
@@ -45127,11 +45384,31 @@
                     {
                       "type": "MultilineText",
                       "style": "edit_info_S",
-                      "x": 5,
-                      "y": 62,
+                      "x": 0,
+                      "y": 60,
                       "text": "Non-interactive mode: Move up/down to change value.",
-                      "width": 197,
+                      "width": 202,
                       "height": 76
+                    },
+                    {
+                      "type": "Text",
+                      "action": "non_interactive_enter",
+                      "style": "non_interactive_button_S",
+                      "x": 0,
+                      "y": 136,
+                      "text": "~ Set",
+                      "width": 101,
+                      "height": 36
+                    },
+                    {
+                      "type": "Text",
+                      "action": "non_interactive_discard",
+                      "style": "non_interactive_button_S",
+                      "x": 101,
+                      "y": 136,
+                      "text": " Discard",
+                      "width": 101,
+                      "height": 36
                     },
                     {
                       "type": "List",
@@ -45219,26 +45496,6 @@
                       "width": 80,
                       "height": 204,
                       "style": "default"
-                    },
-                    {
-                      "type": "Text",
-                      "action": "non_interactive_enter",
-                      "style": "non_interactive_button_S",
-                      "x": 5,
-                      "y": 136,
-                      "text": "~ Set",
-                      "width": 101,
-                      "height": 36
-                    },
-                    {
-                      "type": "Text",
-                      "action": "non_interactive_discard",
-                      "style": "non_interactive_button_S",
-                      "x": 106,
-                      "y": 136,
-                      "text": " Discard",
-                      "width": 96,
-                      "height": 36
                     }
                   ],
                   "width": 202,
@@ -47004,6 +47261,47 @@
         "landscape": {
           "widgets": [
             {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "DisplayData",
+                  "data": "EventQueue.lastEvent.message",
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 28,
+                  "style": "event_info",
+                  "action": "show_event_queue"
+                },
+                {
+                  "type": "DisplayData",
+                  "data": "EventQueue.lastEvent.message",
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 28,
+                  "style": "event_warning",
+                  "action": "show_event_queue"
+                },
+                {
+                  "type": "DisplayData",
+                  "data": "EventQueue.lastEvent.message",
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 28,
+                  "style": "event_error",
+                  "action": "show_event_queue"
+                }
+              ],
+              "x": 0,
+              "y": 0,
+              "width": 320,
+              "height": 28,
+              "style": "default",
+              "data": "EventQueue.lastEvent.type"
+            },
+            {
               "type": "List",
               "listType": "horizontal",
               "itemWidget": {
@@ -47018,7 +47316,7 @@
                     "x": 0,
                     "y": 0,
                     "width": 160,
-                    "height": 70
+                    "height": 56
                   },
                   {
                     "type": "Container",
@@ -47037,7 +47335,7 @@
                             "x": 0,
                             "y": 0,
                             "width": 160,
-                            "height": 70,
+                            "height": 56,
                             "action": "toggle_channel"
                           },
                           {
@@ -47051,7 +47349,7 @@
                                 "x": 0,
                                 "y": 0,
                                 "width": 160,
-                                "height": 70,
+                                "height": 56,
                                 "action": "toggle_channel"
                               },
                               {
@@ -47061,40 +47359,20 @@
                                 "x": 0,
                                 "y": 0,
                                 "width": 160,
-                                "height": 70,
+                                "height": 56,
                                 "action": "toggle_channel"
                               }
                             ],
                             "x": 0,
                             "y": 0,
                             "width": 160,
-                            "height": 70,
+                            "height": 56,
                             "style": "default"
                           }
                         ],
                         "width": 160,
-                        "height": 70,
+                        "height": 56,
                         "style": "default"
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "volt",
-                        "action": "edit",
-                        "x": 48,
-                        "y": 73,
-                        "style": "mon_value",
-                        "width": 112,
-                        "height": 40
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "curr",
-                        "action": "edit",
-                        "x": 48,
-                        "y": 113,
-                        "style": "mon_value",
-                        "width": 112,
-                        "height": 40
                       },
                       {
                         "type": "Select",
@@ -47119,7 +47397,7 @@
                           }
                         ],
                         "x": 0,
-                        "y": 70,
+                        "y": 56,
                         "width": 48,
                         "height": 24,
                         "data": "lrip",
@@ -47157,7 +47435,7 @@
                           }
                         ],
                         "x": 0,
-                        "y": 94,
+                        "y": 80,
                         "width": 48,
                         "height": 24,
                         "data": "ocp",
@@ -47195,7 +47473,7 @@
                           }
                         ],
                         "x": 0,
-                        "y": 118,
+                        "y": 104,
                         "width": 48,
                         "height": 24,
                         "data": "ovp",
@@ -47233,7 +47511,7 @@
                           }
                         ],
                         "x": 0,
-                        "y": 142,
+                        "y": 128,
                         "width": 48,
                         "height": 24,
                         "data": "otp_ch",
@@ -47271,17 +47549,37 @@
                           }
                         ],
                         "x": 0,
-                        "y": 166,
+                        "y": 152,
                         "width": 48,
                         "height": 24,
                         "data": "opp",
                         "style": "default"
                       },
                       {
+                        "type": "DisplayData",
+                        "data": "volt",
+                        "action": "edit",
+                        "x": 48,
+                        "y": 59,
+                        "style": "mon_value",
+                        "width": 112,
+                        "height": 40
+                      },
+                      {
+                        "type": "DisplayData",
+                        "data": "curr",
+                        "action": "edit",
+                        "x": 48,
+                        "y": 99,
+                        "style": "mon_value",
+                        "width": 112,
+                        "height": 40
+                      },
+                      {
                         "type": "Text",
                         "action": "show_channel_settings",
                         "x": 48,
-                        "y": 150,
+                        "y": 136,
                         "style": "edit_S",
                         "text": "`  Settings",
                         "width": 112,
@@ -47291,19 +47589,19 @@
                     "x": 0,
                     "y": 0,
                     "width": 160,
-                    "height": 70,
+                    "height": 176,
                     "style": "default"
                   }
                 ],
                 "x": 0,
                 "width": 160,
-                "height": 70,
+                "height": 56,
                 "style": "default"
               },
               "x": 0,
-              "y": 14,
+              "y": 28,
               "width": 320,
-              "height": 190,
+              "height": 176,
               "data": "channels",
               "style": "default"
             },
@@ -47379,6 +47677,93 @@
           "height": 240
         },
         "description": "Main menu"
+      },
+      {
+        "name": "event_queue",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "List",
+              "listType": "vertical",
+              "x": 0,
+              "y": 0,
+              "width": 320,
+              "height": 196,
+              "data": "EventQueue.events",
+              "style": "default",
+              "itemWidget": {
+                "type": "Select",
+                "widgets": [
+                  {
+                    "type": "DisplayData",
+                    "data": "EventQueue.events.message",
+                    "x": 0,
+                    "y": 0,
+                    "width": 320,
+                    "height": 28,
+                    "style": "event_info",
+                    "action": ""
+                  },
+                  {
+                    "type": "DisplayData",
+                    "data": "EventQueue.events.message",
+                    "x": 0,
+                    "y": 0,
+                    "width": 320,
+                    "height": 28,
+                    "style": "event_warning",
+                    "action": ""
+                  },
+                  {
+                    "type": "DisplayData",
+                    "data": "EventQueue.events.message",
+                    "x": 0,
+                    "y": 0,
+                    "width": 320,
+                    "height": 28,
+                    "style": "event_error",
+                    "action": ""
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 320,
+                "height": 28,
+                "style": "default",
+                "data": "EventQueue.events.type"
+              }
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 272,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            }
+          ]
+        }
       },
       {
         "name": "sys_profiles",

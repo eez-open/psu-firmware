@@ -44,6 +44,8 @@
 #include "front_panel/control.h"
 #endif
 
+#include "event_queue.h"
+
 namespace eez {
 namespace psu {
 
@@ -58,6 +60,8 @@ static bool g_is_time_critical_mode = false;
 static float g_current_max_limit = NAN;
 
 ontime::Counter g_powerOnTimeCounter(ontime::ON_TIME_COUNTER_POWER);
+
+extern bool g_insideInterruptHandler = false;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -86,6 +90,8 @@ void boot() {
     bp::init();
     serial::init();
     success &= eeprom::init();
+
+	event_queue::init();
 
 	g_powerOnTimeCounter.init();
 
@@ -506,6 +512,7 @@ void generateError(int16_t error) {
     if (ethernet::test_result == TEST_OK) {
         SCPI_ErrorPush(&ethernet::scpi_context, error);
     }
+	event_queue::pushEvent(event_queue::EVENT_TYPE_ERROR, SCPI_ErrorTranslate(error));
 }
 
 ////////////////////////////////////////////////////////////////////////////////

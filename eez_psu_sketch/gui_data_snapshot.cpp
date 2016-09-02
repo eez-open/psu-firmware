@@ -189,6 +189,12 @@ void Snapshot::takeSnapshot() {
     editModeSnapshot.takeSnapshot(this);
 
     alertMessage = g_alertMessage;
+
+	if (event_queue::getNumEvents() > 0) {
+		event_queue::getEvent(0, &lastEvent);
+	} else {
+		lastEvent.type = event_queue::EVENT_TYPE_NONE;
+	}
 }
 
 Value Snapshot::get(const Cursor &cursor, uint8_t id) {
@@ -197,46 +203,101 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 
 		if (id == DATA_ID_CHANNEL_OK) {
 			return Value(channelSnapshots[iChannel].flags.ok);
-		} else if (id == DATA_ID_OUTPUT_STATE) {
+		}
+		
+		if (id == DATA_ID_OUTPUT_STATE) {
 			return Value(channelSnapshots[iChannel].flags.state);
-		} else if (id == DATA_ID_OUTPUT_MODE) {
+		}
+		
+		if (id == DATA_ID_OUTPUT_MODE) {
 			return Value(channelSnapshots[iChannel].flags.mode);
-		} else if (id == DATA_ID_MON_VALUE) {
+		}
+		
+		if (id == DATA_ID_MON_VALUE) {
 			return channelSnapshots[iChannel].mon_value;
-		} else if (id == DATA_ID_VOLT) {
+		}
+		
+		if (id == DATA_ID_VOLT) {
 			return Value(channelSnapshots[iChannel].u_set, VALUE_TYPE_FLOAT_VOLT);
-		} else if (id == DATA_ID_CURR) {
+		}
+		
+		if (id == DATA_ID_CURR) {
 			return Value(channelSnapshots[iChannel].i_set, VALUE_TYPE_FLOAT_AMPER);
-		} else if (id == DATA_ID_LRIP) {
+		}
+		
+		if (id == DATA_ID_LRIP) {
 			return Value(channelSnapshots[iChannel].flags.lrip);
-		} else if (id == DATA_ID_OVP) {
+		}
+		
+		if (id == DATA_ID_OVP) {
 			return Value(channelSnapshots[iChannel].flags.ovp);
-		} else if (id == DATA_ID_OCP) {
+		}
+		
+		if (id == DATA_ID_OCP) {
 			return Value(channelSnapshots[iChannel].flags.ocp);
-		} else if (id == DATA_ID_OPP) {
+		}
+		
+		if (id == DATA_ID_OPP) {
 			return Value(channelSnapshots[iChannel].flags.opp);
-		} else if (id == DATA_ID_OTP_CH) {
+		}
+		
+		if (id == DATA_ID_OTP_CH) {
 			return Value(channelSnapshots[iChannel].flags.otp_ch);
-		} else if (id == DATA_ID_DP) {
+		}
+		
+		if (id == DATA_ID_DP) {
 			return Value(channelSnapshots[iChannel].flags.dp);
-		} else if (id == DATA_ID_CHANNEL_LABEL) {
+		}
+		
+		if (id == DATA_ID_CHANNEL_LABEL) {
 			return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_LABEL);
-		} else if (id == DATA_ID_CHANNEL_SHORT_LABEL) {
+		}
+		
+		if (id == DATA_ID_CHANNEL_SHORT_LABEL) {
 			return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_SHORT_LABEL);
 		}
 	}
 	
 	if (id == DATA_ID_OTP) {
         return Value(flags.otp);
-    } else if (id == DATA_ID_ALERT_MESSAGE) {
+    }
+	
+	if (id == DATA_ID_ALERT_MESSAGE) {
         return alertMessage;
-    } else if (id == DATA_ID_MODEL_INFO) {
+    }
+	
+	if (id == DATA_ID_MODEL_INFO) {
         return Value(getModelInfo());
-    } else if (id == DATA_ID_FIRMWARE_INFO) {
+    }
+	
+	if (id == DATA_ID_FIRMWARE_INFO) {
         return Value(getFirmwareInfo());
-    } else if (id == DATA_ID_SELF_TEST_RESULT) {
+    }
+	
+	if (id == DATA_ID_SELF_TEST_RESULT) {
 		return Value(selfTestResult);
 	} 
+	
+	if (lastEvent.type != event_queue::EVENT_TYPE_NONE) {
+		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_TYPE) {
+			return Value(lastEvent.type);
+		}
+		
+		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_MESSAGE) {
+			return Value(&lastEvent);
+		}
+	} 
+	
+	if (cursor.iChannel >= 0) {
+		if (id == DATA_ID_EVENT_QUEUE_EVENTS_TYPE) {
+			event_queue::getEvent(cursor.iChannel, &lastEvent);
+			return Value(lastEvent.type);
+		} 
+		
+		if (id == DATA_ID_EVENT_QUEUE_EVENTS_MESSAGE) {
+			return Value(&lastEvent);
+		}
+	}
 
 	Value value = keypadSnapshot.get(id);
     if (value.getType() != VALUE_TYPE_NONE) {

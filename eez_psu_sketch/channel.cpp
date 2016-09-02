@@ -29,6 +29,7 @@
 #include "persist_conf.h"
 #include "sound.h"
 #include "profile.h"
+#include "event_queue.h"
 
 namespace eez {
 namespace psu {
@@ -159,9 +160,21 @@ void Channel::protectionEnter(ProtectionValue &cpv) {
     int bit_mask = reg_get_ques_isum_bit_mask_for_channel_protection_value(this, cpv);
     setQuesBits(bit_mask, true);
 
-    if (IS_OVP_VALUE(this, cpv)) {
+	char *protType;
+
+	if (IS_OVP_VALUE(this, cpv)) {
         doRemoteProgrammingEnable(false);
-    }
+		protType = "OVP";
+    } else if (IS_OCP_VALUE(this, cpv)) {
+		protType = "OCP";
+	} else {
+		protType = "OPP";
+	}
+
+	char message[32];
+	snprintf_P(message, sizeof(message), PSTR("Ch%d %s tripped"), index, protType);
+	message[sizeof(message) - 1] = 0;
+	event_queue::pushEvent(event_queue::EVENT_TYPE_ERROR, message);
 
     sound::playBeep();
 }

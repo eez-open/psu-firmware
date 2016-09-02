@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "event_queue.h"
+
 namespace eez {
 namespace psu {
 namespace gui {
@@ -47,7 +49,9 @@ enum ValueType {
 
 	VALUE_TYPE_LESS_THEN_MIN,
 
-	VALUE_TYPE_GREATER_THEN_MAX
+	VALUE_TYPE_GREATER_THEN_MAX,
+
+	VALUE_TYPE_EVENT
 };
 
 struct Value {
@@ -56,6 +60,7 @@ struct Value {
 	Value(int value, ValueType type) : type_(type), int_(value)  {}
     Value(float value, ValueType type) : type_(type), float_(value) {}
     Value(const char *str) : type_(VALUE_TYPE_STR), str_(str) {}
+	Value(event_queue::Event *e) : type_(VALUE_TYPE_EVENT), event_(e) {}
 
     static Value ProgmemStr(const char *pstr PROGMEM) {
         Value value;
@@ -104,6 +109,7 @@ private:
         float float_;
         const char *const_str_ PROGMEM;
         const char *str_;
+		event_queue::Event *event_;
     };
 };
 

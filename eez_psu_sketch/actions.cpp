@@ -297,6 +297,10 @@ void action_ch_settings_prot_discard() {
     protection::discard();
 }
 
+void action_show_event_queue() {
+    showPage(PAGE_ID_EVENT_QUEUE);
+}
+
 
 ACTION actions[] = {
     0,
@@ -363,7 +367,8 @@ ACTION actions[] = {
     action_ch_settings_prot_edit_level,
     action_ch_settings_prot_edit_delay,
     action_ch_settings_prot_set,
-    action_ch_settings_prot_discard
+    action_ch_settings_prot_discard,
+    action_show_event_queue
 };
 
 }
