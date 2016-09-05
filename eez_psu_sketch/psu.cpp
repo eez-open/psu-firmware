@@ -18,7 +18,11 @@
  
 #include "psu.h"
 #include "serial_psu.h"
+
+#if OPTION_ETHERNET
 #include "ethernet.h"
+#endif
+
 #include "bp.h"
 #include "adc.h"
 #include "dac.h"
@@ -89,6 +93,7 @@ void boot() {
 
     bp::init();
     serial::init();
+
     success &= eeprom::init();
 
 	g_powerOnTimeCounter.init();
@@ -104,7 +109,12 @@ void boot() {
 
 	event_queue::init();
 
+#if OPTION_ETHERNET
 	success &= ethernet::init();
+#else
+	DebugTrace("Ethernet initialization skipped!");
+#endif
+
 	success &= temperature::init();
 
     // load channels calibration parameters
@@ -385,8 +395,11 @@ static bool psu_reset(bool power_on) {
 
     // SYST:ERR:COUN? 0
     SCPI_ErrorClear(&serial::scpi_context);
-    if (ethernet::test_result == TEST_OK)
+#if OPTION_ETHERNET
+	if (ethernet::test_result == TEST_OK) {
         SCPI_ErrorClear(&ethernet::scpi_context);
+	}
+#endif
 
     // TEMP:PROT[MAIN]
     // TEMP:PROT:DEL
@@ -442,7 +455,11 @@ static bool test_shield() {
 	result &= rtc::test();
     result &= datetime::test();
     result &= eeprom::test();
+
+#if OPTION_ETHERNET
     result &= ethernet::test();
+#endif
+
 	result &= temperature::test();
 
     return result;
@@ -470,7 +487,7 @@ bool test() {
 }
 
 void tick() {
-    unsigned long tick_usec = micros();
+	unsigned long tick_usec = micros();
 
 #if CONF_DEBUG
     debug::tick(tick_usec);
@@ -478,7 +495,7 @@ void tick() {
 
 	g_powerOnTimeCounter.tick(tick_usec);
 
-    temperature::tick(tick_usec);
+	temperature::tick(tick_usec);
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	watchdog::tick(tick_usec);
@@ -490,8 +507,12 @@ void tick() {
     }
 
     serial::tick(tick_usec);
-    ethernet::tick(tick_usec);
-    sound::tick(tick_usec);
+
+#if OPTION_ETHERNET
+	ethernet::tick(tick_usec);
+#endif
+    
+	sound::tick(tick_usec);
     profile::tick(tick_usec);
 
 #if OPTION_DISPLAY
@@ -503,22 +524,30 @@ void tick() {
 
 void setEsrBits(int bit_mask) {
     SCPI_RegSetBits(&serial::scpi_context, SCPI_REG_ESR, bit_mask);
-    if (ethernet::test_result == TEST_OK)
+#if OPTION_ETHERNET
+	if (ethernet::test_result == TEST_OK) {
         SCPI_RegSetBits(&ethernet::scpi_context, SCPI_REG_ESR, bit_mask);
+	}
+#endif
 }
 
 
 void setQuesBits(int bit_mask, bool on) {
     reg_set_ques_bit(&serial::scpi_context, bit_mask, on);
-    if (ethernet::test_result == TEST_OK)
+#if OPTION_ETHERNET
+	if (ethernet::test_result == TEST_OK) {
         reg_set_ques_bit(&ethernet::scpi_context, bit_mask, on);
+	}
+#endif
 }
 
 void generateError(int16_t error) {
     SCPI_ErrorPush(&serial::scpi_context, error);
-    if (ethernet::test_result == TEST_OK) {
+#if OPTION_ETHERNET
+	if (ethernet::test_result == TEST_OK) {
         SCPI_ErrorPush(&ethernet::scpi_context, error);
     }
+#endif
 	event_queue::pushEvent(error);
 }
 
