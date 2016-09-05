@@ -21,12 +21,14 @@
 #include "eeprom.h"
 #include "event_queue.h"
 
+#include "gui_internal.h"
+
 namespace eez {
 namespace psu {
 namespace event_queue {
 
 static const uint32_t MAGIC = 0xD8152FC3L;
-static const uint16_t VERSION = 1;
+static const uint16_t VERSION = 2;
 
 static const uint16_t MAX_EVENTS = 100;
 
@@ -40,6 +42,14 @@ struct EventQueueHeader {
 static EventQueueHeader eventQueue;
 
 bool g_unread = false;
+bool g_refreshGUI = false;
+
+static int16_t g_eventsDuringInterruptHandling[6];
+static uint8_t g_eventsDuringInterruptHandlingHead = 0;
+static const int MAX_EVENTS_DURING_INTERRUPT_HANDLING = sizeof(g_eventsDuringInterruptHandling) / sizeof(int16_t);
+
+static const int EVENTS_PER_PAGE = 7;
+static uint8_t g_pageIndex = 0;
 
 void init() {
 	eeprom::read((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
@@ -52,7 +62,21 @@ void init() {
 			0
 		};
 
-		pushEvent(EVENT_TYPE_INFO, "Welcome!");
+		pushEvent(EVENT_INFO_WELCOME);
+	}
+}
+
+void tick(unsigned long tick_usec) {
+	for (int i = 0; i < g_eventsDuringInterruptHandlingHead; ++i) {
+		pushEvent(g_eventsDuringInterruptHandling[i]);
+	}
+	g_eventsDuringInterruptHandlingHead = 0;
+
+	if (g_refreshGUI) {
+		if (gui::getActivePage() == gui::PAGE_ID_EVENT_QUEUE) {
+			gui::refreshPage();
+		}
+		g_refreshGUI = false;
 	}
 }
 
@@ -66,28 +90,136 @@ void getEvent(int i, Event *e) {
 	eeprom::read((uint8_t *)e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + sizeof(EventQueueHeader) + i * sizeof(Event));
 }
 
-void pushEvent(uint8_t type,  const char *message) {
-	Event e;
+int getEventType(Event *e) {
+	if (e->eventId >= EVENT_INFO_START_ID) {
+		return EVENT_TYPE_INFO;
+	} else if (e->eventId >= EVENT_WARNING_START_ID) {
+		return EVENT_TYPE_WARNING;
+	} else if (e->eventId > 0) {
+		return EVENT_TYPE_ERROR;
+	} else {
+		return EVENT_TYPE_NONE;
+	}
+}
 
-	e.dateTime = datetime::now();
-	e.type = type;
-	strncpy(e.message, message, sizeof(e.message));
-	e.message[sizeof(e.message) - 1] = 0;
+const char *getEventMessage(Event *e) {
+	static char message[35];
 
-	eeprom::write((uint8_t *)&e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + sizeof(EventQueueHeader) + eventQueue.head * sizeof(Event));
+	const char *p_message = 0;
 
-	eventQueue.head = (eventQueue.head + 1) % MAX_EVENTS;
-	if (eventQueue.size < MAX_EVENTS) {
-		++eventQueue.size;
+	if (e->eventId >= EVENT_INFO_START_ID) {
+		switch (e->eventId) {
+#define EVENT_ERROR(NAME, ID, TEXT)
+#define EVENT_WARNING(NAME, ID, TEXT)
+#define EVENT_INFO(NAME, ID, TEXT) case EVENT_INFO_START_ID + ID: p_message = PSTR(TEXT); break;
+			LIST_OF_EVENTS
+#undef EVENT_INFO
+#undef EVENT_WARNING
+#undef EVENT_ERROR
+		}
+	} else if (e->eventId >= EVENT_WARNING_START_ID) {
+		switch (e->eventId) {
+#define EVENT_ERROR(NAME, ID, TEXT)
+#define EVENT_WARNING(NAME, ID, TEXT) case EVENT_WARNING_START_ID + ID: p_message = PSTR(TEXT); break;
+#define EVENT_INFO(NAME, ID, TEXT)
+			LIST_OF_EVENTS
+#undef EVENT_INFO
+#undef EVENT_WARNING
+#undef EVENT_ERROR
+		default:
+			p_message = 0;
+		}
+	} else if (e->eventId >= EVENT_ERROR_START_ID) {
+		switch (e->eventId) {
+#define EVENT_INFO(NAME, ID, TEXT)
+#define EVENT_WARNING(NAME, ID, TEXT)
+#define EVENT_ERROR(NAME, ID, TEXT) case EVENT_ERROR_START_ID + ID: p_message = PSTR(TEXT); break;
+			LIST_OF_EVENTS
+#undef EVENT_INFO
+#undef EVENT_WARNING
+#undef EVENT_ERROR
+		}
+	} else if (e->eventId > 0) {
+		return SCPI_ErrorTranslate(e->eventId);
 	}
 
-	eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
+	if (p_message) {
+		strncpy_P(message, p_message, sizeof(message) - 1);
+		message[sizeof(message) - 1] = 0;
+		return message;
+	}
 
-	g_unread = true;
+	return 0;
+}
+
+void pushEvent(int16_t eventId) {
+	if (g_insideInterruptHandler) {
+		if (g_eventsDuringInterruptHandlingHead < MAX_EVENTS_DURING_INTERRUPT_HANDLING) {
+			g_eventsDuringInterruptHandling[g_eventsDuringInterruptHandlingHead] = eventId;
+			++g_eventsDuringInterruptHandlingHead;
+		} else {
+			DebugTrace("MAX_EVENTS_DURING_INTERRUPT_HANDLING exceeded");
+		}
+	} else {
+		Event e;
+
+		e.dateTime = datetime::now();
+		e.eventId = eventId;
+
+		eeprom::write((uint8_t *)&e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + sizeof(EventQueueHeader) + eventQueue.head * sizeof(Event));
+
+		eventQueue.head = (eventQueue.head + 1) % MAX_EVENTS;
+		if (eventQueue.size < MAX_EVENTS) {
+			++eventQueue.size;
+		}
+
+		eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
+
+		g_unread = true;
+		g_refreshGUI = true;
+	}
 }
 
 void markAsRead() {
 	g_unread = false;
+}
+
+int getNumPages() {
+	return getNumEvents() / EVENTS_PER_PAGE + 1;
+}
+
+int getActivePageNumEvents() {
+	if (g_pageIndex < getNumPages() - 1) {
+		return EVENTS_PER_PAGE;
+	} else {
+		return getNumEvents() - (getNumPages() - 1) * EVENTS_PER_PAGE;
+	}
+}
+
+void getActivePageEvent(int i, Event *e) {
+	getEvent(g_pageIndex * EVENTS_PER_PAGE + i, e);
+}
+
+void moveToFirstPage() {
+	g_pageIndex = 0;
+}
+
+void moveToNextPage() {
+	if (g_pageIndex < getNumPages() - 1) {
+		++g_pageIndex;
+		g_refreshGUI = true;
+	}
+}
+
+void moveToPreviousPage() {
+	if (g_pageIndex > 0) {
+		--g_pageIndex;
+		g_refreshGUI = true;
+	}
+}
+
+int getActivePageIndex() {
+	return g_pageIndex;
 }
 
 }

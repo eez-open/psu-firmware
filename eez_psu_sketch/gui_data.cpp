@@ -83,13 +83,18 @@ void Value::toText(char *text, int count) const {
 			datetime::breakTime(datetime::now(), yearNow, monthNow, dayNow, hourNow, minuteNow, secondNow);
 
 			if (yearNow == year && monthNow == month && dayNow == day) {
-				snprintf_P(text, count-1, PSTR("%c [%02d:%02d:%02d] %s"), 128 + event_->type, hour, minute, second, event_->message);
+				snprintf_P(text, count-1, PSTR("%c [%02d:%02d:%02d] %s"), 127 + event_queue::getEventType(event_), hour, minute, second, event_queue::getEventMessage(event_));
 			} else {
-				snprintf_P(text, count-1, PSTR("%c [%02d-%02d-%02d] %s"), 128 + event_->type, day, month, year % 1100, event_->message);
+				snprintf_P(text, count-1, PSTR("%c [%02d-%02d-%02d] %s"), 127 + event_queue::getEventType(event_), day, month, year % 1100, event_queue::getEventMessage(event_));
 			}
 
 			text[count - 1] = 0;
 		}
+		break;
+
+	case VALUE_TYPE_PAGE_INFO:
+		snprintf_P(text, count-1, PSTR("Page #%d of %d"), pageInfo_.pageIndex + 1, pageInfo_.numPages);
+		text[count - 1] = 0;
 		break;
 
 	default:
@@ -130,7 +135,7 @@ int count(uint8_t id) {
     if (id == DATA_ID_CHANNELS) {
         return CH_NUM;
     } else if (id == DATA_ID_EVENT_QUEUE_EVENTS) {
-        return event_queue::getNumEvents();
+        return event_queue::getActivePageNumEvents();
     } 
     return 0;
 }

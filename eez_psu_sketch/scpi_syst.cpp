@@ -180,7 +180,10 @@ scpi_result_t scpi_syst_BeeperState(scpi_t * context) {
     }
 
     if (enable != persist_conf::isBeepEnabled()) {
-        persist_conf::enableBeep(enable);
+		if (!persist_conf::enableBeep(enable)) {
+			SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+			return SCPI_RES_ERR;
+		}
     }
 
     return SCPI_RES_OK;

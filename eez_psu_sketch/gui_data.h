@@ -51,7 +51,9 @@ enum ValueType {
 
 	VALUE_TYPE_GREATER_THEN_MAX,
 
-	VALUE_TYPE_EVENT
+	VALUE_TYPE_EVENT,
+
+	VALUE_TYPE_PAGE_INFO
 };
 
 struct Value {
@@ -69,6 +71,14 @@ struct Value {
         return value;
     }
 
+	static Value PageInfo(uint8_t pageIndex, uint8_t numPages) {
+		Value value;
+		value.pageInfo_.pageIndex = pageIndex;
+		value.pageInfo_.numPages = numPages;
+		value.type_ = VALUE_TYPE_PAGE_INFO;
+		return value;
+	}
+
     bool operator ==(const Value &other) {
         if (type_ != other.type_) {
             return false;
@@ -83,8 +93,10 @@ struct Value {
         } else if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL) {
             return int_ == other.int_;
         } else if (type_ == VALUE_TYPE_EVENT) {
-            return event_->type == other.event_->type && event_->dateTime == other.event_->dateTime && strcmp(event_->message, other.event_->message) == 0;
-        } else {
+            return event_->dateTime == other.event_->dateTime && event_->eventId == other.event_->eventId;
+        } else if (type_ == VALUE_TYPE_PAGE_INFO) {
+			return pageInfo_.pageIndex == other.pageInfo_.pageIndex && pageInfo_.numPages == other.pageInfo_.numPages;
+		} else {
             return float_ == other.float_;
         }
     }
@@ -112,6 +124,10 @@ private:
         const char *const_str_ PROGMEM;
         const char *str_;
 		event_queue::Event *event_;
+		struct {
+			uint8_t pageIndex;
+			uint8_t numPages;
+		} pageInfo_;
     };
 };
 

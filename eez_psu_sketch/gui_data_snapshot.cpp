@@ -193,7 +193,7 @@ void Snapshot::takeSnapshot() {
 	if (event_queue::getNumEvents() > 0) {
 		event_queue::getEvent(0, &lastEvent);
 	} else {
-		lastEvent.type = event_queue::EVENT_TYPE_NONE;
+		lastEvent.eventId = 0;
 	}
 }
 
@@ -280,7 +280,7 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 	
 	if (event_queue::g_unread) {
 		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_TYPE) {
-			return Value(lastEvent.type);
+			return Value(event_queue::getEventType(&lastEvent));
 		}
 		
 		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_MESSAGE) {
@@ -294,8 +294,8 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 	
 	if (cursor.iChannel >= 0) {
 		if (id == DATA_ID_EVENT_QUEUE_EVENTS_TYPE) {
-			event_queue::getEvent(cursor.iChannel, &lastEvent);
-			return Value(lastEvent.type);
+			event_queue::getActivePageEvent(cursor.iChannel, &lastEvent);
+			return Value(event_queue::getEventType(&lastEvent));
 		} 
 		
 		if (id == DATA_ID_EVENT_QUEUE_EVENTS_MESSAGE) {
@@ -303,6 +303,21 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 		}
 	}
 
+	if (id == DATA_ID_EVENT_QUEUE_MULTIPLE_PAGES) {
+		return Value(event_queue::getNumPages() > 1 ? 1 : 0);
+	}
+
+	if (id == DATA_ID_EVENT_QUEUE_PREVIOUS_PAGE_ENABLED) {
+		return Value(event_queue::getActivePageIndex() > 0 ? 1 : 0);
+	}
+
+	if (id == DATA_ID_EVENT_QUEUE_NEXT_PAGE_ENABLED) {
+		return Value(event_queue::getActivePageIndex() < event_queue::getNumPages() - 1 ? 1 : 0);
+	}
+
+	if (id == DATA_ID_EVENT_QUEUE_PAGE_INFO) {
+		return Value::PageInfo(event_queue::getActivePageIndex(), event_queue::getNumPages());
+	}
 
 	Value value = keypadSnapshot.get(id);
     if (value.getType() != VALUE_TYPE_NONE) {

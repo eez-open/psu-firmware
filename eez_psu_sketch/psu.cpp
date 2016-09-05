@@ -257,6 +257,8 @@ bool powerUp() {
     // turn on Power On (PON) bit of ESE register
     setEsrBits(ESR_PON);
 
+	event_queue::pushEvent(event_queue::EVENT_INFO_POWER_UP);
+
     // play power up tune on success
     if (success) {
         sound::playPowerUp();
@@ -287,6 +289,8 @@ void powerDown() {
 
     g_power_is_up = false;
 	g_powerOnTimeCounter.stop();
+
+	event_queue::pushEvent(event_queue::EVENT_INFO_POWER_DOWN);
 
 	sound::playPowerDown();
 }
@@ -493,6 +497,8 @@ void tick() {
 #if OPTION_DISPLAY
     gui::tick(tick_usec);
 #endif
+
+	event_queue::tick(tick_usec);
 }
 
 void setEsrBits(int bit_mask) {
@@ -513,7 +519,7 @@ void generateError(int16_t error) {
     if (ethernet::test_result == TEST_OK) {
         SCPI_ErrorPush(&ethernet::scpi_context, error);
     }
-	event_queue::pushEvent(event_queue::EVENT_TYPE_ERROR, SCPI_ErrorTranslate(error));
+	event_queue::pushEvent(error);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

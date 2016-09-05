@@ -94,7 +94,7 @@ bool saveDevice();
 bool isPasswordValid(const char *new_password, size_t new_password_len, int16_t &err);
 bool changePassword(const char *new_password, size_t new_password_len);
 
-void enableBeep(bool enable);
+bool enableBeep(bool enable);
 bool isBeepEnabled();
 
 bool readSystemDate(uint8_t &year, uint8_t &month, uint8_t &day);

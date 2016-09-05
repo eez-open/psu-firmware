@@ -18,6 +18,7 @@
 
 #include "psu.h"
 #include "actions.h"
+#include "event_queue.h"
 #include "gui_internal.h"
 #include "gui_keypad.h"
 #include "gui_edit_mode.h"
@@ -301,6 +302,14 @@ void action_show_event_queue() {
     showPage(PAGE_ID_EVENT_QUEUE);
 }
 
+void action_event_queue_previous_page() {
+    event_queue::moveToPreviousPage();
+}
+
+void action_event_queue_next_page() {
+    event_queue::moveToNextPage();
+}
+
 
 ACTION actions[] = {
     0,
@@ -368,7 +377,9 @@ ACTION actions[] = {
     action_ch_settings_prot_edit_delay,
     action_ch_settings_prot_set,
     action_ch_settings_prot_discard,
-    action_show_event_queue
+    action_show_event_queue,
+    action_event_queue_previous_page,
+    action_event_queue_next_page
 };
 
 }

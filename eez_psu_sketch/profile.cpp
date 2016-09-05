@@ -20,6 +20,7 @@
 #include "profile.h"
 #include "persist_conf.h"
 #include "datetime.h"
+#include "event_queue.h"
 
 namespace eez {
 namespace psu {
@@ -117,7 +118,12 @@ bool recall(int location) {
         Parameters profile;
         if (persist_conf::loadProfile(location, &profile) && profile.is_valid) {
             if (persist_conf::saveProfile(0, &profile)) {
-                return recallFromProfile(&profile);
+                if (recallFromProfile(&profile)) {
+					event_queue::pushEvent(event_queue::EVENT_INFO_RECALL_FROM_PROFILE_0 + location);
+					return true;
+				} else {
+					return false;
+				}
             }
         }
     }

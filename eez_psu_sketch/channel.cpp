@@ -160,21 +160,17 @@ void Channel::protectionEnter(ProtectionValue &cpv) {
     int bit_mask = reg_get_ques_isum_bit_mask_for_channel_protection_value(this, cpv);
     setQuesBits(bit_mask, true);
 
-	char *protType;
+	int16_t eventId = event_queue::EVENT_ERROR_CH1_OVP_TRIPPED + 3 * (index - 1);
 
 	if (IS_OVP_VALUE(this, cpv)) {
         doRemoteProgrammingEnable(false);
-		protType = "OVP";
     } else if (IS_OCP_VALUE(this, cpv)) {
-		protType = "OCP";
+		eventId += 1;
 	} else {
-		protType = "OPP";
+		eventId += 2;
 	}
 
-	char message[32];
-	snprintf_P(message, sizeof(message), PSTR("Ch%d %s tripped"), index, protType);
-	message[sizeof(message) - 1] = 0;
-	event_queue::pushEvent(event_queue::EVENT_TYPE_ERROR, message);
+	event_queue::pushEvent(eventId);
 
     sound::playBeep();
 }
@@ -755,7 +751,9 @@ void Channel::update() {
 void Channel::outputEnable(bool enable) {
     if (enable != flags.output_enabled) {
         doOutputEnable(enable);
-        profile::save();
+		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_OUTPUT_ENABLED :
+			event_queue::EVENT_INFO_CH1_OUTPUT_DISABLED) + index - 1);
+		profile::save();
     }
 }
 
@@ -766,6 +764,8 @@ bool Channel::isOutputEnabled() {
 void Channel::remoteSensingEnable(bool enable) {
     if (enable != flags.sense_enabled) {
         doRemoteSensingEnable(enable);
+		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_REMOTE_SENSE_ENABLED :
+			event_queue::EVENT_INFO_CH1_REMOTE_SENSE_DISABLED) + index - 1);
         profile::save();
     }
 }
@@ -777,6 +777,8 @@ bool Channel::isRemoteSensingEnabled() {
 void Channel::remoteProgrammingEnable(bool enable) {
     if (enable != flags.rprog_enabled) {
         doRemoteProgrammingEnable(enable);
+		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_REMOTE_PROG_ENABLED :
+			event_queue::EVENT_INFO_CH1_REMOTE_PROG_DISABLED) + index - 1);
 		profile::save();
     }
 }

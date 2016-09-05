@@ -18,6 +18,7 @@
  
 #include "psu.h"
 #include "eeprom.h"
+#include "event_queue.h"
 #include "profile.h"
 
 namespace eez {
@@ -149,12 +150,21 @@ bool isPasswordValid(const char *new_password, size_t new_password_len, int16_t 
 bool changePassword(const char *new_password, size_t new_password_len) {
     memset(&dev_conf.calibration_password, 0, sizeof(dev_conf.calibration_password));
     strncpy(dev_conf.calibration_password, new_password, new_password_len);
-    return saveDevice();
+    if (saveDevice()) {
+		event_queue::pushEvent(event_queue::EVENT_INFO_CALIBRATION_PASSWORD_CHANGED);
+		return true;
+	}
+	return false;
 }
 
-void enableBeep(bool enable) {
+bool enableBeep(bool enable) {
     dev_conf.flags.beep_enabled = enable ? 1 : 0;
-    saveDevice();
+	event_queue::pushEvent(enable ? event_queue::EVENT_INFO_BEEPER_ENABLED : event_queue::EVENT_INFO_BEEPER_DISABLED);
+    if (saveDevice()) {
+		event_queue::pushEvent(event_queue::EVENT_INFO_CALIBRATION_PASSWORD_CHANGED);
+		return true;
+	}
+	return false;
 }
 
 bool isBeepEnabled() {
@@ -208,7 +218,11 @@ bool isProfileAutoRecallEnabled() {
 
 bool setProfileAutoRecallLocation(int location) {
     dev_conf.profile_auto_recall_location = (int8_t)location;
-    return saveDevice();
+    if (saveDevice()) {
+		event_queue::pushEvent(event_queue::EVENT_INFO_DEFAULE_PROFILE_CHANGED_TO_0 + location);
+		return true;
+	}
+    return false;
 }
 
 int getProfileAutoRecallLocation() {

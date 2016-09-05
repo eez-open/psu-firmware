@@ -316,6 +316,23 @@
     {
       "name": "EventQueue.events.message",
       "defaultValue": "[2m ago] Ch1 OTP tripped"
+    },
+    {
+      "name": "EventQueue.multiplePages",
+      "defaultValue": "1",
+      "description": "0: single page only\n1: multiple pages"
+    },
+    {
+      "name": "EventQueue.previousPageEnabled",
+      "defaultValue": "1"
+    },
+    {
+      "name": "EventQueue.nextPageEnabled",
+      "defaultValue": "1"
+    },
+    {
+      "name": "EventQueue.pageInfo",
+      "defaultValue": "Page #1 of 2"
     }
   ],
   "actions": [
@@ -651,6 +668,16 @@
       "name": "show_event_queue",
       "implementationType": "native",
       "implementation": "showPage(PAGE_ID_EVENT_QUEUE);"
+    },
+    {
+      "name": "event_queue_previous_page",
+      "implementationType": "native",
+      "implementation": "event_queue::moveToPreviousPage();\n"
+    },
+    {
+      "name": "event_queue_next_page",
+      "implementationType": "native",
+      "implementation": "event_queue::moveToNextPage();\n"
     }
   ],
   "gui": {
@@ -3941,10 +3968,10 @@
           },
           {
             "encoding": 130,
-            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAiUlEQVQ4T72UUQ7AIAhDx/0PvQUTDBIoZVnmp8DDKlWuD5cA1g1iaV22iSCRf9RHWAWyvCy+GR7WgexUJRB1tGL69AxMoUyeaNLkwuEgdTBW4moygbUKfoONJHYymRk8HgTJfAVTOrSJi8PmlOfCcJW2Q1ImD7ByuwLKRpWJq/urbAT/M180/mkf2RwiDkLF+moAAAAASUVORK5CYII=",
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAj0lEQVQ4T9WUSw6AMAhE5f6H1tCkzUBgAONGlwUevxG5PvyEsG5iC+OiRwbxfBPvYREIfaidOU5GsHx3AGZk1VJbBZu0LQrrVrWHn1ZXwRTAkhk7wrKBV7AD/AcMpeKVrq2WY+gsoDoFZ6aVzjYoq8wspwPr6nCJFrNjS6//zQzol9K+GgyYLYHeMwwaX9oHgjksDgUebxwAAAAASUVORK5CYII=",
             "source": {
               "filePath": "fonts\\bdf\\webhostinghub-glyphs.14.bdf",
-              "encoding": 62229
+              "encoding": 61530
             },
             "x": 0,
             "y": -2,
@@ -3959,49 +3986,49 @@
               254,
               0,
               31,
-              159,
-              0,
-              63,
-              15,
-              128,
-              127,
-              15,
-              192,
-              127,
-              159,
-              192,
-              255,
-              255,
-              224,
-              254,
               31,
-              224,
-              254,
-              63,
-              224,
-              254,
-              63,
-              224,
-              252,
-              63,
-              224,
-              252,
-              127,
-              224,
-              252,
-              127,
-              224,
-              124,
-              111,
+              0,
+              60,
+              7,
+              128,
+              112,
+              225,
               192,
-              124,
-              15,
+              113,
+              241,
+              192,
+              225,
+              240,
+              224,
+              224,
+              224,
+              224,
+              192,
+              224,
+              96,
+              192,
+              224,
+              96,
+              192,
+              224,
+              96,
+              224,
+              64,
+              224,
+              224,
+              0,
+              224,
+              112,
+              65,
+              192,
+              112,
+              225,
               192,
               60,
-              63,
+              7,
               128,
-              30,
-              127,
+              31,
+              31,
               0,
               15,
               254,
@@ -44512,6 +44539,12 @@
         "_paddingVertical": 0
       },
       {
+        "name": "bottom_button_textual_S_left",
+        "_font": "small",
+        "_alignHorizontal": "left",
+        "inheritFrom": "bottom_button_textual"
+      },
+      {
         "name": "error_alert",
         "_backgroundColor": "#e02020",
         "inheritFrom": "default_S"
@@ -47835,14 +47868,6 @@
               }
             },
             {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 272,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
               "type": "Text",
               "action": "show_main_page",
               "x": 272,
@@ -47851,6 +47876,73 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Rectangle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 272,
+                  "height": 36,
+                  "style": "bottom_button_background"
+                },
+                {
+                  "type": "Container",
+                  "widgets": [
+                    {
+                      "type": "Button",
+                      "x": 0,
+                      "y": 0,
+                      "width": 48,
+                      "height": 36,
+                      "style": "bottom_button",
+                      "Disabled style:": "bottom_button_disabled",
+                      "text": "(",
+                      "Enabled": "calibration.channel.stepPrevEnabled",
+                      "disabledStyle": "bottom_button_disabled",
+                      "enabled": "EventQueue.previousPageEnabled",
+                      "action": "event_queue_previous_page"
+                    },
+                    {
+                      "type": "Button",
+                      "x": 48,
+                      "y": 0,
+                      "width": 48,
+                      "height": 36,
+                      "style": "bottom_button",
+                      "Disabled style:": "bottom_button_disabled",
+                      "text": ")",
+                      "Enabled": "calibration.channel.stepNextEnabled",
+                      "disabledStyle": "bottom_button_disabled",
+                      "enabled": "EventQueue.nextPageEnabled",
+                      "action": "event_queue_next_page"
+                    },
+                    {
+                      "type": "DisplayData",
+                      "data": "EventQueue.pageInfo",
+                      "x": 96,
+                      "y": 0,
+                      "width": 176,
+                      "height": 36,
+                      "style": "bottom_button_textual_S_left",
+                      "activeStyle": "default"
+                    }
+                  ],
+                  "x": 0,
+                  "y": 0,
+                  "width": 272,
+                  "height": 36,
+                  "style": "default"
+                }
+              ],
+              "x": 0,
+              "y": 204,
+              "width": 272,
+              "height": 36,
+              "style": "default",
+              "data": "EventQueue.multiplePages"
             }
           ]
         }
@@ -56689,7 +56781,7 @@
         },
         {
           "fileName": "actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_protection.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_protection.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
         },
         {
           "fileName": "gui_document.h",

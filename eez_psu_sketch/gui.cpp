@@ -613,8 +613,8 @@ bool draw_display_data_widget(const WidgetCursor &widgetCursor, const Widget *wi
         }
 
         if (refresh) {
-            char text[32];
-            value.toText(text, 32);
+            char text[64];
+            value.toText(text, sizeof(text));
 
             if (edit) {
                 DECL_STYLE_WITH_OFFSET(style, display_data_widget->editStyle);
@@ -641,8 +641,8 @@ bool draw_text_widget(const WidgetCursor &widgetCursor, const Widget *widget, bo
 			if (value.isString()) {
 	            drawText(value.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
 			} else {
-				char text[32];
-				value.toText(text, 32);
+				char text[64];
+				value.toText(text, sizeof(text));
 				drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
 			}
 		} else {
@@ -665,8 +665,8 @@ bool draw_multiline_text_widget(const WidgetCursor &widgetCursor, const Widget *
 			if (value.isString()) {
 				drawMultilineText(value.asString(), widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
 			} else {
-				char text[32];
-				value.toText(text, 32);
+				char text[64];
+				value.toText(text, sizeof(text));
 				drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
 			}
 		} else {
@@ -972,6 +972,10 @@ void doShowPage(int index) {
 
 	if (g_activePageId == PAGE_ID_EVENT_QUEUE && index == PAGE_ID_MAIN) {
 		event_queue::markAsRead();
+	}
+
+	if (index == PAGE_ID_EVENT_QUEUE) {
+		event_queue::moveToFirstPage();
 	}
 
 	g_activePageId = index;
