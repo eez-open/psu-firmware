@@ -32,6 +32,7 @@ static const int EVENT_TYPE_ERROR = 3;
 #define LIST_OF_EVENTS \
 	EVENT_ERROR(CH1_OVP_TRIPPED,  0, "Ch1 OVP tripped") \
 	EVENT_ERROR(CH1_OCP_TRIPPED,  1, "Ch1 OCP tripped") \
+	EVENT_ERROR(CH1_OCP_TRIPPED,  2, "Ch1 OPP tripped") \
 	EVENT_ERROR(CH2_OVP_TRIPPED,  3, "Ch2 OVP tripped") \
 	EVENT_ERROR(CH2_OCP_TRIPPED,  4, "Ch2 OCP tripped") \
 	EVENT_ERROR(CH2_OPP_TRIPPED,  5, "Ch2 OPP tripped") \
