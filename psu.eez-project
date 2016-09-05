@@ -47192,7 +47192,7 @@
               "listType": "vertical",
               "data": "channels",
               "x": 0,
-              "y": 16,
+              "y": 28,
               "itemWidget": {
                 "type": "Select",
                 "data": "channel_ok",
@@ -47205,7 +47205,7 @@
                     "x": 0,
                     "y": 0,
                     "width": 240,
-                    "height": 126
+                    "height": 128
                   },
                   {
                     "type": "Container",
@@ -47260,7 +47260,7 @@
                           }
                         ],
                         "width": 240,
-                        "height": 86,
+                        "height": 88,
                         "style": "default"
                       },
                       {
@@ -47268,7 +47268,7 @@
                         "data": "volt",
                         "action": "edit",
                         "x": 0,
-                        "y": 86,
+                        "y": 88,
                         "style": "mon_value",
                         "width": 106,
                         "height": 40
@@ -47278,7 +47278,7 @@
                         "data": "curr",
                         "action": "edit",
                         "x": 106,
-                        "y": 86,
+                        "y": 88,
                         "style": "mon_value",
                         "width": 106,
                         "height": 40
@@ -47287,7 +47287,7 @@
                         "type": "Text",
                         "action": "show_channel_settings",
                         "x": 212,
-                        "y": 86,
+                        "y": 88,
                         "style": "default_S",
                         "text": "`",
                         "width": 28,
@@ -47297,17 +47297,17 @@
                     "x": 0,
                     "y": 0,
                     "width": 240,
-                    "height": 126,
+                    "height": 128,
                     "style": "default"
                   }
                 ],
                 "x": 0,
                 "width": 240,
-                "height": 126,
+                "height": 128,
                 "style": "default"
               },
               "width": 240,
-              "height": 320,
+              "height": 256,
               "style": "default"
             },
             {
@@ -47356,6 +47356,57 @@
               "text": "Q",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "\\u0083",
+                  "x": 0,
+                  "y": 0,
+                  "width": 28,
+                  "height": 28,
+                  "style": "default_S",
+                  "action": "show_event_queue"
+                },
+                {
+                  "type": "DisplayData",
+                  "data": "EventQueue.lastEvent.message",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "event_info",
+                  "action": "show_event_queue"
+                },
+                {
+                  "type": "DisplayData",
+                  "data": "EventQueue.lastEvent.message",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "event_warning",
+                  "action": "show_event_queue"
+                },
+                {
+                  "type": "DisplayData",
+                  "data": "EventQueue.lastEvent.message",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "event_error",
+                  "action": "show_event_queue"
+                }
+              ],
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 28,
+              "style": "default",
+              "data": "EventQueue.lastEvent.type"
             }
           ],
           "x": 0,
@@ -47800,7 +47851,144 @@
           "y": 0,
           "width": 240,
           "height": 320,
-          "widgets": []
+          "widgets": [
+            {
+              "type": "List",
+              "listType": "vertical",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 280,
+              "data": "EventQueue.events",
+              "style": "default",
+              "itemWidget": {
+                "type": "Select",
+                "widgets": [
+                  {
+                    "type": "Rectangle",
+                    "x": 0,
+                    "y": 0,
+                    "width": 0,
+                    "height": 0,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "data": "EventQueue.events.message",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 28,
+                    "style": "event_info",
+                    "action": ""
+                  },
+                  {
+                    "type": "DisplayData",
+                    "data": "EventQueue.events.message",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 28,
+                    "style": "event_warning",
+                    "action": ""
+                  },
+                  {
+                    "type": "DisplayData",
+                    "data": "EventQueue.events.message",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 28,
+                    "style": "event_error",
+                    "action": ""
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 240,
+                "height": 28,
+                "style": "default",
+                "data": "EventQueue.events.type"
+              }
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Rectangle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 204,
+                  "height": 36,
+                  "style": "bottom_button_background"
+                },
+                {
+                  "type": "Container",
+                  "widgets": [
+                    {
+                      "type": "Button",
+                      "x": 0,
+                      "y": 0,
+                      "width": 36,
+                      "height": 36,
+                      "style": "bottom_button",
+                      "Disabled style:": "bottom_button_disabled",
+                      "text": "(",
+                      "Enabled": "calibration.channel.stepPrevEnabled",
+                      "disabledStyle": "bottom_button_disabled",
+                      "enabled": "EventQueue.previousPageEnabled",
+                      "action": "event_queue_previous_page"
+                    },
+                    {
+                      "type": "Button",
+                      "x": 36,
+                      "y": 0,
+                      "width": 36,
+                      "height": 36,
+                      "style": "bottom_button",
+                      "Disabled style:": "bottom_button_disabled",
+                      "text": ")",
+                      "Enabled": "calibration.channel.stepNextEnabled",
+                      "disabledStyle": "bottom_button_disabled",
+                      "enabled": "EventQueue.nextPageEnabled",
+                      "action": "event_queue_next_page"
+                    },
+                    {
+                      "type": "DisplayData",
+                      "data": "EventQueue.pageInfo",
+                      "x": 72,
+                      "y": 0,
+                      "width": 132,
+                      "height": 36,
+                      "style": "bottom_button_textual_S_left",
+                      "activeStyle": "default"
+                    }
+                  ],
+                  "x": 0,
+                  "y": 0,
+                  "width": 192,
+                  "height": 36,
+                  "style": "default"
+                }
+              ],
+              "x": 0,
+              "y": 284,
+              "width": 192,
+              "height": 36,
+              "style": "default",
+              "data": "EventQueue.multiplePages"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 204,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 36,
+              "height": 36
+            }
+          ]
         },
         "landscape": {
           "x": 0,
@@ -47868,16 +48056,6 @@
               }
             },
             {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            },
-            {
               "type": "Select",
               "widgets": [
                 {
@@ -47943,6 +48121,16 @@
               "height": 36,
               "style": "default",
               "data": "EventQueue.multiplePages"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
             }
           ]
         }

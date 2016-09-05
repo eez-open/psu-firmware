@@ -48,7 +48,12 @@ static int16_t g_eventsDuringInterruptHandling[6];
 static uint8_t g_eventsDuringInterruptHandlingHead = 0;
 static const int MAX_EVENTS_DURING_INTERRUPT_HANDLING = sizeof(g_eventsDuringInterruptHandling) / sizeof(int16_t);
 
+#if DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT || DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT_REVERSE
+static const int EVENTS_PER_PAGE = 10;
+#else
 static const int EVENTS_PER_PAGE = 7;
+#endif
+
 static uint8_t g_pageIndex = 0;
 
 void init() {

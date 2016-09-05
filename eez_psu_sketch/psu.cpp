@@ -61,7 +61,7 @@ static float g_current_max_limit = NAN;
 
 ontime::Counter g_powerOnTimeCounter(ontime::ON_TIME_COUNTER_POWER);
 
-extern bool g_insideInterruptHandler = false;
+bool g_insideInterruptHandler = false;
 
 ////////////////////////////////////////////////////////////////////////////////
 
