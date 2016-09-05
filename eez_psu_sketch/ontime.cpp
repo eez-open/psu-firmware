@@ -27,36 +27,43 @@ namespace psu {
 namespace ontime {
 
 Counter::Counter(int type_)
-	: type(type_)
+	: typeAndIsActive(type_)
 	, lastTime(0)
-	, isActive(false)
 	, writeInterval(WRITE_ONTIME_INTERVAL * MIN_TO_MS)
 	, fractionTime(0)
 {
 }
 
 void Counter::init() {
-	totalTime = persist_conf::readTotalOnTime(type);
+	totalTime = persist_conf::readTotalOnTime(getType());
+}
+
+int Counter::getType() {
+	return typeAndIsActive & ~0x80;
+}
+
+bool Counter::isActive() {
+	return (typeAndIsActive & 0x80) != 0;
 }
 
 void Counter::start() {
-	if (!isActive) {
+	if (!isActive()) {
 		lastTick = millis();
-		isActive = true;
+		typeAndIsActive |= 0x80;
 	}
 }
 
 void Counter::stop() {
-	if (isActive) {
+	if (isActive()) {
 		fractionTime += millis() - lastTick;
-		isActive = false;
+		typeAndIsActive &= ~0x80;
 		totalTime += lastTime;
 		lastTime = 0;
 	}
 }
 
 void Counter::tick(unsigned long tick_usec) {
-	if (isActive) {
+	if (isActive()) {
 		unsigned long timeMS = millis() - lastTick;
 		lastTick += timeMS;
 		fractionTime += timeMS;
@@ -69,7 +76,7 @@ void Counter::tick(unsigned long tick_usec) {
 	}
 
 	if (writeInterval.test(tick_usec)) {
-		persist_conf::writeTotalOnTime(type, getTotalTime());
+		persist_conf::writeTotalOnTime(getType(), getTotalTime());
 	}
 }
 

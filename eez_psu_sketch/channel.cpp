@@ -18,7 +18,11 @@
  
 #include "psu.h"
 #include "serial_psu.h"
+
+#if OPTION_ETHERNET
 #include "ethernet.h"
+#endif
+
 #include "bp.h"
 #include "board.h"
 #include "ioexp.h"
@@ -875,14 +879,20 @@ void Channel::disableProtection() {
 
 void Channel::setQuesBits(int bit_mask, bool on) {
     reg_set_ques_isum_bit(&serial::scpi_context, this, bit_mask, on);
-    if (ethernet::test_result == psu::TEST_OK)
+#if OPTION_ETHERNET
+	if (ethernet::test_result == psu::TEST_OK) {
         reg_set_ques_isum_bit(&ethernet::scpi_context, this, bit_mask, on);
+	}
+#endif
 }
 
 void Channel::setOperBits(int bit_mask, bool on) {
     reg_set_oper_isum_bit(&serial::scpi_context, this, bit_mask, on);
-    if (ethernet::test_result == psu::TEST_OK)
+#if OPTION_ETHERNET
+	if (ethernet::test_result == psu::TEST_OK) {
         reg_set_oper_isum_bit(&ethernet::scpi_context, this, bit_mask, on);
+	}
+#endif
 }
 
 char *Channel::getCvModeStr() {

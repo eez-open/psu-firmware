@@ -95,13 +95,13 @@ scpi_result_t debug_scpi_OntimeQ(scpi_t *context) {
     char buffer[512] = { 0 };
     char *p = buffer;
 
-    sprintf_P(p, PSTR("power active: %d\n"), (int)g_powerOnTimeCounter.isActive);
+    sprintf_P(p, PSTR("power active: %d\n"), int(g_powerOnTimeCounter.isActive() ? 1 : 0));
     p += strlen(p);
 
 	for (int i = 0; i < CH_NUM; ++i) {
 	    Channel& channel = Channel::get(i);
 
-		sprintf_P(p, PSTR("CH%d active: %d\n"), channel.index, (int)channel.onTimeCounter.isActive);
+		sprintf_P(p, PSTR("CH%d active: %d\n"), channel.index, int(channel.onTimeCounter.isActive() ? 1 : 0));
 		p += strlen(p);
 	}
 

@@ -113,44 +113,38 @@ scpi_t scpi_context;
 ////////////////////////////////////////////////////////////////////////////////
 
 bool init() {
-    if (OPTION_ETHERNET) {
 #ifdef EEZ_PSU_ARDUINO
-        DebugTrace("Ethernet initialization started...");
+    DebugTrace("Ethernet initialization started...");
 #endif
 
-        Enc28J60Network::setControlCS(ETH_SELECT);
+    Enc28J60Network::setControlCS(ETH_SELECT);
 
-        SPI.beginTransaction(ENC28J60_SPI);
-        test_result = Ethernet.begin(mac) ? psu::TEST_OK : psu::TEST_FAILED;
-        if (!test_result) {
-            SPI.endTransaction();
-            DebugTrace("Ethernet initialization failed!");
-            return false;
-        }
-        server.begin();
+    SPI.beginTransaction(ENC28J60_SPI);
+    test_result = Ethernet.begin(mac) ? psu::TEST_OK : psu::TEST_FAILED;
+    if (!test_result) {
         SPI.endTransaction();
+        DebugTrace("Ethernet initialization failed!");
+        return false;
+    }
+    server.begin();
+    SPI.endTransaction();
 
 #ifdef EEZ_PSU_ARDUINO
 #if CONF_DEBUG || CONF_DEBUG_LATEST
-        Serial.print("My IP: "); Serial.println(Ethernet.localIP());
-        Serial.print("Netmask: "); Serial.println(Ethernet.subnetMask());
-        Serial.print("GW IP: "); Serial.println(Ethernet.gatewayIP());
-        Serial.print("DNS IP: "); Serial.println(Ethernet.dnsServerIP());
+    Serial.print("My IP: "); Serial.println(Ethernet.localIP());
+    Serial.print("Netmask: "); Serial.println(Ethernet.subnetMask());
+    Serial.print("GW IP: "); Serial.println(Ethernet.gatewayIP());
+    Serial.print("DNS IP: "); Serial.println(Ethernet.dnsServerIP());
 #endif
 #else
-        Serial.print("Listening on port "); Serial.println(TCP_PORT);
+    Serial.print("Listening on port "); Serial.println(TCP_PORT);
 #endif
 
-        scpi::init(scpi_context,
-            scpi_psu_context,
-            &scpi_interface,
-            scpi_input_buffer, SCPI_PARSER_INPUT_BUFFER_LENGTH,
-            error_queue_data, SCPI_PARSER_ERROR_QUEUE_SIZE + 1);
-    }
-    else {
-        DebugTrace("Ethernet initialization skipped!");
-        test_result = psu::TEST_SKIPPED;
-    }
+    scpi::init(scpi_context,
+        scpi_psu_context,
+        &scpi_interface,
+        scpi_input_buffer, SCPI_PARSER_INPUT_BUFFER_LENGTH,
+        error_queue_data, SCPI_PARSER_ERROR_QUEUE_SIZE + 1);
 
     return test();
 }

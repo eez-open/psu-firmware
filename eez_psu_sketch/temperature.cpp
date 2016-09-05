@@ -20,7 +20,11 @@
 
 #include "psu.h"
 #include "serial_psu.h"
+
+#if OPTION_ETHERNET
 #include "ethernet.h"
+#endif
+
 #include "persist_conf.h"
 #include "sound.h"
 #include "temperature.h"

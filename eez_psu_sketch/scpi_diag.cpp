@@ -214,7 +214,7 @@ scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
 		devices::Device &device = devices::devices[i];
 
 		sprintf_P(buffer, PSTR("%d, %s, %s, %s"),
-			(int)*device.testResult, device.deviceName, devices::getInstalledString(device.installed), devices::getTestResultString(*device.testResult));
+			device.testResult ? (int)*device.testResult : TEST_SKIPPED, device.deviceName, devices::getInstalledString(device.installed), devices::getTestResultString(*device.testResult));
 		SCPI_ResultText(context, buffer);
 	}
 

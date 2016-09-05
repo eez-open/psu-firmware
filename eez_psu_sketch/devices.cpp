@@ -20,7 +20,11 @@
 #include "devices.h"
 
 #include "eeprom.h"
+
+#if OPTION_ETHERNET
 #include "ethernet.h"
+#endif
+
 #include "rtc.h"
 #include "datetime.h"
 #include "bp.h"
@@ -42,7 +46,11 @@ namespace devices {
 
 Device devices[] = {
 	{ "EEPROM", OPTION_EXT_EEPROM, &eeprom::test_result },
-	{ "Ethernet", OPTION_ETHERNET, &ethernet::test_result },
+#if OPTION_ETHERNET
+	{ "Ethernet", 1, &ethernet::test_result },
+#else
+	{ "Ethernet", 0, 0 },
+#endif
 	{ "RTC", OPTION_EXT_RTC, &rtc::test_result },
 	{ "DateTime", true, &datetime::test_result },
 	{ "BP option", OPTION_BP, &bp::test_result },
@@ -61,7 +69,7 @@ int numDevices = sizeof(devices) / sizeof(Device);
 bool anyFailedOrWarning() {
 	for (int i = 0; i < numDevices; ++i) {
 		Device &device = devices[i];
-		if (*device.testResult == TEST_FAILED || *device.testResult == TEST_WARNING) {
+		if (device.testResult != 0 && (*device.testResult == TEST_FAILED || *device.testResult == TEST_WARNING)) {
 			return true;
 		}
 	}

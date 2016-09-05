@@ -32,9 +32,10 @@ enum {
 
 class Counter {
 public:
-	bool isActive;
-
 	Counter(int type);
+
+	int getType();
+	bool isActive();
 
 	void start();
 	void stop();
@@ -46,7 +47,7 @@ public:
 	unsigned long getLastTime();
 
 private:
-	int type;
+	uint8_t typeAndIsActive;
 	unsigned long totalTime;
 	unsigned long lastTime;
 	unsigned long lastTick;
