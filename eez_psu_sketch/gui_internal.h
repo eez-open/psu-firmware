@@ -88,12 +88,12 @@ void errorMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);
 
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());
 
-extern void (*dialog_yes_callback)();
-extern void (*dialog_no_callback)();
-extern void (*dialog_cancel_callback)();
+extern void (*g_dialogYesCallback)();
+extern void (*g_dialogNoCallback)();
+extern void (*g_dialogCancelCallback)();
 void dialog_ok_callback();
 
-extern WidgetCursor found_widget_at_down;
+extern WidgetCursor g_foundWidgetAtDown;
 
 void selectChannel();
 extern Channel *g_channel;

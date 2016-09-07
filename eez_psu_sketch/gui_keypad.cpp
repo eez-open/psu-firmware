@@ -167,7 +167,7 @@ void appendChar(char c) {
 }
 
 void key() {
-	DECL_WIDGET(widget, found_widget_at_down.widgetOffset);
+	DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
 	DECL_WIDGET_SPECIFIC(TextWidget, textWidget, widget);
 	DECL_STRING(text, textWidget->text);
 	char c = text[0];

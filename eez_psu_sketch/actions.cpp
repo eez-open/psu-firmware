@@ -32,7 +32,7 @@ namespace psu {
 using namespace gui;
 
 void action_toggle_channel() {
-    Channel& channel = Channel::get(found_widget_at_down.cursor.iChannel);
+    Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.iChannel);
     if (channel.isTripped()) {
         errorMessageP(PSTR("Channel is tripped!"), 0);
     } else {
@@ -132,11 +132,11 @@ void action_touch_screen_calibration() {
 }
 
 void action_yes() {
-    dialog_yes_callback();
+    g_dialogYesCallback();
 }
 
 void action_no() {
-    dialog_no_callback();
+    g_dialogNoCallback();
 }
 
 void action_ok() {
@@ -144,7 +144,7 @@ void action_ok() {
 }
 
 void action_cancel() {
-    dialog_cancel_callback();
+    g_dialogCancelCallback();
 }
 
 void action_show_previous_page() {

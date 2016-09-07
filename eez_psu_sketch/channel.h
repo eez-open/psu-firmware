@@ -362,7 +362,13 @@ public:
     /// Is channel output enabled?
     bool isOutputEnabled();
 
-    /// Enable/disable remote sensing.
+    /// Enable/disable channel calibration.
+    void calibrationEnable(bool enable);
+
+    /// Is channel calibration enabled?
+    bool isCalibrationEnabled();
+
+	/// Enable/disable remote sensing.
     void remoteSensingEnable(bool enable);
 
     /// Is remote sensing enabled?

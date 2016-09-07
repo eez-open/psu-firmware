@@ -56,7 +56,7 @@ using namespace lcd;
 
 Document *g_doc;
 #if defined(EEZ_PSU_ARDUINO_MEGA)
-static Document doc_buffer;
+static Document g_docBuffer;
 #endif
 
 static int g_activePageId;
@@ -65,26 +65,25 @@ static bool g_pushActivePageOnStack;
 static int g_pageNavigationStack[CONF_GUI_PAGE_NAVIGATION_STACK_SIZE];
 static int g_pageNavigationStackPointer = 0;
 
-static bool is_page_refresh;
-static bool widget_refresh;
+static bool g_isPageRefresh;
+static bool g_widgetRefresh;
 
-static const Style *page_style;
+static const Style *g_pageStyle;
 
-static WidgetCursor selected_widget;
-WidgetCursor found_widget_at_down;
+static WidgetCursor g_selectedWidget;
+WidgetCursor g_foundWidgetAtDown;
 
-void (*dialog_yes_callback)();
-void (*dialog_no_callback)();
-void (*dialog_cancel_callback)();
+void (*g_dialogYesCallback)();
+void (*g_dialogNoCallback)();
+void (*g_dialogCancelCallback)();
 
-static bool isBlinkTime;
-static bool wasBlinkTime;
+static bool g_isBlinkTime;
+static bool g_wasBlinkTime;
 
-static unsigned long showPageTime;
-static unsigned long touchDownTime;
-static bool touchActionExecuted;
-
-WidgetCursor actionWidgetCursor;
+static unsigned long g_showPageTime;
+static unsigned long g_timeOfLastActivity;
+static unsigned long g_touchDownTime;
+static bool g_touchActionExecuted;
 
 Channel *g_channel;
 
@@ -314,9 +313,9 @@ void drawText(const char *text, int textLength, int x, int y, int w, int h, cons
     uint16_t background_color = inverse ? style->color : style->background_color;
     lcd::lcd.setColor(background_color);
 
-    if (widget_refresh) {
+    if (g_widgetRefresh) {
         lcd::lcd.fillRect(x1, y1, x2, y2);
-    } else if (!is_page_refresh || page_style->background_color != background_color) {
+    } else if (!g_isPageRefresh || g_pageStyle->background_color != background_color) {
         if (x1 <= x_offset - 1 && y1 <= y2)
             lcd::lcd.fillRect(x1, y1, x_offset - 1, y2);
         if (x_offset + width <= x2 && y1 <= y2)
@@ -337,7 +336,7 @@ void drawText(const char *text, int textLength, int x, int y, int w, int h, cons
         lcd::lcd.setBackColor(style->background_color);
         lcd::lcd.setColor(style->color);
     }
-    lcd::lcd.drawStr(text, textLength, x_offset, y_offset, x1, y1, x2, y2, font, (!is_page_refresh && !widget_refresh) || page_style->background_color != background_color);
+    lcd::lcd.drawStr(text, textLength, x_offset, y_offset, x1, y1, x2, y2, font, (!g_isPageRefresh && !g_widgetRefresh) || g_pageStyle->background_color != background_color);
 }
 
 void drawMultilineText(const char *text, int x, int y, int w, int h, const Style *style, bool inverse) {
@@ -368,10 +367,10 @@ void drawMultilineText(const char *text, int x, int y, int w, int h, const Style
 
     uint16_t background_color = inverse ? style->color : style->background_color;
     lcd::lcd.setColor(background_color);
-    if (widget_refresh) {
+    if (g_widgetRefresh) {
         lcd::lcd.fillRect(x1, y1, x2, y2);
     } else {
-        clear_background = !is_page_refresh || page_style->background_color != background_color;
+        clear_background = !g_isPageRefresh || g_pageStyle->background_color != background_color;
         if (clear_background) {
             if (style->padding_horizontal > 0) {
                 lcd::lcd.fillRect(x1, y1, x1 + style->padding_horizontal - 1, y2);
@@ -427,7 +426,7 @@ void drawMultilineText(const char *text, int x, int y, int w, int h, const Style
             lcd::lcd.setColor(style->color);
         }
 
-        lcd::lcd.drawStr(text + j, i - j, x, y, x1, y1, x2, y2, font, (!is_page_refresh && !widget_refresh) || page_style->background_color != background_color);
+        lcd::lcd.drawStr(text + j, i - j, x, y, x1, y1, x2, y2, font, (!g_isPageRefresh && !g_widgetRefresh) || g_pageStyle->background_color != background_color);
 
         x += width;
 
@@ -520,9 +519,9 @@ void drawBitmap(uint8_t bitmapIndex, int x, int y, int w, int h, const Style *st
     uint16_t background_color = inverse ? style->color : style->background_color;
     lcd::lcd.setColor(background_color);
 
-    if (widget_refresh) {
+    if (g_widgetRefresh) {
         lcd::lcd.fillRect(x1, y1, x2, y2);
-    } else if (!is_page_refresh || page_style->background_color != background_color) {
+    } else if (!g_isPageRefresh || g_pageStyle->background_color != background_color) {
         if (x1 <= x_offset - 1 && y1 <= y2)
             lcd::lcd.fillRect(x1, y1, x_offset - 1, y2);
         if (x_offset + width <= x2 && y1 <= y2)
@@ -592,12 +591,12 @@ bool draw_display_data_widget(const WidgetCursor &widgetCursor, const Widget *wi
 
         bool isBlinking = data::currentSnapshot.isBlinking(widgetCursor.cursor, widget->data);
         if (isBlinking) {
-            if (isBlinkTime) {
+            if (g_isBlinkTime) {
                 value = data::Value("");
             } else {
                 value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
             }
-            refresh = refresh || (isBlinkTime != wasBlinkTime);
+            refresh = refresh || (g_isBlinkTime != g_wasBlinkTime);
         } else {
             value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
         }
@@ -776,7 +775,7 @@ bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, b
 
         static int edit_mode_slider_scale_last_y_value;
 
-        if (is_page_refresh || widget->data != DATA_ID_EDIT_VALUE) {
+        if (g_isPageRefresh || widget->data != DATA_ID_EDIT_VALUE) {
             // draw entire scale 
             draw_scale(widget, y_from_min, y_from_max, y_min, y_max, y_value, f, d, true);
         }
@@ -882,7 +881,7 @@ bool draw_bitmap_widget(const WidgetCursor &widgetCursor, const Widget *widget, 
 bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
-    bool inverse = selected_widget == widgetCursor;
+    bool inverse = g_selectedWidget == widgetCursor;
 
     if (widget->type == WIDGET_TYPE_DISPLAY_DATA) {
         return draw_display_data_widget(widgetCursor, widget, refresh, inverse);
@@ -912,8 +911,8 @@ static EnumWidgets draw_enum_widgets(draw_widget);
 void draw_tick() {
     for (int i = 0; i < CONF_GUI_DRAW_TICK_ITERATIONS; ++i) {
         if (!draw_enum_widgets.next()) {
-            wasBlinkTime = isBlinkTime;
-            isBlinkTime = (micros() % (2 * CONF_GUI_BLINK_TIME)) > CONF_GUI_BLINK_TIME && touch::event_type == touch::TOUCH_NONE;
+            g_wasBlinkTime = g_isBlinkTime;
+            g_isBlinkTime = (micros() % (2 * CONF_GUI_BLINK_TIME)) > CONF_GUI_BLINK_TIME && touch::event_type == touch::TOUCH_NONE;
 
             data::previousSnapshot = data::currentSnapshot;
             data::currentSnapshot.takeSnapshot();
@@ -924,7 +923,7 @@ void draw_tick() {
             //DebugTraceF("%d", draw_counter);
             //draw_counter = 0;
 
-            is_page_refresh = false;
+            g_isPageRefresh = false;
 
             break;
         }
@@ -932,18 +931,18 @@ void draw_tick() {
 }
 
 void refresh_widget(WidgetCursor widget_cursor) {
-    widget_refresh = true;
+    g_widgetRefresh = true;
     draw_widget(widget_cursor, true);
-    widget_refresh = false;
+    g_widgetRefresh = false;
 }
 
 void refreshPage() {
-    is_page_refresh = true;
+    g_isPageRefresh = true;
 
     // clear screen with background color
     DECL_WIDGET(page, getPageOffset(g_activePageId));
     DECL_WIDGET_STYLE(style, page);
-    page_style = style;
+    g_pageStyle = style;
     lcd::lcd.setColor(style->background_color);
     lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
 
@@ -952,7 +951,7 @@ void refreshPage() {
 }
 
 void flush() {
-    while (is_page_refresh) {
+    while (g_isPageRefresh) {
         draw_tick();
     }
 
@@ -980,7 +979,8 @@ void doShowPage(int index) {
 
 	g_activePageId = index;
 
-    showPageTime = micros();
+    g_showPageTime = micros();
+	g_timeOfLastActivity = millis();
     refreshPage();
 }
 
@@ -1039,7 +1039,7 @@ void showEnteringStandbyPage() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void selectChannel() {
-	g_channel = &Channel::get(found_widget_at_down.cursor.iChannel);
+	g_channel = &Channel::get(g_foundWidgetAtDown.cursor.iChannel);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1079,13 +1079,13 @@ void find_widget(int x, int y) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void select_widget(WidgetCursor &widget_cursor) {
-    selected_widget = widget_cursor;
-    refresh_widget(selected_widget);
+    g_selectedWidget = widget_cursor;
+    refresh_widget(g_selectedWidget);
 }
 
 void deselect_widget() {
-    WidgetCursor old_selected_widget = selected_widget;
-    selected_widget = 0;
+    WidgetCursor old_selected_widget = g_selectedWidget;
+    g_selectedWidget = 0;
     refresh_widget(old_selected_widget);
 }
 
@@ -1101,12 +1101,12 @@ void standbyTouchHandling(unsigned long tick_usec) {
     // touch handling in power off:
     // wait for long press anywhere on the screen and then turn power on
     if (touch::event_type == touch::TOUCH_DOWN) {
-        touchDownTime = tick_usec;
-        touchActionExecuted = false;
+        g_touchDownTime = tick_usec;
+        g_touchActionExecuted = false;
     } else if (touch::event_type == touch::TOUCH_MOVE) {
-        if (tick_usec - touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
-            if (!touchActionExecuted) {
-                touchActionExecuted = true;
+        if (tick_usec - g_touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
+            if (!g_touchActionExecuted) {
+                g_touchActionExecuted = true;
                 psu::changePowerState(true);
             }
         }
@@ -1129,8 +1129,8 @@ void init() {
     g_activePageId = -1;
 
 #if defined(EEZ_PSU_ARDUINO_MEGA)
-    arduino_util::prog_read_buffer(document, (uint8_t *)&doc_buffer, sizeof(Document));
-    g_doc = &doc_buffer;
+    arduino_util::prog_read_buffer(document, (uint8_t *)&g_docBuffer, sizeof(Document));
+    g_doc = &g_docBuffer;
 #else
     g_doc = (Document *)document;
 #endif
@@ -1151,17 +1151,17 @@ void tick(unsigned long tick_usec) {
     }
 
     // wait some time for transitional pages
-    if (g_activePageId == PAGE_ID_STANDBY && tick_usec - showPageTime < CONF_GUI_STANDBY_PAGE_TIMEOUT) {
+    if (g_activePageId == PAGE_ID_STANDBY && tick_usec - g_showPageTime < CONF_GUI_STANDBY_PAGE_TIMEOUT) {
         standbyTouchHandling(tick_usec);
         return;
-    } else if (g_activePageId == PAGE_ID_ENTERING_STANDBY && tick_usec - showPageTime < CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT) {
+    } else if (g_activePageId == PAGE_ID_ENTERING_STANDBY && tick_usec - g_showPageTime < CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT) {
         if (!psu::isPowerUp()) {
-            unsigned long saved_showPageTime = showPageTime;
+            unsigned long saved_showPageTime = g_showPageTime;
             showStandbyPage();
-            showPageTime = saved_showPageTime - (CONF_GUI_STANDBY_PAGE_TIMEOUT - CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT);
+            g_showPageTime = saved_showPageTime - (CONF_GUI_STANDBY_PAGE_TIMEOUT - CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT);
         }
         return;
-    } else if (g_activePageId == PAGE_ID_WELCOME && tick_usec - showPageTime < CONF_GUI_WELCOME_PAGE_TIMEOUT) {
+    } else if (g_activePageId == PAGE_ID_WELCOME && tick_usec - g_showPageTime < CONF_GUI_WELCOME_PAGE_TIMEOUT) {
         return;
     }
 
@@ -1190,83 +1190,94 @@ void tick(unsigned long tick_usec) {
     }
 
     // touch handling
-    if (touch::event_type == touch::TOUCH_DOWN) {
-        touchDownTime = tick_usec;
-        touchActionExecuted = false;
-        find_widget(touch::x, touch::y);
-        DECL_WIDGET(widget, found_widget.widgetOffset);
-        if (found_widget && widget->action) {
-            found_widget_at_down = found_widget;
-        } else {
-            found_widget_at_down = 0;
-        }
-        if (found_widget_at_down) {
-            select_widget(found_widget_at_down);
-        } else {
-            DECL_WIDGET(widget, found_widget.widgetOffset);
-            if (found_widget && widget->type == WIDGET_TYPE_BUTTON_GROUP) {
-                widget_button_group::onTouchDown(found_widget);
-            } else if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
-                edit_mode_slider::onTouchDown();
-            } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
-                edit_mode_step::onTouchDown();
-            }
-        }
-    } else if (touch::event_type == touch::TOUCH_MOVE) {
-        if (found_widget_at_down) {
-            DECL_WIDGET(widget, found_widget_at_down.widgetOffset);
-            if (widget->action == ACTION_ID_TURN_OFF) {
-                if (tick_usec - touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
-                    if (!touchActionExecuted) {
-                        deselect_widget();
-                        found_widget_at_down = 0;
-                        touchActionExecuted = true;
-                        psu::changePowerState(false);
-                    }
-                }
-            }
-        } else {
-            if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
-                edit_mode_slider::onTouchMove();
-            } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
-                edit_mode_step::onTouchMove();
-            } else if (g_activePageId == PAGE_ID_YES_NO) {
-#ifdef CONF_DEBUG
-                int x = touch::x;
-                if (x < 1) x = 1;
-                else if (x > lcd::lcd.getDisplayXSize() - 2) x = lcd::lcd.getDisplayXSize() - 2;
+	if (touch::event_type != touch::TOUCH_NONE) {
+		g_timeOfLastActivity = millis();
 
-                int y = touch::y;
-                if (y < 1) y = 1;
-                else if (y > lcd::lcd.getDisplayYSize() - 2) y = lcd::lcd.getDisplayYSize() - 2;
+		if (touch::event_type == touch::TOUCH_DOWN) {
+			g_touchDownTime = tick_usec;
+			g_touchActionExecuted = false;
+			find_widget(touch::x, touch::y);
+			DECL_WIDGET(widget, found_widget.widgetOffset);
+			if (found_widget && widget->action) {
+				g_foundWidgetAtDown = found_widget;
+			} else {
+				g_foundWidgetAtDown = 0;
+			}
+			if (g_foundWidgetAtDown) {
+				select_widget(g_foundWidgetAtDown);
+			} else {
+				DECL_WIDGET(widget, found_widget.widgetOffset);
+				if (found_widget && widget->type == WIDGET_TYPE_BUTTON_GROUP) {
+					widget_button_group::onTouchDown(found_widget);
+				} else if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+					edit_mode_slider::onTouchDown();
+				} else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
+					edit_mode_step::onTouchDown();
+				}
+			}
+		} else if (touch::event_type == touch::TOUCH_MOVE) {
+			if (g_foundWidgetAtDown) {
+				DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
+				if (widget->action == ACTION_ID_TURN_OFF) {
+					if (tick_usec - g_touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
+						if (!g_touchActionExecuted) {
+							deselect_widget();
+							g_foundWidgetAtDown = 0;
+							g_touchActionExecuted = true;
+							psu::changePowerState(false);
+						}
+					}
+				}
+			} else {
+				if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+					edit_mode_slider::onTouchMove();
+				} else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
+					edit_mode_step::onTouchMove();
+				} else if (g_activePageId == PAGE_ID_YES_NO) {
+	#ifdef CONF_DEBUG
+					int x = touch::x;
+					if (x < 1) x = 1;
+					else if (x > lcd::lcd.getDisplayXSize() - 2) x = lcd::lcd.getDisplayXSize() - 2;
 
-                lcd::lcd.setColor(VGA_WHITE);
-                lcd::lcd.fillRect(touch::x-1, touch::y-1, touch::x+1, touch::y+1);
-#endif
-            }
-        }
-    } else if (touch::event_type == touch::TOUCH_UP) {
-        if (found_widget_at_down) {
-            deselect_widget();
-            DECL_WIDGET(widget, found_widget_at_down.widgetOffset);
-            do_action(widget->action);
-            found_widget_at_down = 0;
-        } else {
-            if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
-                edit_mode_slider::onTouchUp();
-            } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
-                edit_mode_step::onTouchUp();
-            }
-        }
-    }
+					int y = touch::y;
+					if (y < 1) y = 1;
+					else if (y > lcd::lcd.getDisplayYSize() - 2) y = lcd::lcd.getDisplayYSize() - 2;
+
+					lcd::lcd.setColor(VGA_WHITE);
+					lcd::lcd.fillRect(touch::x-1, touch::y-1, touch::x+1, touch::y+1);
+	#endif
+				}
+			}
+		} else if (touch::event_type == touch::TOUCH_UP) {
+			if (g_foundWidgetAtDown) {
+				deselect_widget();
+				DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
+				do_action(widget->action);
+				g_foundWidgetAtDown = 0;
+			} else {
+				if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+					edit_mode_slider::onTouchUp();
+				} else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
+					edit_mode_step::onTouchUp();
+				}
+			}
+		}
+	}
+
+	//
+	if (millis() - g_timeOfLastActivity >= 10 * 1000UL) {
+		if (g_activePageId == PAGE_ID_EVENT_QUEUE) {
+			showPage(PAGE_ID_MAIN);
+		}
+	}
 
     // update screen
     draw_tick();
 }
 
 void dialog_ok_callback() {
-	if (dialog_yes_callback) {
-		dialog_yes_callback();
+	if (g_dialogYesCallback) {
+		g_dialogYesCallback();
 	} else {
 		g_activePageId = g_lastActivePageId;
 		refreshPage();
@@ -1276,7 +1287,7 @@ void dialog_ok_callback() {
 void alertMessage(int alertPageId, data::Value message, void (*ok_callback)()) {
     data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, message);
 
-    dialog_yes_callback = ok_callback;
+    g_dialogYesCallback = ok_callback;
 
 	g_lastActivePageId = g_activePageId;
     g_activePageId = alertPageId;
@@ -1306,9 +1317,9 @@ void errorMessageP(const char *message PROGMEM, void (*ok_callback)()) {
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
     data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message));
 
-    dialog_yes_callback = yes_callback;
-    dialog_no_callback = no_callback;
-    dialog_cancel_callback = cancel_callback;
+    g_dialogYesCallback = yes_callback;
+    g_dialogNoCallback = no_callback;
+    g_dialogCancelCallback = cancel_callback;
 
     g_activePageId = PAGE_ID_YES_NO;
     refreshPage();

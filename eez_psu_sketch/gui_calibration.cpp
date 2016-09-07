@@ -300,8 +300,8 @@ void stop() {
 }
 
 void toggleEnable() {
-	Channel &channel = g_channel ? *g_channel : Channel::get(found_widget_at_down.cursor.iChannel);
-	channel.flags.cal_enabled = !channel.flags.cal_enabled;
+	Channel &channel = g_channel ? *g_channel : Channel::get(g_foundWidgetAtDown.cursor.iChannel);
+	channel.calibrationEnable(!channel.flags.cal_enabled);
 	refreshPage();
 }
 

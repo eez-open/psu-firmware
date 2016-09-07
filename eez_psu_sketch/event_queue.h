@@ -39,6 +39,8 @@ static const int EVENT_TYPE_ERROR = 3;
 	EVENT_ERROR(MAIN_OTP_TRIPPED, 30, "MAIN OTP tripped") \
 	EVENT_ERROR(CH1_OTP_TRIPPED,  31, "CH1 OTP tripped") \
 	EVENT_ERROR(CH2_OTP_TRIPPED,  32, "CH2 OTP tripped") \
+	EVENT_WARNING(CH1_CALIBRATION_DISABLED, 0, "Ch1 calibration disabled") \
+	EVENT_WARNING(CH2_CALIBRATION_DISABLED, 1, "Ch2 calibration disabled") \
 	EVENT_INFO(WELCOME, 0, "Welcome!") \
 	EVENT_INFO(POWER_UP, 1, "Power up") \
 	EVENT_INFO(POWER_DOWN, 2, "Power down") \
@@ -76,7 +78,9 @@ static const int EVENT_TYPE_ERROR = 3;
 	EVENT_INFO(DEFAULE_PROFILE_CHANGED_TO_6, 86, "Default profile changed to 6") \
 	EVENT_INFO(DEFAULE_PROFILE_CHANGED_TO_7, 87, "Default profile changed to 7") \
 	EVENT_INFO(DEFAULE_PROFILE_CHANGED_TO_8, 88, "Default profile changed to 8") \
-	EVENT_INFO(DEFAULE_PROFILE_CHANGED_TO_9, 89, "Default profile changed to 9")
+	EVENT_INFO(DEFAULE_PROFILE_CHANGED_TO_9, 89, "Default profile changed to 9") \
+	EVENT_INFO(CH1_CALIBRATION_ENABLED, 90, "Ch1 calibration enabled") \
+	EVENT_INFO(CH2_CALIBRATION_ENABLED, 91, "Ch2 calibration enabled") \
 
 #define EVENT_ERROR_START_ID 10000
 #define EVENT_WARNING_START_ID 12000

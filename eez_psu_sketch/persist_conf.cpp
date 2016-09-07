@@ -159,9 +159,8 @@ bool changePassword(const char *new_password, size_t new_password_len) {
 
 bool enableBeep(bool enable) {
     dev_conf.flags.beep_enabled = enable ? 1 : 0;
-	event_queue::pushEvent(enable ? event_queue::EVENT_INFO_BEEPER_ENABLED : event_queue::EVENT_INFO_BEEPER_DISABLED);
     if (saveDevice()) {
-		event_queue::pushEvent(event_queue::EVENT_INFO_CALIBRATION_PASSWORD_CHANGED);
+		event_queue::pushEvent(enable ? event_queue::EVENT_INFO_BEEPER_ENABLED : event_queue::EVENT_INFO_BEEPER_DISABLED);
 		return true;
 	}
 	return false;

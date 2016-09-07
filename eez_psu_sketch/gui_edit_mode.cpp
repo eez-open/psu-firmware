@@ -93,8 +93,8 @@ void enter(int tabIndex_) {
 
     if (getActivePage() != tabIndex) {
         if (getActivePage() == PAGE_ID_MAIN) {
-            dataCursor = found_widget_at_down.cursor;
-            DECL_WIDGET(widget, found_widget_at_down.widgetOffset);
+            dataCursor = g_foundWidgetAtDown.cursor;
+            DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
             dataId = widget->data;
         }
 

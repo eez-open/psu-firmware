@@ -765,6 +765,20 @@ bool Channel::isOutputEnabled() {
     return psu::isPowerUp() && flags.output_enabled;
 }
 
+void Channel::calibrationEnable(bool enable) {
+    if (enable != flags.cal_enabled) {
+	    flags.cal_enabled = enable;
+		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_CALIBRATION_ENABLED :
+			event_queue::EVENT_WARNING_CH1_CALIBRATION_DISABLED) + index - 1);
+		profile::save();
+    }
+}
+
+bool Channel::isCalibrationEnabled() {
+	return flags.cal_enabled;
+}
+
+
 void Channel::remoteSensingEnable(bool enable) {
     if (enable != flags.sense_enabled) {
         doRemoteSensingEnable(enable);

@@ -284,7 +284,7 @@ scpi_result_t scpi_cal_State(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    channel->flags.cal_enabled = cal_enabled;
+	channel->calibrationEnable(cal_enabled);
 
     return SCPI_RES_OK;
 }
