@@ -54,7 +54,7 @@ class Channel;
 class IOExpander {
 public:
     static const uint8_t IO_BIT_IN_ADC_DRDY = 0;
-	static const uint8_t IO_BIT_IN_REMOTE_SENSE_REVERSE_POLARITY_DETECTION = 0;
+	static const uint8_t IO_BIT_IN_RPOL = 0; // remote sense reverse polarity detection
     static const uint8_t IO_BIT_IN_CC_ACTIVE = 2;
     static const uint8_t IO_BIT_IN_TEMP_SENSOR = 3;
     static const uint8_t IO_BIT_IN_CV_ACTIVE = 5;

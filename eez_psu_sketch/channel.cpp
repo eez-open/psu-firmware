@@ -585,16 +585,16 @@ void Channel::event(uint8_t gpio, int16_t adc_data) {
 #endif
 
 	if (boardRevision == CH_BOARD_REVISION_R5B9) {
-		unsigned remote_sense_reverse_polarity = !(gpio & (1 << IOExpander::IO_BIT_IN_REMOTE_SENSE_REVERSE_POLARITY_DETECTION));
+		unsigned rpol = !(gpio & (1 << IOExpander::IO_BIT_IN_RPOL));
 
-		if (remote_sense_reverse_polarity && isOutputEnabled()) {
+		if (rpol && isOutputEnabled()) {
 			outputEnable(false);
 			event_queue::pushEvent(event_queue::EVENT_ERROR_CH1_REMOTE_SENSE_REVERSE_POLARITY_DETECTED + index - 1);
 		}
 
-		if (remote_sense_reverse_polarity != flags.remote_sense_reverse_polarity) {
-			flags.remote_sense_reverse_polarity = remote_sense_reverse_polarity;
-			setQuesBits(QUES_ISUM_REMOTE_SENSE_REVERSE_POLARITY, flags.remote_sense_reverse_polarity ? true : false);
+		if (rpol != flags.rpol) {
+			flags.rpol = rpol;
+			setQuesBits(QUES_ISUM_RPOL, flags.rpol ? true : false);
 		}
 	}
 

@@ -55,7 +55,7 @@ namespace scpi {
 #define QUES_ISUM_VOLT (1 <<  0)  /* VOLTage */
 #define QUES_ISUM_CURR (1 <<  1)  /* CURRent */
 #define QUES_ISUM_TEMP (1 <<  4)  /* TEMPerature */
-#define QUES_ISUM_REMOTE_SENSE_REVERSE_POLARITY (1 <<  7)  /* Remote sense reverse polarity detected */
+#define QUES_ISUM_RPOL (1 <<  7)  /* Remote sense reverse polarity is detected */
 #define QUES_ISUM_OVP  (1 <<  8)  /* OVP */
 #define QUES_ISUM_OCP  (1 <<  9)  /* OVP */
 #define QUES_ISUM_OPP  (1 << 10)  /* OPP */
