@@ -147,6 +147,7 @@ bool getText(char *text, int count) {
 
 	return true;
 }
+
 data::Value getData(uint8_t id) {
 	if (id == DATA_ID_KEYPAD_MAX_ENABLED) {
 		return data::Value(g_maxButtonEnabled ? 1 : 0);
@@ -161,6 +162,15 @@ data::Value getData(uint8_t id) {
 
 bool isMilli() {
 	return g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT || g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER;
+}
+
+void switchToMilli() {
+	if (g_editUnit == data::VALUE_TYPE_FLOAT_VOLT) {
+		g_editUnit = data::VALUE_TYPE_FLOAT_MILLI_VOLT;
+	}
+	else if (g_editUnit == data::VALUE_TYPE_FLOAT_AMPER) {
+		g_editUnit = data::VALUE_TYPE_FLOAT_MILLI_AMPER;
+	}
 }
 
 float getValue() {
@@ -183,7 +193,13 @@ float getValue() {
 			}
 		}
 
-		return a + b;
+		float value = a + b;
+
+		if (isMilli()) {
+			value /= 1000.0f;
+		}
+
+		return value;
 	} else {
 		float value = 0;
 
@@ -385,21 +401,17 @@ void dot() {
 }
 
 void toggleEditUnit() {
-	if (g_genericNumberKeypad) {
-		// DO NOTHING
-	} else {
-		if (g_editUnit == data::VALUE_TYPE_FLOAT_VOLT) {
-			g_editUnit = data::VALUE_TYPE_FLOAT_MILLI_VOLT;
-		}
-		else if (g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT) {
-			g_editUnit = data::VALUE_TYPE_FLOAT_VOLT;
-		}
-		else if (g_editUnit == data::VALUE_TYPE_FLOAT_AMPER) {
-			g_editUnit = data::VALUE_TYPE_FLOAT_MILLI_AMPER;
-		}
-		else if (g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER) {
-			g_editUnit = data::VALUE_TYPE_FLOAT_AMPER;
-		}
+	if (g_editUnit == data::VALUE_TYPE_FLOAT_VOLT) {
+		g_editUnit = data::VALUE_TYPE_FLOAT_MILLI_VOLT;
+	}
+	else if (g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT) {
+		g_editUnit = data::VALUE_TYPE_FLOAT_VOLT;
+	}
+	else if (g_editUnit == data::VALUE_TYPE_FLOAT_AMPER) {
+		g_editUnit = data::VALUE_TYPE_FLOAT_MILLI_AMPER;
+	}
+	else if (g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER) {
+		g_editUnit = data::VALUE_TYPE_FLOAT_AMPER;
 	}
 }
 
@@ -497,7 +509,7 @@ void sign() {
 
 void unit() {
 	if (g_genericNumberKeypad) {
-		// DO NOTHING
+		toggleEditUnit();
 	} else {
 		float value = getValue();
 		data::ValueType savedEditUnit = g_editUnit;
