@@ -584,6 +584,20 @@ void Channel::event(uint8_t gpio, int16_t adc_data) {
 	testPwrgood(gpio);
 #endif
 
+	if (boardRevision == CH_BOARD_REVISION_R5B9) {
+		unsigned remote_sense_reverse_polarity = !(gpio & (1 << IOExpander::IO_BIT_IN_REMOTE_SENSE_REVERSE_POLARITY_DETECTION));
+
+		if (remote_sense_reverse_polarity && isOutputEnabled()) {
+			outputEnable(false);
+			event_queue::pushEvent(event_queue::EVENT_ERROR_CH1_REMOTE_SENSE_REVERSE_POLARITY_DETECTED + index - 1);
+		}
+
+		if (remote_sense_reverse_polarity != flags.remote_sense_reverse_polarity) {
+			flags.remote_sense_reverse_polarity = remote_sense_reverse_polarity;
+			setQuesBits(QUES_ISUM_REMOTE_SENSE_REVERSE_POLARITY, flags.remote_sense_reverse_polarity ? true : false);
+		}
+	}
+
     adcDataIsReady(adc_data);
 
     setCvMode(gpio & (1 << IOExpander::IO_BIT_IN_CV_ACTIVE) ? true : false);
@@ -916,11 +930,11 @@ char *Channel::getCvModeStr() {
 }
 
 const char *Channel::getBoardRevisionName() {
-    return CH_BOARD_REVISION_NAMES[this->boardRevision];
+    return CH_BOARD_REVISION_NAMES[boardRevision];
 }
 
 uint16_t Channel::getFeatures() {
-    return CH_BOARD_REVISION_FEATURES[this->boardRevision];
+    return CH_BOARD_REVISION_FEATURES[boardRevision];
 }
 
 float Channel::getVoltageLimit() const {

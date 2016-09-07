@@ -34,7 +34,7 @@ Pin 7  Out, OUTPUT_ENABLE
 
 CH_BOARD_REVISION_R5B6B
 
-Pin 0  In, ADC interrupt/DRDY
+Pin 0  In, "ADC interrupt/DRDY" or "remote sense reverse polarity detection" on CH_BOARD_REVISION_R5B9 
 Pin 1  Out, DP enable (active low)
 Pin 2  In, CC_ACTIVE
 Pin 3  Out, SET_100% (active low)
@@ -54,6 +54,7 @@ class Channel;
 class IOExpander {
 public:
     static const uint8_t IO_BIT_IN_ADC_DRDY = 0;
+	static const uint8_t IO_BIT_IN_REMOTE_SENSE_REVERSE_POLARITY_DETECTION = 0;
     static const uint8_t IO_BIT_IN_CC_ACTIVE = 2;
     static const uint8_t IO_BIT_IN_TEMP_SENSOR = 3;
     static const uint8_t IO_BIT_IN_CV_ACTIVE = 5;
