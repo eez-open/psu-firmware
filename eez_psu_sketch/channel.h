@@ -138,6 +138,7 @@ public:
         unsigned rprog_enabled: 1;
         unsigned lripple_enabled: 1;
         unsigned lripple_auto_enabled: 1;
+		unsigned remote_sense_reverse_polarity : 1;
     };
 
     /// Voltage and current data set and measured during runtime.

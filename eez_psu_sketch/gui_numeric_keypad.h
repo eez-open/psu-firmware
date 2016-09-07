@@ -30,6 +30,7 @@ void start(const char *label, data::ValueType editUnit, float min, float max, bo
 data::ValueType getEditUnit();
 bool getText(char *text, int count);
 data::Value getData(uint8_t id);
+void switchToMilli();
 
 void key(char c);
 void space();
