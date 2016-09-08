@@ -73,9 +73,9 @@ static const Style *g_pageStyle;
 static WidgetCursor g_selectedWidget;
 WidgetCursor g_foundWidgetAtDown;
 
-void (*g_dialogYesCallback)();
-void (*g_dialogNoCallback)();
-void (*g_dialogCancelCallback)();
+static void (*g_dialogYesCallback)();
+static void (*g_dialogNoCallback)();
+static void (*g_dialogCancelCallback)();
 
 static bool g_isBlinkTime;
 static bool g_wasBlinkTime;
@@ -679,62 +679,163 @@ bool draw_multiline_text_widget(const WidgetCursor &widgetCursor, const Widget *
     return false;
 }
 
-void draw_scale(const Widget *widget, int y_from, int y_to, int y_min, int y_max, int y_value, int f, int d, bool drawTicks) {
+void draw_scale(const Widget *widget, const ScaleWidget *scale_widget, const Style* style, int y_from, int y_to, int y_min, int y_max, int y_value, int f, int d, bool drawTicks) {
     //++draw_counter;
 
-    DECL_WIDGET_STYLE(style, widget);
-    DECL_WIDGET_SPECIFIC(ScaleWidget, scale_widget, widget);
+	bool vertical = scale_widget->needle_position == SCALE_NEEDLE_POSITION_LEFT ||
+		scale_widget->needle_position == SCALE_NEEDLE_POSITION_RIGHT;
+	bool flip = scale_widget->needle_position == SCALE_NEEDLE_POSITION_LEFT ||
+		scale_widget->needle_position == SCALE_NEEDLE_POSITION_TOP;
 
-    int x1 = widget->x;
-    int l1 = 5 * widget->w / 12 - 1;
+	int needleSize;
 
-    int x2 = x1 + l1 + 2;
-    int l2 = widget->w - l1 - 3;
+	int x1, l1, x2, l2;
+
+	if (vertical) {
+		needleSize = scale_widget->needle_height;
+
+		if (flip) {
+            x1 = widget->x + scale_widget->needle_width + 2;
+            l1 = widget->w - (scale_widget->needle_width + 2);
+            x2 = widget->x;
+            l2 = scale_widget->needle_width;
+		} else {
+            x1 = widget->x;
+            l1 = widget->w - (scale_widget->needle_width + 2);
+            x2 = widget->x + widget->w - scale_widget->needle_width;
+            l2 = scale_widget->needle_width;
+		}
+	} else {
+		needleSize = scale_widget->needle_width;
+
+		if (flip) {
+            x1 = widget->y + scale_widget->needle_height + 2;
+            l1 = widget->h - (scale_widget->needle_height + 2);
+            x2 = widget->y;
+            l2 = scale_widget->needle_height;
+		} else {
+            x1 = widget->y;
+            l1 = widget->h - scale_widget->needle_height - 2;
+            x2 = widget->y + widget->h - scale_widget->needle_height;
+            l2 = scale_widget->needle_height;
+		}
+	}
 
     int s = 10 * f / d;
 
-    int y_offset = (widget->y + widget->h) - 1 -
-        (widget->h - (y_max - y_min)) / 2 - scale_widget->needle_height / 2;
+    int y_offset;
+    if (vertical) {
+		y_offset = int((widget->y + widget->h) - 1 - (widget->h - (y_max - y_min)) / 2);
+	} else {
+		y_offset = int(widget->x + (widget->w - (y_max - y_min)) / 2);
+	}
 
     for (int y_i = y_from; y_i <= y_to; ++y_i) {
-        int y = y_offset - y_i;
+        int y;
+
+        if (vertical) {
+            y = y_offset - y_i;
+        } else {
+            y = y_offset + y_i;
+        }
 
         if (drawTicks) {
             // draw ticks
             if (y_i >= y_min && y_i <= y_max) {
                 if (y_i % s == 0) {
                     lcd::lcd.setColor(style->border_color);
-                    lcd::lcd.drawHLine(x1, y, l1);
+					if (vertical) {
+	                    lcd::lcd.drawHLine(x1, y, l1);
+					} else {
+						lcd::lcd.drawVLine(y, x1, l1);
+					}
                 }
                 else if (y_i % (s / 2) == 0) {
                     lcd::lcd.setColor(style->border_color);
-                    lcd::lcd.drawHLine(x1, y, l1 / 2);
+					if (vertical) {
+						if (flip) {
+							lcd::lcd.drawHLine(x1 + l1 / 2, y, l1 / 2);
+						} else {
+							lcd::lcd.drawHLine(x1, y, l1 / 2);
+						}
+					} else {
+						if (flip) {
+							lcd::lcd.drawVLine(y, x1 + l1 / 2, l1 / 2);
+						} else {
+							lcd::lcd.drawVLine(y, x1, l1 / 2);
+						}
+					}
                 }
                 else if (y_i % (s / 10) == 0) {
                     lcd::lcd.setColor(style->border_color);
-                    lcd::lcd.drawHLine(x1, y, l1 / 4);
+					if (vertical) {
+						if (flip) {
+							lcd::lcd.drawHLine(x1 + l1 - l1 / 4, y, l1 / 4);
+						} else {
+							lcd::lcd.drawHLine(x1, y, l1 / 4);
+						}
+					} else {
+						if (flip) {
+							lcd::lcd.drawVLine(y, x1 + l1 - l1 / 4, l1 / 4);
+						} else {
+							lcd::lcd.drawVLine(y, x1, l1 / 4);
+						}
+					}
                 }
                 else {
                     lcd::lcd.setColor(style->background_color);
-                    lcd::lcd.drawHLine(x1, y, l1);
+					if (vertical) {
+						lcd::lcd.drawHLine(x1, y, l1);
+					} else {
+						lcd::lcd.drawVLine(y, x1, l1);
+					}
                 }
             }
         }
 
         int d = abs(y_i - y_value);
-        if (d <= scale_widget->needle_height / 2) {
+        if (d <= int(needleSize / 2)) {
             // draw thumb
             lcd::lcd.setColor(style->color);
-            lcd::lcd.drawHLine(x2 + d, y, l2 - d);
-            if (y_i != y_value) {
+            if (vertical) {
+                if (flip) {
+                    lcd::lcd.drawHLine(x2, y, l2 - d);
+                } else {
+                    lcd::lcd.drawHLine(x2 + d, y, l2 - d);
+                }
+            } else {
+                if (flip) {
+                    lcd::lcd.drawVLine(y, x2, l2 - d);
+                } else {
+                    lcd::lcd.drawVLine(y, x2 + d, l2 - d);
+                }
+            }
+
+			if (y_i != y_value) {
                 lcd::lcd.setColor(style->background_color);
-                lcd::lcd.drawHLine(x2, y, d);
+                if (vertical) {
+                    if (flip) {
+                        lcd::lcd.drawHLine(x2 + l2 - d, y, d);
+                    } else {
+                        lcd::lcd.drawHLine(x2, y, d);
+                    }
+                } else {
+                    if (flip) {
+                        lcd::lcd.drawVLine(y, x2 + l2 - d, d);
+                    } else {
+                        lcd::lcd.drawVLine(y, x2, d);
+                    }
+                }
             }
         }
         else {
             // erase
             lcd::lcd.setColor(style->background_color);
-            lcd::lcd.drawHLine(x2, y, l2);
+            if (vertical) {
+                lcd::lcd.drawHLine(x2, y, l2);
+            } else {
+                lcd::lcd.drawVLine(y, x2, l2);
+            }
         }
     }
 }
@@ -756,7 +857,19 @@ bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, b
 
         DECL_WIDGET_SPECIFIC(ScaleWidget, scale_widget, widget);
 
-        int f = (int)floor((widget->h - scale_widget->needle_height) / max);
+		bool vertical = scale_widget->needle_position == SCALE_NEEDLE_POSITION_LEFT ||
+			scale_widget->needle_position == SCALE_NEEDLE_POSITION_RIGHT;
+
+		int f;
+		int needleSize;
+		if (vertical) {
+			needleSize = scale_widget->needle_height;
+			f = (int)floor((widget->h - needleSize) / max);
+		} else {
+			needleSize = scale_widget->needle_width;
+			f = (int)floor((widget->w - needleSize) / max);
+		}
+
         int d;
         if (max > 10) {
             d = 1;
@@ -770,43 +883,43 @@ bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, b
         int y_max = (int)round(max * f);
         int y_value = (int)round(value.getFloat() * f);
 
-        int y_from_min = y_min - scale_widget->needle_height / 2;
-        int y_from_max = y_max + scale_widget->needle_height / 2;
+        int y_from_min = y_min - needleSize / 2;
+        int y_from_max = y_max + needleSize / 2;
 
         static int edit_mode_slider_scale_last_y_value;
 
         if (g_isPageRefresh || widget->data != DATA_ID_EDIT_VALUE) {
             // draw entire scale 
-            draw_scale(widget, y_from_min, y_from_max, y_min, y_max, y_value, f, d, true);
+            draw_scale(widget, scale_widget, style, y_from_min, y_from_max, y_min, y_max, y_value, f, d, true);
         }
         else {
             // optimization for the scale in edit with slider mode:
             // draw only part of the scale that is changed
-            if (widget->data == DATA_ID_EDIT_VALUE) {
-                int last_y_value_from = edit_mode_slider_scale_last_y_value - scale_widget->needle_height / 2;
-                int last_y_value_to = edit_mode_slider_scale_last_y_value + scale_widget->needle_height / 2;
-                int y_value_from = y_value - scale_widget->needle_height / 2;
-                int y_value_to = y_value + scale_widget->needle_height / 2;
+            if (widget->data == DATA_ID_EDIT_VALUE && edit_mode_slider_scale_last_y_value != y_value) {
+                int last_y_value_from = edit_mode_slider_scale_last_y_value - needleSize / 2;
+                int last_y_value_to = edit_mode_slider_scale_last_y_value + needleSize / 2;
+                int y_value_from = y_value - needleSize / 2;
+                int y_value_to = y_value + needleSize / 2;
 
-                if (last_y_value_from != y_value_from) {
-                    if (last_y_value_from > y_value_from) {
-                        util_swap(int, last_y_value_from, y_value_from);
-                        util_swap(int, last_y_value_to, y_value_to);
-                    }
+                if (last_y_value_from > y_value_from) {
+                    util_swap(int, last_y_value_from, y_value_from);
+                    util_swap(int, last_y_value_to, y_value_to);
+                }
 
-                    if (last_y_value_from < y_from_min)
-                        last_y_value_from = y_from_min;
+                if (last_y_value_from < y_from_min) {
+                    last_y_value_from = y_from_min;
+				}
 
-                    if (y_value_to > y_from_max)
-                        y_value_to = y_from_max;
+                if (y_value_to > y_from_max) {
+                    y_value_to = y_from_max;
+				}
 
-                    if (last_y_value_to + 1 < y_value_from) {
-                        draw_scale(widget, last_y_value_from, last_y_value_to, y_min, y_max, y_value, f, d, false);
-                        draw_scale(widget, y_value_from, y_value_to, y_min, y_max, y_value, f, d, false);
-                    }
-                    else {
-                        draw_scale(widget, last_y_value_from, y_value_to, y_min, y_max, y_value, f, d, false);
-                    }
+                if (0 && last_y_value_to + 1 < y_value_from) {
+                    draw_scale(widget, scale_widget, style, last_y_value_from, last_y_value_to, y_min, y_max, y_value, f, d, false);
+                    draw_scale(widget, scale_widget, style, y_value_from, y_value_to, y_min, y_max, y_value, f, d, false);
+                }
+                else {
+                    draw_scale(widget, scale_widget, style, last_y_value_from, y_value_to, y_min, y_max, y_value, f, d, false);
                 }
             }
         }
@@ -814,8 +927,9 @@ bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, b
         edit_mode_slider_scale_last_y_value = y_value;
 
         if (widget->data == DATA_ID_EDIT_VALUE) {
-            edit_mode_slider::scale_width = widget->w;
-            edit_mode_slider::scale_height = (max - min) * f;
+			edit_mode_slider::scale_is_vertical = vertical;
+			edit_mode_slider::scale_width = vertical ? widget->w : widget->h;
+			edit_mode_slider::scale_height = (max - min) * f; 
         }
 
         return true;
@@ -1275,7 +1389,25 @@ void tick(unsigned long tick_usec) {
     draw_tick();
 }
 
-void dialog_ok_callback() {
+void dialogYes() {
+	if (g_dialogYesCallback) {
+		g_dialogYesCallback();
+	}
+}
+
+void dialogNo() {
+	if (g_dialogNoCallback) {
+		g_dialogNoCallback();
+	}
+}
+
+void dialogCancel() {
+	if (g_dialogCancelCallback) {
+		g_dialogCancelCallback();
+	}
+}
+
+void dialogOk() {
 	if (g_dialogYesCallback) {
 		g_dialogYesCallback();
 	} else {

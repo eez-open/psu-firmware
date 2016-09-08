@@ -25,6 +25,7 @@ namespace psu {
 namespace gui {
 namespace edit_mode_slider {
 
+extern bool scale_is_vertical;
 extern int scale_width;
 extern float scale_height;
 

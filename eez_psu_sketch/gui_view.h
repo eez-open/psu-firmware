@@ -48,8 +48,13 @@ namespace gui {
 #define WIDGET_TYPE_BUTTON_GROUP 11
 #define WIDGET_TYPE_SCALE 12
 
-#define LIST_TYPE_VERTICAL   1
+#define LIST_TYPE_VERTICAL 1
 #define LIST_TYPE_HORIZONTAL 2
+
+#define SCALE_NEEDLE_POSITION_LEFT 1
+#define SCALE_NEEDLE_POSITION_RIGHT 2
+#define SCALE_NEEDLE_POSITION_TOP 3
+#define SCALE_NEEDLE_POSITION_BOTTOM 4
 
 typedef uint16_t OBJ_OFFSET;
 
@@ -123,6 +128,8 @@ struct ToggleButtonWidget {
 };
 
 struct ScaleWidget {
+	uint8_t needle_position; // SCALE_NEEDLE_POSITION_...
+	uint8_t needle_width;
     uint8_t needle_height;
 };
 

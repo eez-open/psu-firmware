@@ -88,10 +88,10 @@ void errorMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);
 
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());
 
-extern void (*g_dialogYesCallback)();
-extern void (*g_dialogNoCallback)();
-extern void (*g_dialogCancelCallback)();
-void dialog_ok_callback();
+void dialogYes();
+void dialogNo();
+void dialogCancel();
+void dialogOk();
 
 extern WidgetCursor g_foundWidgetAtDown;
 

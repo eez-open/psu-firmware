@@ -132,19 +132,19 @@ void action_touch_screen_calibration() {
 }
 
 void action_yes() {
-    g_dialogYesCallback();
+    dialogYes();
 }
 
 void action_no() {
-    g_dialogNoCallback();
+    dialogNo();
 }
 
 void action_ok() {
-    dialog_ok_callback();
+    dialogOk();
 }
 
 void action_cancel() {
-    g_dialogCancelCallback();
+    dialogCancel();
 }
 
 void action_show_previous_page() {

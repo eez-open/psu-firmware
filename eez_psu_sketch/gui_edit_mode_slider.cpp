@@ -24,6 +24,7 @@ namespace psu {
 namespace gui {
 namespace edit_mode_slider {
 
+bool scale_is_vertical;
 int scale_width;
 float scale_height;
 
@@ -34,9 +35,21 @@ static int last_scale;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+int touchY() {
+	return scale_is_vertical ? touch::y : touch::x;
+}
+
+int touchX() {
+	return scale_is_vertical ? touch::x : touch::y;
+}
+
+int displayXSize() {
+	return scale_is_vertical ? lcd::lcd.getDisplayXSize() : lcd::lcd.getDisplayYSize();
+}
+
 void onTouchDown() {
     start_value = edit_mode::getEditValue().getFloat();
-    start_y = touch::y;
+    start_y = touchY();
 
     last_scale = 1;
 }
@@ -47,23 +60,23 @@ void onTouchMove() {
 
     int scale;
 
-    int x = (touch::x / 20) * 20;
+    int x = (touchX() / 20) * 20;
     if (x < scale_width) {
         scale = 1;
     }
     else {
         int num_bars = (max - min) >= 10 ? 9 : 5;
-        int bar_width = (lcd::lcd.getDisplayXSize() - scale_width) / num_bars;
+        int bar_width = (displayXSize() - scale_width) / num_bars;
         scale = 1 << (1 + (x - scale_width) / bar_width);
     }
 
     if (scale != last_scale) {
         start_value = edit_mode::getEditValue().getFloat();
-        start_y = touch::y;
+        start_y = touchY();
         last_scale = scale;
     }
 
-    float value = start_value + (start_y - touch::y) * (max - min) / (scale * scale_height);
+    float value = start_value + (scale_is_vertical ? 1 : -1) * (start_y - touchY()) * (max - min) / (scale * scale_height);
 
     if (value < min) {
         value = min;
