@@ -85,7 +85,7 @@ void Value::toText(char *text, int count) const {
 			if (yearNow == year && monthNow == month && dayNow == day) {
 				snprintf_P(text, count-1, PSTR("%c [%02d:%02d:%02d] %s"), 127 + event_queue::getEventType(event_), hour, minute, second, event_queue::getEventMessage(event_));
 			} else {
-				snprintf_P(text, count-1, PSTR("%c [%02d-%02d-%02d] %s"), 127 + event_queue::getEventType(event_), day, month, year % 1100, event_queue::getEventMessage(event_));
+				snprintf_P(text, count-1, PSTR("%c [%02d-%02d-%02d] %s"), 127 + event_queue::getEventType(event_), day, month, year % 100, event_queue::getEventMessage(event_));
 			}
 
 			text[count - 1] = 0;
@@ -135,7 +135,7 @@ int count(uint8_t id) {
     if (id == DATA_ID_CHANNELS) {
         return CH_NUM;
     } else if (id == DATA_ID_EVENT_QUEUE_EVENTS) {
-        return event_queue::getActivePageNumEvents();
+        return event_queue::EVENTS_PER_PAGE;
     } 
     return 0;
 }

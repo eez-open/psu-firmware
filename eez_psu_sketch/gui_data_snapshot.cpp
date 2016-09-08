@@ -190,10 +190,22 @@ void Snapshot::takeSnapshot() {
 
     alertMessage = g_alertMessage;
 
-	if (event_queue::getNumEvents() > 0) {
-		event_queue::getEvent(0, &lastEvent);
+	if (getActivePage() == PAGE_ID_EVENT_QUEUE) {
+		int n = event_queue::getActivePageNumEvents();
+		for (int i = 0; i < event_queue::EVENTS_PER_PAGE; ++i) {
+			if (i < n) {
+				event_queue::getActivePageEvent(i, events + i);
+			} else {
+				events[i].eventId = event_queue::EVENT_TYPE_NONE;
+			}
+		}
+		eventQueuePageInfo = Value::PageInfo(event_queue::getActivePageIndex(), event_queue::getNumPages());
 	} else {
-		lastEvent.eventId = 0;
+		if (event_queue::getNumEvents() > 0) {
+			event_queue::getEvent(0, &lastEvent);
+		} else {
+			lastEvent.eventId = 0;
+		}
 	}
 }
 
@@ -278,47 +290,48 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 		return Value(selfTestResult);
 	} 
 	
-	if (event_queue::g_unread) {
-		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_TYPE) {
-			return Value(event_queue::getEventType(&lastEvent));
-		}
+	if (getActivePage() == PAGE_ID_EVENT_QUEUE) {
+		if (cursor.iChannel >= 0) {
+			if (id == DATA_ID_EVENT_QUEUE_EVENTS_TYPE) {
+				return Value(event_queue::getEventType(events + cursor.iChannel));
+			} 
 		
-		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_MESSAGE) {
-			return Value(&lastEvent);
+			if (id == DATA_ID_EVENT_QUEUE_EVENTS_MESSAGE) {
+				return Value(events + cursor.iChannel);
+			}
+		}
+
+		if (id == DATA_ID_EVENT_QUEUE_MULTIPLE_PAGES) {
+			return Value(eventQueuePageInfo.getNumPages() > 1 ? 1 : 0);
+		}
+
+		if (id == DATA_ID_EVENT_QUEUE_PREVIOUS_PAGE_ENABLED) {
+			return Value(eventQueuePageInfo.getPageIndex() > 0 ? 1 : 0);
+		}
+
+		if (id == DATA_ID_EVENT_QUEUE_NEXT_PAGE_ENABLED) {
+			return Value(eventQueuePageInfo.getPageIndex() < eventQueuePageInfo.getNumPages() - 1 ? 1 : 0);
+		}
+
+		if (id == DATA_ID_EVENT_QUEUE_PAGE_INFO) {
+			return eventQueuePageInfo;
 		}
 	} else {
-		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_TYPE) {
-			return Value(event_queue::EVENT_TYPE_NONE);
-		} 
-	}
-	
-	if (cursor.iChannel >= 0) {
-		if (id == DATA_ID_EVENT_QUEUE_EVENTS_TYPE) {
-			event_queue::getActivePageEvent(cursor.iChannel, &lastEvent);
-			return Value(event_queue::getEventType(&lastEvent));
-		} 
+		if (event_queue::g_unread) {
+			if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_TYPE) {
+				return Value(event_queue::getEventType(&lastEvent));
+			}
 		
-		if (id == DATA_ID_EVENT_QUEUE_EVENTS_MESSAGE) {
-			return Value(&lastEvent);
+			if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_MESSAGE) {
+				return Value(&lastEvent);
+			}
+		} else {
+			if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_TYPE) {
+				return Value(event_queue::EVENT_TYPE_NONE);
+			} 
 		}
 	}
-
-	if (id == DATA_ID_EVENT_QUEUE_MULTIPLE_PAGES) {
-		return Value(event_queue::getNumPages() > 1 ? 1 : 0);
-	}
-
-	if (id == DATA_ID_EVENT_QUEUE_PREVIOUS_PAGE_ENABLED) {
-		return Value(event_queue::getActivePageIndex() > 0 ? 1 : 0);
-	}
-
-	if (id == DATA_ID_EVENT_QUEUE_NEXT_PAGE_ENABLED) {
-		return Value(event_queue::getActivePageIndex() < event_queue::getNumPages() - 1 ? 1 : 0);
-	}
-
-	if (id == DATA_ID_EVENT_QUEUE_PAGE_INFO) {
-		return Value::PageInfo(event_queue::getActivePageIndex(), event_queue::getNumPages());
-	}
-
+	
 	Value value = keypadSnapshot.get(id);
     if (value.getType() != VALUE_TYPE_NONE) {
         return value;

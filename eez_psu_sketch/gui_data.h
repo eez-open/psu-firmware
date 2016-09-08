@@ -116,6 +116,9 @@ struct Value {
 	bool isString() { return type_ == VALUE_TYPE_STR; }
 	const char *asString() { return str_; }
 
+	uint8_t getPageIndex() { return pageInfo_.pageIndex; }
+	uint8_t getNumPages() { return pageInfo_.numPages; }
+
 private:
     uint8_t type_;
     union {

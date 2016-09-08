@@ -105,6 +105,14 @@ enum Events {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#if DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT
+static const int EVENTS_PER_PAGE = 10;
+#elif DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_LANDSCAPE
+static const int EVENTS_PER_PAGE = 7;
+#endif
+
+////////////////////////////////////////////////////////////////////////////////
+
 struct Event {
 	uint32_t dateTime;
 	int16_t eventId;

@@ -48465,9 +48465,9 @@
                     "type": "Rectangle",
                     "x": 0,
                     "y": 0,
-                    "width": 0,
-                    "height": 0,
-                    "style": "default"
+                    "width": 240,
+                    "height": 28,
+                    "style": "default_inverse"
                   },
                   {
                     "type": "DisplayData",
@@ -48609,9 +48609,9 @@
                     "type": "Rectangle",
                     "x": 0,
                     "y": 0,
-                    "width": 0,
-                    "height": 0,
-                    "style": "default"
+                    "width": 320,
+                    "height": 28,
+                    "style": "default_inverse"
                   },
                   {
                     "type": "DisplayData",
@@ -57574,7 +57574,7 @@
         },
         {
           "fileName": "gui_document.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2015-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"lcd.h\"\n#include \"gui_document.h\"\n\nnamespace eez {\nnamespace psu {\nnamespace gui {\n\n//${eez-studio GUI_FONTS_DEF}\n\n//${eez-studio GUI_BITMAPS_DEF}\n\n#if DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT || DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT_REVERSE\n//${eez-studio GUI_DOCUMENT_PORTRAIT_DEF}\n#else\n//${eez-studio GUI_DOCUMENT_LANDSCAPE_DEF}\n#endif\n\n}\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2015-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"lcd.h\"\n#include \"gui_document.h\"\n\nnamespace eez {\nnamespace psu {\nnamespace gui {\n\n//${eez-studio GUI_FONTS_DEF}\n\n//${eez-studio GUI_BITMAPS_DEF}\n\n#if DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT\n//${eez-studio GUI_DOCUMENT_PORTRAIT_DEF}\n#elif DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_LANDSCAPE\n//${eez-studio GUI_DOCUMENT_LANDSCAPE_DEF}\n#endif\n\n}\n}\n} // namespace eez::psu::gui\n"
         }
       ],
       "destinationFolder": "eez_psu_sketch"

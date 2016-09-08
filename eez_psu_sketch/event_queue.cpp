@@ -43,17 +43,10 @@ struct EventQueueHeader {
 static EventQueueHeader eventQueue;
 
 bool g_unread = false;
-bool g_refreshGUI = false;
 
 static int16_t g_eventsDuringInterruptHandling[6];
 static uint8_t g_eventsDuringInterruptHandlingHead = 0;
 static const int MAX_EVENTS_DURING_INTERRUPT_HANDLING = sizeof(g_eventsDuringInterruptHandling) / sizeof(int16_t);
-
-#if DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT || DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT_REVERSE
-static const int EVENTS_PER_PAGE = 10;
-#else
-static const int EVENTS_PER_PAGE = 7;
-#endif
 
 static uint8_t g_pageIndex = 0;
 
@@ -77,13 +70,6 @@ void tick(unsigned long tick_usec) {
 		pushEvent(g_eventsDuringInterruptHandling[i]);
 	}
 	g_eventsDuringInterruptHandlingHead = 0;
-
-	if (g_refreshGUI) {
-		if (gui::getActivePage() == gui::PAGE_ID_EVENT_QUEUE) {
-			gui::refreshPage();
-		}
-		g_refreshGUI = false;
-	}
 }
 
 int getNumEvents() {
@@ -101,7 +87,7 @@ int getEventType(Event *e) {
 		return EVENT_TYPE_INFO;
 	} else if (e->eventId >= EVENT_WARNING_START_ID) {
 		return EVENT_TYPE_WARNING;
-	} else if (e->eventId > 0) {
+	} else if (e->eventId != EVENT_TYPE_NONE) {
 		return EVENT_TYPE_ERROR;
 	} else {
 		return EVENT_TYPE_NONE;
@@ -188,7 +174,6 @@ void pushEvent(int16_t eventId) {
 		eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
 
 		g_unread = true;
-		g_refreshGUI = true;
 
 		if (getEventType(&e) == EVENT_TYPE_ERROR) {
 			sound::playBeep();
@@ -223,14 +208,12 @@ void moveToFirstPage() {
 void moveToNextPage() {
 	if (g_pageIndex < getNumPages() - 1) {
 		++g_pageIndex;
-		g_refreshGUI = true;
 	}
 }
 
 void moveToPreviousPage() {
 	if (g_pageIndex > 0) {
 		--g_pageIndex;
-		g_refreshGUI = true;
 	}
 }
 
