@@ -28,6 +28,8 @@
     SCPI_COMMAND("SIMUlator:LOAD?", scpi_simu_LoadQ) \
     SCPI_COMMAND("SIMUlator:PWRGood", scpi_simu_Pwrgood) \
     SCPI_COMMAND("SIMUlator:PWRGood?", scpi_simu_PwrgoodQ) \
+    SCPI_COMMAND("SIMUlator:RPOL", scpi_simu_RPol) \
+    SCPI_COMMAND("SIMUlator:RPOL?", scpi_simu_RPolQ) \
     SCPI_COMMAND("SIMUlator:TEMPerature", scpi_simu_Temperature) \
     SCPI_COMMAND("SIMUlator:TEMPerature?", scpi_simu_TemperatureQ) \
     SCPI_COMMAND("SIMUlator:GUI", scpi_simu_GUI) \

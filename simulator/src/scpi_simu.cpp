@@ -220,6 +220,43 @@ scpi_result_t scpi_simu_PwrgoodQ(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t scpi_simu_RPol(scpi_t *context) {
+    bool on;
+    if (!SCPI_ParamBool(context, &on, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    Channel *channel = param_channel(context, FALSE, TRUE);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+	if (channel->boardRevision != CH_BOARD_REVISION_R5B9) {
+		SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+	}
+	
+	chips::IOExpanderChip::setRPol(channel->ioexp_pin, on);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_simu_RPolQ(scpi_t *context) {
+    Channel *channel = param_channel(context, FALSE, TRUE);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+	if (channel->boardRevision != CH_BOARD_REVISION_R5B9) {
+		SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+	}
+
+    SCPI_ResultBool(context, chips::IOExpanderChip::getRPol(channel->ioexp_pin));
+
+    return SCPI_RES_OK;
+}
+
 scpi_result_t scpi_simu_Temperature(scpi_t *context) {
     float value;
     if (!get_temperature_param(context, value, -100.0f, 200.0f, 25.0f)) {

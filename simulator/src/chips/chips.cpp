@@ -495,6 +495,7 @@ uint8_t BPChip::transfer(uint8_t data) {
 IOExpanderChip::IOExpanderChip()
     : state(IDLE)
     , pwrgood(true)
+	, rpol(false)
 {
 }
 
@@ -505,6 +506,15 @@ bool IOExpanderChip::getPwrgood(int pin) {
 void IOExpanderChip::setPwrgood(int pin, bool on) {
     if (pin == IO_EXPANDER1) ioexp_chip1.pwrgood = on;
     else ioexp_chip2.pwrgood = on;
+}
+
+bool IOExpanderChip::getRPol(int pin) {
+    return pin == IO_EXPANDER1 ? ioexp_chip1.rpol : ioexp_chip2.rpol;
+}
+
+void IOExpanderChip::setRPol(int pin, bool on) {
+    if (pin == IO_EXPANDER1) ioexp_chip1.rpol = on;
+    else ioexp_chip2.rpol = on;
 }
 
 void IOExpanderChip::select() {
@@ -531,6 +541,14 @@ uint8_t IOExpanderChip::transfer(uint8_t data) {
             if (pwrgood) {
                 result |= 1 << IOExpander::IO_BIT_IN_PWRGOOD;
             }
+
+
+			Channel &channel = Channel::get(this == &ioexp_chip1 ? 0 : 1);
+			if (channel.boardRevision == CH_BOARD_REVISION_R5B9) {
+				if (!rpol) {
+					result |= 1 << IOExpander::IO_BIT_IN_RPOL;
+				}
+			}
 
             if (cv) {
                 result |= 1 << IOExpander::IO_BIT_IN_CV_ACTIVE;

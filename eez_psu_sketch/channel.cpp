@@ -175,8 +175,6 @@ void Channel::protectionEnter(ProtectionValue &cpv) {
 	}
 
 	event_queue::pushEvent(eventId);
-
-    sound::playBeep();
 }
 
 void Channel::protectionCheck(ProtectionValue &cpv) {

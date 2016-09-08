@@ -277,8 +277,6 @@ void TempSensorTemperature::protection_enter() {
     set_otp_reg(true);
 
 	event_queue::pushEvent(event_queue::EVENT_ERROR_MAIN_OTP_TRIPPED + sensorIndex);
-
-    sound::playBeep();
 }
 
 }

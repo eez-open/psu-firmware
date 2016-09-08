@@ -19,6 +19,7 @@
 #include "psu.h"
 #include "datetime.h"
 #include "eeprom.h"
+#include "sound.h"
 #include "event_queue.h"
 
 #include "gui_internal.h"
@@ -114,38 +115,44 @@ const char *getEventMessage(Event *e) {
 
 	if (e->eventId >= EVENT_INFO_START_ID) {
 		switch (e->eventId) {
+#define EVENT_SCPI_ERROR(ID, TEXT)
 #define EVENT_ERROR(NAME, ID, TEXT)
 #define EVENT_WARNING(NAME, ID, TEXT)
 #define EVENT_INFO(NAME, ID, TEXT) case EVENT_INFO_START_ID + ID: p_message = PSTR(TEXT); break;
 			LIST_OF_EVENTS
+#undef EVENT_SCPI_ERROR
 #undef EVENT_INFO
 #undef EVENT_WARNING
 #undef EVENT_ERROR
 		}
 	} else if (e->eventId >= EVENT_WARNING_START_ID) {
 		switch (e->eventId) {
+#define EVENT_SCPI_ERROR(ID, TEXT)
 #define EVENT_ERROR(NAME, ID, TEXT)
 #define EVENT_WARNING(NAME, ID, TEXT) case EVENT_WARNING_START_ID + ID: p_message = PSTR(TEXT); break;
 #define EVENT_INFO(NAME, ID, TEXT)
 			LIST_OF_EVENTS
+#undef EVENT_SCPI_ERROR
 #undef EVENT_INFO
 #undef EVENT_WARNING
 #undef EVENT_ERROR
 		default:
 			p_message = 0;
 		}
-	} else if (e->eventId >= EVENT_ERROR_START_ID) {
+	} else {
 		switch (e->eventId) {
+#define EVENT_SCPI_ERROR(ID, TEXT) case ID: p_message = PSTR(TEXT); break;
 #define EVENT_INFO(NAME, ID, TEXT)
 #define EVENT_WARNING(NAME, ID, TEXT)
 #define EVENT_ERROR(NAME, ID, TEXT) case EVENT_ERROR_START_ID + ID: p_message = PSTR(TEXT); break;
 			LIST_OF_EVENTS
+#undef EVENT_SCPI_ERROR
 #undef EVENT_INFO
 #undef EVENT_WARNING
 #undef EVENT_ERROR
+		default:
+			return SCPI_ErrorTranslate(e->eventId);
 		}
-	} else if (e->eventId > 0) {
-		return SCPI_ErrorTranslate(e->eventId);
 	}
 
 	if (p_message) {
@@ -182,6 +189,10 @@ void pushEvent(int16_t eventId) {
 
 		g_unread = true;
 		g_refreshGUI = true;
+
+		if (getEventType(&e) == EVENT_TYPE_ERROR) {
+			sound::playBeep();
+		}
 	}
 }
 
