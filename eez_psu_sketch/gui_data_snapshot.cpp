@@ -224,7 +224,7 @@ void Snapshot::takeSnapshot() {
 	{
 		switches.switch1 = adv_lripple::getStatus();
 		switches.switch2 = adv_lripple::getAutoMode();
-		switches.switch2 = adv_lripple::getDirty();
+		switches.switch3 = adv_lripple::getDirty();
 	}
 }
 

@@ -323,6 +323,22 @@ void action_event_queue_next_page() {
     event_queue::moveToNextPage();
 }
 
+void action_ch_settins_adv_lripple_toggle_status() {
+    adv_lripple::toggleStatus();
+}
+
+void action_ch_settins_adv_lripple_toggle_auto_mode() {
+    adv_lripple::toggleAutoMode();
+}
+
+void action_ch_settins_adv_lripple_set() {
+    adv_lripple::set();
+}
+
+void action_ch_settins_adv_lripple_discard() {
+    adv_lripple::discard();
+}
+
 
 ACTION actions[] = {
     0,
@@ -395,7 +411,11 @@ ACTION actions[] = {
     action_ch_settings_prot_discard,
     action_show_event_queue,
     action_event_queue_previous_page,
-    action_event_queue_next_page
+    action_event_queue_next_page,
+    action_ch_settins_adv_lripple_toggle_status,
+    action_ch_settins_adv_lripple_toggle_auto_mode,
+    action_ch_settins_adv_lripple_set,
+    action_ch_settins_adv_lripple_discard
 };
 
 }

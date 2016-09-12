@@ -346,6 +346,18 @@
     {
       "name": "channel.lripple.maxDissipation",
       "defaultValue": "20.00W"
+    },
+    {
+      "name": "channel.lripple.status",
+      "defaultValue": "0"
+    },
+    {
+      "name": "channel.lripple.autoMode",
+      "defaultValue": "1"
+    },
+    {
+      "name": "channel.lripple.dirty",
+      "defaultValue": "0"
     }
   ],
   "actions": [
@@ -706,6 +718,26 @@
       "name": "event_queue_next_page",
       "implementationType": "native",
       "implementation": "event_queue::moveToNextPage();\n"
+    },
+    {
+      "name": "ch_settins_adv_lripple_toggle_status",
+      "implementationType": "native",
+      "implementation": "adv_lripple::toggleStatus();"
+    },
+    {
+      "name": "ch_settins_adv_lripple_toggle_auto_mode",
+      "implementationType": "native",
+      "implementation": "adv_lripple::toggleAutoMode();"
+    },
+    {
+      "name": "ch_settins_adv_lripple_set",
+      "implementationType": "native",
+      "implementation": "adv_lripple::set();"
+    },
+    {
+      "name": "ch_settins_adv_lripple_discard",
+      "implementationType": "native",
+      "implementation": "adv_lripple::discard();"
     }
   ],
   "gui": {
@@ -53682,13 +53714,35 @@
               "style": "edit_value_left"
             },
             {
-              "type": "Text",
-              "text": "ON",
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "OFF",
+                  "x": 0,
+                  "y": 0,
+                  "width": 62,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "action": "ch_settins_adv_lripple_toggle_status"
+                },
+                {
+                  "type": "Text",
+                  "text": "ON",
+                  "x": 0,
+                  "y": 0,
+                  "width": 62,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "action": "ch_settins_adv_lripple_toggle_status"
+                }
+              ],
               "x": 178,
               "y": 78,
               "width": 62,
               "height": 42,
-              "style": "edit_value_active_left"
+              "style": "default",
+              "data": "channel.lripple.status"
             },
             {
               "type": "Text",
@@ -53700,30 +53754,55 @@
               "style": "edit_value_left"
             },
             {
-              "type": "Text",
-              "text": "ON",
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "OFF",
+                  "x": 0,
+                  "y": 0,
+                  "width": 62,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "action": "ch_settins_adv_lripple_toggle_auto_mode"
+                },
+                {
+                  "type": "Text",
+                  "text": "ON",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 40,
+                  "style": "edit_value_active_left",
+                  "action": "ch_settins_adv_lripple_toggle_auto_mode"
+                }
+              ],
               "x": 178,
               "y": 114,
               "width": 62,
               "height": 42,
-              "style": "edit_value_active_left"
+              "style": "default",
+              "data": "channel.lripple.autoMode"
             },
             {
-              "type": "Text",
-              "action": "non_interactive_enter",
-              "style": "non_interactive_button_S",
+              "type": "Button",
               "x": 16,
-              "y": 160,
-              "text": "~ Set",
+              "y": 163,
               "width": 101,
-              "height": 36
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "action": "ch_settins_adv_lripple_set",
+              "disabledStyle": "non_interactive_button_S_disabled",
+              "data": "",
+              "enabled": "channel.lripple.dirty"
             },
             {
               "type": "Text",
-              "action": "non_interactive_discard",
+              "action": "ch_settins_adv_lripple_discard",
               "style": "non_interactive_button_S",
               "x": 117,
-              "y": 160,
+              "y": 163,
               "text": " Discard",
               "width": 96,
               "height": 36

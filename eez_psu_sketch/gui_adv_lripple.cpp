@@ -62,7 +62,25 @@ int getDirty() {
 }
 
 data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	// TODO
+	if (id == DATA_ID_CHANNEL_LRIPPLE_MAX_CURRENT) {
+		return data::Value(g_channel->SOA_PREG_CURR, data::VALUE_TYPE_FLOAT_AMPER);
+	}
+
+	if (id == DATA_ID_CHANNEL_LRIPPLE_MAX_DISSIPATION) {
+		return data::Value(g_channel->SOA_POSTREG_PTOT, data::VALUE_TYPE_FLOAT_WATT);
+	}
+
+	if (id == DATA_ID_CHANNEL_LRIPPLE_STATUS) {
+		return snapshot->switches.switch1;
+	}
+
+	if (id == DATA_ID_CHANNEL_LRIPPLE_AUTO_MODE) {
+		return snapshot->switches.switch2;
+	}
+
+	if (id == DATA_ID_CHANNEL_LRIPPLE_DIRTY) {
+		return snapshot->switches.switch3;
+	}
 
 	return data::Value();
 }
