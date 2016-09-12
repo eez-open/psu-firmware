@@ -37,8 +37,8 @@ enum PersistConfSection {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static const uint16_t DEV_CONF_VERSION = 0x0005L;
-static const uint16_t CH_CAL_CONF_VERSION = 0x0001L;
+static const uint16_t DEV_CONF_VERSION = 0x0006L;
+static const uint16_t CH_CAL_CONF_VERSION = 0x0002L;
 static const uint16_t PROFILE_VERSION = 0x0004L;
 
 static const uint16_t PERSIST_CONF_DEVICE_ADDRESS = 1024;
@@ -49,12 +49,11 @@ static const uint16_t PERSIST_CONF_CH_CAL_BLOCK_SIZE = 512;
 static const uint16_t PERSIST_CONF_FIRST_PROFILE_ADDRESS = 4096;
 static const uint16_t PERSIST_CONF_PROFILE_BLOCK_SIZE = 1024;
 
-static const uint32_t ONTIME_MAGIC = 0xA7F11B3CL;
+static const uint32_t ONTIME_MAGIC = 0xA7F31B3CL;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 DeviceConfiguration dev_conf;
-uint8_t last_total_ontime_address_index;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -260,22 +259,18 @@ uint32_t readTotalOnTime(int type) {
 	uint32_t buffer[6];
 
 	eeprom::read((uint8_t *)buffer, sizeof(buffer),
-		eeprom::EEPROM_ONTIME_START_ADDRESS +
-		type * 6 * sizeof(uint32_t));
+		eeprom::EEPROM_ONTIME_START_ADDRESS + type * eeprom::EEPROM_ONTIME_SIZE);
 
 	if (buffer[0] == ONTIME_MAGIC && buffer[1] == buffer[2]) {
 		if (buffer[3] == ONTIME_MAGIC && buffer[4] == buffer[5]) {
 			if (buffer[4] > buffer[1]) {
-				last_total_ontime_address_index = 1;
 				return buffer[4];
 			}
 		}
-		last_total_ontime_address_index = 0;
 		return buffer[1];
 	}
 	
 	if (buffer[3] == ONTIME_MAGIC && buffer[4] == buffer[5]) {
-		last_total_ontime_address_index = 1;
 		return buffer[4];
 	}
 
@@ -283,19 +278,18 @@ uint32_t readTotalOnTime(int type) {
 }
 
 bool writeTotalOnTime(int type, uint32_t time) {
-	uint32_t buffer[3];
+	uint32_t buffer[6];
 
 	buffer[0] = ONTIME_MAGIC;
 	buffer[1] = time;
 	buffer[2] = time;
 
-	if (last_total_ontime_address_index == 0) last_total_ontime_address_index = 1;
-	else last_total_ontime_address_index = 0;
+	buffer[3] = ONTIME_MAGIC;
+	buffer[4] = time;
+	buffer[5] = time;
 
 	return eeprom::write((uint8_t *)buffer, sizeof(buffer),
-		eeprom::EEPROM_ONTIME_START_ADDRESS +
-		type * 6 * sizeof(uint32_t) +
-		last_total_ontime_address_index * 3 * sizeof(uint32_t));
+		eeprom::EEPROM_ONTIME_START_ADDRESS + type * eeprom::EEPROM_ONTIME_SIZE);
 }
 
 }

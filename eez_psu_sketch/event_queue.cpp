@@ -29,9 +29,12 @@ namespace psu {
 namespace event_queue {
 
 static const uint32_t MAGIC = 0xD8152FC3L;
-static const uint16_t VERSION = 2;
+static const uint16_t VERSION = 3;
 
 static const uint16_t MAX_EVENTS = 100;
+
+static const uint16_t EVENT_HEADER_SIZE = 16;
+static const uint16_t EVENT_SIZE = 16;
 
 struct EventQueueHeader {
 	uint32_t magicNumber;
@@ -79,7 +82,7 @@ int getNumEvents() {
 void getEvent(int i, Event *e) {
 	i = (eventQueue.head - (i + 1) + MAX_EVENTS) % MAX_EVENTS;
 
-	eeprom::read((uint8_t *)e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + sizeof(EventQueueHeader) + i * sizeof(Event));
+	eeprom::read((uint8_t *)e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + EVENT_HEADER_SIZE + i * EVENT_SIZE);
 }
 
 int getEventType(Event *e) {
@@ -164,7 +167,7 @@ void pushEvent(int16_t eventId) {
 		e.dateTime = datetime::now();
 		e.eventId = eventId;
 
-		eeprom::write((uint8_t *)&e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + sizeof(EventQueueHeader) + eventQueue.head * sizeof(Event));
+		eeprom::write((uint8_t *)&e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + EVENT_HEADER_SIZE + eventQueue.head * EVENT_SIZE);
 
 		eventQueue.head = (eventQueue.head + 1) % MAX_EVENTS;
 		if (eventQueue.size < MAX_EVENTS) {
@@ -186,7 +189,7 @@ void markAsRead() {
 }
 
 int getNumPages() {
-	return getNumEvents() / EVENTS_PER_PAGE + 1;
+	return (getNumEvents() + EVENTS_PER_PAGE - 1) / EVENTS_PER_PAGE;
 }
 
 int getActivePageNumEvents() {

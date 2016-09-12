@@ -26,8 +26,8 @@
 |-------|----|------------------------------------------|
 |0      |  64|Not used                                  |
 |64     |  24|[Total ON-time counter](#ontime-counter)  |
-|88     |  24|[CH1 ON-time counter](#ontime-counter)    |
-|112    |  24|[CH2 ON-time counter](#ontime-counter)    |
+|128    |  24|[CH1 ON-time counter](#ontime-counter)    |
+|192    |  24|[CH2 ON-time counter](#ontime-counter)    |
 |1024   |  32|[Device configuration](#device)           |
 |2048   | 121|CH1 [calibration parameters](#calibration)|
 |2560   | 121|CH2 [calibration parameters](#calibration)|
@@ -200,13 +200,13 @@
 
 ## <a name="event-queue">Event queue</a>
 
-|Offset|Size|Type                     |Description                  |
-|------|----|-------------------------|-----------------------------|
-|0     |4   |int                      |Magic number                 |
-|4     |2   |int                      |Version                      |
-|6     |2   |int                      |Queue head                   |
-|8     |2   |int                      |Queue size                   |
-|10    |600 |[struct](#event)         |Max. 100 events              |	
+|Offset|Size |Type                     |Description                  |
+|------|-----|-------------------------|-----------------------------|
+|0     |4    |int                      |Magic number                 |
+|4     |2    |int                      |Version                      |
+|6     |2    |int                      |Queue head                   |
+|8     |2    |int                      |Queue size                   |
+|16    |1600 |[struct](#event)         |Max. 100 events              |	
 
 ## <a name="event">Event</a>
 
@@ -234,6 +234,8 @@ static const uint8_t READ = 3;
 static const uint8_t WRITE = 2;
 
 static const uint16_t EEPROM_ONTIME_START_ADDRESS = 64;
+static const uint16_t EEPROM_ONTIME_SIZE = 64;
+
 static const uint16_t EEPROM_START_ADDRESS = 1024;
 
 static const uint16_t EEPROM_EVENT_QUEUE_START_ADDRESS = 16384;

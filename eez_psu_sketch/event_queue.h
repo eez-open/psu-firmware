@@ -52,10 +52,10 @@ static const int EVENT_TYPE_ERROR = 3;
 	EVENT_INFO(CALIBRATION_PASSWORD_CHANGED, 3, "Calibration password changed") \
 	EVENT_INFO(BEEPER_ENABLED, 4, "Beeper enabled") \
 	EVENT_INFO(BEEPER_DISABLED, 5, "Beeper disabled") \
-	EVENT_INFO(CH1_OUTPUT_ENABLED, 10, "Ch1 output enabled") \
-	EVENT_INFO(CH2_OUTPUT_ENABLED, 11, "Ch2 output enabled") \
-	EVENT_INFO(CH1_OUTPUT_DISABLED, 20, "Ch1 output disabled") \
-	EVENT_INFO(CH2_OUTPUT_DISABLED, 21, "Ch2 output disabled") \
+	EVENT_INFO(CH1_OUTPUT_ENABLED, 10, "Ch1 output on") \
+	EVENT_INFO(CH2_OUTPUT_ENABLED, 11, "Ch2 output on") \
+	EVENT_INFO(CH1_OUTPUT_DISABLED, 20, "Ch1 output off") \
+	EVENT_INFO(CH2_OUTPUT_DISABLED, 21, "Ch2 output off") \
 	EVENT_INFO(CH1_REMOTE_SENSE_ENABLED, 30, "Ch1 remote sense enabled") \
 	EVENT_INFO(CH2_REMOTE_SENSE_ENABLED, 31, "Ch2 remote sense enabled") \
 	EVENT_INFO(CH1_REMOTE_SENSE_DISABLED, 40, "Ch1 remote sense disabled") \

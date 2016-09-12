@@ -21,6 +21,7 @@
 #include "profile.h"
 #include "temperature.h"
 
+#include "gui_data_snapshot.h"
 #include "gui_internal.h"
 #include "gui_protection.h"
 #include "gui_numeric_keypad.h"
@@ -48,6 +49,8 @@ static data::Value delay;
 static float minDelay;
 static float maxDelay;
 static float defaultDelay;
+
+static int dirty;
 
 void clear() {
 	g_channel->clearProtection();
@@ -81,6 +84,8 @@ void editOVP() {
 	maxDelay = g_channel->OVP_MAX_DELAY;
 	defaultDelay = g_channel->OVP_DEFAULT_DELAY;
 
+	dirty = 0;
+
 	editPage = PAGE_ID_CH_SETTINGS_PROT_OVP;
 	showPage(editPage);
 }
@@ -97,6 +102,8 @@ void editOCP() {
 	minDelay = g_channel->OCP_MIN_DELAY;
 	maxDelay = g_channel->OCP_MAX_DELAY;
 	defaultDelay = g_channel->OCP_DEFAULT_DELAY;
+
+	dirty = 0;
 
 	editPage = PAGE_ID_CH_SETTINGS_PROT_OCP;
 	showPage(editPage);
@@ -119,6 +126,8 @@ void editOPP() {
 	minDelay = g_channel->OPP_MIN_DELAY;
 	maxDelay = g_channel->OPP_MAX_DELAY;
 	defaultDelay = g_channel->OPP_DEFAULT_DELAY;
+
+	dirty = 0;
 
 	editPage = PAGE_ID_CH_SETTINGS_PROT_OPP;
 	showPage(editPage);
@@ -143,12 +152,22 @@ void editOTP() {
 	maxDelay = OTP_MAIN_MAX_DELAY;
 	defaultDelay = OTP_MAIN_DEFAULT_DELAY;
 
+	dirty = 0;
+
 	editPage = PAGE_ID_CH_SETTINGS_PROT_OTP;
 	showPage(editPage);
 #endif
 }
 
-data::Value getData(const data::Cursor &cursor, uint8_t id) {
+int getState() {
+	return state;
+}
+
+int getDirty() {
+	return dirty;
+}
+
+data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
 	if (id == DATA_ID_CHANNEL_PROTECTION_OTP_INSTALLED) {
 		return temperature::isChannelSensorInstalled(g_channel);
 	}
@@ -163,7 +182,7 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
 		id == DATA_ID_CHANNEL_PROTECTION_OCP_STATE ||
 		id == DATA_ID_CHANNEL_PROTECTION_OPP_STATE ||
 		id == DATA_ID_CHANNEL_PROTECTION_OTP_STATE) {
-		return state;
+		return snapshot->switches.switch1;
 	}
 
 	if (id == DATA_ID_CHANNEL_PROTECTION_OVP_LEVEL ||
@@ -179,16 +198,21 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
 		return delay;
 	}
 
+	if (id == DATA_ID_CHANNEL_PROTECTION_DIRTY) {
+		return snapshot->switches.switch2;
+	}
+
 	return data::Value();
 }
 
 void toggleState() {
 	state = state ? 0 : 1;
-	refreshPage();
+	dirty = true;
 }
 
 void onLimitSet(float value) {
 	limit = data::Value(value, limit.getType());
+	dirty = true;
 	showPreviousPage();
 }
 
@@ -198,6 +222,7 @@ void editLimit() {
 
 void onLevelSet(float value) {
 	level = data::Value(value, level.getType());
+	dirty = true;
 	showPreviousPage();
 }
 
@@ -207,6 +232,7 @@ void editLevel() {
 
 void onDelaySet(float value) {
 	delay = data::Value(value, delay.getType());
+	dirty = true;
 	showPreviousPage();
 }
 
@@ -215,6 +241,10 @@ void editDelay() {
 }
 
 void set() {
+	if (!dirty) {
+		return;
+	}
+
 	if (editPage == PAGE_ID_CH_SETTINGS_PROT_OVP) {
 		g_channel->setVoltageLimit(limit.getFloat());
 		g_channel->prot_conf.flags.u_state = state;

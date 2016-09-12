@@ -38,6 +38,7 @@ struct ChannelSnapshotFlags {
     unsigned opp : 2;
     unsigned otp_ch : 2;
     unsigned dp : 2;
+	unsigned cal_enabled: 1;
 };
 
 struct ChannelSnapshot {
@@ -51,6 +52,11 @@ struct SnapshotFlags {
     unsigned otp : 2;
 };
 
+struct Switches {
+	unsigned switch1: 1;
+	unsigned switch2: 1;
+};
+
 struct Snapshot {
     ChannelSnapshot channelSnapshots[CH_NUM];
 	keypad::Snapshot keypadSnapshot;
@@ -61,6 +67,7 @@ struct Snapshot {
 	event_queue::Event lastEvent;
 	event_queue::Event events[event_queue::EVENTS_PER_PAGE];
 	Value eventQueuePageInfo;
+	Switches switches;
 
     unsigned long lastSnapshotTime;
 

@@ -118,7 +118,7 @@ bool IOExpander::test() {
         channel.flags.power_ok = test_bit(IO_BIT_IN_PWRGOOD);
         if (!channel.flags.power_ok) {
             DebugTraceF("Ch%d power fault", channel.index);
-            psu::generateError(SCPI_ERROR_CH1_FAULT_DETECTED + channel.index - 1);
+            psu::generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (channel.index - 1));
         }
 #else
 		channel.flags.power_ok = 1;

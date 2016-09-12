@@ -100,19 +100,31 @@ void write_chunk(const uint8_t *buffer, uint16_t buffer_size, uint16_t address) 
     SPI.endTransaction();
 }
 
+static uint8_t *buffer_verify;
+static uint16_t buffer_verify_size;
+
 bool write(const uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
     for (uint16_t i = 0; i < buffer_size; i += 64) {
         write_chunk(buffer + i, min(buffer_size - i, 64), address + i);
     }
 
-    uint8_t *buffer_verify = (uint8_t *)malloc(buffer_size);
+	if (!buffer_verify || buffer_size > buffer_verify_size) {
+		if (buffer_verify) {
+			free(buffer_verify);
+		}
+		buffer_verify = (uint8_t *)malloc(buffer_size);
+		buffer_verify_size = buffer_size;
+		DebugTraceF("buffer_verify_size = %u", buffer_verify_size);
+	}
+
     read(buffer_verify, buffer_size, address);
 
-    bool result = memcmp(buffer, buffer_verify, buffer_size) == 0;
+    if (memcmp(buffer, buffer_verify, buffer_size) == 0) {
+		return true;
+	}
 
-    free(buffer_verify);
-
-    return result;
+	DebugTrace("EEPROM write verify failed!");
+	return false;
 }
 
 bool init() {

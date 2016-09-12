@@ -66,7 +66,7 @@ bool check_channel(scpi_t *context, int32_t ch) {
     }
 
     if (!Channel::get(ch - 1).isPowerOk()) {
-        SCPI_ErrorPush(context, SCPI_ERROR_CH1_FAULT_DETECTED + ch - 1);
+        SCPI_ErrorPush(context, SCPI_ERROR_CH1_FAULT_DETECTED - (ch - 1));
         return false;
     }
 

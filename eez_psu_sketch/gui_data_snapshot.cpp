@@ -167,6 +167,8 @@ void Snapshot::takeSnapshot() {
 #endif
 
 		channelSnapshots[i].flags.dp = channel.flags.dp_on ? 1 : 0;
+		
+		channelSnapshots[i].flags.cal_enabled = channel.flags.cal_enabled ? 1 : 0;
     }
 
 	temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::MAIN];
@@ -174,7 +176,9 @@ void Snapshot::takeSnapshot() {
     else if (!tempSensor.isTripped()) flags.otp = 1;
     else flags.otp = 2;
 
-	if (getActivePage() == PAGE_ID_SELF_TEST_RESULT) {
+	int activePage = getActivePage();
+
+	if (activePage == PAGE_ID_SELF_TEST_RESULT) {
 		if (!selfTestResult) {
 			selfTestResult = devices::getSelfTestResultString();
 		}
@@ -190,7 +194,7 @@ void Snapshot::takeSnapshot() {
 
     alertMessage = g_alertMessage;
 
-	if (getActivePage() == PAGE_ID_EVENT_QUEUE) {
+	if (activePage == PAGE_ID_EVENT_QUEUE) {
 		int n = event_queue::getActivePageNumEvents();
 		for (int i = 0; i < event_queue::EVENTS_PER_PAGE; ++i) {
 			if (i < n) {
@@ -206,6 +210,13 @@ void Snapshot::takeSnapshot() {
 		} else {
 			lastEvent.eventId = 0;
 		}
+	}
+
+	if (activePage == PAGE_ID_CH_SETTINGS_PROT_OVP || activePage == PAGE_ID_CH_SETTINGS_PROT_OCP || 
+		activePage == PAGE_ID_CH_SETTINGS_PROT_OPP || activePage == PAGE_ID_CH_SETTINGS_PROT_OTP)
+	{
+		switches.switch1 = protection::getState();
+		switches.switch2 = protection::getDirty();
 	}
 }
 
@@ -342,12 +353,12 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
         return value;
     }
 
-	value = gui::calibration::getData(cursor, id);
+	value = gui::calibration::getData(cursor, id, this);
     if (value.getType() != VALUE_TYPE_NONE) {
 		return value;
 	}
 
-	value = gui::protection::getData(cursor, id);
+	value = gui::protection::getData(cursor, id, this);
     if (value.getType() != VALUE_TYPE_NONE) {
 		return value;
 	}

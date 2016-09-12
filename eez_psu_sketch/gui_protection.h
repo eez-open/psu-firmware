@@ -21,6 +21,11 @@
 namespace eez {
 namespace psu {
 namespace gui {
+
+namespace data {
+struct Snapshot;
+}
+
 namespace protection {
 
 void clear();
@@ -31,7 +36,9 @@ void editOCP();
 void editOPP();
 void editOTP();
 
-data::Value getData(const data::Cursor &cursor, uint8_t id);
+int getState();
+int getDirty();
+data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
 
 void toggleState();
 void editLimit();

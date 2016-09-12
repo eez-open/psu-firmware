@@ -22,6 +22,7 @@
 #include "sound.h"
 #include "calibration.h"
 
+#include "gui_data_snapshot.h"
 #include "gui_calibration.h"
 #include "gui_keypad.h"
 #include "gui_numeric_keypad.h"
@@ -128,13 +129,13 @@ void start() {
 	checkPassword(PSTR("Password: "), onStartPasswordOk, showPreviousPage);
 }
 
-data::Value getData(const data::Cursor &cursor, uint8_t id) {
+data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
 	if (id == DATA_ID_CHANNEL_CALIBRATION_STATUS) {
 		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
 		return data::Value(channel.isCalibrationExists() ? 1 : 0);
 	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STATE) {
-		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
-		return data::Value(channel.flags.cal_enabled ? 1 : 0);
+		int iChannel = cursor.iChannel == -1 ? g_channel->index - 1 : cursor.iChannel;
+		return data::Value(snapshot->channelSnapshots[iChannel].flags.cal_enabled ? 1 : 0);
 	} else if (id == DATA_ID_CHANNEL_CALIBRATION_DATE) {
 		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
 		return data::Value(channel.cal_conf.calibration_date);
@@ -306,7 +307,6 @@ void stop() {
 void toggleEnable() {
 	Channel &channel = g_channel ? *g_channel : Channel::get(g_foundWidgetAtDown.cursor.iChannel);
 	channel.calibrationEnable(!channel.flags.cal_enabled);
-	refreshPage();
 }
 
 }
