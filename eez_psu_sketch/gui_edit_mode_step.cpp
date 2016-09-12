@@ -85,7 +85,7 @@ void test() {
 #if DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT
         int d = start_pos - touch::y;
 #else
-        int d = start_pos - touch::x;
+        int d = touch::x - start_pos;
 #endif
         if (abs(d) >= CONF_GUI_EDIT_MODE_STEP_THRESHOLD_PX) {
             float min = edit_mode::getMin().getFloat();
