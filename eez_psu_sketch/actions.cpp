@@ -159,6 +159,10 @@ void action_show_sys_settings() {
     showPage(PAGE_ID_SYS_SETTINGS);
 }
 
+void action_show_sys_settings2() {
+    showPage(PAGE_ID_SYS_SETTINGS2);
+}
+
 void action_show_main_help_page() {
     showPage(PAGE_ID_MAIN_HELP);
 }
@@ -343,6 +347,7 @@ ACTION actions[] = {
     action_show_previous_page,
     action_turn_off,
     action_show_sys_settings,
+    action_show_sys_settings2,
     action_show_main_help_page,
     action_show_ch_settings_prot,
     action_show_ch_settings_prot_clear,

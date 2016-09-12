@@ -63,10 +63,10 @@ void draw_cross(int x, int y, word color) {
     last_cross_y = y;
 
     lcd::lcd.setColor(color);
-    lcd::lcd.drawVLine(x + RECT_SIZE / 2, y, RECT_SIZE);
-    lcd::lcd.drawVLine(x + RECT_SIZE / 2 + 1, y, RECT_SIZE);
-    lcd::lcd.drawHLine(x, y + RECT_SIZE / 2, RECT_SIZE);
-    lcd::lcd.drawHLine(x, y + RECT_SIZE / 2 + 1, RECT_SIZE);
+    lcd::lcd.drawVLine(x + RECT_SIZE / 2, y, RECT_SIZE - 1);
+    lcd::lcd.drawVLine(x + RECT_SIZE / 2 + 1, y, RECT_SIZE - 1);
+    lcd::lcd.drawHLine(x, y + RECT_SIZE / 2, RECT_SIZE - 1);
+    lcd::lcd.drawHLine(x, y + RECT_SIZE / 2 + 1, RECT_SIZE - 1);
 
     lcd::lcd.setColor(VGA_BLACK);
     lcd::lcd.fillRect(

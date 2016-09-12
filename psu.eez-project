@@ -501,6 +501,11 @@
       "implementation": "showPage(PAGE_ID_SYS_SETTINGS);"
     },
     {
+      "name": "show_sys_settings2",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_SYS_SETTINGS2);"
+    },
+    {
       "name": "show_main_help_page",
       "implementationType": "native",
       "implementation": "showPage(PAGE_ID_MAIN_HELP);"
@@ -48544,9 +48549,7 @@
                       "width": 36,
                       "height": 36,
                       "style": "bottom_button",
-                      "Disabled style:": "bottom_button_disabled",
                       "text": "(",
-                      "Enabled": "calibration.channel.stepPrevEnabled",
                       "disabledStyle": "bottom_button_disabled",
                       "enabled": "EventQueue.previousPageEnabled",
                       "action": "event_queue_previous_page"
@@ -48558,9 +48561,7 @@
                       "width": 36,
                       "height": 36,
                       "style": "bottom_button",
-                      "Disabled style:": "bottom_button_disabled",
                       "text": ")",
-                      "Enabled": "calibration.channel.stepNextEnabled",
                       "disabledStyle": "bottom_button_disabled",
                       "enabled": "EventQueue.nextPageEnabled",
                       "action": "event_queue_next_page"
@@ -48688,9 +48689,7 @@
                       "width": 48,
                       "height": 36,
                       "style": "bottom_button",
-                      "Disabled style:": "bottom_button_disabled",
                       "text": "(",
-                      "Enabled": "calibration.channel.stepPrevEnabled",
                       "disabledStyle": "bottom_button_disabled",
                       "enabled": "EventQueue.previousPageEnabled",
                       "action": "event_queue_previous_page"
@@ -48702,9 +48701,7 @@
                       "width": 48,
                       "height": 36,
                       "style": "bottom_button",
-                      "Disabled style:": "bottom_button_disabled",
                       "text": ")",
-                      "Enabled": "calibration.channel.stepNextEnabled",
                       "disabledStyle": "bottom_button_disabled",
                       "enabled": "EventQueue.nextPageEnabled",
                       "action": "event_queue_next_page"
@@ -54431,22 +54428,22 @@
         "landscape": {
           "widgets": [
             {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 272,
-              "height": 36,
-              "style": "bottom_button_background"
+              "type": "Text",
+              "text": "System settings (1)",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             },
             {
               "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
+              "text": "Sound",
+              "x": 12,
+              "y": 30,
+              "width": 102,
+              "height": 28,
+              "style": "edit_value_active_S_left"
             },
             {
               "type": "Text",
@@ -54460,21 +54457,50 @@
             },
             {
               "type": "Text",
-              "text": "Sound",
-              "x": 12,
-              "y": 30,
-              "width": 102,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
               "text": "Display backlight",
               "x": 12,
               "y": 86,
               "width": 180,
               "height": 28,
               "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Diagnostics",
+              "x": 12,
+              "y": 114,
+              "width": 180,
+              "height": 28,
+              "style": "default_disabled_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "System password",
+              "x": 12,
+              "y": 142,
+              "width": 180,
+              "height": 28,
+              "style": "default_disabled_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Shutdown when trip",
+              "x": 12,
+              "y": 170,
+              "width": 155,
+              "height": 29,
+              "style": "edit_value_S_left",
+              "action": "show_ch_settings_prot_clear"
+            },
+            {
+              "type": "Text",
+              "text": "OFF",
+              "x": 167,
+              "y": 170,
+              "width": 73,
+              "height": 29,
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_clear"
             },
             {
               "type": "List",
@@ -54565,78 +54591,40 @@
             },
             {
               "type": "Text",
-              "text": "Diagnostics",
-              "x": 12,
-              "y": 114,
-              "width": 180,
-              "height": 28,
-              "style": "default_disabled_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "System settings (1)",
-              "x": 6,
-              "y": 0,
-              "width": 228,
-              "height": 32,
-              "style": "value_S"
-            },
-            {
-              "type": "Button",
               "x": 0,
               "y": 204,
               "width": 48,
               "height": 36,
-              "style": "bottom_button",
-              "Disabled style:": "bottom_button_disabled",
-              "text": "(",
-              "Enabled": "calibration.channel.stepPrevEnabled",
-              "disabledStyle": "bottom_button_disabled",
-              "enabled": "channel.calibration.step.prevEnabled",
-              "action": "sys_settings_cal_ch_wiz_step_previous"
+              "style": "bottom_button_disabled",
+              "text": "("
             },
             {
-              "type": "Button",
+              "type": "Text",
               "x": 48,
               "y": 204,
               "width": 48,
               "height": 36,
               "style": "bottom_button",
-              "Disabled style:": "bottom_button_disabled",
               "text": ")",
-              "Enabled": "calibration.channel.stepNextEnabled",
-              "disabledStyle": "bottom_button_disabled",
-              "enabled": "channel.calibration.step.nextEnabled",
-              "action": "sys_settings_cal_ch_wiz_step_next"
+              "action": "show_sys_settings2"
+            },
+            {
+              "type": "Rectangle",
+              "x": 96,
+              "y": 204,
+              "width": 176,
+              "height": 36,
+              "style": "bottom_button_background"
             },
             {
               "type": "Text",
-              "text": "System password",
-              "x": 12,
-              "y": 142,
-              "width": 180,
-              "height": 28,
-              "style": "default_disabled_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "Shutdown when trip",
-              "x": 12,
-              "y": 170,
-              "width": 155,
-              "height": 29,
-              "style": "edit_value_S_left",
-              "action": "show_ch_settings_prot_clear"
-            },
-            {
-              "type": "Text",
-              "text": "OFF",
-              "x": 167,
-              "y": 170,
-              "width": 73,
-              "height": 29,
-              "style": "edit_value_active_S_left",
-              "action": "show_ch_settings_prot_clear"
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
             }
           ],
           "x": 0,
@@ -54829,32 +54817,31 @@
         "landscape": {
           "widgets": [
             {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 272,
-              "height": 36,
-              "style": "bottom_button_background"
+              "type": "Text",
+              "text": "System settings (2)",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
             },
             {
               "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "text": "Screen calibration",
+              "text": "Formats",
               "x": 12,
-              "y": 144,
+              "y": 30,
+              "width": 180,
+              "height": 28,
+              "style": "default_disabled_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Serial (via USB) settings",
+              "x": 12,
+              "y": 58,
               "width": 189,
               "height": 28,
-              "style": "edit_value_active_S_left",
-              "action": "touch_screen_calibration"
+              "style": "default_disabled_S_left"
             },
             {
               "type": "Text",
@@ -54868,21 +54855,22 @@
             },
             {
               "type": "Text",
-              "text": "Formats",
-              "x": 12,
-              "y": 30,
-              "width": 180,
-              "height": 28,
-              "style": "default_disabled_S_left"
-            },
-            {
-              "type": "Text",
               "text": "NTP server",
               "x": 12,
               "y": 114,
               "width": 189,
               "height": 28,
               "style": "default_disabled_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Screen calibration",
+              "x": 12,
+              "y": 144,
+              "width": 189,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "action": "touch_screen_calibration"
             },
             {
               "type": "List",
@@ -54973,49 +54961,40 @@
             },
             {
               "type": "Text",
-              "text": "Serial (via USB) settings",
-              "x": 12,
-              "y": 58,
-              "width": 189,
-              "height": 28,
-              "style": "default_disabled_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "System settings (2)",
-              "x": 6,
-              "y": 0,
-              "width": 228,
-              "height": 32,
-              "style": "value_S"
-            },
-            {
-              "type": "Button",
               "x": 0,
               "y": 204,
               "width": 48,
               "height": 36,
               "style": "bottom_button",
-              "Disabled style:": "bottom_button_disabled",
               "text": "(",
-              "Enabled": "calibration.channel.stepPrevEnabled",
-              "disabledStyle": "bottom_button_disabled",
-              "enabled": "channel.calibration.step.prevEnabled",
-              "action": "sys_settings_cal_ch_wiz_step_previous"
+              "action": "show_sys_settings"
             },
             {
-              "type": "Button",
+              "type": "Text",
               "x": 48,
               "y": 204,
               "width": 48,
               "height": 36,
+              "style": "bottom_button_disabled",
+              "text": ")"
+            },
+            {
+              "type": "Rectangle",
+              "x": 96,
+              "y": 204,
+              "width": 176,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
               "style": "bottom_button",
-              "Disabled style:": "bottom_button_disabled",
-              "text": ")",
-              "Enabled": "calibration.channel.stepNextEnabled",
-              "disabledStyle": "bottom_button_disabled",
-              "enabled": "channel.calibration.step.nextEnabled",
-              "action": "sys_settings_cal_ch_wiz_step_next"
+              "text": "X",
+              "width": 48,
+              "height": 36
             }
           ],
           "x": 0,
@@ -56038,9 +56017,7 @@
               "width": 48,
               "height": 36,
               "style": "bottom_button",
-              "Disabled style:": "bottom_button_disabled",
               "text": "(",
-              "Enabled": "calibration.channel.stepPrevEnabled",
               "disabledStyle": "bottom_button_disabled",
               "enabled": "channel.calibration.step.prevEnabled",
               "action": "sys_settings_cal_ch_wiz_step_previous"
@@ -56052,9 +56029,7 @@
               "width": 48,
               "height": 36,
               "style": "bottom_button",
-              "Disabled style:": "bottom_button_disabled",
               "text": ")",
-              "Enabled": "calibration.channel.stepNextEnabled",
               "disabledStyle": "bottom_button_disabled",
               "enabled": "channel.calibration.step.nextEnabled",
               "action": "sys_settings_cal_ch_wiz_step_next"
@@ -56341,9 +56316,7 @@
               "width": 48,
               "height": 36,
               "style": "bottom_button",
-              "Disabled style:": "bottom_button_disabled",
               "text": "(",
-              "Enabled": "calibration.channel.stepPrevEnabled",
               "disabledStyle": "bottom_button_disabled",
               "enabled": "channel.calibration.step.prevEnabled",
               "action": "sys_settings_cal_ch_wiz_step_previous"

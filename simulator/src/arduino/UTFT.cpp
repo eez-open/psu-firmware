@@ -139,10 +139,10 @@ void UTFT::clrScr() {
 }
 
 void UTFT::drawRect(int x1, int y1, int x2, int y2) {
-    drawHLine(x1, y1, x2 - x1 + 1);
-    drawHLine(x1, y2, x2 - x1 + 1);
-	drawVLine(x1, y1, y2 - y1 + 1);
-	drawVLine(x2, y1, y2 - y1 + 1);
+    drawHLine(x1, y1, x2 - x1);
+    drawHLine(x1, y2, x2 - x1);
+	drawVLine(x1, y1, y2 - y1);
+	drawVLine(x2, y1, y2 - y1);
 }
 
 void UTFT::fillRect(int x1, int y1, int x2, int y2) {
@@ -163,7 +163,7 @@ void UTFT::fillRect(int x1, int y1, int x2, int y2) {
 
 void UTFT::drawHLine(int x, int y, int l) {
     setXY(x, y, x + l, y);
-    for (int i = 0; i < l; ++i) {
+    for (int i = 0; i < l + 1; ++i) {
         setPixel((fch << 8) | fcl);
     }
 }
@@ -171,11 +171,11 @@ void UTFT::drawHLine(int x, int y, int l) {
 void UTFT::drawVLine(int x, int y, int l) {
     if (orient == PORTRAIT) {
         setXY(x, y, x, y + l);
-        for (int i = 0; i < l; ++i) {
+        for (int i = 0; i < l + 1; ++i) {
             setPixel((fch << 8) | fcl);
         }
     } else {
-        for (int i = 0; i < l; ++i) {
+        for (int i = 0; i < l +1 ; ++i) {
             setXY(x, y + i, x, y + i);
             setPixel((fch << 8) | fcl);
         }
