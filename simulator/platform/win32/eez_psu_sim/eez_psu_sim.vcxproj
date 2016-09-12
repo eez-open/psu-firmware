@@ -191,6 +191,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\fan.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\font.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gesture.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_adv_lripple.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_calibration.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_data.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_data_snapshot.h" />
@@ -298,6 +299,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\fan.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\font.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gesture.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_adv_lripple.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_calibration.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_data.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_data_snapshot.cpp" />

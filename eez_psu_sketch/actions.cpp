@@ -25,6 +25,7 @@
 #include "gui_edit_mode_keypad.h"
 #include "gui_calibration.h"
 #include "gui_protection.h"
+#include "gui_adv_lripple.h"
 
 namespace eez {
 namespace psu {
@@ -167,6 +168,14 @@ void action_show_main_help_page() {
     showPage(PAGE_ID_MAIN_HELP);
 }
 
+void action_show_edit_mode_step_help() {
+    showPage(PAGE_ID_EDIT_MODE_STEP_HELP);
+}
+
+void action_show_edit_mode_slider_help() {
+    showPage(PAGE_ID_EDIT_MODE_SLIDER_HELP);
+}
+
 void action_show_ch_settings_prot() {
     showPage(PAGE_ID_CH_SETTINGS_PROT);
 }
@@ -196,7 +205,7 @@ void action_show_ch_settings_adv() {
 }
 
 void action_show_ch_settings_adv_lripple() {
-    showPage(PAGE_ID_CH_SETTINGS_ADV_LRIPPLE);
+    adv_lripple::show();
 }
 
 void action_show_ch_settings_adv_limits() {
@@ -349,6 +358,8 @@ ACTION actions[] = {
     action_show_sys_settings,
     action_show_sys_settings2,
     action_show_main_help_page,
+    action_show_edit_mode_step_help,
+    action_show_edit_mode_slider_help,
     action_show_ch_settings_prot,
     action_show_ch_settings_prot_clear,
     action_show_ch_settings_prot_ocp,

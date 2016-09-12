@@ -29,7 +29,7 @@ namespace psu {
 namespace gui {
 namespace edit_mode {
 
-static int tabIndex = PAGE_ID_EDIT_MODE_SLIDER;
+static int tabIndex = PAGE_ID_EDIT_MODE_KEYPAD;
 static data::Cursor dataCursor;
 static int dataId = -1;
 static data::Value editValue;

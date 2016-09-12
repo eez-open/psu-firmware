@@ -25,8 +25,8 @@ namespace gui {
 namespace edit_mode_slider {
 
 bool scale_is_vertical;
-int scale_width;
-float scale_height;
+int scale_width = 40;
+float scale_height = 240;
 
 static int start_y;
 static float start_value;

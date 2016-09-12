@@ -33,24 +33,26 @@ namespace protection {
 
 static int editPage;
 
+static int origState;
 static int state;
 
+static data::Value origLimit;
 static data::Value limit;
 static float minLimit;
 static float maxLimit;
 static float defLimit;
 
+static data::Value origLevel;
 static data::Value level;
 static float minLevel;
 static float maxLevel;
 static float defLevel;
 
+static data::Value origDelay;
 static data::Value delay;
 static float minDelay;
 static float maxDelay;
 static float defaultDelay;
-
-static int dirty;
 
 void clear() {
 	g_channel->clearProtection();
@@ -67,67 +69,63 @@ void clearAndDisable() {
 }
 
 void editOVP() {
-	state = g_channel->prot_conf.flags.u_state ? 1 : 0;
+	origState = state = g_channel->prot_conf.flags.u_state ? 1 : 0;
 
-	limit = data::Value(g_channel->u.limit, data::VALUE_TYPE_FLOAT_VOLT);
+	origLimit = limit = data::Value(g_channel->u.limit, data::VALUE_TYPE_FLOAT_VOLT);
 	minLimit = g_channel->U_MIN;
 	maxLimit = g_channel->U_MAX;
 	defLimit = g_channel->U_MAX;
 
-	level = data::Value(g_channel->prot_conf.u_level, data::VALUE_TYPE_FLOAT_VOLT);
+	origLevel = level = data::Value(g_channel->prot_conf.u_level, data::VALUE_TYPE_FLOAT_VOLT);
 	minLevel = g_channel->u.set;
 	maxLevel = g_channel->U_MAX;
 	defLevel = g_channel->U_MAX;
 
-	delay = data::Value(g_channel->prot_conf.u_delay, data::VALUE_TYPE_FLOAT_SECOND);
+	origDelay = delay = data::Value(g_channel->prot_conf.u_delay, data::VALUE_TYPE_FLOAT_SECOND);
 	minDelay = g_channel->OVP_MIN_DELAY;
 	maxDelay = g_channel->OVP_MAX_DELAY;
 	defaultDelay = g_channel->OVP_DEFAULT_DELAY;
-
-	dirty = 0;
 
 	editPage = PAGE_ID_CH_SETTINGS_PROT_OVP;
 	showPage(editPage);
 }
 
 void editOCP() {
-	state = g_channel->prot_conf.flags.i_state ? 1 : 0;
+	origState = state = g_channel->prot_conf.flags.i_state ? 1 : 0;
 
-	limit = data::Value(g_channel->i.limit, data::VALUE_TYPE_FLOAT_AMPER);
+	origLimit = limit = data::Value(g_channel->i.limit, data::VALUE_TYPE_FLOAT_AMPER);
 	minLimit = g_channel->I_MIN;
 	maxLimit = g_channel->I_MAX;
 	defLimit = g_channel->I_MAX;
 
-	delay = data::Value(g_channel->prot_conf.i_delay, data::VALUE_TYPE_FLOAT_SECOND);
+	origLevel = level = 0;
+
+	origDelay = delay = data::Value(g_channel->prot_conf.i_delay, data::VALUE_TYPE_FLOAT_SECOND);
 	minDelay = g_channel->OCP_MIN_DELAY;
 	maxDelay = g_channel->OCP_MAX_DELAY;
 	defaultDelay = g_channel->OCP_DEFAULT_DELAY;
-
-	dirty = 0;
 
 	editPage = PAGE_ID_CH_SETTINGS_PROT_OCP;
 	showPage(editPage);
 }
 
 void editOPP() {
-	state = g_channel->prot_conf.flags.p_state ? 1 : 0;
+	origState = state = g_channel->prot_conf.flags.p_state ? 1 : 0;
 
-	limit = data::Value(g_channel->p_limit, data::VALUE_TYPE_FLOAT_WATT);
+	origLimit = limit = data::Value(g_channel->p_limit, data::VALUE_TYPE_FLOAT_WATT);
 	minLimit = g_channel->U_MIN * g_channel->I_MIN;
 	maxLimit = g_channel->U_MAX * g_channel->I_MAX;
 	defLimit = g_channel->PTOT;
 
-	level = data::Value(g_channel->prot_conf.p_level, data::VALUE_TYPE_FLOAT_WATT);
+	origLevel = level = data::Value(g_channel->prot_conf.p_level, data::VALUE_TYPE_FLOAT_WATT);
 	minLevel = g_channel->OPP_MIN_LEVEL;
 	maxLevel = g_channel->OPP_MAX_LEVEL;
 	defLevel = g_channel->OPP_DEFAULT_LEVEL;
 
-	delay = data::Value(g_channel->prot_conf.p_delay, data::VALUE_TYPE_FLOAT_SECOND);
+	origDelay = delay = data::Value(g_channel->prot_conf.p_delay, data::VALUE_TYPE_FLOAT_SECOND);
 	minDelay = g_channel->OPP_MIN_DELAY;
 	maxDelay = g_channel->OPP_MAX_DELAY;
 	defaultDelay = g_channel->OPP_DEFAULT_DELAY;
-
-	dirty = 0;
 
 	editPage = PAGE_ID_CH_SETTINGS_PROT_OPP;
 	showPage(editPage);
@@ -135,24 +133,22 @@ void editOPP() {
 
 void editOTP() {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-	state = temperature::getChannelSensorState(g_channel) ? 1 : 0;
+	origState = state = temperature::getChannelSensorState(g_channel) ? 1 : 0;
 
-	limit = 0;
+	origLimit = limit = 0;
 	minLimit = 0;
 	maxLimit = 0;
 	defLimit = 0;
 
-	level = data::Value(temperature::getChannelSensorLevel(g_channel), data::VALUE_TYPE_FLOAT_CELSIUS);
+	origLevel = level = data::Value(temperature::getChannelSensorLevel(g_channel), data::VALUE_TYPE_FLOAT_CELSIUS);
 	minLevel = OTP_MAIN_MIN_LEVEL;
 	maxLevel = OTP_MAIN_MAX_LEVEL;
 	defLevel = OTP_MAIN_DEFAULT_LEVEL;
 
-	delay = data::Value(temperature::getChannelSensorDelay(g_channel), data::VALUE_TYPE_FLOAT_SECOND);
+	origDelay = delay = data::Value(temperature::getChannelSensorDelay(g_channel), data::VALUE_TYPE_FLOAT_SECOND);
 	minDelay = OTP_MAIN_MIN_DELAY;
 	maxDelay = OTP_MAIN_MAX_DELAY;
 	defaultDelay = OTP_MAIN_DEFAULT_DELAY;
-
-	dirty = 0;
 
 	editPage = PAGE_ID_CH_SETTINGS_PROT_OTP;
 	showPage(editPage);
@@ -164,7 +160,7 @@ int getState() {
 }
 
 int getDirty() {
-	return dirty;
+	return (origState != state || origLimit != limit || origLevel != level || origDelay != delay) ? 1 : 0;
 }
 
 data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
@@ -207,12 +203,10 @@ data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snap
 
 void toggleState() {
 	state = state ? 0 : 1;
-	dirty = true;
 }
 
 void onLimitSet(float value) {
 	limit = data::Value(value, limit.getType());
-	dirty = true;
 	showPreviousPage();
 }
 
@@ -222,7 +216,6 @@ void editLimit() {
 
 void onLevelSet(float value) {
 	level = data::Value(value, level.getType());
-	dirty = true;
 	showPreviousPage();
 }
 
@@ -232,7 +225,6 @@ void editLevel() {
 
 void onDelaySet(float value) {
 	delay = data::Value(value, delay.getType());
-	dirty = true;
 	showPreviousPage();
 }
 
@@ -241,7 +233,7 @@ void editDelay() {
 }
 
 void set() {
-	if (!dirty) {
+	if (!getDirty()) {
 		return;
 	}
 

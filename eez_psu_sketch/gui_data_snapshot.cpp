@@ -27,6 +27,7 @@
 #include "gui_keypad.h"
 #include "gui_calibration.h"
 #include "gui_protection.h"
+#include "gui_adv_lripple.h"
 
 #define CONF_GUI_REFRESH_EVERY_MS 250
 
@@ -218,6 +219,13 @@ void Snapshot::takeSnapshot() {
 		switches.switch1 = protection::getState();
 		switches.switch2 = protection::getDirty();
 	}
+
+	if (activePage == PAGE_ID_CH_SETTINGS_ADV_LRIPPLE)
+	{
+		switches.switch1 = adv_lripple::getStatus();
+		switches.switch2 = adv_lripple::getAutoMode();
+		switches.switch2 = adv_lripple::getDirty();
+	}
 }
 
 Value Snapshot::get(const Cursor &cursor, uint8_t id) {
@@ -359,6 +367,11 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 	}
 
 	value = gui::protection::getData(cursor, id, this);
+    if (value.getType() != VALUE_TYPE_NONE) {
+		return value;
+	}
+
+	value = gui::adv_lripple::getData(cursor, id, this);
     if (value.getType() != VALUE_TYPE_NONE) {
 		return value;
 	}

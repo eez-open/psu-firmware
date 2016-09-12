@@ -55,6 +55,7 @@ struct SnapshotFlags {
 struct Switches {
 	unsigned switch1: 1;
 	unsigned switch2: 1;
+	unsigned switch3: 1;
 };
 
 struct Snapshot {

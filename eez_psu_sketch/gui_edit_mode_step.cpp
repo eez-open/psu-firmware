@@ -52,7 +52,7 @@ namespace edit_mode_step {
 static int step_index = 2;
 
 static bool changed;
-static int start_y;
+static int start_pos;
 
 float getStepValue() {
     if (edit_mode::getUnit() == VALUE_TYPE_FLOAT_VOLT) {
@@ -82,7 +82,11 @@ void setStepIndex(int value) {
 
 void test() {
     if (!changed) {
-        int d = start_y - touch::y;
+#if DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT
+        int d = start_pos - touch::y;
+#else
+        int d = start_pos - touch::x;
+#endif
         if (abs(d) >= CONF_GUI_EDIT_MODE_STEP_THRESHOLD_PX) {
             float min = edit_mode::getMin().getFloat();
             float max = edit_mode::getMax().getFloat();
@@ -109,7 +113,11 @@ void test() {
 }
 
 void onTouchDown() {
-    start_y = touch::y;
+#if DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT
+    start_pos = touch::y;
+#else
+	start_pos = touch::x;
+#endif
     changed = false;
 }
 
