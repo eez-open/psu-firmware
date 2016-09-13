@@ -19,15 +19,10 @@
 #include "psu.h"
 #include "calibration.h"
 #include "temperature.h"
-#include "devices.h"
 #include "gui_data_snapshot.h"
-#include "gui_view.h"
-#include "gui_document.h"
 #include "gui_internal.h"
 #include "gui_keypad.h"
 #include "gui_calibration.h"
-#include "gui_protection.h"
-#include "gui_adv_lripple.h"
 
 #define CONF_GUI_REFRESH_EVERY_MS 250
 
@@ -177,54 +172,14 @@ void Snapshot::takeSnapshot() {
     else if (!tempSensor.isTripped()) flags.otp = 1;
     else flags.otp = 2;
 
-	int activePage = getActivePage();
-
-	if (activePage == PAGE_ID_SELF_TEST_RESULT) {
-		if (!selfTestResult) {
-			selfTestResult = devices::getSelfTestResultString();
-		}
-	} else {
-		if (selfTestResult) {
-			free(selfTestResult);
-			selfTestResult = 0;
-		}
-	}
-
 	keypadSnapshot.takeSnapshot(this);
     editModeSnapshot.takeSnapshot(this);
 
     alertMessage = g_alertMessage;
 
-	if (activePage == PAGE_ID_EVENT_QUEUE) {
-		int n = event_queue::getActivePageNumEvents();
-		for (int i = 0; i < event_queue::EVENTS_PER_PAGE; ++i) {
-			if (i < n) {
-				event_queue::getActivePageEvent(i, events + i);
-			} else {
-				events[i].eventId = event_queue::EVENT_TYPE_NONE;
-			}
-		}
-		eventQueuePageInfo = Value::PageInfo(event_queue::getActivePageIndex(), event_queue::getNumPages());
-	} else {
-		if (event_queue::getNumEvents() > 0) {
-			event_queue::getEvent(0, &lastEvent);
-		} else {
-			lastEvent.eventId = 0;
-		}
-	}
-
-	if (activePage == PAGE_ID_CH_SETTINGS_PROT_OVP || activePage == PAGE_ID_CH_SETTINGS_PROT_OCP || 
-		activePage == PAGE_ID_CH_SETTINGS_PROT_OPP || activePage == PAGE_ID_CH_SETTINGS_PROT_OTP)
-	{
-		switches.switch1 = protection::getState();
-		switches.switch2 = protection::getDirty();
-	}
-
-	if (activePage == PAGE_ID_CH_SETTINGS_ADV_LRIPPLE)
-	{
-		switches.switch1 = adv_lripple::getStatus();
-		switches.switch2 = adv_lripple::getAutoMode();
-		switches.switch3 = adv_lripple::getDirty();
+	Page *activePage = getActivePage();
+	if (activePage) {
+		activePage->takeSnapshot(this);
 	}
 }
 
@@ -304,53 +259,15 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 	if (id == DATA_ID_FIRMWARE_INFO) {
         return Value(getFirmwareInfo());
     }
-	
-	if (id == DATA_ID_SELF_TEST_RESULT) {
-		return Value(selfTestResult);
-	} 
-	
-	if (getActivePage() == PAGE_ID_EVENT_QUEUE) {
-		if (cursor.iChannel >= 0) {
-			if (id == DATA_ID_EVENT_QUEUE_EVENTS_TYPE) {
-				return Value(event_queue::getEventType(events + cursor.iChannel));
-			} 
-		
-			if (id == DATA_ID_EVENT_QUEUE_EVENTS_MESSAGE) {
-				return Value(events + cursor.iChannel);
-			}
-		}
 
-		if (id == DATA_ID_EVENT_QUEUE_MULTIPLE_PAGES) {
-			return Value(eventQueuePageInfo.getNumPages() > 1 ? 1 : 0);
-		}
-
-		if (id == DATA_ID_EVENT_QUEUE_PREVIOUS_PAGE_ENABLED) {
-			return Value(eventQueuePageInfo.getPageIndex() > 0 ? 1 : 0);
-		}
-
-		if (id == DATA_ID_EVENT_QUEUE_NEXT_PAGE_ENABLED) {
-			return Value(eventQueuePageInfo.getPageIndex() < eventQueuePageInfo.getNumPages() - 1 ? 1 : 0);
-		}
-
-		if (id == DATA_ID_EVENT_QUEUE_PAGE_INFO) {
-			return eventQueuePageInfo;
-		}
-	} else {
-		if (event_queue::g_unread) {
-			if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_TYPE) {
-				return Value(event_queue::getEventType(&lastEvent));
-			}
-		
-			if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_MESSAGE) {
-				return Value(&lastEvent);
-			}
-		} else {
-			if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_TYPE) {
-				return Value(event_queue::EVENT_TYPE_NONE);
-			} 
+	Page *page = getActivePage();
+	if (page) {
+		Value value = page->getData(cursor, id, this);
+		if (value.getType() != VALUE_TYPE_NONE) {
+			return value;
 		}
 	}
-	
+
 	Value value = keypadSnapshot.get(id);
     if (value.getType() != VALUE_TYPE_NONE) {
         return value;
@@ -362,16 +279,6 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
     }
 
 	value = gui::calibration::getData(cursor, id, this);
-    if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-	value = gui::protection::getData(cursor, id, this);
-    if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-	value = gui::adv_lripple::getData(cursor, id, this);
     if (value.getType() != VALUE_TYPE_NONE) {
 		return value;
 	}

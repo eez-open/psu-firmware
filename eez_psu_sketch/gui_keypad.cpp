@@ -67,7 +67,7 @@ void Snapshot::takeSnapshot(data::Snapshot *snapshot) {
 		textPtr += strlen(g_label);
 	}
 
-	if (getActivePage() == PAGE_ID_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_KEYPAD) {
 		if (g_isPassword) {
 			int n = strlen(keypad::g_keypadText);
 			if (n > 0) {
@@ -98,12 +98,12 @@ void Snapshot::takeSnapshot(data::Snapshot *snapshot) {
 	}
 
 	//
-	if (getActivePage() == PAGE_ID_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_KEYPAD) {
 		this->isUpperCase = keypad::g_isUpperCase;
 	}
 
 	//
-	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
         switch (numeric_keypad::getEditUnit()) {
         case data::VALUE_TYPE_FLOAT_VOLT: keypadUnit = data::Value::ProgmemStr(PSTR("mV")); break;
         case data::VALUE_TYPE_FLOAT_MILLI_VOLT: keypadUnit = data::Value::ProgmemStr(PSTR("V")); break;
@@ -119,7 +119,7 @@ data::Value Snapshot::get(uint8_t id) {
 		return isUpperCase ? 1 : 0;
 	} else if (id == DATA_ID_EDIT_UNIT) {
         return keypadUnit;
-    } else if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+    } else if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
 		data::Value value = numeric_keypad::getData(id);
 		if (value.getType() != data::VALUE_TYPE_NONE) {
 			return value;
@@ -152,7 +152,7 @@ void start(const char *label, const char *text, int maxChars_, bool isPassword_,
 	}
 	g_isUpperCase = false;
 
-	showPage(PAGE_ID_KEYPAD, false);
+	showAuxPage(PAGE_ID_KEYPAD);
 }
 
 void appendChar(char c) {
@@ -172,7 +172,7 @@ void key() {
 	DECL_STRING(text, textWidget->text);
 	char c = text[0];
 
-	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
 		numeric_keypad::key(c);
 	} else {
 		appendChar(g_isUpperCase ? toupper(c) : tolower(c));
@@ -180,7 +180,7 @@ void key() {
 }
 
 void space() {
-	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
 		numeric_keypad::space();
 	} else {
 		appendChar(' ');
@@ -188,7 +188,7 @@ void space() {
 }
 
 void caps() {
-	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
 		numeric_keypad::caps();
 	} else {
 		g_isUpperCase = !g_isUpperCase;
@@ -196,7 +196,7 @@ void caps() {
 }
 
 void back() {
-	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
 		numeric_keypad::back();
 	} else {
 		int n = strlen(g_keypadText);
@@ -209,7 +209,7 @@ void back() {
 }
 
 void clear() {
-	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
 		numeric_keypad::clear();
 	} else {
 		g_keypadText[0] = 0;
@@ -217,35 +217,35 @@ void clear() {
 }
 
 void sign() {
-	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
 		numeric_keypad::sign();
 	} else {
 	}
 }
 
 void unit() {
-	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
 		numeric_keypad::unit();
 	} else {
 	}
 }
 
 void setMaxValue() {
-	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
 		numeric_keypad::setMaxValue();
 	} else {
 	}
 }
 
 void setDefaultValue() {
-	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
 		numeric_keypad::setDefaultValue();
 	} else {
 	}
 }
 
 void ok() {
-	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
 		numeric_keypad::ok();
 	} else {
 		g_okCallback(g_keypadText);
@@ -253,7 +253,7 @@ void ok() {
 }
 
 void cancel() {
-	if (getActivePage() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePage() == PAGE_ID_NUMERIC_KEYPAD) {
+	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
 		numeric_keypad::cancel();
 	} else {
 		g_cancelCallback();

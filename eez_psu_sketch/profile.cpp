@@ -234,8 +234,15 @@ bool saveAtLocation(int location) {
 			}
         }
 
-		for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
-			memcpy(profile.temp_prot + i, &temperature::sensors[i].prot_conf, sizeof(temperature::ProtectionConfiguration));
+		for (int i = 0; i < temp_sensor::MAX_NUM_TEMP_SENSORS; ++i) {
+			if (i < temp_sensor::NUM_TEMP_SENSORS) {
+				memcpy(profile.temp_prot + i, &temperature::sensors[i].prot_conf, sizeof(temperature::ProtectionConfiguration));
+			} else {
+				profile.temp_prot[i].sensor = i;
+				profile.temp_prot[i].delay = OTP_MAIN_DEFAULT_DELAY;
+				profile.temp_prot[i].level = OTP_MAIN_DEFAULT_LEVEL;
+				profile.temp_prot[i].state = OTP_MAIN_DEFAULT_STATE;
+			}
 		}
 
         interrupts();

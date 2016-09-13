@@ -25,6 +25,7 @@
 
 #include "gui_data.h"
 #include "gui_view.h"
+#include "gui_page.h"
 
 #include "actions.h"
 #include "gui_document.h"
@@ -71,8 +72,12 @@ struct WidgetCursor {
     //const Widget* getWidget() const;
 };
 
-int getActivePage();
+class Page;
+
+int getActivePageId();
+Page *getActivePage();
 void showPage(int index, bool pushOnStack = true);
+void showAuxPage(int index);
 void showPreviousPage();
 void refreshPage();
 

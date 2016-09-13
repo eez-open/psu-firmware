@@ -32,6 +32,11 @@
 #include "gui_edit_mode_step.h"
 #include "gui_edit_mode_keypad.h"
 #include "gui_widget_button_group.h"
+#include "gui_page_self_test_result.h"
+#include "gui_page_main.h"
+#include "gui_page_event_queue.h"
+#include "gui_page_ch_settings_protection.h"
+#include "gui_page_ch_settings_adv_lripple.h"
 
 #ifdef EEZ_PSU_SIMULATOR
 #include "front_panel/control.h"
@@ -60,8 +65,14 @@ static Document g_docBuffer;
 #endif
 
 static int g_activePageId;
-static int g_lastActivePageId;
+static Page *g_activePage;
+
+static int g_lastActivePageId = -1;
+static Page *g_lastActivePage;
+static bool g_lastPushActivePageOnStack;
+
 static bool g_pushActivePageOnStack;
+
 static int g_pageNavigationStack[CONF_GUI_PAGE_NAVIGATION_STACK_SIZE];
 static int g_pageNavigationStackPointer = 0;
 
@@ -1076,22 +1087,40 @@ void flush() {
 #endif
 }
 
-int getActivePage() {
+int getActivePageId() {
     return g_activePageId;
+}
+
+Page *getActivePage() {
+    return g_activePage;
 }
 
 void doShowPage(int index) {
     lcd::turnOn();
 
-	if (g_activePageId == PAGE_ID_EVENT_QUEUE && index == PAGE_ID_MAIN) {
-		event_queue::markAsRead();
-	}
-
-	if (index == PAGE_ID_EVENT_QUEUE) {
-		event_queue::moveToFirstPage();
+	if (g_activePage) {
+		g_activePage->pageDidDisappear();
+		delete g_activePage;
+		g_activePage = 0;
 	}
 
 	g_activePageId = index;
+
+	switch (g_activePageId) {
+	case PAGE_ID_SELF_TEST_RESULT: g_activePage = new SelfTestResultPage(); break;
+	case PAGE_ID_MAIN: g_activePage = new MainPage(); break;
+	case PAGE_ID_EVENT_QUEUE: g_activePage = new EventQueuePage(); break;
+	case PAGE_ID_CH_SETTINGS_PROT: g_activePage = new ChSettingsProtectionPage(); break;
+	case PAGE_ID_CH_SETTINGS_PROT_OVP: g_activePage = new ChSettingsOvpProtectionPage(); break;
+	case PAGE_ID_CH_SETTINGS_PROT_OCP: g_activePage = new ChSettingsOcpProtectionPage(); break;
+	case PAGE_ID_CH_SETTINGS_PROT_OPP: g_activePage = new ChSettingsOppProtectionPage(); break;
+	case PAGE_ID_CH_SETTINGS_PROT_OTP: g_activePage = new ChSettingsOtpProtectionPage(); break;
+	case PAGE_ID_CH_SETTINGS_ADV_LRIPPLE: g_activePage = new ChSettingsAdvLRipple(); break;
+	}
+
+	if (g_activePage) {
+		g_activePage->pageWillAppear();
+	}
 
     g_showPageTime = micros();
 	g_timeOfLastActivity = millis();
@@ -1099,6 +1128,14 @@ void doShowPage(int index) {
 }
 
 void showPage(int index, bool pushOnStack) {
+	if (g_lastActivePageId != -1) {
+		g_activePageId = g_lastActivePageId;
+		g_activePage = g_lastActivePage;
+		g_pushActivePageOnStack = g_lastPushActivePageOnStack;
+
+		g_lastActivePageId = -1;
+	}
+
 	if (index == PAGE_ID_MAIN) {
 		g_pageNavigationStackPointer = -1;
 	} else if (g_activePageId == PAGE_ID_MAIN) {
@@ -1118,8 +1155,27 @@ void showPage(int index, bool pushOnStack) {
 	doShowPage(index);
 }
 
+void showAuxPage(int index) {
+	g_lastActivePageId = g_activePageId;
+	g_lastActivePage = g_activePage;
+	g_lastPushActivePageOnStack = g_pushActivePageOnStack;
+
+    g_activePageId = index;
+	g_activePage = 0;
+    
+	refreshPage();
+}
+
 void showPreviousPage() {
-	if (g_pageNavigationStackPointer >= 0) {
+	if (g_lastActivePageId != -1) {
+		g_activePageId = g_lastActivePageId;
+		g_activePage = g_lastActivePage;
+		g_pushActivePageOnStack = g_lastPushActivePageOnStack;
+		
+		g_lastActivePageId = -1;
+
+		refreshPage();
+	} else if (g_pageNavigationStackPointer >= 0) {
 		--g_pageNavigationStackPointer;
 		if (g_pageNavigationStackPointer >= 0) {
 			g_pushActivePageOnStack = true;
@@ -1148,6 +1204,72 @@ void showStandbyPage() {
 void showEnteringStandbyPage() {
     showPage(PAGE_ID_ENTERING_STANDBY);
     flush();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void dialogYes() {
+	if (g_dialogYesCallback) {
+		g_dialogYesCallback();
+	}
+}
+
+void dialogNo() {
+	if (g_dialogNoCallback) {
+		g_dialogNoCallback();
+	}
+}
+
+void dialogCancel() {
+	if (g_dialogCancelCallback) {
+		g_dialogCancelCallback();
+	}
+}
+
+void dialogOk() {
+	showPreviousPage();
+
+	if (g_dialogYesCallback) {
+		g_dialogYesCallback();
+	}
+}
+
+void alertMessage(int alertPageId, data::Value message, void (*ok_callback)()) {
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, message);
+
+    g_dialogYesCallback = ok_callback;
+
+	showAuxPage(alertPageId);
+
+	if (alertPageId == PAGE_ID_ERROR_ALERT) {
+		sound::playBeep();
+	}
+}
+
+void infoMessage(data::Value value, void (*ok_callback)()) {
+	alertMessage(PAGE_ID_INFO_ALERT, value, ok_callback);
+}
+
+void infoMessageP(const char *message PROGMEM, void (*ok_callback)()) {
+	alertMessage(PAGE_ID_INFO_ALERT, data::Value::ProgmemStr(message), ok_callback);
+}
+
+void errorMessage(data::Value value, void (*ok_callback)()) {
+	alertMessage(PAGE_ID_ERROR_ALERT, value, ok_callback);
+}
+
+void errorMessageP(const char *message PROGMEM, void (*ok_callback)()) {
+	alertMessage(PAGE_ID_ERROR_ALERT, data::Value::ProgmemStr(message), ok_callback);
+}
+
+void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message));
+
+    g_dialogYesCallback = yes_callback;
+    g_dialogNoCallback = no_callback;
+    g_dialogCancelCallback = cancel_callback;
+
+	showPage(PAGE_ID_YES_NO);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1241,6 +1363,7 @@ void init() {
     touch::init();
 
     g_activePageId = -1;
+	g_activePage = 0;
 
 #if defined(EEZ_PSU_ARDUINO_MEGA)
     arduino_util::prog_read_buffer(document, (uint8_t *)&g_docBuffer, sizeof(Document));
@@ -1283,6 +1406,7 @@ void tick(unsigned long tick_usec) {
     if (!psu::isPowerUp()) {
         standbyTouchHandling(tick_usec);
         g_activePageId = -1;
+		g_activePage = 0;
         turnOff();
         return;
     }
@@ -1387,74 +1511,6 @@ void tick(unsigned long tick_usec) {
 
     // update screen
     draw_tick();
-}
-
-void dialogYes() {
-	if (g_dialogYesCallback) {
-		g_dialogYesCallback();
-	}
-}
-
-void dialogNo() {
-	if (g_dialogNoCallback) {
-		g_dialogNoCallback();
-	}
-}
-
-void dialogCancel() {
-	if (g_dialogCancelCallback) {
-		g_dialogCancelCallback();
-	}
-}
-
-void dialogOk() {
-	if (g_dialogYesCallback) {
-		g_dialogYesCallback();
-	} else {
-		g_activePageId = g_lastActivePageId;
-		refreshPage();
-	}
-}
-
-void alertMessage(int alertPageId, data::Value message, void (*ok_callback)()) {
-    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, message);
-
-    g_dialogYesCallback = ok_callback;
-
-	g_lastActivePageId = g_activePageId;
-    g_activePageId = alertPageId;
-    refreshPage();
-
-	if (alertPageId == PAGE_ID_ERROR_ALERT) {
-		sound::playBeep();
-	}
-}
-
-void infoMessage(data::Value value, void (*ok_callback)()) {
-	alertMessage(PAGE_ID_INFO_ALERT, value, ok_callback);
-}
-
-void infoMessageP(const char *message PROGMEM, void (*ok_callback)()) {
-	alertMessage(PAGE_ID_INFO_ALERT, data::Value::ProgmemStr(message), ok_callback);
-}
-
-void errorMessage(data::Value value, void (*ok_callback)()) {
-	alertMessage(PAGE_ID_ERROR_ALERT, value, ok_callback);
-}
-
-void errorMessageP(const char *message PROGMEM, void (*ok_callback)()) {
-	alertMessage(PAGE_ID_ERROR_ALERT, data::Value::ProgmemStr(message), ok_callback);
-}
-
-void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
-    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message));
-
-    g_dialogYesCallback = yes_callback;
-    g_dialogNoCallback = no_callback;
-    g_dialogCancelCallback = cancel_callback;
-
-    g_activePageId = PAGE_ID_YES_NO;
-    refreshPage();
 }
 
 }

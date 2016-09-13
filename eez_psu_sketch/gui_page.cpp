@@ -15,39 +15,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#pragma once
+
+#include "psu.h"
+
+#include "gui_internal.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 
-namespace data {
-struct Snapshot;
+////////////////////////////////////////////////////////////////////////////////
+
+void Page::pageWillAppear() {
 }
 
-namespace protection {
+void Page::pageDidDisappear() {
+}
 
-void clear();
-void clearAndDisable();
+void Page::takeSnapshot(data::Snapshot *snapshot) {
+}
 
-void editOVP();
-void editOCP();
-void editOPP();
-void editOTP();
+data::Value Page::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+	return data::Value();
+}
 
-int getState();
-int getDirty();
-data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+////////////////////////////////////////////////////////////////////////////////
 
-void toggleState();
-void editLimit();
-void editLevel();
-void editDelay();
-void set();
-void discard();
+void SetPage::discard() {
+	showPreviousPage();
+}
 
 }
 }
-}
-} // namespace eez::psu::gui::protection
+} // namespace eez::psu::gui

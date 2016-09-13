@@ -91,8 +91,8 @@ void enter(int tabIndex_) {
 		tabIndex = tabIndex_;
 	}
 
-    if (getActivePage() != tabIndex) {
-        if (getActivePage() == PAGE_ID_MAIN) {
+    if (getActivePageId() != tabIndex) {
+        if (getActivePageId() == PAGE_ID_MAIN) {
             dataCursor = g_foundWidgetAtDown.cursor;
             DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
             dataId = widget->data;
@@ -114,7 +114,7 @@ void enter(int tabIndex_) {
 }
 
 void exit() {
-    if (getActivePage() != PAGE_ID_MAIN) {
+    if (getActivePageId() != PAGE_ID_MAIN) {
         dataId = -1;
 
         psu::leaveTimeCriticalMode();

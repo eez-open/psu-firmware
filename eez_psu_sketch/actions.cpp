@@ -24,8 +24,8 @@
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_keypad.h"
 #include "gui_calibration.h"
-#include "gui_protection.h"
-#include "gui_adv_lripple.h"
+#include "gui_page_ch_settings_protection.h"
+#include "gui_page_ch_settings_adv_lripple.h"
 
 namespace eez {
 namespace psu {
@@ -185,19 +185,19 @@ void action_show_ch_settings_prot_clear() {
 }
 
 void action_show_ch_settings_prot_ocp() {
-    protection::editOCP();
+    showPage(PAGE_ID_CH_SETTINGS_PROT_OCP);
 }
 
 void action_show_ch_settings_prot_ovp() {
-    protection::editOVP();
+    showPage(PAGE_ID_CH_SETTINGS_PROT_OVP);
 }
 
 void action_show_ch_settings_prot_opp() {
-    protection::editOPP();
+    showPage(PAGE_ID_CH_SETTINGS_PROT_OPP);
 }
 
 void action_show_ch_settings_prot_otp() {
-    protection::editOTP();
+    showPage(PAGE_ID_CH_SETTINGS_PROT_OTP);
 }
 
 void action_show_ch_settings_adv() {
@@ -205,7 +205,7 @@ void action_show_ch_settings_adv() {
 }
 
 void action_show_ch_settings_adv_lripple() {
-    adv_lripple::show();
+    showPage(PAGE_ID_CH_SETTINGS_ADV_LRIPPLE);
 }
 
 void action_show_ch_settings_adv_limits() {
@@ -280,35 +280,35 @@ void action_sys_settings_cal_toggle_enable() {
 }
 
 void action_ch_settings_prot_clear() {
-    protection::clear();
+    ChSettingsProtectionPage::clear();
 }
 
 void action_ch_settings_prot_clear_and_disable() {
-    protection::clearAndDisable();
+    ChSettingsProtectionPage::clear();
 }
 
 void action_ch_settings_prot_toggle_state() {
-    protection::toggleState();
+    ((ChSettingsProtectionSetPage *)getActivePage())->toggleState();
 }
 
 void action_ch_settings_prot_edit_limit() {
-    protection::editLimit();
+    ((ChSettingsProtectionSetPage *)getActivePage())->editLimit();
 }
 
 void action_ch_settings_prot_edit_level() {
-    protection::editLevel();
+    ((ChSettingsProtectionSetPage *)getActivePage())->editLevel();
 }
 
 void action_ch_settings_prot_edit_delay() {
-    protection::editDelay();
+    ((ChSettingsProtectionSetPage *)getActivePage())->editDelay();
 }
 
-void action_ch_settings_prot_set() {
-    protection::set();
+void action_set() {
+    ((SetPage *)getActivePage())->set();
 }
 
-void action_ch_settings_prot_discard() {
-    protection::discard();
+void action_discard() {
+    ((SetPage *)getActivePage())->discard();
 }
 
 void action_show_event_queue() {
@@ -324,19 +324,11 @@ void action_event_queue_next_page() {
 }
 
 void action_ch_settins_adv_lripple_toggle_status() {
-    adv_lripple::toggleStatus();
+    ((ChSettingsAdvLRipple *)getActivePage())->toggleStatus();
 }
 
 void action_ch_settins_adv_lripple_toggle_auto_mode() {
-    adv_lripple::toggleAutoMode();
-}
-
-void action_ch_settins_adv_lripple_set() {
-    adv_lripple::set();
-}
-
-void action_ch_settins_adv_lripple_discard() {
-    adv_lripple::discard();
+    ((ChSettingsAdvLRipple *)getActivePage())->toggleAutoMode();
 }
 
 
@@ -407,15 +399,13 @@ ACTION actions[] = {
     action_ch_settings_prot_edit_limit,
     action_ch_settings_prot_edit_level,
     action_ch_settings_prot_edit_delay,
-    action_ch_settings_prot_set,
-    action_ch_settings_prot_discard,
+    action_set,
+    action_discard,
     action_show_event_queue,
     action_event_queue_previous_page,
     action_event_queue_next_page,
     action_ch_settins_adv_lripple_toggle_status,
-    action_ch_settins_adv_lripple_toggle_auto_mode,
-    action_ch_settins_adv_lripple_set,
-    action_ch_settins_adv_lripple_discard
+    action_ch_settins_adv_lripple_toggle_auto_mode
 };
 
 }

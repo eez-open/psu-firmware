@@ -25,8 +25,8 @@ namespace gui {
 namespace edit_mode_slider {
 
 bool scale_is_vertical;
-int scale_width = 40;
-float scale_height = 240;
+int scale_width = 34;
+float scale_height = 204;
 
 static int start_y;
 static float start_value;
@@ -69,6 +69,8 @@ void onTouchMove() {
         int bar_width = (displayXSize() - scale_width) / num_bars;
         scale = 1 << (1 + (x - scale_width) / bar_width);
     }
+
+	DebugTraceF("%d", scale);
 
     if (scale != last_scale) {
         start_value = edit_mode::getEditValue().getFloat();

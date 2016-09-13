@@ -191,7 +191,6 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\fan.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\font.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gesture.h" />
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_adv_lripple.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_calibration.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_data.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_data_snapshot.h" />
@@ -204,7 +203,12 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_edit_mode_slider.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_keypad.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_numeric_keypad.h" />
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_protection.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_ch_settings_adv_lripple.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_ch_settings_protection.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_event_queue.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_main.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_self_test_result.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_view.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_widget_button_group.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\ioexp.h" />
@@ -299,7 +303,6 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\fan.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\font.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gesture.cpp" />
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_adv_lripple.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_calibration.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_data.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_data_snapshot.cpp" />
@@ -310,7 +313,12 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_edit_mode_step.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_keypad.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_numeric_keypad.cpp" />
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_protection.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_ch_settings_adv_lripple.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_ch_settings_protection.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_event_queue.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_main.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_self_test_result.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_view.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_widget_button_group.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\ioexp.cpp" />

@@ -15,35 +15,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#pragma once
+
+#include "psu.h"
+
+#include "devices.h"
+
+#include "gui_data_snapshot.h"
+#include "gui_page_self_test_result.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 
-namespace data {
-struct Snapshot;
+void SelfTestResultPage::pageWillAppear() {
+	selfTestResult = devices::getSelfTestResultString();
 }
 
-namespace adv_lripple {
+void SelfTestResultPage::pageDidDisappear() {
+	free(selfTestResult);
+}
 
-void show();
+data::Value SelfTestResultPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+	if (id == DATA_ID_SELF_TEST_RESULT) {
+		return data::Value(selfTestResult);
+	}
 
-data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
-
-int getStatus();
-void toggleStatus();
-
-int getAutoMode();
-void toggleAutoMode();
-
-int getDirty();
-
-void set();
-void discard();
+	return data::Value();
+}
 
 }
 }
-}
-} // namespace eez::psu::gui::adv_lripple
+} // namespace eez::psu::gui

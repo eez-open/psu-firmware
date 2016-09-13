@@ -553,22 +553,22 @@
     {
       "name": "show_ch_settings_prot_ocp",
       "implementationType": "native",
-      "implementation": "protection::editOCP();"
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OCP);"
     },
     {
       "name": "show_ch_settings_prot_ovp",
       "implementationType": "native",
-      "implementation": "protection::editOVP();"
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OVP);"
     },
     {
       "name": "show_ch_settings_prot_opp",
       "implementationType": "native",
-      "implementation": "protection::editOPP();"
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OPP);"
     },
     {
       "name": "show_ch_settings_prot_otp",
       "implementationType": "native",
-      "implementation": "protection::editOTP();"
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OTP);"
     },
     {
       "name": "show_ch_settings_adv",
@@ -578,7 +578,7 @@
     {
       "name": "show_ch_settings_adv_lripple",
       "implementationType": "native",
-      "implementation": "adv_lripple::show();"
+      "implementation": "showPage(PAGE_ID_CH_SETTINGS_ADV_LRIPPLE);"
     },
     {
       "name": "show_ch_settings_adv_limits",
@@ -667,42 +667,42 @@
     {
       "name": "ch_settings_prot_clear",
       "implementationType": "native",
-      "implementation": "protection::clear();"
+      "implementation": "ChSettingsProtectionPage::clear();"
     },
     {
       "name": "ch_settings_prot_clear_and_disable",
       "implementationType": "native",
-      "implementation": "protection::clearAndDisable();"
+      "implementation": "ChSettingsProtectionPage::clear();"
     },
     {
       "name": "ch_settings_prot_toggle_state",
       "implementationType": "native",
-      "implementation": "protection::toggleState();"
+      "implementation": "((ChSettingsProtectionSetPage *)getActivePage())->toggleState();"
     },
     {
       "name": "ch_settings_prot_edit_limit",
       "implementationType": "native",
-      "implementation": "protection::editLimit();"
+      "implementation": "((ChSettingsProtectionSetPage *)getActivePage())->editLimit();"
     },
     {
       "name": "ch_settings_prot_edit_level",
       "implementationType": "native",
-      "implementation": "protection::editLevel();"
+      "implementation": "((ChSettingsProtectionSetPage *)getActivePage())->editLevel();"
     },
     {
       "name": "ch_settings_prot_edit_delay",
       "implementationType": "native",
-      "implementation": "protection::editDelay();"
+      "implementation": "((ChSettingsProtectionSetPage *)getActivePage())->editDelay();"
     },
     {
-      "name": "ch_settings_prot_set",
+      "name": "set",
       "implementationType": "native",
-      "implementation": "protection::set();"
+      "implementation": "((SetPage *)getActivePage())->set();"
     },
     {
-      "name": "ch_settings_prot_discard",
+      "name": "discard",
       "implementationType": "native",
-      "implementation": "protection::discard();"
+      "implementation": "((SetPage *)getActivePage())->discard();"
     },
     {
       "name": "show_event_queue",
@@ -722,22 +722,12 @@
     {
       "name": "ch_settins_adv_lripple_toggle_status",
       "implementationType": "native",
-      "implementation": "adv_lripple::toggleStatus();"
+      "implementation": "((ChSettingsAdvLRipple *)getActivePage())->toggleStatus();"
     },
     {
       "name": "ch_settins_adv_lripple_toggle_auto_mode",
       "implementationType": "native",
-      "implementation": "adv_lripple::toggleAutoMode();"
-    },
-    {
-      "name": "ch_settins_adv_lripple_set",
-      "implementationType": "native",
-      "implementation": "adv_lripple::set();"
-    },
-    {
-      "name": "ch_settins_adv_lripple_discard",
-      "implementationType": "native",
-      "implementation": "adv_lripple::discard();"
+      "implementation": "((ChSettingsAdvLRipple *)getActivePage())->toggleAutoMode();"
     }
   ],
   "gui": {
@@ -44676,6 +44666,36 @@
         "name": "event_error",
         "inheritFrom": "event_info",
         "_color": "#ff0000"
+      },
+      {
+        "name": "yellow_1",
+        "inheritFrom": "default",
+        "_color": "#ffff00"
+      },
+      {
+        "name": "yellow_2",
+        "inheritFrom": "default",
+        "_color": "#ffff77"
+      },
+      {
+        "name": "yellow_3",
+        "inheritFrom": "default",
+        "_color": "#ffff99"
+      },
+      {
+        "name": "yellow_4",
+        "inheritFrom": "default",
+        "_color": "#ffffB3"
+      },
+      {
+        "name": "yellow_5",
+        "inheritFrom": "default",
+        "_color": "#ffffcc"
+      },
+      {
+        "name": "yellow_6",
+        "inheritFrom": "default",
+        "_color": "#ffffe5"
       }
     ],
     "pages": [
@@ -44955,6 +44975,15 @@
           "height": 240,
           "widgets": [
             {
+              "type": "Text",
+              "text": "Selt-test is not passed:",
+              "x": 0,
+              "y": 0,
+              "width": 320,
+              "height": 24,
+              "style": "edit_info_S"
+            },
+            {
               "type": "MultilineText",
               "text": "",
               "x": 0,
@@ -44965,6 +44994,14 @@
               "data": "self_test_result"
             },
             {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 280,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
               "type": "Text",
               "text": "X",
               "x": 280,
@@ -44973,23 +45010,6 @@
               "height": 36,
               "style": "bottom_button",
               "action": "show_main_page"
-            },
-            {
-              "type": "Text",
-              "text": "Selt-test is not passed:",
-              "x": 0,
-              "y": 0,
-              "width": 320,
-              "height": 24,
-              "style": "edit_info_S"
-            },
-            {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 280,
-              "height": 36,
-              "style": "bottom_button_background"
             }
           ]
         },
@@ -46246,22 +46266,40 @@
           "height": 240,
           "widgets": [
             {
-              "type": "MultilineText",
-              "text": "Interactive mode: Move up/down to change value step in a time.",
+              "type": "Text",
+              "text": "[X] Interactive mode:",
               "x": 8,
-              "y": 19,
-              "width": 232,
-              "height": 112,
+              "y": 0,
+              "width": 244,
+              "height": 32,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "MultilineText",
+              "text": "Move left/right to change value by selected step in a time.",
+              "x": 8,
+              "y": 32,
+              "width": 244,
+              "height": 71,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "[Y] Non-interactive mode:",
+              "x": 8,
+              "y": 112,
+              "width": 244,
+              "height": 32,
               "style": "edit_value_S_left"
             },
             {
               "type": "MultilineText",
               "style": "edit_value_S_left",
               "x": 8,
-              "y": 131,
-              "text": "Non-interactive mode: Move up/down to change value.",
-              "width": 232,
-              "height": 71
+              "y": 144,
+              "text": "Move left/right to change value and confirm with [Y] option.",
+              "width": 244,
+              "height": 48
             },
             {
               "type": "List",
@@ -47411,6 +47449,15 @@
         "landscape": {
           "widgets": [
             {
+              "type": "Rectangle",
+              "data": "",
+              "x": 0,
+              "y": 0,
+              "style": "yellow_1",
+              "width": 36,
+              "height": 34
+            },
+            {
               "type": "DisplayData",
               "data": "edit_info",
               "x": 48,
@@ -47633,6 +47680,51 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Rectangle",
+              "data": "",
+              "x": 0,
+              "y": 34,
+              "style": "yellow_2",
+              "width": 36,
+              "height": 34
+            },
+            {
+              "type": "Rectangle",
+              "data": "",
+              "x": 0,
+              "y": 68,
+              "style": "yellow_3",
+              "width": 36,
+              "height": 34
+            },
+            {
+              "type": "Rectangle",
+              "data": "",
+              "x": 0,
+              "y": 102,
+              "style": "yellow_4",
+              "width": 36,
+              "height": 34
+            },
+            {
+              "type": "Rectangle",
+              "data": "",
+              "x": 0,
+              "y": 136,
+              "style": "yellow_5",
+              "width": 36,
+              "height": 34
+            },
+            {
+              "type": "Rectangle",
+              "data": "",
+              "x": 0,
+              "y": 170,
+              "style": "yellow_6",
+              "width": 36,
+              "height": 34
             }
           ],
           "x": 0,
@@ -47658,22 +47750,40 @@
           "height": 240,
           "widgets": [
             {
-              "type": "MultilineText",
-              "text": "Interactive mode: Move up/down to change value. Use leftmost pos. for coarse and righmost pos. for fine adjustment.",
+              "type": "Text",
+              "text": "[X] Interactive mode:",
               "x": 8,
-              "y": 19,
-              "width": 232,
-              "height": 112,
+              "y": 0,
+              "width": 244,
+              "height": 32,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "MultilineText",
+              "text": "Move left/right to change value. Use upper area for coarse and lower for the fine adjustment.",
+              "x": 8,
+              "y": 32,
+              "width": 244,
+              "height": 71,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "[Y] Non-interactive mode:",
+              "x": 8,
+              "y": 120,
+              "width": 244,
+              "height": 52,
               "style": "edit_value_S_left"
             },
             {
               "type": "MultilineText",
               "style": "edit_value_S_left",
               "x": 8,
-              "y": 131,
-              "text": "Non-interactive mode: Move up/down to change value.",
-              "width": 232,
-              "height": 71
+              "y": 152,
+              "text": "Move left/right to change value and confirm with [Y] option.",
+              "width": 244,
+              "height": 52
             },
             {
               "type": "List",
@@ -51671,43 +51781,22 @@
           "widgets": [
             {
               "type": "Text",
-              "action": "show_ch_settings_prot",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "E",
-              "width": 48,
-              "height": 36
+              "text": "Channel protections",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 30,
+              "style": "value_S"
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_adv",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page",
-              "text": "G",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_info",
-              "x": 144,
-              "y": 204,
-              "style": "tab_page",
-              "text": "?",
-              "width": 48,
-              "height": 36
+              "text": "Clear / Disable",
+              "x": 12,
+              "y": 30,
+              "width": 180,
+              "height": 29,
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_clear"
             },
             {
               "type": "Text",
@@ -51740,24 +51829,6 @@
               "action": "show_ch_settings_prot_opp"
             },
             {
-              "type": "Rectangle",
-              "x": 192,
-              "y": 204,
-              "width": 80,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            },
-            {
               "type": "Select",
               "widgets": [
                 {
@@ -51787,25 +51858,6 @@
               "height": 29,
               "style": "default",
               "data": "channel.protection.otp.installed"
-            },
-            {
-              "type": "Text",
-              "text": "Channel protections",
-              "x": 6,
-              "y": 0,
-              "width": 228,
-              "height": 30,
-              "style": "value_S"
-            },
-            {
-              "type": "Text",
-              "text": "Clear / Disable",
-              "x": 12,
-              "y": 30,
-              "width": 180,
-              "height": 29,
-              "style": "edit_value_active_S_left",
-              "action": "show_ch_settings_prot_clear"
             },
             {
               "type": "List",
@@ -51893,6 +51945,64 @@
               "height": 204,
               "data": "channels",
               "style": "default"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page_selected",
+              "text": "E",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page",
+              "text": "G",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_disp",
+              "x": 96,
+              "y": 204,
+              "style": "tab_page",
+              "text": "F",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 144,
+              "y": 204,
+              "style": "tab_page",
+              "text": "?",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Rectangle",
+              "x": 192,
+              "y": 204,
+              "width": 80,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
             }
           ]
         },
@@ -52285,14 +52395,14 @@
               "height": 36,
               "style": "non_interactive_button_S",
               "text": "~ Set",
-              "action": "ch_settings_prot_set",
+              "action": "set",
               "disabledStyle": "non_interactive_button_S_disabled",
               "data": "",
               "enabled": "channel.protection.dirty"
             },
             {
               "type": "Text",
-              "action": "ch_settings_prot_discard",
+              "action": "discard",
               "style": "non_interactive_button_S",
               "x": 117,
               "y": 163,
@@ -52587,14 +52697,14 @@
               "height": 36,
               "style": "non_interactive_button_S",
               "text": "~ Set",
-              "action": "ch_settings_prot_set",
+              "action": "set",
               "disabledStyle": "non_interactive_button_S_disabled",
               "data": "",
               "enabled": "channel.protection.dirty"
             },
             {
               "type": "Text",
-              "action": "ch_settings_prot_discard",
+              "action": "discard",
               "style": "non_interactive_button_S",
               "x": 117,
               "y": 163,
@@ -52908,14 +53018,14 @@
               "height": 36,
               "style": "non_interactive_button_S",
               "text": "~ Set",
-              "action": "ch_settings_prot_set",
+              "action": "set",
               "disabledStyle": "non_interactive_button_S_disabled",
               "data": "",
               "enabled": "channel.protection.dirty"
             },
             {
               "type": "Text",
-              "action": "ch_settings_prot_discard",
+              "action": "discard",
               "style": "non_interactive_button_S",
               "x": 117,
               "y": 163,
@@ -53210,14 +53320,14 @@
               "height": 36,
               "style": "non_interactive_button_S",
               "text": "~ Set",
-              "action": "ch_settings_prot_set",
+              "action": "set",
               "disabledStyle": "non_interactive_button_S_disabled",
               "data": "",
               "enabled": "channel.protection.dirty"
             },
             {
               "type": "Text",
-              "action": "ch_settings_prot_discard",
+              "action": "discard",
               "style": "non_interactive_button_S",
               "x": 117,
               "y": 163,
@@ -53792,14 +53902,14 @@
               "height": 36,
               "style": "non_interactive_button_S",
               "text": "~ Set",
-              "action": "ch_settins_adv_lripple_set",
+              "action": "set",
               "disabledStyle": "non_interactive_button_S_disabled",
               "data": "",
               "enabled": "channel.lripple.dirty"
             },
             {
               "type": "Text",
-              "action": "ch_settins_adv_lripple_discard",
+              "action": "discard",
               "style": "non_interactive_button_S",
               "x": 117,
               "y": 163,
@@ -58516,7 +58626,7 @@
         },
         {
           "fileName": "actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_protection.h\"\n#include \"gui_adv_lripple.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv_lripple.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
         },
         {
           "fileName": "gui_document.h",

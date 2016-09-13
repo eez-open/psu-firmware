@@ -85,7 +85,7 @@ void init(const char *label, data::ValueType editUnit, float min, float max, boo
 
 void start(const char *label, data::ValueType editUnit, float min, float max, bool maxButtonEnabled, float def, bool defButtonEnabled, void (*ok)(float), void (*cancel)(), bool genericNumberKeypad) {
 	init(label, editUnit, min, max, maxButtonEnabled, def, defButtonEnabled, ok, cancel, genericNumberKeypad);
-	showPage(PAGE_ID_NUMERIC_KEYPAD, false);
+	showAuxPage(PAGE_ID_NUMERIC_KEYPAD);
 }
 
 data::ValueType getEditUnit() {

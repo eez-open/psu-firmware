@@ -17,51 +17,28 @@
  */
 
 #include "psu.h"
+
 #include "profile.h"
 
 #include "gui_data_snapshot.h"
-#include "gui_internal.h"
-#include "gui_adv_lripple.h"
+#include "gui_page_ch_settings_adv_lripple.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
-namespace adv_lripple {
 
-static int origStatus;
-static int status;
-
-static int origAutoMode;
-static int autoMode;
-
-void show() {
+void ChSettingsAdvLRipple::pageWillAppear() {
 	origStatus = status = g_channel->isLowRippleEnabled();
 	origAutoMode = autoMode = g_channel->isLowRippleAutoEnabled();
-
-	showPage(PAGE_ID_CH_SETTINGS_ADV_LRIPPLE);
 }
 
-int getStatus() {
-	return status;
+void ChSettingsAdvLRipple::takeSnapshot(data::Snapshot *snapshot) {
+	snapshot->switches.switch1 = status;
+	snapshot->switches.switch2 = autoMode;
+	snapshot->switches.switch3 = getDirty();
 }
 
-void toggleStatus() {
-	status = status ? 0 : 1;
-}
-
-int getAutoMode() {
-	return autoMode;
-}
-
-void toggleAutoMode() {
-	autoMode = autoMode ? 0 : 1;
-}
-
-int getDirty() {
-	return (origStatus != status || origAutoMode != autoMode) ? 1 : 0;
-}
-
-data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value ChSettingsAdvLRipple::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
 	if (id == DATA_ID_CHANNEL_LRIPPLE_MAX_CURRENT) {
 		return data::Value(g_channel->SOA_PREG_CURR, data::VALUE_TYPE_FLOAT_AMPER);
 	}
@@ -85,28 +62,33 @@ data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snap
 	return data::Value();
 }
 
-void set() {
-	if (!getDirty()) {
-		return;
-	}
+void ChSettingsAdvLRipple::toggleStatus() {
+	status = status ? 0 : 1;
+}
 
-	if (!g_channel->lowRippleEnable(status ? true : false)) {
-		errorMessageP(PSTR("Failed to change LRipple status!"), showPreviousPage);
-		return;
-	}
+void ChSettingsAdvLRipple::toggleAutoMode() {
+	autoMode = autoMode ? 0 : 1;
+}
+
+int ChSettingsAdvLRipple::getDirty() {
+	return (origStatus != status || origAutoMode != autoMode) ? 1 : 0;
+}
+
+void ChSettingsAdvLRipple::set() {
+	if (getDirty()) {
+		if (!g_channel->lowRippleEnable(status ? true : false)) {
+			errorMessageP(PSTR("Failed to change LRipple status!"), showPreviousPage);
+			return;
+		}
 	
-	g_channel->lowRippleAutoEnable(autoMode ? true : false);
+		g_channel->lowRippleAutoEnable(autoMode ? true : false);
 
-	profile::save();
+		profile::save();
 	
-	infoMessageP(PSTR("LRipple params changed!"), showPreviousPage);
-}
-
-void discard() {
-	showPreviousPage();
+		infoMessageP(PSTR("LRipple params changed!"), showPreviousPage);
+	}
 }
 
 }
 }
-}
-} // namespace eez::psu::gui::adv_lripple
+} // namespace eez::psu::gui
