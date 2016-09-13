@@ -1071,9 +1071,7 @@ void refreshPage() {
     DECL_WIDGET_STYLE(style, page);
     g_pageStyle = style;
     lcd::lcd.setColor(style->background_color);
-	/*
     lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
-	*/
 
     data::currentSnapshot.takeSnapshot();
     draw_enum_widgets.start(g_activePageId, page->x, page->y, true);

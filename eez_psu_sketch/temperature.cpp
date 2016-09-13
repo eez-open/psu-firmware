@@ -182,6 +182,8 @@ bool isAllowedToPowerUp() {
 
 TempSensorTemperature::TempSensorTemperature(int sensorIndex_)
 	: sensorIndex(sensorIndex_)
+	, temperature(NAN)
+
 {
 }
 
@@ -195,7 +197,7 @@ bool TempSensorTemperature::isTestOK() {
 
 void TempSensorTemperature::tick(unsigned long tick_usec) {
 	if (isInstalled() && isTestOK()) {
-		temperature = temp_sensor::sensors[sensorIndex].read();
+		measure();
 		if (temp_sensor::sensors[sensorIndex].test_result == TEST_OK) {
 			protection_check(tick_usec);
 		}
@@ -214,7 +216,12 @@ bool TempSensorTemperature::isChannelTripped(Channel *channel) {
 }
 
 float TempSensorTemperature::measure() {
-    temperature = temp_sensor::sensors[sensorIndex].read();
+    float newTemperature = temp_sensor::sensors[sensorIndex].read();
+	if (util::isNaN(temperature)) {
+		temperature = newTemperature;
+	} else {
+		temperature = temperature + 0.1f * (newTemperature - temperature);
+	}
     return temperature;
 }
 
