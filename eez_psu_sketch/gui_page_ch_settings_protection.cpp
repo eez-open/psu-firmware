@@ -55,8 +55,8 @@ data::Value ChSettingsProtectionPage::getData(const data::Cursor &cursor, uint8_
 ////////////////////////////////////////////////////////////////////////////////
 
 void ChSettingsProtectionSetPage::takeSnapshot(data::Snapshot *snapshot) {
-	snapshot->switches.switch1 = state;
-	snapshot->switches.switch2 = getDirty();
+	snapshot->flags.switch1 = state;
+	snapshot->flags.switch2 = getDirty();
 }
 
 data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
@@ -71,7 +71,7 @@ data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uin
 		id == DATA_ID_CHANNEL_PROTECTION_OCP_STATE ||
 		id == DATA_ID_CHANNEL_PROTECTION_OPP_STATE ||
 		id == DATA_ID_CHANNEL_PROTECTION_OTP_STATE) {
-		return snapshot->switches.switch1;
+		return snapshot->flags.switch1;
 	}
 
 	if (id == DATA_ID_CHANNEL_PROTECTION_OVP_LEVEL ||
@@ -88,7 +88,7 @@ data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uin
 	}
 
 	if (id == DATA_ID_CHANNEL_PROTECTION_DIRTY) {
-		return snapshot->switches.switch2;
+		return snapshot->flags.switch2;
 	}
 
 	return data::Value();

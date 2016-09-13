@@ -25,7 +25,7 @@
 #include "gui_edit_mode_keypad.h"
 #include "gui_calibration.h"
 #include "gui_page_ch_settings_protection.h"
-#include "gui_page_ch_settings_adv_lripple.h"
+#include "gui_page_ch_settings_adv.h"
 
 namespace eez {
 namespace psu {
@@ -164,6 +164,23 @@ void action_show_sys_settings2() {
     showPage(PAGE_ID_SYS_SETTINGS2);
 }
 
+void action_show_sys_settings_cal() {
+    showPage(PAGE_ID_SYS_SETTINGS_CAL);
+}
+
+void action_show_sys_settings_cal_ch() {
+    gui::selectChannel();
+    showPage(PAGE_ID_SYS_SETTINGS_CAL_CH);
+}
+
+void action_show_sys_settings_screen_calibration() {
+    showPage(PAGE_ID_SYS_SETTINGS_SCREEN_CALIBRATION);
+}
+
+void action_show_sys_info() {
+    showPage(PAGE_ID_SYS_INFO);
+}
+
 void action_show_main_help_page() {
     showPage(PAGE_ID_MAIN_HELP);
 }
@@ -208,10 +225,6 @@ void action_show_ch_settings_adv_lripple() {
     showPage(PAGE_ID_CH_SETTINGS_ADV_LRIPPLE);
 }
 
-void action_show_ch_settings_adv_limits() {
-    showPage(PAGE_ID_CH_SETTINGS_ADV_LIMITS);
-}
-
 void action_show_ch_settings_adv_rsense() {
     showPage(PAGE_ID_CH_SETTINGS_ADV_RSENSE);
 }
@@ -228,12 +241,7 @@ void action_show_ch_settings_info() {
     showPage(PAGE_ID_CH_SETTINGS_INFO);
 }
 
-void action_show_sys_settings_cal() {
-    showPage(PAGE_ID_SYS_SETTINGS_CAL);
-}
-
-void action_show_sys_settings_cal_ch() {
-    gui::selectChannel();
+void action_show_ch_settings_info_cal() {
     showPage(PAGE_ID_SYS_SETTINGS_CAL_CH);
 }
 
@@ -324,11 +332,19 @@ void action_event_queue_next_page() {
 }
 
 void action_ch_settins_adv_lripple_toggle_status() {
-    ((ChSettingsAdvLRipple *)getActivePage())->toggleStatus();
+    ((ChSettingsAdvLRipplePage *)getActivePage())->toggleStatus();
 }
 
 void action_ch_settins_adv_lripple_toggle_auto_mode() {
-    ((ChSettingsAdvLRipple *)getActivePage())->toggleAutoMode();
+    ((ChSettingsAdvLRipplePage *)getActivePage())->toggleAutoMode();
+}
+
+void action_ch_settins_adv_rsense_toggle_status() {
+    ((ChSettingsAdvRSensePage *)getActivePage())->toggleStatus();
+}
+
+void action_ch_settins_adv_rprog_toggle_status() {
+    ((ChSettingsAdvRProgPage *)getActivePage())->toggleStatus();
 }
 
 
@@ -365,6 +381,10 @@ ACTION actions[] = {
     action_turn_off,
     action_show_sys_settings,
     action_show_sys_settings2,
+    action_show_sys_settings_cal,
+    action_show_sys_settings_cal_ch,
+    action_show_sys_settings_screen_calibration,
+    action_show_sys_info,
     action_show_main_help_page,
     action_show_edit_mode_step_help,
     action_show_edit_mode_slider_help,
@@ -376,13 +396,11 @@ ACTION actions[] = {
     action_show_ch_settings_prot_otp,
     action_show_ch_settings_adv,
     action_show_ch_settings_adv_lripple,
-    action_show_ch_settings_adv_limits,
     action_show_ch_settings_adv_rsense,
     action_show_ch_settings_adv_rprog,
     action_show_ch_settings_disp,
     action_show_ch_settings_info,
-    action_show_sys_settings_cal,
-    action_show_sys_settings_cal_ch,
+    action_show_ch_settings_info_cal,
     action_sys_settings_cal_edit_password,
     action_sys_settings_cal_ch_params_enabled,
     action_sys_settings_cal_ch_wiz_start,
@@ -405,7 +423,9 @@ ACTION actions[] = {
     action_event_queue_previous_page,
     action_event_queue_next_page,
     action_ch_settins_adv_lripple_toggle_status,
-    action_ch_settins_adv_lripple_toggle_auto_mode
+    action_ch_settins_adv_lripple_toggle_auto_mode,
+    action_ch_settins_adv_rsense_toggle_status,
+    action_ch_settins_adv_rprog_toggle_status
 };
 
 }

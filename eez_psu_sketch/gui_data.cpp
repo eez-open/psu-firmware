@@ -97,6 +97,10 @@ void Value::toText(char *text, int count) const {
 		text[count - 1] = 0;
 		break;
 
+	case VALUE_TYPE_ON_TIME_COUNTER:
+		ontime::counterToString(text, count, uint32_);
+		break;
+
 	default:
 		{
 			util::strcatFloat(text, float_);

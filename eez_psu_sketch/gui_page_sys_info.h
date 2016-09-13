@@ -24,24 +24,10 @@ namespace eez {
 namespace psu {
 namespace gui {
 
-class ChSettingsAdvLRipple : public SetPage {
+class SysInfoPage: public Page {
 public:
-	void pageWillAppear();
 	void takeSnapshot(data::Snapshot *snapshot);
 	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
-
-	int getDirty();
-	void set();
-
-	void toggleStatus();
-	void toggleAutoMode();
-
-private:
-	int origStatus;
-	int status;
-
-	int origAutoMode;
-	int autoMode;
 };
 
 }

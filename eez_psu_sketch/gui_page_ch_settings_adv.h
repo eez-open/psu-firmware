@@ -24,11 +24,45 @@ namespace eez {
 namespace psu {
 namespace gui {
 
-class EventQueuePage : public Page {
+class ChSettingsAdvPage : public Page {
+public:
+	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+};
+
+class ChSettingsAdvLRipplePage : public SetPage {
 public:
 	void pageWillAppear();
 	void takeSnapshot(data::Snapshot *snapshot);
 	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+
+	int getDirty();
+	void set();
+
+	void toggleStatus();
+	void toggleAutoMode();
+
+private:
+	int origStatus;
+	int status;
+
+	int origAutoMode;
+	int autoMode;
+};
+
+class ChSettingsAdvRSensePage : public Page {
+public:
+	void takeSnapshot(data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+
+	void toggleStatus();
+};
+
+class ChSettingsAdvRProgPage : public Page {
+public:
+	void takeSnapshot(data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+
+	void toggleStatus();
 };
 
 }

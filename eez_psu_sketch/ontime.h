@@ -24,6 +24,8 @@ namespace eez {
 namespace psu {
 namespace ontime {
 
+void counterToString(char *str, size_t count, uint32_t counterTime);
+
 enum {
 	ON_TIME_COUNTER_POWER,
 	ON_TIME_COUNTER_CH1,

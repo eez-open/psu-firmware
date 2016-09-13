@@ -39,6 +39,7 @@ struct ChannelSnapshotFlags {
     unsigned otp_ch : 2;
     unsigned dp : 2;
 	unsigned cal_enabled: 1;
+	unsigned temperatureStatus: 2;
 };
 
 struct ChannelSnapshot {
@@ -46,13 +47,14 @@ struct ChannelSnapshot {
     float u_set;
     float i_set;
     ChannelSnapshotFlags flags;
+	float temperature;
+	uint32_t onTimeTotal;
+	uint32_t onTimeLast;
 };
 
 struct SnapshotFlags {
     unsigned otp : 2;
-};
-
-struct Switches {
+	unsigned mainTemperatureStatus: 2;
 	unsigned switch1: 1;
 	unsigned switch2: 1;
 	unsigned switch3: 1;
@@ -67,7 +69,9 @@ struct Snapshot {
 	event_queue::Event lastEvent;
 	event_queue::Event events[event_queue::EVENTS_PER_PAGE];
 	Value eventQueuePageInfo;
-	Switches switches;
+	uint32_t onTimeTotal;
+	uint32_t onTimeLast;
+	float mainTemperature;
 
     unsigned long lastSnapshotTime;
 

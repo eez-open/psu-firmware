@@ -545,19 +545,9 @@ bool get_profile_location_param(scpi_t * context, int &location, bool all_locati
 }
 
 void outputOnTime(scpi_t* context, uint32_t time) {
-    char text[128];
-
-	if (time >= 24 * 60) {
-		uint32_t d = time / (24 * 60);
-		time -= d * (24 * 60);
-		sprintf_P(text, PSTR("%dd %dh %dm"), int(d), int(time / 60), int(time % 60));
-	} else if (time >= 60) {
-		sprintf_P(text, PSTR("%dh %dm"), int(time / 60), int(time % 60));
-	} else {
-		sprintf_P(text, PSTR("%dm"), int(time));
-	}
-    
-	SCPI_ResultText(context, text);
+    char str[128];
+	ontime::counterToString(str, sizeof(str), time);
+	SCPI_ResultText(context, str);
 }
 
 }

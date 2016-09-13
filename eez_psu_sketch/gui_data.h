@@ -53,13 +53,16 @@ enum ValueType {
 
 	VALUE_TYPE_EVENT,
 
-	VALUE_TYPE_PAGE_INFO
+	VALUE_TYPE_PAGE_INFO,
+
+	VALUE_TYPE_ON_TIME_COUNTER
 };
 
 struct Value {
     Value() : type_(VALUE_TYPE_NONE) { }
     Value(int value) : type_(VALUE_TYPE_INT), int_(value)  {}
 	Value(int value, ValueType type) : type_(type), int_(value)  {}
+	Value(uint32_t value, ValueType type) : type_(type), uint32_(value)  {}
     Value(float value, ValueType type) : type_(type), float_(value) {}
     Value(const char *str) : type_(VALUE_TYPE_STR), str_(str) {}
 	Value(event_queue::Event *e) : type_(VALUE_TYPE_EVENT), event_(e) {}
@@ -96,6 +99,8 @@ struct Value {
             return event_->dateTime == other.event_->dateTime && event_->eventId == other.event_->eventId;
         } else if (type_ == VALUE_TYPE_PAGE_INFO) {
 			return pageInfo_.pageIndex == other.pageInfo_.pageIndex && pageInfo_.numPages == other.pageInfo_.numPages;
+		} else if (type_ == VALUE_TYPE_ON_TIME_COUNTER) {
+			return uint32_ == other.uint32_;
 		} else {
             return float_ == other.float_;
         }
@@ -126,6 +131,7 @@ private:
         float float_;
         const char *const_str_ PROGMEM;
         const char *str_;
+		uint32_t uint32_;
 		event_queue::Event *event_;
 		struct {
 			uint8_t pageIndex;

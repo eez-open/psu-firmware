@@ -36,7 +36,9 @@
 #include "gui_page_main.h"
 #include "gui_page_event_queue.h"
 #include "gui_page_ch_settings_protection.h"
-#include "gui_page_ch_settings_adv_lripple.h"
+#include "gui_page_ch_settings_adv.h"
+#include "gui_page_ch_settings_info.h"
+#include "gui_page_sys_info.h"
 
 #ifdef EEZ_PSU_SIMULATOR
 #include "front_panel/control.h"
@@ -1069,7 +1071,9 @@ void refreshPage() {
     DECL_WIDGET_STYLE(style, page);
     g_pageStyle = style;
     lcd::lcd.setColor(style->background_color);
+	/*
     lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
+	*/
 
     data::currentSnapshot.takeSnapshot();
     draw_enum_widgets.start(g_activePageId, page->x, page->y, true);
@@ -1115,7 +1119,12 @@ void doShowPage(int index) {
 	case PAGE_ID_CH_SETTINGS_PROT_OCP: g_activePage = new ChSettingsOcpProtectionPage(); break;
 	case PAGE_ID_CH_SETTINGS_PROT_OPP: g_activePage = new ChSettingsOppProtectionPage(); break;
 	case PAGE_ID_CH_SETTINGS_PROT_OTP: g_activePage = new ChSettingsOtpProtectionPage(); break;
-	case PAGE_ID_CH_SETTINGS_ADV_LRIPPLE: g_activePage = new ChSettingsAdvLRipple(); break;
+	case PAGE_ID_CH_SETTINGS_ADV: g_activePage = new ChSettingsAdvPage(); break;
+	case PAGE_ID_CH_SETTINGS_ADV_LRIPPLE: g_activePage = new ChSettingsAdvLRipplePage(); break;
+	case PAGE_ID_CH_SETTINGS_ADV_RSENSE: g_activePage = new ChSettingsAdvRSensePage(); break;
+	case PAGE_ID_CH_SETTINGS_ADV_RPROG: g_activePage = new ChSettingsAdvRProgPage(); break;
+	case PAGE_ID_CH_SETTINGS_INFO: g_activePage = new ChSettingsInfoPage(); break;
+	case PAGE_ID_SYS_INFO: g_activePage = new SysInfoPage(); break;
 	}
 
 	if (g_activePage) {
