@@ -29,9 +29,10 @@ namespace psu {
 namespace event_queue {
 
 static const uint32_t MAGIC = 0xD8152FC3L;
-static const uint16_t VERSION = 3;
+static const uint16_t VERSION = 4;
 
 static const uint16_t MAX_EVENTS = 100;
+static const uint16_t NULL_INDEX = MAX_EVENTS;
 
 static const uint16_t EVENT_HEADER_SIZE = 16;
 static const uint16_t EVENT_SIZE = 16;
@@ -41,11 +42,10 @@ struct EventQueueHeader {
 	uint16_t version;
 	uint16_t head;
 	uint16_t size;
+	uint16_t lastErrorEventIndex;
 };
 
 static EventQueueHeader eventQueue;
-
-bool g_unread = false;
 
 static int16_t g_eventsDuringInterruptHandling[6];
 static uint8_t g_eventsDuringInterruptHandlingHead = 0;
@@ -53,15 +53,32 @@ static const int MAX_EVENTS_DURING_INTERRUPT_HANDLING = sizeof(g_eventsDuringInt
 
 static uint8_t g_pageIndex = 0;
 
-void init() {
+void readHeader() {
 	eeprom::read((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
+}
+
+void writeHeader() {
+	eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
+}
+
+void readEvent(uint16_t eventIndex, Event *e) {
+	eeprom::read((uint8_t *)e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + EVENT_HEADER_SIZE + eventIndex * EVENT_SIZE);
+}
+
+void writeEvent(uint16_t eventIndex, Event *e) {
+	eeprom::write((uint8_t *)e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + EVENT_HEADER_SIZE + eventIndex * EVENT_SIZE);
+}
+
+void init() {
+	readHeader();
 
 	if (eventQueue.magicNumber != MAGIC || eventQueue.version != VERSION || eventQueue.head >= MAX_EVENTS || eventQueue.size > MAX_EVENTS) {
 		eventQueue = {
 			MAGIC,
 			VERSION,
 			0,
-			0
+			0,
+			NULL_INDEX
 		};
 
 		pushEvent(EVENT_INFO_WELCOME);
@@ -79,10 +96,17 @@ int getNumEvents() {
 	return eventQueue.size;
 }
 
-void getEvent(int i, Event *e) {
-	i = (eventQueue.head - (i + 1) + MAX_EVENTS) % MAX_EVENTS;
+void getEvent(uint16_t index, Event *e) {
+	uint16_t eventIndex = (eventQueue.head - (index + 1) + MAX_EVENTS) % MAX_EVENTS;
+	readEvent(eventIndex, e);
+}
 
-	eeprom::read((uint8_t *)e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + EVENT_HEADER_SIZE + i * EVENT_SIZE);
+void getLastErrorEvent(Event *e) {
+	if (eventQueue.lastErrorEventIndex != NULL_INDEX) {
+		readEvent(eventQueue.lastErrorEventIndex, e);
+	} else {
+		e->eventId = EVENT_TYPE_NONE;
+	}
 }
 
 int getEventType(Event *e) {
@@ -167,16 +191,24 @@ void pushEvent(int16_t eventId) {
 		e.dateTime = datetime::now();
 		e.eventId = eventId;
 
-		eeprom::write((uint8_t *)&e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + EVENT_HEADER_SIZE + eventQueue.head * EVENT_SIZE);
+		writeEvent(eventQueue.head, &e);
+
+		if (eventQueue.lastErrorEventIndex == eventQueue.head) {
+			// this event overwrote last error event, therefore:
+			eventQueue.lastErrorEventIndex = NULL_INDEX;
+		}
+
+		int eventType = getEventType(&e);
+		if (eventType == EVENT_TYPE_ERROR || eventType == EVENT_TYPE_WARNING && eventQueue.lastErrorEventIndex == NULL_INDEX) {
+			eventQueue.lastErrorEventIndex = eventQueue.head;
+		}
 
 		eventQueue.head = (eventQueue.head + 1) % MAX_EVENTS;
 		if (eventQueue.size < MAX_EVENTS) {
 			++eventQueue.size;
 		}
 
-		eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
-
-		g_unread = true;
+		writeHeader();
 
 		if (getEventType(&e) == EVENT_TYPE_ERROR) {
 			sound::playBeep();
@@ -185,7 +217,10 @@ void pushEvent(int16_t eventId) {
 }
 
 void markAsRead() {
-	g_unread = false;
+	if (eventQueue.lastErrorEventIndex != NULL_INDEX) {
+		eventQueue.lastErrorEventIndex = NULL_INDEX;
+		writeHeader();
+	}
 }
 
 int getNumPages() {

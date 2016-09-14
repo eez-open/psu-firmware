@@ -744,7 +744,7 @@
     {
       "name": "ch_settings_prot_clear_and_disable",
       "implementationType": "native",
-      "implementation": "ChSettingsProtectionPage::clear();"
+      "implementation": "ChSettingsProtectionPage::clearAndDisable();"
     },
     {
       "name": "ch_settings_prot_toggle_state",
@@ -49285,14 +49285,32 @@
               "type": "Select",
               "widgets": [
                 {
-                  "type": "Text",
-                  "text": "\\u0083",
+                  "type": "Container",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "text": "\\u0083",
+                      "x": 0,
+                      "y": 0,
+                      "width": 28,
+                      "height": 28,
+                      "style": "default_S",
+                      "action": "show_event_queue"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 28,
+                      "y": 0,
+                      "width": 292,
+                      "height": 28,
+                      "style": "default_inverse"
+                    }
+                  ],
                   "x": 0,
                   "y": 0,
-                  "width": 28,
+                  "width": 320,
                   "height": 28,
-                  "style": "default_S",
-                  "action": "show_event_queue"
+                  "style": "default"
                 },
                 {
                   "type": "DisplayData",
@@ -54733,7 +54751,7 @@
                       "width": 60,
                       "height": 30,
                       "style": "edit_value_active_S_left",
-                      "action": "sys_settings_cal_toggle_enable"
+                      "action": ""
                     }
                   ],
                   "x": 0,
@@ -56297,7 +56315,7 @@
               "y": 80,
               "width": 304,
               "height": 93,
-              "style": "default",
+              "style": "default_inverse",
               "data": "channel.calibration.status"
             },
             {

@@ -118,13 +118,10 @@ struct Event {
 	int16_t eventId;
 };
 
-extern bool g_unread;
-
 void init();
 void tick(unsigned long tick_usec);
 
-int getNumEvents();
-void getEvent(int i, Event *e);
+void getLastErrorEvent(Event *e);
 
 int getEventType(Event *e);
 const char *getEventMessage(Event *e);

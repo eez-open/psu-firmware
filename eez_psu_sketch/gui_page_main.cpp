@@ -26,26 +26,18 @@ namespace psu {
 namespace gui {
 
 void MainPage::takeSnapshot(data::Snapshot *snapshot) {
-	if (event_queue::getNumEvents() > 0) {
-		event_queue::getEvent(0, &snapshot->lastEvent);
-	} else {
-		snapshot->lastEvent.eventId = 0;
-	}
+	event_queue::getLastErrorEvent(&snapshot->lastEvent);
 }
 
 data::Value MainPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	if (event_queue::g_unread) {
-		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_TYPE) {
-			return data::Value(event_queue::getEventType(&snapshot->lastEvent));
-		}
+	if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_TYPE) {
+		return data::Value(event_queue::getEventType(&snapshot->lastEvent));
+	}
 		
-		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_MESSAGE) {
+	if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_MESSAGE) {
+		if (event_queue::getEventType(&snapshot->lastEvent) != event_queue::EVENT_TYPE_NONE) {
 			return data::Value(&snapshot->lastEvent);
 		}
-	} else {
-		if (id == DATA_ID_EVENT_QUEUE_LAST_EVENT_TYPE) {
-			return data::Value(event_queue::EVENT_TYPE_NONE);
-		} 
 	}
 
 	return data::Value();

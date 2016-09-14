@@ -292,7 +292,7 @@ void action_ch_settings_prot_clear() {
 }
 
 void action_ch_settings_prot_clear_and_disable() {
-    ChSettingsProtectionPage::clear();
+    ChSettingsProtectionPage::clearAndDisable();
 }
 
 void action_ch_settings_prot_toggle_state() {
