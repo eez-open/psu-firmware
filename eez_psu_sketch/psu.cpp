@@ -74,6 +74,7 @@ static bool test_shield();
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
 static void startMasterSync();
+static void updateMasterSync();
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -520,6 +521,10 @@ void tick() {
 #endif
 
 	event_queue::tick(tick_usec);
+
+#if OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
+	updateMasterSync();
+#endif
 }
 
 void setEsrBits(int bit_mask) {
@@ -689,6 +694,10 @@ extern float getCurrentMaxLimit() {
 }
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
+static bool g_masterSyncStarted;
+static Tc *g_chTC;
+static uint32_t g_chNo;
+
 static void TC_SetCMR_ChannelA(Tc *tc, uint32_t chan, uint32_t v) {
 	tc->TC_CHANNEL[chan].TC_CMR = (tc->TC_CHANNEL[chan].TC_CMR & 0xFFF0FFFF) | v;
 }
@@ -747,7 +756,31 @@ void startMasterSync() {
             g_APinDescription[SYNC_MASTER].ulPinConfiguration);
 
     TC_Start(chTC, chNo);
+	g_chTC = chTC;
+	g_chNo = chNo;
+	g_masterSyncStarted = true;
 }
+
+void updateMasterSync() {
+	bool shouldBeStarted = true;
+
+    for (int i = 0; i < CH_NUM; ++i) {
+		if (Channel::get(i).isLowRippleEnabled()) {
+			shouldBeStarted = false;
+			break;
+		}
+    }
+
+	if (shouldBeStarted != g_masterSyncStarted) {
+		if (shouldBeStarted) {
+			TC_Start(g_chTC, g_chNo);
+		} else {
+			TC_Stop(g_chTC, g_chNo);
+		}
+		g_masterSyncStarted = shouldBeStarted;
+	}
+}
+
 #endif
 
 

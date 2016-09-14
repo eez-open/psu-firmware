@@ -3,7 +3,7 @@
 #include <inttypes.h>
 #include <utility/uip_debug.h>
 extern "C" {
-  #import "utility/uip.h"
+  #include "utility/uip.h"
 }
 
 struct uip_conn con[UIP_CONNS];
