@@ -56229,7 +56229,7 @@
                   "y": 0,
                   "width": 0,
                   "height": 0,
-                  "style": "default"
+                  "style": "default_inverse"
                 },
                 {
                   "type": "Container",
