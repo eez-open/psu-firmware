@@ -29,9 +29,7 @@ namespace data {
 
 enum ValueType {
     VALUE_TYPE_NONE,
-
     VALUE_TYPE_INT,
-
 	VALUE_TYPE_FLOAT,
     VALUE_TYPE_FLOAT_VOLT,
     VALUE_TYPE_FLOAT_AMPER,
@@ -40,22 +38,16 @@ enum ValueType {
 	VALUE_TYPE_FLOAT_WATT,
 	VALUE_TYPE_FLOAT_SECOND,
 	VALUE_TYPE_FLOAT_CELSIUS,
-
     VALUE_TYPE_CONST_STR,
     VALUE_TYPE_STR,
-
     VALUE_TYPE_CHANNEL_LABEL,
 	VALUE_TYPE_CHANNEL_SHORT_LABEL,
-
 	VALUE_TYPE_LESS_THEN_MIN,
-
 	VALUE_TYPE_GREATER_THEN_MAX,
-
 	VALUE_TYPE_EVENT,
-
 	VALUE_TYPE_PAGE_INFO,
-
-	VALUE_TYPE_ON_TIME_COUNTER
+	VALUE_TYPE_ON_TIME_COUNTER,
+	VALUE_TYPE_SCPI_ERROR_TEXT
 };
 
 struct Value {
@@ -82,7 +74,14 @@ struct Value {
 		return value;
 	}
 
-    bool operator ==(const Value &other) {
+	static Value ScpiErrorText(int16_t errorCode) {
+		Value value;
+		value.int16_ = errorCode;
+		value.type_ = VALUE_TYPE_SCPI_ERROR_TEXT;
+		return value;
+	}
+
+	bool operator ==(const Value &other) {
         if (type_ != other.type_) {
             return false;
         }
@@ -101,6 +100,8 @@ struct Value {
 			return pageInfo_.pageIndex == other.pageInfo_.pageIndex && pageInfo_.numPages == other.pageInfo_.numPages;
 		} else if (type_ == VALUE_TYPE_ON_TIME_COUNTER) {
 			return uint32_ == other.uint32_;
+		} else if (type_ == VALUE_TYPE_SCPI_ERROR_TEXT) {
+			return int16_ == other.int16_;
 		} else {
             return float_ == other.float_;
         }
@@ -132,6 +133,7 @@ private:
         const char *const_str_ PROGMEM;
         const char *str_;
 		uint32_t uint32_;
+		int16_t int16_;
 		event_queue::Event *event_;
 		struct {
 			uint8_t pageIndex;
@@ -179,7 +181,7 @@ ValueType getUnit(const Cursor &cursor, uint8_t id);
 
 void getButtonLabels(const Cursor &cursor, uint8_t id, const Value **labels, int &count);
 
-bool set(const Cursor &cursor, uint8_t id, Value value);
+bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error);
 
 }
 }

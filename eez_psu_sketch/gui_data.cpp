@@ -101,6 +101,11 @@ void Value::toText(char *text, int count) const {
 		ontime::counterToString(text, count, uint32_);
 		break;
 
+	case VALUE_TYPE_SCPI_ERROR_TEXT:
+		strncpy(text, SCPI_ErrorTranslate(int16_), count - 1);
+		text[count - 1] = 0;
+		break;
+
 	default:
 		{
 			util::strcatFloat(text, float_);
@@ -189,21 +194,25 @@ void getButtonLabels(const Cursor &cursor, uint8_t id, const Value **labels, int
     }
 }
 
-bool set(const Cursor &cursor, uint8_t id, Value value) {
+bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
     if (id == DATA_ID_VOLT) {
 		if (value.getFloat() > Channel::get(cursor.iChannel).getVoltageLimit()) {
+			if (error) *error = SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
 			return false;
 		}
         if (value.getFloat() * Channel::get(cursor.iChannel).i.set > Channel::get(cursor.iChannel).getPowerLimit()) {
+			if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
         Channel::get(cursor.iChannel).setVoltage(value.getFloat());
         return true;
     } else if (id == DATA_ID_CURR) {
 		if (value.getFloat() > Channel::get(cursor.iChannel).getCurrentLimit()) {
+			if (error) *error = SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
 			return false;
 		}
         if (value.getFloat() * Channel::get(cursor.iChannel).u.set > Channel::get(cursor.iChannel).getPowerLimit()) {
+			if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
         Channel::get(cursor.iChannel).setCurrent(value.getFloat());
@@ -215,7 +224,9 @@ bool set(const Cursor &cursor, uint8_t id, Value value) {
         edit_mode_step::setStepIndex(value.getInt());
         return true;
     }
-    return false;
+
+	if (error) *error = 0;
+	return false;
 }
 
 }

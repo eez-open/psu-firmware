@@ -124,14 +124,15 @@ void exit() {
 }
 
 void nonInteractiveSet() {
-	if (!data::set(dataCursor, dataId, editValue)) {
-		errorMessageP(PSTR("Limit exceeded!"), 0);
+	int16_t error;
+	if (!data::set(dataCursor, dataId, editValue, &error)) {
+		errorMessage(data::Value::ScpiErrorText(error), 0);
 	}
 }
 
 void nonInteractiveDiscard() {
     editValue = undoValue;
-    data::set(dataCursor, dataId, undoValue);
+    data::set(dataCursor, dataId, undoValue, 0);
 }
 
 bool isInteractiveMode() {
@@ -167,8 +168,9 @@ data::ValueType getUnit() {
 bool setValue(float value_) {
     data::Value value = data::Value(value_, getUnit());
     if (is_interactive_mode || tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
-        if (!data::set(dataCursor, dataId, value)) {
-			errorMessageP(PSTR("Limit exceeded!"), 0);
+		int16_t error;
+        if (!data::set(dataCursor, dataId, value, &error)) {
+			errorMessage(data::Value::ScpiErrorText(error), 0);
             return false;
         }
     }

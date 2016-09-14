@@ -1242,7 +1242,7 @@ void dialogOk() {
 }
 
 void alertMessage(int alertPageId, data::Value message, void (*ok_callback)()) {
-    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, message);
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, message, 0);
 
     g_dialogYesCallback = ok_callback;
 
@@ -1270,7 +1270,7 @@ void errorMessageP(const char *message PROGMEM, void (*ok_callback)()) {
 }
 
 void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
-    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message));
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message), 0);
 
     g_dialogYesCallback = yes_callback;
     g_dialogNoCallback = no_callback;

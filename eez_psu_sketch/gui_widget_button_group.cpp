@@ -93,7 +93,7 @@ void onTouchDown(const WidgetCursor &widgetCursor) {
     }
 
     if (selectedButton >= 0 && selectedButton < count) {
-        data::set(widgetCursor.cursor, widget->data, selectedButton);
+        data::set(widgetCursor.cursor, widget->data, selectedButton, 0);
     }
 }
 
