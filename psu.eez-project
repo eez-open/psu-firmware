@@ -54728,7 +54728,7 @@
                   "width": 74,
                   "height": 30,
                   "style": "default_disabled_S_left",
-                  "action": "show_sys_settings_cal_ch"
+                  "action": ""
                 },
                 {
                   "type": "Select",
@@ -54751,7 +54751,7 @@
                       "width": 60,
                       "height": 30,
                       "style": "edit_value_active_S_left",
-                      "action": ""
+                      "action": "sys_settings_cal_toggle_enable"
                     }
                   ],
                   "x": 0,
