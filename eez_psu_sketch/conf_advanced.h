@@ -221,3 +221,6 @@
 
 /// Maximum allowed length (including label) of the keypad text.
 #define MAX_KEYPAD_TEXT_LENGTH 128
+
+// Frequency of master sync
+#define SYNC_MASTER_FREQUENCY 330000 // 330kHz 

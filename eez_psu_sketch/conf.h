@@ -72,9 +72,6 @@ option.
 /// Generate square wave on SYNC_MASTER pin
 #define OPTION_SYNC_MASTER 1
 
-// Frequency of master sync
-#define SYNC_MASTER_FREQUENCY 330000 // 330kHz 
-
 /// Maximum number of channels existing.
 #define CH_MAX 2
 
