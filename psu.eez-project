@@ -44545,16 +44545,6 @@
         "inheritFrom": "default"
       },
       {
-        "name": "tab_page_M",
-        "_font": "medium",
-        "inheritFrom": "tab_page"
-      },
-      {
-        "name": "tab_page_selected_M",
-        "_font": "medium",
-        "inheritFrom": "tab_page_selected"
-      },
-      {
         "name": "bottom_button",
         "_font": "icons",
         "_color": "#2F2F2F",
@@ -58500,23 +58490,22 @@
             },
             {
               "type": "Text",
-              "action": "",
               "x": 0,
               "y": 204,
-              "style": "tab_page_selected_M",
-              "text": "1",
               "width": 48,
-              "height": 36
+              "height": 36,
+              "style": "bottom_button_disabled",
+              "text": "("
             },
             {
               "type": "Text",
-              "action": "show_sys_info2",
               "x": 48,
               "y": 204,
-              "style": "tab_page_M",
-              "text": "2",
               "width": 48,
-              "height": 36
+              "height": 36,
+              "style": "bottom_button",
+              "text": ")",
+              "action": "show_sys_info2"
             },
             {
               "type": "Rectangle",
@@ -58788,23 +58777,22 @@
             },
             {
               "type": "Text",
-              "action": "show_sys_info",
               "x": 0,
               "y": 204,
-              "style": "tab_page_M",
-              "text": "1",
               "width": 48,
-              "height": 36
+              "height": 36,
+              "style": "bottom_button",
+              "text": "(",
+              "action": "show_sys_info"
             },
             {
               "type": "Text",
-              "action": "",
               "x": 48,
               "y": 204,
-              "style": "tab_page_selected_M",
-              "text": "2",
               "width": 48,
-              "height": 36
+              "height": 36,
+              "style": "bottom_button_disabled",
+              "text": ")"
             },
             {
               "type": "Rectangle",

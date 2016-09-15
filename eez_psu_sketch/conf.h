@@ -46,7 +46,7 @@ option.
 #define CONF_DEBUG_LATEST 1
 
 /// Is Ethernet present?
-#define OPTION_ETHERNET 1
+#define OPTION_ETHERNET 0
 
 /// Is RTC present?
 #define OPTION_EXT_RTC 1
@@ -69,8 +69,11 @@ option.
 /// Is main temperature sensor present?
 #define OPTION_MAIN_TEMP_SENSOR 1
 
-/// Generate square wave of frequency 330kHz on SYNC_MASTER pin
+/// Generate square wave on SYNC_MASTER pin
 #define OPTION_SYNC_MASTER 1
+
+// Frequency of master sync
+#define SYNC_MASTER_FREQUENCY 330000 // 330kHz 
 
 /// Maximum number of channels existing.
 #define CH_MAX 2

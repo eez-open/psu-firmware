@@ -709,7 +709,7 @@ static void TC_SetCMR_ChannelB(Tc *tc, uint32_t chan, uint32_t v) {
 /// Generate square wave of frequency 330kHz on SYNC_MASTER pin
 void startMasterSync() {
     // We use MCLK/2 as clock.
-    const uint32_t frequency = 330000;
+    const uint32_t frequency = SYNC_MASTER_FREQUENCY;
     const uint32_t TC = VARIANT_MCK / 2 / frequency; // VARIANT_MCK = 84000000
 
     // Map value to Timer ranges 0..255 => 0..TC

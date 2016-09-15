@@ -583,23 +583,25 @@ void drawBitmap(uint8_t bitmapIndex, int x, int y, int w, int h, const Style *st
 void drawRectangle(int x, int y, int w, int h, const Style *style, bool inverse) {
     //++draw_counter;
 
-    int x1 = x;
-    int y1 = y;
-    int x2 = x + w - 1;
-    int y2 = y + h - 1;
+	if (w > 0 && h > 0) {
+		int x1 = x;
+		int y1 = y;
+		int x2 = x + w - 1;
+		int y2 = y + h - 1;
 
-    if (styleHasBorder(style)) {
-        lcd::lcd.setColor(style->border_color);
-        lcd::lcd.drawRect(x1, y1, x2, y2);
-        ++x1;
-        ++y1;
-        --x2;
-        --y2;
-    }
+		if (styleHasBorder(style)) {
+			lcd::lcd.setColor(style->border_color);
+			lcd::lcd.drawRect(x1, y1, x2, y2);
+			++x1;
+			++y1;
+			--x2;
+			--y2;
+		}
 
-    uint16_t color = inverse ? style->background_color : style->color;
-    lcd::lcd.setColor(color);
-    lcd::lcd.fillRect(x1, y1, x2, y2);
+		uint16_t color = inverse ? style->background_color : style->color;
+		lcd::lcd.setColor(color);
+		lcd::lcd.fillRect(x1, y1, x2, y2);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
