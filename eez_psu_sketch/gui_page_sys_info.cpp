@@ -84,10 +84,6 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::S
 			return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL);
 		}
 
-		if (id == DATA_ID_CHANNEL_BOARD_INFO_STATUS) {
-			return data::Value(iChannel < CH_NUM ? 1 : 0);
-		}
-
 		if (id == DATA_ID_CHANNEL_BOARD_INFO_REVISION) {
 			if (iChannel < CH_NUM) {
 				return data::Value(Channel::get(iChannel).getBoardRevisionName());

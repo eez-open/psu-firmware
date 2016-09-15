@@ -1,7 +1,7 @@
 {
   "data": [
     {
-      "name": "channels_installed",
+      "name": "channels",
       "description": "list of installed channels",
       "defaultValue": [
         {},
@@ -9,18 +9,9 @@
       ]
     },
     {
-      "name": "channels_all",
-      "description": "list of all channels (including not installed)",
-      "defaultValue": [
-        {},
-        {}
-      ]
-    },
-    {
-      "name": "channel_ok",
-      "description": "0: if there is channel error\n1: if channel is ok",
-      "operations": "get",
-      "defaultValue": 1
+      "name": "channel.status",
+      "description": "0: not installed\n1: installed and ok\n2: installed and error",
+      "defaultValue": "1"
     },
     {
       "name": "output_state",
@@ -446,11 +437,6 @@
       "name": "channel.boardInfo.label",
       "description": "",
       "defaultValue": "CH1 board:"
-    },
-    {
-      "name": "channel.boardInfo.status",
-      "description": "0: not installed\n1: installed",
-      "defaultValue": "1"
     },
     {
       "name": "channel.boardInfo.revision",
@@ -45309,7 +45295,7 @@
             {
               "type": "List",
               "listType": "horizontal",
-              "data": "channels_installed",
+              "data": "channels",
               "x": 0,
               "y": 32,
               "itemWidget": {
@@ -45885,7 +45871,7 @@
               "y": 0,
               "width": 80,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -45998,7 +45984,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels_installed",
+                      "data": "channels",
                       "x": 140,
                       "y": 72,
                       "itemWidget": {
@@ -46113,7 +46099,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels_installed",
+                      "data": "channels",
                       "x": 140,
                       "y": 60,
                       "itemWidget": {
@@ -46447,7 +46433,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -46663,7 +46649,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -46741,7 +46727,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels_installed",
+                      "data": "channels",
                       "x": 140,
                       "y": 72,
                       "itemWidget": {
@@ -46856,7 +46842,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels_installed",
+                      "data": "channels",
                       "x": 140,
                       "y": 60,
                       "itemWidget": {
@@ -47140,7 +47126,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels_installed",
+                      "data": "channels",
                       "x": 202,
                       "y": -32,
                       "itemWidget": {
@@ -47258,7 +47244,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels_installed",
+                      "data": "channels",
                       "x": 202,
                       "y": -32,
                       "itemWidget": {
@@ -47437,7 +47423,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels_installed",
+                      "data": "channels",
                       "x": 140,
                       "y": 72,
                       "itemWidget": {
@@ -47552,7 +47538,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels_installed",
+                      "data": "channels",
                       "x": 140,
                       "y": 60,
                       "itemWidget": {
@@ -47886,7 +47872,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -48147,7 +48133,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -48228,7 +48214,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels_installed",
+                      "data": "channels",
                       "x": 140,
                       "y": 72,
                       "itemWidget": {
@@ -48343,7 +48329,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels_installed",
+                      "data": "channels",
                       "x": 140,
                       "y": 60,
                       "itemWidget": {
@@ -48630,7 +48616,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels_installed",
+                      "data": "channels",
                       "x": 202,
                       "y": -32,
                       "itemWidget": {
@@ -48768,7 +48754,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels_installed",
+                      "data": "channels",
                       "x": 202,
                       "y": -32,
                       "itemWidget": {
@@ -49096,22 +49082,21 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels_installed",
+              "data": "channels",
               "x": 0,
               "y": 28,
               "itemWidget": {
                 "type": "Select",
-                "data": "channel_ok",
+                "data": "channel.status",
                 "y": 0,
                 "widgets": [
                   {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
+                    "type": "Rectangle",
                     "x": 0,
                     "y": 0,
                     "width": 240,
-                    "height": 128
+                    "height": 128,
+                    "style": "default_inverse"
                   },
                   {
                     "type": "Container",
@@ -49205,6 +49190,15 @@
                     "width": 240,
                     "height": 128,
                     "style": "default"
+                  },
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 128
                   }
                 ],
                 "x": 0,
@@ -49396,17 +49390,16 @@
               "listType": "horizontal",
               "itemWidget": {
                 "type": "Select",
-                "data": "channel_ok",
+                "data": "channel.status",
                 "y": 0,
                 "widgets": [
                   {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
+                    "type": "Rectangle",
                     "x": 0,
                     "y": 0,
                     "width": 160,
-                    "height": 56
+                    "height": 176,
+                    "style": "default_inverse"
                   },
                   {
                     "type": "Container",
@@ -49681,18 +49674,27 @@
                     "width": 160,
                     "height": 176,
                     "style": "default"
+                  },
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 160,
+                    "height": 176
                   }
                 ],
                 "x": 0,
                 "width": 160,
-                "height": 56,
+                "height": 176,
                 "style": "default"
               },
               "x": 0,
               "y": 28,
               "width": 320,
               "height": 176,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -50059,22 +50061,21 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels_installed",
+              "data": "channels",
               "x": 0,
               "y": 16,
               "itemWidget": {
                 "type": "Select",
-                "data": "channel_ok",
+                "data": "channel.status",
                 "y": 0,
                 "widgets": [
                   {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
+                    "type": "Rectangle",
                     "x": 0,
                     "y": 0,
                     "width": 240,
-                    "height": 126
+                    "height": 126,
+                    "style": "default_inverse"
                   },
                   {
                     "type": "Container",
@@ -50168,6 +50169,15 @@
                     "width": 240,
                     "height": 126,
                     "style": "default"
+                  },
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126
                   }
                 ],
                 "x": 0,
@@ -50336,7 +50346,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -50872,7 +50882,7 @@
             {
               "type": "List",
               "listType": "horizontal",
-              "data": "channels_installed",
+              "data": "channels",
               "x": 0,
               "y": 32,
               "itemWidget": {
@@ -51450,7 +51460,7 @@
               "y": 0,
               "width": 80,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -51696,7 +51706,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -51917,7 +51927,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -52247,7 +52257,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -52549,7 +52559,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -52870,7 +52880,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -53172,7 +53182,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -53433,7 +53443,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -53775,7 +53785,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -54025,7 +54035,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -54275,7 +54285,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -54503,7 +54513,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -54905,7 +54915,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -54977,22 +54987,21 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels_installed",
+              "data": "channels",
               "x": 0,
               "y": 16,
               "itemWidget": {
                 "type": "Select",
-                "data": "channel_ok",
+                "data": "channel.status",
                 "y": 0,
                 "widgets": [
                   {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
+                    "type": "Rectangle",
                     "x": 0,
                     "y": 0,
                     "width": 240,
-                    "height": 126
+                    "height": 126,
+                    "style": "default_inverse"
                   },
                   {
                     "type": "Container",
@@ -55086,6 +55095,15 @@
                     "width": 240,
                     "height": 126,
                     "style": "default"
+                  },
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126
                   }
                 ],
                 "x": 0,
@@ -55301,7 +55319,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -55356,22 +55374,21 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels_installed",
+              "data": "channels",
               "x": 0,
               "y": 16,
               "itemWidget": {
                 "type": "Select",
-                "data": "channel_ok",
+                "data": "channel.status",
                 "y": 0,
                 "widgets": [
                   {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
+                    "type": "Rectangle",
                     "x": 0,
                     "y": 0,
                     "width": 240,
-                    "height": 126
+                    "height": 126,
+                    "style": "default_inverse"
                   },
                   {
                     "type": "Container",
@@ -55465,6 +55482,15 @@
                     "width": 240,
                     "height": 126,
                     "style": "default"
+                  },
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126
                   }
                 ],
                 "x": 0,
@@ -55671,7 +55697,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -55813,7 +55839,7 @@
               "width": 240,
               "height": 64,
               "style": "default",
-              "data": "channels_installed"
+              "data": "channels"
             },
             {
               "type": "Rectangle",
@@ -55994,7 +56020,7 @@
               "width": 286,
               "height": 130,
               "style": "default",
-              "data": "channels_installed"
+              "data": "channels"
             },
             {
               "type": "Rectangle",
@@ -56048,22 +56074,21 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels_installed",
+              "data": "channels",
               "x": 0,
               "y": 16,
               "itemWidget": {
                 "type": "Select",
-                "data": "channel_ok",
+                "data": "channel.status",
                 "y": 0,
                 "widgets": [
                   {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
+                    "type": "Rectangle",
                     "x": 0,
                     "y": 0,
                     "width": 240,
-                    "height": 126
+                    "height": 126,
+                    "style": "default_inverse"
                   },
                   {
                     "type": "Container",
@@ -56157,6 +56182,15 @@
                     "width": 240,
                     "height": 126,
                     "style": "default"
+                  },
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126
                   }
                 ],
                 "x": 0,
@@ -56421,22 +56455,21 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels_installed",
+              "data": "channels",
               "x": 0,
               "y": 16,
               "itemWidget": {
                 "type": "Select",
-                "data": "channel_ok",
+                "data": "channel.status",
                 "y": 0,
                 "widgets": [
                   {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
+                    "type": "Rectangle",
                     "x": 0,
                     "y": 0,
                     "width": 240,
-                    "height": 126
+                    "height": 126,
+                    "style": "default_inverse"
                   },
                   {
                     "type": "Container",
@@ -56530,6 +56563,15 @@
                     "width": 240,
                     "height": 126,
                     "style": "default"
+                  },
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126
                   }
                 ],
                 "x": 0,
@@ -56802,22 +56844,21 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels_installed",
+              "data": "channels",
               "x": 0,
               "y": 16,
               "itemWidget": {
                 "type": "Select",
-                "data": "channel_ok",
+                "data": "channel.status",
                 "y": 0,
                 "widgets": [
                   {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
+                    "type": "Rectangle",
                     "x": 0,
                     "y": 0,
                     "width": 240,
-                    "height": 126
+                    "height": 126,
+                    "style": "default_inverse"
                   },
                   {
                     "type": "Container",
@@ -56911,6 +56952,15 @@
                     "width": 240,
                     "height": 126,
                     "style": "default"
+                  },
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126
                   }
                 ],
                 "x": 0,
@@ -57226,7 +57276,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -57445,7 +57495,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -57517,22 +57567,21 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels_installed",
+              "data": "channels",
               "x": 0,
               "y": 16,
               "itemWidget": {
                 "type": "Select",
-                "data": "channel_ok",
+                "data": "channel.status",
                 "y": 0,
                 "widgets": [
                   {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
+                    "type": "Rectangle",
                     "x": 0,
                     "y": 0,
                     "width": 240,
-                    "height": 126
+                    "height": 126,
+                    "style": "default_inverse"
                   },
                   {
                     "type": "Container",
@@ -57626,6 +57675,15 @@
                     "width": 240,
                     "height": 126,
                     "style": "default"
+                  },
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126
                   }
                 ],
                 "x": 0,
@@ -57785,7 +57843,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -58035,7 +58093,7 @@
               "y": 0,
               "width": 80,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -58485,7 +58543,7 @@
               "y": 0,
               "width": 80,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {
@@ -58627,7 +58685,7 @@
                   },
                   {
                     "type": "Select",
-                    "data": "channel.boardInfo.status",
+                    "data": "channel.status",
                     "widgets": [
                       {
                         "type": "Text",
@@ -58638,6 +58696,15 @@
                         "width": 110,
                         "height": 28,
                         "text": "Not installed"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "style": "value_S",
+                        "data": "channel.boardInfo.revision",
+                        "x": 0,
+                        "y": 0,
+                        "width": 110,
+                        "height": 28
                       },
                       {
                         "type": "DisplayData",
@@ -58667,7 +58734,7 @@
               "width": 228,
               "height": 56,
               "style": "default",
-              "data": "channels_installed"
+              "data": "channels"
             },
             {
               "type": "Text",
@@ -58772,7 +58839,7 @@
               "y": 0,
               "width": 80,
               "height": 204,
-              "data": "channels_installed",
+              "data": "channels",
               "style": "default"
             },
             {

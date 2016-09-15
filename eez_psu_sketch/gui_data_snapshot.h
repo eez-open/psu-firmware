@@ -29,9 +29,9 @@ namespace gui {
 namespace data {
 
 struct ChannelSnapshotFlags {
-    unsigned ok : 1;
-    unsigned mode : 1;
+    unsigned status : 2;
     unsigned state : 1;
+    unsigned mode : 1;
 	unsigned lrip : 1;
     unsigned ovp : 2;
     unsigned ocp : 2;
@@ -61,7 +61,7 @@ struct SnapshotFlags {
 };
 
 struct Snapshot {
-    ChannelSnapshot channelSnapshots[CH_NUM];
+    ChannelSnapshot channelSnapshots[CH_MAX];
 	keypad::Snapshot keypadSnapshot;
     edit_mode::Snapshot editModeSnapshot;
     Value alertMessage;

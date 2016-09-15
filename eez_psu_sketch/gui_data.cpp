@@ -146,9 +146,7 @@ void Value::toText(char *text, int count) const {
 ////////////////////////////////////////////////////////////////////////////////
 
 int count(uint8_t id) {
-    if (id == DATA_ID_CHANNELS_INSTALLED) {
-        return CH_NUM;
-    } else if (id == DATA_ID_CHANNELS_ALL) {
+    if (id == DATA_ID_CHANNELS) {
         return CH_MAX;
     } else if (id == DATA_ID_EVENT_QUEUE_EVENTS) {
         return event_queue::EVENTS_PER_PAGE;
@@ -157,7 +155,7 @@ int count(uint8_t id) {
 }
 
 void select(Cursor &cursor, uint8_t id, int index) {
-    if (id == DATA_ID_CHANNELS_INSTALLED || id == DATA_ID_CHANNELS_ALL) {
+    if (id == DATA_ID_CHANNELS) {
         cursor.iChannel = index;
     } else if (id == DATA_ID_EVENT_QUEUE_EVENTS) {
 		cursor.iChannel = index;

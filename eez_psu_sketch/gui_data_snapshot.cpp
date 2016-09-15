@@ -110,10 +110,15 @@ void Snapshot::takeSnapshot() {
         lastSnapshotTime = currentTime;
     }
 
-    for (int i = 0; i < CH_NUM; ++i) {
-        Channel &channel = Channel::get(i);
+    for (int i = 0; i < CH_MAX; ++i) {
+		if (i >= CH_NUM) {
+			channelSnapshots[i].flags.status = 0;
+			continue;
+		}
 
-        channelSnapshots[i].flags.ok = channel.isOk() ? 1 : 0;
+		Channel &channel = Channel::get(i);
+
+        channelSnapshots[i].flags.status = channel.isOk() ? 1 : 2;
 
         channelSnapshots[i].flags.state = channel.isOutputEnabled() ? 1 : 0;
 
@@ -187,60 +192,62 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 	if (cursor.iChannel >= 0 || g_channel != 0) {
 		int iChannel = cursor.iChannel >= 0 ? cursor.iChannel : g_channel->index - 1;
 
-		if (id == DATA_ID_CHANNEL_OK) {
-			return Value(channelSnapshots[iChannel].flags.ok);
+		if (id == DATA_ID_CHANNEL_STATUS) {
+			return Value(channelSnapshots[iChannel].flags.status);
 		}
+
+		if (channelSnapshots[iChannel].flags.status == 1) {
+			if (id == DATA_ID_OUTPUT_STATE) {
+				return Value(channelSnapshots[iChannel].flags.state);
+			}
 		
-		if (id == DATA_ID_OUTPUT_STATE) {
-			return Value(channelSnapshots[iChannel].flags.state);
-		}
+			if (id == DATA_ID_OUTPUT_MODE) {
+				return Value(channelSnapshots[iChannel].flags.mode);
+			}
 		
-		if (id == DATA_ID_OUTPUT_MODE) {
-			return Value(channelSnapshots[iChannel].flags.mode);
-		}
+			if (id == DATA_ID_MON_VALUE) {
+				return channelSnapshots[iChannel].mon_value;
+			}
 		
-		if (id == DATA_ID_MON_VALUE) {
-			return channelSnapshots[iChannel].mon_value;
-		}
+			if (id == DATA_ID_VOLT) {
+				return Value(channelSnapshots[iChannel].u_set, VALUE_TYPE_FLOAT_VOLT);
+			}
 		
-		if (id == DATA_ID_VOLT) {
-			return Value(channelSnapshots[iChannel].u_set, VALUE_TYPE_FLOAT_VOLT);
-		}
+			if (id == DATA_ID_CURR) {
+				return Value(channelSnapshots[iChannel].i_set, VALUE_TYPE_FLOAT_AMPER);
+			}
 		
-		if (id == DATA_ID_CURR) {
-			return Value(channelSnapshots[iChannel].i_set, VALUE_TYPE_FLOAT_AMPER);
-		}
+			if (id == DATA_ID_LRIP) {
+				return Value(channelSnapshots[iChannel].flags.lrip);
+			}
 		
-		if (id == DATA_ID_LRIP) {
-			return Value(channelSnapshots[iChannel].flags.lrip);
-		}
+			if (id == DATA_ID_OVP) {
+				return Value(channelSnapshots[iChannel].flags.ovp);
+			}
 		
-		if (id == DATA_ID_OVP) {
-			return Value(channelSnapshots[iChannel].flags.ovp);
-		}
+			if (id == DATA_ID_OCP) {
+				return Value(channelSnapshots[iChannel].flags.ocp);
+			}
 		
-		if (id == DATA_ID_OCP) {
-			return Value(channelSnapshots[iChannel].flags.ocp);
-		}
+			if (id == DATA_ID_OPP) {
+				return Value(channelSnapshots[iChannel].flags.opp);
+			}
 		
-		if (id == DATA_ID_OPP) {
-			return Value(channelSnapshots[iChannel].flags.opp);
-		}
+			if (id == DATA_ID_OTP_CH) {
+				return Value(channelSnapshots[iChannel].flags.otp_ch);
+			}
 		
-		if (id == DATA_ID_OTP_CH) {
-			return Value(channelSnapshots[iChannel].flags.otp_ch);
-		}
+			if (id == DATA_ID_DP) {
+				return Value(channelSnapshots[iChannel].flags.dp);
+			}
 		
-		if (id == DATA_ID_DP) {
-			return Value(channelSnapshots[iChannel].flags.dp);
-		}
+			if (id == DATA_ID_CHANNEL_LABEL) {
+				return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_LABEL);
+			}
 		
-		if (id == DATA_ID_CHANNEL_LABEL) {
-			return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_LABEL);
-		}
-		
-		if (id == DATA_ID_CHANNEL_SHORT_LABEL) {
-			return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_SHORT_LABEL);
+			if (id == DATA_ID_CHANNEL_SHORT_LABEL) {
+				return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_SHORT_LABEL);
+			}
 		}
 	}
 	
