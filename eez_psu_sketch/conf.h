@@ -76,7 +76,7 @@ option.
 #define CH_MAX 2
 
 /// Number of channels visible (less then or equal to CH_MAX)
-#define CH_NUM 1
+#define CH_NUM 2
 
 /// Channels configuration.
 /// 
