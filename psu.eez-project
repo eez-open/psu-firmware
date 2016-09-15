@@ -54789,7 +54789,7 @@
                       "text": "Enable",
                       "x": 0,
                       "y": 0,
-                      "width": 63,
+                      "width": 62,
                       "height": 30,
                       "style": "edit_value_active_S_left",
                       "action": "sys_settings_cal_toggle_enable"
@@ -54799,7 +54799,7 @@
                       "text": "Disable",
                       "x": 0,
                       "y": 0,
-                      "width": 60,
+                      "width": 62,
                       "height": 30,
                       "style": "edit_value_active_S_left",
                       "action": "sys_settings_cal_toggle_enable"
@@ -56671,6 +56671,14 @@
         "landscape": {
           "widgets": [
             {
+              "type": "Rectangle",
+              "x": 16,
+              "y": 16,
+              "width": 290,
+              "height": 76,
+              "style": "default_inverse"
+            },
+            {
               "type": "Select",
               "widgets": [
                 {
@@ -56763,7 +56771,7 @@
                   "text": "Text",
                   "x": 0,
                   "y": 0,
-                  "width": 300,
+                  "width": 290,
                   "height": 40,
                   "style": "value",
                   "data": "channel.calibration.step.value"
@@ -56784,7 +56792,7 @@
                   "text": "Set",
                   "x": 0,
                   "y": 0,
-                  "width": 80,
+                  "width": 118,
                   "height": 40,
                   "style": "edit_value_active_left",
                   "data": "",
@@ -56804,7 +56812,7 @@
               ],
               "x": 16,
               "y": 132,
-              "width": 80,
+              "width": 118,
               "height": 40,
               "style": "default",
               "data": "channel.calibration.step.status"
