@@ -50,7 +50,7 @@
 #define CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT 5000000UL
 #define CONF_GUI_WELCOME_PAGE_TIMEOUT 2000000UL
 #define CONF_GUI_LONG_PRESS_TIMEOUT 1000000UL
-#define CONF_GUI_DRAW_TICK_ITERATIONS 4
+#define CONF_GUI_DRAW_TICK_ITERATIONS 100
 #define CONF_GUI_PAGE_NAVIGATION_STACK_SIZE 5
 
 namespace eez {
@@ -78,10 +78,7 @@ static bool g_pushActivePageOnStack;
 static int g_pageNavigationStack[CONF_GUI_PAGE_NAVIGATION_STACK_SIZE];
 static int g_pageNavigationStackPointer = 0;
 
-static bool g_isPageRefresh;
 static bool g_widgetRefresh;
-
-static const Style *g_pageStyle;
 
 static WidgetCursor g_selectedWidget;
 WidgetCursor g_foundWidgetAtDown;
@@ -155,7 +152,7 @@ public:
             if (widget->type == WIDGET_TYPE_CONTAINER) {
                 DECL_WIDGET_SPECIFIC(ContainerWidget, container, widget);
                 if (stack[stack_index].index < container->widgets.count) {
-                    OBJ_OFFSET childWidgetOffset = getListItemOffset(container->widgets, stack[stack_index].index);
+                    OBJ_OFFSET childWidgetOffset = getListItemOffset(container->widgets, stack[stack_index].index, sizeof(Widget));
                     ++stack[stack_index].index;
                     if (!push(childWidgetOffset, stack[stack_index].x, stack[stack_index].y, stack[stack_index].refresh)) {
                         return true;
@@ -258,7 +255,7 @@ private:
             data::select(cursor, widget->data, index);
 
             DECL_WIDGET_SPECIFIC(ContainerWidget, containerWidget, widget);
-            OBJ_OFFSET selectedWidgetOffset = getListItemOffset(containerWidget->widgets, index);
+            OBJ_OFFSET selectedWidgetOffset = getListItemOffset(containerWidget->widgets, index, sizeof(Widget));
 
             if (!refresh) {
                 int previousIndex = data::previousSnapshot.get(cursor, widget->data).getInt();
@@ -350,7 +347,7 @@ void drawText(const char *text, int textLength, int x, int y, int w, int h, cons
 
     if (g_widgetRefresh) {
         lcd::lcd.fillRect(x1, y1, x2, y2);
-    } else if (!g_isPageRefresh || g_pageStyle->background_color != background_color) {
+    } else {
         if (x1 <= x_offset - 1 && y1 <= y2)
             lcd::lcd.fillRect(x1, y1, x_offset - 1, y2);
         if (x_offset + width <= x2 && y1 <= y2)
@@ -371,7 +368,7 @@ void drawText(const char *text, int textLength, int x, int y, int w, int h, cons
         lcd::lcd.setBackColor(style->background_color);
         lcd::lcd.setColor(style->color);
     }
-    lcd::lcd.drawStr(text, textLength, x_offset, y_offset, x1, y1, x2, y2, font, (!g_isPageRefresh && !g_widgetRefresh) || g_pageStyle->background_color != background_color);
+    lcd::lcd.drawStr(text, textLength, x_offset, y_offset, x1, y1, x2, y2, font);
 }
 
 void drawMultilineText(const char *text, int x, int y, int w, int h, const Style *style, bool inverse) {
@@ -405,16 +402,13 @@ void drawMultilineText(const char *text, int x, int y, int w, int h, const Style
     if (g_widgetRefresh) {
         lcd::lcd.fillRect(x1, y1, x2, y2);
     } else {
-        clear_background = !g_isPageRefresh || g_pageStyle->background_color != background_color;
-        if (clear_background) {
-            if (style->padding_horizontal > 0) {
-                lcd::lcd.fillRect(x1, y1, x1 + style->padding_horizontal - 1, y2);
-                lcd::lcd.fillRect(x2 - style->padding_horizontal + 1, y1, x2, y2);
-            }
-            if (y1 < y) {
-                lcd::lcd.fillRect(x1, y1, x2, y1 + style->padding_vertical - 1);
-                lcd::lcd.fillRect(x1, y2 - style->padding_vertical + 1, x2, y2);
-            }
+        if (style->padding_horizontal > 0) {
+            lcd::lcd.fillRect(x1, y1, x1 + style->padding_horizontal - 1, y2);
+            lcd::lcd.fillRect(x2 - style->padding_horizontal + 1, y1, x2, y2);
+        }
+        if (y1 < y) {
+            lcd::lcd.fillRect(x1, y1, x2, y1 + style->padding_vertical - 1);
+            lcd::lcd.fillRect(x1, y2 - style->padding_vertical + 1, x2, y2);
         }
     }
 
@@ -461,7 +455,7 @@ void drawMultilineText(const char *text, int x, int y, int w, int h, const Style
             lcd::lcd.setColor(style->color);
         }
 
-        lcd::lcd.drawStr(text + j, i - j, x, y, x1, y1, x2, y2, font, (!g_isPageRefresh && !g_widgetRefresh) || g_pageStyle->background_color != background_color);
+        lcd::lcd.drawStr(text + j, i - j, x, y, x1, y1, x2, y2, font);
 
         x += width;
 
@@ -556,7 +550,7 @@ void drawBitmap(uint8_t bitmapIndex, int x, int y, int w, int h, const Style *st
 
     if (g_widgetRefresh) {
         lcd::lcd.fillRect(x1, y1, x2, y2);
-    } else if (!g_isPageRefresh || g_pageStyle->background_color != background_color) {
+    } else {
         if (x1 <= x_offset - 1 && y1 <= y2)
             lcd::lcd.fillRect(x1, y1, x_offset - 1, y2);
         if (x_offset + width <= x2 && y1 <= y2)
@@ -925,7 +919,7 @@ bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, b
 
         static int edit_mode_slider_scale_last_y_value;
 
-        if (g_isPageRefresh || widget->data != DATA_ID_EDIT_VALUE) {
+        if (widget->data != DATA_ID_EDIT_VALUE) {
             // draw entire scale 
             drawScale(widget, scale_widget, style, y_from_min, y_from_max, y_min, y_max, y_value, f, d, true);
         }
@@ -1057,11 +1051,11 @@ bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
     return false;
 }
 
-static EnumWidgets draw_enum_widgets(draw_widget);
+static EnumWidgets g_drawEnumWidgets(draw_widget);
 
-void draw_tick() {
+bool draw_tick() {
     for (int i = 0; i < CONF_GUI_DRAW_TICK_ITERATIONS; ++i) {
-        if (!draw_enum_widgets.next()) {
+        if (!g_drawEnumWidgets.next()) {
             g_wasBlinkTime = g_isBlinkTime;
             g_isBlinkTime = (micros() % (2 * CONF_GUI_BLINK_TIME)) > CONF_GUI_BLINK_TIME && touch::event_type == touch::TOUCH_NONE;
 
@@ -1069,16 +1063,15 @@ void draw_tick() {
             data::currentSnapshot.takeSnapshot();
 
 		    DECL_WIDGET(page, getPageOffset(g_activePageId));
-            draw_enum_widgets.start(g_activePageId, page->x, page->y, false);
+            g_drawEnumWidgets.start(g_activePageId, page->x, page->y, false);
 
             //DebugTraceF("%d", draw_counter);
             //draw_counter = 0;
 
-            g_isPageRefresh = false;
-
-            break;
+            return false;
         }
     }
+	return true;
 }
 
 void refresh_widget(WidgetCursor widget_cursor) {
@@ -1088,23 +1081,24 @@ void refresh_widget(WidgetCursor widget_cursor) {
 }
 
 void refreshPage() {
-    g_isPageRefresh = true;
+	DECL_WIDGET(page, getPageOffset(g_activePageId));
 
-    // clear screen with background color
-    DECL_WIDGET(page, getPageOffset(g_activePageId));
+	// clear screen with background color
+    DECL_WIDGET_SPECIFIC(PageWidget, pageSpecific, page);
     DECL_WIDGET_STYLE(style, page);
-    g_pageStyle = style;
     lcd::lcd.setColor(style->background_color);
-    lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
+	for (int i = 0; i < pageSpecific->transparentRectangles.count; ++i) {
+		OBJ_OFFSET rectOffset = getListItemOffset(pageSpecific->transparentRectangles, i, sizeof(Rect));
+		DECL_STRUCT_WITH_OFFSET(Rect, rect, rectOffset);
+		lcd::lcd.fillRect(rect->x, rect->y, rect->x + rect->w - 1, rect->y + rect->h - 1);
+	}
 
     data::currentSnapshot.takeSnapshot();
-    draw_enum_widgets.start(g_activePageId, page->x, page->y, true);
+    g_drawEnumWidgets.start(g_activePageId, page->x, page->y, true);
 }
 
 void flush() {
-    while (g_isPageRefresh) {
-        draw_tick();
-    }
+    while (draw_tick());
 
 #ifdef EEZ_PSU_SIMULATOR
     if (simulator::front_panel::isOpened()) {

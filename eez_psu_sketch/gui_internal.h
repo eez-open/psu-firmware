@@ -108,12 +108,12 @@ extern Channel *g_channel;
 
 extern Document *g_doc;
 
-inline OBJ_OFFSET getListItemOffset(const List &list, int index) {
-    return list.first + index * sizeof(Widget);
+inline OBJ_OFFSET getListItemOffset(const List &list, int index, int listItemSize) {
+    return list.first + index * listItemSize;
 }
 
 inline OBJ_OFFSET getPageOffset(int pageID) {
-    return getListItemOffset(g_doc->pages, pageID);
+    return getListItemOffset(g_doc->pages, pageID, sizeof(Widget));
 }
 
 inline const int getWidgetStyleId(const Widget *widget) {
@@ -158,6 +158,11 @@ inline const int getWidgetStyleId(const Widget *widget) {
     arduino_util::prog_read_buffer(document + (offset), (uint8_t *)&var##_buffer, sizeof(Bitmap)); \
     const Bitmap *var = &var##_buffer
 
+#define DECL_STRUCT_WITH_OFFSET(Struct, var, offset) \
+    Struct var##_buffer; \
+    arduino_util::prog_read_buffer(document + (offset), (uint8_t *)&var##_buffer, sizeof(Struct)); \
+    const Struct *var = &var##_buffer
+
 #else
 
 #define DECL_WIDGET(var, widgetOffset) const Widget *var = (const Widget *)(document + (widgetOffset))
@@ -167,6 +172,7 @@ inline const int getWidgetStyleId(const Widget *widget) {
 #define DECL_STYLE(var, styleId) const Style *var = (const Style *)(document + g_doc->styles.first + (styleId) * sizeof(Style))
 #define DECL_STRING(var, offset) const char *var = (const char *)(document + (offset))
 #define DECL_BITMAP(var, offset) const Bitmap *var = (const Bitmap *)(document + (offset))
+#define DECL_STRUCT_WITH_OFFSET(Struct, var, offset) const Struct *var = (const Struct *)(document + (offset))
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////

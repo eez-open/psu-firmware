@@ -133,6 +133,18 @@ struct ScaleWidget {
     uint8_t needle_height;
 };
 
+struct Rect {
+    int16_t x;
+    int16_t y;
+    uint16_t w;
+    uint16_t h;
+};
+
+struct PageWidget {
+    List widgets;
+	List transparentRectangles;
+};
+
 struct Document {
     List styles;
     List pages;
