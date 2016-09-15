@@ -55900,25 +55900,25 @@
               "type": "List",
               "listType": "vertical",
               "itemWidget": {
-                "type": "Container",
+                "type": "Select",
                 "widgets": [
                   {
-                    "type": "Text",
-                    "text": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 42,
-                    "height": 30,
-                    "style": "edit_value_S_left",
-                    "data": "channel.shortLabel"
-                  },
-                  {
-                    "type": "Select",
+                    "type": "Container",
                     "widgets": [
                       {
                         "type": "Text",
-                        "text": "Calibrate",
+                        "text": "",
                         "x": 0,
+                        "y": 0,
+                        "width": 42,
+                        "height": 30,
+                        "style": "edit_value_S_left",
+                        "data": "channel.shortLabel"
+                      },
+                      {
+                        "type": "Text",
+                        "text": "Calibrate",
+                        "x": 42,
                         "y": 0,
                         "width": 74,
                         "height": 30,
@@ -55926,98 +55926,130 @@
                         "action": "show_sys_settings_cal_ch"
                       },
                       {
-                        "type": "Container",
-                        "widgets": [
-                          {
-                            "type": "Select",
-                            "widgets": [
-                              {
-                                "type": "Text",
-                                "text": "Enable",
-                                "x": 0,
-                                "y": 0,
-                                "width": 60,
-                                "height": 30,
-                                "style": "edit_value_active_S_left",
-                                "action": "sys_settings_cal_toggle_enable"
-                              },
-                              {
-                                "type": "Text",
-                                "text": "Disable",
-                                "x": 0,
-                                "y": 0,
-                                "width": 60,
-                                "height": 30,
-                                "style": "edit_value_active_S_left",
-                                "action": "sys_settings_cal_toggle_enable"
-                              }
-                            ],
-                            "x": 0,
-                            "y": 0,
-                            "width": 62,
-                            "height": 30,
-                            "style": "default",
-                            "data": "channel.calibration.state",
-                            "action": ""
-                          },
-                          {
-                            "type": "Text",
-                            "text": "Recalibrate",
-                            "x": 76,
-                            "y": 0,
-                            "width": 90,
-                            "height": 30,
-                            "style": "edit_value_active_S_left",
-                            "action": "show_sys_settings_cal_ch"
-                          },
-                          {
-                            "type": "Text",
-                            "text": "Date",
-                            "x": -42,
-                            "y": 30,
-                            "width": 96,
-                            "height": 30,
-                            "style": "value_S",
-                            "data": "channel.calibration.date"
-                          },
-                          {
-                            "type": "Text",
-                            "text": "Remark",
-                            "x": 54,
-                            "y": 30,
-                            "width": 194,
-                            "height": 30,
-                            "style": "value_S",
-                            "data": "channel.calibration.remark"
-                          }
-                        ],
-                        "x": 0,
+                        "type": "Rectangle",
+                        "x": 116,
                         "y": 0,
-                        "width": 262,
+                        "width": 90,
                         "height": 30,
-                        "style": "default"
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "Rectangle",
+                        "x": 0,
+                        "y": 30,
+                        "width": 290,
+                        "height": 30,
+                        "style": "default_inverse"
                       }
                     ],
-                    "x": 42,
+                    "x": 0,
                     "y": 0,
-                    "width": 117,
-                    "height": 30,
-                    "style": "default",
-                    "data": "channel.calibration.status",
-                    "action": ""
+                    "width": 290,
+                    "height": 65,
+                    "style": "default"
+                  },
+                  {
+                    "type": "Container",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "text": "",
+                        "x": 0,
+                        "y": 0,
+                        "width": 42,
+                        "height": 30,
+                        "style": "edit_value_S_left",
+                        "data": "channel.shortLabel"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "text": "Enable",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30,
+                            "style": "edit_value_active_S_left",
+                            "action": "sys_settings_cal_toggle_enable"
+                          },
+                          {
+                            "type": "Text",
+                            "text": "Disable",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30,
+                            "style": "edit_value_active_S_left",
+                            "action": "sys_settings_cal_toggle_enable"
+                          }
+                        ],
+                        "x": 42,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30,
+                        "style": "default",
+                        "data": "channel.calibration.state",
+                        "action": ""
+                      },
+                      {
+                        "type": "Rectangle",
+                        "x": 106,
+                        "y": 0,
+                        "width": 10,
+                        "height": 30,
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "Text",
+                        "text": "Recalibrate",
+                        "x": 116,
+                        "y": 0,
+                        "width": 90,
+                        "height": 30,
+                        "style": "edit_value_active_S_left",
+                        "action": "show_sys_settings_cal_ch"
+                      },
+                      {
+                        "type": "Text",
+                        "text": "Date",
+                        "x": 0,
+                        "y": 30,
+                        "width": 96,
+                        "height": 30,
+                        "style": "value_S",
+                        "data": "channel.calibration.date"
+                      },
+                      {
+                        "type": "Text",
+                        "text": "Remark",
+                        "x": 96,
+                        "y": 30,
+                        "width": 194,
+                        "height": 30,
+                        "style": "value_S",
+                        "data": "channel.calibration.remark"
+                      }
+                    ],
+                    "x": 0,
+                    "y": 0,
+                    "width": 290,
+                    "height": 65,
+                    "style": "default"
                   }
                 ],
                 "x": 0,
                 "y": 0,
-                "width": 286,
+                "width": 290,
                 "height": 65,
                 "style": "default",
-                "data": "",
+                "data": "channel.calibration.status",
                 "action": ""
               },
               "x": 16,
               "y": 73,
-              "width": 286,
+              "width": 290,
               "height": 130,
               "style": "default",
               "data": "channels"
