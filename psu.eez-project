@@ -50245,24 +50245,6 @@
         "landscape": {
           "widgets": [
             {
-              "type": "MultilineText",
-              "text": "Select any yellow colored text to open related menu, editing page or to trigger an action (e.g. on this page switching off selected channel output).",
-              "x": 8,
-              "y": 19,
-              "width": 232,
-              "height": 112,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "MultilineText",
-              "text": "For more detailed information please visit: www.envox.hr/ezz or github.com/eez-open",
-              "x": 8,
-              "y": 131,
-              "width": 232,
-              "height": 73,
-              "style": "edit_value_S_left"
-            },
-            {
               "type": "List",
               "listType": "vertical",
               "itemWidget": {
@@ -50348,6 +50330,24 @@
               "height": 204,
               "data": "channels",
               "style": "default"
+            },
+            {
+              "type": "MultilineText",
+              "text": "Select any yellow colored text to open related menu, editing page or to trigger an action (e.g. on this page switching off selected channel output).",
+              "x": 8,
+              "y": 19,
+              "width": 232,
+              "height": 112,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "MultilineText",
+              "text": "For more detailed information please visit: www.envox.hr/ezz or github.com/eez-open",
+              "x": 8,
+              "y": 131,
+              "width": 232,
+              "height": 73,
+              "style": "edit_value_S_left"
             },
             {
               "type": "Rectangle",
@@ -51543,86 +51543,6 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "text": "Channel protections",
-              "x": 6,
-              "y": 0,
-              "width": 228,
-              "height": 30,
-              "style": "value_S"
-            },
-            {
-              "type": "Text",
-              "text": "Clear / Disable",
-              "x": 12,
-              "y": 30,
-              "width": 180,
-              "height": 29,
-              "style": "edit_value_active_S_left",
-              "action": "show_ch_settings_prot_clear"
-            },
-            {
-              "type": "Text",
-              "text": "Current limit and OCP",
-              "x": 12,
-              "y": 59,
-              "width": 180,
-              "height": 29,
-              "style": "edit_value_active_S_left",
-              "action": "show_ch_settings_prot_ocp"
-            },
-            {
-              "type": "Text",
-              "text": "Voltage limit and OVP",
-              "x": 12,
-              "y": 88,
-              "width": 180,
-              "height": 29,
-              "style": "edit_value_active_S_left",
-              "action": "show_ch_settings_prot_ovp"
-            },
-            {
-              "type": "Text",
-              "text": "Power limit and OPP",
-              "x": 12,
-              "y": 117,
-              "width": 180,
-              "height": 29,
-              "style": "edit_value_active_S_left",
-              "action": "show_ch_settings_prot_opp"
-            },
-            {
-              "type": "Select",
-              "widgets": [
-                {
-                  "type": "Text",
-                  "text": "Temp. (OTP) not installed",
-                  "x": 0,
-                  "y": 0,
-                  "width": 228,
-                  "height": 29,
-                  "style": "edit_value_S_left",
-                  "action": ""
-                },
-                {
-                  "type": "Text",
-                  "text": "Temperature (OTP)",
-                  "x": 0,
-                  "y": 0,
-                  "width": 180,
-                  "height": 29,
-                  "style": "edit_value_active_S_left",
-                  "action": "show_ch_settings_prot_otp"
-                }
-              ],
-              "x": 12,
-              "y": 146,
-              "width": 228,
-              "height": 29,
-              "style": "default",
-              "data": "channel.protection.otp.installed"
-            },
-            {
               "type": "List",
               "listType": "vertical",
               "itemWidget": {
@@ -51708,6 +51628,86 @@
               "height": 204,
               "data": "channels",
               "style": "default"
+            },
+            {
+              "type": "Text",
+              "text": "Channel protections",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 30,
+              "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Clear / Disable",
+              "x": 12,
+              "y": 30,
+              "width": 180,
+              "height": 29,
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_clear"
+            },
+            {
+              "type": "Text",
+              "text": "Current limit and OCP",
+              "x": 12,
+              "y": 59,
+              "width": 180,
+              "height": 29,
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_ocp"
+            },
+            {
+              "type": "Text",
+              "text": "Voltage limit and OVP",
+              "x": 12,
+              "y": 88,
+              "width": 180,
+              "height": 29,
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_ovp"
+            },
+            {
+              "type": "Text",
+              "text": "Power limit and OPP",
+              "x": 12,
+              "y": 117,
+              "width": 180,
+              "height": 29,
+              "style": "edit_value_active_S_left",
+              "action": "show_ch_settings_prot_opp"
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "Temp. (OTP) not installed",
+                  "x": 0,
+                  "y": 0,
+                  "width": 228,
+                  "height": 29,
+                  "style": "edit_value_S_left",
+                  "action": ""
+                },
+                {
+                  "type": "Text",
+                  "text": "Temperature (OTP)",
+                  "x": 0,
+                  "y": 0,
+                  "width": 180,
+                  "height": 29,
+                  "style": "edit_value_active_S_left",
+                  "action": "show_ch_settings_prot_otp"
+                }
+              ],
+              "x": 12,
+              "y": 146,
+              "width": 228,
+              "height": 29,
+              "style": "default",
+              "data": "channel.protection.otp.installed"
             },
             {
               "type": "Text",
@@ -55171,71 +55171,6 @@
         "landscape": {
           "widgets": [
             {
-              "type": "Text",
-              "text": "System settings (1)",
-              "x": 6,
-              "y": 0,
-              "width": 228,
-              "height": 32,
-              "style": "value_S"
-            },
-            {
-              "type": "Text",
-              "text": "Sound",
-              "x": 12,
-              "y": 30,
-              "width": 102,
-              "height": 28,
-              "style": "default_disabled_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "Display backlight",
-              "x": 12,
-              "y": 58,
-              "width": 180,
-              "height": 28,
-              "style": "default_disabled_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "Diagnostics",
-              "x": 12,
-              "y": 86,
-              "width": 180,
-              "height": 28,
-              "style": "default_disabled_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "System password",
-              "x": 12,
-              "y": 114,
-              "width": 180,
-              "height": 28,
-              "style": "default_disabled_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "Shutdown when trip",
-              "x": 12,
-              "y": 142,
-              "width": 155,
-              "height": 29,
-              "style": "default_disabled_S_left",
-              "action": "show_ch_settings_prot_clear"
-            },
-            {
-              "type": "Text",
-              "text": "OFF",
-              "x": 167,
-              "y": 142,
-              "width": 73,
-              "height": 29,
-              "style": "default_disabled_S_left",
-              "action": "show_ch_settings_prot_clear"
-            },
-            {
               "type": "List",
               "listType": "vertical",
               "itemWidget": {
@@ -55321,6 +55256,71 @@
               "height": 204,
               "data": "channels",
               "style": "default"
+            },
+            {
+              "type": "Text",
+              "text": "System settings (1)",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Sound",
+              "x": 12,
+              "y": 30,
+              "width": 102,
+              "height": 28,
+              "style": "default_disabled_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Display backlight",
+              "x": 12,
+              "y": 58,
+              "width": 180,
+              "height": 28,
+              "style": "default_disabled_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Diagnostics",
+              "x": 12,
+              "y": 86,
+              "width": 180,
+              "height": 28,
+              "style": "default_disabled_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "System password",
+              "x": 12,
+              "y": 114,
+              "width": 180,
+              "height": 28,
+              "style": "default_disabled_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Shutdown when trip",
+              "x": 12,
+              "y": 142,
+              "width": 155,
+              "height": 29,
+              "style": "default_disabled_S_left",
+              "action": "show_ch_settings_prot_clear"
+            },
+            {
+              "type": "Text",
+              "text": "OFF",
+              "x": 167,
+              "y": 142,
+              "width": 73,
+              "height": 29,
+              "style": "default_disabled_S_left",
+              "action": "show_ch_settings_prot_clear"
             },
             {
               "type": "Text",
@@ -58315,6 +58315,93 @@
           "height": 240,
           "widgets": [
             {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "output_state",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "output_mode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 76,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "volt",
+                    "x": 0,
+                    "y": 30,
+                    "width": 76,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "curr",
+                    "x": 0,
+                    "y": 60,
+                    "width": 76,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 80,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 240,
+              "y": 0,
+              "width": 80,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
+            },
+            {
               "type": "Text",
               "text": "System information (1)",
               "x": 6,
@@ -58500,6 +58587,90 @@
               "data": "sys.temp.aux.status"
             },
             {
+              "type": "Text",
+              "x": 0,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button_disabled",
+              "text": "("
+            },
+            {
+              "type": "Text",
+              "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": ")",
+              "action": "show_sys_info2"
+            },
+            {
+              "type": "Rectangle",
+              "x": 96,
+              "y": 204,
+              "width": 176,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            }
+          ]
+        },
+        "description": "System information. "
+      },
+      {
+        "name": "sys_info2",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "TODO",
+              "x": 0,
+              "y": 40,
+              "width": 240,
+              "height": 83,
+              "style": "default"
+            },
+            {
+              "type": "Local.NotificationBar",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 40,
+              "style": "default"
+            }
+          ]
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
               "type": "List",
               "listType": "vertical",
               "itemWidget": {
@@ -58586,90 +58757,6 @@
               "data": "channels",
               "style": "default"
             },
-            {
-              "type": "Text",
-              "x": 0,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button_disabled",
-              "text": "("
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": ")",
-              "action": "show_sys_info2"
-            },
-            {
-              "type": "Rectangle",
-              "x": 96,
-              "y": 204,
-              "width": 176,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            }
-          ]
-        },
-        "description": "System information. "
-      },
-      {
-        "name": "sys_info2",
-        "portrait": {
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320,
-          "widgets": [
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 192,
-              "y": 284,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "text": "TODO",
-              "x": 0,
-              "y": 40,
-              "width": 240,
-              "height": 83,
-              "style": "default"
-            },
-            {
-              "type": "Local.NotificationBar",
-              "x": 0,
-              "y": 0,
-              "width": 240,
-              "height": 40,
-              "style": "default"
-            }
-          ]
-        },
-        "landscape": {
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240,
-          "widgets": [
             {
               "type": "Text",
               "text": "System information (2)",
@@ -58794,93 +58881,6 @@
               "height": 28,
               "style": "value_S",
               "data": "sys.info.scpiVer"
-            },
-            {
-              "type": "List",
-              "listType": "vertical",
-              "itemWidget": {
-                "type": "Container",
-                "widgets": [
-                  {
-                    "type": "Select",
-                    "x": 0,
-                    "y": 0,
-                    "data": "output_state",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "style": "edit_value_S_right",
-                        "text": "OFF",
-                        "x": 0,
-                        "y": 0,
-                        "width": 76,
-                        "height": 30
-                      },
-                      {
-                        "type": "Select",
-                        "data": "output_mode",
-                        "widgets": [
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 76,
-                            "height": 30
-                          },
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 76,
-                            "height": 30
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 76,
-                        "height": 30,
-                        "style": "default"
-                      }
-                    ],
-                    "width": 76,
-                    "height": 30,
-                    "style": "default"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "volt",
-                    "x": 0,
-                    "y": 30,
-                    "width": 76,
-                    "height": 30
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "curr",
-                    "x": 0,
-                    "y": 60,
-                    "width": 76,
-                    "height": 30
-                  }
-                ],
-                "x": 0,
-                "y": 0,
-                "width": 80,
-                "height": 112,
-                "style": "default"
-              },
-              "x": 240,
-              "y": 0,
-              "width": 80,
-              "height": 204,
-              "data": "channels",
-              "style": "default"
             },
             {
               "type": "Text",
