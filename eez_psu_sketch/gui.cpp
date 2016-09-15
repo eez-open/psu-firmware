@@ -368,7 +368,7 @@ void drawText(const char *text, int textLength, int x, int y, int w, int h, cons
         lcd::lcd.setBackColor(style->background_color);
         lcd::lcd.setColor(style->color);
     }
-    lcd::lcd.drawStr(text, textLength, x_offset, y_offset, x1, y1, x2, y2, font);
+    lcd::lcd.drawStr(text, textLength, x_offset, y_offset, x1, y1, x2, y2, font, !g_widgetRefresh);
 }
 
 void drawMultilineText(const char *text, int x, int y, int w, int h, const Style *style, bool inverse) {
@@ -399,18 +399,7 @@ void drawMultilineText(const char *text, int x, int y, int w, int h, const Style
 
     uint16_t background_color = inverse ? style->color : style->background_color;
     lcd::lcd.setColor(background_color);
-    if (g_widgetRefresh) {
-        lcd::lcd.fillRect(x1, y1, x2, y2);
-    } else {
-        if (style->padding_horizontal > 0) {
-            lcd::lcd.fillRect(x1, y1, x1 + style->padding_horizontal - 1, y2);
-            lcd::lcd.fillRect(x2 - style->padding_horizontal + 1, y1, x2, y2);
-        }
-        if (y1 < y) {
-            lcd::lcd.fillRect(x1, y1, x2, y1 + style->padding_vertical - 1);
-            lcd::lcd.fillRect(x1, y2 - style->padding_vertical + 1, x2, y2);
-        }
-    }
+    lcd::lcd.fillRect(x1, y1, x2, y2);
 
     x1 += style->padding_horizontal;
     x2 -= style->padding_horizontal;
@@ -455,7 +444,7 @@ void drawMultilineText(const char *text, int x, int y, int w, int h, const Style
             lcd::lcd.setColor(style->color);
         }
 
-        lcd::lcd.drawStr(text + j, i - j, x, y, x1, y1, x2, y2, font);
+        lcd::lcd.drawStr(text + j, i - j, x, y, x1, y1, x2, y2, font, false);
 
         x += width;
 
@@ -1087,10 +1076,14 @@ void refreshPage() {
     DECL_WIDGET_SPECIFIC(PageWidget, pageSpecific, page);
     DECL_WIDGET_STYLE(style, page);
     lcd::lcd.setColor(style->background_color);
-	for (int i = 0; i < pageSpecific->transparentRectangles.count; ++i) {
-		OBJ_OFFSET rectOffset = getListItemOffset(pageSpecific->transparentRectangles, i, sizeof(Rect));
-		DECL_STRUCT_WITH_OFFSET(Rect, rect, rectOffset);
-		lcd::lcd.fillRect(rect->x, rect->y, rect->x + rect->w - 1, rect->y + rect->h - 1);
+	if (g_activePageId == PAGE_ID_WELCOME) {
+		lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
+	} else {
+		for (int i = 0; i < pageSpecific->transparentRectangles.count; ++i) {
+			OBJ_OFFSET rectOffset = getListItemOffset(pageSpecific->transparentRectangles, i, sizeof(Rect));
+			DECL_STRUCT_WITH_OFFSET(Rect, rect, rectOffset);
+			lcd::lcd.fillRect(rect->x, rect->y, rect->x + rect->w - 1, rect->y + rect->h - 1);
+		}
 	}
 
     data::currentSnapshot.takeSnapshot();

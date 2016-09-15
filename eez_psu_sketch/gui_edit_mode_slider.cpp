@@ -70,8 +70,6 @@ void onTouchMove() {
         scale = 1 << (1 + (x - scale_width) / bar_width);
     }
 
-	DebugTraceF("%d", scale);
-
     if (scale != last_scale) {
         start_value = edit_mode::getEditValue().getFloat();
         start_y = touchY();
