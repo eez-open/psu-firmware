@@ -28,7 +28,10 @@ namespace widget_button_group {
 void drawButtons(const Widget* widget, int x, int y, const Style *style, int selectedButton, const data::Value *labels, int count) {
     if (widget->w > widget->h) {
         // horizontal orientation
-        int w = widget->w / count;
+		lcd::lcd.setColor(style->background_color);
+		lcd::lcd.fillRect(x, y, x + widget->w - 1, y + widget->h - 1);
+
+		int w = widget->w / count;
         x += (widget->w - w * count) / 2;
         int h = widget->h;
         for (int i = 0; i < count; ++i) {
@@ -42,18 +45,44 @@ void drawButtons(const Widget* widget, int x, int y, const Style *style, int sel
         int w = widget->w;
         int h = widget->h / count;
 
-		y += (widget->h - h * count) / 2;
+		int bottom = y + widget->h - 1;
+		int topPadding = (widget->h - h * count) / 2;
+		
+		if (topPadding > 0) {
+			lcd::lcd.setColor(style->background_color);
+			lcd::lcd.fillRect(x, y, x + widget->w - 1, y + topPadding - 1);
+
+			y += topPadding;
+		}
 
 		int labelHeight = min(w, h);
 		int yOffset = (h - labelHeight) / 2;
 
 		for (int i = 0; i < count; ++i) {
-            char text[32];
+			if (yOffset > 0) {
+				lcd::lcd.setColor(style->background_color);
+				lcd::lcd.fillRect(x, y, x + widget->w - 1, y + yOffset - 1);
+			}
+
+			char text[32];
             labels[i].toText(text, 32);
             drawText(text, -1, x, y + yOffset, w, labelHeight , style, i == selectedButton);
-            y += h;
-        }
-    }
+
+			int b = y + yOffset + labelHeight;
+			
+			y += h;
+        
+			if (b < y) {
+				lcd::lcd.setColor(style->background_color);
+				lcd::lcd.fillRect(x, b, x + widget->w - 1, y - 1);
+			}
+		}
+
+		if (y <= bottom) {
+			lcd::lcd.setColor(style->background_color);
+			lcd::lcd.fillRect(x, y, x + widget->w - 1, bottom);
+		}
+	}
 }
 
 bool draw(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
