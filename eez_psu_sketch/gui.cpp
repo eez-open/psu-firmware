@@ -100,6 +100,28 @@ static bool g_touchActionExecuted;
 
 Channel *g_channel;
 
+Page *createPageFromId(int pageId) {
+	switch (pageId) {
+	case PAGE_ID_SELF_TEST_RESULT: return new SelfTestResultPage();
+	case PAGE_ID_MAIN: return new MainPage();
+	case PAGE_ID_EVENT_QUEUE: return new EventQueuePage();
+	case PAGE_ID_CH_SETTINGS_PROT: return new ChSettingsProtectionPage();
+	case PAGE_ID_CH_SETTINGS_PROT_OVP: return new ChSettingsOvpProtectionPage();
+	case PAGE_ID_CH_SETTINGS_PROT_OCP: return new ChSettingsOcpProtectionPage();
+	case PAGE_ID_CH_SETTINGS_PROT_OPP: return new ChSettingsOppProtectionPage();
+	case PAGE_ID_CH_SETTINGS_PROT_OTP: return new ChSettingsOtpProtectionPage();
+	case PAGE_ID_CH_SETTINGS_ADV: return new ChSettingsAdvPage();
+	case PAGE_ID_CH_SETTINGS_ADV_LRIPPLE: return new ChSettingsAdvLRipplePage();
+	case PAGE_ID_CH_SETTINGS_ADV_RSENSE: return new ChSettingsAdvRSensePage();
+	case PAGE_ID_CH_SETTINGS_ADV_RPROG: return new ChSettingsAdvRProgPage();
+	case PAGE_ID_CH_SETTINGS_INFO: return new ChSettingsInfoPage();
+	case PAGE_ID_SYS_INFO:
+	case PAGE_ID_SYS_INFO2: return new SysInfoPage();
+	}
+
+	return 0;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 typedef bool(*EnumWidgetsCallback)(const WidgetCursor &widgetCursor, bool refresh);
@@ -1108,22 +1130,7 @@ void doShowPage(int index) {
 
 	g_activePageId = index;
 
-	switch (g_activePageId) {
-	case PAGE_ID_SELF_TEST_RESULT: g_activePage = new SelfTestResultPage(); break;
-	case PAGE_ID_MAIN: g_activePage = new MainPage(); break;
-	case PAGE_ID_EVENT_QUEUE: g_activePage = new EventQueuePage(); break;
-	case PAGE_ID_CH_SETTINGS_PROT: g_activePage = new ChSettingsProtectionPage(); break;
-	case PAGE_ID_CH_SETTINGS_PROT_OVP: g_activePage = new ChSettingsOvpProtectionPage(); break;
-	case PAGE_ID_CH_SETTINGS_PROT_OCP: g_activePage = new ChSettingsOcpProtectionPage(); break;
-	case PAGE_ID_CH_SETTINGS_PROT_OPP: g_activePage = new ChSettingsOppProtectionPage(); break;
-	case PAGE_ID_CH_SETTINGS_PROT_OTP: g_activePage = new ChSettingsOtpProtectionPage(); break;
-	case PAGE_ID_CH_SETTINGS_ADV: g_activePage = new ChSettingsAdvPage(); break;
-	case PAGE_ID_CH_SETTINGS_ADV_LRIPPLE: g_activePage = new ChSettingsAdvLRipplePage(); break;
-	case PAGE_ID_CH_SETTINGS_ADV_RSENSE: g_activePage = new ChSettingsAdvRSensePage(); break;
-	case PAGE_ID_CH_SETTINGS_ADV_RPROG: g_activePage = new ChSettingsAdvRProgPage(); break;
-	case PAGE_ID_CH_SETTINGS_INFO: g_activePage = new ChSettingsInfoPage(); break;
-	case PAGE_ID_SYS_INFO: g_activePage = new SysInfoPage(); break;
-	}
+	g_activePage = createPageFromId(g_activePageId);
 
 	if (g_activePage) {
 		g_activePage->pageWillAppear();

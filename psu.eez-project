@@ -1,8 +1,16 @@
 {
   "data": [
     {
-      "name": "channels",
-      "description": "list of channels",
+      "name": "channels_installed",
+      "description": "list of installed channels",
+      "defaultValue": [
+        {},
+        {}
+      ]
+    },
+    {
+      "name": "channels_all",
+      "description": "list of all channels (including not installed)",
       "defaultValue": [
         {},
         {}
@@ -410,6 +418,15 @@
       "defaultValue": "45.5oC"
     },
     {
+      "name": "sys.temp.aux.status",
+      "description": "0: invalid (error)\n1: valid\n2: not installed",
+      "defaultValue": "2"
+    },
+    {
+      "name": "sys.temp.aux",
+      "defaultValue": "45.5oC"
+    },
+    {
       "name": "sys.info.firmwareVer",
       "defaultValue": "M2"
     },
@@ -420,6 +437,25 @@
     {
       "name": "sys.info.scpiVer",
       "defaultValue": "1999.0"
+    },
+    {
+      "name": "sys.info.cpu",
+      "defaultValue": "Arduino Due"
+    },
+    {
+      "name": "channel.boardInfo.label",
+      "description": "",
+      "defaultValue": "CH1 board:"
+    },
+    {
+      "name": "channel.boardInfo.status",
+      "description": "0: not installed\n1: installed",
+      "defaultValue": "1"
+    },
+    {
+      "name": "channel.boardInfo.revision",
+      "description": "",
+      "defaultValue": "R5B9"
     }
   ],
   "actions": [
@@ -606,6 +642,11 @@
       "name": "show_sys_info",
       "implementationType": "native",
       "implementation": "showPage(PAGE_ID_SYS_INFO);"
+    },
+    {
+      "name": "show_sys_info2",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_SYS_INFO2);"
     },
     {
       "name": "show_main_help_page",
@@ -44504,6 +44545,16 @@
         "inheritFrom": "default"
       },
       {
+        "name": "tab_page_M",
+        "_font": "medium",
+        "inheritFrom": "tab_page"
+      },
+      {
+        "name": "tab_page_selected_M",
+        "_font": "medium",
+        "inheritFrom": "tab_page_selected"
+      },
+      {
         "name": "bottom_button",
         "_font": "icons",
         "_color": "#2F2F2F",
@@ -45268,7 +45319,7 @@
             {
               "type": "List",
               "listType": "horizontal",
-              "data": "channels",
+              "data": "channels_installed",
               "x": 0,
               "y": 32,
               "itemWidget": {
@@ -45844,12 +45895,12 @@
               "y": 0,
               "width": 80,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
               "type": "Text",
-              "action": "edit_mode_keypad",
+              "action": "",
               "x": 0,
               "y": 204,
               "style": "tab_page_selected",
@@ -45957,7 +46008,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels",
+                      "data": "channels_installed",
                       "x": 140,
                       "y": 72,
                       "itemWidget": {
@@ -46072,7 +46123,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels",
+                      "data": "channels_installed",
                       "x": 140,
                       "y": 60,
                       "itemWidget": {
@@ -46406,7 +46457,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -46421,7 +46472,7 @@
             },
             {
               "type": "Text",
-              "action": "edit_mode_step",
+              "action": "",
               "x": 48,
               "y": 204,
               "style": "tab_page_selected",
@@ -46622,7 +46673,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -46700,7 +46751,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels",
+                      "data": "channels_installed",
                       "x": 140,
                       "y": 72,
                       "itemWidget": {
@@ -46815,7 +46866,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels",
+                      "data": "channels_installed",
                       "x": 140,
                       "y": 60,
                       "itemWidget": {
@@ -47099,7 +47150,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels",
+                      "data": "channels_installed",
                       "x": 202,
                       "y": -32,
                       "itemWidget": {
@@ -47217,7 +47268,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels",
+                      "data": "channels_installed",
                       "x": 202,
                       "y": -32,
                       "itemWidget": {
@@ -47396,7 +47447,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels",
+                      "data": "channels_installed",
                       "x": 140,
                       "y": 72,
                       "itemWidget": {
@@ -47511,7 +47562,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels",
+                      "data": "channels_installed",
                       "x": 140,
                       "y": 60,
                       "itemWidget": {
@@ -47845,7 +47896,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -47870,7 +47921,7 @@
             },
             {
               "type": "Text",
-              "action": "edit_mode_slider",
+              "action": "",
               "x": 96,
               "y": 204,
               "style": "tab_page_selected",
@@ -48106,7 +48157,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -48187,7 +48238,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels",
+                      "data": "channels_installed",
                       "x": 140,
                       "y": 72,
                       "itemWidget": {
@@ -48302,7 +48353,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels",
+                      "data": "channels_installed",
                       "x": 140,
                       "y": 60,
                       "itemWidget": {
@@ -48589,7 +48640,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels",
+                      "data": "channels_installed",
                       "x": 202,
                       "y": -32,
                       "itemWidget": {
@@ -48727,7 +48778,7 @@
                     {
                       "type": "List",
                       "listType": "vertical",
-                      "data": "channels",
+                      "data": "channels_installed",
                       "x": 202,
                       "y": -32,
                       "itemWidget": {
@@ -49055,7 +49106,7 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels",
+              "data": "channels_installed",
               "x": 0,
               "y": 28,
               "itemWidget": {
@@ -49651,7 +49702,7 @@
               "y": 28,
               "width": 320,
               "height": 176,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -50018,7 +50069,7 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels",
+              "data": "channels_installed",
               "x": 0,
               "y": 16,
               "itemWidget": {
@@ -50194,22 +50245,22 @@
         "landscape": {
           "widgets": [
             {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
+              "type": "MultilineText",
+              "text": "Select any yellow colored text to open related menu, editing page or to trigger an action (e.g. on this page switching off selected channel output).",
+              "x": 8,
+              "y": 19,
+              "width": 232,
+              "height": 112,
+              "style": "edit_value_S_left"
             },
             {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 272,
-              "height": 36,
-              "style": "bottom_button_background"
+              "type": "MultilineText",
+              "text": "For more detailed information please visit: www.envox.hr/ezz or github.com/eez-open",
+              "x": 8,
+              "y": 131,
+              "width": 232,
+              "height": 73,
+              "style": "edit_value_S_left"
             },
             {
               "type": "List",
@@ -50229,7 +50280,7 @@
                         "text": "OFF",
                         "x": 0,
                         "y": 0,
-                        "width": 76,
+                        "width": 64,
                         "height": 30
                       },
                       {
@@ -50238,11 +50289,11 @@
                         "widgets": [
                           {
                             "type": "DisplayData",
-                            "style": "edit_value_active_S_right",
+                            "style": "edit_value_S_right",
                             "data": "mon_value",
                             "x": 0,
                             "y": 0,
-                            "width": 76,
+                            "width": 64,
                             "height": 30
                           },
                           {
@@ -50251,18 +50302,18 @@
                             "data": "mon_value",
                             "x": 0,
                             "y": 0,
-                            "width": 76,
+                            "width": 64,
                             "height": 30
                           }
                         ],
                         "x": 0,
                         "y": 0,
-                        "width": 76,
+                        "width": 64,
                         "height": 30,
                         "style": "default"
                       }
                     ],
-                    "width": 76,
+                    "width": 64,
                     "height": 30,
                     "style": "default"
                   },
@@ -50272,7 +50323,7 @@
                     "data": "volt",
                     "x": 0,
                     "y": 30,
-                    "width": 76,
+                    "width": 64,
                     "height": 30
                   },
                   {
@@ -50281,40 +50332,40 @@
                     "data": "curr",
                     "x": 0,
                     "y": 60,
-                    "width": 76,
+                    "width": 64,
                     "height": 30
                   }
                 ],
                 "x": 0,
                 "y": 0,
-                "width": 80,
+                "width": 64,
                 "height": 112,
                 "style": "default"
               },
-              "x": 240,
+              "x": 252,
               "y": 0,
-              "width": 80,
+              "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
-              "type": "MultilineText",
-              "text": "Select any yellow colored text to open related menu, editing page or to trigger an action (e.g. on this page switching off selected channel output).",
-              "x": 8,
-              "y": 19,
-              "width": 232,
-              "height": 112,
-              "style": "edit_value_S_left"
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 272,
+              "height": 36,
+              "style": "bottom_button_background"
             },
             {
-              "type": "MultilineText",
-              "text": "For more detailed information please visit: www.envox.hr/ezz or github.com/eez-open",
-              "x": 8,
-              "y": 131,
-              "width": 232,
-              "height": 73,
-              "style": "edit_value_S_left"
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
             }
           ],
           "x": 0,
@@ -50831,7 +50882,7 @@
             {
               "type": "List",
               "listType": "horizontal",
-              "data": "channels",
+              "data": "channels_installed",
               "x": 0,
               "y": 32,
               "itemWidget": {
@@ -51409,7 +51460,7 @@
               "y": 0,
               "width": 80,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -51655,7 +51706,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -51876,7 +51927,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -52206,7 +52257,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -52508,7 +52559,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -52829,7 +52880,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -53131,7 +53182,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -53392,7 +53443,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -53734,7 +53785,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -53984,7 +54035,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -54234,7 +54285,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -54462,7 +54513,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -54864,7 +54915,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -54936,7 +54987,7 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels",
+              "data": "channels_installed",
               "x": 0,
               "y": 16,
               "itemWidget": {
@@ -55260,7 +55311,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -55315,7 +55366,7 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels",
+              "data": "channels_installed",
               "x": 0,
               "y": 16,
               "itemWidget": {
@@ -55630,7 +55681,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -55772,7 +55823,7 @@
               "width": 240,
               "height": 64,
               "style": "default",
-              "data": "channels"
+              "data": "channels_installed"
             },
             {
               "type": "Rectangle",
@@ -55953,7 +56004,7 @@
               "width": 286,
               "height": 130,
               "style": "default",
-              "data": "channels"
+              "data": "channels_installed"
             },
             {
               "type": "Rectangle",
@@ -56007,7 +56058,7 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels",
+              "data": "channels_installed",
               "x": 0,
               "y": 16,
               "itemWidget": {
@@ -56380,7 +56431,7 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels",
+              "data": "channels_installed",
               "x": 0,
               "y": 16,
               "itemWidget": {
@@ -56761,7 +56812,7 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels",
+              "data": "channels_installed",
               "x": 0,
               "y": 16,
               "itemWidget": {
@@ -57185,7 +57236,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -57404,7 +57455,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -57476,7 +57527,7 @@
             {
               "type": "List",
               "listType": "vertical",
-              "data": "channels",
+              "data": "channels_installed",
               "x": 0,
               "y": 16,
               "itemWidget": {
@@ -57744,7 +57795,7 @@
               "y": 0,
               "width": 64,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -57994,7 +58045,7 @@
               "y": 0,
               "width": 80,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
@@ -58177,7 +58228,7 @@
           "widgets": [
             {
               "type": "Text",
-              "text": "System information",
+              "text": "System information (1)",
               "x": 6,
               "y": 0,
               "width": 228,
@@ -58312,9 +58363,328 @@
             },
             {
               "type": "Text",
-              "text": "SCPI Version:",
+              "text": "Temp. AUX:",
               "x": 12,
               "y": 168,
+              "width": 108,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "Invalid",
+                  "x": 0,
+                  "y": 0,
+                  "width": 96,
+                  "height": 28,
+                  "style": "event_error",
+                  "data": ""
+                },
+                {
+                  "type": "DisplayData",
+                  "text": "45.5",
+                  "x": 0,
+                  "y": 0,
+                  "width": 96,
+                  "height": 28,
+                  "style": "value_S",
+                  "data": "sys.temp.aux"
+                },
+                {
+                  "type": "Text",
+                  "text": "Not installed",
+                  "x": 0,
+                  "y": 0,
+                  "width": 96,
+                  "height": 28,
+                  "style": "default_disabled_S_left",
+                  "data": ""
+                }
+              ],
+              "x": 130,
+              "y": 168,
+              "width": 110,
+              "height": 28,
+              "style": "default",
+              "data": "sys.temp.aux.status"
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "output_state",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "output_mode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 76,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 76,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 76,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "volt",
+                    "x": 0,
+                    "y": 30,
+                    "width": 76,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "curr",
+                    "x": 0,
+                    "y": 60,
+                    "width": 76,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 80,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 240,
+              "y": 0,
+              "width": 80,
+              "height": 204,
+              "data": "channels_installed",
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 0,
+              "y": 204,
+              "style": "tab_page_selected_M",
+              "text": "1",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_sys_info2",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page_M",
+              "text": "2",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Rectangle",
+              "x": 96,
+              "y": 204,
+              "width": 176,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            }
+          ]
+        },
+        "description": "System information. "
+      },
+      {
+        "name": "sys_info2",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "TODO",
+              "x": 0,
+              "y": 40,
+              "width": 240,
+              "height": 83,
+              "style": "default"
+            },
+            {
+              "type": "Local.NotificationBar",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 40,
+              "style": "default"
+            }
+          ]
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "text": "System information (2)",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "CPU:",
+              "x": 12,
+              "y": 30,
+              "width": 108,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "DisplayData",
+              "text": "323:33:10",
+              "x": 130,
+              "y": 30,
+              "width": 110,
+              "height": 28,
+              "style": "value_S",
+              "data": "sys.info.cpu"
+            },
+            {
+              "type": "Container",
+              "widgets": [],
+              "x": 12,
+              "y": 58,
+              "width": 228,
+              "height": 28,
+              "style": "default"
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Text",
+                    "text": "Firmware:",
+                    "x": 0,
+                    "y": 0,
+                    "width": 108,
+                    "height": 28,
+                    "style": "edit_value_S_left",
+                    "data": "channel.boardInfo.label"
+                  },
+                  {
+                    "type": "Select",
+                    "data": "channel.boardInfo.status",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "value_S",
+                        "data": "",
+                        "x": 0,
+                        "y": 0,
+                        "width": 110,
+                        "height": 28,
+                        "text": "Not installed"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "style": "value_S",
+                        "data": "channel.boardInfo.revision",
+                        "x": 0,
+                        "y": 0,
+                        "width": 110,
+                        "height": 28
+                      }
+                    ],
+                    "x": 118,
+                    "y": 0,
+                    "width": 110,
+                    "height": 28,
+                    "style": "default"
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 228,
+                "height": 28,
+                "style": "default"
+              },
+              "x": 12,
+              "y": 58,
+              "width": 228,
+              "height": 56,
+              "style": "default",
+              "data": "channels_installed"
+            },
+            {
+              "type": "Text",
+              "text": "SCPI Version:",
+              "x": 12,
+              "y": 114,
               "width": 108,
               "height": 28,
               "style": "edit_value_S_left"
@@ -58323,7 +58693,7 @@
               "type": "DisplayData",
               "text": "45.5 oC",
               "x": 130,
-              "y": 168,
+              "y": 114,
               "width": 110,
               "height": 28,
               "style": "value_S",
@@ -58413,14 +58783,34 @@
               "y": 0,
               "width": 80,
               "height": 204,
-              "data": "channels",
+              "data": "channels_installed",
               "style": "default"
             },
             {
-              "type": "Rectangle",
+              "type": "Text",
+              "action": "show_sys_info",
               "x": 0,
               "y": 204,
-              "width": 272,
+              "style": "tab_page_M",
+              "text": "1",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 48,
+              "y": 204,
+              "style": "tab_page_selected_M",
+              "text": "2",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Rectangle",
+              "x": 96,
+              "y": 204,
+              "width": 176,
               "height": 36,
               "style": "bottom_button_background"
             },

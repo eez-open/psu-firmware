@@ -42,6 +42,7 @@ enum ValueType {
     VALUE_TYPE_STR,
     VALUE_TYPE_CHANNEL_LABEL,
 	VALUE_TYPE_CHANNEL_SHORT_LABEL,
+	VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL,
 	VALUE_TYPE_LESS_THEN_MIN,
 	VALUE_TYPE_GREATER_THEN_MAX,
 	VALUE_TYPE_EVENT,
@@ -92,7 +93,7 @@ struct Value {
             return strcmp(str_, other.str_) == 0;
         } else if (type_ == VALUE_TYPE_CONST_STR) {
             return const_str_ == other.const_str_;
-        } else if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL) {
+        } else if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL) {
             return int_ == other.int_;
         } else if (type_ == VALUE_TYPE_EVENT) {
             return event_->dateTime == other.event_->dateTime && event_->eventId == other.event_->eventId;

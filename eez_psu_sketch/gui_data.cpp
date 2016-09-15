@@ -64,6 +64,11 @@ void Value::toText(char *text, int count) const {
 		text[count - 1] = 0;
 		break;
 
+	case VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL:
+		snprintf_P(text, count-1, PSTR("CH%d board:"), int_);
+		text[count - 1] = 0;
+		break;
+
 	case VALUE_TYPE_LESS_THEN_MIN:
 		snprintf_P(text, count-1, PSTR("Value is less then %.2f"), float_);
 		text[count - 1] = 0;
@@ -141,8 +146,10 @@ void Value::toText(char *text, int count) const {
 ////////////////////////////////////////////////////////////////////////////////
 
 int count(uint8_t id) {
-    if (id == DATA_ID_CHANNELS) {
+    if (id == DATA_ID_CHANNELS_INSTALLED) {
         return CH_NUM;
+    } else if (id == DATA_ID_CHANNELS_ALL) {
+        return CH_MAX;
     } else if (id == DATA_ID_EVENT_QUEUE_EVENTS) {
         return event_queue::EVENTS_PER_PAGE;
     } 
@@ -150,7 +157,7 @@ int count(uint8_t id) {
 }
 
 void select(Cursor &cursor, uint8_t id, int index) {
-    if (id == DATA_ID_CHANNELS) {
+    if (id == DATA_ID_CHANNELS_INSTALLED || id == DATA_ID_CHANNELS_ALL) {
         cursor.iChannel = index;
     } else if (id == DATA_ID_EVENT_QUEUE_EVENTS) {
 		cursor.iChannel = index;

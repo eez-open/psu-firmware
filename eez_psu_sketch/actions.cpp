@@ -181,6 +181,10 @@ void action_show_sys_info() {
     showPage(PAGE_ID_SYS_INFO);
 }
 
+void action_show_sys_info2() {
+    showPage(PAGE_ID_SYS_INFO2);
+}
+
 void action_show_main_help_page() {
     showPage(PAGE_ID_MAIN_HELP);
 }
@@ -385,6 +389,7 @@ ACTION actions[] = {
     action_show_sys_settings_cal_ch,
     action_show_sys_settings_screen_calibration,
     action_show_sys_info,
+    action_show_sys_info2,
     action_show_main_help_page,
     action_show_edit_mode_step_help,
     action_show_edit_mode_slider_help,

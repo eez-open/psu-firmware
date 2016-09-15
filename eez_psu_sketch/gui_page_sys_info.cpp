@@ -45,14 +45,6 @@ void SysInfoPage::takeSnapshot(data::Snapshot *snapshot) {
 }
 
 data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	if (id == DATA_ID_SYS_TEMP_MAIN_STATUS) {
-		return data::Value(snapshot->flags.mainTemperatureStatus);
-	}
-
-	if (id == DATA_ID_SYS_TEMP_MAIN && snapshot->flags.mainTemperatureStatus == 1) {
-		return data::Value(snapshot->mainTemperature, data::VALUE_TYPE_FLOAT_CELSIUS);
-	}
-
 	if (id == DATA_ID_SYS_ON_TIME_TOTAL) {
 		return data::Value(snapshot->onTimeTotal, data::VALUE_TYPE_ON_TIME_COUNTER);
 	}
@@ -67,6 +59,40 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::S
 
 	if (id == DATA_ID_SYS_INFO_SERIAL_NO) {
 		return data::Value(PSU_SERIAL);
+	}
+
+	if (id == DATA_ID_SYS_TEMP_MAIN_STATUS) {
+		return data::Value(snapshot->flags.mainTemperatureStatus);
+	}
+
+	if (id == DATA_ID_SYS_TEMP_MAIN && snapshot->flags.mainTemperatureStatus == 1) {
+		return data::Value(snapshot->mainTemperature, data::VALUE_TYPE_FLOAT_CELSIUS);
+	}
+
+	if (id == DATA_ID_SYS_TEMP_AUX_STATUS) {
+		return data::Value(2);
+	}
+
+	if (id == DATA_ID_SYS_INFO_CPU) {
+		return data::Value(getCpuType());
+	}
+
+	if (cursor.iChannel >= 0) {
+		int iChannel = cursor.iChannel >= 0 ? cursor.iChannel : g_channel->index - 1;
+
+		if (id == DATA_ID_CHANNEL_BOARD_INFO_LABEL) {
+			return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL);
+		}
+
+		if (id == DATA_ID_CHANNEL_BOARD_INFO_STATUS) {
+			return data::Value(iChannel < CH_NUM ? 1 : 0);
+		}
+
+		if (id == DATA_ID_CHANNEL_BOARD_INFO_REVISION) {
+			if (iChannel < CH_NUM) {
+				return data::Value(Channel::get(iChannel).getBoardRevisionName());
+			}
+		}
 	}
 
 	if (id == DATA_ID_SYS_INFO_SCPI_VER) {
