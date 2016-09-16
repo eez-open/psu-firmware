@@ -183,12 +183,15 @@ void tick(unsigned long tick_usec) {
 	if (tick_usec - fan_speed_last_adjusted_tick >= FAN_SPEED_ADJUSTMENT_INTERVAL * 1000L) {
 		float max_channel_temperature = temperature::getMaxChannelTemperature();
 		if (max_channel_temperature >= FAN_MIN_TEMP) {
+			DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
 			float fanSpeed = util::remap(max_channel_temperature, FAN_MIN_TEMP, FAN_MIN_PWM, FAN_MAX_TEMP, FAN_MAX_PWM);
 			fan_speed_pwm = (int)util::clamp(fanSpeed, FAN_MIN_PWM, FAN_MAX_PWM);
+			DebugTraceF("fanSpeed PWM: %d", fan_speed_pwm);
 			fan_speed_last_measured_tick = tick_usec;
 			analogWrite(FAN_PWM, fan_speed_pwm);
 		} else if (fan_speed_pwm != 0) {
 			fan_speed_pwm = 0;
+			DebugTrace("FAN OFF");
 			analogWrite(FAN_PWM, fan_speed_pwm);
 		}
 
