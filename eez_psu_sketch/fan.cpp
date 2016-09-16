@@ -28,12 +28,31 @@ namespace eez {
 namespace psu {
 namespace fan {
 
+enum RpmMeasureState {
+	RPM_MEASURE_STATE_INIT,
+	RPM_MEASURE_STATE_T1,
+	RPM_MEASURE_STATE_T2,
+	RPM_MEASURE_STATE_FINISHED,
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
 TestResult test_result = psu::TEST_FAILED;
 
-static int fan_speed_pwm = 0;
-int rpm = 0;
+static unsigned long g_testStartTime;
 
-static unsigned long test_start_time;
+static int g_fanSpeedPWM = 0;
+static float g_fanSpeed = FAN_MIN_PWM;
+
+static unsigned long g_fanSpeedLastMeasuredTick = 0;
+static unsigned long g_fanSpeedLastAdjustedTick = 0;
+
+int g_rpm = 0;
+
+static int g_rpmMeasureInterruptNumber;
+static RpmMeasureState g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
+static unsigned long g_rpmMeasureT1;
+static unsigned long g_rpmMeasureT2;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -56,72 +75,56 @@ int pwm_to_rpm(int pwm) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-enum RpmMeasureState {
-	RPM_MEASURE_STATE_INIT,
-	RPM_MEASURE_STATE_T1,
-	RPM_MEASURE_STATE_T2,
-	RPM_MEASURE_STATE_FINISHED,
-};
-
-static int rpm_measure_interrupt_number;
-static RpmMeasureState rpm_measure_state = RPM_MEASURE_STATE_FINISHED;
-static unsigned long rpm_measure_t1;
-static unsigned long rpm_measure_t2;
-
 void finish_rpm_measure();
 void rpm_measure_interrupt_handler();
 
 void start_rpm_measure() {
-	rpm_measure_state = RPM_MEASURE_STATE_INIT;
-	rpm_measure_t1 = 0;
-	rpm_measure_t2 = 0;
+	g_rpmMeasureState = RPM_MEASURE_STATE_INIT;
+	g_rpmMeasureT1 = 0;
+	g_rpmMeasureT2 = 0;
 
 	analogWrite(FAN_PWM, FAN_MAX_PWM);
 	delay(2);
-	attachInterrupt(rpm_measure_interrupt_number, rpm_measure_interrupt_handler, CHANGE);
+	attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
 
 #ifdef EEZ_PSU_SIMULATOR
-	rpm_measure_t1 = 0;
-	rpm_measure_t2 = rpm_to_dt(pwm_to_rpm(fan_speed_pwm));
-	rpm_measure_state = RPM_MEASURE_STATE_FINISHED;
+	g_rpmMeasureT1 = 0;
+	g_rpmMeasureT2 = rpm_to_dt(pwm_to_rpm(g_fanSpeedPWM));
+	g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
 	finish_rpm_measure();
 #endif
 }
 
 void rpm_measure_interrupt_handler() {
 	int x = digitalRead(FAN_SENSE);
-	if (rpm_measure_state == RPM_MEASURE_STATE_INIT && x) {
-		rpm_measure_state = RPM_MEASURE_STATE_T1;
-	} else if (rpm_measure_state == RPM_MEASURE_STATE_T1 && !x) {
-		rpm_measure_t1 = micros();
-		rpm_measure_state = RPM_MEASURE_STATE_T2;
-	} else if (rpm_measure_state == RPM_MEASURE_STATE_T2 && x) {
-		rpm_measure_t2 = micros();
-		rpm_measure_state = RPM_MEASURE_STATE_FINISHED;
+	if (g_rpmMeasureState == RPM_MEASURE_STATE_INIT && x) {
+		g_rpmMeasureState = RPM_MEASURE_STATE_T1;
+	} else if (g_rpmMeasureState == RPM_MEASURE_STATE_T1 && !x) {
+		g_rpmMeasureT1 = micros();
+		g_rpmMeasureState = RPM_MEASURE_STATE_T2;
+	} else if (g_rpmMeasureState == RPM_MEASURE_STATE_T2 && x) {
+		g_rpmMeasureT2 = micros();
+		g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
 		finish_rpm_measure();
 	}
 }
 
 void finish_rpm_measure() {
-	detachInterrupt(rpm_measure_interrupt_number);
-	analogWrite(FAN_PWM, fan_speed_pwm);
+	detachInterrupt(g_rpmMeasureInterruptNumber);
+	analogWrite(FAN_PWM, g_fanSpeedPWM);
 
-	if (rpm_measure_state == RPM_MEASURE_STATE_FINISHED) {
-		rpm = dt_to_rpm(rpm_measure_t2 - rpm_measure_t1);
+	if (g_rpmMeasureState == RPM_MEASURE_STATE_FINISHED) {
+		g_rpm = dt_to_rpm(g_rpmMeasureT2 - g_rpmMeasureT1);
 	} else {
-		rpm_measure_state = RPM_MEASURE_STATE_FINISHED;
-		rpm = 0;
+		g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
+		g_rpm = 0;
 	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static unsigned long fan_speed_last_measured_tick = 0;
-static unsigned long fan_speed_last_adjusted_tick = 0;
-static float g_fanSpeed = FAN_MIN_PWM;
-
 bool init() {
-	rpm_measure_interrupt_number = digitalPinToInterrupt(FAN_SENSE);
+	g_rpmMeasureInterruptNumber = digitalPinToInterrupt(FAN_SENSE);
 
 	return test();
 }
@@ -129,38 +132,38 @@ bool init() {
 void test_start() {
 	if (OPTION_FAN) {
 		analogWrite(FAN_PWM, FAN_MAX_PWM);
-		test_start_time = millis();
+		g_testStartTime = millis();
 	}
 }
 
 bool test() {
 	if (OPTION_FAN) {
-		unsigned long time_since_test_start = millis() - test_start_time;
+		unsigned long time_since_test_start = millis() - g_testStartTime;
 		if (time_since_test_start < 250) {
 			delay(300 - time_since_test_start);
 		}
 
 #ifdef EEZ_PSU_SIMULATOR
-		int saved_fan_speed_pwm = fan_speed_pwm;
-		fan_speed_pwm = FAN_MAX_PWM;
+		int saved_fan_speed_pwm = g_fanSpeedPWM;
+		g_fanSpeedPWM = FAN_MAX_PWM;
 #endif
 
 		start_rpm_measure();
 
 #ifdef EEZ_PSU_SIMULATOR
-		fan_speed_pwm = saved_fan_speed_pwm;
+		g_fanSpeedPWM = saved_fan_speed_pwm;
 #endif
 
-		for (int i = 0; i < 25 && rpm_measure_state != RPM_MEASURE_STATE_FINISHED; ++i) {
+		for (int i = 0; i < 25 && g_rpmMeasureState != RPM_MEASURE_STATE_FINISHED; ++i) {
 			delay(1);
 		}
 
-		if (rpm_measure_state != RPM_MEASURE_STATE_FINISHED) {
+		if (g_rpmMeasureState != RPM_MEASURE_STATE_FINISHED) {
 			finish_rpm_measure();
 			test_result = psu::TEST_FAILED;
 		} else {
 			test_result = psu::TEST_OK;
-			DebugTraceF("Fan RPM: %d", rpm);
+			DebugTraceF("Fan RPM: %d", g_rpm);
 		}
 	} else {
 		test_result = psu::TEST_SKIPPED;
@@ -181,42 +184,47 @@ void tick(unsigned long tick_usec) {
 	if (test_result != psu::TEST_OK) return;
 
 	// adjust fan speed depending on max. channel temperature
-	if (tick_usec - fan_speed_last_adjusted_tick >= FAN_SPEED_ADJUSTMENT_INTERVAL * 1000L) {
+	if (tick_usec - g_fanSpeedLastAdjustedTick >= FAN_SPEED_ADJUSTMENT_INTERVAL * 1000L) {
 		float max_channel_temperature = temperature::getMaxChannelTemperature();
-		if (max_channel_temperature >= FAN_MIN_TEMP) {
-			DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
+		DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
 
-			float fanSpeedNew = util::remap(max_channel_temperature, FAN_MIN_TEMP, FAN_MIN_PWM, FAN_MAX_TEMP, FAN_MAX_PWM);
-			g_fanSpeed = g_fanSpeed + 0.1f * (fanSpeedNew - g_fanSpeed);
+		float fanSpeedNew = util::remap(max_channel_temperature, FAN_MIN_TEMP, FAN_MIN_PWM, FAN_MAX_TEMP, FAN_MAX_PWM);
+		g_fanSpeed = g_fanSpeed + 0.1f * (fanSpeedNew - g_fanSpeed);
 
-			fan_speed_pwm = (int)util::clamp(g_fanSpeed, FAN_MIN_PWM, FAN_MAX_PWM);
-
-			DebugTraceF("fanSpeed PWM: %d", fan_speed_pwm);
-
-			fan_speed_last_measured_tick = tick_usec;
-
-			analogWrite(FAN_PWM, fan_speed_pwm);
-		} else if (fan_speed_pwm != 0) {
-			fan_speed_pwm = 0;
-			g_fanSpeed = FAN_MIN_PWM;
-
-			DebugTrace("FAN OFF");
-
-			analogWrite(FAN_PWM, fan_speed_pwm);
+		int newFanSpeedPWM = (int)g_fanSpeed;
+		if (newFanSpeedPWM < FAN_MIN_PWM) {
+			newFanSpeedPWM = 0;
+		} else if (newFanSpeedPWM > FAN_MAX_PWM) {
+			newFanSpeedPWM = FAN_MAX_PWM;
 		}
-		fan_speed_last_adjusted_tick = tick_usec;
+
+		if (newFanSpeedPWM != g_fanSpeedPWM) {
+			g_fanSpeedPWM = newFanSpeedPWM;
+
+			if (g_fanSpeedPWM > 0) {
+				DebugTraceF("fanSpeed PWM: %d", g_fanSpeedPWM);
+	
+				g_fanSpeedLastMeasuredTick = tick_usec;
+			} else {
+				DebugTrace("fanSpeed OFF");
+			}
+
+			analogWrite(FAN_PWM, g_fanSpeedPWM);
+
+			g_fanSpeedLastAdjustedTick = tick_usec;
+		}
 	}
 
 	// measure fan speed
-	if (fan_speed_pwm != 0) {
-		if (tick_usec - fan_speed_last_measured_tick >= FAN_SPEED_MEASURMENT_INTERVAL * 1000L) {
-			fan_speed_last_measured_tick = tick_usec;
+	if (g_fanSpeedPWM != 0) {
+		if (tick_usec - g_fanSpeedLastMeasuredTick >= FAN_SPEED_MEASURMENT_INTERVAL * 1000L) {
+			g_fanSpeedLastMeasuredTick = tick_usec;
 			start_rpm_measure();
 		} else {
-			if (tick_usec - fan_speed_last_measured_tick >= 50 * 1000L) {
-				if (rpm_measure_state != RPM_MEASURE_STATE_FINISHED) {
+			if (tick_usec - g_fanSpeedLastMeasuredTick >= 50 * 1000L) {
+				if (g_rpmMeasureState != RPM_MEASURE_STATE_FINISHED) {
 					finish_rpm_measure();
-					if (fan_speed_pwm != 0) {
+					if (g_fanSpeedPWM != 0) {
 						test_result = psu::TEST_FAILED;
 						psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
 						psu::setQuesBits(QUES_FAN, true);
@@ -226,7 +234,7 @@ void tick(unsigned long tick_usec) {
 			}
 		}
 	} else {
-		rpm = 0;
+		g_rpm = 0;
 	}
 }
 
