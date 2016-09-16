@@ -84,6 +84,41 @@ void Channel::Value::init(float def_step, float def_limit) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+struct {
+	unsigned OE_SAVED: 1;
+	unsigned CH1_OE: 1;
+	unsigned CH2_OE: 1;
+} g_savedOE;
+
+void Channel::saveAndDisableOE() {
+	if (!g_savedOE.OE_SAVED) {
+		if (CH_NUM > 0) {
+			g_savedOE.CH1_OE = Channel::get(0).isOutputEnabled() ? 1 : 0;
+			Channel::get(0).outputEnable(false);
+
+			if (CH_NUM > 1) {
+				g_savedOE.CH2_OE = Channel::get(1).isOutputEnabled() ? 1 : 0;
+				Channel::get(1).outputEnable(false);
+			}
+		}
+		g_savedOE.OE_SAVED = 1;
+	}
+}
+
+void Channel::restoreOE() {
+	if (g_savedOE.OE_SAVED) {
+		if (CH_NUM > 0) {
+			Channel::get(0).outputEnable(g_savedOE.CH1_OE ? true : false);
+			if (CH_NUM > 1) {
+				Channel::get(1).outputEnable(g_savedOE.CH2_OE ? true : false);
+			}
+		}
+		g_savedOE.OE_SAVED = 0;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 #ifdef EEZ_PSU_SIMULATOR
 
 void Channel::Simulator::setLoadEnabled(bool value) {

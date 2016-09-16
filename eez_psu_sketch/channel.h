@@ -193,6 +193,12 @@ public:
     /// \returns Reference to channel.
     static Channel &get(int channel_index);
 
+	/// Save and disable OE for all the channels.
+	static void saveAndDisableOE();
+
+	/// Restore previously saved OE state for all the channels.
+	static void restoreOE();
+
     /// Channel index. Starts from 1.
     uint8_t index;
 

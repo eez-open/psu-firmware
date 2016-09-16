@@ -129,7 +129,7 @@ void action_keypad_def() {
 }
 
 void action_touch_screen_calibration() {
-    touch::calibration::enterCalibrationMode();
+    touch::calibration::enterCalibrationMode(PAGE_ID_YES_NO_CANCEL, PAGE_ID_SYS_SETTINGS2);
 }
 
 void action_yes() {

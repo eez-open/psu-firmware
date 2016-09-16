@@ -1265,14 +1265,14 @@ void errorMessageP(const char *message PROGMEM, void (*ok_callback)()) {
 	alertMessage(PAGE_ID_ERROR_ALERT, data::Value::ProgmemStr(message), ok_callback);
 }
 
-void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
+void yesNoDialog(int yesNoPageId, const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
     data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message), 0);
 
     g_dialogYesCallback = yes_callback;
     g_dialogNoCallback = no_callback;
     g_dialogCancelCallback = cancel_callback;
 
-	showPage(PAGE_ID_YES_NO);
+	showPage(yesNoPageId);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1376,6 +1376,10 @@ void init() {
 #endif
 }
 
+int getStartPageId() {
+	return devices::anyFailedOrWarning() ? PAGE_ID_SELF_TEST_RESULT: PAGE_ID_MAIN;
+}
+
 void tick(unsigned long tick_usec) {
 #ifdef EEZ_PSU_SIMULATOR
     if (!simulator::front_panel::isOpened()) {
@@ -1414,18 +1418,18 @@ void tick(unsigned long tick_usec) {
         return;
     }
 
-    // do the touch screen calibration if not calibrated
-    if (!touch::calibration::isCalibrated()) {
-        touch::calibration::tick(tick_usec);
-        return;
-    }
+	if (touch::calibration::isCalibrating()) {
+		touch::calibration::tick(tick_usec);
+		return;
+	}
 
-    // go to the main page (or self test result) after transitional page
+    // select page to go after transitional page
     if (g_activePageId == PAGE_ID_WELCOME || g_activePageId == PAGE_ID_STANDBY || g_activePageId == PAGE_ID_ENTERING_STANDBY) {
-		if (devices::anyFailedOrWarning()) {
-			showPage(PAGE_ID_SELF_TEST_RESULT);
+		if (!touch::calibration::isCalibrated()) {
+			// touch screen is not calibrated
+			showPage(PAGE_ID_SCREEN_CALIBRATION_INTRO);
 		} else {
-			showPage(PAGE_ID_MAIN);
+			showPage(getStartPageId());
 		}
         return;
     }
@@ -1435,6 +1439,10 @@ void tick(unsigned long tick_usec) {
 		g_timeOfLastActivity = millis();
 
 		if (touch::event_type == touch::TOUCH_DOWN) {
+			if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
+				return;
+			}
+
 			g_touchDownTime = tick_usec;
 			g_touchActionExecuted = false;
 			find_widget(touch::x, touch::y);
@@ -1457,6 +1465,10 @@ void tick(unsigned long tick_usec) {
 				}
 			}
 		} else if (touch::event_type == touch::TOUCH_MOVE) {
+			if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
+				return;
+			}
+
 			if (g_foundWidgetAtDown) {
 				DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
 				if (widget->action == ACTION_ID_TURN_OFF) {
@@ -1474,7 +1486,7 @@ void tick(unsigned long tick_usec) {
 					edit_mode_slider::onTouchMove();
 				} else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
 					edit_mode_step::onTouchMove();
-				} else if (g_activePageId == PAGE_ID_YES_NO) {
+				} else if (g_activePageId == PAGE_ID_YES_NO || g_activePageId == PAGE_ID_YES_NO_CANCEL) {
 	#ifdef CONF_DEBUG
 					int x = touch::x;
 					if (x < 1) x = 1;
@@ -1490,6 +1502,11 @@ void tick(unsigned long tick_usec) {
 				}
 			}
 		} else if (touch::event_type == touch::TOUCH_UP) {
+			if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
+				touch::calibration::enterCalibrationMode(PAGE_ID_YES_NO, getStartPageId());
+				return;
+			}
+
 			if (g_foundWidgetAtDown) {
 				deselect_widget();
 				DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
@@ -1506,9 +1523,15 @@ void tick(unsigned long tick_usec) {
 	}
 
 	//
-	if (millis() - g_timeOfLastActivity >= 10 * 1000UL) {
-		if (g_activePageId == PAGE_ID_EVENT_QUEUE) {
+	unsigned long inactivityPeriod = millis() - g_timeOfLastActivity;
+	if (g_activePageId == PAGE_ID_EVENT_QUEUE) {
+		if (inactivityPeriod >= 10 * 1000UL) {
 			showPage(PAGE_ID_MAIN);
+		}
+	} else if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
+		if (inactivityPeriod >= 20 * 1000UL) {
+			touch::calibration::enterCalibrationMode(PAGE_ID_YES_NO, getStartPageId());
+			return;
 		}
 	}
 

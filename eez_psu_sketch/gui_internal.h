@@ -91,7 +91,7 @@ void infoMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);
 void errorMessage(data::Value value, void (*ok_callback)() = 0);
 void errorMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);
 
-void yesNoDialog(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());
+void yesNoDialog(int yesNoPageId, const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());
 
 void dialogYes();
 void dialogNo();

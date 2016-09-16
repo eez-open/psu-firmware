@@ -34,13 +34,17 @@ const int RECT_SIZE = 2 * CONF_GUI_TOUCH_SCREEN_CALIBRATION_M;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+static int g_yesNoPageId;
+static int g_nextPageId;
+
 static enum {
+	MODE_NOT_CALIBRATED,
+    MODE_CALIBRATED,
     MODE_START,
     MODE_POINT_TL,
     MODE_POINT_BR,
     MODE_POINT_TR,
-    MODE_FINISHED
-
+	MODE_FINISHED
 } mode;
 
 static int point_tlx;
@@ -118,24 +122,46 @@ void init() {
         success = false;
     }
 
-    if (!success) {
-        mode = MODE_START;
+	success = false;
+
+    if (success) {
+        mode = MODE_CALIBRATED;
     } else {
-        mode = MODE_FINISHED;
+        mode = MODE_NOT_CALIBRATED;
     }
 }
 
-void enterCalibrationMode() {
-    touch::resetTransformCalibration();
+void startCalibration() {
+	touch::resetTransformCalibration();
     mode = MODE_START;
 }
 
+void enterCalibrationMode(int yesNoPageId, int nextPageId) {
+	g_yesNoPageId = yesNoPageId;
+	g_nextPageId = nextPageId;
+
+	startCalibration();
+
+	Channel::saveAndDisableOE();
+}
+
+void leaveCalibrationMode() {
+	mode = MODE_CALIBRATED;
+    showPage(g_nextPageId);
+
+	Channel::restoreOE();
+}
+
 bool isCalibrated() {
-    return mode == MODE_FINISHED;
+    return mode == MODE_CALIBRATED;
+}
+
+bool isCalibrating() {
+    return mode != MODE_CALIBRATED && mode != MODE_NOT_CALIBRATED && mode != MODE_FINISHED;
 }
 
 void dialogYes() {
-    persist_conf::dev_conf.touch_screen_cal_orientation = DISPLAY_ORIENTATION;
+	persist_conf::dev_conf.touch_screen_cal_orientation = DISPLAY_ORIENTATION;
     persist_conf::dev_conf.touch_screen_cal_tlx = point_tlx;
     persist_conf::dev_conf.touch_screen_cal_tly = point_tly;
     persist_conf::dev_conf.touch_screen_cal_brx = point_brx;
@@ -145,49 +171,47 @@ void dialogYes() {
 
     persist_conf::saveDevice();
 
-    showPage(PAGE_ID_SYS_SETTINGS2);
+	leaveCalibrationMode();
 }
 
 void dialogNo() {
-    enterCalibrationMode();
+    startCalibration();
 }
 
 void dialogCancel() {
-    showPage(PAGE_ID_SYS_SETTINGS2);
+	leaveCalibrationMode();
 }
 
 void tick(unsigned long tick_usec) {
-    if (mode != MODE_FINISHED) {
-        if (mode == MODE_START) {
-            point_x = &point_tlx;
-            point_y = &point_tly;
-            draw_point(0, 0);
-            mode = MODE_POINT_TL;
-        } else if (mode == MODE_POINT_TL) {
-            if (read_point()) {
-                point_x = &point_brx;
-                point_y = &point_bry;
-                draw_point(lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
-                mode = MODE_POINT_BR;
-            }
-        } else if (mode == MODE_POINT_BR) {
-            if (read_point()) {
-                point_x = &point_trx;
-                point_y = &point_try;
-                draw_point(lcd::lcd.getDisplayXSize() - 1, 0);
-                mode = MODE_POINT_TR;
-            }
-        } else if (mode == MODE_POINT_TR) {
-            if (read_point()) {
-                bool success = touch::calibrateTransform(
-                    point_tlx, point_tly,  point_brx, point_bry,  point_trx, point_try,
-                    CONF_GUI_TOUCH_SCREEN_CALIBRATION_M, lcd::lcd.getDisplayXSize(), lcd::lcd.getDisplayYSize());
-                if (success) {
-                    mode = MODE_FINISHED;
-                    yesNoDialog(PSTR("Save changes?"), dialogYes, dialogNo, dialogCancel);
-                } else {
-                    mode = MODE_START;
-                }
+    if (mode == MODE_START) {
+        point_x = &point_tlx;
+        point_y = &point_tly;
+        draw_point(0, 0);
+        mode = MODE_POINT_TL;
+    } else if (mode == MODE_POINT_TL) {
+        if (read_point()) {
+            point_x = &point_brx;
+            point_y = &point_bry;
+            draw_point(lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
+            mode = MODE_POINT_BR;
+        }
+    } else if (mode == MODE_POINT_BR) {
+        if (read_point()) {
+            point_x = &point_trx;
+            point_y = &point_try;
+            draw_point(lcd::lcd.getDisplayXSize() - 1, 0);
+            mode = MODE_POINT_TR;
+        }
+    } else if (mode == MODE_POINT_TR) {
+        if (read_point()) {
+            bool success = touch::calibrateTransform(
+                point_tlx, point_tly,  point_brx, point_bry,  point_trx, point_try,
+                CONF_GUI_TOUCH_SCREEN_CALIBRATION_M, lcd::lcd.getDisplayXSize(), lcd::lcd.getDisplayYSize());
+            if (success) {
+				mode = MODE_FINISHED;
+                yesNoDialog(g_yesNoPageId, PSTR("Save changes?"), dialogYes, dialogNo, dialogCancel);
+            } else {
+                mode = MODE_START;
             }
         }
     }
