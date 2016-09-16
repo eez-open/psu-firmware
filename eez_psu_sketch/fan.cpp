@@ -210,9 +210,9 @@ void tick(unsigned long tick_usec) {
 			}
 
 			analogWrite(FAN_PWM, g_fanSpeedPWM);
-
-			g_fanSpeedLastAdjustedTick = tick_usec;
 		}
+
+		g_fanSpeedLastAdjustedTick = tick_usec;
 	}
 
 	// measure fan speed
