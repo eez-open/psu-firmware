@@ -1059,6 +1059,9 @@ bool draw_tick() {
 
             return false;
         }
+
+		//_sleep(50);
+		//break;
     }
 	return true;
 }
