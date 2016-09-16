@@ -197,6 +197,7 @@ void tick(unsigned long tick_usec) {
 
 			analogWrite(FAN_PWM, fan_speed_pwm);
 		} else if (fan_speed_pwm != 0) {
+			fan_speed_pwm = 0;
 			g_fanSpeed = FAN_MIN_PWM;
 
 			DebugTrace("FAN OFF");
