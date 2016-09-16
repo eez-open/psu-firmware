@@ -122,8 +122,6 @@ void init() {
         success = false;
     }
 
-	success = false;
-
     if (success) {
         mode = MODE_CALIBRATED;
     } else {
