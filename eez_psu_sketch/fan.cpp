@@ -118,6 +118,7 @@ void finish_rpm_measure() {
 
 static unsigned long fan_speed_last_measured_tick = 0;
 static unsigned long fan_speed_last_adjusted_tick = 0;
+static float g_fanSpeed = FAN_MIN_PWM;
 
 bool init() {
 	rpm_measure_interrupt_number = digitalPinToInterrupt(FAN_SENSE);
@@ -184,17 +185,24 @@ void tick(unsigned long tick_usec) {
 		float max_channel_temperature = temperature::getMaxChannelTemperature();
 		if (max_channel_temperature >= FAN_MIN_TEMP) {
 			DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
-			float fanSpeed = util::remap(max_channel_temperature, FAN_MIN_TEMP, FAN_MIN_PWM, FAN_MAX_TEMP, FAN_MAX_PWM);
-			fan_speed_pwm = (int)util::clamp(fanSpeed, FAN_MIN_PWM, FAN_MAX_PWM);
+
+			float fanSpeedNew = util::remap(max_channel_temperature, FAN_MIN_TEMP, FAN_MIN_PWM, FAN_MAX_TEMP, FAN_MAX_PWM);
+			g_fanSpeed = g_fanSpeed + 0.1f * (fanSpeedNew - g_fanSpeed);
+
+			fan_speed_pwm = (int)util::clamp(g_fanSpeed, FAN_MIN_PWM, FAN_MAX_PWM);
+
 			DebugTraceF("fanSpeed PWM: %d", fan_speed_pwm);
+
 			fan_speed_last_measured_tick = tick_usec;
+
 			analogWrite(FAN_PWM, fan_speed_pwm);
 		} else if (fan_speed_pwm != 0) {
-			fan_speed_pwm = 0;
+			g_fanSpeed = FAN_MIN_PWM;
+
 			DebugTrace("FAN OFF");
+
 			analogWrite(FAN_PWM, fan_speed_pwm);
 		}
-
 		fan_speed_last_adjusted_tick = tick_usec;
 	}
 

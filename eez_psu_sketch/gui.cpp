@@ -38,6 +38,7 @@
 #include "gui_page_ch_settings_protection.h"
 #include "gui_page_ch_settings_adv.h"
 #include "gui_page_ch_settings_info.h"
+#include "gui_page_sys_settings_date_time.h"
 #include "gui_page_sys_info.h"
 
 #ifdef EEZ_PSU_SIMULATOR
@@ -112,6 +113,7 @@ Page *createPageFromId(int pageId) {
 	case PAGE_ID_CH_SETTINGS_ADV_RSENSE: return new ChSettingsAdvRSensePage();
 	case PAGE_ID_CH_SETTINGS_ADV_RPROG: return new ChSettingsAdvRProgPage();
 	case PAGE_ID_CH_SETTINGS_INFO: return new ChSettingsInfoPage();
+	case PAGE_ID_SYS_SETTINGS_DATE_TIME: return new SysSettingsDateTimePage();
 	case PAGE_ID_SYS_INFO:
 	case PAGE_ID_SYS_INFO2: return new SysInfoPage();
 	}

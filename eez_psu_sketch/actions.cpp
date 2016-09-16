@@ -164,6 +164,10 @@ void action_show_sys_settings2() {
     showPage(PAGE_ID_SYS_SETTINGS2);
 }
 
+void action_show_sys_settings_date_time() {
+    showPage(PAGE_ID_SYS_SETTINGS_DATE_TIME);
+}
+
 void action_show_sys_settings_cal() {
     showPage(PAGE_ID_SYS_SETTINGS_CAL);
 }
@@ -385,6 +389,7 @@ ACTION actions[] = {
     action_turn_off,
     action_show_sys_settings,
     action_show_sys_settings2,
+    action_show_sys_settings_date_time,
     action_show_sys_settings_cal,
     action_show_sys_settings_cal_ch,
     action_show_sys_settings_screen_calibration,

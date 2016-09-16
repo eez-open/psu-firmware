@@ -442,6 +442,30 @@
       "name": "channel.boardInfo.revision",
       "description": "",
       "defaultValue": "R5B9"
+    },
+    {
+      "name": "sys.info.date.year",
+      "defaultValue": "2016"
+    },
+    {
+      "name": "sys.info.date.month",
+      "defaultValue": "12"
+    },
+    {
+      "name": "sys.info.date.day",
+      "defaultValue": "28"
+    },
+    {
+      "name": "sys.info.time.hour",
+      "defaultValue": "23"
+    },
+    {
+      "name": "sys.info.time.minute",
+      "defaultValue": "58"
+    },
+    {
+      "name": "sys.info.time.second",
+      "defaultValue": "48"
     }
   ],
   "actions": [
@@ -608,6 +632,11 @@
       "name": "show_sys_settings2",
       "implementationType": "native",
       "implementation": "showPage(PAGE_ID_SYS_SETTINGS2);"
+    },
+    {
+      "name": "show_sys_settings_date_time",
+      "implementationType": "native",
+      "implementation": "showPage(PAGE_ID_SYS_SETTINGS_DATE_TIME);"
     },
     {
       "name": "show_sys_settings_cal",
@@ -55427,16 +55456,17 @@
             },
             {
               "type": "Text",
-              "text": "Display backlight",
+              "text": "Set date and time",
               "x": 12,
               "y": 58,
-              "width": 180,
+              "width": 155,
               "height": 28,
-              "style": "default_disabled_S_left"
+              "style": "edit_value_active_S_left",
+              "action": "show_sys_settings_date_time"
             },
             {
               "type": "Text",
-              "text": "Diagnostics",
+              "text": "Display backlight",
               "x": 12,
               "y": 86,
               "width": 180,
@@ -55445,7 +55475,7 @@
             },
             {
               "type": "Text",
-              "text": "System password",
+              "text": "Diagnostics",
               "x": 12,
               "y": 114,
               "width": 180,
@@ -55454,9 +55484,18 @@
             },
             {
               "type": "Text",
-              "text": "Shutdown when trip",
+              "text": "System password",
               "x": 12,
               "y": 142,
+              "width": 180,
+              "height": 28,
+              "style": "default_disabled_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Shutdown when trip",
+              "x": 12,
+              "y": 170,
               "width": 155,
               "height": 29,
               "style": "default_disabled_S_left",
@@ -55466,7 +55505,7 @@
               "type": "Text",
               "text": "OFF",
               "x": 167,
-              "y": 142,
+              "y": 170,
               "width": 73,
               "height": 29,
               "style": "default_disabled_S_left",
@@ -55508,15 +55547,6 @@
               "text": "X",
               "width": 48,
               "height": 36
-            },
-            {
-              "type": "Text",
-              "text": "Set date and time",
-              "x": 12,
-              "y": 58,
-              "width": 155,
-              "height": 28,
-              "style": "default_disabled_S_left"
             }
           ],
           "x": 0,
@@ -55905,6 +55935,453 @@
               "height": 28,
               "style": "edit_value_active_S_left",
               "action": "show_sys_settings_cal"
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240
+        },
+        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right."
+      },
+      {
+        "name": "sys_settings_date_time",
+        "portrait": {
+          "widgets": [
+            {
+              "type": "List",
+              "listType": "vertical",
+              "data": "channels",
+              "x": 0,
+              "y": 16,
+              "itemWidget": {
+                "type": "Select",
+                "data": "channel.status",
+                "y": 0,
+                "widgets": [
+                  {
+                    "type": "Rectangle",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126,
+                    "style": "default_inverse"
+                  },
+                  {
+                    "type": "Container",
+                    "widgets": [
+                      {
+                        "type": "Select",
+                        "x": 0,
+                        "y": 0,
+                        "data": "output_state",
+                        "action": "",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "style": "channel_off_L",
+                            "text": "OFF",
+                            "x": 0,
+                            "y": 0,
+                            "width": 240,
+                            "height": 86,
+                            "action": "toggle_channel"
+                          },
+                          {
+                            "type": "Select",
+                            "data": "output_mode",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "style": "mon_value_L",
+                                "data": "mon_value",
+                                "x": 0,
+                                "y": 0,
+                                "width": 240,
+                                "height": 86,
+                                "action": "toggle_channel"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "style": "mon_value_L_ur",
+                                "data": "mon_value",
+                                "x": 0,
+                                "y": 0,
+                                "width": 240,
+                                "height": 86,
+                                "action": "toggle_channel"
+                              }
+                            ],
+                            "x": 0,
+                            "y": 0,
+                            "width": 240,
+                            "height": 86,
+                            "style": "default"
+                          }
+                        ],
+                        "width": 240,
+                        "height": 86,
+                        "style": "default"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "data": "volt",
+                        "action": "edit",
+                        "x": 0,
+                        "y": 86,
+                        "style": "mon_value",
+                        "width": 106,
+                        "height": 40
+                      },
+                      {
+                        "type": "DisplayData",
+                        "data": "curr",
+                        "action": "edit",
+                        "x": 106,
+                        "y": 86,
+                        "style": "mon_value",
+                        "width": 106,
+                        "height": 40
+                      },
+                      {
+                        "type": "Text",
+                        "action": "show_channel_settings",
+                        "x": 212,
+                        "y": 86,
+                        "style": "default_S",
+                        "text": "`",
+                        "width": 28,
+                        "height": 40
+                      }
+                    ],
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126,
+                    "style": "default"
+                  },
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126
+                  }
+                ],
+                "x": 0,
+                "width": 240,
+                "height": 126,
+                "style": "default"
+              },
+              "width": 240,
+              "height": 320,
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "action": "touch_screen_calibration",
+              "x": 0,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "P",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 48,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "?",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 96,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "!",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 144,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "L",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "turn_off",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "Q",
+              "width": 48,
+              "height": 36
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320
+        },
+        "landscape": {
+          "widgets": [
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "output_state",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "output_mode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "mon_value",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 64,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "volt",
+                    "x": 0,
+                    "y": 30,
+                    "width": 64,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "curr",
+                    "x": 0,
+                    "y": 60,
+                    "width": 64,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 252,
+              "y": 0,
+              "width": 64,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "text": "Set date and time",
+              "x": 6,
+              "y": 0,
+              "width": 228,
+              "height": 32,
+              "style": "value_S"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 224,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "B",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "DisplayData",
+              "text": "",
+              "x": 45,
+              "y": 58,
+              "width": 46,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "action": "",
+              "data": "sys.info.date.year"
+            },
+            {
+              "type": "Text",
+              "text": "-",
+              "x": 93,
+              "y": 58,
+              "width": 14,
+              "height": 28,
+              "style": "default_S"
+            },
+            {
+              "type": "DisplayData",
+              "text": "",
+              "x": 109,
+              "y": 58,
+              "width": 26,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "action": "",
+              "data": "sys.info.date.month"
+            },
+            {
+              "type": "Text",
+              "text": "-",
+              "x": 137,
+              "y": 58,
+              "width": 14,
+              "height": 28,
+              "style": "default_S"
+            },
+            {
+              "type": "DisplayData",
+              "text": "",
+              "x": 151,
+              "y": 58,
+              "width": 26,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "action": "",
+              "data": "sys.info.date.day"
+            },
+            {
+              "type": "Button",
+              "x": 16,
+              "y": 163,
+              "width": 101,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "action": "set",
+              "disabledStyle": "non_interactive_button_S_disabled",
+              "data": "",
+              "enabled": "channel.protection.dirty"
+            },
+            {
+              "type": "Text",
+              "action": "discard",
+              "style": "non_interactive_button_S",
+              "x": 117,
+              "y": 163,
+              "text": " Discard",
+              "width": 96,
+              "height": 36
+            },
+            {
+              "type": "DisplayData",
+              "text": "",
+              "x": 55,
+              "y": 97,
+              "width": 26,
+              "height": 28,
+              "style": "edit_value_active_S_right",
+              "action": "",
+              "data": "sys.info.time.hour"
+            },
+            {
+              "type": "Text",
+              "text": ":",
+              "x": 83,
+              "y": 97,
+              "width": 14,
+              "height": 28,
+              "style": "default_S"
+            },
+            {
+              "type": "DisplayData",
+              "text": "",
+              "x": 101,
+              "y": 97,
+              "width": 26,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "action": "",
+              "data": "sys.info.time.minute"
+            },
+            {
+              "type": "Text",
+              "text": ":",
+              "x": 127,
+              "y": 97,
+              "width": 14,
+              "height": 28,
+              "style": "default_S"
+            },
+            {
+              "type": "DisplayData",
+              "text": "",
+              "x": 143,
+              "y": 97,
+              "width": 26,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "action": "",
+              "data": "sys.info.time.second"
             }
           ],
           "x": 0,

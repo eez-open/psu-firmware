@@ -397,6 +397,9 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_info.h">
       <Filter>gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_date_time.h">
+      <Filter>gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -680,6 +683,9 @@
       <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_info.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_date_time.cpp">
       <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>
