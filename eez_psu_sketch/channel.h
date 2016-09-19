@@ -360,9 +360,6 @@ public:
     /// This is called when channel is recovering from hardware failure.
     void update();
 
-    /// Force update of only output enable state, i.e. enable/disable output depending of output_enabled flag.
-    void updateOutputEnable();
-
     /// Enable/disable channel output.
     void outputEnable(bool enable);
 

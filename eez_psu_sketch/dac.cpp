@@ -97,9 +97,10 @@ bool DigitalAnalogConverter::test() {
     int save_cal_enabled = channel.flags.cal_enabled;
     channel.flags.cal_enabled = 0;
 
+	// disable OE on channel
     int save_output_enabled = channel.flags.output_enabled;
     channel.flags.output_enabled = 0;
-    channel.updateOutputEnable();
+	channel.ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, false);
 
     test_result = psu::TEST_OK;
 
@@ -143,9 +144,11 @@ bool DigitalAnalogConverter::test() {
 
     channel.flags.cal_enabled = save_cal_enabled;
 
-    // Re-enable output just in case if it is out of sync.
-    channel.flags.output_enabled = save_output_enabled;
-    channel.updateOutputEnable();
+    // Re-enable output
+	if (save_output_enabled) {
+		channel.flags.output_enabled = true;
+		channel.ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, true);
+	}
 
     channel.setVoltage(u_set_save);
     channel.setCurrent(i_set_save);

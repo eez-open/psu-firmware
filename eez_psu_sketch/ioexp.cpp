@@ -48,11 +48,11 @@ static const uint8_t REG_VALUES[] = {
 ////////////////////////////////////////////////////////////////////////////////
 
 static void ioexp_interrupt_ch1() {
-    Channel::get(0).ioexp.on_interrupt();
+    Channel::get(0).ioexp.onInterrupt();
 }
 
 static void ioexp_interrupt_ch2() {
-    Channel::get(1).ioexp.on_interrupt();
+    Channel::get(1).ioexp.onInterrupt();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -115,7 +115,7 @@ bool IOExpander::test() {
 
     if (test_result == psu::TEST_OK) {
 #if !CONF_SKIP_PWRGOOD_TEST
-        channel.flags.power_ok = test_bit(IO_BIT_IN_PWRGOOD);
+        channel.flags.power_ok = testBit(IO_BIT_IN_PWRGOOD);
         if (!channel.flags.power_ok) {
             DebugTraceF("Ch%d power fault", channel.index);
             psu::generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (channel.index - 1));
@@ -146,24 +146,35 @@ bool IOExpander::test() {
 void IOExpander::tick(unsigned long tick_usec) {
 }
 
-uint8_t IOExpander::read_gpio() {
+uint8_t IOExpander::readGpio() {
 	return reg_read(REG_GPIO);
 }
 
-bool IOExpander::test_bit(int io_bit) {
-    uint8_t value = read_gpio();
+bool IOExpander::testBit(int io_bit) {
+    uint8_t value = readGpio();
     return value & (1 << io_bit) ? true : false;
 }
 
-void IOExpander::change_bit(int io_bit, bool set) {
+void IOExpander::changeBit(int io_bit, bool set) {
     uint8_t newValue = set ? (gpio | (1 << io_bit)) : (gpio & ~(1 << io_bit));
 	if (gpio != newValue) {
 		gpio = newValue;
-		reg_write(REG_GPIO, gpio);
+		if (!writeDisabled) {
+			reg_write(REG_GPIO, gpio);
+		}
 	}
 }
 
-void IOExpander::on_interrupt() {
+void IOExpander::disableWrite() {
+	writeDisabled = true;
+}
+
+void IOExpander::enableWriteAndFlush() {
+	writeDisabled = false;
+	reg_write(REG_GPIO, gpio);
+}
+
+void IOExpander::onInterrupt() {
 	g_insideInterruptHandler = true;
 
     // IMPORTANT!

@@ -61,8 +61,8 @@ public:
     static const uint8_t IO_BIT_IN_PWRGOOD = 6;
 
     static const uint8_t IO_BIT_OUT_DP_ENABLE = 1;
-    uint8_t IO_BIT_OUT_SET_100_PERCENT;
-    uint8_t IO_BIT_OUT_EXT_PROG;
+    const uint8_t IO_BIT_OUT_SET_100_PERCENT;
+    const uint8_t IO_BIT_OUT_EXT_PROG;
     static const uint8_t IO_BIT_OUT_OUTPUT_ENABLE = 7;
 
     static const uint8_t IOEXP_READ = 0B01000001;
@@ -94,16 +94,21 @@ public:
 
     void tick(unsigned long tick_usec);
 
-	uint8_t read_gpio();
+	uint8_t readGpio();
 
-    bool test_bit(int io_bit);
-    void change_bit(int io_bit, bool set);
-
-    void on_interrupt();
+    bool testBit(int io_bit);
+    void changeBit(int io_bit, bool set);
+	void disableWrite();
+	void enableWriteAndFlush();
 
 private:
     Channel &channel;
 	uint8_t gpio;
+	bool writeDisabled;
+
+	friend void ioexp_interrupt_ch1();
+	friend void ioexp_interrupt_ch2();
+    void onInterrupt();
 
 	uint8_t getRegInitValue(int i);
     uint8_t reg_read_write(uint8_t opcode, uint8_t reg, uint8_t val);
