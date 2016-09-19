@@ -543,7 +543,10 @@ void Channel::adcDataIsReady(int16_t data) {
         else {
             u.mon = 0;
             i.mon = 0;
-            adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
+			
+			doLowRippleEnable(false);
+
+			adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
         }
         break;
 
@@ -673,39 +676,40 @@ void Channel::doOutputEnable(bool enable) {
     flags.output_enabled = enable;
 
 	if (enable) {
+		// ENABLE OUTPUT
 		onTimeCounter.start();
-	} else {
-		onTimeCounter.stop();
-	}
 
-    ioexp.change_bit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, enable);
-    bp::switchOutput(this, enable);
-
-    if (enable) {
 		delayLowRippleCheck = true;
 		outputEnableStartTime = micros();
 
+		ioexp.change_bit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, true);
+		bp::switchOutput(this, true);
+
 		adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
-    }
-    else {
+
+        delayed_dp_off = false;
+        doDpEnable(true);
+
+	    setOperBits(OPER_ISUM_OE_OFF, false);
+	} else {
+		// DISABLE OUTPUT
+		ioexp.change_bit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, false);
+		bp::switchOutput(this, false);
+
         setCvMode(false);
         setCcMode(false);
 
         if (calibration::isEnabled()) {
             calibration::stop();
         }
-    }
 
-    if (enable) {
-        delayed_dp_off = false;
-        doDpEnable(true);
-    }
-    else {
         delayed_dp_off = true;
         delayed_dp_off_start = micros();
-    }
 
-    setOperBits(OPER_ISUM_OE_OFF, !enable);
+	    setOperBits(OPER_ISUM_OE_OFF, true);
+
+		onTimeCounter.stop();
+	}
 }
 
 void Channel::doRemoteSensingEnable(bool enable) {
