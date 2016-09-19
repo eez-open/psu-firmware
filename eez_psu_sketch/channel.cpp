@@ -501,12 +501,13 @@ float Channel::readingToCalibratedValue(Value *cv, float mon_reading) {
 
 void Channel::valueAddReading(Value *cv, float value) {
     cv->mon = readingToCalibratedValue(cv, value);
-    if (cv == &u) {
-        protectionCheck(ovp);
-    } else {
+
+	if (cv == &u) {
+		protectionCheck(ovp);
+	} else {
 		protectionCheck(ocp);
 	}
-    protectionCheck(opp);
+	protectionCheck(opp);
 
 	lowRippleCheck();
 }
@@ -536,8 +537,9 @@ void Channel::adcDataIsReady(int16_t data) {
 #if CONF_DEBUG
         debug::i_mon[index - 1] = data;
 #endif
-        valueAddReading(&i, remapAdcDataToCurrent(data));
-        if (isOutputEnabled()) {
+	    valueAddReading(&i, remapAdcDataToCurrent(data));
+
+		if (isOutputEnabled()) {
             adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
         }
         else {
@@ -750,6 +752,10 @@ bool Channel::isLowRippleAllowed() {
 
 void Channel::lowRippleCheck() {
     if (getFeatures() & CH_FEATURE_LRIPPLE) {
+		if (!isOutputEnabled()) {
+			return;
+		}
+
 		if (delayLowRippleCheck) {
 			if (micros() - outputEnableStartTime < 100 * 1000L) {
 				return;
