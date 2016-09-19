@@ -675,7 +675,6 @@ void Channel::doOutputEnable(bool enable) {
     }
 
     flags.output_enabled = enable;
-	ioexp.writeDisable();
 
 	if (enable) {
 		// ENABLE OUTPUT
@@ -693,7 +692,6 @@ void Channel::doOutputEnable(bool enable) {
         delayed_dp_off = false;
         doDpEnable(true);
 
-
 		adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
 	} else {
 		// DISABLE OUTPUT
@@ -707,10 +705,6 @@ void Channel::doOutputEnable(bool enable) {
             calibration::stop();
         }
 
-		if (getFeatures() & CH_FEATURE_LRIPPLE) {
-			doLowRippleEnable(false);
-		}
-
         delayed_dp_off = true;
         delayed_dp_off_start = micros();
 
@@ -718,8 +712,6 @@ void Channel::doOutputEnable(bool enable) {
 
 		onTimeCounter.stop();
 	}
-
-	ioexp.writeEnable();
 }
 
 void Channel::doRemoteSensingEnable(bool enable) {
