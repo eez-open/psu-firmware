@@ -483,6 +483,8 @@ public:
 private:
     bool delayed_dp_off;
     uint32_t delayed_dp_off_start;
+	bool delayLowRippleCheck;
+	uint32_t outputEnableStartTime;
 
     void clearProtectionConf();
     void protectionEnter(ProtectionValue &cpv);
@@ -505,6 +507,7 @@ private:
 #if !CONF_SKIP_PWRGOOD_TEST
 	void testPwrgood(uint8_t gpio);
 #endif
+
 };
 
 }

@@ -227,7 +227,6 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     else if (IS_OCP_VALUE(this, cpv)) {
         state = prot_conf.flags.i_state;
         //condition = flags.cc_mode && (!flags.cv_mode || fabs(u.mon - u.set) >= CHANNEL_VALUE_PRECISION);
-		condition = i.mon >= i.set;
 		condition = util::greaterOrEqual(i.mon, i.set, CHANNEL_VALUE_PRECISION);
         delay = prot_conf.i_delay;
         delay -= PROT_DELAY_CORRECTION;
@@ -273,8 +272,6 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     else {
         cpv.flags.alarmed = 0;
     }
-
-    lowRippleCheck();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -506,8 +503,12 @@ void Channel::valueAddReading(Value *cv, float value) {
     cv->mon = readingToCalibratedValue(cv, value);
     if (cv == &u) {
         protectionCheck(ovp);
-    }
+    } else {
+		protectionCheck(ocp);
+	}
     protectionCheck(opp);
+
+	lowRippleCheck();
 }
 
 void Channel::valueAddReadingDac(Value *cv, float value) {
@@ -678,11 +679,13 @@ void Channel::doOutputEnable(bool enable) {
 	}
 
     ioexp.change_bit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, enable);
-
     bp::switchOutput(this, enable);
 
     if (enable) {
-        adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+		delayLowRippleCheck = true;
+		outputEnableStartTime = micros();
+
+		adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
     }
     else {
         setCvMode(false);
@@ -730,7 +733,7 @@ void Channel::doRemoteProgrammingEnable(bool enable) {
 }
 
 bool Channel::isLowRippleAllowed() {
-    if (i.mon > SOA_PREG_CURR || i.mon > SOA_POSTREG_PTOT / (SOA_VIN - u.mon)) {
+	if (i.mon > SOA_PREG_CURR || i.mon > SOA_POSTREG_PTOT / (SOA_VIN - u.mon)) {
         return false;
     }
 
@@ -743,7 +746,15 @@ bool Channel::isLowRippleAllowed() {
 
 void Channel::lowRippleCheck() {
     if (getFeatures() & CH_FEATURE_LRIPPLE) {
-        if (isLowRippleAllowed()) {
+		if (delayLowRippleCheck) {
+			if (micros() - outputEnableStartTime < 100 * 1000L) {
+				return;
+			} else {
+				delayLowRippleCheck = false;
+			}
+		}
+
+		if (isLowRippleAllowed()) {
             if (!flags.lripple_enabled && flags.lripple_auto_enabled) {
                 doLowRippleEnable(true, false);
             }
