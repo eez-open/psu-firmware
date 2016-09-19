@@ -114,7 +114,7 @@ bool write(const uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
 		}
 		buffer_verify = (uint8_t *)malloc(buffer_size);
 		buffer_verify_size = buffer_size;
-		DebugTraceF("buffer_verify_size = %u", buffer_verify_size);
+		//DebugTraceF("buffer_verify_size = %u", buffer_verify_size);
 	}
 
     read(buffer_verify, buffer_size, address);

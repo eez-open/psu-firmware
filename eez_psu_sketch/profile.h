@@ -34,15 +34,15 @@ struct ChannelFlags {
     unsigned p_state : 1;
     unsigned cal_enabled : 1;
     unsigned rprog_enabled : 1;
-    unsigned lripple_enabled : 1;
+    unsigned reserverd10 : 1;
     unsigned lripple_auto_enabled : 1;
     unsigned parameters_are_valid : 1;
-    unsigned reserverd10 : 1;
     unsigned reserverd11 : 1;
     unsigned reserverd12 : 1;
     unsigned reserverd13 : 1;
     unsigned reserverd14 : 1;
     unsigned reserverd15 : 1;
+    unsigned reserverd16 : 1;
 };
 
 /// Channel parameters stored in profile.

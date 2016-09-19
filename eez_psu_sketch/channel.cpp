@@ -351,7 +351,6 @@ void Channel::reset() {
     }
 
     if (getFeatures() & CH_FEATURE_LRIPPLE) {
-        // [SOUR[n]]:VOLT:PROG INTernal
         doLowRippleEnable(false);
     }
 
@@ -455,7 +454,9 @@ void Channel::tick(unsigned long tick_usec) {
     adc.tick(tick_usec);
 	onTimeCounter.tick(tick_usec);
 
-	lowRippleCheck(tick_usec);
+    if (getFeatures() & CH_FEATURE_LRIPPLE) {
+		lowRippleCheck(tick_usec);
+	}
 
     // turn off DP after delay
     if (delayed_dp_off && tick_usec - delayed_dp_off_start >= DP_OFF_DELAY_PERIOD * 1000000L) {
@@ -546,8 +547,6 @@ void Channel::adcDataIsReady(int16_t data) {
             u.mon = 0;
             i.mon = 0;
 			
-			doLowRippleEnable(false);
-
 			adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
         }
         break;
@@ -681,8 +680,10 @@ void Channel::doOutputEnable(bool enable) {
 		// ENABLE OUTPUT
 		onTimeCounter.start();
 
-		outputEnableStartTime = micros();
-		delayLowRippleCheck = true;
+		if (getFeatures() & CH_FEATURE_LRIPPLE) {
+			outputEnableStartTime = micros();
+			delayLowRippleCheck = true;
+		}
 
 		ioexp.change_bit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, true);
 		bp::switchOutput(this, true);
@@ -738,7 +739,18 @@ void Channel::doRemoteProgrammingEnable(bool enable) {
     setOperBits(OPER_ISUM_RPROG_ON, enable);
 }
 
-bool Channel::isLowRippleAllowed() {
+bool Channel::isLowRippleAllowed(unsigned long tick_usec) {
+	if (!isOutputEnabled()) {
+		return false;
+	}
+
+	if (delayLowRippleCheck) {
+		if (tick_usec - outputEnableStartTime < 100 * 1000L) {
+			return false;
+		}
+		delayLowRippleCheck = false;
+	}
+
 	if (i.mon > SOA_PREG_CURR || i.mon > SOA_POSTREG_PTOT / (SOA_VIN - u.mon)) {
         return false;
     }
@@ -751,43 +763,22 @@ bool Channel::isLowRippleAllowed() {
 }
 
 void Channel::lowRippleCheck(unsigned long tick_usec) {
-    if (getFeatures() & CH_FEATURE_LRIPPLE) {
-		if (isOutputEnabled()) {
-			if (delayLowRippleCheck) {
-				if (tick_usec - outputEnableStartTime < 100 * 1000L) {
-					return;
-				}
-				
-				delayLowRippleCheck = false;
-			}
-
-			if (isLowRippleAllowed()) {
-				if (!flags.lripple_enabled && flags.lripple_auto_enabled) {
-					doLowRippleEnable(true, false);
-				}
-			} else {
-				if (flags.lripple_enabled) {
-					doLowRippleEnable(false);
-				}
+	if (isLowRippleAllowed(tick_usec)) {
+		if (!flags.lripple_enabled) {
+			if (flags.lripple_auto_enabled) {
+				doLowRippleEnable(true);
 			}
 		}
-    }
+	} else {
+		if (flags.lripple_enabled) {
+			doLowRippleEnable(false);
+		}
+	}
 }
 
-bool Channel::doLowRippleEnable(bool enable, bool callIsAllowed) {
-    if (enable) {
-        if (!callIsAllowed || isLowRippleAllowed()) {
-            flags.lripple_enabled = true;
-            ioexp.change_bit(ioexp.IO_BIT_OUT_SET_100_PERCENT, !flags.lripple_enabled);
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        flags.lripple_enabled = false;
-        ioexp.change_bit(ioexp.IO_BIT_OUT_SET_100_PERCENT, !flags.lripple_enabled);
-        return true;
-    }
+void Channel::doLowRippleEnable(bool enable) {
+    flags.lripple_enabled = enable;
+    ioexp.change_bit(ioexp.IO_BIT_OUT_SET_100_PERCENT, !enable);
 }
 
 void Channel::doLowRippleAutoEnable(bool enable) {
@@ -806,13 +797,6 @@ void Channel::update() {
     doRemoteSensingEnable(flags.sense_enabled);
     if (getFeatures() & CH_FEATURE_RPROG) {
         doRemoteProgrammingEnable(flags.rprog_enabled);
-    }
-    if (getFeatures() & CH_FEATURE_LRIPPLE) {
-        if (flags.lripple_enabled && isLowRippleAllowed()) {
-            doLowRippleEnable(true);
-        } else {
-            doLowRippleEnable(false);
-        }
     }
 
     profile::enableSave(last_save_enabled);
@@ -873,8 +857,10 @@ bool Channel::isRemoteProgrammingEnabled() {
 
 bool Channel::lowRippleEnable(bool enable) {
     if (enable != flags.lripple_enabled) {
-        doLowRippleEnable(enable);
-		profile::save();
+		if (enable && !isLowRippleAllowed(micros())) {
+			return false;
+		}
+		doLowRippleEnable(enable);
     }
     return true;
 }

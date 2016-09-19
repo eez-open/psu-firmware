@@ -186,7 +186,7 @@ void tick(unsigned long tick_usec) {
 	// adjust fan speed depending on max. channel temperature
 	if (tick_usec - g_fanSpeedLastAdjustedTick >= FAN_SPEED_ADJUSTMENT_INTERVAL * 1000L) {
 		float max_channel_temperature = temperature::getMaxChannelTemperature();
-		DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
+		//DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
 
 		float fanSpeedNew = util::remap(max_channel_temperature, FAN_MIN_TEMP, FAN_MIN_PWM, FAN_MAX_TEMP, FAN_MAX_PWM);
 		g_fanSpeed = g_fanSpeed + 0.1f * (fanSpeedNew - g_fanSpeed);
@@ -202,11 +202,11 @@ void tick(unsigned long tick_usec) {
 			g_fanSpeedPWM = newFanSpeedPWM;
 
 			if (g_fanSpeedPWM > 0) {
-				DebugTraceF("fanSpeed PWM: %d", g_fanSpeedPWM);
+				//DebugTraceF("fanSpeed PWM: %d", g_fanSpeedPWM);
 	
 				g_fanSpeedLastMeasuredTick = tick_usec;
 			} else {
-				DebugTrace("fanSpeed OFF");
+				//DebugTrace("fanSpeed OFF");
 			}
 
 			analogWrite(FAN_PWM, g_fanSpeedPWM);

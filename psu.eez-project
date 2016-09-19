@@ -58977,11 +58977,11 @@
               "height": 29,
               "style": "edit_value_S_left"
             },
-                  {
+            {
               "type": "Text",
               "text": "User profiles (1)",
               "x": 6,
-                    "y": 0,
+              "y": 0,
               "width": 228,
               "height": 30,
               "style": "value_S"
@@ -59004,16 +59004,16 @@
               "height": 29,
               "style": "edit_value_S_left"
             },
-                      {
-                        "type": "Text",
+            {
+              "type": "Text",
               "text": "Yes",
               "x": 189,
               "y": 30,
               "width": 35,
               "height": 29,
               "style": "edit_value_active_S_left"
-                      },
-                      {
+            },
+            {
               "type": "Text",
               "text": "0",
               "x": 141,
@@ -59026,11 +59026,11 @@
         },
         "description": "User profiles information and settings"
       },
-                          {
+      {
         "name": "user_profiles2",
         "portrait": {
-                            "x": 0,
-                            "y": 0,
+          "x": 0,
+          "y": 0,
           "width": 240,
           "height": 320,
           "widgets": [
@@ -59043,11 +59043,11 @@
               "text": "X",
               "width": 48,
               "height": 36
-                          },
-                          {
+            },
+            {
               "type": "Text",
               "text": "TODO",
-                            "x": 0,
+              "x": 0,
               "y": 40,
               "width": 240,
               "height": 83,
@@ -59055,23 +59055,23 @@
             },
             {
               "type": "Local.NotificationBar",
-                        "x": 0,
-                        "y": 0,
+              "x": 0,
+              "y": 0,
               "width": 240,
               "height": 40,
-                        "style": "default"
-                      }
+              "style": "default"
+            }
           ]
-                  },
+        },
         "landscape": {
           "x": 0,
           "y": 0,
           "width": 320,
           "height": 240,
           "widgets": [
-                  {
+            {
               "type": "Text",
-                    "x": 0,
+              "x": 0,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -59119,7 +59119,7 @@
               "type": "Text",
               "text": "-- Not installed --",
               "x": 43,
-                    "y": 30,
+              "y": 30,
               "width": 269,
               "height": 29,
               "style": "edit_value_S_left"
@@ -59213,8 +59213,8 @@
               "width": 35,
               "height": 29,
               "style": "edit_S"
-                  },
-                  {
+            },
+            {
               "type": "Text",
               "text": "-- Not installed --",
               "x": 43,
@@ -59222,7 +59222,7 @@
               "width": 269,
               "height": 29,
               "style": "edit_value_S_left"
-                  }
+            }
           ]
         },
         "description": "User profiles information and settings"
@@ -59230,8 +59230,8 @@
       {
         "name": "user_profile_settings",
         "portrait": {
-                "x": 0,
-                "y": 0,
+          "x": 0,
+          "y": 0,
           "width": 240,
           "height": 320,
           "widgets": [
@@ -59244,7 +59244,7 @@
               "text": "X",
               "width": 48,
               "height": 36
-              },
+            },
             {
               "type": "Text",
               "text": "TODO",
@@ -59263,7 +59263,7 @@
               "style": "default"
             }
           ]
-            },
+        },
         "landscape": {
           "x": 0,
           "y": 0,
@@ -59272,9 +59272,9 @@
           "widgets": [
             {
               "type": "Rectangle",
-              "x": 112,
+              "x": 168,
               "y": 204,
-              "width": 112,
+              "width": 56,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -59389,6 +59389,16 @@
               "width": 173,
               "height": 30,
               "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Delete",
+              "x": 112,
+              "y": 204,
+              "width": 56,
+              "height": 36,
+              "style": "bottom_button_textual_S",
+              "action": "touch_screen_calibration"
             }
           ]
         },

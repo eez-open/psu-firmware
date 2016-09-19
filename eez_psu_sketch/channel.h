@@ -500,8 +500,8 @@ private:
     void doRemoteSensingEnable(bool enable);
     void doRemoteProgrammingEnable(bool enable);
     void lowRippleCheck(unsigned long tick_usec);
-    bool isLowRippleAllowed();
-    bool doLowRippleEnable(bool enable, bool callIsAllowed = true);
+    bool isLowRippleAllowed(unsigned long tick_usec);
+    void doLowRippleEnable(bool enable);
     void doLowRippleAutoEnable(bool enable);
     void doDpEnable(bool enable);
 #if !CONF_SKIP_PWRGOOD_TEST
