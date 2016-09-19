@@ -455,6 +455,8 @@ void Channel::tick(unsigned long tick_usec) {
     adc.tick(tick_usec);
 	onTimeCounter.tick(tick_usec);
 
+	lowRippleCheck(tick_usec);
+
     // turn off DP after delay
     if (delayed_dp_off && tick_usec - delayed_dp_off_start >= DP_OFF_DELAY_PERIOD * 1000000L) {
         delayed_dp_off = false;
@@ -508,8 +510,6 @@ void Channel::valueAddReading(Value *cv, float value) {
 		protectionCheck(ocp);
 	}
 	protectionCheck(opp);
-
-	lowRippleCheck();
 }
 
 void Channel::valueAddReadingDac(Value *cv, float value) {
@@ -750,29 +750,26 @@ bool Channel::isLowRippleAllowed() {
     return true;
 }
 
-void Channel::lowRippleCheck() {
+void Channel::lowRippleCheck(unsigned long tick_usec) {
     if (getFeatures() & CH_FEATURE_LRIPPLE) {
-		if (!isOutputEnabled()) {
-			return;
-		}
-
-		if (delayLowRippleCheck) {
-			if (micros() - outputEnableStartTime < 100 * 1000L) {
-				return;
-			} else {
+		if (isOutputEnabled()) {
+			if (delayLowRippleCheck) {
+					return;
+				}
+				
 				delayLowRippleCheck = false;
 			}
-		}
 
-		if (isLowRippleAllowed()) {
-            if (!flags.lripple_enabled && flags.lripple_auto_enabled) {
-                doLowRippleEnable(true, false);
-            }
-        } else {
-            if (flags.lripple_enabled) {
-                doLowRippleEnable(false);
-            }
-        }
+			if (isLowRippleAllowed()) {
+				if (!flags.lripple_enabled && flags.lripple_auto_enabled) {
+					doLowRippleEnable(true, false);
+				}
+			} else {
+				if (flags.lripple_enabled) {
+					doLowRippleEnable(false);
+				}
+			}
+		}
     }
 }
 

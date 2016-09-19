@@ -482,9 +482,9 @@ public:
 
 private:
     bool delayed_dp_off;
-    uint32_t delayed_dp_off_start;
+    unsigned long delayed_dp_off_start;
 	bool delayLowRippleCheck;
-	uint32_t outputEnableStartTime;
+	unsigned long outputEnableStartTime;
 
     void clearProtectionConf();
     void protectionEnter(ProtectionValue &cpv);
@@ -499,7 +499,7 @@ private:
     void doOutputEnable(bool enable);
     void doRemoteSensingEnable(bool enable);
     void doRemoteProgrammingEnable(bool enable);
-    void lowRippleCheck();
+    void lowRippleCheck(unsigned long tick_usec);
     bool isLowRippleAllowed();
     bool doLowRippleEnable(bool enable, bool callIsAllowed = true);
     void doLowRippleAutoEnable(bool enable);
