@@ -467,7 +467,7 @@ void Channel::tick(unsigned long tick_usec) {
 	// If channel output is off then test PWRGOOD here, otherwise it is tested in Channel::event method.
 #if !CONF_SKIP_PWRGOOD_TEST
 	if (!isOutputEnabled() && psu::isPowerUp()) {
-		testPwrgood(ioexp.read_gpio());
+		testPwrgood(ioexp.readGpio());
 	}
 #endif
 }
@@ -504,13 +504,6 @@ float Channel::readingToCalibratedValue(Value *cv, float mon_reading) {
 
 void Channel::valueAddReading(Value *cv, float value) {
     cv->mon = readingToCalibratedValue(cv, value);
-
-	if (cv == &u) {
-		protectionCheck(ovp);
-	} else {
-		protectionCheck(ocp);
-	}
-	protectionCheck(opp);
 }
 
 void Channel::valueAddReadingDac(Value *cv, float value) {
@@ -542,11 +535,9 @@ void Channel::adcDataIsReady(int16_t data) {
 
 		if (isOutputEnabled()) {
             adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
-        }
-        else {
+        } else {
             u.mon = 0;
             i.mon = 0;
-			
 			adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
         }
         break;
@@ -582,26 +573,18 @@ void Channel::updateCcAndCvSwitch() {
 }
 
 void Channel::setCcMode(bool cc_mode) {
-    if (!isOutputEnabled()) {
-        cc_mode = 0;
-    }
+    cc_mode = cc_mode && isOutputEnabled();
 
     if (cc_mode != flags.cc_mode) {
         flags.cc_mode = cc_mode;
 
-        updateCcAndCvSwitch();
-
         setOperBits(OPER_ISUM_CC, cc_mode);
         setQuesBits(QUES_ISUM_VOLT, cc_mode);
     }
-
-    protectionCheck(ocp);
 }
 
 void Channel::setCvMode(bool cv_mode) {
-    if (!isOutputEnabled()) {
-        cv_mode = 0;
-    }
+    cv_mode = cv_mode && isOutputEnabled();
 
     if (cv_mode != flags.cv_mode) {
         flags.cv_mode = cv_mode;
@@ -611,8 +594,6 @@ void Channel::setCvMode(bool cv_mode) {
         setOperBits(OPER_ISUM_CV, cv_mode);
         setQuesBits(QUES_ISUM_CURR, cv_mode);
     }
-
-    protectionCheck(ovp);
 }
 
 void Channel::event(uint8_t gpio, int16_t adc_data) {
@@ -625,14 +606,15 @@ void Channel::event(uint8_t gpio, int16_t adc_data) {
 	if (boardRevision == CH_BOARD_REVISION_R5B9) {
 		unsigned rpol = !(gpio & (1 << IOExpander::IO_BIT_IN_RPOL));
 
-		if (rpol && isOutputEnabled()) {
-			outputEnable(false);
-			event_queue::pushEvent(event_queue::EVENT_ERROR_CH1_REMOTE_SENSE_REVERSE_POLARITY_DETECTED + index - 1);
-		}
-
 		if (rpol != flags.rpol) {
 			flags.rpol = rpol;
 			setQuesBits(QUES_ISUM_RPOL, flags.rpol ? true : false);
+		}
+
+		if (rpol && isOutputEnabled()) {
+			outputEnable(false);
+			event_queue::pushEvent(event_queue::EVENT_ERROR_CH1_REMOTE_SENSE_REVERSE_POLARITY_DETECTED + index - 1);
+			return;
 		}
 	}
 
@@ -640,6 +622,11 @@ void Channel::event(uint8_t gpio, int16_t adc_data) {
 
     setCvMode(gpio & (1 << IOExpander::IO_BIT_IN_CV_ACTIVE) ? true : false);
     setCcMode(gpio & (1 << IOExpander::IO_BIT_IN_CC_ACTIVE) ? true : false);
+    updateCcAndCvSwitch();
+
+	protectionCheck(ovp);
+	protectionCheck(ocp);
+	protectionCheck(opp);
 }
 
 void Channel::adcReadMonDac() {
@@ -660,13 +647,9 @@ void Channel::adcReadAll() {
 
 void Channel::doDpEnable(bool enable) {
     // DP bit is active low
-    ioexp.change_bit(IOExpander::IO_BIT_OUT_DP_ENABLE, !enable);
+    ioexp.changeBit(IOExpander::IO_BIT_OUT_DP_ENABLE, !enable);
     setOperBits(OPER_ISUM_DP_OFF, !enable);
     flags.dp_on = enable;
-}
-
-void Channel::updateOutputEnable() {
-   ioexp.change_bit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, flags.output_enabled);
 }
 
 void Channel::doOutputEnable(bool enable) {
@@ -674,44 +657,54 @@ void Channel::doOutputEnable(bool enable) {
         return;
     }
 
-    flags.output_enabled = enable;
+	noInterrupts();
+
+	ioexp.disableWrite();
+
+	flags.output_enabled = enable;
+	ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, enable);
+	setOperBits(OPER_ISUM_OE_OFF, !enable);
+	bp::switchOutput(this, enable);
 
 	if (enable) {
-		// ENABLE OUTPUT
-		onTimeCounter.start();
-
 		if (getFeatures() & CH_FEATURE_LRIPPLE) {
 			outputEnableStartTime = micros();
 			delayLowRippleCheck = true;
 		}
 
-		ioexp.change_bit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, true);
-		bp::switchOutput(this, true);
-	    setOperBits(OPER_ISUM_OE_OFF, false);
-
+		// enable DP
         delayed_dp_off = false;
-        doDpEnable(true);
+		doDpEnable(true);
 
+		// start ADC conversion
 		adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
 	} else {
-		// DISABLE OUTPUT
-		ioexp.change_bit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, false);
-		bp::switchOutput(this, false);
+		if (getFeatures() & CH_FEATURE_LRIPPLE) {
+			doLowRippleEnable(false);
+		}
 
-        setCvMode(false);
+		setCvMode(false);
         setCcMode(false);
+        updateCcAndCvSwitch();
 
         if (calibration::isEnabled()) {
             calibration::stop();
         }
 
+		// disable (delayed) DP
         delayed_dp_off = true;
         delayed_dp_off_start = micros();
+	}
 
-	    setOperBits(OPER_ISUM_OE_OFF, true);
+	ioexp.enableWriteAndFlush();
 
+	if (enable) {
+		onTimeCounter.start();
+	} else {
 		onTimeCounter.stop();
 	}
+
+	interrupts();
 }
 
 void Channel::doRemoteSensingEnable(bool enable) {
@@ -733,7 +726,7 @@ void Channel::doRemoteProgrammingEnable(bool enable) {
         prot_conf.u_level = U_MAX;
 		prot_conf.flags.u_state = true;
     }
-    ioexp.change_bit(ioexp.IO_BIT_OUT_EXT_PROG, enable);
+    ioexp.changeBit(ioexp.IO_BIT_OUT_EXT_PROG, enable);
     bp::switchProg(this, enable);
     setOperBits(OPER_ISUM_RPROG_ON, enable);
 }
@@ -782,7 +775,7 @@ void Channel::lowRippleCheck(unsigned long tick_usec) {
 
 void Channel::doLowRippleEnable(bool enable) {
     flags.lripple_enabled = enable;
-    ioexp.change_bit(ioexp.IO_BIT_OUT_SET_100_PERCENT, !enable);
+    ioexp.changeBit(ioexp.IO_BIT_OUT_SET_100_PERCENT, !enable);
 }
 
 void Channel::doLowRippleAutoEnable(bool enable) {
