@@ -681,8 +681,8 @@ void Channel::doOutputEnable(bool enable) {
 		// ENABLE OUTPUT
 		onTimeCounter.start();
 
-		delayLowRippleCheck = true;
 		outputEnableStartTime = micros();
+		delayLowRippleCheck = true;
 
 		ioexp.change_bit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, true);
 		bp::switchOutput(this, true);
@@ -754,6 +754,7 @@ void Channel::lowRippleCheck(unsigned long tick_usec) {
     if (getFeatures() & CH_FEATURE_LRIPPLE) {
 		if (isOutputEnabled()) {
 			if (delayLowRippleCheck) {
+				if (tick_usec - outputEnableStartTime < 100 * 1000L) {
 					return;
 				}
 				
