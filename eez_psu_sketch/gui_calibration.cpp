@@ -131,34 +131,34 @@ void start() {
 
 data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
 	if (id == DATA_ID_CHANNEL_CALIBRATION_STATUS) {
-		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
 		return data::Value(channel.isCalibrationExists() ? 1 : 0);
 	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STATE) {
-		int iChannel = cursor.iChannel == -1 ? g_channel->index - 1 : cursor.iChannel;
+		int iChannel = cursor.i == -1 ? g_channel->index - 1 : cursor.i;
 		return data::Value(snapshot->channelSnapshots[iChannel].flags.cal_enabled ? 1 : 0);
 	} else if (id == DATA_ID_CHANNEL_CALIBRATION_DATE) {
-		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
 		return data::Value(channel.cal_conf.calibration_date);
 	} else if (id == DATA_ID_CHANNEL_CALIBRATION_REMARK) {
-		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
 		return data::Value(channel.cal_conf.calibration_remark);
 	} else if (id == DATA_ID_CAL_CH_U_MIN) {
-		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
 		return data::Value(channel.cal_conf.u.min.val, data::VALUE_TYPE_FLOAT_VOLT);
 	} else if (id == DATA_ID_CAL_CH_U_MID) {
-		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
 		return data::Value(channel.cal_conf.u.mid.val, data::VALUE_TYPE_FLOAT_VOLT);
 	} else if (id == DATA_ID_CAL_CH_U_MAX) {
-		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
 		return data::Value(channel.cal_conf.u.max.val, data::VALUE_TYPE_FLOAT_VOLT);
 	} else if (id == DATA_ID_CAL_CH_I_MIN) {
-		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
 		return data::Value(channel.cal_conf.i.min.val, data::VALUE_TYPE_FLOAT_AMPER);
 	} else if (id == DATA_ID_CAL_CH_I_MID) {
-		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
 		return data::Value(channel.cal_conf.i.mid.val, data::VALUE_TYPE_FLOAT_AMPER);
 	} else if (id == DATA_ID_CAL_CH_I_MAX) {
-		Channel &channel = cursor.iChannel == -1 ? *g_channel : Channel::get(cursor.iChannel);
+		Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
 		return data::Value(channel.cal_conf.i.max.val, data::VALUE_TYPE_FLOAT_AMPER);
 	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_NUM) {
 		return data::Value(g_stepNum);
@@ -305,7 +305,7 @@ void stop() {
 }
 
 void toggleEnable() {
-	Channel &channel = g_channel ? *g_channel : Channel::get(g_foundWidgetAtDown.cursor.iChannel);
+	Channel &channel = g_channel ? *g_channel : Channel::get(g_foundWidgetAtDown.cursor.i);
 	channel.calibrationEnable(!channel.flags.cal_enabled);
 }
 

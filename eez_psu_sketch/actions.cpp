@@ -33,7 +33,7 @@ namespace psu {
 using namespace gui;
 
 void action_toggle_channel() {
-    Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.iChannel);
+    Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);
     if (channel.isTripped()) {
         errorMessageP(PSTR("Channel is tripped!"), 0);
     } else {

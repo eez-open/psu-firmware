@@ -53,7 +53,7 @@ struct WidgetCursor {
 
     WidgetCursor& operator=(int) {
         widgetOffset = 0;
-		cursor.iChannel = -1;
+		cursor.i = -1;
         return *this;
     }
 

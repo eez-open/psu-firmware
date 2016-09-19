@@ -14,42 +14,46 @@
       "defaultValue": "1"
     },
     {
-      "name": "output_state",
-      "description": "scpi: outp?, values: 0 if output off, 1 if output on",
+      "name": "channel.outputState",
+      "description": "0: output is off\n1: output is on",
       "operations": "get",
       "defaultValue": 1
     },
     {
-      "name": "output_mode",
-      "description": "scpi: outp:mode?, values: 0 if CC or CV, 1 if UR",
+      "name": "channel.outputMode",
+      "description": "0: CC or CV\n1: UR",
       "operations": "get",
       "defaultValue": 0
     },
     {
-      "name": "mon_value",
+      "name": "channel.monValue",
       "description": "scpi: meas:volt? if CC, meas:curr? if CV, min(meas:curr?, meas:volt?) or meas:curr? if equal )",
       "operations": "get",
       "defaultValue": "12.00V"
     },
     {
-      "name": "volt_set",
+      "name": "channel.u.set",
       "description": "scpi: volt? and volt",
       "operations": "get,set",
       "defaultValue": "12.00V"
     },
     {
-      "name": "volt_mon",
+      "name": "channel.u.mon",
       "defaultValue": "12.00V"
     },
     {
-      "name": "curr_set",
+      "name": "channel.i.set",
       "description": "scpi: curr? and curr",
       "operations": "get,set",
       "defaultValue": "1.00A"
     },
     {
-      "name": "curr_mon",
+      "name": "channel.i.mon",
       "defaultValue": "1.00A"
+    },
+    {
+      "name": "channel.p.mon",
+      "defaultValue": "150W"
     },
     {
       "name": "lrip",
@@ -292,7 +296,7 @@
     },
     {
       "name": "channel.protection.opp.level",
-      "defaultValue": "150.00 W"
+      "defaultValue": "150.00W"
     },
     {
       "name": "channel.protection.opp.delay",
@@ -45440,7 +45444,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -45453,12 +45457,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 120,
@@ -45467,7 +45471,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 120,
@@ -45488,7 +45492,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 36,
                     "width": 120,
@@ -45497,7 +45501,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 72,
                     "width": 120,
@@ -45928,7 +45932,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -45941,12 +45945,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 76,
@@ -45956,7 +45960,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 76,
@@ -45977,7 +45981,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 76,
@@ -45987,7 +45991,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 76,
@@ -46129,7 +46133,7 @@
                           {
                             "type": "Select",
                             "y": 0,
-                            "data": "output_state",
+                            "data": "channel.outputState",
                             "widgets": [
                               {
                                 "type": "Text",
@@ -46142,12 +46146,12 @@
                               },
                               {
                                 "type": "Select",
-                                "data": "output_mode",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -46156,7 +46160,7 @@
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_ur_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -46178,7 +46182,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "volt_set",
+                            "data": "channel.u.set",
                             "y": 30,
                             "x": 0,
                             "width": 60,
@@ -46187,7 +46191,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "curr_set",
+                            "data": "channel.i.set",
                             "y": 60,
                             "x": 0,
                             "width": 60,
@@ -46244,7 +46248,7 @@
                           {
                             "type": "Select",
                             "y": 0,
-                            "data": "output_state",
+                            "data": "channel.outputState",
                             "widgets": [
                               {
                                 "type": "Text",
@@ -46257,12 +46261,12 @@
                               },
                               {
                                 "type": "Select",
-                                "data": "output_mode",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -46271,7 +46275,7 @@
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_ur_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -46293,7 +46297,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "volt_set",
+                            "data": "channel.u.set",
                             "y": 26,
                             "x": 0,
                             "width": 60,
@@ -46302,7 +46306,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "curr_set",
+                            "data": "channel.i.set",
                             "y": 52,
                             "x": 0,
                             "width": 60,
@@ -46493,7 +46497,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -46506,12 +46510,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -46520,7 +46524,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -46541,7 +46545,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 64,
@@ -46550,7 +46554,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 64,
@@ -46709,7 +46713,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -46722,12 +46726,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -46736,7 +46740,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -46757,7 +46761,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 64,
@@ -46766,7 +46770,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 64,
@@ -46872,7 +46876,7 @@
                           {
                             "type": "Select",
                             "y": 0,
-                            "data": "output_state",
+                            "data": "channel.outputState",
                             "widgets": [
                               {
                                 "type": "Text",
@@ -46885,12 +46889,12 @@
                               },
                               {
                                 "type": "Select",
-                                "data": "output_mode",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -46899,7 +46903,7 @@
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_ur_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -46921,7 +46925,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "volt_set",
+                            "data": "channel.u.set",
                             "y": 30,
                             "x": 0,
                             "width": 60,
@@ -46930,7 +46934,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "curr_set",
+                            "data": "channel.i.set",
                             "y": 60,
                             "x": 0,
                             "width": 60,
@@ -46987,7 +46991,7 @@
                           {
                             "type": "Select",
                             "y": 0,
-                            "data": "output_state",
+                            "data": "channel.outputState",
                             "widgets": [
                               {
                                 "type": "Text",
@@ -47000,12 +47004,12 @@
                               },
                               {
                                 "type": "Select",
-                                "data": "output_mode",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -47014,7 +47018,7 @@
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_ur_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -47036,7 +47040,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "volt_set",
+                            "data": "channel.u.set",
                             "y": 26,
                             "x": 0,
                             "width": 60,
@@ -47045,7 +47049,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "curr_set",
+                            "data": "channel.i.set",
                             "y": 52,
                             "x": 0,
                             "width": 60,
@@ -47271,7 +47275,7 @@
                           {
                             "type": "Select",
                             "y": 0,
-                            "data": "output_state",
+                            "data": "channel.outputState",
                             "widgets": [
                               {
                                 "type": "Text",
@@ -47284,12 +47288,12 @@
                               },
                               {
                                 "type": "Select",
-                                "data": "output_mode",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 76,
@@ -47299,7 +47303,7 @@
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_ur_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 76,
@@ -47321,7 +47325,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "volt_set",
+                            "data": "channel.u.set",
                             "y": 30,
                             "x": 0,
                             "width": 76,
@@ -47331,7 +47335,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "curr_set",
+                            "data": "channel.i.set",
                             "y": 60,
                             "x": 0,
                             "width": 76,
@@ -47389,7 +47393,7 @@
                           {
                             "type": "Select",
                             "y": 0,
-                            "data": "output_state",
+                            "data": "channel.outputState",
                             "widgets": [
                               {
                                 "type": "Text",
@@ -47402,12 +47406,12 @@
                               },
                               {
                                 "type": "Select",
-                                "data": "output_mode",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 76,
@@ -47416,7 +47420,7 @@
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_ur_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 76,
@@ -47438,7 +47442,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "volt_set",
+                            "data": "channel.u.set",
                             "y": 30,
                             "x": 0,
                             "width": 76,
@@ -47447,7 +47451,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "curr_set",
+                            "data": "channel.i.set",
                             "y": 60,
                             "x": 0,
                             "width": 76,
@@ -47568,7 +47572,7 @@
                           {
                             "type": "Select",
                             "y": 0,
-                            "data": "output_state",
+                            "data": "channel.outputState",
                             "widgets": [
                               {
                                 "type": "Text",
@@ -47581,12 +47585,12 @@
                               },
                               {
                                 "type": "Select",
-                                "data": "output_mode",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -47595,7 +47599,7 @@
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_ur_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -47617,7 +47621,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "volt_set",
+                            "data": "channel.u.set",
                             "y": 30,
                             "x": 0,
                             "width": 60,
@@ -47626,7 +47630,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "curr_set",
+                            "data": "channel.i.set",
                             "y": 60,
                             "x": 0,
                             "width": 60,
@@ -47683,7 +47687,7 @@
                           {
                             "type": "Select",
                             "y": 0,
-                            "data": "output_state",
+                            "data": "channel.outputState",
                             "widgets": [
                               {
                                 "type": "Text",
@@ -47696,12 +47700,12 @@
                               },
                               {
                                 "type": "Select",
-                                "data": "output_mode",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -47710,7 +47714,7 @@
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_ur_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -47732,7 +47736,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "volt_set",
+                            "data": "channel.u.set",
                             "y": 26,
                             "x": 0,
                             "width": 60,
@@ -47741,7 +47745,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "curr_set",
+                            "data": "channel.i.set",
                             "y": 52,
                             "x": 0,
                             "width": 60,
@@ -47932,7 +47936,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -47945,12 +47949,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -47959,7 +47963,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -47980,7 +47984,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 64,
@@ -47989,7 +47993,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 64,
@@ -48193,7 +48197,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -48206,12 +48210,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -48220,7 +48224,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -48241,7 +48245,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 64,
@@ -48250,7 +48254,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 64,
@@ -48359,7 +48363,7 @@
                           {
                             "type": "Select",
                             "y": 0,
-                            "data": "output_state",
+                            "data": "channel.outputState",
                             "widgets": [
                               {
                                 "type": "Text",
@@ -48372,12 +48376,12 @@
                               },
                               {
                                 "type": "Select",
-                                "data": "output_mode",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -48386,7 +48390,7 @@
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_ur_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -48408,7 +48412,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "volt_set",
+                            "data": "channel.u.set",
                             "y": 30,
                             "x": 0,
                             "width": 60,
@@ -48417,7 +48421,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "curr_set",
+                            "data": "channel.i.set",
                             "y": 60,
                             "x": 0,
                             "width": 60,
@@ -48474,7 +48478,7 @@
                           {
                             "type": "Select",
                             "y": 0,
-                            "data": "output_state",
+                            "data": "channel.outputState",
                             "widgets": [
                               {
                                 "type": "Text",
@@ -48487,12 +48491,12 @@
                               },
                               {
                                 "type": "Select",
-                                "data": "output_mode",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -48501,7 +48505,7 @@
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_ur_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 60,
@@ -48523,7 +48527,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "volt_set",
+                            "data": "channel.u.set",
                             "y": 26,
                             "x": 0,
                             "width": 60,
@@ -48532,7 +48536,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "curr_set",
+                            "data": "channel.i.set",
                             "y": 52,
                             "x": 0,
                             "width": 60,
@@ -48761,7 +48765,7 @@
                           {
                             "type": "Select",
                             "y": 0,
-                            "data": "output_state",
+                            "data": "channel.outputState",
                             "widgets": [
                               {
                                 "type": "Text",
@@ -48774,12 +48778,12 @@
                               },
                               {
                                 "type": "Select",
-                                "data": "output_mode",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 76,
@@ -48789,7 +48793,7 @@
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_ur_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 76,
@@ -48811,7 +48815,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "volt_set",
+                            "data": "channel.u.set",
                             "y": 30,
                             "x": 0,
                             "width": 76,
@@ -48821,7 +48825,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "curr_set",
+                            "data": "channel.i.set",
                             "y": 60,
                             "x": 0,
                             "width": 76,
@@ -48899,7 +48903,7 @@
                           {
                             "type": "Select",
                             "y": 0,
-                            "data": "output_state",
+                            "data": "channel.outputState",
                             "widgets": [
                               {
                                 "type": "Text",
@@ -48912,12 +48916,12 @@
                               },
                               {
                                 "type": "Select",
-                                "data": "output_mode",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 76,
@@ -48926,7 +48930,7 @@
                                   {
                                     "type": "DisplayData",
                                     "style": "edit_value_ur_S_right",
-                                    "data": "mon_value",
+                                    "data": "channel.monValue",
                                     "x": 0,
                                     "y": 0,
                                     "width": 76,
@@ -48948,7 +48952,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "volt_set",
+                            "data": "channel.u.set",
                             "y": 26,
                             "x": 0,
                             "width": 76,
@@ -48957,7 +48961,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "curr_set",
+                            "data": "channel.i.set",
                             "y": 52,
                             "x": 0,
                             "width": 76,
@@ -49326,7 +49330,7 @@
                         "type": "Select",
                         "x": 0,
                         "y": 0,
-                        "data": "output_state",
+                        "data": "channel.outputState",
                         "action": "",
                         "widgets": [
                           {
@@ -49341,12 +49345,12 @@
                           },
                           {
                             "type": "Select",
-                            "data": "output_mode",
+                            "data": "channel.outputMode",
                             "widgets": [
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -49356,7 +49360,7 @@
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L_ur",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -49377,7 +49381,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "volt_set",
+                        "data": "channel.u.set",
                         "action": "edit",
                         "x": 0,
                         "y": 88,
@@ -49387,7 +49391,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "curr_set",
+                        "data": "channel.i.set",
                         "action": "edit",
                         "x": 106,
                         "y": 88,
@@ -49629,7 +49633,7 @@
                         "type": "Select",
                         "x": 0,
                         "y": 0,
-                        "data": "output_state",
+                        "data": "channel.outputState",
                         "action": "",
                         "widgets": [
                           {
@@ -49644,12 +49648,12 @@
                           },
                           {
                             "type": "Select",
-                            "data": "output_mode",
+                            "data": "channel.outputMode",
                             "widgets": [
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_landscape_L_right",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 160,
@@ -49659,7 +49663,7 @@
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_ur_landscape_L_right",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 160,
@@ -49861,7 +49865,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "volt_set",
+                        "data": "channel.u.set",
                         "action": "edit",
                         "x": 48,
                         "y": 59,
@@ -49871,7 +49875,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "curr_set",
+                        "data": "channel.i.set",
                         "action": "edit",
                         "x": 48,
                         "y": 99,
@@ -50305,7 +50309,7 @@
                         "type": "Select",
                         "x": 0,
                         "y": 0,
-                        "data": "output_state",
+                        "data": "channel.outputState",
                         "action": "",
                         "widgets": [
                           {
@@ -50320,12 +50324,12 @@
                           },
                           {
                             "type": "Select",
-                            "data": "output_mode",
+                            "data": "channel.outputMode",
                             "widgets": [
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -50335,7 +50339,7 @@
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L_ur",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -50356,7 +50360,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "volt_set",
+                        "data": "channel.u.set",
                         "action": "edit",
                         "x": 0,
                         "y": 86,
@@ -50366,7 +50370,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "curr_set",
+                        "data": "channel.i.set",
                         "action": "edit",
                         "x": 106,
                         "y": 86,
@@ -50475,7 +50479,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -50488,12 +50492,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -50502,7 +50506,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -50523,7 +50527,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 64,
@@ -50532,7 +50536,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 64,
@@ -51114,7 +51118,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -51127,12 +51131,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 120,
@@ -51141,7 +51145,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 120,
@@ -51162,7 +51166,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 36,
                     "width": 120,
@@ -51171,7 +51175,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 72,
                     "width": 120,
@@ -51607,7 +51611,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -51620,12 +51624,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 76,
@@ -51634,7 +51638,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 76,
@@ -51655,7 +51659,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 76,
@@ -51664,7 +51668,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 76,
@@ -51773,7 +51777,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -51786,12 +51790,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -51800,7 +51804,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -51821,7 +51825,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 64,
@@ -51830,7 +51834,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 64,
@@ -51855,8 +51859,18 @@
               "text": "Channel protections",
               "x": 6,
               "y": 0,
-              "width": 228,
-              "height": 30,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Channel protections",
+              "x": 42,
+              "y": 0,
+              "width": 192,
+              "height": 28,
               "style": "value_S"
             },
             {
@@ -52036,6 +52050,25 @@
           "height": 240,
           "widgets": [
             {
+              "type": "Text",
+              "text": "Channel protections",
+              "x": 6,
+              "y": 0,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Clear channel protections",
+              "x": 42,
+              "y": 0,
+              "width": 192,
+              "height": 28,
+              "style": "value_S"
+            },
+            {
               "type": "MultilineText",
               "text": "To prevent new protection(s) tripping make sure that load is disconnected before clearing.",
               "x": 16,
@@ -52063,93 +52096,6 @@
               "height": 32,
               "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_clear_and_disable"
-            },
-            {
-              "type": "List",
-              "listType": "vertical",
-              "itemWidget": {
-                "type": "Container",
-                "widgets": [
-                  {
-                    "type": "Select",
-                    "x": 0,
-                    "y": 0,
-                    "data": "output_state",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "style": "edit_value_S_right",
-                        "text": "OFF",
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30
-                      },
-                      {
-                        "type": "Select",
-                        "data": "output_mode",
-                        "widgets": [
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          },
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30,
-                        "style": "default"
-                      }
-                    ],
-                    "width": 64,
-                    "height": 30,
-                    "style": "default"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "volt_set",
-                    "x": 0,
-                    "y": 30,
-                    "width": 64,
-                    "height": 30
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "curr_set",
-                    "x": 0,
-                    "y": 60,
-                    "width": 64,
-                    "height": 30
-                  }
-                ],
-                "x": 0,
-                "y": 0,
-                "width": 64,
-                "height": 112,
-                "style": "default"
-              },
-              "x": 252,
-              "y": 0,
-              "width": 64,
-              "height": 204,
-              "data": "channels",
-              "style": "default"
             },
             {
               "type": "Text",
@@ -52210,13 +52156,91 @@
               "height": 36
             },
             {
-              "type": "Text",
-              "text": "Clear channel protections",
-              "x": 6,
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "channel.outputState",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "channel.outputMode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 64,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.u.set",
+                    "x": 0,
+                    "y": 30,
+                    "width": 64,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.i.set",
+                    "x": 0,
+                    "y": 60,
+                    "width": 64,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 252,
               "y": 0,
-              "width": 228,
-              "height": 32,
-              "style": "value_S"
+              "width": 64,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
             }
           ]
         },
@@ -52267,11 +52291,21 @@
           "widgets": [
             {
               "type": "Text",
-              "text": "Set voltage protection",
+              "text": "Channel protections",
               "x": 6,
               "y": 0,
-              "width": 246,
-              "height": 27,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Set voltage protection",
+              "x": 42,
+              "y": 0,
+              "width": 210,
+              "height": 28,
               "style": "value_S"
             },
             {
@@ -52346,7 +52380,7 @@
               "type": "Select",
               "x": 135,
               "y": 83,
-              "data": "output_state",
+              "data": "channel.outputState",
               "widgets": [
                 {
                   "type": "Text",
@@ -52360,7 +52394,7 @@
                 {
                   "type": "DisplayData",
                   "style": "value_S",
-                  "data": "volt_mon",
+                  "data": "channel.u.mon",
                   "x": 0,
                   "y": 0,
                   "width": 78,
@@ -52500,7 +52534,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -52513,12 +52547,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -52527,7 +52561,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -52548,7 +52582,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 64,
@@ -52557,7 +52591,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 64,
@@ -52626,11 +52660,21 @@
           "widgets": [
             {
               "type": "Text",
-              "text": "Set current protection",
+              "text": "Channel protections",
               "x": 6,
               "y": 0,
-              "width": 228,
-              "height": 27,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Set current protection",
+              "x": 42,
+              "y": 0,
+              "width": 192,
+              "height": 28,
               "style": "value_S"
             },
             {
@@ -52724,7 +52768,7 @@
               "type": "Select",
               "x": 135,
               "y": 83,
-              "data": "output_state",
+              "data": "channel.outputState",
               "widgets": [
                 {
                   "type": "Text",
@@ -52738,7 +52782,7 @@
                 {
                   "type": "DisplayData",
                   "style": "value_S",
-                  "data": "curr_mon",
+                  "data": "channel.i.mon",
                   "x": 0,
                   "y": 0,
                   "width": 78,
@@ -52771,93 +52815,6 @@
               "text": " Discard",
               "width": 96,
               "height": 36
-            },
-            {
-              "type": "List",
-              "listType": "vertical",
-              "itemWidget": {
-                "type": "Container",
-                "widgets": [
-                  {
-                    "type": "Select",
-                    "x": 0,
-                    "y": 0,
-                    "data": "output_state",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "style": "edit_value_S_right",
-                        "text": "OFF",
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30
-                      },
-                      {
-                        "type": "Select",
-                        "data": "output_mode",
-                        "widgets": [
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          },
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30,
-                        "style": "default"
-                      }
-                    ],
-                    "width": 64,
-                    "height": 30,
-                    "style": "default"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "volt_set",
-                    "x": 0,
-                    "y": 30,
-                    "width": 64,
-                    "height": 30
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "curr_set",
-                    "x": 0,
-                    "y": 60,
-                    "width": 64,
-                    "height": 30
-                  }
-                ],
-                "x": 0,
-                "y": 0,
-                "width": 64,
-                "height": 112,
-                "style": "default"
-              },
-              "x": 252,
-              "y": 0,
-              "width": 64,
-              "height": 204,
-              "data": "channels",
-              "style": "default"
             },
             {
               "type": "Text",
@@ -52916,6 +52873,93 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "channel.outputState",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "channel.outputMode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 64,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.u.set",
+                    "x": 0,
+                    "y": 30,
+                    "width": 64,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.i.set",
+                    "x": 0,
+                    "y": 60,
+                    "width": 64,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 252,
+              "y": 0,
+              "width": 64,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
             }
           ]
         },
@@ -52966,11 +53010,21 @@
           "widgets": [
             {
               "type": "Text",
-              "text": "Set power protection",
+              "text": "Channel protections",
               "x": 6,
               "y": 0,
-              "width": 228,
-              "height": 27,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Set power protection",
+              "x": 42,
+              "y": 0,
+              "width": 210,
+              "height": 28,
               "style": "value_S"
             },
             {
@@ -52978,7 +53032,7 @@
               "text": "Limit:",
               "x": 16,
               "y": 27,
-              "width": 84,
+              "width": 109,
               "height": 28,
               "style": "edit_value_S_left"
             },
@@ -52987,7 +53041,7 @@
               "data": "channel.protection.opp.limit",
               "x": 125,
               "y": 27,
-              "width": 136,
+              "width": 78,
               "height": 28,
               "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_limit"
@@ -52997,7 +53051,7 @@
               "text": "OPP active:",
               "x": 16,
               "y": 55,
-              "width": 84,
+              "width": 109,
               "height": 28,
               "style": "edit_value_S_left"
             },
@@ -53034,10 +53088,48 @@
             },
             {
               "type": "Text",
+              "text": "Output power:",
+              "x": 16,
+              "y": 83,
+              "width": 109,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Select",
+              "x": 125,
+              "y": 83,
+              "data": "channel.outputState",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "style": "value_S",
+                  "text": "OFF",
+                  "x": 0,
+                  "y": 0,
+                  "width": 78,
+                  "height": 28
+                },
+                {
+                  "type": "DisplayData",
+                  "style": "value_S",
+                  "data": "channel.p.mon",
+                  "x": 0,
+                  "y": 0,
+                  "width": 78,
+                  "height": 28
+                }
+              ],
+              "width": 78,
+              "height": 28,
+              "style": "default"
+            },
+            {
+              "type": "Text",
               "text": "Trip level:",
               "x": 16,
               "y": 111,
-              "width": 80,
+              "width": 109,
               "height": 28,
               "style": "edit_value_S_left"
             },
@@ -53046,7 +53138,7 @@
               "data": "channel.protection.opp.level",
               "x": 125,
               "y": 111,
-              "width": 81,
+              "width": 78,
               "height": 28,
               "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_level"
@@ -53056,7 +53148,7 @@
               "text": "Trip delay:",
               "x": 16,
               "y": 139,
-              "width": 110,
+              "width": 109,
               "height": 28,
               "style": "edit_value_S_left"
             },
@@ -53065,7 +53157,7 @@
               "data": "channel.protection.opp.delay",
               "x": 125,
               "y": 139,
-              "width": 81,
+              "width": 78,
               "height": 28,
               "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_delay"
@@ -53092,93 +53184,6 @@
               "text": " Discard",
               "width": 96,
               "height": 34
-            },
-            {
-              "type": "List",
-              "listType": "vertical",
-              "itemWidget": {
-                "type": "Container",
-                "widgets": [
-                  {
-                    "type": "Select",
-                    "x": 0,
-                    "y": 0,
-                    "data": "output_state",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "style": "edit_value_S_right",
-                        "text": "OFF",
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30
-                      },
-                      {
-                        "type": "Select",
-                        "data": "output_mode",
-                        "widgets": [
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          },
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30,
-                        "style": "default"
-                      }
-                    ],
-                    "width": 64,
-                    "height": 30,
-                    "style": "default"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "volt_set",
-                    "x": 0,
-                    "y": 30,
-                    "width": 64,
-                    "height": 30
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "curr_set",
-                    "x": 0,
-                    "y": 60,
-                    "width": 64,
-                    "height": 30
-                  }
-                ],
-                "x": 0,
-                "y": 0,
-                "width": 64,
-                "height": 112,
-                "style": "default"
-              },
-              "x": 252,
-              "y": 0,
-              "width": 64,
-              "height": 204,
-              "data": "channels",
-              "style": "default"
             },
             {
               "type": "Text",
@@ -53239,22 +53244,91 @@
               "height": 36
             },
             {
-              "type": "Text",
-              "text": "Output power:",
-              "x": 16,
-              "y": 83,
-              "width": 110,
-              "height": 28,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "150W",
-              "x": 125,
-              "y": 83,
-              "width": 66,
-              "height": 28,
-              "style": "value_S"
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "channel.outputState",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "channel.outputMode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 64,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.u.set",
+                    "x": 0,
+                    "y": 30,
+                    "width": 64,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.i.set",
+                    "x": 0,
+                    "y": 60,
+                    "width": 64,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 252,
+              "y": 0,
+              "width": 64,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
             }
           ]
         },
@@ -53305,11 +53379,21 @@
           "widgets": [
             {
               "type": "Text",
-              "text": "Set temperature protection",
+              "text": "Channel protections",
               "x": 6,
               "y": 0,
-              "width": 228,
-              "height": 27,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Set temperature protection",
+              "x": 42,
+              "y": 0,
+              "width": 192,
+              "height": 28,
               "style": "value_S"
             },
             {
@@ -53317,7 +53401,7 @@
               "text": "OTP active:",
               "x": 16,
               "y": 27,
-              "width": 84,
+              "width": 114,
               "height": 28,
               "style": "edit_value_S_left"
             },
@@ -53357,7 +53441,7 @@
               "text": "Current temp.:",
               "x": 16,
               "y": 55,
-              "width": 113,
+              "width": 114,
               "height": 28,
               "style": "edit_value_S_left"
             },
@@ -53379,7 +53463,7 @@
                   "text": "45.5",
                   "x": 0,
                   "y": 0,
-                  "width": 80,
+                  "width": 96,
                   "height": 28,
                   "style": "value_S",
                   "data": "channel.temp"
@@ -53407,7 +53491,7 @@
               "text": "Trip level:",
               "x": 16,
               "y": 83,
-              "width": 84,
+              "width": 114,
               "height": 28,
               "style": "edit_value_S_left"
             },
@@ -53416,7 +53500,7 @@
               "data": "channel.protection.otp.level",
               "x": 130,
               "y": 83,
-              "width": 83,
+              "width": 84,
               "height": 28,
               "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_level"
@@ -53426,7 +53510,7 @@
               "text": "Trip delay:",
               "x": 16,
               "y": 111,
-              "width": 101,
+              "width": 114,
               "height": 28,
               "style": "edit_value_S_left"
             },
@@ -53435,7 +53519,7 @@
               "data": "channel.protection.otp.delay",
               "x": 130,
               "y": 111,
-              "width": 80,
+              "width": 84,
               "height": 28,
               "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_delay"
@@ -53462,93 +53546,6 @@
               "text": " Discard",
               "width": 96,
               "height": 36
-            },
-            {
-              "type": "List",
-              "listType": "vertical",
-              "itemWidget": {
-                "type": "Container",
-                "widgets": [
-                  {
-                    "type": "Select",
-                    "x": 0,
-                    "y": 0,
-                    "data": "output_state",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "style": "edit_value_S_right",
-                        "text": "OFF",
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30
-                      },
-                      {
-                        "type": "Select",
-                        "data": "output_mode",
-                        "widgets": [
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          },
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30,
-                        "style": "default"
-                      }
-                    ],
-                    "width": 64,
-                    "height": 30,
-                    "style": "default"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "volt_set",
-                    "x": 0,
-                    "y": 30,
-                    "width": 64,
-                    "height": 30
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "curr_set",
-                    "x": 0,
-                    "y": 60,
-                    "width": 64,
-                    "height": 30
-                  }
-                ],
-                "x": 0,
-                "y": 0,
-                "width": 64,
-                "height": 112,
-                "style": "default"
-              },
-              "x": 252,
-              "y": 0,
-              "width": 64,
-              "height": 204,
-              "data": "channels",
-              "style": "default"
             },
             {
               "type": "Text",
@@ -53607,6 +53604,93 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "channel.outputState",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "channel.outputMode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 64,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.u.set",
+                    "x": 0,
+                    "y": 30,
+                    "width": 64,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.i.set",
+                    "x": 0,
+                    "y": 60,
+                    "width": 64,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 252,
+              "y": 0,
+              "width": 64,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
             }
           ]
         },
@@ -53657,18 +53741,28 @@
           "widgets": [
             {
               "type": "Text",
-              "text": "Channel advanced settings",
+              "text": "Channel protections",
               "x": 6,
               "y": 0,
-              "width": 228,
-              "height": 32,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Channel advanced settings",
+              "x": 42,
+              "y": 0,
+              "width": 210,
+              "height": 28,
               "style": "value_S"
             },
             {
               "type": "Text",
               "text": "Low ripple mode",
               "x": 12,
-              "y": 30,
+              "y": 28,
               "width": 180,
               "height": 32,
               "style": "edit_value_active_S_left",
@@ -53678,7 +53772,7 @@
               "type": "Text",
               "text": "Remote sensing",
               "x": 12,
-              "y": 62,
+              "y": 60,
               "width": 180,
               "height": 32,
               "style": "edit_value_active_S_left",
@@ -53701,7 +53795,7 @@
                   "type": "Text",
                   "text": "Remote programming",
                   "x": 0,
-                  "y": 0,
+                  "y": -2,
                   "width": 180,
                   "height": 32,
                   "style": "edit_value_active_S_left",
@@ -53719,7 +53813,7 @@
               "type": "Text",
               "text": "Tracking control",
               "x": 12,
-              "y": 126,
+              "y": 124,
               "width": 180,
               "height": 32,
               "style": "default_disabled_S_left"
@@ -53728,97 +53822,10 @@
               "type": "Text",
               "text": "Coupling settings",
               "x": 12,
-              "y": 158,
+              "y": 156,
               "width": 180,
               "height": 32,
               "style": "default_disabled_S_left"
-            },
-            {
-              "type": "List",
-              "listType": "vertical",
-              "itemWidget": {
-                "type": "Container",
-                "widgets": [
-                  {
-                    "type": "Select",
-                    "x": 0,
-                    "y": 0,
-                    "data": "output_state",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "style": "edit_value_S_right",
-                        "text": "OFF",
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30
-                      },
-                      {
-                        "type": "Select",
-                        "data": "output_mode",
-                        "widgets": [
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          },
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30,
-                        "style": "default"
-                      }
-                    ],
-                    "width": 64,
-                    "height": 30,
-                    "style": "default"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "volt_set",
-                    "x": 0,
-                    "y": 30,
-                    "width": 64,
-                    "height": 30
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "curr_set",
-                    "x": 0,
-                    "y": 60,
-                    "width": 64,
-                    "height": 30
-                  }
-                ],
-                "x": 0,
-                "y": 0,
-                "width": 64,
-                "height": 112,
-                "style": "default"
-              },
-              "x": 252,
-              "y": 0,
-              "width": 64,
-              "height": 204,
-              "data": "channels",
-              "style": "default"
             },
             {
               "type": "Text",
@@ -53877,6 +53884,93 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "channel.outputState",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "channel.outputMode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 64,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.u.set",
+                    "x": 0,
+                    "y": 30,
+                    "width": 64,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.i.set",
+                    "x": 0,
+                    "y": 60,
+                    "width": 64,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 252,
+              "y": 0,
+              "width": 64,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
             }
           ]
         },
@@ -53927,19 +54021,29 @@
           "widgets": [
             {
               "type": "Text",
-              "text": "Set channel low ripple mode",
+              "text": "Channel protections",
               "x": 6,
               "y": 0,
-              "width": 228,
-              "height": 32,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Set channel low ripple mode",
+              "x": 42,
+              "y": 0,
+              "width": 210,
+              "height": 28,
               "style": "value_S"
             },
             {
               "type": "Text",
               "text": "Max. current:",
               "x": 16,
-              "y": 30,
-              "width": 130,
+              "y": 28,
+              "width": 162,
               "height": 24,
               "style": "edit_value_S_left"
             },
@@ -53947,9 +54051,9 @@
               "type": "DisplayData",
               "text": "0.70",
               "x": 178,
-              "y": 32,
+              "y": 28,
               "width": 74,
-              "height": 24,
+              "height": 26,
               "style": "value_S",
               "data": "channel.lripple.maxCurrent"
             },
@@ -53957,7 +54061,7 @@
               "type": "Text",
               "text": "Max. dissipation:",
               "x": 16,
-              "y": 54,
+              "y": 52,
               "width": 162,
               "height": 24,
               "style": "edit_value_S_left"
@@ -53966,7 +54070,7 @@
               "type": "DisplayData",
               "text": "20.00",
               "x": 178,
-              "y": 54,
+              "y": 52,
               "width": 74,
               "height": 24,
               "style": "value_S",
@@ -53976,7 +54080,7 @@
               "type": "Text",
               "text": "Status:",
               "x": 16,
-              "y": 78,
+              "y": 76,
               "width": 162,
               "height": 42,
               "style": "edit_value_left"
@@ -53989,7 +54093,7 @@
                   "text": "OFF",
                   "x": 0,
                   "y": 0,
-                  "width": 62,
+                  "width": 74,
                   "height": 42,
                   "style": "edit_value_active_left",
                   "action": "ch_settins_adv_lripple_toggle_status"
@@ -53999,15 +54103,15 @@
                   "text": "ON",
                   "x": 0,
                   "y": 0,
-                  "width": 62,
+                  "width": 74,
                   "height": 42,
                   "style": "edit_value_active_left",
                   "action": "ch_settins_adv_lripple_toggle_status"
                 }
               ],
               "x": 178,
-              "y": 78,
-              "width": 62,
+              "y": 76,
+              "width": 74,
               "height": 42,
               "style": "default",
               "data": "channel.lripple.status"
@@ -54016,7 +54120,7 @@
               "type": "Text",
               "text": "Auto mode:",
               "x": 16,
-              "y": 114,
+              "y": 112,
               "width": 162,
               "height": 42,
               "style": "edit_value_left"
@@ -54029,7 +54133,7 @@
                   "text": "OFF",
                   "x": 0,
                   "y": 0,
-                  "width": 62,
+                  "width": 74,
                   "height": 42,
                   "style": "edit_value_active_left",
                   "action": "ch_settins_adv_lripple_toggle_auto_mode"
@@ -54039,15 +54143,15 @@
                   "text": "ON",
                   "x": 0,
                   "y": 0,
-                  "width": 60,
-                  "height": 40,
+                  "width": 74,
+                  "height": 42,
                   "style": "edit_value_active_left",
                   "action": "ch_settins_adv_lripple_toggle_auto_mode"
                 }
               ],
               "x": 178,
-              "y": 114,
-              "width": 62,
+              "y": 112,
+              "width": 74,
               "height": 42,
               "style": "default",
               "data": "channel.lripple.autoMode"
@@ -54074,93 +54178,6 @@
               "text": " Discard",
               "width": 96,
               "height": 36
-            },
-            {
-              "type": "List",
-              "listType": "vertical",
-              "itemWidget": {
-                "type": "Container",
-                "widgets": [
-                  {
-                    "type": "Select",
-                    "x": 0,
-                    "y": 0,
-                    "data": "output_state",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "style": "edit_value_S_right",
-                        "text": "OFF",
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30
-                      },
-                      {
-                        "type": "Select",
-                        "data": "output_mode",
-                        "widgets": [
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          },
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30,
-                        "style": "default"
-                      }
-                    ],
-                    "width": 64,
-                    "height": 30,
-                    "style": "default"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "volt_set",
-                    "x": 0,
-                    "y": 30,
-                    "width": 64,
-                    "height": 30
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "curr_set",
-                    "x": 0,
-                    "y": 60,
-                    "width": 64,
-                    "height": 30
-                  }
-                ],
-                "x": 0,
-                "y": 0,
-                "width": 64,
-                "height": 112,
-                "style": "default"
-              },
-              "x": 252,
-              "y": 0,
-              "width": 64,
-              "height": 204,
-              "data": "channels",
-              "style": "default"
             },
             {
               "type": "Text",
@@ -54219,6 +54236,93 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "channel.outputState",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "channel.outputMode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 64,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.u.set",
+                    "x": 0,
+                    "y": 30,
+                    "width": 64,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.i.set",
+                    "x": 0,
+                    "y": 60,
+                    "width": 64,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 252,
+              "y": 0,
+              "width": 64,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
             }
           ]
         },
@@ -54269,11 +54373,21 @@
           "widgets": [
             {
               "type": "Text",
-              "text": "Set remote voltage sense",
+              "text": "Channel protections",
               "x": 6,
               "y": 0,
-              "width": 228,
-              "height": 32,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Set remote voltage sense",
+              "x": 42,
+              "y": 0,
+              "width": 210,
+              "height": 28,
               "style": "value_S"
             },
             {
@@ -54312,8 +54426,8 @@
                   "text": "ON",
                   "x": 0,
                   "y": 0,
-                  "width": 60,
-                  "height": 40,
+                  "width": 62,
+                  "height": 42,
                   "style": "edit_value_active_left",
                   "action": "ch_settins_adv_rsense_toggle_status"
                 }
@@ -54324,93 +54438,6 @@
               "height": 42,
               "style": "default",
               "data": "channel.rsense.status"
-            },
-            {
-              "type": "List",
-              "listType": "vertical",
-              "itemWidget": {
-                "type": "Container",
-                "widgets": [
-                  {
-                    "type": "Select",
-                    "x": 0,
-                    "y": 0,
-                    "data": "output_state",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "style": "edit_value_S_right",
-                        "text": "OFF",
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30
-                      },
-                      {
-                        "type": "Select",
-                        "data": "output_mode",
-                        "widgets": [
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          },
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30,
-                        "style": "default"
-                      }
-                    ],
-                    "width": 64,
-                    "height": 30,
-                    "style": "default"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "volt_set",
-                    "x": 0,
-                    "y": 30,
-                    "width": 64,
-                    "height": 30
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "curr_set",
-                    "x": 0,
-                    "y": 60,
-                    "width": 64,
-                    "height": 30
-                  }
-                ],
-                "x": 0,
-                "y": 0,
-                "width": 64,
-                "height": 112,
-                "style": "default"
-              },
-              "x": 252,
-              "y": 0,
-              "width": 64,
-              "height": 204,
-              "data": "channels",
-              "style": "default"
             },
             {
               "type": "Text",
@@ -54469,6 +54496,93 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "channel.outputState",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "channel.outputMode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 64,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.u.set",
+                    "x": 0,
+                    "y": 30,
+                    "width": 64,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.i.set",
+                    "x": 0,
+                    "y": 60,
+                    "width": 64,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 252,
+              "y": 0,
+              "width": 64,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
             }
           ]
         },
@@ -54519,11 +54633,21 @@
           "widgets": [
             {
               "type": "Text",
-              "text": "Set remote programming",
+              "text": "Channel protections",
               "x": 6,
               "y": 0,
-              "width": 228,
-              "height": 32,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Set remote programming",
+              "x": 42,
+              "y": 0,
+              "width": 210,
+              "height": 28,
               "style": "value_S"
             },
             {
@@ -54562,8 +54686,8 @@
                   "text": "ON",
                   "x": 0,
                   "y": 0,
-                  "width": 60,
-                  "height": 40,
+                  "width": 62,
+                  "height": 42,
                   "style": "edit_value_active_left",
                   "action": "ch_settins_adv_rprog_toggle_status"
                 }
@@ -54574,93 +54698,6 @@
               "height": 42,
               "style": "default",
               "data": "channel.rprog.status"
-            },
-            {
-              "type": "List",
-              "listType": "vertical",
-              "itemWidget": {
-                "type": "Container",
-                "widgets": [
-                  {
-                    "type": "Select",
-                    "x": 0,
-                    "y": 0,
-                    "data": "output_state",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "style": "edit_value_S_right",
-                        "text": "OFF",
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30
-                      },
-                      {
-                        "type": "Select",
-                        "data": "output_mode",
-                        "widgets": [
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          },
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30,
-                        "style": "default"
-                      }
-                    ],
-                    "width": 64,
-                    "height": 30,
-                    "style": "default"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "volt_set",
-                    "x": 0,
-                    "y": 30,
-                    "width": 64,
-                    "height": 30
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "curr_set",
-                    "x": 0,
-                    "y": 60,
-                    "width": 64,
-                    "height": 30
-                  }
-                ],
-                "x": 0,
-                "y": 0,
-                "width": 64,
-                "height": 112,
-                "style": "default"
-              },
-              "x": 252,
-              "y": 0,
-              "width": 64,
-              "height": 204,
-              "data": "channels",
-              "style": "default"
             },
             {
               "type": "Text",
@@ -54719,6 +54756,93 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "channel.outputState",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "channel.outputMode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 64,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.u.set",
+                    "x": 0,
+                    "y": 30,
+                    "width": 64,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.i.set",
+                    "x": 0,
+                    "y": 60,
+                    "width": 64,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 252,
+              "y": 0,
+              "width": 64,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
             }
           ]
         },
@@ -54769,11 +54893,21 @@
           "widgets": [
             {
               "type": "Text",
-              "text": "Set channel display",
+              "text": "Channel protections",
               "x": 6,
               "y": 0,
-              "width": 228,
-              "height": 32,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Set channel display",
+              "x": 42,
+              "y": 0,
+              "width": 210,
+              "height": 28,
               "style": "value_S"
             },
             {
@@ -54802,93 +54936,6 @@
               "width": 228,
               "height": 32,
               "style": "default_disabled_S_left"
-            },
-            {
-              "type": "List",
-              "listType": "vertical",
-              "itemWidget": {
-                "type": "Container",
-                "widgets": [
-                  {
-                    "type": "Select",
-                    "x": 0,
-                    "y": 0,
-                    "data": "output_state",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "style": "edit_value_S_right",
-                        "text": "OFF",
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30
-                      },
-                      {
-                        "type": "Select",
-                        "data": "output_mode",
-                        "widgets": [
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          },
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30,
-                        "style": "default"
-                      }
-                    ],
-                    "width": 64,
-                    "height": 30,
-                    "style": "default"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "volt_set",
-                    "x": 0,
-                    "y": 30,
-                    "width": 64,
-                    "height": 30
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "curr_set",
-                    "x": 0,
-                    "y": 60,
-                    "width": 64,
-                    "height": 30
-                  }
-                ],
-                "x": 0,
-                "y": 0,
-                "width": 64,
-                "height": 112,
-                "style": "default"
-              },
-              "x": 252,
-              "y": 0,
-              "width": 64,
-              "height": 204,
-              "data": "channels",
-              "style": "default"
             },
             {
               "type": "Text",
@@ -54947,6 +54994,93 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "channel.outputState",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "channel.outputMode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 64,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.u.set",
+                    "x": 0,
+                    "y": 30,
+                    "width": 64,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.i.set",
+                    "x": 0,
+                    "y": 60,
+                    "width": 64,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 252,
+              "y": 0,
+              "width": 64,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
             }
           ]
         },
@@ -54997,11 +55131,21 @@
           "widgets": [
             {
               "type": "Text",
-              "text": "Channel information",
+              "text": "Channel protections",
               "x": 6,
               "y": 0,
-              "width": 228,
-              "height": 32,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Channel information",
+              "x": 42,
+              "y": 0,
+              "width": 210,
+              "height": 28,
               "style": "value_S"
             },
             {
@@ -55206,93 +55350,6 @@
               "style": "default_disabled_S_left"
             },
             {
-              "type": "List",
-              "listType": "vertical",
-              "itemWidget": {
-                "type": "Container",
-                "widgets": [
-                  {
-                    "type": "Select",
-                    "x": 0,
-                    "y": 0,
-                    "data": "output_state",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "style": "edit_value_S_right",
-                        "text": "OFF",
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30
-                      },
-                      {
-                        "type": "Select",
-                        "data": "output_mode",
-                        "widgets": [
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          },
-                          {
-                            "type": "DisplayData",
-                            "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 30
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 30,
-                        "style": "default"
-                      }
-                    ],
-                    "width": 64,
-                    "height": 30,
-                    "style": "default"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "volt_set",
-                    "x": 0,
-                    "y": 30,
-                    "width": 64,
-                    "height": 30
-                  },
-                  {
-                    "type": "DisplayData",
-                    "style": "edit_value_S_right",
-                    "data": "curr_set",
-                    "x": 0,
-                    "y": 60,
-                    "width": 64,
-                    "height": 30
-                  }
-                ],
-                "x": 0,
-                "y": 0,
-                "width": 64,
-                "height": 112,
-                "style": "default"
-              },
-              "x": 252,
-              "y": 0,
-              "width": 64,
-              "height": 204,
-              "data": "channels",
-              "style": "default"
-            },
-            {
               "type": "Text",
               "action": "show_ch_settings_prot",
               "x": 0,
@@ -55349,6 +55406,93 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Select",
+                    "x": 0,
+                    "y": 0,
+                    "data": "channel.outputState",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "style": "edit_value_S_right",
+                        "text": "OFF",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "data": "channel.outputMode",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          },
+                          {
+                            "type": "DisplayData",
+                            "style": "edit_value_ur_S_right",
+                            "data": "channel.monValue",
+                            "x": 0,
+                            "y": 0,
+                            "width": 64,
+                            "height": 30
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 30,
+                        "style": "default"
+                      }
+                    ],
+                    "width": 64,
+                    "height": 30,
+                    "style": "default"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.u.set",
+                    "x": 0,
+                    "y": 30,
+                    "width": 64,
+                    "height": 30
+                  },
+                  {
+                    "type": "DisplayData",
+                    "style": "edit_value_S_right",
+                    "data": "channel.i.set",
+                    "x": 0,
+                    "y": 60,
+                    "width": 64,
+                    "height": 30
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 112,
+                "style": "default"
+              },
+              "x": 252,
+              "y": 0,
+              "width": 64,
+              "height": 204,
+              "data": "channels",
+              "style": "default"
             }
           ]
         },
@@ -55384,7 +55528,7 @@
                         "type": "Select",
                         "x": 0,
                         "y": 0,
-                        "data": "output_state",
+                        "data": "channel.outputState",
                         "action": "",
                         "widgets": [
                           {
@@ -55399,12 +55543,12 @@
                           },
                           {
                             "type": "Select",
-                            "data": "output_mode",
+                            "data": "channel.outputMode",
                             "widgets": [
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -55414,7 +55558,7 @@
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L_ur",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -55435,7 +55579,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "volt_set",
+                        "data": "channel.u.set",
                         "action": "edit",
                         "x": 0,
                         "y": 86,
@@ -55445,7 +55589,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "curr_set",
+                        "data": "channel.i.set",
                         "action": "edit",
                         "x": 106,
                         "y": 86,
@@ -55554,7 +55698,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -55567,12 +55711,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -55581,7 +55725,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -55602,7 +55746,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 64,
@@ -55611,7 +55755,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 64,
@@ -55781,7 +55925,7 @@
                         "type": "Select",
                         "x": 0,
                         "y": 0,
-                        "data": "output_state",
+                        "data": "channel.outputState",
                         "action": "",
                         "widgets": [
                           {
@@ -55796,12 +55940,12 @@
                           },
                           {
                             "type": "Select",
-                            "data": "output_mode",
+                            "data": "channel.outputMode",
                             "widgets": [
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -55811,7 +55955,7 @@
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L_ur",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -55832,7 +55976,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "volt_set",
+                        "data": "channel.u.set",
                         "action": "edit",
                         "x": 0,
                         "y": 86,
@@ -55842,7 +55986,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "curr_set",
+                        "data": "channel.i.set",
                         "action": "edit",
                         "x": 106,
                         "y": 86,
@@ -55998,7 +56142,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -56011,12 +56155,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -56025,7 +56169,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -56046,7 +56190,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 64,
@@ -56055,7 +56199,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 64,
@@ -56160,7 +56304,7 @@
                         "type": "Select",
                         "x": 0,
                         "y": 0,
-                        "data": "output_state",
+                        "data": "channel.outputState",
                         "action": "",
                         "widgets": [
                           {
@@ -56175,12 +56319,12 @@
                           },
                           {
                             "type": "Select",
-                            "data": "output_mode",
+                            "data": "channel.outputMode",
                             "widgets": [
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -56190,7 +56334,7 @@
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L_ur",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -56211,7 +56355,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "volt_set",
+                        "data": "channel.u.set",
                         "action": "edit",
                         "x": 0,
                         "y": 86,
@@ -56221,7 +56365,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "curr_set",
+                        "data": "channel.i.set",
                         "action": "edit",
                         "x": 106,
                         "y": 86,
@@ -56330,7 +56474,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -56343,12 +56487,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -56357,7 +56501,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -56378,7 +56522,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 64,
@@ -56387,7 +56531,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 64,
@@ -57019,7 +57163,7 @@
                         "type": "Select",
                         "x": 0,
                         "y": 0,
-                        "data": "output_state",
+                        "data": "channel.outputState",
                         "action": "",
                         "widgets": [
                           {
@@ -57034,12 +57178,12 @@
                           },
                           {
                             "type": "Select",
-                            "data": "output_mode",
+                            "data": "channel.outputMode",
                             "widgets": [
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -57049,7 +57193,7 @@
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L_ur",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -57070,7 +57214,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "volt_set",
+                        "data": "channel.u.set",
                         "action": "edit",
                         "x": 0,
                         "y": 86,
@@ -57080,7 +57224,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "curr_set",
+                        "data": "channel.i.set",
                         "action": "edit",
                         "x": 106,
                         "y": 86,
@@ -57400,7 +57544,7 @@
                         "type": "Select",
                         "x": 0,
                         "y": 0,
-                        "data": "output_state",
+                        "data": "channel.outputState",
                         "action": "",
                         "widgets": [
                           {
@@ -57415,12 +57559,12 @@
                           },
                           {
                             "type": "Select",
-                            "data": "output_mode",
+                            "data": "channel.outputMode",
                             "widgets": [
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -57430,7 +57574,7 @@
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L_ur",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -57451,7 +57595,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "volt_set",
+                        "data": "channel.u.set",
                         "action": "edit",
                         "x": 0,
                         "y": 86,
@@ -57461,7 +57605,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "curr_set",
+                        "data": "channel.i.set",
                         "action": "edit",
                         "x": 106,
                         "y": 86,
@@ -57797,7 +57941,7 @@
                         "type": "Select",
                         "x": 0,
                         "y": 0,
-                        "data": "output_state",
+                        "data": "channel.outputState",
                         "action": "",
                         "widgets": [
                           {
@@ -57812,12 +57956,12 @@
                           },
                           {
                             "type": "Select",
-                            "data": "output_mode",
+                            "data": "channel.outputMode",
                             "widgets": [
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -57827,7 +57971,7 @@
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L_ur",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -57848,7 +57992,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "volt_set",
+                        "data": "channel.u.set",
                         "action": "edit",
                         "x": 0,
                         "y": 86,
@@ -57858,7 +58002,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "curr_set",
+                        "data": "channel.i.set",
                         "action": "edit",
                         "x": 106,
                         "y": 86,
@@ -58132,7 +58276,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -58145,12 +58289,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -58159,7 +58303,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -58180,7 +58324,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 64,
@@ -58189,7 +58333,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 64,
@@ -58351,7 +58495,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -58364,12 +58508,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -58378,7 +58522,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -58399,7 +58543,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 64,
@@ -58408,7 +58552,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 64,
@@ -58520,7 +58664,7 @@
                         "type": "Select",
                         "x": 0,
                         "y": 0,
-                        "data": "output_state",
+                        "data": "channel.outputState",
                         "action": "",
                         "widgets": [
                           {
@@ -58535,12 +58679,12 @@
                           },
                           {
                             "type": "Select",
-                            "data": "output_mode",
+                            "data": "channel.outputMode",
                             "widgets": [
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -58550,7 +58694,7 @@
                               {
                                 "type": "DisplayData",
                                 "style": "mon_value_L_ur",
-                                "data": "mon_value",
+                                "data": "channel.monValue",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -58571,7 +58715,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "volt_set",
+                        "data": "channel.u.set",
                         "action": "edit",
                         "x": 0,
                         "y": 86,
@@ -58581,7 +58725,7 @@
                       },
                       {
                         "type": "DisplayData",
-                        "data": "curr_set",
+                        "data": "channel.i.set",
                         "action": "edit",
                         "x": 106,
                         "y": 86,
@@ -58699,7 +58843,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -58712,12 +58856,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -58726,7 +58870,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 64,
@@ -58747,7 +58891,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 64,
@@ -58756,7 +58900,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 64,
@@ -59518,7 +59662,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -59531,12 +59675,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 76,
@@ -59545,7 +59689,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 76,
@@ -59566,7 +59710,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 76,
@@ -59575,7 +59719,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 76,
@@ -59905,7 +60049,7 @@
                     "type": "Select",
                     "x": 0,
                     "y": 0,
-                    "data": "output_state",
+                    "data": "channel.outputState",
                     "widgets": [
                       {
                         "type": "Text",
@@ -59918,12 +60062,12 @@
                       },
                       {
                         "type": "Select",
-                        "data": "output_mode",
+                        "data": "channel.outputMode",
                         "widgets": [
                           {
                             "type": "DisplayData",
                             "style": "edit_value_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 76,
@@ -59932,7 +60076,7 @@
                           {
                             "type": "DisplayData",
                             "style": "edit_value_ur_S_right",
-                            "data": "mon_value",
+                            "data": "channel.monValue",
                             "x": 0,
                             "y": 0,
                             "width": 76,
@@ -59953,7 +60097,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "volt_set",
+                    "data": "channel.u.set",
                     "x": 0,
                     "y": 30,
                     "width": 76,
@@ -59962,7 +60106,7 @@
                   {
                     "type": "DisplayData",
                     "style": "edit_value_S_right",
-                    "data": "curr_set",
+                    "data": "channel.i.set",
                     "x": 0,
                     "y": 60,
                     "width": 76,

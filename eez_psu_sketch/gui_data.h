@@ -147,18 +147,18 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
 
 struct Cursor {
-    int iChannel;
+    int i;
 
     Cursor() {
-        iChannel = -1;
+        i = -1;
     }
 
     Cursor(int i) {
-        iChannel = i;
+        this->i = i;
     }
 
     operator bool() {
-        return iChannel != -1;
+        return i != -1;
     }
 
     bool operator != (const Cursor& rhs) const {
@@ -166,8 +166,12 @@ struct Cursor {
     }
 
     bool operator == (const Cursor& rhs) const {
-        return iChannel == rhs.iChannel;
+        return i == rhs.i;
     }
+
+	void reset() {
+		i = -1;
+	}
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -57,9 +57,28 @@ data::Value ChSettingsProtectionPage::getData(const data::Cursor &cursor, uint8_
 void ChSettingsProtectionSetPage::takeSnapshot(data::Snapshot *snapshot) {
 	snapshot->flags.switch1 = state;
 	snapshot->flags.switch2 = getDirty();
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+	channelSnapshot.flags.tempStatus = 2;
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+	data::ChannelSnapshot &channelSnapshot = snapshot->channelSnapshots[g_channel->index - 1];
+
+	temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + g_channel->index - 1];
+	if (tempSensor.isInstalled()) {
+		if (tempSensor.isTestOK()) {
+			channelSnapshot.flags.temperatureStatus = 1;
+			channelSnapshot.temperature = tempSensor.temperature;
+		} else {
+			channelSnapshot.flags.temperatureStatus = 0;
+		}
+	} else {
+		channelSnapshot.flags.temperatureStatus = 2;
+	}
+#endif
 }
 
 data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+	data::ChannelSnapshot &channelSnapshot = snapshot->channelSnapshots[g_channel->index - 1];
 
 	if (id == DATA_ID_CHANNEL_PROTECTION_OVP_LIMIT ||
 		id == DATA_ID_CHANNEL_PROTECTION_OCP_LIMIT ||
@@ -89,6 +108,14 @@ data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uin
 
 	if (id == DATA_ID_CHANNEL_PROTECTION_DIRTY) {
 		return snapshot->flags.switch2;
+	}
+
+	if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
+		return data::Value(channelSnapshot.flags.temperatureStatus);
+	}
+
+	if (id == DATA_ID_CHANNEL_TEMP && channelSnapshot.flags.temperatureStatus == 1) {
+		return data::Value(channelSnapshot.temperature, data::VALUE_TYPE_FLOAT_CELSIUS);
 	}
 
 	return data::Value();

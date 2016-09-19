@@ -29,7 +29,7 @@ namespace gui {
 
 void ChSettingsInfoPage::takeSnapshot(data::Snapshot *snapshot) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-	channelSnapshot.flags.tempStatus = 2;
+	channelSnapshot.flags.temperatureStatus = 2;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	data::ChannelSnapshot &channelSnapshot = snapshot->channelSnapshots[g_channel->index - 1];
 
@@ -53,7 +53,6 @@ void ChSettingsInfoPage::takeSnapshot(data::Snapshot *snapshot) {
 data::Value ChSettingsInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
 	data::ChannelSnapshot &channelSnapshot = snapshot->channelSnapshots[g_channel->index - 1];
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
 		return data::Value(channelSnapshot.flags.temperatureStatus);
 	}
@@ -61,7 +60,6 @@ data::Value ChSettingsInfoPage::getData(const data::Cursor &cursor, uint8_t id, 
 	if (id == DATA_ID_CHANNEL_TEMP && channelSnapshot.flags.temperatureStatus == 1) {
 		return data::Value(channelSnapshot.temperature, data::VALUE_TYPE_FLOAT_CELSIUS);
 	}
-#endif
 
 	if (id == DATA_ID_CHANNEL_ON_TIME_TOTAL) {
 		return data::Value(channelSnapshot.onTimeTotal, data::VALUE_TYPE_ON_TIME_COUNTER);

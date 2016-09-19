@@ -43,13 +43,13 @@ void EventQueuePage::takeSnapshot(data::Snapshot *snapshot) {
 }
 
 data::Value EventQueuePage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	if (cursor.iChannel >= 0) {
+	if (cursor.i >= 0) {
 		if (id == DATA_ID_EVENT_QUEUE_EVENTS_TYPE) {
-			return data::Value(event_queue::getEventType(snapshot->events + cursor.iChannel));
+			return data::Value(event_queue::getEventType(snapshot->events + cursor.i));
 		} 
 		
 		if (id == DATA_ID_EVENT_QUEUE_EVENTS_MESSAGE) {
-			return data::Value(snapshot->events + cursor.iChannel);
+			return data::Value(snapshot->events + cursor.i);
 		}
 	}
 

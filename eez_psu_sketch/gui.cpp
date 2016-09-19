@@ -134,7 +134,7 @@ public:
     }
 
     void start(int pageIndex, int x, int y, bool refresh) {
-		cursor.iChannel = -1;
+		cursor.reset();
         stack[0].widgetOffset = getPageOffset(pageIndex);
         stack[0].index = 0;
         stack_index = 0;
@@ -208,8 +208,8 @@ public:
 							stack[stack_index].index = data::count(widget->data);
 						}
                     }
-                }
-                else {
+                } else {
+					cursor.reset();
                     if (!pop()) {
                         return false;
                     }
@@ -1283,7 +1283,7 @@ void yesNoDialog(int yesNoPageId, const char *message PROGMEM, void (*yes_callba
 ////////////////////////////////////////////////////////////////////////////////
 
 void selectChannel() {
-	g_channel = &Channel::get(g_foundWidgetAtDown.cursor.iChannel);
+	g_channel = &Channel::get(g_foundWidgetAtDown.cursor.i);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

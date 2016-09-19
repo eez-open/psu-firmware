@@ -87,8 +87,8 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::S
 		return data::Value(getCpuType());
 	}
 
-	if (cursor.iChannel >= 0) {
-		int iChannel = cursor.iChannel >= 0 ? cursor.iChannel : g_channel->index - 1;
+	if (cursor.i >= 0) {
+		int iChannel = cursor.i >= 0 ? cursor.i : g_channel->index - 1;
 
 		if (id == DATA_ID_CHANNEL_BOARD_INFO_LABEL) {
 			return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL);

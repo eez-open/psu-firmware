@@ -191,40 +191,44 @@ void Snapshot::takeSnapshot() {
 }
 
 Value Snapshot::get(const Cursor &cursor, uint8_t id) {
-	if (cursor.iChannel >= 0 || g_channel != 0) {
-		int iChannel = cursor.iChannel >= 0 ? cursor.iChannel : g_channel->index - 1;
+	if (cursor.i >= 0 || g_channel != 0) {
+		int iChannel = cursor.i >= 0 ? cursor.i : g_channel->index - 1;
 
 		if (id == DATA_ID_CHANNEL_STATUS) {
 			return Value(channelSnapshots[iChannel].flags.status);
 		}
 
 		if (channelSnapshots[iChannel].flags.status == 1) {
-			if (id == DATA_ID_OUTPUT_STATE) {
+			if (id == DATA_ID_CHANNEL_OUTPUT_STATE) {
 				return Value(channelSnapshots[iChannel].flags.state);
 			}
 		
-			if (id == DATA_ID_OUTPUT_MODE) {
+			if (id == DATA_ID_CHANNEL_OUTPUT_MODE) {
 				return Value(channelSnapshots[iChannel].flags.mode);
 			}
 		
-			if (id == DATA_ID_MON_VALUE) {
+			if (id == DATA_ID_CHANNEL_MON_VALUE) {
 				return channelSnapshots[iChannel].mon_value;
 			}
 		
-			if (id == DATA_ID_VOLT_SET) {
+			if (id == DATA_ID_CHANNEL_U_SET) {
 				return Value(channelSnapshots[iChannel].u_set, VALUE_TYPE_FLOAT_VOLT);
 			}
 		
-			if (id == DATA_ID_VOLT_MON) {
+			if (id == DATA_ID_CHANNEL_U_MON) {
 				return Value(channelSnapshots[iChannel].u_mon, VALUE_TYPE_FLOAT_VOLT);
 			}
 
-			if (id == DATA_ID_CURR_SET) {
+			if (id == DATA_ID_CHANNEL_I_SET) {
 				return Value(channelSnapshots[iChannel].i_set, VALUE_TYPE_FLOAT_AMPER);
 			}
 		
-			if (id == DATA_ID_CURR_MON) {
+			if (id == DATA_ID_CHANNEL_I_MON) {
 				return Value(channelSnapshots[iChannel].i_mon, VALUE_TYPE_FLOAT_AMPER);
+			}
+
+			if (id == DATA_ID_CHANNEL_P_MON) {
+				return Value(channelSnapshots[iChannel].u_mon * channelSnapshots[iChannel].i_mon, VALUE_TYPE_FLOAT_WATT);
 			}
 
 			if (id == DATA_ID_LRIP) {
