@@ -444,28 +444,40 @@
       "defaultValue": "R5B9"
     },
     {
-      "name": "sys.info.date.year",
+      "name": "sys.info.dateTime.year",
       "defaultValue": "2016"
     },
     {
-      "name": "sys.info.date.month",
+      "name": "sys.info.dateTime.month",
       "defaultValue": "12"
     },
     {
-      "name": "sys.info.date.day",
+      "name": "sys.info.dateTime.day",
       "defaultValue": "28"
     },
     {
-      "name": "sys.info.time.hour",
+      "name": "sys.info.dateTime.hour",
       "defaultValue": "23"
     },
     {
-      "name": "sys.info.time.minute",
+      "name": "sys.info.dateTime.minute",
       "defaultValue": "58"
     },
     {
-      "name": "sys.info.time.second",
+      "name": "sys.info.dateTime.second",
       "defaultValue": "48"
+    },
+    {
+      "name": "sys.info.dateTime.timeZone",
+      "defaultValue": "+1 GMT"
+    },
+    {
+      "name": "sys.info.dateTime.DST",
+      "defaultValue": "1"
+    },
+    {
+      "name": "setPage.dirty",
+      "defaultValue": "0"
     }
   ],
   "actions": [
@@ -831,6 +843,11 @@
       "name": "discard",
       "implementationType": "native",
       "implementation": "((SetPage *)getActivePage())->discard();"
+    },
+    {
+      "name": "edit_field",
+      "implementationType": "native",
+      "implementation": "((SetPage *)getActivePage())->edit();"
     },
     {
       "name": "show_event_queue",
@@ -44334,126 +44351,61 @@
     ],
     "styles": [
       {
-        "name": "default",
-        "_font": "medium",
-        "_color": "#FFFFFF",
-        "_backgroundColor": "#5080ff",
+        "name": "bottom_button",
+        "_font": "icons",
+        "_color": "#2F2F2F",
+        "_backgroundColor": "#E9F5F9",
+        "_paddingHorizontal": 4,
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
         "_borderColor": "#D3D3D3",
-        "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance."
+        "_paddingVertical": 0
       },
       {
-        "name": "default_edit",
-        "_font": "medium",
-        "_color": "#FFFFFF",
-        "_backgroundColor": "#5080ff",
+        "name": "bottom_button_background",
+        "_font": "icons",
+        "_color": "#e9f5f9",
+        "_backgroundColor": "#2f2f2f",
+        "_paddingHorizontal": 4,
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
         "_borderColor": "#D3D3D3",
-        "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance.",
-        "inheritFrom": "default"
+        "_paddingVertical": 0
       },
       {
-        "name": "default_edit_inverse",
-        "_font": "medium",
-        "_color": "#5080ff",
-        "_backgroundColor": "#ffffff",
+        "name": "bottom_button_disabled",
+        "_color": "#CDCDCD",
+        "_font": "icons",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_backgroundColor": "#E9F5F9",
+        "_borderSize": 0,
         "_borderColor": "#D3D3D3",
-        "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance.",
-        "inheritFrom": "default"
+        "_paddingHorizontal": 4,
+        "_paddingVertical": 0
       },
       {
-        "name": "default_inverse",
+        "name": "bottom_button_textual",
         "_font": "medium",
-        "_color": "#5080ff",
-        "_backgroundColor": "#ffffff",
-        "_borderColor": "#5080ff",
-        "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance."
+        "_color": "#2F2F2F",
+        "_backgroundColor": "#E9F5F9",
+        "_paddingHorizontal": 4,
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingVertical": 0
       },
       {
-        "name": "default_disabled_S_left",
+        "name": "bottom_button_textual_S_left",
         "_font": "small",
-        "_color": "#808080",
-        "_backgroundColor": "#5080ff",
-        "_borderColor": "#D3D3D3",
-        "description": "",
-        "_alignHorizontal": "left"
+        "_alignHorizontal": "left",
+        "inheritFrom": "bottom_button_textual"
       },
       {
-        "name": "default_S",
-        "_font": "small",
-        "inheritFrom": "default"
-      },
-      {
-        "name": "default_active_S",
-        "inheritFrom": "default_S",
-        "_color": "#ffff00"
-      },
-      {
-        "name": "default_L",
-        "_font": "large",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_color": "#FFFFFF",
-        "_backgroundColor": "#5080ff",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "default_ICONS",
-        "inheritFrom": "default",
-        "_font": "icons"
-      },
-      {
-        "name": "prot_indicator_S",
-        "_alignHorizontal": "center",
-        "_font": "small",
-        "_color": "#808080",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "mon_value_L",
-        "_color": "#FFFF00",
-        "_font": "large",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "mon_value_L_ur",
-        "_color": "#FF0000",
-        "_font": "large",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "mon_value",
-        "_color": "#FFFF00",
-        "_font": "medium",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "mon_value_ur",
+        "name": "channel_error",
         "_color": "#FF0000",
         "_font": "medium",
         "_alignHorizontal": "center",
@@ -44477,9 +44429,9 @@
         "inheritFrom": "default"
       },
       {
-        "name": "channel_error",
-        "_color": "#FF0000",
-        "_font": "medium",
+        "name": "channel_off_landscape",
+        "_color": "#FFFF00",
+        "_font": "large_landscape",
         "_alignHorizontal": "center",
         "_alignVertical": "center",
         "_borderSize": 0,
@@ -44501,144 +44453,75 @@
         "inheritFrom": "default"
       },
       {
-        "name": "prot_indicator_set_S",
-        "_font": "small",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_backgroundColor": "#00ff40",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "prot_indicator_trip_S",
-        "_color": "#ffffff",
-        "_font": "small",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_backgroundColor": "#ff0000",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "menu_S",
-        "_font": "small",
-        "_color": "#FFFFFF",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "tab_page",
-        "_font": "icons",
-        "_color": "#FFFF7F",
-        "_backgroundColor": "#808080",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "tab_page_selected",
-        "_color": "#FFFF00",
-        "_font": "icons",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "bottom_button",
-        "_font": "icons",
-        "_color": "#2F2F2F",
-        "_backgroundColor": "#E9F5F9",
-        "_paddingHorizontal": 4,
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingVertical": 0
-      },
-      {
-        "name": "bottom_button_disabled",
-        "_color": "#CDCDCD",
-        "_font": "icons",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_backgroundColor": "#E9F5F9",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 4,
-        "_paddingVertical": 0
-      },
-      {
-        "name": "bottom_button_background",
-        "_font": "icons",
-        "_color": "#e9f5f9",
-        "_backgroundColor": "#2f2f2f",
-        "_paddingHorizontal": 4,
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingVertical": 0
-      },
-      {
-        "name": "key",
-        "_backgroundColor": "#FFFF00",
-        "_borderSize": 1,
+        "name": "default",
         "_font": "medium",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default_edit_inverse"
+        "_color": "#FFFFFF",
+        "_backgroundColor": "#5080ff",
+        "_borderColor": "#D3D3D3",
+        "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance."
       },
       {
-        "name": "key_disabled",
-        "_backgroundColor": "#ffff00",
-        "inheritFrom": "key",
+        "name": "default_active_S",
+        "inheritFrom": "default_S",
         "_color": "#ffff00"
       },
       {
-        "name": "key_spec",
-        "_backgroundColor": "#e9f5f9",
-        "_borderSize": 1,
+        "name": "default_disabled_S_left",
+        "_font": "small",
+        "_color": "#808080",
+        "_backgroundColor": "#5080ff",
+        "_borderColor": "#D3D3D3",
+        "description": "",
+        "_alignHorizontal": "left"
+      },
+      {
+        "name": "default_edit",
         "_font": "medium",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default_edit_inverse",
-        "_color": "#2f2f2f"
+        "_color": "#FFFFFF",
+        "_backgroundColor": "#5080ff",
+        "_borderColor": "#D3D3D3",
+        "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance.",
+        "inheritFrom": "default"
       },
       {
-        "name": "key_spec_icons",
-        "_font": "icons",
-        "inheritFrom": "key_spec"
+        "name": "default_edit_inverse",
+        "_font": "medium",
+        "_color": "#5080ff",
+        "_backgroundColor": "#ffffff",
+        "_borderColor": "#D3D3D3",
+        "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance.",
+        "inheritFrom": "default"
       },
       {
-        "name": "key_icons",
-        "_font": "icons",
+        "name": "default_ICONS",
+        "inheritFrom": "default",
+        "_font": "icons"
+      },
+      {
+        "name": "default_inverse",
+        "_font": "medium",
+        "_color": "#5080ff",
+        "_backgroundColor": "#ffffff",
+        "_borderColor": "#5080ff",
+        "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance."
+      },
+      {
+        "name": "default_L",
+        "_font": "large",
         "_alignHorizontal": "center",
         "_alignVertical": "center",
-        "_backgroundColor": "#FFFF00",
-        "_borderSize": 1,
+        "_color": "#FFFFFF",
+        "_backgroundColor": "#5080ff",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
         "_paddingHorizontal": 0,
         "_paddingVertical": 0,
-        "inheritFrom": "default_edit_inverse"
+        "inheritFrom": "default"
+      },
+      {
+        "name": "default_S",
+        "_font": "small",
+        "inheritFrom": "default"
       },
       {
         "name": "edit_info_S",
@@ -44653,45 +44536,39 @@
         "inheritFrom": "default"
       },
       {
+        "name": "edit_mode_slider_scale",
+        "_font": "medium",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_color": "#FFFFFF",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "edit_mode_step_vertical_slider",
+        "_font": "medium",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_color": "#FFFFFF",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "edit_S",
+        "_font": "small",
+        "inheritFrom": "default",
+        "_color": "#ffff00"
+      },
+      {
         "name": "edit_value",
         "_font": "medium",
         "_color": "#FFFFFF",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "edit_value_left",
-        "_font": "medium",
-        "_color": "#FFFFFF",
-        "_alignHorizontal": "left",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "edit_value_L",
-        "_font": "large",
-        "_color": "#FFFF00",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "edit_value_ur",
-        "_color": "#FF0000",
-        "_font": "medium",
         "_alignHorizontal": "center",
         "_alignVertical": "center",
         "_borderSize": 0,
@@ -44749,6 +44626,30 @@
         "inheritFrom": "default"
       },
       {
+        "name": "edit_value_L",
+        "_font": "large",
+        "_color": "#FFFF00",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "edit_value_left",
+        "_font": "medium",
+        "_color": "#FFFFFF",
+        "_alignHorizontal": "left",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
         "name": "edit_value_S_left",
         "_font": "small",
         "_alignHorizontal": "left",
@@ -44773,9 +44674,185 @@
         "inheritFrom": "default"
       },
       {
+        "name": "edit_value_ur",
+        "_color": "#FF0000",
+        "_font": "medium",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
         "name": "edit_value_ur_S_right",
         "_color": "#FF0000",
         "_font": "small",
+        "_alignHorizontal": "right",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "error_alert",
+        "_backgroundColor": "#e02020",
+        "inheritFrom": "default_S"
+      },
+      {
+        "name": "error_alert_button",
+        "inheritFrom": "error_alert",
+        "_color": "#ffff00"
+      },
+      {
+        "name": "event_error",
+        "inheritFrom": "event_info",
+        "_color": "#ff0000"
+      },
+      {
+        "name": "event_info",
+        "inheritFrom": "default_S",
+        "_alignHorizontal": "left",
+        "_color": "#80ff80"
+      },
+      {
+        "name": "event_warning",
+        "inheritFrom": "event_info",
+        "_color": "#ff8040"
+      },
+      {
+        "name": "info_alert",
+        "_backgroundColor": "#5fd3b4",
+        "inheritFrom": "default_S"
+      },
+      {
+        "name": "info_alert_button",
+        "inheritFrom": "info_alert",
+        "_color": "#ffff00"
+      },
+      {
+        "name": "key",
+        "_backgroundColor": "#FFFF00",
+        "_borderSize": 1,
+        "_font": "medium",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default_edit_inverse"
+      },
+      {
+        "name": "key_disabled",
+        "_backgroundColor": "#ffff00",
+        "inheritFrom": "key",
+        "_color": "#ffff00"
+      },
+      {
+        "name": "key_icons",
+        "_font": "icons",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_backgroundColor": "#FFFF00",
+        "_borderSize": 1,
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default_edit_inverse"
+      },
+      {
+        "name": "key_spec",
+        "_backgroundColor": "#e9f5f9",
+        "_borderSize": 1,
+        "_font": "medium",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default_edit_inverse",
+        "_color": "#2f2f2f"
+      },
+      {
+        "name": "key_spec_icons",
+        "_font": "icons",
+        "inheritFrom": "key_spec"
+      },
+      {
+        "name": "menu_S",
+        "_font": "small",
+        "_color": "#FFFFFF",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "mon_value",
+        "_color": "#FFFF00",
+        "_font": "medium",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "mon_value_L",
+        "_color": "#FFFF00",
+        "_font": "large",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "mon_value_L_ur",
+        "_color": "#FF0000",
+        "_font": "large",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "mon_value_landscape_L_right",
+        "_color": "#FFFF00",
+        "_font": "large_landscape",
+        "_alignHorizontal": "right",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "mon_value_ur",
+        "_color": "#FF0000",
+        "_font": "medium",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "mon_value_ur_landscape_L_right",
+        "_color": "#FF0000",
+        "_font": "large_landscape",
         "_alignHorizontal": "right",
         "_alignVertical": "center",
         "_borderSize": 0,
@@ -44802,11 +44879,11 @@
         "inheritFrom": "non_interactive_button_S"
       },
       {
-        "name": "edit_mode_slider_scale",
-        "_font": "medium",
+        "name": "prot_indicator_S",
         "_alignHorizontal": "center",
+        "_font": "small",
+        "_color": "#808080",
         "_alignVertical": "center",
-        "_color": "#FFFFFF",
         "_borderSize": 0,
         "_borderColor": "#D3D3D3",
         "_paddingHorizontal": 0,
@@ -44814,13 +44891,49 @@
         "inheritFrom": "default"
       },
       {
-        "name": "edit_mode_step_vertical_slider",
-        "_font": "medium",
+        "name": "prot_indicator_set_S",
+        "_font": "small",
         "_alignHorizontal": "center",
         "_alignVertical": "center",
-        "_color": "#FFFFFF",
+        "_backgroundColor": "#00ff40",
         "_borderSize": 0,
         "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "prot_indicator_trip_S",
+        "_color": "#ffffff",
+        "_font": "small",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_backgroundColor": "#ff0000",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "tab_page",
+        "_font": "icons",
+        "_color": "#FFFF7F",
+        "_backgroundColor": "#808080",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "tab_page_selected",
+        "_color": "#FFFF00",
+        "_font": "icons",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
         "_paddingHorizontal": 0,
         "_paddingVertical": 0,
         "inheritFrom": "default"
@@ -44836,86 +44949,6 @@
         "_borderSize": 0,
         "_borderColor": "#D3D3D3",
         "_paddingVertical": 0
-      },
-      {
-        "name": "mon_value_landscape_L_right",
-        "_color": "#FFFF00",
-        "_font": "large_landscape",
-        "_alignHorizontal": "right",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "channel_off_landscape",
-        "_color": "#FFFF00",
-        "_font": "large_landscape",
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "mon_value_ur_landscape_L_right",
-        "_color": "#FF0000",
-        "_font": "large_landscape",
-        "_alignHorizontal": "right",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingHorizontal": 0,
-        "_paddingVertical": 0,
-        "inheritFrom": "default"
-      },
-      {
-        "name": "edit_S",
-        "_font": "small",
-        "inheritFrom": "default",
-        "_color": "#ffff00"
-      },
-      {
-        "name": "bottom_button_textual",
-        "_font": "medium",
-        "_color": "#2F2F2F",
-        "_backgroundColor": "#E9F5F9",
-        "_paddingHorizontal": 4,
-        "_alignHorizontal": "center",
-        "_alignVertical": "center",
-        "_borderSize": 0,
-        "_borderColor": "#D3D3D3",
-        "_paddingVertical": 0
-      },
-      {
-        "name": "bottom_button_textual_S_left",
-        "_font": "small",
-        "_alignHorizontal": "left",
-        "inheritFrom": "bottom_button_textual"
-      },
-      {
-        "name": "error_alert",
-        "_backgroundColor": "#e02020",
-        "inheritFrom": "default_S"
-      },
-      {
-        "name": "error_alert_button",
-        "inheritFrom": "error_alert",
-        "_color": "#ffff00"
-      },
-      {
-        "name": "info_alert",
-        "_backgroundColor": "#5fd3b4",
-        "inheritFrom": "default_S"
-      },
-      {
-        "name": "info_alert_button",
-        "inheritFrom": "info_alert",
-        "_color": "#ffff00"
       },
       {
         "name": "value",
@@ -44943,22 +44976,6 @@
         "_paddingHorizontal": 0,
         "_paddingVertical": 0,
         "inheritFrom": "default"
-      },
-      {
-        "name": "event_info",
-        "inheritFrom": "default_S",
-        "_alignHorizontal": "left",
-        "_color": "#80ff80"
-      },
-      {
-        "name": "event_warning",
-        "inheritFrom": "event_info",
-        "_color": "#ff8040"
-      },
-      {
-        "name": "event_error",
-        "inheritFrom": "event_info",
-        "_color": "#ff0000"
       },
       {
         "name": "yellow_1",
@@ -51986,18 +52003,18 @@
           "widgets": [
             {
               "type": "MultilineText",
-              "text": "Make sure that load is disconnected before clear tripped protection(s).",
+              "text": "To prevent new protection(s) tripping make sure that load is disconnected before clearing.",
               "x": 16,
               "y": 32,
               "width": 224,
-              "height": 80,
+              "height": 100,
               "style": "edit_value_S_right"
             },
             {
               "type": "Text",
               "text": "Clear",
               "x": 16,
-              "y": 117,
+              "y": 132,
               "width": 143,
               "height": 32,
               "style": "edit_value_active_S_left",
@@ -52007,7 +52024,7 @@
               "type": "Text",
               "text": "Clear and disable",
               "x": 16,
-              "y": 149,
+              "y": 164,
               "width": 143,
               "height": 32,
               "style": "edit_value_active_S_left",
@@ -52229,8 +52246,8 @@
               "x": 16,
               "y": 27,
               "width": 84,
-              "height": 40,
-              "style": "edit_value_left"
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
@@ -52238,84 +52255,84 @@
               "x": 104,
               "y": 27,
               "width": 136,
-              "height": 40,
-              "style": "edit_value_active_left",
+              "height": 28,
+              "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_limit"
             },
             {
               "type": "Text",
-              "text": "OVP:",
+              "text": "OVP active:",
               "x": 16,
-              "y": 67,
+              "y": 55,
               "width": 84,
-              "height": 40,
-              "style": "edit_value_left"
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "Select",
               "widgets": [
                 {
                   "type": "Text",
-                  "text": "OFF",
+                  "text": "No",
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 40,
-                  "style": "edit_value_active_left",
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
                   "action": "ch_settings_prot_toggle_state"
                 },
                 {
                   "type": "Text",
-                  "text": "ON",
+                  "text": "Yes",
                   "x": 0,
-                  "y": 0,
+                  "y": -12,
                   "width": 60,
-                  "height": 40,
-                  "style": "edit_value_active_left",
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
                   "action": "ch_settings_prot_toggle_state"
                 }
               ],
               "x": 104,
               "y": 67,
               "width": 60,
-              "height": 40,
+              "height": 28,
               "style": "default",
               "data": "channel.protection.ovp.state"
             },
             {
               "type": "Text",
-              "text": "Level:",
-              "x": 35,
-              "y": 107,
-              "width": 59,
+              "text": "Trip level:",
+              "x": 16,
+              "y": 111,
+              "width": 119,
               "height": 28,
               "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.ovp.level",
-              "x": 104,
-              "y": 107,
-              "width": 109,
+              "x": 135,
+              "y": 111,
+              "width": 78,
               "height": 28,
               "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_level"
             },
             {
               "type": "Text",
-              "text": "Delay:",
-              "x": 35,
-              "y": 135,
-              "width": 59,
+              "text": "Trip delay:",
+              "x": 16,
+              "y": 139,
+              "width": 119,
               "height": 28,
               "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.ovp.delay",
-              "x": 104,
-              "y": 135,
-              "width": 109,
+              "x": 135,
+              "y": 139,
+              "width": 78,
               "height": 28,
               "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_delay"
@@ -52323,9 +52340,9 @@
             {
               "type": "Button",
               "x": 16,
-              "y": 163,
+              "y": 167,
               "width": 101,
-              "height": 36,
+              "height": 34,
               "style": "non_interactive_button_S",
               "text": "~ Set",
               "action": "set",
@@ -52338,10 +52355,10 @@
               "action": "discard",
               "style": "non_interactive_button_S",
               "x": 117,
-              "y": 163,
+              "y": 167,
               "text": " Discard",
               "width": 96,
-              "height": 36
+              "height": 34
             },
             {
               "type": "List",
@@ -52487,6 +52504,24 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Output voltage:",
+              "x": 16,
+              "y": 83,
+              "width": 119,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "12.34V",
+              "x": 135,
+              "y": 83,
+              "width": 66,
+              "height": 28,
+              "style": "value_S"
             }
           ]
         },
@@ -52550,76 +52585,76 @@
               "x": 16,
               "y": 27,
               "width": 84,
-              "height": 40,
-              "style": "edit_value_left"
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.ocp.limit",
-              "x": 104,
+              "x": 135,
               "y": 27,
               "width": 136,
-              "height": 40,
-              "style": "edit_value_active_left",
+              "height": 28,
+              "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_limit"
             },
             {
               "type": "Text",
-              "text": "OCP:",
+              "text": "OCP active:",
               "x": 16,
-              "y": 67,
+              "y": 55,
               "width": 84,
-              "height": 40,
-              "style": "edit_value_left"
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "Select",
               "widgets": [
                 {
                   "type": "Text",
-                  "text": "OFF",
+                  "text": "No",
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 40,
-                  "style": "edit_value_active_left",
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
                   "action": "ch_settings_prot_toggle_state"
                 },
                 {
                   "type": "Text",
-                  "text": "ON",
+                  "text": "Yes",
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 40,
-                  "style": "edit_value_active_left",
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
                   "action": "ch_settings_prot_toggle_state"
                 }
               ],
-              "x": 104,
-              "y": 67,
+              "x": 135,
+              "y": 55,
               "width": 60,
-              "height": 40,
+              "height": 28,
               "style": "default",
               "data": "channel.protection.ocp.state"
             },
             {
               "type": "Text",
-              "text": "Delay:",
-              "x": 35,
-              "y": 107,
+              "text": "Trip delay:",
+              "x": 16,
+              "y": 111,
               "width": 84,
-              "height": 42,
-              "style": "edit_value_left"
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.ocp.delay",
-              "x": 121,
-              "y": 107,
-              "width": 119,
-              "height": 42,
-              "style": "edit_value_active_left",
+              "x": 135,
+              "y": 111,
+              "width": 78,
+              "height": 28,
+              "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_delay"
             },
             {
@@ -52789,6 +52824,24 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Output current:",
+              "x": 16,
+              "y": 83,
+              "width": 119,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "1.23A",
+              "x": 135,
+              "y": 83,
+              "width": 66,
+              "height": 28,
+              "style": "value_S"
             }
           ]
         },
@@ -52852,93 +52905,93 @@
               "x": 16,
               "y": 27,
               "width": 84,
-              "height": 40,
-              "style": "edit_value_left"
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.opp.limit",
-              "x": 104,
+              "x": 125,
               "y": 27,
               "width": 136,
-              "height": 40,
-              "style": "edit_value_active_left",
+              "height": 28,
+              "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_limit"
             },
             {
               "type": "Text",
-              "text": "OPP:",
+              "text": "OPP active:",
               "x": 16,
-              "y": 67,
+              "y": 55,
               "width": 84,
-              "height": 40,
-              "style": "edit_value_left"
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "Select",
               "widgets": [
                 {
                   "type": "Text",
-                  "text": "OFF",
+                  "text": "Yes",
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 40,
-                  "style": "edit_value_active_left",
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
                   "action": "ch_settings_prot_toggle_state"
                 },
                 {
                   "type": "Text",
-                  "text": "ON",
+                  "text": "No",
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 40,
-                  "style": "edit_value_active_left",
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
                   "action": "ch_settings_prot_toggle_state"
                 }
               ],
-              "x": 104,
-              "y": 67,
+              "x": 125,
+              "y": 55,
               "width": 60,
-              "height": 42,
+              "height": 28,
               "style": "default",
               "data": "channel.protection.opp.state"
             },
             {
               "type": "Text",
-              "text": "Level:",
-              "x": 37,
-              "y": 107,
-              "width": 59,
+              "text": "Trip level:",
+              "x": 16,
+              "y": 111,
+              "width": 80,
               "height": 28,
               "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.opp.level",
-              "x": 104,
-              "y": 107,
-              "width": 109,
+              "x": 125,
+              "y": 111,
+              "width": 81,
               "height": 28,
               "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_level"
             },
             {
               "type": "Text",
-              "text": "Delay:",
-              "x": 37,
-              "y": 135,
-              "width": 59,
+              "text": "Trip delay:",
+              "x": 16,
+              "y": 139,
+              "width": 110,
               "height": 28,
               "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.opp.delay",
-              "x": 104,
-              "y": 135,
-              "width": 109,
+              "x": 125,
+              "y": 139,
+              "width": 81,
               "height": 28,
               "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_delay"
@@ -52946,9 +52999,9 @@
             {
               "type": "Button",
               "x": 16,
-              "y": 163,
+              "y": 167,
               "width": 101,
-              "height": 36,
+              "height": 34,
               "style": "non_interactive_button_S",
               "text": "~ Set",
               "action": "set",
@@ -52961,10 +53014,10 @@
               "action": "discard",
               "style": "non_interactive_button_S",
               "x": 117,
-              "y": 163,
+              "y": 167,
               "text": " Discard",
               "width": 96,
-              "height": 36
+              "height": 34
             },
             {
               "type": "List",
@@ -53110,6 +53163,24 @@
               "text": "X",
               "width": 48,
               "height": 36
+            },
+            {
+              "type": "Text",
+              "text": "Output power:",
+              "x": 16,
+              "y": 83,
+              "width": 110,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "150W",
+              "x": 125,
+              "y": 83,
+              "width": 66,
+              "height": 28,
+              "style": "value_S"
             }
           ]
         },
@@ -53169,80 +53240,130 @@
             },
             {
               "type": "Text",
-              "text": "OTP:",
+              "text": "OTP active:",
               "x": 16,
               "y": 27,
               "width": 84,
-              "height": 42,
-              "style": "edit_value_left"
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "Select",
               "widgets": [
                 {
                   "type": "Text",
-                  "text": "OFF",
+                  "text": "No",
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 40,
-                  "style": "edit_value_active_left",
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
                   "action": "ch_settings_prot_toggle_state"
                 },
                 {
                   "type": "Text",
-                  "text": "ON",
+                  "text": "Yes",
                   "x": 0,
                   "y": 0,
                   "width": 60,
-                  "height": 40,
-                  "style": "edit_value_active_left",
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
                   "action": "ch_settings_prot_toggle_state"
                 }
               ],
-              "x": 112,
+              "x": 130,
               "y": 27,
               "width": 60,
-              "height": 40,
+              "height": 28,
               "style": "default",
               "data": "channel.protection.otp.state"
             },
             {
               "type": "Text",
-              "text": "Level:",
-              "x": 35,
-              "y": 69,
+              "text": "Current temp.:",
+              "x": 16,
+              "y": 55,
+              "width": 113,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "Invalid",
+                  "x": 0,
+                  "y": 0,
+                  "width": 96,
+                  "height": 28,
+                  "style": "event_error",
+                  "data": ""
+                },
+                {
+                  "type": "DisplayData",
+                  "text": "45.5",
+                  "x": 0,
+                  "y": 0,
+                  "width": 80,
+                  "height": 28,
+                  "style": "value_S",
+                  "data": "channel.temp"
+                },
+                {
+                  "type": "Text",
+                  "text": "Not installed",
+                  "x": 0,
+                  "y": 0,
+                  "width": 96,
+                  "height": 28,
+                  "style": "default_disabled_S_left",
+                  "data": ""
+                }
+              ],
+              "x": 130,
+              "y": 55,
+              "width": 96,
+              "height": 28,
+              "style": "default",
+              "data": "channel.tempStatus"
+            },
+            {
+              "type": "Text",
+              "text": "Trip level:",
+              "x": 16,
+              "y": 83,
               "width": 84,
-              "height": 40,
-              "style": "edit_value_left"
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.otp.level",
-              "x": 112,
-              "y": 69,
-              "width": 136,
-              "height": 40,
-              "style": "edit_value_active_left",
+              "x": 130,
+              "y": 83,
+              "width": 83,
+              "height": 28,
+              "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_level"
             },
             {
               "type": "Text",
-              "text": "Delay:",
-              "x": 35,
-              "y": 114,
-              "width": 84,
-              "height": 42,
-              "style": "edit_value_left"
+              "text": "Trip delay:",
+              "x": 16,
+              "y": 111,
+              "width": 101,
+              "height": 28,
+              "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "data": "channel.protection.otp.delay",
-              "x": 112,
-              "y": 114,
-              "width": 119,
-              "height": 42,
-              "style": "edit_value_active_left",
+              "x": 130,
+              "y": 111,
+              "width": 80,
+              "height": 28,
+              "style": "edit_value_active_S_left",
               "action": "ch_settings_prot_edit_delay"
             },
             {
@@ -55785,18 +55906,9 @@
             },
             {
               "type": "Text",
-              "text": "NTP server",
-              "x": 12,
-              "y": 114,
-              "width": 189,
-              "height": 28,
-              "style": "default_disabled_S_left"
-            },
-            {
-              "type": "Text",
               "text": "Screen calibration",
               "x": 12,
-              "y": 170,
+              "y": 142,
               "width": 189,
               "height": 28,
               "style": "edit_value_active_S_left",
@@ -55930,7 +56042,7 @@
               "type": "Text",
               "text": "Channel calibration",
               "x": 12,
-              "y": 142,
+              "y": 114,
               "width": 180,
               "height": 28,
               "style": "edit_value_active_S_left",
@@ -56226,27 +56338,17 @@
               "text": "Set date and time",
               "x": 6,
               "y": 0,
-              "width": 228,
+              "width": 246,
               "height": 32,
               "style": "value_S"
             },
             {
               "type": "Rectangle",
-              "x": 0,
+              "x": 197,
               "y": 204,
-              "width": 224,
+              "width": 75,
               "height": 36,
               "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_previous_page",
-              "x": 224,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "B",
-              "width": 48,
-              "height": 36
             },
             {
               "type": "Text",
@@ -56259,60 +56361,189 @@
               "height": 36
             },
             {
+              "type": "Text",
+              "text": "Date:",
+              "x": 16,
+              "y": 30,
+              "width": 101,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
               "type": "DisplayData",
               "text": "",
-              "x": 45,
-              "y": 58,
-              "width": 46,
+              "x": 117,
+              "y": 30,
+              "width": 48,
               "height": 28,
               "style": "edit_value_active_S_left",
-              "action": "",
-              "data": "sys.info.date.year"
+              "action": "edit_field",
+              "data": "sys.info.dateTime.year"
             },
             {
               "type": "Text",
               "text": "-",
-              "x": 93,
-              "y": 58,
+              "x": 165,
+              "y": 30,
               "width": 14,
               "height": 28,
-              "style": "default_S"
+              "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "text": "",
-              "x": 109,
-              "y": 58,
+              "x": 179,
+              "y": 30,
               "width": 26,
               "height": 28,
               "style": "edit_value_active_S_left",
-              "action": "",
-              "data": "sys.info.date.month"
+              "action": "edit_field",
+              "data": "sys.info.dateTime.month"
             },
             {
               "type": "Text",
               "text": "-",
-              "x": 137,
-              "y": 58,
+              "x": 205,
+              "y": 30,
               "width": 14,
               "height": 28,
-              "style": "default_S"
+              "style": "edit_value_S_left"
             },
             {
               "type": "DisplayData",
               "text": "",
-              "x": 151,
+              "x": 219,
+              "y": 30,
+              "width": 26,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "action": "edit_field",
+              "data": "sys.info.dateTime.day"
+            },
+            {
+              "type": "Text",
+              "text": "Time:",
+              "x": 16,
+              "y": 58,
+              "width": 101,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "DisplayData",
+              "text": "",
+              "x": 117,
               "y": 58,
               "width": 26,
               "height": 28,
               "style": "edit_value_active_S_left",
-              "action": "",
-              "data": "sys.info.date.day"
+              "action": "edit_field",
+              "data": "sys.info.dateTime.hour"
+            },
+            {
+              "type": "Text",
+              "text": ":",
+              "x": 143,
+              "y": 58,
+              "width": 12,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "DisplayData",
+              "text": "",
+              "x": 155,
+              "y": 58,
+              "width": 26,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "action": "edit_field",
+              "data": "sys.info.dateTime.minute"
+            },
+            {
+              "type": "Text",
+              "text": ":",
+              "x": 181,
+              "y": 58,
+              "width": 12,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "DisplayData",
+              "text": "",
+              "x": 193,
+              "y": 58,
+              "width": 26,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "action": "edit_field",
+              "data": "sys.info.dateTime.second"
+            },
+            {
+              "type": "Text",
+              "text": "Time zone:",
+              "x": 16,
+              "y": 86,
+              "width": 101,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "DisplayData",
+              "text": "",
+              "x": 117,
+              "y": 86,
+              "width": 89,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "action": "edit_field",
+              "data": "sys.info.dateTime.timeZone"
+            },
+            {
+              "type": "Text",
+              "text": "DST:",
+              "x": 16,
+              "y": 114,
+              "width": 101,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "OFF",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "action": "ch_settings_prot_toggle_state"
+                },
+                {
+                  "type": "Text",
+                  "text": "ON",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "action": "edit_field"
+                }
+              ],
+              "x": 117,
+              "y": 114,
+              "width": 60,
+              "height": 28,
+              "style": "default",
+              "data": "channel.protection.ovp.state"
             },
             {
               "type": "Button",
-              "x": 16,
-              "y": 163,
+              "x": 0,
+              "y": 204,
               "width": 101,
               "height": 36,
               "style": "non_interactive_button_S",
@@ -56320,68 +56551,17 @@
               "action": "set",
               "disabledStyle": "non_interactive_button_S_disabled",
               "data": "",
-              "enabled": "channel.protection.dirty"
+              "enabled": "setPage.dirty"
             },
             {
               "type": "Text",
               "action": "discard",
               "style": "non_interactive_button_S",
-              "x": 117,
-              "y": 163,
+              "x": 101,
+              "y": 204,
               "text": " Discard",
               "width": 96,
               "height": 36
-            },
-            {
-              "type": "DisplayData",
-              "text": "",
-              "x": 55,
-              "y": 97,
-              "width": 26,
-              "height": 28,
-              "style": "edit_value_active_S_right",
-              "action": "",
-              "data": "sys.info.time.hour"
-            },
-            {
-              "type": "Text",
-              "text": ":",
-              "x": 83,
-              "y": 97,
-              "width": 14,
-              "height": 28,
-              "style": "default_S"
-            },
-            {
-              "type": "DisplayData",
-              "text": "",
-              "x": 101,
-              "y": 97,
-              "width": 26,
-              "height": 28,
-              "style": "edit_value_active_S_left",
-              "action": "",
-              "data": "sys.info.time.minute"
-            },
-            {
-              "type": "Text",
-              "text": ":",
-              "x": 127,
-              "y": 97,
-              "width": 14,
-              "height": 28,
-              "style": "default_S"
-            },
-            {
-              "type": "DisplayData",
-              "text": "",
-              "x": 143,
-              "y": 97,
-              "width": 26,
-              "height": 28,
-              "style": "edit_value_active_S_left",
-              "action": "",
-              "data": "sys.info.time.second"
             }
           ],
           "x": 0,
