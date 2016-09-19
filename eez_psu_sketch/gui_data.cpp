@@ -113,7 +113,13 @@ void Value::toText(char *text, int count) const {
 
 	default:
 		{
-			util::strcatFloat(text, float_);
+			int precision = FLOAT_TO_STR_PREC;
+
+			if (type_ == VALUE_TYPE_FLOAT_RPM) {
+				precision = 0;
+			}
+
+			util::strcatFloat(text, float_, precision);
 
 			const char *unit;
 
@@ -132,6 +138,9 @@ void Value::toText(char *text, int count) const {
 				break;
 			case VALUE_TYPE_FLOAT_CELSIUS:
 				unit = "oC";
+				break;
+			case VALUE_TYPE_FLOAT_RPM:
+				unit = "rpm";
 				break;
 			}
 
@@ -163,9 +172,9 @@ void select(Cursor &cursor, uint8_t id, int index) {
 }
 
 Value getMin(const Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_VOLT) {
+    if (id == DATA_ID_VOLT_SET) {
         return Value(Channel::get(cursor.iChannel).U_MIN, VALUE_TYPE_FLOAT_VOLT);
-    } else if (id == DATA_ID_CURR) {
+    } else if (id == DATA_ID_CURR_SET) {
         return Value(Channel::get(cursor.iChannel).I_MIN, VALUE_TYPE_FLOAT_AMPER);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMin();
@@ -174,9 +183,9 @@ Value getMin(const Cursor &cursor, uint8_t id) {
 }
 
 Value getMax(const Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_VOLT) {
+    if (id == DATA_ID_VOLT_SET) {
         return Value(Channel::get(cursor.iChannel).U_MAX, VALUE_TYPE_FLOAT_VOLT);
-    } else if (id == DATA_ID_CURR) {
+    } else if (id == DATA_ID_CURR_SET) {
         return Value(Channel::get(cursor.iChannel).I_MAX, VALUE_TYPE_FLOAT_AMPER);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMax();
@@ -185,9 +194,9 @@ Value getMax(const Cursor &cursor, uint8_t id) {
 }
 
 ValueType getUnit(const Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_VOLT) {
+    if (id == DATA_ID_VOLT_SET) {
         return VALUE_TYPE_FLOAT_VOLT;
-    } else if (id == DATA_ID_CURR) {
+    } else if (id == DATA_ID_CURR_SET) {
         return VALUE_TYPE_FLOAT_AMPER;
     }
     return VALUE_TYPE_NONE;
@@ -200,7 +209,7 @@ void getButtonLabels(const Cursor &cursor, uint8_t id, const Value **labels, int
 }
 
 bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
-    if (id == DATA_ID_VOLT) {
+    if (id == DATA_ID_VOLT_SET) {
 		if (value.getFloat() > Channel::get(cursor.iChannel).getVoltageLimit()) {
 			if (error) *error = SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
 			return false;
@@ -211,7 +220,7 @@ bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
         }
         Channel::get(cursor.iChannel).setVoltage(value.getFloat());
         return true;
-    } else if (id == DATA_ID_CURR) {
+    } else if (id == DATA_ID_CURR_SET) {
 		if (value.getFloat() > Channel::get(cursor.iChannel).getCurrentLimit()) {
 			if (error) *error = SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
 			return false;

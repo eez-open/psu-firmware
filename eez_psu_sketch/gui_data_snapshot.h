@@ -45,7 +45,9 @@ struct ChannelSnapshotFlags {
 struct ChannelSnapshot {
     Value mon_value;
     float u_set;
+	float u_mon;
     float i_set;
+	float i_mon;
     ChannelSnapshotFlags flags;
 	float temperature;
 	uint32_t onTimeTotal;
@@ -55,6 +57,7 @@ struct ChannelSnapshot {
 struct SnapshotFlags {
     unsigned otp : 2;
 	unsigned mainTemperatureStatus: 2;
+	unsigned fanStatus: 2;
 	unsigned switch1: 1;
 	unsigned switch2: 1;
 	unsigned switch3: 1;
@@ -72,6 +75,7 @@ struct Snapshot {
 	uint32_t onTimeTotal;
 	uint32_t onTimeLast;
 	float mainTemperature;
+	float fanSpeed;
 
     unsigned long lastSnapshotTime;
 

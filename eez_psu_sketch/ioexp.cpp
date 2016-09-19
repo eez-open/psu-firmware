@@ -65,6 +65,7 @@ IOExpander::IOExpander(
     : channel(channel_)
     , IO_BIT_OUT_SET_100_PERCENT(IO_BIT_OUT_SET_100_PERCENT_)
     , IO_BIT_OUT_EXT_PROG(IO_BIT_OUT_EXT_PROG_)
+	, writeDisabled(false)
 {
     test_result = psu::TEST_SKIPPED;
 	gpio = channel.ioexp_gpio_init;
@@ -156,12 +157,36 @@ bool IOExpander::test_bit(int io_bit) {
 }
 
 void IOExpander::change_bit(int io_bit, bool set) {
-    uint8_t newValue = set ? (gpio | (1 << io_bit)) : (gpio & ~(1 << io_bit));
+	noInterrupts();
+    
+	uint8_t newValue = set ? (gpio | (1 << io_bit)) : (gpio & ~(1 << io_bit));
 	if (gpio != newValue) {
-		reg_write(REG_GPIO, newValue);
 		gpio = newValue;
+		if (!writeDisabled) {
+			reg_write(REG_GPIO, gpio);
+			gpioWritten = gpio;
+		}
 	}
+	
+	interrupts();
 }
+
+void IOExpander::writeDisable() {
+	writeDisabled = true;
+}
+
+void IOExpander::writeEnable() {
+	noInterrupts();
+	
+	writeDisabled = false;
+	if (gpioWritten != gpio) {
+		reg_write(REG_GPIO, gpioWritten);
+		gpioWritten = gpio;
+	}
+
+	interrupts();
+}
+
 
 void IOExpander::on_interrupt() {
 	g_insideInterruptHandler = true;

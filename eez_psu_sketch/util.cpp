@@ -41,9 +41,9 @@ void strcatInt(char *str, int value) {
     sprintf(str, "%d", value);
 }
 
-void strcatFloat(char *str, float value) {
+void strcatFloat(char *str, float value, int precision) {
     // mitigate "-0.00" case
-    float min = (float) (1.0f / pow(10, FLOAT_TO_STR_PREC));
+    float min = (float) (1.0f / pow(10, precision));
     if (fabs(value) < min) {
         value = 0;
     }
@@ -51,9 +51,9 @@ void strcatFloat(char *str, float value) {
     str = str + strlen(str);
 
 #if defined(_VARIANT_ARDUINO_DUE_X_) || defined(EEZ_PSU_SIMULATOR)
-    sprintf(str, "%.*f", FLOAT_TO_STR_PREC, value);
+    sprintf(str, "%.*f", precision, value);
 #else
-    dtostrf(value, 0, FLOAT_TO_STR_PREC, str);
+    dtostrf(value, 0, precision, str);
 #endif
 
     // remove trailing zeros

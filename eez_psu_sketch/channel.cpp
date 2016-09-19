@@ -675,6 +675,7 @@ void Channel::doOutputEnable(bool enable) {
     }
 
     flags.output_enabled = enable;
+	ioexp.writeDisable();
 
 	if (enable) {
 		// ENABLE OUTPUT
@@ -687,13 +688,13 @@ void Channel::doOutputEnable(bool enable) {
 
 		ioexp.change_bit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, true);
 		bp::switchOutput(this, true);
-
-		adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+	    setOperBits(OPER_ISUM_OE_OFF, false);
 
         delayed_dp_off = false;
         doDpEnable(true);
 
-	    setOperBits(OPER_ISUM_OE_OFF, false);
+
+		adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
 	} else {
 		// DISABLE OUTPUT
 		ioexp.change_bit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, false);
@@ -706,6 +707,10 @@ void Channel::doOutputEnable(bool enable) {
             calibration::stop();
         }
 
+		if (getFeatures() & CH_FEATURE_LRIPPLE) {
+			doLowRippleEnable(false);
+		}
+
         delayed_dp_off = true;
         delayed_dp_off_start = micros();
 
@@ -713,6 +718,8 @@ void Channel::doOutputEnable(bool enable) {
 
 		onTimeCounter.stop();
 	}
+
+	ioexp.writeEnable();
 }
 
 void Channel::doRemoteSensingEnable(bool enable) {
@@ -746,6 +753,11 @@ bool Channel::isLowRippleAllowed(unsigned long tick_usec) {
 
 	if (delayLowRippleCheck) {
 		if (tick_usec - outputEnableStartTime < 100 * 1000L) {
+			// If Auto low ripple is enabled, channel cannot enter low ripple mode
+			// even if condition for that exist before pre-regulation is not activated
+			// for a short period of time (100ms). Without this transition repetive
+			// changing of channel's output mode with load connected WILL result with
+			// post-regulator's power mosfet damage, and overheating of down-programmer mosfet!
 			return false;
 		}
 		delayLowRippleCheck = false;

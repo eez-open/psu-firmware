@@ -18,6 +18,7 @@
 
 #include "psu.h"
 
+#include "fan.h"
 #include "temperature.h"
 
 #include "gui_data_snapshot.h"
@@ -38,6 +39,15 @@ void SysInfoPage::takeSnapshot(data::Snapshot *snapshot) {
 		}
 	} else {
 		snapshot->flags.mainTemperatureStatus = 2;
+	}
+
+	if (fan::test_result == TEST_FAILED || fan::test_result == TEST_WARNING) {
+		snapshot->flags.fanStatus = 0;
+	} else if (fan::test_result == TEST_OK) {
+		snapshot->flags.fanStatus = 1;
+		snapshot->fanSpeed = (float)fan::g_rpm;
+	} else {
+		snapshot->flags.fanStatus = 2;
 	}
 
 	snapshot->onTimeTotal = g_powerOnTimeCounter.getTotalTime();
@@ -93,6 +103,18 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::S
 
 	if (id == DATA_ID_SYS_INFO_SCPI_VER) {
 		return data::Value(SCPI_STD_VERSION_REVISION);
+	}
+
+	if (id == DATA_ID_SYS_INFO_ETHERNET) {
+		return data::Value(getCpuEthernetType());
+	}
+
+	if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
+		return data::Value(snapshot->flags.fanStatus);
+	}
+
+	if (id == DATA_ID_SYS_INFO_FAN_SPEED && snapshot->flags.fanStatus == 1) {
+		return data::Value(snapshot->fanSpeed, data::VALUE_TYPE_FLOAT_RPM);
 	}
 
 	return data::Value();

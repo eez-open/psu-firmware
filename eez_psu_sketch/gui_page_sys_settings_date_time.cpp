@@ -28,21 +28,24 @@ namespace psu {
 namespace gui {
 
 data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	if (id == DATA_ID_SYS_INFO_DATE_YEAR) {
+	if (id == DATA_ID_SYS_INFO_DATE_TIME_YEAR) {
 		return data::Value("2016");
-	} else if (id == DATA_ID_SYS_INFO_DATE_MONTH) {
+	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_MONTH) {
 		return data::Value("09");
-	} else if (id == DATA_ID_SYS_INFO_DATE_DAY) {
+	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_DAY) {
 		return data::Value("16");
-	} else if (id == DATA_ID_SYS_INFO_TIME_HOUR) {
+	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_HOUR) {
 		return data::Value("16");
-	} else if (id == DATA_ID_SYS_INFO_TIME_MINUTE) {
+	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_MINUTE) {
 		return data::Value("00");
-	} else if (id == DATA_ID_SYS_INFO_TIME_SECOND) {
+	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_SECOND) {
 		return data::Value("00");
 	}
 
 	return data::Value();
+}
+
+void SysSettingsDateTimePage::edit() {
 }
 
 int SysSettingsDateTimePage::getDirty() {

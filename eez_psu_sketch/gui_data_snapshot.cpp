@@ -142,7 +142,9 @@ void Snapshot::takeSnapshot() {
         }
 
         channelSnapshots[i].u_set = channel.u.set;
+		channelSnapshots[i].u_mon = channel.u.mon;
         channelSnapshots[i].i_set = channel.i.set;
+		channelSnapshots[i].i_mon = channel.i.mon;
 
 		channelSnapshots[i].flags.lrip = channel.flags.lripple_enabled ? 1 : 0;
 
@@ -209,14 +211,22 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 				return channelSnapshots[iChannel].mon_value;
 			}
 		
-			if (id == DATA_ID_VOLT) {
+			if (id == DATA_ID_VOLT_SET) {
 				return Value(channelSnapshots[iChannel].u_set, VALUE_TYPE_FLOAT_VOLT);
 			}
 		
-			if (id == DATA_ID_CURR) {
+			if (id == DATA_ID_VOLT_MON) {
+				return Value(channelSnapshots[iChannel].u_mon, VALUE_TYPE_FLOAT_VOLT);
+			}
+
+			if (id == DATA_ID_CURR_SET) {
 				return Value(channelSnapshots[iChannel].i_set, VALUE_TYPE_FLOAT_AMPER);
 			}
 		
+			if (id == DATA_ID_CURR_MON) {
+				return Value(channelSnapshots[iChannel].i_mon, VALUE_TYPE_FLOAT_AMPER);
+			}
+
 			if (id == DATA_ID_LRIP) {
 				return Value(channelSnapshots[iChannel].flags.lrip);
 			}

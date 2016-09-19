@@ -185,7 +185,7 @@ bool isEditWidget(const WidgetCursor &widgetCursor) {
 
 void getInfoText(char *infoText) {
     Channel &channel = Channel::get(dataCursor.iChannel);
-    if (dataId == DATA_ID_VOLT) {
+    if (dataId == DATA_ID_VOLT_SET) {
         sprintf_P(infoText, PSTR("Set Ch%d voltage [%d-%d V]"), channel.index, (int)minValue.getFloat(), (int)maxValue.getFloat());
     } else {
         sprintf_P(infoText, PSTR("Set Ch%d current [%d-%d A]"), channel.index, (int)minValue.getFloat(), (int)maxValue.getFloat());

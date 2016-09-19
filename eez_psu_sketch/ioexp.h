@@ -101,9 +101,14 @@ public:
 
     void on_interrupt();
 
+	void writeDisable();
+	void writeEnable();
+
 private:
     Channel &channel;
 	uint8_t gpio;
+	uint8_t gpioWritten;
+	bool writeDisabled;
 
 	uint8_t getRegInitValue(int i);
     uint8_t reg_read_write(uint8_t opcode, uint8_t reg, uint8_t val);

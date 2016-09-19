@@ -28,6 +28,7 @@ class SysSettingsDateTimePage : public SetPage {
 public:
 	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
 
+	void edit();
 	int getDirty();
 	void set();
 

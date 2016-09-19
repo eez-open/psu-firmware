@@ -33,7 +33,7 @@ float remap(float x, float x1, float y1, float x2, float y2);
 float clamp(float x, float min, float max);
 
 void strcatInt(char *str, int value);
-void strcatFloat(char *str, float value);
+void strcatFloat(char *str, float value, int precision = FLOAT_TO_STR_PREC);
 void strcatVoltage(char *str, float value);
 void strcatCurrent(char *str, float value);
 void strcatDuration(char *str, float value);

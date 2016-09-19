@@ -38,6 +38,7 @@ public:
 
 class SetPage : public Page {
 public:
+	virtual void edit();
 	virtual int getDirty() = 0;
 	virtual void set() = 0;
 	virtual void discard();

@@ -41,6 +41,9 @@ data::Value Page::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void SetPage::edit() {
+}
+
 void SetPage::discard() {
 	showPreviousPage();
 }

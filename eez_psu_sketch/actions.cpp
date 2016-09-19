@@ -327,6 +327,10 @@ void action_discard() {
     ((SetPage *)getActivePage())->discard();
 }
 
+void action_edit_field() {
+    ((SetPage *)getActivePage())->edit();
+}
+
 void action_show_event_queue() {
     showPage(PAGE_ID_EVENT_QUEUE);
 }
@@ -429,6 +433,7 @@ ACTION actions[] = {
     action_ch_settings_prot_edit_delay,
     action_set,
     action_discard,
+    action_edit_field,
     action_show_event_queue,
     action_event_queue_previous_page,
     action_event_queue_next_page,
