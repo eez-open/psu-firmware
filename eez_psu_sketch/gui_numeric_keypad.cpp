@@ -153,6 +153,10 @@ data::Value getData(uint8_t id) {
 		return data::Value(g_maxButtonEnabled ? 1 : 0);
 	} else if (id == DATA_ID_KEYPAD_DEF_ENABLED) {
 		return data::Value(g_defButtonEnabled ? 1 : 0);
+	} else if (id == DATA_ID_KEYPAD_DOT_ENABLED) {
+		return data::Value(1);
+	} else if (id == DATA_ID_KEYPAD_SIGN_ENABLED) {
+		return data::Value(1);
 	}
 
 	return data::Value();

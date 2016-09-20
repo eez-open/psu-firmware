@@ -142,6 +142,21 @@ bool readDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, ui
     return true;
 }
 
+bool writeDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second) {
+    if (test_result != psu::TEST_OK) return false;
+    uint8_t data[7] = {
+        util::toBCD(second),
+        util::toBCD(minute),
+        util::toBCD(hour),
+        util::toBCD(day),
+        0,
+        util::toBCD(month),
+        util::toBCD(year),
+    };
+    writeRegisters(WR_SECONDS, sizeof(data), data);
+    return true;
+}
+
 }
 }
 } // namespace eez::psu::rtc

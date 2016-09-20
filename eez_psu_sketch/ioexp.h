@@ -101,14 +101,12 @@ public:
 	void disableWrite();
 	void enableWriteAndFlush();
 
+    void onInterrupt();
+
 private:
     Channel &channel;
 	uint8_t gpio;
 	bool writeDisabled;
-
-	friend void ioexp_interrupt_ch1();
-	friend void ioexp_interrupt_ch2();
-    void onInterrupt();
 
 	uint8_t getRegInitValue(int i);
     uint8_t reg_read_write(uint8_t opcode, uint8_t reg, uint8_t val);

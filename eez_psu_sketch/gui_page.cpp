@@ -41,6 +41,13 @@ data::Value Page::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot
 
 ////////////////////////////////////////////////////////////////////////////////
 
+data::Value SetPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+	if (id == DATA_ID_SET_PAGE_DIRTY) {
+		return data::Value(getDirty() ? 1 : 0);
+	}
+	return data::Value();
+}
+
 void SetPage::edit() {
 }
 

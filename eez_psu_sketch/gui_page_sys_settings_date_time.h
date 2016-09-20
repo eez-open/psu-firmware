@@ -20,12 +20,15 @@
 
 #include "gui_page.h"
 
+#include "datetime.h"
+
 namespace eez {
 namespace psu {
 namespace gui {
 
 class SysSettingsDateTimePage : public SetPage {
 public:
+	void pageWillAppear();
 	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
 
 	void edit();
@@ -33,6 +36,8 @@ public:
 	void set();
 
 private:
+	datetime::DateTime origDateTime;
+	datetime::DateTime dateTime;
 };
 
 }

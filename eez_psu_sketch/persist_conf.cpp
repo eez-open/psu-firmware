@@ -205,6 +205,20 @@ void writeSystemTime(uint8_t hour, uint8_t minute, uint8_t second) {
     saveDevice();
 }
 
+void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second) {
+    dev_conf.date_year = year;
+    dev_conf.date_month = month;
+    dev_conf.date_day = day;
+    dev_conf.flags.date_valid = 1;
+    
+	dev_conf.time_hour = hour;
+    dev_conf.time_minute = minute;
+    dev_conf.time_second = second;
+    dev_conf.flags.time_valid = 1;
+
+	saveDevice();
+}
+
 bool enableProfileAutoRecall(bool enable) {
     dev_conf.flags.profile_auto_recall = enable ? 1 : 0;
     return saveDevice();

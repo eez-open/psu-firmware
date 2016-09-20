@@ -61,6 +61,7 @@ bool readTime(uint8_t &hour, uint8_t &minute, uint8_t &second);
 bool writeTime(uint8_t hour, uint8_t minute, uint8_t second);
 
 bool readDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, uint8_t &minute, uint8_t &second);
+bool writeDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second);
 
 }
 }

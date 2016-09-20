@@ -51,6 +51,11 @@ void ChSettingsAdvLRipplePage::takeSnapshot(data::Snapshot *snapshot) {
 }
 
 data::Value ChSettingsAdvLRipplePage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+	data::Value value = SetPage::getData(cursor, id, snapshot);
+	if (value.getType() != data::VALUE_TYPE_NONE) {
+		return value;
+	}
+
 	if (id == DATA_ID_CHANNEL_LRIPPLE_MAX_CURRENT) {
 		return data::Value(g_channel->SOA_PREG_CURR, data::VALUE_TYPE_FLOAT_AMPER);
 	}

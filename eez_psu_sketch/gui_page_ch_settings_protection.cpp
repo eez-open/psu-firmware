@@ -78,6 +78,11 @@ void ChSettingsProtectionSetPage::takeSnapshot(data::Snapshot *snapshot) {
 }
 
 data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+	data::Value value = SetPage::getData(cursor, id, snapshot);
+	if (value.getType() != data::VALUE_TYPE_NONE) {
+		return value;
+	}
+
 	data::ChannelSnapshot &channelSnapshot = snapshot->channelSnapshots[g_channel->index - 1];
 
 	if (id == DATA_ID_CHANNEL_PROTECTION_OVP_LIMIT ||

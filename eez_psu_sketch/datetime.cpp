@@ -159,6 +159,19 @@ bool setTime(uint8_t hour, uint8_t minute, uint8_t second) {
     return false;
 }
 
+bool getDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, uint8_t &minute, uint8_t &second) {
+	return rtc::readDateTime(year, month, day, hour, minute, second);
+}
+
+bool setDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second) {
+    if (rtc::writeDateTime(year, month, day, hour, minute, second)) {
+		persist_conf::writeSystemDateTime(year, month, day, hour, minute, second);
+        psu::setQuesBits(QUES_TIME, !checkDateTime());
+        return true;
+    }
+    return false;
+}
+
 bool getDateTimeAsString(char *buffer) {
     uint8_t year, month, day, hour, minute, second;
     if (datetime::getDate(year, month, day) && datetime::getTime(hour, minute, second)) {
@@ -262,6 +275,39 @@ void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay,
 
 	resultMonth = month + 1;  // jan is month 1  
 	resultDay = time + 1;     // day of month
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+DateTime::DateTime() {
+}
+
+DateTime::DateTime(uint16_t year_, uint8_t month_, uint8_t day_, uint8_t hour_, uint8_t minute_, uint8_t second_)
+	: year(year_), month(month_), day(day_), hour(hour_), minute(minute_), second(second_)
+{
+}
+
+DateTime::DateTime(const DateTime& rhs) {
+	memcpy(this, &rhs, sizeof(DateTime));
+}
+
+DateTime DateTime::now() {
+	uint8_t year, month, day, hour, minute, second;
+
+	if (!getDateTime(year, month, day, hour, minute, second)) {
+		year = 17;
+		month = 1;
+		day = 1;
+		hour = 0;
+		minute = 0;
+		second = 0;
+	}
+
+	return DateTime(2000 + year, month, day, hour, minute, second);
+}
+
+bool DateTime::operator !=(const DateTime &rhs) {
+	return memcmp(this, &rhs, sizeof(DateTime)) != 0;
 }
 
 }

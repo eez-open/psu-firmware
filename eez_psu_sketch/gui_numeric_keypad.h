@@ -27,6 +27,8 @@ namespace numeric_keypad {
 
 void init(const char *label, data::ValueType editUnit, float min, float max, bool maxButtonEnabled, float def, bool defButtonEnabled, void (*ok)(float), void (*cancel)(), bool genericNumberKeypad);
 void start(const char *label, data::ValueType editUnit, float min, float max, bool maxButtonEnabled, float def, bool defButtonEnabled, void (*ok)(float), void (*cancel)(), bool genericNumberKeypad);
+void start(const char *label, uint16_t min, uint16_t max, uint16_t *val);
+
 data::ValueType getEditUnit();
 bool getText(char *text, int count);
 data::Value getData(uint8_t id);

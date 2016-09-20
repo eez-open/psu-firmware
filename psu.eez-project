@@ -157,6 +157,14 @@
       "description": "Is \"def\" key on numeric keypad enabled?"
     },
     {
+      "name": "keypad_sign_enabled",
+      "defaultValue": "1"
+    },
+    {
+      "name": "keypad_dot_enabled",
+      "defaultValue": "1"
+    },
+    {
       "name": "calibration.passwordStatus",
       "description": "0 - not set\n1 - set",
       "defaultValue": "0"
@@ -510,7 +518,7 @@
       "name": "toggle_channel",
       "description": "turn channel on/off",
       "implementationType": "native",
-      "implementation": "Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.iChannel);\nif (channel.isTripped()) {\n    errorMessageP(PSTR(\"Channel is tripped!\"), 0);\n} else {\n    channel.outputEnable(!channel.isOutputEnabled());\n}\n"
+      "implementation": "Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);\nif (channel.isTripped()) {\n    errorMessageP(PSTR(\"Channel is tripped!\"), 0);\n} else {\n    channel.outputEnable(!channel.isOutputEnabled());\n}\n"
     },
     {
       "name": "show_channel_settings",
@@ -51565,24 +51573,28 @@
                   "height": 43
                 },
                 {
-                  "type": "Text",
+                  "type": "Button",
                   "action": "keypad_key",
                   "x": 60,
                   "y": 131,
                   "style": "key",
                   "text": ".",
                   "width": 60,
-                  "height": 43
+                  "height": 43,
+                  "disabledStyle": "key_disabled",
+                  "enabled": "keypad_dot_enabled"
                 },
                 {
-                  "type": "Text",
+                  "type": "Button",
                   "action": "keypad_sign",
                   "x": 120,
                   "y": 131,
                   "style": "key_icons",
                   "text": "-",
                   "width": 60,
-                  "height": 43
+                  "height": 43,
+                  "disabledStyle": "key_disabled",
+                  "enabled": "keypad_sign_enabled"
                 },
                 {
                   "type": "Button",
