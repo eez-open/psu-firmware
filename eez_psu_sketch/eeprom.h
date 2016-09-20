@@ -67,7 +67,8 @@
 |28    |1   |int                      |Hour                         |
 |29    |1   |int                      |Minute                       |
 |30    |1   |int                      |Second                       |
-|31    |1   |int                      |Auto profile location        |
+|30    |2   |int                      |Time zone                    |
+|32    |1   |int                      |Auto profile location        |
 
 #### <a name="device-flags">Device flags</a>
 
@@ -77,7 +78,7 @@
 |1  |Date set           |
 |2  |Time set           |
 |3  |Auto recall profile|
-|4  |Reserved           |
+|4  |DST                |
 |5  |Reserved           |
 |6  |Reserved           |
 |7  |Reserved           |

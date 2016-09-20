@@ -79,6 +79,11 @@ void Value::toText(char *text, int count) const {
 		text[count - 1] = 0;
 		break;
 
+	case VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE:
+		strncpy_P(text, PSTR("Value is less then -12:00"), count-1);
+		text[count - 1] = 0;
+		break;
+
 	case VALUE_TYPE_GREATER_THEN_MAX_FLOAT:
 		snprintf_P(text, count-1, PSTR("Value is greater then %.2f"), float_);
 		text[count - 1] = 0;
@@ -86,6 +91,11 @@ void Value::toText(char *text, int count) const {
 
 	case VALUE_TYPE_GREATER_THEN_MAX_INT:
 		snprintf_P(text, count-1, PSTR("Value is greater then %d"), int_);
+		text[count - 1] = 0;
+		break;
+
+	case VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE:
+		strncpy_P(text, PSTR("Value is greater then +14:00"), count-1);
 		text[count - 1] = 0;
 		break;
 
@@ -118,6 +128,39 @@ void Value::toText(char *text, int count) const {
 
 	case VALUE_TYPE_SCPI_ERROR_TEXT:
 		strncpy(text, SCPI_ErrorTranslate(int16_), count - 1);
+		text[count - 1] = 0;
+		break;
+
+	case VALUE_TYPE_TIME_ZONE:
+		if (int16_ == 0) {
+			strncpy_P(text, PSTR("GMT"), count - 1);
+			text[count - 1] = 0;
+		} else {
+			char sign;
+			int16_t value;
+			if (int16_ > 0) {
+				sign = '+';
+				value = int16_;
+			} else {
+				sign = '-';
+				value = -int16_;
+			}
+			snprintf_P(text, count-1, PSTR("%c%02d:%02d GMT"), sign, value / 100, value % 100);
+			text[count - 1] = 0;
+		}
+		break;
+
+	case VALUE_TYPE_YEAR:
+		snprintf_P(text, count-1, PSTR("%d"), uint16_);
+		text[count - 1] = 0;
+		break;
+
+	case VALUE_TYPE_MONTH:
+	case VALUE_TYPE_DAY:
+	case VALUE_TYPE_HOUR:
+	case VALUE_TYPE_MINUTE:
+	case VALUE_TYPE_SECOND:
+		snprintf_P(text, count-1, PSTR("%02d"), uint8_);
 		text[count - 1] = 0;
 		break;
 

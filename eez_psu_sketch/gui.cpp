@@ -70,13 +70,10 @@ static Document g_docBuffer;
 static int g_activePageId;
 static Page *g_activePage;
 
-static int g_lastActivePageId = -1;
-static Page *g_lastActivePage;
-static bool g_lastPushActivePageOnStack;
-
-static bool g_pushActivePageOnStack;
-
-static int g_pageNavigationStack[CONF_GUI_PAGE_NAVIGATION_STACK_SIZE];
+static struct {
+	int activePageId;
+	Page *activePage;
+} g_pageNavigationStack[CONF_GUI_PAGE_NAVIGATION_STACK_SIZE];
 static int g_pageNavigationStackPointer = 0;
 
 static bool g_widgetRefresh;
@@ -1135,21 +1132,24 @@ Page *getActivePage() {
     return g_activePage;
 }
 
-void doShowPage(int index) {
+void doShowPage(int index, Page *page = 0) {
     lcd::turnOn();
 
+	// delete current page
 	if (g_activePage) {
 		g_activePage->pageDidDisappear();
 		delete g_activePage;
-		g_activePage = 0;
 	}
 
 	g_activePageId = index;
 
-	g_activePage = createPageFromId(g_activePageId);
-
-	if (g_activePage) {
-		g_activePage->pageWillAppear();
+	if (page) {
+		g_activePage = page;
+	} else {
+		g_activePage = createPageFromId(g_activePageId);
+		if (g_activePage) {
+			g_activePage->pageWillAppear();
+		}
 	}
 
     g_showPageTime = micros();
@@ -1157,6 +1157,7 @@ void doShowPage(int index) {
     refreshPage();
 }
 
+/*
 void showPage(int index, bool pushOnStack) {
 	if (g_lastActivePageId != -1) {
 		g_activePageId = g_lastActivePageId;
@@ -1216,23 +1217,85 @@ void showPreviousPage() {
 	}
 }
 
+*/
+
+void setPage(int index) {
+	// delete stack
+	for (int i = 0; i < g_pageNavigationStackPointer; ++i) {
+		if (g_pageNavigationStack[i].activePage) {
+			g_pageNavigationStack[i].activePage->pageDidDisappear();
+			delete g_pageNavigationStack[i].activePage;
+		}
+	}
+	g_pageNavigationStackPointer = 0;
+
+	//
+	doShowPage(index);
+}
+
+void replacePage(int index) {
+	doShowPage(index);
+}
+
+void pushPage(int index) {
+	// push current page on stack
+
+	if (g_activePageId != -1) {
+		if (g_pageNavigationStackPointer == CONF_GUI_PAGE_NAVIGATION_STACK_SIZE) {
+			// no more space on the stack
+
+			// delete page on the bottom
+			if (g_pageNavigationStack[0].activePage) {
+				g_pageNavigationStack[0].activePage->pageDidDisappear();
+				delete g_pageNavigationStack[0].activePage;
+			}
+
+			// move stack one down
+			for (int i = 1; i < g_pageNavigationStackPointer; ++i) {
+				g_pageNavigationStack[i-1].activePageId = g_pageNavigationStack[i].activePageId;
+				g_pageNavigationStack[i-1].activePage = g_pageNavigationStack[i].activePage;
+			}
+
+			--g_pageNavigationStackPointer;
+		}
+
+		g_pageNavigationStack[g_pageNavigationStackPointer].activePageId = g_activePageId;
+		g_pageNavigationStack[g_pageNavigationStackPointer].activePage = g_activePage;
+		g_activePage = 0;
+		++g_pageNavigationStackPointer;
+	}
+
+	doShowPage(index);
+}
+
+void popPage() {
+	if (g_pageNavigationStackPointer > 0) {
+		--g_pageNavigationStackPointer;
+
+		doShowPage(g_pageNavigationStack[g_pageNavigationStackPointer].activePageId,
+			g_pageNavigationStack[g_pageNavigationStackPointer].activePage);
+	} else {
+		doShowPage(PAGE_ID_MAIN);
+	}
+}
+
 void showWelcomePage() {
-    showPage(PAGE_ID_WELCOME);
+    setPage(PAGE_ID_WELCOME);
     flush();
 }
 
 void showSelfTestResultPage() {
-    showPage(PAGE_ID_SELF_TEST_RESULT);
+    setPage(PAGE_ID_SELF_TEST_RESULT);
     flush();
 }
 
 void showStandbyPage() {
-    showPage(PAGE_ID_STANDBY);
+    setPage(PAGE_ID_STANDBY);
     flush();
 }
 
 void showEnteringStandbyPage() {
-    showPage(PAGE_ID_ENTERING_STANDBY);
+    setPage(PAGE_ID_ENTERING_STANDBY);
     flush();
 }
 
@@ -1257,7 +1320,7 @@ void dialogCancel() {
 }
 
 void dialogOk() {
-	showPreviousPage();
+	popPage();
 
 	if (g_dialogYesCallback) {
 		g_dialogYesCallback();
@@ -1269,7 +1332,7 @@ void alertMessage(int alertPageId, data::Value message, void (*ok_callback)()) {
 
     g_dialogYesCallback = ok_callback;
 
-	showAuxPage(alertPageId);
+	pushPage(alertPageId);
 
 	if (alertPageId == PAGE_ID_ERROR_ALERT) {
 		sound::playBeep();
@@ -1299,7 +1362,7 @@ void yesNoDialog(int yesNoPageId, const char *message PROGMEM, void (*yes_callba
     g_dialogNoCallback = no_callback;
     g_dialogCancelCallback = cancel_callback;
 
-	showPage(yesNoPageId);
+	pushPage(yesNoPageId);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1454,9 +1517,9 @@ void tick(unsigned long tick_usec) {
     if (g_activePageId == PAGE_ID_WELCOME || g_activePageId == PAGE_ID_STANDBY || g_activePageId == PAGE_ID_ENTERING_STANDBY) {
 		if (!touch::calibration::isCalibrated()) {
 			// touch screen is not calibrated
-			showPage(PAGE_ID_SCREEN_CALIBRATION_INTRO);
+			setPage(PAGE_ID_SCREEN_CALIBRATION_INTRO);
 		} else {
-			showPage(getStartPageId());
+			setPage(getStartPageId());
 		}
         return;
     }
@@ -1553,7 +1616,7 @@ void tick(unsigned long tick_usec) {
 	unsigned long inactivityPeriod = millis() - g_timeOfLastActivity;
 	if (g_activePageId == PAGE_ID_EVENT_QUEUE) {
 		if (inactivityPeriod >= 10 * 1000UL) {
-			showPage(PAGE_ID_MAIN);
+			setPage(PAGE_ID_MAIN);
 		}
 	} else if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
 		if (inactivityPeriod >= 20 * 1000UL) {

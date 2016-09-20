@@ -73,11 +73,18 @@ void init(const char *label, Options &options, void (*ok)(float), void (*cancel)
 
 void start(const char *label, Options &options, void (*ok)(float), void (*cancel)()) {
 	init(label, options, ok, cancel);
-	showAuxPage(PAGE_ID_NUMERIC_KEYPAD);
+	pushPage(PAGE_ID_NUMERIC_KEYPAD);
 }
 
 data::ValueType getEditUnit() {
     return g_options.editUnit;
+}
+
+char getDotSign() {
+	if (g_options.editUnit == data::VALUE_TYPE_TIME_ZONE) {
+		return ':';
+	}
+	return '.';
 }
 
 bool getText(char *text, int count) {
@@ -100,7 +107,7 @@ bool getText(char *text, int count) {
 		}
 
 		if (!isMilli() && g_state >= DOT) {
-			text[i++] = '.';
+			text[i++] = getDotSign();
 		}
 
 		if (g_state >= D2) {
@@ -177,8 +184,16 @@ float getValue() {
 
 		int a = 0;
 		float b = 0;
+		int sign = 1;
 
-		while (*p && *p != '.') {
+		if (*p == '-') {
+			sign = -1;
+			++p;
+		} else if (*p == '+') {
+			++p;
+		}
+
+		while (*p && *p != getDotSign()) {
 			a = a * 10 + (*p - '0');
 			++p;
 		}
@@ -191,7 +206,7 @@ float getValue() {
 			}
 		}
 
-		float value = a + b;
+		float value = sign * (a + b);
 
 		if (isMilli()) {
 			value /= 1000.0f;
@@ -317,6 +332,11 @@ void digit(int d) {
 	if (g_options.flags.genericNumberKeypad) {
 		if (g_state == EMPTY) {
 			g_state = BEFORE_DOT;
+			if (g_options.editUnit == data::VALUE_TYPE_TIME_ZONE) {
+				if (strlen(g_keypadText) == 0) {
+					appendChar('+');
+				}
+			}
 		}
 		appendChar(d + '0');
 	} else {
@@ -369,12 +389,18 @@ void dot() {
 		}
 
 		if (g_state == EMPTY) {
+			if (g_options.editUnit == data::VALUE_TYPE_TIME_ZONE) {
+				if (strlen(g_keypadText) == 0) {
+					appendChar('+');
+				}
+			}
 			appendChar('0');
 			g_state = BEFORE_DOT;
 		}
 
 		if (g_state == BEFORE_DOT) {
-			appendChar('.');
+			appendChar(getDotSign());
+			g_state = AFTER_DOT;
 		} else {
 			sound::playBeep();
 		}
@@ -455,10 +481,17 @@ void back() {
 	if (g_options.flags.genericNumberKeypad) {
 		int n = strlen(g_keypadText);
 		if (n > 0) {
-			if (g_keypadText[n - 1] == '.') {
+			if (g_keypadText[n - 1] == getDotSign()) {
 				g_state = BEFORE_DOT;
 			}
 			g_keypadText[n - 1] = 0;
+			if (n - 1 == 1) {
+				if (g_keypadText[0] == '+' || g_keypadText[0] == '-') {
+					g_state = EMPTY;
+				}
+			} else if (n - 1 == 0) {
+				g_state = EMPTY;
+			}
 		} else {
 			sound::playBeep();
 		}
@@ -498,16 +531,26 @@ void back() {
 void clear() {
 	if (g_state != START) {
 		reset();
-	}
-	else {
+	} else {
 		sound::playBeep();
 	}
 }
 
 void sign() {
 	if (g_options.flags.signButtonEnabled) {
-		// not supported
-		sound::playBeep();
+		if (g_options.flags.genericNumberKeypad && g_options.editUnit == data::VALUE_TYPE_TIME_ZONE) {
+			if (g_keypadText[0] == 0) {
+				g_keypadText[0] = '-';
+				g_keypadText[1] = 0;
+			} else if (g_keypadText[0] == '-') {
+				g_keypadText[0] = '+';
+			} else {
+				g_keypadText[0] = '-';
+			}
+		} else {
+			// not supported
+			sound::playBeep();
+		}
 	}
 }
 
@@ -567,7 +610,11 @@ void ok() {
 }
 
 void cancel() {
-	g_cancelCallback();
+	if (g_cancelCallback) {
+		g_cancelCallback();
+	} else {
+		popPage();
+	}
 }
 
 }

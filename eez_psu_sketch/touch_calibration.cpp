@@ -145,7 +145,7 @@ void enterCalibrationMode(int yesNoPageId, int nextPageId) {
 
 void leaveCalibrationMode() {
 	mode = MODE_CALIBRATED;
-    showPage(g_nextPageId);
+    setPage(g_nextPageId);
 
 	Channel::restoreOE();
 }

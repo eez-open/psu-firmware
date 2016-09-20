@@ -43,7 +43,7 @@ struct Options {
 
 void init(const char *label, Options &options, void (*ok)(float), void (*cancel)());
 // data::ValueType editUnit, float min, float max, bool maxButtonEnabled, float def, bool defButtonEnabled         bool genericNumberKeypad
-void start(const char *label, Options &options, void (*ok)(float), void (*cancel)());
+void start(const char *label, Options &options, void (*ok)(float), void (*cancel)() = 0);
 
 data::ValueType getEditUnit();
 bool getText(char *text, int count);

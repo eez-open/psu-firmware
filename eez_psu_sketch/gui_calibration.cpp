@@ -55,26 +55,27 @@ void checkPasswordOkCallback(char *text) {
 void checkPassword(const char *label, void (*ok)(), void (*invalid)()) {
 	g_checkPasswordOkCallback = ok;
 	g_checkPasswordInvalidCallback = invalid;
-	keypad::start(label, 0, PASSWORD_MAX_LENGTH, true, checkPasswordOkCallback, invalid);
+	keypad::startPush(label, 0, PASSWORD_MAX_LENGTH, true, checkPasswordOkCallback, invalid);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void onRetypeNewPasswordOk(char *text) {
-	if (strncmp(g_newPassword, text, strlen(text)) != 0) {
+	size_t textLen = strlen(text);
+	if (strlen(g_newPassword) != textLen || strncmp(g_newPassword, text, textLen) != 0) {
 		// retyped new password doesn't match
-		errorMessageP(PSTR("Password doesn't match!"), showPreviousPage);
+		errorMessageP(PSTR("Password doesn't match!"), popPage);
 		return;
 	}
 	
 	if (!persist_conf::changePassword(g_newPassword, strlen(g_newPassword))) {
 		// failed to save changed password
-		errorMessageP(PSTR("Failed to change password!"), showPreviousPage);
+		errorMessageP(PSTR("Failed to change password!"), popPage);
 		return;
 	}
 
 	// success
-	infoMessageP(PSTR("Password changed!"), showPreviousPage);
+	infoMessageP(PSTR("Password changed!"), popPage);
 }
 
 void onNewPasswordOk(char *text) {
@@ -88,15 +89,15 @@ void onNewPasswordOk(char *text) {
 	}
 
 	strcpy(g_newPassword, text);
-	keypad::start(PSTR("Retype new password: "), 0, PASSWORD_MAX_LENGTH, true, onRetypeNewPasswordOk, showPreviousPage);
+	keypad::startReplace(PSTR("Retype new password: "), 0, PASSWORD_MAX_LENGTH, true, onRetypeNewPasswordOk, popPage);
 }
 
 void onOldPasswordOk() {
-	keypad::start(PSTR("New password: "), 0, PASSWORD_MAX_LENGTH, true, onNewPasswordOk, showPreviousPage);
+	keypad::startReplace(PSTR("New password: "), 0, PASSWORD_MAX_LENGTH, true, onNewPasswordOk, popPage);
 }
 
 void editPassword() {
-	checkPassword(PSTR("Current password: "), onOldPasswordOk, showPreviousPage);
+	checkPassword(PSTR("Current password: "), onOldPasswordOk, popPage);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -122,11 +123,11 @@ void onStartPasswordOk() {
 	psu::calibration::start(g_channel);
 
 	g_stepNum = 0;
-	showPage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP, false);
+	replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP);
 }
 
 void start() {
-	checkPassword(PSTR("Password: "), onStartPasswordOk, showPreviousPage);
+	checkPassword(PSTR("Password: "), onStartPasswordOk, popPage);
 }
 
 data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
@@ -205,7 +206,7 @@ void onSetOk(float value) {
 	if (calibrationValue->checkRange(value, adc)) {
 		calibrationValue->setData(value, adc);
 
-		showPreviousPage();
+		popPage();
 		nextStep();
 	} else {
 		errorMessageP(PSTR("Value out of range!"));
@@ -214,13 +215,14 @@ void onSetOk(float value) {
 
 void showCurrentStep() {
 	if (g_stepNum < 7) {
-		showPage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP, false);
+		replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP);
 	} else {
-		showPage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_FINISH, false);
+		replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_FINISH);
 	}
 }
 
 void onSetRemarkOk(char *remark) {
+	popPage();
 	psu::calibration::setRemark(remark, strlen(remark));
 	if (g_stepNum < 6) {
 		nextStep();
@@ -277,14 +279,14 @@ void set() {
 			numeric_keypad::switchToMilli();
 		}
 	} else if (g_stepNum == 6) {
-		keypad::start(0, psu::calibration::isRemarkSet() ? psu::calibration::getRemark() : 0, 32, false, onSetRemarkOk, showCurrentStep);
+		keypad::startPush(0, psu::calibration::isRemarkSet() ? psu::calibration::getRemark() : 0, 32, false, onSetRemarkOk, popPage);
 	}
 }
 
 void previousStep() {
 	if (g_stepNum > 0) {
 		--g_stepNum;
-		showPage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP, false);
+		replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP);
 	}
 }
 
@@ -308,7 +310,7 @@ void nextStep() {
 
 void save() {
 	if (psu::calibration::save()) {
-		infoMessageP(PSTR("Calibration data saved!"), showPreviousPage);
+		infoMessageP(PSTR("Calibration data saved!"), popPage);
 	} else {
 		errorMessageP(PSTR("Save failed!"));
 	}

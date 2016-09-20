@@ -123,7 +123,7 @@ void enter(int tabIndex_) {
 
         psu::enterTimeCriticalMode();
 
-        showPage(tabIndex);
+        setPage(tabIndex);
     }
 }
 
@@ -133,7 +133,7 @@ void exit() {
 
         psu::leaveTimeCriticalMode();
 
-        showPage(PAGE_ID_MAIN);
+        setPage(PAGE_ID_MAIN);
     }
 }
 

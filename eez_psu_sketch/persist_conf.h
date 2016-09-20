@@ -48,7 +48,7 @@ struct DeviceFlags {
     int date_valid : 1;
     int time_valid : 1;
     int profile_auto_recall : 1;
-    int reserved4 : 1;
+    int dst : 1;
     int reserved5 : 1;
     int reserved6 : 1;
     int reserved7 : 1;
@@ -73,6 +73,7 @@ struct DeviceConfiguration {
     uint8_t time_hour;
     uint8_t time_minute;
     uint8_t time_second;
+	int16_t time_zone;
     int8_t profile_auto_recall_location;
     int8_t touch_screen_cal_orientation;
     int16_t touch_screen_cal_tlx;

@@ -19,6 +19,7 @@
 #include "psu.h"
 
 #include "gui_internal.h"
+#include "gui_data_snapshot.h"
 
 namespace eez {
 namespace psu {
@@ -41,9 +42,13 @@ data::Value Page::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void SetPage::takeSnapshot(data::Snapshot *snapshot) {
+	snapshot->flags.setPageDirty = getDirty();
+}
+
 data::Value SetPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
 	if (id == DATA_ID_SET_PAGE_DIRTY) {
-		return data::Value(getDirty() ? 1 : 0);
+		return data::Value(snapshot->flags.setPageDirty);
 	}
 	return data::Value();
 }
@@ -52,7 +57,7 @@ void SetPage::edit() {
 }
 
 void SetPage::onSetValue(float value) {
-	showPreviousPage();
+	popPage();
 	SetPage *page = (SetPage *)getActivePage();
 	page->setValue(value);
 }
@@ -61,7 +66,7 @@ void SetPage::setValue(float value) {
 }
 
 void SetPage::discard() {
-	showPreviousPage();
+	popPage();
 }
 
 }

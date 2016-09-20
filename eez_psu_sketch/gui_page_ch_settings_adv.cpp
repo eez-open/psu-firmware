@@ -45,9 +45,10 @@ void ChSettingsAdvLRipplePage::pageWillAppear() {
 }
 
 void ChSettingsAdvLRipplePage::takeSnapshot(data::Snapshot *snapshot) {
+	SetPage::takeSnapshot(snapshot);
+
 	snapshot->flags.switch1 = status;
 	snapshot->flags.switch2 = autoMode;
-	snapshot->flags.switch3 = getDirty();
 }
 
 data::Value ChSettingsAdvLRipplePage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
@@ -72,10 +73,6 @@ data::Value ChSettingsAdvLRipplePage::getData(const data::Cursor &cursor, uint8_
 		return snapshot->flags.switch2;
 	}
 
-	if (id == DATA_ID_CHANNEL_LRIPPLE_DIRTY) {
-		return snapshot->flags.switch3;
-	}
-
 	return data::Value();
 }
 
@@ -94,7 +91,7 @@ int ChSettingsAdvLRipplePage::getDirty() {
 void ChSettingsAdvLRipplePage::set() {
 	if (getDirty()) {
 		if (!g_channel->lowRippleEnable(status ? true : false)) {
-			errorMessageP(PSTR("Failed to change LRipple status!"), showPreviousPage);
+			errorMessageP(PSTR("Failed to change LRipple status!"));
 			return;
 		}
 	
@@ -102,7 +99,7 @@ void ChSettingsAdvLRipplePage::set() {
 
 		profile::save();
 	
-		infoMessageP(PSTR("LRipple params changed!"), showPreviousPage);
+		infoMessageP(PSTR("LRipple params changed!"), actions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
 	}
 }
 

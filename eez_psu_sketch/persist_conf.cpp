@@ -37,7 +37,7 @@ enum PersistConfSection {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static const uint16_t DEV_CONF_VERSION = 0x0006L;
+static const uint16_t DEV_CONF_VERSION = 0x0007L;
 static const uint16_t CH_CAL_CONF_VERSION = 0x0002L;
 static const uint16_t PROFILE_VERSION = 0x0004L;
 
@@ -99,6 +99,9 @@ void initDevice() {
 
     dev_conf.flags.date_valid = 0;
     dev_conf.flags.time_valid = 0;
+	dev_conf.flags.dst = 0;
+
+	dev_conf.time_zone = 0;
 
     dev_conf.flags.profile_auto_recall = 1;
     dev_conf.profile_auto_recall_location = 0;

@@ -29,6 +29,7 @@ namespace gui {
 class SysSettingsDateTimePage : public SetPage {
 public:
 	void pageWillAppear();
+	void takeSnapshot(data::Snapshot *snapshot);
 	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
 
 	void edit();
@@ -36,9 +37,17 @@ public:
 	int getDirty();
 	void set();
 
+	void toggleDst();
+
 private:
 	datetime::DateTime origDateTime;
 	datetime::DateTime dateTime;
+
+	int16_t origTimeZone;
+	int16_t timeZone;
+
+	unsigned int origDst;
+	unsigned int dst;
 };
 
 }

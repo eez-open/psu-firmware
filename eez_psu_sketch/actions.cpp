@@ -26,6 +26,7 @@
 #include "gui_calibration.h"
 #include "gui_page_ch_settings_protection.h"
 #include "gui_page_ch_settings_adv.h"
+#include "gui_page_sys_settings_date_time.h"
 
 namespace eez {
 namespace psu {
@@ -39,15 +40,6 @@ void action_toggle_channel() {
     } else {
         channel.outputEnable(!channel.isOutputEnabled());
     }
-}
-
-void action_show_channel_settings() {
-    gui::selectChannel();
-    showPage(PAGE_ID_CH_SETTINGS_PROT);
-}
-
-void action_show_main_page() {
-    showPage(PAGE_ID_MAIN);
 }
 
 void action_edit() {
@@ -148,109 +140,122 @@ void action_cancel() {
     dialogCancel();
 }
 
-void action_show_previous_page() {
-    showPreviousPage();
-}
-
 void action_turn_off() {
 
 }
 
+void action_show_previous_page() {
+    popPage();
+}
+
+void action_show_main_page() {
+    setPage(PAGE_ID_MAIN);
+}
+
+void action_show_event_queue() {
+    setPage(PAGE_ID_EVENT_QUEUE);
+}
+
+void action_show_channel_settings() {
+    gui::selectChannel();
+    setPage(PAGE_ID_CH_SETTINGS_PROT);
+}
+
 void action_show_sys_settings() {
-    showPage(PAGE_ID_SYS_SETTINGS);
+    setPage(PAGE_ID_SYS_SETTINGS);
 }
 
 void action_show_sys_settings2() {
-    showPage(PAGE_ID_SYS_SETTINGS2);
+    setPage(PAGE_ID_SYS_SETTINGS2);
 }
 
 void action_show_sys_settings_date_time() {
-    showPage(PAGE_ID_SYS_SETTINGS_DATE_TIME);
+    pushPage(PAGE_ID_SYS_SETTINGS_DATE_TIME);
 }
 
 void action_show_sys_settings_cal() {
-    showPage(PAGE_ID_SYS_SETTINGS_CAL);
+    pushPage(PAGE_ID_SYS_SETTINGS_CAL);
 }
 
 void action_show_sys_settings_cal_ch() {
     gui::selectChannel();
-    showPage(PAGE_ID_SYS_SETTINGS_CAL_CH);
+    pushPage(PAGE_ID_SYS_SETTINGS_CAL_CH);
 }
 
 void action_show_sys_settings_screen_calibration() {
-    showPage(PAGE_ID_SYS_SETTINGS_SCREEN_CALIBRATION);
+    pushPage(PAGE_ID_SYS_SETTINGS_SCREEN_CALIBRATION);
 }
 
 void action_show_sys_info() {
-    showPage(PAGE_ID_SYS_INFO);
+    setPage(PAGE_ID_SYS_INFO);
 }
 
 void action_show_sys_info2() {
-    showPage(PAGE_ID_SYS_INFO2);
+    setPage(PAGE_ID_SYS_INFO2);
 }
 
 void action_show_main_help_page() {
-    showPage(PAGE_ID_MAIN_HELP);
+    setPage(PAGE_ID_MAIN_HELP);
 }
 
 void action_show_edit_mode_step_help() {
-    showPage(PAGE_ID_EDIT_MODE_STEP_HELP);
+    pushPage(PAGE_ID_EDIT_MODE_STEP_HELP);
 }
 
 void action_show_edit_mode_slider_help() {
-    showPage(PAGE_ID_EDIT_MODE_SLIDER_HELP);
+    pushPage(PAGE_ID_EDIT_MODE_SLIDER_HELP);
 }
 
 void action_show_ch_settings_prot() {
-    showPage(PAGE_ID_CH_SETTINGS_PROT);
+    setPage(PAGE_ID_CH_SETTINGS_PROT);
 }
 
 void action_show_ch_settings_prot_clear() {
-    showPage(PAGE_ID_CH_SETTINGS_PROT_CLEAR);
+    setPage(PAGE_ID_CH_SETTINGS_PROT_CLEAR);
 }
 
 void action_show_ch_settings_prot_ocp() {
-    showPage(PAGE_ID_CH_SETTINGS_PROT_OCP);
+    pushPage(PAGE_ID_CH_SETTINGS_PROT_OCP);
 }
 
 void action_show_ch_settings_prot_ovp() {
-    showPage(PAGE_ID_CH_SETTINGS_PROT_OVP);
+    pushPage(PAGE_ID_CH_SETTINGS_PROT_OVP);
 }
 
 void action_show_ch_settings_prot_opp() {
-    showPage(PAGE_ID_CH_SETTINGS_PROT_OPP);
+    pushPage(PAGE_ID_CH_SETTINGS_PROT_OPP);
 }
 
 void action_show_ch_settings_prot_otp() {
-    showPage(PAGE_ID_CH_SETTINGS_PROT_OTP);
+    pushPage(PAGE_ID_CH_SETTINGS_PROT_OTP);
 }
 
 void action_show_ch_settings_adv() {
-    showPage(PAGE_ID_CH_SETTINGS_ADV);
+    setPage(PAGE_ID_CH_SETTINGS_ADV);
 }
 
 void action_show_ch_settings_adv_lripple() {
-    showPage(PAGE_ID_CH_SETTINGS_ADV_LRIPPLE);
+    pushPage(PAGE_ID_CH_SETTINGS_ADV_LRIPPLE);
 }
 
 void action_show_ch_settings_adv_rsense() {
-    showPage(PAGE_ID_CH_SETTINGS_ADV_RSENSE);
+    setPage(PAGE_ID_CH_SETTINGS_ADV_RSENSE);
 }
 
 void action_show_ch_settings_adv_rprog() {
-    showPage(PAGE_ID_CH_SETTINGS_ADV_RPROG);
+    setPage(PAGE_ID_CH_SETTINGS_ADV_RPROG);
 }
 
 void action_show_ch_settings_disp() {
-    showPage(PAGE_ID_CH_SETTINGS_DISP);
+    setPage(PAGE_ID_CH_SETTINGS_DISP);
 }
 
 void action_show_ch_settings_info() {
-    showPage(PAGE_ID_CH_SETTINGS_INFO);
+    setPage(PAGE_ID_CH_SETTINGS_INFO);
 }
 
 void action_show_ch_settings_info_cal() {
-    showPage(PAGE_ID_SYS_SETTINGS_CAL_CH);
+    pushPage(PAGE_ID_SYS_SETTINGS_CAL_CH);
 }
 
 void action_sys_settings_cal_edit_password() {
@@ -275,12 +280,12 @@ void action_sys_settings_cal_ch_wiz_step_next() {
 
 void action_sys_settings_cal_ch_wiz_stop_and_show_previous_page() {
     calibration::stop();
-    showPreviousPage();
+    popPage();
 }
 
 void action_sys_settings_cal_ch_wiz_stop_and_show_main_page() {
     calibration::stop();
-    showPage(PAGE_ID_MAIN);
+    setPage(PAGE_ID_MAIN);
 }
 
 void action_sys_settings_cal_ch_wiz_step_set() {
@@ -331,10 +336,6 @@ void action_edit_field() {
     ((SetPage *)getActivePage())->edit();
 }
 
-void action_show_event_queue() {
-    showPage(PAGE_ID_EVENT_QUEUE);
-}
-
 void action_event_queue_previous_page() {
     event_queue::moveToPreviousPage();
 }
@@ -359,12 +360,14 @@ void action_ch_settins_adv_rprog_toggle_status() {
     ((ChSettingsAdvRProgPage *)getActivePage())->toggleStatus();
 }
 
+void action_sys_settings_date_time_toggle_dst() {
+    ((SysSettingsDateTimePage *)getActivePage())->toggleDst();
+}
+
 
 ACTION actions[] = {
     0,
     action_toggle_channel,
-    action_show_channel_settings,
-    action_show_main_page,
     action_edit,
     action_edit_mode_slider,
     action_edit_mode_step,
@@ -389,8 +392,11 @@ ACTION actions[] = {
     action_no,
     action_ok,
     action_cancel,
-    action_show_previous_page,
     action_turn_off,
+    action_show_previous_page,
+    action_show_main_page,
+    action_show_event_queue,
+    action_show_channel_settings,
     action_show_sys_settings,
     action_show_sys_settings2,
     action_show_sys_settings_date_time,
@@ -434,13 +440,13 @@ ACTION actions[] = {
     action_set,
     action_discard,
     action_edit_field,
-    action_show_event_queue,
     action_event_queue_previous_page,
     action_event_queue_next_page,
     action_ch_settins_adv_lripple_toggle_status,
     action_ch_settins_adv_lripple_toggle_auto_mode,
     action_ch_settins_adv_rsense_toggle_status,
-    action_ch_settins_adv_rprog_toggle_status
+    action_ch_settins_adv_rprog_toggle_status,
+    action_sys_settings_date_time_toggle_dst
 };
 
 }

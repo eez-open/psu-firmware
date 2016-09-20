@@ -335,11 +335,6 @@
       "defaultValue": "10 s"
     },
     {
-      "name": "channel.protection.dirty",
-      "defaultValue": "0",
-      "description": "0: disabled\n1: enabled"
-    },
-    {
       "name": "EventQueue.lastEvent.type",
       "defaultValue": "3",
       "description": "0: none\n1: info\n2: warning\n3: error"
@@ -397,10 +392,6 @@
     {
       "name": "channel.lripple.autoMode",
       "defaultValue": "1"
-    },
-    {
-      "name": "channel.lripple.dirty",
-      "defaultValue": "0"
     },
     {
       "name": "channel.rsense.status",
@@ -523,16 +514,6 @@
       "description": "turn channel on/off",
       "implementationType": "native",
       "implementation": "Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);\nif (channel.isTripped()) {\n    errorMessageP(PSTR(\"Channel is tripped!\"), 0);\n} else {\n    channel.outputEnable(!channel.isOutputEnabled());\n}\n"
-    },
-    {
-      "name": "show_channel_settings",
-      "implementationType": "native",
-      "implementation": "gui::selectChannel();\nshowPage(PAGE_ID_CH_SETTINGS_PROT);"
-    },
-    {
-      "name": "show_main_page",
-      "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_MAIN);"
     },
     {
       "name": "edit",
@@ -664,133 +645,148 @@
       "implementation": "dialogCancel();"
     },
     {
-      "name": "show_previous_page",
-      "implementationType": "native",
-      "implementation": "showPreviousPage();"
-    },
-    {
       "name": "turn_off",
       "implementationType": ""
     },
     {
+      "name": "show_previous_page",
+      "implementationType": "native",
+      "implementation": "popPage();"
+    },
+    {
+      "name": "show_main_page",
+      "implementationType": "native",
+      "implementation": "setPage(PAGE_ID_MAIN);"
+    },
+    {
+      "name": "show_event_queue",
+      "implementationType": "native",
+      "implementation": "setPage(PAGE_ID_EVENT_QUEUE);"
+    },
+    {
+      "name": "show_channel_settings",
+      "implementationType": "native",
+      "implementation": "gui::selectChannel();\nsetPage(PAGE_ID_CH_SETTINGS_PROT);"
+    },
+    {
       "name": "show_sys_settings",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_SYS_SETTINGS);"
+      "implementation": "setPage(PAGE_ID_SYS_SETTINGS);"
     },
     {
       "name": "show_sys_settings2",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_SYS_SETTINGS2);"
+      "implementation": "setPage(PAGE_ID_SYS_SETTINGS2);"
     },
     {
       "name": "show_sys_settings_date_time",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_SYS_SETTINGS_DATE_TIME);"
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_DATE_TIME);"
     },
     {
       "name": "show_sys_settings_cal",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_SYS_SETTINGS_CAL);"
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_CAL);"
     },
     {
       "name": "show_sys_settings_cal_ch",
       "implementationType": "native",
-      "implementation": "gui::selectChannel();\nshowPage(PAGE_ID_SYS_SETTINGS_CAL_CH);"
+      "implementation": "gui::selectChannel();\npushPage(PAGE_ID_SYS_SETTINGS_CAL_CH);"
     },
     {
       "name": "show_sys_settings_screen_calibration",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_SYS_SETTINGS_SCREEN_CALIBRATION);"
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_SCREEN_CALIBRATION);"
     },
     {
       "name": "show_sys_info",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_SYS_INFO);"
+      "implementation": "setPage(PAGE_ID_SYS_INFO);"
     },
     {
       "name": "show_sys_info2",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_SYS_INFO2);"
+      "implementation": "setPage(PAGE_ID_SYS_INFO2);"
     },
     {
       "name": "show_main_help_page",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_MAIN_HELP);"
+      "implementation": "setPage(PAGE_ID_MAIN_HELP);"
     },
     {
       "name": "show_edit_mode_step_help",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_EDIT_MODE_STEP_HELP);"
+      "implementation": "pushPage(PAGE_ID_EDIT_MODE_STEP_HELP);"
     },
     {
       "name": "show_edit_mode_slider_help",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_EDIT_MODE_SLIDER_HELP);"
+      "implementation": "pushPage(PAGE_ID_EDIT_MODE_SLIDER_HELP);"
     },
     {
       "name": "show_ch_settings_prot",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT);"
+      "implementation": "setPage(PAGE_ID_CH_SETTINGS_PROT);"
     },
     {
       "name": "show_ch_settings_prot_clear",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_CLEAR);"
+      "implementation": "setPage(PAGE_ID_CH_SETTINGS_PROT_CLEAR);"
     },
     {
       "name": "show_ch_settings_prot_ocp",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OCP);"
+      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_PROT_OCP);"
     },
     {
       "name": "show_ch_settings_prot_ovp",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OVP);"
+      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_PROT_OVP);"
     },
     {
       "name": "show_ch_settings_prot_opp",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OPP);"
+      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_PROT_OPP);"
     },
     {
       "name": "show_ch_settings_prot_otp",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_PROT_OTP);"
+      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_PROT_OTP);"
     },
     {
       "name": "show_ch_settings_adv",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_ADV);"
+      "implementation": "setPage(PAGE_ID_CH_SETTINGS_ADV);"
     },
     {
       "name": "show_ch_settings_adv_lripple",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_ADV_LRIPPLE);"
+      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_ADV_LRIPPLE);"
     },
     {
       "name": "show_ch_settings_adv_rsense",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_ADV_RSENSE);"
+      "implementation": "setPage(PAGE_ID_CH_SETTINGS_ADV_RSENSE);"
     },
     {
       "name": "show_ch_settings_adv_rprog",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_ADV_RPROG);"
+      "implementation": "setPage(PAGE_ID_CH_SETTINGS_ADV_RPROG);"
     },
     {
       "name": "show_ch_settings_disp",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_DISP);"
+      "implementation": "setPage(PAGE_ID_CH_SETTINGS_DISP);"
     },
     {
       "name": "show_ch_settings_info",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_CH_SETTINGS_INFO);"
+      "implementation": "setPage(PAGE_ID_CH_SETTINGS_INFO);"
     },
     {
       "name": "show_ch_settings_info_cal",
       "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_SYS_SETTINGS_CAL_CH);"
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_CAL_CH);"
     },
     {
       "name": "sys_settings_cal_edit_password",
@@ -819,12 +815,12 @@
     {
       "name": "sys_settings_cal_ch_wiz_stop_and_show_previous_page",
       "implementationType": "native",
-      "implementation": "calibration::stop();\nshowPreviousPage();"
+      "implementation": "calibration::stop();\npopPage();"
     },
     {
       "name": "sys_settings_cal_ch_wiz_stop_and_show_main_page",
       "implementationType": "native",
-      "implementation": "calibration::stop();\nshowPage(PAGE_ID_MAIN);"
+      "implementation": "calibration::stop();\nsetPage(PAGE_ID_MAIN);"
     },
     {
       "name": "sys_settings_cal_ch_wiz_step_set",
@@ -887,11 +883,6 @@
       "implementation": "((SetPage *)getActivePage())->edit();"
     },
     {
-      "name": "show_event_queue",
-      "implementationType": "native",
-      "implementation": "showPage(PAGE_ID_EVENT_QUEUE);"
-    },
-    {
       "name": "event_queue_previous_page",
       "implementationType": "native",
       "implementation": "event_queue::moveToPreviousPage();\n"
@@ -920,6 +911,11 @@
       "name": "ch_settins_adv_rprog_toggle_status",
       "implementationType": "native",
       "implementation": "((ChSettingsAdvRProgPage *)getActivePage())->toggleStatus();"
+    },
+    {
+      "name": "sys_settings_date_time_toggle_dst",
+      "implementationType": "native",
+      "implementation": "((SysSettingsDateTimePage *)getActivePage())->toggleDst();\n"
     }
   ],
   "gui": {
@@ -52472,7 +52468,7 @@
               "action": "set",
               "disabledStyle": "non_interactive_button_S_disabled",
               "data": "",
-              "enabled": "channel.protection.dirty"
+              "enabled": "setPage.dirty"
             },
             {
               "type": "Text",
@@ -52822,7 +52818,7 @@
               "action": "set",
               "disabledStyle": "non_interactive_button_S_disabled",
               "data": "",
-              "enabled": "channel.protection.dirty"
+              "enabled": "setPage.dirty"
             },
             {
               "type": "Text",
@@ -53191,7 +53187,7 @@
               "action": "set",
               "disabledStyle": "non_interactive_button_S_disabled",
               "data": "",
-              "enabled": "channel.protection.dirty"
+              "enabled": "setPage.dirty"
             },
             {
               "type": "Text",
@@ -53553,7 +53549,7 @@
               "action": "set",
               "disabledStyle": "non_interactive_button_S_disabled",
               "data": "",
-              "enabled": "channel.protection.dirty"
+              "enabled": "setPage.dirty"
             },
             {
               "type": "Text",
@@ -54185,7 +54181,7 @@
               "action": "set",
               "disabledStyle": "non_interactive_button_S_disabled",
               "data": "",
-              "enabled": "channel.lripple.dirty"
+              "enabled": "setPage.dirty"
             },
             {
               "type": "Text",
@@ -56750,23 +56746,23 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "text": "OFF",
+                  "text": "No",
                   "x": 0,
                   "y": 0,
                   "width": 60,
                   "height": 28,
                   "style": "edit_value_active_S_left",
-                  "action": "ch_settings_prot_toggle_state"
+                  "action": "sys_settings_date_time_toggle_dst"
                 },
                 {
                   "type": "Text",
-                  "text": "ON",
+                  "text": "Yes",
                   "x": 0,
                   "y": 0,
                   "width": 60,
                   "height": 28,
                   "style": "edit_value_active_S_left",
-                  "action": "edit_field"
+                  "action": "sys_settings_date_time_toggle_dst"
                 }
               ],
               "x": 117,
@@ -56774,7 +56770,7 @@
               "width": 60,
               "height": 28,
               "style": "default",
-              "data": "channel.protection.ovp.state"
+              "data": "sys.info.dateTime.DST"
             },
             {
               "type": "Button",
@@ -57518,11 +57514,21 @@
             {
               "type": "Text",
               "text": "Chanel callibration settings",
-              "x": 6,
+              "x": 42,
               "y": 0,
-              "width": 228,
+              "width": 230,
               "height": 28,
               "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Channel protections",
+              "x": 6,
+              "y": 0,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
             }
           ],
           "x": 0,
@@ -57723,9 +57729,28 @@
         "landscape": {
           "widgets": [
             {
+              "type": "Text",
+              "text": "Channel protections",
+              "x": 6,
+              "y": 0,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Calibration",
+              "x": 42,
+              "y": 0,
+              "width": 120,
+              "height": 28,
+              "style": "value_S"
+            },
+            {
               "type": "Rectangle",
               "x": 16,
-              "y": 16,
+              "y": 28,
               "width": 290,
               "height": 76,
               "style": "default_inverse"
@@ -57799,7 +57824,7 @@
                 }
               ],
               "x": 16,
-              "y": 16,
+              "y": 28,
               "width": 290,
               "height": 76,
               "style": "default",
@@ -57830,7 +57855,7 @@
                 }
               ],
               "x": 16,
-              "y": 92,
+              "y": 104,
               "width": 290,
               "height": 40,
               "style": "default",
@@ -57863,7 +57888,7 @@
                 }
               ],
               "x": 16,
-              "y": 132,
+              "y": 144,
               "width": 118,
               "height": 40,
               "style": "default",
@@ -58187,6 +58212,25 @@
               "disabledStyle": "bottom_button_disabled",
               "enabled": "channel.calibration.step.prevEnabled",
               "action": "sys_settings_cal_ch_wiz_step_previous"
+            },
+            {
+              "type": "Text",
+              "text": "Channel protections",
+              "x": 6,
+              "y": 0,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "data": "channel.shortLabel"
+            },
+            {
+              "type": "Text",
+              "text": "Calibration",
+              "x": 42,
+              "y": 0,
+              "width": 120,
+              "height": 28,
+              "style": "value_S"
             }
           ],
           "x": 0,
@@ -60753,7 +60797,7 @@
         },
         {
           "fileName": "actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings_date_time.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
         },
         {
           "fileName": "gui_document.h",

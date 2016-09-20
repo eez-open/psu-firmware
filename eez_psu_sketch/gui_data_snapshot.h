@@ -58,9 +58,9 @@ struct SnapshotFlags {
     unsigned otp : 2;
 	unsigned mainTemperatureStatus: 2;
 	unsigned fanStatus: 2;
+	unsigned setPageDirty: 1;
 	unsigned switch1: 1;
 	unsigned switch2: 1;
-	unsigned switch3: 1;
 };
 
 struct Snapshot {

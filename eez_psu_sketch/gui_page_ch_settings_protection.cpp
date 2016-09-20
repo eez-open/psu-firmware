@@ -34,7 +34,7 @@ namespace gui {
 void ChSettingsProtectionPage::clear() {
 	g_channel->clearProtection();
 
-	infoMessageP(PSTR("Cleared!"), 0);
+	infoMessageP(PSTR("Cleared!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
 }
 
 void ChSettingsProtectionPage::clearAndDisable() {
@@ -42,7 +42,7 @@ void ChSettingsProtectionPage::clearAndDisable() {
 	g_channel->disableProtection();
 	profile::save();
 
-	infoMessageP(PSTR("Cleared and disabled!"), 0);
+	infoMessageP(PSTR("Cleared and disabled!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
 }
 
 data::Value ChSettingsProtectionPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
@@ -55,8 +55,9 @@ data::Value ChSettingsProtectionPage::getData(const data::Cursor &cursor, uint8_
 ////////////////////////////////////////////////////////////////////////////////
 
 void ChSettingsProtectionSetPage::takeSnapshot(data::Snapshot *snapshot) {
+	SetPage::takeSnapshot(snapshot);
+
 	snapshot->flags.switch1 = state;
-	snapshot->flags.switch2 = getDirty();
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 	channelSnapshot.flags.tempStatus = 2;
@@ -111,10 +112,6 @@ data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uin
 		return delay;
 	}
 
-	if (id == DATA_ID_CHANNEL_PROTECTION_DIRTY) {
-		return snapshot->flags.switch2;
-	}
-
 	if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
 		return data::Value(channelSnapshot.flags.temperatureStatus);
 	}
@@ -134,7 +131,7 @@ void ChSettingsProtectionSetPage::set() {
 	if (getDirty()) {
 		setParams();
 		profile::save();
-		infoMessageP(PSTR("Protection params changed!"), showPreviousPage);
+		infoMessageP(PSTR("Protection params changed!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
 	}
 }
 
@@ -143,7 +140,7 @@ void ChSettingsProtectionSetPage::toggleState() {
 }
 
 void ChSettingsProtectionSetPage::onLimitSet(float value) {
-	showPreviousPage();
+	popPage();
 	ChSettingsProtectionSetPage *page = (ChSettingsProtectionSetPage *)getActivePage();
 	page->limit = data::Value(value, page->limit.getType());
 }
@@ -163,11 +160,11 @@ void ChSettingsProtectionSetPage::editLimit() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	numeric_keypad::start(0, options, onLimitSet, showPreviousPage);
+	numeric_keypad::start(0, options, onLimitSet);
 }
 
 void ChSettingsProtectionSetPage::onLevelSet(float value) {
-	showPreviousPage();
+	popPage();
 	ChSettingsProtectionSetPage *page = (ChSettingsProtectionSetPage *)getActivePage();
 	page->level = data::Value(value, page->level.getType());
 }
@@ -187,11 +184,11 @@ void ChSettingsProtectionSetPage::editLevel() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	numeric_keypad::start(0, options, onLevelSet, showPreviousPage);
+	numeric_keypad::start(0, options, onLevelSet);
 }
 
 void ChSettingsProtectionSetPage::onDelaySet(float value) {
-	showPreviousPage();
+	popPage();
 	ChSettingsProtectionSetPage *page = (ChSettingsProtectionSetPage *)getActivePage();
 	page->delay = data::Value(value, page->delay.getType());
 }
@@ -211,7 +208,7 @@ void ChSettingsProtectionSetPage::editDelay() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	numeric_keypad::start(0, options, onDelaySet, showPreviousPage);
+	numeric_keypad::start(0, options, onDelaySet);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

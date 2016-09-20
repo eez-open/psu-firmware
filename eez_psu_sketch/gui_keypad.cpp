@@ -151,8 +151,16 @@ void start(const char *label, const char *text, int maxChars_, bool isPassword_,
 		g_keypadText[0] = 0;
 	}
 	g_isUpperCase = false;
+}
 
-	showAuxPage(PAGE_ID_KEYPAD);
+void startPush(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)()) {
+	start(label, text, maxChars_, isPassword_, ok, cancel);
+	pushPage(PAGE_ID_KEYPAD);
+}
+
+void startReplace(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)()) {
+	start(label, text, maxChars_, isPassword_, ok, cancel);
+	replacePage(PAGE_ID_KEYPAD);
 }
 
 void appendChar(char c) {

@@ -38,6 +38,7 @@ public:
 
 class SetPage : public Page {
 public:
+	void takeSnapshot(data::Snapshot *snapshot);
 	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
 
 	virtual void edit();

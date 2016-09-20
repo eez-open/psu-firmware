@@ -47,7 +47,8 @@ extern void (*g_okCallback)(char *);
 extern void (*g_cancelCallback)();
 
 void init(const char *label, void (*ok)(char *), void (*cancel)());
-void start(const char *label, const char *text, int maxChars, bool isPassword, void (*ok)(char *), void (*cancel)());
+void startPush(const char *label, const char *text, int maxChars, bool isPassword, void (*ok)(char *), void (*cancel)());
+void startReplace(const char *label, const char *text, int maxChars, bool isPassword, void (*ok)(char *), void (*cancel)());
 
 void key();
 void space();

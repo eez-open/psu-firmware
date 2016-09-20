@@ -76,10 +76,11 @@ class Page;
 
 int getActivePageId();
 Page *getActivePage();
-void showPage(int index, bool pushOnStack = true);
-void showAuxPage(int index);
-void showPreviousPage();
-void refreshPage();
+
+void setPage(int index);
+void replacePage(int index);
+void pushPage(int index);
+void popPage();
 
 font::Font styleGetFont(const Style *style);
 void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse);

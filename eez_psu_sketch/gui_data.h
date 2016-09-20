@@ -46,18 +46,29 @@ enum ValueType {
 	VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL,
 	VALUE_TYPE_LESS_THEN_MIN_FLOAT,
 	VALUE_TYPE_LESS_THEN_MIN_INT,
+	VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE,
 	VALUE_TYPE_GREATER_THEN_MAX_FLOAT,
 	VALUE_TYPE_GREATER_THEN_MAX_INT,
+	VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE,
 	VALUE_TYPE_EVENT,
 	VALUE_TYPE_PAGE_INFO,
 	VALUE_TYPE_ON_TIME_COUNTER,
-	VALUE_TYPE_SCPI_ERROR_TEXT
+	VALUE_TYPE_SCPI_ERROR_TEXT,
+	VALUE_TYPE_TIME_ZONE,
+	VALUE_TYPE_YEAR,
+	VALUE_TYPE_MONTH,
+	VALUE_TYPE_DAY,
+	VALUE_TYPE_HOUR,
+	VALUE_TYPE_MINUTE,
+	VALUE_TYPE_SECOND,
 };
 
 struct Value {
     Value() : type_(VALUE_TYPE_NONE) { }
     Value(int value) : type_(VALUE_TYPE_INT), int_(value)  {}
 	Value(int value, ValueType type) : type_(type), int_(value)  {}
+	Value(uint8_t value, ValueType type) : type_(type), uint8_(value)  {}
+	Value(uint16_t value, ValueType type) : type_(type), uint16_(value)  {}
 	Value(uint32_t value, ValueType type) : type_(type), uint32_(value)  {}
     Value(float value, ValueType type) : type_(type), float_(value) {}
     Value(const char *str) : type_(VALUE_TYPE_STR), str_(str) {}
@@ -85,26 +96,30 @@ struct Value {
 		return value;
 	}
 
-	static Value GreaterThenMaxMessage(float float_, ValueType type) {
-		Value value;
-		if (type == VALUE_TYPE_INT) {
-			value.int_ = int(float_);
-			value.type_ = VALUE_TYPE_GREATER_THEN_MAX_INT;
-		} else {
-			value.float_ = float_;
-			value.type_ = VALUE_TYPE_GREATER_THEN_MAX_FLOAT;
-		}
-		return value;
-	}
-
 	static Value LessThenMinMessage(float float_, ValueType type) {
 		Value value;
 		if (type == VALUE_TYPE_INT) {
 			value.int_ = int(float_);
 			value.type_ = VALUE_TYPE_LESS_THEN_MIN_INT;
+		} else if (type == VALUE_TYPE_TIME_ZONE) {
+			value.type_ = VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE;
 		} else {
 			value.float_ = float_;
 			value.type_ = VALUE_TYPE_LESS_THEN_MIN_FLOAT;
+		}
+		return value;
+	}
+
+	static Value GreaterThenMaxMessage(float float_, ValueType type) {
+		Value value;
+		if (type == VALUE_TYPE_INT) {
+			value.int_ = int(float_);
+			value.type_ = VALUE_TYPE_GREATER_THEN_MAX_INT;
+		} else if (type == VALUE_TYPE_TIME_ZONE) {
+			value.type_ = VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE;
+		} else {
+			value.float_ = float_;
+			value.type_ = VALUE_TYPE_GREATER_THEN_MAX_FLOAT;
 		}
 		return value;
 	}
@@ -114,25 +129,47 @@ struct Value {
             return false;
         }
 
-        if (type_ == VALUE_TYPE_NONE) {
+        if (type_ == VALUE_TYPE_NONE || type_ == VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE || type_ == VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE) {
             return true;
-        } else if (type_ == VALUE_TYPE_STR) {
-            return strcmp(str_, other.str_) == 0;
-        } else if (type_ == VALUE_TYPE_CONST_STR) {
-            return const_str_ == other.const_str_;
-        } else if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL || type_ == VALUE_TYPE_LESS_THEN_MIN_INT || type_ == VALUE_TYPE_GREATER_THEN_MAX_INT) {
-            return int_ == other.int_;
-        } else if (type_ == VALUE_TYPE_EVENT) {
-            return event_->dateTime == other.event_->dateTime && event_->eventId == other.event_->eventId;
-        } else if (type_ == VALUE_TYPE_PAGE_INFO) {
-			return pageInfo_.pageIndex == other.pageInfo_.pageIndex && pageInfo_.numPages == other.pageInfo_.numPages;
-		} else if (type_ == VALUE_TYPE_ON_TIME_COUNTER) {
-			return uint32_ == other.uint32_;
-		} else if (type_ == VALUE_TYPE_SCPI_ERROR_TEXT) {
-			return int16_ == other.int16_;
-		} else {
-            return float_ == other.float_;
         }
+		
+		if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL || type_ == VALUE_TYPE_LESS_THEN_MIN_INT || type_ == VALUE_TYPE_GREATER_THEN_MAX_INT) {
+            return int_ == other.int_;
+        }
+
+		if (type_ == VALUE_TYPE_SCPI_ERROR_TEXT || type_ == VALUE_TYPE_TIME_ZONE) {
+			return int16_ == other.int16_;
+		}
+
+		if (type_ >= VALUE_TYPE_MONTH && type_ <= VALUE_TYPE_SECOND) {
+			return uint8_ == other.uint32_;
+		}
+
+		if (type_ == VALUE_TYPE_YEAR) {
+			return uint16_ == other.uint16_;
+		}
+
+		if (type_ == VALUE_TYPE_ON_TIME_COUNTER) {
+			return uint32_ == other.uint32_;
+		}
+		
+		if (type_ == VALUE_TYPE_STR) {
+            return strcmp(str_, other.str_) == 0;
+        }
+
+		if (type_ == VALUE_TYPE_CONST_STR) {
+            return const_str_ == other.const_str_;
+        }
+		
+		if (type_ == VALUE_TYPE_EVENT) {
+            return event_->dateTime == other.event_->dateTime && event_->eventId == other.event_->eventId;
+        }
+		
+		if (type_ == VALUE_TYPE_PAGE_INFO) {
+			return pageInfo_.pageIndex == other.pageInfo_.pageIndex && pageInfo_.numPages == other.pageInfo_.numPages;
+		}
+        
+		return float_ == other.float_;
     }
 
     bool operator !=(const Value &other) {
@@ -157,12 +194,18 @@ private:
     uint8_t type_;
     union {
         int int_;
-        float float_;
-        const char *const_str_ PROGMEM;
-        const char *str_;
-		uint32_t uint32_;
 		int16_t int16_;
+		uint8_t uint8_;
+		uint16_t uint16_;
+		uint32_t uint32_;
+
+		float float_;
+        
+		const char *const_str_ PROGMEM;
+        const char *str_;
+		
 		event_queue::Event *event_;
+		
 		struct {
 			uint8_t pageIndex;
 			uint8_t numPages;
