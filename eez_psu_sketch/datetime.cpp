@@ -295,8 +295,8 @@ DateTime DateTime::now() {
 	uint8_t year, month, day, hour, minute, second;
 
 	if (!getDateTime(year, month, day, hour, minute, second)) {
-		year = 17;
-		month = 1;
+		year = 16;
+		month = 10;
 		day = 1;
 		hour = 0;
 		minute = 0;

@@ -149,7 +149,21 @@ void ChSettingsProtectionSetPage::onLimitSet(float value) {
 }
 
 void ChSettingsProtectionSetPage::editLimit() {
-	numeric_keypad::start(0, limit.getType(), minLimit, maxLimit, true, defLimit, true, onLimitSet, showPreviousPage, true);
+	numeric_keypad::Options options;
+
+	options.editUnit = limit.getType();
+
+	options.min = minLimit;
+	options.max = maxLimit;
+	options.def = defLimit;
+
+	options.flags.genericNumberKeypad = true;
+	options.flags.maxButtonEnabled = true;
+	options.flags.defButtonEnabled = true;
+	options.flags.signButtonEnabled = true;
+	options.flags.dotButtonEnabled = true;
+
+	numeric_keypad::start(0, options, onLimitSet, showPreviousPage);
 }
 
 void ChSettingsProtectionSetPage::onLevelSet(float value) {
@@ -159,7 +173,21 @@ void ChSettingsProtectionSetPage::onLevelSet(float value) {
 }
 
 void ChSettingsProtectionSetPage::editLevel() {
-	numeric_keypad::start(0, level.getType(), minLevel, maxLevel, true, defLevel, true, onLevelSet, showPreviousPage, true);
+	numeric_keypad::Options options;
+
+	options.editUnit = level.getType();
+
+	options.min = minLevel;
+	options.max = maxLevel;
+	options.def = defLevel;
+
+	options.flags.genericNumberKeypad = true;
+	options.flags.maxButtonEnabled = true;
+	options.flags.defButtonEnabled = true;
+	options.flags.signButtonEnabled = true;
+	options.flags.dotButtonEnabled = true;
+
+	numeric_keypad::start(0, options, onLevelSet, showPreviousPage);
 }
 
 void ChSettingsProtectionSetPage::onDelaySet(float value) {
@@ -169,7 +197,21 @@ void ChSettingsProtectionSetPage::onDelaySet(float value) {
 }
 
 void ChSettingsProtectionSetPage::editDelay() {
-	numeric_keypad::start(0, delay.getType(), minDelay, maxDelay, true, defaultDelay, true, onDelaySet, showPreviousPage, true);
+	numeric_keypad::Options options;
+
+	options.editUnit = delay.getType();
+
+	options.min = minDelay;
+	options.max = maxDelay;
+	options.def = defaultDelay;
+
+	options.flags.genericNumberKeypad = true;
+	options.flags.maxButtonEnabled = true;
+	options.flags.defButtonEnabled = true;
+	options.flags.signButtonEnabled = true;
+	options.flags.dotButtonEnabled = true;
+
+	numeric_keypad::start(0, options, onDelaySet, showPreviousPage);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

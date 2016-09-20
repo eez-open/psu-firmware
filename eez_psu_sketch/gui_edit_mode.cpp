@@ -104,7 +104,21 @@ void enter(int tabIndex_) {
         maxValue = data::getMax(dataCursor, dataId);
 
         if (tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
-            numeric_keypad::init(0, editValue.getType(), minValue.getFloat(), maxValue.getFloat(), false, 0, false, (void (*)(float))onKeypadOk, 0, false);
+			numeric_keypad::Options options;
+
+			options.editUnit = editValue.getType();
+
+			options.min = minValue.getFloat();
+			options.max = maxValue.getFloat();
+			options.def = 0;
+
+			options.flags.genericNumberKeypad = false;
+			options.flags.maxButtonEnabled = false;
+			options.flags.defButtonEnabled = false;
+			options.flags.signButtonEnabled = true;
+			options.flags.dotButtonEnabled = true;
+
+			numeric_keypad::init(0, options, (void (*)(float))onKeypadOk, 0);
         }
 
         psu::enterTimeCriticalMode();

@@ -69,13 +69,23 @@ void Value::toText(char *text, int count) const {
 		text[count - 1] = 0;
 		break;
 
-	case VALUE_TYPE_LESS_THEN_MIN:
+	case VALUE_TYPE_LESS_THEN_MIN_FLOAT:
 		snprintf_P(text, count-1, PSTR("Value is less then %.2f"), float_);
 		text[count - 1] = 0;
 		break;
 
-	case VALUE_TYPE_GREATER_THEN_MAX:
+	case VALUE_TYPE_LESS_THEN_MIN_INT:
+		snprintf_P(text, count-1, PSTR("Value is less then %d"), int_);
+		text[count - 1] = 0;
+		break;
+
+	case VALUE_TYPE_GREATER_THEN_MAX_FLOAT:
 		snprintf_P(text, count-1, PSTR("Value is greater then %.2f"), float_);
+		text[count - 1] = 0;
+		break;
+
+	case VALUE_TYPE_GREATER_THEN_MAX_INT:
+		snprintf_P(text, count-1, PSTR("Value is greater then %d"), int_);
 		text[count - 1] = 0;
 		break;
 

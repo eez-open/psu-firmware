@@ -762,6 +762,7 @@ void startMasterSync() {
 }
 
 void updateMasterSync() {
+#if 0
 	bool shouldBeStarted = true;
 
     for (int i = 0; i < CH_NUM; ++i) {
@@ -779,6 +780,7 @@ void updateMasterSync() {
 		}
 		g_masterSyncStarted = shouldBeStarted;
 	}
+#endif
 }
 
 #endif

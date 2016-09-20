@@ -44,6 +44,12 @@ public:
 	virtual int getDirty() = 0;
 	virtual void set() = 0;
 	virtual void discard();
+
+protected:
+	int editDataId;
+
+	static void onSetValue(float value);
+	virtual void setValue(float value);
 };
 
 }

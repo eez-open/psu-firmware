@@ -58,14 +58,73 @@ data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t
 	return data::Value();
 }
 
-void onYearSet(float value) {
-}
-
 void SysSettingsDateTimePage::edit() {
 	DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
 	int id = widget->data;
+
+	numeric_keypad::Options options;
+
+	options.editUnit = data::VALUE_TYPE_INT;
+
+	options.flags.genericNumberKeypad = true;
+	options.flags.maxButtonEnabled = false;
+	options.flags.defButtonEnabled = false;
+	options.flags.signButtonEnabled = false;
+	options.flags.dotButtonEnabled = false;
+
+	const char *label = 0;
+
 	if (id == DATA_ID_SYS_INFO_DATE_TIME_YEAR) {
-		//numeric_keypad::start("Year: ", 2016, 3016, dateTime.year);
+		label = "Year (2016-2036): ";
+		options.min = 2016;
+		options.max = 2036;
+		options.def = 2016;
+	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_MONTH) {
+		label = "Month (1-12): ";
+		options.min = 1;
+		options.max = 12;
+		options.def = 1;
+	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_DAY) {
+		label = "Day (1-31): ";
+		options.min = 1;
+		options.max = 31;
+		options.def = 1;
+	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_HOUR) {
+		label = "Hour (0-23): ";
+		options.min = 0;
+		options.max = 23;
+		options.def = 12;
+	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_MINUTE) {
+		label = "Minute (0-59): ";
+		options.min = 0;
+		options.max = 59;
+		options.def = 0;
+	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_SECOND) {
+		label = "Second (0-59): ";
+		options.min = 0;
+		options.max = 59;
+		options.def = 0;
+	}
+
+	if (label) {
+		editDataId = id;
+		numeric_keypad::start(label, options, onSetValue, showPreviousPage);
+	}
+}
+
+void SysSettingsDateTimePage::setValue(float value) {
+	if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_YEAR) {
+		dateTime.year = uint16_t(value);
+	} else if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_MONTH) {
+		dateTime.month = uint8_t(value);
+	} else if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_DAY) {
+		dateTime.day = uint8_t(value);
+	} else if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_HOUR) {
+		dateTime.hour = uint8_t(value);
+	} else if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_MINUTE) {
+		dateTime.minute = uint8_t(value);
+	} else if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_SECOND) {
+		dateTime.second = uint8_t(value);
 	}
 }
 

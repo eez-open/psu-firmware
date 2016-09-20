@@ -25,9 +25,25 @@ namespace psu {
 namespace gui {
 namespace numeric_keypad {
 
-void init(const char *label, data::ValueType editUnit, float min, float max, bool maxButtonEnabled, float def, bool defButtonEnabled, void (*ok)(float), void (*cancel)(), bool genericNumberKeypad);
-void start(const char *label, data::ValueType editUnit, float min, float max, bool maxButtonEnabled, float def, bool defButtonEnabled, void (*ok)(float), void (*cancel)(), bool genericNumberKeypad);
-void start(const char *label, uint16_t min, uint16_t max, uint16_t *val);
+struct Options {
+	data::ValueType editUnit;
+
+	float min;
+	float max;
+	float def;
+
+	struct {
+		unsigned genericNumberKeypad : 1;
+		unsigned maxButtonEnabled : 1;
+		unsigned defButtonEnabled : 1;
+		unsigned signButtonEnabled : 1;
+		unsigned dotButtonEnabled : 1;
+	} flags;
+};
+
+void init(const char *label, Options &options, void (*ok)(float), void (*cancel)());
+// data::ValueType editUnit, float min, float max, bool maxButtonEnabled, float def, bool defButtonEnabled         bool genericNumberKeypad
+void start(const char *label, Options &options, void (*ok)(float), void (*cancel)());
 
 data::ValueType getEditUnit();
 bool getText(char *text, int count);

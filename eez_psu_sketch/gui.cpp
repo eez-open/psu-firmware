@@ -969,13 +969,35 @@ bool draw_button_widget(const WidgetCursor &widgetCursor, const Widget *widget, 
         refresh = state != previousState;
     }
 
-	if (refresh) {
-        DECL_STRING(text, button_widget->text);
-        DECL_STYLE_WITH_OFFSET(style, state ? widget->style : button_widget->disabledStyle);
-        drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
-        return true;
-    }
-    
+	if (widget->data) {
+		data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+		if (!refresh) {
+            data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
+            refresh = value != previousValue;
+		}
+
+		if (refresh) {
+			DECL_STYLE_WITH_OFFSET(style, state ? widget->style : button_widget->disabledStyle);
+
+			if (value.isString()) {
+	            drawText(value.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+			} else {
+				char text[64];
+				value.toText(text, sizeof(text));
+				drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+			}
+
+			return true;
+		}
+	} else {
+		if (refresh) {
+			DECL_STRING(text, button_widget->text);
+			DECL_STYLE_WITH_OFFSET(style, state ? widget->style : button_widget->disabledStyle);
+			drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+			return true;
+		}
+	}
+
 	return false;
 }
 

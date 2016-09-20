@@ -165,6 +165,10 @@
       "defaultValue": "1"
     },
     {
+      "name": "keypad_unit_enabled",
+      "defaultValue": "1"
+    },
+    {
       "name": "calibration.passwordStatus",
       "description": "0 - not set\n1 - set",
       "defaultValue": "0"
@@ -51511,14 +51515,16 @@
                   "height": 43
                 },
                 {
-                  "type": "DisplayData",
+                  "type": "Button",
                   "data": "edit_unit",
                   "action": "keypad_unit",
                   "x": 180,
                   "y": 45,
                   "style": "key",
                   "width": 60,
-                  "height": 43
+                  "height": 43,
+                  "disabledStyle": "key_disabled",
+                  "enabled": "keypad_unit_enabled"
                 },
                 {
                   "type": "Text",

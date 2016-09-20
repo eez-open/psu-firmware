@@ -51,14 +51,7 @@ static int g_d1;
 static int g_d2;
 static int g_d3;
 
-static data::ValueType g_editUnit = data::VALUE_TYPE_NONE;
-
-static float g_min;
-static float g_max;
-static bool g_maxButtonEnabled;
-static float g_def;
-static bool g_defButtonEnabled;
-static bool g_genericNumberKeypad;
+static Options g_options;
 
 bool isMilli();
 void toggleEditUnit();
@@ -66,34 +59,29 @@ void reset();
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void init(const char *label, data::ValueType editUnit, float min, float max, bool maxButtonEnabled, float def, bool defButtonEnabled, void (*ok)(float), void (*cancel)(), bool genericNumberKeypad) {
+void init(const char *label, Options &options, void (*ok)(float), void (*cancel)()) {
 	keypad::init(label, (void (*)(char *))ok, cancel);
 
-	g_editUnit = editUnit;
-	g_min = min;
-	g_max = max;
-	g_maxButtonEnabled = maxButtonEnabled;
-	g_def = def;
-	g_defButtonEnabled = defButtonEnabled;
-	g_genericNumberKeypad = genericNumberKeypad;
-	if (g_genericNumberKeypad) {
+	g_options = options;
+
+	if (g_options.flags.genericNumberKeypad) {
 		g_maxChars = 16;
 	}
 
 	reset();
 }
 
-void start(const char *label, data::ValueType editUnit, float min, float max, bool maxButtonEnabled, float def, bool defButtonEnabled, void (*ok)(float), void (*cancel)(), bool genericNumberKeypad) {
-	init(label, editUnit, min, max, maxButtonEnabled, def, defButtonEnabled, ok, cancel, genericNumberKeypad);
+void start(const char *label, Options &options, void (*ok)(float), void (*cancel)()) {
+	init(label, options, ok, cancel);
 	showAuxPage(PAGE_ID_NUMERIC_KEYPAD);
 }
 
 data::ValueType getEditUnit() {
-    return g_editUnit;
+    return g_options.editUnit;
 }
 
 bool getText(char *text, int count) {
-	if (g_genericNumberKeypad) {
+	if (g_options.flags.genericNumberKeypad) {
 		strcpy(text, g_keypadText);
 	} else {
 		if (g_state == START) {
@@ -129,19 +117,19 @@ bool getText(char *text, int count) {
 	appendCursor(text);
 
 	// TODO move this to data::Value
-	if (g_editUnit == data::VALUE_TYPE_FLOAT_VOLT) {
+	if (g_options.editUnit == data::VALUE_TYPE_FLOAT_VOLT) {
 		strcat_P(text, PSTR("V"));
-	} else if (g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT) {
+	} else if (g_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT) {
 		strcat_P(text, PSTR("mV"));
-	} else if (g_editUnit == data::VALUE_TYPE_FLOAT_AMPER) {
+	} else if (g_options.editUnit == data::VALUE_TYPE_FLOAT_AMPER) {
 		strcat_P(text, PSTR("A"));
-	} else if (g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER) {
+	} else if (g_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER) {
 		strcat_P(text, PSTR("mA"));
-	} else if (g_editUnit == data::VALUE_TYPE_FLOAT_WATT) {
+	} else if (g_options.editUnit == data::VALUE_TYPE_FLOAT_WATT) {
 		strcat_P(text, PSTR("W"));
-	} else if (g_editUnit == data::VALUE_TYPE_FLOAT_SECOND) {
+	} else if (g_options.editUnit == data::VALUE_TYPE_FLOAT_SECOND) {
 		strcat_P(text, PSTR("s"));
-	} else if (g_editUnit == data::VALUE_TYPE_FLOAT_CELSIUS) {
+	} else if (g_options.editUnit == data::VALUE_TYPE_FLOAT_CELSIUS) {
 		strcat_P(text, PSTR("oC"));
 	}
 
@@ -150,13 +138,19 @@ bool getText(char *text, int count) {
 
 data::Value getData(uint8_t id) {
 	if (id == DATA_ID_KEYPAD_MAX_ENABLED) {
-		return data::Value(g_maxButtonEnabled ? 1 : 0);
+		return data::Value(g_options.flags.maxButtonEnabled ? 1 : 0);
 	} else if (id == DATA_ID_KEYPAD_DEF_ENABLED) {
-		return data::Value(g_defButtonEnabled ? 1 : 0);
+		return data::Value(g_options.flags.defButtonEnabled ? 1 : 0);
 	} else if (id == DATA_ID_KEYPAD_DOT_ENABLED) {
-		return data::Value(1);
+		return data::Value(g_options.flags.dotButtonEnabled ? 1 : 0);
 	} else if (id == DATA_ID_KEYPAD_SIGN_ENABLED) {
-		return data::Value(1);
+		return data::Value(g_options.flags.signButtonEnabled ? 1 : 0);
+	} else if (id == DATA_ID_KEYPAD_UNIT_ENABLED) {
+		return data::Value(
+			g_options.editUnit == data::VALUE_TYPE_FLOAT_VOLT ||
+			g_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT ||
+			g_options.editUnit == data::VALUE_TYPE_FLOAT_AMPER ||
+			g_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER ? 1 : 0);
 	}
 
 	return data::Value();
@@ -165,20 +159,20 @@ data::Value getData(uint8_t id) {
 ////////////////////////////////////////////////////////////////////////////////
 
 bool isMilli() {
-	return g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT || g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER;
+	return g_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT || g_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER;
 }
 
 void switchToMilli() {
-	if (g_editUnit == data::VALUE_TYPE_FLOAT_VOLT) {
-		g_editUnit = data::VALUE_TYPE_FLOAT_MILLI_VOLT;
+	if (g_options.editUnit == data::VALUE_TYPE_FLOAT_VOLT) {
+		g_options.editUnit = data::VALUE_TYPE_FLOAT_MILLI_VOLT;
 	}
-	else if (g_editUnit == data::VALUE_TYPE_FLOAT_AMPER) {
-		g_editUnit = data::VALUE_TYPE_FLOAT_MILLI_AMPER;
+	else if (g_options.editUnit == data::VALUE_TYPE_FLOAT_AMPER) {
+		g_options.editUnit = data::VALUE_TYPE_FLOAT_MILLI_AMPER;
 	}
 }
 
 float getValue() {
-	if (g_genericNumberKeypad) {
+	if (g_options.flags.genericNumberKeypad) {
 		const char *p = g_keypadText;
 
 		int a = 0;
@@ -241,7 +235,7 @@ float getValue() {
 }
 
 bool setValue(float fvalue) {
-	if (g_genericNumberKeypad) {
+	if (g_options.flags.genericNumberKeypad) {
 		return false;
 	} else {
 		if (isMilli()) {
@@ -316,11 +310,11 @@ bool isValueValid() {
 		return false;
 	}
 	float value = getValue();
-	return (value >= g_min && value <= g_max);
+	return (value >= g_options.min && value <= g_options.max);
 }
 
 void digit(int d) {
-	if (g_genericNumberKeypad) {
+	if (g_options.flags.genericNumberKeypad) {
 		if (g_state == EMPTY) {
 			g_state = BEFORE_DOT;
 		}
@@ -369,7 +363,11 @@ void digit(int d) {
 }
 
 void dot() {
-	if (g_genericNumberKeypad) {
+	if (g_options.flags.genericNumberKeypad) {
+		if (!g_options.flags.dotButtonEnabled) {
+			return;
+		}
+
 		if (g_state == EMPTY) {
 			appendChar('0');
 			g_state = BEFORE_DOT;
@@ -405,32 +403,32 @@ void dot() {
 }
 
 void toggleEditUnit() {
-	if (g_editUnit == data::VALUE_TYPE_FLOAT_VOLT) {
-		g_editUnit = data::VALUE_TYPE_FLOAT_MILLI_VOLT;
+	if (g_options.editUnit == data::VALUE_TYPE_FLOAT_VOLT) {
+		g_options.editUnit = data::VALUE_TYPE_FLOAT_MILLI_VOLT;
 	}
-	else if (g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT) {
-		g_editUnit = data::VALUE_TYPE_FLOAT_VOLT;
+	else if (g_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT) {
+		g_options.editUnit = data::VALUE_TYPE_FLOAT_VOLT;
 	}
-	else if (g_editUnit == data::VALUE_TYPE_FLOAT_AMPER) {
-		g_editUnit = data::VALUE_TYPE_FLOAT_MILLI_AMPER;
+	else if (g_options.editUnit == data::VALUE_TYPE_FLOAT_AMPER) {
+		g_options.editUnit = data::VALUE_TYPE_FLOAT_MILLI_AMPER;
 	}
-	else if (g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER) {
-		g_editUnit = data::VALUE_TYPE_FLOAT_AMPER;
+	else if (g_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER) {
+		g_options.editUnit = data::VALUE_TYPE_FLOAT_AMPER;
 	}
 }
 
 void reset() {
-	if (g_genericNumberKeypad) {
+	if (g_options.flags.genericNumberKeypad) {
 		g_state = EMPTY;
 		g_state = EMPTY;
 		g_keypadText[0] = 0;
 	} else {
 		g_state = START;
 
-		if (g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT) {
-			g_editUnit = data::VALUE_TYPE_FLOAT_VOLT;
-		} else if (g_editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER) {
-			g_editUnit = data::VALUE_TYPE_FLOAT_AMPER;
+		if (g_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT) {
+			g_options.editUnit = data::VALUE_TYPE_FLOAT_VOLT;
+		} else if (g_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER) {
+			g_options.editUnit = data::VALUE_TYPE_FLOAT_AMPER;
 		}
 	}
 }
@@ -454,7 +452,7 @@ void caps() {
 }
 
 void back() {
-	if (g_genericNumberKeypad) {
+	if (g_options.flags.genericNumberKeypad) {
 		int n = strlen(g_keypadText);
 		if (n > 0) {
 			if (g_keypadText[n - 1] == '.') {
@@ -507,16 +505,18 @@ void clear() {
 }
 
 void sign() {
-    // not supported
-    sound::playBeep();
+	if (g_options.flags.signButtonEnabled) {
+		// not supported
+		sound::playBeep();
+	}
 }
 
 void unit() {
-	if (g_genericNumberKeypad) {
+	if (g_options.flags.genericNumberKeypad) {
 		toggleEditUnit();
 	} else {
 		float value = getValue();
-		data::ValueType savedEditUnit = g_editUnit;
+		data::ValueType savedEditUnit = g_options.editUnit;
 
 		toggleEditUnit();
 
@@ -524,7 +524,7 @@ void unit() {
 			g_state = EMPTY;
 		} else {
 			if (g_state != EMPTY && !setValue(value)) {
-				g_editUnit = savedEditUnit;
+				g_options.editUnit = savedEditUnit;
 				sound::playBeep();
 			}
 		}
@@ -532,26 +532,26 @@ void unit() {
 }
 
 void setMaxValue() {
-	if (g_maxButtonEnabled) {
-		((void (*)(float))g_okCallback)(g_max);
+	if (g_options.flags.maxButtonEnabled) {
+		((void (*)(float))g_okCallback)(g_options.max);
 	}
 }
 
 void setDefaultValue() {
-	if (g_defButtonEnabled) {
-		((void (*)(float))g_okCallback)(g_def);
+	if (g_options.flags.defButtonEnabled) {
+		((void (*)(float))g_okCallback)(g_options.def);
 	}
 }
 
 void ok() {
 	if (g_state != START && g_state != EMPTY) {
-		if (g_genericNumberKeypad) {
+		if (g_options.flags.genericNumberKeypad) {
 			float value = getValue();
 
-			if (value < g_min) {
-				errorMessage(data::Value(g_min, data::VALUE_TYPE_LESS_THEN_MIN));
-			} else if (value > g_max) {
-				errorMessage(data::Value(g_max, data::VALUE_TYPE_GREATER_THEN_MAX));
+			if (value < g_options.min) {
+				errorMessage(data::Value::LessThenMinMessage(g_options.min, g_options.editUnit));
+			} else if (value > g_options.max) {
+				errorMessage(data::Value::GreaterThenMaxMessage(g_options.max, g_options.editUnit));
 			} else {
 				((void (*)(float))g_okCallback)(value);
 			}

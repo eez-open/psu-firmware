@@ -51,6 +51,15 @@ data::Value SetPage::getData(const data::Cursor &cursor, uint8_t id, data::Snaps
 void SetPage::edit() {
 }
 
+void SetPage::onSetValue(float value) {
+	showPreviousPage();
+	SetPage *page = (SetPage *)getActivePage();
+	page->setValue(value);
+}
+
+void SetPage::setValue(float value) {
+}
+
 void SetPage::discard() {
 	showPreviousPage();
 }

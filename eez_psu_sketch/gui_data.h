@@ -44,8 +44,10 @@ enum ValueType {
     VALUE_TYPE_CHANNEL_LABEL,
 	VALUE_TYPE_CHANNEL_SHORT_LABEL,
 	VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL,
-	VALUE_TYPE_LESS_THEN_MIN,
-	VALUE_TYPE_GREATER_THEN_MAX,
+	VALUE_TYPE_LESS_THEN_MIN_FLOAT,
+	VALUE_TYPE_LESS_THEN_MIN_INT,
+	VALUE_TYPE_GREATER_THEN_MAX_FLOAT,
+	VALUE_TYPE_GREATER_THEN_MAX_INT,
 	VALUE_TYPE_EVENT,
 	VALUE_TYPE_PAGE_INFO,
 	VALUE_TYPE_ON_TIME_COUNTER,
@@ -83,6 +85,30 @@ struct Value {
 		return value;
 	}
 
+	static Value GreaterThenMaxMessage(float float_, ValueType type) {
+		Value value;
+		if (type == VALUE_TYPE_INT) {
+			value.int_ = int(float_);
+			value.type_ = VALUE_TYPE_GREATER_THEN_MAX_INT;
+		} else {
+			value.float_ = float_;
+			value.type_ = VALUE_TYPE_GREATER_THEN_MAX_FLOAT;
+		}
+		return value;
+	}
+
+	static Value LessThenMinMessage(float float_, ValueType type) {
+		Value value;
+		if (type == VALUE_TYPE_INT) {
+			value.int_ = int(float_);
+			value.type_ = VALUE_TYPE_LESS_THEN_MIN_INT;
+		} else {
+			value.float_ = float_;
+			value.type_ = VALUE_TYPE_LESS_THEN_MIN_FLOAT;
+		}
+		return value;
+	}
+
 	bool operator ==(const Value &other) {
         if (type_ != other.type_) {
             return false;
@@ -94,7 +120,7 @@ struct Value {
             return strcmp(str_, other.str_) == 0;
         } else if (type_ == VALUE_TYPE_CONST_STR) {
             return const_str_ == other.const_str_;
-        } else if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL) {
+        } else if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL || type_ == VALUE_TYPE_LESS_THEN_MIN_INT || type_ == VALUE_TYPE_GREATER_THEN_MAX_INT) {
             return int_ == other.int_;
         } else if (type_ == VALUE_TYPE_EVENT) {
             return event_->dateTime == other.event_->dateTime && event_->eventId == other.event_->eventId;

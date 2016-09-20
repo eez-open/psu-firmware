@@ -247,11 +247,31 @@ void set() {
 	
 		psu::calibration::Value *calibrationValue = getCalibrationValue();
 
+		numeric_keypad::Options options;
+
 		if (calibrationValue == &psu::calibration::voltage) {
-			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_VOLT, g_channel->U_MIN, g_channel->U_MAX, false, 0, false, onSetOk, showCurrentStep, true);
+			options.editUnit = data::VALUE_TYPE_FLOAT_VOLT;
+
+			options.min = g_channel->U_MIN;
+			options.max = g_channel->U_MAX;
+
 		} else {
-			numeric_keypad::start(0, data::VALUE_TYPE_FLOAT_AMPER, g_channel->I_MIN, g_channel->I_MAX, false, 0, false, onSetOk, showCurrentStep, true);
+			options.editUnit = data::VALUE_TYPE_FLOAT_AMPER;
+
+			options.min = g_channel->I_MIN;
+			options.max = g_channel->I_MAX;
 		}
+
+		options.def = 0;
+
+		options.flags.genericNumberKeypad = true;
+		options.flags.maxButtonEnabled = false;
+		options.flags.defButtonEnabled = false;
+		options.flags.signButtonEnabled = true;
+		options.flags.dotButtonEnabled = true;
+
+
+		numeric_keypad::start(0, options, onSetOk, showCurrentStep);
 
 		if (g_stepNum == 0 || g_stepNum == 3) {
 			numeric_keypad::switchToMilli();
