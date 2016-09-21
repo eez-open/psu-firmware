@@ -168,11 +168,13 @@ void SysSettingsDateTimePage::set() {
         popPage();
 		return;
     }
-
-	if (!datetime::setDateTime(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, dateTime.second)) {
-        errorMessageP(PSTR("Failed to set system date and time!"), popPage);
-        return;
-    }
+	
+	if (dateTime != origDateTime) {
+		if (!datetime::setDateTime(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, dateTime.second)) {
+			errorMessageP(PSTR("Failed to set system date and time!"), popPage);
+			return;
+		}
+	}
 
 	if (timeZone != origTimeZone || dst != origDst) {
 		persist_conf::dev_conf.time_zone = timeZone;

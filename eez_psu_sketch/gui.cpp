@@ -70,6 +70,8 @@ static Document g_docBuffer;
 static int g_activePageId;
 static Page *g_activePage;
 
+static int g_lastActivePageId;
+
 static struct {
 	int activePageId;
 	Page *activePage;
@@ -1081,8 +1083,10 @@ bool draw_tick() {
             return false;
         }
 
-		//_sleep(50);
-		//break;
+#ifdef EEZ_PSU_SIMULATOR
+		_sleep(50);
+		break;
+#endif
     }
 	return true;
 }
@@ -1097,12 +1101,18 @@ void refreshPage() {
 	DECL_WIDGET(page, getPageOffset(g_activePageId));
 
 	// clear screen with background color
-    DECL_WIDGET_SPECIFIC(PageWidget, pageSpecific, page);
     DECL_WIDGET_STYLE(style, page);
     lcd::lcd.setColor(style->background_color);
+
+	if (g_lastActivePageId == PAGE_ID_INFO_ALERT || g_lastActivePageId == PAGE_ID_ERROR_ALERT) {
+		DECL_WIDGET(page, getPageOffset(g_lastActivePageId));
+		lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
+	}
+
 	if (g_activePageId == PAGE_ID_WELCOME) {
 		lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
 	} else {
+	    DECL_WIDGET_SPECIFIC(PageWidget, pageSpecific, page);
 		for (int i = 0; i < pageSpecific->transparentRectangles.count; ++i) {
 			OBJ_OFFSET rectOffset = getListItemOffset(pageSpecific->transparentRectangles, i, sizeof(Rect));
 			DECL_STRUCT_WITH_OFFSET(Rect, rect, rectOffset);
@@ -1141,6 +1151,7 @@ void doShowPage(int index, Page *page = 0) {
 		delete g_activePage;
 	}
 
+	g_lastActivePageId = g_activePageId;
 	g_activePageId = index;
 
 	if (page) {
@@ -1156,68 +1167,6 @@ void doShowPage(int index, Page *page = 0) {
 	g_timeOfLastActivity = millis();
     refreshPage();
 }
-
-/*
-void showPage(int index, bool pushOnStack) {
-	if (g_lastActivePageId != -1) {
-		g_activePageId = g_lastActivePageId;
-		g_activePage = g_lastActivePage;
-		g_pushActivePageOnStack = g_lastPushActivePageOnStack;
-
-		g_lastActivePageId = -1;
-	}
-
-	if (index == PAGE_ID_MAIN) {
-		g_pageNavigationStackPointer = -1;
-	} else if (g_activePageId == PAGE_ID_MAIN) {
-		g_pageNavigationStackPointer = 0;
-	} else if (g_pageNavigationStackPointer >= 0 && g_pushActivePageOnStack) {
-		if (g_pageNavigationStackPointer == CONF_GUI_PAGE_NAVIGATION_STACK_SIZE) {
-			for (int i = 1; i < CONF_GUI_PAGE_NAVIGATION_STACK_SIZE; ++i) {
-				g_pageNavigationStack[i - 1] = g_pageNavigationStack[i];
-			}
-			--g_pageNavigationStackPointer;
-		}
-		g_pageNavigationStack[g_pageNavigationStackPointer++] = g_activePageId;
-	}
-
-	g_pushActivePageOnStack = pushOnStack;
-
-	doShowPage(index);
-}
-
-void showAuxPage(int index) {
-	g_lastActivePageId = g_activePageId;
-	g_lastActivePage = g_activePage;
-	g_lastPushActivePageOnStack = g_pushActivePageOnStack;
-
-    g_activePageId = index;
-	g_activePage = 0;
-    
-	refreshPage();
-}
-
-void showPreviousPage() {
-	if (g_lastActivePageId != -1) {
-		g_activePageId = g_lastActivePageId;
-		g_activePage = g_lastActivePage;
-		g_pushActivePageOnStack = g_lastPushActivePageOnStack;
-		
-		g_lastActivePageId = -1;
-
-		refreshPage();
-	} else if (g_pageNavigationStackPointer >= 0) {
-		--g_pageNavigationStackPointer;
-		if (g_pageNavigationStackPointer >= 0) {
-			g_pushActivePageOnStack = true;
-			doShowPage(g_pageNavigationStack[g_pageNavigationStackPointer]);
-		} else {
-			doShowPage(PAGE_ID_MAIN);
-		}
-	}
-}
-
-*/
 
 void setPage(int index) {
 	// delete stack
