@@ -52181,7 +52181,7 @@
                   "widgets": [
                     {
                       "type": "Text",
-                      "text": "Enable",
+                      "text": "Yes",
                       "x": 0,
                       "y": 0,
                       "width": 96,
@@ -52191,7 +52191,7 @@
                     },
                     {
                       "type": "Text",
-                      "text": "Disable",
+                      "text": "No",
                       "x": 0,
                       "y": 0,
                       "width": 96,
