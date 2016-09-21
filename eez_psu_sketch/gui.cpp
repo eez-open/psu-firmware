@@ -1084,8 +1084,8 @@ bool draw_tick() {
         }
 
 #ifdef EEZ_PSU_SIMULATOR
-		_sleep(50);
-		break;
+		//_sleep(50);
+		//break;
 #endif
     }
 	return true;

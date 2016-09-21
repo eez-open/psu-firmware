@@ -45752,11 +45752,61 @@
         "landscape": {
           "widgets": [
             {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
+              "type": "Container",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "",
+                  "x": 0,
+                  "y": 0,
+                  "style": "tab_page_selected",
+                  "text": "K",
+                  "width": 48,
+                  "height": 36
+                },
+                {
+                  "type": "Text",
+                  "action": "edit_mode_step",
+                  "x": 48,
+                  "y": 0,
+                  "style": "tab_page",
+                  "text": "M",
+                  "width": 48,
+                  "height": 36
+                },
+                {
+                  "type": "Text",
+                  "action": "edit_mode_slider",
+                  "x": 96,
+                  "y": 0,
+                  "style": "tab_page",
+                  "text": "S",
+                  "width": 48,
+                  "height": 36
+                },
+                {
+                  "type": "Rectangle",
+                  "x": 144,
+                  "y": 0,
+                  "width": 128,
+                  "height": 36,
+                  "style": "bottom_button_background"
+                },
+                {
+                  "type": "Text",
+                  "action": "exit_edit_mode",
+                  "x": 272,
+                  "y": 0,
+                  "style": "bottom_button",
+                  "text": "X",
+                  "width": 48,
+                  "height": 36
+                }
+              ],
+              "x": 0,
+              "y": 204,
+              "width": 320,
+              "height": 36,
               "style": "default"
             },
             {
@@ -45804,12 +45854,12 @@
                   "height": 43
                 },
                 {
-                  "type": "Text",
-                  "action": "keypad_back",
+                  "type": "DisplayData",
+                  "data": "edit_unit",
+                  "action": "keypad_unit",
                   "x": 180,
-                  "y": 45,
-                  "style": "key_icons",
-                  "text": "<",
+                  "y": 2,
+                  "style": "key",
                   "width": 60,
                   "height": 43
                 },
@@ -45845,11 +45895,11 @@
                 },
                 {
                   "type": "Text",
-                  "action": "keypad_clear",
+                  "action": "keypad_back",
                   "x": 180,
-                  "y": 88,
+                  "y": 45,
                   "style": "key_icons",
-                  "text": "C",
+                  "text": "<",
                   "width": 60,
                   "height": 43
                 },
@@ -45885,11 +45935,11 @@
                 },
                 {
                   "type": "Text",
-                  "action": "keypad_ok",
+                  "action": "keypad_clear",
                   "x": 180,
-                  "y": 131,
+                  "y": 88,
                   "style": "key_icons",
-                  "text": "O",
+                  "text": "C",
                   "width": 60,
                   "height": 43
                 },
@@ -45924,12 +45974,12 @@
                   "height": 43
                 },
                 {
-                  "type": "DisplayData",
-                  "data": "edit_unit",
-                  "action": "keypad_unit",
+                  "type": "Text",
+                  "action": "keypad_ok",
                   "x": 180,
-                  "y": 2,
-                  "style": "key",
+                  "y": 131,
+                  "style": "key_icons",
+                  "text": "O",
                   "width": 60,
                   "height": 43
                 }
@@ -45939,52 +45989,20 @@
               "style": "default"
             },
             {
-              "type": "Text",
-              "action": "",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "K",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "edit_mode_step",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page",
-              "text": "M",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "edit_mode_slider",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "S",
-              "width": 48,
-              "height": 36
-            },
-            {
               "type": "Rectangle",
-              "x": 144,
-              "y": 204,
-              "width": 128,
-              "height": 36,
-              "style": "bottom_button_background"
+              "x": 240,
+              "y": 0,
+              "width": 12,
+              "height": 204,
+              "style": "default_inverse"
             },
             {
-              "type": "Text",
-              "action": "exit_edit_mode",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
             }
           ],
           "x": 0,
@@ -46338,11 +46356,83 @@
         "landscape": {
           "widgets": [
             {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
+              "type": "Container",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "edit_mode_keypad",
+                  "x": 0,
+                  "y": 0,
+                  "style": "tab_page",
+                  "text": "K",
+                  "width": 48,
+                  "height": 36
+                },
+                {
+                  "type": "Text",
+                  "action": "",
+                  "x": 48,
+                  "y": 0,
+                  "style": "tab_page_selected",
+                  "text": "M",
+                  "width": 48,
+                  "height": 36
+                },
+                {
+                  "type": "Text",
+                  "action": "edit_mode_slider",
+                  "x": 96,
+                  "y": 0,
+                  "style": "tab_page",
+                  "text": "S",
+                  "width": 48,
+                  "height": 36
+                },
+                {
+                  "type": "ToggleButton",
+                  "data": "edit_mode_interactive_mode_selector",
+                  "action": "toggle_interactive_mode",
+                  "x": 144,
+                  "y": 0,
+                  "style": "bottom_button",
+                  "text1": "I",
+                  "text2": "J",
+                  "width": 48,
+                  "height": 36
+                },
+                {
+                  "type": "Text",
+                  "x": 192,
+                  "y": 0,
+                  "style": "bottom_button",
+                  "text": "H",
+                  "width": 48,
+                  "height": 36,
+                  "action": "show_edit_mode_step_help"
+                },
+                {
+                  "type": "Rectangle",
+                  "x": 240,
+                  "y": 0,
+                  "width": 32,
+                  "height": 36,
+                  "style": "bottom_button_background"
+                },
+                {
+                  "type": "Text",
+                  "action": "exit_edit_mode",
+                  "x": 272,
+                  "y": 0,
+                  "style": "bottom_button",
+                  "text": "X",
+                  "width": 48,
+                  "height": 36
+                }
+              ],
+              "x": 0,
+              "y": 204,
+              "width": 320,
+              "height": 36,
               "style": "default"
             },
             {
@@ -46353,6 +46443,14 @@
               "style": "default_S",
               "width": 36,
               "height": 204
+            },
+            {
+              "type": "Rectangle",
+              "x": 36,
+              "y": 0,
+              "width": 12,
+              "height": 204,
+              "style": "default_inverse"
             },
             {
               "type": "DisplayData",
@@ -46373,6 +46471,14 @@
               "height": 72
             },
             {
+              "type": "Rectangle",
+              "x": 48,
+              "y": 104,
+              "width": 204,
+              "height": 64,
+              "style": "default_inverse"
+            },
+            {
               "type": "Select",
               "x": 48,
               "y": 168,
@@ -46382,7 +46488,7 @@
                   "type": "Rectangle",
                   "x": 0,
                   "y": 0,
-                  "width": 200,
+                  "width": 204,
                   "height": 36,
                   "style": "default_inverse"
                 },
@@ -46398,98 +46504,36 @@
                       "x": 0,
                       "y": 0,
                       "text": "~ Set",
-                      "width": 100,
+                      "width": 102,
                       "height": 36
                     },
                     {
                       "type": "Text",
                       "action": "non_interactive_discard",
                       "style": "non_interactive_button_S",
-                      "x": 100,
+                      "x": 102,
                       "y": 0,
                       "text": " Discard",
-                      "width": 100,
+                      "width": 102,
                       "height": 36
                     }
                   ],
-                  "width": 200,
+                  "width": 204,
                   "height": 36,
                   "style": "default"
                 }
               ],
-              "width": 200,
+              "width": 204,
               "height": 36,
               "style": "default"
             },
             {
-              "type": "Text",
-              "action": "edit_mode_keypad",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page",
-              "text": "K",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "M",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "edit_mode_slider",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "S",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "ToggleButton",
-              "data": "edit_mode_interactive_mode_selector",
-              "action": "toggle_interactive_mode",
-              "x": 144,
-              "y": 204,
-              "style": "bottom_button",
-              "text1": "I",
-              "text2": "J",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 192,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "H",
-              "width": 48,
-              "height": 36,
-              "action": "show_edit_mode_step_help"
-            },
-            {
-              "type": "Rectangle",
-              "x": 240,
-              "y": 204,
-              "width": 32,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "exit_edit_mode",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
             }
           ],
           "x": 0,
@@ -46926,21 +46970,156 @@
         "landscape": {
           "widgets": [
             {
-              "type": "Local.Channels",
-              "x": 252,
+              "type": "Container",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "edit_mode_keypad",
+                  "x": 0,
+                  "y": 0,
+                  "style": "tab_page",
+                  "text": "K",
+                  "width": 48,
+                  "height": 36
+                },
+                {
+                  "type": "Text",
+                  "action": "edit_mode_step",
+                  "x": 48,
+                  "y": 0,
+                  "style": "tab_page",
+                  "text": "M",
+                  "width": 48,
+                  "height": 36
+                },
+                {
+                  "type": "Text",
+                  "action": "",
+                  "x": 96,
+                  "y": 0,
+                  "style": "tab_page_selected",
+                  "text": "S",
+                  "width": 48,
+                  "height": 36
+                },
+                {
+                  "type": "ToggleButton",
+                  "data": "edit_mode_interactive_mode_selector",
+                  "action": "toggle_interactive_mode",
+                  "x": 144,
+                  "y": 0,
+                  "style": "bottom_button",
+                  "text1": "I",
+                  "text2": "J",
+                  "width": 48,
+                  "height": 36
+                },
+                {
+                  "type": "Text",
+                  "x": 192,
+                  "y": 0,
+                  "style": "bottom_button",
+                  "text": "H",
+                  "width": 48,
+                  "height": 36,
+                  "action": "show_edit_mode_slider_help"
+                },
+                {
+                  "type": "Rectangle",
+                  "x": 240,
+                  "y": 0,
+                  "width": 32,
+                  "height": 36,
+                  "style": "bottom_button_background"
+                },
+                {
+                  "type": "Text",
+                  "action": "exit_edit_mode",
+                  "x": 272,
+                  "y": 0,
+                  "style": "bottom_button",
+                  "text": "X",
+                  "width": 48,
+                  "height": 36
+                }
+              ],
+              "x": 0,
+              "y": 204,
+              "width": 320,
+              "height": 36,
+              "style": "default"
+            },
+            {
+              "type": "Container",
+              "widgets": [
+                {
+                  "type": "Rectangle",
+                  "data": "",
+                  "x": 0,
+                  "y": 0,
+                  "style": "yellow_1",
+                  "width": 36,
+                  "height": 34
+                },
+                {
+                  "type": "Rectangle",
+                  "data": "",
+                  "x": 0,
+                  "y": 34,
+                  "style": "yellow_2",
+                  "width": 36,
+                  "height": 34
+                },
+                {
+                  "type": "Rectangle",
+                  "data": "",
+                  "x": 0,
+                  "y": 68,
+                  "style": "yellow_3",
+                  "width": 36,
+                  "height": 34
+                },
+                {
+                  "type": "Rectangle",
+                  "data": "",
+                  "x": 0,
+                  "y": 102,
+                  "style": "yellow_4",
+                  "width": 36,
+                  "height": 34
+                },
+                {
+                  "type": "Rectangle",
+                  "data": "",
+                  "x": 0,
+                  "y": 136,
+                  "style": "yellow_5",
+                  "width": 36,
+                  "height": 34
+                },
+                {
+                  "type": "Rectangle",
+                  "data": "",
+                  "x": 0,
+                  "y": 170,
+                  "style": "yellow_6",
+                  "width": 36,
+                  "height": 34
+                }
+              ],
+              "x": 0,
               "y": 0,
-              "width": 68,
+              "width": 36,
               "height": 204,
               "style": "default"
             },
             {
               "type": "Rectangle",
-              "data": "",
-              "x": 0,
+              "x": 36,
               "y": 0,
-              "style": "yellow_1",
-              "width": 36,
-              "height": 34
+              "width": 12,
+              "height": 204,
+              "style": "default_inverse"
             },
             {
               "type": "DisplayData",
@@ -46961,6 +47140,14 @@
               "height": 72
             },
             {
+              "type": "Rectangle",
+              "x": 48,
+              "y": 104,
+              "width": 204,
+              "height": 64,
+              "style": "default_inverse"
+            },
+            {
               "type": "Select",
               "x": 48,
               "y": 168,
@@ -46970,7 +47157,7 @@
                   "type": "Rectangle",
                   "x": 0,
                   "y": 0,
-                  "width": 200,
+                  "width": 204,
                   "height": 36,
                   "style": "default_inverse"
                 },
@@ -46986,143 +47173,36 @@
                       "x": 0,
                       "y": 0,
                       "text": "~ Set",
-                      "width": 100,
+                      "width": 102,
                       "height": 36
                     },
                     {
                       "type": "Text",
                       "action": "non_interactive_discard",
                       "style": "non_interactive_button_S",
-                      "x": 100,
+                      "x": 102,
                       "y": 0,
                       "text": " Discard",
-                      "width": 100,
+                      "width": 102,
                       "height": 36
                     }
                   ],
-                  "width": 200,
+                  "width": 204,
                   "height": 36,
                   "style": "default"
                 }
               ],
-              "width": 200,
+              "width": 203,
               "height": 36,
               "style": "default"
             },
             {
-              "type": "Text",
-              "action": "edit_mode_keypad",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page",
-              "text": "K",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "edit_mode_step",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page",
-              "text": "M",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "S",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "ToggleButton",
-              "data": "edit_mode_interactive_mode_selector",
-              "action": "toggle_interactive_mode",
-              "x": 144,
-              "y": 204,
-              "style": "bottom_button",
-              "text1": "I",
-              "text2": "J",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 192,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "H",
-              "width": 48,
-              "height": 36,
-              "action": "show_edit_mode_slider_help"
-            },
-            {
-              "type": "Rectangle",
-              "x": 240,
-              "y": 204,
-              "width": 32,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "exit_edit_mode",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Rectangle",
-              "data": "",
-              "x": 0,
-              "y": 34,
-              "style": "yellow_2",
-              "width": 36,
-              "height": 34
-            },
-            {
-              "type": "Rectangle",
-              "data": "",
-              "x": 0,
-              "y": 68,
-              "style": "yellow_3",
-              "width": 36,
-              "height": 34
-            },
-            {
-              "type": "Rectangle",
-              "data": "",
-              "x": 0,
-              "y": 102,
-              "style": "yellow_4",
-              "width": 36,
-              "height": 34
-            },
-            {
-              "type": "Rectangle",
-              "data": "",
-              "x": 0,
-              "y": 136,
-              "style": "yellow_5",
-              "width": 36,
-              "height": 34
-            },
-            {
-              "type": "Rectangle",
-              "data": "",
-              "x": 0,
-              "y": 170,
-              "style": "yellow_6",
-              "width": 36,
-              "height": 34
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
             }
           ],
           "x": 0,

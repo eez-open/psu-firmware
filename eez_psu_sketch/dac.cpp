@@ -120,7 +120,7 @@ bool DigitalAnalogConverter::test() {
 
     float u_mon = channel.u.mon_dac;
     float u_diff = u_mon - u_set;
-    if (fabsf(u_diff) > u_set * DAC_TEST_TOLERANCE / 100) {
+    if ((u_diff) > u_set * DAC_TEST_TOLERANCE / 100) {
         test_result = psu::TEST_FAILED;
 
         DebugTraceF("Ch%d DAC test, U_set failure: expected=%d, got=%d, abs diff=%d",
