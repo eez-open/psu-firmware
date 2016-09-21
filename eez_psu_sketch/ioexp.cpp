@@ -171,6 +171,7 @@ void IOExpander::disableWrite() {
 
 void IOExpander::enableWriteAndFlush() {
 	writeDisabled = false;
+	
 	reg_write(REG_GPIO, gpio);
 }
 

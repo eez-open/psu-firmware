@@ -282,7 +282,9 @@ bool Channel::init() {
     bool last_save_enabled = profile::enableSave(false);
 
 	for (int i = 0; i < 3; ++i) {
-		DebugTraceF("ioexp.init %d", i);
+		if (i > 0) {
+			DebugTraceF("ioexp.init failed (%d)", i);
+		}
 	    result = ioexp.init();
 		if (result) {
 			break;
@@ -652,6 +654,8 @@ void Channel::doDpEnable(bool enable) {
     flags.dp_on = enable;
 }
 
+extern int g_trt;
+
 void Channel::doOutputEnable(bool enable) {
     if (enable && !isOk()) {
         return;
@@ -675,9 +679,6 @@ void Channel::doOutputEnable(bool enable) {
 		// enable DP
         delayed_dp_off = false;
 		doDpEnable(true);
-
-		// start ADC conversion
-		adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
 	} else {
 		if (getFeatures() & CH_FEATURE_LRIPPLE) {
 			doLowRippleEnable(false);
@@ -696,15 +697,18 @@ void Channel::doOutputEnable(bool enable) {
         delayed_dp_off_start = micros();
 	}
 
+	interrupts();
 	ioexp.enableWriteAndFlush();
 
 	if (enable) {
+		// start ADC conversion
+		adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+
 		onTimeCounter.start();
 	} else {
 		onTimeCounter.stop();
 	}
 
-	interrupts();
 }
 
 void Channel::doRemoteSensingEnable(bool enable) {
@@ -786,7 +790,11 @@ void Channel::doLowRippleAutoEnable(bool enable) {
 }
 
 void Channel::update() {
-    bool last_save_enabled = profile::enableSave(false);
+	if (!isOk()) {
+		return;
+	}
+
+	bool last_save_enabled = profile::enableSave(false);
 
     setVoltage(u.set);
     setCurrent(i.set);

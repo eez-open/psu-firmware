@@ -42,52 +42,54 @@ void recallChannelsFromProfile(Parameters *profile) {
     bool last_save_enabled = enableSave(false);
 
     for (int i = 0; i < CH_MAX; ++i) {
+		Channel &channel = Channel::get(i);
+
 		if (profile->channels[i].flags.parameters_are_valid) {
-			Channel::get(i).prot_conf.u_delay = profile->channels[i].u_delay;
-			Channel::get(i).prot_conf.u_level = profile->channels[i].u_level;
-			Channel::get(i).prot_conf.i_delay = profile->channels[i].i_delay;
-			Channel::get(i).prot_conf.p_delay = profile->channels[i].p_delay;
-			Channel::get(i).prot_conf.p_level = profile->channels[i].p_level;
+			channel.prot_conf.u_delay = profile->channels[i].u_delay;
+			channel.prot_conf.u_level = profile->channels[i].u_level;
+			channel.prot_conf.i_delay = profile->channels[i].i_delay;
+			channel.prot_conf.p_delay = profile->channels[i].p_delay;
+			channel.prot_conf.p_level = profile->channels[i].p_level;
 
-			Channel::get(i).prot_conf.flags.u_state = profile->channels[i].flags.u_state;
-			Channel::get(i).prot_conf.flags.i_state = profile->channels[i].flags.i_state;
-			Channel::get(i).prot_conf.flags.p_state = profile->channels[i].flags.p_state;
+			channel.prot_conf.flags.u_state = profile->channels[i].flags.u_state;
+			channel.prot_conf.flags.i_state = profile->channels[i].flags.i_state;
+			channel.prot_conf.flags.p_state = profile->channels[i].flags.p_state;
 
-			Channel::get(i).u.set = profile->channels[i].u_set;
-			Channel::get(i).u.step = profile->channels[i].u_step;
-			Channel::get(i).u.limit = profile->channels[i].u_limit;
+			channel.u.set = profile->channels[i].u_set;
+			channel.u.step = profile->channels[i].u_step;
+			channel.u.limit = profile->channels[i].u_limit;
 
-			Channel::get(i).i.set = profile->channels[i].i_set;
-			Channel::get(i).i.step = profile->channels[i].i_step;
-			Channel::get(i).i.limit = profile->channels[i].i_limit;
+			channel.i.set = profile->channels[i].i_set;
+			channel.i.step = profile->channels[i].i_step;
+			channel.i.limit = profile->channels[i].i_limit;
 
-			Channel::get(i).p_limit = profile->channels[i].p_limit;
+			channel.p_limit = profile->channels[i].p_limit;
 
 #ifdef EEZ_PSU_SIMULATOR
-			Channel::get(i).simulator.load_enabled = profile->channels[i].load_enabled;
-			Channel::get(i).simulator.load = profile->channels[i].load;
-			Channel::get(i).simulator.voltProgExt = profile->channels[i].voltProgExt;
+			channel.simulator.load_enabled = profile->channels[i].load_enabled;
+			channel.simulator.load = profile->channels[i].load;
+			channel.simulator.voltProgExt = profile->channels[i].voltProgExt;
 #endif
 
-			Channel::get(i).flags.cal_enabled = profile->channels[i].flags.cal_enabled && Channel::get(i).isCalibrationExists() ? 1 : 0;
-			Channel::get(i).flags.output_enabled = profile->channels[i].flags.output_enabled;
-			Channel::get(i).flags.sense_enabled = profile->channels[i].flags.sense_enabled;
+			channel.flags.cal_enabled = profile->channels[i].flags.cal_enabled && channel.isCalibrationExists() ? 1 : 0;
+			channel.flags.output_enabled = profile->channels[i].flags.output_enabled;
+			channel.flags.sense_enabled = profile->channels[i].flags.sense_enabled;
 
-			if (Channel::get(i).getFeatures() & CH_FEATURE_RPROG) {
-				Channel::get(i).flags.rprog_enabled = profile->channels[i].flags.rprog_enabled;
+			if (channel.getFeatures() & CH_FEATURE_RPROG) {
+				channel.flags.rprog_enabled = profile->channels[i].flags.rprog_enabled;
 			} else {
-				Channel::get(i).flags.rprog_enabled = 0;
+				channel.flags.rprog_enabled = 0;
 			}
 
-			if (Channel::get(i).getFeatures() & CH_FEATURE_LRIPPLE) {
-				Channel::get(i).flags.lripple_auto_enabled = profile->channels[i].flags.lripple_auto_enabled;
+			if (channel.getFeatures() & CH_FEATURE_LRIPPLE) {
+				channel.flags.lripple_auto_enabled = profile->channels[i].flags.lripple_auto_enabled;
 			} else {
-				Channel::get(i).flags.lripple_enabled = 0;
-				Channel::get(i).flags.lripple_auto_enabled = 0;
+				channel.flags.lripple_enabled = 0;
+				channel.flags.lripple_auto_enabled = 0;
 			}
 		}
 
-		Channel::get(i).update();
+		channel.update();
 	}
 
     enableSave(last_save_enabled);
@@ -183,10 +185,12 @@ bool saveAtLocation(int location) {
 
         for (int i = 0; i < CH_MAX; ++i) {
 			if (i < CH_NUM) {
+				Channel &channel = Channel::get(i);
+
 				profile.channels[i].flags.parameters_are_valid = 1;
 
-				profile.channels[i].flags.cal_enabled = Channel::get(i).flags.cal_enabled;
-				profile.channels[i].flags.output_enabled = Channel::get(i).flags.output_enabled;
+				profile.channels[i].flags.cal_enabled = channel.flags.cal_enabled;
+				profile.channels[i].flags.output_enabled = channel.flags.output_enabled;
 				profile.channels[i].flags.sense_enabled = Channel::get(i).flags.sense_enabled;
 
 				if (Channel::get(i).getFeatures() & CH_FEATURE_RPROG) {
