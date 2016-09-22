@@ -230,6 +230,8 @@ void tick(unsigned long tick_usec) {
 						psu::setQuesBits(QUES_FAN, true);
 						psu::setCurrentMaxLimit(ERR_MAX_CURRENT);
 					}
+				} else {
+					DebugTraceF("T1=%f, T2=%f, T2-T1=%f", g_rpmMeasureT1, g_rpmMeasureT2, g_rpmMeasureT2 - g_rpmMeasureT1);
 				}
 			}
 		}
