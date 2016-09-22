@@ -48847,7 +48847,7 @@
               "y": 0,
               "style": "edit_value_S_left",
               "width": 320,
-              "height": 32,
+              "height": 34,
               "activeStyle": "edit_value_active_S_left"
             },
             {
@@ -49647,14 +49647,6 @@
         "landscape": {
           "widgets": [
             {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
-            {
               "type": "DisplayData",
               "data": "keypad_text",
               "x": 0,
@@ -49842,6 +49834,22 @@
               ],
               "width": 240,
               "height": 174,
+              "style": "default"
+            },
+            {
+              "type": "Rectangle",
+              "x": 240,
+              "y": 0,
+              "width": 12,
+              "height": 204,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
               "style": "default"
             },
             {
@@ -56163,7 +56171,7 @@
               "text": "System information (1)",
               "x": 6,
               "y": 0,
-              "width": 234,
+              "width": 246,
               "height": 32,
               "style": "value_S"
             },
@@ -56181,7 +56189,7 @@
               "text": "323:33:10",
               "x": 130,
               "y": 30,
-              "width": 110,
+              "width": 122,
               "height": 28,
               "style": "value_S",
               "data": "sys.onTime.total"
@@ -56200,7 +56208,7 @@
               "text": "323:33:10",
               "x": 130,
               "y": 58,
-              "width": 110,
+              "width": 122,
               "height": 28,
               "style": "value_S",
               "data": "sys.onTime.last"
@@ -56222,7 +56230,7 @@
                   "text": "Invalid",
                   "x": 0,
                   "y": 0,
-                  "width": 110,
+                  "width": 122,
                   "height": 28,
                   "style": "event_error",
                   "data": ""
@@ -56232,7 +56240,7 @@
                   "text": "45.5",
                   "x": 0,
                   "y": 0,
-                  "width": 110,
+                  "width": 122,
                   "height": 28,
                   "style": "value_S",
                   "data": "sys.temp.main"
@@ -56242,7 +56250,7 @@
                   "text": "Not installed",
                   "x": 0,
                   "y": 0,
-                  "width": 110,
+                  "width": 122,
                   "height": 28,
                   "style": "default_disabled_S_left",
                   "data": ""
@@ -56250,7 +56258,7 @@
               ],
               "x": 130,
               "y": 86,
-              "width": 110,
+              "width": 122,
               "height": 28,
               "style": "default",
               "data": "sys.temp.main.status"
@@ -56272,7 +56280,7 @@
                   "text": "Invalid",
                   "x": 0,
                   "y": 0,
-                  "width": 110,
+                  "width": 122,
                   "height": 28,
                   "style": "event_error",
                   "data": ""
@@ -56282,7 +56290,7 @@
                   "text": "45.5",
                   "x": 0,
                   "y": 0,
-                  "width": 110,
+                  "width": 122,
                   "height": 28,
                   "style": "value_S",
                   "data": "sys.temp.aux"
@@ -56292,7 +56300,7 @@
                   "text": "Not installed",
                   "x": 0,
                   "y": 0,
-                  "width": 110,
+                  "width": 122,
                   "height": 28,
                   "style": "default_disabled_S_left",
                   "data": ""
@@ -56322,7 +56330,7 @@
                   "text": "Invalid",
                   "x": 0,
                   "y": 0,
-                  "width": 110,
+                  "width": 122,
                   "height": 28,
                   "style": "event_error",
                   "data": ""
@@ -56332,7 +56340,7 @@
                   "text": "45.5",
                   "x": 0,
                   "y": 0,
-                  "width": 110,
+                  "width": 122,
                   "height": 28,
                   "style": "value_S",
                   "data": "sys.info.fan.speed"
@@ -56342,7 +56350,7 @@
                   "text": "Not installed",
                   "x": 0,
                   "y": 0,
-                  "width": 110,
+                  "width": 122,
                   "height": 28,
                   "style": "default_disabled_S_left",
                   "data": ""
@@ -56369,10 +56377,18 @@
               "text": "M2",
               "x": 130,
               "y": 170,
-              "width": 110,
+              "width": 122,
               "height": 28,
               "style": "value_S",
               "data": "sys.info.firmwareVer"
+            },
+            {
+              "type": "Rectangle",
+              "x": 12,
+              "y": 198,
+              "width": 240,
+              "height": 6,
+              "style": "default_inverse"
             },
             {
               "type": "Text",
@@ -56443,7 +56459,7 @@
               "text": "System information (2)",
               "x": 6,
               "y": 0,
-              "width": 234,
+              "width": 246,
               "height": 32,
               "style": "value_S"
             },
@@ -56461,7 +56477,7 @@
               "text": "00004",
               "x": 130,
               "y": 30,
-              "width": 110,
+              "width": 122,
               "height": 28,
               "style": "value_S",
               "data": "sys.info.serialNo"
@@ -56480,7 +56496,7 @@
               "text": "323:33:10",
               "x": 130,
               "y": 58,
-              "width": 110,
+              "width": 122,
               "height": 28,
               "style": "value_S",
               "data": "sys.info.cpu"
@@ -56499,7 +56515,7 @@
               "text": "",
               "x": 130,
               "y": 86,
-              "width": 110,
+              "width": 122,
               "height": 28,
               "style": "value_S",
               "data": "sys.info.ethernet"
@@ -56530,7 +56546,7 @@
                         "data": "",
                         "x": 0,
                         "y": 0,
-                        "width": 110,
+                        "width": 122,
                         "height": 28,
                         "text": "Not installed"
                       },
@@ -56540,7 +56556,7 @@
                         "data": "channel.boardInfo.revision",
                         "x": 0,
                         "y": 0,
-                        "width": 110,
+                        "width": 122,
                         "height": 28
                       },
                       {
@@ -56549,26 +56565,26 @@
                         "data": "channel.boardInfo.revision",
                         "x": 0,
                         "y": 0,
-                        "width": 110,
+                        "width": 122,
                         "height": 28
                       }
                     ],
                     "x": 118,
                     "y": 0,
-                    "width": 110,
+                    "width": 122,
                     "height": 28,
                     "style": "default"
                   }
                 ],
                 "x": 0,
                 "y": 0,
-                "width": 228,
+                "width": 240,
                 "height": 28,
                 "style": "default"
               },
               "x": 12,
               "y": 114,
-              "width": 228,
+              "width": 240,
               "height": 56,
               "style": "default",
               "data": "channels"
@@ -56587,7 +56603,7 @@
               "text": "45.5 oC",
               "x": 130,
               "y": 170,
-              "width": 110,
+              "width": 122,
               "height": 28,
               "style": "value_S",
               "data": "sys.info.scpiVer"
@@ -56692,7 +56708,8 @@
                               "x": 0,
                               "y": 0,
                               "width": 64,
-                              "height": 32
+                              "height": 32,
+                              "activeStyle": ""
                             },
                             {
                               "type": "DisplayData",
@@ -56701,7 +56718,8 @@
                               "x": 0,
                               "y": 0,
                               "width": 64,
-                              "height": 32
+                              "height": 32,
+                              "activeStyle": ""
                             }
                           ],
                           "x": 0,
@@ -56722,7 +56740,8 @@
                       "x": 0,
                       "y": 32,
                       "width": 64,
-                      "height": 30
+                      "height": 30,
+                      "activeStyle": "edit_value_active_S_right"
                     },
                     {
                       "type": "DisplayData",
@@ -56731,7 +56750,8 @@
                       "x": 0,
                       "y": 62,
                       "width": 64,
-                      "height": 30
+                      "height": 30,
+                      "activeStyle": "edit_value_active_S_right"
                     }
                   ],
                   "x": 0,

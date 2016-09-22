@@ -113,8 +113,8 @@ void enter(int tabIndex_) {
 			options.def = 0;
 
 			options.flags.genericNumberKeypad = false;
-			options.flags.maxButtonEnabled = false;
-			options.flags.defButtonEnabled = false;
+			options.flags.maxButtonEnabled = true;
+			options.flags.defButtonEnabled = true;
 			options.flags.signButtonEnabled = true;
 			options.flags.dotButtonEnabled = true;
 
