@@ -19,6 +19,7 @@
 #include "psu.h"
 #include "datetime.h"
 #include "rtc.h"
+#include "event_queue.h"
 #include "scpi_psu.h"
 
 namespace eez {
@@ -141,6 +142,7 @@ bool setDate(uint8_t year, uint8_t month, uint8_t day) {
     if (rtc::writeDate(year, month, day)) {
         persist_conf::writeSystemDate(year, month, day);
         psu::setQuesBits(QUES_TIME, !checkDateTime());
+		event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_CHANGED);
         return true;
     }
     return false;
@@ -154,6 +156,7 @@ bool setTime(uint8_t hour, uint8_t minute, uint8_t second) {
     if (rtc::writeTime(hour, minute, second)) {
         persist_conf::writeSystemTime(hour, minute, second);
         psu::setQuesBits(QUES_TIME, !checkDateTime());
+		event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_TIME_CHANGED);
         return true;
     }
     return false;
@@ -167,6 +170,7 @@ bool setDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t
     if (rtc::writeDateTime(year, month, day, hour, minute, second)) {
 		persist_conf::writeSystemDateTime(year, month, day, hour, minute, second);
         psu::setQuesBits(QUES_TIME, !checkDateTime());
+		event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
         return true;
     }
     return false;
