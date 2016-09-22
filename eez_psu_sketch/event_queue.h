@@ -52,9 +52,9 @@ static const int EVENT_TYPE_ERROR = 3;
 	EVENT_INFO(CALIBRATION_PASSWORD_CHANGED, 3, "Calibration password changed") \
 	EVENT_INFO(BEEPER_ENABLED, 4, "Beeper enabled") \
 	EVENT_INFO(BEEPER_DISABLED, 5, "Beeper disabled") \
-	EVENT_INFO(SYSTEM_DATE_CHANGED, 5, "System date changed") \
-	EVENT_INFO(SYSTEM_TIME_CHANGED, 5, "System time changed") \
-	EVENT_INFO(SYSTEM_DATE_TIME_CHANGED, 5, "System date and time changed") \
+	EVENT_INFO(SYSTEM_DATE_CHANGED, 6, "System date changed") \
+	EVENT_INFO(SYSTEM_TIME_CHANGED, 7, "System time changed") \
+	EVENT_INFO(SYSTEM_DATE_TIME_CHANGED, 8, "System date and time changed") \
 	EVENT_INFO(CH1_OUTPUT_ENABLED, 10, "Ch1 output on") \
 	EVENT_INFO(CH2_OUTPUT_ENABLED, 11, "Ch2 output on") \
 	EVENT_INFO(CH1_OUTPUT_DISABLED, 20, "Ch1 output off") \
