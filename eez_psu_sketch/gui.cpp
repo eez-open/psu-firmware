@@ -40,6 +40,7 @@
 #include "gui_page_ch_settings_info.h"
 #include "gui_page_sys_settings_date_time.h"
 #include "gui_page_sys_info.h"
+#include "gui_page_user_profiles.h"
 
 #ifdef EEZ_PSU_SIMULATOR
 #include "front_panel/control.h"
@@ -115,6 +116,10 @@ Page *createPageFromId(int pageId) {
 	case PAGE_ID_SYS_SETTINGS_DATE_TIME: return new SysSettingsDateTimePage();
 	case PAGE_ID_SYS_INFO:
 	case PAGE_ID_SYS_INFO2: return new SysInfoPage();
+	case PAGE_ID_USER_PROFILES:
+	case PAGE_ID_USER_PROFILES2:
+	case PAGE_ID_USER_PROFILE_0_SETTINGS:
+	case PAGE_ID_USER_PROFILE_SETTINGS: return new UserProfilesPage();
 	}
 
 	return 0;
@@ -1147,7 +1152,6 @@ void doShowPage(int index, Page *page = 0) {
 
 	// delete current page
 	if (g_activePage) {
-		g_activePage->pageDidDisappear();
 		delete g_activePage;
 	}
 
@@ -1158,9 +1162,10 @@ void doShowPage(int index, Page *page = 0) {
 		g_activePage = page;
 	} else {
 		g_activePage = createPageFromId(g_activePageId);
-		if (g_activePage) {
-			g_activePage->pageWillAppear();
-		}
+	}
+
+	if (g_activePage) {
+		g_activePage->pageWillAppear();
 	}
 
     g_showPageTime = micros();
@@ -1172,7 +1177,6 @@ void setPage(int index) {
 	// delete stack
 	for (int i = 0; i < g_pageNavigationStackPointer; ++i) {
 		if (g_pageNavigationStack[i].activePage) {
-			g_pageNavigationStack[i].activePage->pageDidDisappear();
 			delete g_pageNavigationStack[i].activePage;
 		}
 	}
@@ -1195,7 +1199,6 @@ void pushPage(int index) {
 
 			// delete page on the bottom
 			if (g_pageNavigationStack[0].activePage) {
-				g_pageNavigationStack[0].activePage->pageDidDisappear();
 				delete g_pageNavigationStack[0].activePage;
 			}
 

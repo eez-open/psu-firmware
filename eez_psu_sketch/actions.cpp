@@ -27,6 +27,7 @@
 #include "gui_page_ch_settings_protection.h"
 #include "gui_page_ch_settings_adv.h"
 #include "gui_page_sys_settings_date_time.h"
+#include "gui_page_user_profiles.h"
 
 namespace eez {
 namespace psu {
@@ -364,6 +365,42 @@ void action_sys_settings_date_time_toggle_dst() {
     ((SysSettingsDateTimePage *)getActivePage())->toggleDst();
 }
 
+void action_show_user_profiles() {
+    setPage(PAGE_ID_USER_PROFILES);
+}
+
+void action_show_user_profiles2() {
+    setPage(PAGE_ID_USER_PROFILES2);
+}
+
+void action_show_user_profile_settings() {
+    ((UserProfilesPage *)getActivePage())->showProfile();
+}
+
+void action_profiles_toggle_auto_recall() {
+    ((UserProfilesPage *)getActivePage())->toggleAutoRecall();
+}
+
+void action_profile_toggle_is_auto_recall_location() {
+    ((UserProfilesPage *)getActivePage())->toggleIsAutoRecallLocation();
+}
+
+void action_profile_recall() {
+    ((UserProfilesPage *)getActivePage())->recall();
+}
+
+void action_profile_save() {
+    ((UserProfilesPage *)getActivePage())->save();
+}
+
+void action_profile_delete() {
+    ((UserProfilesPage *)getActivePage())->deleteProfile();
+}
+
+void action_profile_edit_remark() {
+    ((UserProfilesPage *)getActivePage())->editRemark();
+}
+
 
 ACTION actions[] = {
     0,
@@ -446,7 +483,16 @@ ACTION actions[] = {
     action_ch_settins_adv_lripple_toggle_auto_mode,
     action_ch_settins_adv_rsense_toggle_status,
     action_ch_settins_adv_rprog_toggle_status,
-    action_sys_settings_date_time_toggle_dst
+    action_sys_settings_date_time_toggle_dst,
+    action_show_user_profiles,
+    action_show_user_profiles2,
+    action_show_user_profile_settings,
+    action_profiles_toggle_auto_recall,
+    action_profile_toggle_is_auto_recall_location,
+    action_profile_recall,
+    action_profile_save,
+    action_profile_delete,
+    action_profile_edit_remark
 };
 
 }

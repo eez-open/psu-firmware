@@ -18,38 +18,29 @@
  
 #pragma once
 
-#include "gui_internal.h"
+#include "gui_page.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 
-namespace data {
-struct Snapshot;
-}
-
-class Page {
+class UserProfilesPage : public Page {
 public:
-	virtual void pageWillAppear();
-	virtual void takeSnapshot(data::Snapshot *snapshot);
-	virtual data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
-};
-
-class SetPage : public Page {
-public:
+	void pageWillAppear();
 	void takeSnapshot(data::Snapshot *snapshot);
 	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
 
-	virtual void edit();
-	virtual int getDirty() = 0;
-	virtual void set() = 0;
-	virtual void discard();
+	void showProfile();
 
-protected:
-	int editDataId;
+	void toggleAutoRecall();
+	void toggleIsAutoRecallLocation();
+	void recall();
+	void save();
+	void deleteProfile();
+	void editRemark();
 
-	static void onSetValue(float value);
-	virtual void setValue(float value);
+private:
+	static void onEditRemarkOk(char *newRemark);
 };
 
 }

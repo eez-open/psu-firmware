@@ -506,6 +506,66 @@
     {
       "name": "setPage.dirty",
       "defaultValue": "0"
+    },
+    {
+      "name": "profiles.list1",
+      "defaultValue": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "name": "profiles.list2",
+      "defaultValue": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "name": "profiles.autoRecall.status",
+      "description": "0: disabled\n1: enabled",
+      "defaultValue": "1"
+    },
+    {
+      "name": "profiles.autoRecall.location",
+      "defaultValue": "0"
+    },
+    {
+      "name": "profile.status",
+      "description": "0: not installed\n1: installed",
+      "defaultValue": "1"
+    },
+    {
+      "name": "profile.label",
+      "defaultValue": "[ 0 ]"
+    },
+    {
+      "name": "profile.remark",
+      "defaultValue": "This is remark..."
+    },
+    {
+      "name": "profile.isAutoRecallLocation",
+      "defaultValue": "1",
+      "description": "0 - no\n1 - yes"
+    },
+    {
+      "name": "profile.channel.u.set",
+      "defaultValue": "12.00V"
+    },
+    {
+      "name": "profile.channel.i.set",
+      "defaultValue": "1.00A"
+    },
+    {
+      "name": "profile.channel.outputState",
+      "defaultValue": "1",
+      "description": "0: output is off\n1: output is on"
     }
   ],
   "actions": [
@@ -916,6 +976,51 @@
       "name": "sys_settings_date_time_toggle_dst",
       "implementationType": "native",
       "implementation": "((SysSettingsDateTimePage *)getActivePage())->toggleDst();\n"
+    },
+    {
+      "name": "show_user_profiles",
+      "implementationType": "native",
+      "implementation": "setPage(PAGE_ID_USER_PROFILES);"
+    },
+    {
+      "name": "show_user_profiles2",
+      "implementationType": "native",
+      "implementation": "setPage(PAGE_ID_USER_PROFILES2);"
+    },
+    {
+      "name": "show_user_profile_settings",
+      "implementationType": "native",
+      "implementation": "((UserProfilesPage *)getActivePage())->showProfile();\n"
+    },
+    {
+      "name": "profiles.toggleAutoRecall",
+      "implementationType": "native",
+      "implementation": "((UserProfilesPage *)getActivePage())->toggleAutoRecall();"
+    },
+    {
+      "name": "profile.toggleIsAutoRecallLocation",
+      "implementationType": "native",
+      "implementation": "((UserProfilesPage *)getActivePage())->toggleIsAutoRecallLocation();"
+    },
+    {
+      "name": "profile.recall",
+      "implementationType": "native",
+      "implementation": "((UserProfilesPage *)getActivePage())->recall();"
+    },
+    {
+      "name": "profile.save",
+      "implementationType": "native",
+      "implementation": "((UserProfilesPage *)getActivePage())->save();"
+    },
+    {
+      "name": "profile.delete",
+      "implementationType": "native",
+      "implementation": "((UserProfilesPage *)getActivePage())->deleteProfile();"
+    },
+    {
+      "name": "profile.editRemark",
+      "implementationType": "native",
+      "implementation": "((UserProfilesPage *)getActivePage())->editRemark();"
     }
   ],
   "gui": {
@@ -44451,6 +44556,11 @@
         "inheritFrom": "bottom_button_textual"
       },
       {
+        "name": "bottom_button_textual_S_disabled",
+        "inheritFrom": "bottom_button_textual_S",
+        "_color": "#cdcdcd"
+      },
+      {
         "name": "channel_error",
         "_color": "#FF0000",
         "_font": "medium",
@@ -48236,10 +48346,11 @@
               "type": "Text",
               "x": 48,
               "y": 204,
-              "style": "bottom_button_disabled",
+              "style": "bottom_button",
               "text": "R",
               "width": 48,
-              "height": 36
+              "height": 36,
+              "action": "show_user_profiles"
             },
             {
               "type": "Text",
@@ -54362,7 +54473,7 @@
             },
             {
               "type": "Text",
-              "text": "Chanel callibration settings",
+              "text": "Channel callibration settings",
               "x": 42,
               "y": 0,
               "width": 230,
@@ -55665,6 +55776,108 @@
           "widgets": [
             {
               "type": "Text",
+              "text": "User profiles (1)",
+              "x": 6,
+              "y": 0,
+              "width": 306,
+              "height": 30,
+              "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "Autorecall on power-on:",
+              "x": 8,
+              "y": 30,
+              "width": 181,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "No",
+                  "x": 0,
+                  "y": 0,
+                  "width": 40,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "action": "profiles.toggleAutoRecall"
+                },
+                {
+                  "type": "Text",
+                  "text": "Yes",
+                  "x": 0,
+                  "y": 0,
+                  "width": 40,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "action": "profiles.toggleAutoRecall"
+                }
+              ],
+              "x": 189,
+              "y": 30,
+              "width": 40,
+              "height": 28,
+              "style": "default",
+              "data": "profiles.autoRecall.status"
+            },
+            {
+              "type": "Rectangle",
+              "x": 229,
+              "y": 30,
+              "width": 83,
+              "height": 28,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Text",
+              "text": "Power-on profile:",
+              "x": 8,
+              "y": 58,
+              "width": 133,
+              "height": 28,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "",
+              "x": 141,
+              "y": 58,
+              "width": 35,
+              "height": 28,
+              "style": "value_S",
+              "data": "profiles.autoRecall.location"
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Local.Profile",
+                "x": 0,
+                "y": 0,
+                "width": 304,
+                "height": 28,
+                "style": "default"
+              },
+              "x": 8,
+              "y": 86,
+              "width": 304,
+              "height": 116,
+              "style": "default",
+              "data": "profiles.list1"
+            },
+            {
+              "type": "Rectangle",
+              "x": 176,
+              "y": 58,
+              "width": 136,
+              "height": 28,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Text",
               "x": 0,
               "y": 204,
               "width": 48,
@@ -55680,7 +55893,7 @@
               "height": 36,
               "style": "bottom_button",
               "text": ")",
-              "action": "show_sys_settings2"
+              "action": "show_user_profiles2"
             },
             {
               "type": "Rectangle",
@@ -55699,123 +55912,6 @@
               "text": "X",
               "width": 48,
               "height": 36
-            },
-            {
-              "type": "Text",
-              "text": "[ 0 ]",
-              "x": 8,
-              "y": 88,
-              "width": 35,
-              "height": 29,
-              "style": "edit_S"
-            },
-            {
-              "type": "Text",
-              "text": "Default",
-              "x": 43,
-              "y": 88,
-              "width": 269,
-              "height": 29,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "[ 1 ]",
-              "x": 8,
-              "y": 117,
-              "width": 35,
-              "height": 29,
-              "style": "edit_S"
-            },
-            {
-              "type": "Text",
-              "text": "Op amp supply",
-              "x": 43,
-              "y": 117,
-              "width": 269,
-              "height": 29,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "[ 2 ]",
-              "x": 8,
-              "y": 146,
-              "width": 35,
-              "height": 29,
-              "style": "edit_S"
-            },
-            {
-              "type": "Text",
-              "text": "Ovo je jako dugacak naziv za prof...",
-              "x": 43,
-              "y": 146,
-              "width": 269,
-              "height": 29,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "[ 3 ]",
-              "x": 8,
-              "y": 175,
-              "width": 35,
-              "height": 29,
-              "style": "edit_S"
-            },
-            {
-              "type": "Text",
-              "text": "Saved at 2016-09-18 10:00:50",
-              "x": 43,
-              "y": 175,
-              "width": 269,
-              "height": 29,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "User profiles (1)",
-              "x": 6,
-              "y": 0,
-              "width": 228,
-              "height": 30,
-              "style": "value_S"
-            },
-            {
-              "type": "Text",
-              "text": "Autorecall on power-on:",
-              "x": 8,
-              "y": 30,
-              "width": 181,
-              "height": 29,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "Power-on profile:",
-              "x": 8,
-              "y": 59,
-              "width": 133,
-              "height": 29,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "Yes",
-              "x": 189,
-              "y": 30,
-              "width": 35,
-              "height": 29,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "0",
-              "x": 141,
-              "y": 59,
-              "width": 35,
-              "height": 29,
-              "style": "value_S"
             }
           ]
         },
@@ -55838,12 +55934,40 @@
           "widgets": [
             {
               "type": "Text",
+              "text": "User profiles (2)",
+              "x": 6,
+              "y": 0,
+              "width": 306,
+              "height": 30,
+              "style": "value_S"
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Local.Profile",
+                "x": 0,
+                "y": 0,
+                "width": 304,
+                "height": 28,
+                "style": "default"
+              },
+              "x": 8,
+              "y": 30,
+              "width": 304,
+              "height": 168,
+              "style": "default",
+              "data": "profiles.list2"
+            },
+            {
+              "type": "Text",
               "x": 0,
               "y": 204,
               "width": 48,
               "height": 36,
-              "style": "bottom_button_disabled",
-              "text": "("
+              "style": "bottom_button",
+              "text": "(",
+              "action": "show_user_profiles"
             },
             {
               "type": "Text",
@@ -55851,7 +55975,7 @@
               "y": 204,
               "width": 48,
               "height": 36,
-              "style": "bottom_button",
+              "style": "bottom_button_disabled",
               "text": ")",
               "action": "show_sys_settings2"
             },
@@ -55872,123 +55996,6 @@
               "text": "X",
               "width": 48,
               "height": 36
-            },
-            {
-              "type": "Text",
-              "text": "[ 4 ]",
-              "x": 8,
-              "y": 30,
-              "width": 35,
-              "height": 29,
-              "style": "edit_S"
-            },
-            {
-              "type": "Text",
-              "text": "-- Not installed --",
-              "x": 43,
-              "y": 30,
-              "width": 269,
-              "height": 29,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "[ 5 ]",
-              "x": 8,
-              "y": 59,
-              "width": 35,
-              "height": 29,
-              "style": "edit_S"
-            },
-            {
-              "type": "Text",
-              "text": "-- Not installed --",
-              "x": 43,
-              "y": 59,
-              "width": 269,
-              "height": 29,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "[ 6 ]",
-              "x": 8,
-              "y": 88,
-              "width": 35,
-              "height": 29,
-              "style": "edit_S"
-            },
-            {
-              "type": "Text",
-              "text": "-- Not installed --",
-              "x": 43,
-              "y": 88,
-              "width": 269,
-              "height": 29,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "[ 7 ]",
-              "x": 8,
-              "y": 117,
-              "width": 35,
-              "height": 29,
-              "style": "edit_S"
-            },
-            {
-              "type": "Text",
-              "text": "-- Not installed --",
-              "x": 43,
-              "y": 117,
-              "width": 269,
-              "height": 29,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "[ 8 ]",
-              "x": 8,
-              "y": 146,
-              "width": 35,
-              "height": 29,
-              "style": "edit_S"
-            },
-            {
-              "type": "Text",
-              "text": "-- Not installed --",
-              "x": 43,
-              "y": 146,
-              "width": 269,
-              "height": 29,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "User profiles (2)",
-              "x": 6,
-              "y": 0,
-              "width": 228,
-              "height": 30,
-              "style": "value_S"
-            },
-            {
-              "type": "Text",
-              "text": "[ 9 ]",
-              "x": 8,
-              "y": 175,
-              "width": 35,
-              "height": 29,
-              "style": "edit_S"
-            },
-            {
-              "type": "Text",
-              "text": "-- Not installed --",
-              "x": 43,
-              "y": 175,
-              "width": 269,
-              "height": 29,
-              "style": "edit_value_S_left"
             }
           ]
         },
@@ -56010,12 +56017,289 @@
           "height": 240,
           "widgets": [
             {
+              "type": "Text",
+              "text": "User profile",
+              "x": 6,
+              "y": 0,
+              "width": 94,
+              "height": 30,
+              "style": "value_S"
+            },
+            {
+              "type": "Text",
+              "text": "",
+              "x": 100,
+              "y": 0,
+              "width": 36,
+              "height": 30,
+              "style": "value_S",
+              "data": "profile.label"
+            },
+            {
+              "type": "Text",
+              "text": "settings",
+              "x": 136,
+              "y": 0,
+              "width": 176,
+              "height": 30,
+              "style": "value_S"
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "-- Not used --",
+                  "x": 0,
+                  "y": 0,
+                  "width": 304,
+                  "height": 174,
+                  "style": "default_S"
+                },
+                {
+                  "type": "Container",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "text": "Use as Power-up profile:",
+                      "x": 0,
+                      "y": 0,
+                      "width": 195,
+                      "height": 28,
+                      "style": "edit_value_S_left"
+                    },
+                    {
+                      "type": "Select",
+                      "widgets": [
+                        {
+                          "type": "Text",
+                          "text": "No",
+                          "x": 0,
+                          "y": 0,
+                          "width": 40,
+                          "height": 28,
+                          "style": "edit_value_active_S_left",
+                          "action": "profile.toggleIsAutoRecallLocation"
+                        },
+                        {
+                          "type": "Text",
+                          "text": "Yes",
+                          "x": 0,
+                          "y": 0,
+                          "width": 40,
+                          "height": 28,
+                          "style": "edit_value_S_left",
+                          "action": ""
+                        }
+                      ],
+                      "x": 195,
+                      "y": 0,
+                      "width": 40,
+                      "height": 28,
+                      "style": "default",
+                      "data": "profile.isAutoRecallLocation"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 235,
+                      "y": 0,
+                      "width": 69,
+                      "height": 28,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "Text",
+                      "text": "Remark:",
+                      "x": 0,
+                      "y": 28,
+                      "width": 304,
+                      "height": 28,
+                      "style": "edit_value_S_left"
+                    },
+                    {
+                      "type": "MultilineText",
+                      "text": "",
+                      "x": 0,
+                      "y": 56,
+                      "width": 304,
+                      "height": 46,
+                      "style": "edit_value_active_S_left",
+                      "data": "profile.remark",
+                      "action": "profile.editRemark"
+                    },
+                    {
+                      "type": "Text",
+                      "text": "Basic info:",
+                      "x": 0,
+                      "y": 102,
+                      "width": 94,
+                      "height": 29,
+                      "style": "edit_value_S_left"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 131,
+                      "width": 94,
+                      "height": 27,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "List",
+                      "listType": "vertical",
+                      "itemWidget": {
+                        "type": "Container",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "text": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 36,
+                            "height": 28,
+                            "style": "value_S",
+                            "data": "channel.shortLabel"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "text": "Off",
+                                "x": 0,
+                                "y": 0,
+                                "width": 30,
+                                "height": 28,
+                                "style": "value_S",
+                                "data": ""
+                              },
+                              {
+                                "type": "Text",
+                                "text": "On",
+                                "x": 0,
+                                "y": 0,
+                                "width": 30,
+                                "height": 28,
+                                "style": "value_S",
+                                "data": ""
+                              }
+                            ],
+                            "x": 36,
+                            "y": 0,
+                            "width": 30,
+                            "height": 28,
+                            "style": "default",
+                            "data": "profile.channel.outputState"
+                          },
+                          {
+                            "type": "Text",
+                            "text": "",
+                            "x": 66,
+                            "y": 0,
+                            "width": 64,
+                            "height": 28,
+                            "style": "value_S",
+                            "data": "profile.channel.u.set"
+                          },
+                          {
+                            "type": "Text",
+                            "text": "",
+                            "x": 130,
+                            "y": 0,
+                            "width": 80,
+                            "height": 28,
+                            "style": "value_S",
+                            "data": "profile.channel.i.set"
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 210,
+                        "height": 28,
+                        "style": "default"
+                      },
+                      "x": 94,
+                      "y": 102,
+                      "width": 210,
+                      "height": 56,
+                      "style": "default",
+                      "data": "channels"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 158,
+                      "width": 304,
+                      "height": 10,
+                      "style": "default_inverse"
+                    }
+                  ],
+                  "x": 0,
+                  "y": 0,
+                  "width": 304,
+                  "height": 158,
+                  "style": "default"
+                }
+              ],
+              "x": 8,
+              "y": 30,
+              "width": 304,
+              "height": 174,
+              "style": "default",
+              "data": "profile.status"
+            },
+            {
+              "type": "Button",
+              "text": "Recall",
+              "x": 0,
+              "y": 204,
+              "width": 56,
+              "height": 36,
+              "style": "bottom_button_textual_S",
+              "action": "profile.recall",
+              "enabled": "profile.status",
+              "disabledStyle": "bottom_button_textual_S_disabled"
+            },
+            {
+              "type": "Text",
+              "text": "Save",
+              "x": 56,
+              "y": 204,
+              "width": 56,
+              "height": 36,
+              "style": "bottom_button_textual_S",
+              "action": "profile.save",
+              "enabled": ""
+            },
+            {
+              "type": "Button",
+              "text": "Delete",
+              "x": 112,
+              "y": 204,
+              "width": 56,
+              "height": 36,
+              "style": "bottom_button_textual_S",
+              "action": "profile.delete",
+              "enabled": "profile.status",
+              "disabledStyle": "bottom_button_textual_S_disabled"
+            },
+            {
               "type": "Rectangle",
               "x": 168,
               "y": 204,
               "width": 56,
               "height": 36,
               "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "B",
+              "width": 48,
+              "height": 36
             },
             {
               "type": "Text",
@@ -56026,55 +56310,229 @@
               "text": "X",
               "width": 48,
               "height": 36
-            },
+            }
+          ]
+        },
+        "description": "User profiles information and settings"
+      },
+      {
+        "name": "user_profile_0_settings",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
             {
               "type": "Text",
-              "text": "User profle settings",
+              "text": "User profile",
               "x": 6,
               "y": 0,
-              "width": 228,
+              "width": 94,
               "height": 30,
               "style": "value_S"
             },
             {
               "type": "Text",
-              "text": "Remark:",
-              "x": 8,
-              "y": 59,
-              "width": 163,
-              "height": 29,
-              "style": "edit_value_S_left"
+              "text": "",
+              "x": 100,
+              "y": 0,
+              "width": 36,
+              "height": 30,
+              "style": "value_S",
+              "data": "profile.label"
             },
             {
               "type": "Text",
-              "text": "Use as Power-up profile:",
+              "text": "settings",
+              "x": 136,
+              "y": 0,
+              "width": 174,
+              "height": 30,
+              "style": "value_S"
+            },
+            {
+              "type": "Container",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "Use as Power-up profile:",
+                  "x": 0,
+                  "y": 0,
+                  "width": 195,
+                  "height": 28,
+                  "style": "edit_value_S_left"
+                },
+                {
+                  "type": "Select",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "text": "No",
+                      "x": 0,
+                      "y": 0,
+                      "width": 40,
+                      "height": 28,
+                      "style": "edit_value_active_S_left",
+                      "action": "profile.toggleIsAutoRecallLocation"
+                    },
+                    {
+                      "type": "Text",
+                      "text": "Yes",
+                      "x": 0,
+                      "y": 0,
+                      "width": 40,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "action": ""
+                    }
+                  ],
+                  "x": 195,
+                  "y": 0,
+                  "width": 40,
+                  "height": 28,
+                  "style": "default",
+                  "data": "profile.isAutoRecallLocation"
+                },
+                {
+                  "type": "Rectangle",
+                  "x": 235,
+                  "y": 0,
+                  "width": 67,
+                  "height": 28,
+                  "style": "default_inverse"
+                },
+                {
+                  "type": "Text",
+                  "text": "Basic info:",
+                  "x": 0,
+                  "y": 28,
+                  "width": 94,
+                  "height": 29,
+                  "style": "edit_value_S_left"
+                },
+                {
+                  "type": "Rectangle",
+                  "x": 0,
+                  "y": 57,
+                  "width": 94,
+                  "height": 27,
+                  "style": "default_inverse"
+                },
+                {
+                  "type": "List",
+                  "listType": "vertical",
+                  "itemWidget": {
+                    "type": "Container",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "text": "",
+                        "x": 0,
+                        "y": 0,
+                        "width": 36,
+                        "height": 28,
+                        "style": "value_S",
+                        "data": "channel.shortLabel"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "text": "Off",
+                            "x": 0,
+                            "y": 0,
+                            "width": 30,
+                            "height": 28,
+                            "style": "value_S",
+                            "data": ""
+                          },
+                          {
+                            "type": "Text",
+                            "text": "On",
+                            "x": 0,
+                            "y": 0,
+                            "width": 30,
+                            "height": 28,
+                            "style": "value_S",
+                            "data": ""
+                          }
+                        ],
+                        "x": 36,
+                        "y": 0,
+                        "width": 30,
+                        "height": 28,
+                        "style": "default",
+                        "data": "profile.channel.outputState"
+                      },
+                      {
+                        "type": "Text",
+                        "text": "",
+                        "x": 66,
+                        "y": 0,
+                        "width": 64,
+                        "height": 28,
+                        "style": "value_S",
+                        "data": "profile.channel.u.set"
+                      },
+                      {
+                        "type": "Text",
+                        "text": "",
+                        "x": 130,
+                        "y": 0,
+                        "width": 78,
+                        "height": 28,
+                        "style": "value_S",
+                        "data": "profile.channel.i.set"
+                      }
+                    ],
+                    "x": 0,
+                    "y": 0,
+                    "width": 208,
+                    "height": 28,
+                    "style": "default"
+                  },
+                  "x": 94,
+                  "y": 28,
+                  "width": 208,
+                  "height": 56,
+                  "style": "default",
+                  "data": "channels"
+                },
+                {
+                  "type": "Rectangle",
+                  "x": 0,
+                  "y": 84,
+                  "width": 302,
+                  "height": 84,
+                  "style": "default_inverse"
+                }
+              ],
               "x": 8,
               "y": 30,
-              "width": 195,
-              "height": 29,
-              "style": "edit_value_S_left"
+              "width": 302,
+              "height": 158,
+              "style": "default"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 224,
+              "height": 36,
+              "style": "bottom_button_background"
             },
             {
               "type": "Text",
-              "text": "Yes",
-              "x": 203,
-              "y": 30,
-              "width": 35,
-              "height": 29,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "MultilineText",
-              "text": "Ovdje ide opis u jedan ili dva retka ako ne stane u jedan.",
-              "x": 8,
-              "y": 86,
-              "width": 304,
-              "height": 46,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "action": "sys_settings_cal_ch_wiz_stop_and_show_previous_page",
+              "action": "show_previous_page",
               "x": 224,
               "y": 204,
               "style": "bottom_button",
@@ -56084,60 +56542,13 @@
             },
             {
               "type": "Text",
-              "text": "Recall",
-              "x": 0,
+              "action": "show_main_page",
+              "x": 272,
               "y": 204,
-              "width": 56,
-              "height": 36,
-              "style": "bottom_button_textual_S",
-              "action": "touch_screen_calibration"
-            },
-            {
-              "type": "Text",
-              "text": "Save",
-              "x": 56,
-              "y": 204,
-              "width": 56,
-              "height": 36,
-              "style": "bottom_button_textual_S",
-              "action": "touch_screen_calibration"
-            },
-            {
-              "type": "Text",
-              "text": "Basic info:",
-              "x": 8,
-              "y": 142,
-              "width": 86,
-              "height": 29,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "CH1: 3.30V, 4.50A, On",
-              "x": 94,
-              "y": 141,
-              "width": 173,
-              "height": 30,
-              "style": "value_S"
-            },
-            {
-              "type": "Text",
-              "text": "CH2: 5.00V, 1.20A, Off",
-              "x": 94,
-              "y": 171,
-              "width": 173,
-              "height": 30,
-              "style": "value_S"
-            },
-            {
-              "type": "Text",
-              "text": "Delete",
-              "x": 112,
-              "y": 204,
-              "width": 56,
-              "height": 36,
-              "style": "bottom_button_textual_S",
-              "action": "touch_screen_calibration"
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
             }
           ]
         },
@@ -56798,6 +57209,65 @@
             "style": "default_inverse"
           }
         ]
+      },
+      {
+        "name": "Profile",
+        "width": 304,
+        "height": 28,
+        "widgets": [
+          {
+            "type": "Container",
+            "widgets": [
+              {
+                "type": "Text",
+                "text": "",
+                "x": 0,
+                "y": 0,
+                "width": 36,
+                "height": 28,
+                "style": "edit_S",
+                "data": "profile.label",
+                "action": "show_user_profile_settings"
+              },
+              {
+                "type": "Select",
+                "widgets": [
+                  {
+                    "type": "Text",
+                    "text": "-- Not used --",
+                    "x": 0,
+                    "y": 0,
+                    "width": 268,
+                    "height": 28,
+                    "style": "edit_value_S_left",
+                    "data": ""
+                  },
+                  {
+                    "type": "Text",
+                    "text": "",
+                    "x": 0,
+                    "y": 0,
+                    "width": 268,
+                    "height": 28,
+                    "style": "edit_value_S_left",
+                    "data": "profile.remark"
+                  }
+                ],
+                "x": 36,
+                "y": 0,
+                "width": 268,
+                "height": 28,
+                "style": "default",
+                "data": "profile.status"
+              }
+            ],
+            "x": 0,
+            "y": 0,
+            "width": 304,
+            "height": 28,
+            "style": "default"
+          }
+        ]
       }
     ],
     "storyboard": {
@@ -57188,7 +57658,7 @@
         },
         {
           "fileName": "actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings_date_time.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings_date_time.h\"\n#include \"gui_page_user_profiles.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
         },
         {
           "fileName": "gui_document.h",

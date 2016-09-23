@@ -96,7 +96,7 @@ bool deleteAll();
 bool isValid(int location);
 
 bool setName(int location, const char *name, size_t name_len);
-void getName(int location, char *name);
+void getName(int location, char *name, int count);
 
 }
 }

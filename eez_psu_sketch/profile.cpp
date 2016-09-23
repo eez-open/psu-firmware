@@ -298,15 +298,17 @@ bool setName(int location, const char *name, size_t name_len) {
     return false;
 }
 
-void getName(int location, char *name) {
-    if (location >= 0 && location < NUM_PROFILE_LOCATIONS) {
+void getName(int location, char *name, int count) {
+	if (location >= 0 && location < NUM_PROFILE_LOCATIONS) {
         Parameters profile;
         if (persist_conf::loadProfile(location, &profile) && profile.is_valid) {
-            strcpy(name, profile.name);
+            strncpy(name, profile.name, count - 1);
+			name[count - 1] = 0;
             return;
         }
     }
-    strcpy(name, "--Not used--");
+    strncpy(name, "--Not used--", count - 1);
+	name[count - 1] = 0;
 }
 
 }

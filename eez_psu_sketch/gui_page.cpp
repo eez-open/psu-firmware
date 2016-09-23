@@ -30,9 +30,6 @@ namespace gui {
 void Page::pageWillAppear() {
 }
 
-void Page::pageDidDisappear() {
-}
-
 void Page::takeSnapshot(data::Snapshot *snapshot) {
 }
 

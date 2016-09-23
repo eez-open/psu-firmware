@@ -264,7 +264,11 @@ void cancel() {
 	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
 		numeric_keypad::cancel();
 	} else {
-		g_cancelCallback();
+		if (g_cancelCallback) {
+			g_cancelCallback();
+		} else {
+			popPage();
+		}
 	}
 }
 

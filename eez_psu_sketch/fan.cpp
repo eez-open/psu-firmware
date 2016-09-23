@@ -84,7 +84,8 @@ void start_rpm_measure() {
 	g_rpmMeasureT2 = 0;
 
 	analogWrite(FAN_PWM, FAN_MAX_PWM);
-	delay(2);
+	delay(10);
+
 	attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
 
 #ifdef EEZ_PSU_SIMULATOR
@@ -96,13 +97,16 @@ void start_rpm_measure() {
 }
 
 void rpm_measure_interrupt_handler() {
+	// measure length of the square pulse
 	int x = digitalRead(FAN_SENSE);
 	if (g_rpmMeasureState == RPM_MEASURE_STATE_INIT && x) {
 		g_rpmMeasureState = RPM_MEASURE_STATE_T1;
 	} else if (g_rpmMeasureState == RPM_MEASURE_STATE_T1 && !x) {
+		// start is when signal goes from 1 to 0
 		g_rpmMeasureT1 = micros();
 		g_rpmMeasureState = RPM_MEASURE_STATE_T2;
 	} else if (g_rpmMeasureState == RPM_MEASURE_STATE_T2 && x) {
+		// start is when signal goes from 0 to 1
 		g_rpmMeasureT2 = micros();
 		g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
 		finish_rpm_measure();
@@ -229,6 +233,14 @@ void tick(unsigned long tick_usec) {
 						psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
 						psu::setQuesBits(QUES_FAN, true);
 						psu::setCurrentMaxLimit(ERR_MAX_CURRENT);
+					}
+				} else {
+					if (g_rpmMeasureT2 != g_rpmMeasureT1) {
+						if (g_rpm > FAN_NOMINAL_RPM) {
+							DebugTraceF("Invalid RPM: PWM=%d, T1=%ld, T2=%ld, T3=%ld, RPM=%d", g_fanSpeedPWM, g_rpmMeasureT1, g_rpmMeasureT2, g_rpmMeasureT2 - g_rpmMeasureT1, g_rpm);
+						}
+						g_rpmMeasureT1 = 0;
+						g_rpmMeasureT2 = 0;
 					}
 				}
 			}

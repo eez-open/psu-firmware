@@ -54,6 +54,19 @@ struct ChannelSnapshot {
 	uint32_t onTimeLast;
 };
 
+struct ProfileChannelSnapshot {
+	unsigned outputStatus: 1;
+	float u_set;
+	float i_set;
+};
+
+struct ProfileSnapshot {
+	unsigned status: 1;
+	unsigned isAutoRecallLocation: 1;
+	char remark[PROFILE_NAME_MAX_LENGTH + 1];
+	ProfileChannelSnapshot channels[CH_MAX];
+};
+
 struct SnapshotFlags {
     unsigned otp : 2;
 	unsigned mainTemperatureStatus: 2;
@@ -76,6 +89,7 @@ struct Snapshot {
 	uint32_t onTimeLast;
 	float mainTemperature;
 	float fanSpeed;
+	ProfileSnapshot profile;
 
     unsigned long lastSnapshotTime;
 

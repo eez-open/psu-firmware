@@ -38,7 +38,7 @@ scpi_result_t scpi_mem_StateCatalogQ(scpi_t *context) {
     char name[PROFILE_NAME_MAX_LENGTH + 1];
 
     for (int i = 0; i < NUM_PROFILE_LOCATIONS; ++i) {
-        profile::getName(i, name);
+        profile::getName(i, name, sizeof(name));
         SCPI_ResultText(context, name);
     }
 
@@ -105,7 +105,7 @@ scpi_result_t scpi_mem_StateNameQ(scpi_t *context) {
     }
 
     char name[PROFILE_NAME_MAX_LENGTH + 1];
-    profile::getName(location, name);
+    profile::getName(location, name, sizeof(name));
 
     SCPI_ResultText(context, name);
 

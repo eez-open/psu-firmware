@@ -61,6 +61,8 @@ enum ValueType {
 	VALUE_TYPE_HOUR,
 	VALUE_TYPE_MINUTE,
 	VALUE_TYPE_SECOND,
+	VALUE_TYPE_USER_PROFILE_LABEL,
+	VALUE_TYPE_USER_PROFILE_REMARK
 };
 
 struct Value {
@@ -133,7 +135,7 @@ struct Value {
             return true;
         }
 		
-		if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL || type_ == VALUE_TYPE_LESS_THEN_MIN_INT || type_ == VALUE_TYPE_GREATER_THEN_MAX_INT) {
+		if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL || type_ == VALUE_TYPE_LESS_THEN_MIN_INT || type_ == VALUE_TYPE_GREATER_THEN_MAX_INT || type_ == VALUE_TYPE_USER_PROFILE_LABEL || type_ == VALUE_TYPE_USER_PROFILE_REMARK) {
             return int_ == other.int_;
         }
 

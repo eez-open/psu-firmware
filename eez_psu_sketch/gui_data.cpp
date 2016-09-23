@@ -18,6 +18,7 @@
 
 #include "psu.h"
 #include "datetime.h"
+#include "profile.h"
 #include "gui_internal.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_keypad.h"
@@ -164,6 +165,15 @@ void Value::toText(char *text, int count) const {
 		text[count - 1] = 0;
 		break;
 
+	case VALUE_TYPE_USER_PROFILE_LABEL:
+		snprintf_P(text, count-1, PSTR("[ %d ]"), int_);
+		text[count - 1] = 0;
+		break;
+
+	case VALUE_TYPE_USER_PROFILE_REMARK:
+		profile::getName(int_, text, count);
+		break;
+
 	default:
 		{
 			int precision = FLOAT_TO_STR_PREC;
@@ -212,7 +222,11 @@ int count(uint8_t id) {
         return CH_MAX;
     } else if (id == DATA_ID_EVENT_QUEUE_EVENTS) {
         return event_queue::EVENTS_PER_PAGE;
-    } 
+    } else if (id == DATA_ID_PROFILES_LIST1) {
+		return 4;
+	} else if (id == DATA_ID_PROFILES_LIST2) {
+		return 6;
+	}
     return 0;
 }
 
@@ -221,6 +235,10 @@ void select(Cursor &cursor, uint8_t id, int index) {
         cursor.i = index;
     } else if (id == DATA_ID_EVENT_QUEUE_EVENTS) {
 		cursor.i = index;
+	} else if (id == DATA_ID_PROFILES_LIST1) {
+		cursor.i = index;
+	} else if (id == DATA_ID_PROFILES_LIST2) {
+		cursor.i = 4 + index;
 	}
 }
 
