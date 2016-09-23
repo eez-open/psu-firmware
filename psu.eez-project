@@ -45442,6 +45442,190 @@
         }
       },
       {
+        "name": "screen_calibration_yes_no",
+        "portrait": {
+          "widgets": [
+            {
+              "type": "DisplayData",
+              "data": "alert_message",
+              "x": 0,
+              "y": 0,
+              "style": "menu_S",
+              "width": 240,
+              "height": 160
+            },
+            {
+              "type": "Text",
+              "action": "yes",
+              "x": 20,
+              "y": 220,
+              "style": "menu_S",
+              "text": "Yes",
+              "width": 48,
+              "height": 40
+            },
+            {
+              "type": "Text",
+              "action": "no",
+              "x": 80,
+              "y": 220,
+              "style": "menu_S",
+              "text": "No",
+              "width": 50,
+              "height": 40
+            },
+            {
+              "type": "Text",
+              "action": "cancel",
+              "x": 134,
+              "y": 220,
+              "style": "menu_S",
+              "text": "Cancel",
+              "width": 88,
+              "height": 40
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320
+        },
+        "landscape": {
+          "widgets": [
+            {
+              "type": "DisplayData",
+              "data": "alert_message",
+              "x": 0,
+              "y": 66,
+              "style": "menu_S",
+              "width": 320,
+              "height": 37
+            },
+            {
+              "type": "Text",
+              "action": "yes",
+              "x": 79,
+              "y": 160,
+              "style": "menu_S",
+              "text": "Yes",
+              "width": 48,
+              "height": 40
+            },
+            {
+              "type": "Text",
+              "action": "no",
+              "x": 141,
+              "y": 160,
+              "style": "menu_S",
+              "text": "Start again",
+              "width": 100,
+              "height": 40
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240
+        }
+      },
+      {
+        "name": "screen_calibration_yes_no_cancel",
+        "portrait": {
+          "widgets": [
+            {
+              "type": "DisplayData",
+              "data": "alert_message",
+              "x": 0,
+              "y": 0,
+              "style": "menu_S",
+              "width": 240,
+              "height": 160
+            },
+            {
+              "type": "Text",
+              "action": "yes",
+              "x": 20,
+              "y": 220,
+              "style": "menu_S",
+              "text": "Yes",
+              "width": 48,
+              "height": 40
+            },
+            {
+              "type": "Text",
+              "action": "no",
+              "x": 80,
+              "y": 220,
+              "style": "menu_S",
+              "text": "No",
+              "width": 50,
+              "height": 40
+            },
+            {
+              "type": "Text",
+              "action": "cancel",
+              "x": 134,
+              "y": 220,
+              "style": "menu_S",
+              "text": "Cancel",
+              "width": 88,
+              "height": 40
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320
+        },
+        "landscape": {
+          "widgets": [
+            {
+              "type": "DisplayData",
+              "data": "alert_message",
+              "x": 0,
+              "y": 66,
+              "style": "menu_S",
+              "width": 320,
+              "height": 37
+            },
+            {
+              "type": "Text",
+              "action": "yes",
+              "x": 48,
+              "y": 160,
+              "style": "menu_S",
+              "text": "Yes",
+              "width": 48,
+              "height": 40
+            },
+            {
+              "type": "Text",
+              "action": "no",
+              "x": 110,
+              "y": 160,
+              "style": "menu_S",
+              "text": "Start again",
+              "width": 100,
+              "height": 40
+            },
+            {
+              "type": "Text",
+              "action": "cancel",
+              "x": 210,
+              "y": 160,
+              "style": "menu_S",
+              "text": "Cancel",
+              "width": 88,
+              "height": 40
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240
+        }
+      },
+      {
         "name": "self_test_result",
         "portrait": {
           "x": 0,
@@ -47529,186 +47713,73 @@
       {
         "name": "yes_no",
         "portrait": {
+          "x": 0,
+          "y": 104,
+          "width": 240,
+          "height": 112,
           "widgets": [
             {
-              "type": "DisplayData",
-              "data": "alert_message",
+              "type": "Text",
+              "text": "OK",
+              "x": 90,
+              "y": 72,
+              "width": 60,
+              "height": 32,
+              "style": "default_active_S",
+              "action": "yes"
+            },
+            {
+              "type": "MultilineText",
+              "text": "Multiline text",
               "x": 0,
               "y": 0,
-              "style": "menu_S",
               "width": 240,
-              "height": 160
-            },
-            {
-              "type": "Text",
-              "action": "yes",
-              "x": 20,
-              "y": 220,
-              "style": "menu_S",
-              "text": "Yes",
-              "width": 48,
-              "height": 40
-            },
-            {
-              "type": "Text",
-              "action": "no",
-              "x": 80,
-              "y": 220,
-              "style": "menu_S",
-              "text": "No",
-              "width": 50,
-              "height": 40
-            },
-            {
-              "type": "Text",
-              "action": "cancel",
-              "x": 134,
-              "y": 220,
-              "style": "menu_S",
-              "text": "Cancel",
-              "width": 88,
-              "height": 40
+              "height": 64,
+              "style": "error_alert"
             }
           ],
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320
+          "style": "error_alert"
         },
         "landscape": {
+          "x": 20,
+          "y": 76,
+          "width": 280,
+          "height": 88,
           "widgets": [
             {
-              "type": "DisplayData",
-              "data": "alert_message",
+              "type": "Text",
+              "text": "",
               "x": 0,
-              "y": 66,
-              "style": "menu_S",
-              "width": 320,
-              "height": 37
+              "y": 8,
+              "width": 280,
+              "height": 32,
+              "style": "info_alert",
+              "data": "alert_message"
             },
             {
               "type": "Text",
               "action": "yes",
-              "x": 79,
-              "y": 160,
-              "style": "menu_S",
+              "x": 85,
+              "y": 48,
+              "style": "info_alert_button",
               "text": "Yes",
               "width": 48,
-              "height": 40
+              "height": 32
             },
             {
               "type": "Text",
               "action": "no",
-              "x": 141,
-              "y": 160,
-              "style": "menu_S",
-              "text": "Start again",
-              "width": 100,
-              "height": 40
-            }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240
-        }
-      },
-      {
-        "name": "yes_no_cancel",
-        "portrait": {
-          "widgets": [
-            {
-              "type": "DisplayData",
-              "data": "alert_message",
-              "x": 0,
-              "y": 0,
-              "style": "menu_S",
-              "width": 240,
-              "height": 160
-            },
-            {
-              "type": "Text",
-              "action": "yes",
-              "x": 20,
-              "y": 220,
-              "style": "menu_S",
-              "text": "Yes",
-              "width": 48,
-              "height": 40
-            },
-            {
-              "type": "Text",
-              "action": "no",
-              "x": 80,
-              "y": 220,
-              "style": "menu_S",
+              "x": 147,
+              "y": 48,
+              "style": "info_alert_button",
               "text": "No",
-              "width": 50,
-              "height": 40
-            },
-            {
-              "type": "Text",
-              "action": "cancel",
-              "x": 134,
-              "y": 220,
-              "style": "menu_S",
-              "text": "Cancel",
-              "width": 88,
-              "height": 40
-            }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320
-        },
-        "landscape": {
-          "widgets": [
-            {
-              "type": "DisplayData",
-              "data": "alert_message",
-              "x": 0,
-              "y": 66,
-              "style": "menu_S",
-              "width": 320,
-              "height": 37
-            },
-            {
-              "type": "Text",
-              "action": "yes",
-              "x": 48,
-              "y": 160,
-              "style": "menu_S",
-              "text": "Yes",
               "width": 48,
-              "height": 40
-            },
-            {
-              "type": "Text",
-              "action": "no",
-              "x": 110,
-              "y": 160,
-              "style": "menu_S",
-              "text": "Start again",
-              "width": 100,
-              "height": 40
-            },
-            {
-              "type": "Text",
-              "action": "cancel",
-              "x": 210,
-              "y": 160,
-              "style": "menu_S",
-              "text": "Cancel",
-              "width": 88,
-              "height": 40
+              "height": 32
             }
           ],
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240
-        }
+          "style": "info_alert"
+        },
+        "description": "Info message"
       },
       {
         "name": "main",
@@ -56128,102 +56199,12 @@
                       "action": "profile.editRemark"
                     },
                     {
-                      "type": "Text",
-                      "text": "Basic info:",
+                      "type": "Local.ProfileBasicInfo",
                       "x": 0,
                       "y": 102,
-                      "width": 94,
-                      "height": 29,
-                      "style": "edit_value_S_left"
-                    },
-                    {
-                      "type": "Rectangle",
-                      "x": 0,
-                      "y": 131,
-                      "width": 94,
-                      "height": 27,
-                      "style": "default_inverse"
-                    },
-                    {
-                      "type": "List",
-                      "listType": "vertical",
-                      "itemWidget": {
-                        "type": "Container",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "text": "",
-                            "x": 0,
-                            "y": 0,
-                            "width": 36,
-                            "height": 28,
-                            "style": "value_S",
-                            "data": "channel.shortLabel"
-                          },
-                          {
-                            "type": "Select",
-                            "widgets": [
-                              {
-                                "type": "Text",
-                                "text": "Off",
-                                "x": 0,
-                                "y": 0,
-                                "width": 30,
-                                "height": 28,
-                                "style": "value_S",
-                                "data": ""
-                              },
-                              {
-                                "type": "Text",
-                                "text": "On",
-                                "x": 0,
-                                "y": 0,
-                                "width": 30,
-                                "height": 28,
-                                "style": "value_S",
-                                "data": ""
-                              }
-                            ],
-                            "x": 36,
-                            "y": 0,
-                            "width": 30,
-                            "height": 28,
-                            "style": "default",
-                            "data": "profile.channel.outputState"
-                          },
-                          {
-                            "type": "Text",
-                            "text": "",
-                            "x": 66,
-                            "y": 0,
-                            "width": 64,
-                            "height": 28,
-                            "style": "value_S",
-                            "data": "profile.channel.u.set"
-                          },
-                          {
-                            "type": "Text",
-                            "text": "",
-                            "x": 130,
-                            "y": 0,
-                            "width": 80,
-                            "height": 28,
-                            "style": "value_S",
-                            "data": "profile.channel.i.set"
-                          }
-                        ],
-                        "x": 0,
-                        "y": 0,
-                        "width": 210,
-                        "height": 28,
-                        "style": "default"
-                      },
-                      "x": 94,
-                      "y": 102,
-                      "width": 210,
+                      "width": 304,
                       "height": 56,
-                      "style": "default",
-                      "data": "channels"
+                      "style": "default"
                     },
                     {
                       "type": "Rectangle",
@@ -56354,7 +56335,7 @@
               "text": "settings",
               "x": 136,
               "y": 0,
-              "width": 174,
+              "width": 176,
               "height": 30,
               "style": "value_S"
             },
@@ -56405,113 +56386,23 @@
                   "type": "Rectangle",
                   "x": 235,
                   "y": 0,
-                  "width": 67,
+                  "width": 69,
                   "height": 28,
                   "style": "default_inverse"
                 },
                 {
-                  "type": "Text",
-                  "text": "Basic info:",
+                  "type": "Local.ProfileBasicInfo",
                   "x": 0,
                   "y": 28,
-                  "width": 94,
-                  "height": 29,
-                  "style": "edit_value_S_left"
-                },
-                {
-                  "type": "Rectangle",
-                  "x": 0,
-                  "y": 57,
-                  "width": 94,
-                  "height": 27,
-                  "style": "default_inverse"
-                },
-                {
-                  "type": "List",
-                  "listType": "vertical",
-                  "itemWidget": {
-                    "type": "Container",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "text": "",
-                        "x": 0,
-                        "y": 0,
-                        "width": 36,
-                        "height": 28,
-                        "style": "value_S",
-                        "data": "channel.shortLabel"
-                      },
-                      {
-                        "type": "Select",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "text": "Off",
-                            "x": 0,
-                            "y": 0,
-                            "width": 30,
-                            "height": 28,
-                            "style": "value_S",
-                            "data": ""
-                          },
-                          {
-                            "type": "Text",
-                            "text": "On",
-                            "x": 0,
-                            "y": 0,
-                            "width": 30,
-                            "height": 28,
-                            "style": "value_S",
-                            "data": ""
-                          }
-                        ],
-                        "x": 36,
-                        "y": 0,
-                        "width": 30,
-                        "height": 28,
-                        "style": "default",
-                        "data": "profile.channel.outputState"
-                      },
-                      {
-                        "type": "Text",
-                        "text": "",
-                        "x": 66,
-                        "y": 0,
-                        "width": 64,
-                        "height": 28,
-                        "style": "value_S",
-                        "data": "profile.channel.u.set"
-                      },
-                      {
-                        "type": "Text",
-                        "text": "",
-                        "x": 130,
-                        "y": 0,
-                        "width": 78,
-                        "height": 28,
-                        "style": "value_S",
-                        "data": "profile.channel.i.set"
-                      }
-                    ],
-                    "x": 0,
-                    "y": 0,
-                    "width": 208,
-                    "height": 28,
-                    "style": "default"
-                  },
-                  "x": 94,
-                  "y": 28,
-                  "width": 208,
+                  "width": 304,
                   "height": 56,
-                  "style": "default",
-                  "data": "channels"
+                  "style": "default"
                 },
                 {
                   "type": "Rectangle",
                   "x": 0,
                   "y": 84,
-                  "width": 302,
+                  "width": 304,
                   "height": 84,
                   "style": "default_inverse"
                 }
@@ -57268,6 +57159,112 @@
             "style": "default"
           }
         ]
+      },
+      {
+        "name": "ProfileBasicInfo",
+        "width": 304,
+        "height": 56,
+        "widgets": [
+          {
+            "type": "Text",
+            "text": "Basic info:",
+            "x": 0,
+            "y": 0,
+            "width": 94,
+            "height": 29,
+            "style": "edit_value_S_left"
+          },
+          {
+            "type": "Rectangle",
+            "x": 0,
+            "y": 29,
+            "width": 94,
+            "height": 27,
+            "style": "default_inverse"
+          },
+          {
+            "type": "List",
+            "listType": "vertical",
+            "itemWidget": {
+              "type": "Container",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 36,
+                  "height": 28,
+                  "style": "value_S",
+                  "data": "channel.shortLabel"
+                },
+                {
+                  "type": "Select",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "text": "Off",
+                      "x": 0,
+                      "y": 0,
+                      "width": 30,
+                      "height": 28,
+                      "style": "value_S",
+                      "data": ""
+                    },
+                    {
+                      "type": "Text",
+                      "text": "On",
+                      "x": 0,
+                      "y": 0,
+                      "width": 30,
+                      "height": 28,
+                      "style": "value_S",
+                      "data": ""
+                    }
+                  ],
+                  "x": 36,
+                  "y": 0,
+                  "width": 30,
+                  "height": 28,
+                  "style": "default",
+                  "data": "profile.channel.outputState"
+                },
+                {
+                  "type": "DisplayData",
+                  "text": "",
+                  "x": 66,
+                  "y": 0,
+                  "width": 64,
+                  "height": 28,
+                  "style": "value_S",
+                  "data": "profile.channel.u.set"
+                },
+                {
+                  "type": "DisplayData",
+                  "text": "",
+                  "x": 130,
+                  "y": 0,
+                  "width": 80,
+                  "height": 28,
+                  "style": "value_S",
+                  "data": "profile.channel.i.set"
+                }
+              ],
+              "x": 0,
+              "y": 0,
+              "width": 210,
+              "height": 28,
+              "style": "default"
+            },
+            "x": 94,
+            "y": 0,
+            "width": 210,
+            "height": 56,
+            "style": "default",
+            "data": "channels"
+          }
+        ],
+        "description": ""
       }
     ],
     "storyboard": {

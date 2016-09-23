@@ -1109,7 +1109,7 @@ void refreshPage() {
     DECL_WIDGET_STYLE(style, page);
     lcd::lcd.setColor(style->background_color);
 
-	if (g_lastActivePageId == PAGE_ID_INFO_ALERT || g_lastActivePageId == PAGE_ID_ERROR_ALERT) {
+	if (g_lastActivePageId == PAGE_ID_INFO_ALERT || g_lastActivePageId == PAGE_ID_ERROR_ALERT || g_lastActivePageId == PAGE_ID_YES_NO) {
 		DECL_WIDGET(page, getPageOffset(g_lastActivePageId));
 		lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
 	}
@@ -1262,6 +1262,8 @@ void dialogYes() {
 void dialogNo() {
 	if (g_dialogNoCallback) {
 		g_dialogNoCallback();
+	} else {
+		popPage();
 	}
 }
 
@@ -1528,7 +1530,7 @@ void tick(unsigned long tick_usec) {
 					edit_mode_slider::onTouchMove();
 				} else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
 					edit_mode_step::onTouchMove();
-				} else if (g_activePageId == PAGE_ID_YES_NO || g_activePageId == PAGE_ID_YES_NO_CANCEL) {
+				} else if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_YES_NO || g_activePageId == PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL) {
 	#ifdef CONF_DEBUG
 					int x = touch::x;
 					if (x < 1) x = 1;
@@ -1545,7 +1547,7 @@ void tick(unsigned long tick_usec) {
 			}
 		} else if (touch::event_type == touch::TOUCH_UP) {
 			if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
-				touch::calibration::enterCalibrationMode(PAGE_ID_YES_NO, getStartPageId());
+				touch::calibration::enterCalibrationMode(PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, getStartPageId());
 				return;
 			}
 
@@ -1572,7 +1574,7 @@ void tick(unsigned long tick_usec) {
 		}
 	} else if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
 		if (inactivityPeriod >= 20 * 1000UL) {
-			touch::calibration::enterCalibrationMode(PAGE_ID_YES_NO, getStartPageId());
+			touch::calibration::enterCalibrationMode(PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, getStartPageId());
 			return;
 		}
 	}

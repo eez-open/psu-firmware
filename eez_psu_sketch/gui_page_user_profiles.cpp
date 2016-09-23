@@ -134,31 +134,48 @@ void UserProfilesPage::toggleIsAutoRecallLocation() {
 
 void UserProfilesPage::recall() {
 	if (g_selectedProfileLocation > 0 && profile::isValid(g_selectedProfileLocation)) {
-	    if (!profile::recall(g_selectedProfileLocation)) {
+	    if (profile::recall(g_selectedProfileLocation)) {
+			infoMessageP(PSTR("Profile parameters loaded"));
+		} else {
 			errorMessageP(PSTR("Failed!"));
 		}
 	}
 }
 
 void UserProfilesPage::save() {
-    if (g_selectedProfileLocation > 0 && !profile::saveAtLocation(g_selectedProfileLocation)) {
-		errorMessageP(PSTR("Failed!"));
+    if (g_selectedProfileLocation > 0) {
+		if (profile::saveAtLocation(g_selectedProfileLocation)) {
+			infoMessageP(PSTR("Current parameters saved"));
+		} else {
+			errorMessageP(PSTR("Failed!"));
+		}
     }
 }
 
-void UserProfilesPage::deleteProfile() {
+void UserProfilesPage::onDeleteProfileYes() {
+	popPage();
+
 	if (g_selectedProfileLocation > 0 && profile::isValid(g_selectedProfileLocation)) {
-		if (!profile::deleteLocation(g_selectedProfileLocation)) {
+		if (profile::deleteLocation(g_selectedProfileLocation)) {
+			infoMessageP(PSTR("Profile deleted"));
+		} else {
 			errorMessageP(PSTR("Failed!"));
 		}
 	}
 }
 
+void UserProfilesPage::deleteProfile() {
+	if (g_selectedProfileLocation > 0 && profile::isValid(g_selectedProfileLocation)) {
+		yesNoDialog(PAGE_ID_YES_NO, "Are you sure?", onDeleteProfileYes, 0, 0);
+	}
+}
+
 void UserProfilesPage::onEditRemarkOk(char *newRemark) {
-    if (!profile::setName(g_selectedProfileLocation, newRemark, strlen(newRemark))) {
+	popPage();
+
+	if (!profile::setName(g_selectedProfileLocation, newRemark, strlen(newRemark))) {
 		errorMessageP(PSTR("Failed!"));
 	}
-	popPage();
 }
 
 void UserProfilesPage::editRemark() {

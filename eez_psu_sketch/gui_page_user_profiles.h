@@ -41,6 +41,7 @@ public:
 
 private:
 	static void onEditRemarkOk(char *newRemark);
+	static void onDeleteProfileYes();
 };
 
 }
