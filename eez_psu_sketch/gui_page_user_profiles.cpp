@@ -31,7 +31,7 @@ namespace gui {
 static int g_selectedProfileLocation;
 
 void UserProfilesPage::pageWillAppear() {
-	if (getActivePageId() != PAGE_ID_USER_PROFILE_0_SETTINGS || getActivePageId() != PAGE_ID_USER_PROFILE_SETTINGS) {
+	if (getActivePageId() != PAGE_ID_USER_PROFILE_0_SETTINGS && getActivePageId() != PAGE_ID_USER_PROFILE_SETTINGS) {
 		g_selectedProfileLocation = -1;
 	}
 }
