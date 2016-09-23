@@ -166,9 +166,9 @@ void UserProfilesPage::deleteProfile() {
 }
 
 void UserProfilesPage::onEditRemarkOk(char *newRemark) {
-	popPage();
-
-	if (!profile::setName(g_selectedProfileLocation, newRemark, strlen(newRemark))) {
+	if (profile::setName(g_selectedProfileLocation, newRemark, strlen(newRemark))) {
+		infoMessageP(PSTR("Remark changed"), popPage);
+	} else {
 		errorMessageP(PSTR("Failed!"));
 	}
 }
