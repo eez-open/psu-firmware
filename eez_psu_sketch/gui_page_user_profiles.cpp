@@ -18,8 +18,6 @@
 
 #include "psu.h"
 
-#include "profile.h"
-
 #include "gui_data_snapshot.h"
 #include "gui_keypad.h"
 #include "gui_page_user_profiles.h"
@@ -31,7 +29,9 @@ namespace gui {
 static int g_selectedProfileLocation;
 
 void UserProfilesPage::pageWillAppear() {
-	if (getActivePageId() != PAGE_ID_USER_PROFILE_0_SETTINGS && getActivePageId() != PAGE_ID_USER_PROFILE_SETTINGS) {
+	if (getActivePageId() == PAGE_ID_USER_PROFILE_0_SETTINGS || getActivePageId() == PAGE_ID_USER_PROFILE_SETTINGS) {
+		profile::load(g_selectedProfileLocation, &profile);
+	} else {
 		g_selectedProfileLocation = -1;
 	}
 }
@@ -43,9 +43,6 @@ void UserProfilesPage::takeSnapshot(data::Snapshot *snapshot) {
 		snapshot->profile.isAutoRecallLocation = persist_conf::getProfileAutoRecallLocation() == g_selectedProfileLocation ? 1 : 0;
         profile::getName(g_selectedProfileLocation, snapshot->profile.remark, sizeof(snapshot->profile.remark));
 		
-		profile::Parameters profile;
-		profile::load(g_selectedProfileLocation, &profile);
-
 		for (int i = 0; i < CH_MAX; ++i) {
 			snapshot->profile.channels[i].outputStatus = profile.channels[i].flags.output_enabled;
 			snapshot->profile.channels[i].u_set = profile.channels[i].u_set;
@@ -96,10 +93,6 @@ data::Value UserProfilesPage::getData(const data::Cursor &cursor, uint8_t id, da
 			}
 		}
 	} else if (cursor.i >= 0) {
-		if (id == DATA_ID_PROFILE_STATUS) {
-			return data::Value(profile::isValid(cursor.i) ? 1 : 0);
-		}
-
 		if (id == DATA_ID_PROFILE_LABEL) {
 			return data::Value(cursor.i, data::VALUE_TYPE_USER_PROFILE_LABEL);
 		}
@@ -126,7 +119,9 @@ void UserProfilesPage::toggleAutoRecall() {
 
 void UserProfilesPage::toggleIsAutoRecallLocation() {
 	if (profile::isValid(g_selectedProfileLocation)) {
-		if (!persist_conf::setProfileAutoRecallLocation(g_selectedProfileLocation)) {
+		if (persist_conf::setProfileAutoRecallLocation(g_selectedProfileLocation)) {
+			profile::load(g_selectedProfileLocation, &profile);
+		} else {
 			errorMessageP(PSTR("Failed!"));
 		}
 	}

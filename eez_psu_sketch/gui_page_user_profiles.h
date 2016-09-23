@@ -19,6 +19,7 @@
 #pragma once
 
 #include "gui_page.h"
+#include "profile.h"
 
 namespace eez {
 namespace psu {
@@ -40,6 +41,8 @@ public:
 	void editRemark();
 
 private:
+	profile::Parameters profile;
+
 	static void onEditRemarkOk(char *newRemark);
 	static void onDeleteProfileYes();
 };

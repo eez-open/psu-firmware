@@ -679,7 +679,7 @@
       "name": "touch_screen_calibration",
       "description": "touch screen calibration",
       "implementationType": "native",
-      "implementation": "touch::calibration::enterCalibrationMode(PAGE_ID_YES_NO_CANCEL, PAGE_ID_SYS_SETTINGS2);"
+      "implementation": "touch::calibration::enterCalibrationMode(PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, PAGE_ID_SYS_SETTINGS2);"
     },
     {
       "name": "yes",
@@ -57121,35 +57121,14 @@
                 "action": "show_user_profile_settings"
               },
               {
-                "type": "Select",
-                "widgets": [
-                  {
-                    "type": "Text",
-                    "text": "-- Not used --",
-                    "x": 0,
-                    "y": 0,
-                    "width": 268,
-                    "height": 28,
-                    "style": "edit_value_S_left",
-                    "data": ""
-                  },
-                  {
-                    "type": "Text",
-                    "text": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 268,
-                    "height": 28,
-                    "style": "edit_value_S_left",
-                    "data": "profile.remark"
-                  }
-                ],
+                "type": "Text",
+                "text": "",
                 "x": 36,
                 "y": 0,
                 "width": 268,
                 "height": 28,
-                "style": "default",
-                "data": "profile.status"
+                "style": "edit_value_S_left",
+                "data": "profile.remark"
               }
             ],
             "x": 0,
