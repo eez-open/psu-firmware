@@ -44890,6 +44890,16 @@
         "_color": "#ffff00"
       },
       {
+        "name": "yes_no",
+        "_backgroundColor": "#e02020",
+        "inheritFrom": "default_S"
+      },
+      {
+        "name": "yes_no_button",
+        "inheritFrom": "yes_no",
+        "_color": "#ffff00"
+      },
+      {
         "name": "key",
         "_backgroundColor": "#FFFF00",
         "_borderSize": 1,
@@ -47753,7 +47763,7 @@
               "y": 8,
               "width": 280,
               "height": 32,
-              "style": "info_alert",
+              "style": "yes_no",
               "data": "alert_message"
             },
             {
@@ -47761,7 +47771,7 @@
               "action": "yes",
               "x": 85,
               "y": 48,
-              "style": "info_alert_button",
+              "style": "yes_no_button",
               "text": "Yes",
               "width": 48,
               "height": 32
@@ -47771,13 +47781,13 @@
               "action": "no",
               "x": 147,
               "y": 48,
-              "style": "info_alert_button",
+              "style": "yes_no_button",
               "text": "No",
               "width": 48,
               "height": 32
             }
           ],
-          "style": "info_alert"
+          "style": "yes_no"
         },
         "description": "Info message"
       },
