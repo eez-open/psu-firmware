@@ -23,26 +23,34 @@ Use this header file to override anything from conf.h or conf_advanced.h.
 
 #pragma once
 
-//#undef CHANNELS
-//#define CHANNELS \
-//    CHANNEL(1, CH_BOARD_REVISION_R4B43A_PARAMS, CH_PINS_1, CH_PARAMS_50V_3A), \
-//    CHANNEL(2, CH_BOARD_REVISION_R4B43A_PARAMS, CH_PINS_2, CH_PARAMS_50V_3A)
+/// PSU serial number.
+#undef PSU_SERIAL
+#define PSU_SERIAL   "00003"
 
-/// Is Ethernet present?
-#undef OPTION_ETHERNET
-#define OPTION_ETHERNET 0
+/// Firmware version.
+#undef FIRMWARE
+#define FIRMWARE     "M2.0.32 Beta"
+
+/// Set to 1 to skip the test of PWRGOOD signal
+//#undef CONF_SKIP_PWRGOOD_TEST
+//#define CONF_SKIP_PWRGOOD_TEST 0
 
 /// This is the delay period, after the channel output went OFF,
 /// after which we shall turn DP off.
 /// Value is given in seconds.
 #undef DP_OFF_DELAY_PERIOD
-#define DP_OFF_DELAY_PERIOD 30
+#define DP_OFF_DELAY_PERIOD 2
 
-// Pre-regulator's PMOS SOA:
-//
-// SUD19P06-60  Imax=0.8 A
+/// Set to 1 to skip the test of PWRGOOD signal
+//#undef CONF_SKIP_PWRGOOD_TEST
+//#define CONF_SKIP_PWRGOOD_TEST 1
 
-#undef CH_PARAMS_40V_5A
-#define CH_PARAMS_40V_5A    CH_PARAMS_U_40V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY, 10.0f, 150.0f, 160.0f, 48.0f, 0.8f, 20.0f, 160.0f
+/// Fan switch-on temperature (in oC)
+#undef FAN_MIN_TEMP 
+#define FAN_MIN_TEMP 50
+
+///  PWM value for min. fan speed (12) 
+#undef FAN_MIN_PWM 
+#define FAN_MIN_PWM 25 
 
 
