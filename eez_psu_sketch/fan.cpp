@@ -84,7 +84,7 @@ void start_rpm_measure() {
 	g_rpmMeasureT2 = 0;
 
 	analogWrite(FAN_PWM, FAN_MAX_PWM);
-	delay(10);
+	delayMicroseconds(10);
 
 	attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
 
