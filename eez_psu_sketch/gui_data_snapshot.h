@@ -48,6 +48,7 @@ struct ChannelSnapshot {
 	float u_mon;
     float i_set;
 	float i_mon;
+	float p_mon;
     ChannelSnapshotFlags flags;
 	float temperature;
 	uint32_t onTimeTotal;

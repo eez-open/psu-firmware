@@ -139,6 +139,8 @@ void Snapshot::takeSnapshot() {
                     channelSnapshots[i].mon_value = Value(iMon, VALUE_TYPE_FLOAT_AMPER);
                 }
             }
+
+			channelSnapshots[i].p_mon = channel.u.mon * channel.i.mon;
         }
 
         channelSnapshots[i].u_set = channel.u.set;
@@ -228,7 +230,7 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 			}
 
 			if (id == DATA_ID_CHANNEL_P_MON) {
-				return Value(channelSnapshots[iChannel].u_mon * channelSnapshots[iChannel].i_mon, VALUE_TYPE_FLOAT_WATT);
+				return Value(channelSnapshots[iChannel].p_mon, VALUE_TYPE_FLOAT_WATT);
 			}
 
 			if (id == DATA_ID_LRIP) {
