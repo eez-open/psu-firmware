@@ -37,12 +37,16 @@ void ChSettingsProtectionPage::clear() {
 	infoMessageP(PSTR("Cleared!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
 }
 
-void ChSettingsProtectionPage::clearAndDisable() {
+void onClearAndDisableYes() {
 	g_channel->clearProtection();
 	g_channel->disableProtection();
 	profile::save();
 
 	infoMessageP(PSTR("Cleared and disabled!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
+}
+
+void ChSettingsProtectionPage::clearAndDisable() {
+	areYouSure(onClearAndDisableYes);
 }
 
 data::Value ChSettingsProtectionPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {

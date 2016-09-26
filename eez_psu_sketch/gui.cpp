@@ -1319,6 +1319,10 @@ void yesNoDialog(int yesNoPageId, const char *message PROGMEM, void (*yes_callba
 	pushPage(yesNoPageId);
 }
 
+void areYouSure(void (*yes_callback)()) {
+	yesNoDialog(PAGE_ID_YES_NO, "Are you sure?", yes_callback, 0, 0);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 void selectChannel() {

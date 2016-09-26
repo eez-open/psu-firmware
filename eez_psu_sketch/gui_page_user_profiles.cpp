@@ -161,7 +161,7 @@ void UserProfilesPage::onDeleteProfileYes() {
 
 void UserProfilesPage::deleteProfile() {
 	if (g_selectedProfileLocation > 0 && profile::isValid(g_selectedProfileLocation)) {
-		yesNoDialog(PAGE_ID_YES_NO, "Are you sure?", onDeleteProfileYes, 0, 0);
+		areYouSure(onDeleteProfileYes);
 	}
 }
 
