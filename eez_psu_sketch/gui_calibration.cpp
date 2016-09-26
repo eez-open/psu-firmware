@@ -277,6 +277,7 @@ void set() {
 			numeric_keypad::switchToMilli();
 		}
 	} else if (g_stepNum == 6) {
+		psu::calibration::resetChannelToZero();
 		keypad::startPush(0, psu::calibration::isRemarkSet() ? psu::calibration::getRemark() : 0, 32, false, onSetRemarkOk, popPage);
 	}
 }

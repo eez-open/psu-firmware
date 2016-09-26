@@ -75,6 +75,9 @@ void start(Channel *channel);
 /// Stop calibration procedure.
 void stop();
 
+/// Set U and I to zero for the calibration channel.
+void resetChannelToZero();
+
 /// Is calibration remark is set.
 bool isRemarkSet();
 
