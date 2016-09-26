@@ -33,6 +33,7 @@ void send_address(uint16_t address) {
 }
 
 void read_chunk(uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
+	noInterrupts();
     SPI.beginTransaction(AT25256B_SPI);
 
     digitalWrite(EEPROM_SELECT, LOW);  // select chip
@@ -47,6 +48,7 @@ void read_chunk(uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
     digitalWrite(EEPROM_SELECT, HIGH); // release chip, signal end transfer
 
     SPI.endTransaction();
+	interrupts();
 }
 
 void read(uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
