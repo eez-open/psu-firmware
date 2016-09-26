@@ -97,19 +97,21 @@ void start_rpm_measure() {
 }
 
 void rpm_measure_interrupt_handler() {
-	// measure length of the square pulse
-	int x = digitalRead(FAN_SENSE);
-	if (g_rpmMeasureState == RPM_MEASURE_STATE_INIT && x) {
-		g_rpmMeasureState = RPM_MEASURE_STATE_T1;
-	} else if (g_rpmMeasureState == RPM_MEASURE_STATE_T1 && !x) {
-		// start is when signal goes from 1 to 0
-		g_rpmMeasureT1 = micros();
-		g_rpmMeasureState = RPM_MEASURE_STATE_T2;
-	} else if (g_rpmMeasureState == RPM_MEASURE_STATE_T2 && x) {
-		// start is when signal goes from 0 to 1
-		g_rpmMeasureT2 = micros();
-		g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
-		finish_rpm_measure();
+	if (g_rpmMeasureState != RPM_MEASURE_STATE_FINISHED) {
+		// measure length of the square pulse
+		int x = digitalRead(FAN_SENSE);
+		if (g_rpmMeasureState == RPM_MEASURE_STATE_INIT && x) {
+			g_rpmMeasureState = RPM_MEASURE_STATE_T1;
+		} else if (g_rpmMeasureState == RPM_MEASURE_STATE_T1 && !x) {
+			// start is when signal goes from 1 to 0
+			g_rpmMeasureT1 = micros();
+			g_rpmMeasureState = RPM_MEASURE_STATE_T2;
+		} else if (g_rpmMeasureState == RPM_MEASURE_STATE_T2 && x) {
+			// start is when signal goes from 0 to 1
+			g_rpmMeasureT2 = micros();
+			g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
+			//finish_rpm_measure();
+		}
 	}
 }
 
@@ -163,8 +165,9 @@ bool test() {
 			delay(1);
 		}
 
+		finish_rpm_measure();
+
 		if (g_rpmMeasureState != RPM_MEASURE_STATE_FINISHED) {
-			finish_rpm_measure();
 			test_result = psu::TEST_FAILED;
 		} else {
 			test_result = psu::TEST_OK;
@@ -194,7 +197,14 @@ void tick(unsigned long tick_usec) {
 		//DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
 
 		float fanSpeedNew = util::remap(max_channel_temperature, FAN_MIN_TEMP, FAN_MIN_PWM, FAN_MAX_TEMP, FAN_MAX_PWM);
-		g_fanSpeed = g_fanSpeed + 0.1f * (fanSpeedNew - g_fanSpeed);
+		if (fanSpeedNew >= FAN_MIN_PWM) {
+			if (g_fanSpeed == 0) {
+				g_fanSpeed = FAN_MIN_PWM;
+			} 
+			g_fanSpeed = g_fanSpeed + 0.1f * (fanSpeedNew - g_fanSpeed);
+		} else {
+			g_fanSpeed = 0;
+		}
 
 		int newFanSpeedPWM = (int)g_fanSpeed;
 		if (newFanSpeedPWM < FAN_MIN_PWM) {
@@ -226,22 +236,25 @@ void tick(unsigned long tick_usec) {
 			g_fanSpeedLastMeasuredTick = tick_usec;
 			start_rpm_measure();
 		} else {
-			if (tick_usec - g_fanSpeedLastMeasuredTick >= 50 * 1000L) {
-				if (g_rpmMeasureState != RPM_MEASURE_STATE_FINISHED) {
+			if (g_rpmMeasureState == RPM_MEASURE_STATE_FINISHED) {
+				finish_rpm_measure();
+				if (g_rpmMeasureT2 != g_rpmMeasureT1) {
+					if (g_rpm > FAN_NOMINAL_RPM) {
+						DebugTraceF("Invalid RPM: PWM=%d, T1=%ld, T2=%ld, T3=%ld, RPM=%d", g_fanSpeedPWM, g_rpmMeasureT1, g_rpmMeasureT2, g_rpmMeasureT2 - g_rpmMeasureT1, g_rpm);
+					} else {
+						DebugTraceF("Valid RPM: RPM=%d", g_rpm);
+					}
+					g_rpmMeasureT1 = 0;
+					g_rpmMeasureT2 = 0;
+				}
+			} else {
+				if (tick_usec - g_fanSpeedLastMeasuredTick >= 50 * 1000L) {
 					finish_rpm_measure();
 					if (g_fanSpeedPWM != 0) {
 						test_result = psu::TEST_FAILED;
 						psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
 						psu::setQuesBits(QUES_FAN, true);
 						psu::setCurrentMaxLimit(ERR_MAX_CURRENT);
-					}
-				} else {
-					if (g_rpmMeasureT2 != g_rpmMeasureT1) {
-						if (g_rpm > FAN_NOMINAL_RPM) {
-							DebugTraceF("Invalid RPM: PWM=%d, T1=%ld, T2=%ld, T3=%ld, RPM=%d", g_fanSpeedPWM, g_rpmMeasureT1, g_rpmMeasureT2, g_rpmMeasureT2 - g_rpmMeasureT1, g_rpm);
-						}
-						g_rpmMeasureT1 = 0;
-						g_rpmMeasureT2 = 0;
 					}
 				}
 			}
