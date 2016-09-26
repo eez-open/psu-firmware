@@ -573,7 +573,7 @@
       "name": "toggle_channel",
       "description": "turn channel on/off",
       "implementationType": "native",
-      "implementation": "Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);\nif (channel.isTripped()) {\n    errorMessageP(PSTR(\"Channel is tripped!\"), 0);\n} else {\n    channel.outputEnable(!channel.isOutputEnabled());\n}\n"
+      "implementation": "Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);\nif (channel.isTripped()) {\n    errorMessageP(PSTR(\"Channel is tripped!\"));\n} else {\n    channel.outputEnable(!channel.isOutputEnabled());\n}\n"
     },
     {
       "name": "edit",
@@ -56639,7 +56639,7 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "text": "Invalid",
+                  "text": "Fault",
                   "x": 0,
                   "y": 0,
                   "width": 122,

@@ -84,7 +84,7 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::S
 	}
 
 	if (id == DATA_ID_SYS_INFO_CPU) {
-		return data::Value(getCpuType());
+		return data::Value(getCpuModel());
 	}
 
 	if (cursor.i >= 0) {
