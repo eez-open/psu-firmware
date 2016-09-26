@@ -1254,31 +1254,31 @@ void showEnteringStandbyPage() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void dialogYes() {
+	popPage();
+
 	if (g_dialogYesCallback) {
 		g_dialogYesCallback();
 	}
 }
 
 void dialogNo() {
+	popPage();
+
 	if (g_dialogNoCallback) {
 		g_dialogNoCallback();
-	} else {
-		popPage();
 	}
 }
 
 void dialogCancel() {
+	popPage();
+
 	if (g_dialogCancelCallback) {
 		g_dialogCancelCallback();
 	}
 }
 
 void dialogOk() {
-	popPage();
-
-	if (g_dialogYesCallback) {
-		g_dialogYesCallback();
-	}
+	dialogYes();
 }
 
 void alertMessage(int alertPageId, data::Value message, void (*ok_callback)()) {

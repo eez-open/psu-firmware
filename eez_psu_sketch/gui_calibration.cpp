@@ -33,7 +33,6 @@ namespace gui {
 namespace calibration {
 
 static void (*g_checkPasswordOkCallback)();
-static void (*g_checkPasswordInvalidCallback)();
 
 static char g_newPassword[PASSWORD_MAX_LENGTH];
 
@@ -48,14 +47,13 @@ void checkPasswordOkCallback(char *text) {
 		g_checkPasswordOkCallback();
 	} else {
 		// entered password doesn't match, 
-		errorMessageP(PSTR("Invalid password!"), g_checkPasswordInvalidCallback);
+		errorMessageP(PSTR("Invalid password!"), popPage);
 	}
 }
 
-void checkPassword(const char *label, void (*ok)(), void (*invalid)()) {
+void checkPassword(const char *label, void (*ok)()) {
 	g_checkPasswordOkCallback = ok;
-	g_checkPasswordInvalidCallback = invalid;
-	keypad::startPush(label, 0, PASSWORD_MAX_LENGTH, true, checkPasswordOkCallback, invalid);
+	keypad::startPush(label, 0, PASSWORD_MAX_LENGTH, true, checkPasswordOkCallback, popPage);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +95,7 @@ void onOldPasswordOk() {
 }
 
 void editPassword() {
-	checkPassword(PSTR("Current password: "), onOldPasswordOk, popPage);
+	checkPassword(PSTR("Current password: "), onOldPasswordOk);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +125,7 @@ void onStartPasswordOk() {
 }
 
 void start() {
-	checkPassword(PSTR("Password: "), onStartPasswordOk, popPage);
+	checkPassword(PSTR("Password: "), onStartPasswordOk);
 }
 
 data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {

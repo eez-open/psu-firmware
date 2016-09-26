@@ -43,8 +43,9 @@ public:
 private:
 	profile::Parameters profile;
 
-	static void onEditRemarkOk(char *newRemark);
+	static void onSaveYes();
 	static void onDeleteProfileYes();
+	static void onEditRemarkOk(char *newRemark);
 };
 
 }

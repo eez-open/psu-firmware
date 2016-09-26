@@ -75,28 +75,28 @@ protected:
 
 class ChSettingsOvpProtectionPage : public ChSettingsProtectionSetPage {
 public:
-	void pageWillAppear();
+	ChSettingsOvpProtectionPage();
 
 	void setParams();
 };
 
 class ChSettingsOcpProtectionPage : public ChSettingsProtectionSetPage {
 public:
-	void pageWillAppear();
+	ChSettingsOcpProtectionPage();
 
 	void setParams();
 };
 
 class ChSettingsOppProtectionPage : public ChSettingsProtectionSetPage {
 public:
-	void pageWillAppear();
+	ChSettingsOppProtectionPage();
 
 	void setParams();
 };
 
 class ChSettingsOtpProtectionPage : public ChSettingsProtectionSetPage {
 public:
-	void pageWillAppear();
+	ChSettingsOtpProtectionPage();
 
 	void setParams();
 };

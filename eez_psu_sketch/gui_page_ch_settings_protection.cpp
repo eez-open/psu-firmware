@@ -217,7 +217,7 @@ void ChSettingsProtectionSetPage::editDelay() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void ChSettingsOvpProtectionPage::pageWillAppear() {
+ChSettingsOvpProtectionPage::ChSettingsOvpProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.u_state ? 1 : 0;
 
 	origLimit = limit = data::Value(g_channel->u.limit, data::VALUE_TYPE_FLOAT_VOLT);
@@ -245,7 +245,7 @@ void ChSettingsOvpProtectionPage::setParams() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void ChSettingsOcpProtectionPage::pageWillAppear() {
+ChSettingsOcpProtectionPage::ChSettingsOcpProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.i_state ? 1 : 0;
 
 	origLimit = limit = data::Value(g_channel->i.limit, data::VALUE_TYPE_FLOAT_AMPER);
@@ -269,7 +269,7 @@ void ChSettingsOcpProtectionPage::setParams() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void ChSettingsOppProtectionPage::pageWillAppear() {
+ChSettingsOppProtectionPage::ChSettingsOppProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.p_state ? 1 : 0;
 
 	origLimit = limit = data::Value(g_channel->p_limit, data::VALUE_TYPE_FLOAT_WATT);
@@ -297,7 +297,7 @@ void ChSettingsOppProtectionPage::setParams() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void ChSettingsOtpProtectionPage::pageWillAppear() {
+ChSettingsOtpProtectionPage::ChSettingsOtpProtectionPage() {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	origState = state = temperature::getChannelSensorState(g_channel) ? 1 : 0;
 

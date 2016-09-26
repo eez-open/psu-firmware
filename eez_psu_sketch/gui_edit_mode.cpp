@@ -140,7 +140,7 @@ void exit() {
 void nonInteractiveSet() {
 	int16_t error;
 	if (!data::set(dataCursor, dataId, editValue, &error)) {
-		errorMessage(data::Value::ScpiErrorText(error), 0);
+		errorMessage(data::Value::ScpiErrorText(error));
 	}
 }
 
@@ -184,7 +184,7 @@ bool setValue(float value_) {
     if (is_interactive_mode || tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
 		int16_t error;
         if (!data::set(dataCursor, dataId, value, &error)) {
-			errorMessage(data::Value::ScpiErrorText(error), 0);
+			errorMessage(data::Value::ScpiErrorText(error));
             return false;
         }
     }

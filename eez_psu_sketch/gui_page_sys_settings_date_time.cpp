@@ -28,7 +28,7 @@ namespace eez {
 namespace psu {
 namespace gui {
 
-void SysSettingsDateTimePage::pageWillAppear() {
+SysSettingsDateTimePage::SysSettingsDateTimePage() {
 	dateTime = origDateTime = datetime::DateTime::now();
 	timeZone = origTimeZone = persist_conf::dev_conf.time_zone;
 	dst = origDst = persist_conf::dev_conf.flags.dst;
@@ -171,7 +171,7 @@ void SysSettingsDateTimePage::set() {
 	
 	if (dateTime != origDateTime) {
 		if (!datetime::setDateTime(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, dateTime.second)) {
-			errorMessageP(PSTR("Failed to set system date and time!"), popPage);
+			errorMessageP(PSTR("Failed to set system date and time!"));
 			return;
 		}
 	}
@@ -180,12 +180,12 @@ void SysSettingsDateTimePage::set() {
 		persist_conf::dev_conf.time_zone = timeZone;
 		persist_conf::dev_conf.flags.dst = dst;
 		if (!persist_conf::saveDevice()) {
-	        errorMessageP(PSTR("Failed to set time zone and DST!"), popPage);
+	        errorMessageP(PSTR("Failed to set time zone and DST!"));
 			return;
 		}
 	}
 
-	infoMessageP(PSTR("Date and time settings saved!"), popPage);
+	infoMessageP(PSTR("Date and time settings saved!"));
 	return;
 }
 

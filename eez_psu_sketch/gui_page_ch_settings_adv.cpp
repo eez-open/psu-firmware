@@ -39,7 +39,7 @@ data::Value ChSettingsAdvPage::getData(const data::Cursor &cursor, uint8_t id, d
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void ChSettingsAdvLRipplePage::pageWillAppear() {
+ChSettingsAdvLRipplePage::ChSettingsAdvLRipplePage() {
 	origStatus = status = g_channel->isLowRippleEnabled();
 	origAutoMode = autoMode = g_channel->isLowRippleAutoEnabled();
 }

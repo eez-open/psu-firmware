@@ -31,7 +31,8 @@ public:
 
 class ChSettingsAdvLRipplePage : public SetPage {
 public:
-	void pageWillAppear();
+	ChSettingsAdvLRipplePage();
+
 	void takeSnapshot(data::Snapshot *snapshot);
 	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
 

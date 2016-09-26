@@ -137,19 +137,25 @@ void UserProfilesPage::recall() {
 	}
 }
 
+void UserProfilesPage::onSaveYes() {
+	if (profile::saveAtLocation(g_selectedProfileLocation)) {
+		infoMessageP(PSTR("Current parameters saved"));
+	} else {
+		errorMessageP(PSTR("Failed!"));
+	}
+}
+
 void UserProfilesPage::save() {
     if (g_selectedProfileLocation > 0) {
-		if (profile::saveAtLocation(g_selectedProfileLocation)) {
-			infoMessageP(PSTR("Current parameters saved"));
+		if (profile::isValid(g_selectedProfileLocation)) {
+			areYouSure(onSaveYes);
 		} else {
-			errorMessageP(PSTR("Failed!"));
+			onSaveYes();
 		}
     }
 }
 
 void UserProfilesPage::onDeleteProfileYes() {
-	popPage();
-
 	if (g_selectedProfileLocation > 0 && profile::isValid(g_selectedProfileLocation)) {
 		if (profile::deleteLocation(g_selectedProfileLocation)) {
 			infoMessageP(PSTR("Profile deleted"));
@@ -167,7 +173,7 @@ void UserProfilesPage::deleteProfile() {
 
 void UserProfilesPage::onEditRemarkOk(char *newRemark) {
 	if (profile::setName(g_selectedProfileLocation, newRemark, strlen(newRemark))) {
-		infoMessageP(PSTR("Remark changed"), popPage);
+		infoMessageP(PSTR("Remark changed"));
 	} else {
 		errorMessageP(PSTR("Failed!"));
 	}

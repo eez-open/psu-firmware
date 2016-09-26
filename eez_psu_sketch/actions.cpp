@@ -37,7 +37,7 @@ using namespace gui;
 void action_toggle_channel() {
     Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);
     if (channel.isTripped()) {
-        errorMessageP(PSTR("Channel is tripped!"), 0);
+        errorMessageP(PSTR("Channel is tripped!"));
     } else {
         channel.outputEnable(!channel.isOutputEnabled());
     }
