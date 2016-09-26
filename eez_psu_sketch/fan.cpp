@@ -165,11 +165,11 @@ bool test() {
 			delay(1);
 		}
 
-		finish_rpm_measure();
-
 		if (g_rpmMeasureState != RPM_MEASURE_STATE_FINISHED) {
+			finish_rpm_measure();
 			test_result = psu::TEST_FAILED;
 		} else {
+			finish_rpm_measure();
 			test_result = psu::TEST_OK;
 			DebugTraceF("Fan RPM: %d", g_rpm);
 		}

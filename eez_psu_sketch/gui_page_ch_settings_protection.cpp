@@ -250,7 +250,7 @@ ChSettingsOcpProtectionPage::ChSettingsOcpProtectionPage() {
 
 	origLimit = limit = data::Value(g_channel->i.limit, data::VALUE_TYPE_FLOAT_AMPER);
 	minLimit = g_channel->I_MIN;
-	maxLimit = g_channel->I_MAX;
+	maxLimit = g_channel->getCurrentMaxLimit();
 	defLimit = g_channel->I_MAX;
 
 	origLevel = level = 0;
