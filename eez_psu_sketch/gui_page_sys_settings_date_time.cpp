@@ -183,6 +183,10 @@ void SysSettingsDateTimePage::set() {
 	        errorMessageP(PSTR("Failed to set time zone and DST!"));
 			return;
 		}
+		
+		if (dateTime == origDateTime) {
+			event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
+		}
 	}
 
 	infoMessageP(PSTR("Date and time settings saved!"));

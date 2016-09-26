@@ -58,6 +58,7 @@ struct DateTime {
 
 	static DateTime now();
 
+	bool operator ==(const DateTime &rhs);
 	bool operator !=(const DateTime &rhs);
 };
 

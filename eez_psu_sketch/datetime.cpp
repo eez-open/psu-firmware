@@ -142,7 +142,7 @@ bool setDate(uint8_t year, uint8_t month, uint8_t day) {
     if (rtc::writeDate(year, month, day)) {
         persist_conf::writeSystemDate(year, month, day);
         psu::setQuesBits(QUES_TIME, !checkDateTime());
-		event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_CHANGED);
+		event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
         return true;
     }
     return false;
@@ -156,7 +156,7 @@ bool setTime(uint8_t hour, uint8_t minute, uint8_t second) {
     if (rtc::writeTime(hour, minute, second)) {
         persist_conf::writeSystemTime(hour, minute, second);
         psu::setQuesBits(QUES_TIME, !checkDateTime());
-		event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_TIME_CHANGED);
+		event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
         return true;
     }
     return false;
@@ -308,6 +308,10 @@ DateTime DateTime::now() {
 	}
 
 	return DateTime(2000 + year, month, day, hour, minute, second);
+}
+
+bool DateTime::operator ==(const DateTime &rhs) {
+	return memcmp(this, &rhs, sizeof(DateTime)) == 0;
 }
 
 bool DateTime::operator !=(const DateTime &rhs) {
