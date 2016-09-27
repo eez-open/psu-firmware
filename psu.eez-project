@@ -48747,7 +48747,7 @@
                         "y": 0,
                         "width": 65,
                         "height": 28,
-                        "style": "edit_S",
+                        "style": "edit_value_active_S_right",
                         "data": "channel.u.set",
                         "action": "edit"
                       },
@@ -48766,7 +48766,7 @@
                         "y": 30,
                         "width": 65,
                         "height": 28,
-                        "style": "edit_S",
+                        "style": "edit_value_active_S_right",
                         "data": "channel.i.set",
                         "action": "edit"
                       },
@@ -48968,21 +48968,13 @@
                         "style": "default_inverse"
                       },
                       {
-                        "type": "Rectangle",
-                        "x": 240,
-                        "y": 58,
-                        "width": 15,
-                        "height": 30,
-                        "style": "default_inverse"
-                      },
-                      {
                         "type": "DisplayData",
                         "text": "12.00W",
-                        "x": 255,
+                        "x": 240,
                         "y": 60,
-                        "width": 65,
+                        "width": 80,
                         "height": 28,
-                        "style": "default_S",
+                        "style": "edit_value_S_right",
                         "data": "channel.p.mon"
                       },
                       {
