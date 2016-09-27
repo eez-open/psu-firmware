@@ -44590,6 +44590,54 @@
     ],
     "styles": [
       {
+        "name": "bar_graph_I_default",
+        "_font": "medium",
+        "_color": "#c830c8",
+        "description": "",
+        "inheritFrom": "",
+        "_backgroundColor": "#d3d3d3"
+      },
+      {
+        "name": "bar_graph_limit_line",
+        "inheritFrom": "default",
+        "_color": "#ff0000",
+        "_borderSize": 1,
+        "_borderColor": "#ff0000",
+        "_backgroundColor": "#ff0000"
+      },
+      {
+        "name": "bar_graph_set_line",
+        "inheritFrom": "default",
+        "_color": "#808080",
+        "_borderSize": 1
+      },
+      {
+        "name": "bar_graph_text",
+        "_font": "small",
+        "_color": "#404040",
+        "description": "",
+        "inheritFrom": "",
+        "_backgroundColor": "#d3d3d3",
+        "_paddingHorizontal": 4,
+        "_alignHorizontal": "left"
+      },
+      {
+        "name": "bar_graph_U_defualt",
+        "_font": "medium",
+        "_color": "#ffb000",
+        "description": "",
+        "inheritFrom": "",
+        "_backgroundColor": "#d3d3d3"
+      },
+      {
+        "name": "bar_graph_unregulated",
+        "_font": "medium",
+        "_color": "#ff0000",
+        "description": "",
+        "inheritFrom": "",
+        "_backgroundColor": "#d3d3d3"
+      },
+      {
         "name": "bottom_button",
         "_font": "icons",
         "_color": "#2F2F2F",
@@ -45273,46 +45321,6 @@
         "name": "yellow_6",
         "inheritFrom": "default",
         "_color": "#ffffe5"
-      },
-      {
-        "name": "bar_graph_green",
-        "_font": "medium",
-        "_color": "#00ff00",
-        "description": "",
-        "inheritFrom": "",
-        "_backgroundColor": "#d3d3d3"
-      },
-      {
-        "name": "bar_graph_red",
-        "_font": "medium",
-        "_color": "#ff0000",
-        "description": "",
-        "inheritFrom": "",
-        "_backgroundColor": "#d3d3d3"
-      },
-      {
-        "name": "channel_bar_graph_set_line",
-        "inheritFrom": "default",
-        "_color": "#ffff00",
-        "_borderSize": 1
-      },
-      {
-        "name": "channel_bar_graph_limit_line",
-        "inheritFrom": "default",
-        "_color": "#ff0000",
-        "_borderSize": 1,
-        "_borderColor": "#ff0000",
-        "_backgroundColor": "#ff0000"
-      },
-      {
-        "name": "bar_graph_text",
-        "_font": "small",
-        "_color": "#404040",
-        "description": "",
-        "inheritFrom": "",
-        "_backgroundColor": "#d3d3d3",
-        "_paddingHorizontal": 4,
-        "_alignHorizontal": "left"
       }
     ],
     "pages": [
@@ -48630,14 +48638,14 @@
                                     "width": 200,
                                     "height": 28,
                                     "orientation": "left-right",
-                                    "style": "bar_graph_green",
+                                    "style": "bar_graph_U_defualt",
                                     "data": "channel.u.mon",
                                     "action": "toggle_channel",
                                     "textStyle": "bar_graph_text",
                                     "line1Data": "channel.u.set",
                                     "line2Data": "channel.u.limit",
-                                    "line1Style": "channel_bar_graph_set_line",
-                                    "line2Style": "channel_bar_graph_limit_line"
+                                    "line1Style": "bar_graph_set_line",
+                                    "line2Style": "bar_graph_limit_line"
                                   },
                                   {
                                     "type": "Rectangle",
@@ -48654,14 +48662,14 @@
                                     "width": 200,
                                     "height": 28,
                                     "orientation": "left-right",
-                                    "style": "bar_graph_green",
+                                    "style": "bar_graph_I_default",
                                     "data": "channel.i.mon",
                                     "action": "toggle_channel",
                                     "textStyle": "bar_graph_text",
                                     "line1Data": "channel.i.set",
                                     "line2Data": "channel.i.limit",
-                                    "line1Style": "channel_bar_graph_set_line",
-                                    "line2Style": "channel_bar_graph_limit_line"
+                                    "line1Style": "bar_graph_set_line",
+                                    "line2Style": "bar_graph_limit_line"
                                   }
                                 ],
                                 "x": 0,
@@ -48680,14 +48688,14 @@
                                     "width": 200,
                                     "height": 28,
                                     "orientation": "left-right",
-                                    "style": "bar_graph_red",
+                                    "style": "bar_graph_unregulated",
                                     "data": "channel.u.mon",
                                     "action": "toggle_channel",
                                     "textStyle": "bar_graph_text",
                                     "line1Data": "channel.u.set",
                                     "line2Data": "channel.u.limit",
-                                    "line1Style": "channel_bar_graph_set_line",
-                                    "line2Style": "channel_bar_graph_limit_line"
+                                    "line1Style": "bar_graph_set_line",
+                                    "line2Style": "bar_graph_limit_line"
                                   },
                                   {
                                     "type": "Rectangle",
@@ -48704,14 +48712,14 @@
                                     "width": 200,
                                     "height": 28,
                                     "orientation": "left-right",
-                                    "style": "bar_graph_red",
+                                    "style": "bar_graph_unregulated",
                                     "data": "channel.i.mon",
                                     "action": "toggle_channel",
                                     "textStyle": "bar_graph_text",
                                     "line1Data": "channel.i.set",
                                     "line2Data": "channel.i.limit",
-                                    "line1Style": "channel_bar_graph_set_line",
-                                    "line2Style": "channel_bar_graph_limit_line"
+                                    "line1Style": "bar_graph_set_line",
+                                    "line2Style": "bar_graph_limit_line"
                                   }
                                 ],
                                 "x": 0,
