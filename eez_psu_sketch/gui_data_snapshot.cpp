@@ -146,8 +146,10 @@ void Snapshot::takeSnapshot() {
 
         channelSnapshots[i].u_set = channel.u.set;
 		channelSnapshots[i].u_mon = channel.u.mon;
+		channelSnapshots[i].u_limit = channel.getVoltageLimit();
         channelSnapshots[i].i_set = channel.i.set;
 		channelSnapshots[i].i_mon = channel.i.mon;
+		channelSnapshots[i].i_limit = channel.getCurrentLimit();
 
 		channelSnapshots[i].flags.lrip = channel.flags.lripple_enabled ? 1 : 0;
 
@@ -228,12 +230,20 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 				return Value(channelSnapshots[iChannel].u_mon, VALUE_TYPE_FLOAT_VOLT);
 			}
 
+			if (id == DATA_ID_CHANNEL_U_LIMIT) {
+				return Value(channelSnapshots[iChannel].u_limit, VALUE_TYPE_FLOAT_VOLT);
+			}
+
 			if (id == DATA_ID_CHANNEL_I_SET) {
 				return Value(channelSnapshots[iChannel].i_set, VALUE_TYPE_FLOAT_AMPER);
 			}
 		
 			if (id == DATA_ID_CHANNEL_I_MON) {
 				return Value(channelSnapshots[iChannel].i_mon, VALUE_TYPE_FLOAT_AMPER);
+			}
+
+			if (id == DATA_ID_CHANNEL_I_LIMIT) {
+				return Value(channelSnapshots[iChannel].i_limit, VALUE_TYPE_FLOAT_VOLT);
 			}
 
 			if (id == DATA_ID_CHANNEL_P_MON) {

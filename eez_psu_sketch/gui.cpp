@@ -1040,6 +1040,45 @@ bool drawBitmapWidget(const WidgetCursor &widgetCursor, const Widget *widget, bo
     return false;
 }
 
+int calcValuePosInBarGraphWidget(data::Value &value, float min, float max, int d) {
+	int p = (int)roundf((value.getFloat() - min) * d / (max - min));
+
+	if (p < 0) {
+		p = 0;
+	} else if (p > d) {
+		p = d;
+	}
+
+	return p;
+}
+
+void drawLineInBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, const BarGraphWidget *barGraphWidget, uint8_t lineData, OBJ_OFFSET lineStyle, float min, float max, int d) {
+    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, lineData);
+
+    int p = calcValuePosInBarGraphWidget(value, min, max, d);
+    if (p == d) {
+        p = d - 1;
+    }
+
+    DECL_STYLE_WITH_OFFSET(style, lineStyle);
+
+	const int x = widgetCursor.x;
+	const int y = widgetCursor.y;
+	const int w = widget->w;
+	const int h = widget->h;
+
+	lcd::lcd.setColor(style->color);
+    if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_LEFT_RIGHT) {
+        lcd::lcd.drawVLine(x + p, y, h - 1);
+    } else if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_RIGHT_LEFT) {
+        lcd::lcd.drawVLine(x + w - p, y, h - 1);
+    } else if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_TOP_BOTTOM) {
+        lcd::lcd.drawHLine(x, y + p, w - 1);
+    } else {
+        lcd::lcd.drawHLine(x, y + h - p, w - 1);
+    }
+}
+
 bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
     if (!refresh) {
@@ -1054,25 +1093,16 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
         DECL_WIDGET_STYLE(style, widget);
         DECL_WIDGET_SPECIFIC(BarGraphWidget, barGraphWidget, widget);
 
-		int x = widgetCursor.x;
-		int y = widgetCursor.y;
-		int w = widget->w;
-		int h = widget->h;
+		const int x = widgetCursor.x;
+		const int y = widgetCursor.y;
+		const int w = widget->w;
+		const int h = widget->h;
 
-		int d;
-		if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_LEFT_RIGHT || barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_RIGHT_LEFT) {
-			d = w;
-		} else {
-			d =  h;
-		}
+		bool horizontal = barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_LEFT_RIGHT || barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_RIGHT_LEFT;
 
-		int p = (int)roundf((value.getFloat() - min) * d / (max - min));
+		int d = horizontal ? w : h;
 
-		if (p < 0) {
-			p = 0;
-		} else if (p > d) {
-			p = d;
-		}
+		int p = calcValuePosInBarGraphWidget(value, min, max, d);
 
 		uint16_t fg = inverse ? style->background_color : style->color;
 		uint16_t bg = inverse ? style->color : style->background_color;
@@ -1118,6 +1148,37 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 				lcd::lcd.fillRect(x, y + h - p, x + w - 1, y + h - 1);
 			}
 		}
+
+		if (horizontal) {
+			if (barGraphWidget->textStyle) {
+				DECL_STYLE_WITH_OFFSET(textStyle, barGraphWidget->textStyle);
+				font::Font font = styleGetFont(textStyle);
+    
+				char valueText[64];
+				value.toText(valueText, sizeof(valueText));
+				int wText = lcd::lcd.measureStr(valueText, -1, font, w);
+				
+				int padding = textStyle->padding_horizontal;
+				wText += padding;
+
+				Style style;
+				memcpy(&style, textStyle, sizeof(Style));
+
+				int xText;
+				if (widgetCursor.x + p + wText <= x + w) {
+					style.background_color = bg;
+					xText = x + p;
+				} else {
+					style.background_color = fg;
+					xText = x + p - wText - padding;
+				}
+
+				drawText(valueText, -1, xText, y, wText, h - 1, &style, false);
+			}
+		}
+
+		drawLineInBarGraphWidget(widgetCursor, widget, barGraphWidget, barGraphWidget->line1Data, barGraphWidget->line1Style, min, max, d);
+		drawLineInBarGraphWidget(widgetCursor, widget, barGraphWidget, barGraphWidget->line2Data, barGraphWidget->line2Style, min, max, d);
 
 		return true;
     }

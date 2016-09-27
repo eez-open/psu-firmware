@@ -141,6 +141,11 @@ struct ScaleWidget {
 
 struct BarGraphWidget {
 	uint8_t orientation; // BAR_GRAPH_ORIENTATION_...
+	OBJ_OFFSET textStyle;
+	uint8_t line1Data;
+	OBJ_OFFSET line1Style;
+	uint8_t line2Data;
+	OBJ_OFFSET line2Style;
 };
 
 struct Rect {
