@@ -48928,7 +48928,7 @@
                         "style": "default_inverse"
                       },
                       {
-                        "type": "Text",
+                        "type": "DisplayData",
                         "text": "12.00W",
                         "x": 255,
                         "y": 60,
