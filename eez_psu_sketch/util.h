@@ -45,6 +45,7 @@ uint8_t toBCD(uint8_t bin);
 uint8_t fromBCD(uint8_t bcd);
 
 bool greaterOrEqual(float a, float b, float prec);
+bool equal(float a, float b, float prec);
 
 bool isNaN(float x);
 

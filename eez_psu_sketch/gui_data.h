@@ -171,7 +171,7 @@ struct Value {
 			return pageInfo_.pageIndex == other.pageInfo_.pageIndex && pageInfo_.numPages == other.pageInfo_.numPages;
 		}
         
-		return float_ == other.float_;
+		return util::equal(float_, other.float_, CHANNEL_VALUE_PRECISION);
     }
 
     bool operator !=(const Value &other) {
