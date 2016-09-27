@@ -114,8 +114,10 @@ void initDevice() {
     dev_conf.touch_screen_cal_trx = 0;
     dev_conf.touch_screen_cal_try = 0;
 
+	dev_conf.flags.channelDisplayedValues = 0;
+
 #ifdef EEZ_PSU_SIMULATOR
-    dev_conf.gui_opened = false;
+    dev_conf.gui_opened = true;
 #endif // EEZ_PSU_SIMULATOR
 }
 
@@ -124,7 +126,11 @@ void loadDevice() {
         eeprom::read((uint8_t *)&dev_conf, sizeof(DeviceConfiguration), get_address(PERSIST_CONF_BLOCK_DEVICE));
         if (!check_block((BlockHeader *)&dev_conf, sizeof(DeviceConfiguration), DEV_CONF_VERSION)) {
             initDevice();
-        }
+        } else {
+			if (dev_conf.flags.channelDisplayedValues != 0 && dev_conf.flags.channelDisplayedValues != 3) {
+				dev_conf.flags.channelDisplayedValues = 0;
+			}
+		}
     }
     else {
         initDevice();
