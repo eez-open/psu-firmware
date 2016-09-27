@@ -23,7 +23,7 @@
 namespace eez {
 namespace psu {
 namespace gui {
-namespace widget_button_group {
+namespace widgetButtonGroup {
 
 void drawButtons(const Widget* widget, int x, int y, const Style *style, int selectedButton, const data::Value *labels, int count) {
     if (widget->w > widget->h) {

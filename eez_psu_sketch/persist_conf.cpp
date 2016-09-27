@@ -244,6 +244,15 @@ int getProfileAutoRecallLocation() {
     return dev_conf.profile_auto_recall_location;
 }
 
+void toggleChannelDisplayedValues() {
+	if (dev_conf.flags.channelDisplayedValues == 0) {
+		dev_conf.flags.channelDisplayedValues = 3;
+	} else if (dev_conf.flags.channelDisplayedValues == 3) {
+		dev_conf.flags.channelDisplayedValues = 0;
+	}
+	saveDevice();
+}
+
 void loadChannelCalibration(Channel *channel) {
     if (eeprom::test_result == psu::TEST_OK) {
         eeprom::read((uint8_t *)&channel->cal_conf, sizeof(Channel::CalibrationConfiguration), get_address(PERSIST_CONF_BLOCK_CH_CAL, channel));

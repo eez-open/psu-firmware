@@ -595,7 +595,7 @@ void drawRectangle(int x, int y, int w, int h, const Style *style, bool inverse)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool draw_display_data_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+bool drawDisplayDataWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
 	DECL_WIDGET_SPECIFIC(DisplayDataWidget, display_data_widget, widget);
 
 	bool edit = edit_mode::isEditWidget(widgetCursor);
@@ -657,7 +657,7 @@ bool draw_display_data_widget(const WidgetCursor &widgetCursor, const Widget *wi
     }
 }
 
-bool draw_text_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+bool drawTextWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
         DECL_WIDGET_STYLE(style, widget);
 
@@ -681,7 +681,7 @@ bool draw_text_widget(const WidgetCursor &widgetCursor, const Widget *widget, bo
     return false;
 }
 
-bool draw_multiline_text_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+bool drawMultilineTextWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
         DECL_WIDGET_STYLE(style, widget);
 
@@ -866,7 +866,7 @@ void drawScale(const Widget *widget, const ScaleWidget *scale_widget, const Styl
     }
 }
 
-bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+bool drawScaleWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
     if (!refresh) {
         data::Value previousValue = data::previousSnapshot.editModeSnapshot.editValue;
@@ -964,7 +964,7 @@ bool draw_scale_widget(const WidgetCursor &widgetCursor, const Widget *widget, b
     return false;
 }
 
-bool draw_button_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+bool drawButtonWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     DECL_WIDGET_SPECIFIC(ButtonWidget, button_widget, widget);
 
 	int state = data::currentSnapshot.get(widgetCursor.cursor, button_widget->enabled).getInt();
@@ -1005,7 +1005,7 @@ bool draw_button_widget(const WidgetCursor &widgetCursor, const Widget *widget, 
 	return false;
 }
 
-bool draw_toggle_button_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+bool drawToggleButtonWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     int state = data::currentSnapshot.get(widgetCursor.cursor, widget->data).getInt();
     if (!refresh) {
         int previousState = data::previousSnapshot.get(widgetCursor.cursor, widget->data).getInt();
@@ -1021,7 +1021,7 @@ bool draw_toggle_button_widget(const WidgetCursor &widgetCursor, const Widget *w
     return false;
 }
 
-bool draw_rectangle_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+bool drawRectangleWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
         DECL_WIDGET_STYLE(style, widget);
         drawRectangle(widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
@@ -1030,7 +1030,7 @@ bool draw_rectangle_widget(const WidgetCursor &widgetCursor, const Widget *widge
     return false;
 }
 
-bool draw_bitmap_widget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+bool drawBitmapWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
     if (refresh) {
         DECL_WIDGET_SPECIFIC(BitmapWidget, display_bitmap_widget, widget);
         DECL_WIDGET_STYLE(style, widget);
@@ -1040,29 +1040,116 @@ bool draw_bitmap_widget(const WidgetCursor &widgetCursor, const Widget *widget, 
     return false;
 }
 
+bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+    if (!refresh) {
+        data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
+        refresh = previousValue != value;
+    }
+
+    if (refresh) {
+        float min = data::getMin(widgetCursor.cursor, widget->data).getFloat();
+        float max = data::getMax(widgetCursor.cursor, widget->data).getFloat();
+
+        DECL_WIDGET_STYLE(style, widget);
+        DECL_WIDGET_SPECIFIC(BarGraphWidget, barGraphWidget, widget);
+
+		int x = widgetCursor.x;
+		int y = widgetCursor.y;
+		int w = widget->w;
+		int h = widget->h;
+
+		int d;
+		if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_LEFT_RIGHT || barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_RIGHT_LEFT) {
+			d = w;
+		} else {
+			d =  h;
+		}
+
+		int p = (int)roundf((value.getFloat() - min) * d / (max - min));
+
+		if (p < 0) {
+			p = 0;
+		} else if (p > d) {
+			p = d;
+		}
+
+		uint16_t fg = inverse ? style->background_color : style->color;
+		uint16_t bg = inverse ? style->color : style->background_color;
+
+		if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_LEFT_RIGHT) {
+			if (p > 0) {
+				lcd::lcd.setColor(fg);
+				lcd::lcd.fillRect(x, y, x + p - 1, y + h - 1);
+			}
+
+			if (p < d) {
+				lcd::lcd.setColor(bg);
+				lcd::lcd.fillRect(x + p, y, x + w - 1, y + h - 1);
+			}
+		} else if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_RIGHT_LEFT) {
+			if (p < d) {
+				lcd::lcd.setColor(bg);
+				lcd::lcd.fillRect(x, y, x + w - p - 1, y + h - 1);
+			}
+
+			if (p > 0) {
+				lcd::lcd.setColor(fg);
+				lcd::lcd.fillRect(x + w - p, y, x + w - 1, y + h - 1);
+			}
+		} else if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_TOP_BOTTOM) {
+			if (p > 0) {
+				lcd::lcd.setColor(fg);
+				lcd::lcd.fillRect(x, y, x + w - 1, y + p - 1);
+			}
+
+			if (p < d) {
+				lcd::lcd.setColor(bg);
+				lcd::lcd.fillRect(x, y + p, x + w - 1, y + h - 1);
+			}
+		} else {
+			if (p < d) {
+				lcd::lcd.setColor(bg);
+				lcd::lcd.fillRect(x, y, x + w - 1, y + h - p - 1);
+			}
+
+			if (p > 0) {
+				lcd::lcd.setColor(fg);
+				lcd::lcd.fillRect(x, y + h - p, x + w - 1, y + h - 1);
+			}
+		}
+
+		return true;
+    }
+
+    return false;
+}
+
 bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
     bool inverse = g_selectedWidget == widgetCursor;
 
     if (widget->type == WIDGET_TYPE_DISPLAY_DATA) {
-        return draw_display_data_widget(widgetCursor, widget, refresh, inverse);
+        return drawDisplayDataWidget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_TEXT) {
-        return draw_text_widget(widgetCursor, widget, refresh, inverse);
+        return drawTextWidget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_MULTILINE_TEXT) {
-        return draw_multiline_text_widget(widgetCursor, widget, refresh, inverse);
+        return drawMultilineTextWidget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_RECTANGLE) {
-        return draw_rectangle_widget(widgetCursor, widget, refresh, inverse);
+        return drawRectangleWidget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_BITMAP) {
-        return draw_bitmap_widget(widgetCursor, widget, refresh, inverse);
+        return drawBitmapWidget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_BUTTON) {
-        return draw_button_widget(widgetCursor, widget, refresh, inverse);
+        return drawButtonWidget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_TOGGLE_BUTTON) {
-        return draw_toggle_button_widget(widgetCursor, widget, refresh, inverse);
+        return drawToggleButtonWidget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_BUTTON_GROUP) {
-        return widget_button_group::draw(widgetCursor, widget, refresh, inverse);
+        return widgetButtonGroup::draw(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_SCALE) {
-        return draw_scale_widget(widgetCursor, widget, refresh, inverse);
+        return drawScaleWidget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_BAR_GRAPH) {
+        return drawBarGraphWidget(widgetCursor, widget, refresh, inverse);
     } 
 
     return false;
@@ -1505,7 +1592,7 @@ void tick(unsigned long tick_usec) {
 			} else {
 				DECL_WIDGET(widget, found_widget.widgetOffset);
 				if (found_widget && widget->type == WIDGET_TYPE_BUTTON_GROUP) {
-					widget_button_group::onTouchDown(found_widget);
+					widgetButtonGroup::onTouchDown(found_widget);
 				} else if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
 					edit_mode_slider::onTouchDown();
 				} else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {

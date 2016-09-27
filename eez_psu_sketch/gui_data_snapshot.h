@@ -75,6 +75,7 @@ struct SnapshotFlags {
 	unsigned setPageDirty: 1;
 	unsigned switch1: 1;
 	unsigned switch2: 1;
+	unsigned channelDisplayedValues: 3;
 };
 
 struct Snapshot {

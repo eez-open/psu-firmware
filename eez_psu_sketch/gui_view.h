@@ -47,6 +47,7 @@ namespace gui {
 #define WIDGET_TYPE_TOGGLE_BUTTON 10
 #define WIDGET_TYPE_BUTTON_GROUP 11
 #define WIDGET_TYPE_SCALE 12
+#define WIDGET_TYPE_BAR_GRAPH 13
 
 #define LIST_TYPE_VERTICAL 1
 #define LIST_TYPE_HORIZONTAL 2
@@ -55,6 +56,11 @@ namespace gui {
 #define SCALE_NEEDLE_POSITION_RIGHT 2
 #define SCALE_NEEDLE_POSITION_TOP 3
 #define SCALE_NEEDLE_POSITION_BOTTOM 4
+
+#define BAR_GRAPH_ORIENTATION_LEFT_RIGHT 1
+#define BAR_GRAPH_ORIENTATION_RIGHT_LEFT 2
+#define BAR_GRAPH_ORIENTATION_TOP_BOTTOM 3
+#define BAR_GRAPH_ORIENTATION_BOTTOM_TOP 4
 
 typedef uint16_t OBJ_OFFSET;
 
@@ -131,6 +137,10 @@ struct ScaleWidget {
 	uint8_t needle_position; // SCALE_NEEDLE_POSITION_...
 	uint8_t needle_width;
     uint8_t needle_height;
+};
+
+struct BarGraphWidget {
+	uint8_t orientation; // BAR_GRAPH_ORIENTATION_...
 };
 
 struct Rect {

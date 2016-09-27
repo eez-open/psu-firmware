@@ -29,31 +29,48 @@
       "name": "channel.monValue",
       "description": "scpi: meas:volt? if CC, meas:curr? if CV, min(meas:curr?, meas:volt?) or meas:curr? if equal )",
       "operations": "get",
-      "defaultValue": "12.00V"
+      "defaultValue": "12.00V",
+      "defaultMinValue": 8,
+      "defaultMaxValue": 40
     },
     {
       "name": "channel.u.set",
       "description": "scpi: volt? and volt",
       "operations": "get,set",
-      "defaultValue": "12.00V"
+      "defaultValue": "12.00V",
+      "defaultMinValue": 8,
+      "defaultMaxValue": 40
     },
     {
       "name": "channel.u.mon",
-      "defaultValue": "12.00V"
+      "defaultValue": "12.00V",
+      "defaultMinValue": 8,
+      "defaultMaxValue": 40
     },
     {
       "name": "channel.i.set",
       "description": "scpi: curr? and curr",
       "operations": "get,set",
-      "defaultValue": "1.00A"
+      "defaultValue": "1.00A",
+      "defaultMinValue": 0,
+      "defaultMaxValue": 5
     },
     {
       "name": "channel.i.mon",
-      "defaultValue": "1.00A"
+      "defaultValue": "1.00A",
+      "defaultMinValue": 0,
+      "defaultMaxValue": 5
     },
     {
       "name": "channel.p.mon",
-      "defaultValue": "150W"
+      "defaultValue": "150W",
+      "defaultMinValue": 0,
+      "defaultMaxValue": 200
+    },
+    {
+      "name": "channel.displayedValues",
+      "description": "0: Default (Voltage / Current)\n1: Power / Energy\n2: XY line plot\n3: Bar graph",
+      "defaultValue": "0"
     },
     {
       "name": "lrip",
@@ -834,11 +851,6 @@
       "implementation": "setPage(PAGE_ID_CH_SETTINGS_ADV_RPROG);"
     },
     {
-      "name": "show_ch_settings_disp",
-      "implementationType": "native",
-      "implementation": "setPage(PAGE_ID_CH_SETTINGS_DISP);"
-    },
-    {
       "name": "show_ch_settings_info",
       "implementationType": "native",
       "implementation": "setPage(PAGE_ID_CH_SETTINGS_INFO);"
@@ -1021,6 +1033,11 @@
       "name": "profile.editRemark",
       "implementationType": "native",
       "implementation": "((UserProfilesPage *)getActivePage())->editRemark();"
+    },
+    {
+      "name": "toggle_channel_displayed_values",
+      "implementationType": "native",
+      "implementation": "persist_conf::toggleChannelDisplayedValues();"
     }
   ],
   "gui": {
@@ -4606,6 +4623,78 @@
               255,
               127,
               255
+            ]
+          },
+          {
+            "encoding": 135,
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAn0lEQVQ4T7WUURKAIAhE8/6HrrEJBnBZsKm+TOGJy+o4PvwGYZ1kDeahSQaJfJcfYQhkY+h6FTgracdIoN0xJlf/cvRRwapeuyImLOrAOhzhLhfBok4IAPPsZKciqQS64A0s9eYOLKtqynCv7WgWYYuBu92kWqnRngEybeeiLz7TMxevRPUA6A1gwO27KUVlu2eNcgb/9T2zsnUa4GS+AKe4Kw4V3ePeAAAAAElFTkSuQmCC",
+            "source": {
+              "filePath": "fonts\\bdf\\webhostinghub-glyphs.14.bdf",
+              "encoding": 61446
+            },
+            "x": 0,
+            "y": -2,
+            "width": 19,
+            "height": 19,
+            "dx": 19,
+            "pixels": [
+              3,
+              248,
+              0,
+              15,
+              254,
+              0,
+              31,
+              31,
+              0,
+              63,
+              31,
+              128,
+              113,
+              17,
+              192,
+              112,
+              1,
+              192,
+              240,
+              1,
+              224,
+              248,
+              11,
+              224,
+              192,
+              24,
+              96,
+              192,
+              16,
+              96,
+              192,
+              48,
+              96,
+              248,
+              51,
+              224,
+              240,
+              97,
+              224,
+              115,
+              249,
+              192,
+              127,
+              191,
+              192,
+              63,
+              31,
+              128,
+              31,
+              191,
+              0,
+              15,
+              254,
+              0,
+              3,
+              248,
+              0
             ]
           }
         ],
@@ -45172,6 +45261,38 @@
         "name": "yellow_6",
         "inheritFrom": "default",
         "_color": "#ffffe5"
+      },
+      {
+        "name": "bar_graph_green",
+        "_font": "medium",
+        "_color": "#00ff00",
+        "description": "",
+        "inheritFrom": "bar_graph_grey",
+        "_backgroundColor": "#d3d3d3"
+      },
+      {
+        "name": "bar_graph_red",
+        "_font": "medium",
+        "_color": "#ff0000",
+        "description": "",
+        "inheritFrom": "bar_graph_grey",
+        "_backgroundColor": "#d3d3d3"
+      },
+      {
+        "name": "bar_graph_grey",
+        "_font": "medium",
+        "_color": "#d3d3d3",
+        "_backgroundColor": "#5080ff",
+        "_borderColor": "#000000",
+        "description": ""
+      },
+      {
+        "name": "bar_graph_grey2",
+        "_font": "medium",
+        "_color": "#606060",
+        "_backgroundColor": "#5080ff",
+        "_borderColor": "#000000",
+        "description": ""
       }
     ],
     "pages": [
@@ -48045,21 +48166,21 @@
                       "y": 0,
                       "width": 28,
                       "height": 28,
-                      "style": "default_S",
+                      "style": "edit_S",
                       "action": "show_event_queue"
                     },
                     {
                       "type": "Rectangle",
                       "x": 28,
                       "y": 0,
-                      "width": 292,
+                      "width": 264,
                       "height": 28,
                       "style": "default_inverse"
                     }
                   ],
                   "x": 0,
                   "y": 0,
-                  "width": 320,
+                  "width": 292,
                   "height": 28,
                   "style": "default"
                 },
@@ -48068,7 +48189,7 @@
                   "data": "EventQueue.lastEvent.message",
                   "x": 0,
                   "y": 0,
-                  "width": 320,
+                  "width": 292,
                   "height": 28,
                   "style": "event_info",
                   "action": "show_event_queue"
@@ -48078,7 +48199,7 @@
                   "data": "EventQueue.lastEvent.message",
                   "x": 0,
                   "y": 0,
-                  "width": 320,
+                  "width": 292,
                   "height": 28,
                   "style": "event_warning",
                   "action": "show_event_queue"
@@ -48088,7 +48209,7 @@
                   "data": "EventQueue.lastEvent.message",
                   "x": 0,
                   "y": 0,
-                  "width": 320,
+                  "width": 292,
                   "height": 28,
                   "style": "event_error",
                   "action": "show_event_queue"
@@ -48096,33 +48217,371 @@
               ],
               "x": 0,
               "y": 0,
-              "width": 320,
+              "width": 292,
               "height": 28,
               "style": "default",
               "data": "EventQueue.lastEvent.type"
             },
             {
-              "type": "List",
-              "listType": "horizontal",
-              "itemWidget": {
-                "type": "Select",
-                "data": "channel.status",
-                "y": 0,
-                "widgets": [
-                  {
-                    "type": "Rectangle",
-                    "x": 0,
+              "type": "Text",
+              "text": "\\u0087",
+              "x": 292,
+              "y": 0,
+              "width": 28,
+              "height": 28,
+              "style": "edit_S",
+              "action": "toggle_channel_displayed_values"
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "List",
+                  "listType": "horizontal",
+                  "itemWidget": {
+                    "type": "Select",
+                    "data": "channel.status",
                     "y": 0,
+                    "widgets": [
+                      {
+                        "type": "Rectangle",
+                        "x": 0,
+                        "y": 0,
+                        "width": 160,
+                        "height": 176,
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "Container",
+                        "widgets": [
+                          {
+                            "type": "Select",
+                            "x": 0,
+                            "y": 0,
+                            "data": "channel.outputState",
+                            "action": "",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "style": "channel_off_landscape",
+                                "text": "OFF",
+                                "x": 0,
+                                "y": 0,
+                                "width": 160,
+                                "height": 56,
+                                "action": "toggle_channel"
+                              },
+                              {
+                                "type": "Select",
+                                "data": "channel.outputMode",
+                                "widgets": [
+                                  {
+                                    "type": "DisplayData",
+                                    "style": "mon_value_landscape_L_right",
+                                    "data": "channel.monValue",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 160,
+                                    "height": 56,
+                                    "action": "toggle_channel"
+                                  },
+                                  {
+                                    "type": "DisplayData",
+                                    "style": "mon_value_ur_landscape_L_right",
+                                    "data": "channel.monValue",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 160,
+                                    "height": 56,
+                                    "action": "toggle_channel"
+                                  }
+                                ],
+                                "x": 0,
+                                "y": 0,
+                                "width": 160,
+                                "height": 56,
+                                "style": "default"
+                              }
+                            ],
+                            "width": 160,
+                            "height": 56,
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "LRip",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "LRip",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 0,
+                            "y": 56,
+                            "width": 48,
+                            "height": 24,
+                            "data": "lrip",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OCP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OCP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OCP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 0,
+                            "y": 80,
+                            "width": 48,
+                            "height": 24,
+                            "data": "ocp",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OVP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OVP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OVP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 0,
+                            "y": 104,
+                            "width": 48,
+                            "height": 24,
+                            "data": "ovp",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OTP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OTP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OTP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 0,
+                            "y": 128,
+                            "width": 48,
+                            "height": 24,
+                            "data": "otp_ch",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OPP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OPP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OPP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 0,
+                            "y": 152,
+                            "width": 48,
+                            "height": 24,
+                            "data": "opp",
+                            "style": "default"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.set",
+                            "action": "edit",
+                            "x": 48,
+                            "y": 56,
+                            "style": "mon_value",
+                            "width": 112,
+                            "height": 43
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.set",
+                            "action": "edit",
+                            "x": 48,
+                            "y": 99,
+                            "style": "mon_value",
+                            "width": 112,
+                            "height": 40
+                          },
+                          {
+                            "type": "Text",
+                            "action": "show_channel_settings",
+                            "x": 48,
+                            "y": 138,
+                            "style": "edit_S",
+                            "text": "`  Settings",
+                            "width": 112,
+                            "height": 38
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 160,
+                        "height": 176,
+                        "style": "default"
+                      },
+                      {
+                        "type": "Text",
+                        "style": "channel_error",
+                        "text": "ERROR",
+                        "x": 0,
+                        "y": 0,
+                        "width": 160,
+                        "height": 176
+                      }
+                    ],
+                    "x": 0,
                     "width": 160,
                     "height": 176,
-                    "style": "default_inverse"
+                    "style": "default"
                   },
-                  {
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 176,
+                  "data": "channels",
+                  "style": "default"
+                },
+                {
+                  "type": "Rectangle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 176,
+                  "style": "default"
+                },
+                {
+                  "type": "Rectangle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 176,
+                  "style": "default"
+                },
+                {
+                  "type": "List",
+                  "listType": "vertical",
+                  "itemWidget": {
                     "type": "Container",
                     "widgets": [
                       {
-                        "type": "Select",
+                        "type": "Text",
+                        "action": "show_channel_settings",
                         "x": 0,
+                        "y": 0,
+                        "style": "edit_S",
+                        "text": "` Set",
+                        "width": 55,
+                        "height": 58
+                      },
+                      {
+                        "type": "Select",
+                        "x": 55,
                         "y": 0,
                         "data": "channel.outputState",
                         "action": "",
@@ -48133,8 +48592,8 @@
                             "text": "OFF",
                             "x": 0,
                             "y": 0,
-                            "width": 160,
-                            "height": 56,
+                            "width": 200,
+                            "height": 58,
                             "action": "toggle_channel"
                           },
                           {
@@ -48142,36 +48601,134 @@
                             "data": "channel.outputMode",
                             "widgets": [
                               {
-                                "type": "DisplayData",
-                                "style": "mon_value_landscape_L_right",
-                                "data": "channel.monValue",
+                                "type": "Container",
+                                "widgets": [
+                                  {
+                                    "type": "BarGraph",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 200,
+                                    "height": 28,
+                                    "orientation": "left-right",
+                                    "style": "bar_graph_green",
+                                    "data": "channel.u.mon",
+                                    "action": "toggle_channel"
+                                  },
+                                  {
+                                    "type": "Rectangle",
+                                    "x": 0,
+                                    "y": 28,
+                                    "width": 200,
+                                    "height": 2,
+                                    "style": "default_inverse"
+                                  },
+                                  {
+                                    "type": "BarGraph",
+                                    "x": 0,
+                                    "y": 30,
+                                    "width": 200,
+                                    "height": 28,
+                                    "orientation": "left-right",
+                                    "style": "bar_graph_green",
+                                    "data": "channel.i.mon",
+                                    "action": "toggle_channel"
+                                  }
+                                ],
                                 "x": 0,
                                 "y": 0,
-                                "width": 160,
-                                "height": 56,
-                                "action": "toggle_channel"
+                                "width": 200,
+                                "height": 58,
+                                "style": "default"
                               },
                               {
-                                "type": "DisplayData",
-                                "style": "mon_value_ur_landscape_L_right",
-                                "data": "channel.monValue",
+                                "type": "Container",
+                                "widgets": [
+                                  {
+                                    "type": "BarGraph",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 200,
+                                    "height": 28,
+                                    "orientation": "left-right",
+                                    "style": "bar_graph_red",
+                                    "data": "channel.u.mon",
+                                    "action": "toggle_channel"
+                                  },
+                                  {
+                                    "type": "Rectangle",
+                                    "x": 0,
+                                    "y": 28,
+                                    "width": 200,
+                                    "height": 2,
+                                    "style": "default_inverse"
+                                  },
+                                  {
+                                    "type": "BarGraph",
+                                    "x": 0,
+                                    "y": 30,
+                                    "width": 200,
+                                    "height": 28,
+                                    "orientation": "left-right",
+                                    "style": "bar_graph_red",
+                                    "data": "channel.i.mon",
+                                    "action": "toggle_channel"
+                                  }
+                                ],
                                 "x": 0,
                                 "y": 0,
-                                "width": 160,
-                                "height": 56,
-                                "action": "toggle_channel"
+                                "width": 200,
+                                "height": 58,
+                                "style": "default"
                               }
                             ],
                             "x": 0,
                             "y": 0,
-                            "width": 160,
-                            "height": 56,
+                            "width": 200,
+                            "height": 58,
                             "style": "default"
                           }
                         ],
-                        "width": 160,
-                        "height": 56,
+                        "width": 200,
+                        "height": 58,
                         "style": "default"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "text": "20.00V",
+                        "x": 255,
+                        "y": 0,
+                        "width": 65,
+                        "height": 28,
+                        "style": "edit_S",
+                        "data": "channel.u.set",
+                        "action": "edit"
+                      },
+                      {
+                        "type": "Rectangle",
+                        "x": 255,
+                        "y": 28,
+                        "width": 65,
+                        "height": 2,
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "text": "0.60A",
+                        "x": 255,
+                        "y": 30,
+                        "width": 65,
+                        "height": 28,
+                        "style": "edit_S",
+                        "data": "channel.i.set",
+                        "action": "edit"
+                      },
+                      {
+                        "type": "Rectangle",
+                        "x": 0,
+                        "y": 58,
+                        "width": 255,
+                        "height": 3,
+                        "style": "default_inverse"
                       },
                       {
                         "type": "Select",
@@ -48196,7 +48753,7 @@
                           }
                         ],
                         "x": 0,
-                        "y": 56,
+                        "y": 61,
                         "width": 48,
                         "height": 24,
                         "data": "lrip",
@@ -48233,8 +48790,8 @@
                             "height": 24
                           }
                         ],
-                        "x": 0,
-                        "y": 80,
+                        "x": 48,
+                        "y": 61,
                         "width": 48,
                         "height": 24,
                         "data": "ocp",
@@ -48271,8 +48828,8 @@
                             "height": 24
                           }
                         ],
-                        "x": 0,
-                        "y": 104,
+                        "x": 96,
+                        "y": 61,
                         "width": 48,
                         "height": 24,
                         "data": "ovp",
@@ -48309,8 +48866,8 @@
                             "height": 24
                           }
                         ],
-                        "x": 0,
-                        "y": 128,
+                        "x": 144,
+                        "y": 61,
                         "width": 48,
                         "height": 24,
                         "data": "otp_ch",
@@ -48347,71 +48904,68 @@
                             "height": 24
                           }
                         ],
-                        "x": 0,
-                        "y": 152,
+                        "x": 192,
+                        "y": 61,
                         "width": 48,
                         "height": 24,
                         "data": "opp",
                         "style": "default"
                       },
                       {
-                        "type": "DisplayData",
-                        "data": "channel.u.set",
-                        "action": "edit",
-                        "x": 48,
-                        "y": 56,
-                        "style": "mon_value",
-                        "width": 112,
-                        "height": 43
+                        "type": "Rectangle",
+                        "x": 0,
+                        "y": 85,
+                        "width": 255,
+                        "height": 3,
+                        "style": "default_inverse"
                       },
                       {
-                        "type": "DisplayData",
-                        "data": "channel.i.set",
-                        "action": "edit",
-                        "x": 48,
-                        "y": 99,
-                        "style": "mon_value",
-                        "width": 112,
-                        "height": 40
+                        "type": "Rectangle",
+                        "x": 240,
+                        "y": 58,
+                        "width": 15,
+                        "height": 30,
+                        "style": "default_inverse"
                       },
                       {
                         "type": "Text",
-                        "action": "show_channel_settings",
-                        "x": 48,
-                        "y": 138,
-                        "style": "edit_S",
-                        "text": "`  Settings",
-                        "width": 112,
-                        "height": 38
+                        "text": "12.00W",
+                        "x": 255,
+                        "y": 60,
+                        "width": 65,
+                        "height": 28,
+                        "style": "default_S",
+                        "data": "channel.p.mon"
+                      },
+                      {
+                        "type": "Rectangle",
+                        "x": 255,
+                        "y": 58,
+                        "width": 65,
+                        "height": 2,
+                        "style": "default_inverse"
                       }
                     ],
                     "x": 0,
                     "y": 0,
-                    "width": 160,
-                    "height": 176,
+                    "width": 320,
+                    "height": 88,
                     "style": "default"
                   },
-                  {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
-                    "x": 0,
-                    "y": 0,
-                    "width": 160,
-                    "height": 176
-                  }
-                ],
-                "x": 0,
-                "width": 160,
-                "height": 176,
-                "style": "default"
-              },
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 176,
+                  "style": "default",
+                  "data": "channels"
+                }
+              ],
               "x": 0,
               "y": 28,
               "width": 320,
               "height": 176,
-              "data": "channels",
-              "style": "default"
+              "style": "default",
+              "data": "channel.displayedValues"
             },
             {
               "type": "Text",
@@ -48487,6 +49041,256 @@
           "height": 240
         },
         "description": "Main menu"
+      },
+      {
+        "name": "main_help",
+        "portrait": {
+          "widgets": [
+            {
+              "type": "List",
+              "listType": "vertical",
+              "data": "channels",
+              "x": 0,
+              "y": 16,
+              "itemWidget": {
+                "type": "Select",
+                "data": "channel.status",
+                "y": 0,
+                "widgets": [
+                  {
+                    "type": "Rectangle",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126,
+                    "style": "default_inverse"
+                  },
+                  {
+                    "type": "Container",
+                    "widgets": [
+                      {
+                        "type": "Select",
+                        "x": 0,
+                        "y": 0,
+                        "data": "channel.outputState",
+                        "action": "",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "style": "channel_off_L",
+                            "text": "OFF",
+                            "x": 0,
+                            "y": 0,
+                            "width": 240,
+                            "height": 86,
+                            "action": "toggle_channel"
+                          },
+                          {
+                            "type": "Select",
+                            "data": "channel.outputMode",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "style": "mon_value_L",
+                                "data": "channel.monValue",
+                                "x": 0,
+                                "y": 0,
+                                "width": 240,
+                                "height": 86,
+                                "action": "toggle_channel"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "style": "mon_value_L_ur",
+                                "data": "channel.monValue",
+                                "x": 0,
+                                "y": 0,
+                                "width": 240,
+                                "height": 86,
+                                "action": "toggle_channel"
+                              }
+                            ],
+                            "x": 0,
+                            "y": 0,
+                            "width": 240,
+                            "height": 86,
+                            "style": "default"
+                          }
+                        ],
+                        "width": 240,
+                        "height": 86,
+                        "style": "default"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "data": "channel.u.set",
+                        "action": "edit",
+                        "x": 0,
+                        "y": 86,
+                        "style": "mon_value",
+                        "width": 106,
+                        "height": 40
+                      },
+                      {
+                        "type": "DisplayData",
+                        "data": "channel.i.set",
+                        "action": "edit",
+                        "x": 106,
+                        "y": 86,
+                        "style": "mon_value",
+                        "width": 106,
+                        "height": 40
+                      },
+                      {
+                        "type": "Text",
+                        "action": "show_channel_settings",
+                        "x": 212,
+                        "y": 86,
+                        "style": "default_S",
+                        "text": "`",
+                        "width": 28,
+                        "height": 40
+                      }
+                    ],
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126,
+                    "style": "default"
+                  },
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 126
+                  }
+                ],
+                "x": 0,
+                "width": 240,
+                "height": 126,
+                "style": "default"
+              },
+              "width": 240,
+              "height": 320,
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "action": "touch_screen_calibration",
+              "x": 0,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "P",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 48,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "?",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 96,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "!",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 144,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "L",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "turn_off",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "Q",
+              "width": 48,
+              "height": 36
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320
+        },
+        "landscape": {
+          "widgets": [
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 0,
+              "width": 252,
+              "height": 204,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 272,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "MultilineText",
+              "text": "Select any yellow colored text to open related menu, editing page or to trigger an action (e.g. on this page switching off selected channel output).",
+              "x": 8,
+              "y": 19,
+              "width": 232,
+              "height": 112,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "MultilineText",
+              "text": "For more detailed information please visit: www.envox.hr/ezz or github.com/eez-open",
+              "x": 8,
+              "y": 131,
+              "width": 232,
+              "height": 73,
+              "style": "edit_value_S_left"
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240
+        },
+        "description": "Redefined main menu"
       },
       {
         "name": "event_queue",
@@ -48770,256 +49574,6 @@
             }
           ]
         }
-      },
-      {
-        "name": "main_help",
-        "portrait": {
-          "widgets": [
-            {
-              "type": "List",
-              "listType": "vertical",
-              "data": "channels",
-              "x": 0,
-              "y": 16,
-              "itemWidget": {
-                "type": "Select",
-                "data": "channel.status",
-                "y": 0,
-                "widgets": [
-                  {
-                    "type": "Rectangle",
-                    "x": 0,
-                    "y": 0,
-                    "width": 240,
-                    "height": 126,
-                    "style": "default_inverse"
-                  },
-                  {
-                    "type": "Container",
-                    "widgets": [
-                      {
-                        "type": "Select",
-                        "x": 0,
-                        "y": 0,
-                        "data": "channel.outputState",
-                        "action": "",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "style": "channel_off_L",
-                            "text": "OFF",
-                            "x": 0,
-                            "y": 0,
-                            "width": 240,
-                            "height": 86,
-                            "action": "toggle_channel"
-                          },
-                          {
-                            "type": "Select",
-                            "data": "channel.outputMode",
-                            "widgets": [
-                              {
-                                "type": "DisplayData",
-                                "style": "mon_value_L",
-                                "data": "channel.monValue",
-                                "x": 0,
-                                "y": 0,
-                                "width": 240,
-                                "height": 86,
-                                "action": "toggle_channel"
-                              },
-                              {
-                                "type": "DisplayData",
-                                "style": "mon_value_L_ur",
-                                "data": "channel.monValue",
-                                "x": 0,
-                                "y": 0,
-                                "width": 240,
-                                "height": 86,
-                                "action": "toggle_channel"
-                              }
-                            ],
-                            "x": 0,
-                            "y": 0,
-                            "width": 240,
-                            "height": 86,
-                            "style": "default"
-                          }
-                        ],
-                        "width": 240,
-                        "height": 86,
-                        "style": "default"
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "channel.u.set",
-                        "action": "edit",
-                        "x": 0,
-                        "y": 86,
-                        "style": "mon_value",
-                        "width": 106,
-                        "height": 40
-                      },
-                      {
-                        "type": "DisplayData",
-                        "data": "channel.i.set",
-                        "action": "edit",
-                        "x": 106,
-                        "y": 86,
-                        "style": "mon_value",
-                        "width": 106,
-                        "height": 40
-                      },
-                      {
-                        "type": "Text",
-                        "action": "show_channel_settings",
-                        "x": 212,
-                        "y": 86,
-                        "style": "default_S",
-                        "text": "`",
-                        "width": 28,
-                        "height": 40
-                      }
-                    ],
-                    "x": 0,
-                    "y": 0,
-                    "width": 240,
-                    "height": 126,
-                    "style": "default"
-                  },
-                  {
-                    "type": "Text",
-                    "style": "channel_error",
-                    "text": "ERROR",
-                    "x": 0,
-                    "y": 0,
-                    "width": 240,
-                    "height": 126
-                  }
-                ],
-                "x": 0,
-                "width": 240,
-                "height": 126,
-                "style": "default"
-              },
-              "width": 240,
-              "height": 320,
-              "style": "default"
-            },
-            {
-              "type": "Text",
-              "action": "touch_screen_calibration",
-              "x": 0,
-              "y": 284,
-              "style": "bottom_button",
-              "text": "P",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 96,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "!",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "x": 144,
-              "y": 284,
-              "style": "bottom_button_disabled",
-              "text": "L",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "turn_off",
-              "x": 192,
-              "y": 284,
-              "style": "bottom_button",
-              "text": "Q",
-              "width": 48,
-              "height": 36
-            }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320
-        },
-        "landscape": {
-          "widgets": [
-            {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
-            {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 0,
-              "width": 252,
-              "height": 204,
-              "style": "default_inverse"
-            },
-            {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 272,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "MultilineText",
-              "text": "Select any yellow colored text to open related menu, editing page or to trigger an action (e.g. on this page switching off selected channel output).",
-              "x": 8,
-              "y": 19,
-              "width": 232,
-              "height": 112,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "MultilineText",
-              "text": "For more detailed information please visit: www.envox.hr/ezz or github.com/eez-open",
-              "x": 8,
-              "y": 131,
-              "width": 232,
-              "height": 73,
-              "style": "edit_value_S_left"
-            }
-          ],
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240
-        },
-        "description": "Redefined main menu"
       },
       {
         "name": "keypad",
@@ -50273,18 +50827,8 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 144,
+              "x": 96,
               "y": 204,
               "style": "tab_page",
               "text": "?",
@@ -50293,9 +50837,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 144,
               "y": 204,
-              "width": 80,
+              "width": 128,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -50349,7 +50893,7 @@
             },
             {
               "type": "MultilineText",
-              "text": "To prevent new protection(s) tripping make sure that load is disconnected before clearing.",
+              "text": "Make sure that load is disconnected before clear tripped protection(s).",
               "x": 16,
               "y": 28,
               "width": 236,
@@ -50414,18 +50958,8 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 144,
+              "x": 96,
               "y": 204,
               "style": "tab_page",
               "text": "?",
@@ -50434,9 +50968,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 144,
               "y": 204,
-              "width": 80,
+              "width": 128,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -50676,18 +51210,8 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 144,
+              "x": 96,
               "y": 204,
               "style": "tab_page",
               "text": "?",
@@ -50696,9 +51220,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 144,
               "y": 204,
-              "width": 80,
+              "width": 128,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -50927,18 +51451,8 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 144,
+              "x": 96,
               "y": 204,
               "style": "tab_page",
               "text": "?",
@@ -50947,9 +51461,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 144,
               "y": 204,
-              "width": 80,
+              "width": 128,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -51189,18 +51703,8 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 144,
+              "x": 96,
               "y": 204,
               "style": "tab_page",
               "text": "?",
@@ -51209,9 +51713,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 144,
               "y": 204,
-              "width": 80,
+              "width": 128,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -51452,18 +51956,8 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 144,
+              "x": 96,
               "y": 204,
               "style": "tab_page",
               "text": "?",
@@ -51472,9 +51966,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 144,
               "y": 204,
-              "width": 80,
+              "width": 128,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -51683,18 +52177,8 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 144,
+              "x": 96,
               "y": 204,
               "style": "tab_page",
               "text": "?",
@@ -51703,9 +52187,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 144,
               "y": 204,
-              "width": 80,
+              "width": 128,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -51944,18 +52428,8 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 144,
+              "x": 96,
               "y": 204,
               "style": "tab_page",
               "text": "?",
@@ -51964,9 +52438,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 144,
               "y": 204,
-              "width": 80,
+              "width": 128,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -52121,18 +52595,8 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 144,
+              "x": 96,
               "y": 204,
               "style": "tab_page",
               "text": "?",
@@ -52141,9 +52605,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 144,
               "y": 204,
-              "width": 80,
+              "width": 128,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -52298,18 +52762,8 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 144,
+              "x": 96,
               "y": 204,
               "style": "tab_page",
               "text": "?",
@@ -52318,9 +52772,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 144,
               "y": 204,
-              "width": 80,
+              "width": 128,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -52345,145 +52799,6 @@
           ]
         },
         "description": "Output voltage remote programming information and settings"
-      },
-      {
-        "name": "ch_settings_disp",
-        "portrait": {
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320,
-          "widgets": []
-        },
-        "landscape": {
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240,
-          "widgets": [
-            {
-              "type": "Text",
-              "text": "Channel protections",
-              "x": 6,
-              "y": 0,
-              "width": 36,
-              "height": 28,
-              "style": "value_S",
-              "data": "channel.shortLabel"
-            },
-            {
-              "type": "Text",
-              "text": "Displayed values",
-              "x": 42,
-              "y": 0,
-              "width": 210,
-              "height": 28,
-              "style": "value_S"
-            },
-            {
-              "type": "Text",
-              "text": "Default (Voltage / Current)",
-              "x": 16,
-              "y": 28,
-              "width": 236,
-              "height": 28,
-              "style": "default_disabled_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "Power / Energy",
-              "x": 16,
-              "y": 56,
-              "width": 236,
-              "height": 29,
-              "style": "default_disabled_S_left"
-            },
-            {
-              "type": "Text",
-              "text": "XY line plot",
-              "x": 16,
-              "y": 85,
-              "width": 236,
-              "height": 28,
-              "style": "default_disabled_S_left"
-            },
-            {
-              "type": "Rectangle",
-              "x": 16,
-              "y": 113,
-              "width": 236,
-              "height": 91,
-              "style": "default_inverse"
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_prot",
-              "x": 0,
-              "y": 204,
-              "style": "tab_page",
-              "text": "E",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_adv",
-              "x": 48,
-              "y": 204,
-              "style": "tab_page",
-              "text": "G",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page_selected",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_info",
-              "x": 144,
-              "y": 204,
-              "style": "tab_page",
-              "text": "?",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Rectangle",
-              "x": 192,
-              "y": 204,
-              "width": 80,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "style": "bottom_button",
-              "text": "X",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            }
-          ]
-        },
-        "description": "Select layout for displaying channels' output information. Not scheduled for M2."
       },
       {
         "name": "ch_settings_info",
@@ -52732,16 +53047,6 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "action": "show_ch_settings_adv",
               "x": 48,
               "y": 204,
@@ -52753,7 +53058,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 144,
+              "x": 96,
               "y": 204,
               "style": "tab_page_selected",
               "text": "?",
@@ -52762,9 +53067,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 144,
               "y": 204,
-              "width": 80,
+              "width": 128,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -55371,18 +55676,8 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 144,
+              "x": 96,
               "y": 204,
               "style": "tab_page",
               "text": "?",
@@ -55391,9 +55686,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 144,
               "y": 204,
-              "width": 80,
+              "width": 128,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -55483,18 +55778,8 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_disp",
-              "x": 96,
-              "y": 204,
-              "style": "tab_page",
-              "text": "F",
-              "width": 48,
-              "height": 36
-            },
-            {
-              "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 144,
+              "x": 96,
               "y": 204,
               "style": "tab_page",
               "text": "?",
@@ -55503,9 +55788,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 192,
+              "x": 144,
               "y": 204,
-              "width": 80,
+              "width": 128,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -57644,7 +57929,7 @@
         },
         {
           "fileName": "actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings_date_time.h\"\n#include \"gui_page_user_profiles.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"persist_conf.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings_date_time.h\"\n#include \"gui_page_user_profiles.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
         },
         {
           "fileName": "gui_document.h",

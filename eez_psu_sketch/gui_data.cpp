@@ -243,9 +243,9 @@ void select(Cursor &cursor, uint8_t id, int index) {
 }
 
 Value getMin(const Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_CHANNEL_U_SET) {
+    if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_MON) {
         return Value(Channel::get(cursor.i).U_MIN, VALUE_TYPE_FLOAT_VOLT);
-    } else if (id == DATA_ID_CHANNEL_I_SET) {
+    } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_MON) {
         return Value(Channel::get(cursor.i).I_MIN, VALUE_TYPE_FLOAT_AMPER);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMin();
@@ -254,9 +254,9 @@ Value getMin(const Cursor &cursor, uint8_t id) {
 }
 
 Value getMax(const Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_CHANNEL_U_SET) {
+    if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_MON) {
         return Value(Channel::get(cursor.i).U_MAX, VALUE_TYPE_FLOAT_VOLT);
-    } else if (id == DATA_ID_CHANNEL_I_SET) {
+    } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_MON) {
         return Value(Channel::get(cursor.i).I_MAX, VALUE_TYPE_FLOAT_AMPER);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMax();
@@ -280,7 +280,7 @@ void getButtonLabels(const Cursor &cursor, uint8_t id, const Value **labels, int
 }
 
 bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
-    if (id == DATA_ID_CHANNEL_U_SET) {
+	if (id == DATA_ID_CHANNEL_U_SET) {
 		if (value.getFloat() > Channel::get(cursor.i).getVoltageLimit()) {
 			if (error) *error = SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
 			return false;

@@ -19,6 +19,7 @@
 #include "psu.h"
 #include "actions.h"
 #include "event_queue.h"
+#include "persist_conf.h"
 #include "gui_internal.h"
 #include "gui_keypad.h"
 #include "gui_edit_mode.h"
@@ -247,10 +248,6 @@ void action_show_ch_settings_adv_rprog() {
     setPage(PAGE_ID_CH_SETTINGS_ADV_RPROG);
 }
 
-void action_show_ch_settings_disp() {
-    setPage(PAGE_ID_CH_SETTINGS_DISP);
-}
-
 void action_show_ch_settings_info() {
     setPage(PAGE_ID_CH_SETTINGS_INFO);
 }
@@ -401,6 +398,10 @@ void action_profile_edit_remark() {
     ((UserProfilesPage *)getActivePage())->editRemark();
 }
 
+void action_toggle_channel_displayed_values() {
+    persist_conf::toggleChannelDisplayedValues();
+}
+
 
 ACTION actions[] = {
     0,
@@ -455,7 +456,6 @@ ACTION actions[] = {
     action_show_ch_settings_adv_lripple,
     action_show_ch_settings_adv_rsense,
     action_show_ch_settings_adv_rprog,
-    action_show_ch_settings_disp,
     action_show_ch_settings_info,
     action_show_ch_settings_info_cal,
     action_sys_settings_cal_edit_password,
@@ -492,7 +492,8 @@ ACTION actions[] = {
     action_profile_recall,
     action_profile_save,
     action_profile_delete,
-    action_profile_edit_remark
+    action_profile_edit_remark,
+    action_toggle_channel_displayed_values
 };
 
 }

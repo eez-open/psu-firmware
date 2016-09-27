@@ -23,7 +23,7 @@
 namespace eez {
 namespace psu {
 namespace gui {
-namespace widget_button_group {
+namespace widgetButtonGroup {
 
 bool draw(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse);
 void onTouchDown(const WidgetCursor &widgetCursor);

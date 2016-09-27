@@ -49,17 +49,15 @@ struct DeviceFlags {
     int time_valid : 1;
     int profile_auto_recall : 1;
     int dst : 1;
+    int channelDisplayedValues : 3;
+    int reserved1 : 1;
+    int reserved2 : 1;
+    int reserved3 : 1;
+    int reserved4 : 1;
     int reserved5 : 1;
     int reserved6 : 1;
     int reserved7 : 1;
     int reserved8 : 1;
-    int reserved9 : 1;
-    int reserved10 : 1;
-    int reserved11 : 1;
-    int reserved12 : 1;
-    int reserved13 : 1;
-    int reserved14 : 1;
-    int reserved15 : 1;
 };
 
 /// Device configuration block.
@@ -110,6 +108,8 @@ bool readSystemTime(uint8_t &hour, uint8_t &minute, uint8_t &second);
 void writeSystemTime(uint8_t hour, uint8_t minute, uint8_t second);
 
 void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second);
+
+void toggleChannelDisplayedValues();
 
 void loadChannelCalibration(Channel *channel);
 bool saveChannelCalibration(Channel *channel);

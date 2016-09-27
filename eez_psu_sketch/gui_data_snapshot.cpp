@@ -19,6 +19,7 @@
 #include "psu.h"
 #include "calibration.h"
 #include "temperature.h"
+#include "persist_conf.h"
 #include "gui_data_snapshot.h"
 #include "gui_internal.h"
 #include "gui_keypad.h"
@@ -176,6 +177,8 @@ void Snapshot::takeSnapshot() {
 		channelSnapshots[i].flags.cal_enabled = channel.flags.cal_enabled ? 1 : 0;
     }
 
+	flags.channelDisplayedValues = persist_conf::dev_conf.flags.channelDisplayedValues;
+
 	temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::MAIN];
 	if (!tempSensor.prot_conf.state) flags.otp = 0;
     else if (!tempSensor.isTripped()) flags.otp = 1;
@@ -193,6 +196,10 @@ void Snapshot::takeSnapshot() {
 }
 
 Value Snapshot::get(const Cursor &cursor, uint8_t id) {
+	if (id == DATA_ID_CHANNEL_DISPLAYED_VALUES) {
+		return Value(flags.channelDisplayedValues);
+	}
+
 	if (cursor.i >= 0 || g_channel != 0) {
 		int iChannel = cursor.i >= 0 ? cursor.i : g_channel->index - 1;
 
