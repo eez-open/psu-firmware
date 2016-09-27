@@ -610,10 +610,9 @@ void ok() {
 }
 
 void cancel() {
+	popPage();
 	if (g_cancelCallback) {
 		g_cancelCallback();
-	} else {
-		popPage();
 	}
 }
 

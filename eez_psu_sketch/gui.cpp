@@ -1173,7 +1173,7 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 					xText = x + p - wText - padding;
 				}
 
-				drawText(valueText, -1, xText, y, wText, h - 1, &style, false);
+				drawText(valueText, -1, xText, y, wText, h, &style, false);
 			}
 		}
 

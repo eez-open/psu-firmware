@@ -270,7 +270,6 @@ void set() {
 		options.flags.signButtonEnabled = true;
 		options.flags.dotButtonEnabled = true;
 
-
 		numeric_keypad::start(0, options, onSetOk, showCurrentStep);
 
 		if (g_stepNum == 0 || g_stepNum == 3) {
