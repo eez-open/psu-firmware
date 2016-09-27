@@ -274,7 +274,7 @@ ChSettingsOppProtectionPage::ChSettingsOppProtectionPage() {
 
 	origLimit = limit = data::Value(g_channel->p_limit, data::VALUE_TYPE_FLOAT_WATT);
 	minLimit = g_channel->OPP_MIN_LEVEL;
-	maxLimit = g_channel->OPP_MIN_LEVEL;
+	maxLimit = g_channel->OPP_MAX_LEVEL;
 	defLimit = g_channel->OPP_DEFAULT_LEVEL;
 
 	origLevel = level = data::Value(g_channel->prot_conf.p_level, data::VALUE_TYPE_FLOAT_WATT);
