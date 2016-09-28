@@ -213,6 +213,9 @@
 /// Temperature drop (in oC) below FAN_MAX_TEMP to turn again main power on. Premature attempt to turn power on will report error -200.
 #define FAN_MAX_TEMP_DROP 15 
 
+/// Enable/disable RPM measurement during work - it will still be enabled at the boot during fan test.
+#define FAN_OPTION_RPM_MEASUREMENT 1
+
 /// Interval (in milliseconds) at which watchdog impulse will be sent
 #define WATCHDOG_INTERVAL 1000
 

@@ -44,10 +44,14 @@ void SysInfoPage::takeSnapshot(data::Snapshot *snapshot) {
 	if (fan::test_result == TEST_FAILED || fan::test_result == TEST_WARNING) {
 		snapshot->flags.fanStatus = 0;
 	} else if (fan::test_result == TEST_OK) {
+#if FAN_OPTION_RPM_MEASUREMENT
 		snapshot->flags.fanStatus = 1;
 		snapshot->fanSpeed = (float)fan::g_rpm;
-	} else {
+#else
 		snapshot->flags.fanStatus = 2;
+#endif
+	} else {
+		snapshot->flags.fanStatus = 3;
 	}
 
 	snapshot->onTimeTotal = g_powerOnTimeCounter.getTotalTime();

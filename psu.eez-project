@@ -48747,7 +48747,7 @@
                         "y": 0,
                         "width": 65,
                         "height": 28,
-                        "style": "edit_value_active_S_right",
+                        "style": "edit_S",
                         "data": "channel.u.set",
                         "action": "edit"
                       },
@@ -48766,7 +48766,7 @@
                         "y": 30,
                         "width": 65,
                         "height": 28,
-                        "style": "edit_value_active_S_right",
+                        "style": "edit_S",
                         "data": "channel.i.set",
                         "action": "edit"
                       },
@@ -48968,13 +48968,21 @@
                         "style": "default_inverse"
                       },
                       {
+                        "type": "Rectangle",
+                        "x": 240,
+                        "y": 58,
+                        "width": 15,
+                        "height": 30,
+                        "style": "default_inverse"
+                      },
+                      {
                         "type": "DisplayData",
                         "text": "12.00W",
-                        "x": 240,
+                        "x": 255,
                         "y": 60,
-                        "width": 80,
+                        "width": 65,
                         "height": 28,
-                        "style": "edit_value_S_right",
+                        "style": "default_S",
                         "data": "channel.p.mon"
                       },
                       {
@@ -56981,6 +56989,16 @@
                   "height": 28,
                   "style": "value_S",
                   "data": "sys.info.fan.speed"
+                },
+                {
+                  "type": "Text",
+                  "text": "Unsupported",
+                  "x": 0,
+                  "y": 0,
+                  "width": 122,
+                  "height": 28,
+                  "style": "default_disabled_S_left",
+                  "data": ""
                 },
                 {
                   "type": "Text",

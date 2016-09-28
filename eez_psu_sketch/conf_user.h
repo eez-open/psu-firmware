@@ -40,3 +40,6 @@ Use this header file to override anything from conf.h or conf_advanced.h.
 /// Value is given in seconds.
 #undef DP_OFF_DELAY_PERIOD
 #define DP_OFF_DELAY_PERIOD 30
+
+#undef FAN_OPTION_RPM_MEASUREMENT
+#define FAN_OPTION_RPM_MEASUREMENT 0

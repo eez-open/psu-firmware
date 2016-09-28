@@ -273,7 +273,7 @@ scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_diag_InformationFanQ(scpi_t * context) {
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_FAN
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_FAN && FAN_OPTION_RPM_MEASUREMENT
 	SCPI_ResultInt(context, fan::g_rpm);
 #else
 	SCPI_ResultInt(context, -1);
