@@ -141,7 +141,7 @@ void Snapshot::takeSnapshot() {
                 }
             }
 
-			channelSnapshots[i].p_mon = channel.u.mon * channel.i.mon;
+			channelSnapshots[i].p_mon = util::multiply(channel.u.mon, channel.i.mon, CHANNEL_VALUE_PRECISION);
         }
 
         channelSnapshots[i].u_set = channel.u.set;

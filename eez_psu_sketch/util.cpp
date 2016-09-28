@@ -144,6 +144,10 @@ bool equal(float a, float b, float prec) {
 	return roundf(a * prec) == roundf(b * prec);
 }
 
+float multiply(float a, float b, float prec) {
+	return (roundf(a * prec) / prec) * (roundf(b * prec) / prec);
+}
+
 bool isNaN(float x) {
 	return x != x;
 }
