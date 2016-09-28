@@ -48,6 +48,12 @@
       "defaultMaxValue": 40
     },
     {
+      "name": "channel.u.monDac",
+      "defaultValue": "25.00V",
+      "defaultMinValue": 8,
+      "defaultMaxValue": 40
+    },
+    {
       "name": "channel.u.limit",
       "defaultValue": "35.00V",
       "defaultMinValue": 8,
@@ -63,6 +69,12 @@
     },
     {
       "name": "channel.i.mon",
+      "defaultValue": "1.00A",
+      "defaultMinValue": 0,
+      "defaultMaxValue": 5
+    },
+    {
+      "name": "channel.i.monDac",
       "defaultValue": "1.00A",
       "defaultMinValue": 0,
       "defaultMaxValue": 5
@@ -428,11 +440,13 @@
     },
     {
       "name": "channel.rprog.installed",
-      "defaultValue": "1"
+      "defaultValue": "1",
+      "description": "0: not installed\n1: installed"
     },
     {
       "name": "channel.rprog.status",
-      "defaultValue": "0"
+      "defaultValue": "0",
+      "description": "0: disabled\n1: enabled"
     },
     {
       "name": "sys.onTime.total",
@@ -45321,6 +45335,23 @@
         "name": "yellow_6",
         "inheritFrom": "default",
         "_color": "#ffffe5"
+      },
+      {
+        "name": "mon_dac",
+        "_color": "#ff0000",
+        "_font": "medium",
+        "_alignHorizontal": "center",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "mon_dac_S",
+        "_font": "small",
+        "inheritFrom": "mon_dac"
       }
     ],
     "pages": [
@@ -48517,14 +48548,35 @@
                             "style": "default"
                           },
                           {
-                            "type": "DisplayData",
-                            "data": "channel.u.set",
-                            "action": "edit",
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.set",
+                                "action": "edit",
+                                "x": 0,
+                                "y": 0,
+                                "style": "mon_value",
+                                "width": 112,
+                                "height": 43
+                              },
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.monDac",
+                                "action": "",
+                                "x": 0,
+                                "y": 0,
+                                "style": "mon_dac",
+                                "width": 112,
+                                "height": 43
+                              }
+                            ],
                             "x": 48,
                             "y": 56,
-                            "style": "mon_value",
                             "width": 112,
-                            "height": 43
+                            "height": 43,
+                            "style": "default",
+                            "data": "channel.rprog.status"
                           },
                           {
                             "type": "DisplayData",
@@ -48741,15 +48793,37 @@
                         "style": "default"
                       },
                       {
-                        "type": "DisplayData",
-                        "text": "20.00V",
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "text": "20.00V",
+                            "x": 0,
+                            "y": 0,
+                            "width": 65,
+                            "height": 28,
+                            "style": "edit_S",
+                            "data": "channel.u.set",
+                            "action": "edit"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "text": "20.00V",
+                            "x": 0,
+                            "y": 0,
+                            "width": 65,
+                            "height": 28,
+                            "style": "mon_dac_S",
+                            "data": "channel.u.monDac",
+                            "action": ""
+                          }
+                        ],
                         "x": 255,
                         "y": 0,
                         "width": 65,
                         "height": 28,
-                        "style": "edit_S",
-                        "data": "channel.u.set",
-                        "action": "edit"
+                        "data": "channel.rprog.status",
+                        "style": "default"
                       },
                       {
                         "type": "Rectangle",

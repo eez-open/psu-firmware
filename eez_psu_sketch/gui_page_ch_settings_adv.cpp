@@ -122,17 +122,6 @@ void ChSettingsAdvRSensePage::toggleStatus() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void ChSettingsAdvRProgPage::takeSnapshot(data::Snapshot *snapshot) {
-	snapshot->flags.switch1 = g_channel->isRemoteProgrammingEnabled() ? 1 : 0;
-}
-
-data::Value ChSettingsAdvRProgPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	if (id == DATA_ID_CHANNEL_RPROG_STATUS) {
-		return snapshot->flags.switch1;
-	}
-	return data::Value();
-}
-
 void ChSettingsAdvRProgPage::toggleStatus() {
 	g_channel->remoteProgrammingEnable(!g_channel->isRemoteProgrammingEnabled());
 }

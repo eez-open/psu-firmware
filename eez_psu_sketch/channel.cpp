@@ -536,7 +536,11 @@ void Channel::adcDataIsReady(int16_t data) {
 	    valueAddReading(&i, remapAdcDataToCurrent(data));
 
 		if (isOutputEnabled()) {
-            adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+			if (isRemoteProgrammingEnabled()) {
+	            adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
+			} else {
+	            adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+			}
         } else {
             u.mon = 0;
             i.mon = 0;
@@ -549,7 +553,11 @@ void Channel::adcDataIsReady(int16_t data) {
         debug::u_mon_dac[index - 1] = data;
 #endif
         valueAddReadingDac(&u, remapAdcDataToVoltage(data));
-        adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_SET);
+		if (isOutputEnabled() && isRemoteProgrammingEnabled()) {
+			adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+		} else {
+			adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_SET);
+		}
         break;
 
     case AnalogDigitalConverter::ADC_REG0_READ_I_SET:

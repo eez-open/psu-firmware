@@ -33,6 +33,7 @@ struct ChannelSnapshotFlags {
     unsigned state : 1;
     unsigned mode : 1;
 	unsigned lrip : 1;
+	unsigned rprog: 1;
     unsigned ovp : 2;
     unsigned ocp : 2;
     unsigned opp : 2;
@@ -46,9 +47,11 @@ struct ChannelSnapshot {
     Value mon_value;
     float u_set;
 	float u_mon;
+	float u_monDac;
 	float u_limit;
     float i_set;
 	float i_mon;
+	float i_monDac;
 	float i_limit;
 	float p_mon;
     ChannelSnapshotFlags flags;

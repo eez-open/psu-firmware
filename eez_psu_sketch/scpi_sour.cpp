@@ -222,6 +222,11 @@ scpi_result_t scpi_source_Voltage(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
+	if (channel->isRemoteProgrammingEnabled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+	}
+
 	if (voltage > channel->getVoltageLimit()) {
         SCPI_ErrorPush(context, SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
@@ -243,7 +248,14 @@ scpi_result_t scpi_source_VoltageQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, channel->u.set, channel->U_MIN, channel->U_MAX, channel->U_DEF);
+	float u;
+	if (channel->isRemoteProgrammingEnabled()) {
+		u = channel->u.mon_dac;
+	} else {
+		u = channel->u.set;
+	}
+
+    return get_source_value(context, u, channel->U_MIN, channel->U_MAX, channel->U_DEF);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

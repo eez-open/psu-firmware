@@ -146,12 +146,15 @@ void Snapshot::takeSnapshot() {
 
         channelSnapshots[i].u_set = channel.u.set;
 		channelSnapshots[i].u_mon = channel.u.mon;
+		channelSnapshots[i].u_monDac = channel.u.mon_dac;
 		channelSnapshots[i].u_limit = channel.getVoltageLimit();
         channelSnapshots[i].i_set = channel.i.set;
 		channelSnapshots[i].i_mon = channel.i.mon;
+		channelSnapshots[i].i_monDac = channel.i.mon_dac;
 		channelSnapshots[i].i_limit = channel.getCurrentLimit();
 
 		channelSnapshots[i].flags.lrip = channel.flags.lripple_enabled ? 1 : 0;
+		channelSnapshots[i].flags.rprog = channel.flags.rprog_enabled ? 1 : 0;
 
 		if (!channel.prot_conf.flags.i_state) channelSnapshots[i].flags.ocp = 0;
         else if (!channel.ocp.flags.tripped) channelSnapshots[i].flags.ocp = 1;
@@ -230,6 +233,10 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 				return Value(channelSnapshots[iChannel].u_mon, VALUE_TYPE_FLOAT_VOLT);
 			}
 
+			if (id == DATA_ID_CHANNEL_U_MON_DAC) {
+				return Value(channelSnapshots[iChannel].u_monDac, VALUE_TYPE_FLOAT_VOLT);
+			}
+
 			if (id == DATA_ID_CHANNEL_U_LIMIT) {
 				return Value(channelSnapshots[iChannel].u_limit, VALUE_TYPE_FLOAT_VOLT);
 			}
@@ -240,6 +247,10 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 		
 			if (id == DATA_ID_CHANNEL_I_MON) {
 				return Value(channelSnapshots[iChannel].i_mon, VALUE_TYPE_FLOAT_AMPER);
+			}
+
+			if (id == DATA_ID_CHANNEL_I_MON_DAC) {
+				return Value(channelSnapshots[iChannel].i_monDac, VALUE_TYPE_FLOAT_AMPER);
 			}
 
 			if (id == DATA_ID_CHANNEL_I_LIMIT) {
@@ -253,7 +264,11 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 			if (id == DATA_ID_LRIP) {
 				return Value(channelSnapshots[iChannel].flags.lrip);
 			}
-		
+
+			if (id == DATA_ID_CHANNEL_RPROG_STATUS) {
+				return Value(channelSnapshots[iChannel].flags.rprog);
+			}
+
 			if (id == DATA_ID_OVP) {
 				return Value(channelSnapshots[iChannel].flags.ovp);
 			}
