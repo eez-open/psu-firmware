@@ -137,11 +137,11 @@ uint8_t fromBCD(uint8_t bcd) {
 }
 
 bool greaterOrEqual(float a, float b, float prec) {
-	return a > b || fabs(a - b) <= prec;
+	return a > b || equal(a, b, prec);
 }
 
 bool equal(float a, float b, float prec) {
-	return fabs(a - b) <= prec;
+	return roundf(a * prec) == roundf(b * prec);
 }
 
 bool isNaN(float x) {

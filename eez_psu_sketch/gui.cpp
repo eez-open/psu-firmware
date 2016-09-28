@@ -1259,8 +1259,38 @@ bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
 }
 
 static EnumWidgets g_drawEnumWidgets(draw_widget);
+static bool g_clearBackground;
+
+void clearBackground() {
+	// clear screen with background color
+	DECL_WIDGET(page, getPageOffset(g_activePageId));
+
+    DECL_WIDGET_STYLE(style, page);
+    lcd::lcd.setColor(style->background_color);
+
+	if (g_lastActivePageId == PAGE_ID_INFO_ALERT || g_lastActivePageId == PAGE_ID_ERROR_ALERT || g_lastActivePageId == PAGE_ID_YES_NO) {
+		DECL_WIDGET(page, getPageOffset(g_lastActivePageId));
+		lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
+	}
+
+	if (g_activePageId == PAGE_ID_WELCOME) {
+		lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
+	} else {
+	    DECL_WIDGET_SPECIFIC(PageWidget, pageSpecific, page);
+		for (int i = 0; i < pageSpecific->transparentRectangles.count; ++i) {
+			OBJ_OFFSET rectOffset = getListItemOffset(pageSpecific->transparentRectangles, i, sizeof(Rect));
+			DECL_STRUCT_WITH_OFFSET(Rect, rect, rectOffset);
+			lcd::lcd.fillRect(rect->x, rect->y, rect->x + rect->w - 1, rect->y + rect->h - 1);
+		}
+	}
+}
 
 bool draw_tick() {
+	if (g_clearBackground) {
+		clearBackground();
+		g_clearBackground = false;
+	}
+
     for (int i = 0; i < CONF_GUI_DRAW_TICK_ITERATIONS; ++i) {
         if (!g_drawEnumWidgets.next()) {
             g_wasBlinkTime = g_isBlinkTime;
@@ -1294,28 +1324,8 @@ void refresh_widget(WidgetCursor widget_cursor) {
 
 void refreshPage() {
 	DECL_WIDGET(page, getPageOffset(g_activePageId));
-
-	// clear screen with background color
-    DECL_WIDGET_STYLE(style, page);
-    lcd::lcd.setColor(style->background_color);
-
-	if (g_lastActivePageId == PAGE_ID_INFO_ALERT || g_lastActivePageId == PAGE_ID_ERROR_ALERT || g_lastActivePageId == PAGE_ID_YES_NO) {
-		DECL_WIDGET(page, getPageOffset(g_lastActivePageId));
-		lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
-	}
-
-	if (g_activePageId == PAGE_ID_WELCOME) {
-		lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
-	} else {
-	    DECL_WIDGET_SPECIFIC(PageWidget, pageSpecific, page);
-		for (int i = 0; i < pageSpecific->transparentRectangles.count; ++i) {
-			OBJ_OFFSET rectOffset = getListItemOffset(pageSpecific->transparentRectangles, i, sizeof(Rect));
-			DECL_STRUCT_WITH_OFFSET(Rect, rect, rectOffset);
-			lcd::lcd.fillRect(rect->x, rect->y, rect->x + rect->w - 1, rect->y + rect->h - 1);
-		}
-	}
-
     data::currentSnapshot.takeSnapshot();
+	g_clearBackground = true;
     g_drawEnumWidgets.start(g_activePageId, page->x, page->y, true);
 }
 
@@ -1510,7 +1520,11 @@ void yesNoDialog(int yesNoPageId, const char *message PROGMEM, void (*yes_callba
 }
 
 void areYouSure(void (*yes_callback)()) {
-	yesNoDialog(PAGE_ID_YES_NO, "Are you sure?", yes_callback, 0, 0);
+	yesNoDialog(PAGE_ID_YES_NO, PSTR("Are you sure?"), yes_callback, 0, 0);
+}
+
+void areYouSureWithMessage(const char *message PROGMEM, void (*yes_callback)()) {
+	yesNoDialog(PAGE_ID_ARE_YOU_SURE_WITH_MESSAGE, message, yes_callback, 0, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

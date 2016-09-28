@@ -39,7 +39,6 @@ public:
 
 	int getDirty();
 	void set();
-	virtual void setParams() = 0;
 
 	void toggleState();
 	void editLimit();
@@ -68,37 +67,53 @@ protected:
 	float maxDelay;
 	float defaultDelay;
 
+	virtual void setParams(bool checkLoad) = 0;
+
 	static void onLimitSet(float value);
 	static void onLevelSet(float value);
 	static void onDelaySet(float value);
+	static void onSetFinish();
 };
 
 class ChSettingsOvpProtectionPage : public ChSettingsProtectionSetPage {
 public:
 	ChSettingsOvpProtectionPage();
 
-	void setParams();
+protected:
+	void setParams(bool checkLoad);
+
+private:
+	static void onSetParamsOk();
 };
 
 class ChSettingsOcpProtectionPage : public ChSettingsProtectionSetPage {
 public:
 	ChSettingsOcpProtectionPage();
 
-	void setParams();
+protected:
+	void setParams(bool checkLoad);
+
+private:
+	static void onSetParamsOk();
 };
 
 class ChSettingsOppProtectionPage : public ChSettingsProtectionSetPage {
 public:
 	ChSettingsOppProtectionPage();
 
-	void setParams();
+protected:
+	void setParams(bool checkLoad);
+
+private:
+	static void onSetParamsOk();
 };
 
 class ChSettingsOtpProtectionPage : public ChSettingsProtectionSetPage {
 public:
 	ChSettingsOtpProtectionPage();
 
-	void setParams();
+protected:
+	void setParams(bool checkLoad);
 };
 
 }

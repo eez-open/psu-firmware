@@ -100,4 +100,4 @@ extern bool g_insideInterruptHandler;
 #include "util.h"
 #include "channel.h"
 
-#define CHANNEL_VALUE_PRECISION (1.0f / powf(10.0f, FLOAT_TO_STR_PREC))
+#define CHANNEL_VALUE_PRECISION powf(10.0f, FLOAT_TO_STR_PREC)

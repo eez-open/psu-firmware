@@ -45058,6 +45058,18 @@
         "inheritFrom": "default_S"
       },
       {
+        "name": "yes_no_background",
+        "_backgroundColor": "#e02020",
+        "inheritFrom": "default_S",
+        "_color": "#e02020"
+      },
+      {
+        "name": "yes_no_message",
+        "_backgroundColor": "#e02020",
+        "inheritFrom": "default_S",
+        "_color": "#c0c0c0"
+      },
+      {
         "name": "yes_no_button",
         "inheritFrom": "yes_no",
         "_color": "#ffff00"
@@ -47965,6 +47977,127 @@
               "text": "No",
               "width": 48,
               "height": 32
+            }
+          ],
+          "style": "yes_no"
+        },
+        "description": "Info message"
+      },
+      {
+        "name": "are_you_sure_with_message",
+        "portrait": {
+          "x": 0,
+          "y": 104,
+          "width": 240,
+          "height": 112,
+          "widgets": [
+            {
+              "type": "Text",
+              "text": "OK",
+              "x": 90,
+              "y": 72,
+              "width": 60,
+              "height": 32,
+              "style": "default_active_S",
+              "action": "yes"
+            },
+            {
+              "type": "MultilineText",
+              "text": "Multiline text",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 64,
+              "style": "error_alert"
+            }
+          ],
+          "style": "error_alert"
+        },
+        "landscape": {
+          "x": 20,
+          "y": 64,
+          "width": 280,
+          "height": 112,
+          "widgets": [
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 0,
+              "width": 280,
+              "height": 8,
+              "style": "yes_no_background"
+            },
+            {
+              "type": "Text",
+              "text": "Are you sure?",
+              "x": 0,
+              "y": 8,
+              "width": 280,
+              "height": 32,
+              "style": "yes_no",
+              "data": ""
+            },
+            {
+              "type": "Text",
+              "text": "Are you sure?",
+              "x": 0,
+              "y": 40,
+              "width": 280,
+              "height": 32,
+              "style": "yes_no_message",
+              "data": "alert_message"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 72,
+              "width": 85,
+              "height": 32,
+              "style": "yes_no_background"
+            },
+            {
+              "type": "Text",
+              "action": "yes",
+              "x": 85,
+              "y": 72,
+              "style": "yes_no_button",
+              "text": "Yes",
+              "width": 48,
+              "height": 32
+            },
+            {
+              "type": "Rectangle",
+              "x": 133,
+              "y": 72,
+              "width": 14,
+              "height": 32,
+              "style": "yes_no_background"
+            },
+            {
+              "type": "Text",
+              "action": "no",
+              "x": 147,
+              "y": 72,
+              "style": "yes_no_button",
+              "text": "No",
+              "width": 48,
+              "height": 32
+            },
+            {
+              "type": "Rectangle",
+              "x": 195,
+              "y": 72,
+              "width": 85,
+              "height": 32,
+              "style": "yes_no_background"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 104,
+              "width": 280,
+              "height": 8,
+              "style": "yes_no_background"
             }
           ],
           "style": "yes_no"

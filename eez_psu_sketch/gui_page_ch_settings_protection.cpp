@@ -131,11 +131,14 @@ int ChSettingsProtectionSetPage::getDirty() {
 	return (origState != state || origLimit != limit || origLevel != level || origDelay != delay) ? 1 : 0;
 }
 
+void ChSettingsProtectionSetPage::onSetFinish() {
+	profile::save();
+	infoMessageP(PSTR("Protection params changed!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
+}
+
 void ChSettingsProtectionSetPage::set() {
 	if (getDirty()) {
-		setParams();
-		profile::save();
-		infoMessageP(PSTR("Protection params changed!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
+		setParams(true);
 	}
 }
 
@@ -236,11 +239,20 @@ ChSettingsOvpProtectionPage::ChSettingsOvpProtectionPage() {
 	defaultDelay = g_channel->OVP_DEFAULT_DELAY;
 }
 
-void ChSettingsOvpProtectionPage::setParams() {
-	g_channel->setVoltageLimit(limit.getFloat());
-	g_channel->prot_conf.flags.u_state = state;
-	g_channel->prot_conf.u_level = level.getFloat();
-	g_channel->prot_conf.u_delay = delay.getFloat();
+void ChSettingsOvpProtectionPage::onSetParamsOk() {
+	((ChSettingsOvpProtectionPage *)getActivePage())->setParams(false);
+}
+
+void ChSettingsOvpProtectionPage::setParams(bool checkLoad) {
+	if (checkLoad && limit.getFloat() < g_channel->u.mon) {
+		areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
+	} else {
+		g_channel->setVoltageLimit(limit.getFloat());
+		g_channel->prot_conf.flags.u_state = state;
+		g_channel->prot_conf.u_level = level.getFloat();
+		g_channel->prot_conf.u_delay = delay.getFloat();
+		onSetFinish();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -261,10 +273,19 @@ ChSettingsOcpProtectionPage::ChSettingsOcpProtectionPage() {
 	defaultDelay = g_channel->OCP_DEFAULT_DELAY;
 }
 
-void ChSettingsOcpProtectionPage::setParams() {
-	g_channel->setCurrentLimit(limit.getFloat());
-	g_channel->prot_conf.flags.i_state = state;
-	g_channel->prot_conf.i_delay = delay.getFloat();
+void ChSettingsOcpProtectionPage::onSetParamsOk() {
+	((ChSettingsOcpProtectionPage *)getActivePage())->setParams(false);
+}
+
+void ChSettingsOcpProtectionPage::setParams(bool checkLoad) {
+	if (checkLoad && limit.getFloat() < g_channel->i.mon) {
+		areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
+	} else {
+		g_channel->setCurrentLimit(limit.getFloat());
+		g_channel->prot_conf.flags.i_state = state;
+		g_channel->prot_conf.i_delay = delay.getFloat();
+		onSetFinish();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -288,11 +309,20 @@ ChSettingsOppProtectionPage::ChSettingsOppProtectionPage() {
 	defaultDelay = g_channel->OPP_DEFAULT_DELAY;
 }
 
-void ChSettingsOppProtectionPage::setParams() {
-	g_channel->setPowerLimit(limit.getFloat());
-	g_channel->prot_conf.flags.p_state = state;
-	g_channel->prot_conf.p_level = level.getFloat();
-	g_channel->prot_conf.p_delay = delay.getFloat();
+void ChSettingsOppProtectionPage::onSetParamsOk() {
+	((ChSettingsOppProtectionPage *)getActivePage())->setParams(false);
+}
+
+void ChSettingsOppProtectionPage::setParams(bool checkLoad) {
+	if (checkLoad && limit.getFloat() < g_channel->u.mon * g_channel->i.mon) {
+		areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
+	} else {
+		g_channel->setPowerLimit(limit.getFloat());
+		g_channel->prot_conf.flags.p_state = state;
+		g_channel->prot_conf.p_level = level.getFloat();
+		g_channel->prot_conf.p_delay = delay.getFloat();
+		onSetFinish();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -318,11 +348,12 @@ ChSettingsOtpProtectionPage::ChSettingsOtpProtectionPage() {
 #endif
 }
 
-void ChSettingsOtpProtectionPage::setParams() {
+void ChSettingsOtpProtectionPage::setParams(bool checkLoad) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4	
 	temperature::setChannelSensorState(g_channel, state ? true : false);
 	temperature::setChannelSensorLevel(g_channel, level.getFloat());
 	temperature::setChannelSensorDelay(g_channel, delay.getFloat());
+	onSetFinish();
 #endif
 }
 
