@@ -137,11 +137,25 @@ void UserProfilesPage::recall() {
 	}
 }
 
-void UserProfilesPage::onSaveYes() {
-	if (profile::saveAtLocation(g_selectedProfileLocation)) {
-		infoMessageP(PSTR("Current parameters saved"));
+void UserProfilesPage::onSaveFinish(char *remark, void (*callback)()) {
+	if (profile::saveAtLocation(g_selectedProfileLocation, remark)) {
+		infoMessageP(PSTR("Current parameters saved"), callback);
 	} else {
 		errorMessageP(PSTR("Failed!"));
+	}
+}
+
+void UserProfilesPage::onSaveEditRemarkOk(char *remark) {
+	onSaveFinish(remark, popPage);
+}
+
+void UserProfilesPage::onSaveYes() {
+	if (g_selectedProfileLocation > 0) {
+		char remark[PROFILE_NAME_MAX_LENGTH + 1];
+		profile::getSaveName(remark);
+		keypad::startPush(0, remark, PROFILE_NAME_MAX_LENGTH, false, onSaveEditRemarkOk, 0);
+	} else {
+		onSaveFinish();
 	}
 }
 

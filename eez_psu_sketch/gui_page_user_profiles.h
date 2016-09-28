@@ -43,6 +43,8 @@ public:
 private:
 	profile::Parameters profile;
 
+	static void onSaveFinish(char *remark = 0, void (*callback)() = 0);
+	static void onSaveEditRemarkOk(char *remark);
 	static void onSaveYes();
 	static void onDeleteProfileYes();
 	static void onEditRemarkOk(char *newRemark);

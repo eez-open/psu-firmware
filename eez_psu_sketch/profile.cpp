@@ -26,6 +26,8 @@ namespace eez {
 namespace psu {
 namespace profile {
 
+#define AUTO_NAME_PREFIX PSTR("Saved at ")
+
 static bool g_save_enabled = true;
 static bool g_save_profile = false;
 
@@ -138,6 +140,11 @@ bool load(int location, Parameters *profile) {
     return false;
 }
 
+void getSaveName(char *name) {
+    strcpy_P(name, AUTO_NAME_PREFIX);
+    datetime::getDateTimeAsString(name + strlen(AUTO_NAME_PREFIX));
+}
+
 bool enableSave(bool enable) {
     bool last_save_enabled = g_save_enabled;
     g_save_enabled = enable;
@@ -153,7 +160,7 @@ void saveImmediately() {
     saveAtLocation(0);
 }
 
-bool saveAtLocation(int location) {
+bool saveAtLocation(int location, char *name) {
     if (location >= 0 && location < NUM_PROFILE_LOCATIONS) {
         Parameters currentProfile;
         if (!persist_conf::loadProfile(location, &currentProfile)) {
@@ -167,16 +174,15 @@ bool saveAtLocation(int location) {
         // name
         memset(profile.name, 0, sizeof(profile.name));
         if (location > 0) {
-            if (!currentProfile.is_valid || strncmp_P(currentProfile.name, PSTR("Saved at "), 9) == 0) {
-                char datetime_buffer[20] = { 0 };
-                if (datetime::getDateTimeAsString(datetime_buffer)) {
-                    strcpy_P(profile.name, PSTR("Saved at "));
-                    strcat(profile.name, datetime_buffer);
-                }
-            }
-            else {
-                strcpy(profile.name, currentProfile.name);
-            }
+			if (name) {
+				strcpy(profile.name, name);
+			} else {
+				if (!currentProfile.is_valid || strncmp_P(currentProfile.name, AUTO_NAME_PREFIX, strlen(AUTO_NAME_PREFIX)) == 0) {
+					getSaveName(profile.name);
+				} else {
+					strcpy(profile.name, currentProfile.name);
+				}
+			}
         }
 
         noInterrupts();

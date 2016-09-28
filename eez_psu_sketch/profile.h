@@ -85,17 +85,19 @@ bool recall(int location);
 
 bool load(int location, Parameters *profile);
 
+void getSaveName(char *name);
+
 bool enableSave(bool enable);
 void save();
 void saveImmediately();
-bool saveAtLocation(int location);
+bool saveAtLocation(int location, char *name = 0);
 
 bool deleteLocation(int location);
 bool deleteAll();
 
 bool isValid(int location);
 
-bool setName(int location, const char *name, size_t name_len);
+bool setName(int location, const char *name, size_t nameLength);
 void getName(int location, char *name, int count);
 
 }

@@ -165,7 +165,7 @@ void startReplace(const char *label, const char *text, int maxChars_, bool isPas
 
 void appendChar(char c) {
 	int n = strlen(g_keypadText);
-	if (n < g_maxChars && (n + (g_label ? strlen(g_label) : 0)) < MAX_KEYPAD_TEXT_LENGTH) {
+	if (n <= g_maxChars && (n + (g_label ? strlen(g_label) : 0)) < MAX_KEYPAD_TEXT_LENGTH) {
 		g_keypadText[n] = c;
 		g_keypadText[n + 1] = 0;
 		g_lastKeyAppendTime = micros();

@@ -277,7 +277,7 @@ void set() {
 		}
 	} else if (g_stepNum == 6) {
 		psu::calibration::resetChannelToZero();
-		keypad::startPush(0, psu::calibration::isRemarkSet() ? psu::calibration::getRemark() : 0, 32, false, onSetRemarkOk, popPage);
+		keypad::startPush(0, psu::calibration::isRemarkSet() ? psu::calibration::getRemark() : 0, CALIBRATION_REMARK_MAX_LENGTH, false, onSetRemarkOk, popPage);
 	}
 }
 

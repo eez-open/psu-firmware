@@ -225,5 +225,11 @@
 /// Maximum allowed length (including label) of the keypad text.
 #define MAX_KEYPAD_TEXT_LENGTH 128
 
-// Frequency of master sync
+/// Frequency of master sync
 #define SYNC_MASTER_FREQUENCY 330000 // 330kHz 
+
+/// Enable transition to the Main page after period of inactivity.
+#define GUI_BACK_TO_MAIN_ENABLED 1
+
+/// Inactivity period duration in seconds before transition to the Main page.
+#define GUI_BACK_TO_MAIN_DELAY 10

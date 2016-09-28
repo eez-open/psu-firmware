@@ -1762,11 +1762,21 @@ void tick(unsigned long tick_usec) {
 
 	//
 	unsigned long inactivityPeriod = millis() - g_timeOfLastActivity;
-	if (g_activePageId == PAGE_ID_EVENT_QUEUE) {
-		if (inactivityPeriod >= 10 * 1000UL) {
+
+#if GUI_BACK_TO_MAIN_ENABLED
+	if (g_activePageId == PAGE_ID_EVENT_QUEUE ||
+		g_activePageId == PAGE_ID_USER_PROFILES ||
+		g_activePageId == PAGE_ID_USER_PROFILES2 ||
+		g_activePageId == PAGE_ID_USER_PROFILE_0_SETTINGS ||
+		g_activePageId == PAGE_ID_USER_PROFILE_SETTINGS)
+	{
+		if (inactivityPeriod >= GUI_BACK_TO_MAIN_DELAY * 1000UL) {
 			setPage(PAGE_ID_MAIN);
 		}
-	} else if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
+	}
+#endif
+
+	if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
 		if (inactivityPeriod >= 20 * 1000UL) {
 			touch::calibration::enterCalibrationMode(PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, getStartPageId());
 			return;
