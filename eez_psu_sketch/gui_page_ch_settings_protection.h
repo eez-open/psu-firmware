@@ -72,7 +72,7 @@ protected:
 	static void onLimitSet(float value);
 	static void onLevelSet(float value);
 	static void onDelaySet(float value);
-	static void onSetFinish();
+	static void onSetFinish(bool showInfo);
 };
 
 class ChSettingsOvpProtectionPage : public ChSettingsProtectionSetPage {

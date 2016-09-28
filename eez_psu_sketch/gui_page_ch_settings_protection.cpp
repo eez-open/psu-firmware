@@ -131,9 +131,13 @@ int ChSettingsProtectionSetPage::getDirty() {
 	return (origState != state || origLimit != limit || origLevel != level || origDelay != delay) ? 1 : 0;
 }
 
-void ChSettingsProtectionSetPage::onSetFinish() {
+void ChSettingsProtectionSetPage::onSetFinish(bool showInfo) {
 	profile::save();
-	infoMessageP(PSTR("Protection params changed!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
+	if (showInfo) {
+		infoMessageP(PSTR("Protection params changed!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
+	} else {
+		actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]();
+	}
 }
 
 void ChSettingsProtectionSetPage::set() {
@@ -251,7 +255,7 @@ void ChSettingsOvpProtectionPage::setParams(bool checkLoad) {
 		g_channel->prot_conf.flags.u_state = state;
 		g_channel->prot_conf.u_level = level.getFloat();
 		g_channel->prot_conf.u_delay = delay.getFloat();
-		onSetFinish();
+		onSetFinish(checkLoad);
 	}
 }
 
@@ -284,7 +288,7 @@ void ChSettingsOcpProtectionPage::setParams(bool checkLoad) {
 		g_channel->setCurrentLimit(limit.getFloat());
 		g_channel->prot_conf.flags.i_state = state;
 		g_channel->prot_conf.i_delay = delay.getFloat();
-		onSetFinish();
+		onSetFinish(checkLoad);
 	}
 }
 
@@ -321,7 +325,7 @@ void ChSettingsOppProtectionPage::setParams(bool checkLoad) {
 		g_channel->prot_conf.flags.p_state = state;
 		g_channel->prot_conf.p_level = level.getFloat();
 		g_channel->prot_conf.p_delay = delay.getFloat();
-		onSetFinish();
+		onSetFinish(checkLoad);
 	}
 }
 
@@ -353,7 +357,7 @@ void ChSettingsOtpProtectionPage::setParams(bool checkLoad) {
 	temperature::setChannelSensorState(g_channel, state ? true : false);
 	temperature::setChannelSensorLevel(g_channel, level.getFloat());
 	temperature::setChannelSensorDelay(g_channel, delay.getFloat());
-	onSetFinish();
+	onSetFinish(checkLoad);
 #endif
 }
 
