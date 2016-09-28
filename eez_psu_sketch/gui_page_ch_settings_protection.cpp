@@ -248,7 +248,7 @@ void ChSettingsOvpProtectionPage::onSetParamsOk() {
 }
 
 void ChSettingsOvpProtectionPage::setParams(bool checkLoad) {
-	if (checkLoad && limit.getFloat() < g_channel->u.mon) {
+	if (checkLoad && g_channel->isOutputEnabled() && limit.getFloat() < g_channel->u.mon && util::greaterOrEqual(g_channel->i.mon, 0, CHANNEL_VALUE_PRECISION)) {
 		areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
 	} else {
 		g_channel->setVoltageLimit(limit.getFloat());
@@ -282,7 +282,7 @@ void ChSettingsOcpProtectionPage::onSetParamsOk() {
 }
 
 void ChSettingsOcpProtectionPage::setParams(bool checkLoad) {
-	if (checkLoad && limit.getFloat() < g_channel->i.mon) {
+	if (checkLoad && g_channel->isOutputEnabled() && limit.getFloat() < g_channel->i.mon) {
 		areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
 	} else {
 		g_channel->setCurrentLimit(limit.getFloat());
@@ -318,15 +318,19 @@ void ChSettingsOppProtectionPage::onSetParamsOk() {
 }
 
 void ChSettingsOppProtectionPage::setParams(bool checkLoad) {
-	if (checkLoad && limit.getFloat() < g_channel->u.mon * g_channel->i.mon) {
-		areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
-	} else {
-		g_channel->setPowerLimit(limit.getFloat());
-		g_channel->prot_conf.flags.p_state = state;
-		g_channel->prot_conf.p_level = level.getFloat();
-		g_channel->prot_conf.p_delay = delay.getFloat();
-		onSetFinish(checkLoad);
+	if (checkLoad && g_channel->isOutputEnabled()) {
+		float pMon = g_channel->u.mon * g_channel->i.mon;
+		if (limit.getFloat() < pMon && util::greaterOrEqual(g_channel->i.mon, 0, CHANNEL_VALUE_PRECISION)) {
+			areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
+			return;
+		}
 	}
+
+	g_channel->setPowerLimit(limit.getFloat());
+	g_channel->prot_conf.flags.p_state = state;
+	g_channel->prot_conf.p_level = level.getFloat();
+	g_channel->prot_conf.p_delay = delay.getFloat();
+	onSetFinish(checkLoad);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
