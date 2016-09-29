@@ -228,14 +228,14 @@ ChSettingsOvpProtectionPage::ChSettingsOvpProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.u_state ? 1 : 0;
 
 	origLimit = limit = data::Value(g_channel->u.limit, data::VALUE_TYPE_FLOAT_VOLT);
-	minLimit = g_channel->U_MIN;
-	maxLimit = g_channel->U_MAX;
-	defLimit = g_channel->U_MAX;
+	minLimit = g_channel->u.min;
+	maxLimit = g_channel->u.max;
+	defLimit = g_channel->u.max;
 
 	origLevel = level = data::Value(g_channel->prot_conf.u_level, data::VALUE_TYPE_FLOAT_VOLT);
 	minLevel = g_channel->u.set;
-	maxLevel = g_channel->U_MAX;
-	defLevel = g_channel->U_MAX;
+	maxLevel = g_channel->u.max;
+	defLevel = g_channel->u.max;
 
 	origDelay = delay = data::Value(g_channel->prot_conf.u_delay, data::VALUE_TYPE_FLOAT_SECOND);
 	minDelay = g_channel->OVP_MIN_DELAY;
@@ -265,9 +265,9 @@ ChSettingsOcpProtectionPage::ChSettingsOcpProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.i_state ? 1 : 0;
 
 	origLimit = limit = data::Value(g_channel->i.limit, data::VALUE_TYPE_FLOAT_AMPER);
-	minLimit = g_channel->I_MIN;
+	minLimit = g_channel->i.min;
 	maxLimit = g_channel->getCurrentMaxLimit();
-	defLimit = g_channel->I_MAX;
+	defLimit = g_channel->i.max;
 
 	origLevel = level = 0;
 

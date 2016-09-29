@@ -94,19 +94,19 @@ bool DigitalAnalogConverter::test() {
         return true;
     }
 
-    int save_cal_enabled = channel.flags.cal_enabled;
-    channel.flags.cal_enabled = 0;
+    bool saveCalibrationEnabled = channel.isCalibrationEnabled();
+    channel.calibrationEnableNoEvent(false);
 
 	// disable OE on channel
-    int save_output_enabled = channel.flags.output_enabled;
-    channel.flags.output_enabled = 0;
+    int save_output_enabled = channel.flags.outputEnabled;
+    channel.flags.outputEnabled = 0;
 	channel.ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, false);
 
     test_result = psu::TEST_OK;
 
     // set U on DAC and check it on ADC
-    float u_set = channel.U_MAX / 2;
-    float i_set = channel.I_MAX / 2;
+    float u_set = channel.u.max / 2;
+    float i_set = channel.i.max / 2;
 
     float u_set_save = channel.u.set;
     channel.setVoltage(u_set);
@@ -142,11 +142,11 @@ bool DigitalAnalogConverter::test() {
             (int)(i_diff * 100));
     }
 
-    channel.flags.cal_enabled = save_cal_enabled;
+	channel.calibrationEnableNoEvent(saveCalibrationEnabled);
 
     // Re-enable output
 	if (save_output_enabled) {
-		channel.flags.output_enabled = true;
+		channel.flags.outputEnabled = true;
 		channel.ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, true);
 	}
 
@@ -171,11 +171,11 @@ bool DigitalAnalogConverter::test() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void DigitalAnalogConverter::set_voltage(float value) {
-    set_value(DATA_BUFFER_A, util::remap(value, channel.U_MIN, (float)DAC_MIN, channel.U_MAX, (float)DAC_MAX));
+    set_value(DATA_BUFFER_A, util::remap(value, channel.u.min, (float)DAC_MIN, channel.u.max, (float)DAC_MAX));
 }
 
 void DigitalAnalogConverter::set_current(float value) {
-    set_value(DATA_BUFFER_B, util::remap(value, channel.I_MIN, (float)DAC_MIN, channel.I_MAX, (float)DAC_MAX));
+    set_value(DATA_BUFFER_B, util::remap(value, channel.i.min, (float)DAC_MIN, channel.i.max, (float)DAC_MAX));
 }
 
 }

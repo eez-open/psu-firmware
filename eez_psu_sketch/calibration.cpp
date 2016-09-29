@@ -153,8 +153,8 @@ bool Value::checkMid() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void resetChannelToZero() {
-    channel->setVoltage(0);
-    channel->setCurrent(0);
+    channel->setVoltage(channel->u.min);
+    channel->setCurrent(channel->i.min);
 }
 
 bool isEnabled() {
@@ -172,8 +172,7 @@ void start(Channel *channel_) {
     current.reset();
     voltage.reset();
 
-    channel->flags.cal_enabled = 0;
-
+    channel->calibrationEnable(false);
     resetChannelToZero();
 
     channel->setOperBits(OPER_ISUM_CALI, true);
@@ -185,9 +184,8 @@ void stop() {
     enabled = false;
 
     if (channel->isCalibrationExists()) {
-        channel->flags.cal_enabled = 1;
+        channel->calibrationEnable(true);
     }
-
     resetChannelToZero();
 
     channel->setOperBits(OPER_ISUM_CALI, false);
@@ -313,7 +311,7 @@ bool save() {
 
 bool clear() {
     channel->clearCalibrationConf();
-    channel->flags.cal_enabled = 0;
+    channel->calibrationEnable(false);
     return persist_conf::saveChannelCalibration(channel);
 }
 

@@ -104,9 +104,9 @@ scpi_result_t scpi_appl_ApplyQ(scpi_t * context) {
 
         // return both current and voltage
         sprintf_P(buffer, PSTR("CH%d:"), channel->index);
-        util::strcatVoltage(buffer, channel->U_MAX);
+        util::strcatVoltage(buffer, channel->u.max);
         strcat(buffer, "/");
-        util::strcatCurrent(buffer, channel->I_MAX);
+        util::strcatCurrent(buffer, channel->i.max);
         strcat(buffer, ", ");
 
         util::strcatFloat(buffer, channel->u.set);

@@ -204,7 +204,7 @@ scpi_result_t scpi_source_CurrentQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, channel->i.set, channel->I_MIN, channel->I_MAX, channel->I_DEF);
+    return get_source_value(context, channel->i.set, channel->i.min, channel->i.max, channel->i.def);
 }
 
 scpi_result_t scpi_source_Voltage(scpi_t * context) {
@@ -255,7 +255,7 @@ scpi_result_t scpi_source_VoltageQ(scpi_t * context) {
 		u = channel->u.set;
 	}
 
-    return get_source_value(context, u, channel->U_MIN, channel->U_MAX, channel->U_DEF);
+    return get_source_value(context, u, channel->u.min, channel->u.max, channel->u.def);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -424,7 +424,7 @@ scpi_result_t scpi_source_VoltageProtectionLevel(scpi_t * context) {
 	}
 
     float voltage;
-    if (!get_voltage_protection_level_param(context, voltage, channel->u.set, channel->U_MAX, channel->U_MAX)) {
+    if (!get_voltage_protection_level_param(context, voltage, channel->u.set, channel->u.max, channel->u.max)) {
         return SCPI_RES_ERR;
     }
 
@@ -441,7 +441,7 @@ scpi_result_t scpi_source_VoltageProtectionLevelQ(scpi_t * context) {
     }
     
     return get_source_value(context, channel->prot_conf.u_level,
-        channel->u.set, channel->U_MAX, channel->U_MAX);
+        channel->u.set, channel->u.max, channel->u.max);
 }
 
 scpi_result_t scpi_source_VoltageProtectionDelay(scpi_t * context) {

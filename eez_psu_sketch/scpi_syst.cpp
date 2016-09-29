@@ -310,7 +310,7 @@ scpi_result_t scpi_syst_ChannelInformationCurrentQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    SCPI_ResultFloat(context, channel->I_MAX);
+    SCPI_ResultFloat(context, channel->i.max);
 
     return SCPI_RES_OK;
 }
@@ -393,7 +393,7 @@ scpi_result_t scpi_syst_ChannelInformationVoltageQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    SCPI_ResultFloat(context, channel->U_MAX);
+    SCPI_ResultFloat(context, channel->u.max);
 
     return SCPI_RES_OK;
 }

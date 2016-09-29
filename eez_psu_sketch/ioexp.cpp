@@ -115,8 +115,8 @@ bool IOExpander::test() {
 
     if (test_result == psu::TEST_OK) {
 #if !CONF_SKIP_PWRGOOD_TEST
-        channel.flags.power_ok = testBit(IO_BIT_IN_PWRGOOD);
-        if (!channel.flags.power_ok) {
+        channel.flags.powerOk = testBit(IO_BIT_IN_PWRGOOD);
+        if (!channel.flags.powerOk) {
             DebugTraceF("Ch%d power fault", channel.index);
             psu::generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (channel.index - 1));
         }
@@ -125,7 +125,7 @@ bool IOExpander::test() {
 #endif
     }
     else {
-        channel.flags.power_ok = 0;
+        channel.flags.powerOk = 0;
     }
 
     if (test_result == psu::TEST_FAILED) {

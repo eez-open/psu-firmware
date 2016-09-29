@@ -244,9 +244,9 @@ void select(Cursor &cursor, uint8_t id, int index) {
 
 Value getMin(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_MON) {
-        return Value(Channel::get(cursor.i).U_MIN, VALUE_TYPE_FLOAT_VOLT);
+        return Value(Channel::get(cursor.i).u.min, VALUE_TYPE_FLOAT_VOLT);
     } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_MON) {
-        return Value(Channel::get(cursor.i).I_MIN, VALUE_TYPE_FLOAT_AMPER);
+        return Value(Channel::get(cursor.i).i.min, VALUE_TYPE_FLOAT_AMPER);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMin();
     }
@@ -255,9 +255,9 @@ Value getMin(const Cursor &cursor, uint8_t id) {
 
 Value getMax(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_MON) {
-        return Value(Channel::get(cursor.i).U_MAX, VALUE_TYPE_FLOAT_VOLT);
+        return Value(Channel::get(cursor.i).u.max, VALUE_TYPE_FLOAT_VOLT);
     } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_MON) {
-        return Value(Channel::get(cursor.i).I_MAX, VALUE_TYPE_FLOAT_AMPER);
+        return Value(Channel::get(cursor.i).i.max, VALUE_TYPE_FLOAT_AMPER);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMax();
     }

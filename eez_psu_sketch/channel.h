@@ -128,16 +128,16 @@ public:
 
     /// Channel binary flags like output enabled, sense enabled, ...
     struct Flags {
-        unsigned output_enabled : 1;
-        unsigned dp_on : 1;
-        unsigned sense_enabled : 1;
-        unsigned cv_mode : 1;
-        unsigned cc_mode : 1;
-        unsigned power_ok : 1;
-        unsigned cal_enabled : 1;
-        unsigned rprog_enabled: 1;
-        unsigned lripple_enabled: 1;
-        unsigned lripple_auto_enabled: 1;
+        unsigned outputEnabled : 1;
+        unsigned dpOn : 1;
+        unsigned senseEnabled : 1;
+        unsigned cvMode : 1;
+        unsigned ccMode : 1;
+        unsigned powerOk : 1;
+        unsigned _calEnabled : 1;
+        unsigned rprogEnabled: 1;
+        unsigned lrippleEnabled: 1;
+        unsigned lrippleAutoEnabled: 1;
 		unsigned rpol : 1; // remote sense reverse polarity is detected
     };
 
@@ -148,6 +148,10 @@ public:
         float mon;
         float step;
 		float limit;
+
+		float min;
+	    float def;
+		float max;
 
         void init(float def_step, float def_limit);
     };
@@ -199,6 +203,10 @@ public:
 	/// Restore previously saved OE state for all the channels.
 	static void restoreOE();
 
+	///
+	static char *getChannelsInfo(char *p);
+	static char *getChannelsInfoShort(char *p);
+
     /// Channel index. Starts from 1.
     uint8_t index;
 
@@ -225,10 +233,7 @@ public:
     uint8_t cc_led_pin;
     uint8_t cv_led_pin;
 
-    float U_MIN;
-    float U_DEF;
-    float U_MAX;
-    float U_MIN_STEP;
+	float U_MIN_STEP;
     float U_DEF_STEP;
     float U_MAX_STEP;
     float U_CAL_VAL_MIN;
@@ -241,10 +246,7 @@ public:
     float OVP_DEFAULT_DELAY;
     float OVP_MAX_DELAY;
 
-    float I_MIN;
-    float I_DEF;
-    float I_MAX;
-    float I_MIN_STEP;
+	float I_MIN_STEP;
     float I_DEF_STEP;
     float I_MAX_STEP;
     float I_CAL_VAL_MIN;
@@ -306,7 +308,7 @@ public:
         uint8_t bp_led_out, uint8_t bp_led_sense, uint8_t bp_relay_sense, uint8_t bp_led_prog,
 #endif
         uint8_t cc_led_pin, uint8_t cv_led_pin,
-        float U_MIN, float U_DEF, float U_MAX, float U_MIN_STEP, float U_DEF_STEP, float U_MAX_STEP, float U_CAL_VAL_MIN, float U_CAL_VAL_MID, float U_CAL_VAL_MAX, float U_CURR_CAL,
+        float U_MIN, float U_DEF, float U_MAX, float U_MAX_CONF, float U_MIN_STEP, float U_DEF_STEP, float U_MAX_STEP, float U_CAL_VAL_MIN, float U_CAL_VAL_MID, float U_CAL_VAL_MAX, float U_CURR_CAL,
         bool OVP_DEFAULT_STATE, float OVP_MIN_DELAY, float OVP_DEFAULT_DELAY, float OVP_MAX_DELAY,
         float I_MIN, float I_DEF, float I_MAX, float I_MIN_STEP, float I_DEF_STEP, float I_MAX_STEP, float I_CAL_VAL_MIN, float I_CAL_VAL_MID, float I_CAL_VAL_MAX, float I_VOLT_CAL,
         bool OCP_DEFAULT_STATE, float OCP_MIN_DELAY, float OCP_DEFAULT_DELAY, float OCP_MAX_DELAY,
@@ -368,6 +370,7 @@ public:
 
     /// Enable/disable channel calibration.
     void calibrationEnable(bool enable);
+	void calibrationEnableNoEvent(bool enable);
 
     /// Is channel calibration enabled?
     bool isCalibrationEnabled();
@@ -421,10 +424,10 @@ public:
     void setOperBits(int bit_mask, bool on);
 
     /// Is channel in CV (constant voltage) mode?
-    bool isCvMode() { return flags.cv_mode && !flags.cc_mode; }
+    bool isCvMode() { return flags.cvMode && !flags.ccMode; }
 
     /// Is channel in CC (constant current) mode?
-    bool isCcMode() { return flags.cc_mode && !flags.cv_mode; }
+    bool isCcMode() { return flags.ccMode && !flags.cvMode; }
 
     /// Returns "CC", "CV" or "UR"
     char *getCvModeStr();
@@ -483,28 +486,45 @@ private:
 	bool delayLowRippleCheck;
 	unsigned long outputEnableStartTime;
 
+	float U_MIN;
+    float U_DEF;
+    float U_MAX;
+	float U_MAX_CONF;
+
+	float I_MIN;
+    float I_DEF;
+    float I_MAX;
+
     void clearProtectionConf();
     void protectionEnter(ProtectionValue &cpv);
     void protectionCheck(ProtectionValue &cpv);
-    float readingToCalibratedValue(Value *cv, float mon_reading);
-    void valueAddReading(Value *cv, float value);
+
+	void doCalibrationEnable(bool enable);
+	float readingToCalibratedValue(Value *cv, float mon_reading);
+
+	void valueAddReading(Value *cv, float value);
     void valueAddReadingDac(Value *cv, float value);
-    void adcDataIsReady(int16_t data);
-    void setCcMode(bool cc_mode);
+	void adcDataIsReady(int16_t data);
+    
+	void setCcMode(bool cc_mode);
     void setCvMode(bool cv_mode);
     void updateCcAndCvSwitch();
-    void doOutputEnable(bool enable);
-    void doRemoteSensingEnable(bool enable);
+    
+	void doOutputEnable(bool enable);
+    
+	void doRemoteSensingEnable(bool enable);
     void doRemoteProgrammingEnable(bool enable);
-    void lowRippleCheck(unsigned long tick_usec);
+
+	void lowRippleCheck(unsigned long tick_usec);
     bool isLowRippleAllowed(unsigned long tick_usec);
     void doLowRippleEnable(bool enable);
     void doLowRippleAutoEnable(bool enable);
-    void doDpEnable(bool enable);
+
+	void doDpEnable(bool enable);
+
 #if !CONF_SKIP_PWRGOOD_TEST
 	void testPwrgood(uint8_t gpio);
 #endif
-
 };
 
 }

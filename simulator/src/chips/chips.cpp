@@ -693,7 +693,7 @@ void AnalogDigitalConverterChip::updateValues() {
         Channel &channel = Channel::get(i);
         if (channel.convend_pin == convend_pin) {
 			if (channel.simulator.getLoadEnabled()) {
-                float u_set_v = channel.isRemoteProgrammingEnabled() ? util::remap(channel.simulator.voltProgExt, 0, 0, 2.5, channel.U_MAX) : channel.remapAdcDataToVoltage(u_set);
+                float u_set_v = channel.isRemoteProgrammingEnabled() ? util::remap(channel.simulator.voltProgExt, 0, 0, 2.5, channel.u.max) : channel.remapAdcDataToVoltage(u_set);
                 float i_set_a = channel.remapAdcDataToCurrent(i_set);
 
                 float u_mon_v = i_set_a * channel.simulator.load;

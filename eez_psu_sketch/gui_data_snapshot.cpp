@@ -48,39 +48,7 @@ const char *getModelInfo() {
     static char model_info[CH_NUM * (sizeof("XX V / XX A") - 1) + (CH_NUM - 1) * (sizeof(" - ") - 1) + 1];
 
     if (*model_info == 0) {
-        char *p = model_info;
-
-        bool ch_used[CH_NUM];
-
-        for (int i = 0; i < CH_NUM; ++i) {
-            ch_used[i] = false;
-        }
-
-        bool first_channel = true;
-
-        for (int i = 0; i < CH_NUM; ++i) {
-            if (!ch_used[i]) {
-                int count = 1;
-                for (int j = i + 1; j < CH_NUM; ++j) {
-                    if (Channel::get(i).U_MAX == Channel::get(j).U_MAX && Channel::get(i).I_MAX == Channel::get(j).I_MAX) {
-                        ch_used[j] = true;
-                        ++count;
-                    }
-                }
-
-                if (first_channel) {
-                    first_channel = false;
-                }
-                else {
-                    *p++ += ' ';
-                    *p++ += '-';
-                    *p++ += ' ';
-                }
-
-                p += sprintf_P(p, PSTR("%d V / %d A"), (int)floor(Channel::get(i).U_MAX), (int)floor(Channel::get(i).I_MAX));
-            }
-        }
-
+        char *p = Channel::getChannelsInfoShort(model_info);
         *p = 0;
     }
 
@@ -153,8 +121,8 @@ void Snapshot::takeSnapshot() {
 		channelSnapshots[i].i_monDac = channel.i.mon_dac;
 		channelSnapshots[i].i_limit = channel.getCurrentLimit();
 
-		channelSnapshots[i].flags.lrip = channel.flags.lripple_enabled ? 1 : 0;
-		channelSnapshots[i].flags.rprog = channel.flags.rprog_enabled ? 1 : 0;
+		channelSnapshots[i].flags.lrip = channel.flags.lrippleEnabled ? 1 : 0;
+		channelSnapshots[i].flags.rprog = channel.flags.rprogEnabled ? 1 : 0;
 
 		if (!channel.prot_conf.flags.i_state) channelSnapshots[i].flags.ocp = 0;
         else if (!channel.ocp.flags.tripped) channelSnapshots[i].flags.ocp = 1;
@@ -177,9 +145,9 @@ void Snapshot::takeSnapshot() {
         else channelSnapshots[i].flags.otp_ch = 2;
 #endif
 
-		channelSnapshots[i].flags.dp = channel.flags.dp_on ? 1 : 0;
+		channelSnapshots[i].flags.dp = channel.flags.dpOn ? 1 : 0;
 		
-		channelSnapshots[i].flags.cal_enabled = channel.flags.cal_enabled ? 1 : 0;
+		channelSnapshots[i].flags.cal_enabled = channel.isCalibrationEnabled() ? 1 : 0;
     }
 
 	flags.channelDisplayedValues = persist_conf::dev_conf.flags.channelDisplayedValues;

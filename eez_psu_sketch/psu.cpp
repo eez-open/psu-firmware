@@ -590,35 +590,7 @@ const char *getModelName() {
 
         char *p = model_name + strlen(model_name);
 
-        bool ch_used[CH_NUM];
-
-        for (int i = 0; i < CH_NUM; ++i) {
-            ch_used[i] = false;
-        }
-
-        bool first_channel = true;
-
-        for (int i = 0; i < CH_NUM; ++i) {
-            if (!ch_used[i]) {
-                int count = 1;
-                for (int j = i + 1; j < CH_NUM; ++j) {
-                    if (Channel::get(i).U_MAX == Channel::get(j).U_MAX && Channel::get(i).I_MAX == Channel::get(j).I_MAX) {
-                        ch_used[j] = true;
-                        ++count;
-                    }
-                }
-
-                if (first_channel) {
-                    *p++ += ' ';
-                    first_channel = false;
-                }
-                else {
-                    *p++ += '-';
-                }
-
-                p += sprintf_P(p, PSTR("%d/%02d/%02d"), count, (int)floor(Channel::get(i).U_MAX), (int)floor(Channel::get(i).I_MAX));
-            }
-        }
+		p = Channel::getChannelsInfo(p);
 
         *p++ = ' ';
         *p++ = '(';
@@ -678,7 +650,7 @@ extern void setCurrentMaxLimit(float value) {
 		if (!util::isNaN(g_current_max_limit)) {
 			for (int i = 0; i < CH_NUM; ++i) {
 				if (Channel::get(i).isOutputEnabled() && Channel::get(i).i.mon > value) {
-					Channel::get(i).setCurrent(0);
+					Channel::get(i).setCurrent(Channel::get(i).i.min);
 				}
 
 				if (g_current_max_limit < Channel::get(i).getCurrentLimit()) {

@@ -73,21 +73,21 @@ void recallChannelsFromProfile(Parameters *profile) {
 			channel.simulator.voltProgExt = profile->channels[i].voltProgExt;
 #endif
 
-			channel.flags.cal_enabled = profile->channels[i].flags.cal_enabled && channel.isCalibrationExists() ? 1 : 0;
-			channel.flags.output_enabled = profile->channels[i].flags.output_enabled;
-			channel.flags.sense_enabled = profile->channels[i].flags.sense_enabled;
+			channel.calibrationEnable(profile->channels[i].flags.cal_enabled && channel.isCalibrationExists() ? 1 : 0);
+			channel.flags.outputEnabled = profile->channels[i].flags.output_enabled;
+			channel.flags.senseEnabled = profile->channels[i].flags.sense_enabled;
 
 			if (channel.getFeatures() & CH_FEATURE_RPROG) {
-				channel.flags.rprog_enabled = profile->channels[i].flags.rprog_enabled;
+				channel.flags.rprogEnabled = profile->channels[i].flags.rprog_enabled;
 			} else {
-				channel.flags.rprog_enabled = 0;
+				channel.flags.rprogEnabled = 0;
 			}
 
 			if (channel.getFeatures() & CH_FEATURE_LRIPPLE) {
-				channel.flags.lripple_auto_enabled = profile->channels[i].flags.lripple_auto_enabled;
+				channel.flags.lrippleAutoEnabled = profile->channels[i].flags.lripple_auto_enabled;
 			} else {
-				channel.flags.lripple_enabled = 0;
-				channel.flags.lripple_auto_enabled = 0;
+				channel.flags.lrippleEnabled = 0;
+				channel.flags.lrippleAutoEnabled = 0;
 			}
 		}
 
@@ -195,18 +195,18 @@ bool saveAtLocation(int location, char *name) {
 
 				profile.channels[i].flags.parameters_are_valid = 1;
 
-				profile.channels[i].flags.cal_enabled = channel.flags.cal_enabled;
-				profile.channels[i].flags.output_enabled = channel.flags.output_enabled;
-				profile.channels[i].flags.sense_enabled = Channel::get(i).flags.sense_enabled;
+				profile.channels[i].flags.cal_enabled = channel.isCalibrationEnabled();
+				profile.channels[i].flags.output_enabled = channel.flags.outputEnabled;
+				profile.channels[i].flags.sense_enabled = Channel::get(i).flags.senseEnabled;
 
 				if (Channel::get(i).getFeatures() & CH_FEATURE_RPROG) {
-					profile.channels[i].flags.rprog_enabled = Channel::get(i).flags.rprog_enabled;
+					profile.channels[i].flags.rprog_enabled = Channel::get(i).flags.rprogEnabled;
 				} else {
 					profile.channels[i].flags.rprog_enabled = 0;
 				}
 
 				if (Channel::get(i).getFeatures() & CH_FEATURE_LRIPPLE) {
-					profile.channels[i].flags.lripple_auto_enabled = Channel::get(i).flags.lripple_auto_enabled;
+					profile.channels[i].flags.lripple_auto_enabled = Channel::get(i).flags.lrippleAutoEnabled;
 				} else {
 					profile.channels[i].flags.lripple_auto_enabled = 0;
 				}

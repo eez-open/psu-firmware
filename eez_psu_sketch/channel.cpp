@@ -117,6 +117,74 @@ void Channel::restoreOE() {
 	}
 }
 
+char *Channel::getChannelsInfo(char *p) {
+    bool ch_used[CH_NUM];
+
+    for (int i = 0; i < CH_NUM; ++i) {
+        ch_used[i] = false;
+    }
+
+    bool first_channel = true;
+
+    for (int i = 0; i < CH_NUM; ++i) {
+        if (!ch_used[i]) {
+            int count = 1;
+            for (int j = i + 1; j < CH_NUM; ++j) {
+                if (Channel::get(i).U_MAX == Channel::get(j).U_MAX && Channel::get(i).I_MAX == Channel::get(j).I_MAX) {
+                    ch_used[j] = true;
+                    ++count;
+                }
+            }
+
+            if (first_channel) {
+                *p++ += ' ';
+                first_channel = false;
+            }
+            else {
+                *p++ += '-';
+            }
+
+            p += sprintf_P(p, PSTR("%d/%02d/%02d"), count, (int)floor(Channel::get(i).U_MAX), (int)floor(Channel::get(i).I_MAX));
+        }
+    }
+
+	return p;
+}
+
+char *Channel::getChannelsInfoShort(char *p) {
+    bool ch_used[CH_NUM];
+
+    for (int i = 0; i < CH_NUM; ++i) {
+        ch_used[i] = false;
+    }
+
+    bool first_channel = true;
+
+    for (int i = 0; i < CH_NUM; ++i) {
+        if (!ch_used[i]) {
+            int count = 1;
+            for (int j = i + 1; j < CH_NUM; ++j) {
+                if (Channel::get(i).U_MAX == Channel::get(j).U_MAX && Channel::get(i).I_MAX == Channel::get(j).I_MAX) {
+                    ch_used[j] = true;
+                    ++count;
+                }
+            }
+
+            if (first_channel) {
+                *p++ += ' ';
+                first_channel = false;
+            }
+            else {
+                *p++ += '-';
+            }
+
+            p += sprintf_P(p, PSTR("%d/%02d/%02d"), count, (int)floor(Channel::get(i).U_MAX), (int)floor(Channel::get(i).I_MAX));
+        }
+    }
+
+	return p;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifdef EEZ_PSU_SIMULATOR
@@ -161,7 +229,7 @@ Channel::Channel(
     uint8_t bp_led_out_, uint8_t bp_led_sense_, uint8_t bp_relay_sense_, uint8_t bp_led_prog_,
 #endif
     uint8_t cc_led_pin_, uint8_t cv_led_pin_,
-    float U_MIN_, float U_DEF_, float U_MAX_, float U_MIN_STEP_, float U_DEF_STEP_, float U_MAX_STEP_, float U_CAL_VAL_MIN_, float U_CAL_VAL_MID_, float U_CAL_VAL_MAX_, float U_CURR_CAL_,
+    float U_MIN_, float U_DEF_, float U_MAX_, float U_MAX_CONF_, float U_MIN_STEP_, float U_DEF_STEP_, float U_MAX_STEP_, float U_CAL_VAL_MIN_, float U_CAL_VAL_MID_, float U_CAL_VAL_MAX_, float U_CURR_CAL_,
     bool OVP_DEFAULT_STATE_, float OVP_MIN_DELAY_, float OVP_DEFAULT_DELAY_, float OVP_MAX_DELAY_,
     float I_MIN_, float I_DEF_, float I_MAX_, float I_MIN_STEP_, float I_DEF_STEP_, float I_MAX_STEP_, float I_CAL_VAL_MIN_, float I_CAL_VAL_MID_, float I_CAL_VAL_MAX_, float I_VOLT_CAL_,
     bool OCP_DEFAULT_STATE_, float OCP_MIN_DELAY_, float OCP_DEFAULT_DELAY_, float OCP_MAX_DELAY_,
@@ -178,7 +246,7 @@ Channel::Channel(
     bp_led_out(bp_led_out_), bp_led_sense(bp_led_sense_), bp_relay_sense(bp_relay_sense_), bp_led_prog(bp_led_prog_),
 #endif
     cc_led_pin(cc_led_pin_), cv_led_pin(cv_led_pin_),
-    U_MIN(U_MIN_), U_DEF(U_DEF_), U_MAX(U_MAX_), U_MIN_STEP(U_MIN_STEP_), U_DEF_STEP(U_DEF_STEP_), U_MAX_STEP(U_MAX_STEP_), U_CAL_VAL_MIN(U_CAL_VAL_MIN_), U_CAL_VAL_MID(U_CAL_VAL_MID_), U_CAL_VAL_MAX(U_CAL_VAL_MAX_), U_CURR_CAL(U_CURR_CAL_),
+    U_MIN(U_MIN_), U_DEF(U_DEF_), U_MAX(U_MAX_), U_MAX_CONF(U_MAX_CONF_), U_MIN_STEP(U_MIN_STEP_), U_DEF_STEP(U_DEF_STEP_), U_MAX_STEP(U_MAX_STEP_), U_CAL_VAL_MIN(U_CAL_VAL_MIN_), U_CAL_VAL_MID(U_CAL_VAL_MID_), U_CAL_VAL_MAX(U_CAL_VAL_MAX_), U_CURR_CAL(U_CURR_CAL_),
     OVP_DEFAULT_STATE(OVP_DEFAULT_STATE_), OVP_MIN_DELAY(OVP_MIN_DELAY_), OVP_DEFAULT_DELAY(OVP_DEFAULT_DELAY_), OVP_MAX_DELAY(OVP_MAX_DELAY_),
     I_MIN(I_MIN_), I_DEF(I_DEF_), I_MAX(I_MAX_), I_MIN_STEP(I_MIN_STEP_), I_DEF_STEP(I_DEF_STEP_), I_MAX_STEP(I_MAX_STEP_), I_CAL_VAL_MIN(I_CAL_VAL_MIN_), I_CAL_VAL_MID(I_CAL_VAL_MID_), I_CAL_VAL_MAX(I_CAL_VAL_MAX_), I_VOLT_CAL(I_VOLT_CAL_),
     OCP_DEFAULT_STATE(OCP_DEFAULT_STATE_), OCP_MIN_DELAY(OCP_MIN_DELAY_), OCP_DEFAULT_DELAY(OCP_DEFAULT_DELAY_), OCP_MAX_DELAY(OCP_MAX_DELAY_),
@@ -189,6 +257,13 @@ Channel::Channel(
     dac(*this),
 	onTimeCounter(index_)
 {
+	u.min = U_MIN;
+	u.max = U_MAX;
+	u.def = U_DEF;
+
+	i.min = I_MIN;
+	i.max = I_MAX;
+	i.def = I_DEF;
 }
 
 void Channel::protectionEnter(ProtectionValue &cpv) {
@@ -218,7 +293,7 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     float delay;
     
     if (IS_OVP_VALUE(this, cpv)) {
-        state = flags.rprog_enabled || prot_conf.flags.u_state;
+        state = flags.rprogEnabled || prot_conf.flags.u_state;
 		//condition = flags.cv_mode && (!flags.cc_mode || fabs(i.mon - i.set) >= CHANNEL_VALUE_PRECISION) && (prot_conf.u_level <= u.set);
 		condition = util::greaterOrEqual(u.mon, prot_conf.u_level, CHANNEL_VALUE_PRECISION);
         delay = prot_conf.u_delay;
@@ -244,10 +319,10 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
                     cpv.flags.alarmed = 0;
 
                     if (IS_OVP_VALUE(this, cpv)) {
-                        DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA, I MON=%d mA", (int)flags.cv_mode, (int)flags.cc_mode, (int)(fabs(i.mon - i.set) * 1000), (int)(i.mon * 1000));
+                        DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA, I MON=%d mA", (int)flags.cvMode, (int)flags.ccMode, (int)(fabs(i.mon - i.set) * 1000), (int)(i.mon * 1000));
                     }
                     else if (IS_OCP_VALUE(this, cpv)) {
-                        DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.cc_mode, (int)flags.cv_mode, (int)(fabs(u.mon - u.set) * 1000));
+                        DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.ccMode, (int)flags.cvMode, (int)(fabs(u.mon - u.set) * 1000));
                     }
 
                     protectionEnter(cpv);
@@ -260,10 +335,10 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
         }
         else {
             if (IS_OVP_VALUE(this, cpv)) {
-                DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA", (int)flags.cv_mode, (int)flags.cc_mode, (int)(fabs(i.mon - i.set) * 1000));
+                DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA", (int)flags.cvMode, (int)flags.ccMode, (int)(fabs(i.mon - i.set) * 1000));
             }
             else if (IS_OCP_VALUE(this, cpv)) {
-                DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.cc_mode, (int)flags.cv_mode, (int)(fabs(u.mon - u.set) * 1000));
+                DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.ccMode, (int)flags.cvMode, (int)(fabs(u.mon - u.set) * 1000));
             }
 
 			protectionEnter(cpv);
@@ -316,15 +391,15 @@ void Channel::onPowerDown() {
 }
 
 void Channel::reset() {
-    flags.output_enabled = 0;
-    flags.dp_on = 0;
-    flags.sense_enabled = 0;
-    flags.rprog_enabled = 0;
+    flags.outputEnabled = 0;
+    flags.dpOn = 0;
+    flags.senseEnabled = 0;
+    flags.rprogEnabled = 0;
 
-    flags.cv_mode = 0;
-    flags.cc_mode = 0;
+    flags.cvMode = 0;
+    flags.ccMode = 0;
 
-    flags.power_ok = 0;
+    flags.powerOk = 0;
 
     ovp.flags.tripped = 0;
     ovp.flags.alarmed = 0;
@@ -336,7 +411,7 @@ void Channel::reset() {
     opp.flags.alarmed = 0;
 
     // CAL:STAT ON if valid calibrating data for both voltage and current exists in the nonvolatile memory, otherwise OFF.
-    flags.cal_enabled = isCalibrationExists();
+    doCalibrationEnable(isCalibrationExists());
 
     // OUTP:PROT:CLE OFF
     // [SOUR[n]]:VOLT:PROT:TRIP? 0
@@ -432,7 +507,7 @@ bool Channel::test() {
 }
 
 bool Channel::isPowerOk() {
-    return flags.power_ok;
+    return flags.powerOk;
 }
 
 bool Channel::isTestFailed() {
@@ -493,7 +568,7 @@ int16_t Channel::remapCurrentToAdcData(float value) {
 }
 
 float Channel::readingToCalibratedValue(Value *cv, float mon_reading) {
-    if (flags.cal_enabled) {
+    if (isCalibrationEnabled()) {
         if (cv == &u) {
             mon_reading = util::remap(mon_reading, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
         }
@@ -585,8 +660,8 @@ void Channel::updateCcAndCvSwitch() {
 void Channel::setCcMode(bool cc_mode) {
     cc_mode = cc_mode && isOutputEnabled();
 
-    if (cc_mode != flags.cc_mode) {
-        flags.cc_mode = cc_mode;
+    if (cc_mode != flags.ccMode) {
+        flags.ccMode = cc_mode;
 
         setOperBits(OPER_ISUM_CC, cc_mode);
         setQuesBits(QUES_ISUM_VOLT, cc_mode);
@@ -596,8 +671,8 @@ void Channel::setCcMode(bool cc_mode) {
 void Channel::setCvMode(bool cv_mode) {
     cv_mode = cv_mode && isOutputEnabled();
 
-    if (cv_mode != flags.cv_mode) {
-        flags.cv_mode = cv_mode;
+    if (cv_mode != flags.cvMode) {
+        flags.cvMode = cv_mode;
 
         updateCcAndCvSwitch();
 
@@ -659,7 +734,7 @@ void Channel::doDpEnable(bool enable) {
     // DP bit is active low
     ioexp.changeBit(IOExpander::IO_BIT_OUT_DP_ENABLE, !enable);
     setOperBits(OPER_ISUM_DP_OFF, !enable);
-    flags.dp_on = enable;
+    flags.dpOn = enable;
 }
 
 extern int g_trt;
@@ -673,7 +748,7 @@ void Channel::doOutputEnable(bool enable) {
 
 	ioexp.disableWrite();
 
-	flags.output_enabled = enable;
+	flags.outputEnabled = enable;
 	ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, enable);
 	setOperBits(OPER_ISUM_OE_OFF, !enable);
 	bp::switchOutput(this, enable);
@@ -723,7 +798,7 @@ void Channel::doRemoteSensingEnable(bool enable) {
     if (enable && !isOk()) {
         return;
     }
-    flags.sense_enabled = enable;
+    flags.senseEnabled = enable;
     bp::switchSense(this, enable);
     setOperBits(OPER_ISUM_RSENS_ON, enable);
 }
@@ -732,9 +807,9 @@ void Channel::doRemoteProgrammingEnable(bool enable) {
     if (enable && !isOk()) {
         return;
     }
-    flags.rprog_enabled = enable;
+    flags.rprogEnabled = enable;
     if (enable) {
-        setVoltage(0);
+        setVoltage(u.min);
         prot_conf.u_level = U_MAX;
 		prot_conf.flags.u_state = true;
     }
@@ -773,20 +848,20 @@ bool Channel::isLowRippleAllowed(unsigned long tick_usec) {
 
 void Channel::lowRippleCheck(unsigned long tick_usec) {
 	if (isLowRippleAllowed(tick_usec)) {
-		if (!flags.lripple_enabled) {
-			if (flags.lripple_auto_enabled) {
+		if (!flags.lrippleEnabled) {
+			if (flags.lrippleAutoEnabled) {
 				doLowRippleEnable(true);
 			}
 		}
 	} else {
-		if (flags.lripple_enabled) {
+		if (flags.lrippleEnabled) {
 			doLowRippleEnable(false);
 		}
 	}
 }
 
 void Channel::doLowRippleEnable(bool enable) {
-    flags.lripple_enabled = enable;
+    flags.lrippleEnabled = enable;
     ioexp.changeBit(ioexp.IO_BIT_OUT_SET_100_PERCENT, !enable);
 }
 
@@ -794,7 +869,7 @@ void Channel::doLowRippleAutoEnable(bool enable) {
     if (enable && !isOk()) {
         return;
     }
-    flags.lripple_auto_enabled = enable;
+    flags.lrippleAutoEnabled = enable;
 }
 
 void Channel::update() {
@@ -806,17 +881,17 @@ void Channel::update() {
 
     setVoltage(u.set);
     setCurrent(i.set);
-    doOutputEnable(flags.output_enabled);
-    doRemoteSensingEnable(flags.sense_enabled);
+    doOutputEnable(flags.outputEnabled);
+    doRemoteSensingEnable(flags.senseEnabled);
     if (getFeatures() & CH_FEATURE_RPROG) {
-        doRemoteProgrammingEnable(flags.rprog_enabled);
+        doRemoteProgrammingEnable(flags.rprogEnabled);
     }
 
     profile::enableSave(last_save_enabled);
 }
 
 void Channel::outputEnable(bool enable) {
-    if (enable != flags.output_enabled) {
+    if (enable != flags.outputEnabled) {
         doOutputEnable(enable);
 		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_OUTPUT_ENABLED :
 			event_queue::EVENT_INFO_CH1_OUTPUT_DISABLED) + index - 1);
@@ -825,25 +900,65 @@ void Channel::outputEnable(bool enable) {
 }
 
 bool Channel::isOutputEnabled() {
-    return psu::isPowerUp() && flags.output_enabled;
+    return psu::isPowerUp() && flags.outputEnabled;
+}
+
+void Channel::doCalibrationEnable(bool enable) {
+	flags._calEnabled = enable;
+
+	if (enable) {
+		u.min = util::remap(U_MIN, cal_conf.u.min.dac, cal_conf.u.min.val, cal_conf.u.max.dac, cal_conf.u.max.val);
+		if (u.min < U_MIN) {
+			u.min = U_MIN;
+		}
+
+		u.max= util::remap(U_MAX, cal_conf.u.min.dac, cal_conf.u.min.val, cal_conf.u.max.dac, cal_conf.u.max.val);
+		if (u.max > U_MAX) {
+			u.max = U_MAX;
+		}
+
+		i.min = util::remap(U_MIN, cal_conf.i.min.dac, cal_conf.i.min.val, cal_conf.i.max.dac, cal_conf.i.max.val);
+		if (i.min < I_MIN) {
+			i.min = I_MIN;
+		}
+
+		i.max= util::remap(U_MAX, cal_conf.i.min.dac, cal_conf.i.min.val, cal_conf.i.max.dac, cal_conf.i.max.val);
+		if (i.max > I_MAX) {
+			i.max = I_MAX;
+		}
+	} else {
+		u.min = U_MIN;
+		u.max = U_MAX;
+
+		i.min = I_MIN;
+		i.max = I_MAX;
+	}
+
+	u.def = u.min;
+	i.def = i.min;
 }
 
 void Channel::calibrationEnable(bool enable) {
-    if (enable != flags.cal_enabled) {
-	    flags.cal_enabled = enable;
+    if (enable != isCalibrationEnabled()) {
 		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_CALIBRATION_ENABLED :
 			event_queue::EVENT_WARNING_CH1_CALIBRATION_DISABLED) + index - 1);
 		profile::save();
     }
 }
 
-bool Channel::isCalibrationEnabled() {
-	return flags.cal_enabled;
+void Channel::calibrationEnableNoEvent(bool enable) {
+    if (enable != isCalibrationEnabled()) {
+		doCalibrationEnable(enable);
+		profile::save();
+    }
 }
 
+bool Channel::isCalibrationEnabled() {
+	return flags._calEnabled;
+}
 
 void Channel::remoteSensingEnable(bool enable) {
-    if (enable != flags.sense_enabled) {
+    if (enable != flags.senseEnabled) {
         doRemoteSensingEnable(enable);
 		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_REMOTE_SENSE_ENABLED :
 			event_queue::EVENT_INFO_CH1_REMOTE_SENSE_DISABLED) + index - 1);
@@ -852,11 +967,11 @@ void Channel::remoteSensingEnable(bool enable) {
 }
 
 bool Channel::isRemoteSensingEnabled() {
-    return flags.sense_enabled;
+    return flags.senseEnabled;
 }
 
 void Channel::remoteProgrammingEnable(bool enable) {
-    if (enable != flags.rprog_enabled) {
+    if (enable != flags.rprogEnabled) {
         doRemoteProgrammingEnable(enable);
 		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_REMOTE_PROG_ENABLED :
 			event_queue::EVENT_INFO_CH1_REMOTE_PROG_DISABLED) + index - 1);
@@ -865,11 +980,11 @@ void Channel::remoteProgrammingEnable(bool enable) {
 }
 
 bool Channel::isRemoteProgrammingEnabled() {
-    return flags.rprog_enabled;
+    return flags.rprogEnabled;
 }
 
 bool Channel::lowRippleEnable(bool enable) {
-    if (enable != flags.lripple_enabled) {
+    if (enable != flags.lrippleEnabled) {
 		if (enable && !isLowRippleAllowed(micros())) {
 			return false;
 		}
@@ -879,17 +994,17 @@ bool Channel::lowRippleEnable(bool enable) {
 }
 
 bool Channel::isLowRippleEnabled() {
-    return flags.lripple_enabled;
+    return flags.lrippleEnabled;
 }
 
 void Channel::lowRippleAutoEnable(bool enable) {
-    if (enable != flags.lripple_auto_enabled) {
+    if (enable != flags.lrippleAutoEnabled) {
         doLowRippleAutoEnable(enable);
     }
 }
 
 bool Channel::isLowRippleAutoEnabled() {
-    return flags.lripple_auto_enabled;
+    return flags.lrippleAutoEnabled;
 }
 
 void Channel::setVoltage(float value) {
@@ -900,9 +1015,13 @@ void Channel::setVoltage(float value) {
         prot_conf.u_level = u.set;
     }
 
-    if (flags.cal_enabled) {
+    if (isCalibrationEnabled()) {
         value = util::remap(value, cal_conf.u.min.val, cal_conf.u.min.dac, cal_conf.u.max.val, cal_conf.u.max.dac);
-    }
+    } else {
+		if (U_MAX != U_MAX_CONF) {
+			value = util::remap(value, 0, 0, U_MAX_CONF, U_MAX);
+		}
+	}
     dac.set_voltage(value);
 
     profile::save();
@@ -912,7 +1031,7 @@ void Channel::setCurrent(float value) {
     i.set = value;
     i.mon_dac = 0;
 
-    if (flags.cal_enabled) {
+    if (isCalibrationEnabled()) {
         value = util::remap(value, cal_conf.i.min.val, cal_conf.i.min.dac, cal_conf.i.max.val, cal_conf.i.max.dac);
     }
     dac.set_current(value);
@@ -1063,7 +1182,7 @@ void Channel::setPowerLimit(float limit) {
 void Channel::testPwrgood(uint8_t gpio) {
     if (!(gpio & (1 << IOExpander::IO_BIT_IN_PWRGOOD))) {
         DebugTraceF("Ch%d PWRGOOD bit changed to 0", index);
-        flags.power_ok = 0;
+        flags.powerOk = 0;
         psu::generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (index - 1));
         psu::powerDownBySensor();
         return;

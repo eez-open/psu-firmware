@@ -269,22 +269,22 @@ scpi_result_t scpi_cal_State(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    bool cal_enabled;
-    if (!SCPI_ParamBool(context, &cal_enabled, TRUE)) {
+    bool calibrationEnabled;
+    if (!SCPI_ParamBool(context, &calibrationEnabled, TRUE)) {
         return SCPI_RES_ERR;
     }
 
-    if (cal_enabled == channel->flags.cal_enabled) {
+    if (calibrationEnabled == channel->isCalibrationEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS);
         return SCPI_RES_ERR;
     }
 
-    if (cal_enabled && !channel->isCalibrationExists()) {
+    if (calibrationEnabled && !channel->isCalibrationExists()) {
         SCPI_ErrorPush(context, SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS);
         return SCPI_RES_ERR;
     }
 
-	channel->calibrationEnable(cal_enabled);
+	channel->calibrationEnable(calibrationEnabled);
 
     return SCPI_RES_OK;
 }
@@ -293,7 +293,7 @@ scpi_result_t scpi_cal_StateQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
     Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
 
-    SCPI_ResultBool(context, channel->flags.cal_enabled);
+    SCPI_ResultBool(context, channel->isCalibrationEnabled());
 
     return SCPI_RES_OK;
 }

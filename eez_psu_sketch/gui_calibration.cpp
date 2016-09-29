@@ -252,14 +252,14 @@ void set() {
 		if (calibrationValue == &psu::calibration::voltage) {
 			options.editUnit = data::VALUE_TYPE_FLOAT_VOLT;
 
-			options.min = g_channel->U_MIN;
-			options.max = g_channel->U_MAX;
+			options.min = g_channel->u.min;
+			options.max = g_channel->u.max;
 
 		} else {
 			options.editUnit = data::VALUE_TYPE_FLOAT_AMPER;
 
-			options.min = g_channel->I_MIN;
-			options.max = g_channel->I_MAX;
+			options.min = g_channel->i.min;
+			options.max = g_channel->i.max;
 		}
 
 		options.def = 0;
@@ -327,7 +327,7 @@ void stop() {
 
 void toggleEnable() {
 	Channel &channel = g_channel ? *g_channel : Channel::get(g_foundWidgetAtDown.cursor.i);
-	channel.calibrationEnable(!channel.flags.cal_enabled);
+	channel.calibrationEnable(!channel.isCalibrationEnabled());
 }
 
 }
