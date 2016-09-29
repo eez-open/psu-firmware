@@ -1023,7 +1023,7 @@ void Channel::setVoltage(float value) {
 
     if (isCalibrationEnabled()) {
         value = util::remap(value, cal_conf.u.min.val, cal_conf.u.min.dac, cal_conf.u.max.val, cal_conf.u.max.dac);
-    } else {
+    } else if (!calibration::isEnabled()) {
 		if (U_MAX != U_MAX_CONF) {
 			value = util::remap(value, 0, 0, U_MAX_CONF, U_MAX);
 		}
