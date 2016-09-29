@@ -67,12 +67,12 @@ void strcatFloat(char *str, float value, int precision) {
 
 void strcatVoltage(char *str, float value) {
     strcatFloat(str, value);
-    strcat(str, " V");
+    strcat(str, "V");
 }
 
 void strcatCurrent(char *str, float value) {
     strcatFloat(str, value);
-    strcat(str, " A");
+    strcat(str, "A");
 }
 
 void strcatDuration(char *str, float value) {

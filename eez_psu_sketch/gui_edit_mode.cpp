@@ -200,9 +200,17 @@ bool isEditWidget(const WidgetCursor &widgetCursor) {
 void getInfoText(char *infoText) {
     Channel &channel = Channel::get(dataCursor.i);
     if (dataId == DATA_ID_CHANNEL_I_SET) {
-        sprintf_P(infoText, PSTR("Set Ch%d voltage [%d-%d V]"), channel.index, (int)minValue.getFloat(), (int)maxValue.getFloat());
+		sprintf_P(infoText, PSTR("Set Ch%d current ["), channel.index);
+		util::strcatFloat(infoText, minValue.getFloat());
+		strcat_P(infoText, PSTR("-"));
+		util::strcatCurrent(infoText, maxValue.getFloat());
+		strcat_P(infoText, PSTR("]"));
     } else {
-        sprintf_P(infoText, PSTR("Set Ch%d current [%d-%d A]"), channel.index, (int)minValue.getFloat(), (int)maxValue.getFloat());
+		sprintf_P(infoText, PSTR("Set Ch%d voltage ["), channel.index);
+		util::strcatFloat(infoText, minValue.getFloat());
+		strcat_P(infoText, PSTR("-"));
+		util::strcatVoltage(infoText, maxValue.getFloat());
+		strcat_P(infoText, PSTR("]"));
     }
 }
 
