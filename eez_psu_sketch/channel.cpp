@@ -940,6 +940,7 @@ void Channel::doCalibrationEnable(bool enable) {
 
 void Channel::calibrationEnable(bool enable) {
     if (enable != isCalibrationEnabled()) {
+		doCalibrationEnable(enable);
 		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_CALIBRATION_ENABLED :
 			event_queue::EVENT_WARNING_CH1_CALIBRATION_DISABLED) + index - 1);
 		profile::save();
