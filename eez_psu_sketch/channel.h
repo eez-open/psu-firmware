@@ -43,6 +43,8 @@ enum ChannelFeatures {
 
 /// PSU channel.
 class Channel {
+	friend class DigitalAnalogConverter;
+
 public:
     /// Binary flags for the channel calibration configuration.
     struct CalibrationConfigurationFlags {

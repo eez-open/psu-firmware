@@ -171,11 +171,11 @@ bool DigitalAnalogConverter::test() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void DigitalAnalogConverter::set_voltage(float value) {
-    set_value(DATA_BUFFER_A, util::remap(value, channel.u.min, (float)DAC_MIN, channel.u.max, (float)DAC_MAX));
+    set_value(DATA_BUFFER_A, util::remap(value, channel.U_MIN, (float)DAC_MIN, channel.U_MAX, (float)DAC_MAX));
 }
 
 void DigitalAnalogConverter::set_current(float value) {
-    set_value(DATA_BUFFER_B, util::remap(value, channel.i.min, (float)DAC_MIN, channel.i.max, (float)DAC_MAX));
+    set_value(DATA_BUFFER_B, util::remap(value, channel.I_MIN, (float)DAC_MIN, channel.I_MAX, (float)DAC_MAX));
 }
 
 }

@@ -171,14 +171,15 @@ char *Channel::getChannelsInfoShort(char *p) {
             }
 
             if (first_channel) {
-                *p++ += ' ';
                 first_channel = false;
             }
             else {
+                *p++ += ' ';
                 *p++ += '-';
+                *p++ += ' ';
             }
 
-            p += sprintf_P(p, PSTR("%d/%02d/%02d"), count, (int)floor(Channel::get(i).U_MAX), (int)floor(Channel::get(i).I_MAX));
+            p += sprintf_P(p, PSTR("%d V / %d A"), (int)floor(Channel::get(i).U_MAX), (int)floor(Channel::get(i).I_MAX));
         }
     }
 
@@ -444,8 +445,8 @@ void Channel::reset() {
     // [SOUR[n]]:CURR:STEP
     // [SOUR[n]]:VOLT
     // [SOUR[n]]:VOLT:STEP -> set all to default
-    u.init(U_DEF_STEP, U_MAX);
-    i.init(I_DEF_STEP, I_MAX);
+    u.init(U_DEF_STEP, u.max);
+    i.init(I_DEF_STEP, i.max);
 
 	i_max_limit = NAN;
 	p_limit = PTOT;
@@ -473,7 +474,7 @@ void Channel::clearProtectionConf() {
     prot_conf.flags.p_state = OPP_DEFAULT_STATE;
 
     prot_conf.u_delay = OVP_DEFAULT_DELAY;
-    prot_conf.u_level = U_MAX;
+    prot_conf.u_level = u.max;
     prot_conf.i_delay = OCP_DEFAULT_DELAY;
     prot_conf.p_delay = OPP_DEFAULT_DELAY;
     prot_conf.p_level = OPP_DEFAULT_LEVEL;
@@ -810,7 +811,7 @@ void Channel::doRemoteProgrammingEnable(bool enable) {
     flags.rprogEnabled = enable;
     if (enable) {
         setVoltage(u.min);
-        prot_conf.u_level = U_MAX;
+        prot_conf.u_level = u.max;
 		prot_conf.flags.u_state = true;
     }
     ioexp.changeBit(ioexp.IO_BIT_OUT_EXT_PROG, enable);
@@ -908,21 +909,25 @@ void Channel::doCalibrationEnable(bool enable) {
 
 	if (enable) {
 		u.min = util::remap(U_MIN, cal_conf.u.min.dac, cal_conf.u.min.val, cal_conf.u.max.dac, cal_conf.u.max.val);
+		DebugTraceF("%lf", u.min);
 		if (u.min < U_MIN) {
 			u.min = U_MIN;
 		}
 
 		u.max= util::remap(U_MAX, cal_conf.u.min.dac, cal_conf.u.min.val, cal_conf.u.max.dac, cal_conf.u.max.val);
+		DebugTraceF("%lf", u.max);
 		if (u.max > U_MAX) {
 			u.max = U_MAX;
 		}
 
-		i.min = util::remap(U_MIN, cal_conf.i.min.dac, cal_conf.i.min.val, cal_conf.i.max.dac, cal_conf.i.max.val);
+		i.min = util::remap(I_MIN, cal_conf.i.min.dac, cal_conf.i.min.val, cal_conf.i.max.dac, cal_conf.i.max.val);
+		DebugTraceF("%lf", i.min);
 		if (i.min < I_MIN) {
 			i.min = I_MIN;
 		}
 
-		i.max= util::remap(U_MAX, cal_conf.i.min.dac, cal_conf.i.min.val, cal_conf.i.max.dac, cal_conf.i.max.val);
+		i.max= util::remap(I_MAX, cal_conf.i.min.dac, cal_conf.i.min.val, cal_conf.i.max.dac, cal_conf.i.max.val);
+		DebugTraceF("%lf", i.max);
 		if (i.max > I_MAX) {
 			i.max = I_MAX;
 		}
@@ -1113,7 +1118,7 @@ float Channel::getVoltageLimit() const {
 }
 
 float Channel::getVoltageMaxLimit() const {
-	return U_MAX;
+	return u.max;
 }
 
 void Channel::setVoltageLimit(float limit) {
@@ -1136,7 +1141,7 @@ float Channel::getCurrentMaxLimit() const {
 	if (!util::isNaN(i_max_limit)) {
 		return i_max_limit;
 	}
-	return I_MAX;
+	return i.max;
 }
 
 void Channel::setCurrentMaxLimit(float value) {
