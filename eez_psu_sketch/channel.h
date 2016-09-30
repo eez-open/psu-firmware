@@ -67,7 +67,6 @@ public:
         float val;
         /// Value read from ADC.
         float adc;
-
     };
 
     /// Calibration parameters for the voltage and current.
@@ -85,6 +84,12 @@ public:
         CalibrationValuePointConfiguration mid;
         /// Max point.
         CalibrationValuePointConfiguration max;
+
+		/// Real min after calibration
+		float minPossible;
+
+		/// Real max after calibration
+		float maxPossible;
     };
 
     /// A structure where calibration parameters for the channel are stored.

@@ -48,8 +48,8 @@ struct Value {
     float max_val;
     float max_adc;
 
-	float range_min;
-	float range_max;
+	float minPossible;
+	float maxPossible;
 
     Value(bool voltOrCurr);
 
