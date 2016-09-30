@@ -85,7 +85,7 @@ bool recall(int location);
 
 bool load(int location, Parameters *profile);
 
-void getSaveName(char *name);
+void getSaveName(const Parameters *profile, char *name);
 
 bool enableSave(bool enable);
 void save();

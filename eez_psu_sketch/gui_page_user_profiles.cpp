@@ -151,8 +151,10 @@ void UserProfilesPage::onSaveEditRemarkOk(char *remark) {
 
 void UserProfilesPage::onSaveYes() {
 	if (g_selectedProfileLocation > 0) {
+
 		char remark[PROFILE_NAME_MAX_LENGTH + 1];
-		profile::getSaveName(remark);
+		profile::getSaveName(&(((UserProfilesPage *)getActivePage())->profile), remark);
+
 		keypad::startPush(0, remark, PROFILE_NAME_MAX_LENGTH, false, onSaveEditRemarkOk, 0);
 	} else {
 		onSaveFinish();

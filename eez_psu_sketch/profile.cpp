@@ -140,9 +140,13 @@ bool load(int location, Parameters *profile) {
     return false;
 }
 
-void getSaveName(char *name) {
-    strcpy_P(name, AUTO_NAME_PREFIX);
-    datetime::getDateTimeAsString(name + strlen(AUTO_NAME_PREFIX));
+void getSaveName(const Parameters *profile, char *name) {
+	if (!profile->is_valid || strncmp_P(profile->name, AUTO_NAME_PREFIX, strlen(AUTO_NAME_PREFIX)) == 0) {
+		strcpy_P(name, AUTO_NAME_PREFIX);
+		datetime::getDateTimeAsString(name + strlen(AUTO_NAME_PREFIX));
+	} else {
+		strcpy(name, profile->name);
+	}
 }
 
 bool enableSave(bool enable) {
@@ -177,11 +181,7 @@ bool saveAtLocation(int location, char *name) {
 			if (name) {
 				strcpy(profile.name, name);
 			} else {
-				if (!currentProfile.is_valid || strncmp_P(currentProfile.name, AUTO_NAME_PREFIX, strlen(AUTO_NAME_PREFIX)) == 0) {
-					getSaveName(profile.name);
-				} else {
-					strcpy(profile.name, currentProfile.name);
-				}
+				getSaveName(&currentProfile, profile.name);
 			}
         }
 
