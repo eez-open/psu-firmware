@@ -994,9 +994,10 @@ void Channel::calibrationFindCurrentRange(float minDac, float minVal, float maxD
 	cal_conf.i.max.dac = maxDac;
 	cal_conf.i.max.val = maxVal;
 
-	setCurrent(I_MIN);
-	delay(20);
-	*min = i.mon;
+	//setCurrent(I_MIN);
+	//delay(20);
+	//*min = i.mon;
+	*min = 0;
 
 	setCurrent(I_MAX);
 	delay(20);

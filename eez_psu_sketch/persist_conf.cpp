@@ -127,7 +127,7 @@ void loadDevice() {
         if (!check_block((BlockHeader *)&dev_conf, sizeof(DeviceConfiguration), DEV_CONF_VERSION)) {
             initDevice();
         } else {
-			if (dev_conf.flags.channelDisplayedValues != 0 && dev_conf.flags.channelDisplayedValues != 3) {
+			if (dev_conf.flags.channelDisplayedValues < 0 || dev_conf.flags.channelDisplayedValues > 2) {
 				dev_conf.flags.channelDisplayedValues = 0;
 			}
 		}
@@ -251,11 +251,7 @@ int getProfileAutoRecallLocation() {
 }
 
 void toggleChannelDisplayedValues() {
-	if (dev_conf.flags.channelDisplayedValues == 0) {
-		dev_conf.flags.channelDisplayedValues = 3;
-	} else if (dev_conf.flags.channelDisplayedValues == 3) {
-		dev_conf.flags.channelDisplayedValues = 0;
-	}
+	dev_conf.flags.channelDisplayedValues = (dev_conf.flags.channelDisplayedValues + 1) % 3;
 	saveDevice();
 }
 
