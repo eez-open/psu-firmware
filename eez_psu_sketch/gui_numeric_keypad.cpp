@@ -363,7 +363,7 @@ void digit(int d) {
 			State saved_state = g_state;
 			g_d2 = d;
 			g_state = D2;
-			if (!isValueValid()) {
+			if (g_state != DOT && !isValueValid()) {
 				g_state = saved_state;
 				sound::playBeep();
 			}
