@@ -281,27 +281,43 @@ void getButtonLabels(const Cursor &cursor, uint8_t id, const Value **labels, int
 
 bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
 	if (id == DATA_ID_CHANNEL_U_SET) {
+		if (value.getFloat() < Channel::get(cursor.i).u.min || value.getFloat() > Channel::get(cursor.i).u.max) {
+			if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
+			return false;
+		}
+		
 		if (value.getFloat() > Channel::get(cursor.i).getVoltageLimit()) {
 			if (error) *error = SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
 			return false;
 		}
-        if (value.getFloat() * Channel::get(cursor.i).i.set > Channel::get(cursor.i).getPowerLimit()) {
+        
+		if (value.getFloat() * Channel::get(cursor.i).i.set > Channel::get(cursor.i).getPowerLimit()) {
 			if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
-        Channel::get(cursor.i).setVoltage(value.getFloat());
-        return true;
+        
+		Channel::get(cursor.i).setVoltage(value.getFloat());
+
+		return true;
     } else if (id == DATA_ID_CHANNEL_I_SET) {
+		if (value.getFloat() < Channel::get(cursor.i).i.min || value.getFloat() > Channel::get(cursor.i).i.max) {
+			if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
+			return false;
+		}
+		
 		if (value.getFloat() > Channel::get(cursor.i).getCurrentLimit()) {
 			if (error) *error = SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
 			return false;
 		}
-        if (value.getFloat() * Channel::get(cursor.i).u.set > Channel::get(cursor.i).getPowerLimit()) {
+        
+		if (value.getFloat() * Channel::get(cursor.i).u.set > Channel::get(cursor.i).getPowerLimit()) {
 			if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
-        Channel::get(cursor.i).setCurrent(value.getFloat());
-        return true;
+        
+		Channel::get(cursor.i).setCurrent(value.getFloat());
+
+		return true;
     } else if (id == DATA_ID_ALERT_MESSAGE) {
         g_alertMessage = value;
         return true;

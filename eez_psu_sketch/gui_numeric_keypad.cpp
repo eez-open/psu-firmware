@@ -343,6 +343,7 @@ void digit(int d) {
 		if (g_state == START || g_state == EMPTY) {
 			g_d0 = d;
 			g_state = D0;
+			/*
 			if (!isValueValid()) {
 				toggleEditUnit();
 			} 
@@ -350,31 +351,38 @@ void digit(int d) {
 				reset();
 				sound::playBeep();
 			}
+			*/
 		}
 		else if (g_state == D0) {
 			g_d1 = d;
 			g_state = D1;
+			/*
 			if (!isValueValid()) {
 				g_state = D0;
 				sound::playBeep();
 			}
+			*/
 		}
 		else if (g_state == DOT || (isMilli() && g_state == D1)) {
 			State saved_state = g_state;
 			g_d2 = d;
 			g_state = D2;
-			if (g_state != DOT && !isValueValid()) {
+			/*
+			if (!isValueValid()) {
 				g_state = saved_state;
 				sound::playBeep();
 			}
+			*/
 		}
 		else if (g_state == D2 && !isMilli()) {
 			g_d3 = d;
 			g_state = D3;
+			/*
 			if (!isValueValid()) {
 				g_state = D2;
 				sound::playBeep();
 			}
+			*/
 		}
 		else {
 			sound::playBeep();
