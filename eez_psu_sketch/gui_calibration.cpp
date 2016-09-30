@@ -163,12 +163,12 @@ data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snap
 		return data::Value(g_stepNum);
 	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_VALUE) {
 		switch (g_stepNum) {
-		case 0: return data::Value(psu::calibration::voltage.min, data::VALUE_TYPE_FLOAT_VOLT);
-		case 1: return data::Value(psu::calibration::voltage.mid, data::VALUE_TYPE_FLOAT_VOLT);
-		case 2: return data::Value(psu::calibration::voltage.max, data::VALUE_TYPE_FLOAT_VOLT);
-		case 3: return data::Value(psu::calibration::current.min, data::VALUE_TYPE_FLOAT_AMPER);
-		case 4: return data::Value(psu::calibration::current.mid, data::VALUE_TYPE_FLOAT_AMPER);
-		case 5: return data::Value(psu::calibration::current.max, data::VALUE_TYPE_FLOAT_AMPER);
+		case 0: return data::Value(psu::calibration::voltage.min_val, data::VALUE_TYPE_FLOAT_VOLT);
+		case 1: return data::Value(psu::calibration::voltage.mid_val, data::VALUE_TYPE_FLOAT_VOLT);
+		case 2: return data::Value(psu::calibration::voltage.max_val, data::VALUE_TYPE_FLOAT_VOLT);
+		case 3: return data::Value(psu::calibration::current.min_val, data::VALUE_TYPE_FLOAT_AMPER);
+		case 4: return data::Value(psu::calibration::current.mid_val, data::VALUE_TYPE_FLOAT_AMPER);
+		case 5: return data::Value(psu::calibration::current.max_val, data::VALUE_TYPE_FLOAT_AMPER);
 		case 6: return data::Value(psu::calibration::getRemark());
 		}
 	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_STATUS) {

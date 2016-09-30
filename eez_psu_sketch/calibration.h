@@ -37,22 +37,24 @@ struct Value {
     int8_t level;
 
     bool  min_set;
-    float min;
+    float min_val;
     float min_adc;
 
     bool  mid_set;
-    float mid;
+    float mid_val;
     float mid_adc;
 
     bool  max_set;
-    float max;
+    float max_val;
     float max_adc;
+
+	float range_min;
+	float range_max;
 
     Value(bool voltOrCurr);
 
     void reset();
 
-    float getRange();
     float getLevelValue();
     float getAdcValue();
 
@@ -61,6 +63,9 @@ struct Value {
 
 	bool checkRange(float value, float adc);
     bool checkMid();
+
+private:
+    float getRange();
 };
 
 extern Value voltage;

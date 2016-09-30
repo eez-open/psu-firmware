@@ -907,6 +907,7 @@ bool Channel::isOutputEnabled() {
 void Channel::doCalibrationEnable(bool enable) {
 	flags._calEnabled = enable;
 
+/*
 	if (enable) {
 		u.min = util::remap(U_MIN, cal_conf.u.min.dac, cal_conf.u.min.val, cal_conf.u.max.dac, cal_conf.u.max.val);
 		DebugTraceF("%lf", u.min);
@@ -941,6 +942,7 @@ void Channel::doCalibrationEnable(bool enable) {
 
 	u.def = u.min;
 	i.def = i.min;
+	*/
 }
 
 void Channel::calibrationEnable(bool enable) {
@@ -961,6 +963,54 @@ void Channel::calibrationEnableNoEvent(bool enable) {
 
 bool Channel::isCalibrationEnabled() {
 	return flags._calEnabled;
+}
+
+void Channel::calibrationFindVoltageRange(float minDac, float minVal, float maxDac, float maxVal, float *min, float *max) {
+	flags._calEnabled = true;
+
+	CalibrationValueConfiguration calValueConf;
+	calValueConf = cal_conf.u;
+
+	cal_conf.u.min.dac = minDac;
+	cal_conf.u.min.val = minVal;
+	cal_conf.u.max.dac = maxDac;
+	cal_conf.u.max.val = maxVal;
+
+	setVoltage(U_MIN);
+	delay(50);
+	*min = u.mon;
+
+	setVoltage(U_MAX);
+	delay(50);
+	*max = u.mon;
+
+	cal_conf.u = calValueConf;
+
+	flags._calEnabled = false;
+}
+
+void Channel::calibrationFindCurrentRange(float minDac, float minVal, float maxDac, float maxVal, float *min, float *max) {
+	flags._calEnabled = true;
+
+	CalibrationValueConfiguration calValueConf;
+	calValueConf = cal_conf.i;
+
+	cal_conf.i.min.dac = minDac;
+	cal_conf.i.min.val = minVal;
+	cal_conf.i.max.dac = maxDac;
+	cal_conf.i.max.val = maxVal;
+
+	setCurrent(I_MIN);
+	delay(20);
+	*min = i.mon;
+
+	setCurrent(I_MAX);
+	delay(20);
+	*max = i.mon;
+
+	cal_conf.i = calValueConf;
+
+	flags._calEnabled = false;
 }
 
 void Channel::remoteSensingEnable(bool enable) {

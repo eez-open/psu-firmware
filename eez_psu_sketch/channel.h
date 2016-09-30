@@ -31,6 +31,10 @@
 namespace eez {
 namespace psu {
 
+namespace calibration {
+struct Value;
+}
+
 enum ChannelFeatures {
     CH_FEATURE_VOLT = (1 << 1),
     CH_FEATURE_CURRENT = (1 << 2),
@@ -44,6 +48,7 @@ enum ChannelFeatures {
 /// PSU channel.
 class Channel {
 	friend class DigitalAnalogConverter;
+	friend struct calibration::Value;
 
 public:
     /// Binary flags for the channel calibration configuration.
@@ -503,6 +508,8 @@ private:
 
 	void doCalibrationEnable(bool enable);
 	float readingToCalibratedValue(Value *cv, float mon_reading);
+	void calibrationFindVoltageRange(float minDac, float minVal, float maxDac, float maxVal, float *min, float *max);
+	void calibrationFindCurrentRange(float minDac, float minVal, float maxDac, float maxVal, float *min, float *max);
 
 	void valueAddReading(Value *cv, float value);
     void valueAddReadingDac(Value *cv, float value);

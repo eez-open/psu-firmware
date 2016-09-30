@@ -45,9 +45,9 @@ static void print_calibration_value(scpi_t * context, char *buffer, calibration:
         strcat_value = util::strcatCurrent;
     }
 
-    if (value.min_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_min=")); strcat_value(buffer, value.min); SCPI_ResultText(context, buffer); }
-    if (value.mid_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_mid=")); strcat_value(buffer, value.mid); SCPI_ResultText(context, buffer); }
-    if (value.max_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_max=")); strcat_value(buffer, value.max); SCPI_ResultText(context, buffer); }
+    if (value.min_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_min=")); strcat_value(buffer, value.min_val); SCPI_ResultText(context, buffer); }
+    if (value.mid_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_mid=")); strcat_value(buffer, value.mid_val); SCPI_ResultText(context, buffer); }
+    if (value.max_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_max=")); strcat_value(buffer, value.max_val); SCPI_ResultText(context, buffer); }
 
     strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_level="));
     switch (value.level) {

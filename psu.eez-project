@@ -889,7 +889,7 @@
     {
       "name": "sys_settings_cal_edit_password",
       "implementationType": "native",
-      "implementation": "calibration::editPassword();"
+      "implementation": "gui::calibration::editPassword();"
     },
     {
       "name": "sys_settings_cal_ch_params_enabled",
@@ -898,42 +898,42 @@
     {
       "name": "sys_settings_cal_ch_wiz_start",
       "implementationType": "native",
-      "implementation": "calibration::start();"
+      "implementation": "gui::calibration::start();"
     },
     {
       "name": "sys_settings_cal_ch_wiz_step_previous",
       "implementationType": "native",
-      "implementation": "calibration::previousStep();"
+      "implementation": "gui::calibration::previousStep();"
     },
     {
       "name": "sys_settings_cal_ch_wiz_step_next",
       "implementationType": "native",
-      "implementation": "calibration::nextStep();"
+      "implementation": "gui::calibration::nextStep();"
     },
     {
       "name": "sys_settings_cal_ch_wiz_stop_and_show_previous_page",
       "implementationType": "native",
-      "implementation": "calibration::stop();\npopPage();"
+      "implementation": "gui::calibration::stop();\npopPage();"
     },
     {
       "name": "sys_settings_cal_ch_wiz_stop_and_show_main_page",
       "implementationType": "native",
-      "implementation": "calibration::stop();\nsetPage(PAGE_ID_MAIN);"
+      "implementation": "gui::calibration::stop();\nsetPage(PAGE_ID_MAIN);"
     },
     {
       "name": "sys_settings_cal_ch_wiz_step_set",
       "implementationType": "native",
-      "implementation": "calibration::set();"
+      "implementation": "gui::calibration::set();"
     },
     {
       "name": "sys_settings_cal_ch_wiz_save",
       "implementationType": "native",
-      "implementation": "calibration::save();\n"
+      "implementation": "gui::calibration::save();\n"
     },
     {
       "name": "sys_settings_cal_toggle_enable",
       "implementationType": "native",
-      "implementation": "calibration::toggleEnable();\n"
+      "implementation": "gui::calibration::toggleEnable();\n"
     },
     {
       "name": "ch_settings_prot_clear",
@@ -48935,7 +48935,7 @@
                             "y": 0,
                             "width": 65,
                             "height": 28,
-                            "style": "edit_S",
+                            "style": "edit_value_active_S_right",
                             "data": "channel.u.set",
                             "action": "edit"
                           },
@@ -48973,7 +48973,7 @@
                         "y": 30,
                         "width": 65,
                         "height": 28,
-                        "style": "edit_S",
+                        "style": "edit_value_active_S_right",
                         "data": "channel.i.set",
                         "action": "edit"
                       },
@@ -49185,11 +49185,11 @@
                       {
                         "type": "DisplayData",
                         "text": "12.00W",
-                        "x": 255,
+                        "x": 240,
                         "y": 60,
-                        "width": 65,
+                        "width": 80,
                         "height": 28,
-                        "style": "default_S",
+                        "style": "edit_value_S_right",
                         "data": "channel.p.mon"
                       },
                       {
@@ -49205,6 +49205,1602 @@
                     "y": 0,
                     "width": 320,
                     "height": 88,
+                    "style": "default"
+                  },
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 176,
+                  "style": "default",
+                  "data": "channels"
+                }
+              ],
+              "x": 0,
+              "y": 28,
+              "width": 320,
+              "height": 176,
+              "style": "default",
+              "data": "channel.displayedValues"
+            },
+            {
+              "type": "Text",
+              "action": "show_sys_settings",
+              "x": 0,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "P",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 48,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "R",
+              "width": 48,
+              "height": 36,
+              "action": "show_user_profiles"
+            },
+            {
+              "type": "Text",
+              "x": 96,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "?",
+              "width": 48,
+              "height": 36,
+              "action": "show_sys_info"
+            },
+            {
+              "type": "Text",
+              "x": 144,
+              "y": 204,
+              "style": "bottom_button_disabled",
+              "text": "L",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 192,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "H",
+              "width": 48,
+              "height": 36,
+              "action": "show_main_help_page"
+            },
+            {
+              "type": "Rectangle",
+              "x": 240,
+              "y": 204,
+              "width": 32,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "turn_off",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "Q",
+              "width": 48,
+              "height": 36
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240
+        },
+        "description": "Main menu"
+      },
+      {
+        "name": "main_NEW",
+        "portrait": {
+          "widgets": [
+            {
+              "type": "List",
+              "listType": "vertical",
+              "data": "channels",
+              "x": 0,
+              "y": 28,
+              "itemWidget": {
+                "type": "Select",
+                "data": "channel.status",
+                "y": 0,
+                "widgets": [
+                  {
+                    "type": "Rectangle",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 128,
+                    "style": "default_inverse"
+                  },
+                  {
+                    "type": "Container",
+                    "widgets": [
+                      {
+                        "type": "Select",
+                        "x": 0,
+                        "y": 0,
+                        "data": "channel.outputState",
+                        "action": "",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "style": "channel_off_L",
+                            "text": "OFF",
+                            "x": 0,
+                            "y": 0,
+                            "width": 240,
+                            "height": 86,
+                            "action": "toggle_channel"
+                          },
+                          {
+                            "type": "Select",
+                            "data": "channel.outputMode",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "style": "mon_value_L",
+                                "data": "channel.monValue",
+                                "x": 0,
+                                "y": 0,
+                                "width": 240,
+                                "height": 86,
+                                "action": "toggle_channel"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "style": "mon_value_L_ur",
+                                "data": "channel.monValue",
+                                "x": 0,
+                                "y": 0,
+                                "width": 240,
+                                "height": 86,
+                                "action": "toggle_channel"
+                              }
+                            ],
+                            "x": 0,
+                            "y": 0,
+                            "width": 240,
+                            "height": 86,
+                            "style": "default"
+                          }
+                        ],
+                        "width": 240,
+                        "height": 88,
+                        "style": "default"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "data": "channel.u.set",
+                        "action": "edit",
+                        "x": 0,
+                        "y": 88,
+                        "style": "mon_value",
+                        "width": 106,
+                        "height": 40
+                      },
+                      {
+                        "type": "DisplayData",
+                        "data": "channel.i.set",
+                        "action": "edit",
+                        "x": 106,
+                        "y": 88,
+                        "style": "mon_value",
+                        "width": 106,
+                        "height": 40
+                      },
+                      {
+                        "type": "Text",
+                        "action": "show_channel_settings",
+                        "x": 212,
+                        "y": 88,
+                        "style": "default_S",
+                        "text": "`",
+                        "width": 28,
+                        "height": 40
+                      }
+                    ],
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 128,
+                    "style": "default"
+                  },
+                  {
+                    "type": "Text",
+                    "style": "channel_error",
+                    "text": "ERROR",
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 128
+                  }
+                ],
+                "x": 0,
+                "width": 240,
+                "height": 128,
+                "style": "default"
+              },
+              "width": 240,
+              "height": 256,
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "action": "touch_screen_calibration",
+              "x": 0,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "P",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 48,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "?",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 96,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "!",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "x": 144,
+              "y": 284,
+              "style": "bottom_button_disabled",
+              "text": "L",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "turn_off",
+              "x": 192,
+              "y": 284,
+              "style": "bottom_button",
+              "text": "Q",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "\\u0083",
+                  "x": 0,
+                  "y": 0,
+                  "width": 28,
+                  "height": 28,
+                  "style": "default_S",
+                  "action": "show_event_queue"
+                },
+                {
+                  "type": "DisplayData",
+                  "data": "EventQueue.lastEvent.message",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "event_info",
+                  "action": "show_event_queue"
+                },
+                {
+                  "type": "DisplayData",
+                  "data": "EventQueue.lastEvent.message",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "event_warning",
+                  "action": "show_event_queue"
+                },
+                {
+                  "type": "DisplayData",
+                  "data": "EventQueue.lastEvent.message",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "event_error",
+                  "action": "show_event_queue"
+                }
+              ],
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 28,
+              "style": "default",
+              "data": "EventQueue.lastEvent.type"
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320
+        },
+        "landscape": {
+          "widgets": [
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "text": "\\u0083",
+                      "x": 0,
+                      "y": 0,
+                      "width": 28,
+                      "height": 28,
+                      "style": "edit_S",
+                      "action": "show_event_queue"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 28,
+                      "y": 0,
+                      "width": 264,
+                      "height": 28,
+                      "style": "default_inverse"
+                    }
+                  ],
+                  "x": 0,
+                  "y": 0,
+                  "width": 292,
+                  "height": 28,
+                  "style": "default"
+                },
+                {
+                  "type": "DisplayData",
+                  "data": "EventQueue.lastEvent.message",
+                  "x": 0,
+                  "y": 0,
+                  "width": 292,
+                  "height": 28,
+                  "style": "event_info",
+                  "action": "show_event_queue"
+                },
+                {
+                  "type": "DisplayData",
+                  "data": "EventQueue.lastEvent.message",
+                  "x": 0,
+                  "y": 0,
+                  "width": 292,
+                  "height": 28,
+                  "style": "event_warning",
+                  "action": "show_event_queue"
+                },
+                {
+                  "type": "DisplayData",
+                  "data": "EventQueue.lastEvent.message",
+                  "x": 0,
+                  "y": 0,
+                  "width": 292,
+                  "height": 28,
+                  "style": "event_error",
+                  "action": "show_event_queue"
+                }
+              ],
+              "x": 0,
+              "y": 0,
+              "width": 292,
+              "height": 28,
+              "style": "default",
+              "data": "EventQueue.lastEvent.type"
+            },
+            {
+              "type": "Text",
+              "text": "\\u0087",
+              "x": 292,
+              "y": 0,
+              "width": 28,
+              "height": 28,
+              "style": "edit_S",
+              "action": "toggle_channel_displayed_values"
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "List",
+                  "listType": "horizontal",
+                  "itemWidget": {
+                    "type": "Select",
+                    "data": "channel.status",
+                    "y": 0,
+                    "widgets": [
+                      {
+                        "type": "Rectangle",
+                        "x": 0,
+                        "y": 0,
+                        "width": 160,
+                        "height": 176,
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "Container",
+                        "widgets": [
+                          {
+                            "type": "Select",
+                            "x": 0,
+                            "y": 0,
+                            "data": "channel.outputState",
+                            "action": "",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "style": "channel_off_landscape",
+                                "text": "OFF",
+                                "x": 0,
+                                "y": 0,
+                                "width": 160,
+                                "height": 56,
+                                "action": "toggle_channel"
+                              },
+                              {
+                                "type": "Select",
+                                "data": "channel.outputMode",
+                                "widgets": [
+                                  {
+                                    "type": "DisplayData",
+                                    "style": "mon_value_landscape_L_right",
+                                    "data": "channel.monValue",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 160,
+                                    "height": 56,
+                                    "action": "toggle_channel"
+                                  },
+                                  {
+                                    "type": "DisplayData",
+                                    "style": "mon_value_ur_landscape_L_right",
+                                    "data": "channel.monValue",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 160,
+                                    "height": 56,
+                                    "action": "toggle_channel"
+                                  }
+                                ],
+                                "x": 0,
+                                "y": 0,
+                                "width": 160,
+                                "height": 56,
+                                "style": "default"
+                              }
+                            ],
+                            "width": 160,
+                            "height": 56,
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "LRip",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "LRip",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 0,
+                            "y": 56,
+                            "width": 48,
+                            "height": 24,
+                            "data": "lrip",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OCP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OCP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OCP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 0,
+                            "y": 80,
+                            "width": 48,
+                            "height": 24,
+                            "data": "ocp",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OVP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OVP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OVP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 0,
+                            "y": 104,
+                            "width": 48,
+                            "height": 24,
+                            "data": "ovp",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OTP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OTP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OTP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 0,
+                            "y": 128,
+                            "width": 48,
+                            "height": 24,
+                            "data": "otp_ch",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OPP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OPP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OPP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 0,
+                            "y": 152,
+                            "width": 48,
+                            "height": 24,
+                            "data": "opp",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.set",
+                                "action": "edit",
+                                "x": 0,
+                                "y": 0,
+                                "style": "mon_value",
+                                "width": 112,
+                                "height": 43
+                              },
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.monDac",
+                                "action": "",
+                                "x": 0,
+                                "y": 0,
+                                "style": "mon_dac",
+                                "width": 112,
+                                "height": 43
+                              }
+                            ],
+                            "x": 48,
+                            "y": 56,
+                            "width": 112,
+                            "height": 43,
+                            "style": "default",
+                            "data": "channel.rprog.status"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.set",
+                            "action": "edit",
+                            "x": 48,
+                            "y": 99,
+                            "style": "mon_value",
+                            "width": 112,
+                            "height": 40
+                          },
+                          {
+                            "type": "Text",
+                            "action": "show_channel_settings",
+                            "x": 48,
+                            "y": 138,
+                            "style": "edit_S",
+                            "text": "`  Settings",
+                            "width": 112,
+                            "height": 38
+                          }
+                        ],
+                        "x": 0,
+                        "y": 0,
+                        "width": 160,
+                        "height": 176,
+                        "style": "default"
+                      },
+                      {
+                        "type": "Text",
+                        "style": "channel_error",
+                        "text": "ERROR",
+                        "x": 0,
+                        "y": 0,
+                        "width": 160,
+                        "height": 176
+                      }
+                    ],
+                    "x": 0,
+                    "width": 160,
+                    "height": 176,
+                    "style": "default"
+                  },
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 176,
+                  "data": "channels",
+                  "style": "default"
+                },
+                {
+                  "type": "Rectangle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 176,
+                  "style": "default"
+                },
+                {
+                  "type": "Rectangle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 176,
+                  "style": "default"
+                },
+                {
+                  "type": "List",
+                  "listType": "vertical",
+                  "itemWidget": {
+                    "type": "Container",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "action": "show_channel_settings",
+                        "x": 0,
+                        "y": 0,
+                        "style": "edit_S",
+                        "text": "` Set",
+                        "width": 55,
+                        "height": 58
+                      },
+                      {
+                        "type": "Select",
+                        "x": 55,
+                        "y": 0,
+                        "data": "channel.outputState",
+                        "action": "",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "style": "channel_off_landscape",
+                            "text": "OFF",
+                            "x": 0,
+                            "y": 0,
+                            "width": 200,
+                            "height": 58,
+                            "action": "toggle_channel"
+                          },
+                          {
+                            "type": "Select",
+                            "data": "channel.outputMode",
+                            "widgets": [
+                              {
+                                "type": "Container",
+                                "widgets": [
+                                  {
+                                    "type": "BarGraph",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 200,
+                                    "height": 28,
+                                    "orientation": "left-right",
+                                    "style": "bar_graph_U_defualt",
+                                    "data": "channel.u.mon",
+                                    "action": "toggle_channel",
+                                    "textStyle": "bar_graph_text",
+                                    "line1Data": "channel.u.set",
+                                    "line2Data": "channel.u.limit",
+                                    "line1Style": "bar_graph_set_line",
+                                    "line2Style": "bar_graph_limit_line"
+                                  },
+                                  {
+                                    "type": "Rectangle",
+                                    "x": 0,
+                                    "y": 28,
+                                    "width": 200,
+                                    "height": 2,
+                                    "style": "default_inverse"
+                                  },
+                                  {
+                                    "type": "BarGraph",
+                                    "x": 0,
+                                    "y": 30,
+                                    "width": 200,
+                                    "height": 28,
+                                    "orientation": "left-right",
+                                    "style": "bar_graph_I_default",
+                                    "data": "channel.i.mon",
+                                    "action": "toggle_channel",
+                                    "textStyle": "bar_graph_text",
+                                    "line1Data": "channel.i.set",
+                                    "line2Data": "channel.i.limit",
+                                    "line1Style": "bar_graph_set_line",
+                                    "line2Style": "bar_graph_limit_line"
+                                  }
+                                ],
+                                "x": 0,
+                                "y": 0,
+                                "width": 200,
+                                "height": 58,
+                                "style": "default"
+                              },
+                              {
+                                "type": "Container",
+                                "widgets": [
+                                  {
+                                    "type": "BarGraph",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 200,
+                                    "height": 28,
+                                    "orientation": "left-right",
+                                    "style": "bar_graph_unregulated",
+                                    "data": "channel.u.mon",
+                                    "action": "toggle_channel",
+                                    "textStyle": "bar_graph_text",
+                                    "line1Data": "channel.u.set",
+                                    "line2Data": "channel.u.limit",
+                                    "line1Style": "bar_graph_set_line",
+                                    "line2Style": "bar_graph_limit_line"
+                                  },
+                                  {
+                                    "type": "Rectangle",
+                                    "x": 0,
+                                    "y": 28,
+                                    "width": 200,
+                                    "height": 2,
+                                    "style": "default_inverse"
+                                  },
+                                  {
+                                    "type": "BarGraph",
+                                    "x": 0,
+                                    "y": 30,
+                                    "width": 200,
+                                    "height": 28,
+                                    "orientation": "left-right",
+                                    "style": "bar_graph_unregulated",
+                                    "data": "channel.i.mon",
+                                    "action": "toggle_channel",
+                                    "textStyle": "bar_graph_text",
+                                    "line1Data": "channel.i.set",
+                                    "line2Data": "channel.i.limit",
+                                    "line1Style": "bar_graph_set_line",
+                                    "line2Style": "bar_graph_limit_line"
+                                  }
+                                ],
+                                "x": 0,
+                                "y": 0,
+                                "width": 200,
+                                "height": 58,
+                                "style": "default"
+                              }
+                            ],
+                            "x": 0,
+                            "y": 0,
+                            "width": 200,
+                            "height": 58,
+                            "style": "default"
+                          }
+                        ],
+                        "width": 200,
+                        "height": 58,
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "text": "20.00V",
+                            "x": 0,
+                            "y": 0,
+                            "width": 65,
+                            "height": 28,
+                            "style": "edit_value_active_S_right",
+                            "data": "channel.u.set",
+                            "action": "edit"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "text": "20.00V",
+                            "x": 0,
+                            "y": 0,
+                            "width": 65,
+                            "height": 28,
+                            "style": "mon_dac_S",
+                            "data": "channel.u.monDac",
+                            "action": ""
+                          }
+                        ],
+                        "x": 255,
+                        "y": 0,
+                        "width": 65,
+                        "height": 28,
+                        "data": "channel.rprog.status",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Rectangle",
+                        "x": 255,
+                        "y": 28,
+                        "width": 65,
+                        "height": 2,
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "text": "0.60A",
+                        "x": 255,
+                        "y": 30,
+                        "width": 65,
+                        "height": 28,
+                        "style": "edit_value_active_S_right",
+                        "data": "channel.i.set",
+                        "action": "edit"
+                      },
+                      {
+                        "type": "Rectangle",
+                        "x": 0,
+                        "y": 58,
+                        "width": 255,
+                        "height": 3,
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "LRip",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "LRip",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 0,
+                        "y": 61,
+                        "width": 48,
+                        "height": 24,
+                        "data": "lrip",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "OCP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "OCP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_trip_S",
+                            "text": "OCP",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 48,
+                        "y": 61,
+                        "width": 48,
+                        "height": 24,
+                        "data": "ocp",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "OVP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "OVP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_trip_S",
+                            "text": "OVP",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 96,
+                        "y": 61,
+                        "width": 48,
+                        "height": 24,
+                        "data": "ovp",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "OTP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "OTP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_trip_S",
+                            "text": "OTP",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 144,
+                        "y": 61,
+                        "width": 48,
+                        "height": 24,
+                        "data": "otp_ch",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "OPP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "OPP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_trip_S",
+                            "text": "OPP",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 192,
+                        "y": 61,
+                        "width": 48,
+                        "height": 24,
+                        "data": "opp",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Rectangle",
+                        "x": 0,
+                        "y": 85,
+                        "width": 255,
+                        "height": 3,
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "Rectangle",
+                        "x": 240,
+                        "y": 58,
+                        "width": 15,
+                        "height": 30,
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "text": "12.00W",
+                        "x": 240,
+                        "y": 60,
+                        "width": 80,
+                        "height": 28,
+                        "style": "edit_value_S_right",
+                        "data": "channel.p.mon"
+                      },
+                      {
+                        "type": "Rectangle",
+                        "x": 255,
+                        "y": 58,
+                        "width": 65,
+                        "height": 2,
+                        "style": "default_inverse"
+                      }
+                    ],
+                    "x": 0,
+                    "y": 0,
+                    "width": 320,
+                    "height": 88,
+                    "style": "default"
+                  },
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 176,
+                  "style": "default",
+                  "data": "channels"
+                },
+                {
+                  "type": "List",
+                  "listType": "horizontal",
+                  "itemWidget": {
+                    "type": "Container",
+                    "widgets": [
+                      {
+                        "type": "Rectangle",
+                        "x": 0,
+                        "y": 0,
+                        "width": 160,
+                        "height": 176,
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "Text",
+                        "action": "show_channel_settings",
+                        "x": 0,
+                        "y": 0,
+                        "style": "edit_S",
+                        "text": "` Set",
+                        "width": 48,
+                        "height": 30
+                      },
+                      {
+                        "type": "Select",
+                        "x": 49,
+                        "y": 0,
+                        "data": "channel.outputState",
+                        "action": "",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "style": "channel_off_landscape",
+                            "text": "OFF",
+                            "x": 0,
+                            "y": 0,
+                            "width": 110,
+                            "height": 148,
+                            "action": "toggle_channel"
+                          },
+                          {
+                            "type": "Select",
+                            "data": "channel.outputMode",
+                            "widgets": [
+                              {
+                                "type": "Container",
+                                "widgets": [
+                                  {
+                                    "type": "BarGraph",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 54,
+                                    "height": 148,
+                                    "orientation": "bottom-top",
+                                    "style": "bar_graph_U_defualt",
+                                    "data": "channel.u.mon",
+                                    "action": "toggle_channel",
+                                    "textStyle": "bar_graph_text",
+                                    "line1Data": "channel.u.set",
+                                    "line2Data": "channel.u.limit",
+                                    "line1Style": "bar_graph_set_line",
+                                    "line2Style": "bar_graph_limit_line"
+                                  },
+                                  {
+                                    "type": "Rectangle",
+                                    "x": 54,
+                                    "y": 0,
+                                    "width": 2,
+                                    "height": 148,
+                                    "style": "default_inverse"
+                                  },
+                                  {
+                                    "type": "BarGraph",
+                                    "x": 56,
+                                    "y": 0,
+                                    "width": 54,
+                                    "height": 148,
+                                    "orientation": "bottom-top",
+                                    "style": "bar_graph_I_default",
+                                    "data": "channel.i.mon",
+                                    "action": "toggle_channel",
+                                    "textStyle": "bar_graph_text",
+                                    "line1Data": "channel.i.set",
+                                    "line2Data": "channel.i.limit",
+                                    "line1Style": "bar_graph_set_line",
+                                    "line2Style": "bar_graph_limit_line"
+                                  }
+                                ],
+                                "x": 0,
+                                "y": 0,
+                                "width": 110,
+                                "height": 148,
+                                "style": "default"
+                              },
+                              {
+                                "type": "Container",
+                                "widgets": [
+                                  {
+                                    "type": "BarGraph",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 54,
+                                    "height": 148,
+                                    "orientation": "bottom-top",
+                                    "style": "bar_graph_unregulated",
+                                    "data": "channel.u.mon",
+                                    "action": "toggle_channel",
+                                    "textStyle": "bar_graph_text",
+                                    "line1Data": "channel.u.set",
+                                    "line2Data": "channel.u.limit",
+                                    "line1Style": "bar_graph_set_line",
+                                    "line2Style": "bar_graph_limit_line"
+                                  },
+                                  {
+                                    "type": "Rectangle",
+                                    "x": 54,
+                                    "y": 0,
+                                    "width": 2,
+                                    "height": 148,
+                                    "style": "default_inverse"
+                                  },
+                                  {
+                                    "type": "BarGraph",
+                                    "x": 56,
+                                    "y": 0,
+                                    "width": 54,
+                                    "height": 148,
+                                    "orientation": "bottom-top",
+                                    "style": "bar_graph_unregulated",
+                                    "data": "channel.i.mon",
+                                    "action": "toggle_channel",
+                                    "textStyle": "bar_graph_text",
+                                    "line1Data": "channel.i.set",
+                                    "line2Data": "channel.i.limit",
+                                    "line1Style": "bar_graph_set_line",
+                                    "line2Style": "bar_graph_limit_line"
+                                  }
+                                ],
+                                "x": 0,
+                                "y": 0,
+                                "width": 110,
+                                "height": 148,
+                                "style": "default"
+                              }
+                            ],
+                            "x": 0,
+                            "y": 0,
+                            "width": 110,
+                            "height": 148,
+                            "style": "default"
+                          }
+                        ],
+                        "width": 110,
+                        "height": 148,
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "LRip",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "LRip",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 0,
+                        "y": 28,
+                        "width": 48,
+                        "height": 24,
+                        "data": "lrip",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "OCP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "OCP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_trip_S",
+                            "text": "OCP",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 0,
+                        "y": 52,
+                        "width": 48,
+                        "height": 24,
+                        "data": "ocp",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "OVP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "OVP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_trip_S",
+                            "text": "OVP",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 0,
+                        "y": 76,
+                        "width": 48,
+                        "height": 24,
+                        "data": "ovp",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "OTP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "OTP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_trip_S",
+                            "text": "OTP",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 0,
+                        "y": 100,
+                        "width": 48,
+                        "height": 24,
+                        "data": "otp_ch",
+                        "style": "default"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_S",
+                            "text": "OPP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_set_S",
+                            "text": "OPP",
+                            "width": 48,
+                            "height": 24
+                          },
+                          {
+                            "type": "Text",
+                            "x": 0,
+                            "y": 0,
+                            "style": "prot_indicator_trip_S",
+                            "text": "OPP",
+                            "width": 48,
+                            "height": 24
+                          }
+                        ],
+                        "x": 0,
+                        "y": 124,
+                        "width": 48,
+                        "height": 24,
+                        "data": "opp",
+                        "style": "default"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "text": "12.00W",
+                        "x": 0,
+                        "y": 148,
+                        "width": 49,
+                        "height": 28,
+                        "style": "edit_value_S_right",
+                        "data": "channel.p.mon"
+                      },
+                      {
+                        "type": "Select",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.set",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "style": "edit_S",
+                            "width": 55,
+                            "height": 28
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.monDac",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "style": "mon_dac_S",
+                            "width": 55,
+                            "height": 28
+                          }
+                        ],
+                        "x": 49,
+                        "y": 148,
+                        "width": 55,
+                        "height": 28,
+                        "style": "default",
+                        "data": "channel.rprog.status"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "data": "channel.i.set",
+                        "action": "edit",
+                        "x": 104,
+                        "y": 148,
+                        "style": "edit_S",
+                        "width": 55,
+                        "height": 28
+                      }
+                    ],
+                    "x": 0,
+                    "y": 0,
+                    "width": 160,
+                    "height": 176,
                     "style": "default"
                   },
                   "x": 0,

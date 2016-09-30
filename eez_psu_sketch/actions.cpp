@@ -257,7 +257,7 @@ void action_show_ch_settings_info_cal() {
 }
 
 void action_sys_settings_cal_edit_password() {
-    calibration::editPassword();
+    gui::calibration::editPassword();
 }
 
 void action_sys_settings_cal_ch_params_enabled() {
@@ -265,37 +265,37 @@ void action_sys_settings_cal_ch_params_enabled() {
 }
 
 void action_sys_settings_cal_ch_wiz_start() {
-    calibration::start();
+    gui::calibration::start();
 }
 
 void action_sys_settings_cal_ch_wiz_step_previous() {
-    calibration::previousStep();
+    gui::calibration::previousStep();
 }
 
 void action_sys_settings_cal_ch_wiz_step_next() {
-    calibration::nextStep();
+    gui::calibration::nextStep();
 }
 
 void action_sys_settings_cal_ch_wiz_stop_and_show_previous_page() {
-    calibration::stop();
+    gui::calibration::stop();
     popPage();
 }
 
 void action_sys_settings_cal_ch_wiz_stop_and_show_main_page() {
-    calibration::stop();
+    gui::calibration::stop();
     setPage(PAGE_ID_MAIN);
 }
 
 void action_sys_settings_cal_ch_wiz_step_set() {
-    calibration::set();
+    gui::calibration::set();
 }
 
 void action_sys_settings_cal_ch_wiz_save() {
-    calibration::save();
+    gui::calibration::save();
 }
 
 void action_sys_settings_cal_toggle_enable() {
-    calibration::toggleEnable();
+    gui::calibration::toggleEnable();
 }
 
 void action_ch_settings_prot_clear() {

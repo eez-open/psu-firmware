@@ -120,19 +120,30 @@ void Value::setLevel(int8_t value) {
 void Value::setData(float data, float adc) {
     if (level == LEVEL_MIN) {
         min_set = true;
-        min = data;
+        min_val = data;
         min_adc = adc;
     }
     else if (level == LEVEL_MID) {
         mid_set = true;
-        mid = data;
+        mid_val = data;
         mid_adc = adc;
     }
     else {
         max_set = true;
-        max = data;
+        max_val = data;
         max_adc = adc;
-    }
+	}
+
+	if (min_set && max_set) {
+		if (voltOrCurr) {
+			channel->calibrationFindVoltageRange(channel->U_CAL_VAL_MIN, min_val, channel->U_CAL_VAL_MAX, max_val, &range_min, &range_max);
+			DebugTraceF("Voltage range: %lf, %lf", range_min, range_max);
+		}
+		else {
+			channel->calibrationFindCurrentRange(channel->I_CAL_VAL_MIN, min_val, channel->I_CAL_VAL_MAX, max_val, &range_min, &range_max);
+			DebugTraceF("Current range: %lf, %lf", range_min, range_max);
+		}
+	}
 }
 
 bool Value::checkMid() {
@@ -140,14 +151,14 @@ bool Value::checkMid() {
 
     if (voltOrCurr) {
         mid = util::remap(channel->U_CAL_VAL_MID,
-            channel->U_CAL_VAL_MIN, min, channel->U_CAL_VAL_MAX, max);
+            channel->U_CAL_VAL_MIN, min_val, channel->U_CAL_VAL_MAX, max_val);
     }
     else {
         mid = util::remap(channel->I_CAL_VAL_MID,
-            channel->I_CAL_VAL_MIN, min, channel->I_CAL_VAL_MAX, max);
+            channel->I_CAL_VAL_MIN, min_val, channel->I_CAL_VAL_MAX, max_val);
     }
 
-    return fabsf(mid - mid) <= CALIBRATION_MID_TOLERANCE_PERCENT * (max - min) / 100.0f;
+    return fabsf(mid - mid) <= CALIBRATION_MID_TOLERANCE_PERCENT * (max_val - min_val) / 100.0f;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -206,7 +217,7 @@ void setRemark(const char *value, size_t len) {
 }
 
 static bool checkCalibrationValue(calibration::Value &calibrationValue, int16_t &scpiErr) {
-    if (calibrationValue.min >= calibrationValue.max) {
+    if (calibrationValue.min_val >= calibrationValue.max_val) {
         scpiErr = SCPI_ERROR_INVALID_CAL_DATA;
         return false;
     }
@@ -272,15 +283,15 @@ bool save() {
         channel->cal_conf.flags.u_cal_params_exists = 1;
 
         channel->cal_conf.u.min.dac = channel->U_CAL_VAL_MIN;
-        channel->cal_conf.u.min.val = voltage.min;
+        channel->cal_conf.u.min.val = voltage.min_val;
         channel->cal_conf.u.min.adc = voltage.min_adc;
 
         channel->cal_conf.u.mid.dac = channel->U_CAL_VAL_MID;
-        channel->cal_conf.u.mid.val = voltage.mid;
+        channel->cal_conf.u.mid.val = voltage.mid_val;
         channel->cal_conf.u.mid.adc = voltage.mid_adc;
 
         channel->cal_conf.u.max.dac = channel->U_CAL_VAL_MAX;
-        channel->cal_conf.u.max.val = voltage.max;
+        channel->cal_conf.u.max.val = voltage.max_val;
         channel->cal_conf.u.max.adc = voltage.max_adc;
 
         voltage.level = LEVEL_NONE;
@@ -290,15 +301,15 @@ bool save() {
         channel->cal_conf.flags.i_cal_params_exists = 1;
 
         channel->cal_conf.i.min.dac = channel->I_CAL_VAL_MIN;
-        channel->cal_conf.i.min.val = current.min;
+        channel->cal_conf.i.min.val = current.min_val;
         channel->cal_conf.i.min.adc = current.min_adc;
 
         channel->cal_conf.i.mid.dac = channel->I_CAL_VAL_MID;
-        channel->cal_conf.i.mid.val = current.mid;
+        channel->cal_conf.i.mid.val = current.mid_val;
         channel->cal_conf.i.mid.adc = current.mid_adc;
 
         channel->cal_conf.i.max.dac = channel->I_CAL_VAL_MAX;
-        channel->cal_conf.i.max.val = current.max;
+        channel->cal_conf.i.max.val = current.max_val;
         channel->cal_conf.i.max.adc = current.max_adc;
 
         current.level = LEVEL_NONE;
