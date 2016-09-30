@@ -44636,6 +44636,18 @@
         "_alignHorizontal": "left"
       },
       {
+        "name": "bar_graph_text_vertical",
+        "_font": "small",
+        "_color": "#404040",
+        "description": "",
+        "inheritFrom": "",
+        "_backgroundColor": "#d3d3d3",
+        "_paddingHorizontal": 0,
+        "_alignHorizontal": "center",
+        "_paddingVertical": 0,
+        "_alignVertical": "top"
+      },
+      {
         "name": "bar_graph_U_defualt",
         "_font": "medium",
         "_color": "#ffb000",
@@ -44961,6 +44973,18 @@
         "_font": "medium",
         "_color": "#FFFFFF",
         "_alignHorizontal": "left",
+        "_alignVertical": "center",
+        "_borderSize": 0,
+        "_borderColor": "#D3D3D3",
+        "_paddingHorizontal": 0,
+        "_paddingVertical": 0,
+        "inheritFrom": "default"
+      },
+      {
+        "name": "edit_value_S_centered",
+        "_font": "small",
+        "_alignHorizontal": "center",
+        "_color": "#FFFFFF",
         "_alignVertical": "center",
         "_borderSize": 0,
         "_borderColor": "#D3D3D3",
@@ -49215,9 +49239,25 @@
                         "height": 30
                       },
                       {
+                        "type": "Rectangle",
+                        "x": 47,
+                        "y": 0,
+                        "width": 2,
+                        "height": 148,
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "Rectangle",
+                        "x": 159,
+                        "y": 0,
+                        "width": 1,
+                        "height": 176,
+                        "style": "default_inverse"
+                      },
+                      {
                         "type": "Select",
                         "x": 49,
-                        "y": 0,
+                        "y": 28,
                         "data": "channel.outputState",
                         "action": "",
                         "widgets": [
@@ -49228,7 +49268,7 @@
                             "x": 0,
                             "y": 0,
                             "width": 110,
-                            "height": 148,
+                            "height": 124,
                             "action": "toggle_channel"
                           },
                           {
@@ -49243,12 +49283,12 @@
                                     "x": 0,
                                     "y": 0,
                                     "width": 54,
-                                    "height": 148,
+                                    "height": 124,
                                     "orientation": "bottom-top",
                                     "style": "bar_graph_U_defualt",
                                     "data": "channel.u.mon",
                                     "action": "toggle_channel",
-                                    "textStyle": "bar_graph_text",
+                                    "textStyle": "bar_graph_text_vertical",
                                     "line1Data": "channel.u.set",
                                     "line2Data": "channel.u.limit",
                                     "line1Style": "bar_graph_set_line",
@@ -49267,12 +49307,12 @@
                                     "x": 56,
                                     "y": 0,
                                     "width": 54,
-                                    "height": 148,
+                                    "height": 124,
                                     "orientation": "bottom-top",
                                     "style": "bar_graph_I_default",
                                     "data": "channel.i.mon",
                                     "action": "toggle_channel",
-                                    "textStyle": "bar_graph_text",
+                                    "textStyle": "bar_graph_text_vertical",
                                     "line1Data": "channel.i.set",
                                     "line2Data": "channel.i.limit",
                                     "line1Style": "bar_graph_set_line",
@@ -49282,7 +49322,7 @@
                                 "x": 0,
                                 "y": 0,
                                 "width": 110,
-                                "height": 148,
+                                "height": 124,
                                 "style": "default"
                               },
                               {
@@ -49293,12 +49333,12 @@
                                     "x": 0,
                                     "y": 0,
                                     "width": 54,
-                                    "height": 148,
+                                    "height": 124,
                                     "orientation": "bottom-top",
                                     "style": "bar_graph_unregulated",
                                     "data": "channel.u.mon",
                                     "action": "toggle_channel",
-                                    "textStyle": "bar_graph_text",
+                                    "textStyle": "bar_graph_text_vertical",
                                     "line1Data": "channel.u.set",
                                     "line2Data": "channel.u.limit",
                                     "line1Style": "bar_graph_set_line",
@@ -49317,12 +49357,12 @@
                                     "x": 56,
                                     "y": 0,
                                     "width": 54,
-                                    "height": 148,
+                                    "height": 124,
                                     "orientation": "bottom-top",
                                     "style": "bar_graph_unregulated",
                                     "data": "channel.i.mon",
                                     "action": "toggle_channel",
-                                    "textStyle": "bar_graph_text",
+                                    "textStyle": "bar_graph_text_vertical",
                                     "line1Data": "channel.i.set",
                                     "line2Data": "channel.i.limit",
                                     "line1Style": "bar_graph_set_line",
@@ -49332,14 +49372,14 @@
                                 "x": 0,
                                 "y": 0,
                                 "width": 110,
-                                "height": 148,
+                                "height": 124,
                                 "style": "default"
                               }
                             ],
                             "x": 0,
                             "y": 0,
                             "width": 110,
-                            "height": 148,
+                            "height": 124,
                             "style": "default"
                           }
                         ],
@@ -49529,13 +49569,21 @@
                         "style": "default"
                       },
                       {
-                        "type": "DisplayData",
-                        "text": "12.00W",
+                        "type": "Rectangle",
                         "x": 0,
                         "y": 148,
                         "width": 49,
                         "height": 28,
-                        "style": "edit_value_S_right",
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "DisplayData",
+                        "text": "12.00W",
+                        "x": 49,
+                        "y": 0,
+                        "width": 110,
+                        "height": 28,
+                        "style": "edit_value_S_centered",
                         "data": "channel.p.mon"
                       },
                       {
@@ -49549,7 +49597,7 @@
                             "y": 0,
                             "style": "edit_S",
                             "width": 55,
-                            "height": 28
+                            "height": 24
                           },
                           {
                             "type": "DisplayData",
@@ -49559,13 +49607,13 @@
                             "y": 0,
                             "style": "mon_dac_S",
                             "width": 55,
-                            "height": 28
+                            "height": 24
                           }
                         ],
-                        "x": 49,
-                        "y": 148,
+                        "x": 48,
+                        "y": 152,
                         "width": 55,
-                        "height": 28,
+                        "height": 24,
                         "style": "default",
                         "data": "channel.rprog.status"
                       },
@@ -49574,10 +49622,10 @@
                         "data": "channel.i.set",
                         "action": "edit",
                         "x": 104,
-                        "y": 148,
+                        "y": 152,
                         "style": "edit_S",
                         "width": 55,
-                        "height": 28
+                        "height": 24
                       }
                     ],
                     "x": 0,
