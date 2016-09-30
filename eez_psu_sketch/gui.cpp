@@ -1059,11 +1059,11 @@ void drawLineInBarGraphWidget(const BarGraphWidget *barGraphWidget, int p, OBJ_O
     if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_LEFT_RIGHT) {
         lcd::lcd.drawVLine(x + p, y, h - 1);
     } else if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_RIGHT_LEFT) {
-        lcd::lcd.drawVLine(x + w - p, y, h - 1);
+        lcd::lcd.drawVLine(x - p, y, h - 1);
     } else if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_TOP_BOTTOM) {
         lcd::lcd.drawHLine(x, y + p, w - 1);
     } else {
-        lcd::lcd.drawHLine(x, y + h - p, w - 1);
+        lcd::lcd.drawHLine(x, y - p, w - 1);
     }
 }
 
@@ -1077,8 +1077,8 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
     if (refresh) {
         DECL_WIDGET_SPECIFIC(BarGraphWidget, barGraphWidget, widget);
 
-		const int x = widgetCursor.x;
-		const int y = widgetCursor.y;
+		int x = widgetCursor.x;
+		int y = widgetCursor.y;
 		const int w = widget->w;
 		const int h = widget->h;
 
@@ -1120,8 +1120,8 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 			// calc text position
 			Style textStyle;
 			char valueText[64];
-			int pText;
-			int wText;
+			int pText = 0;
+			int wText = 0;
 			if (barGraphWidget->textStyle) {
 				DECL_STYLE_WITH_OFFSET(textStyleInner, barGraphWidget->textStyle);
 				memcpy(&textStyle, textStyleInner, sizeof(Style));
@@ -1176,47 +1176,135 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 					lcd::lcd.fillRect(x + pBackground, y, x + d - 1, y + h - 1);
 				}
 			} else {
-				// TODO: optimize drawing
+				x += w - 1;
 
-				if (pValue < d) {
-					lcd::lcd.setColor(bg);
-					lcd::lcd.fillRect(x, y, x + w - pValue - 1, y + h - 1);
-				}
-
-				if (pValue > 0) {
+				// draw bar
+				if (pText > 0) {
 					lcd::lcd.setColor(fg);
-					lcd::lcd.fillRect(x + w - pValue, y, x + w - 1, y + h - 1);
+					lcd::lcd.fillRect(x - (pText - 1), y, x, y + h - 1);
+				}
+	
+				drawText(valueText, -1, x - (pText + wText - 1), y, wText, h, &textStyle, false);
+
+				// draw background, but do not draw over line 1 and line 2
+				lcd::lcd.setColor(bg);
+
+				int pBackground = pText + wText;
+
+				if (pBackground <= pLine1) {
+					if (pBackground < pLine1) {
+						lcd::lcd.fillRect(x - (pLine1 - 1), y, x - pBackground, y + h - 1);
+					}
+					pBackground = pLine1 + 1;
 				}
 
-				// TODO: draw text
+				if (pBackground <= pLine2) {
+					if (pBackground < pLine2) {
+						lcd::lcd.fillRect(x - (pLine2 - 1), y, x - pBackground, y + h - 1);
+					}
+					pBackground = pLine2 + 1;
+				}
+
+				if (pBackground < d) {
+					lcd::lcd.fillRect(x - (d - 1), y, x - pBackground, y + h - 1);
+				}
 			}
 
 			drawLineInBarGraphWidget(barGraphWidget, pLine1, barGraphWidget->line1Style, x, y, w, h);
 			drawLineInBarGraphWidget(barGraphWidget, pLine2, barGraphWidget->line2Style, x, y, w, h);
 		} else {
-			 if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_TOP_BOTTOM) {
-				if (pValue > 0) {
-					lcd::lcd.setColor(fg);
-					lcd::lcd.fillRect(x, y, x + w - 1, y + pValue - 1);
-				}
+			// calc text position
+			Style textStyle;
+			char valueText[64];
+			int pText = 0;
+			int hText = 0;
+			if (barGraphWidget->textStyle) {
+				DECL_STYLE_WITH_OFFSET(textStyleInner, barGraphWidget->textStyle);
+				memcpy(&textStyle, textStyleInner, sizeof(Style));
 
-				if (pValue < d) {
-					lcd::lcd.setColor(bg);
-					lcd::lcd.fillRect(x, y + pValue, x + w - 1, y + h - 1);
-				}
-			} else {
-				if (pValue < d) {
-					lcd::lcd.setColor(bg);
-					lcd::lcd.fillRect(x, y, x + w - 1, y + h - pValue - 1);
-				}
+				font::Font font = styleGetFont(&textStyle);
+    
+				value.toText(valueText, sizeof(valueText));
+				hText = font.getHeight();
+				
+				int padding = textStyle.padding_vertical;
+				hText += padding;
 
-				if (pValue > 0) {
-					lcd::lcd.setColor(fg);
-					lcd::lcd.fillRect(x, y + h - pValue, x + w - 1, y + h - 1);
+				if (pValue + hText <= d) {
+					textStyle.background_color = bg;
+					pText = pValue;
+				} else {
+					textStyle.background_color = fg;
+					hText += padding;
+					pText = pValue - hText;
 				}
 			}
 
-			// TODO: draw text
+			if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_TOP_BOTTOM) {
+				// draw bar
+				if (pText > 0) {
+					lcd::lcd.setColor(fg);
+					lcd::lcd.fillRect(x, y, x + w - 1, y + pText - 1);
+				}
+	
+				drawText(valueText, -1, x, y + pText, w, hText, &textStyle, false);
+
+				// draw background, but do not draw over line 1 and line 2
+				lcd::lcd.setColor(bg);
+
+				int pBackground = pText + hText;
+
+				if (pBackground <= pLine1) {
+					if (pBackground < pLine1) {
+						lcd::lcd.fillRect(x, y + pBackground, x + w - 1, y + pLine1 - 1);
+					}
+					pBackground = pLine1 + 1;
+				}
+
+				if (pBackground <= pLine2) {
+					if (pBackground < pLine2) {
+						lcd::lcd.fillRect(x, y + pBackground, x + w - 1, y + pLine2 - 1);
+					}
+					pBackground = pLine2 + 1;
+				}
+
+				if (pBackground < d) {
+					lcd::lcd.fillRect(x, y + pBackground, x + w - 1, y + d - 1);
+				}
+			} else {
+				y += h - 1;
+
+				// draw bar
+				if (pText > 0) {
+					lcd::lcd.setColor(fg);
+					lcd::lcd.fillRect(x, y - (pText - 1), x + w - 1, y);
+				}
+	
+				drawText(valueText, -1, x, y - (pText + hText - 1), w, hText, &textStyle, false);
+
+				// draw background, but do not draw over line 1 and line 2
+				lcd::lcd.setColor(bg);
+
+				int pBackground = pText + hText;
+
+				if (pBackground <= pLine1) {
+					if (pBackground < pLine1) {
+						lcd::lcd.fillRect(x, y - (pLine1 - 1), x + w - 1, y - pBackground);
+					}
+					pBackground = pLine1 + 1;
+				}
+
+				if (pBackground <= pLine2) {
+					if (pBackground < pLine2) {
+						lcd::lcd.fillRect(x, y - (pLine2 - 1), x + w - 1, y - (pBackground));
+					}
+					pBackground = pLine2 + 1;
+				}
+
+				if (pBackground < d) {
+					lcd::lcd.fillRect(x, y - (d - 1), x + w - 1, y - pBackground);
+				}
+			}
 
 			drawLineInBarGraphWidget(barGraphWidget, pLine1, barGraphWidget->line1Style, x, y, w, h);
 			drawLineInBarGraphWidget(barGraphWidget, pLine2, barGraphWidget->line2Style, x, y, w, h);
