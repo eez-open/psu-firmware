@@ -105,7 +105,7 @@ void test() {
                 }
             } else {
                 if (value == max) {
-                    value = (ceilf(min / stepValue) - 1) * stepValue;
+                    value = (ceilf(max / stepValue) - 1) * stepValue;
                 } else {
                     value -= getStepValue();
                 }
