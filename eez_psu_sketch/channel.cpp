@@ -912,22 +912,22 @@ void Channel::doCalibrationEnable(bool enable) {
 	flags._calEnabled = enable;
 
 	if (enable) {
-		u.min = util::ceil(cal_conf.u.minPossible, CHANNEL_VALUE_PRECISION);
+		u.min = util::ceilPrec(cal_conf.u.minPossible, CHANNEL_VALUE_PRECISION);
 		if (u.min < U_MIN) u.min = U_MIN;
 		if (u.limit < u.min) u.limit = u.min;
 		if (u.set < u.min) setVoltage(u.min);
 		
-		u.max = util::floor(cal_conf.u.maxPossible, CHANNEL_VALUE_PRECISION);
+		u.max = util::floorPrec(cal_conf.u.maxPossible, CHANNEL_VALUE_PRECISION);
 		if (u.max > U_MAX) u.max = U_MAX;
 		if (u.set > u.max) setVoltage(u.max);
 		if (u.limit > u.max) u.limit = u.max;
 
-		i.min = util::ceil(cal_conf.i.minPossible, CHANNEL_VALUE_PRECISION);
+		i.min = util::ceilPrec(cal_conf.i.minPossible, CHANNEL_VALUE_PRECISION);
 		if (i.min < I_MIN) i.min = I_MIN;
 		if (i.limit < i.min) i.limit = i.min;
 		if (i.set < i.min) setCurrent(i.min);
 
-		i.max = util::floor(cal_conf.i.maxPossible, CHANNEL_VALUE_PRECISION);
+		i.max = util::floorPrec(cal_conf.i.maxPossible, CHANNEL_VALUE_PRECISION);
 		if (i.max > I_MAX) i.max = I_MAX;
 		if (i.limit > i.max) i.limit = i.max;
 		if (i.set > i.max) setCurrent(i.max);

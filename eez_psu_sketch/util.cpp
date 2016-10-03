@@ -136,15 +136,15 @@ uint8_t fromBCD(uint8_t bcd) {
     return ((bcd >> 4) & 0xF) * 10 + (bcd & 0xF);
 }
 
-float floor(float a, float prec) {
+float floorPrec(float a, float prec) {
     return floorf(a * prec) / prec;
 }
 
-float ceil(float a, float prec) {
+float ceilPrec(float a, float prec) {
     return ceilf(a * prec) / prec;
 }
 
-float round(float a, float prec) {
+float roundPrec(float a, float prec) {
     return roundf(a * prec) / prec;
 }
 
@@ -157,7 +157,7 @@ bool equal(float a, float b, float prec) {
 }
 
 float multiply(float a, float b, float prec) {
-	return util::round(a, prec) * util::round(b, prec);
+	return roundPrec(a, prec) * roundPrec(b, prec);
 }
 
 bool isNaN(float x) {
