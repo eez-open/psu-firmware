@@ -32,7 +32,6 @@ namespace edit_mode {
 
 struct Snapshot {
     data::Value editValue;
-    char infoText[32];
     int interactiveModeSelector;
 
     int step_index;

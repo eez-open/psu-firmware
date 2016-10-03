@@ -44,8 +44,6 @@ void Snapshot::takeSnapshot(data::Snapshot *snapshot) {
     if (edit_mode::isActive()) {
         editValue = edit_mode::getEditValue();
 
-        getInfoText(infoText);
-
         interactiveModeSelector = isInteractiveMode() ? 0 : 1;
 
         step_index = edit_mode_step::getStepIndex();
@@ -58,7 +56,11 @@ data::Value Snapshot::getData(uint8_t id) {
     if (id == DATA_ID_EDIT_VALUE) {
        return editValue;
     } else if (id == DATA_ID_EDIT_INFO) {
-        return infoText;
+        return data::Value(0, data::VALUE_TYPE_EDIT_INFO);
+    } else if (id == DATA_ID_EDIT_INFO1) {
+        return data::Value(1, data::VALUE_TYPE_EDIT_INFO);
+    } else if (id == DATA_ID_EDIT_INFO2) {
+        return data::Value(2, data::VALUE_TYPE_EDIT_INFO);
     } else if (id == DATA_ID_EDIT_MODE_INTERACTIVE_MODE_SELECTOR) {
         return interactiveModeSelector;
     } else if (id == DATA_ID_EDIT_STEPS) {
@@ -197,20 +199,44 @@ bool isEditWidget(const WidgetCursor &widgetCursor) {
     return widgetCursor.cursor == dataCursor && widget->data == dataId;
 }
 
-void getInfoText(char *infoText) {
+void getInfoText(int part, char *infoText) {
     Channel &channel = Channel::get(dataCursor.i);
     if (dataId == DATA_ID_CHANNEL_I_SET) {
-		sprintf_P(infoText, PSTR("Set Ch%d current ["), channel.index);
-		util::strcatFloat(infoText, minValue.getFloat());
-		strcat_P(infoText, PSTR("-"));
-		util::strcatCurrent(infoText, maxValue.getFloat());
-		strcat_P(infoText, PSTR("]"));
+        if (part == 0 || part == 1) {
+		    sprintf_P(infoText, PSTR("Set Ch%d current"), channel.index);
+        } else {
+            *infoText = 0;
+        }
+
+        if (part == 0) {
+            strcat_P(infoText, PSTR(" "));
+        }
+
+        if (part == 0 || part == 2) {
+            strcat_P(infoText, PSTR("["));
+		    util::strcatFloat(infoText, minValue.getFloat());
+		    strcat_P(infoText, PSTR("-"));
+		    util::strcatCurrent(infoText, maxValue.getFloat());
+		    strcat_P(infoText, PSTR("]"));
+        }
     } else {
-		sprintf_P(infoText, PSTR("Set Ch%d voltage ["), channel.index);
-		util::strcatFloat(infoText, minValue.getFloat());
-		strcat_P(infoText, PSTR("-"));
-		util::strcatVoltage(infoText, maxValue.getFloat());
-		strcat_P(infoText, PSTR("]"));
+        if (part == 0 || part == 1) {
+		    sprintf_P(infoText, PSTR("Set Ch%d voltage"), channel.index);
+        } else {
+            *infoText = 0;
+        }
+
+        if (part == 0) {
+            strcat_P(infoText, PSTR(" "));
+        }
+
+        if (part == 0 || part == 2) {
+            strcat_P(infoText, PSTR("["));
+            util::strcatFloat(infoText, minValue.getFloat());
+		    strcat_P(infoText, PSTR("-"));
+		    util::strcatVoltage(infoText, maxValue.getFloat());
+		    strcat_P(infoText, PSTR("]"));
+        }
     }
 }
 

@@ -174,6 +174,10 @@ void Value::toText(char *text, int count) const {
 		profile::getName(int_, text, count);
 		break;
 
+    case VALUE_TYPE_EDIT_INFO:
+        edit_mode::getInfoText(int_, text);
+        break;
+
 	default:
 		{
 			int precision = FLOAT_TO_STR_PREC;

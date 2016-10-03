@@ -40,7 +40,7 @@ data::ValueType getUnit();
 bool setValue(float value);
 
 bool isEditWidget(const WidgetCursor &widgetCursor);
-void getInfoText(char *infoText);
+void getInfoText(int part, char *infoText);
 
 void nonInteractiveSet();
 void nonInteractiveDiscard();

@@ -156,6 +156,14 @@
       "defaultValue": "Set Ch1 voltage [0-50 V]"
     },
     {
+      "name": "edit_info1",
+      "defaultValue": "Set Ch1 voltage"
+    },
+    {
+      "name": "edit_info2",
+      "defaultValue": "[0-50 V]"
+    },
+    {
       "name": "edit_mode_interactive_mode_selector",
       "description": "0: interactive mode, 1: non-interactive mode",
       "defaultValue": "1"
@@ -46332,10 +46340,10 @@
             {
               "type": "DisplayData",
               "data": "edit_info",
-              "x": 6,
+              "x": 0,
               "y": 0,
-              "style": "edit_value_S_left",
-              "width": 234,
+              "style": "edit_info_S",
+              "width": 240,
               "height": 32
             },
             {
@@ -46976,28 +46984,37 @@
             },
             {
               "type": "DisplayData",
-              "data": "edit_info",
+              "data": "edit_info1",
               "x": 48,
               "y": 0,
               "style": "edit_info_S",
               "width": 204,
-              "height": 32
+              "height": 28
+            },
+            {
+              "type": "DisplayData",
+              "data": "edit_info2",
+              "x": 48,
+              "y": 28,
+              "style": "edit_info_S",
+              "width": 204,
+              "height": 28
             },
             {
               "type": "DisplayData",
               "data": "edit_value",
               "x": 48,
-              "y": 32,
+              "y": 56,
               "style": "edit_value_L",
               "width": 204,
-              "height": 72
+              "height": 80
             },
             {
               "type": "Rectangle",
               "x": 48,
-              "y": 104,
+              "y": 136,
               "width": 204,
-              "height": 64,
+              "height": 32,
               "style": "default_inverse"
             },
             {
@@ -47645,28 +47662,37 @@
             },
             {
               "type": "DisplayData",
-              "data": "edit_info",
+              "data": "edit_info1",
               "x": 48,
               "y": 0,
               "style": "edit_info_S",
               "width": 204,
-              "height": 32
+              "height": 28
+            },
+            {
+              "type": "DisplayData",
+              "data": "edit_info2",
+              "x": 48,
+              "y": 28,
+              "style": "edit_info_S",
+              "width": 204,
+              "height": 28
             },
             {
               "type": "DisplayData",
               "data": "edit_value",
               "x": 48,
-              "y": 32,
+              "y": 56,
               "style": "edit_value_L",
               "width": 204,
-              "height": 72
+              "height": 80
             },
             {
               "type": "Rectangle",
               "x": 48,
-              "y": 104,
+              "y": 136,
               "width": 204,
-              "height": 64,
+              "height": 32,
               "style": "default_inverse"
             },
             {
