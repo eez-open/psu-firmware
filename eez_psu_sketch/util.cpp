@@ -157,7 +157,7 @@ bool equal(float a, float b, float prec) {
 }
 
 float multiply(float a, float b, float prec) {
-	return round(a, prec) * round(b, prec);
+	return util::round(a, prec) * util::round(b, prec);
 }
 
 bool isNaN(float x) {

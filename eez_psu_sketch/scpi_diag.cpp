@@ -142,8 +142,8 @@ scpi_result_t scpi_diag_InformationCalibrationQ(scpi_t * context) {
             strcpy_P(buffer, PSTR("i_max_level=")); util::strcatCurrent(buffer, channel->cal_conf.i.max.dac); SCPI_ResultText(context, buffer);
             strcpy_P(buffer, PSTR("i_max_data=") ); util::strcatCurrent(buffer, channel->cal_conf.i.max.val); SCPI_ResultText(context, buffer);
             strcpy_P(buffer, PSTR("i_max_adc=")  ); util::strcatCurrent(buffer, channel->cal_conf.i.max.adc); SCPI_ResultText(context, buffer);
-			strcpy_P(buffer, PSTR("i_min_range=")  ); util::strcatVoltage(buffer, channel->cal_conf.i.minPossible, 6); SCPI_ResultText(context, buffer);
-			strcpy_P(buffer, PSTR("i_max_range=")  ); util::strcatVoltage(buffer, channel->cal_conf.i.maxPossible, 6); SCPI_ResultText(context, buffer);
+			strcpy_P(buffer, PSTR("i_min_range=")  ); util::strcatCurrent(buffer, channel->cal_conf.i.minPossible, 6); SCPI_ResultText(context, buffer);
+			strcpy_P(buffer, PSTR("i_max_range=")  ); util::strcatCurrent(buffer, channel->cal_conf.i.maxPossible, 6); SCPI_ResultText(context, buffer);
         }
     }
 
