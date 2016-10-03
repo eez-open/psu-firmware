@@ -219,14 +219,20 @@ void showCurrentStep() {
 	}
 }
 
+bool canSave() {
+	int16_t scpiErr;
+	return psu::calibration::canSave(scpiErr) &&
+		(psu::calibration::isVoltageCalibrated() || g_channel->cal_conf.flags.u_cal_params_exists) &&
+		(psu::calibration::isCurrentCalibrated() || g_channel->cal_conf.flags.i_cal_params_exists);
+}
+
 void onSetRemarkOk(char *remark) {
 	popPage();
 	psu::calibration::setRemark(remark, strlen(remark));
 	if (g_stepNum < 6) {
 		nextStep();
 	} else {
-		int16_t scpiErr;
-		if (psu::calibration::canSave(scpiErr)) {
+		if (canSave()) {
 			nextStep();
 		} else {
 			showCurrentStep();
@@ -290,13 +296,8 @@ void previousStep() {
 
 void nextStep() {
 	if (g_stepNum == 6) {
-		int16_t scpiErr;
-		if (!psu::calibration::canSave(scpiErr)) {
-			if (scpiErr == SCPI_ERROR_INVALID_CAL_DATA) {
-				errorMessageP(PSTR("Invalid calibration data!"));
-			} else {
-				errorMessageP(PSTR("Missing calibration data!"));
-			}
+		if (!canSave()) {
+			errorMessageP(PSTR("Missing calibration data!"));
 			return;
 		}
 	}

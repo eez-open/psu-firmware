@@ -92,6 +92,12 @@ const char *getRemark();
 /// Set calibration remark.
 void setRemark(const char *value, size_t len);
 
+/// Are voltage calibration parameters entered?
+bool isVoltageCalibrated();
+
+/// Are current calibration parameters entered?
+bool isCurrentCalibrated();
+
 /// Are all calibration parameters entered?
 bool canSave(int16_t &scpiErr);
 

@@ -230,6 +230,14 @@ static bool checkCalibrationValue(calibration::Value &calibrationValue, int16_t 
     return true;
 }
 
+bool isVoltageCalibrated() {
+	return g_voltage.min_set && g_voltage.mid_set && g_voltage.max_set;
+}
+
+bool isCurrentCalibrated() {
+	return g_current.min_set && g_current.mid_set && g_current.max_set;
+}
+
 bool canSave(int16_t &scpiErr) {
     if (!isEnabled()) {
         scpiErr = SCPI_ERROR_CALIBRATION_STATE_IS_OFF;
@@ -242,7 +250,7 @@ bool canSave(int16_t &scpiErr) {
     }
 
     bool u_calibrated = false;
-    if (g_voltage.min_set && g_voltage.mid_set && g_voltage.max_set) {
+    if (isVoltageCalibrated()) {
         if (!checkCalibrationValue(calibration::g_voltage, scpiErr)) {
             return false;
         }
@@ -250,7 +258,7 @@ bool canSave(int16_t &scpiErr) {
     }
 
     bool i_calibrated = false;
-    if (g_current.min_set && g_current.mid_set && g_current.max_set) {
+    if (isCurrentCalibrated()) {
         if (!checkCalibrationValue(g_current, scpiErr)) {
             return false;
         }
@@ -279,7 +287,7 @@ bool save() {
     memset(&g_channel->cal_conf.calibration_remark, 0, sizeof(g_channel->cal_conf.calibration_remark));
     strcpy(g_channel->cal_conf.calibration_remark, g_remark);
 
-    if (g_voltage.min_set && g_voltage.mid_set && g_voltage.max_set) {
+    if (isVoltageCalibrated()) {
         g_channel->cal_conf.flags.u_cal_params_exists = 1;
 
         g_channel->cal_conf.u.min.dac = g_channel->U_CAL_VAL_MIN;
@@ -300,7 +308,7 @@ bool save() {
 		g_voltage.level = LEVEL_NONE;
     }
 
-    if (g_current.min_set && g_current.mid_set && g_current.max_set) {
+    if (isCurrentCalibrated()) {
         g_channel->cal_conf.flags.i_cal_params_exists = 1;
 
         g_channel->cal_conf.i.min.dac = g_channel->I_CAL_VAL_MIN;
