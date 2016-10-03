@@ -35,7 +35,7 @@ namespace scpi {
 
 static void print_calibration_value(scpi_t * context, char *buffer, calibration::Value &value) {
     const char *prefix;
-    void(*strcat_value)(char *str, float value);
+    void(*strcat_value)(char *str, float value, int precision);
     if (value.voltOrCurr) {
         prefix = PSTR("u");
         strcat_value = util::strcatVoltage;
@@ -45,9 +45,9 @@ static void print_calibration_value(scpi_t * context, char *buffer, calibration:
         strcat_value = util::strcatCurrent;
     }
 
-    if (value.min_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_min=")); strcat_value(buffer, value.min_val); SCPI_ResultText(context, buffer); }
-    if (value.mid_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_mid=")); strcat_value(buffer, value.mid_val); SCPI_ResultText(context, buffer); }
-    if (value.max_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_max=")); strcat_value(buffer, value.max_val); SCPI_ResultText(context, buffer); }
+    if (value.min_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_min=")); strcat_value(buffer, value.min_val, FLOAT_TO_STR_PREC); SCPI_ResultText(context, buffer); }
+    if (value.mid_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_mid=")); strcat_value(buffer, value.mid_val, FLOAT_TO_STR_PREC); SCPI_ResultText(context, buffer); }
+    if (value.max_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_max=")); strcat_value(buffer, value.max_val, FLOAT_TO_STR_PREC); SCPI_ResultText(context, buffer); }
 
     strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_level="));
     switch (value.level) {
@@ -59,8 +59,8 @@ static void print_calibration_value(scpi_t * context, char *buffer, calibration:
     SCPI_ResultText(context, buffer);
 
     if (value.level != calibration::LEVEL_NONE) {
-        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_level_value=")); strcat_value(buffer, value.getLevelValue()); SCPI_ResultText(context, buffer);
-        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_adc="        )); strcat_value(buffer, value.getAdcValue()  ); SCPI_ResultText(context, buffer);
+        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_level_value=")); strcat_value(buffer, value.getLevelValue(), FLOAT_TO_STR_PREC); SCPI_ResultText(context, buffer);
+        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_adc="        )); strcat_value(buffer, value.getAdcValue()  , FLOAT_TO_STR_PREC); SCPI_ResultText(context, buffer);
     }
 }
 
@@ -127,8 +127,8 @@ scpi_result_t scpi_diag_InformationCalibrationQ(scpi_t * context) {
             strcpy_P(buffer, PSTR("u_max_level=")); util::strcatVoltage(buffer, channel->cal_conf.u.max.dac); SCPI_ResultText(context, buffer);
             strcpy_P(buffer, PSTR("u_max_data=") ); util::strcatVoltage(buffer, channel->cal_conf.u.max.val); SCPI_ResultText(context, buffer);
             strcpy_P(buffer, PSTR("u_max_adc=")  ); util::strcatVoltage(buffer, channel->cal_conf.u.max.adc); SCPI_ResultText(context, buffer);
-			strcpy_P(buffer, PSTR("u_min_range=")  ); util::strcatVoltage(buffer, channel->cal_conf.u.minPossible); SCPI_ResultText(context, buffer);
-			strcpy_P(buffer, PSTR("u_max_range=")  ); util::strcatVoltage(buffer, channel->cal_conf.u.maxPossible); SCPI_ResultText(context, buffer);
+			strcpy_P(buffer, PSTR("u_min_range=")  ); util::strcatVoltage(buffer, channel->cal_conf.u.minPossible, 6); SCPI_ResultText(context, buffer);
+			strcpy_P(buffer, PSTR("u_max_range=")  ); util::strcatVoltage(buffer, channel->cal_conf.u.maxPossible, 6); SCPI_ResultText(context, buffer);
         }
 
         strcpy_P(buffer, PSTR("i_cal_params_exists=")); util::strcatInt(buffer, channel->cal_conf.flags.i_cal_params_exists); SCPI_ResultText(context, buffer);
@@ -142,8 +142,8 @@ scpi_result_t scpi_diag_InformationCalibrationQ(scpi_t * context) {
             strcpy_P(buffer, PSTR("i_max_level=")); util::strcatCurrent(buffer, channel->cal_conf.i.max.dac); SCPI_ResultText(context, buffer);
             strcpy_P(buffer, PSTR("i_max_data=") ); util::strcatCurrent(buffer, channel->cal_conf.i.max.val); SCPI_ResultText(context, buffer);
             strcpy_P(buffer, PSTR("i_max_adc=")  ); util::strcatCurrent(buffer, channel->cal_conf.i.max.adc); SCPI_ResultText(context, buffer);
-			strcpy_P(buffer, PSTR("i_min_range=")  ); util::strcatVoltage(buffer, channel->cal_conf.i.minPossible); SCPI_ResultText(context, buffer);
-			strcpy_P(buffer, PSTR("i_max_range=")  ); util::strcatVoltage(buffer, channel->cal_conf.i.maxPossible); SCPI_ResultText(context, buffer);
+			strcpy_P(buffer, PSTR("i_min_range=")  ); util::strcatVoltage(buffer, channel->cal_conf.i.minPossible, 6); SCPI_ResultText(context, buffer);
+			strcpy_P(buffer, PSTR("i_max_range=")  ); util::strcatVoltage(buffer, channel->cal_conf.i.maxPossible, 6); SCPI_ResultText(context, buffer);
         }
     }
 

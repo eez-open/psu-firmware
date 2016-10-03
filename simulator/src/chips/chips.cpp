@@ -686,6 +686,8 @@ void AnalogDigitalConverterChip::setDacValue(uint8_t data_buffer, uint16_t dac_v
         i_set = (uint16_t)util::clamp(value,
             AnalogDigitalConverter::ADC_MIN, AnalogDigitalConverter::ADC_MAX);
     }
+    updateValues();
+    tick();
 }
 
 void AnalogDigitalConverterChip::updateValues() {

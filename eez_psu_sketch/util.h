@@ -34,8 +34,8 @@ float clamp(float x, float min, float max);
 
 void strcatInt(char *str, int value);
 void strcatFloat(char *str, float value, int precision = FLOAT_TO_STR_PREC);
-void strcatVoltage(char *str, float value);
-void strcatCurrent(char *str, float value);
+void strcatVoltage(char *str, float value, int precision = FLOAT_TO_STR_PREC);
+void strcatCurrent(char *str, float value, int precision = FLOAT_TO_STR_PREC);
 void strcatDuration(char *str, float value);
 void strcatLoad(char *str, float value);
 

@@ -65,13 +65,13 @@ void strcatFloat(char *str, float value, int precision) {
     */
 }
 
-void strcatVoltage(char *str, float value) {
-    strcatFloat(str, value);
+void strcatVoltage(char *str, float value, int precision) {
+    strcatFloat(str, value, precision);
     strcat(str, "V");
 }
 
-void strcatCurrent(char *str, float value) {
-    strcatFloat(str, value);
+void strcatCurrent(char *str, float value, int precision) {
+    strcatFloat(str, value, precision);
     strcat(str, "A");
 }
 
