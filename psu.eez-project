@@ -44631,7 +44631,7 @@
         "_color": "#404040",
         "description": "",
         "inheritFrom": "",
-        "_backgroundColor": "#d3d3d3",
+        "_backgroundColor": "#ffff00",
         "_paddingHorizontal": 4,
         "_alignHorizontal": "left"
       },
@@ -44641,7 +44641,7 @@
         "_color": "#404040",
         "description": "",
         "inheritFrom": "",
-        "_backgroundColor": "#d3d3d3",
+        "_backgroundColor": "#ffff00",
         "_paddingHorizontal": 0,
         "_alignHorizontal": "center",
         "_paddingVertical": 0,

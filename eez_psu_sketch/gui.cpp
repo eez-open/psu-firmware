@@ -1113,19 +1113,27 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 
         DECL_WIDGET_STYLE(style, widget);
 
-		uint16_t fg = inverse ? style->background_color : style->color;
-		uint16_t bg = inverse ? style->color : style->background_color;
+        Style textStyle;
+
+        uint16_t inverseColor;
+		if (barGraphWidget->textStyle) {
+    		DECL_STYLE_WITH_OFFSET(textStyleInner, barGraphWidget->textStyle);
+			memcpy(&textStyle, textStyleInner, sizeof(Style));
+    
+            inverseColor = textStyle.background_color;
+        } else {
+            inverseColor = style->background_color;
+        }
+
+		uint16_t fg = inverse ? inverseColor : style->color;
+		uint16_t bg = inverse ? inverseColor : style->background_color;
 
 		if (horizontal) {
 			// calc text position
-			Style textStyle;
 			char valueText[64];
 			int pText = 0;
 			int wText = 0;
 			if (barGraphWidget->textStyle) {
-				DECL_STYLE_WITH_OFFSET(textStyleInner, barGraphWidget->textStyle);
-				memcpy(&textStyle, textStyleInner, sizeof(Style));
-
 				font::Font font = styleGetFont(&textStyle);
     
 				value.toText(valueText, sizeof(valueText));
@@ -1219,9 +1227,6 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 			int pText = 0;
 			int hText = 0;
 			if (barGraphWidget->textStyle) {
-				DECL_STYLE_WITH_OFFSET(textStyleInner, barGraphWidget->textStyle);
-				memcpy(&textStyle, textStyleInner, sizeof(Style));
-
 				font::Font font = styleGetFont(&textStyle);
     
 				value.toText(valueText, sizeof(valueText));
