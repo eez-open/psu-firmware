@@ -108,8 +108,8 @@ scpi_result_t scpi_diag_InformationCalibrationQ(scpi_t * context) {
             sprintf_P(buffer, PSTR("remark=%s"), calibration::getRemark());
             SCPI_ResultText(context, buffer);
         }
-        print_calibration_value(context, buffer, calibration::voltage);
-        print_calibration_value(context, buffer, calibration::current);
+        print_calibration_value(context, buffer, calibration::g_voltage);
+        print_calibration_value(context, buffer, calibration::g_current);
     }
     else {
         sprintf_P(buffer, PSTR("remark=%s %s"), channel->cal_conf.calibration_date, channel->cal_conf.calibration_remark);

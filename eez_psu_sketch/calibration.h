@@ -68,8 +68,8 @@ private:
     float getRange();
 };
 
-extern Value voltage;
-extern Value current;
+extern Value g_voltage;
+extern Value g_current;
 
 bool isEnabled();
 
@@ -99,7 +99,8 @@ bool canSave(int16_t &scpiErr);
 bool save();
 
 /// Clear calibration parameters for the currently selected channel.
-bool clear();
+/// /param channel Selected channel
+bool clear(Channel *channel);
 
 }
 }

@@ -459,10 +459,14 @@ void Channel::clearCalibrationConf() {
     cal_conf.u.min.dac = cal_conf.u.min.val = cal_conf.u.min.adc = U_CAL_VAL_MIN;
     cal_conf.u.mid.dac = cal_conf.u.mid.val = cal_conf.u.mid.adc = (U_CAL_VAL_MIN + U_CAL_VAL_MAX) / 2;
     cal_conf.u.max.dac = cal_conf.u.max.val = cal_conf.u.max.adc = U_CAL_VAL_MAX;
-
+    cal_conf.u.minPossible = U_MIN;
+    cal_conf.u.maxPossible = U_MAX;
+    
     cal_conf.i.min.dac = cal_conf.i.min.val = cal_conf.i.min.adc = I_CAL_VAL_MIN;
     cal_conf.i.mid.dac = cal_conf.i.mid.val = cal_conf.i.mid.adc = (I_CAL_VAL_MIN + I_CAL_VAL_MAX) / 2;
     cal_conf.i.max.dac = cal_conf.i.max.val = cal_conf.i.max.adc = I_CAL_VAL_MAX;
+    cal_conf.i.minPossible = I_MIN;
+    cal_conf.i.maxPossible = I_MAX;
 
     strcpy(cal_conf.calibration_date, "");
     strcpy(cal_conf.calibration_remark, CALIBRATION_REMARK_INIT);

@@ -121,7 +121,10 @@ scpi_result_t scpi_cal_Clear(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (!calibration::clear()) {
+    scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
+    Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
+
+    if (!calibration::clear(channel)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
@@ -168,11 +171,11 @@ scpi_result_t scpi_cal_ModeQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_cal_CurrentData(scpi_t * context) {
-    return calibration_data(context, calibration::current);
+    return calibration_data(context, calibration::g_current);
 }
 
 scpi_result_t scpi_cal_CurrentLevel(scpi_t * context) {
-    return calibration_level(context, calibration::current);
+    return calibration_level(context, calibration::g_current);
 }
 
 scpi_result_t scpi_cal_PasswordNew(scpi_t * context) {
@@ -299,11 +302,11 @@ scpi_result_t scpi_cal_StateQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_cal_VoltageData(scpi_t * context) {
-    return calibration_data(context, calibration::voltage);
+    return calibration_data(context, calibration::g_voltage);
 }
 
 scpi_result_t scpi_cal_VoltageLevel(scpi_t * context) {
-    return calibration_level(context, calibration::voltage);;
+    return calibration_level(context, calibration::g_voltage);;
 }
 
 }

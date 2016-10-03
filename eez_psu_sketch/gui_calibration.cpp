@@ -163,22 +163,22 @@ data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snap
 		return data::Value(g_stepNum);
 	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_VALUE) {
 		switch (g_stepNum) {
-		case 0: return data::Value(psu::calibration::voltage.min_val, data::VALUE_TYPE_FLOAT_VOLT);
-		case 1: return data::Value(psu::calibration::voltage.mid_val, data::VALUE_TYPE_FLOAT_VOLT);
-		case 2: return data::Value(psu::calibration::voltage.max_val, data::VALUE_TYPE_FLOAT_VOLT);
-		case 3: return data::Value(psu::calibration::current.min_val, data::VALUE_TYPE_FLOAT_AMPER);
-		case 4: return data::Value(psu::calibration::current.mid_val, data::VALUE_TYPE_FLOAT_AMPER);
-		case 5: return data::Value(psu::calibration::current.max_val, data::VALUE_TYPE_FLOAT_AMPER);
+		case 0: return data::Value(psu::calibration::g_voltage.min_val, data::VALUE_TYPE_FLOAT_VOLT);
+		case 1: return data::Value(psu::calibration::g_voltage.mid_val, data::VALUE_TYPE_FLOAT_VOLT);
+		case 2: return data::Value(psu::calibration::g_voltage.max_val, data::VALUE_TYPE_FLOAT_VOLT);
+		case 3: return data::Value(psu::calibration::g_current.min_val, data::VALUE_TYPE_FLOAT_AMPER);
+		case 4: return data::Value(psu::calibration::g_current.mid_val, data::VALUE_TYPE_FLOAT_AMPER);
+		case 5: return data::Value(psu::calibration::g_current.max_val, data::VALUE_TYPE_FLOAT_AMPER);
 		case 6: return data::Value(psu::calibration::getRemark());
 		}
 	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_STATUS) {
 		switch (g_stepNum) {
-		case 0: return data::Value(psu::calibration::voltage.min_set ? 1 : 0);
-		case 1: return data::Value(psu::calibration::voltage.mid_set ? 1 : 0);
-		case 2: return data::Value(psu::calibration::voltage.max_set ? 1 : 0);
-		case 3: return data::Value(psu::calibration::current.min_set ? 1 : 0);
-		case 4: return data::Value(psu::calibration::current.mid_set ? 1 : 0);
-		case 5: return data::Value(psu::calibration::current.max_set ? 1 : 0);
+		case 0: return data::Value(psu::calibration::g_voltage.min_set ? 1 : 0);
+		case 1: return data::Value(psu::calibration::g_voltage.mid_set ? 1 : 0);
+		case 2: return data::Value(psu::calibration::g_voltage.max_set ? 1 : 0);
+		case 3: return data::Value(psu::calibration::g_current.min_set ? 1 : 0);
+		case 4: return data::Value(psu::calibration::g_current.mid_set ? 1 : 0);
+		case 5: return data::Value(psu::calibration::g_current.max_set ? 1 : 0);
 		case 6: return data::Value(psu::calibration::isRemarkSet() ? 1 : 0);
 		}
 	} else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_PREV_ENABLED) {
@@ -192,9 +192,9 @@ data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snap
 
 psu::calibration::Value *getCalibrationValue() {
 	if (g_stepNum < 3) {
-		return &psu::calibration::voltage;
+		return &psu::calibration::g_voltage;
 	}
-	return &psu::calibration::current;
+	return &psu::calibration::g_current;
 }
 
 void onSetOk(float value) {
@@ -237,19 +237,19 @@ void onSetRemarkOk(char *remark) {
 void set() {
 	if (g_stepNum < 6) {
 		switch (g_stepNum) {
-		case 0: psu::calibration::voltage.setLevel(psu::calibration::LEVEL_MIN); break;
-		case 1: psu::calibration::voltage.setLevel(psu::calibration::LEVEL_MID); break;
-		case 2: psu::calibration::voltage.setLevel(psu::calibration::LEVEL_MAX); break;
-		case 3: psu::calibration::current.setLevel(psu::calibration::LEVEL_MIN); break;
-		case 4: psu::calibration::current.setLevel(psu::calibration::LEVEL_MID); break;
-		case 5: psu::calibration::current.setLevel(psu::calibration::LEVEL_MAX); break;
+		case 0: psu::calibration::g_voltage.setLevel(psu::calibration::LEVEL_MIN); break;
+		case 1: psu::calibration::g_voltage.setLevel(psu::calibration::LEVEL_MID); break;
+		case 2: psu::calibration::g_voltage.setLevel(psu::calibration::LEVEL_MAX); break;
+		case 3: psu::calibration::g_current.setLevel(psu::calibration::LEVEL_MIN); break;
+		case 4: psu::calibration::g_current.setLevel(psu::calibration::LEVEL_MID); break;
+		case 5: psu::calibration::g_current.setLevel(psu::calibration::LEVEL_MAX); break;
 		}
 	
 		psu::calibration::Value *calibrationValue = getCalibrationValue();
 
 		numeric_keypad::Options options;
 
-		if (calibrationValue == &psu::calibration::voltage) {
+		if (calibrationValue == &psu::calibration::g_voltage) {
 			options.editUnit = data::VALUE_TYPE_FLOAT_VOLT;
 
 			options.min = g_channel->u.min;
