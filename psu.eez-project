@@ -48788,131 +48788,151 @@
                   "type": "List",
                   "listType": "vertical",
                   "itemWidget": {
-                    "type": "Container",
+                    "type": "Select",
+                    "data": "channel.status",
+                    "y": 0,
                     "widgets": [
                       {
-                        "type": "Text",
-                        "action": "show_channel_settings",
+                        "type": "Rectangle",
                         "x": 0,
                         "y": 0,
-                        "style": "edit_S",
-                        "text": "` Set",
-                        "width": 55,
-                        "height": 58
+                        "width": 320,
+                        "height": 88,
+                        "style": "default_inverse"
                       },
                       {
-                        "type": "Select",
-                        "x": 55,
-                        "y": 0,
-                        "data": "channel.outputState",
-                        "action": "",
+                        "type": "Container",
                         "widgets": [
                           {
                             "type": "Text",
-                            "style": "channel_off_landscape",
-                            "text": "OFF",
+                            "action": "show_channel_settings",
                             "x": 0,
                             "y": 0,
-                            "width": 200,
-                            "height": 58,
-                            "action": "toggle_channel"
+                            "style": "edit_S",
+                            "text": "` Set",
+                            "width": 55,
+                            "height": 58
                           },
                           {
                             "type": "Select",
-                            "data": "channel.outputMode",
+                            "x": 55,
+                            "y": 0,
+                            "data": "channel.outputState",
+                            "action": "",
                             "widgets": [
                               {
-                                "type": "Container",
-                                "widgets": [
-                                  {
-                                    "type": "BarGraph",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 200,
-                                    "height": 28,
-                                    "orientation": "left-right",
-                                    "style": "bar_graph_U_defualt",
-                                    "data": "channel.u.mon",
-                                    "action": "toggle_channel",
-                                    "textStyle": "bar_graph_text",
-                                    "line1Data": "channel.u.set",
-                                    "line2Data": "channel.u.limit",
-                                    "line1Style": "bar_graph_set_line",
-                                    "line2Style": "bar_graph_limit_line"
-                                  },
-                                  {
-                                    "type": "Rectangle",
-                                    "x": 0,
-                                    "y": 28,
-                                    "width": 200,
-                                    "height": 2,
-                                    "style": "default_inverse"
-                                  },
-                                  {
-                                    "type": "BarGraph",
-                                    "x": 0,
-                                    "y": 30,
-                                    "width": 200,
-                                    "height": 28,
-                                    "orientation": "left-right",
-                                    "style": "bar_graph_I_default",
-                                    "data": "channel.i.mon",
-                                    "action": "toggle_channel",
-                                    "textStyle": "bar_graph_text",
-                                    "line1Data": "channel.i.set",
-                                    "line2Data": "channel.i.limit",
-                                    "line1Style": "bar_graph_set_line",
-                                    "line2Style": "bar_graph_limit_line"
-                                  }
-                                ],
+                                "type": "Text",
+                                "style": "channel_off_landscape",
+                                "text": "OFF",
                                 "x": 0,
                                 "y": 0,
                                 "width": 200,
                                 "height": 58,
-                                "style": "default"
+                                "action": "toggle_channel"
                               },
                               {
-                                "type": "Container",
+                                "type": "Select",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
-                                    "type": "BarGraph",
+                                    "type": "Container",
+                                    "widgets": [
+                                      {
+                                        "type": "BarGraph",
+                                        "x": 0,
+                                        "y": 0,
+                                        "width": 200,
+                                        "height": 28,
+                                        "orientation": "left-right",
+                                        "style": "bar_graph_U_defualt",
+                                        "data": "channel.u.mon",
+                                        "action": "toggle_channel",
+                                        "textStyle": "bar_graph_text",
+                                        "line1Data": "channel.u.set",
+                                        "line2Data": "channel.u.limit",
+                                        "line1Style": "bar_graph_set_line",
+                                        "line2Style": "bar_graph_limit_line"
+                                      },
+                                      {
+                                        "type": "Rectangle",
+                                        "x": 0,
+                                        "y": 28,
+                                        "width": 200,
+                                        "height": 2,
+                                        "style": "default_inverse"
+                                      },
+                                      {
+                                        "type": "BarGraph",
+                                        "x": 0,
+                                        "y": 30,
+                                        "width": 200,
+                                        "height": 28,
+                                        "orientation": "left-right",
+                                        "style": "bar_graph_I_default",
+                                        "data": "channel.i.mon",
+                                        "action": "toggle_channel",
+                                        "textStyle": "bar_graph_text",
+                                        "line1Data": "channel.i.set",
+                                        "line2Data": "channel.i.limit",
+                                        "line1Style": "bar_graph_set_line",
+                                        "line2Style": "bar_graph_limit_line"
+                                      }
+                                    ],
                                     "x": 0,
                                     "y": 0,
                                     "width": 200,
-                                    "height": 28,
-                                    "orientation": "left-right",
-                                    "style": "bar_graph_unregulated",
-                                    "data": "channel.u.mon",
-                                    "action": "toggle_channel",
-                                    "textStyle": "bar_graph_text",
-                                    "line1Data": "channel.u.set",
-                                    "line2Data": "channel.u.limit",
-                                    "line1Style": "bar_graph_set_line",
-                                    "line2Style": "bar_graph_limit_line"
+                                    "height": 58,
+                                    "style": "default"
                                   },
                                   {
-                                    "type": "Rectangle",
+                                    "type": "Container",
+                                    "widgets": [
+                                      {
+                                        "type": "BarGraph",
+                                        "x": 0,
+                                        "y": 0,
+                                        "width": 200,
+                                        "height": 28,
+                                        "orientation": "left-right",
+                                        "style": "bar_graph_unregulated",
+                                        "data": "channel.u.mon",
+                                        "action": "toggle_channel",
+                                        "textStyle": "bar_graph_text",
+                                        "line1Data": "channel.u.set",
+                                        "line2Data": "channel.u.limit",
+                                        "line1Style": "bar_graph_set_line",
+                                        "line2Style": "bar_graph_limit_line"
+                                      },
+                                      {
+                                        "type": "Rectangle",
+                                        "x": 0,
+                                        "y": 28,
+                                        "width": 200,
+                                        "height": 2,
+                                        "style": "default_inverse"
+                                      },
+                                      {
+                                        "type": "BarGraph",
+                                        "x": 0,
+                                        "y": 30,
+                                        "width": 200,
+                                        "height": 28,
+                                        "orientation": "left-right",
+                                        "style": "bar_graph_unregulated",
+                                        "data": "channel.i.mon",
+                                        "action": "toggle_channel",
+                                        "textStyle": "bar_graph_text",
+                                        "line1Data": "channel.i.set",
+                                        "line2Data": "channel.i.limit",
+                                        "line1Style": "bar_graph_set_line",
+                                        "line2Style": "bar_graph_limit_line"
+                                      }
+                                    ],
                                     "x": 0,
-                                    "y": 28,
+                                    "y": 0,
                                     "width": 200,
-                                    "height": 2,
-                                    "style": "default_inverse"
-                                  },
-                                  {
-                                    "type": "BarGraph",
-                                    "x": 0,
-                                    "y": 30,
-                                    "width": 200,
-                                    "height": 28,
-                                    "orientation": "left-right",
-                                    "style": "bar_graph_unregulated",
-                                    "data": "channel.i.mon",
-                                    "action": "toggle_channel",
-                                    "textStyle": "bar_graph_text",
-                                    "line1Data": "channel.i.set",
-                                    "line2Data": "channel.i.limit",
-                                    "line1Style": "bar_graph_set_line",
-                                    "line2Style": "bar_graph_limit_line"
+                                    "height": 58,
+                                    "style": "default"
                                   }
                                 ],
                                 "x": 0,
@@ -48922,295 +48942,303 @@
                                 "style": "default"
                               }
                             ],
-                            "x": 0,
-                            "y": 0,
                             "width": 200,
                             "height": 58,
                             "style": "default"
-                          }
-                        ],
-                        "width": 200,
-                        "height": 58,
-                        "style": "default"
-                      },
-                      {
-                        "type": "Select",
-                        "widgets": [
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "text": "20.00V",
+                                "x": 0,
+                                "y": 0,
+                                "width": 65,
+                                "height": 28,
+                                "style": "edit_value_active_S_right",
+                                "data": "channel.u.set",
+                                "action": "edit"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "text": "20.00V",
+                                "x": 0,
+                                "y": 0,
+                                "width": 65,
+                                "height": 28,
+                                "style": "mon_dac_S",
+                                "data": "channel.u.monDac",
+                                "action": ""
+                              }
+                            ],
+                            "x": 255,
+                            "y": 0,
+                            "width": 65,
+                            "height": 28,
+                            "data": "channel.rprog.status",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Rectangle",
+                            "x": 255,
+                            "y": 28,
+                            "width": 65,
+                            "height": 2,
+                            "style": "default_inverse"
+                          },
                           {
                             "type": "DisplayData",
-                            "text": "20.00V",
-                            "x": 0,
-                            "y": 0,
+                            "text": "0.60A",
+                            "x": 255,
+                            "y": 30,
                             "width": 65,
                             "height": 28,
                             "style": "edit_value_active_S_right",
-                            "data": "channel.u.set",
+                            "data": "channel.i.set",
                             "action": "edit"
                           },
                           {
+                            "type": "Rectangle",
+                            "x": 0,
+                            "y": 58,
+                            "width": 255,
+                            "height": 3,
+                            "style": "default_inverse"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "LRip",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "LRip",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 0,
+                            "y": 61,
+                            "width": 48,
+                            "height": 24,
+                            "data": "lrip",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OCP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OCP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OCP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 48,
+                            "y": 61,
+                            "width": 48,
+                            "height": 24,
+                            "data": "ocp",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OVP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OVP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OVP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 96,
+                            "y": 61,
+                            "width": 48,
+                            "height": 24,
+                            "data": "ovp",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OTP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OTP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OTP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 144,
+                            "y": 61,
+                            "width": 48,
+                            "height": 24,
+                            "data": "otp_ch",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OPP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OPP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OPP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
+                            "x": 192,
+                            "y": 61,
+                            "width": 48,
+                            "height": 24,
+                            "data": "opp",
+                            "style": "default"
+                          },
+                          {
+                            "type": "Rectangle",
+                            "x": 0,
+                            "y": 85,
+                            "width": 255,
+                            "height": 3,
+                            "style": "default_inverse"
+                          },
+                          {
+                            "type": "Rectangle",
+                            "x": 240,
+                            "y": 58,
+                            "width": 15,
+                            "height": 30,
+                            "style": "default_inverse"
+                          },
+                          {
                             "type": "DisplayData",
-                            "text": "20.00V",
-                            "x": 0,
-                            "y": 0,
-                            "width": 65,
+                            "text": "12.00W",
+                            "x": 240,
+                            "y": 60,
+                            "width": 80,
                             "height": 28,
-                            "style": "mon_dac_S",
-                            "data": "channel.u.monDac",
-                            "action": ""
+                            "style": "edit_value_S_right",
+                            "data": "channel.p.mon"
+                          },
+                          {
+                            "type": "Rectangle",
+                            "x": 255,
+                            "y": 58,
+                            "width": 65,
+                            "height": 2,
+                            "style": "default_inverse"
                           }
                         ],
-                        "x": 255,
+                        "x": 0,
                         "y": 0,
-                        "width": 65,
-                        "height": 28,
-                        "data": "channel.rprog.status",
+                        "width": 320,
+                        "height": 88,
                         "style": "default"
                       },
                       {
-                        "type": "Rectangle",
-                        "x": 255,
-                        "y": 28,
-                        "width": 65,
-                        "height": 2,
-                        "style": "default_inverse"
-                      },
-                      {
-                        "type": "DisplayData",
-                        "text": "0.60A",
-                        "x": 255,
-                        "y": 30,
-                        "width": 65,
-                        "height": 28,
-                        "style": "edit_value_active_S_right",
-                        "data": "channel.i.set",
-                        "action": "edit"
-                      },
-                      {
-                        "type": "Rectangle",
+                        "type": "Text",
+                        "style": "channel_error",
+                        "text": "ERROR",
                         "x": 0,
-                        "y": 58,
-                        "width": 255,
-                        "height": 3,
-                        "style": "default_inverse"
-                      },
-                      {
-                        "type": "Select",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_S",
-                            "text": "LRip",
-                            "width": 48,
-                            "height": 24
-                          },
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_set_S",
-                            "text": "LRip",
-                            "width": 48,
-                            "height": 24
-                          }
-                        ],
-                        "x": 0,
-                        "y": 61,
-                        "width": 48,
-                        "height": 24,
-                        "data": "lrip",
-                        "style": "default"
-                      },
-                      {
-                        "type": "Select",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_S",
-                            "text": "OCP",
-                            "width": 48,
-                            "height": 24
-                          },
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_set_S",
-                            "text": "OCP",
-                            "width": 48,
-                            "height": 24
-                          },
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_trip_S",
-                            "text": "OCP",
-                            "width": 48,
-                            "height": 24
-                          }
-                        ],
-                        "x": 48,
-                        "y": 61,
-                        "width": 48,
-                        "height": 24,
-                        "data": "ocp",
-                        "style": "default"
-                      },
-                      {
-                        "type": "Select",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_S",
-                            "text": "OVP",
-                            "width": 48,
-                            "height": 24
-                          },
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_set_S",
-                            "text": "OVP",
-                            "width": 48,
-                            "height": 24
-                          },
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_trip_S",
-                            "text": "OVP",
-                            "width": 48,
-                            "height": 24
-                          }
-                        ],
-                        "x": 96,
-                        "y": 61,
-                        "width": 48,
-                        "height": 24,
-                        "data": "ovp",
-                        "style": "default"
-                      },
-                      {
-                        "type": "Select",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_S",
-                            "text": "OTP",
-                            "width": 48,
-                            "height": 24
-                          },
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_set_S",
-                            "text": "OTP",
-                            "width": 48,
-                            "height": 24
-                          },
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_trip_S",
-                            "text": "OTP",
-                            "width": 48,
-                            "height": 24
-                          }
-                        ],
-                        "x": 144,
-                        "y": 61,
-                        "width": 48,
-                        "height": 24,
-                        "data": "otp_ch",
-                        "style": "default"
-                      },
-                      {
-                        "type": "Select",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_S",
-                            "text": "OPP",
-                            "width": 48,
-                            "height": 24
-                          },
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_set_S",
-                            "text": "OPP",
-                            "width": 48,
-                            "height": 24
-                          },
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_trip_S",
-                            "text": "OPP",
-                            "width": 48,
-                            "height": 24
-                          }
-                        ],
-                        "x": 192,
-                        "y": 61,
-                        "width": 48,
-                        "height": 24,
-                        "data": "opp",
-                        "style": "default"
-                      },
-                      {
-                        "type": "Rectangle",
-                        "x": 0,
-                        "y": 85,
-                        "width": 255,
-                        "height": 3,
-                        "style": "default_inverse"
-                      },
-                      {
-                        "type": "Rectangle",
-                        "x": 240,
-                        "y": 58,
-                        "width": 15,
-                        "height": 30,
-                        "style": "default_inverse"
-                      },
-                      {
-                        "type": "DisplayData",
-                        "text": "12.00W",
-                        "x": 240,
-                        "y": 60,
-                        "width": 80,
-                        "height": 28,
-                        "style": "edit_value_S_right",
-                        "data": "channel.p.mon"
-                      },
-                      {
-                        "type": "Rectangle",
-                        "x": 255,
-                        "y": 58,
-                        "width": 65,
-                        "height": 2,
-                        "style": "default_inverse"
+                        "y": 0,
+                        "width": 320,
+                        "height": 88
                       }
                     ],
                     "x": 0,
-                    "y": 0,
                     "width": 320,
                     "height": 88,
                     "style": "default"
@@ -49226,147 +49254,167 @@
                   "type": "List",
                   "listType": "horizontal",
                   "itemWidget": {
-                    "type": "Container",
+                    "type": "Select",
+                    "data": "channel.status",
+                    "y": 0,
                     "widgets": [
                       {
-                        "type": "Text",
-                        "action": "show_channel_settings",
+                        "type": "Rectangle",
                         "x": 0,
                         "y": 0,
-                        "style": "edit_S",
-                        "text": "` Set",
-                        "width": 48,
-                        "height": 30
-                      },
-                      {
-                        "type": "Rectangle",
-                        "x": 47,
-                        "y": 0,
-                        "width": 2,
-                        "height": 148,
-                        "style": "default_inverse"
-                      },
-                      {
-                        "type": "Rectangle",
-                        "x": 159,
-                        "y": 0,
-                        "width": 1,
+                        "width": 160,
                         "height": 176,
                         "style": "default_inverse"
                       },
                       {
-                        "type": "Select",
-                        "x": 49,
-                        "y": 28,
-                        "data": "channel.outputState",
-                        "action": "",
+                        "type": "Container",
                         "widgets": [
                           {
                             "type": "Text",
-                            "style": "channel_off_landscape",
-                            "text": "OFF",
+                            "action": "show_channel_settings",
                             "x": 0,
                             "y": 0,
-                            "width": 110,
-                            "height": 124,
-                            "action": "toggle_channel"
+                            "style": "edit_S",
+                            "text": "` Set",
+                            "width": 48,
+                            "height": 30
+                          },
+                          {
+                            "type": "Rectangle",
+                            "x": 47,
+                            "y": 0,
+                            "width": 2,
+                            "height": 148,
+                            "style": "default_inverse"
+                          },
+                          {
+                            "type": "Rectangle",
+                            "x": 159,
+                            "y": 0,
+                            "width": 1,
+                            "height": 176,
+                            "style": "default_inverse"
                           },
                           {
                             "type": "Select",
-                            "data": "channel.outputMode",
+                            "x": 49,
+                            "y": 28,
+                            "data": "channel.outputState",
+                            "action": "",
                             "widgets": [
                               {
-                                "type": "Container",
-                                "widgets": [
-                                  {
-                                    "type": "BarGraph",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 54,
-                                    "height": 124,
-                                    "orientation": "bottom-top",
-                                    "style": "bar_graph_U_defualt",
-                                    "data": "channel.u.mon",
-                                    "action": "toggle_channel",
-                                    "textStyle": "bar_graph_text_vertical",
-                                    "line1Data": "channel.u.set",
-                                    "line2Data": "channel.u.limit",
-                                    "line1Style": "bar_graph_set_line",
-                                    "line2Style": "bar_graph_limit_line"
-                                  },
-                                  {
-                                    "type": "Rectangle",
-                                    "x": 54,
-                                    "y": 0,
-                                    "width": 2,
-                                    "height": 148,
-                                    "style": "default_inverse"
-                                  },
-                                  {
-                                    "type": "BarGraph",
-                                    "x": 56,
-                                    "y": 0,
-                                    "width": 54,
-                                    "height": 124,
-                                    "orientation": "bottom-top",
-                                    "style": "bar_graph_I_default",
-                                    "data": "channel.i.mon",
-                                    "action": "toggle_channel",
-                                    "textStyle": "bar_graph_text_vertical",
-                                    "line1Data": "channel.i.set",
-                                    "line2Data": "channel.i.limit",
-                                    "line1Style": "bar_graph_set_line",
-                                    "line2Style": "bar_graph_limit_line"
-                                  }
-                                ],
+                                "type": "Text",
+                                "style": "channel_off_landscape",
+                                "text": "OFF",
                                 "x": 0,
                                 "y": 0,
                                 "width": 110,
                                 "height": 124,
-                                "style": "default"
+                                "action": "toggle_channel"
                               },
                               {
-                                "type": "Container",
+                                "type": "Select",
+                                "data": "channel.outputMode",
                                 "widgets": [
                                   {
-                                    "type": "BarGraph",
+                                    "type": "Container",
+                                    "widgets": [
+                                      {
+                                        "type": "BarGraph",
+                                        "x": 0,
+                                        "y": 0,
+                                        "width": 54,
+                                        "height": 124,
+                                        "orientation": "bottom-top",
+                                        "style": "bar_graph_U_defualt",
+                                        "data": "channel.u.mon",
+                                        "action": "toggle_channel",
+                                        "textStyle": "bar_graph_text_vertical",
+                                        "line1Data": "channel.u.set",
+                                        "line2Data": "channel.u.limit",
+                                        "line1Style": "bar_graph_set_line",
+                                        "line2Style": "bar_graph_limit_line"
+                                      },
+                                      {
+                                        "type": "Rectangle",
+                                        "x": 54,
+                                        "y": 0,
+                                        "width": 2,
+                                        "height": 148,
+                                        "style": "default_inverse"
+                                      },
+                                      {
+                                        "type": "BarGraph",
+                                        "x": 56,
+                                        "y": 0,
+                                        "width": 54,
+                                        "height": 124,
+                                        "orientation": "bottom-top",
+                                        "style": "bar_graph_I_default",
+                                        "data": "channel.i.mon",
+                                        "action": "toggle_channel",
+                                        "textStyle": "bar_graph_text_vertical",
+                                        "line1Data": "channel.i.set",
+                                        "line2Data": "channel.i.limit",
+                                        "line1Style": "bar_graph_set_line",
+                                        "line2Style": "bar_graph_limit_line"
+                                      }
+                                    ],
                                     "x": 0,
                                     "y": 0,
-                                    "width": 54,
+                                    "width": 110,
                                     "height": 124,
-                                    "orientation": "bottom-top",
-                                    "style": "bar_graph_unregulated",
-                                    "data": "channel.u.mon",
-                                    "action": "toggle_channel",
-                                    "textStyle": "bar_graph_text_vertical",
-                                    "line1Data": "channel.u.set",
-                                    "line2Data": "channel.u.limit",
-                                    "line1Style": "bar_graph_set_line",
-                                    "line2Style": "bar_graph_limit_line"
+                                    "style": "default"
                                   },
                                   {
-                                    "type": "Rectangle",
-                                    "x": 54,
+                                    "type": "Container",
+                                    "widgets": [
+                                      {
+                                        "type": "BarGraph",
+                                        "x": 0,
+                                        "y": 0,
+                                        "width": 54,
+                                        "height": 124,
+                                        "orientation": "bottom-top",
+                                        "style": "bar_graph_unregulated",
+                                        "data": "channel.u.mon",
+                                        "action": "toggle_channel",
+                                        "textStyle": "bar_graph_text_vertical",
+                                        "line1Data": "channel.u.set",
+                                        "line2Data": "channel.u.limit",
+                                        "line1Style": "bar_graph_set_line",
+                                        "line2Style": "bar_graph_limit_line"
+                                      },
+                                      {
+                                        "type": "Rectangle",
+                                        "x": 54,
+                                        "y": 0,
+                                        "width": 2,
+                                        "height": 148,
+                                        "style": "default_inverse"
+                                      },
+                                      {
+                                        "type": "BarGraph",
+                                        "x": 56,
+                                        "y": 0,
+                                        "width": 54,
+                                        "height": 124,
+                                        "orientation": "bottom-top",
+                                        "style": "bar_graph_unregulated",
+                                        "data": "channel.i.mon",
+                                        "action": "toggle_channel",
+                                        "textStyle": "bar_graph_text_vertical",
+                                        "line1Data": "channel.i.set",
+                                        "line2Data": "channel.i.limit",
+                                        "line1Style": "bar_graph_set_line",
+                                        "line2Style": "bar_graph_limit_line"
+                                      }
+                                    ],
+                                    "x": 0,
                                     "y": 0,
-                                    "width": 2,
-                                    "height": 148,
-                                    "style": "default_inverse"
-                                  },
-                                  {
-                                    "type": "BarGraph",
-                                    "x": 56,
-                                    "y": 0,
-                                    "width": 54,
+                                    "width": 110,
                                     "height": 124,
-                                    "orientation": "bottom-top",
-                                    "style": "bar_graph_unregulated",
-                                    "data": "channel.i.mon",
-                                    "action": "toggle_channel",
-                                    "textStyle": "bar_graph_text_vertical",
-                                    "line1Data": "channel.i.set",
-                                    "line2Data": "channel.i.limit",
-                                    "line1Style": "bar_graph_set_line",
-                                    "line2Style": "bar_graph_limit_line"
+                                    "style": "default"
                                   }
                                 ],
                                 "x": 0,
@@ -49376,260 +49424,268 @@
                                 "style": "default"
                               }
                             ],
-                            "x": 0,
-                            "y": 0,
                             "width": 110,
-                            "height": 124,
+                            "height": 148,
                             "style": "default"
-                          }
-                        ],
-                        "width": 110,
-                        "height": 148,
-                        "style": "default"
-                      },
-                      {
-                        "type": "Select",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_S",
-                            "text": "LRip",
-                            "width": 48,
-                            "height": 24
                           },
                           {
-                            "type": "Text",
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "LRip",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "LRip",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
                             "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_set_S",
-                            "text": "LRip",
+                            "y": 28,
                             "width": 48,
-                            "height": 24
-                          }
-                        ],
-                        "x": 0,
-                        "y": 28,
-                        "width": 48,
-                        "height": 24,
-                        "data": "lrip",
-                        "style": "default"
-                      },
-                      {
-                        "type": "Select",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_S",
-                            "text": "OCP",
-                            "width": 48,
-                            "height": 24
+                            "height": 24,
+                            "data": "lrip",
+                            "style": "default"
                           },
                           {
-                            "type": "Text",
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OCP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OCP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OCP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
                             "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_set_S",
-                            "text": "OCP",
+                            "y": 52,
                             "width": 48,
-                            "height": 24
+                            "height": 24,
+                            "data": "ocp",
+                            "style": "default"
                           },
                           {
-                            "type": "Text",
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OVP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OVP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OVP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
                             "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_trip_S",
-                            "text": "OCP",
+                            "y": 76,
                             "width": 48,
-                            "height": 24
-                          }
-                        ],
-                        "x": 0,
-                        "y": 52,
-                        "width": 48,
-                        "height": 24,
-                        "data": "ocp",
-                        "style": "default"
-                      },
-                      {
-                        "type": "Select",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_S",
-                            "text": "OVP",
-                            "width": 48,
-                            "height": 24
+                            "height": 24,
+                            "data": "ovp",
+                            "style": "default"
                           },
                           {
-                            "type": "Text",
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OTP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OTP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OTP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
                             "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_set_S",
-                            "text": "OVP",
+                            "y": 100,
                             "width": 48,
-                            "height": 24
+                            "height": 24,
+                            "data": "otp_ch",
+                            "style": "default"
                           },
                           {
-                            "type": "Text",
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_S",
+                                "text": "OPP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_set_S",
+                                "text": "OPP",
+                                "width": 48,
+                                "height": 24
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "style": "prot_indicator_trip_S",
+                                "text": "OPP",
+                                "width": 48,
+                                "height": 24
+                              }
+                            ],
                             "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_trip_S",
-                            "text": "OVP",
+                            "y": 124,
                             "width": 48,
-                            "height": 24
-                          }
-                        ],
-                        "x": 0,
-                        "y": 76,
-                        "width": 48,
-                        "height": 24,
-                        "data": "ovp",
-                        "style": "default"
-                      },
-                      {
-                        "type": "Select",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_S",
-                            "text": "OTP",
-                            "width": 48,
-                            "height": 24
+                            "height": 24,
+                            "data": "opp",
+                            "style": "default"
                           },
                           {
-                            "type": "Text",
+                            "type": "Rectangle",
                             "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_set_S",
-                            "text": "OTP",
-                            "width": 48,
-                            "height": 24
+                            "y": 148,
+                            "width": 49,
+                            "height": 28,
+                            "style": "default_inverse"
                           },
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_trip_S",
-                            "text": "OTP",
-                            "width": 48,
-                            "height": 24
-                          }
-                        ],
-                        "x": 0,
-                        "y": 100,
-                        "width": 48,
-                        "height": 24,
-                        "data": "otp_ch",
-                        "style": "default"
-                      },
-                      {
-                        "type": "Select",
-                        "widgets": [
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_S",
-                            "text": "OPP",
-                            "width": 48,
-                            "height": 24
-                          },
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_set_S",
-                            "text": "OPP",
-                            "width": 48,
-                            "height": 24
-                          },
-                          {
-                            "type": "Text",
-                            "x": 0,
-                            "y": 0,
-                            "style": "prot_indicator_trip_S",
-                            "text": "OPP",
-                            "width": 48,
-                            "height": 24
-                          }
-                        ],
-                        "x": 0,
-                        "y": 124,
-                        "width": 48,
-                        "height": 24,
-                        "data": "opp",
-                        "style": "default"
-                      },
-                      {
-                        "type": "Rectangle",
-                        "x": 0,
-                        "y": 148,
-                        "width": 49,
-                        "height": 28,
-                        "style": "default_inverse"
-                      },
-                      {
-                        "type": "DisplayData",
-                        "text": "12.00W",
-                        "x": 49,
-                        "y": 0,
-                        "width": 110,
-                        "height": 28,
-                        "style": "edit_value_S_centered",
-                        "data": "channel.p.mon"
-                      },
-                      {
-                        "type": "Select",
-                        "widgets": [
                           {
                             "type": "DisplayData",
-                            "data": "channel.u.set",
-                            "action": "edit",
-                            "x": 0,
+                            "text": "12.00W",
+                            "x": 49,
                             "y": 0,
+                            "width": 110,
+                            "height": 28,
+                            "style": "edit_value_S_centered",
+                            "data": "channel.p.mon"
+                          },
+                          {
+                            "type": "Select",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.set",
+                                "action": "edit",
+                                "x": 0,
+                                "y": 0,
+                                "style": "edit_S",
+                                "width": 55,
+                                "height": 24
+                              },
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.monDac",
+                                "action": "",
+                                "x": 0,
+                                "y": 0,
+                                "style": "mon_dac_S",
+                                "width": 55,
+                                "height": 24
+                              }
+                            ],
+                            "x": 48,
+                            "y": 152,
+                            "width": 55,
+                            "height": 24,
+                            "style": "default",
+                            "data": "channel.rprog.status"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.set",
+                            "action": "edit",
+                            "x": 104,
+                            "y": 152,
                             "style": "edit_S",
                             "width": 55,
                             "height": 24
-                          },
-                          {
-                            "type": "DisplayData",
-                            "data": "channel.u.monDac",
-                            "action": "",
-                            "x": 0,
-                            "y": 0,
-                            "style": "mon_dac_S",
-                            "width": 55,
-                            "height": 24
                           }
                         ],
-                        "x": 48,
-                        "y": 152,
-                        "width": 55,
-                        "height": 24,
-                        "style": "default",
-                        "data": "channel.rprog.status"
+                        "x": 0,
+                        "y": 0,
+                        "width": 160,
+                        "height": 176,
+                        "style": "default"
                       },
                       {
-                        "type": "DisplayData",
-                        "data": "channel.i.set",
-                        "action": "edit",
-                        "x": 104,
-                        "y": 152,
-                        "style": "edit_S",
-                        "width": 55,
-                        "height": 24
+                        "type": "Text",
+                        "style": "channel_error",
+                        "text": "ERROR",
+                        "x": 0,
+                        "y": 0,
+                        "width": 160,
+                        "height": 176
                       }
                     ],
                     "x": 0,
-                    "y": 0,
                     "width": 160,
                     "height": 176,
                     "style": "default"
