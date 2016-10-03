@@ -44,6 +44,10 @@ uint32_t crc32(const uint8_t *message, size_t size);
 uint8_t toBCD(uint8_t bin);
 uint8_t fromBCD(uint8_t bcd);
 
+float floor(float a, float prec);
+float ceil(float a, float prec);
+float round(float a, float prec);
+
 bool greaterOrEqual(float a, float b, float prec);
 bool equal(float a, float b, float prec);
 

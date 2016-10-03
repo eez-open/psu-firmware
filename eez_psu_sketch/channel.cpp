@@ -912,22 +912,22 @@ void Channel::doCalibrationEnable(bool enable) {
 	flags._calEnabled = enable;
 
 	if (enable) {
-		u.min = cal_conf.u.minPossible;
+		u.min = util::ceil(cal_conf.u.minPossible, CHANNEL_VALUE_PRECISION);
 		if (u.min < U_MIN) u.min = U_MIN;
 		if (u.limit < u.min) u.limit = u.min;
 		if (u.set < u.min) setVoltage(u.min);
 		
-		u.max = cal_conf.u.maxPossible;
+		u.max = util::floor(cal_conf.u.maxPossible, CHANNEL_VALUE_PRECISION);
 		if (u.max > U_MAX) u.max = U_MAX;
 		if (u.set > u.max) setVoltage(u.max);
 		if (u.limit > u.max) u.limit = u.max;
 
-		i.min = cal_conf.i.minPossible;
+		i.min = util::ceil(cal_conf.i.minPossible, CHANNEL_VALUE_PRECISION);
 		if (i.min < I_MIN) i.min = I_MIN;
 		if (i.limit < i.min) i.limit = i.min;
 		if (i.set < i.min) setCurrent(i.min);
 
-		i.max = cal_conf.i.maxPossible;
+		i.max = util::floor(cal_conf.i.maxPossible, CHANNEL_VALUE_PRECISION);
 		if (i.max > I_MAX) i.max = I_MAX;
 		if (i.limit > i.max) i.limit = i.max;
 		if (i.set > i.max) setCurrent(i.max);
@@ -975,11 +975,11 @@ void Channel::calibrationFindVoltageRange(float minDac, float minVal, float maxD
 	cal_conf.u.max.val = maxVal;
 
 	setVoltage(U_MIN);
-	delay(50); 
+	delay(100); 
 	*min = u.mon;
 
 	setVoltage(U_MAX);
-	delay(50); // guard time, because without load it will require more than 15ms to jump to the max
+	delay(200); // guard time, because without load it will require more than 15ms to jump to the max
 	*max = u.mon;
 
 	cal_conf.u = calValueConf;
@@ -1071,9 +1071,7 @@ void Channel::setVoltage(float value) {
     }
 
     if (U_MAX != U_MAX_CONF) {
-        DebugTraceF("Before %lf", value);
 		value = util::remap(value, 0, 0, U_MAX_CONF, U_MAX);
-        DebugTraceF("After %lf", value);
 	}
 
     if (isCalibrationEnabled()) {
