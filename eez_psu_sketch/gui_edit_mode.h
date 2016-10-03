@@ -34,8 +34,8 @@ void toggleInteractiveMode();
 
 const data::Value& getEditValue();
 data::Value getCurrentValue(data::Snapshot snapshot);
-const float getMin();
-const float getMax();
+const data::Value &getMin();
+const data::Value &getMax();
 data::ValueType getUnit();
 bool setValue(float value);
 
