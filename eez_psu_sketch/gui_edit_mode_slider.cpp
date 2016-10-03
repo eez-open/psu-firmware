@@ -55,8 +55,8 @@ void onTouchDown() {
 }
 
 void onTouchMove() {
-    float min = edit_mode::getMin().getFloat();
-    float max = edit_mode::getMax().getFloat();
+    float min = edit_mode::getMin();
+    float max = edit_mode::getMax();
 
     int scale;
 

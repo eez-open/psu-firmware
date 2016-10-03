@@ -167,12 +167,12 @@ data::Value getCurrentValue(data::Snapshot snapshot) {
     return snapshot.get(dataCursor, dataId);
 }
 
-const data::Value& getMin() {
-    return minValue;
+const float getMin() {
+    return minValue.getFloat();
 }
 
-const data::Value& getMax() {
-    return maxValue;
+const float getMax() {
+    return maxValue.getFloat();
 }
 
 data::ValueType getUnit() {

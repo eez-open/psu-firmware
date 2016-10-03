@@ -88,18 +88,27 @@ void test() {
         int d = touch::x - start_pos;
 #endif
         if (abs(d) >= CONF_GUI_EDIT_MODE_STEP_THRESHOLD_PX) {
-            float min = edit_mode::getMin().getFloat();
-            float max = edit_mode::getMax().getFloat();
+            float min = edit_mode::getMin();
+            float max = edit_mode::getMax();
 
             float value = edit_mode::getEditValue().getFloat();
 
+            float stepValue = getStepValue();
             if (d > 0) {
-                value += getStepValue();
+                if (value == min) {
+                    value = (floorf(min / stepValue) + 1) * stepValue;
+                } else {
+                    value += getStepValue();
+                }
                 if (value > max) {
                     value = max;
                 }
             } else {
-                value -= getStepValue();
+                if (value == max) {
+                    value = (ceilf(min / stepValue) - 1) * stepValue;
+                } else {
+                    value -= getStepValue();
+                }
                 if (value < min) {
                     value = min;
                 }
