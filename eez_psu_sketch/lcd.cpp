@@ -105,7 +105,7 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
     int width;
     if (x_glyph + glyph.width - 1 > clip_x2) {
         width = clip_x2 - x_glyph + 1;
-        // if glyph doesn't fit, don't paint it
+        // if glyph doesn't fit, don't paint it, i.e. paint background
         paintEnabled = false;
     } else {
         width = glyph.width;
@@ -179,14 +179,55 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
 		    for (int iRow = 0; iRow < height; ++iRow) {
 			    setXY(x_glyph, y_glyph + iRow, x_glyph + width - 1, y_glyph + iRow);
 			    for (int iByte = iStartByte + (width + 7) / 8; iByte >= iStartByte; --iByte) {
+#if defined(EEZ_PSU_ARDUINO_DUE)
+				    uint8_t data = *(glyph.data + offset + iByte);
+#else
 				    uint8_t data = arduino_util::prog_read_byte(glyph.data + offset + iByte);
-				    for (int iBit = 7; iBit >= 0; --iBit) {
-                        int iPixel = iByte * 8 + iBit;
-					    if (iPixel >= iStartCol && iPixel < width) {
-							setPixel(paintEnabled && (data & (0x80 >> iBit)) ? fc : bc);
-					    }
-				    }
-			    }
+#endif
+
+                    int iPixel = iByte * 8 + 7;
+                    if (iPixel - 7 >= iStartCol && iPixel < width) {
+                        if (paintEnabled) {
+                            setPixel((data & (0x80 >> 7)) ? fc : bc);
+                            setPixel((data & (0x80 >> 6)) ? fc : bc);
+                            setPixel((data & (0x80 >> 5)) ? fc : bc);
+                            setPixel((data & (0x80 >> 4)) ? fc : bc);
+                            setPixel((data & (0x80 >> 3)) ? fc : bc);
+                            setPixel((data & (0x80 >> 2)) ? fc : bc);
+                            setPixel((data & (0x80 >> 1)) ? fc : bc);
+                            setPixel((data & (0x80 >> 0)) ? fc : bc);
+                        } else {
+                            setPixel(bc);
+                            setPixel(bc);
+                            setPixel(bc);
+                            setPixel(bc);
+                            setPixel(bc);
+                            setPixel(bc);
+                            setPixel(bc);
+                            setPixel(bc);
+                        }
+                    } else {
+                        if (paintEnabled) {
+					                  if (iPixel >= iStartCol && iPixel < width) setPixel((data & (0x80 >> 7)) ? fc : bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel((data & (0x80 >> 6)) ? fc : bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel((data & (0x80 >> 5)) ? fc : bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel((data & (0x80 >> 4)) ? fc : bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel((data & (0x80 >> 3)) ? fc : bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel((data & (0x80 >> 2)) ? fc : bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel((data & (0x80 >> 1)) ? fc : bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel((data & (0x80 >> 0)) ? fc : bc);
+                        } else {
+                                      if (iPixel >= iStartCol && iPixel < width) setPixel(bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel(bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel(bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel(bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel(bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel(bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel(bc);
+                            --iPixel; if (iPixel >= iStartCol && iPixel < width) setPixel(bc);
+                        }
+                    }
+                }
 
 			    offset += widthInBytes;
 		    }

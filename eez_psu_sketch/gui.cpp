@@ -1222,7 +1222,6 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 			drawLineInBarGraphWidget(barGraphWidget, pLine2, barGraphWidget->line2Style, x, y, w, h);
 		} else {
 			// calc text position
-			Style textStyle;
 			char valueText[64];
 			int pText = 0;
 			int hText = 0;
