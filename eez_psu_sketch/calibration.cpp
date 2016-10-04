@@ -136,11 +136,11 @@ void Value::setData(float data, float adc) {
 
 	if (min_set && max_set) {
 		if (voltOrCurr) {
-			g_channel->calibrationFindVoltageRange(g_channel->U_CAL_VAL_MIN, min_val, g_channel->U_CAL_VAL_MAX, max_val, &minPossible, &maxPossible);
+			g_channel->calibrationFindVoltageRange(g_channel->U_CAL_VAL_MIN, min_val, min_adc, g_channel->U_CAL_VAL_MAX, max_val, max_adc, &minPossible, &maxPossible);
 			DebugTraceF("Voltage range: %lf - %lfV", minPossible, maxPossible);
 		}
 		else {
-			g_channel->calibrationFindCurrentRange(g_channel->I_CAL_VAL_MIN, min_val, g_channel->I_CAL_VAL_MAX, max_val, &minPossible, &maxPossible);
+			g_channel->calibrationFindCurrentRange(g_channel->I_CAL_VAL_MIN, min_val, min_adc, g_channel->I_CAL_VAL_MAX, max_val, max_adc, &minPossible, &maxPossible);
 			DebugTraceF("Current range: %lf - %lfA", minPossible, maxPossible);
 		}
 	}

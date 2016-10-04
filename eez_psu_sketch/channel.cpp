@@ -963,7 +963,7 @@ bool Channel::isCalibrationEnabled() {
 	return flags._calEnabled;
 }
 
-void Channel::calibrationFindVoltageRange(float minDac, float minVal, float maxDac, float maxVal, float *min, float *max) {
+void Channel::calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max) {
 	flags._calEnabled = true;
 
 	CalibrationValueConfiguration calValueConf;
@@ -971,8 +971,10 @@ void Channel::calibrationFindVoltageRange(float minDac, float minVal, float maxD
 
 	cal_conf.u.min.dac = minDac;
 	cal_conf.u.min.val = minVal;
+    cal_conf.u.min.adc = minAdc;
 	cal_conf.u.max.dac = maxDac;
 	cal_conf.u.max.val = maxVal;
+    cal_conf.u.max.adc = maxAdc;
 
 	setVoltage(U_MIN);
 	delay(100); 
@@ -987,7 +989,7 @@ void Channel::calibrationFindVoltageRange(float minDac, float minVal, float maxD
 	flags._calEnabled = false;
 }
 
-void Channel::calibrationFindCurrentRange(float minDac, float minVal, float maxDac, float maxVal, float *min, float *max) {
+void Channel::calibrationFindCurrentRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max) {
 	flags._calEnabled = true;
 
 	CalibrationValueConfiguration calValueConf;
@@ -995,8 +997,10 @@ void Channel::calibrationFindCurrentRange(float minDac, float minVal, float maxD
 
 	cal_conf.i.min.dac = minDac;
 	cal_conf.i.min.val = minVal;
+    cal_conf.i.min.adc = minAdc;
 	cal_conf.i.max.dac = maxDac;
 	cal_conf.i.max.val = maxVal;
+    cal_conf.i.max.adc = maxAdc;
 
 	//setCurrent(I_MIN);
 	//delay(20);

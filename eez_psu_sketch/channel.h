@@ -513,8 +513,8 @@ private:
 
 	void doCalibrationEnable(bool enable);
 	float readingToCalibratedValue(Value *cv, float mon_reading);
-	void calibrationFindVoltageRange(float minDac, float minVal, float maxDac, float maxVal, float *min, float *max);
-	void calibrationFindCurrentRange(float minDac, float minVal, float maxDac, float maxVal, float *min, float *max);
+	void calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
+	void calibrationFindCurrentRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
 
 	void valueAddReading(Value *cv, float value);
     void valueAddReadingDac(Value *cv, float value);
