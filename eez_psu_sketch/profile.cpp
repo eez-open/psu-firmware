@@ -63,7 +63,7 @@ void recallChannelsFromProfile(Parameters *profile) {
 
 			channel.i.set = profile->channels[i].i_set;
 			channel.i.step = profile->channels[i].i_step;
-			channel.i.limit = profile->channels[i].i_limit;
+			channel.setCurrentLimit(profile->channels[i].i_limit);
 
 			channel.p_limit = profile->channels[i].p_limit;
 
