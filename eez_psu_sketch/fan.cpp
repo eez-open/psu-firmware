@@ -180,9 +180,9 @@ bool test() {
 	if (test_result == psu::TEST_FAILED) {
 		psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
 		psu::setQuesBits(QUES_FAN, true);
-		psu::setCurrentMaxLimit(ERR_MAX_CURRENT);
+		psu::limitMaxCurrent(MAX_CURRENT_LIMIT_CAUSE_FAN);
 	} else {
-		psu::setCurrentMaxLimit(NAN);
+		psu::unlimitMaxCurrent();
 	}
 
 	return test_result != psu::TEST_FAILED;
@@ -255,7 +255,7 @@ void tick(unsigned long tick_usec) {
 						test_result = psu::TEST_FAILED;
 						psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
 						psu::setQuesBits(QUES_FAN, true);
-						psu::setCurrentMaxLimit(ERR_MAX_CURRENT);
+						psu::limitMaxCurrent(MAX_CURRENT_LIMIT_CAUSE_FAN);
 					}
 				}
 			}

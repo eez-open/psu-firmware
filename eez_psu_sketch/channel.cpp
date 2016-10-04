@@ -448,7 +448,7 @@ void Channel::reset() {
     u.init(U_DEF_STEP, u.max);
     i.init(I_DEF_STEP, i.max);
 
-	i_max_limit = NAN;
+	maxCurrentLimitCause = MAX_CURRENT_LIMIT_CAUSE_NONE;
 	p_limit = PTOT;
 }
 
@@ -1186,38 +1186,47 @@ float Channel::getCurrentLimit() const {
 	return i.limit;
 }
 
-float Channel::getCurrentMaxLimit() const {
-	float limit = psu::getCurrentMaxLimit();
-	if (!util::isNaN(limit)) {
-		return limit;
-	}
-	if (!util::isNaN(i_max_limit)) {
-		return i_max_limit;
-	}
-	return i.max;
-}
-
-void Channel::setCurrentMaxLimit(float value) {
-	if (!util::isNaN(value) && isOutputEnabled() && i.mon > value) {
-		setCurrent(0);
-	}
-
-	if (i_max_limit != value) {
-		i_max_limit = value;
-
-		float max_limit = getCurrentMaxLimit();
-		if (max_limit < i.limit) {
-			setCurrentLimit(max_limit);
-		}
-	}
-}
-
 void Channel::setCurrentLimit(float limit) {
 	i.limit = limit;
 	if (i.set > i.limit) {
 		setCurrent(i.limit);
 	}
 	profile::save();
+}
+
+float Channel::getMaxCurrentLimit() const {
+	return isMaxCurrentLimited() ? ERR_MAX_CURRENT : i.max;
+}
+
+bool Channel::isMaxCurrentLimited() const {
+    return getMaxCurrentLimitCause() != MAX_CURRENT_LIMIT_CAUSE_NONE;
+}
+
+MaxCurrentLimitCause Channel::getMaxCurrentLimitCause() const {
+	if (psu::isMaxCurrentLimited()) {
+		return psu::getMaxCurrentLimitCause();
+	}
+	return maxCurrentLimitCause;
+}
+
+void Channel::limitMaxCurrent(MaxCurrentLimitCause cause) {
+    if (cause != maxCurrentLimitCause) {
+        maxCurrentLimitCause = cause;
+
+        if (isMaxCurrentLimited()) {
+	        if (isOutputEnabled() && i.mon > ERR_MAX_CURRENT) {
+		        setCurrent(0);
+	        }
+
+		    if (i.limit > ERR_MAX_CURRENT) {
+			    setCurrentLimit(ERR_MAX_CURRENT);
+		    }
+        }
+    }
+}
+
+void Channel::unlimitMaxCurrent() {
+    limitMaxCurrent(MAX_CURRENT_LIMIT_CAUSE_NONE);
 }
 
 float Channel::getPowerLimit() const {

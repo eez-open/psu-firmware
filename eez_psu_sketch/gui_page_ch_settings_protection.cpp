@@ -124,6 +124,10 @@ data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uin
 		return data::Value(channelSnapshot.temperature, data::VALUE_TYPE_FLOAT_CELSIUS);
 	}
 
+    if (id == DATA_ID_CHANNEL_PROTECTION_OCP_MAX_CURRENT_LIMIT_CAUSE) {
+        return data::Value(g_channel->getMaxCurrentLimitCause());
+    }
+
 	return data::Value();
 }
 
@@ -266,7 +270,7 @@ ChSettingsOcpProtectionPage::ChSettingsOcpProtectionPage() {
 
 	origLimit = limit = data::Value(g_channel->i.limit, data::VALUE_TYPE_FLOAT_AMPER);
 	minLimit = g_channel->i.min;
-	maxLimit = g_channel->getCurrentMaxLimit();
+	maxLimit = g_channel->getMaxCurrentLimit();
 	defLimit = maxLimit;
 
 	origLevel = level = 0;

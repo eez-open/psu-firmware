@@ -663,7 +663,7 @@ scpi_result_t scpi_source_CurrentLimitQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, channel->getCurrentLimit(), 0, channel->getCurrentMaxLimit(), channel->getCurrentMaxLimit());
+    return get_source_value(context, channel->getCurrentLimit(), 0, channel->getMaxCurrentLimit(), channel->getMaxCurrentLimit());
 }
 
 scpi_result_t scpi_source_VoltageLimit(scpi_t * context) {

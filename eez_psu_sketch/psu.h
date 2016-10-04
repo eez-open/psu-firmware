@@ -87,8 +87,15 @@ void enterTimeCriticalMode();
 bool isTimeCriticalMode();
 void leaveTimeCriticalMode();
 
-void setCurrentMaxLimit(float value);
-float getCurrentMaxLimit();
+enum MaxCurrentLimitCause {
+    MAX_CURRENT_LIMIT_CAUSE_NONE,
+    MAX_CURRENT_LIMIT_CAUSE_FAN,
+    MAX_CURRENT_LIMIT_CAUSE_TEMPERATURE
+};
+bool isMaxCurrentLimited();
+MaxCurrentLimitCause getMaxCurrentLimitCause();
+void limitMaxCurrent(MaxCurrentLimitCause cause);
+void unlimitMaxCurrent();
 
 extern ontime::Counter g_powerOnTimeCounter;
 extern bool g_insideInterruptHandler;

@@ -468,13 +468,13 @@ bool get_voltage_limit_from_param(scpi_t *context, const scpi_number_t &param, f
 bool get_current_limit_from_param(scpi_t *context, const scpi_number_t &param, float &value, const Channel *channel, const Channel::Value *cv) {
     if (param.special) {
         if (param.tag == SCPI_NUM_MAX) {
-            value = channel->getCurrentMaxLimit();
+            value = channel->getMaxCurrentLimit();
         }
         else if (param.tag == SCPI_NUM_MIN) {
             value = channel->i.min;
         }
         else if (param.tag == SCPI_NUM_DEF) {
-            value = channel->getCurrentMaxLimit();
+            value = channel->getMaxCurrentLimit();
         }
     }
     else {
@@ -484,7 +484,7 @@ bool get_current_limit_from_param(scpi_t *context, const scpi_number_t &param, f
         }
 
         value = (float)param.value;
-        if (value < channel->i.min || value > channel->getCurrentMaxLimit()) {
+        if (value < channel->i.min || value > channel->getMaxCurrentLimit()) {
             SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
             return false;
         }

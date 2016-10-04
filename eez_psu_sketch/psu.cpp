@@ -61,7 +61,7 @@ static bool g_test_power_up_delay = false;
 static unsigned long g_power_down_time;
 static bool g_is_time_critical_mode = false;
 
-static float g_current_max_limit = NAN;
+static MaxCurrentLimitCause g_maxCurrentLimitCause;
 
 ontime::Counter g_powerOnTimeCounter(ontime::ON_TIME_COUNTER_POWER);
 
@@ -643,26 +643,34 @@ void leaveTimeCriticalMode() {
     g_is_time_critical_mode = false;
 }
 
-extern void setCurrentMaxLimit(float value) {
-	if (g_current_max_limit != value) {
-		g_current_max_limit = value;
+bool isMaxCurrentLimited() {
+    return g_maxCurrentLimitCause != MAX_CURRENT_LIMIT_CAUSE_NONE;
+}
 
-		if (!util::isNaN(g_current_max_limit)) {
+void limitMaxCurrent(MaxCurrentLimitCause cause) {
+	if (g_maxCurrentLimitCause != cause) {
+		g_maxCurrentLimitCause = cause;
+
+		if (isMaxCurrentLimited()) {
 			for (int i = 0; i < CH_NUM; ++i) {
-				if (Channel::get(i).isOutputEnabled() && Channel::get(i).i.mon > value) {
+				if (Channel::get(i).isOutputEnabled() && Channel::get(i).i.mon > ERR_MAX_CURRENT) {
 					Channel::get(i).setCurrent(Channel::get(i).i.min);
 				}
 
-				if (g_current_max_limit < Channel::get(i).getCurrentLimit()) {
-					Channel::get(i).setCurrentLimit(g_current_max_limit);
+				if (ERR_MAX_CURRENT < Channel::get(i).getCurrentLimit()) {
+					Channel::get(i).setCurrentLimit(ERR_MAX_CURRENT);
 				}
 			}
 		}
 	}
 }
 
-extern float getCurrentMaxLimit() {
-	return g_current_max_limit;
+void unlimitMaxCurrent() {
+    limitMaxCurrent(MAX_CURRENT_LIMIT_CAUSE_NONE);
+}
+
+MaxCurrentLimitCause getMaxCurrentLimitCause() {
+    return g_maxCurrentLimitCause;
 }
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)

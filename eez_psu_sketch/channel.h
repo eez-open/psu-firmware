@@ -294,7 +294,6 @@ public:
     Value u;
     Value i;
 
-	float i_max_limit;
 	float p_limit;
 
     CalibrationConfiguration cal_conf;
@@ -474,14 +473,23 @@ public:
 	/// Returns currently set current limit
 	float getCurrentLimit() const;
 
-	/// Returns max. current limit
-	float getCurrentMaxLimit() const;
-
-	/// Returns max. current limit
-	void setCurrentMaxLimit(float value);
-
 	/// Change current limit, it will adjust I_SET if necessary.
 	void setCurrentLimit(float limit);
+
+	/// Returns ERR_MAX_CURRENT if max. current is limited or i.max if not
+	float getMaxCurrentLimit() const;
+
+    /// Returns true if max current is limited to ERR_MAX_CURRENT.
+	bool isMaxCurrentLimited() const;
+
+    /// Returns max. current limit cause
+	MaxCurrentLimitCause getMaxCurrentLimitCause() const;
+
+	/// Set current max. limit to ERR_MAX_CURRENT
+    void limitMaxCurrent(MaxCurrentLimitCause cause);
+    
+	/// Unset current max. limit 
+    void unlimitMaxCurrent();
 
 	/// Returns currently set power limit
 	float getPowerLimit() const;
@@ -506,6 +514,8 @@ private:
 	float I_MIN;
     float I_DEF;
     float I_MAX;
+
+	MaxCurrentLimitCause maxCurrentLimitCause;
 
     void clearProtectionConf();
     void protectionEnter(ProtectionValue &cpv);

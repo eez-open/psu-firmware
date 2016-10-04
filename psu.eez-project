@@ -349,7 +349,12 @@
     },
     {
       "name": "channel.protection.ocp.limit",
-      "defaultValue": "5.00A"
+      "defaultValue": "1.00A"
+    },
+    {
+      "name": "channel.protection.ocp.maxCurrentLimitCause",
+      "description": "0: no cause\n1: fan\n2: temperature",
+      "defaultValue": "1"
     },
     {
       "name": "channel.protection.opp.state",
@@ -4728,6 +4733,131 @@
               0,
               3,
               248,
+              0
+            ]
+          },
+          {
+            "encoding": 136,
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAmklEQVQ4T9WU4Q6AIAiE4/0fusYmDOEQbK6tflnh53EgdB18aLDuA0ximIDseoet+2QhChniVbb/rZRZiFdqDwzKbLD1EQEZBL1GPnm19iCoSAI8DL1nMP4+xWebV63iU9fYVUqosqIGFuQfMJRCxzvoWajOMCY1vKomAmaw0KNZ00olX9+AqmHLm/DZ1OjOtGlqZJ3ehek9fwAYUz8EPU6dwAAAAABJRU5ErkJggg==",
+            "source": {
+              "filePath": "fonts\\bdf\\webhostinghub-glyphs.14.bdf",
+              "encoding": 61450
+            },
+            "x": 0,
+            "y": -2,
+            "width": 19,
+            "height": 19,
+            "dx": 19,
+            "pixels": [
+              127,
+              255,
+              192,
+              223,
+              255,
+              96,
+              143,
+              30,
+              32,
+              220,
+              7,
+              96,
+              242,
+              9,
+              224,
+              246,
+              29,
+              224,
+              238,
+              30,
+              224,
+              231,
+              240,
+              224,
+              193,
+              240,
+              96,
+              193,
+              240,
+              96,
+              193,
+              240,
+              96,
+              225,
+              252,
+              224,
+              239,
+              14,
+              224,
+              247,
+              13,
+              224,
+              242,
+              9,
+              224,
+              220,
+              7,
+              96,
+              143,
+              30,
+              32,
+              223,
+              255,
+              96,
+              127,
+              255,
+              192
+            ]
+          },
+          {
+            "encoding": 137,
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAaUlEQVQ4T+2USwoAIAhE9f6HLgwCk/EHQZta2vgQHYbp4uMCayhNqM9gGrSZbk8EsxOlE1ZgWrOBsO/DCO3n/c48G4T2QNfM/OT+R7CubejDVki0DuQt2UaP6FDtiMPKxVB+tlNDIK1wnLFtIhUiD0mXAAAAAElFTkSuQmCC",
+            "source": {
+              "filePath": "fonts\\bdf\\webhostinghub-glyphs.14.bdf",
+              "encoding": 61965
+            },
+            "x": 4,
+            "y": -2,
+            "width": 11,
+            "height": 19,
+            "dx": 19,
+            "pixels": [
+              14,
+              0,
+              31,
+              0,
+              59,
+              128,
+              49,
+              128,
+              49,
+              128,
+              49,
+              128,
+              49,
+              128,
+              49,
+              128,
+              49,
+              128,
+              113,
+              192,
+              224,
+              224,
+              192,
+              96,
+              192,
+              96,
+              192,
+              96,
+              192,
+              96,
+              224,
+              224,
+              123,
+              192,
+              63,
+              128,
+              31,
               0
             ]
           }
@@ -45396,6 +45526,12 @@
         "name": "mon_dac_S",
         "_font": "small",
         "inheritFrom": "mon_dac"
+      },
+      {
+        "name": "max_current_limit_cause",
+        "inheritFrom": "default_S",
+        "_color": "#ff0000",
+        "_alignHorizontal": "left"
       }
     ],
     "pages": [
@@ -52056,14 +52192,101 @@
               "style": "edit_value_S_left"
             },
             {
-              "type": "DisplayData",
-              "data": "channel.protection.ocp.limit",
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "widgets": [
+                    {
+                      "type": "DisplayData",
+                      "data": "channel.protection.ocp.limit",
+                      "x": 0,
+                      "y": 0,
+                      "width": 54,
+                      "height": 28,
+                      "style": "edit_value_active_S_left",
+                      "action": "ch_settings_prot_edit_limit"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 54,
+                      "y": 0,
+                      "width": 24,
+                      "height": 28,
+                      "style": "default_inverse"
+                    }
+                  ],
+                  "x": 0,
+                  "y": 0,
+                  "width": 78,
+                  "height": 28,
+                  "style": "default"
+                },
+                {
+                  "type": "Container",
+                  "widgets": [
+                    {
+                      "type": "DisplayData",
+                      "data": "channel.protection.ocp.limit",
+                      "x": 0,
+                      "y": 0,
+                      "width": 54,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "action": ""
+                    },
+                    {
+                      "type": "Text",
+                      "text": "\\u0088",
+                      "x": 54,
+                      "y": 0,
+                      "width": 24,
+                      "height": 28,
+                      "style": "max_current_limit_cause"
+                    }
+                  ],
+                  "x": 0,
+                  "y": 0,
+                  "width": 78,
+                  "height": 28,
+                  "style": "default"
+                },
+                {
+                  "type": "Container",
+                  "widgets": [
+                    {
+                      "type": "DisplayData",
+                      "data": "channel.protection.ocp.limit",
+                      "x": 0,
+                      "y": 0,
+                      "width": 54,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "action": ""
+                    },
+                    {
+                      "type": "Text",
+                      "text": "\\u0089",
+                      "x": 54,
+                      "y": 0,
+                      "width": 24,
+                      "height": 28,
+                      "style": "max_current_limit_cause"
+                    }
+                  ],
+                  "x": 0,
+                  "y": 0,
+                  "width": 78,
+                  "height": 28,
+                  "style": "default"
+                }
+              ],
               "x": 135,
               "y": 28,
               "width": 78,
               "height": 28,
-              "style": "edit_value_active_S_left",
-              "action": "ch_settings_prot_edit_limit"
+              "style": "default",
+              "data": "channel.protection.ocp.maxCurrentLimitCause"
             },
             {
               "type": "Text",
