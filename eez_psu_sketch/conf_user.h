@@ -23,10 +23,6 @@ Use this header file to override anything from conf.h or conf_advanced.h.
 
 #pragma once
 
-/// PSU serial number.
-#undef PSU_SERIAL
-#define PSU_SERIAL   "00004"
-
 /// Firmware version.
 #undef FIRMWARE
 #define FIRMWARE     "M2 (f62ae8a)"

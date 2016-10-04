@@ -37,7 +37,7 @@ enum PersistConfSection {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static const uint16_t DEV_CONF_VERSION = 0x0007L;
+static const uint16_t DEV_CONF_VERSION = 0x0008L;
 static const uint16_t CH_CAL_CONF_VERSION = 0x0003L;
 static const uint16_t PROFILE_VERSION = 0x0004L;
 
@@ -92,6 +92,8 @@ uint16_t get_profile_address(int location) {
 void initDevice() {
     dev_conf.header.checksum = 0;
     dev_conf.header.version = DEV_CONF_VERSION;
+
+    strcpy(dev_conf.serialNumber, PSU_SERIAL);
 
     strcpy(dev_conf.calibration_password, CALIBRATION_PASSWORD_DEFAULT);
 
@@ -163,6 +165,20 @@ bool changePassword(const char *new_password, size_t new_password_len) {
 		return true;
 	}
 	return false;
+}
+
+bool changeSerial(const char *newSerialNumber, size_t newSerialNumberLength) {
+    // copy up to 7 characters from newSerialNumber, fill the rest with zero's
+    for (size_t i = 0; i < 7; ++i) {
+        if (i < newSerialNumberLength) {
+            dev_conf.serialNumber[i] = newSerialNumber[i];
+        } else {
+            dev_conf.serialNumber[i] = 0;
+        }
+    }
+    dev_conf.serialNumber[7] = 0;
+
+    return saveDevice();
 }
 
 bool enableBeep(bool enable) {

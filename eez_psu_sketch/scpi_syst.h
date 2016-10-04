@@ -53,4 +53,6 @@
 	SCPI_COMMAND("SYSTem:CPU:INFOrmation:ONTime:TOTal?",scpi_syst_CpuInformationOnTimeTotalQ) \
 	SCPI_COMMAND("SYSTem:CPU:INFOrmation:ONTime:LASt?", scpi_syst_CpuInformationOnTimeLastQ) \
     SCPI_COMMAND("SYSTem:CPU:MODel?", scpi_syst_CpuModelQ) \
-    SCPI_COMMAND("SYSTem:CPU:OPTion?", scpi_syst_CpuOptionQ)
+    SCPI_COMMAND("SYSTem:CPU:OPTion?", scpi_syst_CpuOptionQ) \
+    SCPI_COMMAND("SYSTem:SERial", scpi_syst_Serial) \
+    SCPI_COMMAND("SYSTem:SERial?", scpi_syst_SerialQ)

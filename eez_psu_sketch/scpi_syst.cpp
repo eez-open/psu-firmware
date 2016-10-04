@@ -506,6 +506,34 @@ scpi_result_t scpi_syst_CpuOptionQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t scpi_syst_Serial(scpi_t * context) {
+    const char *serial;
+    size_t serialLength;
+
+    if (!SCPI_ParamCharacters(context, &serial, &serialLength, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (serialLength > 7) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CHARACTER_DATA_TOO_LONG);
+        return SCPI_RES_ERR;
+    }
+
+    if (!persist_conf::changeSerial(serial, serialLength)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
+}
+
+
+scpi_result_t scpi_syst_SerialQ(scpi_t * context) {
+    SCPI_ResultText(context, persist_conf::dev_conf.serialNumber);
+    return SCPI_RES_OK;
+}
+
+
 }
 }
 } // namespace eez::psu::scpi

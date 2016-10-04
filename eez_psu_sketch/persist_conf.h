@@ -63,6 +63,7 @@ struct DeviceFlags {
 /// Device configuration block.
 struct DeviceConfiguration {
     BlockHeader header;
+    char serialNumber[7 + 1];
     char calibration_password[PASSWORD_MAX_LENGTH + 1];
     DeviceFlags flags;
     uint8_t date_year;
@@ -92,6 +93,8 @@ bool saveDevice();
 
 bool isPasswordValid(const char *new_password, size_t new_password_len, int16_t &err);
 bool changePassword(const char *new_password, size_t new_password_len);
+
+bool changeSerial(const char *newSerialNumber, size_t newSerialNumberLength);
 
 bool enableBeep(bool enable);
 bool isBeepEnabled();

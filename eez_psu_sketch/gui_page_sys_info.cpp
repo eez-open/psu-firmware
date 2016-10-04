@@ -72,7 +72,7 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::S
 	}
 
 	if (id == DATA_ID_SYS_INFO_SERIAL_NO) {
-		return data::Value(PSU_SERIAL);
+		return data::Value(persist_conf::dev_conf.serialNumber);
 	}
 
 	if (id == DATA_ID_SYS_TEMP_MAIN_STATUS) {

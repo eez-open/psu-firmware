@@ -28,7 +28,7 @@
 |64     |  24|[Total ON-time counter](#ontime-counter)  |
 |128    |  24|[CH1 ON-time counter](#ontime-counter)    |
 |192    |  24|[CH2 ON-time counter](#ontime-counter)    |
-|1024   |  32|[Device configuration](#device)           |
+|1024   |  42|[Device configuration](#device)           |
 |2048   | 121|CH1 [calibration parameters](#calibration)|
 |2560   | 121|CH2 [calibration parameters](#calibration)|
 |4096   | 164|[Profile](#profile) 0                     |
@@ -59,16 +59,17 @@
 |Offset|Size|Type                     |Description                  |
 |------|----|-------------------------|-----------------------------|
 |0     |6   |[struct](#block-header)  |[Block header](#block-header)|
-|6     |17  |string                   |Calibration password         |
-|23    |2   |[bitarray](#device-flags)|[Device Flags](#device-flags)|
-|25    |1   |int                      |Year                         |
-|26    |1   |int                      |Month                        |
-|27    |1   |int                      |Day                          |
-|28    |1   |int                      |Hour                         |
-|29    |1   |int                      |Minute                       |
-|30    |1   |int                      |Second                       |
-|30    |2   |int                      |Time zone                    |
-|32    |1   |int                      |Auto profile location        |
+|6     |8   |string                   |Serial number                |
+|14    |17  |string                   |Calibration password         |
+|31    |2   |[bitarray](#device-flags)|[Device Flags](#device-flags)|
+|33    |1   |int                      |Year                         |
+|34    |1   |int                      |Month                        |
+|35    |1   |int                      |Day                          |
+|36    |1   |int                      |Hour                         |
+|37    |1   |int                      |Minute                       |
+|38    |1   |int                      |Second                       |
+|39    |2   |int                      |Time zone                    |
+|41    |1   |int                      |Auto profile location        |
 
 #### <a name="device-flags">Device flags</a>
 
