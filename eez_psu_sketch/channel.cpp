@@ -77,7 +77,8 @@ Channel &Channel::get(int channel_index) {
 void Channel::Value::init(float def_step, float def_limit) {
     set = 0;
     mon_dac = 0;
-    mon = 0;
+	mon_adc = 0;
+	mon = 0;
     step = def_step;
 	limit = def_limit;
 }
@@ -265,6 +266,9 @@ Channel::Channel(
 	i.min = I_MIN;
 	i.max = I_MAX;
 	i.def = I_DEF;
+
+	negligibleAdcDiffForVoltage = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (U_MAX - U_MIN)));
+	negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (I_MAX - I_MIN)));
 }
 
 void Channel::protectionEnter(ProtectionValue &cpv) {
@@ -572,26 +576,6 @@ int16_t Channel::remapCurrentToAdcData(float value) {
     return (int16_t)util::clamp(adc_value, (float)(-AnalogDigitalConverter::ADC_MAX - 1), (float)AnalogDigitalConverter::ADC_MAX);
 }
 
-float Channel::readingToCalibratedValue(Value *cv, float mon_reading) {
-    if (isCalibrationEnabled()) {
-        if (cv == &u) {
-            mon_reading = util::remap(mon_reading, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
-        }
-        else {
-            mon_reading = util::remap(mon_reading, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val);
-        }
-    }
-    return mon_reading;
-}
-
-void Channel::valueAddReading(Value *cv, float value) {
-    cv->mon = readingToCalibratedValue(cv, value);
-}
-
-void Channel::valueAddReadingDac(Value *cv, float value) {
-    cv->mon_dac = readingToCalibratedValue(cv, value);
-}
-
 #if CONF_DEBUG
 extern int16_t debug::u_mon[CH_MAX];
 extern int16_t debug::u_mon_dac[CH_MAX];
@@ -601,54 +585,98 @@ extern int16_t debug::i_mon_dac[CH_MAX];
 
 void Channel::adcDataIsReady(int16_t data) {
     switch (adc.start_reg0) {
+
     case AnalogDigitalConverter::ADC_REG0_READ_U_MON:
+	{
 #if CONF_DEBUG
-        debug::u_mon[index - 1] = data;
+		debug::u_mon[index - 1] = data;
 #endif
-        valueAddReading(&u, remapAdcDataToVoltage(data));
-        adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
-        break;
+
+		if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage) {
+			u.mon_adc = data;
+
+			float value = remapAdcDataToVoltage(data);
+
+			u.mon = isCalibrationEnabled() ?
+				util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val) :
+				value;
+		}
+
+		adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
+	}
+	break;
 
     case AnalogDigitalConverter::ADC_REG0_READ_I_MON:
+	{
 #if CONF_DEBUG
-        debug::i_mon[index - 1] = data;
+		debug::i_mon[index - 1] = data;
 #endif
-	    valueAddReading(&i, remapAdcDataToCurrent(data));
+
+		if (abs(i.mon_adc - data) > negligibleAdcDiffForCurrent) {
+			i.mon_adc = data;
+
+			float value = remapAdcDataToCurrent(data);
+
+			i.mon = isCalibrationEnabled() ?
+				util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val) :
+				value;
+		}
 
 		if (isOutputEnabled()) {
 			if (isRemoteProgrammingEnabled()) {
-	            adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
-			} else {
-	            adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+				adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
 			}
-        } else {
-            u.mon = 0;
-            i.mon = 0;
+			else {
+				adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+			}
+		}
+		else {
+			u.mon_adc = 0;
+			u.mon = 0;
+			i.mon_adc = 0;
+			i.mon = 0;
 			adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
-        }
-        break;
+		}
+	}
+	break;
 
     case AnalogDigitalConverter::ADC_REG0_READ_U_SET:
+	{
 #if CONF_DEBUG
-        debug::u_mon_dac[index - 1] = data;
+		debug::u_mon_dac[index - 1] = data;
 #endif
-        valueAddReadingDac(&u, remapAdcDataToVoltage(data));
+
+		float value = remapAdcDataToVoltage(data);
+		u.mon_dac = isCalibrationEnabled() ?
+			util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val) :
+			value;
+
 		if (isOutputEnabled() && isRemoteProgrammingEnabled()) {
 			adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
-		} else {
+		}
+		else {
 			adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_SET);
 		}
-        break;
+	}
+	break;
 
     case AnalogDigitalConverter::ADC_REG0_READ_I_SET:
+	{
 #if CONF_DEBUG
-        debug::i_mon_dac[index - 1] = data;
+		debug::i_mon_dac[index - 1] = data;
 #endif
-        valueAddReadingDac(&i, remapAdcDataToCurrent(data));
-        if (isOutputEnabled()) {
-            adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
-        }
-        break;
+
+		float value = remapAdcDataToCurrent(data);
+		i.mon_dac = isCalibrationEnabled() ?
+			util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val) :
+			value;
+
+		if (isOutputEnabled()) {
+			adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+		}
+	}
+	break;
+
     }
 }
 

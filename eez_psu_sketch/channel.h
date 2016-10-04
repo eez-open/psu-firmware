@@ -157,6 +157,7 @@ public:
     struct Value {
         float set;
         float mon_dac;
+		int16_t mon_adc;
         float mon;
         float step;
 		float limit;
@@ -517,6 +518,9 @@ private:
 
 	MaxCurrentLimitCause maxCurrentLimitCause;
 
+	int negligibleAdcDiffForVoltage;
+	int negligibleAdcDiffForCurrent;
+
     void clearProtectionConf();
     void protectionEnter(ProtectionValue &cpv);
     void protectionCheck(ProtectionValue &cpv);
@@ -526,8 +530,6 @@ private:
 	void calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
 	void calibrationFindCurrentRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
 
-	void valueAddReading(Value *cv, float value);
-    void valueAddReadingDac(Value *cv, float value);
 	void adcDataIsReady(int16_t data);
     
 	void setCcMode(bool cc_mode);
