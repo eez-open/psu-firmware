@@ -68,12 +68,13 @@ void fillChannelData(ChannelData *data, int ch) {
 
         Channel &channel = Channel::get(ch - 1);
         if (channel.simulator.getLoadEnabled()) {
-            float load = channel.simulator.getLoad();
+            data->load = channel.simulator.getLoad();
+
             char *str = &str_load[ch - 1][0];
-            if (load == 0) {
+            if (data->load == 0) {
                 strcpy(str, "Shorted!");
             }
-            else if (load == INFINITY) {
+            else if (data->load == INFINITY) {
                 // utf-8 infinity character
                 // http://www.fileformat.info/info/unicode/char/221e/index.htm
                 str[0] = (char)0xE2;
@@ -83,11 +84,12 @@ void fillChannelData(ChannelData *data, int ch) {
             }
             else {
                 *str = 0;
-                util::strcatLoad(str, load);
+                util::strcatLoad(str, data->load);
             }
             data->load_text = str;
         }
         else {
+            data->load = 0;
             data->load_text = 0;
         }
     }
@@ -145,6 +147,41 @@ void fillData(Data *data) {
     fillLocalControlBuffer(data);
 }
 
+void processChannelData(ChannelData *data, int ch) {
+    if (CH_NUM >= ch) {
+        Channel &channel = Channel::get(ch - 1);
+     
+        if (data->loadWidget.mouse_data.is_down) {
+            if (data->loadWidget.mouse_data.down_x >= 0 &&
+                data->loadWidget.mouse_data.down_x < data->loadWidget.w &&
+                data->loadWidget.mouse_data.down_y >= 0 &&
+                data->loadWidget.mouse_data.down_y < data->loadWidget.h) 
+            {
+                data->loadOnMouseDown = data->load;
+            } else {
+                data->loadOnMouseDown = NAN;
+            }
+        }
+
+        if (!util::isNaN(data->loadOnMouseDown)) {
+            if (data->loadWidget.mouse_data.is_pressed) {
+                if (channel.simulator.getLoadEnabled()) {
+                    float step = 0.01f;
+                    float load = data->loadOnMouseDown + step * (data->loadWidget.mouse_data.x - data->loadWidget.mouse_data.down_x);
+                    if (load < 0 || util::isNaN(load)) {
+                        load = 0;
+                    }
+                    channel.simulator.setLoad(load);
+                }
+            } else if (data->loadWidget.mouse_data.is_up) {
+                if (data->loadWidget.mouse_data.up_x == data->loadWidget.mouse_data.down_x && data->loadWidget.mouse_data.up_y == data->loadWidget.mouse_data.down_y) {
+                    channel.simulator.setLoadEnabled(!channel.simulator.getLoadEnabled());
+                }
+            }
+        }
+    }
+}
+
 void processData(Data *data) {
     static bool reseting = false;
 
@@ -156,6 +193,11 @@ void processData(Data *data) {
         }
     }
 
+    //
+    processChannelData(&data->ch1, 1);
+    processChannelData(&data->ch2, 2);
+
+    //
     bool is_down = false;
     int x = -1;
     int y = -1;

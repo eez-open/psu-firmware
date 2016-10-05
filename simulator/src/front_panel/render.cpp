@@ -71,6 +71,19 @@ imgui::WindowDefinition *getWindowDefinition(int w, int h) {
 	}
 }
 
+void addLoadWidget(Window *window, int x, int y, int w, int h, UserWidget *loadWidget) {
+    loadWidget->x = x;
+    loadWidget->y = y;
+    loadWidget->w = w;
+    loadWidget->h = h;
+
+    loadWidget->pixels = 0;
+    loadWidget->pixels_w = 0;
+    loadWidget->pixels_h = 0;
+
+    window->addUserWidget(loadWidget);
+}
+
 void render(Window *window, Data *data) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     window->addImage(0, 0, 1475, 531, R1B9_IMAGE("front-panel"));
@@ -120,7 +133,10 @@ void render(Window *window, Data *data) {
     if (data->ch1.load_text) {
         window->addImage(RECT(652, 294, 138, 66), R3B4_IMAGE("load"));
         window->addText(RECT(677, 326, 88, 29), data->ch1.load_text);
+    } else {
+        window->addImage(RECT(652, 294, 138, 66), R3B4_IMAGE("load-disconnected"));
     }
+    addLoadWidget(window, RECT(652, 294, 138, 66), &data->ch1.loadWidget);
 
     window->addOnOffImage(RECT(918, 61, 17, 17), data->ch2.cv, R3B4_IMAGE("led-yellow"), R3B4_IMAGE("led-off"));
     window->addOnOffImage(RECT(918, 95, 17, 17), data->ch2.cc, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
@@ -130,7 +146,10 @@ void render(Window *window, Data *data) {
     if (data->ch2.load_text) {
         window->addImage(RECT(834, 294, 138, 66), R3B4_IMAGE("load"));
         window->addText(RECT(859, 326, 88, 29), data->ch2.load_text);
+    } else {
+        window->addImage(RECT(834, 294, 138, 66), R3B4_IMAGE("load-disconnected"));
     }
+    addLoadWidget(window, RECT(834, 294, 138, 66), &data->ch2.loadWidget);
 
 	data->reset = window->addButton(RECT(129, 165, 20, 20), R3B4_IMAGE("reset-normal"), R3B4_IMAGE("reset-pressed"));
 

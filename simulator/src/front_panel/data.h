@@ -39,6 +39,9 @@ struct ChannelData {
 	bool prog;
 #endif
     const char *load_text;
+    float load;
+    float loadOnMouseDown;
+    imgui::UserWidget loadWidget;
 };
 
 /// Data presented in GUI front panel.
