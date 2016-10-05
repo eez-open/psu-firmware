@@ -166,10 +166,12 @@ void processChannelData(ChannelData *data, int ch) {
         if (!util::isNaN(data->loadOnMouseDown)) {
             if (data->loadWidget.mouse_data.is_pressed) {
                 if (channel.simulator.getLoadEnabled()) {
-                    float step = 0.01f;
+                    float step = 1;
                     float load = data->loadOnMouseDown + step * (data->loadWidget.mouse_data.x - data->loadWidget.mouse_data.down_x);
                     if (load < 0 || util::isNaN(load)) {
                         load = 0;
+                    } else if (load > 10000000) {
+                        load = 10000000;
                     }
                     channel.simulator.setLoad(load);
                 }
