@@ -41,6 +41,9 @@ void SysInfoPage::takeSnapshot(data::Snapshot *snapshot) {
 		snapshot->flags.mainTemperatureStatus = 2;
 	}
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+    snapshot->flags.fanStatus = 3;
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	if (fan::test_result == TEST_FAILED || fan::test_result == TEST_WARNING) {
 		snapshot->flags.fanStatus = 0;
 	} else if (fan::test_result == TEST_OK) {
@@ -53,6 +56,7 @@ void SysInfoPage::takeSnapshot(data::Snapshot *snapshot) {
 	} else {
 		snapshot->flags.fanStatus = 3;
 	}
+#endif
 
 	snapshot->onTimeTotal = g_powerOnTimeCounter.getTotalTime();
 	snapshot->onTimeLast = g_powerOnTimeCounter.getLastTime();

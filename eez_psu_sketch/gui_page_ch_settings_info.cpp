@@ -28,11 +28,11 @@ namespace psu {
 namespace gui {
 
 void ChSettingsInfoPage::takeSnapshot(data::Snapshot *snapshot) {
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-	channelSnapshot.flags.temperatureStatus = 2;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	data::ChannelSnapshot &channelSnapshot = snapshot->channelSnapshots[g_channel->index - 1];
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+    channelSnapshot.flags.temperatureStatus = 2;
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + g_channel->index - 1];
 	if (tempSensor.isInstalled()) {
 		if (tempSensor.isTestOK()) {
