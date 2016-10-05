@@ -26,9 +26,7 @@ namespace ethernet {
 
 extern TestResult test_result;
 
-#if OPTION_ETHERNET
 extern scpi_t scpi_context;
-#endif
 
 bool init();
 bool test();

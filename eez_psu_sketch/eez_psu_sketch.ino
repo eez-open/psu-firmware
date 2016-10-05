@@ -17,16 +17,24 @@
  */
  
 #include "SPI.h"
+
+#include <scpi-parser.h>
+
+#include "psu.h"
+
+#if OPTION_ETHERNET
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 #include <UIPEthernet.h>
 #include <UIPServer.h>
 #include <UIPClient.h>
-#include <scpi-parser.h>
-#include <eez_psu_rev.h>
-#include <eez_psu.h>
-#include "UTFT.h"
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#include <Ethernet2.h>
+#include <EthernetServer.h>
+#include <EthernetClient.h>
+#endif
+#endif
 
-void PSU_boot();
-void PSU_tick();
+#include <UTFT.h>
 
 void setup() {
     PSU_boot();

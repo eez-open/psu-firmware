@@ -108,3 +108,6 @@ extern bool g_insideInterruptHandler;
 #include "channel.h"
 
 #define CHANNEL_VALUE_PRECISION powf(10.0f, FLOAT_TO_STR_PREC)
+
+void PSU_boot();
+void PSU_tick();

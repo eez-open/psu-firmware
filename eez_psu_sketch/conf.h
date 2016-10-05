@@ -46,7 +46,7 @@ option.
 #define CONF_DEBUG_LATEST 1
 
 /// Is Ethernet present?
-#define OPTION_ETHERNET 0
+#define OPTION_ETHERNET 1
 
 /// Is RTC present?
 #define OPTION_EXT_RTC 1

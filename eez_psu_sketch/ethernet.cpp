@@ -15,12 +15,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 
+#if OPTION_ETHERNET
+
+#if defined(EEZ_PSU_SIMULATOR) || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 #include <UIPEthernet.h>
 #include <UIPServer.h>
 #include <UIPClient.h>
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#include <Ethernet2.h>
+#include <EthernetServer.h>
+#include <EthernetClient.h>
+#endif
 
 #include "ethernet.h"
 
@@ -33,7 +41,7 @@ namespace ethernet {
 
 psu::TestResult test_result = psu::TEST_FAILED;
 
-uint8_t mac[6] = { 0x74,0x69,0x69,0x2D,0x30,0x00 };
+uint8_t mac[6] = ETHERNET_MAC_ADDRESS;
 
 EthernetServer server(TCP_PORT);
 
@@ -117,7 +125,12 @@ bool init() {
     DebugTrace("Ethernet initialization started...");
 #endif
 
+#if defined(EEZ_PSU_SIMULATOR) || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     Enc28J60Network::setControlCS(ETH_SELECT);
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+    Ethernet.init(ETH_SELECT);
+    Ethernet.setDhcpTimeout(ETHERNET_DHCP_TIMEOUT * 1000UL);
+#endif
 
     SPI.beginTransaction(ENC28J60_SPI);
     test_result = Ethernet.begin(mac) ? psu::TEST_OK : psu::TEST_FAILED;
@@ -129,6 +142,8 @@ bool init() {
     server.begin();
     SPI.endTransaction();
 
+    DebugTraceF("Listening on port %d", (int)TCP_PORT);
+
 #ifdef EEZ_PSU_ARDUINO
 #if CONF_DEBUG || CONF_DEBUG_LATEST
     Serial.print("My IP: "); Serial.println(Ethernet.localIP());
@@ -136,8 +151,6 @@ bool init() {
     Serial.print("GW IP: "); Serial.println(Ethernet.gatewayIP());
     Serial.print("DNS IP: "); Serial.println(Ethernet.dnsServerIP());
 #endif
-#else
-    Serial.print("Listening on port "); Serial.println(TCP_PORT);
 #endif
 
     scpi::init(scpi_context,
@@ -211,3 +224,5 @@ void tick(unsigned long tick_usec) {
 }
 }
 } // namespace eez::psu::ethernet
+
+#endif

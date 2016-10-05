@@ -30,10 +30,17 @@ import platform
 import sys
 import shutil
 
-def rm_then_cp(src, dest):
+def rm_then_cp(src, dest, ignoreRootDirs=None):
+    def copytreeIgnore(d, files):
+        if ignoreRootDirs is not None:
+            if d == src:
+                return ignoreRootDirs
+        return []
+
     if os.path.exists(dest):
         shutil.rmtree(dest)
-    shutil.copytree(src, dest)
+
+    shutil.copytree(src, dest, ignore=copytreeIgnore)
 
 def build_scpi_parser_lib(libscpi_dir, scpi_parser_dir):
     '''
@@ -66,8 +73,11 @@ def build_scpi_parser_lib(libscpi_dir, scpi_parser_dir):
     rm_then_cp(os.path.join(libscpi_dir, 'src'), os.path.join(scpi_parser_dir, 'src/impl'))
     
 def build_UIPEthernet_lib(arduino_uip_dir, UIPEthernet_dir):
-    rm_then_cp(os.path.join(arduino_uip_dir, 'UIPEthernet'), UIPEthernet_dir)
+    rm_then_cp(os.path.join(arduino_uip_dir, 'UIPEthernet'), UIPEthernet_dir, ['examples'])
 
+def build_Ethernet2_lib(arduino_Ethernet2_dir, Ethernet2_dir):
+    rm_then_cp(arduino_Ethernet2_dir, Ethernet2_dir, ['.git', '.github', 'examples'])
+    
 def copy_lib(src_lib_dir, dst_name):
     #
     # find arduino libraries directory

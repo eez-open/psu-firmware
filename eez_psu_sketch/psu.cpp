@@ -85,11 +85,8 @@ void boot() {
     // initialize shield
     eez_psu_init();
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-#if OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
 	startMasterSync();
-#endif
-	fan::test_start();
 #endif
 
     bp::init();
@@ -114,6 +111,10 @@ void boot() {
 	success &= ethernet::init();
 #else
 	DebugTrace("Ethernet initialization skipped!");
+#endif
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+	fan::test_start();
 #endif
 
 	success &= temperature::init();

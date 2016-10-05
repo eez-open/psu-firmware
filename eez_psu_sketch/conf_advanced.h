@@ -233,3 +233,7 @@
 
 /// Inactivity period duration in seconds before transition to the Main page.
 #define GUI_BACK_TO_MAIN_DELAY 10
+
+/// How much to wait (in seconds) for a lease for an IP address from a DHCP server
+/// until we declare ethernet initialization failure.
+#define ETHERNET_DHCP_TIMEOUT 15
