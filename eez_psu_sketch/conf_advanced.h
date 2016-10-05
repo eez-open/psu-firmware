@@ -159,7 +159,7 @@
 /// This is the delay period, after the channel output went OFF,
 /// after which we shall turn DP off.
 /// Value is given in seconds.
-#define DP_OFF_DELAY_PERIOD 0.05
+#define DP_OFF_DELAY_PERIOD 30
 
 /// Text returned by the SYStem:CAPability command
 #define STR_SYST_CAP "DCSUPPLY WITH (MEASURE|MULTIPLE|TRIGGER)"
@@ -190,7 +190,7 @@
 #define FAN_SPEED_MEASURMENT_INTERVAL 5000
 
 /// Fan switch-on temperature (in oC)
-#define FAN_MIN_TEMP 45
+#define FAN_MIN_TEMP 55
 
 /// Max. allowed temperature (in oC), if it stays more then FAN_MAX_TEMP_DELAY seconds then main power will be turned off.
 #define FAN_MAX_TEMP 75
@@ -214,7 +214,7 @@
 #define FAN_MAX_TEMP_DROP 15 
 
 /// Enable/disable RPM measurement during work - it will still be enabled at the boot during fan test.
-#define FAN_OPTION_RPM_MEASUREMENT 1
+#define FAN_OPTION_RPM_MEASUREMENT 0
 
 /// Interval (in milliseconds) at which watchdog impulse will be sent
 #define WATCHDOG_INTERVAL 1000

@@ -73,7 +73,7 @@
 
 //                         U_MIN, U_DEF, U_MAX, U_MAX_CONF, U_MIN_STEP, U_DEF_STEP, U_MAX_STEP, U_CAL_VAL_MIN, U_CAL_VAL_MID, U_CAL_VAL_MAX, U_CURR_CAL
 #define CH_PARAMS_U_30V    0.0f,  0.0f,  30.0f, 30.0f,      0.01f,      0.1f,       5.0f,       0.15f,         14.1f,         28.0f,         25.0f,     CH_PARAMS_OVP
-#define CH_PARAMS_U_40V    0.0f,  0.0f,  40.0f, 40.0f,      0.01f,      0.1f,       5.0f,       0.15f,         19.1f,         38.0f,         25.0f,     CH_PARAMS_OVP
+#define CH_PARAMS_U_40V    0.0f,  0.0f,  40.0f, 40.6667f,   0.01f,      0.1f,       5.0f,       0.15f,         19.1f,         38.0f,         25.0f,     CH_PARAMS_OVP
 #define CH_PARAMS_U_50V    0.0f,  0.0f,  50.0f, 50.0f,      0.01f,      0.1f,       5.0f,       0.15f,         24.1f,         48.0f,         25.0f,     CH_PARAMS_OVP
 
 //                       OCP_DEFAULT_STATE, OCP_MIN_DELAY, OCP_DEFAULT_DELAY, OCP_MAX_DELAY

@@ -269,6 +269,15 @@ Channel::Channel(
 
 	negligibleAdcDiffForVoltage = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (U_MAX - U_MIN)));
 	negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (I_MAX - I_MIN)));
+
+#ifdef EEZ_PSU_SIMULATOR
+    simulator.load_enabled = true;
+    if (index == 1) {
+        simulator.load = 10;
+    } else {
+        simulator.load = 20;
+    }
+#endif
 }
 
 void Channel::protectionEnter(ProtectionValue &cpv) {

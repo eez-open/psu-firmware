@@ -23,21 +23,12 @@ Use this header file to override anything from conf.h or conf_advanced.h.
 
 #pragma once
 
-/// Firmware version.
-#undef FIRMWARE
-#define FIRMWARE     "M2 (f62ae8a)"
-
-/// Set to 1 to skip the test of PWRGOOD signal
-//#undef CONF_SKIP_PWRGOOD_TEST
-//#define CONF_SKIP_PWRGOOD_TEST 0
-
-/// This is the delay period, after the channel output went OFF,
-/// after which we shall turn DP off.
-/// Value is given in seconds.
-#undef DP_OFF_DELAY_PERIOD
-#define DP_OFF_DELAY_PERIOD 30
-
-#undef FAN_OPTION_RPM_MEASUREMENT
-#define FAN_OPTION_RPM_MEASUREMENT 0
-
 #define ETHERNET_MAC_ADDRESS { 0x74, 0x69, 0x69, 0x2D, 0x30, 0x00 }
+
+// Example: redefine channels
+/*
+#undef CHANNELS
+#define CHANNELS \
+    CHANNEL(1, CH_BOARD_REVISION_R5B9_PARAMS, CH_PINS_1, CH_PARAMS_50V_3A), \
+    CHANNEL(2, CH_BOARD_REVISION_R5B9_PARAMS, CH_PINS_2, CH_PARAMS_50V_3A) \
+*/
