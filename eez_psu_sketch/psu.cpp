@@ -523,7 +523,7 @@ void tick() {
 
 	event_queue::tick(tick_usec);
 
-#if OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
 	updateMasterSync();
 #endif
 }
