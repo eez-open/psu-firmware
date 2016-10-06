@@ -1545,6 +1545,11 @@ void showEnteringStandbyPage() {
     flush();
 }
 
+void showEthernetInit() {
+    doShowPage(PAGE_ID_ETHERNET_INIT);
+    flush();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 void dialogYes() {
@@ -1723,7 +1728,7 @@ void init() {
 }
 
 int getStartPageId() {
-	return devices::anyFailedOrWarning() ? PAGE_ID_SELF_TEST_RESULT: PAGE_ID_MAIN;
+	return devices::anyFailed() ? PAGE_ID_SELF_TEST_RESULT: PAGE_ID_MAIN;
 }
 
 void tick(unsigned long tick_usec) {
