@@ -63,7 +63,8 @@ enum ValueType {
 	VALUE_TYPE_SECOND,
 	VALUE_TYPE_USER_PROFILE_LABEL,
 	VALUE_TYPE_USER_PROFILE_REMARK,
-    VALUE_TYPE_EDIT_INFO
+    VALUE_TYPE_EDIT_INFO,
+    VALUE_TYPE_IP_ADDRESS
 };
 
 struct Value {
@@ -145,14 +146,14 @@ struct Value {
 		}
 
 		if (type_ >= VALUE_TYPE_MONTH && type_ <= VALUE_TYPE_SECOND) {
-			return uint8_ == other.uint32_;
+			return uint8_ == other.uint8_;
 		}
 
 		if (type_ == VALUE_TYPE_YEAR) {
 			return uint16_ == other.uint16_;
 		}
 
-		if (type_ == VALUE_TYPE_ON_TIME_COUNTER) {
+		if (type_ == VALUE_TYPE_ON_TIME_COUNTER || type_ == VALUE_TYPE_IP_ADDRESS) {
 			return uint32_ == other.uint32_;
 		}
 		

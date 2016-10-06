@@ -18,6 +18,8 @@
 
 #include "psu.h"
 
+#include "persist_conf.h"
+
 #if OPTION_ETHERNET
 
 #if defined(EEZ_PSU_SIMULATOR) || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
@@ -121,6 +123,11 @@ scpi_t scpi_context;
 ////////////////////////////////////////////////////////////////////////////////
 
 bool init() {
+    if (!persist_conf::isEthernetEnabled()) {
+        test_result = psu::TEST_SKIPPED;
+        return true;
+    }
+
 #ifdef EEZ_PSU_ARDUINO
     DebugTrace("Ethernet initialization started...");
 #endif
@@ -219,6 +226,10 @@ void tick(unsigned long tick_usec) {
     }
 
     SPI.endTransaction();
+}
+
+uint32_t getIpAddress() {
+    return Ethernet.localIP();
 }
 
 }

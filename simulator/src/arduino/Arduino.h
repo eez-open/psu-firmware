@@ -73,8 +73,16 @@ void delayMicroseconds(uint32_t microseconds);
 
 /// Bare minimum implementation of the Arduino IPAddress class
 class IPAddress {
+    friend class SimulatorSerial;
+
+private:
+    union {
+	    uint8_t bytes[4];  // IPv4 address
+	    uint32_t dword;
+    } _address;
+
 public:
-    uint8_t bytes[4];
+    operator uint32_t() const { return _address.dword; };
 };
 
 /// Bare minimum implementation of the Arduino Serial object

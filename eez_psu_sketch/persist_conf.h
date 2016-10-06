@@ -50,6 +50,7 @@ struct DeviceFlags {
     int profile_auto_recall : 1;
     int dst : 1;
     int channelDisplayedValues : 3;
+    int ethernetEnabled : 1;
     int reserved1 : 1;
     int reserved2 : 1;
     int reserved3 : 1;
@@ -57,7 +58,6 @@ struct DeviceFlags {
     int reserved5 : 1;
     int reserved6 : 1;
     int reserved7 : 1;
-    int reserved8 : 1;
 };
 
 /// Device configuration block.
@@ -98,6 +98,9 @@ bool changeSerial(const char *newSerialNumber, size_t newSerialNumberLength);
 
 bool enableBeep(bool enable);
 bool isBeepEnabled();
+
+bool enableEthernet(bool enable);
+bool isEthernetEnabled();
 
 bool readSystemDate(uint8_t &year, uint8_t &month, uint8_t &day);
 void writeSystemDate(uint8_t year, uint8_t month, uint8_t day);

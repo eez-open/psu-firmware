@@ -100,7 +100,11 @@ int SimulatorSerial::println(const char *data) {
 }
 
 int SimulatorSerial::println(IPAddress ipAddress) {
-    return printf("%d.%d.%d.%d\n", ipAddress.bytes[0], ipAddress.bytes[1], ipAddress.bytes[2], ipAddress.bytes[3]);
+    return printf("%d.%d.%d.%d\n",
+        ipAddress._address.bytes[0],
+        ipAddress._address.bytes[1],
+        ipAddress._address.bytes[2],
+        ipAddress._address.bytes[3]);
 }
 
 int SimulatorSerial::available(void) {

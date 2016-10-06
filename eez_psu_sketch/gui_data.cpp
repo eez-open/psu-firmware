@@ -178,7 +178,15 @@ void Value::toText(char *text, int count) const {
         edit_mode::getInfoText(int_, text);
         break;
 
-	default:
+    case VALUE_TYPE_IP_ADDRESS:
+    {
+        uint8_t *bytes = (uint8_t *)&uint32_;
+		snprintf_P(text, count-1, PSTR("%d.%d.%d.%d"), (int)bytes[0], (int)bytes[1], (int)bytes[2], (int)bytes[3]);
+		text[count - 1] = 0;
+        break;
+    }
+
+    default:
 		{
 			int precision = FLOAT_TO_STR_PREC;
 

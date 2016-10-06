@@ -283,6 +283,10 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
         return Value(getFirmwareInfo());
     }
 
+    if (id == DATA_ID_SYS_ETHERNET_INSTALLED) {
+        return data::Value(OPTION_ETHERNET);
+    }
+
 	Page *page = getActivePage();
 	if (page) {
 		Value value = page->getData(cursor, id, this);

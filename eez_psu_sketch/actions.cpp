@@ -29,6 +29,7 @@
 #include "gui_page_ch_settings_adv.h"
 #include "gui_page_sys_settings_date_time.h"
 #include "gui_page_user_profiles.h"
+#include "gui_page_sys_settings_ethernet.h"
 
 namespace eez {
 namespace psu {
@@ -186,6 +187,10 @@ void action_show_sys_settings_cal_ch() {
 
 void action_show_sys_settings_screen_calibration() {
     pushPage(PAGE_ID_SYS_SETTINGS_SCREEN_CALIBRATION);
+}
+
+void action_show_sys_settings_ethernet() {
+    pushPage(PAGE_ID_SYS_SETTINGS_ETHERNET);
 }
 
 void action_show_sys_info() {
@@ -402,6 +407,14 @@ void action_toggle_channel_displayed_values() {
     persist_conf::toggleChannelDisplayedValues();
 }
 
+void action_sys_settings_ethernet_enable() {
+    SysSettingsEthernetPage::enable();
+}
+
+void action_sys_settings_ethernet_disable() {
+    SysSettingsEthernetPage::disable();
+}
+
 
 ACTION actions[] = {
     0,
@@ -441,6 +454,7 @@ ACTION actions[] = {
     action_show_sys_settings_cal,
     action_show_sys_settings_cal_ch,
     action_show_sys_settings_screen_calibration,
+    action_show_sys_settings_ethernet,
     action_show_sys_info,
     action_show_sys_info2,
     action_show_main_help_page,
@@ -493,7 +507,9 @@ ACTION actions[] = {
     action_profile_save,
     action_profile_delete,
     action_profile_edit_remark,
-    action_toggle_channel_displayed_values
+    action_toggle_channel_displayed_values,
+    action_sys_settings_ethernet_enable,
+    action_sys_settings_ethernet_disable
 };
 
 }

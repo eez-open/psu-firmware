@@ -622,6 +622,31 @@
       "name": "profile.channel.outputState",
       "defaultValue": "1",
       "description": "0: output is off\n1: output is on"
+    },
+    {
+      "name": "sys.ethernet.installed",
+      "description": "0: not installed\n1: installed",
+      "defaultValue": "1"
+    },
+    {
+      "name": "sys.ethernet.enabled",
+      "description": "0: disabled\n1: enabled",
+      "defaultValue": "1"
+    },
+    {
+      "name": "sys.ethernet.status",
+      "description": "0: failed\n1: ok\n2: skipped",
+      "defaultValue": "1"
+    },
+    {
+      "name": "sys.ethernet.ipAddress",
+      "description": "",
+      "defaultValue": "192.168.1.101"
+    },
+    {
+      "name": "sys.ethernet.scpiPort",
+      "description": "",
+      "defaultValue": "5025"
     }
   ],
   "actions": [
@@ -813,6 +838,11 @@
       "name": "show_sys_settings_screen_calibration",
       "implementationType": "native",
       "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_SCREEN_CALIBRATION);"
+    },
+    {
+      "name": "show_sys_settings_ethernet",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_ETHERNET);"
     },
     {
       "name": "show_sys_info",
@@ -1077,6 +1107,16 @@
       "name": "toggle_channel_displayed_values",
       "implementationType": "native",
       "implementation": "persist_conf::toggleChannelDisplayedValues();"
+    },
+    {
+      "name": "sys_settings_ethernet_enable",
+      "implementationType": "native",
+      "implementation": "SysSettingsEthernetPage::enable();"
+    },
+    {
+      "name": "sys_settings_ethernet_disable",
+      "implementationType": "native",
+      "implementation": "SysSettingsEthernetPage::disable();\n"
     }
   ],
   "gui": {
@@ -54618,14 +54658,35 @@
               "style": "default_disabled_S_left"
             },
             {
-              "type": "Text",
-              "text": "Ethernet settings",
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "Ethernet not installed",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "edit_value_S_left",
+                  "action": ""
+                },
+                {
+                  "type": "Text",
+                  "text": "Ethernet settings",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "action": "show_sys_settings_ethernet"
+                }
+              ],
               "x": 12,
               "y": 86,
               "width": 240,
               "height": 28,
-              "style": "default_disabled_S_left",
-              "action": "show_sys_settings_cal"
+              "style": "default",
+              "data": "sys.ethernet.installed"
             },
             {
               "type": "Text",
@@ -57113,6 +57174,335 @@
         }
       },
       {
+        "name": "sys_settings_ethernet",
+        "portrait": {
+          "widgets": [
+            {
+              "type": "Text",
+              "text": "Password:",
+              "x": 0,
+              "y": 0,
+              "width": 120,
+              "height": 32,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "text": "Change",
+              "x": 120,
+              "y": 0,
+              "width": 120,
+              "height": 32,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "List",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "widgets": [
+                  {
+                    "type": "Text",
+                    "text": "",
+                    "x": 0,
+                    "y": 0,
+                    "width": 120,
+                    "height": 32,
+                    "style": "edit_value_S_left",
+                    "data": "channel.label"
+                  },
+                  {
+                    "type": "Select",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "text": "Calibrated",
+                        "x": 0,
+                        "y": 0,
+                        "width": 120,
+                        "height": 32,
+                        "style": "edit_value_active_S_left",
+                        "action": "show_sys_settings_cal_ch"
+                      },
+                      {
+                        "type": "Text",
+                        "text": "Not calibrated",
+                        "x": 0,
+                        "y": 0,
+                        "width": 120,
+                        "height": 32,
+                        "style": "edit_value_active_S_left",
+                        "action": "show_sys_settings_cal_ch"
+                      }
+                    ],
+                    "x": 120,
+                    "y": 0,
+                    "width": 120,
+                    "height": 32,
+                    "style": "default",
+                    "data": "channel.calibration.status",
+                    "action": "show_sys_settings_cal_ch"
+                  }
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 240,
+                "height": 32,
+                "style": "default",
+                "data": "",
+                "action": ""
+              },
+              "x": 0,
+              "y": 66,
+              "width": 240,
+              "height": 64,
+              "style": "default",
+              "data": "channels"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 269,
+              "width": 168,
+              "height": 51,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 168,
+              "y": 269,
+              "style": "bottom_button",
+              "text": "B",
+              "width": 36,
+              "height": 51
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 204,
+              "y": 269,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 36,
+              "height": 51
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320
+        },
+        "landscape": {
+          "widgets": [
+            {
+              "type": "Text",
+              "text": "Ethernet settings",
+              "x": 6,
+              "y": 0,
+              "width": 314,
+              "height": 32,
+              "style": "value_S"
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "text": "Enable ethernet (requires restart)",
+                  "x": 0,
+                  "y": 0,
+                  "width": 296,
+                  "height": 30,
+                  "style": "edit_value_active_S_left",
+                  "action": "sys_settings_ethernet_enable"
+                },
+                {
+                  "type": "Text",
+                  "text": "Disable ethernet (requires restart)",
+                  "x": 0,
+                  "y": 0,
+                  "width": 296,
+                  "height": 30,
+                  "style": "edit_value_active_S_left",
+                  "action": "sys_settings_ethernet_disable"
+                }
+              ],
+              "x": 12,
+              "y": 32,
+              "width": 296,
+              "height": 30,
+              "style": "default",
+              "data": "sys.ethernet.enabled"
+            },
+            {
+              "type": "Rectangle",
+              "x": 308,
+              "y": 32,
+              "width": 12,
+              "height": 30,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Select",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "text": "Failed to initialize ethernet at start!",
+                      "x": 0,
+                      "y": 0,
+                      "width": 308,
+                      "height": 30,
+                      "style": "event_error",
+                      "action": "sys_settings_ethernet_enable"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 30,
+                      "width": 308,
+                      "height": 112,
+                      "style": "default_inverse"
+                    }
+                  ],
+                  "x": 0,
+                  "y": 0,
+                  "width": 308,
+                  "height": 142,
+                  "style": "default"
+                },
+                {
+                  "type": "Container",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "text": "IP address:",
+                      "x": 0,
+                      "y": 0,
+                      "width": 132,
+                      "height": 28,
+                      "style": "edit_value_S_left"
+                    },
+                    {
+                      "type": "DisplayData",
+                      "text": "323:33:10",
+                      "x": 130,
+                      "y": 0,
+                      "width": 178,
+                      "height": 28,
+                      "style": "value_S",
+                      "data": "sys.ethernet.ipAddress"
+                    },
+                    {
+                      "type": "Text",
+                      "text": "SCPI port:",
+                      "x": 0,
+                      "y": 28,
+                      "width": 132,
+                      "height": 28,
+                      "style": "edit_value_S_left"
+                    },
+                    {
+                      "type": "DisplayData",
+                      "text": "323:33:10",
+                      "x": 132,
+                      "y": 28,
+                      "width": 176,
+                      "height": 28,
+                      "style": "value_S",
+                      "data": "sys.ethernet.scpiPort"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 56,
+                      "width": 308,
+                      "height": 86,
+                      "style": "default_inverse"
+                    }
+                  ],
+                  "x": 0,
+                  "y": 0,
+                  "width": 308,
+                  "height": 142,
+                  "style": "default"
+                },
+                {
+                  "type": "Container",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "text": "Ethernet initialization skipped at start.",
+                      "x": 0,
+                      "y": 0,
+                      "width": 308,
+                      "height": 30,
+                      "style": "event_warning",
+                      "data": ""
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 30,
+                      "width": 308,
+                      "height": 112,
+                      "style": "default_inverse"
+                    }
+                  ],
+                  "x": 0,
+                  "y": 0,
+                  "width": 308,
+                  "height": 142,
+                  "style": "default"
+                }
+              ],
+              "x": 12,
+              "y": 62,
+              "width": 308,
+              "height": 142,
+              "style": "default",
+              "data": "sys.ethernet.status"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 224,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "B",
+              "width": 48,
+              "height": 36
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "style": "bottom_button",
+              "text": "X",
+              "width": 48,
+              "height": 36
+            }
+          ],
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240
+        },
+        "description": "Calibration general information, active calibration settings (CAL:STAT), change password (CAL:PASS:NEW) and enter wizard."
+      },
+      {
         "name": "user_profiles",
         "portrait": {
           "x": 0,
@@ -58926,7 +59316,7 @@
         },
         {
           "fileName": "actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"persist_conf.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings_date_time.h\"\n#include \"gui_page_user_profiles.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"persist_conf.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings_date_time.h\"\n#include \"gui_page_user_profiles.h\"\n#include \"gui_page_sys_settings_ethernet.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
         },
         {
           "fileName": "gui_document.h",

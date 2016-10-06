@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015-present, Envox d.o.o.
+ * Copyright (C) 2016-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,23 +18,23 @@
  
 #pragma once
 
-#include "scpi_psu.h"
+#include "gui_page.h"
+
+#include "datetime.h"
 
 namespace eez {
 namespace psu {
-namespace ethernet {
+namespace gui {
 
-extern TestResult test_result;
+class SysSettingsEthernetPage : public Page {
+public:
+	void takeSnapshot(data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
 
-extern scpi_t scpi_context;
-
-bool init();
-bool test();
-
-void tick(unsigned long tick_usec);
-
-uint32_t getIpAddress();
+    static void enable();
+    static void disable();
+};
 
 }
 }
-} // namespace eez::psu::ethernet
+} // namespace eez::psu::gui

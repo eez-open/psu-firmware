@@ -53,6 +53,8 @@ static const int EVENT_TYPE_ERROR = 3;
 	EVENT_INFO(BEEPER_ENABLED, 4, "Beeper enabled") \
 	EVENT_INFO(BEEPER_DISABLED, 5, "Beeper disabled") \
 	EVENT_INFO(SYSTEM_DATE_TIME_CHANGED, 6, "Date/time changed") \
+	EVENT_INFO(ETHERNET_ENABLED, 7, "Ethernet enabled") \
+	EVENT_INFO(ETHERNET_DISABLED, 8, "Ethernet disabled") \
 	EVENT_INFO(CH1_OUTPUT_ENABLED, 10, "Ch1 output on") \
 	EVENT_INFO(CH2_OUTPUT_ENABLED, 11, "Ch2 output on") \
 	EVENT_INFO(CH1_OUTPUT_DISABLED, 20, "Ch1 output off") \

@@ -120,6 +120,9 @@ void initDevice() {
 
 #ifdef EEZ_PSU_SIMULATOR
     dev_conf.gui_opened = true;
+    dev_conf.flags.ethernetEnabled = 1;
+#else
+    dev_conf.flags.ethernetEnabled = 0;
 #endif // EEZ_PSU_SIMULATOR
 }
 
@@ -192,6 +195,19 @@ bool enableBeep(bool enable) {
 
 bool isBeepEnabled() {
     return dev_conf.flags.beep_enabled ? true : false;
+}
+
+bool enableEthernet(bool enable) {
+    dev_conf.flags.ethernetEnabled = enable ? 1 : 0;
+    if (saveDevice()) {
+		event_queue::pushEvent(enable ? event_queue::EVENT_INFO_ETHERNET_ENABLED : event_queue::EVENT_INFO_ETHERNET_DISABLED);
+		return true;
+	}
+	return false;
+}
+
+bool isEthernetEnabled() {
+    return dev_conf.flags.ethernetEnabled ? true : false;
 }
 
 bool readSystemDate(uint8_t &year, uint8_t &month, uint8_t &day) {
