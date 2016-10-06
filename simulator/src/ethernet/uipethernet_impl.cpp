@@ -37,6 +37,7 @@ void Enc28J60Network::setControlCS(int pin) {
 SimulatorEthernet Ethernet;
 
 bool SimulatorEthernet::begin(uint8_t *mac) {
+    delay(1000);
     return true;
 }
 

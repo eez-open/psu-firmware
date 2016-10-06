@@ -46,6 +46,7 @@ static const int EVENT_TYPE_ERROR = 3;
 	EVENT_ERROR(CH2_REMOTE_SENSE_REVERSE_POLARITY_DETECTED, 51, "CH2 rsense reverse polarity detected") \
 	EVENT_WARNING(CH1_CALIBRATION_DISABLED, 0, "Ch1 calibration disabled") \
 	EVENT_WARNING(CH2_CALIBRATION_DISABLED, 1, "Ch2 calibration disabled") \
+    EVENT_WARNING(ETHERNET_NOT_CONNECTED, 2, "Ethernet not connected") \
 	EVENT_INFO(WELCOME, 0, "Welcome!") \
 	EVENT_INFO(POWER_UP, 1, "Power up") \
 	EVENT_INFO(POWER_DOWN, 2, "Power down") \

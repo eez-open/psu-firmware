@@ -66,10 +66,10 @@ Device devices[] = {
 
 int numDevices = sizeof(devices) / sizeof(Device);
 
-bool anyFailedOrWarning() {
+bool anyFailed() {
 	for (int i = 0; i < numDevices; ++i) {
 		Device &device = devices[i];
-		if (device.testResult != 0 && (*device.testResult == TEST_FAILED || *device.testResult == TEST_WARNING)) {
+		if (device.testResult != 0 && *device.testResult == TEST_FAILED) {
 			return true;
 		}
 	}
@@ -101,7 +101,7 @@ char *getSelfTestResultString() {
 
 	for (int deviceIndex = 0; deviceIndex < numDevices; ++deviceIndex) {
 		Device &device = devices[deviceIndex];
-		if (device.testResult && (*device.testResult == TEST_FAILED || *device.testResult == TEST_WARNING)) {
+		if (device.testResult && *device.testResult == TEST_FAILED) {
 			if (index > 0) {
 				APPEND_CHAR('\n');
 			}

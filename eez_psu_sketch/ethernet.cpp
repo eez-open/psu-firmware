@@ -19,6 +19,7 @@
 #include "psu.h"
 
 #include "persist_conf.h"
+#include "event_queue.h"
 
 #if OPTION_ETHERNET
 
@@ -140,14 +141,22 @@ bool init() {
 #endif
 
     SPI.beginTransaction(ENC28J60_SPI);
-    test_result = Ethernet.begin(mac) ? psu::TEST_OK : psu::TEST_FAILED;
-    if (!test_result) {
+
+    if (!Ethernet.begin(mac)) {
         SPI.endTransaction();
-        DebugTrace("Ethernet initialization failed!");
-        return false;
+
+        test_result = psu::TEST_WARNING;
+        DebugTrace("Ethernet not connected!");
+        event_queue::pushEvent(event_queue::EVENT_WARNING_ETHERNET_NOT_CONNECTED);
+
+        return true;
     }
+
     server.begin();
+
     SPI.endTransaction();
+
+    test_result = psu::TEST_OK;
 
     DebugTraceF("Listening on port %d", (int)TCP_PORT);
 

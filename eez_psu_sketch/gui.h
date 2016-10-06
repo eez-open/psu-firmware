@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ethernet.h"
+
 namespace eez {
 namespace psu {
 namespace gui {
@@ -28,6 +30,8 @@ void tick(unsigned long tick_usec);
 void showWelcomePage();
 void showStandbyPage();
 void showEnteringStandbyPage();
+void showEthernetInit();
+
 
 }
 }

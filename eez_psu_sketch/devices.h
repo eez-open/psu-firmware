@@ -31,7 +31,7 @@ struct Device {
 extern Device devices[];
 extern int numDevices;
 
-bool anyFailedOrWarning();
+bool anyFailed();
 char *getSelfTestResultString();
 
 const char *getInstalledString(bool installed);

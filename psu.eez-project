@@ -635,7 +635,7 @@
     },
     {
       "name": "sys.ethernet.status",
-      "description": "0: failed\n1: ok\n2: skipped",
+      "description": "0: failed\n1: ok\n2: skipped\n3: warning",
       "defaultValue": "1"
     },
     {
@@ -45686,6 +45686,34 @@
         "description": "Welcome screen, display channels and firmware revision"
       },
       {
+        "name": "ethernet_init",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "text": "Ethernet initialisation",
+              "x": 0,
+              "y": 100,
+              "width": 320,
+              "height": 40,
+              "style": "default",
+              "data": ""
+            }
+          ]
+        }
+      },
+      {
         "name": "entering_standby",
         "portrait": {
           "widgets": [
@@ -57351,7 +57379,7 @@
                   "widgets": [
                     {
                       "type": "Text",
-                      "text": "Failed to initialize ethernet at start!",
+                      "text": "Ethernet errror",
                       "x": 0,
                       "y": 0,
                       "width": 308,
@@ -57435,13 +57463,41 @@
                   "widgets": [
                     {
                       "type": "Text",
-                      "text": "Ethernet initialization skipped at start.",
+                      "text": "Ethernet initialization skipped at start",
+                      "x": 0,
+                      "y": 0,
+                      "width": 308,
+                      "height": 30,
+                      "style": "event_info",
+                      "data": ""
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 30,
+                      "width": 308,
+                      "height": 112,
+                      "style": "default_inverse"
+                    }
+                  ],
+                  "x": 0,
+                  "y": 0,
+                  "width": 308,
+                  "height": 142,
+                  "style": "default"
+                },
+                {
+                  "type": "Container",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "text": "Ethernet not connected",
                       "x": 0,
                       "y": 0,
                       "width": 308,
                       "height": 30,
                       "style": "event_warning",
-                      "data": ""
+                      "action": "sys_settings_ethernet_enable"
                     },
                     {
                       "type": "Rectangle",
