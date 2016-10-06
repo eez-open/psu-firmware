@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  */
  
 #include "psu.h"
-#include <scpi-parser.h>
 #include "scpi_psu.h"
 #include "scpi_mem.h"
 
@@ -39,7 +38,7 @@ scpi_result_t scpi_mem_StateCatalogQ(scpi_t *context) {
     char name[PROFILE_NAME_MAX_LENGTH + 1];
 
     for (int i = 0; i < NUM_PROFILE_LOCATIONS; ++i) {
-        profile::getName(i, name);
+        profile::getName(i, name, sizeof(name));
         SCPI_ResultText(context, name);
     }
 
@@ -106,7 +105,7 @@ scpi_result_t scpi_mem_StateNameQ(scpi_t *context) {
     }
 
     char name[PROFILE_NAME_MAX_LENGTH + 1];
-    profile::getName(location, name);
+    profile::getName(location, name, sizeof(name));
 
     SCPI_ResultText(context, name);
 

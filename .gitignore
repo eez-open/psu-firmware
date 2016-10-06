@@ -1,2 +1,5 @@
 *.pyc
 doc/html
+.vscode
+simulator/platform/win32/eez_psu_sim.VC.db
+*.opendb

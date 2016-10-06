@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -495,6 +495,7 @@ uint8_t BPChip::transfer(uint8_t data) {
 IOExpanderChip::IOExpanderChip()
     : state(IDLE)
     , pwrgood(true)
+	, rpol(false)
 {
 }
 
@@ -505,6 +506,15 @@ bool IOExpanderChip::getPwrgood(int pin) {
 void IOExpanderChip::setPwrgood(int pin, bool on) {
     if (pin == IO_EXPANDER1) ioexp_chip1.pwrgood = on;
     else ioexp_chip2.pwrgood = on;
+}
+
+bool IOExpanderChip::getRPol(int pin) {
+    return pin == IO_EXPANDER1 ? ioexp_chip1.rpol : ioexp_chip2.rpol;
+}
+
+void IOExpanderChip::setRPol(int pin, bool on) {
+    if (pin == IO_EXPANDER1) ioexp_chip1.rpol = on;
+    else ioexp_chip2.rpol = on;
 }
 
 void IOExpanderChip::select() {
@@ -531,6 +541,14 @@ uint8_t IOExpanderChip::transfer(uint8_t data) {
             if (pwrgood) {
                 result |= 1 << IOExpander::IO_BIT_IN_PWRGOOD;
             }
+
+
+			Channel &channel = Channel::get(this == &ioexp_chip1 ? 0 : 1);
+			if (channel.boardRevision == CH_BOARD_REVISION_R5B9) {
+				if (!rpol) {
+					result |= 1 << IOExpander::IO_BIT_IN_RPOL;
+				}
+			}
 
             if (cv) {
                 result |= 1 << IOExpander::IO_BIT_IN_CV_ACTIVE;
@@ -668,14 +686,16 @@ void AnalogDigitalConverterChip::setDacValue(uint8_t data_buffer, uint16_t dac_v
         i_set = (uint16_t)util::clamp(value,
             AnalogDigitalConverter::ADC_MIN, AnalogDigitalConverter::ADC_MAX);
     }
+    updateValues();
+    tick();
 }
 
 void AnalogDigitalConverterChip::updateValues() {
     for (int i = 0; i < CH_NUM; ++i) {
         Channel &channel = Channel::get(i);
         if (channel.convend_pin == convend_pin) {
-            if (channel.simulator.getLoadEnabled()) {
-                float u_set_v = channel.remapAdcDataToVoltage(u_set);
+			if (channel.simulator.getLoadEnabled()) {
+                float u_set_v = channel.isRemoteProgrammingEnabled() ? util::remap(channel.simulator.voltProgExt, 0, 0, 2.5, channel.u.max) : channel.remapAdcDataToVoltage(u_set);
                 float i_set_a = channel.remapAdcDataToCurrent(i_set);
 
                 float u_mon_v = i_set_a * channel.simulator.load;

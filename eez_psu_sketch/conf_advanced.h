@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,170 +22,218 @@
 
 #pragma once
 
-/* 
- * General parameters
- */
+/// PSU serial number.
+#define PSU_SERIAL   "0000000"
 
-/// Number of digits after decimal point
-/// in float to string conversion.
-#define FLOAT_TO_STR_PREC 2
+/// Firmware version.
+#define FIRMWARE     "M2"
 
-/// Number of profile storage locations
-#define NUM_PROFILE_LOCATIONS 10
-
-/// Profile name maximum length in number of characters
-#define PROFILE_NAME_MAX_LENGTH 32
-
-/// Size in number characters of SCPI parser input buffer
-#define SCPI_PARSER_INPUT_BUFFER_LENGTH 48
-
-/// Size of SCPI parser error queue
-#define SCPI_PARSER_ERROR_QUEUE_SIZE 20
-
-/// Since we are not using timer, but ADC interrupt for measuring 
-/// the OVP and OCP delay there will be some error (size of which
-/// depends on ADC_SPS value). You can use the following value, which
-/// will be subtracted from the programmed OVP and OCP delay, 
-/// for better approximation. The value is given in seconds.
-#define PROT_DELAY_CORRECTION 0.002f
-
-/// Defines delay in seconds to turn off the down-programmer after
-/// the channel output is switched off. That is used to discharge 
-/// output capacitor.
-#define DP_OFF_DELAY_PERIOD 0.05
-
-/// Text returned by the SYStem:CAPability command
-#define STR_SYST_CAP "DCSUPPLY WITH (MEASURE|MULTIPLE|TRIGGER)"
-
-/* 
- * Remote control parameters
- */
-
-/// Wait until serial port is ready before starting firmware
-#define CONF_WAIT_SERIAL  0
-
-/// TCP server port for remote control using SCPI commands
-#define TCP_PORT 5025
-
-/* 
- * Debug parameters
- */
-
-/// Enable sending of all debug trace to the serial communication interface
-#define CONF_DEBUG        1
-
-/// Enable only selected debug trace to the serial communication interface
-#define CONF_DEBUG_LATEST 1
-
-/* 
- * PSU identification data
- */
-
-/// PSU serial number that will be shown in results of the *IDN? query
-#define PSU_SERIAL   "123456789"
-
-/// Firmware version that will be shown in results of the *IDN? query
-#define FIRMWARE     "M1"
-
-/// Manufacturer name that will be shown in results of the *IDN? query
+/// Manufacturer description text.
 #define MANUFACTURER "EEZ"
 
-/* 
- * SPI peripherals parameters
- */
+/// SCPI TCP server port.
+#define TCP_PORT 5025
 
-/// DAC device name for reference only, not currently used
+/// Name of the DAC chip.
 #define DAC_NAME "DAC8552"
 
-/// DAC resolution in number of bits
+/// DAC chip resolution in number of bits.
 #define DAC_RES 16
 
-/// Allowed difference in percentage between DAC and 
-/// ADC uncalibrated values during self-test
+/// Allowed difference, in percentage, between DAC and ADC value during testing.
 #define DAC_TEST_TOLERANCE 4.0f
 
-/// Number of DAC testing attempts before it’s proclaimed non-operational
+/// Max. number of tries during DAC testing before giving up. 
 #define DAC_TEST_MAX_TRIES 3
 
-/// ADC device name for reference only, not currently used
+/// Name of the ADC chip.
 #define ADC_NAME "ADS1120"
 
-/// ADC resolution in number of bits
+/// ADC chip resolution in number of bits.
 #define ADC_RES 15
 
-/// ADC sampling rate
-/// 0: 20 SPS, 1: 45 SPS, 2: 90 SPS, 3: 175 SPS, 
-/// 4: 330 SPS, 5: 600 SPS, 6: 1000 SPS
+/// How many times per second will ADC take snapshot value?
+/// 0: 20 SPS, 1: 45 SPS, 2: 90 SPS, 3: 175 SPS, 4: 330 SPS, 5: 600 SPS, 6: 1000 SPS
+#ifdef EEZ_PSU_ARDUINO_MEGA
+#define ADC_SPS 2
+#else
 #define ADC_SPS 5
+#endif
+#define ADC_SPS_TIME_CRITICAL 0 // used when time/performance critical operation is running
 
-/// Max. allowed time in milliseconds between two ADC interrupt 
-/// before an ADC timeout condition is declared. The reason for 
-/// that could be lost of communication with ADC (e.g. SPI cable 
-/// is disconnected) or exceptionally some issue with firmware 
-/// that has to be closely inspected if happens repetitively. 
+/// Duration, in milliseconds, from the last ADC interrupt
+/// after which ADC timeout condition is declared.  
 #define ADC_TIMEOUT_MS 60
 
-/// Maximum number of attempts to recover from ADC timeout 
-/// condition before giving up and report failure
+/// Maximum number of attempts to recover from ADC timeout before giving up.
 #define MAX_ADC_TIMEOUT_RECOVERY_ATTEMPTS 3
 
-/* 
- * Calibration parameters
- */
-
-/// Default calibration password
-#define CALIBRATION_PASSWORD_DEFAULT "eezpsu"
-
-/// Calibration password minimum length in number of characters
+/// Password minimum length in number characters.
 #define PASSWORD_MIN_LENGTH 4
 
-/// Calibration password maximum length in number of characters
+/// Password maximum length in number of characters.
 #define PASSWORD_MAX_LENGTH 16
 
-/// Calibration remark maximum length
+/// Calibration remark maximum length.
 #define CALIBRATION_REMARK_MAX_LENGTH 32
 
-/// Text that will be returned when CALibrate:REMark? query is 
-/// executed on channel that is not calibrated yet or calibration 
-/// information are erased using CALibration:CLEar
+/// Default calibration remark text.
 #define CALIBRATION_REMARK_INIT "Not calibrated"
 
-/// Maximum allowed difference, in percentage, between measured 
-/// and real (entered by user) value during calibration.
+/// Maximum difference, in percentage, between ADC
+/// and real value during calibration.
 #define CALIBRATION_DATA_TOLERANCE 5.0f
 
 /// Maximum difference, in percentage, between calculated mid value
 /// and real mid value during calibration.
 #define CALIBRATION_MID_TOLERANCE_PERCENT 1.0f
 
-/* 
- * Temperature sensors and Over-temperature protection (OTP)
- */
+/// Number of digits after decimal point
+/// in float to string conversion.
+#define FLOAT_TO_STR_PREC 2
 
-/// Temperature reading interval in milliseconds
+/// Temperature reading interval.
 #define TEMP_SENSOR_READ_EVERY_MS 1000
 
-/// Voltage value of the first temperature calibration point 
-#define MAIN_TEMP_COEF_P1_U 1.6f
+/// Temperature sensors calibration points.
+/// There are 2 points. For each point there are two values.
+/// First value is Voltage[V] and second value is Temperature[oC].
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 
-/// Temperature(oC) value of the first temperature calibration point 
-#define MAIN_TEMP_COEF_P1_T 25.0f
+#define MAIN_TEMP_SENSOR_CALIBRATION_POINTS 1.6f, 25.0f, 4.07f, 85.0f
 
-/// Voltage value of the second temperature calibration point 
-#define MAIN_TEMP_COEF_P2_U 4.07f
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 
-/// Temperature(oC) value of the second temperature calibration point 
-#define MAIN_TEMP_COEF_P2_T 85.0f
+#define MAIN_TEMP_SENSOR_CALIBRATION_POINTS 1.6f, 25.0f, 4.07f, 85.0f // 10K, Beta: 3977K
+#define CH1_TEMP_SENSOR_CALIBRATION_POINTS 1.6f, 25.0f, 3.89f, 85.0f  // 10K, Beta: 3570K
+#define CH2_TEMP_SENSOR_CALIBRATION_POINTS 1.6f, 25.0f, 3.89f, 85.0f  // 10K, Beta: 3570K
 
-/// Minimum OTP delay in seconds
+#endif
+
+/// temperature sensors
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+
+#define TEMP_SENSORS \
+	TEMP_SENSOR(MAIN, OPTION_MAIN_TEMP_SENSOR, TEMP_ANALOG, MAIN_TEMP_SENSOR_CALIBRATION_POINTS, -1, QUES_TEMP, SCPI_ERROR_MAIN_TEMP_SENSOR_TEST_FAILED)
+
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+
+#define TEMP_SENSORS \
+	TEMP_SENSOR(MAIN, OPTION_MAIN_TEMP_SENSOR, TEMP_ANALOG, MAIN_TEMP_SENSOR_CALIBRATION_POINTS, -1, QUES_TEMP, SCPI_ERROR_MAIN_TEMP_SENSOR_TEST_FAILED), \
+	TEMP_SENSOR(CH1, CH_NUM >= 1, NTC1, CH1_TEMP_SENSOR_CALIBRATION_POINTS, 0, QUES_ISUM_TEMP, SCPI_ERROR_CH1_TEMP_SENSOR_TEST_FAILED), \
+	TEMP_SENSOR(CH2, CH_NUM >= 2, NTC2, CH2_TEMP_SENSOR_CALIBRATION_POINTS, 1, QUES_ISUM_TEMP, SCPI_ERROR_CH2_TEMP_SENSOR_TEST_FAILED)
+
+#endif
+
+/// Minimum OTP delay
 #define OTP_MAIN_MIN_DELAY     0.0f
 
-/// Maximum OTP delay in seconds
+/// Maximum OTP delay
 #define OTP_MAIN_MAX_DELAY     300.0f
 
-/// Minimum OTP level in oC
+/// Minimum OTP level
 #define OTP_MAIN_MIN_LEVEL     0.0f
 
-/// Maximum OTP level in oC
+/// Maximum OTP level
 #define OTP_MAIN_MAX_LEVEL     100.0f
 
+/// Number of profile storage locations
+#define NUM_PROFILE_LOCATIONS 10
+
+/// Profile name maximum length in number of characters.
+#define PROFILE_NAME_MAX_LENGTH 32
+
+/// Size in number characters of SCPI parser input buffer.
+#define SCPI_PARSER_INPUT_BUFFER_LENGTH 48
+
+/// Size of SCPI parser error queue.
+#define SCPI_PARSER_ERROR_QUEUE_SIZE 20
+
+/// Since we are not using timer, but ADC interrupt for the OVP and
+/// OCP delay measuring there will be some error (size of which
+/// depends on ADC_SPS value). You can use the following value, which
+/// will be subtracted from the OVP and OCP delay, to correct this error.
+/// Value is given in seconds.
+#define PROT_DELAY_CORRECTION 0.002f
+
+/// This is the delay period, after the channel output went OFF,
+/// after which we shall turn DP off.
+/// Value is given in seconds.
+#define DP_OFF_DELAY_PERIOD 30
+
+/// Text returned by the SYStem:CAPability command
+#define STR_SYST_CAP "DCSUPPLY WITH (MEASURE|MULTIPLE|TRIGGER)"
+
+/// Select type of TFT touch display, possible values are: TFT_320QVT_1289 and TFT_320QVT_9341
+#define DISPLAY_TYPE TFT_320QVT_9341
+
+/// Select display orientations, possible values are:
+/// DISPLAY_ORIENTATION_PORTRAIT and DISPLAY_ORIENTATION_LANDSCAPE
+#define DISPLAY_ORIENTATION_PORTRAIT 0
+#define DISPLAY_ORIENTATION_LANDSCAPE 1
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+#define DISPLAY_ORIENTATION DISPLAY_ORIENTATION_PORTRAIT
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#define DISPLAY_ORIENTATION DISPLAY_ORIENTATION_LANDSCAPE
+#endif
+
+/// Set to 1 to skip the test of PWRGOOD signal
+#define CONF_SKIP_PWRGOOD_TEST 0
+
+/// Minimal temperature (in oC) for sensor to be declared as valid.
+#define TEMP_SENSOR_MIN_VALID_TEMPERATURE -5
+
+/// Interval at which fan speed should be adjusted
+#define FAN_SPEED_ADJUSTMENT_INTERVAL 10000
+
+/// Interval at which fan speed should be measured
+#define FAN_SPEED_MEASURMENT_INTERVAL 5000
+
+/// Fan switch-on temperature (in oC)
+#define FAN_MIN_TEMP 55
+
+/// Max. allowed temperature (in oC), if it stays more then FAN_MAX_TEMP_DELAY seconds then main power will be turned off.
+#define FAN_MAX_TEMP 75
+
+///  PWM value for min. fan speed (12) 
+#define FAN_MIN_PWM 12 
+
+/// PWM value for max. fan speed (255)
+#define FAN_MAX_PWM 255
+
+/// Max. allowed output current (in ampers) if fan or temp. sensor is invalid.
+#define ERR_MAX_CURRENT 1 
+
+/// Nominal fan RPM (for PWM=255).
+#define FAN_NOMINAL_RPM 4500 
+
+/// Number of seconds after which main power will be turned off.
+#define FAN_MAX_TEMP_DELAY 30
+
+/// Temperature drop (in oC) below FAN_MAX_TEMP to turn again main power on. Premature attempt to turn power on will report error -200.
+#define FAN_MAX_TEMP_DROP 15 
+
+/// Enable/disable RPM measurement during work - it will still be enabled at the boot during fan test.
+#define FAN_OPTION_RPM_MEASUREMENT 0
+
+/// Interval (in milliseconds) at which watchdog impulse will be sent
+#define WATCHDOG_INTERVAL 1000
+
+/// Interval (in minutes) at which "on time" will be written to EEPROM
+#define WRITE_ONTIME_INTERVAL 10
+
+/// Maximum allowed length (including label) of the keypad text.
+#define MAX_KEYPAD_TEXT_LENGTH 128
+
+/// Frequency of master sync
+#define SYNC_MASTER_FREQUENCY 330000 // 330kHz 
+
+/// Enable transition to the Main page after period of inactivity.
+#define GUI_BACK_TO_MAIN_ENABLED 1
+
+/// Inactivity period duration in seconds before transition to the Main page.
+#define GUI_BACK_TO_MAIN_DELAY 10
+
+/// How much to wait (in seconds) for a lease for an IP address from a DHCP server
+/// until we declare ethernet initialization failure.
+#define ETHERNET_DHCP_TIMEOUT 15

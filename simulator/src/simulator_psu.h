@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
 
 #pragma once
 
+#define EEZ_PSU_ARDUINO_DUE
+
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #else
@@ -33,16 +35,18 @@
 
 #define PSTR(U) U
 #define strcpy_P strcpy
+#define strncpy_P strncpy
 #define strcat_P strcat
 #define sprintf_P sprintf
+#define snprintf_P snprintf
+#define vsnprintf_P vsnprintf
+#define strcmp_P strcmp
 #define strncmp_P strncmp
 
 extern void eez_psu_init();
 
 #define interrupts() 0
 #define noInterrupts() 0
-
-#include "temp_sensor.h"
 
 namespace eez {
 namespace psu {
@@ -52,8 +56,8 @@ namespace simulator {
 void init();
 void tick();
 
-void setTemperature(temp_sensor::Type sensor, float value);
-float getTemperature(temp_sensor::Type sensor);
+void setTemperature(int sensor, float value);
+float getTemperature(int sensor);
 
 char *getConfFilePath(char *file_name);
 

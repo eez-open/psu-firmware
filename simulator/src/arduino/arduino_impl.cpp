@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,14 +46,22 @@ void digitalWrite(uint8_t pin, uint8_t state) {
     chips::select(pin, state);
 }
 
+float temp_sensor_cels_to_volt(float cels, float p1_volt, float p1_cels, float p2_volt, float p2_cels) {
+	return util::remap(cels, p1_cels, p1_volt, p2_cels, p2_volt);
+}
+
 int analogRead(uint8_t pin) {
-    if (pin == TEMP_ANALOG) {
-        float cels = simulator::getTemperature(temp_sensor::MAIN);
-        float volt = util::remap(cels, MAIN_TEMP_COEF_P1_T, MAIN_TEMP_COEF_P1_U, MAIN_TEMP_COEF_P2_T, MAIN_TEMP_COEF_P2_U);
-        float adc = util::remap(volt, (float)temp_sensor::MIN_U, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_U, (float)temp_sensor::MAX_ADC);
-        return (int)util::clamp(adc, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_ADC);
-    }
-    return pins[pin];
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		temp_sensor::TempSensor &tempSensor = temp_sensor::sensors[i];
+		if (tempSensor.installed && tempSensor.pin == pin) {
+			float cels = simulator::getTemperature(i);
+			float volt = util::remap(cels, tempSensor.p1_cels, tempSensor.p1_volt, tempSensor.p2_cels, tempSensor.p2_volt);
+			float adc = util::remap(volt, (float)temp_sensor::MIN_U, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_U, (float)temp_sensor::MAX_ADC); \
+			return (int)util::clamp(adc, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_ADC); \
+		}
+	}
+
+	return pins[pin];
 }
 
 void analogWrite(uint8_t pin, int state) {
@@ -62,6 +70,10 @@ void analogWrite(uint8_t pin, int state) {
 
 void attachInterrupt(uint8_t interrupt_no, InterruptCallback interrupt_callback, int mode) {
     interrupt_callbacks[interrupt_no] = interrupt_callback;
+}
+
+void detachInterrupt(uint8_t interrupt_no) {
+    interrupt_callbacks[interrupt_no] = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +100,11 @@ int SimulatorSerial::println(const char *data) {
 }
 
 int SimulatorSerial::println(IPAddress ipAddress) {
-    return printf("%d.%d.%d.%d\n", ipAddress.bytes[0], ipAddress.bytes[1], ipAddress.bytes[2], ipAddress.bytes[3]);
+    return printf("%d.%d.%d.%d\n",
+        ipAddress._address.bytes[0],
+        ipAddress._address.bytes[1],
+        ipAddress._address.bytes[2],
+        ipAddress._address.bytes[3]);
 }
 
 int SimulatorSerial::available(void) {

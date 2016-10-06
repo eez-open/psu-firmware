@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,11 @@
  
 #pragma once
 
+#define clear_bit(reg, bitmask) *reg &= ~bitmask
+#define set_bit(reg, bitmask) *reg |= bitmask
+
+#define util_swap(type, i, j) {type t = i; i = j; j = t;}
+
 namespace eez {
 namespace psu {
 
@@ -28,9 +33,9 @@ float remap(float x, float x1, float y1, float x2, float y2);
 float clamp(float x, float min, float max);
 
 void strcatInt(char *str, int value);
-void strcatFloat(char *str, float value);
-void strcatVoltage(char *str, float value);
-void strcatCurrent(char *str, float value);
+void strcatFloat(char *str, float value, int precision = FLOAT_TO_STR_PREC);
+void strcatVoltage(char *str, float value, int precision = FLOAT_TO_STR_PREC);
+void strcatCurrent(char *str, float value, int precision = FLOAT_TO_STR_PREC);
 void strcatDuration(char *str, float value);
 void strcatLoad(char *str, float value);
 
@@ -38,6 +43,17 @@ uint32_t crc32(const uint8_t *message, size_t size);
 
 uint8_t toBCD(uint8_t bin);
 uint8_t fromBCD(uint8_t bcd);
+
+float floorPrec(float a, float prec);
+float ceilPrec(float a, float prec);
+float roundPrec(float a, float prec);
+
+bool greaterOrEqual(float a, float b, float prec);
+bool equal(float a, float b, float prec);
+
+float multiply(float a, float b, float prec);
+
+bool isNaN(float x);
 
 }
 }

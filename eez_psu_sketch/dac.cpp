@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,6 +60,15 @@ void DigitalAnalogConverter::set_value(uint8_t buffer, float value) {
     SPI.transfer(buffer);
     SPI.transfer(DAC_value >> 8); // send first byte
     SPI.transfer(DAC_value & 0xFF);  // send second byte
+
+#if CONF_DEBUG
+	if  (debug::g_set_voltage_or_current_time_start != 0) {
+		unsigned long end = micros();
+		DebugTraceF("Command duration[microseconds]: %ul", debug::g_set_voltage_or_current_time_start - end);
+		debug::g_set_voltage_or_current_time_start = 0;
+	}
+#endif
+
     digitalWrite(channel.dac_pin, HIGH); // Deselect DAC
     SPI.endTransaction();
 }
@@ -74,29 +83,30 @@ bool DigitalAnalogConverter::test() {
     test_result = psu::TEST_OK;
 
     if (channel.ioexp.test_result != psu::TEST_OK) {
-        DebugTrace("Ch%d DAC test skipped because of IO expander", channel.index);
+        DebugTraceF("Ch%d DAC test skipped because of IO expander", channel.index);
         test_result = psu::TEST_SKIPPED;
         return true;
     }
 
     if (channel.adc.test_result != psu::TEST_OK) {
-        DebugTrace("Ch%d DAC test skipped because of ADC", channel.index);
+        DebugTraceF("Ch%d DAC test skipped because of ADC", channel.index);
         test_result = psu::TEST_SKIPPED;
         return true;
     }
 
-    int save_cal_enabled = channel.flags.cal_enabled;
-    channel.flags.cal_enabled = 0;
+    bool saveCalibrationEnabled = channel.isCalibrationEnabled();
+    channel.calibrationEnableNoEvent(false);
 
-    int save_output_enabled = channel.flags.output_enabled;
-    channel.flags.output_enabled = 0;
-    channel.updateOutputEnable();
+	// disable OE on channel
+    int save_output_enabled = channel.flags.outputEnabled;
+    channel.flags.outputEnabled = 0;
+	channel.ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, false);
 
     test_result = psu::TEST_OK;
 
     // set U on DAC and check it on ADC
-    float u_set = channel.U_MAX / 2;
-    float i_set = channel.I_MAX / 2;
+    float u_set = channel.u.max / 2;
+    float i_set = channel.i.max / 2;
 
     float u_set_save = channel.u.set;
     channel.setVoltage(u_set);
@@ -113,7 +123,7 @@ bool DigitalAnalogConverter::test() {
     if (fabsf(u_diff) > u_set * DAC_TEST_TOLERANCE / 100) {
         test_result = psu::TEST_FAILED;
 
-        DebugTrace("Ch%d DAC test, U_set failure: expected=%d, got=%d, abs diff=%d",
+        DebugTraceF("Ch%d DAC test, U_set failure: expected=%d, got=%d, abs diff=%d",
             channel.index,
             (int)(u_set * 100),
             (int)(u_mon * 100),
@@ -125,18 +135,20 @@ bool DigitalAnalogConverter::test() {
     if (fabsf(i_diff) > i_set * DAC_TEST_TOLERANCE / 100) {
         test_result = psu::TEST_FAILED;
 
-        DebugTrace("Ch%d DAC test, I_set failure: expected=%d, got=%d, abs diff=%d",
+        DebugTraceF("Ch%d DAC test, I_set failure: expected=%d, got=%d, abs diff=%d",
             channel.index,
             (int)(i_set * 100),
             (int)(i_mon * 100),
             (int)(i_diff * 100));
     }
 
-    channel.flags.cal_enabled = save_cal_enabled;
+	channel.calibrationEnableNoEvent(saveCalibrationEnabled);
 
-    // Re-enable output just in case if it is out of sync.
-    channel.flags.output_enabled = save_output_enabled;
-    channel.updateOutputEnable();
+    // Re-enable output
+	if (save_output_enabled) {
+		channel.flags.outputEnabled = true;
+		channel.ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, true);
+	}
 
     channel.setVoltage(u_set_save);
     channel.setCurrent(i_set_save);

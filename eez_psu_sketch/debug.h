@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,18 +29,22 @@ namespace psu {
 /// Everything used for the debugging purposes.
 namespace debug {
 
-void Trace(char *format, ...);
+void tick(unsigned long tick_usec);
+
+void Trace(const char *format, ...);
 
 }
 }
 } // namespace eez::psu::debug
 
 
-#define DebugTrace(...) debug::Trace(__VA_ARGS__)
+#define DebugTrace(message) debug::Trace(PSTR(message))
+#define DebugTraceF(format, ...) debug::Trace(PSTR(format), __VA_ARGS__)
 
 #else // NO DEBUG
 
 #define DebugTrace(...) 0
+#define DebugTraceF(...) 0
 
 #endif
 
@@ -58,14 +62,18 @@ extern int16_t u_mon_dac[2];
 extern int16_t i_mon[2];
 extern int16_t i_mon_dac[2];
 
+extern unsigned long g_set_voltage_or_current_time_start;
+
 extern unsigned long last_loop_duration;
 extern unsigned long max_loop_duration;
+extern unsigned long avg_loop_duration;
 
 extern unsigned long total_ioexp_int_counter;
 extern unsigned long last_ioexp_int_counter;
 
-void tick(unsigned long tick_usec);
 void ioexpIntTick(unsigned long tick_usec);
+
+extern bool g_debug_watchdog;
 
 }
 }

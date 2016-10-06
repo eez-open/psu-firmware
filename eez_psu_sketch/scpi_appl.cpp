@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  */
  
 #include "psu.h"
-#include <scpi-parser.h>
 #include "scpi_psu.h"
 #include "scpi_appl.h"
 
@@ -63,6 +62,21 @@ scpi_result_t scpi_appl_Apply(scpi_t *context) {
         call_set_current = true;
     }
 
+	if (voltage > channel->getVoltageLimit()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
+        return SCPI_RES_ERR;
+	}
+
+	if (call_set_current && current > channel->getCurrentLimit()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
+        return SCPI_RES_ERR;
+	}
+
+    if (voltage * (call_set_current ? current : channel->i.set) > channel->getPowerLimit()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
+        return SCPI_RES_ERR;
+    }
+
     // set voltage
     channel->setVoltage(voltage);
 
@@ -89,10 +103,10 @@ scpi_result_t scpi_appl_ApplyQ(scpi_t * context) {
         }
 
         // return both current and voltage
-        sprintf(buffer, "CH%d:", channel->index);
-        util::strcatVoltage(buffer, channel->U_MAX);
+        sprintf_P(buffer, PSTR("CH%d:"), channel->index);
+        util::strcatVoltage(buffer, channel->u.max);
         strcat(buffer, "/");
-        util::strcatCurrent(buffer, channel->I_MAX);
+        util::strcatCurrent(buffer, channel->i.max);
         strcat(buffer, ", ");
 
         util::strcatFloat(buffer, channel->u.set);

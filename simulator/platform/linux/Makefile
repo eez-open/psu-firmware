@@ -34,7 +34,9 @@ SIM_CXXSOURCES = \
 	../../src/ethernet/*.cpp \
 	../../src/front_panel/*.cpp \
 	../../../eez_psu_sketch/*.cpp \
-	../../../libraries/eez_psu_lib/src/eez_psu.cpp
+	../../../libraries/eez_psu_lib/src/eez_psu.cpp \
+	../../../libraries/eez_psu_lib/src/R1B9/R1B9_init.cpp \
+	../../../libraries/eez_psu_lib/src/R3B4/R3B4_init.cpp
 
 SIM_LINKERFLAGS = -ldl -lpthread
 

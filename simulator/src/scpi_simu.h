@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,8 +23,13 @@
     SCPI_COMMAND("SIMUlator:LOAD:STATe?", scpi_simu_LoadStateQ) \
     SCPI_COMMAND("SIMUlator:LOAD", scpi_simu_Load) \
     SCPI_COMMAND("SIMUlator:LOAD?", scpi_simu_LoadQ) \
+    SCPI_COMMAND("SIMUlator:VOLTage:PROGram:EXTernal", scpi_simu_VoltageProgramExternal) \
+	SCPI_COMMAND("SIMUlator:VOLTage:PROGram:EXTernal?", scpi_simu_VoltageProgramExternalQ) \
+    SCPI_COMMAND("SIMUlator:LOAD?", scpi_simu_LoadQ) \
     SCPI_COMMAND("SIMUlator:PWRGood", scpi_simu_Pwrgood) \
     SCPI_COMMAND("SIMUlator:PWRGood?", scpi_simu_PwrgoodQ) \
+    SCPI_COMMAND("SIMUlator:RPOL", scpi_simu_RPol) \
+    SCPI_COMMAND("SIMUlator:RPOL?", scpi_simu_RPolQ) \
     SCPI_COMMAND("SIMUlator:TEMPerature", scpi_simu_Temperature) \
     SCPI_COMMAND("SIMUlator:TEMPerature?", scpi_simu_TemperatureQ) \
     SCPI_COMMAND("SIMUlator:GUI", scpi_simu_GUI) \

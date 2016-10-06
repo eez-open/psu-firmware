@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  */
  
 #include "psu.h"
-#include <scpi-parser.h>
 #include "scpi_psu.h"
 #include "scpi_sour.h"
 
@@ -170,13 +169,27 @@ scpi_result_t get_tripped(scpi_t *context, Channel::ProtectionValue &cpv) {
 ////////////////////////////////////////////////////////////////////////////////
 
 scpi_result_t scpi_source_Current(scpi_t * context) {
-    Channel *channel = set_channel_from_command_number(context);
+#if CONF_DEBUG
+	debug::g_set_voltage_or_current_time_start = micros();
+#endif
+
+	Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
     }
 
     float current;
     if (!get_current_param(context, current, channel, &channel->i)) {
+        return SCPI_RES_ERR;
+    }
+
+	if (current > channel->getCurrentLimit()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
+        return SCPI_RES_ERR;
+	}
+
+    if (current * channel->u.set > channel->getPowerLimit()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
     }
 
@@ -191,10 +204,14 @@ scpi_result_t scpi_source_CurrentQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, channel->i.set, channel->I_MIN, channel->I_MAX, channel->I_DEF);
+    return get_source_value(context, channel->i.set, channel->i.min, channel->i.max, channel->i.def);
 }
 
 scpi_result_t scpi_source_Voltage(scpi_t * context) {
+#if CONF_DEBUG
+	debug::g_set_voltage_or_current_time_start = micros();
+#endif
+
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -202,6 +219,21 @@ scpi_result_t scpi_source_Voltage(scpi_t * context) {
 
     float voltage;
     if (!get_voltage_param(context, voltage, channel, &channel->u)) {
+        return SCPI_RES_ERR;
+    }
+
+	if (channel->isRemoteProgrammingEnabled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+	}
+
+	if (voltage > channel->getVoltageLimit()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
+        return SCPI_RES_ERR;
+	}
+
+	if (voltage * channel->i.set > channel->getPowerLimit()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
     }
 
@@ -216,7 +248,14 @@ scpi_result_t scpi_source_VoltageQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, channel->u.set, channel->U_MIN, channel->U_MAX, channel->U_DEF);
+	float u;
+	if (channel->isRemoteProgrammingEnabled()) {
+		u = channel->u.mon_dac;
+	} else {
+		u = channel->u.set;
+	}
+
+    return get_source_value(context, u, channel->u.min, channel->u.max, channel->u.def);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -378,6 +417,33 @@ scpi_result_t scpi_source_PowerProtectionTrippedQ(scpi_t * context) {
     return get_tripped(context, channel->opp);
 }
 
+scpi_result_t scpi_source_VoltageProtectionLevel(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+	}
+
+    float voltage;
+    if (!get_voltage_protection_level_param(context, voltage, channel->u.set, channel->u.max, channel->u.max)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel->prot_conf.u_level = voltage;
+    profile::save();
+
+	return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_VoltageProtectionLevelQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+    
+    return get_source_value(context, channel->prot_conf.u_level,
+        channel->u.set, channel->u.max, channel->u.max);
+}
+
 scpi_result_t scpi_source_VoltageProtectionDelay(scpi_t * context) {
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
@@ -422,6 +488,232 @@ scpi_result_t scpi_source_VoltageProtectionTrippedQ(scpi_t * context) {
     }
 
     return get_tripped(context, channel->ovp);
+}
+
+scpi_result_t scpi_source_VoltageSenseSource(scpi_t * context) {
+    if (!OPTION_BP) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    int32_t choice;
+    if (!SCPI_ParamChoice(context, internal_external_choice, &choice, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel->remoteSensingEnable(choice == 0 ? false : true);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_VoltageSenseSourceQ(scpi_t * context) {
+    if (!OPTION_BP) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultBool(context, channel->isRemoteSensingEnabled());
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_VoltageProgramSource(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    int32_t choice;
+    if (!SCPI_ParamChoice(context, internal_external_choice, &choice, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel->remoteProgrammingEnable(choice == 0 ? false : true);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_VoltageProgramSourceQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultBool(context, channel->isRemoteProgrammingEnabled());
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_LRipple(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_LRIPPLE)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+	bool enable;
+	if (!SCPI_ParamBool(context, &enable, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+    if (!channel->lowRippleEnable(enable)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_LRippleQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultBool(context, channel->isLowRippleEnabled());
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_LRippleAuto(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+	bool enable;
+	if (!SCPI_ParamBool(context, &enable, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+    channel->lowRippleAutoEnable(enable);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_LRippleAutoQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultBool(context, channel->isLowRippleAutoEnabled());
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_CurrentLimit(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    float limit;
+    if (!get_current_limit_param(context, limit, channel, &channel->i)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel->setCurrentLimit(limit);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_CurrentLimitQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    return get_source_value(context, channel->getCurrentLimit(), 0, channel->getMaxCurrentLimit(), channel->getMaxCurrentLimit());
+}
+
+scpi_result_t scpi_source_VoltageLimit(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    float limit;
+    if (!get_voltage_limit_param(context, limit, channel, &channel->i)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel->setVoltageLimit(limit);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_VoltageLimitQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    return get_source_value(context, channel->getVoltageLimit(), 0, channel->getVoltageMaxLimit(), channel->getVoltageMaxLimit());
+}
+
+scpi_result_t scpi_source_PowerLimit(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    float limit;
+    if (!get_power_limit_param(context, limit, channel, &channel->i)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel->setPowerLimit(limit);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_PowerLimitQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    return get_source_value(context, channel->getPowerLimit(), 0, channel->getPowerMaxLimit(), channel->getPowerMaxLimit());
 }
 
 }

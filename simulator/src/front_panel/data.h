@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "imgui/window.h"
+
 namespace eez {
 namespace psu {
 namespace simulator {
@@ -26,12 +28,20 @@ namespace front_panel {
 struct ChannelData {
     bool cv;
     bool cc;
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     bool out_plus;
     bool sense_plus;
     bool sense_minus;
     bool out_minus;
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+    bool out;
+	bool sense;
+	bool prog;
+#endif
     const char *load_text;
-
+    float load;
+    float loadOnMouseDown;
+    imgui::UserWidget loadWidget;
 };
 
 /// Data presented in GUI front panel.
@@ -42,6 +52,8 @@ struct Data {
     ChannelData ch2;
 
     bool reset;
+
+    imgui::UserWidget local_control_widget;
 };
 
 void fillData(Data *data);

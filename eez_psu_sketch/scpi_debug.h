@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,9 @@
 #define SCPI_DEBUG_COMMANDS \
     SCPI_COMMAND("DEBUG", debug_scpi_command) \
     SCPI_COMMAND("DEBUG?", debug_scpi_commandQ) \
+	SCPI_COMMAND("DEBUG:WDOG", debug_scpi_Watchdog) \
+	SCPI_COMMAND("DEBUG:WDOG?", debug_scpi_WatchdogQ) \
+	SCPI_COMMAND("DEBUG:ONTime?", debug_scpi_OntimeQ) \
 
 #else // NO DEBUG
 

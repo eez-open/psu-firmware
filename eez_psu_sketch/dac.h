@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ public:
     static const uint16_t DAC_MIN = 0;
     static const uint16_t DAC_MAX = (1L << DAC_RES) - 1;
 
-    int test_result;
+    psu::TestResult test_result;
 
     DigitalAnalogConverter(Channel &channel);
 

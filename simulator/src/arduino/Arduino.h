@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,6 +62,7 @@ void analogWrite(uint8_t pin, int state);
 typedef void(*InterruptCallback)(void);
 
 void attachInterrupt(uint8_t, InterruptCallback, int mode);
+void detachInterrupt(uint8_t);
 
 void tone(uint8_t _pin, unsigned int frequency, unsigned long duration = 0);
 
@@ -72,8 +73,16 @@ void delayMicroseconds(uint32_t microseconds);
 
 /// Bare minimum implementation of the Arduino IPAddress class
 class IPAddress {
+    friend class SimulatorSerial;
+
+private:
+    union {
+	    uint8_t bytes[4];  // IPv4 address
+	    uint32_t dword;
+    } _address;
+
 public:
-    uint8_t bytes[4];
+    operator uint32_t() const { return _address.dword; };
 };
 
 /// Bare minimum implementation of the Arduino Serial object
@@ -96,6 +105,9 @@ private:
 };
 
 extern SimulatorSerial Serial;
+
+#define PROGMEM
+#define pgm_read_byte_near(address_short) (*(address_short))
 
 }
 }

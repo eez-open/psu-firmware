@@ -47,7 +47,7 @@ Source: "C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\simulator\platform\win32\
 Source: "C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\simulator\platform\win32\Release\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\simulator\fonts\*"; DestDir: "{app}\fonts"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\simulator\images\*"; DestDir: "{app}\images"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\doc\SCPI reference guide M1\EEZ PSU SCPI reference guide.pdf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\doc\SCPI reference guide\EEZ PSU SCPI reference guide.pdf"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

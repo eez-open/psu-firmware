@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  */
  
 #include "psu.h"
-#include <scpi-parser.h>
 #include "scpi_psu.h"
 #include "scpi_outp.h"
 
@@ -35,12 +34,7 @@ scpi_result_t scpi_outp_ModeQ(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    if (channel->isCvMode())
-        SCPI_ResultText(context, "CV");
-    else if (channel->isCcMode())
-        SCPI_ResultText(context, "CC");
-    else
-        SCPI_ResultText(context, "UR");
+    SCPI_ResultText(context, channel->getCvModeStr());
 
     return SCPI_RES_OK;
 }
@@ -52,45 +46,6 @@ scpi_result_t scpi_outp_ProtectionClear(scpi_t * context) {
     }
 
     channel->clearProtection();
-
-    return SCPI_RES_OK;
-}
-
-scpi_result_t scpi_outp_Sense(scpi_t * context) {
-    if (!OPTION_BP) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
-        return SCPI_RES_ERR;
-    }
-
-    bool enable;
-    if (!SCPI_ParamBool(context, &enable, TRUE)) {
-        return SCPI_RES_ERR;
-    }
-
-    Channel *channel = param_channel(context);
-    if (!channel) {
-        return SCPI_RES_ERR;
-    }
-
-    if (enable != channel->isRemoteSensingEnabled()) {
-        channel->remoteSensingEnable(enable);
-    }
-
-    return SCPI_RES_OK;
-}
-
-scpi_result_t scpi_outp_SenseQ(scpi_t * context) {
-    if (!OPTION_BP) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
-        return SCPI_RES_ERR;
-    }
-
-    Channel *channel = param_channel(context);
-    if (!channel) {
-        return SCPI_RES_ERR;
-    }
-
-    SCPI_ResultBool(context, channel->isRemoteSensingEnabled());
 
     return SCPI_RES_OK;
 }

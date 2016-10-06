@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
  
 #pragma once
 
+#include "temperature.h"
+
 namespace eez {
 namespace psu {
 /// PSU configuration profiles (save, recall, ...).
@@ -31,16 +33,16 @@ struct ChannelFlags {
     unsigned i_state : 1;
     unsigned p_state : 1;
     unsigned cal_enabled : 1;
-    unsigned reserverd6 : 1;
-    unsigned reserverd7 : 1;
-    unsigned reserverd8 : 1;
-    unsigned reserverd9 : 1;
+    unsigned rprog_enabled : 1;
     unsigned reserverd10 : 1;
+    unsigned lripple_auto_enabled : 1;
+    unsigned parameters_are_valid : 1;
     unsigned reserverd11 : 1;
     unsigned reserverd12 : 1;
     unsigned reserverd13 : 1;
     unsigned reserverd14 : 1;
     unsigned reserverd15 : 1;
+    unsigned reserverd16 : 1;
 };
 
 /// Channel parameters stored in profile.
@@ -48,15 +50,20 @@ struct ChannelParameters {
     ChannelFlags flags;
     float u_set;
     float u_step;
+	float u_limit;
+    float u_delay;
+    float u_level;
     float i_set;
     float i_step;
-    float u_delay;
+	float i_limit;
     float i_delay;
+	float p_limit;
     float p_delay;
     float p_level;
 #ifdef EEZ_PSU_SIMULATOR
     bool load_enabled;
     float load;
+	float voltProgExt;
 #endif
 };
 
@@ -67,7 +74,7 @@ struct Parameters {
     char name[PROFILE_NAME_MAX_LENGTH + 1];
     bool power_is_up;
     ChannelParameters channels[CH_MAX];
-    temperature::ProtectionConfiguration temp_prot[temp_sensor::COUNT];
+    temperature::ProtectionConfiguration temp_prot[temp_sensor::MAX_NUM_TEMP_SENSORS];
 };
 
 void tick(unsigned long tick_usec);
@@ -78,17 +85,20 @@ bool recall(int location);
 
 bool load(int location, Parameters *profile);
 
+void getSaveName(const Parameters *profile, char *name);
+
 bool enableSave(bool enable);
 void save();
-bool saveAtLocation(int location);
+void saveImmediately();
+bool saveAtLocation(int location, char *name = 0);
 
 bool deleteLocation(int location);
 bool deleteAll();
 
 bool isValid(int location);
 
-bool setName(int location, const char *name, size_t name_len);
-void getName(int location, char *name);
+bool setName(int location, const char *name, size_t nameLength);
+void getName(int location, char *name, int count);
 
 }
 }

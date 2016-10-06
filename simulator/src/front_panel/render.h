@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ namespace psu {
 namespace simulator {
 namespace front_panel {
 
-imgui::WindowDefinition *getWindowDefinition();
+imgui::WindowDefinition *getWindowDefinition(int w, int h);
 void render(imgui::Window *window, Data *data);
 
 }

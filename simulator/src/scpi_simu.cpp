@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,13 +17,14 @@
  */
 
 #include "psu.h"
-#include <scpi-parser.h>
 #include "scpi_psu.h"
 #include "scpi_simu.h"
 
 #include "simulator_psu.h"
 #include "chips.h"
+#if OPTION_DISPLAY
 #include "front_panel/control.h"
+#endif
 
 namespace eez {
 namespace psu {
@@ -157,6 +158,41 @@ scpi_result_t scpi_simu_LoadQ(scpi_t *context) {
     return result_float(context, value);
 }
 
+scpi_result_t scpi_simu_VoltageProgramExternal(scpi_t *context) {
+	float value;
+	if (!get_voltage_param(context, value, 0, 0)) {
+		return SCPI_RES_ERR;
+	}
+	
+    Channel *channel = param_channel(context, FALSE, TRUE);
+	if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    channel->simulator.setVoltProgExt(value);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_simu_VoltageProgramExternalQ(scpi_t *context) {
+    Channel *channel = param_channel(context, FALSE, TRUE);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    return result_float(context, channel->simulator.getVoltProgExt());
+}
+
 scpi_result_t scpi_simu_Pwrgood(scpi_t *context) {
     bool on;
     if (!SCPI_ParamBool(context, &on, TRUE)) {
@@ -184,32 +220,63 @@ scpi_result_t scpi_simu_PwrgoodQ(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t scpi_simu_RPol(scpi_t *context) {
+    bool on;
+    if (!SCPI_ParamBool(context, &on, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    Channel *channel = param_channel(context, FALSE, TRUE);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+	if (channel->boardRevision != CH_BOARD_REVISION_R5B9) {
+		SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+	}
+	
+	chips::IOExpanderChip::setRPol(channel->ioexp_pin, on);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_simu_RPolQ(scpi_t *context) {
+    Channel *channel = param_channel(context, FALSE, TRUE);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+	if (channel->boardRevision != CH_BOARD_REVISION_R5B9) {
+		SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+	}
+
+    SCPI_ResultBool(context, chips::IOExpanderChip::getRPol(channel->ioexp_pin));
+
+    return SCPI_RES_OK;
+}
+
 scpi_result_t scpi_simu_Temperature(scpi_t *context) {
     float value;
-    if (!get_temperature_param(context, value, 0.0f, 100.0f, 25.0f)) {
+    if (!get_temperature_param(context, value, -100.0f, 200.0f, 25.0f)) {
         return SCPI_RES_ERR;
     }
 
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, all_temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
-            return SCPI_RES_ERR;
-        }
-        sensor = temp_sensor::MAIN;
+    if (!param_temp_sensor(context, sensor)) {
+		return SCPI_RES_ERR;
     }
 
-    simulator::setTemperature((temp_sensor::Type)sensor, value);
+    simulator::setTemperature(sensor, value);
 
     return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_simu_TemperatureQ(scpi_t *context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, all_temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
-            return SCPI_RES_ERR;
-        }
-        sensor = temp_sensor::MAIN;
+    if (!param_temp_sensor(context, sensor)) {
+		return SCPI_RES_ERR;
     }
 
     float value;
@@ -220,7 +287,7 @@ scpi_result_t scpi_simu_TemperatureQ(scpi_t *context) {
             return SCPI_RES_ERR;
         }
 
-        value = simulator::getTemperature((temp_sensor::Type)sensor);
+        value = simulator::getTemperature(sensor);
     }
     else {
         if (spec == SCPI_NUM_MIN) {
@@ -242,12 +309,17 @@ scpi_result_t scpi_simu_TemperatureQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_simu_GUI(scpi_t *context) {
+#if OPTION_DISPLAY
     if (!simulator::front_panel::open()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_simu_Exit(scpi_t *context) {

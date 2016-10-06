@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,12 +25,15 @@ namespace psu {
 namespace ethernet {
 
 extern TestResult test_result;
+
 extern scpi_t scpi_context;
 
 bool init();
 bool test();
 
 void tick(unsigned long tick_usec);
+
+uint32_t getIpAddress();
 
 }
 }

@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  */
  
 #include "psu.h"
-#include <scpi-parser.h>
 #include "scpi_psu.h"
 #include "scpi_cal.h"
 
@@ -46,7 +45,8 @@ static bool check_password(scpi_t * context) {
         return false;
     }
 
-    if (strncmp(persist_conf::dev_conf.calibration_password, password, len) != 0) {
+	int nPassword = strlen(persist_conf::dev_conf.calibration_password);
+    if (nPassword != len || strncmp(persist_conf::dev_conf.calibration_password, password, len) != 0) {
         SCPI_ErrorPush(context, SCPI_ERROR_INVALID_CAL_PASSWORD);
         return false;
     }
@@ -96,41 +96,17 @@ static scpi_result_t calibration_data(scpi_t * context, calibration::Value &cali
         return SCPI_RES_ERR;
     }
 
-    float levelValue = calibrationValue.getLevelValue();
+	float value = (float)param.value;
     float adc = calibrationValue.getAdcValue();
-    float range = calibrationValue.getRange();
 
-    float diff;
-
-    diff = (float)(levelValue - param.value);
-    if (fabsf(diff) >= range * CALIBRATION_DATA_TOLERANCE / 100) {
+	if (!calibrationValue.checkRange(value, adc)) {
         SCPI_ErrorPush(context, SCPI_ERROR_CAL_VALUE_OUT_OF_RANGE);
         return SCPI_RES_ERR;
-    }
-
-    diff = levelValue - adc;
-    if (fabsf(diff) >= range * CALIBRATION_DATA_TOLERANCE / 100) {
-        SCPI_ErrorPush(context, SCPI_ERROR_CAL_VALUE_OUT_OF_RANGE);
-        return SCPI_RES_ERR;
-    }
-
-    calibrationValue.setData((float)param.value, adc);
+	}
+    
+	calibrationValue.setData(value, adc);
 
     return SCPI_RES_OK;
-}
-
-static bool check_calibration(scpi_t * context, calibration::Value &calibrationValue) {
-    if (calibrationValue.min >= calibrationValue.max) {
-        SCPI_ErrorPush(context, SCPI_ERROR_INVALID_CAL_DATA);
-        return false;
-    }
-
-    if (!calibrationValue.checkMid()) {
-        SCPI_ErrorPush(context, SCPI_ERROR_INVALID_CAL_DATA);
-        return false;
-    }
-
-    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +121,10 @@ scpi_result_t scpi_cal_Clear(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (!calibration::clear()) {
+    scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
+    Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
+
+    if (!calibration::clear(channel)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
@@ -192,11 +171,11 @@ scpi_result_t scpi_cal_ModeQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_cal_CurrentData(scpi_t * context) {
-    return calibration_data(context, calibration::current);
+    return calibration_data(context, calibration::g_current);
 }
 
 scpi_result_t scpi_cal_CurrentLevel(scpi_t * context) {
-    return calibration_level(context, calibration::current);
+    return calibration_level(context, calibration::g_current);
 }
 
 scpi_result_t scpi_cal_PasswordNew(scpi_t * context) {
@@ -211,15 +190,11 @@ scpi_result_t scpi_cal_PasswordNew(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (new_password_len < PASSWORD_MIN_LENGTH) {
-        SCPI_ErrorPush(context, SCPI_ERROR_CAL_PASSWORD_TOO_SHORT);
+	int16_t err;
+	if (!persist_conf::isPasswordValid(new_password, new_password_len, err)) {
+        SCPI_ErrorPush(context, err);
         return SCPI_RES_ERR;
-    }
-
-    if (new_password_len > PASSWORD_MAX_LENGTH) {
-        SCPI_ErrorPush(context, SCPI_ERROR_CAL_PASSWORD_TOO_LONG);
-        return SCPI_RES_ERR;
-    }
+	}
 
     if (!persist_conf::changePassword(new_password, new_password_len)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
@@ -269,36 +244,11 @@ scpi_result_t scpi_cal_RemarkQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_cal_Save(scpi_t * context) {
-    if (!calibration::isEnabled()) {
-        SCPI_ErrorPush(context, SCPI_ERROR_CALIBRATION_STATE_IS_OFF);
+	int16_t err;
+	if (!calibration::canSave(err)) {
+        SCPI_ErrorPush(context, err);
         return SCPI_RES_ERR;
-    }
-
-    if (!calibration::isRemarkSet()) {
-        SCPI_ErrorPush(context, SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS);
-        return SCPI_RES_ERR;
-    }
-
-    bool u_calibrated = false;
-    if (calibration::current.min_set && calibration::current.mid_set && calibration::current.max_set) {
-        if (!check_calibration(context, calibration::current)) {
-            return SCPI_RES_ERR;
-        }
-        u_calibrated = true;
-    }
-
-    bool i_calibrated = false;
-    if (calibration::voltage.min_set && calibration::voltage.mid_set && calibration::voltage.max_set) {
-        if (!check_calibration(context, calibration::voltage)) {
-            return SCPI_RES_ERR;
-        }
-        i_calibrated = true;
-    }
-
-    if (!u_calibrated && !i_calibrated) {
-        SCPI_ErrorPush(context, SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS);
-        return SCPI_RES_ERR;
-    }
+	}
 
     if (!calibration::save()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
@@ -322,22 +272,22 @@ scpi_result_t scpi_cal_State(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    bool cal_enabled;
-    if (!SCPI_ParamBool(context, &cal_enabled, TRUE)) {
+    bool calibrationEnabled;
+    if (!SCPI_ParamBool(context, &calibrationEnabled, TRUE)) {
         return SCPI_RES_ERR;
     }
 
-    if (cal_enabled == channel->flags.cal_enabled) {
+    if (calibrationEnabled == channel->isCalibrationEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS);
         return SCPI_RES_ERR;
     }
 
-    if (cal_enabled && !channel->isCalibrationExists()) {
+    if (calibrationEnabled && !channel->isCalibrationExists()) {
         SCPI_ErrorPush(context, SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS);
         return SCPI_RES_ERR;
     }
 
-    channel->flags.cal_enabled = cal_enabled;
+	channel->calibrationEnable(calibrationEnabled);
 
     return SCPI_RES_OK;
 }
@@ -346,17 +296,17 @@ scpi_result_t scpi_cal_StateQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
     Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
 
-    SCPI_ResultBool(context, channel->flags.cal_enabled);
+    SCPI_ResultBool(context, channel->isCalibrationEnabled());
 
     return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_cal_VoltageData(scpi_t * context) {
-    return calibration_data(context, calibration::voltage);
+    return calibration_data(context, calibration::g_voltage);
 }
 
 scpi_result_t scpi_cal_VoltageLevel(scpi_t * context) {
-    return calibration_level(context, calibration::voltage);;
+    return calibration_level(context, calibration::g_voltage);;
 }
 
 }

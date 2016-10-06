@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +17,9 @@
  */
  
 #include "psu.h"
-#include <scpi-parser.h>
 #include "scpi_psu.h"
 #include "scpi_core.h"
+#include "temperature.h"
 
 namespace eez {
 namespace psu {
@@ -68,15 +68,12 @@ scpi_result_t scpi_meas_VoltageQ(scpi_t * context) {
 
 scpi_result_t scpi_meas_TemperatureQ(scpi_t * context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, all_temp_sensor_choice, &sensor, FALSE)) {
-        if (SCPI_ParamErrorOccurred(context)) {
-            return SCPI_RES_ERR;
-        }
-        sensor = temp_sensor::MAIN;
+    if (!param_temp_sensor(context, sensor)) {
+		return SCPI_RES_ERR;
     }
 
     char buffer[256] = { 0 };
-    util::strcatFloat(buffer, temperature::measure((temp_sensor::Type)sensor));
+    util::strcatFloat(buffer, temperature::sensors[sensor].measure());
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;

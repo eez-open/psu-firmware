@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ bool bind(int port) {
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (iResult != 0) {
-        DebugTrace("EHTERNET: WSAStartup failed with error %d\n", iResult);
+        DebugTraceF("EHTERNET: WSAStartup failed with error %d\n", iResult);
         return false;
     }
 
@@ -65,14 +65,14 @@ bool bind(int port) {
     _itoa(port, port_str, 10);
     iResult = getaddrinfo(NULL, port_str, &hints, &result);
     if (iResult != 0) {
-        DebugTrace("EHTERNET: getaddrinfo failed with error %d\n", iResult);
+        DebugTraceF("EHTERNET: getaddrinfo failed with error %d\n", iResult);
         return false;
     }
 
     // Create a SOCKET for connecting to server
     listen_socket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
     if (listen_socket == INVALID_SOCKET) {
-        DebugTrace("EHTERNET: socket failed with error %ld\n", WSAGetLastError());
+        DebugTraceF("EHTERNET: socket failed with error %ld\n", WSAGetLastError());
         freeaddrinfo(result);
         return false;
     }
@@ -80,7 +80,7 @@ bool bind(int port) {
     u_long iMode = 1;
     iResult = ioctlsocket(listen_socket, FIONBIO, &iMode);
     if (iResult != NO_ERROR) {
-        DebugTrace("EHTERNET: ioctlsocket failed with error %ld\n", iResult);
+        DebugTraceF("EHTERNET: ioctlsocket failed with error %ld\n", iResult);
         freeaddrinfo(result);
         closesocket(listen_socket);
         listen_socket = INVALID_SOCKET;
@@ -90,7 +90,7 @@ bool bind(int port) {
     // Setup the TCP listening socket
     iResult = ::bind(listen_socket, result->ai_addr, (int)result->ai_addrlen);
     if (iResult == SOCKET_ERROR) {
-        DebugTrace("EHTERNET: bind failed with error %d\n", WSAGetLastError());
+        DebugTraceF("EHTERNET: bind failed with error %d\n", WSAGetLastError());
         freeaddrinfo(result);
         closesocket(listen_socket);
         listen_socket = INVALID_SOCKET;
@@ -101,7 +101,7 @@ bool bind(int port) {
 
     iResult = listen(listen_socket, SOMAXCONN);
     if (iResult == SOCKET_ERROR) {
-        DebugTrace("EHTERNET listen failed with error %d\n", WSAGetLastError());
+        DebugTraceF("EHTERNET listen failed with error %d\n", WSAGetLastError());
         closesocket(listen_socket);
         listen_socket = INVALID_SOCKET;
         return false;
@@ -124,7 +124,7 @@ bool client_available() {
             return false;
         }
 
-        DebugTrace("EHTERNET accept failed with error %d\n", WSAGetLastError());
+        DebugTraceF("EHTERNET accept failed with error %d\n", WSAGetLastError());
         closesocket(listen_socket);
         listen_socket = INVALID_SOCKET;
         return false;
@@ -177,7 +177,7 @@ int write(const char *buffer, int buffer_size) {
         // Echo the buffer back to the sender
         iSendResult = ::send(client_socket, buffer, buffer_size, 0);
         if (iSendResult == SOCKET_ERROR) {
-            DebugTrace("send failed with error: %d\n", WSAGetLastError());
+            DebugTraceF("send failed with error: %d\n", WSAGetLastError());
             closesocket(client_socket);
             client_socket = INVALID_SOCKET;
             return 0;
@@ -192,7 +192,7 @@ void stop() {
     if (client_socket != INVALID_SOCKET) {
         int iResult = shutdown(client_socket, SD_SEND);
         if (iResult == SOCKET_ERROR) {
-            DebugTrace("EHTERNET shutdown failed with error %d\n", WSAGetLastError());
+            DebugTraceF("EHTERNET shutdown failed with error %d\n", WSAGetLastError());
         }
         closesocket(client_socket);
         client_socket = INVALID_SOCKET;

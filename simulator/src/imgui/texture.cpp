@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -101,8 +101,37 @@ bool Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor,
 		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
 	}
 
-
 	//Return success
+	return mTexture != NULL;
+}
+
+bool Texture::loadFromImageBuffer(unsigned char *image_buffer, int width, int height, SDL_Renderer *renderer) {
+	//Get rid of preexisting texture
+	free();
+
+    SDL_Surface* rgbSurface = SDL_CreateRGBSurfaceFrom(image_buffer, width, height, 32, 4 * width, 0, 0, 0, 0);
+	if (rgbSurface != NULL) {
+		//Create texture from surface pixels
+		mTexture = SDL_CreateTextureFromSurface(renderer, rgbSurface);
+		if (mTexture == NULL) {
+			printf("Unable to create texture from image buffer! SDL Error: %s\n", SDL_GetError());
+		}
+		else {
+			//Get image dimensions
+			mWidth = rgbSurface->w;
+			mHeight = rgbSurface->h;
+		}
+
+		//Get rid of old surface
+		SDL_FreeSurface(rgbSurface);
+	}
+	else
+	{
+		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+	}
+
+
+    //Return success
 	return mTexture != NULL;
 }
 

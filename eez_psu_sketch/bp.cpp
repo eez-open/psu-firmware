@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 namespace eez {
 namespace psu {
 namespace bp {
+
+psu::TestResult test_result = psu::TEST_SKIPPED;
 
 static uint16_t last_conf;
 
@@ -47,8 +49,12 @@ void bp_switch(uint16_t mask, bool on) {
 
     if (on) {
         conf |= mask;
-        if (mask & BP_LED_OUT1_PLUS) conf &= ~BP_LED_OUT1_PLUS_RED;
-        if (mask & BP_LED_OUT1_MINUS) conf &= ~BP_LED_OUT1_MINUS_RED;
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+        if (mask & (1 << BP_LED_OUT1_PLUS)) conf &= ~(1 << BP_LED_OUT1_PLUS_RED);
+        if (mask & (1 << BP_LED_OUT1_MINUS)) conf &= ~(1 << BP_LED_OUT1_MINUS_RED);
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+        if (mask & (1 << BP_LED_OUT1)) conf &= ~(1 << BP_LED_OUT1_RED);
+#endif
     }
     else {
         conf &= ~mask;
@@ -66,19 +72,45 @@ void init() {
 }
 
 void switchStandby(bool on) {
-    set(on ? BP_STANDBY : 0);
+    set(on ? (1 << BP_STANDBY) : 0);
 }
 
 void switchOutput(Channel *channel, bool on) {
-    bp_switch(channel->bp_led_out_plus |
-        channel->bp_led_out_minus, on);
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+    bp_switch((1 << channel->bp_led_out_plus) |
+        (1 << channel->bp_led_out_minus), on);
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+    bp_switch((1 << channel->bp_led_out), on);
+#endif
 }
 
 void switchSense(Channel *channel, bool on) {
-    bp_switch(channel->bp_led_sense_plus |
-        channel->bp_led_sense_minus |
-        channel->bp_relay_sense, on);
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+    bp_switch((1 << channel->bp_led_sense_plus) |
+        (1 << channel->bp_led_sense_minus) |
+        (1 << channel->bp_relay_sense), on);
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+    bp_switch((1 << channel->bp_led_sense) | (1 << channel->bp_relay_sense), on);
+#endif
 }
+
+void switchProg(Channel *channel, bool on) {
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4    
+    bp_switch(1 << channel->bp_led_prog, on);
+#endif
+}
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+
+void cvLedSwitch(Channel *channel, bool on) {
+    bp_switch(1 << channel->cv_led_pin, on);
+}
+
+void ccLedSwitch(Channel *channel, bool on) {
+    bp_switch(1 << channel->cc_led_pin, on);
+}
+
+#endif
 
 }
 }

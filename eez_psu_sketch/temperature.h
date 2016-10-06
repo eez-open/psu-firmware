@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,25 +28,64 @@ class Channel;
 /// Temperature measurement and protection.
 namespace temperature {
 
-
 /// Configuration data for the temperature protection.
 struct ProtectionConfiguration {
-    temp_sensor::Type sensor;
+    int8_t sensor;
     float delay;
     float level;
     bool state;
 };
 
-extern ProtectionConfiguration prot_conf[temp_sensor::COUNT];
-
+bool init();
+bool test();
 void tick(unsigned long tick_usec);
 
-float measure(temp_sensor::Type sensor);
-
-void clearProtection(temp_sensor::Type sensor);
-bool isSensorTripped(temp_sensor::Type sensor);
+bool isChannelSensorInstalled(Channel *channel);
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+bool getChannelSensorState(Channel *channel);
+void setChannelSensorState(Channel *channel, bool state);
+float getChannelSensorLevel(Channel *channel);
+void setChannelSensorLevel(Channel *channel, float value);
+float getChannelSensorDelay(Channel *channel);
+void setChannelSensorDelay(Channel *channel, float value);
+#endif
 
 bool isChannelTripped(Channel *channel);
+void clearChannelProtection(Channel *channel);
+void disableChannelProtection(Channel *channel);
+
+float getMaxChannelTemperature();
+bool isAllowedToPowerUp();
+
+class TempSensorTemperature {
+public:
+	ProtectionConfiguration prot_conf;
+	float temperature;
+
+	TempSensorTemperature(int sensorIndex);
+
+	bool isInstalled();
+	bool isTestOK();
+	void tick(unsigned long tick_usec);
+	bool isChannelSensor(Channel *channel);
+	bool isChannelTripped(Channel *channel);
+	float measure();
+	void clearProtection();
+	bool isTripped();
+
+private:
+	int sensorIndex;
+
+	bool otp_alarmed;
+	unsigned long otp_alarmed_started_tick;
+	bool otp_tripped;
+
+	void set_otp_reg(bool on);
+	void protection_check(unsigned long tick_usec);
+	void protection_enter();
+};
+
+extern TempSensorTemperature sensors[temp_sensor::NUM_TEMP_SENSORS];
 
 }
 }

@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,26 @@ struct WindowDefinition {
 	const char *icon_path;
 };
 
+struct MouseData {
+    bool is_down;
+    bool is_pressed;
+    bool is_up;
+    int x, y, down_x, down_y, up_x, up_y;
+};
+
+struct UserWidget {
+    int x;
+    int y;
+    int w;
+    int h;
+
+	int pixels_w;
+	int pixels_h;
+	unsigned char *pixels;
+
+	MouseData mouse_data;
+};
+
 class WindowImpl;
 
 /// Top level window, high level interface.
@@ -49,6 +69,7 @@ public:
 	virtual void addOnOffImage(int x, int y, int w, int h, bool value, const char *on_image, const char *off_image);
 	virtual void addText(int x, int y, int w, int h, const char *text);
 	virtual bool addButton(int x, int y, int w, int h, const char *normal_image, const char *pressed_image);
+    virtual void addUserWidget(UserWidget *user_widget);
 
 	virtual void endUpdate();
 
@@ -57,6 +78,7 @@ private:
 };
 
 typedef Window *(*create_window_ptr_t)(WindowDefinition *windowDefinition);
+typedef int (*get_desktop_resolution_ptr_t)(int *w, int *h);
 
 }
 } // namespace eez::imgui

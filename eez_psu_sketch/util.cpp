@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,13 +41,19 @@ void strcatInt(char *str, int value) {
     sprintf(str, "%d", value);
 }
 
-void strcatFloat(char *str, float value) {
+void strcatFloat(char *str, float value, int precision) {
+    // mitigate "-0.00" case
+    float min = (float) (1.0f / pow(10, precision));
+    if (fabs(value) < min) {
+        value = 0;
+    }
+
     str = str + strlen(str);
 
 #if defined(_VARIANT_ARDUINO_DUE_X_) || defined(EEZ_PSU_SIMULATOR)
-    sprintf(str, "%.*f", FLOAT_TO_STR_PREC, value);
+    sprintf(str, "%.*f", precision, value);
 #else
-    dtostrf(value, 0, FLOAT_TO_STR_PREC, str);
+    dtostrf(value, 0, precision, str);
 #endif
 
     // remove trailing zeros
@@ -59,14 +65,14 @@ void strcatFloat(char *str, float value) {
     */
 }
 
-void strcatVoltage(char *str, float value) {
-    strcatFloat(str, value);
-    strcat(str, " V");
+void strcatVoltage(char *str, float value, int precision) {
+    strcatFloat(str, value, precision);
+    strcat(str, "V");
 }
 
-void strcatCurrent(char *str, float value) {
-    strcatFloat(str, value);
-    strcat(str, " A");
+void strcatCurrent(char *str, float value, int precision) {
+    strcatFloat(str, value, precision);
+    strcat(str, "A");
 }
 
 void strcatDuration(char *str, float value) {
@@ -115,7 +121,7 @@ uint32_t crc32(const uint8_t *mem_block, size_t block_size) {
         uint32_t byte = mem_block[i];            // Get next byte.
         crc = crc ^ byte;
         for (int j = 0; j < 8; ++j) {    // Do eight times.
-            uint32_t mask = -(crc & 1);
+            uint32_t mask = -((int32_t)crc & 1);
             crc = (crc >> 1) ^ (0xEDB88320 & mask);
         }
     }
@@ -128,6 +134,34 @@ uint8_t toBCD(uint8_t bin) {
 
 uint8_t fromBCD(uint8_t bcd) {
     return ((bcd >> 4) & 0xF) * 10 + (bcd & 0xF);
+}
+
+float floorPrec(float a, float prec) {
+    return floorf(a * prec) / prec;
+}
+
+float ceilPrec(float a, float prec) {
+    return ceilf(a * prec) / prec;
+}
+
+float roundPrec(float a, float prec) {
+    return roundf(a * prec) / prec;
+}
+
+bool greaterOrEqual(float a, float b, float prec) {
+	return a > b || equal(a, b, prec);
+}
+
+bool equal(float a, float b, float prec) {
+	return roundf(a * prec) == roundf(b * prec);
+}
+
+float multiply(float a, float b, float prec) {
+	return roundPrec(a, prec) * roundPrec(b, prec);
+}
+
+bool isNaN(float x) {
+	return x != x;
 }
 
 }

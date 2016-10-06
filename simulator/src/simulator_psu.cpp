@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,9 @@
 
 #include "psu.h"
 #include "chips.h"
+#if OPTION_DISPLAY
 #include "front_panel/control.h"
+#endif
 
 #include "main_loop.h"
 
@@ -43,12 +45,10 @@ namespace eez {
 namespace psu {
 namespace simulator {
 
-float temperature[temp_sensor::COUNT];
-
-bool firstTick = true;
+float temperature[temp_sensor::NUM_TEMP_SENSORS];
 
 void init() {
-    for (int i = 0; i < temp_sensor::COUNT; ++i) {
+    for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
         temperature[i] = 25.0f;
     }
 }
@@ -56,21 +56,16 @@ void init() {
 void tick() {
     chips::tick();
     psu::tick();
+#if OPTION_DISPLAY
     front_panel::tick();
-
-    if (firstTick) {
-        if (persist_conf::dev_conf.gui_opened) {
-            simulator::front_panel::open();
-        }
-        firstTick = false;
-    }
+#endif
 }
 
-void setTemperature(temp_sensor::Type sensor, float value) {
+void setTemperature(int sensor, float value) {
     temperature[sensor] = value;
 }
 
-float getTemperature(temp_sensor::Type sensor) {
+float getTemperature(int sensor) {
     return temperature[sensor];
 }
 

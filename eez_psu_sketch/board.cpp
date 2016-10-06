@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ void powerUp() {
     digitalWrite(PWR_SSTART, HIGH);
     delay(700);
 
+	DebugTrace("PWR_DIRECT -> HIGH");
     digitalWrite(PWR_DIRECT, HIGH);
     delay(100);
 
@@ -34,8 +35,11 @@ void powerUp() {
 }
 
 void powerDown() {
+	DebugTrace("PWR_DIRECT -> LOW");
     digitalWrite(PWR_DIRECT, LOW);
 }
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 
 void cvLedSwitch(Channel *channel, bool on) {
     digitalWrite(channel->cv_led_pin, on);
@@ -44,6 +48,8 @@ void cvLedSwitch(Channel *channel, bool on) {
 void ccLedSwitch(Channel *channel, bool on) {
     digitalWrite(channel->cc_led_pin, on);
 }
+
+#endif
 
 }
 }

@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,6 @@
  */
  
 #pragma once
-
-#include "temperature.h"
 
 namespace eez {
 namespace psu {
@@ -50,23 +48,22 @@ struct DeviceFlags {
     int date_valid : 1;
     int time_valid : 1;
     int profile_auto_recall : 1;
+    int dst : 1;
+    int channelDisplayedValues : 3;
+    int ethernetEnabled : 1;
+    int reserved1 : 1;
+    int reserved2 : 1;
+    int reserved3 : 1;
     int reserved4 : 1;
     int reserved5 : 1;
     int reserved6 : 1;
     int reserved7 : 1;
-    int reserved8 : 1;
-    int reserved9 : 1;
-    int reserved10 : 1;
-    int reserved11 : 1;
-    int reserved12 : 1;
-    int reserved13 : 1;
-    int reserved14 : 1;
-    int reserved15 : 1;
 };
 
 /// Device configuration block.
 struct DeviceConfiguration {
     BlockHeader header;
+    char serialNumber[7 + 1];
     char calibration_password[PASSWORD_MAX_LENGTH + 1];
     DeviceFlags flags;
     uint8_t date_year;
@@ -75,7 +72,15 @@ struct DeviceConfiguration {
     uint8_t time_hour;
     uint8_t time_minute;
     uint8_t time_second;
+	int16_t time_zone;
     int8_t profile_auto_recall_location;
+    int8_t touch_screen_cal_orientation;
+    int16_t touch_screen_cal_tlx;
+    int16_t touch_screen_cal_tly;
+    int16_t touch_screen_cal_brx;
+    int16_t touch_screen_cal_bry;
+    int16_t touch_screen_cal_trx;
+    int16_t touch_screen_cal_try;
 #ifdef EEZ_PSU_SIMULATOR
     bool gui_opened;
 #endif // EEZ_PSU_SIMULATOR
@@ -86,10 +91,16 @@ extern DeviceConfiguration dev_conf;
 void loadDevice();
 bool saveDevice();
 
+bool isPasswordValid(const char *new_password, size_t new_password_len, int16_t &err);
 bool changePassword(const char *new_password, size_t new_password_len);
 
-void enableBeep(bool enable);
+bool changeSerial(const char *newSerialNumber, size_t newSerialNumberLength);
+
+bool enableBeep(bool enable);
 bool isBeepEnabled();
+
+bool enableEthernet(bool enable);
+bool isEthernetEnabled();
 
 bool readSystemDate(uint8_t &year, uint8_t &month, uint8_t &day);
 void writeSystemDate(uint8_t year, uint8_t month, uint8_t day);
@@ -102,11 +113,18 @@ int getProfileAutoRecallLocation();
 bool readSystemTime(uint8_t &hour, uint8_t &minute, uint8_t &second);
 void writeSystemTime(uint8_t hour, uint8_t minute, uint8_t second);
 
+void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second);
+
+void toggleChannelDisplayedValues();
+
 void loadChannelCalibration(Channel *channel);
 bool saveChannelCalibration(Channel *channel);
 
 bool loadProfile(int location, profile::Parameters *profile);
 bool saveProfile(int location, profile::Parameters *profile);
+
+uint32_t readTotalOnTime(int type);
+bool writeTotalOnTime(int type, uint32_t time);
 
 }
 }

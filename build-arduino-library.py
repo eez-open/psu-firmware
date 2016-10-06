@@ -1,3 +1,5 @@
+from __future__ import (print_function)
+
 '''
 EEZ PSU Firmware
 Copyright (C) 2015 Envox d.o.o.
@@ -22,17 +24,23 @@ As a convinience, it also copies a newly create library into arduino libraries
 directory so any Arduino sketch can see it.
 Execute this script if scpi-parser is changed or scpi_user_config.h (from this directory) is changed.
 '''
-from __future__ import (print_function)
 
 import os
 import platform
 import sys
 import shutil
 
-def rm_then_cp(src, dest):
+def rm_then_cp(src, dest, ignoreRootDirs=None):
+    def copytreeIgnore(d, files):
+        if ignoreRootDirs is not None:
+            if d == src:
+                return ignoreRootDirs
+        return []
+
     if os.path.exists(dest):
         shutil.rmtree(dest)
-    shutil.copytree(src, dest)
+
+    shutil.copytree(src, dest, ignore=copytreeIgnore)
 
 def build_scpi_parser_lib(libscpi_dir, scpi_parser_dir):
     '''
@@ -65,8 +73,11 @@ def build_scpi_parser_lib(libscpi_dir, scpi_parser_dir):
     rm_then_cp(os.path.join(libscpi_dir, 'src'), os.path.join(scpi_parser_dir, 'src/impl'))
     
 def build_UIPEthernet_lib(arduino_uip_dir, UIPEthernet_dir):
-    rm_then_cp(os.path.join(arduino_uip_dir, 'UIPEthernet'), UIPEthernet_dir)
+    rm_then_cp(os.path.join(arduino_uip_dir, 'UIPEthernet'), UIPEthernet_dir, ['examples'])
 
+def build_Ethernet2_lib(arduino_Ethernet2_dir, Ethernet2_dir):
+    rm_then_cp(arduino_Ethernet2_dir, Ethernet2_dir, ['.git', '.github', 'examples'])
+    
 def copy_lib(src_lib_dir, dst_name):
     #
     # find arduino libraries directory

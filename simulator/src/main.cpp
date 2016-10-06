@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,9 @@
 
 #include "psu.h"
 #include "main_loop.h"
+#if OPTION_DISPLAY
 #include "front_panel/control.h"
+#endif
 
 using namespace eez::psu;
 
@@ -26,6 +28,8 @@ int main() {
     simulator::init();
     boot();
 	main_loop();
+#if OPTION_DISPLAY
     simulator::front_panel::close();
+#endif
     return 0;
 }

@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  
 #include "psu.h"
 #include "eeprom.h"
+#include "event_queue.h"
 #include "profile.h"
 
 namespace eez {
@@ -36,9 +37,9 @@ enum PersistConfSection {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static const uint16_t DEV_CONF_VERSION = 0x0004L;
-static const uint16_t CH_CAL_CONF_VERSION = 0x0001L;
-static const uint16_t PROFILE_VERSION = 0x0003L;
+static const uint16_t DEV_CONF_VERSION = 0x0008L;
+static const uint16_t CH_CAL_CONF_VERSION = 0x0003L;
+static const uint16_t PROFILE_VERSION = 0x0004L;
 
 static const uint16_t PERSIST_CONF_DEVICE_ADDRESS = 1024;
 
@@ -47,6 +48,8 @@ static const uint16_t PERSIST_CONF_CH_CAL_BLOCK_SIZE = 512;
 
 static const uint16_t PERSIST_CONF_FIRST_PROFILE_ADDRESS = 4096;
 static const uint16_t PERSIST_CONF_PROFILE_BLOCK_SIZE = 1024;
+
+static const uint32_t ONTIME_MAGIC = 0xA7F31B3CL;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -90,18 +93,36 @@ void initDevice() {
     dev_conf.header.checksum = 0;
     dev_conf.header.version = DEV_CONF_VERSION;
 
+    strcpy(dev_conf.serialNumber, PSU_SERIAL);
+
     strcpy(dev_conf.calibration_password, CALIBRATION_PASSWORD_DEFAULT);
 
     dev_conf.flags.beep_enabled = 1;
 
     dev_conf.flags.date_valid = 0;
     dev_conf.flags.time_valid = 0;
+	dev_conf.flags.dst = 0;
+
+	dev_conf.time_zone = 0;
 
     dev_conf.flags.profile_auto_recall = 1;
     dev_conf.profile_auto_recall_location = 0;
 
+    dev_conf.touch_screen_cal_orientation = -1;
+    dev_conf.touch_screen_cal_tlx = 0;
+    dev_conf.touch_screen_cal_tly = 0;
+    dev_conf.touch_screen_cal_brx = 0;
+    dev_conf.touch_screen_cal_bry = 0;
+    dev_conf.touch_screen_cal_trx = 0;
+    dev_conf.touch_screen_cal_try = 0;
+
+	dev_conf.flags.channelDisplayedValues = 0;
+
 #ifdef EEZ_PSU_SIMULATOR
-    dev_conf.gui_opened = false;
+    dev_conf.gui_opened = true;
+    dev_conf.flags.ethernetEnabled = 1;
+#else
+    dev_conf.flags.ethernetEnabled = 0;
 #endif // EEZ_PSU_SIMULATOR
 }
 
@@ -110,7 +131,11 @@ void loadDevice() {
         eeprom::read((uint8_t *)&dev_conf, sizeof(DeviceConfiguration), get_address(PERSIST_CONF_BLOCK_DEVICE));
         if (!check_block((BlockHeader *)&dev_conf, sizeof(DeviceConfiguration), DEV_CONF_VERSION)) {
             initDevice();
-        }
+        } else {
+			if (dev_conf.flags.channelDisplayedValues < 0 || dev_conf.flags.channelDisplayedValues > 2) {
+				dev_conf.flags.channelDisplayedValues = 0;
+			}
+		}
     }
     else {
         initDevice();
@@ -121,19 +146,68 @@ bool saveDevice() {
     return save((BlockHeader *)&dev_conf, sizeof(DeviceConfiguration), get_address(PERSIST_CONF_BLOCK_DEVICE), DEV_CONF_VERSION);
 }
 
+bool isPasswordValid(const char *new_password, size_t new_password_len, int16_t &err) {
+    if (new_password_len < PASSWORD_MIN_LENGTH) {
+		err = SCPI_ERROR_CAL_PASSWORD_TOO_SHORT;
+		return false;
+    }
+
+    if (new_password_len > PASSWORD_MAX_LENGTH) {
+		err = SCPI_ERROR_CAL_PASSWORD_TOO_LONG;
+        return false;
+    }
+
+	return true;
+}
+
 bool changePassword(const char *new_password, size_t new_password_len) {
     memset(&dev_conf.calibration_password, 0, sizeof(dev_conf.calibration_password));
     strncpy(dev_conf.calibration_password, new_password, new_password_len);
+    if (saveDevice()) {
+		event_queue::pushEvent(event_queue::EVENT_INFO_CALIBRATION_PASSWORD_CHANGED);
+		return true;
+	}
+	return false;
+}
+
+bool changeSerial(const char *newSerialNumber, size_t newSerialNumberLength) {
+    // copy up to 7 characters from newSerialNumber, fill the rest with zero's
+    for (size_t i = 0; i < 7; ++i) {
+        if (i < newSerialNumberLength) {
+            dev_conf.serialNumber[i] = newSerialNumber[i];
+        } else {
+            dev_conf.serialNumber[i] = 0;
+        }
+    }
+    dev_conf.serialNumber[7] = 0;
+
     return saveDevice();
 }
 
-void enableBeep(bool enable) {
+bool enableBeep(bool enable) {
     dev_conf.flags.beep_enabled = enable ? 1 : 0;
-    saveDevice();
+    if (saveDevice()) {
+		event_queue::pushEvent(enable ? event_queue::EVENT_INFO_BEEPER_ENABLED : event_queue::EVENT_INFO_BEEPER_DISABLED);
+		return true;
+	}
+	return false;
 }
 
 bool isBeepEnabled() {
     return dev_conf.flags.beep_enabled ? true : false;
+}
+
+bool enableEthernet(bool enable) {
+    dev_conf.flags.ethernetEnabled = enable ? 1 : 0;
+    if (saveDevice()) {
+		event_queue::pushEvent(enable ? event_queue::EVENT_INFO_ETHERNET_ENABLED : event_queue::EVENT_INFO_ETHERNET_DISABLED);
+		return true;
+	}
+	return false;
+}
+
+bool isEthernetEnabled() {
+    return dev_conf.flags.ethernetEnabled ? true : false;
 }
 
 bool readSystemDate(uint8_t &year, uint8_t &month, uint8_t &day) {
@@ -172,6 +246,20 @@ void writeSystemTime(uint8_t hour, uint8_t minute, uint8_t second) {
     saveDevice();
 }
 
+void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second) {
+    dev_conf.date_year = year;
+    dev_conf.date_month = month;
+    dev_conf.date_day = day;
+    dev_conf.flags.date_valid = 1;
+    
+	dev_conf.time_hour = hour;
+    dev_conf.time_minute = minute;
+    dev_conf.time_second = second;
+    dev_conf.flags.time_valid = 1;
+
+	saveDevice();
+}
+
 bool enableProfileAutoRecall(bool enable) {
     dev_conf.flags.profile_auto_recall = enable ? 1 : 0;
     return saveDevice();
@@ -183,11 +271,20 @@ bool isProfileAutoRecallEnabled() {
 
 bool setProfileAutoRecallLocation(int location) {
     dev_conf.profile_auto_recall_location = (int8_t)location;
-    return saveDevice();
+    if (saveDevice()) {
+		event_queue::pushEvent(event_queue::EVENT_INFO_DEFAULE_PROFILE_CHANGED_TO_0 + location);
+		return true;
+	}
+    return false;
 }
 
 int getProfileAutoRecallLocation() {
     return dev_conf.profile_auto_recall_location;
+}
+
+void toggleChannelDisplayedValues() {
+	dev_conf.flags.channelDisplayedValues = (dev_conf.flags.channelDisplayedValues + 1) % 3;
+	saveDevice();
 }
 
 void loadChannelCalibration(Channel *channel) {
@@ -216,6 +313,43 @@ bool loadProfile(int location, profile::Parameters *profile) {
 
 bool saveProfile(int location, profile::Parameters *profile) {
     return save((BlockHeader *)profile, sizeof(profile::Parameters), get_profile_address(location), PROFILE_VERSION);
+}
+
+uint32_t readTotalOnTime(int type) {
+	uint32_t buffer[6];
+
+	eeprom::read((uint8_t *)buffer, sizeof(buffer),
+		eeprom::EEPROM_ONTIME_START_ADDRESS + type * eeprom::EEPROM_ONTIME_SIZE);
+
+	if (buffer[0] == ONTIME_MAGIC && buffer[1] == buffer[2]) {
+		if (buffer[3] == ONTIME_MAGIC && buffer[4] == buffer[5]) {
+			if (buffer[4] > buffer[1]) {
+				return buffer[4];
+			}
+		}
+		return buffer[1];
+	}
+	
+	if (buffer[3] == ONTIME_MAGIC && buffer[4] == buffer[5]) {
+		return buffer[4];
+	}
+
+	return 0;
+}
+
+bool writeTotalOnTime(int type, uint32_t time) {
+	uint32_t buffer[6];
+
+	buffer[0] = ONTIME_MAGIC;
+	buffer[1] = time;
+	buffer[2] = time;
+
+	buffer[3] = ONTIME_MAGIC;
+	buffer[4] = time;
+	buffer[5] = time;
+
+	return eeprom::write((uint8_t *)buffer, sizeof(buffer),
+		eeprom::EEPROM_ONTIME_START_ADDRESS + type * eeprom::EEPROM_ONTIME_SIZE);
 }
 
 }

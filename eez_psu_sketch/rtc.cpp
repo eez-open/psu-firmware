@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,12 +66,12 @@ bool test() {
         test_result = psu::TEST_OK;
 
         if (ctrl_reg_values[0] != CONTROL_1_VALUE) {
-            DebugTrace("RTC test failed Control 1: w=%d, r=%d", (int)CONTROL_1_VALUE, (int)ctrl_reg_values[0]);
+            DebugTraceF("RTC test failed Control 1: w=%d, r=%d", (int)CONTROL_1_VALUE, (int)ctrl_reg_values[0]);
             test_result = psu::TEST_FAILED;
         }
 
         if (ctrl_reg_values[1] != CONTROL_2_VALUE) {
-            DebugTrace("RTC test failed Control 2: w=%d, r=%d", (int)CONTROL_2_VALUE, (int)ctrl_reg_values[1]);
+            DebugTraceF("RTC test failed Control 2: w=%d, r=%d", (int)CONTROL_2_VALUE, (int)ctrl_reg_values[1]);
             test_result = psu::TEST_FAILED;
         }
     }
@@ -112,7 +112,7 @@ bool readTime(uint8_t &hour, uint8_t &minute, uint8_t &second) {
     if (test_result != psu::TEST_OK) return false;
     uint8_t data[3];
     readRegisters(RD_SECONDS, sizeof(data), data);
-    second = util::fromBCD(data[0]);
+    second = util::fromBCD(data[0] & 0x7F);
     minute = util::fromBCD(data[1]);
     hour = util::fromBCD(data[2]);
     return true;
@@ -133,12 +133,27 @@ bool readDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, ui
     if (test_result != psu::TEST_OK) return false;
     uint8_t data[7];
     readRegisters(RD_SECONDS, sizeof(data), data);
-    second = util::fromBCD(data[0]);
+    second = util::fromBCD(data[0] & 0x7F);
     minute = util::fromBCD(data[1]);
     hour = util::fromBCD(data[2]);
     day = util::fromBCD(data[3]);
     month = util::fromBCD(data[5]);
     year = util::fromBCD(data[6]);
+    return true;
+}
+
+bool writeDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second) {
+    if (test_result != psu::TEST_OK) return false;
+    uint8_t data[7] = {
+        util::toBCD(second),
+        util::toBCD(minute),
+        util::toBCD(hour),
+        util::toBCD(day),
+        0,
+        util::toBCD(month),
+        util::toBCD(year),
+    };
+    writeRegisters(WR_SECONDS, sizeof(data), data);
     return true;
 }
 

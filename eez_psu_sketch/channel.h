@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "ioexp.h"
 #include "adc.h"
 #include "dac.h"
+#include "temp_sensor.h"
 
 #define IS_OVP_VALUE(channel, cpv) (&cpv == &channel->ovp)
 #define IS_OCP_VALUE(channel, cpv) (&cpv == &channel->ocp)
@@ -30,8 +31,25 @@
 namespace eez {
 namespace psu {
 
+namespace calibration {
+struct Value;
+}
+
+enum ChannelFeatures {
+    CH_FEATURE_VOLT = (1 << 1),
+    CH_FEATURE_CURRENT = (1 << 2),
+    CH_FEATURE_POWER = (1 << 3),
+    CH_FEATURE_OE = (1 << 4),
+    CH_FEATURE_DPROG = (1 << 5),
+    CH_FEATURE_LRIPPLE = (1 << 6),
+    CH_FEATURE_RPROG = (1 << 7)
+};
+
 /// PSU channel.
 class Channel {
+	friend class DigitalAnalogConverter;
+	friend struct calibration::Value;
+
 public:
     /// Binary flags for the channel calibration configuration.
     struct CalibrationConfigurationFlags {
@@ -49,7 +67,6 @@ public:
         float val;
         /// Value read from ADC.
         float adc;
-
     };
 
     /// Calibration parameters for the voltage and current.
@@ -67,6 +84,12 @@ public:
         CalibrationValuePointConfiguration mid;
         /// Max point.
         CalibrationValuePointConfiguration max;
+
+		/// Real min after calibration
+		float minPossible;
+
+		/// Real max after calibration
+		float maxPossible;
     };
 
     /// A structure where calibration parameters for the channel are stored.
@@ -109,6 +132,7 @@ public:
         ProtectionConfigurationFlags flags;
 
         float u_delay;
+        float u_level;
         float i_delay;
         float p_delay;
         float p_level;
@@ -116,22 +140,33 @@ public:
 
     /// Channel binary flags like output enabled, sense enabled, ...
     struct Flags {
-        unsigned output_enabled : 1;
-        unsigned sense_enabled : 1;
-        unsigned cv_mode : 1;
-        unsigned cc_mode : 1;
-        unsigned power_ok : 1;
-        unsigned cal_enabled : 1;
+        unsigned outputEnabled : 1;
+        unsigned dpOn : 1;
+        unsigned senseEnabled : 1;
+        unsigned cvMode : 1;
+        unsigned ccMode : 1;
+        unsigned powerOk : 1;
+        unsigned _calEnabled : 1;
+        unsigned rprogEnabled: 1;
+        unsigned lrippleEnabled: 1;
+        unsigned lrippleAutoEnabled: 1;
+		unsigned rpol : 1; // remote sense reverse polarity is detected
     };
 
     /// Voltage and current data set and measured during runtime.
     struct Value {
         float set;
         float mon_dac;
+		int16_t mon_adc;
         float mon;
         float step;
+		float limit;
 
-        void init(float def_step);
+		float min;
+	    float def;
+		float max;
+
+        void init(float def_step, float def_limit);
     };
 
     /// Runtime protection binary flags (alarmed, tripped)
@@ -156,13 +191,17 @@ public:
         float u_dac;
         float i_set;
         float i_dac;
-        float temperature[temp_sensor::COUNT];
+        float temperature[temp_sensor::NUM_TEMP_SENSORS];
+		float voltProgExt;
 
         void setLoadEnabled(bool value);
         bool getLoadEnabled();
 
         void setLoad(float value);
         float getLoad();
+
+		void setVoltProgExt(float value);
+		float getVoltProgExt();
     };
 #endif // EEZ_PSU_SIMULATOR
 
@@ -171,126 +210,81 @@ public:
     /// \returns Reference to channel.
     static Channel &get(int channel_index);
 
-    /// Channel index. Starts from 1.
-    int8_t index;
+	/// Save and disable OE for all the channels.
+	static void saveAndDisableOE();
 
+	/// Restore previously saved OE state for all the channels.
+	static void restoreOE();
+
+	///
+	static char *getChannelsInfo(char *p);
+	static char *getChannelsInfoShort(char *p);
+
+    /// Channel index. Starts from 1.
+    uint8_t index;
+
+    uint8_t boardRevision;
+
+    uint8_t ioexp_iodir;
+	uint8_t ioexp_gpio_init;
     uint8_t isolator_pin;
     uint8_t ioexp_pin;
     uint8_t convend_pin;
     uint8_t adc_pin;
     uint8_t dac_pin;
-    uint16_t bp_led_out_plus;
-    uint16_t bp_led_out_minus;
-    uint16_t bp_led_sense_plus;
-    uint16_t bp_led_sense_minus;
-    uint16_t bp_relay_sense;
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+    uint8_t bp_led_out_plus;
+    uint8_t bp_led_out_minus;
+    uint8_t bp_led_sense_plus;
+    uint8_t bp_led_sense_minus;
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+    uint8_t bp_led_out;
+    uint8_t bp_led_sense;
+    uint8_t bp_led_prog;
+#endif
+    uint8_t bp_relay_sense;
     uint8_t cc_led_pin;
     uint8_t cv_led_pin;
 
-    /// MINimum constant value in volts
-    float U_MIN;
-
-    /// DEFault constant value in volts
-    float U_DEF;
-    
-    /// MAXimum constant value in volts
-    float U_MAX;
-
-    /// MINimum voltage step constant value in volts
-    float U_MIN_STEP;
-
-    /// DEFault voltage step constant value in volts
+	float U_MIN_STEP;
     float U_DEF_STEP;
-
-    /// MAXimum voltage step constant value in volts
     float U_MAX_STEP;
-
-    /// Programmed output voltage in volts when MINimum LEVel in calibration state is selected 
     float U_CAL_VAL_MIN;
-
-    /// Programmed output voltage in volts when MIDdle LEVel in calibration state is selected 
     float U_CAL_VAL_MID;
-
-    /// Programmed output voltage in volts when MAXimum LEVel in calibration state is selected   
     float U_CAL_VAL_MAX;
+    float U_CURR_CAL; // voltage level during current calibration
 
-    /// Programmed output voltage in volts during calibration of current
-    float U_CURR_CAL;
-    
-    /// default OVP state
     bool OVP_DEFAULT_STATE;
-
-    /// OVP MINimum constant value in seconds
     float OVP_MIN_DELAY;
-
-    /// OVP DEFault constant value in seconds
     float OVP_DEFAULT_DELAY;
-
-    /// OVP MAXimum constant value in seconds
     float OVP_MAX_DELAY;
 
-    /// MINimum constant value in amperes
-    float I_MIN;
-
-    /// DEFault constant value in amperes
-    float I_DEF;
-
-    /// MAXimum constant value in amperes
-    float I_MAX;
-
-    /// MINimum current step constant value in amperes
-    float I_MIN_STEP;
-
-    /// DEFault current step constant value in amperes
+	float I_MIN_STEP;
     float I_DEF_STEP;
-
-    /// MAXimum current step constant value in amperes
     float I_MAX_STEP;
-
-    /// Programmed output current in amperes when MINimum LEVel in calibration state is selected
     float I_CAL_VAL_MIN;
-
-    /// Programmed output current in amperes when MIDdle LEVel in calibration state is selected
     float I_CAL_VAL_MID;
-
-    /// Programmed output current in amperes when MAXimum LEVel in calibration state is selected
     float I_CAL_VAL_MAX;
-
-    /// Programmed output current in amperes during calibration of voltage (has to be greater then 0 A!)
     float I_VOLT_CAL; // current level during voltage calibration
 
-    /// default OCP state
     bool OCP_DEFAULT_STATE;
-
-    /// OCP MINimum constant value in seconds
     float OCP_MIN_DELAY;
-
-    /// OCP DEFault constant value in seconds 
     float OCP_DEFAULT_DELAY;
-
-    /// OCP MAXimum constant value in seconds
     float OCP_MAX_DELAY;
-    
-    /// default OPP state
+
     bool OPP_DEFAULT_STATE;
-
-    /// OPP MINimum constant value in watts
     float OPP_MIN_DELAY;
-
-    /// OPP DEFault constant value in watts
     float OPP_DEFAULT_DELAY;
-
-    /// OPP MAXimum constant value in watts
     float OPP_MAX_DELAY;
-
-    /// OPP MINimum LEVel constant value in watts 
     float OPP_MIN_LEVEL;
-
-    /// OPP DEFault LEVel constant value in watts 
     float OPP_DEFAULT_LEVEL;
-
-    /// OPP MAXimum LEVel constant value in watts 
     float OPP_MAX_LEVEL;
+
+    float SOA_VIN;
+    float SOA_PREG_CURR;
+    float SOA_POSTREG_PTOT;
+
+    float PTOT;
 
     IOExpander ioexp;
     AnalogDigitalConverter adc;
@@ -301,6 +295,8 @@ public:
     Value u;
     Value i;
 
+	float p_limit;
+
     CalibrationConfiguration cal_conf;
     ChannelProtectionConfiguration prot_conf;
 
@@ -308,20 +304,28 @@ public:
     ProtectionValue ocp;
     ProtectionValue opp;
 
+	ontime::Counter onTimeCounter;
+
 #ifdef EEZ_PSU_SIMULATOR
     Simulator simulator;
 #endif // EEZ_PSU_SIMULATOR
 
     Channel(
-        int8_t index,
+        uint8_t index,
+        uint8_t boardRevision, uint8_t ioexp_iodir, uint8_t ioexp_gpio_init, uint8_t IO_BIT_OUT_SET_100_PERCENT_, uint8_t IO_BIT_OUT_EXT_PROG_,
         uint8_t isolator_pin, uint8_t ioexp_pin, uint8_t convend_pin, uint8_t adc_pin, uint8_t dac_pin,
-        uint16_t bp_led_out_plus, uint16_t bp_led_out_minus, uint16_t bp_led_sense_plus, uint16_t bp_led_sense_minus, uint16_t bp_relay_sense,
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+        uint8_t bp_led_out_plus, uint8_t bp_led_out_minus, uint8_t bp_led_sense_plus, uint8_t bp_led_sense_minus, uint8_t bp_relay_sense,
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+        uint8_t bp_led_out, uint8_t bp_led_sense, uint8_t bp_relay_sense, uint8_t bp_led_prog,
+#endif
         uint8_t cc_led_pin, uint8_t cv_led_pin,
-        float U_MIN, float U_DEF, float U_MAX, float U_MIN_STEP, float U_DEF_STEP, float U_MAX_STEP, float U_CAL_VAL_MIN, float U_CAL_VAL_MID, float U_CAL_VAL_MAX, float U_CURR_CAL,
+        float U_MIN, float U_DEF, float U_MAX, float U_MAX_CONF, float U_MIN_STEP, float U_DEF_STEP, float U_MAX_STEP, float U_CAL_VAL_MIN, float U_CAL_VAL_MID, float U_CAL_VAL_MAX, float U_CURR_CAL,
         bool OVP_DEFAULT_STATE, float OVP_MIN_DELAY, float OVP_DEFAULT_DELAY, float OVP_MAX_DELAY,
         float I_MIN, float I_DEF, float I_MAX, float I_MIN_STEP, float I_DEF_STEP, float I_MAX_STEP, float I_CAL_VAL_MIN, float I_CAL_VAL_MID, float I_CAL_VAL_MAX, float I_VOLT_CAL,
         bool OCP_DEFAULT_STATE, float OCP_MIN_DELAY, float OCP_DEFAULT_DELAY, float OCP_MAX_DELAY,
-        bool OPP_DEFAULT_STATE, float OPP_MIN_DELAY, float OPP_DEFAULT_DELAY, float OPP_MAX_DELAY, float OPP_MIN_LEVEL, float OPP_DEFAULT_LEVEL, float OPP_MAX_LEVEL);
+        bool OPP_DEFAULT_STATE, float OPP_MIN_DELAY, float OPP_DEFAULT_DELAY, float OPP_MAX_DELAY, float OPP_MIN_LEVEL, float OPP_DEFAULT_LEVEL, float OPP_MAX_LEVEL,
+        float SOA_VIN, float SOA_PREG_CURR, float SOA_POSTREG_PTOT, float PTOT);
 
     /// Initialize channel and underlying hardware.
     /// Makes a required tests, for example ADC, DAC and IO Expander tests.
@@ -370,20 +374,42 @@ public:
     /// This is called when channel is recovering from hardware failure.
     void update();
 
-    /// Force update of only output enable state, i.e. enable/disable output depending of output_enabled flag.
-    void updateOutputEnable();
-
     /// Enable/disable channel output.
     void outputEnable(bool enable);
 
     /// Is channel output enabled?
     bool isOutputEnabled();
 
-    /// Enable/disable remote sensing.
+    /// Enable/disable channel calibration.
+    void calibrationEnable(bool enable);
+	void calibrationEnableNoEvent(bool enable);
+
+    /// Is channel calibration enabled?
+    bool isCalibrationEnabled();
+
+	/// Enable/disable remote sensing.
     void remoteSensingEnable(bool enable);
 
     /// Is remote sensing enabled?
     bool isRemoteSensingEnabled();
+
+    /// Enable/disable remote programming.
+    void remoteProgrammingEnable(bool enable);
+
+    /// Is remote programming enabled?
+    bool isRemoteProgrammingEnabled();
+
+    /// Enable/disable low ripple mode.
+    bool lowRippleEnable(bool enable);
+
+    /// Is low ripple mode enabled?
+    bool isLowRippleEnabled();
+
+    /// Enable/disable low ripple auto mode.
+    void lowRippleAutoEnable(bool enable);
+
+    /// Is low ripple auto mode enabled?
+    bool isLowRippleAutoEnabled();
 
     /// Set channel voltage level.
     void setVoltage(float voltage);
@@ -400,17 +426,23 @@ public:
     /// Clear channel protection tripp state.
     void clearProtection();
 
-    /// Turn on/off bit in SCPI Questinable Instrument Isummary register for this channel.
+    /// Disable protection for this channel
+    void disableProtection();
+
+	/// Turn on/off bit in SCPI Questinable Instrument Isummary register for this channel.
     void setQuesBits(int bit_mask, bool on);
 
     /// Turn on/off bit in SCPI Operational Instrument Isummary register for this channel.
     void setOperBits(int bit_mask, bool on);
 
     /// Is channel in CV (constant voltage) mode?
-    bool isCvMode() { return flags.cv_mode && !flags.cc_mode; }
+    bool isCvMode() { return flags.cvMode && !flags.ccMode; }
 
     /// Is channel in CC (constant current) mode?
-    bool isCcMode() { return flags.cc_mode && !flags.cv_mode; }
+    bool isCcMode() { return flags.ccMode && !flags.cvMode; }
+
+    /// Returns "CC", "CV" or "UR"
+    char *getCvModeStr();
 
     /// Remap ADC data value to actual voltage value (use calibration if configured).
     float remapAdcDataToVoltage(int16_t adc_data);
@@ -424,23 +456,101 @@ public:
     /// Remap current value to ADC data value (use calibration if configured).
     int16_t remapCurrentToAdcData(float value);
 
+    /// Returns name of the board revison of this channel.
+    const char *getBoardRevisionName();
+
+    /// Returns features present (check ChannelFeatures) in board revision of this channel.
+    uint16_t getFeatures();
+
+	/// Returns currently set voltage limit
+	float getVoltageLimit() const;
+
+	/// Returns max. voltage limit
+	float getVoltageMaxLimit() const;
+
+	/// Change voltage limit, it will adjust U_SET if necessary.
+	void setVoltageLimit(float limit);
+
+	/// Returns currently set current limit
+	float getCurrentLimit() const;
+
+	/// Change current limit, it will adjust I_SET if necessary.
+	void setCurrentLimit(float limit);
+
+	/// Returns ERR_MAX_CURRENT if max. current is limited or i.max if not
+	float getMaxCurrentLimit() const;
+
+    /// Returns true if max current is limited to ERR_MAX_CURRENT.
+	bool isMaxCurrentLimited() const;
+
+    /// Returns max. current limit cause
+	MaxCurrentLimitCause getMaxCurrentLimitCause() const;
+
+	/// Set current max. limit to ERR_MAX_CURRENT
+    void limitMaxCurrent(MaxCurrentLimitCause cause);
+    
+	/// Unset current max. limit 
+    void unlimitMaxCurrent();
+
+	/// Returns currently set power limit
+	float getPowerLimit() const;
+
+	/// Returns max. power limit
+	float getPowerMaxLimit() const;
+
+	/// Change power limit, it will adjust U_SET or I_SET if necessary.
+	void setPowerLimit(float limit);
+
 private:
     bool delayed_dp_off;
-    uint32_t delayed_dp_off_start;
+    unsigned long delayed_dp_off_start;
+	bool delayLowRippleCheck;
+	unsigned long outputEnableStartTime;
+
+	float U_MIN;
+    float U_DEF;
+    float U_MAX;
+	float U_MAX_CONF;
+
+	float I_MIN;
+    float I_DEF;
+    float I_MAX;
+
+	MaxCurrentLimitCause maxCurrentLimitCause;
+
+	int negligibleAdcDiffForVoltage;
+	int negligibleAdcDiffForCurrent;
 
     void clearProtectionConf();
     void protectionEnter(ProtectionValue &cpv);
     void protectionCheck(ProtectionValue &cpv);
-    float readingToCalibratedValue(Value *cv, float mon_reading);
-    void valueAddReading(Value *cv, float value);
-    void valueAddReadingDac(Value *cv, float value);
-    void adcDataIsReady(int16_t data);
-    void setCcMode(bool cc_mode);
+
+	void doCalibrationEnable(bool enable);
+	float readingToCalibratedValue(Value *cv, float mon_reading);
+	void calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
+	void calibrationFindCurrentRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
+
+	void adcDataIsReady(int16_t data);
+    
+	void setCcMode(bool cc_mode);
     void setCvMode(bool cv_mode);
-    void updateBoardCcAndCvSwitch();
-    void doOutputEnable(bool enable);
-    void doRemoteSensingEnable(bool enable);
-    void doDpEnable(bool enable);
+    void updateCcAndCvSwitch();
+    
+	void doOutputEnable(bool enable);
+    
+	void doRemoteSensingEnable(bool enable);
+    void doRemoteProgrammingEnable(bool enable);
+
+	void lowRippleCheck(unsigned long tick_usec);
+    bool isLowRippleAllowed(unsigned long tick_usec);
+    void doLowRippleEnable(bool enable);
+    void doLowRippleAutoEnable(bool enable);
+
+	void doDpEnable(bool enable);
+
+#if !CONF_SKIP_PWRGOOD_TEST
+	void testPwrgood(uint8_t gpio);
+#endif
 };
 
 }

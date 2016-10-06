@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,126 +15,275 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
+#include <float.h>
+
 #include "psu.h"
 #include "serial_psu.h"
+
+#if OPTION_ETHERNET
 #include "ethernet.h"
+#endif
+
 #include "persist_conf.h"
 #include "sound.h"
+#include "temperature.h"
+#include "event_queue.h"
 
 namespace eez {
 namespace psu {
-
-using namespace scpi;
-
 namespace temperature {
 
-ProtectionConfiguration prot_conf[temp_sensor::COUNT];
+#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) \
+	TempSensorTemperature(temp_sensor::NAME)
 
-static unsigned long sensor_temperature_last_measured_tick[temp_sensor::COUNT];
-static float sensor_temperature[temp_sensor::COUNT];
-static bool sensor_otp_alarmed[temp_sensor::COUNT];
-static unsigned long sensor_otp_alarmed_started_tick[temp_sensor::COUNT];
-static bool sensor_otp_tripped[temp_sensor::COUNT];
+TempSensorTemperature sensors[temp_sensor::NUM_TEMP_SENSORS] = {
+	TEMP_SENSORS
+};
 
-////////////////////////////////////////////////////////////////////////////////
-
-static void set_otp_reg(temp_sensor::Type sensor, bool on) {
-    if (sensor == temp_sensor::MAIN) {
-        psu::setQuesBits(QUES_TEMP, on);
-    }
-    else {
-        int bit_mask = reg_get_ques_isum_bit_mask_for_channel_protection_value(sensor);
-        Channel::get(sensor == temp_sensor::S1 || sensor == temp_sensor::BAT1 ? 0 : 1).setQuesBits(bit_mask, on);
-    }
-}
-
-static void sensor_protection_enter(temp_sensor::Type sensor) {
-    sensor_otp_tripped[sensor] = true;
-
-    if (sensor == temp_sensor::MAIN) {
-        for (int i = 0; i < CH_NUM; ++i) {
-            Channel::get(i).outputEnable(false);
-        }
-
-        psu::powerDownBySensor();
-    }
-    else {
-        Channel::get(sensor == temp_sensor::S1 || sensor == temp_sensor::BAT1 ? 0 : 1).outputEnable(false);
-    }
-
-    set_otp_reg(sensor, true);
-
-    sound::playBeep();
-}
-
-static void sensor_protection_check(unsigned long tick_usec, temp_sensor::Type sensor) {
-    if (sensor_otp_tripped[sensor]) {
-        return;
-    }
-
-    if (prot_conf[sensor].state && sensor_temperature[sensor] >= prot_conf[sensor].level) {
-        float delay = prot_conf[sensor].delay;
-        if (delay > 0) {
-            if (sensor_otp_alarmed[sensor]) {
-                if (tick_usec - sensor_otp_alarmed_started_tick[sensor] >= delay * 1000000UL) {
-                    sensor_otp_alarmed[sensor] = 0;
-                    sensor_protection_enter(sensor);
-                }
-            }
-            else {
-                sensor_otp_alarmed[sensor] = 1;
-                sensor_otp_alarmed_started_tick[sensor] = tick_usec;
-            }
-        }
-        else {
-            sensor_protection_enter(sensor);
-        }
-    }
-    else {
-        sensor_otp_alarmed[sensor] = 0;
-    }
-}
+#undef TEMP_SENSOR
 
 ////////////////////////////////////////////////////////////////////////////////
+
+static unsigned long last_measured_tick;
+static float last_max_channel_temperature;
+static unsigned long max_temp_start_tick;
+static bool force_power_down = false;
+
+bool init() {
+	return test();
+}
+
+bool test() {
+	bool success = true;
+
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		success &= temp_sensor::sensors[i].test();
+	}
+
+	return success;
+}
 
 void tick(unsigned long tick_usec) {
-    if (tick_usec - sensor_temperature_last_measured_tick[temp_sensor::MAIN] >= TEMP_SENSOR_READ_EVERY_MS * 1000L) {
-        sensor_temperature_last_measured_tick[temp_sensor::MAIN] = tick_usec;
-        sensor_temperature[temp_sensor::MAIN] = temp_sensor::read(temp_sensor::MAIN);
-        sensor_protection_check(tick_usec, temp_sensor::MAIN);
-    }
+	if (tick_usec - last_measured_tick >= TEMP_SENSOR_READ_EVERY_MS * 1000L) {
+		last_measured_tick = tick_usec;
+
+		for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+			sensors[i].tick(tick_usec);
+		}
+
+		// find max. channel temperature
+		float max_channel_temperature = FLT_MIN;
+
+		for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+			temp_sensor::TempSensor &sensor = temp_sensor::sensors[i];
+			if (sensor.ch_num >= 0) {
+				if (sensor.test_result == psu::TEST_OK) {
+					temperature::TempSensorTemperature &sensorTemperature = temperature::sensors[i];
+					if (sensorTemperature.temperature > max_channel_temperature) {
+						max_channel_temperature = sensorTemperature.temperature;
+					}
+				}
+			}
+		}
+
+		// check if max_channel_temperature is too high
+		if (max_channel_temperature > FAN_MAX_TEMP) {
+			if (last_max_channel_temperature <= FAN_MAX_TEMP) {
+				max_temp_start_tick = tick_usec;
+			}
+
+			if (tick_usec - max_temp_start_tick > FAN_MAX_TEMP_DELAY * 1000000L) {
+				// turn off power
+				force_power_down = true;
+				psu::changePowerState(false);
+			}
+		} else if (max_channel_temperature <= FAN_MAX_TEMP - FAN_MAX_TEMP_DROP) {
+			force_power_down = false;
+		}
+
+		last_max_channel_temperature = max_channel_temperature;
+	}
 }
 
-float measure(temp_sensor::Type sensor) {
-    sensor_temperature[sensor] = temp_sensor::read(sensor);
-    return sensor_temperature[sensor];
+bool isChannelSensorInstalled(Channel *channel) {
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+	return false;
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+	return sensors[temp_sensor::CH1 + channel->index - 1].isInstalled();
+#endif
 }
 
-void clearProtection(temp_sensor::Type sensor) {
-    sensor_otp_tripped[sensor] = false;
-    set_otp_reg(sensor, false);
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+bool getChannelSensorState(Channel *channel) {
+	return sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.state;
 }
 
-bool isSensorTripped(temp_sensor::Type sensor) {
-    return sensor_otp_tripped[sensor];
+void setChannelSensorState(Channel *channel, bool state) {
+	sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.state = state;
 }
+
+float getChannelSensorLevel(Channel *channel) {
+	return sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.level;
+}
+
+void setChannelSensorLevel(Channel *channel, float value) {
+	sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.level = value;
+}
+
+float getChannelSensorDelay(Channel *channel) {
+	return sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.delay;
+}
+
+void setChannelSensorDelay(Channel *channel, float value) {
+	sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.delay = value;
+}
+#endif
 
 bool isChannelTripped(Channel *channel) {
-    if (sensor_otp_tripped[temp_sensor::MAIN])
-        return true;
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		if (sensors[i].isChannelTripped(channel)) {
+			return true;
+		}
+	}
 
-    if (channel->index == 1) {
-        if (sensor_otp_tripped[temp_sensor::S1] || sensor_otp_tripped[temp_sensor::BAT1])
-            return true;
-    }
-    else {
-        if (sensor_otp_tripped[temp_sensor::S2] || sensor_otp_tripped[temp_sensor::BAT2])
-            return true;
+	return false;
+}
 
-    }
+void clearChannelProtection(Channel *channel) {
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		if (sensors[i].isChannelSensor(channel)) {
+			sensors[i].clearProtection();
+		}
+	}
+}
 
-    return false;
+void disableChannelProtection(Channel *channel) {
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		if (sensors[i].isChannelSensor(channel)) {
+			sensors[i].prot_conf.state = 0;
+		}
+	}
+}
+
+float getMaxChannelTemperature() {
+	return last_max_channel_temperature;
+}
+
+bool isAllowedToPowerUp() {
+#if OPTION_MAIN_TEMP_SENSOR
+	if (temperature::sensors[temp_sensor::MAIN].isTripped()) return false;
+#endif
+
+	return !force_power_down;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+TempSensorTemperature::TempSensorTemperature(int sensorIndex_)
+	: sensorIndex(sensorIndex_)
+	, temperature(NAN)
+
+{
+}
+
+bool TempSensorTemperature::isInstalled() {
+	return temp_sensor::sensors[sensorIndex].installed ? true : false;
+}
+
+bool TempSensorTemperature::isTestOK() {
+	return temp_sensor::sensors[sensorIndex].test_result == TEST_OK;
+}
+
+void TempSensorTemperature::tick(unsigned long tick_usec) {
+	if (isInstalled() && isTestOK()) {
+		measure();
+		if (temp_sensor::sensors[sensorIndex].test_result == TEST_OK) {
+			protection_check(tick_usec);
+		}
+	}
+}
+
+bool TempSensorTemperature::isChannelSensor(Channel *channel) {
+	return temp_sensor::sensors[sensorIndex].installed && (
+		temp_sensor::sensors[sensorIndex].ch_num < 0 ||
+		channel->index == temp_sensor::sensors[sensorIndex].ch_num + 1
+	);
+}
+
+bool TempSensorTemperature::isChannelTripped(Channel *channel) {
+    return isChannelSensor(channel) && otp_tripped;
+}
+
+float TempSensorTemperature::measure() {
+    float newTemperature = temp_sensor::sensors[sensorIndex].read();
+	if (util::isNaN(temperature)) {
+		temperature = newTemperature;
+	} else {
+		temperature = temperature + 0.1f * (newTemperature - temperature);
+	}
+    return temperature;
+}
+
+void TempSensorTemperature::clearProtection() {
+    otp_tripped = false;
+    set_otp_reg(false);
+}
+
+bool TempSensorTemperature::isTripped() {
+    return otp_tripped;
+}
+
+void TempSensorTemperature::set_otp_reg(bool on) {
+	if (temp_sensor::sensors[sensorIndex].ch_num >= 0) {
+		Channel::get(temp_sensor::sensors[sensorIndex].ch_num).setQuesBits(temp_sensor::sensors[sensorIndex].ques_bit, on);
+	} else {
+		psu::setQuesBits(temp_sensor::sensors[sensorIndex].ques_bit, on);
+	}
+}
+
+void TempSensorTemperature::protection_check(unsigned long tick_usec) {
+	if (temp_sensor::sensors[sensorIndex].installed) {
+		if (otp_tripped) {
+			return;
+		}
+
+		if (prot_conf.state && temperature >= prot_conf.level) {
+			float delay = prot_conf.delay;
+			if (delay > 0) {
+				if (otp_alarmed) {
+					if (tick_usec - otp_alarmed_started_tick >= delay * 1000000UL) {
+						otp_alarmed = 0;
+						protection_enter();
+					}
+				} else {
+					otp_alarmed = 1;
+					otp_alarmed_started_tick = tick_usec;
+				}
+			} else {
+				protection_enter();
+			}
+		} else {
+			otp_alarmed = 0;
+		}
+	}
+}
+
+void TempSensorTemperature::protection_enter() {
+    otp_tripped = true;
+
+	if (temp_sensor::sensors[sensorIndex].ch_num >= 0) {
+		Channel::get(temp_sensor::sensors[sensorIndex].ch_num).outputEnable(false);
+	} else {
+		for (int i = 0; i < CH_NUM; ++i) {
+			Channel::get(i).outputEnable(false);
+		}
+		psu::powerDownBySensor();
+	}
+	
+    set_otp_reg(true);
+
+	event_queue::pushEvent(event_queue::EVENT_ERROR_MAIN_OTP_TRIPPED + sensorIndex);
 }
 
 }

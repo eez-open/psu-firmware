@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@
  
 #pragma once
 
-#include <scpi-parser.h>
-
 namespace eez {
 namespace psu {
 namespace scpi {
@@ -29,6 +27,7 @@ namespace scpi {
 //
 #define QUES_TIME (1 << 3)    /* TIME */
 #define QUES_TEMP (1 << 4)    /* TEMPerature */
+#define QUES_FAN  (1 << 12)   /* FAN */
 #define QUES_ISUM (1 << 13)   /* INSTrument Summary */
 
 //
@@ -56,10 +55,11 @@ namespace scpi {
 #define QUES_ISUM_VOLT (1 <<  0)  /* VOLTage */
 #define QUES_ISUM_CURR (1 <<  1)  /* CURRent */
 #define QUES_ISUM_TEMP (1 <<  4)  /* TEMPerature */
+#define QUES_ISUM_RPOL (1 <<  7)  /* Remote sense reverse polarity is detected */
 #define QUES_ISUM_OVP  (1 <<  8)  /* OVP */
 #define QUES_ISUM_OCP  (1 <<  9)  /* OVP */
 #define QUES_ISUM_OPP  (1 << 10)  /* OPP */
-#define QUES_ISUM_BAT  (1 << 11)  /* BAT */
+
 
 //
 // OPERation INSTrument ISUMmary register bits
@@ -72,6 +72,7 @@ namespace scpi {
 #define OPER_ISUM_OE_OFF   (1 << 10)  /* Output Enable OFF */
 #define OPER_ISUM_DP_OFF   (1 << 11)  /* Down Programmer OFF */
 #define OPER_ISUM_RSENS_ON (1 << 12)  /* Remote SENSe ON */
+#define OPER_ISUM_RPROG_ON (1 << 13)  /* Remote PROGram ON */
 
 //
 // PSU registers
@@ -111,7 +112,6 @@ scpi_reg_val_t reg_get(scpi_t * context, scpi_psu_reg_name_t name);
 void reg_set(scpi_t * context, scpi_psu_reg_name_t name, scpi_reg_val_t val);
 
 int reg_get_ques_isum_bit_mask_for_channel_protection_value(Channel *channel, Channel::ProtectionValue &cpv);
-int reg_get_ques_isum_bit_mask_for_channel_protection_value(temp_sensor::Type sensor);
 
 void reg_set_ques_bit(scpi_t *context, int bit_mask, bool on);
 void reg_set_ques_isum_bit(scpi_t * context, Channel *channel, int bit_mask, bool on);

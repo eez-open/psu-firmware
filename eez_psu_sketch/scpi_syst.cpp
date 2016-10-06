@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  */
  
 #include "psu.h"
-#include <scpi-parser.h>
 #include "scpi_psu.h"
 #include "scpi_syst.h"
 
@@ -57,10 +56,12 @@ scpi_result_t scpi_syst_Power(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (temperature::isSensorTripped(temp_sensor::MAIN)) {
+#if OPTION_MAIN_TEMP_SENSOR
+    if (temperature::sensors[temp_sensor::MAIN].isTripped()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_EXECUTE_BEFORE_CLEARING_PROTECTION);
         return SCPI_RES_ERR;
     }
+#endif
 
     if (!psu::changePowerState(up)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
@@ -179,7 +180,10 @@ scpi_result_t scpi_syst_BeeperState(scpi_t * context) {
     }
 
     if (enable != persist_conf::isBeepEnabled()) {
-        persist_conf::enableBeep(enable);
+		if (!persist_conf::enableBeep(enable)) {
+			SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+			return SCPI_RES_ERR;
+		}
     }
 
     return SCPI_RES_OK;
@@ -192,14 +196,11 @@ scpi_result_t scpi_syst_BeeperStateQ(scpi_t * context) {
 
 scpi_result_t scpi_syst_TempProtectionClear(scpi_t * context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
-            return SCPI_RES_ERR;
-        }
-        sensor = temp_sensor::MAIN;
+    if (!param_temp_sensor(context, sensor)) {
+		return SCPI_RES_ERR;
     }
 
-    temperature::clearProtection((temp_sensor::Type)sensor);
+    temperature::sensors[sensor].clearProtection();
 
     return SCPI_RES_OK;
 }
@@ -211,14 +212,11 @@ scpi_result_t scpi_syst_TempProtectionLevel(scpi_t * context) {
     }
 
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
-            return SCPI_RES_ERR;
-        }
-        sensor = temp_sensor::MAIN;
+    if (!param_temp_sensor(context, sensor)) {
+		return SCPI_RES_ERR;
     }
 
-    temperature::prot_conf[sensor].level = level;
+    temperature::sensors[sensor].prot_conf.level = level;
     profile::save();
 
     return SCPI_RES_OK;
@@ -226,14 +224,11 @@ scpi_result_t scpi_syst_TempProtectionLevel(scpi_t * context) {
 
 scpi_result_t scpi_syst_TempProtectionLevelQ(scpi_t * context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
-            return SCPI_RES_ERR;
-        }
-        sensor = temp_sensor::MAIN;
+    if (!param_temp_sensor(context, sensor)) {
+		return SCPI_RES_ERR;
     }
 
-    return result_float(context, temperature::prot_conf[sensor].level);
+    return result_float(context, temperature::sensors[sensor].prot_conf.level);
 }
 
 scpi_result_t scpi_syst_TempProtectionState(scpi_t * context) {
@@ -243,14 +238,11 @@ scpi_result_t scpi_syst_TempProtectionState(scpi_t * context) {
     }
 
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
-            return SCPI_RES_ERR;
-        }
-        sensor = temp_sensor::MAIN;
+    if (!param_temp_sensor(context, sensor)) {
+		return SCPI_RES_ERR;
     }
 
-    temperature::prot_conf[sensor].state = state;
+    temperature::sensors[sensor].prot_conf.state = state;
     profile::save();
 
     return SCPI_RES_OK;
@@ -258,14 +250,11 @@ scpi_result_t scpi_syst_TempProtectionState(scpi_t * context) {
 
 scpi_result_t scpi_syst_TempProtectionStateQ(scpi_t * context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
-            return SCPI_RES_ERR;
-        }
-        sensor = temp_sensor::MAIN;
+    if (!param_temp_sensor(context, sensor)) {
+		return SCPI_RES_ERR;
     }
 
-    SCPI_ResultBool(context, temperature::prot_conf[sensor].state);
+    SCPI_ResultBool(context, temperature::sensors[sensor].prot_conf.state);
 
     return SCPI_RES_OK;
 }
@@ -277,14 +266,11 @@ scpi_result_t scpi_syst_TempProtectionDelay(scpi_t * context) {
     }
 
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
-            return SCPI_RES_ERR;
-        }
-        sensor = temp_sensor::MAIN;
+    if (!param_temp_sensor(context, sensor)) {
+		return SCPI_RES_ERR;
     }
 
-    temperature::prot_conf[sensor].delay = delay;
+    temperature::sensors[sensor].prot_conf.delay = delay;
     profile::save();
 
     return SCPI_RES_OK;
@@ -292,31 +278,261 @@ scpi_result_t scpi_syst_TempProtectionDelay(scpi_t * context) {
 
 scpi_result_t scpi_syst_TempProtectionDelayQ(scpi_t * context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
-            return SCPI_RES_ERR;
-        }
-        sensor = temp_sensor::MAIN;
+    if (!param_temp_sensor(context, sensor)) {
+		return SCPI_RES_ERR;
     }
 
-    SCPI_ResultFloat(context, temperature::prot_conf[sensor].delay);
+    SCPI_ResultFloat(context, temperature::sensors[sensor].prot_conf.delay);
 
     return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_syst_TempProtectionTrippedQ(scpi_t * context) {
     int32_t sensor;
-    if (!SCPI_ParamChoice(context, main_temp_sensor_choice, &sensor, false)) {
-        if (SCPI_ParamErrorOccurred(context)) {
-            return SCPI_RES_ERR;
-        }
-        sensor = temp_sensor::MAIN;
+    if (!param_temp_sensor(context, sensor)) {
+		return SCPI_RES_ERR;
     }
 
-    SCPI_ResultBool(context, temperature::isSensorTripped((temp_sensor::Type)sensor));
+    SCPI_ResultBool(context, temperature::sensors[sensor].isTripped());
 
     return SCPI_RES_OK;
 }
+
+scpi_result_t scpi_syst_ChannelCountQ(scpi_t * context) {
+    SCPI_ResultInt(context, CH_NUM);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_ChannelInformationCurrentQ(scpi_t * context) {
+    Channel *channel = param_channel(context, false, true);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultFloat(context, channel->i.max);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_ChannelInformationPowerQ(scpi_t * context) {
+    Channel *channel = param_channel(context, false, true);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultFloat(context, channel->PTOT);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_ChannelInformationProgramQ(scpi_t * context) {
+    Channel *channel = param_channel(context, false, true);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    uint16_t features = channel->getFeatures();
+    
+    char strFeatures[64] = {0};
+
+    if (features & CH_FEATURE_VOLT) {
+        strcat(strFeatures, "Volt");
+    }
+
+    if (features & CH_FEATURE_CURRENT) {
+        if (strFeatures[0]) {
+            strcat(strFeatures, ", ");
+        }
+        strcat(strFeatures, "Current");
+    }
+
+    if (features & CH_FEATURE_POWER) {
+        if (strFeatures[0]) {
+            strcat(strFeatures, ", ");
+        }
+        strcat(strFeatures, "Power");
+    }
+
+    if (features & CH_FEATURE_OE) {
+        if (strFeatures[0]) {
+            strcat(strFeatures, ", ");
+        }
+        strcat(strFeatures, "OE");
+    }
+
+    if (features & CH_FEATURE_DPROG) {
+        if (strFeatures[0]) {
+            strcat(strFeatures, ", ");
+        }
+        strcat(strFeatures, "DProg");
+    }
+
+    if (features & CH_FEATURE_LRIPPLE) {
+        if (strFeatures[0]) {
+            strcat(strFeatures, ", ");
+        }
+        strcat(strFeatures, "LRipple");
+    }
+
+    if (features & CH_FEATURE_RPROG) {
+        if (strFeatures[0]) {
+            strcat(strFeatures, ", ");
+        }
+        strcat(strFeatures, "Rprog");
+    }
+
+    SCPI_ResultText(context, strFeatures);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_ChannelInformationVoltageQ(scpi_t * context) {
+    Channel *channel = param_channel(context, false, true);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultFloat(context, channel->u.max);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_ChannelInformationOnTimeTotalQ(scpi_t * context) {
+    Channel *channel = param_channel(context, false, true);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    outputOnTime(context, channel->onTimeCounter.getTotalTime());
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_ChannelInformationOnTimeLastQ(scpi_t * context) {
+    Channel *channel = param_channel(context, false, true);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    outputOnTime(context, channel->onTimeCounter.getLastTime());
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_ChannelModelQ(scpi_t * context) {
+    Channel *channel = param_channel(context, false, true);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultText(context, channel->getBoardRevisionName());
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_CpuInformationEhternetTypeQ(scpi_t * context) {
+    SCPI_ResultText(context, getCpuEthernetType());
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_CpuInformationTypeQ(scpi_t * context) {
+    SCPI_ResultText(context, getCpuType());
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_CpuInformationOnTimeTotalQ(scpi_t * context) {
+	outputOnTime(context, g_powerOnTimeCounter.getTotalTime());
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_CpuInformationOnTimeLastQ(scpi_t * context) {
+	outputOnTime(context, g_powerOnTimeCounter.getLastTime());
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_CpuModelQ(scpi_t * context) {
+    SCPI_ResultText(context, getCpuModel());
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_CpuOptionQ(scpi_t * context) {
+    char strFeatures[128] = {0};
+
+#if OPTION_BP
+    if (strFeatures[0]) {
+        strcat(strFeatures, ", ");
+    }
+    strcat(strFeatures, "BPost");
+#endif
+
+#if OPTION_EXT_EEPROM
+    if (strFeatures[0]) {
+        strcat(strFeatures, ", ");
+    }
+    strcat(strFeatures, "EEPROM");
+#endif
+
+#if OPTION_EXT_RTC
+    if (strFeatures[0]) {
+        strcat(strFeatures, ", ");
+    }
+    strcat(strFeatures, "RTC");
+#endif
+
+#if OPTION_SD_CARD
+    if (strFeatures[0]) {
+        strcat(strFeatures, ", ");
+    }
+    strcat(strFeatures, "SDcard");
+#endif
+
+#if OPTION_ETHERNET
+    if (strFeatures[0]) {
+        strcat(strFeatures, ", ");
+    }
+    strcat(strFeatures, "Ethernet");
+#endif
+
+#if OPTION_DISPLAY
+    if (strFeatures[0]) {
+        strcat(strFeatures, ", ");
+    }
+    strcat(strFeatures, "Display");
+#endif
+
+    SCPI_ResultText(context, strFeatures);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_Serial(scpi_t * context) {
+    const char *serial;
+    size_t serialLength;
+
+    if (!SCPI_ParamCharacters(context, &serial, &serialLength, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (serialLength > 7) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CHARACTER_DATA_TOO_LONG);
+        return SCPI_RES_ERR;
+    }
+
+    if (!persist_conf::changeSerial(serial, serialLength)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
+}
+
+
+scpi_result_t scpi_syst_SerialQ(scpi_t * context) {
+    SCPI_ResultText(context, persist_conf::dev_conf.serialNumber);
+    return SCPI_RES_OK;
+}
+
 
 }
 }

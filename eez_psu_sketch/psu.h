@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,11 +29,11 @@
 #include "Arduino.h"
 #include "SPI.h"
 
+#include "eez_psu_rev.h"
+
 #ifdef EEZ_PSU_ARDUINO
 #include "arduino_psu.h"
 #endif
-
-#include "eez_psu.h"
 
 #include "conf.h"
 
@@ -41,11 +41,11 @@
 #include "simulator_conf.h"
 #endif
 
+#include "eez_psu.h"
+
 #include <scpi-parser.h>
 
-#include "debug.h"
-#include "util.h"
-#include "channel.h"
+#include "ontime.h"
 
 /// Namespace for the everything from the EEZ.
 namespace eez {
@@ -79,6 +79,35 @@ void setQuesBits(int bit_mask, bool on);
 void generateError(int16_t error);
 
 const char *getModelName();
+const char *getCpuModel();
+const char *getCpuType();
+const char *getCpuEthernetType();
+
+void enterTimeCriticalMode();
+bool isTimeCriticalMode();
+void leaveTimeCriticalMode();
+
+enum MaxCurrentLimitCause {
+    MAX_CURRENT_LIMIT_CAUSE_NONE,
+    MAX_CURRENT_LIMIT_CAUSE_FAN,
+    MAX_CURRENT_LIMIT_CAUSE_TEMPERATURE
+};
+bool isMaxCurrentLimited();
+MaxCurrentLimitCause getMaxCurrentLimitCause();
+void limitMaxCurrent(MaxCurrentLimitCause cause);
+void unlimitMaxCurrent();
+
+extern ontime::Counter g_powerOnTimeCounter;
+extern bool g_insideInterruptHandler;
 
 }
 } // namespace eez::psu
+
+#include "debug.h"
+#include "util.h"
+#include "channel.h"
+
+#define CHANNEL_VALUE_PRECISION powf(10.0f, FLOAT_TO_STR_PREC)
+
+void PSU_boot();
+void PSU_tick();

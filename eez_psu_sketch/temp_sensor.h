@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,16 +27,46 @@ static const int MIN_U = 0;
 static const int MAX_ADC = 1023;
 static const int MAX_U = 5;
 
+////////////////////////////////////////////////////////////////////////////////
+
+static const int MAX_NUM_TEMP_SENSORS = 5;
+
+////////////////////////////////////////////////////////////////////////////////
+
+#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) NAME
 enum Type {
-    MAIN,
-    S1,
-    S2,
-    BAT1,
-    BAT2,
-    COUNT
+	TEMP_SENSORS,
+	NUM_TEMP_SENSORS
+};
+#undef TEMP_SENSOR
+
+////////////////////////////////////////////////////////////////////////////////
+
+class TempSensor {
+public:
+	TempSensor(const char *name, int installed, int pin, float p1_volt, float p1_cels, float p2_volt, float p2_cels, int ch_num, int ques_bit, int scpi_error);
+
+	psu::TestResult test_result;
+	const char *name;
+	int installed;
+	int pin;
+	float p1_volt;
+	float p1_cels;
+	float p2_volt;
+	float p2_cels;
+	int ch_num;
+	int ques_bit;
+	int scpi_error;
+
+	bool init();
+	bool test();
+
+	float read();
 };
 
-float read(Type sensor);
+////////////////////////////////////////////////////////////////////////////////
+
+extern TempSensor sensors[NUM_TEMP_SENSORS];
 
 }
 }

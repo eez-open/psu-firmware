@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,9 @@ namespace front_panel {
 static bool g_lib_loaded = false;
 static eez_dll_lib_t g_lib = 0;
 static create_window_ptr_t g_create_window_ptr = 0;
+static get_desktop_resolution_ptr_t g_get_desktop_resolution_ptr = 0;
 static Window* g_window;
+static Data g_data;
 
 static beep_ptr_t g_beep_ptr = 0;
 
@@ -61,6 +63,7 @@ void load_lib() {
             if (!g_create_window_ptr) {
                 printf("Incompatible GUI library!\n");
             }
+			g_get_desktop_resolution_ptr = (get_desktop_resolution_ptr_t)eez_dll_get_proc_address(g_lib, "eez_imgui_get_desktop_resolution");
             g_beep_ptr = (beep_ptr_t)eez_dll_get_proc_address(g_lib, "eez_imgui_beep");
         }
         else {
@@ -68,6 +71,10 @@ void load_lib() {
         }
         g_lib_loaded = true;
     }
+}
+
+bool isOpened() {
+    return g_window ? true : false;
 }
 
 bool open() {
@@ -80,8 +87,11 @@ bool open() {
     if (!g_create_window_ptr) {
         return false;
     }
+
+	int w, h;
+	g_get_desktop_resolution_ptr(&w, &h);
     
-    g_window = g_create_window_ptr(getWindowDefinition());
+    g_window = g_create_window_ptr(getWindowDefinition(w, h));
 
     if (!persist_conf::dev_conf.gui_opened) {
         persist_conf::dev_conf.gui_opened = true;
@@ -108,12 +118,11 @@ void tick() {
         if (g_window->pollEvent()) {
             g_window->beginUpdate();
 
-            Data data;
-            fillData(&data);
+            fillData(&g_data);
 
-            render(g_window, &data);
+            render(g_window, &g_data);
 
-            processData(&data);
+            processData(&g_data);
 
             g_window->endUpdate();
         }

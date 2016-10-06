@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ void Enc28J60Network::setControlCS(int pin) {
 SimulatorEthernet Ethernet;
 
 bool SimulatorEthernet::begin(uint8_t *mac) {
+    delay(1000);
     return true;
 }
 

@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015 Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,11 @@
 
 |Address|Size|Description                               |
 |-------|----|------------------------------------------|
-|0      |1024|Not used                                  |
-|1024   |  32|[Device configuration](#device)           |
+|0      |  64|Not used                                  |
+|64     |  24|[Total ON-time counter](#ontime-counter)  |
+|128    |  24|[CH1 ON-time counter](#ontime-counter)    |
+|192    |  24|[CH2 ON-time counter](#ontime-counter)    |
+|1024   |  42|[Device configuration](#device)           |
 |2048   | 121|CH1 [calibration parameters](#calibration)|
 |2560   | 121|CH2 [calibration parameters](#calibration)|
 |4096   | 164|[Profile](#profile) 0                     |
@@ -38,21 +41,35 @@
 |11264  | 164|[Profile](#profile) 7                     |
 |12288  | 164|[Profile](#profile) 8                     |
 |13312  | 164|[Profile](#profile) 9                     |
+|16384  | 610|[Event Queue](#event-queue)               |
+
+## <a name="ontime-counter">ON-time counter</a>
+
+|Offset|Size|Type                     |Description                  |
+|------|----|-------------------------|-----------------------------|
+|0     |4   |int                      |1st magic number             |
+|4     |4   |int                      |1st counter                  |
+|8     |4   |int                      |1st counter (copy)           |
+|12    |4   |int                      |2nd magic number             |
+|16    |4   |int                      |2nd counter                  |
+|20    |4   |int                      |2bd counter (copy)           |
 
 ## <a name="device">Device configuration</a>
 
 |Offset|Size|Type                     |Description                  |
 |------|----|-------------------------|-----------------------------|
 |0     |6   |[struct](#block-header)  |[Block header](#block-header)|
-|6     |17  |string                   |Calibration password         |
-|23    |2   |[bitarray](#device-flags)|[Device Flags](#device-flags)|
-|25    |1   |int                      |Year                         |
-|26    |1   |int                      |Month                        |
-|27    |1   |int                      |Day                          |
-|28    |1   |int                      |Hour                         |
-|29    |1   |int                      |Minute                       |
-|30    |1   |int                      |Second                       |
-|31    |1   |int                      |Auto profile location        |
+|6     |8   |string                   |Serial number                |
+|14    |17  |string                   |Calibration password         |
+|31    |2   |[bitarray](#device-flags)|[Device Flags](#device-flags)|
+|33    |1   |int                      |Year                         |
+|34    |1   |int                      |Month                        |
+|35    |1   |int                      |Day                          |
+|36    |1   |int                      |Hour                         |
+|37    |1   |int                      |Minute                       |
+|38    |1   |int                      |Second                       |
+|39    |2   |int                      |Time zone                    |
+|41    |1   |int                      |Auto profile location        |
 
 #### <a name="device-flags">Device flags</a>
 
@@ -62,7 +79,7 @@
 |1  |Date set           |
 |2  |Time set           |
 |3  |Auto recall profile|
-|4  |Reserved           |
+|4  |DST                |
 |5  |Reserved           |
 |6  |Reserved           |
 |7  |Reserved           |
@@ -182,6 +199,24 @@
 |------|----|----|-----------|
 |0     |4   |int |Checksum   |
 |4     |2   |int |Version    |
+
+## <a name="event-queue">Event queue</a>
+
+|Offset|Size |Type                     |Description                  |
+|------|-----|-------------------------|-----------------------------|
+|0     |4    |int                      |Magic number                 |
+|4     |2    |int                      |Version                      |
+|6     |2    |int                      |Queue head                   |
+|8     |2    |int                      |Queue size                   |
+|16    |1600 |[struct](#event)         |Max. 100 events              |	
+
+## <a name="event">Event</a>
+
+|Offset|Size|Type                     |Description                  |
+|------|----|-------------------------|-----------------------------|
+|0     |4   |datetime                 |Event date and time          |
+|4     |2   |int                      |Event ID                     |
+
 */
 
 
@@ -200,7 +235,12 @@ static const uint8_t WRSR = 1;
 static const uint8_t READ = 3;
 static const uint8_t WRITE = 2;
 
+static const uint16_t EEPROM_ONTIME_START_ADDRESS = 64;
+static const uint16_t EEPROM_ONTIME_SIZE = 64;
+
 static const uint16_t EEPROM_START_ADDRESS = 1024;
+
+static const uint16_t EEPROM_EVENT_QUEUE_START_ADDRESS = 16384;
 
 bool init();
 bool test();
