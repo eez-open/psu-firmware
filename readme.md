@@ -1,7 +1,6 @@
 ## Introduction
 
-This project has Arduino/Genuino sketch for [Mega2560](https://www.arduino.cc/en/Main/ArduinoBoardMega2560) (8-bit, AVR) and [Due](https://www.arduino.cc/en/Main/ArduinoBoardDue) (32-bit, ARM) boards and accompanying libraries
-for the open hardware [EEZ bench power supply](http://www.envox.hr/eez/bench-power-supply/psu-introduction.html) firmware.
+This project has Arduino/Genuino sketch for [Mega2560](https://www.arduino.cc/en/Main/ArduinoBoardMega2560) (8-bit, AVR) and [Due](https://www.arduino.cc/en/Main/ArduinoBoardDue) (32-bit, ARM) boards and accompanying libraries for the open hardware [EEZ H24005 power supply](http://www.envox.hr/eez/bench-power-supply/psu-introduction.html) firmware.
 
 The unique feature of this project is a fully featured software simulator that can be used to evalute all firmware features without having physical power supply on disposal. The simulator can be complied to run on major platforms such as Windows, Linux or Mac.
 It shares all the code with the Arduino Sketch plus emulation layer for the Arduino API, Ethernet library and digital controls used for programming and monitoring EEZ bench power supply.
@@ -23,6 +22,7 @@ Firmware key features:
 ### Arduino Sketch
 
 We recommend Arduino IDE version 1.6.x or newer to compile and deploy Arduino sketch to the EEZ bench power supply.
+
 1. Download zip archive from the github repository. 
 2. Copy folders `eez_psu_sketch` and `libraries` from
 the zip archive into Arduino folder on your computer. Arduino folder is e.g. `My Documents\Arduino` on Windows or `Documents/Arduino` on Linux and Mac. 
@@ -39,13 +39,13 @@ If you are on Windows, there is a pre-build version:
 [ ![Download Simulator for Windows](doc/windows_download_button.png) ](http://www.envox.hr/eez/component/jdownloads/download/1-software-simulator-for-windows.html)
 
 
-After you build and run simulator you can lunch GUI front panel by typing following SCPI command:
+After you build and run simulator, a mouse is used as simulation of finger on the TFT touchscreen display.
+
+Console window can be used to enter SCPI commands [SCPI reference manual](http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-introduction.html). SCPI commands can be also send by starting a telnet session to the port 5025:
 
 ```
-simu:gui
+telnet localhost 5025
 ```
-
-For all other SCPI commands and examples please check [SCPI reference manual](http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-introduction.html).
 
 #### Windows
 
