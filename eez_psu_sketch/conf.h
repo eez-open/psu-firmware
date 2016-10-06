@@ -97,7 +97,7 @@ option.
 #define OTP_MAIN_DEFAULT_DELAY 10.0f
 
 /// Default OTP level
-#define OTP_MAIN_DEFAULT_LEVEL 70.0f
+#define OTP_MAIN_DEFAULT_LEVEL 50.0f
 
 #include "conf_advanced.h"
 #include "conf_user.h"
