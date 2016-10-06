@@ -45702,12 +45702,12 @@
           "widgets": [
             {
               "type": "Text",
-              "text": "Ethernet initialisation",
-              "x": 0,
-              "y": 100,
-              "width": 320,
+              "text": "Ethernet initialization, please wait...",
+              "x": 8,
+              "y": 200,
+              "width": 312,
               "height": 40,
-              "style": "default",
+              "style": "edit_value_S_left",
               "data": ""
             }
           ]
