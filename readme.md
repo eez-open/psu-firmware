@@ -238,9 +238,9 @@ Here are some components of the core layer (all the files are in `eez_psu_sketch
 
 Implementation of the GUI is based on MVC (Model View Controller) architecture.
 
-Model is where all data displayed on the screen comes from and our Model is implemented in the Core layer.
+In MVC architecture, **Model** is where all the data that is displayed on the screen comes from and our Model is implemented in the Core layer.
 
-View is about how everything looks on the screen. It is defined decoratively and definitions are created with the special tool we call EEZ Studio (it is not public yet!).
+**View** defines how everything looks on the screen. In our case, View is defined declaratively and definitions are created with the special tool we call EEZ Studio (it is not public yet!).
 
 ![EEZ Studio](doc/eez-studio.png)
 
@@ -249,7 +249,7 @@ data and action definitions.
 JSON file is then compiled to C++ source code files (`gui_document.cpp`, `gui_document.h`, `actions.cpp` and `actions.h`)
 that are included as an integral part of the sketch.
 
-Controller is the glue code between Model and View. It is implemented in the all the files that start with "gui_" prefix. 
+**Controller** is the glue code between Model and View. It is implemented in the all the files that start with "gui_" prefix. 
 
 Also, there is some utility code that is used, for example, to interact with the hardware:
 
