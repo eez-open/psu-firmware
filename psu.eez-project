@@ -54403,7 +54403,7 @@
               "width": 155,
               "height": 29,
               "style": "default_disabled_S_left",
-              "action": "show_ch_settings_prot_clear"
+              "action": ""
             },
             {
               "type": "Local.Channels",
@@ -54421,7 +54421,7 @@
               "width": 85,
               "height": 29,
               "style": "default_disabled_S_left",
-              "action": "show_ch_settings_prot_clear"
+              "action": ""
             },
             {
               "type": "Text",

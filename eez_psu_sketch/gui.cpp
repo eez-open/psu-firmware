@@ -1709,7 +1709,7 @@ void init() {
     lcd::init();
 
 #ifdef EEZ_PSU_SIMULATOR
-    if (persist_conf::dev_conf.gui_opened) {
+    if (true || persist_conf::dev_conf.gui_opened) {
         simulator::front_panel::open();
     }
 #endif

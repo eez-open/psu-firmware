@@ -22,6 +22,7 @@
 
 namespace eez {
 namespace psu {
+/// GUI for local control using TFT with touch
 namespace gui {
 
 void init();

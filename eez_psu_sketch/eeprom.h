@@ -28,19 +28,19 @@
 |64     |  24|[Total ON-time counter](#ontime-counter)  |
 |128    |  24|[CH1 ON-time counter](#ontime-counter)    |
 |192    |  24|[CH2 ON-time counter](#ontime-counter)    |
-|1024   |  42|[Device configuration](#device)           |
-|2048   | 121|CH1 [calibration parameters](#calibration)|
-|2560   | 121|CH2 [calibration parameters](#calibration)|
-|4096   | 164|[Profile](#profile) 0                     |
-|5120   | 164|[Profile](#profile) 1                     |
-|6144   | 164|[Profile](#profile) 2                     |
-|7168   | 164|[Profile](#profile) 3                     |
-|8192   | 164|[Profile](#profile) 4                     |
-|9216   | 164|[Profile](#profile) 5                     |
-|10240  | 164|[Profile](#profile) 6                     |
-|11264  | 164|[Profile](#profile) 7                     |
-|12288  | 164|[Profile](#profile) 8                     |
-|13312  | 164|[Profile](#profile) 9                     |
+|1024   |  55|[Device configuration](#device)           |
+|2048   | 137|CH1 [calibration parameters](#calibration)|
+|2560   | 137|CH2 [calibration parameters](#calibration)|
+|4096   | 196|[Profile](#profile) 0                     |
+|5120   | 196|[Profile](#profile) 1                     |
+|6144   | 196|[Profile](#profile) 2                     |
+|7168   | 196|[Profile](#profile) 3                     |
+|8192   | 196|[Profile](#profile) 4                     |
+|9216   | 196|[Profile](#profile) 5                     |
+|10240  | 196|[Profile](#profile) 6                     |
+|11264  | 196|[Profile](#profile) 7                     |
+|12288  | 196|[Profile](#profile) 8                     |
+|13312  | 196|[Profile](#profile) 9                     |
 |16384  | 610|[Event Queue](#event-queue)               |
 
 ## <a name="ontime-counter">ON-time counter</a>
@@ -70,27 +70,36 @@
 |38    |1   |int                      |Second                       |
 |39    |2   |int                      |Time zone                    |
 |41    |1   |int                      |Auto profile location        |
+|42    |1   |int                      |Touch screen cal. orientation|
+|43    |2   |int                      |Touch screen cal. TLX        |
+|45    |2   |int                      |Touch screen cal. TLY        |
+|47    |2   |int                      |Touch screen cal. BRX        |
+|49    |2   |int                      |Touch screen cal. BRY        |
+|51    |2   |int                      |Touch screen cal. TRX        |
+|53    |2   |int                      |Touch screen cal. TRY        |
 
 #### <a name="device-flags">Device flags</a>
 
-|Bit|Description        |
-|---|-------------------|
-|0  |Beep enabled       |
-|1  |Date set           |
-|2  |Time set           |
-|3  |Auto recall profile|
-|4  |DST                |
-|5  |Reserved           |
-|6  |Reserved           |
-|7  |Reserved           |
-|8  |Reserved           |
-|9  |Reserved           |
-|10 |Reserved           |
-|11 |Reserved           |
-|12 |Reserved           |
-|13 |Reserved           |
-|14 |Reserved           |
-|15 |Reserved           |
+|Bit|Description         |
+|---|--------------------|
+|0  |Beep enabled        |
+|1  |Date set            |
+|2  |Time set            |
+|3  |Auto recall profile |
+|4  |DST                 |
+|5  |Channel display mode|
+|6  |Channel display mode|
+|7  |Channel display mode|
+|8  |Ethernet enabled    |
+|7  |Reserved            |
+|8  |Reserved            |
+|9  |Reserved            |
+|10 |Reserved            |
+|11 |Reserved            |
+|12 |Reserved            |
+|13 |Reserved            |
+|14 |Reserved            |
+|15 |Reserved            |
 
 ## <a name="calibration">Calibration parameters</a>
 
@@ -98,8 +107,8 @@
 |------|----|-----------------------|-----------------------------|
 |0     |6   |[struct](#block-header)|[Block header](#block-header)|
 |6     |1   |[bitarray](#cal-flags) |[Flags](#cal-flags)          |
-|7     |36  |[struct](#cal-points)  |Voltage [points](#cal-points)|
-|43    |36  |[struct](#cal-points)  |Current [points](#cal-points)|
+|7     |44  |[struct](#cal-points)  |Voltage [points](#cal-points)|
+|43    |44  |[struct](#cal-points)  |Current [points](#cal-points)|
 |79    |8   |string                 |Date                         |
 |88    |33  |string                 |Remark                       |
 
@@ -117,6 +126,8 @@
 |0     |12  |[struct](#cal-point)|Min [point](#cal-point)|
 |12    |12  |[struct](#cal-point)|Mid [point](#cal-point)|
 |24    |12  |[struct](#cal-point)|Max [point](#cal-point)|
+|36    |4   |[struct](#cal-point)|Min. set value possible|
+|40    |4   |[struct](#cal-point)|Max. set value possible|
 
 #### <a name="cal-point">Value point</a>
 
@@ -134,23 +145,27 @@
 |6     |1   |boolean                |Is valid?                      |
 |7     |33  |string                 |Name                           |
 |40    |1   |boolean                |Is power up?                   |
-|41    |34  |[struct](#ch-params)   |CH1 [parameters](#ch-params)   |
-|75    |34  |[struct](#ch-params)   |CH2 [parameters](#ch-params)   |
-|109   |55  |[struct](#otp-conf)[5] |[OTP configurations](#otp-conf)|
+|41    |50  |[struct](#ch-params)   |CH1 [parameters](#ch-params)   |
+|91    |50  |[struct](#ch-params)   |CH2 [parameters](#ch-params)   |
+|141   |55  |[struct](#otp-conf)[5] |[OTP configurations](#otp-conf)|
 
 #### <a name="ch-params">Channel parameters</a>
 
 |Offset|Size|Type                 |Description               |
 |------|----|---------------------|--------------------------|
 |0     |2   |[bitarray](#ch-flags)|[Channel Flags](#ch-flags)|
-|2     |4   |float                |Voltage set               |
-|6     |4   |float                |Voltage step              |
-|10    |4   |float                |Current set               |
-|14    |4   |float                |Current step              |
-|18    |4   |float                |OVP delay                 |
-|22    |4   |float                |OCP delay                 |
-|26    |4   |float                |OPP delay                 |
-|30    |4   |float                |OPP level                 |
+|2     |4   |float                |U set                     |
+|6     |4   |float                |U step                    |
+|10    |4   |float                |U limit                   |
+|14    |4   |float                |OVP delay                 |
+|18    |4   |float                |OVP level                 |
+|22    |4   |float                |I set                     |
+|26    |4   |float                |I step                    |
+|30    |4   |float                |I limit                   |
+|34    |4   |float                |OCP delay                 |
+|38    |4   |float                |P step                    |
+|42    |4   |float                |OVP delay                 |
+|46    |4   |float                |OVP level                 |
 
 #### <a name="ch-flags">Channel flags</a>
 
@@ -158,14 +173,14 @@
 |---|-------------------|
 |0  |Output enabled     |
 |1  |Sense enabled      |
-|2  |OVP state          |
-|3  |OCP state          |
-|3  |OPP state          |
+|2  |OVP enabled        |
+|3  |OCP enabled        |
+|3  |OPP enabled        |
 |5  |Calibration enabled|
-|6  |Reserved           |
+|6  |RPROG enabled      |
 |7  |Reserved           |
-|8  |Reserved           |
-|9  |Reserved           |
+|8  |LRIPPLE enabled    |
+|9  |Params. valid      |
 |10 |Reserved           |
 |11 |Reserved           |
 |12 |Reserved           |
@@ -208,6 +223,7 @@
 |4     |2    |int                      |Version                      |
 |6     |2    |int                      |Queue head                   |
 |8     |2    |int                      |Queue size                   |
+|10    |2    |int                      |Last error event index       |
 |16    |1600 |[struct](#event)         |Max. 100 events              |	
 
 ## <a name="event">Event</a>

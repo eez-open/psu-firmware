@@ -1,9 +1,14 @@
 ## Introduction
 
-This project has Arduino/Genuino sketch for [Mega2560](https://www.arduino.cc/en/Main/ArduinoBoardMega2560) (8-bit, AVR) and [Due](https://www.arduino.cc/en/Main/ArduinoBoardDue) (32-bit, ARM) boards and accompanying libraries for the open hardware [EEZ H24005 power supply](http://www.envox.hr/eez/bench-power-supply/psu-introduction.html) firmware.
+This project has Arduino/Genuino sketch for [Mega2560](https://www.arduino.cc/en/Main/ArduinoBoardMega2560) (8-bit, AVR)
+and [Due](https://www.arduino.cc/en/Main/ArduinoBoardDue) (32-bit, ARM) boards and accompanying libraries for
+the open hardware [EEZ H24005 power supply](http://www.envox.hr/eez/bench-power-supply/psu-introduction.html) firmware.
 
-The unique feature of this project is a fully featured software simulator that can be used to evalute all firmware features without having physical power supply on disposal. The simulator can be complied to run on major platforms such as Windows, Linux or Mac.
-It shares all the code with the Arduino Sketch plus emulation layer for the Arduino API, Ethernet library and digital controls used for programming and monitoring EEZ bench power supply.
+The unique feature of this project is a fully featured software simulator that can be used to evaluate all
+firmware features without having physical power supply on disposal.
+The simulator can be complied to run on major platforms such as Windows, Linux or Mac.
+It shares all the code with the Arduino Sketch plus emulation layer for the Arduino API,
+Ethernet library and digital controls used for programming and monitoring EEZ bench power supply.
 
 ![Simulator GUI Front Panel](doc/simulator_screenshot.png)
 
@@ -13,9 +18,12 @@ Firmware key features:
 - Multiple programmable channels
 - Programming and continuous monitoring of voltage, current and power
 - Voltage and current calibration
-- Various protection mechanisms: OVP (Over Voltage Protection), OCP (Over Current Protection), OPP (Over Power Protection) and OTP (Over Temperature Protection)
+- Various protection mechanisms: OVP (Over Voltage Protection), OCP (Over Current Protection),
+  OPP (Over Power Protection) and OTP (Over Temperature Protection)
 - System date and time (using RTC)
 - EEPROM based storage for device configuration, calibration parameters and 10 user profiles.
+- Local GUI control using TFT touch display 
+- Remote control based on SCPI protocol
 
 ## Installation
 
@@ -28,7 +36,8 @@ We recommend Arduino IDE version 1.6.x or newer to compile and deploy Arduino sk
 the zip archive into Arduino folder on your computer. Arduino folder is e.g. `My Documents\Arduino` on Windows or `Documents/Arduino` on Linux and Mac. 
 3. Open `eez_psu_sketch.ino` in Arduino IDE, check if
 everything is correct with Verify button and upload the sketch using Upload button.
-4. Start using it via Telnet client such as [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/) (connection type: raw, port: 5025) or serial client that comes with Arduino IDE or any other you like.
+4. Remote control can be accessed via Telnet client such as [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/) (connection type: raw, port: 5025)
+or serial client that comes with Arduino IDE or any other you like.
 
 ### Simulator
 
@@ -38,10 +47,10 @@ If you are on Windows, there is a pre-build version:
 
 [ ![Download Simulator for Windows](doc/windows_download_button.png) ](http://www.envox.hr/eez/component/jdownloads/download/1-software-simulator-for-windows.html)
 
-
 After you build and run simulator, a mouse is used as simulation of finger on the TFT touchscreen display.
 
-Console window can be used to enter SCPI commands [SCPI reference manual](http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-introduction.html). SCPI commands can be also send by starting a telnet session to the port 5025:
+Console window can be used to enter SCPI commands [SCPI reference manual](http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-introduction.html).
+SCPI commands can be also send by starting a telnet session to the port 5025:
 
 ```
 telnet localhost 5025
@@ -110,9 +119,15 @@ EEZ bench power supply sketch source code can be divided into following layers:
   Implementation of EEZ bench power supply firmware functionality, for example Channel abstraction.
   It doesn't work directly with the hardware but uses the board layer, so it doesn't depends on Arduino platform API. 
 
-- SCPI
+- Control
   
-  Uses core layer to implement SCPI commands. This layer depends on third party scpi-parser library.
+  This layer is using Core layer to implement local and remote control.
+  
+  Local control is GUI based using TFT touch display. Special tool was developed to assist creation of GUI interface.
+  This layer depends on third party library [UTFT_Pro](https://github.com/itead/ITEADLIB_Arduino_UTFT_Pro) library that we use to draw graphical primitives.
+  
+  Remote control is based on SCPI protocol. Check [SCPI reference manual](http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-introduction.html) for available commands.
+  This layer depends on third party [scpi-parser](https://github.com/j123b567/scpi-parser) library.
 
 Additionally, simulator introduces two additional layers:
 
@@ -161,6 +176,7 @@ Here are the components of the board layer (all the files are in `eez_psu_sketch
         - Debug output
     - Temp. sensors (`temp_sensor.cpp` and `temp_sensor.h`)
         - MAIN temp. sensor read over analog pin
+    - FAN control
 - Post-regulator (power supply channel)
     - ADC (`adc.cpp` and `adc.h`)
         - Channel's ADC
@@ -177,7 +193,7 @@ Arduino library `eez_psu_lib` is also a part of the board layer and it is locate
 
 ### Core Layer
 
-Here are the components of the core layer (all the files are in `eez_psu_sketch` folder):
+Here are some components of the core layer (all the files are in `eez_psu_sketch` folder):
 
 - PSU (`psu.cpp` and `psu.h`)
     - power up
@@ -216,7 +232,32 @@ Here are the components of the core layer (all the files are in `eez_psu_sketch`
 - Persistent configuration (`persist_conf.cpp` and `persist_conf.h`)
     - Store/restore persistent configuration
 
-### SCPI
+### Control Layer
+
+#### Local control: TFT touch GUI
+
+Implementation of the GUI is based on MVC (Model View Controller) architecture.
+
+Model is where all data displayed on the screen comes from and our Model is implemented in the Core layer.
+
+View is about how everything looks on the screen. It is defined decoratively and definitions are created with the special tool we call EEZ Studio (it is not public yet!).
+
+![EEZ Studio](doc/eez-studio.png)
+
+This tool creates JSON based eez-project file which contains definitions of GUI pages, styles, bitmaps and fonts along with
+data and action definitions.
+JSON file is then compiled to C++ source code files (`gui_document.cpp`, `gui_document.h`, `actions.cpp` and `actions.h`)
+that are included as an integral part of the sketch.
+
+Controller is the glue code between Model and View. It is implemented in the all the files that start with "gui_" prefix. 
+
+Also, there is some utility code that is used, for example, to interact with the hardware:
+
+- `lcd.cpp`, `lcd.h` and UTFT_Pro is used to draw graphical primitives on the screen.
+- `touch.cpp` and `touch.h` is used to get data from the touch hardware. Input from the touch hardware is filtered using `touch_filter.cpp` and `touch_filter.h` - check [this](https://www.youtube.com/watch?v=jofIdGx2gTg) and [this](https://www.youtube.com/watch?v=_mrBomMLKiI) video. 
+- `font.cpp` and `font.h` is used to to access font definitions created with EEZ Studio.  
+
+#### Remote control: SCPI
 
 We are using [third party SCPI parser](https://github.com/j123b567/scpi-parser) and have our [own
 branch](https://github.com/mvladic/scpi-parser) where command definitions could be in AVR PROGMEM that helps preserve some memory space when Arduino Mega board is used.

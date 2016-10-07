@@ -20,6 +20,7 @@
 
 namespace eez {
 namespace psu {
+/// Utility code (PROGMEM access) for Arduino platform
 namespace arduino_util {
 
 uint8_t prog_read_byte(const uint8_t *p PROGMEM);
