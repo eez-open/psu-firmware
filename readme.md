@@ -1,3 +1,6 @@
+[![GitHub release](https://img.shields.io/github/release/eez-open/psu-firmware.svg)](https://github.com/eez-open/psu-firmware/releases)
+[![license](https://img.shields.io/github/license/eez-open/psu-firmware.svg)](https://github.com/eez-open/psu-firmware/blob/master/LICENSE.TXT)
+
 ## Introduction
 
 This project has Arduino/Genuino sketch for [Mega2560](https://www.arduino.cc/en/Main/ArduinoBoardMega2560) (8-bit, AVR)
@@ -28,7 +31,7 @@ Firmware key features:
 ### Ownership and License
 
 The contributors are listed in CONTRIB.TXT. This project uses the GPL v3 license, see LICENSE.TXT.
-EEZ psu-firmware uses the [C4.1 (Collective Code Construction Contract)](http://rfc.zeromq.org/spec:22) process for contributions..
+EEZ psu-firmware uses the [C4.1 (Collective Code Construction Contract)](http://rfc.zeromq.org/spec:22) process for contributions.
 To report an issue, use the [EEZ psu-firmware issue tracker](https://github.com/eez-open/psu-firmware/issues).
 
 ## Installation
