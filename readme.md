@@ -25,6 +25,12 @@ Firmware key features:
 - Local GUI control using TFT touch display 
 - Remote control based on SCPI protocol
 
+### Ownership and License
+
+The contributors are listed in CONTRIB.TXT. This project uses the GPL v3 license, see LICENSE.TXT.
+EEZ psu-firmware uses the [C4.1 (Collective Code Construction Contract)](http://rfc.zeromq.org/spec:22) process for contributions..
+To report an issue, use the [EEZ psu-firmware issue tracker](https://github.com/eez-open/psu-firmware/issues).
+
 ## Installation
 
 ### Arduino Sketch
@@ -259,8 +265,7 @@ Also, there is some utility code that is used, for example, to interact with the
 
 #### Remote control: SCPI
 
-We are using [third party SCPI parser](https://github.com/j123b567/scpi-parser) and have our [own
-branch](https://github.com/mvladic/scpi-parser) where command definitions could be in AVR PROGMEM that helps preserve some memory space when Arduino Mega board is used.
+We are using [third party SCPI parser](https://github.com/j123b567/scpi-parser) and have our [own branch](https://github.com/mvladic/scpi-parser) where command definitions could be in AVR PROGMEM that helps preserve some memory space when Arduino Mega board is used.
 (check [avr_progmem](https://github.com/mvladic/scpi-parser/tree/avr_progmem) branch). 
 
 There are two entry points for the SCPI commands: serial port and TCP server.
