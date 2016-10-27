@@ -603,13 +603,13 @@ void Channel::adcDataIsReady(int16_t data) {
 
 		if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage) {
 			u.mon_adc = data;
-
-			float value = remapAdcDataToVoltage(data);
-
-			u.mon = isCalibrationEnabled() ?
-				util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val) :
-				value;
 		}
+
+        float value = remapAdcDataToVoltage(u.mon_adc);
+
+        u.mon = isCalibrationEnabled() ?
+	        util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val) :
+	        value;
 
 		adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
 	}
@@ -623,13 +623,13 @@ void Channel::adcDataIsReady(int16_t data) {
 
 		if (abs(i.mon_adc - data) > negligibleAdcDiffForCurrent) {
 			i.mon_adc = data;
+        }
 
-			float value = remapAdcDataToCurrent(data);
+        float value = remapAdcDataToCurrent(i.mon_adc);
 
-			i.mon = isCalibrationEnabled() ?
-				util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val) :
-				value;
-		}
+		i.mon = isCalibrationEnabled() ?
+			util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val) :
+			value;
 
 		if (isOutputEnabled()) {
 			if (isRemoteProgrammingEnabled()) {

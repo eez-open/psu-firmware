@@ -282,11 +282,6 @@ scpi_result_t scpi_cal_State(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (calibrationEnabled && !channel->isCalibrationExists()) {
-        SCPI_ErrorPush(context, SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS);
-        return SCPI_RES_ERR;
-    }
-
 	channel->calibrationEnable(calibrationEnabled);
 
     return SCPI_RES_OK;
