@@ -246,9 +246,15 @@ bool saveAtLocation(int location, char *name) {
 				memcpy(profile.temp_prot + i, &temperature::sensors[i].prot_conf, sizeof(temperature::ProtectionConfiguration));
 			} else {
 				profile.temp_prot[i].sensor = i;
-				profile.temp_prot[i].delay = OTP_MAIN_DEFAULT_DELAY;
-				profile.temp_prot[i].level = OTP_MAIN_DEFAULT_LEVEL;
-				profile.temp_prot[i].state = OTP_MAIN_DEFAULT_STATE;
+                if (profile.temp_prot[i].sensor == temp_sensor::MAIN) {
+				    profile.temp_prot[i].delay = OTP_MAIN_DEFAULT_DELAY;
+				    profile.temp_prot[i].level = OTP_MAIN_DEFAULT_LEVEL;
+				    profile.temp_prot[i].state = OTP_MAIN_DEFAULT_STATE;
+                } else {
+				    profile.temp_prot[i].delay = OTP_CH_DEFAULT_DELAY;
+				    profile.temp_prot[i].level = OTP_CH_DEFAULT_LEVEL;
+				    profile.temp_prot[i].state = OTP_CH_DEFAULT_STATE;
+                }
 			}
 		}
 

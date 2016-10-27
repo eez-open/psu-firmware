@@ -99,5 +99,14 @@ option.
 /// Default OTP level
 #define OTP_MAIN_DEFAULT_LEVEL 50.0f
 
+/// Is channel OTP enabled by default?
+#define OTP_CH_DEFAULT_STATE 1
+
+/// Default channel OTP delay
+#define OTP_CH_DEFAULT_DELAY 30.0f
+
+/// Default channel OTP level
+#define OTP_CH_DEFAULT_LEVEL 75.0f
+
 #include "conf_advanced.h"
 #include "conf_user.h"

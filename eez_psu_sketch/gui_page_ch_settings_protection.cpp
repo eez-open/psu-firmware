@@ -356,7 +356,7 @@ ChSettingsOtpProtectionPage::ChSettingsOtpProtectionPage() {
 	origDelay = delay = data::Value(temperature::getChannelSensorDelay(g_channel), data::VALUE_TYPE_FLOAT_SECOND);
 	minDelay = OTP_MAIN_MIN_DELAY;
 	maxDelay = OTP_MAIN_MAX_DELAY;
-	defaultDelay = OTP_MAIN_DEFAULT_DELAY;
+	defaultDelay = OTP_CH_DEFAULT_DELAY;
 #endif
 }
 
