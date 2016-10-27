@@ -94,7 +94,7 @@ bool draw(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, 
     if (refresh) {
         const data::Value *labels;
         int count;
-        data::getButtonLabels(widgetCursor.cursor, widget->data, &labels, count);
+        data::getList(widgetCursor.cursor, widget->data, &labels, count);
         DECL_WIDGET_STYLE(style, widget);
         drawButtons(widget, widgetCursor.x, widgetCursor.y, style, selectedButton, labels, count);
         return true;
@@ -107,7 +107,7 @@ void onTouchDown(const WidgetCursor &widgetCursor) {
 
     const data::Value *labels;
     int count;
-    data::getButtonLabels(widgetCursor.cursor, widget->data, &labels, count);
+    data::getList(widgetCursor.cursor, widget->data, &labels, count);
 
     int selectedButton;
     if (widget->w > widget->h) {

@@ -249,12 +249,8 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 				return Value(channelSnapshots[iChannel].flags.opp);
 			}
 		
-			if (id == DATA_ID_OTP_CH) {
+			if (id == DATA_ID_OTP) {
 				return Value(channelSnapshots[iChannel].flags.otp_ch);
-			}
-		
-			if (id == DATA_ID_DP) {
-				return Value(channelSnapshots[iChannel].flags.dp);
 			}
 		
 			if (id == DATA_ID_CHANNEL_LABEL) {

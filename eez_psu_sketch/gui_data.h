@@ -258,7 +258,7 @@ Value getMin(const Cursor &cursor, uint8_t id);
 Value getMax(const Cursor &cursor, uint8_t id);
 ValueType getUnit(const Cursor &cursor, uint8_t id);
 
-void getButtonLabels(const Cursor &cursor, uint8_t id, const Value **labels, int &count);
+void getList(const Cursor &cursor, uint8_t id, const Value **labels, int &count);
 
 bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error);
 

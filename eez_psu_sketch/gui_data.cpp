@@ -285,9 +285,9 @@ ValueType getUnit(const Cursor &cursor, uint8_t id) {
     return VALUE_TYPE_NONE;
 }
 
-void getButtonLabels(const Cursor &cursor, uint8_t id, const Value **labels, int &count) {
+void getList(const Cursor &cursor, uint8_t id, const Value **values, int &count) {
     if (id == DATA_ID_EDIT_STEPS) {
-        return edit_mode_step::getStepValues(labels, count);
+        return edit_mode_step::getStepValues(values, count);
     }
 }
 
