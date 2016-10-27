@@ -45,7 +45,7 @@ Here we will explain how to build simulator from source code on Windows, Linux a
 
 If you are on Windows, there is a pre-build version:
 
-[ ![Download Simulator for Windows](doc/windows_download_button.png) ](http://www.envox.hr/eez/component/jdownloads/download/1-software-simulator-for-windows.html)
+[![Download Simulator for Windows](doc/windows_download_button.png)](http://www.envox.hr/eez/component/jdownloads/download/1-software-simulator-for-windows.html)
 
 After you build and run simulator, a mouse is used as simulation of finger on the TFT touchscreen display.
 
