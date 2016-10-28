@@ -126,11 +126,47 @@ void boot() {
     }
 
     // auto recall profile or ...
+    bool autoRecalledFromProfile = false;
+    
     profile::Parameters profile;
-    if (persist_conf::isProfileAutoRecallEnabled() && profile::load(persist_conf::getProfileAutoRecallLocation(), &profile)) {
-        success &= profile::recallFromProfile(&profile);
+    if (persist_conf::isProfileAutoRecallEnabled()) {
+        int location = persist_conf::getProfileAutoRecallLocation();
+        if (profile::load(location, &profile)) {
+            bool differenceChecked = true;
+
+            if (location != 0) {
+                profile::Parameters defaultProfile;
+                if (profile::load(0, &defaultProfile)) {
+                    bool differenceDetected = false;
+
+                    for (int i = 0; i < CH_NUM; ++i) {
+                        if (profile.channels[i].u_set != defaultProfile.channels[i].u_set || profile.channels[i].i_set != profile.channels[i].i_set) {
+                            differenceDetected = true;
+                            break;
+                        }
+                    }
+
+                    if (differenceDetected) {
+                        for (int i = 0; i < CH_NUM; ++i) {
+                            profile.channels[i].flags.output_enabled = false;
+                            profile.channels[i].flags.output_enabled = false;
+                        }
+
+                        event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
+                    }
+                } else {
+                    differenceChecked = false;
+                }
+            }
+            
+            if (differenceChecked && profile::recallFromProfile(&profile)) {
+                autoRecalledFromProfile = true;
+                success &= autoRecalledFromProfile;
+            }
+        }
     }
-    else {
+    
+    if (!autoRecalledFromProfile) {
         // ... reset
         success &= psu_reset(true);
     }
