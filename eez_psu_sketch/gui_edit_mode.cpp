@@ -216,7 +216,7 @@ void getInfoText(int part, char *infoText) {
             strcat_P(infoText, PSTR("["));
 		    util::strcatFloat(infoText, minValue.getFloat());
 		    strcat_P(infoText, PSTR("-"));
-		    util::strcatCurrent(infoText, maxValue.getFloat());
+		    util::strcatCurrent(infoText, Channel::get(dataCursor.i).getCurrentLimit());
 		    strcat_P(infoText, PSTR("]"));
         }
     } else {
@@ -234,7 +234,7 @@ void getInfoText(int part, char *infoText) {
             strcat_P(infoText, PSTR("["));
             util::strcatFloat(infoText, minValue.getFloat());
 		    strcat_P(infoText, PSTR("-"));
-		    util::strcatVoltage(infoText, maxValue.getFloat());
+		    util::strcatVoltage(infoText, Channel::get(dataCursor.i).getVoltageLimit());
 		    strcat_P(infoText, PSTR("]"));
         }
     }
