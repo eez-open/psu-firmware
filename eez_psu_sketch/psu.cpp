@@ -551,13 +551,17 @@ void tick() {
         Channel::get(i).tick(tick_usec);
     }
 
+    // if we move this, for example, after ethernet::tick we could get
+    // (in certain situations, see #25) PWRGOOD error on channel after
+    // the "pow:syst 1" command is executed 
+	sound::tick(tick_usec);
+
     serial::tick(tick_usec);
 
 #if OPTION_ETHERNET
 	ethernet::tick(tick_usec);
 #endif
     
-	sound::tick(tick_usec);
     profile::tick(tick_usec);
 
 #if OPTION_DISPLAY
