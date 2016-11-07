@@ -564,13 +564,13 @@ void Channel::tick(unsigned long tick_usec) {
     /// and that condition lasts more then DP_NEG_DELAY seconds (default 5 s),
     /// down-programmer circuit has to be switched off.
     if (flags.dpOn) {
-        if (u.set * i.set >= DP_NEG_LEV) {
+        if (u.mon * i.mon >= DP_NEG_LEV) {
             dpNegMonitoringTime = tick_usec;
-        }
-
-        if (tick_usec - dpNegMonitoringTime > DP_NEG_DELAY * 1000000UL) {
-            psu::generateError(SCPI_ERROR_CH1_DOWN_PROGRAMMER_SWITCHED_OFF + (index - 1));
-            doDpEnable(false);
+        } else {
+            if (tick_usec - dpNegMonitoringTime > DP_NEG_DELAY * 1000000UL) {
+                psu::generateError(SCPI_ERROR_CH1_DOWN_PROGRAMMER_SWITCHED_OFF + (index - 1));
+                doDpEnable(false);
+            }
         }
     }
 
