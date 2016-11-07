@@ -237,3 +237,12 @@
 /// How much to wait (in seconds) for a lease for an IP address from a DHCP server
 /// until we declare ethernet initialization failure.
 #define ETHERNET_DHCP_TIMEOUT 15
+
+/// Output power is monitored and if its go below DP_NEG_LEV
+/// that is negative value in Watts (default -1 W),
+/// and that condition lasts more then DP_NEG_DELAY seconds (default 5 s),
+/// down-programmer circuit has to be switched off.
+#define DP_NEG_LEV -1 // -1 W
+
+/// See DP_NEG_LEV.
+#define DP_NEG_DELAY 5 // 5 s

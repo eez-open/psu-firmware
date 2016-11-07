@@ -559,6 +559,21 @@ void Channel::tick(unsigned long tick_usec) {
         doDpEnable(false);
     }
 
+    /// Output power is monitored and if its go below DP_NEG_LEV
+    /// that is negative value in Watts (default -1 W),
+    /// and that condition lasts more then DP_NEG_DELAY seconds (default 5 s),
+    /// down-programmer circuit has to be switched off.
+    if (flags.dpOn) {
+        if (u.set * i.set >= DP_NEG_LEV) {
+            dpNegMonitoringTime = tick_usec;
+        }
+
+        if (tick_usec - dpNegMonitoringTime > DP_NEG_DELAY * 1000000UL) {
+            psu::generateError(SCPI_ERROR_CH1_DOWN_PROGRAMMER_SWITCHED_OFF + (index - 1));
+            doDpEnable(false);
+        }
+    }
+
 	// If channel output is off then test PWRGOOD here, otherwise it is tested in Channel::event method.
 #if !CONF_SKIP_PWRGOOD_TEST
 	if (!isOutputEnabled() && psu::isPowerUp()) {
@@ -777,6 +792,9 @@ void Channel::doDpEnable(bool enable) {
     ioexp.changeBit(IOExpander::IO_BIT_OUT_DP_ENABLE, !enable);
     setOperBits(OPER_ISUM_DP_OFF, !enable);
     flags.dpOn = enable;
+    if (enable) {
+        dpNegMonitoringTime = millis();
+    }
 }
 
 extern int g_trt;

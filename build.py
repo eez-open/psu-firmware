@@ -42,6 +42,6 @@ build_arduino_library.copy_lib(Ethernet2_dir, 'Ethernet2')
 eez_psu_lib_dir = os.path.join(os.path.dirname(__file__), 'libraries/eez_psu_lib')
 build_arduino_library.copy_lib(eez_psu_lib_dir, 'eez_psu_lib')
 
-# UTFT
-utft_dir = os.path.join(os.path.dirname(__file__), 'libraries/UTFT')
-build_arduino_library.copy_lib(utft_dir, 'UTFT')
+# UTFT_Pro
+utft_dir = os.path.join(os.path.dirname(__file__), 'libraries/UTFT_Pro')
+build_arduino_library.copy_lib(utft_dir, 'UTFT_Pro')

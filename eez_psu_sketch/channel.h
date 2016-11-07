@@ -506,6 +506,7 @@ private:
     unsigned long delayed_dp_off_start;
 	bool delayLowRippleCheck;
 	unsigned long outputEnableStartTime;
+    unsigned long dpNegMonitoringTime;
 
 	float U_MIN;
     float U_DEF;
@@ -526,7 +527,6 @@ private:
     void protectionCheck(ProtectionValue &cpv);
 
 	void doCalibrationEnable(bool enable);
-	float readingToCalibratedValue(Value *cv, float mon_reading);
 	void calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
 	void calibrationFindCurrentRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
 
