@@ -108,7 +108,9 @@ void boot() {
 	event_queue::init();
 
 #if OPTION_ETHERNET
+#if OPTION_DISPLAY
     gui::showEthernetInit();
+#endif
 	success &= ethernet::init();
 #else
 	DebugTrace("Ethernet initialization skipped!");
