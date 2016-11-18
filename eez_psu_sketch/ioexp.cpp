@@ -121,7 +121,7 @@ bool IOExpander::test() {
             psu::generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (channel.index - 1));
         }
 #else
-		channel.flags.power_ok = 1;
+		channel.flags.powerOk = 1;
 #endif
     }
     else {
