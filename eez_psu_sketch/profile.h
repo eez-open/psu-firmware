@@ -67,12 +67,19 @@ struct ChannelParameters {
 #endif
 };
 
+/// Channel binary flags stored in profile.
+struct ProfileFlags {
+    unsigned isValid: 1;
+    unsigned powerIsUp: 1;
+    unsigned channelsCoupling : 2;
+    unsigned reserverd : 12;
+};
+
 /// Profile parameters.
 struct Parameters {
     persist_conf::BlockHeader header;
-    bool is_valid;
+    ProfileFlags flags;
     char name[PROFILE_NAME_MAX_LENGTH + 1];
-    bool power_is_up;
     ChannelParameters channels[CH_MAX];
     temperature::ProtectionConfiguration temp_prot[temp_sensor::MAX_NUM_TEMP_SENSORS];
 };

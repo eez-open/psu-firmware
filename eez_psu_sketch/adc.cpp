@@ -18,6 +18,7 @@
  
 #include "psu.h"
 #include "adc.h"
+#include "channel_coupling.h"
 
 namespace eez {
 namespace psu {
@@ -136,10 +137,14 @@ void AnalogDigitalConverter::tick(unsigned long tick_usec) {
                     // TODO
                 }
 
-                channel.outputEnable(false);
+                channel_coupling::outputEnable(channel, false);
                 channel.remoteSensingEnable(false);
-				channel.remoteProgrammingEnable(false);
-				channel.lowRippleEnable(false);
+                if (channel.getFeatures() & CH_FEATURE_RPROG) {
+			    	channel.remoteProgrammingEnable(false);
+                }
+                if (channel.getFeatures() & CH_FEATURE_LRIPPLE) {
+			    	channel.lowRippleEnable(false);
+                }
             }
         }
         else {

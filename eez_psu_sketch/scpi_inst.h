@@ -23,4 +23,6 @@
     SCPI_COMMAND("INSTrument[:SELect]?", scpi_inst_SelectQ) \
     SCPI_COMMAND("INSTrument:NSELect",   scpi_inst_NSelect) \
     SCPI_COMMAND("INSTrument:NSELect?",  scpi_inst_NSelectQ) \
+    SCPI_COMMAND("INSTrument:COUPle:TRACking",  scpi_inst_CoupleTracking) \
+    SCPI_COMMAND("INSTrument:COUPle:TRACking?",  scpi_inst_CoupleTrackingQ) \
 

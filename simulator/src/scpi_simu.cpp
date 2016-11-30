@@ -17,6 +17,8 @@
  */
 
 #include "psu.h"
+#include "channel_coupling.h"
+
 #include "scpi_psu.h"
 #include "scpi_simu.h"
 
@@ -91,7 +93,7 @@ scpi_result_t scpi_simu_LoadState(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    channel->simulator.setLoadEnabled(state);
+    channel_coupling::setLoadEnabled(*channel, state);
 
     return SCPI_RES_OK;
 }
@@ -118,7 +120,7 @@ scpi_result_t scpi_simu_Load(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    channel->simulator.setLoad(value);
+    channel_coupling::setLoad(*channel, value);
 
     return SCPI_RES_OK;
 }

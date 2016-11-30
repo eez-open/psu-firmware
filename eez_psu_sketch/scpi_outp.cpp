@@ -21,6 +21,7 @@
 #include "scpi_outp.h"
 
 #include "calibration.h"
+#include "channel_coupling.h"
 
 namespace eez {
 namespace psu {
@@ -45,7 +46,7 @@ scpi_result_t scpi_outp_ProtectionClear(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    channel->clearProtection();
+    channel_coupling::clearProtection(*channel);
 
     return SCPI_RES_OK;
 }
@@ -74,7 +75,7 @@ scpi_result_t scpi_outp_State(scpi_t * context) {
             }
         }
 
-        channel->outputEnable(enable);
+        channel_coupling::outputEnable(*channel, enable);
     }
 
     return SCPI_RES_OK;

@@ -19,6 +19,7 @@
 #include "psu.h"
 
 #include "profile.h"
+#include "channel_coupling.h"
 
 #include "gui_data_snapshot.h"
 #include "gui_page_ch_settings_adv.h"
@@ -90,12 +91,12 @@ int ChSettingsAdvLRipplePage::getDirty() {
 
 void ChSettingsAdvLRipplePage::set() {
 	if (getDirty()) {
-		if (!g_channel->lowRippleEnable(status ? true : false)) {
+		if (!channel_coupling::lowRippleEnable(*g_channel, status ? true : false)) {
 			errorMessageP(PSTR("Failed to change LRipple status!"));
 			return;
 		}
 	
-		g_channel->lowRippleAutoEnable(autoMode ? true : false);
+		channel_coupling::lowRippleAutoEnable(*g_channel, autoMode ? true : false);
 
 		profile::save();
 	
@@ -127,6 +128,47 @@ void ChSettingsAdvRProgPage::toggleStatus() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+int ChSettingsAdvCouplingPage::selectedMode = 0;
+
+data::Value ChSettingsAdvCouplingPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+	if (id == DATA_ID_CHANNEL_COUPLING_SELECTED_MODE) {
+		return data::Value(selectedMode);
+	}
+
+	return data::Value();
+}
+
+void ChSettingsAdvCouplingPage::uncouple() {
+    channel_coupling::setType(channel_coupling::TYPE_NONE);
+	infoMessageP(PSTR("Channels uncoupled!"));
+}
+
+void ChSettingsAdvCouplingPage::setParallelInfo() {
+    selectedMode = 0;
+    pushPage(PAGE_ID_CH_SETTINGS_ADV_COUPLING_INFO);
+}
+
+void ChSettingsAdvCouplingPage::setSeriesInfo() {
+    selectedMode = 1;
+    pushPage(PAGE_ID_CH_SETTINGS_ADV_COUPLING_INFO);
+}
+
+void ChSettingsAdvCouplingPage::setParallel() {
+    if (selectedMode == 0) {
+        if (channel_coupling::setType(channel_coupling::TYPE_PARALLEL)) {
+	        infoMessageP(PSTR("Channels coupled in parallel!"), popPage);
+        }
+    }
+}
+
+void ChSettingsAdvCouplingPage::setSeries() {
+    if (selectedMode == 1) {
+        if (channel_coupling::setType(channel_coupling::TYPE_SERIES)) {
+    	    infoMessageP(PSTR("Channels coupled in series!"), popPage);
+        }
+    }
+}
 
 }
 }

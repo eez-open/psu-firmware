@@ -61,6 +61,8 @@ enum TestResult {
 
 void boot();
 
+extern bool g_is_booted;
+
 bool powerUp();
 void powerDown();
 bool isPowerUp();

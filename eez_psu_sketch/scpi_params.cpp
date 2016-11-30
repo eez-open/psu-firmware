@@ -19,6 +19,7 @@
 #include "psu.h"
 #include "scpi_psu.h"
 #include "temp_sensor.h"
+#include "channel_coupling.h"
 
 namespace eez {
 namespace psu {
@@ -188,21 +189,21 @@ bool get_voltage_from_param(scpi_t *context, const scpi_number_t &param, float &
     if (param.special) {
 		if (channel) {
 			if (param.tag == SCPI_NUM_MAX) {
-				value = channel->u.max;
+				value = channel_coupling::getUMax(*channel);
 			}
 			else if (param.tag == SCPI_NUM_MIN) {
-				value = channel->u.min;
+				value = channel_coupling::getUMin(*channel);
 			}
 			else if (param.tag == SCPI_NUM_DEF) {
-				value = channel->u.def;
+				value = channel_coupling::getUDef(*channel);
 			}
 			else if (param.tag == SCPI_NUM_UP && cv) {
 				value = cv->set + cv->step;
-				if (value > channel->u.max) value = channel->u.max;
+				if (value > channel_coupling::getUMax(*channel)) value = channel_coupling::getUMax(*channel);
 			}
 			else if (param.tag == SCPI_NUM_DOWN && cv) {
 				value = cv->set - cv->step;
-				if (value < channel->u.min) value = channel->u.min;
+				if (value < channel_coupling::getUMin(*channel)) value = channel_coupling::getUMin(*channel);
 			}
 			else {
 				SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
@@ -222,7 +223,7 @@ bool get_voltage_from_param(scpi_t *context, const scpi_number_t &param, float &
         value = (float)param.value;
 		
 		if (channel) {
-			if (value < channel->u.min || value > channel->u.max) {
+			if (value < channel_coupling::getUMin(*channel) || value > channel_coupling::getUMax(*channel)) {
 				SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
 				return false;
 			}
@@ -266,21 +267,21 @@ bool get_voltage_protection_level_from_param(scpi_t *context, const scpi_number_
 bool get_current_from_param(scpi_t *context, const scpi_number_t &param, float &value, const Channel *channel, const Channel::Value *cv) {
     if (param.special) {
         if (param.tag == SCPI_NUM_MAX) {
-            value = channel->i.max;
+            value = channel_coupling::getIMax(*channel);
         }
         else if (param.tag == SCPI_NUM_MIN) {
-            value = channel->i.min;
+            value = channel_coupling::getIMin(*channel);
         }
         else if (param.tag == SCPI_NUM_DEF) {
-            value = channel->i.def;
+            value = channel_coupling::getIDef(*channel);
         }
         else if (param.tag == SCPI_NUM_UP && cv) {
             value = cv->set + cv->step;
-            if (value > channel->i.max) value = channel->i.max;
+            if (value > channel_coupling::getIMax(*channel)) value = channel_coupling::getIMax(*channel);
         }
         else if (param.tag == SCPI_NUM_DOWN && cv) {
             value = cv->set - cv->step;
-            if (value < channel->i.min) value = channel->i.min;
+            if (value < channel_coupling::getIMin(*channel)) value = channel_coupling::getIMin(*channel);
         }
         else {
             SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
@@ -294,7 +295,7 @@ bool get_current_from_param(scpi_t *context, const scpi_number_t &param, float &
         }
 
         value = (float)param.value;
-        if (value < channel->i.min || value > channel->i.max) {
+        if (value < channel_coupling::getIMin(*channel) || value > channel_coupling::getIMax(*channel)) {
             SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
             return false;
         }
@@ -429,13 +430,13 @@ bool get_voltage_limit_from_param(scpi_t *context, const scpi_number_t &param, f
     if (param.special) {
 		if (channel) {
 			if (param.tag == SCPI_NUM_MAX) {
-				value = channel->getVoltageMaxLimit();
+				value = channel_coupling::getUMaxLimit(*channel);
 			}
 			else if (param.tag == SCPI_NUM_MIN) {
-				value = channel->u.min;
+				value = channel_coupling::getUMin(*channel);
 			}
 			else if (param.tag == SCPI_NUM_DEF) {
-				value = channel->getVoltageMaxLimit();
+				value = channel_coupling::getUMaxLimit(*channel);
 			}
 			else {
 				SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
@@ -455,7 +456,7 @@ bool get_voltage_limit_from_param(scpi_t *context, const scpi_number_t &param, f
         value = (float)param.value;
 		
 		if (channel) {
-			if (value < channel->u.min || value > channel->getVoltageMaxLimit()) {
+			if (value < channel_coupling::getUMin(*channel) || channel_coupling::getUMaxLimit(*channel)) {
 				SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
 				return false;
 			}
@@ -468,13 +469,13 @@ bool get_voltage_limit_from_param(scpi_t *context, const scpi_number_t &param, f
 bool get_current_limit_from_param(scpi_t *context, const scpi_number_t &param, float &value, const Channel *channel, const Channel::Value *cv) {
     if (param.special) {
         if (param.tag == SCPI_NUM_MAX) {
-            value = channel->getMaxCurrentLimit();
+            value = channel_coupling::getIMaxLimit(*channel);
         }
         else if (param.tag == SCPI_NUM_MIN) {
-            value = channel->i.min;
+            value = channel_coupling::getIMax(*channel);
         }
         else if (param.tag == SCPI_NUM_DEF) {
-            value = channel->getMaxCurrentLimit();
+            value = channel_coupling::getIMaxLimit(*channel);
         }
     }
     else {
@@ -484,7 +485,7 @@ bool get_current_limit_from_param(scpi_t *context, const scpi_number_t &param, f
         }
 
         value = (float)param.value;
-        if (value < channel->i.min || value > channel->getMaxCurrentLimit()) {
+        if (value < channel_coupling::getIMin(*channel) || value > channel_coupling::getIMaxLimit(*channel)) {
             SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
             return false;
         }
@@ -496,13 +497,13 @@ bool get_current_limit_from_param(scpi_t *context, const scpi_number_t &param, f
 bool get_power_limit_from_param(scpi_t *context, const scpi_number_t &param, float &value, const Channel *channel, const Channel::Value *cv) {
     if (param.special) {
         if (param.tag == SCPI_NUM_MAX) {
-            value = channel->getPowerMaxLimit();
+            value = channel_coupling::getPowerMaxLimit(*channel);
         }
         else if (param.tag == SCPI_NUM_MIN) {
-            value = 0;
+            value = channel_coupling::getPowerMinLimit(*channel);
         }
         else if (param.tag == SCPI_NUM_DEF) {
-            value = channel->getPowerMaxLimit();
+            value = channel_coupling::getPowerMaxLimit(*channel);
         }
     }
     else {
@@ -512,7 +513,7 @@ bool get_power_limit_from_param(scpi_t *context, const scpi_number_t &param, flo
         }
 
         value = (float)param.value;
-        if (value < 0 || value > channel->getPowerMaxLimit()) {
+        if (value < channel_coupling::getPowerMinLimit(*channel) || value > channel_coupling::getPowerMaxLimit(*channel)) {
             SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
             return false;
         }

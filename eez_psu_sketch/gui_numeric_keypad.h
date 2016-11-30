@@ -45,6 +45,8 @@ void init(const char *label, Options &options, void (*ok)(float), void (*cancel)
 // data::ValueType editUnit, float min, float max, bool maxButtonEnabled, float def, bool defButtonEnabled         bool genericNumberKeypad
 void start(const char *label, Options &options, void (*ok)(float), void (*cancel)() = 0);
 
+bool isEditing();
+
 data::ValueType getEditUnit();
 bool getText(char *text, int count);
 data::Value getData(uint8_t id);

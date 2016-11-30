@@ -76,6 +76,10 @@ void start(const char *label, Options &options, void (*ok)(float), void (*cancel
 	pushPage(PAGE_ID_NUMERIC_KEYPAD);
 }
 
+bool isEditing() {
+    return g_state != EMPTY && g_state != START;
+}
+
 data::ValueType getEditUnit() {
     return g_options.editUnit;
 }

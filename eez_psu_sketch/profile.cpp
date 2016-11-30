@@ -21,6 +21,7 @@
 #include "persist_conf.h"
 #include "datetime.h"
 #include "event_queue.h"
+#include "channel_coupling.h"
 
 namespace eez {
 namespace psu {
@@ -42,6 +43,8 @@ void tick(unsigned long tick_usec) {
 
 void recallChannelsFromProfile(Parameters *profile) {
     bool last_save_enabled = enableSave(false);
+
+    channel_coupling::setType((channel_coupling::Type)profile->flags.channelsCoupling);
 
     for (int i = 0; i < CH_MAX; ++i) {
 		Channel &channel = Channel::get(i);
@@ -106,7 +109,7 @@ bool recallFromProfile(Parameters *profile) {
 		memcpy(&temperature::sensors[i].prot_conf, profile->temp_prot + i, sizeof(temperature::ProtectionConfiguration));
 	}
 
-    if (profile->power_is_up) result &= psu::powerUp();
+    if (profile->flags.powerIsUp) result &= psu::powerUp();
     else psu::powerDown();
 
     recallChannelsFromProfile(profile);
@@ -119,7 +122,7 @@ bool recallFromProfile(Parameters *profile) {
 bool recall(int location) {
     if (location > 0 && location < NUM_PROFILE_LOCATIONS) {
         Parameters profile;
-        if (persist_conf::loadProfile(location, &profile) && profile.is_valid) {
+        if (persist_conf::loadProfile(location, &profile) && profile.flags.isValid) {
             if (persist_conf::saveProfile(0, &profile)) {
                 if (recallFromProfile(&profile)) {
 					event_queue::pushEvent(event_queue::EVENT_INFO_RECALL_FROM_PROFILE_0 + location);
@@ -135,13 +138,13 @@ bool recall(int location) {
 
 bool load(int location, Parameters *profile) {
     if (location >= 0 && location < NUM_PROFILE_LOCATIONS) {
-        return persist_conf::loadProfile(location, profile) && profile->is_valid;
+        return persist_conf::loadProfile(location, profile) && profile->flags.isValid;
     }
     return false;
 }
 
 void getSaveName(const Parameters *profile, char *name) {
-	if (!profile->is_valid || strncmp_P(profile->name, AUTO_NAME_PREFIX, strlen(AUTO_NAME_PREFIX)) == 0) {
+	if (!profile->flags.isValid || strncmp_P(profile->name, AUTO_NAME_PREFIX, strlen(AUTO_NAME_PREFIX)) == 0) {
 		strcpy_P(name, AUTO_NAME_PREFIX);
 		datetime::getDateTimeAsString(name + strlen(AUTO_NAME_PREFIX));
 	} else {
@@ -167,13 +170,16 @@ void saveImmediately() {
 bool saveAtLocation(int location, char *name) {
     if (location >= 0 && location < NUM_PROFILE_LOCATIONS) {
         Parameters currentProfile;
+
         if (!persist_conf::loadProfile(location, &currentProfile)) {
-            currentProfile.is_valid = false;
+            currentProfile.flags.isValid = false;
         }
 
         Parameters profile;
 
-        profile.is_valid = true;
+        profile.flags.isValid = true;
+
+        profile.flags.channelsCoupling = channel_coupling::getType();
 
         // name
         memset(profile.name, 0, sizeof(profile.name));
@@ -187,7 +193,7 @@ bool saveAtLocation(int location, char *name) {
 
         noInterrupts();
 
-        profile.power_is_up = psu::isPowerUp();
+        profile.flags.powerIsUp = psu::isPowerUp();
 
         for (int i = 0; i < CH_MAX; ++i) {
 			if (i < CH_NUM) {
@@ -197,44 +203,44 @@ bool saveAtLocation(int location, char *name) {
 
 				profile.channels[i].flags.cal_enabled = channel.isCalibrationEnabled();
 				profile.channels[i].flags.output_enabled = channel.flags.outputEnabled;
-				profile.channels[i].flags.sense_enabled = Channel::get(i).flags.senseEnabled;
+				profile.channels[i].flags.sense_enabled = channel.flags.senseEnabled;
 
-				if (Channel::get(i).getFeatures() & CH_FEATURE_RPROG) {
-					profile.channels[i].flags.rprog_enabled = Channel::get(i).flags.rprogEnabled;
+				if (channel.getFeatures() & CH_FEATURE_RPROG) {
+					profile.channels[i].flags.rprog_enabled = channel.flags.rprogEnabled;
 				} else {
 					profile.channels[i].flags.rprog_enabled = 0;
 				}
 
-				if (Channel::get(i).getFeatures() & CH_FEATURE_LRIPPLE) {
+				if (channel.getFeatures() & CH_FEATURE_LRIPPLE) {
 					profile.channels[i].flags.lripple_auto_enabled = Channel::get(i).flags.lrippleAutoEnabled;
 				} else {
 					profile.channels[i].flags.lripple_auto_enabled = 0;
 				}
 
-				profile.channels[i].flags.u_state = Channel::get(i).prot_conf.flags.u_state;
-				profile.channels[i].flags.i_state = Channel::get(i).prot_conf.flags.i_state;
-				profile.channels[i].flags.p_state = Channel::get(i).prot_conf.flags.p_state;
+				profile.channels[i].flags.u_state = channel.prot_conf.flags.u_state;
+				profile.channels[i].flags.i_state = channel.prot_conf.flags.i_state;
+				profile.channels[i].flags.p_state = channel.prot_conf.flags.p_state;
 
-				profile.channels[i].u_set = Channel::get(i).u.set;
-				profile.channels[i].u_step = Channel::get(i).u.step;
-				profile.channels[i].u_limit = Channel::get(i).u.limit;
+				profile.channels[i].u_set = channel.getUSet();
+				profile.channels[i].u_step = channel.u.step;
+				profile.channels[i].u_limit = channel.u.limit;
 
-				profile.channels[i].i_set = Channel::get(i).i.set;
-				profile.channels[i].i_step = Channel::get(i).i.step;
-				profile.channels[i].i_limit = Channel::get(i).i.limit;
+				profile.channels[i].i_set = channel.getISet();
+				profile.channels[i].i_step = channel.i.step;
+				profile.channels[i].i_limit = channel.i.limit;
 
-				profile.channels[i].p_limit = Channel::get(i).p_limit;
+				profile.channels[i].p_limit = channel.p_limit;
 
-				profile.channels[i].u_delay = Channel::get(i).prot_conf.u_delay;
-				profile.channels[i].u_level = Channel::get(i).prot_conf.u_level;
-				profile.channels[i].i_delay = Channel::get(i).prot_conf.i_delay;
-				profile.channels[i].p_delay = Channel::get(i).prot_conf.p_delay;
-				profile.channels[i].p_level = Channel::get(i).prot_conf.p_level;
+				profile.channels[i].u_delay = channel.prot_conf.u_delay;
+				profile.channels[i].u_level = channel.prot_conf.u_level;
+				profile.channels[i].i_delay = channel.prot_conf.i_delay;
+				profile.channels[i].p_delay = channel.prot_conf.p_delay;
+				profile.channels[i].p_level = channel.prot_conf.p_level;
 
 #ifdef EEZ_PSU_SIMULATOR
-				profile.channels[i].load_enabled = Channel::get(i).simulator.load_enabled;
-				profile.channels[i].load = Channel::get(i).simulator.load;
-				profile.channels[i].voltProgExt = Channel::get(i).simulator.voltProgExt;
+				profile.channels[i].load_enabled = channel.simulator.load_enabled;
+				profile.channels[i].load = channel.simulator.load;
+				profile.channels[i].voltProgExt = channel.simulator.voltProgExt;
 #endif
 			} else {
 				profile.channels[i].flags.parameters_are_valid = 0;
@@ -270,7 +276,7 @@ bool deleteLocation(int location) {
     bool result = false;
     if (location > 0 && location < NUM_PROFILE_LOCATIONS) {
         Parameters profile;
-        profile.is_valid = false;
+        profile.flags.isValid = false;
         if (location == persist_conf::getProfileAutoRecallLocation()) {
             persist_conf::setProfileAutoRecallLocation(0);
         }
@@ -292,7 +298,7 @@ bool isValid(int location) {
     if (location >= 0 && location < NUM_PROFILE_LOCATIONS) {
         Parameters profile;
         if (persist_conf::loadProfile(location, &profile)) {
-            return profile.is_valid;
+            return profile.flags.isValid;
         }
     }
     return false;
@@ -301,7 +307,7 @@ bool isValid(int location) {
 bool setName(int location, const char *name, size_t name_len) {
     if (location > 0 && location < NUM_PROFILE_LOCATIONS) {
         Parameters profile;
-        if (persist_conf::loadProfile(location, &profile) && profile.is_valid) {
+        if (persist_conf::loadProfile(location, &profile) && profile.flags.isValid) {
             memset(profile.name, 0, sizeof(profile.name));
             strncpy(profile.name, name, name_len);
             return persist_conf::saveProfile(location, &profile);
@@ -313,7 +319,7 @@ bool setName(int location, const char *name, size_t name_len) {
 void getName(int location, char *name, int count) {
 	if (location >= 0 && location < NUM_PROFILE_LOCATIONS) {
         Parameters profile;
-        if (persist_conf::loadProfile(location, &profile) && profile.is_valid) {
+        if (persist_conf::loadProfile(location, &profile) && profile.flags.isValid) {
             strncpy(name, profile.name, count - 1);
 			name[count - 1] = 0;
             return;

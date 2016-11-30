@@ -141,6 +141,7 @@ public:
     /// Channel binary flags like output enabled, sense enabled, ...
     struct Flags {
         unsigned outputEnabled : 1;
+        unsigned afterBootOutputEnabled: 1;
         unsigned dpOn : 1;
         unsigned senseEnabled : 1;
         unsigned cvMode : 1;
@@ -377,6 +378,8 @@ public:
     /// Enable/disable channel output.
     void outputEnable(bool enable);
 
+    void afterBootOutputEnable();
+
     /// Is channel output enabled?
     bool isOutputEnabled();
 
@@ -501,6 +504,11 @@ public:
 	/// Change power limit, it will adjust U_SET or I_SET if necessary.
 	void setPowerLimit(float limit);
 
+    bool isVoltageBalanced() { return !util::isNaN(uBeforeBalancing); }
+    bool isCurrentBalanced() { return !util::isNaN(iBeforeBalancing); }
+    float getUSet() { return isVoltageBalanced() ? uBeforeBalancing : u.set; }
+    float getISet() { return isCurrentBalanced() ? iBeforeBalancing : i.set; }
+
 private:
     bool delayed_dp_off;
     unsigned long delayed_dp_off_start;
@@ -517,6 +525,9 @@ private:
     float I_DEF;
     float I_MAX;
 
+    float uBeforeBalancing;
+    float iBeforeBalancing;
+
 	MaxCurrentLimitCause maxCurrentLimitCause;
 
 	int negligibleAdcDiffForVoltage;
@@ -525,6 +536,7 @@ private:
     void clearProtectionConf();
     void protectionEnter(ProtectionValue &cpv);
     void protectionCheck(ProtectionValue &cpv);
+    void protectionCheck();
 
 	void doCalibrationEnable(bool enable);
 	void calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
@@ -532,6 +544,15 @@ private:
 
 	void adcDataIsReady(int16_t data);
     
+    void voltageBalancing();
+    void currentBalancing();
+
+    void restoreVoltageToValueBeforeBalancing();
+    void restoreCurrentToValueBeforeBalancing();
+
+    void doSetVoltage(float value);
+    void doSetCurrent(float value);
+
 	void setCcMode(bool cc_mode);
     void setCvMode(bool cv_mode);
     void updateCcAndCvSwitch();

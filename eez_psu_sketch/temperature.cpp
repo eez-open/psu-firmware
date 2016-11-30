@@ -29,6 +29,7 @@
 #include "sound.h"
 #include "temperature.h"
 #include "event_queue.h"
+#include "channel_coupling.h"
 
 namespace eez {
 namespace psu {
@@ -119,24 +120,12 @@ bool getChannelSensorState(Channel *channel) {
 	return sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.state;
 }
 
-void setChannelSensorState(Channel *channel, bool state) {
-	sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.state = state;
-}
-
 float getChannelSensorLevel(Channel *channel) {
 	return sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.level;
 }
 
-void setChannelSensorLevel(Channel *channel, float value) {
-	sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.level = value;
-}
-
 float getChannelSensorDelay(Channel *channel) {
 	return sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.delay;
-}
-
-void setChannelSensorDelay(Channel *channel, float value) {
-	sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.delay = value;
 }
 #endif
 
@@ -273,7 +262,7 @@ void TempSensorTemperature::protection_enter() {
     otp_tripped = true;
 
 	if (temp_sensor::sensors[sensorIndex].ch_num >= 0) {
-		Channel::get(temp_sensor::sensors[sensorIndex].ch_num).outputEnable(false);
+		channel_coupling::outputEnable(Channel::get(temp_sensor::sensors[sensorIndex].ch_num), false);
 	} else {
 		for (int i = 0; i < CH_NUM; ++i) {
 			Channel::get(i).outputEnable(false);

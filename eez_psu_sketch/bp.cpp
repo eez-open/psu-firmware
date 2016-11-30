@@ -25,7 +25,8 @@ namespace bp {
 
 psu::TestResult test_result = psu::TEST_SKIPPED;
 
-static uint16_t last_conf;
+static uint16_t g_lastConf;
+static int g_channelCouplingType;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -36,16 +37,18 @@ void set(uint16_t conf) {
         digitalWrite(BP_SELECT, LOW);
         SPI.transfer(conf >> 8);
         SPI.transfer(conf & 0xFF);
-        last_conf = conf;
+        g_lastConf = conf;
         digitalWrite(BP_SELECT, HIGH);
         digitalWrite(BP_SELECT, LOW);
         digitalWrite(BP_OE, LOW);
         SPI.endTransaction();
+
+        DebugTraceF("BP 0x%04x", (int)conf);
     }
 }
 
 void bp_switch(uint16_t mask, bool on) {
-    uint16_t conf = last_conf;
+    uint16_t conf = g_lastConf;
 
     if (on) {
         conf |= mask;
@@ -54,13 +57,25 @@ void bp_switch(uint16_t mask, bool on) {
         if (mask & (1 << BP_LED_OUT1_MINUS)) conf &= ~(1 << BP_LED_OUT1_MINUS_RED);
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
         if (mask & (1 << BP_LED_OUT1)) conf &= ~(1 << BP_LED_OUT1_RED);
+        if (mask & (1 << BP_LED_OUT1_RED)) conf &= ~((1 << BP_LED_OUT1) | (1 << BP_LED_OUT2));
 #endif
     }
     else {
         conf &= ~mask;
     }
 
-    if (conf != last_conf) {
+    if (conf != g_lastConf) {
+        set(conf);
+    }
+}
+
+void bp_switch2(uint16_t maskOn, uint16_t maskOff) {
+    uint16_t conf = g_lastConf;
+
+    conf |= maskOn;
+    conf &= ~maskOff;
+
+    if (conf != g_lastConf) {
         set(conf);
     }
 }
@@ -77,10 +92,19 @@ void switchStandby(bool on) {
 
 void switchOutput(Channel *channel, bool on) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-    bp_switch((1 << channel->bp_led_out_plus) |
-        (1 << channel->bp_led_out_minus), on);
+    if (g_channelCouplingType == CHANNELS_COUPLING_TYPE_NONE) {
+        bp_switch((1 << channel->bp_led_out_plus) | (1 << channel->bp_led_out_minus), on);
+    } else {
+        if (channe->index == 1) {
+            bp_switch((1 << BP_LED_OUT1_PLUS_RED) | (1 << BP_LED_OUT1_MINUS_RED), on);
+        }
+    }
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-    bp_switch((1 << channel->bp_led_out), on);
+    if (g_channelCouplingType == CHANNELS_COUPLING_TYPE_NONE) {
+        bp_switch((1 << channel->bp_led_out), on);
+    } else {
+        bp_switch((1 << BP_LED_OUT1_RED), on);
+    }
 #endif
 }
 
@@ -111,6 +135,18 @@ void ccLedSwitch(Channel *channel, bool on) {
 }
 
 #endif
+
+void switchChannelCoupling(int channelCouplingType) {
+    g_channelCouplingType = channelCouplingType;
+
+    if (g_channelCouplingType == CHANNELS_COUPLING_TYPE_PARALLEL) {
+        bp_switch2(1 << BP_K_PAR, 1 << BP_K_SER);
+    } else if (g_channelCouplingType == CHANNELS_COUPLING_TYPE_SERIES) {
+        bp_switch2(1 << BP_K_SER, 1 << BP_K_PAR);
+    } else {
+        bp_switch2(0, (1 << BP_K_SER) | (1 << BP_K_PAR));
+    }
+}
 
 }
 }

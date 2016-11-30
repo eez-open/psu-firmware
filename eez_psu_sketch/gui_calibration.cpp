@@ -21,6 +21,7 @@
 #include "persist_conf.h"
 #include "sound.h"
 #include "calibration.h"
+#include "channel_coupling.h"
 
 #include "gui_data_snapshot.h"
 #include "gui_calibration.h"
@@ -112,8 +113,8 @@ void onStartPasswordOk() {
         g_channel->remoteProgrammingEnable(false);
     }
     if (g_channel->getFeatures() & CH_FEATURE_LRIPPLE) {
-        g_channel->lowRippleEnable(false);
-		g_channel->lowRippleAutoEnable(false);
+        channel_coupling::lowRippleEnable(*g_channel, false);
+		channel_coupling::lowRippleAutoEnable(*g_channel, false);
     }
 
 	g_channel->outputEnable(true);

@@ -23,6 +23,7 @@
 #include "datetime.h"
 #include "sound.h"
 #include "profile.h"
+#include "channel_coupling.h"
 
 namespace eez {
 namespace psu {
@@ -200,7 +201,7 @@ scpi_result_t scpi_syst_TempProtectionClear(scpi_t * context) {
 		return SCPI_RES_ERR;
     }
 
-    temperature::sensors[sensor].clearProtection();
+    channel_coupling::clearOtpProtection(sensor);
 
     return SCPI_RES_OK;
 }
@@ -216,7 +217,7 @@ scpi_result_t scpi_syst_TempProtectionLevel(scpi_t * context) {
 		return SCPI_RES_ERR;
     }
 
-    temperature::sensors[sensor].prot_conf.level = level;
+    channel_coupling::setOtpLevel(sensor, level);
     profile::save();
 
     return SCPI_RES_OK;
@@ -242,7 +243,7 @@ scpi_result_t scpi_syst_TempProtectionState(scpi_t * context) {
 		return SCPI_RES_ERR;
     }
 
-    temperature::sensors[sensor].prot_conf.state = state;
+    channel_coupling::setOtpState(sensor, state);
     profile::save();
 
     return SCPI_RES_OK;
@@ -270,7 +271,7 @@ scpi_result_t scpi_syst_TempProtectionDelay(scpi_t * context) {
 		return SCPI_RES_ERR;
     }
 
-    temperature::sensors[sensor].prot_conf.delay = delay;
+    channel_coupling::setOtpDelay(sensor, delay);
     profile::save();
 
     return SCPI_RES_OK;
@@ -310,7 +311,7 @@ scpi_result_t scpi_syst_ChannelInformationCurrentQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    SCPI_ResultFloat(context, channel->i.max);
+    SCPI_ResultFloat(context, channel_coupling::getIMax(*channel));
 
     return SCPI_RES_OK;
 }
@@ -393,7 +394,7 @@ scpi_result_t scpi_syst_ChannelInformationVoltageQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    SCPI_ResultFloat(context, channel->u.max);
+    SCPI_ResultFloat(context, channel_coupling::getUMax(*channel));
 
     return SCPI_RES_OK;
 }

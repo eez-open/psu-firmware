@@ -20,6 +20,7 @@
 #include "scpi_psu.h"
 #include "scpi_core.h"
 #include "temperature.h"
+#include "channel_coupling.h"
 
 namespace eez {
 namespace psu {
@@ -34,7 +35,7 @@ scpi_result_t scpi_meas_CurrentQ(scpi_t * context) {
     }
 
     char buffer[256] = { 0 };
-    util::strcatFloat(buffer, channel->i.mon);
+    util::strcatFloat(buffer, channel_coupling::getIMon(*channel));
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;
@@ -47,7 +48,7 @@ scpi_result_t scpi_meas_PowerQ(scpi_t * context) {
     }
 
     char buffer[256] = { 0 };
-    util::strcatFloat(buffer, channel->u.mon * channel->i.mon);
+    util::strcatFloat(buffer, channel_coupling::getUMon(*channel) * channel_coupling::getIMon(*channel));
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;
@@ -60,7 +61,7 @@ scpi_result_t scpi_meas_VoltageQ(scpi_t * context) {
     }
 
     char buffer[256] = { 0 };
-    util::strcatFloat(buffer, channel->u.mon);
+    util::strcatFloat(buffer, channel_coupling::getUMon(*channel));
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;

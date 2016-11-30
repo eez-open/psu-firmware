@@ -68,6 +68,10 @@
 
 #endif
 
+#define CHANNELS_COUPLING_TYPE_NONE     0
+#define CHANNELS_COUPLING_TYPE_PARALLEL 1
+#define CHANNELS_COUPLING_TYPE_SERIES   2
+
 namespace eez {
 namespace psu {
 namespace bp {
@@ -81,6 +85,8 @@ void switchOutput(Channel *channel, bool on);
 void switchSense(Channel *channel, bool on);
 
 void switchProg(Channel *channel, bool on);
+
+void switchChannelCoupling(int channelCouplingType);
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 void cvLedSwitch(Channel *channel, bool on);

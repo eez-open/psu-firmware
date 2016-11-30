@@ -406,6 +406,9 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_ethernet.h">
       <Filter>gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\channel_coupling.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -699,6 +702,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_ethernet.cpp">
       <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\channel_coupling.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

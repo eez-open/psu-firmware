@@ -21,6 +21,7 @@
 #include "scpi_sour.h"
 
 #include "profile.h"
+#include "channel_coupling.h"
 
 #define I_STATE 1
 #define P_STATE 2
@@ -115,39 +116,10 @@ static scpi_result_t get_source_value(scpi_t * context, float value, float def) 
     return result_float(context, value);
 }
 
-scpi_result_t set_delay(scpi_t *context, float &delay_var, float min, float max, float def) {
-    float delay;
-    if (!get_duration_param(context, delay, min, max, def)) {
-        return SCPI_RES_ERR;
-    }
-
-    delay_var = delay;
-    profile::save();
-
-    return SCPI_RES_OK;
-}
-
 scpi_result_t get_delay(scpi_t *context, float delay) {
     SCPI_ResultFloat(context, delay);
 
     return SCPI_RES_OK;
-}
-
-scpi_result_t set_state(scpi_t *context, Channel *channel, int type) {
-	bool state;
-	if (!SCPI_ParamBool(context, &state, TRUE)) {
-		return SCPI_RES_ERR;
-	}
-
-    switch (type) {
-    case I_STATE: channel->prot_conf.flags.i_state = state; break;
-    case P_STATE: channel->prot_conf.flags.p_state = state; break;
-    default:      channel->prot_conf.flags.u_state = state; break;
-	}
-
-    profile::save();
-
-	return SCPI_RES_OK;
 }
 
 scpi_result_t get_state(scpi_t *context, Channel *channel, int type) {
@@ -183,17 +155,17 @@ scpi_result_t scpi_source_Current(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-	if (current > channel->getCurrentLimit()) {
+	if (current > channel_coupling::getILimit(*channel)) {
         SCPI_ErrorPush(context, SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
 	}
 
-    if (current * channel->u.set > channel->getPowerLimit()) {
+    if (current * channel_coupling::getUSet(*channel) > channel_coupling::getPowerLimit(*channel)) {
         SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
     }
 
-    channel->setCurrent(current);
+    channel_coupling::setCurrent(*channel, current);
 
     return SCPI_RES_OK;
 }
@@ -204,7 +176,11 @@ scpi_result_t scpi_source_CurrentQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, channel->i.set, channel->i.min, channel->i.max, channel->i.def);
+    return get_source_value(context, 
+        channel_coupling::getISet(*channel),
+        channel_coupling::getIMin(*channel),
+        channel_coupling::getIMax(*channel),
+        channel_coupling::getIDef(*channel));
 }
 
 scpi_result_t scpi_source_Voltage(scpi_t * context) {
@@ -227,17 +203,17 @@ scpi_result_t scpi_source_Voltage(scpi_t * context) {
         return SCPI_RES_ERR;
 	}
 
-	if (voltage > channel->getVoltageLimit()) {
+	if (voltage > channel_coupling::getULimit(*channel)) {
         SCPI_ErrorPush(context, SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
 	}
 
-	if (voltage * channel->i.set > channel->getPowerLimit()) {
+	if (voltage * channel_coupling::getISet(*channel) > channel_coupling::getPowerLimit(*channel)) {
         SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
     }
 
-    channel->setVoltage(voltage);
+    channel_coupling::setVoltage(*channel, voltage);
 
     return SCPI_RES_OK;
 }
@@ -252,10 +228,13 @@ scpi_result_t scpi_source_VoltageQ(scpi_t * context) {
 	if (channel->isRemoteProgrammingEnabled()) {
 		u = channel->u.mon_dac;
 	} else {
-		u = channel->u.set;
+		u = channel_coupling::getUSet(*channel);
 	}
 
-    return get_source_value(context, u, channel->u.min, channel->u.max, channel->u.def);
+    return get_source_value(context, u,
+        channel_coupling::getUMin(*channel),
+        channel_coupling::getUMax(*channel),
+        channel_coupling::getUDef(*channel));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -304,8 +283,16 @@ scpi_result_t scpi_source_CurrentProtectionDelay(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return set_delay(context, channel->prot_conf.i_delay,
-        channel->OCP_MIN_DELAY, channel->OCP_MAX_DELAY, channel->OCP_DEFAULT_DELAY);
+    float delay;
+    if (!get_duration_param(context, delay, channel->OCP_MIN_DELAY, channel->OCP_MAX_DELAY, channel->OCP_DEFAULT_DELAY)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel_coupling::setOcpDelay(*channel, delay);
+    
+    profile::save();
+    
+    return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_source_CurrentProtectionDelayQ(scpi_t * context) {
@@ -323,7 +310,14 @@ scpi_result_t scpi_source_CurrentProtectionState(scpi_t *context) {
         return SCPI_RES_ERR;
     }
     
-    return set_state(context, channel, I_STATE);
+	bool state;
+	if (!SCPI_ParamBool(context, &state, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+    channel_coupling::setOcpState(*channel, state);
+
+	return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_source_CurrentProtectionStateQ(scpi_t * context) {
@@ -351,11 +345,11 @@ scpi_result_t scpi_source_PowerProtectionLevel(scpi_t * context) {
 	}
 
 	float power;
-	if (!get_power_param(context, power, channel->OPP_MIN_LEVEL, channel->OPP_MAX_LEVEL, channel->OPP_DEFAULT_LEVEL)) {
+	if (!get_power_param(context, power, channel_coupling::getOppMinLevel(*channel), channel_coupling::getOppMaxLevel(*channel), channel_coupling::getOppDefaultLevel(*channel))) {
 		return SCPI_RES_ERR;
 	}
 
-    channel->prot_conf.p_level = power;
+    channel_coupling::setOppLevel(*channel, power);
     profile::save();
 
 	return SCPI_RES_OK;
@@ -367,8 +361,10 @@ scpi_result_t scpi_source_PowerProtectionLevelQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
     
-    return get_source_value(context, channel->prot_conf.p_level,
-        channel->OPP_MIN_LEVEL, channel->OPP_MAX_LEVEL, channel->OPP_DEFAULT_LEVEL);
+    return get_source_value(context, channel_coupling::getPowerProtectionLevel(*channel),
+        channel_coupling::getOppMinLevel(*channel),
+        channel_coupling::getOppMaxLevel(*channel),
+        channel_coupling::getOppDefaultLevel(*channel));
 }
 
 scpi_result_t scpi_source_PowerProtectionDelay(scpi_t * context) {
@@ -377,8 +373,16 @@ scpi_result_t scpi_source_PowerProtectionDelay(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return set_delay(context, channel->prot_conf.p_delay,
-        channel->OCP_MIN_DELAY, channel->OCP_MAX_DELAY, channel->OPP_DEFAULT_DELAY);
+    float delay;
+    if (!get_duration_param(context, delay, channel->OPP_MIN_DELAY, channel->OPP_MAX_DELAY, channel->OPP_DEFAULT_DELAY)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel_coupling::setOppDelay(*channel, delay);
+    
+    profile::save();
+    
+    return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_source_PowerProtectionDelayQ(scpi_t * context) {
@@ -396,7 +400,14 @@ scpi_result_t scpi_source_PowerProtectionState(scpi_t * context) {
         return SCPI_RES_ERR;
     }
     
-    return set_state(context, channel, P_STATE);
+	bool state;
+	if (!SCPI_ParamBool(context, &state, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+    channel_coupling::setOppState(*channel, state);
+
+	return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_source_PowerProtectionStateQ(scpi_t * context) {
@@ -424,11 +435,11 @@ scpi_result_t scpi_source_VoltageProtectionLevel(scpi_t * context) {
 	}
 
     float voltage;
-    if (!get_voltage_protection_level_param(context, voltage, channel->u.set, channel->u.max, channel->u.max)) {
+    if (!get_voltage_protection_level_param(context, voltage, channel_coupling::getUSet(*channel), channel_coupling::getUMax(*channel), channel_coupling::getUMax(*channel))) {
         return SCPI_RES_ERR;
     }
 
-    channel->prot_conf.u_level = voltage;
+    channel_coupling::setOvpLevel(*channel, voltage);
     profile::save();
 
 	return SCPI_RES_OK;
@@ -440,8 +451,10 @@ scpi_result_t scpi_source_VoltageProtectionLevelQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
     
-    return get_source_value(context, channel->prot_conf.u_level,
-        channel->u.set, channel->u.max, channel->u.max);
+    return get_source_value(context, channel_coupling::getUProtectionLevel(*channel),
+        channel_coupling::getUSet(*channel),
+        channel_coupling::getUMax(*channel),
+        channel_coupling::getUMax(*channel));
 }
 
 scpi_result_t scpi_source_VoltageProtectionDelay(scpi_t * context) {
@@ -450,8 +463,16 @@ scpi_result_t scpi_source_VoltageProtectionDelay(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return set_delay(context, channel->prot_conf.u_delay,
-        channel->OVP_MIN_DELAY, channel->OVP_MAX_DELAY, channel->OVP_DEFAULT_DELAY);
+    float delay;
+    if (!get_duration_param(context, delay, channel->OVP_MIN_DELAY, channel->OVP_MAX_DELAY, channel->OVP_DEFAULT_DELAY)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel_coupling::setOvpDelay(*channel, delay);
+    
+    profile::save();
+    
+    return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_source_VoltageProtectionDelayQ(scpi_t * context) {
@@ -469,7 +490,14 @@ scpi_result_t scpi_source_VoltageProtectionState(scpi_t * context) {
         return SCPI_RES_ERR;
     }
     
-    return set_state(context, channel, U_STATE);
+	bool state;
+	if (!SCPI_ParamBool(context, &state, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+    channel_coupling::setOvpState(*channel, state);
+
+	return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_source_VoltageProtectionStateQ(scpi_t * context) {
@@ -491,6 +519,11 @@ scpi_result_t scpi_source_VoltageProtectionTrippedQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_source_VoltageSenseSource(scpi_t * context) {
+    if (channel_coupling::getType() == channel_coupling::TYPE_SERIES) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     if (!OPTION_BP) {
         SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
@@ -512,6 +545,11 @@ scpi_result_t scpi_source_VoltageSenseSource(scpi_t * context) {
 }
 
 scpi_result_t scpi_source_VoltageSenseSourceQ(scpi_t * context) {
+    if (channel_coupling::getType() == channel_coupling::TYPE_SERIES) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     if (!OPTION_BP) {
         SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
@@ -528,6 +566,11 @@ scpi_result_t scpi_source_VoltageSenseSourceQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_source_VoltageProgramSource(scpi_t * context) {
+    if (channel_coupling::getType() != channel_coupling::TYPE_NONE) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -549,6 +592,11 @@ scpi_result_t scpi_source_VoltageProgramSource(scpi_t * context) {
 }
 
 scpi_result_t scpi_source_VoltageProgramSourceQ(scpi_t * context) {
+    if (channel_coupling::getType() != channel_coupling::TYPE_NONE) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -565,6 +613,11 @@ scpi_result_t scpi_source_VoltageProgramSourceQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_source_LRipple(scpi_t * context) {
+    if (channel_coupling::getType() == channel_coupling::TYPE_SERIES) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -580,7 +633,7 @@ scpi_result_t scpi_source_LRipple(scpi_t * context) {
 		return SCPI_RES_ERR;
 	}
 
-    if (!channel->lowRippleEnable(enable)) {
+    if (!channel_coupling::lowRippleEnable(*channel, enable)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
@@ -589,6 +642,11 @@ scpi_result_t scpi_source_LRipple(scpi_t * context) {
 }
 
 scpi_result_t scpi_source_LRippleQ(scpi_t * context) {
+    if (channel_coupling::getType() == channel_coupling::TYPE_SERIES) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -605,6 +663,11 @@ scpi_result_t scpi_source_LRippleQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_source_LRippleAuto(scpi_t * context) {
+    if (channel_coupling::getType() == channel_coupling::TYPE_SERIES) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -626,12 +689,17 @@ scpi_result_t scpi_source_LRippleAuto(scpi_t * context) {
 }
 
 scpi_result_t scpi_source_LRippleAutoQ(scpi_t * context) {
+    if (channel_coupling::getType() == channel_coupling::TYPE_SERIES) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
     }
 
-    if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
+    if (!(channel->getFeatures() & CH_FEATURE_LRIPPLE)) {
         SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
     }
@@ -652,7 +720,7 @@ scpi_result_t scpi_source_CurrentLimit(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    channel->setCurrentLimit(limit);
+    channel_coupling::setCurrentLimit(*channel, limit);
 
     return SCPI_RES_OK;
 }
@@ -663,7 +731,11 @@ scpi_result_t scpi_source_CurrentLimitQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, channel->getCurrentLimit(), 0, channel->getMaxCurrentLimit(), channel->getMaxCurrentLimit());
+    return get_source_value(context,
+        channel_coupling::getILimit(*channel),
+        0,
+        channel_coupling::getIMaxLimit(*channel),
+        channel_coupling::getIMaxLimit(*channel));
 }
 
 scpi_result_t scpi_source_VoltageLimit(scpi_t * context) {
@@ -677,7 +749,7 @@ scpi_result_t scpi_source_VoltageLimit(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    channel->setVoltageLimit(limit);
+    channel_coupling::setVoltageLimit(*channel, limit);
 
     return SCPI_RES_OK;
 }
@@ -688,7 +760,11 @@ scpi_result_t scpi_source_VoltageLimitQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, channel->getVoltageLimit(), 0, channel->getVoltageMaxLimit(), channel->getVoltageMaxLimit());
+    return get_source_value(context,
+        channel_coupling::getULimit(*channel),
+        0,
+        channel_coupling::getUMaxLimit(*channel),
+        channel_coupling::getUMaxLimit(*channel));
 }
 
 scpi_result_t scpi_source_PowerLimit(scpi_t * context) {
@@ -702,7 +778,7 @@ scpi_result_t scpi_source_PowerLimit(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    channel->setPowerLimit(limit);
+    channel_coupling::setPowerLimit(*channel, limit);
 
     return SCPI_RES_OK;
 }
@@ -713,7 +789,11 @@ scpi_result_t scpi_source_PowerLimitQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, channel->getPowerLimit(), 0, channel->getPowerMaxLimit(), channel->getPowerMaxLimit());
+    return get_source_value(context,
+        channel_coupling::getPowerLimit(*channel),
+        channel_coupling::getPowerMinLimit(*channel),
+        channel_coupling::getPowerMaxLimit(*channel),
+        channel_coupling::getPowerDefaultLimit(*channel));
 }
 
 }

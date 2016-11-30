@@ -21,10 +21,20 @@
 #include "scpi_cal.h"
 
 #include "calibration.h"
+#include "channel_coupling.h"
 
 namespace eez {
 namespace psu {
 namespace scpi {
+
+////////////////////////////////////////////////////////////////////////////////
+
+scpi_choice_def_t channelsCouplingChoice[] = {
+    { "NONE", channel_coupling::TYPE_NONE },
+    { "PARallel", channel_coupling::TYPE_PARALLEL },
+    { "SERies", channel_coupling::TYPE_SERIES },
+    SCPI_CHOICE_LIST_END /* termination of option list */
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -85,6 +95,41 @@ scpi_result_t scpi_inst_NSelectQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     SCPI_ResultInt(context, psu_context->selected_channel_index);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_inst_CoupleTracking(scpi_t * context) {
+    int32_t type;
+    if (!SCPI_ParamChoice(context, channelsCouplingChoice, &type, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (CH_NUM < 2 && type == channel_coupling::TYPE_NONE) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    channel_coupling::setType((channel_coupling::Type)type);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_inst_CoupleTrackingQ(scpi_t * context) {
+    scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
+
+    char result[16];
+
+    channel_coupling::Type type = channel_coupling::getType();
+    if (type == channel_coupling::TYPE_PARALLEL) {
+        strcpy_P(result, PSTR("PARALLEL"));
+    } else if (type == channel_coupling::TYPE_SERIES) {
+        strcpy_P(result, PSTR("SERIES"));
+    } else {
+        strcpy_P(result, PSTR("NONE"));
+    }
+
+    SCPI_ResultText(context, result);
 
     return SCPI_RES_OK;
 }

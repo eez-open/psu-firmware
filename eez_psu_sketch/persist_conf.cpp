@@ -39,7 +39,7 @@ enum PersistConfSection {
 
 static const uint16_t DEV_CONF_VERSION = 0x0008L;
 static const uint16_t CH_CAL_CONF_VERSION = 0x0003L;
-static const uint16_t PROFILE_VERSION = 0x0004L;
+static const uint16_t PROFILE_VERSION = 0x0005L;
 
 static const uint16_t PERSIST_CONF_DEVICE_ADDRESS = 1024;
 
@@ -273,6 +273,11 @@ bool setProfileAutoRecallLocation(int location) {
     dev_conf.profile_auto_recall_location = (int8_t)location;
     if (saveDevice()) {
 		event_queue::pushEvent(event_queue::EVENT_INFO_DEFAULE_PROFILE_CHANGED_TO_0 + location);
+
+        if (location == 0) {
+            profile::save();
+        }
+
 		return true;
 	}
     return false;

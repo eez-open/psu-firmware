@@ -24,6 +24,7 @@
 #include "gui_edit_mode_keypad.h"
 #include "gui_edit_mode_step.h"
 #include "channel.h"
+#include "channel_coupling.h"
 
 namespace eez {
 namespace psu {
@@ -251,14 +252,16 @@ void select(Cursor &cursor, uint8_t id, int index) {
 		cursor.i = index;
 	} else if (id == DATA_ID_PROFILES_LIST2) {
 		cursor.i = 4 + index;
-	}
+	} else if (id == DATA_ID_CHANNEL_COUPLING_MODE) {
+        cursor.i = 0;
+    }
 }
 
 Value getMin(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_MON) {
-        return Value(Channel::get(cursor.i).u.min, VALUE_TYPE_FLOAT_VOLT);
+        return Value(channel_coupling::getUMin(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT);
     } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_MON) {
-        return Value(Channel::get(cursor.i).i.min, VALUE_TYPE_FLOAT_AMPER);
+        return Value(channel_coupling::getIMin(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMin();
     }
@@ -267,9 +270,9 @@ Value getMin(const Cursor &cursor, uint8_t id) {
 
 Value getMax(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_MON) {
-        return Value(Channel::get(cursor.i).u.max, VALUE_TYPE_FLOAT_VOLT);
+        return Value(channel_coupling::getUMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT);
     } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_MON) {
-        return Value(Channel::get(cursor.i).i.max, VALUE_TYPE_FLOAT_AMPER);
+        return Value(channel_coupling::getIMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMax();
     }
@@ -293,41 +296,41 @@ void getList(const Cursor &cursor, uint8_t id, const Value **values, int &count)
 
 bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
 	if (id == DATA_ID_CHANNEL_U_SET) {
-		if (value.getFloat() < Channel::get(cursor.i).u.min || value.getFloat() > Channel::get(cursor.i).u.max) {
+		if (value.getFloat() < channel_coupling::getUMin(Channel::get(cursor.i)) || value.getFloat() > channel_coupling::getUMax(Channel::get(cursor.i))) {
 			if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
 			return false;
 		}
 		
-		if (value.getFloat() > Channel::get(cursor.i).getVoltageLimit()) {
+		if (value.getFloat() > channel_coupling::getULimit(Channel::get(cursor.i))) {
 			if (error) *error = SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
 			return false;
 		}
         
-		if (value.getFloat() * Channel::get(cursor.i).i.set > Channel::get(cursor.i).getPowerLimit()) {
+		if (value.getFloat() * channel_coupling::getISet(Channel::get(cursor.i)) > channel_coupling::getPowerLimit(Channel::get(cursor.i))) {
 			if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
         
-		Channel::get(cursor.i).setVoltage(value.getFloat());
+		channel_coupling::setVoltage(Channel::get(cursor.i), value.getFloat());
 
 		return true;
     } else if (id == DATA_ID_CHANNEL_I_SET) {
-		if (value.getFloat() < Channel::get(cursor.i).i.min || value.getFloat() > Channel::get(cursor.i).i.max) {
+		if (value.getFloat() < channel_coupling::getIMin(Channel::get(cursor.i)) || value.getFloat() > channel_coupling::getIMax(Channel::get(cursor.i))) {
 			if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
 			return false;
 		}
 		
-		if (value.getFloat() > Channel::get(cursor.i).getCurrentLimit()) {
+		if (value.getFloat() > channel_coupling::getILimit(Channel::get(cursor.i))) {
 			if (error) *error = SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
 			return false;
 		}
         
-		if (value.getFloat() * Channel::get(cursor.i).u.set > Channel::get(cursor.i).getPowerLimit()) {
+		if (value.getFloat() * channel_coupling::getUSet(Channel::get(cursor.i)) > channel_coupling::getPowerLimit(Channel::get(cursor.i))) {
 			if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
         
-		Channel::get(cursor.i).setCurrent(value.getFloat());
+		channel_coupling::setCurrent(Channel::get(cursor.i), value.getFloat());
 
 		return true;
     } else if (id == DATA_ID_ALERT_MESSAGE) {

@@ -48,6 +48,9 @@ struct ChannelData {
 struct Data {
     bool standby;
 
+    bool coupled;
+    bool coupledOut;
+
     ChannelData ch1;
     ChannelData ch2;
 

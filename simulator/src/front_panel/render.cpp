@@ -90,6 +90,9 @@ void render(Window *window, Data *data) {
 
     window->addOnOffImage(878, 34, 17, 16, data->standby, R1B9_IMAGE("led-blue"), R1B9_IMAGE("led-off"));
 
+    window->addOnOffImage(983, 80, 17, 16, data->coupledOut, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(1247, 80, 17, 16, data->coupledOut, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
+
     window->addOnOffImage(878, 126, 17, 16, data->ch1.cv, R1B9_IMAGE("led-yellow"), R1B9_IMAGE("led-off"));
     window->addOnOffImage(878, 172, 17, 16, data->ch1.cc, R1B9_IMAGE("led-red"), R1B9_IMAGE("led-off"));
     window->addOnOffImage(983, 80, 17, 16, data->ch1.out_plus, R1B9_IMAGE("led-green"), R1B9_IMAGE("led-off"));
@@ -125,31 +128,46 @@ void render(Window *window, Data *data) {
 
     window->addOnOffImage(RECT(131, 243, 17, 17), data->standby, R3B4_IMAGE("led-blue"), R3B4_IMAGE("led-off"));
 
+    window->addOnOffImage(RECT(803, 267, 17, 17), data->coupledOut, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
+    if (data->coupled) {
+        if (data->ch1.load_text) {
+            window->addImage(RECT(652+91, 294, 138, 66), R3B4_IMAGE("load"));
+            window->addText(RECT(677+91, 326, 88, 29), data->ch1.load_text);
+        } else {
+            window->addImage(RECT(652+91, 294, 138, 66), R3B4_IMAGE("load-disconnected"));
+        }
+        addLoadWidget(window, RECT(652+91, 294, 138, 66), &data->ch1.loadWidget);
+    }
+
     window->addOnOffImage(RECT(689, 61, 17, 17), data->ch1.cv, R3B4_IMAGE("led-yellow"), R3B4_IMAGE("led-off"));
     window->addOnOffImage(RECT(689, 95, 17, 17), data->ch1.cc, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
     window->addOnOffImage(RECT(713, 267, 17, 17), data->ch1.out, R3B4_IMAGE("led-green"), R3B4_IMAGE("led-off"));
     window->addOnOffImage(RECT(689, 128, 17, 17), data->ch1.sense, R3B4_IMAGE("led-yellow"), R3B4_IMAGE("led-off"));
     window->addOnOffImage(RECT(650, 128, 17, 17), data->ch1.prog, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
-    if (data->ch1.load_text) {
-        window->addImage(RECT(652, 294, 138, 66), R3B4_IMAGE("load"));
-        window->addText(RECT(677, 326, 88, 29), data->ch1.load_text);
-    } else {
-        window->addImage(RECT(652, 294, 138, 66), R3B4_IMAGE("load-disconnected"));
+    if (!data->coupled) {
+        if (data->ch1.load_text) {
+            window->addImage(RECT(652, 294, 138, 66), R3B4_IMAGE("load"));
+            window->addText(RECT(677, 326, 88, 29), data->ch1.load_text);
+        } else {
+            window->addImage(RECT(652, 294, 138, 66), R3B4_IMAGE("load-disconnected"));
+        }
+        addLoadWidget(window, RECT(652, 294, 138, 66), &data->ch1.loadWidget);
     }
-    addLoadWidget(window, RECT(652, 294, 138, 66), &data->ch1.loadWidget);
 
     window->addOnOffImage(RECT(918, 61, 17, 17), data->ch2.cv, R3B4_IMAGE("led-yellow"), R3B4_IMAGE("led-off"));
     window->addOnOffImage(RECT(918, 95, 17, 17), data->ch2.cc, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
     window->addOnOffImage(RECT(894, 267, 17, 17), data->ch2.out, R3B4_IMAGE("led-green"), R3B4_IMAGE("led-off"));
     window->addOnOffImage(RECT(918, 128, 17, 17), data->ch2.sense, R3B4_IMAGE("led-yellow"), R3B4_IMAGE("led-off"));
     window->addOnOffImage(RECT(879, 128, 17, 17), data->ch2.prog, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
-    if (data->ch2.load_text) {
-        window->addImage(RECT(834, 294, 138, 66), R3B4_IMAGE("load"));
-        window->addText(RECT(859, 326, 88, 29), data->ch2.load_text);
-    } else {
-        window->addImage(RECT(834, 294, 138, 66), R3B4_IMAGE("load-disconnected"));
+    if (!data->coupled) {
+        if (data->ch2.load_text) {
+            window->addImage(RECT(834, 294, 138, 66), R3B4_IMAGE("load"));
+            window->addText(RECT(859, 326, 88, 29), data->ch2.load_text);
+        } else {
+            window->addImage(RECT(834, 294, 138, 66), R3B4_IMAGE("load-disconnected"));
+        }
+        addLoadWidget(window, RECT(834, 294, 138, 66), &data->ch2.loadWidget);
     }
-    addLoadWidget(window, RECT(834, 294, 138, 66), &data->ch2.loadWidget);
 
 	data->reset = window->addButton(RECT(129, 165, 20, 20), R3B4_IMAGE("reset-normal"), R3B4_IMAGE("reset-pressed"));
 

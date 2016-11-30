@@ -97,6 +97,7 @@ public:
     operator bool() { return true; }
     int available(void);
     int read(void);
+    void flush(void);
 
     void put(int ch);
 

@@ -121,6 +121,9 @@ void SimulatorSerial::put(int ch) {
     input.push(ch);
 }
 
+void SimulatorSerial::flush() {
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 SPISettings::SPISettings(uint32_t clock, uint8_t bitOrder, uint8_t dataMode) {

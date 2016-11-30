@@ -20,6 +20,7 @@
 #include "calibration.h"
 #include "scpi_psu.h"
 #include "datetime.h"
+#include "channel_coupling.h"
 
 namespace eez {
 namespace psu {

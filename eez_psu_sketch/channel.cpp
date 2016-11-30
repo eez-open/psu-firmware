@@ -34,6 +34,7 @@
 #include "sound.h"
 #include "profile.h"
 #include "event_queue.h"
+#include "channel_coupling.h"
 
 namespace eez {
 namespace psu {
@@ -278,10 +279,13 @@ Channel::Channel(
         simulator.load = 20;
     }
 #endif
+
+    uBeforeBalancing = NAN;
+    iBeforeBalancing = NAN;
 }
 
 void Channel::protectionEnter(ProtectionValue &cpv) {
-    outputEnable(false);
+    channel_coupling::outputEnable(*this, false);
 
     cpv.flags.tripped = 1;
 
@@ -299,6 +303,16 @@ void Channel::protectionEnter(ProtectionValue &cpv) {
 	}
 
 	event_queue::pushEvent(eventId);
+
+    if (channel_coupling::getType() != channel_coupling::TYPE_NONE && index == 1) {
+        if (IS_OVP_VALUE(this, cpv)) {
+            Channel::get(1).protectionEnter(Channel::get(1).ovp);
+        } else if (IS_OCP_VALUE(this, cpv)) {
+            Channel::get(1).protectionEnter(Channel::get(1).ocp);
+        } else {
+            Channel::get(1).protectionEnter(Channel::get(1).opp);
+        }
+    }
 }
 
 void Channel::protectionCheck(ProtectionValue &cpv) {
@@ -309,20 +323,20 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     if (IS_OVP_VALUE(this, cpv)) {
         state = flags.rprogEnabled || prot_conf.flags.u_state;
 		//condition = flags.cv_mode && (!flags.cc_mode || fabs(i.mon - i.set) >= CHANNEL_VALUE_PRECISION) && (prot_conf.u_level <= u.set);
-		condition = util::greaterOrEqual(u.mon, prot_conf.u_level, CHANNEL_VALUE_PRECISION);
+		condition = util::greaterOrEqual(channel_coupling::getUMon(*this), channel_coupling::getUProtectionLevel(*this), CHANNEL_VALUE_PRECISION);
         delay = prot_conf.u_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
     else if (IS_OCP_VALUE(this, cpv)) {
         state = prot_conf.flags.i_state;
         //condition = flags.cc_mode && (!flags.cv_mode || fabs(u.mon - u.set) >= CHANNEL_VALUE_PRECISION);
-		condition = util::greaterOrEqual(i.mon, i.set, CHANNEL_VALUE_PRECISION);
+		condition = util::greaterOrEqual(channel_coupling::getIMon(*this), channel_coupling::getISet(*this), CHANNEL_VALUE_PRECISION);
         delay = prot_conf.i_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
     else {
         state = prot_conf.flags.p_state;
-        condition = u.mon * i.mon > prot_conf.p_level;
+        condition = channel_coupling::getUMon(*this) * channel_coupling::getIMon(*this) > channel_coupling::getPowerProtectionLevel(*this);
         delay = prot_conf.p_delay;
     }
 
@@ -332,12 +346,12 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
                 if (micros() - cpv.alarm_started >= delay * 1000000UL) {
                     cpv.flags.alarmed = 0;
 
-                    if (IS_OVP_VALUE(this, cpv)) {
-                        DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA, I MON=%d mA", (int)flags.cvMode, (int)flags.ccMode, (int)(fabs(i.mon - i.set) * 1000), (int)(i.mon * 1000));
-                    }
-                    else if (IS_OCP_VALUE(this, cpv)) {
-                        DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.ccMode, (int)flags.cvMode, (int)(fabs(u.mon - u.set) * 1000));
-                    }
+                    //if (IS_OVP_VALUE(this, cpv)) {
+                    //    DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA, I MON=%d mA", (int)flags.cvMode, (int)flags.ccMode, (int)(fabs(i.mon - i.set) * 1000), (int)(i.mon * 1000));
+                    //}
+                    //else if (IS_OCP_VALUE(this, cpv)) {
+                    //    DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.ccMode, (int)flags.cvMode, (int)(fabs(u.mon - u.set) * 1000));
+                    //}
 
                     protectionEnter(cpv);
                 }
@@ -348,12 +362,12 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
             }
         }
         else {
-            if (IS_OVP_VALUE(this, cpv)) {
-                DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA", (int)flags.cvMode, (int)flags.ccMode, (int)(fabs(i.mon - i.set) * 1000));
-            }
-            else if (IS_OCP_VALUE(this, cpv)) {
-                DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.ccMode, (int)flags.cvMode, (int)(fabs(u.mon - u.set) * 1000));
-            }
+            //if (IS_OVP_VALUE(this, cpv)) {
+            //    DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA", (int)flags.cvMode, (int)flags.ccMode, (int)(fabs(i.mon - i.set) * 1000));
+            //}
+            //else if (IS_OCP_VALUE(this, cpv)) {
+            //    DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.ccMode, (int)flags.cvMode, (int)(fabs(u.mon - u.set) * 1000));
+            //}
 
 			protectionEnter(cpv);
         }
@@ -544,6 +558,42 @@ bool Channel::isOk() {
     return psu::isPowerUp() && isPowerOk() && isTestOk();
 }
 
+void Channel::voltageBalancing() {
+    DebugTraceF("Channel voltage balancing: CH1_Umon=%f, CH2_Umon=%f", Channel::get(0).u.mon, Channel::get(1).u.mon);
+
+    if (util::isNaN(uBeforeBalancing)) {
+        uBeforeBalancing = u.set;
+    }
+
+    doSetVoltage((Channel::get(0).u.mon + Channel::get(1).u.mon) / 2);
+}
+
+void Channel::currentBalancing() {
+    DebugTraceF("CH%d channel current balancing: CH1_Imon=%f, CH2_Imon=%f", index, Channel::get(0).i.mon, Channel::get(1).i.mon);
+
+    if (util::isNaN(iBeforeBalancing)) {
+        iBeforeBalancing = i.set;
+    }
+
+    doSetCurrent((Channel::get(0).i.mon + Channel::get(1).i.mon) / 2);
+}
+
+void Channel::restoreVoltageToValueBeforeBalancing() {
+    if (!util::isNaN(uBeforeBalancing)) {
+        DebugTraceF("Restore voltage to value before balancing: %f", uBeforeBalancing);
+        setVoltage(uBeforeBalancing);
+        uBeforeBalancing = NAN;
+    }
+}
+
+void Channel::restoreCurrentToValueBeforeBalancing() {
+    if (!util::isNaN(iBeforeBalancing)) {
+        DebugTraceF("Restore current to value before balancing: %f", index, iBeforeBalancing);
+        setCurrent(iBeforeBalancing);
+        iBeforeBalancing = NAN;
+    }
+}
+
 void Channel::tick(unsigned long tick_usec) {
     ioexp.tick(tick_usec);
     adc.tick(tick_usec);
@@ -563,13 +613,33 @@ void Channel::tick(unsigned long tick_usec) {
     /// that is negative value in Watts (default -1 W),
     /// and that condition lasts more then DP_NEG_DELAY seconds (default 5 s),
     /// down-programmer circuit has to be switched off.
-    if (flags.dpOn) {
+    if (isOutputEnabled()) {
         if (u.mon * i.mon >= DP_NEG_LEV) {
             dpNegMonitoringTime = tick_usec;
         } else {
             if (tick_usec - dpNegMonitoringTime > DP_NEG_DELAY * 1000000UL) {
-                psu::generateError(SCPI_ERROR_CH1_DOWN_PROGRAMMER_SWITCHED_OFF + (index - 1));
-                doDpEnable(false);
+                if (flags.dpOn) {
+                    DebugTraceF("CH%d, neg. P, DP off: %f", index, u.mon * i.mon);
+                    dpNegMonitoringTime = tick_usec;
+                    psu::generateError(SCPI_ERROR_CH1_DOWN_PROGRAMMER_SWITCHED_OFF + (index - 1));
+                    doDpEnable(false);
+                } else {
+                    DebugTraceF("CH%d, neg. P, output off: %f", index, u.mon * i.mon);
+                    psu::generateError(SCPI_ERROR_CH1_OUTPUT_FAULT_DETECTED - (index - 1));
+                    channel_coupling::outputEnable(*this, false);
+                }
+            } else if (tick_usec - dpNegMonitoringTime > 500 * 1000UL) {
+                if (flags.dpOn) {
+                    if (channel_coupling::getType() == channel_coupling::TYPE_SERIES) {
+                        Channel& channel = Channel::get(index == 1 ? 1 : 0);
+                        channel.voltageBalancing();
+                        dpNegMonitoringTime = tick_usec;
+                    } else if (channel_coupling::getType() == channel_coupling::TYPE_PARALLEL) {
+                        Channel& channel = Channel::get(index == 1 ? 1 : 0);
+                        channel.currentBalancing();
+                        dpNegMonitoringTime = tick_usec;
+                    }
+                }
             }
         }
     }
@@ -722,6 +792,8 @@ void Channel::setCcMode(bool cc_mode) {
 
         setOperBits(OPER_ISUM_CC, cc_mode);
         setQuesBits(QUES_ISUM_VOLT, cc_mode);
+
+        Channel::get(index == 1 ? 1 : 0).restoreCurrentToValueBeforeBalancing();
     }
 }
 
@@ -735,7 +807,20 @@ void Channel::setCvMode(bool cv_mode) {
 
         setOperBits(OPER_ISUM_CV, cv_mode);
         setQuesBits(QUES_ISUM_CURR, cv_mode);
+
+        Channel::get(index == 1 ? 1 : 0).restoreVoltageToValueBeforeBalancing();
     }
+}
+
+void Channel::protectionCheck() {
+    if (channel_coupling::getType() != channel_coupling::TYPE_NONE && index == 2) {
+        // protections of coupled channels are checked on channel 1
+        return;
+    }
+
+    protectionCheck(ovp);
+	protectionCheck(ocp);
+	protectionCheck(opp);
 }
 
 void Channel::event(uint8_t gpio, int16_t adc_data) {
@@ -754,7 +839,7 @@ void Channel::event(uint8_t gpio, int16_t adc_data) {
 		}
 
 		if (rpol && isOutputEnabled()) {
-			outputEnable(false);
+			channel_coupling::outputEnable(*this, false);
 			event_queue::pushEvent(event_queue::EVENT_ERROR_CH1_REMOTE_SENSE_REVERSE_POLARITY_DETECTED + index - 1);
 			return;
 		}
@@ -766,9 +851,7 @@ void Channel::event(uint8_t gpio, int16_t adc_data) {
     setCcMode(gpio & (1 << IOExpander::IO_BIT_IN_CC_ACTIVE) ? true : false);
     updateCcAndCvSwitch();
 
-	protectionCheck(ovp);
-	protectionCheck(ocp);
-	protectionCheck(opp);
+    protectionCheck();
 }
 
 void Channel::adcReadMonDac() {
@@ -797,16 +880,18 @@ void Channel::doDpEnable(bool enable) {
     }
 }
 
-extern int g_trt;
-
 void Channel::doOutputEnable(bool enable) {
+    if (!psu::g_is_booted) {
+        flags.afterBootOutputEnabled = enable;
+        return;
+    }
+
     if (enable && !isOk()) {
         return;
     }
 
-	noInterrupts();
-
-	ioexp.disableWrite();
+	//noInterrupts();
+	//ioexp.disableWrite();
 
 	flags.outputEnabled = enable;
 	ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, enable);
@@ -819,9 +904,11 @@ void Channel::doOutputEnable(bool enable) {
 			delayLowRippleCheck = true;
 		}
 
-		// enable DP
+    	// enable DP
         delayed_dp_off = false;
 		doDpEnable(true);
+
+        dpNegMonitoringTime = micros();
 	} else {
 		if (getFeatures() & CH_FEATURE_LRIPPLE) {
 			doLowRippleEnable(false);
@@ -835,13 +922,22 @@ void Channel::doOutputEnable(bool enable) {
             calibration::stop();
         }
 
-		// disable (delayed) DP
-        delayed_dp_off = true;
-        delayed_dp_off_start = micros();
+		// disable DP
+        if (channel_coupling::getType() == channel_coupling::TYPE_NONE) {
+            // channel is coupled in parallel, disable DP immediatelly
+            doDpEnable(false);
+        } else {
+            // delayed
+            delayed_dp_off = true;
+            delayed_dp_off_start = micros();
+        }
 	}
 
-	interrupts();
-	ioexp.enableWriteAndFlush();
+	//interrupts();
+	//ioexp.enableWriteAndFlush();
+
+    restoreVoltageToValueBeforeBalancing();
+    restoreCurrentToValueBeforeBalancing();
 
 	if (enable) {
 		// start ADC conversion
@@ -851,7 +947,6 @@ void Channel::doOutputEnable(bool enable) {
 	} else {
 		onTimeCounter.stop();
 	}
-
 }
 
 void Channel::doRemoteSensingEnable(bool enable) {
@@ -956,6 +1051,12 @@ void Channel::outputEnable(bool enable) {
 		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_OUTPUT_ENABLED :
 			event_queue::EVENT_INFO_CH1_OUTPUT_DISABLED) + index - 1);
 		profile::save();
+    }
+}
+
+void Channel::afterBootOutputEnable() {
+    if (flags.afterBootOutputEnabled) {
+        doOutputEnable(true);
     }
 }
 
@@ -1120,7 +1221,7 @@ bool Channel::isLowRippleAutoEnabled() {
     return flags.lrippleAutoEnabled;
 }
 
-void Channel::setVoltage(float value) {
+void Channel::doSetVoltage(float value) {
     u.set = value;
     u.mon_dac = 0;
 
@@ -1136,11 +1237,18 @@ void Channel::setVoltage(float value) {
         value = util::remap(value, cal_conf.u.min.val, cal_conf.u.min.dac, cal_conf.u.max.val, cal_conf.u.max.dac);
     }
     dac.set_voltage(value);
+}
+
+void Channel::setVoltage(float value) {
+    doSetVoltage(value);
+
+    uBeforeBalancing = NAN;
+    restoreCurrentToValueBeforeBalancing();
 
     profile::save();
 }
 
-void Channel::setCurrent(float value) {
+void Channel::doSetCurrent(float value) {
     i.set = value;
     i.mon_dac = 0;
 
@@ -1148,6 +1256,13 @@ void Channel::setCurrent(float value) {
         value = util::remap(value, cal_conf.i.min.val, cal_conf.i.min.dac, cal_conf.i.max.val, cal_conf.i.max.dac);
     }
     dac.set_current(value);
+}
+
+void Channel::setCurrent(float value) {
+    doSetCurrent(value);
+
+    iBeforeBalancing = NAN;
+    restoreVoltageToValueBeforeBalancing();
 
     profile::save();
 }
