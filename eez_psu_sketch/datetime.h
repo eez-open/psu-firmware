@@ -25,7 +25,7 @@ namespace datetime {
 
 extern psu::TestResult test_result;
 
-bool init();
+void init();
 bool test();
 
 bool isValidDate(uint8_t year, uint8_t month, uint8_t day);

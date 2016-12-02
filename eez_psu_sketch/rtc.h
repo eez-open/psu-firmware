@@ -51,7 +51,7 @@ static const uint8_t CONTROL_2_VALUE = 0B00000000;
 
 extern psu::TestResult test_result;
 
-bool init();
+void init();
 bool test();
 
 bool readDate(uint8_t &year, uint8_t &month, uint8_t &day);

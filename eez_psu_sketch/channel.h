@@ -330,7 +330,7 @@ public:
 
     /// Initialize channel and underlying hardware.
     /// Makes a required tests, for example ADC, DAC and IO Expander tests.
-    bool init();
+    void init();
 
     /// Reset the channel to default values.
     void reset();
@@ -359,7 +359,8 @@ public:
     /// Called from IO expander interrupt routine.
     /// @param gpio State of IO expander GPIO register.
     /// @param adc_data ADC snapshot data.
-    void event(uint8_t gpio, int16_t adc_data);
+    void eventAdcData(int16_t adc_data);
+    void eventGpio(uint8_t gpio);
 
     /// Called when device power is turned off, so channel
     /// can do its own housekeeping.

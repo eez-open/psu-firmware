@@ -36,7 +36,7 @@ struct ProtectionConfiguration {
     bool state;
 };
 
-bool init();
+void init();
 bool test();
 void tick(unsigned long tick_usec);
 

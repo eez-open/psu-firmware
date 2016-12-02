@@ -193,7 +193,7 @@ uint32_t micros() {
 
 void delay(uint32_t millis) {
     delayMicroseconds(millis * 1000);
-}
+} 
 
 void delayMicroseconds(uint32_t microseconds) {
 #ifdef _WIN32

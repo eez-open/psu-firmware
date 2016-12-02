@@ -58,7 +58,7 @@ public:
 	int ques_bit;
 	int scpi_error;
 
-	bool init();
+	void init();
 	bool test();
 
 	float read();

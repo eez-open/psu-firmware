@@ -25,7 +25,7 @@ namespace fan {
 extern psu::TestResult test_result;
 extern int g_rpm;
 
-bool init();
+void init();
 void test_start();
 bool test();
 void tick(unsigned long tick_usec);

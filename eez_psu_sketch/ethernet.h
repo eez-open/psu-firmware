@@ -28,7 +28,7 @@ extern TestResult test_result;
 
 extern scpi_t scpi_context;
 
-bool init();
+void init();
 bool test();
 
 void tick(unsigned long tick_usec);

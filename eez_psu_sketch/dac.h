@@ -34,7 +34,7 @@ public:
 
     DigitalAnalogConverter(Channel &channel);
 
-    bool init();
+    void init();
     bool test();
 
     void set_voltage(float voltage);

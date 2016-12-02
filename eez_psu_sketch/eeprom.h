@@ -258,7 +258,7 @@ static const uint16_t EEPROM_START_ADDRESS = 1024;
 
 static const uint16_t EEPROM_EVENT_QUEUE_START_ADDRESS = 16384;
 
-bool init();
+void init();
 bool test();
 
 extern TestResult test_result;

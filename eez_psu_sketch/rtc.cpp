@@ -49,8 +49,7 @@ void writeRegisters(int command, int n, const uint8_t *values) {
     SPI.endTransaction();
 }
 
-bool init() {
-    return test();
+void init() {
 }
 
 bool test() {

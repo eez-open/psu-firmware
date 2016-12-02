@@ -40,7 +40,7 @@ uint8_t AnalogDigitalConverter::getReg1Val() {
     return (current_sps << 5) | 0B00000000; // Register 01h: 256KHz modulator clock, Single shot, disable temp sensor, Current sources off
 }
 
-bool AnalogDigitalConverter::init() {
+void AnalogDigitalConverter::init() {
     SPI.beginTransaction(ADS1120_SPI);
     digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.adc_pin, LOW);
@@ -60,8 +60,6 @@ bool AnalogDigitalConverter::init() {
     digitalWrite(channel.adc_pin, HIGH);
     digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
     SPI.endTransaction();
-
-    return test();
 }
 
 bool AnalogDigitalConverter::test() {
@@ -111,7 +109,7 @@ bool AnalogDigitalConverter::test() {
 }
 
 void AnalogDigitalConverter::tick(unsigned long tick_usec) {
-    if (channel.isOutputEnabled()) {
+    if (channel.isOk() && channel.isOutputEnabled()) {
         noInterrupts();
         unsigned long last_adc_start_time = start_time;
         interrupts();
@@ -122,9 +120,8 @@ void AnalogDigitalConverter::tick(unsigned long tick_usec) {
 
                 DebugTraceF("ADC timeout (%lu) detected on CH%d, recovery attempt no. %d", diff, channel.index, adc_timeout_recovery_attempts_counter);
 
-                if (channel.init()) {
-                    start(ADC_REG0_READ_U_MON);
-                }
+                channel.init();
+                start(ADC_REG0_READ_U_MON);
             }
             else {
                 if (channel.index == 1) {
@@ -150,6 +147,8 @@ void AnalogDigitalConverter::tick(unsigned long tick_usec) {
         else {
             adc_timeout_recovery_attempts_counter = 0;
         }
+    } else {
+        start_time = micros();
     }
 }
 
@@ -181,7 +180,6 @@ void AnalogDigitalConverter::start(uint8_t reg0) {
     digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
     SPI.endTransaction();
 }
-
 
 int16_t AnalogDigitalConverter::read() {
     SPI.beginTransaction(ADS1120_SPI);

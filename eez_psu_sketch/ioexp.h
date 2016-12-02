@@ -89,7 +89,7 @@ public:
         uint8_t IO_BIT_OUT_EXT_PROG_
     );
 
-    bool init();
+    void init();
     bool test();
 
     void tick(unsigned long tick_usec);
@@ -106,6 +106,7 @@ public:
 private:
     Channel &channel;
 	uint8_t gpio;
+    bool gpio_changed;
 	bool writeDisabled;
 
 	uint8_t getRegInitValue(int i);

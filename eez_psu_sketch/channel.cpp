@@ -379,28 +379,17 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Channel::init() {
-    bool result = true;
-
+void Channel::init() {
     bool last_save_enabled = profile::enableSave(false);
 
-	for (int i = 0; i < 3; ++i) {
-		if (i > 0) {
-			DebugTraceF("ioexp.init failed (%d)", i);
-		}
-	    result = ioexp.init();
-		if (result) {
-			break;
-		}
-	}
-
-    result &= adc.init();
-    result &= dac.init();
-	onTimeCounter.init();
+	ioexp.init();
+    adc.init();
+    dac.init();
+    if (!g_isBooted) {
+	    onTimeCounter.init();
+    }
 
     profile::enableSave(last_save_enabled);
-
-    return result;
 }
 
 void Channel::onPowerDown() {
@@ -560,21 +549,17 @@ bool Channel::isOk() {
 
 void Channel::voltageBalancing() {
     DebugTraceF("Channel voltage balancing: CH1_Umon=%f, CH2_Umon=%f", Channel::get(0).u.mon, Channel::get(1).u.mon);
-
     if (util::isNaN(uBeforeBalancing)) {
         uBeforeBalancing = u.set;
     }
-
     doSetVoltage((Channel::get(0).u.mon + Channel::get(1).u.mon) / 2);
 }
 
 void Channel::currentBalancing() {
     DebugTraceF("CH%d channel current balancing: CH1_Imon=%f, CH2_Imon=%f", index, Channel::get(0).i.mon, Channel::get(1).i.mon);
-
     if (util::isNaN(iBeforeBalancing)) {
         iBeforeBalancing = i.set;
     }
-
     doSetCurrent((Channel::get(0).i.mon + Channel::get(1).i.mon) / 2);
 }
 
@@ -614,7 +599,7 @@ void Channel::tick(unsigned long tick_usec) {
     /// and that condition lasts more then DP_NEG_DELAY seconds (default 5 s),
     /// down-programmer circuit has to be switched off.
     if (isOutputEnabled()) {
-        if (u.mon * i.mon >= DP_NEG_LEV) {
+        if (u.mon * i.mon >= DP_NEG_LEV || tick_usec < dpNegMonitoringTime) {
             dpNegMonitoringTime = tick_usec;
         } else {
             if (tick_usec - dpNegMonitoringTime > DP_NEG_DELAY * 1000000UL) {
@@ -644,12 +629,20 @@ void Channel::tick(unsigned long tick_usec) {
         }
     }
 
-	// If channel output is off then test PWRGOOD here, otherwise it is tested in Channel::event method.
+	// If channel output is off then test PWRGOOD here, otherwise it is tested in Channel::eventGpio method.
 #if !CONF_SKIP_PWRGOOD_TEST
 	if (!isOutputEnabled() && psu::isPowerUp()) {
 		testPwrgood(ioexp.readGpio());
 	}
 #endif
+
+    //if (!util::equal(u.set, u.mon_dac, CHANNEL_VALUE_PRECISION)) {
+    //    DebugTraceF("U_SET(%f) <> U_MON_DAC(%f)", u.set, u.mon_dac);
+    //}
+
+    //if (!util::equal(i.set, i.mon_dac, CHANNEL_VALUE_PRECISION)) {
+    //    DebugTraceF("I_SET(%f) <> I_MON_DAC(%f)", i.set, i.mon_dac);
+    //}
 }
 
 float Channel::remapAdcDataToVoltage(int16_t adc_data) {
@@ -823,7 +816,14 @@ void Channel::protectionCheck() {
 	protectionCheck(opp);
 }
 
-void Channel::event(uint8_t gpio, int16_t adc_data) {
+void Channel::eventAdcData(int16_t adc_data) {
+    if (!psu::isPowerUp()) return;
+
+    adcDataIsReady(adc_data);
+    protectionCheck();
+}
+
+void Channel::eventGpio(uint8_t gpio) {
     if (!psu::isPowerUp()) return;
 
 #if !CONF_SKIP_PWRGOOD_TEST
@@ -845,13 +845,9 @@ void Channel::event(uint8_t gpio, int16_t adc_data) {
 		}
 	}
 
-    adcDataIsReady(adc_data);
-
     setCvMode(gpio & (1 << IOExpander::IO_BIT_IN_CV_ACTIVE) ? true : false);
     setCcMode(gpio & (1 << IOExpander::IO_BIT_IN_CC_ACTIVE) ? true : false);
     updateCcAndCvSwitch();
-
-    protectionCheck();
 }
 
 void Channel::adcReadMonDac() {
@@ -876,12 +872,12 @@ void Channel::doDpEnable(bool enable) {
     setOperBits(OPER_ISUM_DP_OFF, !enable);
     flags.dpOn = enable;
     if (enable) {
-        dpNegMonitoringTime = millis();
+        dpNegMonitoringTime = micros();
     }
 }
 
 void Channel::doOutputEnable(bool enable) {
-    if (!psu::g_is_booted) {
+    if (!psu::g_isBooted) {
         flags.afterBootOutputEnabled = enable;
         return;
     }
@@ -943,7 +939,7 @@ void Channel::doOutputEnable(bool enable) {
 		// start ADC conversion
 		adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
 
-		onTimeCounter.start();
+        onTimeCounter.start();
 	} else {
 		onTimeCounter.stop();
 	}

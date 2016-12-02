@@ -51,8 +51,10 @@ static float last_max_channel_temperature;
 static unsigned long max_temp_start_tick;
 static bool force_power_down = false;
 
-bool init() {
-	return test();
+void init() {
+	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		temp_sensor::sensors[i].init();
+	}
 }
 
 bool test() {
@@ -172,7 +174,6 @@ bool isAllowedToPowerUp() {
 TempSensorTemperature::TempSensorTemperature(int sensorIndex_)
 	: sensorIndex(sensorIndex_)
 	, temperature(NAN)
-
 {
 }
 

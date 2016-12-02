@@ -26,7 +26,7 @@ namespace psu {
 ////////////////////////////////////////////////////////////////////////////////
 
 #define IPOL    0B00000000 // no pin is inverted
-#define GPINTEN 0B00000001 // enable interrupt for pin 0
+#define GPINTEN 0B00000000 // no interrupts
 #define DEVAL   0B00000000 // 
 #define INTCON  0B00000000 // 
 #define IOCON   0B00100000 // sequential operation disabled, hw addressing disabled
@@ -68,19 +68,20 @@ IOExpander::IOExpander(
 {
     test_result = psu::TEST_SKIPPED;
 	gpio = channel.ioexp_gpio_init;
+    gpio_changed = false;
 }
 
 uint8_t IOExpander::getRegInitValue(int i) {
 	if (REG_VALUES[i] == IOExpander::REG_IODIR) {
         return channel.ioexp_iodir;
     } else if (REG_VALUES[i] == IOExpander::REG_GPIO) {
-        return channel.ioexp_gpio_init;
+        return gpio;
     } else {
         return REG_VALUES[i + 1];
     }
 }
 
-bool IOExpander::init() {
+void IOExpander::init() {
     for (int i = 0; REG_VALUES[i] != 0xFF; i += 3) {
 		reg_write(REG_VALUES[i], getRegInitValue(i));
     }
@@ -92,8 +93,6 @@ bool IOExpander::init() {
         channel.index == 1 ? ioexp_interrupt_ch1 : ioexp_interrupt_ch2,
         FALLING
         );
-
-    return test();
 }
 
 bool IOExpander::test() {
@@ -144,6 +143,31 @@ bool IOExpander::test() {
 }
 
 void IOExpander::tick(unsigned long tick_usec) {
+    if (isPowerUp()) {
+        uint8_t gpio = readGpio();
+
+        if (gpio_changed) {
+            if ((gpio & (1 << IO_BIT_OUT_DP_ENABLE)) != (this->gpio & (1 << IO_BIT_OUT_DP_ENABLE))) {
+                DebugTrace("IOEXP write check failed for DP_ENABLE");
+            }
+
+            if ((gpio & (1 << IO_BIT_OUT_SET_100_PERCENT)) != (this->gpio & (1 << IO_BIT_OUT_SET_100_PERCENT))) {
+                DebugTrace("IOEXP write check failed for SET_100_PERCENT");
+            }
+
+            if ((gpio & (1 << IO_BIT_OUT_EXT_PROG)) != (this->gpio & (1 << IO_BIT_OUT_EXT_PROG))) {
+                DebugTrace("IOEXP write check failed for OUT_EXT_PROG");
+            }
+
+            if ((gpio & (1 << IO_BIT_OUT_OUTPUT_ENABLE)) != (this->gpio & (1 << IO_BIT_OUT_OUTPUT_ENABLE))) {
+                DebugTrace("IOEXP write check failed for OUTPUT_ENABLE");
+            }
+
+            gpio_changed = false;
+        }
+
+        channel.eventGpio(gpio);
+    }
 }
 
 uint8_t IOExpander::readGpio() {
@@ -161,6 +185,7 @@ void IOExpander::changeBit(int io_bit, bool set) {
 		gpio = newValue;
 		if (!writeDisabled) {
 			reg_write(REG_GPIO, gpio);
+            gpio_changed = true;
 		}
 	}
 }
@@ -173,18 +198,15 @@ void IOExpander::enableWriteAndFlush() {
 	writeDisabled = false;
 	
 	reg_write(REG_GPIO, gpio);
+    gpio_changed = true;
 }
 
 void IOExpander::onInterrupt() {
 	g_insideInterruptHandler = true;
 
-    // IMPORTANT!
-    // Read ADC first, then INTF and GPIO.
-    // Otherwise, it will generate 2 interrupts for single ADC start shot!
     int16_t adc_data = channel.adc.read();
-    uint8_t gpio = reg_read(REG_GPIO);
-
-    channel.event(gpio, adc_data);
+    
+    channel.eventAdcData(adc_data);
 
 #if CONF_DEBUG
     debug::ioexpIntTick(micros());
@@ -194,6 +216,10 @@ void IOExpander::onInterrupt() {
 }
 
 uint8_t IOExpander::reg_read_write(uint8_t opcode, uint8_t reg, uint8_t val) {
+    pinMode(channel.index == 1 ? IO_EXPANDER1 : IO_EXPANDER2, OUTPUT);
+    digitalWrite(channel.ioexp_pin, HIGH); // Deselect DAC
+    delayMicroseconds(3);
+
     SPI.beginTransaction(MCP23S08_SPI);
     digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.ioexp_pin, LOW);

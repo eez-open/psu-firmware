@@ -26,13 +26,33 @@ namespace eez {
 namespace psu {
 namespace watchdog {
 
+static bool watchdogEnabled = false;
 static Interval watchdogInterval(WATCHDOG_INTERVAL);
 
-void init() {
+void enable() {
+    watchdogEnabled = true;
 	pinMode(WATCHDOG, OUTPUT);
 }
 
+void disable() {
+    watchdogEnabled = false;
+	pinMode(WATCHDOG, INPUT);
+}
+
 void tick(unsigned long tick_usec) {
+    if (watchdogEnabled) {
+        if (!isPowerUp()) {
+            // WATCHDOG pin impedance must be changed to be sure that TPS3705 will not detect prolonged delay in receiving heartbeat impulse
+            // when waking up sequence from Stand-by mode is initiated and consequently switch off input power.
+            // That could generate a "glitch" in powering SPI periperals on the Power board when huge load is connected.
+            disable();
+        }
+    } else {
+        if (isPowerUp()) {
+            enable();
+        }
+    }
+
 	if (watchdogInterval.test(tick_usec)) {
 #if CONF_DEBUG
 		if (debug::g_debug_watchdog) {

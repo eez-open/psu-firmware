@@ -56,11 +56,12 @@ namespace psu {
 
 using namespace scpi;
 
-bool g_is_booted = false;
-static bool g_power_is_up = false;
-static bool g_test_power_up_delay = false;
-static unsigned long g_power_down_time;
-static bool g_is_time_critical_mode = false;
+bool g_isBooted = false;
+bool g_bootTestSuccess;
+static bool g_powerIsUp = false;
+static bool g_testPowerUpDelay = false;
+static unsigned long g_powerDownTime;
+static bool g_isTimeCriticalMode = false;
 
 static MaxCurrentLimitCause g_maxCurrentLimitCause;
 
@@ -70,8 +71,7 @@ bool g_insideInterruptHandler = false;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static bool psu_reset(bool power_on);
-static bool test_shield();
+static bool testShield();
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
 static void startMasterSync();
@@ -80,9 +80,19 @@ static void updateMasterSync();
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void boot() {
-    bool success = true;
+void loadConf() {
+    // loads global configuration parameters
+    persist_conf::loadDevice();
+ 
+    // load channels calibration parameters
+    for (int i = 0; i < CH_NUM; ++i) {
+        persist_conf::loadChannelCalibration(&Channel::get(i));
+    }
+}
 
+////////////////////////////////////////////////////////////////////////////////
+
+void init() {
     // initialize shield
     eez_psu_init();
 
@@ -93,18 +103,19 @@ void boot() {
     bp::init();
     serial::init();
 
-    success &= eeprom::init();
+    eeprom::init();
+    eeprom::test();
 
 	g_powerOnTimeCounter.init();
 
-    persist_conf::loadDevice(); // loads global configuration parameters
+    loadConf();
 
 #if OPTION_DISPLAY
     gui::init();
 #endif
 
-    success &= rtc::init();
-	success &= datetime::init();
+    rtc::init();
+	datetime::init();
 
 	event_queue::init();
 
@@ -112,299 +123,75 @@ void boot() {
 #if OPTION_DISPLAY
     gui::showEthernetInit();
 #endif
-	success &= ethernet::init();
+	ethernet::init();
 #else
 	DebugTrace("Ethernet initialization skipped!");
 #endif
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+    fan::init();
+#endif
+
+	temperature::init();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+static bool testChannels() {
+    if (!g_powerIsUp) {
+        // test is skipped
+        return true;
+    }
+
+    bool result = true;
+
+    for (int i = 0; i < CH_NUM; ++i) {
+        result &= Channel::get(i).test();
+    }
+
+    return result;
+}
+
+static bool testShield() {
+    bool result = true;
+
+	result &= rtc::test();
+    result &= datetime::test();
+    result &= eeprom::test();
+
+#if OPTION_ETHERNET
+    result &= ethernet::test();
+#endif
+
+	result &= temperature::test();
+
+    return result;
+}
+
+bool test() {
+    bool testResult = true;
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	fan::test_start();
 #endif
 
-	success &= temperature::init();
-
-    // load channels calibration parameters
-    for (int i = 0; i < CH_NUM; ++i) {
-        persist_conf::loadChannelCalibration(&Channel::get(i));
-    }
-
-    // auto recall profile or ...
-    bool autoRecalledFromProfile = false;
-    
-    profile::Parameters profile;
-    if (persist_conf::isProfileAutoRecallEnabled()) {
-        int location = persist_conf::getProfileAutoRecallLocation();
-        if (profile::load(location, &profile)) {
-            bool differenceChecked = true;
-
-            if (location != 0) {
-                profile::Parameters defaultProfile;
-                if (profile::load(0, &defaultProfile)) {
-                    bool differenceDetected = false;
-
-                    for (int i = 0; i < CH_NUM; ++i) {
-                        if (profile.channels[i].u_set != defaultProfile.channels[i].u_set || profile.channels[i].i_set != profile.channels[i].i_set) {
-                            differenceDetected = true;
-                            break;
-                        }
-                    }
-
-                    if (differenceDetected) {
-                        for (int i = 0; i < CH_NUM; ++i) {
-                            profile.channels[i].flags.output_enabled = false;
-                            profile.channels[i].flags.output_enabled = false;
-                        }
-
-                        event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
-                    }
-                } else {
-                    differenceChecked = false;
-                }
-            }
-            
-            if (differenceChecked && profile::recallFromProfile(&profile)) {
-                autoRecalledFromProfile = true;
-                success &= autoRecalledFromProfile;
-            }
-        }
-    }
-    
-    if (!autoRecalledFromProfile) {
-        // ... reset
-        success &= psu_reset(true);
-    }
+    testResult &= testShield();
+    testResult &= testChannels();
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-	success &= fan::init();
+	testResult &= fan::test();
 #endif
 
-    // play beep if there is an error during boot procedure
-    if (!success) {
+	if (!testResult) {
         sound::playBeep();
     }
 
-    /*
-    using namespace persist_conf;
-
-    DebugTraceF("%d", sizeof(BlockHeader));                                         // 6
-    DebugTraceF("%d", offsetof(BlockHeader, checksum));                             // 0
-    DebugTraceF("%d", offsetof(BlockHeader, version));                              // 4
-    DebugTraceF("%d", sizeof(DeviceFlags));                                         // 2
-    DebugTraceF("%d", sizeof(DeviceConfiguration));                                 // 32
-    DebugTraceF("%d", offsetof(DeviceConfiguration, header));                       // 0
-    DebugTraceF("%d", offsetof(DeviceConfiguration, calibration_password));         // 6
-    DebugTraceF("%d", offsetof(DeviceConfiguration, flags));                        // 23
-    DebugTraceF("%d", offsetof(DeviceConfiguration, date_year));                    // 25
-    DebugTraceF("%d", offsetof(DeviceConfiguration, date_month));                   // 26
-    DebugTraceF("%d", offsetof(DeviceConfiguration, date_day));                     // 27
-    DebugTraceF("%d", offsetof(DeviceConfiguration, time_hour));                    // 28
-    DebugTraceF("%d", offsetof(DeviceConfiguration, time_minute));                  // 29
-    DebugTraceF("%d", offsetof(DeviceConfiguration, time_second));                  // 30
-    DebugTraceF("%d", offsetof(DeviceConfiguration, profile_auto_recall_location)); // 31
-
-    typedef Channel::CalibrationConfiguration CalibrationConfiguration;
-    typedef Channel::CalibrationValueConfiguration CalibrationValueConfiguration;
-    typedef Channel::CalibrationValuePointConfiguration CalibrationValuePointConfiguration;
-
-    DebugTraceF("%d", sizeof(CalibrationConfiguration));
-    DebugTraceF("%d", offsetof(CalibrationConfiguration, flags));
-    DebugTraceF("%d", offsetof(CalibrationConfiguration, u));
-    DebugTraceF("%d", offsetof(CalibrationConfiguration, i));
-    DebugTraceF("%d", offsetof(CalibrationConfiguration, calibration_date));
-    DebugTraceF("%d", offsetof(CalibrationConfiguration, calibration_remark));
-
-    DebugTraceF("%d", sizeof(CalibrationValueConfiguration));
-    DebugTraceF("%d", offsetof(CalibrationValueConfiguration, min));
-    DebugTraceF("%d", offsetof(CalibrationValueConfiguration, max));
-    DebugTraceF("%d", offsetof(CalibrationValueConfiguration, mid));
-
-    DebugTraceF("%d", sizeof(CalibrationValuePointConfiguration));
-    DebugTraceF("%d", offsetof(CalibrationValuePointConfiguration, dac));
-    DebugTraceF("%d", offsetof(CalibrationValuePointConfiguration, val));
-    DebugTraceF("%d", offsetof(CalibrationValuePointConfiguration, adc));
-
-    using namespace profile;
-
-    DebugTraceF("%d", sizeof(Parameters));
-    DebugTraceF("%d", offsetof(Parameters, header));
-    DebugTraceF("%d", offsetof(Parameters, is_valid));
-    DebugTraceF("%d", offsetof(Parameters, name));
-    DebugTraceF("%d", offsetof(Parameters, power_is_up));
-    DebugTraceF("%d", offsetof(Parameters, channels));
-    DebugTraceF("%d", offsetof(Parameters, temp_prot));
-
-    DebugTraceF("%d", sizeof(ChannelParameters));
-    DebugTraceF("%d", offsetof(ChannelParameters, flags));
-    DebugTraceF("%d", offsetof(ChannelParameters, u_set));
-    DebugTraceF("%d", offsetof(ChannelParameters, u_step));
-    DebugTraceF("%d", offsetof(ChannelParameters, i_set));
-    DebugTraceF("%d", offsetof(ChannelParameters, i_step));
-    DebugTraceF("%d", offsetof(ChannelParameters, u_delay));
-    DebugTraceF("%d", offsetof(ChannelParameters, u_level));
-    DebugTraceF("%d", offsetof(ChannelParameters, i_delay));
-    DebugTraceF("%d", offsetof(ChannelParameters, p_delay));
-    DebugTraceF("%d", offsetof(ChannelParameters, p_level));
-
-    using namespace temperature;
-
-    DebugTraceF("%d", sizeof(ProtectionConfiguration));
-    DebugTraceF("%d", offsetof(ProtectionConfiguration, sensor));
-    DebugTraceF("%d", offsetof(ProtectionConfiguration, delay));
-    DebugTraceF("%d", offsetof(ProtectionConfiguration, level));
-    DebugTraceF("%d", offsetof(ProtectionConfiguration, state));
-    */
-
-    g_is_booted = true;
-
-    if (g_power_is_up) {
-        for (int i = 0; i < CH_NUM; ++i) {
-            Channel::get(i).afterBootOutputEnable();
-        }
-    }
-
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-	watchdog::init();
-#endif
+	return testResult;
 }
 
-bool powerUp() {
-    if (g_power_is_up) return true;
+////////////////////////////////////////////////////////////////////////////////
 
-	if (!temperature::isAllowedToPowerUp()) return false;
-
-#if OPTION_DISPLAY
-    gui::showWelcomePage();
-#endif
-
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-	if (g_is_booted) {
-		fan::test_start();
-	}
-#endif
-
-    // reset channels
-    for (int i = 0; i < CH_NUM; ++i) {
-        Channel::get(i).reset();
-    }
-
-    // turn power on
-    board::powerUp();
-    g_power_is_up = true;
-	g_powerOnTimeCounter.start();
-
-    // turn off standby blue LED
-    bp::switchStandby(false);
-
-    bool success = true;
-
-	if (g_is_booted) {
-		success &= test_shield();
-	}
-
-    // init channels
-    for (int i = 0; i < CH_NUM; ++i) {
-        success &= Channel::get(i).init();
-    }
-
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-	if (g_is_booted) {
-		success &= fan::test();
-	}
-#endif
-
-    // turn on Power On (PON) bit of ESE register
-    setEsrBits(ESR_PON);
-
-	event_queue::pushEvent(event_queue::EVENT_INFO_POWER_UP);
-
-    // play power up tune on success
-    if (success) {
-        sound::playPowerUp();
-    }
-
-    return true;
-}
-
-void powerDown() {
-#if OPTION_DISPLAY
-    if (g_is_booted) {
-        gui::showEnteringStandbyPage();
-    } else {
-        gui::showStandbyPage();
-    }
-#endif
-
-    if (!g_power_is_up) return;
-
-    channel_coupling::setType(channel_coupling::TYPE_NONE);
-
-    for (int i = 0; i < CH_NUM; ++i) {
-        Channel::get(i).onPowerDown();
-    }
-
-    board::powerDown();
-
-    // turn on standby blue LED
-    bp::switchStandby(true);
-
-    g_power_is_up = false;
-	g_powerOnTimeCounter.stop();
-
-	event_queue::pushEvent(event_queue::EVENT_INFO_POWER_DOWN);
-
-	sound::playPowerDown();
-}
-
-bool isPowerUp() {
-    return g_power_is_up;
-}
-
-bool changePowerState(bool up) {
-    if (up == g_power_is_up) return true;
-
-    if (up) {
-        // at least MIN_POWER_UP_DELAY seconds shall pass after last power down
-        if (g_test_power_up_delay) {
-            if (millis() - g_power_down_time < MIN_POWER_UP_DELAY * 1000) return false;
-            g_test_power_up_delay = false;
-        }
-
-        if (!powerUp()) {
-            return false;
-        }
-
-        // auto recall channels parameters from profile
-        profile::Parameters profile;
-        if (persist_conf::isProfileAutoRecallEnabled() && profile::load(persist_conf::getProfileAutoRecallLocation(), &profile)) {
-            profile::recallChannelsFromProfile(&profile);
-        }
-    
-        profile::save();
-    }
-    else {
-        g_power_is_up = false;
-        profile::saveImmediately();
-        g_power_is_up = true;
-
-        profile::enableSave(false);
-
-        powerDown();
-
-        profile::enableSave(true);
-
-        g_test_power_up_delay = true;
-        g_power_down_time = millis();
-    }
-
-    return true;
-}
-
-void powerDownBySensor() {
-    powerDown();
-    profile::save();
-}
-
-static bool psu_reset(bool power_on) {
+static bool psuReset(bool power_on) {
     if (!power_on) {
         powerDown();
     }
@@ -485,65 +272,237 @@ static bool psu_reset(bool power_on) {
     return false;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+bool autoRecall() {
+    if (persist_conf::isProfileAutoRecallEnabled()) {
+        int location = persist_conf::getProfileAutoRecallLocation();
+        profile::Parameters profile;
+        if (profile::load(location, &profile)) {
+            bool differenceChecked = true;
+
+            if (location != 0) {
+                profile::Parameters defaultProfile;
+                if (profile::load(0, &defaultProfile)) {
+                    bool differenceDetected = false;
+
+                    for (int i = 0; i < CH_NUM; ++i) {
+                        if (profile.channels[i].u_set != defaultProfile.channels[i].u_set || profile.channels[i].i_set != profile.channels[i].i_set) {
+                            differenceDetected = true;
+                            break;
+                        }
+                    }
+
+                    if (differenceDetected) {
+                        for (int i = 0; i < CH_NUM; ++i) {
+                            profile.channels[i].flags.output_enabled = false;
+                            profile.channels[i].flags.output_enabled = false;
+                        }
+
+                        event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
+                    }
+                } else {
+                    differenceChecked = false;
+                }
+            }
+            
+            if (differenceChecked && profile::recallFromProfile(&profile)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void boot() {
+    init();
+
+    // test
+    g_bootTestSuccess = true;
+
+    g_bootTestSuccess &= testShield();
+
+    if (!autoRecall()) {
+        psuReset(true);
+    }
+
+    // play beep if there is an error during boot procedure
+    if (!g_bootTestSuccess) {
+        sound::playBeep();
+    }
+
+    g_isBooted = true;
+
+    if (g_powerIsUp) {
+        // enable channels output if required
+        for (int i = 0; i < CH_NUM; ++i) {
+            Channel::get(i).afterBootOutputEnable();
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool powerUp() {
+    if (g_powerIsUp) {
+        return true;
+    }
+
+	if (!temperature::isAllowedToPowerUp()) {
+        return false;
+    }
+
+#if OPTION_DISPLAY
+    gui::showWelcomePage();
+#endif
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+    fan::test_start();
+#endif
+
+    // reset channels
+    for (int i = 0; i < CH_NUM; ++i) {
+        Channel::get(i).reset();
+    }
+
+    // turn power on
+    board::powerUp();
+    g_powerIsUp = true;
+	g_powerOnTimeCounter.start();
+
+    // turn off standby blue LED
+    bp::switchStandby(false);
+
+    // init channels
+    for (int i = 0; i < CH_NUM; ++i) {
+        Channel::get(i).init();
+    }
+
+    bool testSuccess = true;
+
+    if (g_isBooted) {
+	    testSuccess &= testShield();
+    }
+
+    // test channels
+    for (int i = 0; i < CH_NUM; ++i) {
+        testSuccess &= Channel::get(i).test();
+    }
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+	testSuccess &= fan::test();
+#endif
+
+    // turn on Power On (PON) bit of ESE register
+    setEsrBits(ESR_PON);
+
+	event_queue::pushEvent(event_queue::EVENT_INFO_POWER_UP);
+
+    // play power up tune on success
+    if (testSuccess) {
+        sound::playPowerUp();
+    }
+
+    if (!g_isBooted) {
+        g_bootTestSuccess &= testSuccess;
+    }
+
+    return true;
+}
+
+void powerDown() {
+#if OPTION_DISPLAY
+    if (g_isBooted) {
+        gui::showEnteringStandbyPage();
+    } else {
+        gui::showStandbyPage();
+    }
+#endif
+
+    if (!g_powerIsUp) return;
+
+    channel_coupling::setType(channel_coupling::TYPE_NONE);
+
+    for (int i = 0; i < CH_NUM; ++i) {
+        Channel::get(i).onPowerDown();
+    }
+
+    board::powerDown();
+
+    // turn on standby blue LED
+    bp::switchStandby(true);
+
+    g_powerIsUp = false;
+	g_powerOnTimeCounter.stop();
+
+	event_queue::pushEvent(event_queue::EVENT_INFO_POWER_DOWN);
+
+	sound::playPowerDown();
+}
+
+bool isPowerUp() {
+    return g_powerIsUp;
+}
+
+bool changePowerState(bool up) {
+    if (up == g_powerIsUp) return true;
+
+    if (up) {
+        // at least MIN_POWER_UP_DELAY seconds shall pass after last power down
+        if (g_testPowerUpDelay) {
+            if (millis() - g_powerDownTime < MIN_POWER_UP_DELAY * 1000) return false;
+            g_testPowerUpDelay = false;
+        }
+
+        if (!powerUp()) {
+            return false;
+        }
+
+        // auto recall channels parameters from profile
+        profile::Parameters profile;
+        if (persist_conf::isProfileAutoRecallEnabled() && profile::load(persist_conf::getProfileAutoRecallLocation(), &profile)) {
+            profile::recallChannelsFromProfile(&profile);
+        }
+    
+        profile::save();
+    }
+    else {
+        g_powerIsUp = false;
+        profile::saveImmediately();
+        g_powerIsUp = true;
+
+        profile::enableSave(false);
+
+        powerDown();
+
+        profile::enableSave(true);
+
+        g_testPowerUpDelay = true;
+        g_powerDownTime = millis();
+    }
+
+    return true;
+}
+
+void powerDownBySensor() {
+    powerDown();
+    profile::save();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 bool reset() {
-    if (psu_reset(false)) {
+    if (psuReset(false)) {
         profile::save();
         return true;
     }
     return false;
 }
 
-static bool test_channels() {
-    if (!g_power_is_up) {
-        // test is skipped
-        return true;
-    }
-
-    bool result = true;
-
-    for (int i = 0; i < CH_NUM; ++i) {
-        result &= Channel::get(i).test();
-    }
-
-    return result;
-}
-
-static bool test_shield() {
-    bool result = true;
-
-	result &= rtc::test();
-    result &= datetime::test();
-    result &= eeprom::test();
-
-#if OPTION_ETHERNET
-    result &= ethernet::test();
-#endif
-
-	result &= temperature::test();
-
-    return result;
-}
-
-bool test() {
-    bool result = true;
-
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-	fan::test_start();
-#endif
-
-    result &= test_shield();
-    result &= test_channels();
-
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-	result &= fan::test();
-#endif
-
-	if (!result) {
-        sound::playBeep();
-    }
-
-	return result;
-}
+////////////////////////////////////////////////////////////////////////////////
 
 void tick() {
 	unsigned long tick_usec = micros();
@@ -588,6 +547,8 @@ void tick() {
 	updateMasterSync();
 #endif
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 void setEsrBits(int bit_mask) {
     SCPI_RegSetBits(&serial::scpi_context, SCPI_REG_ESR, bit_mask);
@@ -694,15 +655,15 @@ const char *getCpuEthernetType() {
 }
 
 void enterTimeCriticalMode() {
-    g_is_time_critical_mode = true;
+    g_isTimeCriticalMode = true;
 }
 
 bool isTimeCriticalMode() {
-    return g_is_time_critical_mode;
+    return g_isTimeCriticalMode;
 }
 
 void leaveTimeCriticalMode() {
-    g_is_time_critical_mode = false;
+    g_isTimeCriticalMode = false;
 }
 
 bool isMaxCurrentLimited() {

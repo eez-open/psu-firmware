@@ -123,10 +123,10 @@ scpi_t scpi_context;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool init() {
+void init() {
     if (!persist_conf::isEthernetEnabled()) {
         test_result = psu::TEST_SKIPPED;
-        return true;
+        return;
     }
 
 #ifdef EEZ_PSU_ARDUINO
@@ -149,7 +149,7 @@ bool init() {
         DebugTrace("Ethernet not connected!");
         event_queue::pushEvent(event_queue::EVENT_WARNING_ETHERNET_NOT_CONNECTED);
 
-        return true;
+        return;
     }
 
     server.begin();
@@ -174,8 +174,6 @@ bool init() {
         &scpi_interface,
         scpi_input_buffer, SCPI_PARSER_INPUT_BUFFER_LENGTH,
         error_queue_data, SCPI_PARSER_ERROR_QUEUE_SIZE + 1);
-
-    return test();
 }
 
 bool test() {
