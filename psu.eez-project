@@ -14025,7 +14025,7 @@
               "width": 118,
               "height": 28,
               "style": "edit_value_S_left",
-              "text": "Temp. MAIN:"
+              "text": "Temp. AUX:"
             },
             {
               "type": "Select",
@@ -14074,62 +14074,13 @@
               "width": 118,
               "height": 28,
               "style": "edit_value_S_left",
-              "text": "Temp. AUX:"
-            },
-            {
-              "type": "Select",
-              "data": "sys.temp.aux.status",
-              "x": 130,
-              "y": 114,
-              "width": 110,
-              "height": 28,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Text",
-                  "data": "",
-                  "x": 0,
-                  "y": 0,
-                  "width": 122,
-                  "height": 28,
-                  "style": "event_error",
-                  "text": "Invalid"
-                },
-                {
-                  "type": "DisplayData",
-                  "data": "sys.temp.aux",
-                  "x": 0,
-                  "y": 0,
-                  "width": 122,
-                  "height": 28,
-                  "style": "value_S"
-                },
-                {
-                  "type": "Text",
-                  "data": "",
-                  "x": 0,
-                  "y": 0,
-                  "width": 122,
-                  "height": 28,
-                  "style": "default_disabled_S_left",
-                  "text": "Not installed"
-                }
-              ]
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 142,
-              "width": 118,
-              "height": 28,
-              "style": "edit_value_S_left",
               "text": "Fan speed:"
             },
             {
               "type": "Select",
               "data": "sys.info.fan.status",
               "x": 130,
-              "y": 142,
+              "y": 114,
               "width": 110,
               "height": 28,
               "style": "default",
@@ -14178,7 +14129,7 @@
             {
               "type": "Text",
               "x": 12,
-              "y": 170,
+              "y": 142,
               "width": 118,
               "height": 28,
               "style": "edit_value_S_left",
@@ -14188,7 +14139,7 @@
               "type": "DisplayData",
               "data": "sys.info.firmwareVer",
               "x": 130,
-              "y": 170,
+              "y": 142,
               "width": 122,
               "height": 28,
               "style": "value_S"
@@ -14237,6 +14188,24 @@
               "height": 36,
               "style": "bottom_button",
               "text": "X"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 170,
+              "width": 118,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Serial No.:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "sys.info.serialNo",
+              "x": 130,
+              "y": 170,
+              "width": 122,
+              "height": 28,
+              "style": "value_S"
             }
           ]
         }
@@ -14277,25 +14246,7 @@
             {
               "type": "Text",
               "x": 12,
-              "y": 30,
-              "width": 118,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Serial No.:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "sys.info.serialNo",
-              "x": 130,
-              "y": 30,
-              "width": 122,
-              "height": 28,
-              "style": "value_S"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 58,
+              "y": 32,
               "width": 118,
               "height": 28,
               "style": "edit_value_S_left",
@@ -14305,7 +14256,7 @@
               "type": "DisplayData",
               "data": "sys.info.cpu",
               "x": 130,
-              "y": 58,
+              "y": 32,
               "width": 122,
               "height": 28,
               "style": "value_S"
@@ -14313,7 +14264,7 @@
             {
               "type": "Text",
               "x": 12,
-              "y": 86,
+              "y": 60,
               "width": 118,
               "height": 28,
               "style": "edit_value_S_left",
@@ -14323,7 +14274,7 @@
               "type": "Text",
               "data": "sys.info.ethernet",
               "x": 130,
-              "y": 86,
+              "y": 60,
               "width": 122,
               "height": 28,
               "style": "value_S",
@@ -14333,7 +14284,7 @@
               "type": "List",
               "data": "channels",
               "x": 12,
-              "y": 114,
+              "y": 88,
               "width": 240,
               "height": 56,
               "style": "default",
@@ -14401,7 +14352,7 @@
             {
               "type": "Text",
               "x": 12,
-              "y": 170,
+              "y": 144,
               "width": 118,
               "height": 28,
               "style": "edit_value_S_left",
@@ -14411,7 +14362,7 @@
               "type": "DisplayData",
               "data": "sys.info.scpiVer",
               "x": 130,
-              "y": 170,
+              "y": 144,
               "width": 122,
               "height": 28,
               "style": "value_S"
