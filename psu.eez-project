@@ -11829,7 +11829,7 @@
               "width": 240,
               "height": 28,
               "style": "default_disabled_S_left",
-              "text": "Diagnostics"
+              "text": "Set AUX sensor OTP"
             },
             {
               "type": "Text",
@@ -12046,6 +12046,266 @@
               "width": 68,
               "height": 204,
               "style": "default"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 170,
+              "width": 240,
+              "height": 28,
+              "style": "default_disabled_S_left",
+              "text": "Diagnostics"
+            }
+          ]
+        }
+      },
+      {
+        "name": "sys_settings_aux_otp",
+        "description": "Define selected protection values\n",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 28,
+              "style": "value_S",
+              "text": "Set AUX temperature protection"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 28,
+              "width": 119,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "OTP active:"
+            },
+            {
+              "type": "Select",
+              "data": "channel.protection.otp.state",
+              "x": 135,
+              "y": 28,
+              "width": 60,
+              "height": 28,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "ch_settings_prot_toggle_state",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "No"
+                },
+                {
+                  "type": "Text",
+                  "action": "ch_settings_prot_toggle_state",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "Yes"
+                }
+              ]
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 56,
+              "width": 119,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Current temp.:"
+            },
+            {
+              "type": "Select",
+              "data": "channel.tempStatus",
+              "x": 135,
+              "y": 56,
+              "width": 96,
+              "height": 28,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "data": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 96,
+                  "height": 28,
+                  "style": "event_error",
+                  "text": "Invalid"
+                },
+                {
+                  "type": "DisplayData",
+                  "data": "channel.temp",
+                  "x": 0,
+                  "y": 0,
+                  "width": 96,
+                  "height": 28,
+                  "style": "value_S"
+                },
+                {
+                  "type": "Text",
+                  "data": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 96,
+                  "height": 28,
+                  "style": "default_disabled_S_left",
+                  "text": "Not installed"
+                }
+              ]
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 84,
+              "width": 119,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Trip level:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.protection.otp.level",
+              "action": "ch_settings_prot_edit_level",
+              "x": 135,
+              "y": 84,
+              "width": 96,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 112,
+              "width": 119,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Trip delay:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.protection.otp.delay",
+              "action": "ch_settings_prot_edit_delay",
+              "x": 135,
+              "y": 112,
+              "width": 96,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Rectangle",
+              "x": 16,
+              "y": 140,
+              "width": 236,
+              "height": 28,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Button",
+              "data": "",
+              "action": "set",
+              "x": 16,
+              "y": 168,
+              "width": 101,
+              "height": 32,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "type": "Text",
+              "action": "discard",
+              "x": 117,
+              "y": 168,
+              "width": 96,
+              "height": 32,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page_selected",
+              "text": "E"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "G"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 96,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "?"
+            },
+            {
+              "type": "Rectangle",
+              "x": 144,
+              "y": 204,
+              "width": 128,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 28,
+              "style": "value_S",
+              "text": "Set AUX temperature protection"
             }
           ]
         }
