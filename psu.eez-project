@@ -8137,23 +8137,82 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "data": "channel.shortLabel",
+              "type": "Select",
+              "data": "channel.coupling.mode",
               "x": 6,
               "y": 0,
-              "width": 36,
+              "width": 246,
               "height": 28,
-              "style": "value_S",
-              "text": "Channel protections"
-            },
-            {
-              "type": "Text",
-              "x": 42,
-              "y": 0,
-              "width": 210,
-              "height": 28,
-              "style": "value_S",
-              "text": "Protection settings"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "data": "channel.shortLabel",
+                      "x": 6,
+                      "y": 0,
+                      "width": 36,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channel protections"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 42,
+                      "y": 0,
+                      "width": 210,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Protection settings"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channels protection settings"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channels protection settings"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "Text",
@@ -8360,23 +8419,82 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "data": "channel.shortLabel",
+              "type": "Select",
+              "data": "channel.coupling.mode",
               "x": 6,
               "y": 0,
-              "width": 36,
+              "width": 246,
               "height": 28,
-              "style": "value_S",
-              "text": "Channel protections"
-            },
-            {
-              "type": "Text",
-              "x": 42,
-              "y": 0,
-              "width": 210,
-              "height": 28,
-              "style": "value_S",
-              "text": "Clear channel protections"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "data": "channel.shortLabel",
+                      "x": 6,
+                      "y": 0,
+                      "width": 36,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channel protections"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 42,
+                      "y": 0,
+                      "width": 210,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Clear channel protection"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Clear channels protection"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Clear channels protection"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "MultilineText",
@@ -8499,23 +8617,82 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "data": "channel.shortLabel",
+              "type": "Select",
+              "data": "channel.coupling.mode",
               "x": 6,
               "y": 0,
-              "width": 36,
+              "width": 246,
               "height": 28,
-              "style": "value_S",
-              "text": "Channel protections"
-            },
-            {
-              "type": "Text",
-              "x": 42,
-              "y": 0,
-              "width": 210,
-              "height": 28,
-              "style": "value_S",
-              "text": "Set voltage protection"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "data": "channel.shortLabel",
+                      "x": 6,
+                      "y": 0,
+                      "width": 36,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channel protections"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 42,
+                      "y": 0,
+                      "width": 210,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set over-voltage protection"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set over-voltage protection"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set over-voltage protection"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "Text",
@@ -8751,23 +8928,82 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "data": "channel.shortLabel",
+              "type": "Select",
+              "data": "channel.coupling.mode",
               "x": 6,
               "y": 0,
-              "width": 36,
+              "width": 246,
               "height": 28,
-              "style": "value_S",
-              "text": "Channel protections"
-            },
-            {
-              "type": "Text",
-              "x": 42,
-              "y": 0,
-              "width": 210,
-              "height": 28,
-              "style": "value_S",
-              "text": "Set current protection"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "data": "channel.shortLabel",
+                      "x": 6,
+                      "y": 0,
+                      "width": 36,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channel protections"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 42,
+                      "y": 0,
+                      "width": 210,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set over-current protection"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set over-current protection"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set over-current protection"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "Text",
@@ -9079,23 +9315,82 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "data": "channel.shortLabel",
+              "type": "Select",
+              "data": "channel.coupling.mode",
               "x": 6,
               "y": 0,
-              "width": 36,
+              "width": 246,
               "height": 28,
-              "style": "value_S",
-              "text": "Channel protections"
-            },
-            {
-              "type": "Text",
-              "x": 42,
-              "y": 0,
-              "width": 210,
-              "height": 28,
-              "style": "value_S",
-              "text": "Set power protection"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "data": "channel.shortLabel",
+                      "x": 6,
+                      "y": 0,
+                      "width": 36,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channel protections"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 42,
+                      "y": 0,
+                      "width": 210,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set over-power protection"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set over-power protection"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set over-power protection"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "Text",
@@ -9331,23 +9626,82 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "data": "channel.shortLabel",
+              "type": "Select",
+              "data": "channel.coupling.mode",
               "x": 6,
               "y": 0,
-              "width": 36,
+              "width": 246,
               "height": 28,
-              "style": "value_S",
-              "text": "Channel protections"
-            },
-            {
-              "type": "Text",
-              "x": 42,
-              "y": 0,
-              "width": 210,
-              "height": 28,
-              "style": "value_S",
-              "text": "Set temperature protection"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "data": "channel.shortLabel",
+                      "x": 6,
+                      "y": 0,
+                      "width": 36,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channel protections"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 42,
+                      "y": 0,
+                      "width": 210,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set temperature protection"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set temperature protection"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set temperature protection"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "Text",
@@ -9583,23 +9937,82 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "data": "channel.shortLabel",
+              "type": "Select",
+              "data": "channel.coupling.mode",
               "x": 6,
               "y": 0,
-              "width": 36,
+              "width": 246,
               "height": 28,
-              "style": "value_S",
-              "text": "Channel protections"
-            },
-            {
-              "type": "Text",
-              "x": 42,
-              "y": 0,
-              "width": 210,
-              "height": 28,
-              "style": "value_S",
-              "text": "Advanced settings"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "data": "channel.shortLabel",
+                      "x": 6,
+                      "y": 0,
+                      "width": 36,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channel protections"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 42,
+                      "y": 0,
+                      "width": 210,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Advanced settings"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channels advanced settings"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channels advanced settings"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "Select",
@@ -9898,23 +10311,82 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "data": "channel.shortLabel",
+              "type": "Select",
+              "data": "channel.coupling.mode",
               "x": 6,
               "y": 0,
-              "width": 36,
+              "width": 246,
               "height": 28,
-              "style": "value_S",
-              "text": "Channel protections"
-            },
-            {
-              "type": "Text",
-              "x": 42,
-              "y": 0,
-              "width": 210,
-              "height": 28,
-              "style": "value_S",
-              "text": "Set channel low ripple mode"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "data": "channel.shortLabel",
+                      "x": 6,
+                      "y": 0,
+                      "width": 36,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channel protections"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 42,
+                      "y": 0,
+                      "width": 210,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Low-ripple mode settings"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Low-ripple mode settings"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Low-ripple mode settings"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "Text",
@@ -10147,23 +10619,82 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "data": "channel.shortLabel",
+              "type": "Select",
+              "data": "channel.coupling.mode",
               "x": 6,
               "y": 0,
-              "width": 36,
+              "width": 246,
               "height": 28,
-              "style": "value_S",
-              "text": "Channel protections"
-            },
-            {
-              "type": "Text",
-              "x": 42,
-              "y": 0,
-              "width": 210,
-              "height": 28,
-              "style": "value_S",
-              "text": "Set remote voltage sense"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "data": "channel.shortLabel",
+                      "x": 6,
+                      "y": 0,
+                      "width": 36,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channel protections"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 42,
+                      "y": 0,
+                      "width": 210,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set remote voltage sense"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set remote voltage sense"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set remote voltage sense"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "MultilineText",
@@ -10482,22 +11013,12 @@
           "widgets": [
             {
               "type": "Text",
-              "data": "channel.shortLabel",
               "x": 6,
               "y": 0,
-              "width": 36,
+              "width": 246,
               "height": 28,
               "style": "value_S",
-              "text": "Channel protections"
-            },
-            {
-              "type": "Text",
-              "x": 42,
-              "y": 0,
-              "width": 210,
-              "height": 28,
-              "style": "value_S",
-              "text": "Set coupling mode"
+              "text": "Set channels coupling mode"
             },
             {
               "type": "Text",
@@ -10839,23 +11360,82 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "data": "channel.shortLabel",
+              "type": "Select",
+              "data": "channel.coupling.mode",
               "x": 6,
               "y": 0,
-              "width": 36,
+              "width": 246,
               "height": 28,
-              "style": "value_S",
-              "text": "Channel protections"
-            },
-            {
-              "type": "Text",
-              "x": 42,
-              "y": 0,
-              "width": 210,
-              "height": 28,
-              "style": "value_S",
-              "text": "Information"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "data": "channel.shortLabel",
+                      "x": 6,
+                      "y": 0,
+                      "width": 36,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channel protections"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 42,
+                      "y": 0,
+                      "width": 210,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Information"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channels information"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channels information"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "Text",
