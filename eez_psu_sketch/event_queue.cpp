@@ -53,6 +53,9 @@ static const int MAX_EVENTS_DURING_INTERRUPT_HANDLING = sizeof(g_eventsDuringInt
 
 static uint8_t g_pageIndex = 0;
 
+static Event g_lastErrorEvent;
+static bool g_lastErrorEventChanged;
+
 void readHeader() {
 	eeprom::read((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
 }
@@ -71,6 +74,7 @@ void writeEvent(uint16_t eventIndex, Event *e) {
 
 void init() {
 	readHeader();
+    g_lastErrorEventChanged = true;
 
 	if (eventQueue.magicNumber != MAGIC || eventQueue.version != VERSION || eventQueue.head >= MAX_EVENTS || eventQueue.size > MAX_EVENTS) {
 		eventQueue = {
@@ -102,11 +106,16 @@ void getEvent(uint16_t index, Event *e) {
 }
 
 void getLastErrorEvent(Event *e) {
-	if (eventQueue.lastErrorEventIndex != NULL_INDEX) {
-		readEvent(eventQueue.lastErrorEventIndex, e);
-	} else {
-		e->eventId = EVENT_TYPE_NONE;
-	}
+    if (g_lastErrorEventChanged) {
+	    if (eventQueue.lastErrorEventIndex != NULL_INDEX) {
+		    readEvent(eventQueue.lastErrorEventIndex, &g_lastErrorEvent);
+	    } else {
+		    g_lastErrorEvent.eventId = EVENT_TYPE_NONE;
+	    }
+        g_lastErrorEventChanged = false;
+    }
+
+    memcpy(e, &g_lastErrorEvent, sizeof(Event));
 }
 
 int getEventType(Event *e) {
@@ -196,11 +205,13 @@ void pushEvent(int16_t eventId) {
 		if (eventQueue.lastErrorEventIndex == eventQueue.head) {
 			// this event overwrote last error event, therefore:
 			eventQueue.lastErrorEventIndex = NULL_INDEX;
+            g_lastErrorEventChanged = true;
 		}
 
 		int eventType = getEventType(&e);
 		if (eventType == EVENT_TYPE_ERROR || eventType == EVENT_TYPE_WARNING && eventQueue.lastErrorEventIndex == NULL_INDEX) {
 			eventQueue.lastErrorEventIndex = eventQueue.head;
+            g_lastErrorEventChanged = true;
 		}
 
 		eventQueue.head = (eventQueue.head + 1) % MAX_EVENTS;
@@ -219,6 +230,7 @@ void pushEvent(int16_t eventId) {
 void markAsRead() {
 	if (eventQueue.lastErrorEventIndex != NULL_INDEX) {
 		eventQueue.lastErrorEventIndex = NULL_INDEX;
+        g_lastErrorEventChanged = true;
 		writeHeader();
 	}
 }

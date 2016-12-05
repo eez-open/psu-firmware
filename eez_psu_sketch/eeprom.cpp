@@ -53,6 +53,18 @@ void read(uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
     for (uint16_t i = 0; i < buffer_size; i += 64) {
         read_chunk(buffer + i, min(buffer_size - i, 64), address + i);
     }
+
+    delay(1);
+
+    uint8_t verifyBuffer[256];
+    uint16_t verifySize = min(buffer_size, sizeof(verifyBuffer));
+    for (uint16_t i = 0; i < verifySize; i += 64) {
+        read_chunk(verifyBuffer + i, min(buffer_size - i, 64), address + i);
+    }
+
+    if (memcmp(buffer, verifyBuffer, verifySize)) {
+        DebugTrace("EEPROM read verify error");
+    }
 }
 
 bool is_write_in_progress() {
