@@ -196,7 +196,7 @@
 #define FAN_MAX_TEMP 75
 
 ///  PWM value for min. fan speed (12) 
-#define FAN_MIN_PWM 12 
+#define FAN_MIN_PWM 15
 
 /// PWM value for max. fan speed (255)
 #define FAN_MAX_PWM 255
