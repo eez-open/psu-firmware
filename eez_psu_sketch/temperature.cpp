@@ -256,12 +256,12 @@ void TempSensorTemperature::protection_check(unsigned long tick_usec) {
 }
 
 void TempSensorTemperature::protection_enter(TempSensorTemperature& sensor) {
-    if (channel_coupling::getType() == channel_coupling::TYPE_NONE) {
-        sensor.protection_enter();
-    } else {
+    if (temp_sensor::sensors[sensor.sensorIndex].ch_num >= 0 && channel_coupling::getType() != channel_coupling::TYPE_NONE) {
 	    for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
 		    sensors[i].protection_enter();
 	    }
+    } else {
+        sensor.protection_enter();
     }
 }
 
