@@ -11285,7 +11285,7 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 246,
+                  "width": 252,
                   "height": 28,
                   "style": "default",
                   "widgets": [
@@ -11312,7 +11312,7 @@
                       "type": "Text",
                       "x": 16,
                       "y": 28,
-                      "width": 132,
+                      "width": 119,
                       "height": 28,
                       "style": "edit_value_S_left",
                       "text": "Total On time:"
@@ -11320,9 +11320,9 @@
                     {
                       "type": "DisplayData",
                       "data": "channel.onTime.total",
-                      "x": 148,
+                      "x": 135,
                       "y": 28,
-                      "width": 104,
+                      "width": 117,
                       "height": 28,
                       "style": "value_S"
                     },
@@ -11330,7 +11330,7 @@
                       "type": "Text",
                       "x": 16,
                       "y": 56,
-                      "width": 132,
+                      "width": 119,
                       "height": 28,
                       "style": "edit_value_S_left",
                       "text": "Last On time:"
@@ -11338,9 +11338,9 @@
                     {
                       "type": "DisplayData",
                       "data": "channel.onTime.last",
-                      "x": 148,
+                      "x": 135,
                       "y": 56,
-                      "width": 104,
+                      "width": 117,
                       "height": 28,
                       "style": "value_S"
                     },
@@ -11348,7 +11348,7 @@
                       "type": "Text",
                       "x": 16,
                       "y": 84,
-                      "width": 132,
+                      "width": 119,
                       "height": 28,
                       "style": "edit_value_S_left",
                       "text": "Temperature:"
@@ -11356,9 +11356,9 @@
                     {
                       "type": "Select",
                       "data": "channel.tempStatus",
-                      "x": 148,
+                      "x": 135,
                       "y": 84,
-                      "width": 104,
+                      "width": 117,
                       "height": 28,
                       "style": "default",
                       "widgets": [
@@ -11367,7 +11367,7 @@
                           "data": "",
                           "x": 0,
                           "y": 0,
-                          "width": 104,
+                          "width": 117,
                           "height": 28,
                           "style": "event_error",
                           "text": "Invalid"
@@ -11377,7 +11377,7 @@
                           "data": "channel.temp",
                           "x": 0,
                           "y": 0,
-                          "width": 104,
+                          "width": 117,
                           "height": 28,
                           "style": "value_S"
                         },
@@ -11386,7 +11386,7 @@
                           "data": "",
                           "x": 0,
                           "y": 0,
-                          "width": 104,
+                          "width": 117,
                           "height": 28,
                           "style": "default_disabled_S_left",
                           "text": "Not installed"
@@ -11397,7 +11397,7 @@
                       "type": "Text",
                       "x": 16,
                       "y": 112,
-                      "width": 132,
+                      "width": 119,
                       "height": 28,
                       "style": "edit_value_S_left",
                       "text": "Calib. params:"
@@ -11406,9 +11406,9 @@
                       "type": "Select",
                       "data": "channel.calibration.status",
                       "action": "",
-                      "x": 148,
+                      "x": 135,
                       "y": 112,
-                      "width": 104,
+                      "width": 117,
                       "height": 28,
                       "style": "default",
                       "widgets": [
@@ -11417,7 +11417,7 @@
                           "action": "show_ch_settings_info_cal",
                           "x": 0,
                           "y": 0,
-                          "width": 104,
+                          "width": 117,
                           "height": 28,
                           "style": "edit_value_active_S_left",
                           "text": "Calibrate"
@@ -11427,7 +11427,7 @@
                           "action": "show_ch_settings_info_cal",
                           "x": 0,
                           "y": 0,
-                          "width": 104,
+                          "width": 117,
                           "height": 28,
                           "style": "edit_value_active_S_left",
                           "text": "Recalibrate"
@@ -11438,7 +11438,7 @@
                       "type": "Text",
                       "x": 16,
                       "y": 140,
-                      "width": 132,
+                      "width": 119,
                       "height": 28,
                       "style": "edit_value_S_left",
                       "text": "Calib. enabled:"
@@ -11447,9 +11447,9 @@
                       "type": "Select",
                       "data": "channel.calibration.status",
                       "action": "",
-                      "x": 148,
+                      "x": 135,
                       "y": 140,
-                      "width": 104,
+                      "width": 117,
                       "height": 28,
                       "style": "default",
                       "widgets": [
@@ -11458,7 +11458,7 @@
                           "action": "",
                           "x": 0,
                           "y": 0,
-                          "width": 104,
+                          "width": 117,
                           "height": 28,
                           "style": "default_disabled_S_left",
                           "text": "Yes"
@@ -11469,7 +11469,7 @@
                           "action": "",
                           "x": 0,
                           "y": 0,
-                          "width": 104,
+                          "width": 117,
                           "height": 28,
                           "style": "default",
                           "widgets": [
@@ -11478,7 +11478,7 @@
                               "action": "sys_settings_cal_toggle_enable",
                               "x": 0,
                               "y": 0,
-                              "width": 104,
+                              "width": 117,
                               "height": 28,
                               "style": "edit_value_active_S_left",
                               "text": "No"
@@ -11488,7 +11488,7 @@
                               "action": "sys_settings_cal_toggle_enable",
                               "x": 0,
                               "y": 0,
-                              "width": 104,
+                              "width": 117,
                               "height": 28,
                               "style": "edit_value_active_S_left",
                               "text": "Yes"
@@ -11512,7 +11512,7 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 246,
+                  "width": 252,
                   "height": 28,
                   "style": "default",
                   "widgets": [
@@ -11529,7 +11529,7 @@
                       "type": "Text",
                       "x": 16,
                       "y": 28,
-                      "width": 132,
+                      "width": 112,
                       "height": 28,
                       "style": "edit_value_S_left",
                       "text": "Total On time:"
@@ -11538,16 +11538,16 @@
                       "type": "Rectangle",
                       "x": 16,
                       "y": 56,
-                      "width": 132,
+                      "width": 112,
                       "height": 28,
                       "style": "default_inverse"
                     },
                     {
                       "type": "List",
                       "data": "channels",
-                      "x": 148,
+                      "x": 128,
                       "y": 28,
-                      "width": 104,
+                      "width": 124,
                       "height": 56,
                       "style": "default",
                       "listType": "vertical",
@@ -11555,7 +11555,7 @@
                         "type": "Container",
                         "x": 0,
                         "y": 0,
-                        "width": 104,
+                        "width": 124,
                         "height": 28,
                         "widgets": [
                           {
@@ -11563,7 +11563,7 @@
                             "data": "channel.onTime.total",
                             "x": 0,
                             "y": 0,
-                            "width": 104,
+                            "width": 124,
                             "height": 28,
                             "style": "value_S"
                           }
@@ -11574,7 +11574,7 @@
                       "type": "Text",
                       "x": 16,
                       "y": 84,
-                      "width": 132,
+                      "width": 112,
                       "height": 28,
                       "style": "edit_value_S_left",
                       "text": "Last On time:"
@@ -11583,16 +11583,16 @@
                       "type": "Rectangle",
                       "x": 16,
                       "y": 112,
-                      "width": 132,
+                      "width": 112,
                       "height": 28,
                       "style": "default_inverse"
                     },
                     {
                       "type": "List",
                       "data": "channels",
-                      "x": 148,
+                      "x": 128,
                       "y": 84,
-                      "width": 104,
+                      "width": 124,
                       "height": 56,
                       "style": "default",
                       "listType": "vertical",
@@ -11600,7 +11600,7 @@
                         "type": "Container",
                         "x": 0,
                         "y": 0,
-                        "width": 104,
+                        "width": 124,
                         "height": 28,
                         "widgets": [
                           {
@@ -11608,7 +11608,7 @@
                             "data": "channel.onTime.last",
                             "x": 0,
                             "y": 0,
-                            "width": 104,
+                            "width": 124,
                             "height": 28,
                             "style": "value_S"
                           }
@@ -11619,7 +11619,7 @@
                       "type": "Text",
                       "x": 16,
                       "y": 140,
-                      "width": 132,
+                      "width": 112,
                       "height": 28,
                       "style": "edit_value_S_left",
                       "text": "Temperature:"
@@ -11627,9 +11627,9 @@
                     {
                       "type": "List",
                       "data": "channels",
-                      "x": 148,
+                      "x": 128,
                       "y": 140,
-                      "width": 104,
+                      "width": 124,
                       "height": 56,
                       "style": "default",
                       "listType": "vertical",
@@ -11637,7 +11637,7 @@
                         "type": "Container",
                         "x": 0,
                         "y": 0,
-                        "width": 104,
+                        "width": 124,
                         "height": 28,
                         "widgets": [
                           {
@@ -11645,7 +11645,7 @@
                             "data": "channel.tempStatus",
                             "x": 0,
                             "y": 0,
-                            "width": 104,
+                            "width": 124,
                             "height": 28,
                             "style": "default",
                             "widgets": [
@@ -11654,7 +11654,7 @@
                                 "data": "",
                                 "x": 0,
                                 "y": 0,
-                                "width": 104,
+                                "width": 124,
                                 "height": 28,
                                 "style": "event_error",
                                 "text": "Invalid"
@@ -11664,7 +11664,7 @@
                                 "data": "channel.temp",
                                 "x": 0,
                                 "y": 0,
-                                "width": 104,
+                                "width": 124,
                                 "height": 28,
                                 "style": "value_S"
                               },
@@ -11673,7 +11673,7 @@
                                 "data": "",
                                 "x": 0,
                                 "y": 0,
-                                "width": 104,
+                                "width": 124,
                                 "height": 28,
                                 "style": "default_disabled_S_left",
                                 "text": "Not installed"
@@ -11687,7 +11687,7 @@
                       "type": "Rectangle",
                       "x": 16,
                       "y": 168,
-                      "width": 132,
+                      "width": 112,
                       "height": 28,
                       "style": "default_inverse"
                     }
@@ -15581,24 +15581,70 @@
                             ]
                           },
                           {
-                            "type": "DisplayData",
-                            "data": "channel.u.set",
+                            "type": "Select",
+                            "data": "channel.isVoltageBalanced",
                             "x": 0,
                             "y": 32,
                             "width": 64,
                             "height": 30,
-                            "style": "edit_value_S_right",
-                            "activeStyle": "edit_value_focus_S_right"
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.set",
+                                "action": "",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "edit_value_S_right",
+                                "activeStyle": "edit_value_focus_S_right"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.set",
+                                "action": "edit",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "set_value_S_right_balanced",
+                                "activeStyle": "edit_value_focus_S_right"
+                              }
+                            ]
                           },
                           {
-                            "type": "DisplayData",
-                            "data": "channel.i.set",
+                            "type": "Select",
+                            "data": "channel.isCurrentBalanced",
                             "x": 0,
                             "y": 62,
                             "width": 64,
                             "height": 30,
-                            "style": "edit_value_S_right",
-                            "activeStyle": "edit_value_focus_S_right"
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.i.set",
+                                "action": "edit",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "edit_value_S_right",
+                                "activeStyle": "edit_value_focus_S_right"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.i.set",
+                                "action": "edit",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "set_value_S_right_balanced",
+                                "activeStyle": "edit_value_focus_S_right"
+                              }
+                            ]
                           }
                         ]
                       },
@@ -15734,24 +15780,70 @@
                             ]
                           },
                           {
-                            "type": "DisplayData",
-                            "data": "channel.u.set",
+                            "type": "Select",
+                            "data": "channel.isVoltageBalanced",
                             "x": 0,
                             "y": 32,
                             "width": 64,
                             "height": 30,
-                            "style": "edit_value_S_right",
-                            "activeStyle": "edit_value_focus_S_right"
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.set",
+                                "action": "",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "edit_value_S_right",
+                                "activeStyle": "edit_value_focus_S_right"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.set",
+                                "action": "edit",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "set_value_S_right_balanced",
+                                "activeStyle": "edit_value_focus_S_right"
+                              }
+                            ]
                           },
                           {
-                            "type": "DisplayData",
-                            "data": "channel.i.set",
+                            "type": "Select",
+                            "data": "channel.isCurrentBalanced",
                             "x": 0,
                             "y": 62,
                             "width": 64,
                             "height": 30,
-                            "style": "edit_value_S_right",
-                            "activeStyle": "edit_value_focus_S_right"
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.i.set",
+                                "action": "edit",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "edit_value_S_right",
+                                "activeStyle": "edit_value_focus_S_right"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.i.set",
+                                "action": "edit",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "set_value_S_right_balanced",
+                                "activeStyle": "edit_value_focus_S_right"
+                              }
+                            ]
                           }
                         ]
                       },
@@ -17930,6 +18022,19 @@
         "inheritFrom": "default",
         "font": "medium",
         "alignHorizontal": "center",
+        "alignVertical": "center",
+        "color": "#00ff80",
+        "backgroundColor": "#5080ff",
+        "borderSize": 0,
+        "borderColor": "#D3D3D3",
+        "paddingHorizontal": 0,
+        "paddingVertical": 0
+      },
+      {
+        "name": "set_value_S_right_balanced",
+        "inheritFrom": "default",
+        "font": "small",
+        "alignHorizontal": "right",
         "alignVertical": "center",
         "color": "#00ff80",
         "backgroundColor": "#5080ff",
