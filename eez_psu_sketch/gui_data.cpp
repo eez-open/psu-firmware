@@ -32,6 +32,7 @@ namespace gui {
 namespace data {
 
 Value g_alertMessage;
+Value g_alertMessage2;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -335,6 +336,9 @@ bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
 		return true;
     } else if (id == DATA_ID_ALERT_MESSAGE) {
         g_alertMessage = value;
+        return true;
+    } else if (id == DATA_ID_ALERT_MESSAGE_2) {
+        g_alertMessage2 = value;
         return true;
     } else if (id == DATA_ID_EDIT_STEPS) {
         edit_mode_step::setStepIndex(value.getInt());

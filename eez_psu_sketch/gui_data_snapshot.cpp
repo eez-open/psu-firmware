@@ -174,6 +174,7 @@ void Snapshot::takeSnapshot() {
     editModeSnapshot.takeSnapshot(this);
 
     alertMessage = g_alertMessage;
+    alertMessage2 = g_alertMessage2;
 
 	Page *activePage = getActivePage();
 	if (activePage) {
@@ -296,7 +297,11 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
         return alertMessage;
     }
 	
-	if (id == DATA_ID_MODEL_INFO) {
+	if (id == DATA_ID_ALERT_MESSAGE_2) {
+        return alertMessage2;
+    }
+
+    if (id == DATA_ID_MODEL_INFO) {
         return Value(getModelInfo());
     }
 	

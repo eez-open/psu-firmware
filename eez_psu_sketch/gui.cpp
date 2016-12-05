@@ -1594,12 +1594,25 @@ void alertMessage(int alertPageId, data::Value message, void (*ok_callback)()) {
 	}
 }
 
+void longAlertMessage(int alertPageId, data::Value message, data::Value message2, void (*ok_callback)()) {
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE_2, message2, 0);
+    alertMessage(alertPageId, message, ok_callback);
+}
+
 void infoMessage(data::Value value, void (*ok_callback)()) {
 	alertMessage(PAGE_ID_INFO_ALERT, value, ok_callback);
 }
 
 void infoMessageP(const char *message PROGMEM, void (*ok_callback)()) {
 	alertMessage(PAGE_ID_INFO_ALERT, data::Value::ProgmemStr(message), ok_callback);
+}
+
+void longInfoMessage(data::Value value1, data::Value value2, void (*ok_callback)()) {
+	longAlertMessage(PAGE_ID_INFO_LONG_ALERT, value1, value2, ok_callback);
+}
+
+void longInfoMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, void (*ok_callback)()) {
+	longInfoMessage(data::Value::ProgmemStr(message1), data::Value::ProgmemStr(message2), ok_callback);
 }
 
 void errorMessage(data::Value value, void (*ok_callback)()) {

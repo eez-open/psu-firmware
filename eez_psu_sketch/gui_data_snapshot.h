@@ -90,6 +90,7 @@ struct Snapshot {
 	keypad::Snapshot keypadSnapshot;
     edit_mode::Snapshot editModeSnapshot;
     Value alertMessage;
+    Value alertMessage2;
 	SnapshotFlags flags;
 	event_queue::Event lastEvent;
 	event_queue::Event events[event_queue::EVENTS_PER_PAGE];

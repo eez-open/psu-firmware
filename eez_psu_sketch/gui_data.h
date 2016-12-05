@@ -250,6 +250,7 @@ struct Cursor {
 ////////////////////////////////////////////////////////////////////////////////
 
 extern Value g_alertMessage;
+extern Value g_alertMessage2;
 
 int count(uint8_t id);
 void select(Cursor &cursor, uint8_t id, int index);

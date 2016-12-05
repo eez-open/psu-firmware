@@ -52,16 +52,19 @@ data::Value SysSettingsEthernetPage::getData(const data::Cursor &cursor, uint8_t
     return data::Value();
 }
 
+static void enableEthernet(bool enable) {
+    persist_conf::enableEthernet(enable);
+    longInfoMessageP(
+        PSTR("Turn off and on power or"),
+        PSTR("press reset to apply changes!"));
+}
+
 void SysSettingsEthernetPage::enable() {
-    if (!persist_conf::isEthernetEnabled()) {
-        persist_conf::enableEthernet(true);
-    }
+    enableEthernet(true);
 }
 
 void SysSettingsEthernetPage::disable() {
-    if (persist_conf::isEthernetEnabled()) {
-        persist_conf::enableEthernet(false);
-    }
+    enableEthernet(false);
 }
 
 

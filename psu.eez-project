@@ -677,6 +677,12 @@
       "defaultValue": "Are you sure?"
     },
     {
+      "name": "alert_message_2",
+      "description": "Message in alert dialog",
+      "type": "string",
+      "defaultValue": "Second line"
+    },
+    {
       "name": "edit_value",
       "type": "float",
       "defaultValue": "12.00V",
@@ -6446,6 +6452,77 @@
               "action": "ok",
               "x": 110,
               "y": 48,
+              "width": 60,
+              "height": 32,
+              "style": "info_alert_button",
+              "text": "OK"
+            }
+          ]
+        }
+      },
+      {
+        "name": "info_long_alert",
+        "description": "Info message",
+        "portrait": {
+          "x": 0,
+          "y": 104,
+          "width": 240,
+          "height": 112,
+          "style": "error_alert",
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "yes",
+              "x": 90,
+              "y": 72,
+              "width": 60,
+              "height": 32,
+              "style": "default_active_S",
+              "text": "OK"
+            },
+            {
+              "type": "MultilineText",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 64,
+              "style": "error_alert",
+              "text": "Multiline text"
+            }
+          ]
+        },
+        "landscape": {
+          "x": 20,
+          "y": 64,
+          "width": 280,
+          "height": 112,
+          "style": "info_alert",
+          "widgets": [
+            {
+              "type": "Text",
+              "data": "alert_message",
+              "x": 0,
+              "y": 8,
+              "width": 280,
+              "height": 28,
+              "style": "info_alert",
+              "text": ""
+            },
+            {
+              "type": "Text",
+              "data": "alert_message_2",
+              "x": 0,
+              "y": 36,
+              "width": 280,
+              "height": 28,
+              "style": "info_alert",
+              "text": ""
+            },
+            {
+              "type": "Text",
+              "action": "ok",
+              "x": 110,
+              "y": 72,
               "width": 60,
               "height": 32,
               "style": "info_alert_button",
