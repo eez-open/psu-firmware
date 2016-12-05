@@ -191,7 +191,11 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 		return data::Value(channel_coupling::getType());
 	}
 
-	if (cursor.i >= 0 || g_channel != 0) {
+	if (id == DATA_ID_CHANNEL_IS_COUPLED) {
+		return data::Value(channel_coupling::getType() != channel_coupling::TYPE_NONE ? 1 : 0);
+	}
+
+    if (cursor.i >= 0 || g_channel != 0) {
 		int iChannel = cursor.i >= 0 ? cursor.i : g_channel->index - 1;
 
 		if (id == DATA_ID_CHANNEL_STATUS) {
