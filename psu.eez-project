@@ -13951,7 +13951,7 @@
               "type": "Text",
               "x": 6,
               "y": 0,
-              "width": 314,
+              "width": 246,
               "height": 32,
               "style": "value_S",
               "text": "Ethernet settings"
@@ -13961,7 +13961,7 @@
               "data": "sys.ethernet.enabled",
               "x": 12,
               "y": 32,
-              "width": 296,
+              "width": 240,
               "height": 30,
               "style": "default",
               "widgets": [
@@ -13970,65 +13970,57 @@
                   "action": "sys_settings_ethernet_enable",
                   "x": 0,
                   "y": 0,
-                  "width": 296,
+                  "width": 240,
                   "height": 30,
                   "style": "edit_value_active_S_left",
-                  "text": "Enable ethernet (requires restart)"
+                  "text": "Enable Ethernet"
                 },
                 {
                   "type": "Text",
                   "action": "sys_settings_ethernet_disable",
                   "x": 0,
                   "y": 0,
-                  "width": 296,
+                  "width": 240,
                   "height": 30,
                   "style": "edit_value_active_S_left",
-                  "text": "Disable ethernet (requires restart)"
+                  "text": "Disable Ethernet"
                 }
               ]
-            },
-            {
-              "type": "Rectangle",
-              "x": 308,
-              "y": 32,
-              "width": 12,
-              "height": 30,
-              "style": "default_inverse"
             },
             {
               "type": "Select",
               "data": "sys.ethernet.status",
               "x": 12,
               "y": 62,
-              "width": 308,
-              "height": 142,
+              "width": 240,
+              "height": 112,
               "style": "default",
               "widgets": [
                 {
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 308,
+                  "width": 240,
                   "height": 142,
                   "style": "default",
                   "widgets": [
                     {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 0,
+                      "width": 240,
+                      "height": 112,
+                      "style": "default_inverse"
+                    },
+                    {
                       "type": "Text",
                       "action": "sys_settings_ethernet_enable",
                       "x": 0,
-                      "y": 0,
-                      "width": 308,
+                      "y": 112,
+                      "width": 240,
                       "height": 30,
                       "style": "event_error",
-                      "text": "Ethernet errror"
-                    },
-                    {
-                      "type": "Rectangle",
-                      "x": 0,
-                      "y": 30,
-                      "width": 308,
-                      "height": 112,
-                      "style": "default_inverse"
+                      "text": "\\u0082 Ethernet errror"
                     }
                   ]
                 },
@@ -14036,7 +14028,7 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 308,
+                  "width": 240,
                   "height": 142,
                   "style": "default",
                   "widgets": [
@@ -14044,7 +14036,7 @@
                       "type": "Text",
                       "x": 0,
                       "y": 0,
-                      "width": 132,
+                      "width": 95,
                       "height": 28,
                       "style": "edit_value_S_left",
                       "text": "IP address:"
@@ -14052,9 +14044,9 @@
                     {
                       "type": "DisplayData",
                       "data": "sys.ethernet.ipAddress",
-                      "x": 130,
+                      "x": 95,
                       "y": 0,
-                      "width": 178,
+                      "width": 145,
                       "height": 28,
                       "style": "value_S"
                     },
@@ -14062,7 +14054,7 @@
                       "type": "Text",
                       "x": 0,
                       "y": 28,
-                      "width": 132,
+                      "width": 95,
                       "height": 28,
                       "style": "edit_value_S_left",
                       "text": "SCPI port:"
@@ -14070,9 +14062,9 @@
                     {
                       "type": "DisplayData",
                       "data": "sys.ethernet.scpiPort",
-                      "x": 132,
+                      "x": 95,
                       "y": 28,
-                      "width": 176,
+                      "width": 145,
                       "height": 28,
                       "style": "value_S"
                     },
@@ -14080,7 +14072,7 @@
                       "type": "Rectangle",
                       "x": 0,
                       "y": 56,
-                      "width": 308,
+                      "width": 240,
                       "height": 86,
                       "style": "default_inverse"
                     }
@@ -14090,27 +14082,35 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 308,
+                  "width": 240,
                   "height": 142,
                   "style": "default",
                   "widgets": [
                     {
-                      "type": "Text",
-                      "data": "",
-                      "x": 0,
-                      "y": 0,
-                      "width": 308,
-                      "height": 30,
-                      "style": "event_info",
-                      "text": "Ethernet initialization skipped at start"
-                    },
-                    {
                       "type": "Rectangle",
                       "x": 0,
-                      "y": 30,
-                      "width": 308,
-                      "height": 112,
+                      "y": 0,
+                      "width": 240,
+                      "height": 94,
                       "style": "default_inverse"
+                    },
+                    {
+                      "type": "MultilineText",
+                      "x": 0,
+                      "y": 94,
+                      "width": 22,
+                      "height": 48,
+                      "style": "event_info",
+                      "text": "\\u0080"
+                    },
+                    {
+                      "type": "MultilineText",
+                      "x": 22,
+                      "y": 94,
+                      "width": 218,
+                      "height": 48,
+                      "style": "event_info",
+                      "text": "Ethernet initialization skipped at start"
                     }
                   ]
                 },
@@ -14118,27 +14118,27 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 308,
+                  "width": 240,
                   "height": 142,
                   "style": "default",
                   "widgets": [
                     {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 0,
+                      "width": 240,
+                      "height": 112,
+                      "style": "default_inverse"
+                    },
+                    {
                       "type": "Text",
                       "action": "sys_settings_ethernet_enable",
                       "x": 0,
-                      "y": 0,
-                      "width": 308,
+                      "y": 112,
+                      "width": 240,
                       "height": 30,
                       "style": "event_warning",
-                      "text": "Ethernet not connected"
-                    },
-                    {
-                      "type": "Rectangle",
-                      "x": 0,
-                      "y": 30,
-                      "width": 308,
-                      "height": 112,
-                      "style": "default_inverse"
+                      "text": "\\u0081 Ethernet not connected"
                     }
                   ]
                 }
@@ -14171,6 +14171,14 @@
               "height": 36,
               "style": "bottom_button",
               "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
             }
           ]
         }
