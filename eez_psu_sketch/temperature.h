@@ -79,6 +79,7 @@ private:
 
 	void set_otp_reg(bool on);
 	void protection_check(unsigned long tick_usec);
+    static void protection_enter(TempSensorTemperature& sensor);
 	void protection_enter();
 };
 

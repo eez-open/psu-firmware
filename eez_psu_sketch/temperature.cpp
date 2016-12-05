@@ -234,24 +234,20 @@ void TempSensorTemperature::set_otp_reg(bool on) {
 
 void TempSensorTemperature::protection_check(unsigned long tick_usec) {
 	if (temp_sensor::sensors[sensorIndex].installed) {
-		if (otp_tripped) {
-			return;
-		}
-
-		if (prot_conf.state && temperature >= prot_conf.level) {
+		if (!otp_tripped && prot_conf.state && temperature >= prot_conf.level) {
 			float delay = prot_conf.delay;
 			if (delay > 0) {
 				if (otp_alarmed) {
 					if (tick_usec - otp_alarmed_started_tick >= delay * 1000000UL) {
 						otp_alarmed = 0;
-						protection_enter();
+						protection_enter(*this);
 					}
 				} else {
 					otp_alarmed = 1;
 					otp_alarmed_started_tick = tick_usec;
 				}
 			} else {
-				protection_enter();
+				protection_enter(*this);
 			}
 		} else {
 			otp_alarmed = 0;
@@ -259,11 +255,21 @@ void TempSensorTemperature::protection_check(unsigned long tick_usec) {
 	}
 }
 
+void TempSensorTemperature::protection_enter(TempSensorTemperature& sensor) {
+    if (channel_coupling::getType() == channel_coupling::TYPE_NONE) {
+        sensor.protection_enter();
+    } else {
+	    for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		    sensors[i].protection_enter();
+	    }
+    }
+}
+
 void TempSensorTemperature::protection_enter() {
     otp_tripped = true;
 
 	if (temp_sensor::sensors[sensorIndex].ch_num >= 0) {
-		channel_coupling::outputEnable(Channel::get(temp_sensor::sensors[sensorIndex].ch_num), false);
+		Channel::get(temp_sensor::sensors[sensorIndex].ch_num).outputEnable(false);
 	} else {
 		for (int i = 0; i < CH_NUM; ++i) {
 			Channel::get(i).outputEnable(false);
