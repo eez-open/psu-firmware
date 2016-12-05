@@ -221,7 +221,11 @@ void getInfoText(int part, char *infoText) {
     Channel &channel = Channel::get(dataCursor.i);
     if (dataId == DATA_ID_CHANNEL_I_SET) {
         if (part == 0 || part == 1) {
-		    sprintf_P(infoText, PSTR("Set Ch%d current"), channel.index);
+            if (channel_coupling::getType() == channel_coupling::TYPE_NONE) {
+		        sprintf_P(infoText, PSTR("Set Ch%d current"), channel.index);
+            } else {
+                sprintf_P(infoText, PSTR("Set current"), channel.index);
+            }
         } else {
             *infoText = 0;
         }
@@ -239,7 +243,11 @@ void getInfoText(int part, char *infoText) {
         }
     } else {
         if (part == 0 || part == 1) {
-		    sprintf_P(infoText, PSTR("Set Ch%d voltage"), channel.index);
+            if (channel_coupling::getType() == channel_coupling::TYPE_NONE) {
+    		    sprintf_P(infoText, PSTR("Set Ch%d voltage"), channel.index);
+            } else {
+                sprintf_P(infoText, PSTR("Set voltage"), channel.index);
+            }
         } else {
             *infoText = 0;
         }
