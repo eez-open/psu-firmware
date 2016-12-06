@@ -224,7 +224,7 @@ void getInfoText(int part, char *infoText) {
             if (channel_coupling::getType() == channel_coupling::TYPE_NONE) {
 		        sprintf_P(infoText, PSTR("Set Ch%d current"), channel.index);
             } else {
-                sprintf_P(infoText, PSTR("Set current"), channel.index);
+                strcpy_P(infoText, PSTR("Set current"));
             }
         } else {
             *infoText = 0;
@@ -246,7 +246,7 @@ void getInfoText(int part, char *infoText) {
             if (channel_coupling::getType() == channel_coupling::TYPE_NONE) {
     		    sprintf_P(infoText, PSTR("Set Ch%d voltage"), channel.index);
             } else {
-                sprintf_P(infoText, PSTR("Set voltage"), channel.index);
+                strcpy_P(infoText, PSTR("Set voltage"));
             }
         } else {
             *infoText = 0;

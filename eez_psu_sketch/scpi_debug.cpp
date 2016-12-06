@@ -75,6 +75,11 @@ scpi_result_t debug_scpi_commandQ(scpi_t *context) {
 }
 
 scpi_result_t debug_scpi_Watchdog(scpi_t * context) {
+    if (!OPTION_WATCHDOG) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
     bool enable;
     if (!SCPI_ParamBool(context, &enable, TRUE)) {
         return SCPI_RES_ERR;
@@ -86,6 +91,11 @@ scpi_result_t debug_scpi_Watchdog(scpi_t * context) {
 }
 
 scpi_result_t debug_scpi_WatchdogQ(scpi_t * context) {
+    if (!OPTION_WATCHDOG) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
     SCPI_ResultBool(context, debug::g_debug_watchdog);
     
     return SCPI_RES_OK;

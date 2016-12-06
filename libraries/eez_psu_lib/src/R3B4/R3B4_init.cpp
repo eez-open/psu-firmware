@@ -24,8 +24,8 @@ void eez_psu_R3B4_init() {
     pinMode(TOUCH_IRQ, INPUT);
     pinMode(TOUCH_DOUT, INPUT);
 
-    // WATCHDOG pin must not be defined here! 
-    //pinMode(WATCHDOG, OUTPUT);
+    // disable WATCHDOG
+    pinMode(WATCHDOG, INPUT);
 
     //pinMode(WIFI_CE, OUTPUT);
     pinMode(SYNC_MASTER, INPUT);

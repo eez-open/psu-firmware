@@ -40,7 +40,9 @@
 #include "gui.h"
 #endif
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if OPTION_WATCHDOG
 #include "watchdog.h"
+#endif
 #include "fan.h"
 #endif
 
@@ -519,7 +521,9 @@ void tick() {
 	temperature::tick(tick_usec);
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if OPTION_WATCHDOG
 	watchdog::tick(tick_usec);
+#endif
 	fan::tick(tick_usec);
 #endif
 

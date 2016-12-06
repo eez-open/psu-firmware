@@ -502,6 +502,13 @@ scpi_result_t scpi_syst_CpuOptionQ(scpi_t * context) {
     strcat(strFeatures, "Display");
 #endif
 
+#if OPTION_WATCHDOG
+    if (strFeatures[0]) {
+        strcat(strFeatures, ", ");
+    }
+    strcat(strFeatures, "Watchdog");
+#endif
+
     SCPI_ResultText(context, strFeatures);
 
     return SCPI_RES_OK;

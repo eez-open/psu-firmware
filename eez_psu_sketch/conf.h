@@ -72,6 +72,9 @@ option.
 /// Generate square wave on SYNC_MASTER pin
 #define OPTION_SYNC_MASTER 1
 
+/// Enable watchdog
+#define OPTION_WATCHDOG 1
+
 /// Maximum number of channels existing.
 #define CH_MAX 2
 

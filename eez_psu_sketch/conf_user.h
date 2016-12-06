@@ -44,3 +44,6 @@ Use this header file to override anything from conf.h or conf_advanced.h.
 //#if !ADC_USE_INTERRUPTS
 //#define ADC_READ_TIME_US 2000L
 //#endif
+
+//#undef OPTION_WATCHDOG
+//#define OPTION_WATCHDOG 0
