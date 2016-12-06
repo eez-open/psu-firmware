@@ -1163,7 +1163,7 @@ void Channel::calibrationFindVoltageRange(float minDac, float minVal, float minA
 	delay(100);
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
-    delay(ADC_READ_TIME_US + 1);
+    delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
 	*min = u.mon;
@@ -1172,7 +1172,7 @@ void Channel::calibrationFindVoltageRange(float minDac, float minVal, float minA
 	delay(200); // guard time, because without load it will require more than 15ms to jump to the max
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
-    delay(ADC_READ_TIME_US + 1);
+    delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
 	*max = u.mon;
@@ -1199,7 +1199,7 @@ void Channel::calibrationFindCurrentRange(float minDac, float minVal, float minA
 	delay(20);
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
-    delay(ADC_READ_TIME_US + 1);
+    delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
 	*min = i.mon;
@@ -1208,7 +1208,7 @@ void Channel::calibrationFindCurrentRange(float minDac, float minVal, float minA
 	delay(20);
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
-    delay(ADC_READ_TIME_US + 1);
+    delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
 	*max = i.mon;
