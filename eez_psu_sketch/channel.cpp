@@ -668,6 +668,8 @@ extern int16_t debug::i_mon_dac[CH_MAX];
 #endif
 
 void Channel::adcDataIsReady(int16_t data) {
+    uint8_t nextStartReg0 = 0;
+
     switch (adc.start_reg0) {
 
     case AnalogDigitalConverter::ADC_REG0_READ_U_MON:
@@ -686,7 +688,7 @@ void Channel::adcDataIsReady(int16_t data) {
 	        util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val) :
 	        value;
 
-		adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
+		nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_I_MON;
 	}
 	break;
 
@@ -708,10 +710,10 @@ void Channel::adcDataIsReady(int16_t data) {
 
 		if (isOutputEnabled()) {
 			if (isRemoteProgrammingEnabled()) {
-				adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
+				nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_SET;
 			}
 			else {
-				adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+				nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
 			}
 		}
 		else {
@@ -719,7 +721,7 @@ void Channel::adcDataIsReady(int16_t data) {
 			u.mon = 0;
 			i.mon_adc = 0;
 			i.mon = 0;
-			adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
+			nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_SET;
 		}
 	}
 	break;
@@ -736,10 +738,10 @@ void Channel::adcDataIsReady(int16_t data) {
 			value;
 
 		if (isOutputEnabled() && isRemoteProgrammingEnabled()) {
-			adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+			nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
 		}
 		else {
-			adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_SET);
+			nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_I_SET;
 		}
 	}
 	break;
@@ -756,12 +758,13 @@ void Channel::adcDataIsReady(int16_t data) {
 			value;
 
 		if (isOutputEnabled()) {
-			adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+			nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
 		}
 	}
 	break;
-
     }
+
+    adc.start(nextStartReg0);
 }
 
 void Channel::updateCcAndCvSwitch() {
@@ -848,18 +851,49 @@ void Channel::eventGpio(uint8_t gpio) {
 }
 
 void Channel::adcReadMonDac() {
+#if ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
     delay(ADC_TIMEOUT_MS * 2);
+#else
+    adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
+    delay(ADC_TIMEOUT_MS);
+    adc.tick(micros());
+    delay(ADC_TIMEOUT_MS);
+    adc.tick(micros());
+#endif
 }
 
 void Channel::adcReadAll() {
     if (isOutputEnabled()) {
+#if ADC_USE_INTERRUPTS
         adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
         delay(ADC_TIMEOUT_MS * 3);
-    }
-    else {
+#else
+        adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_SET);
+        delay(ADC_TIMEOUT_MS);
+        adc.tick(micros());
+        delay(ADC_TIMEOUT_MS);
+        adc.tick(micros());
+        delay(ADC_TIMEOUT_MS);
+        adc.tick(micros());
+        delay(ADC_TIMEOUT_MS);
+        adc.tick(micros());
+#endif
+    } else {
+#if ADC_USE_INTERRUPTS
         adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
         delay(ADC_TIMEOUT_MS * 4);
+#else
+        adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+        delay(ADC_TIMEOUT_MS);
+        adc.tick(micros());
+        delay(ADC_TIMEOUT_MS);
+        adc.tick(micros());
+        delay(ADC_TIMEOUT_MS);
+        adc.tick(micros());
+        delay(ADC_TIMEOUT_MS);
+        adc.tick(micros());
+#endif
     }
 }
 

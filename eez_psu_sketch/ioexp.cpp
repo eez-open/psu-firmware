@@ -18,7 +18,6 @@
  
 #include "psu.h"
 #include "ioexp.h"
-#include "adc.h"
 
 namespace eez {
 namespace psu {
@@ -44,16 +43,6 @@ static const uint8_t REG_VALUES[] = {
     IOExpander::REG_GPIO,    0,       0,
     0xFF
 };
-
-////////////////////////////////////////////////////////////////////////////////
-
-static void ioexp_interrupt_ch1() {
-    Channel::get(0).ioexp.onInterrupt();
-}
-
-static void ioexp_interrupt_ch2() {
-    Channel::get(1).ioexp.onInterrupt();
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -85,14 +74,6 @@ void IOExpander::init() {
     for (int i = 0; REG_VALUES[i] != 0xFF; i += 3) {
 		reg_write(REG_VALUES[i], getRegInitValue(i));
     }
-
-    int intNum = digitalPinToInterrupt(channel.convend_pin);
-    SPI.usingInterrupt(intNum);
-    attachInterrupt(
-        intNum,
-        channel.index == 1 ? ioexp_interrupt_ch1 : ioexp_interrupt_ch2,
-        FALLING
-        );
 }
 
 bool IOExpander::test() {
@@ -199,20 +180,6 @@ void IOExpander::enableWriteAndFlush() {
 	
 	reg_write(REG_GPIO, gpio);
     gpio_changed = true;
-}
-
-void IOExpander::onInterrupt() {
-	g_insideInterruptHandler = true;
-
-    int16_t adc_data = channel.adc.read();
-    
-    channel.eventAdcData(adc_data);
-
-#if CONF_DEBUG
-    debug::ioexpIntTick(micros());
-#endif
-
-	g_insideInterruptHandler = false;
 }
 
 uint8_t IOExpander::reg_read_write(uint8_t opcode, uint8_t reg, uint8_t val) {

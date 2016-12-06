@@ -30,17 +30,45 @@ static const uint8_t ADC_REG3_VAL = 0B00000000; // Register 03h: IDAC1 disabled,
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#if ADC_USE_INTERRUPTS
+static void adc_interrupt_ch1() {
+    Channel::get(0).adc.onInterrupt();
+}
+
+static void adc_interrupt_ch2() {
+    Channel::get(1).adc.onInterrupt();
+}
+#endif
+
+////////////////////////////////////////////////////////////////////////////////
+
 AnalogDigitalConverter::AnalogDigitalConverter(Channel &channel_) : channel(channel_) {
     test_result = psu::TEST_SKIPPED;
 
+#if ADC_USE_INTERRUPTS
     current_sps = ADC_SPS;
+#endif
 }
 
 uint8_t AnalogDigitalConverter::getReg1Val() {
-    return (current_sps << 5) | 0B00000000; // Register 01h: 256KHz modulator clock, Single shot, disable temp sensor, Current sources off
+#if ADC_USE_INTERRUPTS
+    return (current_sps << 5) | 0B00000000;
+#else
+    return (ADC_SPS << 5) | 0B00000000;
+#endif
 }
 
 void AnalogDigitalConverter::init() {
+#if ADC_USE_INTERRUPTS
+    int intNum = digitalPinToInterrupt(channel.convend_pin);
+    SPI.usingInterrupt(intNum);
+    attachInterrupt(
+        intNum,
+        channel.index == 1 ? adc_interrupt_ch1 : adc_interrupt_ch2,
+        FALLING
+        );
+#endif
+
     SPI.beginTransaction(ADS1120_SPI);
     digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.adc_pin, LOW);
@@ -51,7 +79,7 @@ void AnalogDigitalConverter::init() {
 
     SPI.transfer(ADC_WR3S1);
 
-    uint8_t reg1_val = (current_sps << 5) | 0B00000000; // Register 01h: 256KHz modulator clock, Single shot, disable temp sensor, Current sources off
+    uint8_t reg1_val = getReg1Val();
     SPI.transfer(reg1_val);
     
     SPI.transfer(ADC_REG2_VAL);
@@ -109,76 +137,93 @@ bool AnalogDigitalConverter::test() {
 }
 
 void AnalogDigitalConverter::tick(unsigned long tick_usec) {
-    if (channel.isOk() && channel.isOutputEnabled()) {
-        noInterrupts();
-        unsigned long last_adc_start_time = start_time;
-        interrupts();
-        long diff = tick_usec - last_adc_start_time;
-        if (diff > ADC_TIMEOUT_MS * 1000L) {
-            if (adc_timeout_recovery_attempts_counter < MAX_ADC_TIMEOUT_RECOVERY_ATTEMPTS) {
-                ++adc_timeout_recovery_attempts_counter;
+#if ADC_USE_INTERRUPTS
+    if (channel.isOk()) {
+        if (channel.isOutputEnabled()) {
+            noInterrupts();
+            unsigned long last_adc_start_time = start_time;
+            interrupts();
+            long diff = tick_usec - last_adc_start_time;
+            if (diff > ADC_TIMEOUT_MS * 1000L) {
+                if (adc_timeout_recovery_attempts_counter < MAX_ADC_TIMEOUT_RECOVERY_ATTEMPTS) {
+                    ++adc_timeout_recovery_attempts_counter;
 
-                DebugTraceF("ADC timeout (%lu) detected on CH%d, recovery attempt no. %d", diff, channel.index, adc_timeout_recovery_attempts_counter);
+                    DebugTraceF("ADC timeout (%lu) detected on CH%d, recovery attempt no. %d", diff, channel.index, adc_timeout_recovery_attempts_counter);
 
-                channel.init();
-                start(ADC_REG0_READ_U_MON);
-            }
-            else {
-                if (channel.index == 1) {
-                    psu::generateError(SCPI_ERROR_CH1_ADC_TIMEOUT_DETECTED);
-                }
-                else if (channel.index == 2) {
-                    psu::generateError(SCPI_ERROR_CH2_ADC_TIMEOUT_DETECTED);
+                    channel.init();
+                    start(ADC_REG0_READ_U_MON);
                 }
                 else {
-                    // TODO
-                }
+                    if (channel.index == 1) {
+                        psu::generateError(SCPI_ERROR_CH1_ADC_TIMEOUT_DETECTED);
+                    }
+                    else if (channel.index == 2) {
+                        psu::generateError(SCPI_ERROR_CH2_ADC_TIMEOUT_DETECTED);
+                    }
+                    else {
+                        // TODO
+                    }
 
-                channel_coupling::outputEnable(channel, false);
-                channel.remoteSensingEnable(false);
-                if (channel.getFeatures() & CH_FEATURE_RPROG) {
-			    	channel.remoteProgrammingEnable(false);
-                }
-                if (channel.getFeatures() & CH_FEATURE_LRIPPLE) {
-			    	channel.lowRippleEnable(false);
+                    channel_coupling::outputEnable(channel, false);
+                    channel.remoteSensingEnable(false);
+                    if (channel.getFeatures() & CH_FEATURE_RPROG) {
+			    	    channel.remoteProgrammingEnable(false);
+                    }
+                    if (channel.getFeatures() & CH_FEATURE_LRIPPLE) {
+			    	    channel.lowRippleEnable(false);
+                    }
                 }
             }
-        }
-        else {
-            adc_timeout_recovery_attempts_counter = 0;
+            else {
+                adc_timeout_recovery_attempts_counter = 0;
+            }
         }
     } else {
         start_time = micros();
     }
+#else
+    if (start_reg0 && tick_usec > start_time + ADC_READ_TIME_US) {
+        int16_t adc_data = read();
+        channel.eventAdcData(adc_data);
+    }
+#endif
 }
 
 void AnalogDigitalConverter::start(uint8_t reg0) {
-    SPI.beginTransaction(ADS1120_SPI);
-    digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
-    digitalWrite(channel.adc_pin, LOW);
-
-    uint8_t sps = psu::isTimeCriticalMode() ? ADC_SPS_TIME_CRITICAL : ADC_SPS;
-    if (sps != current_sps) {
-        current_sps = sps;
-        SPI.transfer(ADC_WR4S0);
-        SPI.transfer(reg0);
-        SPI.transfer(getReg1Val());
-        SPI.transfer(ADC_REG2_VAL);
-        SPI.transfer(ADC_REG3_VAL);
-    } else {
-        SPI.transfer(ADC_WR1S0);
-        SPI.transfer(reg0);
-    }
-
     start_reg0 = reg0;
-    start_time = micros();
 
-    // Start conversion (single shot)
-    SPI.transfer(ADC_START);
+    if (start_reg0) {
+        SPI.beginTransaction(ADS1120_SPI);
+        digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
+        digitalWrite(channel.adc_pin, LOW);
 
-    digitalWrite(channel.adc_pin, HIGH);
-    digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
-    SPI.endTransaction();
+#if ADC_USE_INTERRUPTS
+        uint8_t sps = psu::isTimeCriticalMode() ? ADC_SPS_TIME_CRITICAL : ADC_SPS;
+        if (sps != current_sps) {
+            current_sps = sps;
+            SPI.transfer(ADC_WR4S0);
+            SPI.transfer(start_reg0);
+            SPI.transfer(getReg1Val());
+            SPI.transfer(ADC_REG2_VAL);
+            SPI.transfer(ADC_REG3_VAL);
+        } else {
+            SPI.transfer(ADC_WR1S0);
+            SPI.transfer(start_reg0);
+        }
+#else
+        SPI.transfer(ADC_WR1S0);
+        SPI.transfer(start_reg0);
+#endif
+
+        start_time = micros();
+
+        // Start conversion (single shot)
+        SPI.transfer(ADC_START);
+
+        digitalWrite(channel.adc_pin, HIGH);
+        digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
+        SPI.endTransaction();
+    }
 }
 
 int16_t AnalogDigitalConverter::read() {
@@ -197,6 +242,21 @@ int16_t AnalogDigitalConverter::read() {
 
     return (int16_t)((dmsb << 8) | dlsb);
 }
+
+#if ADC_USE_INTERRUPTS
+void AnalogDigitalConverter::onInterrupt() {
+	g_insideInterruptHandler = true;
+
+    int16_t adc_data = read();
+    channel.eventAdcData(adc_data);
+
+#if CONF_DEBUG
+    debug::ioexpIntTick(micros());
+#endif
+
+	g_insideInterruptHandler = false;
+}
+#endif
 
 }
 } // namespace eez::psu

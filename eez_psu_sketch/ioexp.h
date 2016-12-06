@@ -101,8 +101,6 @@ public:
 	void disableWrite();
 	void enableWriteAndFlush();
 
-    void onInterrupt();
-
 private:
     Channel &channel;
 	uint8_t gpio;

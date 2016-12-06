@@ -55,9 +55,15 @@ public:
     void start(uint8_t reg0);
     int16_t read();
 
+#if ADC_USE_INTERRUPTS
+    void onInterrupt();
+#endif
+
 private:
     Channel &channel;
+#if ADC_USE_INTERRUPTS
     uint8_t current_sps;
+#endif
 
     unsigned long start_time;
 

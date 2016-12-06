@@ -52,6 +52,8 @@
 /// ADC chip resolution in number of bits.
 #define ADC_RES 15
 
+#define ADC_USE_INTERRUPTS 1
+
 /// How many times per second will ADC take snapshot value?
 /// 0: 20 SPS, 1: 45 SPS, 2: 90 SPS, 3: 175 SPS, 4: 330 SPS, 5: 600 SPS, 6: 1000 SPS
 #ifdef EEZ_PSU_ARDUINO_MEGA
