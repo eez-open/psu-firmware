@@ -107,6 +107,9 @@ void init() {
     eeprom::test();
 
 	g_powerOnTimeCounter.init();
+    for (int i = 0; i < CH_NUM; ++i) {
+        Channel::get(i).onTimeCounter.init();
+    }
 
     loadConf();
 

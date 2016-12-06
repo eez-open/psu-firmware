@@ -385,9 +385,6 @@ void Channel::init() {
 	ioexp.init();
     adc.init();
     dac.init();
-    if (!g_isBooted) {
-	    onTimeCounter.init();
-    }
 
     profile::enableSave(last_save_enabled);
 }
