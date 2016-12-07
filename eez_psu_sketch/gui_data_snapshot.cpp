@@ -81,74 +81,90 @@ void Snapshot::takeSnapshot() {
     }
 
     for (int i = 0; i < CH_MAX; ++i) {
-		if (i >= CH_NUM) {
-			channelSnapshots[i].flags.status = 0;
+	    data::ChannelSnapshot &channelSnapshot = channelSnapshots[i];
+
+        if (i >= CH_NUM) {
+			channelSnapshot.flags.status = 0;
 			continue;
 		}
 
 		Channel &channel = Channel::get(i);
 
-        channelSnapshots[i].flags.status = channel.isOk() ? 1 : 2;
+        channelSnapshot.flags.status = channel.isOk() ? 1 : 2;
 
-        channelSnapshots[i].flags.state = channel.isOutputEnabled() ? 1 : 0;
+        channelSnapshot.flags.state = channel.isOutputEnabled() ? 1 : 0;
 
         if (timeout) {
             char *mode_str = channel.getCvModeStr();
-            channelSnapshots[i].flags.mode = 0;
+            channelSnapshot.flags.mode = 0;
             float uMon = channel_coupling::getUMon(channel);
             float iMon = channel_coupling::getIMon(channel);
             if (strcmp(mode_str, "CC") == 0) {
-                channelSnapshots[i].mon_value = Value(uMon, VALUE_TYPE_FLOAT_VOLT);
+                channelSnapshot.mon_value = Value(uMon, VALUE_TYPE_FLOAT_VOLT);
             } else if (strcmp(mode_str, "CV") == 0) {
-                channelSnapshots[i].mon_value = Value(iMon, VALUE_TYPE_FLOAT_AMPER);
+                channelSnapshot.mon_value = Value(iMon, VALUE_TYPE_FLOAT_AMPER);
             } else {
-                channelSnapshots[i].flags.mode = 1;
+                channelSnapshot.flags.mode = 1;
                 if (uMon < iMon) {
-                    channelSnapshots[i].mon_value = Value(uMon, VALUE_TYPE_FLOAT_VOLT);
+                    channelSnapshot.mon_value = Value(uMon, VALUE_TYPE_FLOAT_VOLT);
                 } else {
-                    channelSnapshots[i].mon_value = Value(iMon, VALUE_TYPE_FLOAT_AMPER);
+                    channelSnapshot.mon_value = Value(iMon, VALUE_TYPE_FLOAT_AMPER);
                 }
             }
 
-			channelSnapshots[i].p_mon = util::multiply(channel_coupling::getUMon(channel), channel_coupling::getIMon(channel), CHANNEL_VALUE_PRECISION);
+			channelSnapshot.p_mon = util::multiply(channel_coupling::getUMon(channel), channel_coupling::getIMon(channel), CHANNEL_VALUE_PRECISION);
         }
 
-        channelSnapshots[i].u_set = channel_coupling::getUSet(channel);
-		channelSnapshots[i].u_mon = channel_coupling::getUMon(channel);
-		channelSnapshots[i].u_monDac = channel_coupling::getUMonDac(channel);
-		channelSnapshots[i].u_limit = channel_coupling::getULimit(channel);
-        channelSnapshots[i].i_set = channel_coupling::getISet(channel);
-		channelSnapshots[i].i_mon = channel_coupling::getIMon(channel);
-		channelSnapshots[i].i_monDac = channel_coupling::getIMonDac(channel);
-		channelSnapshots[i].i_limit = channel_coupling::getILimit(channel);
+        channelSnapshot.u_set = channel_coupling::getUSet(channel);
+		channelSnapshot.u_mon = channel_coupling::getUMon(channel);
+		channelSnapshot.u_monDac = channel_coupling::getUMonDac(channel);
+		channelSnapshot.u_limit = channel_coupling::getULimit(channel);
+        channelSnapshot.i_set = channel_coupling::getISet(channel);
+		channelSnapshot.i_mon = channel_coupling::getIMon(channel);
+		channelSnapshot.i_monDac = channel_coupling::getIMonDac(channel);
+		channelSnapshot.i_limit = channel_coupling::getILimit(channel);
 
-		channelSnapshots[i].flags.lrip = channel.flags.lrippleEnabled ? 1 : 0;
-		channelSnapshots[i].flags.rprog = channel.flags.rprogEnabled ? 1 : 0;
+		channelSnapshot.flags.lrip = channel.flags.lrippleEnabled ? 1 : 0;
+		channelSnapshot.flags.rprog = channel.flags.rprogEnabled ? 1 : 0;
 
-		if (!channel.prot_conf.flags.i_state) channelSnapshots[i].flags.ocp = 0;
-        else if (!channel.ocp.flags.tripped) channelSnapshots[i].flags.ocp = 1;
-        else channelSnapshots[i].flags.ocp = 2;
+		if (!channel.prot_conf.flags.i_state) channelSnapshot.flags.ocp = 0;
+        else if (!channel.ocp.flags.tripped) channelSnapshot.flags.ocp = 1;
+        else channelSnapshot.flags.ocp = 2;
 
-		if (!channel.prot_conf.flags.u_state) channelSnapshots[i].flags.ovp = 0;
-        else if (!channel.ovp.flags.tripped) channelSnapshots[i].flags.ovp = 1;
-        else channelSnapshots[i].flags.ovp = 2;
+		if (!channel.prot_conf.flags.u_state) channelSnapshot.flags.ovp = 0;
+        else if (!channel.ovp.flags.tripped) channelSnapshot.flags.ovp = 1;
+        else channelSnapshot.flags.ovp = 2;
         
-        if (!channel.prot_conf.flags.p_state) channelSnapshots[i].flags.opp = 0;
-        else if (!channel.opp.flags.tripped) channelSnapshots[i].flags.opp = 1;
-        else channelSnapshots[i].flags.opp = 2;
+        if (!channel.prot_conf.flags.p_state) channelSnapshot.flags.opp = 0;
+        else if (!channel.opp.flags.tripped) channelSnapshot.flags.opp = 1;
+        else channelSnapshot.flags.opp = 2;
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-		channelSnapshots[i].flags.otp_ch = 0;
+		channelSnapshot.flags.otp_ch = 0;
+        channelSnapshot.flags.temperatureStatus = 2;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 		temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + i];
-        if (!tempSensor.isInstalled() || !tempSensor.isTestOK() || !tempSensor.prot_conf.state) channelSnapshots[i].flags.otp_ch = 0;
-        else if (!tempSensor.isTripped()) channelSnapshots[i].flags.otp_ch = 1;
-        else channelSnapshots[i].flags.otp_ch = 2;
+        if (!tempSensor.isInstalled() || !tempSensor.isTestOK() || !tempSensor.prot_conf.state) channelSnapshot.flags.otp_ch = 0;
+        else if (!tempSensor.isTripped()) channelSnapshot.flags.otp_ch = 1;
+        else channelSnapshot.flags.otp_ch = 2;
+
+	    if (tempSensor.isInstalled()) {
+		    if (tempSensor.isTestOK()) {
+			    channelSnapshot.flags.temperatureStatus = 1;
+			    channelSnapshot.temperature = tempSensor.temperature;
+		    } else {
+			    channelSnapshot.flags.temperatureStatus = 0;
+		    }
+	    } else {
+		    channelSnapshot.flags.temperatureStatus = 2;
+	    }
 #endif
 
-		channelSnapshots[i].flags.dp = channel.flags.dpOn ? 1 : 0;
-		
-		channelSnapshots[i].flags.cal_enabled = channel.isCalibrationEnabled() ? 1 : 0;
+		channelSnapshot.flags.dp = channel.flags.dpOn ? 1 : 0;
+		channelSnapshot.flags.cal_enabled = channel.isCalibrationEnabled() ? 1 : 0;
+
+        channelSnapshot.onTimeTotal = channel.onTimeCounter.getTotalTime();
+	    channelSnapshot.onTimeLast = channel.onTimeCounter.getLastTime();
     }
 
 	flags.channelDisplayedValues = persist_conf::dev_conf.flags.channelDisplayedValues;
@@ -197,82 +213,83 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 
     if (cursor.i >= 0 || g_channel != 0) {
 		int iChannel = cursor.i >= 0 ? cursor.i : g_channel->index - 1;
+        data::ChannelSnapshot &channelSnapshot = channelSnapshots[iChannel];
 
 		if (id == DATA_ID_CHANNEL_STATUS) {
-			return Value(channelSnapshots[iChannel].flags.status);
+			return Value(channelSnapshot.flags.status);
 		}
 
-		if (channelSnapshots[iChannel].flags.status == 1) {
+		if (channelSnapshot.flags.status == 1) {
 			if (id == DATA_ID_CHANNEL_OUTPUT_STATE) {
-				return Value(channelSnapshots[iChannel].flags.state);
+				return Value(channelSnapshot.flags.state);
 			}
 		
 			if (id == DATA_ID_CHANNEL_OUTPUT_MODE) {
-				return Value(channelSnapshots[iChannel].flags.mode);
+				return Value(channelSnapshot.flags.mode);
 			}
 		
 			if (id == DATA_ID_CHANNEL_MON_VALUE) {
-				return channelSnapshots[iChannel].mon_value;
+				return channelSnapshot.mon_value;
 			}
 		
 			if (id == DATA_ID_CHANNEL_U_SET) {
-				return Value(channelSnapshots[iChannel].u_set, VALUE_TYPE_FLOAT_VOLT);
+				return Value(channelSnapshot.u_set, VALUE_TYPE_FLOAT_VOLT);
 			}
 		
 			if (id == DATA_ID_CHANNEL_U_MON) {
-				return Value(channelSnapshots[iChannel].u_mon, VALUE_TYPE_FLOAT_VOLT);
+				return Value(channelSnapshot.u_mon, VALUE_TYPE_FLOAT_VOLT);
 			}
 
 			if (id == DATA_ID_CHANNEL_U_MON_DAC) {
-				return Value(channelSnapshots[iChannel].u_monDac, VALUE_TYPE_FLOAT_VOLT);
+				return Value(channelSnapshot.u_monDac, VALUE_TYPE_FLOAT_VOLT);
 			}
 
 			if (id == DATA_ID_CHANNEL_U_LIMIT) {
-				return Value(channelSnapshots[iChannel].u_limit, VALUE_TYPE_FLOAT_VOLT);
+				return Value(channelSnapshot.u_limit, VALUE_TYPE_FLOAT_VOLT);
 			}
 
 			if (id == DATA_ID_CHANNEL_I_SET) {
-				return Value(channelSnapshots[iChannel].i_set, VALUE_TYPE_FLOAT_AMPER);
+				return Value(channelSnapshot.i_set, VALUE_TYPE_FLOAT_AMPER);
 			}
 		
 			if (id == DATA_ID_CHANNEL_I_MON) {
-				return Value(channelSnapshots[iChannel].i_mon, VALUE_TYPE_FLOAT_AMPER);
+				return Value(channelSnapshot.i_mon, VALUE_TYPE_FLOAT_AMPER);
 			}
 
 			if (id == DATA_ID_CHANNEL_I_MON_DAC) {
-				return Value(channelSnapshots[iChannel].i_monDac, VALUE_TYPE_FLOAT_AMPER);
+				return Value(channelSnapshot.i_monDac, VALUE_TYPE_FLOAT_AMPER);
 			}
 
 			if (id == DATA_ID_CHANNEL_I_LIMIT) {
-				return Value(channelSnapshots[iChannel].i_limit, VALUE_TYPE_FLOAT_VOLT);
+				return Value(channelSnapshot.i_limit, VALUE_TYPE_FLOAT_VOLT);
 			}
 
 			if (id == DATA_ID_CHANNEL_P_MON) {
-				return Value(channelSnapshots[iChannel].p_mon, VALUE_TYPE_FLOAT_WATT);
+				return Value(channelSnapshot.p_mon, VALUE_TYPE_FLOAT_WATT);
 			}
 
 			if (id == DATA_ID_LRIP) {
-				return Value(channelSnapshots[iChannel].flags.lrip);
+				return Value(channelSnapshot.flags.lrip);
 			}
 
 			if (id == DATA_ID_CHANNEL_RPROG_STATUS) {
-				return Value(channelSnapshots[iChannel].flags.rprog);
+				return Value(channelSnapshot.flags.rprog);
 			}
 
 			if (id == DATA_ID_OVP) {
-				return Value(channelSnapshots[iChannel].flags.ovp);
+				return Value(channelSnapshot.flags.ovp);
 			}
 		
 			if (id == DATA_ID_OCP) {
-				return Value(channelSnapshots[iChannel].flags.ocp);
+				return Value(channelSnapshot.flags.ocp);
 			}
 		
 			if (id == DATA_ID_OPP) {
-				return Value(channelSnapshots[iChannel].flags.opp);
+				return Value(channelSnapshot.flags.opp);
 			}
 		
 			if (id == DATA_ID_OTP) {
-				return Value(channelSnapshots[iChannel].flags.otp_ch);
+				return Value(channelSnapshot.flags.otp_ch);
 			}
 		
 			if (id == DATA_ID_CHANNEL_LABEL) {
@@ -282,8 +299,24 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 			if (id == DATA_ID_CHANNEL_SHORT_LABEL) {
 				return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_SHORT_LABEL);
 			}
-		}
-	}
+
+            if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
+	    	    return data::Value(channelSnapshot.flags.temperatureStatus);
+	        }
+
+	        if (id == DATA_ID_CHANNEL_TEMP && channelSnapshot.flags.temperatureStatus == 1) {
+		        return data::Value(channelSnapshot.temperature, data::VALUE_TYPE_FLOAT_CELSIUS);
+	        }
+
+	        if (id == DATA_ID_CHANNEL_ON_TIME_TOTAL) {
+		        return data::Value(channelSnapshot.onTimeTotal, data::VALUE_TYPE_ON_TIME_COUNTER);
+	        }
+
+	        if (id == DATA_ID_CHANNEL_ON_TIME_LAST) {
+		        return data::Value(channelSnapshot.onTimeLast, data::VALUE_TYPE_ON_TIME_COUNTER);
+	        }
+        }
+    }
 	
     if (id == DATA_ID_CHANNEL_IS_VOLTAGE_BALANCED) {
         return data::Value(flags.isVoltageBalanced);

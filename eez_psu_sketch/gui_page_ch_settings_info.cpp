@@ -28,51 +28,9 @@ namespace psu {
 namespace gui {
 
 void ChSettingsInfoPage::takeSnapshot(data::Snapshot *snapshot) {
-    for (int i = 0; i < CH_NUM; ++i) {
-        Channel& channel = Channel::get(i);
-	    data::ChannelSnapshot &channelSnapshot = snapshot->channelSnapshots[i];
-
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-        channelSnapshot.flags.temperatureStatus = 2;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-	    temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + i];
-	    if (tempSensor.isInstalled()) {
-		    if (tempSensor.isTestOK()) {
-			    channelSnapshot.flags.temperatureStatus = 1;
-			    channelSnapshot.temperature = tempSensor.temperature;
-		    } else {
-			    channelSnapshot.flags.temperatureStatus = 0;
-		    }
-	    } else {
-		    channelSnapshot.flags.temperatureStatus = 2;
-	    }
-#endif
-
-        channelSnapshot.onTimeTotal = channel.onTimeCounter.getTotalTime();
-	    channelSnapshot.onTimeLast = channel.onTimeCounter.getLastTime();
-    }
 }
 
 data::Value ChSettingsInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	int iChannel = cursor.i >= 0 ? cursor.i : g_channel->index - 1;
-	data::ChannelSnapshot &channelSnapshot = snapshot->channelSnapshots[iChannel];
-
-	if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
-		return data::Value(channelSnapshot.flags.temperatureStatus);
-	}
-
-	if (id == DATA_ID_CHANNEL_TEMP && channelSnapshot.flags.temperatureStatus == 1) {
-		return data::Value(channelSnapshot.temperature, data::VALUE_TYPE_FLOAT_CELSIUS);
-	}
-
-	if (id == DATA_ID_CHANNEL_ON_TIME_TOTAL) {
-		return data::Value(channelSnapshot.onTimeTotal, data::VALUE_TYPE_ON_TIME_COUNTER);
-	}
-
-	if (id == DATA_ID_CHANNEL_ON_TIME_LAST) {
-		return data::Value(channelSnapshot.onTimeLast, data::VALUE_TYPE_ON_TIME_COUNTER);
-	}
-
 	return data::Value();
 }
 
