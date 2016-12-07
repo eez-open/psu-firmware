@@ -480,9 +480,7 @@ bool changePowerState(bool up) {
         g_powerIsUp = true;
 
         profile::enableSave(false);
-
         powerDown();
-
         profile::enableSave(true);
 
         g_testPowerUpDelay = true;
@@ -493,8 +491,19 @@ bool changePowerState(bool up) {
 }
 
 void powerDownBySensor() {
-    powerDown();
-    profile::save();
+    if (g_powerIsUp) {
+        for (int i = 0; i < CH_NUM; ++i) {
+            Channel::get(i).outputEnable(false);
+        }
+
+        g_powerIsUp = false;
+        profile::saveImmediately();
+        g_powerIsUp = true;
+
+        profile::enableSave(false);
+        powerDown();
+        profile::enableSave(true);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

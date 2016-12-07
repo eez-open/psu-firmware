@@ -165,6 +165,7 @@ void save() {
 
 void saveImmediately() {
     saveAtLocation(0);
+    g_save_profile = false;
 }
 
 bool saveAtLocation(int location, char *name) {
