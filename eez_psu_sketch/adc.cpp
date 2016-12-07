@@ -150,8 +150,12 @@ void AnalogDigitalConverter::tick(unsigned long tick_usec) {
 
                     DebugTraceF("ADC timeout (%lu) detected on CH%d, recovery attempt no. %d", diff, channel.index, adc_timeout_recovery_attempts_counter);
 
+                    unsigned long saved_start_time = start_time;
+
                     channel.init();
                     start(ADC_REG0_READ_U_MON);
+
+                    start_time = saved_start_time;
                 }
                 else {
                     if (channel.index == 1) {
