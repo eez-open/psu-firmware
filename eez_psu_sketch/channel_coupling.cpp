@@ -199,12 +199,14 @@ void setVoltageLimit(Channel &channel, float limit) {
 
 void setOvpParameters(Channel &channel, int state, float level, float delay) {
     if (g_channelCoupling != TYPE_NONE) {
+        float coupledLevel = g_channelCoupling == TYPE_SERIES ? level / 2 : level;
+
 	    Channel::get(0).prot_conf.flags.u_state = state;
-	    Channel::get(0).prot_conf.u_level = level / 2;
+	    Channel::get(0).prot_conf.u_level = coupledLevel;
 	    Channel::get(0).prot_conf.u_delay = delay;
 
         Channel::get(1).prot_conf.flags.u_state = state;
-	    Channel::get(1).prot_conf.u_level = level / 2;
+	    Channel::get(1).prot_conf.u_level = coupledLevel;
 	    Channel::get(1).prot_conf.u_delay = delay;
     } else {
 	    channel.prot_conf.flags.u_state = state;
@@ -224,8 +226,9 @@ void setOvpState(Channel &channel, int state) {
 
 void setOvpLevel(Channel &channel, float level) {
     if (g_channelCoupling != TYPE_NONE) {
-	    Channel::get(0).prot_conf.u_level = level / 2;
-	    Channel::get(1).prot_conf.u_level = level / 2;
+        float coupledLevel = g_channelCoupling == TYPE_SERIES ? level / 2 : level;
+	    Channel::get(0).prot_conf.u_level = coupledLevel;
+	    Channel::get(1).prot_conf.u_level = coupledLevel;
     } else {
 	    channel.prot_conf.u_level = level;
     }
