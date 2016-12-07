@@ -28,6 +28,7 @@ namespace watchdog {
 
 static bool watchdogEnabled = false;
 static Interval watchdogInterval(WATCHDOG_INTERVAL);
+unsigned long g_lastWatchdogImpulseTime;
 
 void enable() {
     watchdogEnabled = true;
@@ -57,6 +58,7 @@ void tick(unsigned long tick_usec) {
 #if CONF_DEBUG
 		if (debug::g_debug_watchdog) {
 #endif
+        g_lastWatchdogImpulseTime = micros();
 		digitalWrite(WATCHDOG, HIGH);
 		delayMicroseconds(5);
 		digitalWrite(WATCHDOG, LOW);

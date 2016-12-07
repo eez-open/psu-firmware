@@ -24,6 +24,8 @@ namespace watchdog {
 
 void tick(unsigned long tick_usec);
 
+extern unsigned long g_lastWatchdogImpulseTime;
+
 }
 }
 } // namespace eez::psu::watchdog
