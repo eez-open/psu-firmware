@@ -60,7 +60,11 @@ void tick(unsigned long tick_usec) {
 #endif
         g_lastWatchdogImpulseTime = micros();
 		digitalWrite(WATCHDOG, HIGH);
-		delayMicroseconds(5);
+		delayMicroseconds(2);
+		digitalWrite(WATCHDOG, LOW);
+		delayMicroseconds(2);
+		digitalWrite(WATCHDOG, HIGH);
+		delayMicroseconds(2);
 		digitalWrite(WATCHDOG, LOW);
 #if CONF_DEBUG
 		}
