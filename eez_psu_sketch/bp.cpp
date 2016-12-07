@@ -43,7 +43,7 @@ void set(uint16_t conf) {
         digitalWrite(BP_OE, LOW);
         SPI.endTransaction();
 
-        DebugTraceF("BP 0x%04x", (int)conf);
+        //DebugTraceF("BP 0x%04x", (int)conf);
     }
 }
 
