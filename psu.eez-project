@@ -8787,13 +8787,51 @@
               "width": 119,
               "height": 28,
               "style": "edit_value_S_left",
+              "text": "Trip level:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.protection.ovp.level",
+              "action": "ch_settings_prot_edit_level",
+              "x": 135,
+              "y": 84,
+              "width": 78,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 112,
+              "width": 119,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Trip delay:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.protection.ovp.delay",
+              "action": "ch_settings_prot_edit_delay",
+              "x": 135,
+              "y": 112,
+              "width": 78,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 140,
+              "width": 119,
+              "height": 28,
+              "style": "edit_value_S_left",
               "text": "Output voltage:"
             },
             {
               "type": "Select",
               "data": "channel.outputState",
               "x": 135,
-              "y": 84,
+              "y": 140,
               "width": 78,
               "height": 28,
               "style": "default",
@@ -8817,44 +8855,6 @@
                   "style": "value_S"
                 }
               ]
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 112,
-              "width": 119,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Trip level:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "channel.protection.ovp.level",
-              "action": "ch_settings_prot_edit_level",
-              "x": 135,
-              "y": 112,
-              "width": 78,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 140,
-              "width": 119,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Trip delay:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "channel.protection.ovp.delay",
-              "action": "ch_settings_prot_edit_delay",
-              "x": 135,
-              "y": 140,
-              "width": 78,
-              "height": 28,
-              "style": "edit_value_active_S_left"
             },
             {
               "type": "Button",
@@ -9162,7 +9162,7 @@
             {
               "type": "Text",
               "x": 16,
-              "y": 112,
+              "y": 84,
               "width": 119,
               "height": 28,
               "style": "edit_value_S_left",
@@ -9173,23 +9173,15 @@
               "data": "channel.protection.ocp.delay",
               "action": "ch_settings_prot_edit_delay",
               "x": 135,
-              "y": 112,
+              "y": 84,
               "width": 78,
               "height": 28,
               "style": "edit_value_active_S_left"
             },
             {
-              "type": "Rectangle",
-              "x": 16,
-              "y": 140,
-              "width": 197,
-              "height": 28,
-              "style": "default_inverse"
-            },
-            {
               "type": "Text",
               "x": 16,
-              "y": 84,
+              "y": 112,
               "width": 119,
               "height": 28,
               "style": "edit_value_S_left",
@@ -9199,7 +9191,7 @@
               "type": "Select",
               "data": "channel.outputState",
               "x": 135,
-              "y": 84,
+              "y": 112,
               "width": 78,
               "height": 28,
               "style": "default",
@@ -9223,6 +9215,14 @@
                   "style": "value_S"
                 }
               ]
+            },
+            {
+              "type": "Rectangle",
+              "x": 16,
+              "y": 140,
+              "width": 197,
+              "height": 28,
+              "style": "default_inverse"
             },
             {
               "type": "Button",
@@ -9447,13 +9447,51 @@
               "width": 119,
               "height": 28,
               "style": "edit_value_S_left",
+              "text": "Trip level:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.protection.opp.level",
+              "action": "ch_settings_prot_edit_level",
+              "x": 135,
+              "y": 84,
+              "width": 78,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 112,
+              "width": 119,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Trip delay:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.protection.opp.delay",
+              "action": "ch_settings_prot_edit_delay",
+              "x": 135,
+              "y": 112,
+              "width": 78,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 140,
+              "width": 119,
+              "height": 28,
+              "style": "edit_value_S_left",
               "text": "Output power:"
             },
             {
               "type": "Select",
               "data": "channel.outputState",
               "x": 135,
-              "y": 84,
+              "y": 140,
               "width": 78,
               "height": 28,
               "style": "default",
@@ -9477,44 +9515,6 @@
                   "style": "value_S"
                 }
               ]
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 112,
-              "width": 119,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Trip level:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "channel.protection.opp.level",
-              "action": "ch_settings_prot_edit_level",
-              "x": 135,
-              "y": 112,
-              "width": 78,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 140,
-              "width": 119,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Trip delay:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "channel.protection.opp.delay",
-              "action": "ch_settings_prot_edit_delay",
-              "x": 135,
-              "y": 140,
-              "width": 78,
-              "height": 28,
-              "style": "edit_value_active_S_left"
             },
             {
               "type": "Button",
@@ -9720,55 +9720,6 @@
               "width": 119,
               "height": 28,
               "style": "edit_value_S_left",
-              "text": "Current temp.:"
-            },
-            {
-              "type": "Select",
-              "data": "channel.tempStatus",
-              "x": 135,
-              "y": 56,
-              "width": 96,
-              "height": 28,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Text",
-                  "data": "",
-                  "x": 0,
-                  "y": 0,
-                  "width": 96,
-                  "height": 28,
-                  "style": "event_error",
-                  "text": "Invalid"
-                },
-                {
-                  "type": "DisplayData",
-                  "data": "channel.temp",
-                  "x": 0,
-                  "y": 0,
-                  "width": 96,
-                  "height": 28,
-                  "style": "value_S"
-                },
-                {
-                  "type": "Text",
-                  "data": "",
-                  "x": 0,
-                  "y": 0,
-                  "width": 96,
-                  "height": 28,
-                  "style": "default_disabled_S_left",
-                  "text": "Not installed"
-                }
-              ]
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 84,
-              "width": 119,
-              "height": 28,
-              "style": "edit_value_S_left",
               "text": "Trip level:"
             },
             {
@@ -9776,7 +9727,7 @@
               "data": "channel.protection.otp.level",
               "action": "ch_settings_prot_edit_level",
               "x": 135,
-              "y": 84,
+              "y": 56,
               "width": 96,
               "height": 28,
               "style": "edit_value_active_S_left"
@@ -9784,7 +9735,7 @@
             {
               "type": "Text",
               "x": 16,
-              "y": 112,
+              "y": 84,
               "width": 119,
               "height": 28,
               "style": "edit_value_S_left",
@@ -9795,18 +9746,165 @@
               "data": "channel.protection.otp.delay",
               "action": "ch_settings_prot_edit_delay",
               "x": 135,
-              "y": 112,
+              "y": 84,
               "width": 96,
               "height": 28,
               "style": "edit_value_active_S_left"
             },
             {
-              "type": "Rectangle",
+              "type": "Text",
               "x": 16,
-              "y": 140,
-              "width": 236,
+              "y": 112,
+              "width": 119,
               "height": 28,
-              "style": "default_inverse"
+              "style": "edit_value_S_left",
+              "text": "Current temp.:"
+            },
+            {
+              "type": "Select",
+              "data": "channel.isCoupled",
+              "x": 135,
+              "y": 112,
+              "width": 117,
+              "height": 56,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 117,
+                  "height": 56,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Select",
+                      "data": "channel.tempStatus",
+                      "x": 0,
+                      "y": 0,
+                      "width": 96,
+                      "height": 28,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "type": "Text",
+                          "data": "",
+                          "x": 0,
+                          "y": 0,
+                          "width": 96,
+                          "height": 28,
+                          "style": "event_error",
+                          "text": "Invalid"
+                        },
+                        {
+                          "type": "DisplayData",
+                          "data": "channel.temp",
+                          "x": 0,
+                          "y": 0,
+                          "width": 96,
+                          "height": 28,
+                          "style": "value_S"
+                        },
+                        {
+                          "type": "Text",
+                          "data": "",
+                          "x": 0,
+                          "y": 0,
+                          "width": 96,
+                          "height": 28,
+                          "style": "default_disabled_S_left",
+                          "text": "Not installed"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": -119,
+                      "y": 28,
+                      "width": 236,
+                      "height": 28,
+                      "style": "default_inverse"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 117,
+                  "height": 56,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Rectangle",
+                      "x": -119,
+                      "y": 28,
+                      "width": 119,
+                      "height": 28,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "List",
+                      "data": "channels",
+                      "x": -1,
+                      "y": 0,
+                      "width": 118,
+                      "height": 56,
+                      "style": "default",
+                      "listType": "vertical",
+                      "itemWidget": {
+                        "type": "Container",
+                        "x": 0,
+                        "y": 0,
+                        "width": 118,
+                        "height": 28,
+                        "widgets": [
+                          {
+                            "type": "Select",
+                            "data": "channel.tempStatus",
+                            "x": 0,
+                            "y": 0,
+                            "width": 118,
+                            "height": 28,
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "data": "",
+                                "x": 0,
+                                "y": 0,
+                                "width": 118,
+                                "height": 28,
+                                "style": "event_error",
+                                "text": "Invalid"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.temp",
+                                "x": 0,
+                                "y": 0,
+                                "width": 118,
+                                "height": 28,
+                                "style": "value_S"
+                              },
+                              {
+                                "type": "Text",
+                                "data": "",
+                                "x": 0,
+                                "y": 0,
+                                "width": 118,
+                                "height": 28,
+                                "style": "default_disabled_S_left",
+                                "text": "Not installed"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "Button",
