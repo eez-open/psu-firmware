@@ -12066,14 +12066,35 @@
               ]
             },
             {
-              "type": "Text",
-              "action": "show_sys_settings_cal",
+              "type": "Select",
+              "data": "channel.isCoupled",
               "x": 12,
               "y": 114,
               "width": 240,
               "height": 28,
-              "style": "edit_value_active_S_left",
-              "text": "Channel calibration"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "show_sys_settings_cal",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "Channel calibration"
+                },
+                {
+                  "type": "Text",
+                  "action": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "default_disabled_S_left",
+                  "text": "Channel calibration"
+                }
+              ]
             },
             {
               "type": "Text",
