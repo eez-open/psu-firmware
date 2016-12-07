@@ -58,7 +58,7 @@ void tick(unsigned long tick_usec) {
 		if (debug::g_debug_watchdog) {
 #endif
 		digitalWrite(WATCHDOG, HIGH);
-		delayMicroseconds(1);
+		delayMicroseconds(5);
 		digitalWrite(WATCHDOG, LOW);
 #if CONF_DEBUG
 		}
