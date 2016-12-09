@@ -201,7 +201,7 @@ void delayMicroseconds(uint32_t microseconds) {
 #else
     timespec ts;
     ts.tv_sec = microseconds / 1000000;
-    ts.tv_nsec = (microseconds % 1000000) * 1000000;
+    ts.tv_nsec = (microseconds % 1000000) * 1000;
     nanosleep(&ts, 0);
 #endif
 }
