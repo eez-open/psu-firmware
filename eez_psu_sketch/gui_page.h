@@ -30,6 +30,7 @@ struct Snapshot;
 
 class Page {
 public:
+    virtual ~Page() {}
 	virtual void pageWillAppear();
 	virtual void takeSnapshot(data::Snapshot *snapshot);
 	virtual data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);

@@ -46,7 +46,7 @@ static bool check_password(scpi_t * context) {
         return false;
     }
 
-	int nPassword = strlen(persist_conf::dev_conf.calibration_password);
+	size_t nPassword = strlen(persist_conf::dev_conf.calibration_password);
     if (nPassword != len || strncmp(persist_conf::dev_conf.calibration_password, password, len) != 0) {
         SCPI_ErrorPush(context, SCPI_ERROR_INVALID_CAL_PASSWORD);
         return false;

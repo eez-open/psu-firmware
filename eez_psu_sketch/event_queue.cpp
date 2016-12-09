@@ -77,13 +77,11 @@ void init() {
     g_lastErrorEventChanged = true;
 
 	if (eventQueue.magicNumber != MAGIC || eventQueue.version != VERSION || eventQueue.head >= MAX_EVENTS || eventQueue.size > MAX_EVENTS) {
-		eventQueue = {
-			MAGIC,
-			VERSION,
-			0,
-			0,
-			NULL_INDEX
-		};
+		eventQueue.magicNumber = MAGIC;
+        eventQueue.version = VERSION;
+        eventQueue.head = 0;
+        eventQueue.size = 0;
+        eventQueue.lastErrorEventIndex = NULL_INDEX;
 
 		pushEvent(EVENT_INFO_WELCOME);
 	}

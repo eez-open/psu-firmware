@@ -14,7 +14,7 @@ SIM_CSOURCES = \
 	-c third_party/thread_queue.c
 
 SIM_CXXFLAGS = \
-	-Wall -Wno-unused-variable -fpermissive \
+	-Wall -Wno-unused-variable -fpermissive -Wno-reorder -Wno-parentheses \
 	-DUSE_FULL_ERROR_LIST=0 \
 	-DEEZ_PSU_SIMULATOR \
 	-I../../../eez_psu_sketch \

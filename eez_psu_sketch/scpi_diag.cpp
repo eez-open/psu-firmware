@@ -244,8 +244,8 @@ scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
 //
 //	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
 //		temp_sensor::TempSensor &sensor = temp_sensor::sensors[i];
-//		sprintf_P(buffer, PSTR("%d, %s temp, %s, %s"), \
-//			sensor.test_result, sensor.name, get_installed_str(sensor.installed ? true : false), get_test_result_str(sensor.test_result)); \
+//		sprintf_P(buffer, PSTR("%d, %s temp, %s, %s"),
+//			sensor.test_result, sensor.name, get_installed_str(sensor.installed ? true : false), get_test_result_str(sensor.test_result));
 //		SCPI_ResultText(context, buffer);
 //	}
 //
