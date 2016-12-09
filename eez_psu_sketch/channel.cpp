@@ -35,9 +35,6 @@
 #include "profile.h"
 #include "event_queue.h"
 #include "channel_coupling.h"
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_WATCHDOG
-#include "watchdog.h"
-#endif
 
 namespace eez {
 namespace psu {
@@ -89,7 +86,7 @@ void Channel::Value::init(float def_step, float def_limit) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-struct {
+static struct {
 	unsigned OE_SAVED: 1;
 	unsigned CH1_OE: 1;
 	unsigned CH2_OE: 1;
@@ -1472,9 +1469,6 @@ void Channel::setPowerLimit(float limit) {
 void Channel::testPwrgood(uint8_t gpio) {
     if (!(gpio & (1 << IOExpander::IO_BIT_IN_PWRGOOD))) {
         DebugTraceF("Ch%d PWRGOOD bit changed to 0", index);
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_WATCHDOG
-        DebugTraceF("Last watchdog impulse was before %u uS", micros() - watchdog::g_lastWatchdogImpulseTime);
-#endif
         flags.powerOk = 0;
         psu::generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (index - 1));
         psu::powerDownBySensor();

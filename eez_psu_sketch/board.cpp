@@ -18,6 +18,9 @@
  
 #include "psu.h"
 #include "board.h"
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_WATCHDOG
+#include "watchdog.h"
+#endif
 
 namespace eez {
 namespace psu {
@@ -35,6 +38,9 @@ void powerUp() {
 }
 
 void powerDown() {
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_WATCHDOG
+        DebugTraceF("Last watchdog impulse was before %u uS", micros() - watchdog::g_lastWatchdogImpulseTime);
+#endif
 	DebugTrace("PWR_DIRECT -> LOW");
     digitalWrite(PWR_DIRECT, LOW);
 }
