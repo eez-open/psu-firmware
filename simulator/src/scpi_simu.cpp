@@ -161,7 +161,12 @@ scpi_result_t scpi_simu_LoadQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_simu_VoltageProgramExternal(scpi_t *context) {
-	float value;
+    if (channel_coupling::getType() != channel_coupling::TYPE_NONE) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
+        return SCPI_RES_ERR;
+    }
+
+    float value;
 	if (!get_voltage_param(context, value, 0, 0)) {
 		return SCPI_RES_ERR;
 	}
@@ -182,6 +187,11 @@ scpi_result_t scpi_simu_VoltageProgramExternal(scpi_t *context) {
 }
 
 scpi_result_t scpi_simu_VoltageProgramExternalQ(scpi_t *context) {
+    if (channel_coupling::getType() != channel_coupling::TYPE_NONE) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
+        return SCPI_RES_ERR;
+    }
+
     Channel *channel = param_channel(context, FALSE, TRUE);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -223,6 +233,11 @@ scpi_result_t scpi_simu_PwrgoodQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_simu_RPol(scpi_t *context) {
+    if (channel_coupling::getType() != channel_coupling::TYPE_SERIES) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
+        return SCPI_RES_ERR;
+    }
+
     bool on;
     if (!SCPI_ParamBool(context, &on, TRUE)) {
         return SCPI_RES_ERR;
@@ -244,6 +259,11 @@ scpi_result_t scpi_simu_RPol(scpi_t *context) {
 }
 
 scpi_result_t scpi_simu_RPolQ(scpi_t *context) {
+    if (channel_coupling::getType() != channel_coupling::TYPE_SERIES) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
+        return SCPI_RES_ERR;
+    }
+
     Channel *channel = param_channel(context, FALSE, TRUE);
     if (!channel) {
         return SCPI_RES_ERR;
