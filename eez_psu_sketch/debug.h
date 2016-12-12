@@ -55,25 +55,25 @@ namespace eez {
 namespace psu {
 namespace debug {
 
-extern uint16_t u_dac[2];
-extern uint16_t i_dac[2];
-extern int16_t u_mon[2];
-extern int16_t u_mon_dac[2];
-extern int16_t i_mon[2];
-extern int16_t i_mon_dac[2];
+extern uint16_t uDac[2];
+extern uint16_t iDac[2];
+extern int16_t uMon[2];
+extern int16_t uMonDac[2];
+extern int16_t iMon[2];
+extern int16_t iMonDac[2];
 
-extern unsigned long g_set_voltage_or_current_time_start;
+extern unsigned long g_setVoltageOrCurrentTimeStart;
 
-extern unsigned long last_loop_duration;
-extern unsigned long max_loop_duration;
-extern unsigned long avg_loop_duration;
+extern unsigned long lastLoopDuration;
+extern unsigned long maxLoopDuration;
+extern unsigned long avgLoopDuration;
 
-extern unsigned long total_ioexp_int_counter;
-extern unsigned long last_ioexp_int_counter;
+extern unsigned long totalAdcReadCounter;
+extern unsigned long lastAdcReadCounter;
 
-void ioexpIntTick(unsigned long tick_usec);
+void adcReadTick(unsigned long tick_usec);
 
-extern bool g_debug_watchdog;
+extern bool g_debugWatchdog;
 
 }
 }

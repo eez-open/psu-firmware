@@ -189,7 +189,11 @@ void AnalogDigitalConverter::tick(unsigned long tick_usec) {
     if (start_reg0 && tick_usec > start_time + ADC_READ_TIME_US) {
         int16_t adc_data = read();
         channel.eventAdcData(adc_data);
-    }
+
+#if CONF_DEBUG
+        debug::adcReadTick(micros());
+#endif
+}
 #endif
 }
 
@@ -255,7 +259,7 @@ void AnalogDigitalConverter::onInterrupt() {
     channel.eventAdcData(adc_data);
 
 #if CONF_DEBUG
-    debug::ioexpIntTick(micros());
+    debug::adcReadTick(micros());
 #endif
 
 	g_insideInterruptHandler = false;

@@ -27,32 +27,32 @@ namespace eez {
 namespace psu {
 namespace debug {
 
-uint16_t u_dac[2];
-uint16_t i_dac[2];
-int16_t u_mon[2];
-int16_t u_mon_dac[2];
-int16_t i_mon[2];
-int16_t i_mon_dac[2];
+uint16_t uDac[2];
+uint16_t iDac[2];
+int16_t uMon[2];
+int16_t uMonDac[2];
+int16_t iMon[2];
+int16_t iMonDac[2];
 
-static unsigned long previous_tick_count = 0;
-unsigned long last_loop_duration = 0;
-unsigned long max_loop_duration = 0;
+static unsigned long previousTickCount = 0;
+unsigned long lastLoopDuration = 0;
+unsigned long maxLoopDuration = 0;
 
-static unsigned long avg_loop_duration_counter = 0;
-static unsigned long avg_loop_duration_total = 0;
-unsigned long avg_loop_duration = 0;
+static unsigned long avgLoopDurationCounter = 0;
+static unsigned long avgLoopDurationTotal = 0;
+unsigned long avgLoopDuration = 0;
 
-static unsigned long ioexp_previous_tick_count = 0;
-static unsigned long current_ioexp_int_counter = 0;
-unsigned long total_ioexp_int_counter = 0;
-unsigned long last_ioexp_int_counter = 0;
+static unsigned long previousAdcReadCount = 0;
+static unsigned long currentAdcReadCounter = 0;
+unsigned long totalAdcReadCounter = 0;
+unsigned long lastAdcReadCounter = 0;
 
-unsigned long g_set_voltage_or_current_time_start = 0;
+unsigned long g_setVoltageOrCurrentTimeStart = 0;
 
-bool g_debug_watchdog = true;
+bool g_debugWatchdog = true;
 
-void ioexpIntTick(unsigned long tick_usec) {
-    ++current_ioexp_int_counter;
+void adcReadTick(unsigned long tick_usec) {
+    ++currentAdcReadCounter;
 }
 
 }
@@ -88,40 +88,40 @@ void DumpTraceBuffer() {
 
 void tick(unsigned long tick_usec) {
 #if CONF_DEBUG
-    if (previous_tick_count != 0) {
-        last_loop_duration = tick_usec - previous_tick_count;
-        if (last_loop_duration > max_loop_duration) {
-            max_loop_duration = last_loop_duration;
+    if (previousTickCount != 0) {
+        lastLoopDuration = tick_usec - previousTickCount;
+        if (lastLoopDuration > maxLoopDuration) {
+            maxLoopDuration = lastLoopDuration;
         }
 
-        if (avg_loop_duration_counter++ < AVG_LOOP_DURATION_N) {
-            avg_loop_duration_total += last_loop_duration;
+        if (avgLoopDurationCounter++ < AVG_LOOP_DURATION_N) {
+            avgLoopDurationTotal += lastLoopDuration;
         } else {
-            avg_loop_duration = avg_loop_duration_total / AVG_LOOP_DURATION_N;
-            avg_loop_duration_total = 0;
-            avg_loop_duration_counter = 0;
+            avgLoopDuration = avgLoopDurationTotal / AVG_LOOP_DURATION_N;
+            avgLoopDurationTotal = 0;
+            avgLoopDurationCounter = 0;
         }
     }
 
-    if (ioexp_previous_tick_count != 0) {
-        unsigned long duration = tick_usec - ioexp_previous_tick_count;
+    if (previousAdcReadCount != 0) {
+        unsigned long duration = tick_usec - previousAdcReadCount;
         if (duration > 1000000) {
             noInterrupts();
-            unsigned long int_counter = current_ioexp_int_counter;
-            current_ioexp_int_counter = 0;
+            unsigned long int_counter = currentAdcReadCounter;
+            currentAdcReadCounter = 0;
             interrupts();
 
-            last_ioexp_int_counter = int_counter;
-            total_ioexp_int_counter += int_counter;
+            lastAdcReadCounter = int_counter;
+            totalAdcReadCounter += int_counter;
 
-            ioexp_previous_tick_count = tick_usec;
+            previousAdcReadCount = tick_usec;
         }
     }
     else {
-        ioexp_previous_tick_count = tick_usec;
+        previousAdcReadCount = tick_usec;
     }
 
-    previous_tick_count = tick_usec;
+    previousTickCount = tick_usec;
 #endif
 
     if (dumpTraceBufferOnNextTick) {

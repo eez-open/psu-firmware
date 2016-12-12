@@ -56,7 +56,7 @@ void tick(unsigned long tick_usec) {
 
 	if (watchdogInterval.test(tick_usec)) {
 #if CONF_DEBUG
-		if (debug::g_debug_watchdog) {
+		if (debug::g_debugWatchdog) {
 #endif
         g_lastWatchdogImpulseTime = micros();
 		digitalWrite(WATCHDOG, HIGH);

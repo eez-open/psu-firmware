@@ -44,29 +44,29 @@ scpi_result_t debug_scpi_commandQ(scpi_t *context) {
     char buffer[512] = { 0 };
     char *p = buffer;
 
-    sprintf_P(p, PSTR("max_loop_duration: %lu\n"), max_loop_duration);
+    sprintf_P(p, PSTR("max_loop_duration: %lu\n"), maxLoopDuration);
     p += strlen(p);
 
-    sprintf_P(p, PSTR("last_loop_duration: %lu\n"), last_loop_duration);
+    sprintf_P(p, PSTR("last_loop_duration: %lu\n"), lastLoopDuration);
     p += strlen(p);
 
-    sprintf_P(p, PSTR("avg_loop_duration: %lu\n"), avg_loop_duration);
+    sprintf_P(p, PSTR("avg_loop_duration: %lu\n"), avgLoopDuration);
     p += strlen(p);
 
-    sprintf_P(p, PSTR("total_ioexp_int_counter: %lu\n"), total_ioexp_int_counter);
+    sprintf_P(p, PSTR("total_ioexp_int_counter: %lu\n"), totalAdcReadCounter);
     p += strlen(p);
 
-    sprintf_P(p, PSTR("last_ioexp_int_counter: %lu\n"), last_ioexp_int_counter);
+    sprintf_P(p, PSTR("last_ioexp_int_counter: %lu\n"), lastAdcReadCounter);
     p += strlen(p);
 
     sprintf_P(p, PSTR("CH1: u_dac=%u, u_mon_dac=%d, u_mon=%d, i_dac=%u, i_mon_dac=%d, i_mon=%d\n"),
-        (unsigned int)u_dac[0], (int)u_mon_dac[0], (int)u_mon[0],
-        (unsigned int)i_dac[0], (int)i_mon_dac[0], (int)i_mon[0]);
+        (unsigned int)uDac[0], (int)uMonDac[0], (int)uMon[0],
+        (unsigned int)iDac[0], (int)iMonDac[0], (int)iMon[0]);
     p += strlen(p);
 
     sprintf_P(p, PSTR("CH2: u_dac=%u, u_mon_dac=%d, u_mon=%d, i_dac=%u, i_mon_dac=%d, i_mon=%d\n"),
-        (unsigned int)u_dac[1], (int)u_mon_dac[1], (int)u_mon[1],
-        (unsigned int)i_dac[1], (int)i_mon_dac[1], (int)i_mon[1]);
+        (unsigned int)uDac[1], (int)uMonDac[1], (int)uMon[1],
+        (unsigned int)iDac[1], (int)iMonDac[1], (int)iMon[1]);
     p += strlen(p);
 
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
@@ -85,7 +85,7 @@ scpi_result_t debug_scpi_Watchdog(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-	debug::g_debug_watchdog = enable;
+	debug::g_debugWatchdog = enable;
     
     return SCPI_RES_OK;
 }
@@ -96,7 +96,7 @@ scpi_result_t debug_scpi_WatchdogQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    SCPI_ResultBool(context, debug::g_debug_watchdog);
+    SCPI_ResultBool(context, debug::g_debugWatchdog);
     
     return SCPI_RES_OK;
 }

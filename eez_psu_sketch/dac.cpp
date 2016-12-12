@@ -48,10 +48,10 @@ void DigitalAnalogConverter::set_value(uint8_t buffer, float value) {
 
 #if CONF_DEBUG
     if (buffer == DATA_BUFFER_A) {
-        debug::u_dac[channel.index - 1] = DAC_value;
+        debug::uDac[channel.index - 1] = DAC_value;
     }
     else {
-        debug::i_dac[channel.index - 1] = DAC_value;
+        debug::iDac[channel.index - 1] = DAC_value;
     }
 #endif
 
@@ -66,10 +66,10 @@ void DigitalAnalogConverter::set_value(uint8_t buffer, float value) {
     SPI.transfer(DAC_value & 0xFF);  // send second byte
 
 #if CONF_DEBUG
-	if  (debug::g_set_voltage_or_current_time_start != 0) {
+	if  (debug::g_setVoltageOrCurrentTimeStart != 0) {
 		unsigned long end = micros();
-		DebugTraceF("Command duration[microseconds]: %ul", debug::g_set_voltage_or_current_time_start - end);
-		debug::g_set_voltage_or_current_time_start = 0;
+		DebugTraceF("Command duration[microseconds]: %ul", debug::g_setVoltageOrCurrentTimeStart - end);
+		debug::g_setVoltageOrCurrentTimeStart = 0;
 	}
 #endif
 

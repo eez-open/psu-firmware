@@ -661,10 +661,10 @@ int16_t Channel::remapCurrentToAdcData(float value) {
 }
 
 #if CONF_DEBUG
-extern int16_t debug::u_mon[CH_MAX];
-extern int16_t debug::u_mon_dac[CH_MAX];
-extern int16_t debug::i_mon[CH_MAX];
-extern int16_t debug::i_mon_dac[CH_MAX];
+extern int16_t debug::uMon[CH_MAX];
+extern int16_t debug::uMonDac[CH_MAX];
+extern int16_t debug::iMon[CH_MAX];
+extern int16_t debug::iMonDac[CH_MAX];
 #endif
 
 void Channel::adcDataIsReady(int16_t data) {
@@ -675,7 +675,7 @@ void Channel::adcDataIsReady(int16_t data) {
     case AnalogDigitalConverter::ADC_REG0_READ_U_MON:
 	{
 #if CONF_DEBUG
-		debug::u_mon[index - 1] = data;
+		debug::uMon[index - 1] = data;
 #endif
 
 		if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage) {
@@ -695,7 +695,7 @@ void Channel::adcDataIsReady(int16_t data) {
     case AnalogDigitalConverter::ADC_REG0_READ_I_MON:
 	{
 #if CONF_DEBUG
-		debug::i_mon[index - 1] = data;
+		debug::iMon[index - 1] = data;
 #endif
 
 		if (abs(i.mon_adc - data) > negligibleAdcDiffForCurrent) {
@@ -729,7 +729,7 @@ void Channel::adcDataIsReady(int16_t data) {
     case AnalogDigitalConverter::ADC_REG0_READ_U_SET:
 	{
 #if CONF_DEBUG
-		debug::u_mon_dac[index - 1] = data;
+		debug::uMonDac[index - 1] = data;
 #endif
 
 		float value = remapAdcDataToVoltage(data);
@@ -749,7 +749,7 @@ void Channel::adcDataIsReady(int16_t data) {
     case AnalogDigitalConverter::ADC_REG0_READ_I_SET:
 	{
 #if CONF_DEBUG
-		debug::i_mon_dac[index - 1] = data;
+		debug::iMonDac[index - 1] = data;
 #endif
 
 		float value = remapAdcDataToCurrent(data);
