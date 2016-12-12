@@ -508,7 +508,7 @@ void outputEnable(Channel& channel, bool enable) {
 }
 
 bool lowRippleEnable(Channel& channel, bool enable) {
-    if (isCoupled() || isTracked()) {
+    if (isCoupled()) {
         bool success = Channel::get(0).lowRippleEnable(enable) && Channel::get(1).lowRippleEnable(enable);
         if (!success) {
             Channel::get(0).lowRippleEnable(false);
