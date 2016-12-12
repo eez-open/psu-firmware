@@ -9838,7 +9838,7 @@
                     {
                       "type": "List",
                       "data": "channels",
-                      "x": -1,
+                      "x": 0,
                       "y": 0,
                       "width": 96,
                       "height": 56,
@@ -9850,6 +9850,7 @@
                         "y": 0,
                         "width": 96,
                         "height": 28,
+                        "style": "default",
                         "widgets": [
                           {
                             "x": 0,
@@ -11655,6 +11656,7 @@
                         "y": 0,
                         "width": 124,
                         "height": 28,
+                        "style": "default",
                         "widgets": [
                           {
                             "type": "DisplayData",
@@ -11700,6 +11702,7 @@
                         "y": 0,
                         "width": 124,
                         "height": 28,
+                        "style": "default",
                         "widgets": [
                           {
                             "type": "DisplayData",
@@ -11737,6 +11740,7 @@
                         "y": 0,
                         "width": 124,
                         "height": 28,
+                        "style": "default",
                         "widgets": [
                           {
                             "x": 0,
