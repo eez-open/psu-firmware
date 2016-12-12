@@ -4052,6 +4052,77 @@
         }
       },
       {
+        "name": "main_help",
+        "description": "Redefined main menu",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 0,
+              "width": 252,
+              "height": 204,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 272,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "MultilineText",
+              "x": 8,
+              "y": 19,
+              "width": 232,
+              "height": 112,
+              "style": "edit_value_S_left",
+              "text": "Select any yellow colored text to open related menu, editing page or to trigger an action (e.g. on this page switching off selected channel output)."
+            },
+            {
+              "type": "MultilineText",
+              "x": 8,
+              "y": 131,
+              "width": 232,
+              "height": 73,
+              "style": "edit_value_S_left",
+              "text": "For more detailed information please visit: www.envox.hr/ezz or github.com/eez-open"
+            }
+          ]
+        }
+      },
+      {
         "name": "edit_mode_keypad",
         "description": "Value edit mode: keypad",
         "portrait": {
@@ -5647,34 +5718,88 @@
               "x": 48,
               "y": 0,
               "width": 204,
-              "height": 28,
+              "height": 25,
               "style": "edit_info_S"
             },
             {
               "type": "DisplayData",
               "data": "edit_info2",
               "x": 48,
-              "y": 28,
+              "y": 25,
               "width": 204,
-              "height": 28,
+              "height": 25,
               "style": "edit_info_S"
             },
             {
               "type": "DisplayData",
               "data": "edit_value",
               "x": 48,
-              "y": 56,
+              "y": 50,
               "width": 204,
-              "height": 80,
+              "height": 66,
               "style": "edit_value_L"
             },
             {
               "type": "Rectangle",
               "x": 48,
-              "y": 136,
-              "width": 204,
-              "height": 32,
+              "y": 116,
+              "width": 78,
+              "height": 20,
               "style": "default_inverse"
+            },
+            {
+              "x": 48,
+              "type": "Select",
+              "data": "lrip",
+              "y": 136,
+              "width": 48,
+              "height": 23,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "x": 0,
+                  "y": 0,
+                  "width": 48,
+                  "height": 23,
+                  "style": "prot_indicator_S",
+                  "text": "LRip"
+                },
+                {
+                  "type": "Text",
+                  "x": 0,
+                  "y": 0,
+                  "width": 48,
+                  "height": 23,
+                  "style": "prot_indicator_set_S",
+                  "text": "LRip"
+                }
+              ]
+            },
+            {
+              "type": "Rectangle",
+              "x": 96,
+              "y": 136,
+              "width": 30,
+              "height": 23,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Rectangle",
+              "x": 48,
+              "y": 159,
+              "width": 78,
+              "height": 9,
+              "style": "default_inverse"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.p.mon",
+              "x": 126,
+              "y": 116,
+              "width": 126,
+              "height": 52,
+              "style": "value"
             },
             {
               "x": 48,
@@ -6325,34 +6450,88 @@
               "x": 48,
               "y": 0,
               "width": 204,
-              "height": 28,
+              "height": 25,
               "style": "edit_info_S"
             },
             {
               "type": "DisplayData",
               "data": "edit_info2",
               "x": 48,
-              "y": 28,
+              "y": 25,
               "width": 204,
-              "height": 28,
+              "height": 25,
               "style": "edit_info_S"
             },
             {
               "type": "DisplayData",
               "data": "edit_value",
               "x": 48,
-              "y": 56,
+              "y": 50,
               "width": 204,
-              "height": 80,
+              "height": 66,
               "style": "edit_value_L"
             },
             {
               "type": "Rectangle",
               "x": 48,
-              "y": 136,
-              "width": 204,
-              "height": 32,
+              "y": 116,
+              "width": 78,
+              "height": 20,
               "style": "default_inverse"
+            },
+            {
+              "x": 48,
+              "type": "Select",
+              "data": "lrip",
+              "y": 136,
+              "width": 48,
+              "height": 23,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "x": 0,
+                  "y": 0,
+                  "width": 48,
+                  "height": 23,
+                  "style": "prot_indicator_S",
+                  "text": "LRip"
+                },
+                {
+                  "type": "Text",
+                  "x": 0,
+                  "y": 0,
+                  "width": 48,
+                  "height": 23,
+                  "style": "prot_indicator_set_S",
+                  "text": "LRip"
+                }
+              ]
+            },
+            {
+              "type": "Rectangle",
+              "x": 96,
+              "y": 136,
+              "width": 30,
+              "height": 23,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Rectangle",
+              "x": 48,
+              "y": 159,
+              "width": 78,
+              "height": 9,
+              "style": "default_inverse"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.p.mon",
+              "x": 126,
+              "y": 116,
+              "width": 126,
+              "height": 52,
+              "style": "value"
             },
             {
               "x": 48,
@@ -6875,77 +7054,6 @@
               "width": 280,
               "height": 8,
               "style": "yes_no_background"
-            }
-          ]
-        }
-      },
-      {
-        "name": "main_help",
-        "description": "Redefined main menu",
-        "portrait": {
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320,
-          "widgets": []
-        },
-        "landscape": {
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240,
-          "widgets": [
-            {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
-            {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 0,
-              "width": 252,
-              "height": 204,
-              "style": "default_inverse"
-            },
-            {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 272,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "X"
-            },
-            {
-              "type": "MultilineText",
-              "x": 8,
-              "y": 19,
-              "width": 232,
-              "height": 112,
-              "style": "edit_value_S_left",
-              "text": "Select any yellow colored text to open related menu, editing page or to trigger an action (e.g. on this page switching off selected channel output)."
-            },
-            {
-              "type": "MultilineText",
-              "x": 8,
-              "y": 131,
-              "width": 232,
-              "height": 73,
-              "style": "edit_value_S_left",
-              "text": "For more detailed information please visit: www.envox.hr/ezz or github.com/eez-open"
             }
           ]
         }
@@ -10336,7 +10444,7 @@
               "y": 112,
               "width": 180,
               "height": 28,
-              "style": "default_disabled_S_left",
+              "style": "edit_value_active_S_left",
               "text": "Tracking control"
             },
             {
@@ -11096,8 +11204,8 @@
         }
       },
       {
-        "name": "ch_settings_adv_coupling",
-        "description": "Output voltage remote programming information and settings",
+        "name": "ch_settings_adv_tracking",
+        "description": "Output voltage remote sensing information and settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -11118,165 +11226,79 @@
               "width": 246,
               "height": 28,
               "style": "value_S",
-              "text": "Set channels coupling mode"
+              "text": "Set channels tracking mode"
+            },
+            {
+              "type": "MultilineText",
+              "x": 16,
+              "y": 28,
+              "width": 224,
+              "height": 118,
+              "style": "edit_value_S_left",
+              "text": "Tracking output programming values and protections. Protection tripping on one channel will disable both channels."
+            },
+            {
+              "type": "Rectangle",
+              "x": 240,
+              "y": 28,
+              "width": 12,
+              "height": 118,
+              "style": "default_inverse"
             },
             {
               "type": "Text",
               "x": 16,
-              "y": 28,
+              "y": 146,
               "width": 101,
-              "height": 59,
+              "height": 42,
               "style": "edit_value_left",
-              "text": "Mode:"
+              "text": "Status:"
             },
             {
               "x": 117,
               "type": "Select",
-              "data": "channel.coupling.mode",
-              "y": 28,
-              "width": 135,
-              "height": 59,
+              "data": "channel.rsense.status",
+              "y": 146,
+              "width": 62,
+              "height": 42,
               "style": "default",
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "",
+                  "action": "ch_settins_adv_rsense_toggle_status",
                   "x": 0,
                   "y": 0,
-                  "width": 135,
-                  "height": 59,
-                  "style": "edit_value_left",
-                  "text": "None"
+                  "width": 62,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "OFF"
                 },
                 {
                   "type": "Text",
-                  "action": "",
+                  "action": "ch_settins_adv_rsense_toggle_status",
                   "x": 0,
                   "y": 0,
-                  "width": 135,
-                  "height": 59,
-                  "style": "edit_value_left",
-                  "text": "Parallel"
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 0,
-                  "y": 0,
-                  "width": 135,
-                  "height": 59,
-                  "style": "edit_value_left",
-                  "text": "Series"
-                }
-              ]
-            },
-            {
-              "x": 16,
-              "type": "Select",
-              "data": "channel.coupling.mode",
-              "y": 87,
-              "width": 236,
-              "height": 100,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Container",
-                  "x": 0,
-                  "y": 0,
-                  "width": 236,
-                  "height": 100,
-                  "style": "default",
-                  "widgets": [
-                    {
-                      "type": "Text",
-                      "action": "ch_settins_adv_coupling_set_parallel_info",
-                      "x": 0,
-                      "y": 0,
-                      "width": 236,
-                      "height": 50,
-                      "style": "edit_value_active_left",
-                      "text": "Set parallel"
-                    },
-                    {
-                      "type": "Text",
-                      "action": "ch_settins_adv_coupling_set_series_info",
-                      "x": 0,
-                      "y": 50,
-                      "width": 236,
-                      "height": 50,
-                      "style": "edit_value_active_left",
-                      "text": "Set series"
-                    }
-                  ]
-                },
-                {
-                  "type": "Container",
-                  "x": 0,
-                  "y": 0,
-                  "width": 236,
-                  "height": 100,
-                  "style": "default",
-                  "widgets": [
-                    {
-                      "type": "Text",
-                      "action": "ch_settins_adv_coupling_uncouple",
-                      "x": 0,
-                      "y": 0,
-                      "width": 236,
-                      "height": 50,
-                      "style": "edit_value_active_left",
-                      "text": "Uncouple"
-                    },
-                    {
-                      "type": "Text",
-                      "action": "ch_settins_adv_coupling_set_series_info",
-                      "x": 0,
-                      "y": 50,
-                      "width": 236,
-                      "height": 50,
-                      "style": "edit_value_active_left",
-                      "text": "Set series"
-                    }
-                  ]
-                },
-                {
-                  "type": "Container",
-                  "x": 0,
-                  "y": 0,
-                  "width": 236,
-                  "height": 100,
-                  "style": "default",
-                  "widgets": [
-                    {
-                      "type": "Text",
-                      "action": "ch_settins_adv_coupling_uncouple",
-                      "x": 0,
-                      "y": 0,
-                      "width": 236,
-                      "height": 50,
-                      "style": "edit_value_active_left",
-                      "text": "Uncouple"
-                    },
-                    {
-                      "type": "Text",
-                      "action": "ch_settins_adv_coupling_set_parallel_info",
-                      "x": 0,
-                      "y": 50,
-                      "width": 236,
-                      "height": 50,
-                      "style": "edit_value_active_left",
-                      "text": "Set parallel"
-                    }
-                  ]
+                  "width": 62,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "ON"
                 }
               ]
             },
             {
               "type": "Rectangle",
+              "x": 179,
+              "y": 146,
+              "width": 73,
+              "height": 42,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Rectangle",
               "x": 16,
-              "y": 187,
+              "y": 188,
               "width": 236,
-              "height": 17,
+              "height": 16,
               "style": "default_inverse"
             },
             {
@@ -11334,6 +11356,208 @@
               "width": 68,
               "height": 204,
               "style": "default"
+            }
+          ]
+        }
+      },
+      {
+        "name": "ch_settings_adv_coupling",
+        "description": "Output voltage remote programming information and settings",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 28,
+              "style": "value_S",
+              "text": "Set channels coupling mode"
+            },
+            {
+              "x": 16,
+              "type": "Select",
+              "data": "channel.coupling.mode",
+              "y": 106,
+              "width": 236,
+              "height": 94,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 10,
+                  "width": 236,
+                  "height": 84,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "action": "ch_settins_adv_coupling_set_parallel_info",
+                      "x": 0,
+                      "y": 0,
+                      "width": 236,
+                      "height": 38,
+                      "style": "edit_value_active_left",
+                      "text": "Set parallel"
+                    },
+                    {
+                      "type": "Text",
+                      "action": "ch_settins_adv_coupling_set_series_info",
+                      "x": 0,
+                      "y": 38,
+                      "width": 236,
+                      "height": 38,
+                      "style": "edit_value_active_left",
+                      "text": "Set series"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 10,
+                  "width": 236,
+                  "height": 84,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "action": "ch_settins_adv_coupling_uncouple",
+                      "x": 0,
+                      "y": 0,
+                      "width": 236,
+                      "height": 38,
+                      "style": "edit_value_active_left",
+                      "text": "Uncouple"
+                    },
+                    {
+                      "type": "Text",
+                      "action": "ch_settins_adv_coupling_set_series_info",
+                      "x": 0,
+                      "y": 38,
+                      "width": 236,
+                      "height": 38,
+                      "style": "edit_value_active_left",
+                      "text": "Set series"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 10,
+                  "width": 236,
+                  "height": 84,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "action": "ch_settins_adv_coupling_uncouple",
+                      "x": 0,
+                      "y": 0,
+                      "width": 236,
+                      "height": 38,
+                      "style": "edit_value_active_left",
+                      "text": "Uncouple"
+                    },
+                    {
+                      "type": "Text",
+                      "action": "ch_settins_adv_coupling_set_parallel_info",
+                      "x": 0,
+                      "y": 38,
+                      "width": 236,
+                      "height": 38,
+                      "style": "edit_value_active_left",
+                      "text": "Set parallel"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Rectangle",
+              "x": 16,
+              "y": 192,
+              "width": 236,
+              "height": 12,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "E"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page_selected",
+              "text": "G"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 96,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "?"
+            },
+            {
+              "type": "Rectangle",
+              "x": 144,
+              "y": 204,
+              "width": 128,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
+              "type": "MultilineText",
+              "x": 16,
+              "y": 28,
+              "width": 236,
+              "height": 88,
+              "style": "edit_value_S_left",
+              "text": "Combine channels for higher max. output current or voltage."
             }
           ]
         }
@@ -11432,13 +11656,33 @@
               "text": "X"
             },
             {
-              "type": "Text",
               "x": 0,
+              "type": "Select",
+              "data": "channel.coupling.selectedMode",
               "y": 162,
               "width": 320,
               "height": 42,
               "style": "default_S",
-              "text": "Don't forget to disconnect load!"
+              "widgets": [
+                {
+                  "type": "Text",
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 42,
+                  "style": "default_S",
+                  "text": "\\u0082 Max. output current will be doubled"
+                },
+                {
+                  "type": "Text",
+                  "x": 0,
+                  "y": 0,
+                  "width": 320,
+                  "height": 42,
+                  "style": "default_S",
+                  "text": "\\u0081 Take precautions with voltage over 40V"
+                }
+              ]
             }
           ]
         }
@@ -11972,11 +12216,11 @@
             {
               "type": "Text",
               "x": 12,
-              "y": 30,
+              "y": 32,
               "width": 240,
               "height": 28,
-              "style": "default_disabled_S_left",
-              "text": "Sound"
+              "style": "edit_value_active_S_left",
+              "text": "Set / Clear AUX sensor OTP"
             },
             {
               "type": "Text",
@@ -11995,7 +12239,7 @@
               "width": 240,
               "height": 28,
               "style": "default_disabled_S_left",
-              "text": "Display backlight"
+              "text": "Sound"
             },
             {
               "type": "Text",
@@ -12004,7 +12248,7 @@
               "width": 240,
               "height": 28,
               "style": "default_disabled_S_left",
-              "text": "Set AUX sensor OTP"
+              "text": "Display backlight"
             },
             {
               "type": "Text",
@@ -12412,67 +12656,14 @@
               "x": 16,
               "y": 140,
               "width": 236,
-              "height": 28,
+              "height": 64,
               "style": "default_inverse"
             },
             {
-              "type": "Button",
-              "data": "",
-              "action": "set",
-              "x": 16,
-              "y": 168,
-              "width": 101,
-              "height": 32,
-              "style": "non_interactive_button_S",
-              "text": "~ Set",
-              "enabled": "setPage.dirty",
-              "disabledStyle": "non_interactive_button_S_disabled"
-            },
-            {
-              "type": "Text",
-              "action": "discard",
-              "x": 117,
-              "y": 168,
-              "width": 96,
-              "height": 32,
-              "style": "non_interactive_button_S",
-              "text": " Discard"
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_prot",
-              "x": 0,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "tab_page_selected",
-              "text": "E"
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_adv",
-              "x": 48,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "tab_page",
-              "text": "G"
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_info",
-              "x": 96,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "tab_page",
-              "text": "?"
-            },
-            {
               "type": "Rectangle",
-              "x": 144,
+              "x": 231,
               "y": 204,
-              "width": 128,
+              "width": 41,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -12502,6 +12693,42 @@
               "height": 28,
               "style": "value_S",
               "text": "Set AUX temperature protection"
+            },
+            {
+              "type": "Button",
+              "data": "",
+              "action": "set",
+              "x": 0,
+              "y": 204,
+              "width": 72,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "type": "Text",
+              "action": "discard",
+              "x": 72,
+              "y": 204,
+              "width": 96,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
+            },
+            {
+              "type": "Button",
+              "data": "",
+              "action": "set",
+              "x": 168,
+              "y": 204,
+              "width": 63,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "Clear",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
             }
           ]
         }
@@ -14592,7 +14819,7 @@
             },
             {
               "type": "Text",
-              "action": "show_sys_settings2",
+              "action": "",
               "x": 48,
               "y": 204,
               "width": 48,
@@ -18234,7 +18461,7 @@
         "font": "medium",
         "alignHorizontal": "center",
         "alignVertical": "center",
-        "color": "#00ff80",
+        "color": "#c0c000",
         "backgroundColor": "#5080ff",
         "borderSize": 0,
         "borderColor": "#D3D3D3",
@@ -18247,7 +18474,7 @@
         "font": "small",
         "alignHorizontal": "right",
         "alignVertical": "center",
-        "color": "#00ff80",
+        "color": "#c0c000",
         "backgroundColor": "#5080ff",
         "borderSize": 0,
         "borderColor": "#D3D3D3",
