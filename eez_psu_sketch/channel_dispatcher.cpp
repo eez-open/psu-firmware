@@ -391,21 +391,18 @@ void setOcpDelay(Channel &channel, float delay) {
 }
 
 float getPowerLimit(const Channel& channel) {
-    if (g_channelCoupling != TYPE_NONE) {
+    if (isCoupled()) {
         return 2 * min(Channel::get(0).getPowerLimit(), Channel::get(1).getPowerLimit());
     }
     return channel.getPowerLimit();
 }
 
 float getPowerMinLimit(const Channel& channel) {
-    if (g_channelCoupling != TYPE_NONE) {
-        return 0;
-    }
     return 0;
 }
 
 float getPowerMaxLimit(const Channel& channel) {
-    if (g_channelCoupling != TYPE_NONE) {
+    if (isCoupled()) {
         return 2 * min(Channel::get(0).PTOT, Channel::get(1).PTOT);
     }
     return channel.PTOT;
@@ -416,7 +413,7 @@ float getPowerDefaultLimit(const Channel& channel) {
 }
 
 float getPowerProtectionLevel(const Channel &channel) {
-    if (g_channelCoupling != TYPE_NONE) {
+    if (isCoupled()) {
         return Channel::get(0).prot_conf.p_level + Channel::get(1).prot_conf.p_level;
     }
     return channel.prot_conf.p_level;
@@ -435,21 +432,21 @@ void setPowerLimit(Channel &channel, float limit) {
 }
 
 float getOppMinLevel(Channel &channel) {
-    if (g_channelCoupling != TYPE_NONE) {
+    if (isCoupled()) {
         return 2 * max(Channel::get(0).OPP_MIN_LEVEL, Channel::get(1).OPP_MIN_LEVEL);
     }
     return channel.OPP_MIN_LEVEL;
 }
 
 float getOppMaxLevel(Channel &channel) {
-    if (g_channelCoupling != TYPE_NONE) {
+    if (isCoupled()) {
         return 2 * min(Channel::get(0).OPP_MAX_LEVEL, Channel::get(1).OPP_MAX_LEVEL);
     }
     return channel.OPP_MAX_LEVEL;
 }
 
 float getOppDefaultLevel(Channel &channel) {
-    if (g_channelCoupling != TYPE_NONE) {
+    if (isCoupled()) {
         return Channel::get(0).OPP_DEFAULT_LEVEL + Channel::get(1).OPP_DEFAULT_LEVEL;
     }
     return channel.OPP_DEFAULT_LEVEL;
