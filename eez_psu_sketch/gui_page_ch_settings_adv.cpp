@@ -173,12 +173,12 @@ void ChSettingsAdvCouplingPage::setSeries() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void ChSettingsAdvTrackingPage::toggleTrackingMode() {
-    channel_dispatcher::setType(channel_dispatcher::TYPE_TRACKED);
-
     if (channel_dispatcher::isTracked()) {
-	    infoMessageP(PSTR("Tracking enabled!"));
-    } else {
+        channel_dispatcher::setType(channel_dispatcher::TYPE_NONE);
         infoMessageP(PSTR("Tracking disabled!"));
+    } else {
+        channel_dispatcher::setType(channel_dispatcher::TYPE_TRACKED);
+	    infoMessageP(PSTR("Tracking enabled!"));
     }
 }
 
