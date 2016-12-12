@@ -41,7 +41,7 @@ void SysInfoPage::takeSnapshot(data::Snapshot *snapshot) {
 		snapshot->flags.mainTemperatureStatus = 2;
 	}
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9 || !OPTION_FAN
     snapshot->flags.fanStatus = 3;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 	if (fan::test_result == TEST_FAILED || fan::test_result == TEST_WARNING) {

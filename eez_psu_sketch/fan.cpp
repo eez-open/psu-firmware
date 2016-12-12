@@ -120,7 +120,9 @@ void finish_rpm_measure() {
 	analogWrite(FAN_PWM, g_fanSpeedPWM);
 
 	if (g_rpmMeasureState == RPM_MEASURE_STATE_FINISHED) {
-		g_rpm = dt_to_rpm(g_rpmMeasureT2 - g_rpmMeasureT1);
+        if (g_rpmMeasureT2 != g_rpmMeasureT1) {
+		    g_rpm = dt_to_rpm(g_rpmMeasureT2 - g_rpmMeasureT1);
+        }
 	} else {
 		g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
 		g_rpm = 0;
@@ -241,7 +243,7 @@ void tick(unsigned long tick_usec) {
 					if (g_rpm > FAN_NOMINAL_RPM) {
 						DebugTraceF("Invalid RPM: PWM=%d, T1=%ld, T2=%ld, T3=%ld, RPM=%d", g_fanSpeedPWM, g_rpmMeasureT1, g_rpmMeasureT2, g_rpmMeasureT2 - g_rpmMeasureT1, g_rpm);
 					} else {
-						DebugTraceF("Valid RPM: RPM=%d", g_rpm);
+					    // DebugTraceF("Valid RPM: RPM=%d", g_rpm);
 					}
 					g_rpmMeasureT1 = 0;
 					g_rpmMeasureT2 = 0;

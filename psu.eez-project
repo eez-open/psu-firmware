@@ -1168,9 +1168,9 @@
     },
     {
       "name": "sys.info.fan.status",
-      "description": "0: invalid (error)\n1: valid\n2: not installed",
+      "description": "0: invalid (error)\n1: valid\n2: unsupported\n3: not installed",
       "type": "enum",
-      "enumItems": "[\n\"Invalid\",\n\"Valid\",\n\"Not installed\"\n]",
+      "enumItems": "[\n\"Invalid\",\n\"Valid\",\n\"Unsupported\",\n\"Not installed\"\n]",
       "defaultValue": "1"
     },
     {
@@ -2220,9 +2220,9 @@
               "style": "default",
               "listType": "vertical",
               "itemWidget": {
+                "x": 0,
                 "type": "Select",
                 "data": "channel.status",
-                "x": 0,
                 "y": 0,
                 "width": 240,
                 "height": 128,
@@ -2245,10 +2245,10 @@
                     "style": "default",
                     "widgets": [
                       {
+                        "x": 0,
                         "type": "Select",
                         "data": "channel.outputState",
                         "action": "",
-                        "x": 0,
                         "y": 0,
                         "width": 240,
                         "height": 88,
@@ -2265,9 +2265,9 @@
                             "text": "OFF"
                           },
                           {
+                            "x": 0,
                             "type": "Select",
                             "data": "channel.outputMode",
-                            "x": 0,
                             "y": 0,
                             "width": 240,
                             "height": 86,
@@ -2389,9 +2389,9 @@
               "text": "Q"
             },
             {
+              "x": 0,
               "type": "Select",
               "data": "EventQueue.lastEvent.type",
-              "x": 0,
               "y": 0,
               "width": 240,
               "height": 28,
@@ -2448,9 +2448,9 @@
           "height": 240,
           "widgets": [
             {
+              "x": 0,
               "type": "Select",
               "data": "EventQueue.lastEvent.type",
-              "x": 0,
               "y": 0,
               "width": 292,
               "height": 28,
@@ -2527,18 +2527,18 @@
               "text": "\\u0087"
             },
             {
+              "x": 0,
               "type": "Select",
               "data": "channel.coupling.mode",
-              "x": 0,
               "y": 28,
               "width": 320,
               "height": 176,
               "style": "default",
               "widgets": [
                 {
+                  "x": 0,
                   "type": "Select",
                   "data": "channel.displayedValues",
-                  "x": 0,
                   "y": 0,
                   "width": 320,
                   "height": 176,
@@ -2554,9 +2554,9 @@
                       "style": "default",
                       "listType": "horizontal",
                       "itemWidget": {
+                        "x": 0,
                         "type": "Select",
                         "data": "channel.status",
-                        "x": 0,
                         "y": 0,
                         "width": 160,
                         "height": 176,
@@ -2579,10 +2579,10 @@
                             "style": "default",
                             "widgets": [
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "channel.outputState",
                                 "action": "",
-                                "x": 0,
                                 "y": 0,
                                 "width": 160,
                                 "height": 56,
@@ -2599,9 +2599,9 @@
                                     "text": "OFF"
                                   },
                                   {
+                                    "x": 0,
                                     "type": "Select",
                                     "data": "channel.outputMode",
-                                    "x": 0,
                                     "y": 0,
                                     "width": 160,
                                     "height": 56,
@@ -2632,9 +2632,9 @@
                                 ]
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "lrip",
-                                "x": 0,
                                 "y": 56,
                                 "width": 48,
                                 "height": 24,
@@ -2661,9 +2661,9 @@
                                 ]
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "ocp",
-                                "x": 0,
                                 "y": 80,
                                 "width": 48,
                                 "height": 24,
@@ -2699,9 +2699,9 @@
                                 ]
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "ovp",
-                                "x": 0,
                                 "y": 104,
                                 "width": 48,
                                 "height": 24,
@@ -2737,9 +2737,9 @@
                                 ]
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "otp",
-                                "x": 0,
                                 "y": 128,
                                 "width": 48,
                                 "height": 24,
@@ -2775,9 +2775,9 @@
                                 ]
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "opp",
-                                "x": 0,
                                 "y": 152,
                                 "width": 48,
                                 "height": 24,
@@ -2813,9 +2813,9 @@
                                 ]
                               },
                               {
+                                "x": 48,
                                 "type": "Select",
                                 "data": "channel.rprog.status",
-                                "x": 48,
                                 "y": 56,
                                 "width": 112,
                                 "height": 43,
@@ -2887,9 +2887,9 @@
                       "style": "default",
                       "listType": "vertical",
                       "itemWidget": {
+                        "x": 0,
                         "type": "Select",
                         "data": "channel.status",
-                        "x": 0,
                         "y": 0,
                         "width": 320,
                         "height": 88,
@@ -2922,10 +2922,10 @@
                                 "text": "` Set"
                               },
                               {
+                                "x": 55,
                                 "type": "Select",
                                 "data": "channel.outputState",
                                 "action": "",
-                                "x": 55,
                                 "y": 0,
                                 "width": 200,
                                 "height": 58,
@@ -2942,9 +2942,9 @@
                                     "text": "OFF"
                                   },
                                   {
+                                    "x": 0,
                                     "type": "Select",
                                     "data": "channel.outputMode",
-                                    "x": 0,
                                     "y": 0,
                                     "width": 200,
                                     "height": 58,
@@ -3055,9 +3055,9 @@
                                 ]
                               },
                               {
+                                "x": 255,
                                 "type": "Select",
                                 "data": "channel.rprog.status",
-                                "x": 255,
                                 "y": 0,
                                 "width": 65,
                                 "height": 28,
@@ -3112,9 +3112,9 @@
                                 "style": "default_inverse"
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "lrip",
-                                "x": 0,
                                 "y": 61,
                                 "width": 48,
                                 "height": 24,
@@ -3141,9 +3141,9 @@
                                 ]
                               },
                               {
+                                "x": 48,
                                 "type": "Select",
                                 "data": "ocp",
-                                "x": 48,
                                 "y": 61,
                                 "width": 48,
                                 "height": 24,
@@ -3179,9 +3179,9 @@
                                 ]
                               },
                               {
+                                "x": 96,
                                 "type": "Select",
                                 "data": "ovp",
-                                "x": 96,
                                 "y": 61,
                                 "width": 48,
                                 "height": 24,
@@ -3217,9 +3217,9 @@
                                 ]
                               },
                               {
+                                "x": 144,
                                 "type": "Select",
                                 "data": "otp",
-                                "x": 144,
                                 "y": 61,
                                 "width": 48,
                                 "height": 24,
@@ -3255,9 +3255,9 @@
                                 ]
                               },
                               {
+                                "x": 192,
                                 "type": "Select",
                                 "data": "opp",
-                                "x": 192,
                                 "y": 61,
                                 "width": 48,
                                 "height": 24,
@@ -3349,9 +3349,9 @@
                       "style": "default",
                       "listType": "horizontal",
                       "itemWidget": {
+                        "x": 0,
                         "type": "Select",
                         "data": "channel.status",
-                        "x": 0,
                         "y": 0,
                         "width": 160,
                         "height": 176,
@@ -3400,10 +3400,10 @@
                                 "style": "default_inverse"
                               },
                               {
+                                "x": 49,
                                 "type": "Select",
                                 "data": "channel.outputState",
                                 "action": "",
-                                "x": 49,
                                 "y": 28,
                                 "width": 110,
                                 "height": 148,
@@ -3420,9 +3420,9 @@
                                     "text": "OFF"
                                   },
                                   {
+                                    "x": 0,
                                     "type": "Select",
                                     "data": "channel.outputMode",
-                                    "x": 0,
                                     "y": 0,
                                     "width": 110,
                                     "height": 124,
@@ -3533,9 +3533,9 @@
                                 ]
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "lrip",
-                                "x": 0,
                                 "y": 28,
                                 "width": 48,
                                 "height": 24,
@@ -3562,9 +3562,9 @@
                                 ]
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "ocp",
-                                "x": 0,
                                 "y": 52,
                                 "width": 48,
                                 "height": 24,
@@ -3600,9 +3600,9 @@
                                 ]
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "ovp",
-                                "x": 0,
                                 "y": 76,
                                 "width": 48,
                                 "height": 24,
@@ -3638,9 +3638,9 @@
                                 ]
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "otp",
-                                "x": 0,
                                 "y": 100,
                                 "width": 48,
                                 "height": 24,
@@ -3676,9 +3676,9 @@
                                 ]
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "opp",
-                                "x": 0,
                                 "y": 124,
                                 "width": 48,
                                 "height": 24,
@@ -3731,9 +3731,9 @@
                                 "style": "edit_value_S_centered"
                               },
                               {
+                                "x": 48,
                                 "type": "Select",
                                 "data": "channel.rprog.status",
-                                "x": 48,
                                 "y": 152,
                                 "width": 55,
                                 "height": 24,
@@ -3847,9 +3847,9 @@
                       "style": "default_inverse"
                     },
                     {
+                      "x": 0,
                       "type": "Select",
                       "data": "channel.displayedValues",
-                      "x": 0,
                       "y": 38,
                       "width": 320,
                       "height": 138,
@@ -3943,9 +3943,9 @@
                       "style": "default_inverse"
                     },
                     {
+                      "x": 0,
                       "type": "Select",
                       "data": "channel.displayedValues",
-                      "x": 0,
                       "y": 38,
                       "width": 320,
                       "height": 138,
@@ -4087,9 +4087,9 @@
                 "style": "default",
                 "widgets": [
                   {
+                    "x": 0,
                     "type": "Select",
                     "data": "channel.outputState",
-                    "x": 0,
                     "y": 0,
                     "width": 120,
                     "height": 36,
@@ -4105,9 +4105,9 @@
                         "text": "OFF"
                       },
                       {
+                        "x": 0,
                         "type": "Select",
                         "data": "channel.outputMode",
-                        "x": 0,
                         "y": 0,
                         "width": 120,
                         "height": 36,
@@ -4638,9 +4638,9 @@
               "style": "default",
               "widgets": [
                 {
+                  "x": 0,
                   "type": "Select",
                   "data": "channel.coupling.mode",
-                  "x": 0,
                   "y": 0,
                   "width": 64,
                   "height": 32,
@@ -4656,9 +4656,9 @@
                       "style": "default",
                       "listType": "vertical",
                       "itemWidget": {
+                        "x": 0,
                         "type": "Select",
                         "data": "channel.status",
-                        "x": 0,
                         "y": 0,
                         "width": 64,
                         "height": 112,
@@ -4681,9 +4681,9 @@
                             "style": "default",
                             "widgets": [
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "channel.outputState",
-                                "x": 0,
                                 "y": 0,
                                 "width": 64,
                                 "height": 32,
@@ -4700,9 +4700,9 @@
                                     "text": "OFF"
                                   },
                                   {
+                                    "x": 0,
                                     "type": "Select",
                                     "data": "channel.outputMode",
-                                    "x": 0,
                                     "y": 0,
                                     "width": 64,
                                     "height": 32,
@@ -4778,9 +4778,9 @@
                       "style": "default",
                       "widgets": [
                         {
+                          "x": 0,
                           "type": "Select",
                           "data": "channel.status",
-                          "x": 0,
                           "y": 0,
                           "width": 64,
                           "height": 112,
@@ -4803,9 +4803,9 @@
                               "style": "default",
                               "widgets": [
                                 {
+                                  "x": 0,
                                   "type": "Select",
                                   "data": "channel.outputState",
-                                  "x": 0,
                                   "y": 0,
                                   "width": 64,
                                   "height": 32,
@@ -4822,9 +4822,9 @@
                                       "text": "OFF"
                                     },
                                     {
+                                      "x": 0,
                                       "type": "Select",
                                       "data": "channel.outputMode",
-                                      "x": 0,
                                       "y": 0,
                                       "width": 64,
                                       "height": 32,
@@ -4936,9 +4936,9 @@
                       "style": "default",
                       "widgets": [
                         {
+                          "x": 0,
                           "type": "Select",
                           "data": "channel.status",
-                          "x": 0,
                           "y": 0,
                           "width": 64,
                           "height": 112,
@@ -4961,9 +4961,9 @@
                               "style": "default",
                               "widgets": [
                                 {
+                                  "x": 0,
                                   "type": "Select",
                                   "data": "channel.outputState",
-                                  "x": 0,
                                   "y": 0,
                                   "width": 64,
                                   "height": 32,
@@ -4980,9 +4980,9 @@
                                       "text": "OFF"
                                     },
                                     {
+                                      "x": 0,
                                       "type": "Select",
                                       "data": "channel.outputMode",
-                                      "x": 0,
                                       "y": 0,
                                       "width": 64,
                                       "height": 32,
@@ -5136,9 +5136,9 @@
               "style": "default_S"
             },
             {
+              "x": 38,
               "type": "Select",
               "data": "edit_mode_interactive_mode_selector",
-              "x": 38,
               "y": 32,
               "width": 202,
               "height": 172,
@@ -5188,9 +5188,9 @@
                         "style": "default",
                         "widgets": [
                           {
+                            "x": 0,
                             "type": "Select",
                             "data": "channel.outputState",
-                            "x": 0,
                             "y": 0,
                             "width": 60,
                             "height": 30,
@@ -5206,9 +5206,9 @@
                                 "text": "OFF"
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "channel.outputMode",
-                                "x": 0,
                                 "y": 0,
                                 "width": 60,
                                 "height": 30,
@@ -5303,9 +5303,9 @@
                         "style": "default",
                         "widgets": [
                           {
+                            "x": 0,
                             "type": "Select",
                             "data": "channel.outputState",
-                            "x": 0,
                             "y": 0,
                             "width": 60,
                             "height": 26,
@@ -5321,9 +5321,9 @@
                                 "text": "OFF"
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "channel.outputMode",
-                                "x": 0,
                                 "y": 0,
                                 "width": 60,
                                 "height": 26,
@@ -5589,9 +5589,9 @@
               "style": "default_inverse"
             },
             {
+              "x": 48,
               "type": "Select",
               "data": "edit_mode_interactive_mode_selector",
-              "x": 48,
               "y": 168,
               "width": 204,
               "height": 36,
@@ -5759,9 +5759,9 @@
               "needleHeight": 11
             },
             {
+              "x": 38,
               "type": "Select",
               "data": "edit_mode_interactive_mode_selector",
-              "x": 38,
               "y": 32,
               "width": 202,
               "height": 172,
@@ -5811,9 +5811,9 @@
                         "style": "default",
                         "widgets": [
                           {
+                            "x": 0,
                             "type": "Select",
                             "data": "channel.outputState",
-                            "x": 0,
                             "y": 0,
                             "width": 60,
                             "height": 30,
@@ -5829,9 +5829,9 @@
                                 "text": "OFF"
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "channel.outputMode",
-                                "x": 0,
                                 "y": 0,
                                 "width": 60,
                                 "height": 30,
@@ -5926,9 +5926,9 @@
                         "style": "default",
                         "widgets": [
                           {
+                            "x": 0,
                             "type": "Select",
                             "data": "channel.outputState",
-                            "x": 0,
                             "y": 0,
                             "width": 60,
                             "height": 26,
@@ -5944,9 +5944,9 @@
                                 "text": "OFF"
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "channel.outputMode",
-                                "x": 0,
                                 "y": 0,
                                 "width": 60,
                                 "height": 26,
@@ -6267,9 +6267,9 @@
               "style": "default_inverse"
             },
             {
+              "x": 48,
               "type": "Select",
               "data": "edit_mode_interactive_mode_selector",
-              "x": 48,
               "y": 168,
               "width": 203,
               "height": 36,
@@ -6880,9 +6880,9 @@
               "style": "default",
               "listType": "vertical",
               "itemWidget": {
+                "x": 0,
                 "type": "Select",
                 "data": "EventQueue.events.type",
-                "x": 0,
                 "y": 0,
                 "width": 240,
                 "height": 28,
@@ -6930,9 +6930,9 @@
               }
             },
             {
+              "x": 0,
               "type": "Select",
               "data": "EventQueue.multiplePages",
-              "x": 0,
               "y": 284,
               "width": 192,
               "height": 36,
@@ -7020,9 +7020,9 @@
               "style": "default",
               "listType": "vertical",
               "itemWidget": {
+                "x": 0,
                 "type": "Select",
                 "data": "EventQueue.events.type",
-                "x": 0,
                 "y": 0,
                 "width": 320,
                 "height": 28,
@@ -7070,9 +7070,9 @@
               }
             },
             {
+              "x": 0,
               "type": "Select",
               "data": "EventQueue.multiplePages",
-              "x": 0,
               "y": 204,
               "width": 272,
               "height": 36,
@@ -7672,9 +7672,9 @@
                 "style": "default",
                 "widgets": [
                   {
+                    "x": 0,
                     "type": "Select",
                     "data": "channel.outputState",
-                    "x": 0,
                     "y": 0,
                     "width": 120,
                     "height": 36,
@@ -7690,9 +7690,9 @@
                         "text": "OFF"
                       },
                       {
+                        "x": 0,
                         "type": "Select",
                         "data": "channel.outputMode",
-                        "x": 0,
                         "y": 0,
                         "width": 120,
                         "height": 36,
@@ -8221,9 +8221,9 @@
           "height": 240,
           "widgets": [
             {
+              "x": 6,
               "type": "Select",
               "data": "channel.isCoupled",
-              "x": 6,
               "y": 0,
               "width": 246,
               "height": 28,
@@ -8352,9 +8352,9 @@
               "style": "default_inverse"
             },
             {
+              "x": 16,
               "type": "Select",
               "data": "channel.protection.otp.installed",
-              "x": 16,
               "y": 140,
               "width": 236,
               "height": 28,
@@ -8484,9 +8484,9 @@
           "height": 240,
           "widgets": [
             {
+              "x": 6,
               "type": "Select",
               "data": "channel.isCoupled",
-              "x": 6,
               "y": 0,
               "width": 246,
               "height": 28,
@@ -8663,9 +8663,9 @@
           "height": 240,
           "widgets": [
             {
+              "x": 6,
               "type": "Select",
               "data": "channel.isCoupled",
-              "x": 6,
               "y": 0,
               "width": 246,
               "height": 28,
@@ -8750,9 +8750,9 @@
               "text": "OVP active:"
             },
             {
+              "x": 135,
               "type": "Select",
               "data": "channel.protection.ovp.state",
-              "x": 135,
               "y": 56,
               "width": 78,
               "height": 28,
@@ -8828,9 +8828,9 @@
               "text": "Output voltage:"
             },
             {
+              "x": 135,
               "type": "Select",
               "data": "channel.outputState",
-              "x": 135,
               "y": 140,
               "width": 78,
               "height": 28,
@@ -8955,9 +8955,9 @@
           "height": 240,
           "widgets": [
             {
+              "x": 6,
               "type": "Select",
               "data": "channel.isCoupled",
-              "x": 6,
               "y": 0,
               "width": 246,
               "height": 28,
@@ -9023,9 +9023,9 @@
               "text": "Limit:"
             },
             {
+              "x": 135,
               "type": "Select",
               "data": "channel.protection.ocp.maxCurrentLimitCause",
-              "x": 135,
               "y": 28,
               "width": 78,
               "height": 28,
@@ -9129,9 +9129,9 @@
               "text": "OCP active:"
             },
             {
+              "x": 135,
               "type": "Select",
               "data": "channel.protection.ocp.state",
-              "x": 135,
               "y": 56,
               "width": 78,
               "height": 28,
@@ -9188,9 +9188,9 @@
               "text": "Output current:"
             },
             {
+              "x": 135,
               "type": "Select",
               "data": "channel.outputState",
-              "x": 135,
               "y": 112,
               "width": 78,
               "height": 28,
@@ -9323,9 +9323,9 @@
           "height": 240,
           "widgets": [
             {
+              "x": 6,
               "type": "Select",
               "data": "channel.isCoupled",
-              "x": 6,
               "y": 0,
               "width": 246,
               "height": 28,
@@ -9410,9 +9410,9 @@
               "text": "OPP active:"
             },
             {
+              "x": 135,
               "type": "Select",
               "data": "channel.protection.opp.state",
-              "x": 135,
               "y": 56,
               "width": 58,
               "height": 28,
@@ -9488,9 +9488,9 @@
               "text": "Output power:"
             },
             {
+              "x": 135,
               "type": "Select",
               "data": "channel.outputState",
-              "x": 135,
               "y": 140,
               "width": 78,
               "height": 28,
@@ -9615,9 +9615,9 @@
           "height": 240,
           "widgets": [
             {
+              "x": 6,
               "type": "Select",
               "data": "channel.isCoupled",
-              "x": 6,
               "y": 0,
               "width": 246,
               "height": 28,
@@ -9683,9 +9683,9 @@
               "text": "OTP active:"
             },
             {
+              "x": 135,
               "type": "Select",
               "data": "channel.protection.otp.state",
-              "x": 135,
               "y": 28,
               "width": 60,
               "height": 28,
@@ -9761,9 +9761,9 @@
               "text": "Current temp.:"
             },
             {
+              "x": 135,
               "type": "Select",
               "data": "channel.isCoupled",
-              "x": 135,
               "y": 112,
               "width": 96,
               "height": 56,
@@ -9778,9 +9778,9 @@
                   "style": "default",
                   "widgets": [
                     {
+                      "x": 0,
                       "type": "Select",
                       "data": "channel.tempStatus",
-                      "x": 0,
                       "y": 0,
                       "width": 96,
                       "height": 28,
@@ -9852,9 +9852,9 @@
                         "height": 28,
                         "widgets": [
                           {
+                            "x": 0,
                             "type": "Select",
                             "data": "channel.tempStatus",
-                            "x": 0,
                             "y": 0,
                             "width": 96,
                             "height": 28,
@@ -10005,9 +10005,9 @@
           "height": 240,
           "widgets": [
             {
+              "x": 6,
               "type": "Select",
               "data": "channel.isCoupled",
-              "x": 6,
               "y": 0,
               "width": 246,
               "height": 28,
@@ -10064,9 +10064,9 @@
               ]
             },
             {
+              "x": 16,
               "type": "Select",
               "data": "channel.coupling.mode",
-              "x": 16,
               "y": 28,
               "width": 180,
               "height": 28,
@@ -10113,9 +10113,9 @@
               "style": "default_inverse"
             },
             {
+              "x": 16,
               "type": "Select",
               "data": "channel.coupling.mode",
-              "x": 16,
               "y": 56,
               "width": 180,
               "height": 28,
@@ -10162,9 +10162,9 @@
               "style": "default_inverse"
             },
             {
+              "x": 16,
               "type": "Select",
               "data": "channel.rprog.installed",
-              "x": 16,
               "y": 84,
               "width": 236,
               "height": 28,
@@ -10189,9 +10189,9 @@
                   "style": "default",
                   "widgets": [
                     {
+                      "x": 0,
                       "type": "Select",
                       "data": "channel.coupling.mode",
-                      "x": 0,
                       "y": 0,
                       "width": 180,
                       "height": 28,
@@ -10360,9 +10360,9 @@
           "height": 240,
           "widgets": [
             {
+              "x": 6,
               "type": "Select",
               "data": "channel.isCoupled",
-              "x": 6,
               "y": 0,
               "width": 246,
               "height": 28,
@@ -10464,9 +10464,9 @@
               "text": "Status:"
             },
             {
+              "x": 178,
               "type": "Select",
               "data": "channel.lripple.status",
-              "x": 178,
               "y": 76,
               "width": 74,
               "height": 42,
@@ -10504,9 +10504,9 @@
               "text": "Auto mode:"
             },
             {
+              "x": 178,
               "type": "Select",
               "data": "channel.lripple.autoMode",
-              "x": 178,
               "y": 112,
               "width": 74,
               "height": 42,
@@ -10649,9 +10649,9 @@
           "height": 240,
           "widgets": [
             {
+              "x": 6,
               "type": "Select",
               "data": "channel.isCoupled",
-              "x": 6,
               "y": 0,
               "width": 246,
               "height": 28,
@@ -10734,9 +10734,9 @@
               "text": "Status:"
             },
             {
+              "x": 117,
               "type": "Select",
               "data": "channel.rsense.status",
-              "x": 117,
               "y": 110,
               "width": 62,
               "height": 42,
@@ -10901,9 +10901,9 @@
               "text": "Status:"
             },
             {
+              "x": 117,
               "type": "Select",
               "data": "channel.rprog.status",
-              "x": 117,
               "y": 110,
               "width": 62,
               "height": 42,
@@ -11041,9 +11041,9 @@
               "text": "Mode:"
             },
             {
+              "x": 117,
               "type": "Select",
               "data": "channel.coupling.mode",
-              "x": 117,
               "y": 28,
               "width": 135,
               "height": 59,
@@ -11082,9 +11082,9 @@
               ]
             },
             {
+              "x": 16,
               "type": "Select",
               "data": "channel.coupling.mode",
-              "x": 16,
               "y": 87,
               "width": 236,
               "height": 100,
@@ -11284,9 +11284,9 @@
               "bitmap": "bp_coupled"
             },
             {
+              "x": 0,
               "type": "Select",
               "data": "channel.coupling.selectedMode",
-              "x": 0,
               "y": 204,
               "width": 132,
               "height": 36,
@@ -11371,9 +11371,9 @@
           "height": 240,
           "widgets": [
             {
+              "x": 0,
               "type": "Select",
               "data": "channel.isCoupled",
-              "x": 0,
               "y": 0,
               "width": 246,
               "height": 28,
@@ -11452,9 +11452,9 @@
                       "text": "Temperature:"
                     },
                     {
+                      "x": 135,
                       "type": "Select",
                       "data": "channel.tempStatus",
-                      "x": 135,
                       "y": 84,
                       "width": 117,
                       "height": 28,
@@ -11501,10 +11501,10 @@
                       "text": "Calib. params:"
                     },
                     {
+                      "x": 135,
                       "type": "Select",
                       "data": "channel.calibration.status",
                       "action": "",
-                      "x": 135,
                       "y": 112,
                       "width": 117,
                       "height": 28,
@@ -11542,10 +11542,10 @@
                       "text": "Calib. enabled:"
                     },
                     {
+                      "x": 135,
                       "type": "Select",
                       "data": "channel.calibration.status",
                       "action": "",
-                      "x": 135,
                       "y": 140,
                       "width": 117,
                       "height": 28,
@@ -11562,10 +11562,10 @@
                           "text": "Yes"
                         },
                         {
+                          "x": 0,
                           "type": "Select",
                           "data": "channel.calibration.state",
                           "action": "",
-                          "x": 0,
                           "y": 0,
                           "width": 117,
                           "height": 28,
@@ -11739,9 +11739,9 @@
                         "height": 28,
                         "widgets": [
                           {
+                            "x": 0,
                             "type": "Select",
                             "data": "channel.tempStatus",
-                            "x": 0,
                             "y": 0,
                             "width": 124,
                             "height": 28,
@@ -12035,9 +12035,9 @@
               "text": "Serial (via USB) settings"
             },
             {
+              "x": 12,
               "type": "Select",
               "data": "sys.ethernet.installed",
-              "x": 12,
               "y": 86,
               "width": 240,
               "height": 28,
@@ -12066,9 +12066,9 @@
               ]
             },
             {
+              "x": 12,
               "type": "Select",
               "data": "channel.isCoupled",
-              "x": 12,
               "y": 114,
               "width": 240,
               "height": 28,
@@ -12198,9 +12198,9 @@
               "text": "OTP active:"
             },
             {
+              "x": 135,
               "type": "Select",
               "data": "channel.protection.otp.state",
-              "x": 135,
               "y": 28,
               "width": 60,
               "height": 28,
@@ -12238,9 +12238,9 @@
               "text": "Current temp.:"
             },
             {
+              "x": 135,
               "type": "Select",
               "data": "channel.tempStatus",
-              "x": 135,
               "y": 56,
               "width": 96,
               "height": 28,
@@ -12608,9 +12608,9 @@
               "text": "DST:"
             },
             {
+              "x": 113,
               "type": "Select",
               "data": "sys.info.dateTime.DST",
-              "x": 113,
               "y": 114,
               "width": 60,
               "height": 28,
@@ -12721,10 +12721,10 @@
                     "text": ""
                   },
                   {
+                    "x": 120,
                     "type": "Select",
                     "data": "channel.calibration.status",
                     "action": "show_sys_settings_cal_ch",
-                    "x": 120,
                     "y": 0,
                     "width": 120,
                     "height": 32,
@@ -12820,10 +12820,10 @@
               "style": "default",
               "listType": "vertical",
               "itemWidget": {
+                "x": 0,
                 "type": "Select",
                 "data": "channel.calibration.status",
                 "action": "",
-                "x": 0,
                 "y": 0,
                 "width": 290,
                 "height": 65,
@@ -12894,10 +12894,10 @@
                         "text": ""
                       },
                       {
+                        "x": 42,
                         "type": "Select",
                         "data": "channel.calibration.state",
                         "action": "",
-                        "x": 42,
                         "y": 0,
                         "width": 64,
                         "height": 30,
@@ -13063,9 +13063,9 @@
               "text": "<none>"
             },
             {
+              "x": 16,
               "type": "Select",
               "data": "channel.calibration.status",
-              "x": 16,
               "y": 80,
               "width": 304,
               "height": 93,
@@ -13264,9 +13264,9 @@
               "style": "default_inverse"
             },
             {
+              "x": 16,
               "type": "Select",
               "data": "channel.calibration.step.num",
-              "x": 16,
               "y": 28,
               "width": 290,
               "height": 76,
@@ -13339,9 +13339,9 @@
               ]
             },
             {
+              "x": 16,
               "type": "Select",
               "data": "channel.calibration.step.status",
-              "x": 16,
               "y": 104,
               "width": 290,
               "height": 40,
@@ -13370,9 +13370,9 @@
               ]
             },
             {
+              "x": 16,
               "type": "Select",
               "data": "channel.calibration.step.status",
-              "x": 16,
               "y": 144,
               "width": 118,
               "height": 40,
@@ -13981,10 +13981,10 @@
                     "text": ""
                   },
                   {
+                    "x": 120,
                     "type": "Select",
                     "data": "channel.calibration.status",
                     "action": "show_sys_settings_cal_ch",
-                    "x": 120,
                     "y": 0,
                     "width": 120,
                     "height": 32,
@@ -14061,9 +14061,9 @@
               "text": "Ethernet settings"
             },
             {
+              "x": 12,
               "type": "Select",
               "data": "sys.ethernet.enabled",
-              "x": 12,
               "y": 32,
               "width": 240,
               "height": 30,
@@ -14092,9 +14092,9 @@
               ]
             },
             {
+              "x": 12,
               "type": "Select",
               "data": "sys.ethernet.status",
-              "x": 12,
               "y": 62,
               "width": 240,
               "height": 112,
@@ -14322,9 +14322,9 @@
               "text": "Autorecall on power-on:"
             },
             {
+              "x": 189,
               "type": "Select",
               "data": "profiles.autoRecall.status",
-              "x": 189,
               "y": 30,
               "width": 40,
               "height": 28,
@@ -14574,9 +14574,9 @@
               "text": "settings"
             },
             {
+              "x": 8,
               "type": "Select",
               "data": "profile.status",
-              "x": 8,
               "y": 30,
               "width": 304,
               "height": 174,
@@ -14609,9 +14609,9 @@
                       "text": "Use as Power-up profile:"
                     },
                     {
+                      "x": 195,
                       "type": "Select",
                       "data": "profile.isAutoRecallLocation",
-                      "x": 195,
                       "y": 0,
                       "width": 40,
                       "height": 28,
@@ -14814,9 +14814,9 @@
                   "text": "Use as Power-up profile:"
                 },
                 {
+                  "x": 195,
                   "type": "Select",
                   "data": "profile.isAutoRecallLocation",
-                  "x": 195,
                   "y": 0,
                   "width": 40,
                   "height": 28,
@@ -14980,9 +14980,9 @@
               "text": "Temp. AUX:"
             },
             {
+              "x": 130,
               "type": "Select",
               "data": "sys.temp.main.status",
-              "x": 130,
               "y": 86,
               "width": 122,
               "height": 28,
@@ -15029,9 +15029,9 @@
               "text": "Fan speed:"
             },
             {
+              "x": 130,
               "type": "Select",
               "data": "sys.info.fan.status",
-              "x": 130,
               "y": 114,
               "width": 110,
               "height": 28,
@@ -15260,9 +15260,9 @@
                     "text": "Firmware:"
                   },
                   {
+                    "x": 118,
                     "type": "Select",
                     "data": "channel.status",
-                    "x": 118,
                     "y": 0,
                     "width": 122,
                     "height": 28,
@@ -15479,9 +15479,9 @@
         "height": 204,
         "widgets": [
           {
+            "x": 0,
             "type": "Select",
             "data": "channel.coupling.mode",
-            "x": 0,
             "y": 0,
             "width": 64,
             "height": 32,
@@ -15505,9 +15505,9 @@
                     "style": "default",
                     "listType": "vertical",
                     "itemWidget": {
+                      "x": 0,
                       "type": "Select",
                       "data": "channel.status",
-                      "x": 0,
                       "y": 0,
                       "width": 64,
                       "height": 112,
@@ -15530,9 +15530,9 @@
                           "style": "default",
                           "widgets": [
                             {
+                              "x": 0,
                               "type": "Select",
                               "data": "channel.outputState",
-                              "x": 0,
                               "y": 0,
                               "width": 64,
                               "height": 32,
@@ -15548,9 +15548,9 @@
                                   "text": "OFF"
                                 },
                                 {
+                                  "x": 0,
                                   "type": "Select",
                                   "data": "channel.outputMode",
-                                  "x": 0,
                                   "y": 0,
                                   "width": 64,
                                   "height": 32,
@@ -15624,9 +15624,9 @@
                 "style": "default",
                 "widgets": [
                   {
+                    "x": 0,
                     "type": "Select",
                     "data": "channel.status",
-                    "x": 0,
                     "y": 0,
                     "width": 64,
                     "height": 112,
@@ -15649,9 +15649,9 @@
                         "style": "default",
                         "widgets": [
                           {
+                            "x": 0,
                             "type": "Select",
                             "data": "channel.outputState",
-                            "x": 0,
                             "y": 0,
                             "width": 64,
                             "height": 32,
@@ -15667,9 +15667,9 @@
                                 "text": "OFF"
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "channel.outputMode",
-                                "x": 0,
                                 "y": 0,
                                 "width": 64,
                                 "height": 32,
@@ -15700,9 +15700,9 @@
                             ]
                           },
                           {
+                            "x": 0,
                             "type": "Select",
                             "data": "channel.isVoltageBalanced",
-                            "x": 0,
                             "y": 32,
                             "width": 64,
                             "height": 30,
@@ -15733,9 +15733,9 @@
                             ]
                           },
                           {
+                            "x": 0,
                             "type": "Select",
                             "data": "channel.isCurrentBalanced",
-                            "x": 0,
                             "y": 62,
                             "width": 64,
                             "height": 30,
@@ -15823,9 +15823,9 @@
                 "style": "default",
                 "widgets": [
                   {
+                    "x": 0,
                     "type": "Select",
                     "data": "channel.status",
-                    "x": 0,
                     "y": 0,
                     "width": 64,
                     "height": 112,
@@ -15848,9 +15848,9 @@
                         "style": "default",
                         "widgets": [
                           {
+                            "x": 0,
                             "type": "Select",
                             "data": "channel.outputState",
-                            "x": 0,
                             "y": 0,
                             "width": 64,
                             "height": 32,
@@ -15866,9 +15866,9 @@
                                 "text": "OFF"
                               },
                               {
+                                "x": 0,
                                 "type": "Select",
                                 "data": "channel.outputMode",
-                                "x": 0,
                                 "y": 0,
                                 "width": 64,
                                 "height": 32,
@@ -15899,9 +15899,9 @@
                             ]
                           },
                           {
+                            "x": 0,
                             "type": "Select",
                             "data": "channel.isVoltageBalanced",
-                            "x": 0,
                             "y": 32,
                             "width": 64,
                             "height": 30,
@@ -15932,9 +15932,9 @@
                             ]
                           },
                           {
+                            "x": 0,
                             "type": "Select",
                             "data": "channel.isCurrentBalanced",
-                            "x": 0,
                             "y": 62,
                             "width": 64,
                             "height": 30,
@@ -16122,9 +16122,9 @@
                   "text": ""
                 },
                 {
+                  "x": 36,
                   "type": "Select",
                   "data": "profile.channel.outputState",
-                  "x": 36,
                   "y": 0,
                   "width": 30,
                   "height": 28,
@@ -16197,10 +16197,10 @@
             "style": "default_inverse"
           },
           {
+            "x": 48,
             "type": "Select",
             "data": "channel.outputState",
             "action": "",
-            "x": 48,
             "y": 14,
             "width": 155,
             "height": 86,
@@ -16217,9 +16217,9 @@
                 "text": "OFF"
               },
               {
+                "x": 0,
                 "type": "Select",
                 "data": "channel.outputMode",
-                "x": 0,
                 "y": 0,
                 "width": 155,
                 "height": 86,
@@ -16250,9 +16250,9 @@
             ]
           },
           {
+            "x": 0,
             "type": "Select",
             "data": "lrip",
-            "x": 0,
             "y": 14,
             "width": 48,
             "height": 24,
@@ -16279,9 +16279,9 @@
             ]
           },
           {
+            "x": 0,
             "type": "Select",
             "data": "ocp",
-            "x": 0,
             "y": 38,
             "width": 48,
             "height": 24,
@@ -16317,9 +16317,9 @@
             ]
           },
           {
+            "x": 0,
             "type": "Select",
             "data": "ovp",
-            "x": 0,
             "y": 62,
             "width": 48,
             "height": 24,
@@ -16355,9 +16355,9 @@
             ]
           },
           {
+            "x": 0,
             "type": "Select",
             "data": "otp",
-            "x": 0,
             "y": 86,
             "width": 48,
             "height": 24,
@@ -16393,9 +16393,9 @@
             ]
           },
           {
+            "x": 0,
             "type": "Select",
             "data": "opp",
-            "x": 0,
             "y": 110,
             "width": 48,
             "height": 24,
@@ -16431,9 +16431,9 @@
             ]
           },
           {
+            "x": 203,
             "type": "Select",
             "data": "channel.isVoltageBalanced",
-            "x": 203,
             "y": 10,
             "width": 117,
             "height": 40,
@@ -16462,9 +16462,9 @@
             ]
           },
           {
+            "x": 203,
             "type": "Select",
             "data": "channel.isCurrentBalanced",
-            "x": 203,
             "y": 50,
             "width": 117,
             "height": 40,
@@ -16559,10 +16559,10 @@
             "style": "default_inverse"
           },
           {
+            "x": 8,
             "type": "Select",
             "data": "channel.outputState",
             "action": "",
-            "x": 8,
             "y": 5,
             "width": 195,
             "height": 106,
@@ -16579,9 +16579,9 @@
                 "text": "OFF"
               },
               {
+                "x": 0,
                 "type": "Select",
                 "data": "channel.outputMode",
-                "x": 0,
                 "y": 0,
                 "width": 195,
                 "height": 106,
@@ -16692,9 +16692,9 @@
             ]
           },
           {
+            "x": 203,
             "type": "Select",
             "data": "channel.isVoltageBalanced",
-            "x": 203,
             "y": 4,
             "width": 117,
             "height": 36,
@@ -16723,9 +16723,9 @@
             ]
           },
           {
+            "x": 203,
             "type": "Select",
             "data": "channel.isCurrentBalanced",
-            "x": 203,
             "y": 40,
             "width": 117,
             "height": 36,
@@ -16763,9 +16763,9 @@
             "style": "default"
           },
           {
+            "x": 0,
             "type": "Select",
             "data": "lrip",
-            "x": 0,
             "y": 114,
             "width": 45,
             "height": 24,
@@ -16792,9 +16792,9 @@
             ]
           },
           {
+            "x": 45,
             "type": "Select",
             "data": "ocp",
-            "x": 45,
             "y": 114,
             "width": 45,
             "height": 24,
@@ -16830,9 +16830,9 @@
             ]
           },
           {
+            "x": 90,
             "type": "Select",
             "data": "ovp",
-            "x": 90,
             "y": 114,
             "width": 45,
             "height": 24,
@@ -16868,9 +16868,9 @@
             ]
           },
           {
+            "x": 135,
             "type": "Select",
             "data": "otp",
-            "x": 135,
             "y": 114,
             "width": 45,
             "height": 24,
@@ -16906,9 +16906,9 @@
             ]
           },
           {
+            "x": 180,
             "type": "Select",
             "data": "opp",
-            "x": 180,
             "y": 114,
             "width": 45,
             "height": 24,
@@ -16985,10 +16985,10 @@
             "style": "default_inverse"
           },
           {
+            "x": 54,
             "type": "Select",
             "data": "channel.outputState",
             "action": "",
-            "x": 54,
             "y": 4,
             "width": 149,
             "height": 129,
@@ -17005,9 +17005,9 @@
                 "text": "OFF"
               },
               {
+                "x": 0,
                 "type": "Select",
                 "data": "channel.outputMode",
-                "x": 0,
                 "y": 0,
                 "width": 149,
                 "height": 130,
@@ -17118,9 +17118,9 @@
             ]
           },
           {
+            "x": 0,
             "type": "Select",
             "data": "lrip",
-            "x": 0,
             "y": 14,
             "width": 48,
             "height": 24,
@@ -17147,9 +17147,9 @@
             ]
           },
           {
+            "x": 0,
             "type": "Select",
             "data": "ocp",
-            "x": 0,
             "y": 38,
             "width": 48,
             "height": 24,
@@ -17185,9 +17185,9 @@
             ]
           },
           {
+            "x": 0,
             "type": "Select",
             "data": "ovp",
-            "x": 0,
             "y": 62,
             "width": 48,
             "height": 24,
@@ -17223,9 +17223,9 @@
             ]
           },
           {
+            "x": 0,
             "type": "Select",
             "data": "otp",
-            "x": 0,
             "y": 86,
             "width": 48,
             "height": 24,
@@ -17261,9 +17261,9 @@
             ]
           },
           {
+            "x": 0,
             "type": "Select",
             "data": "opp",
-            "x": 0,
             "y": 110,
             "width": 48,
             "height": 24,
@@ -17315,9 +17315,9 @@
             "style": "default_inverse"
           },
           {
+            "x": 203,
             "type": "Select",
             "data": "channel.isVoltageBalanced",
-            "x": 203,
             "y": 4,
             "width": 117,
             "height": 36,
@@ -17346,9 +17346,9 @@
             ]
           },
           {
+            "x": 203,
             "type": "Select",
             "data": "channel.isCurrentBalanced",
-            "x": 203,
             "y": 40,
             "width": 117,
             "height": 36,
