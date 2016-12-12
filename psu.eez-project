@@ -4857,26 +4857,70 @@
                                   ]
                                 },
                                 {
-                                  "type": "DisplayData",
-                                  "data": "channel.u.set",
-                                  "action": "edit",
                                   "x": 0,
+                                  "type": "Select",
+                                  "data": "channel.isVoltageBalanced",
                                   "y": 32,
                                   "width": 64,
                                   "height": 30,
-                                  "style": "edit_value_active_S_right",
-                                  "activeStyle": "edit_value_focus_S_right"
+                                  "style": "default",
+                                  "widgets": [
+                                    {
+                                      "type": "DisplayData",
+                                      "data": "channel.u.set",
+                                      "action": "edit",
+                                      "x": 0,
+                                      "y": 0,
+                                      "width": 64,
+                                      "height": 30,
+                                      "style": "edit_value_active_S_right",
+                                      "activeStyle": "edit_value_focus_S_right"
+                                    },
+                                    {
+                                      "type": "DisplayData",
+                                      "data": "channel.u.set",
+                                      "action": "edit",
+                                      "x": 0,
+                                      "y": 0,
+                                      "width": 64,
+                                      "height": 30,
+                                      "style": "set_value_S_right_balanced",
+                                      "activeStyle": "edit_value_focus_S_right"
+                                    }
+                                  ]
                                 },
                                 {
-                                  "type": "DisplayData",
-                                  "data": "channel.i.set",
-                                  "action": "edit",
                                   "x": 0,
+                                  "type": "Select",
+                                  "data": "channel.isCurrentBalanced",
                                   "y": 62,
                                   "width": 64,
                                   "height": 30,
-                                  "style": "edit_value_active_S_right",
-                                  "activeStyle": "edit_value_focus_S_right"
+                                  "style": "default",
+                                  "widgets": [
+                                    {
+                                      "type": "DisplayData",
+                                      "data": "channel.i.set",
+                                      "action": "edit",
+                                      "x": 0,
+                                      "y": 0,
+                                      "width": 64,
+                                      "height": 30,
+                                      "style": "edit_value_active_S_right",
+                                      "activeStyle": "edit_value_focus_S_right"
+                                    },
+                                    {
+                                      "type": "DisplayData",
+                                      "data": "channel.i.set",
+                                      "action": "edit",
+                                      "x": 0,
+                                      "y": 0,
+                                      "width": 64,
+                                      "height": 30,
+                                      "style": "set_value_S_right_balanced",
+                                      "activeStyle": "edit_value_focus_S_right"
+                                    }
+                                  ]
                                 }
                               ]
                             },
@@ -5015,26 +5059,70 @@
                                   ]
                                 },
                                 {
-                                  "type": "DisplayData",
-                                  "data": "channel.u.set",
-                                  "action": "edit",
                                   "x": 0,
+                                  "type": "Select",
+                                  "data": "channel.isVoltageBalanced",
                                   "y": 32,
                                   "width": 64,
                                   "height": 30,
-                                  "style": "edit_value_active_S_right",
-                                  "activeStyle": "edit_value_focus_S_right"
+                                  "style": "default",
+                                  "widgets": [
+                                    {
+                                      "type": "DisplayData",
+                                      "data": "channel.u.set",
+                                      "action": "edit",
+                                      "x": 0,
+                                      "y": 0,
+                                      "width": 64,
+                                      "height": 30,
+                                      "style": "edit_value_active_S_right",
+                                      "activeStyle": "edit_value_focus_S_right"
+                                    },
+                                    {
+                                      "type": "DisplayData",
+                                      "data": "channel.u.set",
+                                      "action": "edit",
+                                      "x": 0,
+                                      "y": 0,
+                                      "width": 64,
+                                      "height": 30,
+                                      "style": "set_value_S_right_balanced",
+                                      "activeStyle": "edit_value_focus_S_right"
+                                    }
+                                  ]
                                 },
                                 {
-                                  "type": "DisplayData",
-                                  "data": "channel.i.set",
-                                  "action": "edit",
                                   "x": 0,
+                                  "type": "Select",
+                                  "data": "channel.isCurrentBalanced",
                                   "y": 62,
                                   "width": 64,
                                   "height": 30,
-                                  "style": "edit_value_active_S_right",
-                                  "activeStyle": "edit_value_focus_S_right"
+                                  "style": "default",
+                                  "widgets": [
+                                    {
+                                      "type": "DisplayData",
+                                      "data": "channel.i.set",
+                                      "action": "edit",
+                                      "x": 0,
+                                      "y": 0,
+                                      "width": 64,
+                                      "height": 30,
+                                      "style": "edit_value_active_S_right",
+                                      "activeStyle": "edit_value_focus_S_right"
+                                    },
+                                    {
+                                      "type": "DisplayData",
+                                      "data": "channel.i.set",
+                                      "action": "edit",
+                                      "x": 0,
+                                      "y": 0,
+                                      "width": 64,
+                                      "height": 30,
+                                      "style": "set_value_S_right_balanced",
+                                      "activeStyle": "edit_value_focus_S_right"
+                                    }
+                                  ]
                                 }
                               ]
                             },
@@ -11344,33 +11432,13 @@
               "text": "X"
             },
             {
-              "x": 160,
-              "type": "Select",
-              "data": "channel.coupling.selectedMode",
-              "y": 172,
-              "width": 64,
-              "height": 32,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Text",
-                  "x": -160,
-                  "y": -10,
-                  "width": 320,
-                  "height": 42,
-                  "style": "default_S",
-                  "text": "\\u0082 Max. output current will be doubled"
-                },
-                {
-                  "type": "Text",
-                  "x": -160,
-                  "y": -10,
-                  "width": 320,
-                  "height": 42,
-                  "style": "default_S",
-                  "text": "\\u0082 Max. output voltage will be doubled"
-                }
-              ]
+              "type": "Text",
+              "x": 0,
+              "y": 162,
+              "width": 320,
+              "height": 42,
+              "style": "default_S",
+              "text": "Don't forget to disconnect load!"
             }
           ]
         }
@@ -14524,7 +14592,7 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_sys_settings2",
               "x": 48,
               "y": 204,
               "width": 48,
@@ -18166,7 +18234,7 @@
         "font": "medium",
         "alignHorizontal": "center",
         "alignVertical": "center",
-        "color": "#c0c000",
+        "color": "#00ff80",
         "backgroundColor": "#5080ff",
         "borderSize": 0,
         "borderColor": "#D3D3D3",
@@ -18179,7 +18247,7 @@
         "font": "small",
         "alignHorizontal": "right",
         "alignVertical": "center",
-        "color": "#c0c000",
+        "color": "#00ff80",
         "backgroundColor": "#5080ff",
         "borderSize": 0,
         "borderColor": "#D3D3D3",

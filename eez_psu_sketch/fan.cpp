@@ -54,6 +54,8 @@ static RpmMeasureState g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
 static unsigned long g_rpmMeasureT1;
 static unsigned long g_rpmMeasureT2;
 
+static bool g_startingRpmMeasure;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 int dt_to_rpm(unsigned long dt) {
@@ -87,10 +89,12 @@ void start_rpm_measure() {
 
     // delay 2ms
     if (g_isBooted) {
+        g_startingRpmMeasure = true;
         unsigned long finishTime = micros() + 2000;
         do {
             psu::tick();
         } while (micros() < finishTime);
+        g_startingRpmMeasure = false;
     } else {
         delay(2);
     }
@@ -198,7 +202,13 @@ bool test() {
 }
 
 void tick(unsigned long tick_usec) {
-	if (test_result != psu::TEST_OK) return;
+	if (test_result != psu::TEST_OK) {
+        return;
+    }
+
+    if (g_startingRpmMeasure) {
+        return;
+    }
 
 	// adjust fan speed depending on max. channel temperature
 	if (tick_usec - g_fanSpeedLastAdjustedTick >= FAN_SPEED_ADJUSTMENT_INTERVAL * 1000L) {

@@ -53,10 +53,10 @@ scpi_result_t debug_scpi_commandQ(scpi_t *context) {
     sprintf_P(p, PSTR("avg_loop_duration: %lu\n"), avgLoopDuration);
     p += strlen(p);
 
-    sprintf_P(p, PSTR("total_ioexp_int_counter: %lu\n"), totalAdcReadCounter);
+    sprintf_P(p, PSTR("total_adc_read_counter: %lu\n"), totalAdcReadCounter);
     p += strlen(p);
 
-    sprintf_P(p, PSTR("last_ioexp_int_counter: %lu\n"), lastAdcReadCounter);
+    sprintf_P(p, PSTR("last_adc_read_counter: %lu\n"), lastAdcReadCounter);
     p += strlen(p);
 
     sprintf_P(p, PSTR("CH1: u_dac=%u, u_mon_dac=%d, u_mon=%d, i_dac=%u, i_mon_dac=%d, i_mon=%d\n"),
