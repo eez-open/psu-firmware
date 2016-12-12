@@ -11344,13 +11344,33 @@
               "text": "X"
             },
             {
-              "type": "Text",
-              "x": 0,
-              "y": 162,
-              "width": 320,
-              "height": 42,
-              "style": "default_S",
-              "text": "Don't forget to disconnect load!"
+              "x": 160,
+              "type": "Select",
+              "data": "channel.coupling.selectedMode",
+              "y": 172,
+              "width": 64,
+              "height": 32,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "x": -160,
+                  "y": -10,
+                  "width": 320,
+                  "height": 42,
+                  "style": "default_S",
+                  "text": "\\u0082 Max. output current will be doubled"
+                },
+                {
+                  "type": "Text",
+                  "x": -160,
+                  "y": -10,
+                  "width": 320,
+                  "height": 42,
+                  "style": "default_S",
+                  "text": "\\u0082 Max. output voltage will be doubled"
+                }
+              ]
             }
           ]
         }
@@ -14504,7 +14524,7 @@
             },
             {
               "type": "Text",
-              "action": "show_sys_settings2",
+              "action": "",
               "x": 48,
               "y": 204,
               "width": 48,
@@ -18146,7 +18166,7 @@
         "font": "medium",
         "alignHorizontal": "center",
         "alignVertical": "center",
-        "color": "#00ff80",
+        "color": "#c0c000",
         "backgroundColor": "#5080ff",
         "borderSize": 0,
         "borderColor": "#D3D3D3",
@@ -18159,7 +18179,7 @@
         "font": "small",
         "alignHorizontal": "right",
         "alignVertical": "center",
-        "color": "#00ff80",
+        "color": "#c0c000",
         "backgroundColor": "#5080ff",
         "borderSize": 0,
         "borderColor": "#D3D3D3",
