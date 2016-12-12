@@ -21,7 +21,7 @@
 #include "scpi_cal.h"
 
 #include "calibration.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 
 namespace eez {
 namespace psu {
@@ -134,7 +134,7 @@ scpi_result_t scpi_cal_Clear(scpi_t * context) {
 }
 
 scpi_result_t scpi_cal_Mode(scpi_t * context) {
-    if (channel_coupling::getType() != channel_coupling::TYPE_NONE) {
+    if (channel_dispatcher::isCoupled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
     }
@@ -265,7 +265,7 @@ scpi_result_t scpi_cal_Save(scpi_t * context) {
 }
 
 scpi_result_t scpi_cal_State(scpi_t * context) {
-    if (channel_coupling::getType() != channel_coupling::TYPE_NONE) {
+    if (channel_dispatcher::isCoupled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
     }

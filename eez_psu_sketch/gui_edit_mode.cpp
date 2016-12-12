@@ -17,7 +17,7 @@
 */
 
 #include "psu.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 #include "sound.h"
 
 #include "gui_data_snapshot.h"
@@ -221,10 +221,10 @@ void getInfoText(int part, char *infoText) {
     Channel &channel = Channel::get(dataCursor.i);
     if (dataId == DATA_ID_CHANNEL_I_SET) {
         if (part == 0 || part == 1) {
-            if (channel_coupling::getType() == channel_coupling::TYPE_NONE) {
-		        sprintf_P(infoText, PSTR("Set Ch%d current"), channel.index);
-            } else {
+            if (channel_dispatcher::isCoupled()) {
                 strcpy_P(infoText, PSTR("Set current"));
+            } else {
+		        sprintf_P(infoText, PSTR("Set Ch%d current"), channel.index);
             }
         } else {
             *infoText = 0;
@@ -238,15 +238,15 @@ void getInfoText(int part, char *infoText) {
             strcat_P(infoText, PSTR("["));
 		    util::strcatFloat(infoText, minValue.getFloat());
 		    strcat_P(infoText, PSTR("-"));
-		    util::strcatCurrent(infoText, channel_coupling::getILimit(Channel::get(dataCursor.i)));
+		    util::strcatCurrent(infoText, channel_dispatcher::getILimit(Channel::get(dataCursor.i)));
 		    strcat_P(infoText, PSTR("]"));
         }
     } else {
         if (part == 0 || part == 1) {
-            if (channel_coupling::getType() == channel_coupling::TYPE_NONE) {
-    		    sprintf_P(infoText, PSTR("Set Ch%d voltage"), channel.index);
-            } else {
+            if (channel_dispatcher::isCoupled()) {
                 strcpy_P(infoText, PSTR("Set voltage"));
+            } else {
+    		    sprintf_P(infoText, PSTR("Set Ch%d voltage"), channel.index);
             }
         } else {
             *infoText = 0;
@@ -260,7 +260,7 @@ void getInfoText(int part, char *infoText) {
             strcat_P(infoText, PSTR("["));
             util::strcatFloat(infoText, minValue.getFloat());
 		    strcat_P(infoText, PSTR("-"));
-		    util::strcatVoltage(infoText, channel_coupling::getULimit(Channel::get(dataCursor.i)));
+		    util::strcatVoltage(infoText, channel_dispatcher::getULimit(Channel::get(dataCursor.i)));
 		    strcat_P(infoText, PSTR("]"));
         }
     }

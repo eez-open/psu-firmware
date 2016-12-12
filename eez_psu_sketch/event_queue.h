@@ -98,6 +98,7 @@ static const int EVENT_TYPE_ERROR = 3;
     EVENT_INFO(COUPLED_IN_PARALLEL, 92, "Coupled in parallel") \
     EVENT_INFO(COUPLED_IN_SERIES, 93, "Coupled in series") \
     EVENT_INFO(CHANNELS_UNCOUPLED, 94, "Channels uncoupled") \
+    EVENT_INFO(CHANNELS_TRACKED, 95, "Channels operates in track mode") \
     
 
 #define EVENT_ERROR_START_ID 10000

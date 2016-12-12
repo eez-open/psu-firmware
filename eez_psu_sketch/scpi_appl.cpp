@@ -19,7 +19,7 @@
 #include "psu.h"
 #include "scpi_psu.h"
 #include "scpi_appl.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 
 namespace eez {
 namespace psu {
@@ -63,27 +63,27 @@ scpi_result_t scpi_appl_Apply(scpi_t *context) {
         call_set_current = true;
     }
 
-	if (voltage > channel_coupling::getULimit(*channel)) {
+	if (voltage > channel_dispatcher::getULimit(*channel)) {
         SCPI_ErrorPush(context, SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
 	}
 
-	if (call_set_current && current > channel_coupling::getILimit(*channel)) {
+	if (call_set_current && current > channel_dispatcher::getILimit(*channel)) {
         SCPI_ErrorPush(context, SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
 	}
 
-    if (voltage * (call_set_current ? current : channel_coupling::getISet(*channel)) > channel_coupling::getPowerLimit(*channel)) {
+    if (voltage * (call_set_current ? current : channel_dispatcher::getISet(*channel)) > channel_dispatcher::getPowerLimit(*channel)) {
         SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
     }
 
     // set voltage
-    channel_coupling::setVoltage(*channel, voltage);
+    channel_dispatcher::setVoltage(*channel, voltage);
 
     // set current
     if (call_set_current) {
-        channel_coupling::setCurrent(*channel, current);
+        channel_dispatcher::setCurrent(*channel, current);
     }
 
     return SCPI_RES_OK;
@@ -105,23 +105,23 @@ scpi_result_t scpi_appl_ApplyQ(scpi_t * context) {
 
         // return both current and voltage
         sprintf_P(buffer, PSTR("CH%d:"), channel->index);
-        util::strcatVoltage(buffer, channel_coupling::getUMax(*channel));
+        util::strcatVoltage(buffer, channel_dispatcher::getUMax(*channel));
         strcat(buffer, "/");
-        util::strcatCurrent(buffer, channel_coupling::getIMax(*channel));
+        util::strcatCurrent(buffer, channel_dispatcher::getIMax(*channel));
         strcat(buffer, ", ");
 
-        util::strcatFloat(buffer, channel_coupling::getUSet(*channel));
+        util::strcatFloat(buffer, channel_dispatcher::getUSet(*channel));
         strcat(buffer, ", ");
-        util::strcatFloat(buffer, channel_coupling::getISet(*channel));
+        util::strcatFloat(buffer, channel_dispatcher::getISet(*channel));
     }
     else {
         if (current_or_voltage == 0) {
             // return only current
-            util::strcatFloat(buffer, channel_coupling::getISet(*channel));
+            util::strcatFloat(buffer, channel_dispatcher::getISet(*channel));
         }
         else {
             // return only voltage
-            util::strcatFloat(buffer, channel_coupling::getUSet(*channel));
+            util::strcatFloat(buffer, channel_dispatcher::getUSet(*channel));
         }
     }
 

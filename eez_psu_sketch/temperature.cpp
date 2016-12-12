@@ -29,7 +29,7 @@
 #include "sound.h"
 #include "temperature.h"
 #include "event_queue.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 
 namespace eez {
 namespace psu {
@@ -256,7 +256,7 @@ void TempSensorTemperature::protection_check(unsigned long tick_usec) {
 }
 
 void TempSensorTemperature::protection_enter(TempSensorTemperature& sensor) {
-    if (channel_coupling::getType() != channel_coupling::TYPE_NONE && (temp_sensor::sensors[sensor.sensorIndex].ch_num == 0 || temp_sensor::sensors[sensor.sensorIndex].ch_num == 1)) {
+    if (channel_dispatcher::isCoupled() && (temp_sensor::sensors[sensor.sensorIndex].ch_num == 0 || temp_sensor::sensors[sensor.sensorIndex].ch_num == 1)) {
 	    for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
             TempSensorTemperature& sensor = sensors[i];
             if (temp_sensor::sensors[sensor.sensorIndex].ch_num == 0 || temp_sensor::sensors[sensor.sensorIndex].ch_num == 1) {

@@ -51,7 +51,7 @@
 #endif
 
 #include "event_queue.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 
 namespace eez {
 namespace psu {
@@ -264,7 +264,7 @@ static bool psuReset(bool power_on) {
     calibration::stop();
 
     //
-    channel_coupling::setType(channel_coupling::TYPE_NONE);
+    channel_dispatcher::setType(channel_dispatcher::TYPE_NONE);
 
     // SYST:POW ON
     if (powerUp()) {
@@ -429,7 +429,7 @@ void powerDown() {
 
     if (!g_powerIsUp) return;
 
-    channel_coupling::setType(channel_coupling::TYPE_NONE);
+    channel_dispatcher::setType(channel_dispatcher::TYPE_NONE);
 
     for (int i = 0; i < CH_NUM; ++i) {
         Channel::get(i).onPowerDown();

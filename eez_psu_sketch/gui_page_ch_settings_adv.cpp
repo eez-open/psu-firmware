@@ -19,7 +19,7 @@
 #include "psu.h"
 
 #include "profile.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 
 #include "gui_data_snapshot.h"
 #include "gui_page_ch_settings_adv.h"
@@ -91,12 +91,12 @@ int ChSettingsAdvLRipplePage::getDirty() {
 
 void ChSettingsAdvLRipplePage::set() {
 	if (getDirty()) {
-		if (!channel_coupling::lowRippleEnable(*g_channel, status ? true : false)) {
+		if (!channel_dispatcher::lowRippleEnable(*g_channel, status ? true : false)) {
 			errorMessageP(PSTR("Failed to change LRipple status!"));
 			return;
 		}
 	
-		channel_coupling::lowRippleAutoEnable(*g_channel, autoMode ? true : false);
+		channel_dispatcher::lowRippleAutoEnable(*g_channel, autoMode ? true : false);
 
 		profile::save();
 	
@@ -140,7 +140,7 @@ data::Value ChSettingsAdvCouplingPage::getData(const data::Cursor &cursor, uint8
 }
 
 void ChSettingsAdvCouplingPage::uncouple() {
-    channel_coupling::setType(channel_coupling::TYPE_NONE);
+    channel_dispatcher::setType(channel_dispatcher::TYPE_NONE);
 	infoMessageP(PSTR("Channels uncoupled!"));
 }
 
@@ -156,7 +156,7 @@ void ChSettingsAdvCouplingPage::setSeriesInfo() {
 
 void ChSettingsAdvCouplingPage::setParallel() {
     if (selectedMode == 0) {
-        if (channel_coupling::setType(channel_coupling::TYPE_PARALLEL)) {
+        if (channel_dispatcher::setType(channel_dispatcher::TYPE_PARALLEL)) {
 	        infoMessageP(PSTR("Channels coupled in parallel!"), popPage);
         }
     }
@@ -164,7 +164,7 @@ void ChSettingsAdvCouplingPage::setParallel() {
 
 void ChSettingsAdvCouplingPage::setSeries() {
     if (selectedMode == 1) {
-        if (channel_coupling::setType(channel_coupling::TYPE_SERIES)) {
+        if (channel_dispatcher::setType(channel_dispatcher::TYPE_SERIES)) {
     	    infoMessageP(PSTR("Channels coupled in series!"), popPage);
         }
     }

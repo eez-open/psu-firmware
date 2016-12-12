@@ -20,7 +20,7 @@
 #include "calibration.h"
 #include "temperature.h"
 #include "persist_conf.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 #include "gui_data_snapshot.h"
 #include "gui_internal.h"
 #include "gui_keypad.h"
@@ -97,8 +97,8 @@ void Snapshot::takeSnapshot() {
         if (timeout) {
             char *mode_str = channel.getCvModeStr();
             channelSnapshot.flags.mode = 0;
-            float uMon = channel_coupling::getUMon(channel);
-            float iMon = channel_coupling::getIMon(channel);
+            float uMon = channel_dispatcher::getUMon(channel);
+            float iMon = channel_dispatcher::getIMon(channel);
             if (strcmp(mode_str, "CC") == 0) {
                 channelSnapshot.mon_value = Value(uMon, VALUE_TYPE_FLOAT_VOLT);
             } else if (strcmp(mode_str, "CV") == 0) {
@@ -112,17 +112,17 @@ void Snapshot::takeSnapshot() {
                 }
             }
 
-			channelSnapshot.p_mon = util::multiply(channel_coupling::getUMon(channel), channel_coupling::getIMon(channel), CHANNEL_VALUE_PRECISION);
+			channelSnapshot.p_mon = util::multiply(channel_dispatcher::getUMon(channel), channel_dispatcher::getIMon(channel), CHANNEL_VALUE_PRECISION);
         }
 
-        channelSnapshot.u_set = channel_coupling::getUSet(channel);
-		channelSnapshot.u_mon = channel_coupling::getUMon(channel);
-		channelSnapshot.u_monDac = channel_coupling::getUMonDac(channel);
-		channelSnapshot.u_limit = channel_coupling::getULimit(channel);
-        channelSnapshot.i_set = channel_coupling::getISet(channel);
-		channelSnapshot.i_mon = channel_coupling::getIMon(channel);
-		channelSnapshot.i_monDac = channel_coupling::getIMonDac(channel);
-		channelSnapshot.i_limit = channel_coupling::getILimit(channel);
+        channelSnapshot.u_set = channel_dispatcher::getUSet(channel);
+		channelSnapshot.u_mon = channel_dispatcher::getUMon(channel);
+		channelSnapshot.u_monDac = channel_dispatcher::getUMonDac(channel);
+		channelSnapshot.u_limit = channel_dispatcher::getULimit(channel);
+        channelSnapshot.i_set = channel_dispatcher::getISet(channel);
+		channelSnapshot.i_mon = channel_dispatcher::getIMon(channel);
+		channelSnapshot.i_monDac = channel_dispatcher::getIMonDac(channel);
+		channelSnapshot.i_limit = channel_dispatcher::getILimit(channel);
 
 		channelSnapshot.flags.lrip = channel.flags.lrippleEnabled ? 1 : 0;
 		channelSnapshot.flags.rprog = channel.flags.rprogEnabled ? 1 : 0;
@@ -169,13 +169,13 @@ void Snapshot::takeSnapshot() {
 
 	flags.channelDisplayedValues = persist_conf::dev_conf.flags.channelDisplayedValues;
 
-    if (channel_coupling::getType() == channel_coupling::TYPE_SERIES) {
+    if (channel_dispatcher::isSeries()) {
         flags.isVoltageBalanced = Channel::get(0).isVoltageBalanced() || Channel::get(1).isVoltageBalanced() ? 1 : 0;
     } else {
         flags.isVoltageBalanced = 0;
     }
 
-    if (channel_coupling::getType() == channel_coupling::TYPE_PARALLEL) {
+    if (channel_dispatcher::isParallel()) {
         flags.isCurrentBalanced = Channel::get(0).isCurrentBalanced() || Channel::get(1).isCurrentBalanced() ? 1 : 0;
     } else {
         flags.isCurrentBalanced = 0;
@@ -204,11 +204,11 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 	}
 
 	if (id == DATA_ID_CHANNEL_COUPLING_MODE) {
-		return data::Value(channel_coupling::getType());
+		return data::Value(channel_dispatcher::getType());
 	}
 
 	if (id == DATA_ID_CHANNEL_IS_COUPLED) {
-		return data::Value(channel_coupling::getType() != channel_coupling::TYPE_NONE ? 1 : 0);
+		return data::Value(channel_dispatcher::isCoupled() ? 1 : 0);
 	}
 
     if (cursor.i >= 0 || g_channel != 0) {

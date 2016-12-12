@@ -21,7 +21,7 @@
 #include "scpi_cal.h"
 
 #include "calibration.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 
 namespace eez {
 namespace psu {
@@ -30,9 +30,9 @@ namespace scpi {
 ////////////////////////////////////////////////////////////////////////////////
 
 scpi_choice_def_t channelsCouplingChoice[] = {
-    { "NONE", channel_coupling::TYPE_NONE },
-    { "PARallel", channel_coupling::TYPE_PARALLEL },
-    { "SERies", channel_coupling::TYPE_SERIES },
+    { "NONE", channel_dispatcher::TYPE_NONE },
+    { "PARallel", channel_dispatcher::TYPE_PARALLEL },
+    { "SERies", channel_dispatcher::TYPE_SERIES },
     SCPI_CHOICE_LIST_END /* termination of option list */
 };
 
@@ -105,12 +105,12 @@ scpi_result_t scpi_inst_CoupleTracking(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (CH_NUM < 2 && type == channel_coupling::TYPE_NONE) {
+    if (CH_NUM < 2 && type == channel_dispatcher::TYPE_NONE) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
 
-    channel_coupling::setType((channel_coupling::Type)type);
+    channel_dispatcher::setType((channel_dispatcher::Type)type);
 
     return SCPI_RES_OK;
 }
@@ -120,10 +120,10 @@ scpi_result_t scpi_inst_CoupleTrackingQ(scpi_t * context) {
 
     char result[16];
 
-    channel_coupling::Type type = channel_coupling::getType();
-    if (type == channel_coupling::TYPE_PARALLEL) {
+    channel_dispatcher::Type type = channel_dispatcher::getType();
+    if (type == channel_dispatcher::TYPE_PARALLEL) {
         strcpy_P(result, PSTR("PARALLEL"));
-    } else if (type == channel_coupling::TYPE_SERIES) {
+    } else if (type == channel_dispatcher::TYPE_SERIES) {
         strcpy_P(result, PSTR("SERIES"));
     } else {
         strcpy_P(result, PSTR("NONE"));

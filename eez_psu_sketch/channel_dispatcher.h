@@ -26,16 +26,22 @@
 
 namespace eez {
 namespace psu {
-namespace channel_coupling {
+namespace channel_dispatcher {
 
 enum Type {
     TYPE_NONE,
     TYPE_PARALLEL,
-    TYPE_SERIES
+    TYPE_SERIES,
+    TYPE_TRACKED
 };
 
 bool setType(Type value);
 Type getType();
+
+bool isCoupled() { return getType() == TYPE_PARALLEL || getType() == TYPE_SERIES; }
+bool isParallel() { return getType() == TYPE_PARALLEL; }
+bool isSeries() { return getType() == TYPE_SERIES; }
+bool isTracked() { return getType() == channel_dispatcher::TYPE_TRACKED; }
 
 float getUSet(const Channel &channel);
 float getUMon(const Channel &channel);
@@ -102,4 +108,4 @@ void setLoad(Channel &channel, float load);
 
 }
 }
-} // namespace eez::psu::channel_coupling
+} // namespace eez::psu::channel_dispatcher

@@ -21,7 +21,7 @@
 #include "persist_conf.h"
 #include "datetime.h"
 #include "event_queue.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 
 namespace eez {
 namespace psu {
@@ -44,7 +44,7 @@ void tick(unsigned long tick_usec) {
 void recallChannelsFromProfile(Parameters *profile) {
     bool last_save_enabled = enableSave(false);
 
-    channel_coupling::setType((channel_coupling::Type)profile->flags.channelsCoupling);
+    channel_dispatcher::setType((channel_dispatcher::Type)profile->flags.channelsCoupling);
 
     for (int i = 0; i < CH_MAX; ++i) {
 		Channel &channel = Channel::get(i);
@@ -180,7 +180,7 @@ bool saveAtLocation(int location, char *name) {
 
         profile.flags.isValid = true;
 
-        profile.flags.channelsCoupling = channel_coupling::getType();
+        profile.flags.channelsCoupling = channel_dispatcher::getType();
 
         // name
         memset(profile.name, 0, sizeof(profile.name));

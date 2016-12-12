@@ -23,7 +23,7 @@
 #include "bp.h"
 #include "lcd.h"
 #include "touch.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 
 namespace eez {
 namespace psu {
@@ -142,7 +142,7 @@ void fillData(Data *data) {
 
     data->standby = bp_value & (1 << BP_STANDBY) ? true : false;
 
-    data->coupled = channel_coupling::getType() != channel_coupling::TYPE_NONE;
+    data->coupled = channel_dispatcher::isCoupled();
     data->coupledOut = chips::bp_chip.getValue() & (1 << BP_LED_OUT1_RED) ? true : false;
 
     fillChannelData(&data->ch1, 1);
@@ -177,11 +177,11 @@ void processChannelData(ChannelData *data, int ch) {
                     } else if (load > 10000000) {
                         load = 10000000;
                     }
-                    channel_coupling::setLoad(channel, load);
+                    channel_dispatcher::setLoad(channel, load);
                 }
             } else if (data->loadWidget.mouse_data.is_up) {
                 if (data->loadWidget.mouse_data.up_x == data->loadWidget.mouse_data.down_x && data->loadWidget.mouse_data.up_y == data->loadWidget.mouse_data.down_y) {
-                    channel_coupling::setLoadEnabled(channel, !channel.simulator.getLoadEnabled());
+                    channel_dispatcher::setLoadEnabled(channel, !channel.simulator.getLoadEnabled());
                 }
             }
         }

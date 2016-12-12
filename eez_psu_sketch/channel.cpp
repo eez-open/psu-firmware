@@ -34,7 +34,7 @@
 #include "sound.h"
 #include "profile.h"
 #include "event_queue.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 
 namespace eez {
 namespace psu {
@@ -285,7 +285,7 @@ Channel::Channel(
 }
 
 void Channel::protectionEnter(ProtectionValue &cpv) {
-    channel_coupling::outputEnable(*this, false);
+    channel_dispatcher::outputEnable(*this, false);
 
     cpv.flags.tripped = 1;
 
@@ -304,7 +304,7 @@ void Channel::protectionEnter(ProtectionValue &cpv) {
 
 	event_queue::pushEvent(eventId);
 
-    if (channel_coupling::getType() != channel_coupling::TYPE_NONE && index == 1) {
+    if (channel_dispatcher::isCoupled() && index == 1) {
         if (IS_OVP_VALUE(this, cpv)) {
             Channel::get(1).protectionEnter(Channel::get(1).ovp);
         } else if (IS_OCP_VALUE(this, cpv)) {
@@ -323,20 +323,20 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     if (IS_OVP_VALUE(this, cpv)) {
         state = flags.rprogEnabled || prot_conf.flags.u_state;
 		//condition = flags.cv_mode && (!flags.cc_mode || fabs(i.mon - i.set) >= CHANNEL_VALUE_PRECISION) && (prot_conf.u_level <= u.set);
-		condition = util::greaterOrEqual(channel_coupling::getUMon(*this), channel_coupling::getUProtectionLevel(*this), CHANNEL_VALUE_PRECISION);
+		condition = util::greaterOrEqual(channel_dispatcher::getUMon(*this), channel_dispatcher::getUProtectionLevel(*this), CHANNEL_VALUE_PRECISION);
         delay = prot_conf.u_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
     else if (IS_OCP_VALUE(this, cpv)) {
         state = prot_conf.flags.i_state;
         //condition = flags.cc_mode && (!flags.cv_mode || fabs(u.mon - u.set) >= CHANNEL_VALUE_PRECISION);
-		condition = util::greaterOrEqual(channel_coupling::getIMon(*this), channel_coupling::getISet(*this), CHANNEL_VALUE_PRECISION);
+		condition = util::greaterOrEqual(channel_dispatcher::getIMon(*this), channel_dispatcher::getISet(*this), CHANNEL_VALUE_PRECISION);
         delay = prot_conf.i_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
     else {
         state = prot_conf.flags.p_state;
-        condition = channel_coupling::getUMon(*this) * channel_coupling::getIMon(*this) > channel_coupling::getPowerProtectionLevel(*this);
+        condition = channel_dispatcher::getUMon(*this) * channel_dispatcher::getIMon(*this) > channel_dispatcher::getPowerProtectionLevel(*this);
         delay = prot_conf.p_delay;
     }
 
@@ -608,15 +608,15 @@ void Channel::tick(unsigned long tick_usec) {
                 } else {
                     DebugTraceF("CH%d, neg. P, output off: %f", index, u.mon * i.mon);
                     psu::generateError(SCPI_ERROR_CH1_OUTPUT_FAULT_DETECTED - (index - 1));
-                    channel_coupling::outputEnable(*this, false);
+                    channel_dispatcher::outputEnable(*this, false);
                 }
             } else if (tick_usec - dpNegMonitoringTime > 500 * 1000UL) {
                 if (flags.dpOn) {
-                    if (channel_coupling::getType() == channel_coupling::TYPE_SERIES) {
+                    if (channel_dispatcher::isSeries()) {
                         Channel& channel = Channel::get(index == 1 ? 1 : 0);
                         channel.voltageBalancing();
                         dpNegMonitoringTime = tick_usec;
-                    } else if (channel_coupling::getType() == channel_coupling::TYPE_PARALLEL) {
+                    } else if (channel_dispatcher::isParallel()) {
                         Channel& channel = Channel::get(index == 1 ? 1 : 0);
                         channel.currentBalancing();
                         dpNegMonitoringTime = tick_usec;
@@ -806,7 +806,7 @@ void Channel::setCvMode(bool cv_mode) {
 }
 
 void Channel::protectionCheck() {
-    if (channel_coupling::getType() != channel_coupling::TYPE_NONE && index == 2) {
+    if (channel_dispatcher::isCoupled() && index == 2) {
         // protections of coupled channels are checked on channel 1
         return;
     }
@@ -839,7 +839,7 @@ void Channel::eventGpio(uint8_t gpio) {
 		}
 
 		if (rpol && isOutputEnabled()) {
-			channel_coupling::outputEnable(*this, false);
+			channel_dispatcher::outputEnable(*this, false);
 			event_queue::pushEvent(event_queue::EVENT_ERROR_CH1_REMOTE_SENSE_REVERSE_POLARITY_DETECTED + index - 1);
 			return;
 		}
@@ -950,7 +950,7 @@ void Channel::doOutputEnable(bool enable) {
         }
 
 		// disable DP
-        if (channel_coupling::getType() == channel_coupling::TYPE_NONE) {
+        if (channel_dispatcher::isParallel()) {
             // channel is coupled in parallel, disable DP immediatelly
             doDpEnable(false);
         } else {

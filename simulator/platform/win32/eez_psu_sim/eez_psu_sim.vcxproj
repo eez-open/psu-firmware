@@ -176,7 +176,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\buzzer.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\calibration.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\channel.h" />
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\channel_coupling.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\channel_dispatcher.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\conf_channel.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\conf.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\conf_advanced.h" />
@@ -299,7 +299,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\buzzer.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\calibration.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\channel.cpp" />
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\channel_coupling.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\channel_dispatcher.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\dac.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\datetime.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\debug.cpp" />

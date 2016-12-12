@@ -20,7 +20,7 @@
 #include "actions.h"
 #include "event_queue.h"
 #include "persist_conf.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 #include "gui_internal.h"
 #include "gui_keypad.h"
 #include "gui_edit_mode.h"
@@ -42,7 +42,7 @@ void action_toggle_channel() {
     if (channel.isTripped()) {
         errorMessageP(PSTR("Channel is tripped!"));
     } else {
-        channel_coupling::outputEnable(channel, !channel.isOutputEnabled());
+        channel_dispatcher::outputEnable(channel, !channel.isOutputEnabled());
     }
 }
 

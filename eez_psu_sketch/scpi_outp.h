@@ -23,4 +23,6 @@
     SCPI_COMMAND("OUTPut:PROTection:CLEar", scpi_outp_ProtectionClear) \
     SCPI_COMMAND("OUTPut[:STATe]", scpi_outp_State) \
     SCPI_COMMAND("OUTPut[:STATe]?", scpi_outp_StateQ) \
+    SCPI_COMMAND("OUTPut:TRACk[:STATe]", scpi_outp_TrackState) \
+    SCPI_COMMAND("OUTPut:TRACk[:STATe]?", scpi_outp_TrackStateQ) \
 

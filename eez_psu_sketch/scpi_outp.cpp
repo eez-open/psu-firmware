@@ -21,7 +21,7 @@
 #include "scpi_outp.h"
 
 #include "calibration.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 
 namespace eez {
 namespace psu {
@@ -46,7 +46,7 @@ scpi_result_t scpi_outp_ProtectionClear(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    channel_coupling::clearProtection(*channel);
+    channel_dispatcher::clearProtection(*channel);
 
     return SCPI_RES_OK;
 }
@@ -75,7 +75,7 @@ scpi_result_t scpi_outp_State(scpi_t * context) {
             }
         }
 
-        channel_coupling::outputEnable(*channel, enable);
+        channel_dispatcher::outputEnable(*channel, enable);
     }
 
     return SCPI_RES_OK;
@@ -88,6 +88,45 @@ scpi_result_t scpi_outp_StateQ(scpi_t * context) {
     }
 
     SCPI_ResultBool(context, channel->isOutputEnabled());
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_outp_TrackState(scpi_t * context) {
+    if (channel_dispatcher::isCoupled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
+        return SCPI_RES_ERR;
+    }
+
+    bool enable;
+    if (!SCPI_ParamBool(context, &enable, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (enable != channel_dispatcher::isTracked()) {
+        channel_dispatcher::setType(enable ? channel_dispatcher::TYPE_TRACKED : channel_dispatcher::TYPE_NONE);
+    }
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_outp_TrackStateQ(scpi_t * context) {
+    if (channel_dispatcher::isCoupled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
+        return SCPI_RES_ERR;
+    }
+
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultBool(context, channel_dispatcher::isTracked());
 
     return SCPI_RES_OK;
 }

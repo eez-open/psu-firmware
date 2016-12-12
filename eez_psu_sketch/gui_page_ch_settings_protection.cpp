@@ -20,7 +20,7 @@
 
 #include "profile.h"
 #include "temperature.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 
 #include "gui_data_snapshot.h"
 #include "gui_page_ch_settings_protection.h"
@@ -33,14 +33,14 @@ namespace gui {
 ////////////////////////////////////////////////////////////////////////////////
 
 void ChSettingsProtectionPage::clear() {
-	channel_coupling::clearProtection(*g_channel);
+	channel_dispatcher::clearProtection(*g_channel);
 
 	infoMessageP(PSTR("Cleared!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
 }
 
 void onClearAndDisableYes() {
-	channel_coupling::clearProtection(*g_channel);
-	channel_coupling::disableProtection(*g_channel);
+	channel_dispatcher::clearProtection(*g_channel);
+	channel_dispatcher::disableProtection(*g_channel);
 	profile::save();
 
 	infoMessageP(PSTR("Cleared and disabled!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
@@ -232,15 +232,15 @@ void ChSettingsProtectionSetPage::editDelay() {
 ChSettingsOvpProtectionPage::ChSettingsOvpProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.u_state ? 1 : 0;
 
-	origLimit = limit = data::Value(channel_coupling::getULimit(*g_channel), data::VALUE_TYPE_FLOAT_VOLT);
-	minLimit = channel_coupling::getUMin(*g_channel);
-	maxLimit = channel_coupling::getUMax(*g_channel);
-	defLimit = channel_coupling::getUMax(*g_channel);
+	origLimit = limit = data::Value(channel_dispatcher::getULimit(*g_channel), data::VALUE_TYPE_FLOAT_VOLT);
+	minLimit = channel_dispatcher::getUMin(*g_channel);
+	maxLimit = channel_dispatcher::getUMax(*g_channel);
+	defLimit = channel_dispatcher::getUMax(*g_channel);
 
-	origLevel = level = data::Value(channel_coupling::getUProtectionLevel(*g_channel), data::VALUE_TYPE_FLOAT_VOLT);
-	minLevel = channel_coupling::getUSet(*g_channel);
-	maxLevel = channel_coupling::getUMax(*g_channel);
-	defLevel = channel_coupling::getUMax(*g_channel);
+	origLevel = level = data::Value(channel_dispatcher::getUProtectionLevel(*g_channel), data::VALUE_TYPE_FLOAT_VOLT);
+	minLevel = channel_dispatcher::getUSet(*g_channel);
+	maxLevel = channel_dispatcher::getUMax(*g_channel);
+	defLevel = channel_dispatcher::getUMax(*g_channel);
 
 	origDelay = delay = data::Value(g_channel->prot_conf.u_delay, data::VALUE_TYPE_FLOAT_SECOND);
 	minDelay = g_channel->OVP_MIN_DELAY;
@@ -253,11 +253,11 @@ void ChSettingsOvpProtectionPage::onSetParamsOk() {
 }
 
 void ChSettingsOvpProtectionPage::setParams(bool checkLoad) {
-	if (checkLoad && g_channel->isOutputEnabled() && limit.getFloat() < channel_coupling::getUMon(*g_channel) && util::greaterOrEqual(channel_coupling::getIMon(*g_channel), 0, CHANNEL_VALUE_PRECISION)) {
+	if (checkLoad && g_channel->isOutputEnabled() && limit.getFloat() < channel_dispatcher::getUMon(*g_channel) && util::greaterOrEqual(channel_dispatcher::getIMon(*g_channel), 0, CHANNEL_VALUE_PRECISION)) {
 		areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
 	} else {
-		channel_coupling::setVoltageLimit(*g_channel, limit.getFloat());
-        channel_coupling::setOvpParameters(*g_channel, state, level.getFloat(), delay.getFloat());
+		channel_dispatcher::setVoltageLimit(*g_channel, limit.getFloat());
+        channel_dispatcher::setOvpParameters(*g_channel, state, level.getFloat(), delay.getFloat());
         onSetFinish(checkLoad);
 	}
 }
@@ -267,9 +267,9 @@ void ChSettingsOvpProtectionPage::setParams(bool checkLoad) {
 ChSettingsOcpProtectionPage::ChSettingsOcpProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.i_state ? 1 : 0;
 
-	origLimit = limit = data::Value(channel_coupling::getILimit(*g_channel), data::VALUE_TYPE_FLOAT_AMPER);
-	minLimit = channel_coupling::getIMin(*g_channel);
-	maxLimit = channel_coupling::getIMaxLimit(*g_channel);
+	origLimit = limit = data::Value(channel_dispatcher::getILimit(*g_channel), data::VALUE_TYPE_FLOAT_AMPER);
+	minLimit = channel_dispatcher::getIMin(*g_channel);
+	maxLimit = channel_dispatcher::getIMaxLimit(*g_channel);
 	defLimit = maxLimit;
 
 	origLevel = level = 0;
@@ -285,11 +285,11 @@ void ChSettingsOcpProtectionPage::onSetParamsOk() {
 }
 
 void ChSettingsOcpProtectionPage::setParams(bool checkLoad) {
-	if (checkLoad && g_channel->isOutputEnabled() && limit.getFloat() < channel_coupling::getIMon(*g_channel)) {
+	if (checkLoad && g_channel->isOutputEnabled() && limit.getFloat() < channel_dispatcher::getIMon(*g_channel)) {
 		areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
 	} else {
-		channel_coupling::setCurrentLimit(*g_channel, limit.getFloat());
-        channel_coupling::setOcpParameters(*g_channel, state, delay.getFloat());
+		channel_dispatcher::setCurrentLimit(*g_channel, limit.getFloat());
+        channel_dispatcher::setOcpParameters(*g_channel, state, delay.getFloat());
 		onSetFinish(checkLoad);
 	}
 }
@@ -299,15 +299,15 @@ void ChSettingsOcpProtectionPage::setParams(bool checkLoad) {
 ChSettingsOppProtectionPage::ChSettingsOppProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.p_state ? 1 : 0;
 
-	origLimit = limit = data::Value(channel_coupling::getPowerLimit(*g_channel), data::VALUE_TYPE_FLOAT_WATT);
-	minLimit = channel_coupling::getPowerMinLimit(*g_channel);
-	maxLimit = channel_coupling::getPowerMaxLimit(*g_channel);
-	defLimit = channel_coupling::getPowerDefaultLimit(*g_channel);
+	origLimit = limit = data::Value(channel_dispatcher::getPowerLimit(*g_channel), data::VALUE_TYPE_FLOAT_WATT);
+	minLimit = channel_dispatcher::getPowerMinLimit(*g_channel);
+	maxLimit = channel_dispatcher::getPowerMaxLimit(*g_channel);
+	defLimit = channel_dispatcher::getPowerDefaultLimit(*g_channel);
 
-	origLevel = level = data::Value(channel_coupling::getPowerProtectionLevel(*g_channel), data::VALUE_TYPE_FLOAT_WATT);
-	minLevel = channel_coupling::getOppMinLevel(*g_channel);
-	maxLevel = channel_coupling::getOppMaxLevel(*g_channel);
-	defLevel = channel_coupling::getOppDefaultLevel(*g_channel);
+	origLevel = level = data::Value(channel_dispatcher::getPowerProtectionLevel(*g_channel), data::VALUE_TYPE_FLOAT_WATT);
+	minLevel = channel_dispatcher::getOppMinLevel(*g_channel);
+	maxLevel = channel_dispatcher::getOppMaxLevel(*g_channel);
+	defLevel = channel_dispatcher::getOppDefaultLevel(*g_channel);
 
 	origDelay = delay = data::Value(g_channel->prot_conf.p_delay, data::VALUE_TYPE_FLOAT_SECOND);
 	minDelay = g_channel->OPP_MIN_DELAY;
@@ -321,15 +321,15 @@ void ChSettingsOppProtectionPage::onSetParamsOk() {
 
 void ChSettingsOppProtectionPage::setParams(bool checkLoad) {
 	if (checkLoad && g_channel->isOutputEnabled()) {
-		float pMon = channel_coupling::getUMon(*g_channel) * channel_coupling::getIMon(*g_channel);
-		if (limit.getFloat() < pMon && util::greaterOrEqual(channel_coupling::getIMon(*g_channel), 0, CHANNEL_VALUE_PRECISION)) {
+		float pMon = channel_dispatcher::getUMon(*g_channel) * channel_dispatcher::getIMon(*g_channel);
+		if (limit.getFloat() < pMon && util::greaterOrEqual(channel_dispatcher::getIMon(*g_channel), 0, CHANNEL_VALUE_PRECISION)) {
 			areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
 			return;
 		}
 	}
 
-	channel_coupling::setPowerLimit(*g_channel, limit.getFloat());
-    channel_coupling::setOppParameters(*g_channel, state, level.getFloat(), delay.getFloat());
+	channel_dispatcher::setPowerLimit(*g_channel, limit.getFloat());
+    channel_dispatcher::setOppParameters(*g_channel, state, level.getFloat(), delay.getFloat());
 	onSetFinish(checkLoad);
 }
 
@@ -358,7 +358,7 @@ ChSettingsOtpProtectionPage::ChSettingsOtpProtectionPage() {
 
 void ChSettingsOtpProtectionPage::setParams(bool checkLoad) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4	
-	channel_coupling::setOtpParameters(*g_channel, state, level.getFloat(), delay.getFloat());
+	channel_dispatcher::setOtpParameters(*g_channel, state, level.getFloat(), delay.getFloat());
 	onSetFinish(checkLoad);
 #endif
 }

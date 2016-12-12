@@ -17,7 +17,7 @@
  */
 
 #include "psu.h"
-#include "channel_coupling.h"
+#include "channel_dispatcher.h"
 
 #include "scpi_psu.h"
 #include "scpi_simu.h"
@@ -93,7 +93,7 @@ scpi_result_t scpi_simu_LoadState(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    channel_coupling::setLoadEnabled(*channel, state);
+    channel_dispatcher::setLoadEnabled(*channel, state);
 
     return SCPI_RES_OK;
 }
@@ -120,7 +120,7 @@ scpi_result_t scpi_simu_Load(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    channel_coupling::setLoad(*channel, value);
+    channel_dispatcher::setLoad(*channel, value);
 
     return SCPI_RES_OK;
 }
@@ -161,7 +161,7 @@ scpi_result_t scpi_simu_LoadQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_simu_VoltageProgramExternal(scpi_t *context) {
-    if (channel_coupling::getType() != channel_coupling::TYPE_NONE) {
+    if (channel_dispatcher::isCoupled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
     }
@@ -187,7 +187,7 @@ scpi_result_t scpi_simu_VoltageProgramExternal(scpi_t *context) {
 }
 
 scpi_result_t scpi_simu_VoltageProgramExternalQ(scpi_t *context) {
-    if (channel_coupling::getType() != channel_coupling::TYPE_NONE) {
+    if (channel_dispatcher::isCoupled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
     }
@@ -233,7 +233,7 @@ scpi_result_t scpi_simu_PwrgoodQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_simu_RPol(scpi_t *context) {
-    if (channel_coupling::getType() != channel_coupling::TYPE_SERIES) {
+    if (channel_dispatcher::isSeries()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
     }
@@ -259,7 +259,7 @@ scpi_result_t scpi_simu_RPol(scpi_t *context) {
 }
 
 scpi_result_t scpi_simu_RPolQ(scpi_t *context) {
-    if (channel_coupling::getType() != channel_coupling::TYPE_SERIES) {
+    if (channel_dispatcher::isSeries()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
     }
