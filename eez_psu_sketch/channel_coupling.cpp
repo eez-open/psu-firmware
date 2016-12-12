@@ -486,7 +486,7 @@ void lowRippleAutoEnable(Channel& channel, bool enable) {
         Channel::get(0).lowRippleAutoEnable(enable);
         Channel::get(1).lowRippleAutoEnable(enable);
     } else {
-        channel.outputEnable(enable);
+        channel.lowRippleAutoEnable(enable);
     }
 }
 

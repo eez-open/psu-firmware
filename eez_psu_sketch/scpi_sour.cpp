@@ -683,7 +683,7 @@ scpi_result_t scpi_source_LRippleAuto(scpi_t * context) {
 		return SCPI_RES_ERR;
 	}
 
-    channel->lowRippleAutoEnable(enable);
+    channel_coupling::lowRippleAutoEnable(*channel, enable);
 
     return SCPI_RES_OK;
 }
