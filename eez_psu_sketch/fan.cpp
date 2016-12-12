@@ -84,7 +84,16 @@ void start_rpm_measure() {
 	g_rpmMeasureT2 = 0;
 
 	analogWrite(FAN_PWM, FAN_MAX_PWM);
-	delay(2);
+
+    // delay 2ms
+    if (g_isBooted) {
+        unsigned long finishTime = micros() + 2000;
+        do {
+            psu::tick();
+        } while (micros() < finishTime);
+    } else {
+        delay(2);
+    }
 
 	attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
 
@@ -224,7 +233,9 @@ void tick(unsigned long tick_usec) {
 				//DebugTrace("fanSpeed OFF");
 			}
 
-			analogWrite(FAN_PWM, g_fanSpeedPWM);
+            if (g_rpmMeasureState == RPM_MEASURE_STATE_FINISHED) {
+			    analogWrite(FAN_PWM, g_fanSpeedPWM);
+            }
 		}
 
 		g_fanSpeedLastAdjustedTick = tick_usec;
