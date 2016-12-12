@@ -38,10 +38,10 @@ enum Type {
 bool setType(Type value);
 Type getType();
 
-bool isCoupled() { return getType() == TYPE_PARALLEL || getType() == TYPE_SERIES; }
-bool isParallel() { return getType() == TYPE_PARALLEL; }
-bool isSeries() { return getType() == TYPE_SERIES; }
-bool isTracked() { return getType() == channel_dispatcher::TYPE_TRACKED; }
+inline bool isCoupled() { return getType() == TYPE_PARALLEL || getType() == TYPE_SERIES; }
+inline bool isParallel() { return getType() == TYPE_PARALLEL; }
+inline bool isSeries() { return getType() == TYPE_SERIES; }
+inline bool isTracked() { return getType() == channel_dispatcher::TYPE_TRACKED; }
 
 float getUSet(const Channel &channel);
 float getUMon(const Channel &channel);

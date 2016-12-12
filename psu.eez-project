@@ -18,7 +18,7 @@
         },
         {
           "fileName": "actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"persist_conf.h\"\n#include \"channel_coupling.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings_date_time.h\"\n#include \"gui_page_user_profiles.h\"\n#include \"gui_page_sys_settings_ethernet.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"persist_conf.h\"\n#include \"channel_dispatcher.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings_date_time.h\"\n#include \"gui_page_user_profiles.h\"\n#include \"gui_page_sys_settings_ethernet.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
         },
         {
           "fileName": "gui_document.h",
@@ -37,7 +37,7 @@
       "name": "toggle_channel",
       "description": "turn channel on/off",
       "implementationType": "native",
-      "implementation": "Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);\nif (channel.isTripped()) {\n    errorMessageP(PSTR(\"Channel is tripped!\"));\n} else {\n    channel_coupling::outputEnable(channel, !channel.isOutputEnabled());\n}\n"
+      "implementation": "Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);\nif (channel.isTripped()) {\n    errorMessageP(PSTR(\"Channel is tripped!\"));\n} else {\n    channel_dispatcher::outputEnable(channel, !channel.isOutputEnabled());\n}\n"
     },
     {
       "name": "edit",
@@ -304,6 +304,11 @@
       "implementation": "setPage(PAGE_ID_CH_SETTINGS_ADV_RPROG);"
     },
     {
+      "name": "show_ch_settings_adv_tracking",
+      "implementationType": "native",
+      "implementation": "setPage(PAGE_ID_CH_SETTINGS_ADV_TRACKING);"
+    },
+    {
       "name": "show_ch_settings_adv_coupling",
       "implementationType": "native",
       "implementation": "setPage(PAGE_ID_CH_SETTINGS_ADV_COUPLING);"
@@ -419,22 +424,22 @@
       "implementation": "event_queue::moveToNextPage();\n"
     },
     {
-      "name": "ch_settins_adv_lripple_toggle_status",
+      "name": "ch_settings_adv_lripple_toggle_status",
       "implementationType": "native",
       "implementation": "((ChSettingsAdvLRipplePage *)getActivePage())->toggleStatus();"
     },
     {
-      "name": "ch_settins_adv_lripple_toggle_auto_mode",
+      "name": "ch_settings_adv_lripple_toggle_auto_mode",
       "implementationType": "native",
       "implementation": "((ChSettingsAdvLRipplePage *)getActivePage())->toggleAutoMode();"
     },
     {
-      "name": "ch_settins_adv_rsense_toggle_status",
+      "name": "ch_settings_adv_rsense_toggle_status",
       "implementationType": "native",
       "implementation": "((ChSettingsAdvRSensePage *)getActivePage())->toggleStatus();"
     },
     {
-      "name": "ch_settins_adv_rprog_toggle_status",
+      "name": "ch_settings_adv_rprog_toggle_status",
       "implementationType": "native",
       "implementation": "((ChSettingsAdvRProgPage *)getActivePage())->toggleStatus();"
     },
@@ -504,29 +509,34 @@
       "implementation": "SysSettingsEthernetPage::disable();\n"
     },
     {
-      "name": "ch_settins_adv_coupling_uncouple",
+      "name": "ch_settings_adv_coupling_uncouple",
       "implementationType": "native",
       "implementation": "((ChSettingsAdvCouplingPage *)getActivePage())->uncouple();"
     },
     {
-      "name": "ch_settins_adv_coupling_set_parallel_info",
+      "name": "ch_settings_adv_coupling_set_parallel_info",
       "implementationType": "native",
       "implementation": "((ChSettingsAdvCouplingPage *)getActivePage())->setParallelInfo();"
     },
     {
-      "name": "ch_settins_adv_coupling_set_series_info",
+      "name": "ch_settings_adv_coupling_set_series_info",
       "implementationType": "native",
       "implementation": "((ChSettingsAdvCouplingPage *)getActivePage())->setSeriesInfo();"
     },
     {
-      "name": "ch_settins_adv_coupling_set_parallel",
+      "name": "ch_settings_adv_coupling_set_parallel",
       "implementationType": "native",
       "implementation": "((ChSettingsAdvCouplingPage *)getActivePage())->setParallel();"
     },
     {
-      "name": "ch_settins_adv_coupling_set_series",
+      "name": "ch_settings_adv_coupling_set_series",
       "implementationType": "native",
       "implementation": "((ChSettingsAdvCouplingPage *)getActivePage())->setSeries();"
+    },
+    {
+      "name": "ch_settings_adv_toggle_tracking_mode",
+      "implementationType": "native",
+      "implementation": "((ChSettingsAdvTrackingPage *)getActivePage())->toggleTrackingMode();"
     }
   ],
   "data": [
@@ -1087,6 +1097,13 @@
     },
     {
       "name": "channel.isCoupled",
+      "description": "",
+      "type": "boolean",
+      "enumItems": "",
+      "defaultValue": "0"
+    },
+    {
+      "name": "channel.isTracked",
       "description": "",
       "type": "boolean",
       "enumItems": "",
@@ -10439,13 +10456,35 @@
               ]
             },
             {
-              "type": "Text",
               "x": 16,
+              "type": "Select",
+              "data": "channel.isCoupled",
               "y": 112,
               "width": 180,
               "height": 28,
-              "style": "edit_value_active_S_left",
-              "text": "Tracking control"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "show_ch_settings_adv_tracking",
+                  "x": 0,
+                  "y": 0,
+                  "width": 180,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "Tracking control"
+                },
+                {
+                  "type": "Text",
+                  "action": "show_ch_settings_adv_tracking",
+                  "x": 0,
+                  "y": 0,
+                  "width": 180,
+                  "height": 28,
+                  "style": "default_disabled_S_left",
+                  "text": "Tracking control"
+                }
+              ]
             },
             {
               "type": "Rectangle",
@@ -10671,7 +10710,7 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "ch_settins_adv_lripple_toggle_status",
+                  "action": "ch_settings_adv_lripple_toggle_status",
                   "x": 0,
                   "y": 0,
                   "width": 74,
@@ -10681,7 +10720,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "ch_settins_adv_lripple_toggle_status",
+                  "action": "ch_settings_adv_lripple_toggle_status",
                   "x": 0,
                   "y": 0,
                   "width": 74,
@@ -10711,7 +10750,7 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "ch_settins_adv_lripple_toggle_auto_mode",
+                  "action": "ch_settings_adv_lripple_toggle_auto_mode",
                   "x": 0,
                   "y": 0,
                   "width": 74,
@@ -10721,7 +10760,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "ch_settins_adv_lripple_toggle_auto_mode",
+                  "action": "ch_settings_adv_lripple_toggle_auto_mode",
                   "x": 0,
                   "y": 0,
                   "width": 74,
@@ -10941,7 +10980,7 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "ch_settins_adv_rsense_toggle_status",
+                  "action": "ch_settings_adv_rsense_toggle_status",
                   "x": 0,
                   "y": 0,
                   "width": 62,
@@ -10951,7 +10990,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "ch_settins_adv_rsense_toggle_status",
+                  "action": "ch_settings_adv_rsense_toggle_status",
                   "x": 0,
                   "y": 0,
                   "width": 62,
@@ -11108,7 +11147,7 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "ch_settins_adv_rprog_toggle_status",
+                  "action": "ch_settings_adv_rprog_toggle_status",
                   "x": 0,
                   "y": 0,
                   "width": 62,
@@ -11118,7 +11157,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "ch_settins_adv_rprog_toggle_status",
+                  "action": "ch_settings_adv_rprog_toggle_status",
                   "x": 0,
                   "y": 0,
                   "width": 62,
@@ -11257,7 +11296,7 @@
             {
               "x": 117,
               "type": "Select",
-              "data": "channel.rsense.status",
+              "data": "channel.isTracked",
               "y": 146,
               "width": 62,
               "height": 42,
@@ -11265,7 +11304,7 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "ch_settins_adv_rsense_toggle_status",
+                  "action": "ch_settings_adv_toggle_tracking_mode",
                   "x": 0,
                   "y": 0,
                   "width": 62,
@@ -11275,7 +11314,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "ch_settins_adv_rsense_toggle_status",
+                  "action": "ch_settings_adv_toggle_tracking_mode",
                   "x": 0,
                   "y": 0,
                   "width": 62,
@@ -11404,7 +11443,7 @@
                   "widgets": [
                     {
                       "type": "Text",
-                      "action": "ch_settins_adv_coupling_set_parallel_info",
+                      "action": "ch_settings_adv_coupling_set_parallel_info",
                       "x": 0,
                       "y": 0,
                       "width": 236,
@@ -11414,7 +11453,7 @@
                     },
                     {
                       "type": "Text",
-                      "action": "ch_settins_adv_coupling_set_series_info",
+                      "action": "ch_settings_adv_coupling_set_series_info",
                       "x": 0,
                       "y": 38,
                       "width": 236,
@@ -11434,7 +11473,7 @@
                   "widgets": [
                     {
                       "type": "Text",
-                      "action": "ch_settins_adv_coupling_uncouple",
+                      "action": "ch_settings_adv_coupling_uncouple",
                       "x": 0,
                       "y": 0,
                       "width": 236,
@@ -11444,7 +11483,7 @@
                     },
                     {
                       "type": "Text",
-                      "action": "ch_settins_adv_coupling_set_series_info",
+                      "action": "ch_settings_adv_coupling_set_series_info",
                       "x": 0,
                       "y": 38,
                       "width": 236,
@@ -11464,7 +11503,7 @@
                   "widgets": [
                     {
                       "type": "Text",
-                      "action": "ch_settins_adv_coupling_uncouple",
+                      "action": "ch_settings_adv_coupling_uncouple",
                       "x": 0,
                       "y": 0,
                       "width": 236,
@@ -11474,7 +11513,7 @@
                     },
                     {
                       "type": "Text",
-                      "action": "ch_settins_adv_coupling_set_parallel_info",
+                      "action": "ch_settings_adv_coupling_set_parallel_info",
                       "x": 0,
                       "y": 38,
                       "width": 236,
@@ -11607,7 +11646,7 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "ch_settins_adv_coupling_set_parallel",
+                  "action": "ch_settings_adv_coupling_set_parallel",
                   "x": 0,
                   "y": 0,
                   "width": 132,
@@ -11617,7 +11656,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "ch_settins_adv_coupling_set_series",
+                  "action": "ch_settings_adv_coupling_set_series",
                   "x": 0,
                   "y": 0,
                   "width": 132,

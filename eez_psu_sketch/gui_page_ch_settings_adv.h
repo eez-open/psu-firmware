@@ -77,6 +77,11 @@ private:
     static int selectedMode;
 };
 
+class ChSettingsAdvTrackingPage : public Page {
+public:
+    void toggleTrackingMode();
+};
+
 }
 }
 } // namespace eez::psu::gui

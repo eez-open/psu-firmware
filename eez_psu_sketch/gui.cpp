@@ -113,6 +113,7 @@ Page *createPageFromId(int pageId) {
 	case PAGE_ID_CH_SETTINGS_ADV_LRIPPLE: return new ChSettingsAdvLRipplePage();
 	case PAGE_ID_CH_SETTINGS_ADV_RSENSE: return new ChSettingsAdvRSensePage();
 	case PAGE_ID_CH_SETTINGS_ADV_RPROG: return new ChSettingsAdvRProgPage();
+    case PAGE_ID_CH_SETTINGS_ADV_TRACKING: return new ChSettingsAdvTrackingPage();
 	case PAGE_ID_CH_SETTINGS_ADV_COUPLING:
     case PAGE_ID_CH_SETTINGS_ADV_COUPLING_INFO: return new ChSettingsAdvCouplingPage();
 	case PAGE_ID_CH_SETTINGS_INFO: return new ChSettingsInfoPage();

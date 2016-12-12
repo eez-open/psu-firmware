@@ -204,11 +204,19 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 	}
 
 	if (id == DATA_ID_CHANNEL_COUPLING_MODE) {
-		return data::Value(channel_dispatcher::getType());
+        if (channel_dispatcher::isCoupled()) {
+		    return data::Value(channel_dispatcher::getType());
+        } else {
+            return data::Value(0);
+        }
 	}
 
 	if (id == DATA_ID_CHANNEL_IS_COUPLED) {
 		return data::Value(channel_dispatcher::isCoupled() ? 1 : 0);
+	}
+
+	if (id == DATA_ID_CHANNEL_IS_TRACKED) {
+		return data::Value(channel_dispatcher::isTracked() ? 1 : 0);
 	}
 
     if (cursor.i >= 0 || g_channel != 0) {

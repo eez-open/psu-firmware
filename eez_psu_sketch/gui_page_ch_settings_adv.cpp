@@ -170,6 +170,18 @@ void ChSettingsAdvCouplingPage::setSeries() {
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+void ChSettingsAdvTrackingPage::toggleTrackingMode() {
+    channel_dispatcher::setType(channel_dispatcher::TYPE_TRACKED);
+
+    if (channel_dispatcher::isTracked()) {
+	    infoMessageP(PSTR("Tracking enabled!"));
+    } else {
+        infoMessageP(PSTR("Tracking disabled!"));
+    }
+}
+
 }
 }
 } // namespace eez::psu::gui

@@ -254,6 +254,10 @@ void action_show_ch_settings_adv_rprog() {
     setPage(PAGE_ID_CH_SETTINGS_ADV_RPROG);
 }
 
+void action_show_ch_settings_adv_tracking() {
+    setPage(PAGE_ID_CH_SETTINGS_ADV_TRACKING);
+}
+
 void action_show_ch_settings_adv_coupling() {
     setPage(PAGE_ID_CH_SETTINGS_ADV_COUPLING);
 }
@@ -348,19 +352,19 @@ void action_event_queue_next_page() {
     event_queue::moveToNextPage();
 }
 
-void action_ch_settins_adv_lripple_toggle_status() {
+void action_ch_settings_adv_lripple_toggle_status() {
     ((ChSettingsAdvLRipplePage *)getActivePage())->toggleStatus();
 }
 
-void action_ch_settins_adv_lripple_toggle_auto_mode() {
+void action_ch_settings_adv_lripple_toggle_auto_mode() {
     ((ChSettingsAdvLRipplePage *)getActivePage())->toggleAutoMode();
 }
 
-void action_ch_settins_adv_rsense_toggle_status() {
+void action_ch_settings_adv_rsense_toggle_status() {
     ((ChSettingsAdvRSensePage *)getActivePage())->toggleStatus();
 }
 
-void action_ch_settins_adv_rprog_toggle_status() {
+void action_ch_settings_adv_rprog_toggle_status() {
     ((ChSettingsAdvRProgPage *)getActivePage())->toggleStatus();
 }
 
@@ -416,24 +420,28 @@ void action_sys_settings_ethernet_disable() {
     SysSettingsEthernetPage::disable();
 }
 
-void action_ch_settins_adv_coupling_uncouple() {
+void action_ch_settings_adv_coupling_uncouple() {
     ((ChSettingsAdvCouplingPage *)getActivePage())->uncouple();
 }
 
-void action_ch_settins_adv_coupling_set_parallel_info() {
+void action_ch_settings_adv_coupling_set_parallel_info() {
     ((ChSettingsAdvCouplingPage *)getActivePage())->setParallelInfo();
 }
 
-void action_ch_settins_adv_coupling_set_series_info() {
+void action_ch_settings_adv_coupling_set_series_info() {
     ((ChSettingsAdvCouplingPage *)getActivePage())->setSeriesInfo();
 }
 
-void action_ch_settins_adv_coupling_set_parallel() {
+void action_ch_settings_adv_coupling_set_parallel() {
     ((ChSettingsAdvCouplingPage *)getActivePage())->setParallel();
 }
 
-void action_ch_settins_adv_coupling_set_series() {
+void action_ch_settings_adv_coupling_set_series() {
     ((ChSettingsAdvCouplingPage *)getActivePage())->setSeries();
+}
+
+void action_ch_settings_adv_toggle_tracking_mode() {
+    ((ChSettingsAdvTrackingPage *)getActivePage())->toggleTrackingMode();
 }
 
 
@@ -491,6 +499,7 @@ ACTION actions[] = {
     action_show_ch_settings_adv_lripple,
     action_show_ch_settings_adv_rsense,
     action_show_ch_settings_adv_rprog,
+    action_show_ch_settings_adv_tracking,
     action_show_ch_settings_adv_coupling,
     action_show_ch_settings_info,
     action_show_ch_settings_info_cal,
@@ -514,10 +523,10 @@ ACTION actions[] = {
     action_edit_field,
     action_event_queue_previous_page,
     action_event_queue_next_page,
-    action_ch_settins_adv_lripple_toggle_status,
-    action_ch_settins_adv_lripple_toggle_auto_mode,
-    action_ch_settins_adv_rsense_toggle_status,
-    action_ch_settins_adv_rprog_toggle_status,
+    action_ch_settings_adv_lripple_toggle_status,
+    action_ch_settings_adv_lripple_toggle_auto_mode,
+    action_ch_settings_adv_rsense_toggle_status,
+    action_ch_settings_adv_rprog_toggle_status,
     action_sys_settings_date_time_toggle_dst,
     action_show_user_profiles,
     action_show_user_profiles2,
@@ -531,11 +540,12 @@ ACTION actions[] = {
     action_toggle_channel_displayed_values,
     action_sys_settings_ethernet_enable,
     action_sys_settings_ethernet_disable,
-    action_ch_settins_adv_coupling_uncouple,
-    action_ch_settins_adv_coupling_set_parallel_info,
-    action_ch_settins_adv_coupling_set_series_info,
-    action_ch_settins_adv_coupling_set_parallel,
-    action_ch_settins_adv_coupling_set_series
+    action_ch_settings_adv_coupling_uncouple,
+    action_ch_settings_adv_coupling_set_parallel_info,
+    action_ch_settings_adv_coupling_set_series_info,
+    action_ch_settings_adv_coupling_set_parallel,
+    action_ch_settings_adv_coupling_set_series,
+    action_ch_settings_adv_toggle_tracking_mode
 };
 
 }
