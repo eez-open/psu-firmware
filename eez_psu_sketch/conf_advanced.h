@@ -61,7 +61,7 @@
 #else
 #define ADC_SPS 5
 #endif
-#define ADC_SPS_TIME_CRITICAL 0 // used when time/performance critical operation is running
+#define ADC_SPS_TIME_CRITICAL 5 // used when time/performance critical operation is running
 
 /// Duration, in milliseconds, from the last ADC interrupt
 /// after which ADC timeout condition is declared.  
