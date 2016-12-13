@@ -119,6 +119,7 @@ enum DataEnum {
     DATA_ID_CHANNEL_RPROG_STATUS,
     DATA_ID_CHANNEL_IS_COUPLED,
     DATA_ID_CHANNEL_IS_TRACKED,
+    DATA_ID_CHANNEL_IS_COUPLED_OR_TRACKED,
     DATA_ID_CHANNEL_COUPLING_MODE,
     DATA_ID_CHANNEL_COUPLING_SELECTED_MODE,
     DATA_ID_SYS_ON_TIME_TOTAL,
@@ -181,6 +182,7 @@ enum BitmapsEnum {
 };
 
 enum StylesEnum {
+    STYLE_ID_NONE,
     STYLE_ID_BAR_GRAPH_I_DEFAULT,
     STYLE_ID_BAR_GRAPH_LIMIT_LINE,
     STYLE_ID_BAR_GRAPH_SET_LINE,
@@ -342,6 +344,8 @@ struct Bitmap {
 };
 
 extern Bitmap bitmaps[];
+
+extern const uint8_t styles[];
 
 extern const uint8_t document[];
 

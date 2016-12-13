@@ -64,9 +64,12 @@ using namespace lcd;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Document *g_doc;
+Styles *g_styles;
+Document *g_document;
+
 #if defined(EEZ_PSU_ARDUINO_MEGA)
-static Document g_docBuffer;
+static Styles g_stylesBuffer;
+static Document g_documentBuffer;
 #endif
 
 static int g_activePageId;
@@ -175,6 +178,22 @@ public:
                     }
                 }
             }
+            else if (widget->type == WIDGET_TYPE_CUSTOM) {
+                DECL_WIDGET_SPECIFIC(CustomWidgetSpecific, customWidgetSpecific, widget);
+                DECL_CUSTOM_WIDGET(customWidget, customWidgetSpecific->customWidget);
+                if (stack[stack_index].index < customWidget->widgets.count) {
+                    OBJ_OFFSET childWidgetOffset = getListItemOffset(customWidget->widgets, stack[stack_index].index, sizeof(Widget));
+                    ++stack[stack_index].index;
+                    if (!push(childWidgetOffset, stack[stack_index].x, stack[stack_index].y, stack[stack_index].refresh)) {
+                        return true;
+                    }
+                }
+                else {
+                    if (!pop()) {
+                        return false;
+                    }
+                }
+            }
             else if (widget->type == WIDGET_TYPE_LIST) {
                 if (stack[stack_index].index < data::count(widget->data)) {
                     data::select(cursor, widget->data, stack[stack_index].index);
@@ -246,7 +265,7 @@ private:
     bool push(OBJ_OFFSET widgetOffset, int x, int y, bool refresh) {
         DECL_WIDGET(widget, widgetOffset);
 
-        if (widget->type == WIDGET_TYPE_CONTAINER || widget->type == WIDGET_TYPE_LIST) {
+        if (widget->type == WIDGET_TYPE_CONTAINER || widget->type == WIDGET_TYPE_LIST || widget->type == WIDGET_TYPE_CUSTOM) {
 			if (++stack_index == CONF_GUI_ENUM_WIDGETS_STACK_SIZE) {
                 return false;
             }
@@ -611,7 +630,7 @@ bool drawDisplayDataWidget(const WidgetCursor &widgetCursor, const Widget *widge
             refresh = strcmp(text, previousText) != 0;
         }
         if (refresh) {
-            DECL_STYLE_WITH_OFFSET(style, display_data_widget->editStyle);
+            DECL_STYLE(style, display_data_widget->editStyle);
             drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
             return true;
         }
@@ -647,7 +666,7 @@ bool drawDisplayDataWidget(const WidgetCursor &widgetCursor, const Widget *widge
             value.toText(text, sizeof(text));
 
             if (edit) {
-                DECL_STYLE_WITH_OFFSET(style, display_data_widget->editStyle);
+                DECL_STYLE(style, display_data_widget->editStyle);
                 drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
             }
             else {
@@ -986,7 +1005,7 @@ bool drawButtonWidget(const WidgetCursor &widgetCursor, const Widget *widget, bo
 		}
 
 		if (refresh) {
-			DECL_STYLE_WITH_OFFSET(style, state ? widget->style : button_widget->disabledStyle);
+			DECL_STYLE(style, state ? widget->style : button_widget->disabledStyle);
 
 			if (value.isString()) {
 	            drawText(value.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
@@ -1001,7 +1020,7 @@ bool drawButtonWidget(const WidgetCursor &widgetCursor, const Widget *widget, bo
 	} else {
 		if (refresh) {
 			DECL_STRING(text, button_widget->text);
-			DECL_STYLE_WITH_OFFSET(style, state ? widget->style : button_widget->disabledStyle);
+			DECL_STYLE(style, state ? widget->style : button_widget->disabledStyle);
 			drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
 			return true;
 		}
@@ -1058,7 +1077,7 @@ int calcValuePosInBarGraphWidget(data::Value &value, float min, float max, int d
 }
 
 void drawLineInBarGraphWidget(const BarGraphWidget *barGraphWidget, int p, OBJ_OFFSET lineStyle, int x, int y, int w, int h) {
-    DECL_STYLE_WITH_OFFSET(style, lineStyle);
+    DECL_STYLE(style, lineStyle);
 
 	lcd::lcd.setColor(style->color);
     if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_LEFT_RIGHT) {
@@ -1122,7 +1141,7 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 
         uint16_t inverseColor;
 		if (barGraphWidget->textStyle) {
-    		DECL_STYLE_WITH_OFFSET(textStyleInner, barGraphWidget->textStyle);
+    		DECL_STYLE(textStyleInner, barGraphWidget->textStyle);
 			memcpy(&textStyle, textStyleInner, sizeof(Style));
     
             inverseColor = textStyle.background_color;
@@ -1645,7 +1664,11 @@ void areYouSureWithMessage(const char *message PROGMEM, void (*yes_callback)()) 
 ////////////////////////////////////////////////////////////////////////////////
 
 void selectChannel() {
-	g_channel = &Channel::get(g_foundWidgetAtDown.cursor.i);
+    if (g_foundWidgetAtDown.cursor.i >= 0) {
+	    g_channel = &Channel::get(g_foundWidgetAtDown.cursor.i);
+    } else {
+        g_channel = &Channel::get(0);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1736,10 +1759,14 @@ void init() {
 	g_activePage = 0;
 
 #if defined(EEZ_PSU_ARDUINO_MEGA)
-    arduino_util::prog_read_buffer(document, (uint8_t *)&g_docBuffer, sizeof(Document));
-    g_doc = &g_docBuffer;
+    arduino_util::prog_read_buffer(styles, (uint8_t *)&g_stylesBuffer, sizeof(Styles));
+    g_styles = &g_stylesBuffer;
+
+    arduino_util::prog_read_buffer(pages, (uint8_t *)&g_documentBuffer, sizeof(Document));
+    g_document = &g_documentBuffer;
 #else
-    g_doc = (Document *)document;
+    g_styles = (Styles *)styles;
+    g_document = (Document *)document;
 #endif
 }
 

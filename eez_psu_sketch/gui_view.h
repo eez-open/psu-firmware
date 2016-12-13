@@ -48,6 +48,7 @@ namespace gui {
 #define WIDGET_TYPE_BUTTON_GROUP 11
 #define WIDGET_TYPE_SCALE 12
 #define WIDGET_TYPE_BAR_GRAPH 13
+#define WIDGET_TYPE_CUSTOM 14
 
 #define LIST_TYPE_VERTICAL 1
 #define LIST_TYPE_HORIZONTAL 2
@@ -64,10 +65,14 @@ namespace gui {
 
 typedef uint16_t OBJ_OFFSET;
 
+////////////////////////////////////////////////////////////////////////////////
+
 struct List {
     uint8_t count;
     OBJ_OFFSET first;
 };
+
+////////////////////////////////////////////////////////////////////////////////
 
 struct Style {
     uint8_t font;
@@ -79,7 +84,13 @@ struct Style {
     uint8_t padding_vertical;
 };
 
+typedef List Styles;
+
+////////////////////////////////////////////////////////////////////////////////
+
 typedef uint8_t ActionType;
+
+////////////////////////////////////////////////////////////////////////////////
 
 struct Widget {
     uint8_t type;
@@ -89,7 +100,7 @@ struct Widget {
     int16_t y;
     uint16_t w;
     uint16_t h;
-    OBJ_OFFSET style;
+    uint8_t style;
     OBJ_OFFSET specific;
 };
 
@@ -107,7 +118,7 @@ struct SelectWidget {
 };
 
 struct DisplayDataWidget {
-    OBJ_OFFSET editStyle;
+    uint8_t editStyle;
 };
 
 struct TextWidget {
@@ -125,7 +136,7 @@ struct BitmapWidget {
 struct ButtonWidget {
 	OBJ_OFFSET text;
 	uint8_t enabled;
-	OBJ_OFFSET disabledStyle;
+	uint8_t disabledStyle;
 };
 
 struct ToggleButtonWidget {
@@ -141,11 +152,15 @@ struct ScaleWidget {
 
 struct BarGraphWidget {
 	uint8_t orientation; // BAR_GRAPH_ORIENTATION_...
-	OBJ_OFFSET textStyle;
+	uint8_t textStyle;
 	uint8_t line1Data;
-	OBJ_OFFSET line1Style;
+	uint8_t line1Style;
 	uint8_t line2Data;
-	OBJ_OFFSET line2Style;
+	uint8_t line2Style;
+};
+
+struct CustomWidgetSpecific {
+	uint8_t customWidget;
 };
 
 struct Rect {
@@ -160,8 +175,16 @@ struct PageWidget {
 	List transparentRectangles;
 };
 
+////////////////////////////////////////////////////////////////////////////////
+
+struct CustomWidget {
+    List widgets;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
 struct Document {
-    List styles;
+    List customWidgets;
     List pages;
 };
 

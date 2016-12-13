@@ -204,126 +204,132 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 	}
 
 	if (id == DATA_ID_CHANNEL_COUPLING_MODE) {
-        if (channel_dispatcher::isCoupled()) {
-		    return data::Value(channel_dispatcher::getType());
-        } else {
-            return data::Value(0);
-        }
+		return data::Value(channel_dispatcher::getType());
 	}
 
 	if (id == DATA_ID_CHANNEL_IS_COUPLED) {
-		return data::Value(channel_dispatcher::isCoupled() ? 1 : 0);
+		return data::Value(channel_dispatcher::isCoupled());
 	}
 
-	if (id == DATA_ID_CHANNEL_IS_TRACKED) {
+    if (id == DATA_ID_CHANNEL_IS_TRACKED) {
 		return data::Value(channel_dispatcher::isTracked() ? 1 : 0);
 	}
 
-    if (cursor.i >= 0 || g_channel != 0) {
-		int iChannel = cursor.i >= 0 ? cursor.i : g_channel->index - 1;
-        data::ChannelSnapshot &channelSnapshot = channelSnapshots[iChannel];
+	if (id == DATA_ID_CHANNEL_IS_COUPLED_OR_TRACKED) {
+		return data::Value(channel_dispatcher::isCoupled() || channel_dispatcher::isTracked() ? 1 : 0);
+	}
 
-		if (id == DATA_ID_CHANNEL_STATUS) {
-			return Value(channelSnapshot.flags.status);
+    int iChannel;
+    if (cursor.i >= 0) {
+		iChannel = cursor.i;
+    } else if (g_channel) {
+        iChannel = g_channel->index - 1;
+    } else {
+        iChannel = 0;
+    }
+
+    data::ChannelSnapshot &channelSnapshot = channelSnapshots[iChannel];
+
+	if (id == DATA_ID_CHANNEL_STATUS) {
+		return Value(channelSnapshot.flags.status);
+	}
+
+	if (channelSnapshot.flags.status == 1) {
+		if (id == DATA_ID_CHANNEL_OUTPUT_STATE) {
+			return Value(channelSnapshot.flags.state);
+		}
+		
+		if (id == DATA_ID_CHANNEL_OUTPUT_MODE) {
+			return Value(channelSnapshot.flags.mode);
+		}
+		
+		if (id == DATA_ID_CHANNEL_MON_VALUE) {
+			return channelSnapshot.mon_value;
+		}
+		
+		if (id == DATA_ID_CHANNEL_U_SET) {
+			return Value(channelSnapshot.u_set, VALUE_TYPE_FLOAT_VOLT);
+		}
+		
+		if (id == DATA_ID_CHANNEL_U_MON) {
+			return Value(channelSnapshot.u_mon, VALUE_TYPE_FLOAT_VOLT);
 		}
 
-		if (channelSnapshot.flags.status == 1) {
-			if (id == DATA_ID_CHANNEL_OUTPUT_STATE) {
-				return Value(channelSnapshot.flags.state);
-			}
+		if (id == DATA_ID_CHANNEL_U_MON_DAC) {
+			return Value(channelSnapshot.u_monDac, VALUE_TYPE_FLOAT_VOLT);
+		}
+
+		if (id == DATA_ID_CHANNEL_U_LIMIT) {
+			return Value(channelSnapshot.u_limit, VALUE_TYPE_FLOAT_VOLT);
+		}
+
+		if (id == DATA_ID_CHANNEL_I_SET) {
+			return Value(channelSnapshot.i_set, VALUE_TYPE_FLOAT_AMPER);
+		}
 		
-			if (id == DATA_ID_CHANNEL_OUTPUT_MODE) {
-				return Value(channelSnapshot.flags.mode);
-			}
+		if (id == DATA_ID_CHANNEL_I_MON) {
+			return Value(channelSnapshot.i_mon, VALUE_TYPE_FLOAT_AMPER);
+		}
+
+		if (id == DATA_ID_CHANNEL_I_MON_DAC) {
+			return Value(channelSnapshot.i_monDac, VALUE_TYPE_FLOAT_AMPER);
+		}
+
+		if (id == DATA_ID_CHANNEL_I_LIMIT) {
+			return Value(channelSnapshot.i_limit, VALUE_TYPE_FLOAT_VOLT);
+		}
+
+		if (id == DATA_ID_CHANNEL_P_MON) {
+			return Value(channelSnapshot.p_mon, VALUE_TYPE_FLOAT_WATT);
+		}
+
+		if (id == DATA_ID_LRIP) {
+			return Value(channelSnapshot.flags.lrip);
+		}
+
+		if (id == DATA_ID_CHANNEL_RPROG_STATUS) {
+			return Value(channelSnapshot.flags.rprog);
+		}
+
+		if (id == DATA_ID_OVP) {
+			return Value(channelSnapshot.flags.ovp);
+		}
 		
-			if (id == DATA_ID_CHANNEL_MON_VALUE) {
-				return channelSnapshot.mon_value;
-			}
+		if (id == DATA_ID_OCP) {
+			return Value(channelSnapshot.flags.ocp);
+		}
 		
-			if (id == DATA_ID_CHANNEL_U_SET) {
-				return Value(channelSnapshot.u_set, VALUE_TYPE_FLOAT_VOLT);
-			}
+		if (id == DATA_ID_OPP) {
+			return Value(channelSnapshot.flags.opp);
+		}
 		
-			if (id == DATA_ID_CHANNEL_U_MON) {
-				return Value(channelSnapshot.u_mon, VALUE_TYPE_FLOAT_VOLT);
-			}
-
-			if (id == DATA_ID_CHANNEL_U_MON_DAC) {
-				return Value(channelSnapshot.u_monDac, VALUE_TYPE_FLOAT_VOLT);
-			}
-
-			if (id == DATA_ID_CHANNEL_U_LIMIT) {
-				return Value(channelSnapshot.u_limit, VALUE_TYPE_FLOAT_VOLT);
-			}
-
-			if (id == DATA_ID_CHANNEL_I_SET) {
-				return Value(channelSnapshot.i_set, VALUE_TYPE_FLOAT_AMPER);
-			}
+		if (id == DATA_ID_OTP) {
+			return Value(channelSnapshot.flags.otp_ch);
+		}
 		
-			if (id == DATA_ID_CHANNEL_I_MON) {
-				return Value(channelSnapshot.i_mon, VALUE_TYPE_FLOAT_AMPER);
-			}
-
-			if (id == DATA_ID_CHANNEL_I_MON_DAC) {
-				return Value(channelSnapshot.i_monDac, VALUE_TYPE_FLOAT_AMPER);
-			}
-
-			if (id == DATA_ID_CHANNEL_I_LIMIT) {
-				return Value(channelSnapshot.i_limit, VALUE_TYPE_FLOAT_VOLT);
-			}
-
-			if (id == DATA_ID_CHANNEL_P_MON) {
-				return Value(channelSnapshot.p_mon, VALUE_TYPE_FLOAT_WATT);
-			}
-
-			if (id == DATA_ID_LRIP) {
-				return Value(channelSnapshot.flags.lrip);
-			}
-
-			if (id == DATA_ID_CHANNEL_RPROG_STATUS) {
-				return Value(channelSnapshot.flags.rprog);
-			}
-
-			if (id == DATA_ID_OVP) {
-				return Value(channelSnapshot.flags.ovp);
-			}
+		if (id == DATA_ID_CHANNEL_LABEL) {
+			return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_LABEL);
+		}
 		
-			if (id == DATA_ID_OCP) {
-				return Value(channelSnapshot.flags.ocp);
-			}
-		
-			if (id == DATA_ID_OPP) {
-				return Value(channelSnapshot.flags.opp);
-			}
-		
-			if (id == DATA_ID_OTP) {
-				return Value(channelSnapshot.flags.otp_ch);
-			}
-		
-			if (id == DATA_ID_CHANNEL_LABEL) {
-				return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_LABEL);
-			}
-		
-			if (id == DATA_ID_CHANNEL_SHORT_LABEL) {
-				return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_SHORT_LABEL);
-			}
+		if (id == DATA_ID_CHANNEL_SHORT_LABEL) {
+			return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_SHORT_LABEL);
+		}
 
-            if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
-	    	    return data::Value(channelSnapshot.flags.temperatureStatus);
-	        }
+        if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
+	    	return data::Value(channelSnapshot.flags.temperatureStatus);
+	    }
 
-	        if (id == DATA_ID_CHANNEL_TEMP && channelSnapshot.flags.temperatureStatus == 1) {
-		        return data::Value(channelSnapshot.temperature, data::VALUE_TYPE_FLOAT_CELSIUS);
-	        }
+	    if (id == DATA_ID_CHANNEL_TEMP && channelSnapshot.flags.temperatureStatus == 1) {
+		    return data::Value(channelSnapshot.temperature, data::VALUE_TYPE_FLOAT_CELSIUS);
+	    }
 
-	        if (id == DATA_ID_CHANNEL_ON_TIME_TOTAL) {
-		        return data::Value(channelSnapshot.onTimeTotal, data::VALUE_TYPE_ON_TIME_COUNTER);
-	        }
+	    if (id == DATA_ID_CHANNEL_ON_TIME_TOTAL) {
+		    return data::Value(channelSnapshot.onTimeTotal, data::VALUE_TYPE_ON_TIME_COUNTER);
+	    }
 
-	        if (id == DATA_ID_CHANNEL_ON_TIME_LAST) {
-		        return data::Value(channelSnapshot.onTimeLast, data::VALUE_TYPE_ON_TIME_COUNTER);
-	        }
-        }
+	    if (id == DATA_ID_CHANNEL_ON_TIME_LAST) {
+		    return data::Value(channelSnapshot.onTimeLast, data::VALUE_TYPE_ON_TIME_COUNTER);
+	    }
     }
 	
     if (id == DATA_ID_CHANNEL_IS_VOLTAGE_BALANCED) {

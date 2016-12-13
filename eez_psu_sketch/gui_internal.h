@@ -112,41 +112,44 @@ extern Channel *g_channel;
 ////////////////////////////////////////////////////////////////////////////////
 // GUI definition document accessor functions
 
-extern Document *g_doc;
+extern Styles *g_styles;
+extern Document *g_document;
 
 inline OBJ_OFFSET getListItemOffset(const List &list, int index, int listItemSize) {
     return list.first + index * listItemSize;
 }
 
-inline OBJ_OFFSET getPageOffset(int pageID) {
-    return getListItemOffset(g_doc->pages, pageID, sizeof(Widget));
+inline OBJ_OFFSET getStyleOffset(int styleID) {
+    if (styleID == 0) {
+        return 0;
+    }
+    return getListItemOffset(*g_styles, styleID - 1, sizeof(Style));
 }
 
-inline const int getWidgetStyleId(const Widget *widget) {
-    return (widget->style - g_doc->styles.first) / sizeof(Style);
+inline OBJ_OFFSET getCustomWidgetOffset(int customWidgetID) {
+    if (customWidgetID == 0) {
+        return 0;
+    }
+    return getListItemOffset(g_document->customWidgets, customWidgetID - 1, sizeof(CustomWidget));
+}
+
+inline OBJ_OFFSET getPageOffset(int pageID) {
+    return getListItemOffset(g_document->pages, pageID, sizeof(Widget));
 }
 
 #if defined(EEZ_PSU_ARDUINO_MEGA)
+
+#define DECL_WIDGET_STYLE(var, widget) DECL_STYLE(var, (widget)->style)
+
+#define DECL_STYLE(var, styleId) \
+    Style var##_buffer; \
+    arduino_util::prog_read_buffer(styles + getStyleOffset(styleId), (uint8_t *)&var##_buffer, sizeof(Style)); \
+    const Style *var = &var##_buffer
 
 #define DECL_WIDGET(var, widgetOffset) \
     Widget var##_buffer; \
     arduino_util::prog_read_buffer(document + (widgetOffset), (uint8_t *)&var##_buffer, sizeof(Widget)); \
     const Widget *var = &var##_buffer
-
-#define DECL_WIDGET_STYLE(var, widget) \
-    Style var##_buffer; \
-    arduino_util::prog_read_buffer(document + (widget)->style, (uint8_t *)&var##_buffer, sizeof(Style)); \
-    const Style *var = &var##_buffer
-
-#define DECL_STYLE_WITH_OFFSET(var, styleOffset) \
-    Style var##_buffer; \
-    arduino_util::prog_read_buffer(document + (styleOffset), (uint8_t *)&var##_buffer, sizeof(Style)); \
-    const Style *var = &var##_buffer
-
-#define DECL_STYLE(var, styleId) \
-    Style var##_buffer; \
-    arduino_util::prog_read_buffer(document + g_doc->styles.first + (styleId) * sizeof(Style), (uint8_t *)&var##_buffer, sizeof(Style)); \
-    const Style *var = &var##_buffer
 
 #define DECL_WIDGET_SPECIFIC(type, var, widget) \
     type var##_buffer; \
@@ -171,14 +174,17 @@ inline const int getWidgetStyleId(const Widget *widget) {
 
 #else
 
+#define DECL_WIDGET_STYLE(var, widget) DECL_STYLE(var, (widget)->style)
+#define DECL_STYLE(var, styleID) const Style *var = (const Style *)(styles + getStyleOffset(styleID))
+
+#define DECL_CUSTOM_WIDGET(var, customWidgetID) const CustomWidget *var = (const CustomWidget *)(document + getCustomWidgetOffset(customWidgetID))
+
 #define DECL_WIDGET(var, widgetOffset) const Widget *var = (const Widget *)(document + (widgetOffset))
-#define DECL_WIDGET_STYLE(var, widget) const Style *var = (const Style *)(document + (widget)->style)
-#define DECL_STYLE_WITH_OFFSET(var, styleOffset) const Style *var = (const Style *)(document + (styleOffset))
 #define DECL_WIDGET_SPECIFIC(type, var, widget) const type *var = (const type *)(document + (widget)->specific)
-#define DECL_STYLE(var, styleId) const Style *var = (const Style *)(document + g_doc->styles.first + (styleId) * sizeof(Style))
 #define DECL_STRING(var, offset) const char *var = (const char *)(document + (offset))
 #define DECL_BITMAP(var, offset) const Bitmap *var = (const Bitmap *)(document + (offset))
 #define DECL_STRUCT_WITH_OFFSET(Struct, var, offset) const Struct *var = (const Struct *)(document + (offset))
+
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
