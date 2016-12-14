@@ -42,10 +42,6 @@ bool setType(Type value) {
 
         g_channelCoupling = value;
 
-#ifdef EEZ_PSU_SIMULATOR
-        float load = Channel::get(0).simulator.getLoad();
-#endif
-
         for (int i = 0; i < 2; ++i) {
             if (i < CH_NUM) {
     		    Channel &channel = Channel::get(i);
@@ -114,12 +110,12 @@ bool setType(Type value) {
                         temperature::sensors[temp_sensor::CH1 + channel.index - 1].prot_conf.delay =
                             min(temperature::sensors[temp_sensor::CH1].prot_conf.delay,
                                 temperature::sensors[temp_sensor::CH2].prot_conf.delay);
-                    }
 
 #ifdef EEZ_PSU_SIMULATOR
-                    channel.simulator.setLoadEnabled(false);
-                    channel.simulator.setLoad(load);
+                        channel.simulator.setLoadEnabled(false);
+                        channel.simulator.setLoad(Channel::get(0).simulator.getLoad());
 #endif
+                    }
                 }
             }
         }
@@ -602,7 +598,7 @@ void setOtpDelay(int sensor, float delay) {
 
 #ifdef EEZ_PSU_SIMULATOR
 void setLoadEnabled(Channel &channel, bool state) {
-    if (isCoupled() || isTracked()) {
+    if (isCoupled()) {
         Channel::get(0).simulator.setLoadEnabled(state);
         Channel::get(1).simulator.setLoadEnabled(state);
     } else {
@@ -611,7 +607,7 @@ void setLoadEnabled(Channel &channel, bool state) {
 }
 
 void setLoad(Channel &channel, float load) {
-    if (isCoupled() || isTracked()) {
+    if (isCoupled()) {
         Channel::get(0).simulator.setLoad(load);
         Channel::get(1).simulator.setLoad(load);
     } else {
