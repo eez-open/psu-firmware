@@ -4356,6 +4356,196 @@
                       "style": "default",
                       "widgets": [
                         {
+                          "type": "Container",
+                          "x": 0,
+                          "y": 0,
+                          "width": 240,
+                          "height": 173,
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "type": "Text",
+                              "action": "show_channel_settings",
+                              "x": 0,
+                              "y": 0,
+                              "width": 55,
+                              "height": 58,
+                              "style": "edit_S",
+                              "text": "` Set"
+                            },
+                            {
+                              "type": "Text",
+                              "action": "show_channel_settings",
+                              "x": 48,
+                              "y": 58,
+                              "width": 192,
+                              "height": 30,
+                              "style": "default_S",
+                              "text": "\\u008A Tracking mode"
+                            },
+                            {
+                              "type": "Rectangle",
+                              "x": 0,
+                              "y": 88,
+                              "width": 55,
+                              "height": 58,
+                              "style": "default_inverse"
+                            },
+                            {
+                              "x": 48,
+                              "type": "Select",
+                              "data": "ocp",
+                              "y": 149,
+                              "width": 48,
+                              "height": 24,
+                              "style": "default",
+                              "widgets": [
+                                {
+                                  "type": "Text",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 48,
+                                  "height": 24,
+                                  "style": "prot_indicator_S",
+                                  "text": "OCP"
+                                },
+                                {
+                                  "type": "Text",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 48,
+                                  "height": 24,
+                                  "style": "prot_indicator_set_S",
+                                  "text": "OCP"
+                                },
+                                {
+                                  "type": "Text",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 48,
+                                  "height": 24,
+                                  "style": "prot_indicator_trip_S",
+                                  "text": "OCP"
+                                }
+                              ]
+                            },
+                            {
+                              "x": 96,
+                              "type": "Select",
+                              "data": "ovp",
+                              "y": 149,
+                              "width": 48,
+                              "height": 24,
+                              "style": "default",
+                              "widgets": [
+                                {
+                                  "type": "Text",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 48,
+                                  "height": 24,
+                                  "style": "prot_indicator_S",
+                                  "text": "OVP"
+                                },
+                                {
+                                  "type": "Text",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 48,
+                                  "height": 24,
+                                  "style": "prot_indicator_set_S",
+                                  "text": "OVP"
+                                },
+                                {
+                                  "type": "Text",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 48,
+                                  "height": 24,
+                                  "style": "prot_indicator_trip_S",
+                                  "text": "OVP"
+                                }
+                              ]
+                            },
+                            {
+                              "x": 144,
+                              "type": "Select",
+                              "data": "otp",
+                              "y": 149,
+                              "width": 48,
+                              "height": 24,
+                              "style": "default",
+                              "widgets": [
+                                {
+                                  "type": "Text",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 48,
+                                  "height": 24,
+                                  "style": "prot_indicator_S",
+                                  "text": "OTP"
+                                },
+                                {
+                                  "type": "Text",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 48,
+                                  "height": 24,
+                                  "style": "prot_indicator_set_S",
+                                  "text": "OTP"
+                                },
+                                {
+                                  "type": "Text",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 48,
+                                  "height": 24,
+                                  "style": "prot_indicator_trip_S",
+                                  "text": "OTP"
+                                }
+                              ]
+                            },
+                            {
+                              "x": 192,
+                              "type": "Select",
+                              "data": "opp",
+                              "y": 149,
+                              "width": 48,
+                              "height": 24,
+                              "style": "default",
+                              "widgets": [
+                                {
+                                  "type": "Text",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 48,
+                                  "height": 24,
+                                  "style": "prot_indicator_S",
+                                  "text": "OPP"
+                                },
+                                {
+                                  "type": "Text",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 48,
+                                  "height": 24,
+                                  "style": "prot_indicator_set_S",
+                                  "text": "OPP"
+                                },
+                                {
+                                  "type": "Text",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 48,
+                                  "height": 24,
+                                  "style": "prot_indicator_trip_S",
+                                  "text": "OPP"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
                           "type": "List",
                           "data": "channels",
                           "x": 0,
@@ -4626,196 +4816,6 @@
                               }
                             ]
                           }
-                        },
-                        {
-                          "type": "Container",
-                          "x": 0,
-                          "y": 0,
-                          "width": 240,
-                          "height": 173,
-                          "style": "default",
-                          "widgets": [
-                            {
-                              "type": "Text",
-                              "action": "show_channel_settings",
-                              "x": 0,
-                              "y": 0,
-                              "width": 55,
-                              "height": 58,
-                              "style": "edit_S",
-                              "text": "` Set"
-                            },
-                            {
-                              "type": "Text",
-                              "action": "show_channel_settings",
-                              "x": 48,
-                              "y": 58,
-                              "width": 192,
-                              "height": 30,
-                              "style": "default_S",
-                              "text": "\\u008A Tracking mode"
-                            },
-                            {
-                              "type": "Rectangle",
-                              "x": 0,
-                              "y": 88,
-                              "width": 55,
-                              "height": 58,
-                              "style": "default_inverse"
-                            },
-                            {
-                              "x": 48,
-                              "type": "Select",
-                              "data": "ocp",
-                              "y": 149,
-                              "width": 48,
-                              "height": 24,
-                              "style": "default",
-                              "widgets": [
-                                {
-                                  "type": "Text",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 48,
-                                  "height": 24,
-                                  "style": "prot_indicator_S",
-                                  "text": "OCP"
-                                },
-                                {
-                                  "type": "Text",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 48,
-                                  "height": 24,
-                                  "style": "prot_indicator_set_S",
-                                  "text": "OCP"
-                                },
-                                {
-                                  "type": "Text",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 48,
-                                  "height": 24,
-                                  "style": "prot_indicator_trip_S",
-                                  "text": "OCP"
-                                }
-                              ]
-                            },
-                            {
-                              "x": 96,
-                              "type": "Select",
-                              "data": "ovp",
-                              "y": 149,
-                              "width": 48,
-                              "height": 24,
-                              "style": "default",
-                              "widgets": [
-                                {
-                                  "type": "Text",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 48,
-                                  "height": 24,
-                                  "style": "prot_indicator_S",
-                                  "text": "OVP"
-                                },
-                                {
-                                  "type": "Text",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 48,
-                                  "height": 24,
-                                  "style": "prot_indicator_set_S",
-                                  "text": "OVP"
-                                },
-                                {
-                                  "type": "Text",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 48,
-                                  "height": 24,
-                                  "style": "prot_indicator_trip_S",
-                                  "text": "OVP"
-                                }
-                              ]
-                            },
-                            {
-                              "x": 144,
-                              "type": "Select",
-                              "data": "otp",
-                              "y": 149,
-                              "width": 48,
-                              "height": 24,
-                              "style": "default",
-                              "widgets": [
-                                {
-                                  "type": "Text",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 48,
-                                  "height": 24,
-                                  "style": "prot_indicator_S",
-                                  "text": "OTP"
-                                },
-                                {
-                                  "type": "Text",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 48,
-                                  "height": 24,
-                                  "style": "prot_indicator_set_S",
-                                  "text": "OTP"
-                                },
-                                {
-                                  "type": "Text",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 48,
-                                  "height": 24,
-                                  "style": "prot_indicator_trip_S",
-                                  "text": "OTP"
-                                }
-                              ]
-                            },
-                            {
-                              "x": 192,
-                              "type": "Select",
-                              "data": "opp",
-                              "y": 149,
-                              "width": 48,
-                              "height": 24,
-                              "style": "default",
-                              "widgets": [
-                                {
-                                  "type": "Text",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 48,
-                                  "height": 24,
-                                  "style": "prot_indicator_S",
-                                  "text": "OPP"
-                                },
-                                {
-                                  "type": "Text",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 48,
-                                  "height": 24,
-                                  "style": "prot_indicator_set_S",
-                                  "text": "OPP"
-                                },
-                                {
-                                  "type": "Text",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 48,
-                                  "height": 24,
-                                  "style": "prot_indicator_trip_S",
-                                  "text": "OPP"
-                                }
-                              ]
-                            }
-                          ]
                         }
                       ]
                     },
@@ -6698,7 +6698,7 @@
             },
             {
               "type": "Text",
-              "action": "show_channel_settings",
+              "action": "",
               "x": 248,
               "y": 92,
               "width": 68,
