@@ -221,7 +221,7 @@ void getInfoText(int part, char *infoText) {
     Channel &channel = Channel::get(dataCursor.i);
     if (dataId == DATA_ID_CHANNEL_I_SET) {
         if (part == 0 || part == 1) {
-            if (channel_dispatcher::isCoupled()) {
+            if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
                 strcpy_P(infoText, PSTR("Set current"));
             } else {
 		        sprintf_P(infoText, PSTR("Set Ch%d current"), channel.index);
@@ -243,7 +243,7 @@ void getInfoText(int part, char *infoText) {
         }
     } else {
         if (part == 0 || part == 1) {
-            if (channel_dispatcher::isCoupled()) {
+            if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
                 strcpy_P(infoText, PSTR("Set voltage"));
             } else {
     		    sprintf_P(infoText, PSTR("Set Ch%d voltage"), channel.index);

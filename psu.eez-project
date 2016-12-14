@@ -6681,6 +6681,16 @@
                               }
                             ]
                           }
+                        },
+                        {
+                          "type": "Text",
+                          "action": "",
+                          "x": 0,
+                          "y": 92,
+                          "width": 68,
+                          "height": 20,
+                          "style": "default_S",
+                          "text": "\\u008A Track"
                         }
                       ]
                     }
@@ -6695,16 +6705,6 @@
                   "style": "default_inverse"
                 }
               ]
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 248,
-              "y": 92,
-              "width": 68,
-              "height": 20,
-              "style": "default_S",
-              "text": "\\u008A Track"
             }
           ]
         }
