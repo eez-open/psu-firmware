@@ -3412,9 +3412,9 @@
                                 "type": "Select",
                                 "data": "channel.outputState",
                                 "action": "",
-                                "y": 28,
+                                "y": 0,
                                 "width": 110,
-                                "height": 148,
+                                "height": 133,
                                 "style": "default",
                                 "widgets": [
                                   {
@@ -3423,7 +3423,7 @@
                                     "x": 0,
                                     "y": 0,
                                     "width": 110,
-                                    "height": 124,
+                                    "height": 133,
                                     "style": "channel_off_landscape",
                                     "text": "OFF"
                                   },
@@ -3433,7 +3433,7 @@
                                     "data": "channel.outputMode",
                                     "y": 0,
                                     "width": 110,
-                                    "height": 124,
+                                    "height": 133,
                                     "style": "default",
                                     "widgets": [
                                       {
@@ -3441,7 +3441,7 @@
                                         "x": 0,
                                         "y": 0,
                                         "width": 110,
-                                        "height": 124,
+                                        "height": 133,
                                         "style": "default",
                                         "widgets": [
                                           {
@@ -3451,7 +3451,7 @@
                                             "x": 0,
                                             "y": 0,
                                             "width": 54,
-                                            "height": 124,
+                                            "height": 133,
                                             "style": "bar_graph_U_defualt",
                                             "orientation": "bottom-top",
                                             "textStyle": "bar_graph_text_vertical",
@@ -3465,7 +3465,7 @@
                                             "x": 54,
                                             "y": 0,
                                             "width": 2,
-                                            "height": 148,
+                                            "height": 154,
                                             "style": "default_inverse"
                                           },
                                           {
@@ -3475,7 +3475,7 @@
                                             "x": 56,
                                             "y": 0,
                                             "width": 54,
-                                            "height": 124,
+                                            "height": 133,
                                             "style": "bar_graph_I_default",
                                             "orientation": "bottom-top",
                                             "textStyle": "bar_graph_text_vertical",
@@ -3491,7 +3491,7 @@
                                         "x": 0,
                                         "y": 0,
                                         "width": 110,
-                                        "height": 124,
+                                        "height": 133,
                                         "style": "default",
                                         "widgets": [
                                           {
@@ -3501,7 +3501,7 @@
                                             "x": 0,
                                             "y": 0,
                                             "width": 54,
-                                            "height": 124,
+                                            "height": 133,
                                             "style": "bar_graph_unregulated",
                                             "orientation": "bottom-top",
                                             "textStyle": "bar_graph_text_vertical",
@@ -3515,7 +3515,7 @@
                                             "x": 54,
                                             "y": 0,
                                             "width": 2,
-                                            "height": 148,
+                                            "height": 133,
                                             "style": "default_inverse"
                                           },
                                           {
@@ -3525,7 +3525,7 @@
                                             "x": 56,
                                             "y": 0,
                                             "width": 54,
-                                            "height": 124,
+                                            "height": 133,
                                             "style": "bar_graph_unregulated",
                                             "orientation": "bottom-top",
                                             "textStyle": "bar_graph_text_vertical",
@@ -3733,16 +3733,16 @@
                                 "type": "DisplayData",
                                 "data": "channel.p.mon",
                                 "x": 49,
-                                "y": 0,
+                                "y": 154,
                                 "width": 110,
-                                "height": 28,
+                                "height": 22,
                                 "style": "edit_value_S_centered"
                               },
                               {
-                                "x": 48,
+                                "x": 49,
                                 "type": "Select",
                                 "data": "channel.rprog.status",
-                                "y": 152,
+                                "y": 133,
                                 "width": 55,
                                 "height": 24,
                                 "style": "default",
@@ -3773,9 +3773,9 @@
                                 "type": "DisplayData",
                                 "data": "channel.i.set",
                                 "action": "edit",
-                                "x": 103,
-                                "y": 152,
-                                "width": 56,
+                                "x": 104,
+                                "y": 133,
+                                "width": 55,
                                 "height": 24,
                                 "style": "edit_S"
                               }
@@ -4322,7 +4322,7 @@
                               "x": 160,
                               "y": 0,
                               "width": 48,
-                              "height": 96,
+                              "height": 64,
                               "style": "default_inverse"
                             },
                             {
@@ -4330,18 +4330,18 @@
                               "x": 208,
                               "y": 59,
                               "width": 112,
-                              "height": 37,
+                              "height": 5,
                               "style": "default_inverse"
                             },
                             {
                               "type": "Text",
                               "action": "show_channel_settings",
                               "x": 160,
-                              "y": 20,
-                              "width": 32,
+                              "y": 64,
+                              "width": 160,
                               "height": 32,
-                              "style": "coupled_info_S",
-                              "text": "\\u008A"
+                              "style": "default_S",
+                              "text": "\\u008A Tracking mode"
                             }
                           ]
                         }
@@ -4636,6 +4636,34 @@
                           "style": "default",
                           "widgets": [
                             {
+                              "type": "Text",
+                              "action": "show_channel_settings",
+                              "x": 0,
+                              "y": 0,
+                              "width": 55,
+                              "height": 58,
+                              "style": "edit_S",
+                              "text": "` Set"
+                            },
+                            {
+                              "type": "Text",
+                              "action": "show_channel_settings",
+                              "x": 48,
+                              "y": 58,
+                              "width": 192,
+                              "height": 30,
+                              "style": "default_S",
+                              "text": "\\u008A Tracking mode"
+                            },
+                            {
+                              "type": "Rectangle",
+                              "x": 0,
+                              "y": 88,
+                              "width": 55,
+                              "height": 58,
+                              "style": "default_inverse"
+                            },
+                            {
                               "x": 48,
                               "type": "Select",
                               "data": "ocp",
@@ -4786,42 +4814,6 @@
                                   "text": "OPP"
                                 }
                               ]
-                            },
-                            {
-                              "type": "Text",
-                              "action": "show_channel_settings",
-                              "x": 0,
-                              "y": 88,
-                              "width": 55,
-                              "height": 58,
-                              "style": "edit_S",
-                              "text": "` Set"
-                            },
-                            {
-                              "type": "Rectangle",
-                              "x": 0,
-                              "y": 0,
-                              "width": 55,
-                              "height": 58,
-                              "style": "default_inverse"
-                            },
-                            {
-                              "type": "Rectangle",
-                              "x": 48,
-                              "y": 60,
-                              "width": 192,
-                              "height": 25,
-                              "style": "default_inverse"
-                            },
-                            {
-                              "type": "Text",
-                              "action": "show_channel_settings",
-                              "x": 144,
-                              "y": 58,
-                              "width": 32,
-                              "height": 30,
-                              "style": "coupled_info_S",
-                              "text": "\\u008A"
                             }
                           ]
                         }
@@ -4854,10 +4846,10 @@
                             "widgets": [
                               {
                                 "type": "Rectangle",
-                                "x": 47,
+                                "x": 48,
                                 "y": 0,
-                                "width": 2,
-                                "height": 148,
+                                "width": 1,
+                                "height": 176,
                                 "style": "default_inverse"
                               },
                               {
@@ -4873,9 +4865,9 @@
                                 "type": "Select",
                                 "data": "channel.outputState",
                                 "action": "",
-                                "y": 28,
+                                "y": 0,
                                 "width": 110,
-                                "height": 148,
+                                "height": 133,
                                 "style": "default",
                                 "widgets": [
                                   {
@@ -4884,7 +4876,7 @@
                                     "x": 0,
                                     "y": 0,
                                     "width": 110,
-                                    "height": 124,
+                                    "height": 133,
                                     "style": "channel_off_landscape",
                                     "text": "OFF"
                                   },
@@ -4894,7 +4886,7 @@
                                     "data": "channel.outputMode",
                                     "y": 0,
                                     "width": 110,
-                                    "height": 124,
+                                    "height": 133,
                                     "style": "default",
                                     "widgets": [
                                       {
@@ -4902,7 +4894,7 @@
                                         "x": 0,
                                         "y": 0,
                                         "width": 110,
-                                        "height": 124,
+                                        "height": 133,
                                         "style": "default",
                                         "widgets": [
                                           {
@@ -4912,7 +4904,7 @@
                                             "x": 0,
                                             "y": 0,
                                             "width": 54,
-                                            "height": 124,
+                                            "height": 133,
                                             "style": "bar_graph_U_defualt",
                                             "orientation": "bottom-top",
                                             "textStyle": "bar_graph_text_vertical",
@@ -4926,7 +4918,7 @@
                                             "x": 54,
                                             "y": 0,
                                             "width": 2,
-                                            "height": 148,
+                                            "height": 133,
                                             "style": "default_inverse"
                                           },
                                           {
@@ -4936,7 +4928,7 @@
                                             "x": 56,
                                             "y": 0,
                                             "width": 54,
-                                            "height": 124,
+                                            "height": 133,
                                             "style": "bar_graph_I_default",
                                             "orientation": "bottom-top",
                                             "textStyle": "bar_graph_text_vertical",
@@ -4952,7 +4944,7 @@
                                         "x": 0,
                                         "y": 0,
                                         "width": 110,
-                                        "height": 124,
+                                        "height": 133,
                                         "style": "default",
                                         "widgets": [
                                           {
@@ -4962,7 +4954,7 @@
                                             "x": 0,
                                             "y": 0,
                                             "width": 54,
-                                            "height": 124,
+                                            "height": 133,
                                             "style": "bar_graph_unregulated",
                                             "orientation": "bottom-top",
                                             "textStyle": "bar_graph_text_vertical",
@@ -4976,7 +4968,7 @@
                                             "x": 54,
                                             "y": 0,
                                             "width": 2,
-                                            "height": 148,
+                                            "height": 133,
                                             "style": "default_inverse"
                                           },
                                           {
@@ -4986,7 +4978,7 @@
                                             "x": 56,
                                             "y": 0,
                                             "width": 54,
-                                            "height": 124,
+                                            "height": 133,
                                             "style": "bar_graph_unregulated",
                                             "orientation": "bottom-top",
                                             "textStyle": "bar_graph_text_vertical",
@@ -5042,17 +5034,17 @@
                                 "type": "DisplayData",
                                 "data": "channel.p.mon",
                                 "x": 49,
-                                "y": 0,
-                                "width": 110,
-                                "height": 28,
+                                "y": 154,
+                                "width": 111,
+                                "height": 22,
                                 "style": "edit_value_S_centered"
                               },
                               {
-                                "x": 48,
+                                "x": 49,
                                 "type": "Select",
                                 "data": "channel.rprog.status",
-                                "y": 152,
-                                "width": 55,
+                                "y": 133,
+                                "width": 56,
                                 "height": 24,
                                 "style": "default",
                                 "widgets": [
@@ -5062,7 +5054,7 @@
                                     "action": "edit",
                                     "x": 0,
                                     "y": 0,
-                                    "width": 55,
+                                    "width": 56,
                                     "height": 24,
                                     "style": "edit_S"
                                   },
@@ -5072,7 +5064,7 @@
                                     "action": "",
                                     "x": 0,
                                     "y": 0,
-                                    "width": 55,
+                                    "width": 56,
                                     "height": 24,
                                     "style": "mon_dac_S"
                                   }
@@ -5082,9 +5074,9 @@
                                 "type": "DisplayData",
                                 "data": "channel.i.set",
                                 "action": "edit",
-                                "x": 103,
-                                "y": 152,
-                                "width": 56,
+                                "x": 104,
+                                "y": 133,
+                                "width": 55,
                                 "height": 24,
                                 "style": "edit_S"
                               }
@@ -5273,7 +5265,7 @@
                               "type": "Rectangle",
                               "x": 159,
                               "y": 52,
-                              "width": 48,
+                              "width": 50,
                               "height": 96,
                               "style": "default_inverse"
                             },
@@ -5281,11 +5273,21 @@
                               "type": "Text",
                               "action": "show_channel_settings",
                               "x": 169,
-                              "y": 75,
+                              "y": 68,
                               "width": 32,
                               "height": 32,
-                              "style": "coupled_info_S",
+                              "style": "default_S",
                               "text": "\\u008A"
+                            },
+                            {
+                              "type": "Text",
+                              "action": "show_channel_settings",
+                              "x": 160,
+                              "y": 100,
+                              "width": 49,
+                              "height": 23,
+                              "style": "default_S",
+                              "text": "Track"
                             }
                           ]
                         }
@@ -6032,127 +6034,145 @@
                   "style": "default",
                   "widgets": [
                     {
-                      "type": "List",
-                      "data": "channels",
+                      "type": "Container",
                       "x": 0,
                       "y": 0,
                       "width": 64,
                       "height": 204,
                       "style": "default",
-                      "listType": "vertical",
-                      "itemWidget": {
-                        "x": 0,
-                        "type": "Select",
-                        "data": "channel.status",
-                        "y": 0,
-                        "width": 64,
-                        "height": 112,
-                        "style": "default",
-                        "widgets": [
-                          {
-                            "type": "Rectangle",
+                      "widgets": [
+                        {
+                          "type": "List",
+                          "data": "channels",
+                          "x": 0,
+                          "y": 0,
+                          "width": 64,
+                          "height": 204,
+                          "style": "default",
+                          "listType": "vertical",
+                          "itemWidget": {
                             "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 92,
-                            "style": "default_inverse"
-                          },
-                          {
-                            "type": "Container",
-                            "x": 0,
+                            "type": "Select",
+                            "data": "channel.status",
                             "y": 0,
                             "width": 64,
                             "height": 112,
                             "style": "default",
                             "widgets": [
                               {
+                                "type": "Rectangle",
                                 "x": 0,
-                                "type": "Select",
-                                "data": "channel.outputState",
                                 "y": 0,
                                 "width": 64,
-                                "height": 32,
+                                "height": 92,
+                                "style": "default_inverse"
+                              },
+                              {
+                                "type": "Container",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 112,
                                 "style": "default",
                                 "widgets": [
                                   {
-                                    "type": "Text",
-                                    "action": "toggle_channel",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 32,
-                                    "style": "edit_value_active_S_right",
-                                    "text": "OFF"
-                                  },
-                                  {
                                     "x": 0,
                                     "type": "Select",
-                                    "data": "channel.outputMode",
+                                    "data": "channel.outputState",
                                     "y": 0,
                                     "width": 64,
                                     "height": 32,
                                     "style": "default",
                                     "widgets": [
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.monValue",
+                                        "type": "Text",
                                         "action": "toggle_channel",
                                         "x": 0,
                                         "y": 0,
                                         "width": 64,
                                         "height": 32,
                                         "style": "edit_value_active_S_right",
-                                        "activeStyle": ""
+                                        "text": "OFF"
                                       },
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.monValue",
-                                        "action": "toggle_channel",
                                         "x": 0,
+                                        "type": "Select",
+                                        "data": "channel.outputMode",
                                         "y": 0,
                                         "width": 64,
                                         "height": 32,
-                                        "style": "edit_value_active_S_right",
-                                        "activeStyle": ""
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.monValue",
+                                            "action": "toggle_channel",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 32,
+                                            "style": "edit_value_active_S_right",
+                                            "activeStyle": ""
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.monValue",
+                                            "action": "toggle_channel",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 32,
+                                            "style": "edit_value_active_S_right",
+                                            "activeStyle": ""
+                                          }
+                                        ]
                                       }
                                     ]
+                                  },
+                                  {
+                                    "type": "DisplayData",
+                                    "data": "channel.u.set",
+                                    "action": "edit",
+                                    "x": 0,
+                                    "y": 32,
+                                    "width": 64,
+                                    "height": 30,
+                                    "style": "edit_value_active_S_right",
+                                    "activeStyle": "edit_value_focus_S_right"
+                                  },
+                                  {
+                                    "type": "DisplayData",
+                                    "data": "channel.i.set",
+                                    "action": "edit",
+                                    "x": 0,
+                                    "y": 62,
+                                    "width": 64,
+                                    "height": 30,
+                                    "style": "edit_value_active_S_right",
+                                    "activeStyle": "edit_value_focus_S_right"
                                   }
                                 ]
                               },
                               {
-                                "type": "DisplayData",
-                                "data": "channel.u.set",
-                                "action": "edit",
+                                "type": "Rectangle",
                                 "x": 0,
-                                "y": 32,
+                                "y": 0,
                                 "width": 64,
-                                "height": 30,
-                                "style": "edit_value_active_S_right",
-                                "activeStyle": "edit_value_focus_S_right"
-                              },
-                              {
-                                "type": "DisplayData",
-                                "data": "channel.i.set",
-                                "action": "edit",
-                                "x": 0,
-                                "y": 62,
-                                "width": 64,
-                                "height": 30,
-                                "style": "edit_value_active_S_right",
-                                "activeStyle": "edit_value_focus_S_right"
+                                "height": 92,
+                                "style": "default_inverse"
                               }
                             ]
-                          },
-                          {
-                            "type": "Rectangle",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 92,
-                            "style": "default_inverse"
                           }
-                        ]
-                      }
+                        },
+                        {
+                          "type": "Rectangle",
+                          "x": 0,
+                          "y": 92,
+                          "width": 64,
+                          "height": 20,
+                          "style": "default_inverse"
+                        }
+                      ]
                     },
                     {
                       "type": "Container",
@@ -6322,9 +6342,9 @@
                         {
                           "type": "Rectangle",
                           "x": 0,
-                          "y": 112,
+                          "y": 92,
                           "width": 64,
-                          "height": 8,
+                          "height": 28,
                           "style": "default_inverse"
                         },
                         {
@@ -6524,9 +6544,9 @@
                         {
                           "type": "Rectangle",
                           "x": 0,
-                          "y": 112,
+                          "y": 92,
                           "width": 64,
-                          "height": 8,
+                          "height": 28,
                           "style": "default_inverse"
                         },
                         {
@@ -6559,32 +6579,23 @@
                       ]
                     },
                     {
-                      "type": "List",
-                      "data": "channels",
+                      "type": "Container",
                       "x": 0,
                       "y": 0,
                       "width": 64,
                       "height": 204,
                       "style": "default",
-                      "listType": "vertical",
-                      "itemWidget": {
-                        "x": 0,
-                        "type": "Select",
-                        "data": "channel.status",
-                        "y": 0,
-                        "width": 64,
-                        "height": 112,
-                        "style": "default",
-                        "widgets": [
-                          {
-                            "type": "Rectangle",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 92,
-                            "style": "default_inverse"
-                          },
-                          {
+                      "widgets": [
+                        {
+                          "type": "List",
+                          "data": "channels",
+                          "x": 0,
+                          "y": 0,
+                          "width": 64,
+                          "height": 204,
+                          "style": "default",
+                          "listType": "vertical",
+                          "itemWidget": {
                             "type": "Container",
                             "x": 0,
                             "y": 0,
@@ -6669,27 +6680,11 @@
                                 "activeStyle": "edit_value_focus_S_right"
                               }
                             ]
-                          },
-                          {
-                            "type": "Rectangle",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 92,
-                            "style": "default_inverse"
                           }
-                        ]
-                      }
+                        }
+                      ]
                     }
                   ]
-                },
-                {
-                  "type": "Rectangle",
-                  "x": 0,
-                  "y": 92,
-                  "width": 64,
-                  "height": 20,
-                  "style": "default_inverse"
                 },
                 {
                   "type": "Rectangle",
@@ -6700,6 +6695,16 @@
                   "style": "default_inverse"
                 }
               ]
+            },
+            {
+              "type": "Text",
+              "action": "show_channel_settings",
+              "x": 248,
+              "y": 92,
+              "width": 68,
+              "height": 20,
+              "style": "default_S",
+              "text": "\\u008A Track"
             }
           ]
         }
@@ -11728,13 +11733,13 @@
                 },
                 {
                   "type": "Text",
-                  "action": "show_ch_settings_adv_lripple",
+                  "action": "",
                   "x": 0,
                   "y": 0,
                   "width": 180,
                   "height": 28,
                   "style": "default_disabled_S_left",
-                  "text": "Low ripple mode"
+                  "text": "Low ripple mode \\u008c"
                 },
                 {
                   "type": "Text",
@@ -11787,13 +11792,13 @@
                 },
                 {
                   "type": "Text",
-                  "action": "show_ch_settings_adv_rsense",
+                  "action": "",
                   "x": 0,
                   "y": 0,
                   "width": 180,
                   "height": 28,
                   "style": "default_disabled_S_left",
-                  "text": "Remote sensing"
+                  "text": "Remote sensing \\u008c"
                 },
                 {
                   "type": "Text",
@@ -11852,54 +11857,64 @@
                       "style": "default",
                       "widgets": [
                         {
-                          "type": "Text",
-                          "action": "show_ch_settings_adv_rprog",
+                          "type": "Container",
                           "x": 0,
                           "y": 0,
                           "width": 180,
                           "height": 28,
-                          "style": "edit_value_active_S_left",
-                          "text": "Remote programming"
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "type": "Text",
+                              "action": "show_ch_settings_adv_rprog",
+                              "x": 0,
+                              "y": 0,
+                              "width": 180,
+                              "height": 28,
+                              "style": "edit_value_active_S_left",
+                              "text": "Remote programming"
+                            },
+                            {
+                              "type": "Rectangle",
+                              "x": 180,
+                              "y": 0,
+                              "width": 56,
+                              "height": 28,
+                              "style": "default_inverse"
+                            }
+                          ]
                         },
                         {
                           "type": "Text",
-                          "action": "show_ch_settings_adv_rprog",
+                          "action": "",
                           "x": 0,
                           "y": 0,
-                          "width": 180,
+                          "width": 236,
                           "height": 28,
                           "style": "default_disabled_S_left",
-                          "text": "Remote programming"
+                          "text": "Remote programming \\u008c"
                         },
                         {
                           "type": "Text",
-                          "action": "show_ch_settings_adv_rprog",
+                          "action": "",
                           "x": 0,
                           "y": 0,
-                          "width": 180,
+                          "width": 236,
                           "height": 28,
                           "style": "default_disabled_S_left",
-                          "text": "Remote programming"
+                          "text": "Remote programming \\u008c"
                         },
                         {
                           "type": "Text",
-                          "action": "show_ch_settings_adv_rprog",
+                          "action": "",
                           "x": 0,
                           "y": 0,
-                          "width": 180,
+                          "width": 236,
                           "height": 28,
-                          "style": "edit_value_active_S_left",
-                          "text": "Remote programming"
+                          "style": "default_disabled_S_left",
+                          "text": "Remote programming \\u008c"
                         }
                       ]
-                    },
-                    {
-                      "type": "Rectangle",
-                      "x": 180,
-                      "y": 0,
-                      "width": 56,
-                      "height": 28,
-                      "style": "default_inverse"
                     }
                   ]
                 }
@@ -11915,73 +11930,93 @@
               "style": "default",
               "widgets": [
                 {
-                  "type": "Text",
-                  "action": "show_ch_settings_adv_tracking",
+                  "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "Tracking control"
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "action": "show_ch_settings_adv_tracking",
+                      "x": 0,
+                      "y": 0,
+                      "width": 180,
+                      "height": 28,
+                      "style": "edit_value_active_S_left",
+                      "text": "Tracking control"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 180,
+                      "y": 0,
+                      "width": 56,
+                      "height": 28,
+                      "style": "default_inverse"
+                    }
+                  ]
                 },
                 {
                   "type": "Text",
-                  "action": "show_ch_settings_adv_tracking",
+                  "action": "",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
                   "style": "default_disabled_S_left",
-                  "text": "Tracking control"
+                  "text": "Tracking control \\u008c"
                 }
               ]
-            },
-            {
-              "type": "Rectangle",
-              "x": 196,
-              "y": 112,
-              "width": 56,
-              "height": 28,
-              "style": "default_inverse"
             },
             {
               "x": 16,
               "type": "Select",
               "data": "channel.isTracked",
               "y": 140,
-              "width": 180,
+              "width": 236,
               "height": 28,
               "style": "default",
               "widgets": [
                 {
-                  "type": "Text",
-                  "action": "show_ch_settings_adv_coupling",
+                  "type": "Container",
                   "x": 0,
                   "y": 0,
                   "width": 180,
                   "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "Coupling settings"
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "action": "show_ch_settings_adv_coupling",
+                      "x": 0,
+                      "y": 0,
+                      "width": 180,
+                      "height": 28,
+                      "style": "edit_value_active_S_left",
+                      "text": "Coupling settings"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 180,
+                      "y": 0,
+                      "width": 56,
+                      "height": 28,
+                      "style": "default_inverse"
+                    }
+                  ]
                 },
                 {
                   "type": "Text",
-                  "action": "show_ch_settings_adv_coupling",
+                  "action": "",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
                   "style": "default_disabled_S_left",
-                  "text": "Coupling settings"
+                  "text": "Coupling settings \\u008c"
                 }
               ]
-            },
-            {
-              "type": "Rectangle",
-              "x": 196,
-              "y": 140,
-              "width": 56,
-              "height": 28,
-              "style": "default_inverse"
             },
             {
               "type": "Rectangle",
@@ -13402,7 +13437,7 @@
                           "width": 117,
                           "height": 28,
                           "style": "default_disabled_S_left",
-                          "text": "Yes"
+                          "text": "Not allowed"
                         },
                         {
                           "x": 0,
@@ -13774,10 +13809,10 @@
               "action": "",
               "x": 12,
               "y": 170,
-              "width": 155,
+              "width": 240,
               "height": 29,
               "style": "default_disabled_S_left",
-              "text": "Shutdown when trip"
+              "text": "System protection settings"
             },
             {
               "type": "Local.Channels",
@@ -13786,16 +13821,6 @@
               "width": 68,
               "height": 204,
               "style": "default"
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 167,
-              "y": 170,
-              "width": 85,
-              "height": 29,
-              "style": "default_disabled_S_left",
-              "text": "OFF"
             },
             {
               "type": "Text",
@@ -13938,7 +13963,7 @@
                   "width": 240,
                   "height": 28,
                   "style": "default_disabled_S_left",
-                  "text": "Channel calibration"
+                  "text": "Channel calibration \\u008c"
                 }
               ]
             },
@@ -14170,41 +14195,6 @@
               "style": "default_inverse"
             },
             {
-              "type": "Rectangle",
-              "x": 231,
-              "y": 204,
-              "width": 41,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "X"
-            },
-            {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
-            {
-              "type": "Text",
-              "x": 6,
-              "y": 0,
-              "width": 246,
-              "height": 28,
-              "style": "value_S",
-              "text": "Set AUX temperature protection"
-            },
-            {
               "type": "Button",
               "data": "",
               "action": "set",
@@ -14239,6 +14229,32 @@
               "text": "Clear",
               "enabled": "setPage.dirty",
               "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "type": "Rectangle",
+              "x": 231,
+              "y": 204,
+              "width": 41,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
             }
           ]
         }
@@ -14489,6 +14505,180 @@
               "height": 36,
               "style": "non_interactive_button_S",
               "text": " Discard"
+            }
+          ]
+        }
+      },
+      {
+        "name": "sys_settings_protections",
+        "description": "Define selected protection values\n",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 28,
+              "style": "value_S",
+              "text": "Set AUX temperature protection"
+            },
+            {
+              "type": "MultilineText",
+              "x": 16,
+              "y": 28,
+              "width": 179,
+              "height": 59,
+              "style": "edit_value_S_left",
+              "text": "Switch off all outputs when protection tripped"
+            },
+            {
+              "x": 195,
+              "type": "Select",
+              "data": "",
+              "y": 28,
+              "width": 57,
+              "height": 59,
+              "style": "edit_value_L",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "ch_settings_prot_toggle_state",
+                  "x": 0,
+                  "y": 0,
+                  "width": 57,
+                  "height": 59,
+                  "style": "edit_value_active",
+                  "text": "No"
+                },
+                {
+                  "type": "Text",
+                  "action": "ch_settings_prot_toggle_state",
+                  "x": 0,
+                  "y": 0,
+                  "width": 57,
+                  "height": 59,
+                  "style": "edit_value_active",
+                  "text": "Yes"
+                }
+              ]
+            },
+            {
+              "type": "MultilineText",
+              "x": 16,
+              "y": 87,
+              "width": 179,
+              "height": 59,
+              "style": "edit_value_S_left",
+              "text": "Shutdown when protection tripped"
+            },
+            {
+              "x": 195,
+              "type": "Select",
+              "data": "",
+              "y": 87,
+              "width": 57,
+              "height": 59,
+              "style": "edit_value_L",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "ch_settings_prot_toggle_state",
+                  "x": 0,
+                  "y": 0,
+                  "width": 57,
+                  "height": 59,
+                  "style": "edit_value_active",
+                  "text": "No"
+                },
+                {
+                  "type": "Text",
+                  "action": "ch_settings_prot_toggle_state",
+                  "x": 0,
+                  "y": 0,
+                  "width": 57,
+                  "height": 59,
+                  "style": "edit_value_active",
+                  "text": "Yes"
+                }
+              ]
+            },
+            {
+              "type": "Rectangle",
+              "x": 16,
+              "y": 140,
+              "width": 236,
+              "height": 64,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Button",
+              "data": "",
+              "action": "set",
+              "x": 0,
+              "y": 204,
+              "width": 72,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "type": "Text",
+              "action": "discard",
+              "x": 72,
+              "y": 204,
+              "width": 96,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
+            },
+            {
+              "type": "Rectangle",
+              "x": 168,
+              "y": 204,
+              "width": 104,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 28,
+              "style": "value_S",
+              "text": "System protection settings"
             }
           ]
         }
@@ -17310,9 +17500,9 @@
           {
             "type": "Rectangle",
             "x": 0,
-            "y": 92,
+            "y": 84,
             "width": 64,
-            "height": 20,
+            "height": 36,
             "style": "default_inverse"
           },
           {
@@ -17960,12 +18150,12 @@
                   {
                     "type": "Text",
                     "action": "show_channel_settings",
-                    "x": 22,
-                    "y": 86,
-                    "width": 32,
+                    "x": 0,
+                    "y": 84,
+                    "width": 68,
                     "height": 32,
-                    "style": "coupled_info_S",
-                    "text": "\\u008A"
+                    "style": "default_S",
+                    "text": "\\u008A Track"
                   }
                 ]
               }
@@ -19477,7 +19667,7 @@
       {
         "name": "bottom_button_textual_S_disabled",
         "inheritFrom": "bottom_button_textual_S",
-        "color": "#cdcdcd"
+        "color": "#c0c0c0"
       },
       {
         "name": "channel_error",
@@ -19562,7 +19752,7 @@
         "description": "",
         "font": "small",
         "alignHorizontal": "left",
-        "color": "#808080",
+        "color": "#c0c0c0",
         "backgroundColor": "#5080ff",
         "borderColor": "#D3D3D3"
       },
@@ -24042,6 +24232,153 @@
               0
             ],
             "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAj0lEQVQ4T5WSUQ7AIAhD5/0PvQUTGEIFui/D8FlK1/N/rzvrcYEaLGkjglCwCPIKPLxVJg16ATWPYR1IxqseMr88SIq30eK/ZDgy+7aA0qdKQXy1Un+M4v1g45NAChCDqyikbbb5cFuLAT1gDEg9gkpZEPJuK2NAqN/Gm4DiNmH2pqAqGpvBgBDM7rOga1A/atAfEKVKzp8AAAAASUVORK5CYII="
+          },
+          {
+            "encoding": 139,
+            "x": 0,
+            "y": -3,
+            "width": 17,
+            "height": 20,
+            "dx": 19,
+            "source": {
+              "filePath": "fonts/bdf/FontAwesome.14.bdf",
+              "encoding": 62038
+            },
+            "pixels": [
+              0,
+              96,
+              0,
+              1,
+              240,
+              0,
+              7,
+              28,
+              0,
+              13,
+              18,
+              0,
+              9,
+              34,
+              0,
+              9,
+              35,
+              128,
+              9,
+              36,
+              128,
+              9,
+              36,
+              128,
+              9,
+              36,
+              128,
+              120,
+              0,
+              128,
+              200,
+              0,
+              128,
+              136,
+              0,
+              128,
+              192,
+              0,
+              128,
+              64,
+              0,
+              128,
+              32,
+              0,
+              128,
+              48,
+              0,
+              128,
+              24,
+              0,
+              128,
+              8,
+              1,
+              128,
+              15,
+              255,
+              0,
+              3,
+              255,
+              0
+            ],
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAASCAYAAAC5DOVpAAAAiklEQVQ4T82UQQ7AIAgE6/8f3QYSDCALyKk9WYFR2I3ryb83CC9UggIaonPQPvMjmBRQjNYeJv8+BmFRQQZOb9aFyfg4H7VZwfQt9/r/MO8n6KXAY6ZNbQXKPSRvGHsLUEp+C0PKFhwOH2retqYPCa0xBULYpF1oWq/saGbhDBokc3j2BDVY9rH4AEqbMxNsQdlpAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 140,
+            "x": 1,
+            "y": 0,
+            "width": 17,
+            "height": 19,
+            "dx": 19,
+            "source": {
+              "filePath": "fonts/bdf/webhostinghub-glyphs.14.bdf",
+              "encoding": 61630
+            },
+            "pixels": [
+              3,
+              224,
+              0,
+              7,
+              240,
+              0,
+              15,
+              120,
+              0,
+              28,
+              28,
+              0,
+              24,
+              12,
+              0,
+              24,
+              12,
+              0,
+              24,
+              12,
+              0,
+              24,
+              12,
+              0,
+              127,
+              255,
+              0,
+              255,
+              255,
+              128,
+              254,
+              63,
+              128,
+              252,
+              31,
+              128,
+              252,
+              31,
+              128,
+              254,
+              63,
+              128,
+              254,
+              63,
+              128,
+              254,
+              63,
+              128,
+              254,
+              63,
+              128,
+              252,
+              31,
+              128,
+              255,
+              255,
+              128
+            ],
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAa0lEQVQ4T+WSwQoAIAhD8/8/uigoNJYzii51ipyPnJN08QhhZVBf9ngwBOps2LeCzaCqQ2/m4wimm7bqnjhigdF8CPOiwKLd7OqenYBG9iIwvSQ3yAzGcqbHl6cw7Wu9H435CezqNlnyTTQK9H4hFQVPriQAAAAASUVORK5CYII="
           }
         ]
       },
