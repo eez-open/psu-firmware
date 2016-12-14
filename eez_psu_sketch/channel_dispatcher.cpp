@@ -180,6 +180,8 @@ float getUMaxLimit(const Channel &channel) {
 float getUMin(const Channel &channel) {
     if (isSeries()) {
         return 2 * max(Channel::get(0).u.min, Channel::get(1).u.min);
+    } else if (isParallel() || isTracked()) {
+        return max(Channel::get(0).u.min, Channel::get(1).u.min);
     }
     return channel.u.min;
 }
@@ -194,6 +196,8 @@ float getUDef(const Channel &channel) {
 float getUMax(const Channel &channel) {
     if (isSeries()) {
         return 2 * min(Channel::get(0).u.max, Channel::get(1).u.max);
+    } else if (isParallel() || isTracked()) {
+        return min(Channel::get(0).u.max, Channel::get(1).u.max);
     }
     return channel.u.max;
 }
@@ -313,6 +317,8 @@ float getIMaxLimit(const Channel &channel) {
 float getIMin(const Channel &channel) {
     if (isParallel()) {
         return 2 * max(Channel::get(0).i.min, Channel::get(1).i.min);
+    } else if (isSeries() || isTracked()) {
+        return max(Channel::get(0).i.min, Channel::get(1).i.min);
     }
     return channel.i.min;
 }
@@ -327,6 +333,8 @@ float getIDef(const Channel &channel) {
 float getIMax(const Channel &channel) {
     if (isParallel()) {
         return 2 * min(Channel::get(0).i.max, Channel::get(1).i.max);
+    } else if (isSeries() || isTracked()) {
+        return min(Channel::get(0).i.max, Channel::get(1).i.max);
     }
     return channel.i.max;
 }
