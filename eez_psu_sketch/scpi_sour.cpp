@@ -566,8 +566,13 @@ scpi_result_t scpi_source_VoltageSenseSourceQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_source_VoltageProgramSource(scpi_t * context) {
-    if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
+    if (channel_dispatcher::isCoupled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
+        return SCPI_RES_ERR;
+    }
+
+    if (channel_dispatcher::isTracked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_IN_TRACKING_MODE);
         return SCPI_RES_ERR;
     }
 
@@ -592,8 +597,13 @@ scpi_result_t scpi_source_VoltageProgramSource(scpi_t * context) {
 }
 
 scpi_result_t scpi_source_VoltageProgramSourceQ(scpi_t * context) {
-    if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
+    if (channel_dispatcher::isCoupled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
+        return SCPI_RES_ERR;
+    }
+
+    if (channel_dispatcher::isTracked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_IN_TRACKING_MODE);
         return SCPI_RES_ERR;
     }
 

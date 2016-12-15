@@ -100,6 +100,11 @@ scpi_result_t scpi_inst_NSelectQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_inst_CoupleTracking(scpi_t * context) {
+    if (channel_dispatcher::isTracked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_IN_TRACKING_MODE);
+        return SCPI_RES_ERR;
+    }
+
     int32_t type;
     if (!SCPI_ParamChoice(context, channelsCouplingChoice, &type, true)) {
         return SCPI_RES_ERR;
@@ -116,7 +121,10 @@ scpi_result_t scpi_inst_CoupleTracking(scpi_t * context) {
 }
 
 scpi_result_t scpi_inst_CoupleTrackingQ(scpi_t * context) {
-    scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
+    if (channel_dispatcher::isTracked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_IN_TRACKING_MODE);
+        return SCPI_RES_ERR;
+    }
 
     char result[16];
 

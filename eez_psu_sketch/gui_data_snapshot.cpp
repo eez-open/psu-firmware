@@ -168,6 +168,7 @@ void Snapshot::takeSnapshot() {
     }
 
 	flags.channelDisplayedValues = persist_conf::dev_conf.flags.channelDisplayedValues;
+    flags.channelCouplingMode = channel_dispatcher::getType();
 
     if (channel_dispatcher::isSeries()) {
         flags.isVoltageBalanced = Channel::get(0).isVoltageBalanced() || Channel::get(1).isVoltageBalanced() ? 1 : 0;
@@ -204,19 +205,19 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 	}
 
 	if (id == DATA_ID_CHANNEL_COUPLING_MODE) {
-		return data::Value(channel_dispatcher::getType());
+		return data::Value(flags.channelCouplingMode);
 	}
 
 	if (id == DATA_ID_CHANNEL_IS_COUPLED) {
-		return data::Value(channel_dispatcher::isCoupled());
+		return data::Value(flags.channelCouplingMode == channel_dispatcher::TYPE_SERIES || flags.channelCouplingMode == channel_dispatcher::TYPE_PARALLEL ? 1 : 0);
 	}
 
     if (id == DATA_ID_CHANNEL_IS_TRACKED) {
-		return data::Value(channel_dispatcher::isTracked() ? 1 : 0);
+		return data::Value(flags.channelCouplingMode == channel_dispatcher::TYPE_TRACKED ? 1 : 0);
 	}
 
 	if (id == DATA_ID_CHANNEL_IS_COUPLED_OR_TRACKED) {
-		return data::Value(channel_dispatcher::isCoupled() || channel_dispatcher::isTracked() ? 1 : 0);
+		return data::Value(flags.channelCouplingMode != channel_dispatcher::TYPE_NONE ? 1 : 0);
 	}
 
     int iChannel;
