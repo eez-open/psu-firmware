@@ -14446,7 +14446,7 @@
               "y": 32,
               "width": 240,
               "height": 28,
-              "style": "edit_value_active_S_left",
+              "style": "default_disabled_S_left",
               "text": "Set / Clear AUX sensor OTP"
             },
             {
@@ -15297,12 +15297,44 @@
               ]
             },
             {
-              "type": "Rectangle",
+              "type": "MultilineText",
               "x": 16,
-              "y": 140,
-              "width": 236,
-              "height": 64,
-              "style": "default_inverse"
+              "y": 145,
+              "width": 179,
+              "height": 59,
+              "style": "edit_value_S_left",
+              "text": "Force disabling of all outputs on power up"
+            },
+            {
+              "x": 195,
+              "type": "Select",
+              "data": "",
+              "y": 145,
+              "width": 57,
+              "height": 59,
+              "style": "edit_value_L",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "ch_settings_prot_toggle_state",
+                  "x": 0,
+                  "y": 0,
+                  "width": 57,
+                  "height": 59,
+                  "style": "edit_value_active",
+                  "text": "No"
+                },
+                {
+                  "type": "Text",
+                  "action": "ch_settings_prot_toggle_state",
+                  "x": 0,
+                  "y": 0,
+                  "width": 57,
+                  "height": 59,
+                  "style": "edit_value_active",
+                  "text": "Yes"
+                }
+              ]
             },
             {
               "type": "Button",
