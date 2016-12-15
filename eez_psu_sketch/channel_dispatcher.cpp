@@ -511,6 +511,24 @@ void outputEnable(Channel& channel, bool enable) {
     }
 }
 
+void remoteSensingEnable(Channel& channel, bool enable) {
+    if (isCoupled() || isTracked()) {
+        Channel::get(0).remoteSensingEnable(enable);
+        Channel::get(1).remoteSensingEnable(enable);
+    } else {
+        channel.remoteSensingEnable(enable);
+    }
+}
+
+void remoteProgrammingEnable(Channel& channel, bool enable) {
+    if (isCoupled() || isTracked()) {
+        Channel::get(0).remoteSensingEnable(enable);
+        Channel::get(1).remoteSensingEnable(enable);
+    } else {
+        channel.remoteSensingEnable(enable);
+    }
+}
+
 bool lowRippleEnable(Channel& channel, bool enable) {
     if (isCoupled() || isTracked()) {
         bool success = Channel::get(0).lowRippleEnable(enable) && Channel::get(1).lowRippleEnable(enable);

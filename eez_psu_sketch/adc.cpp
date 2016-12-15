@@ -169,12 +169,12 @@ void AnalogDigitalConverter::tick(unsigned long tick_usec) {
                     }
 
                     channel_dispatcher::outputEnable(channel, false);
-                    channel.remoteSensingEnable(false);
+                    channel_dispatcher::remoteSensingEnable(channel, false);
                     if (channel.getFeatures() & CH_FEATURE_RPROG) {
-			    	    channel.remoteProgrammingEnable(false);
+			    	    channel_dispatcher::remoteProgrammingEnable(channel, false);
                     }
                     if (channel.getFeatures() & CH_FEATURE_LRIPPLE) {
-			    	    channel.lowRippleEnable(false);
+			    	    channel_dispatcher::lowRippleEnable(channel, false);
                     }
                 }
             }

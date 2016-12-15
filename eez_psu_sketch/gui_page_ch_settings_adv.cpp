@@ -118,7 +118,7 @@ data::Value ChSettingsAdvRSensePage::getData(const data::Cursor &cursor, uint8_t
 }
 
 void ChSettingsAdvRSensePage::toggleStatus() {
-	g_channel->remoteSensingEnable(!g_channel->isRemoteSensingEnabled());
+	channel_dispatcher::remoteSensingEnable(*g_channel, !g_channel->isRemoteSensingEnabled());
 }
 
 ////////////////////////////////////////////////////////////////////////////////

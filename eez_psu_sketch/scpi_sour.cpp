@@ -539,7 +539,7 @@ scpi_result_t scpi_source_VoltageSenseSource(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    channel->remoteSensingEnable(choice == 0 ? false : true);
+    channel_dispatcher::remoteSensingEnable(*channel, choice == 0 ? false : true);
 
     return SCPI_RES_OK;
 }
