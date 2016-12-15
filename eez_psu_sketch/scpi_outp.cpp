@@ -64,7 +64,7 @@ scpi_result_t scpi_outp_State(scpi_t * context) {
 
     if (enable != channel->isOutputEnabled()) {
         if (enable) {
-            if (channel->isTripped()) {
+            if (channel_dispatcher::isTripped(*channel)) {
                 SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_EXECUTE_BEFORE_CLEARING_PROTECTION);
                 return SCPI_RES_OK;
             }

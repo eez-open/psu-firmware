@@ -533,6 +533,14 @@ void lowRippleAutoEnable(Channel& channel, bool enable) {
     }
 }
 
+bool isTripped(Channel& channel) {
+    if (isCoupled() || isTracked()) {
+        return Channel::get(0).isTripped() || Channel::get(1).isTripped();
+    } else {
+        return channel.isTripped();
+    }
+}
+
 void clearProtection(Channel& channel) {
     if (isCoupled() || isTracked()) {
         Channel::get(0).clearProtection();

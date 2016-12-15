@@ -92,6 +92,7 @@ void outputEnable(Channel& channel, bool enable);
 bool lowRippleEnable(Channel& channel, bool enable);
 void lowRippleAutoEnable(Channel& channel, bool enable);
 
+bool isTripped(Channel& channel);
 void clearProtection(Channel& channel);
 void disableProtection(Channel& channel);
 

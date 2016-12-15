@@ -37,7 +37,7 @@
       "name": "toggle_channel",
       "description": "turn channel on/off",
       "implementationType": "native",
-      "implementation": "Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);\nif (channel.isTripped()) {\n    errorMessageP(PSTR(\"Channel is tripped!\"));\n} else {\n    channel_dispatcher::outputEnable(channel, !channel.isOutputEnabled());\n}\n"
+      "implementation": "Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);\nif (channel_dispatcher::isTripped(channel)) {\n    errorMessageP(PSTR(\"Channel is tripped!\"));\n} else {\n    channel_dispatcher::outputEnable(channel, !channel.isOutputEnabled());\n}\n"
     },
     {
       "name": "edit",
