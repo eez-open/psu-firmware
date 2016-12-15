@@ -32,18 +32,29 @@ Use this header file to override anything from conf.h or conf_advanced.h.
 */
 /// Firmware version.
 #undef FIRMWARE
-#define FIRMWARE     "M3 (a47e2ff)"
+#define FIRMWARE     "M3 (48554b5)"
 
-//#undef ADC_USE_INTERRUPTS
-//#define ADC_USE_INTERRUPTS 0
-//
-///// 0: 20 SPS, 1: 45 SPS, 2: 90 SPS, 3: 175 SPS, 4: 330 SPS, 5: 600 SPS, 6: 1000 SPS
-//#undef ADC_SPS
-//#define ADC_SPS 5
-//
-//#if !ADC_USE_INTERRUPTS
-//#define ADC_READ_TIME_US 2000L
-//#endif
+/*
+#undef ADC_USE_INTERRUPTS
+#define ADC_USE_INTERRUPTS 0
+
+/// 0: 20 SPS, 1: 45 SPS, 2: 90 SPS, 3: 175 SPS, 4: 330 SPS, 5: 600 SPS, 6: 1000 SPS
+#undef ADC_SPS
+#define ADC_SPS 5
+
+#if !ADC_USE_INTERRUPTS
+#define ADC_READ_TIME_US 2000L
+#endif
+*/
 
 //#undef OPTION_WATCHDOG
 //#define OPTION_WATCHDOG 0
+
+/// Max. allowed output current (in ampers) if fan or temp. sensor is invalid.
+#undef ERR_MAX_CURRENT 
+#define ERR_MAX_CURRENT 2
+
+/// Interval (in milliseconds) at which watchdog impulse will be sent
+#undef WATCHDOG_INTERVAL
+#define WATCHDOG_INTERVAL 250
+

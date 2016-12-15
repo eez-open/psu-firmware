@@ -4335,7 +4335,7 @@
                             },
                             {
                               "type": "Text",
-                              "action": "show_channel_settings",
+                              "action": "",
                               "x": 160,
                               "y": 64,
                               "width": 160,
@@ -4375,7 +4375,7 @@
                             },
                             {
                               "type": "Text",
-                              "action": "show_channel_settings",
+                              "action": "",
                               "x": 48,
                               "y": 58,
                               "width": 192,
@@ -5271,7 +5271,7 @@
                             },
                             {
                               "type": "Text",
-                              "action": "show_channel_settings",
+                              "action": "",
                               "x": 169,
                               "y": 68,
                               "width": 32,
@@ -5281,7 +5281,7 @@
                             },
                             {
                               "type": "Text",
-                              "action": "show_channel_settings",
+                              "action": "",
                               "x": 160,
                               "y": 100,
                               "width": 49,
