@@ -88,16 +88,7 @@ void start_rpm_measure() {
 	analogWrite(FAN_PWM, FAN_MAX_PWM);
 
     // delay 2ms
-    if (g_isBooted) {
-        g_startingRpmMeasure = true;
-        unsigned long finishTime = micros() + 2000;
-        do {
-            psu::tick();
-        } while (micros() < finishTime);
-        g_startingRpmMeasure = false;
-    } else {
-        delay(2);
-    }
+    delay(2);
 
 	attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
 
