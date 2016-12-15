@@ -41,7 +41,7 @@ void UserProfilesPage::takeSnapshot(data::Snapshot *snapshot) {
 	if (g_selectedProfileLocation != -1) {
 		snapshot->profile.status = profile::isValid(g_selectedProfileLocation) ? 1 : 0;
 		snapshot->profile.isAutoRecallLocation = persist_conf::getProfileAutoRecallLocation() == g_selectedProfileLocation ? 1 : 0;
-        profile::getName(g_selectedProfileLocation, snapshot->profile.remark, sizeof(snapshot->profile.remark));
+        strncpy(snapshot->profile.remark, profile.name, sizeof(snapshot->profile.remark) - 1);
 		
 		for (int i = 0; i < CH_MAX; ++i) {
 			snapshot->profile.channels[i].outputStatus = profile.channels[i].flags.output_enabled;
