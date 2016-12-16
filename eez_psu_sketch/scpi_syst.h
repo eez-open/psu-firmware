@@ -55,4 +55,9 @@
     SCPI_COMMAND("SYSTem:CPU:MODel?", scpi_syst_CpuModelQ) \
     SCPI_COMMAND("SYSTem:CPU:OPTion?", scpi_syst_CpuOptionQ) \
     SCPI_COMMAND("SYSTem:SERial", scpi_syst_Serial) \
-    SCPI_COMMAND("SYSTem:SERial?", scpi_syst_SerialQ)
+    SCPI_COMMAND("SYSTem:SERial?", scpi_syst_SerialQ) \
+    SCPI_COMMAND("SYSTem:POWer:PROTection:TRIP", scpi_syst_PowerProtectionTrip) \
+    SCPI_COMMAND("SYSTem:POWer:PROTection:TRIP?", scpi_syst_PowerProtectionTripQ) \
+    SCPI_COMMAND("SYSTem:PON:OUTPut:DISable", scpi_syst_PonOutputDisable) \
+    SCPI_COMMAND("SYSTem:PON:OUTPut:DISable?", scpi_syst_PonOutputDisableQ) \
+

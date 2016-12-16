@@ -25,7 +25,9 @@ class Interval {
 public:
 	Interval(unsigned long interval_msec);
 
-	bool test(unsigned long tick_usec);
+    void reset();
+
+    bool test(unsigned long tick_usec);
 
 private:
 	unsigned long interval_usec;

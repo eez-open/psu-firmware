@@ -73,6 +73,8 @@ bool reset();
 
 bool test();
 
+void onProtectionTripped();
+
 void tick();
 
 void setEsrBits(int bit_mask);

@@ -40,6 +40,7 @@
 #include "gui_page_ch_settings_info.h"
 #include "gui_page_sys_settings_date_time.h"
 #include "gui_page_sys_settings_ethernet.h"
+#include "gui_page_sys_settings_protections.h"
 #include "gui_page_sys_info.h"
 #include "gui_page_user_profiles.h"
 
@@ -122,6 +123,7 @@ Page *createPageFromId(int pageId) {
 	case PAGE_ID_CH_SETTINGS_INFO: return new ChSettingsInfoPage();
 	case PAGE_ID_SYS_SETTINGS_DATE_TIME: return new SysSettingsDateTimePage();
     case PAGE_ID_SYS_SETTINGS_ETHERNET: return new SysSettingsEthernetPage();
+    case PAGE_ID_SYS_SETTINGS_PROTECTIONS: return new SysSettingsProtectionsPage();
 	case PAGE_ID_SYS_INFO:
 	case PAGE_ID_SYS_INFO2: return new SysInfoPage();
 	case PAGE_ID_USER_PROFILES:

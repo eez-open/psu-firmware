@@ -31,6 +31,7 @@
 #include "gui_page_sys_settings_date_time.h"
 #include "gui_page_user_profiles.h"
 #include "gui_page_sys_settings_ethernet.h"
+#include "gui_page_sys_settings_protections.h"
 
 namespace eez {
 namespace psu {
@@ -192,6 +193,10 @@ void action_show_sys_settings_screen_calibration() {
 
 void action_show_sys_settings_ethernet() {
     pushPage(PAGE_ID_SYS_SETTINGS_ETHERNET);
+}
+
+void action_show_sys_settings_protections() {
+    pushPage(PAGE_ID_SYS_SETTINGS_PROTECTIONS);
 }
 
 void action_show_sys_info() {
@@ -444,6 +449,18 @@ void action_ch_settings_adv_toggle_tracking_mode() {
     ((ChSettingsAdvTrackingPage *)getActivePage())->toggleTrackingMode();
 }
 
+void action_sys_settings_protections_toggle_output_protection_couple() {
+    SysSettingsProtectionsPage::toggleOutputProtectionCouple();
+}
+
+void action_sys_settings_protections_toggle_shutdown_when_protection_tripped() {
+    SysSettingsProtectionsPage::toggleShutdownWhenProtectionTripped();
+}
+
+void action_sys_settings_protections_toggle_force_disabling_all_outputs_on_power_up() {
+    SysSettingsProtectionsPage::toggleForceDisablingAllOutputsOnPowerUp();
+}
+
 
 ACTION actions[] = {
     0,
@@ -484,6 +501,7 @@ ACTION actions[] = {
     action_show_sys_settings_cal_ch,
     action_show_sys_settings_screen_calibration,
     action_show_sys_settings_ethernet,
+    action_show_sys_settings_protections,
     action_show_sys_info,
     action_show_sys_info2,
     action_show_main_help_page,
@@ -545,7 +563,10 @@ ACTION actions[] = {
     action_ch_settings_adv_coupling_set_series_info,
     action_ch_settings_adv_coupling_set_parallel,
     action_ch_settings_adv_coupling_set_series,
-    action_ch_settings_adv_toggle_tracking_mode
+    action_ch_settings_adv_toggle_tracking_mode,
+    action_sys_settings_protections_toggle_output_protection_couple,
+    action_sys_settings_protections_toggle_shutdown_when_protection_tripped,
+    action_sys_settings_protections_toggle_force_disabling_all_outputs_on_power_up
 };
 
 }

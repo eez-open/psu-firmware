@@ -541,6 +541,45 @@ scpi_result_t scpi_syst_SerialQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t scpi_syst_PowerProtectionTrip(scpi_t * context) {
+    bool enable;
+    if (!SCPI_ParamBool(context, &enable, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+	if (!persist_conf::enableShutdownWhenProtectionTripped(enable)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+	}
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_PowerProtectionTripQ(scpi_t * context) {
+    SCPI_ResultBool(context, persist_conf::isShutdownWhenProtectionTrippedEnabled());
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_PonOutputDisable(scpi_t * context) {
+    bool enable;
+    if (!SCPI_ParamBool(context, &enable, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+	if (!persist_conf::enableForceDisablingAllOutputsOnPowerUp(enable)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+	}
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_PonOutputDisableQ(scpi_t * context) {
+    SCPI_ResultBool(context, persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled());
+
+    return SCPI_RES_OK;
+}
 
 }
 }

@@ -131,6 +131,26 @@ scpi_result_t scpi_outp_TrackStateQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t scpi_outp_ProtectionCouple(scpi_t * context) {
+    bool enable;
+    if (!SCPI_ParamBool(context, &enable, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+	if (!persist_conf::enableOutputProtectionCouple(enable)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+	}
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_outp_ProtectionCoupleQ(scpi_t * context) {
+    SCPI_ResultBool(context, persist_conf::isOutputProtectionCoupleEnabled());
+
+    return SCPI_RES_OK;
+}
+
 }
 }
 } // namespace eez::psu::scpi

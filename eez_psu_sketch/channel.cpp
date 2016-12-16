@@ -313,6 +313,8 @@ void Channel::protectionEnter(ProtectionValue &cpv) {
             Channel::get(1).protectionEnter(Channel::get(1).opp);
         }
     }
+
+    onProtectionTripped();
 }
 
 void Channel::protectionCheck(ProtectionValue &cpv) {

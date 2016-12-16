@@ -51,13 +51,13 @@ struct DeviceFlags {
     int dst : 1;
     int channelDisplayedValues : 3;
     int ethernetEnabled : 1;
+    int outputProtectionCouple : 1;
+    int shutdownWhenProtectionTripped : 1;
+    int forceDisablingAllOutputsOnPowerUp : 1;
     int reserved1 : 1;
     int reserved2 : 1;
     int reserved3 : 1;
     int reserved4 : 1;
-    int reserved5 : 1;
-    int reserved6 : 1;
-    int reserved7 : 1;
 };
 
 /// Device configuration block.
@@ -125,6 +125,15 @@ bool saveProfile(int location, profile::Parameters *profile);
 
 uint32_t readTotalOnTime(int type);
 bool writeTotalOnTime(int type, uint32_t time);
+
+bool enableOutputProtectionCouple(bool enable);
+bool isOutputProtectionCoupleEnabled();
+
+bool enableShutdownWhenProtectionTripped(bool enable);
+bool isShutdownWhenProtectionTrippedEnabled();
+
+bool enableForceDisablingAllOutputsOnPowerUp(bool enable);
+bool isForceDisablingAllOutputsOnPowerUpEnabled();
 
 }
 }

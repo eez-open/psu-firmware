@@ -266,6 +266,8 @@ void TempSensorTemperature::protection_enter(TempSensorTemperature& sensor) {
     } else {
         sensor.protection_enter();
     }
+
+    onProtectionTripped();
 }
 
 void TempSensorTemperature::protection_enter() {
@@ -273,7 +275,7 @@ void TempSensorTemperature::protection_enter() {
 
 	if (temp_sensor::sensors[sensorIndex].ch_num >= 0) {
 		Channel::get(temp_sensor::sensors[sensorIndex].ch_num).outputEnable(false);
-	} else {
+    } else {
 		for (int i = 0; i < CH_NUM; ++i) {
 			Channel::get(i).outputEnable(false);
 		}

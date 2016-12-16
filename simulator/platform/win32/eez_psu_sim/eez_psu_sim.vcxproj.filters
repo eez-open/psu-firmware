@@ -409,6 +409,9 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\channel_dispatcher.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_protections.h">
+      <Filter>gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -705,6 +708,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\channel_dispatcher.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_protections.cpp">
+      <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

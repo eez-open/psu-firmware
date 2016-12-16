@@ -18,7 +18,7 @@
         },
         {
           "fileName": "actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"persist_conf.h\"\n#include \"channel_dispatcher.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings_date_time.h\"\n#include \"gui_page_user_profiles.h\"\n#include \"gui_page_sys_settings_ethernet.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"persist_conf.h\"\n#include \"channel_dispatcher.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings_date_time.h\"\n#include \"gui_page_user_profiles.h\"\n#include \"gui_page_sys_settings_ethernet.h\"\n#include \"gui_page_sys_settings_protections.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
         },
         {
           "fileName": "gui_document.h",
@@ -227,6 +227,11 @@
       "name": "show_sys_settings_ethernet",
       "implementationType": "native",
       "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_ETHERNET);"
+    },
+    {
+      "name": "show_sys_settings_protections",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_PROTECTIONS);"
     },
     {
       "name": "show_sys_info",
@@ -537,6 +542,21 @@
       "name": "ch_settings_adv_toggle_tracking_mode",
       "implementationType": "native",
       "implementation": "((ChSettingsAdvTrackingPage *)getActivePage())->toggleTrackingMode();"
+    },
+    {
+      "name": "sys.settings.protections.toggleOutputProtectionCouple",
+      "implementationType": "native",
+      "implementation": "SysSettingsProtectionsPage::toggleOutputProtectionCouple();"
+    },
+    {
+      "name": "sys.settings.protections.toggleShutdownWhenProtectionTripped",
+      "implementationType": "native",
+      "implementation": "SysSettingsProtectionsPage::toggleShutdownWhenProtectionTripped();"
+    },
+    {
+      "name": "sys.settings.protections.toggleForceDisablingAllOutputsOnPowerUp",
+      "implementationType": "native",
+      "implementation": "SysSettingsProtectionsPage::toggleForceDisablingAllOutputsOnPowerUp();"
     }
   ],
   "data": [
@@ -1362,6 +1382,21 @@
     },
     {
       "name": "channel.isCurrentBalanced",
+      "type": "boolean",
+      "defaultValue": "0"
+    },
+    {
+      "name": "sys.outputProtectionCoupled",
+      "type": "boolean",
+      "defaultValue": "0"
+    },
+    {
+      "name": "sys.shutdownWhenProtectionTripped",
+      "type": "boolean",
+      "defaultValue": "0"
+    },
+    {
+      "name": "sys.forceDisablingAllOutputsOnPowerUp",
       "type": "boolean",
       "defaultValue": "0"
     }
@@ -14488,12 +14523,12 @@
             },
             {
               "type": "Text",
-              "action": "",
+              "action": "show_sys_settings_protections",
               "x": 12,
               "y": 170,
               "width": 240,
               "height": 29,
-              "style": "default_disabled_S_left",
+              "style": "edit_value_active_S_left",
               "text": "System protection settings"
             },
             {
@@ -15214,29 +15249,30 @@
               "width": 246,
               "height": 28,
               "style": "value_S",
-              "text": "Set AUX temperature protection"
+              "text": "System protection settings"
             },
             {
               "type": "MultilineText",
               "x": 16,
-              "y": 28,
+              "y": 27,
               "width": 179,
               "height": 59,
               "style": "edit_value_S_left",
-              "text": "Switch off all outputs when protection tripped"
+              "text": "Shutdown when protection tripped"
             },
             {
               "x": 195,
               "type": "Select",
-              "data": "",
-              "y": 28,
+              "data": "sys.shutdownWhenProtectionTripped",
+              "action": "",
+              "y": 27,
               "width": 57,
               "height": 59,
               "style": "edit_value_L",
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "ch_settings_prot_toggle_state",
+                  "action": "sys.settings.protections.toggleShutdownWhenProtectionTripped",
                   "x": 0,
                   "y": 0,
                   "width": 57,
@@ -15246,7 +15282,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "ch_settings_prot_toggle_state",
+                  "action": "sys.settings.protections.toggleShutdownWhenProtectionTripped",
                   "x": 0,
                   "y": 0,
                   "width": 57,
@@ -15257,42 +15293,115 @@
               ]
             },
             {
-              "type": "MultilineText",
               "x": 16,
-              "y": 87,
-              "width": 179,
-              "height": 59,
-              "style": "edit_value_S_left",
-              "text": "Shutdown when protection tripped"
-            },
-            {
-              "x": 195,
               "type": "Select",
-              "data": "",
-              "y": 87,
-              "width": 57,
+              "data": "sys.shutdownWhenProtectionTripped",
+              "y": 86,
+              "width": 236,
               "height": 59,
-              "style": "edit_value_L",
+              "style": "default",
               "widgets": [
                 {
-                  "type": "Text",
-                  "action": "ch_settings_prot_toggle_state",
+                  "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 57,
+                  "width": 236,
                   "height": 59,
-                  "style": "edit_value_active",
-                  "text": "No"
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "MultilineText",
+                      "x": 0,
+                      "y": 0,
+                      "width": 179,
+                      "height": 59,
+                      "style": "edit_value_S_left",
+                      "text": "Switch off all outputs when protection tripped"
+                    },
+                    {
+                      "x": 179,
+                      "type": "Select",
+                      "data": "sys.outputProtectionCoupled",
+                      "action": "",
+                      "y": 0,
+                      "width": 57,
+                      "height": 59,
+                      "style": "edit_value_L",
+                      "widgets": [
+                        {
+                          "type": "Text",
+                          "action": "sys.settings.protections.toggleOutputProtectionCouple",
+                          "x": 0,
+                          "y": 0,
+                          "width": 57,
+                          "height": 59,
+                          "style": "edit_value_active",
+                          "text": "No"
+                        },
+                        {
+                          "type": "Text",
+                          "action": "sys.settings.protections.toggleOutputProtectionCouple",
+                          "x": 0,
+                          "y": 0,
+                          "width": 57,
+                          "height": 59,
+                          "style": "edit_value_active",
+                          "text": "Yes"
+                        }
+                      ]
+                    }
+                  ]
                 },
                 {
-                  "type": "Text",
-                  "action": "ch_settings_prot_toggle_state",
+                  "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 57,
+                  "width": 236,
                   "height": 59,
-                  "style": "edit_value_active",
-                  "text": "Yes"
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "MultilineText",
+                      "x": 0,
+                      "y": 0,
+                      "width": 179,
+                      "height": 59,
+                      "style": "default_disabled_S_left",
+                      "text": "Switch off all outputs when protection tripped"
+                    },
+                    {
+                      "x": 179,
+                      "type": "Select",
+                      "data": "sys.outputProtectionCoupled",
+                      "action": "",
+                      "y": 0,
+                      "width": 57,
+                      "height": 59,
+                      "style": "edit_value_L",
+                      "widgets": [
+                        {
+                          "type": "Text",
+                          "action": "",
+                          "x": 0,
+                          "y": 0,
+                          "width": 57,
+                          "height": 59,
+                          "style": "default_disabled",
+                          "text": "No"
+                        },
+                        {
+                          "type": "Text",
+                          "action": "",
+                          "x": 0,
+                          "y": 0,
+                          "width": 57,
+                          "height": 59,
+                          "style": "default_disabled",
+                          "text": "Yes"
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             },
@@ -15308,7 +15417,8 @@
             {
               "x": 195,
               "type": "Select",
-              "data": "",
+              "data": "sys.forceDisablingAllOutputsOnPowerUp",
+              "action": "",
               "y": 145,
               "width": 57,
               "height": 59,
@@ -15316,7 +15426,7 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "ch_settings_prot_toggle_state",
+                  "action": "sys.settings.protections.toggleForceDisablingAllOutputsOnPowerUp",
                   "x": 0,
                   "y": 0,
                   "width": 57,
@@ -15326,7 +15436,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "ch_settings_prot_toggle_state",
+                  "action": "sys.settings.protections.toggleForceDisablingAllOutputsOnPowerUp",
                   "x": 0,
                   "y": 0,
                   "width": 57,
@@ -15337,35 +15447,22 @@
               ]
             },
             {
-              "type": "Button",
-              "data": "",
-              "action": "set",
+              "type": "Rectangle",
               "x": 0,
               "y": 204,
-              "width": 72,
+              "width": 224,
               "height": 36,
-              "style": "non_interactive_button_S",
-              "text": "~ Set",
-              "enabled": "setPage.dirty",
-              "disabledStyle": "non_interactive_button_S_disabled"
+              "style": "bottom_button_background"
             },
             {
               "type": "Text",
-              "action": "discard",
-              "x": 72,
+              "action": "show_previous_page",
+              "x": 224,
               "y": 204,
-              "width": 96,
+              "width": 48,
               "height": 36,
-              "style": "non_interactive_button_S",
-              "text": " Discard"
-            },
-            {
-              "type": "Rectangle",
-              "x": 168,
-              "y": 204,
-              "width": 104,
-              "height": 36,
-              "style": "bottom_button_background"
+              "style": "bottom_button",
+              "text": "B"
             },
             {
               "type": "Text",
@@ -15384,15 +15481,6 @@
               "width": 68,
               "height": 204,
               "style": "default"
-            },
-            {
-              "type": "Text",
-              "x": 6,
-              "y": 0,
-              "width": 246,
-              "height": 28,
-              "style": "value_S",
-              "text": "System protection settings"
             }
           ]
         }
@@ -20480,6 +20568,15 @@
         "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance.",
         "font": "medium",
         "color": "#FFFFFF",
+        "backgroundColor": "#5080ff",
+        "borderColor": "#D3D3D3"
+      },
+      {
+        "name": "default_disabled",
+        "description": "",
+        "inheritFrom": "default",
+        "font": "medium",
+        "color": "#c0c0c0",
         "backgroundColor": "#5080ff",
         "borderColor": "#D3D3D3"
       },

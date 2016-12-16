@@ -15,36 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+ 
+#pragma once
 
-#include "psu.h"
-#include "timer.h"
+#include "gui_page.h"
+
+#include "datetime.h"
 
 namespace eez {
 namespace psu {
+namespace gui {
 
-Interval::Interval(unsigned long interval_msec)
-	: interval_usec(interval_msec * 1000L)
-{
-	reset();
-}
+class SysSettingsProtectionsPage : public Page {
+public:
+	void takeSnapshot(data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
 
-void Interval::reset() {
-	next_tick_usec = micros() + interval_usec;
-}
-
-bool Interval::test(unsigned long tick_usec) {
-	long diff = tick_usec - next_tick_usec;
-	if (diff > 0) {
-		do {
-			next_tick_usec += interval_usec;
-			diff = tick_usec - next_tick_usec;
-		} while (diff > 0);
-
-		return true;
-	}
-
-	return false;
-}
+    static void toggleOutputProtectionCouple();
+    static void toggleShutdownWhenProtectionTripped();
+    static void toggleForceDisablingAllOutputsOnPowerUp();
+};
 
 }
-} // namespace eez::psu
+}
+} // namespace eez::psu::gui

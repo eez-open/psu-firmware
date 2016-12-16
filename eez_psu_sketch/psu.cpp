@@ -403,35 +403,42 @@ static bool psuReset() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool autoRecall() {
+static bool autoRecall() {
     if (persist_conf::isProfileAutoRecallEnabled()) {
         int location = persist_conf::getProfileAutoRecallLocation();
         profile::Parameters profile;
         if (profile::load(location, &profile)) {
             bool differenceChecked = true;
 
-            if (location != 0) {
-                profile::Parameters defaultProfile;
-                if (profile::load(0, &defaultProfile)) {
-                    bool differenceDetected = false;
+            if (persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled()) {
+                for (int i = 0; i < CH_NUM; ++i) {
+                    profile.channels[i].flags.output_enabled = false;
+                    profile.channels[i].flags.output_enabled = false;
+                }
+            } else {
+                if (location != 0) {
+                    profile::Parameters defaultProfile;
+                    if (profile::load(0, &defaultProfile)) {
+                        bool differenceDetected = false;
 
-                    for (int i = 0; i < CH_NUM; ++i) {
-                        if (profile.channels[i].u_set != defaultProfile.channels[i].u_set || profile.channels[i].i_set != profile.channels[i].i_set) {
-                            differenceDetected = true;
-                            break;
-                        }
-                    }
-
-                    if (differenceDetected) {
                         for (int i = 0; i < CH_NUM; ++i) {
-                            profile.channels[i].flags.output_enabled = false;
-                            profile.channels[i].flags.output_enabled = false;
+                            if (profile.channels[i].u_set != defaultProfile.channels[i].u_set || profile.channels[i].i_set != profile.channels[i].i_set) {
+                                differenceDetected = true;
+                                break;
+                            }
                         }
 
-                        event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
+                        if (differenceDetected) {
+                            for (int i = 0; i < CH_NUM; ++i) {
+                                profile.channels[i].flags.output_enabled = false;
+                                profile.channels[i].flags.output_enabled = false;
+                            }
+
+                            event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
+                        }
+                    } else {
+                        differenceChecked = false;
                     }
-                } else {
-                    differenceChecked = false;
                 }
             }
             
@@ -593,6 +600,12 @@ bool changePowerState(bool up) {
         // auto recall channels parameters from profile
         profile::Parameters profile;
         if (persist_conf::isProfileAutoRecallEnabled() && profile::load(persist_conf::getProfileAutoRecallLocation(), &profile)) {
+            if (persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled()) {
+                for (int i = 0; i < CH_NUM; ++i) {
+                    profile.channels[i].flags.output_enabled = false;
+                    profile.channels[i].flags.output_enabled = false;
+                }
+            }
             profile::recallChannelsFromProfile(&profile);
         }
     
@@ -638,6 +651,24 @@ bool reset() {
         return true;
     }
     return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void onProtectionTripped() {
+    if (isPowerUp()) {
+        if (persist_conf::isShutdownWhenProtectionTrippedEnabled()) {
+            powerDownBySensor();
+        } else {
+            if (persist_conf::isOutputProtectionCoupleEnabled()) {
+                for (int i = 0; i < CH_NUM; ++i) {
+                    if (!Channel::get(i).isOutputEnabled()) {
+                        Channel::get(i).outputEnable(false);
+                    }
+                }
+            }
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

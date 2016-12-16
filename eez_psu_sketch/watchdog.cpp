@@ -32,6 +32,7 @@ unsigned long g_lastWatchdogImpulseTime;
 
 void enable() {
     watchdogEnabled = true;
+    watchdogInterval.reset();
 	pinMode(WATCHDOG, OUTPUT);
 }
 
@@ -54,22 +55,25 @@ void tick(unsigned long tick_usec) {
         }
     }
 
-	if (watchdogInterval.test(tick_usec)) {
+    if (watchdogEnabled) {
+	    if (watchdogInterval.test(tick_usec)) {
 #if CONF_DEBUG
-		if (debug::g_debugWatchdog) {
+		    if (debug::g_debugWatchdog) {
 #endif
-        g_lastWatchdogImpulseTime = micros();
-		digitalWrite(WATCHDOG, HIGH);
-		delayMicroseconds(2);
-		digitalWrite(WATCHDOG, LOW);
-		delayMicroseconds(2);
-		digitalWrite(WATCHDOG, HIGH);
-		delayMicroseconds(2);
-		digitalWrite(WATCHDOG, LOW);
+                g_lastWatchdogImpulseTime = micros();
+
+		        digitalWrite(WATCHDOG, HIGH);
+		        delayMicroseconds(2);
+		        digitalWrite(WATCHDOG, LOW);
+		        delayMicroseconds(2);
+		        digitalWrite(WATCHDOG, HIGH);
+		        delayMicroseconds(2);
+		        digitalWrite(WATCHDOG, LOW);
 #if CONF_DEBUG
-		}
+		    }
 #endif
-	}
+	    }
+    }
 }
 
 }

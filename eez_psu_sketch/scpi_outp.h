@@ -25,4 +25,6 @@
     SCPI_COMMAND("OUTPut[:STATe]?", scpi_outp_StateQ) \
     SCPI_COMMAND("OUTPut:TRACk[:STATe]", scpi_outp_TrackState) \
     SCPI_COMMAND("OUTPut:TRACk[:STATe]?", scpi_outp_TrackStateQ) \
+    SCPI_COMMAND("OUTPut:PROTection:COUPle", scpi_outp_ProtectionCouple) \
+    SCPI_COMMAND("OUTPut:PROTection:COUPle?", scpi_outp_ProtectionCoupleQ) \
 

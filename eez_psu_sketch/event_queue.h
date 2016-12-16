@@ -99,6 +99,12 @@ static const int EVENT_TYPE_ERROR = 3;
     EVENT_INFO(COUPLED_IN_SERIES, 93, "Coupled in series") \
     EVENT_INFO(CHANNELS_UNCOUPLED, 94, "Channels uncoupled") \
     EVENT_INFO(CHANNELS_TRACKED, 95, "Channels operates in track mode") \
+    EVENT_INFO(OUTPUT_PROTECTION_COUPLED, 96, "Output protection coupled") \
+    EVENT_INFO(OUTPUT_PROTECTION_DECOUPLED, 97, "Output protection decoupled") \
+    EVENT_INFO(SHUTDOWN_WHEN_PROTECTION_TRIPPED_ENABLED, 98, "Shutdown when tripped enabled") \
+    EVENT_INFO(SHUTDOWN_WHEN_PROTECTION_TRIPPED_DISABLED, 99, "Shutdown when tripped disabled") \
+    EVENT_INFO(FORCE_DISABLING_ALL_OUTPUTS_ON_POWERUP_ENABLED, 100, "Force disabling outputs enabled") \
+    EVENT_INFO(FORCE_DISABLING_ALL_OUTPUTS_ON_POWERUP_DISABLED, 101, "Force disabling outputs disabled") \
     
 
 #define EVENT_ERROR_START_ID 10000

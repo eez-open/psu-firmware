@@ -124,6 +124,10 @@ void initDevice() {
 #else
     dev_conf.flags.ethernetEnabled = 0;
 #endif // EEZ_PSU_SIMULATOR
+
+    dev_conf.flags.outputProtectionCouple = 0;
+    dev_conf.flags.shutdownWhenProtectionTripped = 0;
+    dev_conf.flags.forceDisablingAllOutputsOnPowerUp = 0;
 }
 
 void loadDevice() {
@@ -355,6 +359,90 @@ bool writeTotalOnTime(int type, uint32_t time) {
 
 	return eeprom::write((uint8_t *)buffer, sizeof(buffer),
 		eeprom::EEPROM_ONTIME_START_ADDRESS + type * eeprom::EEPROM_ONTIME_SIZE);
+}
+
+bool enableOutputProtectionCouple(bool enable) {
+    int outputProtectionCouple = enable ? 1 : 0;
+
+    if (dev_conf.flags.outputProtectionCouple == outputProtectionCouple) {
+        return true;
+    }
+
+    dev_conf.flags.outputProtectionCouple = outputProtectionCouple;
+
+    if (saveDevice()) {
+        if (dev_conf.flags.outputProtectionCouple) {
+		    event_queue::pushEvent(event_queue::EVENT_INFO_OUTPUT_PROTECTION_COUPLED);
+        } else {
+		    event_queue::pushEvent(event_queue::EVENT_INFO_OUTPUT_PROTECTION_DECOUPLED);
+        }
+
+        return true;
+    }
+
+    dev_conf.flags.outputProtectionCouple = 1 - outputProtectionCouple;
+
+    return false;
+}
+
+bool isOutputProtectionCoupleEnabled() {
+    return dev_conf.flags.outputProtectionCouple ? true : false;
+}
+
+bool enableShutdownWhenProtectionTripped(bool enable) {
+    int shutdownWhenProtectionTripped = enable ? 1 : 0;
+
+    if (dev_conf.flags.shutdownWhenProtectionTripped == shutdownWhenProtectionTripped) {
+        return true;
+    }
+
+    dev_conf.flags.shutdownWhenProtectionTripped = shutdownWhenProtectionTripped;
+
+    if (saveDevice()) {
+        if (dev_conf.flags.shutdownWhenProtectionTripped) {
+		    event_queue::pushEvent(event_queue::EVENT_INFO_SHUTDOWN_WHEN_PROTECTION_TRIPPED_ENABLED);
+        } else {
+		    event_queue::pushEvent(event_queue::EVENT_INFO_SHUTDOWN_WHEN_PROTECTION_TRIPPED_DISABLED);
+        }
+
+        return true;
+    }
+
+    dev_conf.flags.shutdownWhenProtectionTripped = 1 - shutdownWhenProtectionTripped;
+
+    return false;
+}
+
+bool isShutdownWhenProtectionTrippedEnabled() {
+    return dev_conf.flags.shutdownWhenProtectionTripped ? true : false;
+}
+
+bool enableForceDisablingAllOutputsOnPowerUp(bool enable) {
+    int forceDisablingAllOutputsOnPowerUp = enable ? 1 : 0;
+
+    if (dev_conf.flags.forceDisablingAllOutputsOnPowerUp == forceDisablingAllOutputsOnPowerUp) {
+        return true;
+    }
+
+    dev_conf.flags.forceDisablingAllOutputsOnPowerUp = forceDisablingAllOutputsOnPowerUp;
+
+    if (saveDevice()) {
+        if (dev_conf.flags.forceDisablingAllOutputsOnPowerUp) {
+		    event_queue::pushEvent(event_queue::EVENT_INFO_FORCE_DISABLING_ALL_OUTPUTS_ON_POWERUP_ENABLED);
+        } else {
+		    event_queue::pushEvent(event_queue::EVENT_INFO_FORCE_DISABLING_ALL_OUTPUTS_ON_POWERUP_DISABLED);
+        }
+
+        return true;
+    }
+
+    dev_conf.flags.forceDisablingAllOutputsOnPowerUp = 1 - forceDisablingAllOutputsOnPowerUp;
+
+    return false;
+}
+
+bool isForceDisablingAllOutputsOnPowerUpEnabled() {
+    return dev_conf.flags.forceDisablingAllOutputsOnPowerUp ? true : false;
 }
 
 }
