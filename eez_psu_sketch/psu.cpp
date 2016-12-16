@@ -662,7 +662,7 @@ void onProtectionTripped() {
         } else {
             if (persist_conf::isOutputProtectionCoupleEnabled()) {
                 for (int i = 0; i < CH_NUM; ++i) {
-                    if (!Channel::get(i).isOutputEnabled()) {
+                    if (Channel::get(i).isOutputEnabled()) {
                         Channel::get(i).outputEnable(false);
                     }
                 }
