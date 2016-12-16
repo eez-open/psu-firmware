@@ -44,6 +44,7 @@ inline bool isSeries() { return getType() == TYPE_SERIES; }
 inline bool isTracked() { return getType() == channel_dispatcher::TYPE_TRACKED; }
 
 float getUSet(const Channel &channel);
+float getUSetUnbalanced(const Channel &channel);
 float getUMon(const Channel &channel);
 float getUMonDac(const Channel &channel);
 float getULimit(const Channel &channel);
@@ -60,6 +61,7 @@ void setOvpLevel(Channel &channel, float level);
 void setOvpDelay(Channel &channel, float delay);
 
 float getISet(const Channel &channel);
+float getISetUnbalanced(const Channel &channel);
 float getIMon(const Channel &channel);
 float getIMonDac(const Channel &channel);
 float getILimit(const Channel &channel);

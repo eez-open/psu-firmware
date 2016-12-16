@@ -108,6 +108,7 @@ struct Snapshot {
     void takeSnapshot();
 
     Value get(const Cursor &cursor, uint8_t id);
+    Value getEditValue(const Cursor &cursor, uint8_t id);
     bool isBlinking(const Cursor &cursor, uint8_t id);
 };
 

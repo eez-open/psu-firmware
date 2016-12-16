@@ -91,6 +91,11 @@ bool onKeypadOk(float value) {
 	return edit_mode::setValue(value);
 }
 
+void initEditValue() {
+    editValue = data::currentSnapshot.getEditValue(dataCursor, dataId);
+    undoValue = editValue;
+}
+
 void enter(int tabIndex_) {
 	if (tabIndex_ != -1) {
 		tabIndex = tabIndex_;
@@ -118,8 +123,8 @@ void enter(int tabIndex_) {
         dataCursor = newDataCursor;
         dataId = newDataId;
 
-        editValue = data::currentSnapshot.get(dataCursor, dataId);
-        undoValue = editValue;
+        initEditValue();
+
         minValue = data::getMin(dataCursor, dataId);
         maxValue = data::getMax(dataCursor, dataId);
 
@@ -175,8 +180,7 @@ bool isInteractiveMode() {
 
 void toggleInteractiveMode() {
     is_interactive_mode = !is_interactive_mode;
-    editValue = data::currentSnapshot.get(dataCursor, dataId);
-    undoValue = editValue;
+    initEditValue();
 }
 
 const data::Value& getEditValue() {

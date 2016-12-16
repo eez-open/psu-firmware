@@ -222,11 +222,11 @@ bool saveAtLocation(int location, char *name) {
 				profile.channels[i].flags.i_state = channel.prot_conf.flags.i_state;
 				profile.channels[i].flags.p_state = channel.prot_conf.flags.p_state;
 
-				profile.channels[i].u_set = channel.getUSet();
+				profile.channels[i].u_set = channel.getUSetUnbalanced();
 				profile.channels[i].u_step = channel.u.step;
 				profile.channels[i].u_limit = channel.u.limit;
 
-				profile.channels[i].i_set = channel.getISet();
+				profile.channels[i].i_set = channel.getISetUnbalanced();
 				profile.channels[i].i_step = channel.i.step;
 				profile.channels[i].i_limit = channel.i.limit;
 

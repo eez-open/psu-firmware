@@ -391,6 +391,29 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
     return Value();
 }
 
+Value Snapshot::getEditValue(const Cursor &cursor, uint8_t id) {
+    int iChannel;
+    if (cursor.i >= 0) {
+		iChannel = cursor.i;
+    } else if (g_channel) {
+        iChannel = g_channel->index - 1;
+    } else {
+        iChannel = 0;
+    }
+
+    Channel &channel = Channel::get(iChannel);
+
+	if (id == DATA_ID_CHANNEL_U_SET) {
+		return Value(channel_dispatcher::getUSetUnbalanced(channel), VALUE_TYPE_FLOAT_VOLT);
+	}
+		
+	if (id == DATA_ID_CHANNEL_I_SET) {
+		return Value(channel_dispatcher::getISetUnbalanced(channel), VALUE_TYPE_FLOAT_AMPER);
+	}
+		
+    return get(cursor, id);
+}
+
 bool Snapshot::isBlinking(const Cursor &cursor, uint8_t id) {
     bool result;
     if (editModeSnapshot.isBlinking(*this, id, result)) {

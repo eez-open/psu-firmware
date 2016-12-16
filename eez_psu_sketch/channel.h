@@ -507,8 +507,8 @@ public:
 
     bool isVoltageBalanced() { return !util::isNaN(uBeforeBalancing); }
     bool isCurrentBalanced() { return !util::isNaN(iBeforeBalancing); }
-    float getUSet() { return isVoltageBalanced() ? uBeforeBalancing : u.set; }
-    float getISet() { return isCurrentBalanced() ? iBeforeBalancing : i.set; }
+    float getUSetUnbalanced() { return isVoltageBalanced() ? uBeforeBalancing : u.set; }
+    float getISetUnbalanced() { return isCurrentBalanced() ? iBeforeBalancing : i.set; }
 
 private:
     bool delayed_dp_off;

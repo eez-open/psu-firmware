@@ -149,6 +149,13 @@ float getUSet(const Channel &channel) {
     return channel.u.set;
 }
 
+float getUSetUnbalanced(const Channel &channel) { 
+    if (isSeries()) {
+        return Channel::get(0).getUSetUnbalanced() + Channel::get(1).getUSetUnbalanced();
+    }
+    return channel.u.set;
+}
+
 float getUMon(const Channel &channel) { 
     if (isSeries()) {
         return Channel::get(0).u.mon + Channel::get(1).u.mon;
@@ -282,6 +289,13 @@ void setOvpDelay(Channel &channel, float delay) {
 float getISet(const Channel &channel) { 
     if (isParallel()) {
         return Channel::get(0).i.set + Channel::get(1).i.set;
+    }
+    return channel.i.set; 
+}
+
+float getISetUnbalanced(const Channel &channel) { 
+    if (isParallel()) {
+        return Channel::get(0).getISetUnbalanced() + Channel::get(1).getISetUnbalanced();
     }
     return channel.i.set; 
 }
