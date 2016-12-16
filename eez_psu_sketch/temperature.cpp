@@ -162,8 +162,8 @@ float getMaxChannelTemperature() {
 }
 
 bool isAllowedToPowerUp() {
-#if OPTION_MAIN_TEMP_SENSOR
-	if (temperature::sensors[temp_sensor::MAIN].isTripped()) return false;
+#if OPTION_AUX_TEMP_SENSOR
+	if (temperature::sensors[temp_sensor::AUX].isTripped()) return false;
 #endif
 
 	return !force_power_down;
@@ -284,7 +284,7 @@ void TempSensorTemperature::protection_enter() {
 	
     set_otp_reg(true);
 
-	event_queue::pushEvent(event_queue::EVENT_ERROR_MAIN_OTP_TRIPPED + sensorIndex);
+	event_queue::pushEvent(event_queue::EVENT_ERROR_AUX_OTP_TRIPPED + sensorIndex);
 }
 
 }

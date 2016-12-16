@@ -75,7 +75,7 @@ struct ProfileSnapshot {
 
 struct SnapshotFlags {
     unsigned otp : 2;
-	unsigned mainTemperatureStatus: 2;
+	unsigned auxTemperatureStatus: 2;
 	unsigned fanStatus: 2;
 	unsigned setPageDirty: 1;
 	unsigned switch1: 1;
@@ -99,7 +99,7 @@ struct Snapshot {
 	Value eventQueuePageInfo;
 	uint32_t onTimeTotal;
 	uint32_t onTimeLast;
-	float mainTemperature;
+	float auxTemperature;
 	float fanSpeed;
 	ProfileSnapshot profile;
 

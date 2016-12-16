@@ -66,8 +66,8 @@ option.
 /// Is fan present?
 #define OPTION_FAN 1
 
-/// Is main temperature sensor present?
-#define OPTION_MAIN_TEMP_SENSOR 1
+/// Is aux temperature sensor present?
+#define OPTION_AUX_TEMP_SENSOR 1
 
 /// Generate square wave on SYNC_MASTER pin
 #define OPTION_SYNC_MASTER 1
@@ -94,13 +94,13 @@ option.
 #define CALIBRATION_PASSWORD_DEFAULT "eezpsu"
 
 /// Is OTP enabled by default?
-#define OTP_MAIN_DEFAULT_STATE 1
+#define OTP_AUX_DEFAULT_STATE 1
 
 /// Default OTP delay
-#define OTP_MAIN_DEFAULT_DELAY 10.0f
+#define OTP_AUX_DEFAULT_DELAY 10.0f
 
 /// Default OTP level
-#define OTP_MAIN_DEFAULT_LEVEL 50.0f
+#define OTP_AUX_DEFAULT_LEVEL 50.0f
 
 /// Is channel OTP enabled by default?
 #define OTP_CH_DEFAULT_STATE 1

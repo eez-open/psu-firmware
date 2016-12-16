@@ -345,13 +345,13 @@ ChSettingsOtpProtectionPage::ChSettingsOtpProtectionPage() {
 	defLimit = 0;
 
 	origLevel = level = data::Value(temperature::getChannelSensorLevel(g_channel), data::VALUE_TYPE_FLOAT_CELSIUS);
-	minLevel = OTP_MAIN_MIN_LEVEL;
-	maxLevel = OTP_MAIN_MAX_LEVEL;
-	defLevel = OTP_MAIN_DEFAULT_LEVEL;
+	minLevel = OTP_AUX_MIN_LEVEL;
+	maxLevel = OTP_AUX_MAX_LEVEL;
+	defLevel = OTP_AUX_DEFAULT_LEVEL;
 
 	origDelay = delay = data::Value(temperature::getChannelSensorDelay(g_channel), data::VALUE_TYPE_FLOAT_SECOND);
-	minDelay = OTP_MAIN_MIN_DELAY;
-	maxDelay = OTP_MAIN_MAX_DELAY;
+	minDelay = OTP_AUX_MIN_DELAY;
+	maxDelay = OTP_AUX_MAX_DELAY;
 	defaultDelay = OTP_CH_DEFAULT_DELAY;
 #endif
 }

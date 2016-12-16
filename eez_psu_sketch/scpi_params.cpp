@@ -112,11 +112,11 @@ Channel *set_channel_from_command_number(scpi_t *context) {
 
 bool param_temp_sensor(scpi_t *context, int32_t &sensor) {
     if (!SCPI_ParamChoice(context, temp_sensor_choice, &sensor, FALSE)) {
-#if OPTION_MAIN_TEMP_SENSOR
+#if OPTION_AUX_TEMP_SENSOR
         if (SCPI_ParamErrorOccurred(context)) {
             return false;
         }
-        sensor = temp_sensor::MAIN;
+        sensor = temp_sensor::AUX;
 #else
         SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
 		return false;

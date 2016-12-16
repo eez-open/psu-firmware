@@ -182,7 +182,7 @@ void Snapshot::takeSnapshot() {
         flags.isCurrentBalanced = 0;
     }
 
-    temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::MAIN];
+    temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::AUX];
 	if (!tempSensor.prot_conf.state) flags.otp = 0;
     else if (!tempSensor.isTripped()) flags.otp = 1;
     else flags.otp = 2;

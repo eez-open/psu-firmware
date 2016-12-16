@@ -367,16 +367,16 @@ static bool psuReset() {
 	}
 #endif
 
-    // TEMP:PROT[MAIN]
+    // TEMP:PROT[AUX]
     // TEMP:PROT:DEL
-    // TEMP:PROT:STAT[MAIN]
+    // TEMP:PROT:STAT[AUX]
     for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
         temperature::ProtectionConfiguration &temp_prot = temperature::sensors[i].prot_conf;
         temp_prot.sensor = i;
-        if (temp_prot.sensor == temp_sensor::MAIN) {
-            temp_prot.delay = OTP_MAIN_DEFAULT_DELAY;
-            temp_prot.level = OTP_MAIN_DEFAULT_LEVEL;
-            temp_prot.state = OTP_MAIN_DEFAULT_STATE;
+        if (temp_prot.sensor == temp_sensor::AUX) {
+            temp_prot.delay = OTP_AUX_DEFAULT_DELAY;
+            temp_prot.level = OTP_AUX_DEFAULT_LEVEL;
+            temp_prot.state = OTP_AUX_DEFAULT_STATE;
         } else {
             temp_prot.delay = OTP_CH_DEFAULT_DELAY;
             temp_prot.level = OTP_CH_DEFAULT_LEVEL;

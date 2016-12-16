@@ -1162,18 +1162,6 @@
       "defaultValue": "15m 10s"
     },
     {
-      "name": "sys.temp.main.status",
-      "description": "0: invalid (error)\n1: valid\n2: not installed",
-      "type": "enum",
-      "enumItems": "[\n\"Invalid\",\n\"Valid\",\n\"Not installed\"\n]",
-      "defaultValue": "1"
-    },
-    {
-      "name": "sys.temp.main",
-      "type": "float",
-      "defaultValue": "45.5oC"
-    },
-    {
       "name": "sys.temp.aux.status",
       "description": "0: invalid (error)\n1: valid\n2: not installed",
       "type": "enum",
@@ -17803,7 +17791,7 @@
             {
               "x": 130,
               "type": "Select",
-              "data": "sys.temp.main.status",
+              "data": "sys.temp.aux.status",
               "y": 86,
               "width": 122,
               "height": 28,
@@ -17821,7 +17809,7 @@
                 },
                 {
                   "type": "DisplayData",
-                  "data": "sys.temp.main",
+                  "data": "sys.temp.aux",
                   "x": 0,
                   "y": 0,
                   "width": 122,

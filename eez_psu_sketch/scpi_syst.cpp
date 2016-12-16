@@ -57,8 +57,8 @@ scpi_result_t scpi_syst_Power(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-#if OPTION_MAIN_TEMP_SENSOR
-    if (temperature::sensors[temp_sensor::MAIN].isTripped()) {
+#if OPTION_AUX_TEMP_SENSOR
+    if (temperature::sensors[temp_sensor::AUX].isTripped()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_EXECUTE_BEFORE_CLEARING_PROTECTION);
         return SCPI_RES_ERR;
     }
@@ -208,7 +208,7 @@ scpi_result_t scpi_syst_TempProtectionClear(scpi_t * context) {
 
 scpi_result_t scpi_syst_TempProtectionLevel(scpi_t * context) {
     float level;
-    if (!get_temperature_param(context, level, OTP_MAIN_MIN_LEVEL, OTP_MAIN_MAX_LEVEL, OTP_MAIN_DEFAULT_LEVEL)) {
+    if (!get_temperature_param(context, level, OTP_AUX_MIN_LEVEL, OTP_AUX_MAX_LEVEL, OTP_AUX_DEFAULT_LEVEL)) {
         return SCPI_RES_ERR;
     }
 
@@ -262,7 +262,7 @@ scpi_result_t scpi_syst_TempProtectionStateQ(scpi_t * context) {
 
 scpi_result_t scpi_syst_TempProtectionDelay(scpi_t * context) {
     float delay;
-    if (!get_duration_param(context, delay, OTP_MAIN_MIN_DELAY, OTP_MAIN_MAX_DELAY, OTP_MAIN_DEFAULT_DELAY)) {
+    if (!get_duration_param(context, delay, OTP_AUX_MIN_DELAY, OTP_AUX_MAX_DELAY, OTP_AUX_DEFAULT_DELAY)) {
         return SCPI_RES_ERR;
     }
 

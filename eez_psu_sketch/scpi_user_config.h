@@ -70,7 +70,7 @@ extern "C" {
     X(SCPI_ERROR_CH2_ADC_TIMEOUT_DETECTED,                   271, "CH2 ADC timeout detected")                     \
     X(SCPI_ERROR_OPTION_NOT_INSTALLED,                       302, "Option not installed")                         \
 	X(SCPI_ERROR_FAN_TEST_FAILED,                            630, "Fan test failed")                              \
-	X(SCPI_ERROR_MAIN_TEMP_SENSOR_TEST_FAILED,               720, "MAIN temperature sensor test failed")          \
+	X(SCPI_ERROR_AUX_TEMP_SENSOR_TEST_FAILED,                720, "AUX temperature sensor test failed")           \
     X(SCPI_ERROR_CH1_TEMP_SENSOR_TEST_FAILED,                722, "CH1 temperature sensor test failed")           \
     X(SCPI_ERROR_CH2_TEMP_SENSOR_TEST_FAILED,                723, "CH2 temperature sensor test failed")           \
     X(SCPI_ERROR_CHARACTER_DATA_TOO_LONG,                   -144, "Character data too long")                      \

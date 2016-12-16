@@ -29,16 +29,16 @@ namespace psu {
 namespace gui {
 
 void SysInfoPage::takeSnapshot(data::Snapshot *snapshot) {
-	temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::MAIN];
+	temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::AUX];
 	if (tempSensor.isInstalled()) {
 		if (tempSensor.isTestOK()) {
-			snapshot->flags.mainTemperatureStatus = 1;
-			snapshot->mainTemperature = tempSensor.temperature;
+			snapshot->flags.auxTemperatureStatus = 1;
+			snapshot->auxTemperature = tempSensor.temperature;
 		} else {
-			snapshot->flags.mainTemperatureStatus = 0;
+			snapshot->flags.auxTemperatureStatus = 0;
 		}
 	} else {
-		snapshot->flags.mainTemperatureStatus = 2;
+		snapshot->flags.auxTemperatureStatus = 2;
 	}
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9 || !OPTION_FAN
@@ -79,12 +79,12 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::S
 		return data::Value(persist_conf::dev_conf.serialNumber);
 	}
 
-	if (id == DATA_ID_SYS_TEMP_MAIN_STATUS) {
-		return data::Value(snapshot->flags.mainTemperatureStatus);
+	if (id == DATA_ID_SYS_TEMP_AUX_STATUS) {
+		return data::Value(snapshot->flags.auxTemperatureStatus);
 	}
 
-	if (id == DATA_ID_SYS_TEMP_MAIN && snapshot->flags.mainTemperatureStatus == 1) {
-		return data::Value(snapshot->mainTemperature, data::VALUE_TYPE_FLOAT_CELSIUS);
+	if (id == DATA_ID_SYS_TEMP_AUX && snapshot->flags.auxTemperatureStatus == 1) {
+		return data::Value(snapshot->auxTemperature, data::VALUE_TYPE_FLOAT_CELSIUS);
 	}
 
 	if (id == DATA_ID_SYS_TEMP_AUX_STATUS) {
