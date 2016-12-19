@@ -84,6 +84,8 @@ void DumpTraceBuffer() {
     }
 
     Serial.println(traceBuffer);
+
+    Serial.flush();
 }
 
 void tick(unsigned long tick_usec) {
