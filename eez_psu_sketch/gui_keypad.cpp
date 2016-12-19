@@ -140,21 +140,29 @@ void init(const char *label_, void (*ok)(char *), void (*cancel)()) {
 }
 
 void start(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)()) {
+    DebugTrace("Save profile T7.1.1");
 	init(label, ok, cancel);
+
+    DebugTrace("Save profile T7.1.2");
 
 	g_maxChars = maxChars_;
 	g_isPassword = isPassword_;
 
 	if (text) {
+        DebugTrace("Save profile T7.1.3");
 		strcpy(g_keypadText, text);
 	} else {
+        DebugTrace("Save profile T7.1.4");
 		g_keypadText[0] = 0;
 	}
+    DebugTrace("Save profile T7.1.5");
 	g_isUpperCase = false;
 }
 
 void startPush(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)()) {
+    DebugTrace("Save profile T7.1");
 	start(label, text, maxChars_, isPassword_, ok, cancel);
+    DebugTrace("Save profile T7.2");
 	pushPage(PAGE_ID_KEYPAD);
 }
 
