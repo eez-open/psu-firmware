@@ -187,6 +187,17 @@ void Snapshot::takeSnapshot() {
     else if (!tempSensor.isTripped()) flags.otp = 1;
     else flags.otp = 2;
 
+	if (tempSensor.isInstalled()) {
+		if (tempSensor.isTestOK()) {
+			flags.auxTemperatureStatus = 1;
+			auxTemperature = tempSensor.temperature;
+		} else {
+			flags.auxTemperatureStatus = 0;
+		}
+	} else {
+		flags.auxTemperatureStatus = 2;
+	}
+
 	keypadSnapshot.takeSnapshot(this);
     editModeSnapshot.takeSnapshot(this);
 
@@ -345,6 +356,14 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
         return Value(flags.otp);
     }
 	
+	if (id == DATA_ID_SYS_TEMP_AUX_STATUS) {
+		return data::Value(flags.auxTemperatureStatus);
+	}
+
+	if (id == DATA_ID_SYS_TEMP_AUX && flags.auxTemperatureStatus == 1) {
+		return data::Value(auxTemperature, data::VALUE_TYPE_FLOAT_CELSIUS);
+	}
+
 	if (id == DATA_ID_ALERT_MESSAGE) {
         return alertMessage;
     }

@@ -104,6 +104,9 @@ void dialogNo();
 void dialogCancel();
 void dialogOk();
 
+void onErrorEventAction();
+void onLastErrorEventAction();
+
 extern WidgetCursor g_foundWidgetAtDown;
 
 void selectChannel();

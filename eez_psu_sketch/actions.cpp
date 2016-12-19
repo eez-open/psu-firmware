@@ -28,10 +28,8 @@
 #include "gui_calibration.h"
 #include "gui_page_ch_settings_protection.h"
 #include "gui_page_ch_settings_adv.h"
-#include "gui_page_sys_settings_date_time.h"
+#include "gui_page_sys_settings.h"
 #include "gui_page_user_profiles.h"
-#include "gui_page_sys_settings_ethernet.h"
-#include "gui_page_sys_settings_protections.h"
 
 namespace eez {
 namespace psu {
@@ -158,7 +156,7 @@ void action_show_main_page() {
 }
 
 void action_show_event_queue() {
-    setPage(PAGE_ID_EVENT_QUEUE);
+        setPage(PAGE_ID_EVENT_QUEUE);
 }
 
 void action_show_channel_settings() {
@@ -197,6 +195,10 @@ void action_show_sys_settings_ethernet() {
 
 void action_show_sys_settings_protections() {
     pushPage(PAGE_ID_SYS_SETTINGS_PROTECTIONS);
+}
+
+void action_show_sys_settings_aux_otp() {
+    pushPage(PAGE_ID_SYS_SETTINGS_AUX_OTP);
 }
 
 void action_show_sys_info() {
@@ -461,6 +463,26 @@ void action_sys_settings_protections_toggle_force_disabling_all_outputs_on_power
     SysSettingsProtectionsPage::toggleForceDisablingAllOutputsOnPowerUp();
 }
 
+void action_sys_settings_protections_aux_otp_toggle_state() {
+    ((SysSettingsAuxOtpPage *)getActivePage())->toggleState();
+}
+
+void action_sys_settings_protections_aux_otp_edit_level() {
+    ((SysSettingsAuxOtpPage *)getActivePage())->editLevel();
+}
+
+void action_sys_settings_protections_aux_otp_edit_delay() {
+    ((SysSettingsAuxOtpPage *)getActivePage())->editDelay();
+}
+
+void action_sys_settings_protections_aux_otp_clear() {
+    SysSettingsAuxOtpPage::clear();
+}
+
+void action_on_last_error_event_action() {
+    onLastErrorEventAction();
+}
+
 
 ACTION actions[] = {
     0,
@@ -502,6 +524,7 @@ ACTION actions[] = {
     action_show_sys_settings_screen_calibration,
     action_show_sys_settings_ethernet,
     action_show_sys_settings_protections,
+    action_show_sys_settings_aux_otp,
     action_show_sys_info,
     action_show_sys_info2,
     action_show_main_help_page,
@@ -566,7 +589,12 @@ ACTION actions[] = {
     action_ch_settings_adv_toggle_tracking_mode,
     action_sys_settings_protections_toggle_output_protection_couple,
     action_sys_settings_protections_toggle_shutdown_when_protection_tripped,
-    action_sys_settings_protections_toggle_force_disabling_all_outputs_on_power_up
+    action_sys_settings_protections_toggle_force_disabling_all_outputs_on_power_up,
+    action_sys_settings_protections_aux_otp_toggle_state,
+    action_sys_settings_protections_aux_otp_edit_level,
+    action_sys_settings_protections_aux_otp_edit_delay,
+    action_sys_settings_protections_aux_otp_clear,
+    action_on_last_error_event_action
 };
 
 }

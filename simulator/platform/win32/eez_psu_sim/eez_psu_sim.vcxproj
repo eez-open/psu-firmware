@@ -212,9 +212,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_main.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_self_test_result.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_info.h" />
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_date_time.h" />
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_ethernet.h" />
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_protections.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_user_profiles.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_view.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_widget_button_group.h" />
@@ -329,9 +327,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_main.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_self_test_result.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_info.cpp" />
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_date_time.cpp" />
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_ethernet.cpp" />
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_protections.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_user_profiles.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_view.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_widget_button_group.cpp" />

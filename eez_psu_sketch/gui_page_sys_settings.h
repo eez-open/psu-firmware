@@ -51,6 +51,63 @@ private:
 	unsigned int dst;
 };
 
+class SysSettingsEthernetPage : public Page {
+public:
+	void takeSnapshot(data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+
+    static void enable();
+    static void disable();
+};
+
+class SysSettingsProtectionsPage : public Page {
+public:
+	void takeSnapshot(data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+
+    static void toggleOutputProtectionCouple();
+    static void toggleShutdownWhenProtectionTripped();
+    static void toggleForceDisablingAllOutputsOnPowerUp();
+};
+
+class SysSettingsAuxOtpPage : public SetPage {
+public:
+    SysSettingsAuxOtpPage();
+
+	void takeSnapshot(data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+
+	int getDirty();
+	void set();
+
+	void toggleState();
+	void editLevel();
+	void editDelay();
+
+    static void clear();
+
+protected:
+	int origState;
+	int state;
+
+	data::Value origLevel;
+	data::Value level;
+	float minLevel;
+	float maxLevel;
+	float defLevel;
+
+	data::Value origDelay;
+	data::Value delay;
+	float minDelay;
+	float maxDelay;
+	float defaultDelay;
+
+	virtual void setParams();
+
+	static void onLevelSet(float value);
+	static void onDelaySet(float value);
+};
+
 }
 }
 } // namespace eez::psu::gui

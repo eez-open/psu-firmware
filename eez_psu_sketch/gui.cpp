@@ -38,9 +38,7 @@
 #include "gui_page_ch_settings_protection.h"
 #include "gui_page_ch_settings_adv.h"
 #include "gui_page_ch_settings_info.h"
-#include "gui_page_sys_settings_date_time.h"
-#include "gui_page_sys_settings_ethernet.h"
-#include "gui_page_sys_settings_protections.h"
+#include "gui_page_sys_settings.h"
 #include "gui_page_sys_info.h"
 #include "gui_page_user_profiles.h"
 
@@ -124,6 +122,7 @@ Page *createPageFromId(int pageId) {
 	case PAGE_ID_SYS_SETTINGS_DATE_TIME: return new SysSettingsDateTimePage();
     case PAGE_ID_SYS_SETTINGS_ETHERNET: return new SysSettingsEthernetPage();
     case PAGE_ID_SYS_SETTINGS_PROTECTIONS: return new SysSettingsProtectionsPage();
+    case PAGE_ID_SYS_SETTINGS_AUX_OTP: return new SysSettingsAuxOtpPage();
 	case PAGE_ID_SYS_INFO:
 	case PAGE_ID_SYS_INFO2: return new SysInfoPage();
 	case PAGE_ID_USER_PROFILES:
@@ -1661,6 +1660,35 @@ void areYouSure(void (*yes_callback)()) {
 
 void areYouSureWithMessage(const char *message PROGMEM, void (*yes_callback)()) {
 	yesNoDialog(PAGE_ID_ARE_YOU_SURE_WITH_MESSAGE, message, yes_callback, 0, 0);
+}
+
+static bool isChannelTripLastEvent(int i, event_queue::Event &lastEvent) {
+    if (lastEvent.eventId == (event_queue::EVENT_ERROR_CH1_OVP_TRIPPED + i * 3) ||
+        lastEvent.eventId == (event_queue::EVENT_ERROR_CH1_OCP_TRIPPED + i * 3) ||
+        lastEvent.eventId == (event_queue::EVENT_ERROR_CH1_OPP_TRIPPED + i * 3) ||
+        lastEvent.eventId == (event_queue::EVENT_ERROR_CH1_OTP_TRIPPED + i)) 
+    {
+        return Channel::get(i).isTripped();
+    }
+
+    return false;
+}
+
+void onLastErrorEventAction() {
+    event_queue::Event lastEvent;
+    event_queue::getLastErrorEvent(&lastEvent);
+
+    if (lastEvent.eventId == event_queue::EVENT_ERROR_AUX_OTP_TRIPPED && temperature::sensors[temp_sensor::AUX].isTripped()) {
+        setPage(PAGE_ID_SYS_SETTINGS_AUX_OTP);
+    } else if (isChannelTripLastEvent(0, lastEvent)) {
+        g_channel = &Channel::get(0);
+        setPage(PAGE_ID_CH_SETTINGS_PROT_CLEAR);
+    } else if (isChannelTripLastEvent(1, lastEvent)) {
+        g_channel = &Channel::get(1);
+        setPage(PAGE_ID_CH_SETTINGS_PROT_CLEAR);
+    } else {
+        setPage(PAGE_ID_EVENT_QUEUE);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

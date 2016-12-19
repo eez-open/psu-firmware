@@ -18,7 +18,7 @@
         },
         {
           "fileName": "actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"persist_conf.h\"\n#include \"channel_dispatcher.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings_date_time.h\"\n#include \"gui_page_user_profiles.h\"\n#include \"gui_page_sys_settings_ethernet.h\"\n#include \"gui_page_sys_settings_protections.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"persist_conf.h\"\n#include \"channel_dispatcher.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings.h\"\n#include \"gui_page_user_profiles.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
         },
         {
           "fileName": "gui_document.h",
@@ -186,7 +186,7 @@
     {
       "name": "show_event_queue",
       "implementationType": "native",
-      "implementation": "setPage(PAGE_ID_EVENT_QUEUE);"
+      "implementation": "    setPage(PAGE_ID_EVENT_QUEUE);"
     },
     {
       "name": "show_channel_settings",
@@ -232,6 +232,11 @@
       "name": "show_sys_settings_protections",
       "implementationType": "native",
       "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_PROTECTIONS);"
+    },
+    {
+      "name": "show_sys_settings_aux_otp",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_AUX_OTP);"
     },
     {
       "name": "show_sys_info",
@@ -557,6 +562,31 @@
       "name": "sys.settings.protections.toggleForceDisablingAllOutputsOnPowerUp",
       "implementationType": "native",
       "implementation": "SysSettingsProtectionsPage::toggleForceDisablingAllOutputsOnPowerUp();"
+    },
+    {
+      "name": "sys.settings.protections.aux.otp.toggleState",
+      "implementationType": "native",
+      "implementation": "((SysSettingsAuxOtpPage *)getActivePage())->toggleState();"
+    },
+    {
+      "name": "sys.settings.protections.aux.otp.editLevel",
+      "implementationType": "native",
+      "implementation": "((SysSettingsAuxOtpPage *)getActivePage())->editLevel();"
+    },
+    {
+      "name": "sys.settings.protections.aux.otp.editDelay",
+      "implementationType": "native",
+      "implementation": "((SysSettingsAuxOtpPage *)getActivePage())->editDelay();"
+    },
+    {
+      "name": "sys.settings.protections.aux.otp.clear",
+      "implementationType": "native",
+      "implementation": "SysSettingsAuxOtpPage::clear();"
+    },
+    {
+      "name": "on_last_error_event_action",
+      "implementationType": "native",
+      "implementation": "onLastErrorEventAction();"
     }
   ],
   "data": [
@@ -1167,6 +1197,26 @@
       "type": "enum",
       "enumItems": "[\n\"Invalid\",\n\"Valid\",\n\"Not installed\"\n]",
       "defaultValue": "2"
+    },
+    {
+      "name": "sys.temp.aux.otp.state",
+      "type": "enum",
+      "enumItems": "[\n\"Off\",\n\"On\"\n]",
+      "defaultValue": "1"
+    },
+    {
+      "name": "sys.temp.aux.otp.level",
+      "type": "float",
+      "defaultValue": "125.00oC"
+    },
+    {
+      "name": "sys.temp.aux.otp.delay",
+      "defaultValue": "10s"
+    },
+    {
+      "name": "sys.temp.aux.otp.isTripped",
+      "type": "boolean",
+      "defaultValue": "1"
     },
     {
       "name": "sys.temp.aux",
@@ -2554,7 +2604,7 @@
                 {
                   "type": "DisplayData",
                   "data": "EventQueue.lastEvent.message",
-                  "action": "show_event_queue",
+                  "action": "on_last_error_event_action",
                   "x": 0,
                   "y": 0,
                   "width": 292,
@@ -9366,6 +9416,7 @@
                 "x": 0,
                 "type": "Select",
                 "data": "EventQueue.events.type",
+                "action": "",
                 "y": 0,
                 "width": 320,
                 "height": 28,
@@ -14464,13 +14515,43 @@
               "text": "System settings (1)"
             },
             {
-              "type": "Text",
               "x": 12,
+              "type": "Select",
+              "data": "sys.temp.aux.status",
               "y": 32,
               "width": 240,
               "height": 28,
-              "style": "default_disabled_S_left",
-              "text": "Set / Clear AUX sensor OTP"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "default_disabled_S_left",
+                  "text": "AUX temp. (OTP) invalid"
+                },
+                {
+                  "type": "Text",
+                  "action": "show_sys_settings_aux_otp",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "Set / Clear AUX sensor OTP"
+                },
+                {
+                  "type": "Text",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "default_disabled_S_left",
+                  "text": "AUX temp. (OTP) not installed"
+                }
+              ]
             },
             {
               "type": "Text",
@@ -14776,7 +14857,7 @@
             {
               "x": 135,
               "type": "Select",
-              "data": "channel.protection.otp.state",
+              "data": "sys.temp.aux.otp.state",
               "y": 28,
               "width": 60,
               "height": 28,
@@ -14784,7 +14865,7 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "ch_settings_prot_toggle_state",
+                  "action": "sys.settings.protections.aux.otp.toggleState",
                   "x": 0,
                   "y": 0,
                   "width": 60,
@@ -14794,7 +14875,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "ch_settings_prot_toggle_state",
+                  "action": "sys.settings.protections.aux.otp.toggleState",
                   "x": 0,
                   "y": 0,
                   "width": 60,
@@ -14816,7 +14897,7 @@
             {
               "x": 135,
               "type": "Select",
-              "data": "channel.tempStatus",
+              "data": "sys.temp.aux.status",
               "y": 56,
               "width": 96,
               "height": 28,
@@ -14834,7 +14915,7 @@
                 },
                 {
                   "type": "DisplayData",
-                  "data": "channel.temp",
+                  "data": "sys.temp.aux",
                   "x": 0,
                   "y": 0,
                   "width": 96,
@@ -14864,8 +14945,8 @@
             },
             {
               "type": "DisplayData",
-              "data": "channel.protection.otp.level",
-              "action": "ch_settings_prot_edit_level",
+              "data": "sys.temp.aux.otp.level",
+              "action": "sys.settings.protections.aux.otp.editLevel",
               "x": 135,
               "y": 84,
               "width": 96,
@@ -14883,8 +14964,8 @@
             },
             {
               "type": "DisplayData",
-              "data": "channel.protection.otp.delay",
-              "action": "ch_settings_prot_edit_delay",
+              "data": "sys.temp.aux.otp.delay",
+              "action": "sys.settings.protections.aux.otp.editDelay",
               "x": 135,
               "y": 112,
               "width": 96,
@@ -14925,14 +15006,14 @@
             {
               "type": "Button",
               "data": "",
-              "action": "set",
+              "action": "sys.settings.protections.aux.otp.clear",
               "x": 168,
               "y": 204,
               "width": 63,
               "height": 36,
               "style": "non_interactive_button_S",
               "text": "Clear",
-              "enabled": "setPage.dirty",
+              "enabled": "sys.temp.aux.otp.isTripped",
               "disabledStyle": "non_interactive_button_S_disabled"
             },
             {

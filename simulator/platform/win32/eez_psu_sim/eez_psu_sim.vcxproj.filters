@@ -397,19 +397,13 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_info.h">
       <Filter>gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_date_time.h">
-      <Filter>gui</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_user_profiles.h">
-      <Filter>gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_ethernet.h">
       <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\channel_dispatcher.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_protections.h">
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings.h">
       <Filter>gui</Filter>
     </ClInclude>
   </ItemGroup>
@@ -697,19 +691,13 @@
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_info.cpp">
       <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_date_time.cpp">
-      <Filter>gui</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_user_profiles.cpp">
-      <Filter>gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_ethernet.cpp">
       <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\channel_dispatcher.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings_protections.cpp">
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_sys_settings.cpp">
       <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>

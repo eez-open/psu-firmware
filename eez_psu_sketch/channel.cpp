@@ -1324,21 +1324,33 @@ bool Channel::isTripped() {
     return ovp.flags.tripped ||
         ocp.flags.tripped ||
         opp.flags.tripped ||
-        temperature::isChannelTripped(this);
+        temperature::isAnySensorTripped(this);
 }
 
 void Channel::clearProtection() {
+    event_queue::Event lastEvent;
+    event_queue::getLastErrorEvent(&lastEvent);
+
     ovp.flags.tripped = 0;
     ovp.flags.alarmed = 0;
     setQuesBits(QUES_ISUM_OVP, false);
+    if (lastEvent.eventId == event_queue::EVENT_ERROR_CH1_OVP_TRIPPED + 3 * (index - 1)) {
+        event_queue::markAsRead();
+    }
 
     ocp.flags.tripped = 0;
     ocp.flags.alarmed = 0;
     setQuesBits(QUES_ISUM_OCP, false);
+    if (lastEvent.eventId == event_queue::EVENT_ERROR_CH1_OCP_TRIPPED + 3 * (index - 1)) {
+        event_queue::markAsRead();
+    }
 
     opp.flags.tripped = 0;
     opp.flags.alarmed = 0;
     setQuesBits(QUES_ISUM_OPP, false);
+    if (lastEvent.eventId == event_queue::EVENT_ERROR_CH1_OPP_TRIPPED + 3 * (index - 1)) {
+        event_queue::markAsRead();
+    }
 
 	temperature::clearChannelProtection(this);
 }

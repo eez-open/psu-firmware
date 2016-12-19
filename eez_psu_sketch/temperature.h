@@ -47,7 +47,8 @@ float getChannelSensorLevel(Channel *channel);
 float getChannelSensorDelay(Channel *channel);
 #endif
 
-bool isChannelTripped(Channel *channel);
+bool isAnySensorTripped(Channel *channel);
+
 void clearChannelProtection(Channel *channel);
 void disableChannelProtection(Channel *channel);
 
@@ -65,7 +66,6 @@ public:
 	bool isTestOK();
 	void tick(unsigned long tick_usec);
 	bool isChannelSensor(Channel *channel);
-	bool isChannelTripped(Channel *channel);
 	float measure();
 	void clearProtection();
 	bool isTripped();

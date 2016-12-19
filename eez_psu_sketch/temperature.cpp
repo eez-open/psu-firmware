@@ -131,9 +131,9 @@ float getChannelSensorDelay(Channel *channel) {
 }
 #endif
 
-bool isChannelTripped(Channel *channel) {
+bool isAnySensorTripped(Channel *channel) {
 	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
-		if (sensors[i].isChannelTripped(channel)) {
+		if (sensors[i].isTripped()) {
 			return true;
 		}
 	}
@@ -162,10 +162,6 @@ float getMaxChannelTemperature() {
 }
 
 bool isAllowedToPowerUp() {
-#if OPTION_AUX_TEMP_SENSOR
-	if (temperature::sensors[temp_sensor::AUX].isTripped()) return false;
-#endif
-
 	return !force_power_down;
 }
 
@@ -201,10 +197,6 @@ bool TempSensorTemperature::isChannelSensor(Channel *channel) {
 	);
 }
 
-bool TempSensorTemperature::isChannelTripped(Channel *channel) {
-    return isChannelSensor(channel) && otp_tripped;
-}
-
 float TempSensorTemperature::measure() {
     float newTemperature = temp_sensor::sensors[sensorIndex].read();
 	if (util::isNaN(temperature)) {
@@ -218,6 +210,12 @@ float TempSensorTemperature::measure() {
 void TempSensorTemperature::clearProtection() {
     otp_tripped = false;
     set_otp_reg(false);
+
+    event_queue::Event lastEvent;
+    event_queue::getLastErrorEvent(&lastEvent);
+    if (lastEvent.eventId == event_queue::EVENT_ERROR_AUX_OTP_TRIPPED + sensorIndex) {
+        event_queue::markAsRead();
+    }
 }
 
 bool TempSensorTemperature::isTripped() {
@@ -279,7 +277,6 @@ void TempSensorTemperature::protection_enter() {
 		for (int i = 0; i < CH_NUM; ++i) {
 			Channel::get(i).outputEnable(false);
 		}
-		psu::powerDownBySensor();
 	}
 	
     set_otp_reg(true);
