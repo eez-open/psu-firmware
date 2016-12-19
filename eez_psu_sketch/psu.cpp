@@ -59,7 +59,7 @@ namespace psu {
 using namespace scpi;
 
 bool g_isBooted = false;
-bool g_bootTestSuccess;
+static bool g_bootTestSuccess;
 static bool g_powerIsUp = false;
 static bool g_testPowerUpDelay = false;
 static unsigned long g_powerDownTime;
@@ -409,7 +409,7 @@ static bool loadAutoRecallProfile(profile::Parameters *profile) {
         if (profile::load(location, profile)) {
             bool disableOutputs = false;
 
-            if (persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled()) {
+            if (persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled() || !g_bootTestSuccess) {
                 disableOutputs = true;
             } else {
                 if (location != 0) {
@@ -542,9 +542,7 @@ bool powerUp() {
         sound::playPowerUp();
     }
 
-    if (!g_isBooted) {
-        g_bootTestSuccess &= testSuccess;
-    }
+    g_bootTestSuccess &= testSuccess;
 
     return true;
 }
@@ -592,6 +590,8 @@ bool changePowerState(bool up) {
             if (millis() - g_powerDownTime < MIN_POWER_UP_DELAY * 1000) return false;
             g_testPowerUpDelay = false;
         }
+
+        g_bootTestSuccess = true;
 
         if (!powerUp()) {
             return false;
