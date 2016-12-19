@@ -203,6 +203,7 @@ void Snapshot::takeSnapshot() {
 
     alertMessage = g_alertMessage;
     alertMessage2 = g_alertMessage2;
+    alertMessage3 = g_alertMessage3;
 
 	Page *activePage = getActivePage();
 	if (activePage) {
@@ -370,6 +371,10 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
 	
 	if (id == DATA_ID_ALERT_MESSAGE_2) {
         return alertMessage2;
+    }
+
+	if (id == DATA_ID_ALERT_MESSAGE_3) {
+        return alertMessage3;
     }
 
     if (id == DATA_ID_MODEL_INFO) {

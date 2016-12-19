@@ -1636,6 +1636,11 @@ void longInfoMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM
 	longInfoMessage(data::Value::ProgmemStr(message1), data::Value::ProgmemStr(message2), ok_callback);
 }
 
+void toastMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, const char *message3 PROGMEM, void (*ok_callback)()) {
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE_3, message3, 0);
+    longAlertMessage(PAGE_ID_TOAST3_ALERT, message1, message2, ok_callback);
+}
+
 void errorMessage(data::Value value, void (*ok_callback)()) {
 	alertMessage(PAGE_ID_ERROR_ALERT, value, ok_callback);
 }
@@ -1969,8 +1974,17 @@ void tick(unsigned long tick_usec) {
 		}
 	}
 
+    if (g_activePageId == PAGE_ID_TOAST3_ALERT) {
+		if (inactivityPeriod >= 2 * 1000UL) {
+			dialogOk();
+			return;
+		}
+    }
+
     // update screen
-    draw_tick();
+	if (!touch::calibration::isCalibrating()) {
+        draw_tick();
+    }
 }
 
 }

@@ -93,6 +93,7 @@ struct Snapshot {
     edit_mode::Snapshot editModeSnapshot;
     Value alertMessage;
     Value alertMessage2;
+    Value alertMessage3;
 	SnapshotFlags flags;
 	event_queue::Event lastEvent;
 	event_queue::Event events[event_queue::EVENTS_PER_PAGE];

@@ -180,6 +180,10 @@ void dialogCancel() {
 	leaveCalibrationMode();
 }
 
+void startAgain() {
+    mode = MODE_START;
+}
+
 void tick(unsigned long tick_usec) {
     if (mode == MODE_START) {
         point_x = &point_tlx;
@@ -209,7 +213,8 @@ void tick(unsigned long tick_usec) {
 				mode = MODE_FINISHED;
                 yesNoDialog(g_yesNoPageId, PSTR("Save changes?"), dialogYes, dialogNo, dialogCancel);
             } else {
-                mode = MODE_START;
+                mode = MODE_FINISHED;
+                toastMessageP(PSTR("Received data is invalid due to"), PSTR("imprecise pointing or"), PSTR("communication problem!"), startAgain);
             }
         }
     }
