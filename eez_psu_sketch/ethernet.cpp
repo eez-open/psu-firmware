@@ -54,7 +54,7 @@ EthernetClient firstClient;
 ////////////////////////////////////////////////////////////////////////////////
 
 size_t ethernet_client_write(EthernetClient &client, const char *data, size_t len) {
-    SPI.beginTransaction(ENC28J60_SPI);
+    SPI.beginTransaction(ETHERNET_SPI);
     size_t size = client.write(data, len);
     SPI.endTransaction();
 
@@ -140,7 +140,7 @@ void init() {
     Ethernet.setDhcpTimeout(ETHERNET_DHCP_TIMEOUT * 1000UL);
 #endif
 
-    SPI.beginTransaction(ENC28J60_SPI);
+    SPI.beginTransaction(ETHERNET_SPI);
 
     if (!Ethernet.begin(mac)) {
         SPI.endTransaction();
@@ -189,7 +189,7 @@ void tick(unsigned long tick_usec) {
         return;
     }
 
-    SPI.beginTransaction(ENC28J60_SPI);
+    SPI.beginTransaction(ETHERNET_SPI);
 
     if (firstClientDetected) {
         if (!firstClient.connected()) {
@@ -217,12 +217,12 @@ void tick(unsigned long tick_usec) {
                 for (size_t i = 0; i < size; ++i) {
                     input(scpi_context, msg[i]);
                 }
-                SPI.beginTransaction(ENC28J60_SPI);
+                SPI.beginTransaction(ETHERNET_SPI);
             }
             else {
                 SPI.endTransaction();
                 ethernet_client_write_str(client, "Already connected!\r\n");
-                SPI.beginTransaction(ENC28J60_SPI);
+                SPI.beginTransaction(ETHERNET_SPI);
 
                 client.stop();
 

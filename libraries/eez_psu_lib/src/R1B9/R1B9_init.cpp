@@ -96,7 +96,7 @@ void eez_psu_R1B9_init() {
 
     digitalWrite(RTC_SELECT, LOW); // Deselect PCA21125
 
-    digitalWrite(ETH_SELECT, HIGH); // Deselect ENC28J60
+    digitalWrite(ETH_SELECT, HIGH); // Deselect ethernet
 
     digitalWrite(BP_SELECT, HIGH); // Deselect TLC5925
 

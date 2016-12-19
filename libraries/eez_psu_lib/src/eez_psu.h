@@ -72,9 +72,13 @@ extern SPISettings PCA21125_SPI;
 extern SPISettings AT25256B_SPI;
 
 ////////////////////////////////////////////////////////////////////////////////
-// ETHERNET - ENC28J60
+// ETHERNET
 
-extern SPISettings ENC28J60_SPI;
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+extern SPISettings ETHERNET_SPI;
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+extern SPISettings ETHERNET_SPI;
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 

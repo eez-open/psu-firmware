@@ -102,7 +102,7 @@ void eez_psu_R3B4_init() {
 
     digitalWrite(EEPROM_SELECT, HIGH); // Deselect EEPROM
     digitalWrite(RTC_SELECT, LOW); // Deselect PCA21125
-    digitalWrite(ETH_SELECT, HIGH); // Deselect ENC28J60
+    digitalWrite(ETH_SELECT, HIGH); // Deselect ETHERNET
     digitalWrite(BP_SELECT, HIGH); // Deselect TLC5925
     digitalWrite(BP_OE, HIGH); // Deselect TLC5925 OE
 
