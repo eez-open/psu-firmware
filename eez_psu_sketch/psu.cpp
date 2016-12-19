@@ -403,51 +403,51 @@ static bool psuReset() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static bool autoRecall() {
+static bool loadAutoRecallProfile(profile::Parameters *profile) {
     if (persist_conf::isProfileAutoRecallEnabled()) {
         int location = persist_conf::getProfileAutoRecallLocation();
-        profile::Parameters profile;
-        if (profile::load(location, &profile)) {
-            bool differenceChecked = true;
+        if (profile::load(location, profile)) {
+            bool disableOutputs = false;
 
             if (persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled()) {
-                for (int i = 0; i < CH_NUM; ++i) {
-                    profile.channels[i].flags.output_enabled = false;
-                    profile.channels[i].flags.output_enabled = false;
-                }
+                disableOutputs = true;
             } else {
                 if (location != 0) {
                     profile::Parameters defaultProfile;
                     if (profile::load(0, &defaultProfile)) {
-                        bool differenceDetected = false;
-
                         for (int i = 0; i < CH_NUM; ++i) {
-                            if (profile.channels[i].u_set != defaultProfile.channels[i].u_set || profile.channels[i].i_set != profile.channels[i].i_set) {
-                                differenceDetected = true;
+                            if (profile->channels[i].u_set != defaultProfile.channels[i].u_set || profile->channels[i].i_set != defaultProfile.channels[i].i_set) {
+                                disableOutputs = true;
+                                event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
                                 break;
                             }
                         }
-
-                        if (differenceDetected) {
-                            for (int i = 0; i < CH_NUM; ++i) {
-                                profile.channels[i].flags.output_enabled = false;
-                                profile.channels[i].flags.output_enabled = false;
-                            }
-
-                            event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
-                        }
                     } else {
-                        differenceChecked = false;
+                        disableOutputs = true;
                     }
                 }
             }
-            
-            if (differenceChecked && profile::recallFromProfile(&profile)) {
-                return true;
+
+            if (disableOutputs) {
+                for (int i = 0; i < CH_NUM; ++i) {
+                    profile->channels[i].flags.output_enabled = false;
+                }
             }
+
+            return true;
         }
     }
 
+    return false;
+}
+
+static bool autoRecall() {
+    profile::Parameters profile;
+    if (loadAutoRecallProfile(&profile)) {
+        if (profile::recallFromProfile(&profile)) {
+            return true;
+        }
+    }
     return false;
 }
 
@@ -599,13 +599,10 @@ bool changePowerState(bool up) {
 
         // auto recall channels parameters from profile
         profile::Parameters profile;
-        if (persist_conf::isProfileAutoRecallEnabled() && profile::load(persist_conf::getProfileAutoRecallLocation(), &profile)) {
-            if (persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled()) {
-                for (int i = 0; i < CH_NUM; ++i) {
-                    profile.channels[i].flags.output_enabled = false;
-                    profile.channels[i].flags.output_enabled = false;
-                }
-            }
+        if (loadAutoRecallProfile(&profile)) {
+	        for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+		        memcpy(&temperature::sensors[i].prot_conf, profile.temp_prot + i, sizeof(temperature::ProtectionConfiguration));
+	        }
             profile::recallChannelsFromProfile(&profile);
         }
     
@@ -684,13 +681,6 @@ void tick() {
 
 	temperature::tick(tick_usec);
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-#if OPTION_WATCHDOG
-	watchdog::tick(tick_usec);
-#endif
-	fan::tick(tick_usec);
-#endif
-
     for (int i = 0; i < CH_NUM; ++i) {
         Channel::get(i).tick(tick_usec);
     }
@@ -716,6 +706,13 @@ void tick() {
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
 	updateMasterSync();
+#endif
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+	fan::tick(tick_usec);
+#if OPTION_WATCHDOG
+	watchdog::tick(tick_usec);
+#endif
 #endif
 }
 
