@@ -1465,29 +1465,46 @@ Page *getActivePage() {
 }
 
 void doShowPage(int index, Page *page = 0) {
+    DebugTrace("Save profile T7.2.10.1");
+    
     lcd::turnOn();
+
+    DebugTrace("Save profile T7.2.10.2");
 
 	// delete current page
 	if (g_activePage) {
 		delete g_activePage;
 	}
 
+    DebugTrace("Save profile T7.2.10.3");
+
 	g_lastActivePageId = g_activePageId;
 	g_activePageId = index;
 
-	if (page) {
+    DebugTrace("Save profile T7.2.10.4");
+
+    if (page) {
 		g_activePage = page;
 	} else {
 		g_activePage = createPageFromId(g_activePageId);
 	}
 
+    DebugTrace("Save profile T7.2.10.5");
+
 	if (g_activePage) {
 		g_activePage->pageWillAppear();
 	}
 
+    DebugTrace("Save profile T7.2.10.6");
+
     g_showPageTime = micros();
 	g_timeOfLastActivity = millis();
+
+    DebugTrace("Save profile T7.2.10.7");
+
     refreshPage();
+
+    DebugTrace("Save profile T7.2.10.8");
 }
 
 void setPage(int index) {
