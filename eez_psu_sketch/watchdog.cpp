@@ -30,10 +30,14 @@ static bool watchdogEnabled = false;
 static Interval watchdogInterval(WATCHDOG_INTERVAL);
 unsigned long g_lastWatchdogImpulseTime;
 
+static uint8_t g_watchdogState;
+
 void enable() {
     watchdogEnabled = true;
     watchdogInterval.reset();
 	pinMode(WATCHDOG, OUTPUT);
+    g_watchdogState = HIGH;
+    digitalWrite(WATCHDOG, g_watchdogState);
 }
 
 void disable() {
@@ -62,13 +66,8 @@ void tick(unsigned long tick_usec) {
 #endif
                 g_lastWatchdogImpulseTime = micros();
 
-		        digitalWrite(WATCHDOG, HIGH);
-		        delayMicroseconds(2);
-		        digitalWrite(WATCHDOG, LOW);
-		        delayMicroseconds(2);
-		        digitalWrite(WATCHDOG, HIGH);
-		        delayMicroseconds(2);
-		        digitalWrite(WATCHDOG, LOW);
+                g_watchdogState = g_watchdogState == HIGH ? LOW : HIGH;
+		        digitalWrite(WATCHDOG, g_watchdogState);
 #if CONF_DEBUG
 		    }
 #endif
