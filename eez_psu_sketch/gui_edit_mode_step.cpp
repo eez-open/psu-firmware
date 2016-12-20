@@ -23,31 +23,30 @@
 
 #define CONF_GUI_EDIT_MODE_STEP_THRESHOLD_PX 5
 
-using eez::psu::gui::data::Value;
-using eez::psu::gui::data::VALUE_TYPE_FLOAT_VOLT;
-using eez::psu::gui::data::VALUE_TYPE_FLOAT_AMPER;
-
-const Value CONF_GUI_U_STEPS[] = {
-    Value(5.0f, VALUE_TYPE_FLOAT_VOLT),
-    Value(2.0f, VALUE_TYPE_FLOAT_VOLT),
-    Value(1.0f, VALUE_TYPE_FLOAT_VOLT),
-    Value(0.5f, VALUE_TYPE_FLOAT_VOLT),
-    Value(0.1f, VALUE_TYPE_FLOAT_VOLT)
-};
-
-const Value CONF_GUI_I_STEPS[] = {
-    Value(0.5f, VALUE_TYPE_FLOAT_AMPER),
-    Value(0.25f, VALUE_TYPE_FLOAT_AMPER),
-    Value(0.1f, VALUE_TYPE_FLOAT_AMPER),
-    Value(0.05f, VALUE_TYPE_FLOAT_AMPER),
-    Value(0.01f, VALUE_TYPE_FLOAT_AMPER)
-};
-
-
 namespace eez {
 namespace psu {
 namespace gui {
 namespace edit_mode_step {
+
+using data::Value;
+using data::VALUE_TYPE_FLOAT_VOLT;
+using data::VALUE_TYPE_FLOAT_AMPER;
+
+const Value CONF_GUI_U_STEPS[] = {
+    Value(5.0f, data::VALUE_TYPE_FLOAT),
+    Value(2.0f, data::VALUE_TYPE_FLOAT),
+    Value(1.0f, data::VALUE_TYPE_FLOAT),
+    Value(0.5f, data::VALUE_TYPE_FLOAT),
+    Value(0.1f, data::VALUE_TYPE_FLOAT)
+};
+
+const Value CONF_GUI_I_STEPS[] = {
+    Value(0.5f, data::VALUE_TYPE_FLOAT),
+    Value(0.25f, data::VALUE_TYPE_FLOAT),
+    Value(0.1f, data::VALUE_TYPE_FLOAT),
+    Value(0.05f, data::VALUE_TYPE_FLOAT),
+    Value(0.01f, data::VALUE_TYPE_FLOAT)
+};
 
 static int step_index = 2;
 
