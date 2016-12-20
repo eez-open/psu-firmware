@@ -1092,7 +1092,7 @@ void drawLineInBarGraphWidget(const BarGraphWidget *barGraphWidget, int p, OBJ_O
     }
 }
 
-bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse, bool fullScale) {
     data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
     if (!refresh) {
         data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
@@ -1107,8 +1107,10 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 		const int w = widget->w;
 		const int h = widget->h;
 
-		float min = data::getMin(widgetCursor.cursor, widget->data).getFloat();
-        float max = data::getMax(widgetCursor.cursor, widget->data).getFloat();
+		data::Value line2 = data::currentSnapshot.get(widgetCursor.cursor, barGraphWidget->line2Data);
+
+        float min = data::getMin(widgetCursor.cursor, widget->data).getFloat();
+        float max = fullScale ? line2.getFloat() : data::getMax(widgetCursor.cursor, widget->data).getFloat();
 
 		bool horizontal = barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_LEFT_RIGHT || barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_RIGHT_LEFT;
 
@@ -1121,20 +1123,22 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 		data::Value line1 = data::currentSnapshot.get(widgetCursor.cursor, barGraphWidget->line1Data);
 		int pLine1 = calcValuePosInBarGraphWidget(line1, min, max, d);
 
-		// calc line 2 position (limit value) 
-		data::Value line2 = data::currentSnapshot.get(widgetCursor.cursor, barGraphWidget->line2Data);
-		int pLine2 = calcValuePosInBarGraphWidget(line2, min, max, d);
+        int pLine2;
+        if (!fullScale) {
+		    // calc line 2 position (limit value) 
+		    pLine2 = calcValuePosInBarGraphWidget(line2, min, max, d);
 
-		// make sure line positions don't overlap
-		if (pLine1 == pLine2) {
-			pLine1 = pLine2 - 1;
-		}
+		    // make sure line positions don't overlap
+		    if (pLine1 == pLine2) {
+			    pLine1 = pLine2 - 1;
+		    }
 
-		// make sure all lines are visible
-		if (pLine1 < 0) {
-			pLine2 -= pLine1;
-			pLine1 = 0;
-		}
+		    // make sure all lines are visible
+		    if (pLine1 < 0) {
+			    pLine2 -= pLine1;
+			    pLine1 = 0;
+		    }
+        }
 
         DECL_WIDGET_STYLE(style, widget);
 
@@ -1198,12 +1202,14 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 					pBackground = pLine1 + 1;
 				}
 
-				if (pBackground <= pLine2) {
-					if (pBackground < pLine2) {
-						lcd::lcd.fillRect(x + pBackground, y, x + pLine2 - 1, y + h - 1);
-					}
-					pBackground = pLine2 + 1;
-				}
+                if (!fullScale) {
+				    if (pBackground <= pLine2) {
+				    	if (pBackground < pLine2) {
+				    		lcd::lcd.fillRect(x + pBackground, y, x + pLine2 - 1, y + h - 1);
+				    	}
+				    	pBackground = pLine2 + 1;
+				    }
+                }
 
 				if (pBackground < d) {
 					lcd::lcd.fillRect(x + pBackground, y, x + d - 1, y + h - 1);
@@ -1231,12 +1237,14 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 					pBackground = pLine1 + 1;
 				}
 
-				if (pBackground <= pLine2) {
-					if (pBackground < pLine2) {
-						lcd::lcd.fillRect(x - (pLine2 - 1), y, x - pBackground, y + h - 1);
-					}
-					pBackground = pLine2 + 1;
-				}
+                if (!fullScale) {
+				    if (pBackground <= pLine2) {
+					    if (pBackground < pLine2) {
+						    lcd::lcd.fillRect(x - (pLine2 - 1), y, x - pBackground, y + h - 1);
+					    }
+					    pBackground = pLine2 + 1;
+				    }
+                }
 
 				if (pBackground < d) {
 					lcd::lcd.fillRect(x - (d - 1), y, x - pBackground, y + h - 1);
@@ -1244,7 +1252,9 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 			}
 
 			drawLineInBarGraphWidget(barGraphWidget, pLine1, barGraphWidget->line1Style, x, y, w, h);
-			drawLineInBarGraphWidget(barGraphWidget, pLine2, barGraphWidget->line2Style, x, y, w, h);
+            if (!fullScale) {
+    			drawLineInBarGraphWidget(barGraphWidget, pLine2, barGraphWidget->line2Style, x, y, w, h);
+            }
 		} else {
 			// calc text position
 			char valueText[64];
@@ -1290,12 +1300,14 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 					pBackground = pLine1 + 1;
 				}
 
-				if (pBackground <= pLine2) {
-					if (pBackground < pLine2) {
-						lcd::lcd.fillRect(x, y + pBackground, x + w - 1, y + pLine2 - 1);
-					}
-					pBackground = pLine2 + 1;
-				}
+                if (!fullScale) {
+				    if (pBackground <= pLine2) {
+					    if (pBackground < pLine2) {
+						    lcd::lcd.fillRect(x, y + pBackground, x + w - 1, y + pLine2 - 1);
+					    }
+					    pBackground = pLine2 + 1;
+				    }
+                }
 
 				if (pBackground < d) {
 					lcd::lcd.fillRect(x, y + pBackground, x + w - 1, y + d - 1);
@@ -1323,12 +1335,14 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 					pBackground = pLine1 + 1;
 				}
 
-				if (pBackground <= pLine2) {
-					if (pBackground < pLine2) {
-						lcd::lcd.fillRect(x, y - (pLine2 - 1), x + w - 1, y - (pBackground));
-					}
-					pBackground = pLine2 + 1;
-				}
+                if (!fullScale) {
+				    if (pBackground <= pLine2) {
+					    if (pBackground < pLine2) {
+						    lcd::lcd.fillRect(x, y - (pLine2 - 1), x + w - 1, y - (pBackground));
+					    }
+					    pBackground = pLine2 + 1;
+				    }
+                }
 
 				if (pBackground < d) {
 					lcd::lcd.fillRect(x, y - (d - 1), x + w - 1, y - pBackground);
@@ -1336,7 +1350,9 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
 			}
 
 			drawLineInBarGraphWidget(barGraphWidget, pLine1, barGraphWidget->line1Style, x, y, w, h);
-			drawLineInBarGraphWidget(barGraphWidget, pLine2, barGraphWidget->line2Style, x, y, w, h);
+            if (!fullScale) {
+			    drawLineInBarGraphWidget(barGraphWidget, pLine2, barGraphWidget->line2Style, x, y, w, h);
+            }
 		}
 
 		return true;
@@ -1369,7 +1385,7 @@ bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
     } else if (widget->type == WIDGET_TYPE_SCALE) {
         return drawScaleWidget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_BAR_GRAPH) {
-        return drawBarGraphWidget(widgetCursor, widget, refresh, inverse);
+        return drawBarGraphWidget(widgetCursor, widget, refresh, inverse, true);
     } 
 
     return false;
