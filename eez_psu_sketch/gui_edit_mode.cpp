@@ -97,7 +97,9 @@ void initEditValue() {
 }
 
 void enter(int tabIndex_) {
-	if (tabIndex_ != -1) {
+    gui::selectChannel();
+
+    if (tabIndex_ != -1) {
 		tabIndex = tabIndex_;
 	}
 
