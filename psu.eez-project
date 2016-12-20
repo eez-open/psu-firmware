@@ -14662,10 +14662,20 @@
               "type": "Text",
               "x": 12,
               "y": 142,
-              "width": 240,
+              "width": 137,
               "height": 28,
-              "style": "default_disabled_S_left",
-              "text": "System password / Lock"
+              "style": "edit_value_S_left",
+              "text": "System password"
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 149,
+              "y": 142,
+              "width": 103,
+              "height": 29,
+              "style": "edit_value_active_S_left",
+              "text": "Change"
             },
             {
               "type": "Text",
@@ -15368,156 +15378,6 @@
               "height": 36,
               "style": "non_interactive_button_S",
               "text": " Discard"
-            }
-          ]
-        }
-      },
-      {
-        "name": "sys_settings_password",
-        "description": "Define selected protection values\n",
-        "portrait": {
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320,
-          "widgets": []
-        },
-        "landscape": {
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240,
-          "widgets": [
-            {
-              "type": "Text",
-              "x": 6,
-              "y": 0,
-              "width": 246,
-              "height": 28,
-              "style": "value_S",
-              "text": "Set system password and lock"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 32,
-              "width": 141,
-              "height": 30,
-              "style": "edit_value_S_left",
-              "text": "System password:"
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 157,
-              "y": 32,
-              "width": 74,
-              "height": 30,
-              "style": "edit_value_active_S_left",
-              "text": "Change"
-            },
-            {
-              "type": "Rectangle",
-              "x": 231,
-              "y": 32,
-              "width": 21,
-              "height": 30,
-              "style": "default_inverse"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 62,
-              "width": 202,
-              "height": 30,
-              "style": "edit_value_S_left",
-              "text": "Ask password on start up:"
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 218,
-              "y": 62,
-              "width": 34,
-              "height": 30,
-              "style": "edit_value_active_S_left",
-              "text": "No"
-            },
-            {
-              "type": "MultilineText",
-              "x": 16,
-              "y": 92,
-              "width": 202,
-              "height": 51,
-              "style": "edit_value_S_left",
-              "text": "Front panel lock out in remote mode:"
-            },
-            {
-              "type": "Text",
-              "action": "",
-              "x": 218,
-              "y": 92,
-              "width": 34,
-              "height": 51,
-              "style": "edit_value_active_S_left",
-              "text": "No"
-            },
-            {
-              "type": "Rectangle",
-              "x": 16,
-              "y": 143,
-              "width": 236,
-              "height": 61,
-              "style": "default_inverse"
-            },
-            {
-              "type": "Button",
-              "data": "",
-              "action": "set",
-              "x": 0,
-              "y": 204,
-              "width": 72,
-              "height": 36,
-              "style": "non_interactive_button_S",
-              "text": "~ Set",
-              "enabled": "setPage.dirty",
-              "disabledStyle": "non_interactive_button_S_disabled"
-            },
-            {
-              "type": "Text",
-              "action": "discard",
-              "x": 72,
-              "y": 204,
-              "width": 96,
-              "height": 36,
-              "style": "non_interactive_button_S",
-              "text": " Discard"
-            },
-            {
-              "type": "Rectangle",
-              "x": 168,
-              "y": 204,
-              "width": 104,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "X"
-            },
-            {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
             }
           ]
         }
