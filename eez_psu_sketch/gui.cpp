@@ -1465,23 +1465,15 @@ Page *getActivePage() {
 }
 
 void doShowPage(int index, Page *page = 0) {
-    DebugTrace("Save profile T7.2.10.1");
-    
     lcd::turnOn();
-
-    DebugTrace("Save profile T7.2.10.2");
 
 	// delete current page
 	if (g_activePage) {
 		delete g_activePage;
 	}
 
-    DebugTrace("Save profile T7.2.10.3");
-
 	g_lastActivePageId = g_activePageId;
 	g_activePageId = index;
-
-    DebugTrace("Save profile T7.2.10.4");
 
     if (page) {
 		g_activePage = page;
@@ -1489,22 +1481,14 @@ void doShowPage(int index, Page *page = 0) {
 		g_activePage = createPageFromId(g_activePageId);
 	}
 
-    DebugTrace("Save profile T7.2.10.5");
-
 	if (g_activePage) {
 		g_activePage->pageWillAppear();
 	}
 
-    DebugTrace("Save profile T7.2.10.6");
-
     g_showPageTime = micros();
 	g_timeOfLastActivity = millis();
 
-    DebugTrace("Save profile T7.2.10.7");
-
     refreshPage();
-
-    DebugTrace("Save profile T7.2.10.8");
 }
 
 void setPage(int index) {
@@ -1526,45 +1510,31 @@ void replacePage(int index) {
 
 void pushPage(int index) {
 	// push current page on stack
-    DebugTrace("Save profile T7.2.1");
 	if (g_activePageId != -1) {
-        DebugTrace("Save profile T7.2.2");
 		if (g_pageNavigationStackPointer == CONF_GUI_PAGE_NAVIGATION_STACK_SIZE) {
-            DebugTrace("Save profile T7.2.3");
 			// no more space on the stack
 
 			// delete page on the bottom
 			if (g_pageNavigationStack[0].activePage) {
-                DebugTrace("Save profile T7.2.4");
 				delete g_pageNavigationStack[0].activePage;
 			}
 
-            DebugTrace("Save profile T7.2.5");
 			// move stack one down
 			for (int i = 1; i < g_pageNavigationStackPointer; ++i) {
-                DebugTrace("Save profile T7.2.6");
 				g_pageNavigationStack[i-1].activePageId = g_pageNavigationStack[i].activePageId;
 				g_pageNavigationStack[i-1].activePage = g_pageNavigationStack[i].activePage;
 			}
 
-            DebugTrace("Save profile T7.2.7");
-
 			--g_pageNavigationStackPointer;
 		}
-
-        DebugTrace("Save profile T7.2.8");
 
 		g_pageNavigationStack[g_pageNavigationStackPointer].activePageId = g_activePageId;
 		g_pageNavigationStack[g_pageNavigationStackPointer].activePage = g_activePage;
 		g_activePage = 0;
 		++g_pageNavigationStackPointer;
-
-        DebugTrace("Save profile T7.2.9");
 	}
 
-    DebugTrace("Save profile T7.2.10");
 	doShowPage(index);
-    DebugTrace("Save profile T7.2.11");
 }
 
 void popPage() {

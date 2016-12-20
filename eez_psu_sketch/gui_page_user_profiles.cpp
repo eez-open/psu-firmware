@@ -138,47 +138,33 @@ void UserProfilesPage::recall() {
 }
 
 void UserProfilesPage::onSaveFinish(char *remark, void (*callback)()) {
-    DebugTrace("Save profile T10");
 	if (profile::saveAtLocation(g_selectedProfileLocation, remark)) {
-        DebugTrace("Save profile T11");
 		infoMessageP(PSTR("Current parameters saved"), callback);
 	} else {
-        DebugTrace("Save profile T12");
 		errorMessageP(PSTR("Failed!"));
 	}
 }
 
 void UserProfilesPage::onSaveEditRemarkOk(char *remark) {
-    DebugTrace("Save profile T9");
 	onSaveFinish(remark, popPage);
 }
 
 void UserProfilesPage::onSaveYes() {
-    DebugTrace("Save profile T5");
 	if (g_selectedProfileLocation > 0) {
-        DebugTrace("Save profile T6");
-
 		char remark[PROFILE_NAME_MAX_LENGTH + 1];
 		profile::getSaveName(&(((UserProfilesPage *)getActivePage())->profile), remark);
 
-        DebugTrace("Save profile T7");
-
 		keypad::startPush(0, remark, PROFILE_NAME_MAX_LENGTH, false, onSaveEditRemarkOk, 0);
 	} else {
-        DebugTrace("Save profile T8");
 		onSaveFinish();
 	}
 }
 
 void UserProfilesPage::save() {
-    DebugTrace("Save profile T1");
     if (g_selectedProfileLocation > 0) {
-        DebugTrace("Save profile T2");
 		if (profile::isValid(g_selectedProfileLocation)) {
-            DebugTrace("Save profile T3");
 			areYouSure(onSaveYes);
 		} else {
-            DebugTrace("Save profile T4");
 			onSaveYes();
 		}
     }
