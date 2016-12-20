@@ -63,7 +63,7 @@ void load_lib() {
             if (!g_create_window_ptr) {
                 printf("Incompatible GUI library!\n");
             }
-			g_get_desktop_resolution_ptr = (get_desktop_resolution_ptr_t)eez_dll_get_proc_address(g_lib, "eez_imgui_get_desktop_resolution");
+            g_get_desktop_resolution_ptr = (get_desktop_resolution_ptr_t)eez_dll_get_proc_address(g_lib, "eez_imgui_get_desktop_resolution");
             g_beep_ptr = (beep_ptr_t)eez_dll_get_proc_address(g_lib, "eez_imgui_beep");
         }
         else {
@@ -88,8 +88,8 @@ bool open() {
         return false;
     }
 
-	int w, h;
-	g_get_desktop_resolution_ptr(&w, &h);
+    int w, h;
+    g_get_desktop_resolution_ptr(&w, &h);
     
     g_window = g_create_window_ptr(getWindowDefinition(w, h));
 

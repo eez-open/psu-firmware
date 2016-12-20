@@ -37,23 +37,23 @@ typedef void *(*eez_thread_proc_t)(void *);
 
 eez_thread_handle_t eez_thread_create(eez_thread_proc_t thread_proc, void *param) {
 # ifdef _WIN32
-	return ::CreateThread(0, 0, thread_proc, param, 0, 0);
+    return ::CreateThread(0, 0, thread_proc, param, 0, 0);
 # else //_WIN32
-	eez_thread_handle_t thread_handle;
-	int rc = pthread_create(&thread_handle, NULL, thread_proc, param);
-	if (rc) {
-		return 0;
-	}
-	return thread_handle;
+    eez_thread_handle_t thread_handle;
+    int rc = pthread_create(&thread_handle, NULL, thread_proc, param);
+    if (rc) {
+        return 0;
+    }
+    return thread_handle;
 # endif //_WIN32
 }
 
 void eez_thread_join(eez_thread_handle_t handle) {
 # ifdef _WIN32
-	::WaitForSingleObject(handle, INFINITE);
-	::CloseHandle(handle);
+    ::WaitForSingleObject(handle, INFINITE);
+    ::CloseHandle(handle);
 # else //_WIN32
-	pthread_join(handle, NULL);
+    pthread_join(handle, NULL);
 # endif //_WIN32
 }
 

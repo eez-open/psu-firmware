@@ -38,11 +38,11 @@ static const uint16_t EVENT_HEADER_SIZE = 16;
 static const uint16_t EVENT_SIZE = 16;
 
 struct EventQueueHeader {
-	uint32_t magicNumber;
-	uint16_t version;
-	uint16_t head;
-	uint16_t size;
-	uint16_t lastErrorEventIndex;
+    uint32_t magicNumber;
+    uint16_t version;
+    uint16_t head;
+    uint16_t size;
+    uint16_t lastErrorEventIndex;
 };
 
 static EventQueueHeader eventQueue;
@@ -57,59 +57,59 @@ static Event g_lastErrorEvent;
 static bool g_lastErrorEventChanged;
 
 void readHeader() {
-	eeprom::read((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
+    eeprom::read((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
 }
 
 void writeHeader() {
-	eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
+    eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
 }
 
 void readEvent(uint16_t eventIndex, Event *e) {
-	eeprom::read((uint8_t *)e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + EVENT_HEADER_SIZE + eventIndex * EVENT_SIZE);
+    eeprom::read((uint8_t *)e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + EVENT_HEADER_SIZE + eventIndex * EVENT_SIZE);
 }
 
 void writeEvent(uint16_t eventIndex, Event *e) {
-	eeprom::write((uint8_t *)e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + EVENT_HEADER_SIZE + eventIndex * EVENT_SIZE);
+    eeprom::write((uint8_t *)e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + EVENT_HEADER_SIZE + eventIndex * EVENT_SIZE);
 }
 
 void init() {
-	readHeader();
+    readHeader();
     g_lastErrorEventChanged = true;
 
-	if (eventQueue.magicNumber != MAGIC || eventQueue.version != VERSION || eventQueue.head >= MAX_EVENTS || eventQueue.size > MAX_EVENTS) {
-		eventQueue.magicNumber = MAGIC;
+    if (eventQueue.magicNumber != MAGIC || eventQueue.version != VERSION || eventQueue.head >= MAX_EVENTS || eventQueue.size > MAX_EVENTS) {
+        eventQueue.magicNumber = MAGIC;
         eventQueue.version = VERSION;
         eventQueue.head = 0;
         eventQueue.size = 0;
         eventQueue.lastErrorEventIndex = NULL_INDEX;
 
-		pushEvent(EVENT_INFO_WELCOME);
-	}
+        pushEvent(EVENT_INFO_WELCOME);
+    }
 }
 
 void tick(unsigned long tick_usec) {
-	for (int i = 0; i < g_eventsDuringInterruptHandlingHead; ++i) {
-		pushEvent(g_eventsDuringInterruptHandling[i]);
-	}
-	g_eventsDuringInterruptHandlingHead = 0;
+    for (int i = 0; i < g_eventsDuringInterruptHandlingHead; ++i) {
+        pushEvent(g_eventsDuringInterruptHandling[i]);
+    }
+    g_eventsDuringInterruptHandlingHead = 0;
 }
 
 int getNumEvents() {
-	return eventQueue.size;
+    return eventQueue.size;
 }
 
 void getEvent(uint16_t index, Event *e) {
-	uint16_t eventIndex = (eventQueue.head - (index + 1) + MAX_EVENTS) % MAX_EVENTS;
-	readEvent(eventIndex, e);
+    uint16_t eventIndex = (eventQueue.head - (index + 1) + MAX_EVENTS) % MAX_EVENTS;
+    readEvent(eventIndex, e);
 }
 
 void getLastErrorEvent(Event *e) {
     if (g_lastErrorEventChanged) {
-	    if (eventQueue.lastErrorEventIndex != NULL_INDEX) {
-		    readEvent(eventQueue.lastErrorEventIndex, &g_lastErrorEvent);
-	    } else {
-		    g_lastErrorEvent.eventId = EVENT_TYPE_NONE;
-	    }
+        if (eventQueue.lastErrorEventIndex != NULL_INDEX) {
+            readEvent(eventQueue.lastErrorEventIndex, &g_lastErrorEvent);
+        } else {
+            g_lastErrorEvent.eventId = EVENT_TYPE_NONE;
+        }
         g_lastErrorEventChanged = false;
     }
 
@@ -117,156 +117,156 @@ void getLastErrorEvent(Event *e) {
 }
 
 int getEventType(Event *e) {
-	if (e->eventId >= EVENT_INFO_START_ID) {
-		return EVENT_TYPE_INFO;
-	} else if (e->eventId >= EVENT_WARNING_START_ID) {
-		return EVENT_TYPE_WARNING;
-	} else if (e->eventId != EVENT_TYPE_NONE) {
-		return EVENT_TYPE_ERROR;
-	} else {
-		return EVENT_TYPE_NONE;
-	}
+    if (e->eventId >= EVENT_INFO_START_ID) {
+        return EVENT_TYPE_INFO;
+    } else if (e->eventId >= EVENT_WARNING_START_ID) {
+        return EVENT_TYPE_WARNING;
+    } else if (e->eventId != EVENT_TYPE_NONE) {
+        return EVENT_TYPE_ERROR;
+    } else {
+        return EVENT_TYPE_NONE;
+    }
 }
 
 const char *getEventMessage(Event *e) {
-	static char message[35];
+    static char message[35];
 
-	const char *p_message = 0;
+    const char *p_message = 0;
 
-	if (e->eventId >= EVENT_INFO_START_ID) {
-		switch (e->eventId) {
+    if (e->eventId >= EVENT_INFO_START_ID) {
+        switch (e->eventId) {
 #define EVENT_SCPI_ERROR(ID, TEXT)
 #define EVENT_ERROR(NAME, ID, TEXT)
 #define EVENT_WARNING(NAME, ID, TEXT)
 #define EVENT_INFO(NAME, ID, TEXT) case EVENT_INFO_START_ID + ID: p_message = PSTR(TEXT); break;
-			LIST_OF_EVENTS
+            LIST_OF_EVENTS
 #undef EVENT_SCPI_ERROR
 #undef EVENT_INFO
 #undef EVENT_WARNING
 #undef EVENT_ERROR
-		}
-	} else if (e->eventId >= EVENT_WARNING_START_ID) {
-		switch (e->eventId) {
+        }
+    } else if (e->eventId >= EVENT_WARNING_START_ID) {
+        switch (e->eventId) {
 #define EVENT_SCPI_ERROR(ID, TEXT)
 #define EVENT_ERROR(NAME, ID, TEXT)
 #define EVENT_WARNING(NAME, ID, TEXT) case EVENT_WARNING_START_ID + ID: p_message = PSTR(TEXT); break;
 #define EVENT_INFO(NAME, ID, TEXT)
-			LIST_OF_EVENTS
+            LIST_OF_EVENTS
 #undef EVENT_SCPI_ERROR
 #undef EVENT_INFO
 #undef EVENT_WARNING
 #undef EVENT_ERROR
-		default:
-			p_message = 0;
-		}
-	} else {
-		switch (e->eventId) {
+        default:
+            p_message = 0;
+        }
+    } else {
+        switch (e->eventId) {
 #define EVENT_SCPI_ERROR(ID, TEXT) case ID: p_message = PSTR(TEXT); break;
 #define EVENT_INFO(NAME, ID, TEXT)
 #define EVENT_WARNING(NAME, ID, TEXT)
 #define EVENT_ERROR(NAME, ID, TEXT) case EVENT_ERROR_START_ID + ID: p_message = PSTR(TEXT); break;
-			LIST_OF_EVENTS
+            LIST_OF_EVENTS
 #undef EVENT_SCPI_ERROR
 #undef EVENT_INFO
 #undef EVENT_WARNING
 #undef EVENT_ERROR
-		default:
-			return SCPI_ErrorTranslate(e->eventId);
-		}
-	}
+        default:
+            return SCPI_ErrorTranslate(e->eventId);
+        }
+    }
 
-	if (p_message) {
-		strncpy_P(message, p_message, sizeof(message) - 1);
-		message[sizeof(message) - 1] = 0;
-		return message;
-	}
+    if (p_message) {
+        strncpy_P(message, p_message, sizeof(message) - 1);
+        message[sizeof(message) - 1] = 0;
+        return message;
+    }
 
-	return 0;
+    return 0;
 }
 
 void pushEvent(int16_t eventId) {
-	if (g_insideInterruptHandler) {
-		if (g_eventsDuringInterruptHandlingHead < MAX_EVENTS_DURING_INTERRUPT_HANDLING) {
-			g_eventsDuringInterruptHandling[g_eventsDuringInterruptHandlingHead] = eventId;
-			++g_eventsDuringInterruptHandlingHead;
-		} else {
-			DebugTrace("MAX_EVENTS_DURING_INTERRUPT_HANDLING exceeded");
-		}
-	} else {
-		Event e;
+    if (g_insideInterruptHandler) {
+        if (g_eventsDuringInterruptHandlingHead < MAX_EVENTS_DURING_INTERRUPT_HANDLING) {
+            g_eventsDuringInterruptHandling[g_eventsDuringInterruptHandlingHead] = eventId;
+            ++g_eventsDuringInterruptHandlingHead;
+        } else {
+            DebugTrace("MAX_EVENTS_DURING_INTERRUPT_HANDLING exceeded");
+        }
+    } else {
+        Event e;
 
-		e.dateTime = datetime::now();
-		e.eventId = eventId;
+        e.dateTime = datetime::now();
+        e.eventId = eventId;
 
-		writeEvent(eventQueue.head, &e);
+        writeEvent(eventQueue.head, &e);
 
-		if (eventQueue.lastErrorEventIndex == eventQueue.head) {
-			// this event overwrote last error event, therefore:
-			eventQueue.lastErrorEventIndex = NULL_INDEX;
+        if (eventQueue.lastErrorEventIndex == eventQueue.head) {
+            // this event overwrote last error event, therefore:
+            eventQueue.lastErrorEventIndex = NULL_INDEX;
             g_lastErrorEventChanged = true;
-		}
+        }
 
-		int eventType = getEventType(&e);
-		if (eventType == EVENT_TYPE_ERROR || eventType == EVENT_TYPE_WARNING && eventQueue.lastErrorEventIndex == NULL_INDEX) {
-			eventQueue.lastErrorEventIndex = eventQueue.head;
+        int eventType = getEventType(&e);
+        if (eventType == EVENT_TYPE_ERROR || eventType == EVENT_TYPE_WARNING && eventQueue.lastErrorEventIndex == NULL_INDEX) {
+            eventQueue.lastErrorEventIndex = eventQueue.head;
             g_lastErrorEventChanged = true;
-		}
+        }
 
-		eventQueue.head = (eventQueue.head + 1) % MAX_EVENTS;
-		if (eventQueue.size < MAX_EVENTS) {
-			++eventQueue.size;
-		}
+        eventQueue.head = (eventQueue.head + 1) % MAX_EVENTS;
+        if (eventQueue.size < MAX_EVENTS) {
+            ++eventQueue.size;
+        }
 
-		writeHeader();
+        writeHeader();
 
-		if (getEventType(&e) == EVENT_TYPE_ERROR) {
-			sound::playBeep();
-		}
-	}
+        if (getEventType(&e) == EVENT_TYPE_ERROR) {
+            sound::playBeep();
+        }
+    }
 }
 
 void markAsRead() {
-	if (eventQueue.lastErrorEventIndex != NULL_INDEX) {
-		eventQueue.lastErrorEventIndex = NULL_INDEX;
+    if (eventQueue.lastErrorEventIndex != NULL_INDEX) {
+        eventQueue.lastErrorEventIndex = NULL_INDEX;
         g_lastErrorEventChanged = true;
-		writeHeader();
-	}
+        writeHeader();
+    }
 }
 
 int getNumPages() {
-	return (getNumEvents() + EVENTS_PER_PAGE - 1) / EVENTS_PER_PAGE;
+    return (getNumEvents() + EVENTS_PER_PAGE - 1) / EVENTS_PER_PAGE;
 }
 
 int getActivePageNumEvents() {
-	if (g_pageIndex < getNumPages() - 1) {
-		return EVENTS_PER_PAGE;
-	} else {
-		return getNumEvents() - (getNumPages() - 1) * EVENTS_PER_PAGE;
-	}
+    if (g_pageIndex < getNumPages() - 1) {
+        return EVENTS_PER_PAGE;
+    } else {
+        return getNumEvents() - (getNumPages() - 1) * EVENTS_PER_PAGE;
+    }
 }
 
 void getActivePageEvent(int i, Event *e) {
-	getEvent(g_pageIndex * EVENTS_PER_PAGE + i, e);
+    getEvent(g_pageIndex * EVENTS_PER_PAGE + i, e);
 }
 
 void moveToFirstPage() {
-	g_pageIndex = 0;
+    g_pageIndex = 0;
 }
 
 void moveToNextPage() {
-	if (g_pageIndex < getNumPages() - 1) {
-		++g_pageIndex;
-	}
+    if (g_pageIndex < getNumPages() - 1) {
+        ++g_pageIndex;
+    }
 }
 
 void moveToPreviousPage() {
-	if (g_pageIndex > 0) {
-		--g_pageIndex;
-	}
+    if (g_pageIndex > 0) {
+        --g_pageIndex;
+    }
 }
 
 int getActivePageIndex() {
-	return g_pageIndex;
+    return g_pageIndex;
 }
 
 }

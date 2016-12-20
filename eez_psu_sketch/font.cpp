@@ -47,73 +47,73 @@ Font::Font(const uint8_t *data PROGMEM) : fontData(data) {
 }
 
 uint8_t Font::getByte(int offset) {
-	return arduino_util::prog_read_byte(fontData + offset);
+    return arduino_util::prog_read_byte(fontData + offset);
 }
 
 uint16_t Font::getWord(int offset) {
-	return arduino_util::prog_read_word(fontData + offset);
+    return arduino_util::prog_read_word(fontData + offset);
 }
 
 uint8_t Font::getAscent() {
-	return getByte(0);
+    return getByte(0);
 }
 
 uint8_t Font::getDescent() {
-	return getByte(1);
+    return getByte(1);
 }
 
 uint8_t Font::getEncodingStart() {
-	return getByte(2);
+    return getByte(2);
 }
 
 uint8_t Font::getEncodingEnd() {
-	return getByte(3);
+    return getByte(3);
 }
 
 uint8_t Font::getHeight() {
-	return getAscent() + getDescent();
+    return getAscent() + getDescent();
 }
 
 const uint8_t * PROGMEM Font::findGlyphData(uint8_t requested_encoding) {
-	const uint8_t *p PROGMEM = fontData;
+    const uint8_t *p PROGMEM = fontData;
 
-	uint8_t start = getEncodingStart();
-	uint8_t end = getEncodingEnd();
+    uint8_t start = getEncodingStart();
+    uint8_t end = getEncodingEnd();
 
-	if (requested_encoding < start || requested_encoding > end) {
-		// Not found!
-		return 0;
-	}
+    if (requested_encoding < start || requested_encoding > end) {
+        // Not found!
+        return 0;
+    }
 
-	return p + getWord(4 + (requested_encoding - start) * 2);
+    return p + getWord(4 + (requested_encoding - start) * 2);
 }
 
 void Font::fillGlyphParameters(Glyph &glyph) {
-	/*
-	Glyph header:
-	
-	offset
-	0             DWIDTH                    signed
-	1             BBX width                 unsigned
-	2             BBX height                unsigned
-	3             BBX xoffset               signed
-	4             BBX yoffset               signed
+    /*
+    Glyph header:
+    
+    offset
+    0             DWIDTH                    signed
+    1             BBX width                 unsigned
+    2             BBX height                unsigned
+    3             BBX xoffset               signed
+    4             BBX yoffset               signed
 
-	Note: byte 0 == 255 indicates empty glyph
-	*/
+    Note: byte 0 == 255 indicates empty glyph
+    */
 
-	glyph.dx = arduino_util::prog_read_byte(glyph.data + 0);
-	glyph.width = arduino_util::prog_read_byte(glyph.data + 1);
-	glyph.height = arduino_util::prog_read_byte(glyph.data + 2);
-	glyph.x = arduino_util::prog_read_byte(glyph.data + 3);
-	glyph.y = arduino_util::prog_read_byte(glyph.data + 4);
+    glyph.dx = arduino_util::prog_read_byte(glyph.data + 0);
+    glyph.width = arduino_util::prog_read_byte(glyph.data + 1);
+    glyph.height = arduino_util::prog_read_byte(glyph.data + 2);
+    glyph.x = arduino_util::prog_read_byte(glyph.data + 3);
+    glyph.y = arduino_util::prog_read_byte(glyph.data + 4);
 }
 
 void Font::getGlyph(uint8_t requested_encoding, Glyph &glyph) {
-	glyph.data = findGlyphData(requested_encoding);
-	if (glyph.data) {
-		fillGlyphParameters(glyph);
-	}
+    glyph.data = findGlyphData(requested_encoding);
+    if (glyph.data) {
+        fillGlyphParameters(glyph);
+    }
 }
 
 }

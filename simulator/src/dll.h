@@ -30,24 +30,24 @@ typedef void* eez_dll_lib_t;
 
 inline eez_dll_lib_t eez_dll_load(const char* lib_file_path) {
 # ifdef _WIN32
-	return ::LoadLibraryA(lib_file_path);
+    return ::LoadLibraryA(lib_file_path);
 # else //_WIN32
-	return ::dlopen(lib_file_path, RTLD_LAZY);
+    return ::dlopen(lib_file_path, RTLD_LAZY);
 # endif //_WIN32
 }
 
 inline void eez_dll_unload(eez_dll_lib_t lib) {
 # ifdef _WIN32
-	::FreeLibrary((HMODULE)lib);
+    ::FreeLibrary((HMODULE)lib);
 # else //_WIN32
-	::dlclose(lib);
+    ::dlclose(lib);
 # endif //_WIN32
 }
 
 inline void* eez_dll_get_proc_address(eez_dll_lib_t lib, const char* proc_name) {
 # ifdef _WIN32
-	return ::GetProcAddress((HMODULE)lib, proc_name);
+    return ::GetProcAddress((HMODULE)lib, proc_name);
 # else //_WIN32
-	return ::dlsym(lib, proc_name);
+    return ::dlsym(lib, proc_name);
 # endif //_WIN32
 }

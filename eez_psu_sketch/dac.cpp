@@ -66,11 +66,11 @@ void DigitalAnalogConverter::set_value(uint8_t buffer, float value) {
     SPI.transfer(DAC_value & 0xFF);  // send second byte
 
 #if CONF_DEBUG
-	if  (debug::g_setVoltageOrCurrentTimeStart != 0) {
-		unsigned long end = micros();
-		DebugTraceF("Command duration[microseconds]: %ul", debug::g_setVoltageOrCurrentTimeStart - end);
-		debug::g_setVoltageOrCurrentTimeStart = 0;
-	}
+    if  (debug::g_setVoltageOrCurrentTimeStart != 0) {
+        unsigned long end = micros();
+        DebugTraceF("Command duration[microseconds]: %ul", debug::g_setVoltageOrCurrentTimeStart - end);
+        debug::g_setVoltageOrCurrentTimeStart = 0;
+    }
 #endif
 
     digitalWrite(channel.dac_pin, HIGH); // Deselect DAC
@@ -100,10 +100,10 @@ bool DigitalAnalogConverter::test() {
     bool saveCalibrationEnabled = channel.isCalibrationEnabled();
     channel.calibrationEnableNoEvent(false);
 
-	// disable OE on channel
+    // disable OE on channel
     int save_output_enabled = channel.flags.outputEnabled;
     channel.flags.outputEnabled = 0;
-	channel.ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, false);
+    channel.ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, false);
 
     test_result = psu::TEST_OK;
 
@@ -145,13 +145,13 @@ bool DigitalAnalogConverter::test() {
             (int)(i_diff * 100));
     }
 
-	channel.calibrationEnableNoEvent(saveCalibrationEnabled);
+    channel.calibrationEnableNoEvent(saveCalibrationEnabled);
 
     // Re-enable output
-	if (save_output_enabled) {
-		channel.flags.outputEnabled = true;
-		channel.ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, true);
-	}
+    if (save_output_enabled) {
+        channel.flags.outputEnabled = true;
+        channel.ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, true);
+    }
 
     channel.setVoltage(u_set_save);
     channel.setCurrent(i_set_save);

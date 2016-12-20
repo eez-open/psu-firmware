@@ -25,10 +25,10 @@ namespace imgui {
 
 /// Description of the top level winodow, i.e. title, width, height, ...
 struct WindowDefinition {
-	const char *title;
-	int width, height;
-	int content_padding;
-	const char *icon_path;
+    const char *title;
+    int width, height;
+    int content_padding;
+    const char *icon_path;
 };
 
 struct MouseData {
@@ -44,11 +44,11 @@ struct UserWidget {
     int w;
     int h;
 
-	int pixels_w;
-	int pixels_h;
-	unsigned char *pixels;
+    int pixels_w;
+    int pixels_h;
+    unsigned char *pixels;
 
-	MouseData mouse_data;
+    MouseData mouse_data;
 };
 
 class WindowImpl;
@@ -56,25 +56,25 @@ class WindowImpl;
 /// Top level window, high level interface.
 class Window {
 public:
-	Window(WindowDefinition *window_definition);
-	virtual ~Window();
+    Window(WindowDefinition *window_definition);
+    virtual ~Window();
 
-	bool init();
+    bool init();
 
-	virtual bool pollEvent();
+    virtual bool pollEvent();
 
-	virtual void beginUpdate();
+    virtual void beginUpdate();
 
-	virtual void addImage(int x, int y, int w, int h, const char *image);
-	virtual void addOnOffImage(int x, int y, int w, int h, bool value, const char *on_image, const char *off_image);
-	virtual void addText(int x, int y, int w, int h, const char *text);
-	virtual bool addButton(int x, int y, int w, int h, const char *normal_image, const char *pressed_image);
+    virtual void addImage(int x, int y, int w, int h, const char *image);
+    virtual void addOnOffImage(int x, int y, int w, int h, bool value, const char *on_image, const char *off_image);
+    virtual void addText(int x, int y, int w, int h, const char *text);
+    virtual bool addButton(int x, int y, int w, int h, const char *normal_image, const char *pressed_image);
     virtual void addUserWidget(UserWidget *user_widget);
 
-	virtual void endUpdate();
+    virtual void endUpdate();
 
 private:
-	WindowImpl *impl;
+    WindowImpl *impl;
 };
 
 typedef Window *(*create_window_ptr_t)(WindowDefinition *windowDefinition);

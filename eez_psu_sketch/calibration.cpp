@@ -58,7 +58,7 @@ float Value::getRange() {
 }
 
 bool Value::checkRange(float value, float adc) {
-	float levelValue = getLevelValue();
+    float levelValue = getLevelValue();
     float range = getRange();
 
     float diff;
@@ -73,7 +73,7 @@ bool Value::checkRange(float value, float adc) {
         return false;
     }
 
-	return true;
+    return true;
 }
 
 float Value::getLevelValue() {
@@ -133,18 +133,18 @@ void Value::setData(float data, float adc) {
         max_set = true;
         max_val = data;
         max_adc = adc;
-	}
+    }
 
-	if (min_set && max_set) {
-		if (voltOrCurr) {
-			g_channel->calibrationFindVoltageRange(g_channel->U_CAL_VAL_MIN, min_val, min_adc, g_channel->U_CAL_VAL_MAX, max_val, max_adc, &minPossible, &maxPossible);
-			DebugTraceF("Voltage range: %lf - %lfV", minPossible, maxPossible);
-		}
-		else {
-			g_channel->calibrationFindCurrentRange(g_channel->I_CAL_VAL_MIN, min_val, min_adc, g_channel->I_CAL_VAL_MAX, max_val, max_adc, &minPossible, &maxPossible);
-			DebugTraceF("Current range: %lf - %lfA", minPossible, maxPossible);
-		}
-	}
+    if (min_set && max_set) {
+        if (voltOrCurr) {
+            g_channel->calibrationFindVoltageRange(g_channel->U_CAL_VAL_MIN, min_val, min_adc, g_channel->U_CAL_VAL_MAX, max_val, max_adc, &minPossible, &maxPossible);
+            DebugTraceF("Voltage range: %lf - %lfV", minPossible, maxPossible);
+        }
+        else {
+            g_channel->calibrationFindCurrentRange(g_channel->I_CAL_VAL_MIN, min_val, min_adc, g_channel->I_CAL_VAL_MAX, max_val, max_adc, &minPossible, &maxPossible);
+            DebugTraceF("Current range: %lf - %lfA", minPossible, maxPossible);
+        }
+    }
 }
 
 bool Value::checkMid() {
@@ -232,11 +232,11 @@ static bool checkCalibrationValue(calibration::Value &calibrationValue, int16_t 
 }
 
 bool isVoltageCalibrated() {
-	return g_voltage.min_set && g_voltage.mid_set && g_voltage.max_set;
+    return g_voltage.min_set && g_voltage.mid_set && g_voltage.max_set;
 }
 
 bool isCurrentCalibrated() {
-	return g_current.min_set && g_current.mid_set && g_current.max_set;
+    return g_current.min_set && g_current.mid_set && g_current.max_set;
 }
 
 bool canSave(int16_t &scpiErr) {
@@ -271,7 +271,7 @@ bool canSave(int16_t &scpiErr) {
         return false;
     }
 
-	return true;
+    return true;
 }
 
 bool save() {
@@ -303,10 +303,10 @@ bool save() {
         g_channel->cal_conf.u.max.val = g_voltage.max_val;
         g_channel->cal_conf.u.max.adc = g_voltage.max_adc;
 
-		g_channel->cal_conf.u.minPossible = g_voltage.minPossible;
-		g_channel->cal_conf.u.maxPossible = g_voltage.maxPossible;
+        g_channel->cal_conf.u.minPossible = g_voltage.minPossible;
+        g_channel->cal_conf.u.maxPossible = g_voltage.maxPossible;
 
-		g_voltage.level = LEVEL_NONE;
+        g_voltage.level = LEVEL_NONE;
     }
 
     if (isCurrentCalibrated()) {
@@ -324,10 +324,10 @@ bool save() {
         g_channel->cal_conf.i.max.val = g_current.max_val;
         g_channel->cal_conf.i.max.adc = g_current.max_adc;
 
-		g_channel->cal_conf.i.minPossible = g_current.minPossible;
-		g_channel->cal_conf.i.maxPossible = g_current.maxPossible;
+        g_channel->cal_conf.i.minPossible = g_current.minPossible;
+        g_channel->cal_conf.i.maxPossible = g_current.maxPossible;
 
-		g_current.level = LEVEL_NONE;
+        g_current.level = LEVEL_NONE;
     }
 
     resetChannelToZero();

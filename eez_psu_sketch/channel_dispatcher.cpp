@@ -44,7 +44,7 @@ bool setType(Type value) {
 
         for (int i = 0; i < 2; ++i) {
             if (i < CH_NUM) {
-    		    Channel &channel = Channel::get(i);
+                Channel &channel = Channel::get(i);
                 if (Channel::get(i).isOk()) {
                     channel.outputEnable(false);
                     channel.remoteSensingEnable(false);
@@ -64,16 +64,16 @@ bool setType(Type value) {
                             channel.setVoltage(channel1.u.set);
                             channel.setCurrent(channel1.i.set);
 
-	                        channel.prot_conf.flags.u_state = channel1.prot_conf.flags.u_state;
-	                        channel.prot_conf.u_level = channel1.prot_conf.u_level;
-	                        channel.prot_conf.u_delay = channel1.prot_conf.u_delay;
+                            channel.prot_conf.flags.u_state = channel1.prot_conf.flags.u_state;
+                            channel.prot_conf.u_level = channel1.prot_conf.u_level;
+                            channel.prot_conf.u_delay = channel1.prot_conf.u_delay;
 
-	                        channel.prot_conf.flags.i_state = channel1.prot_conf.flags.i_state;
-	                        channel.prot_conf.i_delay = channel1.prot_conf.i_delay;
+                            channel.prot_conf.flags.i_state = channel1.prot_conf.flags.i_state;
+                            channel.prot_conf.i_delay = channel1.prot_conf.i_delay;
 
-	                        channel.prot_conf.flags.p_state = channel1.prot_conf.flags.p_state;
-	                        channel.prot_conf.p_level = channel1.prot_conf.p_level;
-	                        channel.prot_conf.p_delay = channel1.prot_conf.p_delay;
+                            channel.prot_conf.flags.p_state = channel1.prot_conf.flags.p_state;
+                            channel.prot_conf.p_level = channel1.prot_conf.p_level;
+                            channel.prot_conf.p_delay = channel1.prot_conf.p_delay;
 
                             temperature::sensors[temp_sensor::CH1 + channel.index - 1].prot_conf.state =
                                 temperature::sensors[temp_sensor::CH1].prot_conf.state;
@@ -88,16 +88,16 @@ bool setType(Type value) {
                         channel.setVoltage(getUMin(channel));
                         channel.setCurrent(getIMin(channel));
 
-	                    channel.prot_conf.flags.u_state = Channel::get(0).prot_conf.flags.u_state || Channel::get(1).prot_conf.flags.u_state ? 1 : 0;
-	                    channel.prot_conf.u_level = min(Channel::get(0).prot_conf.u_level, Channel::get(1).prot_conf.u_level);
-	                    channel.prot_conf.u_delay = min(Channel::get(0).prot_conf.u_delay, Channel::get(1).prot_conf.u_delay);
+                        channel.prot_conf.flags.u_state = Channel::get(0).prot_conf.flags.u_state || Channel::get(1).prot_conf.flags.u_state ? 1 : 0;
+                        channel.prot_conf.u_level = min(Channel::get(0).prot_conf.u_level, Channel::get(1).prot_conf.u_level);
+                        channel.prot_conf.u_delay = min(Channel::get(0).prot_conf.u_delay, Channel::get(1).prot_conf.u_delay);
 
-	                    channel.prot_conf.flags.i_state = Channel::get(0).prot_conf.flags.i_state || Channel::get(1).prot_conf.flags.i_state ? 1 : 0;
-	                    channel.prot_conf.i_delay = min(Channel::get(0).prot_conf.i_delay, Channel::get(1).prot_conf.i_delay);
+                        channel.prot_conf.flags.i_state = Channel::get(0).prot_conf.flags.i_state || Channel::get(1).prot_conf.flags.i_state ? 1 : 0;
+                        channel.prot_conf.i_delay = min(Channel::get(0).prot_conf.i_delay, Channel::get(1).prot_conf.i_delay);
 
-	                    channel.prot_conf.flags.p_state = Channel::get(0).prot_conf.flags.p_state || Channel::get(1).prot_conf.flags.p_state ? 1 : 0;
-	                    channel.prot_conf.p_level = min(Channel::get(0).prot_conf.p_level, Channel::get(1).prot_conf.p_level);
-	                    channel.prot_conf.p_delay = min(Channel::get(0).prot_conf.p_delay, Channel::get(1).prot_conf.p_delay);
+                        channel.prot_conf.flags.p_state = Channel::get(0).prot_conf.flags.p_state || Channel::get(1).prot_conf.flags.p_state ? 1 : 0;
+                        channel.prot_conf.p_level = min(Channel::get(0).prot_conf.p_level, Channel::get(1).prot_conf.p_level);
+                        channel.prot_conf.p_delay = min(Channel::get(0).prot_conf.p_delay, Channel::get(1).prot_conf.p_delay);
 
                         temperature::sensors[temp_sensor::CH1 + channel.index - 1].prot_conf.state =
                             temperature::sensors[temp_sensor::CH1].prot_conf.state ||
@@ -244,45 +244,45 @@ void setOvpParameters(Channel &channel, int state, float level, float delay) {
     if (isCoupled() || isTracked()) {
         float coupledLevel = isSeries() ? level / 2 : level;
 
-	    Channel::get(0).prot_conf.flags.u_state = state;
-	    Channel::get(0).prot_conf.u_level = coupledLevel;
-	    Channel::get(0).prot_conf.u_delay = delay;
+        Channel::get(0).prot_conf.flags.u_state = state;
+        Channel::get(0).prot_conf.u_level = coupledLevel;
+        Channel::get(0).prot_conf.u_delay = delay;
 
         Channel::get(1).prot_conf.flags.u_state = state;
-	    Channel::get(1).prot_conf.u_level = coupledLevel;
-	    Channel::get(1).prot_conf.u_delay = delay;
+        Channel::get(1).prot_conf.u_level = coupledLevel;
+        Channel::get(1).prot_conf.u_delay = delay;
     } else {
-	    channel.prot_conf.flags.u_state = state;
-	    channel.prot_conf.u_level = level;
-	    channel.prot_conf.u_delay = delay;
+        channel.prot_conf.flags.u_state = state;
+        channel.prot_conf.u_level = level;
+        channel.prot_conf.u_delay = delay;
     }
 }
 
 void setOvpState(Channel &channel, int state) {
     if (isCoupled() || isTracked()) {
-	    Channel::get(0).prot_conf.flags.u_state = state;
+        Channel::get(0).prot_conf.flags.u_state = state;
         Channel::get(1).prot_conf.flags.u_state = state;
     } else {
-	    channel.prot_conf.flags.u_state = state;
+        channel.prot_conf.flags.u_state = state;
     }
 }
 
 void setOvpLevel(Channel &channel, float level) {
     if (isCoupled() || isTracked()) {
         float coupledLevel = isSeries() ? level / 2 : level;
-	    Channel::get(0).prot_conf.u_level = coupledLevel;
-	    Channel::get(1).prot_conf.u_level = coupledLevel;
+        Channel::get(0).prot_conf.u_level = coupledLevel;
+        Channel::get(1).prot_conf.u_level = coupledLevel;
     } else {
-	    channel.prot_conf.u_level = level;
+        channel.prot_conf.u_level = level;
     }
 }
 
 void setOvpDelay(Channel &channel, float delay) {
     if (isCoupled() || isTracked()) {
-	    Channel::get(0).prot_conf.u_delay = delay;
-	    Channel::get(1).prot_conf.u_delay = delay;
+        Channel::get(0).prot_conf.u_delay = delay;
+        Channel::get(1).prot_conf.u_delay = delay;
     } else {
-	    channel.prot_conf.u_delay = delay;
+        channel.prot_conf.u_delay = delay;
     }
 }
 
@@ -379,32 +379,32 @@ void setCurrentLimit(Channel &channel, float limit) {
 
 void setOcpParameters(Channel &channel, int state, float delay) {
     if (isCoupled() || isTracked()) {
-	    Channel::get(0).prot_conf.flags.i_state = state;
-	    Channel::get(0).prot_conf.i_delay = delay;
+        Channel::get(0).prot_conf.flags.i_state = state;
+        Channel::get(0).prot_conf.i_delay = delay;
 
         Channel::get(1).prot_conf.flags.i_state = state;
-	    Channel::get(1).prot_conf.i_delay = delay;
+        Channel::get(1).prot_conf.i_delay = delay;
     } else {
-	    channel.prot_conf.flags.i_state = state;
-	    channel.prot_conf.i_delay = delay;
+        channel.prot_conf.flags.i_state = state;
+        channel.prot_conf.i_delay = delay;
     }
 }
 
 void setOcpState(Channel &channel, int state) {
     if (isCoupled() || isTracked()) {
-	    Channel::get(0).prot_conf.flags.i_state = state;
+        Channel::get(0).prot_conf.flags.i_state = state;
         Channel::get(1).prot_conf.flags.i_state = state;
     } else {
-	    channel.prot_conf.flags.i_state = state;
+        channel.prot_conf.flags.i_state = state;
     }
 }
 
 void setOcpDelay(Channel &channel, float delay) {
     if (isCoupled() || isTracked()) {
-	    Channel::get(0).prot_conf.i_delay = delay;
-	    Channel::get(1).prot_conf.i_delay = delay;
+        Channel::get(0).prot_conf.i_delay = delay;
+        Channel::get(1).prot_conf.i_delay = delay;
     } else {
-	    channel.prot_conf.i_delay = delay;
+        channel.prot_conf.i_delay = delay;
     }
 }
 
@@ -472,47 +472,47 @@ float getOppDefaultLevel(Channel &channel) {
 
 void setOppParameters(Channel &channel, int state, float level, float delay) {
     if (isCoupled() || isTracked()) {
-	    Channel::get(0).prot_conf.flags.p_state = state;
-	    Channel::get(0).prot_conf.p_level = isCoupled() ? level / 2 : level;
-	    Channel::get(0).prot_conf.p_delay = delay;
+        Channel::get(0).prot_conf.flags.p_state = state;
+        Channel::get(0).prot_conf.p_level = isCoupled() ? level / 2 : level;
+        Channel::get(0).prot_conf.p_delay = delay;
 
         Channel::get(1).prot_conf.flags.p_state = state;
-	    Channel::get(1).prot_conf.p_level = isCoupled() ? level / 2 : level;
-	    Channel::get(1).prot_conf.p_delay = delay;
+        Channel::get(1).prot_conf.p_level = isCoupled() ? level / 2 : level;
+        Channel::get(1).prot_conf.p_delay = delay;
     } else {
-	    channel.prot_conf.flags.p_state = state;
-	    channel.prot_conf.p_level = level;
-	    channel.prot_conf.p_delay = delay;
+        channel.prot_conf.flags.p_state = state;
+        channel.prot_conf.p_level = level;
+        channel.prot_conf.p_delay = delay;
     }
 }
 
 void setOppState(Channel &channel, int state) {
     if (isCoupled() || isTracked()) {
-	    Channel::get(0).prot_conf.flags.p_state = state;
+        Channel::get(0).prot_conf.flags.p_state = state;
         Channel::get(1).prot_conf.flags.p_state = state;
     } else {
-	    channel.prot_conf.flags.p_state = state;
+        channel.prot_conf.flags.p_state = state;
     }
 }
 
 void setOppLevel(Channel &channel, float level) {
     if (isCoupled()) {
-	    Channel::get(0).prot_conf.p_level = level / 2;
-	    Channel::get(1).prot_conf.p_level = level / 2;
+        Channel::get(0).prot_conf.p_level = level / 2;
+        Channel::get(1).prot_conf.p_level = level / 2;
     } else if (isTracked()) {
-	    Channel::get(0).prot_conf.p_level = level;
-	    Channel::get(1).prot_conf.p_level = level;
+        Channel::get(0).prot_conf.p_level = level;
+        Channel::get(1).prot_conf.p_level = level;
     } else {
-	    channel.prot_conf.p_level = level;
+        channel.prot_conf.p_level = level;
     }
 }
 
 void setOppDelay(Channel &channel, float delay) {
     if (isCoupled() || isTracked()) {
-	    Channel::get(0).prot_conf.p_delay = delay;
-	    Channel::get(1).prot_conf.p_delay = delay;
+        Channel::get(0).prot_conf.p_delay = delay;
+        Channel::get(1).prot_conf.p_delay = delay;
     } else {
-	    channel.prot_conf.p_delay = delay;
+        channel.prot_conf.p_delay = delay;
     }
 }
 

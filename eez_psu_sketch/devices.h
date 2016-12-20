@@ -23,9 +23,9 @@ namespace psu {
 namespace devices {
 
 struct Device {
-	const char *deviceName;
-	bool installed;
-	TestResult* testResult;
+    const char *deviceName;
+    bool installed;
+    TestResult* testResult;
 };
 
 extern Device devices[];

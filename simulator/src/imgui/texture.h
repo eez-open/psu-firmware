@@ -32,56 +32,56 @@ namespace imgui {
 class Texture
 {
 public:
-	//Initializes variables
-	Texture();
+    //Initializes variables
+    Texture();
 
-	//Deallocates memory
-	~Texture();
+    //Deallocates memory
+    ~Texture();
 
-	//Loads image at specified path
-	bool loadFromFile(std::string path, SDL_Renderer *renderer);
+    //Loads image at specified path
+    bool loadFromFile(std::string path, SDL_Renderer *renderer);
 
-	//Creates image from font string
-	bool loadFromRenderedText(std::string textureText, SDL_Color textColor, SDL_Renderer *renderer, TTF_Font *font);
+    //Creates image from font string
+    bool loadFromRenderedText(std::string textureText, SDL_Color textColor, SDL_Renderer *renderer, TTF_Font *font);
 
-	//Creates image from image buffer
-	bool loadFromImageBuffer(unsigned char *image_buffer, int width, int height, SDL_Renderer *renderer);
+    //Creates image from image buffer
+    bool loadFromImageBuffer(unsigned char *image_buffer, int width, int height, SDL_Renderer *renderer);
 
     //Deallocates texture
-	void free();
+    void free();
 
-	//Set color modulation
-	void setColor(Uint8 red, Uint8 green, Uint8 blue);
+    //Set color modulation
+    void setColor(Uint8 red, Uint8 green, Uint8 blue);
 
-	//Set blending
-	void setBlendMode(SDL_BlendMode blending);
+    //Set blending
+    void setBlendMode(SDL_BlendMode blending);
 
-	//Set alpha modulation
-	void setAlpha(Uint8 alpha);
+    //Set alpha modulation
+    void setAlpha(Uint8 alpha);
 
-	//Renders texture at given point
-	void render(SDL_Renderer *renderer, int x, int y);
-	void render(SDL_Renderer *renderer, int x, int y, int w, int h);
+    //Renders texture at given point
+    void render(SDL_Renderer *renderer, int x, int y);
+    void render(SDL_Renderer *renderer, int x, int y, int w, int h);
 
-	//Gets image dimensions
-	int getWidth();
-	int getHeight();
+    //Gets image dimensions
+    int getWidth();
+    int getHeight();
 
-	//Pixel manipulators
-	bool lockTexture();
-	bool unlockTexture();
-	void* getPixels();
-	int getPitch();
+    //Pixel manipulators
+    bool lockTexture();
+    bool unlockTexture();
+    void* getPixels();
+    int getPitch();
 
 private:
-	//The actual hardware texture
-	SDL_Texture* mTexture;
-	void* mPixels;
-	int mPitch;
+    //The actual hardware texture
+    SDL_Texture* mTexture;
+    void* mPixels;
+    int mPitch;
 
-	//Image dimensions
-	int mWidth;
-	int mHeight;
+    //Image dimensions
+    int mWidth;
+    int mHeight;
 };
 
 }

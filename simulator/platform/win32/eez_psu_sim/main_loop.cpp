@@ -33,50 +33,50 @@ static DWORD main_thread_id;
 
 DWORD WINAPI input_thread_proc(_In_ LPVOID lpParameter) {
     while (1) {
-		int ch = getchar();
-		if (ch == EOF) break;
+        int ch = getchar();
+        if (ch == EOF) break;
 
-		PostThreadMessage(main_thread_id, NEW_INPUT_MESSAGE, ch, 0);
-	}
+        PostThreadMessage(main_thread_id, NEW_INPUT_MESSAGE, ch, 0);
+    }
 
-	PostThreadMessage(main_thread_id, WM_QUIT, 0, 0);
+    PostThreadMessage(main_thread_id, WM_QUIT, 0, 0);
 
-	return 0;
+    return 0;
 }
 
 int main_loop() {
-	MSG msg;
+    MSG msg;
 
-	main_thread_id = GetCurrentThreadId();
-	CreateThread(0, 0, input_thread_proc, 0, 0, 0);
+    main_thread_id = GetCurrentThreadId();
+    CreateThread(0, 0, input_thread_proc, 0, 0, 0);
 
-	while (1) {
-		switch (MsgWaitForMultipleObjects(0, 0, FALSE, TICK_TIMEOUT, QS_POSTMESSAGE)) {
-		case WAIT_OBJECT_0:
-			while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
-			{
+    while (1) {
+        switch (MsgWaitForMultipleObjects(0, 0, FALSE, TICK_TIMEOUT, QS_POSTMESSAGE)) {
+        case WAIT_OBJECT_0:
+            while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
+            {
                 if (msg.message == WM_PAINT) {
                     break;
                 }
 
-				switch (msg.message) {
-				case NEW_INPUT_MESSAGE:
+                switch (msg.message) {
+                case NEW_INPUT_MESSAGE:
                     Serial.put(msg.wParam);
-					break;
-				case WM_QUIT:
-					return 0;
-				}
-			}
-			break;
+                    break;
+                case WM_QUIT:
+                    return 0;
+                }
+            }
+            break;
 
-		case WAIT_TIMEOUT:
+        case WAIT_TIMEOUT:
             simulator::tick();
-			break;
+            break;
 
-		default:
-			return -1;
-		}
-	}
+        default:
+            return -1;
+        }
+    }
 }
 
 void main_loop_exit() {

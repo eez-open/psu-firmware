@@ -30,26 +30,26 @@ namespace front_panel {
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 static WindowDefinition window_definition_small = {
-	"EEZ Software Simulator",
-	1475, 531,
-	10,
-	"eez.png"
+    "EEZ Software Simulator",
+    1475, 531,
+    10,
+    "eez.png"
 };
 
 static WindowDefinition window_definition_large = window_definition_small;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 static WindowDefinition window_definition_small = {
-	"EEZ Software Simulator",
-	1081, 366,
-	10,
-	"eez.png"
+    "EEZ Software Simulator",
+    1081, 366,
+    10,
+    "eez.png"
 };
 
 static WindowDefinition window_definition_large = {
-	"EEZ Software Simulator",
-	2 * 1081, 2 * 366,
-	10,
-	"eez.png"
+    "EEZ Software Simulator",
+    2 * 1081, 2 * 366,
+    10,
+    "eez.png"
 };
 #endif
 
@@ -62,13 +62,13 @@ static int F = 1;
 #define R3B4_IMAGE(IMAGE) (F == 1 ? "r3b4/small/" IMAGE ".png" : "r3b4/large/" IMAGE ".png")
 
 imgui::WindowDefinition *getWindowDefinition(int w, int h) {
-	if (w >= SIM_FRONT_PANEL_LARGE_MODE_MIN_WIDTH) {
-		F = 2;
-		return &window_definition_large;
-	} else {
-		F = 1;
-		return &window_definition_small;
-	}
+    if (w >= SIM_FRONT_PANEL_LARGE_MODE_MIN_WIDTH) {
+        F = 2;
+        return &window_definition_large;
+    } else {
+        F = 1;
+        return &window_definition_small;
+    }
 }
 
 void addLoadWidget(Window *window, int x, int y, int w, int h, UserWidget *loadWidget) {
@@ -169,7 +169,7 @@ void render(Window *window, Data *data) {
         addLoadWidget(window, RECT(834, 294, 138, 66), &data->ch2.loadWidget);
     }
 
-	data->reset = window->addButton(RECT(129, 165, 20, 20), R3B4_IMAGE("reset-normal"), R3B4_IMAGE("reset-pressed"));
+    data->reset = window->addButton(RECT(129, 165, 20, 20), R3B4_IMAGE("reset-normal"), R3B4_IMAGE("reset-pressed"));
 
     data->local_control_widget.x = D(211);
     data->local_control_widget.y = D(57);

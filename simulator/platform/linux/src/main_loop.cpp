@@ -31,55 +31,55 @@ using namespace eez::psu;
 threadqueue queue;
 
 void *input_thread(void *) {
-	while (1) {
-		int ch = getchar();
-		if (ch == EOF) break;
+    while (1) {
+        int ch = getchar();
+        if (ch == EOF) break;
 
-		thread_queue_add(&queue, new char(ch), NEW_INPUT_MESSAGE);
-	}
+        thread_queue_add(&queue, new char(ch), NEW_INPUT_MESSAGE);
+    }
 
-	thread_queue_add(&queue, 0, QUIT_MESSAGE);
+    thread_queue_add(&queue, 0, QUIT_MESSAGE);
 
-	return 0;
+    return 0;
 }
 
 
 int main_loop() {
-	timespec timeout = { 0, TICK_TIMEOUT * 1000 * 1000 };
+    timespec timeout = { 0, TICK_TIMEOUT * 1000 * 1000 };
 
-	if (thread_queue_init(&queue) != 0) return -1;
+    if (thread_queue_init(&queue) != 0) return -1;
 
-	pthread_t thread;
-	pthread_create(&thread, 0, input_thread, 0);
+    pthread_t thread;
+    pthread_create(&thread, 0, input_thread, 0);
 
-	while (1) {
+    while (1) {
         threadmsg msg;
         char *p_ch;
         int ret;
-		switch (ret = thread_queue_get(&queue, &timeout, &msg)) {
-		case 0:
-			switch (msg.msgtype) {
-			case NEW_INPUT_MESSAGE:
-				p_ch = (char *)msg.data;
-				scpi::input(serial::scpi_context, *p_ch);
-				delete p_ch;
-				break;
+        switch (ret = thread_queue_get(&queue, &timeout, &msg)) {
+        case 0:
+            switch (msg.msgtype) {
+            case NEW_INPUT_MESSAGE:
+                p_ch = (char *)msg.data;
+                scpi::input(serial::scpi_context, *p_ch);
+                delete p_ch;
+                break;
 
-			case QUIT_MESSAGE:
-				return 0;
-			}
-			break;
+            case QUIT_MESSAGE:
+                return 0;
+            }
+            break;
 
-		case ETIMEDOUT:
-			simulator::tick();
-			break;
+        case ETIMEDOUT:
+            simulator::tick();
+            break;
 
-		default:
-			return ret;
-		}
-	}
+        default:
+            return ret;
+        }
+    }
 }
 
 void main_loop_exit() {
-	::exit(0);
+    ::exit(0);
 }

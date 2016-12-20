@@ -210,7 +210,7 @@ public:
     static bool getRPol(int pin);
     static void setRPol(int pin, bool on);
 
-	void select();
+    void select();
     uint8_t transfer(uint8_t data);
 
 private:
@@ -218,7 +218,7 @@ private:
     uint8_t register_index;
     uint8_t register_values[IOExpander::NUM_REGISTERS];
     bool pwrgood;
-	bool rpol;
+    bool rpol;
     bool cc;
     bool cv;
 };

@@ -120,23 +120,23 @@ bool write(const uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
         write_chunk(buffer + i, min(buffer_size - i, 64), address + i);
     }
 
-	if (!buffer_verify || buffer_size > buffer_verify_size) {
-		if (buffer_verify) {
-			free(buffer_verify);
-		}
-		buffer_verify = (uint8_t *)malloc(buffer_size);
-		buffer_verify_size = buffer_size;
-		//DebugTraceF("buffer_verify_size = %u", buffer_verify_size);
-	}
+    if (!buffer_verify || buffer_size > buffer_verify_size) {
+        if (buffer_verify) {
+            free(buffer_verify);
+        }
+        buffer_verify = (uint8_t *)malloc(buffer_size);
+        buffer_verify_size = buffer_size;
+        //DebugTraceF("buffer_verify_size = %u", buffer_verify_size);
+    }
 
     read(buffer_verify, buffer_size, address);
 
     if (memcmp(buffer, buffer_verify, buffer_size) == 0) {
-		return true;
-	}
+        return true;
+    }
 
-	DebugTrace("EEPROM write verify failed!");
-	return false;
+    DebugTrace("EEPROM write verify failed!");
+    return false;
 }
 
 void init() {

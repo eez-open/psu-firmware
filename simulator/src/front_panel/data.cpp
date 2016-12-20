@@ -116,8 +116,8 @@ void fillChannelData(ChannelData *data, int ch) {
 
 void fillLocalControlBuffer(Data *data) {
     if (!data->local_control_widget.pixels) {
-		data->local_control_widget.pixels_w = gui::lcd::lcd.getDisplayXSize();
-		data->local_control_widget.pixels_h = gui::lcd::lcd.getDisplayYSize();
+        data->local_control_widget.pixels_w = gui::lcd::lcd.getDisplayXSize();
+        data->local_control_widget.pixels_h = gui::lcd::lcd.getDisplayYSize();
         data->local_control_widget.pixels = new unsigned char[data->local_control_widget.pixels_w * data->local_control_widget.pixels_h * 4];
     }
 

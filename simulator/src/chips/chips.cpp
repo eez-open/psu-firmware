@@ -495,7 +495,7 @@ uint8_t BPChip::transfer(uint8_t data) {
 IOExpanderChip::IOExpanderChip()
     : state(IDLE)
     , pwrgood(true)
-	, rpol(false)
+    , rpol(false)
 {
 }
 
@@ -546,14 +546,14 @@ uint8_t IOExpanderChip::transfer(uint8_t data) {
                 result &= ~(1 << IOExpander::IO_BIT_IN_PWRGOOD);
             }
 
-			Channel &channel = Channel::get(this == &ioexp_chip1 ? 0 : 1);
-			if (channel.boardRevision == CH_BOARD_REVISION_R5B9) {
-				if (!rpol) {
-					result |= 1 << IOExpander::IO_BIT_IN_RPOL;
-				} else {
+            Channel &channel = Channel::get(this == &ioexp_chip1 ? 0 : 1);
+            if (channel.boardRevision == CH_BOARD_REVISION_R5B9) {
+                if (!rpol) {
+                    result |= 1 << IOExpander::IO_BIT_IN_RPOL;
+                } else {
                     result &= ~(1 << IOExpander::IO_BIT_IN_RPOL);
                 }
-			}
+            }
 
             if (cv) {
                 result |= 1 << IOExpander::IO_BIT_IN_CV_ACTIVE;
@@ -703,7 +703,7 @@ void AnalogDigitalConverterChip::updateValues() {
     for (int i = 0; i < CH_NUM; ++i) {
         Channel &channel = Channel::get(i);
         if (channel.convend_pin == convend_pin) {
-			if (channel.simulator.getLoadEnabled()) {
+            if (channel.simulator.getLoadEnabled()) {
                 float u_set_v = channel.isRemoteProgrammingEnabled() ? util::remap(channel.simulator.voltProgExt, 0, 0, 2.5, channel.u.max) : channel.remapAdcDataToVoltage(u_set);
                 float i_set_a = channel.remapAdcDataToCurrent(i_set);
 

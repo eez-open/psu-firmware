@@ -48,8 +48,8 @@ struct Value {
     float max_val;
     float max_adc;
 
-	float minPossible;
-	float maxPossible;
+    float minPossible;
+    float maxPossible;
 
     Value(bool voltOrCurr);
 
@@ -61,7 +61,7 @@ struct Value {
     void  setLevel(int8_t level);
     void setData(float data, float adc);
 
-	bool checkRange(float value, float adc);
+    bool checkRange(float value, float adc);
     bool checkMid();
 
 private:

@@ -133,7 +133,7 @@ void tick(unsigned long tick_usec) {
 }
 
 void Trace(const char *format, ...) {
-	if (dumpTraceBufferOnNextTick) return;
+    if (dumpTraceBufferOnNextTick) return;
 
     va_list args;
     va_start(args, format);

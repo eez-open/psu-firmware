@@ -110,13 +110,13 @@ scpi_result_t scpi_simu_LoadStateQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_simu_Load(scpi_t *context) {
-	float value;
-	if (!get_resistance_param(context, value)) {
-		return SCPI_RES_ERR;
-	}
-	
+    float value;
+    if (!get_resistance_param(context, value)) {
+        return SCPI_RES_ERR;
+    }
+    
     Channel *channel = param_channel(context, FALSE, TRUE);
-	if (!channel) {
+    if (!channel) {
         return SCPI_RES_ERR;
     }
 
@@ -167,12 +167,12 @@ scpi_result_t scpi_simu_VoltageProgramExternal(scpi_t *context) {
     }
 
     float value;
-	if (!get_voltage_param(context, value, 0, 0)) {
-		return SCPI_RES_ERR;
-	}
-	
+    if (!get_voltage_param(context, value, 0, 0)) {
+        return SCPI_RES_ERR;
+    }
+    
     Channel *channel = param_channel(context, FALSE, TRUE);
-	if (!channel) {
+    if (!channel) {
         return SCPI_RES_ERR;
     }
 
@@ -248,12 +248,12 @@ scpi_result_t scpi_simu_RPol(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-	if (channel->boardRevision != CH_BOARD_REVISION_R5B9) {
-		SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    if (channel->boardRevision != CH_BOARD_REVISION_R5B9) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
-	}
-	
-	chips::IOExpanderChip::setRPol(channel->ioexp_pin, on);
+    }
+    
+    chips::IOExpanderChip::setRPol(channel->ioexp_pin, on);
 
     return SCPI_RES_OK;
 }
@@ -269,10 +269,10 @@ scpi_result_t scpi_simu_RPolQ(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-	if (channel->boardRevision != CH_BOARD_REVISION_R5B9) {
-		SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    if (channel->boardRevision != CH_BOARD_REVISION_R5B9) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
-	}
+    }
 
     SCPI_ResultBool(context, chips::IOExpanderChip::getRPol(channel->ioexp_pin));
 
@@ -287,7 +287,7 @@ scpi_result_t scpi_simu_Temperature(scpi_t *context) {
 
     int32_t sensor;
     if (!param_temp_sensor(context, sensor)) {
-		return SCPI_RES_ERR;
+        return SCPI_RES_ERR;
     }
 
     simulator::setTemperature(sensor, value);
@@ -298,7 +298,7 @@ scpi_result_t scpi_simu_Temperature(scpi_t *context) {
 scpi_result_t scpi_simu_TemperatureQ(scpi_t *context) {
     int32_t sensor;
     if (!param_temp_sensor(context, sensor)) {
-		return SCPI_RES_ERR;
+        return SCPI_RES_ERR;
     }
 
     float value;

@@ -27,7 +27,7 @@ using namespace eez::psu;
 int main() {
     simulator::init();
     boot();
-	main_loop();
+    main_loop();
 #if OPTION_DISPLAY
     simulator::front_panel::close();
 #endif

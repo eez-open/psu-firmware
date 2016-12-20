@@ -32,56 +32,56 @@ struct ChannelSnapshotFlags {
     unsigned status : 2;
     unsigned state : 1;
     unsigned mode : 1;
-	unsigned lrip : 1;
-	unsigned rprog: 1;
+    unsigned lrip : 1;
+    unsigned rprog: 1;
     unsigned ovp : 2;
     unsigned ocp : 2;
     unsigned opp : 2;
     unsigned otp_ch : 2;
     unsigned dp : 2;
-	unsigned cal_enabled: 1;
-	unsigned temperatureStatus: 2;
+    unsigned cal_enabled: 1;
+    unsigned temperatureStatus: 2;
 };
 
 struct ChannelSnapshot {
     Value mon_value;
     float u_set;
-	float u_mon;
-	float u_monDac;
-	float u_limit;
+    float u_mon;
+    float u_monDac;
+    float u_limit;
     float i_set;
-	float i_mon;
-	float i_monDac;
-	float i_limit;
-	float p_mon;
+    float i_mon;
+    float i_monDac;
+    float i_limit;
+    float p_mon;
     ChannelSnapshotFlags flags;
-	float temperature;
-	uint32_t onTimeTotal;
-	uint32_t onTimeLast;
+    float temperature;
+    uint32_t onTimeTotal;
+    uint32_t onTimeLast;
 };
 
 struct ProfileChannelSnapshot {
-	unsigned outputStatus: 1;
-	float u_set;
-	float i_set;
+    unsigned outputStatus: 1;
+    float u_set;
+    float i_set;
 };
 
 struct ProfileSnapshot {
-	unsigned status: 1;
-	unsigned isAutoRecallLocation: 1;
-	char remark[PROFILE_NAME_MAX_LENGTH + 1];
-	ProfileChannelSnapshot channels[CH_MAX];
+    unsigned status: 1;
+    unsigned isAutoRecallLocation: 1;
+    char remark[PROFILE_NAME_MAX_LENGTH + 1];
+    ProfileChannelSnapshot channels[CH_MAX];
 };
 
 struct SnapshotFlags {
     unsigned otp : 2;
-	unsigned auxTemperatureStatus: 2;
-	unsigned fanStatus: 2;
-	unsigned setPageDirty: 1;
-	unsigned switch1: 1;
-	unsigned switch2: 1;
+    unsigned auxTemperatureStatus: 2;
+    unsigned fanStatus: 2;
+    unsigned setPageDirty: 1;
+    unsigned switch1: 1;
+    unsigned switch2: 1;
     unsigned switch3: 1;
-	unsigned channelDisplayedValues: 3;
+    unsigned channelDisplayedValues: 3;
     unsigned channelCouplingMode: 2;
     unsigned isVoltageBalanced: 1;
     unsigned isCurrentBalanced: 1;
@@ -89,20 +89,20 @@ struct SnapshotFlags {
 
 struct Snapshot {
     ChannelSnapshot channelSnapshots[CH_MAX];
-	keypad::Snapshot keypadSnapshot;
+    keypad::Snapshot keypadSnapshot;
     edit_mode::Snapshot editModeSnapshot;
     Value alertMessage;
     Value alertMessage2;
     Value alertMessage3;
-	SnapshotFlags flags;
-	event_queue::Event lastEvent;
-	event_queue::Event events[event_queue::EVENTS_PER_PAGE];
-	Value eventQueuePageInfo;
-	uint32_t onTimeTotal;
-	uint32_t onTimeLast;
-	float auxTemperature;
-	float fanSpeed;
-	ProfileSnapshot profile;
+    SnapshotFlags flags;
+    event_queue::Event lastEvent;
+    event_queue::Event events[event_queue::EVENTS_PER_PAGE];
+    Value eventQueuePageInfo;
+    uint32_t onTimeTotal;
+    uint32_t onTimeLast;
+    float auxTemperature;
+    float fanSpeed;
+    ProfileSnapshot profile;
 
     unsigned long lastSnapshotTime;
 

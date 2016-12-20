@@ -77,8 +77,8 @@ class IPAddress {
 
 private:
     union {
-	    uint8_t bytes[4];  // IPv4 address
-	    uint32_t dword;
+        uint8_t bytes[4];  // IPv4 address
+        uint32_t dword;
     } _address;
 
 public:

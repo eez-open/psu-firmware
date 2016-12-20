@@ -171,10 +171,10 @@ void AnalogDigitalConverter::tick(unsigned long tick_usec) {
                     channel_dispatcher::outputEnable(channel, false);
                     channel_dispatcher::remoteSensingEnable(channel, false);
                     if (channel.getFeatures() & CH_FEATURE_RPROG) {
-			    	    channel_dispatcher::remoteProgrammingEnable(channel, false);
+                        channel_dispatcher::remoteProgrammingEnable(channel, false);
                     }
                     if (channel.getFeatures() & CH_FEATURE_LRIPPLE) {
-			    	    channel_dispatcher::lowRippleEnable(channel, false);
+                        channel_dispatcher::lowRippleEnable(channel, false);
                     }
                 }
             }
@@ -253,7 +253,7 @@ int16_t AnalogDigitalConverter::read() {
 
 #if ADC_USE_INTERRUPTS
 void AnalogDigitalConverter::onInterrupt() {
-	g_insideInterruptHandler = true;
+    g_insideInterruptHandler = true;
 
     int16_t adc_data = read();
     channel.eventAdcData(adc_data);
@@ -262,7 +262,7 @@ void AnalogDigitalConverter::onInterrupt() {
     debug::adcReadTick(micros());
 #endif
 
-	g_insideInterruptHandler = false;
+    g_insideInterruptHandler = false;
 }
 #endif
 

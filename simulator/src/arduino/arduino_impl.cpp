@@ -47,21 +47,21 @@ void digitalWrite(uint8_t pin, uint8_t state) {
 }
 
 float temp_sensor_cels_to_volt(float cels, float p1_volt, float p1_cels, float p2_volt, float p2_cels) {
-	return util::remap(cels, p1_cels, p1_volt, p2_cels, p2_volt);
+    return util::remap(cels, p1_cels, p1_volt, p2_cels, p2_volt);
 }
 
 int analogRead(uint8_t pin) {
-	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
-		temp_sensor::TempSensor &tempSensor = temp_sensor::sensors[i];
-		if (tempSensor.installed && tempSensor.pin == pin) {
-			float cels = simulator::getTemperature(i);
-			float volt = util::remap(cels, tempSensor.p1_cels, tempSensor.p1_volt, tempSensor.p2_cels, tempSensor.p2_volt);
-			float adc = util::remap(volt, (float)temp_sensor::MIN_U, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_U, (float)temp_sensor::MAX_ADC); \
-			return (int)util::clamp(adc, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_ADC); \
-		}
-	}
+    for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
+        temp_sensor::TempSensor &tempSensor = temp_sensor::sensors[i];
+        if (tempSensor.installed && tempSensor.pin == pin) {
+            float cels = simulator::getTemperature(i);
+            float volt = util::remap(cels, tempSensor.p1_cels, tempSensor.p1_volt, tempSensor.p2_cels, tempSensor.p2_volt);
+            float adc = util::remap(volt, (float)temp_sensor::MIN_U, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_U, (float)temp_sensor::MAX_ADC); \
+            return (int)util::clamp(adc, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_ADC); \
+        }
+    }
 
-	return pins[pin];
+    return pins[pin];
 }
 
 void analogWrite(uint8_t pin, int state) {

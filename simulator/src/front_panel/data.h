@@ -35,8 +35,8 @@ struct ChannelData {
     bool out_minus;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
     bool out;
-	bool sense;
-	bool prog;
+    bool sense;
+    bool prog;
 #endif
     const char *load_text;
     float load;

@@ -26,7 +26,7 @@ namespace simulator {
 namespace arduino {
 
 UTFT::UTFT(byte , int , int , int , int , int) {
-	P_CS = &CS;
+    P_CS = &CS;
     disp_x_size = 239;
     disp_y_size = 319;
     buffer = new word[getDisplayXSize() * getDisplayYSize()];
@@ -43,31 +43,31 @@ void UTFT::InitLCD(byte orientation) {
 
 void UTFT::setColor(byte r, byte g, byte b) {
     // rrrrrggggggbbbbb
-	fch=((r&248)|g>>5);
-	fcl=((g&28)<<3|b>>3);
+    fch=((r&248)|g>>5);
+    fcl=((g&28)<<3|b>>3);
 }
 
 void UTFT::setColor(word color) {
-	fch=byte(color>>8);
-	fcl=byte(color & 0xFF);
+    fch=byte(color>>8);
+    fcl=byte(color & 0xFF);
 }
 
 word UTFT::getColor() {
-	return (fch<<8) | fcl;
+    return (fch<<8) | fcl;
 }
 
 void UTFT::setBackColor(byte r, byte g, byte b) {
-	bch=((r&248)|g>>5);
-	bcl=((g&28)<<3|b>>3);
+    bch=((r&248)|g>>5);
+    bcl=((g&28)<<3|b>>3);
 }
 
 void UTFT::setBackColor(word color) {
-	bch = byte(color>>8);
-	bcl = byte(color & 0xFF);
+    bch = byte(color>>8);
+    bcl = byte(color & 0xFF);
 }
 
 word UTFT::getBackColor() {
-	return (bch<<8) | bcl;
+    return (bch<<8) | bcl;
 }
 
 void UTFT::setContrast(char c) {
@@ -100,7 +100,7 @@ void UTFT::setPixel(word color) {
             *(buffer + y * getDisplayXSize() + x) = color;
         }
 
-		if (--x < x1) {
+        if (--x < x1) {
             x = x2;
         }
     }
@@ -122,11 +122,11 @@ void UTFT::setXY(word x1_, word y1_, word x2_, word y2_) {
 }
 
 void UTFT::clrXY() {
-	if (orient == PORTRAIT) {
-		setXY(0, 0, disp_x_size, disp_y_size);
+    if (orient == PORTRAIT) {
+        setXY(0, 0, disp_x_size, disp_y_size);
     }
     else {
-		setXY(0, 0, disp_y_size, disp_x_size);
+        setXY(0, 0, disp_y_size, disp_x_size);
     }
 }
 
@@ -141,8 +141,8 @@ void UTFT::clrScr() {
 void UTFT::drawRect(int x1, int y1, int x2, int y2) {
     drawHLine(x1, y1, x2 - x1);
     drawHLine(x1, y2, x2 - x1);
-	drawVLine(x1, y1, y2 - y1);
-	drawVLine(x2, y1, y2 - y1);
+    drawVLine(x1, y1, y2 - y1);
+    drawVLine(x2, y1, y2 - y1);
 }
 
 void UTFT::fillRect(int x1, int y1, int x2, int y2) {

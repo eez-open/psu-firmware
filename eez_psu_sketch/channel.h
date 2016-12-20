@@ -47,8 +47,8 @@ enum ChannelFeatures {
 
 /// PSU channel.
 class Channel {
-	friend class DigitalAnalogConverter;
-	friend struct calibration::Value;
+    friend class DigitalAnalogConverter;
+    friend struct calibration::Value;
 
 public:
     /// Binary flags for the channel calibration configuration.
@@ -85,11 +85,11 @@ public:
         /// Max point.
         CalibrationValuePointConfiguration max;
 
-		/// Real min after calibration
-		float minPossible;
+        /// Real min after calibration
+        float minPossible;
 
-		/// Real max after calibration
-		float maxPossible;
+        /// Real max after calibration
+        float maxPossible;
     };
 
     /// A structure where calibration parameters for the channel are stored.
@@ -151,21 +151,21 @@ public:
         unsigned rprogEnabled: 1;
         unsigned lrippleEnabled: 1;
         unsigned lrippleAutoEnabled: 1;
-		unsigned rpol : 1; // remote sense reverse polarity is detected
+        unsigned rpol : 1; // remote sense reverse polarity is detected
     };
 
     /// Voltage and current data set and measured during runtime.
     struct Value {
         float set;
         float mon_dac;
-		int16_t mon_adc;
+        int16_t mon_adc;
         float mon;
         float step;
-		float limit;
+        float limit;
 
-		float min;
-	    float def;
-		float max;
+        float min;
+        float def;
+        float max;
 
         void init(float def_step, float def_limit);
     };
@@ -193,7 +193,7 @@ public:
         float i_set;
         float i_dac;
         float temperature[temp_sensor::NUM_TEMP_SENSORS];
-		float voltProgExt;
+        float voltProgExt;
 
         void setLoadEnabled(bool value);
         bool getLoadEnabled();
@@ -201,8 +201,8 @@ public:
         void setLoad(float value);
         float getLoad();
 
-		void setVoltProgExt(float value);
-		float getVoltProgExt();
+        void setVoltProgExt(float value);
+        float getVoltProgExt();
     };
 #endif // EEZ_PSU_SIMULATOR
 
@@ -211,15 +211,15 @@ public:
     /// \returns Reference to channel.
     static Channel &get(int channel_index);
 
-	/// Save and disable OE for all the channels.
-	static void saveAndDisableOE();
+    /// Save and disable OE for all the channels.
+    static void saveAndDisableOE();
 
-	/// Restore previously saved OE state for all the channels.
-	static void restoreOE();
+    /// Restore previously saved OE state for all the channels.
+    static void restoreOE();
 
-	///
-	static char *getChannelsInfo(char *p);
-	static char *getChannelsInfoShort(char *p);
+    ///
+    static char *getChannelsInfo(char *p);
+    static char *getChannelsInfoShort(char *p);
 
     /// Channel index. Starts from 1.
     uint8_t index;
@@ -227,7 +227,7 @@ public:
     uint8_t boardRevision;
 
     uint8_t ioexp_iodir;
-	uint8_t ioexp_gpio_init;
+    uint8_t ioexp_gpio_init;
     uint8_t isolator_pin;
     uint8_t ioexp_pin;
     uint8_t convend_pin;
@@ -247,7 +247,7 @@ public:
     uint8_t cc_led_pin;
     uint8_t cv_led_pin;
 
-	float U_MIN_STEP;
+    float U_MIN_STEP;
     float U_DEF_STEP;
     float U_MAX_STEP;
     float U_CAL_VAL_MIN;
@@ -260,7 +260,7 @@ public:
     float OVP_DEFAULT_DELAY;
     float OVP_MAX_DELAY;
 
-	float I_MIN_STEP;
+    float I_MIN_STEP;
     float I_DEF_STEP;
     float I_MAX_STEP;
     float I_CAL_VAL_MIN;
@@ -296,7 +296,7 @@ public:
     Value u;
     Value i;
 
-	float p_limit;
+    float p_limit;
 
     CalibrationConfiguration cal_conf;
     ChannelProtectionConfiguration prot_conf;
@@ -305,7 +305,7 @@ public:
     ProtectionValue ocp;
     ProtectionValue opp;
 
-	ontime::Counter onTimeCounter;
+    ontime::Counter onTimeCounter;
 
 #ifdef EEZ_PSU_SIMULATOR
     Simulator simulator;
@@ -386,12 +386,12 @@ public:
 
     /// Enable/disable channel calibration.
     void calibrationEnable(bool enable);
-	void calibrationEnableNoEvent(bool enable);
+    void calibrationEnableNoEvent(bool enable);
 
     /// Is channel calibration enabled?
     bool isCalibrationEnabled();
 
-	/// Enable/disable remote sensing.
+    /// Enable/disable remote sensing.
     void remoteSensingEnable(bool enable);
 
     /// Is remote sensing enabled?
@@ -433,7 +433,7 @@ public:
     /// Disable protection for this channel
     void disableProtection();
 
-	/// Turn on/off bit in SCPI Questinable Instrument Isummary register for this channel.
+    /// Turn on/off bit in SCPI Questinable Instrument Isummary register for this channel.
     void setQuesBits(int bit_mask, bool on);
 
     /// Turn on/off bit in SCPI Operational Instrument Isummary register for this channel.
@@ -466,44 +466,44 @@ public:
     /// Returns features present (check ChannelFeatures) in board revision of this channel.
     uint16_t getFeatures();
 
-	/// Returns currently set voltage limit
-	float getVoltageLimit() const;
+    /// Returns currently set voltage limit
+    float getVoltageLimit() const;
 
-	/// Returns max. voltage limit
-	float getVoltageMaxLimit() const;
+    /// Returns max. voltage limit
+    float getVoltageMaxLimit() const;
 
-	/// Change voltage limit, it will adjust U_SET if necessary.
-	void setVoltageLimit(float limit);
+    /// Change voltage limit, it will adjust U_SET if necessary.
+    void setVoltageLimit(float limit);
 
-	/// Returns currently set current limit
-	float getCurrentLimit() const;
+    /// Returns currently set current limit
+    float getCurrentLimit() const;
 
-	/// Change current limit, it will adjust I_SET if necessary.
-	void setCurrentLimit(float limit);
+    /// Change current limit, it will adjust I_SET if necessary.
+    void setCurrentLimit(float limit);
 
-	/// Returns ERR_MAX_CURRENT if max. current is limited or i.max if not
-	float getMaxCurrentLimit() const;
+    /// Returns ERR_MAX_CURRENT if max. current is limited or i.max if not
+    float getMaxCurrentLimit() const;
 
     /// Returns true if max current is limited to ERR_MAX_CURRENT.
-	bool isMaxCurrentLimited() const;
+    bool isMaxCurrentLimited() const;
 
     /// Returns max. current limit cause
-	MaxCurrentLimitCause getMaxCurrentLimitCause() const;
+    MaxCurrentLimitCause getMaxCurrentLimitCause() const;
 
-	/// Set current max. limit to ERR_MAX_CURRENT
+    /// Set current max. limit to ERR_MAX_CURRENT
     void limitMaxCurrent(MaxCurrentLimitCause cause);
     
-	/// Unset current max. limit 
+    /// Unset current max. limit 
     void unlimitMaxCurrent();
 
-	/// Returns currently set power limit
-	float getPowerLimit() const;
+    /// Returns currently set power limit
+    float getPowerLimit() const;
 
-	/// Returns max. power limit
-	float getPowerMaxLimit() const;
+    /// Returns max. power limit
+    float getPowerMaxLimit() const;
 
-	/// Change power limit, it will adjust U_SET or I_SET if necessary.
-	void setPowerLimit(float limit);
+    /// Change power limit, it will adjust U_SET or I_SET if necessary.
+    void setPowerLimit(float limit);
 
     bool isVoltageBalanced() { return !util::isNaN(uBeforeBalancing); }
     bool isCurrentBalanced() { return !util::isNaN(iBeforeBalancing); }
@@ -513,37 +513,37 @@ public:
 private:
     bool delayed_dp_off;
     unsigned long delayed_dp_off_start;
-	bool delayLowRippleCheck;
-	unsigned long outputEnableStartTime;
+    bool delayLowRippleCheck;
+    unsigned long outputEnableStartTime;
     unsigned long dpNegMonitoringTime;
 
-	float U_MIN;
+    float U_MIN;
     float U_DEF;
     float U_MAX;
-	float U_MAX_CONF;
+    float U_MAX_CONF;
 
-	float I_MIN;
+    float I_MIN;
     float I_DEF;
     float I_MAX;
 
     float uBeforeBalancing;
     float iBeforeBalancing;
 
-	MaxCurrentLimitCause maxCurrentLimitCause;
+    MaxCurrentLimitCause maxCurrentLimitCause;
 
-	int negligibleAdcDiffForVoltage;
-	int negligibleAdcDiffForCurrent;
+    int negligibleAdcDiffForVoltage;
+    int negligibleAdcDiffForCurrent;
 
     void clearProtectionConf();
     void protectionEnter(ProtectionValue &cpv);
     void protectionCheck(ProtectionValue &cpv);
     void protectionCheck();
 
-	void doCalibrationEnable(bool enable);
-	void calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
-	void calibrationFindCurrentRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
+    void doCalibrationEnable(bool enable);
+    void calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
+    void calibrationFindCurrentRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
 
-	void adcDataIsReady(int16_t data);
+    void adcDataIsReady(int16_t data);
     
     void voltageBalancing();
     void currentBalancing();
@@ -554,24 +554,24 @@ private:
     void doSetVoltage(float value);
     void doSetCurrent(float value);
 
-	void setCcMode(bool cc_mode);
+    void setCcMode(bool cc_mode);
     void setCvMode(bool cv_mode);
     void updateCcAndCvSwitch();
     
-	void doOutputEnable(bool enable);
+    void doOutputEnable(bool enable);
     
-	void doRemoteSensingEnable(bool enable);
+    void doRemoteSensingEnable(bool enable);
     void doRemoteProgrammingEnable(bool enable);
 
-	void lowRippleCheck(unsigned long tick_usec);
+    void lowRippleCheck(unsigned long tick_usec);
     bool isLowRippleAllowed(unsigned long tick_usec);
     void doLowRippleEnable(bool enable);
     void doLowRippleAutoEnable(bool enable);
 
-	void doDpEnable(bool enable);
+    void doDpEnable(bool enable);
 
 #if !CONF_SKIP_PWRGOOD_TEST
-	void testPwrgood(uint8_t gpio);
+    void testPwrgood(uint8_t gpio);
 #endif
 };
 

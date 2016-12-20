@@ -49,17 +49,17 @@ uint32_t makeTime(int year, int month, int day, int hour, int minute, int second
 void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay, int &resultHour, int &resultMinute, int &resultSecond);
 
 struct DateTime {
-	uint16_t year;
-	uint8_t month, day, hour, minute, second;
+    uint16_t year;
+    uint8_t month, day, hour, minute, second;
 
-	DateTime();
-	DateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second);
-	DateTime(const DateTime& rhs);
+    DateTime();
+    DateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second);
+    DateTime(const DateTime& rhs);
 
-	static DateTime now();
+    static DateTime now();
 
-	bool operator ==(const DateTime &rhs);
-	bool operator !=(const DateTime &rhs);
+    bool operator ==(const DateTime &rhs);
+    bool operator !=(const DateTime &rhs);
 };
 
 }
