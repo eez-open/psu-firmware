@@ -197,30 +197,45 @@ void Value::toText(char *text, int count) const {
 				precision = 0;
 			}
 
-			util::strcatFloat(text, float_, precision);
+			const char *unit = 0;
 
-			const char *unit;
+            int temp = (int)round(float_ * 1000);
+            if (temp > -1000 && temp < 1000 && temp != 0) {
+                if (type_ == VALUE_TYPE_FLOAT_VOLT) {
+                    unit = "mV";
+                } else if (type_ == VALUE_TYPE_FLOAT_AMPER) {
+                    unit = "mA";
+                }
 
-			switch (type_) {
-			case VALUE_TYPE_FLOAT_VOLT:
-				unit = "V";
-				break;
-			case VALUE_TYPE_FLOAT_AMPER:
-				unit = "A";
-				break;
-			case VALUE_TYPE_FLOAT_WATT:
-				unit = "W";
-				break;
-			case VALUE_TYPE_FLOAT_SECOND:
-				unit = "s";
-				break;
-			case VALUE_TYPE_FLOAT_CELSIUS:
-				unit = "oC";
-				break;
-			case VALUE_TYPE_FLOAT_RPM:
-				unit = "rpm";
-				break;
-			}
+                if (unit) {
+			        util::strcatInt(text, temp);
+                }
+            }
+
+            if (!unit) {
+			    util::strcatFloat(text, float_, precision);
+
+			    switch (type_) {
+			    case VALUE_TYPE_FLOAT_VOLT:
+				    unit = "V";
+				    break;
+			    case VALUE_TYPE_FLOAT_AMPER:
+				    unit = "A";
+				    break;
+			    case VALUE_TYPE_FLOAT_WATT:
+				    unit = "W";
+				    break;
+			    case VALUE_TYPE_FLOAT_SECOND:
+				    unit = "s";
+				    break;
+			    case VALUE_TYPE_FLOAT_CELSIUS:
+				    unit = "oC";
+				    break;
+			    case VALUE_TYPE_FLOAT_RPM:
+				    unit = "rpm";
+				    break;
+			    }
+            }
 
 			if (unit) {
 				strcat(text, unit);
