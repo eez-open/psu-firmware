@@ -70,6 +70,7 @@ static MaxCurrentLimitCause g_maxCurrentLimitCause;
 ontime::Counter g_powerOnTimeCounter(ontime::ON_TIME_COUNTER_POWER);
 
 bool g_insideInterruptHandler = false;
+static bool g_shutdownOnNextTick;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -478,6 +479,112 @@ void boot() {
             Channel::get(i).afterBootOutputEnable();
         }
     }
+
+//    using namespace persist_conf;
+//
+//    DebugTraceF("%d", sizeof(BlockHeader));                                         // 8
+//    DebugTraceF("%d", offsetof(BlockHeader, checksum));                             // 0
+//    DebugTraceF("%d", offsetof(BlockHeader, version));                              // 4
+//
+//    DebugTraceF("%d", sizeof(DeviceFlags));                                         // 4
+//
+//    DebugTraceF("%d", sizeof(DeviceConfiguration));                                 // 64
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, header));                       // 0
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, serialNumber));                 // 8
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, calibration_password));         // 16
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, flags));                        // 36
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, date_year));                    // 40
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, date_month));                   // 41
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, date_day));                     // 42
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, time_hour));                    // 43
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, time_minute));                  // 44
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, time_second));                  // 45
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, time_zone));                    // 46
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, profile_auto_recall_location)); // 48
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, touch_screen_cal_orientation)); // 49
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, touch_screen_cal_tlx));         // 50
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, touch_screen_cal_tly));         // 52
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, touch_screen_cal_brx));         // 54
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, touch_screen_cal_bry));         // 56
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, touch_screen_cal_trx));         // 58
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, touch_screen_cal_try));         // 60
+//#ifdef EEZ_PSU_SIMULATOR
+//    DebugTraceF("%d", offsetof(DeviceConfiguration, gui_opened));                   // 62
+//#endif // EEZ_PSU_SIMULATOR
+//
+//    typedef Channel::CalibrationConfiguration CalibrationConfiguration;
+//    typedef Channel::CalibrationValueConfiguration CalibrationValueConfiguration;
+//    typedef Channel::CalibrationValuePointConfiguration CalibrationValuePointConfiguration;
+//
+//    DebugTraceF("%d", sizeof(CalibrationConfiguration));                            // 144
+//    DebugTraceF("%d", offsetof(CalibrationConfiguration, header));                  // 0
+//    DebugTraceF("%d", offsetof(CalibrationConfiguration, flags));                   // 8
+//    DebugTraceF("%d", offsetof(CalibrationConfiguration, u));                       // 12
+//    DebugTraceF("%d", offsetof(CalibrationConfiguration, i));                       // 56
+//    DebugTraceF("%d", offsetof(CalibrationConfiguration, calibration_date));        // 100
+//    DebugTraceF("%d", offsetof(CalibrationConfiguration, calibration_remark));      // 109
+//
+//    DebugTraceF("%d", sizeof(CalibrationValueConfiguration));                       // 44
+//    DebugTraceF("%d", offsetof(CalibrationValueConfiguration, min));                // 0
+//    DebugTraceF("%d", offsetof(CalibrationValueConfiguration, mid));                // 12
+//    DebugTraceF("%d", offsetof(CalibrationValueConfiguration, max));                // 24
+//    DebugTraceF("%d", offsetof(CalibrationValueConfiguration, minPossible));        // 36
+//    DebugTraceF("%d", offsetof(CalibrationValueConfiguration, maxPossible));        // 40
+//
+//    DebugTraceF("%d", sizeof(CalibrationValuePointConfiguration));                  // 12
+//    DebugTraceF("%d", offsetof(CalibrationValuePointConfiguration, dac));           // 0
+//    DebugTraceF("%d", offsetof(CalibrationValuePointConfiguration, val));           // 4
+//    DebugTraceF("%d", offsetof(CalibrationValuePointConfiguration, adc));           // 8
+//
+//    using namespace profile;
+//
+//    DebugTraceF("%d", sizeof(Parameters));                                          // 256
+//    DebugTraceF("%d", offsetof(Parameters, header));                                // 0
+//    DebugTraceF("%d", offsetof(Parameters, flags));                                 // 8
+//    DebugTraceF("%d", offsetof(Parameters, name));                                  // 12
+//    DebugTraceF("%d", offsetof(Parameters, channels));                              // 48
+//    DebugTraceF("%d", offsetof(Parameters, temp_prot));                             // 176
+//
+//    DebugTraceF("%d", sizeof(ChannelParameters));                                   // 64
+//    DebugTraceF("%d", offsetof(ChannelParameters, flags));                          // 0
+//    DebugTraceF("%d", offsetof(ChannelParameters, u_set));                          // 4
+//    DebugTraceF("%d", offsetof(ChannelParameters, u_step));                         // 8
+//    DebugTraceF("%d", offsetof(ChannelParameters, u_limit));                        // 12
+//    DebugTraceF("%d", offsetof(ChannelParameters, u_delay));                        // 16
+//    DebugTraceF("%d", offsetof(ChannelParameters, u_level));                        // 20
+//    DebugTraceF("%d", offsetof(ChannelParameters, i_set));                          // 24
+//    DebugTraceF("%d", offsetof(ChannelParameters, i_step));                         // 28
+//    DebugTraceF("%d", offsetof(ChannelParameters, i_limit));                        // 32
+//    DebugTraceF("%d", offsetof(ChannelParameters, i_delay));                        // 36
+//    DebugTraceF("%d", offsetof(ChannelParameters, p_limit));                        // 40
+//    DebugTraceF("%d", offsetof(ChannelParameters, p_delay));                        // 44
+//    DebugTraceF("%d", offsetof(ChannelParameters, p_level));                        // 48
+//#ifdef EEZ_PSU_SIMULATOR
+//    DebugTraceF("%d", offsetof(ChannelParameters, load_enabled));                   // 52
+//    DebugTraceF("%d", offsetof(ChannelParameters, load));                           // 56
+//    DebugTraceF("%d", offsetof(ChannelParameters, voltProgExt));                    // 60
+//#endif // EEZ_PSU_SIMULATOR
+//
+//    using namespace temperature;
+//
+//    DebugTraceF("%d", sizeof(ProtectionConfiguration));                             // 16
+//    DebugTraceF("%d", offsetof(ProtectionConfiguration, sensor));                   // 0
+//    DebugTraceF("%d", offsetof(ProtectionConfiguration, delay));                    // 4
+//    DebugTraceF("%d", offsetof(ProtectionConfiguration, level));                    // 8
+//    DebugTraceF("%d", offsetof(ProtectionConfiguration, state));                    // 12
+//
+//    using namespace event_queue;
+//
+//    DebugTraceF("%d", sizeof(EventQueueHeader));                                    // 12
+//    DebugTraceF("%d", offsetof(EventQueueHeader, magicNumber));                     // 0
+//    DebugTraceF("%d", offsetof(EventQueueHeader, version));                         // 4
+//    DebugTraceF("%d", offsetof(EventQueueHeader, head));                            // 6
+//    DebugTraceF("%d", offsetof(EventQueueHeader, size));                            // 8
+//    DebugTraceF("%d", offsetof(EventQueueHeader, lastErrorEventIndex));             // 10
+//
+//    DebugTraceF("%d", sizeof(Event));                                               // 8
+//    DebugTraceF("%d", offsetof(Event, dateTime));                                   // 0
+//    DebugTraceF("%d", offsetof(Event, eventId));                                    // 4
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -652,17 +759,26 @@ bool reset() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+static void disableChannels() {
+    for (int i = 0; i < CH_NUM; ++i) {
+        if (Channel::get(i).isOutputEnabled()) {
+            Channel::get(i).outputEnable(false);
+        }
+    }
+}
+
 void onProtectionTripped() {
     if (isPowerUp()) {
         if (persist_conf::isShutdownWhenProtectionTrippedEnabled()) {
-            powerDownBySensor();
+            if (g_insideInterruptHandler) {
+                g_shutdownOnNextTick = true;
+                disableChannels();
+            } else {
+                powerDownBySensor();
+            }
         } else {
             if (persist_conf::isOutputProtectionCoupleEnabled()) {
-                for (int i = 0; i < CH_NUM; ++i) {
-                    if (Channel::get(i).isOutputEnabled()) {
-                        Channel::get(i).outputEnable(false);
-                    }
-                }
+                disableChannels();
             }
         }
     }
@@ -671,6 +787,11 @@ void onProtectionTripped() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void tick() {
+    if (g_shutdownOnNextTick) {
+        g_shutdownOnNextTick = false;
+        powerDownBySensor();
+    }
+
 	unsigned long tick_usec = micros();
 
 #if CONF_DEBUG
