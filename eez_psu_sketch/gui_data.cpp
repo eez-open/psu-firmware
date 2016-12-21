@@ -199,8 +199,13 @@ void Value::toText(char *text, int count) const {
 
             const char *unit = 0;
 
-            int temp = (int)round(float_ * 1000);
-            if (temp > -1000 && temp < 1000 && temp != 0) {
+            int temp = 0;
+            if (precision == 2) {
+                temp = ((int)round(float_ * 100)) * 10;
+            } else if (precision >= 3) {
+                temp = ((int)round(float_ * 1000));
+            }
+            if (temp != 0 && temp > -1000 && temp < 1000) {
                 if (type_ == VALUE_TYPE_FLOAT_VOLT) {
                     unit = "mV";
                 } else if (type_ == VALUE_TYPE_FLOAT_AMPER) {
