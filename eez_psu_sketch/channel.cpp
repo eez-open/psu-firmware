@@ -22,6 +22,9 @@
 #if OPTION_ETHERNET
 #include "ethernet.h"
 #endif
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_WATCHDOG
+#include "watchdog.h"
+#endif
 
 #include "bp.h"
 #include "board.h"
@@ -78,45 +81,45 @@ Channel &Channel::get(int channel_index) {
 void Channel::Value::init(float def_step, float def_limit) {
     set = 0;
     mon_dac = 0;
-	mon_adc = 0;
-	mon = 0;
+    mon_adc = 0;
+    mon = 0;
     step = def_step;
-	limit = def_limit;
+    limit = def_limit;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 static struct {
-	unsigned OE_SAVED: 1;
-	unsigned CH1_OE: 1;
-	unsigned CH2_OE: 1;
+    unsigned OE_SAVED: 1;
+    unsigned CH1_OE: 1;
+    unsigned CH2_OE: 1;
 } g_savedOE;
 
 void Channel::saveAndDisableOE() {
-	if (!g_savedOE.OE_SAVED) {
-		if (CH_NUM > 0) {
-			g_savedOE.CH1_OE = Channel::get(0).isOutputEnabled() ? 1 : 0;
-			Channel::get(0).outputEnable(false);
+    if (!g_savedOE.OE_SAVED) {
+        if (CH_NUM > 0) {
+            g_savedOE.CH1_OE = Channel::get(0).isOutputEnabled() ? 1 : 0;
+            Channel::get(0).outputEnable(false);
 
-			if (CH_NUM > 1) {
-				g_savedOE.CH2_OE = Channel::get(1).isOutputEnabled() ? 1 : 0;
-				Channel::get(1).outputEnable(false);
-			}
-		}
-		g_savedOE.OE_SAVED = 1;
-	}
+            if (CH_NUM > 1) {
+                g_savedOE.CH2_OE = Channel::get(1).isOutputEnabled() ? 1 : 0;
+                Channel::get(1).outputEnable(false);
+            }
+        }
+        g_savedOE.OE_SAVED = 1;
+    }
 }
 
 void Channel::restoreOE() {
-	if (g_savedOE.OE_SAVED) {
-		if (CH_NUM > 0) {
-			Channel::get(0).outputEnable(g_savedOE.CH1_OE ? true : false);
-			if (CH_NUM > 1) {
-				Channel::get(1).outputEnable(g_savedOE.CH2_OE ? true : false);
-			}
-		}
-		g_savedOE.OE_SAVED = 0;
-	}
+    if (g_savedOE.OE_SAVED) {
+        if (CH_NUM > 0) {
+            Channel::get(0).outputEnable(g_savedOE.CH1_OE ? true : false);
+            if (CH_NUM > 1) {
+                Channel::get(1).outputEnable(g_savedOE.CH2_OE ? true : false);
+            }
+        }
+        g_savedOE.OE_SAVED = 0;
+    }
 }
 
 char *Channel::getChannelsInfo(char *p) {
@@ -150,7 +153,7 @@ char *Channel::getChannelsInfo(char *p) {
         }
     }
 
-	return p;
+    return p;
 }
 
 char *Channel::getChannelsInfoShort(char *p) {
@@ -185,7 +188,7 @@ char *Channel::getChannelsInfoShort(char *p) {
         }
     }
 
-	return p;
+    return p;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -210,12 +213,12 @@ float Channel::Simulator::getLoad() {
 }
 
 void Channel::Simulator::setVoltProgExt(float value) {
-	voltProgExt = value;
-	profile::save();
+    voltProgExt = value;
+    profile::save();
 }
 
 float Channel::Simulator::getVoltProgExt() {
-	return voltProgExt;
+    return voltProgExt;
 }
 
 #endif
@@ -258,18 +261,18 @@ Channel::Channel(
     ioexp(*this, IO_BIT_OUT_SET_100_PERCENT_, IO_BIT_OUT_EXT_PROG_),
     adc(*this),
     dac(*this),
-	onTimeCounter(index_)
+    onTimeCounter(index_)
 {
-	u.min = U_MIN;
-	u.max = U_MAX;
-	u.def = U_DEF;
+    u.min = U_MIN;
+    u.max = U_MAX;
+    u.def = U_DEF;
 
-	i.min = I_MIN;
-	i.max = I_MAX;
-	i.def = I_DEF;
+    i.min = I_MIN;
+    i.max = I_MAX;
+    i.def = I_DEF;
 
-	negligibleAdcDiffForVoltage = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (U_MAX - U_MIN)));
-	negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (I_MAX - I_MIN)));
+    negligibleAdcDiffForVoltage = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (U_MAX - U_MIN)));
+    negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (I_MAX - I_MIN)));
 
 #ifdef EEZ_PSU_SIMULATOR
     simulator.load_enabled = true;
@@ -292,17 +295,17 @@ void Channel::protectionEnter(ProtectionValue &cpv) {
     int bit_mask = reg_get_ques_isum_bit_mask_for_channel_protection_value(this, cpv);
     setQuesBits(bit_mask, true);
 
-	int16_t eventId = event_queue::EVENT_ERROR_CH1_OVP_TRIPPED + 3 * (index - 1);
+    int16_t eventId = event_queue::EVENT_ERROR_CH1_OVP_TRIPPED + 3 * (index - 1);
 
-	if (IS_OVP_VALUE(this, cpv)) {
+    if (IS_OVP_VALUE(this, cpv)) {
         doRemoteProgrammingEnable(false);
     } else if (IS_OCP_VALUE(this, cpv)) {
-		eventId += 1;
-	} else {
-		eventId += 2;
-	}
+        eventId += 1;
+    } else {
+        eventId += 2;
+    }
 
-	event_queue::pushEvent(eventId);
+    event_queue::pushEvent(eventId);
 
     if (channel_dispatcher::isCoupled() && index == 1) {
         if (IS_OVP_VALUE(this, cpv)) {
@@ -324,15 +327,15 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     
     if (IS_OVP_VALUE(this, cpv)) {
         state = flags.rprogEnabled || prot_conf.flags.u_state;
-		//condition = flags.cv_mode && (!flags.cc_mode || fabs(i.mon - i.set) >= CHANNEL_VALUE_PRECISION) && (prot_conf.u_level <= u.set);
-		condition = util::greaterOrEqual(channel_dispatcher::getUMon(*this), channel_dispatcher::getUProtectionLevel(*this), CHANNEL_VALUE_PRECISION);
+        //condition = flags.cv_mode && (!flags.cc_mode || fabs(i.mon - i.set) >= CHANNEL_VALUE_PRECISION) && (prot_conf.u_level <= u.set);
+        condition = util::greaterOrEqual(channel_dispatcher::getUMon(*this), channel_dispatcher::getUProtectionLevel(*this), CHANNEL_VALUE_PRECISION);
         delay = prot_conf.u_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
     else if (IS_OCP_VALUE(this, cpv)) {
         state = prot_conf.flags.i_state;
         //condition = flags.cc_mode && (!flags.cv_mode || fabs(u.mon - u.set) >= CHANNEL_VALUE_PRECISION);
-		condition = util::greaterOrEqual(channel_dispatcher::getIMon(*this), channel_dispatcher::getISet(*this), CHANNEL_VALUE_PRECISION);
+        condition = util::greaterOrEqual(channel_dispatcher::getIMon(*this), channel_dispatcher::getISet(*this), CHANNEL_VALUE_PRECISION);
         delay = prot_conf.i_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
@@ -371,7 +374,7 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
             //    DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.ccMode, (int)flags.cvMode, (int)(fabs(u.mon - u.set) * 1000));
             //}
 
-			protectionEnter(cpv);
+            protectionEnter(cpv);
         }
     }
     else {
@@ -384,7 +387,7 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
 void Channel::init() {
     bool last_save_enabled = profile::enableSave(false);
 
-	ioexp.init();
+    ioexp.init();
     adc.init();
     dac.init();
 
@@ -463,8 +466,8 @@ void Channel::reset() {
     u.init(U_DEF_STEP, u.max);
     i.init(I_DEF_STEP, i.max);
 
-	maxCurrentLimitCause = MAX_CURRENT_LIMIT_CAUSE_NONE;
-	p_limit = PTOT;
+    maxCurrentLimitCause = MAX_CURRENT_LIMIT_CAUSE_NONE;
+    p_limit = PTOT;
 }
 
 void Channel::clearCalibrationConf() {
@@ -500,7 +503,7 @@ void Channel::clearProtectionConf() {
 }
 
 bool Channel::test() {
-	bool last_save_enabled = profile::enableSave(false);
+    bool last_save_enabled = profile::enableSave(false);
 
     outputEnable(false);
     doRemoteSensingEnable(false);
@@ -511,7 +514,7 @@ bool Channel::test() {
         doLowRippleEnable(false);
     }
 
-	ioexp.test();
+    ioexp.test();
     adc.test();
     dac.test();
 
@@ -523,7 +526,7 @@ bool Channel::test() {
     profile::enableSave(last_save_enabled);
     profile::save();
 
-	return isOk();
+    return isOk();
 }
 
 bool Channel::isPowerOk() {
@@ -581,11 +584,11 @@ void Channel::restoreCurrentToValueBeforeBalancing() {
 void Channel::tick(unsigned long tick_usec) {
     ioexp.tick(tick_usec);
     adc.tick(tick_usec);
-	onTimeCounter.tick(tick_usec);
+    onTimeCounter.tick(tick_usec);
 
     if (getFeatures() & CH_FEATURE_LRIPPLE) {
-		lowRippleCheck(tick_usec);
-	}
+        lowRippleCheck(tick_usec);
+    }
 
     // turn off DP after delay
     if (delayed_dp_off && tick_usec - delayed_dp_off_start >= DP_OFF_DELAY_PERIOD * 1000000L) {
@@ -628,11 +631,11 @@ void Channel::tick(unsigned long tick_usec) {
         }
     }
 
-	// If channel output is off then test PWRGOOD here, otherwise it is tested in Channel::eventGpio method.
+    // If channel output is off then test PWRGOOD here, otherwise it is tested in Channel::eventGpio method.
 #if !CONF_SKIP_PWRGOOD_TEST
-	if (!isOutputEnabled() && psu::isPowerUp()) {
-		testPwrgood(ioexp.readGpio());
-	}
+    if (!isOutputEnabled() && psu::isPowerUp()) {
+        testPwrgood(ioexp.readGpio());
+    }
 #endif
 
     //if (!util::equal(u.set, u.mon_dac, CHANNEL_VALUE_PRECISION)) {
@@ -675,95 +678,95 @@ void Channel::adcDataIsReady(int16_t data) {
     switch (adc.start_reg0) {
 
     case AnalogDigitalConverter::ADC_REG0_READ_U_MON:
-	{
+    {
 #if CONF_DEBUG
-		debug::uMon[index - 1] = data;
+        debug::uMon[index - 1] = data;
 #endif
 
-		if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage) {
-			u.mon_adc = data;
-		}
+        if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage) {
+            u.mon_adc = data;
+        }
 
         float value = remapAdcDataToVoltage(u.mon_adc);
 
         u.mon = isCalibrationEnabled() ?
-	        util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val) :
-	        value;
+            util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val) :
+            value;
 
-		nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_I_MON;
-	}
-	break;
+        nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_I_MON;
+    }
+    break;
 
     case AnalogDigitalConverter::ADC_REG0_READ_I_MON:
-	{
+    {
 #if CONF_DEBUG
-		debug::iMon[index - 1] = data;
+        debug::iMon[index - 1] = data;
 #endif
 
-		if (abs(i.mon_adc - data) > negligibleAdcDiffForCurrent) {
-			i.mon_adc = data;
+        if (abs(i.mon_adc - data) > negligibleAdcDiffForCurrent) {
+            i.mon_adc = data;
         }
 
         float value = remapAdcDataToCurrent(i.mon_adc);
 
-		i.mon = isCalibrationEnabled() ?
-			util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val) :
-			value;
+        i.mon = isCalibrationEnabled() ?
+            util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val) :
+            value;
 
-		if (isOutputEnabled()) {
-			if (isRemoteProgrammingEnabled()) {
-				nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_SET;
-			}
-			else {
-				nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
-			}
-		}
-		else {
-			u.mon_adc = 0;
-			u.mon = 0;
-			i.mon_adc = 0;
-			i.mon = 0;
-			nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_SET;
-		}
-	}
-	break;
+        if (isOutputEnabled()) {
+            if (isRemoteProgrammingEnabled()) {
+                nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_SET;
+            }
+            else {
+                nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
+            }
+        }
+        else {
+            u.mon_adc = 0;
+            u.mon = 0;
+            i.mon_adc = 0;
+            i.mon = 0;
+            nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_SET;
+        }
+    }
+    break;
 
     case AnalogDigitalConverter::ADC_REG0_READ_U_SET:
-	{
+    {
 #if CONF_DEBUG
-		debug::uMonDac[index - 1] = data;
+        debug::uMonDac[index - 1] = data;
 #endif
 
-		float value = remapAdcDataToVoltage(data);
-		u.mon_dac = isCalibrationEnabled() ?
-			util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val) :
-			value;
+        float value = remapAdcDataToVoltage(data);
+        u.mon_dac = isCalibrationEnabled() ?
+            util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val) :
+            value;
 
-		if (isOutputEnabled() && isRemoteProgrammingEnabled()) {
-			nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
-		}
-		else {
-			nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_I_SET;
-		}
-	}
-	break;
+        if (isOutputEnabled() && isRemoteProgrammingEnabled()) {
+            nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
+        }
+        else {
+            nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_I_SET;
+        }
+    }
+    break;
 
     case AnalogDigitalConverter::ADC_REG0_READ_I_SET:
-	{
+    {
 #if CONF_DEBUG
-		debug::iMonDac[index - 1] = data;
+        debug::iMonDac[index - 1] = data;
 #endif
 
-		float value = remapAdcDataToCurrent(data);
-		i.mon_dac = isCalibrationEnabled() ?
-			util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val) :
-			value;
+        float value = remapAdcDataToCurrent(data);
+        i.mon_dac = isCalibrationEnabled() ?
+            util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val) :
+            value;
 
-		if (isOutputEnabled()) {
-			nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
-		}
-	}
-	break;
+        if (isOutputEnabled()) {
+            nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
+        }
+    }
+    break;
     }
 
     adc.start(nextStartReg0);
@@ -814,8 +817,8 @@ void Channel::protectionCheck() {
     }
 
     protectionCheck(ovp);
-	protectionCheck(ocp);
-	protectionCheck(opp);
+    protectionCheck(ocp);
+    protectionCheck(opp);
 }
 
 void Channel::eventAdcData(int16_t adc_data) {
@@ -829,23 +832,23 @@ void Channel::eventGpio(uint8_t gpio) {
     if (!psu::isPowerUp()) return;
 
 #if !CONF_SKIP_PWRGOOD_TEST
-	testPwrgood(gpio);
+    testPwrgood(gpio);
 #endif
 
-	if (boardRevision == CH_BOARD_REVISION_R5B9) {
-		unsigned rpol = !(gpio & (1 << IOExpander::IO_BIT_IN_RPOL));
+    if (boardRevision == CH_BOARD_REVISION_R5B9) {
+        unsigned rpol = !(gpio & (1 << IOExpander::IO_BIT_IN_RPOL));
 
-		if (rpol != flags.rpol) {
-			flags.rpol = rpol;
-			setQuesBits(QUES_ISUM_RPOL, flags.rpol ? true : false);
-		}
+        if (rpol != flags.rpol) {
+            flags.rpol = rpol;
+            setQuesBits(QUES_ISUM_RPOL, flags.rpol ? true : false);
+        }
 
-		if (rpol && isOutputEnabled()) {
-			channel_dispatcher::outputEnable(*this, false);
-			event_queue::pushEvent(event_queue::EVENT_ERROR_CH1_REMOTE_SENSE_REVERSE_POLARITY_DETECTED + index - 1);
-			return;
-		}
-	}
+        if (rpol && isOutputEnabled()) {
+            channel_dispatcher::outputEnable(*this, false);
+            event_queue::pushEvent(event_queue::EVENT_ERROR_CH1_REMOTE_SENSE_REVERSE_POLARITY_DETECTED + index - 1);
+            return;
+        }
+    }
 
     setCvMode(gpio & (1 << IOExpander::IO_BIT_IN_CV_ACTIVE) ? true : false);
     setCcMode(gpio & (1 << IOExpander::IO_BIT_IN_CC_ACTIVE) ? true : false);
@@ -919,31 +922,31 @@ void Channel::doOutputEnable(bool enable) {
         return;
     }
 
-	//noInterrupts();
-	//ioexp.disableWrite();
+    //noInterrupts();
+    //ioexp.disableWrite();
 
-	flags.outputEnabled = enable;
-	ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, enable);
-	setOperBits(OPER_ISUM_OE_OFF, !enable);
-	bp::switchOutput(this, enable);
+    flags.outputEnabled = enable;
+    ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, enable);
+    setOperBits(OPER_ISUM_OE_OFF, !enable);
+    bp::switchOutput(this, enable);
 
-	if (enable) {
-		if (getFeatures() & CH_FEATURE_LRIPPLE) {
-			outputEnableStartTime = micros();
-			delayLowRippleCheck = true;
-		}
+    if (enable) {
+        if (getFeatures() & CH_FEATURE_LRIPPLE) {
+            outputEnableStartTime = micros();
+            delayLowRippleCheck = true;
+        }
 
-    	// enable DP
+        // enable DP
         delayed_dp_off = false;
-		doDpEnable(true);
+        doDpEnable(true);
 
         dpNegMonitoringTime = micros();
-	} else {
-		if (getFeatures() & CH_FEATURE_LRIPPLE) {
-			doLowRippleEnable(false);
-		}
+    } else {
+        if (getFeatures() & CH_FEATURE_LRIPPLE) {
+            doLowRippleEnable(false);
+        }
 
-		setCvMode(false);
+        setCvMode(false);
         setCcMode(false);
         updateCcAndCvSwitch();
 
@@ -951,7 +954,7 @@ void Channel::doOutputEnable(bool enable) {
             calibration::stop();
         }
 
-		// disable DP
+        // disable DP
         if (channel_dispatcher::isParallel()) {
             // channel is coupled in parallel, disable DP immediatelly
             doDpEnable(false);
@@ -960,22 +963,22 @@ void Channel::doOutputEnable(bool enable) {
             delayed_dp_off = true;
             delayed_dp_off_start = micros();
         }
-	}
+    }
 
-	//interrupts();
-	//ioexp.enableWriteAndFlush();
+    //interrupts();
+    //ioexp.enableWriteAndFlush();
 
     restoreVoltageToValueBeforeBalancing();
     restoreCurrentToValueBeforeBalancing();
 
-	if (enable) {
-		// start ADC conversion
-		adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+    if (enable) {
+        // start ADC conversion
+        adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
 
         onTimeCounter.start();
-	} else {
-		onTimeCounter.stop();
-	}
+    } else {
+        onTimeCounter.stop();
+    }
 }
 
 void Channel::doRemoteSensingEnable(bool enable) {
@@ -995,7 +998,7 @@ void Channel::doRemoteProgrammingEnable(bool enable) {
     if (enable) {
         setVoltage(u.min);
         prot_conf.u_level = u.max;
-		prot_conf.flags.u_state = true;
+        prot_conf.flags.u_state = true;
     }
     ioexp.changeBit(ioexp.IO_BIT_OUT_EXT_PROG, enable);
     bp::switchProg(this, enable);
@@ -1003,23 +1006,23 @@ void Channel::doRemoteProgrammingEnable(bool enable) {
 }
 
 bool Channel::isLowRippleAllowed(unsigned long tick_usec) {
-	if (!isOutputEnabled()) {
-		return false;
-	}
+    if (!isOutputEnabled()) {
+        return false;
+    }
 
-	if (delayLowRippleCheck) {
-		if (tick_usec - outputEnableStartTime < 100 * 1000L) {
-			// If Auto low ripple is enabled, channel cannot enter low ripple mode
-			// even if condition for that exist before pre-regulation is not activated
-			// for a short period of time (100ms). Without this transition repetive
-			// changing of channel's output mode with load connected WILL result with
-			// post-regulator's power mosfet damage, and overheating of down-programmer mosfet!
-			return false;
-		}
-		delayLowRippleCheck = false;
-	}
+    if (delayLowRippleCheck) {
+        if (tick_usec - outputEnableStartTime < 100 * 1000L) {
+            // If Auto low ripple is enabled, channel cannot enter low ripple mode
+            // even if condition for that exist before pre-regulation is not activated
+            // for a short period of time (100ms). Without this transition repetive
+            // changing of channel's output mode with load connected WILL result with
+            // post-regulator's power mosfet damage, and overheating of down-programmer mosfet!
+            return false;
+        }
+        delayLowRippleCheck = false;
+    }
 
-	if (i.mon > SOA_PREG_CURR || i.mon > SOA_POSTREG_PTOT / (SOA_VIN - u.mon)) {
+    if (i.mon > SOA_PREG_CURR || i.mon > SOA_POSTREG_PTOT / (SOA_VIN - u.mon)) {
         return false;
     }
 
@@ -1031,17 +1034,17 @@ bool Channel::isLowRippleAllowed(unsigned long tick_usec) {
 }
 
 void Channel::lowRippleCheck(unsigned long tick_usec) {
-	if (isLowRippleAllowed(tick_usec)) {
-		if (!flags.lrippleEnabled) {
-			if (flags.lrippleAutoEnabled) {
-				doLowRippleEnable(true);
-			}
-		}
-	} else {
-		if (flags.lrippleEnabled) {
-			doLowRippleEnable(false);
-		}
-	}
+    if (isLowRippleAllowed(tick_usec)) {
+        if (!flags.lrippleEnabled) {
+            if (flags.lrippleAutoEnabled) {
+                doLowRippleEnable(true);
+            }
+        }
+    } else {
+        if (flags.lrippleEnabled) {
+            doLowRippleEnable(false);
+        }
+    }
 }
 
 void Channel::doLowRippleEnable(bool enable) {
@@ -1057,11 +1060,11 @@ void Channel::doLowRippleAutoEnable(bool enable) {
 }
 
 void Channel::update() {
-	if (!isOk()) {
-		return;
-	}
+    if (!isOk()) {
+        return;
+    }
 
-	bool last_save_enabled = profile::enableSave(false);
+    bool last_save_enabled = profile::enableSave(false);
 
     setVoltage(u.set);
     setCurrent(i.set);
@@ -1077,9 +1080,9 @@ void Channel::update() {
 void Channel::outputEnable(bool enable) {
     if (enable != flags.outputEnabled) {
         doOutputEnable(enable);
-		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_OUTPUT_ENABLED :
-			event_queue::EVENT_INFO_CH1_OUTPUT_DISABLED) + index - 1);
-		profile::save();
+        event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_OUTPUT_ENABLED :
+            event_queue::EVENT_INFO_CH1_OUTPUT_DISABLED) + index - 1);
+        profile::save();
     }
 }
 
@@ -1094,137 +1097,137 @@ bool Channel::isOutputEnabled() {
 }
 
 void Channel::doCalibrationEnable(bool enable) {
-	flags._calEnabled = enable;
+    flags._calEnabled = enable;
 
-	if (enable) {
-		u.min = util::ceilPrec(cal_conf.u.minPossible, CHANNEL_VALUE_PRECISION);
-		if (u.min < U_MIN) u.min = U_MIN;
-		if (u.limit < u.min) u.limit = u.min;
-		if (u.set < u.min) setVoltage(u.min);
-		
-		u.max = util::floorPrec(cal_conf.u.maxPossible, CHANNEL_VALUE_PRECISION);
-		if (u.max > U_MAX) u.max = U_MAX;
-		if (u.set > u.max) setVoltage(u.max);
-		if (u.limit > u.max) u.limit = u.max;
+    if (enable) {
+        u.min = util::ceilPrec(cal_conf.u.minPossible, CHANNEL_VALUE_PRECISION);
+        if (u.min < U_MIN) u.min = U_MIN;
+        if (u.limit < u.min) u.limit = u.min;
+        if (u.set < u.min) setVoltage(u.min);
+        
+        u.max = util::floorPrec(cal_conf.u.maxPossible, CHANNEL_VALUE_PRECISION);
+        if (u.max > U_MAX) u.max = U_MAX;
+        if (u.set > u.max) setVoltage(u.max);
+        if (u.limit > u.max) u.limit = u.max;
 
-		i.min = util::ceilPrec(cal_conf.i.minPossible, CHANNEL_VALUE_PRECISION);
-		if (i.min < I_MIN) i.min = I_MIN;
-		if (i.limit < i.min) i.limit = i.min;
-		if (i.set < i.min) setCurrent(i.min);
+        i.min = util::ceilPrec(cal_conf.i.minPossible, CHANNEL_VALUE_PRECISION);
+        if (i.min < I_MIN) i.min = I_MIN;
+        if (i.limit < i.min) i.limit = i.min;
+        if (i.set < i.min) setCurrent(i.min);
 
-		i.max = util::floorPrec(cal_conf.i.maxPossible, CHANNEL_VALUE_PRECISION);
-		if (i.max > I_MAX) i.max = I_MAX;
-		if (i.limit > i.max) i.limit = i.max;
-		if (i.set > i.max) setCurrent(i.max);
-	} else {
-		u.min = U_MIN;
-		u.max = U_MAX;
+        i.max = util::floorPrec(cal_conf.i.maxPossible, CHANNEL_VALUE_PRECISION);
+        if (i.max > I_MAX) i.max = I_MAX;
+        if (i.limit > i.max) i.limit = i.max;
+        if (i.set > i.max) setCurrent(i.max);
+    } else {
+        u.min = U_MIN;
+        u.max = U_MAX;
 
-		i.min = I_MIN;
-		i.max = I_MAX;
-	}
+        i.min = I_MIN;
+        i.max = I_MAX;
+    }
 
-	u.def = u.min;
-	i.def = i.min;
+    u.def = u.min;
+    i.def = i.min;
 }
 
 void Channel::calibrationEnable(bool enable) {
     if (enable != isCalibrationEnabled()) {
-		doCalibrationEnable(enable);
-		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_CALIBRATION_ENABLED :
-			event_queue::EVENT_WARNING_CH1_CALIBRATION_DISABLED) + index - 1);
-		profile::save();
+        doCalibrationEnable(enable);
+        event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_CALIBRATION_ENABLED :
+            event_queue::EVENT_WARNING_CH1_CALIBRATION_DISABLED) + index - 1);
+        profile::save();
     }
 }
 
 void Channel::calibrationEnableNoEvent(bool enable) {
     if (enable != isCalibrationEnabled()) {
-		doCalibrationEnable(enable);
-		profile::save();
+        doCalibrationEnable(enable);
+        profile::save();
     }
 }
 
 bool Channel::isCalibrationEnabled() {
-	return flags._calEnabled;
+    return flags._calEnabled;
 }
 
 void Channel::calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max) {
-	flags._calEnabled = true;
+    flags._calEnabled = true;
 
-	CalibrationValueConfiguration calValueConf;
-	calValueConf = cal_conf.u;
+    CalibrationValueConfiguration calValueConf;
+    calValueConf = cal_conf.u;
 
-	cal_conf.u.min.dac = minDac;
-	cal_conf.u.min.val = minVal;
+    cal_conf.u.min.dac = minDac;
+    cal_conf.u.min.val = minVal;
     cal_conf.u.min.adc = minAdc;
-	cal_conf.u.max.dac = maxDac;
-	cal_conf.u.max.val = maxVal;
+    cal_conf.u.max.dac = maxDac;
+    cal_conf.u.max.val = maxVal;
     cal_conf.u.max.adc = maxAdc;
 
-	setVoltage(U_MIN);
-	delay(100);
+    setVoltage(U_MIN);
+    delay(100);
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
     delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
-	*min = u.mon;
+    *min = u.mon;
 
-	setVoltage(U_MAX);
-	delay(200); // guard time, because without load it will require more than 15ms to jump to the max
+    setVoltage(U_MAX);
+    delay(200); // guard time, because without load it will require more than 15ms to jump to the max
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
     delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
-	*max = u.mon;
+    *max = u.mon;
 
-	cal_conf.u = calValueConf;
+    cal_conf.u = calValueConf;
 
-	flags._calEnabled = false;
+    flags._calEnabled = false;
 }
 
 void Channel::calibrationFindCurrentRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max) {
-	flags._calEnabled = true;
+    flags._calEnabled = true;
 
-	CalibrationValueConfiguration calValueConf;
-	calValueConf = cal_conf.i;
+    CalibrationValueConfiguration calValueConf;
+    calValueConf = cal_conf.i;
 
-	cal_conf.i.min.dac = minDac;
-	cal_conf.i.min.val = minVal;
+    cal_conf.i.min.dac = minDac;
+    cal_conf.i.min.val = minVal;
     cal_conf.i.min.adc = minAdc;
-	cal_conf.i.max.dac = maxDac;
-	cal_conf.i.max.val = maxVal;
+    cal_conf.i.max.dac = maxDac;
+    cal_conf.i.max.val = maxVal;
     cal_conf.i.max.adc = maxAdc;
 
-	setCurrent(I_MIN);
-	delay(20);
+    setCurrent(I_MIN);
+    delay(20);
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
     delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
-	*min = i.mon;
+    *min = i.mon;
 
-	setCurrent(I_MAX);
-	delay(20);
+    setCurrent(I_MAX);
+    delay(20);
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
     delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
-	*max = i.mon;
+    *max = i.mon;
 
-	cal_conf.i = calValueConf;
+    cal_conf.i = calValueConf;
 
-	flags._calEnabled = false;
+    flags._calEnabled = false;
 }
 
 void Channel::remoteSensingEnable(bool enable) {
     if (enable != flags.senseEnabled) {
         doRemoteSensingEnable(enable);
-		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_REMOTE_SENSE_ENABLED :
-			event_queue::EVENT_INFO_CH1_REMOTE_SENSE_DISABLED) + index - 1);
+        event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_REMOTE_SENSE_ENABLED :
+            event_queue::EVENT_INFO_CH1_REMOTE_SENSE_DISABLED) + index - 1);
         profile::save();
     }
 }
@@ -1236,9 +1239,9 @@ bool Channel::isRemoteSensingEnabled() {
 void Channel::remoteProgrammingEnable(bool enable) {
     if (enable != flags.rprogEnabled) {
         doRemoteProgrammingEnable(enable);
-		event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_REMOTE_PROG_ENABLED :
-			event_queue::EVENT_INFO_CH1_REMOTE_PROG_DISABLED) + index - 1);
-		profile::save();
+        event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_REMOTE_PROG_ENABLED :
+            event_queue::EVENT_INFO_CH1_REMOTE_PROG_DISABLED) + index - 1);
+        profile::save();
     }
 }
 
@@ -1248,10 +1251,10 @@ bool Channel::isRemoteProgrammingEnabled() {
 
 bool Channel::lowRippleEnable(bool enable) {
     if (enable != flags.lrippleEnabled) {
-		if (enable && !isLowRippleAllowed(micros())) {
-			return false;
-		}
-		doLowRippleEnable(enable);
+        if (enable && !isLowRippleAllowed(micros())) {
+            return false;
+        }
+        doLowRippleEnable(enable);
     }
     return true;
 }
@@ -1279,8 +1282,8 @@ void Channel::doSetVoltage(float value) {
     }
 
     if (U_MAX != U_MAX_CONF) {
-		value = util::remap(value, 0, 0, U_MAX_CONF, U_MAX);
-	}
+        value = util::remap(value, 0, 0, U_MAX_CONF, U_MAX);
+    }
 
     if (isCalibrationEnabled()) {
         value = util::remap(value, cal_conf.u.min.val, cal_conf.u.min.dac, cal_conf.u.max.val, cal_conf.u.max.dac);
@@ -1352,33 +1355,33 @@ void Channel::clearProtection() {
         event_queue::markAsRead();
     }
 
-	temperature::clearChannelProtection(this);
+    temperature::clearChannelProtection(this);
 }
 
 void Channel::disableProtection() {
-	if (!isTripped()) {
-		prot_conf.flags.u_state = 0;
-		prot_conf.flags.i_state = 0;
-		prot_conf.flags.p_state = 0;
-		temperature::disableChannelProtection(this);
-	}
+    if (!isTripped()) {
+        prot_conf.flags.u_state = 0;
+        prot_conf.flags.i_state = 0;
+        prot_conf.flags.p_state = 0;
+        temperature::disableChannelProtection(this);
+    }
 }
 
 void Channel::setQuesBits(int bit_mask, bool on) {
     reg_set_ques_isum_bit(&serial::scpi_context, this, bit_mask, on);
 #if OPTION_ETHERNET
-	if (ethernet::test_result == psu::TEST_OK) {
+    if (ethernet::test_result == psu::TEST_OK) {
         reg_set_ques_isum_bit(&ethernet::scpi_context, this, bit_mask, on);
-	}
+    }
 #endif
 }
 
 void Channel::setOperBits(int bit_mask, bool on) {
     reg_set_oper_isum_bit(&serial::scpi_context, this, bit_mask, on);
 #if OPTION_ETHERNET
-	if (ethernet::test_result == psu::TEST_OK) {
+    if (ethernet::test_result == psu::TEST_OK) {
         reg_set_oper_isum_bit(&ethernet::scpi_context, this, bit_mask, on);
-	}
+    }
 #endif
 }
 
@@ -1397,38 +1400,38 @@ uint16_t Channel::getFeatures() {
 }
 
 float Channel::getVoltageLimit() const {
-	return u.limit;
+    return u.limit;
 }
 
 float Channel::getVoltageMaxLimit() const {
-	return u.max;
+    return u.max;
 }
 
 void Channel::setVoltageLimit(float limit) {
-	u.limit = limit;
-	if (u.set > u.limit) {
-		setVoltage(u.limit);
-	}
-	profile::save();
+    u.limit = limit;
+    if (u.set > u.limit) {
+        setVoltage(u.limit);
+    }
+    profile::save();
 }
 
 float Channel::getCurrentLimit() const {
-	return i.limit;
+    return i.limit;
 }
 
 void Channel::setCurrentLimit(float limit) {
-	if (limit > getMaxCurrentLimit()) {
-		limit = getMaxCurrentLimit();
-	}
-	i.limit = limit;
-	if (i.set > i.limit) {
-		setCurrent(i.limit);
-	}
-	profile::save();
+    if (limit > getMaxCurrentLimit()) {
+        limit = getMaxCurrentLimit();
+    }
+    i.limit = limit;
+    if (i.set > i.limit) {
+        setCurrent(i.limit);
+    }
+    profile::save();
 }
 
 float Channel::getMaxCurrentLimit() const {
-	return isMaxCurrentLimited() ? ERR_MAX_CURRENT : i.max;
+    return isMaxCurrentLimited() ? ERR_MAX_CURRENT : i.max;
 }
 
 bool Channel::isMaxCurrentLimited() const {
@@ -1436,10 +1439,10 @@ bool Channel::isMaxCurrentLimited() const {
 }
 
 MaxCurrentLimitCause Channel::getMaxCurrentLimitCause() const {
-	if (psu::isMaxCurrentLimited()) {
-		return psu::getMaxCurrentLimitCause();
-	}
-	return maxCurrentLimitCause;
+    if (psu::isMaxCurrentLimited()) {
+        return psu::getMaxCurrentLimitCause();
+    }
+    return maxCurrentLimitCause;
 }
 
 void Channel::limitMaxCurrent(MaxCurrentLimitCause cause) {
@@ -1447,13 +1450,13 @@ void Channel::limitMaxCurrent(MaxCurrentLimitCause cause) {
         maxCurrentLimitCause = cause;
 
         if (isMaxCurrentLimited()) {
-	        if (isOutputEnabled() && i.mon > ERR_MAX_CURRENT) {
-		        setCurrent(0);
-	        }
+            if (isOutputEnabled() && i.mon > ERR_MAX_CURRENT) {
+                setCurrent(0);
+            }
 
-		    if (i.limit > ERR_MAX_CURRENT) {
-			    setCurrentLimit(ERR_MAX_CURRENT);
-		    }
+            if (i.limit > ERR_MAX_CURRENT) {
+                setCurrentLimit(ERR_MAX_CURRENT);
+            }
         }
     }
 }
@@ -1463,25 +1466,28 @@ void Channel::unlimitMaxCurrent() {
 }
 
 float Channel::getPowerLimit() const {
-	return p_limit;
+    return p_limit;
 }
 
 float Channel::getPowerMaxLimit() const {
-	return PTOT;
+    return PTOT;
 }
 
 void Channel::setPowerLimit(float limit) {
-	p_limit = limit;
-	if (u.set * i.set > p_limit) {
-		//setVoltage(p_limit / i.set);
-		setCurrent(p_limit / u.set);
-	}
-	profile::save();
+    p_limit = limit;
+    if (u.set * i.set > p_limit) {
+        //setVoltage(p_limit / i.set);
+        setCurrent(p_limit / u.set);
+    }
+    profile::save();
 }
 
 #if !CONF_SKIP_PWRGOOD_TEST
 void Channel::testPwrgood(uint8_t gpio) {
     if (!(gpio & (1 << IOExpander::IO_BIT_IN_PWRGOOD))) {
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_WATCHDOG
+        DebugTraceF("Last watchdog impulse was before %u uS", micros() - watchdog::g_lastWatchdogImpulseTime);
+#endif
         DebugTraceF("Ch%d PWRGOOD bit changed to 0", index);
         flags.powerOk = 0;
         psu::generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (index - 1));
