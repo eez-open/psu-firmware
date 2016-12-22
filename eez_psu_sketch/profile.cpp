@@ -138,8 +138,11 @@ bool recall(int location) {
 
 bool load(int location, Parameters *profile) {
     if (location >= 0 && location < NUM_PROFILE_LOCATIONS) {
-        return persist_conf::loadProfile(location, profile) && profile->flags.isValid;
+        if (persist_conf::loadProfile(location, profile)) {
+            return profile->flags.isValid;
+        }
     }
+    profile->flags.isValid = 0;
     return false;
 }
 
