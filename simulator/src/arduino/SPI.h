@@ -54,6 +54,10 @@ public:
     uint8_t transfer(uint8_t data);
     void endTransaction(void);
     void attachInterrupt();
+
+	void setBitOrder(int _order);
+	void setDataMode(uint8_t _mode);
+	void setClockDivider(uint8_t _div);
 };
 
 extern SimulatorSPI SPI;

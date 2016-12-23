@@ -54,10 +54,7 @@ struct DeviceFlags {
     int outputProtectionCouple : 1;
     int shutdownWhenProtectionTripped : 1;
     int forceDisablingAllOutputsOnPowerUp : 1;
-    int reserved1 : 1;
-    int reserved2 : 1;
-    int reserved3 : 1;
-    int reserved4 : 1;
+    int reserved : 20;
 };
 
 /// Device configuration block.

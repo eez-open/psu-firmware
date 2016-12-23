@@ -28,25 +28,25 @@ psu::TestResult test_result = psu::TEST_FAILED;
 ////////////////////////////////////////////////////////////////////////////////
 
 void readRegisters(int command, int n, uint8_t *values) {
-    SPI.beginTransaction(PCA21125_SPI);
+    SPI_beginTransaction(PCA21125_SPI);
     digitalWrite(RTC_SELECT, HIGH); // Select PCA21125
     SPI.transfer(command); // Read mode, a pointer to the address 02h
     while (n--) {
         *values++ = SPI.transfer(0x00);
     }
     digitalWrite(RTC_SELECT, LOW); // Deselect PCA21125
-    SPI.endTransaction();
+    SPI_endTransaction();
 }
 
 void writeRegisters(int command, int n, const uint8_t *values) {
-    SPI.beginTransaction(PCA21125_SPI);
+    SPI_beginTransaction(PCA21125_SPI);
     digitalWrite(RTC_SELECT, HIGH); // Select PCA21125
     SPI.transfer(command); // Read mode, a pointer to the address 02h
     while (n--) {
         SPI.transfer(*values++);
     }
     digitalWrite(RTC_SELECT, LOW); // Deselect PCA21125
-    SPI.endTransaction();
+    SPI_endTransaction();
 }
 
 void init() {

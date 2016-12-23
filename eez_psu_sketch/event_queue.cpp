@@ -37,14 +37,6 @@ static const uint16_t NULL_INDEX = MAX_EVENTS;
 static const uint16_t EVENT_HEADER_SIZE = 16;
 static const uint16_t EVENT_SIZE = 16;
 
-struct EventQueueHeader {
-    uint32_t magicNumber;
-    uint16_t version;
-    uint16_t head;
-    uint16_t size;
-    uint16_t lastErrorEventIndex;
-};
-
 static EventQueueHeader eventQueue;
 
 static int16_t g_eventsDuringInterruptHandling[6];

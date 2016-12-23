@@ -23,7 +23,7 @@ namespace psu {
 namespace fan {
 
 extern psu::TestResult test_result;
-extern int g_rpm;
+extern volatile int g_rpm;
 
 void init();
 void test_start();

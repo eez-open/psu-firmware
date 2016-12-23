@@ -69,7 +69,7 @@ static MaxCurrentLimitCause g_maxCurrentLimitCause;
 
 ontime::Counter g_powerOnTimeCounter(ontime::ON_TIME_COUNTER_POWER);
 
-bool g_insideInterruptHandler = false;
+volatile bool g_insideInterruptHandler = false;
 static bool g_shutdownOnNextTick;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -802,6 +802,12 @@ void tick() {
 
 	temperature::tick(tick_usec);
 
+	fan::tick(tick_usec);
+
+    ////dummy eeprom read
+    //uint8_t buf[128];
+    //eeprom::read(buf, 128, 512);
+
     for (int i = 0; i < CH_NUM; ++i) {
         Channel::get(i).tick(tick_usec);
     }
@@ -830,7 +836,6 @@ void tick() {
 #endif
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-	fan::tick(tick_usec);
 #if OPTION_WATCHDOG
 	watchdog::tick(tick_usec);
 #endif
@@ -866,6 +871,35 @@ void generateError(int16_t error) {
     }
 #endif
 	event_queue::pushEvent(error);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void SPI_usingInterrupt(uint8_t interruptNumber) {
+    //SPI.usingInterrupt(interruptNumber);
+}
+
+void SPI_beginTransaction(SPISettings &settings) {
+    //SPI.beginTransaction(settings);
+
+    noInterrupts();
+
+    if (&settings == &MCP23S08_SPI)      { SPI.setClockDivider(SPI_CLOCK_DIV4); SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE0); }
+    else if (&settings == &DAC8552_SPI)  { SPI.setClockDivider(SPI_CLOCK_DIV4); SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE1); }
+    else if (&settings == &ADS1120_SPI)  { SPI.setClockDivider(SPI_CLOCK_DIV4); SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE1); }
+    else if (&settings == &TLC5925_SPI)  { SPI.setClockDivider(SPI_CLOCK_DIV4); SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE0); }
+    else if (&settings == &PCA21125_SPI) { SPI.setClockDivider(SPI_CLOCK_DIV4); SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE0); }
+    else if (&settings == &AT25256B_SPI) { SPI.setClockDivider(SPI_CLOCK_DIV4); SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE0); }
+#if defined(EEZ_PSU_ARDUINO_DUE)
+    else if (&settings == &ETHERNET_SPI) { SPI.setClockDivider(10);             SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE0); }
+#else
+    else if (&settings == &ETHERNET_SPI) { SPI.setClockDivider(SPI_CLOCK_DIV2); SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE0); }
+#endif
+}
+
+void SPI_endTransaction() {
+    //SPI.endTransaction();
+    interrupts();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

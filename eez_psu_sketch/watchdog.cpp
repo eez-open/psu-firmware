@@ -28,7 +28,7 @@ namespace watchdog {
 
 static bool watchdogEnabled = false;
 static Interval watchdogInterval(WATCHDOG_INTERVAL);
-unsigned long g_lastWatchdogImpulseTime;
+static unsigned long g_lastWatchdogImpulseTime[3];
 
 static uint8_t g_watchdogState;
 
@@ -63,9 +63,10 @@ void tick(unsigned long tick_usec) {
 	    if (watchdogInterval.test(tick_usec)) {
 #if CONF_DEBUG
 		    if (debug::g_debugWatchdog) {
+                g_lastWatchdogImpulseTime[0] = g_lastWatchdogImpulseTime[1];
+                g_lastWatchdogImpulseTime[1] = g_lastWatchdogImpulseTime[2];
+                g_lastWatchdogImpulseTime[2] = micros();
 #endif
-                g_lastWatchdogImpulseTime = micros();
-
                 g_watchdogState = g_watchdogState == HIGH ? LOW : HIGH;
 		        digitalWrite(WATCHDOG, g_watchdogState);
 #if CONF_DEBUG
@@ -74,6 +75,17 @@ void tick(unsigned long tick_usec) {
 	    }
     }
 }
+
+#if CONF_DEBUG || CONF_DEBUG_LATEST
+void printInfo() {
+    unsigned long now = micros();
+    DebugTraceF("Last watchdog impulses: %lu, %u, %lu, %u, %lu, %u, %lu",
+        watchdog::g_lastWatchdogImpulseTime[0], watchdog::g_lastWatchdogImpulseTime[1] - watchdog::g_lastWatchdogImpulseTime[0],
+        watchdog::g_lastWatchdogImpulseTime[1], watchdog::g_lastWatchdogImpulseTime[2] - watchdog::g_lastWatchdogImpulseTime[1],
+        watchdog::g_lastWatchdogImpulseTime[2], now - watchdog::g_lastWatchdogImpulseTime[2],
+        now);
+}
+#endif
 
 }
 }

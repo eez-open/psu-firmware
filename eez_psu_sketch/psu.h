@@ -102,7 +102,11 @@ void limitMaxCurrent(MaxCurrentLimitCause cause);
 void unlimitMaxCurrent();
 
 extern ontime::Counter g_powerOnTimeCounter;
-extern bool g_insideInterruptHandler;
+extern volatile bool g_insideInterruptHandler;
+
+void SPI_usingInterrupt(uint8_t interruptNumber);
+void SPI_beginTransaction(SPISettings &settings);
+void SPI_endTransaction();
 
 }
 } // namespace eez::psu

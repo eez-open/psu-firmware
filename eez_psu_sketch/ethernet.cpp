@@ -54,9 +54,9 @@ EthernetClient firstClient;
 ////////////////////////////////////////////////////////////////////////////////
 
 size_t ethernet_client_write(EthernetClient &client, const char *data, size_t len) {
-    SPI.beginTransaction(ETHERNET_SPI);
+    SPI_beginTransaction(ETHERNET_SPI);
     size_t size = client.write(data, len);
-    SPI.endTransaction();
+    SPI_endTransaction();
 
     return size;
 }
@@ -140,10 +140,10 @@ void init() {
     Ethernet.setDhcpTimeout(ETHERNET_DHCP_TIMEOUT * 1000UL);
 #endif
 
-    SPI.beginTransaction(ETHERNET_SPI);
+    SPI_beginTransaction(ETHERNET_SPI);
 
     if (!Ethernet.begin(mac)) {
-        SPI.endTransaction();
+        SPI_endTransaction();
 
         test_result = psu::TEST_WARNING;
         DebugTrace("Ethernet not connected!");
@@ -154,7 +154,7 @@ void init() {
 
     server.begin();
 
-    SPI.endTransaction();
+    SPI_endTransaction();
 
     test_result = psu::TEST_OK;
 
@@ -189,7 +189,7 @@ void tick(unsigned long tick_usec) {
         return;
     }
 
-    SPI.beginTransaction(ETHERNET_SPI);
+    SPI_beginTransaction(ETHERNET_SPI);
 
     if (firstClientDetected) {
         if (!firstClient.connected()) {
@@ -213,16 +213,16 @@ void tick(unsigned long tick_usec) {
             uint8_t* msg = (uint8_t*)malloc(size);
             size = client.read(msg, size);
             if (client == firstClient) {
-                SPI.endTransaction();
+                SPI_endTransaction();
                 for (size_t i = 0; i < size; ++i) {
                     input(scpi_context, msg[i]);
                 }
-                SPI.beginTransaction(ETHERNET_SPI);
+                SPI_beginTransaction(ETHERNET_SPI);
             }
             else {
-                SPI.endTransaction();
+                SPI_endTransaction();
                 ethernet_client_write_str(client, "Already connected!\r\n");
-                SPI.beginTransaction(ETHERNET_SPI);
+                SPI_beginTransaction(ETHERNET_SPI);
 
                 client.stop();
 
@@ -232,7 +232,7 @@ void tick(unsigned long tick_usec) {
         }
     }
 
-    SPI.endTransaction();
+    SPI_endTransaction();
 }
 
 uint32_t getIpAddress() {

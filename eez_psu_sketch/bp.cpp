@@ -32,7 +32,7 @@ static int g_channelCouplingType;
 
 void set(uint16_t conf) {
     if (OPTION_BP) {
-        SPI.beginTransaction(TLC5925_SPI);
+        SPI_beginTransaction(TLC5925_SPI);
         digitalWrite(BP_OE, HIGH);
         digitalWrite(BP_SELECT, LOW);
         SPI.transfer(conf >> 8);
@@ -41,7 +41,7 @@ void set(uint16_t conf) {
         digitalWrite(BP_SELECT, HIGH);
         digitalWrite(BP_SELECT, LOW);
         digitalWrite(BP_OE, LOW);
-        SPI.endTransaction();
+        SPI_endTransaction();
 
         //DebugTraceF("BP 0x%04x", (int)conf);
     }

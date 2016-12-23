@@ -61,7 +61,7 @@ uint8_t AnalogDigitalConverter::getReg1Val() {
 void AnalogDigitalConverter::init() {
 #if ADC_USE_INTERRUPTS
     int intNum = digitalPinToInterrupt(channel.convend_pin);
-    SPI.usingInterrupt(intNum);
+    SPI_usingInterrupt(intNum);
     attachInterrupt(
         intNum,
         channel.index == 1 ? adc_interrupt_ch1 : adc_interrupt_ch2,
@@ -69,7 +69,7 @@ void AnalogDigitalConverter::init() {
         );
 #endif
 
-    SPI.beginTransaction(ADS1120_SPI);
+    SPI_beginTransaction(ADS1120_SPI);
     digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.adc_pin, LOW);
 
@@ -87,11 +87,11 @@ void AnalogDigitalConverter::init() {
 
     digitalWrite(channel.adc_pin, HIGH);
     digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
-    SPI.endTransaction();
+    SPI_endTransaction();
 }
 
 bool AnalogDigitalConverter::test() {
-    SPI.beginTransaction(ADS1120_SPI);
+    SPI_beginTransaction(ADS1120_SPI);
     digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.adc_pin, LOW);
 
@@ -102,7 +102,7 @@ bool AnalogDigitalConverter::test() {
 
     digitalWrite(channel.adc_pin, HIGH);
     digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
-    SPI.endTransaction();
+    SPI_endTransaction();
 
     test_result = psu::TEST_OK;
 
@@ -201,7 +201,7 @@ void AnalogDigitalConverter::start(uint8_t reg0) {
     start_reg0 = reg0;
 
     if (start_reg0) {
-        SPI.beginTransaction(ADS1120_SPI);
+        SPI_beginTransaction(ADS1120_SPI);
         digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
         digitalWrite(channel.adc_pin, LOW);
 
@@ -230,12 +230,12 @@ void AnalogDigitalConverter::start(uint8_t reg0) {
 
         digitalWrite(channel.adc_pin, HIGH);
         digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
-        SPI.endTransaction();
+        SPI_endTransaction();
     }
 }
 
 int16_t AnalogDigitalConverter::read() {
-    SPI.beginTransaction(ADS1120_SPI);
+    SPI_beginTransaction(ADS1120_SPI);
     digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.adc_pin, LOW);
 
@@ -246,7 +246,7 @@ int16_t AnalogDigitalConverter::read() {
 
     digitalWrite(channel.adc_pin, HIGH);
     digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
-    SPI.endTransaction();
+    SPI_endTransaction();
 
     return (int16_t)((dmsb << 8) | dlsb);
 }

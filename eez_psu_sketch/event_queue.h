@@ -133,6 +133,14 @@ static const int EVENTS_PER_PAGE = 7;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+struct EventQueueHeader {
+    uint32_t magicNumber;
+    uint16_t version;
+    uint16_t head;
+    uint16_t size;
+    uint16_t lastErrorEventIndex;
+};
+
 struct Event {
     uint32_t dateTime;
     int16_t eventId;

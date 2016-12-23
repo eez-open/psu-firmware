@@ -1202,7 +1202,7 @@
       "description": "0: invalid (error)\n1: valid\n2: not installed",
       "type": "enum",
       "enumItems": "[\n\"Invalid\",\n\"Valid\",\n\"Not installed\"\n]",
-      "defaultValue": "2"
+      "defaultValue": "1"
     },
     {
       "name": "sys.temp.aux.otp.state",

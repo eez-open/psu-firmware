@@ -33,7 +33,7 @@ void send_address(uint16_t address) {
 }
 
 void read_chunk(uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
-    SPI.beginTransaction(AT25256B_SPI);
+    SPI_beginTransaction(AT25256B_SPI);
 
     digitalWrite(EEPROM_SELECT, LOW);  // select chip
     SPI.transfer(READ);                // transmit read opcode
@@ -46,7 +46,7 @@ void read_chunk(uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
 
     digitalWrite(EEPROM_SELECT, HIGH); // release chip, signal end transfer
 
-    SPI.endTransaction();
+    SPI_endTransaction();
 }
 
 void read(uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
@@ -68,15 +68,17 @@ void read(uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
 }
 
 bool is_write_in_progress() {
+    SPI_beginTransaction(AT25256B_SPI);
     digitalWrite(EEPROM_SELECT, LOW);
     SPI.transfer(RDSR); // send RDSR command
     uint8_t data = SPI.transfer(0xFF); // get data byte
     digitalWrite(EEPROM_SELECT, HIGH);
+    SPI_endTransaction();
     return (data & (1 << 0));
 }
 
 void write_chunk(const uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
-    SPI.beginTransaction(AT25256B_SPI);
+    SPI_beginTransaction(AT25256B_SPI);
 
     // enable writing
     digitalWrite(EEPROM_SELECT, LOW);  // select chip
@@ -94,6 +96,7 @@ void write_chunk(const uint8_t *buffer, uint16_t buffer_size, uint16_t address) 
     }
 
     digitalWrite(EEPROM_SELECT, HIGH); // release chip
+    SPI_endTransaction();
 
     unsigned long s = micros();
     while (is_write_in_progress()) {
@@ -105,11 +108,11 @@ void write_chunk(const uint8_t *buffer, uint16_t buffer_size, uint16_t address) 
     }
 
     // disable writing
+    SPI_beginTransaction(AT25256B_SPI);
     digitalWrite(EEPROM_SELECT, LOW);  // select chip
     SPI.transfer(WRDI);                // send write disable command
     digitalWrite(EEPROM_SELECT, HIGH); // deselect chip
-
-    SPI.endTransaction();
+    SPI_endTransaction();
 }
 
 static uint8_t *buffer_verify;
@@ -142,12 +145,12 @@ bool write(const uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
 void init() {
     if (OPTION_EXT_EEPROM) {
         // write 0 (no protection) to status register
-        SPI.beginTransaction(AT25256B_SPI);
+        SPI_beginTransaction(AT25256B_SPI);
         digitalWrite(EEPROM_SELECT, LOW);
         SPI.transfer(WRSR);
         SPI.transfer(0);
         digitalWrite(EEPROM_SELECT, HIGH);
-        SPI.endTransaction();
+        SPI_endTransaction();
     }
 }
 

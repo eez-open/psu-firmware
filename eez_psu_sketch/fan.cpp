@@ -48,10 +48,10 @@ static float g_fanSpeed = FAN_MIN_PWM;
 static unsigned long g_fanSpeedLastMeasuredTick = 0;
 static unsigned long g_fanSpeedLastAdjustedTick = 0;
 
-int g_rpm = 0;
+volatile int g_rpm = 0;
 
 static int g_rpmMeasureInterruptNumber;
-static RpmMeasureState g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
+static volatile RpmMeasureState g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
 static unsigned long g_rpmMeasureT1;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -72,14 +72,11 @@ void finish_rpm_measure();
 void rpm_measure_interrupt_handler();
 
 void start_rpm_measure() {
+    analogWrite(FAN_PWM, FAN_MAX_PWM);
+    delay(2);
     g_rpmMeasureState = RPM_MEASURE_STATE_START;
 
-    analogWrite(FAN_PWM, FAN_MAX_PWM);
-
-    // delay 2ms
-    //delay(2);
-
-    attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
+    //attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
 
 #ifdef EEZ_PSU_SIMULATOR
     g_rpmMeasureState = RPM_MEASURE_STATE_MEASURED;
@@ -115,7 +112,7 @@ void rpm_measure_interrupt_handler() {
 
 void finish_rpm_measure() {
     if (g_rpmMeasureState == RPM_MEASURE_STATE_MEASURED) {
-        detachInterrupt(g_rpmMeasureInterruptNumber);
+        //detachInterrupt(g_rpmMeasureInterruptNumber);
         analogWrite(FAN_PWM, g_fanSpeedPWM);
         g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
     }
@@ -125,7 +122,8 @@ void finish_rpm_measure() {
 
 void init() {
     g_rpmMeasureInterruptNumber = digitalPinToInterrupt(FAN_SENSE);
-    SPI.usingInterrupt(g_rpmMeasureInterruptNumber);
+    //SPI_usingInterrupt(g_rpmMeasureInterruptNumber);
+    attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
 }
 
 void test_start() {
@@ -239,7 +237,7 @@ void tick(unsigned long tick_usec) {
             RpmMeasureState rpmMeasureState = g_rpmMeasureState;
             if (rpmMeasureState == RPM_MEASURE_STATE_MEASURED) {
                 finish_rpm_measure();
-                //DebugTraceF("RPM: RPM=%d", g_rpm);
+                //DebugTraceF("RPM=%d", g_rpm);
             } else if (rpmMeasureState != RPM_MEASURE_STATE_FINISHED) {
                 if (tick_usec - g_fanSpeedLastMeasuredTick >= 50 * 1000L) {
                     // measure timeout, interrupt measurement

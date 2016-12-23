@@ -28,19 +28,19 @@
 |64     |  24|[Total ON-time counter](#ontime-counter)  |
 |128    |  24|[CH1 ON-time counter](#ontime-counter)    |
 |192    |  24|[CH2 ON-time counter](#ontime-counter)    |
-|1024   |  55|[Device configuration](#device)           |
-|2048   | 137|CH1 [calibration parameters](#calibration)|
-|2560   | 137|CH2 [calibration parameters](#calibration)|
-|4096   | 196|[Profile](#profile) 0                     |
-|5120   | 196|[Profile](#profile) 1                     |
-|6144   | 196|[Profile](#profile) 2                     |
-|7168   | 196|[Profile](#profile) 3                     |
-|8192   | 196|[Profile](#profile) 4                     |
-|9216   | 196|[Profile](#profile) 5                     |
-|10240  | 196|[Profile](#profile) 6                     |
-|11264  | 196|[Profile](#profile) 7                     |
-|12288  | 196|[Profile](#profile) 8                     |
-|13312  | 196|[Profile](#profile) 9                     |
+|1024   |  64|[Device configuration](#device)           |
+|2048   | 144|CH1 [calibration parameters](#calibration)|
+|2560   | 144|CH2 [calibration parameters](#calibration)|
+|4096   | 232|[Profile](#profile) 0                     |
+|5120   | 232|[Profile](#profile) 1                     |
+|6144   | 232|[Profile](#profile) 2                     |
+|7168   | 232|[Profile](#profile) 3                     |
+|8192   | 232|[Profile](#profile) 4                     |
+|9216   | 232|[Profile](#profile) 5                     |
+|10240  | 232|[Profile](#profile) 6                     |
+|11264  | 232|[Profile](#profile) 7                     |
+|12288  | 232|[Profile](#profile) 8                     |
+|13312  | 232|[Profile](#profile) 9                     |
 |16384  | 610|[Event Queue](#event-queue)               |
 
 ## <a name="ontime-counter">ON-time counter</a>
@@ -59,24 +59,24 @@
 |Offset|Size|Type                     |Description                  |
 |------|----|-------------------------|-----------------------------|
 |0     |6   |[struct](#block-header)  |[Block header](#block-header)|
-|6     |8   |string                   |Serial number                |
-|14    |17  |string                   |Calibration password         |
-|31    |2   |[bitarray](#device-flags)|[Device Flags](#device-flags)|
-|33    |1   |int                      |Year                         |
-|34    |1   |int                      |Month                        |
-|35    |1   |int                      |Day                          |
-|36    |1   |int                      |Hour                         |
-|37    |1   |int                      |Minute                       |
-|38    |1   |int                      |Second                       |
-|39    |2   |int                      |Time zone                    |
-|41    |1   |int                      |Auto profile location        |
-|42    |1   |int                      |Touch screen cal. orientation|
-|43    |2   |int                      |Touch screen cal. TLX        |
-|45    |2   |int                      |Touch screen cal. TLY        |
-|47    |2   |int                      |Touch screen cal. BRX        |
-|49    |2   |int                      |Touch screen cal. BRY        |
-|51    |2   |int                      |Touch screen cal. TRX        |
-|53    |2   |int                      |Touch screen cal. TRY        |
+|8     |8   |string                   |Serial number                |
+|16    |17  |string                   |Calibration password         |
+|36    |4   |[bitarray](#device-flags)|[Device Flags](#device-flags)|
+|40    |1   |int                      |Year                         |
+|41    |1   |int                      |Month                        |
+|42    |1   |int                      |Day                          |
+|43    |1   |int                      |Hour                         |
+|44    |1   |int                      |Minute                       |
+|45    |1   |int                      |Second                       |
+|46    |2   |int                      |Time zone                    |
+|48    |1   |int                      |Auto profile location        |
+|49    |1   |int                      |Touch screen cal. orientation|
+|50    |2   |int                      |Touch screen cal. TLX        |
+|52    |2   |int                      |Touch screen cal. TLY        |
+|54    |2   |int                      |Touch screen cal. BRX        |
+|56    |2   |int                      |Touch screen cal. BRY        |
+|58    |2   |int                      |Touch screen cal. TRX        |
+|60    |2   |int                      |Touch screen cal. TRY        |
 
 #### <a name="device-flags">Device flags</a>
 
@@ -91,26 +91,20 @@
 |6  |Channel display mode|
 |7  |Channel display mode|
 |8  |Ethernet enabled    |
-|7  |Reserved            |
-|8  |Reserved            |
-|9  |Reserved            |
-|10 |Reserved            |
-|11 |Reserved            |
-|12 |Reserved            |
-|13 |Reserved            |
-|14 |Reserved            |
-|15 |Reserved            |
+|9  |Switch off all outputs when protection tripped |
+|10 |Shutdown when protection tripped               |
+|11 |Force disabling of all outputs on power up     |
 
 ## <a name="calibration">Calibration parameters</a>
 
 |Offset|Size|Type                   |Description                  |
 |------|----|-----------------------|-----------------------------|
-|0     |6   |[struct](#block-header)|[Block header](#block-header)|
-|6     |1   |[bitarray](#cal-flags) |[Flags](#cal-flags)          |
-|7     |44  |[struct](#cal-points)  |Voltage [points](#cal-points)|
-|43    |44  |[struct](#cal-points)  |Current [points](#cal-points)|
-|79    |8   |string                 |Date                         |
-|88    |33  |string                 |Remark                       |
+|0     |8   |[struct](#block-header)|[Block header](#block-header)|
+|8     |4   |[bitarray](#cal-flags) |[Flags](#cal-flags)          |
+|12    |44  |[struct](#cal-points)  |Voltage [points](#cal-points)|
+|56    |44  |[struct](#cal-points)  |Current [points](#cal-points)|
+|100   |9   |string                 |Date                         |
+|109   |33  |string                 |Remark                       |
 
 #### <a name="cal-flags">Calibration flags</a>
 
@@ -142,30 +136,37 @@
 |Offset|Size|Type                   |Description                    |
 |------|----|-----------------------|-------------------------------|
 |0     |6   |[struct](#block-header)|[Block header](#block-header)  |
-|6     |1   |boolean                |Is valid?                      |
-|7     |33  |string                 |Name                           |
-|40    |1   |boolean                |Is power up?                   |
-|41    |50  |[struct](#ch-params)   |CH1 [parameters](#ch-params)   |
-|91    |50  |[struct](#ch-params)   |CH2 [parameters](#ch-params)   |
-|141   |55  |[struct](#otp-conf)[5] |[OTP configurations](#otp-conf)|
+|8     |4   |[bitarray](#prof-flags)|[Flags](#prof-flags)           |
+|12    |33  |string                 |Name                           |
+|48    |52  |[struct](#ch-params)   |CH1 [parameters](#ch-params)   |
+|100   |52  |[struct](#ch-params)   |CH2 [parameters](#ch-params)   |
+|152   |80  |[struct](#otp-conf)[5] |[OTP configurations](#otp-conf)|
+
+#### <a name="prof-flags">Profile flags</a>
+
+|Bit|Description        |
+|---|-------------------|
+|0  |Is valid?          |
+|1  |Power is up?       |
+|2  |Channels coupling: 0 - None, 1 - Parallel, 2 - Series, 3 - Tracking mode |
 
 #### <a name="ch-params">Channel parameters</a>
 
 |Offset|Size|Type                 |Description               |
 |------|----|---------------------|--------------------------|
-|0     |2   |[bitarray](#ch-flags)|[Channel Flags](#ch-flags)|
-|2     |4   |float                |U set                     |
-|6     |4   |float                |U step                    |
-|10    |4   |float                |U limit                   |
-|14    |4   |float                |OVP delay                 |
-|18    |4   |float                |OVP level                 |
-|22    |4   |float                |I set                     |
-|26    |4   |float                |I step                    |
-|30    |4   |float                |I limit                   |
-|34    |4   |float                |OCP delay                 |
-|38    |4   |float                |P step                    |
-|42    |4   |float                |OVP delay                 |
-|46    |4   |float                |OVP level                 |
+|0     |4   |[bitarray](#ch-flags)|[Channel Flags](#ch-flags)|
+|4     |4   |float                |U set                     |
+|8     |4   |float                |U step                    |
+|12    |4   |float                |U limit                   |
+|16    |4   |float                |OVP delay                 |
+|20    |4   |float                |OVP level                 |
+|24    |4   |float                |I set                     |
+|28    |4   |float                |I step                    |
+|32    |4   |float                |I limit                   |
+|36    |4   |float                |OCP delay                 |
+|40    |4   |float                |P step                    |
+|44    |4   |float                |OVP delay                 |
+|48    |4   |float                |OVP level                 |
 
 #### <a name="ch-flags">Channel flags</a>
 
@@ -181,21 +182,15 @@
 |7  |Reserved           |
 |8  |LRIPPLE enabled    |
 |9  |Params. valid      |
-|10 |Reserved           |
-|11 |Reserved           |
-|12 |Reserved           |
-|13 |Reserved           |
-|14 |Reserved           |
-|15 |Reserved           |
 
 #### <a name="otp-conf">OTP configuration</a>
 
 |Offset|Size|Type              |Description                     |
 |------|----|------------------|--------------------------------|
-|0     |2   |[enum](#temp-sens)|[Temperature sensor](#temp-sens)|
-|2     |4   |float             |OTP delay                       |
-|6     |4   |float             |OTP level                       |
-|10    |1   |boolean           |OTP state                       |
+|0     |4   |[enum](#temp-sens)|[Temperature sensor](#temp-sens)|
+|4     |4   |float             |OTP delay                       |
+|8     |4   |float             |OTP level                       |
+|12    |1   |boolean           |OTP state                       |
 
 
 ##### <a name="temp-sens">Temperature sensor</a>
@@ -203,10 +198,10 @@
 |Value|Name|
 |-----|----|
 |0    |AUX |
-|1    |S1  |
-|2    |S2  |
-|3    |BAT1|
-|4    |BAT2|
+|1    |CH1 |
+|2    |CH2 |
+|3    |reserved|
+|4    |reserved|
 
 ## <a name="block-header">Block header</a>
 

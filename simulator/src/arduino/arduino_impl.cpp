@@ -152,6 +152,15 @@ void SimulatorSPI::endTransaction(void) {
 void SimulatorSPI::attachInterrupt() {
 }
 
+void SimulatorSPI::setBitOrder(int _order) {
+}
+
+void SimulatorSPI::setDataMode(uint8_t _mode) {
+}
+
+void SimulatorSPI::setClockDivider(uint8_t _div) {
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 void tone(uint8_t _pin, unsigned int frequency, unsigned long duration) {

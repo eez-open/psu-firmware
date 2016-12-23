@@ -24,7 +24,9 @@ namespace watchdog {
 
 void tick(unsigned long tick_usec);
 
-extern unsigned long g_lastWatchdogImpulseTime;
+#if CONF_DEBUG || CONF_DEBUG_LATEST
+void printInfo();
+#endif
 
 }
 }
