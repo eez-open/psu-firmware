@@ -5512,7 +5512,7 @@
               "width": 232,
               "height": 73,
               "style": "edit_value_S_left",
-              "text": "For more detailed information please visit: www.envox.hr/ezz or github.com/eez-open"
+              "text": "For more information please visit: www.envox.hr/ezz or github.com/eez-open"
             }
           ]
         }
@@ -14058,7 +14058,7 @@
                   "width": 320,
                   "height": 42,
                   "style": "default_S",
-                  "text": "\\u0081 Take precautions with voltage over 40V"
+                  "text": "\\u0081 Take precautions with voltage over 50V"
                 }
               ]
             }
@@ -14643,7 +14643,7 @@
             {
               "type": "Text",
               "x": 12,
-              "y": 86,
+              "y": 114,
               "width": 240,
               "height": 28,
               "style": "default_disabled_S_left",
@@ -14652,11 +14652,11 @@
             {
               "type": "Text",
               "x": 12,
-              "y": 114,
+              "y": 86,
               "width": 240,
               "height": 28,
               "style": "default_disabled_S_left",
-              "text": "Display backlight"
+              "text": "Digital input (External trigger)"
             },
             {
               "type": "Text",
@@ -14763,16 +14763,16 @@
             {
               "type": "Text",
               "x": 12,
-              "y": 30,
+              "y": 144,
               "width": 240,
               "height": 28,
               "style": "default_disabled_S_left",
-              "text": "Formats"
+              "text": "Display backlight"
             },
             {
               "type": "Text",
               "x": 12,
-              "y": 58,
+              "y": 32,
               "width": 240,
               "height": 28,
               "style": "default_disabled_S_left",
@@ -14782,7 +14782,7 @@
               "x": 12,
               "type": "Select",
               "data": "sys.ethernet.installed",
-              "y": 86,
+              "y": 60,
               "width": 240,
               "height": 28,
               "style": "default",
@@ -14813,7 +14813,7 @@
               "x": 12,
               "type": "Select",
               "data": "channel.isCoupledOrTracked",
-              "y": 114,
+              "y": 88,
               "width": 240,
               "height": 28,
               "style": "default",
@@ -14844,7 +14844,7 @@
               "type": "Text",
               "action": "show_sys_settings_screen_calibration",
               "x": 12,
-              "y": 142,
+              "y": 116,
               "width": 240,
               "height": 28,
               "style": "edit_value_active_S_left",
@@ -14928,14 +14928,14 @@
               "x": 6,
               "y": 0,
               "width": 246,
-              "height": 28,
+              "height": 32,
               "style": "value_S",
               "text": "Set AUX temperature protection"
             },
             {
               "type": "Text",
               "x": 16,
-              "y": 28,
+              "y": 32,
               "width": 119,
               "height": 28,
               "style": "edit_value_S_left",
@@ -14945,7 +14945,7 @@
               "x": 135,
               "type": "Select",
               "data": "sys.temp.aux.otp.state",
-              "y": 28,
+              "y": 32,
               "width": 60,
               "height": 28,
               "style": "default",
@@ -14975,7 +14975,7 @@
             {
               "type": "Text",
               "x": 16,
-              "y": 56,
+              "y": 60,
               "width": 119,
               "height": 28,
               "style": "edit_value_S_left",
@@ -14985,7 +14985,7 @@
               "x": 135,
               "type": "Select",
               "data": "sys.temp.aux.status",
-              "y": 56,
+              "y": 60,
               "width": 96,
               "height": 28,
               "style": "default",
@@ -15024,7 +15024,7 @@
             {
               "type": "Text",
               "x": 16,
-              "y": 84,
+              "y": 88,
               "width": 119,
               "height": 28,
               "style": "edit_value_S_left",
@@ -15035,7 +15035,7 @@
               "data": "sys.temp.aux.otp.level",
               "action": "sys.settings.protections.aux.otp.editLevel",
               "x": 135,
-              "y": 84,
+              "y": 88,
               "width": 96,
               "height": 28,
               "style": "edit_value_active_S_left"
@@ -15043,7 +15043,7 @@
             {
               "type": "Text",
               "x": 16,
-              "y": 112,
+              "y": 116,
               "width": 119,
               "height": 28,
               "style": "edit_value_S_left",
@@ -15054,7 +15054,7 @@
               "data": "sys.temp.aux.otp.delay",
               "action": "sys.settings.protections.aux.otp.editDelay",
               "x": 135,
-              "y": 112,
+              "y": 116,
               "width": 96,
               "height": 28,
               "style": "edit_value_active_S_left"
@@ -15383,6 +15383,128 @@
         }
       },
       {
+        "name": "sys_settings_din",
+        "description": "Define selected protection values\n",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 32,
+              "style": "value_S",
+              "text": "Digital input pin settings"
+            },
+            {
+              "type": "MultilineText",
+              "x": 16,
+              "y": 32,
+              "width": 236,
+              "height": 114,
+              "style": "default_S",
+              "text": "Select one of the following function: None, Inhibit outputs, trigger input and polarity: Positive (rising edge) or Negative (falling edge)"
+            },
+            {
+              "type": "Text",
+              "x": 26,
+              "y": 146,
+              "width": 79,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Function:"
+            },
+            {
+              "type": "Text",
+              "x": 105,
+              "y": 146,
+              "width": 117,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "[selection]"
+            },
+            {
+              "type": "Text",
+              "x": 26,
+              "y": 174,
+              "width": 79,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Polarity:"
+            },
+            {
+              "type": "Text",
+              "x": 105,
+              "y": 174,
+              "width": 117,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "[selection]"
+            },
+            {
+              "type": "Button",
+              "data": "",
+              "action": "set",
+              "x": 0,
+              "y": 204,
+              "width": 72,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "type": "Text",
+              "action": "discard",
+              "x": 72,
+              "y": 204,
+              "width": 96,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
+            },
+            {
+              "type": "Rectangle",
+              "x": 168,
+              "y": 204,
+              "width": 104,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            }
+          ]
+        }
+      },
+      {
         "name": "sys_settings_protections",
         "description": "Define selected protection values\n",
         "portrait": {
@@ -15403,16 +15525,16 @@
               "x": 6,
               "y": 0,
               "width": 246,
-              "height": 28,
+              "height": 32,
               "style": "value_S",
               "text": "System protection settings"
             },
             {
               "type": "MultilineText",
               "x": 16,
-              "y": 27,
+              "y": 32,
               "width": 179,
-              "height": 59,
+              "height": 57,
               "style": "edit_value_S_left",
               "text": "Shutdown when protection tripped"
             },
@@ -15421,7 +15543,7 @@
               "type": "Select",
               "data": "sys.shutdownWhenProtectionTripped",
               "action": "",
-              "y": 27,
+              "y": 32,
               "width": 57,
               "height": 59,
               "style": "edit_value_L",
@@ -15468,9 +15590,9 @@
                     {
                       "type": "MultilineText",
                       "x": 0,
-                      "y": 0,
+                      "y": 3,
                       "width": 179,
-                      "height": 59,
+                      "height": 57,
                       "style": "edit_value_S_left",
                       "text": "Switch off all outputs when protection tripped"
                     },
@@ -15479,7 +15601,7 @@
                       "type": "Select",
                       "data": "sys.outputProtectionCoupled",
                       "action": "",
-                      "y": 0,
+                      "y": 3,
                       "width": 57,
                       "height": 59,
                       "style": "edit_value_L",
@@ -15564,9 +15686,9 @@
             {
               "type": "MultilineText",
               "x": 16,
-              "y": 145,
+              "y": 146,
               "width": 179,
-              "height": 59,
+              "height": 58,
               "style": "edit_value_S_left",
               "text": "Force disabling of all outputs on power up"
             },
@@ -15575,9 +15697,9 @@
               "type": "Select",
               "data": "sys.forceDisablingAllOutputsOnPowerUp",
               "action": "",
-              "y": 145,
+              "y": 146,
               "width": 57,
-              "height": 59,
+              "height": 58,
               "style": "edit_value_L",
               "widgets": [
                 {
@@ -15586,7 +15708,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 57,
-                  "height": 59,
+                  "height": 58,
                   "style": "edit_value_active",
                   "text": "No"
                 },
@@ -15596,7 +15718,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 57,
-                  "height": 59,
+                  "height": 58,
                   "style": "edit_value_active",
                   "text": "Yes"
                 }
@@ -16849,16 +16971,25 @@
               "width": 304,
               "height": 141,
               "style": "default_S",
-              "text": "Use a stylus or something similar to touch as close to the center of the highlighted crosshair as possible. Keep as still as possible and keep holding until the highlight is removed. Repeat for all crosshairs in sequence."
+              "text": "Use a stylus or something similar to touch as close to the center of the highlighted crosshair as possible. Keep holding as still as possible until the highlight is removed. Repeat for all crosshairs in sequence."
+            },
+            {
+              "type": "Text",
+              "x": 8,
+              "y": 149,
+              "width": 35,
+              "height": 26,
+              "style": "default_S",
+              "text": "\\u0081"
             },
             {
               "type": "MultilineText",
-              "x": 8,
+              "x": 43,
               "y": 149,
-              "width": 304,
+              "width": 269,
               "height": 51,
               "style": "default_S",
-              "text": "Do NOT use your finger as a calibration stylus or the result WILL BE imprecise."
+              "text": "Do not use your finger as a stylus or the result will be imprecise."
             },
             {
               "type": "Text",
