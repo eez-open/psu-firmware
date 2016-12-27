@@ -119,8 +119,12 @@ static void editPassword(const char *oldPassword) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void checkPassword(const char *label PROGMEM, const char *password, void (*ok)()) {
-    g_oldPassword = password;
-    checkPassword(label, ok);
+    if (strlen(password) == 0) {
+        ok();
+    } else {
+        g_oldPassword = password;
+        checkPassword(label, ok);
+    }
 }
 
 void editSystemPassword() {
