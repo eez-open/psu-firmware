@@ -26,6 +26,7 @@
 
 #include "gui.h"
 #include "gui_internal.h"
+#include "gui_password.h"
 #include "gui_data_snapshot.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_slider.h"
@@ -1712,6 +1713,52 @@ void onLastErrorEventAction() {
     }
 }
 
+static void doUnlockFrontPanel() {
+    popPage();
+
+    if (persist_conf::lockFrontPanel(false)) {
+        infoMessageP(PSTR("Front panel is unlocked!"));
+    }
+}
+
+static void checkPasswordToUnlockFrontPanel() {
+    checkPassword(PSTR("Password: "), persist_conf::devConf2.systemPassword, doUnlockFrontPanel);
+}
+
+void lockFrontPanel() {
+    if (persist_conf::lockFrontPanel(true)) {
+        infoMessageP(PSTR("Front panel is locked!"));
+    }
+}
+
+void unlockFrontPanel() {
+    if (strlen(persist_conf::devConf2.systemPassword) > 0) {
+        checkPasswordToUnlockFrontPanel();
+    } else {
+        if (persist_conf::lockFrontPanel(false)) {
+            infoMessageP(PSTR("Front panel is unlocked!"));
+        }
+    }
+}
+
+bool isWidgetActionEnabled(const Widget *widget) {
+    if (widget->action) {
+        if (isFrontPanelLocked()) {
+            if (g_activePageId == PAGE_ID_INFO_ALERT || g_activePageId == PAGE_ID_ERROR_ALERT || g_activePageId == PAGE_ID_KEYPAD) {
+                return true;
+            }
+
+            if (widget->action != ACTION_ID_SYS_FRONT_PANEL_UNLOCK) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 void selectChannel() {
@@ -1799,7 +1846,7 @@ void init() {
     lcd::init();
 
 #ifdef EEZ_PSU_SIMULATOR
-    if (true || persist_conf::dev_conf.gui_opened) {
+    if (true || persist_conf::devConf.gui_opened) {
         simulator::front_panel::open();
     }
 #endif
@@ -1892,7 +1939,7 @@ void tick(unsigned long tick_usec) {
             g_touchActionExecuted = false;
             find_widget(touch::x, touch::y);
             DECL_WIDGET(widget, found_widget.widgetOffset);
-            if (found_widget && widget->action) {
+            if (found_widget && isWidgetActionEnabled(widget)) {
                 g_foundWidgetAtDown = found_widget;
             } else {
                 g_foundWidgetAtDown = 0;
@@ -1923,6 +1970,15 @@ void tick(unsigned long tick_usec) {
                             g_foundWidgetAtDown = 0;
                             g_touchActionExecuted = true;
                             psu::changePowerState(false);
+                        }
+                    }
+                } else if (widget->action == ACTION_ID_SYS_FRONT_PANEL_UNLOCK && isFrontPanelLocked()) {
+                    if (tick_usec - g_touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
+                        if (!g_touchActionExecuted) {
+                            deselect_widget();
+                            g_foundWidgetAtDown = 0;
+                            g_touchActionExecuted = true;
+                            unlockFrontPanel();
                         }
                     }
                 }
