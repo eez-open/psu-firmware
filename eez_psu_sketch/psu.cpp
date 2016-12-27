@@ -485,7 +485,7 @@ void boot() {
         }
     }
 
-    using namespace persist_conf;
+//    using namespace persist_conf;
 //
 //    DebugTraceF("%d", sizeof(BlockHeader));                                         // 8
 //    DebugTraceF("%d", offsetof(BlockHeader, checksum));                             // 0
@@ -517,7 +517,7 @@ void boot() {
 //    DebugTraceF("%d", offsetof(DeviceConfiguration, gui_opened));                   // 62
 //#endif // EEZ_PSU_SIMULATOR
 //
-    DebugTraceF("%d", sizeof(DeviceConfiguration2));                                 // 64
+//    DebugTraceF("%d", sizeof(DeviceConfiguration2));                                // 128
 //
 //    typedef Channel::CalibrationConfiguration CalibrationConfiguration;
 //    typedef Channel::CalibrationValueConfiguration CalibrationValueConfiguration;

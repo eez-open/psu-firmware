@@ -20036,7 +20036,7 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "edit_value_active"
+                "style": "mon_value"
               },
               {
                 "type": "DisplayData",
@@ -20659,7 +20659,7 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "edit_value_active"
+                "style": "mon_value"
               },
               {
                 "type": "DisplayData",
@@ -21595,6 +21595,19 @@
         "name": "toast_alert",
         "inheritFrom": "default_S",
         "backgroundColor": "#808080"
+      },
+      {
+        "name": "default_L_landscape",
+        "inheritFrom": "default",
+        "font": "large_landscape",
+        "alignHorizontal": "center",
+        "alignVertical": "center",
+        "color": "#FFFFFF",
+        "backgroundColor": "#5080ff",
+        "borderSize": 0,
+        "borderColor": "#D3D3D3",
+        "paddingHorizontal": 0,
+        "paddingVertical": 0
       }
     ],
     "fonts": [

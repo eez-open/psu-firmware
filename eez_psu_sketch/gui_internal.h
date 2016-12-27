@@ -110,6 +110,8 @@ void onLastErrorEventAction();
 
 void lockFrontPanel();
 
+int transformStyle(const Widget *widget);
+
 extern WidgetCursor g_foundWidgetAtDown;
 
 void selectChannel();
@@ -180,7 +182,7 @@ inline OBJ_OFFSET getPageOffset(int pageID) {
 
 #else
 
-#define DECL_WIDGET_STYLE(var, widget) DECL_STYLE(var, (widget)->style)
+#define DECL_WIDGET_STYLE(var, widget) DECL_STYLE(var, transformStyle(widget))
 #define DECL_STYLE(var, styleID) const Style *var = (const Style *)(styles + getStyleOffset(styleID))
 
 #define DECL_CUSTOM_WIDGET(var, customWidgetID) const CustomWidget *var = (const CustomWidget *)(document + getCustomWidgetOffset(customWidgetID))

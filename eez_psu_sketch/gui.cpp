@@ -1759,6 +1759,26 @@ bool isWidgetActionEnabled(const Widget *widget) {
     return false;
 }
 
+int transformStyle(const Widget *widget) {
+    if (isFrontPanelLocked()) {
+        if (widget->style == STYLE_ID_BOTTOM_BUTTON) {
+            if (widget->action != ACTION_ID_SYS_FRONT_PANEL_UNLOCK) {
+                return STYLE_ID_BOTTOM_BUTTON_DISABLED;
+            }
+        } else if (widget->style == STYLE_ID_EDIT_S) {
+            return STYLE_ID_DEFAULT_S;
+        } else if (widget->style == STYLE_ID_MON_VALUE) {
+            return STYLE_ID_DEFAULT;
+        } else if (widget->style == STYLE_ID_CHANNEL_OFF_LANDSCAPE) {
+            return STYLE_ID_DEFAULT_L_LANDSCAPE;
+        } else if (widget->style == STYLE_ID_EDIT_VALUE_ACTIVE_S_RIGHT) {
+            return STYLE_ID_EDIT_VALUE_S_RIGHT;
+        }
+    }
+
+    return widget->style;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 void selectChannel() {

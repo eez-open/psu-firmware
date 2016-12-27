@@ -28,6 +28,8 @@ namespace gui {
 void init();
 void tick(unsigned long tick_usec);
 
+void refreshPage();
+
 void showWelcomePage();
 void showStandbyPage();
 void showEnteringStandbyPage();

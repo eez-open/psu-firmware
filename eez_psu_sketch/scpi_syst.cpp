@@ -24,6 +24,7 @@
 #include "sound.h"
 #include "profile.h"
 #include "channel_dispatcher.h"
+#include "gui.h"
 
 namespace eez {
 namespace psu {
@@ -648,6 +649,8 @@ scpi_result_t scpi_syst_KLock(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
+    gui::refreshPage();
+
     return SCPI_RES_OK;
 }
 
@@ -666,22 +669,26 @@ scpi_result_t scpi_syst_RLState(scpi_t * context) {
     }
 
     g_rlState = (RLState)rlState;
+    gui::refreshPage();
 
     return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_syst_Local(scpi_t * context) {
     g_rlState = RL_STATE_LOCAL;
+    gui::refreshPage();
     return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_syst_Remote(scpi_t * context) {
     g_rlState = RL_STATE_REMOTE;
+    gui::refreshPage();
     return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_syst_RWLock(scpi_t * context) {
     g_rlState = RL_STATE_RW_LOCK;
+    gui::refreshPage();
     return SCPI_RES_OK;
 }
 
