@@ -634,7 +634,7 @@ scpi_result_t scpi_syst_SystemPasswordReset(scpi_t * context) {
 }
 
 scpi_result_t scpi_syst_CalibrationPasswordReset(scpi_t * context) {
-    if (!persist_conf::changeCalibrationPassword("", 0)) {
+    if (!persist_conf::changeCalibrationPassword(CALIBRATION_PASSWORD_DEFAULT, 0)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
