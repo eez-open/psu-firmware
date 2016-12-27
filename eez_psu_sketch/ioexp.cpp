@@ -183,9 +183,9 @@ void IOExpander::enableWriteAndFlush() {
 }
 
 uint8_t IOExpander::reg_read_write(uint8_t opcode, uint8_t reg, uint8_t val) {
-    pinMode(channel.index == 1 ? IO_EXPANDER1 : IO_EXPANDER2, OUTPUT);
-    digitalWrite(channel.ioexp_pin, HIGH); // Deselect DAC
-    delayMicroseconds(3);
+    //pinMode(channel.index == 1 ? IO_EXPANDER1 : IO_EXPANDER2, OUTPUT);
+    //digitalWrite(channel.ioexp_pin, HIGH); // Deselect DAC
+    //delayMicroseconds(3);
 
     SPI_beginTransaction(MCP23S08_SPI);
     digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
@@ -206,7 +206,7 @@ uint8_t IOExpander::reg_read(uint8_t reg) {
 void IOExpander::reg_write(uint8_t reg, uint8_t val) {
     reg_read_write(IOEXP_WRITE, reg, val);
 	if (reg == REG_GPIO) {
-		DebugTraceF("Ch%d GPIO 0x%02x", (int)channel.index, (int)val);
+		//DebugTraceF("Ch%d GPIO 0x%02x", (int)channel.index, (int)val);
 	}
 }
 

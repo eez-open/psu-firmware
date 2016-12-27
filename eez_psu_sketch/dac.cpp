@@ -68,7 +68,7 @@ void DigitalAnalogConverter::set_value(uint8_t buffer, float value) {
 #if CONF_DEBUG
     if  (debug::g_setVoltageOrCurrentTimeStart != 0) {
         unsigned long end = micros();
-        DebugTraceF("Command duration[microseconds]: %ul", debug::g_setVoltageOrCurrentTimeStart - end);
+        DebugTraceF("Command duration[microseconds]: %ul", end - debug::g_setVoltageOrCurrentTimeStart);
         debug::g_setVoltageOrCurrentTimeStart = 0;
     }
 #endif
