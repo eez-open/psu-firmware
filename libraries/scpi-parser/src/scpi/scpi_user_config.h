@@ -45,6 +45,9 @@ extern "C" {
     X(SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE,                  -114, "Header suffix out of range")                   \
     X(SCPI_ERROR_CHANNEL_NOT_FOUND,                          100, "Channel not found")                            \
     X(SCPI_ERROR_CALIBRATION_STATE_IS_OFF,                   101, "Calibration state is off")                     \
+    X(SCPI_ERROR_INVALID_SYS_PASSWORD,                       122, "Invalid sys password")                         \
+    X(SCPI_ERROR_SYS_PASSWORD_TOO_LONG,                      125, "Sys password too long")                        \
+    X(SCPI_ERROR_SYS_PASSWORD_TOO_SHORT,                     126, "Sys password too short")                       \
     X(SCPI_ERROR_INVALID_CAL_PASSWORD,                       102, "Invalid cal password")                         \
     X(SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS,       104, "Bad sequence of calibration commands")         \
     X(SCPI_ERROR_CAL_PASSWORD_TOO_LONG,                      105, "Cal password too long")                        \

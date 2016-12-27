@@ -54,7 +54,8 @@ struct DeviceFlags {
     int outputProtectionCouple : 1;
     int shutdownWhenProtectionTripped : 1;
     int forceDisablingAllOutputsOnPowerUp : 1;
-    int reserved : 20;
+    int isFrontPanelLocked: 1;
+    int reserved : 19;
 };
 
 /// Device configuration block.
@@ -83,13 +84,26 @@ struct DeviceConfiguration {
 #endif // EEZ_PSU_SIMULATOR
 };
 
-extern DeviceConfiguration dev_conf;
+struct DeviceConfiguration2 {
+    BlockHeader header;
+    char systemPassword[PASSWORD_MAX_LENGTH + 1];
+    uint8_t reserverd[100];
+};
+
+extern DeviceConfiguration devConf;
+extern DeviceConfiguration2 devConf2;
 
 void loadDevice();
 bool saveDevice();
 
-bool isPasswordValid(const char *new_password, size_t new_password_len, int16_t &err);
-bool changePassword(const char *new_password, size_t new_password_len);
+void loadDevice2();
+bool saveDevice2();
+
+bool isSystemPasswordValid(const char *new_password, size_t new_password_len, int16_t &err);
+bool changeSystemPassword(const char *new_password, size_t new_password_len);
+
+bool isCalibrationPasswordValid(const char *new_password, size_t new_password_len, int16_t &err);
+bool changeCalibrationPassword(const char *new_password, size_t new_password_len);
 
 bool changeSerial(const char *newSerialNumber, size_t newSerialNumberLength);
 
@@ -131,6 +145,8 @@ bool isShutdownWhenProtectionTrippedEnabled();
 
 bool enableForceDisablingAllOutputsOnPowerUp(bool enable);
 bool isForceDisablingAllOutputsOnPowerUpEnabled();
+
+bool lockFrontPanel(bool lock);
 
 }
 }

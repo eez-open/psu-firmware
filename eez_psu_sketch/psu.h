@@ -108,6 +108,16 @@ void SPI_usingInterrupt(uint8_t interruptNumber);
 void SPI_beginTransaction(SPISettings &settings);
 void SPI_endTransaction();
 
+enum RLState {
+    RL_STATE_LOCAL = 0,
+    RL_STATE_REMOTE = 1,
+    RL_STATE_RW_LOCK = 2
+};
+
+extern RLState g_rlState;
+
+bool isFrontPanelLocked();
+
 }
 } // namespace eez::psu
 

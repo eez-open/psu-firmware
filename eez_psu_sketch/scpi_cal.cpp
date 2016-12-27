@@ -46,8 +46,8 @@ static bool check_password(scpi_t * context) {
         return false;
     }
 
-	size_t nPassword = strlen(persist_conf::dev_conf.calibration_password);
-    if (nPassword != len || strncmp(persist_conf::dev_conf.calibration_password, password, len) != 0) {
+	size_t nPassword = strlen(persist_conf::devConf.calibration_password);
+    if (nPassword != len || strncmp(persist_conf::devConf.calibration_password, password, len) != 0) {
         SCPI_ErrorPush(context, SCPI_ERROR_INVALID_CAL_PASSWORD);
         return false;
     }
@@ -202,12 +202,12 @@ scpi_result_t scpi_cal_PasswordNew(scpi_t * context) {
     }
 
 	int16_t err;
-	if (!persist_conf::isPasswordValid(new_password, new_password_len, err)) {
+	if (!persist_conf::isCalibrationPasswordValid(new_password, new_password_len, err)) {
         SCPI_ErrorPush(context, err);
         return SCPI_RES_ERR;
 	}
 
-    if (!persist_conf::changePassword(new_password, new_password_len)) {
+    if (!persist_conf::changeCalibrationPassword(new_password, new_password_len)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }

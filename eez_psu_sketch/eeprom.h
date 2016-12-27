@@ -29,6 +29,7 @@
 |128    |  24|[CH1 ON-time counter](#ontime-counter)    |
 |192    |  24|[CH2 ON-time counter](#ontime-counter)    |
 |1024   |  64|[Device configuration](#device)           |
+|1536   | 128|[Device configuration 2](#device2)           |
 |2048   | 144|CH1 [calibration parameters](#calibration)|
 |2560   | 144|CH2 [calibration parameters](#calibration)|
 |4096   | 232|[Profile](#profile) 0                     |
@@ -77,6 +78,13 @@
 |56    |2   |int                      |Touch screen cal. BRY        |
 |58    |2   |int                      |Touch screen cal. TRX        |
 |60    |2   |int                      |Touch screen cal. TRY        |
+
+## <a name="device">Device configuration 2</a>
+
+|Offset|Size|Type                     |Description                  |
+|------|----|-------------------------|-----------------------------|
+|0     |6   |[struct](#block-header)  |[Block header](#block-header)|
+|8     |17  |string                   |System password              |
 
 #### <a name="device-flags">Device flags</a>
 

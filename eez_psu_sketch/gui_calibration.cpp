@@ -23,6 +23,7 @@
 #include "calibration.h"
 #include "channel_dispatcher.h"
 
+#include "gui_password.h"
 #include "gui_data_snapshot.h"
 #include "gui_calibration.h"
 #include "gui_keypad.h"
@@ -33,71 +34,7 @@ namespace psu {
 namespace gui {
 namespace calibration {
 
-static void (*g_checkPasswordOkCallback)();
-
-static char g_newPassword[PASSWORD_MAX_LENGTH];
-
 int g_stepNum;
-
-////////////////////////////////////////////////////////////////////////////////
-
-void checkPasswordOkCallback(char *text) {
-    int nPassword = strlen(persist_conf::dev_conf.calibration_password);
-    int nText = strlen(text);
-    if (nPassword == nText && strncmp(persist_conf::dev_conf.calibration_password, text, nText) == 0) {
-        g_checkPasswordOkCallback();
-    } else {
-        // entered password doesn't match, 
-        errorMessageP(PSTR("Invalid password!"), popPage);
-    }
-}
-
-void checkPassword(const char *label, void (*ok)()) {
-    g_checkPasswordOkCallback = ok;
-    keypad::startPush(label, 0, PASSWORD_MAX_LENGTH, true, checkPasswordOkCallback, popPage);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-void onRetypeNewPasswordOk(char *text) {
-    size_t textLen = strlen(text);
-    if (strlen(g_newPassword) != textLen || strncmp(g_newPassword, text, textLen) != 0) {
-        // retyped new password doesn't match
-        errorMessageP(PSTR("Password doesn't match!"), popPage);
-        return;
-    }
-    
-    if (!persist_conf::changePassword(g_newPassword, strlen(g_newPassword))) {
-        // failed to save changed password
-        errorMessageP(PSTR("Failed to change password!"), popPage);
-        return;
-    }
-
-    // success
-    infoMessageP(PSTR("Password changed!"), popPage);
-}
-
-void onNewPasswordOk(char *text) {
-    int textLength = strlen(text);
-
-    int16_t err;
-    if (!persist_conf::isPasswordValid(text, textLength, err)) {
-        // invalid password (probably too short), return to keypad
-        errorMessageP(PSTR("Password too short!"));
-        return;
-    }
-
-    strcpy(g_newPassword, text);
-    keypad::startReplace(PSTR("Retype new password: "), 0, PASSWORD_MAX_LENGTH, true, onRetypeNewPasswordOk, popPage);
-}
-
-void onOldPasswordOk() {
-    keypad::startReplace(PSTR("New password: "), 0, PASSWORD_MAX_LENGTH, true, onNewPasswordOk, popPage);
-}
-
-void editPassword() {
-    checkPassword(PSTR("Current password: "), onOldPasswordOk);
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -126,7 +63,7 @@ void onStartPasswordOk() {
 }
 
 void start() {
-    checkPassword(PSTR("Password: "), onStartPasswordOk);
+    checkPassword(PSTR("Password: "), persist_conf::devConf.calibration_password, onStartPasswordOk);
 }
 
 data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {

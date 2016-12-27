@@ -65,14 +65,6 @@ void DigitalAnalogConverter::set_value(uint8_t buffer, float value) {
     SPI.transfer(DAC_value >> 8); // send first byte
     SPI.transfer(DAC_value & 0xFF);  // send second byte
 
-#if CONF_DEBUG
-    if  (debug::g_setVoltageOrCurrentTimeStart != 0) {
-        unsigned long end = micros();
-        DebugTraceF("Command duration[microseconds]: %ul", end - debug::g_setVoltageOrCurrentTimeStart);
-        debug::g_setVoltageOrCurrentTimeStart = 0;
-    }
-#endif
-
     digitalWrite(channel.dac_pin, HIGH); // Deselect DAC
     SPI_endTransaction();
 }

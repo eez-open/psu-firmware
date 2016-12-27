@@ -108,6 +108,8 @@ void dialogOk();
 
 void onLastErrorEventAction();
 
+void lockFrontPanel();
+
 extern WidgetCursor g_foundWidgetAtDown;
 
 void selectChannel();

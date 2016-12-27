@@ -85,6 +85,7 @@ struct SnapshotFlags {
     unsigned channelCouplingMode: 2;
     unsigned isVoltageBalanced: 1;
     unsigned isCurrentBalanced: 1;
+    unsigned rlState: 2;
 };
 
 struct Snapshot {

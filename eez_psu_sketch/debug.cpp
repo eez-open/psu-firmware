@@ -47,8 +47,6 @@ static unsigned long currentAdcReadCounter = 0;
 unsigned long totalAdcReadCounter = 0;
 unsigned long lastAdcReadCounter = 0;
 
-unsigned long g_setVoltageOrCurrentTimeStart = 0;
-
 bool g_debugWatchdog = true;
 
 void adcReadTick(unsigned long tick_usec) {

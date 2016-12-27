@@ -141,10 +141,6 @@ scpi_result_t get_tripped(scpi_t *context, Channel::ProtectionValue &cpv) {
 ////////////////////////////////////////////////////////////////////////////////
 
 scpi_result_t scpi_source_Current(scpi_t * context) {
-#if CONF_DEBUG
-	debug::g_setVoltageOrCurrentTimeStart = micros();
-#endif
-
 	Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -184,10 +180,6 @@ scpi_result_t scpi_source_CurrentQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_source_Voltage(scpi_t * context) {
-#if CONF_DEBUG
-	debug::g_setVoltageOrCurrentTimeStart = micros();
-#endif
-
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;

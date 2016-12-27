@@ -62,8 +62,6 @@ extern int16_t uMonDac[2];
 extern int16_t iMon[2];
 extern int16_t iMonDac[2];
 
-extern unsigned long g_setVoltageOrCurrentTimeStart;
-
 extern unsigned long lastLoopDuration;
 extern unsigned long maxLoopDuration;
 extern unsigned long avgLoopDuration;

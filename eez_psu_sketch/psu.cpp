@@ -72,6 +72,8 @@ ontime::Counter g_powerOnTimeCounter(ontime::ON_TIME_COUNTER_POWER);
 volatile bool g_insideInterruptHandler = false;
 static bool g_shutdownOnNextTick;
 
+RLState g_rlState = RL_STATE_LOCAL;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 static bool testShield();
@@ -87,6 +89,9 @@ void loadConf() {
     // loads global configuration parameters
     persist_conf::loadDevice();
  
+    // loads global configuration parameters block 2
+    persist_conf::loadDevice2();
+
     // load channels calibration parameters
     for (int i = 0; i < CH_NUM; ++i) {
         persist_conf::loadChannelCalibration(&Channel::get(i));
@@ -480,7 +485,7 @@ void boot() {
         }
     }
 
-//    using namespace persist_conf;
+    using namespace persist_conf;
 //
 //    DebugTraceF("%d", sizeof(BlockHeader));                                         // 8
 //    DebugTraceF("%d", offsetof(BlockHeader, checksum));                             // 0
@@ -511,6 +516,8 @@ void boot() {
 //#ifdef EEZ_PSU_SIMULATOR
 //    DebugTraceF("%d", offsetof(DeviceConfiguration, gui_opened));                   // 62
 //#endif // EEZ_PSU_SIMULATOR
+//
+    DebugTraceF("%d", sizeof(DeviceConfiguration2));                                 // 64
 //
 //    typedef Channel::CalibrationConfiguration CalibrationConfiguration;
 //    typedef Channel::CalibrationValueConfiguration CalibrationValueConfiguration;
@@ -597,6 +604,8 @@ bool powerUp() {
 	if (!temperature::isAllowedToPowerUp()) {
         return false;
     }
+
+    g_rlState = persist_conf::devConf.flags.isFrontPanelLocked ? RL_STATE_REMOTE : RL_STATE_LOCAL;
 
 #if OPTION_DISPLAY
     gui::showWelcomePage();
@@ -1017,6 +1026,10 @@ void unlimitMaxCurrent() {
 
 MaxCurrentLimitCause getMaxCurrentLimitCause() {
     return g_maxCurrentLimitCause;
+}
+
+bool isFrontPanelLocked() {
+    return g_rlState != RL_STATE_LOCAL;
 }
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)

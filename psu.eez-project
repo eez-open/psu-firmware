@@ -18,7 +18,7 @@
         },
         {
           "fileName": "actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"persist_conf.h\"\n#include \"channel_dispatcher.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings.h\"\n#include \"gui_page_user_profiles.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2016-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"persist_conf.h\"\n#include \"channel_dispatcher.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings.h\"\n#include \"gui_page_user_profiles.h\"\n#include \"gui_password.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu::gui\n"
         },
         {
           "fileName": "gui_document.h",
@@ -171,7 +171,7 @@
     {
       "name": "turn_off",
       "implementationType": "native",
-      "implementation": "// TODO..."
+      "implementation": "// INTENTIONALLY BLANK IMPLEMENTATION"
     },
     {
       "name": "show_previous_page",
@@ -336,7 +336,7 @@
     {
       "name": "sys_settings_cal_edit_password",
       "implementationType": "native",
-      "implementation": "gui::calibration::editPassword();"
+      "implementation": "editCalibrationPassword();"
     },
     {
       "name": "sys_settings_cal_ch_wiz_start",
@@ -587,6 +587,21 @@
       "name": "on_last_error_event_action",
       "implementationType": "native",
       "implementation": "onLastErrorEventAction();"
+    },
+    {
+      "name": "edit_system_password",
+      "implementationType": "native",
+      "implementation": "editSystemPassword();"
+    },
+    {
+      "name": "sys.frontPanel.lock",
+      "implementationType": "native",
+      "implementation": "lockFrontPanel();"
+    },
+    {
+      "name": "sys.frontPanel.unlock",
+      "implementationType": "native",
+      "implementation": "// INTENTIONALLY BLANK IMPLEMENTATION"
     }
   ],
   "data": [
@@ -1442,6 +1457,17 @@
     {
       "name": "sys.forceDisablingAllOutputsOnPowerUp",
       "type": "boolean",
+      "defaultValue": "0"
+    },
+    {
+      "name": "sys.password.isSet",
+      "type": "boolean",
+      "defaultValue": "1"
+    },
+    {
+      "name": "sys.RlState",
+      "type": "enum",
+      "enumItems": "[\n\"Local\",\n\"Remote\",\n\"RWLock\"\n]",
       "defaultValue": "0"
     }
   ],
@@ -5407,13 +5433,48 @@
               "text": "?"
             },
             {
-              "type": "Text",
               "x": 144,
+              "type": "Select",
+              "data": "sys.RlState",
               "y": 204,
               "width": 48,
               "height": 36,
-              "style": "bottom_button_disabled",
-              "text": "L"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "data": "",
+                  "action": "sys.frontPanel.lock",
+                  "x": 0,
+                  "y": 0,
+                  "width": 48,
+                  "height": 36,
+                  "style": "bottom_button",
+                  "text": "L"
+                },
+                {
+                  "type": "Text",
+                  "data": "",
+                  "action": "sys.frontPanel.unlock",
+                  "x": 0,
+                  "y": 0,
+                  "width": 48,
+                  "height": 36,
+                  "style": "bottom_button",
+                  "text": "N"
+                },
+                {
+                  "type": "Text",
+                  "data": "",
+                  "action": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 48,
+                  "height": 36,
+                  "style": "bottom_button_disabled",
+                  "text": "N"
+                }
+              ]
             },
             {
               "type": "Text",
@@ -14668,14 +14729,35 @@
               "text": "System password"
             },
             {
-              "type": "Text",
-              "action": "",
               "x": 149,
+              "type": "Select",
+              "data": "sys.password.isSet",
               "y": 142,
               "width": 103,
               "height": 29,
-              "style": "edit_value_active_S_left",
-              "text": "Change"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "edit_system_password",
+                  "x": 0,
+                  "y": 0,
+                  "width": 103,
+                  "height": 29,
+                  "style": "edit_value_active_S_left",
+                  "text": "Set"
+                },
+                {
+                  "type": "Text",
+                  "action": "edit_system_password",
+                  "x": 0,
+                  "y": 0,
+                  "width": 103,
+                  "height": 29,
+                  "style": "edit_value_active_S_left",
+                  "text": "Change"
+                }
+              ]
             },
             {
               "type": "Text",
@@ -63555,13 +63637,13 @@
           {
             "encoding": 76,
             "x": 2,
-            "y": 1,
+            "y": 0,
             "width": 29,
             "height": 33,
             "dx": 33,
             "source": {
               "filePath": "fonts/bdf/webhostinghub-glyphs.24.bdf",
-              "encoding": 76
+              "encoding": 61631
             },
             "pixels": [
               0,
@@ -63604,19 +63686,19 @@
               0,
               7,
               128,
-              15,
+              0,
               0,
               7,
               128,
-              15,
+              0,
               0,
               7,
               128,
-              15,
+              0,
               0,
               7,
               128,
-              15,
+              0,
               0,
               7,
               128,
@@ -63697,7 +63779,7 @@
               255,
               240
             ],
-            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAjCAYAAAAaLGNkAAAA4klEQVRYR+2X2w6AIAxD4f8/2luEgDLWDqMzwTcTVg7d3DAGB090wBCsEEsHntZkA3qbX7lgbXjhtgMDkIAgfWiREQAGQSDQ/KPrbuWkQUjCvTg6xgKhxewnbYGIcZrgVUxbX1oNx7K2jkDsgM14BoIBSI5AbkwIpJFAVioDENJwmw7LjGBvBNXhy5c3Nm9O2t9DtOqJdfPQsDrBFHSvXv4NgbRvNC1mJ1xAiNPwTD7qQtaxFqYEwgA8AjHydVWza8QJFxCfNysXNTE7ptYjpH8OaX6YOyZ7gaEGGHuKUZhcVytbJzkkTl9CMgAAAABJRU5ErkJggg=="
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAjCAYAAAAaLGNkAAAA3klEQVRYR+2X2w6AIAxD5f8/2lvUoDLWFqPT6DMrh25smLoAXwrA0KkQfQWe1mQDapsfuWBteOG4AwOwAkH60CIRAAZBIND8o+tO5eRBWMK1ODpGgfBippOWQMw4T/Ao5q3PrYZjWVtbICbAYjwDwQCsjkBuKMJMp/8hvpEOZUYwdXK6JXlh3rF5cdK+HqJ0vVk3Zw3VCabJ1erl3RBIl0XTIjsRAsKchkvyURc2HbUwLRAG4BKIltu1ewS3OBEC4vFmFaIm/o7p9Qjrn8OaH3LHZB8w1ABjT9EKs9XVABrTNSSiMmeoAAAAAElFTkSuQmCC"
           },
           {
             "encoding": 77,
@@ -63881,11 +63963,150 @@
           },
           {
             "encoding": 78,
+            "x": 2,
+            "y": 0,
+            "width": 29,
+            "height": 33,
+            "dx": 33,
             "source": {
               "filePath": "fonts/bdf/webhostinghub-glyphs.24.bdf",
-              "encoding": 78
+              "encoding": 61630
             },
-            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAjCAYAAABVcWC0AAAAD0lEQVQIW2NkAALGIUMAAAz9ACRF5/SBAAAAAElFTkSuQmCC"
+            "pixels": [
+              0,
+              31,
+              192,
+              0,
+              0,
+              127,
+              240,
+              0,
+              0,
+              255,
+              248,
+              0,
+              1,
+              255,
+              252,
+              0,
+              3,
+              248,
+              254,
+              0,
+              7,
+              224,
+              63,
+              0,
+              7,
+              192,
+              31,
+              0,
+              7,
+              128,
+              15,
+              0,
+              15,
+              128,
+              15,
+              128,
+              15,
+              0,
+              7,
+              128,
+              15,
+              0,
+              7,
+              128,
+              15,
+              0,
+              7,
+              128,
+              15,
+              0,
+              7,
+              128,
+              15,
+              0,
+              7,
+              128,
+              63,
+              255,
+              255,
+              224,
+              255,
+              255,
+              255,
+              248,
+              255,
+              255,
+              255,
+              248,
+              255,
+              240,
+              127,
+              248,
+              255,
+              224,
+              63,
+              248,
+              255,
+              224,
+              63,
+              248,
+              255,
+              192,
+              31,
+              248,
+              255,
+              192,
+              31,
+              248,
+              255,
+              224,
+              63,
+              248,
+              255,
+              240,
+              127,
+              248,
+              255,
+              248,
+              255,
+              248,
+              255,
+              248,
+              255,
+              248,
+              255,
+              240,
+              127,
+              248,
+              255,
+              240,
+              127,
+              248,
+              255,
+              224,
+              63,
+              248,
+              255,
+              224,
+              63,
+              248,
+              255,
+              192,
+              63,
+              248,
+              255,
+              255,
+              255,
+              248,
+              127,
+              255,
+              255,
+              240
+            ],
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAjCAYAAAAaLGNkAAAA4klEQVRYR+2X2w6AIAxD4f8/2luEgDLWDqMzwTcTVg7d3DAGB090wBCsEEsHntZkA3qbX7lgbXjhtgMDkIAgfWiREQAGQSDQ/KPrbuWkQUjCvTg6xgKhxewnbYGIcZrgVUxbX1oNx7K2jkDsgM14BoIBSI5AbkwIpJFAVioDENJwmw7LjGBvBNXhy5c3Nm9O2t9DtOqJdfPQsDrBFHSvXv4NgbRvNC1mJ1xAiNPwTD7qQtaxFqYEwgA8AjHydVWza8QJFxCfNysXNTE7ptYjpH8OaX6YOyZ7gaEGGHuKUZhcVytbJzkkTl9CMgAAAABJRU5ErkJggg=="
           },
           {
             "encoding": 79,

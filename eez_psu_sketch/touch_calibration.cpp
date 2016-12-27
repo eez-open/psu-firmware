@@ -107,14 +107,14 @@ bool read_point() {
 void init() {
     bool success;
     
-    if (persist_conf::dev_conf.touch_screen_cal_orientation == DISPLAY_ORIENTATION) {
+    if (persist_conf::devConf.touch_screen_cal_orientation == DISPLAY_ORIENTATION) {
         success = touch::calibrateTransform(
-            persist_conf::dev_conf.touch_screen_cal_tlx,
-            persist_conf::dev_conf.touch_screen_cal_tly, 
-            persist_conf::dev_conf.touch_screen_cal_brx,
-            persist_conf::dev_conf.touch_screen_cal_bry, 
-            persist_conf::dev_conf.touch_screen_cal_trx,
-            persist_conf::dev_conf.touch_screen_cal_try, 
+            persist_conf::devConf.touch_screen_cal_tlx,
+            persist_conf::devConf.touch_screen_cal_tly, 
+            persist_conf::devConf.touch_screen_cal_brx,
+            persist_conf::devConf.touch_screen_cal_bry, 
+            persist_conf::devConf.touch_screen_cal_trx,
+            persist_conf::devConf.touch_screen_cal_try, 
             CONF_GUI_TOUCH_SCREEN_CALIBRATION_M,
             lcd::lcd.getDisplayXSize(), lcd::lcd.getDisplayYSize()
         );
@@ -159,13 +159,13 @@ bool isCalibrating() {
 }
 
 void dialogYes() {
-	persist_conf::dev_conf.touch_screen_cal_orientation = DISPLAY_ORIENTATION;
-    persist_conf::dev_conf.touch_screen_cal_tlx = point_tlx;
-    persist_conf::dev_conf.touch_screen_cal_tly = point_tly;
-    persist_conf::dev_conf.touch_screen_cal_brx = point_brx;
-    persist_conf::dev_conf.touch_screen_cal_bry = point_bry;
-    persist_conf::dev_conf.touch_screen_cal_trx = point_trx;
-    persist_conf::dev_conf.touch_screen_cal_try = point_try;
+	persist_conf::devConf.touch_screen_cal_orientation = DISPLAY_ORIENTATION;
+    persist_conf::devConf.touch_screen_cal_tlx = point_tlx;
+    persist_conf::devConf.touch_screen_cal_tly = point_tly;
+    persist_conf::devConf.touch_screen_cal_brx = point_brx;
+    persist_conf::devConf.touch_screen_cal_bry = point_bry;
+    persist_conf::devConf.touch_screen_cal_trx = point_trx;
+    persist_conf::devConf.touch_screen_cal_try = point_try;
 
     persist_conf::saveDevice();
 

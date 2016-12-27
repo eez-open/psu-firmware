@@ -93,8 +93,8 @@ bool open() {
     
     g_window = g_create_window_ptr(getWindowDefinition(w, h));
 
-    if (!persist_conf::dev_conf.gui_opened) {
-        persist_conf::dev_conf.gui_opened = true;
+    if (!persist_conf::devConf.gui_opened) {
+        persist_conf::devConf.gui_opened = true;
         persist_conf::saveDevice();
     }
 
@@ -106,8 +106,8 @@ void close() {
         delete g_window;
         g_window = 0;
 
-        if (persist_conf::dev_conf.gui_opened) {
-            persist_conf::dev_conf.gui_opened = false;
+        if (persist_conf::devConf.gui_opened) {
+            persist_conf::devConf.gui_opened = false;
             persist_conf::saveDevice();
         }
     }

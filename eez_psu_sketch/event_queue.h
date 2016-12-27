@@ -61,6 +61,7 @@ static const int EVENT_TYPE_ERROR = 3;
     EVENT_INFO(SYSTEM_DATE_TIME_CHANGED, 6, "Date/time changed") \
     EVENT_INFO(ETHERNET_ENABLED, 7, "Ethernet enabled") \
     EVENT_INFO(ETHERNET_DISABLED, 8, "Ethernet disabled") \
+    EVENT_INFO(SYSTEM_PASSWORD_CHANGED, 9, "System password changed") \
     EVENT_INFO(CH1_OUTPUT_ENABLED, 10, "Ch1 output on") \
     EVENT_INFO(CH2_OUTPUT_ENABLED, 11, "Ch2 output on") \
     EVENT_INFO(CH1_OUTPUT_DISABLED, 20, "Ch1 output off") \
@@ -105,6 +106,8 @@ static const int EVENT_TYPE_ERROR = 3;
     EVENT_INFO(SHUTDOWN_WHEN_PROTECTION_TRIPPED_DISABLED, 99, "Shutdown when tripped disabled") \
     EVENT_INFO(FORCE_DISABLING_ALL_OUTPUTS_ON_POWERUP_ENABLED, 100, "Force disabling outputs enabled") \
     EVENT_INFO(FORCE_DISABLING_ALL_OUTPUTS_ON_POWERUP_DISABLED, 101, "Force disabling outputs disabled") \
+    EVENT_INFO(FRONT_PANEL_LOCKED, 102, "Front panel locked") \
+    EVENT_INFO(FRONT_PANEL_UNLOCKED, 103, "Front panel unlocked") \
     
 
 #define EVENT_ERROR_START_ID 10000

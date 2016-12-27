@@ -537,7 +537,7 @@ scpi_result_t scpi_syst_Serial(scpi_t * context) {
 
 
 scpi_result_t scpi_syst_SerialQ(scpi_t * context) {
-    SCPI_ResultText(context, persist_conf::dev_conf.serialNumber);
+    SCPI_ResultText(context, persist_conf::devConf.serialNumber);
     return SCPI_RES_OK;
 }
 
@@ -578,6 +578,110 @@ scpi_result_t scpi_syst_PonOutputDisable(scpi_t * context) {
 scpi_result_t scpi_syst_PonOutputDisableQ(scpi_t * context) {
     SCPI_ResultBool(context, persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled());
 
+    return SCPI_RES_OK;
+}
+
+static bool check_password(scpi_t * context) {
+    const char *password;
+    size_t len;
+
+    if (!SCPI_ParamCharacters(context, &password, &len, true)) {
+        return false;
+    }
+
+	size_t nPassword = strlen(persist_conf::devConf2.systemPassword);
+    if (nPassword != len || strncmp(persist_conf::devConf2.systemPassword, password, len) != 0) {
+        SCPI_ErrorPush(context, SCPI_ERROR_INVALID_SYS_PASSWORD);
+        return false;
+    }
+
+    return true;
+}
+
+scpi_result_t scpi_syst_PasswordNew(scpi_t * context) {
+    if (!check_password(context)) {
+        return SCPI_RES_ERR;
+    }
+
+    const char *new_password;
+    size_t new_password_len;
+
+    if (!SCPI_ParamCharacters(context, &new_password, &new_password_len, true)) {
+        return SCPI_RES_ERR;
+    }
+
+	int16_t err;
+	if (!persist_conf::isSystemPasswordValid(new_password, new_password_len, err)) {
+        SCPI_ErrorPush(context, err);
+        return SCPI_RES_ERR;
+	}
+
+    if (!persist_conf::changeSystemPassword(new_password, new_password_len)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_SystemPasswordReset(scpi_t * context) {
+    if (!persist_conf::changeSystemPassword("", 0)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_CalibrationPasswordReset(scpi_t * context) {
+    if (!persist_conf::changeCalibrationPassword("", 0)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_KLock(scpi_t * context) {
+    if (!persist_conf::lockFrontPanel(true)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
+}
+
+scpi_choice_def_t rlStateChoice[] = {
+    { "LOCal", RL_STATE_LOCAL },
+    { "REMote", RL_STATE_REMOTE },
+    { "RWLock", RL_STATE_RW_LOCK },
+    SCPI_CHOICE_LIST_END /* termination of option list */
+};
+
+
+scpi_result_t scpi_syst_RLState(scpi_t * context) {
+    int32_t rlState;
+    if (!SCPI_ParamChoice(context, rlStateChoice, &rlState, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    g_rlState = (RLState)rlState;
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_Local(scpi_t * context) {
+    g_rlState = RL_STATE_LOCAL;
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_Remote(scpi_t * context) {
+    g_rlState = RL_STATE_REMOTE;
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_RWLock(scpi_t * context) {
+    g_rlState = RL_STATE_RW_LOCK;
     return SCPI_RES_OK;
 }
 

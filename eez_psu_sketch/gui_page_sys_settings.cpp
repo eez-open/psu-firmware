@@ -31,10 +31,12 @@ namespace eez {
 namespace psu {
 namespace gui {
 
+////////////////////////////////////////////////////////////////////////////////
+
 SysSettingsDateTimePage::SysSettingsDateTimePage() {
 	dateTime = origDateTime = datetime::DateTime::now();
-	timeZone = origTimeZone = persist_conf::dev_conf.time_zone;
-	dst = origDst = persist_conf::dev_conf.flags.dst;
+	timeZone = origTimeZone = persist_conf::devConf.time_zone;
+	dst = origDst = persist_conf::devConf.flags.dst;
 }
 
 void SysSettingsDateTimePage::takeSnapshot(data::Snapshot *snapshot) {
@@ -180,8 +182,8 @@ void SysSettingsDateTimePage::set() {
 	}
 
 	if (timeZone != origTimeZone || dst != origDst) {
-		persist_conf::dev_conf.time_zone = timeZone;
-		persist_conf::dev_conf.flags.dst = dst;
+		persist_conf::devConf.time_zone = timeZone;
+		persist_conf::devConf.flags.dst = dst;
 		if (!persist_conf::saveDevice()) {
 	        errorMessageP(PSTR("Failed to set time zone and DST!"));
 			return;

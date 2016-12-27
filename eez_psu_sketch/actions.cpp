@@ -30,6 +30,7 @@
 #include "gui_page_ch_settings_adv.h"
 #include "gui_page_sys_settings.h"
 #include "gui_page_user_profiles.h"
+#include "gui_password.h"
 
 namespace eez {
 namespace psu {
@@ -144,7 +145,7 @@ void action_cancel() {
 }
 
 void action_turn_off() {
-    // TODO...
+    // INTENTIONALLY BLANK IMPLEMENTATION
 }
 
 void action_show_previous_page() {
@@ -278,7 +279,7 @@ void action_show_ch_settings_info_cal() {
 }
 
 void action_sys_settings_cal_edit_password() {
-    gui::calibration::editPassword();
+    editCalibrationPassword();
 }
 
 void action_sys_settings_cal_ch_wiz_start() {
@@ -483,6 +484,18 @@ void action_on_last_error_event_action() {
     onLastErrorEventAction();
 }
 
+void action_edit_system_password() {
+    editSystemPassword();
+}
+
+void action_sys_front_panel_lock() {
+    lockFrontPanel();
+}
+
+void action_sys_front_panel_unlock() {
+    // INTENTIONALLY BLANK IMPLEMENTATION
+}
+
 
 ACTION actions[] = {
     0,
@@ -594,7 +607,10 @@ ACTION actions[] = {
     action_sys_settings_protections_aux_otp_edit_level,
     action_sys_settings_protections_aux_otp_edit_delay,
     action_sys_settings_protections_aux_otp_clear,
-    action_on_last_error_event_action
+    action_on_last_error_event_action,
+    action_edit_system_password,
+    action_sys_front_panel_lock,
+    action_sys_front_panel_unlock
 };
 
 }

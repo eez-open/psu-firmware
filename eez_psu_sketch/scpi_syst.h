@@ -60,4 +60,12 @@
     SCPI_COMMAND("SYSTem:POWer:PROTection:TRIP?", scpi_syst_PowerProtectionTripQ) \
     SCPI_COMMAND("SYSTem:PON:OUTPut:DISable", scpi_syst_PonOutputDisable) \
     SCPI_COMMAND("SYSTem:PON:OUTPut:DISable?", scpi_syst_PonOutputDisableQ) \
+    SCPI_COMMAND("SYSTem:PASSword:NEW", scpi_syst_PasswordNew) \
+    SCPI_COMMAND("SYSTem:PASSword:FPANel:RESet", scpi_syst_SystemPasswordReset) \
+    SCPI_COMMAND("SYSTem:PASSword:CALibrate:RESet", scpi_syst_CalibrationPasswordReset) \
+    SCPI_COMMAND("SYSTem:KLOCk", scpi_syst_KLock) \
+    SCPI_COMMAND("SYSTem:COMMunicate:RLSTate", scpi_syst_RLState) \
+    SCPI_COMMAND("SYSTem:LOCal", scpi_syst_Local) \
+    SCPI_COMMAND("SYSTem:REMote", scpi_syst_Remote) \
+    SCPI_COMMAND("SYSTem:RWLock", scpi_syst_RWLock) \
 

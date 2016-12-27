@@ -167,7 +167,7 @@ void Snapshot::takeSnapshot() {
         channelSnapshot.onTimeLast = channel.onTimeCounter.getLastTime();
     }
 
-    flags.channelDisplayedValues = persist_conf::dev_conf.flags.channelDisplayedValues;
+    flags.channelDisplayedValues = persist_conf::devConf.flags.channelDisplayedValues;
     flags.channelCouplingMode = channel_dispatcher::getType();
 
     if (channel_dispatcher::isSeries()) {
@@ -197,6 +197,8 @@ void Snapshot::takeSnapshot() {
     } else {
         flags.auxTemperatureStatus = 2;
     }
+
+    flags.rlState = g_rlState;
 
     keypadSnapshot.takeSnapshot(this);
     editModeSnapshot.takeSnapshot(this);
@@ -356,7 +358,15 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_OTP) {
         return Value(flags.otp);
     }
-    
+
+    if (id == DATA_ID_SYS_PASSWORD_IS_SET) {
+        return data::Value(strlen(persist_conf::devConf2.systemPassword) > 0 ? 1 : 0);
+    }
+
+    if (id == DATA_ID_SYS_RL_STATE) {
+        return data::Value(flags.rlState);
+    }
+
     if (id == DATA_ID_SYS_TEMP_AUX_STATUS) {
         return data::Value(flags.auxTemperatureStatus);
     }
