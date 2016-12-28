@@ -449,7 +449,7 @@ void SysSettingsSoundPage::toggleSound() {
             infoMessageP(PSTR("Sound disabled!"));
         }
     } else {
-        if (persist_conf::enableOutputProtectionCouple(true)) {
+        if (persist_conf::enableSound(true)) {
             infoMessageP(PSTR("Sound enabled!"));
         }
     }
