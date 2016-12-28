@@ -38,9 +38,9 @@ void powerUp() {
 }
 
 void powerDown() {
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_WATCHDOG && (CONF_DEBUG || CONF_DEBUG_LATEST)
-    watchdog::printInfo();
-#endif
+//#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_WATCHDOG && (CONF_DEBUG || CONF_DEBUG_LATEST)
+//    watchdog::printInfo();
+//#endif
 
     DebugTrace("PWR_DIRECT -> LOW");
     digitalWrite(PWR_DIRECT, LOW);
