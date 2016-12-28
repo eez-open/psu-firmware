@@ -39,9 +39,9 @@ static const uint16_t EVENT_SIZE = 16;
 
 static EventQueueHeader eventQueue;
 
-static int16_t g_eventsDuringInterruptHandling[6];
-static uint8_t g_eventsDuringInterruptHandlingHead = 0;
-static const int MAX_EVENTS_DURING_INTERRUPT_HANDLING = sizeof(g_eventsDuringInterruptHandling) / sizeof(int16_t);
+static int16_t g_eventsToPush[6];
+static uint8_t g_eventsToPushHead = 0;
+static const int MAX_EVENTS_TO_PUSH = sizeof(g_eventsToPush) / sizeof(int16_t);
 
 static uint8_t g_pageIndex = 0;
 
@@ -79,11 +79,43 @@ void init() {
     }
 }
 
-void tick(unsigned long tick_usec) {
-    for (int i = 0; i < g_eventsDuringInterruptHandlingHead; ++i) {
-        pushEvent(g_eventsDuringInterruptHandling[i]);
+void doPushEvent(int16_t eventId) {
+    Event e;
+
+    e.dateTime = datetime::now();
+    e.eventId = eventId;
+
+    writeEvent(eventQueue.head, &e);
+
+    if (eventQueue.lastErrorEventIndex == eventQueue.head) {
+        // this event overwrote last error event, therefore:
+        eventQueue.lastErrorEventIndex = NULL_INDEX;
+        g_lastErrorEventChanged = true;
     }
-    g_eventsDuringInterruptHandlingHead = 0;
+
+    int eventType = getEventType(&e);
+    if (eventType == EVENT_TYPE_ERROR || eventType == EVENT_TYPE_WARNING && eventQueue.lastErrorEventIndex == NULL_INDEX) {
+        eventQueue.lastErrorEventIndex = eventQueue.head;
+        g_lastErrorEventChanged = true;
+    }
+
+    eventQueue.head = (eventQueue.head + 1) % MAX_EVENTS;
+    if (eventQueue.size < MAX_EVENTS) {
+        ++eventQueue.size;
+    }
+
+    writeHeader();
+
+    if (getEventType(&e) == EVENT_TYPE_ERROR) {
+        sound::playBeep();
+    }
+}
+
+void tick(unsigned long tick_usec) {
+    for (int i = 0; i < g_eventsToPushHead; ++i) {
+        doPushEvent(g_eventsToPush[i]);
+    }
+    g_eventsToPushHead = 0;
 }
 
 int getNumEvents() {
@@ -177,43 +209,11 @@ const char *getEventMessage(Event *e) {
 }
 
 void pushEvent(int16_t eventId) {
-    if (g_insideInterruptHandler) {
-        if (g_eventsDuringInterruptHandlingHead < MAX_EVENTS_DURING_INTERRUPT_HANDLING) {
-            g_eventsDuringInterruptHandling[g_eventsDuringInterruptHandlingHead] = eventId;
-            ++g_eventsDuringInterruptHandlingHead;
-        } else {
-            DebugTrace("MAX_EVENTS_DURING_INTERRUPT_HANDLING exceeded");
-        }
+    if (g_eventsToPushHead < MAX_EVENTS_TO_PUSH) {
+        g_eventsToPush[g_eventsToPushHead] = eventId;
+        ++g_eventsToPushHead;
     } else {
-        Event e;
-
-        e.dateTime = datetime::now();
-        e.eventId = eventId;
-
-        writeEvent(eventQueue.head, &e);
-
-        if (eventQueue.lastErrorEventIndex == eventQueue.head) {
-            // this event overwrote last error event, therefore:
-            eventQueue.lastErrorEventIndex = NULL_INDEX;
-            g_lastErrorEventChanged = true;
-        }
-
-        int eventType = getEventType(&e);
-        if (eventType == EVENT_TYPE_ERROR || eventType == EVENT_TYPE_WARNING && eventQueue.lastErrorEventIndex == NULL_INDEX) {
-            eventQueue.lastErrorEventIndex = eventQueue.head;
-            g_lastErrorEventChanged = true;
-        }
-
-        eventQueue.head = (eventQueue.head + 1) % MAX_EVENTS;
-        if (eventQueue.size < MAX_EVENTS) {
-            ++eventQueue.size;
-        }
-
-        writeHeader();
-
-        if (getEventType(&e) == EVENT_TYPE_ERROR) {
-            sound::playBeep();
-        }
+        DebugTrace("MAX_EVENTS_TO_PUSH exceeded");
     }
 }
 
