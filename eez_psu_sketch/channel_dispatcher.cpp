@@ -61,7 +61,10 @@ bool setType(Type value) {
                         if (i != 0) {
                             Channel &channel1 = Channel::get(0);
 
+                            channel.setVoltageLimit(channel1.getVoltageLimit());
                             channel.setVoltage(channel1.u.set);
+
+                            channel.setCurrentLimit(channel1.getCurrentLimit());
                             channel.setCurrent(channel1.i.set);
 
                             channel.prot_conf.flags.u_state = channel1.prot_conf.flags.u_state;
@@ -83,10 +86,16 @@ bool setType(Type value) {
             
                             temperature::sensors[temp_sensor::CH1 + channel.index - 1].prot_conf.delay =
                                 temperature::sensors[temp_sensor::CH1].prot_conf.delay;
+                        } else {
+                            channel.setVoltageLimit(min(Channel::get(0).getVoltageLimit(), Channel::get(1).getVoltageLimit()));
+                            channel.setCurrentLimit(min(Channel::get(0).getCurrentLimit(), Channel::get(1).getCurrentLimit()));
                         }
                     } else {
                         channel.setVoltage(getUMin(channel));
+                        channel.setVoltageLimit(min(Channel::get(0).getVoltageLimit(), Channel::get(1).getVoltageLimit()));
+
                         channel.setCurrent(getIMin(channel));
+                        channel.setCurrentLimit(min(Channel::get(0).getCurrentLimit(), Channel::get(1).getCurrentLimit()));
 
                         channel.prot_conf.flags.u_state = Channel::get(0).prot_conf.flags.u_state || Channel::get(1).prot_conf.flags.u_state ? 1 : 0;
                         channel.prot_conf.u_level = min(Channel::get(0).prot_conf.u_level, Channel::get(1).prot_conf.u_level);
@@ -180,6 +189,8 @@ float getULimit(const Channel &channel) {
 float getUMaxLimit(const Channel &channel) {
     if (isSeries()) {
         return 2 * min(Channel::get(0).getVoltageMaxLimit(), Channel::get(1).getVoltageMaxLimit());
+    } else if (isParallel() || isTracked()) {
+        return min(Channel::get(0).getVoltageMaxLimit(), Channel::get(1).getVoltageMaxLimit());
     }
     return channel.getVoltageMaxLimit();
 }
@@ -324,6 +335,8 @@ float getILimit(const Channel &channel) {
 float getIMaxLimit(const Channel &channel) {
     if (isParallel()) {
         return 2 * min(Channel::get(0).getMaxCurrentLimit(), Channel::get(1).getMaxCurrentLimit());
+    } else if (isSeries() || isTracked()) {
+        return min(Channel::get(0).getMaxCurrentLimit(), Channel::get(1).getMaxCurrentLimit());
     }
     return channel.getMaxCurrentLimit();
 }
