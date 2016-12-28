@@ -954,15 +954,9 @@ void Channel::doOutputEnable(bool enable) {
             calibration::stop();
         }
 
-        // disable DP
-        if (channel_dispatcher::isParallel()) {
-            // channel is coupled in parallel, disable DP immediatelly
-            doDpEnable(false);
-        } else {
-            // delayed
-            delayed_dp_off = true;
-            delayed_dp_off_start = micros();
-        }
+        // turn off DP after some delay
+        delayed_dp_off = true;
+        delayed_dp_off_start = micros();
     }
 
     //interrupts();
