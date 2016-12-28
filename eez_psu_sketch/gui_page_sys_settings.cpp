@@ -194,7 +194,7 @@ void SysSettingsDateTimePage::set() {
 		}
 	}
 
-	infoMessageP(PSTR("Date and time settings saved!"));
+	infoMessageP(PSTR("Date and time settings saved!"), popPage);
 	return;
 }
 

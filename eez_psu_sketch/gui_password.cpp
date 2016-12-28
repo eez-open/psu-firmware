@@ -112,7 +112,7 @@ static void editPassword(const char *oldPassword) {
     if (strlen(g_oldPassword)) {
         checkPassword(PSTR("Current password: "), onOldPasswordOk);
     } else {
-        onOldPasswordOk();
+        keypad::startPush(PSTR("New password: "), 0, PASSWORD_MAX_LENGTH, true, onNewPasswordOk, popPage);
     }
 }
 
