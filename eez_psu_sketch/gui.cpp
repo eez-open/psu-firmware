@@ -1840,6 +1840,7 @@ void deselect_widget() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void do_action(int action_id) {
+    sound::playClick();
     actions[action_id]();
 }
 

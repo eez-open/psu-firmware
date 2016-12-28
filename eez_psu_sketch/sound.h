@@ -35,6 +35,9 @@ void playPowerDown();
 /// Play beep sound.
 void playBeep(bool force = false);
 
+/// Play click sound
+void playClick();
+
 }
 }
 } // namespace eez::psu::sound

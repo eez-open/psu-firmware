@@ -175,6 +175,10 @@ void playBeep(bool force) {
     }
 }
 
+void playClick() {
+    buzzer::tone(1300, 150);
+}
+
 }
 }
 } // namespace eez::psu::sound
