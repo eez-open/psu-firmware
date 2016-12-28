@@ -17,6 +17,7 @@
 */
 
 #include "psu.h"
+#include "sound.h"
 #include "gui_data.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_step.h"
@@ -115,6 +116,7 @@ void test() {
 
             if (edit_mode::setValue(value)) {
 	            changed = true;
+                sound::playClick();
 			}
         }
     }

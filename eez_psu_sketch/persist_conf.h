@@ -44,7 +44,7 @@ struct BlockHeader {
 
 /// Device binary flags stored in DeviceConfiguration.
 struct DeviceFlags {
-    int beep_enabled : 1;
+    int isSoundEnabled : 1;
     int date_valid : 1;
     int time_valid : 1;
     int profile_auto_recall : 1;
@@ -55,7 +55,8 @@ struct DeviceFlags {
     int shutdownWhenProtectionTripped : 1;
     int forceDisablingAllOutputsOnPowerUp : 1;
     int isFrontPanelLocked: 1;
-    int reserved : 19;
+    int isClickSoundEnabled : 1;
+    int reserved : 18;
 };
 
 /// Device configuration block.
@@ -107,8 +108,11 @@ bool changeCalibrationPassword(const char *new_password, size_t new_password_len
 
 bool changeSerial(const char *newSerialNumber, size_t newSerialNumberLength);
 
-bool enableBeep(bool enable);
-bool isBeepEnabled();
+bool enableSound(bool enable);
+bool isSoundEnabled();
+
+bool enableClickSound(bool enable);
+bool isClickSoundEnabled();
 
 bool enableEthernet(bool enable);
 bool isEthernetEnabled();

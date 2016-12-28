@@ -108,6 +108,16 @@ protected:
 	static void onDelaySet(float value);
 };
 
+class SysSettingsSoundPage : public Page {
+public:
+	void takeSnapshot(data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+
+    static void toggleSound();
+    static void toggleClickSound();
+};
+
+
 }
 }
 } // namespace eez::psu::gui

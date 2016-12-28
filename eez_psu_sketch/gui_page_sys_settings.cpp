@@ -424,6 +424,49 @@ void SysSettingsAuxOtpPage::clear() {
     infoMessageP(PSTR("Cleared!"), popPage);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+void SysSettingsSoundPage::takeSnapshot(data::Snapshot *snapshot) {
+    snapshot->flags.switch1 = persist_conf::isSoundEnabled() ? 1 : 0;
+    snapshot->flags.switch2 = persist_conf::isClickSoundEnabled() ? 1 : 0;
+}
+
+data::Value SysSettingsSoundPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+    if (id == DATA_ID_SYS_SOUND_IS_ENABLED) {
+        return data::Value(snapshot->flags.switch1);
+    }
+
+    if (id == DATA_ID_SYS_SOUND_IS_CLICK_ENABLED) {
+        return data::Value(snapshot->flags.switch2);
+    }
+
+    return data::Value();
+}
+
+void SysSettingsSoundPage::toggleSound() {
+    if (persist_conf::isSoundEnabled()) {
+        if (persist_conf::enableSound(false)) {
+            infoMessageP(PSTR("Sound disabled!"));
+        }
+    } else {
+        if (persist_conf::enableOutputProtectionCouple(true)) {
+            infoMessageP(PSTR("Sound enabled!"));
+        }
+    }
+}
+
+void SysSettingsSoundPage::toggleClickSound() {
+    if (persist_conf::isClickSoundEnabled()) {
+        if (persist_conf::enableClickSound(false)) {
+            infoMessageP(PSTR("Click sound disabled!"));
+        }
+    } else {
+        if (persist_conf::enableClickSound(true)) {
+            infoMessageP(PSTR("Click sound enabled!"));
+        }
+    }
+}
+
 }
 }
 } // namespace eez::psu::gui

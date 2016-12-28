@@ -32,6 +32,8 @@
     SCPI_COMMAND("SYSTem:BEEPer[:IMMediate]", scpi_syst_Beeper) \
     SCPI_COMMAND("SYSTem:BEEPer:STATe", scpi_syst_BeeperState) \
     SCPI_COMMAND("SYSTem:BEEPer:STATe?", scpi_syst_BeeperStateQ) \
+    SCPI_COMMAND("SYSTem:BEEPer:KEY:STATe", scpi_syst_BeeperKeyState) \
+    SCPI_COMMAND("SYSTem:BEEPer:KEY:STATe?", scpi_syst_BeeperKeyStateQ) \
     SCPI_COMMAND("SYSTem:TEMPerature:PROTection[:HIGH]:CLEar", scpi_syst_TempProtectionClear) \
     SCPI_COMMAND("SYSTem:TEMPerature:PROTection[:HIGH][:LEVel]", scpi_syst_TempProtectionLevel) \
     SCPI_COMMAND("SYSTem:TEMPerature:PROTection[:HIGH][:LEVel]?", scpi_syst_TempProtectionLevelQ) \

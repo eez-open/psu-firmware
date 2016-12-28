@@ -202,6 +202,10 @@ void action_show_sys_settings_aux_otp() {
     pushPage(PAGE_ID_SYS_SETTINGS_AUX_OTP);
 }
 
+void action_show_sys_settings_sound() {
+    pushPage(PAGE_ID_SYS_SETTINGS_SOUND);
+}
+
 void action_show_sys_info() {
     setPage(PAGE_ID_SYS_INFO);
 }
@@ -496,6 +500,14 @@ void action_sys_front_panel_unlock() {
     // INTENTIONALLY BLANK IMPLEMENTATION
 }
 
+void action_sys_settings_sound_toggle() {
+    ((SysSettingsSoundPage *)getActivePage())->toggleSound();
+}
+
+void action_sys_settings_sound_toggle_click() {
+    ((SysSettingsSoundPage *)getActivePage())->toggleClickSound();
+}
+
 
 ACTION actions[] = {
     0,
@@ -538,6 +550,7 @@ ACTION actions[] = {
     action_show_sys_settings_ethernet,
     action_show_sys_settings_protections,
     action_show_sys_settings_aux_otp,
+    action_show_sys_settings_sound,
     action_show_sys_info,
     action_show_sys_info2,
     action_show_main_help_page,
@@ -610,7 +623,9 @@ ACTION actions[] = {
     action_on_last_error_event_action,
     action_edit_system_password,
     action_sys_front_panel_lock,
-    action_sys_front_panel_unlock
+    action_sys_front_panel_unlock,
+    action_sys_settings_sound_toggle,
+    action_sys_settings_sound_toggle_click
 };
 
 }

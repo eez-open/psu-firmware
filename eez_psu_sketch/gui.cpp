@@ -125,6 +125,7 @@ Page *createPageFromId(int pageId) {
     case PAGE_ID_SYS_SETTINGS_ETHERNET: return new SysSettingsEthernetPage();
     case PAGE_ID_SYS_SETTINGS_PROTECTIONS: return new SysSettingsProtectionsPage();
     case PAGE_ID_SYS_SETTINGS_AUX_OTP: return new SysSettingsAuxOtpPage();
+    case PAGE_ID_SYS_SETTINGS_SOUND: return new SysSettingsSoundPage();
     case PAGE_ID_SYS_INFO:
     case PAGE_ID_SYS_INFO2: return new SysInfoPage();
     case PAGE_ID_USER_PROFILES:

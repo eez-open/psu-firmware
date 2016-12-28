@@ -239,6 +239,11 @@
       "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_AUX_OTP);"
     },
     {
+      "name": "show_sys_settings_sound",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_SOUND);"
+    },
+    {
       "name": "show_sys_info",
       "implementationType": "native",
       "implementation": "setPage(PAGE_ID_SYS_INFO);"
@@ -602,6 +607,16 @@
       "name": "sys.frontPanel.unlock",
       "implementationType": "native",
       "implementation": "// INTENTIONALLY BLANK IMPLEMENTATION"
+    },
+    {
+      "name": "sys.settings.sound.toggle",
+      "implementationType": "native",
+      "implementation": "((SysSettingsSoundPage *)getActivePage())->toggleSound();"
+    },
+    {
+      "name": "sys.settings.sound.toggleClick",
+      "implementationType": "native",
+      "implementation": "((SysSettingsSoundPage *)getActivePage())->toggleClickSound();"
     }
   ],
   "data": [
@@ -1468,6 +1483,16 @@
       "name": "sys.RlState",
       "type": "enum",
       "enumItems": "[\n\"Local\",\n\"Remote\",\n\"RWLock\"\n]",
+      "defaultValue": "0"
+    },
+    {
+      "name": "sys.sound.isEnabled",
+      "type": "boolean",
+      "defaultValue": "1"
+    },
+    {
+      "name": "sys,sound.isClickEnabled",
+      "type": "boolean",
       "defaultValue": "0"
     }
   ],
@@ -14703,11 +14728,12 @@
             },
             {
               "type": "Text",
+              "action": "show_sys_settings_sound",
               "x": 12,
               "y": 114,
               "width": 240,
               "height": 28,
-              "style": "default_disabled_S_left",
+              "style": "edit_value_active_S_left",
               "text": "Sound"
             },
             {
@@ -16762,18 +16788,10 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
-            {
               "type": "Text",
               "x": 6,
               "y": 0,
-              "width": 228,
+              "width": 246,
               "height": 32,
               "style": "value_S",
               "text": "Sound control"
@@ -16782,19 +16800,49 @@
               "type": "Text",
               "x": 16,
               "y": 32,
-              "width": 101,
+              "width": 156,
               "height": 42,
               "style": "edit_value_left",
               "text": "Sound:"
             },
             {
-              "type": "Text",
-              "x": 178,
+              "type": "Rectangle",
+              "x": 172,
               "y": 32,
-              "width": 62,
+              "width": 6,
               "height": 42,
-              "style": "edit_value_active_left",
-              "text": "OFF"
+              "style": "default_inverse"
+            },
+            {
+              "x": 178,
+              "type": "Select",
+              "data": "sys.sound.isEnabled",
+              "y": 32,
+              "width": 74,
+              "height": 42,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "sys.settings.sound.toggle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 74,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "OFF"
+                },
+                {
+                  "type": "Text",
+                  "action": "sys.settings.sound.toggle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 74,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "ON"
+                }
+              ]
             },
             {
               "type": "Text",
@@ -16806,51 +16854,61 @@
               "text": "Click sound:"
             },
             {
-              "type": "Text",
-              "x": 178,
+              "type": "Rectangle",
+              "x": 172,
               "y": 74,
-              "width": 62,
+              "width": 6,
               "height": 42,
-              "style": "edit_value_active_left",
-              "text": "OFF"
+              "style": "default_inverse"
             },
             {
-              "type": "Text",
-              "action": "show_ch_settings_prot",
-              "x": 0,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "tab_page",
-              "text": "E"
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_adv",
-              "x": 48,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "tab_page_selected",
-              "text": "G"
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_info",
-              "x": 96,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "tab_page",
-              "text": "?"
+              "x": 178,
+              "type": "Select",
+              "data": "sys,sound.isClickEnabled",
+              "y": 74,
+              "width": 74,
+              "height": 42,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "sys.settings.sound.toggleClick",
+                  "x": 0,
+                  "y": 0,
+                  "width": 74,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "OFF"
+                },
+                {
+                  "type": "Text",
+                  "action": "sys.settings.sound.toggleClick",
+                  "x": 0,
+                  "y": 0,
+                  "width": 74,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "ON"
+                }
+              ]
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 0,
               "y": 204,
-              "width": 128,
+              "width": 224,
               "height": 36,
               "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "B"
             },
             {
               "type": "Text",
@@ -16861,6 +16919,14 @@
               "height": 36,
               "style": "bottom_button",
               "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
             }
           ]
         }

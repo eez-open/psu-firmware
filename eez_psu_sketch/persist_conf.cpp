@@ -102,7 +102,8 @@ static void initDevice() {
 
     strcpy(devConf.calibration_password, CALIBRATION_PASSWORD_DEFAULT);
 
-    devConf.flags.beep_enabled = 1;
+    devConf.flags.isSoundEnabled = 1;
+    devConf.flags.isClickSoundEnabled = 0;
 
     devConf.flags.date_valid = 0;
     devConf.flags.time_valid = 0;
@@ -238,17 +239,29 @@ bool changeSerial(const char *newSerialNumber, size_t newSerialNumberLength) {
     return saveDevice();
 }
 
-bool enableBeep(bool enable) {
-    devConf.flags.beep_enabled = enable ? 1 : 0;
+bool enableSound(bool enable) {
+    devConf.flags.isSoundEnabled = enable ? 1 : 0;
     if (saveDevice()) {
-		event_queue::pushEvent(enable ? event_queue::EVENT_INFO_BEEPER_ENABLED : event_queue::EVENT_INFO_BEEPER_DISABLED);
+		event_queue::pushEvent(enable ? event_queue::EVENT_INFO_SOUND_ENABLED : event_queue::EVENT_INFO_SOUND_DISABLED);
 		return true;
 	}
 	return false;
 }
 
-bool isBeepEnabled() {
-    return devConf.flags.beep_enabled ? true : false;
+bool isSoundEnabled() {
+    return devConf.flags.isSoundEnabled ? true : false;
+}
+
+bool enableClickSound(bool enable) {
+    devConf.flags.isClickSoundEnabled = enable ? 1 : 0;
+    if (saveDevice()) {
+		return true;
+	}
+	return false;
+}
+
+bool isClickSoundEnabled() {
+    return devConf.flags.isClickSoundEnabled ? true : false;
 }
 
 bool enableEthernet(bool enable) {

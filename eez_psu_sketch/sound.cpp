@@ -158,25 +158,27 @@ void tick(unsigned long tick_usec) {
 }
 
 void playPowerUp() {
-    if (persist_conf::isBeepEnabled()) {
+    if (persist_conf::isSoundEnabled()) {
         g_play_tune = power_up_tune;
     }
 }
 
 void playPowerDown() {
-    if (persist_conf::isBeepEnabled()) {
+    if (persist_conf::isSoundEnabled()) {
         g_play_tune = power_down_tune;
     }
 }
 
 void playBeep(bool force) {
-    if (force || persist_conf::isBeepEnabled()) {
+    if (force || persist_conf::isSoundEnabled()) {
         g_play_tune = beep_tune;
     }
 }
 
 void playClick() {
-    buzzer::tone(1300, 150);
+    if (persist_conf::isClickSoundEnabled()) {
+        buzzer::tone(432, 8);
+    }
 }
 
 }

@@ -56,8 +56,8 @@ static const int EVENT_TYPE_ERROR = 3;
     EVENT_INFO(POWER_UP, 1, "Power up") \
     EVENT_INFO(POWER_DOWN, 2, "Power down") \
     EVENT_INFO(CALIBRATION_PASSWORD_CHANGED, 3, "Calibration password changed") \
-    EVENT_INFO(BEEPER_ENABLED, 4, "Beeper enabled") \
-    EVENT_INFO(BEEPER_DISABLED, 5, "Beeper disabled") \
+    EVENT_INFO(SOUND_ENABLED, 4, "Sound enabled") \
+    EVENT_INFO(SOUND_DISABLED, 5, "Sound disabled") \
     EVENT_INFO(SYSTEM_DATE_TIME_CHANGED, 6, "Date/time changed") \
     EVENT_INFO(ETHERNET_ENABLED, 7, "Ethernet enabled") \
     EVENT_INFO(ETHERNET_DISABLED, 8, "Ethernet disabled") \

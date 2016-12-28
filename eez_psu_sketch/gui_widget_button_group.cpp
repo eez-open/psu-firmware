@@ -17,6 +17,7 @@
 */
 
 #include "psu.h"
+#include "sound.h"
 #include "gui_widget_button_group.h"
 #include "gui_data_snapshot.h"
 
@@ -123,6 +124,7 @@ void onTouchDown(const WidgetCursor &widgetCursor) {
 
     if (selectedButton >= 0 && selectedButton < count) {
         data::set(widgetCursor.cursor, widget->data, selectedButton, 0);
+        sound::playClick();
     }
 }
 

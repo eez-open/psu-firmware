@@ -181,8 +181,8 @@ scpi_result_t scpi_syst_BeeperState(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (enable != persist_conf::isBeepEnabled()) {
-		if (!persist_conf::enableBeep(enable)) {
+    if (enable != persist_conf::isSoundEnabled()) {
+		if (!persist_conf::enableSound(enable)) {
 			SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
 			return SCPI_RES_ERR;
 		}
@@ -192,7 +192,28 @@ scpi_result_t scpi_syst_BeeperState(scpi_t * context) {
 }
 
 scpi_result_t scpi_syst_BeeperStateQ(scpi_t * context) {
-    SCPI_ResultBool(context, persist_conf::isBeepEnabled());
+    SCPI_ResultBool(context, persist_conf::isSoundEnabled());
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_BeeperKeyState(scpi_t * context) {
+    bool enable;
+    if (!SCPI_ParamBool(context, &enable, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (enable != persist_conf::isClickSoundEnabled()) {
+		if (!persist_conf::enableClickSound(enable)) {
+			SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+			return SCPI_RES_ERR;
+		}
+    }
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_syst_BeeperKeyStateQ(scpi_t * context) {
+    SCPI_ResultBool(context, persist_conf::isClickSoundEnabled());
     return SCPI_RES_OK;
 }
 
