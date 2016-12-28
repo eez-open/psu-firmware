@@ -47,14 +47,15 @@
 #include "front_panel/control.h"
 #endif
 
-#define CONF_GUI_BLINK_TIME 400000UL
+#define CONF_GUI_BLINK_TIME 400000UL // 400ms
 #define CONF_GUI_ENUM_WIDGETS_STACK_SIZE 5
-#define CONF_GUI_STANDBY_PAGE_TIMEOUT 10000000UL
-#define CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT 5000000UL
-#define CONF_GUI_WELCOME_PAGE_TIMEOUT 2000000UL
-#define CONF_GUI_LONG_PRESS_TIMEOUT 1000000UL
+#define CONF_GUI_STANDBY_PAGE_TIMEOUT 10000000UL // 10s
+#define CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT 5000000UL // 5s
+#define CONF_GUI_WELCOME_PAGE_TIMEOUT 2000000UL // 2s
+#define CONF_GUI_LONG_PRESS_TIMEOUT 1000000UL // 1s
 #define CONF_GUI_DRAW_TICK_ITERATIONS 100
 #define CONF_GUI_PAGE_NAVIGATION_STACK_SIZE 5
+#define CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY 200000UL // 200ms
 
 namespace eez {
 namespace psu {
@@ -2000,6 +2001,12 @@ void tick(unsigned long tick_usec) {
                             g_touchActionExecuted = true;
                             unlockFrontPanel();
                         }
+                    }
+                } else if (widget->action == ACTION_ID_KEYPAD_BACK) {
+                    if (tick_usec - g_touchDownTime >= CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY) {
+                        g_touchDownTime = tick_usec;
+                        g_touchActionExecuted = true;
+                        do_action(widget->action);
                     }
                 }
             } else {
