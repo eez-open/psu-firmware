@@ -1992,6 +1992,7 @@ void tick(unsigned long tick_usec) {
                             deselect_widget();
                             g_foundWidgetAtDown = 0;
                             g_touchActionExecuted = true;
+                            sound::playClick();
                             psu::changePowerState(false);
                         }
                     }
@@ -2001,6 +2002,7 @@ void tick(unsigned long tick_usec) {
                             deselect_widget();
                             g_foundWidgetAtDown = 0;
                             g_touchActionExecuted = true;
+                            sound::playClick();
                             unlockFrontPanel();
                         }
                     }
