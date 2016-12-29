@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "EEZ PSU Simulator"
-#define MyAppVersion "0.2.0"
+#define MyAppVersion "0.3.0"
 #define MyAppPublisher "Envox d.o.o."
 #define MyAppURL "http://www.envox.hr/eez/bench-power-supply/psu-introduction.html"
 #define MyAppExeName "eez_psu_sim.exe"
@@ -23,7 +23,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\GPL-LICENSE
+LicenseFile=C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\LICENSE.TXT
 OutputDir=C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\simulator\platform\win32\Installation
 OutputBaseFilename=setup
 Compression=lzma
