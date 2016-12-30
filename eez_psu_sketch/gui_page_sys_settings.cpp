@@ -209,6 +209,7 @@ data::Value SysSettingsEthernetPage::getData(const data::Cursor &cursor, uint8_t
         return data::Value(snapshot->flags.switch1);
     }
 
+#if OPTION_ETHERNET
     if (id == DATA_ID_SYS_ETHERNET_STATUS) {
         return data::Value(ethernet::test_result);
     }
@@ -220,6 +221,7 @@ data::Value SysSettingsEthernetPage::getData(const data::Cursor &cursor, uint8_t
     if (id == DATA_ID_SYS_ETHERNET_SCPI_PORT) {
         return TCP_PORT;
     }
+#endif
 
     return data::Value();
 }
