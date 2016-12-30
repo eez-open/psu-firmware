@@ -26,7 +26,7 @@
 #define PSU_SERIAL   "0000000"
 
 /// Firmware version.
-#define FIRMWARE     "M3"
+#define FIRMWARE     "M4"
 
 /// Manufacturer description text.
 #define MANUFACTURER "EEZ"
@@ -204,7 +204,7 @@
 #define FAN_MAX_PWM 255
 
 /// Max. allowed output current (in ampers) if fan or temp. sensor is invalid.
-#define ERR_MAX_CURRENT 1 
+#define ERR_MAX_CURRENT 2
 
 /// Nominal fan RPM (for PWM=255).
 #define FAN_NOMINAL_RPM 4500 
@@ -219,7 +219,7 @@
 #define FAN_OPTION_RPM_MEASUREMENT 1
 
 /// Interval (in milliseconds) at which watchdog impulse will be sent
-#define WATCHDOG_INTERVAL 1000
+#define WATCHDOG_INTERVAL 250
 
 /// Interval (in minutes) at which "on time" will be written to EEPROM
 #define WRITE_ONTIME_INTERVAL 10
