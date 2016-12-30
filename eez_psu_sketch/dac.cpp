@@ -55,12 +55,9 @@ void DigitalAnalogConverter::set_value(uint8_t buffer, float value) {
     }
 #endif
 
-    pinMode(channel.index == 1 ? DAC1_SELECT : DAC2_SELECT, OUTPUT);
-    digitalWrite(channel.dac_pin, HIGH); // Deselect DAC
-    delayMicroseconds(3);
-
     SPI_beginTransaction(DAC8552_SPI);
     digitalWrite(channel.dac_pin, LOW);
+
     SPI.transfer(buffer);
     SPI.transfer(DAC_value >> 8); // send first byte
     SPI.transfer(DAC_value & 0xFF);  // send second byte
