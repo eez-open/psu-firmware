@@ -90,7 +90,7 @@
 
 |Bit|Description         |
 |---|--------------------|
-|0  |Beep enabled        |
+|0  |Sound enabled       |
 |1  |Date set            |
 |2  |Time set            |
 |3  |Auto recall profile |
@@ -102,6 +102,7 @@
 |9  |Switch off all outputs when protection tripped |
 |10 |Shutdown when protection tripped               |
 |11 |Force disabling of all outputs on power up     |
+|12 |Click sound enabled |
 
 ## <a name="calibration">Calibration parameters</a>
 
