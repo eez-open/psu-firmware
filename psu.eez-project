@@ -601,7 +601,7 @@
     {
       "name": "sys.frontPanel.lock",
       "implementationType": "native",
-      "implementation": "lockFrontPanel();"
+      "implementation": "// INTENTIONALLY BLANK IMPLEMENTATION"
     },
     {
       "name": "sys.frontPanel.unlock",

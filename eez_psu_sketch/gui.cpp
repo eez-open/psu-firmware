@@ -1840,9 +1840,15 @@ void deselect_widget() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void do_action(int action_id) {
+bool isLongPressAction(int actionId) {
+    return actionId == ACTION_ID_TURN_OFF ||
+        actionId == ACTION_ID_SYS_FRONT_PANEL_LOCK || 
+        actionId == ACTION_ID_SYS_FRONT_PANEL_UNLOCK;
+}
+
+void executeAction(int actionId) {
     sound::playClick();
-    actions[action_id]();
+    actions[actionId]();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1996,21 +2002,25 @@ void tick(unsigned long tick_usec) {
                             psu::changePowerState(false);
                         }
                     }
-                } else if (widget->action == ACTION_ID_SYS_FRONT_PANEL_UNLOCK && isFrontPanelLocked()) {
+                } else if (widget->action == ACTION_ID_SYS_FRONT_PANEL_LOCK || widget->action == ACTION_ID_SYS_FRONT_PANEL_UNLOCK) {
                     if (tick_usec - g_touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
                         if (!g_touchActionExecuted) {
                             deselect_widget();
                             g_foundWidgetAtDown = 0;
                             g_touchActionExecuted = true;
                             sound::playClick();
-                            unlockFrontPanel();
+                            if (isFrontPanelLocked()) {
+                                unlockFrontPanel();
+                            } else {
+                                lockFrontPanel();
+                            }
                         }
                     }
                 } else if (widget->action == ACTION_ID_KEYPAD_BACK) {
                     if (tick_usec - g_touchDownTime >= CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY) {
                         g_touchDownTime = tick_usec;
                         g_touchActionExecuted = true;
-                        do_action(widget->action);
+                        executeAction(widget->action);
                     }
                 }
             } else {
@@ -2042,7 +2052,9 @@ void tick(unsigned long tick_usec) {
             if (g_foundWidgetAtDown) {
                 deselect_widget();
                 DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
-                do_action(widget->action);
+                if (!isLongPressAction(widget->action)) {
+                    executeAction(widget->action);
+                }
                 g_foundWidgetAtDown = 0;
             } else {
                 if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {

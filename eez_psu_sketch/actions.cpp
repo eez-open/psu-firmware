@@ -493,7 +493,7 @@ void action_edit_system_password() {
 }
 
 void action_sys_front_panel_lock() {
-    lockFrontPanel();
+    // INTENTIONALLY BLANK IMPLEMENTATION
 }
 
 void action_sys_front_panel_unlock() {
