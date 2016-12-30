@@ -72,11 +72,10 @@ void finish_rpm_measure();
 void rpm_measure_interrupt_handler();
 
 void start_rpm_measure() {
-    analogWrite(FAN_PWM, FAN_MAX_PWM);
+    analogWrite(FAN_PWM, 255);
     delay(2);
+    attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
     g_rpmMeasureState = RPM_MEASURE_STATE_START;
-
-    //attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
 
 #ifdef EEZ_PSU_SIMULATOR
     g_rpmMeasureState = RPM_MEASURE_STATE_MEASURED;
@@ -115,6 +114,7 @@ void finish_rpm_measure() {
         //detachInterrupt(g_rpmMeasureInterruptNumber);
         analogWrite(FAN_PWM, g_fanSpeedPWM);
         g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
+        detachInterrupt(g_rpmMeasureInterruptNumber);
     }
 }
 
@@ -122,8 +122,8 @@ void finish_rpm_measure() {
 
 void init() {
     g_rpmMeasureInterruptNumber = digitalPinToInterrupt(FAN_SENSE);
-    //SPI_usingInterrupt(g_rpmMeasureInterruptNumber);
-    attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
+    SPI_usingInterrupt(g_rpmMeasureInterruptNumber);
+    //attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
 }
 
 void test_start() {
