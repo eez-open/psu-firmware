@@ -509,6 +509,8 @@ bool isForceDisablingAllOutputsOnPowerUpEnabled() {
 }
 
 bool lockFrontPanel(bool lock) {
+    g_rlState = lock ? RL_STATE_REMOTE : RL_STATE_LOCAL;
+
     int isFrontPanelLocked = lock ? 1 : 0;
 
     if (devConf.flags.isFrontPanelLocked == isFrontPanelLocked) {
@@ -516,7 +518,6 @@ bool lockFrontPanel(bool lock) {
     }
 
     devConf.flags.isFrontPanelLocked = isFrontPanelLocked;
-    g_rlState = devConf.flags.isFrontPanelLocked ? RL_STATE_REMOTE : RL_STATE_LOCAL;
 
     if (saveDevice()) {
         if (devConf.flags.isFrontPanelLocked) {
