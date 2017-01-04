@@ -7347,66 +7347,189 @@
               "style": "edit_value_L"
             },
             {
-              "type": "Rectangle",
-              "x": 48,
-              "y": 116,
-              "width": 78,
-              "height": 20,
-              "style": "default_inverse"
-            },
-            {
               "x": 48,
               "type": "Select",
-              "data": "lrip",
-              "y": 136,
-              "width": 48,
-              "height": 23,
+              "data": "channel.isTracked",
+              "y": 116,
+              "width": 204,
+              "height": 52,
               "style": "default",
               "widgets": [
                 {
-                  "type": "Text",
+                  "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 48,
-                  "height": 23,
-                  "style": "prot_indicator_S",
-                  "text": "LRip"
+                  "width": 204,
+                  "height": 52,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "x": 0,
+                      "type": "Select",
+                      "data": "lrip",
+                      "y": 20,
+                      "width": 48,
+                      "height": 23,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "type": "Text",
+                          "x": 0,
+                          "y": 0,
+                          "width": 48,
+                          "height": 23,
+                          "style": "prot_indicator_S",
+                          "text": "LRip"
+                        },
+                        {
+                          "type": "Text",
+                          "x": 0,
+                          "y": 0,
+                          "width": 48,
+                          "height": 23,
+                          "style": "prot_indicator_set_S",
+                          "text": "LRip"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 0,
+                      "width": 78,
+                      "height": 20,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "DisplayData",
+                      "data": "channel.p.mon",
+                      "x": 78,
+                      "y": 0,
+                      "width": 126,
+                      "height": 52,
+                      "style": "value"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 43,
+                      "width": 78,
+                      "height": 9,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 48,
+                      "y": 20,
+                      "width": 30,
+                      "height": 23,
+                      "style": "default_inverse"
+                    }
+                  ]
                 },
                 {
-                  "type": "Text",
+                  "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 48,
-                  "height": 23,
-                  "style": "prot_indicator_set_S",
-                  "text": "LRip"
+                  "width": 204,
+                  "height": 52,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 0,
+                      "width": 20,
+                      "height": 52,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "List",
+                      "data": "channels",
+                      "x": 10,
+                      "y": 0,
+                      "width": 182,
+                      "height": 52,
+                      "style": "default",
+                      "listType": "vertical",
+                      "itemWidget": {
+                        "type": "Container",
+                        "x": 0,
+                        "y": 0,
+                        "width": 182,
+                        "height": 26,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "data": "channel.shortLabel",
+                            "x": 10,
+                            "y": 0,
+                            "width": 36,
+                            "height": 26,
+                            "style": "value_S",
+                            "text": "Channel protections"
+                          },
+                          {
+                            "x": 46,
+                            "type": "Select",
+                            "data": "lrip",
+                            "y": 0,
+                            "width": 48,
+                            "height": 26,
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "width": 48,
+                                "height": 26,
+                                "style": "prot_indicator_S",
+                                "text": "LRip"
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "width": 48,
+                                "height": 26,
+                                "style": "prot_indicator_set_S",
+                                "text": "LRip"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.p.mon",
+                            "x": 103,
+                            "y": 0,
+                            "width": 71,
+                            "height": 26,
+                            "style": "value_S"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 104,
+                      "y": 0,
+                      "width": 9,
+                      "height": 52,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 184,
+                      "y": 0,
+                      "width": 20,
+                      "height": 52,
+                      "style": "default_inverse"
+                    }
+                  ]
                 }
               ]
-            },
-            {
-              "type": "Rectangle",
-              "x": 96,
-              "y": 136,
-              "width": 30,
-              "height": 23,
-              "style": "default_inverse"
-            },
-            {
-              "type": "Rectangle",
-              "x": 48,
-              "y": 159,
-              "width": 78,
-              "height": 9,
-              "style": "default_inverse"
-            },
-            {
-              "type": "DisplayData",
-              "data": "channel.p.mon",
-              "x": 126,
-              "y": 116,
-              "width": 126,
-              "height": 52,
-              "style": "value"
             },
             {
               "x": 48,
@@ -8761,66 +8884,189 @@
               "style": "edit_value_L"
             },
             {
-              "type": "Rectangle",
-              "x": 48,
-              "y": 116,
-              "width": 78,
-              "height": 20,
-              "style": "default_inverse"
-            },
-            {
               "x": 48,
               "type": "Select",
-              "data": "lrip",
-              "y": 136,
-              "width": 48,
-              "height": 23,
+              "data": "channel.isTracked",
+              "y": 116,
+              "width": 204,
+              "height": 52,
               "style": "default",
               "widgets": [
                 {
-                  "type": "Text",
+                  "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 48,
-                  "height": 23,
-                  "style": "prot_indicator_S",
-                  "text": "LRip"
+                  "width": 204,
+                  "height": 52,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "x": 0,
+                      "type": "Select",
+                      "data": "lrip",
+                      "y": 20,
+                      "width": 48,
+                      "height": 23,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "type": "Text",
+                          "x": 0,
+                          "y": 0,
+                          "width": 48,
+                          "height": 23,
+                          "style": "prot_indicator_S",
+                          "text": "LRip"
+                        },
+                        {
+                          "type": "Text",
+                          "x": 0,
+                          "y": 0,
+                          "width": 48,
+                          "height": 23,
+                          "style": "prot_indicator_set_S",
+                          "text": "LRip"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 0,
+                      "width": 78,
+                      "height": 20,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "DisplayData",
+                      "data": "channel.p.mon",
+                      "x": 78,
+                      "y": 0,
+                      "width": 126,
+                      "height": 52,
+                      "style": "value"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 43,
+                      "width": 78,
+                      "height": 9,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 48,
+                      "y": 20,
+                      "width": 30,
+                      "height": 23,
+                      "style": "default_inverse"
+                    }
+                  ]
                 },
                 {
-                  "type": "Text",
+                  "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 48,
-                  "height": 23,
-                  "style": "prot_indicator_set_S",
-                  "text": "LRip"
+                  "width": 204,
+                  "height": 52,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 0,
+                      "width": 20,
+                      "height": 52,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "List",
+                      "data": "channels",
+                      "x": 10,
+                      "y": 0,
+                      "width": 182,
+                      "height": 52,
+                      "style": "default",
+                      "listType": "vertical",
+                      "itemWidget": {
+                        "type": "Container",
+                        "x": 0,
+                        "y": 0,
+                        "width": 182,
+                        "height": 26,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "Text",
+                            "data": "channel.shortLabel",
+                            "x": 10,
+                            "y": 0,
+                            "width": 36,
+                            "height": 26,
+                            "style": "value_S",
+                            "text": "Channel protections"
+                          },
+                          {
+                            "x": 46,
+                            "type": "Select",
+                            "data": "lrip",
+                            "y": 0,
+                            "width": 48,
+                            "height": 26,
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "width": 48,
+                                "height": 26,
+                                "style": "prot_indicator_S",
+                                "text": "LRip"
+                              },
+                              {
+                                "type": "Text",
+                                "x": 0,
+                                "y": 0,
+                                "width": 48,
+                                "height": 26,
+                                "style": "prot_indicator_set_S",
+                                "text": "LRip"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.p.mon",
+                            "x": 103,
+                            "y": 0,
+                            "width": 71,
+                            "height": 26,
+                            "style": "value_S"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 104,
+                      "y": 0,
+                      "width": 9,
+                      "height": 52,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 184,
+                      "y": 0,
+                      "width": 20,
+                      "height": 52,
+                      "style": "default_inverse"
+                    }
+                  ]
                 }
               ]
-            },
-            {
-              "type": "Rectangle",
-              "x": 96,
-              "y": 136,
-              "width": 30,
-              "height": 23,
-              "style": "default_inverse"
-            },
-            {
-              "type": "Rectangle",
-              "x": 48,
-              "y": 159,
-              "width": 78,
-              "height": 9,
-              "style": "default_inverse"
-            },
-            {
-              "type": "DisplayData",
-              "data": "channel.p.mon",
-              "x": 126,
-              "y": 116,
-              "width": 126,
-              "height": 52,
-              "style": "value"
             },
             {
               "x": 48,
@@ -19298,10 +19544,10 @@
                     "action": "show_channel_settings",
                     "x": 0,
                     "y": 90,
-                    "width": 68,
+                    "width": 64,
                     "height": 24,
                     "style": "default_S",
-                    "text": "\\u008A Track"
+                    "text": "\\u008ATrack"
                   },
                   {
                     "type": "List",
