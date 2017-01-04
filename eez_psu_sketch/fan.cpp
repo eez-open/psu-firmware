@@ -111,7 +111,6 @@ void rpm_measure_interrupt_handler() {
 
 void finish_rpm_measure() {
     if (g_rpmMeasureState == RPM_MEASURE_STATE_MEASURED) {
-        //detachInterrupt(g_rpmMeasureInterruptNumber);
         analogWrite(FAN_PWM, g_fanSpeedPWM);
         g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
         detachInterrupt(g_rpmMeasureInterruptNumber);

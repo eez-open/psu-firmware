@@ -941,12 +941,14 @@ void generateError(int16_t error) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void SPI_usingInterrupt(uint8_t interruptNumber) {
-    //SPI.usingInterrupt(interruptNumber);
+#if REPLACE_SPI_TRANSACTIONS_IMPLEMENTATION
+#else
+    SPI.usingInterrupt(interruptNumber);
+#endif
 }
 
 void SPI_beginTransaction(SPISettings &settings) {
-    //SPI.beginTransaction(settings);
-
+#if REPLACE_SPI_TRANSACTIONS_IMPLEMENTATION
     noInterrupts();
 
     if (&settings == &MCP23S08_SPI)      { SPI.setClockDivider(SPI_CLOCK_DIV4); SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE0); }
@@ -960,11 +962,17 @@ void SPI_beginTransaction(SPISettings &settings) {
 #else
     else if (&settings == &ETHERNET_SPI) { SPI.setClockDivider(SPI_CLOCK_DIV2); SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE0); }
 #endif
+#else
+    SPI.beginTransaction(settings);
+#endif
 }
 
 void SPI_endTransaction() {
-    //SPI.endTransaction();
+#if REPLACE_SPI_TRANSACTIONS_IMPLEMENTATION
     interrupts();
+#else
+    SPI.endTransaction();
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////

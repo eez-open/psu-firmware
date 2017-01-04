@@ -248,3 +248,10 @@
 
 /// See DP_NEG_LEV.
 #define DP_NEG_DELAY 5 // 5 s
+
+/// Replace standard SPI transactions implementation with in-house implementation,
+/// It is more simple version where all interrupts are disabled during SPI transactions.
+/// We had some problems (WATCHDOG, ADC timeout and EEPROM errros) with SPI in the
+/// past and when we used our SPI transactions implementation, problems disappeared.
+/// But, unfortunately, now ethernet doesn't work.
+#define REPLACE_SPI_TRANSACTIONS_IMPLEMENTATION 1

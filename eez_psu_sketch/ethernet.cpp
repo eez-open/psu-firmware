@@ -140,10 +140,10 @@ void init() {
     Ethernet.setDhcpTimeout(ETHERNET_DHCP_TIMEOUT * 1000UL);
 #endif
 
-    SPI_beginTransaction(ETHERNET_SPI);
+    SPI.beginTransaction(ETHERNET_SPI);
 
     if (!Ethernet.begin(mac)) {
-        SPI_endTransaction();
+        SPI.endTransaction();
 
         test_result = psu::TEST_WARNING;
         DebugTrace("Ethernet not connected!");
@@ -154,7 +154,7 @@ void init() {
 
     server.begin();
 
-    SPI_endTransaction();
+    SPI.endTransaction();
 
     test_result = psu::TEST_OK;
 
