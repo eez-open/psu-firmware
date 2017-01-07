@@ -228,7 +228,7 @@
 #define MAX_KEYPAD_TEXT_LENGTH 128
 
 /// Frequency of master sync
-#define SYNC_MASTER_FREQUENCY 330000 // 330kHz 
+#define SYNC_MASTER_FREQUENCY 320000 // 320kHz 
 
 /// Enable transition to the Main page after period of inactivity.
 #define GUI_BACK_TO_MAIN_ENABLED 1
