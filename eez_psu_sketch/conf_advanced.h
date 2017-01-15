@@ -26,7 +26,7 @@
 #define PSU_SERIAL   "0000000"
 
 /// Firmware version.
-#define FIRMWARE     "M4"
+#define FIRMWARE     "M4 (WIP)"
 
 /// Manufacturer description text.
 #define MANUFACTURER "EEZ"

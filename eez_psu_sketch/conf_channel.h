@@ -86,34 +86,16 @@
 //                             OPP_MIN_DELAY, OPP_DEFAULT_DELAY, OPP_MAX_DELAY
 #define CH_PARAMS_OPP_DELAY    1.0f,          10.0f,             300.0f
 
-// Pre-regulator's PMOS SOA:
+// Channel's OPP, max. power and post-regulator SOA
 //
-// IRFR5305 Imax=2.8 A, set to 2.2 A
 //                                                                    OPP_DEFAULT_STATE          OPP_MIN_LEVEL          SOA_VIN 
 //                                                                    |                          | OPP_DEFAULT_LEVEL    |      SOA_PREG_CURR,
 //                                                                    |                          |      |  OPP_MAX_LEVEL|      |     SOA_POSTREG_PTOT
 //                                                                    |                          |      |       |       |      |     |      PTOT      
-#define CH_PARAMS_30V_3A             CH_PARAMS_U_30V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f,  60.0f,  90.0f, 38.0f, 2.2f, 25.0f, 90.0f
-#define CH_PARAMS_40V_3A             CH_PARAMS_U_40V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f,  80.0f, 120.0f, 48.0f, 2.2f, 25.0f, 120.0f
-#define CH_PARAMS_50V_3A             CH_PARAMS_U_50V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f, 100.0f, 150.0f, 58.0f, 2.2f, 25.0f, 150.0f
-#define CH_PARAMS_30V_5A             CH_PARAMS_U_30V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 100.0f, 120.0f, 38.0f, 2.2f, 25.0f, 120.0f
-#define CH_PARAMS_40V_5A             CH_PARAMS_U_40V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 155.0f, 155.0f, 48.0f, 2.2f, 25.0f, 160.0f
-#define CH_PARAMS_50V_5A             CH_PARAMS_U_50V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 160.0f, 200.0f, 58.0f, 2.2f, 25.0f, 200.0f
-//
-// SPD30P06P  Imax=2.5 A, set to 2.0 A
-//
-#define CH_PARAMS_30V_3A_SPD30P06    CH_PARAMS_U_30V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f,  60.0f,  90.0f, 38.0f, 2.0f, 25.0f, 90.0f
-#define CH_PARAMS_40V_3A_SPD30P06    CH_PARAMS_U_40V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f,  80.0f, 120.0f, 48.0f, 2.0f, 25.0f, 120.0f
-#define CH_PARAMS_50V_3A_SPD30P06    CH_PARAMS_U_50V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f, 100.0f, 150.0f, 58.0f, 2.0f, 25.0f, 150.0f
-#define CH_PARAMS_30V_5A_SPD30P06    CH_PARAMS_U_30V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 100.0f, 120.0f, 38.0f, 2.0f, 25.0f, 120.0f
-#define CH_PARAMS_40V_5A_SPD30P06    CH_PARAMS_U_40V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 155.0f, 155.0f, 48.0f, 2.0f, 25.0f, 160.0f
-#define CH_PARAMS_50V_5A_SPD30P06    CH_PARAMS_U_50V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 160.0f, 200.0f, 58.0f, 2.0f, 25.0f, 200.0f
-//
-// SUD19P06-60  Imax=0.8 A, set to 0.8 A
-//
-#define CH_PARAMS_30V_3A_SUD19P06    CH_PARAMS_U_30V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f,  60.0f,  90.0f, 38.0f, 0.6f, 25.0f, 90.0f
-#define CH_PARAMS_40V_3A_SUD19P06    CH_PARAMS_U_40V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f,  80.0f, 120.0f, 48.0f, 0.6f, 25.0f, 120.0f
-#define CH_PARAMS_50V_3A_SUD19P06    CH_PARAMS_U_50V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f, 100.0f, 150.0f, 58.0f, 0.6f, 25.0f, 150.0f
-#define CH_PARAMS_30V_5A_SUD19P06    CH_PARAMS_U_30V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 100.0f, 120.0f, 38.0f, 0.6f, 25.0f, 120.0f
-#define CH_PARAMS_40V_5A_SUD19P06    CH_PARAMS_U_40V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 155.0f, 155.0f, 48.0f, 0.6f, 25.0f, 160.0f
-#define CH_PARAMS_50V_5A_SUD19P06    CH_PARAMS_U_50V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 160.0f, 200.0f, 58.0f, 0.6f, 25.0f, 200.0f
+#define CH_PARAMS_30V_3A             CH_PARAMS_U_30V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f,  60.0f,  90.0f, 38.0f, 3.125f, 25.0f, 90.0f
+#define CH_PARAMS_40V_3A             CH_PARAMS_U_40V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f,  80.0f, 120.0f, 48.0f, 3.125f, 25.0f, 120.0f
+#define CH_PARAMS_50V_3A             CH_PARAMS_U_50V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f, 100.0f, 150.0f, 58.0f, 3.125f, 25.0f, 150.0f
+#define CH_PARAMS_30V_5A             CH_PARAMS_U_30V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 100.0f, 120.0f, 38.0f, 5.0f, 25.0f, 120.0f
+#define CH_PARAMS_40V_5A             CH_PARAMS_U_40V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 155.0f, 155.0f, 48.0f, 5.0f, 25.0f, 160.0f
+#define CH_PARAMS_50V_5A             CH_PARAMS_U_50V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 160.0f, 200.0f, 58.0f, 5.0f, 25.0f, 200.0f
+

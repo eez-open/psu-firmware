@@ -13332,34 +13332,25 @@
               "width": 162,
               "height": 24,
               "style": "edit_value_S_left",
-              "text": "Max. current:"
+              "text": "Max. dissipation:"
             },
             {
               "type": "DisplayData",
-              "data": "channel.lripple.maxCurrent",
-              "x": 178,
+              "data": "channel.lripple.maxDissipation",
+              "x": 189,
               "y": 28,
-              "width": 74,
-              "height": 26,
+              "width": 63,
+              "height": 24,
               "style": "value_S"
             },
             {
               "type": "Text",
               "x": 16,
               "y": 52,
-              "width": 162,
+              "width": 173,
               "height": 24,
               "style": "edit_value_S_left",
-              "text": "Max. dissipation:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "channel.lripple.maxDissipation",
-              "x": 178,
-              "y": 52,
-              "width": 74,
-              "height": 24,
-              "style": "value_S"
+              "text": "Calculated dissipation:"
             },
             {
               "type": "Text",
@@ -13535,6 +13526,15 @@
               "width": 68,
               "height": 204,
               "style": "default"
+            },
+            {
+              "type": "Text",
+              "x": 189,
+              "y": 52,
+              "width": 63,
+              "height": 24,
+              "style": "value_S",
+              "text": "N/A"
             }
           ]
         }
