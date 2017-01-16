@@ -39,15 +39,15 @@ public:
 	int getDirty();
 	void set();
 
-	void toggleStatus();
 	void toggleAutoMode();
+	void toggleStatus();
 
 private:
-	int origStatus;
-	int status;
-
 	int origAutoMode;
 	int autoMode;
+
+    int origStatus;
+	int status;
 };
 
 class ChSettingsAdvRSensePage : public Page {

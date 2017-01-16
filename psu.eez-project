@@ -1140,26 +1140,32 @@
       "defaultValue": "Page #1 of 2"
     },
     {
-      "name": "channel.lripple.maxCurrent",
-      "type": "float",
-      "defaultValue": "0.7A"
-    },
-    {
       "name": "channel.lripple.maxDissipation",
       "type": "float",
       "defaultValue": "20.00W"
     },
     {
-      "name": "channel.lripple.status",
-      "type": "enum",
-      "enumItems": "[\n\"Off\",\n\"On\"\n]",
-      "defaultValue": "0"
+      "name": "channel.lripple.calculatedDissipation",
+      "type": "float",
+      "defaultValue": "18.00W"
     },
     {
       "name": "channel.lripple.autoMode",
       "type": "enum",
       "enumItems": "[\n\"Off\",\n\"On\"\n]",
       "defaultValue": "1"
+    },
+    {
+      "name": "channel.lripple.isAllowed",
+      "type": "boolean",
+      "enumItems": "",
+      "defaultValue": "1"
+    },
+    {
+      "name": "channel.lripple.status",
+      "type": "enum",
+      "enumItems": "[\n\"Off\",\n\"On\"\n]",
+      "defaultValue": "0"
     },
     {
       "name": "channel.rsense.status",
@@ -13337,9 +13343,9 @@
             {
               "type": "DisplayData",
               "data": "channel.lripple.maxDissipation",
-              "x": 189,
+              "x": 178,
               "y": 28,
-              "width": 63,
+              "width": 74,
               "height": 24,
               "style": "value_S"
             },
@@ -13347,10 +13353,19 @@
               "type": "Text",
               "x": 16,
               "y": 52,
-              "width": 173,
+              "width": 162,
               "height": 24,
               "style": "edit_value_S_left",
-              "text": "Calculated dissipation:"
+              "text": "Calc. dissipation:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.lripple.calculatedDissipation",
+              "x": 178,
+              "y": 52,
+              "width": 74,
+              "height": 24,
+              "style": "value_S"
             },
             {
               "type": "Text",
@@ -13359,12 +13374,12 @@
               "width": 162,
               "height": 42,
               "style": "edit_value_left",
-              "text": "Status:"
+              "text": "Auto mode:"
             },
             {
               "x": 178,
               "type": "Select",
-              "data": "channel.lripple.status",
+              "data": "channel.lripple.autoMode",
               "y": 76,
               "width": 74,
               "height": 42,
@@ -13372,7 +13387,7 @@
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "ch_settings_adv_lripple_toggle_status",
+                  "action": "ch_settings_adv_lripple_toggle_auto_mode",
                   "x": 0,
                   "y": 0,
                   "width": 74,
@@ -13382,7 +13397,7 @@
                 },
                 {
                   "type": "Text",
-                  "action": "ch_settings_adv_lripple_toggle_status",
+                  "action": "ch_settings_adv_lripple_toggle_auto_mode",
                   "x": 0,
                   "y": 0,
                   "width": 74,
@@ -13399,7 +13414,7 @@
               "width": 162,
               "height": 42,
               "style": "edit_value_left",
-              "text": "Auto mode:"
+              "text": "Status:"
             },
             {
               "x": 178,
@@ -13411,24 +13426,87 @@
               "style": "default",
               "widgets": [
                 {
-                  "type": "Text",
-                  "action": "ch_settings_adv_lripple_toggle_auto_mode",
                   "x": 0,
+                  "type": "Select",
+                  "data": "channel.lripple.isAllowed",
                   "y": 0,
                   "width": 74,
                   "height": 42,
-                  "style": "edit_value_active_left",
-                  "text": "OFF"
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "action": "",
+                      "x": 0,
+                      "y": 0,
+                      "width": 74,
+                      "height": 42,
+                      "style": "edit_value_left",
+                      "text": "OFF"
+                    },
+                    {
+                      "x": 0,
+                      "type": "Select",
+                      "data": "channel.lripple.status",
+                      "y": 0,
+                      "width": 74,
+                      "height": 42,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "type": "Text",
+                          "action": "ch_settings_adv_lripple_toggle_status",
+                          "x": 0,
+                          "y": 0,
+                          "width": 74,
+                          "height": 42,
+                          "style": "edit_value_active_left",
+                          "text": "OFF"
+                        },
+                        {
+                          "type": "Text",
+                          "action": "ch_settings_adv_lripple_toggle_status",
+                          "x": 0,
+                          "y": 0,
+                          "width": 74,
+                          "height": 42,
+                          "style": "edit_value_active_left",
+                          "text": "ON"
+                        }
+                      ]
+                    }
+                  ]
                 },
                 {
-                  "type": "Text",
-                  "action": "ch_settings_adv_lripple_toggle_auto_mode",
                   "x": 0,
+                  "type": "Select",
+                  "data": "channel.lripple.status",
                   "y": 0,
                   "width": 74,
                   "height": 42,
-                  "style": "edit_value_active_left",
-                  "text": "ON"
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "action": "",
+                      "x": 0,
+                      "y": 0,
+                      "width": 74,
+                      "height": 42,
+                      "style": "edit_value_left",
+                      "text": "OFF"
+                    },
+                    {
+                      "type": "Text",
+                      "action": "",
+                      "x": 0,
+                      "y": 0,
+                      "width": 74,
+                      "height": 42,
+                      "style": "edit_value_left",
+                      "text": "ON"
+                    }
+                  ]
                 }
               ]
             },
@@ -13526,15 +13604,6 @@
               "width": 68,
               "height": 204,
               "style": "default"
-            },
-            {
-              "type": "Text",
-              "x": 189,
-              "y": 52,
-              "width": 63,
-              "height": 24,
-              "style": "value_S",
-              "text": "N/A"
             }
           ]
         }

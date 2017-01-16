@@ -406,11 +406,14 @@ public:
     /// Enable/disable low ripple mode.
     bool lowRippleEnable(bool enable);
 
-    /// Is low ripple mode enabled?
-    bool isLowRippleEnabled();
-
     /// Enable/disable low ripple auto mode.
     void lowRippleAutoEnable(bool enable);
+
+    /// Is low ripple mode allowed?
+    bool isLowRippleAllowed(unsigned long tick_usec);
+
+    /// Is low ripple mode enabled?
+    bool isLowRippleEnabled();
 
     /// Is low ripple auto mode enabled?
     bool isLowRippleAutoEnabled();
@@ -564,7 +567,6 @@ private:
     void doRemoteProgrammingEnable(bool enable);
 
     void lowRippleCheck(unsigned long tick_usec);
-    bool isLowRippleAllowed(unsigned long tick_usec);
     void doLowRippleEnable(bool enable);
     void doLowRippleAutoEnable(bool enable);
 

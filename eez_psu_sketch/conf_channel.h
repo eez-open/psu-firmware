@@ -90,12 +90,12 @@
 //
 //                                                                    OPP_DEFAULT_STATE          OPP_MIN_LEVEL          SOA_VIN 
 //                                                                    |                          | OPP_DEFAULT_LEVEL    |      SOA_PREG_CURR,
-//                                                                    |                          |      |  OPP_MAX_LEVEL|      |     SOA_POSTREG_PTOT
-//                                                                    |                          |      |       |       |      |     |      PTOT      
+//                                                                    |                          |      |  OPP_MAX_LEVEL|      |       SOA_POSTREG_PTOT
+//                                                                    |                          |      |       |       |      |       |      PTOT      
 #define CH_PARAMS_30V_3A             CH_PARAMS_U_30V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f,  60.0f,  90.0f, 38.0f, 3.125f, 25.0f, 90.0f
 #define CH_PARAMS_40V_3A             CH_PARAMS_U_40V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f,  80.0f, 120.0f, 48.0f, 3.125f, 25.0f, 120.0f
 #define CH_PARAMS_50V_3A             CH_PARAMS_U_50V, CH_PARAMS_I_3A, true, CH_PARAMS_OPP_DELAY,  0.0f, 100.0f, 150.0f, 58.0f, 3.125f, 25.0f, 150.0f
-#define CH_PARAMS_30V_5A             CH_PARAMS_U_30V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 100.0f, 120.0f, 38.0f, 5.0f, 25.0f, 120.0f
-#define CH_PARAMS_40V_5A             CH_PARAMS_U_40V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 155.0f, 155.0f, 48.0f, 5.0f, 25.0f, 160.0f
-#define CH_PARAMS_50V_5A             CH_PARAMS_U_50V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 160.0f, 200.0f, 58.0f, 5.0f, 25.0f, 200.0f
+#define CH_PARAMS_30V_5A             CH_PARAMS_U_30V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 100.0f, 120.0f, 38.0f,   5.0f, 25.0f, 120.0f
+#define CH_PARAMS_40V_5A             CH_PARAMS_U_40V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 155.0f, 155.0f, 48.0f,   5.0f, 25.0f, 160.0f
+#define CH_PARAMS_50V_5A             CH_PARAMS_U_50V, CH_PARAMS_I_5A, true, CH_PARAMS_OPP_DELAY,  0.0f, 160.0f, 200.0f, 58.0f,   5.0f, 25.0f, 200.0f
 

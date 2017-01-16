@@ -41,15 +41,22 @@ data::Value ChSettingsAdvPage::getData(const data::Cursor &cursor, uint8_t id, d
 ////////////////////////////////////////////////////////////////////////////////
 
 ChSettingsAdvLRipplePage::ChSettingsAdvLRipplePage() {
-	origStatus = status = g_channel->isLowRippleEnabled();
 	origAutoMode = autoMode = g_channel->isLowRippleAutoEnabled();
+	origStatus = status = g_channel->isLowRippleEnabled();
 }
 
 void ChSettingsAdvLRipplePage::takeSnapshot(data::Snapshot *snapshot) {
 	SetPage::takeSnapshot(snapshot);
 
-	snapshot->flags.switch1 = status;
-	snapshot->flags.switch2 = autoMode;
+    bool isAllowed = g_channel->isLowRippleAllowed(micros());
+
+	snapshot->flags.switch1 = autoMode;
+	snapshot->flags.switch2 = g_channel->isLowRippleAllowed(micros());
+    snapshot->flags.switch3 = status;
+
+    if (!isAllowed) {
+        origStatus = status = false;
+    }
 }
 
 data::Value ChSettingsAdvLRipplePage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
@@ -58,35 +65,40 @@ data::Value ChSettingsAdvLRipplePage::getData(const data::Cursor &cursor, uint8_
 		return value;
 	}
 
-	if (id == DATA_ID_CHANNEL_LRIPPLE_MAX_CURRENT) {
-		return data::Value(g_channel->SOA_PREG_CURR, data::VALUE_TYPE_FLOAT_AMPER);
-	}
-
 	if (id == DATA_ID_CHANNEL_LRIPPLE_MAX_DISSIPATION) {
 		return data::Value(g_channel->SOA_POSTREG_PTOT, data::VALUE_TYPE_FLOAT_WATT);
 	}
 
-	if (id == DATA_ID_CHANNEL_LRIPPLE_STATUS) {
-		return snapshot->flags.switch1;
+	if (id == DATA_ID_CHANNEL_LRIPPLE_CALCULATED_DISSIPATION) {
+        data::ChannelSnapshot &channelSnapshot = snapshot->channelSnapshots[g_channel->index - 1];
+		return data::Value(channelSnapshot.i_mon * (g_channel->SOA_VIN - channelSnapshot.u_mon), data::VALUE_TYPE_FLOAT_WATT);
 	}
 
 	if (id == DATA_ID_CHANNEL_LRIPPLE_AUTO_MODE) {
+		return snapshot->flags.switch1;
+	}
+
+	if (id == DATA_ID_CHANNEL_LRIPPLE_IS_ALLOWED) {
 		return snapshot->flags.switch2;
 	}
 
-	return data::Value();
-}
+    if (id == DATA_ID_CHANNEL_LRIPPLE_STATUS) {
+		return snapshot->flags.switch3;
+	}
 
-void ChSettingsAdvLRipplePage::toggleStatus() {
-	status = status ? 0 : 1;
+	return data::Value();
 }
 
 void ChSettingsAdvLRipplePage::toggleAutoMode() {
 	autoMode = autoMode ? 0 : 1;
 }
 
+void ChSettingsAdvLRipplePage::toggleStatus() {
+	status = status ? 0 : 1;
+}
+
 int ChSettingsAdvLRipplePage::getDirty() {
-	return (origStatus != status || origAutoMode != autoMode) ? 1 : 0;
+	return (origAutoMode != autoMode || origStatus != status) ? 1 : 0;
 }
 
 void ChSettingsAdvLRipplePage::set() {
