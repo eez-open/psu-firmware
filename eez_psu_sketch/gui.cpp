@@ -1380,7 +1380,7 @@ int getYValue(
 
 void drawYTGraph(
     const WidgetCursor &widgetCursor, const Widget *widget,
-    int startPosition, int endPosition,
+    int startPosition, int endPosition, int numPositions,
     int currentHistoryValuePosition,
     int xGraphOffset, int graphWidth,
     uint8_t data1, float min1, float max1, uint16_t data1Color,
@@ -1392,16 +1392,16 @@ void drawYTGraph(
         if (position < graphWidth) {
             int x = widgetCursor.x + xGraphOffset + position;
 
-            if (position == currentHistoryValuePosition) {
-                lcd::lcd.setColor(backgroundColor);
-                lcd::lcd.drawVLine(x, widgetCursor.y, widget->h - 1);
-            } else {
-                lcd::lcd.setColor(color);
-                lcd::lcd.drawVLine(x, widgetCursor.y, widget->h - 1);
+            lcd::lcd.setColor(color);
+            lcd::lcd.drawVLine(x, widgetCursor.y, widget->h - 1);
 
-                int y1 = getYValue(widgetCursor, widget, data1, min1, max1, position);
-                int y2 = getYValue(widgetCursor, widget, data2, min2, max2, position);
+            int y1 = getYValue(widgetCursor, widget, data1, min1, max1, position);
+            int y1Prev = getYValue(widgetCursor, widget, data1, min1, max1, position == 0 ? position : position - 1);
 
+            int y2 = getYValue(widgetCursor, widget, data2, min2, max2, position);
+            int y2Prev = getYValue(widgetCursor, widget, data2, min2, max2, position == 0 ? position : position - 1);
+
+            if (abs(y1Prev - y1) <= 1 && abs(y2Prev - y2) <= 1) {
                 if (y1 == y2) {
                     lcd::lcd.setColor(position % 2 ? data2Color : data1Color);
                     lcd::lcd.drawPixel(x, widgetCursor.y + y1);
@@ -1411,6 +1411,28 @@ void drawYTGraph(
 
                     lcd::lcd.setColor(data2Color);
                     lcd::lcd.drawPixel(x, widgetCursor.y + y2);
+                }
+            } else {
+                lcd::lcd.setColor(data1Color);
+                if (abs(y1Prev - y1) <= 1) {
+                    lcd::lcd.drawPixel(x, widgetCursor.y + y1);
+                } else {
+                    if (y1Prev < y1) {
+                        lcd::lcd.drawVLine(x, widgetCursor.y + y1Prev + 1, y1 - y1Prev - 1);
+                    } else {
+                        lcd::lcd.drawVLine(x, widgetCursor.y + y1, y1Prev - y1 - 1);
+                    }
+                }
+
+                lcd::lcd.setColor(data2Color);
+                if (abs(y2Prev - y2) <= 1) {
+                    lcd::lcd.drawPixel(x, widgetCursor.y + y2);
+                } else {
+                    if (y2Prev < y2) {
+                        lcd::lcd.drawVLine(x, widgetCursor.y + y2Prev + 1, y2 - y2Prev - 1);
+                    } else {
+                        lcd::lcd.drawVLine(x, widgetCursor.y + y2, y2Prev - y2 - 1);
+                    }
                 }
             }
         }
@@ -1434,7 +1456,7 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
         updated = true;
     }
 
-    int textWidth = 62; // TODO this is hardcoded
+    int textWidth = 62; // TODO>
     int textHeight = widget->h / 2;
 
     // draw first value text
@@ -1495,25 +1517,31 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
         if (startPosition == currentHistoryValuePosition) {
             return updated;
         }
-        endPosition = currentHistoryValuePosition + 1;
+        endPosition = currentHistoryValuePosition;
     }
 
     if (startPosition < endPosition) {
-        drawYTGraph(widgetCursor, widget, startPosition, endPosition, currentHistoryValuePosition,
+        drawYTGraph(widgetCursor, widget,
+            startPosition, endPosition,
+            currentHistoryValuePosition, numHistoryValues,
             textWidth, graphWidth,
             widget->data, min1, max1, y1Style->color,
             ytGraphWidget->y2Data, min2, max2, y2Style->color,
             inverse ? style->color: style->background_color,
             inverse ? style->background_color : style->color);
     } else {
-        drawYTGraph(widgetCursor, widget, startPosition, numHistoryValues, currentHistoryValuePosition,
+        drawYTGraph(widgetCursor, widget,
+            startPosition, numHistoryValues,
+            currentHistoryValuePosition, numHistoryValues,
             textWidth, graphWidth,
             widget->data, min1, max1, y1Style->color,
             ytGraphWidget->y2Data, min2, max2, y2Style->color,
             inverse ? style->color: style->background_color,
             inverse ? style->background_color : style->color);
 
-        drawYTGraph(widgetCursor, widget, 0, endPosition, currentHistoryValuePosition,
+        drawYTGraph(widgetCursor, widget,
+            0, endPosition,
+            currentHistoryValuePosition, numHistoryValues,
             textWidth, graphWidth,
             widget->data, min1, max1, y1Style->color,
             ytGraphWidget->y2Data, min2, max2, y2Style->color,
@@ -1521,9 +1549,13 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
             inverse ? style->background_color : style->color);
     }
 
-    // draw blank lines
     int x = widgetCursor.x + textWidth;
 
+    // draw cursor
+    lcd::lcd.setColor(style->color);
+    lcd::lcd.drawVLine(x + currentHistoryValuePosition, widgetCursor.y, (int)widget->h - 1);
+
+    // draw blank lines
     int x1 = x + (currentHistoryValuePosition + 1) % numHistoryValues;
     int x2 = x + (currentHistoryValuePosition + CONF_GUI_YT_GRAPH_BLANK_PIXELS_AFTER_CURSOR) % numHistoryValues;
 

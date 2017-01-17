@@ -22864,7 +22864,8 @@
       {
         "name": "mon_dac_S",
         "inheritFrom": "mon_dac",
-        "font": "small"
+        "font": "small",
+        "alignHorizontal": "right"
       },
       {
         "name": "mon_value",
