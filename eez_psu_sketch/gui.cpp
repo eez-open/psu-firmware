@@ -1459,15 +1459,18 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
     int textWidth = 62; // TODO>
     int textHeight = widget->h / 2;
 
+    bool refreshText;
+
     // draw first value text
     data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
 
+    refreshText = false;
     if (!refresh) {
         data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
-        refresh = value != previousValue;
+        refreshText = value != previousValue;
     }
 
-    if (refresh) {
+    if (refresh || refreshText) {
         char text[64];
         value.toText(text, sizeof(text));
 
@@ -1479,12 +1482,13 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
     // draw second value text
     value = data::currentSnapshot.get(widgetCursor.cursor, ytGraphWidget->y2Data);
 
+    refreshText = false;
     if (!refresh) {
         data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, ytGraphWidget->y2Data);
-        refresh = value != previousValue;
+        refreshText = value != previousValue;
     }
 
-    if (refresh) {
+    if (refresh || refreshText) {
         char text[64];
         value.toText(text, sizeof(text));
 
