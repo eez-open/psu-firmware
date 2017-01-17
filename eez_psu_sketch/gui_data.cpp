@@ -301,6 +301,15 @@ Value getMax(const Cursor &cursor, uint8_t id) {
     return Value();
 }
 
+Value getLimit(const Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_MON) {
+        return Value(channel_dispatcher::getULimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT);
+    } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_MON) {
+        return Value(channel_dispatcher::getILimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER);
+    }
+    return Value();
+}
+
 ValueType getUnit(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_CHANNEL_U_SET) {
         return VALUE_TYPE_FLOAT_VOLT;

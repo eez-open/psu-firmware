@@ -1364,67 +1364,52 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
     return false;
 }
 
-void drawYTGraph(const WidgetCursor &widgetCursor, const Widget *widget, int startPosition, int endPosition, int currentHistoryValuePosition,
+int getYValue(
+    const WidgetCursor &widgetCursor, const Widget *widget,
+    uint8_t data, float min, float max,
+    int position
+    ) 
+{
+    float value = data::getHistoryValue(widgetCursor.cursor, data, position).getFloat();
+    int y = (int)floor(widget->h * (value - min) / (max - min));
+    if (y < 0) y = 0;
+    if (y >= widget->h) y = widget->h - 1;
+    return widget->h - 1 - y;
+}
+
+void drawYTGraph(
+    const WidgetCursor &widgetCursor, const Widget *widget,
+    int startPosition, int endPosition,
+    int currentHistoryValuePosition,
     int xGraphOffset, int graphWidth,
     uint8_t data1, float min1, float max1, uint16_t data1Color,
     uint8_t data2, float min2, float max2, uint16_t data2Color,
-    uint16_t color, uint16_t backgroundColor) {
+    uint16_t color, uint16_t backgroundColor
+    ) 
+{
     for (int position = startPosition; position < endPosition; ++position) {
         if (position < graphWidth) {
             int x = widgetCursor.x + xGraphOffset + position;
-
-            float value1 = data::getHistoryValue(widgetCursor.cursor, data1, position).getFloat();
-            int y = (int)floor(widget->h * (value1 - min1) / (max1 - min1));
-            if (y < 0) y = 0;
-            if (y >= widget->h) y = widget->h - 1;
-            int y1 = widgetCursor.y + widget->h - 1 - y;
-
-            float value2 = data::getHistoryValue(widgetCursor.cursor, data2, position).getFloat();
-            y = (int)floor(widget->h * (value2 - min2) / (max2 - min2));
-            if (y < 0) y = 0;
-            if (y >= widget->h) y = widget->h - 1;
-            int y2 = widgetCursor.y + widget->h - 1 - y;
 
             if (position == currentHistoryValuePosition) {
                 lcd::lcd.setColor(backgroundColor);
                 lcd::lcd.drawVLine(x, widgetCursor.y, widget->h - 1);
             } else {
-                uint16_t color1;
-                uint16_t color2;
-                if (y1 < y2) {
-                    color1 = data1Color;
-                    color2 = data2Color;
-                } else if (y1 > y2) {
-                    color1 = data2Color;
-                    color2 = data1Color;
-                    int temp = y1;
-                    y1 = y2;
-                    y2 = temp;
+                lcd::lcd.setColor(color);
+                lcd::lcd.drawVLine(x, widgetCursor.y, widget->h - 1);
+
+                int y1 = getYValue(widgetCursor, widget, data1, min1, max1, position);
+                int y2 = getYValue(widgetCursor, widget, data2, min2, max2, position);
+
+                if (y1 == y2) {
+                    lcd::lcd.setColor(position % 2 ? data2Color : data1Color);
+                    lcd::lcd.drawPixel(x, widgetCursor.y + y1);
                 } else {
-                    color1 = x % 2 ? data2Color : data1Color;
-                }
+                    lcd::lcd.setColor(data1Color);
+                    lcd::lcd.drawPixel(x, widgetCursor.y + y1);
 
-                if (y1 > 0) {
-                    lcd::lcd.setColor(color);
-                    lcd::lcd.drawVLine(x, widgetCursor.y, y1 - 1 - widgetCursor.y);
-                }
-
-                lcd::lcd.setColor(color1);
-                lcd::lcd.drawVLine(x, y1, 0);
-
-                if (y1 < y2) {
-                    if (y1 + 1 < y2) {
-                        lcd::lcd.setColor(color);
-                        lcd::lcd.drawVLine(x, y1 + 1, y2 - 1 - (y1 + 1));
-                    }
-
-                    lcd::lcd.setColor(color2);
-                    lcd::lcd.drawVLine(x, y2, 0);
-                }
-
-                if (y2 + 1 < widgetCursor.y + widget->h) {
-                    lcd::lcd.setColor(color);
-                    lcd::lcd.drawVLine(x, y2 + 1, widgetCursor.y + widget->h - 1 - (y2 + 1));
+                    lcd::lcd.setColor(data2Color);
+                    lcd::lcd.drawPixel(x, widgetCursor.y + y2);
                 }
             }
         }
@@ -1508,10 +1493,10 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
     static int lastPosition[CH_NUM];
 
     float min1 = data::getMin(widgetCursor.cursor, widget->data).getFloat();
-    float max1 = data::getMax(widgetCursor.cursor, widget->data).getFloat();
+    float max1 = data::getLimit(widgetCursor.cursor, widget->data).getFloat();
 
     float min2 = data::getMin(widgetCursor.cursor, ytGraphWidget->y2Data).getFloat();
-    float max2 = data::getMax(widgetCursor.cursor, ytGraphWidget->y2Data).getFloat();
+    float max2 = data::getLimit(widgetCursor.cursor, ytGraphWidget->y2Data).getFloat();
 
     int startPosition;
     int endPosition;

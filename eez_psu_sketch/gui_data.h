@@ -258,6 +258,7 @@ void select(Cursor &cursor, uint8_t id, int index);
 
 Value getMin(const Cursor &cursor, uint8_t id);
 Value getMax(const Cursor &cursor, uint8_t id);
+Value getLimit(const Cursor &cursor, uint8_t id);
 ValueType getUnit(const Cursor &cursor, uint8_t id);
 
 void getList(const Cursor &cursor, uint8_t id, const Value **labels, int &count);

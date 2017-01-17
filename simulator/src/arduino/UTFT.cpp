@@ -202,6 +202,11 @@ void UTFT::drawBitmap(int x, int y, int sx, int sy, bitmapdatatype data, int sca
     }
 }
 
+void UTFT::drawPixel(int x, int y) {
+    setXY(x, y, x, y);
+    setPixel((fch << 8) | fcl);
+}
+
 }
 }
 }

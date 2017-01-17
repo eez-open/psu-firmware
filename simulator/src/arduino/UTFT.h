@@ -99,6 +99,7 @@ public:
     void clrXY();
     void drawHLine(int x, int y, int l);
     void drawVLine(int x, int y, int l);
+    void drawPixel(int x, int y);
 };
 
 }
