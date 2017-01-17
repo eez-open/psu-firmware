@@ -56,6 +56,7 @@
 #define CONF_GUI_DRAW_TICK_ITERATIONS 100
 #define CONF_GUI_PAGE_NAVIGATION_STACK_SIZE 5
 #define CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY 200000UL // 200ms
+#define CONF_GUI_YT_GRAPH_BLANK_PIXELS_AFTER_CURSOR 10
 
 namespace eez {
 namespace psu {
@@ -1426,28 +1427,14 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
 
     // draw background
     if (refresh) {
-        int x1 = widgetCursor.x;
-        int y1 = widgetCursor.y;
-        int x2 = widgetCursor.x + (int)widget->w - 1;
-        int y2 = widgetCursor.y + (int)widget->h - 1;
-
-        if (styleHasBorder(style)) {
-            lcd::lcd.setColor(style->border_color);
-            lcd::lcd.drawRect(x1, y1, x2, y2);
-            ++x1;
-            ++y1;
-            --x2;
-            --y2;
-        }
-
         uint16_t color = inverse ? style->color : style->background_color;
         lcd::lcd.setColor(color);
-        lcd::lcd.fillRect(x1, y1, x2, y2);
+        lcd::lcd.fillRect(widgetCursor.x, widgetCursor.y, widgetCursor.x + (int)widget->w - 1, widgetCursor.y + (int)widget->h - 1);
 
         updated = true;
     }
 
-    int textWidth = 62;
+    int textWidth = 62; // TODO this is hardcoded
     int textHeight = widget->h / 2;
 
     // draw first value text
@@ -1505,6 +1492,9 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
         endPosition = numHistoryValues;
     } else {
         startPosition = lastPosition[widgetCursor.cursor.i];
+        if (startPosition == currentHistoryValuePosition) {
+            return updated;
+        }
         endPosition = currentHistoryValuePosition + 1;
     }
 
@@ -1529,6 +1519,20 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
             ytGraphWidget->y2Data, min2, max2, y2Style->color,
             inverse ? style->color: style->background_color,
             inverse ? style->background_color : style->color);
+    }
+
+    // draw blank lines
+    int x = widgetCursor.x + textWidth;
+
+    int x1 = x + (currentHistoryValuePosition + 1) % numHistoryValues;
+    int x2 = x + (currentHistoryValuePosition + CONF_GUI_YT_GRAPH_BLANK_PIXELS_AFTER_CURSOR) % numHistoryValues;
+
+    lcd::lcd.setColor(style->background_color);
+    if (x1 < x2) {
+        lcd::lcd.fillRect(x1, widgetCursor.y, x2, widgetCursor.y + (int)widget->h - 1);
+    } else {
+        lcd::lcd.fillRect(x1, widgetCursor.y, x + graphWidth - 1, widgetCursor.y + (int)widget->h - 1);
+        lcd::lcd.fillRect(x, widgetCursor.y, x2, widgetCursor.y + (int)widget->h - 1);
     }
 
     lastPosition[widgetCursor.cursor.i] = currentHistoryValuePosition;
