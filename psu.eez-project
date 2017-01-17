@@ -4010,10 +4010,7 @@
                                         "y": 0,
                                         "width": 202,
                                         "height": 58,
-                                        "style": "yt_graph",
-                                        "y1Style": "yt_graph_U_defualt",
-                                        "y2Data": "channel.i.mon",
-                                        "y2Style": "yt_graph_I_default"
+                                        "style": "yt_graph"
                                       },
                                       {
                                         "type": "YTGraph",
@@ -4023,10 +4020,7 @@
                                         "y": 0,
                                         "width": 202,
                                         "height": 58,
-                                        "style": "yt_graph",
-                                        "y1Style": "yt_graph_unregulated",
-                                        "y2Data": "channel.i.mon",
-                                        "y2Style": "yt_graph_unregulated"
+                                        "style": "yt_graph"
                                       }
                                     ]
                                   }
@@ -6069,10 +6063,7 @@
                                         "y": 0,
                                         "width": 202,
                                         "height": 58,
-                                        "style": "yt_graph",
-                                        "y1Style": "yt_graph_U_defualt",
-                                        "y2Data": "channel.i.mon",
-                                        "y2Style": "yt_graph_I_default"
+                                        "style": "yt_graph"
                                       },
                                       {
                                         "type": "YTGraph",
@@ -6082,10 +6073,7 @@
                                         "y": 0,
                                         "width": 202,
                                         "height": 58,
-                                        "style": "yt_graph",
-                                        "y1Style": "yt_graph_unregulated",
-                                        "y2Data": "channel.i.mon",
-                                        "y2Style": "yt_graph_unregulated"
+                                        "style": "yt_graph"
                                       }
                                     ]
                                   }
@@ -13976,11 +13964,28 @@
               ]
             },
             {
-              "type": "Rectangle",
+              "type": "Text",
               "x": 16,
               "y": 168,
+              "width": 180,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "Display view"
+            },
+            {
+              "type": "Rectangle",
+              "x": 196,
+              "y": 168,
+              "width": 56,
+              "height": 28,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Rectangle",
+              "x": 16,
+              "y": 196,
               "width": 236,
-              "height": 36,
+              "height": 8,
               "style": "default_inverse"
             },
             {
@@ -15248,6 +15253,225 @@
                   "text": "\\u0081 Take precautions with voltage over 50V"
                 }
               ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "ch_settings_adv_view",
+        "description": "Define selected protection values\n",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "x": 6,
+              "type": "Select",
+              "data": "channel.isCoupledOrTracked",
+              "y": 0,
+              "width": 246,
+              "height": 28,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "data": "channel.shortLabel",
+                      "x": 6,
+                      "y": 0,
+                      "width": 36,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channel protections"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 42,
+                      "y": 0,
+                      "width": 210,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Display view settings"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set temperature protection"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 28,
+              "width": 135,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Display value #1:"
+            },
+            {
+              "type": "Text",
+              "x": 151,
+              "y": 28,
+              "width": 90,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "Voltage (V)"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 56,
+              "width": 135,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Display value #2:"
+            },
+            {
+              "type": "Text",
+              "x": 151,
+              "y": 84,
+              "width": 62,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "100ms"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 84,
+              "width": 135,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "YT view rate:"
+            },
+            {
+              "type": "Button",
+              "data": "",
+              "action": "set",
+              "x": 16,
+              "y": 168,
+              "width": 101,
+              "height": 32,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "type": "Text",
+              "action": "discard",
+              "x": 117,
+              "y": 168,
+              "width": 96,
+              "height": 32,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page_selected",
+              "text": "E"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "G"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 96,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "?"
+            },
+            {
+              "type": "Rectangle",
+              "x": 144,
+              "y": 204,
+              "width": 128,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
+              "type": "Rectangle",
+              "x": 16,
+              "y": 112,
+              "width": 236,
+              "height": 56,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Text",
+              "x": 151,
+              "y": 56,
+              "width": 90,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "Power (W)"
             }
           ]
         }
@@ -21958,10 +22182,7 @@
                     "y": 0,
                     "width": 202,
                     "height": 106,
-                    "style": "yt_graph",
-                    "y1Style": "yt_graph_U_defualt",
-                    "y2Data": "channel.i.mon",
-                    "y2Style": "yt_graph_I_default"
+                    "style": "yt_graph"
                   },
                   {
                     "type": "YTGraph",
@@ -21971,10 +22192,7 @@
                     "y": 0,
                     "width": 202,
                     "height": 106,
-                    "style": "yt_graph",
-                    "y1Style": "yt_graph_unregulated",
-                    "y2Data": "channel.i.mon",
-                    "y2Style": "yt_graph_unregulated"
+                    "style": "yt_graph"
                   }
                 ]
               }
