@@ -1364,6 +1364,193 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
     return false;
 }
 
+void drawYTGraph(const WidgetCursor &widgetCursor, const Widget *widget, int startPosition, int endPosition, int currentHistoryValuePosition,
+    int xGraphOffset, int graphWidth,
+    uint8_t data1, float min1, float max1, uint16_t data1Color,
+    uint8_t data2, float min2, float max2, uint16_t data2Color,
+    uint16_t color, uint16_t backgroundColor) {
+    for (int position = startPosition; position < endPosition; ++position) {
+        if (position < graphWidth) {
+            int x = widgetCursor.x + xGraphOffset + position;
+
+            float value1 = data::getHistoryValue(widgetCursor.cursor, data1, position).getFloat();
+            int y = (int)floor(widget->h * (value1 - min1) / (max1 - min1));
+            if (y < 0) y = 0;
+            if (y >= widget->h) y = widget->h - 1;
+            int y1 = widgetCursor.y + widget->h - 1 - y;
+
+            float value2 = data::getHistoryValue(widgetCursor.cursor, data2, position).getFloat();
+            y = (int)floor(widget->h * (value2 - min2) / (max2 - min2));
+            if (y < 0) y = 0;
+            if (y >= widget->h) y = widget->h - 1;
+            int y2 = widgetCursor.y + widget->h - 1 - y;
+
+            if (position == currentHistoryValuePosition) {
+                lcd::lcd.setColor(backgroundColor);
+                lcd::lcd.drawVLine(x, widgetCursor.y, widget->h - 1);
+            } else {
+                uint16_t color1;
+                uint16_t color2;
+                if (y1 < y2) {
+                    color1 = data1Color;
+                    color2 = data2Color;
+                } else if (y1 > y2) {
+                    color1 = data2Color;
+                    color2 = data1Color;
+                    int temp = y1;
+                    y1 = y2;
+                    y2 = temp;
+                } else {
+                    color1 = x % 2 ? data2Color : data1Color;
+                }
+
+                if (y1 > 0) {
+                    lcd::lcd.setColor(color);
+                    lcd::lcd.drawVLine(x, widgetCursor.y, y1 - 1 - widgetCursor.y);
+                }
+
+                lcd::lcd.setColor(color1);
+                lcd::lcd.drawVLine(x, y1, 0);
+
+                if (y1 < y2) {
+                    if (y1 + 1 < y2) {
+                        lcd::lcd.setColor(color);
+                        lcd::lcd.drawVLine(x, y1 + 1, y2 - 1 - (y1 + 1));
+                    }
+
+                    lcd::lcd.setColor(color2);
+                    lcd::lcd.drawVLine(x, y2, 0);
+                }
+
+                if (y2 + 1 < widgetCursor.y + widget->h) {
+                    lcd::lcd.setColor(color);
+                    lcd::lcd.drawVLine(x, y2 + 1, widgetCursor.y + widget->h - 1 - (y2 + 1));
+                }
+            }
+        }
+    }
+}
+
+bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    DECL_WIDGET_SPECIFIC(YTGraphWidget, ytGraphWidget, widget);
+    DECL_WIDGET_STYLE(style, widget);
+    DECL_STYLE(y1Style, ytGraphWidget->y1Style);
+    DECL_STYLE(y2Style, ytGraphWidget->y2Style);
+
+    bool updated = false;
+
+    // draw background
+    if (refresh) {
+        int x1 = widgetCursor.x;
+        int y1 = widgetCursor.y;
+        int x2 = widgetCursor.x + (int)widget->w - 1;
+        int y2 = widgetCursor.y + (int)widget->h - 1;
+
+        if (styleHasBorder(style)) {
+            lcd::lcd.setColor(style->border_color);
+            lcd::lcd.drawRect(x1, y1, x2, y2);
+            ++x1;
+            ++y1;
+            --x2;
+            --y2;
+        }
+
+        uint16_t color = inverse ? style->color : style->background_color;
+        lcd::lcd.setColor(color);
+        lcd::lcd.fillRect(x1, y1, x2, y2);
+
+        updated = true;
+    }
+
+    int textWidth = 62;
+    int textHeight = widget->h / 2;
+
+    // draw first value text
+    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+
+    if (!refresh) {
+        data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
+        refresh = value != previousValue;
+    }
+
+    if (refresh) {
+        char text[64];
+        value.toText(text, sizeof(text));
+
+        drawText(text, -1, widgetCursor.x, widgetCursor.y, textWidth, textHeight, y1Style, inverse);
+
+        updated = true;
+    }
+
+    // draw second value text
+    value = data::currentSnapshot.get(widgetCursor.cursor, ytGraphWidget->y2Data);
+
+    if (!refresh) {
+        data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, ytGraphWidget->y2Data);
+        refresh = value != previousValue;
+    }
+
+    if (refresh) {
+        char text[64];
+        value.toText(text, sizeof(text));
+
+        drawText(text, -1, widgetCursor.x, widgetCursor.y + textHeight, textWidth, textHeight, y2Style, inverse);
+
+        updated = true;
+    }
+
+    // draw graph
+    int graphWidth = widget->w - textWidth;
+
+    int numHistoryValues = data::getNumHistoryValues(widget->data);
+    int currentHistoryValuePosition = data::getCurrentHistoryValuePosition(widget->data);
+
+    static int lastPosition[CH_NUM];
+
+    float min1 = data::getMin(widgetCursor.cursor, widget->data).getFloat();
+    float max1 = data::getMax(widgetCursor.cursor, widget->data).getFloat();
+
+    float min2 = data::getMin(widgetCursor.cursor, ytGraphWidget->y2Data).getFloat();
+    float max2 = data::getMax(widgetCursor.cursor, ytGraphWidget->y2Data).getFloat();
+
+    int startPosition;
+    int endPosition;
+    if (refresh) {
+        startPosition = 0;
+        endPosition = numHistoryValues;
+    } else {
+        startPosition = lastPosition[widgetCursor.cursor.i];
+        endPosition = currentHistoryValuePosition + 1;
+    }
+
+    if (startPosition < endPosition) {
+        drawYTGraph(widgetCursor, widget, startPosition, endPosition, currentHistoryValuePosition,
+            textWidth, graphWidth,
+            widget->data, min1, max1, y1Style->color,
+            ytGraphWidget->y2Data, min2, max2, y2Style->color,
+            inverse ? style->color: style->background_color,
+            inverse ? style->background_color : style->color);
+    } else {
+        drawYTGraph(widgetCursor, widget, startPosition, numHistoryValues, currentHistoryValuePosition,
+            textWidth, graphWidth,
+            widget->data, min1, max1, y1Style->color,
+            ytGraphWidget->y2Data, min2, max2, y2Style->color,
+            inverse ? style->color: style->background_color,
+            inverse ? style->background_color : style->color);
+
+        drawYTGraph(widgetCursor, widget, 0, endPosition, currentHistoryValuePosition,
+            textWidth, graphWidth,
+            widget->data, min1, max1, y1Style->color,
+            ytGraphWidget->y2Data, min2, max2, y2Style->color,
+            inverse ? style->color: style->background_color,
+            inverse ? style->background_color : style->color);
+    }
+
+    lastPosition[widgetCursor.cursor.i] = currentHistoryValuePosition;
+
+    return updated;
+}
+
 bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
@@ -1389,6 +1576,8 @@ bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
         return drawScaleWidget(widgetCursor, widget, refresh, inverse);
     } else if (widget->type == WIDGET_TYPE_BAR_GRAPH) {
         return drawBarGraphWidget(widgetCursor, widget, refresh, inverse, true);
+    } else if (widget->type == WIDGET_TYPE_YT_GRAPH) {
+        return drawYTGraphWidget(widgetCursor, widget, refresh, inverse);
     } 
 
     return false;

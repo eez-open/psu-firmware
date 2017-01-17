@@ -49,6 +49,7 @@ namespace gui {
 #define WIDGET_TYPE_SCALE 12
 #define WIDGET_TYPE_BAR_GRAPH 13
 #define WIDGET_TYPE_CUSTOM 14
+#define WIDGET_TYPE_YT_GRAPH 15
 
 #define LIST_TYPE_VERTICAL 1
 #define LIST_TYPE_HORIZONTAL 2
@@ -157,6 +158,12 @@ struct BarGraphWidget {
 	uint8_t line1Style;
 	uint8_t line2Data;
 	uint8_t line2Style;
+};
+
+struct YTGraphWidget {
+	uint8_t y1Style;
+	uint8_t y2Data;
+	uint8_t y2Style;
 };
 
 struct CustomWidgetSpecific {

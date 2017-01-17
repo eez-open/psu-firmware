@@ -513,6 +513,10 @@ public:
     float getUSetUnbalanced() { return isVoltageBalanced() ? uBeforeBalancing : u.set; }
     float getISetUnbalanced() { return isCurrentBalanced() ? iBeforeBalancing : i.set; }
 
+    static int getCurrentHistoryValuePosition() { return historyPosition; }
+    float getUMonHistory(int position) const { return uHistory[position]; }
+    float getIMonHistory(int position) const { return iHistory[position]; }
+
 private:
     bool delayed_dp_off;
     unsigned long delayed_dp_off_start;
@@ -536,6 +540,11 @@ private:
 
     int negligibleAdcDiffForVoltage;
     int negligibleAdcDiffForCurrent;
+
+    float uHistory[CHANNEL_HISTORY_SIZE];
+    float iHistory[CHANNEL_HISTORY_SIZE];
+    static int historyPosition;
+    static unsigned long historyLastTick;
 
     void clearProtectionConf();
     void protectionEnter(ProtectionValue &cpv);

@@ -373,6 +373,29 @@ bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
     return false;
 }
 
+int getNumHistoryValues(uint8_t id) {
+    if (id == DATA_ID_CHANNEL_U_MON || DATA_ID_CHANNEL_I_MON) {
+        return CHANNEL_HISTORY_SIZE;
+    }
+    return 0;
+}
+
+int getCurrentHistoryValuePosition(uint8_t id) {
+    if (id == DATA_ID_CHANNEL_U_MON || id == DATA_ID_CHANNEL_I_MON) {
+        return Channel::getCurrentHistoryValuePosition();
+    }
+    return -1;
+}
+
+Value getHistoryValue(const Cursor &cursor, uint8_t id, int position) {
+    if (id == DATA_ID_CHANNEL_U_MON) {
+        return Value(channel_dispatcher::getUMonHistory(Channel::get(cursor.i), position), VALUE_TYPE_FLOAT_VOLT);
+    } else if (id == DATA_ID_CHANNEL_I_MON) {
+        return Value(channel_dispatcher::getIMonHistory(Channel::get(cursor.i), position), VALUE_TYPE_FLOAT_AMPER);
+    }
+    return Value();
+}
+
 }
 }
 }

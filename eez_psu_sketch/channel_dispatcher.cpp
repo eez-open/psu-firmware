@@ -172,6 +172,13 @@ float getUMon(const Channel &channel) {
     return channel.u.mon; 
 }
 
+float getUMonHistory(const Channel &channel, int position) { 
+    if (isSeries()) {
+        return Channel::get(0).getUMonHistory(position) + Channel::get(1).getUMonHistory(position);
+    }
+    return channel.getUMonHistory(position); 
+}
+
 float getUMonDac(const Channel &channel) { 
     if (isSeries()) {
         return Channel::get(0).u.mon_dac + Channel::get(1).u.mon_dac;
@@ -316,6 +323,13 @@ float getIMon(const Channel &channel) {
         return Channel::get(0).i.mon + Channel::get(1).i.mon;
     }
     return channel.i.mon; 
+}
+
+float getIMonHistory(const Channel &channel, int position) { 
+    if (isParallel()) {
+        return Channel::get(0).getIMonHistory(position) + Channel::get(1).getIMonHistory(position);
+    }
+    return channel.getIMonHistory(position); 
 }
 
 float getIMonDac(const Channel &channel) { 

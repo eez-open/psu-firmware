@@ -255,3 +255,6 @@
 /// past and when we used our SPI transactions implementation, problems disappeared.
 /// But, unfortunately, now ethernet doesn't work.
 #define REPLACE_SPI_TRANSACTIONS_IMPLEMENTATION 1
+
+#define CHANNEL_HISTORY_SIZE 140
+#define CHANNEL_HISTORY_SAMPLE_TIME 100 // 100ms

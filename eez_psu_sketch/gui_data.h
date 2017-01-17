@@ -264,6 +264,10 @@ void getList(const Cursor &cursor, uint8_t id, const Value **labels, int &count)
 
 bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error);
 
+int getNumHistoryValues(uint8_t id);
+int getCurrentHistoryValuePosition(uint8_t id);
+Value getHistoryValue(const Cursor &cursor, uint8_t id, int position);
+
 }
 }
 }

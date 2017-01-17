@@ -70,6 +70,9 @@ uint16_t CH_BOARD_REVISION_FEATURES[] = {
 Channel channels[CH_MAX] = { CHANNELS };
 #undef CHANNEL
 
+int Channel::historyPosition = -1;
+unsigned long Channel::historyLastTick;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 Channel &Channel::get(int channel_index) {
@@ -637,6 +640,37 @@ void Channel::tick(unsigned long tick_usec) {
         testPwrgood(ioexp.readGpio());
     }
 #endif
+
+    if (index == 1) {
+        if (historyPosition == -1) {
+            for (int i = 0; i < CH_NUM; ++i) {
+                Channel& channel = get(i);
+                channel.uHistory[0] = channel.u.mon;
+                channel.iHistory[0] = channel.i.mon;
+                for (int i = 1; i < CHANNEL_HISTORY_SIZE; ++i) {
+                    uHistory[i] = 0;
+                    iHistory[i] = 0;
+                }
+            }
+            
+            historyPosition = 1;
+            historyLastTick = tick_usec;
+        } else {
+            while (tick_usec - historyLastTick >= CHANNEL_HISTORY_SAMPLE_TIME * 1000L) {
+                for (int i = 0; i < CH_NUM; ++i) {
+                    Channel& channel = get(i);
+                    channel.uHistory[historyPosition] = channel.u.mon;
+                    channel.iHistory[historyPosition] = channel.i.mon;
+                }
+                
+                if (++historyPosition == CHANNEL_HISTORY_SIZE) {
+                    historyPosition = 0;
+                }
+
+                historyLastTick += CHANNEL_HISTORY_SAMPLE_TIME * 1000L;
+            }
+        }
+    }
 
     //if (!util::equal(u.set, u.mon_dac, CHANNEL_VALUE_PRECISION)) {
     //    DebugTraceF("U_SET(%f) <> U_MON_DAC(%f)", u.set, u.mon_dac);

@@ -21,6 +21,8 @@
 #include "event_queue.h"
 #include "profile.h"
 
+#define NUM_CHANNEL_DISPLAYED_VALUES 4
+
 namespace eez {
 namespace psu {
 namespace persist_conf {
@@ -142,7 +144,7 @@ void loadDevice() {
         if (!check_block((BlockHeader *)&devConf, sizeof(DeviceConfiguration), DEV_CONF_VERSION)) {
             initDevice();
         } else {
-			if (devConf.flags.channelDisplayedValues < 0 || devConf.flags.channelDisplayedValues > 2) {
+			if (devConf.flags.channelDisplayedValues < 0 || devConf.flags.channelDisplayedValues >= NUM_CHANNEL_DISPLAYED_VALUES) {
 				devConf.flags.channelDisplayedValues = 0;
 			}
 		}
@@ -355,7 +357,7 @@ int getProfileAutoRecallLocation() {
 }
 
 void toggleChannelDisplayedValues() {
-	devConf.flags.channelDisplayedValues = (devConf.flags.channelDisplayedValues + 1) % 3;
+	devConf.flags.channelDisplayedValues = (devConf.flags.channelDisplayedValues + 1) % NUM_CHANNEL_DISPLAYED_VALUES;
 	saveDevice();
 }
 
