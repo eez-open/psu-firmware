@@ -472,7 +472,7 @@ void Channel::reset() {
     p_limit = PTOT;
 
     flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
-    flags.displayValue2 = DISPLAY_VALUE_POWER; 
+    flags.displayValue2 = DISPLAY_VALUE_CURRENT; 
     ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
 }
 

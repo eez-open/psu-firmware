@@ -232,6 +232,7 @@ void ChSettingsAdvViewPage::onDisplayValue1Set(uint8_t value) {
 
 void ChSettingsAdvViewPage::editDisplayValue1() {
     //pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue1, onDisplayValue1Set);
+    onDisplayValue1Set(DISPLAY_VALUE_VOLTAGE);
 }
 
 void ChSettingsAdvViewPage::onDisplayValue2Set(uint8_t value) {
@@ -242,6 +243,7 @@ void ChSettingsAdvViewPage::onDisplayValue2Set(uint8_t value) {
 
 void ChSettingsAdvViewPage::editDisplayValue2() {
     //pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue2, onDisplayValue1Set);
+    onDisplayValue1Set(DISPLAY_VALUE_CURRENT);
 }
 
 void ChSettingsAdvViewPage::onYTViewRateSet(float value) {
@@ -256,6 +258,7 @@ void ChSettingsAdvViewPage::editYTViewRate() {
 	options.editUnit = data::VALUE_TYPE_FLOAT_SECOND;
 
 	options.min = GUI_YT_VIEW_RATE_MIN;
+    options.max = GUI_YT_VIEW_RATE_MAX;
 	options.def = GUI_YT_VIEW_RATE_DEFAULT;
 
 	options.flags.genericNumberKeypad = true;

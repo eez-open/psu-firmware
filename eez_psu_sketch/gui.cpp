@@ -1612,6 +1612,14 @@ bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
     return false;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+bool isActivePageInternal() {
+    return g_activePageId < INTERNAL_PAGE_ID_NONE;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 static EnumWidgets g_drawEnumWidgets(draw_widget);
 static bool g_clearBackground;
 
@@ -1640,34 +1648,38 @@ void clearBackground() {
 }
 
 bool draw_tick() {
-    if (g_clearBackground) {
-        clearBackground();
-        g_clearBackground = false;
-    }
-
-    for (int i = 0; i < CONF_GUI_DRAW_TICK_ITERATIONS; ++i) {
-        if (!g_drawEnumWidgets.next()) {
-            g_wasBlinkTime = g_isBlinkTime;
-            g_isBlinkTime = (micros() % (2 * CONF_GUI_BLINK_TIME)) > CONF_GUI_BLINK_TIME && touch::event_type == touch::TOUCH_NONE;
-
-            data::previousSnapshot = data::currentSnapshot;
-            data::currentSnapshot.takeSnapshot();
-
-            DECL_WIDGET(page, getPageOffset(g_activePageId));
-            g_drawEnumWidgets.start(g_activePageId, page->x, page->y, false);
-
-            //DebugTraceF("%d", draw_counter);
-            //draw_counter = 0;
-
-            return false;
+    if (isActivePageInternal()) {
+        return false;
+    } else {
+        if (g_clearBackground) {
+            clearBackground();
+            g_clearBackground = false;
         }
 
-#ifdef EEZ_PSU_SIMULATOR
-        //delay(50);
-        //break;
-#endif
+        for (int i = 0; i < CONF_GUI_DRAW_TICK_ITERATIONS; ++i) {
+            if (!g_drawEnumWidgets.next()) {
+                g_wasBlinkTime = g_isBlinkTime;
+                g_isBlinkTime = (micros() % (2 * CONF_GUI_BLINK_TIME)) > CONF_GUI_BLINK_TIME && touch::event_type == touch::TOUCH_NONE;
+
+                data::previousSnapshot = data::currentSnapshot;
+                data::currentSnapshot.takeSnapshot();
+
+                DECL_WIDGET(page, getPageOffset(g_activePageId));
+                g_drawEnumWidgets.start(g_activePageId, page->x, page->y, false);
+
+                //DebugTraceF("%d", draw_counter);
+                //draw_counter = 0;
+
+                return false;
+            }
+
+    #ifdef EEZ_PSU_SIMULATOR
+            //delay(50);
+            //break;
+    #endif
+        }
+        return true;    
     }
-    return true;
 }
 
 void refresh_widget(WidgetCursor widget_cursor) {
