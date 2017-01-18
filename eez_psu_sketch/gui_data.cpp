@@ -243,6 +243,10 @@ void Value::toText(char *text, int count) const {
             }
 
             if (!unit) {
+                if (util::greaterOrEqual(float_, 99.99f, 2)) {
+                    precision = 1;
+                }
+
                 util::strcatFloat(text, float_, precision);
 
                 switch (type_) {
@@ -327,6 +331,8 @@ Value getMin(const Cursor &cursor, uint8_t id) {
         return Value(channel_dispatcher::getUMin(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT);
     } else if (id == DATA_ID_CHANNEL_I_SET || isIMonData(cursor, id)) {
         return Value(channel_dispatcher::getIMin(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER);
+    } else if (isPMonData(cursor, id)) {
+        return Value(channel_dispatcher::getPowerMinLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMin();
     }
@@ -338,9 +344,12 @@ Value getMax(const Cursor &cursor, uint8_t id) {
         return Value(channel_dispatcher::getUMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT);
     } else if (id == DATA_ID_CHANNEL_I_SET || isIMonData(cursor, id)) {
         return Value(channel_dispatcher::getIMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER);
+    } else if (isPMonData(cursor, id)) {
+        return Value(channel_dispatcher::getPowerMaxLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMax();
     }
+
     return Value();
 }
 
@@ -349,7 +358,10 @@ Value getLimit(const Cursor &cursor, uint8_t id) {
         return Value(channel_dispatcher::getULimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT);
     } else if (id == DATA_ID_CHANNEL_I_SET || isIMonData(cursor, id)) {
         return Value(channel_dispatcher::getILimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER);
+    } else if (isPMonData(cursor, id)) {
+        return Value(channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT);
     }
+
     return Value();
 }
 

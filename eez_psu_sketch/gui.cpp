@@ -1580,7 +1580,7 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
     return updated;
 }
 
-bool draw_widget(const WidgetCursor &widgetCursor, bool refresh) {
+bool drawWidget(const WidgetCursor &widgetCursor, bool refresh) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
     bool inverse = g_selectedWidget == widgetCursor;
@@ -1620,7 +1620,7 @@ bool isActivePageInternal() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static EnumWidgets g_drawEnumWidgets(draw_widget);
+static EnumWidgets g_drawEnumWidgets(drawWidget);
 static bool g_clearBackground;
 
 void clearBackground() {
@@ -1647,9 +1647,9 @@ void clearBackground() {
     }
 }
 
-bool draw_tick() {
+bool drawTick() {
     if (isActivePageInternal()) {
-        return false;
+        return ((InternalPage *)g_activePage)->drawTick();
     } else {
         if (g_clearBackground) {
             clearBackground();
@@ -1682,21 +1682,29 @@ bool draw_tick() {
     }
 }
 
-void refresh_widget(WidgetCursor widget_cursor) {
-    g_widgetRefresh = true;
-    draw_widget(widget_cursor, true);
-    g_widgetRefresh = false;
+void refreshWidget(WidgetCursor widgetCursor) {
+    if (isActivePageInternal()) {
+        ((InternalPage *)g_activePage)->drawWidget(widgetCursor, widgetCursor == g_selectedWidget);
+    } else {
+        g_widgetRefresh = true;
+        drawWidget(widgetCursor, true);
+        g_widgetRefresh = false;
+    }
 }
 
 void refreshPage() {
-    DECL_WIDGET(page, getPageOffset(g_activePageId));
-    data::currentSnapshot.takeSnapshot();
-    g_clearBackground = true;
-    g_drawEnumWidgets.start(g_activePageId, page->x, page->y, true);
+    if (isActivePageInternal()) {
+        ((InternalPage *)g_activePage)->refresh();
+    } else {
+        DECL_WIDGET(page, getPageOffset(g_activePageId));
+        data::currentSnapshot.takeSnapshot();
+        g_clearBackground = true;
+        g_drawEnumWidgets.start(g_activePageId, page->x, page->y, true);
+    }
 }
 
 void flush() {
-    while (draw_tick());
+    while (drawTick());
 
 #ifdef EEZ_PSU_SIMULATOR
     if (simulator::front_panel::isOpened()) {
@@ -1824,8 +1832,8 @@ void showEthernetInit() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t currentValue, void (*onSet)(uint8_t)) {
-    pushPage(INTERNAL_PAGE_ID_SELECT_FROM_ENUM, new SelectFromEnumPage(enumDefinition, currentValue, onSet));
+void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t currentValue, uint8_t disabledValue, void (*onSet)(uint8_t)) {
+    pushPage(INTERNAL_PAGE_ID_SELECT_FROM_ENUM, new SelectFromEnumPage(enumDefinition, currentValue, disabledValue, onSet));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2029,49 +2037,53 @@ void selectChannel() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static int find_widget_at_x;
-static int find_widget_at_y;
-static WidgetCursor found_widget;
+static int g_find_widget_at_x;
+static int g_find_widget_at_y;
+static WidgetCursor g_foundWidget;
 
-bool find_widget_step(const WidgetCursor &widgetCursor, bool refresh) {
+bool findWidgetStep(const WidgetCursor &widgetCursor, bool refresh) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
     bool inside = 
-        find_widget_at_x >= widgetCursor.x &&
-        find_widget_at_x < widgetCursor.x + (int)widget->w &&
-        find_widget_at_y >= widgetCursor.y &&
-        find_widget_at_y < widgetCursor.y + (int)widget->h;
+        g_find_widget_at_x >= widgetCursor.x &&
+        g_find_widget_at_x < widgetCursor.x + (int)widget->w &&
+        g_find_widget_at_y >= widgetCursor.y &&
+        g_find_widget_at_y < widgetCursor.y + (int)widget->h;
 
     if (inside) {
-        found_widget = widgetCursor;
+        g_foundWidget = widgetCursor;
         return true;
     }
 
     return false;
 }
 
-void find_widget(int x, int y) {
-    found_widget = 0;
+void findWidget(int x, int y) {
+    if (isActivePageInternal()) {
+        g_foundWidget = ((InternalPage *)g_activePage)->findWidget(x, y);
+    } else {
+        g_foundWidget = 0;
 
-    find_widget_at_x = touch::x;
-    find_widget_at_y = touch::y;
-    EnumWidgets enum_widgets(find_widget_step);
-    DECL_WIDGET(page, getPageOffset(g_activePageId));
-    enum_widgets.start(g_activePageId, page->x, page->y, true);
-    enum_widgets.next();
+        g_find_widget_at_x = touch::x;
+        g_find_widget_at_y = touch::y;
+        EnumWidgets enum_widgets(findWidgetStep);
+        DECL_WIDGET(page, getPageOffset(g_activePageId));
+        enum_widgets.start(g_activePageId, page->x, page->y, true);
+        enum_widgets.next();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void select_widget(WidgetCursor &widget_cursor) {
-    g_selectedWidget = widget_cursor;
-    refresh_widget(g_selectedWidget);
+void selectWidget(WidgetCursor &widgetCursor) {
+    g_selectedWidget = widgetCursor;
+    refreshWidget(g_selectedWidget);
 }
 
-void deselect_widget() {
+void deselectWidget() {
     WidgetCursor old_selected_widget = g_selectedWidget;
     g_selectedWidget = 0;
-    refresh_widget(old_selected_widget);
+    refreshWidget(old_selected_widget);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2081,6 +2093,16 @@ bool isLongPressAction(int actionId) {
         actionId == ACTION_ID_SYS_FRONT_PANEL_LOCK || 
         actionId == ACTION_ID_SYS_FRONT_PANEL_UNLOCK;
 }
+
+ActionType getAction(WidgetCursor &widgetCursor) {
+    if (isActivePageInternal()) {
+        return ((InternalPage *)g_activePage)->getAction(widgetCursor);
+    } else {
+        DECL_WIDGET(widget, widgetCursor.widgetOffset);
+        return widget->action;
+    }
+}
+
 
 void executeAction(int actionId) {
     sound::playClick();
@@ -2202,23 +2224,31 @@ void tick(unsigned long tick_usec) {
 
             g_touchDownTime = tick_usec;
             g_touchActionExecuted = false;
-            find_widget(touch::x, touch::y);
-            DECL_WIDGET(widget, found_widget.widgetOffset);
-            if (found_widget && isWidgetActionEnabled(widget)) {
-                g_foundWidgetAtDown = found_widget;
-            } else {
-                g_foundWidgetAtDown = 0;
-            }
-            if (g_foundWidgetAtDown) {
-                select_widget(g_foundWidgetAtDown);
-            } else {
-                DECL_WIDGET(widget, found_widget.widgetOffset);
-                if (found_widget && widget->type == WIDGET_TYPE_BUTTON_GROUP) {
-                    widgetButtonGroup::onTouchDown(found_widget);
-                } else if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
-                    edit_mode_slider::onTouchDown();
-                } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
-                    edit_mode_step::onTouchDown();
+            findWidget(touch::x, touch::y);
+            g_foundWidgetAtDown = 0;
+            if (g_foundWidget) {
+                if (isActivePageInternal()) {
+                    g_foundWidgetAtDown = g_foundWidget;
+                } else {
+                    DECL_WIDGET(widget, g_foundWidget.widgetOffset);
+                    if (isWidgetActionEnabled(widget)) {
+                        g_foundWidgetAtDown = g_foundWidget;
+                    }
+                }
+
+                if (g_foundWidgetAtDown) {
+                    selectWidget(g_foundWidgetAtDown);
+                } else {
+                    if (!isActivePageInternal()) {
+                        DECL_WIDGET(widget, g_foundWidget.widgetOffset);
+                        if (g_foundWidget && widget->type == WIDGET_TYPE_BUTTON_GROUP) {
+                            widgetButtonGroup::onTouchDown(g_foundWidget);
+                        } else if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+                            edit_mode_slider::onTouchDown();
+                        } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
+                            edit_mode_step::onTouchDown();
+                        }
+                    }
                 }
             }
         } else if (touch::event_type == touch::TOUCH_MOVE) {
@@ -2227,21 +2257,21 @@ void tick(unsigned long tick_usec) {
             }
 
             if (g_foundWidgetAtDown) {
-                DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
-                if (widget->action == ACTION_ID_TURN_OFF) {
+                ActionType action = getAction(g_foundWidgetAtDown);
+                if (action == ACTION_ID_TURN_OFF) {
                     if (tick_usec - g_touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
                         if (!g_touchActionExecuted) {
-                            deselect_widget();
+                            deselectWidget();
                             g_foundWidgetAtDown = 0;
                             g_touchActionExecuted = true;
                             sound::playClick();
                             psu::changePowerState(false);
                         }
                     }
-                } else if (widget->action == ACTION_ID_SYS_FRONT_PANEL_LOCK || widget->action == ACTION_ID_SYS_FRONT_PANEL_UNLOCK) {
+                } else if (action == ACTION_ID_SYS_FRONT_PANEL_LOCK || action == ACTION_ID_SYS_FRONT_PANEL_UNLOCK) {
                     if (tick_usec - g_touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
                         if (!g_touchActionExecuted) {
-                            deselect_widget();
+                            deselectWidget();
                             g_foundWidgetAtDown = 0;
                             g_touchActionExecuted = true;
                             sound::playClick();
@@ -2252,11 +2282,11 @@ void tick(unsigned long tick_usec) {
                             }
                         }
                     }
-                } else if (widget->action == ACTION_ID_KEYPAD_BACK) {
+                } else if (action == ACTION_ID_KEYPAD_BACK) {
                     if (tick_usec - g_touchDownTime >= CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY) {
                         g_touchDownTime = tick_usec;
                         g_touchActionExecuted = true;
-                        executeAction(widget->action);
+                        executeAction(action);
                     }
                 }
             } else {
@@ -2286,10 +2316,10 @@ void tick(unsigned long tick_usec) {
             }
 
             if (g_foundWidgetAtDown) {
-                deselect_widget();
-                DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
-                if (!isLongPressAction(widget->action)) {
-                    executeAction(widget->action);
+                deselectWidget();
+                ActionType action = getAction(g_foundWidgetAtDown);
+                if (!isLongPressAction(action)) {
+                    executeAction(action);
                 }
                 g_foundWidgetAtDown = 0;
             } else {
@@ -2334,7 +2364,7 @@ void tick(unsigned long tick_usec) {
 
     // update screen
     if (!touch::calibration::isCalibrating()) {
-        draw_tick();
+        drawTick();
     }
 }
 

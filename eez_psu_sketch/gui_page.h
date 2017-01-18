@@ -53,14 +53,43 @@ protected:
 	virtual void setValue(float value);
 };
 
-class SelectFromEnumPage : public Page {
+class InternalPage : public Page {
 public:
-    SelectFromEnumPage(const data::EnumItem *enumDefinition_, uint8_t currentValue_, void (*onSet_)(uint8_t));
+    virtual void refresh() = 0;
+    virtual bool drawTick() = 0;
+    virtual WidgetCursor findWidget(int x, int y) = 0;
+    virtual void drawWidget(const WidgetCursor &widgetCursor, bool selected) = 0;
+    virtual ActionType getAction(const WidgetCursor &widgetCursor) = 0;
+};
+
+class SelectFromEnumPage : public InternalPage {
+public:
+    SelectFromEnumPage(const data::EnumItem *enumDefinition_, uint8_t currentValue_, uint8_t disabledValue_, void (*onSet_)(uint8_t));
+
+    void refresh();
+    bool drawTick();
+    WidgetCursor findWidget(int x, int y);
+    void drawWidget(const WidgetCursor &widgetCursor, bool selected);
+    ActionType getAction(const WidgetCursor &widgetCursor);
+
+    void selectEnumItem();
 
 private:
     const data::EnumItem *enumDefinition;
     uint8_t currentValue;
+    uint8_t disabledValue;
     void (*onSet)(uint8_t);
+
+    int numItems;
+    int x;
+    int y;
+    int width;
+    int height;
+    int itemWidth;
+    int itemHeight;
+
+    void getItemPosition(int itemIndex, int &x, int &y);
+    void getItemLabel(int itemIndex, char *text, int count);
 };
 
 }

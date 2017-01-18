@@ -197,6 +197,40 @@ struct Document {
 
 #pragma pack(pop)
 
+////////////////////////////////////////////////////////////////////////////////
+
+struct WidgetCursor {
+    OBJ_OFFSET widgetOffset;
+    int x;
+    int y;
+    data::Cursor cursor;
+
+    WidgetCursor() : widgetOffset(0) {}
+
+    WidgetCursor(OBJ_OFFSET widgetOffset_, int x_, int y_, const data::Cursor &cursor_)
+        : widgetOffset(widgetOffset_), x(x_), y(y_), cursor(cursor_) 
+    {
+    }
+
+    WidgetCursor& operator=(int) {
+        widgetOffset = 0;
+		cursor.i = -1;
+        return *this;
+    }
+
+    bool operator != (const WidgetCursor& rhs) const {
+        return widgetOffset != rhs.widgetOffset || x != rhs.x || y != rhs.y || cursor != rhs.cursor;
+    }
+
+    bool operator == (const WidgetCursor& rhs) const {
+        return !(*this != rhs);
+    }
+
+    operator bool() {
+        return widgetOffset != 0;
+    }
+};
+
 }
 }
 } // namespace eez::psu::gui

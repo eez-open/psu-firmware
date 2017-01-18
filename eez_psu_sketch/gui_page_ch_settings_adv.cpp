@@ -231,8 +231,7 @@ void ChSettingsAdvViewPage::onDisplayValue1Set(uint8_t value) {
 }
 
 void ChSettingsAdvViewPage::editDisplayValue1() {
-    //pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue1, onDisplayValue1Set);
-    onDisplayValue1Set(DISPLAY_VALUE_VOLTAGE);
+    pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue1, displayValue2, onDisplayValue1Set);
 }
 
 void ChSettingsAdvViewPage::onDisplayValue2Set(uint8_t value) {
@@ -242,8 +241,7 @@ void ChSettingsAdvViewPage::onDisplayValue2Set(uint8_t value) {
 }
 
 void ChSettingsAdvViewPage::editDisplayValue2() {
-    //pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue2, onDisplayValue1Set);
-    onDisplayValue1Set(DISPLAY_VALUE_CURRENT);
+    pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue2, displayValue1, onDisplayValue2Set);
 }
 
 void ChSettingsAdvViewPage::onYTViewRateSet(float value) {

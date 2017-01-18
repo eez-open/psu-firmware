@@ -38,40 +38,6 @@ namespace eez {
 namespace psu {
 namespace gui {
 
-struct WidgetCursor {
-    OBJ_OFFSET widgetOffset;
-    int x;
-    int y;
-    data::Cursor cursor;
-
-    WidgetCursor() : widgetOffset(0) {}
-
-    WidgetCursor(OBJ_OFFSET widgetOffset_, int x_, int y_, const data::Cursor &cursor_)
-        : widgetOffset(widgetOffset_), x(x_), y(y_), cursor(cursor_) 
-    {
-    }
-
-    WidgetCursor& operator=(int) {
-        widgetOffset = 0;
-		cursor.i = -1;
-        return *this;
-    }
-
-    bool operator != (const WidgetCursor& rhs) const {
-        return widgetOffset != rhs.widgetOffset || x != rhs.x || y != rhs.y || cursor != rhs.cursor;
-    }
-
-    bool operator == (const WidgetCursor& rhs) const {
-        return !(*this != rhs);
-    }
-
-    operator bool() {
-        return widgetOffset != 0;
-    }
-
-    //const Widget* getWidget() const;
-};
-
 class Page;
 
 int getActivePageId();
@@ -86,7 +52,7 @@ font::Font styleGetFont(const Style *style);
 void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse);
 void fillRect(int x, int y, int w, int h);
 
-void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t currentValue, void (*onSet)(uint8_t));
+void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t currentValue, uint8_t disabledValue, void (*onSet)(uint8_t));
 
 void infoMessage(data::Value value, void (*ok_callback)() = 0);
 void infoMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);
