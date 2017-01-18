@@ -70,9 +70,6 @@ uint16_t CH_BOARD_REVISION_FEATURES[] = {
 Channel channels[CH_MAX] = { CHANNELS };
 #undef CHANNEL
 
-int Channel::historyPosition = -1;
-unsigned long Channel::historyLastTick;
-
 ////////////////////////////////////////////////////////////////////////////////
 
 Channel &Channel::get(int channel_index) {
@@ -288,6 +285,8 @@ Channel::Channel(
 
     uBeforeBalancing = NAN;
     iBeforeBalancing = NAN;
+
+    historyPosition = -1;
 }
 
 void Channel::protectionEnter(ProtectionValue &cpv) {
@@ -471,6 +470,10 @@ void Channel::reset() {
 
     maxCurrentLimitCause = MAX_CURRENT_LIMIT_CAUSE_NONE;
     p_limit = PTOT;
+
+    flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
+    flags.displayValue2 = DISPLAY_VALUE_POWER; 
+    ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
 }
 
 void Channel::clearCalibrationConf() {
@@ -641,34 +644,28 @@ void Channel::tick(unsigned long tick_usec) {
     }
 #endif
 
-    if (index == 1) {
-        if (historyPosition == -1) {
-            for (int i = 0; i < CH_NUM; ++i) {
-                Channel& channel = get(i);
-                channel.uHistory[0] = channel.u.mon;
-                channel.iHistory[0] = channel.i.mon;
-                for (int i = 1; i < CHANNEL_HISTORY_SIZE; ++i) {
-                    uHistory[i] = 0;
-                    iHistory[i] = 0;
-                }
-            }
+    if (historyPosition == -1) {
+        uHistory[0] = u.mon;
+        iHistory[0] = i.mon;
+        for (int i = 1; i < CHANNEL_HISTORY_SIZE; ++i) {
+            uHistory[i] = 0;
+            iHistory[i] = 0;
+        }
             
-            historyPosition = 1;
-            historyLastTick = tick_usec;
-        } else {
-            while (tick_usec - historyLastTick >= CHANNEL_HISTORY_SAMPLE_TIME * 1000L) {
-                for (int i = 0; i < CH_NUM; ++i) {
-                    Channel& channel = get(i);
-                    channel.uHistory[historyPosition] = channel.u.mon;
-                    channel.iHistory[historyPosition] = channel.i.mon;
-                }
-                
-                if (++historyPosition == CHANNEL_HISTORY_SIZE) {
-                    historyPosition = 0;
-                }
+        historyPosition = 1;
+        historyLastTick = tick_usec;
+    } else {
+        unsigned long ytViewRateMicroseconds = (int)round(ytViewRate * 1000000L); 
 
-                historyLastTick += CHANNEL_HISTORY_SAMPLE_TIME * 1000L;
+        while (tick_usec - historyLastTick >= ytViewRateMicroseconds) {
+            uHistory[historyPosition] = u.mon;
+            iHistory[historyPosition] = i.mon;
+                
+            if (++historyPosition == CHANNEL_HISTORY_SIZE) {
+                historyPosition = 0;
             }
+
+            historyLastTick += ytViewRateMicroseconds;
         }
     }
 

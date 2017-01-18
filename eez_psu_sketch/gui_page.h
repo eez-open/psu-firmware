@@ -53,6 +53,16 @@ protected:
 	virtual void setValue(float value);
 };
 
+class SelectFromEnumPage : public Page {
+public:
+    SelectFromEnumPage(const data::EnumItem *enumDefinition_, uint8_t currentValue_, void (*onSet_)(uint8_t));
+
+private:
+    const data::EnumItem *enumDefinition;
+    uint8_t currentValue;
+    void (*onSet)(uint8_t);
+};
+
 }
 }
 } // namespace eez::psu::gui

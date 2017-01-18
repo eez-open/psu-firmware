@@ -509,9 +509,9 @@
       "implementation": "((UserProfilesPage *)getActivePage())->editRemark();"
     },
     {
-      "name": "toggle_channel_displayed_values",
+      "name": "toggle_channels_view_mode",
       "implementationType": "native",
-      "implementation": "persist_conf::toggleChannelDisplayedValues();"
+      "implementation": "persist_conf::toggleChannelsViewMode();"
     },
     {
       "name": "sys_settings_ethernet_enable",
@@ -617,6 +617,26 @@
       "name": "sys.settings.sound.toggleClick",
       "implementationType": "native",
       "implementation": "((SysSettingsSoundPage *)getActivePage())->toggleClickSound();"
+    },
+    {
+      "name": "show_ch_settings_adv_view",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_ADV_VIEW);"
+    },
+    {
+      "name": "ch.settings.adv.view.editDisplayValue1",
+      "implementationType": "native",
+      "implementation": "((ChSettingsAdvViewPage *)getActivePage())->editDisplayValue1();"
+    },
+    {
+      "name": "ch.settings.adv.view.editDisplayValue2",
+      "implementationType": "native",
+      "implementation": "((ChSettingsAdvViewPage *)getActivePage())->editDisplayValue2();"
+    },
+    {
+      "name": "ch.settings.adv.view.editYTViewRate",
+      "implementationType": "native",
+      "implementation": "((ChSettingsAdvViewPage *)getActivePage())->editYTViewRate();"
     }
   ],
   "data": [
@@ -721,11 +741,25 @@
       "defaultMaxValue": 150
     },
     {
-      "name": "channel.displayedValues",
+      "name": "channelsViewMode",
       "description": "0: Default (Voltage / Current)\n1: Horizontal bar graph\n2: Vertical bar graph\n3: YT",
       "type": "enum",
       "enumItems": "[\n\"Default\",\n\"Horizontal Bar\",\n\"Vertical Bar\",\n\"YT\"\n]",
       "defaultValue": "0"
+    },
+    {
+      "name": "channel.displayValue1",
+      "type": "float",
+      "defaultValue": "25.00V",
+      "defaultMinValue": 8,
+      "defaultMaxValue": 40
+    },
+    {
+      "name": "channel.displayValue2",
+      "type": "float",
+      "defaultValue": "1.00A",
+      "defaultMinValue": 0,
+      "defaultMaxValue": 5
     },
     {
       "name": "lrip",
@@ -1500,6 +1534,23 @@
       "name": "sys,sound.isClickEnabled",
       "type": "boolean",
       "defaultValue": "0"
+    },
+    {
+      "name": "channel.displayViewSettings.displayValue1",
+      "type": "enum",
+      "enumItems": "[\n\"Voltage (V)\",\n\"Current (A)\",\n\"Power (W)\"\n]",
+      "defaultValue": "Voltage (V)"
+    },
+    {
+      "name": "channel.displayViewSettings.displayValue2",
+      "type": "enum",
+      "enumItems": "[\n\"Voltage (V)\",\n\"Current (A)\",\n\"Power (W)\"\n]",
+      "defaultValue": "Power (W)"
+    },
+    {
+      "name": "channel.displayViewSettings.ytViewRate",
+      "type": "float",
+      "defaultValue": "100 ms"
     }
   ],
   "gui": {
@@ -2678,7 +2729,7 @@
             },
             {
               "type": "Text",
-              "action": "toggle_channel_displayed_values",
+              "action": "toggle_channels_view_mode",
               "x": 292,
               "y": 0,
               "width": 28,
@@ -2698,7 +2749,7 @@
                 {
                   "x": 0,
                   "type": "Select",
-                  "data": "channel.displayedValues",
+                  "data": "channelsViewMode",
                   "y": 0,
                   "width": 320,
                   "height": 176,
@@ -3120,7 +3171,7 @@
                                         "widgets": [
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.u.mon",
+                                            "data": "channel.displayValue1",
                                             "action": "toggle_channel",
                                             "x": 0,
                                             "y": 0,
@@ -3144,7 +3195,7 @@
                                           },
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.i.mon",
+                                            "data": "channel.displayValue2",
                                             "action": "toggle_channel",
                                             "x": 0,
                                             "y": 30,
@@ -3170,7 +3221,7 @@
                                         "widgets": [
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.u.mon",
+                                            "data": "channel.displayValue1",
                                             "action": "toggle_channel",
                                             "x": 0,
                                             "y": 0,
@@ -3194,7 +3245,7 @@
                                           },
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.i.mon",
+                                            "data": "channel.displayValue2",
                                             "action": "toggle_channel",
                                             "x": 0,
                                             "y": 30,
@@ -3582,7 +3633,7 @@
                                         "widgets": [
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.u.mon",
+                                            "data": "channel.displayValue1",
                                             "action": "toggle_channel",
                                             "x": 0,
                                             "y": 0,
@@ -3606,7 +3657,7 @@
                                           },
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.i.mon",
+                                            "data": "channel.displayValue2",
                                             "action": "toggle_channel",
                                             "x": 56,
                                             "y": 0,
@@ -3632,7 +3683,7 @@
                                         "widgets": [
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.u.mon",
+                                            "data": "channel.displayValue1",
                                             "action": "toggle_channel",
                                             "x": 0,
                                             "y": 0,
@@ -3656,7 +3707,7 @@
                                           },
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.i.mon",
+                                            "data": "channel.displayValue2",
                                             "action": "toggle_channel",
                                             "x": 56,
                                             "y": 0,
@@ -4004,23 +4055,29 @@
                                     "widgets": [
                                       {
                                         "type": "YTGraph",
-                                        "data": "channel.u.mon",
+                                        "data": "channel.displayValue1",
                                         "action": "toggle_channel",
                                         "x": 0,
                                         "y": 0,
                                         "width": 202,
                                         "height": 58,
-                                        "style": "yt_graph"
+                                        "style": "yt_graph",
+                                        "y1Style": "yt_graph_U_defualt",
+                                        "y2Data": "channel.displayValue2",
+                                        "y2Style": "yt_graph_I_default"
                                       },
                                       {
                                         "type": "YTGraph",
-                                        "data": "channel.u.mon",
+                                        "data": "channel.displayValue1",
                                         "action": "toggle_channel",
                                         "x": 0,
                                         "y": 0,
                                         "width": 202,
                                         "height": 58,
-                                        "style": "yt_graph"
+                                        "style": "yt_graph",
+                                        "y1Style": "yt_graph_unregulated",
+                                        "y2Data": "channel.displayValue2",
+                                        "y2Style": "yt_graph_unregulated"
                                       }
                                     ]
                                   }
@@ -4359,7 +4416,7 @@
                     {
                       "x": 0,
                       "type": "Select",
-                      "data": "channel.displayedValues",
+                      "data": "channelsViewMode",
                       "y": 38,
                       "width": 320,
                       "height": 138,
@@ -4463,7 +4520,7 @@
                     {
                       "x": 0,
                       "type": "Select",
-                      "data": "channel.displayedValues",
+                      "data": "channelsViewMode",
                       "y": 38,
                       "width": 320,
                       "height": 138,
@@ -4508,7 +4565,7 @@
                 {
                   "x": 0,
                   "type": "Select",
-                  "data": "channel.displayedValues",
+                  "data": "channelsViewMode",
                   "y": 0,
                   "width": 320,
                   "height": 176,
@@ -5119,7 +5176,7 @@
                                         "widgets": [
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.u.mon",
+                                            "data": "channel.displayValue1",
                                             "action": "toggle_channel",
                                             "x": 0,
                                             "y": 0,
@@ -5143,7 +5200,7 @@
                                           },
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.i.mon",
+                                            "data": "channel.displayValue2",
                                             "action": "toggle_channel",
                                             "x": 0,
                                             "y": 30,
@@ -5169,7 +5226,7 @@
                                         "widgets": [
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.u.mon",
+                                            "data": "channel.displayValue1",
                                             "action": "toggle_channel",
                                             "x": 0,
                                             "y": 0,
@@ -5193,7 +5250,7 @@
                                           },
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.i.mon",
+                                            "data": "channel.displayValue2",
                                             "action": "toggle_channel",
                                             "x": 0,
                                             "y": 30,
@@ -5417,7 +5474,7 @@
                                         "widgets": [
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.u.mon",
+                                            "data": "channel.displayValue1",
                                             "action": "toggle_channel",
                                             "x": 0,
                                             "y": 0,
@@ -5441,7 +5498,7 @@
                                           },
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.i.mon",
+                                            "data": "channel.displayValue2",
                                             "action": "toggle_channel",
                                             "x": 56,
                                             "y": 0,
@@ -5467,7 +5524,7 @@
                                         "widgets": [
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.u.mon",
+                                            "data": "channel.displayValue1",
                                             "action": "toggle_channel",
                                             "x": 0,
                                             "y": 0,
@@ -5491,7 +5548,7 @@
                                           },
                                           {
                                             "type": "BarGraph",
-                                            "data": "channel.i.mon",
+                                            "data": "channel.displayValue2",
                                             "action": "toggle_channel",
                                             "x": 56,
                                             "y": 0,
@@ -6057,23 +6114,29 @@
                                     "widgets": [
                                       {
                                         "type": "YTGraph",
-                                        "data": "channel.u.mon",
+                                        "data": "channel.displayValue1",
                                         "action": "toggle_channel",
                                         "x": 0,
                                         "y": 0,
                                         "width": 202,
                                         "height": 58,
-                                        "style": "yt_graph"
+                                        "style": "yt_graph",
+                                        "y1Style": "yt_graph_U_defualt",
+                                        "y2Data": "channel.displayValue2",
+                                        "y2Style": "yt_graph_I_default"
                                       },
                                       {
                                         "type": "YTGraph",
-                                        "data": "channel.u.mon",
+                                        "data": "channel.displayValue1",
                                         "action": "toggle_channel",
                                         "x": 0,
                                         "y": 0,
                                         "width": 202,
                                         "height": 58,
-                                        "style": "yt_graph"
+                                        "style": "yt_graph",
+                                        "y1Style": "yt_graph_unregulated",
+                                        "y2Data": "channel.displayValue2",
+                                        "y2Style": "yt_graph_unregulated"
                                       }
                                     ]
                                   }
@@ -13965,6 +14028,7 @@
             },
             {
               "type": "Text",
+              "action": "show_ch_settings_adv_view",
               "x": 16,
               "y": 168,
               "width": 180,
@@ -15343,6 +15407,8 @@
             },
             {
               "type": "Text",
+              "data": "channel.displayViewSettings.displayValue1",
+              "action": "ch.settings.adv.view.editDisplayValue1",
               "x": 151,
               "y": 28,
               "width": 90,
@@ -15361,12 +15427,14 @@
             },
             {
               "type": "Text",
+              "data": "channel.displayViewSettings.displayValue2",
+              "action": "ch.settings.adv.view.editDisplayValue2",
               "x": 151,
-              "y": 84,
-              "width": 62,
+              "y": 56,
+              "width": 90,
               "height": 28,
               "style": "edit_value_active_S_left",
-              "text": "100ms"
+              "text": "Power (W)"
             },
             {
               "type": "Text",
@@ -15376,6 +15444,25 @@
               "height": 28,
               "style": "edit_value_S_left",
               "text": "YT view rate:"
+            },
+            {
+              "type": "Text",
+              "data": "channel.displayViewSettings.ytViewRate",
+              "action": "ch.settings.adv.view.editYTViewRate",
+              "x": 151,
+              "y": 84,
+              "width": 62,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "100ms"
+            },
+            {
+              "type": "Rectangle",
+              "x": 16,
+              "y": 112,
+              "width": 236,
+              "height": 56,
+              "style": "default_inverse"
             },
             {
               "type": "Button",
@@ -15455,23 +15542,6 @@
               "width": 68,
               "height": 204,
               "style": "default"
-            },
-            {
-              "type": "Rectangle",
-              "x": 16,
-              "y": 112,
-              "width": 236,
-              "height": 56,
-              "style": "default_inverse"
-            },
-            {
-              "type": "Text",
-              "x": 151,
-              "y": 56,
-              "width": 90,
-              "height": 28,
-              "style": "edit_value_active_S_left",
-              "text": "Power (W)"
             }
           ]
         }
@@ -21316,7 +21386,7 @@
                     "widgets": [
                       {
                         "type": "BarGraph",
-                        "data": "channel.u.mon",
+                        "data": "channel.displayValue1",
                         "action": "toggle_channel",
                         "x": 0,
                         "y": 0,
@@ -21340,7 +21410,7 @@
                       },
                       {
                         "type": "BarGraph",
-                        "data": "channel.i.mon",
+                        "data": "channel.displayValue2",
                         "action": "toggle_channel",
                         "x": 0,
                         "y": 56,
@@ -21366,7 +21436,7 @@
                     "widgets": [
                       {
                         "type": "BarGraph",
-                        "data": "channel.u.mon",
+                        "data": "channel.displayValue1",
                         "action": "toggle_channel",
                         "x": 0,
                         "y": 0,
@@ -21390,7 +21460,7 @@
                       },
                       {
                         "type": "BarGraph",
-                        "data": "channel.i.mon",
+                        "data": "channel.displayValue2",
                         "action": "toggle_channel",
                         "x": 0,
                         "y": 56,
@@ -21742,7 +21812,7 @@
                     "widgets": [
                       {
                         "type": "BarGraph",
-                        "data": "channel.u.mon",
+                        "data": "channel.displayValue1",
                         "action": "toggle_channel",
                         "x": 2,
                         "y": 0,
@@ -21766,7 +21836,7 @@
                       },
                       {
                         "type": "BarGraph",
-                        "data": "channel.i.mon",
+                        "data": "channel.displayValue2",
                         "action": "toggle_channel",
                         "x": 77,
                         "y": 0,
@@ -21792,7 +21862,7 @@
                     "widgets": [
                       {
                         "type": "BarGraph",
-                        "data": "channel.u.mon",
+                        "data": "channel.displayValue1",
                         "action": "toggle_channel",
                         "x": 2,
                         "y": 0,
@@ -21816,7 +21886,7 @@
                       },
                       {
                         "type": "BarGraph",
-                        "data": "channel.i.mon",
+                        "data": "channel.displayValue2",
                         "action": "toggle_channel",
                         "x": 77,
                         "y": 0,
@@ -22176,23 +22246,29 @@
                 "widgets": [
                   {
                     "type": "YTGraph",
-                    "data": "channel.u.mon",
+                    "data": "channel.displayValue1",
                     "action": "toggle_channel",
                     "x": 0,
                     "y": 0,
                     "width": 202,
                     "height": 106,
-                    "style": "yt_graph"
+                    "style": "yt_graph",
+                    "y1Style": "yt_graph_U_defualt",
+                    "y2Data": "channel.displayValue2",
+                    "y2Style": "yt_graph_I_default"
                   },
                   {
                     "type": "YTGraph",
-                    "data": "channel.u.mon",
+                    "data": "channel.displayValue1",
                     "action": "toggle_channel",
                     "x": 0,
                     "y": 0,
                     "width": 202,
                     "height": 106,
-                    "style": "yt_graph"
+                    "style": "yt_graph",
+                    "y1Style": "yt_graph_unregulated",
+                    "y2Data": "channel.displayValue2",
+                    "y2Style": "yt_graph_unregulated"
                   }
                 ]
               }

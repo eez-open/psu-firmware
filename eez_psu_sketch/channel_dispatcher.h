@@ -108,6 +108,8 @@ void setOtpState(int sensor, int state);
 void setOtpLevel(int sensor, float level);
 void setOtpDelay(int sensor, float delay);
 
+void setDisplayViewSettings(Channel &channel, int displayValue1, int displayValue2, float ytViewRate);
+
 #ifdef EEZ_PSU_SIMULATOR
 void setLoadEnabled(Channel &channel, bool state);
 void setLoad(Channel &channel, float load);

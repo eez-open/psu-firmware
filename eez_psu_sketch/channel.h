@@ -35,6 +35,12 @@ namespace calibration {
 struct Value;
 }
 
+enum DisplayValue {
+    DISPLAY_VALUE_VOLTAGE,
+    DISPLAY_VALUE_CURRENT,
+    DISPLAY_VALUE_POWER
+};
+
 enum ChannelFeatures {
     CH_FEATURE_VOLT = (1 << 1),
     CH_FEATURE_CURRENT = (1 << 2),
@@ -152,6 +158,8 @@ public:
         unsigned lrippleEnabled: 1;
         unsigned lrippleAutoEnabled: 1;
         unsigned rpol : 1; // remote sense reverse polarity is detected
+        unsigned displayValue1: 2;
+        unsigned displayValue2: 2;
     };
 
     /// Voltage and current data set and measured during runtime.
@@ -306,6 +314,8 @@ public:
     ProtectionValue opp;
 
     ontime::Counter onTimeCounter;
+
+    float ytViewRate;
 
 #ifdef EEZ_PSU_SIMULATOR
     Simulator simulator;
@@ -513,7 +523,7 @@ public:
     float getUSetUnbalanced() { return isVoltageBalanced() ? uBeforeBalancing : u.set; }
     float getISetUnbalanced() { return isCurrentBalanced() ? iBeforeBalancing : i.set; }
 
-    static int getCurrentHistoryValuePosition() { return historyPosition; }
+    int getCurrentHistoryValuePosition() { return historyPosition; }
     float getUMonHistory(int position) const { return uHistory[position]; }
     float getIMonHistory(int position) const { return iHistory[position]; }
 
@@ -543,8 +553,8 @@ private:
 
     float uHistory[CHANNEL_HISTORY_SIZE];
     float iHistory[CHANNEL_HISTORY_SIZE];
-    static int historyPosition;
-    static unsigned long historyLastTick;
+    int historyPosition;
+    unsigned long historyLastTick;
 
     void clearProtectionConf();
     void protectionEnter(ProtectionValue &cpv);

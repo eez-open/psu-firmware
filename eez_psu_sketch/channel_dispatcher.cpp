@@ -671,6 +671,22 @@ void setOtpDelay(int sensor, float delay) {
     }
 }
 
+void setDisplayViewSettings(Channel &channel, int displayValue1, int displayValue2, float ytViewRate) {
+    if (isCoupled() || isTracked()) {
+        Channel::get(0).flags.displayValue1 = displayValue1;
+        Channel::get(0).flags.displayValue1 = displayValue2;
+        Channel::get(0).ytViewRate = ytViewRate;
+
+        Channel::get(1).flags.displayValue1 = displayValue1;
+        Channel::get(1).flags.displayValue1 = displayValue2;
+        Channel::get(1).ytViewRate = ytViewRate;
+    } else {
+        channel.flags.displayValue1 = displayValue1;
+        channel.flags.displayValue2 = displayValue2;
+        channel.ytViewRate = ytViewRate;
+    }
+}
+
 #ifdef EEZ_PSU_SIMULATOR
 void setLoadEnabled(Channel &channel, bool state) {
     if (isCoupled()) {

@@ -66,6 +66,15 @@ void SetPage::discard() {
 	popPage();
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+SelectFromEnumPage::SelectFromEnumPage(const data::EnumItem *enumDefinition_, uint8_t currentValue_, void (*onSet_)(uint8_t))
+    : enumDefinition(enumDefinition_)
+    , currentValue(currentValue_)
+    , onSet(onSet_)
+{
+}
+
 }
 }
 } // namespace eez::psu::gui

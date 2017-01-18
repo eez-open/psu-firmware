@@ -82,6 +82,34 @@ public:
     void toggleTrackingMode();
 };
 
+class ChSettingsAdvViewPage : public SetPage {
+public:
+	ChSettingsAdvViewPage();
+
+	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+
+    void editDisplayValue1();
+    void editDisplayValue2();
+    void editYTViewRate();
+
+	int getDirty();
+	void set();
+
+private:
+	uint8_t origDisplayValue1;
+	uint8_t displayValue1;
+
+	uint8_t origDisplayValue2;
+	uint8_t displayValue2;
+
+	float origYTViewRate;
+	float ytViewRate;
+
+    static void onDisplayValue1Set(uint8_t value);
+    static void onDisplayValue2Set(uint8_t value);
+    static void onYTViewRateSet(float value);
+};
+
 }
 }
 } // namespace eez::psu::gui

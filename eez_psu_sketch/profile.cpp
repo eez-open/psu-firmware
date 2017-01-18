@@ -92,6 +92,10 @@ void recallChannelsFromProfile(Parameters *profile) {
 				channel.flags.lrippleEnabled = 0;
 				channel.flags.lrippleAutoEnabled = 0;
 			}
+
+            channel.flags.displayValue1 = profile->channels[i].flags.displayValue1;
+            channel.flags.displayValue2 = profile->channels[i].flags.displayValue2;
+            channel.ytViewRate = profile->channels[i].ytViewRate;
 		}
 
 		channel.update();
@@ -180,13 +184,13 @@ bool saveAtLocation(int location, char *name) {
         }
 
         Parameters profile;
+        memset(&profile, 0, sizeof(Parameters));
 
         profile.flags.isValid = true;
 
         profile.flags.channelsCoupling = channel_dispatcher::getType();
 
         // name
-        memset(profile.name, 0, sizeof(profile.name));
         if (location > 0) {
 			if (name) {
 				strcpy(profile.name, name);
@@ -240,6 +244,10 @@ bool saveAtLocation(int location, char *name) {
 				profile.channels[i].i_delay = channel.prot_conf.i_delay;
 				profile.channels[i].p_delay = channel.prot_conf.p_delay;
 				profile.channels[i].p_level = channel.prot_conf.p_level;
+
+                profile.channels[i].flags.displayValue1 = channel.flags.displayValue1;
+                profile.channels[i].flags.displayValue2 = channel.flags.displayValue2;
+                profile.channels[i].ytViewRate = channel.ytViewRate;
 
 #ifdef EEZ_PSU_SIMULATOR
 				profile.channels[i].load_enabled = channel.simulator.load_enabled;

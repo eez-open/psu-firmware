@@ -420,8 +420,8 @@ void action_profile_edit_remark() {
     ((UserProfilesPage *)getActivePage())->editRemark();
 }
 
-void action_toggle_channel_displayed_values() {
-    persist_conf::toggleChannelDisplayedValues();
+void action_toggle_channels_view_mode() {
+    persist_conf::toggleChannelsViewMode();
 }
 
 void action_sys_settings_ethernet_enable() {
@@ -506,6 +506,22 @@ void action_sys_settings_sound_toggle() {
 
 void action_sys_settings_sound_toggle_click() {
     ((SysSettingsSoundPage *)getActivePage())->toggleClickSound();
+}
+
+void action_show_ch_settings_adv_view() {
+    pushPage(PAGE_ID_CH_SETTINGS_ADV_VIEW);
+}
+
+void action_ch_settings_adv_view_edit_display_value1() {
+    ((ChSettingsAdvViewPage *)getActivePage())->editDisplayValue1();
+}
+
+void action_ch_settings_adv_view_edit_display_value2() {
+    ((ChSettingsAdvViewPage *)getActivePage())->editDisplayValue2();
+}
+
+void action_ch_settings_adv_view_edit_yt_view_rate() {
+    ((ChSettingsAdvViewPage *)getActivePage())->editYTViewRate();
 }
 
 
@@ -604,7 +620,7 @@ ACTION actions[] = {
     action_profile_save,
     action_profile_delete,
     action_profile_edit_remark,
-    action_toggle_channel_displayed_values,
+    action_toggle_channels_view_mode,
     action_sys_settings_ethernet_enable,
     action_sys_settings_ethernet_disable,
     action_ch_settings_adv_coupling_uncouple,
@@ -625,7 +641,11 @@ ACTION actions[] = {
     action_sys_front_panel_lock,
     action_sys_front_panel_unlock,
     action_sys_settings_sound_toggle,
-    action_sys_settings_sound_toggle_click
+    action_sys_settings_sound_toggle_click,
+    action_show_ch_settings_adv_view,
+    action_ch_settings_adv_view_edit_display_value1,
+    action_ch_settings_adv_view_edit_display_value2,
+    action_ch_settings_adv_view_edit_yt_view_rate
 };
 
 }

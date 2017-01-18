@@ -27,6 +27,19 @@ namespace data {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+enum EnumDefinition {
+    ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE
+};
+
+struct EnumItem {
+    uint8_t value;
+    const char *label PROGMEM;
+};
+
+extern data::EnumItem g_channelDisplayValueEnumDefinition[];
+
+////////////////////////////////////////////////////////////////////////////////
+
 enum ValueType {
     VALUE_TYPE_NONE,
     VALUE_TYPE_INT,
@@ -64,7 +77,8 @@ enum ValueType {
 	VALUE_TYPE_USER_PROFILE_LABEL,
 	VALUE_TYPE_USER_PROFILE_REMARK,
     VALUE_TYPE_EDIT_INFO,
-    VALUE_TYPE_IP_ADDRESS
+    VALUE_TYPE_IP_ADDRESS,
+    VALUE_TYPE_ENUM
 };
 
 struct Value {
@@ -77,6 +91,10 @@ struct Value {
     Value(float value, ValueType type) : type_(type), float_(value) {}
     Value(const char *str) : type_(VALUE_TYPE_STR), str_(str) {}
 	Value(event_queue::Event *e) : type_(VALUE_TYPE_EVENT), event_(e) {}
+    Value(uint8_t value, EnumDefinition enumDefinition) : type_(VALUE_TYPE_ENUM) {
+        enum_.value = value;
+        enum_.enumDefinition = enumDefinition;
+    }
 
     static Value ProgmemStr(const char *pstr PROGMEM) {
         Value value;
@@ -214,6 +232,11 @@ private:
 			uint8_t pageIndex;
 			uint8_t numPages;
 		} pageInfo_;
+
+		struct {
+			uint8_t value;
+			uint8_t enumDefinition;
+		} enum_;
     };
 };
 
@@ -253,6 +276,10 @@ extern Value g_alertMessage;
 extern Value g_alertMessage2;
 extern Value g_alertMessage3;
 
+bool isUMonData(const Cursor &cursor, uint8_t id);
+bool isIMonData(const Cursor &cursor, uint8_t id);
+bool isPMonData(const Cursor &cursor, uint8_t id);
+
 int count(uint8_t id);
 void select(Cursor &cursor, uint8_t id, int index);
 
@@ -266,7 +293,7 @@ void getList(const Cursor &cursor, uint8_t id, const Value **labels, int &count)
 bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error);
 
 int getNumHistoryValues(uint8_t id);
-int getCurrentHistoryValuePosition(uint8_t id);
+int getCurrentHistoryValuePosition(const Cursor &cursor, uint8_t id);
 Value getHistoryValue(const Cursor &cursor, uint8_t id, int position);
 
 }

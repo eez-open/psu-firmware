@@ -21,7 +21,7 @@
 #include "event_queue.h"
 #include "profile.h"
 
-#define NUM_CHANNEL_DISPLAYED_VALUES 4
+#define NUM_CHANNELS_VIEW_MODES 4
 
 namespace eez {
 namespace psu {
@@ -124,7 +124,7 @@ static void initDevice() {
     devConf.touch_screen_cal_trx = 0;
     devConf.touch_screen_cal_try = 0;
 
-	devConf.flags.channelDisplayedValues = 0;
+	devConf.flags.channelsViewMode = 0;
 
 #ifdef EEZ_PSU_SIMULATOR
     devConf.gui_opened = true;
@@ -144,8 +144,8 @@ void loadDevice() {
         if (!check_block((BlockHeader *)&devConf, sizeof(DeviceConfiguration), DEV_CONF_VERSION)) {
             initDevice();
         } else {
-			if (devConf.flags.channelDisplayedValues < 0 || devConf.flags.channelDisplayedValues >= NUM_CHANNEL_DISPLAYED_VALUES) {
-				devConf.flags.channelDisplayedValues = 0;
+			if (devConf.flags.channelsViewMode < 0 || devConf.flags.channelsViewMode >= NUM_CHANNELS_VIEW_MODES) {
+				devConf.flags.channelsViewMode = 0;
 			}
 		}
     }
@@ -356,8 +356,8 @@ int getProfileAutoRecallLocation() {
     return devConf.profile_auto_recall_location;
 }
 
-void toggleChannelDisplayedValues() {
-	devConf.flags.channelDisplayedValues = (devConf.flags.channelDisplayedValues + 1) % NUM_CHANNEL_DISPLAYED_VALUES;
+void toggleChannelsViewMode() {
+	devConf.flags.channelsViewMode = (devConf.flags.channelsViewMode + 1) % NUM_CHANNELS_VIEW_MODES;
 	saveDevice();
 }
 

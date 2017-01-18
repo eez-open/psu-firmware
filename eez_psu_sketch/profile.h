@@ -37,10 +37,8 @@ struct ChannelFlags {
     unsigned reserverd10 : 1;
     unsigned lripple_auto_enabled : 1;
     unsigned parameters_are_valid : 1;
-    unsigned reserverd11 : 1;
-    unsigned reserverd12 : 1;
-    unsigned reserverd13 : 1;
-    unsigned reserverd14 : 1;
+    unsigned displayValue1 : 2;
+    unsigned displayValue2 : 2;
     unsigned reserverd15 : 1;
     unsigned reserverd16 : 1;
 };
@@ -60,6 +58,7 @@ struct ChannelParameters {
 	float p_limit;
     float p_delay;
     float p_level;
+    float ytViewRate;
 #ifdef EEZ_PSU_SIMULATOR
     bool load_enabled;
     float load;

@@ -49,7 +49,7 @@ struct DeviceFlags {
     int time_valid : 1;
     int profile_auto_recall : 1;
     int dst : 1;
-    int channelDisplayedValues : 3;
+    int channelsViewMode : 3;
     int ethernetEnabled : 1;
     int outputProtectionCouple : 1;
     int shutdownWhenProtectionTripped : 1;
@@ -130,7 +130,7 @@ void writeSystemTime(uint8_t hour, uint8_t minute, uint8_t second);
 
 void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second);
 
-void toggleChannelDisplayedValues();
+void toggleChannelsViewMode();
 
 void loadChannelCalibration(Channel *channel);
 bool saveChannelCalibration(Channel *channel);

@@ -167,7 +167,7 @@ void Snapshot::takeSnapshot() {
         channelSnapshot.onTimeLast = channel.onTimeCounter.getLastTime();
     }
 
-    flags.channelDisplayedValues = persist_conf::devConf.flags.channelDisplayedValues;
+    flags.channelsViewMode = persist_conf::devConf.flags.channelsViewMode;
     flags.channelCouplingMode = channel_dispatcher::getType();
 
     if (channel_dispatcher::isSeries()) {
@@ -214,8 +214,8 @@ void Snapshot::takeSnapshot() {
 }
 
 Value Snapshot::get(const Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_CHANNEL_DISPLAYED_VALUES) {
-        return Value(flags.channelDisplayedValues);
+    if (id == DATA_ID_CHANNELS_VIEW_MODE) {
+        return Value(flags.channelsViewMode);
     }
 
     if (id == DATA_ID_CHANNEL_COUPLING_MODE) {
@@ -266,7 +266,7 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
             return Value(channelSnapshot.u_set, VALUE_TYPE_FLOAT_VOLT);
         }
         
-        if (id == DATA_ID_CHANNEL_U_MON) {
+        if (isUMonData(cursor, id)) {
             return Value(channelSnapshot.u_mon, VALUE_TYPE_FLOAT_VOLT);
         }
 
@@ -282,7 +282,7 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
             return Value(channelSnapshot.i_set, VALUE_TYPE_FLOAT_AMPER);
         }
         
-        if (id == DATA_ID_CHANNEL_I_MON) {
+        if (isIMonData(cursor, id)) {
             return Value(channelSnapshot.i_mon, VALUE_TYPE_FLOAT_AMPER);
         }
 
@@ -294,7 +294,7 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
             return Value(channelSnapshot.i_limit, VALUE_TYPE_FLOAT_VOLT);
         }
 
-        if (id == DATA_ID_CHANNEL_P_MON) {
+        if (isPMonData(cursor, id)) {
             return Value(channelSnapshot.p_mon, VALUE_TYPE_FLOAT_WATT);
         }
 

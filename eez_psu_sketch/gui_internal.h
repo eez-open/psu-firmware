@@ -79,12 +79,14 @@ Page *getActivePage();
 
 void setPage(int index);
 void replacePage(int index);
-void pushPage(int index);
+void pushPage(int index, Page *page = 0);
 void popPage();
 
 font::Font styleGetFont(const Style *style);
 void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse);
 void fillRect(int x, int y, int w, int h);
+
+void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t currentValue, void (*onSet)(uint8_t));
 
 void infoMessage(data::Value value, void (*ok_callback)() = 0);
 void infoMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);

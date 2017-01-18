@@ -23,6 +23,7 @@
 
 #include "gui_data_snapshot.h"
 #include "gui_page_ch_settings_adv.h"
+#include "gui_numeric_keypad.h"
 
 namespace eez {
 namespace psu {
@@ -192,6 +193,91 @@ void ChSettingsAdvTrackingPage::toggleTrackingMode() {
         channel_dispatcher::setType(channel_dispatcher::TYPE_TRACKED);
 	    infoMessageP(PSTR("Tracking enabled!"));
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+ChSettingsAdvViewPage::ChSettingsAdvViewPage() {
+	origDisplayValue1 = displayValue1 = g_channel->flags.displayValue1;
+	origDisplayValue2 = displayValue2 = g_channel->flags.displayValue2;
+    origYTViewRate = ytViewRate = g_channel->ytViewRate;
+}
+
+data::Value ChSettingsAdvViewPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+	data::Value value = SetPage::getData(cursor, id, snapshot);
+	if (value.getType() != data::VALUE_TYPE_NONE) {
+		return value;
+	}
+
+	if (id == DATA_ID_CHANNEL_DISPLAY_VIEW_SETTINGS_DISPLAY_VALUE1) {
+		return data::Value(displayValue1, data::ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE);
+	}
+
+	if (id == DATA_ID_CHANNEL_DISPLAY_VIEW_SETTINGS_DISPLAY_VALUE2) {
+		return data::Value(displayValue2, data::ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE);
+	}
+
+    if (id == DATA_ID_CHANNEL_DISPLAY_VIEW_SETTINGS_YT_VIEW_RATE) {
+		return data::Value(ytViewRate, data::VALUE_TYPE_FLOAT_SECOND);
+	}
+
+	return data::Value();
+}
+
+void ChSettingsAdvViewPage::onDisplayValue1Set(uint8_t value) {
+	popPage();
+	ChSettingsAdvViewPage *page = (ChSettingsAdvViewPage *)getActivePage();
+	page->displayValue1 = value;
+}
+
+void ChSettingsAdvViewPage::editDisplayValue1() {
+    //pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue1, onDisplayValue1Set);
+}
+
+void ChSettingsAdvViewPage::onDisplayValue2Set(uint8_t value) {
+	popPage();
+	ChSettingsAdvViewPage *page = (ChSettingsAdvViewPage *)getActivePage();
+	page->displayValue2 = value;
+}
+
+void ChSettingsAdvViewPage::editDisplayValue2() {
+    //pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue2, onDisplayValue1Set);
+}
+
+void ChSettingsAdvViewPage::onYTViewRateSet(float value) {
+	popPage();
+	ChSettingsAdvViewPage *page = (ChSettingsAdvViewPage *)getActivePage();
+	page->ytViewRate = value;
+}
+
+void ChSettingsAdvViewPage::editYTViewRate() {
+	numeric_keypad::Options options;
+
+	options.editUnit = data::VALUE_TYPE_FLOAT_SECOND;
+
+	options.min = GUI_YT_VIEW_RATE_MIN;
+	options.max = FLT_MAX;
+	options.def = GUI_YT_VIEW_RATE_DEFAULT;
+
+	options.flags.genericNumberKeypad = true;
+	options.flags.maxButtonEnabled = false;
+	options.flags.defButtonEnabled = true;
+	options.flags.signButtonEnabled = true;
+	options.flags.dotButtonEnabled = true;
+
+	numeric_keypad::start(0, options, onYTViewRateSet);
+}
+
+int ChSettingsAdvViewPage::getDirty() {
+	return (origDisplayValue1 != displayValue1 || origDisplayValue2 != displayValue2 || origYTViewRate != ytViewRate) ? 1 : 0;
+}
+
+void ChSettingsAdvViewPage::set() {
+	if (getDirty()) {
+        channel_dispatcher::setDisplayViewSettings(*g_channel, displayValue1, displayValue2, ytViewRate);
+		profile::save();
+		infoMessageP(PSTR("View settings changed!"), actions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
+	}
 }
 
 }

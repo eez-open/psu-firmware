@@ -58,6 +58,9 @@
 #define CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY 200000UL // 200ms
 #define CONF_GUI_YT_GRAPH_BLANK_PIXELS_AFTER_CURSOR 10
 
+#define INTERNAL_PAGE_ID_NONE             -1
+#define INTERNAL_PAGE_ID_SELECT_FROM_ENUM -2
+
 namespace eez {
 namespace psu {
 namespace gui {
@@ -121,6 +124,7 @@ Page *createPageFromId(int pageId) {
     case PAGE_ID_CH_SETTINGS_ADV_TRACKING: return new ChSettingsAdvTrackingPage();
     case PAGE_ID_CH_SETTINGS_ADV_COUPLING:
     case PAGE_ID_CH_SETTINGS_ADV_COUPLING_INFO: return new ChSettingsAdvCouplingPage();
+    case PAGE_ID_CH_SETTINGS_ADV_VIEW: return new ChSettingsAdvViewPage();
     case PAGE_ID_CH_SETTINGS_INFO: return new ChSettingsInfoPage();
     case PAGE_ID_SYS_SETTINGS_DATE_TIME: return new SysSettingsDateTimePage();
     case PAGE_ID_SYS_SETTINGS_ETHERNET: return new SysSettingsEthernetPage();
@@ -1501,7 +1505,7 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
     int graphWidth = widget->w - textWidth;
 
     int numHistoryValues = data::getNumHistoryValues(widget->data);
-    int currentHistoryValuePosition = data::getCurrentHistoryValuePosition(widget->data);
+    int currentHistoryValuePosition = data::getCurrentHistoryValuePosition(widgetCursor.cursor, widget->data);
 
     static int lastPosition[CH_NUM];
 
@@ -1741,9 +1745,9 @@ void replacePage(int index) {
     doShowPage(index);
 }
 
-void pushPage(int index) {
+void pushPage(int index, Page *page) {
     // push current page on stack
-    if (g_activePageId != -1) {
+    if (g_activePageId != INTERNAL_PAGE_ID_NONE) {
         if (g_pageNavigationStackPointer == CONF_GUI_PAGE_NAVIGATION_STACK_SIZE) {
             // no more space on the stack
 
@@ -1767,7 +1771,7 @@ void pushPage(int index) {
         ++g_pageNavigationStackPointer;
     }
 
-    doShowPage(index);
+    doShowPage(index, page);
 }
 
 void popPage() {
@@ -1804,6 +1808,12 @@ void showEnteringStandbyPage() {
 void showEthernetInit() {
     doShowPage(PAGE_ID_ETHERNET_INIT);
     flush();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t currentValue, void (*onSet)(uint8_t)) {
+    pushPage(INTERNAL_PAGE_ID_SELECT_FROM_ENUM, new SelectFromEnumPage(enumDefinition, currentValue, onSet));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2096,7 +2106,7 @@ void init() {
 
     touch::init();
 
-    g_activePageId = -1;
+    g_activePageId = INTERNAL_PAGE_ID_NONE;
     g_activePage = 0;
 
 #if defined(EEZ_PSU_ARDUINO_MEGA)
@@ -2124,7 +2134,7 @@ void tick(unsigned long tick_usec) {
 
     touch::tick(tick_usec);
 
-    if (g_activePageId == -1) {
+    if (g_activePageId == INTERNAL_PAGE_ID_NONE) {
         standbyTouchHandling(tick_usec);
         return;
     }
@@ -2147,7 +2157,7 @@ void tick(unsigned long tick_usec) {
     // turn the screen off if power is down
     if (!psu::isPowerUp()) {
         standbyTouchHandling(tick_usec);
-        g_activePageId = -1;
+        g_activePageId = INTERNAL_PAGE_ID_NONE;
         g_activePage = 0;
         turnOff();
         return;
