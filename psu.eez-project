@@ -6157,7 +6157,7 @@
                                     "action": "edit",
                                     "x": 0,
                                     "y": 0,
-                                    "width": 65,
+                                    "width": 62,
                                     "height": 28,
                                     "style": "edit_value_active_S_right"
                                   },
@@ -6167,7 +6167,7 @@
                                     "action": "",
                                     "x": 0,
                                     "y": 0,
-                                    "width": 65,
+                                    "width": 62,
                                     "height": 28,
                                     "style": "mon_dac_S"
                                   }
