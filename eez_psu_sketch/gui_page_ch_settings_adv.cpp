@@ -256,7 +256,6 @@ void ChSettingsAdvViewPage::editYTViewRate() {
 	options.editUnit = data::VALUE_TYPE_FLOAT_SECOND;
 
 	options.min = GUI_YT_VIEW_RATE_MIN;
-	options.max = FLT_MAX;
 	options.def = GUI_YT_VIEW_RATE_DEFAULT;
 
 	options.flags.genericNumberKeypad = true;
