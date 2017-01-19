@@ -1024,6 +1024,7 @@ void Channel::doRemoteProgrammingEnable(bool enable) {
     }
     flags.rprogEnabled = enable;
     if (enable) {
+        setVoltageLimit(u.max);
         setVoltage(u.min);
         prot_conf.u_level = u.max;
         prot_conf.flags.u_state = true;
