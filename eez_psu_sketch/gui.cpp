@@ -23,6 +23,9 @@
 #include "devices.h"
 #include "sound.h"
 #include "event_queue.h"
+#if OPTION_ENCODER
+#include "encoder.h"
+#endif
 
 #include "gui.h"
 #include "gui_internal.h"
@@ -2129,8 +2132,25 @@ void standbyTouchHandling(unsigned long tick_usec) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#if OPTION_ENCODER
+
+void encoderTick(unsigned long tick_usec) {
+    int counter = encoder::readAndResetCounter();
+    if (counter > 0) {
+        DebugTraceF("%d", counter);
+    }
+}
+
+#endif
+
+////////////////////////////////////////////////////////////////////////////////
+
 void init() {
     lcd::init();
+
+#if OPTION_ENCODER
+    encoder::init();
+#endif
 
 #ifdef EEZ_PSU_SIMULATOR
     if (true || persist_conf::devConf.gui_opened) {
@@ -2167,6 +2187,10 @@ void tick(unsigned long tick_usec) {
 #endif
 
     touch::tick(tick_usec);
+
+#if OPTION_ENCODER
+    encoderTick(tick_usec);
+#endif
 
     if (g_activePageId == INTERNAL_PAGE_ID_NONE) {
         standbyTouchHandling(tick_usec);

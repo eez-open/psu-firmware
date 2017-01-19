@@ -75,6 +75,9 @@ option.
 /// Enable watchdog
 #define OPTION_WATCHDOG 1
 
+/// Enable encoder
+#define OPTION_ENCODER 1
+
 /// Maximum number of channels existing.
 #define CH_MAX 2
 
