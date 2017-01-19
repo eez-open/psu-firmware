@@ -520,6 +520,10 @@ void action_ch_settings_adv_view_edit_display_value2() {
     ((ChSettingsAdvViewPage *)getActivePage())->editDisplayValue2();
 }
 
+void action_ch_settings_adv_view_swap_display_values() {
+    ((ChSettingsAdvViewPage *)getActivePage())->swapDisplayValues();
+}
+
 void action_ch_settings_adv_view_edit_yt_view_rate() {
     ((ChSettingsAdvViewPage *)getActivePage())->editYTViewRate();
 }
@@ -653,6 +657,7 @@ ACTION actions[] = {
     action_show_ch_settings_adv_view,
     action_ch_settings_adv_view_edit_display_value1,
     action_ch_settings_adv_view_edit_display_value2,
+    action_ch_settings_adv_view_swap_display_values,
     action_ch_settings_adv_view_edit_yt_view_rate,
     action_select_enum_item,
     action_error_alert_action

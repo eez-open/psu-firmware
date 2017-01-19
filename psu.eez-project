@@ -634,6 +634,11 @@
       "implementation": "((ChSettingsAdvViewPage *)getActivePage())->editDisplayValue2();"
     },
     {
+      "name": "ch.settings.adv.view.swapDisplayValues",
+      "implementationType": "native",
+      "implementation": "((ChSettingsAdvViewPage *)getActivePage())->swapDisplayValues();"
+    },
+    {
       "name": "ch.settings.adv.view.editYTViewRate",
       "implementationType": "native",
       "implementation": "((ChSettingsAdvViewPage *)getActivePage())->editYTViewRate();"
@@ -15488,12 +15493,12 @@
               "text": "Display value #1:"
             },
             {
-              "type": "Text",
+              "type": "DisplayData",
               "data": "channel.displayViewSettings.displayValue1",
               "action": "ch.settings.adv.view.editDisplayValue1",
               "x": 151,
               "y": 28,
-              "width": 90,
+              "width": 101,
               "height": 28,
               "style": "edit_value_active_S_left",
               "text": "Voltage (V)"
@@ -15508,20 +15513,30 @@
               "text": "Display value #2:"
             },
             {
-              "type": "Text",
+              "type": "DisplayData",
               "data": "channel.displayViewSettings.displayValue2",
               "action": "ch.settings.adv.view.editDisplayValue2",
               "x": 151,
               "y": 56,
-              "width": 90,
+              "width": 101,
               "height": 28,
               "style": "edit_value_active_S_left",
               "text": "Power (W)"
             },
             {
               "type": "Text",
+              "action": "ch.settings.adv.view.swapDisplayValues",
               "x": 16,
               "y": 84,
+              "width": 236,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "Swap selected values"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 112,
               "width": 135,
               "height": 28,
               "style": "edit_value_S_left",
@@ -15532,8 +15547,8 @@
               "data": "channel.displayViewSettings.ytViewRate",
               "action": "ch.settings.adv.view.editYTViewRate",
               "x": 151,
-              "y": 84,
-              "width": 62,
+              "y": 112,
+              "width": 101,
               "height": 28,
               "style": "edit_value_active_S_left",
               "text": "100ms"
@@ -15541,9 +15556,9 @@
             {
               "type": "Rectangle",
               "x": 16,
-              "y": 112,
+              "y": 140,
               "width": 236,
-              "height": 56,
+              "height": 28,
               "style": "default_inverse"
             },
             {
@@ -15568,6 +15583,14 @@
               "height": 32,
               "style": "non_interactive_button_S",
               "text": " Discard"
+            },
+            {
+              "type": "Rectangle",
+              "x": 213,
+              "y": 168,
+              "width": 39,
+              "height": 32,
+              "style": "default_inverse"
             },
             {
               "type": "Text",

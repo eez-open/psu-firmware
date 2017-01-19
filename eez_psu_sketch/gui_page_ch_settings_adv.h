@@ -86,10 +86,12 @@ class ChSettingsAdvViewPage : public SetPage {
 public:
 	ChSettingsAdvViewPage();
 
+	void takeSnapshot(data::Snapshot *snapshot);
 	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
 
     void editDisplayValue1();
     void editDisplayValue2();
+    void swapDisplayValues();
     void editYTViewRate();
 
 	int getDirty();
