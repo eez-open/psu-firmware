@@ -527,6 +527,8 @@ public:
     float getUMonHistory(int position) const { return uHistory[position]; }
     float getIMonHistory(int position) const { return iHistory[position]; }
 
+    void resetHistory();
+
 private:
     bool delayed_dp_off;
     unsigned long delayed_dp_off_start;

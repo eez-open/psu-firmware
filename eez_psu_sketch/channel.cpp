@@ -285,8 +285,6 @@ Channel::Channel(
 
     uBeforeBalancing = NAN;
     iBeforeBalancing = NAN;
-
-    historyPosition = -1;
 }
 
 void Channel::protectionEnter(ProtectionValue &cpv) {
@@ -474,6 +472,11 @@ void Channel::reset() {
     flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
     flags.displayValue2 = DISPLAY_VALUE_CURRENT; 
     ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
+    resetHistory();
+}
+
+void Channel::resetHistory() {
+    historyPosition = -1;
 }
 
 void Channel::clearCalibrationConf() {

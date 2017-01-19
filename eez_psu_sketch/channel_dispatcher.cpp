@@ -126,6 +126,15 @@ bool setType(Type value) {
 #endif
                     }
                 }
+
+                if (i == 1) {
+                    Channel &channel1 = Channel::get(0);
+                    channel.flags.displayValue1 = channel1.flags.displayValue1;
+                    channel.flags.displayValue2 = channel1.flags.displayValue2;
+                    channel.ytViewRate = channel1.ytViewRate;
+                }
+
+                channel.resetHistory();
             }
         }
 
@@ -674,11 +683,11 @@ void setOtpDelay(int sensor, float delay) {
 void setDisplayViewSettings(Channel &channel, int displayValue1, int displayValue2, float ytViewRate) {
     if (isCoupled() || isTracked()) {
         Channel::get(0).flags.displayValue1 = displayValue1;
-        Channel::get(0).flags.displayValue1 = displayValue2;
+        Channel::get(0).flags.displayValue2 = displayValue2;
         Channel::get(0).ytViewRate = ytViewRate;
 
         Channel::get(1).flags.displayValue1 = displayValue1;
-        Channel::get(1).flags.displayValue1 = displayValue2;
+        Channel::get(1).flags.displayValue2 = displayValue2;
         Channel::get(1).ytViewRate = ytViewRate;
     } else {
         channel.flags.displayValue1 = displayValue1;
