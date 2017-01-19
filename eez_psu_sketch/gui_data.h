@@ -278,10 +278,6 @@ extern Value g_alertMessage;
 extern Value g_alertMessage2;
 extern Value g_alertMessage3;
 
-bool isUMonData(const Cursor &cursor, uint8_t id);
-bool isIMonData(const Cursor &cursor, uint8_t id);
-bool isPMonData(const Cursor &cursor, uint8_t id);
-
 int count(uint8_t id);
 void select(Cursor &cursor, uint8_t id, int index);
 

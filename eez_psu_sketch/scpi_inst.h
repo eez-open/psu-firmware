@@ -24,5 +24,10 @@
     SCPI_COMMAND("INSTrument:NSELect",   scpi_inst_NSelect) \
     SCPI_COMMAND("INSTrument:NSELect?",  scpi_inst_NSelectQ) \
     SCPI_COMMAND("INSTrument:COUPle:TRACking",  scpi_inst_CoupleTracking) \
-    SCPI_COMMAND("INSTrument:COUPle:TRACking?",  scpi_inst_CoupleTrackingQ) \
+    SCPI_COMMAND("INSTrument:COUPle:TRACking?", scpi_inst_CoupleTrackingQ) \
+    SCPI_COMMAND("INSTrument:DISPlay:TRACe#",   scpi_inst_DisplayTrace) \
+    SCPI_COMMAND("INSTrument:DISPlay:TRACe#?",  scpi_inst_DisplayTraceQ) \
+    SCPI_COMMAND("INSTrument:DISPlay:TRACe:SWAP", scpi_inst_DisplayTraceSwap) \
+    SCPI_COMMAND("INSTrument:DISPlay:YT:RATE",    scpi_inst_DisplayYTRate) \
+    SCPI_COMMAND("INSTrument:DISPlay:YT:RATE?",   scpi_inst_DisplayYTRateQ) \
 

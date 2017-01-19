@@ -287,15 +287,15 @@ static bool isDisplayValue(const Cursor &cursor, uint8_t id, DisplayValue displa
          id == DATA_ID_CHANNEL_DISPLAY_VALUE2 && Channel::get(cursor.i).flags.displayValue2 == displayValue);
 }
 
-bool isUMonData(const Cursor &cursor, uint8_t id) {
+static bool isUMonData(const Cursor &cursor, uint8_t id) {
     return id == DATA_ID_CHANNEL_U_MON || isDisplayValue(cursor, id, DISPLAY_VALUE_VOLTAGE);
 }
 
-bool isIMonData(const Cursor &cursor, uint8_t id) {
+static bool isIMonData(const Cursor &cursor, uint8_t id) {
     return id == DATA_ID_CHANNEL_I_MON || isDisplayValue(cursor, id, DISPLAY_VALUE_CURRENT);
 }
 
-bool isPMonData(const Cursor &cursor, uint8_t id) {
+static bool isPMonData(const Cursor &cursor, uint8_t id) {
     return id == DATA_ID_CHANNEL_P_MON || isDisplayValue(cursor, id, DISPLAY_VALUE_POWER);
 }
 

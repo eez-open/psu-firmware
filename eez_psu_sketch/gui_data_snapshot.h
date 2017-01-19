@@ -41,6 +41,8 @@ struct ChannelSnapshotFlags {
     unsigned dp : 2;
     unsigned cal_enabled: 1;
     unsigned temperatureStatus: 2;
+    unsigned displayValue1: 2;
+    unsigned displayValue2: 2;
 };
 
 struct ChannelSnapshot {
@@ -58,6 +60,8 @@ struct ChannelSnapshot {
     float temperature;
     uint32_t onTimeTotal;
     uint32_t onTimeLast;
+    uint8_t displayValue1;
+    uint8_t displayValue2;
 };
 
 struct ProfileChannelSnapshot {
@@ -114,6 +118,14 @@ struct Snapshot {
     Value get(const Cursor &cursor, uint8_t id);
     Value getEditValue(const Cursor &cursor, uint8_t id);
     bool isBlinking(const Cursor &cursor, uint8_t id);
+
+private:
+    int getCurrentChannelIndex(const Cursor &cursor); 
+    ChannelSnapshot &getCurrentChannelSnapshot(const Cursor &cursor); 
+    bool isDisplayValue(const Cursor &cursor, uint8_t id, DisplayValue displayValue);
+    bool isUMonData(const Cursor &cursor, uint8_t id);
+    bool isIMonData(const Cursor &cursor, uint8_t id);
+    bool isPMonData(const Cursor &cursor, uint8_t id);
 };
 
 extern Snapshot currentSnapshot;

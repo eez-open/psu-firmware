@@ -68,7 +68,6 @@ const char *getFirmwareInfo() {
     return firmware_info;
 }
 
-
 Snapshot currentSnapshot;
 Snapshot previousSnapshot;
 
@@ -165,6 +164,9 @@ void Snapshot::takeSnapshot() {
 
         channelSnapshot.onTimeTotal = channel.onTimeCounter.getTotalTime();
         channelSnapshot.onTimeLast = channel.onTimeCounter.getLastTime();
+
+        channelSnapshot.flags.displayValue1 = channel.flags.displayValue1;
+        channelSnapshot.flags.displayValue2 = channel.flags.displayValue2;
     }
 
     flags.channelsViewMode = persist_conf::devConf.flags.channelsViewMode;
@@ -213,6 +215,39 @@ void Snapshot::takeSnapshot() {
     }
 }
 
+int Snapshot::getCurrentChannelIndex(const Cursor &cursor) {
+    if (cursor.i >= 0) {
+        return cursor.i;
+    } else if (g_channel) {
+        return g_channel->index - 1;
+    } else {
+        return 0;
+    }
+}
+
+ChannelSnapshot &Snapshot::getCurrentChannelSnapshot(const Cursor &cursor) {
+    return channelSnapshots[getCurrentChannelIndex(cursor)];
+}
+
+bool Snapshot::isDisplayValue(const Cursor &cursor, uint8_t id, DisplayValue displayValue) {
+    data::ChannelSnapshot &channelSnapshot = getCurrentChannelSnapshot(cursor);
+    return cursor.i >= 0 && 
+        (id == DATA_ID_CHANNEL_DISPLAY_VALUE1 && channelSnapshot.flags.displayValue1 == displayValue ||
+         id == DATA_ID_CHANNEL_DISPLAY_VALUE2 && channelSnapshot.flags.displayValue2 == displayValue);
+}
+
+bool Snapshot::isUMonData(const Cursor &cursor, uint8_t id) {
+    return id == DATA_ID_CHANNEL_U_MON || isDisplayValue(cursor, id, DISPLAY_VALUE_VOLTAGE);
+}
+
+bool Snapshot::isIMonData(const Cursor &cursor, uint8_t id) {
+    return id == DATA_ID_CHANNEL_I_MON || isDisplayValue(cursor, id, DISPLAY_VALUE_CURRENT);
+}
+
+bool Snapshot::isPMonData(const Cursor &cursor, uint8_t id) {
+    return id == DATA_ID_CHANNEL_P_MON || isDisplayValue(cursor, id, DISPLAY_VALUE_POWER);
+}
+
 Value Snapshot::get(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_CHANNELS_VIEW_MODE) {
         return Value(flags.channelsViewMode);
@@ -234,16 +269,7 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
         return data::Value(flags.channelCouplingMode != channel_dispatcher::TYPE_NONE ? 1 : 0);
     }
 
-    int iChannel;
-    if (cursor.i >= 0) {
-        iChannel = cursor.i;
-    } else if (g_channel) {
-        iChannel = g_channel->index - 1;
-    } else {
-        iChannel = 0;
-    }
-
-    data::ChannelSnapshot &channelSnapshot = channelSnapshots[iChannel];
+    data::ChannelSnapshot &channelSnapshot = getCurrentChannelSnapshot(cursor);
 
     if (id == DATA_ID_CHANNEL_STATUS) {
         return Value(channelSnapshot.flags.status);
@@ -323,11 +349,11 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
         }
         
         if (id == DATA_ID_CHANNEL_LABEL) {
-            return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_LABEL);
+            return data::Value(getCurrentChannelIndex(cursor) + 1, data::VALUE_TYPE_CHANNEL_LABEL);
         }
         
         if (id == DATA_ID_CHANNEL_SHORT_LABEL) {
-            return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_SHORT_LABEL);
+            return data::Value(getCurrentChannelIndex(cursor) + 1, data::VALUE_TYPE_CHANNEL_SHORT_LABEL);
         }
 
         if (id == DATA_ID_CHANNEL_TEMP_STATUS) {

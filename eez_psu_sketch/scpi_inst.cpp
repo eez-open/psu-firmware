@@ -22,6 +22,7 @@
 
 #include "calibration.h"
 #include "channel_dispatcher.h"
+#include "profile.h"
 
 namespace eez {
 namespace psu {
@@ -33,6 +34,15 @@ scpi_choice_def_t channelsCouplingChoice[] = {
     { "NONE", channel_dispatcher::TYPE_NONE },
     { "PARallel", channel_dispatcher::TYPE_PARALLEL },
     { "SERies", channel_dispatcher::TYPE_SERIES },
+    SCPI_CHOICE_LIST_END /* termination of option list */
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+scpi_choice_def_t traceValueChoice[] = {
+    { "VOLTage", DISPLAY_VALUE_VOLTAGE },
+    { "CURRent", DISPLAY_VALUE_CURRENT },
+    { "POWer", DISPLAY_VALUE_POWER },
     SCPI_CHOICE_LIST_END /* termination of option list */
 };
 
@@ -138,6 +148,108 @@ scpi_result_t scpi_inst_CoupleTrackingQ(scpi_t * context) {
     }
 
     SCPI_ResultText(context, result);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_inst_DisplayTrace(scpi_t * context) {
+    scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
+    Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
+
+    int32_t traceNumber;
+    SCPI_CommandNumbers(context, &traceNumber, 1, 1);
+    if (traceNumber < 1 || traceNumber > 2) {
+        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        return SCPI_RES_ERR;
+    }
+
+    int32_t traceValue;
+    if (!SCPI_ParamChoice(context, traceValueChoice, &traceValue, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (traceNumber == 1) {
+        if (traceValue == channel->flags.displayValue2) {
+            SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+            return SCPI_RES_ERR;
+        }
+        channel_dispatcher::setDisplayViewSettings(*channel, traceValue, channel->flags.displayValue2, channel->ytViewRate);
+    } else {
+        if (traceValue == channel->flags.displayValue1) {
+            SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+            return SCPI_RES_ERR;
+        }
+        channel_dispatcher::setDisplayViewSettings(*channel, channel->flags.displayValue1, traceValue, channel->ytViewRate);
+    }
+
+    profile::save();
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_inst_DisplayTraceQ(scpi_t * context) {
+    scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
+    Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
+
+    int32_t traceNumber;
+    SCPI_CommandNumbers(context, &traceNumber, 1, 1);
+    if (traceNumber < 1 || traceNumber > 2) {
+        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        return SCPI_RES_ERR;
+    }
+
+    int8_t traceValue;
+    if (traceNumber == 1) {
+        traceValue = channel->flags.displayValue1;
+    } else {
+        traceValue = channel->flags.displayValue2;
+    }
+
+    char result[16];
+
+    if (traceValue == DISPLAY_VALUE_VOLTAGE) {
+        strcpy_P(result, PSTR("VOLT"));
+    } else if (traceValue == DISPLAY_VALUE_CURRENT) {
+        strcpy_P(result, PSTR("CURR"));
+    } else {
+        strcpy_P(result, PSTR("POW"));
+    }
+
+    SCPI_ResultText(context, result);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_inst_DisplayTraceSwap(scpi_t * context) {
+    scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
+    Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
+
+    channel_dispatcher::setDisplayViewSettings(*channel, channel->flags.displayValue2, channel->flags.displayValue1, channel->ytViewRate);
+    profile::save();
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_inst_DisplayYTRate(scpi_t * context) {
+    scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
+    Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
+
+    float ytViewRate;
+    if (!get_duration_param(context, ytViewRate, GUI_YT_VIEW_RATE_MIN, GUI_YT_VIEW_RATE_MAX, GUI_YT_VIEW_RATE_DEFAULT)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel_dispatcher::setDisplayViewSettings(*channel, channel->flags.displayValue1, channel->flags.displayValue2, ytViewRate);
+    profile::save();
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_inst_DisplayYTRateQ(scpi_t * context) {
+    scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
+    Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
+
+    SCPI_ResultFloat(context, channel->ytViewRate);
 
     return SCPI_RES_OK;
 }
