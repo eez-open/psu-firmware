@@ -74,6 +74,8 @@ void dialogNo();
 void dialogCancel();
 void dialogOk();
 
+void errorMessageAction();
+
 void onLastErrorEventAction();
 
 void lockFrontPanel();

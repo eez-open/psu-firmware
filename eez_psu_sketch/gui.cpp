@@ -100,6 +100,8 @@ static void (*g_dialogYesCallback)();
 static void (*g_dialogNoCallback)();
 static void (*g_dialogCancelCallback)();
 
+static void (*g_errorMessageAction)();
+
 static bool g_isBlinkTime;
 static bool g_wasBlinkTime;
 
@@ -1869,6 +1871,16 @@ void dialogOk() {
     dialogYes();
 }
 
+void errorMessageAction() {
+    popPage();
+
+    if (g_dialogYesCallback) {
+        g_dialogYesCallback();
+    }
+
+    g_errorMessageAction();
+}
+
 void alertMessage(int alertPageId, data::Value message, void (*ok_callback)()) {
     data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, message, 0);
 
@@ -1908,8 +1920,34 @@ void toastMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, c
 }
 
 void errorMessage(data::Value value, void (*ok_callback)()) {
+    int pageId = PAGE_ID_ERROR_ALERT;
+
+    if (value.getType() == data::VALUE_TYPE_SCPI_ERROR_TEXT) {
+        void (*action)();
+        const char *actionLabel PROGMEM = 0;
+
+        if (value.getScpiError() == SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED) {
+            action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OVP];
+            actionLabel = PSTR("Change voltage limit");
+        } else if (value.getScpiError() == SCPI_ERROR_CURRENT_LIMIT_EXCEEDED) {
+            action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OCP];
+            actionLabel = PSTR("Change current limit");
+        } else if (value.getScpiError() == SCPI_ERROR_POWER_LIMIT_EXCEEDED) {
+            action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OPP];
+            actionLabel = PSTR("Change power limit");
+        }
+
+        if (action) {
+            data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE_2, actionLabel, 0);
+            g_errorMessageAction = action;
+            alertMessage(PAGE_ID_ERROR_ALERT_WITH_ACTION, value, ok_callback);
+            return;
+        }
+    }
+
     alertMessage(PAGE_ID_ERROR_ALERT, value, ok_callback);
 }
+
 
 void errorMessageP(const char *message PROGMEM, void (*ok_callback)()) {
     alertMessage(PAGE_ID_ERROR_ALERT, data::Value::ProgmemStr(message), ok_callback);

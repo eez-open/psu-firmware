@@ -528,6 +528,10 @@ void action_select_enum_item() {
     ((SelectFromEnumPage *)getActivePage())->selectEnumItem();
 }
 
+void action_error_alert_action() {
+    errorMessageAction();
+}
+
 
 ACTION actions[] = {
     0,
@@ -650,7 +654,8 @@ ACTION actions[] = {
     action_ch_settings_adv_view_edit_display_value1,
     action_ch_settings_adv_view_edit_display_value2,
     action_ch_settings_adv_view_edit_yt_view_rate,
-    action_select_enum_item
+    action_select_enum_item,
+    action_error_alert_action
 };
 
 }

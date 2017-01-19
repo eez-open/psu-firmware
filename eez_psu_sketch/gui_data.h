@@ -212,6 +212,8 @@ struct Value {
 	uint8_t getPageIndex() { return pageInfo_.pageIndex; }
 	uint8_t getNumPages() { return pageInfo_.numPages; }
 
+    int16_t getScpiError() { return int16_; }
+
 private:
     uint8_t type_;
     union {
