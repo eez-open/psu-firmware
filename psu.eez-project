@@ -15576,7 +15576,7 @@
               "y": 204,
               "width": 48,
               "height": 36,
-              "style": "tab_page_selected",
+              "style": "tab_page",
               "text": "E"
             },
             {
@@ -15586,7 +15586,7 @@
               "y": 204,
               "width": 48,
               "height": 36,
-              "style": "tab_page",
+              "style": "tab_page_selected",
               "text": "G"
             },
             {
