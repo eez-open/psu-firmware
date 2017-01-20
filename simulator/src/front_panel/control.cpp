@@ -22,6 +22,7 @@
 #include "imgui/window.h"
 #include "imgui/beeper.h"
 #include "persist_conf.h"
+#include "encoder.h"
 
 #ifdef _WIN32
 #undef INPUT
@@ -125,6 +126,13 @@ void tick() {
             processData(&g_data);
 
             g_window->endUpdate();
+
+            int x, y;
+            g_window->getMouseWheelData(&x, &y);
+
+            if (y != 0) {
+                encoder::addToCounter(y);
+            }
         }
         else {
             close();

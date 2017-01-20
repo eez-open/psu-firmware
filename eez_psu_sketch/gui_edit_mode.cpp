@@ -32,14 +32,13 @@ namespace psu {
 namespace gui {
 namespace edit_mode {
 
-static int tabIndex = PAGE_ID_EDIT_MODE_KEYPAD;
-static data::Cursor dataCursor;
-static int dataId = -1;
-static data::Value editValue;
-static data::Value undoValue;
-static data::Value minValue;
-static data::Value maxValue;
-static bool is_interactive_mode = true;
+static int g_tabIndex = PAGE_ID_EDIT_MODE_KEYPAD;
+
+static data::Value g_editValue;
+static data::Value g_undoValue;
+static data::Value g_minValue;
+static data::Value g_maxValue;
+static bool g_isInteractiveMode = true;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -84,7 +83,9 @@ bool Snapshot::isBlinking(data::Snapshot& snapshot, uint8_t id, bool &result) {
 ////////////////////////////////////////////////////////////////////////////////
 
 bool isActive() {
-    return dataId != -1;
+    return getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD ||
+        getActivePageId() == PAGE_ID_EDIT_MODE_STEP ||
+        getActivePageId() == PAGE_ID_EDIT_MODE_SLIDER;
 }
 
 bool onKeypadOk(float value) {
@@ -92,15 +93,15 @@ bool onKeypadOk(float value) {
 }
 
 void initEditValue() {
-    editValue = data::currentSnapshot.getEditValue(dataCursor, dataId);
-    undoValue = editValue;
+    g_editValue = data::currentSnapshot.getEditValue(g_focusCursor, g_focusDataId);
+    g_undoValue = g_editValue;
 }
 
 void enter(int tabIndex_) {
     gui::selectChannel();
 
     if (tabIndex_ != -1) {
-		tabIndex = tabIndex_;
+		g_tabIndex = tabIndex_;
 	}
 
     data::Cursor newDataCursor;
@@ -110,33 +111,33 @@ void enter(int tabIndex_) {
         DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
         newDataId = widget->data;
     } else {
-        newDataCursor = dataCursor;
-        newDataId = dataId;
+        newDataCursor = g_focusCursor;
+        newDataId = g_focusDataId;
     }
 
-    if (getActivePageId() != tabIndex || dataId != newDataId || dataCursor != newDataCursor) {
-        if (getActivePageId() == tabIndex) {
+    if (getActivePageId() != g_tabIndex || g_focusDataId != newDataId || g_focusCursor != newDataCursor) {
+        if (getActivePageId() == g_tabIndex) {
             if (numeric_keypad::isEditing()) {
                 sound::playBeep();
                 return;
             }
         }
 
-        dataCursor = newDataCursor;
-        dataId = newDataId;
+        g_focusCursor = newDataCursor;
+        g_focusDataId = newDataId;
 
         initEditValue();
 
-        minValue = data::getMin(dataCursor, dataId);
-        maxValue = data::getMax(dataCursor, dataId);
+        g_minValue = data::getMin(g_focusCursor, g_focusDataId);
+        g_maxValue = data::getMax(g_focusCursor, g_focusDataId);
 
-        if (tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
+        if (g_tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
 			numeric_keypad::Options options;
 
-			options.editUnit = editValue.getType();
+			options.editUnit = g_editValue.getType();
 
-			options.min = minValue.getFloat();
-			options.max = maxValue.getFloat();
+			options.min = g_minValue.getFloat();
+			options.max = g_maxValue.getFloat();
 			options.def = 0;
 
 			options.flags.genericNumberKeypad = false;
@@ -150,82 +151,74 @@ void enter(int tabIndex_) {
 
         psu::enterTimeCriticalMode();
 
-        setPage(tabIndex);
+        setPage(g_tabIndex);
     }
 }
 
 void exit() {
     if (getActivePageId() != PAGE_ID_MAIN) {
-        dataId = -1;
-
         psu::leaveTimeCriticalMode();
-
         setPage(PAGE_ID_MAIN);
     }
 }
 
 void nonInteractiveSet() {
 	int16_t error;
-	if (!data::set(dataCursor, dataId, editValue, &error)) {
+	if (!data::set(g_focusCursor, g_focusDataId, g_editValue, &error)) {
 		errorMessage(data::Value::ScpiErrorText(error));
 	}
 }
 
 void nonInteractiveDiscard() {
-    editValue = undoValue;
-    data::set(dataCursor, dataId, undoValue, 0);
+    g_editValue = g_undoValue;
+    data::set(g_focusCursor, g_focusDataId, g_undoValue, 0);
 }
 
 bool isInteractiveMode() {
-    return is_interactive_mode;
+    return g_isInteractiveMode;
 }
 
 void toggleInteractiveMode() {
-    is_interactive_mode = !is_interactive_mode;
+    g_isInteractiveMode = !g_isInteractiveMode;
     initEditValue();
 }
 
 const data::Value& getEditValue() {
-    return editValue;
+    return g_editValue;
 }
 
 data::Value getCurrentValue(data::Snapshot snapshot) {
-    return snapshot.get(dataCursor, dataId);
+    return snapshot.get(g_focusCursor, g_focusDataId);
 }
 
 const data::Value &getMin() {
-    return minValue;
+    return g_minValue;
 }
 
 const data::Value &getMax() {
-    return maxValue;
+    return g_maxValue;
 }
 
 data::ValueType getUnit() {
-    return editValue.getType();
+    return g_editValue.getType();
 }
 
 bool setValue(float value_) {
     data::Value value = data::Value(value_, getUnit());
-    if (is_interactive_mode || tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
+    if (g_isInteractiveMode || g_tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
 		int16_t error;
-        if (!data::set(dataCursor, dataId, value, &error)) {
+        if (!data::set(g_focusCursor, g_focusDataId, value, &error)) {
 			errorMessage(data::Value::ScpiErrorText(error));
             return false;
         }
     }
-    editValue = value;
+    g_editValue = value;
 	return true;
 }
 
-bool isEditWidget(const WidgetCursor &widgetCursor) {
-    DECL_WIDGET(widget, widgetCursor.widgetOffset);
-    return widgetCursor.cursor == dataCursor && widget->data == dataId;
-}
-
 void getInfoText(int part, char *infoText) {
-    Channel &channel = Channel::get(dataCursor.i);
-    if (dataId == DATA_ID_CHANNEL_I_SET) {
+    Channel &channel = Channel::get(g_focusCursor.i);
+    if (g_focusDataId == DATA_ID_CHANNEL_I_SET) {
         if (part == 0 || part == 1) {
             if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
                 strcpy_P(infoText, PSTR("Set current"));
@@ -242,9 +235,9 @@ void getInfoText(int part, char *infoText) {
 
         if (part == 0 || part == 2) {
             strcat_P(infoText, PSTR("["));
-		    util::strcatFloat(infoText, minValue.getFloat());
+		    util::strcatFloat(infoText, g_minValue.getFloat());
 		    strcat_P(infoText, PSTR("-"));
-		    util::strcatCurrent(infoText, channel_dispatcher::getILimit(Channel::get(dataCursor.i)));
+		    util::strcatCurrent(infoText, channel_dispatcher::getILimit(Channel::get(g_focusCursor.i)));
 		    strcat_P(infoText, PSTR("]"));
         }
     } else {
@@ -264,9 +257,9 @@ void getInfoText(int part, char *infoText) {
 
         if (part == 0 || part == 2) {
             strcat_P(infoText, PSTR("["));
-            util::strcatFloat(infoText, minValue.getFloat());
+            util::strcatFloat(infoText, g_minValue.getFloat());
 		    strcat_P(infoText, PSTR("-"));
-		    util::strcatVoltage(infoText, channel_dispatcher::getULimit(Channel::get(dataCursor.i)));
+		    util::strcatVoltage(infoText, channel_dispatcher::getULimit(Channel::get(g_focusCursor.i)));
 		    strcat_P(infoText, PSTR("]"));
         }
     }

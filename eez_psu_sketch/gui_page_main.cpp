@@ -43,6 +43,37 @@ data::Value MainPage::getData(const data::Cursor &cursor, uint8_t id, data::Snap
 	return data::Value();
 }
 
+void MainPage::onEncoder(int counter) {
+    data::Value value = data::currentSnapshot.get(g_focusCursor, g_focusDataId);
+
+    float newValue = value.getFloat() + 0.005f * counter;
+
+    float min = data::getMin(g_focusCursor, g_focusDataId).getFloat();
+    if (newValue < min) {
+        newValue = min;
+    }
+
+    float max = data::getLimit(g_focusCursor, g_focusDataId).getFloat();
+    if (newValue > max) {
+        newValue = max;
+    }
+
+    int16_t error;
+    if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType()), &error)) {
+        errorMessage(data::Value::ScpiErrorText(error));
+    }
+}
+
+bool MainPage::setFocusWidget(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+    if (widget->type == WIDGET_TYPE_DISPLAY_DATA && widget->action == ACTION_ID_EDIT) {
+        g_focusCursor = widgetCursor.cursor;
+        g_focusDataId = widget->data;
+        return true;
+    }
+    return false;
+}
+
 }
 }
 } // namespace eez::psu::gui

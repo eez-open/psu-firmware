@@ -17,12 +17,1530 @@
  */
 
 #include "psu.h"
-#include "gui_data.h"
-#include "gui_view.h"
+#include "gui_internal.h"
+#include "gui_edit_mode.h"
+#include "gui_edit_mode_slider.h"
+#include "gui_widget_button_group.h"
+#include "gui_page.h"
+
+#ifdef EEZ_PSU_SIMULATOR
+#include "front_panel/control.h"
+#endif
+
+#define CONF_GUI_ENUM_WIDGETS_STACK_SIZE 5
+#define CONF_GUI_BLINK_TIME 400000UL // 400ms
+#define CONF_GUI_YT_GRAPH_BLANK_PIXELS_AFTER_CURSOR 10
 
 namespace eez {
 namespace psu {
 namespace gui {
+
+////////////////////////////////////////////////////////////////////////////////
+
+static bool g_widgetRefresh;
+static WidgetCursor g_selectedWidget;
+static bool g_isBlinkTime;
+static bool g_wasBlinkTime;
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool styleHasBorder(const Style *style) {
+    return style->flags & STYLE_FLAGS_BORDER;
+}
+
+bool styleIsHorzAlignLeft(const Style *style) {
+    return (style->flags & STYLE_FLAGS_HORZ_ALIGN) == STYLE_FLAGS_HORZ_ALIGN_LEFT;
+}
+
+bool styleIsHorzAlignRight(const Style *style) {
+    return (style->flags & STYLE_FLAGS_HORZ_ALIGN) == STYLE_FLAGS_HORZ_ALIGN_RIGHT;
+}
+
+bool styleIsVertAlignTop(const Style *style) {
+    return (style->flags & STYLE_FLAGS_VERT_ALIGN) == STYLE_FLAGS_VERT_ALIGN_TOP;
+}
+
+bool styleIsVertAlignBottom(const Style *style) {
+    return (style->flags & STYLE_FLAGS_VERT_ALIGN) == STYLE_FLAGS_VERT_ALIGN_BOTTOM;
+}
+
+font::Font styleGetFont(const Style *style) {
+    return font::Font(style->font > 0 ? fonts[style->font - 1] : 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse) {
+    int x1 = x;
+    int y1 = y;
+    int x2 = x + w - 1;
+    int y2 = y + h - 1;
+
+    if (styleHasBorder(style)) {
+        lcd::lcd.setColor(style->border_color);
+        lcd::lcd.drawRect(x1, y1, x2, y2);
+        ++x1;
+        ++y1;
+        --x2;
+        --y2;
+    }
+
+    font::Font font = styleGetFont(style);
+    
+    int width = lcd::lcd.measureStr(text, textLength, font, x2 - x1 + 1);
+    int height = font.getHeight();
+
+    int x_offset;
+    if (styleIsHorzAlignLeft(style)) x_offset = x1 + style->padding_horizontal;
+    else if (styleIsHorzAlignRight(style)) x_offset = x2 - style->padding_horizontal - width;
+    else x_offset = x1 + ((x2 - x1) - width) / 2;
+    if (x_offset < 0) x_offset = x1;
+
+    int y_offset;
+    if (styleIsVertAlignTop(style)) y_offset = y1 + style->padding_vertical;
+    else if (styleIsVertAlignBottom(style)) y_offset = y2 - style->padding_vertical -height;
+    else y_offset = y1 + ((y2 - y1) - height) / 2;
+    if (y_offset < 0) y_offset = y1;
+
+    uint16_t background_color = inverse ? style->color : style->background_color;
+    lcd::lcd.setColor(background_color);
+
+    if (g_widgetRefresh) {
+        lcd::lcd.fillRect(x1, y1, x2, y2);
+    } else {
+        if (x1 <= x_offset - 1 && y1 <= y2)
+            lcd::lcd.fillRect(x1, y1, x_offset - 1, y2);
+        if (x_offset + width <= x2 && y1 <= y2)
+            lcd::lcd.fillRect(x_offset + width, y1, x2, y2);
+
+        int right = min(x_offset + width - 1, x2);
+
+        if (x_offset <= right && y1 <= y_offset - 1)
+            lcd::lcd.fillRect(x_offset, y1, right, y_offset - 1);
+        if (x_offset <= right && y_offset + height <= y2)
+            lcd::lcd.fillRect(x_offset, y_offset + height, right, y2);
+    }
+
+    if (inverse) {
+        lcd::lcd.setBackColor(style->color);
+        lcd::lcd.setColor(style->background_color);
+    } else {
+        lcd::lcd.setBackColor(style->background_color);
+        lcd::lcd.setColor(style->color);
+    }
+    lcd::lcd.drawStr(text, textLength, x_offset, y_offset, x1, y1, x2, y2, font, !g_widgetRefresh);
+}
+
+void drawMultilineText(const char *text, int x, int y, int w, int h, const Style *style, bool inverse) {
+    int x1 = x;
+    int y1 = y;
+    int x2 = x + w - 1;
+    int y2 = y + h - 1;
+
+    if (styleHasBorder(style)) {
+        lcd::lcd.setColor(style->border_color);
+        lcd::lcd.drawRect(x1, y1, x2, y2);
+        ++x1;
+        ++y1;
+        --x2;
+        --y2;
+    }
+
+    font::Font font = styleGetFont(style);
+    int height = (int)(0.9 * font.getHeight());
+    
+    font::Glyph space_glyph;
+    font.getGlyph(' ', space_glyph);
+    int space_width = space_glyph.dx;
+
+    bool clear_background = false;
+
+    uint16_t background_color = inverse ? style->color : style->background_color;
+    lcd::lcd.setColor(background_color);
+    lcd::lcd.fillRect(x1, y1, x2, y2);
+
+    x1 += style->padding_horizontal;
+    x2 -= style->padding_horizontal;
+    y1 += style->padding_vertical;
+    y2 -= style->padding_vertical;
+
+    x = x1;
+    y = y1;
+
+    int i = 0;
+    while (true) {
+        int j = i;
+        while (text[i] != 0 && text[i] != ' ' && text[i] != '\n')
+            ++i;
+
+        int width = lcd::lcd.measureStr(text + j, i - j, font);
+
+        while (width > x2 - x + 1) {
+            if (clear_background) {
+                lcd::lcd.setColor(background_color);
+                lcd::lcd.fillRect(x, y, x2, y + height - 1);
+            }
+
+            y += height;
+            if (y + height > y2) {
+                break;
+            }
+
+            x = x1;
+        }
+
+        if (y + height > y2) {
+            break;
+        }
+
+        if (inverse) {
+            lcd::lcd.setBackColor(style->color);
+            lcd::lcd.setColor(style->background_color);
+        }
+        else {
+            lcd::lcd.setBackColor(style->background_color);
+            lcd::lcd.setColor(style->color);
+        }
+
+        lcd::lcd.drawStr(text + j, i - j, x, y, x1, y1, x2, y2, font, false);
+
+        x += width;
+
+        while (text[i] == ' ') {
+            if (clear_background) {
+                lcd::lcd.setColor(background_color);
+                lcd::lcd.fillRect(x, y, x + space_width - 1, y + height - 1);
+            }
+            x += space_width;
+            ++i;
+        }
+
+        if (text[i] == 0 || text[i] == '\n') {
+            if (clear_background) {
+                lcd::lcd.setColor(background_color);
+                lcd::lcd.fillRect(x, y, x2, y + height - 1);
+            }
+
+            y += height;
+
+            if (text[i] == 0) {
+                break;
+            }
+
+            ++i;
+
+            int extraHeightBetweenParagraphs = (int)(0.2 * height);
+
+            if (extraHeightBetweenParagraphs > 0 && clear_background) {
+                lcd::lcd.setColor(background_color);
+                lcd::lcd.fillRect(x1, y, x2, y + extraHeightBetweenParagraphs - 1);
+            }
+
+            y += extraHeightBetweenParagraphs;
+
+            if (y + height > y2) {
+                break;
+            }
+            x = x1;
+        }
+    }
+
+    if (clear_background) {
+        lcd::lcd.setColor(background_color);
+        lcd::lcd.fillRect(x1, y, x2, y2);
+    }
+}
+
+void fillRect(int x, int y, int w, int h) {
+    lcd::lcd.fillRect(x, y, x + w - 1, y + h - 1);
+}
+
+void drawBitmap(uint8_t bitmapIndex, int x, int y, int w, int h, const Style *style, bool inverse) {
+    if (bitmapIndex == 0) {
+        return;
+    }
+    Bitmap &bitmap = bitmaps[bitmapIndex - 1];
+
+    int x1 = x;
+    int y1 = y;
+    int x2 = x + w - 1;
+    int y2 = y + h - 1;
+
+    if (styleHasBorder(style)) {
+        lcd::lcd.setColor(style->border_color);
+        lcd::lcd.drawRect(x1, y1, x2, y2);
+        ++x1;
+        ++y1;
+        --x2;
+        --y2;
+    }
+
+    int width = bitmap.w;
+    int height = bitmap.h;
+
+    int x_offset;
+    if (styleIsHorzAlignLeft(style)) x_offset = x1 + style->padding_horizontal;
+    else if (styleIsHorzAlignRight(style)) x_offset = x2 - style->padding_horizontal - width;
+    else x_offset = x1 + ((x2 - x1) - width) / 2;
+    if (x_offset < 0) x_offset = x1;
+
+    int y_offset;
+    if (styleIsVertAlignTop(style)) y_offset = y1 + style->padding_vertical;
+    else if (styleIsVertAlignBottom(style)) y_offset = y2 - style->padding_vertical -height;
+    else y_offset = y1 + ((y2 - y1) - height) / 2;
+    if (y_offset < 0) y_offset = y1;
+
+    uint16_t background_color = inverse ? style->color : style->background_color;
+    lcd::lcd.setColor(background_color);
+
+    if (g_widgetRefresh) {
+        lcd::lcd.fillRect(x1, y1, x2, y2);
+    } else {
+        if (x1 <= x_offset - 1 && y1 <= y2)
+            lcd::lcd.fillRect(x1, y1, x_offset - 1, y2);
+        if (x_offset + width <= x2 && y1 <= y2)
+            lcd::lcd.fillRect(x_offset + width, y1, x2, y2);
+
+        int right = min(x_offset + width - 1, x2);
+
+        if (x_offset <= right && y1 <= y_offset - 1)
+            lcd::lcd.fillRect(x_offset, y1, right, y_offset - 1);
+        if (x_offset <= right && y_offset + height <= y2)
+            lcd::lcd.fillRect(x_offset, y_offset + height, right, y2);
+    }
+
+    if (inverse) {
+        lcd::lcd.setBackColor(style->color);
+        lcd::lcd.setColor(style->background_color);
+    } else {
+        lcd::lcd.setBackColor(style->background_color);
+        lcd::lcd.setColor(style->color);
+    }
+    lcd::lcd.drawBitmap(x_offset, y_offset, width, height, (bitmapdatatype)bitmap.pixels, 1);
+}
+
+void drawRectangle(int x, int y, int w, int h, const Style *style, bool inverse) {
+    if (w > 0 && h > 0) {
+        int x1 = x;
+        int y1 = y;
+        int x2 = x + w - 1;
+        int y2 = y + h - 1;
+
+        if (styleHasBorder(style)) {
+            lcd::lcd.setColor(style->border_color);
+            lcd::lcd.drawRect(x1, y1, x2, y2);
+            ++x1;
+            ++y1;
+            --x2;
+            --y2;
+        }
+
+        uint16_t color = inverse ? style->background_color : style->color;
+        lcd::lcd.setColor(color);
+        lcd::lcd.fillRect(x1, y1, x2, y2);
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool drawDisplayDataWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    DECL_WIDGET_SPECIFIC(DisplayDataWidget, display_data_widget, widget);
+
+    bool wasFocus = wasFocusWidget(widgetCursor);
+    bool isFocus = isFocusWidget(widgetCursor);
+
+    if (!refresh) {
+        if (wasFocus != isFocus) {
+            refresh = true;
+        }
+    }
+
+    if (isFocus && getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || widget->data == DATA_ID_KEYPAD_TEXT) {
+        char *text = data::currentSnapshot.keypadSnapshot.text;
+        if (!refresh) {
+            char *previousText = data::previousSnapshot.keypadSnapshot.text;
+            refresh = strcmp(text, previousText) != 0;
+        }
+        if (refresh) {
+            DECL_STYLE(style, display_data_widget->activeStyle);
+            drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            return true;
+        }
+        return false;
+    }
+    else {
+        data::Value value;
+
+        bool isBlinking = data::currentSnapshot.isBlinking(widgetCursor.cursor, widget->data);
+        if (isBlinking) {
+            if (g_isBlinkTime) {
+                value = data::Value("");
+            } else {
+                value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+            }
+            refresh = refresh || (g_isBlinkTime != g_wasBlinkTime);
+        } else {
+            value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+        }
+
+        data::Value previousValue;
+        if (!refresh) {
+            bool wasBlinking = data::previousSnapshot.isBlinking(widgetCursor.cursor, widget->data);
+            refresh = isBlinking != wasBlinking;
+            if (!refresh) {
+                previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
+                refresh = value != previousValue;
+            }
+        }
+
+        if (refresh) {
+            char text[64];
+            value.toText(text, sizeof(text));
+
+            if (isFocus) {
+                DECL_STYLE(style, display_data_widget->activeStyle);
+                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            }
+            else {
+                DECL_WIDGET_STYLE(style, widget);
+                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+}
+
+bool drawTextWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    if (refresh) {
+        DECL_WIDGET_STYLE(style, widget);
+
+        if (widget->data) {
+            data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+            if (value.isString()) {
+                drawText(value.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            } else {
+                char text[64];
+                value.toText(text, sizeof(text));
+                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            }
+        } else {
+            DECL_WIDGET_SPECIFIC(TextWidget, display_string_widget, widget);
+            DECL_STRING(text, display_string_widget->text);
+            drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+        }
+
+        return true;
+    }
+    return false;
+}
+
+bool drawMultilineTextWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    if (refresh) {
+        DECL_WIDGET_STYLE(style, widget);
+
+        if (widget->data) {
+            data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+            if (value.isString()) {
+                drawMultilineText(value.asString(), widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            } else {
+                char text[64];
+                value.toText(text, sizeof(text));
+                drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            }
+        } else {
+            DECL_WIDGET_SPECIFIC(MultilineTextWidget, display_string_widget, widget);
+            DECL_STRING(text, display_string_widget->text);
+            drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+        }
+
+        return true;
+    }
+    return false;
+}
+
+void drawScale(const Widget *widget, const ScaleWidget *scale_widget, const Style* style, int y_from, int y_to, int y_min, int y_max, int y_value, int f, int d, bool drawTicks) {
+    bool vertical = scale_widget->needle_position == SCALE_NEEDLE_POSITION_LEFT ||
+        scale_widget->needle_position == SCALE_NEEDLE_POSITION_RIGHT;
+    bool flip = scale_widget->needle_position == SCALE_NEEDLE_POSITION_LEFT ||
+        scale_widget->needle_position == SCALE_NEEDLE_POSITION_TOP;
+
+    int needleSize;
+
+    int x1, l1, x2, l2;
+
+    if (vertical) {
+        needleSize = scale_widget->needle_height;
+
+        if (flip) {
+            x1 = widget->x + scale_widget->needle_width + 2;
+            l1 = widget->w - (scale_widget->needle_width + 2);
+            x2 = widget->x;
+            l2 = scale_widget->needle_width;
+        } else {
+            x1 = widget->x;
+            l1 = widget->w - (scale_widget->needle_width + 2);
+            x2 = widget->x + widget->w - scale_widget->needle_width;
+            l2 = scale_widget->needle_width;
+        }
+    } else {
+        needleSize = scale_widget->needle_width;
+
+        if (flip) {
+            x1 = widget->y + scale_widget->needle_height + 2;
+            l1 = widget->h - (scale_widget->needle_height + 2);
+            x2 = widget->y;
+            l2 = scale_widget->needle_height;
+        } else {
+            x1 = widget->y;
+            l1 = widget->h - scale_widget->needle_height - 2;
+            x2 = widget->y + widget->h - scale_widget->needle_height;
+            l2 = scale_widget->needle_height;
+        }
+    }
+
+    int s = 10 * f / d;
+
+    int y_offset;
+    if (vertical) {
+        y_offset = int((widget->y + widget->h) - 1 - (widget->h - (y_max - y_min)) / 2);
+    } else {
+        y_offset = int(widget->x + (widget->w - (y_max - y_min)) / 2);
+    }
+
+    for (int y_i = y_from; y_i <= y_to; ++y_i) {
+        int y;
+
+        if (vertical) {
+            y = y_offset - y_i;
+        } else {
+            y = y_offset + y_i;
+        }
+
+        if (drawTicks) {
+            // draw ticks
+            if (y_i >= y_min && y_i <= y_max) {
+                if (y_i % s == 0) {
+                    lcd::lcd.setColor(style->border_color);
+                    if (vertical) {
+                        lcd::lcd.drawHLine(x1, y, l1 - 1);
+                    } else {
+                        lcd::lcd.drawVLine(y, x1, l1 - 1);
+                    }
+                }
+                else if (y_i % (s / 2) == 0) {
+                    lcd::lcd.setColor(style->border_color);
+                    if (vertical) {
+                        if (flip) {
+                            lcd::lcd.drawHLine(x1 + l1 / 2, y, l1 / 2);
+                        } else {
+                            lcd::lcd.drawHLine(x1, y, l1 / 2);
+                        }
+                    } else {
+                        if (flip) {
+                            lcd::lcd.drawVLine(y, x1 + l1 / 2, l1 / 2);
+                        } else {
+                            lcd::lcd.drawVLine(y, x1, l1 / 2);
+                        }
+                    }
+                }
+                else if (y_i % (s / 10) == 0) {
+                    lcd::lcd.setColor(style->border_color);
+                    if (vertical) {
+                        if (flip) {
+                            lcd::lcd.drawHLine(x1 + l1 - l1 / 4, y, l1 / 4);
+                        } else {
+                            lcd::lcd.drawHLine(x1, y, l1 / 4);
+                        }
+                    } else {
+                        if (flip) {
+                            lcd::lcd.drawVLine(y, x1 + l1 - l1 / 4, l1 / 4);
+                        } else {
+                            lcd::lcd.drawVLine(y, x1, l1 / 4);
+                        }
+                    }
+                }
+                else {
+                    lcd::lcd.setColor(style->background_color);
+                    if (vertical) {
+                        lcd::lcd.drawHLine(x1, y, l1 - 1);
+                    } else {
+                        lcd::lcd.drawVLine(y, x1, l1 - 1);
+                    }
+                }
+            }
+        }
+
+        int d = abs(y_i - y_value);
+        if (d <= int(needleSize / 2)) {
+            // draw thumb
+            lcd::lcd.setColor(style->color);
+            if (vertical) {
+                if (flip) {
+                    lcd::lcd.drawHLine(x2, y, l2 - d - 1);
+                } else {
+                    lcd::lcd.drawHLine(x2 + d, y, l2 - d - 1);
+                }
+            } else {
+                if (flip) {
+                    lcd::lcd.drawVLine(y, x2, l2 - d - 1);
+                } else {
+                    lcd::lcd.drawVLine(y, x2 + d, l2 - d - 1);
+                }
+            }
+
+            if (y_i != y_value) {
+                lcd::lcd.setColor(style->background_color);
+                if (vertical) {
+                    if (flip) {
+                        lcd::lcd.drawHLine(x2 + l2 - d, y, d - 1);
+                    } else {
+                        lcd::lcd.drawHLine(x2, y, d - 1);
+                    }
+                } else {
+                    if (flip) {
+                        lcd::lcd.drawVLine(y, x2 + l2 - d, d - 1);
+                    } else {
+                        lcd::lcd.drawVLine(y, x2, d - 1);
+                    }
+                }
+            }
+        }
+        else {
+            // erase
+            lcd::lcd.setColor(style->background_color);
+            if (vertical) {
+                lcd::lcd.drawHLine(x2, y, l2 - 1);
+            } else {
+                lcd::lcd.drawVLine(y, x2, l2 - 1);
+            }
+        }
+    }
+}
+
+bool drawScaleWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+    if (!refresh) {
+        data::Value previousValue = data::previousSnapshot.editModeSnapshot.editValue;
+        refresh = previousValue != value;
+    }
+
+    if (refresh) {
+        float min = data::getMin(widgetCursor.cursor, widget->data).getFloat();
+        float max = data::getMax(widgetCursor.cursor, widget->data).getFloat();
+
+        DECL_WIDGET_STYLE(style, widget);
+        font::Font font = styleGetFont(style);
+        int fontHeight = font.getAscent();
+
+        DECL_WIDGET_SPECIFIC(ScaleWidget, scale_widget, widget);
+
+        bool vertical = scale_widget->needle_position == SCALE_NEEDLE_POSITION_LEFT ||
+            scale_widget->needle_position == SCALE_NEEDLE_POSITION_RIGHT;
+
+        int f;
+        int needleSize;
+        if (vertical) {
+            needleSize = scale_widget->needle_height;
+            f = (int)floor((widget->h - needleSize) / max);
+        } else {
+            needleSize = scale_widget->needle_width;
+            f = (int)floor((widget->w - needleSize) / max);
+        }
+
+        int d;
+        if (max > 10) {
+            d = 1;
+        }
+        else {
+            f = 10 * (f / 10);
+            d = 10;
+        }
+
+        int y_min = (int)round(min * f);
+        int y_max = (int)round(max * f);
+        int y_value = (int)round(value.getFloat() * f);
+
+        int y_from_min = y_min - needleSize / 2;
+        int y_from_max = y_max + needleSize / 2;
+
+        static int edit_mode_slider_scale_last_y_value;
+
+        if (widget->data != DATA_ID_EDIT_VALUE) {
+            // draw entire scale 
+            drawScale(widget, scale_widget, style, y_from_min, y_from_max, y_min, y_max, y_value, f, d, true);
+        }
+        else {
+            // optimization for the scale in edit with slider mode:
+            // draw only part of the scale that is changed
+            if (widget->data == DATA_ID_EDIT_VALUE && edit_mode_slider_scale_last_y_value != y_value) {
+                int last_y_value_from = edit_mode_slider_scale_last_y_value - needleSize / 2;
+                int last_y_value_to = edit_mode_slider_scale_last_y_value + needleSize / 2;
+                int y_value_from = y_value - needleSize / 2;
+                int y_value_to = y_value + needleSize / 2;
+
+                if (last_y_value_from > y_value_from) {
+                    util_swap(int, last_y_value_from, y_value_from);
+                    util_swap(int, last_y_value_to, y_value_to);
+                }
+
+                if (last_y_value_from < y_from_min) {
+                    last_y_value_from = y_from_min;
+                }
+
+                if (y_value_to > y_from_max) {
+                    y_value_to = y_from_max;
+                }
+
+                if (0 && last_y_value_to + 1 < y_value_from) {
+                    drawScale(widget, scale_widget, style, last_y_value_from, last_y_value_to, y_min, y_max, y_value, f, d, false);
+                    drawScale(widget, scale_widget, style, y_value_from, y_value_to, y_min, y_max, y_value, f, d, false);
+                }
+                else {
+                    drawScale(widget, scale_widget, style, last_y_value_from, y_value_to, y_min, y_max, y_value, f, d, false);
+                }
+            }
+        }
+
+        edit_mode_slider_scale_last_y_value = y_value;
+
+        if (widget->data == DATA_ID_EDIT_VALUE) {
+            edit_mode_slider::scale_is_vertical = vertical;
+            edit_mode_slider::scale_width = vertical ? widget->w : widget->h;
+            edit_mode_slider::scale_height = (max - min) * f; 
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+bool drawButtonWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    DECL_WIDGET_SPECIFIC(ButtonWidget, button_widget, widget);
+
+    int state = data::currentSnapshot.get(widgetCursor.cursor, button_widget->enabled).getInt();
+    if (!refresh) {
+        int previousState = data::previousSnapshot.get(widgetCursor.cursor, button_widget->enabled).getInt();
+        refresh = state != previousState;
+    }
+
+    if (widget->data) {
+        data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+        if (!refresh) {
+            data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
+            refresh = value != previousValue;
+        }
+
+        if (refresh) {
+            DECL_STYLE(style, state ? widget->style : button_widget->disabledStyle);
+
+            if (value.isString()) {
+                drawText(value.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            } else {
+                char text[64];
+                value.toText(text, sizeof(text));
+                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            }
+
+            return true;
+        }
+    } else {
+        if (refresh) {
+            DECL_STRING(text, button_widget->text);
+            DECL_STYLE(style, state ? widget->style : button_widget->disabledStyle);
+            drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool drawToggleButtonWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    int state = data::currentSnapshot.get(widgetCursor.cursor, widget->data).getInt();
+    if (!refresh) {
+        int previousState = data::previousSnapshot.get(widgetCursor.cursor, widget->data).getInt();
+        refresh = state != previousState;
+    }
+    if (refresh) {
+        DECL_WIDGET_SPECIFIC(ToggleButtonWidget, toggle_button_widget, widget);
+        DECL_STRING(text, (state == 0 ? toggle_button_widget->text1 : toggle_button_widget->text2));
+        DECL_WIDGET_STYLE(style, widget);
+        drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+        return true;
+    }
+    return false;
+}
+
+bool drawRectangleWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    if (refresh) {
+        DECL_WIDGET_STYLE(style, widget);
+        drawRectangle(widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+        return true;
+    }
+    return false;
+}
+
+bool drawBitmapWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    if (refresh) {
+        DECL_WIDGET_SPECIFIC(BitmapWidget, display_bitmap_widget, widget);
+        DECL_WIDGET_STYLE(style, widget);
+        drawBitmap(display_bitmap_widget->bitmap, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+        return true;
+    }
+    return false;
+}
+
+int calcValuePosInBarGraphWidget(data::Value &value, float min, float max, int d) {
+    int p = (int)roundf((value.getFloat() - min) * d / (max - min));
+
+    if (p < 0) {
+        p = 0;
+    } else if (p >= d) {
+        p = d - 1;
+    }
+
+    return p;
+}
+
+void drawLineInBarGraphWidget(const BarGraphWidget *barGraphWidget, int p, OBJ_OFFSET lineStyle, int x, int y, int w, int h) {
+    DECL_STYLE(style, lineStyle);
+
+    lcd::lcd.setColor(style->color);
+    if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_LEFT_RIGHT) {
+        lcd::lcd.drawVLine(x + p, y, h - 1);
+    } else if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_RIGHT_LEFT) {
+        lcd::lcd.drawVLine(x - p, y, h - 1);
+    } else if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_TOP_BOTTOM) {
+        lcd::lcd.drawHLine(x, y + p, w - 1);
+    } else {
+        lcd::lcd.drawHLine(x, y - p, w - 1);
+    }
+}
+
+bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse, bool fullScale) {
+    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+    if (!refresh) {
+        data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
+        refresh = previousValue != value;
+    }
+
+    if (refresh) {
+        DECL_WIDGET_SPECIFIC(BarGraphWidget, barGraphWidget, widget);
+
+        int x = widgetCursor.x;
+        int y = widgetCursor.y;
+        const int w = widget->w;
+        const int h = widget->h;
+
+        data::Value line2 = data::currentSnapshot.get(widgetCursor.cursor, barGraphWidget->line2Data);
+
+        float min = data::getMin(widgetCursor.cursor, widget->data).getFloat();
+        float max = fullScale ? line2.getFloat() : data::getMax(widgetCursor.cursor, widget->data).getFloat();
+
+        bool horizontal = barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_LEFT_RIGHT || barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_RIGHT_LEFT;
+
+        int d = horizontal ? w : h;
+
+        // calc bar  position (monitored value)
+        int pValue = calcValuePosInBarGraphWidget(value, min, max, d);
+
+        // calc line 1 position (set value) 
+        data::Value line1 = data::currentSnapshot.get(widgetCursor.cursor, barGraphWidget->line1Data);
+        int pLine1 = calcValuePosInBarGraphWidget(line1, min, max, d);
+
+        int pLine2;
+        if (!fullScale) {
+            // calc line 2 position (limit value) 
+            pLine2 = calcValuePosInBarGraphWidget(line2, min, max, d);
+
+            // make sure line positions don't overlap
+            if (pLine1 == pLine2) {
+                pLine1 = pLine2 - 1;
+            }
+
+            // make sure all lines are visible
+            if (pLine1 < 0) {
+                pLine2 -= pLine1;
+                pLine1 = 0;
+            }
+        }
+
+        DECL_WIDGET_STYLE(style, widget);
+
+        Style textStyle;
+
+        uint16_t inverseColor;
+        if (barGraphWidget->textStyle) {
+            DECL_STYLE(textStyleInner, barGraphWidget->textStyle);
+            memcpy(&textStyle, textStyleInner, sizeof(Style));
+    
+            inverseColor = textStyle.background_color;
+        } else {
+            inverseColor = style->background_color;
+        }
+
+        uint16_t fg = inverse ? inverseColor : style->color;
+        uint16_t bg = inverse ? inverseColor : style->background_color;
+
+        if (horizontal) {
+            // calc text position
+            char valueText[64];
+            int pText = 0;
+            int wText = 0;
+            if (barGraphWidget->textStyle) {
+                font::Font font = styleGetFont(&textStyle);
+    
+                value.toText(valueText, sizeof(valueText));
+                wText = lcd::lcd.measureStr(valueText, -1, font, w);
+                
+                int padding = textStyle.padding_horizontal;
+                wText += padding;
+
+                if (pValue + wText <= d) {
+                    textStyle.background_color = bg;
+                    pText = pValue;
+                } else {
+                    textStyle.background_color = fg;
+                    wText += padding;
+                    pText = pValue - wText;
+                }
+            }
+
+            if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_LEFT_RIGHT) {
+                // draw bar
+                if (pText > 0) {
+                    lcd::lcd.setColor(fg);
+                    lcd::lcd.fillRect(x, y, x + pText - 1, y + h - 1);
+                }
+    
+                drawText(valueText, -1, x + pText, y, wText, h, &textStyle, false);
+
+                // draw background, but do not draw over line 1 and line 2
+                lcd::lcd.setColor(bg);
+
+                int pBackground = pText + wText;
+
+                if (pBackground <= pLine1) {
+                    if (pBackground < pLine1) {
+                        lcd::lcd.fillRect(x + pBackground, y, x + pLine1 - 1, y + h - 1);
+                    }
+                    pBackground = pLine1 + 1;
+                }
+
+                if (!fullScale) {
+                    if (pBackground <= pLine2) {
+                        if (pBackground < pLine2) {
+                            lcd::lcd.fillRect(x + pBackground, y, x + pLine2 - 1, y + h - 1);
+                        }
+                        pBackground = pLine2 + 1;
+                    }
+                }
+
+                if (pBackground < d) {
+                    lcd::lcd.fillRect(x + pBackground, y, x + d - 1, y + h - 1);
+                }
+            } else {
+                x += w - 1;
+
+                // draw bar
+                if (pText > 0) {
+                    lcd::lcd.setColor(fg);
+                    lcd::lcd.fillRect(x - (pText - 1), y, x, y + h - 1);
+                }
+    
+                drawText(valueText, -1, x - (pText + wText - 1), y, wText, h, &textStyle, false);
+
+                // draw background, but do not draw over line 1 and line 2
+                lcd::lcd.setColor(bg);
+
+                int pBackground = pText + wText;
+
+                if (pBackground <= pLine1) {
+                    if (pBackground < pLine1) {
+                        lcd::lcd.fillRect(x - (pLine1 - 1), y, x - pBackground, y + h - 1);
+                    }
+                    pBackground = pLine1 + 1;
+                }
+
+                if (!fullScale) {
+                    if (pBackground <= pLine2) {
+                        if (pBackground < pLine2) {
+                            lcd::lcd.fillRect(x - (pLine2 - 1), y, x - pBackground, y + h - 1);
+                        }
+                        pBackground = pLine2 + 1;
+                    }
+                }
+
+                if (pBackground < d) {
+                    lcd::lcd.fillRect(x - (d - 1), y, x - pBackground, y + h - 1);
+                }
+            }
+
+            drawLineInBarGraphWidget(barGraphWidget, pLine1, barGraphWidget->line1Style, x, y, w, h);
+            if (!fullScale) {
+                drawLineInBarGraphWidget(barGraphWidget, pLine2, barGraphWidget->line2Style, x, y, w, h);
+            }
+        } else {
+            // calc text position
+            char valueText[64];
+            int pText = 0;
+            int hText = 0;
+            if (barGraphWidget->textStyle) {
+                font::Font font = styleGetFont(&textStyle);
+    
+                value.toText(valueText, sizeof(valueText));
+                hText = font.getHeight();
+                
+                int padding = textStyle.padding_vertical;
+                hText += padding;
+
+                if (pValue + hText <= d) {
+                    textStyle.background_color = bg;
+                    pText = pValue;
+                } else {
+                    textStyle.background_color = fg;
+                    hText += padding;
+                    pText = pValue - hText;
+                }
+            }
+
+            if (barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_TOP_BOTTOM) {
+                // draw bar
+                if (pText > 0) {
+                    lcd::lcd.setColor(fg);
+                    lcd::lcd.fillRect(x, y, x + w - 1, y + pText - 1);
+                }
+    
+                drawText(valueText, -1, x, y + pText, w, hText, &textStyle, false);
+
+                // draw background, but do not draw over line 1 and line 2
+                lcd::lcd.setColor(bg);
+
+                int pBackground = pText + hText;
+
+                if (pBackground <= pLine1) {
+                    if (pBackground < pLine1) {
+                        lcd::lcd.fillRect(x, y + pBackground, x + w - 1, y + pLine1 - 1);
+                    }
+                    pBackground = pLine1 + 1;
+                }
+
+                if (!fullScale) {
+                    if (pBackground <= pLine2) {
+                        if (pBackground < pLine2) {
+                            lcd::lcd.fillRect(x, y + pBackground, x + w - 1, y + pLine2 - 1);
+                        }
+                        pBackground = pLine2 + 1;
+                    }
+                }
+
+                if (pBackground < d) {
+                    lcd::lcd.fillRect(x, y + pBackground, x + w - 1, y + d - 1);
+                }
+            } else {
+                y += h - 1;
+
+                // draw bar
+                if (pText > 0) {
+                    lcd::lcd.setColor(fg);
+                    lcd::lcd.fillRect(x, y - (pText - 1), x + w - 1, y);
+                }
+    
+                drawText(valueText, -1, x, y - (pText + hText - 1), w, hText, &textStyle, false);
+
+                // draw background, but do not draw over line 1 and line 2
+                lcd::lcd.setColor(bg);
+
+                int pBackground = pText + hText;
+
+                if (pBackground <= pLine1) {
+                    if (pBackground < pLine1) {
+                        lcd::lcd.fillRect(x, y - (pLine1 - 1), x + w - 1, y - pBackground);
+                    }
+                    pBackground = pLine1 + 1;
+                }
+
+                if (!fullScale) {
+                    if (pBackground <= pLine2) {
+                        if (pBackground < pLine2) {
+                            lcd::lcd.fillRect(x, y - (pLine2 - 1), x + w - 1, y - (pBackground));
+                        }
+                        pBackground = pLine2 + 1;
+                    }
+                }
+
+                if (pBackground < d) {
+                    lcd::lcd.fillRect(x, y - (d - 1), x + w - 1, y - pBackground);
+                }
+            }
+
+            drawLineInBarGraphWidget(barGraphWidget, pLine1, barGraphWidget->line1Style, x, y, w, h);
+            if (!fullScale) {
+                drawLineInBarGraphWidget(barGraphWidget, pLine2, barGraphWidget->line2Style, x, y, w, h);
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+int getYValue(
+    const WidgetCursor &widgetCursor, const Widget *widget,
+    uint8_t data, float min, float max,
+    int position
+    ) 
+{
+    float value = data::getHistoryValue(widgetCursor.cursor, data, position).getFloat();
+    int y = (int)floor(widget->h * (value - min) / (max - min));
+    if (y < 0) y = 0;
+    if (y >= widget->h) y = widget->h - 1;
+    return widget->h - 1 - y;
+}
+
+void drawYTGraph(
+    const WidgetCursor &widgetCursor, const Widget *widget,
+    int startPosition, int endPosition, int numPositions,
+    int currentHistoryValuePosition,
+    int xGraphOffset, int graphWidth,
+    uint8_t data1, float min1, float max1, uint16_t data1Color,
+    uint8_t data2, float min2, float max2, uint16_t data2Color,
+    uint16_t color, uint16_t backgroundColor
+    ) 
+{
+    for (int position = startPosition; position < endPosition; ++position) {
+        if (position < graphWidth) {
+            int x = widgetCursor.x + xGraphOffset + position;
+
+            lcd::lcd.setColor(color);
+            lcd::lcd.drawVLine(x, widgetCursor.y, widget->h - 1);
+
+            int y1 = getYValue(widgetCursor, widget, data1, min1, max1, position);
+            int y1Prev = getYValue(widgetCursor, widget, data1, min1, max1, position == 0 ? position : position - 1);
+
+            int y2 = getYValue(widgetCursor, widget, data2, min2, max2, position);
+            int y2Prev = getYValue(widgetCursor, widget, data2, min2, max2, position == 0 ? position : position - 1);
+
+            if (abs(y1Prev - y1) <= 1 && abs(y2Prev - y2) <= 1) {
+                if (y1 == y2) {
+                    lcd::lcd.setColor(position % 2 ? data2Color : data1Color);
+                    lcd::lcd.drawPixel(x, widgetCursor.y + y1);
+                } else {
+                    lcd::lcd.setColor(data1Color);
+                    lcd::lcd.drawPixel(x, widgetCursor.y + y1);
+
+                    lcd::lcd.setColor(data2Color);
+                    lcd::lcd.drawPixel(x, widgetCursor.y + y2);
+                }
+            } else {
+                lcd::lcd.setColor(data1Color);
+                if (abs(y1Prev - y1) <= 1) {
+                    lcd::lcd.drawPixel(x, widgetCursor.y + y1);
+                } else {
+                    if (y1Prev < y1) {
+                        lcd::lcd.drawVLine(x, widgetCursor.y + y1Prev + 1, y1 - y1Prev - 1);
+                    } else {
+                        lcd::lcd.drawVLine(x, widgetCursor.y + y1, y1Prev - y1 - 1);
+                    }
+                }
+
+                lcd::lcd.setColor(data2Color);
+                if (abs(y2Prev - y2) <= 1) {
+                    lcd::lcd.drawPixel(x, widgetCursor.y + y2);
+                } else {
+                    if (y2Prev < y2) {
+                        lcd::lcd.drawVLine(x, widgetCursor.y + y2Prev + 1, y2 - y2Prev - 1);
+                    } else {
+                        lcd::lcd.drawVLine(x, widgetCursor.y + y2, y2Prev - y2 - 1);
+                    }
+                }
+            }
+        }
+    }
+}
+
+bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    DECL_WIDGET_SPECIFIC(YTGraphWidget, ytGraphWidget, widget);
+    DECL_WIDGET_STYLE(style, widget);
+    DECL_STYLE(y1Style, ytGraphWidget->y1Style);
+    DECL_STYLE(y2Style, ytGraphWidget->y2Style);
+
+    bool updated = false;
+
+    // draw background
+    if (refresh) {
+        uint16_t color = inverse ? style->color : style->background_color;
+        lcd::lcd.setColor(color);
+        lcd::lcd.fillRect(widgetCursor.x, widgetCursor.y, widgetCursor.x + (int)widget->w - 1, widgetCursor.y + (int)widget->h - 1);
+
+        updated = true;
+    }
+
+    int textWidth = 62; // TODO>
+    int textHeight = widget->h / 2;
+
+    bool refreshText;
+
+    // draw first value text
+    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+
+    refreshText = false;
+    if (!refresh) {
+        data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
+        refreshText = value != previousValue;
+    }
+
+    if (refresh || refreshText) {
+        char text[64];
+        value.toText(text, sizeof(text));
+
+        drawText(text, -1, widgetCursor.x, widgetCursor.y, textWidth, textHeight, y1Style, inverse);
+
+        updated = true;
+    }
+
+    // draw second value text
+    value = data::currentSnapshot.get(widgetCursor.cursor, ytGraphWidget->y2Data);
+
+    refreshText = false;
+    if (!refresh) {
+        data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, ytGraphWidget->y2Data);
+        refreshText = value != previousValue;
+    }
+
+    if (refresh || refreshText) {
+        char text[64];
+        value.toText(text, sizeof(text));
+
+        drawText(text, -1, widgetCursor.x, widgetCursor.y + textHeight, textWidth, textHeight, y2Style, inverse);
+
+        updated = true;
+    }
+
+    // draw graph
+    int graphWidth = widget->w - textWidth;
+
+    int numHistoryValues = data::getNumHistoryValues(widget->data);
+    int currentHistoryValuePosition = data::getCurrentHistoryValuePosition(widgetCursor.cursor, widget->data);
+
+    static int lastPosition[CH_NUM];
+
+    float min1 = data::getMin(widgetCursor.cursor, widget->data).getFloat();
+    float max1 = data::getLimit(widgetCursor.cursor, widget->data).getFloat();
+
+    float min2 = data::getMin(widgetCursor.cursor, ytGraphWidget->y2Data).getFloat();
+    float max2 = data::getLimit(widgetCursor.cursor, ytGraphWidget->y2Data).getFloat();
+
+    int startPosition;
+    int endPosition;
+    if (refresh) {
+        startPosition = 0;
+        endPosition = numHistoryValues;
+    } else {
+        startPosition = lastPosition[widgetCursor.cursor.i];
+        if (startPosition == currentHistoryValuePosition) {
+            return updated;
+        }
+        endPosition = currentHistoryValuePosition;
+    }
+
+    if (startPosition < endPosition) {
+        drawYTGraph(widgetCursor, widget,
+            startPosition, endPosition,
+            currentHistoryValuePosition, numHistoryValues,
+            textWidth, graphWidth,
+            widget->data, min1, max1, y1Style->color,
+            ytGraphWidget->y2Data, min2, max2, y2Style->color,
+            inverse ? style->color: style->background_color,
+            inverse ? style->background_color : style->color);
+    } else {
+        drawYTGraph(widgetCursor, widget,
+            startPosition, numHistoryValues,
+            currentHistoryValuePosition, numHistoryValues,
+            textWidth, graphWidth,
+            widget->data, min1, max1, y1Style->color,
+            ytGraphWidget->y2Data, min2, max2, y2Style->color,
+            inverse ? style->color: style->background_color,
+            inverse ? style->background_color : style->color);
+
+        drawYTGraph(widgetCursor, widget,
+            0, endPosition,
+            currentHistoryValuePosition, numHistoryValues,
+            textWidth, graphWidth,
+            widget->data, min1, max1, y1Style->color,
+            ytGraphWidget->y2Data, min2, max2, y2Style->color,
+            inverse ? style->color: style->background_color,
+            inverse ? style->background_color : style->color);
+    }
+
+    int x = widgetCursor.x + textWidth;
+
+    // draw cursor
+    lcd::lcd.setColor(style->color);
+    lcd::lcd.drawVLine(x + currentHistoryValuePosition, widgetCursor.y, (int)widget->h - 1);
+
+    // draw blank lines
+    int x1 = x + (currentHistoryValuePosition + 1) % numHistoryValues;
+    int x2 = x + (currentHistoryValuePosition + CONF_GUI_YT_GRAPH_BLANK_PIXELS_AFTER_CURSOR) % numHistoryValues;
+
+    lcd::lcd.setColor(style->background_color);
+    if (x1 < x2) {
+        lcd::lcd.fillRect(x1, widgetCursor.y, x2, widgetCursor.y + (int)widget->h - 1);
+    } else {
+        lcd::lcd.fillRect(x1, widgetCursor.y, x + graphWidth - 1, widgetCursor.y + (int)widget->h - 1);
+        lcd::lcd.fillRect(x, widgetCursor.y, x2, widgetCursor.y + (int)widget->h - 1);
+    }
+
+    lastPosition[widgetCursor.cursor.i] = currentHistoryValuePosition;
+
+    return updated;
+}
+
+bool drawWidget(const WidgetCursor &widgetCursor, bool refresh) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+
+    bool inverse = g_selectedWidget == widgetCursor;
+
+    if (widget->type == WIDGET_TYPE_DISPLAY_DATA) {
+        return drawDisplayDataWidget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_TEXT) {
+        return drawTextWidget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_MULTILINE_TEXT) {
+        return drawMultilineTextWidget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_RECTANGLE) {
+        return drawRectangleWidget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_BITMAP) {
+        return drawBitmapWidget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_BUTTON) {
+        return drawButtonWidget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_TOGGLE_BUTTON) {
+        return drawToggleButtonWidget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_BUTTON_GROUP) {
+        return widgetButtonGroup::draw(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_SCALE) {
+        return drawScaleWidget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_BAR_GRAPH) {
+        return drawBarGraphWidget(widgetCursor, widget, refresh, inverse, true);
+    } else if (widget->type == WIDGET_TYPE_YT_GRAPH) {
+        return drawYTGraphWidget(widgetCursor, widget, refresh, inverse);
+    } 
+
+    return false;
+}
+
+void refreshWidget(WidgetCursor widgetCursor) {
+    if (isActivePageInternal()) {
+        ((InternalPage *)getActivePage())->drawWidget(widgetCursor, widgetCursor == g_selectedWidget);
+    } else {
+        g_widgetRefresh = true;
+        drawWidget(widgetCursor, true);
+        g_widgetRefresh = false;
+    }
+}
+
+void selectWidget(WidgetCursor &widgetCursor) {
+    g_selectedWidget = widgetCursor;
+    refreshWidget(g_selectedWidget);
+}
+
+void deselectWidget() {
+    WidgetCursor old_selected_widget = g_selectedWidget;
+    g_selectedWidget = 0;
+    refreshWidget(old_selected_widget);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+typedef bool(*EnumWidgetsCallback)(const WidgetCursor &widgetCursor, bool refresh);
+
+void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, bool refresh, data::Cursor &cursor, EnumWidgetsCallback callback) {
+    DECL_WIDGET(widget, widgetOffset);
+
+    x += widget->x;
+    y += widget->y;
+
+    if (widget->type == WIDGET_TYPE_CONTAINER) {
+        DECL_WIDGET_SPECIFIC(ContainerWidget, container, widget);
+        for (int index = 0; index < container->widgets.count; ++index) {
+            OBJ_OFFSET childWidgetOffset = getListItemOffset(container->widgets, index, sizeof(Widget));
+            enumWidget(childWidgetOffset, x, y, refresh, cursor, callback);
+        }
+    }
+    else if (widget->type == WIDGET_TYPE_CUSTOM) {
+        DECL_WIDGET_SPECIFIC(CustomWidgetSpecific, customWidgetSpecific, widget);
+        DECL_CUSTOM_WIDGET(customWidget, customWidgetSpecific->customWidget);
+        for (int index = 0; index < customWidget->widgets.count; ++index) {
+            OBJ_OFFSET childWidgetOffset = getListItemOffset(customWidget->widgets, index, sizeof(Widget));
+            enumWidget(childWidgetOffset, x, y, refresh, cursor, callback);
+        }
+    }
+    else if (widget->type == WIDGET_TYPE_LIST) {
+        int xOffset = 0;
+        int yOffset = 0;
+        for (int index = 0; index < data::count(widget->data); ++index) {
+            data::select(cursor, widget->data, index);
+
+            DECL_WIDGET_SPECIFIC(ListWidget, listWidget, widget);
+            OBJ_OFFSET childWidgetOffset = listWidget->item_widget;
+
+            if (listWidget->listType == LIST_TYPE_VERTICAL) {
+                DECL_WIDGET(childWidget, childWidgetOffset);
+                if (yOffset < widget->h) {
+                    enumWidget(childWidgetOffset, x + xOffset, y + yOffset, refresh, cursor, callback);
+                    yOffset += childWidget->h;
+                } else {
+                    // TODO: add vertical scroll
+                    break;
+                }
+            } else {
+                DECL_WIDGET(childWidget, childWidgetOffset);
+                if (xOffset < widget->w) {
+                    enumWidget(childWidgetOffset, x + xOffset, y + yOffset, refresh, cursor, callback);
+                    xOffset += childWidget->w;
+                } else {
+                    // TODO: add horizontal scroll
+                    break;
+                }
+            }
+        }
+    }
+    else if (widget->type == WIDGET_TYPE_SELECT) {
+        int index = data::currentSnapshot.get(cursor, widget->data).getInt();
+        data::select(cursor, widget->data, index);
+
+        DECL_WIDGET_SPECIFIC(ContainerWidget, containerWidget, widget);
+        OBJ_OFFSET selectedWidgetOffset = getListItemOffset(containerWidget->widgets, index, sizeof(Widget));
+
+        if (!refresh) {
+            int previousIndex = data::previousSnapshot.get(cursor, widget->data).getInt();
+            refresh = index != previousIndex;
+        }
+
+        enumWidget(selectedWidgetOffset, x, y, refresh, cursor, callback);
+    }
+    else {
+        callback(WidgetCursor(widgetOffset, x, y, cursor), refresh);
+    }
+}
+
+void enumWidgets(int pageIndex, bool refresh, EnumWidgetsCallback callback) {
+    data::Cursor cursor;
+    cursor.reset();
+    enumWidget(getPageOffset(pageIndex), 0, 0, refresh, cursor, callback);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void clearBackground() {
+    // clear screen with background color
+    DECL_WIDGET(page, getPageOffset(getActivePageId()));
+
+    DECL_WIDGET_STYLE(style, page);
+    lcd::lcd.setColor(style->background_color);
+
+    if (getPreviousActivePageId() == PAGE_ID_INFO_ALERT || getPreviousActivePageId() == PAGE_ID_ERROR_ALERT || getPreviousActivePageId() == PAGE_ID_YES_NO) {
+        DECL_WIDGET(page, getPageOffset(getPreviousActivePageId()));
+        lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
+    }
+
+    if (getActivePageId() == PAGE_ID_WELCOME) {
+        lcd::lcd.fillRect(page->x, page->y, page->x + page->w - 1, page->y + page->h - 1);
+    } else {
+        DECL_WIDGET_SPECIFIC(PageWidget, pageSpecific, page);
+        for (int i = 0; i < pageSpecific->transparentRectangles.count; ++i) {
+            OBJ_OFFSET rectOffset = getListItemOffset(pageSpecific->transparentRectangles, i, sizeof(Rect));
+            DECL_STRUCT_WITH_OFFSET(Rect, rect, rectOffset);
+            lcd::lcd.fillRect(rect->x, rect->y, rect->x + rect->w - 1, rect->y + rect->h - 1);
+        }
+    }
+}
+
+void drawActivePage(bool refresh) {
+    g_wasBlinkTime = g_isBlinkTime;
+    g_isBlinkTime = (micros() % (2 * CONF_GUI_BLINK_TIME)) > CONF_GUI_BLINK_TIME && touch::event_type == touch::TOUCH_NONE;
+
+    data::previousSnapshot = data::currentSnapshot;
+    data::currentSnapshot.takeSnapshot();
+
+    enumWidgets(getActivePageId(), refresh, drawWidget);
+}
+
+static bool g_refreshPageOnNextTick;
+
+void drawTick() {
+    if (isActivePageInternal()) {
+        ((InternalPage *)getActivePage())->drawTick();
+    } else {
+        if (g_refreshPageOnNextTick) {
+            g_refreshPageOnNextTick = false;
+            clearBackground();
+            drawActivePage(true);
+        } else {
+            drawActivePage(false);
+        }
+    }
+}
+
+
+void refreshPage() {
+    if (isActivePageInternal()) {
+        ((InternalPage *)getActivePage())->refresh();
+    } else {
+        g_refreshPageOnNextTick = true;
+    }
+}
+
+void flush() {
+    drawTick();
+
+#ifdef EEZ_PSU_SIMULATOR
+    if (simulator::front_panel::isOpened()) {
+        simulator::front_panel::tick();
+    }
+#endif
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+static int g_find_widget_at_x;
+static int g_find_widget_at_y;
+static WidgetCursor g_foundWidget;
+
+bool findWidgetStep(const WidgetCursor &widgetCursor, bool refresh) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+
+    bool inside = 
+        g_find_widget_at_x >= widgetCursor.x &&
+        g_find_widget_at_x < widgetCursor.x + (int)widget->w &&
+        g_find_widget_at_y >= widgetCursor.y &&
+        g_find_widget_at_y < widgetCursor.y + (int)widget->h;
+
+    if (inside) {
+        g_foundWidget = widgetCursor;
+        return true;
+    }
+
+    return false;
+}
+
+WidgetCursor findWidget(int x, int y) {
+    if (isActivePageInternal()) {
+        return ((InternalPage *)getActivePage())->findWidget(x, y);
+    } else {
+        g_foundWidget = 0;
+
+        g_find_widget_at_x = touch::x;
+        g_find_widget_at_y = touch::y;
+        enumWidgets(getActivePageId(), true, findWidgetStep);
+
+        return g_foundWidget;
+    }
+}
 
 }
 }

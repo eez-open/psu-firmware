@@ -73,6 +73,8 @@ public:
 
     virtual void endUpdate();
 
+    virtual void getMouseWheelData(int *x, int *y);
+
 private:
     WindowImpl *impl;
 };

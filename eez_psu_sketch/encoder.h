@@ -25,6 +25,10 @@ namespace encoder {
 void init();
 int readAndResetCounter();
 
+#ifdef EEZ_PSU_SIMULATOR
+void addToCounter(int value);
+#endif
+
 }
 }
 } // namespace eez::psu::encoder

@@ -81,6 +81,10 @@ void Window::endUpdate() {
     impl->endUpdate();
 }
 
+void Window::getMouseWheelData(int *x, int *y) {
+    impl->getMouseWheelData(x, y);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 WindowImpl::WindowImpl(WindowDefinition *window_definition_)
@@ -88,6 +92,8 @@ WindowImpl::WindowImpl(WindowDefinition *window_definition_)
     , sdl_window(0)
     , renderer(0)
     , font(0)
+    , xMouseWheel(0)
+    , yMouseWheel(0)
 {
     mouse_data.is_down = false;
     mouse_data.is_pressed = false;
@@ -173,19 +179,24 @@ bool WindowImpl::pollEvent() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) {
-            SDL_GetMouseState(&mouse_data.x, &mouse_data.y);
-            if (event.type == SDL_MOUSEBUTTONDOWN) {
-                mouse_data.down_x = mouse_data.x;
-                mouse_data.down_y = mouse_data.y;
-                mouse_data.is_down = true;
-                mouse_data.is_pressed = true;
+            if (event.button.button == 1) {
+                SDL_GetMouseState(&mouse_data.x, &mouse_data.y);
+                if (event.type == SDL_MOUSEBUTTONDOWN) {
+                    mouse_data.down_x = mouse_data.x;
+                    mouse_data.down_y = mouse_data.y;
+                    mouse_data.is_down = true;
+                    mouse_data.is_pressed = true;
+                }
+                else if (event.type == SDL_MOUSEBUTTONUP) {
+                    mouse_data.up_x = mouse_data.x;
+                    mouse_data.up_y = mouse_data.y;
+                    mouse_data.is_up = true;
+                    mouse_data.is_pressed = false;
+                }
             }
-            else if (event.type == SDL_MOUSEBUTTONUP) {
-                mouse_data.up_x = mouse_data.x;
-                mouse_data.up_y = mouse_data.y;
-                mouse_data.is_up = true;
-                mouse_data.is_pressed = false;
-            }
+        } else if (event.type == SDL_MOUSEWHEEL) {
+            xMouseWheel += event.wheel.x;
+            yMouseWheel += event.wheel.y;
         }
 
         if (event.type == SDL_QUIT)
@@ -206,6 +217,13 @@ void WindowImpl::endUpdate() {
 
     mouse_data.is_down = false;
     mouse_data.is_up = false;
+}
+
+void WindowImpl::getMouseWheelData(int *x, int *y) {
+    *x = xMouseWheel;
+    *y = yMouseWheel;
+    xMouseWheel = 0;
+    yMouseWheel = 0;
 }
 
 void WindowImpl::addImage(int x, int y, int w, int h, const char *image) {

@@ -56,16 +56,14 @@ volatile uint8_t state = 0;
 volatile int counter = 0;
 
 void interruptHandler() {
-  uint8_t pinState = (digitalRead(ENC_B) << 1) | digitalRead(ENC_A);
-  uint8_t state = ttable[state & 0xf][pinState];
-  uint8_t result = state & 0x30;
-  if (result) {
-      if (result == DIR_CW) {
-          ++counter;
-      } else {
-          --counter;
-      }
-  }
+    uint8_t pinState = (digitalRead(ENC_B) << 1) | digitalRead(ENC_A);
+    state = ttable[state & 0xf][pinState];
+    uint8_t result = state & 0x30;
+    if (result == DIR_CW) {
+        ++counter;
+    } else if (result == DIR_CCW) {
+        --counter;
+    }
 }
 
 void init() {
@@ -85,6 +83,13 @@ int readAndResetCounter() {
     interrupts();
     return result;
 }
+
+#ifdef EEZ_PSU_SIMULATOR
+void addToCounter(int value) {
+    counter += value;
+}
+#endif
+
 
 }
 }

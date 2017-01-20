@@ -119,7 +119,7 @@ struct SelectWidget {
 };
 
 struct DisplayDataWidget {
-    uint8_t editStyle;
+    uint8_t activeStyle;
 };
 
 struct TextWidget {
@@ -230,6 +230,16 @@ struct WidgetCursor {
         return widgetOffset != 0;
     }
 };
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool drawWidget(const WidgetCursor &widgetCursor, bool refresh);
+void refreshWidget(WidgetCursor widgetCursor);
+void selectWidget(WidgetCursor &widgetCursor);
+void deselectWidget();
+void flush();
+WidgetCursor findWidget(int x, int y);
+void drawTick();
 
 }
 }

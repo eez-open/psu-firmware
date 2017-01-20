@@ -39,7 +39,6 @@ const data::Value &getMax();
 data::ValueType getUnit();
 bool setValue(float value);
 
-bool isEditWidget(const WidgetCursor &widgetCursor);
 void getInfoText(int part, char *infoText);
 
 void nonInteractiveSet();

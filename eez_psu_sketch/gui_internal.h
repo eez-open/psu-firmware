@@ -43,6 +43,10 @@ class Page;
 int getActivePageId();
 Page *getActivePage();
 
+int getPreviousActivePageId();
+
+bool isActivePageInternal();
+
 void setPage(int index);
 void replacePage(int index);
 void pushPage(int index, Page *page = 0);
@@ -86,6 +90,11 @@ extern WidgetCursor g_foundWidgetAtDown;
 
 void selectChannel();
 extern Channel *g_channel;
+
+extern data::Cursor g_focusCursor;
+extern uint8_t g_focusDataId;
+bool wasFocusWidget(const WidgetCursor &widgetCursor);
+bool isFocusWidget(const WidgetCursor &widgetCursor);
 
 ////////////////////////////////////////////////////////////////////////////////
 // GUI definition document accessor functions

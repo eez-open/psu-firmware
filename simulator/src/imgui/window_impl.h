@@ -51,6 +51,8 @@ public:
 
     void endUpdate();
 
+    void getMouseWheelData(int *x, int *y);
+
 private:
     Texture *getTexture(const char *path);
 
@@ -62,6 +64,9 @@ private:
     TextureMap textures;
 
     MouseData mouse_data;
+
+    int xMouseWheel;
+    int yMouseWheel;
 
     bool pointInRect(int px, int py, int x, int y, int w, int h);
 };

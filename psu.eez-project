@@ -3055,7 +3055,8 @@
                                     "y": 0,
                                     "width": 112,
                                     "height": 43,
-                                    "style": "mon_value"
+                                    "style": "mon_value",
+                                    "activeStyle": "mon_value_focus"
                                   },
                                   {
                                     "type": "DisplayData",
@@ -3077,7 +3078,8 @@
                                 "y": 99,
                                 "width": 112,
                                 "height": 40,
-                                "style": "mon_value"
+                                "style": "mon_value",
+                                "activeStyle": "mon_value_focus"
                               },
                               {
                                 "type": "Text",
@@ -3297,7 +3299,8 @@
                                     "y": 0,
                                     "width": 65,
                                     "height": 28,
-                                    "style": "edit_value_active_S_right"
+                                    "style": "edit_value_active_S_right",
+                                    "activeStyle": "edit_value_focus_S_right"
                                   },
                                   {
                                     "type": "DisplayData",
@@ -3327,7 +3330,8 @@
                                 "y": 30,
                                 "width": 65,
                                 "height": 28,
-                                "style": "edit_value_active_S_right"
+                                "style": "edit_value_active_S_right",
+                                "activeStyle": "edit_value_focus_S_right"
                               },
                               {
                                 "type": "Rectangle",
@@ -3957,7 +3961,8 @@
                                     "y": 0,
                                     "width": 55,
                                     "height": 24,
-                                    "style": "edit_S"
+                                    "style": "edit_S",
+                                    "activeStyle": "edit_S_focus"
                                   },
                                   {
                                     "type": "DisplayData",
@@ -3979,7 +3984,8 @@
                                 "y": 133,
                                 "width": 55,
                                 "height": 24,
-                                "style": "edit_S"
+                                "style": "edit_S",
+                                "activeStyle": "edit_S_focus"
                               }
                             ]
                           },
@@ -4115,7 +4121,8 @@
                                     "y": 0,
                                     "width": 62,
                                     "height": 28,
-                                    "style": "edit_value_active_S_right"
+                                    "style": "edit_value_active_S_right",
+                                    "activeStyle": "edit_value_focus_S_right"
                                   },
                                   {
                                     "type": "DisplayData",
@@ -4145,7 +4152,8 @@
                                 "y": 30,
                                 "width": 62,
                                 "height": 28,
-                                "style": "edit_value_active_S_right"
+                                "style": "edit_value_active_S_right",
+                                "activeStyle": "edit_value_focus_S_right"
                               },
                               {
                                 "type": "Rectangle",
@@ -4710,7 +4718,8 @@
                                     "y": 0,
                                     "width": 112,
                                     "height": 43,
-                                    "style": "mon_value"
+                                    "style": "mon_value",
+                                    "activeStyle": "mon_value_focus"
                                   },
                                   {
                                     "type": "DisplayData",
@@ -4732,7 +4741,8 @@
                                 "y": 99,
                                 "width": 112,
                                 "height": 40,
-                                "style": "mon_value"
+                                "style": "mon_value",
+                                "activeStyle": "mon_value_focus"
                               }
                             ]
                           }
@@ -5302,7 +5312,8 @@
                                     "y": 0,
                                     "width": 65,
                                     "height": 28,
-                                    "style": "edit_value_active_S_right"
+                                    "style": "edit_value_active_S_right",
+                                    "activeStyle": "edit_value_focus_S_right"
                                   },
                                   {
                                     "type": "DisplayData",
@@ -5332,7 +5343,8 @@
                                 "y": 30,
                                 "width": 65,
                                 "height": 28,
-                                "style": "edit_value_active_S_right"
+                                "style": "edit_value_active_S_right",
+                                "activeStyle": "edit_value_focus_S_right"
                               },
                               {
                                 "type": "Rectangle",
@@ -5646,7 +5658,8 @@
                                     "y": 0,
                                     "width": 56,
                                     "height": 24,
-                                    "style": "edit_S"
+                                    "style": "edit_S",
+                                    "activeStyle": "edit_S_focus"
                                   },
                                   {
                                     "type": "DisplayData",
@@ -5668,7 +5681,8 @@
                                 "y": 133,
                                 "width": 55,
                                 "height": 24,
-                                "style": "edit_S"
+                                "style": "edit_S",
+                                "activeStyle": "edit_S_focus"
                               }
                             ]
                           }
@@ -6174,7 +6188,8 @@
                                     "y": 0,
                                     "width": 62,
                                     "height": 28,
-                                    "style": "edit_value_active_S_right"
+                                    "style": "edit_value_active_S_right",
+                                    "activeStyle": "edit_value_focus_S_right"
                                   },
                                   {
                                     "type": "DisplayData",
@@ -6204,7 +6219,8 @@
                                 "y": 30,
                                 "width": 62,
                                 "height": 28,
-                                "style": "edit_value_active_S_right"
+                                "style": "edit_value_active_S_right",
+                                "activeStyle": "edit_value_focus_S_right"
                               },
                               {
                                 "type": "Rectangle",
@@ -21363,7 +21379,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 40,
-                "style": "mon_value"
+                "style": "mon_value",
+                "activeStyle": "mon_value_focus"
               },
               {
                 "type": "DisplayData",
@@ -21373,7 +21390,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 40,
-                "style": "set_value_balanced"
+                "style": "set_value_balanced",
+                "activeStyle": "mon_value_focus"
               }
             ]
           },
@@ -21394,7 +21412,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 40,
-                "style": "mon_value"
+                "style": "mon_value",
+                "activeStyle": "mon_value_focus"
               },
               {
                 "type": "DisplayData",
@@ -21404,7 +21423,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 40,
-                "style": "set_value_balanced"
+                "style": "set_value_balanced",
+                "activeStyle": "mon_value_focus"
               }
             ]
           },
@@ -21624,7 +21644,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "mon_value"
+                "style": "mon_value",
+                "activeStyle": "mon_value_focus"
               },
               {
                 "type": "DisplayData",
@@ -21634,7 +21655,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "set_value_balanced"
+                "style": "set_value_balanced",
+                "activeStyle": "mon_value_focus"
               }
             ]
           },
@@ -21655,7 +21677,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "mon_value"
+                "style": "mon_value",
+                "activeStyle": "mon_value_focus"
               },
               {
                 "type": "DisplayData",
@@ -21665,7 +21688,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "set_value_balanced"
+                "style": "set_value_balanced",
+                "activeStyle": "mon_value_focus"
               }
             ]
           },
@@ -22247,7 +22271,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "mon_value"
+                "style": "mon_value",
+                "activeStyle": "mon_value_focus"
               },
               {
                 "type": "DisplayData",
@@ -22257,7 +22282,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "set_value_balanced"
+                "style": "set_value_balanced",
+                "activeStyle": "mon_value_focus"
               }
             ]
           },
@@ -22278,7 +22304,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "mon_value"
+                "style": "mon_value",
+                "activeStyle": "mon_value_focus"
               },
               {
                 "type": "DisplayData",
@@ -22288,7 +22315,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "set_value_balanced"
+                "style": "set_value_balanced",
+                "activeStyle": "mon_value_focus"
               }
             ]
           },
@@ -22418,7 +22446,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "mon_value"
+                "style": "mon_value",
+                "activeStyle": "mon_value_focus"
               },
               {
                 "type": "DisplayData",
@@ -22428,7 +22457,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "set_value_balanced"
+                "style": "set_value_balanced",
+                "activeStyle": "mon_value_focus"
               }
             ]
           },
@@ -22449,7 +22479,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "mon_value"
+                "style": "mon_value",
+                "activeStyle": "mon_value_focus"
               },
               {
                 "type": "DisplayData",
@@ -22459,7 +22490,8 @@
                 "y": 0,
                 "width": 117,
                 "height": 36,
-                "style": "set_value_balanced"
+                "style": "set_value_balanced",
+                "activeStyle": "mon_value_focus"
               }
             ]
           },
@@ -22995,6 +23027,12 @@
         "color": "#ffff00"
       },
       {
+        "name": "edit_S_focus",
+        "inheritFrom": "edit_S",
+        "font": "small",
+        "color": "#c8e7f0"
+      },
+      {
         "name": "edit_value",
         "inheritFrom": "default",
         "font": "medium",
@@ -23357,6 +23395,17 @@
         "color": "#FF0000",
         "borderSize": 0,
         "borderColor": "#D3D3D3",
+        "paddingHorizontal": 0,
+        "paddingVertical": 0
+      },
+      {
+        "name": "mon_value_focus",
+        "inheritFrom": "mon_value",
+        "font": "medium",
+        "alignHorizontal": "center",
+        "alignVertical": "center",
+        "color": "#c8e7f0",
+        "borderSize": 0,
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
