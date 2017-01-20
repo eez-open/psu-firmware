@@ -40,10 +40,6 @@ data::Value Page::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot
 void Page::onEncoder(int counter) {
 }
 
-bool Page::setFocusWidget(const WidgetCursor &widgetCursor) {
-    return false;
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 
 void SetPage::takeSnapshot(data::Snapshot *snapshot) {

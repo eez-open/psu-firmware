@@ -56,7 +56,6 @@
 #define CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT 5000000UL // 5s
 #define CONF_GUI_WELCOME_PAGE_TIMEOUT 2000000UL // 2s
 #define CONF_GUI_LONG_PRESS_TIMEOUT 1000000UL // 1s
-#define CONF_GUI_ACTIVATE_DISPLAY_WIDGET_TIMEOUT 500000UL // 0.5s
 
 #define CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY 200000UL // 200ms
 
@@ -735,18 +734,6 @@ void tick(unsigned long tick_usec) {
                         g_touchDownTime = tick_usec;
                         g_touchActionExecuted = true;
                         executeAction(action);
-                    }
-                } else {
-                    if (tick_usec - g_touchDownTime >= CONF_GUI_ACTIVATE_DISPLAY_WIDGET_TIMEOUT) {
-                        if (!g_touchActionExecuted) {
-                            if (g_activePage && g_activePage->setFocusWidget(g_foundWidgetAtDown)) {
-                                deselectWidget();
-                                g_foundWidgetAtDown = 0;
-                                g_touchDownTime = tick_usec;
-                                g_touchActionExecuted = true;
-                                sound::playClick();
-                            }
-                        }
                     }
                 }
             } else {

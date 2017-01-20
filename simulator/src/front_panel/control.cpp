@@ -22,7 +22,9 @@
 #include "imgui/window.h"
 #include "imgui/beeper.h"
 #include "persist_conf.h"
+#if OPTION_ENCODER
 #include "encoder.h"
+#endif
 
 #ifdef _WIN32
 #undef INPUT
@@ -127,12 +129,14 @@ void tick() {
 
             g_window->endUpdate();
 
+#if OPTION_ENCODER
             int x, y;
             g_window->getMouseWheelData(&x, &y);
 
             if (y != 0) {
                 encoder::addToCounter(y);
             }
+#endif
         }
         else {
             close();

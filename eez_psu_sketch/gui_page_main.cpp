@@ -64,16 +64,6 @@ void MainPage::onEncoder(int counter) {
     }
 }
 
-bool MainPage::setFocusWidget(const WidgetCursor &widgetCursor) {
-    DECL_WIDGET(widget, widgetCursor.widgetOffset);
-    if (widget->type == WIDGET_TYPE_DISPLAY_DATA && widget->action == ACTION_ID_EDIT) {
-        g_focusCursor = widgetCursor.cursor;
-        g_focusDataId = widget->data;
-        return true;
-    }
-    return false;
-}
-
 }
 }
 } // namespace eez::psu::gui
