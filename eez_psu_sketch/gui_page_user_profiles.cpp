@@ -18,6 +18,8 @@
 
 #include "psu.h"
 
+#if OPTION_DISPLAY
+
 #include "gui_data_snapshot.h"
 #include "gui_keypad.h"
 #include "gui_page_user_profiles.h"
@@ -205,3 +207,5 @@ void UserProfilesPage::editRemark() {
 }
 }
 } // namespace eez::psu::gui
+
+#endif

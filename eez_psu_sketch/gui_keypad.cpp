@@ -18,6 +18,8 @@
 
 #include <ctype.h>
 
+#if OPTION_DISPLAY
+
 #include "psu.h"
 #include "sound.h"
 
@@ -291,3 +293,5 @@ void appendCursor(char *text) {
 }
 }
 } // namespace eez::psu::gui::keypad
+
+#endif

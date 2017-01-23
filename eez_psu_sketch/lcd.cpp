@@ -17,6 +17,9 @@
  */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "lcd.h"
 #include "arduino_util.h"
 
@@ -327,3 +330,5 @@ void turnOff() {
 }
 }
 } // namespace eez::psu::ui::lcd
+
+#endif

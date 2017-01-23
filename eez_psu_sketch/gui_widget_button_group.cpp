@@ -17,6 +17,9 @@
 */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "sound.h"
 #include "gui_widget_button_group.h"
 #include "gui_data_snapshot.h"
@@ -133,3 +136,5 @@ void onTouchDown(const WidgetCursor &widgetCursor) {
 }
 }
 } // namespace eez::psu::gui::widget_button_group
+
+#endif

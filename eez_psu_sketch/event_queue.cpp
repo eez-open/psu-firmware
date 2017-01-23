@@ -22,8 +22,6 @@
 #include "sound.h"
 #include "event_queue.h"
 
-#include "gui_internal.h"
-
 namespace eez {
 namespace psu {
 namespace event_queue {

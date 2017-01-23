@@ -17,6 +17,9 @@
  */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "touch.h"
 #include "touch_filter.h"
 
@@ -256,3 +259,5 @@ bool directIsPressed() {
 }
 }
 } // namespace eez::psu::ui::touch
+
+#endif

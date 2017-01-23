@@ -18,6 +18,8 @@
 
 #include "psu.h"
 
+#if OPTION_DISPLAY
+
 #include "gui_data_snapshot.h"
 #include "gui_page_event_queue.h"
 
@@ -75,3 +77,5 @@ data::Value EventQueuePage::getData(const data::Cursor &cursor, uint8_t id, data
 }
 }
 } // namespace eez::psu::gui
+
+#endif

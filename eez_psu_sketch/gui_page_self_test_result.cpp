@@ -18,6 +18,8 @@
 
 #include "psu.h"
 
+#if OPTION_DISPLAY
+
 #include "devices.h"
 
 #include "gui_data_snapshot.h"
@@ -46,3 +48,5 @@ data::Value SelfTestResultPage::getData(const data::Cursor &cursor, uint8_t id, 
 }
 }
 } // namespace eez::psu::gui
+
+#endif

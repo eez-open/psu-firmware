@@ -17,6 +17,9 @@
 */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "lcd.h"
 #include "gui_document.h"
 
@@ -10958,3 +10961,5 @@ const uint8_t document[40085] PROGMEM = {
 }
 }
 } // namespace eez::psu::gui
+
+#endif

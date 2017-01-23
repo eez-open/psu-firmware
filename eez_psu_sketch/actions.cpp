@@ -17,6 +17,9 @@
 */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "actions.h"
 #include "event_queue.h"
 #include "persist_conf.h"
@@ -664,4 +667,6 @@ ACTION actions[] = {
 };
 
 }
-} // namespace eez::psu::gui
+} // namespace eez::psu
+
+#endif

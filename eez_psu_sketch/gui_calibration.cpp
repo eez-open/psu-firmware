@@ -18,6 +18,8 @@
 
 #include "psu.h"
 
+#if OPTION_DISPLAY
+
 #include "persist_conf.h"
 #include "sound.h"
 #include "calibration.h"
@@ -273,3 +275,5 @@ void toggleEnable() {
 }
 }
 } // namespace eez::psu::gui::calibration
+
+#endif

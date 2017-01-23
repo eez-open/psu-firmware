@@ -17,6 +17,9 @@
  */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "touch_filter.h"
 
 //
@@ -276,3 +279,5 @@ void transform(int& x, int& y) {
 }
 }
 } // namespace eez::psu::ui::touch
+
+#endif

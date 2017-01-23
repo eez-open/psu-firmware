@@ -17,6 +17,9 @@
  */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "persist_conf.h"
 
 #include "gui_internal.h"
@@ -138,3 +141,5 @@ void editCalibrationPassword() {
 }
 }
 } // namespace eez::psu::gui
+
+#endif

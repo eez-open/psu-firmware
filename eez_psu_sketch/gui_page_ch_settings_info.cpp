@@ -18,6 +18,8 @@
 
 #include "psu.h"
 
+#if OPTION_DISPLAY
+
 #include "temperature.h"
 
 #include "gui_data_snapshot.h"
@@ -37,3 +39,5 @@ data::Value ChSettingsInfoPage::getData(const data::Cursor &cursor, uint8_t id, 
 }
 }
 } // namespace eez::psu::gui
+
+#endif

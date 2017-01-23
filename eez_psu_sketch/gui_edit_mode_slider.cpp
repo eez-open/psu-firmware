@@ -17,6 +17,9 @@
  */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "gui_edit_mode.h"
 
 namespace eez {
@@ -111,3 +114,5 @@ void onTouchUp() {
 }
 }
 } // namespace eez::psu::gui::edit_mode_slider
+
+#endif

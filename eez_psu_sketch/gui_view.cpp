@@ -17,6 +17,9 @@
  */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "gui_internal.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_slider.h"
@@ -1545,3 +1548,5 @@ WidgetCursor findWidget(int x, int y) {
 }
 }
 } // namespace eez::psu::gui
+
+#endif

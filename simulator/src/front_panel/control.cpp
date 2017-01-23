@@ -17,6 +17,7 @@
  */
 
 #include "psu.h"
+
 #include "front_panel/control.h"
 #include "front_panel/render.h"
 #include "imgui/window.h"
@@ -76,6 +77,8 @@ void load_lib() {
     }
 }
 
+#if OPTION_DISPLAY
+
 bool isOpened() {
     return g_window ? true : false;
 }
@@ -115,8 +118,10 @@ void close() {
         }
     }
 }
+#endif
 
 void tick() {
+#if OPTION_DISPLAY
     if (g_window) {
         if (g_window->pollEvent()) {
             g_window->beginUpdate();
@@ -142,6 +147,7 @@ void tick() {
             close();
         }
     }
+#endif
 }
 
 void beep(double freq, int duration) {
@@ -156,3 +162,4 @@ void beep(double freq, int duration) {
 }
 }
 } // namespace eez::psu::simulator::front_panel;
+

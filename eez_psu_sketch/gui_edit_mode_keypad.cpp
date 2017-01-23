@@ -17,6 +17,9 @@
 */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_keypad.h"
 #include "gui_numeric_keypad.h"
@@ -40,3 +43,5 @@ void getText(char *text, int count) {
 }
 }
 } // namespace eez::psu::gui::edit_mode_keypad
+
+#endif

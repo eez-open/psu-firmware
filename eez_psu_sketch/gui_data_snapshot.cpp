@@ -17,6 +17,9 @@
  */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "calibration.h"
 #include "temperature.h"
 #include "persist_conf.h"
@@ -487,3 +490,5 @@ bool Snapshot::isBlinking(const Cursor &cursor, uint8_t id) {
 }
 }
 } // namespace eez::psu::ui::data
+
+#endif

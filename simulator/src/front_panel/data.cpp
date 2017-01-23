@@ -17,6 +17,9 @@
  */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "front_panel/data.h"
 #include "arduino_internal.h"
 #include "chips.h"
@@ -226,3 +229,6 @@ void processData(Data *data) {
 }
 }
 } // namespace eez::psu::simulator::front_panel;
+
+
+#endif

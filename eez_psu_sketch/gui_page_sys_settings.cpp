@@ -18,6 +18,8 @@
 
 #include "psu.h"
 
+#if OPTION_DISPLAY
+
 #include "persist_conf.h"
 #include "ethernet.h"
 #include "temperature.h"
@@ -472,3 +474,5 @@ void SysSettingsSoundPage::toggleClickSound() {
 }
 }
 } // namespace eez::psu::gui
+
+#endif

@@ -18,6 +18,8 @@
 
 #include "psu.h"
 
+#if OPTION_DISPLAY
+
 #include "profile.h"
 #include "channel_dispatcher.h"
 
@@ -296,3 +298,5 @@ void ChSettingsAdvViewPage::set() {
 }
 }
 } // namespace eez::psu::gui
+
+#endif

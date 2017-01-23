@@ -17,6 +17,9 @@
  */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "sound.h"
 
 #include "gui_internal.h"
@@ -632,3 +635,5 @@ void cancel() {
 }
 }
 } // namespace eez::psu::gui::numeric_keypad
+
+#endif

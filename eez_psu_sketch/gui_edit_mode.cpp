@@ -17,6 +17,9 @@
 */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "channel_dispatcher.h"
 #include "sound.h"
 
@@ -278,3 +281,5 @@ void getInfoText(int part, char *infoText) {
 }
 }
 } // namespace eez::psu::gui::edit_mode
+
+#endif

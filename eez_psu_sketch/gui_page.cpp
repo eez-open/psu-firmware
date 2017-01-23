@@ -18,6 +18,8 @@
 
 #include "psu.h"
 
+#if OPTION_DISPLAY
+
 #include "gui_internal.h"
 #include "gui_data_snapshot.h"
 
@@ -201,3 +203,5 @@ void SelectFromEnumPage::getItemLabel(int itemIndex, char *text, int count) {
 }
 }
 } // namespace eez::psu::gui
+
+#endif

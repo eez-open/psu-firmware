@@ -18,6 +18,8 @@
 
 #include "psu.h"
 
+#if OPTION_DISPLAY
+
 #include "profile.h"
 #include "temperature.h"
 #include "channel_dispatcher.h"
@@ -366,3 +368,5 @@ void ChSettingsOtpProtectionPage::setParams(bool checkLoad) {
 }
 }
 } // namespace eez::psu::gui
+
+#endif

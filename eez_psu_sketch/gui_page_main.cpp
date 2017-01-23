@@ -18,6 +18,8 @@
 
 #include "psu.h"
 
+#if OPTION_DISPLAY
+
 #include "gui_data_snapshot.h"
 #include "gui_page_main.h"
 
@@ -46,3 +48,5 @@ data::Value MainPage::getData(const data::Cursor &cursor, uint8_t id, data::Snap
 }
 }
 } // namespace eez::psu::gui
+
+#endif

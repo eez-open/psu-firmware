@@ -17,6 +17,9 @@
 */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "sound.h"
 #include "gui_data.h"
 #include "gui_edit_mode.h"
@@ -151,3 +154,5 @@ void onTouchUp() {
 }
 }
 } // namespace eez::psu::gui::edit_mode_step
+
+#endif

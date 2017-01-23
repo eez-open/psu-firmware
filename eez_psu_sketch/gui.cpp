@@ -18,6 +18,8 @@
 
 #include "psu.h"
 
+#if OPTION_DISPLAY
+
 #include "channel.h"
 #include "channel_dispatcher.h"
 #include "actions.h"
@@ -880,3 +882,5 @@ void tick(unsigned long tick_usec) {
 }
 }
 } // namespace eez::psu::gui
+
+#endif

@@ -17,6 +17,9 @@
  */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "touch.h"
 #include "touch_filter.h"
 #include "lcd.h"
@@ -225,3 +228,5 @@ void tick(unsigned long tick_usec) {
 }
 }
 } // namespace eez::psu::ui::touch::calibration
+
+#endif

@@ -17,6 +17,9 @@
  */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "font.h"
 #include "arduino_util.h"
 
@@ -120,3 +123,5 @@ void Font::getGlyph(uint8_t requested_encoding, Glyph &glyph) {
 }
 }
 } // namespace eez::psu::gui::font
+
+#endif

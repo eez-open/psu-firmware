@@ -17,6 +17,9 @@
  */
 
 #include "psu.h"
+
+#if OPTION_DISPLAY
+
 #include "datetime.h"
 #include "profile.h"
 #include "gui_internal.h"
@@ -465,3 +468,5 @@ Value getHistoryValue(const Cursor &cursor, uint8_t id, int position) {
 }
 }
 } // namespace eez::psu::ui::data
+
+#endif

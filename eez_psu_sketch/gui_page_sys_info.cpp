@@ -18,6 +18,8 @@
 
 #include "psu.h"
 
+#if OPTION_DISPLAY
+
 #include "fan.h"
 #include "temperature.h"
 
@@ -107,3 +109,5 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::S
 }
 }
 } // namespace eez::psu::gui
+
+#endif
