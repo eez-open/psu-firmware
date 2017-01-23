@@ -62,6 +62,8 @@
 
 #define CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY 200000UL // 200ms
 
+#define CONF_GUI_TOAST_DURATION_MS 1 * 1000UL // 1sec
+
 #define INTERNAL_PAGE_ID_NONE             -1
 #define INTERNAL_PAGE_ID_SELECT_FROM_ENUM -2
 
@@ -894,7 +896,7 @@ void tick(unsigned long tick_usec) {
     }
 
     if (g_activePageId == PAGE_ID_TOAST3_ALERT || g_activePageId == PAGE_ID_ERROR_TOAST_ALERT) {
-        if (inactivityPeriod >= 2 * 1000UL) {
+        if (inactivityPeriod >= CONF_GUI_TOAST_DURATION_MS) {
             dialogOk();
             return;
         }
