@@ -174,7 +174,7 @@ void exit() {
 void nonInteractiveSet() {
 	int16_t error;
 	if (!data::set(g_focusCursor, g_focusDataId, g_editValue, &error)) {
-		errorMessage(data::Value::ScpiErrorText(error));
+		errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
 	}
 }
 
@@ -217,7 +217,7 @@ bool setValue(float value_) {
     if (g_isInteractiveMode || g_tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
 		int16_t error;
         if (!data::set(g_focusCursor, g_focusDataId, value, &error)) {
-			errorMessage(data::Value::ScpiErrorText(error));
+			errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
             return false;
         }
     }

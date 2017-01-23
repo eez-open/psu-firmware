@@ -604,9 +604,9 @@ void ok() {
 			float value = getValue();
 
 			if (value < g_options.min) {
-				errorMessage(data::Value::LessThenMinMessage(g_options.min, g_options.editUnit));
+				errorMessage(0, data::Value::LessThenMinMessage(g_options.min, g_options.editUnit));
 			} else if (value > g_options.max) {
-				errorMessage(data::Value::GreaterThenMaxMessage(g_options.max, g_options.editUnit));
+				errorMessage(0, data::Value::GreaterThenMaxMessage(g_options.max, g_options.editUnit));
 			} else {
 				((void (*)(float))g_okCallback)(value);
 			}

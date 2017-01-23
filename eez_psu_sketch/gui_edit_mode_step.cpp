@@ -80,7 +80,7 @@ void setStepIndex(int value) {
     step_index = value;
 }
 
-void increment(int counter) {
+void increment(int counter, bool playClick) {
     float min = edit_mode::getMin().getFloat();
     float max = edit_mode::getMax().getFloat();
     float stepValue = getStepValue();
@@ -111,7 +111,9 @@ void increment(int counter) {
 
     if (edit_mode::setValue(value)) {
 	    changed = true;
-        sound::playClick();
+        if (playClick) {
+            sound::playClick();
+        }
 	}
 }
 
@@ -123,7 +125,7 @@ void test() {
         int d = touch::x - start_pos;
 #endif
         if (abs(d) >= CONF_GUI_EDIT_MODE_STEP_THRESHOLD_PX) {
-            increment(d > 0 ? 1 : -1);
+            increment(d > 0 ? 1 : -1, true);
         }
     }
 }

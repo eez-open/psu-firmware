@@ -31,7 +31,7 @@
 #define CONF_ENCODER_INCREMENT_SPEED_PT2_Y 1.0f
 
 #define CONF_ENCODER_DECREMENT_SPEED_PT1_X 5.0f
-#define CONF_ENCODER_DECREMENT_SPEED_PT1_Y 100.0f
+#define CONF_ENCODER_DECREMENT_SPEED_PT1_Y 50.0f
 #define CONF_ENCODER_DECREMENT_SPEED_PT2_X 250.0f
 #define CONF_ENCODER_DECREMENT_SPEED_PT2_Y 1.0f
 
@@ -65,6 +65,7 @@ const uint8_t ttable[7][4] = {
 };
 #endif
 
+bool g_variableSpeed = true;
 float g_speedMultiplier = 1.0f;
 
 volatile uint8_t state = 0;
@@ -80,22 +81,26 @@ void interruptHandler() {
         unsigned long time = micros();
         unsigned long diff = time - g_lastTime;
 
-        int amount = (int) roundf(
-            util::clamp(
-                g_speedMultiplier * 
-                (
-                    result == DIR_CW ?
+        int amount = 1;
+        
+        if (g_variableSpeed) {
+            amount = (int) roundf(
+                util::clamp(
+                    g_speedMultiplier * 
+                    (
+                        result == DIR_CW ?
 
-                    util::remap(diff / 1000.0f, CONF_ENCODER_INCREMENT_SPEED_PT1_X, CONF_ENCODER_INCREMENT_SPEED_PT1_Y,
-                                      CONF_ENCODER_INCREMENT_SPEED_PT2_X, CONF_ENCODER_INCREMENT_SPEED_PT2_Y) :
+                        util::remap(diff / 1000.0f, CONF_ENCODER_INCREMENT_SPEED_PT1_X, CONF_ENCODER_INCREMENT_SPEED_PT1_Y,
+                                          CONF_ENCODER_INCREMENT_SPEED_PT2_X, CONF_ENCODER_INCREMENT_SPEED_PT2_Y) :
 
-                    util::remap(diff / 1000.0f, CONF_ENCODER_DECREMENT_SPEED_PT1_X, CONF_ENCODER_DECREMENT_SPEED_PT1_Y,
-                                      CONF_ENCODER_DECREMENT_SPEED_PT2_X, CONF_ENCODER_DECREMENT_SPEED_PT2_Y)
-                ),
-                1.0f,
-                100.0f
-            )
-        );
+                        util::remap(diff / 1000.0f, CONF_ENCODER_DECREMENT_SPEED_PT1_X, CONF_ENCODER_DECREMENT_SPEED_PT1_Y,
+                                          CONF_ENCODER_DECREMENT_SPEED_PT2_X, CONF_ENCODER_DECREMENT_SPEED_PT2_Y)
+                    ),
+                    1.0f,
+                    100.0f
+                )
+            );
+        }
         
         if (result == DIR_CW) {
             counter += amount;
@@ -130,6 +135,10 @@ int readAndResetCounter() {
     //g_tableIndex = 0;
     interrupts();
     return result;
+}
+
+void enableVariableSpeed(bool enable) {
+    g_variableSpeed = enable;
 }
 
 void setSpeedMultiplier(float speedMultiplier) {

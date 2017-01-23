@@ -28,7 +28,7 @@ void getStepValues(const data::Value **labels, int &count);
 
 void setStepIndex(int value);
 
-void increment(int counter);
+void increment(int counter, bool playClick);
 
 void onTouchDown();
 void onTouchMove();

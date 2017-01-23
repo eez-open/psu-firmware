@@ -66,7 +66,7 @@ void longInfoMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM
 
 void toastMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, const char *message3 PROGMEM, void (*ok_callback)() = 0);
 
-void errorMessage(data::Value value, void (*ok_callback)() = 0);
+void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callback)() = 0);
 void errorMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);
 
 void yesNoDialog(int yesNoPageId, const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());

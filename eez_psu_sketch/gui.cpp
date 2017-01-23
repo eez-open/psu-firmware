@@ -19,6 +19,7 @@
 #include "psu.h"
 
 #include "channel.h"
+#include "channel_dispatcher.h"
 #include "actions.h"
 #include "devices.h"
 #include "sound.h"
@@ -353,22 +354,28 @@ void toastMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, c
     longAlertMessage(PAGE_ID_TOAST3_ALERT, message1, message2, ok_callback);
 }
 
-void errorMessage(data::Value value, void (*ok_callback)()) {
-    int pageId = PAGE_ID_ERROR_ALERT;
-
+void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callback)()) {
     if (value.getType() == data::VALUE_TYPE_SCPI_ERROR_TEXT) {
         void (*action)();
         const char *actionLabel PROGMEM = 0;
 
+        Channel& channel = Channel::get(cursor.i);
+
         if (value.getScpiError() == SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED) {
-            action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OVP];
-            actionLabel = PSTR("Change voltage limit");
+            if (channel_dispatcher::getULimit(channel) < channel_dispatcher::getUMaxLimit(channel)) {
+                action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OVP];
+                actionLabel = PSTR("Change voltage limit");
+            }
         } else if (value.getScpiError() == SCPI_ERROR_CURRENT_LIMIT_EXCEEDED) {
-            action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OCP];
-            actionLabel = PSTR("Change current limit");
+            if (channel_dispatcher::getILimit(channel) < channel_dispatcher::getIMaxLimit(channel)) {
+                action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OCP];
+                actionLabel = PSTR("Change current limit");
+            }
         } else if (value.getScpiError() == SCPI_ERROR_POWER_LIMIT_EXCEEDED) {
-            action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OPP];
-            actionLabel = PSTR("Change power limit");
+            if (channel_dispatcher::getPowerLimit(channel) < channel_dispatcher::getPowerMaxLimit(channel)) {
+                action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OPP];
+                actionLabel = PSTR("Change power limit");
+            }
         }
 
         if (action) {
@@ -573,34 +580,45 @@ void standbyTouchHandling(unsigned long tick_usec) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#if OPTION_ENCODER
 void onEncoder(int counter) {
     if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD) {
         return;
-    } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
-        edit_mode_step::increment(counter);
-    } else if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+    }
+    
+    if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
+        encoder::enableVariableSpeed(false);
+        edit_mode_step::increment(counter, false);
+        return;
+    }
+
+    encoder::enableVariableSpeed(true);
+
+    if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
         edit_mode_slider::increment(counter);
-    } else {
-        data::Value value = data::currentSnapshot.get(g_focusCursor, g_focusDataId);
+        return;
+    }
+    
+    data::Value value = data::currentSnapshot.get(g_focusCursor, g_focusDataId);
 
-        float newValue = value.getFloat() + 0.01f * counter;
+    float newValue = value.getFloat() + 0.01f * counter;
 
-        float min = data::getMin(g_focusCursor, g_focusDataId).getFloat();
-        if (newValue < min) {
-            newValue = min;
-        }
+    float min = data::getMin(g_focusCursor, g_focusDataId).getFloat();
+    if (newValue < min) {
+        newValue = min;
+    }
 
-        float max = data::getLimit(g_focusCursor, g_focusDataId).getFloat();
-        if (newValue > max) {
-            newValue = max;
-        }
+    float max = data::getLimit(g_focusCursor, g_focusDataId).getFloat();
+    if (newValue > max) {
+        newValue = max;
+    }
 
-        int16_t error;
-        if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType()), &error)) {
-            errorMessage(data::Value::ScpiErrorText(error));
-        }
+    int16_t error;
+    if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType()), &error)) {
+        errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
     }
 }
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 
