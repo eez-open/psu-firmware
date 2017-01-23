@@ -25,6 +25,8 @@ namespace encoder {
 void init();
 int readAndResetCounter();
 
+void setSpeedMultiplier(int speedMultiplier);
+
 #ifdef EEZ_PSU_SIMULATOR
 void addToCounter(int value);
 #endif

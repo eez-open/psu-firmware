@@ -106,8 +106,8 @@ Channel *g_channel;
 
 static data::Cursor g_wasFocusCursor;
 static uint8_t g_wasFocusDataId;
-data::Cursor g_focusCursor(0);
-uint8_t g_focusDataId = DATA_ID_CHANNEL_U_SET;
+data::Cursor g_focusCursor;
+uint8_t g_focusDataId;
 
 Page *createPageFromId(int pageId) {
     switch (pageId) {
@@ -512,6 +512,14 @@ void selectChannel() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void setFocusCursor(const data::Cursor& cursor, uint8_t dataId) {
+    g_focusCursor = cursor;
+    g_focusDataId = dataId;
+#if OPTION_ENCODER
+    encoder::setSpeedMultiplier(g_focusDataId == DATA_ID_CHANNEL_U_SET ? 2 : 1);
+#endif
+}
+
 bool wasFocusWidget(const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
     return widgetCursor.cursor == g_wasFocusCursor && widget->data == g_wasFocusDataId;
@@ -566,6 +574,8 @@ void standbyTouchHandling(unsigned long tick_usec) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void init() {
+    setFocusCursor(0, DATA_ID_CHANNEL_U_SET);
+
     lcd::init();
 
 #if OPTION_ENCODER

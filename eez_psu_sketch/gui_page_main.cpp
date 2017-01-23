@@ -46,7 +46,7 @@ data::Value MainPage::getData(const data::Cursor &cursor, uint8_t id, data::Snap
 void MainPage::onEncoder(int counter) {
     data::Value value = data::currentSnapshot.get(g_focusCursor, g_focusDataId);
 
-    float newValue = value.getFloat() + 0.005f * counter;
+    float newValue = value.getFloat() + /*0.005f * */ 0.01f * counter;
 
     float min = data::getMin(g_focusCursor, g_focusDataId).getFloat();
     if (newValue < min) {

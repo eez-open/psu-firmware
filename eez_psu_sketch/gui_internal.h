@@ -91,6 +91,8 @@ extern WidgetCursor g_foundWidgetAtDown;
 void selectChannel();
 extern Channel *g_channel;
 
+void setFocusCursor(const data::Cursor& cursor, uint8_t dataId);
+
 extern data::Cursor g_focusCursor;
 extern uint8_t g_focusDataId;
 bool wasFocusWidget(const WidgetCursor &widgetCursor);

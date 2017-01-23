@@ -101,9 +101,8 @@ void enter(int tabIndex_) {
 #if OPTION_ENCODER
     if (getActivePageId() == PAGE_ID_MAIN) {
         if (!isFocusWidget(g_foundWidgetAtDown)) {
-            g_focusCursor = g_foundWidgetAtDown.cursor;
             DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
-            g_focusDataId = widget->data;
+            setFocusCursor(g_foundWidgetAtDown.cursor, widget->data);
             return;
         }
     }
@@ -134,8 +133,7 @@ void enter(int tabIndex_) {
             }
         }
 
-        g_focusCursor = newDataCursor;
-        g_focusDataId = newDataId;
+        setFocusCursor(newDataCursor, newDataId);
 
         initEditValue();
 
