@@ -238,6 +238,10 @@ void refreshWidget(WidgetCursor widgetCursor);
 void selectWidget(WidgetCursor &widgetCursor);
 void deselectWidget();
 void flush();
+
+typedef bool(*EnumWidgetsCallback)(const WidgetCursor &widgetCursor, bool refresh);
+void enumWidgets(int pageIndex, bool refresh, EnumWidgetsCallback callback);
+
 WidgetCursor findWidget(int x, int y);
 void drawTick();
 

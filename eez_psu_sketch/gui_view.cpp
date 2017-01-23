@@ -1359,8 +1359,6 @@ void deselectWidget() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-typedef bool(*EnumWidgetsCallback)(const WidgetCursor &widgetCursor, bool refresh);
-
 void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, bool refresh, data::Cursor &cursor, EnumWidgetsCallback callback) {
     DECL_WIDGET(widget, widgetOffset);
 

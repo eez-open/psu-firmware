@@ -358,7 +358,7 @@ void toastMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, c
 
 void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callback)()) {
     if (value.getType() == data::VALUE_TYPE_SCPI_ERROR_TEXT) {
-        void (*action)();
+        void (*action)() = 0;
         const char *actionLabel PROGMEM = 0;
 
         Channel& channel = Channel::get(cursor.i);
@@ -583,6 +583,25 @@ void standbyTouchHandling(unsigned long tick_usec) {
 ////////////////////////////////////////////////////////////////////////////////
 
 #if OPTION_ENCODER
+
+static bool g_isEncoderEnabledInActivePage;
+
+bool isEncoderEnabledInActivePageCheckWidget(const WidgetCursor &widgetCursor, bool refresh) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+    if (widget->action == ACTION_ID_EDIT) {
+        g_isEncoderEnabledInActivePage = true;
+        return true;
+    }
+    return false;
+}
+
+bool isEncoderEnabledInActivePage() {
+    // encoder is enabled if active page contains widget with "edit" action
+    g_isEncoderEnabledInActivePage = false;
+    enumWidgets(getActivePageId(), true, isEncoderEnabledInActivePageCheckWidget);
+    return g_isEncoderEnabledInActivePage;
+}
+
 void onEncoder(int counter) {
     if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD) {
         return;
@@ -601,23 +620,25 @@ void onEncoder(int counter) {
         return;
     }
     
-    data::Value value = data::currentSnapshot.get(g_focusCursor, g_focusDataId);
+    if (isEncoderEnabledInActivePage()) {
+        data::Value value = data::currentSnapshot.get(g_focusCursor, g_focusDataId);
 
-    float newValue = value.getFloat() + 0.01f * counter;
+        float newValue = value.getFloat() + 0.01f * counter;
 
-    float min = data::getMin(g_focusCursor, g_focusDataId).getFloat();
-    if (newValue < min) {
-        newValue = min;
-    }
+        float min = data::getMin(g_focusCursor, g_focusDataId).getFloat();
+        if (newValue < min) {
+            newValue = min;
+        }
 
-    float max = data::getLimit(g_focusCursor, g_focusDataId).getFloat();
-    if (newValue > max) {
-        newValue = max;
-    }
+        float max = data::getLimit(g_focusCursor, g_focusDataId).getFloat();
+        if (newValue > max) {
+            newValue = max;
+        }
 
-    int16_t error;
-    if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType()), &error)) {
-        errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
+        int16_t error;
+        if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType()), &error)) {
+            errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
+        }
     }
 }
 #endif
