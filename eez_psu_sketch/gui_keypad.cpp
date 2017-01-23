@@ -17,10 +17,10 @@
  */
 
 #include <ctype.h>
+#include "psu.h"
 
 #if OPTION_DISPLAY
 
-#include "psu.h"
 #include "sound.h"
 
 #include "gui_internal.h"

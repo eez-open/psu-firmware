@@ -152,4 +152,4 @@ typedef void (*ACTION)();
 extern ACTION actions[];
 
 }
-} // namespace eez::psu::gui
+} // namespace eez::psu
