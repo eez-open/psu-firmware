@@ -10419,6 +10419,57 @@
         }
       },
       {
+        "name": "error_toast_alert",
+        "description": "Error message",
+        "portrait": {
+          "x": 0,
+          "y": 104,
+          "width": 240,
+          "height": 112,
+          "style": "error_alert",
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "yes",
+              "x": 90,
+              "y": 72,
+              "width": 60,
+              "height": 32,
+              "style": "default_active_S",
+              "text": "OK"
+            },
+            {
+              "type": "MultilineText",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 64,
+              "style": "error_alert",
+              "text": "Multiline text"
+            }
+          ]
+        },
+        "landscape": {
+          "x": 20,
+          "y": 76,
+          "width": 280,
+          "height": 48,
+          "style": "error_alert",
+          "widgets": [
+            {
+              "type": "Text",
+              "data": "alert_message",
+              "x": 0,
+              "y": 8,
+              "width": 280,
+              "height": 32,
+              "style": "error_alert",
+              "text": ""
+            }
+          ]
+        }
+      },
+      {
         "name": "yes_no",
         "description": "Info message",
         "portrait": {

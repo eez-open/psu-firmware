@@ -357,6 +357,8 @@ void toastMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, c
 }
 
 void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callback)()) {
+    int errorPageId = PAGE_ID_ERROR_ALERT;
+
     if (value.getType() == data::VALUE_TYPE_SCPI_ERROR_TEXT) {
         void (*action)() = 0;
         const char *actionLabel PROGMEM = 0;
@@ -367,28 +369,33 @@ void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callb
             if (channel_dispatcher::getULimit(channel) < channel_dispatcher::getUMaxLimit(channel)) {
                 action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OVP];
                 actionLabel = PSTR("Change voltage limit");
+            } else {
+                errorPageId = PAGE_ID_ERROR_TOAST_ALERT;
             }
         } else if (value.getScpiError() == SCPI_ERROR_CURRENT_LIMIT_EXCEEDED) {
             if (channel_dispatcher::getILimit(channel) < channel_dispatcher::getIMaxLimit(channel)) {
                 action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OCP];
                 actionLabel = PSTR("Change current limit");
+            } else {
+                errorPageId = PAGE_ID_ERROR_TOAST_ALERT;
             }
         } else if (value.getScpiError() == SCPI_ERROR_POWER_LIMIT_EXCEEDED) {
             if (channel_dispatcher::getPowerLimit(channel) < channel_dispatcher::getPowerMaxLimit(channel)) {
                 action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OPP];
                 actionLabel = PSTR("Change power limit");
+            } else {
+                errorPageId = PAGE_ID_ERROR_TOAST_ALERT;
             }
         }
 
         if (action) {
             data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE_2, actionLabel, 0);
             g_errorMessageAction = action;
-            alertMessage(PAGE_ID_ERROR_ALERT_WITH_ACTION, value, ok_callback);
-            return;
+            errorPageId = PAGE_ID_ERROR_ALERT_WITH_ACTION;
         }
     }
 
-    alertMessage(PAGE_ID_ERROR_ALERT, value, ok_callback);
+    alertMessage(errorPageId, value, ok_callback);
 }
 
 
@@ -884,7 +891,7 @@ void tick(unsigned long tick_usec) {
         }
     }
 
-    if (g_activePageId == PAGE_ID_TOAST3_ALERT) {
+    if (g_activePageId == PAGE_ID_TOAST3_ALERT || g_activePageId == PAGE_ID_ERROR_TOAST_ALERT) {
         if (inactivityPeriod >= 2 * 1000UL) {
             dialogOk();
             return;
