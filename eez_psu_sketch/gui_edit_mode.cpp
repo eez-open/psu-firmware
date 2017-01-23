@@ -99,7 +99,7 @@ void initEditValue() {
 
 void enter(int tabIndex_) {
 #if OPTION_ENCODER
-    if (getActivePageId() == PAGE_ID_MAIN) {
+    if (!isActive()) {
         if (!isFocusWidget(g_foundWidgetAtDown)) {
             DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
             setFocusCursor(g_foundWidgetAtDown.cursor, widget->data);

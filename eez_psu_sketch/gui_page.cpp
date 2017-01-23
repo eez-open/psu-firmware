@@ -37,9 +37,6 @@ data::Value Page::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot
 	return data::Value();
 }
 
-void Page::onEncoder(int counter) {
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 
 void SetPage::takeSnapshot(data::Snapshot *snapshot) {

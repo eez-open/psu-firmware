@@ -47,6 +47,22 @@ int displayXSize() {
 	return scale_is_vertical ? lcd::lcd.getDisplayXSize() : lcd::lcd.getDisplayYSize();
 }
 
+void increment(int counter) {
+    float min = edit_mode::getMin().getFloat();
+    float max = edit_mode::getMax().getFloat();
+
+    float value = edit_mode::getEditValue().getFloat() + 0.01f * counter;
+
+    if (value < min) {
+        value = min;
+    }
+    if (value > max) {
+        value = max;
+    }
+
+    edit_mode::setValue(value);
+}
+
 void onTouchDown() {
     start_value = edit_mode::getEditValue().getFloat();
     start_y = touchY();

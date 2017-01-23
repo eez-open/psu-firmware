@@ -33,6 +33,8 @@ void onTouchDown();
 void onTouchMove();
 void onTouchUp();
 
+void increment(int counter);
+
 }
 }
 }

@@ -516,7 +516,7 @@ void setFocusCursor(const data::Cursor& cursor, uint8_t dataId) {
     g_focusCursor = cursor;
     g_focusDataId = dataId;
 #if OPTION_ENCODER
-    encoder::setSpeedMultiplier(g_focusDataId == DATA_ID_CHANNEL_U_SET ? 2 : 1);
+    encoder::setSpeedMultiplier(data::getMax(cursor, g_focusDataId).getFloat() / data::getMax(cursor, DATA_ID_CHANNEL_U_SET).getFloat());
 #endif
 }
 
@@ -573,6 +573,37 @@ void standbyTouchHandling(unsigned long tick_usec) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void onEncoder(int counter) {
+    if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD) {
+        return;
+    } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
+        edit_mode_step::increment(counter);
+    } else if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+        edit_mode_slider::increment(counter);
+    } else {
+        data::Value value = data::currentSnapshot.get(g_focusCursor, g_focusDataId);
+
+        float newValue = value.getFloat() + 0.01f * counter;
+
+        float min = data::getMin(g_focusCursor, g_focusDataId).getFloat();
+        if (newValue < min) {
+            newValue = min;
+        }
+
+        float max = data::getLimit(g_focusCursor, g_focusDataId).getFloat();
+        if (newValue > max) {
+            newValue = max;
+        }
+
+        int16_t error;
+        if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType()), &error)) {
+            errorMessage(data::Value::ScpiErrorText(error));
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 void init() {
     setFocusCursor(0, DATA_ID_CHANNEL_U_SET);
 
@@ -620,8 +651,8 @@ void tick(unsigned long tick_usec) {
 
 #if OPTION_ENCODER
     int counter = encoder::readAndResetCounter();
-    if (counter && g_activePage) {
-        g_activePage->onEncoder(counter);
+    if (counter) {
+        onEncoder(counter);
     }
 #endif
 

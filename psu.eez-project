@@ -20350,6 +20350,7 @@
                               "widgets": [
                                 {
                                   "type": "Text",
+                                  "action": "toggle_channel",
                                   "x": 0,
                                   "y": 0,
                                   "width": 64,
@@ -20369,6 +20370,7 @@
                                     {
                                       "type": "DisplayData",
                                       "data": "channel.monValue",
+                                      "action": "toggle_channel",
                                       "x": 0,
                                       "y": 0,
                                       "width": 64,
@@ -20379,6 +20381,7 @@
                                     {
                                       "type": "DisplayData",
                                       "data": "channel.monValue",
+                                      "action": "toggle_channel",
                                       "x": 0,
                                       "y": 0,
                                       "width": 64,
@@ -20391,23 +20394,47 @@
                               ]
                             },
                             {
-                              "type": "DisplayData",
-                              "data": "channel.u.set",
                               "x": 0,
+                              "type": "Select",
+                              "data": "channel.rprog.status",
                               "y": 32,
                               "width": 64,
                               "height": 30,
-                              "style": "edit_value_S_right",
-                              "activeStyle": "edit_value_focus_S_right"
+                              "style": "default",
+                              "widgets": [
+                                {
+                                  "type": "DisplayData",
+                                  "data": "channel.u.set",
+                                  "action": "edit",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 64,
+                                  "height": 30,
+                                  "style": "edit_value_active_S_right",
+                                  "activeStyle": "edit_value_focus_S_right"
+                                },
+                                {
+                                  "type": "DisplayData",
+                                  "data": "channel.u.monDac",
+                                  "action": "",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 64,
+                                  "height": 30,
+                                  "style": "mon_dac_S",
+                                  "activeStyle": ""
+                                }
+                              ]
                             },
                             {
                               "type": "DisplayData",
                               "data": "channel.i.set",
+                              "action": "edit",
                               "x": 0,
                               "y": 62,
                               "width": 64,
                               "height": 30,
-                              "style": "edit_value_S_right",
+                              "style": "edit_value_active_S_right",
                               "activeStyle": "edit_value_focus_S_right"
                             }
                           ]
@@ -20469,6 +20496,7 @@
                             "widgets": [
                               {
                                 "type": "Text",
+                                "action": "toggle_channel",
                                 "x": 0,
                                 "y": 0,
                                 "width": 64,
@@ -20488,6 +20516,7 @@
                                   {
                                     "type": "DisplayData",
                                     "data": "channel.monValue",
+                                    "action": "toggle_channel",
                                     "x": 0,
                                     "y": 0,
                                     "width": 64,
@@ -20498,6 +20527,7 @@
                                   {
                                     "type": "DisplayData",
                                     "data": "channel.monValue",
+                                    "action": "toggle_channel",
                                     "x": 0,
                                     "y": 0,
                                     "width": 64,
@@ -20521,12 +20551,12 @@
                               {
                                 "type": "DisplayData",
                                 "data": "channel.u.set",
-                                "action": "",
+                                "action": "edit",
                                 "x": 0,
                                 "y": 0,
                                 "width": 64,
                                 "height": 30,
-                                "style": "edit_value_S_right",
+                                "style": "edit_value_active_S_right",
                                 "activeStyle": "edit_value_focus_S_right"
                               },
                               {
@@ -20559,7 +20589,7 @@
                                 "y": 0,
                                 "width": 64,
                                 "height": 30,
-                                "style": "edit_value_S_right",
+                                "style": "edit_value_active_S_right",
                                 "activeStyle": "edit_value_focus_S_right"
                               },
                               {
@@ -20668,6 +20698,7 @@
                             "widgets": [
                               {
                                 "type": "Text",
+                                "action": "toggle_channel",
                                 "x": 0,
                                 "y": 0,
                                 "width": 64,
@@ -20687,6 +20718,7 @@
                                   {
                                     "type": "DisplayData",
                                     "data": "channel.monValue",
+                                    "action": "toggle_channel",
                                     "x": 0,
                                     "y": 0,
                                     "width": 64,
@@ -20697,6 +20729,7 @@
                                   {
                                     "type": "DisplayData",
                                     "data": "channel.monValue",
+                                    "action": "toggle_channel",
                                     "x": 0,
                                     "y": 0,
                                     "width": 64,
@@ -20720,12 +20753,12 @@
                               {
                                 "type": "DisplayData",
                                 "data": "channel.u.set",
-                                "action": "",
+                                "action": "edit",
                                 "x": 0,
                                 "y": 0,
                                 "width": 64,
                                 "height": 30,
-                                "style": "edit_value_S_right",
+                                "style": "edit_value_active_S_right",
                                 "activeStyle": "edit_value_focus_S_right"
                               },
                               {
@@ -20758,7 +20791,7 @@
                                 "y": 0,
                                 "width": 64,
                                 "height": 30,
-                                "style": "edit_value_S_right",
+                                "style": "edit_value_active_S_right",
                                 "activeStyle": "edit_value_focus_S_right"
                               },
                               {
@@ -20886,6 +20919,7 @@
                               "widgets": [
                                 {
                                   "type": "Text",
+                                  "action": "toggle_channel",
                                   "x": 0,
                                   "y": 0,
                                   "width": 64,
@@ -20905,6 +20939,7 @@
                                     {
                                       "type": "DisplayData",
                                       "data": "channel.monValue",
+                                      "action": "toggle_channel",
                                       "x": 0,
                                       "y": 0,
                                       "width": 64,
@@ -20915,6 +20950,7 @@
                                     {
                                       "type": "DisplayData",
                                       "data": "channel.monValue",
+                                      "action": "toggle_channel",
                                       "x": 0,
                                       "y": 0,
                                       "width": 64,
@@ -20929,21 +20965,23 @@
                             {
                               "type": "DisplayData",
                               "data": "channel.u.set",
+                              "action": "edit",
                               "x": 0,
                               "y": 32,
                               "width": 64,
                               "height": 30,
-                              "style": "edit_value_S_right",
+                              "style": "edit_value_active_S_right",
                               "activeStyle": "edit_value_focus_S_right"
                             },
                             {
                               "type": "DisplayData",
                               "data": "channel.i.set",
+                              "action": "edit",
                               "x": 0,
                               "y": 62,
                               "width": 64,
                               "height": 30,
-                              "style": "edit_value_S_right",
+                              "style": "edit_value_active_S_right",
                               "activeStyle": "edit_value_focus_S_right"
                             }
                           ]

@@ -22,14 +22,18 @@
 
 #include "encoder.h"
 
-#define CONF_ENCODER_SPEED1_THRESHOLD_US 5000L
-#define CONF_ENCODER_SPEED1_TICKS 50
+// if time between two ticks is 5ms or less then increment by 1V (100 * 0.01V)
+#define CONF_ENCODER_INCREMENT_SPEED_PT1_X 5.0f
+#define CONF_ENCODER_INCREMENT_SPEED_PT1_Y 10.0f
+// if time between two ticks is 250ms or more then increment by 0.01V,
+// for everything between 5ms and 250ms use linear interpolation
+#define CONF_ENCODER_INCREMENT_SPEED_PT2_X 250.0f
+#define CONF_ENCODER_INCREMENT_SPEED_PT2_Y 1.0f
 
-#define CONF_ENCODER_SPEED2_THRESHOLD_US 20000L
-#define CONF_ENCODER_SPEED2_TICKS 20
-
-#define CONF_ENCODER_SPEED3_THRESHOLD_US 100000L
-#define CONF_ENCODER_SPEED3_TICKS 5
+#define CONF_ENCODER_DECREMENT_SPEED_PT1_X 5.0f
+#define CONF_ENCODER_DECREMENT_SPEED_PT1_Y 100.0f
+#define CONF_ENCODER_DECREMENT_SPEED_PT2_X 250.0f
+#define CONF_ENCODER_DECREMENT_SPEED_PT2_Y 1.0f
 
 namespace eez {
 namespace psu {
@@ -61,7 +65,7 @@ const uint8_t ttable[7][4] = {
 };
 #endif
 
-int g_speedMultiplier = 1;
+float g_speedMultiplier = 1.0f;
 
 volatile uint8_t state = 0;
 volatile int counter = 0;
@@ -76,16 +80,22 @@ void interruptHandler() {
         unsigned long time = micros();
         unsigned long diff = time - g_lastTime;
 
-        int amount;
-        if (diff < CONF_ENCODER_SPEED1_THRESHOLD_US) {
-            amount = g_speedMultiplier * CONF_ENCODER_SPEED1_TICKS;
-        } else if (diff < CONF_ENCODER_SPEED2_THRESHOLD_US) {
-            amount = g_speedMultiplier * CONF_ENCODER_SPEED2_TICKS;
-        }  else if (diff < CONF_ENCODER_SPEED3_THRESHOLD_US) {
-            amount = g_speedMultiplier * CONF_ENCODER_SPEED3_TICKS;
-        } else {
-            amount = 1;
-        }
+        int amount = (int) roundf(
+            util::clamp(
+                g_speedMultiplier * 
+                (
+                    result == DIR_CW ?
+
+                    util::remap(diff / 1000.0f, CONF_ENCODER_INCREMENT_SPEED_PT1_X, CONF_ENCODER_INCREMENT_SPEED_PT1_Y,
+                                      CONF_ENCODER_INCREMENT_SPEED_PT2_X, CONF_ENCODER_INCREMENT_SPEED_PT2_Y) :
+
+                    util::remap(diff / 1000.0f, CONF_ENCODER_DECREMENT_SPEED_PT1_X, CONF_ENCODER_DECREMENT_SPEED_PT1_Y,
+                                      CONF_ENCODER_DECREMENT_SPEED_PT2_X, CONF_ENCODER_DECREMENT_SPEED_PT2_Y)
+                ),
+                1.0f,
+                100.0f
+            )
+        );
         
         if (result == DIR_CW) {
             counter += amount;
@@ -122,7 +132,7 @@ int readAndResetCounter() {
     return result;
 }
 
-void setSpeedMultiplier(int speedMultiplier) {
+void setSpeedMultiplier(float speedMultiplier) {
     g_speedMultiplier = speedMultiplier;
 }
 

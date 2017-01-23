@@ -80,6 +80,41 @@ void setStepIndex(int value) {
     step_index = value;
 }
 
+void increment(int counter) {
+    float min = edit_mode::getMin().getFloat();
+    float max = edit_mode::getMax().getFloat();
+    float stepValue = getStepValue();
+
+    float value = edit_mode::getEditValue().getFloat();
+
+    for (int i = 0; i < abs(counter); ++i) {
+        if (counter > 0) {
+            if (value == min) {
+                value = (floorf(min / stepValue) + 1) * stepValue;
+            } else {
+                value += stepValue;
+            }
+            if (value > max) {
+                value = max;
+            }
+        } else {
+            if (value == max) {
+                value = (ceilf(max / stepValue) - 1) * stepValue;
+            } else {
+                value -= stepValue;
+            }
+            if (value < min) {
+                value = min;
+            }
+        }
+    }
+
+    if (edit_mode::setValue(value)) {
+	    changed = true;
+        sound::playClick();
+	}
+}
+
 void test() {
     if (!changed) {
 #if DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT
@@ -88,36 +123,7 @@ void test() {
         int d = touch::x - start_pos;
 #endif
         if (abs(d) >= CONF_GUI_EDIT_MODE_STEP_THRESHOLD_PX) {
-            float min = edit_mode::getMin().getFloat();
-            float max = edit_mode::getMax().getFloat();
-
-            float value = edit_mode::getEditValue().getFloat();
-
-            float stepValue = getStepValue();
-            if (d > 0) {
-                if (value == min) {
-                    value = (floorf(min / stepValue) + 1) * stepValue;
-                } else {
-                    value += getStepValue();
-                }
-                if (value > max) {
-                    value = max;
-                }
-            } else {
-                if (value == max) {
-                    value = (ceilf(max / stepValue) - 1) * stepValue;
-                } else {
-                    value -= getStepValue();
-                }
-                if (value < min) {
-                    value = min;
-                }
-            }
-
-            if (edit_mode::setValue(value)) {
-	            changed = true;
-                sound::playClick();
-			}
+            increment(d > 0 ? 1 : -1);
         }
     }
 }
