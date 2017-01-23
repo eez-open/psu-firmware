@@ -34,7 +34,9 @@
 #endif
 #endif
 
+#if OPTION_DISPLAY
 #include <UTFT.h>
+#endif
 
 void setup() {
     PSU_boot();
