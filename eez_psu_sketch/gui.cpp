@@ -396,11 +396,13 @@ void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callb
     }
 
     alertMessage(errorPageId, value, ok_callback);
+    sound::playBeep();
 }
 
 
 void errorMessageP(const char *message PROGMEM, void (*ok_callback)()) {
     alertMessage(PAGE_ID_ERROR_ALERT, data::Value::ProgmemStr(message), ok_callback);
+    sound::playBeep();
 }
 
 void yesNoDialog(int yesNoPageId, const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
@@ -637,7 +639,7 @@ void onEncoder(int counter) {
             newValue = min;
         }
 
-        float max = data::getLimit(g_focusCursor, g_focusDataId).getFloat();
+        float max = data::getMax(g_focusCursor, g_focusDataId).getFloat();
         if (newValue > max) {
             newValue = max;
         }

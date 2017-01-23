@@ -152,8 +152,16 @@ bool greaterOrEqual(float a, float b, float prec) {
 	return a > b || equal(a, b, prec);
 }
 
+bool lessOrEqual(float a, float b, float prec) {
+	return a < b || equal(a, b, prec);
+}
+
 bool equal(float a, float b, float prec) {
 	return roundf(a * prec) == roundf(b * prec);
+}
+
+bool between(float x, float a, float b, float prec) {
+    return greaterOrEqual(x, a, prec) && lessOrEqual(x, b, prec);
 }
 
 float multiply(float a, float b, float prec) {

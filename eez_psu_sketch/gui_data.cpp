@@ -385,17 +385,17 @@ void getList(const Cursor &cursor, uint8_t id, const Value **values, int &count)
 
 bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
     if (id == DATA_ID_CHANNEL_U_SET) {
-        if (value.getFloat() < channel_dispatcher::getUMin(Channel::get(cursor.i)) || value.getFloat() > channel_dispatcher::getUMax(Channel::get(cursor.i))) {
+        if (!util::between(value.getFloat(), channel_dispatcher::getUMin(Channel::get(cursor.i)), channel_dispatcher::getUMax(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
             if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
             return false;
         }
         
-        if (value.getFloat() > channel_dispatcher::getULimit(Channel::get(cursor.i))) {
+        if (!util::lessOrEqual(value.getFloat(), channel_dispatcher::getULimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
             if (error) *error = SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
             return false;
         }
         
-        if (value.getFloat() * channel_dispatcher::getISet(Channel::get(cursor.i)) > channel_dispatcher::getPowerLimit(Channel::get(cursor.i))) {
+        if (!util::lessOrEqual(value.getFloat() * channel_dispatcher::getISet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
@@ -404,17 +404,17 @@ bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
 
         return true;
     } else if (id == DATA_ID_CHANNEL_I_SET) {
-        if (value.getFloat() < channel_dispatcher::getIMin(Channel::get(cursor.i)) || value.getFloat() > channel_dispatcher::getIMax(Channel::get(cursor.i))) {
+        if (!util::between(value.getFloat(), channel_dispatcher::getIMin(Channel::get(cursor.i)), channel_dispatcher::getIMax(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
             if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
             return false;
         }
         
-        if (value.getFloat() > channel_dispatcher::getILimit(Channel::get(cursor.i))) {
+        if (!util::lessOrEqual(value.getFloat(), channel_dispatcher::getILimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
             if (error) *error = SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
             return false;
         }
         
-        if (value.getFloat() * channel_dispatcher::getUSet(Channel::get(cursor.i)) > channel_dispatcher::getPowerLimit(Channel::get(cursor.i))) {
+        if (!util::lessOrEqual(value.getFloat() * channel_dispatcher::getUSet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }

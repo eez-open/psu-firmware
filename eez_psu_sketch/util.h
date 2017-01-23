@@ -49,7 +49,10 @@ float ceilPrec(float a, float prec);
 float roundPrec(float a, float prec);
 
 bool greaterOrEqual(float a, float b, float prec);
+bool lessOrEqual(float a, float b, float prec);
 bool equal(float a, float b, float prec);
+
+bool between(float x, float a, float b, float prec);
 
 float multiply(float a, float b, float prec);
 
