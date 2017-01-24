@@ -417,7 +417,7 @@ void changePowerLimit() {
 	float minLimit = channel_dispatcher::getPowerMinLimit(channel);
 	float maxLimit = channel_dispatcher::getPowerMaxLimit(channel);
 	float defLimit = channel_dispatcher::getPowerDefaultLimit(channel);
-    changeLimit(data::Value(channel_dispatcher::getPowerLimit(channel), data::VALUE_TYPE_FLOAT_WATT), minLimit, maxLimit, defLimit, onSetCurrentLimit);
+    changeLimit(data::Value(channel_dispatcher::getPowerLimit(channel), data::VALUE_TYPE_FLOAT_WATT), minLimit, maxLimit, defLimit, onSetPowerLimit);
 }
 
 void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callback)()) {
