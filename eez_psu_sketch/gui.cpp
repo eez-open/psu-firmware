@@ -674,17 +674,13 @@ bool isEncoderEnabledInActivePage() {
 }
 
 void onEncoder(int counter) {
-    if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD) {
+    if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD || g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
+        ((NumericKeypad *)getActiveKeypad())->onEncoder(counter);
         return;
     }
     
     if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
         edit_mode_step::onEncoder(counter);
-        return;
-    }
-
-    if (g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
-        ((NumericKeypad *)g_activePage)->onEncoder(counter);
         return;
     }
 
