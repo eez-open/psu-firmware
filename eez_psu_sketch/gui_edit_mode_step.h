@@ -28,7 +28,9 @@ void getStepValues(const data::Value **labels, int &count);
 
 void setStepIndex(int value);
 
-void increment(int counter, bool playClick);
+#if OPTION_ENCODER
+void onEncoder(int counter);
+#endif
 
 void onTouchDown();
 void onTouchMove();

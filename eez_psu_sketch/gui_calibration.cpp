@@ -193,7 +193,7 @@ void set() {
     
         psu::calibration::Value *calibrationValue = getCalibrationValue();
 
-        numeric_keypad::Options options;
+        NumericKeypadOptions options;
 
         if (calibrationValue == &psu::calibration::g_voltage) {
             options.editUnit = data::VALUE_TYPE_FLOAT_VOLT;
@@ -216,14 +216,14 @@ void set() {
         options.flags.signButtonEnabled = true;
         options.flags.dotButtonEnabled = true;
 
-        numeric_keypad::start(0, options, onSetOk, showCurrentStep);
+        NumericKeypad *numericKeypad = NumericKeypad::start(0, 0, options, onSetOk, showCurrentStep);
 
         if (g_stepNum == 0 || g_stepNum == 3) {
-            numeric_keypad::switchToMilli();
+            numericKeypad->switchToMilli();
         }
     } else if (g_stepNum == 6) {
         psu::calibration::resetChannelToZero();
-        keypad::startPush(0, psu::calibration::isRemarkSet() ? psu::calibration::getRemark() : 0, CALIBRATION_REMARK_MAX_LENGTH, false, onSetRemarkOk, popPage);
+        Keypad::startPush(0, psu::calibration::isRemarkSet() ? psu::calibration::getRemark() : 0, CALIBRATION_REMARK_MAX_LENGTH, false, onSetRemarkOk, popPage);
     }
 }
 

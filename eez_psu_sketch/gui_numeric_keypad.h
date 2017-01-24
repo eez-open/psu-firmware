@@ -23,9 +23,8 @@
 namespace eez {
 namespace psu {
 namespace gui {
-namespace numeric_keypad {
 
-struct Options {
+struct NumericKeypadOptions {
 	data::ValueType editUnit;
 
 	float min;
@@ -41,30 +40,69 @@ struct Options {
 	} flags;
 };
 
-void init(const char *label, Options &options, void (*ok)(float), void (*cancel)());
-// data::ValueType editUnit, float min, float max, bool maxButtonEnabled, float def, bool defButtonEnabled         bool genericNumberKeypad
-void start(const char *label, Options &options, void (*ok)(float), void (*cancel)() = 0);
+enum NumericKeypadState {
+    START,
+    EMPTY,
+    D0,
+    D1,
+    DOT,
+    D2,
+    D3,
 
-bool isEditing();
+	BEFORE_DOT,
+	AFTER_DOT
+};
 
-data::ValueType getEditUnit();
-bool getText(char *text, int count);
-data::Value getData(uint8_t id);
-void switchToMilli();
+class NumericKeypad : public Keypad {
+public:
+    void init(const char *label, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)());
+    static NumericKeypad *start(const char *label, const data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)() = 0);
 
-void key(char c);
-void space();
-void caps();
-void back();
-void clear();
-void sign();
-void unit();
-void setMaxValue();
-void setDefaultValue();
-void ok();
-void cancel();
+    bool isEditing();
+
+    data::ValueType getEditUnit();
+    bool getText(char *text, int count);
+    void switchToMilli();
+
+    void key(char ch);
+    void space();
+    void caps();
+    void back();
+    void clear();
+    void sign();
+    void unit();
+    void setMaxValue();
+    void setDefaultValue();
+    void ok();
+    void cancel();
+
+#if OPTION_ENCODER
+    void onEncoder(int counter);
+#endif
+
+protected:
+    void takeSnapshot(data::Snapshot *snapshot);
+    data::Value getData(KeypadSnapshot *keypadSnapshot, uint8_t id);
+
+private:
+    NumericKeypadState m_state;
+    int m_d0;
+    int m_d1;
+    int m_d2;
+    int m_d3;
+    NumericKeypadOptions m_options;
+
+    float getValue();
+    char getDotSign();
+    bool isMilli();
+    bool setValue(float fvalue);
+    bool isValueValid();
+    void digit(int d);
+    void dot();
+    void toggleEditUnit();
+    void reset();
+};
 
 }
 }
-}
-} // namespace eez::psu::gui::numeric_keypad
+} // namespace eez::psu::gui

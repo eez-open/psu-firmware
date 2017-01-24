@@ -20,6 +20,10 @@
 
 #if OPTION_DISPLAY
 
+#if OPTION_ENCODER
+#include "encoder.h"
+#endif
+
 #include "sound.h"
 #include "gui_data.h"
 #include "gui_edit_mode.h"
@@ -119,6 +123,15 @@ void increment(int counter, bool playClick) {
         }
 	}
 }
+
+#if OPTION_ENCODER
+
+void onEncoder(int counter) {
+    encoder::enableVariableSpeed(false);
+    increment(counter, false);
+}
+
+#endif
 
 void test() {
     if (!changed) {

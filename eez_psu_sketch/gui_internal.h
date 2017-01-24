@@ -48,7 +48,7 @@ int getPreviousActivePageId();
 bool isActivePageInternal();
 
 void setPage(int index);
-void replacePage(int index);
+void replacePage(int index, Page *page = 0);
 void pushPage(int index, Page *page = 0);
 void popPage();
 

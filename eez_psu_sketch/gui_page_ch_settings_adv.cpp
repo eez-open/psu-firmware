@@ -266,7 +266,7 @@ void ChSettingsAdvViewPage::swapDisplayValues() {
 }
 
 void ChSettingsAdvViewPage::editYTViewRate() {
-	numeric_keypad::Options options;
+	NumericKeypadOptions options;
 
 	options.editUnit = data::VALUE_TYPE_FLOAT_SECOND;
 
@@ -280,7 +280,7 @@ void ChSettingsAdvViewPage::editYTViewRate() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	numeric_keypad::start(0, options, onYTViewRateSet);
+	NumericKeypad::start(0, 0, options, onYTViewRateSet);
 }
 
 int ChSettingsAdvViewPage::getDirty() {

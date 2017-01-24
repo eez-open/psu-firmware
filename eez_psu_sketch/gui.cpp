@@ -48,6 +48,7 @@
 #include "gui_page_sys_settings.h"
 #include "gui_page_sys_info.h"
 #include "gui_page_user_profiles.h"
+#include "gui_numeric_keypad.h"
 
 #ifdef EEZ_PSU_SIMULATOR
 #include "front_panel/control.h"
@@ -101,6 +102,7 @@ static void (*g_dialogNoCallback)();
 static void (*g_dialogCancelCallback)();
 
 static void (*g_errorMessageAction)();
+static void *g_errorMessageActionParam;
 
 static unsigned long g_showPageTime;
 static unsigned long g_timeOfLastActivity;
@@ -209,8 +211,8 @@ void setPage(int index) {
     doShowPage(index);
 }
 
-void replacePage(int index) {
-    doShowPage(index);
+void replacePage(int index, Page *page) {
+    doShowPage(index, page);
 }
 
 void pushPage(int index, Page *page) {
@@ -358,6 +360,66 @@ void toastMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, c
     longAlertMessage(PAGE_ID_TOAST3_ALERT, message1, message2, ok_callback);
 }
 
+void changeLimit(const data::Value& value, float minLimit, float maxLimit, float defLimit, void (*onSetLimit)(float)) {
+	NumericKeypadOptions options;
+
+	options.editUnit = value.getType();
+
+	options.min = minLimit;
+	options.max = maxLimit;
+	options.def = defLimit;
+
+	options.flags.genericNumberKeypad = true;
+	options.flags.maxButtonEnabled = true;
+	options.flags.defButtonEnabled = true;
+	options.flags.signButtonEnabled = true;
+	options.flags.dotButtonEnabled = true;
+
+	NumericKeypad::start(0, value, options, onSetLimit);
+}
+
+void onSetVoltageLimit(float limit) {
+    Channel& channel = Channel::get((int)g_errorMessageActionParam);
+    channel_dispatcher::setVoltageLimit(channel, limit);
+    infoMessageP(PSTR("Voltage limit changed!"), popPage);
+}
+
+void changeVoltageLimit() {
+    Channel& channel = Channel::get((int)g_errorMessageActionParam);
+	float minLimit = channel_dispatcher::getUMin(channel);
+	float maxLimit = channel_dispatcher::getUMax(channel);
+	float defLimit = channel_dispatcher::getUMax(channel);
+    changeLimit(data::Value(channel_dispatcher::getULimit(channel), data::VALUE_TYPE_FLOAT_VOLT), minLimit, maxLimit, defLimit, onSetVoltageLimit);
+}
+
+void onSetCurrentLimit(float limit) {
+    Channel& channel = Channel::get((int)g_errorMessageActionParam);
+    channel_dispatcher::setCurrentLimit(channel, limit);
+    infoMessageP(PSTR("Current limit changed!"), popPage);
+}
+
+void changeCurrentLimit() {
+    Channel& channel = Channel::get((int)g_errorMessageActionParam);
+	float minLimit = channel_dispatcher::getIMin(channel);
+	float maxLimit = channel_dispatcher::getIMax(channel);
+	float defLimit = channel_dispatcher::getIMax(channel);
+    changeLimit(data::Value(channel_dispatcher::getILimit(channel), data::VALUE_TYPE_FLOAT_AMPER), minLimit, maxLimit, defLimit, onSetCurrentLimit);
+}
+
+void onSetPowerLimit(float limit) {
+    Channel& channel = Channel::get((int)g_errorMessageActionParam);
+    channel_dispatcher::setPowerLimit(channel, limit);
+    infoMessageP(PSTR("Power limit changed!"), popPage);
+}
+
+void changePowerLimit() {
+    Channel& channel = Channel::get((int)g_errorMessageActionParam);
+	float minLimit = channel_dispatcher::getPowerMinLimit(channel);
+	float maxLimit = channel_dispatcher::getPowerMaxLimit(channel);
+	float defLimit = channel_dispatcher::getPowerDefaultLimit(channel);
+    changeLimit(data::Value(channel_dispatcher::getPowerLimit(channel), data::VALUE_TYPE_FLOAT_WATT), minLimit, maxLimit, defLimit, onSetCurrentLimit);
+}
+
 void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callback)()) {
     int errorPageId = PAGE_ID_ERROR_ALERT;
 
@@ -369,21 +431,21 @@ void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callb
 
         if (value.getScpiError() == SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED) {
             if (channel_dispatcher::getULimit(channel) < channel_dispatcher::getUMaxLimit(channel)) {
-                action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OVP];
+                action = changeVoltageLimit;
                 actionLabel = PSTR("Change voltage limit");
             } else {
                 errorPageId = PAGE_ID_ERROR_TOAST_ALERT;
             }
         } else if (value.getScpiError() == SCPI_ERROR_CURRENT_LIMIT_EXCEEDED) {
             if (channel_dispatcher::getILimit(channel) < channel_dispatcher::getIMaxLimit(channel)) {
-                action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OCP];
+                action = changeCurrentLimit;
                 actionLabel = PSTR("Change current limit");
             } else {
                 errorPageId = PAGE_ID_ERROR_TOAST_ALERT;
             }
         } else if (value.getScpiError() == SCPI_ERROR_POWER_LIMIT_EXCEEDED) {
             if (channel_dispatcher::getPowerLimit(channel) < channel_dispatcher::getPowerMaxLimit(channel)) {
-                action = actions[ACTION_ID_SHOW_CH_SETTINGS_PROT_OPP];
+                action = changePowerLimit;
                 actionLabel = PSTR("Change power limit");
             } else {
                 errorPageId = PAGE_ID_ERROR_TOAST_ALERT;
@@ -393,6 +455,7 @@ void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callb
         if (action) {
             data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE_2, actionLabel, 0);
             g_errorMessageAction = action;
+            g_errorMessageActionParam = (void *)cursor.i;
             errorPageId = PAGE_ID_ERROR_ALERT_WITH_ACTION;
         }
     }
@@ -535,9 +598,6 @@ void selectChannel() {
 void setFocusCursor(const data::Cursor& cursor, uint8_t dataId) {
     g_focusCursor = cursor;
     g_focusDataId = dataId;
-#if OPTION_ENCODER
-    encoder::setSpeedMultiplier(data::getMax(cursor, g_focusDataId).getFloat() / data::getMax(cursor, DATA_ID_CHANNEL_U_SET).getFloat());
-#endif
 }
 
 bool wasFocusWidget(const WidgetCursor &widgetCursor) {
@@ -619,18 +679,23 @@ void onEncoder(int counter) {
     }
     
     if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
-        encoder::enableVariableSpeed(false);
-        edit_mode_step::increment(counter, false);
+        edit_mode_step::onEncoder(counter);
+        return;
+    }
+
+    if (g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
+        ((NumericKeypad *)g_activePage)->onEncoder(counter);
         return;
     }
 
     encoder::enableVariableSpeed(true);
+    encoder::setSpeedMultiplier(data::getMax(g_focusCursor, g_focusDataId).getFloat() / data::getMax(g_focusCursor, DATA_ID_CHANNEL_U_SET).getFloat());
 
     if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
         edit_mode_slider::increment(counter);
         return;
     }
-    
+
     if (isEncoderEnabledInActivePage()) {
         data::Value value = data::currentSnapshot.get(g_focusCursor, g_focusDataId);
 

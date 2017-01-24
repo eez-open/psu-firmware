@@ -27,6 +27,7 @@
 #include "gui_data_snapshot.h"
 #include "gui_keypad.h"
 #include "gui_numeric_keypad.h"
+#include "gui_edit_mode_keypad.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable:4996)
@@ -41,247 +42,200 @@
 namespace eez {
 namespace psu {
 namespace gui {
-namespace keypad {
-
-static const char *g_label;
-int g_maxChars;
-
-char g_keypadText[sizeof(Snapshot::text)];
-static bool g_isUpperCase = false;
-
-static bool g_isPassword = false;
-static unsigned long g_lastKeyAppendTime;
-
-void (*g_okCallback)(char *);
-void (*g_cancelCallback)();
-
-static bool g_cursor;
-static unsigned long g_lastCursorChangeTime;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Snapshot::takeSnapshot(data::Snapshot *snapshot) {
-	// text
-	char *textPtr = this->text;
-
-	if (g_label) {
-		strcpy_P(textPtr, g_label);
-		textPtr += strlen(g_label);
-	}
-
-	if (getActivePageId() == PAGE_ID_KEYPAD) {
-		if (g_isPassword) {
-			int n = strlen(keypad::g_keypadText);
-			if (n > 0) {
-				int i;
-
-				for (i = 0; i < n - 1; ++i) {
-					*textPtr++ = '*';
-				}
-
-				unsigned long current_time = micros();
-				if (current_time - g_lastKeyAppendTime <= CONF_GUI_KEYPAD_PASSWORD_LAST_CHAR_VISIBLE_DURATION) {
-					*textPtr++ = keypad::g_keypadText[i];
-				} else {
-					*textPtr++ = '*';
-				}
-
-				*textPtr++ = 0;
-			} else {
-				*textPtr = 0;
-			}
-		} else {
-			strcpy(textPtr, keypad::g_keypadText);
-		}
-
-		appendCursor(this->text);
-	} else {
-		numeric_keypad::getText(textPtr, 16);
-	}
-
-	//
-	if (getActivePageId() == PAGE_ID_KEYPAD) {
-		this->isUpperCase = keypad::g_isUpperCase;
-	}
-
-	//
-	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
-        switch (numeric_keypad::getEditUnit()) {
-        case data::VALUE_TYPE_FLOAT_VOLT: keypadUnit = data::Value::ProgmemStr(PSTR("mV")); break;
-        case data::VALUE_TYPE_FLOAT_MILLI_VOLT: keypadUnit = data::Value::ProgmemStr(PSTR("V")); break;
-        case data::VALUE_TYPE_FLOAT_AMPER: keypadUnit = data::Value::ProgmemStr(PSTR("mA")); break;
-		case data::VALUE_TYPE_FLOAT_MILLI_AMPER: keypadUnit = data::Value::ProgmemStr(PSTR("A")); break;
-        default: keypadUnit = data::Value::ProgmemStr(PSTR(""));
-        }
-	}
+Keypad *getActiveKeypad() {
+    if (getActivePageId() == PAGE_ID_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
+        return (Keypad *)getActivePage();
+    } else if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD) {
+        return edit_mode_keypad::g_keypad;
+    }
+    return 0;
 }
 
-data::Value Snapshot::get(uint8_t id) {
-	if (id == DATA_ID_KEYPAD_CAPS) {
-		return isUpperCase ? 1 : 0;
-	} else if (id == DATA_ID_EDIT_UNIT) {
-        return keypadUnit;
-    } else if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
-		data::Value value = numeric_keypad::getData(id);
-		if (value.getType() != data::VALUE_TYPE_NONE) {
-			return value;
-		}
-	}
+void KeypadSnapshot::takeSnapshot(data::Snapshot *snapshot) {
+    Keypad *keypad = getActiveKeypad();
+    if (keypad) {
+        keypad->takeSnapshot(snapshot);
+    }
+}
 
+data::Value KeypadSnapshot::get(uint8_t id) {
+    Keypad *keypad = getActiveKeypad();
+    if (keypad) {
+        return keypad->getData(this, id);
+    }
 	return data::Value();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void init(const char *label_, void (*ok)(char *), void (*cancel)()) {
-	g_label = label_;
-	g_okCallback = ok;
-	g_cancelCallback = cancel;
-
-	g_lastCursorChangeTime = micros();
+Keypad::Keypad() {
+    m_label = 0;
+    m_keypadText[0] = 0;
+    m_okCallback = 0;
+    m_cancelCallback = 0;
+    m_isUpperCase = false;
+    m_isPassword = false;
 }
 
-void start(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)()) {
+void Keypad::init(const char *label_, void (*ok)(char *), void (*cancel)()) {
+	m_label = label_;
+	m_okCallback = ok;
+	m_cancelCallback = cancel;
+
+	m_lastCursorChangeTime = micros();
+}
+
+void Keypad::takeSnapshot(data::Snapshot *snapshot) {
+	// text
+	char *textPtr = snapshot->keypadSnapshot.text;
+
+	if (m_label) {
+		strcpy_P(textPtr, m_label);
+		textPtr += strlen(m_label);
+	}
+
+	if (m_isPassword) {
+		int n = strlen(m_keypadText);
+		if (n > 0) {
+			int i;
+
+			for (i = 0; i < n - 1; ++i) {
+				*textPtr++ = '*';
+			}
+
+			unsigned long current_time = micros();
+			if (current_time - m_lastKeyAppendTime <= CONF_GUI_KEYPAD_PASSWORD_LAST_CHAR_VISIBLE_DURATION) {
+				*textPtr++ = m_keypadText[i];
+			} else {
+				*textPtr++ = '*';
+			}
+
+			*textPtr++ = 0;
+		} else {
+			*textPtr = 0;
+		}
+	} else {
+		strcpy(textPtr, m_keypadText);
+	}
+
+	appendCursor(snapshot->keypadSnapshot.text);
+
+	snapshot->keypadSnapshot.isUpperCase = m_isUpperCase;
+}
+
+data::Value Keypad::getData(KeypadSnapshot *keypadSnapshot, uint8_t id) {
+    if (id == DATA_ID_KEYPAD_CAPS) {
+		return data::Value(keypadSnapshot->isUpperCase ? 1 : 0);
+	} else if (id == DATA_ID_EDIT_UNIT) {
+        return keypadSnapshot->keypadUnit;
+    }
+    return data::Value();
+}
+
+void Keypad::start(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)()) {
 	init(label, ok, cancel);
 
-	g_maxChars = maxChars_;
-	g_isPassword = isPassword_;
+	m_maxChars = maxChars_;
+	m_isPassword = isPassword_;
 
 	if (text) {
-		strcpy(g_keypadText, text);
+		strcpy(m_keypadText, text);
 	} else {
-		g_keypadText[0] = 0;
+		m_keypadText[0] = 0;
 	}
-	g_isUpperCase = false;
+	m_isUpperCase = false;
 }
 
-void startPush(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)()) {
-	start(label, text, maxChars_, isPassword_, ok, cancel);
-	pushPage(PAGE_ID_KEYPAD);
+void Keypad::startPush(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)()) {
+    Keypad *page = new Keypad();
+	page->start(label, text, maxChars_, isPassword_, ok, cancel);
+	pushPage(PAGE_ID_KEYPAD, page);
 }
 
-void startReplace(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)()) {
-	start(label, text, maxChars_, isPassword_, ok, cancel);
-	replacePage(PAGE_ID_KEYPAD);
+void Keypad::startReplace(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)()) {
+    Keypad *page = new Keypad();
+	page->start(label, text, maxChars_, isPassword_, ok, cancel);
+	replacePage(PAGE_ID_KEYPAD, page);
 }
 
-void appendChar(char c) {
-	int n = strlen(g_keypadText);
-	if (n <= g_maxChars && (n + (g_label ? strlen(g_label) : 0)) < MAX_KEYPAD_TEXT_LENGTH) {
-		g_keypadText[n] = c;
-		g_keypadText[n + 1] = 0;
-		g_lastKeyAppendTime = micros();
+void Keypad::appendChar(char c) {
+	int n = strlen(m_keypadText);
+	if (n <= m_maxChars && (n + (m_label ? strlen(m_label) : 0)) < MAX_KEYPAD_TEXT_LENGTH) {
+		m_keypadText[n] = c;
+		m_keypadText[n + 1] = 0;
+		m_lastKeyAppendTime = micros();
 	} else {
 		sound::playBeep();
 	}
 }
 
-void key() {
+void Keypad::key() {
 	DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
 	DECL_WIDGET_SPECIFIC(TextWidget, textWidget, widget);
 	DECL_STRING(text, textWidget->text);
-	char c = text[0];
+    key(text[0]);
+}
 
-	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
-		numeric_keypad::key(c);
+void Keypad::key(char ch) {
+    appendChar(m_isUpperCase ? toupper(ch) : tolower(ch));
+}
+
+void Keypad::space() {
+	appendChar(' ');
+}
+
+void Keypad::caps() {
+	m_isUpperCase = !m_isUpperCase;
+}
+
+void Keypad::back() {
+	int n = strlen(m_keypadText);
+	if (n > 0) {
+		m_keypadText[n - 1] = 0;
 	} else {
-		appendChar(g_isUpperCase ? toupper(c) : tolower(c));
+		sound::playBeep();
 	}
 }
 
-void space() {
-	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
-		numeric_keypad::space();
+void Keypad::clear() {
+	m_keypadText[0] = 0;
+}
+
+void Keypad::sign() {
+}
+
+void Keypad::unit() {
+}
+
+void Keypad::setMaxValue() {
+}
+
+void Keypad::setDefaultValue() {
+}
+
+void Keypad::ok() {
+	m_okCallback(m_keypadText);
+}
+
+void Keypad::cancel() {
+	if (m_cancelCallback) {
+		m_cancelCallback();
 	} else {
-		appendChar(' ');
+		popPage();
 	}
 }
 
-void caps() {
-	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
-		numeric_keypad::caps();
-	} else {
-		g_isUpperCase = !g_isUpperCase;
-	}
-}
-
-void back() {
-	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
-		numeric_keypad::back();
-	} else {
-		int n = strlen(g_keypadText);
-		if (n > 0) {
-			g_keypadText[n - 1] = 0;
-		} else {
-			sound::playBeep();
-		}
-	}
-}
-
-void clear() {
-	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
-		numeric_keypad::clear();
-	} else {
-		g_keypadText[0] = 0;
-	}
-}
-
-void sign() {
-	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
-		numeric_keypad::sign();
-	} else {
-	}
-}
-
-void unit() {
-	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
-		numeric_keypad::unit();
-	} else {
-	}
-}
-
-void setMaxValue() {
-	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
-		numeric_keypad::setMaxValue();
-	} else {
-	}
-}
-
-void setDefaultValue() {
-	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
-		numeric_keypad::setDefaultValue();
-	} else {
-	}
-}
-
-void ok() {
-	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
-		numeric_keypad::ok();
-	} else {
-		g_okCallback(g_keypadText);
-	}
-}
-
-void cancel() {
-	if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || getActivePageId() == PAGE_ID_NUMERIC_KEYPAD) {
-		numeric_keypad::cancel();
-	} else {
-		if (g_cancelCallback) {
-			g_cancelCallback();
-		} else {
-			popPage();
-		}
-	}
-}
-
-void appendCursor(char *text) {
+void Keypad::appendCursor(char *text) {
     unsigned long current_time = micros();
-    if (current_time - g_lastCursorChangeTime > CONF_GUI_KEYPAD_CURSOR_BLINK_TIME) {
-        g_cursor = !g_cursor;
-        g_lastCursorChangeTime = current_time;
+    if (current_time - m_lastCursorChangeTime > CONF_GUI_KEYPAD_CURSOR_BLINK_TIME) {
+        m_cursor = !m_cursor;
+        m_lastCursorChangeTime = current_time;
     }
 
-    if (g_cursor) {
+    if (m_cursor) {
         strcat_P(text, PSTR(CONF_GUI_KEYPAD_CURSOR_ON));
     }
     else {
@@ -291,7 +245,6 @@ void appendCursor(char *text) {
 
 }
 }
-}
-} // namespace eez::psu::gui::keypad
+} // namespace eez::psu::gui
 
 #endif

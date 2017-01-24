@@ -94,7 +94,7 @@ struct SnapshotFlags {
 
 struct Snapshot {
     ChannelSnapshot channelSnapshots[CH_MAX];
-    keypad::Snapshot keypadSnapshot;
+    KeypadSnapshot keypadSnapshot;
     edit_mode::Snapshot editModeSnapshot;
     Value alertMessage;
     Value alertMessage2;

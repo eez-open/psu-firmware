@@ -164,7 +164,7 @@ void ChSettingsProtectionSetPage::onLimitSet(float value) {
 }
 
 void ChSettingsProtectionSetPage::editLimit() {
-	numeric_keypad::Options options;
+	NumericKeypadOptions options;
 
 	options.editUnit = limit.getType();
 
@@ -178,7 +178,7 @@ void ChSettingsProtectionSetPage::editLimit() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	numeric_keypad::start(0, options, onLimitSet);
+	NumericKeypad::start(0, 0, options, onLimitSet);
 }
 
 void ChSettingsProtectionSetPage::onLevelSet(float value) {
@@ -188,7 +188,7 @@ void ChSettingsProtectionSetPage::onLevelSet(float value) {
 }
 
 void ChSettingsProtectionSetPage::editLevel() {
-	numeric_keypad::Options options;
+	NumericKeypadOptions options;
 
 	options.editUnit = level.getType();
 
@@ -202,7 +202,7 @@ void ChSettingsProtectionSetPage::editLevel() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	numeric_keypad::start(0, options, onLevelSet);
+	NumericKeypad::start(0, 0, options, onLevelSet);
 }
 
 void ChSettingsProtectionSetPage::onDelaySet(float value) {
@@ -212,7 +212,7 @@ void ChSettingsProtectionSetPage::onDelaySet(float value) {
 }
 
 void ChSettingsProtectionSetPage::editDelay() {
-	numeric_keypad::Options options;
+	NumericKeypadOptions options;
 
 	options.editUnit = delay.getType();
 
@@ -226,7 +226,7 @@ void ChSettingsProtectionSetPage::editDelay() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	numeric_keypad::start(0, options, onDelaySet);
+	NumericKeypad::start(0, 0, options, onDelaySet);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

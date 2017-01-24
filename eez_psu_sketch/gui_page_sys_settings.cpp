@@ -78,7 +78,7 @@ void SysSettingsDateTimePage::edit() {
 	DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
 	int id = widget->data;
 
-	numeric_keypad::Options options;
+	NumericKeypadOptions options;
 
 	options.editUnit = data::VALUE_TYPE_INT;
 
@@ -132,7 +132,7 @@ void SysSettingsDateTimePage::edit() {
 
 	if (label) {
 		editDataId = id;
-		numeric_keypad::start(label, options, onSetValue);
+		NumericKeypad::start(label, 0, options, onSetValue);
 	}
 }
 
@@ -373,7 +373,7 @@ void SysSettingsAuxOtpPage::onLevelSet(float value) {
 }
 
 void SysSettingsAuxOtpPage::editLevel() {
-	numeric_keypad::Options options;
+	NumericKeypadOptions options;
 
 	options.editUnit = level.getType();
 
@@ -387,7 +387,7 @@ void SysSettingsAuxOtpPage::editLevel() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	numeric_keypad::start(0, options, onLevelSet);
+	NumericKeypad::start(0, 0, options, onLevelSet);
 }
 
 void SysSettingsAuxOtpPage::onDelaySet(float value) {
@@ -397,7 +397,7 @@ void SysSettingsAuxOtpPage::onDelaySet(float value) {
 }
 
 void SysSettingsAuxOtpPage::editDelay() {
-	numeric_keypad::Options options;
+	NumericKeypadOptions options;
 
 	options.editUnit = delay.getType();
 
@@ -411,7 +411,7 @@ void SysSettingsAuxOtpPage::editDelay() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	numeric_keypad::start(0, options, onDelaySet);
+	NumericKeypad::start(0, 0, options, onDelaySet);
 }
 
 void SysSettingsAuxOtpPage::setParams() {

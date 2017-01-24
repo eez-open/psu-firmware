@@ -87,57 +87,57 @@
     {
       "name": "keypad_key",
       "implementationType": "native",
-      "implementation": "keypad::key();"
+      "implementation": "getActiveKeypad()->key();"
     },
     {
       "name": "keypad_space",
       "implementationType": "native",
-      "implementation": "keypad::space();"
+      "implementation": "getActiveKeypad()->space();"
     },
     {
       "name": "keypad_back",
       "implementationType": "native",
-      "implementation": "keypad::back();"
+      "implementation": "getActiveKeypad()->back();"
     },
     {
       "name": "keypad_clear",
       "implementationType": "native",
-      "implementation": "keypad::clear();"
+      "implementation": "getActiveKeypad()->clear();"
     },
     {
       "name": "keypad_caps",
       "implementationType": "native",
-      "implementation": "keypad::caps();"
+      "implementation": "getActiveKeypad()->caps();"
     },
     {
       "name": "keypad_ok",
       "implementationType": "native",
-      "implementation": "keypad::ok();"
+      "implementation": "getActiveKeypad()->ok();"
     },
     {
       "name": "keypad_cancel",
       "implementationType": "native",
-      "implementation": "keypad::cancel();"
+      "implementation": "getActiveKeypad()->cancel();"
     },
     {
       "name": "keypad_sign",
       "implementationType": "native",
-      "implementation": "keypad::sign();"
+      "implementation": "getActiveKeypad()->sign();"
     },
     {
       "name": "keypad_unit",
       "implementationType": "native",
-      "implementation": "keypad::unit();"
+      "implementation": "getActiveKeypad()->unit();"
     },
     {
       "name": "keypad_max",
       "implementationType": "native",
-      "implementation": "keypad::setMaxValue();"
+      "implementation": "getActiveKeypad()->setMaxValue();"
     },
     {
       "name": "keypad_def",
       "implementationType": "native",
-      "implementation": "keypad::setDefaultValue();"
+      "implementation": "getActiveKeypad()->setDefaultValue();"
     },
     {
       "name": "touch_screen_calibration",

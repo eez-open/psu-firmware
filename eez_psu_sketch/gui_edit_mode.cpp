@@ -91,10 +91,6 @@ bool isActive() {
         getActivePageId() == PAGE_ID_EDIT_MODE_SLIDER;
 }
 
-bool onKeypadOk(float value) {
-	return edit_mode::setValue(value);
-}
-
 void initEditValue() {
     g_editValue = data::currentSnapshot.getEditValue(g_focusCursor, g_focusDataId);
     g_undoValue = g_editValue;
@@ -129,13 +125,6 @@ void enter(int tabIndex_) {
     }
 
     if (getActivePageId() != g_tabIndex || g_focusDataId != newDataId || g_focusCursor != newDataCursor) {
-        if (getActivePageId() == g_tabIndex) {
-            if (numeric_keypad::isEditing()) {
-                sound::playBeep();
-                return;
-            }
-        }
-
         setFocusCursor(newDataCursor, newDataId);
 
         initEditValue();
@@ -144,21 +133,9 @@ void enter(int tabIndex_) {
         g_maxValue = data::getMax(g_focusCursor, g_focusDataId);
 
         if (g_tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
-			numeric_keypad::Options options;
-
-			options.editUnit = g_editValue.getType();
-
-			options.min = g_minValue.getFloat();
-			options.max = g_maxValue.getFloat();
-			options.def = 0;
-
-			options.flags.genericNumberKeypad = false;
-			options.flags.maxButtonEnabled = true;
-			options.flags.defButtonEnabled = true;
-			options.flags.signButtonEnabled = true;
-			options.flags.dotButtonEnabled = true;
-
-			numeric_keypad::init(0, options, (void (*)(float))onKeypadOk, 0);
+            edit_mode_keypad::enter(g_editValue, g_minValue, g_maxValue);
+        } else {
+            edit_mode_keypad::exit();
         }
 
         psu::enterTimeCriticalMode();
@@ -168,6 +145,8 @@ void enter(int tabIndex_) {
 }
 
 void exit() {
+    edit_mode_keypad::exit();
+
     if (getActivePageId() != PAGE_ID_MAIN) {
         psu::leaveTimeCriticalMode();
         setPage(PAGE_ID_MAIN);

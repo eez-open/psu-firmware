@@ -84,47 +84,47 @@ void action_non_interactive_discard() {
 }
 
 void action_keypad_key() {
-    keypad::key();
+    getActiveKeypad()->key();
 }
 
 void action_keypad_space() {
-    keypad::space();
+    getActiveKeypad()->space();
 }
 
 void action_keypad_back() {
-    keypad::back();
+    getActiveKeypad()->back();
 }
 
 void action_keypad_clear() {
-    keypad::clear();
+    getActiveKeypad()->clear();
 }
 
 void action_keypad_caps() {
-    keypad::caps();
+    getActiveKeypad()->caps();
 }
 
 void action_keypad_ok() {
-    keypad::ok();
+    getActiveKeypad()->ok();
 }
 
 void action_keypad_cancel() {
-    keypad::cancel();
+    getActiveKeypad()->cancel();
 }
 
 void action_keypad_sign() {
-    keypad::sign();
+    getActiveKeypad()->sign();
 }
 
 void action_keypad_unit() {
-    keypad::unit();
+    getActiveKeypad()->unit();
 }
 
 void action_keypad_max() {
-    keypad::setMaxValue();
+    getActiveKeypad()->setMaxValue();
 }
 
 void action_keypad_def() {
-    keypad::setDefaultValue();
+    getActiveKeypad()->setDefaultValue();
 }
 
 void action_touch_screen_calibration() {

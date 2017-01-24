@@ -18,6 +18,8 @@
  
 #pragma once
 
+#include "gui_page.h"
+
 namespace eez {
 namespace psu {
 namespace gui {
@@ -26,11 +28,9 @@ namespace data {
     struct Snapshot;
 }
 
-namespace keypad {
-
 ////////////////////////////////////////////////////////////////////////////////
 
-struct Snapshot {
+struct KeypadSnapshot {
     char text[MAX_KEYPAD_TEXT_LENGTH + 2]; // +2 for cursor and zero at the end
 	bool isUpperCase;
     data::Value keypadUnit;
@@ -41,31 +41,55 @@ struct Snapshot {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-extern char g_keypadText[sizeof(Snapshot::text)];
-extern int g_maxChars;
-extern void (*g_okCallback)(char *);
-extern void (*g_cancelCallback)();
+class Keypad : public Page {
+    friend struct KeypadSnapshot;
 
-void init(const char *label, void (*ok)(char *), void (*cancel)());
-void startPush(const char *label, const char *text, int maxChars, bool isPassword, void (*ok)(char *), void (*cancel)());
-void startReplace(const char *label, const char *text, int maxChars, bool isPassword, void (*ok)(char *), void (*cancel)());
+public:
+    Keypad();
 
-void key();
-void space();
-void caps();
-void back();
-void clear();
-void sign();
-void unit();
-void setMaxValue();
-void setDefaultValue();
-void ok();
-void cancel();
+    static void startPush(const char *label, const char *text, int maxChars, bool isPassword, void (*ok)(char *), void (*cancel)());
+    static void startReplace(const char *label, const char *text, int maxChars, bool isPassword, void (*ok)(char *), void (*cancel)());
 
-void appendChar(char c);
-void appendCursor(char *text);
+    void key();
+    virtual void key(char ch);
+    virtual void space();
+    virtual void caps();
+    virtual void back();
+    virtual void clear();
+    virtual void sign();
+    virtual void unit();
+    virtual void setMaxValue();
+    virtual void setDefaultValue();
+    virtual void ok();
+    virtual void cancel();
+
+    void appendChar(char c);
+    void appendCursor(char *text);
+
+protected:
+    const char *m_label;
+    char m_keypadText[sizeof(KeypadSnapshot::text)];
+    int m_maxChars;
+    void (*m_okCallback)(char *);
+    void (*m_cancelCallback)();
+
+    void init(const char *label, void (*ok)(char *), void (*cancel)());
+
+    virtual void takeSnapshot(data::Snapshot *snapshot);
+    virtual data::Value getData(KeypadSnapshot *keypadSnapshot, uint8_t id);
+
+private:
+    bool m_isUpperCase;
+    bool m_isPassword;
+    unsigned long m_lastKeyAppendTime;
+    bool m_cursor;
+    unsigned long m_lastCursorChangeTime;
+
+    void start(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)());
+};
+
+Keypad *getActiveKeypad();
 
 }
 }
-}
-} // namespace eez::psu::gui::keypad
+} // namespace eez::psu::gui

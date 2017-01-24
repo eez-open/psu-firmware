@@ -43,6 +43,7 @@ extern data::EnumItem g_channelDisplayValueEnumDefinition[];
 enum ValueType {
     VALUE_TYPE_NONE,
     VALUE_TYPE_INT,
+    VALUE_TYPE_FLOAT_FIRST,
 	VALUE_TYPE_FLOAT,
     VALUE_TYPE_FLOAT_VOLT,
     VALUE_TYPE_FLOAT_AMPER,
@@ -52,6 +53,7 @@ enum ValueType {
 	VALUE_TYPE_FLOAT_SECOND,
 	VALUE_TYPE_FLOAT_CELSIUS,
 	VALUE_TYPE_FLOAT_RPM,
+    VALUE_TYPE_FLOAT_LAST,
     VALUE_TYPE_CONST_STR,
     VALUE_TYPE_STR,
     VALUE_TYPE_CHANNEL_LABEL,
@@ -201,6 +203,7 @@ struct Value {
     float getFloat() const { return float_; }
     
     ValueType getType() const { return (ValueType)type_; }
+    bool isFloat() const { return type_ >= VALUE_TYPE_FLOAT_FIRST && type_ <= VALUE_TYPE_FLOAT_LAST; }
 
     uint8_t getInt() const { return int_; }
 

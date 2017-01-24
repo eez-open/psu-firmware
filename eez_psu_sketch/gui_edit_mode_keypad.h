@@ -23,9 +23,17 @@
 namespace eez {
 namespace psu {
 namespace gui {
+
+class NumericKeypad;
+
 namespace edit_mode_keypad {
 
+void enter(const data::Value& editValue, const data::Value& minValue, data::Value& maxValue);
+void exit();
+
 void getText(char *text, int count);
+
+extern NumericKeypad *g_keypad;
 
 }
 }

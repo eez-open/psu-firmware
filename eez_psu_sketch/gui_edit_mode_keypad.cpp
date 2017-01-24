@@ -31,10 +31,43 @@ namespace psu {
 namespace gui {
 namespace edit_mode_keypad {
 
+NumericKeypad *g_keypad;
+
 ////////////////////////////////////////////////////////////////////////////////
 
+bool onKeypadOk(float value) {
+	return edit_mode::setValue(value);
+}
+
+void enter(const data::Value& editValue, const data::Value& minValue, data::Value& maxValue) {
+    g_keypad = new NumericKeypad();
+
+	NumericKeypadOptions options;
+
+	options.editUnit = editValue.getType();
+
+	options.min = minValue.getFloat();
+	options.max = maxValue.getFloat();
+	options.def = 0;
+
+	options.flags.genericNumberKeypad = false;
+	options.flags.maxButtonEnabled = true;
+	options.flags.defButtonEnabled = true;
+	options.flags.signButtonEnabled = true;
+	options.flags.dotButtonEnabled = true;
+
+	g_keypad->init(0, options, (void (*)(float))onKeypadOk, 0);
+}
+
+void exit() {
+    if (g_keypad) {
+        delete g_keypad;
+        g_keypad = 0;
+    }
+}
+
 void getText(char *text, int count) {
-    if (!numeric_keypad::getText(text, count)) {
+    if (!g_keypad || !g_keypad->getText(text, count)) {
         edit_mode::getCurrentValue(data::currentSnapshot).toText(text, count);
     }
 }
