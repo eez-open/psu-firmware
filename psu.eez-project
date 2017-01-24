@@ -20406,7 +20406,7 @@
                                   "y": 0,
                                   "width": 64,
                                   "height": 32,
-                                  "style": "edit_value_S_right",
+                                  "style": "edit_value_active_S_right",
                                   "text": "OFF"
                                 },
                                 {
@@ -20426,7 +20426,7 @@
                                       "y": 0,
                                       "width": 64,
                                       "height": 32,
-                                      "style": "edit_value_S_right",
+                                      "style": "edit_value_active_S_right",
                                       "activeStyle": ""
                                     },
                                     {
@@ -20437,7 +20437,7 @@
                                       "y": 0,
                                       "width": 64,
                                       "height": 32,
-                                      "style": "edit_value_ur_S_right",
+                                      "style": "edit_value_active_S_right",
                                       "activeStyle": ""
                                     }
                                   ]
@@ -20552,7 +20552,7 @@
                                 "y": 0,
                                 "width": 64,
                                 "height": 32,
-                                "style": "edit_value_S_right",
+                                "style": "edit_value_active_S_right",
                                 "text": "OFF"
                               },
                               {
@@ -20572,7 +20572,7 @@
                                     "y": 0,
                                     "width": 64,
                                     "height": 32,
-                                    "style": "edit_value_S_right",
+                                    "style": "edit_value_active_S_right",
                                     "activeStyle": ""
                                   },
                                   {
@@ -20583,7 +20583,7 @@
                                     "y": 0,
                                     "width": 64,
                                     "height": 32,
-                                    "style": "edit_value_ur_S_right",
+                                    "style": "edit_value_active_S_right",
                                     "activeStyle": ""
                                   }
                                 ]
@@ -20754,7 +20754,7 @@
                                 "y": 0,
                                 "width": 64,
                                 "height": 32,
-                                "style": "edit_value_S_right",
+                                "style": "edit_value_active_S_right",
                                 "text": "OFF"
                               },
                               {
@@ -20774,7 +20774,7 @@
                                     "y": 0,
                                     "width": 64,
                                     "height": 32,
-                                    "style": "edit_value_S_right",
+                                    "style": "edit_value_active_S_right",
                                     "activeStyle": ""
                                   },
                                   {
@@ -20785,7 +20785,7 @@
                                     "y": 0,
                                     "width": 64,
                                     "height": 32,
-                                    "style": "edit_value_ur_S_right",
+                                    "style": "edit_value_active_S_right",
                                     "activeStyle": ""
                                   }
                                 ]
@@ -20975,7 +20975,7 @@
                                   "y": 0,
                                   "width": 64,
                                   "height": 32,
-                                  "style": "edit_value_S_right",
+                                  "style": "edit_value_active_S_right",
                                   "text": "OFF"
                                 },
                                 {
@@ -20995,7 +20995,7 @@
                                       "y": 0,
                                       "width": 64,
                                       "height": 32,
-                                      "style": "edit_value_S_right",
+                                      "style": "edit_value_active_S_right",
                                       "activeStyle": ""
                                     },
                                     {
@@ -21006,7 +21006,7 @@
                                       "y": 0,
                                       "width": 64,
                                       "height": 32,
-                                      "style": "edit_value_ur_S_right",
+                                      "style": "edit_value_active_S_right",
                                       "activeStyle": ""
                                     }
                                   ]
