@@ -675,6 +675,10 @@ bool isEncoderEnabledInActivePage() {
 }
 
 void onEncoder(int counter) {
+    if (isFrontPanelLocked()) {
+        return;
+    }
+
     if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD || g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
         if (((NumericKeypad *)getActiveKeypad())->onEncoder(counter)) {
             return;

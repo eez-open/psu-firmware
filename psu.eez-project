@@ -16433,178 +16433,6 @@
         }
       },
       {
-        "name": "sys_settings2",
-        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
-        "portrait": {
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320,
-          "widgets": []
-        },
-        "landscape": {
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240,
-          "widgets": [
-            {
-              "type": "Text",
-              "x": 6,
-              "y": 0,
-              "width": 246,
-              "height": 32,
-              "style": "value_S",
-              "text": "System settings (2)"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 144,
-              "width": 240,
-              "height": 28,
-              "style": "default_disabled_S_left",
-              "text": "Display settings"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 32,
-              "width": 240,
-              "height": 28,
-              "style": "default_disabled_S_left",
-              "text": "Serial (via USB) settings"
-            },
-            {
-              "x": 12,
-              "type": "Select",
-              "data": "sys.ethernet.installed",
-              "y": 60,
-              "width": 240,
-              "height": 28,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 0,
-                  "y": 0,
-                  "width": 240,
-                  "height": 28,
-                  "style": "edit_value_S_left",
-                  "text": "Ethernet not installed"
-                },
-                {
-                  "type": "Text",
-                  "action": "show_sys_settings_ethernet",
-                  "x": 0,
-                  "y": 0,
-                  "width": 240,
-                  "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "Ethernet settings"
-                }
-              ]
-            },
-            {
-              "x": 12,
-              "type": "Select",
-              "data": "channel.isCoupledOrTracked",
-              "y": 88,
-              "width": 240,
-              "height": 28,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Text",
-                  "action": "show_sys_settings_cal",
-                  "x": 0,
-                  "y": 0,
-                  "width": 240,
-                  "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "Channel calibration"
-                },
-                {
-                  "type": "Text",
-                  "action": "",
-                  "x": 0,
-                  "y": 0,
-                  "width": 240,
-                  "height": 28,
-                  "style": "default_disabled_S_left",
-                  "text": "Channel calibration \\u008c"
-                }
-              ]
-            },
-            {
-              "type": "Text",
-              "action": "show_sys_settings_screen_calibration",
-              "x": 12,
-              "y": 116,
-              "width": 240,
-              "height": 28,
-              "style": "edit_value_active_S_left",
-              "text": "Touchscreen calibration"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 170,
-              "width": 240,
-              "height": 28,
-              "style": "default_disabled_S_left",
-              "text": "Encoder"
-            },
-            {
-              "type": "Text",
-              "action": "show_sys_settings",
-              "x": 0,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "("
-            },
-            {
-              "type": "Text",
-              "x": 48,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button_disabled",
-              "text": ")"
-            },
-            {
-              "type": "Rectangle",
-              "x": 96,
-              "y": 204,
-              "width": 176,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "X"
-            },
-            {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            }
-          ]
-        }
-      },
-      {
         "name": "sys_settings_aux_otp",
         "description": "Define selected protection values\n",
         "portrait": {
@@ -17202,6 +17030,166 @@
         }
       },
       {
+        "name": "sys_settings_sound",
+        "description": "Output voltage remote programming information and settings",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 32,
+              "style": "value_S",
+              "text": "Sound control"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 32,
+              "width": 156,
+              "height": 42,
+              "style": "edit_value_left",
+              "text": "Sound:"
+            },
+            {
+              "type": "Rectangle",
+              "x": 172,
+              "y": 32,
+              "width": 6,
+              "height": 42,
+              "style": "default_inverse"
+            },
+            {
+              "x": 178,
+              "type": "Select",
+              "data": "sys.sound.isEnabled",
+              "y": 32,
+              "width": 74,
+              "height": 42,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "sys.settings.sound.toggle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 74,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "OFF"
+                },
+                {
+                  "type": "Text",
+                  "action": "sys.settings.sound.toggle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 74,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "ON"
+                }
+              ]
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 74,
+              "width": 156,
+              "height": 42,
+              "style": "edit_value_left",
+              "text": "Click sound:"
+            },
+            {
+              "type": "Rectangle",
+              "x": 172,
+              "y": 74,
+              "width": 6,
+              "height": 42,
+              "style": "default_inverse"
+            },
+            {
+              "x": 178,
+              "type": "Select",
+              "data": "sys,sound.isClickEnabled",
+              "y": 74,
+              "width": 74,
+              "height": 42,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "sys.settings.sound.toggleClick",
+                  "x": 0,
+                  "y": 0,
+                  "width": 74,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "OFF"
+                },
+                {
+                  "type": "Text",
+                  "action": "sys.settings.sound.toggleClick",
+                  "x": 0,
+                  "y": 0,
+                  "width": 74,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "ON"
+                }
+              ]
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 224,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "B"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            }
+          ]
+        }
+      },
+      {
         "name": "sys_settings_protections",
         "description": "Define selected protection values\n",
         "portrait": {
@@ -17418,6 +17406,541 @@
                   "height": 58,
                   "style": "edit_value_active",
                   "text": "Yes"
+                }
+              ]
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 224,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "B"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            }
+          ]
+        }
+      },
+      {
+        "name": "sys_settings2",
+        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 32,
+              "style": "value_S",
+              "text": "System settings (2)"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 144,
+              "width": 240,
+              "height": 28,
+              "style": "default_disabled_S_left",
+              "text": "Display settings"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 32,
+              "width": 240,
+              "height": 28,
+              "style": "default_disabled_S_left",
+              "text": "Serial (via USB) settings"
+            },
+            {
+              "x": 12,
+              "type": "Select",
+              "data": "sys.ethernet.installed",
+              "y": 60,
+              "width": 240,
+              "height": 28,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "edit_value_S_left",
+                  "text": "Ethernet not installed"
+                },
+                {
+                  "type": "Text",
+                  "action": "show_sys_settings_ethernet",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "Ethernet settings"
+                }
+              ]
+            },
+            {
+              "x": 12,
+              "type": "Select",
+              "data": "channel.isCoupledOrTracked",
+              "y": 88,
+              "width": 240,
+              "height": 28,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "show_sys_settings_cal",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "Channel calibration"
+                },
+                {
+                  "type": "Text",
+                  "action": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "default_disabled_S_left",
+                  "text": "Channel calibration \\u008c"
+                }
+              ]
+            },
+            {
+              "type": "Text",
+              "action": "show_sys_settings_screen_calibration",
+              "x": 12,
+              "y": 116,
+              "width": 240,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "Touchscreen calibration"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 170,
+              "width": 240,
+              "height": 28,
+              "style": "default_disabled_S_left",
+              "text": "Encoder"
+            },
+            {
+              "type": "Text",
+              "action": "show_sys_settings",
+              "x": 0,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "("
+            },
+            {
+              "type": "Text",
+              "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button_disabled",
+              "text": ")"
+            },
+            {
+              "type": "Rectangle",
+              "x": 96,
+              "y": 204,
+              "width": 176,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            }
+          ]
+        }
+      },
+      {
+        "name": "sys_settings_ethernet",
+        "description": "Calibration general information, active calibration settings (CAL:STAT), change password (CAL:PASS:NEW) and enter wizard.",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": [
+            {
+              "type": "Text",
+              "x": 0,
+              "y": 0,
+              "width": 120,
+              "height": 32,
+              "style": "edit_value_S_left",
+              "text": "Password:"
+            },
+            {
+              "type": "Text",
+              "x": 120,
+              "y": 0,
+              "width": 120,
+              "height": 32,
+              "style": "edit_value_active_S_left",
+              "text": "Change"
+            },
+            {
+              "type": "List",
+              "data": "channels",
+              "x": 0,
+              "y": 66,
+              "width": 240,
+              "height": 64,
+              "style": "default",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "data": "",
+                "action": "",
+                "x": 0,
+                "y": 0,
+                "width": 240,
+                "height": 32,
+                "style": "default",
+                "widgets": [
+                  {
+                    "type": "Text",
+                    "data": "channel.label",
+                    "x": 0,
+                    "y": 0,
+                    "width": 120,
+                    "height": 32,
+                    "style": "edit_value_S_left",
+                    "text": ""
+                  },
+                  {
+                    "x": 120,
+                    "type": "Select",
+                    "data": "channel.calibration.status",
+                    "action": "show_sys_settings_cal_ch",
+                    "y": 0,
+                    "width": 120,
+                    "height": 32,
+                    "style": "default",
+                    "widgets": [
+                      {
+                        "type": "Text",
+                        "action": "show_sys_settings_cal_ch",
+                        "x": 0,
+                        "y": 0,
+                        "width": 120,
+                        "height": 32,
+                        "style": "edit_value_active_S_left",
+                        "text": "Calibrated"
+                      },
+                      {
+                        "type": "Text",
+                        "action": "show_sys_settings_cal_ch",
+                        "x": 0,
+                        "y": 0,
+                        "width": 120,
+                        "height": 32,
+                        "style": "edit_value_active_S_left",
+                        "text": "Not calibrated"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 269,
+              "width": 168,
+              "height": 51,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 168,
+              "y": 269,
+              "width": 36,
+              "height": 51,
+              "style": "bottom_button",
+              "text": "B"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 204,
+              "y": 269,
+              "width": 36,
+              "height": 51,
+              "style": "bottom_button",
+              "text": "X"
+            }
+          ]
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 32,
+              "style": "value_S",
+              "text": "Ethernet settings"
+            },
+            {
+              "x": 12,
+              "type": "Select",
+              "data": "sys.ethernet.enabled",
+              "y": 32,
+              "width": 240,
+              "height": 30,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "sys_settings_ethernet_enable",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 30,
+                  "style": "edit_value_active_S_left",
+                  "text": "Enable Ethernet"
+                },
+                {
+                  "type": "Text",
+                  "action": "sys_settings_ethernet_disable",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 30,
+                  "style": "edit_value_active_S_left",
+                  "text": "Disable Ethernet"
+                }
+              ]
+            },
+            {
+              "x": 12,
+              "type": "Select",
+              "data": "sys.ethernet.status",
+              "y": 62,
+              "width": 240,
+              "height": 112,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 142,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 0,
+                      "width": 240,
+                      "height": 112,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "Text",
+                      "action": "sys_settings_ethernet_enable",
+                      "x": 0,
+                      "y": 112,
+                      "width": 240,
+                      "height": 30,
+                      "style": "event_error",
+                      "text": "\\u0082 Ethernet errror"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 142,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 95,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "IP address:"
+                    },
+                    {
+                      "type": "DisplayData",
+                      "data": "sys.ethernet.ipAddress",
+                      "x": 95,
+                      "y": 0,
+                      "width": 145,
+                      "height": 28,
+                      "style": "value_S"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 28,
+                      "width": 95,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "SCPI port:"
+                    },
+                    {
+                      "type": "DisplayData",
+                      "data": "sys.ethernet.scpiPort",
+                      "x": 95,
+                      "y": 28,
+                      "width": 145,
+                      "height": 28,
+                      "style": "value_S"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 56,
+                      "width": 240,
+                      "height": 86,
+                      "style": "default_inverse"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 142,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 0,
+                      "width": 240,
+                      "height": 94,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "MultilineText",
+                      "x": 0,
+                      "y": 94,
+                      "width": 22,
+                      "height": 48,
+                      "style": "event_info",
+                      "text": "\\u0080"
+                    },
+                    {
+                      "type": "MultilineText",
+                      "x": 22,
+                      "y": 94,
+                      "width": 218,
+                      "height": 48,
+                      "style": "event_info",
+                      "text": "Ethernet initialization skipped at start"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 142,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 0,
+                      "width": 240,
+                      "height": 112,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "type": "Text",
+                      "action": "sys_settings_ethernet_enable",
+                      "x": 0,
+                      "y": 112,
+                      "width": 240,
+                      "height": 30,
+                      "style": "event_warning",
+                      "text": "\\u0081 Ethernet not connected"
+                    }
+                  ]
                 }
               ]
             },
@@ -18361,8 +18884,7 @@
         }
       },
       {
-        "name": "sys_settings_sound",
-        "description": "Output voltage remote programming information and settings",
+        "name": "sys_settings_screen_calibration",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -18377,127 +18899,49 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Text",
-              "x": 6,
-              "y": 0,
-              "width": 246,
-              "height": 32,
-              "style": "value_S",
-              "text": "Sound control"
+              "type": "MultilineText",
+              "x": 8,
+              "y": 8,
+              "width": 304,
+              "height": 141,
+              "style": "default_S",
+              "text": "Use a stylus or something similar to touch as close to the center of the highlighted crosshair as possible. Keep holding as still as possible until the highlight is removed. Repeat for all crosshairs in sequence."
             },
             {
               "type": "Text",
-              "x": 16,
-              "y": 32,
-              "width": 156,
-              "height": 42,
-              "style": "edit_value_left",
-              "text": "Sound:"
+              "x": 8,
+              "y": 149,
+              "width": 35,
+              "height": 26,
+              "style": "default_S",
+              "text": "\\u0081"
             },
             {
-              "type": "Rectangle",
-              "x": 172,
-              "y": 32,
-              "width": 6,
-              "height": 42,
-              "style": "default_inverse"
-            },
-            {
-              "x": 178,
-              "type": "Select",
-              "data": "sys.sound.isEnabled",
-              "y": 32,
-              "width": 74,
-              "height": 42,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Text",
-                  "action": "sys.settings.sound.toggle",
-                  "x": 0,
-                  "y": 0,
-                  "width": 74,
-                  "height": 42,
-                  "style": "edit_value_active_left",
-                  "text": "OFF"
-                },
-                {
-                  "type": "Text",
-                  "action": "sys.settings.sound.toggle",
-                  "x": 0,
-                  "y": 0,
-                  "width": 74,
-                  "height": 42,
-                  "style": "edit_value_active_left",
-                  "text": "ON"
-                }
-              ]
+              "type": "MultilineText",
+              "x": 43,
+              "y": 149,
+              "width": 269,
+              "height": 51,
+              "style": "default_S",
+              "text": "Do not use your finger as a stylus or the result will be imprecise."
             },
             {
               "type": "Text",
-              "x": 16,
-              "y": 74,
-              "width": 156,
-              "height": 42,
-              "style": "edit_value_left",
-              "text": "Click sound:"
-            },
-            {
-              "type": "Rectangle",
-              "x": 172,
-              "y": 74,
-              "width": 6,
-              "height": 42,
-              "style": "default_inverse"
-            },
-            {
-              "x": 178,
-              "type": "Select",
-              "data": "sys,sound.isClickEnabled",
-              "y": 74,
-              "width": 74,
-              "height": 42,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Text",
-                  "action": "sys.settings.sound.toggleClick",
-                  "x": 0,
-                  "y": 0,
-                  "width": 74,
-                  "height": 42,
-                  "style": "edit_value_active_left",
-                  "text": "OFF"
-                },
-                {
-                  "type": "Text",
-                  "action": "sys.settings.sound.toggleClick",
-                  "x": 0,
-                  "y": 0,
-                  "width": 74,
-                  "height": 42,
-                  "style": "edit_value_active_left",
-                  "text": "ON"
-                }
-              ]
-            },
-            {
-              "type": "Rectangle",
+              "action": "touch_screen_calibration",
               "x": 0,
               "y": 204,
-              "width": 224,
+              "width": 64,
               "height": 36,
-              "style": "bottom_button_background"
+              "style": "bottom_button_textual_S_left",
+              "text": "Start"
             },
             {
-              "type": "Text",
-              "action": "show_previous_page",
-              "x": 224,
+              "type": "Rectangle",
+              "x": 64,
               "y": 204,
-              "width": 48,
+              "width": 160,
               "height": 36,
-              "style": "bottom_button",
-              "text": "B"
+              "style": "bottom_button_background"
             },
             {
               "type": "Text",
@@ -18510,12 +18954,14 @@
               "text": "X"
             },
             {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "B"
             }
           ]
         }
@@ -18623,6 +19069,110 @@
         }
       },
       {
+        "name": "sys_settings_encoder",
+        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 32,
+              "style": "value_S",
+              "text": "Encoder settings"
+            },
+            {
+              "type": "Rectangle",
+              "x": 197,
+              "y": 204,
+              "width": 75,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 30,
+              "width": 153,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Switch action:"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 58,
+              "width": 153,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Moving up speed:"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 86,
+              "width": 153,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Moving down speed:"
+            },
+            {
+              "type": "Button",
+              "data": "",
+              "action": "set",
+              "x": 0,
+              "y": 204,
+              "width": 101,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "type": "Text",
+              "action": "discard",
+              "x": 101,
+              "y": 204,
+              "width": 96,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
+            }
+          ]
+        }
+      },
+      {
         "name": "sys_settings_diag",
         "description": "Calibration general information, active calibration settings (CAL:STAT), change password (CAL:PASS:NEW) and enter wizard.",
         "portrait": {
@@ -18682,452 +19232,6 @@
               "height": 36,
               "style": "bottom_button",
               "text": "X"
-            }
-          ]
-        }
-      },
-      {
-        "name": "sys_settings_screen_calibration",
-        "portrait": {
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320,
-          "widgets": []
-        },
-        "landscape": {
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240,
-          "widgets": [
-            {
-              "type": "MultilineText",
-              "x": 8,
-              "y": 8,
-              "width": 304,
-              "height": 141,
-              "style": "default_S",
-              "text": "Use a stylus or something similar to touch as close to the center of the highlighted crosshair as possible. Keep holding as still as possible until the highlight is removed. Repeat for all crosshairs in sequence."
-            },
-            {
-              "type": "Text",
-              "x": 8,
-              "y": 149,
-              "width": 35,
-              "height": 26,
-              "style": "default_S",
-              "text": "\\u0081"
-            },
-            {
-              "type": "MultilineText",
-              "x": 43,
-              "y": 149,
-              "width": 269,
-              "height": 51,
-              "style": "default_S",
-              "text": "Do not use your finger as a stylus or the result will be imprecise."
-            },
-            {
-              "type": "Text",
-              "action": "touch_screen_calibration",
-              "x": 0,
-              "y": 204,
-              "width": 64,
-              "height": 36,
-              "style": "bottom_button_textual_S_left",
-              "text": "Start"
-            },
-            {
-              "type": "Rectangle",
-              "x": 64,
-              "y": 204,
-              "width": 160,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "X"
-            },
-            {
-              "type": "Text",
-              "action": "show_previous_page",
-              "x": 224,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "B"
-            }
-          ]
-        }
-      },
-      {
-        "name": "sys_settings_ethernet",
-        "description": "Calibration general information, active calibration settings (CAL:STAT), change password (CAL:PASS:NEW) and enter wizard.",
-        "portrait": {
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320,
-          "widgets": [
-            {
-              "type": "Text",
-              "x": 0,
-              "y": 0,
-              "width": 120,
-              "height": 32,
-              "style": "edit_value_S_left",
-              "text": "Password:"
-            },
-            {
-              "type": "Text",
-              "x": 120,
-              "y": 0,
-              "width": 120,
-              "height": 32,
-              "style": "edit_value_active_S_left",
-              "text": "Change"
-            },
-            {
-              "type": "List",
-              "data": "channels",
-              "x": 0,
-              "y": 66,
-              "width": 240,
-              "height": 64,
-              "style": "default",
-              "listType": "vertical",
-              "itemWidget": {
-                "type": "Container",
-                "data": "",
-                "action": "",
-                "x": 0,
-                "y": 0,
-                "width": 240,
-                "height": 32,
-                "style": "default",
-                "widgets": [
-                  {
-                    "type": "Text",
-                    "data": "channel.label",
-                    "x": 0,
-                    "y": 0,
-                    "width": 120,
-                    "height": 32,
-                    "style": "edit_value_S_left",
-                    "text": ""
-                  },
-                  {
-                    "x": 120,
-                    "type": "Select",
-                    "data": "channel.calibration.status",
-                    "action": "show_sys_settings_cal_ch",
-                    "y": 0,
-                    "width": 120,
-                    "height": 32,
-                    "style": "default",
-                    "widgets": [
-                      {
-                        "type": "Text",
-                        "action": "show_sys_settings_cal_ch",
-                        "x": 0,
-                        "y": 0,
-                        "width": 120,
-                        "height": 32,
-                        "style": "edit_value_active_S_left",
-                        "text": "Calibrated"
-                      },
-                      {
-                        "type": "Text",
-                        "action": "show_sys_settings_cal_ch",
-                        "x": 0,
-                        "y": 0,
-                        "width": 120,
-                        "height": 32,
-                        "style": "edit_value_active_S_left",
-                        "text": "Not calibrated"
-                      }
-                    ]
-                  }
-                ]
-              }
-            },
-            {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 269,
-              "width": 168,
-              "height": 51,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_previous_page",
-              "x": 168,
-              "y": 269,
-              "width": 36,
-              "height": 51,
-              "style": "bottom_button",
-              "text": "B"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 204,
-              "y": 269,
-              "width": 36,
-              "height": 51,
-              "style": "bottom_button",
-              "text": "X"
-            }
-          ]
-        },
-        "landscape": {
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240,
-          "widgets": [
-            {
-              "type": "Text",
-              "x": 6,
-              "y": 0,
-              "width": 246,
-              "height": 32,
-              "style": "value_S",
-              "text": "Ethernet settings"
-            },
-            {
-              "x": 12,
-              "type": "Select",
-              "data": "sys.ethernet.enabled",
-              "y": 32,
-              "width": 240,
-              "height": 30,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Text",
-                  "action": "sys_settings_ethernet_enable",
-                  "x": 0,
-                  "y": 0,
-                  "width": 240,
-                  "height": 30,
-                  "style": "edit_value_active_S_left",
-                  "text": "Enable Ethernet"
-                },
-                {
-                  "type": "Text",
-                  "action": "sys_settings_ethernet_disable",
-                  "x": 0,
-                  "y": 0,
-                  "width": 240,
-                  "height": 30,
-                  "style": "edit_value_active_S_left",
-                  "text": "Disable Ethernet"
-                }
-              ]
-            },
-            {
-              "x": 12,
-              "type": "Select",
-              "data": "sys.ethernet.status",
-              "y": 62,
-              "width": 240,
-              "height": 112,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Container",
-                  "x": 0,
-                  "y": 0,
-                  "width": 240,
-                  "height": 142,
-                  "style": "default",
-                  "widgets": [
-                    {
-                      "type": "Rectangle",
-                      "x": 0,
-                      "y": 0,
-                      "width": 240,
-                      "height": 112,
-                      "style": "default_inverse"
-                    },
-                    {
-                      "type": "Text",
-                      "action": "sys_settings_ethernet_enable",
-                      "x": 0,
-                      "y": 112,
-                      "width": 240,
-                      "height": 30,
-                      "style": "event_error",
-                      "text": "\\u0082 Ethernet errror"
-                    }
-                  ]
-                },
-                {
-                  "type": "Container",
-                  "x": 0,
-                  "y": 0,
-                  "width": 240,
-                  "height": 142,
-                  "style": "default",
-                  "widgets": [
-                    {
-                      "type": "Text",
-                      "x": 0,
-                      "y": 0,
-                      "width": 95,
-                      "height": 28,
-                      "style": "edit_value_S_left",
-                      "text": "IP address:"
-                    },
-                    {
-                      "type": "DisplayData",
-                      "data": "sys.ethernet.ipAddress",
-                      "x": 95,
-                      "y": 0,
-                      "width": 145,
-                      "height": 28,
-                      "style": "value_S"
-                    },
-                    {
-                      "type": "Text",
-                      "x": 0,
-                      "y": 28,
-                      "width": 95,
-                      "height": 28,
-                      "style": "edit_value_S_left",
-                      "text": "SCPI port:"
-                    },
-                    {
-                      "type": "DisplayData",
-                      "data": "sys.ethernet.scpiPort",
-                      "x": 95,
-                      "y": 28,
-                      "width": 145,
-                      "height": 28,
-                      "style": "value_S"
-                    },
-                    {
-                      "type": "Rectangle",
-                      "x": 0,
-                      "y": 56,
-                      "width": 240,
-                      "height": 86,
-                      "style": "default_inverse"
-                    }
-                  ]
-                },
-                {
-                  "type": "Container",
-                  "x": 0,
-                  "y": 0,
-                  "width": 240,
-                  "height": 142,
-                  "style": "default",
-                  "widgets": [
-                    {
-                      "type": "Rectangle",
-                      "x": 0,
-                      "y": 0,
-                      "width": 240,
-                      "height": 94,
-                      "style": "default_inverse"
-                    },
-                    {
-                      "type": "MultilineText",
-                      "x": 0,
-                      "y": 94,
-                      "width": 22,
-                      "height": 48,
-                      "style": "event_info",
-                      "text": "\\u0080"
-                    },
-                    {
-                      "type": "MultilineText",
-                      "x": 22,
-                      "y": 94,
-                      "width": 218,
-                      "height": 48,
-                      "style": "event_info",
-                      "text": "Ethernet initialization skipped at start"
-                    }
-                  ]
-                },
-                {
-                  "type": "Container",
-                  "x": 0,
-                  "y": 0,
-                  "width": 240,
-                  "height": 142,
-                  "style": "default",
-                  "widgets": [
-                    {
-                      "type": "Rectangle",
-                      "x": 0,
-                      "y": 0,
-                      "width": 240,
-                      "height": 112,
-                      "style": "default_inverse"
-                    },
-                    {
-                      "type": "Text",
-                      "action": "sys_settings_ethernet_enable",
-                      "x": 0,
-                      "y": 112,
-                      "width": 240,
-                      "height": 30,
-                      "style": "event_warning",
-                      "text": "\\u0081 Ethernet not connected"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 224,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_previous_page",
-              "x": 224,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "B"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "X"
-            },
-            {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
             }
           ]
         }
@@ -20312,110 +20416,6 @@
               "height": 70,
               "style": "default_S",
               "text": "Press and hold anywhere on the screen to wake up."
-            }
-          ]
-        }
-      },
-      {
-        "name": "sys_settings_encoder",
-        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
-        "portrait": {
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320,
-          "widgets": []
-        },
-        "landscape": {
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240,
-          "widgets": [
-            {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
-            {
-              "type": "Text",
-              "x": 6,
-              "y": 0,
-              "width": 246,
-              "height": 32,
-              "style": "value_S",
-              "text": "Encoder settings"
-            },
-            {
-              "type": "Rectangle",
-              "x": 197,
-              "y": 204,
-              "width": 75,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "X"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 30,
-              "width": 153,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Switch action:"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 58,
-              "width": 153,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Moving up speed:"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 86,
-              "width": 153,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Moving down speed:"
-            },
-            {
-              "type": "Button",
-              "data": "",
-              "action": "set",
-              "x": 0,
-              "y": 204,
-              "width": 101,
-              "height": 36,
-              "style": "non_interactive_button_S",
-              "text": "~ Set",
-              "enabled": "setPage.dirty",
-              "disabledStyle": "non_interactive_button_S_disabled"
-            },
-            {
-              "type": "Text",
-              "action": "discard",
-              "x": 101,
-              "y": 204,
-              "width": 96,
-              "height": 36,
-              "style": "non_interactive_button_S",
-              "text": " Discard"
             }
           ]
         }
