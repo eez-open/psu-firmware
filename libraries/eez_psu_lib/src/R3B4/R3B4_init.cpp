@@ -84,6 +84,7 @@ void eez_psu_R3B4_init() {
     pinMode(EXT_TRIG, INPUT);
     pinMode(ENC_A, INPUT);
     pinMode(ENC_B, INPUT);
+    pinMode(ENC_SW, INPUT);
     pinMode(PWD_RST, INPUT);
 
     //
