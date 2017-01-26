@@ -16464,7 +16464,7 @@
               "width": 240,
               "height": 28,
               "style": "default_disabled_S_left",
-              "text": "Display backlight"
+              "text": "Display settings"
             },
             {
               "type": "Text",
@@ -16554,7 +16554,7 @@
               "width": 240,
               "height": 28,
               "style": "default_disabled_S_left",
-              "text": "Diagnostics"
+              "text": "Encoder"
             },
             {
               "type": "Text",
@@ -20312,6 +20312,110 @@
               "height": 70,
               "style": "default_S",
               "text": "Press and hold anywhere on the screen to wake up."
+            }
+          ]
+        }
+      },
+      {
+        "name": "sys_settings_encoder",
+        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 32,
+              "style": "value_S",
+              "text": "Encoder settings"
+            },
+            {
+              "type": "Rectangle",
+              "x": 197,
+              "y": 204,
+              "width": 75,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 30,
+              "width": 153,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Switch action:"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 58,
+              "width": 153,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Moving up speed:"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 86,
+              "width": 153,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Moving down speed:"
+            },
+            {
+              "type": "Button",
+              "data": "",
+              "action": "set",
+              "x": 0,
+              "y": 204,
+              "width": 101,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "type": "Text",
+              "action": "discard",
+              "x": 101,
+              "y": 204,
+              "width": 96,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
             }
           ]
         }

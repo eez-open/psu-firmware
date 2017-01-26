@@ -366,7 +366,8 @@ enum PagesEnum {
     PAGE_ID_SYS_INFO,
     PAGE_ID_SYS_INFO2,
     PAGE_ID_ENTERING_STANDBY,
-    PAGE_ID_STANDBY
+    PAGE_ID_STANDBY,
+    PAGE_ID_SYS_SETTINGS_ENCODER
 };
 
 extern const uint8_t *fonts[];
