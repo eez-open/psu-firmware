@@ -90,36 +90,44 @@ void SysSettingsDateTimePage::edit() {
 
 	const char *label = 0;
 
-	if (id == DATA_ID_SYS_INFO_DATE_TIME_YEAR) {
+    data::Value value;
+
+    if (id == DATA_ID_SYS_INFO_DATE_TIME_YEAR) {
 		label = "Year (2016-2036): ";
-		options.min = 2016;
+		options.min = 2017;
 		options.max = 2036;
-		options.def = 2016;
+		options.def = 2017;
+        value = data::Value((int)dateTime.year);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_MONTH) {
 		label = "Month (1-12): ";
 		options.min = 1;
 		options.max = 12;
 		options.def = 1;
+        value = data::Value((int)dateTime.month);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_DAY) {
 		label = "Day (1-31): ";
 		options.min = 1;
 		options.max = 31;
 		options.def = 1;
+        value = data::Value((int)dateTime.day);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_HOUR) {
 		label = "Hour (0-23): ";
 		options.min = 0;
 		options.max = 23;
 		options.def = 12;
+        value = data::Value((int)dateTime.hour);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_MINUTE) {
 		label = "Minute (0-59): ";
 		options.min = 0;
 		options.max = 59;
 		options.def = 0;
+        value = data::Value((int)dateTime.minute);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_SECOND) {
 		label = "Second (0-59): ";
 		options.min = 0;
 		options.max = 59;
 		options.def = 0;
+        value = data::Value((int)dateTime.second);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_TIME_ZONE) {
 		label = "Time zone: ";
 		options.min = -12.00;
@@ -132,7 +140,7 @@ void SysSettingsDateTimePage::edit() {
 
 	if (label) {
 		editDataId = id;
-		NumericKeypad::start(label, 0, options, onSetValue);
+		NumericKeypad::start(label, value, options, onSetValue);
 	}
 }
 
@@ -387,7 +395,7 @@ void SysSettingsAuxOtpPage::editLevel() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, 0, options, onLevelSet);
+	NumericKeypad::start(0, level, options, onLevelSet);
 }
 
 void SysSettingsAuxOtpPage::onDelaySet(float value) {
@@ -411,7 +419,7 @@ void SysSettingsAuxOtpPage::editDelay() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, 0, options, onDelaySet);
+	NumericKeypad::start(0, delay, options, onDelaySet);
 }
 
 void SysSettingsAuxOtpPage::setParams() {

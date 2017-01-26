@@ -56,7 +56,7 @@ void enter(const data::Value& editValue, const data::Value& minValue, data::Valu
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	g_keypad->init(0, options, (void (*)(float))onKeypadOk, 0);
+	g_keypad->init(0, data::Value(), options, (void (*)(float))onKeypadOk, 0);
 }
 
 void exit() {

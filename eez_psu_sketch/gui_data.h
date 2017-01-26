@@ -83,6 +83,10 @@ enum ValueType {
     VALUE_TYPE_ENUM
 };
 
+inline bool isFloatType(ValueType valueType) { 
+    return valueType >= VALUE_TYPE_FLOAT_FIRST && valueType <= VALUE_TYPE_FLOAT_LAST;
+}
+
 struct Value {
     Value() : type_(VALUE_TYPE_NONE) { }
     Value(int value) : type_(VALUE_TYPE_INT), int_(value)  {}
@@ -203,9 +207,9 @@ struct Value {
     float getFloat() const { return float_; }
     
     ValueType getType() const { return (ValueType)type_; }
-    bool isFloat() const { return type_ >= VALUE_TYPE_FLOAT_FIRST && type_ <= VALUE_TYPE_FLOAT_LAST; }
+    bool isFloat() const { return isFloatType((ValueType)type_); }
 
-    uint8_t getInt() const { return int_; }
+    int getInt() const { return int_; }
 
     void toText(char *text, int count) const;
 

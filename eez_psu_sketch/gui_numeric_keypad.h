@@ -55,7 +55,7 @@ enum NumericKeypadState {
 
 class NumericKeypad : public Keypad {
 public:
-    void init(const char *label, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)());
+    void init(const char *label, const data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)());
     static NumericKeypad *start(const char *label, const data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)() = 0);
 
     bool isEditing();
@@ -77,7 +77,7 @@ public:
     void cancel();
 
 #if OPTION_ENCODER
-    void onEncoder(int counter);
+    bool onEncoder(int counter);
 #endif
 
 protected:
@@ -85,6 +85,7 @@ protected:
     data::Value getData(KeypadSnapshot *keypadSnapshot, uint8_t id);
 
 private:
+    data::Value m_startValue;
     NumericKeypadState m_state;
     int m_d0;
     int m_d1;
@@ -92,10 +93,11 @@ private:
     int m_d3;
     NumericKeypadOptions m_options;
 
+    void appendEditUnit(char *text);
     float getValue();
     char getDotSign();
     bool isMilli();
-    bool setValue(float fvalue);
+    bool setValue(float value);
     bool isValueValid();
     void digit(int d);
     void dot();

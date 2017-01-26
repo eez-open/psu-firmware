@@ -124,7 +124,7 @@ void enter(int tabIndex_) {
         newDataId = g_focusDataId;
     }
 
-    if (getActivePageId() != g_tabIndex || g_focusDataId != newDataId || g_focusCursor != newDataCursor) {
+//    if (getActivePageId() != g_tabIndex || g_focusDataId != newDataId || g_focusCursor != newDataCursor) {
         setFocusCursor(newDataCursor, newDataId);
 
         initEditValue();
@@ -141,7 +141,7 @@ void enter(int tabIndex_) {
         psu::enterTimeCriticalMode();
 
         setPage(g_tabIndex);
-    }
+//    }
 }
 
 void exit() {

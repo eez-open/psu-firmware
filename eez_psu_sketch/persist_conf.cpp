@@ -97,6 +97,8 @@ uint16_t get_profile_address(int location) {
 ////////////////////////////////////////////////////////////////////////////////
 
 static void initDevice() {
+    memset(&devConf, 0, sizeof(devConf));
+
     devConf.header.checksum = 0;
     devConf.header.version = DEV_CONF_VERSION;
 

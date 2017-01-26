@@ -216,7 +216,7 @@ void set() {
         options.flags.signButtonEnabled = true;
         options.flags.dotButtonEnabled = true;
 
-        NumericKeypad *numericKeypad = NumericKeypad::start(0, 0, options, onSetOk, showCurrentStep);
+        NumericKeypad *numericKeypad = NumericKeypad::start(0, data::Value(), options, onSetOk, showCurrentStep);
 
         if (g_stepNum == 0 || g_stepNum == 3) {
             numericKeypad->switchToMilli();

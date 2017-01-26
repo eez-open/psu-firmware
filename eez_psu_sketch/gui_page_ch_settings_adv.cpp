@@ -280,7 +280,7 @@ void ChSettingsAdvViewPage::editYTViewRate() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, 0, options, onYTViewRateSet);
+	NumericKeypad::start(0, data::Value(ytViewRate, data::VALUE_TYPE_FLOAT_SECOND), options, onYTViewRateSet);
 }
 
 int ChSettingsAdvViewPage::getDirty() {

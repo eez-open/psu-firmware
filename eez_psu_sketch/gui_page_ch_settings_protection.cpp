@@ -178,7 +178,7 @@ void ChSettingsProtectionSetPage::editLimit() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, 0, options, onLimitSet);
+	NumericKeypad::start(0, limit, options, onLimitSet);
 }
 
 void ChSettingsProtectionSetPage::onLevelSet(float value) {
@@ -202,7 +202,7 @@ void ChSettingsProtectionSetPage::editLevel() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, 0, options, onLevelSet);
+	NumericKeypad::start(0, level, options, onLevelSet);
 }
 
 void ChSettingsProtectionSetPage::onDelaySet(float value) {
@@ -226,7 +226,7 @@ void ChSettingsProtectionSetPage::editDelay() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, 0, options, onDelaySet);
+	NumericKeypad::start(0, delay, options, onDelaySet);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -548,7 +548,8 @@ void unlockFrontPanel() {
 bool isWidgetActionEnabled(const Widget *widget) {
     if (widget->action) {
         if (isFrontPanelLocked()) {
-            if (g_activePageId == PAGE_ID_INFO_ALERT || g_activePageId == PAGE_ID_ERROR_ALERT || g_activePageId == PAGE_ID_KEYPAD) {
+            if (g_activePageId == PAGE_ID_INFO_ALERT || g_activePageId == PAGE_ID_ERROR_ALERT || g_activePageId == PAGE_ID_KEYPAD ||
+                g_activePageId == PAGE_ID_SCREEN_CALIBRATION_YES_NO || g_activePageId == PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL) {
                 return true;
             }
 
@@ -675,8 +676,9 @@ bool isEncoderEnabledInActivePage() {
 
 void onEncoder(int counter) {
     if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD || g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
-        ((NumericKeypad *)getActiveKeypad())->onEncoder(counter);
-        return;
+        if (((NumericKeypad *)getActiveKeypad())->onEncoder(counter)) {
+            return;
+        }
     }
     
     if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
