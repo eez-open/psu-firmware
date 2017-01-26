@@ -23,13 +23,13 @@ namespace psu {
 namespace encoder {
 
 void init();
-int readAndResetCounter();
+void read(int &counter, bool &clicked);
 
 void enableVariableSpeed(bool enable);
 void setSpeedMultiplier(float speedMultiplier);
 
 #ifdef EEZ_PSU_SIMULATOR
-void addToCounter(int value);
+void write(int counter, bool clicked);
 #endif
 
 }

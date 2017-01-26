@@ -132,16 +132,17 @@ void tick() {
 
             processData(&g_data);
 
-            g_window->endUpdate();
-
 #if OPTION_ENCODER
             int x, y;
             g_window->getMouseWheelData(&x, &y);
 
-            if (y != 0) {
-                encoder::addToCounter(y);
-            }
+            MouseData mouseData;
+            g_window->getMouseData(&mouseData);
+
+            encoder::write(y, mouseData.button2IsUp);
 #endif
+
+            g_window->endUpdate();
         }
         else {
             close();

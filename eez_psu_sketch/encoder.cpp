@@ -68,18 +68,21 @@ const uint8_t ttable[7][4] = {
 bool g_variableSpeed = true;
 float g_speedMultiplier = 1.0f;
 
-volatile uint8_t state = 0;
-volatile int counter = 0;
-volatile unsigned long g_lastTime = 0;
+volatile uint8_t g_rotationState = 0;
+volatile int g_rotationCounter = 0;
+volatile unsigned long g_rotationLastTime = 0;
 
-void interruptHandler() {
+volatile unsigned long g_switchLastTime = 0;
+volatile int g_switchCounter = 0;
+
+void abInterruptHandler() {
     uint8_t pinState = (digitalRead(ENC_B) << 1) | digitalRead(ENC_A);
 
-    state = ttable[state & 0xf][pinState];
-    uint8_t result = state/* & 0x30*/;
+    g_rotationState = ttable[g_rotationState & 0xf][pinState];
+    uint8_t result = g_rotationState/* & 0x30*/;
     if (result == DIR_CW || result == DIR_CCW) {
         unsigned long time = micros();
-        unsigned long diff = time - g_lastTime;
+        unsigned long diff = time - g_rotationLastTime;
 
         int amount = 1;
         
@@ -103,12 +106,24 @@ void interruptHandler() {
         }
         
         if (result == DIR_CW) {
-            counter += amount;
+            g_rotationCounter += amount;
         } else if (result == DIR_CCW) {
-            counter -= amount;
+            g_rotationCounter -= amount;
         }
 
-        g_lastTime = time;
+        g_rotationLastTime = time;
+    }
+}
+
+void swInterruptHandler() {
+    unsigned long time = micros();
+    if (digitalRead(ENC_SW)) {
+        unsigned long diff = time - g_switchLastTime;
+        if (diff > 10000 && diff < 250000) {
+            ++g_switchCounter;
+        }
+    } else {
+        g_switchLastTime = time;
     }
 }
 
@@ -116,25 +131,26 @@ void init() {
 #ifdef ENABLE_PULLUPS
     digitalWrite(ENC_A, HIGH);
     digitalWrite(ENC_B, HIGH);
+
+    digitalWrite(ENC_SW, HIGH);
 #endif
 
-    attachInterrupt(digitalPinToInterrupt(ENC_A), interruptHandler, CHANGE);
-    attachInterrupt(digitalPinToInterrupt(ENC_B), interruptHandler, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(ENC_A), abInterruptHandler, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(ENC_B), abInterruptHandler, CHANGE);
+
+    attachInterrupt(digitalPinToInterrupt(ENC_SW), swInterruptHandler, CHANGE);
 }
 
-int readAndResetCounter() {
+void read(int &counter, bool &clicked) {
     noInterrupts();
-    int result = counter;
-    counter = 0;
-    //for (int i = 0; i < g_tableIndex; ++i) {
-    //    DebugTraceF("%lu", g_pinStateChangedTimeTable[i]);
-    //}
-    //if (result != 0) {
-    //    DebugTraceF("counter: %d", result);
-    //}
-    //g_tableIndex = 0;
+
+    counter = g_rotationCounter;
+    g_rotationCounter = 0;
+
+    clicked = g_switchCounter > 0;
+    g_switchCounter = 0;
+
     interrupts();
-    return result;
 }
 
 void enableVariableSpeed(bool enable) {
@@ -146,8 +162,14 @@ void setSpeedMultiplier(float speedMultiplier) {
 }
 
 #ifdef EEZ_PSU_SIMULATOR
-void addToCounter(int value) {
-    counter += value;
+void write(int counter, bool clicked) {
+    if (counter != 0) {
+        g_rotationCounter += counter;
+    }
+
+    if (clicked) {
+        ++g_switchCounter;
+    }
 }
 #endif
 

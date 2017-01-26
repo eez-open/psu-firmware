@@ -32,10 +32,17 @@ struct WindowDefinition {
 };
 
 struct MouseData {
-    bool is_down;
-    bool is_pressed;
-    bool is_up;
-    int x, y, down_x, down_y, up_x, up_y;
+    int x, y;
+
+    bool button1IsDown;
+    bool button1IsPressed;
+    bool button1IsUp;
+    int button1DownX, button1DownY;
+    int button1UpX, button1UpY;
+
+    bool button2IsDown;
+    bool button2IsPressed;
+    bool button2IsUp;
 };
 
 struct UserWidget {
@@ -48,7 +55,7 @@ struct UserWidget {
     int pixels_h;
     unsigned char *pixels;
 
-    MouseData mouse_data;
+    MouseData mouseData;
 };
 
 class WindowImpl;
@@ -73,6 +80,7 @@ public:
 
     virtual void endUpdate();
 
+    virtual void getMouseData(MouseData *mouseData);
     virtual void getMouseWheelData(int *x, int *y);
 
 private:

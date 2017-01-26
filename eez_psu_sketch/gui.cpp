@@ -674,48 +674,64 @@ bool isEncoderEnabledInActivePage() {
     return g_isEncoderEnabledInActivePage;
 }
 
-void onEncoder(int counter) {
+void onEncoder(int counter, bool clicked) {
     if (isFrontPanelLocked()) {
         return;
     }
 
-    if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD || g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
-        if (((NumericKeypad *)getActiveKeypad())->onEncoder(counter)) {
+    if (counter) {
+        if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD || g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
+            if (((NumericKeypad *)getActiveKeypad())->onEncoder(counter)) {
+                return;
+            }
+        }
+    
+        if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
+            edit_mode_step::onEncoder(counter);
             return;
         }
-    }
-    
-    if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
-        edit_mode_step::onEncoder(counter);
-        return;
-    }
 
-    encoder::enableVariableSpeed(true);
-    encoder::setSpeedMultiplier(data::getMax(g_focusCursor, g_focusDataId).getFloat() / data::getMax(g_focusCursor, DATA_ID_CHANNEL_U_SET).getFloat());
+        encoder::enableVariableSpeed(true);
+        encoder::setSpeedMultiplier(data::getMax(g_focusCursor, g_focusDataId).getFloat() / data::getMax(g_focusCursor, DATA_ID_CHANNEL_U_SET).getFloat());
 
-    if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
-        edit_mode_slider::increment(counter);
-        return;
-    }
-
-    if (isEncoderEnabledInActivePage()) {
-        data::Value value = data::currentSnapshot.get(g_focusCursor, g_focusDataId);
-
-        float newValue = value.getFloat() + 0.01f * counter;
-
-        float min = data::getMin(g_focusCursor, g_focusDataId).getFloat();
-        if (newValue < min) {
-            newValue = min;
+        if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+            edit_mode_slider::increment(counter);
+            return;
         }
 
-        float max = data::getMax(g_focusCursor, g_focusDataId).getFloat();
-        if (newValue > max) {
-            newValue = max;
-        }
+        if (isEncoderEnabledInActivePage()) {
+            data::Value value = data::currentSnapshot.get(g_focusCursor, g_focusDataId);
 
-        int16_t error;
-        if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType()), &error)) {
-            errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
+            float newValue = value.getFloat() + 0.01f * counter;
+
+            float min = data::getMin(g_focusCursor, g_focusDataId).getFloat();
+            if (newValue < min) {
+                newValue = min;
+            }
+
+            float max = data::getMax(g_focusCursor, g_focusDataId).getFloat();
+            if (newValue > max) {
+                newValue = max;
+            }
+
+            int16_t error;
+            if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType()), &error)) {
+                errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
+            }
+        }
+    }
+
+    if (clicked) {
+        if (g_focusDataId == DATA_ID_CHANNEL_U_SET) {
+            g_focusDataId = DATA_ID_CHANNEL_I_SET;
+        } else {
+            for (int i = 0; i < CH_NUM; ++i) {
+                g_focusCursor.i = (g_focusCursor.i + 1) % CH_NUM;
+                if (Channel::get(g_focusCursor.i).isOk()) {
+                    break;
+                }
+            }
+            g_focusDataId = DATA_ID_CHANNEL_U_SET;
         }
     }
 }
@@ -769,10 +785,10 @@ void tick(unsigned long tick_usec) {
     touch::tick(tick_usec);
 
 #if OPTION_ENCODER
-    int counter = encoder::readAndResetCounter();
-    if (counter) {
-        onEncoder(counter);
-    }
+    int counter;
+    bool clicked;
+    encoder::read(counter, clicked);
+    onEncoder(counter, clicked);
 #endif
 
     if (g_activePageId == INTERNAL_PAGE_ID_NONE) {

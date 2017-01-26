@@ -158,11 +158,11 @@ void processChannelData(ChannelData *data, int ch) {
     if (CH_NUM >= ch) {
         Channel &channel = Channel::get(ch - 1);
      
-        if (data->loadWidget.mouse_data.is_down) {
-            if (data->loadWidget.mouse_data.down_x >= 0 &&
-                data->loadWidget.mouse_data.down_x < data->loadWidget.w &&
-                data->loadWidget.mouse_data.down_y >= 0 &&
-                data->loadWidget.mouse_data.down_y < data->loadWidget.h) 
+        if (data->loadWidget.mouseData.button1IsDown) {
+            if (data->loadWidget.mouseData.button1DownX >= 0 &&
+                data->loadWidget.mouseData.button1DownX < data->loadWidget.w &&
+                data->loadWidget.mouseData.button1DownY >= 0 &&
+                data->loadWidget.mouseData.button1DownY < data->loadWidget.h) 
             {
                 data->loadOnMouseDown = data->load;
             } else {
@@ -171,10 +171,10 @@ void processChannelData(ChannelData *data, int ch) {
         }
 
         if (!util::isNaN(data->loadOnMouseDown)) {
-            if (data->loadWidget.mouse_data.is_pressed) {
+            if (data->loadWidget.mouseData.button1IsPressed) {
                 if (channel.simulator.getLoadEnabled()) {
                     float step = 1;
-                    float load = data->loadOnMouseDown + step * (data->loadWidget.mouse_data.x - data->loadWidget.mouse_data.down_x);
+                    float load = data->loadOnMouseDown + step * (data->loadWidget.mouseData.x - data->loadWidget.mouseData.button1DownX);
                     if (load < 0 || util::isNaN(load)) {
                         load = 0;
                     } else if (load > 10000000) {
@@ -182,8 +182,8 @@ void processChannelData(ChannelData *data, int ch) {
                     }
                     channel_dispatcher::setLoad(channel, load);
                 }
-            } else if (data->loadWidget.mouse_data.is_up) {
-                if (data->loadWidget.mouse_data.up_x == data->loadWidget.mouse_data.down_x && data->loadWidget.mouse_data.up_y == data->loadWidget.mouse_data.down_y) {
+            } else if (data->loadWidget.mouseData.button1IsUp) {
+                if (data->loadWidget.mouseData.button1UpX == data->loadWidget.mouseData.button1DownX && data->loadWidget.mouseData.button1UpY == data->loadWidget.mouseData.button1DownY) {
                     channel_dispatcher::setLoadEnabled(channel, !channel.simulator.getLoadEnabled());
                 }
             }
@@ -211,15 +211,15 @@ void processData(Data *data) {
     int x = -1;
     int y = -1;
 
-    if (data->local_control_widget.mouse_data.is_pressed &&
-        data->local_control_widget.mouse_data.down_x >= 0 &&
-        data->local_control_widget.mouse_data.down_x < data->local_control_widget.w &&
-        data->local_control_widget.mouse_data.down_y >= 0 &&
-        data->local_control_widget.mouse_data.down_y < data->local_control_widget.h) 
+    if (data->local_control_widget.mouseData.button1IsPressed &&
+        data->local_control_widget.mouseData.button1DownX >= 0 &&
+        data->local_control_widget.mouseData.button1DownX < data->local_control_widget.w &&
+        data->local_control_widget.mouseData.button1DownY >= 0 &&
+        data->local_control_widget.mouseData.button1DownY < data->local_control_widget.h) 
     {
         is_down = true;
-        x = (int)round(data->local_control_widget.mouse_data.x / (1.0 * data->local_control_widget.w / data->local_control_widget.pixels_w));
-        y = (int)round(data->local_control_widget.mouse_data.y / (1.0 * data->local_control_widget.h / data->local_control_widget.pixels_h));
+        x = (int)round(data->local_control_widget.mouseData.x / (1.0 * data->local_control_widget.w / data->local_control_widget.pixels_w));
+        y = (int)round(data->local_control_widget.mouseData.y / (1.0 * data->local_control_widget.h / data->local_control_widget.pixels_h));
     }
 
     gui::touch::touch_write(is_down, x, y);

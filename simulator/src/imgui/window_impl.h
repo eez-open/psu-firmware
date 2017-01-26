@@ -51,6 +51,7 @@ public:
 
     void endUpdate();
 
+    void getMouseData(MouseData *mouseData);
     void getMouseWheelData(int *x, int *y);
 
 private:
@@ -63,7 +64,7 @@ private:
     typedef std::map<std::string, Texture *> TextureMap;
     TextureMap textures;
 
-    MouseData mouse_data;
+    MouseData mouseData;
 
     int xMouseWheel;
     int yMouseWheel;

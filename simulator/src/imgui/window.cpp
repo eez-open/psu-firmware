@@ -81,6 +81,10 @@ void Window::endUpdate() {
     impl->endUpdate();
 }
 
+void Window::getMouseData(MouseData *mouseData) {
+    impl->getMouseData(mouseData);
+}
+
 void Window::getMouseWheelData(int *x, int *y) {
     impl->getMouseWheelData(x, y);
 }
@@ -95,9 +99,13 @@ WindowImpl::WindowImpl(WindowDefinition *window_definition_)
     , xMouseWheel(0)
     , yMouseWheel(0)
 {
-    mouse_data.is_down = false;
-    mouse_data.is_pressed = false;
-    mouse_data.is_up = false;
+    mouseData.button1IsDown = false;
+    mouseData.button1IsPressed = false;
+    mouseData.button1IsUp = false;
+
+    mouseData.button2IsDown = false;
+    mouseData.button2IsPressed = false;
+    mouseData.button2IsUp = false;
 }
 
 WindowImpl::~WindowImpl() {
@@ -180,18 +188,27 @@ bool WindowImpl::pollEvent() {
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) {
             if (event.button.button == 1) {
-                SDL_GetMouseState(&mouse_data.x, &mouse_data.y);
+                SDL_GetMouseState(&mouseData.x, &mouseData.y);
                 if (event.type == SDL_MOUSEBUTTONDOWN) {
-                    mouse_data.down_x = mouse_data.x;
-                    mouse_data.down_y = mouse_data.y;
-                    mouse_data.is_down = true;
-                    mouse_data.is_pressed = true;
+                    mouseData.button1DownX = mouseData.x;
+                    mouseData.button1DownY = mouseData.y;
+                    mouseData.button1IsDown = true;
+                    mouseData.button1IsPressed = true;
                 }
                 else if (event.type == SDL_MOUSEBUTTONUP) {
-                    mouse_data.up_x = mouse_data.x;
-                    mouse_data.up_y = mouse_data.y;
-                    mouse_data.is_up = true;
-                    mouse_data.is_pressed = false;
+                    mouseData.button1UpX = mouseData.x;
+                    mouseData.button1UpY = mouseData.y;
+                    mouseData.button1IsUp = true;
+                    mouseData.button1IsPressed = false;
+                }
+            } if (event.button.button == 2) {
+                if (event.type == SDL_MOUSEBUTTONDOWN) {
+                    mouseData.button2IsDown = true;
+                    mouseData.button2IsPressed = true;
+                }
+                else if (event.type == SDL_MOUSEBUTTONUP) {
+                    mouseData.button2IsUp = true;
+                    mouseData.button2IsPressed = false;
                 }
             }
         } else if (event.type == SDL_MOUSEWHEEL) {
@@ -215,8 +232,15 @@ void WindowImpl::endUpdate() {
     // Update screen
     SDL_RenderPresent(renderer);
 
-    mouse_data.is_down = false;
-    mouse_data.is_up = false;
+    mouseData.button1IsDown = false;
+    mouseData.button1IsUp = false;
+
+    mouseData.button2IsDown = false;
+    mouseData.button2IsUp = false;
+}
+
+void WindowImpl::getMouseData(MouseData *mouseData) {
+    memcpy(mouseData, &this->mouseData, sizeof(MouseData));
 }
 
 void WindowImpl::getMouseWheelData(int *x, int *y) {
@@ -278,9 +302,9 @@ bool WindowImpl::addButton(int x, int y, int w, int h, const char *normal_image,
     x += window_definition->content_padding;
     y += window_definition->content_padding;
 
-    bool is_pressed = mouse_data.is_pressed &&
-        pointInRect(mouse_data.down_x, mouse_data.down_y, x, y, w, h) &&
-        pointInRect(mouse_data.x, mouse_data.y, x, y, w, h);
+    bool is_pressed = mouseData.button1IsPressed &&
+        pointInRect(mouseData.button1DownX, mouseData.button1DownY, x, y, w, h) &&
+        pointInRect(mouseData.x, mouseData.y, x, y, w, h);
 
     if (is_pressed) {
         getTexture(pressed_image)->render(renderer, x, y);
@@ -289,9 +313,9 @@ bool WindowImpl::addButton(int x, int y, int w, int h, const char *normal_image,
         getTexture(normal_image)->render(renderer, x, y);
     }
 
-    bool is_clicked = mouse_data.is_up &&
-        pointInRect(mouse_data.down_x, mouse_data.down_y, x, y, w, h) &&
-        pointInRect(mouse_data.up_x, mouse_data.up_y, x, y, w, h);
+    bool is_clicked = mouseData.button1IsUp &&
+        pointInRect(mouseData.button1DownX, mouseData.button1DownY, x, y, w, h) &&
+        pointInRect(mouseData.button1UpX, mouseData.button1UpY, x, y, w, h);
 
     return is_clicked;
 }
@@ -328,16 +352,16 @@ void WindowImpl::addUserWidget(UserWidget *user_widget) {
         }
     }
 
-    memcpy(&user_widget->mouse_data, &mouse_data, sizeof(MouseData));
+    memcpy(&user_widget->mouseData, &mouseData, sizeof(MouseData));
     
-    user_widget->mouse_data.x -= x;
-    user_widget->mouse_data.y -= y;
+    user_widget->mouseData.x -= x;
+    user_widget->mouseData.y -= y;
 
-    user_widget->mouse_data.down_x -= x;
-    user_widget->mouse_data.down_y -= y;
+    user_widget->mouseData.button1DownX -= x;
+    user_widget->mouseData.button1DownY -= y;
 
-    user_widget->mouse_data.up_x -= x;
-    user_widget->mouse_data.up_y -= y;
+    user_widget->mouseData.button1UpX -= x;
+    user_widget->mouseData.button1UpY -= y;
 }
 
 }
