@@ -679,6 +679,20 @@ void onEncoder(int counter, bool clicked) {
         return;
     }
 
+    if (clicked) {
+        if (g_focusDataId == DATA_ID_CHANNEL_U_SET) {
+            g_focusDataId = DATA_ID_CHANNEL_I_SET;
+        } else {
+            for (int i = 0; i < CH_NUM; ++i) {
+                g_focusCursor.i = (g_focusCursor.i + 1) % CH_NUM;
+                if (Channel::get(g_focusCursor.i).isOk()) {
+                    break;
+                }
+            }
+            g_focusDataId = DATA_ID_CHANNEL_U_SET;
+        }
+    }
+
     if (counter) {
         if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD || g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
             if (((NumericKeypad *)getActiveKeypad())->onEncoder(counter)) {
@@ -718,20 +732,6 @@ void onEncoder(int counter, bool clicked) {
             if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType()), &error)) {
                 errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
             }
-        }
-    }
-
-    if (clicked) {
-        if (g_focusDataId == DATA_ID_CHANNEL_U_SET) {
-            g_focusDataId = DATA_ID_CHANNEL_I_SET;
-        } else {
-            for (int i = 0; i < CH_NUM; ++i) {
-                g_focusCursor.i = (g_focusCursor.i + 1) % CH_NUM;
-                if (Channel::get(g_focusCursor.i).isOk()) {
-                    break;
-                }
-            }
-            g_focusDataId = DATA_ID_CHANNEL_U_SET;
         }
     }
 }
