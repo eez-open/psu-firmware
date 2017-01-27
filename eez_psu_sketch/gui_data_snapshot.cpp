@@ -505,7 +505,7 @@ bool Snapshot::isBlinking(const Cursor &cursor, uint8_t id) {
         return result;
     }
 
-    if (g_focusCursor == cursor && g_focusDataId == id && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
+    if (g_focusCursor == cursor && g_focusDataId == id && focusEditValue.getType() != VALUE_TYPE_NONE) {
         return true;
     }
 
