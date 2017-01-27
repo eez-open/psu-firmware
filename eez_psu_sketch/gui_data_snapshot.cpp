@@ -216,6 +216,8 @@ void Snapshot::takeSnapshot() {
     if (activePage) {
         activePage->takeSnapshot(this);
     }
+
+    focusEditValue = g_focusEditValue;
 }
 
 int Snapshot::getCurrentChannelIndex(const Cursor &cursor) {
@@ -295,6 +297,14 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
             return Value(channelSnapshot.u_set, VALUE_TYPE_FLOAT_VOLT);
         }
         
+        if (id == DATA_ID_CHANNEL_U_EDIT) {
+            if (g_focusCursor == cursor && g_focusDataId == DATA_ID_CHANNEL_U_EDIT && focusEditValue.getType() != VALUE_TYPE_NONE) {
+                return focusEditValue;
+            } else {
+                return Value(channelSnapshot.u_set, VALUE_TYPE_FLOAT_VOLT);
+            }
+        }
+        
         if (isUMonData(cursor, id)) {
             return Value(channelSnapshot.u_mon, VALUE_TYPE_FLOAT_VOLT);
         }
@@ -311,6 +321,14 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
             return Value(channelSnapshot.i_set, VALUE_TYPE_FLOAT_AMPER);
         }
         
+        if (id == DATA_ID_CHANNEL_I_EDIT) {
+            if (g_focusCursor == cursor && g_focusDataId == DATA_ID_CHANNEL_I_EDIT && focusEditValue.getType() != VALUE_TYPE_NONE) {
+                return focusEditValue;
+            } else {
+                return Value(channelSnapshot.i_set, VALUE_TYPE_FLOAT_AMPER);
+            }
+        }
+
         if (isIMonData(cursor, id)) {
             return Value(channelSnapshot.i_mon, VALUE_TYPE_FLOAT_AMPER);
         }
@@ -470,11 +488,11 @@ Value Snapshot::getEditValue(const Cursor &cursor, uint8_t id) {
 
     Channel &channel = Channel::get(iChannel);
 
-    if (id == DATA_ID_CHANNEL_U_SET) {
+    if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_EDIT) {
         return Value(channel_dispatcher::getUSetUnbalanced(channel), VALUE_TYPE_FLOAT_VOLT);
     }
         
-    if (id == DATA_ID_CHANNEL_I_SET) {
+    if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_EDIT) {
         return Value(channel_dispatcher::getISetUnbalanced(channel), VALUE_TYPE_FLOAT_AMPER);
     }
         
@@ -485,6 +503,10 @@ bool Snapshot::isBlinking(const Cursor &cursor, uint8_t id) {
     bool result;
     if (editModeSnapshot.isBlinking(*this, id, result)) {
         return result;
+    }
+
+    if (g_focusCursor == cursor && g_focusDataId == id && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
+        return true;
     }
 
     return false;

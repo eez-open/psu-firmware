@@ -53,7 +53,7 @@ void pushPage(int index, Page *page = 0);
 void popPage();
 
 font::Font styleGetFont(const Style *style);
-void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse);
+void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse, bool dimmed = false);
 void fillRect(int x, int y, int w, int h);
 
 void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t currentValue, uint8_t disabledValue, void (*onSet)(uint8_t));
@@ -95,6 +95,7 @@ void setFocusCursor(const data::Cursor& cursor, uint8_t dataId);
 
 extern data::Cursor g_focusCursor;
 extern uint8_t g_focusDataId;
+extern data::Value g_focusEditValue;
 bool wasFocusWidget(const WidgetCursor &widgetCursor);
 bool isFocusWidget(const WidgetCursor &widgetCursor);
 

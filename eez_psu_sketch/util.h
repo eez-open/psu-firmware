@@ -58,6 +58,8 @@ float multiply(float a, float b, float prec);
 
 bool isNaN(float x);
 
+
+
 }
 }
 } // namespace eez::psu::util

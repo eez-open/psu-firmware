@@ -110,6 +110,7 @@ struct Snapshot {
     ProfileSnapshot profile;
     uint8_t intValue1;
     uint8_t intValue2;
+    Value focusEditValue;
 
     unsigned long lastSnapshotTime;
 

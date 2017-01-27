@@ -735,6 +735,14 @@
       "defaultMaxValue": 40
     },
     {
+      "name": "channel.u.edit",
+      "description": "scpi: volt? and volt",
+      "type": "float",
+      "defaultValue": "30.00V",
+      "defaultMinValue": 8,
+      "defaultMaxValue": 40
+    },
+    {
       "name": "channel.i.set",
       "description": "scpi: curr? and curr",
       "type": "float",
@@ -762,6 +770,14 @@
       "defaultValue": "3.00A",
       "defaultMinValue": 0,
       "defaultMaxValue": 5
+    },
+    {
+      "name": "channel.i.edit",
+      "description": "",
+      "type": "float",
+      "defaultValue": "1.00A",
+      "defaultMinValue": 8,
+      "defaultMaxValue": 40
     },
     {
       "name": "channel.p.mon",
@@ -3091,7 +3107,7 @@
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
-                                    "data": "channel.u.set",
+                                    "data": "channel.u.edit",
                                     "action": "edit",
                                     "x": 0,
                                     "y": 0,
@@ -3114,7 +3130,7 @@
                               },
                               {
                                 "type": "DisplayData",
-                                "data": "channel.i.set",
+                                "data": "channel.i.edit",
                                 "action": "edit",
                                 "x": 48,
                                 "y": 99,
@@ -3335,7 +3351,7 @@
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
-                                    "data": "channel.u.set",
+                                    "data": "channel.u.edit",
                                     "action": "edit",
                                     "x": 0,
                                     "y": 0,
@@ -3366,7 +3382,7 @@
                               },
                               {
                                 "type": "DisplayData",
-                                "data": "channel.i.set",
+                                "data": "channel.i.edit",
                                 "action": "edit",
                                 "x": 255,
                                 "y": 30,
@@ -3997,7 +4013,7 @@
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
-                                    "data": "channel.u.set",
+                                    "data": "channel.u.edit",
                                     "action": "edit",
                                     "x": 0,
                                     "y": 0,
@@ -4020,7 +4036,7 @@
                               },
                               {
                                 "type": "DisplayData",
-                                "data": "channel.i.set",
+                                "data": "channel.i.edit",
                                 "action": "edit",
                                 "x": 104,
                                 "y": 133,
@@ -4157,7 +4173,7 @@
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
-                                    "data": "channel.u.set",
+                                    "data": "channel.u.edit",
                                     "action": "edit",
                                     "x": 0,
                                     "y": 0,
@@ -4188,7 +4204,7 @@
                               },
                               {
                                 "type": "DisplayData",
-                                "data": "channel.i.set",
+                                "data": "channel.i.edit",
                                 "action": "edit",
                                 "x": 258,
                                 "y": 30,
@@ -4754,7 +4770,7 @@
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
-                                    "data": "channel.u.set",
+                                    "data": "channel.u.edit",
                                     "action": "edit",
                                     "x": 0,
                                     "y": 0,
@@ -4777,7 +4793,7 @@
                               },
                               {
                                 "type": "DisplayData",
-                                "data": "channel.i.set",
+                                "data": "channel.i.edit",
                                 "action": "edit",
                                 "x": 48,
                                 "y": 99,
@@ -5348,7 +5364,7 @@
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
-                                    "data": "channel.u.set",
+                                    "data": "channel.u.edit",
                                     "action": "edit",
                                     "x": 0,
                                     "y": 0,
@@ -5379,7 +5395,7 @@
                               },
                               {
                                 "type": "DisplayData",
-                                "data": "channel.i.set",
+                                "data": "channel.u.edit",
                                 "action": "edit",
                                 "x": 255,
                                 "y": 30,
@@ -5694,7 +5710,7 @@
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
-                                    "data": "channel.u.set",
+                                    "data": "channel.u.edit",
                                     "action": "edit",
                                     "x": 0,
                                     "y": 0,
@@ -5717,7 +5733,7 @@
                               },
                               {
                                 "type": "DisplayData",
-                                "data": "channel.i.set",
+                                "data": "channel.i.edit",
                                 "action": "edit",
                                 "x": 104,
                                 "y": 133,
@@ -6224,7 +6240,7 @@
                                 "widgets": [
                                   {
                                     "type": "DisplayData",
-                                    "data": "channel.u.set",
+                                    "data": "channel.u.edit",
                                     "action": "edit",
                                     "x": 0,
                                     "y": 0,
@@ -6255,7 +6271,7 @@
                               },
                               {
                                 "type": "DisplayData",
-                                "data": "channel.i.set",
+                                "data": "channel.i.edit",
                                 "action": "edit",
                                 "x": 258,
                                 "y": 30,
@@ -7098,694 +7114,12 @@
               "style": "default_inverse"
             },
             {
-              "type": "Container",
+              "type": "Local.Channels",
               "x": 252,
               "y": 0,
               "width": 68,
               "height": 204,
-              "style": "default",
-              "widgets": [
-                {
-                  "x": 0,
-                  "type": "Select",
-                  "data": "channel.coupling.mode",
-                  "y": 0,
-                  "width": 64,
-                  "height": 32,
-                  "style": "default",
-                  "widgets": [
-                    {
-                      "type": "Container",
-                      "x": 0,
-                      "y": 0,
-                      "width": 64,
-                      "height": 204,
-                      "style": "default",
-                      "widgets": [
-                        {
-                          "type": "List",
-                          "data": "channels",
-                          "x": 0,
-                          "y": 0,
-                          "width": 64,
-                          "height": 204,
-                          "style": "default",
-                          "listType": "vertical",
-                          "itemWidget": {
-                            "x": 0,
-                            "type": "Select",
-                            "data": "channel.status",
-                            "y": 0,
-                            "width": 64,
-                            "height": 112,
-                            "style": "default",
-                            "widgets": [
-                              {
-                                "type": "Rectangle",
-                                "x": 0,
-                                "y": 0,
-                                "width": 64,
-                                "height": 92,
-                                "style": "default_inverse"
-                              },
-                              {
-                                "type": "Container",
-                                "x": 0,
-                                "y": 0,
-                                "width": 64,
-                                "height": 112,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "x": 0,
-                                    "type": "Select",
-                                    "data": "channel.outputState",
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 32,
-                                    "style": "default",
-                                    "widgets": [
-                                      {
-                                        "type": "Text",
-                                        "action": "toggle_channel",
-                                        "x": 0,
-                                        "y": 0,
-                                        "width": 64,
-                                        "height": 32,
-                                        "style": "edit_value_active_S_right",
-                                        "text": "OFF"
-                                      },
-                                      {
-                                        "x": 0,
-                                        "type": "Select",
-                                        "data": "channel.outputMode",
-                                        "y": 0,
-                                        "width": 64,
-                                        "height": 32,
-                                        "style": "default",
-                                        "widgets": [
-                                          {
-                                            "type": "DisplayData",
-                                            "data": "channel.monValue",
-                                            "action": "toggle_channel",
-                                            "x": 0,
-                                            "y": 0,
-                                            "width": 64,
-                                            "height": 32,
-                                            "style": "edit_value_active_S_right",
-                                            "activeStyle": ""
-                                          },
-                                          {
-                                            "type": "DisplayData",
-                                            "data": "channel.monValue",
-                                            "action": "toggle_channel",
-                                            "x": 0,
-                                            "y": 0,
-                                            "width": 64,
-                                            "height": 32,
-                                            "style": "edit_value_active_S_right",
-                                            "activeStyle": ""
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.set",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 32,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "edit_value_active_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.set",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 62,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "edit_value_active_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  }
-                                ]
-                              },
-                              {
-                                "type": "Rectangle",
-                                "x": 0,
-                                "y": 0,
-                                "width": 64,
-                                "height": 92,
-                                "style": "default_inverse"
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "type": "Rectangle",
-                          "x": 0,
-                          "y": 92,
-                          "width": 64,
-                          "height": 20,
-                          "style": "default_inverse"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "Container",
-                      "x": 0,
-                      "y": 0,
-                      "width": 64,
-                      "height": 32,
-                      "style": "default",
-                      "widgets": [
-                        {
-                          "x": 0,
-                          "type": "Select",
-                          "data": "channel.status",
-                          "y": 0,
-                          "width": 64,
-                          "height": 112,
-                          "style": "default",
-                          "widgets": [
-                            {
-                              "type": "Rectangle",
-                              "x": 0,
-                              "y": 0,
-                              "width": 64,
-                              "height": 92,
-                              "style": "default_inverse"
-                            },
-                            {
-                              "type": "Container",
-                              "x": 0,
-                              "y": 0,
-                              "width": 64,
-                              "height": 112,
-                              "style": "default",
-                              "widgets": [
-                                {
-                                  "x": 0,
-                                  "type": "Select",
-                                  "data": "channel.outputState",
-                                  "y": 0,
-                                  "width": 64,
-                                  "height": 32,
-                                  "style": "default",
-                                  "widgets": [
-                                    {
-                                      "type": "Text",
-                                      "action": "toggle_channel",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 32,
-                                      "style": "edit_value_active_S_right",
-                                      "text": "OFF"
-                                    },
-                                    {
-                                      "x": 0,
-                                      "type": "Select",
-                                      "data": "channel.outputMode",
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 32,
-                                      "style": "default",
-                                      "widgets": [
-                                        {
-                                          "type": "DisplayData",
-                                          "data": "channel.monValue",
-                                          "action": "toggle_channel",
-                                          "x": 0,
-                                          "y": 0,
-                                          "width": 64,
-                                          "height": 32,
-                                          "style": "edit_value_active_S_right",
-                                          "activeStyle": ""
-                                        },
-                                        {
-                                          "type": "DisplayData",
-                                          "data": "channel.monValue",
-                                          "action": "toggle_channel",
-                                          "x": 0,
-                                          "y": 0,
-                                          "width": 64,
-                                          "height": 32,
-                                          "style": "edit_value_active_S_right",
-                                          "activeStyle": ""
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "x": 0,
-                                  "type": "Select",
-                                  "data": "channel.isVoltageBalanced",
-                                  "y": 32,
-                                  "width": 64,
-                                  "height": 30,
-                                  "style": "default",
-                                  "widgets": [
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.u.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "edit_value_active_S_right",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    },
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.u.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "set_value_S_right_balanced",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "x": 0,
-                                  "type": "Select",
-                                  "data": "channel.isCurrentBalanced",
-                                  "y": 62,
-                                  "width": 64,
-                                  "height": 30,
-                                  "style": "default",
-                                  "widgets": [
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.i.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "edit_value_active_S_right",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    },
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.i.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "set_value_S_right_balanced",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "type": "Rectangle",
-                              "x": 0,
-                              "y": 0,
-                              "width": 64,
-                              "height": 92,
-                              "style": "default_inverse"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "Rectangle",
-                          "x": 0,
-                          "y": 92,
-                          "width": 64,
-                          "height": 28,
-                          "style": "default_inverse"
-                        },
-                        {
-                          "type": "Text",
-                          "x": 0,
-                          "y": 120,
-                          "width": 64,
-                          "height": 22,
-                          "style": "edit_value_S_centered",
-                          "text": "\\u0081"
-                        },
-                        {
-                          "type": "Text",
-                          "x": 0,
-                          "y": 142,
-                          "width": 64,
-                          "height": 30,
-                          "style": "edit_value_S_left",
-                          "text": "Coupled:"
-                        },
-                        {
-                          "type": "Text",
-                          "x": 0,
-                          "y": 172,
-                          "width": 64,
-                          "height": 32,
-                          "style": "coupled_info_S",
-                          "text": "Parallel"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "Container",
-                      "x": 0,
-                      "y": 0,
-                      "width": 64,
-                      "height": 32,
-                      "style": "default",
-                      "widgets": [
-                        {
-                          "x": 0,
-                          "type": "Select",
-                          "data": "channel.status",
-                          "y": 0,
-                          "width": 64,
-                          "height": 112,
-                          "style": "default",
-                          "widgets": [
-                            {
-                              "type": "Rectangle",
-                              "x": 0,
-                              "y": 0,
-                              "width": 64,
-                              "height": 92,
-                              "style": "default_inverse"
-                            },
-                            {
-                              "type": "Container",
-                              "x": 0,
-                              "y": 0,
-                              "width": 64,
-                              "height": 112,
-                              "style": "default",
-                              "widgets": [
-                                {
-                                  "x": 0,
-                                  "type": "Select",
-                                  "data": "channel.outputState",
-                                  "y": 0,
-                                  "width": 64,
-                                  "height": 32,
-                                  "style": "default",
-                                  "widgets": [
-                                    {
-                                      "type": "Text",
-                                      "action": "toggle_channel",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 32,
-                                      "style": "edit_value_active_S_right",
-                                      "text": "OFF"
-                                    },
-                                    {
-                                      "x": 0,
-                                      "type": "Select",
-                                      "data": "channel.outputMode",
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 32,
-                                      "style": "default",
-                                      "widgets": [
-                                        {
-                                          "type": "DisplayData",
-                                          "data": "channel.monValue",
-                                          "action": "toggle_channel",
-                                          "x": 0,
-                                          "y": 0,
-                                          "width": 64,
-                                          "height": 32,
-                                          "style": "edit_value_active_S_right",
-                                          "activeStyle": ""
-                                        },
-                                        {
-                                          "type": "DisplayData",
-                                          "data": "channel.monValue",
-                                          "action": "toggle_channel",
-                                          "x": 0,
-                                          "y": 0,
-                                          "width": 64,
-                                          "height": 32,
-                                          "style": "edit_value_active_S_right",
-                                          "activeStyle": ""
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "x": 0,
-                                  "type": "Select",
-                                  "data": "channel.isVoltageBalanced",
-                                  "y": 32,
-                                  "width": 64,
-                                  "height": 30,
-                                  "style": "default",
-                                  "widgets": [
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.u.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "edit_value_active_S_right",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    },
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.u.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "set_value_S_right_balanced",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "x": 0,
-                                  "type": "Select",
-                                  "data": "channel.isCurrentBalanced",
-                                  "y": 62,
-                                  "width": 64,
-                                  "height": 30,
-                                  "style": "default",
-                                  "widgets": [
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.i.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "edit_value_active_S_right",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    },
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.i.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "set_value_S_right_balanced",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "type": "Rectangle",
-                              "x": 0,
-                              "y": 0,
-                              "width": 64,
-                              "height": 92,
-                              "style": "default_inverse"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "Rectangle",
-                          "x": 0,
-                          "y": 92,
-                          "width": 64,
-                          "height": 28,
-                          "style": "default_inverse"
-                        },
-                        {
-                          "type": "Text",
-                          "x": 0,
-                          "y": 120,
-                          "width": 64,
-                          "height": 22,
-                          "style": "edit_value_S_centered",
-                          "text": "\\u0081"
-                        },
-                        {
-                          "type": "Text",
-                          "x": 0,
-                          "y": 142,
-                          "width": 64,
-                          "height": 30,
-                          "style": "edit_value_S_left",
-                          "text": "Coupled:"
-                        },
-                        {
-                          "type": "Text",
-                          "x": 0,
-                          "y": 172,
-                          "width": 64,
-                          "height": 32,
-                          "style": "coupled_info_S",
-                          "text": "Series"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "Container",
-                      "x": 0,
-                      "y": 0,
-                      "width": 64,
-                      "height": 204,
-                      "style": "default",
-                      "widgets": [
-                        {
-                          "type": "List",
-                          "data": "channels",
-                          "x": 0,
-                          "y": 0,
-                          "width": 64,
-                          "height": 204,
-                          "style": "default",
-                          "listType": "vertical",
-                          "itemWidget": {
-                            "type": "Container",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 112,
-                            "style": "default",
-                            "widgets": [
-                              {
-                                "x": 0,
-                                "type": "Select",
-                                "data": "channel.outputState",
-                                "y": 0,
-                                "width": 64,
-                                "height": 32,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "Text",
-                                    "action": "toggle_channel",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 32,
-                                    "style": "edit_value_active_S_right",
-                                    "text": "OFF"
-                                  },
-                                  {
-                                    "x": 0,
-                                    "type": "Select",
-                                    "data": "channel.outputMode",
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 32,
-                                    "style": "default",
-                                    "widgets": [
-                                      {
-                                        "type": "DisplayData",
-                                        "data": "channel.monValue",
-                                        "action": "toggle_channel",
-                                        "x": 0,
-                                        "y": 0,
-                                        "width": 64,
-                                        "height": 32,
-                                        "style": "edit_value_active_S_right",
-                                        "activeStyle": ""
-                                      },
-                                      {
-                                        "type": "DisplayData",
-                                        "data": "channel.monValue",
-                                        "action": "toggle_channel",
-                                        "x": 0,
-                                        "y": 0,
-                                        "width": 64,
-                                        "height": 32,
-                                        "style": "edit_value_active_S_right",
-                                        "activeStyle": ""
-                                      }
-                                    ]
-                                  }
-                                ]
-                              },
-                              {
-                                "type": "DisplayData",
-                                "data": "channel.u.set",
-                                "action": "edit",
-                                "x": 0,
-                                "y": 32,
-                                "width": 64,
-                                "height": 30,
-                                "style": "edit_value_active_S_right",
-                                "activeStyle": "edit_value_focus_S_right"
-                              },
-                              {
-                                "type": "DisplayData",
-                                "data": "channel.i.set",
-                                "action": "edit",
-                                "x": 0,
-                                "y": 62,
-                                "width": 64,
-                                "height": 30,
-                                "style": "edit_value_active_S_right",
-                                "activeStyle": "edit_value_focus_S_right"
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "type": "Text",
-                          "action": "",
-                          "x": 0,
-                          "y": 92,
-                          "width": 64,
-                          "height": 20,
-                          "style": "default_S",
-                          "text": "\\u008ATrack"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "Rectangle",
-                  "x": 64,
-                  "y": 0,
-                  "width": 4,
-                  "height": 204,
-                  "style": "default_inverse"
-                }
-              ]
+              "style": "default"
             }
           ]
         }
@@ -8497,694 +7831,12 @@
               ]
             },
             {
-              "type": "Container",
+              "type": "Local.Channels",
               "x": 252,
               "y": 0,
               "width": 68,
               "height": 204,
-              "style": "default",
-              "widgets": [
-                {
-                  "x": 0,
-                  "type": "Select",
-                  "data": "channel.coupling.mode",
-                  "y": 0,
-                  "width": 64,
-                  "height": 32,
-                  "style": "default",
-                  "widgets": [
-                    {
-                      "type": "Container",
-                      "x": 0,
-                      "y": 0,
-                      "width": 64,
-                      "height": 204,
-                      "style": "default",
-                      "widgets": [
-                        {
-                          "type": "List",
-                          "data": "channels",
-                          "x": 0,
-                          "y": 0,
-                          "width": 64,
-                          "height": 204,
-                          "style": "default",
-                          "listType": "vertical",
-                          "itemWidget": {
-                            "x": 0,
-                            "type": "Select",
-                            "data": "channel.status",
-                            "y": 0,
-                            "width": 64,
-                            "height": 112,
-                            "style": "default",
-                            "widgets": [
-                              {
-                                "type": "Rectangle",
-                                "x": 0,
-                                "y": 0,
-                                "width": 64,
-                                "height": 92,
-                                "style": "default_inverse"
-                              },
-                              {
-                                "type": "Container",
-                                "x": 0,
-                                "y": 0,
-                                "width": 64,
-                                "height": 112,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "x": 0,
-                                    "type": "Select",
-                                    "data": "channel.outputState",
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 32,
-                                    "style": "default",
-                                    "widgets": [
-                                      {
-                                        "type": "Text",
-                                        "action": "toggle_channel",
-                                        "x": 0,
-                                        "y": 0,
-                                        "width": 64,
-                                        "height": 32,
-                                        "style": "edit_value_active_S_right",
-                                        "text": "OFF"
-                                      },
-                                      {
-                                        "x": 0,
-                                        "type": "Select",
-                                        "data": "channel.outputMode",
-                                        "y": 0,
-                                        "width": 64,
-                                        "height": 32,
-                                        "style": "default",
-                                        "widgets": [
-                                          {
-                                            "type": "DisplayData",
-                                            "data": "channel.monValue",
-                                            "action": "toggle_channel",
-                                            "x": 0,
-                                            "y": 0,
-                                            "width": 64,
-                                            "height": 32,
-                                            "style": "edit_value_active_S_right",
-                                            "activeStyle": ""
-                                          },
-                                          {
-                                            "type": "DisplayData",
-                                            "data": "channel.monValue",
-                                            "action": "toggle_channel",
-                                            "x": 0,
-                                            "y": 0,
-                                            "width": 64,
-                                            "height": 32,
-                                            "style": "edit_value_active_S_right",
-                                            "activeStyle": ""
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.set",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 32,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "edit_value_active_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.set",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 62,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "edit_value_active_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  }
-                                ]
-                              },
-                              {
-                                "type": "Rectangle",
-                                "x": 0,
-                                "y": 0,
-                                "width": 64,
-                                "height": 92,
-                                "style": "default_inverse"
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "type": "Rectangle",
-                          "x": 0,
-                          "y": 92,
-                          "width": 64,
-                          "height": 20,
-                          "style": "default_inverse"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "Container",
-                      "x": 0,
-                      "y": 0,
-                      "width": 64,
-                      "height": 32,
-                      "style": "default",
-                      "widgets": [
-                        {
-                          "x": 0,
-                          "type": "Select",
-                          "data": "channel.status",
-                          "y": 0,
-                          "width": 64,
-                          "height": 112,
-                          "style": "default",
-                          "widgets": [
-                            {
-                              "type": "Rectangle",
-                              "x": 0,
-                              "y": 0,
-                              "width": 64,
-                              "height": 92,
-                              "style": "default_inverse"
-                            },
-                            {
-                              "type": "Container",
-                              "x": 0,
-                              "y": 0,
-                              "width": 64,
-                              "height": 112,
-                              "style": "default",
-                              "widgets": [
-                                {
-                                  "x": 0,
-                                  "type": "Select",
-                                  "data": "channel.outputState",
-                                  "y": 0,
-                                  "width": 64,
-                                  "height": 32,
-                                  "style": "default",
-                                  "widgets": [
-                                    {
-                                      "type": "Text",
-                                      "action": "toggle_channel",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 32,
-                                      "style": "edit_value_active_S_right",
-                                      "text": "OFF"
-                                    },
-                                    {
-                                      "x": 0,
-                                      "type": "Select",
-                                      "data": "channel.outputMode",
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 32,
-                                      "style": "default",
-                                      "widgets": [
-                                        {
-                                          "type": "DisplayData",
-                                          "data": "channel.monValue",
-                                          "action": "toggle_channel",
-                                          "x": 0,
-                                          "y": 0,
-                                          "width": 64,
-                                          "height": 32,
-                                          "style": "edit_value_active_S_right",
-                                          "activeStyle": ""
-                                        },
-                                        {
-                                          "type": "DisplayData",
-                                          "data": "channel.monValue",
-                                          "action": "toggle_channel",
-                                          "x": 0,
-                                          "y": 0,
-                                          "width": 64,
-                                          "height": 32,
-                                          "style": "edit_value_active_S_right",
-                                          "activeStyle": ""
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "x": 0,
-                                  "type": "Select",
-                                  "data": "channel.isVoltageBalanced",
-                                  "y": 32,
-                                  "width": 64,
-                                  "height": 30,
-                                  "style": "default",
-                                  "widgets": [
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.u.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "edit_value_active_S_right",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    },
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.u.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "set_value_S_right_balanced",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "x": 0,
-                                  "type": "Select",
-                                  "data": "channel.isCurrentBalanced",
-                                  "y": 62,
-                                  "width": 64,
-                                  "height": 30,
-                                  "style": "default",
-                                  "widgets": [
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.i.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "edit_value_active_S_right",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    },
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.i.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "set_value_S_right_balanced",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "type": "Rectangle",
-                              "x": 0,
-                              "y": 0,
-                              "width": 64,
-                              "height": 92,
-                              "style": "default_inverse"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "Rectangle",
-                          "x": 0,
-                          "y": 92,
-                          "width": 64,
-                          "height": 28,
-                          "style": "default_inverse"
-                        },
-                        {
-                          "type": "Text",
-                          "x": 0,
-                          "y": 120,
-                          "width": 64,
-                          "height": 22,
-                          "style": "edit_value_S_centered",
-                          "text": "\\u0081"
-                        },
-                        {
-                          "type": "Text",
-                          "x": 0,
-                          "y": 142,
-                          "width": 64,
-                          "height": 30,
-                          "style": "edit_value_S_left",
-                          "text": "Coupled:"
-                        },
-                        {
-                          "type": "Text",
-                          "x": 0,
-                          "y": 172,
-                          "width": 64,
-                          "height": 32,
-                          "style": "coupled_info_S",
-                          "text": "Parallel"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "Container",
-                      "x": 0,
-                      "y": 0,
-                      "width": 64,
-                      "height": 32,
-                      "style": "default",
-                      "widgets": [
-                        {
-                          "x": 0,
-                          "type": "Select",
-                          "data": "channel.status",
-                          "y": 0,
-                          "width": 64,
-                          "height": 112,
-                          "style": "default",
-                          "widgets": [
-                            {
-                              "type": "Rectangle",
-                              "x": 0,
-                              "y": 0,
-                              "width": 64,
-                              "height": 92,
-                              "style": "default_inverse"
-                            },
-                            {
-                              "type": "Container",
-                              "x": 0,
-                              "y": 0,
-                              "width": 64,
-                              "height": 112,
-                              "style": "default",
-                              "widgets": [
-                                {
-                                  "x": 0,
-                                  "type": "Select",
-                                  "data": "channel.outputState",
-                                  "y": 0,
-                                  "width": 64,
-                                  "height": 32,
-                                  "style": "default",
-                                  "widgets": [
-                                    {
-                                      "type": "Text",
-                                      "action": "toggle_channel",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 32,
-                                      "style": "edit_value_active_S_right",
-                                      "text": "OFF"
-                                    },
-                                    {
-                                      "x": 0,
-                                      "type": "Select",
-                                      "data": "channel.outputMode",
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 32,
-                                      "style": "default",
-                                      "widgets": [
-                                        {
-                                          "type": "DisplayData",
-                                          "data": "channel.monValue",
-                                          "action": "toggle_channel",
-                                          "x": 0,
-                                          "y": 0,
-                                          "width": 64,
-                                          "height": 32,
-                                          "style": "edit_value_active_S_right",
-                                          "activeStyle": ""
-                                        },
-                                        {
-                                          "type": "DisplayData",
-                                          "data": "channel.monValue",
-                                          "action": "toggle_channel",
-                                          "x": 0,
-                                          "y": 0,
-                                          "width": 64,
-                                          "height": 32,
-                                          "style": "edit_value_active_S_right",
-                                          "activeStyle": ""
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "x": 0,
-                                  "type": "Select",
-                                  "data": "channel.isVoltageBalanced",
-                                  "y": 32,
-                                  "width": 64,
-                                  "height": 30,
-                                  "style": "default",
-                                  "widgets": [
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.u.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "edit_value_active_S_right",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    },
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.u.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "set_value_S_right_balanced",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "x": 0,
-                                  "type": "Select",
-                                  "data": "channel.isCurrentBalanced",
-                                  "y": 62,
-                                  "width": 64,
-                                  "height": 30,
-                                  "style": "default",
-                                  "widgets": [
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.i.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "edit_value_active_S_right",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    },
-                                    {
-                                      "type": "DisplayData",
-                                      "data": "channel.i.set",
-                                      "action": "edit",
-                                      "x": 0,
-                                      "y": 0,
-                                      "width": 64,
-                                      "height": 30,
-                                      "style": "set_value_S_right_balanced",
-                                      "activeStyle": "edit_value_focus_S_right"
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "type": "Rectangle",
-                              "x": 0,
-                              "y": 0,
-                              "width": 64,
-                              "height": 92,
-                              "style": "default_inverse"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "Rectangle",
-                          "x": 0,
-                          "y": 92,
-                          "width": 64,
-                          "height": 28,
-                          "style": "default_inverse"
-                        },
-                        {
-                          "type": "Text",
-                          "x": 0,
-                          "y": 120,
-                          "width": 64,
-                          "height": 22,
-                          "style": "edit_value_S_centered",
-                          "text": "\\u0081"
-                        },
-                        {
-                          "type": "Text",
-                          "x": 0,
-                          "y": 142,
-                          "width": 64,
-                          "height": 30,
-                          "style": "edit_value_S_left",
-                          "text": "Coupled:"
-                        },
-                        {
-                          "type": "Text",
-                          "x": 0,
-                          "y": 172,
-                          "width": 64,
-                          "height": 32,
-                          "style": "coupled_info_S",
-                          "text": "Series"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "Container",
-                      "x": 0,
-                      "y": 0,
-                      "width": 64,
-                      "height": 204,
-                      "style": "default",
-                      "widgets": [
-                        {
-                          "type": "List",
-                          "data": "channels",
-                          "x": 0,
-                          "y": 0,
-                          "width": 64,
-                          "height": 204,
-                          "style": "default",
-                          "listType": "vertical",
-                          "itemWidget": {
-                            "type": "Container",
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 112,
-                            "style": "default",
-                            "widgets": [
-                              {
-                                "x": 0,
-                                "type": "Select",
-                                "data": "channel.outputState",
-                                "y": 0,
-                                "width": 64,
-                                "height": 32,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "Text",
-                                    "action": "toggle_channel",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 32,
-                                    "style": "edit_value_active_S_right",
-                                    "text": "OFF"
-                                  },
-                                  {
-                                    "x": 0,
-                                    "type": "Select",
-                                    "data": "channel.outputMode",
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 32,
-                                    "style": "default",
-                                    "widgets": [
-                                      {
-                                        "type": "DisplayData",
-                                        "data": "channel.monValue",
-                                        "action": "toggle_channel",
-                                        "x": 0,
-                                        "y": 0,
-                                        "width": 64,
-                                        "height": 32,
-                                        "style": "edit_value_active_S_right",
-                                        "activeStyle": ""
-                                      },
-                                      {
-                                        "type": "DisplayData",
-                                        "data": "channel.monValue",
-                                        "action": "toggle_channel",
-                                        "x": 0,
-                                        "y": 0,
-                                        "width": 64,
-                                        "height": 32,
-                                        "style": "edit_value_active_S_right",
-                                        "activeStyle": ""
-                                      }
-                                    ]
-                                  }
-                                ]
-                              },
-                              {
-                                "type": "DisplayData",
-                                "data": "channel.u.set",
-                                "action": "edit",
-                                "x": 0,
-                                "y": 32,
-                                "width": 64,
-                                "height": 30,
-                                "style": "edit_value_active_S_right",
-                                "activeStyle": "edit_value_focus_S_right"
-                              },
-                              {
-                                "type": "DisplayData",
-                                "data": "channel.i.set",
-                                "action": "edit",
-                                "x": 0,
-                                "y": 62,
-                                "width": 64,
-                                "height": 30,
-                                "style": "edit_value_active_S_right",
-                                "activeStyle": "edit_value_focus_S_right"
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "type": "Text",
-                          "action": "",
-                          "x": 0,
-                          "y": 92,
-                          "width": 64,
-                          "height": 20,
-                          "style": "default_S",
-                          "text": "\\u008ATrack"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "Rectangle",
-                  "x": 64,
-                  "y": 0,
-                  "width": 4,
-                  "height": 204,
-                  "style": "default_inverse"
-                }
-              ]
+              "style": "default"
             }
           ]
         }
@@ -20659,7 +19311,7 @@
                               "widgets": [
                                 {
                                   "type": "DisplayData",
-                                  "data": "channel.u.set",
+                                  "data": "channel.u.edit",
                                   "action": "edit",
                                   "x": 0,
                                   "y": 0,
@@ -20683,7 +19335,7 @@
                             },
                             {
                               "type": "DisplayData",
-                              "data": "channel.i.set",
+                              "data": "channel.i.edit",
                               "action": "edit",
                               "x": 0,
                               "y": 62,
@@ -20805,7 +19457,7 @@
                             "widgets": [
                               {
                                 "type": "DisplayData",
-                                "data": "channel.u.set",
+                                "data": "channel.u.edit",
                                 "action": "edit",
                                 "x": 0,
                                 "y": 0,
@@ -20816,7 +19468,7 @@
                               },
                               {
                                 "type": "DisplayData",
-                                "data": "channel.u.set",
+                                "data": "channel.u.edit",
                                 "action": "edit",
                                 "x": 0,
                                 "y": 0,
@@ -20838,7 +19490,7 @@
                             "widgets": [
                               {
                                 "type": "DisplayData",
-                                "data": "channel.i.set",
+                                "data": "channel.i.edit",
                                 "action": "edit",
                                 "x": 0,
                                 "y": 0,
@@ -20849,7 +19501,7 @@
                               },
                               {
                                 "type": "DisplayData",
-                                "data": "channel.i.set",
+                                "data": "channel.i.edit",
                                 "action": "edit",
                                 "x": 0,
                                 "y": 0,
@@ -21007,7 +19659,7 @@
                             "widgets": [
                               {
                                 "type": "DisplayData",
-                                "data": "channel.u.set",
+                                "data": "channel.u.edit",
                                 "action": "edit",
                                 "x": 0,
                                 "y": 0,
@@ -21018,7 +19670,7 @@
                               },
                               {
                                 "type": "DisplayData",
-                                "data": "channel.u.set",
+                                "data": "channel.u.edit",
                                 "action": "edit",
                                 "x": 0,
                                 "y": 0,
@@ -21040,7 +19692,7 @@
                             "widgets": [
                               {
                                 "type": "DisplayData",
-                                "data": "channel.i.set",
+                                "data": "channel.i.edit",
                                 "action": "edit",
                                 "x": 0,
                                 "y": 0,
@@ -21051,7 +19703,7 @@
                               },
                               {
                                 "type": "DisplayData",
-                                "data": "channel.i.set",
+                                "data": "channel.i.edit",
                                 "action": "edit",
                                 "x": 0,
                                 "y": 0,
@@ -21219,7 +19871,7 @@
                             },
                             {
                               "type": "DisplayData",
-                              "data": "channel.u.set",
+                              "data": "channel.u.edit",
                               "action": "edit",
                               "x": 0,
                               "y": 32,
@@ -21230,7 +19882,7 @@
                             },
                             {
                               "type": "DisplayData",
-                              "data": "channel.i.set",
+                              "data": "channel.i.edit",
                               "action": "edit",
                               "x": 0,
                               "y": 62,
@@ -21666,7 +20318,7 @@
             "widgets": [
               {
                 "type": "DisplayData",
-                "data": "channel.u.set",
+                "data": "channel.u.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -21677,7 +20329,7 @@
               },
               {
                 "type": "DisplayData",
-                "data": "channel.u.set",
+                "data": "channel.u.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -21699,7 +20351,7 @@
             "widgets": [
               {
                 "type": "DisplayData",
-                "data": "channel.i.set",
+                "data": "channel.i.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -21710,7 +20362,7 @@
               },
               {
                 "type": "DisplayData",
-                "data": "channel.i.set",
+                "data": "channel.i.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -21931,7 +20583,7 @@
             "widgets": [
               {
                 "type": "DisplayData",
-                "data": "channel.u.set",
+                "data": "channel.u.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -21942,7 +20594,7 @@
               },
               {
                 "type": "DisplayData",
-                "data": "channel.u.set",
+                "data": "channel.u.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -21964,7 +20616,7 @@
             "widgets": [
               {
                 "type": "DisplayData",
-                "data": "channel.i.set",
+                "data": "channel.i.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -21975,7 +20627,7 @@
               },
               {
                 "type": "DisplayData",
-                "data": "channel.i.set",
+                "data": "channel.i.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -22558,7 +21210,7 @@
             "widgets": [
               {
                 "type": "DisplayData",
-                "data": "channel.u.set",
+                "data": "channel.u.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -22569,7 +21221,7 @@
               },
               {
                 "type": "DisplayData",
-                "data": "channel.u.set",
+                "data": "channel.u.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -22591,7 +21243,7 @@
             "widgets": [
               {
                 "type": "DisplayData",
-                "data": "channel.i.set",
+                "data": "channel.i.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -22602,7 +21254,7 @@
               },
               {
                 "type": "DisplayData",
-                "data": "channel.i.set",
+                "data": "channel.i.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -22733,7 +21385,7 @@
             "widgets": [
               {
                 "type": "DisplayData",
-                "data": "channel.u.set",
+                "data": "channel.u.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -22744,7 +21396,7 @@
               },
               {
                 "type": "DisplayData",
-                "data": "channel.u.set",
+                "data": "channel.u.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -22766,7 +21418,7 @@
             "widgets": [
               {
                 "type": "DisplayData",
-                "data": "channel.i.set",
+                "data": "channel.i.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -22777,7 +21429,7 @@
               },
               {
                 "type": "DisplayData",
-                "data": "channel.i.set",
+                "data": "channel.i.edit",
                 "action": "edit",
                 "x": 0,
                 "y": 0,
@@ -23202,7 +21854,7 @@
         "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance.",
         "font": "medium",
         "color": "#FFFFFF",
-        "backgroundColor": "#5080ff",
+        "backgroundColor": "#2f68ff",
         "borderColor": "#D3D3D3"
       },
       {

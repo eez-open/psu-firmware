@@ -115,6 +115,7 @@ static data::Cursor g_wasFocusCursor;
 static uint8_t g_wasFocusDataId;
 data::Cursor g_focusCursor;
 uint8_t g_focusDataId;
+data::Value g_focusEditValue;
 
 Page *createPageFromId(int pageId) {
     switch (pageId) {
@@ -602,6 +603,7 @@ void selectChannel() {
 void setFocusCursor(const data::Cursor& cursor, uint8_t dataId) {
     g_focusCursor = cursor;
     g_focusDataId = dataId;
+    g_focusEditValue = data::Value();
 }
 
 bool wasFocusWidget(const WidgetCursor &widgetCursor) {
@@ -683,23 +685,33 @@ void onEncoder(int counter, bool clicked) {
     }
 
     if (clicked) {
-        switch (persist_conf::devConf2.flags.encoderSwitchAction) {
-        case ENCODER_SWITCH_ACTION_SELECTION:
-            if (g_focusDataId == DATA_ID_CHANNEL_U_SET) {
-                g_focusDataId = DATA_ID_CHANNEL_I_SET;
-            } else {
-                for (int i = 0; i < CH_NUM; ++i) {
-                    g_focusCursor.i = (g_focusCursor.i + 1) % CH_NUM;
-                    if (Channel::get(g_focusCursor.i).isOk()) {
-                        break;
+        if (isEncoderEnabledInActivePage()) {
+            switch (persist_conf::devConf2.flags.encoderSwitchAction) {
+            case ENCODER_SWITCH_ACTION_SELECTION:
+                if (g_focusDataId == DATA_ID_CHANNEL_U_EDIT) {
+                    g_focusDataId = DATA_ID_CHANNEL_I_EDIT;
+                } else {
+                    for (int i = 0; i < CH_NUM; ++i) {
+                        g_focusCursor.i = (g_focusCursor.i + 1) % CH_NUM;
+                        if (Channel::get(g_focusCursor.i).isOk()) {
+                            break;
+                        }
+                    }
+                    g_focusDataId = DATA_ID_CHANNEL_U_EDIT;
+                }
+                break;
+
+            case ENCODER_SWITCH_ACTION_CONFIRMATION:
+                if (g_focusEditValue.getType() != data::VALUE_TYPE_NONE) {
+                    int16_t error;
+                    if (!data::set(g_focusCursor, g_focusDataId, g_focusEditValue, &error)) {
+                        errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
+                    } else {
+                        g_focusEditValue = data::Value();
                     }
                 }
-                g_focusDataId = DATA_ID_CHANNEL_U_SET;
+                break;
             }
-            break;
-
-        case ENCODER_SWITCH_ACTION_CONFIRMATION:
-            break;
         }
     }
 
@@ -716,7 +728,8 @@ void onEncoder(int counter, bool clicked) {
         }
 
         encoder::enableVariableSpeed(true);
-        encoder::setMovingSpeedMultiplier(data::getMax(g_focusCursor, g_focusDataId).getFloat() / data::getMax(g_focusCursor, DATA_ID_CHANNEL_U_SET).getFloat());
+        encoder::setMovingSpeedMultiplier(
+            data::getMax(g_focusCursor, g_focusDataId).getFloat() / data::getMax(g_focusCursor, DATA_ID_CHANNEL_U_SET).getFloat());
 
         if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
             edit_mode_slider::increment(counter);
@@ -738,9 +751,13 @@ void onEncoder(int counter, bool clicked) {
                 newValue = max;
             }
 
-            int16_t error;
-            if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType()), &error)) {
-                errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
+            if (persist_conf::devConf2.flags.encoderSwitchAction == ENCODER_SWITCH_ACTION_CONFIRMATION) {
+                g_focusEditValue = data::Value(newValue, value.getType());
+            } else {
+                int16_t error;
+                if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType()), &error)) {
+                    errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
+                }
             }
         }
     }
@@ -750,7 +767,7 @@ void onEncoder(int counter, bool clicked) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void init() {
-    setFocusCursor(0, DATA_ID_CHANNEL_U_SET);
+    setFocusCursor(0, DATA_ID_CHANNEL_U_EDIT);
 
     lcd::init();
 
