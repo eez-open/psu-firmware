@@ -39,6 +39,18 @@ data::Value Page::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot
 	return data::Value();
 }
 
+data::Value Page::getMin(const data::Cursor &cursor, uint8_t id) {
+	return data::Value();
+}
+
+data::Value Page::getMax(const data::Cursor &cursor, uint8_t id) {
+	return data::Value();
+}
+
+bool Page::setData(const data::Cursor &cursor, uint8_t id, data::Value value) {
+    return false;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 void SetPage::takeSnapshot(data::Snapshot *snapshot) {

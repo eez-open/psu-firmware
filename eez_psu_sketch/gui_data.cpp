@@ -47,8 +47,16 @@ data::EnumItem g_channelDisplayValueEnumDefinition[] = {
     {0, 0}
 };
 
+data::EnumItem g_encoderSwitchAction[] = {
+    {ENCODER_SWITCH_ACTION_NONE, PSTR("Not used")},
+    {ENCODER_SWITCH_ACTION_CONFIRMATION, PSTR("Confirmation")},
+    {ENCODER_SWITCH_ACTION_SELECTION, PSTR("Selection")},
+    {0, 0}
+};
+
 static const data::EnumItem *enumDefinitions[] = {
-    g_channelDisplayValueEnumDefinition
+    g_channelDisplayValueEnumDefinition,
+    g_encoderSwitchAction
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -339,6 +347,15 @@ Value getMin(const Cursor &cursor, uint8_t id) {
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMin();
     }
+
+    Page *activePage = getActivePage();
+    if (activePage) {
+        Value value = activePage->getMin(cursor, id);
+        if (value.getType() != VALUE_TYPE_NONE) {
+            return value;
+        }
+    }
+
     return Value();
 }
 
@@ -351,6 +368,14 @@ Value getMax(const Cursor &cursor, uint8_t id) {
         return Value(channel_dispatcher::getPowerMaxLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMax();
+    }
+
+    Page *activePage = getActivePage();
+    if (activePage) {
+        Value value = activePage->getMax(cursor, id);
+        if (value.getType() != VALUE_TYPE_NONE) {
+            return value;
+        }
     }
 
     return Value();
@@ -433,6 +458,11 @@ bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
         return true;
     } else if (id == DATA_ID_EDIT_STEPS) {
         edit_mode_step::setStepIndex(value.getInt());
+        return true;
+    }
+
+    Page *activePage = getActivePage();
+    if (activePage && activePage->setData(cursor, id, value)) {
         return true;
     }
 

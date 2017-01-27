@@ -209,6 +209,10 @@ void action_show_sys_settings_sound() {
     pushPage(PAGE_ID_SYS_SETTINGS_SOUND);
 }
 
+void action_show_sys_settings_encoder() {
+    pushPage(PAGE_ID_SYS_SETTINGS_ENCODER);
+}
+
 void action_show_sys_info() {
     setPage(PAGE_ID_SYS_INFO);
 }
@@ -539,6 +543,16 @@ void action_error_alert_action() {
     errorMessageAction();
 }
 
+void action_up_down() {
+    upDown();
+}
+
+void action_sys_settings_encoder_edit_switch_action() {
+    #if OPTION_ENCODER
+    ((SysSettingsEncoderPage *)getActivePage())->editSwitchAction();
+    #endif
+}
+
 
 ACTION actions[] = {
     0,
@@ -582,6 +596,7 @@ ACTION actions[] = {
     action_show_sys_settings_protections,
     action_show_sys_settings_aux_otp,
     action_show_sys_settings_sound,
+    action_show_sys_settings_encoder,
     action_show_sys_info,
     action_show_sys_info2,
     action_show_main_help_page,
@@ -663,7 +678,9 @@ ACTION actions[] = {
     action_ch_settings_adv_view_swap_display_values,
     action_ch_settings_adv_view_edit_yt_view_rate,
     action_select_enum_item,
-    action_error_alert_action
+    action_error_alert_action,
+    action_up_down,
+    action_sys_settings_encoder_edit_switch_action
 };
 
 }

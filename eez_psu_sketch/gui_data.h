@@ -28,7 +28,8 @@ namespace data {
 ////////////////////////////////////////////////////////////////////////////////
 
 enum EnumDefinition {
-    ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE
+    ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE,
+    ENUM_DEFINITION_ENCODER_SWITCH_ACTION
 };
 
 struct EnumItem {
@@ -37,6 +38,7 @@ struct EnumItem {
 };
 
 extern data::EnumItem g_channelDisplayValueEnumDefinition[];
+extern data::EnumItem g_encoderSwitchAction[];
 
 ////////////////////////////////////////////////////////////////////////////////
 

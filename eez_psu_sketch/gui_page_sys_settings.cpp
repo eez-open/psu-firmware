@@ -24,6 +24,9 @@
 #include "ethernet.h"
 #include "temperature.h"
 #include "profile.h"
+#if OPTION_ENCODER
+#include "encoder.h"
+#endif
 
 #include "gui_data_snapshot.h"
 #include "gui_page_sys_settings.h"
@@ -478,6 +481,97 @@ void SysSettingsSoundPage::toggleClickSound() {
         }
     }
 }
+
+#if OPTION_ENCODER
+
+////////////////////////////////////////////////////////////////////////////////
+
+SysSettingsEncoderPage::SysSettingsEncoderPage() {
+    origSwitchAction = switchAction = (EncoderSwitchAction)persist_conf::devConf2.flags.encoderSwitchAction;
+    origMovingSpeedDown = movingSpeedDown = persist_conf::devConf2.encoderMovingSpeedDown;
+    origMovingSpeedUp = movingSpeedUp = persist_conf::devConf2.encoderMovingSpeedUp;
+}
+
+void SysSettingsEncoderPage::takeSnapshot(data::Snapshot *snapshot) {
+	SetPage::takeSnapshot(snapshot);
+
+    snapshot->intValue1 = movingSpeedDown;
+    snapshot->intValue2 = movingSpeedUp;
+}
+
+data::Value SysSettingsEncoderPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+	data::Value value = SetPage::getData(cursor, id, snapshot);
+	if (value.getType() != data::VALUE_TYPE_NONE) {
+		return value;
+	}
+
+    if (id == DATA_ID_SYS_ENCODER_SWITCH_ACTION) {
+        return data::Value(switchAction, data::ENUM_DEFINITION_ENCODER_SWITCH_ACTION);
+    }
+
+    if (id == DATA_ID_SYS_ENCODER_MOVING_DOWN_SPEED) {
+        return data::Value((int)snapshot->intValue1);
+    }
+
+    if (id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
+        return data::Value((int)snapshot->intValue2);
+    }
+
+    return data::Value();
+}
+
+data::Value SysSettingsEncoderPage::getMin(const data::Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_SYS_ENCODER_MOVING_DOWN_SPEED || id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
+        return encoder::MIN_MOVING_SPEED;
+    }
+
+    return data::Value();
+}
+
+data::Value SysSettingsEncoderPage::getMax(const data::Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_SYS_ENCODER_MOVING_DOWN_SPEED || id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
+        return encoder::MAX_MOVING_SPEED;
+    }
+
+    return data::Value();
+}
+
+bool SysSettingsEncoderPage::setData(const data::Cursor &cursor, uint8_t id, data::Value value) {
+    if (id == DATA_ID_SYS_ENCODER_MOVING_DOWN_SPEED) {
+        movingSpeedDown = (uint8_t)value.getInt();
+        return true;
+    }
+
+    if (id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
+        movingSpeedUp = (uint8_t)value.getInt();
+        return true;
+    }
+
+    return false;
+}
+
+void onSwitchActionSet(uint8_t value) {
+	popPage();
+	SysSettingsEncoderPage *page = (SysSettingsEncoderPage *)getActivePage();
+	page->switchAction = (EncoderSwitchAction)value;
+}
+
+void SysSettingsEncoderPage::editSwitchAction() {
+    pushSelectFromEnumPage(data::g_encoderSwitchAction, switchAction, -1, onSwitchActionSet);
+}
+
+int SysSettingsEncoderPage::getDirty() {
+    return origSwitchAction != switchAction || origMovingSpeedDown != movingSpeedDown || origMovingSpeedUp != movingSpeedUp;
+}
+
+void SysSettingsEncoderPage::set() {
+	if (getDirty()) {
+        persist_conf::setEncoderSettings(switchAction, movingSpeedDown, movingSpeedUp);
+		infoMessageP(PSTR("Encoder settings changed!"), actions[ACTION_ID_SHOW_SYS_SETTINGS2]);
+	}
+}
+
+#endif
 
 }
 }

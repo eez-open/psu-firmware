@@ -208,8 +208,8 @@ ChSettingsAdvViewPage::ChSettingsAdvViewPage() {
 void ChSettingsAdvViewPage::takeSnapshot(data::Snapshot *snapshot) {
 	SetPage::takeSnapshot(snapshot);
 
-    snapshot->displayValue1 = displayValue1;
-    snapshot->displayValue2 = displayValue2;
+    snapshot->intValue1 = displayValue1;
+    snapshot->intValue2 = displayValue2;
 }
 
 data::Value ChSettingsAdvViewPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
@@ -219,11 +219,11 @@ data::Value ChSettingsAdvViewPage::getData(const data::Cursor &cursor, uint8_t i
 	}
 
 	if (id == DATA_ID_CHANNEL_DISPLAY_VIEW_SETTINGS_DISPLAY_VALUE1) {
-		return data::Value(snapshot->displayValue1, data::ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE);
+		return data::Value(snapshot->intValue1, data::ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE);
 	}
 
 	if (id == DATA_ID_CHANNEL_DISPLAY_VIEW_SETTINGS_DISPLAY_VALUE2) {
-		return data::Value(snapshot->displayValue2, data::ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE);
+		return data::Value(snapshot->intValue2, data::ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE);
 	}
 
     if (id == DATA_ID_CHANNEL_DISPLAY_VIEW_SETTINGS_YT_VIEW_RATE) {

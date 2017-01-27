@@ -1304,6 +1304,71 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
     return updated;
 }
 
+bool drawUpDownWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+    DECL_WIDGET_SPECIFIC(UpDownWidget, upDownWidget, widget);
+
+    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+    if (!refresh) {
+        data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
+        refresh = value != previousValue;
+    }
+    
+    if (refresh) {
+        DECL_STRING(downButtonText, upDownWidget->downButtonText);
+        DECL_STYLE(buttonsStyle, upDownWidget->buttonsStyle);
+
+        font::Font buttonsFont = styleGetFont(buttonsStyle);
+        int buttonWidth = buttonsFont.getHeight();
+
+        drawText(downButtonText, -1, widgetCursor.x, widgetCursor.y, buttonWidth, (int)widget->h, buttonsStyle,
+            (inverse || g_selectedWidget == widgetCursor) && g_selectedWidget.segment == UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON);
+
+        char text[64];
+        value.toText(text, sizeof(text));
+        DECL_STYLE(style, widget->style);
+        drawText(text, -1, widgetCursor.x + buttonWidth, widgetCursor.y, (int)(widget->w - 2 * buttonWidth), (int)widget->h, style, false);
+
+        DECL_STRING(upButtonText, upDownWidget->upButtonText);
+        drawText(upButtonText, -1, widgetCursor.x + widget->w - buttonWidth, widgetCursor.y, buttonWidth, (int)widget->h, buttonsStyle,
+            (inverse || g_selectedWidget == widgetCursor) && g_selectedWidget.segment == UP_DOWN_WIDGET_SEGMENT_UP_BUTTON);
+
+        return true;
+    }
+
+    return false;
+}
+
+void upDown() {
+    if (g_foundWidgetAtDown) {
+        DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
+        if (widget->type == WIDGET_TYPE_UP_DOWN) {
+            int value = data::currentSnapshot.get(g_foundWidgetAtDown.cursor, widget->data).getInt();
+
+            int newValue = value;
+
+            if (g_foundWidgetAtDown.segment == UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON) {
+                --newValue;
+            } else if (g_foundWidgetAtDown.segment == UP_DOWN_WIDGET_SEGMENT_UP_BUTTON) {
+                ++newValue;
+            }
+
+            int min = data::getMin(g_foundWidgetAtDown.cursor, widget->data).getInt();
+            if (newValue < min) {
+                newValue = min;
+            }
+
+            int max = data::getMax(g_foundWidgetAtDown.cursor, widget->data).getInt();
+            if (newValue > max) {
+                newValue = max;
+            }
+
+            if (newValue != value) {
+                data::set(g_foundWidgetAtDown.cursor, widget->data, newValue, 0);
+            }
+        }
+    }
+}
+
 bool drawWidget(const WidgetCursor &widgetCursor, bool refresh) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
@@ -1331,6 +1396,8 @@ bool drawWidget(const WidgetCursor &widgetCursor, bool refresh) {
         return drawBarGraphWidget(widgetCursor, widget, refresh, inverse, true);
     } else if (widget->type == WIDGET_TYPE_YT_GRAPH) {
         return drawYTGraphWidget(widgetCursor, widget, refresh, inverse);
+    } else if (widget->type == WIDGET_TYPE_UP_DOWN) {
+        return drawUpDownWidget(widgetCursor, widget, refresh, inverse);
     } 
 
     return false;
@@ -1523,6 +1590,15 @@ bool findWidgetStep(const WidgetCursor &widgetCursor, bool refresh) {
 
     if (inside) {
         g_foundWidget = widgetCursor;
+
+        if (widget->type == WIDGET_TYPE_UP_DOWN) {
+            if (g_find_widget_at_x < widgetCursor.x + widget->w / 2) {
+                g_foundWidget.segment = UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON;
+            } else {
+                g_foundWidget.segment = UP_DOWN_WIDGET_SEGMENT_UP_BUTTON;
+            }
+        }
+
         return true;
     }
 

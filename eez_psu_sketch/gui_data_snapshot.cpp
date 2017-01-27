@@ -428,6 +428,10 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
         return data::Value(OPTION_ETHERNET);
     }
 
+    if (id == DATA_ID_SYS_ENCODER_INSTALLED) {
+        return data::Value(OPTION_ENCODER);
+    }
+
     Page *page = getActivePage();
     if (page) {
         Value value = page->getData(cursor, id, this);

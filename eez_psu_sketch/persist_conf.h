@@ -44,19 +44,19 @@ struct BlockHeader {
 
 /// Device binary flags stored in DeviceConfiguration.
 struct DeviceFlags {
-    int isSoundEnabled : 1;
-    int date_valid : 1;
-    int time_valid : 1;
-    int profile_auto_recall : 1;
-    int dst : 1;
-    int channelsViewMode : 3;
-    int ethernetEnabled : 1;
-    int outputProtectionCouple : 1;
-    int shutdownWhenProtectionTripped : 1;
-    int forceDisablingAllOutputsOnPowerUp : 1;
-    int isFrontPanelLocked: 1;
-    int isClickSoundEnabled : 1;
-    int reserved : 18;
+    unsigned  isSoundEnabled : 1;
+    unsigned  date_valid : 1;
+    unsigned  time_valid : 1;
+    unsigned  profile_auto_recall : 1;
+    unsigned  dst : 1;
+    unsigned  channelsViewMode : 3;
+    unsigned  ethernetEnabled : 1;
+    unsigned  outputProtectionCouple : 1;
+    unsigned  shutdownWhenProtectionTripped : 1;
+    unsigned  forceDisablingAllOutputsOnPowerUp : 1;
+    unsigned  isFrontPanelLocked: 1;
+    unsigned  isClickSoundEnabled : 1;
+    unsigned  reserved: 18;
 };
 
 /// Device configuration block.
@@ -85,10 +85,19 @@ struct DeviceConfiguration {
 #endif // EEZ_PSU_SIMULATOR
 };
 
+/// Device binary flags stored in DeviceConfiguration.
+struct DeviceFlags2 {
+    unsigned encoderSwitchAction : 2;
+    unsigned reserved: 30;
+};
+
 struct DeviceConfiguration2 {
     BlockHeader header;
     char systemPassword[PASSWORD_MAX_LENGTH + 1];
-    uint8_t reserverd[100];
+    DeviceFlags2 flags;
+    uint8_t encoderMovingSpeedDown;
+    uint8_t encoderMovingSpeedUp;
+    uint8_t reserverd[94];
 };
 
 extern DeviceConfiguration devConf;
@@ -151,6 +160,8 @@ bool enableForceDisablingAllOutputsOnPowerUp(bool enable);
 bool isForceDisablingAllOutputsOnPowerUpEnabled();
 
 bool lockFrontPanel(bool lock);
+
+bool setEncoderSettings(uint8_t switchAction, uint8_t movingSpeedDown, uint8_t movingSpeedUp);
 
 }
 }

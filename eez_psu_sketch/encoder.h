@@ -22,11 +22,17 @@ namespace eez {
 namespace psu {
 namespace encoder {
 
+static const uint8_t MAX_MOVING_SPEED = 10;
+static const uint8_t MIN_MOVING_SPEED = 1;
+static const uint8_t DEFAULT_MOVING_DOWN_SPEED = 8;
+static const uint8_t DEFAULT_MOVING_UP_SPEED = 4;
+
 void init();
 void read(int &counter, bool &clicked);
 
 void enableVariableSpeed(bool enable);
-void setSpeedMultiplier(float speedMultiplier);
+void setMovingSpeed(uint8_t down, uint8_t up);
+void setMovingSpeedMultiplier(float speedMultiplier);
 
 #ifdef EEZ_PSU_SIMULATOR
 void write(int counter, bool clicked);

@@ -140,6 +140,9 @@ Page *createPageFromId(int pageId) {
     case PAGE_ID_SYS_SETTINGS_PROTECTIONS: return new SysSettingsProtectionsPage();
     case PAGE_ID_SYS_SETTINGS_AUX_OTP: return new SysSettingsAuxOtpPage();
     case PAGE_ID_SYS_SETTINGS_SOUND: return new SysSettingsSoundPage();
+#if OPTION_ENCODER
+    case PAGE_ID_SYS_SETTINGS_ENCODER: return new SysSettingsEncoderPage();
+#endif
     case PAGE_ID_SYS_INFO:
     case PAGE_ID_SYS_INFO2: return new SysInfoPage();
     case PAGE_ID_USER_PROFILES:
@@ -680,16 +683,23 @@ void onEncoder(int counter, bool clicked) {
     }
 
     if (clicked) {
-        if (g_focusDataId == DATA_ID_CHANNEL_U_SET) {
-            g_focusDataId = DATA_ID_CHANNEL_I_SET;
-        } else {
-            for (int i = 0; i < CH_NUM; ++i) {
-                g_focusCursor.i = (g_focusCursor.i + 1) % CH_NUM;
-                if (Channel::get(g_focusCursor.i).isOk()) {
-                    break;
+        switch (persist_conf::devConf2.flags.encoderSwitchAction) {
+        case ENCODER_SWITCH_ACTION_SELECTION:
+            if (g_focusDataId == DATA_ID_CHANNEL_U_SET) {
+                g_focusDataId = DATA_ID_CHANNEL_I_SET;
+            } else {
+                for (int i = 0; i < CH_NUM; ++i) {
+                    g_focusCursor.i = (g_focusCursor.i + 1) % CH_NUM;
+                    if (Channel::get(g_focusCursor.i).isOk()) {
+                        break;
+                    }
                 }
+                g_focusDataId = DATA_ID_CHANNEL_U_SET;
             }
-            g_focusDataId = DATA_ID_CHANNEL_U_SET;
+            break;
+
+        case ENCODER_SWITCH_ACTION_CONFIRMATION:
+            break;
         }
     }
 
@@ -706,7 +716,7 @@ void onEncoder(int counter, bool clicked) {
         }
 
         encoder::enableVariableSpeed(true);
-        encoder::setSpeedMultiplier(data::getMax(g_focusCursor, g_focusDataId).getFloat() / data::getMax(g_focusCursor, DATA_ID_CHANNEL_U_SET).getFloat());
+        encoder::setMovingSpeedMultiplier(data::getMax(g_focusCursor, g_focusDataId).getFloat() / data::getMax(g_focusCursor, DATA_ID_CHANNEL_U_SET).getFloat());
 
         if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
             edit_mode_slider::increment(counter);
@@ -905,7 +915,7 @@ void tick(unsigned long tick_usec) {
                             }
                         }
                     }
-                } else if (action == ACTION_ID_KEYPAD_BACK) {
+                } else if (action == ACTION_ID_KEYPAD_BACK || action == ACTION_ID_UP_DOWN) {
                     if (tick_usec - g_touchDownTime >= CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY) {
                         g_touchDownTime = tick_usec;
                         g_touchActionExecuted = true;

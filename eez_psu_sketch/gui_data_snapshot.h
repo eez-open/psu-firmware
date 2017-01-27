@@ -108,8 +108,8 @@ struct Snapshot {
     float auxTemperature;
     float fanSpeed;
     ProfileSnapshot profile;
-    uint8_t displayValue1;
-    uint8_t displayValue2;
+    uint8_t intValue1;
+    uint8_t intValue2;
 
     unsigned long lastSnapshotTime;
 

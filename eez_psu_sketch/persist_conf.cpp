@@ -20,6 +20,11 @@
 #include "eeprom.h"
 #include "event_queue.h"
 #include "profile.h"
+#if OPTION_ENCODER
+#include "encoder.h"
+#endif
+
+#include "gui_internal.h"
 
 #define NUM_CHANNELS_VIEW_MODES 4
 
@@ -163,6 +168,7 @@ bool saveDevice() {
 static void initDevice2() {
     memset(&devConf2, 0, sizeof(devConf2));
     devConf2.header.version = DEV_CONF2_VERSION;
+    devConf2.flags.encoderSwitchAction = gui::ENCODER_SWITCH_ACTION_SELECTION;
 }
 
 void loadDevice2() {
@@ -175,6 +181,16 @@ void loadDevice2() {
     else {
         initDevice2();
     }
+
+#if OPTION_ENCODER
+    if (!devConf2.encoderMovingSpeedDown) {
+        devConf2.encoderMovingSpeedDown = encoder::DEFAULT_MOVING_DOWN_SPEED;
+    }
+    if (!devConf2.encoderMovingSpeedUp) {
+        devConf2.encoderMovingSpeedUp = encoder::DEFAULT_MOVING_UP_SPEED;
+    }
+    encoder::setMovingSpeed(devConf2.encoderMovingSpeedDown, devConf2.encoderMovingSpeedUp);
+#endif
 }
 
 bool saveDevice2() {
@@ -537,6 +553,18 @@ bool lockFrontPanel(bool lock) {
     g_rlState = devConf.flags.isFrontPanelLocked ? RL_STATE_REMOTE : RL_STATE_LOCAL;
 
     return false;
+}
+
+bool setEncoderSettings(uint8_t switchAction, uint8_t movingSpeedDown, uint8_t movingSpeedUp) {
+    devConf2.flags.encoderSwitchAction = switchAction;
+    devConf2.encoderMovingSpeedDown = movingSpeedDown;
+    devConf2.encoderMovingSpeedUp = movingSpeedUp;
+
+#if OPTION_ENCODER
+    encoder::setMovingSpeed(devConf2.encoderMovingSpeedDown, devConf2.encoderMovingSpeedUp);
+#endif
+
+    return saveDevice2();
 }
 
 }

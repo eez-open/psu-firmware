@@ -244,6 +244,11 @@
       "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_SOUND);"
     },
     {
+      "name": "show_sys_settings_encoder",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_ENCODER);"
+    },
+    {
       "name": "show_sys_info",
       "implementationType": "native",
       "implementation": "setPage(PAGE_ID_SYS_INFO);"
@@ -652,6 +657,16 @@
       "name": "error_alert_action",
       "implementationType": "native",
       "implementation": "errorMessageAction();"
+    },
+    {
+      "name": "upDown",
+      "implementationType": "native",
+      "implementation": "upDown();"
+    },
+    {
+      "name": "sys.settings.encoder.editSwitchAction",
+      "implementationType": "native",
+      "implementation": "#if OPTION_ENCODER\n((SysSettingsEncoderPage *)getActivePage())->editSwitchAction();\n#endif"
     }
   ],
   "data": [
@@ -1566,6 +1581,33 @@
       "name": "channel.displayViewSettings.ytViewRate",
       "type": "float",
       "defaultValue": "100 ms"
+    },
+    {
+      "name": "sys.encoder.switchAction",
+      "type": "enum",
+      "enumItems": "[\n\"Not used\",\n\"Confirmation\",\n\"Selection\"\n]",
+      "defaultValue": "Confirmation"
+    },
+    {
+      "name": "sys.encoder.movingUpSpeed",
+      "type": "integer",
+      "defaultValue": "10\n",
+      "defaultMinValue": 1,
+      "defaultMaxValue": 10
+    },
+    {
+      "name": "sys.encoder.movingDownSpeed",
+      "type": "integer",
+      "defaultValue": "1",
+      "defaultMinValue": 1,
+      "defaultMaxValue": 10
+    },
+    {
+      "name": "sys.encoder.installed",
+      "description": "0: not installed\n1: installed",
+      "type": "enum",
+      "enumItems": "[\n\"Not installed\",\n\"Installed\"\n]",
+      "defaultValue": "1"
     }
   ],
   "gui": {
@@ -17564,13 +17606,35 @@
               "text": "Touchscreen calibration"
             },
             {
-              "type": "Text",
               "x": 12,
+              "type": "Select",
+              "data": "sys.encoder.installed",
               "y": 170,
               "width": 240,
               "height": 28,
-              "style": "default_disabled_S_left",
-              "text": "Encoder"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "edit_value_S_left",
+                  "text": "Encoder"
+                },
+                {
+                  "type": "Text",
+                  "action": "show_sys_settings_encoder",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "Encoder"
+                }
+              ]
             },
             {
               "type": "Text",
@@ -19102,31 +19166,23 @@
               "text": "Encoder settings"
             },
             {
-              "type": "Rectangle",
-              "x": 197,
-              "y": 204,
-              "width": 75,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "X"
-            },
-            {
               "type": "Text",
               "x": 12,
               "y": 30,
-              "width": 153,
+              "width": 136,
               "height": 28,
               "style": "edit_value_S_left",
               "text": "Switch action:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "sys.encoder.switchAction",
+              "action": "sys.settings.encoder.editSwitchAction",
+              "x": 148,
+              "y": 30,
+              "width": 104,
+              "height": 28,
+              "style": "edit_S"
             },
             {
               "type": "Text",
@@ -19138,6 +19194,19 @@
               "text": "Moving up speed:"
             },
             {
+              "type": "UpDown",
+              "data": "sys.encoder.movingUpSpeed",
+              "action": "upDown",
+              "x": 165,
+              "y": 58,
+              "width": 87,
+              "height": 28,
+              "style": "edit_value_S_centered",
+              "buttonsStyle": "edit_S",
+              "downButtonText": "\\u008F",
+              "upButtonText": "\\u0090"
+            },
+            {
               "type": "Text",
               "x": 12,
               "y": 86,
@@ -19145,6 +19214,19 @@
               "height": 28,
               "style": "edit_value_S_left",
               "text": "Moving down speed:"
+            },
+            {
+              "type": "UpDown",
+              "data": "sys.encoder.movingDownSpeed",
+              "action": "upDown",
+              "x": 165,
+              "y": 86,
+              "width": 87,
+              "height": 28,
+              "style": "edit_value_S_centered",
+              "buttonsStyle": "edit_S",
+              "downButtonText": "\\u008F",
+              "upButtonText": "\\u0090"
             },
             {
               "type": "Button",
@@ -19168,6 +19250,24 @@
               "height": 36,
               "style": "non_interactive_button_S",
               "text": " Discard"
+            },
+            {
+              "type": "Rectangle",
+              "x": 197,
+              "y": 204,
+              "width": 75,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
             }
           ]
         }
@@ -27984,6 +28084,150 @@
               0
             ],
             "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAfklEQVQ4T+2USw6AMAhE5f6H1mAyZiK/0uDOLgvzMgWKHINHEtaZxFydd8mQVvydDFDmGIZNLos6IBcI2A7IABlW1QfiKE80ELnqdPPOBSxqRDaFRvPDyk8b1gzNYMJWNxWgwpE5A8xzV76V5/STvxlugoV99xiq6tSKj27aC0mrLQ59qLTbAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 143,
+            "x": 0,
+            "y": -2,
+            "width": 19,
+            "height": 19,
+            "dx": 19,
+            "source": {
+              "filePath": "fonts/bdf/webhostinghub-glyphs.14.bdf",
+              "encoding": 62570
+            },
+            "pixels": [
+              0,
+              1,
+              192,
+              0,
+              7,
+              224,
+              0,
+              15,
+              224,
+              0,
+              63,
+              192,
+              0,
+              255,
+              0,
+              3,
+              252,
+              0,
+              15,
+              240,
+              0,
+              63,
+              192,
+              0,
+              255,
+              0,
+              0,
+              252,
+              0,
+              0,
+              255,
+              0,
+              0,
+              63,
+              192,
+              0,
+              15,
+              240,
+              0,
+              3,
+              252,
+              0,
+              0,
+              255,
+              0,
+              0,
+              63,
+              192,
+              0,
+              15,
+              224,
+              0,
+              3,
+              224,
+              0,
+              1,
+              192
+            ],
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAbklEQVQ4T7XUUQ7AIAgD0HH/Q29hmQYNCi3Of17aYJDr4JOidZt5YTGLdI/BXEhFBFsiX7RUzRBpPXfJ0sgOgxEPoxGLlZEMhmz69XTgaLKWsox6VWj09382H5J0UmRjIYpg4aIYbIlWMEWHS/sA4XwTEaMdC/sAAAAASUVORK5CYII="
+          },
+          {
+            "encoding": 144,
+            "x": 0,
+            "y": -2,
+            "width": 19,
+            "height": 19,
+            "dx": 19,
+            "source": {
+              "filePath": "fonts/bdf/webhostinghub-glyphs.14.bdf",
+              "encoding": 62569
+            },
+            "pixels": [
+              112,
+              0,
+              0,
+              252,
+              0,
+              0,
+              254,
+              0,
+              0,
+              127,
+              128,
+              0,
+              31,
+              224,
+              0,
+              7,
+              248,
+              0,
+              1,
+              254,
+              0,
+              0,
+              127,
+              128,
+              0,
+              31,
+              224,
+              0,
+              7,
+              224,
+              0,
+              31,
+              224,
+              0,
+              127,
+              128,
+              1,
+              254,
+              0,
+              7,
+              248,
+              0,
+              31,
+              224,
+              0,
+              127,
+              128,
+              0,
+              254,
+              0,
+              0,
+              248,
+              0,
+              0,
+              112,
+              0,
+              0
+            ],
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAdUlEQVQ4T63U2w7AIAgD0Pn/H70FIwkxUlqmj14OVo3judjGst5gep9cxhZGKAIyijCDJfAU8xSPQvdJWWQvANFssIVW25fQCvN4FMpiFKpiEFUxGJfFrpwZhVSPUEIyrIXs2C8kYghiL2h62RckIShmCzLwA7w9ExJ4xuT3AAAAAElFTkSuQmCC"
           }
         ]
       },

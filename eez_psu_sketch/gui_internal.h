@@ -98,6 +98,14 @@ extern uint8_t g_focusDataId;
 bool wasFocusWidget(const WidgetCursor &widgetCursor);
 bool isFocusWidget(const WidgetCursor &widgetCursor);
 
+enum EncoderSwitchAction {
+    ENCODER_SWITCH_ACTION_NONE,
+    ENCODER_SWITCH_ACTION_CONFIRMATION,
+    ENCODER_SWITCH_ACTION_SELECTION
+};
+
+void upDown();
+
 ////////////////////////////////////////////////////////////////////////////////
 // GUI definition document accessor functions
 

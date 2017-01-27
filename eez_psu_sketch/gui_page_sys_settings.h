@@ -117,6 +117,37 @@ public:
     static void toggleClickSound();
 };
 
+#if OPTION_ENCODER
+
+class SysSettingsEncoderPage : public SetPage {
+    friend void onSwitchActionSet(uint8_t value);
+
+public:
+    SysSettingsEncoderPage();
+
+	void takeSnapshot(data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+    data::Value getMin(const data::Cursor &cursor, uint8_t id);
+    data::Value getMax(const data::Cursor &cursor, uint8_t id);
+    bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
+
+    void editSwitchAction();
+
+	int getDirty();
+	void set();
+
+private:
+    EncoderSwitchAction origSwitchAction;
+    EncoderSwitchAction switchAction;
+
+    uint8_t origMovingSpeedDown;
+    uint8_t movingSpeedDown;
+
+    uint8_t origMovingSpeedUp;
+    uint8_t movingSpeedUp;
+};
+
+#endif
 
 }
 }

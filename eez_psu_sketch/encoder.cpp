@@ -22,18 +22,11 @@
 
 #include "encoder.h"
 
-// if time between two ticks is 5ms or less then increment by 1V (100 * 0.01V)
-#define CONF_ENCODER_INCREMENT_SPEED_PT1_X 5.0f
-#define CONF_ENCODER_INCREMENT_SPEED_PT1_Y 10.0f
-// if time between two ticks is 250ms or more then increment by 0.01V,
-// for everything between 5ms and 250ms use linear interpolation
-#define CONF_ENCODER_INCREMENT_SPEED_PT2_X 250.0f
-#define CONF_ENCODER_INCREMENT_SPEED_PT2_Y 1.0f
+#define CONF_ENCODER_SPEED_PT1_X 5.0f
+#define CONF_ENCODER_SPEED_PT1_Y 100.0f
 
-#define CONF_ENCODER_DECREMENT_SPEED_PT1_X 5.0f
-#define CONF_ENCODER_DECREMENT_SPEED_PT1_Y 50.0f
-#define CONF_ENCODER_DECREMENT_SPEED_PT2_X 250.0f
-#define CONF_ENCODER_DECREMENT_SPEED_PT2_Y 1.0f
+#define CONF_ENCODER_SPEED_PT2_X 250.0f
+#define CONF_ENCODER_SPEED_PT2_Y 1.0f
 
 namespace eez {
 namespace psu {
@@ -66,6 +59,8 @@ const uint8_t ttable[7][4] = {
 #endif
 
 bool g_variableSpeed = true;
+int g_speedDown;
+int g_speedUp;
 float g_speedMultiplier = 1.0f;
 
 volatile uint8_t g_rotationState = 0;
@@ -93,14 +88,16 @@ void abInterruptHandler() {
                     (
                         result == DIR_CW ?
 
-                        util::remap(diff / 1000.0f, CONF_ENCODER_INCREMENT_SPEED_PT1_X, CONF_ENCODER_INCREMENT_SPEED_PT1_Y,
-                                          CONF_ENCODER_INCREMENT_SPEED_PT2_X, CONF_ENCODER_INCREMENT_SPEED_PT2_Y) :
+                        util::remap(diff / 1000.0f, 
+                            CONF_ENCODER_SPEED_PT1_X, CONF_ENCODER_SPEED_PT1_Y * g_speedUp / MAX_MOVING_SPEED,
+                            CONF_ENCODER_SPEED_PT2_X, CONF_ENCODER_SPEED_PT2_Y) :
 
-                        util::remap(diff / 1000.0f, CONF_ENCODER_DECREMENT_SPEED_PT1_X, CONF_ENCODER_DECREMENT_SPEED_PT1_Y,
-                                          CONF_ENCODER_DECREMENT_SPEED_PT2_X, CONF_ENCODER_DECREMENT_SPEED_PT2_Y)
+                        util::remap(diff / 1000.0f, 
+                            CONF_ENCODER_SPEED_PT1_X, CONF_ENCODER_SPEED_PT1_Y * g_speedDown / MAX_MOVING_SPEED,
+                            CONF_ENCODER_SPEED_PT2_X, CONF_ENCODER_SPEED_PT2_Y)
                     ),
-                    1.0f,
-                    100.0f
+                    CONF_ENCODER_SPEED_PT2_Y,
+                    CONF_ENCODER_SPEED_PT1_Y
                 )
             );
         }
@@ -157,7 +154,12 @@ void enableVariableSpeed(bool enable) {
     g_variableSpeed = enable;
 }
 
-void setSpeedMultiplier(float speedMultiplier) {
+void setMovingSpeed(uint8_t down, uint8_t up) {
+    g_speedDown = down;
+    g_speedUp = up;
+}
+
+void setMovingSpeedMultiplier(float speedMultiplier) {
     g_speedMultiplier = speedMultiplier;
 }
 

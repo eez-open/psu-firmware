@@ -50,6 +50,7 @@ namespace gui {
 #define WIDGET_TYPE_BAR_GRAPH 13
 #define WIDGET_TYPE_CUSTOM 14
 #define WIDGET_TYPE_YT_GRAPH 15
+#define WIDGET_TYPE_UP_DOWN 16
 
 #define LIST_TYPE_VERTICAL 1
 #define LIST_TYPE_HORIZONTAL 2
@@ -166,6 +167,18 @@ struct YTGraphWidget {
 	uint8_t y2Style;
 };
 
+enum UpDownWidgetSegment {
+    UP_DOWN_WIDGET_SEGMENT_TEXT,
+    UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON,
+    UP_DOWN_WIDGET_SEGMENT_UP_BUTTON
+};
+
+struct UpDownWidget {
+	uint8_t buttonsStyle;
+	OBJ_OFFSET downButtonText;
+	OBJ_OFFSET upButtonText;
+};
+
 struct CustomWidgetSpecific {
 	uint8_t customWidget;
 };
@@ -204,6 +217,7 @@ struct WidgetCursor {
     int x;
     int y;
     data::Cursor cursor;
+    int segment;
 
     WidgetCursor() : widgetOffset(0) {}
 
