@@ -689,33 +689,39 @@ void onEncoder(int counter, bool clicked) {
 
     if (clicked) {
         if (isEncoderEnabledInActivePage()) {
-            switch (persist_conf::devConf2.flags.encoderSwitchAction) {
-            case ENCODER_SWITCH_ACTION_SELECTION:
-                if (g_focusDataId == DATA_ID_CHANNEL_U_EDIT) {
-                    g_focusDataId = DATA_ID_CHANNEL_I_EDIT;
-                } else {
-                    for (int i = 0; i < CH_NUM; ++i) {
-                        g_focusCursor.i = (g_focusCursor.i + 1) % CH_NUM;
-                        if (Channel::get(g_focusCursor.i).isOk()) {
-                            break;
+            if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD || g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
+                if (persist_conf::devConf2.flags.encoderSwitchAction != ENCODER_SWITCH_ACTION_NONE) {
+                    getActiveKeypad()->ok();
+                }
+            } else {
+                switch (persist_conf::devConf2.flags.encoderSwitchAction) {
+                case ENCODER_SWITCH_ACTION_SELECTION:
+                    if (g_focusDataId == DATA_ID_CHANNEL_U_EDIT) {
+                        g_focusDataId = DATA_ID_CHANNEL_I_EDIT;
+                    } else {
+                        for (int i = 0; i < CH_NUM; ++i) {
+                            g_focusCursor.i = (g_focusCursor.i + 1) % CH_NUM;
+                            if (Channel::get(g_focusCursor.i).isOk()) {
+                                break;
+                            }
+                        }
+                        g_focusDataId = DATA_ID_CHANNEL_U_EDIT;
+                    }
+                    sound::playClick();
+                    break;
+
+                case ENCODER_SWITCH_ACTION_CONFIRMATION:
+                    if (g_focusEditValue.getType() != data::VALUE_TYPE_NONE) {
+                        int16_t error;
+                        if (!data::set(g_focusCursor, g_focusDataId, g_focusEditValue, &error)) {
+                            errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
+                        } else {
+                            g_focusEditValue = data::Value();
                         }
                     }
-                    g_focusDataId = DATA_ID_CHANNEL_U_EDIT;
+                    sound::playClick();
+                    break;
                 }
-                sound::playClick();
-                break;
-
-            case ENCODER_SWITCH_ACTION_CONFIRMATION:
-                if (g_focusEditValue.getType() != data::VALUE_TYPE_NONE) {
-                    int16_t error;
-                    if (!data::set(g_focusCursor, g_focusDataId, g_focusEditValue, &error)) {
-                        errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
-                    } else {
-                        g_focusEditValue = data::Value();
-                    }
-                }
-                sound::playClick();
-                break;
             }
         }
     }
