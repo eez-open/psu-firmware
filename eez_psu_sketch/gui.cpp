@@ -211,6 +211,9 @@ void setPage(int index) {
     }
     g_pageNavigationStackPointer = 0;
 
+    // clear
+    g_focusEditValue = data::Value();
+
     //
     doShowPage(index);
 }
@@ -699,6 +702,7 @@ void onEncoder(int counter, bool clicked) {
                     }
                     g_focusDataId = DATA_ID_CHANNEL_U_EDIT;
                 }
+                sound::playClick();
                 break;
 
             case ENCODER_SWITCH_ACTION_CONFIRMATION:
@@ -710,6 +714,7 @@ void onEncoder(int counter, bool clicked) {
                         g_focusEditValue = data::Value();
                     }
                 }
+                sound::playClick();
                 break;
             }
         }
