@@ -110,6 +110,9 @@ struct Snapshot {
     ProfileSnapshot profile;
     uint8_t intValue1;
     uint8_t intValue2;
+
+    Cursor focusCursor;
+    uint8_t focusDataId;
     Value focusEditValue;
 
     unsigned long lastSnapshotTime;

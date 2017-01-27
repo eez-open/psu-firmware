@@ -37,7 +37,7 @@ struct Snapshot {
     int step_index;
 
     void takeSnapshot(data::Snapshot *snapshot);
-    data::Value getData(uint8_t id);
+    data::Value getData(data::Snapshot *snapshot, uint8_t id);
     bool isBlinking(data::Snapshot& snapshot, uint8_t id, bool &result);
 };
 

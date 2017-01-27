@@ -694,23 +694,30 @@ void onEncoder(int counter, bool clicked) {
                     getActiveKeypad()->ok();
                 }
             } else {
-                switch (persist_conf::devConf2.flags.encoderSwitchAction) {
-                case ENCODER_SWITCH_ACTION_SELECTION:
+                if (persist_conf::devConf2.flags.encoderSwitchAction == ENCODER_SWITCH_ACTION_SELECTION) {
+                    data::Cursor newCursor = g_focusCursor;
+                    int newDataId;
+
                     if (g_focusDataId == DATA_ID_CHANNEL_U_EDIT) {
-                        g_focusDataId = DATA_ID_CHANNEL_I_EDIT;
+                        newDataId = DATA_ID_CHANNEL_I_EDIT;
                     } else {
                         for (int i = 0; i < CH_NUM; ++i) {
-                            g_focusCursor.i = (g_focusCursor.i + 1) % CH_NUM;
+                            newCursor.i = (g_focusCursor.i + 1) % CH_NUM;
                             if (Channel::get(g_focusCursor.i).isOk()) {
                                 break;
                             }
                         }
-                        g_focusDataId = DATA_ID_CHANNEL_U_EDIT;
+                        newDataId = DATA_ID_CHANNEL_U_EDIT;
                     }
-                    sound::playClick();
-                    break;
 
-                case ENCODER_SWITCH_ACTION_CONFIRMATION:
+                    setFocusCursor(newCursor, newDataId);
+
+                    if (edit_mode::isActive()) {
+                        edit_mode::update();
+                    }
+
+                    sound::playClick();
+                } else if (persist_conf::devConf2.flags.encoderSwitchAction == ENCODER_SWITCH_ACTION_CONFIRMATION) {
                     if (g_focusEditValue.getType() != data::VALUE_TYPE_NONE) {
                         int16_t error;
                         if (!data::set(g_focusCursor, g_focusDataId, g_focusEditValue, &error)) {
@@ -720,7 +727,6 @@ void onEncoder(int counter, bool clicked) {
                         }
                     }
                     sound::playClick();
-                    break;
                 }
             }
         }

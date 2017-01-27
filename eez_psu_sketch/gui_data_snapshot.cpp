@@ -217,6 +217,8 @@ void Snapshot::takeSnapshot() {
         activePage->takeSnapshot(this);
     }
 
+    focusCursor = g_focusCursor;
+    focusDataId = g_focusDataId;
     focusEditValue = g_focusEditValue;
 }
 
@@ -463,7 +465,7 @@ Value Snapshot::get(const Cursor &cursor, uint8_t id) {
         return value;
     }
 
-    value = editModeSnapshot.getData(id);
+    value = editModeSnapshot.getData(this, id);
     if (value.getType() != VALUE_TYPE_NONE) {
         return value;
     }

@@ -104,103 +104,13 @@ struct Value {
         enum_.enumDefinition = enumDefinition;
     }
 
-    static Value ProgmemStr(const char *pstr PROGMEM) {
-        Value value;
-        value.const_str_ = pstr;
-        value.type_ = VALUE_TYPE_CONST_STR;
-        return value;
-    }
+    static Value ProgmemStr(const char *pstr PROGMEM);
+	static Value PageInfo(uint8_t pageIndex, uint8_t numPages);
+	static Value ScpiErrorText(int16_t errorCode);
+	static Value LessThenMinMessage(float float_, ValueType type);
+	static Value GreaterThenMaxMessage(float float_, ValueType type);
 
-	static Value PageInfo(uint8_t pageIndex, uint8_t numPages) {
-		Value value;
-		value.pageInfo_.pageIndex = pageIndex;
-		value.pageInfo_.numPages = numPages;
-		value.type_ = VALUE_TYPE_PAGE_INFO;
-		return value;
-	}
-
-	static Value ScpiErrorText(int16_t errorCode) {
-		Value value;
-		value.int16_ = errorCode;
-		value.type_ = VALUE_TYPE_SCPI_ERROR_TEXT;
-		return value;
-	}
-
-	static Value LessThenMinMessage(float float_, ValueType type) {
-		Value value;
-		if (type == VALUE_TYPE_INT) {
-			value.int_ = int(float_);
-			value.type_ = VALUE_TYPE_LESS_THEN_MIN_INT;
-		} else if (type == VALUE_TYPE_TIME_ZONE) {
-			value.type_ = VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE;
-		} else {
-			value.float_ = float_;
-			value.type_ = VALUE_TYPE_LESS_THEN_MIN_FLOAT;
-		}
-		return value;
-	}
-
-	static Value GreaterThenMaxMessage(float float_, ValueType type) {
-		Value value;
-		if (type == VALUE_TYPE_INT) {
-			value.int_ = int(float_);
-			value.type_ = VALUE_TYPE_GREATER_THEN_MAX_INT;
-		} else if (type == VALUE_TYPE_TIME_ZONE) {
-			value.type_ = VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE;
-		} else {
-			value.float_ = float_;
-			value.type_ = VALUE_TYPE_GREATER_THEN_MAX_FLOAT;
-		}
-		return value;
-	}
-
-	bool operator ==(const Value &other) {
-        if (type_ != other.type_) {
-            return false;
-        }
-
-        if (type_ == VALUE_TYPE_NONE || type_ == VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE || type_ == VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE) {
-            return true;
-        }
-		
-		if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL || type_ == VALUE_TYPE_LESS_THEN_MIN_INT || type_ == VALUE_TYPE_GREATER_THEN_MAX_INT || type_ == VALUE_TYPE_USER_PROFILE_LABEL || type_ == VALUE_TYPE_USER_PROFILE_REMARK || type_ == VALUE_TYPE_EDIT_INFO) {
-            return int_ == other.int_;
-        }
-
-		if (type_ == VALUE_TYPE_SCPI_ERROR_TEXT || type_ == VALUE_TYPE_TIME_ZONE) {
-			return int16_ == other.int16_;
-		}
-
-		if (type_ >= VALUE_TYPE_MONTH && type_ <= VALUE_TYPE_SECOND) {
-			return uint8_ == other.uint8_;
-		}
-
-		if (type_ == VALUE_TYPE_YEAR) {
-			return uint16_ == other.uint16_;
-		}
-
-		if (type_ == VALUE_TYPE_ON_TIME_COUNTER || type_ == VALUE_TYPE_IP_ADDRESS) {
-			return uint32_ == other.uint32_;
-		}
-		
-		if (type_ == VALUE_TYPE_STR) {
-            return strcmp(str_, other.str_) == 0;
-        }
-
-		if (type_ == VALUE_TYPE_CONST_STR) {
-            return const_str_ == other.const_str_;
-        }
-		
-		if (type_ == VALUE_TYPE_EVENT) {
-            return event_->dateTime == other.event_->dateTime && event_->eventId == other.event_->eventId;
-        }
-		
-		if (type_ == VALUE_TYPE_PAGE_INFO) {
-			return pageInfo_.pageIndex == other.pageInfo_.pageIndex && pageInfo_.numPages == other.pageInfo_.numPages;
-		}
-        
-		return util::equal(float_, other.float_, CHANNEL_VALUE_PRECISION);
-    }
+	bool operator ==(const Value &other);
 
     bool operator !=(const Value &other) {
         return !(*this == other);

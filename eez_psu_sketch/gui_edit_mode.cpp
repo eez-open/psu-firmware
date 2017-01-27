@@ -57,15 +57,17 @@ void Snapshot::takeSnapshot(data::Snapshot *snapshot) {
     }
 }
 
-data::Value Snapshot::getData(uint8_t id) {
+data::Value Snapshot::getData(data::Snapshot *snapshot, uint8_t id) {
+    int editInfoPartOffset = snapshot->focusCursor.i * 6 + (snapshot->focusDataId == DATA_ID_CHANNEL_U_EDIT ? 0 : 1) * 3;
+
     if (id == DATA_ID_EDIT_VALUE) {
        return editValue;
     } else if (id == DATA_ID_EDIT_INFO) {
-        return data::Value(0, data::VALUE_TYPE_EDIT_INFO);
+        return data::Value(0 + editInfoPartOffset, data::VALUE_TYPE_EDIT_INFO);
     } else if (id == DATA_ID_EDIT_INFO1) {
-        return data::Value(1, data::VALUE_TYPE_EDIT_INFO);
+        return data::Value(1 + editInfoPartOffset, data::VALUE_TYPE_EDIT_INFO);
     } else if (id == DATA_ID_EDIT_INFO2) {
-        return data::Value(2, data::VALUE_TYPE_EDIT_INFO);
+        return data::Value(2 + editInfoPartOffset, data::VALUE_TYPE_EDIT_INFO);
     } else if (id == DATA_ID_EDIT_MODE_INTERACTIVE_MODE_SELECTOR) {
         return interactiveModeSelector;
     } else if (id == DATA_ID_EDIT_STEPS) {
@@ -124,24 +126,25 @@ void enter(int tabIndex_) {
         newDataId = g_focusDataId;
     }
 
-//    if (getActivePageId() != g_tabIndex || g_focusDataId != newDataId || g_focusCursor != newDataCursor) {
-        setFocusCursor(newDataCursor, newDataId);
+    setFocusCursor(newDataCursor, newDataId);
 
-        initEditValue();
+    update();
 
-        g_minValue = data::getMin(g_focusCursor, g_focusDataId);
-        g_maxValue = data::getMax(g_focusCursor, g_focusDataId);
+    if (g_tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
+        edit_mode_keypad::enter(g_editValue, g_minValue, g_maxValue);
+    } else {
+        edit_mode_keypad::exit();
+    }
 
-        if (g_tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
-            edit_mode_keypad::enter(g_editValue, g_minValue, g_maxValue);
-        } else {
-            edit_mode_keypad::exit();
-        }
+    psu::enterTimeCriticalMode();
 
-        psu::enterTimeCriticalMode();
+    setPage(g_tabIndex);
+}
 
-        setPage(g_tabIndex);
-//    }
+void update() {
+    initEditValue();
+    g_minValue = data::getMin(g_focusCursor, g_focusDataId);
+    g_maxValue = data::getMax(g_focusCursor, g_focusDataId);
 }
 
 void exit() {
@@ -208,8 +211,35 @@ bool setValue(float value_) {
 }
 
 void getInfoText(int part, char *infoText) {
-    Channel &channel = Channel::get(g_focusCursor.i);
-    if (g_focusDataId == DATA_ID_CHANNEL_I_SET) {
+    // channel 0 u part 0
+    // channel 0 u part 1
+    // channel 0 u part 2
+    // channel 0 i part 0
+    // channel 0 i part 1
+    // channel 0 i part 2
+    // channel 1 u part 0
+    // channel 1 u part 1
+    // channel 1 u part 2
+    // channel 1 i part 0
+    // channel 1 i part 1
+    // channel 1 i part 2
+    // ...
+
+    int iChannel = part / 6;
+    
+    part %= 6;
+    
+    int dataId;
+    if (part / 3 == 0) {
+        dataId = DATA_ID_CHANNEL_U_EDIT;
+    } else {
+        dataId = DATA_ID_CHANNEL_I_EDIT;
+    }
+
+    part %= 3;
+
+    Channel &channel = Channel::get(iChannel);
+    if (dataId == DATA_ID_CHANNEL_I_EDIT) {
         if (part == 0 || part == 1) {
             if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
                 strcpy_P(infoText, PSTR("Set current"));

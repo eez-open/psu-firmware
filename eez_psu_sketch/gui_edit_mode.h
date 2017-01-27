@@ -28,6 +28,7 @@ namespace edit_mode {
 
 bool isActive();
 void enter(int tab_index_ = -1);
+void update();
 void exit();
 bool isInteractiveMode();
 void toggleInteractiveMode();
