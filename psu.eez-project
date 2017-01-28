@@ -4416,7 +4416,7 @@
                                 "x": 0,
                                 "y": 85,
                                 "width": 240,
-                                "height": 4,
+                                "height": 3,
                                 "style": "default_inverse"
                               }
                             ]
@@ -21854,7 +21854,7 @@
         "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance.",
         "font": "medium",
         "color": "#FFFFFF",
-        "backgroundColor": "#2f68ff",
+        "backgroundColor": "#5080ff",
         "borderColor": "#D3D3D3"
       },
       {
