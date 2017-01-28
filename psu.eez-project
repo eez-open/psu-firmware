@@ -21975,7 +21975,8 @@
         "name": "edit_S_focus",
         "inheritFrom": "edit_S",
         "font": "small",
-        "color": "#c8e7f0"
+        "color": "#5080ff",
+        "backgroundColor": "#ffff00"
       },
       {
         "name": "edit_value",
@@ -22043,7 +22044,8 @@
         "font": "small",
         "alignHorizontal": "right",
         "alignVertical": "center",
-        "color": "#c8e7f0",
+        "color": "#5080ff",
+        "backgroundColor": "#ffff00",
         "borderSize": 0,
         "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
@@ -22349,7 +22351,8 @@
         "font": "medium",
         "alignHorizontal": "center",
         "alignVertical": "center",
-        "color": "#c8e7f0",
+        "color": "#5080ff",
+        "backgroundColor": "#ffff00",
         "borderSize": 0,
         "paddingHorizontal": 0,
         "paddingVertical": 0
