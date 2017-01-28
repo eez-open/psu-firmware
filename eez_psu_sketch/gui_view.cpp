@@ -105,9 +105,11 @@ void drawText(const char *text, int textLength, int x, int y, int w, int h, cons
     else y_offset = y1 + ((y2 - y1) - height) / 2;
     if (y_offset < 0) y_offset = y1;
 
-    uint16_t background_color = inverse ? style->color : style->background_color;
-    lcd::lcd.setColor(background_color);
-
+    if (inverse || blink) {
+        lcd::lcd.setColor(style->color);
+    } else {
+        lcd::lcd.setColor(style->background_color);
+    }
     if (g_widgetRefresh) {
         lcd::lcd.fillRect(x1, y1, x2, y2);
     } else {
@@ -124,17 +126,12 @@ void drawText(const char *text, int textLength, int x, int y, int w, int h, cons
             lcd::lcd.fillRect(x_offset, y_offset + height, right, y2);
     }
 
-    if (inverse) {
+    if (inverse || blink) {
         lcd::lcd.setBackColor(style->color);
         lcd::lcd.setColor(style->background_color);
     } else {
-        if (blink) {
-            lcd::lcd.setBackColor(style->color);
-            lcd::lcd.setColor(style->background_color);
-        } else {
-            lcd::lcd.setBackColor(style->background_color);
-            lcd::lcd.setColor(style->color);
-        }
+        lcd::lcd.setBackColor(style->background_color);
+        lcd::lcd.setColor(style->color);
     }
     lcd::lcd.drawStr(text, textLength, x_offset, y_offset, x1, y1, x2, y2, font, !g_widgetRefresh);
 }
