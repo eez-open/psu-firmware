@@ -1471,6 +1471,8 @@ void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, bool refresh, data::Curso
                 }
             }
         }
+
+        data::select(cursor, widget->data, -1);
     }
     else if (widget->type == WIDGET_TYPE_SELECT) {
         int index = data::currentSnapshot.get(cursor, widget->data).getInt();
