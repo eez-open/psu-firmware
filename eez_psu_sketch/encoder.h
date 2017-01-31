@@ -30,7 +30,7 @@ static const uint8_t DEFAULT_MOVING_UP_SPEED = 4;
 void init();
 void read(int &counter, bool &clicked);
 
-void enableVariableSpeed(bool enable);
+void enableAcceleration(bool enable);
 void setMovingSpeed(uint8_t down, uint8_t up);
 void setMovingSpeedMultiplier(float speedMultiplier);
 

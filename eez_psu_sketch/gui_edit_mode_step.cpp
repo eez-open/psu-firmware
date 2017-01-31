@@ -127,7 +127,7 @@ void increment(int counter, bool playClick) {
 #if OPTION_ENCODER
 
 void onEncoder(int counter) {
-    encoder::enableVariableSpeed(false);
+    encoder::enableAcceleration(false);
     increment(counter, false);
 }
 

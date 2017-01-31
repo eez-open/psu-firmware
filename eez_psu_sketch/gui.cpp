@@ -744,7 +744,7 @@ void onEncoder(int counter, bool clicked) {
             return;
         }
 
-        encoder::enableVariableSpeed(true);
+        encoder::enableAcceleration(true);
         encoder::setMovingSpeedMultiplier(
             data::getMax(g_focusCursor, g_focusDataId).getFloat() / data::getMax(g_focusCursor, DATA_ID_CHANNEL_U_SET).getFloat());
 

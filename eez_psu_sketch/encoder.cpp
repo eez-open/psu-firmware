@@ -22,11 +22,8 @@
 
 #include "encoder.h"
 
-#define CONF_ENCODER_SPEED_PT1_X 5.0f
-#define CONF_ENCODER_SPEED_PT1_Y 100.0f
-
-#define CONF_ENCODER_SPEED_PT2_X 250.0f
-#define CONF_ENCODER_SPEED_PT2_Y 1.0f
+#define CONF_ACCELERATION_DECREMENT_PER_MS 1
+#define CONF_ACCELERATION_INCREMENT_FACTOR 2
 
 namespace eez {
 namespace psu {
@@ -58,7 +55,7 @@ const uint8_t ttable[7][4] = {
 };
 #endif
 
-bool g_variableSpeed = true;
+bool g_accelerationEnabled = true;
 int g_speedDown;
 int g_speedUp;
 float g_speedMultiplier = 1.0f;
@@ -66,6 +63,7 @@ float g_speedMultiplier = 1.0f;
 volatile uint8_t g_rotationState = 0;
 volatile int g_rotationCounter = 0;
 volatile unsigned long g_rotationLastTime = 0;
+volatile int g_acceleration;
 
 volatile unsigned long g_switchLastTime = 0;
 volatile int g_switchCounter = 0;
@@ -79,28 +77,17 @@ void abInterruptHandler() {
         unsigned long time = micros();
         unsigned long diff = time - g_rotationLastTime;
 
-        int amount = 1;
-        
-        if (g_variableSpeed) {
-            amount = (int) roundf(
-                util::clamp(
-                    g_speedMultiplier * 
-                    (
-                        result == DIR_CW ?
+        if (g_accelerationEnabled) {
+            g_acceleration += -CONF_ACCELERATION_DECREMENT_PER_MS * (diff / 1000) +
+                CONF_ACCELERATION_INCREMENT_FACTOR * (result == DIR_CW ? g_speedUp : g_speedDown);
 
-                        util::remap(diff / 1000.0f, 
-                            CONF_ENCODER_SPEED_PT1_X, CONF_ENCODER_SPEED_PT1_Y * g_speedUp / MAX_MOVING_SPEED,
-                            CONF_ENCODER_SPEED_PT2_X, CONF_ENCODER_SPEED_PT2_Y) :
-
-                        util::remap(diff / 1000.0f, 
-                            CONF_ENCODER_SPEED_PT1_X, CONF_ENCODER_SPEED_PT1_Y * g_speedDown / MAX_MOVING_SPEED,
-                            CONF_ENCODER_SPEED_PT2_X, CONF_ENCODER_SPEED_PT2_Y)
-                    ),
-                    CONF_ENCODER_SPEED_PT2_Y,
-                    CONF_ENCODER_SPEED_PT1_Y
-                )
-            );
+            if (g_acceleration < 0) g_acceleration = 0;
+            if (g_acceleration > 99) g_acceleration = 99;
+        } else {
+            g_acceleration = 0;
         }
+
+        int amount = 1 + (int)roundf(g_speedMultiplier * g_acceleration);
         
         if (result == DIR_CW) {
             g_rotationCounter += amount;
@@ -150,8 +137,11 @@ void read(int &counter, bool &clicked) {
     interrupts();
 }
 
-void enableVariableSpeed(bool enable) {
-    g_variableSpeed = enable;
+void enableAcceleration(bool enable) {
+    if (g_accelerationEnabled != enable) {
+        g_accelerationEnabled = enable;
+        g_acceleration = 0;
+    }
 }
 
 void setMovingSpeed(uint8_t down, uint8_t up) {
@@ -160,7 +150,10 @@ void setMovingSpeed(uint8_t down, uint8_t up) {
 }
 
 void setMovingSpeedMultiplier(float speedMultiplier) {
-    g_speedMultiplier = speedMultiplier;
+    if (g_speedMultiplier != speedMultiplier) {
+        g_speedMultiplier = speedMultiplier;
+        g_acceleration = 0;
+    }
 }
 
 #ifdef EEZ_PSU_SIMULATOR

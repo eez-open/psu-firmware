@@ -670,7 +670,7 @@ bool NumericKeypad::onEncoder(int counter) {
     if (m_options.flags.genericNumberKeypad) {
         if (m_state == START) {
             if (data::isFloatType(getEditUnit())) {
-                encoder::enableVariableSpeed(true);
+                encoder::enableAcceleration(true);
                 encoder::setMovingSpeedMultiplier(m_options.max / data::getMax(0, DATA_ID_CHANNEL_U_SET).getFloat());
 
                 float newValue = m_startValue.getFloat() + 0.01f * counter;
@@ -687,7 +687,7 @@ bool NumericKeypad::onEncoder(int counter) {
 
                 return true;
             } else if (m_startValue.getType() == data::VALUE_TYPE_INT) {
-                encoder::enableVariableSpeed(false);
+                encoder::enableAcceleration(false);
 
                 int newValue = m_startValue.getInt() + counter;
 
