@@ -384,6 +384,10 @@ bool Value::operator ==(const Value &other) {
 	if (type_ == VALUE_TYPE_PAGE_INFO) {
 		return pageInfo_.pageIndex == other.pageInfo_.pageIndex && pageInfo_.numPages == other.pageInfo_.numPages;
 	}
+
+    if (type_ == VALUE_TYPE_ENUM) {
+        return enum_.enumDefinition == other.enum_.enumDefinition && enum_.value == other.enum_.value;
+    }
         
 	return util::equal(float_, other.float_, CHANNEL_VALUE_PRECISION);
 }
