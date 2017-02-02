@@ -31,7 +31,6 @@ namespace scpi {
 static scpi_choice_def_t sourceChoice[] = {
     { "BUS", trigger::SOURCE_BUS },
     { "IMMediate", trigger::SOURCE_IMMEDIATE },
-    { "EXTernal", trigger::SOURCE_EXTERNAL },
     { "KEY", trigger::SOURCE_KEY },
     { "PIN1", trigger::SOURCE_PIN1 },
     SCPI_CHOICE_LIST_END

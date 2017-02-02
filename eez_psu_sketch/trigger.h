@@ -29,7 +29,6 @@ static const float DELAY_MAX = 3600.0f;
 enum Source {
     SOURCE_BUS,
     SOURCE_IMMEDIATE,
-    SOURCE_EXTERNAL,
     SOURCE_KEY,
     SOURCE_PIN1
 };
