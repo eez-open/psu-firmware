@@ -418,8 +418,6 @@ void Channel::reset() {
     flags.cvMode = 0;
     flags.ccMode = 0;
 
-    flags.powerOk = 0;
-
     ovp.flags.tripped = 0;
     ovp.flags.alarmed = 0;
 
@@ -513,6 +511,8 @@ void Channel::clearProtectionConf() {
 
 bool Channel::test() {
     bool last_save_enabled = profile::enableSave(false);
+
+    flags.powerOk = 0;
 
     outputEnable(false);
     doRemoteSensingEnable(false);

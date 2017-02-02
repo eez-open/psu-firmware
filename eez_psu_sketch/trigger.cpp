@@ -45,7 +45,7 @@ static uint8_t g_extTrigLastState;
 
 void reset() {
     g_delay = DELAY_DEFAULT;
-    g_source = SOURCE_BUS;
+    g_source = SOURCE_IMMEDIATE;
     g_polarity = POLARITY_POSITIVE;
 
     for (int i = 0; i < CH_NUM; ++i) {

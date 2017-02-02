@@ -452,8 +452,14 @@ static bool psuReset() {
     // CAL[:MODE] OFF
     calibration::stop();
 
-    //
+    // reset channels
     channel_dispatcher::setType(channel_dispatcher::TYPE_NONE);
+    for (int i = 0; i < CH_NUM; ++i) {
+        Channel::get(i).reset();
+    }
+
+    //
+    trigger::reset();
 
     // SYST:POW ON
     if (powerUp()) {
@@ -462,8 +468,6 @@ static bool psuReset() {
         }
         return true;
     }
-
-    trigger::reset();
 
     return false;
 }
