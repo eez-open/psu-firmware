@@ -31,6 +31,7 @@
 #include "scpi_sour.h"
 #include "scpi_stat.h"
 #include "scpi_syst.h"
+#include "scpi_trigger.h"
 
 #include "sound.h"
 #include "datetime.h"
@@ -59,6 +60,7 @@ namespace scpi {
     SCPI_SOUR_COMMANDS \
     SCPI_STAT_COMMANDS \
     SCPI_SYST_COMMANDS \
+    SCPI_TRIGGER_COMMANDS \
 
 #define SCPI_COMMAND(P, C) scpi_result_t C(scpi_t * context);
 SCPI_COMMANDS
@@ -136,6 +138,26 @@ void printError(int_fast16_t err) {
 
     Serial.println(errorOutputBuffer);
 }
+
+void resultChoiceName(scpi_t * context, scpi_choice_def_t *choice, int tag) {
+    for (; choice->name; ++choice) {
+        if (choice->tag == tag) {
+            char text[64];
+
+            // copy choice name while upper case letter or digit, examples: IMMediate -> IMM, PIN1 -> PIN1
+            const char *src = choice->name;
+            char *dst = text;
+            while (*src && (util::isUperCaseLetter(*src) || util::isDigit(*src))) {
+                *dst++ = *src++;
+            }
+            *dst = 0;
+
+            SCPI_ResultText(context, text);
+            break;
+        }
+    }
+}
+
 
 }
 }

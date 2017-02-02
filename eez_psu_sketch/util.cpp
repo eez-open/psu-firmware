@@ -172,6 +172,15 @@ bool isNaN(float x) {
 	return x != x;
 }
 
+bool isDigit(char ch) {
+    return ch >= '0' && ch <= '9';
+}
+
+bool isUperCaseLetter(char ch) {
+    return ch >= 'A' && ch <= 'Z';
+}
+
+
 }
 }
 } // namespace eez::psu::util

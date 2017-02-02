@@ -22,6 +22,7 @@
 
 #include "profile.h"
 #include "channel_dispatcher.h"
+#include "trigger.h"
 
 #define I_STATE 1
 #define P_STATE 2
@@ -796,6 +797,66 @@ scpi_result_t scpi_source_PowerLimitQ(scpi_t * context) {
         channel_dispatcher::getPowerMinLimit(*channel),
         channel_dispatcher::getPowerMaxLimit(*channel),
         channel_dispatcher::getPowerDefaultLimit(*channel));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+scpi_result_t scpi_source_CurrentTriggered(scpi_t * context) {
+	Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    float current;
+    if (!get_current_param(context, current, channel, &channel->i)) {
+        return SCPI_RES_ERR;
+    }
+
+    trigger::setCurrent(channel->index - 1, current);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_CurrentTriggeredQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    return get_source_value(context, 
+        trigger::getCurrent(channel->index - 1),
+        channel_dispatcher::getIMin(*channel),
+        channel_dispatcher::getIMax(*channel),
+        channel_dispatcher::getIDef(*channel));
+}
+
+scpi_result_t scpi_source_VoltageTriggered(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    float voltage;
+    if (!get_voltage_param(context, voltage, channel, &channel->u)) {
+        return SCPI_RES_ERR;
+    }
+
+    trigger::setVoltage(channel->index - 1, voltage);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_source_VoltageTriggeredQ(scpi_t * context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    return get_source_value(context,
+        trigger::getVoltage(channel->index - 1),
+        channel_dispatcher::getUMin(*channel),
+        channel_dispatcher::getUMax(*channel),
+        channel_dispatcher::getUDef(*channel));
 }
 
 }

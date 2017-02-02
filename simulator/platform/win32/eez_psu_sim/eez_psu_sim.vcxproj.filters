@@ -412,6 +412,12 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\encoder.h">
       <Filter>board</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\trigger.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_trigger.h">
+      <Filter>scpi\commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -711,6 +717,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\encoder.cpp">
       <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\trigger.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_trigger.cpp">
+      <Filter>scpi\commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

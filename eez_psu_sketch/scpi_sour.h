@@ -60,4 +60,8 @@
     SCPI_COMMAND("[SOURce#]:VOLTage:LIMit[:POSitive][:IMMediate][:AMPLitude]?", scpi_source_VoltageLimitQ) \
     SCPI_COMMAND("[SOURce#]:POWer:LIMit", scpi_source_PowerLimit) \
     SCPI_COMMAND("[SOURce#]:POWer:LIMit?", scpi_source_PowerLimitQ) \
+    SCPI_COMMAND("[SOURce#]:CURRent[:LEVel]:TRIGgered[:AMPLitude]", scpi_source_CurrentTriggered) \
+    SCPI_COMMAND("[SOURce#]:CURRent[:LEVel]:TRIGgered[:AMPLitude]?", scpi_source_CurrentTriggeredQ) \
+    SCPI_COMMAND("[SOURce#]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]", scpi_source_VoltageTriggered) \
+    SCPI_COMMAND("[SOURce#]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]?", scpi_source_VoltageTriggeredQ) \
 

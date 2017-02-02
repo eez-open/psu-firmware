@@ -58,7 +58,8 @@ float multiply(float a, float b, float prec);
 
 bool isNaN(float x);
 
-
+bool isDigit(char ch);
+bool isUperCaseLetter(char ch);
 
 }
 }
