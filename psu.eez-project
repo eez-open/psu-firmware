@@ -15019,16 +15019,6 @@
             },
             {
               "type": "Text",
-              "action": "show_sys_settings_sound",
-              "x": 12,
-              "y": 114,
-              "width": 240,
-              "height": 28,
-              "style": "edit_value_active_S_left",
-              "text": "Sound"
-            },
-            {
-              "type": "Text",
               "x": 12,
               "y": 86,
               "width": 240,
@@ -15038,41 +15028,42 @@
             },
             {
               "type": "Text",
+              "action": "show_sys_settings_sound",
               "x": 12,
-              "y": 142,
-              "width": 137,
+              "y": 114,
+              "width": 240,
               "height": 28,
-              "style": "edit_value_S_left",
-              "text": "System password"
+              "style": "edit_value_active_S_left",
+              "text": "Sound"
             },
             {
-              "x": 149,
+              "x": 12,
               "type": "Select",
-              "data": "sys.password.isSet",
+              "data": "sys.encoder.installed",
               "y": 142,
-              "width": 103,
-              "height": 29,
+              "width": 240,
+              "height": 28,
               "style": "default",
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "edit_system_password",
+                  "action": "",
                   "x": 0,
                   "y": 0,
-                  "width": 103,
-                  "height": 29,
-                  "style": "edit_value_active_S_left",
-                  "text": "Set"
+                  "width": 240,
+                  "height": 28,
+                  "style": "edit_value_S_left",
+                  "text": "Encoder"
                 },
                 {
                   "type": "Text",
-                  "action": "edit_system_password",
+                  "action": "show_sys_settings_encoder",
                   "x": 0,
                   "y": 0,
-                  "width": 103,
-                  "height": 29,
+                  "width": 240,
+                  "height": 28,
                   "style": "edit_value_active_S_left",
-                  "text": "Change"
+                  "text": "Encoder"
                 }
               ]
             },
@@ -16170,15 +16161,6 @@
             {
               "type": "Text",
               "x": 12,
-              "y": 144,
-              "width": 240,
-              "height": 28,
-              "style": "default_disabled_S_left",
-              "text": "Display settings"
-            },
-            {
-              "type": "Text",
-              "x": 12,
               "y": 32,
               "width": 240,
               "height": 28,
@@ -16258,33 +16240,51 @@
               "text": "Touchscreen calibration"
             },
             {
+              "type": "Text",
               "x": 12,
-              "type": "Select",
-              "data": "sys.encoder.installed",
-              "y": 170,
+              "y": 144,
               "width": 240,
               "height": 28,
+              "style": "default_disabled_S_left",
+              "text": "Display settings"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 172,
+              "width": 137,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "System password"
+            },
+            {
+              "x": 149,
+              "type": "Select",
+              "data": "sys.password.isSet",
+              "y": 172,
+              "width": 103,
+              "height": 29,
               "style": "default",
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "",
+                  "action": "edit_system_password",
                   "x": 0,
                   "y": 0,
-                  "width": 240,
-                  "height": 28,
-                  "style": "edit_value_S_left",
-                  "text": "Encoder"
+                  "width": 103,
+                  "height": 29,
+                  "style": "edit_value_active_S_left",
+                  "text": "Set"
                 },
                 {
                   "type": "Text",
-                  "action": "show_sys_settings_encoder",
+                  "action": "edit_system_password",
                   "x": 0,
                   "y": 0,
-                  "width": 240,
-                  "height": 28,
+                  "width": 103,
+                  "height": 29,
                   "style": "edit_value_active_S_left",
-                  "text": "Encoder"
+                  "text": "Change"
                 }
               ]
             },
@@ -17821,36 +17821,26 @@
               "type": "Text",
               "x": 12,
               "y": 30,
-              "width": 136,
+              "width": 153,
               "height": 28,
               "style": "edit_value_S_left",
-              "text": "Switch action:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "sys.encoder.switchAction",
-              "action": "sys.settings.encoder.editSwitchAction",
-              "x": 148,
-              "y": 30,
-              "width": 104,
-              "height": 28,
-              "style": "edit_S"
+              "text": "Confirmation mode:"
             },
             {
               "type": "Text",
               "x": 12,
-              "y": 58,
-              "width": 153,
+              "y": 101,
+              "width": 108,
               "height": 28,
               "style": "edit_value_S_left",
-              "text": "Moving up speed:"
+              "text": "Moving up:"
             },
             {
               "type": "UpDown",
               "data": "sys.encoder.movingUpSpeed",
               "action": "upDown",
-              "x": 165,
-              "y": 58,
+              "x": 120,
+              "y": 101,
               "width": 87,
               "height": 28,
               "style": "edit_value_S_centered",
@@ -17861,18 +17851,18 @@
             {
               "type": "Text",
               "x": 12,
-              "y": 86,
-              "width": 153,
+              "y": 139,
+              "width": 108,
               "height": 28,
               "style": "edit_value_S_left",
-              "text": "Moving down speed:"
+              "text": "Moving down:"
             },
             {
               "type": "UpDown",
               "data": "sys.encoder.movingDownSpeed",
               "action": "upDown",
-              "x": 165,
-              "y": 86,
+              "x": 120,
+              "y": 139,
               "width": 87,
               "height": 28,
               "style": "edit_value_S_centered",
@@ -17920,6 +17910,32 @@
               "height": 36,
               "style": "bottom_button",
               "text": "X"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 69,
+              "width": 240,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Knob acceleration sensitivity:"
+            },
+            {
+              "type": "Rectangle",
+              "x": 12,
+              "y": 63,
+              "width": 236,
+              "height": 1,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 165,
+              "y": 30,
+              "width": 69,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "! YES/NO"
             }
           ]
         }
