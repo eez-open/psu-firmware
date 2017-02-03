@@ -168,7 +168,7 @@ bool saveDevice() {
 static void initDevice2() {
     memset(&devConf2, 0, sizeof(devConf2));
     devConf2.header.version = DEV_CONF2_VERSION;
-    devConf2.flags.encoderSwitchAction = gui::ENCODER_SWITCH_ACTION_SELECTION;
+    devConf2.flags.encoderConfirmationMode = 0;
 }
 
 void loadDevice2() {
@@ -555,8 +555,8 @@ bool lockFrontPanel(bool lock) {
     return false;
 }
 
-bool setEncoderSettings(uint8_t switchAction, uint8_t movingSpeedDown, uint8_t movingSpeedUp) {
-    devConf2.flags.encoderSwitchAction = switchAction;
+bool setEncoderSettings(uint8_t confirmationMode, uint8_t movingSpeedDown, uint8_t movingSpeedUp) {
+    devConf2.flags.encoderConfirmationMode = confirmationMode;
     devConf2.encoderMovingSpeedDown = movingSpeedDown;
     devConf2.encoderMovingSpeedUp = movingSpeedUp;
 

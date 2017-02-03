@@ -47,16 +47,8 @@ data::EnumItem g_channelDisplayValueEnumDefinition[] = {
     {0, 0}
 };
 
-data::EnumItem g_encoderSwitchAction[] = {
-    {ENCODER_SWITCH_ACTION_NONE, PSTR("Not used")},
-    {ENCODER_SWITCH_ACTION_CONFIRMATION, PSTR("Confirmation")},
-    {ENCODER_SWITCH_ACTION_SELECTION, PSTR("Selection")},
-    {0, 0}
-};
-
 static const data::EnumItem *enumDefinitions[] = {
-    g_channelDisplayValueEnumDefinition,
-    g_encoderSwitchAction
+    g_channelDisplayValueEnumDefinition
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -87,8 +87,8 @@ struct DeviceConfiguration {
 
 /// Device binary flags stored in DeviceConfiguration.
 struct DeviceFlags2 {
-    unsigned encoderSwitchAction : 2;
-    unsigned reserved: 30;
+    unsigned encoderConfirmationMode : 1;
+    unsigned reserved: 31;
 };
 
 struct DeviceConfiguration2 {
@@ -161,7 +161,7 @@ bool isForceDisablingAllOutputsOnPowerUpEnabled();
 
 bool lockFrontPanel(bool lock);
 
-bool setEncoderSettings(uint8_t switchAction, uint8_t movingSpeedDown, uint8_t movingSpeedUp);
+bool setEncoderSettings(uint8_t confirmationMode, uint8_t movingSpeedDown, uint8_t movingSpeedUp);
 
 }
 }

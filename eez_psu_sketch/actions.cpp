@@ -547,9 +547,9 @@ void action_up_down() {
     upDown();
 }
 
-void action_sys_settings_encoder_edit_switch_action() {
+void action_sys_settings_encoder_toggle_confirmation_mode() {
     #if OPTION_ENCODER
-    ((SysSettingsEncoderPage *)getActivePage())->editSwitchAction();
+    ((SysSettingsEncoderPage *)getActivePage())->toggleConfirmationMode();
     #endif
 }
 
@@ -680,7 +680,7 @@ ACTION actions[] = {
     action_select_enum_item,
     action_error_alert_action,
     action_up_down,
-    action_sys_settings_encoder_edit_switch_action
+    action_sys_settings_encoder_toggle_confirmation_mode
 };
 
 }

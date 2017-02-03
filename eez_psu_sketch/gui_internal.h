@@ -99,12 +99,6 @@ extern data::Value g_focusEditValue;
 bool wasFocusWidget(const WidgetCursor &widgetCursor);
 bool isFocusWidget(const WidgetCursor &widgetCursor);
 
-enum EncoderSwitchAction {
-    ENCODER_SWITCH_ACTION_NONE,
-    ENCODER_SWITCH_ACTION_CONFIRMATION,
-    ENCODER_SWITCH_ACTION_SELECTION
-};
-
 void upDown();
 
 ////////////////////////////////////////////////////////////////////////////////

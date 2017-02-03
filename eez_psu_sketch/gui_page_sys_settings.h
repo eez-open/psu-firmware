@@ -120,8 +120,6 @@ public:
 #if OPTION_ENCODER
 
 class SysSettingsEncoderPage : public SetPage {
-    friend void onSwitchActionSet(uint8_t value);
-
 public:
     SysSettingsEncoderPage();
 
@@ -131,14 +129,14 @@ public:
     data::Value getMax(const data::Cursor &cursor, uint8_t id);
     bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
 
-    void editSwitchAction();
+    void toggleConfirmationMode();
 
 	int getDirty();
 	void set();
 
 private:
-    EncoderSwitchAction origSwitchAction;
-    EncoderSwitchAction switchAction;
+    uint8_t origConfirmationMode;
+    uint8_t confirmationMode;
 
     uint8_t origMovingSpeedDown;
     uint8_t movingSpeedDown;

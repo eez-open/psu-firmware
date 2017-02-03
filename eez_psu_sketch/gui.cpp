@@ -690,11 +690,10 @@ void onEncoder(int counter, bool clicked) {
     if (clicked) {
         if (isEncoderEnabledInActivePage()) {
             if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD || g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
-                if (persist_conf::devConf2.flags.encoderSwitchAction != ENCODER_SWITCH_ACTION_NONE) {
-                    getActiveKeypad()->ok();
-                }
+                getActiveKeypad()->ok();
             } else {
-                if (persist_conf::devConf2.flags.encoderSwitchAction == ENCODER_SWITCH_ACTION_SELECTION) {
+                if (g_focusEditValue.getType() == data::VALUE_TYPE_NONE) {
+                    // selection
                     data::Cursor newCursor = g_focusCursor;
                     int newDataId;
 
@@ -715,19 +714,16 @@ void onEncoder(int counter, bool clicked) {
                     if (edit_mode::isActive()) {
                         edit_mode::update();
                     }
-
-                    sound::playClick();
-                } else if (persist_conf::devConf2.flags.encoderSwitchAction == ENCODER_SWITCH_ACTION_CONFIRMATION) {
-                    if (g_focusEditValue.getType() != data::VALUE_TYPE_NONE) {
-                        int16_t error;
-                        if (!data::set(g_focusCursor, g_focusDataId, g_focusEditValue, &error)) {
-                            errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
-                        } else {
-                            g_focusEditValue = data::Value();
-                        }
+                } else {
+                    // confirmation
+                    int16_t error;
+                    if (!data::set(g_focusCursor, g_focusDataId, g_focusEditValue, &error)) {
+                        errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
+                    } else {
+                        g_focusEditValue = data::Value();
                     }
-                    sound::playClick();
                 }
+                sound::playClick();
             }
         }
     }
@@ -768,7 +764,7 @@ void onEncoder(int counter, bool clicked) {
                 newValue = max;
             }
 
-            if (persist_conf::devConf2.flags.encoderSwitchAction == ENCODER_SWITCH_ACTION_CONFIRMATION) {
+            if (persist_conf::devConf2.flags.encoderConfirmationMode) {
                 g_focusEditValue = data::Value(newValue, value.getType());
             } else {
                 int16_t error;
