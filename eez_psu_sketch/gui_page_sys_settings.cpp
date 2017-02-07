@@ -28,7 +28,6 @@
 #include "encoder.h"
 #endif
 
-#include "gui_data_snapshot.h"
 #include "gui_page_sys_settings.h"
 #include "gui_numeric_keypad.h"
 
@@ -44,14 +43,8 @@ SysSettingsDateTimePage::SysSettingsDateTimePage() {
 	dst = origDst = persist_conf::devConf.flags.dst;
 }
 
-void SysSettingsDateTimePage::takeSnapshot(data::Snapshot *snapshot) {
-	SetPage::takeSnapshot(snapshot);
-
-	snapshot->flags.switch1 = dst;
-}
-
-data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	data::Value value = SetPage::getData(cursor, id, snapshot);
+data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = SetPage::getData(cursor, id);
 	if (value.getType() != data::VALUE_TYPE_NONE) {
 		return value;
 	}
@@ -71,7 +64,7 @@ data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_TIME_ZONE) {
 		return data::Value(timeZone, data::VALUE_TYPE_TIME_ZONE);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_DST) {
-		return data::Value(snapshot->flags.switch1 ? 1 : 0);
+		return data::Value(dst ? 1 : 0);
 	}
 
 	return data::Value();
@@ -213,13 +206,9 @@ void SysSettingsDateTimePage::set() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void SysSettingsEthernetPage::takeSnapshot(data::Snapshot *snapshot) {
-    snapshot->flags.switch1 = persist_conf::isEthernetEnabled() ? 1 : 0;
-}
-
-data::Value SysSettingsEthernetPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value SysSettingsEthernetPage::getData(const data::Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_SYS_ETHERNET_ENABLED) {
-        return data::Value(snapshot->flags.switch1);
+        return data::Value(persist_conf::isEthernetEnabled() ? 1 : 0);
     }
 
 #if OPTION_ETHERNET
@@ -256,23 +245,17 @@ void SysSettingsEthernetPage::disable() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void SysSettingsProtectionsPage::takeSnapshot(data::Snapshot *snapshot) {
-    snapshot->flags.switch1 = persist_conf::isOutputProtectionCoupleEnabled() ? 1 : 0;
-    snapshot->flags.switch2 = persist_conf::isShutdownWhenProtectionTrippedEnabled() ? 1 : 0;
-    snapshot->flags.switch3 = persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled() ? 1 : 0;
-}
-
-data::Value SysSettingsProtectionsPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value SysSettingsProtectionsPage::getData(const data::Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_SYS_OUTPUT_PROTECTION_COUPLED) {
-        return data::Value(snapshot->flags.switch1);
+        return data::Value(persist_conf::isOutputProtectionCoupleEnabled() ? 1 : 0);
     }
 
     if (id == DATA_ID_SYS_SHUTDOWN_WHEN_PROTECTION_TRIPPED) {
-        return data::Value(snapshot->flags.switch2);
+        return data::Value(persist_conf::isShutdownWhenProtectionTrippedEnabled() ? 1 : 0);
     }
 
     if (id == DATA_ID_SYS_FORCE_DISABLING_ALL_OUTPUTS_ON_POWER_UP) {
-        return data::Value(snapshot->flags.switch3);
+        return data::Value(persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled() ? 1 : 0);
     }
 
     return data::Value();
@@ -330,21 +313,14 @@ SysSettingsAuxOtpPage::SysSettingsAuxOtpPage() {
 	defaultDelay = OTP_CH_DEFAULT_DELAY;
 }
 
-void SysSettingsAuxOtpPage::takeSnapshot(data::Snapshot *snapshot) {
-	SetPage::takeSnapshot(snapshot);
-
-	snapshot->flags.switch1 = state;
-    snapshot->flags.switch2 = temperature::sensors[temp_sensor::AUX].isTripped() ? 1 : 0;
-}
-
-data::Value SysSettingsAuxOtpPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	data::Value value = SetPage::getData(cursor, id, snapshot);
+data::Value SysSettingsAuxOtpPage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = SetPage::getData(cursor, id);
 	if (value.getType() != data::VALUE_TYPE_NONE) {
 		return value;
 	}
 
 	if (id == DATA_ID_SYS_TEMP_AUX_OTP_STATE) {
-		return snapshot->flags.switch1;
+		return state;
 	}
 
     if (id == DATA_ID_SYS_TEMP_AUX_OTP_LEVEL) {
@@ -356,7 +332,7 @@ data::Value SysSettingsAuxOtpPage::getData(const data::Cursor &cursor, uint8_t i
 	}
 
 	if (id == DATA_ID_SYS_TEMP_AUX_OTP_IS_TRIPPED) {
-		return snapshot->flags.switch2;
+		return temperature::sensors[temp_sensor::AUX].isTripped() ? 1 : 0;
 	}
 
 	return data::Value();
@@ -441,18 +417,13 @@ void SysSettingsAuxOtpPage::clear() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void SysSettingsSoundPage::takeSnapshot(data::Snapshot *snapshot) {
-    snapshot->flags.switch1 = persist_conf::isSoundEnabled() ? 1 : 0;
-    snapshot->flags.switch2 = persist_conf::isClickSoundEnabled() ? 1 : 0;
-}
-
-data::Value SysSettingsSoundPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value SysSettingsSoundPage::getData(const data::Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_SYS_SOUND_IS_ENABLED) {
-        return data::Value(snapshot->flags.switch1);
+        return data::Value(persist_conf::isSoundEnabled() ? 1 : 0);
     }
 
     if (id == DATA_ID_SYS_SOUND_IS_CLICK_ENABLED) {
-        return data::Value(snapshot->flags.switch2);
+        return data::Value(persist_conf::isClickSoundEnabled() ? 1 : 0);
     }
 
     return data::Value();
@@ -492,30 +463,22 @@ SysSettingsEncoderPage::SysSettingsEncoderPage() {
     origMovingSpeedUp = movingSpeedUp = persist_conf::devConf2.encoderMovingSpeedUp;
 }
 
-void SysSettingsEncoderPage::takeSnapshot(data::Snapshot *snapshot) {
-	SetPage::takeSnapshot(snapshot);
-
-    snapshot->flags.switch1 = confirmationMode;
-    snapshot->intValue1 = movingSpeedDown;
-    snapshot->intValue2 = movingSpeedUp;
-}
-
-data::Value SysSettingsEncoderPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	data::Value value = SetPage::getData(cursor, id, snapshot);
+data::Value SysSettingsEncoderPage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = SetPage::getData(cursor, id);
 	if (value.getType() != data::VALUE_TYPE_NONE) {
 		return value;
 	}
 
     if (id == DATA_ID_SYS_ENCODER_CONFIRMATION_MODE) {
-        return data::Value((int)snapshot->flags.switch1);
+        return data::Value((int)confirmationMode);
     }
 
     if (id == DATA_ID_SYS_ENCODER_MOVING_DOWN_SPEED) {
-        return data::Value((int)snapshot->intValue1);
+        return data::Value((int)movingSpeedDown);
     }
 
     if (id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
-        return data::Value((int)snapshot->intValue2);
+        return data::Value((int)movingSpeedUp);
     }
 
     return data::Value();

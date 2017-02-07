@@ -24,7 +24,6 @@
 #include "temperature.h"
 #include "channel_dispatcher.h"
 
-#include "gui_data_snapshot.h"
 #include "gui_page_ch_settings_protection.h"
 #include "gui_numeric_keypad.h"
 
@@ -52,7 +51,7 @@ void ChSettingsProtectionPage::clearAndDisable() {
 	areYouSure(onClearAndDisableYes);
 }
 
-data::Value ChSettingsProtectionPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value ChSettingsProtectionPage::getData(const data::Cursor &cursor, uint8_t id) {
 	if (id == DATA_ID_CHANNEL_PROTECTION_OTP_INSTALLED) {
 		return temperature::isChannelSensorInstalled(g_channel);
 	}
@@ -61,37 +60,11 @@ data::Value ChSettingsProtectionPage::getData(const data::Cursor &cursor, uint8_
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void ChSettingsProtectionSetPage::takeSnapshot(data::Snapshot *snapshot) {
-	SetPage::takeSnapshot(snapshot);
-
-	snapshot->flags.switch1 = state;
-
-	data::ChannelSnapshot &channelSnapshot = snapshot->channelSnapshots[g_channel->index - 1];
-
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-	channelSnapshot.flags.temperatureStatus = 2;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-	temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + g_channel->index - 1];
-	if (tempSensor.isInstalled()) {
-		if (tempSensor.isTestOK()) {
-			channelSnapshot.flags.temperatureStatus = 1;
-			channelSnapshot.temperature = tempSensor.temperature;
-		} else {
-			channelSnapshot.flags.temperatureStatus = 0;
-		}
-	} else {
-		channelSnapshot.flags.temperatureStatus = 2;
-	}
-#endif
-}
-
-data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	data::Value value = SetPage::getData(cursor, id, snapshot);
+data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = SetPage::getData(cursor, id);
 	if (value.getType() != data::VALUE_TYPE_NONE) {
 		return value;
 	}
-
-	data::ChannelSnapshot &channelSnapshot = snapshot->channelSnapshots[g_channel->index - 1];
 
 	if (id == DATA_ID_CHANNEL_PROTECTION_OVP_LIMIT ||
 		id == DATA_ID_CHANNEL_PROTECTION_OCP_LIMIT ||
@@ -103,7 +76,7 @@ data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uin
 		id == DATA_ID_CHANNEL_PROTECTION_OCP_STATE ||
 		id == DATA_ID_CHANNEL_PROTECTION_OPP_STATE ||
 		id == DATA_ID_CHANNEL_PROTECTION_OTP_STATE) {
-		return snapshot->flags.switch1;
+		return state;
 	}
 
 	if (id == DATA_ID_CHANNEL_PROTECTION_OVP_LEVEL ||
@@ -119,13 +92,31 @@ data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uin
 		return delay;
 	}
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 	if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
-		return data::Value(channelSnapshot.flags.temperatureStatus);
+		return data::Value(2);
 	}
-
-	if (id == DATA_ID_CHANNEL_TEMP && channelSnapshot.flags.temperatureStatus == 1) {
-		return data::Value(channelSnapshot.temperature, data::VALUE_TYPE_FLOAT_CELSIUS);
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+	temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + g_channel->index - 1];
+	if (tempSensor.isInstalled()) {
+		if (tempSensor.isTestOK()) {
+	        if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
+		        return data::Value(1);
+	        }
+	        if (id == DATA_ID_CHANNEL_TEMP) {
+		        return data::Value(tempSensor.temperature, data::VALUE_TYPE_FLOAT_CELSIUS);
+	        }
+		} else {
+	        if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
+		        return data::Value(0);
+	        }
+		}
+	} else {
+	    if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
+		    return data::Value(2);
+	    }
 	}
+#endif
 
     if (id == DATA_ID_CHANNEL_PROTECTION_OCP_MAX_CURRENT_LIMIT_CAUSE) {
         return data::Value(g_channel->getMaxCurrentLimitCause());

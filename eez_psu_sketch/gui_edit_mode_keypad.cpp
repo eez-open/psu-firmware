@@ -66,12 +66,6 @@ void exit() {
     }
 }
 
-void getText(char *text, int count) {
-    if (!g_keypad || !g_keypad->getText(text, count)) {
-        edit_mode::getCurrentValue(data::currentSnapshot).toText(text, count);
-    }
-}
-
 }
 }
 }

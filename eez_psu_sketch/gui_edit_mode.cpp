@@ -23,7 +23,6 @@
 #include "channel_dispatcher.h"
 #include "sound.h"
 
-#include "gui_data_snapshot.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_slider.h"
 #include "gui_edit_mode_step.h"
@@ -45,48 +44,6 @@ static bool g_isInteractiveMode = true;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Snapshot::takeSnapshot(data::Snapshot *snapshot) {
-    if (edit_mode::isActive()) {
-        editValue = edit_mode::getEditValue();
-
-        interactiveModeSelector = isInteractiveMode() ? 0 : 1;
-
-        step_index = edit_mode_step::getStepIndex();
-
-        edit_mode_keypad::getText(snapshot->keypadSnapshot.text, sizeof(snapshot->keypadSnapshot.text));
-    }
-}
-
-data::Value Snapshot::getData(data::Snapshot *snapshot, uint8_t id) {
-    int editInfoPartOffset = snapshot->focusCursor.i * 6 + (snapshot->focusDataId == DATA_ID_CHANNEL_U_EDIT ? 0 : 1) * 3;
-
-    if (id == DATA_ID_EDIT_VALUE) {
-       return editValue;
-    } else if (id == DATA_ID_EDIT_INFO) {
-        return data::Value(0 + editInfoPartOffset, data::VALUE_TYPE_EDIT_INFO);
-    } else if (id == DATA_ID_EDIT_INFO1) {
-        return data::Value(1 + editInfoPartOffset, data::VALUE_TYPE_EDIT_INFO);
-    } else if (id == DATA_ID_EDIT_INFO2) {
-        return data::Value(2 + editInfoPartOffset, data::VALUE_TYPE_EDIT_INFO);
-    } else if (id == DATA_ID_EDIT_MODE_INTERACTIVE_MODE_SELECTOR) {
-        return interactiveModeSelector;
-    } else if (id == DATA_ID_EDIT_STEPS) {
-        return step_index;
-    }
-
-    return data::Value();
-}
-
-bool Snapshot::isBlinking(data::Snapshot& snapshot, uint8_t id, bool &result) {
-    if (id == DATA_ID_EDIT_VALUE) {
-        result = (interactiveModeSelector == 1) && (editValue != edit_mode::getCurrentValue(snapshot));
-        return true;
-    }
-    return false;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 bool isActive() {
     return getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD ||
         getActivePageId() == PAGE_ID_EDIT_MODE_STEP ||
@@ -94,14 +51,14 @@ bool isActive() {
 }
 
 void initEditValue() {
-    g_editValue = data::currentSnapshot.getEditValue(g_focusCursor, g_focusDataId);
+    g_editValue = data::getEditValue(g_focusCursor, g_focusDataId);
     g_undoValue = g_editValue;
 }
 
 void enter(int tabIndex_) {
 #if OPTION_ENCODER
     if (!isActive()) {
-        if (!isFocusWidget(g_foundWidgetAtDown)) {
+        if (!isFocusWidget(g_foundWidgetAtDown) || g_focusEditValue.getType() != data::VALUE_TYPE_NONE) {
             DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
             setFocusCursor(g_foundWidgetAtDown.cursor, widget->data);
             return;
@@ -177,12 +134,40 @@ void toggleInteractiveMode() {
     initEditValue();
 }
 
+data::Value getData(const data::Cursor &cursor, uint8_t id) {
+    int editInfoPartOffset = g_focusCursor.i * 6 + (g_focusDataId == DATA_ID_CHANNEL_U_EDIT ? 0 : 1) * 3;
+
+    if (id == DATA_ID_EDIT_VALUE) {
+       return edit_mode::getEditValue();
+    } else if (id == DATA_ID_EDIT_INFO) {
+        return data::Value(0 + editInfoPartOffset, data::VALUE_TYPE_EDIT_INFO);
+    } else if (id == DATA_ID_EDIT_INFO1) {
+        return data::Value(1 + editInfoPartOffset, data::VALUE_TYPE_EDIT_INFO);
+    } else if (id == DATA_ID_EDIT_INFO2) {
+        return data::Value(2 + editInfoPartOffset, data::VALUE_TYPE_EDIT_INFO);
+    } else if (id == DATA_ID_EDIT_MODE_INTERACTIVE_MODE_SELECTOR) {
+        return isInteractiveMode() ? 0 : 1;
+    } else if (id == DATA_ID_EDIT_STEPS) {
+        return edit_mode_step::getStepIndex();
+    }
+
+    return data::Value();
+}
+
+bool isBlinking(const data::Cursor &cursor, uint8_t id, bool &result) {
+    if (id == DATA_ID_EDIT_VALUE) {
+        result = !isInteractiveMode() && (edit_mode::getEditValue() != edit_mode::getCurrentValue());
+        return true;
+    }
+    return false;
+}
+
 const data::Value& getEditValue() {
     return g_editValue;
 }
 
-data::Value getCurrentValue(data::Snapshot snapshot) {
-    return snapshot.get(g_focusCursor, g_focusDataId);
+data::Value getCurrentValue() {
+    return data::get(g_focusCursor, g_focusDataId);
 }
 
 const data::Value &getMin() {

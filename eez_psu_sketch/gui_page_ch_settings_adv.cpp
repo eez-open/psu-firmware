@@ -23,7 +23,6 @@
 #include "profile.h"
 #include "channel_dispatcher.h"
 
-#include "gui_data_snapshot.h"
 #include "gui_page_ch_settings_adv.h"
 #include "gui_numeric_keypad.h"
 
@@ -33,7 +32,7 @@ namespace gui {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-data::Value ChSettingsAdvPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value ChSettingsAdvPage::getData(const data::Cursor &cursor, uint8_t id) {
 	if (id == DATA_ID_CHANNEL_RPROG_INSTALLED) {
 		return data::Value(g_channel->getFeatures() & CH_FEATURE_RPROG ? 1 : 0);
 	}
@@ -48,22 +47,8 @@ ChSettingsAdvLRipplePage::ChSettingsAdvLRipplePage() {
 	origStatus = status = g_channel->isLowRippleEnabled();
 }
 
-void ChSettingsAdvLRipplePage::takeSnapshot(data::Snapshot *snapshot) {
-	SetPage::takeSnapshot(snapshot);
-
-    bool isAllowed = g_channel->isLowRippleAllowed(micros());
-
-	snapshot->flags.switch1 = autoMode;
-	snapshot->flags.switch2 = g_channel->isLowRippleAllowed(micros());
-    snapshot->flags.switch3 = status;
-
-    if (!isAllowed) {
-        origStatus = status = false;
-    }
-}
-
-data::Value ChSettingsAdvLRipplePage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	data::Value value = SetPage::getData(cursor, id, snapshot);
+data::Value ChSettingsAdvLRipplePage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = SetPage::getData(cursor, id);
 	if (value.getType() != data::VALUE_TYPE_NONE) {
 		return value;
 	}
@@ -73,20 +58,20 @@ data::Value ChSettingsAdvLRipplePage::getData(const data::Cursor &cursor, uint8_
 	}
 
 	if (id == DATA_ID_CHANNEL_LRIPPLE_CALCULATED_DISSIPATION) {
-        data::ChannelSnapshot &channelSnapshot = snapshot->channelSnapshots[g_channel->index - 1];
-		return data::Value(channelSnapshot.i_mon * (g_channel->SOA_VIN - channelSnapshot.u_mon), data::VALUE_TYPE_FLOAT_WATT);
+        Channel &channel = Channel::get(g_channel->index - 1);
+		return data::Value(channel_dispatcher::getIMon(channel) * (g_channel->SOA_VIN - channel_dispatcher::getUMon(channel)), data::VALUE_TYPE_FLOAT_WATT);
 	}
 
 	if (id == DATA_ID_CHANNEL_LRIPPLE_AUTO_MODE) {
-		return snapshot->flags.switch1;
+		return autoMode;
 	}
 
 	if (id == DATA_ID_CHANNEL_LRIPPLE_IS_ALLOWED) {
-		return snapshot->flags.switch2;
+		return g_channel->isLowRippleAllowed(micros());
 	}
 
     if (id == DATA_ID_CHANNEL_LRIPPLE_STATUS) {
-		return snapshot->flags.switch3;
+		return g_channel->isLowRippleAllowed(micros()) ? status : false;
 	}
 
 	return data::Value();
@@ -101,7 +86,7 @@ void ChSettingsAdvLRipplePage::toggleStatus() {
 }
 
 int ChSettingsAdvLRipplePage::getDirty() {
-	return (origAutoMode != autoMode || origStatus != status) ? 1 : 0;
+	return (origAutoMode != autoMode || g_channel->isLowRippleAllowed(micros()) && origStatus != status) ? 1 : 0;
 }
 
 void ChSettingsAdvLRipplePage::set() {
@@ -121,13 +106,9 @@ void ChSettingsAdvLRipplePage::set() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void ChSettingsAdvRSensePage::takeSnapshot(data::Snapshot *snapshot) {
-	snapshot->flags.switch1 = g_channel->isRemoteSensingEnabled() ? 1 : 0;
-}
-
-data::Value ChSettingsAdvRSensePage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value ChSettingsAdvRSensePage::getData(const data::Cursor &cursor, uint8_t id) {
 	if (id == DATA_ID_CHANNEL_RSENSE_STATUS) {
-		return snapshot->flags.switch1;
+		return g_channel->isRemoteSensingEnabled() ? 1 : 0;
 	}
 	return data::Value();
 }
@@ -146,7 +127,7 @@ void ChSettingsAdvRProgPage::toggleStatus() {
 
 int ChSettingsAdvCouplingPage::selectedMode = 0;
 
-data::Value ChSettingsAdvCouplingPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value ChSettingsAdvCouplingPage::getData(const data::Cursor &cursor, uint8_t id) {
 	if (id == DATA_ID_CHANNEL_COUPLING_SELECTED_MODE) {
 		return data::Value(selectedMode);
 	}
@@ -205,25 +186,18 @@ ChSettingsAdvViewPage::ChSettingsAdvViewPage() {
     origYTViewRate = ytViewRate = g_channel->ytViewRate;
 }
 
-void ChSettingsAdvViewPage::takeSnapshot(data::Snapshot *snapshot) {
-	SetPage::takeSnapshot(snapshot);
-
-    snapshot->intValue1 = displayValue1;
-    snapshot->intValue2 = displayValue2;
-}
-
-data::Value ChSettingsAdvViewPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	data::Value value = SetPage::getData(cursor, id, snapshot);
+data::Value ChSettingsAdvViewPage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = SetPage::getData(cursor, id);
 	if (value.getType() != data::VALUE_TYPE_NONE) {
 		return value;
 	}
 
 	if (id == DATA_ID_CHANNEL_DISPLAY_VIEW_SETTINGS_DISPLAY_VALUE1) {
-		return data::Value(snapshot->intValue1, data::ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE);
+		return data::Value(displayValue1, data::ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE);
 	}
 
 	if (id == DATA_ID_CHANNEL_DISPLAY_VIEW_SETTINGS_DISPLAY_VALUE2) {
-		return data::Value(snapshot->intValue2, data::ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE);
+		return data::Value(displayValue2, data::ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE);
 	}
 
     if (id == DATA_ID_CHANNEL_DISPLAY_VIEW_SETTINGS_YT_VIEW_RATE) {

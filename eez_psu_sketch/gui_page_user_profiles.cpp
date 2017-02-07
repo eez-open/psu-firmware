@@ -20,7 +20,6 @@
 
 #if OPTION_DISPLAY
 
-#include "gui_data_snapshot.h"
 #include "gui_keypad.h"
 #include "gui_page_user_profiles.h"
 
@@ -38,26 +37,9 @@ void UserProfilesPage::pageWillAppear() {
 	}
 }
 
-void UserProfilesPage::takeSnapshot(data::Snapshot *snapshot) {
-	snapshot->flags.switch1 = persist_conf::isProfileAutoRecallEnabled();
-	if (g_selectedProfileLocation != -1) {
-		snapshot->profile.status = profile::isValid(g_selectedProfileLocation) ? 1 : 0;
-		snapshot->profile.isAutoRecallLocation = persist_conf::getProfileAutoRecallLocation() == g_selectedProfileLocation ? 1 : 0;
-        strncpy(snapshot->profile.remark, profile.name, sizeof(snapshot->profile.remark) - 1);
-		
-		for (int i = 0; i < CH_MAX; ++i) {
-			snapshot->profile.channels[i].outputStatus = profile.channels[i].flags.output_enabled;
-			snapshot->profile.channels[i].u_set = profile.channels[i].u_set;
-			snapshot->profile.channels[i].i_set = profile.channels[i].i_set;
-		}
-	} else {
-		snapshot->profile.isAutoRecallLocation = 0;
-	}
-}
-
-data::Value UserProfilesPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value UserProfilesPage::getData(const data::Cursor &cursor, uint8_t id) {
 	if (id == DATA_ID_PROFILES_AUTO_RECALL_STATUS) {
-		return data::Value(snapshot->flags.switch1);
+		return data::Value(persist_conf::isProfileAutoRecallEnabled());
 	}
 
 	if (id == DATA_ID_PROFILES_AUTO_RECALL_LOCATION) {
@@ -66,7 +48,7 @@ data::Value UserProfilesPage::getData(const data::Cursor &cursor, uint8_t id, da
 
 	if (g_selectedProfileLocation != -1) {
 		if (id == DATA_ID_PROFILE_STATUS) {
-			return data::Value(snapshot->profile.status);
+			return data::Value(profile::isValid(g_selectedProfileLocation) ? 1 : 0);
 		}
 
 		if (id == DATA_ID_PROFILE_LABEL) {
@@ -74,24 +56,24 @@ data::Value UserProfilesPage::getData(const data::Cursor &cursor, uint8_t id, da
 		}
 
 		if (id == DATA_ID_PROFILE_REMARK) {
-			return data::Value(snapshot->profile.remark);
+			return data::Value(profile.name);
 		}
 
 		if (id == DATA_ID_PROFILE_IS_AUTO_RECALL_LOCATION) {
-			return data::Value(snapshot->profile.isAutoRecallLocation);
+			return data::Value(persist_conf::getProfileAutoRecallLocation() == g_selectedProfileLocation ? 1 : 0);
 		}
 
 		if (cursor.i >= 0 && cursor.i < CH_MAX) {
 			if (id == DATA_ID_PROFILE_CHANNEL_OUTPUT_STATE) {
-				return data::Value(snapshot->profile.channels[cursor.i].outputStatus);
+				return data::Value(profile.channels[cursor.i].flags.output_enabled);
 			}
 
 			if (id == DATA_ID_PROFILE_CHANNEL_U_SET) {
-				return data::Value(snapshot->profile.channels[cursor.i].u_set, data::VALUE_TYPE_FLOAT_VOLT);
+				return data::Value(profile.channels[cursor.i].u_set, data::VALUE_TYPE_FLOAT_VOLT);
 			}
 
 			if (id == DATA_ID_PROFILE_CHANNEL_I_SET) {
-				return data::Value(snapshot->profile.channels[cursor.i].i_set, data::VALUE_TYPE_FLOAT_AMPER);
+				return data::Value(profile.channels[cursor.i].i_set, data::VALUE_TYPE_FLOAT_AMPER);
 			}
 		}
 	} else if (cursor.i >= 0) {

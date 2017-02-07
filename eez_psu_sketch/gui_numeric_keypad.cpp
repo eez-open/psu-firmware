@@ -29,7 +29,7 @@
 #include "gui_internal.h"
 #include "gui_keypad.h"
 #include "gui_numeric_keypad.h"
-#include "gui_data_snapshot.h"
+#include "gui_edit_mode.h"
 
 namespace eez {
 namespace psu {
@@ -58,41 +58,39 @@ NumericKeypad *NumericKeypad::start(const char *label, const data::Value& value,
     return page;
 }
 
-void NumericKeypad::takeSnapshot(data::Snapshot *snapshot) {
-	// text
-	char *textPtr = snapshot->keypadSnapshot.text;
-
-	if (m_label) {
-		strcpy_P(textPtr, m_label);
-		textPtr += strlen(m_label);
-	}
-
-    getText(textPtr, 16);
-
-    switch (getEditUnit()) {
-    case data::VALUE_TYPE_FLOAT_VOLT: snapshot->keypadSnapshot.keypadUnit = data::Value::ProgmemStr(PSTR("mV")); break;
-    case data::VALUE_TYPE_FLOAT_MILLI_VOLT: snapshot->keypadSnapshot.keypadUnit = data::Value::ProgmemStr(PSTR("V")); break;
-    case data::VALUE_TYPE_FLOAT_AMPER: snapshot->keypadSnapshot.keypadUnit = data::Value::ProgmemStr(PSTR("mA")); break;
-	case data::VALUE_TYPE_FLOAT_MILLI_AMPER: snapshot->keypadSnapshot.keypadUnit = data::Value::ProgmemStr(PSTR("A")); break;
-    default: snapshot->keypadSnapshot.keypadUnit = data::Value::ProgmemStr(PSTR(""));
-    }
-}
-
-data::Value NumericKeypad::getData(KeypadSnapshot *keypadSnapshot, uint8_t id) {
-    data::Value value = Keypad::getData(keypadSnapshot, id);
+data::Value NumericKeypad::getData(uint8_t id) {
+    data::Value value = Keypad::getData(id);
 	if (value.getType() != data::VALUE_TYPE_NONE) {
 		return value;
 	}
 
+    if (id == DATA_ID_EDIT_UNIT) {
+        switch (getEditUnit()) {
+        case data::VALUE_TYPE_FLOAT_VOLT:        return data::Value::ProgmemStr(PSTR("mV")); break;
+        case data::VALUE_TYPE_FLOAT_MILLI_VOLT:  return data::Value::ProgmemStr(PSTR("V")); break;
+        case data::VALUE_TYPE_FLOAT_AMPER:       return data::Value::ProgmemStr(PSTR("mA")); break;
+	    case data::VALUE_TYPE_FLOAT_MILLI_AMPER: return data::Value::ProgmemStr(PSTR("A")); break;
+        default:                                 return data::Value::ProgmemStr(PSTR(""));
+        }
+    }
+
 	if (id == DATA_ID_KEYPAD_MAX_ENABLED) {
 		return data::Value(m_options.flags.maxButtonEnabled ? 1 : 0);
-	} else if (id == DATA_ID_KEYPAD_DEF_ENABLED) {
+    }
+    
+    if (id == DATA_ID_KEYPAD_DEF_ENABLED) {
 		return data::Value(m_options.flags.defButtonEnabled ? 1 : 0);
-	} else if (id == DATA_ID_KEYPAD_DOT_ENABLED) {
+	}
+    
+    if (id == DATA_ID_KEYPAD_DOT_ENABLED) {
 		return data::Value(m_options.flags.dotButtonEnabled ? 1 : 0);
-	} else if (id == DATA_ID_KEYPAD_SIGN_ENABLED) {
+	}
+    
+    if (id == DATA_ID_KEYPAD_SIGN_ENABLED) {
 		return data::Value(m_options.flags.signButtonEnabled ? 1 : 0);
-	} else if (id == DATA_ID_KEYPAD_UNIT_ENABLED) {
+	}
+    
+    if (id == DATA_ID_KEYPAD_UNIT_ENABLED) {
 		return data::Value(
 			m_options.editUnit == data::VALUE_TYPE_FLOAT_VOLT ||
 			m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT ||
@@ -137,6 +135,15 @@ void NumericKeypad::appendEditUnit(char *text) {
 	}
 }
 
+void NumericKeypad::getKeypadText(char *text) {
+	if (m_label) {
+		strcpy_P(text, m_label);
+		text += strlen(m_label);
+	}
+
+    getText(text, 16);
+}
+
 bool NumericKeypad::getText(char *text, int count) {
 	if (m_options.flags.genericNumberKeypad) {
 		if (m_state == START) {
@@ -157,6 +164,9 @@ bool NumericKeypad::getText(char *text, int count) {
 	} else {
 		if (m_state == START) {
 			*text = 0;
+
+            edit_mode::getCurrentValue().toText(text, count);
+
 			return false;
 		}
 
@@ -525,7 +535,9 @@ void NumericKeypad::back() {
 			} else if (n - 1 == 0) {
 				m_state = EMPTY;
 			}
-		} else {
+		} else if (m_state == START) {
+            m_state = EMPTY;
+        } else {
 			sound::playBeep();
 		}
 	} else {
@@ -555,7 +567,9 @@ void NumericKeypad::back() {
 		else if (m_state == D0) {
 			m_state = EMPTY;
 		}
-		else {
+		else if (m_state == START) {
+            m_state = EMPTY;
+        } else {
 			sound::playBeep();
 		}
 	}

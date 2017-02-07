@@ -34,6 +34,8 @@
 #define CONF_GUI_BLINK_TIME 400000UL // 400ms
 #define CONF_GUI_YT_GRAPH_BLANK_PIXELS_AFTER_CURSOR 10
 
+#define CONF_MAX_STATE_SIZE 1024
+
 namespace eez {
 namespace psu {
 namespace gui {
@@ -44,6 +46,16 @@ static bool g_widgetRefresh;
 static WidgetCursor g_selectedWidget;
 static bool g_isBlinkTime;
 static bool g_wasBlinkTime;
+
+static uint8_t g_stateBuffer[2][CONF_MAX_STATE_SIZE];
+WidgetState *g_previousState;
+WidgetState *g_currentState;
+
+////////////////////////////////////////////////////////////////////////////////
+
+int getCurrentStateBufferIndex() {
+    return (uint8_t *)g_currentState == &g_stateBuffer[0][0] ? 0 : 1;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -348,115 +360,96 @@ void drawRectangle(int x, int y, int w, int h, const Style *style, bool inverse)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool drawDisplayDataWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+void drawDisplayDataWidget(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
     DECL_WIDGET_SPECIFIC(DisplayDataWidget, display_data_widget, widget);
 
-    bool wasFocus = wasFocusWidget(widgetCursor);
-    bool isFocus = isFocusWidget(widgetCursor);
+    widgetCursor.currentState->size = sizeof(WidgetState);
+    widgetCursor.currentState->flags.focused = isFocusWidget(widgetCursor);
+    widgetCursor.currentState->flags.blinking = data::isBlinking(widgetCursor.cursor, widget->data) && g_isBlinkTime;
+    widgetCursor.currentState->data = data::get(widgetCursor.cursor, 
+        widgetCursor.currentState->flags.focused && getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD ? DATA_ID_KEYPAD_TEXT : widget->data);
 
-    if (!refresh) {
-        if (wasFocus != isFocus) {
-            refresh = true;
-        }
-    }
+    bool refresh = !widgetCursor.previousState ||
+        widgetCursor.previousState->flags.focused != widgetCursor.currentState->flags.focused ||
+        widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed ||
+        widgetCursor.previousState->flags.blinking != widgetCursor.currentState->flags.blinking ||
+        widgetCursor.previousState->data != widgetCursor.currentState->data;
 
-    if (isFocus && getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD || widget->data == DATA_ID_KEYPAD_TEXT) {
-        char *text = data::currentSnapshot.keypadSnapshot.text;
-        if (!refresh) {
-            char *previousText = data::previousSnapshot.keypadSnapshot.text;
-            refresh = strcmp(text, previousText) != 0;
-        }
-        if (refresh) {
-            DECL_STYLE(style, display_data_widget->activeStyle);
-            drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
-            return true;
-        }
-        return false;
-    }
-    else {
-        data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
+    if (refresh) {
+        char text[64];
+        widgetCursor.currentState->data.toText(text, sizeof(text));
 
-        bool isBlinking = data::currentSnapshot.isBlinking(widgetCursor.cursor, widget->data);
-        if (isBlinking) {
-            refresh = refresh || (g_isBlinkTime != g_wasBlinkTime);
-        }
+        DECL_STYLE(style, widgetCursor.currentState->flags.focused ? display_data_widget->activeStyle : widget->style);
 
-        data::Value previousValue;
-        if (!refresh) {
-            bool wasBlinking = data::previousSnapshot.isBlinking(widgetCursor.cursor, widget->data);
-            refresh = isBlinking != wasBlinking;
-            if (!refresh) {
-                previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
-                refresh = value != previousValue;
-            }
-        }
-
-        if (refresh) {
-            char text[64];
-            value.toText(text, sizeof(text));
-
-            if (isFocus) {
-                DECL_STYLE(style, display_data_widget->activeStyle);
-                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse, isBlinking && g_isBlinkTime);
-            }
-            else {
-                DECL_WIDGET_STYLE(style, widget);
-                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse, isBlinking && g_isBlinkTime);
-            }
-
-            return true;
-        }
-
-        return false;
+        drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+            widgetCursor.currentState->flags.pressed,
+            widgetCursor.currentState->flags.blinking);
     }
 }
 
-bool drawTextWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+void drawTextWidget(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+
+    widgetCursor.currentState->size = sizeof(WidgetState);
+    widgetCursor.currentState->data = widget->data ? data::get(widgetCursor.cursor, widget->data) : 0;
+
+    bool refresh = !widgetCursor.previousState ||
+        widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed ||
+        widgetCursor.previousState->data != widgetCursor.currentState->data;
+
     if (refresh) {
         DECL_WIDGET_STYLE(style, widget);
 
         if (widget->data) {
-            data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
-            if (value.isString()) {
-                drawText(value.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            if (widgetCursor.currentState->data.isString()) {
+                drawText(widgetCursor.currentState->data.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                    widgetCursor.currentState->flags.pressed);
             } else {
                 char text[64];
-                value.toText(text, sizeof(text));
-                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+                widgetCursor.currentState->data.toText(text, sizeof(text));
+                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                    widgetCursor.currentState->flags.pressed);
             }
         } else {
             DECL_WIDGET_SPECIFIC(TextWidget, display_string_widget, widget);
             DECL_STRING(text, display_string_widget->text);
-            drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                widgetCursor.currentState->flags.pressed);
         }
-
-        return true;
     }
-    return false;
 }
 
-bool drawMultilineTextWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+void drawMultilineTextWidget(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+
+    widgetCursor.currentState->size = sizeof(WidgetState);
+    widgetCursor.currentState->data = widget->data ? data::get(widgetCursor.cursor, widget->data) : 0;
+
+    bool refresh = !widgetCursor.previousState ||
+        widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed ||
+        widgetCursor.previousState->data != widgetCursor.currentState->data;
+
     if (refresh) {
         DECL_WIDGET_STYLE(style, widget);
 
         if (widget->data) {
-            data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
-            if (value.isString()) {
-                drawMultilineText(value.asString(), widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            if (widgetCursor.currentState->data.isString()) {
+                drawMultilineText(widgetCursor.currentState->data.asString(), widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                    widgetCursor.currentState->flags.pressed);
             } else {
                 char text[64];
-                value.toText(text, sizeof(text));
-                drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+                widgetCursor.currentState->data.toText(text, sizeof(text));
+                drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                    widgetCursor.currentState->flags.pressed);
             }
         } else {
             DECL_WIDGET_SPECIFIC(MultilineTextWidget, display_string_widget, widget);
             DECL_STRING(text, display_string_widget->text);
-            drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                widgetCursor.currentState->flags.pressed);
         }
-
-        return true;
     }
-    return false;
 }
 
 void drawScale(const Widget *widget, const ScaleWidget *scale_widget, const Style* style, int y_from, int y_to, int y_min, int y_max, int y_value, int f, int d, bool drawTicks) {
@@ -618,12 +611,14 @@ void drawScale(const Widget *widget, const ScaleWidget *scale_widget, const Styl
     }
 }
 
-bool drawScaleWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
-    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
-    if (!refresh) {
-        data::Value previousValue = data::previousSnapshot.editModeSnapshot.editValue;
-        refresh = previousValue != value;
-    }
+void drawScaleWidget(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+
+    widgetCursor.currentState->size = sizeof(WidgetState);
+    widgetCursor.currentState->data = data::get(widgetCursor.cursor, widget->data);
+
+    bool refresh = !widgetCursor.previousState ||
+        widgetCursor.previousState->data != widgetCursor.currentState->data;
 
     if (refresh) {
         float min = data::getMin(widgetCursor.cursor, widget->data).getFloat();
@@ -659,7 +654,7 @@ bool drawScaleWidget(const WidgetCursor &widgetCursor, const Widget *widget, boo
 
         int y_min = (int)round(min * f);
         int y_max = (int)round(max * f);
-        int y_value = (int)round(value.getFloat() * f);
+        int y_value = (int)round(widgetCursor.currentState->data.getFloat() * f);
 
         int y_from_min = y_min - needleSize / 2;
         int y_from_max = y_max + needleSize / 2;
@@ -709,87 +704,90 @@ bool drawScaleWidget(const WidgetCursor &widgetCursor, const Widget *widget, boo
             edit_mode_slider::scale_width = vertical ? widget->w : widget->h;
             edit_mode_slider::scale_height = (max - min) * f; 
         }
-
-        return true;
     }
-
-    return false;
 }
 
-bool drawButtonWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+void drawButtonWidget(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
     DECL_WIDGET_SPECIFIC(ButtonWidget, button_widget, widget);
 
-    int state = data::currentSnapshot.get(widgetCursor.cursor, button_widget->enabled).getInt();
-    if (!refresh) {
-        int previousState = data::previousSnapshot.get(widgetCursor.cursor, button_widget->enabled).getInt();
-        refresh = state != previousState;
-    }
+    widgetCursor.currentState->size = sizeof(WidgetState);
+    widgetCursor.currentState->flags.enabled = data::get(widgetCursor.cursor, button_widget->enabled).getInt();
+    widgetCursor.currentState->data = widget->data ? data::get(widgetCursor.cursor, widget->data) : 0;
 
-    if (widget->data) {
-        data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
-        if (!refresh) {
-            data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
-            refresh = value != previousValue;
-        }
+    bool refresh = !widgetCursor.previousState ||
+        widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed ||
+        widgetCursor.previousState->flags.enabled != widgetCursor.currentState->flags.enabled ||
+        widgetCursor.previousState->data != widgetCursor.currentState->data;
 
-        if (refresh) {
-            DECL_STYLE(style, state ? widget->style : button_widget->disabledStyle);
+    if (refresh) {
+        if (widget->data) {
+            DECL_STYLE(style, widgetCursor.currentState->flags.enabled ? widget->style : button_widget->disabledStyle);
 
-            if (value.isString()) {
-                drawText(value.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+            if (widgetCursor.currentState->data.isString()) {
+                drawText(widgetCursor.currentState->data.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                    widgetCursor.currentState->flags.pressed);
             } else {
                 char text[64];
-                value.toText(text, sizeof(text));
-                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
+                widgetCursor.currentState->data.toText(text, sizeof(text));
+                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                    widgetCursor.currentState->flags.pressed);
             }
-
-            return true;
-        }
-    } else {
-        if (refresh) {
+        } else {
             DECL_STRING(text, button_widget->text);
-            DECL_STYLE(style, state ? widget->style : button_widget->disabledStyle);
-            drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
-            return true;
+            DECL_STYLE(style, widgetCursor.currentState->flags.enabled ? widget->style : button_widget->disabledStyle);
+            drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                widgetCursor.currentState->flags.pressed);
         }
     }
-
-    return false;
 }
 
-bool drawToggleButtonWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
-    int state = data::currentSnapshot.get(widgetCursor.cursor, widget->data).getInt();
-    if (!refresh) {
-        int previousState = data::previousSnapshot.get(widgetCursor.cursor, widget->data).getInt();
-        refresh = state != previousState;
-    }
+void drawToggleButtonWidget(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+
+    widgetCursor.currentState->size = sizeof(WidgetState);
+    widgetCursor.currentState->flags.enabled = data::get(widgetCursor.cursor, widget->data).getInt();
+
+    bool refresh = !widgetCursor.previousState ||
+        widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed ||
+        widgetCursor.previousState->flags.enabled != widgetCursor.currentState->flags.enabled;
+
     if (refresh) {
         DECL_WIDGET_SPECIFIC(ToggleButtonWidget, toggle_button_widget, widget);
-        DECL_STRING(text, (state == 0 ? toggle_button_widget->text1 : toggle_button_widget->text2));
+        DECL_STRING(text, widgetCursor.currentState->flags.enabled ? toggle_button_widget->text2 : toggle_button_widget->text1);
         DECL_WIDGET_STYLE(style, widget);
-        drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
-        return true;
+        drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+            widgetCursor.currentState->flags.pressed);
     }
-    return false;
 }
 
-bool drawRectangleWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+void drawRectangleWidget(const WidgetCursor &widgetCursor) {
+    widgetCursor.currentState->size = sizeof(WidgetState);
+
+    bool refresh = !widgetCursor.previousState ||
+        widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed;
+
     if (refresh) {
+        DECL_WIDGET(widget, widgetCursor.widgetOffset);
         DECL_WIDGET_STYLE(style, widget);
-        drawRectangle(widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
-        return true;
+        drawRectangle(widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+            widgetCursor.currentState->flags.pressed);
     }
-    return false;
 }
 
-bool drawBitmapWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+void drawBitmapWidget(const WidgetCursor &widgetCursor) {
+    widgetCursor.currentState->size = sizeof(WidgetState);
+
+    bool refresh = !widgetCursor.previousState ||
+        widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed;
+
     if (refresh) {
+        DECL_WIDGET(widget, widgetCursor.widgetOffset);
         DECL_WIDGET_SPECIFIC(BitmapWidget, display_bitmap_widget, widget);
         DECL_WIDGET_STYLE(style, widget);
-        drawBitmap(display_bitmap_widget->bitmap, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style, inverse);
-        return true;
+        drawBitmap(display_bitmap_widget->bitmap, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+            widgetCursor.currentState->flags.pressed);
     }
-    return false;
 }
 
 int calcValuePosInBarGraphWidget(data::Value &value, float min, float max, int d) {
@@ -819,41 +817,48 @@ void drawLineInBarGraphWidget(const BarGraphWidget *barGraphWidget, int p, OBJ_O
     }
 }
 
-bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse, bool fullScale) {
-    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
-    if (!refresh) {
-        data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
-        refresh = previousValue != value;
-    }
+void drawBarGraphWidget(const WidgetCursor &widgetCursor) {
+    bool fullScale = true;
+
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+    DECL_WIDGET_SPECIFIC(BarGraphWidget, barGraphWidget, widget);
+
+    widgetCursor.currentState->size = sizeof(BarGraphWidgetState);
+    widgetCursor.currentState->data = data::get(widgetCursor.cursor, widget->data);
+    ((BarGraphWidgetState *)widgetCursor.currentState)->line1Data = data::get(widgetCursor.cursor, barGraphWidget->line1Data);
+    ((BarGraphWidgetState *)widgetCursor.currentState)->line2Data = data::get(widgetCursor.cursor, barGraphWidget->line2Data);
+
+    bool refresh = !widgetCursor.previousState ||
+        widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed ||
+        widgetCursor.previousState->data != widgetCursor.currentState->data ||
+        ((BarGraphWidgetState *)widgetCursor.previousState)->line1Data != ((BarGraphWidgetState *)widgetCursor.currentState)->line1Data ||
+        ((BarGraphWidgetState *)widgetCursor.previousState)->line2Data != ((BarGraphWidgetState *)widgetCursor.currentState)->line2Data;
 
     if (refresh) {
-        DECL_WIDGET_SPECIFIC(BarGraphWidget, barGraphWidget, widget);
-
         int x = widgetCursor.x;
         int y = widgetCursor.y;
         const int w = widget->w;
         const int h = widget->h;
 
-        data::Value line2 = data::currentSnapshot.get(widgetCursor.cursor, barGraphWidget->line2Data);
-
         float min = data::getMin(widgetCursor.cursor, widget->data).getFloat();
-        float max = fullScale ? line2.getFloat() : data::getMax(widgetCursor.cursor, widget->data).getFloat();
+        float max = fullScale ? 
+            ((BarGraphWidgetState *)widgetCursor.currentState)->line2Data.getFloat() :
+            data::getMax(widgetCursor.cursor, widget->data).getFloat();
 
         bool horizontal = barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_LEFT_RIGHT || barGraphWidget->orientation == BAR_GRAPH_ORIENTATION_RIGHT_LEFT;
 
         int d = horizontal ? w : h;
 
         // calc bar  position (monitored value)
-        int pValue = calcValuePosInBarGraphWidget(value, min, max, d);
+        int pValue = calcValuePosInBarGraphWidget(widgetCursor.currentState->data, min, max, d);
 
         // calc line 1 position (set value) 
-        data::Value line1 = data::currentSnapshot.get(widgetCursor.cursor, barGraphWidget->line1Data);
-        int pLine1 = calcValuePosInBarGraphWidget(line1, min, max, d);
+        int pLine1 = calcValuePosInBarGraphWidget(((BarGraphWidgetState *)widgetCursor.currentState)->line1Data, min, max, d);
 
         int pLine2;
         if (!fullScale) {
             // calc line 2 position (limit value) 
-            pLine2 = calcValuePosInBarGraphWidget(line2, min, max, d);
+            pLine2 = calcValuePosInBarGraphWidget(((BarGraphWidgetState *)widgetCursor.currentState)->line2Data, min, max, d);
 
             // make sure line positions don't overlap
             if (pLine1 == pLine2) {
@@ -881,8 +886,8 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
             inverseColor = style->background_color;
         }
 
-        uint16_t fg = inverse ? inverseColor : style->color;
-        uint16_t bg = inverse ? inverseColor : style->background_color;
+        uint16_t fg = widgetCursor.currentState->flags.pressed ? inverseColor : style->color;
+        uint16_t bg = widgetCursor.currentState->flags.pressed ? inverseColor : style->background_color;
 
         if (horizontal) {
             // calc text position
@@ -892,7 +897,7 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
             if (barGraphWidget->textStyle) {
                 font::Font font = styleGetFont(&textStyle);
     
-                value.toText(valueText, sizeof(valueText));
+                widgetCursor.currentState->data.toText(valueText, sizeof(valueText));
                 wText = lcd::lcd.measureStr(valueText, -1, font, w);
                 
                 int padding = textStyle.padding_horizontal;
@@ -990,7 +995,7 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
             if (barGraphWidget->textStyle) {
                 font::Font font = styleGetFont(&textStyle);
     
-                value.toText(valueText, sizeof(valueText));
+                widgetCursor.currentState->data.toText(valueText, sizeof(valueText));
                 hText = font.getHeight();
                 
                 int padding = textStyle.padding_vertical;
@@ -1081,11 +1086,7 @@ bool drawBarGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, 
                 drawLineInBarGraphWidget(barGraphWidget, pLine2, barGraphWidget->line2Style, x, y, w, h);
             }
         }
-
-        return true;
     }
-
-    return false;
 }
 
 int getYValue(
@@ -1162,62 +1163,50 @@ void drawYTGraph(
     }
 }
 
-bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+void drawYTGraphWidget(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
     DECL_WIDGET_SPECIFIC(YTGraphWidget, ytGraphWidget, widget);
     DECL_WIDGET_STYLE(style, widget);
     DECL_STYLE(y1Style, ytGraphWidget->y1Style);
     DECL_STYLE(y2Style, ytGraphWidget->y2Style);
 
-    bool updated = false;
+    widgetCursor.currentState->size = sizeof(YTGraphWidgetState);
+    widgetCursor.currentState->data = data::get(widgetCursor.cursor, widget->data);
+    ((YTGraphWidgetState *)widgetCursor.currentState)->y2Data = data::get(widgetCursor.cursor, ytGraphWidget->y2Data);
 
-    // draw background
+    bool refresh = !widgetCursor.previousState ||
+        widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed;
+
     if (refresh) {
-        uint16_t color = inverse ? style->color : style->background_color;
+        // draw background
+        uint16_t color = widgetCursor.currentState->flags.pressed ? style->color : style->background_color;
         lcd::lcd.setColor(color);
         lcd::lcd.fillRect(widgetCursor.x, widgetCursor.y, widgetCursor.x + (int)widget->w - 1, widgetCursor.y + (int)widget->h - 1);
-
-        updated = true;
     }
 
-    int textWidth = 62; // TODO>
+    int textWidth = 62; // TODO this is hardcoded value
     int textHeight = widget->h / 2;
 
-    bool refreshText;
-
     // draw first value text
-    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
-
-    refreshText = false;
-    if (!refresh) {
-        data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
-        refreshText = value != previousValue;
-    }
+    bool refreshText = !widgetCursor.previousState || widgetCursor.previousState->data != widgetCursor.currentState->data;
 
     if (refresh || refreshText) {
         char text[64];
-        value.toText(text, sizeof(text));
+        widgetCursor.currentState->data.toText(text, sizeof(text));
 
-        drawText(text, -1, widgetCursor.x, widgetCursor.y, textWidth, textHeight, y1Style, inverse);
-
-        updated = true;
+        drawText(text, -1, widgetCursor.x, widgetCursor.y, textWidth, textHeight, y1Style,
+            widgetCursor.currentState->flags.pressed);
     }
 
     // draw second value text
-    value = data::currentSnapshot.get(widgetCursor.cursor, ytGraphWidget->y2Data);
-
-    refreshText = false;
-    if (!refresh) {
-        data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, ytGraphWidget->y2Data);
-        refreshText = value != previousValue;
-    }
+    refreshText = !widgetCursor.previousState || ((YTGraphWidgetState *)widgetCursor.previousState)->y2Data != ((YTGraphWidgetState *)widgetCursor.currentState)->y2Data;
 
     if (refresh || refreshText) {
         char text[64];
-        value.toText(text, sizeof(text));
+        ((YTGraphWidgetState *)widgetCursor.currentState)->y2Data.toText(text, sizeof(text));
 
-        drawText(text, -1, widgetCursor.x, widgetCursor.y + textHeight, textWidth, textHeight, y2Style, inverse);
-
-        updated = true;
+        drawText(text, -1, widgetCursor.x, widgetCursor.y + textHeight, textWidth, textHeight, y2Style,
+            widgetCursor.currentState->flags.pressed);
     }
 
     // draw graph
@@ -1242,7 +1231,7 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
     } else {
         startPosition = lastPosition[widgetCursor.cursor.i];
         if (startPosition == currentHistoryValuePosition) {
-            return updated;
+            return;
         }
         endPosition = currentHistoryValuePosition;
     }
@@ -1254,8 +1243,8 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
             textWidth, graphWidth,
             widget->data, min1, max1, y1Style->color,
             ytGraphWidget->y2Data, min2, max2, y2Style->color,
-            inverse ? style->color: style->background_color,
-            inverse ? style->background_color : style->color);
+            widgetCursor.currentState->flags.pressed ? style->color: style->background_color,
+            widgetCursor.currentState->flags.pressed ? style->background_color : style->color);
     } else {
         drawYTGraph(widgetCursor, widget,
             startPosition, numHistoryValues,
@@ -1263,8 +1252,8 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
             textWidth, graphWidth,
             widget->data, min1, max1, y1Style->color,
             ytGraphWidget->y2Data, min2, max2, y2Style->color,
-            inverse ? style->color: style->background_color,
-            inverse ? style->background_color : style->color);
+            widgetCursor.currentState->flags.pressed ? style->color: style->background_color,
+            widgetCursor.currentState->flags.pressed ? style->background_color : style->color);
 
         drawYTGraph(widgetCursor, widget,
             0, endPosition,
@@ -1272,8 +1261,8 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
             textWidth, graphWidth,
             widget->data, min1, max1, y1Style->color,
             ytGraphWidget->y2Data, min2, max2, y2Style->color,
-            inverse ? style->color: style->background_color,
-            inverse ? style->background_color : style->color);
+            widgetCursor.currentState->flags.pressed ? style->color: style->background_color,
+            widgetCursor.currentState->flags.pressed ? style->background_color : style->color);
     }
 
     int x = widgetCursor.x + textWidth;
@@ -1295,19 +1284,19 @@ bool drawYTGraphWidget(const WidgetCursor &widgetCursor, const Widget *widget, b
     }
 
     lastPosition[widgetCursor.cursor.i] = currentHistoryValuePosition;
-
-    return updated;
 }
 
-bool drawUpDownWidget(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
+void drawUpDownWidget(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
     DECL_WIDGET_SPECIFIC(UpDownWidget, upDownWidget, widget);
 
-    data::Value value = data::currentSnapshot.get(widgetCursor.cursor, widget->data);
-    if (!refresh) {
-        data::Value previousValue = data::previousSnapshot.get(widgetCursor.cursor, widget->data);
-        refresh = value != previousValue;
-    }
-    
+    widgetCursor.currentState->size = sizeof(WidgetState);
+    widgetCursor.currentState->data = data::get(widgetCursor.cursor, widget->data);
+
+    bool refresh = !widgetCursor.previousState ||
+        widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed ||
+        widgetCursor.previousState->data != widgetCursor.currentState->data;
+
     if (refresh) {
         DECL_STRING(downButtonText, upDownWidget->downButtonText);
         DECL_STYLE(buttonsStyle, upDownWidget->buttonsStyle);
@@ -1316,28 +1305,24 @@ bool drawUpDownWidget(const WidgetCursor &widgetCursor, const Widget *widget, bo
         int buttonWidth = buttonsFont.getHeight();
 
         drawText(downButtonText, -1, widgetCursor.x, widgetCursor.y, buttonWidth, (int)widget->h, buttonsStyle,
-            (inverse || g_selectedWidget == widgetCursor) && g_selectedWidget.segment == UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON);
+            (widgetCursor.currentState->flags.pressed || g_selectedWidget == widgetCursor) && g_selectedWidget.segment == UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON);
 
         char text[64];
-        value.toText(text, sizeof(text));
+        widgetCursor.currentState->data.toText(text, sizeof(text));
         DECL_STYLE(style, widget->style);
         drawText(text, -1, widgetCursor.x + buttonWidth, widgetCursor.y, (int)(widget->w - 2 * buttonWidth), (int)widget->h, style, false);
 
         DECL_STRING(upButtonText, upDownWidget->upButtonText);
         drawText(upButtonText, -1, widgetCursor.x + widget->w - buttonWidth, widgetCursor.y, buttonWidth, (int)widget->h, buttonsStyle,
-            (inverse || g_selectedWidget == widgetCursor) && g_selectedWidget.segment == UP_DOWN_WIDGET_SEGMENT_UP_BUTTON);
-
-        return true;
+            (widgetCursor.currentState->flags.pressed || g_selectedWidget == widgetCursor) && g_selectedWidget.segment == UP_DOWN_WIDGET_SEGMENT_UP_BUTTON);
     }
-
-    return false;
 }
 
 void upDown() {
     if (g_foundWidgetAtDown) {
         DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
         if (widget->type == WIDGET_TYPE_UP_DOWN) {
-            int value = data::currentSnapshot.get(g_foundWidgetAtDown.cursor, widget->data).getInt();
+            int value = data::get(g_foundWidgetAtDown.cursor, widget->data).getInt();
 
             int newValue = value;
 
@@ -1364,38 +1349,50 @@ void upDown() {
     }
 }
 
-bool drawWidget(const WidgetCursor &widgetCursor, bool refresh) {
+void drawWidget(const WidgetCursor &widgetCursor_) {
+    WidgetCursor widgetCursor = widgetCursor_;
+
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
-    bool inverse = g_selectedWidget == widgetCursor;
+    uint8_t state[128];
+    if (widgetCursor.currentState == 0) {
+        widgetCursor.currentState = (WidgetState *)&state;
+    } else {
+        //static uint16_t g_maxStateSize = 0; 
+        //uint16_t stateSize = (uint8_t *)widgetCursor.currentState - (getCurrentStateBufferIndex() == 0 ? &g_stateBuffer[0][0] : &g_stateBuffer[1][0]);
+        //if (stateSize > g_maxStateSize) {
+        //    g_maxStateSize = stateSize;
+        //    DebugTraceF("%d", (int)g_maxStateSize);
+        //}
+    }
+
+    widgetCursor.currentState->flags.pressed = g_selectedWidget == widgetCursor;
 
     if (widget->type == WIDGET_TYPE_DISPLAY_DATA) {
-        return drawDisplayDataWidget(widgetCursor, widget, refresh, inverse);
+        drawDisplayDataWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_TEXT) {
-        return drawTextWidget(widgetCursor, widget, refresh, inverse);
+        drawTextWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_MULTILINE_TEXT) {
-        return drawMultilineTextWidget(widgetCursor, widget, refresh, inverse);
+        drawMultilineTextWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_RECTANGLE) {
-        return drawRectangleWidget(widgetCursor, widget, refresh, inverse);
+        drawRectangleWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_BITMAP) {
-        return drawBitmapWidget(widgetCursor, widget, refresh, inverse);
+        drawBitmapWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_BUTTON) {
-        return drawButtonWidget(widgetCursor, widget, refresh, inverse);
+        drawButtonWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_TOGGLE_BUTTON) {
-        return drawToggleButtonWidget(widgetCursor, widget, refresh, inverse);
+        drawToggleButtonWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_BUTTON_GROUP) {
-        return widgetButtonGroup::draw(widgetCursor, widget, refresh, inverse);
+        widgetButtonGroup::draw(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_SCALE) {
-        return drawScaleWidget(widgetCursor, widget, refresh, inverse);
+        drawScaleWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_BAR_GRAPH) {
-        return drawBarGraphWidget(widgetCursor, widget, refresh, inverse, true);
+        drawBarGraphWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_YT_GRAPH) {
-        return drawYTGraphWidget(widgetCursor, widget, refresh, inverse);
+        drawYTGraphWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_UP_DOWN) {
-        return drawUpDownWidget(widgetCursor, widget, refresh, inverse);
-    } 
-
-    return false;
+        drawUpDownWidget(widgetCursor);
+    }
 }
 
 void refreshWidget(WidgetCursor widgetCursor) {
@@ -1403,7 +1400,7 @@ void refreshWidget(WidgetCursor widgetCursor) {
         ((InternalPage *)getActivePage())->drawWidget(widgetCursor, widgetCursor == g_selectedWidget);
     } else {
         g_widgetRefresh = true;
-        drawWidget(widgetCursor, true);
+        drawWidget(widgetCursor);
         g_widgetRefresh = false;
     }
 }
@@ -1421,7 +1418,40 @@ void deselectWidget() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, bool refresh, data::Cursor &cursor, EnumWidgetsCallback callback) {
+WidgetState *next(WidgetState *p) {
+    return p ? (WidgetState *)(((uint8_t *)p) + p->size) : 0;
+}
+
+void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback);
+
+void enumContainer(List widgets, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
+    WidgetState *savedCurrentState = currentState;
+
+    WidgetState *endOfContainerInPreviousState;
+    if (previousState) endOfContainerInPreviousState = next(previousState);
+
+    // move to the first child widget state
+    if (previousState) ++previousState;
+    if (currentState) ++currentState;
+
+    for (int index = 0; index < widgets.count; ++index) {
+        OBJ_OFFSET childWidgetOffset = getListItemOffset(widgets, index, sizeof(Widget));
+        enumWidget(childWidgetOffset, x, y, cursor, previousState, currentState, callback);
+
+        if (previousState) {
+            previousState = next(previousState);
+            if (previousState >= endOfContainerInPreviousState) previousState = 0;
+        }
+        
+        currentState = next(currentState);
+    }
+
+    if (currentState) {
+        savedCurrentState->size = ((uint8_t *)currentState) - ((uint8_t *)savedCurrentState);
+    }
+}
+
+void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
     DECL_WIDGET(widget, widgetOffset);
 
     x += widget->x;
@@ -1429,20 +1459,23 @@ void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, bool refresh, data::Curso
 
     if (widget->type == WIDGET_TYPE_CONTAINER) {
         DECL_WIDGET_SPECIFIC(ContainerWidget, container, widget);
-        for (int index = 0; index < container->widgets.count; ++index) {
-            OBJ_OFFSET childWidgetOffset = getListItemOffset(container->widgets, index, sizeof(Widget));
-            enumWidget(childWidgetOffset, x, y, refresh, cursor, callback);
-        }
+        enumContainer(container->widgets, x, y, cursor, previousState, currentState, callback);
     }
     else if (widget->type == WIDGET_TYPE_CUSTOM) {
         DECL_WIDGET_SPECIFIC(CustomWidgetSpecific, customWidgetSpecific, widget);
         DECL_CUSTOM_WIDGET(customWidget, customWidgetSpecific->customWidget);
-        for (int index = 0; index < customWidget->widgets.count; ++index) {
-            OBJ_OFFSET childWidgetOffset = getListItemOffset(customWidget->widgets, index, sizeof(Widget));
-            enumWidget(childWidgetOffset, x, y, refresh, cursor, callback);
-        }
+        enumContainer(customWidget->widgets, x, y, cursor, previousState, currentState, callback);
     }
     else if (widget->type == WIDGET_TYPE_LIST) {
+        WidgetState *savedCurrentState = currentState;
+
+        WidgetState *endOfContainerInPreviousState;
+        if (previousState) endOfContainerInPreviousState = next(previousState);
+
+        // move to the first child widget state
+        if (previousState) ++previousState;
+        if (currentState) ++currentState;
+
         int xOffset = 0;
         int yOffset = 0;
         for (int index = 0; index < data::count(widget->data); ++index) {
@@ -1454,7 +1487,7 @@ void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, bool refresh, data::Curso
             if (listWidget->listType == LIST_TYPE_VERTICAL) {
                 DECL_WIDGET(childWidget, childWidgetOffset);
                 if (yOffset < widget->h) {
-                    enumWidget(childWidgetOffset, x + xOffset, y + yOffset, refresh, cursor, callback);
+                    enumWidget(childWidgetOffset, x + xOffset, y + yOffset, cursor, previousState, currentState, callback);
                     yOffset += childWidget->h;
                 } else {
                     // TODO: add vertical scroll
@@ -1463,40 +1496,65 @@ void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, bool refresh, data::Curso
             } else {
                 DECL_WIDGET(childWidget, childWidgetOffset);
                 if (xOffset < widget->w) {
-                    enumWidget(childWidgetOffset, x + xOffset, y + yOffset, refresh, cursor, callback);
+                    enumWidget(childWidgetOffset, x + xOffset, y + yOffset, cursor, previousState, currentState, callback);
                     xOffset += childWidget->w;
                 } else {
                     // TODO: add horizontal scroll
                     break;
                 }
             }
+
+            if (previousState) {
+                previousState = next(previousState);
+                if (previousState >= endOfContainerInPreviousState) previousState = 0;
+            }
+        
+            currentState = next(currentState);
+        }
+
+        if (currentState) {
+            savedCurrentState->size = ((uint8_t *)currentState) - ((uint8_t *)savedCurrentState);
         }
 
         data::select(cursor, widget->data, -1);
     }
     else if (widget->type == WIDGET_TYPE_SELECT) {
-        int index = data::currentSnapshot.get(cursor, widget->data).getInt();
-        data::select(cursor, widget->data, index);
+        data::Value indexValue = data::get(cursor, widget->data);
 
+        if (currentState) {
+            currentState->data = indexValue;
+        }
+
+        if (previousState && previousState->data != currentState->data) {
+            previousState = 0;
+        }
+
+        WidgetState *savedCurrentState = currentState;
+
+        // move to the selected widget state
+        if (previousState) ++previousState;
+        if (currentState) ++currentState;
+
+        int index = indexValue.getInt();
+        data::select(cursor, widget->data, index);
         DECL_WIDGET_SPECIFIC(ContainerWidget, containerWidget, widget);
         OBJ_OFFSET selectedWidgetOffset = getListItemOffset(containerWidget->widgets, index, sizeof(Widget));
 
-        if (!refresh) {
-            int previousIndex = data::previousSnapshot.get(cursor, widget->data).getInt();
-            refresh = index != previousIndex;
-        }
+        enumWidget(selectedWidgetOffset, x, y, cursor, previousState, currentState, callback);
 
-        enumWidget(selectedWidgetOffset, x, y, refresh, cursor, callback);
+        if (currentState) {
+            savedCurrentState->size = sizeof(WidgetState) + currentState->size;
+        }
     }
     else {
-        callback(WidgetCursor(widgetOffset, x, y, cursor), refresh);
+        callback(WidgetCursor(widgetOffset, x, y, cursor, previousState, currentState));
     }
 }
 
-void enumWidgets(int pageIndex, bool refresh, EnumWidgetsCallback callback) {
+void enumWidgets(int pageIndex, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
     data::Cursor cursor;
     cursor.reset();
-    enumWidget(getPageOffset(pageIndex), 0, 0, refresh, cursor, callback);
+    enumWidget(getPageOffset(pageIndex), 0, 0, cursor, previousState, currentState, callback);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1529,10 +1587,15 @@ void drawActivePage(bool refresh) {
     g_wasBlinkTime = g_isBlinkTime;
     g_isBlinkTime = (micros() % (2 * CONF_GUI_BLINK_TIME)) > CONF_GUI_BLINK_TIME && touch::event_type == touch::TOUCH_NONE;
 
-    data::previousSnapshot = data::currentSnapshot;
-    data::currentSnapshot.takeSnapshot();
+    if (refresh) {
+        g_previousState = 0;
+        g_currentState = (WidgetState *)(&g_stateBuffer[0][0]);
+    } else {
+        g_previousState = g_currentState;
+        g_currentState = (WidgetState *)(&g_stateBuffer[getCurrentStateBufferIndex() == 0 ? 1 : 0][0]);
+    }
 
-    enumWidgets(getActivePageId(), refresh, drawWidget);
+    enumWidgets(getActivePageId(), g_previousState, g_currentState, drawWidget);
 }
 
 static bool g_refreshPageOnNextTick;
@@ -1576,7 +1639,7 @@ static int g_find_widget_at_x;
 static int g_find_widget_at_y;
 static WidgetCursor g_foundWidget;
 
-bool findWidgetStep(const WidgetCursor &widgetCursor, bool refresh) {
+void findWidgetStep(const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
     bool inside = 
@@ -1595,11 +1658,7 @@ bool findWidgetStep(const WidgetCursor &widgetCursor, bool refresh) {
                 g_foundWidget.segment = UP_DOWN_WIDGET_SEGMENT_UP_BUTTON;
             }
         }
-
-        return true;
     }
-
-    return false;
 }
 
 WidgetCursor findWidget(int x, int y) {
@@ -1610,7 +1669,7 @@ WidgetCursor findWidget(int x, int y) {
 
         g_find_widget_at_x = touch::x;
         g_find_widget_at_y = touch::y;
-        enumWidgets(getActivePageId(), true, findWidgetStep);
+        enumWidgets(getActivePageId(), 0, 0, findWidgetStep);
 
         return g_foundWidget;
     }

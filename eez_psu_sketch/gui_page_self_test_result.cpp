@@ -22,7 +22,6 @@
 
 #include "devices.h"
 
-#include "gui_data_snapshot.h"
 #include "gui_page_self_test_result.h"
 
 namespace eez {
@@ -37,7 +36,7 @@ void SelfTestResultPage::pageDidDisappear() {
 	free(selfTestResult);
 }
 
-data::Value SelfTestResultPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value SelfTestResultPage::getData(const data::Cursor &cursor, uint8_t id) {
 	if (id == DATA_ID_SELF_TEST_RESULT) {
 		return data::Value(selfTestResult);
 	}

@@ -26,15 +26,14 @@ namespace gui {
 
 class ChSettingsAdvPage : public Page {
 public:
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 };
 
 class ChSettingsAdvLRipplePage : public SetPage {
 public:
 	ChSettingsAdvLRipplePage();
 
-	void takeSnapshot(data::Snapshot *snapshot);
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
 	int getDirty();
 	void set();
@@ -52,8 +51,7 @@ private:
 
 class ChSettingsAdvRSensePage : public Page {
 public:
-	void takeSnapshot(data::Snapshot *snapshot);
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
 	void toggleStatus();
 };
@@ -65,7 +63,7 @@ public:
 
 class ChSettingsAdvCouplingPage : public Page {
 public:
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
     void uncouple();
     void setParallelInfo();
@@ -86,8 +84,7 @@ class ChSettingsAdvViewPage : public SetPage {
 public:
 	ChSettingsAdvViewPage();
 
-	void takeSnapshot(data::Snapshot *snapshot);
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
     void editDisplayValue1();
     void editDisplayValue2();

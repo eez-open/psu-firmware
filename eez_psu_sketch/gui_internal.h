@@ -98,6 +98,7 @@ extern uint8_t g_focusDataId;
 extern data::Value g_focusEditValue;
 bool wasFocusWidget(const WidgetCursor &widgetCursor);
 bool isFocusWidget(const WidgetCursor &widgetCursor);
+bool isFocusChanged();
 
 void upDown();
 

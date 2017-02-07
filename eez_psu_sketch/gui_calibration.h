@@ -29,7 +29,7 @@ const int MAX_STEP_NUM = 7;
 
 void editPassword();
 void start();
-data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+data::Value getData(const data::Cursor &cursor, uint8_t id);
 void set();
 void previousStep();
 void nextStep();

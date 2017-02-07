@@ -22,17 +22,13 @@
 
 #include "temperature.h"
 
-#include "gui_data_snapshot.h"
 #include "gui_page_ch_settings_info.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 
-void ChSettingsInfoPage::takeSnapshot(data::Snapshot *snapshot) {
-}
-
-data::Value ChSettingsInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value ChSettingsInfoPage::getData(const data::Cursor &cursor, uint8_t id) {
 	return data::Value();
 }
 

@@ -22,7 +22,6 @@
 
 #include "sound.h"
 #include "gui_widget_button_group.h"
-#include "gui_data_snapshot.h"
 
 namespace eez {
 namespace psu {
@@ -89,21 +88,23 @@ void drawButtons(const Widget* widget, int x, int y, const Style *style, int sel
 	}
 }
 
-bool draw(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse) {
-    int selectedButton = data::currentSnapshot.get(widgetCursor.cursor, widget->data).getInt();
-    if (!refresh) {
-        int previousSelectedButton = data::previousSnapshot.get(widgetCursor.cursor, widget->data).getInt();
-        refresh = selectedButton != previousSelectedButton;
-    }
+void draw(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+
+    widgetCursor.currentState->size = sizeof(WidgetState);
+    widgetCursor.currentState->data = data::get(widgetCursor.cursor, widget->data);
+
+    bool refresh = !widgetCursor.previousState ||
+        widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed ||
+        widgetCursor.previousState->data != widgetCursor.currentState->data;
+
     if (refresh) {
         const data::Value *labels;
         int count;
         data::getList(widgetCursor.cursor, widget->data, &labels, count);
         DECL_WIDGET_STYLE(style, widget);
-        drawButtons(widget, widgetCursor.x, widgetCursor.y, style, selectedButton, labels, count);
-        return true;
+        drawButtons(widget, widgetCursor.x, widgetCursor.y, style, widgetCursor.currentState->data.getInt(), labels, count);
     }
-    return false;
 }
 
 void onTouchDown(const WidgetCursor &widgetCursor) {

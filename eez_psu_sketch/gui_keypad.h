@@ -30,20 +30,7 @@ namespace data {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-struct KeypadSnapshot {
-    char text[MAX_KEYPAD_TEXT_LENGTH + 2]; // +2 for cursor and zero at the end
-	bool isUpperCase;
-    data::Value keypadUnit;
-
-    void takeSnapshot(data::Snapshot *snapshot);
-	data::Value get(uint8_t id);
-};
-
-////////////////////////////////////////////////////////////////////////////////
-
 class Keypad : public Page {
-    friend struct KeypadSnapshot;
-
 public:
     Keypad();
 
@@ -63,20 +50,21 @@ public:
     virtual void ok();
     virtual void cancel();
 
+    virtual void getKeypadText(char *text);
+
     void appendChar(char c);
     void appendCursor(char *text);
 
+    virtual data::Value getData(uint8_t id);
+
 protected:
     const char *m_label;
-    char m_keypadText[sizeof(KeypadSnapshot::text)];
+    char m_keypadText[MAX_KEYPAD_TEXT_LENGTH + 2];
     int m_maxChars;
-    void (*m_okCallback)(char *);
+    void (*m_okCallback)(char *); // +2 for cursor and zero at the end
     void (*m_cancelCallback)();
 
     void init(const char *label, void (*ok)(char *), void (*cancel)());
-
-    virtual void takeSnapshot(data::Snapshot *snapshot);
-    virtual data::Value getData(KeypadSnapshot *keypadSnapshot, uint8_t id);
 
 private:
     bool m_isUpperCase;

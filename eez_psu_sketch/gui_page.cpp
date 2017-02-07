@@ -21,7 +21,6 @@
 #if OPTION_DISPLAY
 
 #include "gui_internal.h"
-#include "gui_data_snapshot.h"
 
 namespace eez {
 namespace psu {
@@ -32,10 +31,7 @@ namespace gui {
 void Page::pageWillAppear() {
 }
 
-void Page::takeSnapshot(data::Snapshot *snapshot) {
-}
-
-data::Value Page::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value Page::getData(const data::Cursor &cursor, uint8_t id) {
 	return data::Value();
 }
 
@@ -53,13 +49,9 @@ bool Page::setData(const data::Cursor &cursor, uint8_t id, data::Value value) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void SetPage::takeSnapshot(data::Snapshot *snapshot) {
-	snapshot->flags.setPageDirty = getDirty();
-}
-
-data::Value SetPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value SetPage::getData(const data::Cursor &cursor, uint8_t id) {
 	if (id == DATA_ID_SET_PAGE_DIRTY) {
-		return data::Value(snapshot->flags.setPageDirty);
+		return data::Value(getDirty());
 	}
 	return data::Value();
 }
@@ -159,7 +151,7 @@ WidgetCursor SelectFromEnumPage::findWidget(int x, int y) {
         }
     }
 
-    return WidgetCursor(i + 1, x, y, -1);
+    return WidgetCursor(i + 1, x, y, -1, 0, 0);
 }
 
 void SelectFromEnumPage::drawWidget(const WidgetCursor &widgetCursor, bool selected) {

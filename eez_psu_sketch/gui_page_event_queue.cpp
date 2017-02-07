@@ -20,55 +20,57 @@
 
 #if OPTION_DISPLAY
 
-#include "gui_data_snapshot.h"
 #include "gui_page_event_queue.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 
+event_queue::Event g_stateEvents[2][event_queue::EVENTS_PER_PAGE];
+
 void EventQueuePage::pageWillAppear() {
 	event_queue::moveToFirstPage();
 	event_queue::markAsRead();
 }
 
-void EventQueuePage::takeSnapshot(data::Snapshot *snapshot) {
-	int n = event_queue::getActivePageNumEvents();
-	for (int i = 0; i < event_queue::EVENTS_PER_PAGE; ++i) {
-		if (i < n) {
-			event_queue::getActivePageEvent(i, snapshot->events + i);
-		} else {
-			snapshot->events[i].eventId = event_queue::EVENT_TYPE_NONE;
-		}
-	}
-	snapshot->eventQueuePageInfo = data::Value::PageInfo(event_queue::getActivePageIndex(), event_queue::getNumPages());
-}
+data::Value EventQueuePage::getData(const data::Cursor &cursor, uint8_t id) {
+	if (cursor.i >= 0 && (id == DATA_ID_EVENT_QUEUE_EVENTS_TYPE || id == DATA_ID_EVENT_QUEUE_EVENTS_MESSAGE)) {
+        event_queue::Event *event = &g_stateEvents[getCurrentStateBufferIndex()][cursor.i];
 
-data::Value EventQueuePage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
-	if (cursor.i >= 0) {
-		if (id == DATA_ID_EVENT_QUEUE_EVENTS_TYPE) {
-			return data::Value(event_queue::getEventType(snapshot->events + cursor.i));
+        int n = event_queue::getActivePageNumEvents();
+        if (cursor.i < n) {
+    		event_queue::getActivePageEvent(cursor.i, event);
+		} else {
+            event->eventId = event_queue::EVENT_TYPE_NONE;
+		}
+
+        if (id == DATA_ID_EVENT_QUEUE_EVENTS_TYPE) {
+            return data::Value(event_queue::getEventType(event));
 		} 
 		
 		if (id == DATA_ID_EVENT_QUEUE_EVENTS_MESSAGE) {
-			return data::Value(snapshot->events + cursor.i);
+			return data::Value(event);
 		}
 	}
 
 	if (id == DATA_ID_EVENT_QUEUE_MULTIPLE_PAGES) {
-		return data::Value(snapshot->eventQueuePageInfo.getNumPages() > 1 ? 1 : 0);
+        data::Value eventQueuePageInfo = data::Value::PageInfo(event_queue::getActivePageIndex(), event_queue::getNumPages());
+		return data::Value(eventQueuePageInfo.getNumPages() > 1 ? 1 : 0);
 	}
 
 	if (id == DATA_ID_EVENT_QUEUE_PREVIOUS_PAGE_ENABLED) {
-		return data::Value(snapshot->eventQueuePageInfo.getPageIndex() > 0 ? 1 : 0);
+        data::Value eventQueuePageInfo = data::Value::PageInfo(event_queue::getActivePageIndex(), event_queue::getNumPages());
+		return data::Value(eventQueuePageInfo.getPageIndex() > 0 ? 1 : 0);
 	}
 
 	if (id == DATA_ID_EVENT_QUEUE_NEXT_PAGE_ENABLED) {
-		return data::Value(snapshot->eventQueuePageInfo.getPageIndex() < snapshot->eventQueuePageInfo.getNumPages() - 1 ? 1 : 0);
+		data::Value eventQueuePageInfo = data::Value::PageInfo(event_queue::getActivePageIndex(), event_queue::getNumPages());
+        return data::Value(eventQueuePageInfo.getPageIndex() < eventQueuePageInfo.getNumPages() - 1 ? 1 : 0);
 	}
 
 	if (id == DATA_ID_EVENT_QUEUE_PAGE_INFO) {
-		return snapshot->eventQueuePageInfo;
+        data::Value eventQueuePageInfo = data::Value::PageInfo(event_queue::getActivePageIndex(), event_queue::getNumPages());
+		return eventQueuePageInfo;
 	}
 
 	return data::Value();

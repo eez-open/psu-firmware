@@ -30,8 +30,7 @@ class SysSettingsDateTimePage : public SetPage {
 public:
 	SysSettingsDateTimePage();
 
-	void takeSnapshot(data::Snapshot *snapshot);
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
 	void edit();
 	void setValue(float value);
@@ -53,8 +52,7 @@ private:
 
 class SysSettingsEthernetPage : public Page {
 public:
-	void takeSnapshot(data::Snapshot *snapshot);
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
     static void enable();
     static void disable();
@@ -62,8 +60,7 @@ public:
 
 class SysSettingsProtectionsPage : public Page {
 public:
-	void takeSnapshot(data::Snapshot *snapshot);
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
     static void toggleOutputProtectionCouple();
     static void toggleShutdownWhenProtectionTripped();
@@ -74,8 +71,7 @@ class SysSettingsAuxOtpPage : public SetPage {
 public:
     SysSettingsAuxOtpPage();
 
-	void takeSnapshot(data::Snapshot *snapshot);
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
 	int getDirty();
 	void set();
@@ -110,8 +106,7 @@ protected:
 
 class SysSettingsSoundPage : public Page {
 public:
-	void takeSnapshot(data::Snapshot *snapshot);
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
     static void toggleSound();
     static void toggleClickSound();
@@ -123,8 +118,7 @@ class SysSettingsEncoderPage : public SetPage {
 public:
     SysSettingsEncoderPage();
 
-	void takeSnapshot(data::Snapshot *snapshot);
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
     data::Value getMin(const data::Cursor &cursor, uint8_t id);
     data::Value getMax(const data::Cursor &cursor, uint8_t id);
     bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);

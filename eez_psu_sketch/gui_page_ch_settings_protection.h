@@ -29,13 +29,12 @@ public:
 	static void clear();
 	static void clearAndDisable();
 
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 };
 
 class ChSettingsProtectionSetPage : public SetPage {
 public:
-	void takeSnapshot(data::Snapshot *snapshot);
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
 	int getDirty();
 	void set();

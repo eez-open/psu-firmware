@@ -33,7 +33,6 @@
 #include "gui.h"
 #include "gui_internal.h"
 #include "gui_password.h"
-#include "gui_data_snapshot.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_slider.h"
 #include "gui_edit_mode_step.h"
@@ -619,6 +618,10 @@ bool isFocusWidget(const WidgetCursor &widgetCursor) {
     return widgetCursor.cursor == g_focusCursor && widget->data == g_focusDataId;
 }
 
+bool isFocusChanged() {
+    return g_focusEditValue.getType() != data::VALUE_TYPE_NONE;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 bool isLongPressAction(int actionId) {
@@ -666,19 +669,17 @@ void standbyTouchHandling(unsigned long tick_usec) {
 
 static bool g_isEncoderEnabledInActivePage;
 
-bool isEncoderEnabledInActivePageCheckWidget(const WidgetCursor &widgetCursor, bool refresh) {
+void isEncoderEnabledInActivePageCheckWidget(const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
     if (widget->action == ACTION_ID_EDIT) {
         g_isEncoderEnabledInActivePage = true;
-        return true;
     }
-    return false;
 }
 
 bool isEncoderEnabledInActivePage() {
     // encoder is enabled if active page contains widget with "edit" action
     g_isEncoderEnabledInActivePage = false;
-    enumWidgets(getActivePageId(), true, isEncoderEnabledInActivePageCheckWidget);
+    enumWidgets(getActivePageId(), 0, 0, isEncoderEnabledInActivePageCheckWidget);
     return g_isEncoderEnabledInActivePage;
 }
 
@@ -692,7 +693,17 @@ void onEncoder(int counter, bool clicked) {
             if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD || g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
                 getActiveKeypad()->ok();
             } else {
-                if (g_focusEditValue.getType() == data::VALUE_TYPE_NONE) {
+                if (isFocusChanged()) {
+                    // confirmation
+                    int16_t error;
+                    if (!data::set(g_focusCursor, g_focusDataId, g_focusEditValue, &error)) {
+                        errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
+                    } else {
+                        g_focusEditValue = data::Value();
+                    }
+                } else if (edit_mode::isActive() && !edit_mode::isInteractiveMode() && edit_mode::getEditValue() != edit_mode::getCurrentValue()) {
+                    edit_mode::nonInteractiveSet();
+                } else {
                     // selection
                     data::Cursor newCursor = g_focusCursor;
                     int newDataId;
@@ -713,14 +724,6 @@ void onEncoder(int counter, bool clicked) {
 
                     if (edit_mode::isActive()) {
                         edit_mode::update();
-                    }
-                } else {
-                    // confirmation
-                    int16_t error;
-                    if (!data::set(g_focusCursor, g_focusDataId, g_focusEditValue, &error)) {
-                        errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
-                    } else {
-                        g_focusEditValue = data::Value();
                     }
                 }
                 sound::playClick();
@@ -750,7 +753,7 @@ void onEncoder(int counter, bool clicked) {
         }
 
         if (isEncoderEnabledInActivePage()) {
-            data::Value value = data::currentSnapshot.get(g_focusCursor, g_focusDataId);
+            data::Value value = data::get(g_focusCursor, g_focusDataId);
 
             float newValue = value.getFloat() + 0.01f * counter;
 

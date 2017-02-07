@@ -29,7 +29,7 @@ public:
 	void pageWillAppear();
 	void pageDidDisappear();
 
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
 private:
 	char *selfTestResult;

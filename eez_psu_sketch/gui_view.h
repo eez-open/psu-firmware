@@ -106,6 +106,19 @@ struct Widget {
     OBJ_OFFSET specific;
 };
 
+struct WidgetStateFlags {
+    unsigned pressed: 1;
+    unsigned focused: 1;
+    unsigned blinking: 1;
+    unsigned enabled: 1;
+};
+
+struct WidgetState {
+    uint16_t size;
+    WidgetStateFlags flags;
+    data::Value data;
+};
+
 struct ContainerWidget {
     List widgets;
 };
@@ -161,10 +174,21 @@ struct BarGraphWidget {
 	uint8_t line2Style;
 };
 
+struct BarGraphWidgetState {
+    WidgetState genericState;
+    data::Value line1Data;
+    data::Value line2Data;
+};
+
 struct YTGraphWidget {
 	uint8_t y1Style;
 	uint8_t y2Data;
 	uint8_t y2Style;
+};
+
+struct YTGraphWidgetState {
+    WidgetState genericState;
+    data::Value y2Data;
 };
 
 enum UpDownWidgetSegment {
@@ -218,11 +242,13 @@ struct WidgetCursor {
     int y;
     data::Cursor cursor;
     int segment;
+    WidgetState *previousState;
+    WidgetState *currentState;
 
     WidgetCursor() : widgetOffset(0) {}
 
-    WidgetCursor(OBJ_OFFSET widgetOffset_, int x_, int y_, const data::Cursor &cursor_)
-        : widgetOffset(widgetOffset_), x(x_), y(y_), cursor(cursor_) 
+    WidgetCursor(OBJ_OFFSET widgetOffset_, int x_, int y_, const data::Cursor &cursor_, WidgetState *previousState_, WidgetState *currentState_)
+        : widgetOffset(widgetOffset_), x(x_), y(y_), cursor(cursor_), previousState(previousState_), currentState(currentState_)
     {
     }
 
@@ -247,17 +273,19 @@ struct WidgetCursor {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool drawWidget(const WidgetCursor &widgetCursor, bool refresh);
+void drawWidget(const WidgetCursor &widgetCursor);
 void refreshWidget(WidgetCursor widgetCursor);
 void selectWidget(WidgetCursor &widgetCursor);
 void deselectWidget();
 void flush();
 
-typedef bool(*EnumWidgetsCallback)(const WidgetCursor &widgetCursor, bool refresh);
-void enumWidgets(int pageIndex, bool refresh, EnumWidgetsCallback callback);
+typedef void(*EnumWidgetsCallback)(const WidgetCursor &widgetCursor);
+void enumWidgets(int pageIndex, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback);
 
 WidgetCursor findWidget(int x, int y);
 void drawTick();
+
+int getCurrentStateBufferIndex();
 
 }
 }

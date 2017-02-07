@@ -19,6 +19,7 @@
 #pragma once
 
 #include "gui_internal.h"
+#include "gui_keypad.h"
 
 namespace eez {
 namespace psu {
@@ -61,6 +62,7 @@ public:
     bool isEditing();
 
     data::ValueType getEditUnit();
+    void getKeypadText(char *text);
     bool getText(char *text, int count);
     void switchToMilli();
 
@@ -80,9 +82,7 @@ public:
     bool onEncoder(int counter);
 #endif
 
-protected:
-    void takeSnapshot(data::Snapshot *snapshot);
-    data::Value getData(KeypadSnapshot *keypadSnapshot, uint8_t id);
+    data::Value getData(uint8_t id);
 
 private:
     data::Value m_startValue;

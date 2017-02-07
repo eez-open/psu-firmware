@@ -26,7 +26,6 @@
 #include "channel_dispatcher.h"
 
 #include "gui_password.h"
-#include "gui_data_snapshot.h"
 #include "gui_calibration.h"
 #include "gui_keypad.h"
 #include "gui_numeric_keypad.h"
@@ -68,13 +67,13 @@ void start() {
     checkPassword(PSTR("Password: "), persist_conf::devConf.calibration_password, onStartPasswordOk);
 }
 
-data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value getData(const data::Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_CHANNEL_CALIBRATION_STATUS) {
         Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
         return data::Value(channel.isCalibrationExists() ? 1 : 0);
     } else if (id == DATA_ID_CHANNEL_CALIBRATION_STATE) {
         int iChannel = cursor.i == -1 ? g_channel->index - 1 : cursor.i;
-        return data::Value(snapshot->channelSnapshots[iChannel].flags.cal_enabled ? 1 : 0);
+        return data::Value(Channel::get(iChannel).isCalibrationEnabled() ? 1 : 0);
     } else if (id == DATA_ID_CHANNEL_CALIBRATION_DATE) {
         Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
         return data::Value(channel.cal_conf.calibration_date);

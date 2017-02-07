@@ -19,7 +19,6 @@
 #pragma once
 
 #include "gui_internal.h"
-#include "gui_data_snapshot.h"
 
 namespace eez {
 namespace psu {
@@ -32,9 +31,13 @@ void update();
 void exit();
 bool isInteractiveMode();
 void toggleInteractiveMode();
+bool isInteractiveChanged();
+
+data::Value getData(const data::Cursor &cursor, uint8_t id);
+bool isBlinking(const data::Cursor &cursor, uint8_t id, bool &result);
 
 const data::Value& getEditValue();
-data::Value getCurrentValue(data::Snapshot snapshot);
+data::Value getCurrentValue();
 const data::Value &getMin();
 const data::Value &getMax();
 data::ValueType getUnit();

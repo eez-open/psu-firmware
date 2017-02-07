@@ -24,7 +24,6 @@
 #include "sound.h"
 
 #include "gui_internal.h"
-#include "gui_data_snapshot.h"
 #include "gui_keypad.h"
 #include "gui_numeric_keypad.h"
 #include "gui_edit_mode_keypad.h"
@@ -43,6 +42,8 @@ namespace eez {
 namespace psu {
 namespace gui {
 
+char g_stateText[2][MAX_KEYPAD_TEXT_LENGTH + 2];
+
 ////////////////////////////////////////////////////////////////////////////////
 
 Keypad *getActiveKeypad() {
@@ -52,21 +53,6 @@ Keypad *getActiveKeypad() {
         return edit_mode_keypad::g_keypad;
     }
     return 0;
-}
-
-void KeypadSnapshot::takeSnapshot(data::Snapshot *snapshot) {
-    Keypad *keypad = getActiveKeypad();
-    if (keypad) {
-        keypad->takeSnapshot(snapshot);
-    }
-}
-
-data::Value KeypadSnapshot::get(uint8_t id) {
-    Keypad *keypad = getActiveKeypad();
-    if (keypad) {
-        return keypad->getData(this, id);
-    }
-	return data::Value();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -88,9 +74,20 @@ void Keypad::init(const char *label_, void (*ok)(char *), void (*cancel)()) {
 	m_lastCursorChangeTime = micros();
 }
 
-void Keypad::takeSnapshot(data::Snapshot *snapshot) {
+data::Value Keypad::getData(uint8_t id) {
+    if (id == DATA_ID_KEYPAD_CAPS) {
+		return data::Value(m_isUpperCase ? 1 : 0);
+	} else if (id == DATA_ID_KEYPAD_TEXT) {
+        char *text = &g_stateText[getCurrentStateBufferIndex()][0];
+        getKeypadText(text);
+        return data::Value(text);
+    }
+    return data::Value();
+}
+
+void Keypad::getKeypadText(char *text) {
 	// text
-	char *textPtr = snapshot->keypadSnapshot.text;
+	char *textPtr = text;
 
 	if (m_label) {
 		strcpy_P(textPtr, m_label);
@@ -121,18 +118,7 @@ void Keypad::takeSnapshot(data::Snapshot *snapshot) {
 		strcpy(textPtr, m_keypadText);
 	}
 
-	appendCursor(snapshot->keypadSnapshot.text);
-
-	snapshot->keypadSnapshot.isUpperCase = m_isUpperCase;
-}
-
-data::Value Keypad::getData(KeypadSnapshot *keypadSnapshot, uint8_t id) {
-    if (id == DATA_ID_KEYPAD_CAPS) {
-		return data::Value(keypadSnapshot->isUpperCase ? 1 : 0);
-	} else if (id == DATA_ID_EDIT_UNIT) {
-        return keypadSnapshot->keypadUnit;
-    }
-    return data::Value();
+	appendCursor(text);
 }
 
 void Keypad::start(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)()) {

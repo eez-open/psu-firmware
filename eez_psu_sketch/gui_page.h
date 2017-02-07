@@ -34,8 +34,7 @@ public:
 
 	virtual void pageWillAppear();
 	
-    virtual void takeSnapshot(data::Snapshot *snapshot);
-    virtual data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+    virtual data::Value getData(const data::Cursor &cursor, uint8_t id);
     virtual data::Value getMin(const data::Cursor &cursor, uint8_t id);
     virtual data::Value getMax(const data::Cursor &cursor, uint8_t id);
     virtual bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
@@ -43,8 +42,7 @@ public:
 
 class SetPage : public Page {
 public:
-	void takeSnapshot(data::Snapshot *snapshot);
-	data::Value getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
 	virtual void edit();
 	virtual int getDirty() = 0;

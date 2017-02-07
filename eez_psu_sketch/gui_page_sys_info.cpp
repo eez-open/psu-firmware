@@ -23,42 +23,19 @@
 #include "fan.h"
 #include "temperature.h"
 
-#include "gui_data_snapshot.h"
 #include "gui_page_sys_info.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 
-void SysInfoPage::takeSnapshot(data::Snapshot *snapshot) {
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9 || !OPTION_FAN
-    snapshot->flags.fanStatus = 3;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-	if (fan::test_result == TEST_FAILED || fan::test_result == TEST_WARNING) {
-		snapshot->flags.fanStatus = 0;
-	} else if (fan::test_result == TEST_OK) {
-#if FAN_OPTION_RPM_MEASUREMENT
-		snapshot->flags.fanStatus = 1;
-		snapshot->fanSpeed = (float)fan::g_rpm;
-#else
-		snapshot->flags.fanStatus = 2;
-#endif
-	} else {
-		snapshot->flags.fanStatus = 3;
-	}
-#endif
-
-	snapshot->onTimeTotal = g_powerOnTimeCounter.getTotalTime();
-	snapshot->onTimeLast = g_powerOnTimeCounter.getLastTime();
-}
-
-data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::Snapshot *snapshot) {
+data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id) {
 	if (id == DATA_ID_SYS_ON_TIME_TOTAL) {
-		return data::Value(snapshot->onTimeTotal, data::VALUE_TYPE_ON_TIME_COUNTER);
+		return data::Value((uint32_t)g_powerOnTimeCounter.getTotalTime(), data::VALUE_TYPE_ON_TIME_COUNTER);
 	}
 
 	if (id == DATA_ID_SYS_ON_TIME_LAST) {
-		return data::Value(snapshot->onTimeLast, data::VALUE_TYPE_ON_TIME_COUNTER);
+		return data::Value((uint32_t)g_powerOnTimeCounter.getLastTime(), data::VALUE_TYPE_ON_TIME_COUNTER);
 	}
 
 	if (id == DATA_ID_SYS_INFO_FIRMWARE_VER) {
@@ -95,13 +72,35 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id, data::S
 		return data::Value(getCpuEthernetType());
 	}
 
-	if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
-		return data::Value(snapshot->flags.fanStatus);
-	}
 
-	if (id == DATA_ID_SYS_INFO_FAN_SPEED && snapshot->flags.fanStatus == 1) {
-		return data::Value(snapshot->fanSpeed, data::VALUE_TYPE_FLOAT_RPM);
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9 || !OPTION_FAN
+	if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
+		return data::Value(3);
 	}
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+	if (fan::test_result == TEST_FAILED || fan::test_result == TEST_WARNING) {
+	    if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
+		    return data::Value(0);
+	    }
+	} else if (fan::test_result == TEST_OK) {
+#if FAN_OPTION_RPM_MEASUREMENT
+	    if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
+		    return data::Value(1);
+	    }
+	    if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
+		    return data::Value((float)fan::g_rpm, data::VALUE_TYPE_FLOAT_RPM);
+	    }
+#else
+	    if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
+		    return data::Value(2);
+	    }
+#endif
+	} else {
+	    if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
+		    return data::Value(3);
+	    }
+	}
+#endif
 
 	return data::Value();
 }

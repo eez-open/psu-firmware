@@ -25,7 +25,7 @@ namespace psu {
 namespace gui {
 namespace widgetButtonGroup {
 
-bool draw(const WidgetCursor &widgetCursor, const Widget *widget, bool refresh, bool inverse);
+void draw(const WidgetCursor &widgetCursor);
 void onTouchDown(const WidgetCursor &widgetCursor);
 
 }

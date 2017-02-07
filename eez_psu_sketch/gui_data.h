@@ -108,9 +108,9 @@ struct Value {
 	static Value LessThenMinMessage(float float_, ValueType type);
 	static Value GreaterThenMaxMessage(float float_, ValueType type);
 
-	bool operator ==(const Value &other);
+	bool operator ==(const Value &other) const;
 
-    bool operator !=(const Value &other) {
+    bool operator !=(const Value &other) const {
         return !(*this == other);
     }
 
@@ -205,11 +205,15 @@ ValueType getUnit(const Cursor &cursor, uint8_t id);
 
 void getList(const Cursor &cursor, uint8_t id, const Value **labels, int &count);
 
+Value get(const Cursor &cursor, uint8_t id);
 bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error);
 
 int getNumHistoryValues(uint8_t id);
 int getCurrentHistoryValuePosition(const Cursor &cursor, uint8_t id);
 Value getHistoryValue(const Cursor &cursor, uint8_t id, int position);
+
+bool isBlinking(const Cursor &cursor, uint8_t id);
+Value getEditValue(const Cursor &cursor, uint8_t id);
 
 }
 }
