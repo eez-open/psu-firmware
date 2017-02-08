@@ -32,7 +32,7 @@
 #else
 
 #include <dirent.h>
-#include <unistd.h>
+#include <sys/stat.h> // mkdir
 
 #endif
 
@@ -66,16 +66,22 @@ File SimulatorSD::open(const char *path, uint8_t mode) {
 ////////////////////////////////////////////////////////////////////////////////
 
 File::File() {
+    init();
+}
+
+File::File(const char *path, uint8_t mode)
+    : m_path(path)
+    , m_mode(mode)
+{
+    init();
+}
+
+void File::init() {
 #ifdef _WIN32
     m_hFind = INVALID_HANDLE_VALUE;
 #else
     m_dp = 0;
 #endif
-}
-
-File::File(const char *path, uint8_t mode) : File() {
-    m_path = path;
-    m_mode = mode;
 }
 
 File::~File() {
@@ -143,7 +149,7 @@ void File::close() {
     }
 #else
     if (m_dp) {
-        closedir(m_dp);
+        closedir((DIR *)m_dp);
         m_dp = 0;
     }
 #endif
@@ -158,13 +164,14 @@ void File::rewindDirectory() {
     }
 #else
     if (m_dp) {
-        closedir(m_dp);
+        closedir((DIR *)m_dp);
     }
-    m_dp = opendir(getRealPath());
+    m_dp = opendir(getRealPath().c_str());
 #endif
 }
 
 File File::openNextFile(uint8_t mode) {
+    const char *name;
 #ifdef _WIN32
     WIN32_FIND_DATAA ffd;
     if (m_hFind == INVALID_HANDLE_VALUE) {
@@ -180,23 +187,26 @@ File File::openNextFile(uint8_t mode) {
             return File();
         }
     }
-    if (strcmp(ffd.cFileName, ".") == 0 || strcmp(ffd.cFileName, "..") == 0) {
-        return openNextFile(mode);
-    }
-    return File((m_path + '/' + ffd.cFileName).c_str(), mode);
+    name = ffd.cFileName;
 #else
     if (!m_dp) {
         return File();
     }
 
-    struct dirent *ep = readdir(dp);
+    struct dirent *ep = readdir((DIR *)m_dp);
     if (!ep) {
-        closedir(m_dp);
+        closedir((DIR *)m_dp);
         m_dp = 0;
         return File();
     }
-    return File((m_path + '/' + ep->d_name).c_str(), mode);
+    name = ep->d_name;
 #endif
+
+    if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0) {
+        return openNextFile(mode);
+    }
+
+    return File((m_path + '/' + name).c_str(), mode);
 }
 
 }

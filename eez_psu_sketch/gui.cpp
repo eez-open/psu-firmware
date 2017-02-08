@@ -101,7 +101,7 @@ static void (*g_dialogNoCallback)();
 static void (*g_dialogCancelCallback)();
 
 static void (*g_errorMessageAction)();
-static void *g_errorMessageActionParam;
+static int g_errorMessageActionParam;
 
 static unsigned long g_showPageTime;
 static unsigned long g_timeOfLastActivity;
@@ -385,13 +385,13 @@ void changeLimit(const data::Value& value, float minLimit, float maxLimit, float
 }
 
 void onSetVoltageLimit(float limit) {
-    Channel& channel = Channel::get((int)g_errorMessageActionParam);
+    Channel& channel = Channel::get(g_errorMessageActionParam);
     channel_dispatcher::setVoltageLimit(channel, limit);
     infoMessageP(PSTR("Voltage limit changed!"), popPage);
 }
 
 void changeVoltageLimit() {
-    Channel& channel = Channel::get((int)g_errorMessageActionParam);
+    Channel& channel = Channel::get(g_errorMessageActionParam);
 	float minLimit = channel_dispatcher::getUMin(channel);
 	float maxLimit = channel_dispatcher::getUMax(channel);
 	float defLimit = channel_dispatcher::getUMax(channel);
@@ -399,13 +399,13 @@ void changeVoltageLimit() {
 }
 
 void onSetCurrentLimit(float limit) {
-    Channel& channel = Channel::get((int)g_errorMessageActionParam);
+    Channel& channel = Channel::get(g_errorMessageActionParam);
     channel_dispatcher::setCurrentLimit(channel, limit);
     infoMessageP(PSTR("Current limit changed!"), popPage);
 }
 
 void changeCurrentLimit() {
-    Channel& channel = Channel::get((int)g_errorMessageActionParam);
+    Channel& channel = Channel::get(g_errorMessageActionParam);
 	float minLimit = channel_dispatcher::getIMin(channel);
 	float maxLimit = channel_dispatcher::getIMax(channel);
 	float defLimit = channel_dispatcher::getIMax(channel);
@@ -413,13 +413,13 @@ void changeCurrentLimit() {
 }
 
 void onSetPowerLimit(float limit) {
-    Channel& channel = Channel::get((int)g_errorMessageActionParam);
+    Channel& channel = Channel::get(g_errorMessageActionParam);
     channel_dispatcher::setPowerLimit(channel, limit);
     infoMessageP(PSTR("Power limit changed!"), popPage);
 }
 
 void changePowerLimit() {
-    Channel& channel = Channel::get((int)g_errorMessageActionParam);
+    Channel& channel = Channel::get(g_errorMessageActionParam);
 	float minLimit = channel_dispatcher::getPowerMinLimit(channel);
 	float maxLimit = channel_dispatcher::getPowerMaxLimit(channel);
 	float defLimit = channel_dispatcher::getPowerDefaultLimit(channel);
@@ -461,7 +461,7 @@ void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callb
         if (action) {
             data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE_2, actionLabel, 0);
             g_errorMessageAction = action;
-            g_errorMessageActionParam = (void *)cursor.i;
+            g_errorMessageActionParam = cursor.i;
             errorPageId = PAGE_ID_ERROR_ALERT_WITH_ACTION;
         }
     }

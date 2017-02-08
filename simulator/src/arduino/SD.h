@@ -54,8 +54,8 @@ private:
     void *m_dp;
 #endif
 
+    void init();
     std::string getRealPath();
-
 };
 
 class SimulatorSD {
