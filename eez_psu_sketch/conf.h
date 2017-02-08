@@ -52,7 +52,7 @@ option.
 #define OPTION_EXT_RTC 1
 
 /// Is SD card present?
-#define OPTION_SD_CARD 1
+#define OPTION_SD_CARD 0
 
 /// Is external EEPROM present?
 #define OPTION_EXT_EEPROM 1
