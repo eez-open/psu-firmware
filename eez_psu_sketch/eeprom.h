@@ -265,7 +265,7 @@ static const uint16_t EEPROM_EVENT_QUEUE_START_ADDRESS = 16384;
 void init();
 bool test();
 
-extern TestResult test_result;
+extern TestResult g_testResult;
 
 void read(uint8_t *buffer, uint16_t buffer_size, uint16_t address);
 bool write(const uint8_t *buffer, uint16_t buffer_size, uint16_t address);

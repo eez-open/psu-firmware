@@ -21,6 +21,10 @@
 
 #include "eeprom.h"
 
+#if OPTION_SD_CARD
+#include "sd_card.h"
+#endif
+
 #if OPTION_ETHERNET
 #include "ethernet.h"
 #endif
@@ -37,25 +41,30 @@ namespace eez {
 namespace psu {
 namespace devices {
 
-#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) { #NAME" temp", INSTALLED, &temp_sensor::sensors[temp_sensor::NAME].test_result }
+#define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) { #NAME" temp", INSTALLED, &temp_sensor::sensors[temp_sensor::NAME].g_testResult }
 
 #define CHANNEL(INDEX, BOARD_REVISION, PINS, PARAMS) \
-    { "CH"#INDEX" IOEXP", true, &Channel::get(INDEX-1).ioexp.test_result }, \
-    { "CH"#INDEX" DAC", true, &Channel::get(INDEX-1).dac.test_result }, \
-    { "CH"#INDEX" ADC", true, &Channel::get(INDEX-1).adc.test_result }
+    { "CH"#INDEX" IOEXP", true, &Channel::get(INDEX-1).ioexp.g_testResult }, \
+    { "CH"#INDEX" DAC", true, &Channel::get(INDEX-1).dac.g_testResult }, \
+    { "CH"#INDEX" ADC", true, &Channel::get(INDEX-1).adc.g_testResult }
 
 Device devices[] = {
-    { "EEPROM", OPTION_EXT_EEPROM, &eeprom::test_result },
+    { "EEPROM", OPTION_EXT_EEPROM, &eeprom::g_testResult },
+#if OPTION_SD_CARD
+    { "SD card", OPTION_SD_CARD, &sd_card::g_testResult },
+#else
+    { "SD card", 0, 0 },
+#endif
 #if OPTION_ETHERNET
-    { "Ethernet", 1, &ethernet::test_result },
+    { "Ethernet", 1, &ethernet::g_testResult },
 #else
     { "Ethernet", 0, 0 },
 #endif
-    { "RTC", OPTION_EXT_RTC, &rtc::test_result },
-    { "DateTime", true, &datetime::test_result },
-    { "BP option", OPTION_BP, &bp::test_result },
+    { "RTC", OPTION_EXT_RTC, &rtc::g_testResult },
+    { "DateTime", true, &datetime::g_testResult },
+    { "BP option", OPTION_BP, &bp::g_testResult },
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-    { "Fan", OPTION_FAN, &fan::test_result },
+    { "Fan", OPTION_FAN, &fan::g_testResult },
 #endif
     TEMP_SENSORS,
     CHANNELS
@@ -124,12 +133,12 @@ const char *getInstalledString(bool installed) {
     return "not installed";
 }
 
-const char *getTestResultString(psu::TestResult test_result) {
-    if (test_result == psu::TEST_OK)
+const char *getTestResultString(psu::TestResult g_testResult) {
+    if (g_testResult == psu::TEST_OK)
         return "passed";
-    if (test_result == psu::TEST_SKIPPED)
+    if (g_testResult == psu::TEST_SKIPPED)
         return "skipped";
-    if (test_result == psu::TEST_WARNING)
+    if (g_testResult == psu::TEST_WARNING)
         return "warning";
     return "failed";
 }

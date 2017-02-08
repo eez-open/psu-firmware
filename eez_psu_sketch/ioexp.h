@@ -82,7 +82,7 @@ public:
 
     static const size_t NUM_REGISTERS = REG_OLAT + 1;
 
-    psu::TestResult test_result;
+    psu::TestResult g_testResult;
 
     IOExpander(Channel &channel, 
         uint8_t IO_BIT_OUT_SET_100_PERCENT_,

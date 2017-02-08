@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2016-present, Envox d.o.o.
+ * Copyright (C) 2017-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,16 +20,17 @@
 
 namespace eez {
 namespace psu {
-namespace fan {
+namespace sd_card {
 
-extern psu::TestResult g_testResult;
-extern volatile int g_rpm;
+extern TestResult g_testResult;
 
 void init();
-void test_start();
 bool test();
-void tick(unsigned long tick_usec);
+
+#if CONF_DEBUG
+void dir();
+#endif
 
 }
 }
-} // namespace eez::psu::fan
+} // namespace eez::psu::sd_card

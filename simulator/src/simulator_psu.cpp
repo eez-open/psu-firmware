@@ -69,10 +69,10 @@ float getTemperature(int sensor) {
     return temperature[sensor];
 }
 
-char *getConfFilePath(char *file_name) {
+char *getConfFilePath(const char *file_name) {
     static char file_path[1024];
 
-    *file_path = '\0';
+    *file_path = 0;
 
 #ifdef _WIN32
     if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PROFILE, NULL, 0, file_path))) {
@@ -93,7 +93,19 @@ char *getConfFilePath(char *file_name) {
     }
 #endif
 
-    strcat(file_path, file_name);
+    char *q = file_path + strlen(file_path);
+    const char *p = file_name;
+    while (*p) {
+        char ch = *p++;
+#ifdef _WIN32
+        if (ch == '/') *q++ = '\\';
+#else
+        if (ch == '\\') *q++ = '/';
+#endif
+        else *q++ = ch;
+    }
+    *q = 0;
+
     return file_path;
 }
 

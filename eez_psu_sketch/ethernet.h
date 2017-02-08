@@ -24,7 +24,7 @@ namespace eez {
 namespace psu {
 namespace ethernet {
 
-extern TestResult test_result;
+extern TestResult g_testResult;
 
 extern scpi_t scpi_context;
 

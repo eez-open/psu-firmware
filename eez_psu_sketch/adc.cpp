@@ -43,7 +43,7 @@ static void adc_interrupt_ch2() {
 ////////////////////////////////////////////////////////////////////////////////
 
 AnalogDigitalConverter::AnalogDigitalConverter(Channel &channel_) : channel(channel_) {
-    test_result = psu::TEST_SKIPPED;
+    g_testResult = psu::TEST_SKIPPED;
 
 #if ADC_USE_INTERRUPTS
     current_sps = ADC_SPS;
@@ -104,24 +104,24 @@ bool AnalogDigitalConverter::test() {
     digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
     SPI_endTransaction();
 
-    test_result = psu::TEST_OK;
+    g_testResult = psu::TEST_OK;
 
     if (reg1 != getReg1Val()) {
         DebugTraceF("Ch%d ADC test failed reg1: expected=%d, got=%d", channel.index, getReg1Val(), reg1);
-        test_result = psu::TEST_FAILED;
+        g_testResult = psu::TEST_FAILED;
     }
 
     if (reg2 != ADC_REG2_VAL) {
         DebugTraceF("Ch%d ADC test failed reg2: expected=%d, got=%d", channel.index, ADC_REG2_VAL, reg2);
-        test_result = psu::TEST_FAILED;
+        g_testResult = psu::TEST_FAILED;
     }
 
     if (reg3 != ADC_REG3_VAL) {
         DebugTraceF("Ch%d ADC test failed reg3: expected=%d, got=%d", channel.index, ADC_REG3_VAL, reg3);
-        test_result = psu::TEST_FAILED;
+        g_testResult = psu::TEST_FAILED;
     }
 
-    if (test_result == psu::TEST_FAILED) {
+    if (g_testResult == psu::TEST_FAILED) {
         if (channel.index == 1) {
             psu::generateError(SCPI_ERROR_CH1_ADC_TEST_FAILED);
         }
@@ -133,7 +133,7 @@ bool AnalogDigitalConverter::test() {
         }
     }
 
-    return test_result != psu::TEST_FAILED;
+    return g_testResult != psu::TEST_FAILED;
 }
 
 void AnalogDigitalConverter::tick(unsigned long tick_usec) {

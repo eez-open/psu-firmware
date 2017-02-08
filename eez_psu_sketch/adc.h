@@ -42,7 +42,7 @@ public:
     static const uint8_t ADC_REG0_READ_U_SET = 0x81; // B10000001: [7:4] AINP = AIN0, AINN = AVSS, [3:1] Gain = 1, [0] PGA disabled and bypassed
     static const uint8_t ADC_REG0_READ_I_SET = 0xB1; // B10110001: [7:4] AINP = AIN3, AINN = AVSS, [3:1] Gain = 1, [0] PGA disabled and bypassed
 
-    psu::TestResult test_result;
+    psu::TestResult g_testResult;
     uint8_t start_reg0;
 
     AnalogDigitalConverter(Channel &channel);

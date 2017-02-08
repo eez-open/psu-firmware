@@ -23,7 +23,7 @@ namespace eez {
 namespace psu {
 namespace rtc {
 
-psu::TestResult test_result = psu::TEST_FAILED;
+psu::TestResult g_testResult = psu::TEST_FAILED;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -62,31 +62,31 @@ bool test() {
         writeRegisters(WR_CONTROL_1, 2, ctrl_reg_values);
         readRegisters(RD_CONTROL_1, 2, ctrl_reg_values);
 
-        test_result = psu::TEST_OK;
+        g_testResult = psu::TEST_OK;
 
         if (ctrl_reg_values[0] != CONTROL_1_VALUE) {
             DebugTraceF("RTC test failed Control 1: w=%d, r=%d", (int)CONTROL_1_VALUE, (int)ctrl_reg_values[0]);
-            test_result = psu::TEST_FAILED;
+            g_testResult = psu::TEST_FAILED;
         }
 
         if (ctrl_reg_values[1] != CONTROL_2_VALUE) {
             DebugTraceF("RTC test failed Control 2: w=%d, r=%d", (int)CONTROL_2_VALUE, (int)ctrl_reg_values[1]);
-            test_result = psu::TEST_FAILED;
+            g_testResult = psu::TEST_FAILED;
         }
     }
     else {
-        test_result = psu::TEST_SKIPPED;
+        g_testResult = psu::TEST_SKIPPED;
     }
 
-    if (test_result == psu::TEST_FAILED) {
+    if (g_testResult == psu::TEST_FAILED) {
         psu::generateError(SCPI_ERROR_RTC_TEST_FAILED);
     }
 
-    return test_result != psu::TEST_FAILED;
+    return g_testResult != psu::TEST_FAILED;
 }
 
 bool readDate(uint8_t &year, uint8_t &month, uint8_t &day) {
-    if (test_result != psu::TEST_OK) return false;
+    if (g_testResult != psu::TEST_OK) return false;
     uint8_t data[4];
     readRegisters(RD_DAYS, sizeof(data), data);
     day = util::fromBCD(data[0]);
@@ -96,7 +96,7 @@ bool readDate(uint8_t &year, uint8_t &month, uint8_t &day) {
 }
 
 bool writeDate(uint8_t year, uint8_t month, uint8_t day) {
-    if (test_result != psu::TEST_OK) return false;
+    if (g_testResult != psu::TEST_OK) return false;
     uint8_t data[4] = {
         util::toBCD(day),
         0,
@@ -108,7 +108,7 @@ bool writeDate(uint8_t year, uint8_t month, uint8_t day) {
 }
 
 bool readTime(uint8_t &hour, uint8_t &minute, uint8_t &second) {
-    if (test_result != psu::TEST_OK) return false;
+    if (g_testResult != psu::TEST_OK) return false;
     uint8_t data[3];
     readRegisters(RD_SECONDS, sizeof(data), data);
     second = util::fromBCD(data[0] & 0x7F);
@@ -118,7 +118,7 @@ bool readTime(uint8_t &hour, uint8_t &minute, uint8_t &second) {
 }
 
 bool writeTime(uint8_t hour, uint8_t minute, uint8_t second) {
-    if (test_result != psu::TEST_OK) return false;
+    if (g_testResult != psu::TEST_OK) return false;
     uint8_t data[3] = {
         util::toBCD(second),
         util::toBCD(minute),
@@ -129,7 +129,7 @@ bool writeTime(uint8_t hour, uint8_t minute, uint8_t second) {
 }
 
 bool readDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, uint8_t &minute, uint8_t &second) {
-    if (test_result != psu::TEST_OK) return false;
+    if (g_testResult != psu::TEST_OK) return false;
     uint8_t data[7];
     readRegisters(RD_SECONDS, sizeof(data), data);
     second = util::fromBCD(data[0] & 0x7F);
@@ -142,7 +142,7 @@ bool readDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, ui
 }
 
 bool writeDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second) {
-    if (test_result != psu::TEST_OK) return false;
+    if (g_testResult != psu::TEST_OK) return false;
     uint8_t data[7] = {
         util::toBCD(second),
         util::toBCD(minute),

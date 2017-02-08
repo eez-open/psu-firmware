@@ -42,7 +42,7 @@ using namespace scpi;
 
 namespace ethernet {
 
-psu::TestResult test_result = psu::TEST_FAILED;
+psu::TestResult g_testResult = psu::TEST_FAILED;
 
 uint8_t mac[6] = ETHERNET_MAC_ADDRESS;
 
@@ -125,7 +125,7 @@ scpi_t scpi_context;
 
 void init() {
     if (!persist_conf::isEthernetEnabled()) {
-        test_result = psu::TEST_SKIPPED;
+        g_testResult = psu::TEST_SKIPPED;
         return;
     }
 
@@ -145,7 +145,7 @@ void init() {
     if (!Ethernet.begin(mac)) {
         SPI.endTransaction();
 
-        test_result = psu::TEST_WARNING;
+        g_testResult = psu::TEST_WARNING;
         DebugTrace("Ethernet not connected!");
         event_queue::pushEvent(event_queue::EVENT_WARNING_ETHERNET_NOT_CONNECTED);
 
@@ -156,7 +156,7 @@ void init() {
 
     SPI.endTransaction();
 
-    test_result = psu::TEST_OK;
+    g_testResult = psu::TEST_OK;
 
     DebugTraceF("Listening on port %d", (int)TCP_PORT);
 
@@ -177,15 +177,15 @@ void init() {
 }
 
 bool test() {
-    if (test_result == psu::TEST_FAILED) {
+    if (g_testResult == psu::TEST_FAILED) {
         psu::generateError(SCPI_ERROR_ETHERNET_TEST_FAILED);
     }
 
-    return test_result != psu::TEST_FAILED;
+    return g_testResult != psu::TEST_FAILED;
 }
 
 void tick(unsigned long tick_usec) {
-    if (test_result != psu::TEST_OK) {
+    if (g_testResult != psu::TEST_OK) {
         return;
     }
 

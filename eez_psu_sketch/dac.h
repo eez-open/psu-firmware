@@ -30,7 +30,7 @@ public:
     static const uint16_t DAC_MIN = 0;
     static const uint16_t DAC_MAX = (1L << DAC_RES) - 1;
 
-    psu::TestResult test_result;
+    psu::TestResult g_testResult;
 
     DigitalAnalogConverter(Channel &channel);
 

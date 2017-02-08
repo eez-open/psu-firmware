@@ -26,7 +26,7 @@ namespace eez {
 namespace psu {
 namespace datetime {
 
-psu::TestResult test_result = psu::TEST_FAILED;
+psu::TestResult g_testResult = psu::TEST_FAILED;
 
 void init() {
 }
@@ -84,43 +84,43 @@ bool isValidTime(uint8_t hour, uint8_t minute, uint8_t second) {
 }
 
 bool test() {
-    if (rtc::test_result == psu::TEST_OK) {
+    if (rtc::g_testResult == psu::TEST_OK) {
         uint8_t year, month, day, hour, minute, second;
         if (persist_conf::readSystemDate(year, month, day) && persist_conf::readSystemTime(hour, minute, second)) {
             uint8_t rtc_year, rtc_month, rtc_day, rtc_hour, rtc_minute, rtc_second;
             rtc::readDateTime(rtc_year, rtc_month, rtc_day, rtc_hour, rtc_minute, rtc_second);
 
             if (!isValidDate(2000 + rtc_year, rtc_month, rtc_day)) {
-                test_result = psu::TEST_FAILED;
+                g_testResult = psu::TEST_FAILED;
                 DebugTraceF("RTC test failed, invalid date format detected (%d-%02d-%02d)",
                     (int)(2000 + rtc_year), (int)rtc_month, (int)rtc_day);
             } else if (!isValidTime(rtc_hour, rtc_minute, rtc_second)) {
-                test_result = psu::TEST_FAILED;
+                g_testResult = psu::TEST_FAILED;
                 DebugTraceF("RTC test failed, invalid time format detected (%02d:%02d:%02d)",
                     (int)rtc_hour, (int)rtc_minute, (int)rtc_second);
             } else if (cmp_datetime(year, month, day, hour, minute, second, rtc_year, rtc_month, rtc_day, rtc_hour, rtc_minute, rtc_second) < 0) {
-                test_result = psu::TEST_OK;
+                g_testResult = psu::TEST_OK;
                 persist_conf::writeSystemDate(rtc_year, rtc_month, rtc_day);
                 persist_conf::writeSystemTime(rtc_hour, rtc_minute, rtc_second);
             }
             else {
-                test_result = psu::TEST_FAILED;
+                g_testResult = psu::TEST_FAILED;
                 DebugTraceF("RTC test failed, RTC time (%d-%02d-%02d %02d:%02d:%02d) older then or equal to EEPROM time (%d-%02d-%02d %02d:%02d:%02d)",
                     (int)(2000 + rtc_year), (int)rtc_month, (int)rtc_day, (int)rtc_hour, (int)rtc_minute, (int)rtc_second,
                     (int)(2000 + year), (int)month, (int)day, (int)hour, (int)minute, (int)second);
             }
         }
         else {
-            test_result = psu::TEST_SKIPPED;
+            g_testResult = psu::TEST_SKIPPED;
         }
     }
     else {
-        test_result = psu::TEST_SKIPPED;
+        g_testResult = psu::TEST_SKIPPED;
     }
 
-    psu::setQuesBits(QUES_TIME, test_result != psu::TEST_OK);
+    psu::setQuesBits(QUES_TIME, g_testResult != psu::TEST_OK);
 
-    return test_result != psu::TEST_FAILED && test_result != psu::TEST_WARNING;
+    return g_testResult != psu::TEST_FAILED && g_testResult != psu::TEST_WARNING;
 }
 
 bool getDate(uint8_t &year, uint8_t &month, uint8_t &day) {

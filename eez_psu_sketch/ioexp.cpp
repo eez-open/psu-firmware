@@ -55,7 +55,7 @@ IOExpander::IOExpander(
     , IO_BIT_OUT_SET_100_PERCENT(IO_BIT_OUT_SET_100_PERCENT_)
     , IO_BIT_OUT_EXT_PROG(IO_BIT_OUT_EXT_PROG_)
 {
-    test_result = psu::TEST_SKIPPED;
+    g_testResult = psu::TEST_SKIPPED;
 	gpio = channel.ioexp_gpio_init;
     gpio_changed = false;
 }
@@ -77,7 +77,7 @@ void IOExpander::init() {
 }
 
 bool IOExpander::test() {
-    test_result = psu::TEST_OK;
+    g_testResult = psu::TEST_OK;
 
     for (int i = 0; REG_VALUES[i] != 0xFF; i += 3) {
         if (REG_VALUES[i] == IOExpander::REG_IODIR || REG_VALUES[i + 2]) {
@@ -87,13 +87,13 @@ bool IOExpander::test() {
                 DebugTraceF("Ch%d IO expander reg check failure: reg=%d, expected=%d, got=%d",
                     channel.index, (int)REG_VALUES[i], (int)compare_with_value, (int)value);
 
-                test_result = psu::TEST_FAILED;
+                g_testResult = psu::TEST_FAILED;
                 break;
             }
         }
     }
 
-    if (test_result == psu::TEST_OK) {
+    if (g_testResult == psu::TEST_OK) {
 #if !CONF_SKIP_PWRGOOD_TEST
         channel.flags.powerOk = testBit(IO_BIT_IN_PWRGOOD);
         if (!channel.flags.powerOk) {
@@ -108,7 +108,7 @@ bool IOExpander::test() {
         channel.flags.powerOk = 0;
     }
 
-    if (test_result == psu::TEST_FAILED) {
+    if (g_testResult == psu::TEST_FAILED) {
         if (channel.index == 1) {
             psu::generateError(SCPI_ERROR_CH1_IOEXP_TEST_FAILED);
         }
@@ -120,7 +120,7 @@ bool IOExpander::test() {
         }
     }
 
-    return test_result != psu::TEST_FAILED;
+    return g_testResult != psu::TEST_FAILED;
 }
 
 void IOExpander::tick(unsigned long tick_usec) {

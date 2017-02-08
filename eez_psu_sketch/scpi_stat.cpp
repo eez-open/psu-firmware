@@ -164,7 +164,7 @@ scpi_result_t scpi_stat_QuestionableInstrumentISummaryEventQ(scpi_t * context) {
 
     int32_t ch;
     SCPI_CommandNumbers(context, &ch, 1, psu_context->selected_channel_index);
-    if (ch < 1 || ch > min(CH_NUM, 2)) {
+    if (ch < 1 || ch > MIN(CH_NUM, 2)) {
         SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
         return SCPI_RES_OK;
     }
@@ -185,7 +185,7 @@ scpi_result_t scpi_stat_QuestionableInstrumentISummaryConditionQ(scpi_t * contex
 
     int32_t ch;
     SCPI_CommandNumbers(context, &ch, 1, psu_context->selected_channel_index);
-    if (ch < 1 || ch > min(CH_NUM, 2)) {
+    if (ch < 1 || ch > MIN(CH_NUM, 2)) {
         SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
         return SCPI_RES_OK;
     }
@@ -203,7 +203,7 @@ scpi_result_t scpi_stat_QuestionableInstrumentISummaryEnable(scpi_t * context) {
 
     int32_t ch;
     SCPI_CommandNumbers(context, &ch, 1, psu_context->selected_channel_index);
-    if (ch < 1 || ch > min(CH_NUM, 2)) {
+    if (ch < 1 || ch > MIN(CH_NUM, 2)) {
         SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
         return SCPI_RES_OK;
     }
@@ -223,7 +223,7 @@ scpi_result_t scpi_stat_QuestionableInstrumentISummaryEnableQ(scpi_t * context) 
 
     int32_t ch;
     SCPI_CommandNumbers(context, &ch, 1, psu_context->selected_channel_index);
-    if (ch < 1 || ch > min(CH_NUM, 2)) {
+    if (ch < 1 || ch > MIN(CH_NUM, 2)) {
         SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
         return SCPI_RES_OK;
     }
@@ -241,7 +241,7 @@ scpi_result_t scpi_stat_OperationInstrumentISummaryEventQ(scpi_t * context) {
 
     int32_t ch;
     SCPI_CommandNumbers(context, &ch, 1, psu_context->selected_channel_index);
-    if (ch < 1 || ch > min(CH_NUM, 2)) {
+    if (ch < 1 || ch > MIN(CH_NUM, 2)) {
         SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
         return SCPI_RES_OK;
     }
@@ -262,7 +262,7 @@ scpi_result_t scpi_stat_OperationInstrumentISummaryConditionQ(scpi_t * context) 
 
     int32_t ch;
     SCPI_CommandNumbers(context, &ch, 1, psu_context->selected_channel_index);
-    if (ch < 1 || ch > min(CH_NUM, 2)) {
+    if (ch < 1 || ch > MIN(CH_NUM, 2)) {
         SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
         return SCPI_RES_OK;
     }
@@ -280,7 +280,7 @@ scpi_result_t scpi_stat_OperationInstrumentISummaryEnable(scpi_t * context) {
 
     int32_t ch;
     SCPI_CommandNumbers(context, &ch, 1, psu_context->selected_channel_index);
-    if (ch < 1 || ch > min(CH_NUM, 2)) {
+    if (ch < 1 || ch > MIN(CH_NUM, 2)) {
         SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
         return SCPI_RES_OK;
     }
@@ -300,7 +300,7 @@ scpi_result_t scpi_stat_OperationInstrumentISummaryEnableQ(scpi_t * context) {
 
     int32_t ch;
     SCPI_CommandNumbers(context, &ch, 1, psu_context->selected_channel_index);
-    if (ch < 1 || ch > min(CH_NUM, 2)) {
+    if (ch < 1 || ch > MIN(CH_NUM, 2)) {
         SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
         return SCPI_RES_OK;
     }

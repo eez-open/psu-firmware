@@ -59,7 +59,7 @@ void tick();
 void setTemperature(int sensor, float value);
 float getTemperature(int sensor);
 
-char *getConfFilePath(char *file_name);
+char *getConfFilePath(const char *file_name);
 
 void exit();
 

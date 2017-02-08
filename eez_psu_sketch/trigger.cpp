@@ -59,7 +59,7 @@ void reset() {
 
 void extTrigInterruptHandler() {
     uint8_t state = digitalRead(EXT_TRIG);
-    if (state == 0 && g_extTrigLastState == 1 && g_polarity == POLARITY_POSITIVE || state == 1 && g_extTrigLastState == 0 && g_polarity == POLARITY_NEGATIVE) {
+    if (state == 1 && g_extTrigLastState == 0 && g_polarity == POLARITY_POSITIVE || state == 0 && g_extTrigLastState == 1 && g_polarity == POLARITY_NEGATIVE) {
         generateTrigger(SOURCE_PIN1, false);
     }
     g_extTrigLastState = state;

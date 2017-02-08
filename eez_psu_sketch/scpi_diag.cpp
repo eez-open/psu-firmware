@@ -223,19 +223,19 @@ scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
 	}
 
 //    sprintf_P(buffer, PSTR("%d, EEPROM, %s, %s"),
-//        eeprom::test_result, get_installed_str(OPTION_EXT_EEPROM), get_test_result_str(eeprom::test_result));
+//        eeprom::g_testResult, get_installed_str(OPTION_EXT_EEPROM), get_test_result_str(eeprom::g_testResult));
 //    SCPI_ResultText(context, buffer);
 //    
 //    sprintf_P(buffer, PSTR("%d, Ethernet, %s, %s"),
-//        ethernet::test_result, get_installed_str(OPTION_ETHERNET), get_test_result_str(ethernet::test_result));
+//        ethernet::g_testResult, get_installed_str(OPTION_ETHERNET), get_test_result_str(ethernet::g_testResult));
 //    SCPI_ResultText(context, buffer);
 //
 //    sprintf_P(buffer, PSTR("%d, RTC, %s, %s"),
-//        rtc::test_result, get_installed_str(OPTION_EXT_RTC), get_test_result_str(rtc::test_result));
+//        rtc::g_testResult, get_installed_str(OPTION_EXT_RTC), get_test_result_str(rtc::g_testResult));
 //    SCPI_ResultText(context, buffer);
 //    
 //    sprintf_P(buffer, PSTR("%d, DateTime, %s, %s"),
-//        datetime::test_result, get_installed_str(true), get_test_result_str(datetime::test_result));
+//        datetime::g_testResult, get_installed_str(true), get_test_result_str(datetime::g_testResult));
 //    SCPI_ResultText(context, buffer);
 //
 //    sprintf_P(buffer, PSTR("%d, BP option, %s, %s"),
@@ -245,13 +245,13 @@ scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
 //	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
 //		temp_sensor::TempSensor &sensor = temp_sensor::sensors[i];
 //		sprintf_P(buffer, PSTR("%d, %s temp, %s, %s"),
-//			sensor.test_result, sensor.name, get_installed_str(sensor.installed ? true : false), get_test_result_str(sensor.test_result));
+//			sensor.g_testResult, sensor.name, get_installed_str(sensor.installed ? true : false), get_test_result_str(sensor.g_testResult));
 //		SCPI_ResultText(context, buffer);
 //	}
 //
 //#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
 //    sprintf_P(buffer, PSTR("%d, Fan, %s, %s"),
-//        fan::test_result, get_installed_str(OPTION_FAN), get_test_result_str(fan::test_result));
+//        fan::g_testResult, get_installed_str(OPTION_FAN), get_test_result_str(fan::g_testResult));
 //    SCPI_ResultText(context, buffer);
 //#endif
 //
@@ -260,15 +260,15 @@ scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
 //            Channel *channel = &Channel::get(i);
 //
 //            sprintf_P(buffer, PSTR("%d, CH%d IOEXP, installed, %s"),
-//                channel->ioexp.test_result, channel->index, get_test_result_str((psu::TestResult)channel->ioexp.test_result));
+//                channel->ioexp.g_testResult, channel->index, get_test_result_str((psu::TestResult)channel->ioexp.g_testResult));
 //            SCPI_ResultText(context, buffer);
 //
 //            sprintf_P(buffer, PSTR("%d, CH%d DAC, installed, %s"),
-//                channel->dac.test_result, channel->index, get_test_result_str((psu::TestResult)channel->dac.test_result));
+//                channel->dac.g_testResult, channel->index, get_test_result_str((psu::TestResult)channel->dac.g_testResult));
 //            SCPI_ResultText(context, buffer);
 //
 //            sprintf_P(buffer, PSTR("%d, CH%d ADC, installed, %s"),
-//                channel->adc.test_result, channel->index, get_test_result_str((psu::TestResult)channel->adc.test_result));
+//                channel->adc.g_testResult, channel->index, get_test_result_str((psu::TestResult)channel->adc.g_testResult));
 //            SCPI_ResultText(context, buffer);
 //        }
 //    }

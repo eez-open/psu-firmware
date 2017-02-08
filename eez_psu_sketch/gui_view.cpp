@@ -130,7 +130,7 @@ void drawText(const char *text, int textLength, int x, int y, int w, int h, cons
         if (x_offset + width <= x2 && y1 <= y2)
             lcd::lcd.fillRect(x_offset + width, y1, x2, y2);
 
-        int right = min(x_offset + width - 1, x2);
+        int right = MIN(x_offset + width - 1, x2);
 
         if (x_offset <= right && y1 <= y_offset - 1)
             lcd::lcd.fillRect(x_offset, y1, right, y_offset - 1);
@@ -318,7 +318,7 @@ void drawBitmap(uint8_t bitmapIndex, int x, int y, int w, int h, const Style *st
         if (x_offset + width <= x2 && y1 <= y2)
             lcd::lcd.fillRect(x_offset + width, y1, x2, y2);
 
-        int right = min(x_offset + width - 1, x2);
+        int right = MIN(x_offset + width - 1, x2);
 
         if (x_offset <= right && y1 <= y_offset - 1)
             lcd::lcd.fillRect(x_offset, y1, right, y_offset - 1);

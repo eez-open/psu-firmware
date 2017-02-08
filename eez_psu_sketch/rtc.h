@@ -49,7 +49,7 @@ static const uint8_t WR_CLKOUT = 0B00011101;
 static const uint8_t CONTROL_1_VALUE = 0B00001000;
 static const uint8_t CONTROL_2_VALUE = 0B00000000;
 
-extern psu::TestResult test_result;
+extern psu::TestResult g_testResult;
 
 void init();
 bool test();

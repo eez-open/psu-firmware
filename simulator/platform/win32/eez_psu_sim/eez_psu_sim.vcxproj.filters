@@ -319,13 +319,7 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_edit_mode_step.h">
       <Filter>gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_data_snapshot.h">
-      <Filter>gui</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_widget_button_group.h">
-      <Filter>gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_edit_mode_snapshot.h">
       <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_document.h">
@@ -417,6 +411,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_trigger.h">
       <Filter>scpi\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\arduino\SD.h">
+      <Filter>simulator\arduino</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\sd_card.h">
+      <Filter>board</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -634,9 +634,6 @@
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_edit_mode_step.cpp">
       <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_data_snapshot.cpp">
-      <Filter>gui</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_widget_button_group.cpp">
       <Filter>gui</Filter>
     </ClCompile>
@@ -723,6 +720,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_trigger.cpp">
       <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\arduino\SD.cpp">
+      <Filter>simulator\arduino</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\sd_card.cpp">
+      <Filter>board</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

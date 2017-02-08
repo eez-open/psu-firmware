@@ -20,6 +20,10 @@
 #include "scpi_psu.h"
 #include "scpi_debug.h"
 
+#ifdef OPTION_SD_CARD
+#include "sd_card.h"
+#endif
+
 #if CONF_DEBUG
 
 namespace eez {
@@ -118,6 +122,16 @@ scpi_result_t debug_scpi_OntimeQ(scpi_t *context) {
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;
+}
+
+scpi_result_t debug_scpi_Dir(scpi_t *context) {
+#ifdef OPTION_SD_CARD
+    sd_card::dir();
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 }

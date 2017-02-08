@@ -58,15 +58,15 @@ void TempSensor::init() {
 bool TempSensor::test() {
 	if (installed) {
 		if (read() > TEMP_SENSOR_MIN_VALID_TEMPERATURE) {
-			test_result = psu::TEST_OK;
+			g_testResult = psu::TEST_OK;
 		} else {
-			test_result = psu::TEST_FAILED;
+			g_testResult = psu::TEST_FAILED;
 		}
 	} else {
-		test_result = psu::TEST_SKIPPED;
+		g_testResult = psu::TEST_SKIPPED;
 	}
 
-    if (test_result == psu::TEST_FAILED) {
+    if (g_testResult == psu::TEST_FAILED) {
 		if (ch_num >= 0) {
 			// set channel current max. limit to ERR_MAX_CURRENT if sensor is faulty
 			Channel::get(ch_num).limitMaxCurrent(MAX_CURRENT_LIMIT_CAUSE_TEMPERATURE);
@@ -79,7 +79,7 @@ bool TempSensor::test() {
 		}
 	}
 
-	return test_result != psu::TEST_FAILED;
+	return g_testResult != psu::TEST_FAILED;
 }
 
 float TempSensor::read() {
@@ -89,7 +89,7 @@ float TempSensor::read() {
 		value = util::remap(value, p1_volt, p1_cels, p2_volt, p2_cels);
 
 		if (value <= TEMP_SENSOR_MIN_VALID_TEMPERATURE) {
-			test_result = psu::TEST_FAILED;
+			g_testResult = psu::TEST_FAILED;
 
 			if (ch_num >= 0) {
 				// set channel current max. limit to ERR_MAX_CURRENT if sensor is faulty

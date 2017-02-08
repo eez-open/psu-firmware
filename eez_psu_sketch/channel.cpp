@@ -543,15 +543,15 @@ bool Channel::isPowerOk() {
 }
 
 bool Channel::isTestFailed() {
-    return ioexp.test_result == psu::TEST_FAILED ||
-        adc.test_result == psu::TEST_FAILED ||
-        dac.test_result == psu::TEST_FAILED;
+    return ioexp.g_testResult == psu::TEST_FAILED ||
+        adc.g_testResult == psu::TEST_FAILED ||
+        dac.g_testResult == psu::TEST_FAILED;
 }
 
 bool Channel::isTestOk() {
-    return ioexp.test_result == psu::TEST_OK &&
-        adc.test_result == psu::TEST_OK &&
-        dac.test_result == psu::TEST_OK;
+    return ioexp.g_testResult == psu::TEST_OK &&
+        adc.g_testResult == psu::TEST_OK &&
+        dac.g_testResult == psu::TEST_OK;
 }
 
 bool Channel::isOk() {
@@ -1399,7 +1399,7 @@ void Channel::disableProtection() {
 void Channel::setQuesBits(int bit_mask, bool on) {
     reg_set_ques_isum_bit(&serial::scpi_context, this, bit_mask, on);
 #if OPTION_ETHERNET
-    if (ethernet::test_result == psu::TEST_OK) {
+    if (ethernet::g_testResult == psu::TEST_OK) {
         reg_set_ques_isum_bit(&ethernet::scpi_context, this, bit_mask, on);
     }
 #endif
@@ -1408,7 +1408,7 @@ void Channel::setQuesBits(int bit_mask, bool on) {
 void Channel::setOperBits(int bit_mask, bool on) {
     reg_set_oper_isum_bit(&serial::scpi_context, this, bit_mask, on);
 #if OPTION_ETHERNET
-    if (ethernet::test_result == psu::TEST_OK) {
+    if (ethernet::g_testResult == psu::TEST_OK) {
         reg_set_oper_isum_bit(&ethernet::scpi_context, this, bit_mask, on);
     }
 #endif

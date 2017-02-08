@@ -23,6 +23,9 @@
 
 #define util_swap(type, i, j) {type t = i; i = j; j = t;}
 
+#define MIN(a,b) ((a)<(b)?(a):(b))
+#define MAX(a,b) ((a)>(b)?(a):(b))
+
 namespace eez {
 namespace psu {
 

@@ -35,7 +35,7 @@ bool anyFailed();
 char *getSelfTestResultString();
 
 const char *getInstalledString(bool installed);
-const char *getTestResultString(psu::TestResult test_result);
+const char *getTestResultString(psu::TestResult g_testResult);
 
 }
 }

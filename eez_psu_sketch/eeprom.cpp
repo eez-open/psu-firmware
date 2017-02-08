@@ -23,7 +23,7 @@ namespace eez {
 namespace psu {
 namespace eeprom {
 
-psu::TestResult test_result = psu::TEST_FAILED;
+psu::TestResult g_testResult = psu::TEST_FAILED;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -51,15 +51,15 @@ void read_chunk(uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
 
 void read(uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
     for (uint16_t i = 0; i < buffer_size; i += 64) {
-        read_chunk(buffer + i, min(buffer_size - i, 64), address + i);
+        read_chunk(buffer + i, MIN(buffer_size - i, 64), address + i);
     }
 
     delay(1);
 
     uint8_t verifyBuffer[256];
-    uint16_t verifySize = min(buffer_size, sizeof(verifyBuffer));
+    uint16_t verifySize = MIN(buffer_size, sizeof(verifyBuffer));
     for (uint16_t i = 0; i < verifySize; i += 64) {
-        read_chunk(verifyBuffer + i, min(buffer_size - i, 64), address + i);
+        read_chunk(verifyBuffer + i, MIN(buffer_size - i, 64), address + i);
     }
 
     if (memcmp(buffer, verifyBuffer, verifySize)) {
@@ -120,7 +120,7 @@ static uint16_t buffer_verify_size;
 
 bool write(const uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
     for (uint16_t i = 0; i < buffer_size; i += 64) {
-        write_chunk(buffer + i, min(buffer_size - i, 64), address + i);
+        write_chunk(buffer + i, MIN(buffer_size - i, 64), address + i);
     }
 
     if (!buffer_verify || buffer_size > buffer_verify_size) {
@@ -173,24 +173,24 @@ bool test() {
         read(test_buffer, EEPROM_TEST_BUFFER_SIZE, EEPROM_TEST_ADDRESS);
 
         // compare it
-        test_result = psu::TEST_OK;
+        g_testResult = psu::TEST_OK;
         for (uint16_t i = 0; i < EEPROM_TEST_BUFFER_SIZE; ++i) {
             if (test_buffer[i] != i % 32) {
                 DebugTraceF("EEPROM test failed at index: %d", i);
-                test_result = psu::TEST_FAILED;
+                g_testResult = psu::TEST_FAILED;
                 break;
             }
         }
     }
     else {
-        test_result = psu::TEST_SKIPPED;
+        g_testResult = psu::TEST_SKIPPED;
     }
 
-    if (test_result == psu::TEST_FAILED) {
+    if (g_testResult == psu::TEST_FAILED) {
         psu::generateError(SCPI_ERROR_EXT_EEPROM_TEST_FAILED);
     }
 
-    return test_result != psu::TEST_FAILED;
+    return g_testResult != psu::TEST_FAILED;
 }
 
 }

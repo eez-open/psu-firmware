@@ -23,7 +23,7 @@ namespace eez {
 namespace psu {
 namespace bp {
 
-psu::TestResult test_result = psu::TEST_SKIPPED;
+psu::TestResult g_testResult = psu::TEST_SKIPPED;
 
 static uint16_t g_lastConf;
 static int g_channelCouplingType;

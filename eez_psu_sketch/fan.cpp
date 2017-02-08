@@ -38,7 +38,7 @@ enum RpmMeasureState {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-TestResult test_result = psu::TEST_FAILED;
+TestResult g_testResult = psu::TEST_FAILED;
 
 static unsigned long g_testStartTime;
 
@@ -156,20 +156,20 @@ bool test() {
 
         if (g_rpmMeasureState == RPM_MEASURE_STATE_MEASURED) {
             finish_rpm_measure();
-            test_result = psu::TEST_OK;
+            g_testResult = psu::TEST_OK;
             DebugTraceF("Fan RPM: %d", g_rpm);
         } else {
             // measure timeout, interrupt measurement
             g_rpmMeasureState = RPM_MEASURE_STATE_MEASURED;
             g_rpm = 0;
             finish_rpm_measure();
-            test_result = psu::TEST_FAILED;
+            g_testResult = psu::TEST_FAILED;
         }
     } else {
-        test_result = psu::TEST_SKIPPED;
+        g_testResult = psu::TEST_SKIPPED;
     }
 
-    if (test_result == psu::TEST_FAILED) {
+    if (g_testResult == psu::TEST_FAILED) {
         psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
         psu::setQuesBits(QUES_FAN, true);
         psu::limitMaxCurrent(MAX_CURRENT_LIMIT_CAUSE_FAN);
@@ -177,11 +177,11 @@ bool test() {
         psu::unlimitMaxCurrent();
     }
 
-    return test_result != psu::TEST_FAILED;
+    return g_testResult != psu::TEST_FAILED;
 }
 
 void tick(unsigned long tick_usec) {
-    if (test_result != psu::TEST_OK) {
+    if (g_testResult != psu::TEST_OK) {
         return;
     }
 
@@ -245,7 +245,7 @@ void tick(unsigned long tick_usec) {
                     finish_rpm_measure();
 
                     if (g_fanSpeedPWM != 0) {
-                        test_result = psu::TEST_FAILED;
+                        g_testResult = psu::TEST_FAILED;
                         psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
                         psu::setQuesBits(QUES_FAN, true);
                         psu::limitMaxCurrent(MAX_CURRENT_LIMIT_CAUSE_FAN);

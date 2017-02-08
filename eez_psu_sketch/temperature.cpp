@@ -81,7 +81,7 @@ void tick(unsigned long tick_usec) {
 		for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
 			temp_sensor::TempSensor &sensor = temp_sensor::sensors[i];
 			if (sensor.ch_num >= 0) {
-				if (sensor.test_result == psu::TEST_OK) {
+				if (sensor.g_testResult == psu::TEST_OK) {
 					temperature::TempSensorTemperature &sensorTemperature = temperature::sensors[i];
 					if (sensorTemperature.temperature > max_channel_temperature) {
 						max_channel_temperature = sensorTemperature.temperature;
@@ -178,13 +178,13 @@ bool TempSensorTemperature::isInstalled() {
 }
 
 bool TempSensorTemperature::isTestOK() {
-	return temp_sensor::sensors[sensorIndex].test_result == TEST_OK;
+	return temp_sensor::sensors[sensorIndex].g_testResult == TEST_OK;
 }
 
 void TempSensorTemperature::tick(unsigned long tick_usec) {
 	if (isInstalled() && isTestOK()) {
 		measure();
-		if (temp_sensor::sensors[sensorIndex].test_result == TEST_OK) {
+		if (temp_sensor::sensors[sensorIndex].g_testResult == TEST_OK) {
 			protection_check(tick_usec);
 		}
 	}

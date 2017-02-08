@@ -87,37 +87,37 @@ bool setType(Type value) {
                             temperature::sensors[temp_sensor::CH1 + channel.index - 1].prot_conf.delay =
                                 temperature::sensors[temp_sensor::CH1].prot_conf.delay;
                         } else {
-                            channel.setVoltageLimit(min(Channel::get(0).getVoltageLimit(), Channel::get(1).getVoltageLimit()));
-                            channel.setCurrentLimit(min(Channel::get(0).getCurrentLimit(), Channel::get(1).getCurrentLimit()));
+                            channel.setVoltageLimit(MIN(Channel::get(0).getVoltageLimit(), Channel::get(1).getVoltageLimit()));
+                            channel.setCurrentLimit(MIN(Channel::get(0).getCurrentLimit(), Channel::get(1).getCurrentLimit()));
                         }
                     } else {
                         channel.setVoltage(getUMin(channel));
-                        channel.setVoltageLimit(min(Channel::get(0).getVoltageLimit(), Channel::get(1).getVoltageLimit()));
+                        channel.setVoltageLimit(MIN(Channel::get(0).getVoltageLimit(), Channel::get(1).getVoltageLimit()));
 
                         channel.setCurrent(getIMin(channel));
-                        channel.setCurrentLimit(min(Channel::get(0).getCurrentLimit(), Channel::get(1).getCurrentLimit()));
+                        channel.setCurrentLimit(MIN(Channel::get(0).getCurrentLimit(), Channel::get(1).getCurrentLimit()));
 
                         channel.prot_conf.flags.u_state = Channel::get(0).prot_conf.flags.u_state || Channel::get(1).prot_conf.flags.u_state ? 1 : 0;
-                        channel.prot_conf.u_level = min(Channel::get(0).prot_conf.u_level, Channel::get(1).prot_conf.u_level);
-                        channel.prot_conf.u_delay = min(Channel::get(0).prot_conf.u_delay, Channel::get(1).prot_conf.u_delay);
+                        channel.prot_conf.u_level = MIN(Channel::get(0).prot_conf.u_level, Channel::get(1).prot_conf.u_level);
+                        channel.prot_conf.u_delay = MIN(Channel::get(0).prot_conf.u_delay, Channel::get(1).prot_conf.u_delay);
 
                         channel.prot_conf.flags.i_state = Channel::get(0).prot_conf.flags.i_state || Channel::get(1).prot_conf.flags.i_state ? 1 : 0;
-                        channel.prot_conf.i_delay = min(Channel::get(0).prot_conf.i_delay, Channel::get(1).prot_conf.i_delay);
+                        channel.prot_conf.i_delay = MIN(Channel::get(0).prot_conf.i_delay, Channel::get(1).prot_conf.i_delay);
 
                         channel.prot_conf.flags.p_state = Channel::get(0).prot_conf.flags.p_state || Channel::get(1).prot_conf.flags.p_state ? 1 : 0;
-                        channel.prot_conf.p_level = min(Channel::get(0).prot_conf.p_level, Channel::get(1).prot_conf.p_level);
-                        channel.prot_conf.p_delay = min(Channel::get(0).prot_conf.p_delay, Channel::get(1).prot_conf.p_delay);
+                        channel.prot_conf.p_level = MIN(Channel::get(0).prot_conf.p_level, Channel::get(1).prot_conf.p_level);
+                        channel.prot_conf.p_delay = MIN(Channel::get(0).prot_conf.p_delay, Channel::get(1).prot_conf.p_delay);
 
                         temperature::sensors[temp_sensor::CH1 + channel.index - 1].prot_conf.state =
                             temperature::sensors[temp_sensor::CH1].prot_conf.state ||
                             temperature::sensors[temp_sensor::CH2].prot_conf.state ? 1 : 0;
 
                         temperature::sensors[temp_sensor::CH1 + channel.index - 1].prot_conf.level =
-                            min(temperature::sensors[temp_sensor::CH1].prot_conf.level,
+                            MIN(temperature::sensors[temp_sensor::CH1].prot_conf.level,
                                 temperature::sensors[temp_sensor::CH2].prot_conf.level);
             
                         temperature::sensors[temp_sensor::CH1 + channel.index - 1].prot_conf.delay =
-                            min(temperature::sensors[temp_sensor::CH1].prot_conf.delay,
+                            MIN(temperature::sensors[temp_sensor::CH1].prot_conf.delay,
                                 temperature::sensors[temp_sensor::CH2].prot_conf.delay);
 
 #ifdef EEZ_PSU_SIMULATOR
@@ -197,25 +197,25 @@ float getUMonDac(const Channel &channel) {
 
 float getULimit(const Channel &channel) {
     if (isSeries()) {
-        return 2 * min(Channel::get(0).getVoltageLimit(), Channel::get(1).getVoltageLimit());
+        return 2 * MIN(Channel::get(0).getVoltageLimit(), Channel::get(1).getVoltageLimit());
     }
     return channel.getVoltageLimit();
 }
 
 float getUMaxLimit(const Channel &channel) {
     if (isSeries()) {
-        return 2 * min(Channel::get(0).getVoltageMaxLimit(), Channel::get(1).getVoltageMaxLimit());
+        return 2 * MIN(Channel::get(0).getVoltageMaxLimit(), Channel::get(1).getVoltageMaxLimit());
     } else if (isParallel() || isTracked()) {
-        return min(Channel::get(0).getVoltageMaxLimit(), Channel::get(1).getVoltageMaxLimit());
+        return MIN(Channel::get(0).getVoltageMaxLimit(), Channel::get(1).getVoltageMaxLimit());
     }
     return channel.getVoltageMaxLimit();
 }
 
 float getUMin(const Channel &channel) {
     if (isSeries()) {
-        return 2 * max(Channel::get(0).u.min, Channel::get(1).u.min);
+        return 2 * MAX(Channel::get(0).u.min, Channel::get(1).u.min);
     } else if (isParallel() || isTracked()) {
-        return max(Channel::get(0).u.min, Channel::get(1).u.min);
+        return MAX(Channel::get(0).u.min, Channel::get(1).u.min);
     }
     return channel.u.min;
 }
@@ -229,9 +229,9 @@ float getUDef(const Channel &channel) {
 
 float getUMax(const Channel &channel) {
     if (isSeries()) {
-        return 2 * min(Channel::get(0).u.max, Channel::get(1).u.max);
+        return 2 * MIN(Channel::get(0).u.max, Channel::get(1).u.max);
     } else if (isParallel() || isTracked()) {
-        return min(Channel::get(0).u.max, Channel::get(1).u.max);
+        return MIN(Channel::get(0).u.max, Channel::get(1).u.max);
     }
     return channel.u.max;
 }
@@ -350,25 +350,25 @@ float getIMonDac(const Channel &channel) {
 
 float getILimit(const Channel &channel) {
     if (isParallel()) {
-        return 2 * min(Channel::get(0).getCurrentLimit(), Channel::get(1).getCurrentLimit());
+        return 2 * MIN(Channel::get(0).getCurrentLimit(), Channel::get(1).getCurrentLimit());
     }
     return channel.getCurrentLimit();
 }
 
 float getIMaxLimit(const Channel &channel) {
     if (isParallel()) {
-        return 2 * min(Channel::get(0).getMaxCurrentLimit(), Channel::get(1).getMaxCurrentLimit());
+        return 2 * MIN(Channel::get(0).getMaxCurrentLimit(), Channel::get(1).getMaxCurrentLimit());
     } else if (isSeries() || isTracked()) {
-        return min(Channel::get(0).getMaxCurrentLimit(), Channel::get(1).getMaxCurrentLimit());
+        return MIN(Channel::get(0).getMaxCurrentLimit(), Channel::get(1).getMaxCurrentLimit());
     }
     return channel.getMaxCurrentLimit();
 }
 
 float getIMin(const Channel &channel) {
     if (isParallel()) {
-        return 2 * max(Channel::get(0).i.min, Channel::get(1).i.min);
+        return 2 * MAX(Channel::get(0).i.min, Channel::get(1).i.min);
     } else if (isSeries() || isTracked()) {
-        return max(Channel::get(0).i.min, Channel::get(1).i.min);
+        return MAX(Channel::get(0).i.min, Channel::get(1).i.min);
     }
     return channel.i.min;
 }
@@ -382,9 +382,9 @@ float getIDef(const Channel &channel) {
 
 float getIMax(const Channel &channel) {
     if (isParallel()) {
-        return 2 * min(Channel::get(0).i.max, Channel::get(1).i.max);
+        return 2 * MIN(Channel::get(0).i.max, Channel::get(1).i.max);
     } else if (isSeries() || isTracked()) {
-        return min(Channel::get(0).i.max, Channel::get(1).i.max);
+        return MIN(Channel::get(0).i.max, Channel::get(1).i.max);
     }
     return channel.i.max;
 }
@@ -446,7 +446,7 @@ void setOcpDelay(Channel &channel, float delay) {
 
 float getPowerLimit(const Channel& channel) {
     if (isCoupled()) {
-        return 2 * min(Channel::get(0).getPowerLimit(), Channel::get(1).getPowerLimit());
+        return 2 * MIN(Channel::get(0).getPowerLimit(), Channel::get(1).getPowerLimit());
     }
     return channel.getPowerLimit();
 }
@@ -457,7 +457,7 @@ float getPowerMinLimit(const Channel& channel) {
 
 float getPowerMaxLimit(const Channel& channel) {
     if (isCoupled()) {
-        return 2 * min(Channel::get(0).PTOT, Channel::get(1).PTOT);
+        return 2 * MIN(Channel::get(0).PTOT, Channel::get(1).PTOT);
     }
     return channel.PTOT;
 }
@@ -487,14 +487,14 @@ void setPowerLimit(Channel &channel, float limit) {
 
 float getOppMinLevel(Channel &channel) {
     if (isCoupled()) {
-        return 2 * max(Channel::get(0).OPP_MIN_LEVEL, Channel::get(1).OPP_MIN_LEVEL);
+        return 2 * MAX(Channel::get(0).OPP_MIN_LEVEL, Channel::get(1).OPP_MIN_LEVEL);
     }
     return channel.OPP_MIN_LEVEL;
 }
 
 float getOppMaxLevel(Channel &channel) {
     if (isCoupled()) {
-        return 2 * min(Channel::get(0).OPP_MAX_LEVEL, Channel::get(1).OPP_MAX_LEVEL);
+        return 2 * MIN(Channel::get(0).OPP_MAX_LEVEL, Channel::get(1).OPP_MAX_LEVEL);
     }
     return channel.OPP_MAX_LEVEL;
 }

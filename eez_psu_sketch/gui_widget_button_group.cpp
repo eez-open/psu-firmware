@@ -58,7 +58,7 @@ void drawButtons(const Widget* widget, int x, int y, const Style *style, int sel
 			y += topPadding;
 		}
 
-		int labelHeight = min(w, h);
+		int labelHeight = MIN(w, h);
 		int yOffset = (h - labelHeight) / 2;
 
 		for (int i = 0; i < count; ++i) {

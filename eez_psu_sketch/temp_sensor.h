@@ -46,7 +46,7 @@ class TempSensor {
 public:
 	TempSensor(const char *name, int installed, int pin, float p1_volt, float p1_cels, float p2_volt, float p2_cels, int ch_num, int ques_bit, int scpi_error);
 
-	psu::TestResult test_result;
+	psu::TestResult g_testResult;
 	const char *name;
 	int installed;
 	int pin;

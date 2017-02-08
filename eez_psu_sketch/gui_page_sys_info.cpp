@@ -78,11 +78,11 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id) {
 		return data::Value(3);
 	}
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-	if (fan::test_result == TEST_FAILED || fan::test_result == TEST_WARNING) {
+	if (fan::g_testResult == TEST_FAILED || fan::g_testResult == TEST_WARNING) {
 	    if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
 		    return data::Value(0);
 	    }
-	} else if (fan::test_result == TEST_OK) {
+	} else if (fan::g_testResult == TEST_OK) {
 #if FAN_OPTION_RPM_MEASUREMENT
 	    if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
 		    return data::Value(1);

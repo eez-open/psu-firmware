@@ -77,7 +77,7 @@ namespace eez {
 namespace psu {
 namespace bp {
 
-extern psu::TestResult test_result;
+extern psu::TestResult g_testResult;
 
 void init();
 

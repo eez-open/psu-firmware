@@ -23,7 +23,7 @@ namespace psu {
 /// System date and time.
 namespace datetime {
 
-extern psu::TestResult test_result;
+extern psu::TestResult g_testResult;
 
 void init();
 bool test();

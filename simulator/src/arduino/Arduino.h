@@ -32,9 +32,6 @@ namespace arduino {
 #define LSBFIRST 0
 #define MSBFIRST 1
 
-#define min(a,b) ((a)<(b)?(a):(b))
-#define max(a,b) ((a)>(b)?(a):(b))
-
 #define INPUT 0x0
 #define OUTPUT 0x1
 #define INPUT_PULLUP 0x2
