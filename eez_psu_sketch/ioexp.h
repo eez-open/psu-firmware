@@ -34,7 +34,7 @@ Pin 7  Out, OUTPUT_ENABLE
 
 CH_BOARD_REVISION_R5B6B
 
-Pin 0  In, "ADC interrupt/DRDY" or "remote sense reverse polarity detection" on CH_BOARD_REVISION_R5B9 
+Pin 0  In, "ADC interrupt/DRDY" or "remote sense reverse polarity detection" on CH_BOARD_REVISION_R5B9 and CH_BOARD_REVISION_R5B10 
 Pin 1  Out, DP enable (active low)
 Pin 2  In, CC_ACTIVE
 Pin 3  Out, SET_100% (active low)

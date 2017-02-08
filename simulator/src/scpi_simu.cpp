@@ -248,7 +248,7 @@ scpi_result_t scpi_simu_RPol(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    if (channel->boardRevision != CH_BOARD_REVISION_R5B9) {
+    if (channel->getFeatures() & CH_FEATURE_RPOL) {
         SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
     }
@@ -269,7 +269,7 @@ scpi_result_t scpi_simu_RPolQ(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    if (channel->boardRevision != CH_BOARD_REVISION_R5B9) {
+    if (channel->getFeatures() & CH_FEATURE_RPOL) {
         SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
     }

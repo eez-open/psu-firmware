@@ -407,6 +407,13 @@ scpi_result_t scpi_syst_ChannelInformationProgramQ(scpi_t * context) {
         strcat(strFeatures, "Rprog");
     }
 
+    if (features & CH_FEATURE_RPOL) {
+        if (strFeatures[0]) {
+            strcat(strFeatures, ", ");
+        }
+        strcat(strFeatures, "RPol");
+    }
+
     SCPI_ResultText(context, strFeatures);
 
     return SCPI_RES_OK;

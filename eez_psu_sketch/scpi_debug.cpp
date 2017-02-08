@@ -63,10 +63,14 @@ scpi_result_t debug_scpi_commandQ(scpi_t *context) {
     sprintf_P(p, PSTR("last_adc_read_counter: %lu\n"), lastAdcReadCounter);
     p += strlen(p);
 
+    Channel::get(0).adcReadAll();
+
     sprintf_P(p, PSTR("CH1: u_dac=%u, u_mon_dac=%d, u_mon=%d, i_dac=%u, i_mon_dac=%d, i_mon=%d\n"),
         (unsigned int)uDac[0], (int)uMonDac[0], (int)uMon[0],
         (unsigned int)iDac[0], (int)iMonDac[0], (int)iMon[0]);
     p += strlen(p);
+
+    Channel::get(1).adcReadAll();
 
     sprintf_P(p, PSTR("CH2: u_dac=%u, u_mon_dac=%d, u_mon=%d, i_dac=%u, i_mon_dac=%d, i_mon=%d\n"),
         (unsigned int)uDac[1], (int)uMonDac[1], (int)uMon[1],

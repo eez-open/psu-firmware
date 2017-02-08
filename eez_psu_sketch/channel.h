@@ -48,7 +48,8 @@ enum ChannelFeatures {
     CH_FEATURE_OE = (1 << 4),
     CH_FEATURE_DPROG = (1 << 5),
     CH_FEATURE_LRIPPLE = (1 << 6),
-    CH_FEATURE_RPROG = (1 << 7)
+    CH_FEATURE_RPROG = (1 << 7),
+    CH_FEATURE_RPOL = (1 << 8)
 };
 
 /// PSU channel.
@@ -323,7 +324,7 @@ public:
 
     Channel(
         uint8_t index,
-        uint8_t boardRevision, uint8_t ioexp_iodir, uint8_t ioexp_gpio_init, uint8_t IO_BIT_OUT_SET_100_PERCENT_, uint8_t IO_BIT_OUT_EXT_PROG_,
+        uint8_t boardRevision, uint8_t ioexp_iodir, uint8_t ioexp_gpio_init, uint8_t IO_BIT_OUT_SET_100_PERCENT_, uint8_t IO_BIT_OUT_EXT_PROG_, float VOLTAGE_GND_OFFSET_, float CURRENT_GND_OFFSET_,
         uint8_t isolator_pin, uint8_t ioexp_pin, uint8_t convend_pin, uint8_t adc_pin, uint8_t dac_pin,
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
         uint8_t bp_led_out_plus, uint8_t bp_led_out_minus, uint8_t bp_led_sense_plus, uint8_t bp_led_sense_minus, uint8_t bp_relay_sense,
@@ -557,6 +558,9 @@ private:
     float iHistory[CHANNEL_HISTORY_SIZE];
     int historyPosition;
     unsigned long historyLastTick;
+
+    float VOLTAGE_GND_OFFSET;
+    float CURRENT_GND_OFFSET;
 
     void clearProtectionConf();
     void protectionEnter(ProtectionValue &cpv);

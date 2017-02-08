@@ -547,7 +547,7 @@ uint8_t IOExpanderChip::transfer(uint8_t data) {
             }
 
             Channel &channel = Channel::get(this == &ioexp_chip1 ? 0 : 1);
-            if (channel.boardRevision == CH_BOARD_REVISION_R5B9) {
+            if (channel.getFeatures() & CH_FEATURE_RPOL) {
                 if (!rpol) {
                     result |= 1 << IOExpander::IO_BIT_IN_RPOL;
                 } else {
