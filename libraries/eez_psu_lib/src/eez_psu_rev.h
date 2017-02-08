@@ -19,8 +19,8 @@
 #ifndef EEZ_PSU_REV_H
 #define EEZ_PSU_REV_H
 
-#define EEZ_PSU_REVISION_R1B9 1
-#define EEZ_PSU_REVISION_R3B4 2
+#define EEZ_PSU_REVISION_R1B9  1
+#define EEZ_PSU_REVISION_R3B4  2
 
 #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 #define EEZ_PSU_ARDUINO_MEGA

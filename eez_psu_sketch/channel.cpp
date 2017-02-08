@@ -52,7 +52,9 @@ const char *CH_BOARD_REVISION_NAMES[] = {
     // CH_BOARD_REVISION_R5B6B
     "Power_r5B6b",
     // CH_BOARD_REVISION_R5B9
-    "Power_r5B9"
+    "Power_r5B9",
+    // CH_BOARD_REVISION_R5B10
+    "Power_r5B10"
 };
 
 uint16_t CH_BOARD_REVISION_FEATURES[] = {
@@ -723,7 +725,7 @@ void Channel::adcDataIsReady(int16_t data) {
 
         float value = remapAdcDataToVoltage(u.mon_adc);
 
-        u.mon = isCalibrationEnabled() ?
+        u.mon = isVoltageCalibrationEnabled() ?
             util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val) :
             value;
 
@@ -743,7 +745,7 @@ void Channel::adcDataIsReady(int16_t data) {
 
         float value = remapAdcDataToCurrent(i.mon_adc);
 
-        i.mon = isCalibrationEnabled() ?
+        i.mon = isCurrentCalibrationEnabled() ?
             util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val) :
             value;
 
@@ -772,7 +774,7 @@ void Channel::adcDataIsReady(int16_t data) {
 #endif
 
         float value = remapAdcDataToVoltage(data);
-        u.mon_dac = isCalibrationEnabled() ?
+        u.mon_dac = isVoltageCalibrationEnabled() ?
             util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val) :
             value;
 
@@ -792,7 +794,7 @@ void Channel::adcDataIsReady(int16_t data) {
 #endif
 
         float value = remapAdcDataToCurrent(data);
-        i.mon_dac = isCalibrationEnabled() ?
+        i.mon_dac = isCurrentCalibrationEnabled() ?
             util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val) :
             value;
 
@@ -1129,22 +1131,22 @@ void Channel::doCalibrationEnable(bool enable) {
     flags._calEnabled = enable;
 
     if (enable) {
-        u.min = util::ceilPrec(cal_conf.u.minPossible, CHANNEL_VALUE_PRECISION);
+        u.min = util::floorPrec(cal_conf.u.minPossible, CHANNEL_VALUE_PRECISION);
         if (u.min < U_MIN) u.min = U_MIN;
         if (u.limit < u.min) u.limit = u.min;
         if (u.set < u.min) setVoltage(u.min);
         
-        u.max = util::floorPrec(cal_conf.u.maxPossible, CHANNEL_VALUE_PRECISION);
+        u.max = util::ceilPrec(cal_conf.u.maxPossible, CHANNEL_VALUE_PRECISION);
         if (u.max > U_MAX) u.max = U_MAX;
         if (u.set > u.max) setVoltage(u.max);
         if (u.limit > u.max) u.limit = u.max;
 
-        i.min = util::ceilPrec(cal_conf.i.minPossible, CHANNEL_VALUE_PRECISION);
+        i.min = util::floorPrec(cal_conf.i.minPossible, CHANNEL_VALUE_PRECISION);
         if (i.min < I_MIN) i.min = I_MIN;
         if (i.limit < i.min) i.limit = i.min;
         if (i.set < i.min) setCurrent(i.min);
 
-        i.max = util::floorPrec(cal_conf.i.maxPossible, CHANNEL_VALUE_PRECISION);
+        i.max = util::ceilPrec(cal_conf.i.maxPossible, CHANNEL_VALUE_PRECISION);
         if (i.max > I_MAX) i.max = I_MAX;
         if (i.limit > i.max) i.limit = i.max;
         if (i.set > i.max) setCurrent(i.max);
@@ -1180,9 +1182,15 @@ bool Channel::isCalibrationEnabled() {
     return flags._calEnabled;
 }
 
-void Channel::calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max) {
-    flags._calEnabled = true;
+bool Channel::isVoltageCalibrationEnabled() {
+    return flags._calEnabled && cal_conf.flags.u_cal_params_exists;
+}
 
+bool Channel::isCurrentCalibrationEnabled() {
+    return flags._calEnabled && cal_conf.flags.i_cal_params_exists;
+}
+
+void Channel::calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max) {
     CalibrationValueConfiguration calValueConf;
     calValueConf = cal_conf.u;
 
@@ -1193,22 +1201,30 @@ void Channel::calibrationFindVoltageRange(float minDac, float minVal, float minA
     cal_conf.u.max.val = maxVal;
     cal_conf.u.max.adc = maxAdc;
 
-    setVoltage(U_MIN);
+    flags._calEnabled = false;
+    doSetVoltage(U_MIN);
+    flags._calEnabled = true;
     delay(100);
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
     delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
+    //DebugTraceF("DAC=%d", (int)debug::uDac[index-1]);
+    //DebugTraceF("MON_ADC=%d", (int)u.mon_adc);
     *min = u.mon;
 
-    setVoltage(U_MAX);
+    flags._calEnabled = false;
+    doSetVoltage(U_MAX);
+    flags._calEnabled = true;
     delay(200); // guard time, because without load it will require more than 15ms to jump to the max
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
     delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
+    //DebugTraceF("DAC=%d", (int)debug::uDac[index-1]);
+    //DebugTraceF("MON_ADC=%d", (int)u.mon_adc);
     *max = u.mon;
 
     cal_conf.u = calValueConf;
@@ -1217,8 +1233,6 @@ void Channel::calibrationFindVoltageRange(float minDac, float minVal, float minA
 }
 
 void Channel::calibrationFindCurrentRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max) {
-    flags._calEnabled = true;
-
     CalibrationValueConfiguration calValueConf;
     calValueConf = cal_conf.i;
 
@@ -1229,7 +1243,9 @@ void Channel::calibrationFindCurrentRange(float minDac, float minVal, float minA
     cal_conf.i.max.val = maxVal;
     cal_conf.i.max.adc = maxAdc;
 
-    setCurrent(I_MIN);
+    flags._calEnabled = false;
+    doSetCurrent(I_MIN);
+    flags._calEnabled = true;
     delay(20);
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
@@ -1238,7 +1254,9 @@ void Channel::calibrationFindCurrentRange(float minDac, float minVal, float minA
 #endif
     *min = i.mon;
 
-    setCurrent(I_MAX);
+    flags._calEnabled = false;
+    doSetCurrent(I_MAX);
+    flags._calEnabled = true;
     delay(20);
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
@@ -1314,7 +1332,7 @@ void Channel::doSetVoltage(float value) {
         value = util::remap(value, 0, 0, U_MAX_CONF, U_MAX);
     }
 
-    if (isCalibrationEnabled()) {
+    if (isVoltageCalibrationEnabled()) {
         value = util::remap(value, cal_conf.u.min.val, cal_conf.u.min.dac, cal_conf.u.max.val, cal_conf.u.max.dac);
     }
     dac.set_voltage(value);
@@ -1333,7 +1351,7 @@ void Channel::doSetCurrent(float value) {
     i.set = value;
     i.mon_dac = 0;
 
-    if (isCalibrationEnabled()) {
+    if (isCurrentCalibrationEnabled()) {
         value = util::remap(value, cal_conf.i.min.val, cal_conf.i.min.dac, cal_conf.i.max.val, cal_conf.i.max.dac);
     }
     dac.set_current(value);
@@ -1349,7 +1367,7 @@ void Channel::setCurrent(float value) {
 }
 
 bool Channel::isCalibrationExists() {
-    return cal_conf.flags.i_cal_params_exists && cal_conf.flags.u_cal_params_exists;
+    return cal_conf.flags.i_cal_params_exists || cal_conf.flags.u_cal_params_exists;
 }
 
 bool Channel::isTripped() {

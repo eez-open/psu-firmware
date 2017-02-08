@@ -31,3 +31,7 @@ Use this header file to override anything from conf.h or conf_advanced.h.
     CHANNEL(2, CH_BOARD_REVISION_R5B9_PARAMS, CH_PINS_2, CH_PARAMS_30V_3A) \
 */
 
+#undef CHANNELS
+#define CHANNELS \
+    CHANNEL(1, CH_BOARD_REVISION_R5B9_PARAMS, CH_PINS_1, CH_PARAMS_40V_5A), \
+    CHANNEL(2, CH_BOARD_REVISION_R5B10_PARAMS, CH_PINS_2, CH_PARAMS_40V_5A)

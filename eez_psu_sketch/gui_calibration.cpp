@@ -160,9 +160,9 @@ void showCurrentStep() {
 
 bool canSave() {
     int16_t scpiErr;
-    return psu::calibration::canSave(scpiErr) &&
+    return psu::calibration::canSave(scpiErr)/* &&
         (psu::calibration::isVoltageCalibrated() || g_channel->cal_conf.flags.u_cal_params_exists) &&
-        (psu::calibration::isCurrentCalibrated() || g_channel->cal_conf.flags.i_cal_params_exists);
+        (psu::calibration::isCurrentCalibrated() || g_channel->cal_conf.flags.i_cal_params_exists)*/;
 }
 
 void onSetRemarkOk(char *remark) {

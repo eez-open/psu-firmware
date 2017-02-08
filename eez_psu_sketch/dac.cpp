@@ -32,13 +32,6 @@ static const uint16_t DAC_MAX = (1L << DAC_RES) - 1;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#if CONF_DEBUG
-extern uint16_t debug_u_dac[CH_MAX];
-extern uint16_t debug_i_dac[CH_MAX];
-#endif
-
-////////////////////////////////////////////////////////////////////////////////
-
 DigitalAnalogConverter::DigitalAnalogConverter(Channel &channel_) : channel(channel_) {
     g_testResult = psu::TEST_SKIPPED;
 }

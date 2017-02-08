@@ -566,6 +566,8 @@ private:
     void doCalibrationEnable(bool enable);
     void calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
     void calibrationFindCurrentRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max);
+    bool isVoltageCalibrationEnabled();
+    bool isCurrentCalibrationEnabled();
 
     void adcDataIsReady(int16_t data);
     

@@ -21,14 +21,17 @@
 #define CH_BOARD_REVISION_R4B43A 0
 #define CH_BOARD_REVISION_R5B6B  1
 #define CH_BOARD_REVISION_R5B9   2
+#define CH_BOARD_REVISION_R5B10  3
 
 #define IOEXP_IODIR_R4B43A 0B01111101 // pins 1 and 7 set as output
 #define IOEXP_IODIR_R5B6B  0B01100101 // pins 1, 3, 4 and 7 set as output
 #define IOEXP_IODIR_R5B9   0B01100101 // pins 1, 3, 4 and 7 set as output
+#define IOEXP_IODIR_R5B10  0B01100101 // pins 1, 3, 4 and 7 set as output
 
 #define IOEXP_GPIO_INIT_R4B43A 0B00000010
 #define IOEXP_GPIO_INIT_R5B6B  0B00001010
 #define IOEXP_GPIO_INIT_R5B9   0B00001010
+#define IOEXP_GPIO_INIT_R5B10  0B00001010
 
 #define IO_BIT_NOT_USED 0
 
@@ -38,9 +41,13 @@
 #define IO_BIT_OUT_SET_100_PERCENT_R5B9 3
 #define IO_BIT_OUT_EXT_PROG_R5B9 4
 
+#define IO_BIT_OUT_SET_100_PERCENT_R5B10 3
+#define IO_BIT_OUT_EXT_PROG_R5B10 4
+
 #define CH_BOARD_REVISION_R4B43A_PARAMS CH_BOARD_REVISION_R4B43A, IOEXP_IODIR_R4B43A, IOEXP_GPIO_INIT_R4B43A, IO_BIT_NOT_USED, IO_BIT_NOT_USED
 #define CH_BOARD_REVISION_R5B6B_PARAMS  CH_BOARD_REVISION_R5B6B, IOEXP_IODIR_R5B6B, IOEXP_GPIO_INIT_R5B6B, IO_BIT_OUT_SET_100_PERCENT_R5B6B, IO_BIT_OUT_EXT_PROG_R5B6B
-#define CH_BOARD_REVISION_R5B9_PARAMS  CH_BOARD_REVISION_R5B9, IOEXP_IODIR_R5B9, IOEXP_GPIO_INIT_R5B9, IO_BIT_OUT_SET_100_PERCENT_R5B9, IO_BIT_OUT_EXT_PROG_R5B9
+#define CH_BOARD_REVISION_R5B9_PARAMS   CH_BOARD_REVISION_R5B9, IOEXP_IODIR_R5B9, IOEXP_GPIO_INIT_R5B9, IO_BIT_OUT_SET_100_PERCENT_R5B9, IO_BIT_OUT_EXT_PROG_R5B9
+#define CH_BOARD_REVISION_R5B10_PARAMS  CH_BOARD_REVISION_R5B10, IOEXP_IODIR_R5B10, IOEXP_GPIO_INIT_R5B10, IO_BIT_OUT_SET_100_PERCENT_R5B10, IO_BIT_OUT_EXT_PROG_R5B10
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 
@@ -73,15 +80,15 @@
 
 //                         U_MIN, U_DEF, U_MAX, U_MAX_CONF, U_MIN_STEP, U_DEF_STEP, U_MAX_STEP, U_CAL_VAL_MIN, U_CAL_VAL_MID, U_CAL_VAL_MAX, U_CURR_CAL
 #define CH_PARAMS_U_30V    0.0f,  0.0f,  30.0f, 30.0f,      0.01f,      0.1f,       5.0f,       0.15f,         14.1f,         28.0f,         25.0f,     CH_PARAMS_OVP
-#define CH_PARAMS_U_40V    0.0f,  0.0f,  40.0f, 40.6667f,   0.01f,      0.1f,       5.0f,       0.15f,         19.1f,         38.0f,         25.0f,     CH_PARAMS_OVP
+#define CH_PARAMS_U_40V    0.0f,  0.0f,  40.0f, 40.0f,      0.01f,      0.1f,       5.0f,       1.00f,         19.1f,         38.0f,         25.0f,     CH_PARAMS_OVP
 #define CH_PARAMS_U_50V    0.0f,  0.0f,  50.0f, 50.0f,      0.01f,      0.1f,       5.0f,       0.15f,         24.1f,         48.0f,         25.0f,     CH_PARAMS_OVP
 
 //                       OCP_DEFAULT_STATE, OCP_MIN_DELAY, OCP_DEFAULT_DELAY, OCP_MAX_DELAY
 #define CH_PARAMS_OCP    false,             0.0f,          0.02f,             10.0f
 
 //                        I_MIN, I_DEF, I_MAX,  I_MIN_STEP, I_DEF_STEP, I_MAX_STEP, I_CAL_VAL_MIN, I_CAL_VAL_MID, I_CAL_VAL_MAX, I_VOLT_CAL
-#define CH_PARAMS_I_3A    0.0f,  0.0f,  3.125f, 0.01f,      0.01f,      1.0f,       0.05f,         1.525f,        3.0f,          0.05f,      CH_PARAMS_OCP
-#define CH_PARAMS_I_5A    0.0f,  0.0f,  5.0f,   0.01f,      0.01f,      1.0f,       0.05f,         2.425f,        4.8f,          0.05f,      CH_PARAMS_OCP
+#define CH_PARAMS_I_3A    0.0f,  0.0f,  3.125f, 0.01f,      0.01f,      1.0f,       0.05f,         1.525f,        3.0f,          1.00f,      CH_PARAMS_OCP
+#define CH_PARAMS_I_5A    0.0f,  0.0f,  5.0f,   0.01f,      0.01f,      1.0f,       0.05f,         2.425f,        4.8f,          1.00f,      CH_PARAMS_OCP
 
 //                             OPP_MIN_DELAY, OPP_DEFAULT_DELAY, OPP_MAX_DELAY
 #define CH_PARAMS_OPP_DELAY    1.0f,          10.0f,             300.0f
