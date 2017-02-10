@@ -87,7 +87,7 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id) {
 	    if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
 		    return data::Value(1);
 	    }
-	    if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
+	    if (id == DATA_ID_SYS_INFO_FAN_SPEED) {
 		    return data::Value((float)fan::g_rpm, data::VALUE_TYPE_FLOAT_RPM);
 	    }
 #else
