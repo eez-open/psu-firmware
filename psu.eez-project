@@ -15024,7 +15024,7 @@
               "width": 240,
               "height": 28,
               "style": "default_disabled_S_left",
-              "text": "Digital input (External trigger)"
+              "text": "Digital I/O"
             },
             {
               "type": "Text",
@@ -15593,7 +15593,7 @@
         }
       },
       {
-        "name": "sys_settings_din",
+        "name": "sys_settings_io",
         "description": "Define selected protection values\n",
         "portrait": {
           "x": 0,
@@ -15615,52 +15615,7 @@
               "width": 246,
               "height": 32,
               "style": "value_S",
-              "text": "Digital input pin settings"
-            },
-            {
-              "type": "MultilineText",
-              "x": 16,
-              "y": 32,
-              "width": 236,
-              "height": 114,
-              "style": "default_S",
-              "text": "Select one of the following function: None, Inhibit outputs, trigger input and polarity: Positive (rising edge) or Negative (falling edge)"
-            },
-            {
-              "type": "Text",
-              "x": 26,
-              "y": 146,
-              "width": 79,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Function:"
-            },
-            {
-              "type": "Text",
-              "x": 105,
-              "y": 146,
-              "width": 117,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "[selection]"
-            },
-            {
-              "type": "Text",
-              "x": 26,
-              "y": 174,
-              "width": 79,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Polarity:"
-            },
-            {
-              "type": "Text",
-              "x": 105,
-              "y": 174,
-              "width": 117,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "[selection]"
+              "text": "Digital I/O pin settings"
             },
             {
               "type": "Button",
@@ -15710,6 +15665,42 @@
               "width": 68,
               "height": 204,
               "style": "default"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 42,
+              "width": 236,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Pin #:       1          2          3"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 70,
+              "width": 236,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Enable:    Yes        No       Yes"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 98,
+              "width": 236,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Function: Trig       Out      Out"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 98,
+              "width": 236,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Polarity:  Pos       Neg      Neg"
             }
           ]
         }
