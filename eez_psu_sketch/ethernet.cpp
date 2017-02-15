@@ -77,20 +77,23 @@ scpi_result_t SCPI_Flush(scpi_t * context) {
 
 int SCPI_Error(scpi_t *context, int_fast16_t err) {
     if (err != 0) {
-        scpi::printError(err);
+        char errorOutputBuffer[256];
+        sprintf_P(errorOutputBuffer, PSTR("**ERROR: %d,\"%s\"\r\n"), (int16_t)err, SCPI_ErrorTranslate(err));
+        ethernet_client_write(firstClient, errorOutputBuffer, strlen(errorOutputBuffer));
     }
+
     return 0;
 }
 
 scpi_result_t SCPI_Control(scpi_t *context, scpi_ctrl_name_t ctrl, scpi_reg_val_t val) {
-    char errorOutputBuffer[256];
+    char outputBuffer[256];
     if (SCPI_CTRL_SRQ == ctrl) {
-        sprintf_P(errorOutputBuffer, PSTR("**SRQ: 0x%X (%d)\r\n"), val, val);
+        sprintf_P(outputBuffer, PSTR("**SRQ: 0x%X (%d)\r\n"), val, val);
+    } else {
+        sprintf_P(outputBuffer, PSTR("**CTRL %02x: 0x%X (%d)\r\n"), ctrl, val, val);
     }
-    else {
-        sprintf_P(errorOutputBuffer, PSTR("**CTRL %02x: 0x%X (%d)\r\n"), ctrl, val, val);
-    }
-    Serial.println(errorOutputBuffer);
+
+    ethernet_client_write(firstClient, outputBuffer, strlen(outputBuffer));
 
     return SCPI_RES_OK;
 }
