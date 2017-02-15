@@ -8772,6 +8772,15 @@
               "height": 36,
               "style": "bottom_button",
               "text": "B"
+            },
+            {
+              "type": "Container",
+              "x": 222,
+              "y": 298,
+              "width": 64,
+              "height": 32,
+              "style": "default_inverse",
+              "widgets": []
             }
           ]
         }
@@ -10723,6 +10732,14 @@
               "style": "default"
             },
             {
+              "type": "Rectangle",
+              "x": 196,
+              "y": 28,
+              "width": 56,
+              "height": 140,
+              "style": "default_inverse"
+            },
+            {
               "x": 6,
               "type": "Select",
               "data": "channel.isCoupledOrTracked",
@@ -10792,14 +10809,6 @@
               "text": "Clear / Disable"
             },
             {
-              "type": "Rectangle",
-              "x": 196,
-              "y": 28,
-              "width": 56,
-              "height": 28,
-              "style": "default_inverse"
-            },
-            {
               "type": "Text",
               "action": "show_ch_settings_prot_ocp",
               "x": 16,
@@ -10808,14 +10817,6 @@
               "height": 28,
               "style": "edit_value_active_S_left",
               "text": "Current limit and OCP"
-            },
-            {
-              "type": "Rectangle",
-              "x": 196,
-              "y": 56,
-              "width": 56,
-              "height": 28,
-              "style": "default_inverse"
             },
             {
               "type": "Text",
@@ -10828,14 +10829,6 @@
               "text": "Voltage limit and OVP"
             },
             {
-              "type": "Rectangle",
-              "x": 196,
-              "y": 84,
-              "width": 56,
-              "height": 28,
-              "style": "default_inverse"
-            },
-            {
               "type": "Text",
               "action": "show_ch_settings_prot_opp",
               "x": 16,
@@ -10844,14 +10837,6 @@
               "height": 28,
               "style": "edit_value_active_S_left",
               "text": "Power limit and OPP"
-            },
-            {
-              "type": "Rectangle",
-              "x": 196,
-              "y": 112,
-              "width": 56,
-              "height": 28,
-              "style": "default_inverse"
             },
             {
               "x": 16,
@@ -10889,14 +10874,6 @@
                       "height": 28,
                       "style": "edit_value_active_S_left",
                       "text": "Temperature (OTP)"
-                    },
-                    {
-                      "type": "Rectangle",
-                      "x": 180,
-                      "y": 0,
-                      "width": 56,
-                      "height": 28,
-                      "style": "default_inverse"
                     }
                   ]
                 }
@@ -12222,7 +12199,7 @@
               "action": "ch_settings_prot_edit_level",
               "x": 135,
               "y": 56,
-              "width": 96,
+              "width": 87,
               "height": 28,
               "style": "edit_value_active_S_left"
             },
@@ -12618,14 +12595,6 @@
               ]
             },
             {
-              "type": "Rectangle",
-              "x": 196,
-              "y": 28,
-              "width": 56,
-              "height": 28,
-              "style": "default_inverse"
-            },
-            {
               "x": 16,
               "type": "Select",
               "data": "channel.coupling.mode",
@@ -12675,14 +12644,6 @@
                   "text": "Remote sensing"
                 }
               ]
-            },
-            {
-              "type": "Rectangle",
-              "x": 196,
-              "y": 56,
-              "width": 56,
-              "height": 28,
-              "style": "default_inverse"
             },
             {
               "x": 16,
@@ -12737,14 +12698,6 @@
                               "height": 28,
                               "style": "edit_value_active_S_left",
                               "text": "Remote programming"
-                            },
-                            {
-                              "type": "Rectangle",
-                              "x": 180,
-                              "y": 0,
-                              "width": 56,
-                              "height": 28,
-                              "style": "default_inverse"
                             }
                           ]
                         },
@@ -12797,7 +12750,7 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 236,
+                  "width": 180,
                   "height": 28,
                   "style": "default",
                   "widgets": [
@@ -12810,14 +12763,6 @@
                       "height": 28,
                       "style": "edit_value_active_S_left",
                       "text": "Tracking control"
-                    },
-                    {
-                      "type": "Rectangle",
-                      "x": 180,
-                      "y": 0,
-                      "width": 56,
-                      "height": 28,
-                      "style": "default_inverse"
                     }
                   ]
                 },
@@ -12838,7 +12783,7 @@
               "type": "Select",
               "data": "channel.isTracked",
               "y": 140,
-              "width": 236,
+              "width": 180,
               "height": 28,
               "style": "default",
               "widgets": [
@@ -12859,14 +12804,6 @@
                       "height": 28,
                       "style": "edit_value_active_S_left",
                       "text": "Coupling settings"
-                    },
-                    {
-                      "type": "Rectangle",
-                      "x": 180,
-                      "y": 0,
-                      "width": 56,
-                      "height": 28,
-                      "style": "default_inverse"
                     }
                   ]
                 },
@@ -12875,7 +12812,7 @@
                   "action": "",
                   "x": 0,
                   "y": 0,
-                  "width": 236,
+                  "width": 180,
                   "height": 28,
                   "style": "default_disabled_S_left",
                   "text": "Coupling settings \\u008c"
@@ -12891,14 +12828,6 @@
               "height": 28,
               "style": "edit_value_active_S_left",
               "text": "Display view"
-            },
-            {
-              "type": "Rectangle",
-              "x": 196,
-              "y": 168,
-              "width": 56,
-              "height": 28,
-              "style": "default_inverse"
             },
             {
               "type": "Rectangle",
@@ -15588,6 +15517,14 @@
               "height": 36,
               "style": "non_interactive_button_S",
               "text": " Discard"
+            },
+            {
+              "type": "Rectangle",
+              "x": 269,
+              "y": 315,
+              "width": 64,
+              "height": 32,
+              "style": "default"
             }
           ]
         }
@@ -19211,9 +19148,9 @@
           {
             "type": "Rectangle",
             "x": 0,
-            "y": 84,
+            "y": 92,
             "width": 64,
-            "height": 36,
+            "height": 20,
             "style": "default_inverse"
           },
           {
@@ -21821,7 +21758,6 @@
         "alignVertical": "center",
         "color": "#FF0000",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -21833,7 +21769,6 @@
         "alignVertical": "center",
         "color": "#FFFF00",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -21845,7 +21780,6 @@
         "alignVertical": "center",
         "color": "#FFFF00",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -21857,7 +21791,6 @@
         "alignVertical": "center",
         "color": "#FFFFFF",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -21891,41 +21824,34 @@
         "description": "",
         "inheritFrom": "default",
         "font": "medium",
-        "color": "#c0c0c0",
-        "backgroundColor": "#5080ff",
-        "borderColor": "#D3D3D3"
+        "color": "#c0c0c0"
       },
       {
         "name": "default_active_S",
-        "inheritFrom": "default_S",
+        "inheritFrom": "default",
         "color": "#ffff00"
       },
       {
         "name": "default_disabled_S_left",
         "description": "",
+        "inheritFrom": "default",
         "font": "small",
         "alignHorizontal": "left",
-        "color": "#c0c0c0",
-        "backgroundColor": "#5080ff",
-        "borderColor": "#D3D3D3"
+        "color": "#c0c0c0"
       },
       {
         "name": "default_edit",
-        "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance.",
+        "description": "",
         "inheritFrom": "default",
         "font": "medium",
-        "color": "#FFFFFF",
-        "backgroundColor": "#5080ff",
-        "borderColor": "#D3D3D3"
+        "color": "#FFFFFF"
       },
       {
         "name": "default_edit_inverse",
-        "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance.",
+        "description": "",
         "inheritFrom": "default",
         "font": "medium",
-        "color": "#5080ff",
-        "backgroundColor": "#ffffff",
-        "borderColor": "#D3D3D3"
+        "backgroundColor": "#ffffff"
       },
       {
         "name": "default_ICONS",
@@ -21934,11 +21860,11 @@
       },
       {
         "name": "default_inverse",
-        "description": "Previous background color was: #52b5d3\nNew one was changed intentionally to test inheritance.",
+        "description": "",
+        "inheritFrom": "default",
         "font": "medium",
         "color": "#5080ff",
-        "backgroundColor": "#ffffff",
-        "borderColor": "#5080ff"
+        "backgroundColor": "#5080ff"
       },
       {
         "name": "default_L",
@@ -21947,9 +21873,7 @@
         "alignHorizontal": "center",
         "alignVertical": "center",
         "color": "#FFFFFF",
-        "backgroundColor": "#5080ff",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -21966,7 +21890,6 @@
         "alignVertical": "center",
         "color": "#c8e7f0",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -21978,7 +21901,6 @@
         "alignVertical": "center",
         "color": "#FFFFFF",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -21990,7 +21912,6 @@
         "alignVertical": "center",
         "color": "#FFFFFF",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22015,7 +21936,6 @@
         "alignVertical": "center",
         "color": "#FFFFFF",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22027,7 +21947,6 @@
         "alignVertical": "center",
         "color": "#FFFF00",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22039,7 +21958,6 @@
         "alignVertical": "center",
         "color": "#FFFF00",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22051,7 +21969,6 @@
         "alignVertical": "center",
         "color": "#FFFF00",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22063,7 +21980,6 @@
         "alignVertical": "center",
         "color": "#FFFF00",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22088,7 +22004,6 @@
         "alignVertical": "center",
         "color": "#c8e7f0",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22100,7 +22015,6 @@
         "alignVertical": "center",
         "color": "#FFFFFF",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22112,7 +22026,6 @@
         "alignVertical": "center",
         "color": "#FFFFFF",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22124,7 +22037,6 @@
         "alignVertical": "center",
         "color": "#FFFFFF",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22136,7 +22048,6 @@
         "alignVertical": "center",
         "color": "#FFFFFF",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22148,7 +22059,6 @@
         "alignVertical": "center",
         "color": "#FF0000",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22160,7 +22070,6 @@
         "alignVertical": "center",
         "color": "#FF0000",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22292,7 +22201,6 @@
         "alignVertical": "center",
         "color": "#ff0000",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22310,7 +22218,6 @@
         "alignVertical": "center",
         "color": "#FFFF00",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22322,7 +22229,6 @@
         "alignVertical": "center",
         "color": "#FFFF00",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22334,7 +22240,6 @@
         "alignVertical": "center",
         "color": "#FF0000",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22346,7 +22251,6 @@
         "alignVertical": "center",
         "color": "#FFFF00",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22358,7 +22262,6 @@
         "alignVertical": "center",
         "color": "#FF0000",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22370,7 +22273,6 @@
         "alignVertical": "center",
         "color": "#FF0000",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22411,7 +22313,6 @@
         "alignVertical": "center",
         "color": "#808080",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22447,9 +22348,7 @@
         "alignHorizontal": "center",
         "alignVertical": "center",
         "color": "#c0c000",
-        "backgroundColor": "#5080ff",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22460,9 +22359,7 @@
         "alignHorizontal": "right",
         "alignVertical": "center",
         "color": "#c0c000",
-        "backgroundColor": "#5080ff",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22522,9 +22419,7 @@
         "alignHorizontal": "center",
         "alignVertical": "center",
         "color": "#c8e7f0",
-        "backgroundColor": "#5080ff",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
@@ -22570,9 +22465,7 @@
         "alignHorizontal": "center",
         "alignVertical": "center",
         "color": "#FFFFFF",
-        "backgroundColor": "#5080ff",
         "borderSize": 0,
-        "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
