@@ -67580,7 +67580,7 @@
       },
       {
         "name": "test1",
-        "code": "// this is comment line\nscpi> *idn?\nEEZ,PSU /.*/\nscpi> debug?\n// use /.*/ to match anything\nmax_loop_duration: /.*/\nlast_loop_duration: /.*/\navg_loop_duration: /.*/\ntotal_adc_read_counter: /.*/\nlast_adc_read_counter: /.*/\nCH1: u_dac=/.*/, u_mon_dac=/.*/, u_mon=/.*/, i_dac=/.*/, i_mon_dac=/.*/, i_mon=/.*/\nCH2: u_dac=/.*/, u_mon_dac=/.*/, u_mon=/.*/, i_dac=/.*/, i_mon_dac=/.*/, i_mon=/.*/\nscpi> diag:add?\n**ERROR: -113,\"Undefined header\"\nscpi> diag:adc?\n\"U_SET=/.*/V\",\"U_MON=/.*/V\",\"I_SET=/.*/A\",\"I_MON=/.*/A\""
+        "code": "// this is comment line\nscpi> *idn?\nEEZ,PSU /.*/\nscpi> debug?\n// use /.*/ to match anything\nmax_loop_duration: /.*/\nlast_loop_duration: /.*/\navg_loop_duration: /.*/\ntotal_adc_read_counter: /.*/\nlast_adc_read_counter: /.*/\nCH1: u_dac=/.*/, u_mon_dac=/.*/, u_mon=/.*/, i_dac=/.*/, i_mon_dac=/.*/, i_mon=/.*/\nCH2: u_dac=/.*/, u_mon_dac=/.*/, u_mon=/.*/, i_dac=/.*/, i_mon_dac=/.*/, i_mon=/.*/\nscpi> diag:add?\n**ERROR/.*/: -113,\"Undefined header\"\nscpi> diag:adc?\n\"U_SET=/.*/V\",\"U_MON=/.*/V\",\"I_SET=/.*/A\",\"I_MON=/.*/A\""
       }
     ],
     "playground": {}
