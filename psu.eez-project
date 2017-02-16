@@ -15517,14 +15517,6 @@
               "height": 36,
               "style": "non_interactive_button_S",
               "text": " Discard"
-            },
-            {
-              "type": "Rectangle",
-              "x": 269,
-              "y": 315,
-              "width": 64,
-              "height": 32,
-              "style": "default"
             }
           ]
         }
@@ -22137,6 +22129,7 @@
         "font": "medium",
         "alignHorizontal": "center",
         "alignVertical": "center",
+        "color": "#5080ff",
         "backgroundColor": "#FFFF00",
         "borderSize": 1,
         "paddingHorizontal": 0,
@@ -22150,7 +22143,7 @@
       },
       {
         "name": "key_icons",
-        "inheritFrom": "default_edit_inverse",
+        "inheritFrom": "key",
         "font": "icons",
         "alignHorizontal": "center",
         "alignVertical": "center",
