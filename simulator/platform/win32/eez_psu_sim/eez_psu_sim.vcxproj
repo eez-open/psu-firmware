@@ -257,6 +257,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\eez_psu_rev.h" />
     <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\R1B9\R1B9_pins.h" />
     <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\R3B4\R3B4_pins.h" />
+    <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\R5B12\R5B12_pins.h" />
     <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\impl\fifo_private.h" />
     <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\impl\lexer_private.h" />
     <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\impl\parser_private.h" />
@@ -375,6 +376,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\libraries\eez_psu_lib\src\eez_psu.cpp" />
     <ClCompile Include="..\..\..\..\libraries\eez_psu_lib\src\R1B9\R1B9_init.cpp" />
     <ClCompile Include="..\..\..\..\libraries\eez_psu_lib\src\R3B4\R3B4_init.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\eez_psu_lib\src\R5B12\R5B12_init.cpp" />
     <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\error.c" />
     <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\expression.c" />
     <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\fifo.c" />

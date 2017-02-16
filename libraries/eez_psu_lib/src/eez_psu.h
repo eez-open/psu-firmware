@@ -37,6 +37,11 @@
     
     extern void eez_psu_R3B4_init();
     #define eez_psu_init eez_psu_R3B4_init
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+    #include "R5B12/R5B12_pins.h"
+    
+    extern void eez_psu_R5B12_init();
+    #define eez_psu_init eez_psu_R5B12_init
 #else
     #error "Unknown EEZ PSU Revision"
 #endif

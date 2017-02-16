@@ -9,6 +9,10 @@
         {
           "name": "R3B4",
           "screenOrientation": "landscape"
+        },
+        {
+          "name": "R5B12",
+          "screenOrientation": "landscape"
         }
       ],
       "files": [

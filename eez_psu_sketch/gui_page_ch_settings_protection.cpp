@@ -96,7 +96,7 @@ data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uin
 	if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
 		return data::Value(2);
 	}
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 	temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + g_channel->index - 1];
 	if (tempSensor.isInstalled()) {
 		if (tempSensor.isTestOK()) {
@@ -329,7 +329,7 @@ void ChSettingsOppProtectionPage::setParams(bool checkLoad) {
 ////////////////////////////////////////////////////////////////////////////////
 
 ChSettingsOtpProtectionPage::ChSettingsOtpProtectionPage() {
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 	origState = state = temperature::getChannelSensorState(g_channel) ? 1 : 0;
 
 	origLimit = limit = 0;
@@ -350,7 +350,7 @@ ChSettingsOtpProtectionPage::ChSettingsOtpProtectionPage() {
 }
 
 void ChSettingsOtpProtectionPage::setParams(bool checkLoad) {
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4	
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 	channel_dispatcher::setOtpParameters(*g_channel, state, level.getFloat(), delay.getFloat());
 	onSetFinish(checkLoad);
 #endif

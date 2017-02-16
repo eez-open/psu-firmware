@@ -27,7 +27,7 @@
 #include <UIPEthernet.h>
 #include <UIPServer.h>
 #include <UIPClient.h>
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 #include <Ethernet2.h>
 #include <EthernetServer.h>
 #include <EthernetClient.h>
@@ -138,7 +138,7 @@ void init() {
 
 #if defined(EEZ_PSU_SIMULATOR) || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     Enc28J60Network::setControlCS(ETH_SELECT);
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     Ethernet.init(ETH_SELECT);
     Ethernet.setDhcpTimeout(ETHERNET_DHCP_TIMEOUT * 1000UL);
 #endif

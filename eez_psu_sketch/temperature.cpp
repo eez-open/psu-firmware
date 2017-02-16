@@ -112,12 +112,12 @@ void tick(unsigned long tick_usec) {
 bool isChannelSensorInstalled(Channel *channel) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 	return false;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 	return sensors[temp_sensor::CH1 + channel->index - 1].isInstalled();
 #endif
 }
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 bool getChannelSensorState(Channel *channel) {
 	return sensors[temp_sensor::CH1 + channel->index - 1].prot_conf.state;
 }

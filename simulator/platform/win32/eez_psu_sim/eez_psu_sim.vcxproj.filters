@@ -46,6 +46,9 @@
     <Filter Include="board\R3B4">
       <UniqueIdentifier>{b92159b7-8ef1-40a8-b0fd-c7b91adc2eb6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="board\R5B12">
+      <UniqueIdentifier>{b92159b7-8ef1-40a8-b0fd-c7b91adc2eb7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\calibration.h">
@@ -330,6 +333,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\R3B4\R3B4_pins.h">
       <Filter>board\R3B4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\eez_psu_lib\src\R5B12\R5B12_pins.h">
+      <Filter>board\R5B12</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\conf_user_revision.h">
       <Filter>core</Filter>
@@ -645,6 +651,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\eez_psu_lib\src\R3B4\R3B4_init.cpp">
       <Filter>board\R3B4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\eez_psu_lib\src\R5B12\R5B12_init.cpp">
+      <Filter>board\R5B12</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\actions.cpp">
       <Filter>gui</Filter>

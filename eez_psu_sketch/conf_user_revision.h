@@ -25,5 +25,6 @@ Use this header file to specify EEZ PSU revision.
 
 /// Selected EEZ PSU revison, possible values are:
 ///   - EEZ_PSU_REVISION_R1B9
-///   - EEZ_PSU_REVISION_R3B4 (default)
-#define EEZ_PSU_SELECTED_REVISION EEZ_PSU_REVISION_R3B4
+///   - EEZ_PSU_REVISION_R3B4
+///   - EEZ_PSU_REVISION_R5B12
+#define EEZ_PSU_SELECTED_REVISION EEZ_PSU_REVISION_R5B12

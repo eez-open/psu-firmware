@@ -77,7 +77,7 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id) {
 	if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
 		return data::Value(3);
 	}
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 	if (fan::g_testResult == TEST_FAILED || fan::g_testResult == TEST_WARNING) {
 	    if (id == DATA_ID_SYS_INFO_FAN_STATUS) {
 		    return data::Value(0);

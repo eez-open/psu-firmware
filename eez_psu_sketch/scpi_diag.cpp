@@ -23,7 +23,7 @@
 #include "calibration.h"
 #include "devices.h"
 #include "temperature.h"
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 #include "fan.h"
 #endif
 
@@ -249,7 +249,7 @@ scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
 //		SCPI_ResultText(context, buffer);
 //	}
 //
-//#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+//#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 //    sprintf_P(buffer, PSTR("%d, Fan, %s, %s"),
 //        fan::g_testResult, get_installed_str(OPTION_FAN), get_test_result_str(fan::g_testResult));
 //    SCPI_ResultText(context, buffer);
@@ -277,7 +277,7 @@ scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_diag_InformationFanQ(scpi_t * context) {
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_FAN && FAN_OPTION_RPM_MEASUREMENT
+#if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_FAN && FAN_OPTION_RPM_MEASUREMENT
 	SCPI_ResultInt(context, fan::g_rpm);
 #else
 	SCPI_ResultInt(context, -1);

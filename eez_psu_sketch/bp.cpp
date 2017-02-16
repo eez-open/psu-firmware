@@ -55,7 +55,7 @@ void bp_switch(uint16_t mask, bool on) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
         if (mask & (1 << BP_LED_OUT1_PLUS)) conf &= ~(1 << BP_LED_OUT1_PLUS_RED);
         if (mask & (1 << BP_LED_OUT1_MINUS)) conf &= ~(1 << BP_LED_OUT1_MINUS_RED);
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
         if (mask & (1 << BP_LED_OUT1)) conf &= ~(1 << BP_LED_OUT1_RED);
         if (mask & (1 << BP_LED_OUT1_RED)) conf &= ~((1 << BP_LED_OUT1) | (1 << BP_LED_OUT2));
 #endif
@@ -99,7 +99,7 @@ void switchOutput(Channel *channel, bool on) {
             bp_switch((1 << BP_LED_OUT1_PLUS_RED) | (1 << BP_LED_OUT1_MINUS_RED), on);
         }
     }
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     if (g_channelCouplingType != CHANNELS_COUPLING_TYPE_PARALLEL && g_channelCouplingType != CHANNELS_COUPLING_TYPE_SERIES) {
         bp_switch((1 << channel->bp_led_out), on);
     } else {
@@ -113,18 +113,18 @@ void switchSense(Channel *channel, bool on) {
     bp_switch((1 << channel->bp_led_sense_plus) |
         (1 << channel->bp_led_sense_minus) |
         (1 << channel->bp_relay_sense), on);
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     bp_switch((1 << channel->bp_led_sense) | (1 << channel->bp_relay_sense), on);
 #endif
 }
 
 void switchProg(Channel *channel, bool on) {
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4    
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     bp_switch(1 << channel->bp_led_prog, on);
 #endif
 }
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 
 void cvLedSwitch(Channel *channel, bool on) {
     bp_switch(1 << channel->cv_led_pin, on);

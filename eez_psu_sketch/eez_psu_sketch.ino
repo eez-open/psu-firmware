@@ -27,7 +27,7 @@
 #include <UIPEthernet.h>
 #include <UIPServer.h>
 #include <UIPClient.h>
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 #include <Ethernet2.h>
 #include <EthernetServer.h>
 #include <EthernetClient.h>

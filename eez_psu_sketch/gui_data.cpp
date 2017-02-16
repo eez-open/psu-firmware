@@ -713,7 +713,7 @@ Value get(const Cursor &cursor, uint8_t id) {
         if (id == DATA_ID_OTP) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
             return 0;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
             temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + channel.index - 1];
             if (!tempSensor.isInstalled() || !tempSensor.isTestOK() || !tempSensor.prot_conf.state) return 0;
             else if (!tempSensor.isTripped()) return 1;
@@ -732,7 +732,7 @@ Value get(const Cursor &cursor, uint8_t id) {
         if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
             return 2;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
             temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + channel.index - 1];
             if (tempSensor.isInstalled()) return tempSensor.isTestOK() ? 1 : 0;
             else return 2;
@@ -741,7 +741,7 @@ Value get(const Cursor &cursor, uint8_t id) {
 
         if (id == DATA_ID_CHANNEL_TEMP) {
             float temperature = 0;
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
             temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + channel.index - 1];
             if (tempSensor.isInstalled() && tempSensor.isTestOK()) {
                 temperature = tempSensor.temperature;

@@ -37,7 +37,7 @@ static WindowDefinition window_definition_small = {
 };
 
 static WindowDefinition window_definition_large = window_definition_small;
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 static WindowDefinition window_definition_small = {
     "EEZ Software Simulator",
     1081, 366,
@@ -60,6 +60,17 @@ static int F = 1;
 
 #define R1B9_IMAGE(IMAGE) "r1b9/" IMAGE ".png"
 #define R3B4_IMAGE(IMAGE) (F == 1 ? "r3b4/small/" IMAGE ".png" : "r3b4/large/" IMAGE ".png")
+#define R5B12_IMAGE(IMAGE) (F == 1 ? "r5b12/small/" IMAGE ".png" : "r5b12/large/" IMAGE ".png")
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+
+#define BOARD_IMAGE R1B9_IMAGE
+
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#define BOARD_IMAGE R3B4_IMAGE
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+#define BOARD_IMAGE R5B12_IMAGE
+#endif
 
 imgui::WindowDefinition *getWindowDefinition(int w, int h) {
     if (w >= SIM_FRONT_PANEL_LARGE_MODE_MIN_WIDTH) {
@@ -86,36 +97,36 @@ void addLoadWidget(Window *window, int x, int y, int w, int h, UserWidget *loadW
 
 void render(Window *window, Data *data) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-    window->addImage(0, 0, 1475, 531, R1B9_IMAGE("front-panel"));
+    window->addImage(0, 0, 1475, 531, BOARD_IMAGE("front-panel"));
 
-    window->addOnOffImage(878, 34, 17, 16, data->standby, R1B9_IMAGE("led-blue"), R1B9_IMAGE("led-off"));
+    window->addOnOffImage(878, 34, 17, 16, data->standby, BOARD_IMAGE("led-blue"), BOARD_IMAGE("led-off"));
 
-    window->addOnOffImage(983, 80, 17, 16, data->coupledOut, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
-    window->addOnOffImage(1247, 80, 17, 16, data->coupledOut, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(983, 80, 17, 16, data->coupledOut, BOARD_IMAGE("led-red"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(1247, 80, 17, 16, data->coupledOut, BOARD_IMAGE("led-red"), BOARD_IMAGE("led-off"));
 
-    window->addOnOffImage(878, 126, 17, 16, data->ch1.cv, R1B9_IMAGE("led-yellow"), R1B9_IMAGE("led-off"));
-    window->addOnOffImage(878, 172, 17, 16, data->ch1.cc, R1B9_IMAGE("led-red"), R1B9_IMAGE("led-off"));
-    window->addOnOffImage(983, 80, 17, 16, data->ch1.out_plus, R1B9_IMAGE("led-green"), R1B9_IMAGE("led-off"));
-    window->addOnOffImage(1071, 80, 17, 16, data->ch1.sense_plus, R1B9_IMAGE("led-yellow"), R1B9_IMAGE("led-off"));
-    window->addOnOffImage(1159, 80, 17, 16, data->ch1.sense_minus, R1B9_IMAGE("led-yellow"), R1B9_IMAGE("led-off"));
-    window->addOnOffImage(1247, 80, 17, 16, data->ch1.out_minus, R1B9_IMAGE("led-green"), R1B9_IMAGE("led-off"));
+    window->addOnOffImage(878, 126, 17, 16, data->ch1.cv, BOARD_IMAGE("led-yellow"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(878, 172, 17, 16, data->ch1.cc, BOARD_IMAGE("led-red"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(983, 80, 17, 16, data->ch1.out_plus, BOARD_IMAGE("led-green"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(1071, 80, 17, 16, data->ch1.sense_plus, BOARD_IMAGE("led-yellow"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(1159, 80, 17, 16, data->ch1.sense_minus, BOARD_IMAGE("led-yellow"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(1247, 80, 17, 16, data->ch1.out_minus, BOARD_IMAGE("led-green"), BOARD_IMAGE("led-off"));
     if (data->ch1.load_text) {
-        window->addImage(992, 184, 266, 71, R1B9_IMAGE("load"));
+        window->addImage(992, 184, 266, 71, BOARD_IMAGE("load"));
         window->addText(1047, 217, 156, 32, data->ch1.load_text);
     }
 
-    window->addOnOffImage(878, 366, 17, 16, data->ch2.cv, R1B9_IMAGE("led-yellow"), R1B9_IMAGE("led-off"));
-    window->addOnOffImage(878, 412, 17, 16, data->ch2.cc, R1B9_IMAGE("led-red"), R1B9_IMAGE("led-off"));
-    window->addOnOffImage(983, 324, 17, 16, data->ch2.out_plus, R1B9_IMAGE("led-green"), R1B9_IMAGE("led-off"));
-    window->addOnOffImage(1071, 324, 17, 16, data->ch2.sense_plus, R1B9_IMAGE("led-yellow"), R1B9_IMAGE("led-off"));
-    window->addOnOffImage(1159, 324, 17, 16, data->ch2.sense_minus, R1B9_IMAGE("led-yellow"), R1B9_IMAGE("led-off"));
-    window->addOnOffImage(1247, 324, 17, 16, data->ch2.out_minus, R1B9_IMAGE("led-green"), R1B9_IMAGE("led-off"));
+    window->addOnOffImage(878, 366, 17, 16, data->ch2.cv, BOARD_IMAGE("led-yellow"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(878, 412, 17, 16, data->ch2.cc, BOARD_IMAGE("led-red"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(983, 324, 17, 16, data->ch2.out_plus, BOARD_IMAGE("led-green"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(1071, 324, 17, 16, data->ch2.sense_plus, BOARD_IMAGE("led-yellow"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(1159, 324, 17, 16, data->ch2.sense_minus, BOARD_IMAGE("led-yellow"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(1247, 324, 17, 16, data->ch2.out_minus, BOARD_IMAGE("led-green"), BOARD_IMAGE("led-off"));
     if (data->ch2.load_text) {
-        window->addImage(992, 428, 266, 71, R1B9_IMAGE("load"));
+        window->addImage(992, 428, 266, 71, BOARD_IMAGE("load"));
         window->addText(1047, 461, 156, 32, data->ch2.load_text);
     }
 
-    data->reset = window->addButton(509, 398, 18, 18, R1B9_IMAGE("reset-normal"), R1B9_IMAGE("reset-pressed"));
+    data->reset = window->addButton(509, 398, 18, 18, BOARD_IMAGE("reset-normal"), BOARD_IMAGE("reset-pressed"));
 
     data->local_control_widget.x = 594;
     data->local_control_widget.y = 94;
@@ -123,53 +134,57 @@ void render(Window *window, Data *data) {
     data->local_control_widget.h = 320;
 
     window->addUserWidget(&data->local_control_widget);
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
-    window->addImage(RECT(0, 0, 1081, 366), R3B4_IMAGE("front-panel"));
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+    window->addImage(RECT(0, 0, 1081, 366), BOARD_IMAGE("front-panel"));
 
-    window->addOnOffImage(RECT(131, 243, 17, 17), data->standby, R3B4_IMAGE("led-blue"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(RECT(131, 243, 17, 17), data->standby, BOARD_IMAGE("led-blue"), BOARD_IMAGE("led-off"));
 
-    window->addOnOffImage(RECT(803, 267, 17, 17), data->coupledOut, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(RECT(803, 267, 17, 17), data->coupledOut, BOARD_IMAGE("led-red"), BOARD_IMAGE("led-off"));
     if (data->coupled) {
         if (data->ch1.load_text) {
-            window->addImage(RECT(652+91, 294, 138, 66), R3B4_IMAGE("load"));
+            window->addImage(RECT(652+91, 294, 138, 66), BOARD_IMAGE("load"));
             window->addText(RECT(677+91, 326, 88, 29), data->ch1.load_text);
         } else {
-            window->addImage(RECT(652+91, 294, 138, 66), R3B4_IMAGE("load-disconnected"));
+            window->addImage(RECT(652+91, 294, 138, 66), BOARD_IMAGE("load-disconnected"));
         }
         addLoadWidget(window, RECT(652+91, 294, 138, 66), &data->ch1.loadWidget);
     }
 
-    window->addOnOffImage(RECT(689, 61, 17, 17), data->ch1.cv, R3B4_IMAGE("led-yellow"), R3B4_IMAGE("led-off"));
-    window->addOnOffImage(RECT(689, 95, 17, 17), data->ch1.cc, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
-    window->addOnOffImage(RECT(713, 267, 17, 17), data->ch1.out, R3B4_IMAGE("led-green"), R3B4_IMAGE("led-off"));
-    window->addOnOffImage(RECT(689, 128, 17, 17), data->ch1.sense, R3B4_IMAGE("led-yellow"), R3B4_IMAGE("led-off"));
-    window->addOnOffImage(RECT(650, 128, 17, 17), data->ch1.prog, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(RECT(689, 61, 17, 17), data->ch1.cv, BOARD_IMAGE("led-yellow"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(RECT(689, 95, 17, 17), data->ch1.cc, BOARD_IMAGE("led-red"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(RECT(713, 267, 17, 17), data->ch1.out, BOARD_IMAGE("led-green"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(RECT(689, 128, 17, 17), data->ch1.sense, BOARD_IMAGE("led-yellow"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(RECT(650, 128, 17, 17), data->ch1.prog, BOARD_IMAGE("led-red"), BOARD_IMAGE("led-off"));
     if (!data->coupled) {
         if (data->ch1.load_text) {
-            window->addImage(RECT(652, 294, 138, 66), R3B4_IMAGE("load"));
+            window->addImage(RECT(652, 294, 138, 66), BOARD_IMAGE("load"));
             window->addText(RECT(677, 326, 88, 29), data->ch1.load_text);
         } else {
-            window->addImage(RECT(652, 294, 138, 66), R3B4_IMAGE("load-disconnected"));
+            window->addImage(RECT(652, 294, 138, 66), BOARD_IMAGE("load-disconnected"));
         }
         addLoadWidget(window, RECT(652, 294, 138, 66), &data->ch1.loadWidget);
     }
 
-    window->addOnOffImage(RECT(918, 61, 17, 17), data->ch2.cv, R3B4_IMAGE("led-yellow"), R3B4_IMAGE("led-off"));
-    window->addOnOffImage(RECT(918, 95, 17, 17), data->ch2.cc, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
-    window->addOnOffImage(RECT(894, 267, 17, 17), data->ch2.out, R3B4_IMAGE("led-green"), R3B4_IMAGE("led-off"));
-    window->addOnOffImage(RECT(918, 128, 17, 17), data->ch2.sense, R3B4_IMAGE("led-yellow"), R3B4_IMAGE("led-off"));
-    window->addOnOffImage(RECT(879, 128, 17, 17), data->ch2.prog, R3B4_IMAGE("led-red"), R3B4_IMAGE("led-off"));
+    window->addOnOffImage(RECT(918, 61, 17, 17), data->ch2.cv, BOARD_IMAGE("led-yellow"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(RECT(918, 95, 17, 17), data->ch2.cc, BOARD_IMAGE("led-red"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(RECT(894, 267, 17, 17), data->ch2.out, BOARD_IMAGE("led-green"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(RECT(918, 128, 17, 17), data->ch2.sense, BOARD_IMAGE("led-yellow"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(RECT(879, 128, 17, 17), data->ch2.prog, BOARD_IMAGE("led-red"), BOARD_IMAGE("led-off"));
     if (!data->coupled) {
         if (data->ch2.load_text) {
-            window->addImage(RECT(834, 294, 138, 66), R3B4_IMAGE("load"));
+            window->addImage(RECT(834, 294, 138, 66), BOARD_IMAGE("load"));
             window->addText(RECT(859, 326, 88, 29), data->ch2.load_text);
         } else {
-            window->addImage(RECT(834, 294, 138, 66), R3B4_IMAGE("load-disconnected"));
+            window->addImage(RECT(834, 294, 138, 66), BOARD_IMAGE("load-disconnected"));
         }
         addLoadWidget(window, RECT(834, 294, 138, 66), &data->ch2.loadWidget);
     }
 
-    data->reset = window->addButton(RECT(129, 165, 20, 20), R3B4_IMAGE("reset-normal"), R3B4_IMAGE("reset-pressed"));
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+    data->reset = window->addButton(RECT(129, 165, 20, 20), BOARD_IMAGE("reset-normal"), BOARD_IMAGE("reset-pressed"));
+#else
+    data->reset = window->addButton(RECT(281, 320, 20, 20), BOARD_IMAGE("reset-normal"), BOARD_IMAGE("reset-pressed"));
+#endif
 
     data->local_control_widget.x = D(211);
     data->local_control_widget.y = D(57);

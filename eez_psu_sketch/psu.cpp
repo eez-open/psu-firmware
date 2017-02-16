@@ -42,7 +42,7 @@
 #if OPTION_DISPLAY
 #include "gui.h"
 #endif
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 #if OPTION_WATCHDOG
 #include "watchdog.h"
 #endif
@@ -82,7 +82,7 @@ RLState g_rlState = RL_STATE_LOCAL;
 
 static bool testShield();
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
+#if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
 static void startMasterSync();
 static void updateMasterSync();
 #endif
@@ -108,7 +108,7 @@ void init() {
     // initialize shield
     eez_psu_init();
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
+#if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
 	startMasterSync();
 #endif
 
@@ -147,7 +147,7 @@ void init() {
 	DebugTrace("Ethernet initialization skipped!");
 #endif
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     fan::init();
 #endif
 
@@ -195,14 +195,14 @@ static bool testShield() {
 bool test() {
     bool testResult = true;
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 	fan::test_start();
 #endif
 
     testResult &= testShield();
     testResult &= testChannels();
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 	testResult &= fan::test();
 #endif
 
@@ -686,7 +686,7 @@ bool powerUp() {
     gui::showWelcomePage();
 #endif
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     fan::test_start();
 #endif
 
@@ -719,7 +719,7 @@ bool powerUp() {
         testSuccess &= Channel::get(i).test();
     }
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 	testSuccess &= fan::test();
 #endif
 
@@ -917,11 +917,11 @@ void tick() {
 
 	event_queue::tick(tick_usec);
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
+#if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
 	updateMasterSync();
 #endif
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 #if OPTION_WATCHDOG
 	watchdog::tick(tick_usec);
 #endif
@@ -1049,6 +1049,8 @@ const char *getCpuModel() {
     return "Arduino, R1B9";
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
     return "Arduino, R3B4";
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+    return "Arduino, R5B12";
 #endif
 #else
     return "Simulator, M2.0";
@@ -1063,7 +1065,7 @@ const char *getCpuEthernetType() {
 #if defined(EEZ_PSU_ARDUINO)
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     return "ENC28J60";
-#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     return "W5500";
 #endif
 #else
@@ -1117,7 +1119,7 @@ bool isFrontPanelLocked() {
     return g_rlState != RL_STATE_LOCAL;
 }
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
+#if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
 static bool g_masterSyncStarted;
 static Tc *g_chTC;
 static uint32_t g_chNo;
