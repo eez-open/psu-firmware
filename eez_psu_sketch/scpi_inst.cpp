@@ -18,7 +18,6 @@
  
 #include "psu.h"
 #include "scpi_psu.h"
-#include "scpi_cal.h"
 
 #include "calibration.h"
 #include "channel_dispatcher.h"
@@ -55,7 +54,7 @@ static void select_channel(scpi_t * context, uint8_t ch) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-scpi_result_t scpi_inst_Select(scpi_t * context) {
+scpi_result_t scpi_cmd_instrumentSelect(scpi_t * context) {
     if (calibration::isEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS);
         return SCPI_RES_ERR;
@@ -71,7 +70,7 @@ scpi_result_t scpi_inst_Select(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_inst_SelectQ(scpi_t * context) {
+scpi_result_t scpi_cmd_instrumentSelectQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     char buffer[256] = { 0 };
@@ -81,7 +80,7 @@ scpi_result_t scpi_inst_SelectQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_inst_NSelect(scpi_t * context) {
+scpi_result_t scpi_cmd_instrumentNselect(scpi_t * context) {
     if (calibration::isEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS);
         return SCPI_RES_ERR;
@@ -101,7 +100,7 @@ scpi_result_t scpi_inst_NSelect(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_inst_NSelectQ(scpi_t * context) {
+scpi_result_t scpi_cmd_instrumentNselectQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     SCPI_ResultInt(context, psu_context->selected_channel_index);
@@ -109,7 +108,7 @@ scpi_result_t scpi_inst_NSelectQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_inst_CoupleTracking(scpi_t * context) {
+scpi_result_t scpi_cmd_instrumentCoupleTracking(scpi_t * context) {
     if (channel_dispatcher::isTracked()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_IN_TRACKING_MODE);
         return SCPI_RES_ERR;
@@ -130,7 +129,7 @@ scpi_result_t scpi_inst_CoupleTracking(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_inst_CoupleTrackingQ(scpi_t * context) {
+scpi_result_t scpi_cmd_instrumentCoupleTrackingQ(scpi_t * context) {
     if (channel_dispatcher::isTracked()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_IN_TRACKING_MODE);
         return SCPI_RES_ERR;
@@ -152,7 +151,7 @@ scpi_result_t scpi_inst_CoupleTrackingQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_inst_DisplayTrace(scpi_t * context) {
+scpi_result_t scpi_cmd_instrumentDisplayTrace(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
     Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
 
@@ -187,7 +186,7 @@ scpi_result_t scpi_inst_DisplayTrace(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_inst_DisplayTraceQ(scpi_t * context) {
+scpi_result_t scpi_cmd_instrumentDisplayTraceQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
     Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
 
@@ -220,7 +219,7 @@ scpi_result_t scpi_inst_DisplayTraceQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_inst_DisplayTraceSwap(scpi_t * context) {
+scpi_result_t scpi_cmd_instrumentDisplayTraceSwap(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
     Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
 
@@ -230,7 +229,7 @@ scpi_result_t scpi_inst_DisplayTraceSwap(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_inst_DisplayYTRate(scpi_t * context) {
+scpi_result_t scpi_cmd_instrumentDisplayYtRate(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
     Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
 
@@ -245,7 +244,7 @@ scpi_result_t scpi_inst_DisplayYTRate(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_inst_DisplayYTRateQ(scpi_t * context) {
+scpi_result_t scpi_cmd_instrumentDisplayYtRateQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
     Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
 

@@ -18,7 +18,6 @@
  
 #include "psu.h"
 #include "scpi_psu.h"
-#include "scpi_stat.h"
 
 namespace eez {
 namespace psu {
@@ -26,7 +25,7 @@ namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-scpi_result_t scpi_stat_QuestionableEventQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusQuestionableEventQ(scpi_t * context) {
     /* return value */
     SCPI_ResultInt32(context, SCPI_RegGet(context, SCPI_REG_QUES));
 
@@ -36,14 +35,14 @@ scpi_result_t scpi_stat_QuestionableEventQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_QuestionableConditionQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusQuestionableConditionQ(scpi_t * context) {
     /* return value */
     SCPI_ResultInt32(context, reg_get(context, SCPI_PSU_REG_QUES_COND));
 
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_QuestionableEnable(scpi_t * context) {
+scpi_result_t scpi_cmd_statusQuestionableEnable(scpi_t * context) {
     int32_t new_QUESE;
     if (SCPI_ParamInt32(context, &new_QUESE, TRUE)) {
         SCPI_RegSet(context, SCPI_REG_QUESE, (scpi_reg_val_t)new_QUESE);
@@ -52,7 +51,7 @@ scpi_result_t scpi_stat_QuestionableEnable(scpi_t * context) {
     return SCPI_RES_ERR;
 }
 
-scpi_result_t scpi_stat_QuestionableEnableQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusQuestionableEnableQ(scpi_t * context) {
     /* return value */
     SCPI_ResultInt32(context, SCPI_RegGet(context, SCPI_REG_QUESE));
  
@@ -60,7 +59,7 @@ scpi_result_t scpi_stat_QuestionableEnableQ(scpi_t * context) {
 }
 
 
-scpi_result_t scpi_stat_OperationEventQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusOperationEventQ(scpi_t * context) {
     /* return value */
     SCPI_ResultInt32(context, SCPI_RegGet(context, SCPI_REG_OPER));
 
@@ -70,14 +69,14 @@ scpi_result_t scpi_stat_OperationEventQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_OperationConditionQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusOperationConditionQ(scpi_t * context) {
     /* return value */
     SCPI_ResultInt32(context, reg_get(context, SCPI_PSU_REG_OPER_COND));
 
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_OperationEnable(scpi_t * context) {
+scpi_result_t scpi_cmd_statusOperationEnable(scpi_t * context) {
     int32_t new_OPERE;
     if (SCPI_ParamInt32(context, &new_OPERE, TRUE)) {
         SCPI_RegSet(context, SCPI_REG_OPERE, (scpi_reg_val_t)new_OPERE);
@@ -86,14 +85,14 @@ scpi_result_t scpi_stat_OperationEnable(scpi_t * context) {
     return SCPI_RES_ERR;
 }
 
-scpi_result_t scpi_stat_OperationEnableQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusOperationEnableQ(scpi_t * context) {
     /* return value */
     SCPI_ResultInt32(context, SCPI_RegGet(context, SCPI_REG_OPERE));
 
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_QuestionableInstrumentEventQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusQuestionableInstrumentEventQ(scpi_t * context) {
     /* return value */
     SCPI_ResultInt32(context, reg_get(context, SCPI_PSU_REG_QUES_INST_EVENT));
 
@@ -103,14 +102,14 @@ scpi_result_t scpi_stat_QuestionableInstrumentEventQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_QuestionableInstrumentConditionQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusQuestionableInstrumentConditionQ(scpi_t * context) {
     /* return value */
     SCPI_ResultInt32(context, reg_get(context, SCPI_PSU_REG_QUES_INST_COND));
 
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_QuestionableInstrumentEnable(scpi_t * context) {
+scpi_result_t scpi_cmd_statusQuestionableInstrumentEnable(scpi_t * context) {
     int32_t newVal;
     if (SCPI_ParamInt32(context, &newVal, TRUE)) {
         reg_set(context, SCPI_PSU_REG_QUES_INST_ENABLE, (scpi_reg_val_t)newVal);
@@ -119,14 +118,14 @@ scpi_result_t scpi_stat_QuestionableInstrumentEnable(scpi_t * context) {
     return SCPI_RES_ERR;
 }
 
-scpi_result_t scpi_stat_QuestionableInstrumentEnableQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusQuestionableInstrumentEnableQ(scpi_t * context) {
     /* return value */
     SCPI_ResultInt32(context, reg_get(context, SCPI_PSU_REG_QUES_INST_ENABLE));
 
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_OperationInstrumentEventQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusOperationInstrumentEventQ(scpi_t * context) {
     /* return value */
     SCPI_ResultInt32(context, reg_get(context, SCPI_PSU_REG_OPER_INST_EVENT));
 
@@ -136,14 +135,14 @@ scpi_result_t scpi_stat_OperationInstrumentEventQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_OperationInstrumentConditionQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusOperationInstrumentConditionQ(scpi_t * context) {
     /* return value */
     SCPI_ResultInt32(context, reg_get(context, SCPI_PSU_REG_OPER_INST_COND));
 
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_OperationInstrumentEnable(scpi_t * context) {
+scpi_result_t scpi_cmd_statusOperationInstrumentEnable(scpi_t * context) {
     int32_t newVal;
     if (SCPI_ParamInt32(context, &newVal, TRUE)) {
         reg_set(context, SCPI_PSU_REG_OPER_INST_ENABLE, (scpi_reg_val_t)newVal);
@@ -152,14 +151,14 @@ scpi_result_t scpi_stat_OperationInstrumentEnable(scpi_t * context) {
     return SCPI_RES_ERR;
 }
 
-scpi_result_t scpi_stat_OperationInstrumentEnableQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusOperationInstrumentEnableQ(scpi_t * context) {
     /* return value */
     SCPI_ResultInt32(context, reg_get(context, SCPI_PSU_REG_OPER_INST_ENABLE));
 
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_QuestionableInstrumentISummaryEventQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusQuestionableInstrumentIsummaryEventQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     int32_t ch;
@@ -180,7 +179,7 @@ scpi_result_t scpi_stat_QuestionableInstrumentISummaryEventQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_QuestionableInstrumentISummaryConditionQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusQuestionableInstrumentIsummaryConditionQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     int32_t ch;
@@ -198,7 +197,7 @@ scpi_result_t scpi_stat_QuestionableInstrumentISummaryConditionQ(scpi_t * contex
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_QuestionableInstrumentISummaryEnable(scpi_t * context) {
+scpi_result_t scpi_cmd_statusQuestionableInstrumentIsummaryEnable(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     int32_t ch;
@@ -218,7 +217,7 @@ scpi_result_t scpi_stat_QuestionableInstrumentISummaryEnable(scpi_t * context) {
     return SCPI_RES_ERR;
 }
 
-scpi_result_t scpi_stat_QuestionableInstrumentISummaryEnableQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusQuestionableInstrumentIsummaryEnableQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     int32_t ch;
@@ -236,7 +235,7 @@ scpi_result_t scpi_stat_QuestionableInstrumentISummaryEnableQ(scpi_t * context) 
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_OperationInstrumentISummaryEventQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusOperationInstrumentIsummaryEventQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     int32_t ch;
@@ -257,7 +256,7 @@ scpi_result_t scpi_stat_OperationInstrumentISummaryEventQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_OperationInstrumentISummaryConditionQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusOperationInstrumentIsummaryConditionQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     int32_t ch;
@@ -275,7 +274,7 @@ scpi_result_t scpi_stat_OperationInstrumentISummaryConditionQ(scpi_t * context) 
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_OperationInstrumentISummaryEnable(scpi_t * context) {
+scpi_result_t scpi_cmd_statusOperationInstrumentIsummaryEnable(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     int32_t ch;
@@ -295,7 +294,7 @@ scpi_result_t scpi_stat_OperationInstrumentISummaryEnable(scpi_t * context) {
     return SCPI_RES_ERR;
 }
 
-scpi_result_t scpi_stat_OperationInstrumentISummaryEnableQ(scpi_t * context) {
+scpi_result_t scpi_cmd_statusOperationInstrumentIsummaryEnableQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     int32_t ch;
@@ -313,7 +312,7 @@ scpi_result_t scpi_stat_OperationInstrumentISummaryEnableQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_stat_Preset(scpi_t * context) {
+scpi_result_t scpi_cmd_statusPreset(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     SCPI_RegSet(context, SCPI_REG_ESE, 0);

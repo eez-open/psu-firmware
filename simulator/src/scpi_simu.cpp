@@ -20,7 +20,6 @@
 #include "channel_dispatcher.h"
 
 #include "scpi_psu.h"
-#include "scpi_simu.h"
 
 #include "simulator_psu.h"
 #include "chips.h"
@@ -82,7 +81,7 @@ static bool get_resistance_param(scpi_t *context, float &value) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-scpi_result_t scpi_simu_LoadState(scpi_t *context) {
+scpi_result_t scpi_cmd_simulatorLoadState(scpi_t *context) {
     bool state;
     if (!SCPI_ParamBool(context, &state, TRUE)) {
         return SCPI_RES_ERR;
@@ -98,7 +97,7 @@ scpi_result_t scpi_simu_LoadState(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_simu_LoadStateQ(scpi_t * context) {
+scpi_result_t scpi_cmd_simulatorLoadStateQ(scpi_t * context) {
     Channel *channel = param_channel(context, FALSE, TRUE);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -109,7 +108,7 @@ scpi_result_t scpi_simu_LoadStateQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_simu_Load(scpi_t *context) {
+scpi_result_t scpi_cmd_simulatorLoad(scpi_t *context) {
     float value;
     if (!get_resistance_param(context, value)) {
         return SCPI_RES_ERR;
@@ -125,7 +124,7 @@ scpi_result_t scpi_simu_Load(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_simu_LoadQ(scpi_t *context) {
+scpi_result_t scpi_cmd_simulatorLoadQ(scpi_t *context) {
     Channel *channel = param_channel(context, FALSE, TRUE);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -160,7 +159,7 @@ scpi_result_t scpi_simu_LoadQ(scpi_t *context) {
     return result_float(context, value);
 }
 
-scpi_result_t scpi_simu_VoltageProgramExternal(scpi_t *context) {
+scpi_result_t scpi_cmd_simulatorVoltageProgramExternal(scpi_t *context) {
     if (channel_dispatcher::isCoupled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
@@ -186,7 +185,7 @@ scpi_result_t scpi_simu_VoltageProgramExternal(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_simu_VoltageProgramExternalQ(scpi_t *context) {
+scpi_result_t scpi_cmd_simulatorVoltageProgramExternalQ(scpi_t *context) {
     if (channel_dispatcher::isCoupled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
@@ -205,7 +204,7 @@ scpi_result_t scpi_simu_VoltageProgramExternalQ(scpi_t *context) {
     return result_float(context, channel->simulator.getVoltProgExt());
 }
 
-scpi_result_t scpi_simu_Pwrgood(scpi_t *context) {
+scpi_result_t scpi_cmd_simulatorPwrgood(scpi_t *context) {
     bool on;
     if (!SCPI_ParamBool(context, &on, TRUE)) {
         return SCPI_RES_ERR;
@@ -221,7 +220,7 @@ scpi_result_t scpi_simu_Pwrgood(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_simu_PwrgoodQ(scpi_t *context) {
+scpi_result_t scpi_cmd_simulatorPwrgoodQ(scpi_t *context) {
     Channel *channel = param_channel(context, FALSE, TRUE);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -232,7 +231,7 @@ scpi_result_t scpi_simu_PwrgoodQ(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_simu_RPol(scpi_t *context) {
+scpi_result_t scpi_cmd_simulatorRpol(scpi_t *context) {
     if (channel_dispatcher::isSeries()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
@@ -258,7 +257,7 @@ scpi_result_t scpi_simu_RPol(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_simu_RPolQ(scpi_t *context) {
+scpi_result_t scpi_cmd_simulatorRpolQ(scpi_t *context) {
     if (channel_dispatcher::isSeries()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
@@ -279,7 +278,7 @@ scpi_result_t scpi_simu_RPolQ(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_simu_Temperature(scpi_t *context) {
+scpi_result_t scpi_cmd_simulatorTemperature(scpi_t *context) {
     float value;
     if (!get_temperature_param(context, value, -100.0f, 200.0f, 25.0f)) {
         return SCPI_RES_ERR;
@@ -295,7 +294,7 @@ scpi_result_t scpi_simu_Temperature(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_simu_TemperatureQ(scpi_t *context) {
+scpi_result_t scpi_cmd_simulatorTemperatureQ(scpi_t *context) {
     int32_t sensor;
     if (!param_temp_sensor(context, sensor)) {
         return SCPI_RES_ERR;
@@ -330,7 +329,7 @@ scpi_result_t scpi_simu_TemperatureQ(scpi_t *context) {
     return result_float(context, value);
 }
 
-scpi_result_t scpi_simu_GUI(scpi_t *context) {
+scpi_result_t scpi_cmd_simulatorGui(scpi_t *context) {
 #if OPTION_DISPLAY
     if (!simulator::front_panel::open()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
@@ -344,10 +343,14 @@ scpi_result_t scpi_simu_GUI(scpi_t *context) {
 #endif
 }
 
-scpi_result_t scpi_simu_Exit(scpi_t *context) {
+scpi_result_t scpi_cmd_simulatorExit(scpi_t *context) {
     simulator::exit();
 
     return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_simulatorQuit(scpi_t *context) {
+    return scpi_cmd_simulatorExit(context);
 }
 
 }

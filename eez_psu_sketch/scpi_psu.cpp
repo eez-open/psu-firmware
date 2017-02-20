@@ -19,48 +19,16 @@
 #include "psu.h"
 #include "scpi_psu.h"
 
-#include "scpi_appl.h"
-#include "scpi_cal.h"
-#include "scpi_core.h"
-#include "scpi_debug.h"
-#include "scpi_diag.h"
-#include "scpi_inst.h"
-#include "scpi_meas.h"
-#include "scpi_mem.h"
-#include "scpi_outp.h"
-#include "scpi_sour.h"
-#include "scpi_stat.h"
-#include "scpi_syst.h"
-#include "scpi_trigger.h"
+#include "scpi_commands.h"
 
 #include "sound.h"
 #include "datetime.h"
-
-#ifdef EEZ_PSU_SIMULATOR 
-#include "scpi_simu.h"
-#endif
 
 namespace eez {
 namespace psu {
 namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
-
-#define SCPI_COMMANDS \
-    SCPI_APPL_COMMANDS \
-    SCPI_CAL_COMMANDS \
-    SCPI_CORE_COMMANDS \
-    SCPI_DEBUG_COMMANDS \
-    SCPI_DIAG_COMMANDS \
-    SCPI_INST_COMMANDS \
-    SCPI_MEAS_COMMANDS \
-    SCPI_MEM_COMMANDS \
-    SCPI_OUTP_COMMANDS \
-    SCPI_SIMU_COMMANDS \
-    SCPI_SOUR_COMMANDS \
-    SCPI_STAT_COMMANDS \
-    SCPI_SYST_COMMANDS \
-    SCPI_TRIGGER_COMMANDS \
 
 #define SCPI_COMMAND(P, C) scpi_result_t C(scpi_t * context);
 SCPI_COMMANDS

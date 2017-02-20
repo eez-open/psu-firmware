@@ -18,7 +18,6 @@
  
 #include "psu.h"
 #include "scpi_psu.h"
-#include "scpi_diag.h"
 
 #include "calibration.h"
 #include "devices.h"
@@ -66,7 +65,7 @@ static void print_calibration_value(scpi_t * context, char *buffer, calibration:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-scpi_result_t scpi_diag_InformationADCQ(scpi_t * context) {
+scpi_result_t scpi_cmd_diagnosticInformationAdcQ(scpi_t * context) {
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -95,7 +94,7 @@ scpi_result_t scpi_diag_InformationADCQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_diag_InformationCalibrationQ(scpi_t * context) {
+scpi_result_t scpi_cmd_diagnosticInformationCalibrationQ(scpi_t * context) {
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -150,7 +149,7 @@ scpi_result_t scpi_diag_InformationCalibrationQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_diag_InformationProtectionQ(scpi_t * context) {
+scpi_result_t scpi_cmd_diagnosticInformationProtectionQ(scpi_t * context) {
     char buffer[256] = { 0 };
 
     for (int i = 0; i < CH_NUM; ++i) {
@@ -211,7 +210,7 @@ scpi_result_t scpi_diag_InformationProtectionQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
+scpi_result_t scpi_cmd_diagnosticInformationTestQ(scpi_t * context) {
     char buffer[128] = { 0 };
 
 	for (int i = 0; i < devices::numDevices; ++i) {
@@ -276,7 +275,7 @@ scpi_result_t scpi_diag_InformationTestQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_diag_InformationFanQ(scpi_t * context) {
+scpi_result_t scpi_cmd_diagnosticInformationFanQ(scpi_t * context) {
 #if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_FAN && FAN_OPTION_RPM_MEASUREMENT
 	SCPI_ResultInt(context, fan::g_rpm);
 #else

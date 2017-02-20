@@ -18,7 +18,6 @@
  
 #include "psu.h"
 #include "scpi_psu.h"
-#include "scpi_debug.h"
 
 #ifdef OPTION_SD_CARD
 #include "sd_card.h"
@@ -33,7 +32,7 @@ using namespace debug;
 
 namespace scpi {
 
-scpi_result_t debug_scpi_command(scpi_t *context) {
+scpi_result_t scpi_cmd_debug(scpi_t *context) {
     scpi_number_t param;
     if (SCPI_ParamNumber(context, 0, &param, false)) {
         delay((uint32_t) round(param.value * 1000));
@@ -44,7 +43,7 @@ scpi_result_t debug_scpi_command(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t debug_scpi_commandQ(scpi_t *context) {
+scpi_result_t scpi_cmd_debugQ(scpi_t *context) {
     char buffer[512] = { 0 };
     char *p = buffer;
 
@@ -82,7 +81,7 @@ scpi_result_t debug_scpi_commandQ(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t debug_scpi_Watchdog(scpi_t * context) {
+scpi_result_t scpi_cmd_debugWdog(scpi_t * context) {
     if (!OPTION_WATCHDOG) {
         SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
@@ -98,7 +97,7 @@ scpi_result_t debug_scpi_Watchdog(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t debug_scpi_WatchdogQ(scpi_t * context) {
+scpi_result_t scpi_cmd_debugWdogQ(scpi_t * context) {
     if (!OPTION_WATCHDOG) {
         SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
@@ -109,7 +108,7 @@ scpi_result_t debug_scpi_WatchdogQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t debug_scpi_OntimeQ(scpi_t *context) {
+scpi_result_t scpi_cmd_debugOntimeQ(scpi_t *context) {
     char buffer[512] = { 0 };
     char *p = buffer;
 
@@ -128,7 +127,7 @@ scpi_result_t debug_scpi_OntimeQ(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t debug_scpi_Dir(scpi_t *context) {
+scpi_result_t scpi_cmd_debugDirQ(scpi_t *context) {
 #ifdef OPTION_SD_CARD
     sd_card::dir();
     return SCPI_RES_OK;

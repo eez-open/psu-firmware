@@ -18,7 +18,6 @@
  
 #include "psu.h"
 #include "scpi_psu.h"
-#include "scpi_core.h"
 #include "temperature.h"
 #include "channel_dispatcher.h"
 
@@ -28,7 +27,7 @@ namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-scpi_result_t scpi_meas_CurrentQ(scpi_t * context) {
+scpi_result_t scpi_cmd_measureScalarCurrentDcQ(scpi_t * context) {
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -41,7 +40,7 @@ scpi_result_t scpi_meas_CurrentQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_meas_PowerQ(scpi_t * context) {
+scpi_result_t scpi_cmd_measureScalarPowerDcQ(scpi_t * context) {
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -54,7 +53,7 @@ scpi_result_t scpi_meas_PowerQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_meas_VoltageQ(scpi_t * context) {
+scpi_result_t scpi_cmd_measureScalarVoltageDcQ(scpi_t * context) {
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -67,7 +66,7 @@ scpi_result_t scpi_meas_VoltageQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_meas_TemperatureQ(scpi_t * context) {
+scpi_result_t scpi_cmd_measureScalarTemperatureThermistorDcQ(scpi_t * context) {
     int32_t sensor;
     if (!param_temp_sensor(context, sensor)) {
 		return SCPI_RES_ERR;

@@ -18,7 +18,6 @@
  
 #include "psu.h"
 #include "scpi_psu.h"
-#include "scpi_outp.h"
 
 #include "calibration.h"
 #include "channel_dispatcher.h"
@@ -29,7 +28,7 @@ namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-scpi_result_t scpi_outp_ModeQ(scpi_t *context) {
+scpi_result_t scpi_cmd_outputModeQ(scpi_t *context) {
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -40,7 +39,7 @@ scpi_result_t scpi_outp_ModeQ(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_outp_ProtectionClear(scpi_t * context) {
+scpi_result_t scpi_cmd_outputProtectionClear(scpi_t * context) {
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -51,7 +50,7 @@ scpi_result_t scpi_outp_ProtectionClear(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_outp_State(scpi_t * context) {
+scpi_result_t scpi_cmd_outputState(scpi_t * context) {
     bool enable;
     if (!SCPI_ParamBool(context, &enable, TRUE)) {
         return SCPI_RES_ERR;
@@ -81,7 +80,7 @@ scpi_result_t scpi_outp_State(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_outp_StateQ(scpi_t * context) {
+scpi_result_t scpi_cmd_outputStateQ(scpi_t * context) {
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -92,7 +91,7 @@ scpi_result_t scpi_outp_StateQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_outp_TrackState(scpi_t * context) {
+scpi_result_t scpi_cmd_outputTrackState(scpi_t * context) {
     if (channel_dispatcher::isCoupled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
@@ -115,7 +114,7 @@ scpi_result_t scpi_outp_TrackState(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_outp_TrackStateQ(scpi_t * context) {
+scpi_result_t scpi_cmd_outputTrackStateQ(scpi_t * context) {
     if (channel_dispatcher::isCoupled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
@@ -131,7 +130,7 @@ scpi_result_t scpi_outp_TrackStateQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_outp_ProtectionCouple(scpi_t * context) {
+scpi_result_t scpi_cmd_outputProtectionCouple(scpi_t * context) {
     bool enable;
     if (!SCPI_ParamBool(context, &enable, TRUE)) {
         return SCPI_RES_ERR;
@@ -145,7 +144,7 @@ scpi_result_t scpi_outp_ProtectionCouple(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_outp_ProtectionCoupleQ(scpi_t * context) {
+scpi_result_t scpi_cmd_outputProtectionCoupleQ(scpi_t * context) {
     SCPI_ResultBool(context, persist_conf::isOutputProtectionCoupleEnabled());
 
     return SCPI_RES_OK;

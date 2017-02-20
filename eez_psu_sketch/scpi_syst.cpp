@@ -18,7 +18,6 @@
  
 #include "psu.h"
 #include "scpi_psu.h"
-#include "scpi_syst.h"
 
 #include "datetime.h"
 #include "sound.h"
@@ -34,7 +33,7 @@ namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-scpi_result_t scpi_syst_CapabilityQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemCapabilityQ(scpi_t * context) {
     char text[sizeof(STR_SYST_CAP)];
     strcpy_P(text, PSTR(STR_SYST_CAP));
     SCPI_ResultText(context, text);
@@ -42,19 +41,19 @@ scpi_result_t scpi_syst_CapabilityQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_ErrorNextQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemErrorNextQ(scpi_t * context) {
     return SCPI_SystemErrorNextQ(context);
 }
 
-scpi_result_t scpi_syst_ErrorCountQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemErrorCountQ(scpi_t * context) {
     return SCPI_SystemErrorCountQ(context);
 }
 
-scpi_result_t scpi_syst_VersionQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemVersionQ(scpi_t * context) {
     return SCPI_SystemVersionQ(context);
 }
 
-scpi_result_t scpi_syst_Power(scpi_t * context) {
+scpi_result_t scpi_cmd_systemPower(scpi_t * context) {
     bool up;
     if (!SCPI_ParamBool(context, &up, TRUE)) {
         return SCPI_RES_ERR;
@@ -75,12 +74,12 @@ scpi_result_t scpi_syst_Power(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_PowerQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemPowerQ(scpi_t * context) {
     SCPI_ResultBool(context, psu::isPowerUp());
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_Date(scpi_t * context) {
+scpi_result_t scpi_cmd_systemDate(scpi_t * context) {
     int32_t year;
     if (!SCPI_ParamInt(context, &year, TRUE)) {
         return SCPI_RES_ERR;
@@ -115,7 +114,7 @@ scpi_result_t scpi_syst_Date(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_DateQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemDateQ(scpi_t * context) {
     uint8_t year, month, day;
     if (!datetime::getDate(year, month, day)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
@@ -129,7 +128,7 @@ scpi_result_t scpi_syst_DateQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_Time(scpi_t * context) {
+scpi_result_t scpi_cmd_systemTime(scpi_t * context) {
     int32_t hour;
     if (!SCPI_ParamInt(context, &hour, TRUE)) {
         return SCPI_RES_ERR;
@@ -158,7 +157,7 @@ scpi_result_t scpi_syst_Time(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_TimeQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemTimeQ(scpi_t * context) {
     uint8_t hour, minute, second;
     if (!datetime::getTime(hour, minute, second)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
@@ -172,12 +171,12 @@ scpi_result_t scpi_syst_TimeQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_Beeper(scpi_t * context) {
+scpi_result_t scpi_cmd_systemBeeperImmediate(scpi_t * context) {
     sound::playBeep(true);
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_BeeperState(scpi_t * context) {
+scpi_result_t scpi_cmd_systemBeeperState(scpi_t * context) {
     bool enable;
     if (!SCPI_ParamBool(context, &enable, TRUE)) {
         return SCPI_RES_ERR;
@@ -193,12 +192,12 @@ scpi_result_t scpi_syst_BeeperState(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_BeeperStateQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemBeeperStateQ(scpi_t * context) {
     SCPI_ResultBool(context, persist_conf::isSoundEnabled());
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_BeeperKeyState(scpi_t * context) {
+scpi_result_t scpi_cmd_systemBeeperKeyState(scpi_t * context) {
     bool enable;
     if (!SCPI_ParamBool(context, &enable, TRUE)) {
         return SCPI_RES_ERR;
@@ -214,12 +213,12 @@ scpi_result_t scpi_syst_BeeperKeyState(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_BeeperKeyStateQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemBeeperKeyStateQ(scpi_t * context) {
     SCPI_ResultBool(context, persist_conf::isClickSoundEnabled());
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_TempProtectionClear(scpi_t * context) {
+scpi_result_t scpi_cmd_systemTemperatureProtectionHighClear(scpi_t * context) {
     int32_t sensor;
     if (!param_temp_sensor(context, sensor)) {
 		return SCPI_RES_ERR;
@@ -230,7 +229,7 @@ scpi_result_t scpi_syst_TempProtectionClear(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_TempProtectionLevel(scpi_t * context) {
+scpi_result_t scpi_cmd_systemTemperatureProtectionHighLevel(scpi_t * context) {
     float level;
     if (!get_temperature_param(context, level, OTP_AUX_MIN_LEVEL, OTP_AUX_MAX_LEVEL, OTP_AUX_DEFAULT_LEVEL)) {
         return SCPI_RES_ERR;
@@ -247,7 +246,7 @@ scpi_result_t scpi_syst_TempProtectionLevel(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_TempProtectionLevelQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemTemperatureProtectionHighLevelQ(scpi_t * context) {
     int32_t sensor;
     if (!param_temp_sensor(context, sensor)) {
 		return SCPI_RES_ERR;
@@ -256,7 +255,7 @@ scpi_result_t scpi_syst_TempProtectionLevelQ(scpi_t * context) {
     return result_float(context, temperature::sensors[sensor].prot_conf.level);
 }
 
-scpi_result_t scpi_syst_TempProtectionState(scpi_t * context) {
+scpi_result_t scpi_cmd_systemTemperatureProtectionHighState(scpi_t * context) {
     bool state;
     if (!SCPI_ParamBool(context, &state, TRUE)) {
         return SCPI_RES_ERR;
@@ -273,7 +272,7 @@ scpi_result_t scpi_syst_TempProtectionState(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_TempProtectionStateQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemTemperatureProtectionHighStateQ(scpi_t * context) {
     int32_t sensor;
     if (!param_temp_sensor(context, sensor)) {
 		return SCPI_RES_ERR;
@@ -284,7 +283,7 @@ scpi_result_t scpi_syst_TempProtectionStateQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_TempProtectionDelay(scpi_t * context) {
+scpi_result_t scpi_cmd_systemTemperatureProtectionHighDelayTime(scpi_t * context) {
     float delay;
     if (!get_duration_param(context, delay, OTP_AUX_MIN_DELAY, OTP_AUX_MAX_DELAY, OTP_AUX_DEFAULT_DELAY)) {
         return SCPI_RES_ERR;
@@ -301,7 +300,7 @@ scpi_result_t scpi_syst_TempProtectionDelay(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_TempProtectionDelayQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemTemperatureProtectionHighDelayTimeQ(scpi_t * context) {
     int32_t sensor;
     if (!param_temp_sensor(context, sensor)) {
 		return SCPI_RES_ERR;
@@ -312,7 +311,7 @@ scpi_result_t scpi_syst_TempProtectionDelayQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_TempProtectionTrippedQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemTemperatureProtectionHighTrippedQ(scpi_t * context) {
     int32_t sensor;
     if (!param_temp_sensor(context, sensor)) {
 		return SCPI_RES_ERR;
@@ -323,13 +322,13 @@ scpi_result_t scpi_syst_TempProtectionTrippedQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_ChannelCountQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemChannelCountQ(scpi_t * context) {
     SCPI_ResultInt(context, CH_NUM);
 
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_ChannelInformationCurrentQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemChannelInformationCurrentQ(scpi_t * context) {
     Channel *channel = param_channel(context, false, true);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -340,7 +339,7 @@ scpi_result_t scpi_syst_ChannelInformationCurrentQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_ChannelInformationPowerQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemChannelInformationPowerQ(scpi_t * context) {
     Channel *channel = param_channel(context, false, true);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -351,7 +350,7 @@ scpi_result_t scpi_syst_ChannelInformationPowerQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_ChannelInformationProgramQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemChannelInformationProgramQ(scpi_t * context) {
     Channel *channel = param_channel(context, false, true);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -419,7 +418,7 @@ scpi_result_t scpi_syst_ChannelInformationProgramQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_ChannelInformationVoltageQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemChannelInformationVoltageQ(scpi_t * context) {
     Channel *channel = param_channel(context, false, true);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -430,7 +429,7 @@ scpi_result_t scpi_syst_ChannelInformationVoltageQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_ChannelInformationOnTimeTotalQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemChannelInformationOntimeTotalQ(scpi_t * context) {
     Channel *channel = param_channel(context, false, true);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -441,7 +440,7 @@ scpi_result_t scpi_syst_ChannelInformationOnTimeTotalQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_ChannelInformationOnTimeLastQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemChannelInformationOntimeLastQ(scpi_t * context) {
     Channel *channel = param_channel(context, false, true);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -452,7 +451,7 @@ scpi_result_t scpi_syst_ChannelInformationOnTimeLastQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_ChannelModelQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemChannelModelQ(scpi_t * context) {
     Channel *channel = param_channel(context, false, true);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -463,32 +462,32 @@ scpi_result_t scpi_syst_ChannelModelQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_CpuInformationEhternetTypeQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemCpuInformationEthernetTypeQ(scpi_t * context) {
     SCPI_ResultText(context, getCpuEthernetType());
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_CpuInformationTypeQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemCpuInformationTypeQ(scpi_t * context) {
     SCPI_ResultText(context, getCpuType());
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_CpuInformationOnTimeTotalQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemCpuInformationOntimeTotalQ(scpi_t * context) {
 	outputOnTime(context, g_powerOnTimeCounter.getTotalTime());
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_CpuInformationOnTimeLastQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemCpuInformationOntimeLastQ(scpi_t * context) {
 	outputOnTime(context, g_powerOnTimeCounter.getLastTime());
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_CpuModelQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemCpuModelQ(scpi_t * context) {
     SCPI_ResultText(context, getCpuModel());
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_CpuOptionQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemCpuOptionQ(scpi_t * context) {
     char strFeatures[128] = {0};
 
 #if OPTION_BP
@@ -545,7 +544,7 @@ scpi_result_t scpi_syst_CpuOptionQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_Serial(scpi_t * context) {
+scpi_result_t scpi_cmd_systemSerial(scpi_t * context) {
     const char *serial;
     size_t serialLength;
 
@@ -567,12 +566,12 @@ scpi_result_t scpi_syst_Serial(scpi_t * context) {
 }
 
 
-scpi_result_t scpi_syst_SerialQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemSerialQ(scpi_t * context) {
     SCPI_ResultText(context, persist_conf::devConf.serialNumber);
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_PowerProtectionTrip(scpi_t * context) {
+scpi_result_t scpi_cmd_systemPowerProtectionTrip(scpi_t * context) {
     bool enable;
     if (!SCPI_ParamBool(context, &enable, TRUE)) {
         return SCPI_RES_ERR;
@@ -586,13 +585,13 @@ scpi_result_t scpi_syst_PowerProtectionTrip(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_PowerProtectionTripQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemPowerProtectionTripQ(scpi_t * context) {
     SCPI_ResultBool(context, persist_conf::isShutdownWhenProtectionTrippedEnabled());
 
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_PonOutputDisable(scpi_t * context) {
+scpi_result_t scpi_cmd_systemPonOutputDisable(scpi_t * context) {
     bool enable;
     if (!SCPI_ParamBool(context, &enable, TRUE)) {
         return SCPI_RES_ERR;
@@ -606,7 +605,7 @@ scpi_result_t scpi_syst_PonOutputDisable(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_PonOutputDisableQ(scpi_t * context) {
+scpi_result_t scpi_cmd_systemPonOutputDisableQ(scpi_t * context) {
     SCPI_ResultBool(context, persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled());
 
     return SCPI_RES_OK;
@@ -629,7 +628,7 @@ static bool check_password(scpi_t * context) {
     return true;
 }
 
-scpi_result_t scpi_syst_PasswordNew(scpi_t * context) {
+scpi_result_t scpi_cmd_systemPasswordNew(scpi_t * context) {
     if (!check_password(context)) {
         return SCPI_RES_ERR;
     }
@@ -655,7 +654,7 @@ scpi_result_t scpi_syst_PasswordNew(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_SystemPasswordReset(scpi_t * context) {
+scpi_result_t scpi_cmd_systemPasswordFpanelReset(scpi_t * context) {
     if (!persist_conf::changeSystemPassword("", 0)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -664,7 +663,7 @@ scpi_result_t scpi_syst_SystemPasswordReset(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_CalibrationPasswordReset(scpi_t * context) {
+scpi_result_t scpi_cmd_systemPasswordCalibrateReset(scpi_t * context) {
     if (!persist_conf::changeCalibrationPassword(CALIBRATION_PASSWORD_DEFAULT, strlen(CALIBRATION_PASSWORD_DEFAULT))) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -673,7 +672,7 @@ scpi_result_t scpi_syst_CalibrationPasswordReset(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_KLock(scpi_t * context) {
+scpi_result_t scpi_cmd_systemKlock(scpi_t * context) {
     if (!persist_conf::lockFrontPanel(true)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -694,7 +693,7 @@ scpi_choice_def_t rlStateChoice[] = {
 };
 
 
-scpi_result_t scpi_syst_RLState(scpi_t * context) {
+scpi_result_t scpi_cmd_systemCommunicateRlstate(scpi_t * context) {
     int32_t rlState;
     if (!SCPI_ParamChoice(context, rlStateChoice, &rlState, true)) {
         return SCPI_RES_ERR;
@@ -709,7 +708,7 @@ scpi_result_t scpi_syst_RLState(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_Local(scpi_t * context) {
+scpi_result_t scpi_cmd_systemLocal(scpi_t * context) {
     g_rlState = RL_STATE_LOCAL;
 
 #if OPTION_DISPLAY
@@ -719,7 +718,7 @@ scpi_result_t scpi_syst_Local(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_Remote(scpi_t * context) {
+scpi_result_t scpi_cmd_systemRemote(scpi_t * context) {
     g_rlState = RL_STATE_REMOTE;
 
 #if OPTION_DISPLAY
@@ -729,7 +728,7 @@ scpi_result_t scpi_syst_Remote(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_syst_RWLock(scpi_t * context) {
+scpi_result_t scpi_cmd_systemRwlock(scpi_t * context) {
     g_rlState = RL_STATE_RW_LOCK;
 
 #if OPTION_DISPLAY

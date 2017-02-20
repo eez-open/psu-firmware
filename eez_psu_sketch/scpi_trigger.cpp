@@ -18,7 +18,6 @@
  
 #include "psu.h"
 #include "scpi_psu.h"
-#include "scpi_trigger.h"
 
 #include "trigger.h"
 
@@ -44,7 +43,7 @@ static scpi_choice_def_t polarityChoice[] = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-scpi_result_t scpi_trigger_SequenceImmediate(scpi_t * context) {
+scpi_result_t scpi_cmd_triggerSequenceImmediate(scpi_t * context) {
     int result = trigger::startImmediately();
     if (result != SCPI_RES_OK) {
         SCPI_ErrorPush(context, result);
@@ -54,7 +53,7 @@ scpi_result_t scpi_trigger_SequenceImmediate(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_trigger_SequenceDelay(scpi_t * context) {
+scpi_result_t scpi_cmd_triggerSequenceDelay(scpi_t * context) {
     float delay;
     if (!get_duration_param(context, delay, trigger::DELAY_MIN, trigger::DELAY_MAX, trigger::DELAY_DEFAULT)) {
         return SCPI_RES_ERR;
@@ -65,12 +64,12 @@ scpi_result_t scpi_trigger_SequenceDelay(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_trigger_SequenceDelayQ(scpi_t * context) {
+scpi_result_t scpi_cmd_triggerSequenceDelayQ(scpi_t * context) {
     SCPI_ResultFloat(context, trigger::getDelay());
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_trigger_SequenceSlope(scpi_t * context) {
+scpi_result_t scpi_cmd_triggerSequenceSlope(scpi_t * context) {
     int32_t polarity;
     if (!SCPI_ParamChoice(context, polarityChoice, &polarity, true)) {
         return SCPI_RES_ERR;
@@ -81,12 +80,12 @@ scpi_result_t scpi_trigger_SequenceSlope(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_trigger_SequenceSlopeQ(scpi_t * context) {
+scpi_result_t scpi_cmd_triggerSequenceSlopeQ(scpi_t * context) {
     resultChoiceName(context, polarityChoice, trigger::getPolarity());
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_trigger_SequenceSource(scpi_t * context) {
+scpi_result_t scpi_cmd_triggerSequenceSource(scpi_t * context) {
     int32_t source;
     if (!SCPI_ParamChoice(context, sourceChoice, &source, true)) {
         return SCPI_RES_ERR;
@@ -97,12 +96,12 @@ scpi_result_t scpi_trigger_SequenceSource(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_trigger_SequenceSourceQ(scpi_t * context) {
+scpi_result_t scpi_cmd_triggerSequenceSourceQ(scpi_t * context) {
     resultChoiceName(context, sourceChoice, trigger::getSource());
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_trigger_Initiate(scpi_t * context) {
+scpi_result_t scpi_cmd_initiate(scpi_t * context) {
     int result = trigger::initiate();
     if (result != SCPI_RES_OK) {
         SCPI_ErrorPush(context, result);
@@ -112,7 +111,7 @@ scpi_result_t scpi_trigger_Initiate(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_trigger_InitiateContinuous(scpi_t * context) {
+scpi_result_t scpi_cmd_initiateContinuous(scpi_t * context) {
     bool enable;
     if (!SCPI_ParamBool(context, &enable, TRUE)) {
         return SCPI_RES_ERR;
@@ -127,18 +126,18 @@ scpi_result_t scpi_trigger_InitiateContinuous(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_trigger_InitiateContinuousQ(scpi_t * context) {
+scpi_result_t scpi_cmd_initiateContinuousQ(scpi_t * context) {
     SCPI_ResultBool(context, trigger::isContinuousInitializationEnabled() ? 1 : 0);
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_trigger_Abort(scpi_t * context) {
+scpi_result_t scpi_cmd_abort(scpi_t * context) {
     trigger::abort();
 
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_trigger_Trg(scpi_t * context) {
+scpi_result_t scpi_cmd_coreTrg(scpi_t * context) {
     int result = trigger::generateTrigger(trigger::SOURCE_BUS);
     if (result != SCPI_RES_OK) {
         SCPI_ErrorPush(context, result);

@@ -18,7 +18,6 @@
  
 #include "psu.h"
 #include "scpi_psu.h"
-#include "scpi_cal.h"
 
 #include "calibration.h"
 #include "channel_dispatcher.h"
@@ -112,7 +111,7 @@ static scpi_result_t calibration_data(scpi_t * context, calibration::Value &cali
 
 ////////////////////////////////////////////////////////////////////////////////
 
-scpi_result_t scpi_cal_Clear(scpi_t * context) {
+scpi_result_t scpi_cmd_calibrationClear(scpi_t * context) {
     if (calibration::isEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS);
         return SCPI_RES_ERR;
@@ -133,7 +132,7 @@ scpi_result_t scpi_cal_Clear(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cal_Mode(scpi_t * context) {
+scpi_result_t scpi_cmd_calibrationMode(scpi_t * context) {
     if (channel_dispatcher::isCoupled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
@@ -176,20 +175,20 @@ scpi_result_t scpi_cal_Mode(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cal_ModeQ(scpi_t * context) {
+scpi_result_t scpi_cmd_calibrationModeQ(scpi_t * context) {
     SCPI_ResultBool(context, calibration::isEnabled());
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cal_CurrentData(scpi_t * context) {
+scpi_result_t scpi_cmd_calibrationCurrentData(scpi_t * context) {
     return calibration_data(context, calibration::g_current);
 }
 
-scpi_result_t scpi_cal_CurrentLevel(scpi_t * context) {
+scpi_result_t scpi_cmd_calibrationCurrentLevel(scpi_t * context) {
     return calibration_level(context, calibration::g_current);
 }
 
-scpi_result_t scpi_cal_PasswordNew(scpi_t * context) {
+scpi_result_t scpi_cmd_calibrationPasswordNew(scpi_t * context) {
     if (!check_password(context)) {
         return SCPI_RES_ERR;
     }
@@ -215,7 +214,7 @@ scpi_result_t scpi_cal_PasswordNew(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cal_Remark(scpi_t * context) {
+scpi_result_t scpi_cmd_calibrationRemark(scpi_t * context) {
     if (!calibration::isEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CALIBRATION_STATE_IS_OFF);
         return SCPI_RES_ERR;
@@ -237,7 +236,7 @@ scpi_result_t scpi_cal_Remark(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cal_RemarkQ(scpi_t * context) {
+scpi_result_t scpi_cmd_calibrationRemarkQ(scpi_t * context) {
     const char *remark;
 
     if (calibration::isEnabled()) {
@@ -254,7 +253,7 @@ scpi_result_t scpi_cal_RemarkQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cal_Save(scpi_t * context) {
+scpi_result_t scpi_cmd_calibrationSave(scpi_t * context) {
 	int16_t err;
 	if (!calibration::canSave(err)) {
         SCPI_ErrorPush(context, err);
@@ -269,7 +268,7 @@ scpi_result_t scpi_cal_Save(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cal_State(scpi_t * context) {
+scpi_result_t scpi_cmd_calibrationState(scpi_t * context) {
     if (channel_dispatcher::isCoupled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED);
         return SCPI_RES_ERR;
@@ -308,7 +307,7 @@ scpi_result_t scpi_cal_State(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cal_StateQ(scpi_t * context) {
+scpi_result_t scpi_cmd_calibrationStateQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
     Channel *channel = &Channel::get(psu_context->selected_channel_index - 1);
 
@@ -317,11 +316,11 @@ scpi_result_t scpi_cal_StateQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cal_VoltageData(scpi_t * context) {
+scpi_result_t scpi_cmd_calibrationVoltageData(scpi_t * context) {
     return calibration_data(context, calibration::g_voltage);
 }
 
-scpi_result_t scpi_cal_VoltageLevel(scpi_t * context) {
+scpi_result_t scpi_cmd_calibrationVoltageLevel(scpi_t * context) {
     return calibration_level(context, calibration::g_voltage);;
 }
 

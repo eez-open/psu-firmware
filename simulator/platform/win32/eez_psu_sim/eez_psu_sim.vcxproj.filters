@@ -196,42 +196,6 @@
       <Filter>simulator</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_appl.h">
-      <Filter>scpi\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_cal.h">
-      <Filter>scpi\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_core.h">
-      <Filter>scpi\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_diag.h">
-      <Filter>scpi\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_inst.h">
-      <Filter>scpi\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_meas.h">
-      <Filter>scpi\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_mem.h">
-      <Filter>scpi\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_outp.h">
-      <Filter>scpi\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\scpi_simu.h">
-      <Filter>scpi\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_sour.h">
-      <Filter>scpi\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_stat.h">
-      <Filter>scpi\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_syst.h">
-      <Filter>scpi\commands</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_params.h">
       <Filter>scpi</Filter>
     </ClInclude>
@@ -246,9 +210,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\front_panel\control.h">
       <Filter>simulator\front_panel</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_debug.h">
-      <Filter>scpi\commands</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\conf_advanced.h">
       <Filter>core</Filter>
@@ -415,14 +376,14 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\trigger.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_trigger.h">
-      <Filter>scpi\commands</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\arduino\SD.h">
       <Filter>simulator\arduino</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\sd_card.h">
       <Filter>board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_commands.h">
+      <Filter>scpi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

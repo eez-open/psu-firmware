@@ -18,7 +18,6 @@
  
 #include "psu.h"
 #include "scpi_psu.h"
-#include "scpi_appl.h"
 #include "channel_dispatcher.h"
 
 namespace eez {
@@ -35,7 +34,7 @@ static scpi_choice_def_t current_or_voltage_choice[] = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-scpi_result_t scpi_appl_Apply(scpi_t *context) {
+scpi_result_t scpi_cmd_apply(scpi_t *context) {
     Channel *channel = param_channel(context, TRUE);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -89,7 +88,7 @@ scpi_result_t scpi_appl_Apply(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_appl_ApplyQ(scpi_t * context) {
+scpi_result_t scpi_cmd_applyQ(scpi_t * context) {
     Channel *channel = param_channel(context, TRUE);
     if (!channel) {
         return SCPI_RES_ERR;

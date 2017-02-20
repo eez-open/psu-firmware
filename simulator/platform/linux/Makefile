@@ -5,7 +5,7 @@ CXX = g++
 
 SIM_PROGRAM_NAME = eez_psu_sim
 
-SIM_CFLAGS = -c -Wextra -Wmissing-prototypes -Wimplicit \
+SIM_CFLAGS = -g -c -Wextra -Wmissing-prototypes -Wimplicit \
     -DUSE_FULL_ERROR_LIST=0 \
 	-I../../../libraries/scpi-parser/src \
 	
@@ -13,7 +13,7 @@ SIM_CSOURCES = \
 	-c ../../../libraries/scpi-parser/src/impl/*.c \
 	-c third_party/thread_queue.c
 
-SIM_CXXFLAGS = \
+SIM_CXXFLAGS = -g \
 	-Wall -Wno-unused-variable -fpermissive -Wno-reorder -Wno-parentheses \
 	-DUSE_FULL_ERROR_LIST=0 \
 	-DEEZ_PSU_SIMULATOR \
