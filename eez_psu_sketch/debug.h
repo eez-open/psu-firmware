@@ -29,7 +29,7 @@ namespace psu {
 /// Everything used for the debugging purposes.
 namespace debug {
 
-void tick(unsigned long tick_usec);
+void tick(uint32_t tick_usec);
 
 void Trace(const char *format, ...);
 
@@ -62,14 +62,14 @@ extern int16_t uMonDac[2];
 extern int16_t iMon[2];
 extern int16_t iMonDac[2];
 
-extern unsigned long lastLoopDuration;
-extern unsigned long maxLoopDuration;
-extern unsigned long avgLoopDuration;
+extern uint32_t lastLoopDuration;
+extern uint32_t maxLoopDuration;
+extern uint32_t avgLoopDuration;
 
-extern unsigned long totalAdcReadCounter;
-extern unsigned long lastAdcReadCounter;
+extern uint32_t totalAdcReadCounter;
+extern uint32_t lastAdcReadCounter;
 
-void adcReadTick(unsigned long tick_usec);
+void adcReadTick(uint32_t tick_usec);
 
 extern bool g_debugWatchdog;
 

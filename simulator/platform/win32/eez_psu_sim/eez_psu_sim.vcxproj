@@ -382,7 +382,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\src\front_panel\render.cpp" />
     <ClCompile Include="..\..\..\src\front_panel\data.cpp" />
     <ClCompile Include="..\..\..\src\main.cpp" />
-    <ClCompile Include="..\..\..\src\scpi_simu.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_simu.cpp" />
     <ClCompile Include="..\..\..\src\simulator_psu.cpp" />
     <ClCompile Include="ethernet_win32.cpp" />
     <ClCompile Include="main_loop.cpp" />

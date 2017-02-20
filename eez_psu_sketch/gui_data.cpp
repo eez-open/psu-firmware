@@ -46,7 +46,7 @@ static struct ChannelSnapshot {
     unsigned int mode;
     Value monValue;
     float pMon;
-    unsigned long lastSnapshotTime;
+    uint32_t lastSnapshotTime;
 } g_channelSnapshot[CH_NUM];
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -593,7 +593,7 @@ Value get(const Cursor &cursor, uint8_t id) {
         }
 
         ChannelSnapshot &channelSnapshot = g_channelSnapshot[channel.index - 1];
-        unsigned long currentTime = micros();
+        uint32_t currentTime = micros();
         if (!channelSnapshot.lastSnapshotTime || currentTime - channelSnapshot.lastSnapshotTime >= CONF_GUI_REFRESH_EVERY_MS * 1000UL) {
             char *mode_str = channel.getCvModeStr();
             channelSnapshot.mode = 0;

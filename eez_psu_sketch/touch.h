@@ -26,7 +26,7 @@ namespace gui {
 namespace touch {
 
 extern void init();
-extern void tick(unsigned long tick_usec);
+extern void tick(uint32_t tick_usec);
 
 enum EventType {
     TOUCH_NONE,

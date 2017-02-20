@@ -136,21 +136,21 @@ bool AnalogDigitalConverter::test() {
     return g_testResult != psu::TEST_FAILED;
 }
 
-void AnalogDigitalConverter::tick(unsigned long tick_usec) {
+void AnalogDigitalConverter::tick(uint32_t tick_usec) {
 #if ADC_USE_INTERRUPTS
     if (channel.isOk()) {
         if (channel.isOutputEnabled()) {
             noInterrupts();
-            unsigned long last_adc_start_time = start_time;
+            uint32_t last_adc_start_time = start_time;
             interrupts();
-            long diff = tick_usec - last_adc_start_time;
+            int32_t diff = tick_usec - last_adc_start_time;
             if (diff > ADC_TIMEOUT_MS * 1000L) {
                 if (adc_timeout_recovery_attempts_counter < MAX_ADC_TIMEOUT_RECOVERY_ATTEMPTS) {
                     ++adc_timeout_recovery_attempts_counter;
 
                     DebugTraceF("ADC timeout (%lu) detected on CH%d, recovery attempt no. %d", diff, channel.index, adc_timeout_recovery_attempts_counter);
 
-                    unsigned long saved_start_time = start_time;
+                    uint32_t saved_start_time = start_time;
 
                     channel.init();
                     start(ADC_REG0_READ_U_MON);

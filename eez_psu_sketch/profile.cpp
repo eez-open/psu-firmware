@@ -34,7 +34,7 @@ static bool g_save_profile = false;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void tick(unsigned long tick_usec) {
+void tick(uint32_t tick_usec) {
     if (g_save_profile) {
         saveAtLocation(0);
         g_save_profile = false;

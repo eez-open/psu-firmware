@@ -34,22 +34,22 @@ int16_t uMonDac[2];
 int16_t iMon[2];
 int16_t iMonDac[2];
 
-static unsigned long previousTickCount = 0;
-unsigned long lastLoopDuration = 0;
-unsigned long maxLoopDuration = 0;
+static uint32_t previousTickCount = 0;
+uint32_t lastLoopDuration = 0;
+uint32_t maxLoopDuration = 0;
 
-static unsigned long avgLoopDurationCounter = 0;
-static unsigned long avgLoopDurationTotal = 0;
-unsigned long avgLoopDuration = 0;
+static uint32_t avgLoopDurationCounter = 0;
+static uint32_t avgLoopDurationTotal = 0;
+uint32_t avgLoopDuration = 0;
 
-static unsigned long previousAdcReadCount = 0;
-static unsigned long currentAdcReadCounter = 0;
-unsigned long totalAdcReadCounter = 0;
-unsigned long lastAdcReadCounter = 0;
+static uint32_t previousAdcReadCount = 0;
+static uint32_t currentAdcReadCounter = 0;
+uint32_t totalAdcReadCounter = 0;
+uint32_t lastAdcReadCounter = 0;
 
 bool g_debugWatchdog = true;
 
-void adcReadTick(unsigned long tick_usec) {
+void adcReadTick(uint32_t tick_usec) {
     ++currentAdcReadCounter;
 }
 
@@ -86,7 +86,7 @@ void DumpTraceBuffer() {
     Serial.flush();
 }
 
-void tick(unsigned long tick_usec) {
+void tick(uint32_t tick_usec) {
 #if CONF_DEBUG
     if (previousTickCount != 0) {
         lastLoopDuration = tick_usec - previousTickCount;
@@ -104,10 +104,10 @@ void tick(unsigned long tick_usec) {
     }
 
     if (previousAdcReadCount != 0) {
-        unsigned long duration = tick_usec - previousAdcReadCount;
+        uint32_t duration = tick_usec - previousAdcReadCount;
         if (duration > 1000000) {
             noInterrupts();
-            unsigned long int_counter = currentAdcReadCounter;
+            uint32_t int_counter = currentAdcReadCounter;
             currentAdcReadCounter = 0;
             interrupts();
 

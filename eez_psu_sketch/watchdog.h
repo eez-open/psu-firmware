@@ -22,7 +22,7 @@ namespace eez {
 namespace psu {
 namespace watchdog {
 
-void tick(unsigned long tick_usec);
+void tick(uint32_t tick_usec);
 
 #if CONF_DEBUG || CONF_DEBUG_LATEST
 void printInfo();

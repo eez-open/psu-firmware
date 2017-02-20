@@ -204,7 +204,7 @@ EventType event_type = TOUCH_NONE;
 int x = -1;
 int y = -1;
 
-unsigned long last_tick_usec = 0;
+uint32_t last_tick_usec = 0;
 
 void init() {
     touch_init();
@@ -213,7 +213,7 @@ void init() {
     DebugTrace("Touch modification ENABLED");
 }
 
-void tick(unsigned long tick_usec) {
+void tick(uint32_t tick_usec) {
     if (last_tick_usec == 0 || tick_usec - last_tick_usec > CONF_GUI_TOUCH_READ_FREQ_MS * 1000UL) {
     	touch_read();
 

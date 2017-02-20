@@ -98,9 +98,9 @@ void write_chunk(const uint8_t *buffer, uint16_t buffer_size, uint16_t address) 
     digitalWrite(EEPROM_SELECT, HIGH); // release chip
     SPI_endTransaction();
 
-    unsigned long s = micros();
+    uint32_t s = micros();
     while (is_write_in_progress()) {
-        unsigned long e = micros();
+        uint32_t e = micros();
         if (e - s > 3000) {
             DebugTrace("EEPROM write failure!");
             break;

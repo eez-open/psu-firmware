@@ -17,15 +17,17 @@
  */
 
 #include "psu.h"
-#include "channel_dispatcher.h"
-
 #include "scpi_psu.h"
+
+#ifdef EEZ_PSU_SIMULATOR
 
 #include "simulator_psu.h"
 #include "chips.h"
 #if OPTION_DISPLAY
 #include "front_panel/control.h"
 #endif
+
+#include "channel_dispatcher.h"
 
 namespace eez {
 namespace psu {
@@ -356,3 +358,91 @@ scpi_result_t scpi_cmd_simulatorQuit(scpi_t *context) {
 }
 }
 } // namespace eez::psu::scpi
+
+#else
+
+namespace eez {
+namespace psu {
+namespace scpi {
+
+scpi_result_t scpi_cmd_simulatorLoadState(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorLoadStateQ(scpi_t * context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorLoad(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorLoadQ(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorVoltageProgramExternal(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorVoltageProgramExternalQ(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorPwrgood(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorPwrgoodQ(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorRpol(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorRpolQ(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorTemperature(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorTemperatureQ(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorGui(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorExit(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorQuit(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+
+}
+}
+} // namespace eez::psu::scpi
+
+#endif

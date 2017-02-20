@@ -365,7 +365,7 @@ public:
     bool isOk();
 
     /// Called by main loop, used for channel maintenance.
-    void tick(unsigned long tick_usec);
+    void tick(uint32_t tick_usec);
 
     /// Called from IO expander interrupt routine.
     /// @param gpio State of IO expander GPIO register.
@@ -421,7 +421,7 @@ public:
     void lowRippleAutoEnable(bool enable);
 
     /// Is low ripple mode allowed?
-    bool isLowRippleAllowed(unsigned long tick_usec);
+    bool isLowRippleAllowed(uint32_t tick_usec);
 
     /// Is low ripple mode enabled?
     bool isLowRippleEnabled();
@@ -532,10 +532,10 @@ public:
 
 private:
     bool delayed_dp_off;
-    unsigned long delayed_dp_off_start;
+    uint32_t delayed_dp_off_start;
     bool delayLowRippleCheck;
-    unsigned long outputEnableStartTime;
-    unsigned long dpNegMonitoringTime;
+    uint32_t outputEnableStartTime;
+    uint32_t dpNegMonitoringTime;
 
     float U_MIN;
     float U_DEF;
@@ -557,7 +557,7 @@ private:
     float uHistory[CHANNEL_HISTORY_SIZE];
     float iHistory[CHANNEL_HISTORY_SIZE];
     int historyPosition;
-    unsigned long historyLastTick;
+    uint32_t historyLastTick;
 
     float VOLTAGE_GND_OFFSET;
     float CURRENT_GND_OFFSET;
@@ -593,7 +593,7 @@ private:
     void doRemoteSensingEnable(bool enable);
     void doRemoteProgrammingEnable(bool enable);
 
-    void lowRippleCheck(unsigned long tick_usec);
+    void lowRippleCheck(uint32_t tick_usec);
     void doLowRippleEnable(bool enable);
     void doLowRippleAutoEnable(bool enable);
 

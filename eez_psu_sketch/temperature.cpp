@@ -46,9 +46,9 @@ TempSensorTemperature sensors[temp_sensor::NUM_TEMP_SENSORS] = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static unsigned long last_measured_tick;
+static uint32_t last_measured_tick;
 static float last_max_channel_temperature;
-static unsigned long max_temp_start_tick;
+static uint32_t max_temp_start_tick;
 static bool force_power_down = false;
 
 void init() {
@@ -67,7 +67,7 @@ bool test() {
 	return success;
 }
 
-void tick(unsigned long tick_usec) {
+void tick(uint32_t tick_usec) {
 	if (tick_usec - last_measured_tick >= TEMP_SENSOR_READ_EVERY_MS * 1000L) {
 		last_measured_tick = tick_usec;
 
@@ -181,7 +181,7 @@ bool TempSensorTemperature::isTestOK() {
 	return temp_sensor::sensors[sensorIndex].g_testResult == TEST_OK;
 }
 
-void TempSensorTemperature::tick(unsigned long tick_usec) {
+void TempSensorTemperature::tick(uint32_t tick_usec) {
 	if (isInstalled() && isTestOK()) {
 		measure();
 		if (temp_sensor::sensors[sensorIndex].g_testResult == TEST_OK) {
@@ -230,7 +230,7 @@ void TempSensorTemperature::set_otp_reg(bool on) {
 	}
 }
 
-void TempSensorTemperature::protection_check(unsigned long tick_usec) {
+void TempSensorTemperature::protection_check(uint32_t tick_usec) {
 	if (temp_sensor::sensors[sensorIndex].installed) {
 		if (!otp_tripped && prot_conf.state && temperature >= prot_conf.level) {
 			float delay = prot_conf.delay;

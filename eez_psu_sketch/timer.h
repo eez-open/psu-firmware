@@ -23,15 +23,15 @@ namespace psu {
 
 class Interval {
 public:
-	Interval(unsigned long interval_msec);
+	Interval(uint32_t interval_msec);
 
     void reset();
 
-    bool test(unsigned long tick_usec);
+    bool test(uint32_t tick_usec);
 
 private:
-	unsigned long interval_usec;
-	unsigned long next_tick_usec;
+	uint32_t interval_usec;
+	uint32_t next_tick_usec;
 };
 
 }

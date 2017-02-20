@@ -105,7 +105,7 @@ void init() {
         error_queue_data, SCPI_PARSER_ERROR_QUEUE_SIZE + 1);
 }
 
-void tick(unsigned long tick_usec) {
+void tick(uint32_t tick_usec) {
     while (Serial.available()) {
         char ch = (char)Serial.read();
         input(scpi_context, ch);

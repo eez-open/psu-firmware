@@ -38,7 +38,7 @@ struct ProtectionConfiguration {
 
 void init();
 bool test();
-void tick(unsigned long tick_usec);
+void tick(uint32_t tick_usec);
 
 bool isChannelSensorInstalled(Channel *channel);
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
@@ -64,7 +64,7 @@ public:
 
 	bool isInstalled();
 	bool isTestOK();
-	void tick(unsigned long tick_usec);
+	void tick(uint32_t tick_usec);
 	bool isChannelSensor(Channel *channel);
 	float measure();
 	void clearProtection();
@@ -74,11 +74,11 @@ private:
 	int sensorIndex;
 
 	bool otp_alarmed;
-	unsigned long otp_alarmed_started_tick;
+	uint32_t otp_alarmed_started_tick;
 	bool otp_tripped;
 
 	void set_otp_reg(bool on);
-	void protection_check(unsigned long tick_usec);
+	void protection_check(uint32_t tick_usec);
     static void protection_enter(TempSensorTemperature& sensor);
 	void protection_enter();
 };

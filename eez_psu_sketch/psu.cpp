@@ -66,7 +66,7 @@ bool g_isBooted = false;
 static bool g_bootTestSuccess;
 static bool g_powerIsUp = false;
 static bool g_testPowerUpDelay = false;
-static unsigned long g_powerDownTime;
+static uint32_t g_powerDownTime;
 static bool g_isTimeCriticalMode = false;
 
 static MaxCurrentLimitCause g_maxCurrentLimitCause;
@@ -876,7 +876,7 @@ void tick() {
         powerDownBySensor();
     }
 
-	unsigned long tick_usec = micros();
+	uint32_t tick_usec = micros();
 
 #if CONF_DEBUG
     debug::tick(tick_usec);

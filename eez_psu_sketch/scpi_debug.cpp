@@ -47,19 +47,19 @@ scpi_result_t scpi_cmd_debugQ(scpi_t *context) {
     char buffer[512] = { 0 };
     char *p = buffer;
 
-    sprintf_P(p, PSTR("max_loop_duration: %lu\n"), maxLoopDuration);
+    sprintf_P(p, PSTR("max_loop_duration: %lu\n"), (unsigned long)maxLoopDuration);
     p += strlen(p);
 
-    sprintf_P(p, PSTR("last_loop_duration: %lu\n"), lastLoopDuration);
+    sprintf_P(p, PSTR("last_loop_duration: %lu\n"), (unsigned long)lastLoopDuration);
     p += strlen(p);
 
-    sprintf_P(p, PSTR("avg_loop_duration: %lu\n"), avgLoopDuration);
+    sprintf_P(p, PSTR("avg_loop_duration: %lu\n"), (unsigned long)avgLoopDuration);
     p += strlen(p);
 
-    sprintf_P(p, PSTR("total_adc_read_counter: %lu\n"), totalAdcReadCounter);
+    sprintf_P(p, PSTR("total_adc_read_counter: %lu\n"), (unsigned long)totalAdcReadCounter);
     p += strlen(p);
 
-    sprintf_P(p, PSTR("last_adc_read_counter: %lu\n"), lastAdcReadCounter);
+    sprintf_P(p, PSTR("last_adc_read_counter: %lu\n"), (unsigned long)lastAdcReadCounter);
     p += strlen(p);
 
     Channel::get(0).adcReadAll();

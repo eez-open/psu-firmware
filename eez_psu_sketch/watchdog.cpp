@@ -28,7 +28,7 @@ namespace watchdog {
 
 static bool watchdogEnabled = false;
 static Interval watchdogInterval(WATCHDOG_INTERVAL);
-static unsigned long g_lastWatchdogImpulseTime[3];
+static uint32_t g_lastWatchdogImpulseTime[3];
 
 static uint8_t g_watchdogState;
 
@@ -45,7 +45,7 @@ void disable() {
 	pinMode(WATCHDOG, INPUT);
 }
 
-void tick(unsigned long tick_usec) {
+void tick(uint32_t tick_usec) {
     if (watchdogEnabled) {
         if (!isPowerUp()) {
             // WATCHDOG pin impedance must be changed to be sure that TPS3705 will not detect prolonged delay in receiving heartbeat impulse
@@ -78,7 +78,7 @@ void tick(unsigned long tick_usec) {
 
 #if CONF_DEBUG || CONF_DEBUG_LATEST
 void printInfo() {
-    unsigned long now = micros();
+    uint32_t now = micros();
     DebugTraceF("Last watchdog impulses: %lu, %u, %lu, %u, %lu, %u, %lu",
         watchdog::g_lastWatchdogImpulseTime[0], watchdog::g_lastWatchdogImpulseTime[1] - watchdog::g_lastWatchdogImpulseTime[0],
         watchdog::g_lastWatchdogImpulseTime[1], watchdog::g_lastWatchdogImpulseTime[2] - watchdog::g_lastWatchdogImpulseTime[1],

@@ -40,7 +40,7 @@ enum State {
 };
 static State g_state;
 static bool g_continuousInitializationEnabled;
-static unsigned long g_triggeredTime;
+static uint32_t g_triggeredTime;
 static uint8_t g_extTrigLastState;
 
 void reset() {
@@ -114,7 +114,7 @@ float getCurrent(int iChannel) {
     return g_levels[iChannel].i;
 }
 
-void check(unsigned long currentTime) {
+void check(uint32_t currentTime) {
     if (currentTime - g_triggeredTime > g_delay * 1000L) {
         startImmediately();
         if (g_continuousInitializationEnabled) {
@@ -215,7 +215,7 @@ void abort() {
     reset();
 }
 
-void tick(unsigned long tick_usec) {
+void tick(uint32_t tick_usec) {
     if (g_state == STATE_TRIGGERED) {
         check(tick_usec / 1000);
     }

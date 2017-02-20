@@ -28,7 +28,7 @@ extern volatile int g_rpm;
 void init();
 void test_start();
 bool test();
-void tick(unsigned long tick_usec);
+void tick(uint32_t tick_usec);
 
 }
 }

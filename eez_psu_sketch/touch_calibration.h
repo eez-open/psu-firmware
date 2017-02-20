@@ -28,7 +28,7 @@ void init();
 void enterCalibrationMode(int yesNoPageId, int nextPageId);
 bool isCalibrated();
 bool isCalibrating();
-void tick(unsigned long tick_usec);
+void tick(uint32_t tick_usec);
 
 }
 }

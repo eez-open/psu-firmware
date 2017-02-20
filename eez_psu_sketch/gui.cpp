@@ -103,9 +103,9 @@ static void (*g_dialogCancelCallback)();
 static void (*g_errorMessageAction)();
 static int g_errorMessageActionParam;
 
-static unsigned long g_showPageTime;
-static unsigned long g_timeOfLastActivity;
-static unsigned long g_touchDownTime;
+static uint32_t g_showPageTime;
+static uint32_t g_timeOfLastActivity;
+static uint32_t g_touchDownTime;
 static bool g_touchActionExecuted;
 
 Channel *g_channel;
@@ -647,7 +647,7 @@ void executeAction(int actionId) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void standbyTouchHandling(unsigned long tick_usec) {
+void standbyTouchHandling(uint32_t tick_usec) {
     // touch handling in power off:
     // wait for long press anywhere on the screen and then turn power on
     if (touch::event_type == touch::TOUCH_DOWN) {
@@ -818,7 +818,7 @@ int getStartPageId() {
     return devices::anyFailed() ? PAGE_ID_SELF_TEST_RESULT: PAGE_ID_MAIN;
 }
 
-void tick(unsigned long tick_usec) {
+void tick(uint32_t tick_usec) {
 #ifdef EEZ_PSU_SIMULATOR
     if (!simulator::front_panel::isOpened()) {
         return;
@@ -845,7 +845,7 @@ void tick(unsigned long tick_usec) {
         return;
     } else if (g_activePageId == PAGE_ID_ENTERING_STANDBY && tick_usec - g_showPageTime < CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT) {
         if (!psu::isPowerUp()) {
-            unsigned long saved_showPageTime = g_showPageTime;
+            uint32_t saved_showPageTime = g_showPageTime;
             showStandbyPage();
             g_showPageTime = saved_showPageTime - (CONF_GUI_STANDBY_PAGE_TIMEOUT - CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT);
         }
@@ -999,7 +999,7 @@ void tick(unsigned long tick_usec) {
     }
 
     //
-    unsigned long inactivityPeriod = millis() - g_timeOfLastActivity;
+    uint32_t inactivityPeriod = millis() - g_timeOfLastActivity;
 
 #if GUI_BACK_TO_MAIN_ENABLED
     if (g_activePageId == PAGE_ID_EVENT_QUEUE ||

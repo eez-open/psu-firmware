@@ -187,7 +187,7 @@ void startAgain() {
     mode = MODE_START;
 }
 
-void tick(unsigned long tick_usec) {
+void tick(uint32_t tick_usec) {
     if (mode == MODE_START) {
         point_x = &point_tlx;
         point_y = &point_tly;

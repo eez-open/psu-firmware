@@ -109,7 +109,7 @@ void doPushEvent(int16_t eventId) {
     }
 }
 
-void tick(unsigned long tick_usec) {
+void tick(uint32_t tick_usec) {
     for (int i = 0; i < g_eventsToPushHead; ++i) {
         doPushEvent(g_eventsToPush[i]);
     }

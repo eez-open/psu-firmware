@@ -150,7 +150,7 @@ struct Event {
 };
 
 void init();
-void tick(unsigned long tick_usec);
+void tick(uint32_t tick_usec);
 
 void getLastErrorEvent(Event *e);
 

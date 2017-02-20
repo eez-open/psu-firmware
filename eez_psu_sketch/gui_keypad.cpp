@@ -103,7 +103,7 @@ void Keypad::getKeypadText(char *text) {
 				*textPtr++ = '*';
 			}
 
-			unsigned long current_time = micros();
+			uint32_t current_time = micros();
 			if (current_time - m_lastKeyAppendTime <= CONF_GUI_KEYPAD_PASSWORD_LAST_CHAR_VISIBLE_DURATION) {
 				*textPtr++ = m_keypadText[i];
 			} else {
@@ -215,7 +215,7 @@ void Keypad::cancel() {
 }
 
 void Keypad::appendCursor(char *text) {
-    unsigned long current_time = micros();
+    uint32_t current_time = micros();
     if (current_time - m_lastCursorChangeTime > CONF_GUI_KEYPAD_CURSOR_BLINK_TIME) {
         m_cursor = !m_cursor;
         m_lastCursorChangeTime = current_time;

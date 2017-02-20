@@ -43,17 +43,17 @@ public:
 	void stop();
 
 	void init();
-	void tick(unsigned long tick_usec);
+	void tick(uint32_t tick_usec);
 
-	unsigned long getTotalTime();
-	unsigned long getLastTime();
+	uint32_t getTotalTime();
+	uint32_t getLastTime();
 
 private:
 	uint8_t typeAndIsActive;
-	unsigned long totalTime;
-	unsigned long lastTime;
-	unsigned long lastTick;
-	unsigned long fractionTime;
+	uint32_t totalTime;
+	uint32_t lastTime;
+	uint32_t lastTick;
+	uint32_t fractionTime;
 	Interval writeInterval;
 };
 

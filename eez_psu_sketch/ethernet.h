@@ -31,7 +31,7 @@ extern scpi_t scpi_context;
 void init();
 bool test();
 
-void tick(unsigned long tick_usec);
+void tick(uint32_t tick_usec);
 
 uint32_t getIpAddress();
 

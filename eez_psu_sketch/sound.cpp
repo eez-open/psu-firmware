@@ -150,7 +150,7 @@ static void play_tune(int *tune) {
     }
 }
 
-void tick(unsigned long tick_usec) {
+void tick(uint32_t tick_usec) {
     if (g_play_tune) {
         play_tune(g_play_tune);
         g_play_tune = 0;

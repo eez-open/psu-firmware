@@ -596,7 +596,7 @@ void Channel::restoreCurrentToValueBeforeBalancing() {
     }
 }
 
-void Channel::tick(unsigned long tick_usec) {
+void Channel::tick(uint32_t tick_usec) {
     ioexp.tick(tick_usec);
     adc.tick(tick_usec);
     onTimeCounter.tick(tick_usec);
@@ -664,7 +664,7 @@ void Channel::tick(unsigned long tick_usec) {
         historyPosition = 1;
         historyLastTick = tick_usec;
     } else {
-        unsigned long ytViewRateMicroseconds = (int)round(ytViewRate * 1000000L); 
+        uint32_t ytViewRateMicroseconds = (int)round(ytViewRate * 1000000L); 
 
         while (tick_usec - historyLastTick >= ytViewRateMicroseconds) {
             uHistory[historyPosition] = u.mon;
@@ -1050,7 +1050,7 @@ void Channel::doRemoteProgrammingEnable(bool enable) {
     setOperBits(OPER_ISUM_RPROG_ON, enable);
 }
 
-bool Channel::isLowRippleAllowed(unsigned long tick_usec) {
+bool Channel::isLowRippleAllowed(uint32_t tick_usec) {
     if (!isOutputEnabled()) {
         return false;
     }
@@ -1078,7 +1078,7 @@ bool Channel::isLowRippleAllowed(unsigned long tick_usec) {
     return true;
 }
 
-void Channel::lowRippleCheck(unsigned long tick_usec) {
+void Channel::lowRippleCheck(uint32_t tick_usec) {
     if (isLowRippleAllowed(tick_usec)) {
         if (!flags.lrippleEnabled) {
             if (flags.lrippleAutoEnabled) {

@@ -62,10 +62,10 @@ float g_speedMultiplier = 1.0f;
 
 volatile uint8_t g_rotationState = 0;
 volatile int g_rotationCounter = 0;
-volatile unsigned long g_rotationLastTime = 0;
+volatile uint32_t g_rotationLastTime = 0;
 volatile int g_acceleration;
 
-volatile unsigned long g_switchLastTime = 0;
+volatile uint32_t g_switchLastTime = 0;
 volatile int g_switchCounter = 0;
 
 void abInterruptHandler() {
@@ -74,8 +74,8 @@ void abInterruptHandler() {
     g_rotationState = ttable[g_rotationState & 0xf][pinState];
     uint8_t result = g_rotationState/* & 0x30*/;
     if (result == DIR_CW || result == DIR_CCW) {
-        unsigned long time = micros();
-        unsigned long diff = time - g_rotationLastTime;
+        uint32_t time = micros();
+        int32_t diff = time - g_rotationLastTime;
 
         if (g_accelerationEnabled) {
             g_acceleration += -CONF_ACCELERATION_DECREMENT_PER_MS * (diff / 1000) +
@@ -100,9 +100,9 @@ void abInterruptHandler() {
 }
 
 void swInterruptHandler() {
-    unsigned long time = micros();
+    uint32_t time = micros();
     if (digitalRead(ENC_SW)) {
-        unsigned long diff = time - g_switchLastTime;
+        int32_t diff = time - g_switchLastTime;
         if (diff > 10000 && diff < 250000) {
             ++g_switchCounter;
         }

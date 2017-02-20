@@ -234,7 +234,7 @@ void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay,
     // break the given time_t into time components
     uint8_t year;
     uint8_t month, monthLength;
-    unsigned long days;
+    uint32_t days;
 
     resultSecond = time % 60;
     time /= 60; // now it is minutes

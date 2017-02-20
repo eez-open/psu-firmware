@@ -24,7 +24,7 @@ namespace psu {
 /// Play simple sound tunes.
 namespace sound {
 
-void tick(unsigned long tick_usec);
+void tick(uint32_t tick_usec);
 
 /// Play power up tune.
 void playPowerUp();

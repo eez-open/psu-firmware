@@ -69,9 +69,9 @@ protected:
 private:
     bool m_isUpperCase;
     bool m_isPassword;
-    unsigned long m_lastKeyAppendTime;
+    uint32_t m_lastKeyAppendTime;
     bool m_cursor;
-    unsigned long m_lastCursorChangeTime;
+    uint32_t m_lastCursorChangeTime;
 
     void start(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)());
 };

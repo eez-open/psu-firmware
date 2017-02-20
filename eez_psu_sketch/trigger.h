@@ -63,7 +63,7 @@ int enableInitiateContinuous(bool enable);
 bool isContinuousInitializationEnabled();
 void abort();
 
-void tick(unsigned long tick_usec);
+void tick(uint32_t tick_usec);
 
 }
 }

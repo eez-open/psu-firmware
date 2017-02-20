@@ -20,7 +20,7 @@ extern GestureType gesture_type;
 extern int start_x;
 extern int start_y;
 
-void tick(unsigned long tick_usec);
+void tick(uint32_t tick_usec);
 
 }
 }

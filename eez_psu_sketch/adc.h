@@ -50,7 +50,7 @@ public:
     void init();
     bool test();
 
-    void tick(unsigned long tick_usec);
+    void tick(uint32_t tick_usec);
 
     void start(uint8_t reg0);
     int16_t read();
@@ -65,7 +65,7 @@ private:
     uint8_t current_sps;
 #endif
 
-    unsigned long start_time;
+    uint32_t start_time;
 
     uint8_t adc_timeout_recovery_attempts_counter;
 

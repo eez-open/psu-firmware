@@ -123,7 +123,7 @@ bool IOExpander::test() {
     return g_testResult != psu::TEST_FAILED;
 }
 
-void IOExpander::tick(unsigned long tick_usec) {
+void IOExpander::tick(uint32_t tick_usec) {
     if (isPowerUp()) {
         uint8_t gpio = readGpio();
 

@@ -517,7 +517,7 @@
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_outp.cpp">
       <Filter>scpi\commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\scpi_simu.cpp">
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_simu.cpp">
       <Filter>scpi\commands</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_sour.cpp">

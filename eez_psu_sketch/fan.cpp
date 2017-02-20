@@ -40,23 +40,23 @@ enum RpmMeasureState {
 
 TestResult g_testResult = psu::TEST_FAILED;
 
-static unsigned long g_testStartTime;
+static uint32_t g_testStartTime;
 
 static int g_fanSpeedPWM = 0;
 static float g_fanSpeed = FAN_MIN_PWM;
 
-static unsigned long g_fanSpeedLastMeasuredTick = 0;
-static unsigned long g_fanSpeedLastAdjustedTick = 0;
+static uint32_t g_fanSpeedLastMeasuredTick = 0;
+static uint32_t g_fanSpeedLastAdjustedTick = 0;
 
 volatile int g_rpm = 0;
 
 static int g_rpmMeasureInterruptNumber;
 static volatile RpmMeasureState g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
-static unsigned long g_rpmMeasureT1;
+static uint32_t g_rpmMeasureT1;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int dt_to_rpm(unsigned long dt) {
+int dt_to_rpm(uint32_t dt) {
     dt *= 2; // duty cycle is 50%
     dt *= 2; // 2 impulse per revolution
     return (int)(60L * 1000 * 1000 / dt);
@@ -95,7 +95,7 @@ void rpm_measure_interrupt_handler() {
             g_rpmMeasureState = RPM_MEASURE_STATE_MEASURE_T2;
         } else if (g_rpmMeasureState == RPM_MEASURE_STATE_MEASURE_T2 && x) {
             // stop is when signal goes from 0 to 1
-            unsigned long rpmMeasureT2 = micros();
+            uint32_t rpmMeasureT2 = micros();
             int rpm = dt_to_rpm(rpmMeasureT2 - g_rpmMeasureT1);
             if (rpm > (int)ceil(FAN_NOMINAL_RPM * 1.05)) {
                 // invalid RPM
@@ -134,7 +134,7 @@ void test_start() {
 
 bool test() {
     if (OPTION_FAN) {
-        unsigned long time_since_test_start = millis() - g_testStartTime;
+        uint32_t time_since_test_start = millis() - g_testStartTime;
         if (time_since_test_start < 250) {
             delay(300 - time_since_test_start);
         }
@@ -180,7 +180,7 @@ bool test() {
     return g_testResult != psu::TEST_FAILED;
 }
 
-void tick(unsigned long tick_usec) {
+void tick(uint32_t tick_usec) {
     if (g_testResult != psu::TEST_OK) {
         return;
     }

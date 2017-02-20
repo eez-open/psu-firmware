@@ -39,14 +39,14 @@ GestureType gesture_type = GESTURE_NONE;
 int start_x;
 int start_y;
 
-static unsigned long last_tick_usec;
+static uint32_t last_tick_usec;
 static int last_x;
 static int last_y;
 
-static long distance_x;
-static long distance_y;
-static unsigned long time;
-static unsigned long count;
+static int32_t distance_x;
+static int32_t distance_y;
+static uint32_t time;
+static uint32_t count;
 
 void recognize() {
     DebugTraceF("Distance X: %ld", distance_x);
@@ -81,7 +81,7 @@ void recognize() {
     }
 }
 
-void tick(unsigned long tick_usec) {
+void tick(uint32_t tick_usec) {
     gesture_type = GESTURE_NONE;
 
     if (touch::event_type == touch::TOUCH_DOWN) {

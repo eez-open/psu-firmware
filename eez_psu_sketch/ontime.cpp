@@ -76,14 +76,14 @@ void Counter::stop() {
 	}
 }
 
-void Counter::tick(unsigned long tick_usec) {
+void Counter::tick(uint32_t tick_usec) {
 	if (isActive()) {
-		unsigned long timeMS = millis() - lastTick;
+		uint32_t timeMS = millis() - lastTick;
 		lastTick += timeMS;
 		fractionTime += timeMS;
 	}
 
-	unsigned long time = fractionTime / MIN_TO_MS;
+	uint32_t time = fractionTime / MIN_TO_MS;
 	if (time > 0) {
 		lastTime += time;
 		fractionTime -= time * MIN_TO_MS;
@@ -94,11 +94,11 @@ void Counter::tick(unsigned long tick_usec) {
 	}
 }
 
-unsigned long Counter::getTotalTime() {
+uint32_t Counter::getTotalTime() {
 	return totalTime + getLastTime();
 }
 
-unsigned long Counter::getLastTime() {
+uint32_t Counter::getLastTime() {
 	return lastTime;
 }
 
