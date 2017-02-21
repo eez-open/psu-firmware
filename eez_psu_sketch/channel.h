@@ -52,6 +52,12 @@ enum ChannelFeatures {
     CH_FEATURE_RPOL = (1 << 8)
 };
 
+enum TriggerMode {
+    TRIGGER_MODE_FIXED,
+    TRIGGER_MODE_LIST,
+    TRIGGER_MODE_STEP
+};
+
 /// PSU channel.
 class Channel {
     friend class DigitalAnalogConverter;
@@ -161,6 +167,8 @@ public:
         unsigned rpol : 1; // remote sense reverse polarity is detected
         unsigned displayValue1: 2;
         unsigned displayValue2: 2;
+        unsigned voltageTriggerMode: 2;
+        unsigned currentTriggerMode: 2;
     };
 
     /// Voltage and current data set and measured during runtime.
@@ -529,6 +537,12 @@ public:
     float getIMonHistory(int position) const { return iHistory[position]; }
 
     void resetHistory();
+
+    TriggerMode getVoltageTriggerMode();
+    void setVoltageTriggerMode(TriggerMode mode);
+
+    TriggerMode getCurrentTriggerMode();
+    void setCurrentTriggerMode(TriggerMode mode);
 
 private:
     bool delayed_dp_off;

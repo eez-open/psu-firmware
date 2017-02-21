@@ -86,6 +86,8 @@
     SCPI_COMMAND("MEMory:STATe:RECall:SELect", scpi_cmd_memoryStateRecallSelect) \
     SCPI_COMMAND("MEMory:STATe:RECall:SELect?", scpi_cmd_memoryStateRecallSelectQ) \
     SCPI_COMMAND("MEMory:STATe:VALid?", scpi_cmd_memoryStateValidQ) \
+    SCPI_COMMAND("MMEMory:LOAD:LIST#", scpi_cmd_mmemoryLoadList) \
+    SCPI_COMMAND("MMEMory:STORe:LIST#", scpi_cmd_mmemoryStoreList) \
     SCPI_COMMAND("OUTPut:MODE?", scpi_cmd_outputModeQ) \
     SCPI_COMMAND("OUTPut:PROTection:CLEar", scpi_cmd_outputProtectionClear) \
     SCPI_COMMAND("OUTPut[:STATe]", scpi_cmd_outputState) \
@@ -154,6 +156,18 @@
     SCPI_COMMAND("[SOURce#]:CURRent[:LEVel]:TRIGgered[:AMPLitude]?", scpi_cmd_sourceCurrentLevelTriggeredAmplitudeQ) \
     SCPI_COMMAND("[SOURce#]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]", scpi_cmd_sourceVoltageLevelTriggeredAmplitude) \
     SCPI_COMMAND("[SOURce#]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]?", scpi_cmd_sourceVoltageLevelTriggeredAmplitudeQ) \
+    SCPI_COMMAND("[SOURce#]:CURRent:MODE", scpi_cmd_sourceCurrentMode) \
+    SCPI_COMMAND("[SOURce#]:CURRent:MODE?", scpi_cmd_sourceCurrentModeQ) \
+    SCPI_COMMAND("[SOURce#]:VOLTage:MODE", scpi_cmd_sourceVoltageMode) \
+    SCPI_COMMAND("[SOURce#]:VOLTage:MODE?", scpi_cmd_sourceVoltageModeQ) \
+    SCPI_COMMAND("[SOURce#]:LIST:COUNt", scpi_cmd_sourceListCount) \
+    SCPI_COMMAND("[SOURce#]:LIST:COUNt?", scpi_cmd_sourceListCountQ) \
+    SCPI_COMMAND("[SOURce#]:LIST:CURRent[:LEVel]", scpi_cmd_sourceListCurrentLevel) \
+    SCPI_COMMAND("[SOURce#]:LIST:CURRent[:LEVel]?", scpi_cmd_sourceListCurrentLevelQ) \
+    SCPI_COMMAND("[SOURce#]:LIST:DWELl", scpi_cmd_sourceListDwell) \
+    SCPI_COMMAND("[SOURce#]:LIST:DWELl?", scpi_cmd_sourceListDwellQ) \
+    SCPI_COMMAND("[SOURce#]:LIST:VOLTage[:LEVel]", scpi_cmd_sourceListVoltageLevel) \
+    SCPI_COMMAND("[SOURce#]:LIST:VOLTage[:LEVel]?", scpi_cmd_sourceListVoltageLevelQ) \
     SCPI_COMMAND("STATus:QUEStionable[:EVENt]?", scpi_cmd_statusQuestionableEventQ) \
     SCPI_COMMAND("STATus:QUEStionable:CONDition?", scpi_cmd_statusQuestionableConditionQ) \
     SCPI_COMMAND("STATus:QUEStionable:ENABle", scpi_cmd_statusQuestionableEnable) \

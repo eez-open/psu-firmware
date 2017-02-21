@@ -110,6 +110,12 @@ void setOtpDelay(int sensor, float delay);
 
 void setDisplayViewSettings(Channel &channel, int displayValue1, int displayValue2, float ytViewRate);
 
+TriggerMode getVoltageTriggerMode(Channel& channel);
+void setVoltageTriggerMode(Channel& channel, TriggerMode mode);
+
+TriggerMode getCurrentTriggerMode(Channel& channel);
+void setCurrentTriggerMode(Channel& channel, TriggerMode mode);
+
 #ifdef EEZ_PSU_SIMULATOR
 void setLoadEnabled(Channel &channel, bool state);
 void setLoad(Channel &channel, float load);

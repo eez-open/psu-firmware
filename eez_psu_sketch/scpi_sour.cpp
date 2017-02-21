@@ -22,6 +22,7 @@
 #include "profile.h"
 #include "channel_dispatcher.h"
 #include "trigger.h"
+#include "list.h"
 
 #define I_STATE 1
 #define P_STATE 2
@@ -811,7 +812,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelTriggeredAmplitude(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    trigger::setCurrent(channel->index - 1, current);
+    trigger::setCurrent(*channel, current);
 
     return SCPI_RES_OK;
 }
@@ -823,7 +824,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelTriggeredAmplitudeQ(scpi_t * context) {
     }
 
     return get_source_value(context, 
-        trigger::getCurrent(channel->index - 1),
+        trigger::getCurrent(*channel),
         channel_dispatcher::getIMin(*channel),
         channel_dispatcher::getIMax(*channel),
         channel_dispatcher::getIDef(*channel));
@@ -840,7 +841,7 @@ scpi_result_t scpi_cmd_sourceVoltageLevelTriggeredAmplitude(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    trigger::setVoltage(channel->index - 1, voltage);
+    trigger::setVoltage(*channel, voltage);
 
     return SCPI_RES_OK;
 }
@@ -852,10 +853,260 @@ scpi_result_t scpi_cmd_sourceVoltageLevelTriggeredAmplitudeQ(scpi_t * context) {
     }
 
     return get_source_value(context,
-        trigger::getVoltage(channel->index - 1),
+        trigger::getVoltage(*channel),
         channel_dispatcher::getUMin(*channel),
         channel_dispatcher::getUMax(*channel),
         channel_dispatcher::getUDef(*channel));
+}
+
+static scpi_choice_def_t triggerModeChoice[] = {
+    { "FIXed", TRIGGER_MODE_FIXED },
+    { "LIST", TRIGGER_MODE_LIST },
+    { "STEP", TRIGGER_MODE_STEP },
+    SCPI_CHOICE_LIST_END /* termination of option list */
+};
+
+scpi_result_t scpi_cmd_sourceCurrentMode(scpi_t *context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    int32_t triggerMode;
+    if (!SCPI_ParamChoice(context, triggerModeChoice, &triggerMode, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel_dispatcher::setCurrentTriggerMode(*channel, (TriggerMode)triggerMode);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceCurrentModeQ(scpi_t *context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    resultChoiceName(context, triggerModeChoice, channel_dispatcher::getCurrentTriggerMode(*channel));
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceVoltageMode(scpi_t *context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    int32_t triggerMode;
+    if (!SCPI_ParamChoice(context, triggerModeChoice, &triggerMode, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel_dispatcher::setVoltageTriggerMode(*channel, (TriggerMode)triggerMode);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceVoltageModeQ(scpi_t *context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    resultChoiceName(context, triggerModeChoice, channel_dispatcher::getVoltageTriggerMode(*channel));
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceListCount(scpi_t *context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    scpi_number_t param;
+    if (!SCPI_ParamNumber(context, scpi_special_numbers_def, &param, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    uint8_t count;
+
+    if (param.special) {
+        if (param.tag == SCPI_NUM_INF) {
+            count = 0;
+        } else {
+			SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+			return SCPI_RES_ERR;
+        }
+    } else {
+        if (param.unit != SCPI_UNIT_NONE) {
+            SCPI_ErrorPush(context, SCPI_ERROR_INVALID_SUFFIX);
+            return SCPI_RES_ERR;
+        }
+
+        int value = (int)param.value;
+        if (value < 0 || value > 255) {
+			SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
+			return SCPI_RES_ERR;
+        }
+
+        count = value;
+    }
+
+    list::setListCount(*channel, count);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceListCountQ(scpi_t *context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultInt(context, list::getListCount(*channel));
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceListCurrentLevel(scpi_t *context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    float list[MAX_LIST_SIZE];
+    uint16_t listSize = 0;
+
+    while (true) {
+        float voltage;
+        if (!SCPI_ParamFloat(context, &voltage, false)) {
+            break;
+        }
+
+        if (listSize >= MAX_LIST_SIZE) {
+            SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
+            return SCPI_RES_ERR;
+        }
+
+        list[listSize++] = voltage;
+    }
+
+    if (listSize == 0) {
+        SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
+        return SCPI_RES_ERR;
+    }
+
+    list::setCurrentList(*channel, list, listSize);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceListCurrentLevelQ(scpi_t *context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    uint16_t listSize;
+    float *list = list::getCurrentList(*channel, &listSize);
+    SCPI_ResultArrayFloat(context, list, listSize, SCPI_FORMAT_ASCII);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceListDwell(scpi_t *context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    float list[MAX_LIST_SIZE];
+    uint16_t listSize = 0;
+
+    while (true) {
+        float voltage;
+        if (!SCPI_ParamFloat(context, &voltage, false)) {
+            break;
+        }
+
+        if (listSize >= MAX_LIST_SIZE) {
+            SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
+            return SCPI_RES_ERR;
+        }
+
+        list[listSize++] = voltage;
+    }
+
+    if (listSize == 0) {
+        SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
+        return SCPI_RES_ERR;
+    }
+
+    list::setDwellList(*channel, list, listSize);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceListDwellQ(scpi_t *context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    uint16_t listSize;
+    float *list = list::getDwellList(*channel, &listSize);
+    SCPI_ResultArrayFloat(context, list, listSize, SCPI_FORMAT_ASCII);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    float list[MAX_LIST_SIZE];
+    uint16_t listSize = 0;
+
+    while (true) {
+        float voltage;
+        if (!SCPI_ParamFloat(context, &voltage, false)) {
+            break;
+        }
+
+        if (listSize >= MAX_LIST_SIZE) {
+            SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
+            return SCPI_RES_ERR;
+        }
+
+        list[listSize++] = voltage;
+    }
+
+    if (listSize == 0) {
+        SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
+        return SCPI_RES_ERR;
+    }
+
+    list::setVoltageList(*channel, list, listSize);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceListVoltageLevelQ(scpi_t *context) {
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    uint16_t listSize;
+    float *list = list::getVoltageList(*channel, &listSize);
+    SCPI_ResultArrayFloat(context, list, listSize, SCPI_FORMAT_ASCII);
+
+    return SCPI_RES_OK;
 }
 
 }

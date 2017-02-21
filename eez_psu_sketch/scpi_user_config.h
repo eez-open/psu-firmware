@@ -35,6 +35,9 @@ extern "C" {
 
 #define USE_USER_ERROR_LIST 1
 #define LIST_OF_USER_ERRORS \
+    X(SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE,                  -114, "Header suffix out of range")                   \
+    X(SCPI_ERROR_CHARACTER_DATA_TOO_LONG,                   -144, "Character data too long")                      \
+    X(SCPI_ERROR_TRIGGER_IGNORED,                           -211, "Trigger ignored")                              \
     X(SCPI_ERROR_DATA_OUT_OF_RANGE,                         -222, "Data out of range")                            \
     X(SCPI_ERROR_TOO_MUCH_DATA,                             -223, "Too much data")                                \
     X(SCPI_ERROR_HARDWARE_ERROR,                            -240, "Hardware error")                               \
@@ -42,12 +45,8 @@ extern "C" {
 	X(SCPI_ERROR_CH2_FAULT_DETECTED,                        -243, "CH2 fault detected")                           \
     X(SCPI_ERROR_CH1_OUTPUT_FAULT_DETECTED,                 -245, "CH1 output fault detected")                    \
 	X(SCPI_ERROR_CH2_OUTPUT_FAULT_DETECTED,                 -246, "CH2 output fault detected")                    \
-    X(SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE,                  -114, "Header suffix out of range")                   \
     X(SCPI_ERROR_CHANNEL_NOT_FOUND,                          100, "Channel not found")                            \
     X(SCPI_ERROR_CALIBRATION_STATE_IS_OFF,                   101, "Calibration state is off")                     \
-    X(SCPI_ERROR_INVALID_SYS_PASSWORD,                       122, "Invalid sys password")                         \
-    X(SCPI_ERROR_SYS_PASSWORD_TOO_LONG,                      125, "Sys password too long")                        \
-    X(SCPI_ERROR_SYS_PASSWORD_TOO_SHORT,                     126, "Sys password too short")                       \
     X(SCPI_ERROR_INVALID_CAL_PASSWORD,                       102, "Invalid cal password")                         \
     X(SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS,       104, "Bad sequence of calibration commands")         \
     X(SCPI_ERROR_CAL_PASSWORD_TOO_LONG,                      105, "Cal password too long")                        \
@@ -56,6 +55,9 @@ extern "C" {
     X(SCPI_ERROR_CAL_OUTPUT_DISABLED,                        108, "Cal output disabled")                          \
     X(SCPI_ERROR_INVALID_CAL_DATA,                           109, "Invalid cal data")                             \
     X(SCPI_ERROR_CAL_PARAMS_MISSING,                         110, "Cal params missing or corrupted")              \
+    X(SCPI_ERROR_INVALID_SYS_PASSWORD,                       122, "Invalid sys password")                         \
+    X(SCPI_ERROR_SYS_PASSWORD_TOO_LONG,                      125, "Sys password too long")                        \
+    X(SCPI_ERROR_SYS_PASSWORD_TOO_SHORT,                     126, "Sys password too short")                       \
     X(SCPI_ERROR_POWER_LIMIT_EXCEEDED,                       150, "Power limit exceeded")                         \
 	X(SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED,                     151, "Voltage limit exceeded")                       \
 	X(SCPI_ERROR_CURRENT_LIMIT_EXCEEDED,                     152, "Current limit exceeded")                       \
@@ -72,16 +74,16 @@ extern "C" {
     X(SCPI_ERROR_CH1_ADC_TIMEOUT_DETECTED,                   270, "CH1 ADC timeout detected")                     \
     X(SCPI_ERROR_CH2_ADC_TIMEOUT_DETECTED,                   271, "CH2 ADC timeout detected")                     \
     X(SCPI_ERROR_OPTION_NOT_INSTALLED,                       302, "Option not installed")                         \
+    X(SCPI_ERROR_TOO_MANY_LIST_POINTS,                       306, "Too many list points")                         \
+    X(SCPI_ERROR_LIST_LENGTHS_NOT_EQUIVALENT,                307, "List lengths are not equivalent")              \
+    X(SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED,         312, "Cannot execute when the channels are coupled") \
+    X(SCPI_ERROR_EXECUTE_ERROR_IN_TRACKING_MODE,             313, "Cannot execute in tracking mode")              \
+    X(SCPI_ERROR_CH1_DOWN_PROGRAMMER_SWITCHED_OFF,           500, "Down-programmer on CH1 switched off")          \
+    X(SCPI_ERROR_CH2_DOWN_PROGRAMMER_SWITCHED_OFF,           501, "Down-programmer on CH2 switched off")          \
 	X(SCPI_ERROR_FAN_TEST_FAILED,                            630, "Fan test failed")                              \
 	X(SCPI_ERROR_AUX_TEMP_SENSOR_TEST_FAILED,                720, "AUX temperature sensor test failed")           \
     X(SCPI_ERROR_CH1_TEMP_SENSOR_TEST_FAILED,                722, "CH1 temperature sensor test failed")           \
     X(SCPI_ERROR_CH2_TEMP_SENSOR_TEST_FAILED,                723, "CH2 temperature sensor test failed")           \
-    X(SCPI_ERROR_CHARACTER_DATA_TOO_LONG,                   -144, "Character data too long")                      \
-    X(SCPI_ERROR_CH1_DOWN_PROGRAMMER_SWITCHED_OFF,           500, "Down-programmer on CH1 switched off")          \
-    X(SCPI_ERROR_CH2_DOWN_PROGRAMMER_SWITCHED_OFF,           501, "Down-programmer on CH2 switched off")          \
-    X(SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED,         312, "Cannot execute when the channels are coupled") \
-    X(SCPI_ERROR_EXECUTE_ERROR_IN_TRACKING_MODE,             313, "Cannot execute in tracking mode")              \
-    X(SCPI_ERROR_TRIGGER_IGNORED,                           -211, "Trigger ignored")                              \
 
 // strtoull is not defined on some arduino boards
 // TODO mvladic:find better way to do this

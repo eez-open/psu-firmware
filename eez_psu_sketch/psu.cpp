@@ -56,6 +56,7 @@
 #include "event_queue.h"
 #include "channel_dispatcher.h"
 #include "trigger.h"
+#include "list.h"
 
 namespace eez {
 namespace psu {
@@ -154,6 +155,8 @@ void init() {
 	temperature::init();
 
     trigger::init();
+
+    list::init();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -470,6 +473,9 @@ static bool psuReset() {
 
     //
     trigger::reset();
+
+    //
+    list::reset();
 
     // SYST:POW ON
     if (powerUp()) {
@@ -897,6 +903,8 @@ void tick() {
     }
 
     trigger::tick(tick_usec);
+
+    list::tick(tick_usec);
 
     // if we move this, for example, after ethernet::tick we could get
     // (in certain situations, see #25) PWRGOOD error on channel after

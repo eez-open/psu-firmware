@@ -50,17 +50,19 @@ Source getSource();
 void setPolarity(Polarity polarity);
 Polarity getPolarity();
 
-void setVoltage(int iChannel, float value);
-float getVoltage(int iChannel);
+void setVoltage(Channel &channel, float value);
+float getVoltage(Channel &channel);
 
-void setCurrent(int iChannel, float value);
-float getCurrent(int iChannel);
+void setCurrent(Channel &channel, float value);
+float getCurrent(Channel &channel);
 
 int generateTrigger(Source source, bool checkImmediatelly = true);
 int startImmediately();
 int initiate();
 int enableInitiateContinuous(bool enable);
 bool isContinuousInitializationEnabled();
+void setVoltageTriggerFinished(Channel &channel);
+void setCurrentTriggerFinished(Channel &channel);
 void abort();
 
 void tick(uint32_t tick_usec);

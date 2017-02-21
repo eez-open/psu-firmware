@@ -132,6 +132,11 @@ bool setType(Type value) {
                     channel.flags.displayValue1 = channel1.flags.displayValue1;
                     channel.flags.displayValue2 = channel1.flags.displayValue2;
                     channel.ytViewRate = channel1.ytViewRate;
+
+                    if (isCoupled() || isTracked()) {
+                        channel.setVoltageTriggerMode(TRIGGER_MODE_FIXED);
+                        channel.setCurrentTriggerMode(TRIGGER_MODE_FIXED);
+                    }
                 }
 
                 channel.resetHistory();
@@ -695,6 +700,39 @@ void setDisplayViewSettings(Channel &channel, int displayValue1, int displayValu
         channel.ytViewRate = ytViewRate;
     }
 }
+
+TriggerMode getVoltageTriggerMode(Channel& channel) {
+    if (isCoupled() || isTracked()) {
+        return Channel::get(0).getVoltageTriggerMode();
+    } else {
+        return channel.getVoltageTriggerMode();
+    }
+}
+
+void setVoltageTriggerMode(Channel& channel, TriggerMode mode) {
+    if (isCoupled() || isTracked()) {
+        Channel::get(0).setVoltageTriggerMode(mode);
+    } else {
+        channel.setVoltageTriggerMode(mode);
+    }
+}
+
+TriggerMode getCurrentTriggerMode(Channel& channel) {
+    if (isCoupled() || isTracked()) {
+        return Channel::get(0).getCurrentTriggerMode();
+    } else {
+        return channel.getCurrentTriggerMode();
+    }
+}
+
+void setCurrentTriggerMode(Channel& channel, TriggerMode mode) {
+    if (isCoupled() || isTracked()) {
+        Channel::get(0).setCurrentTriggerMode(mode);
+    } else {
+        channel.setCurrentTriggerMode(mode);
+    }
+}
+
 
 #ifdef EEZ_PSU_SIMULATOR
 void setLoadEnabled(Channel &channel, bool state) {

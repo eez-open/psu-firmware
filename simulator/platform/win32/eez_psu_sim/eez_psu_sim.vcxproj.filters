@@ -385,6 +385,9 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_commands.h">
       <Filter>scpi</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\list.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -696,6 +699,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\sd_card.cpp">
       <Filter>board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_mmem.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\list.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

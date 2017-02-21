@@ -477,6 +477,9 @@ void Channel::reset() {
     flags.displayValue2 = DISPLAY_VALUE_CURRENT; 
     ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
     resetHistory();
+
+    flags.voltageTriggerMode = TRIGGER_MODE_FIXED;
+    flags.currentTriggerMode = TRIGGER_MODE_FIXED;
 }
 
 void Channel::resetHistory() {
@@ -1580,6 +1583,23 @@ void Channel::testPwrgood(uint8_t gpio) {
     }
 }
 #endif
+
+TriggerMode Channel::getVoltageTriggerMode() {
+    return (TriggerMode)flags.voltageTriggerMode;
+}
+
+void Channel::setVoltageTriggerMode(TriggerMode mode) {
+    flags.voltageTriggerMode = mode;
+}
+
+TriggerMode Channel::getCurrentTriggerMode() {
+    return (TriggerMode)flags.currentTriggerMode;
+}
+
+void Channel::setCurrentTriggerMode(TriggerMode mode) {
+    flags.currentTriggerMode = mode;
+}
+
 
 }
 } // namespace eez::psu
