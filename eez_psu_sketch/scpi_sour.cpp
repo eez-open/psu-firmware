@@ -877,6 +877,11 @@ scpi_result_t scpi_cmd_sourceCurrentMode(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
+    if (trigger::isExecuting()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
+        return SCPI_RES_ERR;
+    }
+
     channel_dispatcher::setCurrentTriggerMode(*channel, (TriggerMode)triggerMode);
 
     return SCPI_RES_OK;
@@ -901,6 +906,11 @@ scpi_result_t scpi_cmd_sourceVoltageMode(scpi_t *context) {
 
     int32_t triggerMode;
     if (!SCPI_ParamChoice(context, triggerModeChoice, &triggerMode, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (trigger::isExecuting()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }
 
@@ -955,6 +965,11 @@ scpi_result_t scpi_cmd_sourceListCount(scpi_t *context) {
         count = value;
     }
 
+    if (trigger::isExecuting()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
+        return SCPI_RES_ERR;
+    }
+
     list::setListCount(*channel, count);
 
     return SCPI_RES_OK;
@@ -996,6 +1011,11 @@ scpi_result_t scpi_cmd_sourceListCurrentLevel(scpi_t *context) {
 
     if (listSize == 0) {
         SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
+        return SCPI_RES_ERR;
+    }
+
+    if (trigger::isExecuting()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }
 
@@ -1045,6 +1065,11 @@ scpi_result_t scpi_cmd_sourceListDwell(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
+    if (trigger::isExecuting()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
+        return SCPI_RES_ERR;
+    }
+
     list::setDwellList(*channel, list, listSize);
 
     return SCPI_RES_OK;
@@ -1064,6 +1089,8 @@ scpi_result_t scpi_cmd_sourceListDwellQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
+    DebugTraceF("vi %ul", micros());
+
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -1091,7 +1118,14 @@ scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
+    if (trigger::isExecuting()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
+        return SCPI_RES_ERR;
+    }
+
     list::setVoltageList(*channel, list, listSize);
+
+    DebugTraceF("vo %ul", micros());
 
     return SCPI_RES_OK;
 }

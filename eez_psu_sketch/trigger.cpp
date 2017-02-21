@@ -294,6 +294,10 @@ bool isContinuousInitializationEnabled() {
     return g_continuousInitializationEnabled;
 }
 
+bool isExecuting() {
+    return g_state == STATE_EXECUTING;
+}
+
 void abort() {
     list::abort();
     g_state = STATE_IDLE;

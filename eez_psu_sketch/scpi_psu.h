@@ -41,6 +41,7 @@ void init(scpi_t &scpi_context,
     int16_t error_queue_size);
 
 void input(scpi_t &scpi_context, char ch);
+void input(scpi_t &scpi_context, const char *str, size_t size);
 
 void printError(int_fast16_t err);
 

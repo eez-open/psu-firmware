@@ -217,9 +217,12 @@ void tick(uint32_t tick_usec) {
             size = client.read(msg, size);
             if (client == firstClient) {
                 SPI_endTransaction();
-                for (size_t i = 0; i < size; ++i) {
-                    input(scpi_context, msg[i]);
-                }
+                DebugTraceF("b %d", (int)size);
+                DebugTraceF("ei %ul", micros());
+//                for (size_t i = 0; i < size; ++i) {
+                    input(scpi_context, (const char *)msg, size);
+//                }
+                DebugTraceF("eo %ul", micros());
                 SPI_beginTransaction(ETHERNET_SPI);
             }
             else {

@@ -63,6 +63,7 @@ int enableInitiateContinuous(bool enable);
 bool isContinuousInitializationEnabled();
 void setVoltageTriggerFinished(Channel &channel);
 void setCurrentTriggerFinished(Channel &channel);
+bool isExecuting();
 void abort();
 
 void tick(uint32_t tick_usec);

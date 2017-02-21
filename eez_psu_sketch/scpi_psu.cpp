@@ -92,6 +92,22 @@ void input(scpi_t &scpi_context, char ch) {
     }
 }
 
+void input(scpi_t &scpi_context, const char *str, size_t size) {
+    //if (ch < 0 || ch > 127) {
+    //    // non ASCII, call parser now
+    //    SCPI_Input(&scpi_context, 0, 0);
+    //    return;
+    //}
+
+    int result = SCPI_Input(&scpi_context, str, size);
+    if (result == -1) {
+        // TODO we need better buffer overrun handling here
+
+        // call parser now
+        SCPI_Input(&scpi_context, 0, 0);
+    }
+}
+
 void printError(int_fast16_t err) {
     sound::playBeep();
 

@@ -76,6 +76,7 @@ extern "C" {
     X(SCPI_ERROR_OPTION_NOT_INSTALLED,                       302, "Option not installed")                         \
     X(SCPI_ERROR_TOO_MANY_LIST_POINTS,                       306, "Too many list points")                         \
     X(SCPI_ERROR_LIST_LENGTHS_NOT_EQUIVALENT,                307, "List lengths are not equivalent")              \
+    X(SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER,            308, "Cannot be changed while transient trigger is initiated") \
     X(SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED,         312, "Cannot execute when the channels are coupled") \
     X(SCPI_ERROR_EXECUTE_ERROR_IN_TRACKING_MODE,             313, "Cannot execute in tracking mode")              \
     X(SCPI_ERROR_CH1_DOWN_PROGRAMMER_SWITCHED_OFF,           500, "Down-programmer on CH1 switched off")          \
