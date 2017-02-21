@@ -209,7 +209,7 @@ void tick(uint32_t tick_usec) {
                 }
 
                 if (g_execution[i].flags.setCurrent) {
-                    float current = g_channelsLists[i].voltageList[g_execution[i].it % g_channelsLists[i].voltageListSize];
+                    float current = g_channelsLists[i].currentList[g_execution[i].it % g_channelsLists[i].currentListSize];
 
                     if (current > channel_dispatcher::getILimit(channel)) {
                         generateError(SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
