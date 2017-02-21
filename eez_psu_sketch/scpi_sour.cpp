@@ -1089,8 +1089,6 @@ scpi_result_t scpi_cmd_sourceListDwellQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
-    DebugTraceF("vi %ul", micros());
-
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -1124,8 +1122,6 @@ scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
     }
 
     list::setVoltageList(*channel, list, listSize);
-
-    DebugTraceF("vo %ul", micros());
 
     return SCPI_RES_OK;
 }
