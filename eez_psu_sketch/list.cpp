@@ -213,15 +213,14 @@ void tick(uint32_t tick_usec) {
                 set = true;
             } else {
                 int32_t diff = g_execution[i].nextPointTime - tick_usec;
-
                 if (diff <= 0) {
                     set = true;
-                } else {
+                }/* else {
                     if (diff < 1000) {
                         delayMicroseconds(diff);
                         set = true;
                     }
-                }
+                }*/
             }
 
             if (set) {
