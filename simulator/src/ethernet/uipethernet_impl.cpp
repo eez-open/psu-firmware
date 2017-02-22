@@ -99,6 +99,9 @@ size_t EthernetClient::write(const char *buffer, size_t buffer_size) {
     return ethernet_platform::write(buffer, (int)buffer_size);
 }
 
+void EthernetClient::flush() {
+}
+
 void EthernetClient::stop() {
     ethernet_platform::stop();
 }

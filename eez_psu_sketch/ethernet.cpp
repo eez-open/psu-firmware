@@ -48,8 +48,8 @@ uint8_t mac[6] = ETHERNET_MAC_ADDRESS;
 
 EthernetServer server(TCP_PORT);
 
-bool firstClientDetected = false;
-EthernetClient firstClient;
+bool alreadyConnected = false;
+EthernetClient activeClient;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -68,7 +68,7 @@ size_t ethernet_client_write_str(EthernetClient &client, const char *str) {
 ////////////////////////////////////////////////////////////////////////////////
 
 size_t SCPI_Write(scpi_t *context, const char * data, size_t len) {
-    return ethernet_client_write(firstClient, data, len);
+    return ethernet_client_write(activeClient, data, len);
 }
 
 scpi_result_t SCPI_Flush(scpi_t * context) {
@@ -79,7 +79,7 @@ int SCPI_Error(scpi_t *context, int_fast16_t err) {
     if (err != 0) {
         char errorOutputBuffer[256];
         sprintf_P(errorOutputBuffer, PSTR("**ERROR: %d,\"%s\"\r\n"), (int16_t)err, SCPI_ErrorTranslate(err));
-        ethernet_client_write(firstClient, errorOutputBuffer, strlen(errorOutputBuffer));
+        ethernet_client_write(activeClient, errorOutputBuffer, strlen(errorOutputBuffer));
     }
 
     return 0;
@@ -93,7 +93,7 @@ scpi_result_t SCPI_Control(scpi_t *context, scpi_ctrl_name_t ctrl, scpi_reg_val_
         sprintf_P(outputBuffer, PSTR("**CTRL %02x: 0x%X (%d)\r\n"), ctrl, val, val);
     }
 
-    ethernet_client_write(firstClient, outputBuffer, strlen(outputBuffer));
+    ethernet_client_write(activeClient, outputBuffer, strlen(outputBuffer));
 
     return SCPI_RES_OK;
 }
@@ -194,10 +194,10 @@ void tick(uint32_t tick_usec) {
 
     SPI_beginTransaction(ETHERNET_SPI);
 
-    if (firstClientDetected) {
-        if (!firstClient.connected()) {
-            firstClientDetected = false;
-            firstClient = EthernetClient();
+    if (alreadyConnected) {
+        if (!activeClient.connected()) {
+            alreadyConnected = false;
+            activeClient = EthernetClient();
             DebugTrace("Ethernet client lost!");
         }
     }
@@ -205,9 +205,10 @@ void tick(uint32_t tick_usec) {
     EthernetClient client = server.available();
 
     if (client) {
-        if (!firstClient) {
-            firstClient = client;
-            firstClientDetected = true;
+        if (!alreadyConnected) {
+            client.flush();
+            activeClient = client;
+            alreadyConnected = true;
             DebugTrace("A new ethernet client detected!");
         }
 
@@ -215,19 +216,16 @@ void tick(uint32_t tick_usec) {
         while ((size = client.available()) > 0) {
             uint8_t* msg = (uint8_t*)malloc(size);
             size = client.read(msg, size);
-            if (client == firstClient) {
+            if (client == activeClient) {
                 SPI_endTransaction();
                 input(scpi_context, (const char *)msg, size);
                 SPI_beginTransaction(ETHERNET_SPI);
             }
             else {
                 SPI_endTransaction();
-                ethernet_client_write_str(client, "Already connected!\r\n");
+                ethernet_client_write_str(client, "**ERROR: another client already connected\r\n");
                 SPI_beginTransaction(ETHERNET_SPI);
-
-                client.stop();
-
-                DebugTrace("Another client detected and disconnected!");
+                DebugTrace("Another client detected and ignored!");
             }
             free(msg);
         }

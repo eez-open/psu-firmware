@@ -139,6 +139,8 @@ void init() {
 
 	event_queue::init();
 
+    list::init();
+
 #if OPTION_ETHERNET
 #if OPTION_DISPLAY
     gui::showEthernetInit();
@@ -155,8 +157,6 @@ void init() {
 	temperature::init();
 
     trigger::init();
-
-    list::init();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -884,10 +884,6 @@ void tick() {
 
 	uint32_t tick_usec = micros();
 
-#if CONF_DEBUG
-    debug::tick(tick_usec);
-#endif
-
 	g_powerOnTimeCounter.tick(tick_usec);
 
 	temperature::tick(tick_usec);
@@ -934,6 +930,26 @@ void tick() {
 	watchdog::tick(tick_usec);
 #endif
 #endif
+}
+
+void criticalTick() {
+    if (!g_powerIsUp) {
+        return;
+    }
+
+    static uint32_t lastTick = 0;
+    uint32_t tick_usec = micros();
+
+    if (lastTick == 0) {
+        lastTick = tick_usec;
+    } else if (tick_usec - lastTick >= 250) {
+        for (int i = 0; i < CH_NUM; ++i) {
+            Channel::get(i).tick(tick_usec);
+        }
+        list::tick(tick_usec);
+
+        lastTick = tick_usec;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

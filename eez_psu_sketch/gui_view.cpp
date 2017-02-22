@@ -1452,6 +1452,8 @@ void enumContainer(List widgets, int x, int y, data::Cursor &cursor, WidgetState
 }
 
 void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
+    psu::criticalTick();
+
     DECL_WIDGET(widget, widgetOffset);
 
     x += widget->x;

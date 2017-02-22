@@ -43,6 +43,8 @@ EEZ_UTFT::EEZ_UTFT(byte model, int RS, int WR, int CS, int RST, int SER)
 }
 
 int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int clip_y2, uint8_t encoding, bool fill_background) {
+    psu::criticalTick();
+
 	font::Glyph glyph;
 	font.getGlyph(encoding, glyph);
 	if (!glyph.isFound())

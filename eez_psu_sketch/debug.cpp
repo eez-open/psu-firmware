@@ -21,7 +21,7 @@
 
 #if CONF_DEBUG
 
-#define AVG_LOOP_DURATION_N 10
+#define AVG_LOOP_DURATION_N 100
 
 namespace eez {
 namespace psu {
@@ -36,6 +36,7 @@ int16_t iMonDac[2];
 
 static uint32_t previousTickCount = 0;
 uint32_t lastLoopDuration = 0;
+uint32_t currentMaxLoopDuration = 0;
 uint32_t maxLoopDuration = 0;
 
 static uint32_t avgLoopDurationCounter = 0;
@@ -90,8 +91,8 @@ void tick(uint32_t tick_usec) {
 #if CONF_DEBUG
     if (previousTickCount != 0) {
         lastLoopDuration = tick_usec - previousTickCount;
-        if (lastLoopDuration > maxLoopDuration) {
-            maxLoopDuration = lastLoopDuration;
+        if (lastLoopDuration > currentMaxLoopDuration) {
+            currentMaxLoopDuration = lastLoopDuration;
         }
 
         if (avgLoopDurationCounter++ < AVG_LOOP_DURATION_N) {
@@ -100,6 +101,8 @@ void tick(uint32_t tick_usec) {
             avgLoopDuration = avgLoopDurationTotal / AVG_LOOP_DURATION_N;
             avgLoopDurationTotal = 0;
             avgLoopDurationCounter = 0;
+            maxLoopDuration = currentMaxLoopDuration;
+            currentMaxLoopDuration = 0;
         }
     }
 

@@ -76,6 +76,7 @@ bool test();
 void onProtectionTripped();
 
 void tick();
+void criticalTick();
 
 void setEsrBits(int bit_mask);
 void setQuesBits(int bit_mask, bool on);

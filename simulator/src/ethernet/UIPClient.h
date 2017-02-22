@@ -37,6 +37,7 @@ public:
     size_t available();
     size_t read(uint8_t*, size_t);
     size_t write(const char *data, size_t len);
+    void flush();
 
     void stop();
 
