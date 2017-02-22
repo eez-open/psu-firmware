@@ -706,6 +706,9 @@
     <ClCompile Include="..\..\..\..\eez_psu_sketch\list.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_display.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="eez_psu_sim.rc" />

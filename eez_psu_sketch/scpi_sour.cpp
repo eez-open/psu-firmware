@@ -996,8 +996,8 @@ scpi_result_t scpi_cmd_sourceListCurrentLevel(scpi_t *context) {
     uint16_t listSize = 0;
 
     while (true) {
-        float voltage;
-        if (!SCPI_ParamFloat(context, &voltage, false)) {
+        float current;
+        if (!SCPI_ParamFloat(context, &current, false)) {
             break;
         }
 
@@ -1006,7 +1006,7 @@ scpi_result_t scpi_cmd_sourceListCurrentLevel(scpi_t *context) {
             return SCPI_RES_ERR;
         }
 
-        list[listSize++] = voltage;
+        list[listSize++] = current;
     }
 
     if (listSize == 0) {
@@ -1047,8 +1047,8 @@ scpi_result_t scpi_cmd_sourceListDwell(scpi_t *context) {
     uint16_t listSize = 0;
 
     while (true) {
-        float voltage;
-        if (!SCPI_ParamFloat(context, &voltage, false)) {
+        float dwell;
+        if (!SCPI_ParamFloat(context, &dwell, false)) {
             break;
         }
 
@@ -1057,7 +1057,7 @@ scpi_result_t scpi_cmd_sourceListDwell(scpi_t *context) {
             return SCPI_RES_ERR;
         }
 
-        list[listSize++] = voltage;
+        list[listSize++] = dwell;
     }
 
     if (listSize == 0) {

@@ -191,12 +191,30 @@ uint32_t millis() {
 
 uint32_t micros() {
 #ifdef _WIN32
-    return GetTickCount() * 1000;
+    static bool firstTime = true;
+    static unsigned __int64 frequency;
+    static unsigned __int64 startTime;
+
+    if (firstTime) {
+        firstTime = false;
+        QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+        QueryPerformanceCounter((LARGE_INTEGER *)&startTime);
+
+        return 0;
+    } else {
+        unsigned __int64 time;
+        QueryPerformanceCounter((LARGE_INTEGER *)&time);
+
+        unsigned __int64 diff = (time - startTime) * 1000000L / frequency;
+
+        return (uint32_t)(diff % 4294967296);
+    }
+
 #else
     timeval tv;
     gettimeofday(&tv, NULL);
     uint64_t micros = tv.tv_sec*(uint64_t)1000000 + tv.tv_usec;
-    return (uint32_t)(micros);
+    return (uint32_t)(micros % 4294967296);
 #endif
 }
 

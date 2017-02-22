@@ -88,7 +88,8 @@ struct DeviceConfiguration {
 /// Device binary flags stored in DeviceConfiguration.
 struct DeviceFlags2 {
     unsigned encoderConfirmationMode : 1;
-    unsigned reserved: 31;
+    unsigned displayState: 1;
+    unsigned reserved: 30;
 };
 
 struct DeviceConfiguration2 {
@@ -97,7 +98,8 @@ struct DeviceConfiguration2 {
     DeviceFlags2 flags;
     uint8_t encoderMovingSpeedDown;
     uint8_t encoderMovingSpeedUp;
-    uint8_t reserverd[94];
+    uint8_t displayBrightness;
+    uint8_t reserverd[93];
 };
 
 extern DeviceConfiguration devConf;
@@ -162,6 +164,8 @@ bool isForceDisablingAllOutputsOnPowerUpEnabled();
 bool lockFrontPanel(bool lock);
 
 bool setEncoderSettings(uint8_t confirmationMode, uint8_t movingSpeedDown, uint8_t movingSpeedUp);
+
+bool setDisplayState(unsigned state);
 
 }
 }

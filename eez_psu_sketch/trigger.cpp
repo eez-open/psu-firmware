@@ -20,6 +20,7 @@
 #include "trigger.h"
 #include "channel_dispatcher.h"
 #include "list.h"
+#include "profile.h"
 
 namespace eez {
 namespace psu {
@@ -161,6 +162,8 @@ void triggerFinished() {
     } else {
         g_state = STATE_IDLE;
     }
+
+    profile::enableSave(true);
 }
 
 void setVoltageTriggerFinished(Channel &channel) {
@@ -193,6 +196,9 @@ void setCurrentTriggerFinished(Channel &channel) {
 
 int startImmediately() {
     g_state = STATE_EXECUTING;
+
+    profile::enableSave(false);
+
     for (int i = 0; i < CH_NUM; ++i) {
         g_triggerInProgress[i] = VOLTAGE_TRIGGER_IN_PROGRESS | CURRENT_TRIGGER_IN_PROGRESS;
     }
@@ -301,6 +307,7 @@ bool isExecuting() {
 void abort() {
     list::abort();
     g_state = STATE_IDLE;
+    profile::enableSave(true);
 }
 
 void tick(uint32_t tick_usec) {

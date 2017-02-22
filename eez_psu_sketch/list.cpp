@@ -25,7 +25,7 @@ namespace eez {
 namespace psu {
 namespace list {
 
-struct ChannelLists {
+static struct {
     float voltageList[MAX_LIST_SIZE];
     uint16_t voltageListSize;
 
@@ -36,19 +36,19 @@ struct ChannelLists {
     uint16_t dwellListSize;
 
     uint8_t count;
-};
+} g_channelsLists[CH_NUM];
 
-ChannelLists g_channelsLists[CH_NUM];
-
-struct {
+static struct {
     struct {
         unsigned setVoltage: 1;
         unsigned setCurrent: 1;
     } flags; 
     int counter;
     int it;
-    uint32_t lastTime;
+    uint32_t nextPointTime;
 } g_execution[CH_NUM];
+
+////////////////////////////////////////////////////////////////////////////////
 
 void init() {
     reset();
@@ -164,12 +164,67 @@ int maxListsSize(Channel &channel) {
     return maxSize;
 }
 
+static bool g_active = false;
+static int g_min;
+static int g_last;
+static int g_max;
+
 void tick(uint32_t tick_usec) {
+    bool active = false;
+
     for (int i = 0; i < CH_NUM; ++i) {
         Channel &channel = Channel::get(i);
-
         if (g_execution[i].counter >= 0) {
-            if (g_execution[i].it == -1 || (int32_t)(tick_usec - g_execution[i].lastTime) > g_channelsLists[i].dwellList[g_execution[i].it % g_channelsLists[i].dwellListSize] * 1000000L) {
+            active = true;
+            break;
+        }
+    }
+
+    if (g_active != active) {
+        if (g_active) {
+            DebugTraceF("Min: %d", g_min);
+            DebugTraceF("Max: %d", g_max);
+        } else {
+            g_min = 1000000;
+            g_max = 1;
+            g_last = tick_usec;
+        }
+
+        g_active = active;
+    } else {
+        if (g_active) {
+            int time = tick_usec - g_last;
+            if (time < g_min) {
+                g_min = time;
+            }
+            if (time > g_max) {
+                g_max = time;
+            }
+            g_last = tick_usec;
+        }
+    }
+
+    for (int i = 0; i < CH_NUM; ++i) {
+        Channel &channel = Channel::get(i);
+        if (g_execution[i].counter >= 0) {
+            bool set = false;
+
+            if (g_execution[i].it == -1) {
+                set = true;
+            } else {
+                int32_t diff = g_execution[i].nextPointTime - tick_usec;
+
+                if (diff <= 0) {
+                    set = true;
+                } else {
+                    if (diff < 1000) {
+                        delayMicroseconds(diff);
+                        set = true;
+                    }
+                }
+            }
+
+            if (set) {
                 if (++g_execution[i].it == maxListsSize(channel)) {
                     if (g_execution[i].counter > 0) {
                         if (--g_execution[i].counter == 0) {
@@ -226,7 +281,8 @@ void tick(uint32_t tick_usec) {
                     channel_dispatcher::setCurrent(channel, current);
                 }
 
-                g_execution[i].lastTime = tick_usec;
+                uint32_t dwell = (uint32_t)round(g_channelsLists[i].dwellList[g_execution[i].it % g_channelsLists[i].dwellListSize] * 1000000L);
+                g_execution[i].nextPointTime = tick_usec + dwell;
             }
         }
     }

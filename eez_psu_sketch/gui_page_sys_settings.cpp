@@ -531,6 +531,15 @@ void SysSettingsEncoderPage::set() {
 
 #endif
 
+////////////////////////////////////////////////////////////////////////////////
+
+void SysSettingsDisplayPage::turnOff() {
+    persist_conf::setDisplayState(0);
+}
+
+void SysSettingsDisplayPage::editBrightness() {
+}
+
 }
 }
 } // namespace eez::psu::gui

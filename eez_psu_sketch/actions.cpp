@@ -193,6 +193,10 @@ void action_show_sys_settings_screen_calibration() {
     pushPage(PAGE_ID_SYS_SETTINGS_SCREEN_CALIBRATION);
 }
 
+void action_show_sys_settings_display() {
+    pushPage(PAGE_ID_SYS_SETTINGS_DISPLAY);
+}
+
 void action_show_sys_settings_ethernet() {
     pushPage(PAGE_ID_SYS_SETTINGS_ETHERNET);
 }
@@ -553,6 +557,14 @@ void action_sys_settings_encoder_toggle_confirmation_mode() {
     #endif
 }
 
+void action_sys_settings_display_turn_off() {
+    ((SysSettingsDisplayPage *)getActivePage())->turnOff();
+}
+
+void action_sys_settings_display_edit_brightness() {
+    ((SysSettingsDisplayPage *)getActivePage())->editBrightness();
+}
+
 
 ACTION actions[] = {
     0,
@@ -592,6 +604,7 @@ ACTION actions[] = {
     action_show_sys_settings_cal,
     action_show_sys_settings_cal_ch,
     action_show_sys_settings_screen_calibration,
+    action_show_sys_settings_display,
     action_show_sys_settings_ethernet,
     action_show_sys_settings_protections,
     action_show_sys_settings_aux_otp,
@@ -680,7 +693,9 @@ ACTION actions[] = {
     action_select_enum_item,
     action_error_alert_action,
     action_up_down,
-    action_sys_settings_encoder_toggle_confirmation_mode
+    action_sys_settings_encoder_toggle_confirmation_mode,
+    action_sys_settings_display_turn_off,
+    action_sys_settings_display_edit_brightness
 };
 
 }

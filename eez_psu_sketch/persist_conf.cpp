@@ -46,7 +46,7 @@ enum PersistConfSection {
 ////////////////////////////////////////////////////////////////////////////////
 
 static const uint16_t DEV_CONF_VERSION = 0x0008L;
-static const uint16_t DEV_CONF2_VERSION = 0x0001L;
+static const uint16_t DEV_CONF2_VERSION = 0x0002L;
 static const uint16_t CH_CAL_CONF_VERSION = 0x0003L;
 static const uint16_t PROFILE_VERSION = 0x0005L;
 
@@ -169,6 +169,8 @@ static void initDevice2() {
     memset(&devConf2, 0, sizeof(devConf2));
     devConf2.header.version = DEV_CONF2_VERSION;
     devConf2.flags.encoderConfirmationMode = 0;
+    devConf2.flags.displayState = 1;
+    devConf2.displayBrightness = 200;
 }
 
 void loadDevice2() {
@@ -565,6 +567,20 @@ bool setEncoderSettings(uint8_t confirmationMode, uint8_t movingSpeedDown, uint8
 #endif
 
     return saveDevice2();
+}
+
+bool setDisplayState(unsigned newState) {
+    unsigned currentDisplayState = devConf2.flags.displayState;
+
+    if (currentDisplayState != newState) {
+        devConf2.flags.displayState = newState;
+        if (!saveDevice2()) {
+            devConf2.flags.displayState = currentDisplayState;
+            return false;
+        }
+    }
+
+    return true;
 }
 
 }

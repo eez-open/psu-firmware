@@ -141,6 +141,12 @@ private:
 
 #endif
 
+class SysSettingsDisplayPage : public Page {
+public:
+    void turnOff();
+    void editBrightness();
+};
+
 }
 }
 } // namespace eez::psu::gui

@@ -338,6 +338,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_core.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_debug.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_diag.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_display.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_inst.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_meas.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_mem.cpp" />

@@ -51,7 +51,7 @@ int main_loop() {
     CreateThread(0, 0, input_thread_proc, 0, 0, 0);
 
     while (1) {
-        switch (MsgWaitForMultipleObjects(0, 0, FALSE, TICK_TIMEOUT, QS_POSTMESSAGE)) {
+        switch (MsgWaitForMultipleObjects(0, 0, FALSE, 0, QS_POSTMESSAGE)) {
         case WAIT_OBJECT_0:
             while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
             {

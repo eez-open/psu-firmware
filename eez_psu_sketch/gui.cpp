@@ -143,6 +143,7 @@ Page *createPageFromId(int pageId) {
 #if OPTION_ENCODER
     case PAGE_ID_SYS_SETTINGS_ENCODER: return new SysSettingsEncoderPage();
 #endif
+    case PAGE_ID_SYS_SETTINGS_DISPLAY: return new SysSettingsDisplayPage();
     case PAGE_ID_SYS_INFO:
     case PAGE_ID_SYS_INFO2: return new SysInfoPage();
     case PAGE_ID_USER_PROFILES:
@@ -663,6 +664,20 @@ void standbyTouchHandling(uint32_t tick_usec) {
     }
 }
 
+void displayOffTouchHandling(uint32_t tick_usec) {
+    if (touch::event_type == touch::TOUCH_DOWN) {
+        g_touchDownTime = tick_usec;
+        g_touchActionExecuted = false;
+    } else if (touch::event_type == touch::TOUCH_MOVE) {
+        if (tick_usec - g_touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
+            if (!g_touchActionExecuted) {
+                g_touchActionExecuted = true;
+                persist_conf::setDisplayState(1);
+            }
+        }
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 #if OPTION_ENCODER
@@ -815,7 +830,11 @@ void init() {
 }
 
 int getStartPageId() {
-    return devices::anyFailed() ? PAGE_ID_SELF_TEST_RESULT: PAGE_ID_MAIN;
+    if (devices::anyFailed()) {
+        return PAGE_ID_SELF_TEST_RESULT;
+    }
+
+    return PAGE_ID_MAIN;
 }
 
 void tick(uint32_t tick_usec) {
@@ -826,13 +845,6 @@ void tick(uint32_t tick_usec) {
 #endif
 
     touch::tick(tick_usec);
-
-#if OPTION_ENCODER
-    int counter;
-    bool clicked;
-    encoder::read(counter, clicked);
-    onEncoder(counter, clicked);
-#endif
 
     if (g_activePageId == INTERNAL_PAGE_ID_NONE) {
         standbyTouchHandling(tick_usec);
@@ -878,6 +890,27 @@ void tick(uint32_t tick_usec) {
         }
         return;
     }
+
+    if (persist_conf::devConf2.flags.displayState == 0 && (g_activePageId != PAGE_ID_DISPLAY_OFF && g_activePageId != PAGE_ID_SELF_TEST_RESULT && touch::calibration::isCalibrated())) {
+        setPage(PAGE_ID_DISPLAY_OFF);
+        flush();
+        return;
+    } else if (persist_conf::devConf2.flags.displayState == 1 && g_activePageId == PAGE_ID_DISPLAY_OFF) {
+        setPage(PAGE_ID_MAIN);
+        return;
+    }
+
+    if (g_activePageId == PAGE_ID_DISPLAY_OFF) {
+        displayOffTouchHandling(tick_usec);
+        return;
+    }
+
+#if OPTION_ENCODER
+    int counter;
+    bool clicked;
+    encoder::read(counter, clicked);
+    onEncoder(counter, clicked);
+#endif
 
     // touch handling
     if (touch::event_type != touch::TOUCH_NONE) {
