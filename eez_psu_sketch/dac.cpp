@@ -41,10 +41,10 @@ void DigitalAnalogConverter::set_value(uint8_t buffer, float value) {
 
 #if CONF_DEBUG
     if (buffer == DATA_BUFFER_A) {
-        debug::uDac[channel.index - 1] = DAC_value;
+        debug::g_uDac[channel.index - 1].set(DAC_value);
     }
     else {
-        debug::iDac[channel.index - 1] = DAC_value;
+        debug::g_iDac[channel.index - 1].set(DAC_value);
     }
 #endif
 

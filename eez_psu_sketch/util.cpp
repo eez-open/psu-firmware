@@ -41,6 +41,11 @@ void strcatInt(char *str, int value) {
     sprintf(str, "%d", value);
 }
 
+void strcatUInt32(char *str, uint32_t value) {
+    str = str + strlen(str);
+    sprintf(str, "%lu", (unsigned long)value);
+}
+
 void strcatFloat(char *str, float value, int precision) {
     // mitigate "-0.00" case
     float min = (float) (1.0f / pow(10, precision));

@@ -45,6 +45,9 @@ option.
 /// Enable only some of the debug trace to the serial port. 
 #define CONF_DEBUG_LATEST 1
 
+/// Enable debug variables
+#define CONF_DEBUG_VARIABLES 0
+
 /// Is Ethernet present?
 #define OPTION_ETHERNET 1
 

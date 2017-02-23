@@ -29,7 +29,7 @@ namespace psu {
 /// Everything used for the debugging purposes.
 namespace debug {
 
-void tick(uint32_t tick_usec);
+void tick(uint32_t tickCount);
 
 void Trace(const char *format, ...);
 
@@ -55,23 +55,125 @@ namespace eez {
 namespace psu {
 namespace debug {
 
-extern uint16_t uDac[2];
-extern uint16_t iDac[2];
-extern int16_t uMon[2];
-extern int16_t uMonDac[2];
-extern int16_t iMon[2];
-extern int16_t iMonDac[2];
+class DebugVariable {
+public:
+    DebugVariable(const char *name);
 
-extern uint32_t lastLoopDuration;
-extern uint32_t maxLoopDuration;
-extern uint32_t avgLoopDuration;
+    const char *name();
 
-extern uint32_t totalAdcReadCounter;
-extern uint32_t lastAdcReadCounter;
+    virtual void tick1secPeriod() = 0;
+    virtual void tick10secPeriod() = 0;
+    virtual void dump(char *buffer) = 0;
 
-void adcReadTick(uint32_t tick_usec);
+private:
+    const char *m_name;
+};
+
+class DebugValueVariable : public DebugVariable {
+public:
+    DebugValueVariable(const char *name);
+   
+    void set(uint32_t value) { m_value = value; }
+    
+    void tick1secPeriod();
+    void tick10secPeriod();
+    void dump(char *buffer);
+
+private:
+    uint32_t m_value;
+};
+
+class DebugDurationForPeriod {
+public:
+    DebugDurationForPeriod();
+    
+    void tick(uint32_t duration);
+    void tickPeriod();
+
+    void dump(char *buffer);
+
+private:
+    uint32_t m_lastTickCount;
+
+    uint32_t m_min;
+    uint32_t m_max;
+    uint32_t m_total;
+    uint32_t m_count;
+
+    uint32_t m_minLast;
+    uint32_t m_maxLast;
+    uint32_t m_avgLast;
+
+};
+
+class DebugDurationVariable : public DebugVariable {
+public:
+    DebugDurationVariable(const char *name);
+    
+    void start();
+    void finish();
+    void tick(uint32_t tickCount);
+
+    void tick1secPeriod();
+    void tick10secPeriod();
+    void dump(char *buffer);
+
+private:
+    uint32_t m_lastTickCount;
+
+    DebugDurationForPeriod duration1sec;
+    DebugDurationForPeriod duration10sec;
+
+    uint32_t m_minTotal;
+    uint32_t m_maxTotal;
+};
+
+class DebugCounterForPeriod {
+public:
+    DebugCounterForPeriod();
+    
+    void inc();
+    void tickPeriod();
+    void dump(char *buffer);
+
+private:
+    uint32_t m_counter;
+    uint32_t m_lastCounter;
+};
+
+class DebugCounterVariable : public DebugVariable {
+public:
+    DebugCounterVariable(const char *name);
+    
+    void inc();
+
+    void tick1secPeriod();
+    void tick10secPeriod();
+    void dump(char *buffer);
+
+private:
+    DebugCounterForPeriod counter1sec;
+    DebugCounterForPeriod counter10sec;
+
+    uint32_t m_totalCounter;
+};
+
+extern DebugValueVariable g_uDac[2];
+extern DebugValueVariable g_uMon[2];
+extern DebugValueVariable g_uMonDac[2];
+extern DebugValueVariable g_iDac[2];
+extern DebugValueVariable g_iMon[2];
+extern DebugValueVariable g_iMonDac[2];
+
+extern DebugDurationVariable g_mainLoopDuration;
+#if CONF_DEBUG_VARIABLES
+extern DebugDurationVariable g_listTickDuration;
+#endif
+extern DebugCounterVariable g_adcCounter;
 
 extern bool g_debugWatchdog;
+
+void dumpVariables(char *buffer);
 
 }
 }

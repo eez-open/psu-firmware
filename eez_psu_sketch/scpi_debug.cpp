@@ -44,37 +44,12 @@ scpi_result_t scpi_cmd_debug(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_debugQ(scpi_t *context) {
-    char buffer[512] = { 0 };
-    char *p = buffer;
-
-    sprintf_P(p, PSTR("max_loop_duration: %lu\n"), (unsigned long)maxLoopDuration);
-    p += strlen(p);
-
-    sprintf_P(p, PSTR("last_loop_duration: %lu\n"), (unsigned long)lastLoopDuration);
-    p += strlen(p);
-
-    sprintf_P(p, PSTR("avg_loop_duration: %lu\n"), (unsigned long)avgLoopDuration);
-    p += strlen(p);
-
-    sprintf_P(p, PSTR("total_adc_read_counter: %lu\n"), (unsigned long)totalAdcReadCounter);
-    p += strlen(p);
-
-    sprintf_P(p, PSTR("last_adc_read_counter: %lu\n"), (unsigned long)lastAdcReadCounter);
-    p += strlen(p);
+    char buffer[2048];
 
     Channel::get(0).adcReadAll();
-
-    sprintf_P(p, PSTR("CH1: u_dac=%u, u_mon_dac=%d, u_mon=%d, i_dac=%u, i_mon_dac=%d, i_mon=%d\n"),
-        (unsigned int)uDac[0], (int)uMonDac[0], (int)uMon[0],
-        (unsigned int)iDac[0], (int)iMonDac[0], (int)iMon[0]);
-    p += strlen(p);
-
     Channel::get(1).adcReadAll();
 
-    sprintf_P(p, PSTR("CH2: u_dac=%u, u_mon_dac=%d, u_mon=%d, i_dac=%u, i_mon_dac=%d, i_mon=%d\n"),
-        (unsigned int)uDac[1], (int)uMonDac[1], (int)uMon[1],
-        (unsigned int)iDac[1], (int)iMonDac[1], (int)iMon[1]);
-    p += strlen(p);
+    debug::dumpVariables(buffer);
 
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 

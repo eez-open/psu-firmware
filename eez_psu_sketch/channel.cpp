@@ -291,6 +291,10 @@ Channel::Channel(
 
     uBeforeBalancing = NAN;
     iBeforeBalancing = NAN;
+
+    flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
+    flags.displayValue2 = DISPLAY_VALUE_CURRENT; 
+    ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
 }
 
 void Channel::protectionEnter(ProtectionValue &cpv) {
@@ -473,9 +477,6 @@ void Channel::reset() {
     maxCurrentLimitCause = MAX_CURRENT_LIMIT_CAUSE_NONE;
     p_limit = PTOT;
 
-    flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
-    flags.displayValue2 = DISPLAY_VALUE_CURRENT; 
-    ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
     resetHistory();
 
     flags.voltageTriggerMode = TRIGGER_MODE_FIXED;
@@ -708,13 +709,6 @@ int16_t Channel::remapCurrentToAdcData(float value) {
     return (int16_t)util::clamp(adc_value, (float)(-AnalogDigitalConverter::ADC_MAX - 1), (float)AnalogDigitalConverter::ADC_MAX);
 }
 
-#if CONF_DEBUG
-extern int16_t debug::uMon[CH_MAX];
-extern int16_t debug::uMonDac[CH_MAX];
-extern int16_t debug::iMon[CH_MAX];
-extern int16_t debug::iMonDac[CH_MAX];
-#endif
-
 void Channel::adcDataIsReady(int16_t data) {
     uint8_t nextStartReg0 = 0;
 
@@ -723,7 +717,7 @@ void Channel::adcDataIsReady(int16_t data) {
     case AnalogDigitalConverter::ADC_REG0_READ_U_MON:
     {
 #if CONF_DEBUG
-        debug::uMon[index - 1] = data;
+        debug::g_uMon[index - 1].set(data);
 #endif
 
         if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage) {
@@ -745,7 +739,7 @@ void Channel::adcDataIsReady(int16_t data) {
     case AnalogDigitalConverter::ADC_REG0_READ_I_MON:
     {
 #if CONF_DEBUG
-        debug::iMon[index - 1] = data;
+        debug::g_iMon[index - 1].set(data);
 #endif
 
         if (abs(i.mon_adc - data) > negligibleAdcDiffForCurrent) {
@@ -781,7 +775,7 @@ void Channel::adcDataIsReady(int16_t data) {
     case AnalogDigitalConverter::ADC_REG0_READ_U_SET:
     {
 #if CONF_DEBUG
-        debug::uMonDac[index - 1] = data;
+        debug::g_uMonDac[index - 1].set(data);
 #endif
 
         float value = remapAdcDataToVoltage(data) - VOLTAGE_GND_OFFSET;
@@ -804,7 +798,7 @@ void Channel::adcDataIsReady(int16_t data) {
     case AnalogDigitalConverter::ADC_REG0_READ_I_SET:
     {
 #if CONF_DEBUG
-        debug::iMonDac[index - 1] = data;
+        debug::g_iMonDac[index - 1].set(data);
 #endif
 
         float value = remapAdcDataToCurrent(data) - CURRENT_GND_OFFSET;

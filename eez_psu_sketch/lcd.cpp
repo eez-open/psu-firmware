@@ -130,10 +130,16 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
         word bc = (bch << 8) | bcl;
 
 	    if (orient == PORTRAIT) {
-		    setXY(x_glyph, y_glyph, x_glyph + width - 1, y_glyph + height - 1);
+            int numPixels = 0;
+
+            setXY(x_glyph, y_glyph, x_glyph + width - 1, y_glyph + height - 1);
 		    for (int iRow = 0; iRow < height; ++iRow, offset += widthInBytes) {
-			    for (int iByte = iStartByte, iCol = iStartCol; iByte < widthInBytes; ++iByte) {
-				    uint8_t data = arduino_util::prog_read_byte(glyph.data + offset + iByte);
+			    for (int iByte = iStartByte, iCol = iStartCol; iByte < widthInBytes; ++iByte, numPixels += 8) {
+                    if (numPixels % 120 == 0) {
+                        psu::criticalTick();
+                    }
+
+                    uint8_t data = arduino_util::prog_read_byte(glyph.data + offset + iByte);
                     if (paintEnabled) {
                         if (iCol + 8 <= width) {
                             setPixel(data & 0x80 ? fc : bc);
@@ -181,9 +187,15 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
 		    }
 	    }
 	    else {
+            int numPixels = 0;
+
 		    for (int iRow = 0; iRow < height; ++iRow) {
 			    setXY(x_glyph, y_glyph + iRow, x_glyph + width - 1, y_glyph + iRow);
-			    for (int iByte = iStartByte + (width + 7) / 8; iByte >= iStartByte; --iByte) {
+			    for (int iByte = iStartByte + (width + 7) / 8; iByte >= iStartByte; --iByte, numPixels += 8) {
+                    if (numPixels % 120 == 0) {
+                        psu::criticalTick();
+                    }
+
 #if defined(EEZ_PSU_ARDUINO_DUE)
 				    uint8_t data = *(glyph.data + offset + iByte);
 #else

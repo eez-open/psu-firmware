@@ -79,6 +79,8 @@ static bool g_shutdownOnNextTick;
 
 RLState g_rlState = RL_STATE_LOCAL;
 
+static uint32_t g_mainLoopCounter;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 static bool testShield();
@@ -877,12 +879,18 @@ void onProtectionTripped() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void tick() {
+    ++g_mainLoopCounter;
+
     if (g_shutdownOnNextTick) {
         g_shutdownOnNextTick = false;
         powerDownBySensor();
     }
 
 	uint32_t tick_usec = micros();
+
+#if CONF_DEBUG
+    debug::tick(tick_usec);
+#endif
 
 	g_powerOnTimeCounter.tick(tick_usec);
 
@@ -910,13 +918,19 @@ void tick() {
     serial::tick(tick_usec);
 
 #if OPTION_ETHERNET
-	ethernet::tick(tick_usec);
+    if (g_mainLoopCounter % 2 == 0) {
+        // tick ethernet every other time
+	    ethernet::tick(tick_usec);
+    }
 #endif
     
     profile::tick(tick_usec);
 
 #if OPTION_DISPLAY
-    gui::tick(tick_usec);
+    if (g_mainLoopCounter % 2 == 1) {
+        // tick gui every other time
+        gui::tick(tick_usec);
+    }
 #endif
 
 	event_queue::tick(tick_usec);
@@ -942,7 +956,6 @@ void criticalTick() {
 
     if (lastTick == 0) {
         lastTick = tick_usec;
-    } else if (tick_usec - lastTick >= 250) {
         for (int i = 0; i < CH_NUM; ++i) {
             Channel::get(i).tick(tick_usec);
         }

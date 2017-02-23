@@ -51,6 +51,8 @@ void executionStart(Channel &channel);
 
 void tick(uint32_t tick_usec);
 
+bool isActive();
+
 void abort();
 
 }

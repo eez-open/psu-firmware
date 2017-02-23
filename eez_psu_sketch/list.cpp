@@ -170,6 +170,10 @@ static int g_last;
 static int g_max;
 
 void tick(uint32_t tick_usec) {
+#if CONF_DEBUG_VARIABLES
+    debug::g_listTickDuration.tick(tick_usec);
+#endif
+
     bool active = false;
 
     for (int i = 0; i < CH_NUM; ++i) {
@@ -280,6 +284,10 @@ void tick(uint32_t tick_usec) {
             }
         }
     }
+}
+
+bool isActive() {
+    return g_active;
 }
 
 void abort() {
