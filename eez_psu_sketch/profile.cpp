@@ -34,7 +34,7 @@ static bool g_save_profile = false;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void tick(uint32_t tick_usec) {
+void tick(uint32_t tickCount) {
     if (g_save_profile) {
         saveAtLocation(0);
         g_save_profile = false;
@@ -96,6 +96,14 @@ void recallChannelsFromProfile(Parameters *profile) {
             channel.flags.displayValue1 = profile->channels[i].flags.displayValue1;
             channel.flags.displayValue2 = profile->channels[i].flags.displayValue2;
             channel.ytViewRate = profile->channels[i].ytViewRate;
+
+            if (channel.flags.displayValue1 == 0 && channel.flags.displayValue2 == 0) {
+                channel.flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
+                channel.flags.displayValue2 = DISPLAY_VALUE_CURRENT;
+            }
+            if (channel.ytViewRate == 0) {
+                channel.ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
+            }
 		}
 
 		channel.update();
