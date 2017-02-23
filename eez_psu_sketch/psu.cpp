@@ -956,6 +956,7 @@ void criticalTick() {
 
     if (lastTick == 0) {
         lastTick = tick_usec;
+    } else if (tick_usec - lastTick >= (uint32_t)(list::isActive() ? 250 : 1000)) {
         for (int i = 0; i < CH_NUM; ++i) {
             Channel::get(i).tick(tick_usec);
         }
