@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "gui_document.h"
+
 namespace eez {
 namespace psu {
 namespace gui {
@@ -25,7 +27,7 @@ namespace touch {
 namespace calibration {
 
 void init();
-void enterCalibrationMode(int yesNoPageId, int nextPageId);
+void enterCalibrationMode(int yesNoPageId = PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, int nextPageId = -1);
 bool isCalibrated();
 bool isCalibrating();
 void tick(uint32_t tick_usec);

@@ -151,7 +151,7 @@
       "name": "touch_screen_calibration",
       "description": "touch screen calibration",
       "implementationType": "native",
-      "implementation": "touch::calibration::enterCalibrationMode(PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, PAGE_ID_SYS_SETTINGS2);"
+      "implementation": "touch::calibration::enterCalibrationMode();"
     },
     {
       "name": "yes",
@@ -690,6 +690,41 @@
       "name": "sys.settings.display.editBrightness",
       "implementationType": "native",
       "implementation": "((SysSettingsDisplayPage *)getActivePage())->editBrightness();"
+    },
+    {
+      "name": "show_ch_settings_trigger",
+      "implementationType": "native",
+      "implementation": "setPage(PAGE_ID_CH_SETTINGS_TRIGGER);"
+    },
+    {
+      "name": "ch.settings.adv.trigger.editVoltageTriggerMode",
+      "implementationType": "native",
+      "implementation": "((ChSettingsAdvTriggerPage *)getActivePage())->editVoltageTriggerMode();"
+    },
+    {
+      "name": "ch.settings.adv.trigger.editVoltageTriggerValue",
+      "implementationType": "native",
+      "implementation": "((ChSettingsAdvTriggerPage *)getActivePage())->editVoltageTriggerValue();"
+    },
+    {
+      "name": "ch.settings.adv.trigger.editCurrentTriggerMode",
+      "implementationType": "native",
+      "implementation": "((ChSettingsAdvTriggerPage *)getActivePage())->editCurrentTriggerMode();"
+    },
+    {
+      "name": "ch.settings.adv.trigger.editCurrentTriggerValue",
+      "implementationType": "native",
+      "implementation": "((ChSettingsAdvTriggerPage *)getActivePage())->editCurrentTriggerValue();"
+    },
+    {
+      "name": "show_ch_settings_lists",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_LISTS);"
+    },
+    {
+      "name": "show_sys_settings_trigger",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_TRIGGER);"
     }
   ],
   "data": [
@@ -1655,6 +1690,62 @@
     },
     {
       "name": "sys.display.brightness"
+    },
+    {
+      "name": "channel.u.trigger.mode",
+      "type": "enum",
+      "enumItems": "[\n\"Fixed\",\n\"List\",\n\"Step\"\n]",
+      "defaultValue": "Fixed"
+    },
+    {
+      "name": "channel.u.trigger.value",
+      "type": "float",
+      "defaultValue": "24.00V",
+      "defaultMinValue": 0,
+      "defaultMaxValue": 40
+    },
+    {
+      "name": "channel.i.trigger.mode",
+      "type": "enum",
+      "enumItems": "[\n\"Fixed\",\n\"List\",\n\"Step\"\n]",
+      "defaultValue": "Fixed"
+    },
+    {
+      "name": "channel.i.trigger.value",
+      "type": "float",
+      "defaultValue": "2.00A",
+      "defaultMinValue": 0,
+      "defaultMaxValue": 5
+    },
+    {
+      "name": "channel.list.count",
+      "type": "integer",
+      "defaultValue": "1"
+    },
+    {
+      "name": "channel.lists",
+      "type": "list",
+      "defaultValue": "[{}, {}, {}, {}]"
+    },
+    {
+      "name": "channel.list.index",
+      "type": "integer",
+      "defaultValue": "256"
+    },
+    {
+      "name": "channel.list.dwell",
+      "type": "float",
+      "defaultValue": "0.01"
+    },
+    {
+      "name": "channel.list.voltage",
+      "type": "float",
+      "defaultValue": "10.00"
+    },
+    {
+      "name": "channel.list.current",
+      "type": "float",
+      "defaultValue": "2.00"
     }
   ],
   "gui": {
@@ -10930,8 +11021,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -10941,7 +11042,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -10950,9 +11051,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -11101,8 +11202,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -11112,7 +11223,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -11121,9 +11232,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -11393,8 +11504,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -11404,7 +11525,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -11413,9 +11534,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -11761,8 +11882,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -11772,7 +11903,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -11781,9 +11912,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -12053,8 +12184,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -12064,7 +12205,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -12073,9 +12214,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -12444,8 +12585,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -12455,7 +12606,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -12464,9 +12615,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -12492,8 +12643,257 @@
         }
       },
       {
-        "name": "ch_settings_adv",
-        "description": "Set advanced channel's options such as remote sensing, remote programming, triggering, calibration, tracking/coupling, Low ripple mode, output limits",
+        "name": "ch_settings_trigger",
+        "description": "",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "x": 0,
+              "type": "Select",
+              "data": "channel.isCoupledOrTracked",
+              "y": 0,
+              "width": 246,
+              "height": 28,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 252,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "data": "channel.shortLabel",
+                      "x": 6,
+                      "y": 0,
+                      "width": 36,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channel protections"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 42,
+                      "y": 0,
+                      "width": 210,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Trigger"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 252,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 252,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channels trigger"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 28,
+              "width": 168,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Voltage trigger mode:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.u.trigger.mode",
+              "action": "ch.settings.adv.trigger.editVoltageTriggerMode",
+              "x": 184,
+              "y": 28,
+              "width": 68,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 56,
+              "width": 168,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Voltage trigger value:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.u.trigger.value",
+              "action": "ch.settings.adv.trigger.editVoltageTriggerValue",
+              "x": 184,
+              "y": 56,
+              "width": 68,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 84,
+              "width": 168,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Current trigger mode:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.i.trigger.mode",
+              "action": "ch.settings.adv.trigger.editCurrentTriggerMode",
+              "x": 184,
+              "y": 84,
+              "width": 68,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 112,
+              "width": 168,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Current trigger value:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.i.trigger.value",
+              "action": "ch.settings.adv.trigger.editCurrentTriggerValue",
+              "x": 184,
+              "y": 112,
+              "width": 68,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 140,
+              "width": 168,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "List count:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "channel.list.count",
+              "action": "ch.settings.adv.trigger.editCurrentTriggerValue",
+              "x": 184,
+              "y": 140,
+              "width": 68,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_lists",
+              "x": 16,
+              "y": 168,
+              "width": 168,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "Edit lists"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_prot",
+              "x": 0,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "E"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_trigger",
+              "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page_selected",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "G"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_info",
+              "x": 144,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "?"
+            },
+            {
+              "type": "Rectangle",
+              "x": 192,
+              "y": 204,
+              "width": 80,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            }
+          ]
+        }
+      },
+      {
+        "name": "ch_settings_lists",
+        "description": "",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -12515,6 +12915,198 @@
               "height": 204,
               "style": "default"
             },
+            {
+              "type": "YTGraph",
+              "data": "channel.list.voltage",
+              "x": 0,
+              "y": 0,
+              "width": 252,
+              "height": 84,
+              "style": "yt_graph",
+              "y1Style": "yt_graph_U_defualt",
+              "y2Data": "channel.list.current",
+              "y2Style": "yt_graph_I_default"
+            },
+            {
+              "type": "Text",
+              "x": 0,
+              "y": 84,
+              "width": 33,
+              "height": 24,
+              "style": "default_disabled_S_right",
+              "text": "#"
+            },
+            {
+              "type": "Text",
+              "x": 33,
+              "y": 84,
+              "width": 73,
+              "height": 24,
+              "style": "default_disabled_S",
+              "text": "Dwell"
+            },
+            {
+              "type": "Text",
+              "x": 106,
+              "y": 84,
+              "width": 73,
+              "height": 24,
+              "style": "yt_graph_U_defualt_label",
+              "text": "Voltage"
+            },
+            {
+              "type": "Text",
+              "x": 179,
+              "y": 84,
+              "width": 73,
+              "height": 24,
+              "style": "yt_graph_I_default_label",
+              "text": "Current"
+            },
+            {
+              "type": "List",
+              "data": "channel.lists",
+              "x": 0,
+              "y": 108,
+              "width": 252,
+              "height": 96,
+              "style": "default",
+              "listType": "vertical",
+              "itemWidget": {
+                "type": "Container",
+                "x": 0,
+                "y": 0,
+                "width": 252,
+                "height": 24,
+                "style": "default",
+                "widgets": [
+                  {
+                    "type": "DisplayData",
+                    "data": "channel.list.index",
+                    "x": 0,
+                    "y": 0,
+                    "width": 33,
+                    "height": 24,
+                    "style": "edit_value_S_right"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "data": "channel.list.dwell",
+                    "x": 33,
+                    "y": 0,
+                    "width": 73,
+                    "height": 24,
+                    "style": "default_S"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "data": "channel.list.voltage",
+                    "x": 106,
+                    "y": 0,
+                    "width": 73,
+                    "height": 24,
+                    "style": "default_S"
+                  },
+                  {
+                    "type": "DisplayData",
+                    "data": "channel.list.current",
+                    "x": 179,
+                    "y": 0,
+                    "width": 73,
+                    "height": 24,
+                    "style": "default_S"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Button",
+              "x": 0,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "(",
+              "disabledStyle": "bottom_button_disabled"
+            },
+            {
+              "type": "Button",
+              "action": "",
+              "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": ")",
+              "disabledStyle": "bottom_button"
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 96,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "V"
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 144,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "W"
+            },
+            {
+              "type": "Rectangle",
+              "x": 192,
+              "y": 204,
+              "width": 32,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "U"
+            },
+            {
+              "type": "Text",
+              "action": "",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "I"
+            }
+          ]
+        }
+      },
+      {
+        "name": "ch_settings_adv",
+        "description": "Set advanced channel's options such as remote sensing, remote programming, triggering, calibration, tracking/coupling, Low ripple mode, output limits",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
             {
               "x": 6,
               "type": "Select",
@@ -12579,7 +13171,7 @@
               "type": "Select",
               "data": "channel.coupling.mode",
               "y": 28,
-              "width": 180,
+              "width": 236,
               "height": 28,
               "style": "default",
               "widgets": [
@@ -12588,7 +13180,7 @@
                   "action": "show_ch_settings_adv_lripple",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
                   "style": "edit_value_active_S_left",
                   "text": "Low ripple mode"
@@ -12598,7 +13190,7 @@
                   "action": "show_ch_settings_adv_lripple",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
                   "style": "edit_value_active_S_left",
                   "text": "Low ripple mode"
@@ -12608,7 +13200,7 @@
                   "action": "",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
                   "style": "default_disabled_S_left",
                   "text": "Low ripple mode \\u008c"
@@ -12618,7 +13210,7 @@
                   "action": "show_ch_settings_adv_lripple",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
                   "style": "edit_value_active_S_left",
                   "text": "Low ripple mode"
@@ -12630,7 +13222,7 @@
               "type": "Select",
               "data": "channel.coupling.mode",
               "y": 56,
-              "width": 180,
+              "width": 236,
               "height": 28,
               "style": "default",
               "widgets": [
@@ -12639,7 +13231,7 @@
                   "action": "show_ch_settings_adv_rsense",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
                   "style": "edit_value_active_S_left",
                   "text": "Remote sensing"
@@ -12649,7 +13241,7 @@
                   "action": "show_ch_settings_adv_rsense",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
                   "style": "edit_value_active_S_left",
                   "text": "Remote sensing"
@@ -12659,7 +13251,7 @@
                   "action": "",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
                   "style": "default_disabled_S_left",
                   "text": "Remote sensing \\u008c"
@@ -12669,7 +13261,7 @@
                   "action": "show_ch_settings_adv_rsense",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
                   "style": "edit_value_active_S_left",
                   "text": "Remote sensing"
@@ -12708,7 +13300,7 @@
                       "type": "Select",
                       "data": "channel.coupling.mode",
                       "y": 0,
-                      "width": 180,
+                      "width": 236,
                       "height": 28,
                       "style": "default",
                       "widgets": [
@@ -12716,7 +13308,7 @@
                           "type": "Container",
                           "x": 0,
                           "y": 0,
-                          "width": 180,
+                          "width": 236,
                           "height": 28,
                           "style": "default",
                           "widgets": [
@@ -12725,7 +13317,7 @@
                               "action": "show_ch_settings_adv_rprog",
                               "x": 0,
                               "y": 0,
-                              "width": 180,
+                              "width": 236,
                               "height": 28,
                               "style": "edit_value_active_S_left",
                               "text": "Remote programming"
@@ -12781,7 +13373,7 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
                   "style": "default",
                   "widgets": [
@@ -12790,7 +13382,7 @@
                       "action": "show_ch_settings_adv_tracking",
                       "x": 0,
                       "y": 0,
-                      "width": 180,
+                      "width": 236,
                       "height": 28,
                       "style": "edit_value_active_S_left",
                       "text": "Tracking control"
@@ -12814,7 +13406,7 @@
               "type": "Select",
               "data": "channel.isTracked",
               "y": 140,
-              "width": 180,
+              "width": 236,
               "height": 28,
               "style": "default",
               "widgets": [
@@ -12822,7 +13414,7 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
                   "style": "default",
                   "widgets": [
@@ -12831,7 +13423,7 @@
                       "action": "show_ch_settings_adv_coupling",
                       "x": 0,
                       "y": 0,
-                      "width": 180,
+                      "width": 236,
                       "height": 28,
                       "style": "edit_value_active_S_left",
                       "text": "Coupling settings"
@@ -12843,7 +13435,7 @@
                   "action": "",
                   "x": 0,
                   "y": 0,
-                  "width": 180,
+                  "width": 236,
                   "height": 28,
                   "style": "default_disabled_S_left",
                   "text": "Coupling settings \\u008c"
@@ -12855,7 +13447,7 @@
               "action": "show_ch_settings_adv_view",
               "x": 16,
               "y": 168,
-              "width": 180,
+              "width": 236,
               "height": 28,
               "style": "edit_value_active_S_left",
               "text": "Display view"
@@ -12880,8 +13472,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -12891,7 +13493,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -12900,9 +13502,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -12915,6 +13517,14 @@
               "height": 36,
               "style": "bottom_button",
               "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
             }
           ]
         }
@@ -13224,8 +13834,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -13235,7 +13855,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -13244,9 +13864,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -13431,8 +14051,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -13442,7 +14072,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -13451,9 +14081,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -13598,8 +14228,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -13609,7 +14249,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -13618,9 +14258,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -13755,8 +14395,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -13766,7 +14416,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -13775,9 +14425,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -13937,6 +14587,15 @@
               "style": "default_inverse"
             },
             {
+              "type": "MultilineText",
+              "x": 16,
+              "y": 28,
+              "width": 236,
+              "height": 88,
+              "style": "edit_value_S_left",
+              "text": "Combine channels for higher max. output current or voltage."
+            },
+            {
               "type": "Text",
               "action": "show_ch_settings_prot",
               "x": 0,
@@ -13948,8 +14607,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -13959,7 +14628,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -13968,9 +14637,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -13991,15 +14660,6 @@
               "width": 68,
               "height": 204,
               "style": "default"
-            },
-            {
-              "type": "MultilineText",
-              "x": 16,
-              "y": 28,
-              "width": 236,
-              "height": 88,
-              "style": "edit_value_S_left",
-              "text": "Combine channels for higher max. output current or voltage."
             }
           ]
         }
@@ -14347,8 +15007,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -14358,7 +15028,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -14367,9 +15037,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -14410,14 +15080,6 @@
           "width": 320,
           "height": 240,
           "widgets": [
-            {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
             {
               "x": 0,
               "type": "Select",
@@ -14856,8 +15518,18 @@
             },
             {
               "type": "Text",
-              "action": "show_ch_settings_adv",
+              "action": "show_ch_settings_trigger",
               "x": 48,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "tab_page",
+              "text": "T"
+            },
+            {
+              "type": "Text",
+              "action": "show_ch_settings_adv",
+              "x": 96,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -14867,7 +15539,7 @@
             {
               "type": "Text",
               "action": "show_ch_settings_info",
-              "x": 96,
+              "x": 144,
               "y": 204,
               "width": 48,
               "height": 36,
@@ -14876,9 +15548,9 @@
             },
             {
               "type": "Rectangle",
-              "x": 144,
+              "x": 192,
               "y": 204,
-              "width": 128,
+              "width": 80,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -14891,6 +15563,14 @@
               "height": 36,
               "style": "bottom_button",
               "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
             }
           ]
         }
@@ -14969,18 +15649,28 @@
             },
             {
               "type": "Text",
-              "action": "show_sys_settings_date_time",
+              "action": "show_sys_settings_protections",
               "x": 12,
               "y": 60,
               "width": 240,
               "height": 28,
               "style": "edit_value_active_S_left",
-              "text": "Set date and time"
+              "text": "System protection settings"
+            },
+            {
+              "type": "Text",
+              "action": "show_sys_settings_trigger",
+              "x": 12,
+              "y": 88,
+              "width": 240,
+              "height": 29,
+              "style": "edit_value_active_S_left",
+              "text": "Trigger"
             },
             {
               "type": "Text",
               "x": 12,
-              "y": 88,
+              "y": 116,
               "width": 240,
               "height": 28,
               "style": "default_disabled_S_left",
@@ -14988,19 +15678,19 @@
             },
             {
               "type": "Text",
-              "action": "show_sys_settings_sound",
+              "action": "show_sys_settings_date_time",
               "x": 12,
-              "y": 116,
+              "y": 144,
               "width": 240,
               "height": 28,
               "style": "edit_value_active_S_left",
-              "text": "Sound"
+              "text": "Set date and time"
             },
             {
               "x": 12,
               "type": "Select",
               "data": "sys.encoder.installed",
-              "y": 144,
+              "y": 172,
               "width": 240,
               "height": 28,
               "style": "default",
@@ -15026,16 +15716,6 @@
                   "text": "Encoder"
                 }
               ]
-            },
-            {
-              "type": "Text",
-              "action": "show_sys_settings_protections",
-              "x": 12,
-              "y": 172,
-              "width": 240,
-              "height": 29,
-              "style": "edit_value_active_S_left",
-              "text": "System protection settings"
             },
             {
               "type": "Text",
@@ -15280,529 +15960,6 @@
               "width": 41,
               "height": 36,
               "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "X"
-            },
-            {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            }
-          ]
-        }
-      },
-      {
-        "name": "sys_settings_date_time",
-        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
-        "portrait": {
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320,
-          "widgets": []
-        },
-        "landscape": {
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240,
-          "widgets": [
-            {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
-            {
-              "type": "Text",
-              "x": 6,
-              "y": 0,
-              "width": 246,
-              "height": 32,
-              "style": "value_S",
-              "text": "Set date and time"
-            },
-            {
-              "type": "Rectangle",
-              "x": 197,
-              "y": 204,
-              "width": 75,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "X"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 30,
-              "width": 101,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Date:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.year",
-              "action": "edit_field",
-              "x": 113,
-              "y": 30,
-              "width": 48,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "x": 161,
-              "y": 30,
-              "width": 14,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "-"
-            },
-            {
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.month",
-              "action": "edit_field",
-              "x": 175,
-              "y": 30,
-              "width": 26,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "x": 201,
-              "y": 30,
-              "width": 14,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "-"
-            },
-            {
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.day",
-              "action": "edit_field",
-              "x": 215,
-              "y": 30,
-              "width": 26,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 58,
-              "width": 101,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Time:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.hour",
-              "action": "edit_field",
-              "x": 113,
-              "y": 58,
-              "width": 26,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "x": 139,
-              "y": 58,
-              "width": 12,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": ":"
-            },
-            {
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.minute",
-              "action": "edit_field",
-              "x": 151,
-              "y": 58,
-              "width": 26,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "x": 177,
-              "y": 58,
-              "width": 12,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": ":"
-            },
-            {
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.second",
-              "action": "edit_field",
-              "x": 189,
-              "y": 58,
-              "width": 26,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 86,
-              "width": 101,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Time zone:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.timeZone",
-              "action": "edit_field",
-              "x": 113,
-              "y": 86,
-              "width": 89,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 114,
-              "width": 101,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "DST:"
-            },
-            {
-              "x": 113,
-              "type": "Select",
-              "data": "sys.info.dateTime.DST",
-              "y": 114,
-              "width": 60,
-              "height": 28,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Text",
-                  "action": "sys_settings_date_time_toggle_dst",
-                  "x": 0,
-                  "y": 0,
-                  "width": 60,
-                  "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "No"
-                },
-                {
-                  "type": "Text",
-                  "action": "sys_settings_date_time_toggle_dst",
-                  "x": 0,
-                  "y": 0,
-                  "width": 60,
-                  "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "Yes"
-                }
-              ]
-            },
-            {
-              "type": "Button",
-              "data": "",
-              "action": "set",
-              "x": 0,
-              "y": 204,
-              "width": 101,
-              "height": 36,
-              "style": "non_interactive_button_S",
-              "text": "~ Set",
-              "enabled": "setPage.dirty",
-              "disabledStyle": "non_interactive_button_S_disabled"
-            },
-            {
-              "type": "Text",
-              "action": "discard",
-              "x": 101,
-              "y": 204,
-              "width": 96,
-              "height": 36,
-              "style": "non_interactive_button_S",
-              "text": " Discard"
-            }
-          ]
-        }
-      },
-      {
-        "name": "sys_settings_io",
-        "description": "Define selected protection values\n",
-        "portrait": {
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320,
-          "widgets": []
-        },
-        "landscape": {
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240,
-          "widgets": [
-            {
-              "type": "Text",
-              "x": 6,
-              "y": 0,
-              "width": 246,
-              "height": 32,
-              "style": "value_S",
-              "text": "Digital I/O pin settings"
-            },
-            {
-              "type": "Button",
-              "data": "",
-              "action": "set",
-              "x": 0,
-              "y": 204,
-              "width": 72,
-              "height": 36,
-              "style": "non_interactive_button_S",
-              "text": "~ Set",
-              "enabled": "setPage.dirty",
-              "disabledStyle": "non_interactive_button_S_disabled"
-            },
-            {
-              "type": "Text",
-              "action": "discard",
-              "x": 72,
-              "y": 204,
-              "width": 96,
-              "height": 36,
-              "style": "non_interactive_button_S",
-              "text": " Discard"
-            },
-            {
-              "type": "Rectangle",
-              "x": 168,
-              "y": 204,
-              "width": 104,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "X"
-            },
-            {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 42,
-              "width": 236,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Pin #:       1          2          3"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 70,
-              "width": 236,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Enable:    Yes        No       Yes"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 98,
-              "width": 236,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Function: Trig       Out      Out"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 98,
-              "width": 236,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Polarity:  Pos       Neg      Neg"
-            }
-          ]
-        }
-      },
-      {
-        "name": "sys_settings_sound",
-        "description": "Output voltage remote programming information and settings",
-        "portrait": {
-          "x": 0,
-          "y": 0,
-          "width": 240,
-          "height": 320,
-          "widgets": []
-        },
-        "landscape": {
-          "x": 0,
-          "y": 0,
-          "width": 320,
-          "height": 240,
-          "widgets": [
-            {
-              "type": "Text",
-              "x": 6,
-              "y": 0,
-              "width": 246,
-              "height": 32,
-              "style": "value_S",
-              "text": "Sound control"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 32,
-              "width": 156,
-              "height": 42,
-              "style": "edit_value_left",
-              "text": "Sound:"
-            },
-            {
-              "type": "Rectangle",
-              "x": 172,
-              "y": 32,
-              "width": 6,
-              "height": 42,
-              "style": "default_inverse"
-            },
-            {
-              "x": 178,
-              "type": "Select",
-              "data": "sys.sound.isEnabled",
-              "y": 32,
-              "width": 74,
-              "height": 42,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Text",
-                  "action": "sys.settings.sound.toggle",
-                  "x": 0,
-                  "y": 0,
-                  "width": 74,
-                  "height": 42,
-                  "style": "edit_value_active_left",
-                  "text": "OFF"
-                },
-                {
-                  "type": "Text",
-                  "action": "sys.settings.sound.toggle",
-                  "x": 0,
-                  "y": 0,
-                  "width": 74,
-                  "height": 42,
-                  "style": "edit_value_active_left",
-                  "text": "ON"
-                }
-              ]
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 74,
-              "width": 156,
-              "height": 42,
-              "style": "edit_value_left",
-              "text": "Click sound:"
-            },
-            {
-              "type": "Rectangle",
-              "x": 172,
-              "y": 74,
-              "width": 6,
-              "height": 42,
-              "style": "default_inverse"
-            },
-            {
-              "x": 178,
-              "type": "Select",
-              "data": "sys,sound.isClickEnabled",
-              "y": 74,
-              "width": 74,
-              "height": 42,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Text",
-                  "action": "sys.settings.sound.toggleClick",
-                  "x": 0,
-                  "y": 0,
-                  "width": 74,
-                  "height": 42,
-                  "style": "edit_value_active_left",
-                  "text": "OFF"
-                },
-                {
-                  "type": "Text",
-                  "action": "sys.settings.sound.toggleClick",
-                  "x": 0,
-                  "y": 0,
-                  "width": 74,
-                  "height": 42,
-                  "style": "edit_value_active_left",
-                  "text": "ON"
-                }
-              ]
-            },
-            {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 224,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "type": "Text",
-              "action": "show_previous_page",
-              "x": 224,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "B"
             },
             {
               "type": "Text",
@@ -16085,6 +16242,682 @@
         }
       },
       {
+        "name": "sys_settings_trigger",
+        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 32,
+              "style": "value_S",
+              "text": "Trigger"
+            },
+            {
+              "x": 16,
+              "type": "Select",
+              "data": "sys.shutdownWhenProtectionTripped",
+              "y": 86,
+              "width": 236,
+              "height": 59,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 236,
+                  "height": 59,
+                  "style": "default",
+                  "widgets": []
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 236,
+                  "height": 59,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "MultilineText",
+                      "x": 0,
+                      "y": 0,
+                      "width": 179,
+                      "height": 59,
+                      "style": "default_disabled_S_left",
+                      "text": "Switch off all outputs when protection tripped"
+                    },
+                    {
+                      "x": 179,
+                      "type": "Select",
+                      "data": "sys.outputProtectionCoupled",
+                      "action": "",
+                      "y": 0,
+                      "width": 57,
+                      "height": 59,
+                      "style": "edit_value_L",
+                      "widgets": [
+                        {
+                          "type": "Text",
+                          "action": "",
+                          "x": 0,
+                          "y": 0,
+                          "width": 57,
+                          "height": 59,
+                          "style": "default_disabled",
+                          "text": "No"
+                        },
+                        {
+                          "type": "Text",
+                          "action": "",
+                          "x": 0,
+                          "y": 0,
+                          "width": 57,
+                          "height": 59,
+                          "style": "default_disabled",
+                          "text": "Yes"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 224,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "B"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            }
+          ]
+        }
+      },
+      {
+        "name": "sys_settings_io",
+        "description": "Define selected protection values\n",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 32,
+              "style": "value_S",
+              "text": "Digital I/O pin settings"
+            },
+            {
+              "type": "Button",
+              "data": "",
+              "action": "set",
+              "x": 0,
+              "y": 204,
+              "width": 72,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "type": "Text",
+              "action": "discard",
+              "x": 72,
+              "y": 204,
+              "width": 96,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
+            },
+            {
+              "type": "Rectangle",
+              "x": 168,
+              "y": 204,
+              "width": 104,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 42,
+              "width": 236,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Pin #:       1          2          3"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 70,
+              "width": 236,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Enable:    Yes        No       Yes"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 98,
+              "width": 236,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Function: Trig       Out      Out"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 98,
+              "width": 236,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Polarity:  Pos       Neg      Neg"
+            }
+          ]
+        }
+      },
+      {
+        "name": "sys_settings_date_time",
+        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 32,
+              "style": "value_S",
+              "text": "Set date and time"
+            },
+            {
+              "type": "Rectangle",
+              "x": 197,
+              "y": 204,
+              "width": 75,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 30,
+              "width": 101,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Date:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "sys.info.dateTime.year",
+              "action": "edit_field",
+              "x": 113,
+              "y": 30,
+              "width": 48,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 161,
+              "y": 30,
+              "width": 14,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "-"
+            },
+            {
+              "type": "DisplayData",
+              "data": "sys.info.dateTime.month",
+              "action": "edit_field",
+              "x": 175,
+              "y": 30,
+              "width": 26,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 201,
+              "y": 30,
+              "width": 14,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "-"
+            },
+            {
+              "type": "DisplayData",
+              "data": "sys.info.dateTime.day",
+              "action": "edit_field",
+              "x": 215,
+              "y": 30,
+              "width": 26,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 58,
+              "width": 101,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Time:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "sys.info.dateTime.hour",
+              "action": "edit_field",
+              "x": 113,
+              "y": 58,
+              "width": 26,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 139,
+              "y": 58,
+              "width": 12,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": ":"
+            },
+            {
+              "type": "DisplayData",
+              "data": "sys.info.dateTime.minute",
+              "action": "edit_field",
+              "x": 151,
+              "y": 58,
+              "width": 26,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 177,
+              "y": 58,
+              "width": 12,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": ":"
+            },
+            {
+              "type": "DisplayData",
+              "data": "sys.info.dateTime.second",
+              "action": "edit_field",
+              "x": 189,
+              "y": 58,
+              "width": 26,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 86,
+              "width": 101,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Time zone:"
+            },
+            {
+              "type": "DisplayData",
+              "data": "sys.info.dateTime.timeZone",
+              "action": "edit_field",
+              "x": 113,
+              "y": 86,
+              "width": 89,
+              "height": 28,
+              "style": "edit_value_active_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 114,
+              "width": 101,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "DST:"
+            },
+            {
+              "x": 113,
+              "type": "Select",
+              "data": "sys.info.dateTime.DST",
+              "y": 114,
+              "width": 60,
+              "height": 28,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "sys_settings_date_time_toggle_dst",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "No"
+                },
+                {
+                  "type": "Text",
+                  "action": "sys_settings_date_time_toggle_dst",
+                  "x": 0,
+                  "y": 0,
+                  "width": 60,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "Yes"
+                }
+              ]
+            },
+            {
+              "type": "Button",
+              "data": "",
+              "action": "set",
+              "x": 0,
+              "y": 204,
+              "width": 101,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "type": "Text",
+              "action": "discard",
+              "x": 101,
+              "y": 204,
+              "width": 96,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
+            }
+          ]
+        }
+      },
+      {
+        "name": "sys_settings_encoder",
+        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 32,
+              "style": "value_S",
+              "text": "Encoder settings"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 30,
+              "width": 153,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Confirmation mode:"
+            },
+            {
+              "x": 165,
+              "type": "Select",
+              "data": "sys.encoder.confirmationMode",
+              "y": 30,
+              "width": 65,
+              "height": 28,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "sys.settings.encoder.toggleConfirmationMode",
+                  "x": 0,
+                  "y": 0,
+                  "width": 65,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "No"
+                },
+                {
+                  "type": "Text",
+                  "action": "sys.settings.encoder.toggleConfirmationMode",
+                  "x": 0,
+                  "y": 0,
+                  "width": 65,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "Yes"
+                }
+              ]
+            },
+            {
+              "type": "Rectangle",
+              "x": 12,
+              "y": 63,
+              "width": 236,
+              "height": 1,
+              "style": "edit_value_S_left"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 69,
+              "width": 240,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Knob acceleration sensitivity:"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 101,
+              "width": 108,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Moving up:"
+            },
+            {
+              "type": "UpDown",
+              "data": "sys.encoder.movingUpSpeed",
+              "action": "upDown",
+              "x": 120,
+              "y": 101,
+              "width": 87,
+              "height": 28,
+              "style": "edit_value_S_centered",
+              "buttonsStyle": "edit_S",
+              "downButtonText": "\\u008F",
+              "upButtonText": "\\u0090"
+            },
+            {
+              "type": "Text",
+              "x": 12,
+              "y": 139,
+              "width": 108,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Moving down:"
+            },
+            {
+              "type": "UpDown",
+              "data": "sys.encoder.movingDownSpeed",
+              "action": "upDown",
+              "x": 120,
+              "y": 139,
+              "width": 87,
+              "height": 28,
+              "style": "edit_value_S_centered",
+              "buttonsStyle": "edit_S",
+              "downButtonText": "\\u008F",
+              "upButtonText": "\\u0090"
+            },
+            {
+              "type": "Button",
+              "data": "",
+              "action": "set",
+              "x": 0,
+              "y": 204,
+              "width": 101,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "type": "Text",
+              "action": "discard",
+              "x": 101,
+              "y": 204,
+              "width": 96,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
+            },
+            {
+              "type": "Rectangle",
+              "x": 197,
+              "y": 204,
+              "width": 75,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            }
+          ]
+        }
+      },
+      {
         "name": "sys_settings2",
         "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
         "portrait": {
@@ -16182,23 +17015,23 @@
             },
             {
               "type": "Text",
-              "action": "show_sys_settings_screen_calibration",
+              "action": "show_sys_settings_display",
               "x": 12,
               "y": 116,
               "width": 240,
               "height": 28,
               "style": "edit_value_active_S_left",
-              "text": "Touchscreen calibration"
+              "text": "Display settings"
             },
             {
               "type": "Text",
-              "action": "show_sys_settings_display",
+              "action": "show_sys_settings_sound",
               "x": 12,
               "y": 144,
               "width": 240,
               "height": 28,
               "style": "edit_value_active_S_left",
-              "text": "Display settings"
+              "text": "Sound"
             },
             {
               "type": "Text",
@@ -17672,8 +18505,8 @@
               "x": 16,
               "y": 32,
               "width": 159,
-              "height": 42,
-              "style": "edit_value_left",
+              "height": 28,
+              "style": "edit_value_S_left",
               "text": "Brightness:"
             },
             {
@@ -17682,27 +18515,47 @@
               "x": 175,
               "y": 32,
               "width": 77,
-              "height": 42,
-              "style": "edit_value_active_left",
+              "height": 28,
+              "style": "edit_value_active_S_left",
               "text": "60"
+            },
+            {
+              "type": "Text",
+              "action": "show_sys_settings_screen_calibration",
+              "x": 16,
+              "y": 60,
+              "width": 236,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "Touchscreen calibration"
             },
             {
               "type": "Text",
               "action": "sys.settings.display.turnOff",
               "x": 16,
-              "y": 74,
+              "y": 88,
               "width": 236,
-              "height": 42,
-              "style": "edit_value_active_left",
+              "height": 28,
+              "style": "edit_value_active_S_left",
               "text": "Turn display off"
             },
             {
               "type": "Rectangle",
               "x": 0,
               "y": 204,
-              "width": 272,
+              "width": 224,
               "height": 36,
               "style": "bottom_button_background"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "B"
             },
             {
               "type": "Text",
@@ -17718,8 +18571,8 @@
         }
       },
       {
-        "name": "sys_settings_encoder",
-        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
+        "name": "sys_settings_sound",
+        "description": "Output voltage remote programming information and settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -17734,153 +18587,127 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
-            {
               "type": "Text",
               "x": 6,
               "y": 0,
               "width": 246,
               "height": 32,
               "style": "value_S",
-              "text": "Encoder settings"
+              "text": "Sound control"
             },
             {
               "type": "Text",
-              "x": 12,
-              "y": 30,
-              "width": 153,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Confirmation mode:"
+              "x": 16,
+              "y": 32,
+              "width": 156,
+              "height": 42,
+              "style": "edit_value_left",
+              "text": "Sound:"
             },
             {
-              "x": 165,
+              "type": "Rectangle",
+              "x": 172,
+              "y": 32,
+              "width": 6,
+              "height": 42,
+              "style": "default_inverse"
+            },
+            {
+              "x": 178,
               "type": "Select",
-              "data": "sys.encoder.confirmationMode",
-              "y": 30,
-              "width": 65,
-              "height": 28,
+              "data": "sys.sound.isEnabled",
+              "y": 32,
+              "width": 74,
+              "height": 42,
               "style": "default",
               "widgets": [
                 {
                   "type": "Text",
-                  "action": "sys.settings.encoder.toggleConfirmationMode",
+                  "action": "sys.settings.sound.toggle",
                   "x": 0,
                   "y": 0,
-                  "width": 65,
-                  "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "No"
+                  "width": 74,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "OFF"
                 },
                 {
                   "type": "Text",
-                  "action": "sys.settings.encoder.toggleConfirmationMode",
+                  "action": "sys.settings.sound.toggle",
                   "x": 0,
                   "y": 0,
-                  "width": 65,
-                  "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "Yes"
+                  "width": 74,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "ON"
+                }
+              ]
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 74,
+              "width": 156,
+              "height": 42,
+              "style": "edit_value_left",
+              "text": "Click sound:"
+            },
+            {
+              "type": "Rectangle",
+              "x": 172,
+              "y": 74,
+              "width": 6,
+              "height": 42,
+              "style": "default_inverse"
+            },
+            {
+              "x": 178,
+              "type": "Select",
+              "data": "sys,sound.isClickEnabled",
+              "y": 74,
+              "width": 74,
+              "height": 42,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "sys.settings.sound.toggleClick",
+                  "x": 0,
+                  "y": 0,
+                  "width": 74,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "OFF"
+                },
+                {
+                  "type": "Text",
+                  "action": "sys.settings.sound.toggleClick",
+                  "x": 0,
+                  "y": 0,
+                  "width": 74,
+                  "height": 42,
+                  "style": "edit_value_active_left",
+                  "text": "ON"
                 }
               ]
             },
             {
               "type": "Rectangle",
-              "x": 12,
-              "y": 63,
-              "width": 236,
-              "height": 1,
-              "style": "edit_value_S_left"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 69,
-              "width": 240,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Knob acceleration sensitivity:"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 101,
-              "width": 108,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Moving up:"
-            },
-            {
-              "type": "UpDown",
-              "data": "sys.encoder.movingUpSpeed",
-              "action": "upDown",
-              "x": 120,
-              "y": 101,
-              "width": 87,
-              "height": 28,
-              "style": "edit_value_S_centered",
-              "buttonsStyle": "edit_S",
-              "downButtonText": "\\u008F",
-              "upButtonText": "\\u0090"
-            },
-            {
-              "type": "Text",
-              "x": 12,
-              "y": 139,
-              "width": 108,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Moving down:"
-            },
-            {
-              "type": "UpDown",
-              "data": "sys.encoder.movingDownSpeed",
-              "action": "upDown",
-              "x": 120,
-              "y": 139,
-              "width": 87,
-              "height": 28,
-              "style": "edit_value_S_centered",
-              "buttonsStyle": "edit_S",
-              "downButtonText": "\\u008F",
-              "upButtonText": "\\u0090"
-            },
-            {
-              "type": "Button",
-              "data": "",
-              "action": "set",
               "x": 0,
               "y": 204,
-              "width": 101,
+              "width": 224,
               "height": 36,
-              "style": "non_interactive_button_S",
-              "text": "~ Set",
-              "enabled": "setPage.dirty",
-              "disabledStyle": "non_interactive_button_S_disabled"
+              "style": "bottom_button_background"
             },
             {
               "type": "Text",
-              "action": "discard",
-              "x": 101,
+              "action": "show_previous_page",
+              "x": 224,
               "y": 204,
-              "width": 96,
+              "width": 48,
               "height": 36,
-              "style": "non_interactive_button_S",
-              "text": " Discard"
-            },
-            {
-              "type": "Rectangle",
-              "x": 197,
-              "y": 204,
-              "width": 75,
-              "height": 36,
-              "style": "bottom_button_background"
+              "style": "bottom_button",
+              "text": "B"
             },
             {
               "type": "Text",
@@ -17891,6 +18718,14 @@
               "height": 36,
               "style": "bottom_button",
               "text": "X"
+            },
+            {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
             }
           ]
         }
@@ -21874,11 +22709,26 @@
         "color": "#ffff00"
       },
       {
+        "name": "default_disabled_S",
+        "description": "",
+        "inheritFrom": "default",
+        "font": "small",
+        "color": "#c0c0c0"
+      },
+      {
         "name": "default_disabled_S_left",
         "description": "",
         "inheritFrom": "default",
         "font": "small",
         "alignHorizontal": "left",
+        "color": "#c0c0c0"
+      },
+      {
+        "name": "default_disabled_S_right",
+        "description": "",
+        "inheritFrom": "default",
+        "font": "small",
+        "alignHorizontal": "right",
         "color": "#c0c0c0"
       },
       {
@@ -22521,12 +23371,26 @@
         "backgroundColor": "#000000"
       },
       {
+        "name": "yt_graph_U_defualt_label",
+        "description": "",
+        "inheritFrom": "default",
+        "font": "small",
+        "color": "#ffb000"
+      },
+      {
         "name": "yt_graph_I_default",
         "description": "",
         "inheritFrom": "default",
         "font": "small",
         "color": "#c830c8",
         "backgroundColor": "#000000"
+      },
+      {
+        "name": "yt_graph_I_default_label",
+        "description": "",
+        "inheritFrom": "default",
+        "font": "small",
+        "color": "#c830c8"
       },
       {
         "name": "yt_graph",
@@ -66182,11 +67046,183 @@
           },
           {
             "encoding": 84,
+            "x": 0,
+            "y": 0,
+            "width": 33,
+            "height": 33,
+            "dx": 33,
             "source": {
               "filePath": "fonts/bdf/webhostinghub-glyphs.24.bdf",
-              "encoding": 84
+              "encoding": 62350
             },
-            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAjCAYAAABVcWC0AAAAD0lEQVQIW2NkAALGIUMAAAz9ACRF5/SBAAAAAElFTkSuQmCC"
+            "pixels": [
+              96,
+              0,
+              1,
+              132,
+              0,
+              240,
+              0,
+              7,
+              135,
+              0,
+              248,
+              0,
+              7,
+              135,
+              128,
+              254,
+              3,
+              135,
+              135,
+              128,
+              255,
+              15,
+              134,
+              123,
+              128,
+              255,
+              15,
+              136,
+              120,
+              128,
+              255,
+              15,
+              248,
+              120,
+              0,
+              243,
+              14,
+              248,
+              120,
+              0,
+              240,
+              240,
+              248,
+              132,
+              0,
+              240,
+              240,
+              247,
+              135,
+              0,
+              240,
+              240,
+              135,
+              135,
+              128,
+              252,
+              241,
+              135,
+              135,
+              128,
+              255,
+              15,
+              135,
+              255,
+              128,
+              255,
+              15,
+              136,
+              120,
+              128,
+              255,
+              15,
+              184,
+              120,
+              0,
+              243,
+              14,
+              248,
+              120,
+              0,
+              240,
+              240,
+              248,
+              120,
+              0,
+              240,
+              240,
+              255,
+              134,
+              0,
+              240,
+              240,
+              199,
+              135,
+              128,
+              252,
+              240,
+              135,
+              135,
+              128,
+              255,
+              63,
+              135,
+              135,
+              128,
+              255,
+              15,
+              128,
+              1,
+              128,
+              255,
+              15,
+              128,
+              0,
+              0,
+              247,
+              15,
+              0,
+              0,
+              0,
+              240,
+              8,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              96,
+              0,
+              0,
+              0,
+              0
+            ],
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAjCAYAAAAaLGNkAAABIUlEQVRYR+1W7Q6EMAhz7//QXmbGshG+KlzO5PSXUQe1lEI7HnC1B2A4CMQ5wFSD0uL25zNXv6EPiZQKIF7M9X2TQHQwWSAIiCsZP7DKxAKz/Q3TVikIiRUJNAfLtSCBms88Ju6A2EQ3GLKYOatA8E7XmBHFb3WH1V5rMKQ8MAg6AIlM8ButPJBPoCAi3uP6BFTP0eJ3zkwdWcLkli7VM6Ibt8OqusNjwpyT3wDxM5/gP+Mxs73/G5/oejDbHO1pV+mKAs0BVwliTQQZXNYniGpIiLw8SIsiy08ZE9rOGZma0SX+ioUwoU3V9E6qCTOzP0ZZMAeYt2lLtgwn5tu0J6JUgsjhiE9E4qS+eUFY27InzBT10uG3HNyStYW1nHop4AetmWwYV11NGwAAAABJRU5ErkJggg=="
           },
           {
             "encoding": 85,
@@ -66370,19 +67406,323 @@
           },
           {
             "encoding": 86,
+            "x": 0,
+            "y": 4,
+            "width": 33,
+            "height": 25,
+            "dx": 33,
             "source": {
               "filePath": "fonts/bdf/webhostinghub-glyphs.24.bdf",
-              "encoding": 86
+              "encoding": 62595
             },
-            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAjCAYAAABVcWC0AAAAD0lEQVQIW2NkAALGIUMAAAz9ACRF5/SBAAAAAElFTkSuQmCC"
+            "pixels": [
+              31,
+              248,
+              0,
+              0,
+              0,
+              63,
+              252,
+              0,
+              0,
+              0,
+              127,
+              254,
+              0,
+              0,
+              0,
+              255,
+              254,
+              0,
+              0,
+              0,
+              255,
+              255,
+              255,
+              255,
+              0,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              240,
+              0,
+              0,
+              255,
+              255,
+              192,
+              0,
+              0,
+              255,
+              255,
+              199,
+              254,
+              0,
+              255,
+              255,
+              143,
+              255,
+              0,
+              128,
+              0,
+              31,
+              255,
+              0,
+              0,
+              0,
+              31,
+              255,
+              128,
+              0,
+              0,
+              31,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              127,
+              255,
+              255,
+              255,
+              0,
+              63,
+              255,
+              255,
+              254,
+              0
+            ],
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAjCAYAAAAaLGNkAAAArElEQVRYR+2WQQ6AIAwE5f+P1kBSgkQNLGPooZypDrvbQjocrOSA4QgIcyGUeFPiHAwqqmD7sVEA3EqDmAVAQTKECpBBEFtWIQYj9LkteYAocq7Y8XTEaYtIiOmft+mmlFDavdRQSigAVQiDkKXsQqGoWrqDXAoEM2yaU8gQUiEpHxXMJaaA+GNYyZaEHWFHHx43mchgO6fm7QLbAVLfE3J/U4X0VS5xBYTJdgHnmRwXL0fTwwAAAABJRU5ErkJggg=="
           },
           {
             "encoding": 87,
+            "x": 0,
+            "y": 0,
+            "width": 33,
+            "height": 33,
+            "dx": 33,
             "source": {
               "filePath": "fonts/bdf/webhostinghub-glyphs.24.bdf",
-              "encoding": 87
+              "encoding": 61640
             },
-            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAjCAYAAABVcWC0AAAAD0lEQVQIW2NkAALGIUMAAAz9ACRF5/SBAAAAAElFTkSuQmCC"
+            "pixels": [
+              127,
+              255,
+              255,
+              248,
+              0,
+              255,
+              255,
+              255,
+              252,
+              0,
+              240,
+              0,
+              0,
+              126,
+              0,
+              240,
+              0,
+              0,
+              127,
+              0,
+              240,
+              0,
+              248,
+              127,
+              128,
+              240,
+              0,
+              248,
+              127,
+              128,
+              240,
+              0,
+              248,
+              127,
+              128,
+              240,
+              0,
+              248,
+              127,
+              128,
+              240,
+              0,
+              248,
+              127,
+              128,
+              240,
+              0,
+              248,
+              127,
+              128,
+              240,
+              0,
+              0,
+              127,
+              128,
+              240,
+              0,
+              0,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              255,
+              255,
+              255,
+              255,
+              128,
+              252,
+              0,
+              0,
+              31,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              243,
+              255,
+              255,
+              231,
+              128,
+              241,
+              255,
+              255,
+              199,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              243,
+              255,
+              255,
+              231,
+              128,
+              243,
+              255,
+              255,
+              231,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              240,
+              0,
+              0,
+              7,
+              128,
+              243,
+              255,
+              255,
+              231,
+              128,
+              115,
+              255,
+              255,
+              231,
+              0
+            ],
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAjCAYAAAAaLGNkAAAAvklEQVRYR+2Y3Q6AIAiF9f0fuqabThkBMlTa6K7lz8c5gFVODq7sgCE1iOcwzBR8uTkN0OLtIBjEDou+Aq173YaoDBYQWJRQTdLygBgzFEq1mphhR1PThRKSZru9OjgItiPfbNsdPiCoPsF5bP6csmO1aUng0CS1ODskm8MxE4x7CLa+FRKgr5OcEpYgY479yw6F2uIpoQR6/FOJaZmU8FtDbIcLCHGWKQaKlVCsLZ4SEL6ro9CNHu38Z4GtnV9vq0gIrqWBygAAAABJRU5ErkJggg=="
           },
           {
             "encoding": 88,
@@ -67741,6 +69081,10 @@
       {
         "name": "list_step",
         "code": "// Stepwave generation example\n//\n// Resolution 10 ms (9 points)\n// Max. frequency: 11.11 Hz (90 ms)\n// Amplitude: 0.02 to 40 V\n// Step: 5 V\n//\nscpi> *RST\nscpi> OUTP ON\nscpi> ABORt\nscpi> LIST:COUNt INF\nscpi> VOLTage:MODE LIST\nscpi> CURRent:MODE LIST\nscpi> LIST:VOLTage:LEVel 0.02, 5, 10, 15, 20, 25, 30, 35, 40\nscpi> LIST:DWELl 0.01\nscpi> LIST:CURRent:LEVel 1\nscpi> TRIGger:SEQuence:IMMediate"
+      },
+      {
+        "name": "list_sinewave (48 points) 2 channels",
+        "code": "// Sinewave generation example\n//\n// Resolution 1 ms (48 points)\n// Max. frequency: 20.83 Hz (48 ms)\n// Amplitude: +/-10 V\n// DC offset: 20 V\n//\nscpi> ABORt\nscpi> INST ch1\nscpi> OUTP 1\nscpi> LIST:COUNt INF\nscpi> VOLTage:MODE LIST\nscpi> CURRent:MODE LIST\nscpi> LIST:VOLTage:LEVel 20.00, 21.31, 22.59, 23.83, 25.00, 26.09, 27.07, 27.93, 28.66, 29.24, 29.66, 29.91, 30.00, 29.91, 29.66, 29.24, 28.66, 27.93, 27.07, 26.09, 25.00, 23.83, 22.59, 21.31, 20.00, 18.69, 17.41, 16.17, 15.00, 13.91, 12.93, 12.07, 11.34, 10.76, 10.34, 10.09, 10.00, 10.09, 10.34, 10.76, 11.34, 12.07, 12.93, 13.91, 15.00, 16.17, 17.41, 18.69\nscpi> LIST:CURRent:LEVel 1\nscpi> LIST:DWELl 0.001\nscpi> INST ch2\nscpi> OUTP 1\nscpi> LIST:COUNt INF\nscpi> VOLTage:MODE LIST\nscpi> CURRent:MODE LIST\nscpi> LIST:VOLTage:LEVel 20.00, 21.31, 22.59, 23.83, 25.00, 26.09, 27.07, 27.93, 28.66, 29.24, 29.66, 29.91, 30.00, 29.91, 29.66, 29.24, 28.66, 27.93, 27.07, 26.09, 25.00, 23.83, 22.59, 21.31, 20.00, 18.69, 17.41, 16.17, 15.00, 13.91, 12.93, 12.07, 11.34, 10.76, 10.34, 10.09, 10.00, 10.09, 10.34, 10.76, 11.34, 12.07, 12.93, 13.91, 15.00, 16.17, 17.41, 18.69\nscpi> LIST:CURRent:LEVel 1\nscpi> LIST:DWELl 0.001\nscpi> TRIGger:SEQuence:IMMediate"
       }
     ],
     "playground": {}

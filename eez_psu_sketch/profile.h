@@ -39,8 +39,9 @@ struct ChannelFlags {
     unsigned parameters_are_valid : 1;
     unsigned displayValue1 : 2;
     unsigned displayValue2 : 2;
-    unsigned reserverd15 : 1;
-    unsigned reserverd16 : 1;
+    unsigned u_triggerMode : 2;
+    unsigned i_triggerMode : 2;
+    unsigned reserved: 14;
 };
 
 /// Channel parameters stored in profile.
@@ -59,6 +60,8 @@ struct ChannelParameters {
     float p_delay;
     float p_level;
     float ytViewRate;
+    float u_triggerValue;
+    float i_triggerValue;
 #ifdef EEZ_PSU_SIMULATOR
     bool load_enabled;
     float load;

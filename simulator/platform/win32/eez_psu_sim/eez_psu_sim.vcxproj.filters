@@ -388,6 +388,9 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\list.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_ch_settings_trigger.h">
+      <Filter>gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -708,6 +711,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_display.cpp">
       <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_page_ch_settings_trigger.cpp">
+      <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

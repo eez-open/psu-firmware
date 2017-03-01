@@ -29,7 +29,7 @@ namespace trigger {
 static struct {
     float u;
     float i;
-} g_levels[CH_NUM];
+} g_levels[CH_MAX];
 
 static float g_delay;
 static Source g_source;

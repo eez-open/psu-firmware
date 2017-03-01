@@ -22,6 +22,7 @@
 #include "datetime.h"
 #include "event_queue.h"
 #include "channel_dispatcher.h"
+#include "trigger.h"
 
 namespace eez {
 namespace psu {
@@ -104,6 +105,11 @@ void recallChannelsFromProfile(Parameters *profile) {
             if (channel.ytViewRate == 0) {
                 channel.ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
             }
+        
+            channel.flags.voltageTriggerMode = (TriggerMode)profile->channels[i].flags.u_triggerMode;
+            channel.flags.currentTriggerMode = (TriggerMode)profile->channels[i].flags.i_triggerMode;
+            trigger::setVoltage(channel, profile->channels[i].u_triggerValue);
+            trigger::setCurrent(channel, profile->channels[i].i_triggerValue);
 		}
 
 		channel.update();
@@ -262,6 +268,11 @@ bool saveAtLocation(int location, char *name) {
 				profile.channels[i].load = channel.simulator.load;
 				profile.channels[i].voltProgExt = channel.simulator.voltProgExt;
 #endif
+
+                profile.channels[i].flags.u_triggerMode = channel.flags.voltageTriggerMode;
+                profile.channels[i].flags.i_triggerMode = channel.flags.currentTriggerMode;
+                profile.channels[i].u_triggerValue = trigger::getVoltage(channel);
+                profile.channels[i].i_triggerValue = trigger::getCurrent(channel);
 			} else {
 				profile.channels[i].flags.parameters_are_valid = 0;
 			}

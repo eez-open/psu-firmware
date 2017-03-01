@@ -28,7 +28,8 @@ namespace data {
 ////////////////////////////////////////////////////////////////////////////////
 
 enum EnumDefinition {
-    ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE
+    ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE,
+    ENUM_DEFINITION_CHANNEL_TRIGGER_MODE
 };
 
 struct EnumItem {
@@ -37,6 +38,7 @@ struct EnumItem {
 };
 
 extern data::EnumItem g_channelDisplayValueEnumDefinition[];
+extern data::EnumItem g_channelTriggerModeEnumDefinition[];
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -163,13 +165,16 @@ private:
 
 struct Cursor {
     int i;
+    int j;
 
     Cursor() {
         i = -1;
+        j = -1;
     }
 
-    Cursor(int i) {
+    Cursor(int i, int j = -1) {
         this->i = i;
+        this->j = j;
     }
 
     operator bool() {
@@ -181,11 +186,12 @@ struct Cursor {
     }
 
     bool operator == (const Cursor& rhs) const {
-        return i == rhs.i;
+        return i == rhs.i && j == rhs.j;
     }
 
 	void reset() {
 		i = -1;
+        j = -1;
 	}
 };
 

@@ -58,8 +58,16 @@ data::EnumItem g_channelDisplayValueEnumDefinition[] = {
     {0, 0}
 };
 
+data::EnumItem g_channelTriggerModeEnumDefinition[] = {
+    {TRIGGER_MODE_FIXED, PSTR("Fixed")},
+    {TRIGGER_MODE_LIST, PSTR("List")},
+    {TRIGGER_MODE_STEP, PSTR("Step")},
+    {0, 0}
+};
+
 static const data::EnumItem *enumDefinitions[] = {
-    g_channelDisplayValueEnumDefinition
+    g_channelDisplayValueEnumDefinition,
+    g_channelTriggerModeEnumDefinition
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -434,6 +442,8 @@ int count(uint8_t id) {
         return 4;
     } else if (id == DATA_ID_PROFILES_LIST2) {
         return 6;
+    } else if (id == DATA_ID_CHANNEL_LISTS) {
+        return 4;
     }
     return 0;
 }
@@ -449,6 +459,8 @@ void select(Cursor &cursor, uint8_t id, int index) {
         cursor.i = 4 + index;
     } else if (id == DATA_ID_CHANNEL_COUPLING_MODE) {
         cursor.i = 0;
+    } else if (id == DATA_ID_CHANNEL_LISTS) {
+        cursor.j = index;
     }
 }
 

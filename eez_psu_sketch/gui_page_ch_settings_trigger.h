@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2015-present, Envox d.o.o.
+ * Copyright (C) 2017-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,27 +15,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+ 
 #pragma once
 
-#include "ethernet.h"
+#include "gui_page.h"
 
 namespace eez {
 namespace psu {
-/// GUI for local control using TFT with touch
 namespace gui {
 
-void init();
-void tick(uint32_t tick_usec);
-void touchHandling(uint32_t tick_usec);
+class ChSettingsTriggerPage : public Page {
+public:
+	ChSettingsTriggerPage();
 
-void refreshPage();
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
-void showWelcomePage();
-void showStandbyPage();
-void showEnteringStandbyPage();
-void showEthernetInit();
+    void editVoltageTriggerMode();
+    void editVoltageTriggerValue();
 
+    void editCurrentTriggerMode();
+    void editCurrentTriggerValue();
+
+private:
+    static void onVoltageTriggerModeSet(uint8_t value);
+    static void onVoltageTriggerValueSet(float value);
+
+    static void onCurrentTriggerModeSet(uint8_t value);
+    static void onCurrentTriggerValueSet(float value);
+};
+
+class ChSettingsListsPage : public Page {
+public:
+	ChSettingsListsPage();
+
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
+
+private:
+};
 
 }
 }

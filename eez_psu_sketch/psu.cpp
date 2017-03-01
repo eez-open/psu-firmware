@@ -41,6 +41,7 @@
 #include "profile.h"
 #if OPTION_DISPLAY
 #include "gui.h"
+#include "touch.h"
 #endif
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 #if OPTION_WATCHDOG
@@ -927,10 +928,20 @@ void tick() {
     profile::tick(tick_usec);
 
 #if OPTION_DISPLAY
-    if (g_mainLoopCounter % 2 == 1) {
-        // tick gui every other time
-        gui::tick(tick_usec);
+#ifdef EEZ_PSU_SIMULATOR
+    if (simulator::front_panel::isOpened()) {
+#endif
+        gui::touch::tick(tick_usec);
+        gui::touchHandling(tick_usec);
+
+        if (g_mainLoopCounter % 2 == 1) {
+            // tick gui every other time
+            tick_usec = micros();
+            gui::tick(tick_usec);
+        }
+#ifdef EEZ_PSU_SIMULATOR
     }
+#endif
 #endif
 
 	event_queue::tick(tick_usec);
@@ -964,6 +975,17 @@ void criticalTick() {
 
         lastTick = tick_usec;
     }
+
+#if OPTION_DISPLAY
+#ifdef EEZ_PSU_SIMULATOR
+    if (simulator::front_panel::isOpened()) {
+#endif
+        gui::touch::tick(tick_usec);
+        gui::touchHandling(tick_usec);
+#ifdef EEZ_PSU_SIMULATOR
+    }
+#endif
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////

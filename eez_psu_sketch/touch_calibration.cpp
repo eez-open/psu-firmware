@@ -148,7 +148,11 @@ void enterCalibrationMode(int yesNoPageId, int nextPageId) {
 
 void leaveCalibrationMode() {
 	mode = MODE_CALIBRATED;
-    setPage(g_nextPageId);
+    if (g_nextPageId == -1) {
+        popPage();
+    } else {
+        setPage(g_nextPageId);
+    }
 
 	Channel::restoreOE();
 }

@@ -63,7 +63,7 @@ static uint32_t g_previousTickCount10sec;
 void dumpVariables(char *buffer) {
     buffer[0] = 0;
 
-    for (int i = 0; i < sizeof(g_variables) / sizeof(DebugVariable *); ++i) {
+    for (unsigned i = 0; i < sizeof(g_variables) / sizeof(DebugVariable *); ++i) {
         strcat(buffer, g_variables[i]->name());
         strcat(buffer, " = ");
         g_variables[i]->dump(buffer);
@@ -110,7 +110,7 @@ void tick(uint32_t tickCount) {
 
     if (g_previousTickCount1sec != 0) {
         if (tickCount - g_previousTickCount1sec >= 1000000L) {
-            for (int i = 0; i < sizeof(g_variables) / sizeof(DebugVariable *); ++i) {
+            for (unsigned i = 0; i < sizeof(g_variables) / sizeof(DebugVariable *); ++i) {
                 g_variables[i]->tick1secPeriod();
             }
             g_previousTickCount1sec = tickCount;
@@ -121,7 +121,7 @@ void tick(uint32_t tickCount) {
 
     if (g_previousTickCount10sec != 0) {
         if (tickCount - g_previousTickCount10sec >= 10 * 1000000L) {
-            for (int i = 0; i < sizeof(g_variables) / sizeof(DebugVariable *); ++i) {
+            for (unsigned i = 0; i < sizeof(g_variables) / sizeof(DebugVariable *); ++i) {
                 g_variables[i]->tick10secPeriod();
             }
             g_previousTickCount10sec = tickCount;

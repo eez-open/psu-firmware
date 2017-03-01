@@ -22,6 +22,7 @@
 
 #include "profile.h"
 #include "channel_dispatcher.h"
+#include "trigger.h"
 
 #include "gui_page_ch_settings_adv.h"
 #include "gui_numeric_keypad.h"
@@ -267,6 +268,139 @@ void ChSettingsAdvViewPage::set() {
 		profile::save();
 		infoMessageP(PSTR("View settings changed!"), actions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+ChSettingsAdvTriggerPage::ChSettingsAdvTriggerPage() {
+}
+
+data::Value ChSettingsAdvTriggerPage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = Page::getData(cursor, id);
+	if (value.getType() != data::VALUE_TYPE_NONE) {
+		return value;
+	}
+
+	if (id == DATA_ID_CHANNEL_U_TRIGGER_MODE) {
+		return data::Value(channel_dispatcher::getVoltageTriggerMode(*g_channel), data::ENUM_DEFINITION_CHANNEL_TRIGGER_MODE);
+	}
+
+	if (id == DATA_ID_CHANNEL_U_TRIGGER_VALUE) {
+		return data::Value(trigger::getVoltage(*g_channel), data::VALUE_TYPE_FLOAT_VOLT);
+	}
+
+	if (id == DATA_ID_CHANNEL_I_TRIGGER_MODE) {
+		return data::Value(channel_dispatcher::getCurrentTriggerMode(*g_channel), data::ENUM_DEFINITION_CHANNEL_TRIGGER_MODE);
+	}
+
+	if (id == DATA_ID_CHANNEL_I_TRIGGER_VALUE) {
+		return data::Value(trigger::getCurrent(*g_channel), data::VALUE_TYPE_FLOAT_AMPER);
+	}
+
+	if (id == DATA_ID_CHANNEL_LIST_COUNT) {
+		return data::Value(1);
+	}
+
+    return data::Value();
+}
+
+void ChSettingsAdvTriggerPage::onVoltageTriggerModeSet(uint8_t value) {
+	popPage();
+    channel_dispatcher::setVoltageTriggerMode(*g_channel, (TriggerMode)value);
+    profile::save();
+}
+
+void ChSettingsAdvTriggerPage::editVoltageTriggerMode() {
+    pushSelectFromEnumPage(data::g_channelTriggerModeEnumDefinition, channel_dispatcher::getVoltageTriggerMode(*g_channel), -1, onVoltageTriggerModeSet);
+}
+
+void ChSettingsAdvTriggerPage::onVoltageTriggerValueSet(float value) {
+	popPage();
+    trigger::setVoltage(*g_channel, value);
+    profile::save();
+}
+
+void ChSettingsAdvTriggerPage::editVoltageTriggerValue() {
+	NumericKeypadOptions options;
+
+	options.editUnit = data::VALUE_TYPE_FLOAT_VOLT;
+
+	options.min = channel_dispatcher::getUMin(*g_channel);
+	options.max = channel_dispatcher::getUMax(*g_channel);
+	options.def = channel_dispatcher::getUMax(*g_channel);
+
+	options.flags.genericNumberKeypad = true;
+	options.flags.maxButtonEnabled = true;
+	options.flags.defButtonEnabled = true;
+	options.flags.signButtonEnabled = true;
+	options.flags.dotButtonEnabled = true;
+
+	NumericKeypad::start(0, data::Value(trigger::getVoltage(*g_channel), data::VALUE_TYPE_FLOAT_VOLT), options, onVoltageTriggerValueSet);
+}
+
+void ChSettingsAdvTriggerPage::onCurrentTriggerModeSet(uint8_t value) {
+	popPage();
+	ChSettingsAdvTriggerPage *page = (ChSettingsAdvTriggerPage *)getActivePage();
+    channel_dispatcher::setCurrentTriggerMode(*g_channel, (TriggerMode)value);
+    profile::save();
+}
+
+void ChSettingsAdvTriggerPage::editCurrentTriggerMode() {
+    pushSelectFromEnumPage(data::g_channelTriggerModeEnumDefinition, channel_dispatcher::getCurrentTriggerMode(*g_channel), -1, onCurrentTriggerModeSet);
+}
+
+void ChSettingsAdvTriggerPage::onCurrentTriggerValueSet(float value) {
+	popPage();
+    trigger::setCurrent(*g_channel, value);
+    profile::save();
+}
+
+void ChSettingsAdvTriggerPage::editCurrentTriggerValue() {
+	NumericKeypadOptions options;
+
+	options.editUnit = data::VALUE_TYPE_FLOAT_AMPER;
+
+	options.min = channel_dispatcher::getIMin(*g_channel);
+	options.max = channel_dispatcher::getIMax(*g_channel);
+	options.def = channel_dispatcher::getIMax(*g_channel);
+
+	options.flags.genericNumberKeypad = true;
+	options.flags.maxButtonEnabled = true;
+	options.flags.defButtonEnabled = true;
+	options.flags.signButtonEnabled = true;
+	options.flags.dotButtonEnabled = true;
+
+	NumericKeypad::start(0, data::Value(trigger::getCurrent(*g_channel), data::VALUE_TYPE_FLOAT_AMPER), options, onCurrentTriggerValueSet);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+ChSettingsAdvListsPage::ChSettingsAdvListsPage() {
+}
+
+data::Value ChSettingsAdvListsPage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = Page::getData(cursor, id);
+	if (value.getType() != data::VALUE_TYPE_NONE) {
+		return value;
+	}
+
+	if (id == DATA_ID_CHANNEL_LIST_INDEX) {
+		return data::Value(trigger::getVoltage(*g_channel), data::VALUE_TYPE_FLOAT_VOLT);
+	}
+
+    if (id == DATA_ID_CHANNEL_LIST_DWELL) {
+		return data::Value(0.01f, data::VALUE_TYPE_FLOAT);
+	}
+
+	if (id == DATA_ID_CHANNEL_LIST_VOLTAGE) {
+		return data::Value(0.1f * cursor.j, data::VALUE_TYPE_FLOAT_VOLT);
+	}
+
+	if (id == DATA_ID_CHANNEL_LIST_CURRENT) {
+		return data::Value(0.01f * cursor.j, data::VALUE_TYPE_FLOAT_VOLT);
+	}
+
+	return data::Value();
 }
 
 }

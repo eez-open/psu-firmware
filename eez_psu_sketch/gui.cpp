@@ -42,6 +42,7 @@
 #include "gui_page_main.h"
 #include "gui_page_event_queue.h"
 #include "gui_page_ch_settings_protection.h"
+#include "gui_page_ch_settings_trigger.h"
 #include "gui_page_ch_settings_adv.h"
 #include "gui_page_ch_settings_info.h"
 #include "gui_page_sys_settings.h"
@@ -58,7 +59,7 @@
 #define CONF_GUI_STANDBY_PAGE_TIMEOUT 10000000UL // 10s
 #define CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT 5000000UL // 5s
 #define CONF_GUI_WELCOME_PAGE_TIMEOUT 2000000UL // 2s
-#define CONF_GUI_LONG_PRESS_TIMEOUT 1000000UL // 1s
+#define CONF_GUI_LONG_TAP_TIMEOUT 1000000UL // 1s
 
 #define CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY 200000UL // 200ms
 
@@ -66,6 +67,8 @@
 
 #define INTERNAL_PAGE_ID_NONE             -1
 #define INTERNAL_PAGE_ID_SELECT_FROM_ENUM -2
+
+#define MAX_EVENTS 16
 
 namespace eez {
 namespace psu {
@@ -88,7 +91,7 @@ static Page *g_activePage;
 
 static int g_previousActivePageId;
 
-static struct {
+static struct Event {
     int activePageId;
     Page *activePage;
 } g_pageNavigationStack[CONF_GUI_PAGE_NAVIGATION_STACK_SIZE];
@@ -105,7 +108,6 @@ static int g_errorMessageActionParam;
 
 static uint32_t g_showPageTime;
 static uint32_t g_timeOfLastActivity;
-static uint32_t g_touchDownTime;
 static bool g_touchActionExecuted;
 
 Channel *g_channel;
@@ -115,6 +117,29 @@ static uint8_t g_wasFocusDataId;
 data::Cursor g_focusCursor;
 uint8_t g_focusDataId;
 data::Value g_focusEditValue;
+
+////////////////////////////////////////
+
+static uint32_t g_touchDownTime;
+static uint32_t g_lastAutoRepeatEventTime;
+static bool g_longTapGenerated;
+
+enum EventType {
+    EVENT_TYPE_TOUCH_DOWN,
+    EVENT_TYPE_TOUCH_MOVE,
+    EVENT_TYPE_LONG_TAP,
+    EVENT_TYPE_AUTO_REPEAT,
+    EVENT_TYPE_TOUCH_UP
+};
+
+static int g_numEvents;
+static struct {
+    EventType type;
+    int x;
+    int y;
+} g_events[MAX_EVENTS];
+
+////////////////////////////////////////////////////////////////////////////////
 
 Page *createPageFromId(int pageId) {
     switch (pageId) {
@@ -134,6 +159,8 @@ Page *createPageFromId(int pageId) {
     case PAGE_ID_CH_SETTINGS_ADV_COUPLING:
     case PAGE_ID_CH_SETTINGS_ADV_COUPLING_INFO: return new ChSettingsAdvCouplingPage();
     case PAGE_ID_CH_SETTINGS_ADV_VIEW: return new ChSettingsAdvViewPage();
+    case PAGE_ID_CH_SETTINGS_TRIGGER: return new ChSettingsTriggerPage();
+    case PAGE_ID_CH_SETTINGS_LISTS: return new ChSettingsListsPage();
     case PAGE_ID_CH_SETTINGS_INFO: return new ChSettingsInfoPage();
     case PAGE_ID_SYS_SETTINGS_DATE_TIME: return new SysSettingsDateTimePage();
     case PAGE_ID_SYS_SETTINGS_ETHERNET: return new SysSettingsEthernetPage();
@@ -278,8 +305,10 @@ void showStandbyPage() {
 }
 
 void showEnteringStandbyPage() {
-    setPage(PAGE_ID_ENTERING_STANDBY);
-    flush();
+    if (g_activePageId != PAGE_ID_ENTERING_STANDBY) {
+        setPage(PAGE_ID_ENTERING_STANDBY);
+        flush();
+    }
 }
 
 void showEthernetInit() {
@@ -648,38 +677,6 @@ void executeAction(int actionId) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void standbyTouchHandling(uint32_t tick_usec) {
-    // touch handling in power off:
-    // wait for long press anywhere on the screen and then turn power on
-    if (touch::event_type == touch::TOUCH_DOWN) {
-        g_touchDownTime = tick_usec;
-        g_touchActionExecuted = false;
-    } else if (touch::event_type == touch::TOUCH_MOVE) {
-        if (tick_usec - g_touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
-            if (!g_touchActionExecuted) {
-                g_touchActionExecuted = true;
-                psu::changePowerState(true);
-            }
-        }
-    }
-}
-
-void displayOffTouchHandling(uint32_t tick_usec) {
-    if (touch::event_type == touch::TOUCH_DOWN) {
-        g_touchDownTime = tick_usec;
-        g_touchActionExecuted = false;
-    } else if (touch::event_type == touch::TOUCH_MOVE) {
-        if (tick_usec - g_touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
-            if (!g_touchActionExecuted) {
-                g_touchActionExecuted = true;
-                persist_conf::setDisplayState(1);
-            }
-        }
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 #if OPTION_ENCODER
 
 static bool g_isEncoderEnabledInActivePage;
@@ -837,23 +834,211 @@ int getStartPageId() {
     return PAGE_ID_MAIN;
 }
 
-void tick(uint32_t tick_usec) {
-#ifdef EEZ_PSU_SIMULATOR
-    if (!simulator::front_panel::isOpened()) {
+////////////////////////////////////////////////////////////////////////////////
+
+void pushEvent(EventType type) {
+    // allow only one EVENT_TYPE_AUTO_REPEAT in the stack
+    if (type == EVENT_TYPE_AUTO_REPEAT) {
+        for (int i = 0; i < g_numEvents; ++i) {
+            if (g_events[i].type == EVENT_TYPE_AUTO_REPEAT) {
+                return;
+            }
+        }
+    }
+
+    // ignore EVENT_TYPE_TOUCH_MOVE if it is the same as the last event
+    if (type == EVENT_TYPE_TOUCH_MOVE) {
+        if (g_numEvents > 0 && g_events[g_numEvents-1].type == EVENT_TYPE_TOUCH_MOVE &&
+            g_events[g_numEvents-1].x == touch::x || g_events[g_numEvents-1].y == touch::y) {
+            return;
+        }
+    }
+
+    // if events stack is full then remove oldest EVENT_TYPE_TOUCH_MOVE
+    if (g_numEvents == MAX_EVENTS) {
+        for (int i = 0; i < g_numEvents; ++i) {
+            if (g_events[i].type == EVENT_TYPE_TOUCH_MOVE) {
+                for (int j = i + 1; j < g_numEvents; ++j) {
+                    g_events[j - 1] = g_events[j];
+                }
+                --g_numEvents;
+                break;
+            }
+        }
+    }
+
+    if (g_numEvents < MAX_EVENTS) {
+        // push new event on the stack
+        g_events[g_numEvents].type = type;
+        g_events[g_numEvents].x = touch::x;
+        g_events[g_numEvents].y = touch::y;
+        ++g_numEvents;
+    }
+}
+
+void touchHandling(uint32_t tick_usec) {
+    if (touch::calibration::isCalibrating()) {
+        touch::calibration::tick(tick_usec);
         return;
     }
-#endif
 
-    touch::tick(tick_usec);
+    if (g_activePageId == PAGE_ID_ENTERING_STANDBY) {
+        return;
+    }
 
-    if (g_activePageId == INTERNAL_PAGE_ID_NONE) {
-        standbyTouchHandling(tick_usec);
+    if (touch::event_type != touch::TOUCH_NONE) {
+        g_timeOfLastActivity = millis();
+
+        if (touch::event_type == touch::TOUCH_DOWN) {
+            g_touchDownTime = tick_usec;
+            g_lastAutoRepeatEventTime = tick_usec;
+            g_longTapGenerated = false;
+            pushEvent(EVENT_TYPE_TOUCH_DOWN);
+        } else if (touch::event_type == touch::TOUCH_MOVE) {
+            pushEvent(EVENT_TYPE_TOUCH_MOVE);
+
+            if (!g_longTapGenerated && tick_usec - g_touchDownTime >= CONF_GUI_LONG_TAP_TIMEOUT) {
+                g_longTapGenerated = true;
+                pushEvent(EVENT_TYPE_LONG_TAP);
+            }
+            
+            if (tick_usec - g_lastAutoRepeatEventTime >= CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY) {
+                pushEvent(EVENT_TYPE_AUTO_REPEAT);
+                g_lastAutoRepeatEventTime = tick_usec;
+            }
+        } else if (touch::event_type == touch::TOUCH_UP) {
+            pushEvent(EVENT_TYPE_TOUCH_UP);
+        }
+    }
+}
+
+void processEvents() {
+    for (int i = 0; i < g_numEvents; ++i) {
+        if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
+            if (g_events[i].type == EVENT_TYPE_TOUCH_UP) {
+                touch::calibration::enterCalibrationMode(PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, getStartPageId());
+            }
+        } else {
+            if (g_events[i].type == EVENT_TYPE_TOUCH_DOWN) {
+                g_touchActionExecuted = false;
+                WidgetCursor foundWidget = findWidget(g_events[i].x, g_events[i].y);
+                g_foundWidgetAtDown = 0;
+                if (foundWidget) {
+                    if (isActivePageInternal()) {
+                        g_foundWidgetAtDown = foundWidget;
+                    } else {
+                        DECL_WIDGET(widget, foundWidget.widgetOffset);
+                        if (isWidgetActionEnabled(widget)) {
+                            g_foundWidgetAtDown = foundWidget;
+                        }
+                    }
+
+                    if (g_foundWidgetAtDown) {
+                        selectWidget(g_foundWidgetAtDown);
+                    } else {
+                        if (!isActivePageInternal()) {
+                            DECL_WIDGET(widget, foundWidget.widgetOffset);
+                            if (foundWidget && widget->type == WIDGET_TYPE_BUTTON_GROUP) {
+                                widgetButtonGroup::onTouchDown(foundWidget);
+                            } else if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+                                edit_mode_slider::onTouchDown();
+                            } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
+                                edit_mode_step::onTouchDown();
+                            }
+                        }
+                    }
+                }
+            } else if (g_events[i].type == EVENT_TYPE_TOUCH_MOVE) {
+                if (!g_foundWidgetAtDown) {
+                    if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+                        edit_mode_slider::onTouchMove();
+                    } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
+                        edit_mode_step::onTouchMove();
+                    } else if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_YES_NO || g_activePageId == PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL) {
+        #ifdef CONF_DEBUG
+                        int x = g_events[i].x;
+                        if (x < 1) x = 1;
+                        else if (x > lcd::lcd.getDisplayXSize() - 2) x = lcd::lcd.getDisplayXSize() - 2;
+
+                        int y = g_events[i].y;
+                        if (y < 1) y = 1;
+                        else if (y > lcd::lcd.getDisplayYSize() - 2) y = lcd::lcd.getDisplayYSize() - 2;
+
+                        lcd::lcd.setColor(VGA_WHITE);
+                        lcd::lcd.fillRect(g_events[i].x - 1, g_events[i].y - 1, g_events[i].x + 1, g_events[i].y + 1);
+        #endif
+                    }
+                }
+            } else if (g_events[i].type == EVENT_TYPE_LONG_TAP) {
+                if (!g_touchActionExecuted) {
+                    if (g_activePageId == INTERNAL_PAGE_ID_NONE) {
+                        g_touchActionExecuted = true;
+                        psu::changePowerState(true);
+                    } else if (g_activePageId == PAGE_ID_DISPLAY_OFF) {
+                        g_touchActionExecuted = true;
+                        persist_conf::setDisplayState(1);
+                    } else {
+                        if (g_foundWidgetAtDown) {
+                            ActionType action = getAction(g_foundWidgetAtDown);
+                            if (action == ACTION_ID_TURN_OFF) {
+                                deselectWidget();
+                                g_foundWidgetAtDown = 0;
+                                g_touchActionExecuted = true;
+                                showEnteringStandbyPage();
+                                sound::playClick();
+                                psu::changePowerState(false);
+                            } else if (action == ACTION_ID_SYS_FRONT_PANEL_LOCK || action == ACTION_ID_SYS_FRONT_PANEL_UNLOCK) {
+                                deselectWidget();
+                                g_foundWidgetAtDown = 0;
+                                g_touchActionExecuted = true;
+                                sound::playClick();
+                                if (isFrontPanelLocked()) {
+                                    unlockFrontPanel();
+                                } else {
+                                    lockFrontPanel();
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (g_events[i].type == EVENT_TYPE_AUTO_REPEAT) {
+                if (g_foundWidgetAtDown) {
+                    ActionType action = getAction(g_foundWidgetAtDown);
+                    if (action == ACTION_ID_KEYPAD_BACK || action == ACTION_ID_UP_DOWN) {
+                        g_touchActionExecuted = true;
+                        executeAction(action);
+                    }
+                }
+            } else if (g_events[i].type == EVENT_TYPE_TOUCH_UP) {
+                if (g_foundWidgetAtDown) {
+                    deselectWidget();
+                    ActionType action = getAction(g_foundWidgetAtDown);
+                    if (!isLongPressAction(action)) {
+                        executeAction(action);
+                    }
+                    g_foundWidgetAtDown = 0;
+                } else {
+                    if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+                        edit_mode_slider::onTouchUp();
+                    } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
+                        edit_mode_step::onTouchUp();
+                    }
+                }
+            }
+        }
+    }
+
+    g_numEvents = 0;
+}
+
+void tick(uint32_t tick_usec) {
+    if (g_activePageId == INTERNAL_PAGE_ID_NONE || g_activePageId == PAGE_ID_DISPLAY_OFF) {
+        processEvents();
         return;
     }
 
     // wait some time for transitional pages
     if (g_activePageId == PAGE_ID_STANDBY && tick_usec - g_showPageTime < CONF_GUI_STANDBY_PAGE_TIMEOUT) {
-        standbyTouchHandling(tick_usec);
         return;
     } else if (g_activePageId == PAGE_ID_ENTERING_STANDBY && tick_usec - g_showPageTime < CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT) {
         if (!psu::isPowerUp()) {
@@ -868,15 +1053,9 @@ void tick(uint32_t tick_usec) {
 
     // turn the screen off if power is down
     if (!psu::isPowerUp()) {
-        standbyTouchHandling(tick_usec);
         g_activePageId = INTERNAL_PAGE_ID_NONE;
         g_activePage = 0;
         turnOff();
-        return;
-    }
-
-    if (touch::calibration::isCalibrating()) {
-        touch::calibration::tick(tick_usec);
         return;
     }
 
@@ -900,11 +1079,6 @@ void tick(uint32_t tick_usec) {
         return;
     }
 
-    if (g_activePageId == PAGE_ID_DISPLAY_OFF) {
-        displayOffTouchHandling(tick_usec);
-        return;
-    }
-
 #if OPTION_ENCODER
     int counter;
     bool clicked;
@@ -912,124 +1086,7 @@ void tick(uint32_t tick_usec) {
     onEncoder(counter, clicked);
 #endif
 
-    // touch handling
-    if (touch::event_type != touch::TOUCH_NONE) {
-        g_timeOfLastActivity = millis();
-
-        if (touch::event_type == touch::TOUCH_DOWN) {
-            if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
-                return;
-            }
-
-            g_touchDownTime = tick_usec;
-            g_touchActionExecuted = false;
-            WidgetCursor foundWidget = findWidget(touch::x, touch::y);
-            g_foundWidgetAtDown = 0;
-            if (foundWidget) {
-                if (isActivePageInternal()) {
-                    g_foundWidgetAtDown = foundWidget;
-                } else {
-                    DECL_WIDGET(widget, foundWidget.widgetOffset);
-                    if (isWidgetActionEnabled(widget)) {
-                        g_foundWidgetAtDown = foundWidget;
-                    }
-                }
-
-                if (g_foundWidgetAtDown) {
-                    selectWidget(g_foundWidgetAtDown);
-                } else {
-                    if (!isActivePageInternal()) {
-                        DECL_WIDGET(widget, foundWidget.widgetOffset);
-                        if (foundWidget && widget->type == WIDGET_TYPE_BUTTON_GROUP) {
-                            widgetButtonGroup::onTouchDown(foundWidget);
-                        } else if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
-                            edit_mode_slider::onTouchDown();
-                        } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
-                            edit_mode_step::onTouchDown();
-                        }
-                    }
-                }
-            }
-        } else if (touch::event_type == touch::TOUCH_MOVE) {
-            if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
-                return;
-            }
-
-            if (g_foundWidgetAtDown) {
-                ActionType action = getAction(g_foundWidgetAtDown);
-                if (action == ACTION_ID_TURN_OFF) {
-                    if (tick_usec - g_touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
-                        if (!g_touchActionExecuted) {
-                            deselectWidget();
-                            g_foundWidgetAtDown = 0;
-                            g_touchActionExecuted = true;
-                            sound::playClick();
-                            psu::changePowerState(false);
-                        }
-                    }
-                } else if (action == ACTION_ID_SYS_FRONT_PANEL_LOCK || action == ACTION_ID_SYS_FRONT_PANEL_UNLOCK) {
-                    if (tick_usec - g_touchDownTime >= CONF_GUI_LONG_PRESS_TIMEOUT) {
-                        if (!g_touchActionExecuted) {
-                            deselectWidget();
-                            g_foundWidgetAtDown = 0;
-                            g_touchActionExecuted = true;
-                            sound::playClick();
-                            if (isFrontPanelLocked()) {
-                                unlockFrontPanel();
-                            } else {
-                                lockFrontPanel();
-                            }
-                        }
-                    }
-                } else if (action == ACTION_ID_KEYPAD_BACK || action == ACTION_ID_UP_DOWN) {
-                    if (tick_usec - g_touchDownTime >= CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY) {
-                        g_touchDownTime = tick_usec;
-                        g_touchActionExecuted = true;
-                        executeAction(action);
-                    }
-                }
-            } else {
-                if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
-                    edit_mode_slider::onTouchMove();
-                } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
-                    edit_mode_step::onTouchMove();
-                } else if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_YES_NO || g_activePageId == PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL) {
-    #ifdef CONF_DEBUG
-                    int x = touch::x;
-                    if (x < 1) x = 1;
-                    else if (x > lcd::lcd.getDisplayXSize() - 2) x = lcd::lcd.getDisplayXSize() - 2;
-
-                    int y = touch::y;
-                    if (y < 1) y = 1;
-                    else if (y > lcd::lcd.getDisplayYSize() - 2) y = lcd::lcd.getDisplayYSize() - 2;
-
-                    lcd::lcd.setColor(VGA_WHITE);
-                    lcd::lcd.fillRect(touch::x-1, touch::y-1, touch::x+1, touch::y+1);
-    #endif
-                }
-            }
-        } else if (touch::event_type == touch::TOUCH_UP) {
-            if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
-                touch::calibration::enterCalibrationMode(PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, getStartPageId());
-                return;
-            }
-
-            if (g_foundWidgetAtDown) {
-                deselectWidget();
-                ActionType action = getAction(g_foundWidgetAtDown);
-                if (!isLongPressAction(action)) {
-                    executeAction(action);
-                }
-                g_foundWidgetAtDown = 0;
-            } else {
-                if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
-                    edit_mode_slider::onTouchUp();
-                } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
-                    edit_mode_step::onTouchUp();
-                }
-            }
-        }
-    }
+    processEvents();
 
     //
     uint32_t inactivityPeriod = millis() - g_timeOfLastActivity;

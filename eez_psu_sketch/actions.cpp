@@ -128,7 +128,7 @@ void action_keypad_def() {
 }
 
 void action_touch_screen_calibration() {
-    touch::calibration::enterCalibrationMode(PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, PAGE_ID_SYS_SETTINGS2);
+    touch::calibration::enterCalibrationMode();
 }
 
 void action_yes() {
@@ -565,6 +565,34 @@ void action_sys_settings_display_edit_brightness() {
     ((SysSettingsDisplayPage *)getActivePage())->editBrightness();
 }
 
+void action_show_ch_settings_trigger() {
+    setPage(PAGE_ID_CH_SETTINGS_TRIGGER);
+}
+
+void action_ch_settings_adv_trigger_edit_voltage_trigger_mode() {
+    ((ChSettingsAdvTriggerPage *)getActivePage())->editVoltageTriggerMode();
+}
+
+void action_ch_settings_adv_trigger_edit_voltage_trigger_value() {
+    ((ChSettingsAdvTriggerPage *)getActivePage())->editVoltageTriggerValue();
+}
+
+void action_ch_settings_adv_trigger_edit_current_trigger_mode() {
+    ((ChSettingsAdvTriggerPage *)getActivePage())->editCurrentTriggerMode();
+}
+
+void action_ch_settings_adv_trigger_edit_current_trigger_value() {
+    ((ChSettingsAdvTriggerPage *)getActivePage())->editCurrentTriggerValue();
+}
+
+void action_show_ch_settings_lists() {
+    pushPage(PAGE_ID_CH_SETTINGS_LISTS);
+}
+
+void action_show_sys_settings_trigger() {
+    pushPage(PAGE_ID_SYS_SETTINGS_TRIGGER);
+}
+
 
 ACTION actions[] = {
     0,
@@ -695,7 +723,14 @@ ACTION actions[] = {
     action_up_down,
     action_sys_settings_encoder_toggle_confirmation_mode,
     action_sys_settings_display_turn_off,
-    action_sys_settings_display_edit_brightness
+    action_sys_settings_display_edit_brightness,
+    action_show_ch_settings_trigger,
+    action_ch_settings_adv_trigger_edit_voltage_trigger_mode,
+    action_ch_settings_adv_trigger_edit_voltage_trigger_value,
+    action_ch_settings_adv_trigger_edit_current_trigger_mode,
+    action_ch_settings_adv_trigger_edit_current_trigger_value,
+    action_show_ch_settings_lists,
+    action_show_sys_settings_trigger
 };
 
 }
