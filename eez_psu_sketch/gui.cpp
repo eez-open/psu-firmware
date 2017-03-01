@@ -1032,7 +1032,7 @@ void processEvents() {
 }
 
 void tick(uint32_t tick_usec) {
-    if (g_activePageId == INTERNAL_PAGE_ID_NONE || g_activePageId == PAGE_ID_DISPLAY_OFF) {
+    if (g_activePageId == INTERNAL_PAGE_ID_NONE) {
         processEvents();
         return;
     }
@@ -1079,14 +1079,18 @@ void tick(uint32_t tick_usec) {
         return;
     }
 
+    processEvents();
+
+    if (g_activePageId == PAGE_ID_DISPLAY_OFF) {
+        return;
+    }
+
 #if OPTION_ENCODER
     int counter;
     bool clicked;
     encoder::read(counter, clicked);
     onEncoder(counter, clicked);
 #endif
-
-    processEvents();
 
     //
     uint32_t inactivityPeriod = millis() - g_timeOfLastActivity;

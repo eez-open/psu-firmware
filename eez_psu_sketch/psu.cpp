@@ -962,29 +962,38 @@ void criticalTick() {
         return;
     }
 
-    static uint32_t lastTick = 0;
     uint32_t tick_usec = micros();
+
+    static uint32_t lastTick = 0;
 
     if (lastTick == 0) {
         lastTick = tick_usec;
-    } else if (tick_usec - lastTick >= (uint32_t)(list::isActive() ? 250 : 1000)) {
+    } else if (tick_usec - lastTick >= (uint32_t)(list::isActive() ? 250 : ADC_READ_TIME_US / 2)) {
+        lastTick = tick_usec;
+
         for (int i = 0; i < CH_NUM; ++i) {
             Channel::get(i).tick(tick_usec);
         }
         list::tick(tick_usec);
-
-        lastTick = tick_usec;
     }
 
 #if OPTION_DISPLAY
+    static uint32_t lastTickTouch = 0;
+
 #ifdef EEZ_PSU_SIMULATOR
     if (simulator::front_panel::isOpened()) {
 #endif
-        gui::touch::tick(tick_usec);
-        gui::touchHandling(tick_usec);
+        if (lastTickTouch == 0) {
+            lastTickTouch = tick_usec;
+        } else if (tick_usec - lastTickTouch >= 5000) {
+            lastTickTouch = tick_usec;
+            gui::touch::tick(tick_usec);
+            gui::touchHandling(tick_usec);
+        }
 #ifdef EEZ_PSU_SIMULATOR
     }
 #endif
+
 #endif
 }
 

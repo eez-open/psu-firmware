@@ -33,6 +33,12 @@ public:
     void drawStr(const char *text, int textLength, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background);
     int measureStr(const char *text, int textLength, font::Font &font, int max_width = 0);
 
+    //void fillRect();
+    //void drawRect();
+    //void drawBitmap();
+    //void drawHLine();
+    //void drawVLine();
+
 private:
     font::Font font;
 

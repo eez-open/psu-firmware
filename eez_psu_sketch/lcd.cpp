@@ -126,6 +126,149 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
     if (width > 0 && height > 0) {
 	    clear_bit(P_CS, B_CS);
 
+#if DISPLAY_TYPE == ITDB32S_V2 && !defined(EEZ_PSU_SIMULATOR)
+#if DISPLAY_ORIENTATION != DISPLAY_ORIENTATION_LANDSCAPE
+#error "Only LANDSCAPE display orientation is supported on ITDB32S_V2"
+#endif
+        // optimized drawing for ITDB32S_V2
+
+#define PIXEL_ON { \
+    sbi(P_RS, B_RS); \
+    REG_PIOA_CODR=0x0000C080; \
+    REG_PIOC_CODR=0x0000003E; \
+    REG_PIOD_CODR=0x0000064F; \
+    REG_PIOA_SODR=REG_PIOA_SODR_FG; \
+    FG_TEST ? REG_PIOB_SODR = 0x4000000 : REG_PIOB_CODR = 0x4000000; \
+    REG_PIOC_SODR=REG_PIOC_SODR_FG; \
+    REG_PIOD_SODR=REG_PIOD_SODR_FG; \
+    pulse_low(P_WR, B_WR); \
+}
+
+#define PIXEL_OFF { \
+    sbi(P_RS, B_RS); \
+    REG_PIOA_CODR=0x0000C080; \
+    REG_PIOC_CODR=0x0000003E; \
+    REG_PIOD_CODR=0x0000064F; \
+    REG_PIOA_SODR=REG_PIOA_SODR_BG; \
+    BG_TEST ? REG_PIOB_SODR = 0x4000000 : REG_PIOB_CODR = 0x4000000; \
+    REG_PIOC_SODR=REG_PIOC_SODR_BG; \
+    REG_PIOD_SODR=REG_PIOD_SODR_BG; \
+    pulse_low(P_WR, B_WR); \
+}
+
+#define SET_PIXEL(C) \
+    if (C) { \
+        if (LAST_PIXEL == 1) { \
+            pulse_low(P_WR, B_WR); \
+        } else { \
+            PIXEL_ON; \
+            LAST_PIXEL = 1; \
+        } \
+    } else { \
+        if (LAST_PIXEL == 0) { \
+            pulse_low(P_WR, B_WR); \
+        } else { \
+            PIXEL_OFF; \
+            LAST_PIXEL = 0; \
+        } \
+    }
+
+        uint32_t REG_PIOA_SODR_FG =((fch & 0x06)<<13) | ((fcl & 0x40)<<1);
+        uint32_t REG_PIOC_SODR_FG =((fcl & 0x01)<<5) | ((fcl & 0x02)<<3) | ((fcl & 0x04)<<1) | ((fcl & 0x08)>>1) | ((fcl & 0x10)>>3);
+        uint32_t REG_PIOD_SODR_FG =((fch & 0x78)>>3) | ((fch & 0x80)>>1) | ((fcl & 0x20)<<5) | ((fcl & 0x80)<<2);
+        int FG_TEST = fch & 0x01;
+
+        uint32_t REG_PIOA_SODR_BG =((bch & 0x06)<<13) | ((bcl & 0x40)<<1);
+        uint32_t REG_PIOC_SODR_BG =((bcl & 0x01)<<5) | ((bcl & 0x02)<<3) | ((bcl & 0x04)<<1) | ((bcl & 0x08)>>1) | ((bcl & 0x10)>>3);
+        uint32_t REG_PIOD_SODR_BG =((bch & 0x78)>>3) | ((bch & 0x80)>>1) | ((bcl & 0x20)<<5) | ((bcl & 0x80)<<2);
+        int BG_TEST = bch & 0x01;
+
+        int numPixels = 0;
+
+        int iEndByte = iStartByte + (width + 7) / 8;
+        int x1_glyph = x_glyph;
+        int x2_glyph = x_glyph + width - 1;
+
+        if (paintEnabled) {
+            while (height--) {
+                setXY(x1_glyph, y_glyph, x2_glyph, y_glyph);
+                ++y_glyph;
+
+                const uint8_t *p_data = glyph.data + offset + iEndByte;
+                for (int iByte = iEndByte; iByte >= iStartByte; --iByte, numPixels += 8) {
+                    if (numPixels % 40 == 0) {
+                        psu::criticalTick();
+                    }
+
+                    uint8_t data = *p_data--;
+
+                    int LAST_PIXEL = -1;
+
+                    int iPixel = (iByte << 3) + 7;
+                    if (iPixel - 7 >= iStartCol && iPixel < width) {
+                        SET_PIXEL(data & (0x80 >> 7));
+                        SET_PIXEL(data & (0x80 >> 6));
+                        SET_PIXEL(data & (0x80 >> 5));
+                        SET_PIXEL(data & (0x80 >> 4));
+                        SET_PIXEL(data & (0x80 >> 3));
+                        SET_PIXEL(data & (0x80 >> 2));
+                        SET_PIXEL(data & (0x80 >> 1));
+                        SET_PIXEL(data & (0x80 >> 0));
+                    } else {
+                                    if (iPixel >= iStartCol && iPixel < width) SET_PIXEL(data & (0x80 >> 7));
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) SET_PIXEL(data & (0x80 >> 6));
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) SET_PIXEL(data & (0x80 >> 5));
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) SET_PIXEL(data & (0x80 >> 4));
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) SET_PIXEL(data & (0x80 >> 3));
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) SET_PIXEL(data & (0x80 >> 2));
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) SET_PIXEL(data & (0x80 >> 1));
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) SET_PIXEL(data & (0x80 >> 0));
+                    }
+                }
+
+                offset += widthInBytes;
+            }
+        } else {
+            while (height--) {
+                setXY(x1_glyph, y_glyph, x2_glyph, y_glyph);
+                ++y_glyph;
+
+                const uint8_t *p_data = glyph.data + offset + iEndByte;
+                for (int iByte = iEndByte; iByte >= iStartByte; --iByte, numPixels += 8) {
+                    if (numPixels % 120 == 0) {
+                        psu::criticalTick();
+                    }
+
+                    uint8_t data = *p_data--;
+
+                    int LAST_PIXEL = -1;
+
+                    int iPixel = (iByte << 3) + 7;
+                    if (iPixel - 7 >= iStartCol && iPixel < width) {
+                        PIXEL_OFF;
+                        PIXEL_OFF;
+                        PIXEL_OFF;
+                        PIXEL_OFF;
+                        PIXEL_OFF;
+                        PIXEL_OFF;
+                        PIXEL_OFF;
+                        PIXEL_OFF;
+                    } else {
+                                    if (iPixel >= iStartCol && iPixel < width) PIXEL_OFF;
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) PIXEL_OFF;
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) PIXEL_OFF;
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) PIXEL_OFF;
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) PIXEL_OFF;
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) PIXEL_OFF;
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) PIXEL_OFF;
+                        --iPixel; if (iPixel >= iStartCol && iPixel < width) PIXEL_OFF;
+                    }
+                }
+
+                offset += widthInBytes;
+            }
+        }
+#else
         word fc = (fch << 8) | fcl;
         word bc = (bch << 8) | bcl;
 
@@ -249,7 +392,7 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
 			    offset += widthInBytes;
 		    }
 	    }
-
+#endif
 	    set_bit(P_CS, B_CS);
 	    clrXY();
     }

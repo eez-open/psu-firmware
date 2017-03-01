@@ -223,14 +223,14 @@ void AnalogDigitalConverter::start(uint8_t reg0) {
         SPI.transfer(start_reg0);
 #endif
 
-        start_time = micros();
-
         // Start conversion (single shot)
         SPI.transfer(ADC_START);
 
         digitalWrite(channel.adc_pin, HIGH);
         digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
         SPI_endTransaction();
+
+        start_time = micros();
     }
 }
 
