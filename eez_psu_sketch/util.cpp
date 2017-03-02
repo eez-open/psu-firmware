@@ -46,9 +46,9 @@ void strcatUInt32(char *str, uint32_t value) {
     sprintf(str, "%lu", (unsigned long)value);
 }
 
-void strcatFloat(char *str, float value, int precision) {
+void strcatFloat(char *str, float value, int numSignificantDecimalDigits) {
     // mitigate "-0.00" case
-    float min = (float) (1.0f / pow(10, precision));
+    float min = (float) (1.0f / pow(10, numSignificantDecimalDigits));
     if (fabs(value) < min) {
         value = 0;
     }
@@ -56,7 +56,7 @@ void strcatFloat(char *str, float value, int precision) {
     str = str + strlen(str);
 
 #if defined(_VARIANT_ARDUINO_DUE_X_) || defined(EEZ_PSU_SIMULATOR)
-    sprintf(str, "%.*f", precision, value);
+    sprintf(str, "%.*f", numSignificantDecimalDigits, value);
 #else
     dtostrf(value, 0, precision, str);
 #endif
@@ -70,13 +70,13 @@ void strcatFloat(char *str, float value, int precision) {
     */
 }
 
-void strcatVoltage(char *str, float value, int precision) {
-    strcatFloat(str, value, precision);
+void strcatVoltage(char *str, float value, int numSignificantDecimalDigits) {
+    strcatFloat(str, value, numSignificantDecimalDigits);
     strcat(str, "V");
 }
 
-void strcatCurrent(char *str, float value, int precision) {
-    strcatFloat(str, value, precision);
+void strcatCurrent(char *str, float value, int numSignificantDecimalDigits) {
+    strcatFloat(str, value, numSignificantDecimalDigits);
     strcat(str, "A");
 }
 
@@ -153,8 +153,16 @@ float roundPrec(float a, float prec) {
     return roundf(a * prec) / prec;
 }
 
+bool greater(float a, float b, float prec) {
+	return a > b && !equal(a, b, prec);
+}
+
 bool greaterOrEqual(float a, float b, float prec) {
 	return a > b || equal(a, b, prec);
+}
+
+bool less(float a, float b, float prec) {
+	return a < b && !equal(a, b, prec);
 }
 
 bool lessOrEqual(float a, float b, float prec) {
@@ -185,6 +193,19 @@ bool isUperCaseLetter(char ch) {
     return ch >= 'A' && ch <= 'Z';
 }
 
+void removeTrailingZerosFromFloat(char *str) {
+    int n = strlen(str);
+    for (int i = strlen(str) - 1; i >= 0; --i) {
+        if (str[i] == '0') {
+            str[i] = 0;
+        } else {
+            if (str[i] == '.') {
+                str[i] = 0;
+            }
+            break;
+        }
+    }
+}
 
 }
 }

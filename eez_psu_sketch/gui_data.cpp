@@ -104,7 +104,7 @@ Value Value::LessThenMinMessage(float float_, ValueType type) {
 		value.type_ = VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE;
 	} else {
 		value.float_ = float_;
-		value.type_ = VALUE_TYPE_LESS_THEN_MIN_FLOAT;
+		value.type_ = VALUE_TYPE_LESS_THEN_MIN_FLOAT + type - VALUE_TYPE_FLOAT;
 	}
 	return value;
 }
@@ -118,7 +118,7 @@ Value Value::GreaterThenMaxMessage(float float_, ValueType type) {
 		value.type_ = VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE;
 	} else {
 		value.float_ = float_;
-		value.type_ = VALUE_TYPE_GREATER_THEN_MAX_FLOAT;
+		value.type_ = VALUE_TYPE_GREATER_THEN_MAX_FLOAT + type - VALUE_TYPE_FLOAT;
 	}
 	return value;
 }
@@ -159,11 +159,6 @@ void Value::toText(char *text, int count) const {
         text[count - 1] = 0;
         break;
 
-    case VALUE_TYPE_LESS_THEN_MIN_FLOAT:
-        snprintf_P(text, count-1, PSTR("Value is less then %.2f"), float_);
-        text[count - 1] = 0;
-        break;
-
     case VALUE_TYPE_LESS_THEN_MIN_INT:
         snprintf_P(text, count-1, PSTR("Value is less then %d"), int_);
         text[count - 1] = 0;
@@ -171,11 +166,6 @@ void Value::toText(char *text, int count) const {
 
     case VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE:
         strncpy_P(text, PSTR("Value is less then -12:00"), count-1);
-        text[count - 1] = 0;
-        break;
-
-    case VALUE_TYPE_GREATER_THEN_MAX_FLOAT:
-        snprintf_P(text, count-1, PSTR("Value is greater then %.2f"), float_);
         text[count - 1] = 0;
         break;
 
@@ -288,45 +278,49 @@ void Value::toText(char *text, int count) const {
     }
 
     default:
-        {
-            int precision = FLOAT_TO_STR_PREC;
-
-            if (type_ == VALUE_TYPE_FLOAT_RPM) {
-                precision = 0;
-            }
-
-            if (type_ == VALUE_TYPE_FLOAT_SECOND) {
-                precision = 3;
-            }
+        if (type_ > VALUE_TYPE_GREATER_THEN_MAX_FLOAT) {
+            char valueText[64];
+            Value(float_, ValueType(type_ - VALUE_TYPE_GREATER_THEN_MAX_FLOAT + VALUE_TYPE_FLOAT)).toText(valueText, sizeof(text));
+            snprintf_P(text, count-1, PSTR("Value is less then %s"), valueText);
+            text[count - 1] = 0;
+        } else if (type_ > VALUE_TYPE_LESS_THEN_MIN_FLOAT) {
+            char valueText[64];
+            Value(float_, ValueType(type_ - VALUE_TYPE_LESS_THEN_MIN_FLOAT + VALUE_TYPE_FLOAT)).toText(valueText, sizeof(text));
+            snprintf_P(text, count-1, PSTR("Value is less then %s"), valueText);
+            text[count - 1] = 0;
+        } else {
+            int numSignificantDecimalDigits = getNumSignificantDecimalDigits((ValueType)type_);
 
             const char *unit = 0;
 
             int temp = 0;
-            if (precision == 2) {
-                temp = ((int)round(float_ * 100)) * 10;
-            } else if (precision >= 3) {
-                temp = ((int)round(float_ * 1000));
+            if (numSignificantDecimalDigits == 2) {
+                temp = ((int)round(float_ * 100)) * 100;
+            } else if (numSignificantDecimalDigits == 3) {
+                temp = ((int)round(float_ * 1000)) * 10;
+            } else if (numSignificantDecimalDigits >= 4) {
+                temp = ((int)round(float_ * 10000));
             }
-            if (temp != 0 && temp > -1000 && temp < 1000) {
+            if (temp != 0 && temp > -10000 && temp < 10000) {
                 if (type_ == VALUE_TYPE_FLOAT_VOLT) {
                     unit = "mV";
+                    util::strcatInt(text, temp / 10);
                 } else if (type_ == VALUE_TYPE_FLOAT_AMPER) {
                     unit = "mA";
+                    util::strcatInt(text, temp / 10);
                 } else if (type_ == VALUE_TYPE_FLOAT_SECOND) {
                     unit = "ms";
-                }
-
-                if (unit) {
-                    util::strcatInt(text, temp);
+                    util::strcatFloat(text, temp / 10.0f, 1);
+                    util::removeTrailingZerosFromFloat(text);
                 }
             }
 
             if (!unit) {
                 if (util::greaterOrEqual(float_, 99.99f, 2)) {
-                    precision = 1;
+                    numSignificantDecimalDigits = 1;
                 }
 
-                util::strcatFloat(text, float_, precision);
+                util::strcatFloat(text, float_, numSignificantDecimalDigits);
 
                 switch (type_) {
                 case VALUE_TYPE_FLOAT_VOLT:
@@ -339,6 +333,7 @@ void Value::toText(char *text, int count) const {
                     unit = "W";
                     break;
                 case VALUE_TYPE_FLOAT_SECOND:
+                    util::removeTrailingZerosFromFloat(text);
                     unit = "s";
                     break;
                 case VALUE_TYPE_FLOAT_CELSIUS:
@@ -408,7 +403,7 @@ bool Value::operator ==(const Value &other) const {
     }
     
     if (type_ == VALUE_TYPE_FLOAT_SECOND) {
-    	return util::equal(float_, other.float_, powf(10.0f, 3));
+    	return util::equal(float_, other.float_, powf(10.0f, 4));
     }
 
 	return util::equal(float_, other.float_, CHANNEL_VALUE_PRECISION);
@@ -1045,6 +1040,16 @@ Value getEditValue(const Cursor &cursor, uint8_t id) {
     }
         
     return get(cursor, id);
+}
+
+int getNumSignificantDecimalDigits(ValueType valueType) {
+    if (valueType == VALUE_TYPE_FLOAT_RPM) return 0;
+    if (valueType == VALUE_TYPE_FLOAT_SECOND) return 4;
+    return FLOAT_TO_STR_NUM_DECIMAL_DIGITS;
+}
+
+float getPrecision(ValueType valueType) {
+    return powf(10.0f, (float)getNumSignificantDecimalDigits(valueType));
 }
 
 }

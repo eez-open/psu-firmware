@@ -94,7 +94,7 @@
 
 /// Number of digits after decimal point
 /// in float to string conversion.
-#define FLOAT_TO_STR_PREC 2
+#define FLOAT_TO_STR_NUM_DECIMAL_DIGITS 2
 
 /// Temperature reading interval.
 #define TEMP_SENSOR_READ_EVERY_MS 1000

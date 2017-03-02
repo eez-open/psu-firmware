@@ -254,7 +254,7 @@
     SCPI_COMMAND("INITiate", scpi_cmd_initiate) \
     SCPI_COMMAND("INITiate:CONTinuous", scpi_cmd_initiateContinuous) \
     SCPI_COMMAND("INITiate:CONTinuous?", scpi_cmd_initiateContinuousQ) \
-    SCPI_COMMAND("ABORT", scpi_cmd_abort) \
+    SCPI_COMMAND("ABORt", scpi_cmd_abort) \
     SCPI_COMMAND("*TRG", scpi_cmd_coreTrg) \
     SCPI_COMMAND("DISPlay:BRIGhtness", scpi_cmd_displayBrightness) \
     SCPI_COMMAND("DISPlay:BRIGhtness?", scpi_cmd_displayBrightnessQ) \

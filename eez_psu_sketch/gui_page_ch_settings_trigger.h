@@ -94,6 +94,7 @@ private:
     uint16_t getMaxListSize();
     uint16_t getNumPages();
 
+    bool isFocusedValueEmpty();
     float getFocusedValue();
     void setFocusedValue(float value);
     static void onValueSet(float value);

@@ -26,6 +26,8 @@
 #define MIN(a,b) ((a)<(b)?(a):(b))
 #define MAX(a,b) ((a)>(b)?(a):(b))
 
+#include "gui_data.h"
+
 namespace eez {
 namespace psu {
 
@@ -37,9 +39,9 @@ float clamp(float x, float min, float max);
 
 void strcatInt(char *str, int value);
 void strcatUInt32(char *str, uint32_t value);
-void strcatFloat(char *str, float value, int precision = FLOAT_TO_STR_PREC);
-void strcatVoltage(char *str, float value, int precision = FLOAT_TO_STR_PREC);
-void strcatCurrent(char *str, float value, int precision = FLOAT_TO_STR_PREC);
+void strcatFloat(char *str, float value, int numSignificantDecimalDigits = FLOAT_TO_STR_NUM_DECIMAL_DIGITS);
+void strcatVoltage(char *str, float value, int numSignificantDecimalDigits = FLOAT_TO_STR_NUM_DECIMAL_DIGITS);
+void strcatCurrent(char *str, float value, int numSignificantDecimalDigits = FLOAT_TO_STR_NUM_DECIMAL_DIGITS);
 void strcatDuration(char *str, float value);
 void strcatLoad(char *str, float value);
 
@@ -52,7 +54,9 @@ float floorPrec(float a, float prec);
 float ceilPrec(float a, float prec);
 float roundPrec(float a, float prec);
 
+bool greater(float a, float b, float prec);
 bool greaterOrEqual(float a, float b, float prec);
+bool less(float a, float b, float prec);
 bool lessOrEqual(float a, float b, float prec);
 bool equal(float a, float b, float prec);
 
@@ -64,6 +68,8 @@ bool isNaN(float x);
 
 bool isDigit(char ch);
 bool isUperCaseLetter(char ch);
+
+void removeTrailingZerosFromFloat(char *str);
 
 }
 }

@@ -44,9 +44,9 @@ static void print_calibration_value(scpi_t * context, char *buffer, calibration:
         strcat_value = util::strcatCurrent;
     }
 
-    if (value.min_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_min=")); strcat_value(buffer, value.min_val, FLOAT_TO_STR_PREC); SCPI_ResultText(context, buffer); }
-    if (value.mid_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_mid=")); strcat_value(buffer, value.mid_val, FLOAT_TO_STR_PREC); SCPI_ResultText(context, buffer); }
-    if (value.max_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_max=")); strcat_value(buffer, value.max_val, FLOAT_TO_STR_PREC); SCPI_ResultText(context, buffer); }
+    if (value.min_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_min=")); strcat_value(buffer, value.min_val, FLOAT_TO_STR_NUM_DECIMAL_DIGITS); SCPI_ResultText(context, buffer); }
+    if (value.mid_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_mid=")); strcat_value(buffer, value.mid_val, FLOAT_TO_STR_NUM_DECIMAL_DIGITS); SCPI_ResultText(context, buffer); }
+    if (value.max_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_max=")); strcat_value(buffer, value.max_val, FLOAT_TO_STR_NUM_DECIMAL_DIGITS); SCPI_ResultText(context, buffer); }
 
     strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_level="));
     switch (value.level) {
@@ -58,8 +58,8 @@ static void print_calibration_value(scpi_t * context, char *buffer, calibration:
     SCPI_ResultText(context, buffer);
 
     if (value.level != calibration::LEVEL_NONE) {
-        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_level_value=")); strcat_value(buffer, value.getLevelValue(), FLOAT_TO_STR_PREC); SCPI_ResultText(context, buffer);
-        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_adc="        )); strcat_value(buffer, value.getAdcValue()  , FLOAT_TO_STR_PREC); SCPI_ResultText(context, buffer);
+        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_level_value=")); strcat_value(buffer, value.getLevelValue(), FLOAT_TO_STR_NUM_DECIMAL_DIGITS); SCPI_ResultText(context, buffer);
+        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_adc="        )); strcat_value(buffer, value.getAdcValue()  , FLOAT_TO_STR_NUM_DECIMAL_DIGITS); SCPI_ResultText(context, buffer);
     }
 }
 

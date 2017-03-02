@@ -70,8 +70,8 @@ data::Value NumericKeypad::getData(uint8_t id) {
         case data::VALUE_TYPE_FLOAT_MILLI_VOLT:   return data::Value::ProgmemStr(PSTR("V"));  break;
         case data::VALUE_TYPE_FLOAT_AMPER:        return data::Value::ProgmemStr(PSTR("mA")); break;
 	    case data::VALUE_TYPE_FLOAT_MILLI_AMPER:  return data::Value::ProgmemStr(PSTR("A"));  break;
-        case data::VALUE_TYPE_FLOAT_SECOND:       return data::Value::ProgmemStr(PSTR("s"));  break;
-	    case data::VALUE_TYPE_FLOAT_MILLI_SECOND: return data::Value::ProgmemStr(PSTR("ms")); break;
+        case data::VALUE_TYPE_FLOAT_SECOND:       return data::Value::ProgmemStr(PSTR("ms"));  break;
+	    case data::VALUE_TYPE_FLOAT_MILLI_SECOND: return data::Value::ProgmemStr(PSTR("s")); break;
         default:                                  return data::Value::ProgmemStr(PSTR(""));
         }
     }
@@ -153,16 +153,7 @@ void NumericKeypad::getKeypadText(char *text) {
 bool NumericKeypad::getText(char *text, int count) {
 	if (m_options.flags.genericNumberKeypad) {
 		if (m_state == START) {
-            text[0] = 0;
-
-            if (m_startValue.isFloat()) {
-                util::strcatFloat(text, m_startValue.getFloat());
-            } else {
-                util::strcatInt(text, m_startValue.getInt());
-            }
-
-            appendEditUnit(text);
-            
+            m_startValue.toText(text, count);
             return false;
 		}
         
@@ -659,9 +650,9 @@ void NumericKeypad::ok() {
         if (m_state != EMPTY) {
 			float value = getValue();
 
-			if (value < m_options.min) {
+			if (util::less(value, m_options.min, data::getPrecision(m_options.editUnit))) {
 				errorMessage(0, data::Value::LessThenMinMessage(m_options.min, m_options.editUnit));
-			} else if (value > m_options.max) {
+			} else if (util::greater(value, m_options.max, data::getPrecision(m_options.editUnit))) {
 				errorMessage(0, data::Value::GreaterThenMaxMessage(m_options.max, m_options.editUnit));
 			} else {
 				((void (*)(float))m_okCallback)(value);

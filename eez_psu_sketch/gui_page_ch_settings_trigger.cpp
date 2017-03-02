@@ -139,7 +139,8 @@ void ChSettingsTriggerPage::editCurrentTriggerValue() {
 
 ChSettingsListsPage::ChSettingsListsPage()
     : m_iPage(0)
-    , m_iFocused(-1)
+    , m_iFocused(0)
+    , m_focusDataId(DATA_ID_CHANNEL_LIST_DWELL)
     , m_listVersion(0)
 {
     float *voltageList = list::getVoltageList(*g_channel, &m_voltageListSize);
@@ -327,18 +328,33 @@ void ChSettingsListsPage::deleteRow() {
 void ChSettingsListsPage::insertRow() {
 }
 
+bool ChSettingsListsPage::isFocusedValueEmpty() {
+    data::Cursor cursor(m_iFocused);
+    data::Value value = data::get(cursor, m_focusDataId);
+    return value.getType() == data::VALUE_TYPE_STR;
+}
+
 float ChSettingsListsPage::getFocusedValue() {
     data::Cursor cursor(m_iFocused);
-	return data::get(cursor, m_focusDataId).getFloat();
+
+    data::Value value = data::get(cursor, m_focusDataId);
+    
+    if (value.getType() == data::VALUE_TYPE_STR) {
+        value = data::getDef(cursor, m_focusDataId);
+    }
+        
+    return value.getFloat();
 }
 
 void ChSettingsListsPage::setFocusedValue(float value) {
     data::Cursor cursor(m_iFocused);
 
-	float min = data::getMin(cursor, m_focusDataId).getFloat();
-	float max = data::getMax(cursor, m_focusDataId).getFloat();
+	data::Value min = data::getMin(cursor, m_focusDataId);
+	data::Value max = data::getMax(cursor, m_focusDataId);
 
-    if (value >= min && value <= max) {
+    if (util::greaterOrEqual(value, min.getFloat(), data::getPrecision(min.getType())) &&
+        util::lessOrEqual(value, max.getFloat(), data::getPrecision(max.getType())))
+    {
         int i = getFocusedIndex();
     
         if (m_focusDataId == DATA_ID_CHANNEL_LIST_DWELL) {
@@ -378,22 +394,33 @@ void ChSettingsListsPage::edit() {
 
         data::Value value = data::get(cursor, m_focusDataId);
 
-	    options.editUnit = value.getType();
+	    data::Value def = data::getDef(cursor, m_focusDataId);
 
+        if (value.getType() == data::VALUE_TYPE_STR) {
+            value = def;
+        }
+
+        options.editUnit = value.getType();
+
+        options.def = def.getFloat();
 	    options.min = data::getMin(cursor, m_focusDataId).getFloat();
 	    options.max = data::getMax(cursor, m_focusDataId).getFloat();
-	    options.def = data::getDef(cursor, m_focusDataId).getFloat();
 
 	    options.flags.genericNumberKeypad = true;
-	    options.flags.maxButtonEnabled = true;
-	    options.flags.defButtonEnabled = true;
+	    options.flags.maxButtonEnabled = false;
+	    options.flags.defButtonEnabled = false;
 	    options.flags.signButtonEnabled = true;
 	    options.flags.dotButtonEnabled = true;
 
 	    NumericKeypad::start(0, value, options, onValueSet);
+    } else {
+        m_iFocused = g_foundWidgetAtDown.cursor.i;
+        m_focusDataId = widget->data;
+
+        if (isFocusedValueEmpty()) {
+            edit();
+        }
     }
-    m_iFocused = g_foundWidgetAtDown.cursor.i;
-    m_focusDataId = widget->data;
 }
 
 bool ChSettingsListsPage::isFocusWidget(const WidgetCursor &widgetCursor) {
@@ -435,6 +462,8 @@ void ChSettingsListsPage::set() {
     {
         errorMessageP(PSTR("List lengths are not equivalent!"));
     } else {
+        trigger::abort();
+
         list::setDwellList(*g_channel, m_dwellList, m_dwellListSize);
         list::setVoltageList(*g_channel, m_voltageList, m_voltageListSize);
         list::setCurrentList(*g_channel, m_currentList, m_currentListSize);
