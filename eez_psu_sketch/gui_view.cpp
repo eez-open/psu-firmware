@@ -1366,11 +1366,14 @@ void drawListGraphWidget(const WidgetCursor &widgetCursor) {
     bool refresh = refreshAll;
 
     int iPrevCursor = -1;
+    int iPrevRow = -1;
     if (widgetCursor.previousState) {
-        iPrevCursor = ((ListGraphWidgetState *)widgetCursor.previousState)->cursorData.getInt() / 3;
+        iPrevCursor = ((ListGraphWidgetState *)widgetCursor.previousState)->cursorData.getInt();
+        iPrevRow = iPrevCursor / 3;
     }
 
-    int iCursor = ((ListGraphWidgetState *)widgetCursor.currentState)->cursorData.getInt() / 3;
+    int iCursor = ((ListGraphWidgetState *)widgetCursor.currentState)->cursorData.getInt();
+    int iRow = iCursor / 3;
 
     if (!refreshAll) {
         refresh = iPrevCursor != iCursor;
@@ -1378,8 +1381,10 @@ void drawListGraphWidget(const WidgetCursor &widgetCursor) {
 
     if (refresh) {
         // draw background
-        lcd::lcd.setColor(style->background_color);
-        lcd::lcd.fillRect(widgetCursor.x, widgetCursor.y, widgetCursor.x + (int)widget->w - 1, widgetCursor.y + (int)widget->h - 1);
+        if (refreshAll) {
+            lcd::lcd.setColor(style->background_color);
+            lcd::lcd.fillRect(widgetCursor.x, widgetCursor.y, widgetCursor.x + (int)widget->w - 1, widgetCursor.y + (int)widget->h - 1);
+        }
 
         int dwellListSize = data::getListSize(listGraphWidget->dwellData);
         if (dwellListSize > 0) {
@@ -1427,46 +1432,75 @@ void drawListGraphWidget(const WidgetCursor &widgetCursor) {
             for (int i = 0; i < maxListSize; ++i) {
                 currentDwellSum += i < dwellListSize ? dwellList[i] : dwellList[dwellListSize - 1];
                 int x1 = xPrev;
-                int x2 = int(widgetCursor.x + currentDwellSum * ((int)widget->w - 1) / dwellSum);
-                xPrev = x2;
+                int x2;
+                if (i == maxListSize - 1) {
+                    x2 = widgetCursor.x + (int)widget->w - 1;
+                } else {
+                    x2 = widgetCursor.x + int(currentDwellSum * (int)widget->w / dwellSum);
+                }
+                if (x2 < x1) x2 = x1;
+                if (x2 >= widgetCursor.x + (int)widget->w) x2 = widgetCursor.x + (int)widget->w - 1;
+
+                bool skipDraw = false;
 
                 if (!refreshAll) {
-                    if (i < iPrevCursor - 1 && i > iPrevCursor + 1 && i < iCursor - 1 && i > iCursor + 1) {
-                        continue;
+                    if (i < iPrevRow - 1 && i > iPrevRow + 1 && i < iRow - 1 && i > iRow + 1) {
+                        skipDraw = true;
                     }
                 }
 
-                if (i == iCursor) {
-                    lcd::lcd.setColor(cursorStyle->background_color);
-                    lcd::lcd.fillRect(x1, widgetCursor.y, x2 - 1, widgetCursor.y + (int)widget->h - 1);
+                if (!skipDraw) {
+                    if (!refreshAll && i == iPrevRow) {
+                        lcd::lcd.setColor(style->background_color);
+                        lcd::lcd.fillRect(x1, widgetCursor.y, x2 - 1, widgetCursor.y + (int)widget->h - 1);
+                    }
+
+                    if (i == iRow) {
+                        lcd::lcd.setColor(cursorStyle->background_color);
+                        lcd::lcd.fillRect(x1, widgetCursor.y, x2 - 1, widgetCursor.y + (int)widget->h - 1);
+                    }
                 }
 
-                for (int j = 0; j < 2; ++j) {
+                for (int k = 0; k < 2; ++k) {
+                    int j = iCursor % 3 == 2 ? k : 1 - k;
+
                     if (listSize[j] > 0) {
-                        lcd::lcd.setColor(styles[j]->color);
+                        if (!skipDraw) {
+                            lcd::lcd.setColor(styles[j]->color);
+                        }
 
                         float value = i < listSize[j] ? list[j][i] : list[j][listSize[j] - 1];
-                        int y = widgetCursor.y + ((int)widget->h - 1) - (int)((value - min[j]) * ((int)widget->h - 1) / (max[j] - min[j]));
+                        int y = int((value - min[j]) * widget->h / (max[j] - min[j]));
+                        if (y < 0) y = 0;
+                        if (y >= (int)widget->h) y = (int)widget->h - 1;
 
-                        if (i > 0 && abs(yPrev[j] - y) > 1) {
-                            if (yPrev[j] < y) {
-                                lcd::lcd.drawVLine(x1 + j, yPrev[j] + 1, y - yPrev[j] - 1);
-                            } else {
-                                lcd::lcd.drawVLine(x1 + j, y, yPrev[j] - y - 1);
+                        y = widgetCursor.y + ((int)widget->h - 1) - y;
+
+                        if (!skipDraw) {
+                            if (i > 0 && abs(yPrev[j] - y) > 1) {
+                                if (yPrev[j] < y) {
+                                    lcd::lcd.drawVLine(x1, yPrev[j] + 1, y - yPrev[j] - 1);
+                                } else {
+                                    lcd::lcd.drawVLine(x1, y, yPrev[j] - y - 1);
+                                }
                             }
                         }
 
                         yPrev[j] = y;
 
-                        lcd::lcd.drawHLine(i > 0 ? x1 + j : x1, y, x2 - x1);
+                        if (!skipDraw) {
+                            lcd::lcd.drawHLine(x1, y, x2 - x1);
+                        }
                     }
                 }
+
+                xPrev = x2;
             }
         }
     }
 }
 
-void onTouchListGraph(const WidgetCursor &widgetCursor) {
+void onTouchListGraph(const WidgetCursor &widgetCursor, int xTouch, int yTouch) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
     DECL_WIDGET_SPECIFIC(ListGraphWidget, listGraphWidget, widget);
 
@@ -1487,15 +1521,24 @@ void onTouchListGraph(const WidgetCursor &widgetCursor) {
             }
         }
 
+        if (xTouch < widgetCursor.x) xTouch = widgetCursor.x;
+        if (xTouch >= widgetCursor.x + (int)widget->w) xTouch = widgetCursor.x + (int)widget->w - 1;
+
         float currentDwellSum = 0;
         int xPrev = widgetCursor.x;
         for (int i = 0; i < maxListSize; ++i) {
             currentDwellSum += i < dwellListSize ? dwellList[i] : dwellList[dwellListSize - 1];
             int x1 = xPrev;
-            int x2 = int(widgetCursor.x + currentDwellSum * ((int)widget->w - 1) / dwellSum);
-            xPrev = x2;
+            int x2;
+            if (i == maxListSize - 1) {
+                x2 = widgetCursor.x + (int)widget->w - 1;
+            } else {
+                x2 = widgetCursor.x + int(currentDwellSum * (int)widget->w / dwellSum);
+            }
+            if (x2 < x1) x2 = x1;
+            if (x2 >= widgetCursor.x + (int)widget->w) x2 = widgetCursor.x + (int)widget->w - 1;
 
-            if (touch::x >= x1 && touch::x < x2) {
+            if (xTouch >= x1 && xTouch < x2) {
                 iCursor = i * 3;
                 break;
             }
@@ -1829,8 +1872,8 @@ WidgetCursor findWidget(int x, int y) {
     } else {
         g_foundWidget = 0;
 
-        g_find_widget_at_x = touch::x;
-        g_find_widget_at_y = touch::y;
+        g_find_widget_at_x = x;
+        g_find_widget_at_y = y;
         enumWidgets(getActivePageId(), 0, 0, findWidgetStep);
 
         return g_foundWidget;

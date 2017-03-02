@@ -545,7 +545,7 @@ void ChSettingsListsPage::moveCursorToFirstAvailableCell() {
     if (iRow > m_dwellListSize) {
         if (iRow > m_voltageListSize) {
             if (iRow > m_voltageListSize) {
-                m_iCursor  = 0;
+                m_iCursor = 0;
             } else {
                 m_iCursor += 2;
             }

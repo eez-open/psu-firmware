@@ -303,7 +303,7 @@ void drawTick();
 
 int getCurrentStateBufferIndex();
 
-void onTouchListGraph(const WidgetCursor &widgetCursor);
+void onTouchListGraph(const WidgetCursor &widgetCursor, int xTouch, int yTouch);
 
 }
 }

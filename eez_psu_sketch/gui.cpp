@@ -963,7 +963,7 @@ void processEvents() {
                                 edit_mode_step::onTouchDown();
                             } else if (foundWidget && widget->type == WIDGET_TYPE_LIST_GRAPH) {
                                 g_foundTouchWidget = foundWidget;
-                                onTouchListGraph(g_foundTouchWidget);
+                                onTouchListGraph(g_foundTouchWidget, g_events[i].x, g_events[i].y);
                             } 
                         }
                     }
@@ -989,7 +989,7 @@ void processEvents() {
         #endif
                     } else if (g_foundTouchWidget) {
                         DECL_WIDGET(widget, g_foundTouchWidget.widgetOffset);
-                        onTouchListGraph(g_foundTouchWidget);
+                        onTouchListGraph(g_foundTouchWidget, g_events[i].x, g_events[i].y);
                     }
                 }
             } else if (g_events[i].type == EVENT_TYPE_LONG_TAP) {
