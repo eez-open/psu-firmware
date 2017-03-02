@@ -38,12 +38,17 @@ public:
     void editCurrentTriggerMode();
     void editCurrentTriggerValue();
 
+    void editListCount();
+
 private:
     static void onVoltageTriggerModeSet(uint8_t value);
     static void onVoltageTriggerValueSet(float value);
 
     static void onCurrentTriggerModeSet(uint8_t value);
     static void onCurrentTriggerValueSet(float value);
+
+    static void onListCountSet(float value);
+    static void onListCountSetToInfinity();
 };
 
 class ChSettingsListsPage : public SetPage {
@@ -56,6 +61,7 @@ public:
     data::Value getMax(const data::Cursor &cursor, uint8_t id);
     data::Value getDef(const data::Cursor &cursor, uint8_t id);
 	data::Value getData(const data::Cursor &cursor, uint8_t id);
+    bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
 
     void previousPage();
     void nextPage();
@@ -86,13 +92,16 @@ private:
     float m_dwellList[MAX_LIST_SIZE];
     uint16_t m_dwellListSize;
 
-    int m_iPage;
-    int m_iFocused;
-    uint8_t m_focusDataId;
+    int m_iCursor;
 
-    uint16_t getFocusedIndex();
+    int getRowIndex();
+    int getPageIndex();
     uint16_t getMaxListSize();
     uint16_t getNumPages();
+    int getCursorIndexWithinPage();
+    uint8_t getDataIdAtCursor();
+    int getCursorIndex(const data::Cursor &cursor, uint8_t id);
+    void moveCursorToFirstAvailableCell();
 
     bool isFocusedValueEmpty();
     float getFocusedValue();

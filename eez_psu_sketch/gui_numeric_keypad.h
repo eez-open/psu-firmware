@@ -26,6 +26,8 @@ namespace psu {
 namespace gui {
 
 struct NumericKeypadOptions {
+    NumericKeypadOptions();
+
 	data::ValueType editUnit;
 
 	float min;
@@ -34,11 +36,24 @@ struct NumericKeypadOptions {
 
 	struct {
 		unsigned genericNumberKeypad : 1;
-		unsigned maxButtonEnabled : 1;
-		unsigned defButtonEnabled : 1;
+		unsigned option1ButtonEnabled : 1;
+		unsigned option2ButtonEnabled : 1;
 		unsigned signButtonEnabled : 1;
 		unsigned dotButtonEnabled : 1;
 	} flags;
+
+    const char *option1ButtonText PROGMEM;
+    void (*option1)();
+    
+    const char *option2ButtonText PROGMEM;
+    void (*option2)();
+
+    void enableMaxButton();
+    void enableDefButton();
+
+private:
+    static void maxOption();
+    static void defOption();
 };
 
 enum NumericKeypadState {
@@ -73,8 +88,10 @@ public:
     void clear();
     void sign();
     void unit();
+    void option1();
+    void option2();
     void setMaxValue();
-    void setDefaultValue();
+    void setDefValue();
     void ok();
     void cancel();
 

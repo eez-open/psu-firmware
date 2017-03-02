@@ -250,8 +250,7 @@ void ChSettingsAdvViewPage::editYTViewRate() {
 	options.def = GUI_YT_VIEW_RATE_DEFAULT;
 
 	options.flags.genericNumberKeypad = true;
-	options.flags.maxButtonEnabled = false;
-	options.flags.defButtonEnabled = true;
+	options.enableDefButton();
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 

@@ -204,12 +204,19 @@ struct UpDownWidget {
 	OBJ_OFFSET upButtonText;
 };
 
+struct ListGraphWidgetState {
+    WidgetState genericState;
+    data::Value cursorData;
+};
+
 struct ListGraphWidget {
     uint8_t dwellData;
     uint8_t y1Data;
 	uint8_t y1Style;
     uint8_t y2Data;
 	uint8_t y2Style;
+    uint8_t cursorData;
+    uint8_t cursorStyle;
 };
 
 struct CustomWidgetSpecific {
@@ -295,6 +302,8 @@ WidgetCursor findWidget(int x, int y);
 void drawTick();
 
 int getCurrentStateBufferIndex();
+
+void onTouchListGraph(const WidgetCursor &widgetCursor);
 
 }
 }

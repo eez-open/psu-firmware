@@ -51,8 +51,8 @@ void enter(const data::Value& editValue, const data::Value& minValue, data::Valu
 	options.def = 0;
 
 	options.flags.genericNumberKeypad = false;
-	options.flags.maxButtonEnabled = true;
-	options.flags.defButtonEnabled = true;
+	options.enableMaxButton();
+	options.enableDefButton();
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 

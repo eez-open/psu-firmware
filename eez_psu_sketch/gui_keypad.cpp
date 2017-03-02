@@ -196,10 +196,16 @@ void Keypad::sign() {
 void Keypad::unit() {
 }
 
+void Keypad::option1() {
+}
+
+void Keypad::option2() {
+}
+
 void Keypad::setMaxValue() {
 }
 
-void Keypad::setDefaultValue() {
+void Keypad::setDefValue() {
 }
 
 void Keypad::ok() {

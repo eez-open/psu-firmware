@@ -98,6 +98,7 @@ static struct Event {
 static int g_pageNavigationStackPointer = 0;
 
 WidgetCursor g_foundWidgetAtDown;
+static WidgetCursor g_foundTouchWidget;
 
 static void (*g_dialogYesCallback)();
 static void (*g_dialogNoCallback)();
@@ -406,8 +407,8 @@ void changeLimit(const data::Value& value, float minLimit, float maxLimit, float
 	options.def = defLimit;
 
 	options.flags.genericNumberKeypad = true;
-	options.flags.maxButtonEnabled = true;
-	options.flags.defButtonEnabled = true;
+	options.enableMaxButton();
+	options.enableDefButton();
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
@@ -960,7 +961,10 @@ void processEvents() {
                                 edit_mode_slider::onTouchDown();
                             } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
                                 edit_mode_step::onTouchDown();
-                            }
+                            } else if (foundWidget && widget->type == WIDGET_TYPE_LIST_GRAPH) {
+                                g_foundTouchWidget = foundWidget;
+                                onTouchListGraph(g_foundTouchWidget);
+                            } 
                         }
                     }
                 }
@@ -983,6 +987,9 @@ void processEvents() {
                         lcd::lcd.setColor(VGA_WHITE);
                         lcd::lcd.fillRect(g_events[i].x - 1, g_events[i].y - 1, g_events[i].x + 1, g_events[i].y + 1);
         #endif
+                    } else if (g_foundTouchWidget) {
+                        DECL_WIDGET(widget, g_foundTouchWidget.widgetOffset);
+                        onTouchListGraph(g_foundTouchWidget);
                     }
                 }
             } else if (g_events[i].type == EVENT_TYPE_LONG_TAP) {

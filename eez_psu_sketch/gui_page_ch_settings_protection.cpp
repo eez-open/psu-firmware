@@ -164,8 +164,8 @@ void ChSettingsProtectionSetPage::editLimit() {
 	options.def = defLimit;
 
 	options.flags.genericNumberKeypad = true;
-	options.flags.maxButtonEnabled = true;
-	options.flags.defButtonEnabled = true;
+	options.enableMaxButton();
+	options.enableDefButton();
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
@@ -188,8 +188,8 @@ void ChSettingsProtectionSetPage::editLevel() {
 	options.def = defLevel;
 
 	options.flags.genericNumberKeypad = true;
-	options.flags.maxButtonEnabled = true;
-	options.flags.defButtonEnabled = true;
+	options.enableMaxButton();
+	options.enableDefButton();
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
@@ -212,8 +212,8 @@ void ChSettingsProtectionSetPage::editDelay() {
 	options.def = defaultDelay;
 
 	options.flags.genericNumberKeypad = true;
-	options.flags.maxButtonEnabled = true;
-	options.flags.defButtonEnabled = true;
+	options.enableMaxButton();
+	options.enableDefButton();
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 

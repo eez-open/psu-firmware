@@ -120,12 +120,12 @@ void action_keypad_unit() {
     getActiveKeypad()->unit();
 }
 
-void action_keypad_max() {
-    getActiveKeypad()->setMaxValue();
+void action_keypad_option1() {
+    getActiveKeypad()->option1();
 }
 
-void action_keypad_def() {
-    getActiveKeypad()->setDefaultValue();
+void action_keypad_option2() {
+    getActiveKeypad()->option2();
 }
 
 void action_touch_screen_calibration() {
@@ -570,20 +570,24 @@ void action_show_ch_settings_trigger() {
     setPage(PAGE_ID_CH_SETTINGS_TRIGGER);
 }
 
-void action_ch_settings_adv_trigger_edit_voltage_trigger_mode() {
+void action_ch_settings_trigger_edit_voltage_trigger_mode() {
     ((ChSettingsTriggerPage *)getActivePage())->editVoltageTriggerMode();
 }
 
-void action_ch_settings_adv_trigger_edit_voltage_trigger_value() {
+void action_ch_settings_trigger_edit_voltage_trigger_value() {
     ((ChSettingsTriggerPage *)getActivePage())->editVoltageTriggerValue();
 }
 
-void action_ch_settings_adv_trigger_edit_current_trigger_mode() {
+void action_ch_settings_trigger_edit_current_trigger_mode() {
     ((ChSettingsTriggerPage *)getActivePage())->editCurrentTriggerMode();
 }
 
-void action_ch_settings_adv_trigger_edit_current_trigger_value() {
+void action_ch_settings_trigger_edit_current_trigger_value() {
     ((ChSettingsTriggerPage *)getActivePage())->editCurrentTriggerValue();
+}
+
+void action_ch_settings_trigger_edit_list_count() {
+    ((ChSettingsTriggerPage *)getActivePage())->editListCount();
 }
 
 void action_show_ch_settings_lists() {
@@ -635,8 +639,8 @@ ACTION actions[] = {
     action_keypad_cancel,
     action_keypad_sign,
     action_keypad_unit,
-    action_keypad_max,
-    action_keypad_def,
+    action_keypad_option1,
+    action_keypad_option2,
     action_touch_screen_calibration,
     action_yes,
     action_no,
@@ -746,10 +750,11 @@ ACTION actions[] = {
     action_sys_settings_display_turn_off,
     action_sys_settings_display_edit_brightness,
     action_show_ch_settings_trigger,
-    action_ch_settings_adv_trigger_edit_voltage_trigger_mode,
-    action_ch_settings_adv_trigger_edit_voltage_trigger_value,
-    action_ch_settings_adv_trigger_edit_current_trigger_mode,
-    action_ch_settings_adv_trigger_edit_current_trigger_value,
+    action_ch_settings_trigger_edit_voltage_trigger_mode,
+    action_ch_settings_trigger_edit_voltage_trigger_value,
+    action_ch_settings_trigger_edit_current_trigger_mode,
+    action_ch_settings_trigger_edit_current_trigger_value,
+    action_ch_settings_trigger_edit_list_count,
     action_show_ch_settings_lists,
     action_show_sys_settings_trigger,
     action_channel_lists_previous_page,

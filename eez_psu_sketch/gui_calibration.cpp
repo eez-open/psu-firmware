@@ -210,8 +210,6 @@ void set() {
         options.def = 0;
 
         options.flags.genericNumberKeypad = true;
-        options.flags.maxButtonEnabled = false;
-        options.flags.defButtonEnabled = false;
         options.flags.signButtonEnabled = true;
         options.flags.dotButtonEnabled = true;
 

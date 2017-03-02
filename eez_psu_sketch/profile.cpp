@@ -23,6 +23,7 @@
 #include "event_queue.h"
 #include "channel_dispatcher.h"
 #include "trigger.h"
+#include "list.h"
 
 namespace eez {
 namespace psu {
@@ -110,6 +111,7 @@ void recallChannelsFromProfile(Parameters *profile) {
             channel.flags.currentTriggerMode = (TriggerMode)profile->channels[i].flags.i_triggerMode;
             trigger::setVoltage(channel, profile->channels[i].u_triggerValue);
             trigger::setCurrent(channel, profile->channels[i].i_triggerValue);
+            list::setListCount(channel, profile->channels[i].listCount);
 		}
 
 		channel.update();
@@ -273,6 +275,7 @@ bool saveAtLocation(int location, char *name) {
                 profile.channels[i].flags.i_triggerMode = channel.flags.currentTriggerMode;
                 profile.channels[i].u_triggerValue = trigger::getVoltage(channel);
                 profile.channels[i].i_triggerValue = trigger::getCurrent(channel);
+                profile.channels[i].listCount = list::getListCount(channel);
 			} else {
 				profile.channels[i].flags.parameters_are_valid = 0;
 			}

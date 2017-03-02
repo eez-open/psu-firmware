@@ -35,6 +35,38 @@ namespace eez {
 namespace psu {
 namespace gui {
 
+////////////////////////////////////////////////////////////////////////////////
+
+NumericKeypadOptions::NumericKeypadOptions()
+{
+    flags.option1ButtonEnabled = false;
+    flags.option2ButtonEnabled = false;
+    flags.signButtonEnabled = false;
+    flags.dotButtonEnabled = false;
+}
+
+void NumericKeypadOptions::enableMaxButton() {
+	flags.option1ButtonEnabled = true;
+    option1ButtonText = PSTR("max");
+    option1 = maxOption;
+}
+
+void NumericKeypadOptions::enableDefButton() {
+	flags.option2ButtonEnabled = true;
+    option2ButtonText = PSTR("def");
+    option2 = defOption;
+}
+
+void NumericKeypadOptions::maxOption() {
+    getActiveKeypad()->setMaxValue();
+}
+
+void NumericKeypadOptions::defOption() {
+    getActiveKeypad()->setDefValue();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 void NumericKeypad::init(const char *label, const data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)()) {
 	Keypad::init(label, (void (*)(char *))ok, cancel);
 
@@ -76,14 +108,22 @@ data::Value NumericKeypad::getData(uint8_t id) {
         }
     }
 
-	if (id == DATA_ID_KEYPAD_MAX_ENABLED) {
-		return data::Value(m_options.flags.maxButtonEnabled ? 1 : 0);
+    if (id == DATA_ID_KEYPAD_OPTION1_ENABLED) {
+		return data::Value(m_options.flags.option1ButtonEnabled ? 1 : 0);
     }
     
-    if (id == DATA_ID_KEYPAD_DEF_ENABLED) {
-		return data::Value(m_options.flags.defButtonEnabled ? 1 : 0);
+	if (id == DATA_ID_KEYPAD_OPTION1_TEXT) {
+		return data::Value(m_options.flags.option1ButtonEnabled ? m_options.option1ButtonText : PSTR(""));
+    }
+
+    if (id == DATA_ID_KEYPAD_OPTION2_ENABLED) {
+		return data::Value(m_options.flags.option2ButtonEnabled ? 1 : 0);
 	}
     
+	if (id == DATA_ID_KEYPAD_OPTION2_TEXT) {
+		return data::Value(m_options.flags.option2ButtonEnabled ? m_options.option2ButtonText : PSTR(""));
+    }
+
     if (id == DATA_ID_KEYPAD_DOT_ENABLED) {
 		return data::Value(m_options.flags.dotButtonEnabled ? 1 : 0);
 	}
@@ -627,16 +667,24 @@ void NumericKeypad::unit() {
 	}
 }
 
-void NumericKeypad::setMaxValue() {
-	if (m_options.flags.maxButtonEnabled) {
-		((void (*)(float))m_okCallback)(m_options.max);
-	}
+void NumericKeypad::option1() {
+    if (m_options.flags.option1ButtonEnabled && m_options.option1) {
+        m_options.option1();
+    }
 }
 
-void NumericKeypad::setDefaultValue() {
-	if (m_options.flags.defButtonEnabled) {
-		((void (*)(float))m_okCallback)(m_options.def);
-	}
+void NumericKeypad::option2() {
+    if (m_options.flags.option2ButtonEnabled && m_options.option2) {
+        m_options.option2();
+    }
+}
+
+void NumericKeypad::setMaxValue() {
+	((void (*)(float))m_okCallback)(m_options.max);
+}
+
+void NumericKeypad::setDefValue() {
+	((void (*)(float))m_okCallback)(m_options.def);
 }
 
 void NumericKeypad::ok() {

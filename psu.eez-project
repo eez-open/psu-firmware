@@ -138,14 +138,14 @@
       "implementation": "getActiveKeypad()->unit();"
     },
     {
-      "name": "keypad_max",
+      "name": "keypad_option1",
       "implementationType": "native",
-      "implementation": "getActiveKeypad()->setMaxValue();"
+      "implementation": "getActiveKeypad()->option1();"
     },
     {
-      "name": "keypad_def",
+      "name": "keypad_option2",
       "implementationType": "native",
-      "implementation": "getActiveKeypad()->setDefaultValue();"
+      "implementation": "getActiveKeypad()->option2();"
     },
     {
       "name": "touch_screen_calibration",
@@ -697,24 +697,29 @@
       "implementation": "setPage(PAGE_ID_CH_SETTINGS_TRIGGER);"
     },
     {
-      "name": "ch.settings.adv.trigger.editVoltageTriggerMode",
+      "name": "ch.settings.trigger.editVoltageTriggerMode",
       "implementationType": "native",
       "implementation": "((ChSettingsTriggerPage *)getActivePage())->editVoltageTriggerMode();"
     },
     {
-      "name": "ch.settings.adv.trigger.editVoltageTriggerValue",
+      "name": "ch.settings.trigger.editVoltageTriggerValue",
       "implementationType": "native",
       "implementation": "((ChSettingsTriggerPage *)getActivePage())->editVoltageTriggerValue();"
     },
     {
-      "name": "ch.settings.adv.trigger.editCurrentTriggerMode",
+      "name": "ch.settings.trigger.editCurrentTriggerMode",
       "implementationType": "native",
       "implementation": "((ChSettingsTriggerPage *)getActivePage())->editCurrentTriggerMode();"
     },
     {
-      "name": "ch.settings.adv.trigger.editCurrentTriggerValue",
+      "name": "ch.settings.trigger.editCurrentTriggerValue",
       "implementationType": "native",
       "implementation": "((ChSettingsTriggerPage *)getActivePage())->editCurrentTriggerValue();"
+    },
+    {
+      "name": "ch.settings.trigger.editListCount",
+      "implementationType": "native",
+      "implementation": "((ChSettingsTriggerPage *)getActivePage())->editListCount();"
     },
     {
       "name": "show_ch_settings_lists",
@@ -1009,13 +1014,23 @@
       "defaultValue": "0"
     },
     {
-      "name": "keypad_max_enabled",
+      "name": "keypad_option1_text",
+      "type": "string",
+      "defaultValue": "max"
+    },
+    {
+      "name": "keypad_option1_enabled",
       "description": "Is \"max\" key on numeric keypad enabled?",
       "type": "boolean",
       "defaultValue": "1"
     },
     {
-      "name": "keypad_def_enabled",
+      "name": "keypad_option2_text",
+      "type": "string",
+      "defaultValue": "def"
+    },
+    {
+      "name": "keypad_option2_enabled",
       "description": "Is \"def\" key on numeric keypad enabled?",
       "type": "boolean",
       "defaultValue": "1"
@@ -1806,6 +1821,11 @@
       "name": "channel.lists.insertRowEnabled",
       "type": "boolean",
       "defaultValue": "1"
+    },
+    {
+      "name": "channel.lists.cursor",
+      "type": "integer",
+      "defaultValue": "128"
     }
   ],
   "gui": {
@@ -7235,14 +7255,14 @@
                 },
                 {
                   "type": "Button",
-                  "action": "keypad_def",
+                  "action": "keypad_option2",
                   "x": 180,
                   "y": 88,
                   "width": 60,
                   "height": 43,
                   "style": "key",
                   "text": "def",
-                  "enabled": "keypad_def_enabled",
+                  "enabled": "keypad_option2_enabled",
                   "disabledStyle": "key_disabled"
                 },
                 {
@@ -10270,7 +10290,7 @@
                   "x": 0,
                   "y": 168,
                   "width": 64,
-                  "height": 42,
+                  "height": 40,
                   "style": "key_spec_icons",
                   "text": "<"
                 },
@@ -10281,7 +10301,7 @@
                   "x": 64,
                   "y": 168,
                   "width": 64,
-                  "height": 42,
+                  "height": 40,
                   "style": "key_spec",
                   "text1": "abc",
                   "text2": "ABC"
@@ -10292,7 +10312,7 @@
                   "x": 128,
                   "y": 168,
                   "width": 64,
-                  "height": 42,
+                  "height": 40,
                   "style": "key",
                   "text": "SP"
                 },
@@ -10302,7 +10322,7 @@
                   "x": 192,
                   "y": 168,
                   "width": 64,
-                  "height": 42,
+                  "height": 40,
                   "style": "key_spec_icons",
                   "text": "U"
                 },
@@ -10312,7 +10332,7 @@
                   "x": 256,
                   "y": 168,
                   "width": 64,
-                  "height": 42,
+                  "height": 40,
                   "style": "key_spec_icons",
                   "text": "I"
                 }
@@ -10784,14 +10804,15 @@
                 },
                 {
                   "type": "Button",
-                  "action": "keypad_max",
+                  "data": "keypad_option1_text",
+                  "action": "keypad_option1",
                   "x": 180,
                   "y": 88,
                   "width": 60,
                   "height": 43,
                   "style": "key",
-                  "text": "max",
-                  "enabled": "keypad_max_enabled",
+                  "text": "",
+                  "enabled": "keypad_option1_enabled",
                   "disabledStyle": "key_disabled"
                 },
                 {
@@ -10830,14 +10851,15 @@
                 },
                 {
                   "type": "Button",
-                  "action": "keypad_def",
+                  "data": "keypad_option2_text",
+                  "action": "keypad_option2",
                   "x": 180,
                   "y": 131,
                   "width": 60,
                   "height": 43,
                   "style": "key",
-                  "text": "def",
-                  "enabled": "keypad_def_enabled",
+                  "text": "",
+                  "enabled": "keypad_option2_enabled",
                   "disabledStyle": "key_disabled"
                 }
               ]
@@ -12789,7 +12811,7 @@
             {
               "type": "DisplayData",
               "data": "channel.u.trigger.mode",
-              "action": "ch.settings.adv.trigger.editVoltageTriggerMode",
+              "action": "ch.settings.trigger.editVoltageTriggerMode",
               "x": 184,
               "y": 28,
               "width": 68,
@@ -12808,7 +12830,7 @@
             {
               "type": "DisplayData",
               "data": "channel.u.trigger.value",
-              "action": "ch.settings.adv.trigger.editVoltageTriggerValue",
+              "action": "ch.settings.trigger.editVoltageTriggerValue",
               "x": 184,
               "y": 56,
               "width": 68,
@@ -12827,7 +12849,7 @@
             {
               "type": "DisplayData",
               "data": "channel.i.trigger.mode",
-              "action": "ch.settings.adv.trigger.editCurrentTriggerMode",
+              "action": "ch.settings.trigger.editCurrentTriggerMode",
               "x": 184,
               "y": 84,
               "width": 68,
@@ -12846,7 +12868,7 @@
             {
               "type": "DisplayData",
               "data": "channel.i.trigger.value",
-              "action": "ch.settings.adv.trigger.editCurrentTriggerValue",
+              "action": "ch.settings.trigger.editCurrentTriggerValue",
               "x": 184,
               "y": 112,
               "width": 68,
@@ -12865,7 +12887,7 @@
             {
               "type": "DisplayData",
               "data": "channel.list.count",
-              "action": "ch.settings.adv.trigger.editCurrentTriggerValue",
+              "action": "ch.settings.trigger.editListCount",
               "x": 184,
               "y": 140,
               "width": 68,
@@ -12987,7 +13009,9 @@
               "y1Data": "channel.list.voltage",
               "y1Style": "yt_graph_U_defualt",
               "y2Data": "channel.list.current",
-              "y2Style": "yt_graph_I_default"
+              "y2Style": "yt_graph_I_default",
+              "cursorData": "channel.lists.cursor",
+              "cursorStyle": "list_graph_cursor"
             },
             {
               "type": "Text",
@@ -23617,6 +23641,15 @@
         "font": "small",
         "color": "#e6e6e6",
         "backgroundColor": "#202020"
+      },
+      {
+        "name": "list_graph_cursor",
+        "description": "",
+        "inheritFrom": "default",
+        "font": "small",
+        "backgroundColor": "#525252",
+        "borderSize": 0,
+        "borderColor": "#ffffff"
       }
     ],
     "fonts": [
@@ -27901,6 +27934,48 @@
               0
             ],
             "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAdUlEQVQ4T63U2w7AIAgD0Pn/H70FIwkxUlqmj14OVo3judjGst5gep9cxhZGKAIyijCDJfAU8xSPQvdJWWQvANFssIVW25fQCvN4FMpiFKpiEFUxGJfFrpwZhVSPUEIyrIXs2C8kYghiL2h62RckIShmCzLwA7w9ExJ4xuT3AAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 145,
+            "x": 0,
+            "y": 3,
+            "width": 19,
+            "height": 9,
+            "dx": 19,
+            "source": {
+              "filePath": "fonts\\bdf\\webhostinghub-glyphs.14.bdf",
+              "encoding": 8734
+            },
+            "pixels": [
+              62,
+              15,
+              128,
+              127,
+              31,
+              192,
+              227,
+              184,
+              224,
+              225,
+              240,
+              224,
+              192,
+              224,
+              96,
+              225,
+              240,
+              224,
+              227,
+              184,
+              224,
+              127,
+              31,
+              192,
+              62,
+              15,
+              128
+            ],
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAZklEQVQ4T+2TwQoAIAhD6/8/ujAwRGYa2c3Ob3Mt6y3x9ESvVmb3bcrOBpCjTk2OYQSwtzdwcwRKI0sY4k4QTYxcfTPSzNo5K7mseDHfkrE5T9SJ3G7TXxMlQWvhcvXR3z76vVopJhxYGRCP7aM4AAAAAElFTkSuQmCC"
           }
         ]
       },
@@ -33774,6 +33849,193 @@
               "encoding": 127
             },
             "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 128,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 129,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 130,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 131,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 132,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 133,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 134,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 135,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 136,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 137,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 138,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 139,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 140,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 141,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 142,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 143,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 144,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 127
+            },
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAYAAAC5IuLZAAAAD0lEQVQIW2NkAALGYUcAABNRACxO9nmAAAAAAElFTkSuQmCC"
+          },
+          {
+            "encoding": 145,
+            "x": 1,
+            "y": 3,
+            "width": 19,
+            "height": 12,
+            "dx": 21,
+            "source": {
+              "filePath": "fonts/bdf/Oswald-Medium.24.bdf",
+              "encoding": 8734
+            },
+            "pixels": [
+              62,
+              7,
+              128,
+              127,
+              159,
+              192,
+              255,
+              255,
+              224,
+              255,
+              255,
+              224,
+              225,
+              248,
+              224,
+              224,
+              240,
+              224,
+              225,
+              248,
+              224,
+              243,
+              253,
+              224,
+              255,
+              255,
+              224,
+              127,
+              191,
+              192,
+              63,
+              15,
+              128,
+              12,
+              0,
+              0
+            ],
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAArCAYAAACXZ8NLAAAAlUlEQVRIS+2U4Q6AIAiE5f0furJlI4UAh21t51+OEz5QKgsOLfAsMM2nCqZgmkwAK5UM9LAD0wfTTSCsIeq1t44nSIb8jqZ9050ajzC6HvSZac9Qa1dDJ1YqDUYdysWGx12mKZVGBli7GrpYOqhanWdPPZrhQ/Hw0woQXxRf8mY+9YtNJVlPDKYWoXgcTOPMrIz/MN0BX/cYLGLU9BsAAAAASUVORK5CYII="
           }
         ]
       },

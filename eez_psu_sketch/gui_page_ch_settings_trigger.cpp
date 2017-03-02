@@ -29,6 +29,8 @@
 #include "gui_page_ch_settings_trigger.h"
 #include "gui_numeric_keypad.h"
 
+#define INF_TEXT PSTR("\x91")
+
 namespace eez {
 namespace psu {
 namespace gui {
@@ -61,7 +63,12 @@ data::Value ChSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t i
 	}
 
 	if (id == DATA_ID_CHANNEL_LIST_COUNT) {
-		return data::Value(1);
+        int count = list::getListCount(*g_channel);
+        if (count > 0) {
+    		return data::Value(count);
+        } else {
+            return data::Value(INF_TEXT);
+        }
 	}
 
     return data::Value();
@@ -93,8 +100,8 @@ void ChSettingsTriggerPage::editVoltageTriggerValue() {
 	options.def = channel_dispatcher::getUMax(*g_channel);
 
 	options.flags.genericNumberKeypad = true;
-	options.flags.maxButtonEnabled = true;
-	options.flags.defButtonEnabled = true;
+	options.enableMaxButton();
+	options.enableDefButton();
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
@@ -127,20 +134,48 @@ void ChSettingsTriggerPage::editCurrentTriggerValue() {
 	options.def = channel_dispatcher::getIMax(*g_channel);
 
 	options.flags.genericNumberKeypad = true;
-	options.flags.maxButtonEnabled = true;
-	options.flags.defButtonEnabled = true;
+	options.enableMaxButton();
+	options.enableDefButton();
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
 	NumericKeypad::start(0, data::Value(trigger::getCurrent(*g_channel), data::VALUE_TYPE_FLOAT_AMPER), options, onCurrentTriggerValueSet);
 }
 
+void ChSettingsTriggerPage::onListCountSet(float value) {
+	popPage();
+    list::setListCount(*g_channel, (int)value);
+    profile::save();
+}
+
+void ChSettingsTriggerPage::onListCountSetToInfinity() {
+	popPage();
+    list::setListCount(*g_channel, 0);
+    profile::save();
+}
+
+
+void ChSettingsTriggerPage::editListCount() {
+	NumericKeypadOptions options;
+
+	options.editUnit = data::VALUE_TYPE_INT;
+
+	options.min = 0;
+	options.max = 255;
+	options.def = 0;
+
+	options.flags.genericNumberKeypad = true;
+    options.flags.option1ButtonEnabled = true;
+    options.option1ButtonText = INF_TEXT;
+    options.option1 = onListCountSetToInfinity;
+
+	NumericKeypad::start(0, data::Value((int)list::getListCount(*g_channel)), options, onListCountSet);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 ChSettingsListsPage::ChSettingsListsPage()
-    : m_iPage(0)
-    , m_iFocused(0)
-    , m_focusDataId(DATA_ID_CHANNEL_LIST_DWELL)
+    : m_iCursor(0)
     , m_listVersion(0)
 {
     float *voltageList = list::getVoltageList(*g_channel, &m_voltageListSize);
@@ -243,134 +278,157 @@ data::Value ChSettingsListsPage::getData(const data::Cursor &cursor, uint8_t id)
 		return value;
 	}
 
-    int i = LIST_ITEMS_PER_PAGE * m_iPage + cursor.i;
+    int iPage = getPageIndex();
+    int iRow = iPage * LIST_ITEMS_PER_PAGE + cursor.i;
 
 	if (id == DATA_ID_CHANNEL_LISTS) {
 		return data::Value(m_listVersion);
 	}
 
     if (id == DATA_ID_CHANNEL_LIST_INDEX) {
-		return data::Value(i + 1);
+		return data::Value(iRow + 1);
 	}
 
     if (id == DATA_ID_CHANNEL_LIST_DWELL_ENABLED) {
-        return data::Value(i <= m_dwellListSize ? 1 : 0);
+        return data::Value(iRow <= m_dwellListSize ? 1 : 0);
     }
 
     if (id == DATA_ID_CHANNEL_LIST_DWELL) {
-        if (i < m_dwellListSize) {
-		    return data::Value(m_dwellList[i], data::VALUE_TYPE_FLOAT_SECOND);
+        if (iRow < m_dwellListSize) {
+		    return data::Value(m_dwellList[iRow], data::VALUE_TYPE_FLOAT_SECOND);
         } else {
             return data::Value(PSTR("-"));
         }
 	}
 
     if (id == DATA_ID_CHANNEL_LIST_VOLTAGE_ENABLED) {
-        return data::Value(i <= m_voltageListSize ? 1 : 0);
+        return data::Value(iRow <= m_voltageListSize ? 1 : 0);
     }
 
     if (id == DATA_ID_CHANNEL_LIST_VOLTAGE) {
-        if (i < m_voltageListSize) {
-		    return data::Value(m_voltageList[i], data::VALUE_TYPE_FLOAT_VOLT);
+        if (iRow < m_voltageListSize) {
+		    return data::Value(m_voltageList[iRow], data::VALUE_TYPE_FLOAT_VOLT);
         } else {
             return data::Value(PSTR("-"));
         }
 	}
 
     if (id == DATA_ID_CHANNEL_LIST_CURRENT_ENABLED) {
-        return data::Value(i <= m_currentListSize ? 1 : 0);
+        return data::Value(iRow <= m_currentListSize ? 1 : 0);
     }
 
     if (id == DATA_ID_CHANNEL_LIST_CURRENT) {
-        if (i < m_currentListSize) {
-		    return data::Value(m_currentList[i], data::VALUE_TYPE_FLOAT_AMPER);
+        if (iRow < m_currentListSize) {
+		    return data::Value(m_currentList[iRow], data::VALUE_TYPE_FLOAT_AMPER);
         } else {
             return data::Value(PSTR("-"));
         }
 	}
 
 	if (id == DATA_ID_CHANNEL_LISTS_PREVIOUS_PAGE_ENABLED) {
-		return data::Value(m_iPage > 0 ? 1 : 0);
+		return data::Value(iPage > 0 ? 1 : 0);
 	}
 
 	if (id == DATA_ID_CHANNEL_LISTS_NEXT_PAGE_ENABLED) {
-        return data::Value((m_iPage < getNumPages() - 1) ? 1 : 0);
+        return data::Value((iPage < getNumPages() - 1) ? 1 : 0);
 	}
 
 	if (id == DATA_ID_CHANNEL_LISTS_DELETE_ROW_ENABLED) {
-        return data::Value((m_iFocused != -1 && getFocusedIndex() < getMaxListSize()) ? 1 : 0);
+        return data::Value(iRow < getMaxListSize() ? 1 : 0);
 	}
 
 	if (id == DATA_ID_CHANNEL_LISTS_INSERT_ROW_ENABLED) {
-        return data::Value((m_iFocused != -1 && getFocusedIndex() < getMaxListSize()) ? 1 : 0);
+        return data::Value(iRow < getMaxListSize() ? 1 : 0);
 	}
+
+    if (id == DATA_ID_CHANNEL_LISTS_CURSOR) {
+        return data::Value(m_iCursor);
+    }
 
     return data::Value();
 }
 
+bool ChSettingsListsPage::setData(const data::Cursor &cursor, uint8_t id, data::Value value) {
+    if (id == DATA_ID_CHANNEL_LISTS_CURSOR) {
+        m_iCursor = value.getInt();
+        moveCursorToFirstAvailableCell();
+        return true;
+    }
+
+    return false;
+}
+
 void ChSettingsListsPage::previousPage() {
-    if (m_iPage > 0) {
-        --m_iPage;
-        m_iFocused = -1;
+    int iPage = getPageIndex();
+    if (iPage > 0) {
+        --iPage;
+        m_iCursor = iPage * LIST_ITEMS_PER_PAGE * 3;
+        moveCursorToFirstAvailableCell();
     }
 }
 
 void ChSettingsListsPage::nextPage() {
-    if (m_iPage < getNumPages() - 1) {
-        ++m_iPage;
-        m_iFocused = -1;
+    int iPage = getPageIndex();
+    if (iPage < getNumPages() - 1) {
+        ++iPage;
+        m_iCursor = iPage * LIST_ITEMS_PER_PAGE * 3;
+        moveCursorToFirstAvailableCell();
     }
 }
 
 void ChSettingsListsPage::deleteRow() {
+    // TODO ...
 }
 
 void ChSettingsListsPage::insertRow() {
+    // TODO ...
 }
 
 bool ChSettingsListsPage::isFocusedValueEmpty() {
-    data::Cursor cursor(m_iFocused);
-    data::Value value = data::get(cursor, m_focusDataId);
+    data::Cursor cursor(getCursorIndexWithinPage());
+    data::Value value = data::get(cursor, getDataIdAtCursor());
     return value.getType() == data::VALUE_TYPE_STR;
 }
 
 float ChSettingsListsPage::getFocusedValue() {
-    data::Cursor cursor(m_iFocused);
+    data::Cursor cursor(getCursorIndexWithinPage());
 
-    data::Value value = data::get(cursor, m_focusDataId);
+    data::Value value = data::get(cursor, getDataIdAtCursor());
     
     if (value.getType() == data::VALUE_TYPE_STR) {
-        value = data::getDef(cursor, m_focusDataId);
+        value = data::getDef(cursor, getDataIdAtCursor());
     }
         
     return value.getFloat();
 }
 
 void ChSettingsListsPage::setFocusedValue(float value) {
-    data::Cursor cursor(m_iFocused);
+    data::Cursor cursor(getCursorIndexWithinPage());
 
-	data::Value min = data::getMin(cursor, m_focusDataId);
-	data::Value max = data::getMax(cursor, m_focusDataId);
+    uint8_t dataId = getDataIdAtCursor();
+
+	data::Value min = data::getMin(cursor, dataId);
+	data::Value max = data::getMax(cursor, dataId);
 
     if (util::greaterOrEqual(value, min.getFloat(), data::getPrecision(min.getType())) &&
         util::lessOrEqual(value, max.getFloat(), data::getPrecision(max.getType())))
     {
-        int i = getFocusedIndex();
+        int iRow = getRowIndex();
     
-        if (m_focusDataId == DATA_ID_CHANNEL_LIST_DWELL) {
-            m_dwellList[i] = value;
-            if (i >= m_dwellListSize) {
-                m_dwellListSize = i + 1;
+        if (dataId == DATA_ID_CHANNEL_LIST_DWELL) {
+            m_dwellList[iRow] = value;
+            if (iRow >= m_dwellListSize) {
+                m_dwellListSize = iRow + 1;
             }
-        } else if (m_focusDataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
-            m_voltageList[i] = value;
-            if (i >= m_voltageListSize) {
-                m_voltageListSize = i + 1;
+        } else if (dataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
+            m_voltageList[iRow] = value;
+            if (iRow >= m_voltageListSize) {
+                m_voltageListSize = iRow + 1;
             }
         } else {
-            m_currentList[i] = value;
-            if (i >= m_currentListSize) {
-                m_currentListSize = i + 1;
+            m_currentList[iRow] = value;
+            if (iRow >= m_currentListSize) {
+                m_currentListSize = iRow + 1;
             }
         }
         
@@ -390,32 +448,32 @@ void ChSettingsListsPage::edit() {
     if (isFocusWidget(g_foundWidgetAtDown)) {
         NumericKeypadOptions options;
 
-        data::Cursor cursor(m_iFocused);
+        data::Cursor cursor(getCursorIndexWithinPage());
 
-        data::Value value = data::get(cursor, m_focusDataId);
+        uint8_t dataId = getDataIdAtCursor();
 
-	    data::Value def = data::getDef(cursor, m_focusDataId);
+        data::Value value = data::get(cursor, dataId);
+
+	    data::Value def = data::getDef(cursor, dataId);
 
         if (value.getType() == data::VALUE_TYPE_STR) {
-            value = def;
+            value = data::Value();
+            options.editUnit = def.getType();
+        } else {
+            options.editUnit = value.getType();
         }
 
-        options.editUnit = value.getType();
-
         options.def = def.getFloat();
-	    options.min = data::getMin(cursor, m_focusDataId).getFloat();
-	    options.max = data::getMax(cursor, m_focusDataId).getFloat();
+	    options.min = data::getMin(cursor, dataId).getFloat();
+	    options.max = data::getMax(cursor, dataId).getFloat();
 
 	    options.flags.genericNumberKeypad = true;
-	    options.flags.maxButtonEnabled = false;
-	    options.flags.defButtonEnabled = false;
 	    options.flags.signButtonEnabled = true;
 	    options.flags.dotButtonEnabled = true;
 
 	    NumericKeypad::start(0, value, options, onValueSet);
     } else {
-        m_iFocused = g_foundWidgetAtDown.cursor.i;
-        m_focusDataId = widget->data;
+        m_iCursor = getCursorIndex(g_foundWidgetAtDown.cursor, widget->data);
 
         if (isFocusedValueEmpty()) {
             edit();
@@ -425,12 +483,15 @@ void ChSettingsListsPage::edit() {
 
 bool ChSettingsListsPage::isFocusWidget(const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
-    return widgetCursor.cursor.i == m_iFocused && 
-        widget->data == m_focusDataId;
+    return m_iCursor == getCursorIndex(widgetCursor.cursor, widget->data);
 }
 
-uint16_t ChSettingsListsPage::getFocusedIndex() {
-    return m_iPage * LIST_ITEMS_PER_PAGE + m_iFocused;
+int ChSettingsListsPage::getRowIndex() {
+    return m_iCursor / 3;
+}
+
+int ChSettingsListsPage::getPageIndex() {
+    return getRowIndex() / LIST_ITEMS_PER_PAGE;
 }
 
 uint16_t ChSettingsListsPage::getMaxListSize() {
@@ -449,6 +510,49 @@ uint16_t ChSettingsListsPage::getMaxListSize() {
 
 uint16_t ChSettingsListsPage::getNumPages() {
     return getMaxListSize() / LIST_ITEMS_PER_PAGE + 1;
+}
+
+int ChSettingsListsPage::getCursorIndexWithinPage() {
+    return getRowIndex() % LIST_ITEMS_PER_PAGE;
+}
+
+uint8_t ChSettingsListsPage::getDataIdAtCursor() {
+    if (m_iCursor % 3 == 0) {
+        return DATA_ID_CHANNEL_LIST_DWELL;
+    } else if (m_iCursor % 3 == 1) {
+        return DATA_ID_CHANNEL_LIST_VOLTAGE;
+    } else {
+        return DATA_ID_CHANNEL_LIST_CURRENT;
+    }
+}
+
+int ChSettingsListsPage::getCursorIndex(const data::Cursor &cursor, uint8_t id) {
+    int iCursor = (getPageIndex() * LIST_ITEMS_PER_PAGE + cursor.i) * 3;
+    if (id == DATA_ID_CHANNEL_LIST_DWELL) {
+        return iCursor;
+    } else if (id == DATA_ID_CHANNEL_LIST_VOLTAGE) {
+        return iCursor + 1;
+    } else if (id == DATA_ID_CHANNEL_LIST_CURRENT) {
+        return iCursor + 2;
+    } else {
+        return -1;
+    }
+}
+
+void ChSettingsListsPage::moveCursorToFirstAvailableCell() {
+    int iRow = getRowIndex();
+
+    if (iRow > m_dwellListSize) {
+        if (iRow > m_voltageListSize) {
+            if (iRow > m_voltageListSize) {
+                m_iCursor  = 0;
+            } else {
+                m_iCursor += 2;
+            }
+        } else {
+            m_iCursor += 1;
+        }
+    }
 }
 
 int ChSettingsListsPage::getDirty() {
@@ -481,72 +585,52 @@ void ChSettingsListsPage::discard() {
 }
 
 bool ChSettingsListsPage::onEncoder(int counter) {
-    if (m_iFocused != -1) {
-        encoder::enableAcceleration(true);
-        if (m_focusDataId == DATA_ID_CHANNEL_LIST_DWELL || m_focusDataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
-            encoder::setMovingSpeedMultiplier(1.0f);
-        } else {
-            encoder::setMovingSpeedMultiplier(g_channel->i.max / g_channel->u.max);
-        }
-
-        float step = m_focusDataId == DATA_ID_CHANNEL_LIST_DWELL ? 0.001f : 0.01f;
-
-        setFocusedValue(getFocusedValue() + step * counter);
+    encoder::enableAcceleration(true);
+    uint8_t dataId = getDataIdAtCursor();
+    if (dataId == DATA_ID_CHANNEL_LIST_DWELL || dataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
+        encoder::setMovingSpeedMultiplier(1.0f);
+    } else {
+        encoder::setMovingSpeedMultiplier(g_channel->i.max / g_channel->u.max);
     }
+
+    float step = dataId == DATA_ID_CHANNEL_LIST_DWELL ? 0.001f : 0.01f;
+
+    setFocusedValue(getFocusedValue() + step * counter);
 
     return true;
 }
 
 bool ChSettingsListsPage::onEncoderClicked() {
-    if (m_iFocused == -1) {
-        m_iFocused = 0;
-        m_focusDataId = DATA_ID_CHANNEL_LIST_DWELL;
+    uint8_t dataId = getDataIdAtCursor();
+    int iRow = getRowIndex();
+
+    if (dataId == DATA_ID_CHANNEL_LIST_DWELL) {
+        if (iRow <= m_voltageListSize) {
+            m_iCursor += 1;
+            return true;
+        }
+            
+        if (iRow <= m_currentListSize) {
+            m_iCursor += 2;
+            return true;
+        }
+
+        m_iCursor += 3;
+    } else if (dataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
+        if (iRow <= m_currentListSize) {
+            m_iCursor += 1;
+            return true;
+        }
+
+        m_iCursor += 2;
     } else {
-        if (m_focusDataId == DATA_ID_CHANNEL_LIST_DWELL) {
-            if (getFocusedIndex() <= m_voltageListSize) {
-                m_focusDataId = DATA_ID_CHANNEL_LIST_VOLTAGE;
-                return true;
-            }
-            
-            if (getFocusedIndex() <= m_currentListSize) {
-                m_focusDataId = DATA_ID_CHANNEL_LIST_CURRENT;
-                return true;
-            }
-            
-            ++m_iFocused;
-        } else if (m_focusDataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
-            if (getFocusedIndex() <= m_currentListSize) {
-                m_focusDataId = DATA_ID_CHANNEL_LIST_CURRENT;
-                return true;
-            }
-            
-            ++m_iFocused;
-        } else {
-            ++m_iFocused;
-        }
-
-        if (m_iFocused == LIST_ITEMS_PER_PAGE) {
-            m_iFocused = 0;
-            ++m_iPage;
-        }
-
-        if (getFocusedIndex() > getMaxListSize()) {
-            m_iFocused = 0;
-            m_iPage = 0;
-        }
-
-        if (getFocusedIndex() <= m_dwellListSize) {
-            m_focusDataId = DATA_ID_CHANNEL_LIST_DWELL;
-        } else if (getFocusedIndex() <= m_voltageListSize) {
-            m_focusDataId = DATA_ID_CHANNEL_LIST_VOLTAGE;
-        } else {
-            m_focusDataId = DATA_ID_CHANNEL_LIST_CURRENT;
-        }
+        m_iCursor += 1;
     }
+
+    moveCursorToFirstAvailableCell();
 
     return true;
 }
-
 
 }
 }

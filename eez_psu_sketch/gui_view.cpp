@@ -1355,12 +1355,26 @@ void drawListGraphWidget(const WidgetCursor &widgetCursor) {
     DECL_WIDGET_STYLE(style, widget);
     DECL_STYLE(y1Style, listGraphWidget->y1Style);
     DECL_STYLE(y2Style, listGraphWidget->y2Style);
+    DECL_STYLE(cursorStyle, listGraphWidget->cursorStyle);
 
-    widgetCursor.currentState->size = sizeof(WidgetState);
+    widgetCursor.currentState->size = sizeof(ListGraphWidgetState);
     widgetCursor.currentState->data = data::get(widgetCursor.cursor, widget->data);
+    ((ListGraphWidgetState *)widgetCursor.currentState)->cursorData = data::get(widgetCursor.cursor, listGraphWidget->cursorData);
 
-    bool refresh = !widgetCursor.previousState ||
+    bool refreshAll = !widgetCursor.previousState ||
         widgetCursor.previousState->data != widgetCursor.currentState->data;
+    bool refresh = refreshAll;
+
+    int iPrevCursor = -1;
+    if (widgetCursor.previousState) {
+        iPrevCursor = ((ListGraphWidgetState *)widgetCursor.previousState)->cursorData.getInt() / 3;
+    }
+
+    int iCursor = ((ListGraphWidgetState *)widgetCursor.currentState)->cursorData.getInt() / 3;
+
+    if (!refreshAll) {
+        refresh = iPrevCursor != iCursor;
+    }
 
     if (refresh) {
         // draw background
@@ -1371,7 +1385,7 @@ void drawListGraphWidget(const WidgetCursor &widgetCursor) {
         if (dwellListSize > 0) {
             float *dwellList = data::getFloatList(listGraphWidget->dwellData);
         
-            const Style *style[2] = {
+            const Style *styles[2] = {
                 y1Style,
                 y2Style
             };
@@ -1416,9 +1430,20 @@ void drawListGraphWidget(const WidgetCursor &widgetCursor) {
                 int x2 = int(widgetCursor.x + currentDwellSum * ((int)widget->w - 1) / dwellSum);
                 xPrev = x2;
 
+                if (!refreshAll) {
+                    if (i < iPrevCursor - 1 && i > iPrevCursor + 1 && i < iCursor - 1 && i > iCursor + 1) {
+                        continue;
+                    }
+                }
+
+                if (i == iCursor) {
+                    lcd::lcd.setColor(cursorStyle->background_color);
+                    lcd::lcd.fillRect(x1, widgetCursor.y, x2 - 1, widgetCursor.y + (int)widget->h - 1);
+                }
+
                 for (int j = 0; j < 2; ++j) {
                     if (listSize[j] > 0) {
-                        lcd::lcd.setColor(style[j]->color);
+                        lcd::lcd.setColor(styles[j]->color);
 
                         float value = i < listSize[j] ? list[j][i] : list[j][listSize[j] - 1];
                         int y = widgetCursor.y + ((int)widget->h - 1) - (int)((value - min[j]) * ((int)widget->h - 1) / (max[j] - min[j]));
@@ -1437,6 +1462,47 @@ void drawListGraphWidget(const WidgetCursor &widgetCursor) {
                     }
                 }
             }
+        }
+    }
+}
+
+void onTouchListGraph(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+    DECL_WIDGET_SPECIFIC(ListGraphWidget, listGraphWidget, widget);
+
+    int dwellListSize = data::getListSize(listGraphWidget->dwellData);
+    if (dwellListSize > 0) {
+        int iCursor = -1;
+
+        float *dwellList = data::getFloatList(listGraphWidget->dwellData);
+
+        int maxListSize = data::getListSize(widget->data);
+
+        float dwellSum = 0;
+        for (int i = 0; i < maxListSize; ++i) {
+            if (i < dwellListSize) {
+                dwellSum += dwellList[i];
+            } else {
+                dwellSum += dwellList[dwellListSize - 1];
+            }
+        }
+
+        float currentDwellSum = 0;
+        int xPrev = widgetCursor.x;
+        for (int i = 0; i < maxListSize; ++i) {
+            currentDwellSum += i < dwellListSize ? dwellList[i] : dwellList[dwellListSize - 1];
+            int x1 = xPrev;
+            int x2 = int(widgetCursor.x + currentDwellSum * ((int)widget->w - 1) / dwellSum);
+            xPrev = x2;
+
+            if (touch::x >= x1 && touch::x < x2) {
+                iCursor = i * 3;
+                break;
+            }
+        }
+
+        if (iCursor >= 0) {
+            data::set(widgetCursor.cursor, listGraphWidget->cursorData, data::Value(iCursor), 0);
         }
     }
 }

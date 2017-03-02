@@ -45,8 +45,10 @@ public:
     virtual void clear();
     virtual void sign();
     virtual void unit();
+    virtual void option1();
+    virtual void option2();
     virtual void setMaxValue();
-    virtual void setDefaultValue();
+    virtual void setDefValue();
     virtual void ok();
     virtual void cancel();
 
