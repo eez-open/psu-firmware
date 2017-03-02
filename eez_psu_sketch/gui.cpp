@@ -644,8 +644,12 @@ bool wasFocusWidget(const WidgetCursor &widgetCursor) {
 }
 
 bool isFocusWidget(const WidgetCursor &widgetCursor) {
-    DECL_WIDGET(widget, widgetCursor.widgetOffset);
-    return widgetCursor.cursor == g_focusCursor && widget->data == g_focusDataId;
+    if (g_activePageId == PAGE_ID_CH_SETTINGS_LISTS) {
+        return ((ChSettingsListsPage *)g_activePage)->isFocusWidget(widgetCursor);
+    } else {
+        DECL_WIDGET(widget, widgetCursor.widgetOffset);
+        return widgetCursor.cursor == g_focusCursor && widget->data == g_focusDataId;
+    }
 }
 
 bool isFocusChanged() {
@@ -701,6 +705,12 @@ void onEncoder(int counter, bool clicked) {
     }
 
     if (clicked) {
+        if (g_activePage) {
+            if (g_activePage->onEncoderClicked()) {
+                return;
+            }
+        }
+
         if (isEncoderEnabledInActivePage()) {
             if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD || g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
                 getActiveKeypad()->ok();
@@ -744,6 +754,12 @@ void onEncoder(int counter, bool clicked) {
     }
 
     if (counter) {
+        if (g_activePage) {
+            if (g_activePage->onEncoder(counter)) {
+                return;
+            }
+        }
+
         if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD || g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
             if (((NumericKeypad *)getActiveKeypad())->onEncoder(counter)) {
                 return;

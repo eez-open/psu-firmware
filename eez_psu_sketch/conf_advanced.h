@@ -269,3 +269,7 @@
 #define GUI_YT_VIEW_RATE_MAX 300.0f
 
 #define MAX_LIST_SIZE 256
+
+#define LIST_DWELL_MIN 0.0001f 
+#define LIST_DWELL_MAX 65535.0f
+#define LIST_DWELL_DEF 0.1f

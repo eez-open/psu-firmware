@@ -34,6 +34,7 @@
 #include "gui_page_sys_settings.h"
 #include "gui_page_user_profiles.h"
 #include "gui_password.h"
+#include "gui_page_ch_settings_trigger.h"
 
 namespace eez {
 namespace psu {
@@ -570,19 +571,19 @@ void action_show_ch_settings_trigger() {
 }
 
 void action_ch_settings_adv_trigger_edit_voltage_trigger_mode() {
-    ((ChSettingsAdvTriggerPage *)getActivePage())->editVoltageTriggerMode();
+    ((ChSettingsTriggerPage *)getActivePage())->editVoltageTriggerMode();
 }
 
 void action_ch_settings_adv_trigger_edit_voltage_trigger_value() {
-    ((ChSettingsAdvTriggerPage *)getActivePage())->editVoltageTriggerValue();
+    ((ChSettingsTriggerPage *)getActivePage())->editVoltageTriggerValue();
 }
 
 void action_ch_settings_adv_trigger_edit_current_trigger_mode() {
-    ((ChSettingsAdvTriggerPage *)getActivePage())->editCurrentTriggerMode();
+    ((ChSettingsTriggerPage *)getActivePage())->editCurrentTriggerMode();
 }
 
 void action_ch_settings_adv_trigger_edit_current_trigger_value() {
-    ((ChSettingsAdvTriggerPage *)getActivePage())->editCurrentTriggerValue();
+    ((ChSettingsTriggerPage *)getActivePage())->editCurrentTriggerValue();
 }
 
 void action_show_ch_settings_lists() {
@@ -591,6 +592,26 @@ void action_show_ch_settings_lists() {
 
 void action_show_sys_settings_trigger() {
     pushPage(PAGE_ID_SYS_SETTINGS_TRIGGER);
+}
+
+void action_channel_lists_previous_page() {
+    ((ChSettingsListsPage *)getActivePage())->previousPage();
+}
+
+void action_channel_lists_next_page() {
+    ((ChSettingsListsPage *)getActivePage())->nextPage();
+}
+
+void action_channel_lists_delete_row() {
+    ((ChSettingsListsPage *)getActivePage())->deleteRow();
+}
+
+void action_channel_lists_insert_row() {
+    ((ChSettingsListsPage *)getActivePage())->insertRow();
+}
+
+void action_channel_lists_edit() {
+    ((ChSettingsListsPage *)getActivePage())->edit();
 }
 
 
@@ -730,7 +751,12 @@ ACTION actions[] = {
     action_ch_settings_adv_trigger_edit_current_trigger_mode,
     action_ch_settings_adv_trigger_edit_current_trigger_value,
     action_show_ch_settings_lists,
-    action_show_sys_settings_trigger
+    action_show_sys_settings_trigger,
+    action_channel_lists_previous_page,
+    action_channel_lists_next_page,
+    action_channel_lists_delete_row,
+    action_channel_lists_insert_row,
+    action_channel_lists_edit
 };
 
 }

@@ -31,6 +31,14 @@ namespace gui {
 void Page::pageWillAppear() {
 }
 
+int Page::getListSize(uint8_t id) {
+    return 0;
+}
+
+float *Page::getFloatList(uint8_t id) {
+    return 0;
+}
+
 data::Value Page::getData(const data::Cursor &cursor, uint8_t id) {
 	return data::Value();
 }
@@ -43,8 +51,20 @@ data::Value Page::getMax(const data::Cursor &cursor, uint8_t id) {
 	return data::Value();
 }
 
+data::Value Page::getDef(const data::Cursor &cursor, uint8_t id) {
+	return data::Value();
+}
+
 bool Page::setData(const data::Cursor &cursor, uint8_t id, data::Value value) {
     return false;
+}
+
+bool Page::onEncoder(int counter) {
+    return false;
+}
+
+bool Page::onEncoderClicked() {
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

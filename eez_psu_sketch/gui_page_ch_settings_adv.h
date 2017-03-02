@@ -109,35 +109,6 @@ private:
     static void onYTViewRateSet(float value);
 };
 
-class ChSettingsAdvTriggerPage : public Page {
-public:
-	ChSettingsAdvTriggerPage();
-
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-
-    void editVoltageTriggerMode();
-    void editVoltageTriggerValue();
-
-    void editCurrentTriggerMode();
-    void editCurrentTriggerValue();
-
-private:
-    static void onVoltageTriggerModeSet(uint8_t value);
-    static void onVoltageTriggerValueSet(float value);
-
-    static void onCurrentTriggerModeSet(uint8_t value);
-    static void onCurrentTriggerValueSet(float value);
-};
-
-class ChSettingsAdvListsPage : public Page {
-public:
-	ChSettingsAdvListsPage();
-
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-
-private:
-};
-
 }
 }
 } // namespace eez::psu::gui

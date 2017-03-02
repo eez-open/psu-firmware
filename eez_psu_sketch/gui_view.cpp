@@ -1241,12 +1241,12 @@ void drawYTGraphWidget(const WidgetCursor &widgetCursor) {
             startPosition, endPosition,
             currentHistoryValuePosition, numHistoryValues,
             textWidth, graphWidth,
-            widget->data, min1, max1, y1Style->color,
+            widget->data, min1, max1, y1Style->color, 
             ytGraphWidget->y2Data, min2, max2, y2Style->color,
             widgetCursor.currentState->flags.pressed ? style->color: style->background_color,
             widgetCursor.currentState->flags.pressed ? style->background_color : style->color);
     } else {
-        drawYTGraph(widgetCursor, widget,
+        drawYTGraph(widgetCursor, widget, 
             startPosition, numHistoryValues,
             currentHistoryValuePosition, numHistoryValues,
             textWidth, graphWidth,
@@ -1349,6 +1349,98 @@ void upDown() {
     }
 }
 
+void drawListGraphWidget(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+    DECL_WIDGET_SPECIFIC(ListGraphWidget, listGraphWidget, widget);
+    DECL_WIDGET_STYLE(style, widget);
+    DECL_STYLE(y1Style, listGraphWidget->y1Style);
+    DECL_STYLE(y2Style, listGraphWidget->y2Style);
+
+    widgetCursor.currentState->size = sizeof(WidgetState);
+    widgetCursor.currentState->data = data::get(widgetCursor.cursor, widget->data);
+
+    bool refresh = !widgetCursor.previousState ||
+        widgetCursor.previousState->data != widgetCursor.currentState->data;
+
+    if (refresh) {
+        // draw background
+        lcd::lcd.setColor(style->background_color);
+        lcd::lcd.fillRect(widgetCursor.x, widgetCursor.y, widgetCursor.x + (int)widget->w - 1, widgetCursor.y + (int)widget->h - 1);
+
+        int dwellListSize = data::getListSize(listGraphWidget->dwellData);
+        if (dwellListSize > 0) {
+            float *dwellList = data::getFloatList(listGraphWidget->dwellData);
+        
+            const Style *style[2] = {
+                y1Style,
+                y2Style
+            };
+
+            int listSize[2] = {
+                data::getListSize(listGraphWidget->y1Data),
+                data::getListSize(listGraphWidget->y2Data)
+            };
+            
+            float *list[2] = {
+                data::getFloatList(listGraphWidget->y1Data),
+                data::getFloatList(listGraphWidget->y2Data)
+            };
+            
+            float min[2] = {
+                data::getMin(widgetCursor.cursor, listGraphWidget->y1Data).getFloat(),
+                data::getMin(widgetCursor.cursor, listGraphWidget->y2Data).getFloat()
+            };
+            
+            float max[2] = {
+                data::getMax(widgetCursor.cursor, listGraphWidget->y1Data).getFloat(),
+                data::getMax(widgetCursor.cursor, listGraphWidget->y2Data).getFloat()
+            };
+
+            int maxListSize = data::getListSize(widget->data);
+
+            float dwellSum = 0;
+            for (int i = 0; i < maxListSize; ++i) {
+                if (i < dwellListSize) {
+                    dwellSum += dwellList[i];
+                } else {
+                    dwellSum += dwellList[dwellListSize - 1];
+                }
+            }
+
+            float currentDwellSum = 0;
+            int xPrev = widgetCursor.x;
+            int yPrev[2];
+            for (int i = 0; i < maxListSize; ++i) {
+                currentDwellSum += i < dwellListSize ? dwellList[i] : dwellList[dwellListSize - 1];
+                int x1 = xPrev;
+                int x2 = int(widgetCursor.x + currentDwellSum * ((int)widget->w - 1) / dwellSum);
+                xPrev = x2;
+
+                for (int j = 0; j < 2; ++j) {
+                    if (listSize[j] > 0) {
+                        lcd::lcd.setColor(style[j]->color);
+
+                        float value = i < listSize[j] ? list[j][i] : list[j][listSize[j] - 1];
+                        int y = widgetCursor.y + ((int)widget->h - 1) - (int)((value - min[j]) * ((int)widget->h - 1) / (max[j] - min[j]));
+
+                        if (i > 0 && abs(yPrev[j] - y) > 1) {
+                            if (yPrev[j] < y) {
+                                lcd::lcd.drawVLine(x1 + j, yPrev[j] + 1, y - yPrev[j] - 1);
+                            } else {
+                                lcd::lcd.drawVLine(x1 + j, y, yPrev[j] - y - 1);
+                            }
+                        }
+
+                        yPrev[j] = y;
+
+                        lcd::lcd.drawHLine(i > 0 ? x1 + j : x1, y, x2 - x1);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void drawWidget(const WidgetCursor &widgetCursor_) {
     WidgetCursor widgetCursor = widgetCursor_;
 
@@ -1392,7 +1484,9 @@ void drawWidget(const WidgetCursor &widgetCursor_) {
         drawYTGraphWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_UP_DOWN) {
         drawUpDownWidget(widgetCursor);
-    }
+    } else if (widget->type == WIDGET_TYPE_LIST_GRAPH) {
+        drawListGraphWidget(widgetCursor);
+    } 
 }
 
 void refreshWidget(WidgetCursor widgetCursor) {

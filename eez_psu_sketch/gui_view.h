@@ -51,6 +51,7 @@ namespace gui {
 #define WIDGET_TYPE_CUSTOM 14
 #define WIDGET_TYPE_YT_GRAPH 15
 #define WIDGET_TYPE_UP_DOWN 16
+#define WIDGET_TYPE_LIST_GRAPH 17
 
 #define LIST_TYPE_VERTICAL 1
 #define LIST_TYPE_HORIZONTAL 2
@@ -201,6 +202,14 @@ struct UpDownWidget {
 	uint8_t buttonsStyle;
 	OBJ_OFFSET downButtonText;
 	OBJ_OFFSET upButtonText;
+};
+
+struct ListGraphWidget {
+    uint8_t dwellData;
+    uint8_t y1Data;
+	uint8_t y1Style;
+    uint8_t y2Data;
+	uint8_t y2Style;
 };
 
 struct CustomWidgetSpecific {

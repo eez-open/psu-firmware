@@ -53,6 +53,7 @@ enum ValueType {
     VALUE_TYPE_FLOAT_MILLI_AMPER,
 	VALUE_TYPE_FLOAT_WATT,
 	VALUE_TYPE_FLOAT_SECOND,
+    VALUE_TYPE_FLOAT_MILLI_SECOND,
 	VALUE_TYPE_FLOAT_CELSIUS,
 	VALUE_TYPE_FLOAT_RPM,
     VALUE_TYPE_FLOAT_LAST,
@@ -165,16 +166,13 @@ private:
 
 struct Cursor {
     int i;
-    int j;
 
     Cursor() {
         i = -1;
-        j = -1;
     }
 
     Cursor(int i, int j = -1) {
         this->i = i;
-        this->j = j;
     }
 
     operator bool() {
@@ -186,12 +184,11 @@ struct Cursor {
     }
 
     bool operator == (const Cursor& rhs) const {
-        return i == rhs.i && j == rhs.j;
+        return i == rhs.i;
     }
 
 	void reset() {
 		i = -1;
-        j = -1;
 	}
 };
 
@@ -204,8 +201,12 @@ extern Value g_alertMessage3;
 int count(uint8_t id);
 void select(Cursor &cursor, uint8_t id, int index);
 
+int getListSize(uint8_t id);
+float *getFloatList(uint8_t id);
+
 Value getMin(const Cursor &cursor, uint8_t id);
 Value getMax(const Cursor &cursor, uint8_t id);
+Value getDef(const Cursor &cursor, uint8_t id);
 Value getLimit(const Cursor &cursor, uint8_t id);
 ValueType getUnit(const Cursor &cursor, uint8_t id);
 

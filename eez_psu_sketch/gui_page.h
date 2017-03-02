@@ -34,10 +34,15 @@ public:
 
 	virtual void pageWillAppear();
 	
+    virtual int getListSize(uint8_t id);
+    virtual float *getFloatList(uint8_t id);
     virtual data::Value getData(const data::Cursor &cursor, uint8_t id);
     virtual data::Value getMin(const data::Cursor &cursor, uint8_t id);
     virtual data::Value getMax(const data::Cursor &cursor, uint8_t id);
+    virtual data::Value getDef(const data::Cursor &cursor, uint8_t id);
     virtual bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
+    virtual bool onEncoder(int counter);
+    virtual bool onEncoderClicked();
 };
 
 class SetPage : public Page {

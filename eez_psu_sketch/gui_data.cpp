@@ -30,6 +30,7 @@
 #include "channel_dispatcher.h"
 #include "gui_calibration.h"
 #include "gui_keypad.h"
+#include "gui_page_ch_settings_trigger.h"
 
 #define CONF_GUI_REFRESH_EVERY_MS 250
 
@@ -294,6 +295,10 @@ void Value::toText(char *text, int count) const {
                 precision = 0;
             }
 
+            if (type_ == VALUE_TYPE_FLOAT_SECOND) {
+                precision = 3;
+            }
+
             const char *unit = 0;
 
             int temp = 0;
@@ -307,6 +312,8 @@ void Value::toText(char *text, int count) const {
                     unit = "mV";
                 } else if (type_ == VALUE_TYPE_FLOAT_AMPER) {
                     unit = "mA";
+                } else if (type_ == VALUE_TYPE_FLOAT_SECOND) {
+                    unit = "ms";
                 }
 
                 if (unit) {
@@ -399,7 +406,11 @@ bool Value::operator ==(const Value &other) const {
     if (type_ == VALUE_TYPE_ENUM) {
         return enum_.enumDefinition == other.enum_.enumDefinition && enum_.value == other.enum_.value;
     }
-        
+    
+    if (type_ == VALUE_TYPE_FLOAT_SECOND) {
+    	return util::equal(float_, other.float_, powf(10.0f, 3));
+    }
+
 	return util::equal(float_, other.float_, CHANNEL_VALUE_PRECISION);
 }
 
@@ -443,7 +454,7 @@ int count(uint8_t id) {
     } else if (id == DATA_ID_PROFILES_LIST2) {
         return 6;
     } else if (id == DATA_ID_CHANNEL_LISTS) {
-        return 4;
+        return LIST_ITEMS_PER_PAGE;
     }
     return 0;
 }
@@ -460,8 +471,26 @@ void select(Cursor &cursor, uint8_t id, int index) {
     } else if (id == DATA_ID_CHANNEL_COUPLING_MODE) {
         cursor.i = 0;
     } else if (id == DATA_ID_CHANNEL_LISTS) {
-        cursor.j = index;
+        cursor.i = index;
     }
+}
+
+int getListSize(uint8_t id) {
+    Page *activePage = getActivePage();
+    if (activePage) {
+        return activePage->getListSize(id);
+    }
+
+    return 0;
+}
+
+float *getFloatList(uint8_t id) {
+    Page *activePage = getActivePage();
+    if (activePage) {
+        return activePage->getFloatList(id);
+    }
+
+    return 0;
 }
 
 Value getMin(const Cursor &cursor, uint8_t id) {
@@ -500,6 +529,18 @@ Value getMax(const Cursor &cursor, uint8_t id) {
     Page *activePage = getActivePage();
     if (activePage) {
         Value value = activePage->getMax(cursor, id);
+        if (value.getType() != VALUE_TYPE_NONE) {
+            return value;
+        }
+    }
+
+    return Value();
+}
+
+Value getDef(const Cursor &cursor, uint8_t id) {
+    Page *activePage = getActivePage();
+    if (activePage) {
+        Value value = activePage->getDef(cursor, id);
         if (value.getType() != VALUE_TYPE_NONE) {
             return value;
         }
