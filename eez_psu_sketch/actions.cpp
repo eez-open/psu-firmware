@@ -606,11 +606,11 @@ void action_channel_lists_edit() {
 }
 
 void action_show_channel_lists_insert_menu() {
-    pushPage(PAGE_ID_CH_SETTINGS_LISTS_INSERT_MENU);
+    ((ChSettingsListsPage *)getActivePage())->showInsertMenu();
 }
 
 void action_show_channel_lists_clear_menu() {
-    pushPage(PAGE_ID_CH_SETTINGS_LISTS_CLEAR_MENU);
+    ((ChSettingsListsPage *)getActivePage())->showClearMenu();
 }
 
 void action_channel_lists_insert_row_above() {

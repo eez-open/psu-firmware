@@ -161,7 +161,7 @@ void ChSettingsTriggerPage::editListCount() {
 	options.editUnit = data::VALUE_TYPE_INT;
 
 	options.min = 0;
-	options.max = 255;
+	options.max = MAX_LIST_COUNT;
 	options.def = 0;
 
 	options.flags.genericNumberKeypad = true;

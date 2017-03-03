@@ -957,7 +957,7 @@ scpi_result_t scpi_cmd_sourceListCount(scpi_t *context) {
         }
 
         int value = (int)param.value;
-        if (value < 0 || value > 255) {
+        if (value < 0 || value > MAX_LIST_COUNT) {
 			SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
 			return SCPI_RES_ERR;
         }
