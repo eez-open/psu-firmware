@@ -422,9 +422,44 @@ void ChSettingsListsPage::setFocusedValue(float value) {
 }
 
 void ChSettingsListsPage::onValueSet(float value) {
+    ChSettingsListsPage *page = (ChSettingsListsPage *)getPreviousPage();
+    page->doValueSet(value);
+}
+
+void ChSettingsListsPage::doValueSet(float value) {
+    uint8_t dataId = getDataIdAtCursor();
+
+    if (dataId != DATA_ID_CHANNEL_LIST_DWELL) {
+        float power = value;
+
+        int iRow = getRowIndex();
+
+        if (dataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
+            if (iRow < m_currentListSize) {
+                power *= m_currentList[iRow];
+            } else if (m_currentListSize > 0) {
+                power *= m_currentList[0];
+            } else {
+                power = 0;
+            }
+        } else {
+            if (iRow < m_voltageListSize) {
+                power *= m_voltageList[iRow];
+            } else if (m_voltageListSize > 0) {
+                power *= m_voltageList[0];
+            } else {
+                power = 0;
+            }
+        }
+
+        if (util::greater(power, g_channel->getPowerMaxLimit(), data::getPrecision(data::VALUE_TYPE_FLOAT_WATT))) {
+            errorMessageP(PSTR("Power limit exceeded"));
+            return;
+        }
+    }
+
     popPage();
-    ChSettingsListsPage *page = (ChSettingsListsPage *)getActivePage();
-    page->setFocusedValue(value);
+    setFocusedValue(value);
 }
 
 void ChSettingsListsPage::edit() {

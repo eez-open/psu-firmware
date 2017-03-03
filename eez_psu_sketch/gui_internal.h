@@ -44,6 +44,7 @@ int getActivePageId();
 Page *getActivePage();
 
 int getPreviousActivePageId();
+Page *getPreviousPage();
 
 bool isActivePageInternal();
 

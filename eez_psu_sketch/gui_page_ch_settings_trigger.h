@@ -113,6 +113,7 @@ private:
     float getFocusedValue();
     void setFocusedValue(float value);
     static void onValueSet(float value);
+    void doValueSet(float value);
 
     static void onClearColumn();
     void doClearColumn();

@@ -204,6 +204,10 @@ int getPreviousActivePageId() {
     return g_previousActivePageId;
 }
 
+Page *getPreviousPage() {
+    return g_pageNavigationStack[g_pageNavigationStackPointer - 1].activePage;
+}
+
 void doShowPage(int index, Page *page = 0) {
     lcd::turnOn();
 
