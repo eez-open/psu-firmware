@@ -13050,14 +13050,6 @@
           "height": 240,
           "widgets": [
             {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
-            {
               "type": "ListGraph",
               "data": "channel.lists",
               "x": 2,
@@ -13323,6 +13315,14 @@
               "width": 5,
               "height": 36,
               "style": "bottom_button_background"
+            },
+            {
+              "type": "Local.ChannelsInactive",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
             }
           ]
         },
@@ -22885,6 +22885,742 @@
             "width": 320,
             "height": 3,
             "style": "default_inverse"
+          }
+        ]
+      },
+      {
+        "name": "ChannelsInactive",
+        "width": 68,
+        "height": 204,
+        "widgets": [
+          {
+            "type": "Rectangle",
+            "x": 0,
+            "y": 92,
+            "width": 64,
+            "height": 20,
+            "style": "default_inverse"
+          },
+          {
+            "type": "Rectangle",
+            "x": 64,
+            "y": 0,
+            "width": 4,
+            "height": 204,
+            "style": "default_inverse"
+          },
+          {
+            "x": 0,
+            "type": "Select",
+            "data": "channel.coupling.mode",
+            "y": 0,
+            "width": 64,
+            "height": 32,
+            "style": "default",
+            "widgets": [
+              {
+                "type": "Container",
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 32,
+                "style": "default",
+                "widgets": [
+                  {
+                    "type": "List",
+                    "data": "channels",
+                    "x": 0,
+                    "y": 0,
+                    "width": 64,
+                    "height": 204,
+                    "style": "default",
+                    "listType": "vertical",
+                    "itemWidget": {
+                      "x": 0,
+                      "type": "Select",
+                      "data": "channel.status",
+                      "y": 0,
+                      "width": 64,
+                      "height": 112,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "type": "Rectangle",
+                          "x": 0,
+                          "y": 0,
+                          "width": 64,
+                          "height": 92,
+                          "style": "default_inverse"
+                        },
+                        {
+                          "type": "Container",
+                          "x": 0,
+                          "y": 0,
+                          "width": 64,
+                          "height": 112,
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "x": 0,
+                              "type": "Select",
+                              "data": "channel.outputState",
+                              "y": 0,
+                              "width": 64,
+                              "height": 32,
+                              "style": "default",
+                              "widgets": [
+                                {
+                                  "type": "Text",
+                                  "action": "channel.toggleOutput",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 64,
+                                  "height": 32,
+                                  "style": "edit_value_active_S_right",
+                                  "text": "OFF"
+                                },
+                                {
+                                  "x": 0,
+                                  "type": "Select",
+                                  "data": "channel.outputMode",
+                                  "y": 0,
+                                  "width": 64,
+                                  "height": 32,
+                                  "style": "default",
+                                  "widgets": [
+                                    {
+                                      "type": "DisplayData",
+                                      "data": "channel.monValue",
+                                      "action": "channel.toggleOutput",
+                                      "x": 0,
+                                      "y": 0,
+                                      "width": 64,
+                                      "height": 32,
+                                      "style": "edit_value_active_S_right",
+                                      "activeStyle": ""
+                                    },
+                                    {
+                                      "type": "DisplayData",
+                                      "data": "channel.monValue",
+                                      "action": "channel.toggleOutput",
+                                      "x": 0,
+                                      "y": 0,
+                                      "width": 64,
+                                      "height": 32,
+                                      "style": "edit_value_active_S_right",
+                                      "activeStyle": ""
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "x": 0,
+                              "type": "Select",
+                              "data": "channel.rprog.status",
+                              "y": 32,
+                              "width": 64,
+                              "height": 30,
+                              "style": "default",
+                              "widgets": [
+                                {
+                                  "type": "DisplayData",
+                                  "data": "channel.u.edit",
+                                  "action": "",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 64,
+                                  "height": 30,
+                                  "style": "edit_value_S_right",
+                                  "activeStyle": "edit_value_S_right"
+                                },
+                                {
+                                  "type": "DisplayData",
+                                  "data": "channel.u.monDac",
+                                  "action": "",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 64,
+                                  "height": 30,
+                                  "style": "mon_dac_S",
+                                  "activeStyle": ""
+                                }
+                              ]
+                            },
+                            {
+                              "type": "DisplayData",
+                              "data": "channel.i.edit",
+                              "action": "",
+                              "x": 0,
+                              "y": 62,
+                              "width": 64,
+                              "height": 30,
+                              "style": "edit_value_S_right",
+                              "activeStyle": "edit_value_S_right"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "Rectangle",
+                          "x": 0,
+                          "y": 0,
+                          "width": 64,
+                          "height": 92,
+                          "style": "default_inverse"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "Container",
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 32,
+                "style": "default",
+                "widgets": [
+                  {
+                    "x": 0,
+                    "type": "Select",
+                    "data": "channel.status",
+                    "y": 0,
+                    "width": 64,
+                    "height": 112,
+                    "style": "default",
+                    "widgets": [
+                      {
+                        "type": "Rectangle",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 92,
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "Container",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 112,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "x": 0,
+                            "type": "Select",
+                            "data": "channel.outputState",
+                            "y": 0,
+                            "width": 64,
+                            "height": 32,
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "action": "channel.toggleOutput",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 32,
+                                "style": "edit_value_active_S_right",
+                                "text": "OFF"
+                              },
+                              {
+                                "x": 0,
+                                "type": "Select",
+                                "data": "channel.outputMode",
+                                "y": 0,
+                                "width": 64,
+                                "height": 32,
+                                "style": "default",
+                                "widgets": [
+                                  {
+                                    "type": "DisplayData",
+                                    "data": "channel.monValue",
+                                    "action": "channel.toggleOutput",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 64,
+                                    "height": 32,
+                                    "style": "edit_value_active_S_right",
+                                    "activeStyle": ""
+                                  },
+                                  {
+                                    "type": "DisplayData",
+                                    "data": "channel.monValue",
+                                    "action": "channel.toggleOutput",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 64,
+                                    "height": 32,
+                                    "style": "edit_value_active_S_right",
+                                    "activeStyle": ""
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "x": 0,
+                            "type": "Select",
+                            "data": "channel.isVoltageBalanced",
+                            "y": 32,
+                            "width": 64,
+                            "height": 30,
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.edit",
+                                "action": "",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "edit_value_S_right",
+                                "activeStyle": "edit_value_S_right"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.edit",
+                                "action": "",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "set_value_S_right_balanced",
+                                "activeStyle": "edit_value_S_right"
+                              }
+                            ]
+                          },
+                          {
+                            "x": 0,
+                            "type": "Select",
+                            "data": "channel.isCurrentBalanced",
+                            "y": 62,
+                            "width": 64,
+                            "height": 30,
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.i.edit",
+                                "action": "",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "edit_value_S_right",
+                                "activeStyle": "edit_value_S_right"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.i.edit",
+                                "action": "",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "set_value_S_right_balanced",
+                                "activeStyle": "edit_value_S_right"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Rectangle",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 92,
+                        "style": "default_inverse"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Rectangle",
+                    "x": 0,
+                    "y": 112,
+                    "width": 64,
+                    "height": 8,
+                    "style": "default_inverse"
+                  },
+                  {
+                    "type": "Text",
+                    "x": 0,
+                    "y": 120,
+                    "width": 64,
+                    "height": 22,
+                    "style": "edit_value_S_centered",
+                    "text": "\\u0081"
+                  },
+                  {
+                    "type": "Text",
+                    "x": 0,
+                    "y": 142,
+                    "width": 64,
+                    "height": 30,
+                    "style": "edit_value_S_left",
+                    "text": "Coupled:"
+                  },
+                  {
+                    "type": "Text",
+                    "x": 0,
+                    "y": 172,
+                    "width": 64,
+                    "height": 32,
+                    "style": "coupled_info_S",
+                    "text": "Parallel"
+                  }
+                ]
+              },
+              {
+                "type": "Container",
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 32,
+                "style": "default",
+                "widgets": [
+                  {
+                    "x": 0,
+                    "type": "Select",
+                    "data": "channel.status",
+                    "y": 0,
+                    "width": 64,
+                    "height": 112,
+                    "style": "default",
+                    "widgets": [
+                      {
+                        "type": "Rectangle",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 92,
+                        "style": "default_inverse"
+                      },
+                      {
+                        "type": "Container",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 112,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "x": 0,
+                            "type": "Select",
+                            "data": "channel.outputState",
+                            "y": 0,
+                            "width": 64,
+                            "height": 32,
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "type": "Text",
+                                "action": "channel.toggleOutput",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 32,
+                                "style": "edit_value_active_S_right",
+                                "text": "OFF"
+                              },
+                              {
+                                "x": 0,
+                                "type": "Select",
+                                "data": "channel.outputMode",
+                                "y": 0,
+                                "width": 64,
+                                "height": 32,
+                                "style": "default",
+                                "widgets": [
+                                  {
+                                    "type": "DisplayData",
+                                    "data": "channel.monValue",
+                                    "action": "channel.toggleOutput",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 64,
+                                    "height": 32,
+                                    "style": "edit_value_active_S_right",
+                                    "activeStyle": ""
+                                  },
+                                  {
+                                    "type": "DisplayData",
+                                    "data": "channel.monValue",
+                                    "action": "channel.toggleOutput",
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 64,
+                                    "height": 32,
+                                    "style": "edit_value_active_S_right",
+                                    "activeStyle": ""
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "x": 0,
+                            "type": "Select",
+                            "data": "channel.isVoltageBalanced",
+                            "y": 32,
+                            "width": 64,
+                            "height": 30,
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.edit",
+                                "action": "",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "edit_value_S_right",
+                                "activeStyle": "edit_value_S_right"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.u.edit",
+                                "action": "",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "set_value_S_right_balanced",
+                                "activeStyle": "edit_value_focus_S_right"
+                              }
+                            ]
+                          },
+                          {
+                            "x": 0,
+                            "type": "Select",
+                            "data": "channel.isCurrentBalanced",
+                            "y": 62,
+                            "width": 64,
+                            "height": 30,
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.i.edit",
+                                "action": "",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "edit_value_S_right",
+                                "activeStyle": "edit_value_focus_S_right"
+                              },
+                              {
+                                "type": "DisplayData",
+                                "data": "channel.i.edit",
+                                "action": "",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "set_value_S_right_balanced",
+                                "activeStyle": "edit_value_S_right"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Rectangle",
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 92,
+                        "style": "default_inverse"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Rectangle",
+                    "x": 0,
+                    "y": 112,
+                    "width": 64,
+                    "height": 10,
+                    "style": "default_inverse"
+                  },
+                  {
+                    "type": "Text",
+                    "x": 0,
+                    "y": 120,
+                    "width": 64,
+                    "height": 22,
+                    "style": "edit_value_S_centered",
+                    "text": "\\u0081"
+                  },
+                  {
+                    "type": "Text",
+                    "x": 0,
+                    "y": 142,
+                    "width": 64,
+                    "height": 30,
+                    "style": "edit_value_S_left",
+                    "text": "Coupled:"
+                  },
+                  {
+                    "type": "Text",
+                    "x": 0,
+                    "y": 172,
+                    "width": 64,
+                    "height": 32,
+                    "style": "coupled_info_S",
+                    "text": "Series"
+                  }
+                ]
+              },
+              {
+                "type": "Container",
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 32,
+                "style": "default",
+                "widgets": [
+                  {
+                    "type": "Text",
+                    "action": "show_channel_settings",
+                    "x": 0,
+                    "y": 90,
+                    "width": 64,
+                    "height": 24,
+                    "style": "default_S",
+                    "text": "\\u008ATrack"
+                  },
+                  {
+                    "type": "List",
+                    "data": "channels",
+                    "x": 0,
+                    "y": 0,
+                    "width": 64,
+                    "height": 204,
+                    "style": "default",
+                    "listType": "vertical",
+                    "itemWidget": {
+                      "x": 0,
+                      "type": "Select",
+                      "data": "channel.status",
+                      "y": 0,
+                      "width": 64,
+                      "height": 112,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "type": "Rectangle",
+                          "x": 0,
+                          "y": 0,
+                          "width": 64,
+                          "height": 92,
+                          "style": "default_inverse"
+                        },
+                        {
+                          "type": "Container",
+                          "x": 0,
+                          "y": 0,
+                          "width": 64,
+                          "height": 112,
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "x": 0,
+                              "type": "Select",
+                              "data": "channel.outputState",
+                              "y": 0,
+                              "width": 64,
+                              "height": 32,
+                              "style": "default",
+                              "widgets": [
+                                {
+                                  "type": "Text",
+                                  "action": "channel.toggleOutput",
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 64,
+                                  "height": 32,
+                                  "style": "edit_value_active_S_right",
+                                  "text": "OFF"
+                                },
+                                {
+                                  "x": 0,
+                                  "type": "Select",
+                                  "data": "channel.outputMode",
+                                  "y": 0,
+                                  "width": 64,
+                                  "height": 32,
+                                  "style": "default",
+                                  "widgets": [
+                                    {
+                                      "type": "DisplayData",
+                                      "data": "channel.monValue",
+                                      "action": "channel.toggleOutput",
+                                      "x": 0,
+                                      "y": 0,
+                                      "width": 64,
+                                      "height": 32,
+                                      "style": "edit_value_active_S_right",
+                                      "activeStyle": ""
+                                    },
+                                    {
+                                      "type": "DisplayData",
+                                      "data": "channel.monValue",
+                                      "action": "channel.toggleOutput",
+                                      "x": 0,
+                                      "y": 0,
+                                      "width": 64,
+                                      "height": 32,
+                                      "style": "edit_value_active_S_right",
+                                      "activeStyle": ""
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "DisplayData",
+                              "data": "channel.u.edit",
+                              "action": "",
+                              "x": 0,
+                              "y": 32,
+                              "width": 64,
+                              "height": 30,
+                              "style": "edit_value_S_right",
+                              "activeStyle": "edit_value_S_right"
+                            },
+                            {
+                              "type": "DisplayData",
+                              "data": "channel.i.edit",
+                              "action": "",
+                              "x": 0,
+                              "y": 62,
+                              "width": 64,
+                              "height": 30,
+                              "style": "edit_value_S_right",
+                              "activeStyle": "edit_value_S_right"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "Rectangle",
+                          "x": 0,
+                          "y": 0,
+                          "width": 64,
+                          "height": 92,
+                          "style": "default_inverse"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
           }
         ]
       }
