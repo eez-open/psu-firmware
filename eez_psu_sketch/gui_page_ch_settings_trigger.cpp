@@ -490,6 +490,10 @@ int ChSettingsListsPage::getRowIndex() {
     return m_iCursor / 3;
 }
 
+int ChSettingsListsPage::getColIndex() {
+    return m_iCursor % 3;
+}
+
 int ChSettingsListsPage::getPageIndex() {
     return getRowIndex() / LIST_ITEMS_PER_PAGE;
 }
@@ -517,9 +521,10 @@ int ChSettingsListsPage::getCursorIndexWithinPage() {
 }
 
 uint8_t ChSettingsListsPage::getDataIdAtCursor() {
-    if (m_iCursor % 3 == 0) {
+    int iCol = getColIndex();
+    if (iCol == 0) {
         return DATA_ID_CHANNEL_LIST_DWELL;
-    } else if (m_iCursor % 3 == 1) {
+    } else if (iCol == 1) {
         return DATA_ID_CHANNEL_LIST_VOLTAGE;
     } else {
         return DATA_ID_CHANNEL_LIST_CURRENT;
@@ -541,16 +546,32 @@ int ChSettingsListsPage::getCursorIndex(const data::Cursor &cursor, uint8_t id) 
 
 void ChSettingsListsPage::moveCursorToFirstAvailableCell() {
     int iRow = getRowIndex();
-
-    if (iRow > m_dwellListSize) {
-        if (iRow > m_voltageListSize) {
+    int iCol = getColIndex();
+    if (iCol == 0) {
+        if (iRow > m_dwellListSize) {
             if (iRow > m_voltageListSize) {
-                m_iCursor = 0;
+                if (iRow > m_currentListSize) {
+                    m_iCursor = 0;
+                } else {
+                    m_iCursor += 2;
+                }
             } else {
-                m_iCursor += 2;
+                m_iCursor += 1;
             }
-        } else {
+        }
+    } else if (iCol == 1) {
+        if (iRow > m_voltageListSize) {
+            if (iRow > m_currentListSize) {
+                m_iCursor += 2;
+                moveCursorToFirstAvailableCell();
+            } else {
+                m_iCursor += 1;
+            }
+        }
+    } else {
+        if (iRow > m_currentListSize) {
             m_iCursor += 1;
+            moveCursorToFirstAvailableCell();
         }
     }
 }

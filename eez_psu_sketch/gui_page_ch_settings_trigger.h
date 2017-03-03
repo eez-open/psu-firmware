@@ -95,6 +95,7 @@ private:
     int m_iCursor;
 
     int getRowIndex();
+    int getColIndex();
     int getPageIndex();
     uint16_t getMaxListSize();
     uint16_t getNumPages();

@@ -1539,7 +1539,8 @@ void onTouchListGraph(const WidgetCursor &widgetCursor, int xTouch, int yTouch) 
             if (x2 >= widgetCursor.x + (int)widget->w) x2 = widgetCursor.x + (int)widget->w - 1;
 
             if (xTouch >= x1 && xTouch < x2) {
-                iCursor = i * 3;
+                int iCurrentCursor = data::get(widgetCursor.cursor, listGraphWidget->cursorData).getInt();
+                iCursor = i * 3 + iCurrentCursor % 3;
                 break;
             }
         }
