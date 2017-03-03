@@ -338,7 +338,7 @@ data::Value ChSettingsListsPage::getData(const data::Cursor &cursor, uint8_t id)
         return data::Value(m_iCursor);
     }
 
-    if (id == DATA_ID_CHANNEL_LISTS_INSERT_ROW_BELOW_ENABLED) {
+    if (id == DATA_ID_CHANNEL_LISTS_INSERT_MENU_ENABLED) {
         return data::Value(getRowIndex() < getMaxListSize() ? 1 : 0);
     }
 
@@ -693,6 +693,18 @@ bool ChSettingsListsPage::onEncoderClicked() {
     return true;
 }
 
+void ChSettingsListsPage::showInsertMenu() {
+    if (getRowIndex() < getMaxListSize()) {
+        pushPage(PAGE_ID_CH_SETTINGS_LISTS_INSERT_MENU);
+    }
+}
+
+void ChSettingsListsPage::showClearMenu() {
+    if (getMaxListSize()) {
+        pushPage(PAGE_ID_CH_SETTINGS_LISTS_CLEAR_MENU);
+    }
+}
+
 void ChSettingsListsPage::insertRow(int iRow, int iCopyRow) {
     if (getMaxListSize() < MAX_LIST_SIZE) {
         int iRow = getRowIndex();
@@ -705,23 +717,17 @@ void ChSettingsListsPage::insertRow(int iRow, int iCopyRow) {
         data::Cursor cursor(getCursorIndexWithinPage());
 
         if (iRow <= m_dwellListSize) {
-            m_dwellList[iRow] = iCopyRow < m_dwellListSize ?
-                m_dwellList[iCopyRow] :
-                data::getDef(cursor, DATA_ID_CHANNEL_LIST_DWELL).getFloat();
+            m_dwellList[iRow] = m_dwellList[iCopyRow];
             ++m_dwellListSize;
         }
         
         if (iRow <= m_voltageListSize) {
-            m_voltageList[iRow] = iCopyRow < m_voltageListSize ?
-                m_voltageList[iCopyRow] :
-                data::getDef(cursor, DATA_ID_CHANNEL_LIST_VOLTAGE).getFloat();
+            m_voltageList[iRow] = m_voltageList[iCopyRow];
             ++m_voltageListSize;
         }
         
         if (iRow <= m_currentListSize) {
-            m_currentList[iRow] = iCopyRow < m_currentListSize ?
-                m_currentList[iCopyRow] :
-                data::getDef(cursor, DATA_ID_CHANNEL_LIST_CURRENT).getFloat();
+            m_currentList[iRow] = m_currentList[iCopyRow];
             ++m_currentListSize;
         }
     }
@@ -813,7 +819,6 @@ void ChSettingsListsPage::doClearAll() {
 void ChSettingsListsPage::clearAll() {
     yesNoDialog(PAGE_ID_YES_NO, PSTR("Are you sure?"), onClearAll, 0, 0);
 }
-
 
 }
 }

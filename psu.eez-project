@@ -749,12 +749,12 @@
     {
       "name": "show_channel_lists_insert_menu",
       "implementationType": "native",
-      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_LISTS_INSERT_MENU);"
+      "implementation": "((ChSettingsListsPage *)getActivePage())->showInsertMenu();"
     },
     {
       "name": "show_channel_lists_clear_menu",
       "implementationType": "native",
-      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_LISTS_CLEAR_MENU);"
+      "implementation": "((ChSettingsListsPage *)getActivePage())->showClearMenu();\n"
     },
     {
       "name": "channel.lists.insertRowAbove",
@@ -1863,12 +1863,12 @@
       "defaultValue": "128"
     },
     {
-      "name": "channel.lists.clearMenuEnabled",
+      "name": "channel.lists.insertMenuEnabled",
       "type": "boolean",
       "defaultValue": "1"
     },
     {
-      "name": "channel.lists.insertRowBelowEnabled",
+      "name": "channel.lists.clearMenuEnabled",
       "type": "boolean",
       "defaultValue": "1"
     },
@@ -13262,14 +13262,16 @@
               "disabledStyle": "bottom_button_disabled"
             },
             {
-              "type": "Text",
+              "type": "Button",
               "action": "show_channel_lists_insert_menu",
               "x": 90,
               "y": 204,
               "width": 45,
               "height": 36,
               "style": "bottom_button",
-              "text": "V"
+              "text": "V",
+              "enabled": "channel.lists.insertMenuEnabled",
+              "disabledStyle": "bottom_button_disabled"
             },
             {
               "type": "Button",
@@ -13354,7 +13356,7 @@
               "text": "Insert row above"
             },
             {
-              "type": "Button",
+              "type": "Text",
               "data": "",
               "action": "channel.lists.insertRowBelow",
               "x": 12,
@@ -13362,9 +13364,7 @@
               "width": 140,
               "height": 32,
               "style": "select_enum_item_popup_item",
-              "text": "Insert row below",
-              "enabled": "channel.lists.insertRowBelowEnabled",
-              "disabledStyle": "select_enum_item_popup_disabled_item"
+              "text": "Insert row below"
             }
           ]
         },

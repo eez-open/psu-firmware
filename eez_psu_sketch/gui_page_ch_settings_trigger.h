@@ -77,6 +77,9 @@ public:
     bool onEncoder(int counter);
     bool onEncoderClicked();
 
+    void showInsertMenu();
+    void showClearMenu();
+
     void insertRowAbove();
     void insertRowBelow();
 
