@@ -338,6 +338,26 @@ data::Value ChSettingsListsPage::getData(const data::Cursor &cursor, uint8_t id)
         return data::Value(m_iCursor);
     }
 
+    if (id == DATA_ID_CHANNEL_LISTS_INSERT_ROW_BELOW_ENABLED) {
+        return data::Value(getRowIndex() < getMaxListSize() ? 1 : 0);
+    }
+
+    if (id == DATA_ID_CHANNEL_LISTS_CLEAR_MENU_ENABLED) {
+        return data::Value(getMaxListSize() ? 1 : 0);
+    }
+
+    if (id == DATA_ID_CHANNEL_LISTS_CLEAR_ROW_ENABLED) {
+        return data::Value(getRowIndex() < getMaxListSize() ? 1 : 0);
+    }
+
+    if (id == DATA_ID_CHANNEL_LISTS_CLEAR_COLUMN_ENABLED) {
+        return data::Value(getRowIndex() < getMaxListSize() ? 1 : 0);
+    }
+
+    if (id == DATA_ID_CHANNEL_LISTS_CLEAR_ROWS_ENABLED) {
+        return data::Value(getRowIndex() < getMaxListSize() ? 1 : 0);
+    }
+
     return data::Value();
 }
 
@@ -673,7 +693,7 @@ bool ChSettingsListsPage::onEncoderClicked() {
     return true;
 }
 
-void ChSettingsListsPage::insertRowAbove() {
+void ChSettingsListsPage::insertRow(int iRow, int iCopyRow) {
     if (getMaxListSize() < MAX_LIST_SIZE) {
         int iRow = getRowIndex();
         for (int i = MAX_LIST_SIZE - 2; i >= iRow; --i) {
@@ -685,27 +705,38 @@ void ChSettingsListsPage::insertRowAbove() {
         data::Cursor cursor(getCursorIndexWithinPage());
 
         if (iRow <= m_dwellListSize) {
+            m_dwellList[iRow] = iCopyRow < m_dwellListSize ?
+                m_dwellList[iCopyRow] :
+                data::getDef(cursor, DATA_ID_CHANNEL_LIST_DWELL).getFloat();
             ++m_dwellListSize;
-            m_dwellList[iRow] = data::getDef(cursor, DATA_ID_CHANNEL_LIST_DWELL).getFloat();
         }
         
         if (iRow <= m_voltageListSize) {
+            m_voltageList[iRow] = iCopyRow < m_voltageListSize ?
+                m_voltageList[iCopyRow] :
+                data::getDef(cursor, DATA_ID_CHANNEL_LIST_VOLTAGE).getFloat();
             ++m_voltageListSize;
-            m_voltageList[iRow] = data::getDef(cursor, DATA_ID_CHANNEL_LIST_VOLTAGE).getFloat();
         }
         
         if (iRow <= m_currentListSize) {
+            m_currentList[iRow] = iCopyRow < m_currentListSize ?
+                m_currentList[iCopyRow] :
+                data::getDef(cursor, DATA_ID_CHANNEL_LIST_CURRENT).getFloat();
             ++m_currentListSize;
-            m_currentList[iRow] = data::getDef(cursor, DATA_ID_CHANNEL_LIST_CURRENT).getFloat();
         }
     }
+}
+
+void ChSettingsListsPage::insertRowAbove() {
+    int iRow = getRowIndex();
+    insertRow(iRow, iRow);
 }
 
 void ChSettingsListsPage::insertRowBelow() {
     int iRow = getRowIndex();
     if (iRow < getMaxListSize()) {
         m_iCursor += 3;
-        insertRowBelow();
+        insertRow(getRowIndex(), iRow);
     }
 }
 

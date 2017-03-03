@@ -897,6 +897,14 @@ Value get(const Cursor &cursor, uint8_t id) {
         }
     }
 
+    page = getPreviousPage();
+    if (page) {
+        Value value = page->getData(cursor, id);
+        if (value.getType() != VALUE_TYPE_NONE) {
+            return value;
+        }
+    }
+
     Keypad *keypad = getActiveKeypad();
     if (keypad) {
         Value value = keypad->getData(id);

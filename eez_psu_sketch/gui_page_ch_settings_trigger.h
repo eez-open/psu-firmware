@@ -115,6 +115,8 @@ private:
     static void onValueSet(float value);
     void doValueSet(float value);
 
+    void insertRow(int iRow, int iCopyRow);
+
     static void onClearColumn();
     void doClearColumn();
 

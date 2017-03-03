@@ -205,7 +205,11 @@ int getPreviousActivePageId() {
 }
 
 Page *getPreviousPage() {
-    return g_pageNavigationStack[g_pageNavigationStackPointer - 1].activePage;
+    if (g_pageNavigationStackPointer > 0) {
+        return g_pageNavigationStack[g_pageNavigationStackPointer - 1].activePage;
+    } else {
+        return 0;
+    }
 }
 
 void doShowPage(int index, Page *page = 0) {

@@ -1861,6 +1861,31 @@
       "name": "channel.lists.cursor",
       "type": "integer",
       "defaultValue": "128"
+    },
+    {
+      "name": "channel.lists.clearMenuEnabled",
+      "type": "boolean",
+      "defaultValue": "1"
+    },
+    {
+      "name": "channel.lists.insertRowBelowEnabled",
+      "type": "boolean",
+      "defaultValue": "1"
+    },
+    {
+      "name": "channel.lists.clearRowEnabled",
+      "type": "boolean",
+      "defaultValue": "1"
+    },
+    {
+      "name": "channel.lists.clearColumnEnabled",
+      "type": "boolean",
+      "defaultValue": "1"
+    },
+    {
+      "name": "channel.lists.clearRowsEnabled",
+      "type": "boolean",
+      "defaultValue": "1"
     }
   ],
   "gui": {
@@ -13247,14 +13272,16 @@
               "text": "V"
             },
             {
-              "type": "Text",
+              "type": "Button",
               "action": "show_channel_lists_clear_menu",
               "x": 135,
               "y": 204,
               "width": 45,
               "height": 36,
               "style": "bottom_button",
-              "text": "W"
+              "text": "W",
+              "enabled": "channel.lists.clearMenuEnabled",
+              "disabledStyle": "bottom_button_disabled"
             },
             {
               "type": "Text",
@@ -13327,7 +13354,7 @@
               "text": "Insert row above"
             },
             {
-              "type": "Text",
+              "type": "Button",
               "data": "",
               "action": "channel.lists.insertRowBelow",
               "x": 12,
@@ -13335,7 +13362,9 @@
               "width": 140,
               "height": 32,
               "style": "select_enum_item_popup_item",
-              "text": "Insert row below"
+              "text": "Insert row below",
+              "enabled": "channel.lists.insertRowBelowEnabled",
+              "disabledStyle": "select_enum_item_popup_disabled_item"
             }
           ]
         },
@@ -13358,34 +13387,40 @@
           "style": "select_enum_item_popup_container",
           "widgets": [
             {
-              "type": "Text",
+              "type": "Button",
               "action": "channel.lists.clearRow",
               "x": 12,
               "y": 12,
               "width": 218,
               "height": 32,
               "style": "select_enum_item_popup_item",
-              "text": "Clear row"
+              "text": "Clear row",
+              "enabled": "channel.lists.clearRowEnabled",
+              "disabledStyle": "select_enum_item_popup_disabled_item"
             },
             {
-              "type": "Text",
+              "type": "Button",
               "action": "channel.lists.clearColumn",
               "x": 12,
               "y": 44,
               "width": 218,
               "height": 32,
               "style": "select_enum_item_popup_item",
-              "text": "Clear column from cursor"
+              "text": "Clear column from cursor",
+              "enabled": "channel.lists.clearColumnEnabled",
+              "disabledStyle": "select_enum_item_popup_disabled_item"
             },
             {
-              "type": "Text",
+              "type": "Button",
               "action": "channel.lists.clearRows",
               "x": 12,
               "y": 76,
               "width": 218,
               "height": 32,
               "style": "select_enum_item_popup_item",
-              "text": "Clear all rows from cursor"
+              "text": "Clear all rows from cursor",
+              "enabled": "channel.lists.clearRowsEnabled",
+              "disabledStyle": "select_enum_item_popup_disabled_item"
             },
             {
               "type": "Text",
