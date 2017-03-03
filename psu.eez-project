@@ -13050,6 +13050,14 @@
           "height": 240,
           "widgets": [
             {
+              "type": "Local.ChannelsInactive",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
               "type": "ListGraph",
               "data": "channel.lists",
               "x": 2,
@@ -13315,14 +13323,6 @@
               "width": 5,
               "height": 36,
               "style": "bottom_button_background"
-            },
-            {
-              "type": "Local.ChannelsInactive",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
             }
           ]
         },
