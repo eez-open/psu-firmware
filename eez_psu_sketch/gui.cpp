@@ -62,7 +62,7 @@
 #define CONF_GUI_WELCOME_PAGE_TIMEOUT 2000000UL // 2s
 #define CONF_GUI_LONG_TAP_TIMEOUT 1000000UL // 1s
 
-#define CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY 200000UL // 200ms
+#define CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY 250000UL // 250ms
 
 #define CONF_GUI_TOAST_DURATION_MS 1 * 1000UL // 1sec
 
@@ -985,6 +985,17 @@ void touchHandling(uint32_t tick_usec) {
     }
 }
 
+bool isAutoRepeatAction(ActionType action) {
+    return
+        action == ACTION_ID_KEYPAD_BACK ||
+        action == ACTION_ID_UP_DOWN ||
+        action == ACTION_ID_EVENT_QUEUE_PREVIOUS_PAGE ||
+        action == ACTION_ID_EVENT_QUEUE_NEXT_PAGE ||
+        action == ACTION_ID_CHANNEL_LISTS_PREVIOUS_PAGE ||
+        action == ACTION_ID_CHANNEL_LISTS_NEXT_PAGE;
+}
+
+
 void processEvents() {
     for (int i = 0; i < g_numEvents; ++i) {
         if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
@@ -1084,7 +1095,7 @@ void processEvents() {
             } else if (g_events[i].type == EVENT_TYPE_AUTO_REPEAT) {
                 if (g_foundWidgetAtDown) {
                     ActionType action = getAction(g_foundWidgetAtDown);
-                    if (action == ACTION_ID_KEYPAD_BACK || action == ACTION_ID_UP_DOWN) {
+                    if (isAutoRepeatAction(action)) {
                         g_touchActionExecuted = true;
                         executeAction(action);
                     }
