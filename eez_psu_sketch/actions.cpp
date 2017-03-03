@@ -41,13 +41,8 @@ namespace psu {
 
 using namespace gui;
 
-void action_toggle_channel() {
-    Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);
-    if (channel_dispatcher::isTripped(channel)) {
-        errorMessageP(PSTR("Channel is tripped!"));
-    } else {
-        channel_dispatcher::outputEnable(channel, !channel.isOutputEnabled());
-    }
+void action_channel_toggle_output() {
+    channelToggleOutput();
 }
 
 void action_edit() {
@@ -648,10 +643,22 @@ void action_channel_lists_clear_all() {
     ((ChSettingsListsPage *)getActivePage())->clearAll();
 }
 
+void action_channel_start_list() {
+    channelStartList();
+}
+
+void action_channel_disable_list() {
+    channelDisableList();
+}
+
+void action_channel_enable_output() {
+    channelEnableOutput();
+}
+
 
 ACTION actions[] = {
     0,
-    action_toggle_channel,
+    action_channel_toggle_output,
     action_edit,
     action_edit_mode_slider,
     action_edit_mode_step,
@@ -797,7 +804,10 @@ ACTION actions[] = {
     action_channel_lists_clear_row,
     action_channel_lists_clear_column,
     action_channel_lists_clear_rows,
-    action_channel_lists_clear_all
+    action_channel_lists_clear_all,
+    action_channel_start_list,
+    action_channel_disable_list,
+    action_channel_enable_output
 };
 
 }

@@ -29,6 +29,7 @@
 #if OPTION_ENCODER
 #include "encoder.h"
 #endif
+#include "trigger.h"
 
 #include "gui.h"
 #include "gui_internal.h"
@@ -808,6 +809,61 @@ void onEncoder(int counter, bool clicked) {
     }
 }
 #endif
+
+////////////////////////////////////////////////////////////////////////////////
+
+static WidgetCursor g_toggleOutputWidgetCursor;
+
+void channelToggleOutput() {
+    Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);
+    if (channel_dispatcher::isTripped(channel)) {
+        errorMessageP(PSTR("Channel is tripped!"));
+    } else {
+        if (channel.isOutputEnabled()) {
+            trigger::abort();
+            channel_dispatcher::outputEnable(channel, false);
+        } else {
+            bool list = channel_dispatcher::getVoltageTriggerMode(channel) == TRIGGER_MODE_LIST ||
+                channel_dispatcher::getCurrentTriggerMode(channel) == TRIGGER_MODE_LIST;
+
+            if (list && !trigger::isExecuting()) {
+                g_toggleOutputWidgetCursor = g_foundWidgetAtDown;
+                pushPage(PAGE_ID_CH_START_LIST);
+            } else {
+                channel_dispatcher::outputEnable(channel, true);
+            }
+        }
+    }
+}
+
+void channelStartList() {
+    popPage();
+    Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i);
+    int err = trigger::startImmediately();
+    if (err == SCPI_RES_OK) {
+        channel_dispatcher::outputEnable(channel, true);
+    } else {
+        errorMessage(g_toggleOutputWidgetCursor.cursor, data::Value::ScpiErrorText(err));
+    }
+}
+
+void channelDisableList() {
+    popPage();
+    Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i);
+    if (channel_dispatcher::getVoltageTriggerMode(channel) == TRIGGER_MODE_LIST) {
+        channel_dispatcher::setVoltageTriggerMode(channel, TRIGGER_MODE_FIXED);
+    }
+    if (channel_dispatcher::getCurrentTriggerMode(channel) == TRIGGER_MODE_LIST) {
+        channel_dispatcher::setCurrentTriggerMode(channel, TRIGGER_MODE_FIXED);
+    }
+    channel_dispatcher::outputEnable(channel, true);
+}
+
+void channelEnableOutput() {
+    popPage();
+    Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i);
+    channel_dispatcher::outputEnable(channel, true);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 

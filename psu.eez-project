@@ -42,10 +42,10 @@
   },
   "actions": [
     {
-      "name": "toggle_channel",
+      "name": "channel.toggleOutput",
       "description": "turn channel on/off",
       "implementationType": "native",
-      "implementation": "Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);\nif (channel_dispatcher::isTripped(channel)) {\n    errorMessageP(PSTR(\"Channel is tripped!\"));\n} else {\n    channel_dispatcher::outputEnable(channel, !channel.isOutputEnabled());\n}\n"
+      "implementation": "channelToggleOutput();"
     },
     {
       "name": "edit",
@@ -785,6 +785,21 @@
       "name": "channel.lists.clearAll",
       "implementationType": "native",
       "implementation": "popPage();\n((ChSettingsListsPage *)getActivePage())->clearAll();"
+    },
+    {
+      "name": "channel.startList",
+      "implementationType": "native",
+      "implementation": "channelStartList();"
+    },
+    {
+      "name": "channel.disableList",
+      "implementationType": "native",
+      "implementation": "channelDisableList();"
+    },
+    {
+      "name": "channel.enableOutput",
+      "implementationType": "native",
+      "implementation": "channelEnableOutput();"
     }
   ],
   "data": [
@@ -2762,7 +2777,7 @@
                         "widgets": [
                           {
                             "type": "Text",
-                            "action": "toggle_channel",
+                            "action": "channel.toggleOutput",
                             "x": 0,
                             "y": 0,
                             "width": 240,
@@ -2782,7 +2797,7 @@
                               {
                                 "type": "DisplayData",
                                 "data": "channel.monValue",
-                                "action": "toggle_channel",
+                                "action": "channel.toggleOutput",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -2792,7 +2807,7 @@
                               {
                                 "type": "DisplayData",
                                 "data": "channel.monValue",
-                                "action": "toggle_channel",
+                                "action": "channel.toggleOutput",
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
@@ -3096,7 +3111,7 @@
                                 "widgets": [
                                   {
                                     "type": "Text",
-                                    "action": "toggle_channel",
+                                    "action": "channel.toggleOutput",
                                     "x": 0,
                                     "y": 0,
                                     "width": 160,
@@ -3116,7 +3131,7 @@
                                       {
                                         "type": "DisplayData",
                                         "data": "channel.monValue",
-                                        "action": "toggle_channel",
+                                        "action": "channel.toggleOutput",
                                         "x": 0,
                                         "y": 0,
                                         "width": 160,
@@ -3126,7 +3141,7 @@
                                       {
                                         "type": "DisplayData",
                                         "data": "channel.monValue",
-                                        "action": "toggle_channel",
+                                        "action": "channel.toggleOutput",
                                         "x": 0,
                                         "y": 0,
                                         "width": 160,
@@ -3441,7 +3456,7 @@
                                 "widgets": [
                                   {
                                     "type": "Text",
-                                    "action": "toggle_channel",
+                                    "action": "channel.toggleOutput",
                                     "x": 0,
                                     "y": 0,
                                     "width": 200,
@@ -3469,7 +3484,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue1",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 0,
                                             "y": 0,
                                             "width": 200,
@@ -3493,7 +3508,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue2",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 0,
                                             "y": 30,
                                             "width": 200,
@@ -3519,7 +3534,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue1",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 0,
                                             "y": 0,
                                             "width": 200,
@@ -3543,7 +3558,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue2",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 0,
                                             "y": 30,
                                             "width": 200,
@@ -3905,7 +3920,7 @@
                                 "widgets": [
                                   {
                                     "type": "Text",
-                                    "action": "toggle_channel",
+                                    "action": "channel.toggleOutput",
                                     "x": 0,
                                     "y": 0,
                                     "width": 110,
@@ -3933,7 +3948,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue1",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 0,
                                             "y": 0,
                                             "width": 54,
@@ -3957,7 +3972,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue2",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 56,
                                             "y": 0,
                                             "width": 54,
@@ -3983,7 +3998,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue1",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 0,
                                             "y": 0,
                                             "width": 54,
@@ -4007,7 +4022,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue2",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 56,
                                             "y": 0,
                                             "width": 54,
@@ -4337,7 +4352,7 @@
                                 "widgets": [
                                   {
                                     "type": "Text",
-                                    "action": "toggle_channel",
+                                    "action": "channel.toggleOutput",
                                     "x": 0,
                                     "y": 0,
                                     "width": 202,
@@ -4357,7 +4372,7 @@
                                       {
                                         "type": "YTGraph",
                                         "data": "channel.displayValue1",
-                                        "action": "toggle_channel",
+                                        "action": "channel.toggleOutput",
                                         "x": 0,
                                         "y": 0,
                                         "width": 202,
@@ -4370,7 +4385,7 @@
                                       {
                                         "type": "YTGraph",
                                         "data": "channel.displayValue1",
-                                        "action": "toggle_channel",
+                                        "action": "channel.toggleOutput",
                                         "x": 0,
                                         "y": 0,
                                         "width": 202,
@@ -4911,7 +4926,7 @@
                                 "widgets": [
                                   {
                                     "type": "Text",
-                                    "action": "toggle_channel",
+                                    "action": "channel.toggleOutput",
                                     "x": 0,
                                     "y": 0,
                                     "width": 160,
@@ -4931,7 +4946,7 @@
                                       {
                                         "type": "DisplayData",
                                         "data": "channel.monValue",
-                                        "action": "toggle_channel",
+                                        "action": "channel.toggleOutput",
                                         "x": 0,
                                         "y": 0,
                                         "width": 160,
@@ -4941,7 +4956,7 @@
                                       {
                                         "type": "DisplayData",
                                         "data": "channel.monValue",
-                                        "action": "toggle_channel",
+                                        "action": "channel.toggleOutput",
                                         "x": 0,
                                         "y": 0,
                                         "width": 160,
@@ -5454,7 +5469,7 @@
                                 "widgets": [
                                   {
                                     "type": "Text",
-                                    "action": "toggle_channel",
+                                    "action": "channel.toggleOutput",
                                     "x": 0,
                                     "y": 0,
                                     "width": 200,
@@ -5482,7 +5497,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue1",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 0,
                                             "y": 0,
                                             "width": 200,
@@ -5506,7 +5521,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue2",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 0,
                                             "y": 30,
                                             "width": 200,
@@ -5532,7 +5547,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue1",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 0,
                                             "y": 0,
                                             "width": 200,
@@ -5556,7 +5571,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue2",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 0,
                                             "y": 30,
                                             "width": 200,
@@ -5754,7 +5769,7 @@
                                 "widgets": [
                                   {
                                     "type": "Text",
-                                    "action": "toggle_channel",
+                                    "action": "channel.toggleOutput",
                                     "x": 0,
                                     "y": 0,
                                     "width": 110,
@@ -5782,7 +5797,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue1",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 0,
                                             "y": 0,
                                             "width": 54,
@@ -5806,7 +5821,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue2",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 56,
                                             "y": 0,
                                             "width": 54,
@@ -5832,7 +5847,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue1",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 0,
                                             "y": 0,
                                             "width": 54,
@@ -5856,7 +5871,7 @@
                                           {
                                             "type": "BarGraph",
                                             "data": "channel.displayValue2",
-                                            "action": "toggle_channel",
+                                            "action": "channel.toggleOutput",
                                             "x": 56,
                                             "y": 0,
                                             "width": 54,
@@ -6404,7 +6419,7 @@
                                 "widgets": [
                                   {
                                     "type": "Text",
-                                    "action": "toggle_channel",
+                                    "action": "channel.toggleOutput",
                                     "x": 0,
                                     "y": 0,
                                     "width": 202,
@@ -6424,7 +6439,7 @@
                                       {
                                         "type": "YTGraph",
                                         "data": "channel.displayValue1",
-                                        "action": "toggle_channel",
+                                        "action": "channel.toggleOutput",
                                         "x": 0,
                                         "y": 0,
                                         "width": 202,
@@ -6437,7 +6452,7 @@
                                       {
                                         "type": "YTGraph",
                                         "data": "channel.displayValue1",
-                                        "action": "toggle_channel",
+                                        "action": "channel.toggleOutput",
                                         "x": 0,
                                         "y": 0,
                                         "width": 202,
@@ -13381,6 +13396,56 @@
               "height": 32,
               "style": "select_enum_item_popup_item",
               "text": "Clear all"
+            }
+          ]
+        },
+        "closePageIfTouchedOutside": true
+      },
+      {
+        "name": "ch_start_list",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 74,
+          "y": 60,
+          "width": 172,
+          "height": 120,
+          "style": "select_enum_item_popup_container",
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "channel.enableOutput",
+              "x": 12,
+              "y": 76,
+              "width": 148,
+              "height": 32,
+              "style": "select_enum_item_popup_item",
+              "text": "Only enable output"
+            },
+            {
+              "type": "Text",
+              "action": "channel.startList",
+              "x": 12,
+              "y": 12,
+              "width": 148,
+              "height": 32,
+              "style": "select_enum_item_popup_item",
+              "text": "Start list"
+            },
+            {
+              "type": "Text",
+              "action": "channel.disableList",
+              "x": 12,
+              "y": 44,
+              "width": 148,
+              "height": 32,
+              "style": "select_enum_item_popup_item",
+              "text": "Disable list"
             }
           ]
         },
@@ -20395,7 +20460,7 @@
                               "widgets": [
                                 {
                                   "type": "Text",
-                                  "action": "toggle_channel",
+                                  "action": "channel.toggleOutput",
                                   "x": 0,
                                   "y": 0,
                                   "width": 64,
@@ -20415,7 +20480,7 @@
                                     {
                                       "type": "DisplayData",
                                       "data": "channel.monValue",
-                                      "action": "toggle_channel",
+                                      "action": "channel.toggleOutput",
                                       "x": 0,
                                       "y": 0,
                                       "width": 64,
@@ -20426,7 +20491,7 @@
                                     {
                                       "type": "DisplayData",
                                       "data": "channel.monValue",
-                                      "action": "toggle_channel",
+                                      "action": "channel.toggleOutput",
                                       "x": 0,
                                       "y": 0,
                                       "width": 64,
@@ -20541,7 +20606,7 @@
                             "widgets": [
                               {
                                 "type": "Text",
-                                "action": "toggle_channel",
+                                "action": "channel.toggleOutput",
                                 "x": 0,
                                 "y": 0,
                                 "width": 64,
@@ -20561,7 +20626,7 @@
                                   {
                                     "type": "DisplayData",
                                     "data": "channel.monValue",
-                                    "action": "toggle_channel",
+                                    "action": "channel.toggleOutput",
                                     "x": 0,
                                     "y": 0,
                                     "width": 64,
@@ -20572,7 +20637,7 @@
                                   {
                                     "type": "DisplayData",
                                     "data": "channel.monValue",
-                                    "action": "toggle_channel",
+                                    "action": "channel.toggleOutput",
                                     "x": 0,
                                     "y": 0,
                                     "width": 64,
@@ -20743,7 +20808,7 @@
                             "widgets": [
                               {
                                 "type": "Text",
-                                "action": "toggle_channel",
+                                "action": "channel.toggleOutput",
                                 "x": 0,
                                 "y": 0,
                                 "width": 64,
@@ -20763,7 +20828,7 @@
                                   {
                                     "type": "DisplayData",
                                     "data": "channel.monValue",
-                                    "action": "toggle_channel",
+                                    "action": "channel.toggleOutput",
                                     "x": 0,
                                     "y": 0,
                                     "width": 64,
@@ -20774,7 +20839,7 @@
                                   {
                                     "type": "DisplayData",
                                     "data": "channel.monValue",
-                                    "action": "toggle_channel",
+                                    "action": "channel.toggleOutput",
                                     "x": 0,
                                     "y": 0,
                                     "width": 64,
@@ -20964,7 +21029,7 @@
                               "widgets": [
                                 {
                                   "type": "Text",
-                                  "action": "toggle_channel",
+                                  "action": "channel.toggleOutput",
                                   "x": 0,
                                   "y": 0,
                                   "width": 64,
@@ -20984,7 +21049,7 @@
                                     {
                                       "type": "DisplayData",
                                       "data": "channel.monValue",
-                                      "action": "toggle_channel",
+                                      "action": "channel.toggleOutput",
                                       "x": 0,
                                       "y": 0,
                                       "width": 64,
@@ -20995,7 +21060,7 @@
                                     {
                                       "type": "DisplayData",
                                       "data": "channel.monValue",
-                                      "action": "toggle_channel",
+                                      "action": "channel.toggleOutput",
                                       "x": 0,
                                       "y": 0,
                                       "width": 64,
@@ -21223,7 +21288,7 @@
             "widgets": [
               {
                 "type": "Text",
-                "action": "toggle_channel",
+                "action": "channel.toggleOutput",
                 "x": 0,
                 "y": 0,
                 "width": 155,
@@ -21243,7 +21308,7 @@
                   {
                     "type": "DisplayData",
                     "data": "channel.monValue",
-                    "action": "toggle_channel",
+                    "action": "channel.toggleOutput",
                     "x": 0,
                     "y": 0,
                     "width": 155,
@@ -21253,7 +21318,7 @@
                   {
                     "type": "DisplayData",
                     "data": "channel.monValue",
-                    "action": "toggle_channel",
+                    "action": "channel.toggleOutput",
                     "x": 0,
                     "y": 0,
                     "width": 155,
@@ -21589,7 +21654,7 @@
             "widgets": [
               {
                 "type": "Text",
-                "action": "toggle_channel",
+                "action": "channel.toggleOutput",
                 "x": 0,
                 "y": 0,
                 "width": 195,
@@ -21617,7 +21682,7 @@
                       {
                         "type": "BarGraph",
                         "data": "channel.displayValue1",
-                        "action": "toggle_channel",
+                        "action": "channel.toggleOutput",
                         "x": 0,
                         "y": 0,
                         "width": 195,
@@ -21641,7 +21706,7 @@
                       {
                         "type": "BarGraph",
                         "data": "channel.displayValue2",
-                        "action": "toggle_channel",
+                        "action": "channel.toggleOutput",
                         "x": 0,
                         "y": 56,
                         "width": 195,
@@ -21667,7 +21732,7 @@
                       {
                         "type": "BarGraph",
                         "data": "channel.displayValue1",
-                        "action": "toggle_channel",
+                        "action": "channel.toggleOutput",
                         "x": 0,
                         "y": 0,
                         "width": 195,
@@ -21691,7 +21756,7 @@
                       {
                         "type": "BarGraph",
                         "data": "channel.displayValue2",
-                        "action": "toggle_channel",
+                        "action": "channel.toggleOutput",
                         "x": 0,
                         "y": 56,
                         "width": 195,
@@ -22019,7 +22084,7 @@
             "widgets": [
               {
                 "type": "Text",
-                "action": "toggle_channel",
+                "action": "channel.toggleOutput",
                 "x": 0,
                 "y": 0,
                 "width": 149,
@@ -22047,7 +22112,7 @@
                       {
                         "type": "BarGraph",
                         "data": "channel.displayValue1",
-                        "action": "toggle_channel",
+                        "action": "channel.toggleOutput",
                         "x": 2,
                         "y": 0,
                         "width": 65,
@@ -22071,7 +22136,7 @@
                       {
                         "type": "BarGraph",
                         "data": "channel.displayValue2",
-                        "action": "toggle_channel",
+                        "action": "channel.toggleOutput",
                         "x": 77,
                         "y": 0,
                         "width": 65,
@@ -22097,7 +22162,7 @@
                       {
                         "type": "BarGraph",
                         "data": "channel.displayValue1",
-                        "action": "toggle_channel",
+                        "action": "channel.toggleOutput",
                         "x": 2,
                         "y": 0,
                         "width": 65,
@@ -22121,7 +22186,7 @@
                       {
                         "type": "BarGraph",
                         "data": "channel.displayValue2",
-                        "action": "toggle_channel",
+                        "action": "channel.toggleOutput",
                         "x": 77,
                         "y": 0,
                         "width": 65,
@@ -22465,7 +22530,7 @@
             "widgets": [
               {
                 "type": "Text",
-                "action": "toggle_channel",
+                "action": "channel.toggleOutput",
                 "x": 0,
                 "y": 0,
                 "width": 202,
@@ -22485,7 +22550,7 @@
                   {
                     "type": "YTGraph",
                     "data": "channel.displayValue1",
-                    "action": "toggle_channel",
+                    "action": "channel.toggleOutput",
                     "x": 0,
                     "y": 0,
                     "width": 202,
@@ -22498,7 +22563,7 @@
                   {
                     "type": "YTGraph",
                     "data": "channel.displayValue1",
-                    "action": "toggle_channel",
+                    "action": "channel.toggleOutput",
                     "x": 0,
                     "y": 0,
                     "width": 202,

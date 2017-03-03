@@ -102,6 +102,11 @@ bool isFocusChanged();
 
 void upDown();
 
+void channelToggleOutput();
+void channelStartList();
+void channelDisableList();
+void channelEnableOutput();
+
 ////////////////////////////////////////////////////////////////////////////////
 // GUI definition document accessor functions
 
