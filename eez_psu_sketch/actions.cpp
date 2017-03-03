@@ -606,16 +606,46 @@ void action_channel_lists_next_page() {
     ((ChSettingsListsPage *)getActivePage())->nextPage();
 }
 
-void action_channel_lists_delete_row() {
-    ((ChSettingsListsPage *)getActivePage())->deleteRow();
-}
-
-void action_channel_lists_insert_row() {
-    ((ChSettingsListsPage *)getActivePage())->insertRow();
-}
-
 void action_channel_lists_edit() {
     ((ChSettingsListsPage *)getActivePage())->edit();
+}
+
+void action_show_channel_lists_insert_menu() {
+    pushPage(PAGE_ID_CH_SETTINGS_LISTS_INSERT_MENU);
+}
+
+void action_show_channel_lists_clear_menu() {
+    pushPage(PAGE_ID_CH_SETTINGS_LISTS_CLEAR_MENU);
+}
+
+void action_channel_lists_insert_row_above() {
+    popPage();
+    ((ChSettingsListsPage *)getActivePage())->insertRowAbove();
+}
+
+void action_channel_lists_insert_row_below() {
+    popPage();
+    ((ChSettingsListsPage *)getActivePage())->insertRowBelow();
+}
+
+void action_channel_lists_clear_row() {
+    popPage();
+    ((ChSettingsListsPage *)getActivePage())->clearRow();
+}
+
+void action_channel_lists_clear_column() {
+    popPage();
+    ((ChSettingsListsPage *)getActivePage())->clearColumn();
+}
+
+void action_channel_lists_clear_rows() {
+    popPage();
+    ((ChSettingsListsPage *)getActivePage())->clearRows();
+}
+
+void action_channel_lists_clear_all() {
+    popPage();
+    ((ChSettingsListsPage *)getActivePage())->clearAll();
 }
 
 
@@ -759,9 +789,15 @@ ACTION actions[] = {
     action_show_sys_settings_trigger,
     action_channel_lists_previous_page,
     action_channel_lists_next_page,
-    action_channel_lists_delete_row,
-    action_channel_lists_insert_row,
-    action_channel_lists_edit
+    action_channel_lists_edit,
+    action_show_channel_lists_insert_menu,
+    action_show_channel_lists_clear_menu,
+    action_channel_lists_insert_row_above,
+    action_channel_lists_insert_row_below,
+    action_channel_lists_clear_row,
+    action_channel_lists_clear_column,
+    action_channel_lists_clear_rows,
+    action_channel_lists_clear_all
 };
 
 }

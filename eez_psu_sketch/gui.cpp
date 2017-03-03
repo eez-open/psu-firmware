@@ -964,6 +964,7 @@ void processEvents() {
                             } else if (foundWidget && widget->type == WIDGET_TYPE_LIST_GRAPH) {
                                 g_foundTouchWidget = foundWidget;
                                 onTouchListGraph(g_foundTouchWidget, g_events[i].x, g_events[i].y);
+                                sound::playClick();
                             } 
                         }
                     }
@@ -1045,6 +1046,15 @@ void processEvents() {
                         edit_mode_slider::onTouchUp();
                     } else if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
                         edit_mode_step::onTouchUp();
+                    } else {
+                        // clear screen with background color
+                        DECL_WIDGET(page, getPageOffset(getActivePageId()));
+                        DECL_WIDGET_SPECIFIC(PageWidget, pageSpecific, page);
+                        if (pageSpecific->closePageIfTouchedOutside) {
+                            if (!util::pointInsideRect(g_events[i].x, g_events[i].y, page->x, page->y, page->w, page->h)) {
+                                popPage();
+                            }
+                        }
                     }
                 }
             }

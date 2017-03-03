@@ -207,6 +207,11 @@ void removeTrailingZerosFromFloat(char *str) {
     }
 }
 
+bool pointInsideRect(int xPoint, int yPoint, int xRect, int yRect, int wRect, int hRect) {
+    return xPoint >= xRect && xPoint < xRect + wRect &&
+        yPoint >= yRect && yPoint < yRect + hRect;
+}
+
 }
 }
 } // namespace eez::psu::util

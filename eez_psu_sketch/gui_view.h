@@ -233,6 +233,7 @@ struct Rect {
 struct PageWidget {
     List widgets;
 	List transparentRectangles;
+    uint8_t closePageIfTouchedOutside;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

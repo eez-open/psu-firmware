@@ -272,4 +272,4 @@
 
 #define LIST_DWELL_MIN 0.0001f 
 #define LIST_DWELL_MAX 65535.0f
-#define LIST_DWELL_DEF 0.1f
+#define LIST_DWELL_DEF 0.01f

@@ -66,9 +66,6 @@ public:
     void previousPage();
     void nextPage();
 
-    void deleteRow();
-    void insertRow();
-
     void edit();
 
     bool isFocusWidget(const WidgetCursor &widgetCursor);
@@ -79,6 +76,14 @@ public:
 
     bool onEncoder(int counter);
     bool onEncoderClicked();
+
+    void insertRowAbove();
+    void insertRowBelow();
+
+    void clearRow();
+    void clearColumn();
+    void clearRows();
+    void clearAll();
 
 private:
     int m_listVersion;
@@ -95,7 +100,7 @@ private:
     int m_iCursor;
 
     int getRowIndex();
-    int getColIndex();
+    int getColumnIndex();
     int getPageIndex();
     uint16_t getMaxListSize();
     uint16_t getNumPages();
@@ -108,6 +113,15 @@ private:
     float getFocusedValue();
     void setFocusedValue(float value);
     static void onValueSet(float value);
+
+    static void onClearColumn();
+    void doClearColumn();
+
+    static void onClearRows();
+    void doClearRows();
+
+    static void onClearAll();
+    void doClearAll();
 };
 
 }

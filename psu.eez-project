@@ -742,19 +742,49 @@
       "implementation": "((ChSettingsListsPage *)getActivePage())->nextPage();"
     },
     {
-      "name": "channel.lists.deleteRow",
-      "implementationType": "native",
-      "implementation": "((ChSettingsListsPage *)getActivePage())->deleteRow();"
-    },
-    {
-      "name": "channel.lists.insertRow",
-      "implementationType": "native",
-      "implementation": "((ChSettingsListsPage *)getActivePage())->insertRow();"
-    },
-    {
       "name": "channel.lists.edit",
       "implementationType": "native",
       "implementation": "((ChSettingsListsPage *)getActivePage())->edit();"
+    },
+    {
+      "name": "show_channel_lists_insert_menu",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_LISTS_INSERT_MENU);"
+    },
+    {
+      "name": "show_channel_lists_clear_menu",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_LISTS_CLEAR_MENU);"
+    },
+    {
+      "name": "channel.lists.insertRowAbove",
+      "implementationType": "native",
+      "implementation": "popPage();\n((ChSettingsListsPage *)getActivePage())->insertRowAbove();"
+    },
+    {
+      "name": "channel.lists.insertRowBelow",
+      "implementationType": "native",
+      "implementation": "popPage();\n((ChSettingsListsPage *)getActivePage())->insertRowBelow();"
+    },
+    {
+      "name": "channel.lists.clearRow",
+      "implementationType": "native",
+      "implementation": "popPage();\n((ChSettingsListsPage *)getActivePage())->clearRow();"
+    },
+    {
+      "name": "channel.lists.clearColumn",
+      "implementationType": "native",
+      "implementation": "popPage();\n((ChSettingsListsPage *)getActivePage())->clearColumn();"
+    },
+    {
+      "name": "channel.lists.clearRows",
+      "implementationType": "native",
+      "implementation": "popPage();\n((ChSettingsListsPage *)getActivePage())->clearRows();"
+    },
+    {
+      "name": "channel.lists.clearAll",
+      "implementationType": "native",
+      "implementation": "popPage();\n((ChSettingsListsPage *)getActivePage())->clearAll();"
     }
   ],
   "data": [
@@ -1809,16 +1839,6 @@
     },
     {
       "name": "channel.lists.nextPageEnabled",
-      "type": "boolean",
-      "defaultValue": "1"
-    },
-    {
-      "name": "channel.lists.deleteRowEnabled",
-      "type": "boolean",
-      "defaultValue": "1"
-    },
-    {
-      "name": "channel.lists.insertRowEnabled",
       "type": "boolean",
       "defaultValue": "1"
     },
@@ -13202,28 +13222,24 @@
               "disabledStyle": "bottom_button_disabled"
             },
             {
-              "type": "Button",
-              "action": "channel.lists.deleteRow",
+              "type": "Text",
+              "action": "show_channel_lists_insert_menu",
               "x": 90,
               "y": 204,
               "width": 45,
               "height": 36,
               "style": "bottom_button",
-              "text": "V",
-              "enabled": "channel.lists.deleteRowEnabled",
-              "disabledStyle": "bottom_button_disabled"
+              "text": "V"
             },
             {
-              "type": "Button",
-              "action": "channel.lists.insertRow",
+              "type": "Text",
+              "action": "show_channel_lists_clear_menu",
               "x": 135,
               "y": 204,
               "width": 45,
               "height": 36,
               "style": "bottom_button",
-              "text": "W",
-              "enabled": "channel.lists.insertRowEnabled",
-              "disabledStyle": "bottom_button_disabled"
+              "text": "W"
             },
             {
               "type": "Text",
@@ -13265,7 +13281,110 @@
               "style": "bottom_button_background"
             }
           ]
-        }
+        },
+        "closePageIfTouchedOutside": false
+      },
+      {
+        "name": "ch_settings_lists_insert_menu",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 78,
+          "y": 76,
+          "width": 164,
+          "height": 88,
+          "style": "select_enum_item_popup_container",
+          "widgets": [
+            {
+              "type": "Text",
+              "data": "",
+              "action": "channel.lists.insertRowAbove",
+              "x": 12,
+              "y": 12,
+              "width": 140,
+              "height": 32,
+              "style": "select_enum_item_popup_item",
+              "text": "Insert row above"
+            },
+            {
+              "type": "Text",
+              "data": "",
+              "action": "channel.lists.insertRowBelow",
+              "x": 12,
+              "y": 44,
+              "width": 140,
+              "height": 32,
+              "style": "select_enum_item_popup_item",
+              "text": "Insert row below"
+            }
+          ]
+        },
+        "closePageIfTouchedOutside": true
+      },
+      {
+        "name": "ch_settings_lists_clear_menu",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 39,
+          "y": 44,
+          "width": 242,
+          "height": 152,
+          "style": "select_enum_item_popup_container",
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "channel.lists.clearRow",
+              "x": 12,
+              "y": 12,
+              "width": 218,
+              "height": 32,
+              "style": "select_enum_item_popup_item",
+              "text": "Clear row"
+            },
+            {
+              "type": "Text",
+              "action": "channel.lists.clearColumn",
+              "x": 12,
+              "y": 44,
+              "width": 218,
+              "height": 32,
+              "style": "select_enum_item_popup_item",
+              "text": "Clear column from cursor"
+            },
+            {
+              "type": "Text",
+              "action": "channel.lists.clearRows",
+              "x": 12,
+              "y": 76,
+              "width": 218,
+              "height": 32,
+              "style": "select_enum_item_popup_item",
+              "text": "Clear all rows from cursor"
+            },
+            {
+              "type": "Text",
+              "action": "channel.lists.clearAll",
+              "x": 12,
+              "y": 108,
+              "width": 218,
+              "height": 32,
+              "style": "select_enum_item_popup_item",
+              "text": "Clear all"
+            }
+          ]
+        },
+        "closePageIfTouchedOutside": true
       },
       {
         "name": "ch_settings_adv",

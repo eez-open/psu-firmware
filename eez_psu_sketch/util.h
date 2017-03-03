@@ -71,6 +71,8 @@ bool isUperCaseLetter(char ch);
 
 void removeTrailingZerosFromFloat(char *str);
 
+bool pointInsideRect(int xPoint, int yPoint, int xRect, int yRect, int wRect, int hRect);
+
 }
 }
 } // namespace eez::psu::util
