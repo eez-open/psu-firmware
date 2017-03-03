@@ -621,19 +621,21 @@ int ChSettingsListsPage::getDirty() {
 }
 
 void ChSettingsListsPage::set() {
-    if (!list::areListSizesEquivalent(m_dwellListSize, m_voltageListSize) || 
-        !list::areListSizesEquivalent(m_dwellListSize, m_currentListSize) ||
-        !list::areListSizesEquivalent(m_voltageListSize, m_currentListSize))
-    {
-        errorMessageP(PSTR("List lengths are not equivalent!"));
-    } else {
-        trigger::abort();
+    if (getDirty()) {
+        if (!list::areListSizesEquivalent(m_dwellListSize, m_voltageListSize) || 
+            !list::areListSizesEquivalent(m_dwellListSize, m_currentListSize) ||
+            !list::areListSizesEquivalent(m_voltageListSize, m_currentListSize))
+        {
+            errorMessageP(PSTR("List lengths are not equivalent!"));
+        } else {
+            trigger::abort();
 
-        list::setDwellList(*g_channel, m_dwellList, m_dwellListSize);
-        list::setVoltageList(*g_channel, m_voltageList, m_voltageListSize);
-        list::setCurrentList(*g_channel, m_currentList, m_currentListSize);
+            list::setDwellList(*g_channel, m_dwellList, m_dwellListSize);
+            list::setVoltageList(*g_channel, m_voltageList, m_voltageListSize);
+            list::setCurrentList(*g_channel, m_currentList, m_currentListSize);
 
-        infoMessageP(PSTR("Lists changed!"), popPage);
+            infoMessageP(PSTR("Lists changed!"), popPage);
+        }
     }
 }
 
