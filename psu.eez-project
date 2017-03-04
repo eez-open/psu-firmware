@@ -12834,7 +12834,7 @@
                       "width": 210,
                       "height": 28,
                       "style": "value_S",
-                      "text": "Trigger"
+                      "text": "Trigger settings"
                     }
                   ]
                 },
@@ -13079,7 +13079,7 @@
               "y": 84,
               "width": 33,
               "height": 24,
-              "style": "default_disabled_S_right",
+              "style": "edit_value_S_centered",
               "text": "#"
             },
             {
@@ -13088,7 +13088,7 @@
               "y": 84,
               "width": 73,
               "height": 24,
-              "style": "default_disabled_S",
+              "style": "edit_value_S_centered",
               "text": "Dwell"
             },
             {
@@ -13133,7 +13133,7 @@
                     "y": 0,
                     "width": 33,
                     "height": 24,
-                    "style": "default_disabled_S_right"
+                    "style": "edit_value_S_centered"
                   },
                   {
                     "x": 33,
@@ -13152,7 +13152,7 @@
                         "y": 0,
                         "width": 73,
                         "height": 24,
-                        "style": "default_disabled_S",
+                        "style": "edit_value_S_centered",
                         "text": "-"
                       },
                       {
@@ -13185,7 +13185,7 @@
                         "y": 0,
                         "width": 73,
                         "height": 24,
-                        "style": "default_disabled_S",
+                        "style": "edit_value_S_centered",
                         "text": "-"
                       },
                       {
@@ -13218,7 +13218,7 @@
                         "y": 0,
                         "width": 73,
                         "height": 24,
-                        "style": "default_disabled_S",
+                        "style": "edit_value_S_centered",
                         "text": "-"
                       },
                       {
@@ -13325,8 +13325,7 @@
               "style": "bottom_button_background"
             }
           ]
-        },
-        "closePageIfTouchedOutside": false
+        }
       },
       {
         "name": "ch_settings_lists_insert_menu",
@@ -13367,8 +13366,7 @@
               "text": "Insert row below"
             }
           ]
-        },
-        "closePageIfTouchedOutside": true
+        }
       },
       {
         "name": "ch_settings_lists_clear_menu",
@@ -13380,9 +13378,9 @@
           "widgets": []
         },
         "landscape": {
-          "x": 39,
+          "x": 25,
           "y": 44,
-          "width": 242,
+          "width": 270,
           "height": 152,
           "style": "select_enum_item_popup_container",
           "widgets": [
@@ -13394,7 +13392,7 @@
               "width": 218,
               "height": 32,
               "style": "select_enum_item_popup_item",
-              "text": "Clear row",
+              "text": "Delete row",
               "enabled": "channel.lists.clearRowEnabled",
               "disabledStyle": "select_enum_item_popup_disabled_item"
             },
@@ -13403,10 +13401,10 @@
               "action": "channel.lists.clearColumn",
               "x": 12,
               "y": 44,
-              "width": 218,
+              "width": 248,
               "height": 32,
               "style": "select_enum_item_popup_item",
-              "text": "Clear column from cursor",
+              "text": "Clear column from cursor down",
               "enabled": "channel.lists.clearColumnEnabled",
               "disabledStyle": "select_enum_item_popup_disabled_item"
             },
@@ -13418,7 +13416,7 @@
               "width": 218,
               "height": 32,
               "style": "select_enum_item_popup_item",
-              "text": "Clear all rows from cursor",
+              "text": "Delete all from cursor down",
               "enabled": "channel.lists.clearRowsEnabled",
               "disabledStyle": "select_enum_item_popup_disabled_item"
             },
@@ -13430,11 +13428,10 @@
               "width": 218,
               "height": 32,
               "style": "select_enum_item_popup_item",
-              "text": "Clear all"
+              "text": "Delete all"
             }
           ]
-        },
-        "closePageIfTouchedOutside": true
+        }
       },
       {
         "name": "ch_start_list",
@@ -13483,8 +13480,7 @@
               "text": "Disable list"
             }
           ]
-        },
-        "closePageIfTouchedOutside": true
+        }
       },
       {
         "name": "ch_settings_adv",
@@ -16659,78 +16655,7 @@
               "width": 246,
               "height": 32,
               "style": "value_S",
-              "text": "Trigger"
-            },
-            {
-              "x": 16,
-              "type": "Select",
-              "data": "sys.shutdownWhenProtectionTripped",
-              "y": 86,
-              "width": 236,
-              "height": 59,
-              "style": "default",
-              "widgets": [
-                {
-                  "type": "Container",
-                  "x": 0,
-                  "y": 0,
-                  "width": 236,
-                  "height": 59,
-                  "style": "default",
-                  "widgets": []
-                },
-                {
-                  "type": "Container",
-                  "x": 0,
-                  "y": 0,
-                  "width": 236,
-                  "height": 59,
-                  "style": "default",
-                  "widgets": [
-                    {
-                      "type": "MultilineText",
-                      "x": 0,
-                      "y": 0,
-                      "width": 179,
-                      "height": 59,
-                      "style": "default_disabled_S_left",
-                      "text": "Switch off all outputs when protection tripped"
-                    },
-                    {
-                      "x": 179,
-                      "type": "Select",
-                      "data": "sys.outputProtectionCoupled",
-                      "action": "",
-                      "y": 0,
-                      "width": 57,
-                      "height": 59,
-                      "style": "edit_value_L",
-                      "widgets": [
-                        {
-                          "type": "Text",
-                          "action": "",
-                          "x": 0,
-                          "y": 0,
-                          "width": 57,
-                          "height": 59,
-                          "style": "default_disabled",
-                          "text": "No"
-                        },
-                        {
-                          "type": "Text",
-                          "action": "",
-                          "x": 0,
-                          "y": 0,
-                          "width": 57,
-                          "height": 59,
-                          "style": "default_disabled",
-                          "text": "Yes"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "text": "General trigger settings"
             },
             {
               "type": "Rectangle",
@@ -16767,6 +16692,63 @@
               "width": 68,
               "height": 204,
               "style": "default"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 32,
+              "width": 119,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Trigger source:"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 60,
+              "width": 119,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Trigger delay:"
+            },
+            {
+              "type": "Text",
+              "data": "",
+              "x": 135,
+              "y": 32,
+              "width": 60,
+              "height": 28,
+              "style": "value_S",
+              "text": "PIN1"
+            },
+            {
+              "type": "Text",
+              "data": "",
+              "x": 135,
+              "y": 60,
+              "width": 60,
+              "height": 28,
+              "style": "value_S",
+              "text": "0s"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 88,
+              "width": 162,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Initiate continuously:"
+            },
+            {
+              "type": "Text",
+              "data": "",
+              "x": 178,
+              "y": 88,
+              "width": 60,
+              "height": 28,
+              "style": "value_S",
+              "text": "Yes"
             }
           ]
         }
