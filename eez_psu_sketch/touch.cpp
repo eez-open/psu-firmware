@@ -185,6 +185,8 @@ void touch_read() {
 #else
 
 bool g_nextIsPressed = false;
+int g_nextX = -1;
+int g_nextY = -1;
 
 void touch_init() {
 }
