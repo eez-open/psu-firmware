@@ -64,7 +64,7 @@ bool Page::onEncoder(int counter) {
 }
 
 bool Page::onEncoderClicked() {
-    return true;
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
