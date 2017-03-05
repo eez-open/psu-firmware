@@ -342,11 +342,11 @@ data::Value ChSettingsListsPage::getData(const data::Cursor &cursor, uint8_t id)
         return data::Value(getRowIndex() < getMaxListSize() ? 1 : 0);
     }
 
-    if (id == DATA_ID_CHANNEL_LISTS_CLEAR_MENU_ENABLED) {
+    if (id == DATA_ID_CHANNEL_LISTS_DELETE_MENU_ENABLED) {
         return data::Value(getMaxListSize() ? 1 : 0);
     }
 
-    if (id == DATA_ID_CHANNEL_LISTS_CLEAR_ROW_ENABLED) {
+    if (id == DATA_ID_CHANNEL_LISTS_DELETE_ROW_ENABLED) {
         return data::Value(getRowIndex() < getMaxListSize() ? 1 : 0);
     }
 
@@ -354,7 +354,7 @@ data::Value ChSettingsListsPage::getData(const data::Cursor &cursor, uint8_t id)
         return data::Value(getRowIndex() < getMaxListSize() ? 1 : 0);
     }
 
-    if (id == DATA_ID_CHANNEL_LISTS_CLEAR_ROWS_ENABLED) {
+    if (id == DATA_ID_CHANNEL_LISTS_DELETE_ROWS_ENABLED) {
         return data::Value(getRowIndex() < getMaxListSize() ? 1 : 0);
     }
 
@@ -701,9 +701,9 @@ void ChSettingsListsPage::showInsertMenu() {
     }
 }
 
-void ChSettingsListsPage::showClearMenu() {
+void ChSettingsListsPage::showDeleteMenu() {
     if (getMaxListSize()) {
-        pushPage(PAGE_ID_CH_SETTINGS_LISTS_CLEAR_MENU);
+        pushPage(PAGE_ID_CH_SETTINGS_LISTS_DELETE_MENU);
     }
 }
 
@@ -748,7 +748,7 @@ void ChSettingsListsPage::insertRowBelow() {
     }
 }
 
-void ChSettingsListsPage::clearRow() {
+void ChSettingsListsPage::deleteRow() {
     int iRow = getRowIndex();
     int maxListSize = getMaxListSize();
     if (iRow < getMaxListSize()) {
@@ -758,15 +758,15 @@ void ChSettingsListsPage::clearRow() {
             m_currentList[i-1] = m_currentList[i];
         }
     
-        if (m_dwellListSize == maxListSize) {
+        if (iRow < m_dwellListSize) {
             --m_dwellListSize;
         }
         
-        if (m_voltageListSize == maxListSize) {
+        if (iRow < m_voltageListSize) {
             --m_voltageListSize;
         }
 
-        if (m_currentListSize == maxListSize) {
+        if (iRow < m_currentListSize) {
             --m_currentListSize;
         }
     }
@@ -792,34 +792,34 @@ void ChSettingsListsPage::clearColumn() {
     yesNoDialog(PAGE_ID_YES_NO, PSTR("Are you sure?"), onClearColumn, 0, 0);
 }
 
-void ChSettingsListsPage::onClearRows() {
-    ((ChSettingsListsPage *)getActivePage())->doClearRows();
+void ChSettingsListsPage::onDeleteRows() {
+    ((ChSettingsListsPage *)getActivePage())->doDeleteRows();
 }
 
-void ChSettingsListsPage::doClearRows() {
+void ChSettingsListsPage::doDeleteRows() {
     int iRow = getRowIndex();
     if (iRow < m_dwellListSize) m_dwellListSize = iRow;
     if (iRow < m_voltageListSize) m_voltageListSize = iRow;
     if (iRow < m_currentListSize) m_currentListSize = iRow;
 }
 
-void ChSettingsListsPage::clearRows() {
-    yesNoDialog(PAGE_ID_YES_NO, PSTR("Are you sure?"), onClearRows, 0, 0);
+void ChSettingsListsPage::deleteRows() {
+    yesNoDialog(PAGE_ID_YES_NO, PSTR("Are you sure?"), onDeleteRows, 0, 0);
 }
 
-void ChSettingsListsPage::onClearAll() {
-    ((ChSettingsListsPage *)getActivePage())->doClearAll();
+void ChSettingsListsPage::onDeleteAll() {
+    ((ChSettingsListsPage *)getActivePage())->doDeleteAll();
 }
 
-void ChSettingsListsPage::doClearAll() {
+void ChSettingsListsPage::doDeleteAll() {
     m_dwellListSize = 0;
     m_voltageListSize = 0;
     m_currentListSize = 0;
     m_iCursor = 0;
 }
 
-void ChSettingsListsPage::clearAll() {
-    yesNoDialog(PAGE_ID_YES_NO, PSTR("Are you sure?"), onClearAll, 0, 0);
+void ChSettingsListsPage::deleteAll() {
+    yesNoDialog(PAGE_ID_YES_NO, PSTR("Are you sure?"), onDeleteAll, 0, 0);
 }
 
 }

@@ -78,15 +78,15 @@ public:
     bool onEncoderClicked();
 
     void showInsertMenu();
-    void showClearMenu();
+    void showDeleteMenu();
 
     void insertRowAbove();
     void insertRowBelow();
 
-    void clearRow();
+    void deleteRow();
     void clearColumn();
-    void clearRows();
-    void clearAll();
+    void deleteRows();
+    void deleteAll();
 
 private:
     int m_listVersion;
@@ -123,11 +123,11 @@ private:
     static void onClearColumn();
     void doClearColumn();
 
-    static void onClearRows();
-    void doClearRows();
+    static void onDeleteRows();
+    void doDeleteRows();
 
-    static void onClearAll();
-    void doClearAll();
+    static void onDeleteAll();
+    void doDeleteAll();
 };
 
 }

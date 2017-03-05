@@ -609,8 +609,8 @@ void action_show_channel_lists_insert_menu() {
     ((ChSettingsListsPage *)getActivePage())->showInsertMenu();
 }
 
-void action_show_channel_lists_clear_menu() {
-    ((ChSettingsListsPage *)getActivePage())->showClearMenu();
+void action_show_channel_lists_delete_menu() {
+    ((ChSettingsListsPage *)getActivePage())->showDeleteMenu();
 }
 
 void action_channel_lists_insert_row_above() {
@@ -623,9 +623,9 @@ void action_channel_lists_insert_row_below() {
     ((ChSettingsListsPage *)getActivePage())->insertRowBelow();
 }
 
-void action_channel_lists_clear_row() {
+void action_channel_lists_delete_row() {
     popPage();
-    ((ChSettingsListsPage *)getActivePage())->clearRow();
+    ((ChSettingsListsPage *)getActivePage())->deleteRow();
 }
 
 void action_channel_lists_clear_column() {
@@ -633,14 +633,14 @@ void action_channel_lists_clear_column() {
     ((ChSettingsListsPage *)getActivePage())->clearColumn();
 }
 
-void action_channel_lists_clear_rows() {
+void action_channel_lists_delete_rows() {
     popPage();
-    ((ChSettingsListsPage *)getActivePage())->clearRows();
+    ((ChSettingsListsPage *)getActivePage())->deleteRows();
 }
 
-void action_channel_lists_clear_all() {
+void action_channel_lists_delete_all() {
     popPage();
-    ((ChSettingsListsPage *)getActivePage())->clearAll();
+    ((ChSettingsListsPage *)getActivePage())->deleteAll();
 }
 
 void action_channel_start_list() {
@@ -798,13 +798,13 @@ ACTION actions[] = {
     action_channel_lists_next_page,
     action_channel_lists_edit,
     action_show_channel_lists_insert_menu,
-    action_show_channel_lists_clear_menu,
+    action_show_channel_lists_delete_menu,
     action_channel_lists_insert_row_above,
     action_channel_lists_insert_row_below,
-    action_channel_lists_clear_row,
+    action_channel_lists_delete_row,
     action_channel_lists_clear_column,
-    action_channel_lists_clear_rows,
-    action_channel_lists_clear_all,
+    action_channel_lists_delete_rows,
+    action_channel_lists_delete_all,
     action_channel_start_list,
     action_channel_disable_list,
     action_channel_enable_output
