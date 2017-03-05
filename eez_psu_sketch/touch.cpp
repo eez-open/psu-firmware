@@ -184,16 +184,21 @@ void touch_read() {
 
 #else
 
+bool g_nextIsPressed = false;
+
 void touch_init() {
 }
 
 void touch_read() {
+    touch_is_pressed = g_nextIsPressed;
+    touch_x = g_nextX;
+    touch_y = g_nextY;
 }
 
 void touch_write(bool is_pressed, int x, int y) {
-    touch_is_pressed = is_pressed;
-    touch_x = x;
-    touch_y = y;
+    g_nextIsPressed = is_pressed;
+    g_nextX = x;
+    g_nextY = y;
 }
 
 #endif
