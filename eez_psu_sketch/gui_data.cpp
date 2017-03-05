@@ -281,7 +281,7 @@ void Value::toText(char *text, int count) const {
         if (type_ > VALUE_TYPE_GREATER_THEN_MAX_FLOAT) {
             char valueText[64];
             Value(float_, ValueType(type_ - VALUE_TYPE_GREATER_THEN_MAX_FLOAT + VALUE_TYPE_FLOAT)).toText(valueText, sizeof(text));
-            snprintf_P(text, count-1, PSTR("Value is less then %s"), valueText);
+            snprintf_P(text, count-1, PSTR("Value is greater then %s"), valueText);
             text[count - 1] = 0;
         } else if (type_ > VALUE_TYPE_LESS_THEN_MIN_FLOAT) {
             char valueText[64];
