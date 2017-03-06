@@ -656,6 +656,8 @@ bool wasFocusWidget(const WidgetCursor &widgetCursor) {
 bool isFocusWidget(const WidgetCursor &widgetCursor) {
     if (g_activePageId == PAGE_ID_CH_SETTINGS_LISTS) {
         return ((ChSettingsListsPage *)g_activePage)->isFocusWidget(widgetCursor);
+    } else if (trigger::isExecuting()) {
+        return false;
     } else {
         DECL_WIDGET(widget, widgetCursor.widgetOffset);
         return widgetCursor.cursor == g_focusCursor && widget->data == g_focusDataId;
