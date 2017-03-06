@@ -34,8 +34,8 @@ float *getCurrentList(Channel &channel, uint16_t *listSize);
 void setDwellList(Channel &channel, float *list, uint16_t listSize);
 float *getDwellList(Channel &channel, uint16_t *listSize);
 
-uint8_t getListCount(Channel &channel);
-void setListCount(Channel &channel, uint8_t value);
+uint16_t getListCount(Channel &channel);
+void setListCount(Channel &channel, uint16_t value);
 
 bool areListSizesEquivalent(uint16_t size1, uint16_t size2);
 bool areVoltageAndDwellListSizesEquivalent(Channel &channel);

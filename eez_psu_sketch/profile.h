@@ -62,7 +62,7 @@ struct ChannelParameters {
     float ytViewRate;
     float u_triggerValue;
     float i_triggerValue;
-    int listCount;
+    uint16_t listCount;
 #ifdef EEZ_PSU_SIMULATOR
     bool load_enabled;
     float load;

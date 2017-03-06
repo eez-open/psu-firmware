@@ -35,7 +35,7 @@ static struct {
     float dwellList[MAX_LIST_SIZE];
     uint16_t dwellListSize;
 
-    uint8_t count;
+    uint16_t count;
 } g_channelsLists[CH_NUM];
 
 static struct {
@@ -96,11 +96,11 @@ float *getDwellList(Channel &channel, uint16_t *listSize) {
     return g_channelsLists[channel.index - 1].dwellList;
 }
 
-uint8_t getListCount(Channel &channel) {
+uint16_t getListCount(Channel &channel) {
     return g_channelsLists[channel.index - 1].count;
 }
 
-void setListCount(Channel &channel, uint8_t value) {
+void setListCount(Channel &channel, uint16_t value) {
     g_channelsLists[channel.index - 1].count = value;
 }
 
