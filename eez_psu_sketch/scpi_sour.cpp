@@ -147,6 +147,11 @@ scpi_result_t scpi_cmd_sourceCurrentLevelImmediateAmplitude(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
+    if (trigger::isExecuting()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
+        return SCPI_RES_ERR;
+    }
+
     float current;
     if (!get_current_param(context, current, channel, &channel->i)) {
         return SCPI_RES_ERR;
@@ -183,6 +188,11 @@ scpi_result_t scpi_cmd_sourceCurrentLevelImmediateAmplitudeQ(scpi_t * context) {
 scpi_result_t scpi_cmd_sourceVoltageLevelImmediateAmplitude(scpi_t * context) {
     Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (trigger::isExecuting()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }
 
@@ -941,7 +951,7 @@ scpi_result_t scpi_cmd_sourceListCount(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    uint8_t count;
+    uint16_t count;
 
     if (param.special) {
         if (param.tag == SCPI_NUM_INF) {

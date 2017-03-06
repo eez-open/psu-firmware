@@ -28,6 +28,8 @@
 #include "gui_edit_mode_step.h"
 #include "channel.h"
 #include "channel_dispatcher.h"
+#include "trigger.h"
+
 #include "gui_calibration.h"
 #include "gui_keypad.h"
 #include "gui_page_ch_settings_trigger.h"
@@ -668,6 +670,10 @@ Value get(const Cursor &cursor, uint8_t id) {
         if (id == DATA_ID_CHANNEL_OUTPUT_MODE) {
             char *mode_str = channel.getCvModeStr();
             return Value(channelSnapshot.mode);
+        }
+
+        if (id == DATA_ID_EDIT_ENABLED) {
+            return Value(trigger::isExecuting() || getActivePageId() == PAGE_ID_CH_SETTINGS_LISTS ? 0 : 1);
         }
         
         if (id == DATA_ID_CHANNEL_MON_VALUE) {

@@ -24,6 +24,7 @@ namespace gui {
 
 enum DataEnum {
     DATA_ID_NONE,
+    DATA_ID_EDIT_ENABLED,
     DATA_ID_CHANNELS,
     DATA_ID_CHANNEL_STATUS,
     DATA_ID_CHANNEL_OUTPUT_STATE,
