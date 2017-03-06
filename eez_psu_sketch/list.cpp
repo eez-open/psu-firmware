@@ -54,15 +54,21 @@ void init() {
     reset();
 }
 
+void resetChannelList(Channel &channel) {
+    int i = channel.index - 1;
+
+    g_channelsLists[i].voltageListSize = 0;
+    g_channelsLists[i].currentListSize = 0;
+    g_channelsLists[i].dwellListSize = 0;
+
+    g_channelsLists[i].count = 1;
+
+    g_execution[i].counter = -1;
+}
+
 void reset() {
     for (int i = 0; i < CH_NUM; ++i) {
-        g_channelsLists[i].voltageListSize = 0;
-        g_channelsLists[i].currentListSize = 0;
-        g_channelsLists[i].dwellListSize = 0;
-
-        g_channelsLists[i].count = 1;
-
-        g_execution[i].counter = -1;
+        resetChannelList(Channel::get(i));
     }
 }
 

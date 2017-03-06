@@ -32,19 +32,17 @@ public:
 
 	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
-    void editVoltageTriggerMode();
-    void editVoltageTriggerValue();
+    void editTriggerMode();
 
-    void editCurrentTriggerMode();
+    void editVoltageTriggerValue();
     void editCurrentTriggerValue();
 
     void editListCount();
 
 private:
-    static void onVoltageTriggerModeSet(uint8_t value);
-    static void onVoltageTriggerValueSet(float value);
+    static void onTriggerModeSet(uint8_t value);
 
-    static void onCurrentTriggerModeSet(uint8_t value);
+    static void onVoltageTriggerValueSet(float value);
     static void onCurrentTriggerValueSet(float value);
 
     static void onListCountSet(float value);

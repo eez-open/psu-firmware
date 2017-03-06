@@ -67,7 +67,11 @@ Keypad::Keypad() {
 }
 
 void Keypad::init(const char *label_, void (*ok)(char *), void (*cancel)()) {
-	strcpy(m_label, label_);
+    if (label_) {
+	    strcpy(m_label, label_);
+    } else {
+        m_label[0] = 0;
+    }
 	m_okCallback = ok;
 	m_cancelCallback = cancel;
 

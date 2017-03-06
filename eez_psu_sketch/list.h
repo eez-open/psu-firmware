@@ -23,6 +23,8 @@ namespace psu {
 namespace list {
 
 void init();
+
+void resetChannelList(Channel &channel);
 void reset();
 
 void setVoltageList(Channel &channel, float *list, uint16_t listSize);

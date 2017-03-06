@@ -697,19 +697,14 @@
       "implementation": "setPage(PAGE_ID_CH_SETTINGS_TRIGGER);"
     },
     {
-      "name": "ch.settings.trigger.editVoltageTriggerMode",
+      "name": "ch.settings.trigger.editTriggerMode",
       "implementationType": "native",
-      "implementation": "((ChSettingsTriggerPage *)getActivePage())->editVoltageTriggerMode();"
+      "implementation": "((ChSettingsTriggerPage *)getActivePage())->editTriggerMode();"
     },
     {
       "name": "ch.settings.trigger.editVoltageTriggerValue",
       "implementationType": "native",
       "implementation": "((ChSettingsTriggerPage *)getActivePage())->editVoltageTriggerValue();"
-    },
-    {
-      "name": "ch.settings.trigger.editCurrentTriggerMode",
-      "implementationType": "native",
-      "implementation": "((ChSettingsTriggerPage *)getActivePage())->editCurrentTriggerMode();"
     },
     {
       "name": "ch.settings.trigger.editCurrentTriggerValue",
@@ -1782,7 +1777,7 @@
       "name": "sys.display.brightness"
     },
     {
-      "name": "channel.u.trigger.mode",
+      "name": "channel.trigger.mode",
       "type": "enum",
       "enumItems": "[\n\"Fixed\",\n\"List\",\n\"Step\"\n]",
       "defaultValue": "Fixed"
@@ -1793,12 +1788,6 @@
       "defaultValue": "24.00V",
       "defaultMinValue": 0,
       "defaultMaxValue": 40
-    },
-    {
-      "name": "channel.i.trigger.mode",
-      "type": "enum",
-      "enumItems": "[\n\"Fixed\",\n\"List\",\n\"Step\"\n]",
-      "defaultValue": "Fixed"
     },
     {
       "name": "channel.i.trigger.value",
@@ -13265,12 +13254,12 @@
               "width": 168,
               "height": 28,
               "style": "edit_value_S_left",
-              "text": "Voltage trigger mode:"
+              "text": "Trigger mode:"
             },
             {
               "type": "DisplayData",
-              "data": "channel.u.trigger.mode",
-              "action": "ch.settings.trigger.editVoltageTriggerMode",
+              "data": "channel.trigger.mode",
+              "action": "ch.settings.trigger.editTriggerMode",
               "x": 184,
               "y": 28,
               "width": 68,
@@ -13278,90 +13267,118 @@
               "style": "edit_value_active_S_left"
             },
             {
-              "type": "Text",
               "x": 16,
+              "type": "Select",
+              "data": "channel.trigger.mode",
               "y": 56,
-              "width": 168,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Voltage trigger value:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "channel.u.trigger.value",
-              "action": "ch.settings.trigger.editVoltageTriggerValue",
-              "x": 184,
-              "y": 56,
-              "width": 68,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 84,
-              "width": 168,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Current trigger mode:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "channel.i.trigger.mode",
-              "action": "ch.settings.trigger.editCurrentTriggerMode",
-              "x": 184,
-              "y": 84,
-              "width": 68,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 112,
-              "width": 168,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Current trigger value:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "channel.i.trigger.value",
-              "action": "ch.settings.trigger.editCurrentTriggerValue",
-              "x": 184,
-              "y": 112,
-              "width": 68,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 140,
-              "width": 168,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "List count:"
-            },
-            {
-              "type": "DisplayData",
-              "data": "channel.list.count",
-              "action": "ch.settings.trigger.editListCount",
-              "x": 184,
-              "y": 140,
-              "width": 68,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "type": "Text",
-              "action": "show_ch_settings_lists",
-              "x": 16,
-              "y": 168,
-              "width": 168,
-              "height": 28,
-              "style": "edit_value_active_S_left",
-              "text": "Edit lists"
+              "width": 236,
+              "height": 56,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Rectangle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 236,
+                  "height": 56,
+                  "style": "default_inverse"
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 236,
+                  "height": 56,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 168,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "List count:"
+                    },
+                    {
+                      "type": "DisplayData",
+                      "data": "channel.list.count",
+                      "action": "ch.settings.trigger.editListCount",
+                      "x": 168,
+                      "y": 0,
+                      "width": 68,
+                      "height": 28,
+                      "style": "edit_value_active_S_left"
+                    },
+                    {
+                      "type": "Text",
+                      "action": "show_ch_settings_lists",
+                      "x": 0,
+                      "y": 28,
+                      "width": 168,
+                      "height": 28,
+                      "style": "edit_value_active_S_left",
+                      "text": "Edit lists"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 168,
+                      "y": 28,
+                      "width": 68,
+                      "height": 28,
+                      "style": "default_inverse"
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 236,
+                  "height": 56,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 168,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Voltage step value:"
+                    },
+                    {
+                      "type": "DisplayData",
+                      "data": "channel.u.trigger.value",
+                      "action": "ch.settings.trigger.editVoltageTriggerValue",
+                      "x": 168,
+                      "y": 0,
+                      "width": 68,
+                      "height": 28,
+                      "style": "edit_value_active_S_left"
+                    },
+                    {
+                      "type": "Text",
+                      "x": 0,
+                      "y": 28,
+                      "width": 168,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Current step value:"
+                    },
+                    {
+                      "type": "DisplayData",
+                      "data": "channel.i.trigger.value",
+                      "action": "ch.settings.trigger.editCurrentTriggerValue",
+                      "x": 168,
+                      "y": 28,
+                      "width": 68,
+                      "height": 28,
+                      "style": "edit_value_active_S_left"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "Text",

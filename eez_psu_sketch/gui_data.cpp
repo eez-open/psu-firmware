@@ -411,6 +411,13 @@ bool Value::operator ==(const Value &other) const {
 	return util::equal(float_, other.float_, CHANNEL_VALUE_PRECISION);
 }
 
+int Value::getInt() const {
+    if (type_ == VALUE_TYPE_ENUM) {
+        return enum_.value;
+    }
+    return int_; 
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 static bool isDisplayValue(const Cursor &cursor, uint8_t id, DisplayValue displayValue) {

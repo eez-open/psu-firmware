@@ -122,7 +122,7 @@ struct Value {
     ValueType getType() const { return (ValueType)type_; }
     bool isFloat() const { return isFloatType((ValueType)type_); }
 
-    int getInt() const { return int_; }
+    int getInt() const;
 
     void toText(char *text, int count) const;
 

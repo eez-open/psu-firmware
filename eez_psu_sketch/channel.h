@@ -184,7 +184,7 @@ public:
         float def;
         float max;
 
-        void init(float def_step, float def_limit);
+        void init(float set, float def_step, float def_limit);
     };
 
     /// Runtime protection binary flags (alarmed, tripped)

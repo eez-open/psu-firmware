@@ -46,20 +46,16 @@ data::Value ChSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t i
 		return value;
 	}
 
-	if (id == DATA_ID_CHANNEL_U_TRIGGER_MODE) {
+	if (id == DATA_ID_CHANNEL_TRIGGER_MODE) {
 		return data::Value(channel_dispatcher::getVoltageTriggerMode(*g_channel), data::ENUM_DEFINITION_CHANNEL_TRIGGER_MODE);
 	}
 
 	if (id == DATA_ID_CHANNEL_U_TRIGGER_VALUE) {
-		return data::Value(trigger::getVoltage(*g_channel), data::VALUE_TYPE_FLOAT_VOLT);
-	}
-
-	if (id == DATA_ID_CHANNEL_I_TRIGGER_MODE) {
-		return data::Value(channel_dispatcher::getCurrentTriggerMode(*g_channel), data::ENUM_DEFINITION_CHANNEL_TRIGGER_MODE);
+		return data::Value(channel_dispatcher::getTriggerVoltage(*g_channel), data::VALUE_TYPE_FLOAT_VOLT);
 	}
 
 	if (id == DATA_ID_CHANNEL_I_TRIGGER_VALUE) {
-		return data::Value(trigger::getCurrent(*g_channel), data::VALUE_TYPE_FLOAT_AMPER);
+		return data::Value(channel_dispatcher::getTriggerCurrent(*g_channel), data::VALUE_TYPE_FLOAT_AMPER);
 	}
 
 	if (id == DATA_ID_CHANNEL_LIST_COUNT) {
@@ -74,19 +70,20 @@ data::Value ChSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t i
     return data::Value();
 }
 
-void ChSettingsTriggerPage::onVoltageTriggerModeSet(uint8_t value) {
+void ChSettingsTriggerPage::onTriggerModeSet(uint8_t value) {
 	popPage();
     channel_dispatcher::setVoltageTriggerMode(*g_channel, (TriggerMode)value);
+    channel_dispatcher::setCurrentTriggerMode(*g_channel, (TriggerMode)value);
     profile::save();
 }
 
-void ChSettingsTriggerPage::editVoltageTriggerMode() {
-    pushSelectFromEnumPage(data::g_channelTriggerModeEnumDefinition, channel_dispatcher::getVoltageTriggerMode(*g_channel), -1, onVoltageTriggerModeSet);
+void ChSettingsTriggerPage::editTriggerMode() {
+    pushSelectFromEnumPage(data::g_channelTriggerModeEnumDefinition, channel_dispatcher::getVoltageTriggerMode(*g_channel), -1, onTriggerModeSet);
 }
 
 void ChSettingsTriggerPage::onVoltageTriggerValueSet(float value) {
 	popPage();
-    trigger::setVoltage(*g_channel, value);
+    channel_dispatcher::setTriggerVoltage(*g_channel, value);
     profile::save();
 }
 
@@ -108,19 +105,9 @@ void ChSettingsTriggerPage::editVoltageTriggerValue() {
 	NumericKeypad::start(0, data::Value(trigger::getVoltage(*g_channel), data::VALUE_TYPE_FLOAT_VOLT), options, onVoltageTriggerValueSet);
 }
 
-void ChSettingsTriggerPage::onCurrentTriggerModeSet(uint8_t value) {
-	popPage();
-    channel_dispatcher::setCurrentTriggerMode(*g_channel, (TriggerMode)value);
-    profile::save();
-}
-
-void ChSettingsTriggerPage::editCurrentTriggerMode() {
-    pushSelectFromEnumPage(data::g_channelTriggerModeEnumDefinition, channel_dispatcher::getCurrentTriggerMode(*g_channel), -1, onCurrentTriggerModeSet);
-}
-
 void ChSettingsTriggerPage::onCurrentTriggerValueSet(float value) {
 	popPage();
-    trigger::setCurrent(*g_channel, value);
+    channel_dispatcher::setTriggerCurrent(*g_channel, value);
     profile::save();
 }
 

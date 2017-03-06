@@ -116,6 +116,12 @@ void setVoltageTriggerMode(Channel& channel, TriggerMode mode);
 TriggerMode getCurrentTriggerMode(Channel& channel);
 void setCurrentTriggerMode(Channel& channel, TriggerMode mode);
 
+float getTriggerVoltage(Channel& channel);
+void setTriggerVoltage(Channel& channel, float value);
+
+float getTriggerCurrent(Channel& channel);
+void setTriggerCurrent(Channel& channel, float value);
+
 #ifdef EEZ_PSU_SIMULATOR
 void setLoadEnabled(Channel &channel, bool state);
 void setLoad(Channel &channel, float load);

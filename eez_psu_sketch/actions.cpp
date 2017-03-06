@@ -565,16 +565,12 @@ void action_show_ch_settings_trigger() {
     setPage(PAGE_ID_CH_SETTINGS_TRIGGER);
 }
 
-void action_ch_settings_trigger_edit_voltage_trigger_mode() {
-    ((ChSettingsTriggerPage *)getActivePage())->editVoltageTriggerMode();
+void action_ch_settings_trigger_edit_trigger_mode() {
+    ((ChSettingsTriggerPage *)getActivePage())->editTriggerMode();
 }
 
 void action_ch_settings_trigger_edit_voltage_trigger_value() {
     ((ChSettingsTriggerPage *)getActivePage())->editVoltageTriggerValue();
-}
-
-void action_ch_settings_trigger_edit_current_trigger_mode() {
-    ((ChSettingsTriggerPage *)getActivePage())->editCurrentTriggerMode();
 }
 
 void action_ch_settings_trigger_edit_current_trigger_value() {
@@ -787,9 +783,8 @@ ACTION actions[] = {
     action_sys_settings_display_turn_off,
     action_sys_settings_display_edit_brightness,
     action_show_ch_settings_trigger,
-    action_ch_settings_trigger_edit_voltage_trigger_mode,
+    action_ch_settings_trigger_edit_trigger_mode,
     action_ch_settings_trigger_edit_voltage_trigger_value,
-    action_ch_settings_trigger_edit_current_trigger_mode,
     action_ch_settings_trigger_edit_current_trigger_value,
     action_ch_settings_trigger_edit_list_count,
     action_show_ch_settings_lists,

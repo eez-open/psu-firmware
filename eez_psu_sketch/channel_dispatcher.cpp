@@ -21,6 +21,8 @@
 #include "bp.h"
 #include "temperature.h"
 #include "event_queue.h"
+#include "trigger.h"
+#include "list.h"
 
 namespace eez {
 namespace psu {
@@ -57,6 +59,11 @@ bool setType(Type value) {
                         channel.lowRippleAutoEnable(false);
                     }
 
+                    channel.setVoltageTriggerMode(TRIGGER_MODE_FIXED);
+                    channel.setCurrentTriggerMode(TRIGGER_MODE_FIXED);
+
+                    list::resetChannelList(channel);
+
                     if (isTracked()) {
                         if (i != 0) {
                             Channel &channel1 = Channel::get(0);
@@ -66,6 +73,9 @@ bool setType(Type value) {
 
                             channel.setCurrentLimit(channel1.getCurrentLimit());
                             channel.setCurrent(channel1.i.set);
+
+                            trigger::setVoltage(channel, channel1.u.def);
+                            trigger::setCurrent(channel, channel1.i.def);
 
                             channel.prot_conf.flags.u_state = channel1.prot_conf.flags.u_state;
                             channel.prot_conf.u_level = channel1.prot_conf.u_level;
@@ -89,6 +99,9 @@ bool setType(Type value) {
                         } else {
                             channel.setVoltageLimit(MIN(Channel::get(0).getVoltageLimit(), Channel::get(1).getVoltageLimit()));
                             channel.setCurrentLimit(MIN(Channel::get(0).getCurrentLimit(), Channel::get(1).getCurrentLimit()));
+
+                            trigger::setVoltage(channel, channel.u.def);
+                            trigger::setCurrent(channel, channel.i.def);
                         }
                     } else {
                         channel.setVoltage(getUMin(channel));
@@ -96,6 +109,9 @@ bool setType(Type value) {
 
                         channel.setCurrent(getIMin(channel));
                         channel.setCurrentLimit(MIN(Channel::get(0).getCurrentLimit(), Channel::get(1).getCurrentLimit()));
+
+                        trigger::setVoltage(channel, getUMin(channel));
+                        trigger::setCurrent(channel, getIMin(channel));
 
                         channel.prot_conf.flags.u_state = Channel::get(0).prot_conf.flags.u_state || Channel::get(1).prot_conf.flags.u_state ? 1 : 0;
                         channel.prot_conf.u_level = MIN(Channel::get(0).prot_conf.u_level, Channel::get(1).prot_conf.u_level);
@@ -733,6 +749,37 @@ void setCurrentTriggerMode(Channel& channel, TriggerMode mode) {
     }
 }
 
+float getTriggerVoltage(Channel& channel) {
+    if (isCoupled() || isTracked()) {
+        return trigger::getVoltage(Channel::get(0));
+    } else {
+        return trigger::getVoltage(channel);
+    }
+}
+
+void setTriggerVoltage(Channel& channel, float value) {
+    if (isCoupled() || isTracked()) {
+        trigger::setVoltage(Channel::get(0), value);
+    } else {
+        trigger::setVoltage(channel, value);
+    }
+}
+
+float getTriggerCurrent(Channel& channel) {
+    if (isCoupled() || isTracked()) {
+        return trigger::getCurrent(Channel::get(0));
+    } else {
+        return trigger::getCurrent(channel);
+    }
+}
+
+void setTriggerCurrent(Channel& channel, float value) {
+    if (isCoupled() || isTracked()) {
+        trigger::setCurrent(Channel::get(0), value);
+    } else {
+        trigger::setCurrent(channel, value);
+    }
+}
 
 #ifdef EEZ_PSU_SIMULATOR
 void setLoadEnabled(Channel &channel, bool state) {

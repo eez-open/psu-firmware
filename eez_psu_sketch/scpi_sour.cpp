@@ -822,7 +822,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelTriggeredAmplitude(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    trigger::setCurrent(*channel, current);
+    channel_dispatcher::setTriggerCurrent(*channel, current);
 
     return SCPI_RES_OK;
 }
@@ -834,7 +834,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelTriggeredAmplitudeQ(scpi_t * context) {
     }
 
     return get_source_value(context, 
-        trigger::getCurrent(*channel),
+        channel_dispatcher::getTriggerCurrent(*channel),
         channel_dispatcher::getIMin(*channel),
         channel_dispatcher::getIMax(*channel),
         channel_dispatcher::getIDef(*channel));
@@ -851,7 +851,7 @@ scpi_result_t scpi_cmd_sourceVoltageLevelTriggeredAmplitude(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    trigger::setVoltage(*channel, voltage);
+    channel_dispatcher::setTriggerVoltage(*channel, voltage);
 
     return SCPI_RES_OK;
 }
@@ -863,7 +863,7 @@ scpi_result_t scpi_cmd_sourceVoltageLevelTriggeredAmplitudeQ(scpi_t * context) {
     }
 
     return get_source_value(context,
-        trigger::getVoltage(*channel),
+        channel_dispatcher::getTriggerVoltage(*channel),
         channel_dispatcher::getUMin(*channel),
         channel_dispatcher::getUMax(*channel),
         channel_dispatcher::getUDef(*channel));

@@ -38,6 +38,8 @@
 #include "profile.h"
 #include "event_queue.h"
 #include "channel_dispatcher.h"
+#include "list.h"
+#include "trigger.h"
 
 namespace eez {
 namespace psu {
@@ -82,8 +84,8 @@ Channel &Channel::get(int channel_index) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Channel::Value::init(float def_step, float def_limit) {
-    set = 0;
+void Channel::Value::init(float set, float def_step, float def_limit) {
+    set = set;
     mon_dac = 0;
     mon_adc = 0;
     mon = 0;
@@ -282,11 +284,7 @@ Channel::Channel(
 
 #ifdef EEZ_PSU_SIMULATOR
     simulator.load_enabled = true;
-    if (index == 1) {
-        simulator.load = 10;
-    } else {
-        simulator.load = 20;
-    }
+    simulator.load = 10;
 #endif
 
     uBeforeBalancing = NAN;
@@ -471,16 +469,28 @@ void Channel::reset() {
     // [SOUR[n]]:CURR:STEP
     // [SOUR[n]]:VOLT
     // [SOUR[n]]:VOLT:STEP -> set all to default
-    u.init(U_DEF_STEP, u.max);
-    i.init(I_DEF_STEP, i.max);
+    u.init(U_MIN, U_DEF_STEP, u.max);
+    i.init(I_MIN, I_DEF_STEP, i.max);
 
     maxCurrentLimitCause = MAX_CURRENT_LIMIT_CAUSE_NONE;
     p_limit = PTOT;
 
     resetHistory();
 
+    flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
+    flags.displayValue2 = DISPLAY_VALUE_CURRENT;
+    ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
+
     flags.voltageTriggerMode = TRIGGER_MODE_FIXED;
     flags.currentTriggerMode = TRIGGER_MODE_FIXED;
+    trigger::setVoltage(*this, U_MIN);
+    trigger::setCurrent(*this, I_MIN);
+    list::resetChannelList(*this);
+
+#ifdef EEZ_PSU_SIMULATOR
+    simulator.setLoadEnabled(false);
+    simulator.load = 10;
+#endif
 }
 
 void Channel::resetHistory() {
@@ -517,6 +527,10 @@ void Channel::clearProtectionConf() {
     prot_conf.i_delay = OCP_DEFAULT_DELAY;
     prot_conf.p_delay = OPP_DEFAULT_DELAY;
     prot_conf.p_level = OPP_DEFAULT_LEVEL;
+
+    temperature::sensors[temp_sensor::CH1 + index - 1].prot_conf.state = OTP_CH_DEFAULT_STATE;
+    temperature::sensors[temp_sensor::CH1 + index - 1].prot_conf.level = OTP_CH_DEFAULT_LEVEL;
+    temperature::sensors[temp_sensor::CH1 + index - 1].prot_conf.delay = OTP_CH_DEFAULT_DELAY;
 }
 
 bool Channel::test() {
