@@ -63,7 +63,7 @@ data::Value ChSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t i
 	}
 
 	if (id == DATA_ID_CHANNEL_LIST_COUNT) {
-        int count = list::getListCount(*g_channel);
+        uint16_t count = list::getListCount(*g_channel);
         if (count > 0) {
     		return data::Value(count);
         } else {
@@ -144,7 +144,7 @@ void ChSettingsTriggerPage::editCurrentTriggerValue() {
 
 void ChSettingsTriggerPage::onListCountSet(float value) {
 	popPage();
-    list::setListCount(*g_channel, (int)value);
+    list::setListCount(*g_channel, (uint16_t)value);
     profile::save();
 }
 
@@ -169,7 +169,7 @@ void ChSettingsTriggerPage::editListCount() {
     options.option1ButtonText = INF_TEXT;
     options.option1 = onListCountSetToInfinity;
 
-	NumericKeypad::start(0, data::Value((int)list::getListCount(*g_channel)), options, onListCountSet);
+	NumericKeypad::start(0, data::Value((uint16_t)list::getListCount(*g_channel)), options, onListCountSet);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -227,11 +227,11 @@ float *ChSettingsListsPage::getFloatList(uint8_t id) {
 
 data::Value ChSettingsListsPage::getMin(const data::Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_CHANNEL_LIST_VOLTAGE) {
-        return data::Value(g_channel->u.min, data::VALUE_TYPE_FLOAT_VOLT);
+        return data::Value(channel_dispatcher::getUMin(*g_channel), data::VALUE_TYPE_FLOAT_VOLT);
     }
 
     if (id == DATA_ID_CHANNEL_LIST_CURRENT) {
-        return data::Value(g_channel->i.min, data::VALUE_TYPE_FLOAT_AMPER);
+        return data::Value(channel_dispatcher::getIMin(*g_channel), data::VALUE_TYPE_FLOAT_AMPER);
     }
 
     if (id == DATA_ID_CHANNEL_LIST_DWELL) {
@@ -243,11 +243,11 @@ data::Value ChSettingsListsPage::getMin(const data::Cursor &cursor, uint8_t id) 
 
 data::Value ChSettingsListsPage::getMax(const data::Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_CHANNEL_LIST_VOLTAGE) {
-        return data::Value(g_channel->u.max, data::VALUE_TYPE_FLOAT_VOLT);
+        return data::Value(channel_dispatcher::getUMax(*g_channel), data::VALUE_TYPE_FLOAT_VOLT);
     }
 
     if (id == DATA_ID_CHANNEL_LIST_CURRENT) {
-        return data::Value(g_channel->i.max, data::VALUE_TYPE_FLOAT_AMPER);
+        return data::Value(channel_dispatcher::getIMax(*g_channel), data::VALUE_TYPE_FLOAT_AMPER);
     }
 
     if (id == DATA_ID_CHANNEL_LIST_DWELL) {
@@ -503,15 +503,39 @@ void ChSettingsListsPage::edit() {
             options.editUnit = value.getType();
         }
 
+        data::Value min = data::getMin(cursor, dataId);
+        data::Value max = data::getMax(cursor, dataId);
+
         options.def = def.getFloat();
-	    options.min = data::getMin(cursor, dataId).getFloat();
-	    options.max = data::getMax(cursor, dataId).getFloat();
+	    options.min = min.getFloat();
+	    options.max = max.getFloat();
 
 	    options.flags.genericNumberKeypad = true;
 	    options.flags.signButtonEnabled = true;
 	    options.flags.dotButtonEnabled = true;
 
-	    NumericKeypad::start(0, value, options, onValueSet);
+        char label[64];
+        strcpy_P(label, PSTR("["));
+        if (dataId == DATA_ID_CHANNEL_LIST_DWELL) {
+            char dwell[64];
+            min.toText(dwell, sizeof(dwell));
+            strcat(label, dwell);
+        } else {
+		    util::strcatFloat(label, options.min);
+        }
+		strcat_P(label, PSTR("-"));
+        if (dataId == DATA_ID_CHANNEL_LIST_DWELL) {
+            char dwell[64];
+            max.toText(dwell, sizeof(dwell));
+            strcat(label, dwell);
+        } else if (dataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
+    		util::strcatVoltage(label, options.max);
+        } else {
+    		util::strcatCurrent(label, options.max);
+        }
+		strcat_P(label, PSTR("]: "));
+
+	    NumericKeypad::start(label, value, options, onValueSet);
     } else {
         m_iCursor = getCursorIndex(g_foundWidgetAtDown.cursor, widget->data);
 

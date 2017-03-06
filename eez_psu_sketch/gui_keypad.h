@@ -60,7 +60,7 @@ public:
     virtual data::Value getData(uint8_t id);
 
 protected:
-    const char *m_label;
+    char m_label[64];
     char m_keypadText[MAX_KEYPAD_TEXT_LENGTH + 2];
     int m_maxChars;
     void (*m_okCallback)(char *); // +2 for cursor and zero at the end

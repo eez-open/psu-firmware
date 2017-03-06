@@ -58,7 +58,7 @@ Keypad *getActiveKeypad() {
 ////////////////////////////////////////////////////////////////////////////////
 
 Keypad::Keypad() {
-    m_label = 0;
+    m_label[0] = 0;
     m_keypadText[0] = 0;
     m_okCallback = 0;
     m_cancelCallback = 0;
@@ -67,7 +67,7 @@ Keypad::Keypad() {
 }
 
 void Keypad::init(const char *label_, void (*ok)(char *), void (*cancel)()) {
-	m_label = label_;
+	strcpy(m_label, label_);
 	m_okCallback = ok;
 	m_cancelCallback = cancel;
 
