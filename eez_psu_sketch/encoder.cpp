@@ -22,8 +22,11 @@
 
 #include "encoder.h"
 
-#define CONF_ACCELERATION_DECREMENT_PER_MS 1
-#define CONF_ACCELERATION_INCREMENT_FACTOR 2
+#define CONF_ENCODER_ACCELERATION_DECREMENT_PER_MS 1
+#define CONF_ENCODER_ACCELERATION_INCREMENT_FACTOR 2
+
+#define CONF_ENCODER_SWITCH_DURATION_MIN 5000
+#define CONF_ENCODER_SWITCH_DURATION_MAX 1000000
 
 namespace eez {
 namespace psu {
@@ -78,8 +81,8 @@ void abInterruptHandler() {
         int32_t diff = time - g_rotationLastTime;
 
         if (g_accelerationEnabled) {
-            g_acceleration += -CONF_ACCELERATION_DECREMENT_PER_MS * (diff / 1000) +
-                CONF_ACCELERATION_INCREMENT_FACTOR * (result == DIR_CW ? g_speedUp : g_speedDown);
+            g_acceleration += -CONF_ENCODER_ACCELERATION_DECREMENT_PER_MS * (diff / 1000) +
+                CONF_ENCODER_ACCELERATION_INCREMENT_FACTOR * (result == DIR_CW ? g_speedUp : g_speedDown);
 
             if (g_acceleration < 0) g_acceleration = 0;
             if (g_acceleration > 99) g_acceleration = 99;
@@ -103,7 +106,7 @@ void swInterruptHandler() {
     uint32_t time = micros();
     if (digitalRead(ENC_SW)) {
         int32_t diff = time - g_switchLastTime;
-        if (diff > 10000 && diff < 250000) {
+        if (diff > CONF_ENCODER_SWITCH_DURATION_MIN && diff < CONF_ENCODER_SWITCH_DURATION_MAX) {
             ++g_switchCounter;
         }
     } else {
