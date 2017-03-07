@@ -577,7 +577,7 @@ void SysSettingsTriggerPage::onTriggerSourceSet(uint8_t value) {
 }
 
 void SysSettingsTriggerPage::selectSource() {
-    pushSelectFromEnumPage(data::g_triggerSourceEnumDefinition, trigger::getSource(), -1, onTriggerSourceSet);
+    pushSelectFromEnumPage(data::g_triggerSourceEnumDefinition, m_source, -1, onTriggerSourceSet);
 }
 
 void SysSettingsTriggerPage::onDelaySet(float value) {
