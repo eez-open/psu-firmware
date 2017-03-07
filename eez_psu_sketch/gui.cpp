@@ -840,7 +840,7 @@ void channelToggleOutput() {
             channel_dispatcher::outputEnable(channel, false);
         } else {
             bool triggerModeEnabled = channel_dispatcher::getVoltageTriggerMode(channel) != TRIGGER_MODE_FIXED ||
-                channel_dispatcher::getCurrentTriggerMode(channel) == TRIGGER_MODE_FIXED;
+                channel_dispatcher::getCurrentTriggerMode(channel) != TRIGGER_MODE_FIXED;
 
             if (triggerModeEnabled && trigger::isIdle()) {
                 g_toggleOutputWidgetCursor = g_foundWidgetAtDown;

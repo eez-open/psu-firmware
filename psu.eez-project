@@ -13941,7 +13941,8 @@
               "text": "Set to fixed"
             }
           ]
-        }
+        },
+        "closePageIfTouchedOutside": true
       },
       {
         "name": "ch_settings_adv",
