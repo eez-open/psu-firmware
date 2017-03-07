@@ -698,10 +698,10 @@ void NumericKeypad::ok() {
         if (m_state != EMPTY) {
 			float value = getValue();
 
-			if (util::less(value, m_options.min, data::getPrecision(m_options.editUnit))) {
-				errorMessage(0, data::Value::LessThenMinMessage(m_options.min, m_options.editUnit));
-			} else if (util::greater(value, m_options.max, data::getPrecision(m_options.editUnit))) {
-				errorMessage(0, data::Value::GreaterThenMaxMessage(m_options.max, m_options.editUnit));
+			if (util::less(value, m_options.min, data::getPrecision(m_startValue.getType()))) {
+				errorMessage(0, data::Value::LessThenMinMessage(m_options.min, m_startValue.getType()));
+			} else if (util::greater(value, m_options.max, data::getPrecision(m_startValue.getType()))) {
+				errorMessage(0, data::Value::GreaterThenMaxMessage(m_options.max, m_startValue.getType()));
 			} else {
 				((void (*)(float))m_okCallback)(value);
 			}
