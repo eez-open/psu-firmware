@@ -68,9 +68,25 @@ data::EnumItem g_channelTriggerModeEnumDefinition[] = {
     {0, 0}
 };
 
+data::EnumItem g_triggerSourceEnumDefinition[] = {
+    {trigger::SOURCE_BUS, PSTR("Bus")},
+    {trigger::SOURCE_IMMEDIATE, PSTR("Immediate")},
+    {trigger::SOURCE_MANUAL, PSTR("Manual")},
+    {trigger::SOURCE_PIN1, PSTR("Pin1")},
+    {0, 0}
+};
+
+data::EnumItem g_triggerPolarityEnumDefinition[] = {
+    {trigger::POLARITY_NEGATIVE, PSTR("Negative")},
+    {trigger::POLARITY_POSITIVE, PSTR("Positive")},
+    {0, 0}
+};
+
 static const data::EnumItem *enumDefinitions[] = {
     g_channelDisplayValueEnumDefinition,
-    g_channelTriggerModeEnumDefinition
+    g_channelTriggerModeEnumDefinition,
+    g_triggerSourceEnumDefinition,
+    g_triggerPolarityEnumDefinition
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -680,7 +696,7 @@ Value get(const Cursor &cursor, uint8_t id) {
         }
 
         if (id == DATA_ID_EDIT_ENABLED) {
-            return Value(trigger::isExecuting() || getActivePageId() == PAGE_ID_CH_SETTINGS_LISTS ? 0 : 1);
+            return Value(!trigger::isIdle() || getActivePageId() == PAGE_ID_CH_SETTINGS_LISTS ? 0 : 1);
         }
         
         if (id == DATA_ID_CHANNEL_MON_VALUE) {

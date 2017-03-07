@@ -21,6 +21,7 @@
 #include "gui_page.h"
 
 #include "datetime.h"
+#include "trigger.h"
 
 namespace eez {
 namespace psu {
@@ -145,6 +146,37 @@ class SysSettingsDisplayPage : public Page {
 public:
     void turnOff();
     void editBrightness();
+};
+
+class SysSettingsTriggerPage : public SetPage {
+public:
+    SysSettingsTriggerPage();
+
+    data::Value getData(const data::Cursor &cursor, uint8_t id);
+
+    void selectSource();
+    void editDelay();
+    void selectPolarity();
+    void toggleInitiateContinuously();
+    
+	int getDirty();
+	void set();
+
+private:
+    trigger::Source m_sourceOrig;
+    trigger::Source m_source;
+
+    float m_delayOrig;
+    float m_delay;
+
+    trigger::Polarity m_polarityOrig;
+    trigger::Polarity m_polarity;
+
+    bool m_initiateContinuouslyOrig;
+    bool m_initiateContinuously;
+
+    static void onTriggerSourceSet(uint8_t value);
+    static void onDelaySet(float value);
 };
 
 }

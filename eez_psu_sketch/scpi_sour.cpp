@@ -147,7 +147,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelImmediateAmplitude(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (trigger::isExecuting()) {
+    if (!trigger::isIdle()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }
@@ -191,7 +191,7 @@ scpi_result_t scpi_cmd_sourceVoltageLevelImmediateAmplitude(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (trigger::isExecuting()) {
+    if (!trigger::isIdle()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }
@@ -887,7 +887,7 @@ scpi_result_t scpi_cmd_sourceCurrentMode(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    if (trigger::isExecuting()) {
+    if (!trigger::isIdle()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }
@@ -919,7 +919,7 @@ scpi_result_t scpi_cmd_sourceVoltageMode(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    if (trigger::isExecuting()) {
+    if (!trigger::isIdle()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }
@@ -975,7 +975,7 @@ scpi_result_t scpi_cmd_sourceListCount(scpi_t *context) {
         count = value;
     }
 
-    if (trigger::isExecuting()) {
+    if (!trigger::isIdle()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }
@@ -1024,7 +1024,7 @@ scpi_result_t scpi_cmd_sourceListCurrentLevel(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    if (trigger::isExecuting()) {
+    if (!trigger::isIdle()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }
@@ -1075,7 +1075,7 @@ scpi_result_t scpi_cmd_sourceListDwell(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    if (trigger::isExecuting()) {
+    if (!trigger::isIdle()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }
@@ -1126,7 +1126,7 @@ scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    if (trigger::isExecuting()) {
+    if (!trigger::isIdle()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }

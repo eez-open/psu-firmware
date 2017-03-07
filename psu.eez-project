@@ -782,19 +782,39 @@
       "implementation": "popPage();\n((ChSettingsListsPage *)getActivePage())->deleteAll();"
     },
     {
-      "name": "channel.startList",
+      "name": "channel.initiateTrigger",
       "implementationType": "native",
-      "implementation": "channelStartList();"
+      "implementation": "channelInitiateTrigger();"
     },
     {
-      "name": "channel.disableList",
+      "name": "channel.setToFixed",
       "implementationType": "native",
-      "implementation": "channelDisableList();"
+      "implementation": "channelSetToFixed();"
     },
     {
       "name": "channel.enableOutput",
       "implementationType": "native",
       "implementation": "channelEnableOutput();"
+    },
+    {
+      "name": "trigger.selectSource",
+      "implementationType": "native",
+      "implementation": "((SysSettingsTriggerPage *)getActivePage())->selectSource();"
+    },
+    {
+      "name": "trigger.editDelay",
+      "implementationType": "native",
+      "implementation": "((SysSettingsTriggerPage *)getActivePage())->editDelay();"
+    },
+    {
+      "name": "trigger.selectPolarity",
+      "implementationType": "native",
+      "implementation": "((SysSettingsTriggerPage *)getActivePage())->selectPolarity();"
+    },
+    {
+      "name": "trigger.toggleInitiateContinuously",
+      "implementationType": "native",
+      "implementation": "((SysSettingsTriggerPage *)getActivePage())->toggleInitiateContinuously();"
     }
   ],
   "data": [
@@ -1879,6 +1899,29 @@
     {
       "name": "channel.lists.deleteRowsEnabled",
       "type": "boolean",
+      "defaultValue": "1"
+    },
+    {
+      "name": "trigger.source",
+      "type": "enum",
+      "enumItems": "[\n\"Bus\",\n\"Immediate\",\n\"Manual\",\n\"Pin1\"\n]",
+      "defaultValue": "Immediate"
+    },
+    {
+      "name": "trigger.delay",
+      "type": "float",
+      "defaultValue": "0"
+    },
+    {
+      "name": "trigger.polarity",
+      "type": "enum",
+      "enumItems": "[\n\"Negative\",\n\"Positive\"\n]",
+      "defaultValue": "Positive"
+    },
+    {
+      "name": "trigger.initiateContinuously",
+      "type": "boolean",
+      "enumItems": "",
       "defaultValue": "1"
     }
   ],
@@ -13257,7 +13300,7 @@
               "text": "Trigger mode:"
             },
             {
-              "type": "DisplayData",
+              "type": "Text",
               "data": "channel.trigger.mode",
               "action": "ch.settings.trigger.editTriggerMode",
               "x": 184,
@@ -13879,23 +13922,23 @@
             },
             {
               "type": "Text",
-              "action": "channel.startList",
+              "action": "channel.initiateTrigger",
               "x": 12,
               "y": 12,
               "width": 148,
               "height": 32,
               "style": "select_enum_item_popup_item",
-              "text": "Start list"
+              "text": "Initiate trigger"
             },
             {
               "type": "Text",
-              "action": "channel.disableList",
+              "action": "channel.setToFixed",
               "x": 12,
               "y": 44,
               "width": 148,
               "height": 32,
               "style": "select_enum_item_popup_item",
-              "text": "Disable list"
+              "text": "Set to fixed"
             }
           ]
         }
@@ -17067,6 +17110,14 @@
           "height": 240,
           "widgets": [
             {
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
               "type": "Text",
               "x": 6,
               "y": 0,
@@ -17076,22 +17127,138 @@
               "text": "General trigger settings"
             },
             {
-              "type": "Rectangle",
-              "x": 0,
-              "y": 204,
-              "width": 224,
-              "height": 36,
-              "style": "bottom_button_background"
+              "type": "Text",
+              "x": 16,
+              "y": 32,
+              "width": 68,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Source:"
             },
             {
               "type": "Text",
-              "action": "show_previous_page",
-              "x": 224,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "B"
+              "data": "trigger.source",
+              "action": "trigger.selectSource",
+              "x": 84,
+              "y": 32,
+              "width": 97,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "PIN1"
+            },
+            {
+              "type": "Rectangle",
+              "x": 181,
+              "y": 32,
+              "width": 71,
+              "height": 28,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 60,
+              "width": 68,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Delay:"
+            },
+            {
+              "type": "Text",
+              "data": "trigger.delay",
+              "action": "trigger.editDelay",
+              "x": 84,
+              "y": 60,
+              "width": 67,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "0s"
+            },
+            {
+              "type": "Rectangle",
+              "x": 151,
+              "y": 60,
+              "width": 101,
+              "height": 28,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 88,
+              "width": 68,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Polarity:"
+            },
+            {
+              "type": "Text",
+              "data": "trigger.polarity",
+              "action": "trigger.selectPolarity",
+              "x": 84,
+              "y": 88,
+              "width": 67,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "Yes"
+            },
+            {
+              "type": "Rectangle",
+              "x": 151,
+              "y": 88,
+              "width": 101,
+              "height": 28,
+              "style": "default_inverse"
+            },
+            {
+              "type": "Text",
+              "x": 16,
+              "y": 116,
+              "width": 165,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Initiate continuously:"
+            },
+            {
+              "x": 181,
+              "type": "Select",
+              "data": "trigger.initiateContinuously",
+              "y": 116,
+              "width": 71,
+              "height": 28,
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "data": "",
+                  "action": "trigger.toggleInitiateContinuously",
+                  "x": 0,
+                  "y": 0,
+                  "width": 71,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "No"
+                },
+                {
+                  "type": "Text",
+                  "data": "",
+                  "action": "trigger.toggleInitiateContinuously",
+                  "x": 0,
+                  "y": 0,
+                  "width": 71,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
+                  "text": "Yes"
+                }
+              ]
+            },
+            {
+              "type": "Rectangle",
+              "x": 16,
+              "y": 144,
+              "width": 236,
+              "height": 60,
+              "style": "default_inverse"
             },
             {
               "type": "Text",
@@ -17104,69 +17271,45 @@
               "text": "X"
             },
             {
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 32,
-              "width": 119,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Trigger source:"
-            },
-            {
-              "type": "Text",
-              "x": 16,
-              "y": 60,
-              "width": 119,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Trigger delay:"
-            },
-            {
-              "type": "Text",
+              "type": "Button",
               "data": "",
-              "x": 135,
-              "y": 32,
-              "width": 60,
-              "height": 28,
-              "style": "value_S",
-              "text": "PIN1"
+              "action": "set",
+              "x": 0,
+              "y": 204,
+              "width": 101,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
             },
             {
               "type": "Text",
-              "data": "",
-              "x": 135,
-              "y": 60,
-              "width": 60,
-              "height": 28,
-              "style": "value_S",
-              "text": "0s"
+              "action": "discard",
+              "x": 101,
+              "y": 204,
+              "width": 96,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
+            },
+            {
+              "type": "Rectangle",
+              "x": 197,
+              "y": 204,
+              "width": 27,
+              "height": 36,
+              "style": "bottom_button_background"
             },
             {
               "type": "Text",
-              "x": 16,
-              "y": 88,
-              "width": 162,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Initiate continuously:"
-            },
-            {
-              "type": "Text",
-              "data": "",
-              "x": 178,
-              "y": 88,
-              "width": 60,
-              "height": 28,
-              "style": "value_S",
-              "text": "Yes"
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "B"
             }
           ]
         }

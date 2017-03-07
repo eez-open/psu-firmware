@@ -30,7 +30,7 @@ namespace scpi {
 static scpi_choice_def_t sourceChoice[] = {
     { "BUS", trigger::SOURCE_BUS },
     { "IMMediate", trigger::SOURCE_IMMEDIATE },
-    { "KEY", trigger::SOURCE_KEY },
+    { "MANual", trigger::SOURCE_MANUAL },
     { "PIN1", trigger::SOURCE_PIN1 },
     SCPI_CHOICE_LIST_END
 };
@@ -60,6 +60,7 @@ scpi_result_t scpi_cmd_triggerSequenceDelay(scpi_t * context) {
     }
 
     trigger::setDelay(delay);
+    persist_conf::saveDevice2();
 
     return SCPI_RES_OK;
 }
@@ -76,6 +77,7 @@ scpi_result_t scpi_cmd_triggerSequenceSlope(scpi_t * context) {
     }
 
     trigger::setPolarity((trigger::Polarity)polarity);
+    persist_conf::saveDevice2();
 
     return SCPI_RES_OK;
 }
@@ -92,6 +94,7 @@ scpi_result_t scpi_cmd_triggerSequenceSource(scpi_t * context) {
     }
 
     trigger::setSource((trigger::Source)source);
+    persist_conf::saveDevice2();
 
     return SCPI_RES_OK;
 }
@@ -118,6 +121,9 @@ scpi_result_t scpi_cmd_initiateContinuous(scpi_t * context) {
     }
 
     int result = trigger::enableInitiateContinuous(enable);
+
+    persist_conf::saveDevice2();
+
     if (result != SCPI_RES_OK) {
         SCPI_ErrorPush(context, result);
         return SCPI_RES_ERR;

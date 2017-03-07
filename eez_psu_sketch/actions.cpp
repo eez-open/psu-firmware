@@ -639,16 +639,32 @@ void action_channel_lists_delete_all() {
     ((ChSettingsListsPage *)getActivePage())->deleteAll();
 }
 
-void action_channel_start_list() {
-    channelStartList();
+void action_channel_initiate_trigger() {
+    channelInitiateTrigger();
 }
 
-void action_channel_disable_list() {
-    channelDisableList();
+void action_channel_set_to_fixed() {
+    channelSetToFixed();
 }
 
 void action_channel_enable_output() {
     channelEnableOutput();
+}
+
+void action_trigger_select_source() {
+    ((SysSettingsTriggerPage *)getActivePage())->selectSource();
+}
+
+void action_trigger_edit_delay() {
+    ((SysSettingsTriggerPage *)getActivePage())->editDelay();
+}
+
+void action_trigger_select_polarity() {
+    ((SysSettingsTriggerPage *)getActivePage())->selectPolarity();
+}
+
+void action_trigger_toggle_initiate_continuously() {
+    ((SysSettingsTriggerPage *)getActivePage())->toggleInitiateContinuously();
 }
 
 
@@ -800,9 +816,13 @@ ACTION actions[] = {
     action_channel_lists_clear_column,
     action_channel_lists_delete_rows,
     action_channel_lists_delete_all,
-    action_channel_start_list,
-    action_channel_disable_list,
-    action_channel_enable_output
+    action_channel_initiate_trigger,
+    action_channel_set_to_fixed,
+    action_channel_enable_output,
+    action_trigger_select_source,
+    action_trigger_edit_delay,
+    action_trigger_select_polarity,
+    action_trigger_toggle_initiate_continuously
 };
 
 }

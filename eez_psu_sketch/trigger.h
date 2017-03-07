@@ -29,13 +29,13 @@ static const float DELAY_MAX = 3600.0f;
 enum Source {
     SOURCE_BUS,
     SOURCE_IMMEDIATE,
-    SOURCE_KEY,
+    SOURCE_MANUAL,
     SOURCE_PIN1
 };
 
 enum Polarity {
-    POLARITY_POSITIVE = 1,
-    POLARITY_NEGATIVE = 0
+    POLARITY_NEGATIVE,
+    POLARITY_POSITIVE
 };
 
 void init();
@@ -63,7 +63,7 @@ int enableInitiateContinuous(bool enable);
 bool isContinuousInitializationEnabled();
 void setVoltageTriggerFinished(Channel &channel);
 void setCurrentTriggerFinished(Channel &channel);
-bool isExecuting();
+bool isIdle();
 void abort();
 
 void tick(uint32_t tick_usec);

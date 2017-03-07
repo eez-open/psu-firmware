@@ -89,7 +89,8 @@ struct DeviceConfiguration {
 struct DeviceFlags2 {
     unsigned encoderConfirmationMode : 1;
     unsigned displayState: 1;
-    unsigned reserved: 30;
+    unsigned triggerContinuousInitializationEnabled: 1;
+    unsigned reserved: 29;
 };
 
 struct DeviceConfiguration2 {
@@ -99,7 +100,10 @@ struct DeviceConfiguration2 {
     uint8_t encoderMovingSpeedDown;
     uint8_t encoderMovingSpeedUp;
     uint8_t displayBrightness;
-    uint8_t reserverd[93];
+    uint8_t triggerSource;
+    float triggerDelay;
+    uint8_t triggerPolarity;
+    uint8_t reserverd[87];
 };
 
 extern DeviceConfiguration devConf;

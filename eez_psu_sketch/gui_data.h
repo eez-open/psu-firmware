@@ -29,7 +29,9 @@ namespace data {
 
 enum EnumDefinition {
     ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE,
-    ENUM_DEFINITION_CHANNEL_TRIGGER_MODE
+    ENUM_DEFINITION_CHANNEL_TRIGGER_MODE,
+    ENUM_DEFINITION_TRIGGER_SOURCE,
+    ENUM_DEFINITION_TRIGGER_POLARITY
 };
 
 struct EnumItem {
@@ -39,6 +41,8 @@ struct EnumItem {
 
 extern data::EnumItem g_channelDisplayValueEnumDefinition[];
 extern data::EnumItem g_channelTriggerModeEnumDefinition[];
+extern data::EnumItem g_triggerSourceEnumDefinition[];
+extern data::EnumItem g_triggerPolarityEnumDefinition[];
 
 ////////////////////////////////////////////////////////////////////////////////
 

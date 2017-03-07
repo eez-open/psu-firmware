@@ -21,6 +21,7 @@
 #include "channel_dispatcher.h"
 #include "list.h"
 #include "profile.h"
+#include "persist_conf.h"
 
 namespace eez {
 namespace psu {
@@ -31,10 +32,6 @@ static struct {
     float i;
 } g_levels[CH_MAX];
 
-static float g_delay;
-static Source g_source;
-static Polarity g_polarity;
-
 enum State {
     STATE_IDLE,
     STATE_INITIATED,
@@ -42,7 +39,6 @@ enum State {
     STATE_EXECUTING
 };
 static State g_state;
-static bool g_continuousInitializationEnabled;
 static uint32_t g_triggeredTime;
 static uint8_t g_extTrigLastState;
 
@@ -51,58 +47,60 @@ static const int CURRENT_TRIGGER_IN_PROGRESS = 2;
 uint8_t g_triggerInProgress[CH_NUM];
 
 void reset() {
-    g_delay = DELAY_DEFAULT;
-    g_source = SOURCE_IMMEDIATE;
-    g_polarity = POLARITY_POSITIVE;
+    persist_conf::devConf2.triggerDelay = DELAY_DEFAULT;
+    persist_conf::devConf2.triggerSource = SOURCE_IMMEDIATE;
+    persist_conf::devConf2.triggerPolarity = POLARITY_POSITIVE;
+    persist_conf::devConf2.flags.triggerContinuousInitializationEnabled = false;
 
-    for (int i = 0; i < CH_NUM; ++i) {
-        g_levels[i].u = 0;
-        g_levels[i].i = 0;
-    }
+    persist_conf::saveDevice2();
 
     g_state = STATE_IDLE;
-    g_continuousInitializationEnabled = false;
 }
 
 void extTrigInterruptHandler() {
     uint8_t state = digitalRead(EXT_TRIG);
-    if (state == 1 && g_extTrigLastState == 0 && g_polarity == POLARITY_POSITIVE || state == 0 && g_extTrigLastState == 1 && g_polarity == POLARITY_NEGATIVE) {
+    if (state == 1 && g_extTrigLastState == 0 && persist_conf::devConf2.triggerPolarity == POLARITY_POSITIVE ||
+        state == 0 && g_extTrigLastState == 1 && persist_conf::devConf2.triggerPolarity == POLARITY_NEGATIVE) {
         generateTrigger(SOURCE_PIN1, false);
     }
     g_extTrigLastState = state;
 }
 
 void init() {
-    reset();
+    g_state = STATE_IDLE;
 
     noInterrupts();
     g_extTrigLastState = digitalRead(EXT_TRIG);
     attachInterrupt(digitalPinToInterrupt(EXT_TRIG), extTrigInterruptHandler, CHANGE);
     interrupts();
+
+    if (isContinuousInitializationEnabled()) {
+        initiate();
+    }
 }
 
 void setDelay(float delay) {
-    g_delay = delay;
+    persist_conf::devConf2.triggerDelay = delay;
 }
 
 float getDelay() {
-    return g_delay;
+    return persist_conf::devConf2.triggerDelay;
 }
 
 void setSource(Source source) {
-    g_source = source;
+    persist_conf::devConf2.triggerSource = source;
 }
 
 Source getSource() {
-    return g_source;
+    return (Source)persist_conf::devConf2.triggerSource;
 }
 
 void setPolarity(Polarity polarity) {
-    g_polarity = polarity;
+    persist_conf::devConf2.triggerPolarity = polarity;
 }
 
 Polarity getPolarity() {
-    return g_polarity;
+    return (Polarity)persist_conf::devConf2.triggerPolarity;
 }
 
 void setVoltage(Channel &channel, float value) {
@@ -122,13 +120,13 @@ float getCurrent(Channel &channel) {
 }
 
 void check(uint32_t currentTime) {
-    if (currentTime - g_triggeredTime > g_delay * 1000L) {
+    if (currentTime - g_triggeredTime > persist_conf::devConf2.triggerDelay * 1000L) {
         startImmediately();
     }
 }
 
 int generateTrigger(Source source, bool checkImmediatelly) {
-    if (g_source != source) {
+    if (persist_conf::devConf2.triggerSource != source) {
         return SCPI_ERROR_TRIGGER_IGNORED;
     }
     
@@ -157,7 +155,7 @@ bool isTriggerFinished() {
 }
 
 void triggerFinished() {
-    if (g_continuousInitializationEnabled) {
+    if (persist_conf::devConf2.flags.triggerContinuousInitializationEnabled) {
         g_state = STATE_INITIATED;
     } else {
         g_state = STATE_IDLE;
@@ -283,7 +281,7 @@ int startImmediately() {
 }
 
 int initiate() {
-    if (g_source == SOURCE_IMMEDIATE) {
+    if (persist_conf::devConf2.triggerSource == SOURCE_IMMEDIATE) {
         return startImmediately();
     } else {
         g_state = STATE_INITIATED;
@@ -292,16 +290,20 @@ int initiate() {
 }
 
 int enableInitiateContinuous(bool enable) {
-    g_continuousInitializationEnabled = enable;
-    return initiate();
+    persist_conf::devConf2.flags.triggerContinuousInitializationEnabled = enable;
+    if (enable) {
+        return initiate();
+    } else {
+        return SCPI_RES_OK;
+    }
 }
 
 bool isContinuousInitializationEnabled() {
-    return g_continuousInitializationEnabled;
+    return persist_conf::devConf2.flags.triggerContinuousInitializationEnabled;
 }
 
-bool isExecuting() {
-    return g_state == STATE_EXECUTING;
+bool isIdle() {
+    return g_state == STATE_IDLE;
 }
 
 void abort() {

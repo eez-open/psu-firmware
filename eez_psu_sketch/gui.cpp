@@ -167,6 +167,7 @@ Page *createPageFromId(int pageId) {
     case PAGE_ID_SYS_SETTINGS_DATE_TIME: return new SysSettingsDateTimePage();
     case PAGE_ID_SYS_SETTINGS_ETHERNET: return new SysSettingsEthernetPage();
     case PAGE_ID_SYS_SETTINGS_PROTECTIONS: return new SysSettingsProtectionsPage();
+    case PAGE_ID_SYS_SETTINGS_TRIGGER: return new SysSettingsTriggerPage();
     case PAGE_ID_SYS_SETTINGS_AUX_OTP: return new SysSettingsAuxOtpPage();
     case PAGE_ID_SYS_SETTINGS_SOUND: return new SysSettingsSoundPage();
 #if OPTION_ENCODER
@@ -656,7 +657,7 @@ bool wasFocusWidget(const WidgetCursor &widgetCursor) {
 bool isFocusWidget(const WidgetCursor &widgetCursor) {
     if (g_activePageId == PAGE_ID_CH_SETTINGS_LISTS) {
         return ((ChSettingsListsPage *)g_activePage)->isFocusWidget(widgetCursor);
-    } else if (trigger::isExecuting()) {
+    } else if (!trigger::isIdle()) {
         return false;
     } else {
         DECL_WIDGET(widget, widgetCursor.widgetOffset);
@@ -717,6 +718,11 @@ void onEncoder(int counter, bool clicked) {
     }
 
     if (clicked) {
+        if (trigger::generateTrigger(trigger::SOURCE_MANUAL, false) != SCPI_ERROR_TRIGGER_IGNORED) {
+            sound::playClick();
+            return;
+        }
+
         if (g_activePage) {
             if (g_activePage->onEncoderClicked()) {
                 return;
@@ -833,10 +839,10 @@ void channelToggleOutput() {
             trigger::abort();
             channel_dispatcher::outputEnable(channel, false);
         } else {
-            bool list = channel_dispatcher::getVoltageTriggerMode(channel) == TRIGGER_MODE_LIST ||
-                channel_dispatcher::getCurrentTriggerMode(channel) == TRIGGER_MODE_LIST;
+            bool triggerModeEnabled = channel_dispatcher::getVoltageTriggerMode(channel) != TRIGGER_MODE_FIXED ||
+                channel_dispatcher::getCurrentTriggerMode(channel) == TRIGGER_MODE_FIXED;
 
-            if (list && !trigger::isExecuting()) {
+            if (triggerModeEnabled && trigger::isIdle()) {
                 g_toggleOutputWidgetCursor = g_foundWidgetAtDown;
                 pushPage(PAGE_ID_CH_START_LIST);
             } else {
@@ -846,10 +852,10 @@ void channelToggleOutput() {
     }
 }
 
-void channelStartList() {
+void channelInitiateTrigger() {
     popPage();
     Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i);
-    int err = trigger::startImmediately();
+    int err = trigger::initiate();
     if (err == SCPI_RES_OK) {
         channel_dispatcher::outputEnable(channel, true);
     } else {
@@ -857,13 +863,13 @@ void channelStartList() {
     }
 }
 
-void channelDisableList() {
+void channelSetToFixed() {
     popPage();
     Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i);
-    if (channel_dispatcher::getVoltageTriggerMode(channel) == TRIGGER_MODE_LIST) {
+    if (channel_dispatcher::getVoltageTriggerMode(channel) != TRIGGER_MODE_FIXED) {
         channel_dispatcher::setVoltageTriggerMode(channel, TRIGGER_MODE_FIXED);
     }
-    if (channel_dispatcher::getCurrentTriggerMode(channel) == TRIGGER_MODE_LIST) {
+    if (channel_dispatcher::getCurrentTriggerMode(channel) != TRIGGER_MODE_FIXED) {
         channel_dispatcher::setCurrentTriggerMode(channel, TRIGGER_MODE_FIXED);
     }
     channel_dispatcher::outputEnable(channel, true);

@@ -536,6 +536,99 @@ void SysSettingsDisplayPage::turnOff() {
 void SysSettingsDisplayPage::editBrightness() {
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+SysSettingsTriggerPage::SysSettingsTriggerPage() {
+        m_sourceOrig = m_source = trigger::getSource();
+        m_delayOrig = m_delay = trigger::getDelay();
+        m_polarityOrig = m_polarity =trigger::getPolarity();
+        m_initiateContinuouslyOrig = m_initiateContinuously = trigger::isContinuousInitializationEnabled();
+}
+
+data::Value SysSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = SetPage::getData(cursor, id);
+	if (value.getType() != data::VALUE_TYPE_NONE) {
+		return value;
+	}
+
+	if (id == DATA_ID_TRIGGER_SOURCE) {
+		return data::Value(m_source, data::ENUM_DEFINITION_TRIGGER_SOURCE);
+	}
+
+	if (id == DATA_ID_TRIGGER_DELAY) {
+		return data::Value(m_delay, data::VALUE_TYPE_FLOAT_SECOND);
+	}
+
+	if (id == DATA_ID_TRIGGER_POLARITY) {
+		return data::Value(m_polarity, data::ENUM_DEFINITION_TRIGGER_POLARITY);
+	}
+
+	if (id == DATA_ID_TRIGGER_INITIATE_CONTINUOUSLY) {
+        return data::Value(m_initiateContinuously ? 1 : 0);
+	}
+
+    return data::Value();
+}
+
+void SysSettingsTriggerPage::onTriggerSourceSet(uint8_t value) {
+    popPage();
+	SysSettingsTriggerPage *page = (SysSettingsTriggerPage*)getActivePage();
+    page->m_source = (trigger::Source)value;
+}
+
+void SysSettingsTriggerPage::selectSource() {
+    pushSelectFromEnumPage(data::g_triggerSourceEnumDefinition, trigger::getSource(), -1, onTriggerSourceSet);
+}
+
+void SysSettingsTriggerPage::onDelaySet(float value) {
+    popPage();
+	SysSettingsTriggerPage *page = (SysSettingsTriggerPage*)getActivePage();
+    page->m_delay = value;
+}
+
+void SysSettingsTriggerPage::editDelay() {
+    NumericKeypadOptions options;
+
+    options.editUnit = data::VALUE_TYPE_FLOAT_SECOND;
+
+    options.def = 0;
+	options.min = 0;
+	options.max = 3600;
+
+	options.flags.genericNumberKeypad = true;
+	options.flags.signButtonEnabled = true;
+	options.flags.dotButtonEnabled = true;
+
+	NumericKeypad::start(0, data::Value(trigger::getDelay(), data::VALUE_TYPE_FLOAT_SECOND), options, onDelaySet);
+}
+
+void SysSettingsTriggerPage::selectPolarity() {
+	SysSettingsTriggerPage *page = (SysSettingsTriggerPage*)getActivePage();
+    page->m_polarity = page->m_polarity == trigger::POLARITY_NEGATIVE ? trigger::POLARITY_POSITIVE : trigger::POLARITY_NEGATIVE;
+}
+
+void SysSettingsTriggerPage::toggleInitiateContinuously() {
+    m_initiateContinuously = !m_initiateContinuously;
+}
+
+int SysSettingsTriggerPage::getDirty() {
+    return m_sourceOrig != m_source || m_delayOrig != m_delay || m_polarityOrig != m_polarity || m_initiateContinuouslyOrig != m_initiateContinuously;
+}
+
+void SysSettingsTriggerPage::set() {
+    if (getDirty()) {
+        trigger::setSource(m_source);
+        trigger::setDelay(m_delay);
+        trigger::setPolarity(m_polarity);
+        trigger::enableInitiateContinuous(m_initiateContinuously);
+
+        persist_conf::saveDevice2();
+
+        infoMessageP(PSTR("Trigger settings saved!"), popPage);
+    }
+}
+
+
 }
 }
 } // namespace eez::psu::gui

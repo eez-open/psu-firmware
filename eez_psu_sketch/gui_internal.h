@@ -104,8 +104,8 @@ bool isFocusChanged();
 void upDown();
 
 void channelToggleOutput();
-void channelStartList();
-void channelDisableList();
+void channelInitiateTrigger();
+void channelSetToFixed();
 void channelEnableOutput();
 
 ////////////////////////////////////////////////////////////////////////////////
