@@ -262,6 +262,8 @@
 /// But, unfortunately, now ethernet doesn't work.
 #define REPLACE_SPI_TRANSACTIONS_IMPLEMENTATION 0
 
+/// Number of history values shown in YT diagram. This value must be the same as
+/// the width of YT widget.
 #define CHANNEL_HISTORY_SIZE 140
 
 #define GUI_YT_VIEW_RATE_DEFAULT 0.1f
@@ -284,6 +286,12 @@
 #define CSV_SEPARATOR ','
 #define LIST_CSV_FILE_NO_VALUE_CHAR '='
 
+/// Current configuration if changed will be automatically saved
+/// in profile 0 if auto recall of profile 0 is enabled, but not
+/// more often than this frequency in seconds.
 #define SAVE_PROFILE_0_FREQ 60
 
+/// Changed but not confirmed value will be reset to current one
+/// after this timeout in seconds.
+/// See https://github.com/eez-open/psu-firmware/issues/84
 #define ENCODER_CHANGE_TIMEOUT 15
