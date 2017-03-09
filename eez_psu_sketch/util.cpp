@@ -212,6 +212,21 @@ bool pointInsideRect(int xPoint, int yPoint, int xRect, int yRect, int wRect, in
         yPoint >= yRect && yPoint < yRect + hRect;
 }
 
+void getParentDir(const char *path, char *parentDirPath) {
+    int lastPathSeparatorIndex;
+
+    for (lastPathSeparatorIndex = strlen(path) - 1;
+        lastPathSeparatorIndex >= 0 && path[lastPathSeparatorIndex] != PATH_SEPARATOR[0];
+        --lastPathSeparatorIndex);
+
+    int i;
+    for (i = 0; i < lastPathSeparatorIndex; ++i) {
+        parentDirPath[i] = path[i];
+    }
+    parentDirPath[i] = 0;
+}
+
+
 }
 }
 } // namespace eez::psu::util

@@ -18,6 +18,7 @@
 
 #include "psu.h"
 #include "SD.h"
+#include "util.h"
 
 #ifdef _WIN32
 
@@ -49,34 +50,97 @@ SimulatorSD SD;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool SimulatorSD::begin(uint8_t cs) {
-    const char *path = getConfFilePath("sd_card");
-#ifdef _WIN32
-    _mkdir(path);
-#else
-    mkdir(path, 0700);
-#endif
-    return File("/");
+std::string getRealPath(const char *path) {
+    std::string realPath;
+    
+    realPath = "sd_card";
+
+    if (path[0] != '/') {
+        realPath += "/";
+    }
+
+    realPath += path;
+
+    // remove trailing slash
+    if (realPath[realPath.size() - 1] == '/') {
+        realPath = realPath.substr(0, realPath.size()-1);
+    }
+
+    return getConfFilePath(realPath.c_str());
 }
 
-File SimulatorSD::open(const char *path, uint8_t mode) {
-    return File(path, mode);
+bool pathExists(const char *path) {
+    std::string realPath = getRealPath(path);
+    struct stat path_stat;   
+    int result = stat(realPath.c_str(), &path_stat);
+    return result == 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-File::File() {
+class FileImpl {
+    friend class File;
+    friend class SimulatorSD;
+
+public:
+    FileImpl();
+    FileImpl(const char *path, uint8_t mode = READ_ONLY);
+    ~FileImpl();
+
+    operator bool();
+    const char *name();
+    uint32_t size();
+    bool isDirectory();
+
+    void close();
+
+    void rewindDirectory();
+    File openNextFile(uint8_t mode = READ_ONLY);
+
+    bool available();
+    bool seek(uint32_t pos);
+    int peek();
+    int read();
+
+    void print(float value, int numDecimalDigits);
+    void print(char value);
+
+private:
+    int m_refCount;
+    std::string m_path;
+    uint8_t m_mode;
+    FILE *m_fp;
+
+#ifdef _WIN32
+    void *m_hFind;
+#else
+    void *m_dp;
+#endif
+
+    void ref();
+    void unref();
+
+    void init();
+    void open();
+    std::string getRealPath();
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+FileImpl::FileImpl() {
     init();
 }
 
-File::File(const char *path, uint8_t mode)
+FileImpl::FileImpl(const char *path, uint8_t mode)
     : m_path(path)
     , m_mode(mode)
 {
     init();
 }
 
-void File::init() {
+void FileImpl::init() {
+    m_refCount = 0;
+    m_fp = NULL;
 #ifdef _WIN32
     m_hFind = INVALID_HANDLE_VALUE;
 #else
@@ -84,41 +148,47 @@ void File::init() {
 #endif
 }
 
-File::~File() {
+void FileImpl::open() {
+    if (m_mode == FILE_WRITE) {
+        m_fp = fopen(getRealPath().c_str(), "w");
+    } else {
+        m_fp = fopen(getRealPath().c_str(), "r");
+    }
+}
+
+void FileImpl::ref() {
+    ++m_refCount;
+}
+
+void FileImpl::unref() {
+    --m_refCount;
+    if (m_refCount == 0) {
+        delete this;
+    }
+}
+
+FileImpl::~FileImpl() {
     close();
 }
-std::string File::getRealPath() {
-    std::string path;
-    
-    path = "sd_card";
 
-    if (m_path[0] != '/') {
-        path += "/";
-    }
-
-    path += m_path;
-
-    // remove trailing slash
-    if (path[path.size() - 1] == '/') {
-        path = path.substr(0, path.size()-1);
-    }
-
-    return getConfFilePath(path.c_str());
+std::string FileImpl::getRealPath() {
+    return ::getRealPath(m_path.c_str());
 }
 
-File::operator bool() {
+FileImpl::operator bool() {
+    if (m_fp) return true;
+
     if (m_path.length() == 0) {
         return false;
     }
-    struct stat path_stat;   
-    return stat(getRealPath().c_str(), &path_stat) == 0;
+    return pathExists(m_path.c_str());
 }
 
-const char *File::name() {
+const char *FileImpl::name() {
     return strrchr(m_path.c_str(), '/');
 }
 
-uint32_t File::size() {
+uint32_t FileImpl::size() {
     FILE *fp = fopen(getRealPath().c_str(), "rb");
     if (!fp) {
         return 0;
@@ -133,7 +203,7 @@ uint32_t File::size() {
     return size;
 }
 
-bool File::isDirectory() {
+bool FileImpl::isDirectory() {
     struct stat path_stat;
     if (stat(getRealPath().c_str(), &path_stat) != 0) {
         return false;
@@ -141,7 +211,12 @@ bool File::isDirectory() {
     return !S_ISREG(path_stat.st_mode);
 }
 
-void File::close() {
+void FileImpl::close() {
+    if (m_fp) {
+        fclose(m_fp);
+        m_fp = NULL;
+    }
+
 #ifdef _WIN32
     if (m_hFind != INVALID_HANDLE_VALUE) {
         FindClose(m_hFind);
@@ -156,7 +231,7 @@ void File::close() {
     m_path = "";
 }
 
-void File::rewindDirectory() {
+void FileImpl::rewindDirectory() {
 #ifdef _WIN32
     if (m_hFind != INVALID_HANDLE_VALUE) {
         FindClose(m_hFind);
@@ -170,7 +245,7 @@ void File::rewindDirectory() {
 #endif
 }
 
-File File::openNextFile(uint8_t mode) {
+File FileImpl::openNextFile(uint8_t mode) {
     const char *name;
 #ifdef _WIN32
     WIN32_FIND_DATAA ffd;
@@ -207,6 +282,165 @@ File File::openNextFile(uint8_t mode) {
     }
 
     return File((m_path + '/' + name).c_str(), mode);
+}
+
+bool FileImpl::seek(uint32_t pos) {
+    return fseek(m_fp, pos, SEEK_SET) == 0;
+}
+
+bool FileImpl::available() {
+    return peek() != EOF;
+}
+
+int FileImpl::peek() {
+    int c = getc(m_fp);
+
+    if (c == EOF) {
+        return EOF;
+    }
+
+    ungetc(c, m_fp);
+
+    return c;
+}
+
+int FileImpl::read() {
+    return getc(m_fp);
+}
+
+void FileImpl::print(float value, int numDecimalDigits) {
+    fprintf(m_fp, "%.*f", numDecimalDigits, value);
+}
+
+void FileImpl::print(char value) {
+    fputc(value, m_fp);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+File::File() {
+    m_impl = new FileImpl();
+    m_impl->ref();
+}
+
+File::File(const char *path, uint8_t mode) {
+    m_impl = new FileImpl(path, mode);
+    m_impl->ref();
+}
+
+File::File(const File &file) {
+    m_impl = file.m_impl;
+    m_impl->ref();
+}
+
+File &File::operator =(const File &file) {
+    if (m_impl) m_impl->unref();
+    m_impl = file.m_impl;
+    m_impl->ref();
+    return *this;
+}
+
+File::~File() {
+    m_impl->unref();
+}
+void File::close() {
+    return m_impl->close();
+}
+
+File::operator bool() {
+    return m_impl->operator bool();
+}
+
+const char *File::name() {
+    return m_impl->name();
+}
+
+uint32_t File::size() {
+    return m_impl->size();
+}
+
+bool File::isDirectory() {
+    return m_impl->isDirectory();
+}
+
+void File::rewindDirectory() {
+    m_impl->rewindDirectory();
+}
+
+File File::openNextFile(uint8_t mode) {
+    return m_impl->openNextFile(mode);
+}
+
+bool File::available() {
+    return m_impl->available();
+}
+
+bool File::seek(uint32_t pos) {
+    return m_impl->seek(pos);
+}
+
+int File::peek() {
+    return m_impl->peek();
+}
+
+int File::read() {
+    return m_impl->read();
+}
+
+void File::print(float value, int numDecimalDigits) {
+    m_impl->print(value, numDecimalDigits);
+}
+
+void File::print(char value) {
+    m_impl->print(value);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool SimulatorSD::begin(uint8_t cs) {
+#ifdef EEZ_PSU_SIMULATOR
+    // make sure SD card root path exists
+    mkdir("/");
+#endif
+    return File("/");
+}
+
+File SimulatorSD::open(const char *path, uint8_t mode) {
+    File file(path, mode);
+    file.m_impl->open();
+    return file;
+}
+
+bool SimulatorSD::exists(const char *path) {
+    return pathExists(path);
+}
+
+bool SimulatorSD::mkdir(const char *path) {
+    if (pathExists(path)) {
+        return true;
+    }
+
+    char parentDir[205];
+    util::getParentDir(path, parentDir);
+
+    if (!mkdir(parentDir)) {
+        return false;
+    }
+
+    std::string realPath = getRealPath(path);
+
+    int result;
+#ifdef _WIN32
+    result = ::_mkdir(realPath.c_str());
+#else
+    ::mkdir(path.c_str(), 0700);
+#endif
+    return result == 0 || result == EEXIST;
+}
+
+bool SimulatorSD::remove(const char *path) {
+    std::string realPath = getRealPath(path);
+    return ::remove(realPath.c_str()) == 0;
 }
 
 }

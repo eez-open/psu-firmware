@@ -34,7 +34,7 @@
 #include "rtc.h"
 #include "datetime.h"
 #include "eeprom.h"
-#ifdef OPTION_SD_CARD
+#if OPTION_SD_CARD
 #include "sd_card.h"
 #endif
 #include "calibration.h"
@@ -122,7 +122,7 @@ void init() {
     eeprom::init();
     eeprom::test();
 
-#ifdef OPTION_SD_CARD
+#if OPTION_SD_CARD
     sd_card::init();
 #endif
 
@@ -185,7 +185,7 @@ static bool testShield() {
 	result &= rtc::test();
     result &= datetime::test();
     result &= eeprom::test();
-#ifdef OPTION_SD_CARD
+#if OPTION_SD_CARD
     result &= sd_card::test();
 #endif
 
@@ -493,16 +493,16 @@ static bool psuReset() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static bool loadAutoRecallProfile(profile::Parameters *profile) {
+static bool loadAutoRecallProfile(profile::Parameters *profile, int *location) {
     if (persist_conf::isProfileAutoRecallEnabled()) {
-        int location = persist_conf::getProfileAutoRecallLocation();
-        if (profile::load(location, profile)) {
+        *location = persist_conf::getProfileAutoRecallLocation();
+        if (profile::load(*location, profile)) {
             bool disableOutputs = false;
 
             if (persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled() || !g_bootTestSuccess) {
                 disableOutputs = true;
             } else {
-                if (location != 0) {
+                if (*location != 0) {
                     profile::Parameters defaultProfile;
                     if (profile::load(0, &defaultProfile)) {
                         for (int i = 0; i < CH_NUM; ++i) {
@@ -533,8 +533,9 @@ static bool loadAutoRecallProfile(profile::Parameters *profile) {
 
 static bool autoRecall() {
     profile::Parameters profile;
-    if (loadAutoRecallProfile(&profile)) {
-        if (profile::recallFromProfile(&profile)) {
+    int location;
+    if (loadAutoRecallProfile(&profile, &location)) {
+        if (profile::recallFromProfile(&profile, location)) {
             return true;
         }
     }
@@ -799,11 +800,12 @@ bool changePowerState(bool up) {
 
         // auto recall channels parameters from profile
         profile::Parameters profile;
-        if (loadAutoRecallProfile(&profile)) {
+        int location;
+        if (loadAutoRecallProfile(&profile, &location)) {
 	        for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
 		        memcpy(&temperature::sensors[i].prot_conf, profile.temp_prot + i, sizeof(temperature::ProtectionConfiguration));
 	        }
-            profile::recallChannelsFromProfile(&profile);
+            profile::recallChannelsFromProfile(&profile, location);
         }
     
         profile::save();

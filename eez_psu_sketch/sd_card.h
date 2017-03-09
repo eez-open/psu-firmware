@@ -18,6 +18,8 @@
  
 #pragma once
 
+#include <SD.h>
+
 namespace eez {
 namespace psu {
 namespace sd_card {
@@ -27,9 +29,18 @@ extern TestResult g_testResult;
 void init();
 bool test();
 
+void matchZeroOrMoreSpaces(File& file);
+bool match(File& file, float &result);
+bool match(File& file, char c);
+
+bool makeParentDir(const char *filePath);
+
 #if CONF_DEBUG
 void dir();
+void dumpFile(const char *path);
 #endif
+
+
 
 }
 }

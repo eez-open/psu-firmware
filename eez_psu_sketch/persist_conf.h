@@ -45,9 +45,9 @@ struct BlockHeader {
 /// Device binary flags stored in DeviceConfiguration.
 struct DeviceFlags {
     unsigned  isSoundEnabled : 1;
-    unsigned  date_valid : 1;
-    unsigned  time_valid : 1;
-    unsigned  profile_auto_recall : 1;
+    unsigned  dateValid : 1;
+    unsigned  timeValid : 1;
+    unsigned  profileAutoRecallEnabled : 1;
     unsigned  dst : 1;
     unsigned  channelsViewMode : 3;
     unsigned  ethernetEnabled : 1;

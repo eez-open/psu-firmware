@@ -45,7 +45,6 @@ void read_chunk(uint8_t *buffer, uint16_t buffer_size, uint16_t address) {
     }
 
     digitalWrite(EEPROM_SELECT, HIGH); // release chip, signal end transfer
-
     SPI_endTransaction();
 }
 

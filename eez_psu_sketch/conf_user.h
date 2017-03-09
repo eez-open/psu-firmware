@@ -33,3 +33,6 @@ Use this header file to override anything from conf.h or conf_advanced.h.
 
 #undef CONF_DEBUG_VARIABLES
 #define CONF_DEBUG_VARIABLES 1
+
+#undef OPTION_SD_CARD
+#define OPTION_SD_CARD 1

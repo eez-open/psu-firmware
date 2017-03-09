@@ -73,6 +73,8 @@ void removeTrailingZerosFromFloat(char *str);
 
 bool pointInsideRect(int xPoint, int yPoint, int xRect, int yRect, int wRect, int hRect);
 
+void getParentDir(const char *path, char *parentDirPath);
+
 }
 }
 } // namespace eez::psu::util

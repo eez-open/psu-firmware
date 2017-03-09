@@ -495,10 +495,10 @@ void select(Cursor &cursor, uint8_t id, int index) {
     }
 }
 
-int getListSize(uint8_t id) {
+int getListLength(uint8_t id) {
     Page *activePage = getActivePage();
     if (activePage) {
-        return activePage->getListSize(id);
+        return activePage->getListLength(id);
     }
 
     return 0;

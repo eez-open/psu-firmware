@@ -27,25 +27,30 @@ void init();
 void resetChannelList(Channel &channel);
 void reset();
 
-void setVoltageList(Channel &channel, float *list, uint16_t listSize);
-float *getVoltageList(Channel &channel, uint16_t *listSize);
+void setDwellList(Channel &channel, float *list, uint16_t listLength);
+float *getDwellList(Channel &channel, uint16_t *listLength);
 
-void setCurrentList(Channel &channel, float *list, uint16_t listSize);
-float *getCurrentList(Channel &channel, uint16_t *listSize);
+void setVoltageList(Channel &channel, float *list, uint16_t listLength);
+float *getVoltageList(Channel &channel, uint16_t *listLength);
 
-void setDwellList(Channel &channel, float *list, uint16_t listSize);
-float *getDwellList(Channel &channel, uint16_t *listSize);
+void setCurrentList(Channel &channel, float *list, uint16_t listLength);
+float *getCurrentList(Channel &channel, uint16_t *listLength);
+
+bool getListsChanged(Channel &channel);
+void setListsChanged(Channel &channel, bool changed);
 
 uint16_t getListCount(Channel &channel);
 void setListCount(Channel &channel, uint16_t value);
 
-bool areListSizesEquivalent(uint16_t size1, uint16_t size2);
-bool areVoltageAndDwellListSizesEquivalent(Channel &channel);
-bool areCurrentAndDwellListSizesEquivalent(Channel &channel);
-bool areVoltageAndCurrentListSizesEquivalent(Channel &channel);
+bool areListLengthsEquivalent(uint16_t size1, uint16_t size2);
+bool areListLengthsEquivalent(uint16_t size1, uint16_t size2, uint16_t size3);
+bool areListLengthsEquivalent(Channel &channel);
+bool areVoltageAndDwellListLengthsEquivalent(Channel &channel);
+bool areCurrentAndDwellListLengthsEquivalent(Channel &channel);
+bool areVoltageAndCurrentListLengthsEquivalent(Channel &channel);
 
-bool loadList(Channel &channel, int *err);
-bool saveList(Channel &channel, int *err);
+bool loadList(Channel &channel, const char *filePath, int *err);
+bool saveList(Channel &channel, const char *filePath, int *err);
 
 void executionReset(Channel &channel);
 void executionSetVoltage(Channel &channel);

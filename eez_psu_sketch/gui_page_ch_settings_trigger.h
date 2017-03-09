@@ -53,7 +53,7 @@ class ChSettingsListsPage : public SetPage {
 public:
 	ChSettingsListsPage();
 
-    int getListSize(uint8_t id);
+    int getListLength(uint8_t id);
     float *getFloatList(uint8_t id);
     data::Value getMin(const data::Cursor &cursor, uint8_t id);
     data::Value getMax(const data::Cursor &cursor, uint8_t id);
@@ -89,21 +89,21 @@ public:
 private:
     int m_listVersion;
 
-    float m_voltageList[MAX_LIST_SIZE];
-    uint16_t m_voltageListSize;
+    float m_voltageList[MAX_LIST_LENGTH];
+    uint16_t m_voltageListLength;
 
-    float m_currentList[MAX_LIST_SIZE];
-    uint16_t m_currentListSize;
+    float m_currentList[MAX_LIST_LENGTH];
+    uint16_t m_currentListLength;
 
-    float m_dwellList[MAX_LIST_SIZE];
-    uint16_t m_dwellListSize;
+    float m_dwellList[MAX_LIST_LENGTH];
+    uint16_t m_dwellListLength;
 
     int m_iCursor;
 
     int getRowIndex();
     int getColumnIndex();
     int getPageIndex();
-    uint16_t getMaxListSize();
+    uint16_t getMaxListLength();
     uint16_t getNumPages();
     int getCursorIndexWithinPage();
     uint8_t getDataIdAtCursor();

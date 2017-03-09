@@ -29,39 +29,47 @@ namespace arduino {
 #define FILE_WRITE 2 // O_READ | O_WRITE | O_CREAT
 #define READ_ONLY  3 // O_RDONLY
 
+class FileImpl;
+
 class File {
+    friend class SimulatorSD;
+
 public:
     File();
+    File(const File &file);
     File(const char *path, uint8_t mode = READ_ONLY);
+    File &operator=(const File &file);
+
     ~File();
+    void close();
 
     operator bool();
     const char *name();
     uint32_t size();
     bool isDirectory();
 
-    void close();
-
     void rewindDirectory();
     File openNextFile(uint8_t mode = READ_ONLY);
 
-private:
-    std::string m_path;
-    uint8_t m_mode;
-#ifdef _WIN32
-    void *m_hFind;
-#else
-    void *m_dp;
-#endif
+    bool available();
+    bool seek(uint32_t pos);
+    int peek();
+    int read();
 
-    void init();
-    std::string getRealPath();
+    void print(float value, int numDecimalDigits);
+    void print(char value);
+
+private:
+    FileImpl *m_impl;
 };
 
 class SimulatorSD {
 public:
     bool begin(uint8_t cs);
     File open(const char *path, uint8_t mode = FILE_READ);
+    bool exists(const char *path);
+    bool mkdir(const char *path);
+    bool remove(const char *path);
 };
 
 extern SimulatorSD SD;

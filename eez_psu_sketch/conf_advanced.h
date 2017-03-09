@@ -260,7 +260,7 @@
 /// We had some problems (WATCHDOG, ADC timeout and EEPROM errros) with SPI in the
 /// past and when we used our SPI transactions implementation, problems disappeared.
 /// But, unfortunately, now ethernet doesn't work.
-#define REPLACE_SPI_TRANSACTIONS_IMPLEMENTATION 1
+#define REPLACE_SPI_TRANSACTIONS_IMPLEMENTATION 0
 
 #define CHANNEL_HISTORY_SIZE 140
 
@@ -268,10 +268,20 @@
 #define GUI_YT_VIEW_RATE_MIN 0.01f
 #define GUI_YT_VIEW_RATE_MAX 300.0f
 
-#define MAX_LIST_SIZE 256
+#define MAX_LIST_LENGTH 256
 
 #define LIST_DWELL_MIN 0.0001f 
 #define LIST_DWELL_MAX 65535.0f
 #define LIST_DWELL_DEF 0.01f
 
 #define MAX_LIST_COUNT 65535
+
+#define PATH_SEPARATOR "/"
+#define LISTS_DIR PATH_SEPARATOR "LISTS"
+#define PROFILES_DIR PATH_SEPARATOR "PROFILES"
+#define LIST_FILE_EXTENSION ".CSV"
+#define MAX_PATH_LENGTH 128
+#define CSV_SEPARATOR ','
+#define LIST_CSV_FILE_NO_VALUE_CHAR '='
+
+#define SAVE_PROFILE_0_FREQ 60

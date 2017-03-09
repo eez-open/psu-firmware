@@ -31,7 +31,7 @@ namespace gui {
 void Page::pageWillAppear() {
 }
 
-int Page::getListSize(uint8_t id) {
+int Page::getListLength(uint8_t id) {
     return 0;
 }
 

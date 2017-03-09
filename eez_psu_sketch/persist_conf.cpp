@@ -56,7 +56,7 @@ static const uint16_t PERSIST_CONF_DEVICE2_ADDRESS = 1536;
 static const uint16_t PERSIST_CONF_CH_CAL_ADDRESS = 2048;
 static const uint16_t PERSIST_CONF_CH_CAL_BLOCK_SIZE = 512;
 
-static const uint16_t PERSIST_CONF_FIRST_PROFILE_ADDRESS = 4096;
+static const uint16_t PERSIST_CONF_FIRST_PROFILE_ADDRESS = 5120;
 static const uint16_t PERSIST_CONF_PROFILE_BLOCK_SIZE = 1024;
 
 static const uint32_t ONTIME_MAGIC = 0xA7F31B3CL;
@@ -114,13 +114,13 @@ static void initDevice() {
     devConf.flags.isSoundEnabled = 1;
     devConf.flags.isClickSoundEnabled = 0;
 
-    devConf.flags.date_valid = 0;
-    devConf.flags.time_valid = 0;
+    devConf.flags.dateValid = 0;
+    devConf.flags.timeValid = 0;
 	devConf.flags.dst = 0;
 
 	devConf.time_zone = 0;
 
-    devConf.flags.profile_auto_recall = 1;
+    devConf.flags.profileAutoRecallEnabled = 0;
     devConf.profile_auto_recall_location = 0;
 
     devConf.touch_screen_cal_orientation = -1;
@@ -300,7 +300,7 @@ bool isEthernetEnabled() {
 }
 
 bool readSystemDate(uint8_t &year, uint8_t &month, uint8_t &day) {
-    if (devConf.flags.date_valid) {
+    if (devConf.flags.dateValid) {
         year = devConf.date_year;
         month = devConf.date_month;
         day = devConf.date_day;
@@ -313,12 +313,12 @@ void writeSystemDate(uint8_t year, uint8_t month, uint8_t day) {
     devConf.date_year = year;
     devConf.date_month = month;
     devConf.date_day = day;
-    devConf.flags.date_valid = 1;
+    devConf.flags.dateValid = 1;
     saveDevice();
 }
 
 bool readSystemTime(uint8_t &hour, uint8_t &minute, uint8_t &second) {
-    if (devConf.flags.time_valid) {
+    if (devConf.flags.timeValid) {
         hour = devConf.time_hour;
         minute = devConf.time_minute;
         second = devConf.time_second;
@@ -331,7 +331,7 @@ void writeSystemTime(uint8_t hour, uint8_t minute, uint8_t second) {
     devConf.time_hour = hour;
     devConf.time_minute = minute;
     devConf.time_second = second;
-    devConf.flags.time_valid = 1;
+    devConf.flags.timeValid = 1;
     saveDevice();
 }
 
@@ -339,23 +339,23 @@ void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour,
     devConf.date_year = year;
     devConf.date_month = month;
     devConf.date_day = day;
-    devConf.flags.date_valid = 1;
+    devConf.flags.dateValid = 1;
     
 	devConf.time_hour = hour;
     devConf.time_minute = minute;
     devConf.time_second = second;
-    devConf.flags.time_valid = 1;
+    devConf.flags.timeValid = 1;
 
 	saveDevice();
 }
 
 bool enableProfileAutoRecall(bool enable) {
-    devConf.flags.profile_auto_recall = enable ? 1 : 0;
+    devConf.flags.profileAutoRecallEnabled = enable ? 1 : 0;
     return saveDevice();
 }
 
 bool isProfileAutoRecallEnabled() {
-    return devConf.flags.profile_auto_recall ? true : false;
+    return devConf.flags.profileAutoRecallEnabled ? true : false;
 }
 
 bool setProfileAutoRecallLocation(int location) {

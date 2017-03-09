@@ -71563,6 +71563,9 @@
           },
           {
             "name": "DEBUG:DIR?"
+          },
+          {
+            "name": "DEBUG:FILE?"
           }
         ]
       },

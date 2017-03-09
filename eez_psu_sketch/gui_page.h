@@ -34,7 +34,7 @@ public:
 
 	virtual void pageWillAppear();
 	
-    virtual int getListSize(uint8_t id);
+    virtual int getListLength(uint8_t id);
     virtual float *getFloatList(uint8_t id);
     virtual data::Value getData(const data::Cursor &cursor, uint8_t id);
     virtual data::Value getMin(const data::Cursor &cursor, uint8_t id);

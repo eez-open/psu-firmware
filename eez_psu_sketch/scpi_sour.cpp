@@ -1002,8 +1002,8 @@ scpi_result_t scpi_cmd_sourceListCurrentLevel(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    float list[MAX_LIST_SIZE];
-    uint16_t listSize = 0;
+    float list[MAX_LIST_LENGTH];
+    uint16_t listLength = 0;
 
     while (true) {
         float current;
@@ -1011,15 +1011,15 @@ scpi_result_t scpi_cmd_sourceListCurrentLevel(scpi_t *context) {
             break;
         }
 
-        if (listSize >= MAX_LIST_SIZE) {
+        if (listLength >MAX_LIST_LENGTH) {
             SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
             return SCPI_RES_ERR;
         }
 
-        list[listSize++] = current;
+        list[listLength++] = current;
     }
 
-    if (listSize == 0) {
+    if (listLength == 0) {
         SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
         return SCPI_RES_ERR;
     }
@@ -1029,7 +1029,7 @@ scpi_result_t scpi_cmd_sourceListCurrentLevel(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    list::setCurrentList(*channel, list, listSize);
+    list::setCurrentList(*channel, list, listLength);
 
     return SCPI_RES_OK;
 }
@@ -1040,9 +1040,9 @@ scpi_result_t scpi_cmd_sourceListCurrentLevelQ(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    uint16_t listSize;
-    float *list = list::getCurrentList(*channel, &listSize);
-    SCPI_ResultArrayFloat(context, list, listSize, SCPI_FORMAT_ASCII);
+    uint16_t listLength;
+    float *list = list::getCurrentList(*channel, &listLength);
+    SCPI_ResultArrayFloat(context, list, listLength, SCPI_FORMAT_ASCII);
 
     return SCPI_RES_OK;
 }
@@ -1053,8 +1053,8 @@ scpi_result_t scpi_cmd_sourceListDwell(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    float list[MAX_LIST_SIZE];
-    uint16_t listSize = 0;
+    float list[MAX_LIST_LENGTH];
+    uint16_t listLength = 0;
 
     while (true) {
         float dwell;
@@ -1062,15 +1062,15 @@ scpi_result_t scpi_cmd_sourceListDwell(scpi_t *context) {
             break;
         }
 
-        if (listSize >= MAX_LIST_SIZE) {
+        if (listLength >MAX_LIST_LENGTH) {
             SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
             return SCPI_RES_ERR;
         }
 
-        list[listSize++] = dwell;
+        list[listLength++] = dwell;
     }
 
-    if (listSize == 0) {
+    if (listLength == 0) {
         SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
         return SCPI_RES_ERR;
     }
@@ -1080,7 +1080,7 @@ scpi_result_t scpi_cmd_sourceListDwell(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    list::setDwellList(*channel, list, listSize);
+    list::setDwellList(*channel, list, listLength);
 
     return SCPI_RES_OK;
 }
@@ -1091,9 +1091,9 @@ scpi_result_t scpi_cmd_sourceListDwellQ(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    uint16_t listSize;
-    float *list = list::getDwellList(*channel, &listSize);
-    SCPI_ResultArrayFloat(context, list, listSize, SCPI_FORMAT_ASCII);
+    uint16_t listLength;
+    float *list = list::getDwellList(*channel, &listLength);
+    SCPI_ResultArrayFloat(context, list, listLength, SCPI_FORMAT_ASCII);
 
     return SCPI_RES_OK;
 }
@@ -1104,8 +1104,8 @@ scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    float list[MAX_LIST_SIZE];
-    uint16_t listSize = 0;
+    float list[MAX_LIST_LENGTH];
+    uint16_t listLength = 0;
 
     while (true) {
         float voltage;
@@ -1113,15 +1113,15 @@ scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
             break;
         }
 
-        if (listSize >= MAX_LIST_SIZE) {
+        if (listLength >MAX_LIST_LENGTH) {
             SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
             return SCPI_RES_ERR;
         }
 
-        list[listSize++] = voltage;
+        list[listLength++] = voltage;
     }
 
-    if (listSize == 0) {
+    if (listLength == 0) {
         SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
         return SCPI_RES_ERR;
     }
@@ -1131,7 +1131,7 @@ scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    list::setVoltageList(*channel, list, listSize);
+    list::setVoltageList(*channel, list, listLength);
 
     return SCPI_RES_OK;
 }
@@ -1142,9 +1142,9 @@ scpi_result_t scpi_cmd_sourceListVoltageLevelQ(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    uint16_t listSize;
-    float *list = list::getVoltageList(*channel, &listSize);
-    SCPI_ResultArrayFloat(context, list, listSize, SCPI_FORMAT_ASCII);
+    uint16_t listLength;
+    float *list = list::getVoltageList(*channel, &listLength);
+    SCPI_ResultArrayFloat(context, list, listLength, SCPI_FORMAT_ASCII);
 
     return SCPI_RES_OK;
 }

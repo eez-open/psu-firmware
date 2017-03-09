@@ -18,9 +18,8 @@
 
 #include "psu.h"
 
-#ifdef OPTION_SD_CARD
+#if OPTION_SD_CARD
 
-#include <SD.h>
 #include "sd_card.h"
 
 namespace eez {
@@ -28,6 +27,8 @@ namespace psu {
 namespace sd_card {
 
 TestResult g_testResult = TEST_FAILED;
+
+////////////////////////////////////////////////////////////////////////////////
 
 void init() {
     if (!SD.begin(LCDSD_CS)) {
@@ -39,6 +40,96 @@ void init() {
 
 bool test() {
     return g_testResult != TEST_FAILED;
+}
+
+#ifndef isSpace
+bool isSpace(int c) {
+    return c == '\r' || c == '\n' || c == '\t' || c == ' ';
+}
+#endif
+
+void matchZeroOrMoreSpaces(File &file) {
+    while (true) {
+        int c = file.peek();
+        if (!isSpace(c)) {
+            return;
+        }
+        file.read();
+    }
+}
+
+bool match(File& file, char c) {
+    matchZeroOrMoreSpaces(file);
+    if (file.peek() == c) {
+        file.read();
+        return true;
+    }
+    return false;
+}
+
+bool match(File& file, float &result) {
+    matchZeroOrMoreSpaces(file);
+
+    int c = file.peek();
+    if (c == -1) {
+        return false;
+    }
+
+    bool isNegative;
+    if (c == '-') {
+        file.read();
+        isNegative = true;
+        c = file.peek();
+    } else {
+        isNegative = false;
+    }
+
+    bool isFraction = false;
+    float fraction = 1.0;
+
+    long value = -1;
+
+    while (true) {
+        if (c == '.') {
+            if (isFraction) {
+                return false;
+            }
+            isFraction = true;
+        } else if (c >= '0' && c <= '9') {
+            if (value == -1) {
+                value = 0;
+            }
+
+            value = value * 10 + c - '0';
+
+            if (isFraction) {
+                fraction *= 0.1f;
+            }
+        } else {
+            if (value == -1) {
+                return false;
+            }
+
+            result = (float)value;
+            if (isNegative) {
+                result = -result;
+            }
+            if (isFraction) {
+                result *= fraction;
+            }
+
+            return true;
+        }
+
+        file.read();
+        c = file.peek();
+   }
+}
+
+bool makeParentDir(const char *filePath) {
+    char dirPath[MAX_PATH_LENGTH];
+    util::getParentDir(filePath, dirPath);
+    return SD.mkdir(dirPath);
 }
 
 #if CONF_DEBUG
@@ -78,6 +169,30 @@ void printDirectory(File dir, int level) {
 void dir() {
     File root = SD.open("/");
     printDirectory(root, 0);
+}
+
+void dumpFile(const char *path) {
+    File file = SD.open(path, FILE_READ);
+
+    if (!file) {
+        DebugTrace("File not found!");
+    }
+
+    char line[256];
+    int i = 0;
+
+    while (file.available()) {
+        int c = file.read();
+        if (c == '\n') {
+            line[i] = 0;
+            DebugTrace(line);
+            i = 0;
+        } else {
+            if (i < 255) {
+                line[i++] = c;
+            }
+        }
+    }
 }
 
 #endif

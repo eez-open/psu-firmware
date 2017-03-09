@@ -89,8 +89,8 @@ struct Parameters {
 
 void tick(uint32_t tick_usec);
 
-void recallChannelsFromProfile(Parameters *profile);
-bool recallFromProfile(Parameters *profile);
+void recallChannelsFromProfile(Parameters *profile, int location);
+bool recallFromProfile(Parameters *profile, int location);
 bool recall(int location);
 
 bool load(int location, Parameters *profile);

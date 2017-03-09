@@ -1386,8 +1386,8 @@ void drawListGraphWidget(const WidgetCursor &widgetCursor) {
             lcd::lcd.fillRect(widgetCursor.x, widgetCursor.y, widgetCursor.x + (int)widget->w - 1, widgetCursor.y + (int)widget->h - 1);
         }
 
-        int dwellListSize = data::getListSize(listGraphWidget->dwellData);
-        if (dwellListSize > 0) {
+        int dwellListLength = data::getListLength(listGraphWidget->dwellData);
+        if (dwellListLength > 0) {
             float *dwellList = data::getFloatList(listGraphWidget->dwellData);
         
             const Style *styles[2] = {
@@ -1395,9 +1395,9 @@ void drawListGraphWidget(const WidgetCursor &widgetCursor) {
                 y2Style
             };
 
-            int listSize[2] = {
-                data::getListSize(listGraphWidget->y1Data),
-                data::getListSize(listGraphWidget->y2Data)
+            int listLength[2] = {
+                data::getListLength(listGraphWidget->y1Data),
+                data::getListLength(listGraphWidget->y2Data)
             };
             
             float *list[2] = {
@@ -1415,25 +1415,25 @@ void drawListGraphWidget(const WidgetCursor &widgetCursor) {
                 data::getMax(widgetCursor.cursor, listGraphWidget->y2Data).getFloat()
             };
 
-            int maxListSize = data::getListSize(widget->data);
+            int maxListLength = data::getListLength(widget->data);
 
             float dwellSum = 0;
-            for (int i = 0; i < maxListSize; ++i) {
-                if (i < dwellListSize) {
+            for (int i = 0; i < maxListLength; ++i) {
+                if (i < dwellListLength) {
                     dwellSum += dwellList[i];
                 } else {
-                    dwellSum += dwellList[dwellListSize - 1];
+                    dwellSum += dwellList[dwellListLength - 1];
                 }
             }
 
             float currentDwellSum = 0;
             int xPrev = widgetCursor.x;
             int yPrev[2];
-            for (int i = 0; i < maxListSize; ++i) {
-                currentDwellSum += i < dwellListSize ? dwellList[i] : dwellList[dwellListSize - 1];
+            for (int i = 0; i < maxListLength; ++i) {
+                currentDwellSum += i < dwellListLength ? dwellList[i] : dwellList[dwellListLength - 1];
                 int x1 = xPrev;
                 int x2;
-                if (i == maxListSize - 1) {
+                if (i == maxListLength - 1) {
                     x2 = widgetCursor.x + (int)widget->w - 1;
                 } else {
                     x2 = widgetCursor.x + int(currentDwellSum * (int)widget->w / dwellSum);
@@ -1464,12 +1464,12 @@ void drawListGraphWidget(const WidgetCursor &widgetCursor) {
                 for (int k = 0; k < 2; ++k) {
                     int j = iCursor % 3 == 2 ? k : 1 - k;
 
-                    if (listSize[j] > 0) {
+                    if (listLength[j] > 0) {
                         if (!skipDraw) {
                             lcd::lcd.setColor(styles[j]->color);
                         }
 
-                        float value = i < listSize[j] ? list[j][i] : list[j][listSize[j] - 1];
+                        float value = i < listLength[j] ? list[j][i] : list[j][listLength[j] - 1];
                         int y = int((value - min[j]) * widget->h / (max[j] - min[j]));
                         if (y < 0) y = 0;
                         if (y >= (int)widget->h) y = (int)widget->h - 1;
@@ -1504,20 +1504,20 @@ void onTouchListGraph(const WidgetCursor &widgetCursor, int xTouch, int yTouch) 
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
     DECL_WIDGET_SPECIFIC(ListGraphWidget, listGraphWidget, widget);
 
-    int dwellListSize = data::getListSize(listGraphWidget->dwellData);
-    if (dwellListSize > 0) {
+    int dwellListLength = data::getListLength(listGraphWidget->dwellData);
+    if (dwellListLength > 0) {
         int iCursor = -1;
 
         float *dwellList = data::getFloatList(listGraphWidget->dwellData);
 
-        int maxListSize = data::getListSize(widget->data);
+        int maxListLength = data::getListLength(widget->data);
 
         float dwellSum = 0;
-        for (int i = 0; i < maxListSize; ++i) {
-            if (i < dwellListSize) {
+        for (int i = 0; i < maxListLength; ++i) {
+            if (i < dwellListLength) {
                 dwellSum += dwellList[i];
             } else {
-                dwellSum += dwellList[dwellListSize - 1];
+                dwellSum += dwellList[dwellListLength - 1];
             }
         }
 
@@ -1526,11 +1526,11 @@ void onTouchListGraph(const WidgetCursor &widgetCursor, int xTouch, int yTouch) 
 
         float currentDwellSum = 0;
         int xPrev = widgetCursor.x;
-        for (int i = 0; i < maxListSize; ++i) {
-            currentDwellSum += i < dwellListSize ? dwellList[i] : dwellList[dwellListSize - 1];
+        for (int i = 0; i < maxListLength; ++i) {
+            currentDwellSum += i < dwellListLength ? dwellList[i] : dwellList[dwellListLength - 1];
             int x1 = xPrev;
             int x2;
-            if (i == maxListSize - 1) {
+            if (i == maxListLength - 1) {
                 x2 = widgetCursor.x + (int)widget->w - 1;
             } else {
                 x2 = widgetCursor.x + int(currentDwellSum * (int)widget->w / dwellSum);

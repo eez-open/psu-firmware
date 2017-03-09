@@ -212,7 +212,7 @@ int startImmediately() {
 	            }
 
                 if (channel.getVoltageTriggerMode() == TRIGGER_MODE_LIST) {
-                    if (!list::areVoltageAndDwellListSizesEquivalent(channel)) {
+                    if (!list::areVoltageAndDwellListLengthsEquivalent(channel)) {
                         return SCPI_ERROR_LIST_LENGTHS_NOT_EQUIVALENT;
                     }
                 } else {
@@ -228,7 +228,7 @@ int startImmediately() {
 
             if (channel.getCurrentTriggerMode() == TRIGGER_MODE_FIXED) {
             } else if (channel.getCurrentTriggerMode() == TRIGGER_MODE_LIST) {
-                if (!list::areCurrentAndDwellListSizesEquivalent(channel)) {
+                if (!list::areCurrentAndDwellListLengthsEquivalent(channel)) {
                     return SCPI_ERROR_LIST_LENGTHS_NOT_EQUIVALENT;
                 }
             } else {
@@ -242,7 +242,7 @@ int startImmediately() {
             }
 
             if (channel.getVoltageTriggerMode() == TRIGGER_MODE_LIST && channel.getCurrentTriggerMode() == TRIGGER_MODE_LIST) {
-                if (!list::areVoltageAndCurrentListSizesEquivalent(channel)) {
+                if (!list::areVoltageAndCurrentListLengthsEquivalent(channel)) {
                     return SCPI_ERROR_LIST_LENGTHS_NOT_EQUIVALENT;
                 }
             }

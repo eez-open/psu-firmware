@@ -205,7 +205,7 @@ extern Value g_alertMessage3;
 int count(uint8_t id);
 void select(Cursor &cursor, uint8_t id, int index);
 
-int getListSize(uint8_t id);
+int getListLength(uint8_t id);
 float *getFloatList(uint8_t id);
 
 Value getMin(const Cursor &cursor, uint8_t id);

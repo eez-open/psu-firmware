@@ -165,32 +165,32 @@ ChSettingsListsPage::ChSettingsListsPage()
     : m_iCursor(0)
     , m_listVersion(0)
 {
-    float *dwellList = list::getDwellList(*g_channel, &m_dwellListSize);
-    memcpy(m_dwellList, dwellList, m_dwellListSize * sizeof(float));
+    float *dwellList = list::getDwellList(*g_channel, &m_dwellListLength);
+    memcpy(m_dwellList, dwellList, m_dwellListLength * sizeof(float));
 
-    float *voltageList = list::getVoltageList(*g_channel, &m_voltageListSize);
-    memcpy(m_voltageList, voltageList, m_voltageListSize * sizeof(float));
+    float *voltageList = list::getVoltageList(*g_channel, &m_voltageListLength);
+    memcpy(m_voltageList, voltageList, m_voltageListLength * sizeof(float));
 
-    float *currentList = list::getCurrentList(*g_channel, &m_currentListSize);
-    memcpy(m_currentList, currentList, m_currentListSize * sizeof(float));
+    float *currentList = list::getCurrentList(*g_channel, &m_currentListLength);
+    memcpy(m_currentList, currentList, m_currentListLength * sizeof(float));
 
 }
 
-int ChSettingsListsPage::getListSize(uint8_t id) {
+int ChSettingsListsPage::getListLength(uint8_t id) {
 	if (id == DATA_ID_CHANNEL_LISTS) {
-		return getMaxListSize();
+		return getMaxListLength();
 	}
     
     if (id == DATA_ID_CHANNEL_LIST_DWELL) {
-        return m_dwellListSize;
+        return m_dwellListLength;
     }
 
     if (id == DATA_ID_CHANNEL_LIST_VOLTAGE) {
-        return m_voltageListSize;
+        return m_voltageListLength;
     }
 
     if (id == DATA_ID_CHANNEL_LIST_CURRENT) {
-        return m_currentListSize;
+        return m_currentListLength;
     }
 
     return 0;
@@ -278,11 +278,11 @@ data::Value ChSettingsListsPage::getData(const data::Cursor &cursor, uint8_t id)
 	}
 
     if (id == DATA_ID_CHANNEL_LIST_DWELL_ENABLED) {
-        return data::Value(iRow <= m_dwellListSize ? 1 : 0);
+        return data::Value(iRow <= m_dwellListLength ? 1 : 0);
     }
 
     if (id == DATA_ID_CHANNEL_LIST_DWELL) {
-        if (iRow < m_dwellListSize) {
+        if (iRow < m_dwellListLength) {
 		    return data::Value(m_dwellList[iRow], data::VALUE_TYPE_FLOAT_SECOND);
         } else {
             return data::Value(PSTR("-"));
@@ -290,11 +290,11 @@ data::Value ChSettingsListsPage::getData(const data::Cursor &cursor, uint8_t id)
 	}
 
     if (id == DATA_ID_CHANNEL_LIST_VOLTAGE_ENABLED) {
-        return data::Value(iRow <= m_voltageListSize ? 1 : 0);
+        return data::Value(iRow <= m_voltageListLength ? 1 : 0);
     }
 
     if (id == DATA_ID_CHANNEL_LIST_VOLTAGE) {
-        if (iRow < m_voltageListSize) {
+        if (iRow < m_voltageListLength) {
 		    return data::Value(m_voltageList[iRow], data::VALUE_TYPE_FLOAT_VOLT);
         } else {
             return data::Value(PSTR("-"));
@@ -302,11 +302,11 @@ data::Value ChSettingsListsPage::getData(const data::Cursor &cursor, uint8_t id)
 	}
 
     if (id == DATA_ID_CHANNEL_LIST_CURRENT_ENABLED) {
-        return data::Value(iRow <= m_currentListSize ? 1 : 0);
+        return data::Value(iRow <= m_currentListLength ? 1 : 0);
     }
 
     if (id == DATA_ID_CHANNEL_LIST_CURRENT) {
-        if (iRow < m_currentListSize) {
+        if (iRow < m_currentListLength) {
 		    return data::Value(m_currentList[iRow], data::VALUE_TYPE_FLOAT_AMPER);
         } else {
             return data::Value(PSTR("-"));
@@ -326,23 +326,23 @@ data::Value ChSettingsListsPage::getData(const data::Cursor &cursor, uint8_t id)
     }
 
     if (id == DATA_ID_CHANNEL_LISTS_INSERT_MENU_ENABLED) {
-        return data::Value(getRowIndex() < getMaxListSize() ? 1 : 0);
+        return data::Value(getRowIndex() < getMaxListLength() ? 1 : 0);
     }
 
     if (id == DATA_ID_CHANNEL_LISTS_DELETE_MENU_ENABLED) {
-        return data::Value(getMaxListSize() ? 1 : 0);
+        return data::Value(getMaxListLength() ? 1 : 0);
     }
 
     if (id == DATA_ID_CHANNEL_LISTS_DELETE_ROW_ENABLED) {
-        return data::Value(getRowIndex() < getMaxListSize() ? 1 : 0);
+        return data::Value(getRowIndex() < getMaxListLength() ? 1 : 0);
     }
 
     if (id == DATA_ID_CHANNEL_LISTS_CLEAR_COLUMN_ENABLED) {
-        return data::Value(getRowIndex() < getMaxListSize() ? 1 : 0);
+        return data::Value(getRowIndex() < getMaxListLength() ? 1 : 0);
     }
 
     if (id == DATA_ID_CHANNEL_LISTS_DELETE_ROWS_ENABLED) {
-        return data::Value(getRowIndex() < getMaxListSize() ? 1 : 0);
+        return data::Value(getRowIndex() < getMaxListLength() ? 1 : 0);
     }
 
     return data::Value();
@@ -409,18 +409,18 @@ void ChSettingsListsPage::setFocusedValue(float value) {
     
         if (dataId == DATA_ID_CHANNEL_LIST_DWELL) {
             m_dwellList[iRow] = value;
-            if (iRow >= m_dwellListSize) {
-                m_dwellListSize = iRow + 1;
+            if (iRow >= m_dwellListLength) {
+                m_dwellListLength = iRow + 1;
             }
         } else if (dataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
             m_voltageList[iRow] = value;
-            if (iRow >= m_voltageListSize) {
-                m_voltageListSize = iRow + 1;
+            if (iRow >= m_voltageListLength) {
+                m_voltageListLength = iRow + 1;
             }
         } else {
             m_currentList[iRow] = value;
-            if (iRow >= m_currentListSize) {
-                m_currentListSize = iRow + 1;
+            if (iRow >= m_currentListLength) {
+                m_currentListLength = iRow + 1;
             }
         }
         
@@ -442,17 +442,17 @@ void ChSettingsListsPage::doValueSet(float value) {
         int iRow = getRowIndex();
 
         if (dataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
-            if (iRow < m_currentListSize) {
+            if (iRow < m_currentListLength) {
                 power *= m_currentList[iRow];
-            } else if (m_currentListSize > 0) {
+            } else if (m_currentListLength > 0) {
                 power *= m_currentList[0];
             } else {
                 power = 0;
             }
         } else {
-            if (iRow < m_voltageListSize) {
+            if (iRow < m_voltageListLength) {
                 power *= m_voltageList[iRow];
-            } else if (m_voltageListSize > 0) {
+            } else if (m_voltageListLength > 0) {
                 power *= m_voltageList[0];
             } else {
                 power = 0;
@@ -549,22 +549,22 @@ int ChSettingsListsPage::getPageIndex() {
     return getRowIndex() / LIST_ITEMS_PER_PAGE;
 }
 
-uint16_t ChSettingsListsPage::getMaxListSize() {
-    uint16_t size = m_dwellListSize;
+uint16_t ChSettingsListsPage::getMaxListLength() {
+    uint16_t size = m_dwellListLength;
 
-    if (m_voltageListSize > size) {
-        size = m_voltageListSize;
+    if (m_voltageListLength > size) {
+        size = m_voltageListLength;
     }
     
-    if (m_currentListSize > size) {
-        size = m_currentListSize;
+    if (m_currentListLength > size) {
+        size = m_currentListLength;
     }
 
     return size;
 }
 
 uint16_t ChSettingsListsPage::getNumPages() {
-    return getMaxListSize() / LIST_ITEMS_PER_PAGE + 1;
+    return getMaxListLength() / LIST_ITEMS_PER_PAGE + 1;
 }
 
 int ChSettingsListsPage::getCursorIndexWithinPage() {
@@ -599,9 +599,9 @@ void ChSettingsListsPage::moveCursorToFirstAvailableCell() {
     int iRow = getRowIndex();
     int iColumn = getColumnIndex();
     if (iColumn == 0) {
-        if (iRow > m_dwellListSize) {
-            if (iRow > m_voltageListSize) {
-                if (iRow > m_currentListSize) {
+        if (iRow > m_dwellListLength) {
+            if (iRow > m_voltageListLength) {
+                if (iRow > m_currentListLength) {
                     m_iCursor = 0;
                 } else {
                     m_iCursor += 2;
@@ -611,8 +611,8 @@ void ChSettingsListsPage::moveCursorToFirstAvailableCell() {
             }
         }
     } else if (iColumn == 1) {
-        if (iRow > m_voltageListSize) {
-            if (iRow > m_currentListSize) {
+        if (iRow > m_voltageListLength) {
+            if (iRow > m_currentListLength) {
                 m_iCursor += 2;
                 moveCursorToFirstAvailableCell();
             } else {
@@ -620,7 +620,7 @@ void ChSettingsListsPage::moveCursorToFirstAvailableCell() {
             }
         }
     } else {
-        if (iRow > m_currentListSize) {
+        if (iRow > m_currentListLength) {
             m_iCursor += 1;
             moveCursorToFirstAvailableCell();
         }
@@ -633,19 +633,18 @@ int ChSettingsListsPage::getDirty() {
 
 void ChSettingsListsPage::set() {
     if (getDirty()) {
-        if (!list::areListSizesEquivalent(m_dwellListSize, m_voltageListSize) || 
-            !list::areListSizesEquivalent(m_dwellListSize, m_currentListSize) ||
-            !list::areListSizesEquivalent(m_voltageListSize, m_currentListSize))
-        {
-            errorMessageP(PSTR("List lengths are not equivalent!"));
-        } else {
+        if (list::areListLengthsEquivalent(m_dwellListLength, m_voltageListLength, m_currentListLength)) {
             trigger::abort();
 
-            list::setDwellList(*g_channel, m_dwellList, m_dwellListSize);
-            list::setVoltageList(*g_channel, m_voltageList, m_voltageListSize);
-            list::setCurrentList(*g_channel, m_currentList, m_currentListSize);
+            list::setDwellList(*g_channel, m_dwellList, m_dwellListLength);
+            list::setVoltageList(*g_channel, m_voltageList, m_voltageListLength);
+            list::setCurrentList(*g_channel, m_currentList, m_currentListLength);
+
+            profile::save();
 
             infoMessageP(PSTR("Lists changed!"), popPage);
+        } else {
+            errorMessageP(PSTR("List lengths are not equivalent!"));
         }
     }
 }
@@ -679,19 +678,19 @@ bool ChSettingsListsPage::onEncoderClicked() {
     int iRow = getRowIndex();
 
     if (dataId == DATA_ID_CHANNEL_LIST_DWELL) {
-        if (iRow <= m_voltageListSize) {
+        if (iRow <= m_voltageListLength) {
             m_iCursor += 1;
             return true;
         }
             
-        if (iRow <= m_currentListSize) {
+        if (iRow <= m_currentListLength) {
             m_iCursor += 2;
             return true;
         }
 
         m_iCursor += 3;
     } else if (dataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
-        if (iRow <= m_currentListSize) {
+        if (iRow <= m_currentListLength) {
             m_iCursor += 1;
             return true;
         }
@@ -707,21 +706,21 @@ bool ChSettingsListsPage::onEncoderClicked() {
 }
 
 void ChSettingsListsPage::showInsertMenu() {
-    if (getRowIndex() < getMaxListSize()) {
+    if (getRowIndex() < getMaxListLength()) {
         pushPage(PAGE_ID_CH_SETTINGS_LISTS_INSERT_MENU);
     }
 }
 
 void ChSettingsListsPage::showDeleteMenu() {
-    if (getMaxListSize()) {
+    if (getMaxListLength()) {
         pushPage(PAGE_ID_CH_SETTINGS_LISTS_DELETE_MENU);
     }
 }
 
 void ChSettingsListsPage::insertRow(int iRow, int iCopyRow) {
-    if (getMaxListSize() < MAX_LIST_SIZE) {
+    if (getMaxListLength() < MAX_LIST_LENGTH) {
         int iRow = getRowIndex();
-        for (int i = MAX_LIST_SIZE - 2; i >= iRow; --i) {
+        for (int i = MAX_LIST_LENGTH - 2; i >= iRow; --i) {
             m_dwellList[i+1] = m_dwellList[i];
             m_voltageList[i+1] = m_voltageList[i];
             m_currentList[i+1] = m_currentList[i];
@@ -729,19 +728,19 @@ void ChSettingsListsPage::insertRow(int iRow, int iCopyRow) {
     
         data::Cursor cursor(getCursorIndexWithinPage());
 
-        if (iRow <= m_dwellListSize) {
+        if (iRow <= m_dwellListLength) {
             m_dwellList[iRow] = m_dwellList[iCopyRow];
-            ++m_dwellListSize;
+            ++m_dwellListLength;
         }
         
-        if (iRow <= m_voltageListSize) {
+        if (iRow <= m_voltageListLength) {
             m_voltageList[iRow] = m_voltageList[iCopyRow];
-            ++m_voltageListSize;
+            ++m_voltageListLength;
         }
         
-        if (iRow <= m_currentListSize) {
+        if (iRow <= m_currentListLength) {
             m_currentList[iRow] = m_currentList[iCopyRow];
-            ++m_currentListSize;
+            ++m_currentListLength;
         }
     }
 }
@@ -753,7 +752,7 @@ void ChSettingsListsPage::insertRowAbove() {
 
 void ChSettingsListsPage::insertRowBelow() {
     int iRow = getRowIndex();
-    if (iRow < getMaxListSize()) {
+    if (iRow < getMaxListLength()) {
         m_iCursor += 3;
         insertRow(getRowIndex(), iRow);
     }
@@ -761,24 +760,24 @@ void ChSettingsListsPage::insertRowBelow() {
 
 void ChSettingsListsPage::deleteRow() {
     int iRow = getRowIndex();
-    int maxListSize = getMaxListSize();
-    if (iRow < getMaxListSize()) {
-        for (int i = iRow+1; i < MAX_LIST_SIZE; ++i) {
+    int maxListLength = getMaxListLength();
+    if (iRow < getMaxListLength()) {
+        for (int i = iRow+1; i < MAX_LIST_LENGTH; ++i) {
             m_dwellList[i-1] = m_dwellList[i];
             m_voltageList[i-1] = m_voltageList[i];
             m_currentList[i-1] = m_currentList[i];
         }
     
-        if (iRow < m_dwellListSize) {
-            --m_dwellListSize;
+        if (iRow < m_dwellListLength) {
+            --m_dwellListLength;
         }
         
-        if (iRow < m_voltageListSize) {
-            --m_voltageListSize;
+        if (iRow < m_voltageListLength) {
+            --m_voltageListLength;
         }
 
-        if (iRow < m_currentListSize) {
-            --m_currentListSize;
+        if (iRow < m_currentListLength) {
+            --m_currentListLength;
         }
     }
 }
@@ -791,11 +790,11 @@ void ChSettingsListsPage::doClearColumn() {
     int iRow = getRowIndex();
     int iColumn = getColumnIndex();
     if (iColumn == 0) {
-        m_dwellListSize = iRow;
+        m_dwellListLength = iRow;
     } else if (iColumn == 1) {
-        m_voltageListSize = iRow;
+        m_voltageListLength = iRow;
     } else {
-        m_currentListSize = iRow;
+        m_currentListLength = iRow;
     }
 }
 
@@ -809,9 +808,9 @@ void ChSettingsListsPage::onDeleteRows() {
 
 void ChSettingsListsPage::doDeleteRows() {
     int iRow = getRowIndex();
-    if (iRow < m_dwellListSize) m_dwellListSize = iRow;
-    if (iRow < m_voltageListSize) m_voltageListSize = iRow;
-    if (iRow < m_currentListSize) m_currentListSize = iRow;
+    if (iRow < m_dwellListLength) m_dwellListLength = iRow;
+    if (iRow < m_voltageListLength) m_voltageListLength = iRow;
+    if (iRow < m_currentListLength) m_currentListLength = iRow;
 }
 
 void ChSettingsListsPage::deleteRows() {
@@ -823,9 +822,9 @@ void ChSettingsListsPage::onDeleteAll() {
 }
 
 void ChSettingsListsPage::doDeleteAll() {
-    m_dwellListSize = 0;
-    m_voltageListSize = 0;
-    m_currentListSize = 0;
+    m_dwellListLength = 0;
+    m_voltageListLength = 0;
+    m_currentListLength = 0;
     m_iCursor = 0;
 }
 

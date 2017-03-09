@@ -24,6 +24,9 @@
 #include "channel_dispatcher.h"
 #include "trigger.h"
 #include "list.h"
+#if OPTION_SD_CARD
+#include "SD.h"
+#endif
 
 namespace eez {
 namespace psu {
@@ -31,19 +34,31 @@ namespace profile {
 
 #define AUTO_NAME_PREFIX PSTR("Saved at ")
 
-static bool g_save_enabled = true;
-static bool g_save_profile = false;
+static bool g_saveEnabled = true;
+static bool g_saveProfile = false;
+static uint32_t g_saveProfileLastTime; 
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void tick(uint32_t tickCount) {
-    if (g_save_profile) {
+    if (g_saveProfile && tickCount - g_saveProfileLastTime >= SAVE_PROFILE_0_FREQ * 1000000L) {
+        g_saveProfileLastTime = tickCount;
         saveAtLocation(0);
-        g_save_profile = false;
+        g_saveProfile = false;
     }
 }
 
-void recallChannelsFromProfile(Parameters *profile) {
+void getChannelProfileListFilePath(Channel &channel, int location, char *filePath) {
+    strcpy(filePath, PROFILES_DIR);
+    strcat(filePath, PATH_SEPARATOR);
+    strcat(filePath, "LST_");
+    util::strcatInt(filePath, channel.index);
+    strcat(filePath, "_");
+    util::strcatInt(filePath, location);
+    strcat(filePath, LIST_FILE_EXTENSION);
+}
+
+void recallChannelsFromProfile(Parameters *profile, int location) {
     bool last_save_enabled = enableSave(false);
 
     channel_dispatcher::setType((channel_dispatcher::Type)profile->flags.channelsCoupling);
@@ -112,6 +127,13 @@ void recallChannelsFromProfile(Parameters *profile) {
             trigger::setVoltage(channel, profile->channels[i].u_triggerValue);
             trigger::setCurrent(channel, profile->channels[i].i_triggerValue);
             list::setListCount(channel, profile->channels[i].listCount);
+
+#if OPTION_SD_CARD
+            char filePath[MAX_PATH_LENGTH];
+            getChannelProfileListFilePath(channel, location, filePath);
+            list::loadList(channel, filePath, NULL);
+            list::setListsChanged(channel, false);
+#endif
 		}
 
 		channel.update();
@@ -120,7 +142,7 @@ void recallChannelsFromProfile(Parameters *profile) {
     enableSave(last_save_enabled);
 }
 
-bool recallFromProfile(Parameters *profile) {
+bool recallFromProfile(Parameters *profile, int location) {
     bool last_save_enabled = enableSave(false);
 
     bool result = true;
@@ -132,7 +154,7 @@ bool recallFromProfile(Parameters *profile) {
     if (profile->flags.powerIsUp) result &= psu::powerUp();
     else psu::powerDown();
 
-    recallChannelsFromProfile(profile);
+    recallChannelsFromProfile(profile, location);
 
     enableSave(last_save_enabled);
 
@@ -144,7 +166,7 @@ bool recall(int location) {
         Parameters profile;
         if (persist_conf::loadProfile(location, &profile) && profile.flags.isValid) {
             if (persist_conf::saveProfile(0, &profile)) {
-                if (recallFromProfile(&profile)) {
+                if (recallFromProfile(&profile, location)) {
 					event_queue::pushEvent(event_queue::EVENT_INFO_RECALL_FROM_PROFILE_0 + location);
 					return true;
 				} else {
@@ -176,19 +198,19 @@ void getSaveName(const Parameters *profile, char *name) {
 }
 
 bool enableSave(bool enable) {
-    bool last_save_enabled = g_save_enabled;
-    g_save_enabled = enable;
+    bool last_save_enabled = g_saveEnabled;
+    g_saveEnabled = enable;
     return last_save_enabled;
 }
 
 void save() {
-    if (!g_save_enabled) return;
-    g_save_profile = true;
+    if (!g_saveEnabled) return;
+    g_saveProfile = true;
 }
 
 void saveImmediately() {
     saveAtLocation(0);
-    g_save_profile = false;
+    g_saveProfile = false;
 }
 
 bool saveAtLocation(int location, char *name) {
@@ -276,7 +298,19 @@ bool saveAtLocation(int location, char *name) {
                 profile.channels[i].u_triggerValue = trigger::getVoltage(channel);
                 profile.channels[i].i_triggerValue = trigger::getCurrent(channel);
                 profile.channels[i].listCount = list::getListCount(channel);
-			} else {
+
+#if OPTION_SD_CARD
+                if (list::getListsChanged(channel)) {
+                    char filePath[MAX_PATH_LENGTH];
+                    getChannelProfileListFilePath(channel, location, filePath);
+                    if (list::areListLengthsEquivalent(channel)) {
+                        list::saveList(channel, filePath, NULL);
+                    } else {
+                        SD.remove(filePath);
+                    }
+                }
+#endif
+            } else {
 				profile.channels[i].flags.parameters_are_valid = 0;
 			}
         }
