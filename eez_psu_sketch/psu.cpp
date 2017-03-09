@@ -112,6 +112,8 @@ void init() {
     // initialize shield
     eez_psu_init();
 
+    analogWrite(LCD_BRIGHTNESS, 255);
+
 #if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
 	startMasterSync();
 #endif
