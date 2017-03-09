@@ -24,7 +24,9 @@
 #include "channel_dispatcher.h"
 #include "trigger.h"
 #include "list.h"
+#if OPTION_ENCODER
 #include "encoder.h"
+#endif
 
 #include "gui_page_ch_settings_trigger.h"
 #include "gui_numeric_keypad.h"
@@ -658,6 +660,7 @@ void ChSettingsListsPage::discard() {
 }
 
 bool ChSettingsListsPage::onEncoder(int counter) {
+#if OPTION_ENCODER
     encoder::enableAcceleration(true);
     uint8_t dataId = getDataIdAtCursor();
     if (dataId == DATA_ID_CHANNEL_LIST_DWELL || dataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
@@ -669,8 +672,9 @@ bool ChSettingsListsPage::onEncoder(int counter) {
     float step = dataId == DATA_ID_CHANNEL_LIST_DWELL ? 0.001f : 0.01f;
 
     setFocusedValue(getFocusedValue() + step * counter);
-
     return true;
+#endif
+    return false;
 }
 
 bool ChSettingsListsPage::onEncoderClicked() {
