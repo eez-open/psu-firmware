@@ -119,6 +119,7 @@ static uint8_t g_wasFocusDataId;
 data::Cursor g_focusCursor;
 uint8_t g_focusDataId;
 data::Value g_focusEditValue;
+uint32_t g_focusEditValueChangedTime;
 
 ////////////////////////////////////////
 
@@ -695,7 +696,6 @@ void executeAction(int actionId) {
 ////////////////////////////////////////////////////////////////////////////////
 
 #if OPTION_ENCODER
-
 static bool g_isEncoderEnabledInActivePage;
 
 void isEncoderEnabledInActivePageCheckWidget(const WidgetCursor &widgetCursor) {
@@ -712,7 +712,11 @@ bool isEncoderEnabledInActivePage() {
     return g_isEncoderEnabledInActivePage;
 }
 
-void onEncoder(int counter, bool clicked) {
+void onEncoder(uint32_t tickCount, int counter, bool clicked) {
+    if (tickCount - g_focusEditValueChangedTime >= ENCODER_CHANGE_TIMEOUT * 1000000L) {
+        g_focusEditValue = data::Value();
+    }
+
     if (isFrontPanelLocked()) {
         return;
     }
@@ -815,6 +819,7 @@ void onEncoder(int counter, bool clicked) {
 
             if (persist_conf::devConf2.flags.encoderConfirmationMode) {
                 g_focusEditValue = data::Value(newValue, value.getType());
+                g_focusEditValueChangedTime = micros();
             } else {
                 int16_t error;
                 if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType()), &error)) {
@@ -1205,7 +1210,7 @@ void tick(uint32_t tick_usec) {
     int counter;
     bool clicked;
     encoder::read(counter, clicked);
-    onEncoder(counter, clicked);
+    onEncoder(tick_usec, counter, clicked);
 #endif
 
     //
