@@ -41,10 +41,12 @@ static uint32_t g_saveProfileLastTime;
 ////////////////////////////////////////////////////////////////////////////////
 
 void tick(uint32_t tickCount) {
-    if (g_saveProfile && tickCount - g_saveProfileLastTime >= SAVE_PROFILE_0_FREQ * 1000000L) {
-        g_saveProfileLastTime = tickCount;
-        saveAtLocation(0);
-        g_saveProfile = false;
+    if (persist_conf::devConf.flags.profileAutoRecallEnabled) {
+        if (g_saveProfile && tickCount - g_saveProfileLastTime >= SAVE_PROFILE_0_FREQ * 1000000L) {
+            g_saveProfileLastTime = tickCount;
+            saveAtLocation(0);
+            g_saveProfile = false;
+        }
     }
 }
 
@@ -209,8 +211,10 @@ void save() {
 }
 
 void saveImmediately() {
-    saveAtLocation(0);
-    g_saveProfile = false;
+    if (persist_conf::devConf.flags.profileAutoRecallEnabled) {
+        saveAtLocation(0);
+        g_saveProfile = false;
+    }
 }
 
 bool saveAtLocation(int location, char *name) {
