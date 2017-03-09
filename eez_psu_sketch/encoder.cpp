@@ -105,9 +105,11 @@ void abInterruptHandler() {
 void swInterruptHandler() {
     uint32_t time = micros();
     if (digitalRead(ENC_SW)) {
-        int32_t diff = time - g_switchLastTime;
-        if (diff > CONF_ENCODER_SWITCH_DURATION_MIN && diff < CONF_ENCODER_SWITCH_DURATION_MAX) {
-            ++g_switchCounter;
+        if (g_switchLastTime) {
+            int32_t diff = time - g_switchLastTime;
+            if (diff > CONF_ENCODER_SWITCH_DURATION_MIN && diff < CONF_ENCODER_SWITCH_DURATION_MAX) {
+                ++g_switchCounter;
+            }
         }
     } else {
         g_switchLastTime = time;
