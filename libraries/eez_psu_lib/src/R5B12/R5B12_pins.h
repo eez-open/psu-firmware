@@ -72,6 +72,7 @@ static const uint8_t LCDSD_CS = 53;
 static const uint8_t TEMP_ANALOG = 54;
 static const uint8_t PWR_DIRECT = 55;
 static const uint8_t PWR_SSTART = 56;
+static const uint8_t DOUT2 = 57;
 static const uint8_t BATT_NTC = 58;
 static const uint8_t NTC1 = 59;
 static const uint8_t NTC2 = 60;
@@ -79,7 +80,8 @@ static const uint8_t EXT_TRIG = 61;
 static const uint8_t ENC_A = 62;
 static const uint8_t ENC_B = 63;
 static const uint8_t ENC_SW = 64;
-static const uint8_t PWD_RST = 67;
+static const uint8_t DOUT = 65;
+static const uint8_t EXTSD_CS = 66;
 
 #define ISOLATOR_DISABLE LOW
 #define ISOLATOR_ENABLE  HIGH

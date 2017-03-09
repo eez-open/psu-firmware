@@ -78,6 +78,7 @@ void eez_psu_R5B12_init() {
     pinMode(TEMP_ANALOG, INPUT);
     pinMode(PWR_DIRECT, OUTPUT);
     pinMode(PWR_SSTART, OUTPUT);
+    pinMode(DOUT2, OUTPUT);
     pinMode(BATT_NTC, INPUT);
     pinMode(NTC1, INPUT);
     pinMode(NTC2, INPUT);
@@ -85,7 +86,8 @@ void eez_psu_R5B12_init() {
     pinMode(ENC_A, INPUT);
     pinMode(ENC_B, INPUT);
     pinMode(ENC_SW, INPUT_PULLUP);
-    pinMode(PWD_RST, INPUT);
+    pinMode(DOUT, OUTPUT);
+    pinMode(EXTSD_CS, OUTPUT);
 
     //
     digitalWrite(PWR_DIRECT, LOW);
