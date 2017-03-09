@@ -203,6 +203,7 @@ char *Channel::getChannelsInfoShort(char *p) {
 
 void Channel::Simulator::setLoadEnabled(bool value) {
     load_enabled = value;
+    profile::save();
 }
 
 bool Channel::Simulator::getLoadEnabled() {
