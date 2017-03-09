@@ -34,6 +34,7 @@
 
 #include <dirent.h>
 #include <sys/stat.h> // mkdir
+#include <errno.h>
 
 #endif
 
@@ -433,7 +434,7 @@ bool SimulatorSD::mkdir(const char *path) {
 #ifdef _WIN32
     result = ::_mkdir(realPath.c_str());
 #else
-    ::mkdir(path.c_str(), 0700);
+    result = ::mkdir(realPath.c_str(), 0700);
 #endif
     return result == 0 || result == EEXIST;
 }

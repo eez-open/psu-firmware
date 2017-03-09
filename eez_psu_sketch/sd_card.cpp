@@ -175,7 +175,8 @@ void dumpFile(const char *path) {
     File file = SD.open(path, FILE_READ);
 
     if (!file) {
-        DebugTrace("File not found!");
+        DebugTrace("**ERROR File not found!");
+        return;
     }
 
     char line[256];

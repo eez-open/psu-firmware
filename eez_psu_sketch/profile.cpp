@@ -41,7 +41,7 @@ static uint32_t g_saveProfileLastTime;
 ////////////////////////////////////////////////////////////////////////////////
 
 void tick(uint32_t tickCount) {
-    if (persist_conf::devConf.flags.profileAutoRecallEnabled) {
+    if (persist_conf::devConf.flags.profileAutoRecallEnabled && persist_conf::devConf.profile_auto_recall_location == 0) {
         if (g_saveProfile && tickCount - g_saveProfileLastTime >= SAVE_PROFILE_0_FREQ * 1000000L) {
             g_saveProfileLastTime = tickCount;
             saveAtLocation(0);
@@ -211,7 +211,7 @@ void save() {
 }
 
 void saveImmediately() {
-    if (persist_conf::devConf.flags.profileAutoRecallEnabled) {
+    if (persist_conf::devConf.flags.profileAutoRecallEnabled && persist_conf::devConf.profile_auto_recall_location == 0) {
         saveAtLocation(0);
         g_saveProfile = false;
     }
