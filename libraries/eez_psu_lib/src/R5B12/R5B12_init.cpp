@@ -117,6 +117,10 @@ void eez_psu_R5B12_init() {
     analogWrite(LCD_BRIGHTNESS, 0);
     digitalWrite(LCDSD_CS, HIGH);
 
+    digitalWrite(DOUT, LOW);
+    digitalWrite(DOUT2, LOW);
+    digitalWrite(EXTSD_CS, HIGH);
+
     // Address issue with lack of proper SPI connection on PCB r1B9
 #if defined(EEZ_PSU_ARDUINO_DUE)
     pinMode(50, INPUT);
