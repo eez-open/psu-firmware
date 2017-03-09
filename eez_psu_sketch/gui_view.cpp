@@ -1504,6 +1504,9 @@ void onTouchListGraph(const WidgetCursor &widgetCursor, int xTouch, int yTouch) 
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
     DECL_WIDGET_SPECIFIC(ListGraphWidget, listGraphWidget, widget);
 
+    if (xTouch < widgetCursor.x || xTouch >= widgetCursor.x + (int)widget->w) return;
+    if (yTouch < widgetCursor.y || yTouch >= widgetCursor.y + (int)widget->h) return;
+
     int dwellListLength = data::getListLength(listGraphWidget->dwellData);
     if (dwellListLength > 0) {
         int iCursor = -1;
@@ -1520,9 +1523,6 @@ void onTouchListGraph(const WidgetCursor &widgetCursor, int xTouch, int yTouch) 
                 dwellSum += dwellList[dwellListLength - 1];
             }
         }
-
-        if (xTouch < widgetCursor.x) xTouch = widgetCursor.x;
-        if (xTouch >= widgetCursor.x + (int)widget->w) xTouch = widgetCursor.x + (int)widget->w - 1;
 
         float currentDwellSum = 0;
         int xPrev = widgetCursor.x;
