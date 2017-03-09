@@ -713,7 +713,7 @@ bool isEncoderEnabledInActivePage() {
 }
 
 void onEncoder(uint32_t tickCount, int counter, bool clicked) {
-    if (tickCount - g_focusEditValueChangedTime >= ENCODER_CHANGE_TIMEOUT * 1000000L) {
+    if (isFocusChanged() && tickCount - g_focusEditValueChangedTime >= ENCODER_CHANGE_TIMEOUT * 1000000L) {
         g_focusEditValue = data::Value();
     }
 
