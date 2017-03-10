@@ -424,8 +424,10 @@ bool SimulatorSD::mkdir(const char *path) {
     char parentDir[205];
     util::getParentDir(path, parentDir);
 
-    if (!mkdir(parentDir)) {
-        return false;
+    if (parentDir[0]) {
+        if (!mkdir(parentDir)) {
+            return false;
+        }
     }
 
     std::string realPath = getRealPath(path);
