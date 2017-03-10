@@ -23,16 +23,23 @@ Use this header file to override anything from conf.h or conf_advanced.h.
 
 #define ETHERNET_MAC_ADDRESS { 0x74, 0x69, 0x69, 0x2D, 0x30, 0x00 }
 
-// Example: redefine channels
-/*
+/* Redefine channels
 #undef CHANNELS
 #define CHANNELS \
-    CHANNEL(1, CH_BOARD_REVISION_R5B9_PARAMS, CH_PINS_1, CH_PARAMS_30V_3A), \
-    CHANNEL(2, CH_BOARD_REVISION_R5B9_PARAMS, CH_PINS_2, CH_PARAMS_30V_3A) \
+    CHANNEL(1, CH_BOARD_REVISION_R5B10_PARAMS, CH_PINS_1, CH_PARAMS_40V_5A), \
+    CHANNEL(2, CH_BOARD_REVISION_R5B10_PARAMS, CH_PINS_2, CH_PARAMS_40V_5A) \
 */
 
-#undef CONF_DEBUG_VARIABLES
-#define CONF_DEBUG_VARIABLES 1
+// Enable TFT display with SDD1289 controller
+//#undef DISPLAY_TYPE
+//#define DISPLAY_TYPE TFT_320QVT_1289
 
-#undef OPTION_SD_CARD
-#define OPTION_SD_CARD 1
+// Disable encoder
+//#undef OPTION_ENCODER
+//#define OPTION_ENCODER 0
+
+// Disable SD card
+//#undef OPTION_SD_CARD
+//#define OPTION_SD_CARD 0
+
+
