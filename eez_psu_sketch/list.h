@@ -52,9 +52,6 @@ bool areVoltageAndCurrentListLengthsEquivalent(Channel &channel);
 bool loadList(Channel &channel, const char *filePath, int *err);
 bool saveList(Channel &channel, const char *filePath, int *err);
 
-void executionReset(Channel &channel);
-void executionSetVoltage(Channel &channel);
-void executionSetCurrent(Channel &channel);
 void executionStart(Channel &channel);
 
 void tick(uint32_t tick_usec);

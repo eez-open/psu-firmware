@@ -44,14 +44,12 @@ static struct {
 } g_channelsLists[CH_NUM];
 
 static struct {
-    struct {
-        unsigned setVoltage: 1;
-        unsigned setCurrent: 1;
-    } flags; 
-    int counter;
-    int it;
+    int32_t counter;
+    int16_t it;
     uint32_t nextPointTime;
 } g_execution[CH_NUM];
+
+static bool g_active;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -329,19 +327,6 @@ bool saveList(Channel &channel, const char *filePath, int *err) {
 #endif
 }
 
-void executionReset(Channel &channel) {
-    g_execution[channel.index - 1].flags.setVoltage = 0;
-    g_execution[channel.index - 1].flags.setCurrent = 0;
-}
-
-void executionSetVoltage(Channel &channel) {
-    g_execution[channel.index - 1].flags.setVoltage = 1;
-}
-
-void executionSetCurrent(Channel &channel) {
-    g_execution[channel.index - 1].flags.setCurrent = 1;
-}
-
 void executionStart(Channel &channel) {
     g_execution[channel.index - 1].it = -1;
     g_execution[channel.index - 1].counter = g_channelsLists[channel.index - 1].count;
@@ -365,53 +350,18 @@ int maxListsSize(Channel &channel) {
     return maxSize;
 }
 
-static bool g_active = false;
-static int g_min;
-static int g_last;
-static int g_max;
-
 void tick(uint32_t tick_usec) {
 #if CONF_DEBUG_VARIABLES
     debug::g_listTickDuration.tick(tick_usec);
 #endif
 
-    bool active = false;
+    g_active = false;
 
     for (int i = 0; i < CH_NUM; ++i) {
         Channel &channel = Channel::get(i);
         if (g_execution[i].counter >= 0) {
-            active = true;
-            break;
-        }
-    }
+            g_active = true;
 
-    if (g_active != active) {
-        if (g_active) {
-            DebugTraceF("Min: %d", g_min);
-            DebugTraceF("Max: %d", g_max);
-        } else {
-            g_min = 1000000;
-            g_max = 1;
-            g_last = tick_usec;
-        }
-
-        g_active = active;
-    } else {
-        if (g_active) {
-            int time = tick_usec - g_last;
-            if (time < g_min) {
-                g_min = time;
-            }
-            if (time > g_max) {
-                g_max = time;
-            }
-            g_last = tick_usec;
-        }
-    }
-
-    for (int i = 0; i < CH_NUM; ++i) {
-        Channel &channel = Channel::get(i);
-        if (g_execution[i].counter >= 0) {
             bool set = false;
 
             if (g_execution[i].it == -1) {
@@ -428,15 +378,7 @@ void tick(uint32_t tick_usec) {
                     if (g_execution[i].counter > 0) {
                         if (--g_execution[i].counter == 0) {
                             g_execution[i].counter = -1;
-
-                            if (g_execution[i].flags.setVoltage) {
-                                trigger::setVoltageTriggerFinished(channel);
-                            }
-
-                            if (g_execution[i].flags.setCurrent) {
-                                trigger::setCurrentTriggerFinished(channel);
-                            }
-
+                            trigger::setTriggerFinished(channel);
                             return;
                         }
                     }
@@ -444,41 +386,37 @@ void tick(uint32_t tick_usec) {
                     g_execution[i].it = 0;
                 }
 
-                if (g_execution[i].flags.setVoltage) {
-                    float voltage = g_channelsLists[i].voltageList[g_execution[i].it % g_channelsLists[i].voltageListLength];
+                float voltage = g_channelsLists[i].voltageList[g_execution[i].it % g_channelsLists[i].voltageListLength];
 
-	                if (voltage > channel_dispatcher::getULimit(channel)) {
-                        generateError(SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
-                        abort();
-                        return;
-	                }
+	            if (voltage > channel_dispatcher::getULimit(channel)) {
+                    generateError(SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
+                    abort();
+                    return;
+	            }
 
-	                if (voltage * channel_dispatcher::getISet(channel) > channel_dispatcher::getPowerLimit(channel)) {
-                        generateError(SCPI_ERROR_POWER_LIMIT_EXCEEDED);
-                        abort();
-                        return;
-                    }
-
-                    channel_dispatcher::setVoltage(channel, voltage);
+	            if (voltage * channel_dispatcher::getISet(channel) > channel_dispatcher::getPowerLimit(channel)) {
+                    generateError(SCPI_ERROR_POWER_LIMIT_EXCEEDED);
+                    abort();
+                    return;
                 }
 
-                if (g_execution[i].flags.setCurrent) {
-                    float current = g_channelsLists[i].currentList[g_execution[i].it % g_channelsLists[i].currentListLength];
+                channel_dispatcher::setVoltage(channel, voltage);
 
-                    if (current > channel_dispatcher::getILimit(channel)) {
-                        generateError(SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
-                        abort();
-                        return;
-	                }
+                float current = g_channelsLists[i].currentList[g_execution[i].it % g_channelsLists[i].currentListLength];
 
-                    if (current * channel_dispatcher::getUSet(channel) > channel_dispatcher::getPowerLimit(channel)) {
-                        generateError(SCPI_ERROR_POWER_LIMIT_EXCEEDED);
-                        abort();
-                        return;
-                    }
+                if (current > channel_dispatcher::getILimit(channel)) {
+                    generateError(SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
+                    abort();
+                    return;
+	            }
 
-                    channel_dispatcher::setCurrent(channel, current);
+                if (current * channel_dispatcher::getUSet(channel) > channel_dispatcher::getPowerLimit(channel)) {
+                    generateError(SCPI_ERROR_POWER_LIMIT_EXCEEDED);
+                    abort();
+                    return;
                 }
+
+                channel_dispatcher::setCurrent(channel, current);
 
                 uint32_t dwell = (uint32_t)round(g_channelsLists[i].dwellList[g_execution[i].it % g_channelsLists[i].dwellListLength] * 1000000L);
                 g_execution[i].nextPointTime = tick_usec + dwell;

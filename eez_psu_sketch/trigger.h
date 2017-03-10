@@ -61,8 +61,7 @@ int startImmediately();
 int initiate();
 int enableInitiateContinuous(bool enable);
 bool isContinuousInitializationEnabled();
-void setVoltageTriggerFinished(Channel &channel);
-void setCurrentTriggerFinished(Channel &channel);
+void setTriggerFinished(Channel &channel);
 bool isIdle();
 void abort();
 
