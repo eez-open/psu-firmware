@@ -182,32 +182,27 @@ void IOExpander::enableWriteAndFlush() {
     gpio_changed = true;
 }
 
-uint8_t IOExpander::reg_read_write(uint8_t opcode, uint8_t reg, uint8_t val) {
-    //pinMode(channel.index == 1 ? IO_EXPANDER1 : IO_EXPANDER2, OUTPUT);
-    //digitalWrite(channel.ioexp_pin, HIGH); // Deselect DAC
-    //delayMicroseconds(3);
-
+uint8_t IOExpander::reg_read(uint8_t reg) {
     SPI_beginTransaction(MCP23S08_SPI);
-    digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.ioexp_pin, LOW);
-    SPI.transfer(opcode);
+    SPI.transfer(IOEXP_READ);
     SPI.transfer(reg);
-    uint8_t result = SPI.transfer(val);
+    uint8_t result = SPI.transfer(0);
     digitalWrite(channel.ioexp_pin, HIGH);
-    digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
     SPI_endTransaction();
     return result;
 }
 
-uint8_t IOExpander::reg_read(uint8_t reg) {
-    return reg_read_write(IOEXP_READ, reg, 0);
-}
-
 void IOExpander::reg_write(uint8_t reg, uint8_t val) {
-    reg_read_write(IOEXP_WRITE, reg, val);
-	if (reg == REG_GPIO) {
-		//DebugTraceF("Ch%d GPIO 0x%02x", (int)channel.index, (int)val);
-	}
+    SPI_beginTransaction(MCP23S08_SPI);
+    digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
+    digitalWrite(channel.ioexp_pin, LOW);
+    SPI.transfer(IOEXP_WRITE);
+    SPI.transfer(reg);
+    SPI.transfer(val);
+    digitalWrite(channel.ioexp_pin, HIGH);
+    digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
+    SPI_endTransaction();
 }
 
 }

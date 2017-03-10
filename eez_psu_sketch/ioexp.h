@@ -108,7 +108,6 @@ private:
 	bool writeDisabled;
 
 	uint8_t getRegInitValue(int i);
-    uint8_t reg_read_write(uint8_t opcode, uint8_t reg, uint8_t val);
     uint8_t reg_read(uint8_t reg);
     void reg_write(uint8_t reg, uint8_t val);
 };
