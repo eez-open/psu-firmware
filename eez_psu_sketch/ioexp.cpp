@@ -56,15 +56,16 @@ IOExpander::IOExpander(
     , IO_BIT_OUT_EXT_PROG(IO_BIT_OUT_EXT_PROG_)
 {
     g_testResult = psu::TEST_SKIPPED;
-	gpio = channel.ioexp_gpio_init;
-    gpio_changed = false;
+
+    gpio0 = channel.ioexp_gpio_init;
+    gpio1 = 0;
 }
 
 uint8_t IOExpander::getRegInitValue(int i) {
 	if (REG_VALUES[i] == IOExpander::REG_IODIR) {
         return channel.ioexp_iodir;
     } else if (REG_VALUES[i] == IOExpander::REG_GPIO) {
-        return gpio;
+        return gpio0;
     } else {
         return REG_VALUES[i + 1];
     }
@@ -73,6 +74,11 @@ uint8_t IOExpander::getRegInitValue(int i) {
 void IOExpander::init() {
     for (int i = 0; REG_VALUES[i] != 0xFF; i += 3) {
 		reg_write(REG_VALUES[i], getRegInitValue(i));
+    }
+
+    if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
+        reg_write(2 * REG_IODIR + 1, 0); // bits 8-15 are all output
+        reg_write(2 * REG_GPIO + 1, 0);
     }
 }
 
@@ -125,29 +131,8 @@ bool IOExpander::test() {
 
 void IOExpander::tick(uint32_t tick_usec) {
     if (isPowerUp()) {
-        uint8_t gpio = readGpio();
-
-        if (gpio_changed) {
-            if ((gpio & (1 << IO_BIT_OUT_DP_ENABLE)) != (this->gpio & (1 << IO_BIT_OUT_DP_ENABLE))) {
-                DebugTrace("IOEXP write check failed for DP_ENABLE");
-            }
-
-            if ((gpio & (1 << IO_BIT_OUT_SET_100_PERCENT)) != (this->gpio & (1 << IO_BIT_OUT_SET_100_PERCENT))) {
-                DebugTrace("IOEXP write check failed for SET_100_PERCENT");
-            }
-
-            if ((gpio & (1 << IO_BIT_OUT_EXT_PROG)) != (this->gpio & (1 << IO_BIT_OUT_EXT_PROG))) {
-                DebugTrace("IOEXP write check failed for OUT_EXT_PROG");
-            }
-
-            if ((gpio & (1 << IO_BIT_OUT_OUTPUT_ENABLE)) != (this->gpio & (1 << IO_BIT_OUT_OUTPUT_ENABLE))) {
-                DebugTrace("IOEXP write check failed for OUTPUT_ENABLE");
-            }
-
-            gpio_changed = false;
-        }
-
-        channel.eventGpio(gpio);
+        uint8_t gpio0 = readGpio();
+        channel.eventGpio(gpio0);
     }
 }
 
@@ -161,25 +146,19 @@ bool IOExpander::testBit(int io_bit) {
 }
 
 void IOExpander::changeBit(int io_bit, bool set) {
-    uint8_t newValue = set ? (gpio | (1 << io_bit)) : (gpio & ~(1 << io_bit));
-	if (gpio != newValue) {
-		gpio = newValue;
-		if (!writeDisabled) {
-			reg_write(REG_GPIO, gpio);
-            gpio_changed = true;
-		}
-	}
-}
-
-void IOExpander::disableWrite() {
-	writeDisabled = true;
-}
-
-void IOExpander::enableWriteAndFlush() {
-	writeDisabled = false;
-	
-	reg_write(REG_GPIO, gpio);
-    gpio_changed = true;
+    if (io_bit < 8) {
+        uint8_t newValue = set ? (gpio0 | (1 << io_bit)) : (gpio0 & ~(1 << io_bit));
+	    if (gpio0 != newValue) {
+		    gpio0 = newValue;
+			reg_write(REG_GPIO, gpio0);
+	    }
+    } else {
+        uint8_t newValue = set ? (gpio1 | (1 << (io_bit - 8))) : (gpio1 & ~(1 << (io_bit - 8)));
+	    if (gpio1 != newValue) {
+		    gpio1 = newValue;
+			reg_write(2 * REG_GPIO + 1, gpio1);
+	    }
+    }
 }
 
 uint8_t IOExpander::reg_read(uint8_t reg) {

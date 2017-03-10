@@ -65,6 +65,9 @@ public:
     const uint8_t IO_BIT_OUT_EXT_PROG;
     static const uint8_t IO_BIT_OUT_OUTPUT_ENABLE = 7;
 
+    static const uint8_t IO_BIT_5A = 8;
+    static const uint8_t IO_BIT_500mA = 9;
+
     static const uint8_t IOEXP_READ = 0B01000001;
     static const uint8_t IOEXP_WRITE = 0B01000000;
 
@@ -98,14 +101,11 @@ public:
 
     bool testBit(int io_bit);
     void changeBit(int io_bit, bool set);
-	void disableWrite();
-	void enableWriteAndFlush();
 
 private:
     Channel &channel;
-	uint8_t gpio;
-    bool gpio_changed;
-	bool writeDisabled;
+	uint8_t gpio0;
+    uint8_t gpio1;
 
 	uint8_t getRegInitValue(int i);
     uint8_t reg_read(uint8_t reg);

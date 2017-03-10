@@ -988,8 +988,19 @@ void Channel::doOutputEnable(bool enable) {
         return;
     }
 
-    //noInterrupts();
-    //ioexp.disableWrite();
+    if (boardRevision == CH_BOARD_REVISION_R5B12) {
+        if (enable) {
+            if (util::greater(i.set, 0.5, CHANNEL_VALUE_PRECISION)) {
+                // 5A
+                ioexp.changeBit(IOExpander::IO_BIT_5A, true);
+                ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
+            } else {
+                // 500mA
+                ioexp.changeBit(IOExpander::IO_BIT_500mA, true);
+                ioexp.changeBit(IOExpander::IO_BIT_5A, false);
+            }
+        }
+    }
 
     flags.outputEnabled = enable;
     ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, enable);
@@ -1024,9 +1035,6 @@ void Channel::doOutputEnable(bool enable) {
         delayed_dp_off = true;
         delayed_dp_off_start = micros();
     }
-
-    //interrupts();
-    //ioexp.enableWriteAndFlush();
 
     restoreVoltageToValueBeforeBalancing();
     restoreCurrentToValueBeforeBalancing();
