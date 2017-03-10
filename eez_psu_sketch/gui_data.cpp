@@ -698,7 +698,15 @@ Value get(const Cursor &cursor, uint8_t id) {
         if (id == DATA_ID_EDIT_ENABLED) {
             return Value(!trigger::isIdle() || getActivePageId() == PAGE_ID_CH_SETTINGS_LISTS ? 0 : 1);
         }
+
+        if (id == DATA_ID_TRIGGER_IS_INITIATED) {
+            return Value(trigger::isInitiated() ? 1 : 0);
+        }
         
+        if (id == DATA_ID_TRIGGER_IS_MANUAL) {
+            return Value(trigger::getSource() == trigger::SOURCE_MANUAL ? 1 : 0);
+        }
+
         if (id == DATA_ID_CHANNEL_MON_VALUE) {
             return channelSnapshot.monValue;
         }

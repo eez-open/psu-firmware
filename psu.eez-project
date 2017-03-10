@@ -22,7 +22,7 @@
         },
         {
           "fileName": "actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2017-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n\n#if OPTION_DISPLAY\n\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"persist_conf.h\"\n#include \"channel_dispatcher.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings.h\"\n#include \"gui_page_user_profiles.h\"\n#include \"gui_password.h\"\n#include \"gui_page_ch_settings_trigger.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu\n\n#endif"
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2017-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"psu.h\"\n\n#if OPTION_DISPLAY\n\n#include \"actions.h\"\n#include \"event_queue.h\"\n#include \"persist_conf.h\"\n#include \"channel_dispatcher.h\"\n#include \"trigger.h\"\n#include \"sound.h\"\n#include \"gui_internal.h\"\n#include \"gui_keypad.h\"\n#include \"gui_edit_mode.h\"\n#include \"gui_edit_mode_keypad.h\"\n#include \"gui_calibration.h\"\n#include \"gui_page_ch_settings_protection.h\"\n#include \"gui_page_ch_settings_adv.h\"\n#include \"gui_page_sys_settings.h\"\n#include \"gui_page_user_profiles.h\"\n#include \"gui_password.h\"\n#include \"gui_page_ch_settings_trigger.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu\n\n#endif"
         },
         {
           "fileName": "gui_document.h",
@@ -815,6 +815,11 @@
       "name": "trigger.toggleInitiateContinuously",
       "implementationType": "native",
       "implementation": "((SysSettingsTriggerPage *)getActivePage())->toggleInitiateContinuously();"
+    },
+    {
+      "name": "trigger.generateManual",
+      "implementationType": "native",
+      "implementation": "if (trigger::generateTrigger(trigger::SOURCE_MANUAL, false) != SCPI_ERROR_TRIGGER_IGNORED) {\n    sound::playClick();\n    return;\n}\n"
     }
   ],
   "data": [
@@ -1922,6 +1927,16 @@
       "name": "trigger.initiateContinuously",
       "type": "boolean",
       "enumItems": "",
+      "defaultValue": "1"
+    },
+    {
+      "name": "trigger.isInitiated",
+      "type": "boolean",
+      "defaultValue": "0"
+    },
+    {
+      "name": "trigger.isManual",
+      "type": "boolean",
       "defaultValue": "1"
     }
   ],
@@ -3440,87 +3455,120 @@
                               {
                                 "x": 48,
                                 "type": "Select",
-                                "data": "channel.rprog.status",
+                                "data": "trigger.isInitiated",
                                 "y": 56,
                                 "width": 112,
-                                "height": 43,
+                                "height": 83,
                                 "style": "default",
                                 "widgets": [
                                   {
+                                    "type": "Container",
                                     "x": 0,
-                                    "type": "Select",
-                                    "data": "editEnabled",
                                     "y": 0,
                                     "width": 112,
-                                    "height": 43,
+                                    "height": 83,
                                     "style": "default",
                                     "widgets": [
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "",
                                         "x": 0,
+                                        "type": "Select",
+                                        "data": "channel.rprog.status",
                                         "y": 0,
                                         "width": 112,
                                         "height": 43,
                                         "style": "default",
-                                        "activeStyle": "mon_value_focus"
+                                        "widgets": [
+                                          {
+                                            "x": 0,
+                                            "type": "Select",
+                                            "data": "editEnabled",
+                                            "y": 0,
+                                            "width": 112,
+                                            "height": 43,
+                                            "style": "default",
+                                            "widgets": [
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 112,
+                                                "height": 43,
+                                                "style": "default",
+                                                "activeStyle": "mon_value_focus"
+                                              },
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "edit",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 112,
+                                                "height": 43,
+                                                "style": "mon_value",
+                                                "activeStyle": "mon_value_focus"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.monDac",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 112,
+                                            "height": 43,
+                                            "style": "mon_dac"
+                                          }
+                                        ]
                                       },
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "edit",
                                         "x": 0,
-                                        "y": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 43,
                                         "width": 112,
-                                        "height": 43,
-                                        "style": "mon_value",
-                                        "activeStyle": "mon_value_focus"
+                                        "height": 40,
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 112,
+                                            "height": 40,
+                                            "style": "default",
+                                            "activeStyle": "mon_value_focus"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 112,
+                                            "height": 40,
+                                            "style": "mon_value",
+                                            "activeStyle": "mon_value_focus"
+                                          }
+                                        ]
                                       }
                                     ]
                                   },
                                   {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.monDac",
-                                    "action": "",
+                                    "type": "Button",
+                                    "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
                                     "width": 112,
-                                    "height": 43,
-                                    "style": "mon_dac"
-                                  }
-                                ]
-                              },
-                              {
-                                "x": 48,
-                                "type": "Select",
-                                "data": "editEnabled",
-                                "y": 99,
-                                "width": 112,
-                                "height": 40,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 112,
-                                    "height": 40,
-                                    "style": "default",
-                                    "activeStyle": "mon_value_focus"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 112,
-                                    "height": 40,
+                                    "height": 83,
                                     "style": "mon_value",
-                                    "activeStyle": "mon_value_focus"
+                                    "text": "Trigger",
+                                    "disabledStyle": "default",
+                                    "enabled": "trigger.isManual"
                                   }
                                 ]
                               },
@@ -3728,95 +3776,128 @@
                               {
                                 "x": 255,
                                 "type": "Select",
-                                "data": "channel.rprog.status",
+                                "data": "trigger.isInitiated",
                                 "y": 0,
                                 "width": 65,
-                                "height": 28,
+                                "height": 58,
                                 "style": "default",
                                 "widgets": [
                                   {
+                                    "type": "Container",
                                     "x": 0,
-                                    "type": "Select",
-                                    "data": "editEnabled",
                                     "y": 0,
                                     "width": 65,
-                                    "height": 28,
+                                    "height": 58,
                                     "style": "default",
                                     "widgets": [
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "",
                                         "x": 0,
+                                        "type": "Select",
+                                        "data": "channel.rprog.status",
                                         "y": 0,
                                         "width": 65,
                                         "height": 28,
-                                        "style": "edit_value_S_right",
-                                        "activeStyle": "edit_value_focus_S_right"
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "x": 0,
+                                            "type": "Select",
+                                            "data": "editEnabled",
+                                            "y": 0,
+                                            "width": 65,
+                                            "height": 28,
+                                            "style": "default",
+                                            "widgets": [
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 65,
+                                                "height": 28,
+                                                "style": "edit_value_S_right",
+                                                "activeStyle": "edit_value_focus_S_right"
+                                              },
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "edit",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 65,
+                                                "height": 28,
+                                                "style": "edit_value_active_S_right",
+                                                "activeStyle": "edit_value_focus_S_right"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.monDac",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 65,
+                                            "height": 28,
+                                            "style": "mon_dac_S"
+                                          }
+                                        ]
                                       },
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "edit",
+                                        "type": "Rectangle",
                                         "x": 0,
-                                        "y": 0,
+                                        "y": 28,
+                                        "width": 65,
+                                        "height": 2,
+                                        "style": "default_inverse"
+                                      },
+                                      {
+                                        "x": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 30,
                                         "width": 65,
                                         "height": 28,
-                                        "style": "edit_value_active_S_right",
-                                        "activeStyle": "edit_value_focus_S_right"
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 65,
+                                            "height": 28,
+                                            "style": "edit_value_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 65,
+                                            "height": 28,
+                                            "style": "edit_value_active_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          }
+                                        ]
                                       }
                                     ]
                                   },
                                   {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.monDac",
-                                    "action": "",
+                                    "type": "Button",
+                                    "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
                                     "width": 65,
-                                    "height": 28,
-                                    "style": "mon_dac_S"
-                                  }
-                                ]
-                              },
-                              {
-                                "type": "Rectangle",
-                                "x": 255,
-                                "y": 28,
-                                "width": 65,
-                                "height": 2,
-                                "style": "default_inverse"
-                              },
-                              {
-                                "x": 255,
-                                "type": "Select",
-                                "data": "editEnabled",
-                                "y": 30,
-                                "width": 65,
-                                "height": 28,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 65,
-                                    "height": 28,
-                                    "style": "edit_value_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 65,
-                                    "height": 28,
-                                    "style": "edit_value_active_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
+                                    "height": 58,
+                                    "style": "edit_value_active_S_center",
+                                    "text": "TRG",
+                                    "enabled": "trigger.isManual",
+                                    "disabledStyle": "edit_value_S_centered"
                                   }
                                 ]
                               },
@@ -4158,7 +4239,7 @@
                                             "x": 54,
                                             "y": 0,
                                             "width": 2,
-                                            "height": 154,
+                                            "height": 133,
                                             "style": "default_inverse"
                                           },
                                           {
@@ -4434,87 +4515,120 @@
                               {
                                 "x": 49,
                                 "type": "Select",
-                                "data": "channel.rprog.status",
+                                "data": "trigger.isInitiated",
                                 "y": 133,
-                                "width": 55,
+                                "width": 110,
                                 "height": 24,
                                 "style": "default",
                                 "widgets": [
                                   {
+                                    "type": "Container",
                                     "x": 0,
-                                    "type": "Select",
-                                    "data": "editEnabled",
                                     "y": 0,
-                                    "width": 55,
+                                    "width": 110,
                                     "height": 24,
                                     "style": "default",
                                     "widgets": [
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "",
                                         "x": 0,
+                                        "type": "Select",
+                                        "data": "channel.rprog.status",
                                         "y": 0,
                                         "width": 55,
                                         "height": 24,
-                                        "style": "edit_value_S_centered",
-                                        "activeStyle": "edit_S_focus"
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "x": 0,
+                                            "type": "Select",
+                                            "data": "editEnabled",
+                                            "y": 0,
+                                            "width": 55,
+                                            "height": 24,
+                                            "style": "default",
+                                            "widgets": [
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 55,
+                                                "height": 24,
+                                                "style": "edit_value_S_centered",
+                                                "activeStyle": "edit_S_focus"
+                                              },
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "edit",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 55,
+                                                "height": 24,
+                                                "style": "edit_S",
+                                                "activeStyle": "edit_S_focus"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.monDac",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 55,
+                                            "height": 24,
+                                            "style": "mon_dac_S"
+                                          }
+                                        ]
                                       },
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "edit",
-                                        "x": 0,
+                                        "x": 55,
+                                        "type": "Select",
+                                        "data": "editEnabled",
                                         "y": 0,
                                         "width": 55,
                                         "height": 24,
-                                        "style": "edit_S",
-                                        "activeStyle": "edit_S_focus"
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 55,
+                                            "height": 24,
+                                            "style": "edit_value_S_centered",
+                                            "activeStyle": "edit_S_focus"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 55,
+                                            "height": 24,
+                                            "style": "edit_S",
+                                            "activeStyle": "edit_S_focus"
+                                          }
+                                        ]
                                       }
                                     ]
                                   },
                                   {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.monDac",
-                                    "action": "",
+                                    "type": "Button",
+                                    "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
-                                    "width": 55,
+                                    "width": 110,
                                     "height": 24,
-                                    "style": "mon_dac_S"
-                                  }
-                                ]
-                              },
-                              {
-                                "x": 104,
-                                "type": "Select",
-                                "data": "editEnabled",
-                                "y": 133,
-                                "width": 55,
-                                "height": 24,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 55,
-                                    "height": 24,
-                                    "style": "edit_value_S_centered",
-                                    "activeStyle": "edit_S_focus"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 55,
-                                    "height": 24,
-                                    "style": "edit_S",
-                                    "activeStyle": "edit_S_focus"
+                                    "style": "edit_value_active_S_center",
+                                    "text": "TRG",
+                                    "enabled": "trigger.isManual",
+                                    "disabledStyle": "edit_value_S_centered"
                                   }
                                 ]
                               }
@@ -4638,95 +4752,128 @@
                               {
                                 "x": 258,
                                 "type": "Select",
-                                "data": "channel.rprog.status",
+                                "data": "trigger.isInitiated",
                                 "y": 0,
                                 "width": 62,
-                                "height": 28,
+                                "height": 58,
                                 "style": "default",
                                 "widgets": [
                                   {
+                                    "type": "Container",
                                     "x": 0,
-                                    "type": "Select",
-                                    "data": "editEnabled",
                                     "y": 0,
                                     "width": 62,
-                                    "height": 28,
+                                    "height": 58,
                                     "style": "default",
                                     "widgets": [
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "",
                                         "x": 0,
+                                        "type": "Select",
+                                        "data": "channel.rprog.status",
                                         "y": 0,
                                         "width": 62,
                                         "height": 28,
-                                        "style": "edit_value_S_right",
-                                        "activeStyle": "edit_value_focus_S_right"
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "x": 0,
+                                            "type": "Select",
+                                            "data": "editEnabled",
+                                            "y": 0,
+                                            "width": 62,
+                                            "height": 28,
+                                            "style": "default",
+                                            "widgets": [
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 62,
+                                                "height": 28,
+                                                "style": "edit_value_S_right",
+                                                "activeStyle": "edit_value_focus_S_right"
+                                              },
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "edit",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 62,
+                                                "height": 28,
+                                                "style": "edit_value_active_S_right",
+                                                "activeStyle": "edit_value_focus_S_right"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.monDac",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 62,
+                                            "height": 28,
+                                            "style": "mon_dac_S"
+                                          }
+                                        ]
                                       },
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "edit",
+                                        "type": "Rectangle",
                                         "x": 0,
-                                        "y": 0,
+                                        "y": 28,
+                                        "width": 62,
+                                        "height": 2,
+                                        "style": "default_inverse"
+                                      },
+                                      {
+                                        "x": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 30,
                                         "width": 62,
                                         "height": 28,
-                                        "style": "edit_value_active_S_right",
-                                        "activeStyle": "edit_value_focus_S_right"
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 62,
+                                            "height": 28,
+                                            "style": "edit_value_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 62,
+                                            "height": 28,
+                                            "style": "edit_value_active_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          }
+                                        ]
                                       }
                                     ]
                                   },
                                   {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.monDac",
-                                    "action": "",
+                                    "type": "Button",
+                                    "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
                                     "width": 62,
-                                    "height": 28,
-                                    "style": "mon_dac_S"
-                                  }
-                                ]
-                              },
-                              {
-                                "type": "Rectangle",
-                                "x": 258,
-                                "y": 28,
-                                "width": 62,
-                                "height": 2,
-                                "style": "default_inverse"
-                              },
-                              {
-                                "x": 258,
-                                "type": "Select",
-                                "data": "editEnabled",
-                                "y": 30,
-                                "width": 62,
-                                "height": 28,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 62,
-                                    "height": 28,
-                                    "style": "edit_value_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 62,
-                                    "height": 28,
-                                    "style": "edit_value_active_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
+                                    "height": 58,
+                                    "style": "edit_value_active_S_center",
+                                    "text": "TRG",
+                                    "enabled": "trigger.isManual",
+                                    "disabledStyle": "edit_value_S_centered"
                                   }
                                 ]
                               },
@@ -5279,87 +5426,120 @@
                               {
                                 "x": 48,
                                 "type": "Select",
-                                "data": "channel.rprog.status",
+                                "data": "trigger.isInitiated",
                                 "y": 56,
                                 "width": 112,
-                                "height": 43,
+                                "height": 83,
                                 "style": "default",
                                 "widgets": [
                                   {
+                                    "type": "Container",
                                     "x": 0,
-                                    "type": "Select",
-                                    "data": "editEnabled",
                                     "y": 0,
                                     "width": 112,
-                                    "height": 43,
+                                    "height": 83,
                                     "style": "default",
                                     "widgets": [
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "",
                                         "x": 0,
+                                        "type": "Select",
+                                        "data": "channel.rprog.status",
                                         "y": 0,
                                         "width": 112,
                                         "height": 43,
-                                        "style": "edit_value",
-                                        "activeStyle": "mon_value_focus"
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "x": 0,
+                                            "type": "Select",
+                                            "data": "editEnabled",
+                                            "y": 0,
+                                            "width": 112,
+                                            "height": 43,
+                                            "style": "default",
+                                            "widgets": [
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 112,
+                                                "height": 43,
+                                                "style": "edit_value",
+                                                "activeStyle": "mon_value_focus"
+                                              },
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "edit",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 112,
+                                                "height": 43,
+                                                "style": "mon_value",
+                                                "activeStyle": "mon_value_focus"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.monDac",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 112,
+                                            "height": 43,
+                                            "style": "mon_dac"
+                                          }
+                                        ]
                                       },
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "edit",
                                         "x": 0,
-                                        "y": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 43,
                                         "width": 112,
-                                        "height": 43,
-                                        "style": "mon_value",
-                                        "activeStyle": "mon_value_focus"
+                                        "height": 40,
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 112,
+                                            "height": 40,
+                                            "style": "edit_value",
+                                            "activeStyle": "mon_value_focus"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 112,
+                                            "height": 40,
+                                            "style": "mon_value",
+                                            "activeStyle": "mon_value_focus"
+                                          }
+                                        ]
                                       }
                                     ]
                                   },
                                   {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.monDac",
-                                    "action": "",
+                                    "type": "Button",
+                                    "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
                                     "width": 112,
-                                    "height": 43,
-                                    "style": "mon_dac"
-                                  }
-                                ]
-                              },
-                              {
-                                "x": 48,
-                                "type": "Select",
-                                "data": "editEnabled",
-                                "y": 99,
-                                "width": 112,
-                                "height": 40,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 112,
-                                    "height": 40,
-                                    "style": "edit_value",
-                                    "activeStyle": "mon_value_focus"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 112,
-                                    "height": 40,
+                                    "height": 83,
                                     "style": "mon_value",
-                                    "activeStyle": "mon_value_focus"
+                                    "text": "Trigger",
+                                    "enabled": "trigger.isManual",
+                                    "disabledStyle": "default"
                                   }
                                 ]
                               }
@@ -5917,95 +6097,128 @@
                               {
                                 "x": 255,
                                 "type": "Select",
-                                "data": "channel.rprog.status",
+                                "data": "trigger.isInitiated",
                                 "y": 0,
                                 "width": 65,
-                                "height": 28,
+                                "height": 58,
                                 "style": "default",
                                 "widgets": [
                                   {
+                                    "type": "Container",
                                     "x": 0,
-                                    "type": "Select",
-                                    "data": "editEnabled",
                                     "y": 0,
                                     "width": 65,
-                                    "height": 28,
+                                    "height": 58,
                                     "style": "default",
                                     "widgets": [
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "",
                                         "x": 0,
+                                        "type": "Select",
+                                        "data": "channel.rprog.status",
                                         "y": 0,
                                         "width": 65,
                                         "height": 28,
-                                        "style": "edit_value_S_right",
-                                        "activeStyle": "edit_value_focus_S_right"
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "x": 0,
+                                            "type": "Select",
+                                            "data": "editEnabled",
+                                            "y": 0,
+                                            "width": 65,
+                                            "height": 28,
+                                            "style": "default",
+                                            "widgets": [
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 65,
+                                                "height": 28,
+                                                "style": "edit_value_S_right",
+                                                "activeStyle": "edit_value_focus_S_right"
+                                              },
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "edit",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 65,
+                                                "height": 28,
+                                                "style": "edit_value_active_S_right",
+                                                "activeStyle": "edit_value_focus_S_right"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.monDac",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 65,
+                                            "height": 28,
+                                            "style": "mon_dac_S"
+                                          }
+                                        ]
                                       },
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "edit",
+                                        "type": "Rectangle",
                                         "x": 0,
-                                        "y": 0,
+                                        "y": 28,
+                                        "width": 65,
+                                        "height": 2,
+                                        "style": "default_inverse"
+                                      },
+                                      {
+                                        "x": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 30,
                                         "width": 65,
                                         "height": 28,
-                                        "style": "edit_value_active_S_right",
-                                        "activeStyle": "edit_value_focus_S_right"
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 65,
+                                            "height": 28,
+                                            "style": "edit_value_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 65,
+                                            "height": 28,
+                                            "style": "edit_value_active_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          }
+                                        ]
                                       }
                                     ]
                                   },
                                   {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.monDac",
-                                    "action": "",
+                                    "type": "Button",
+                                    "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
                                     "width": 65,
-                                    "height": 28,
-                                    "style": "mon_dac_S"
-                                  }
-                                ]
-                              },
-                              {
-                                "type": "Rectangle",
-                                "x": 255,
-                                "y": 28,
-                                "width": 65,
-                                "height": 2,
-                                "style": "default_inverse"
-                              },
-                              {
-                                "x": 255,
-                                "type": "Select",
-                                "data": "editEnabled",
-                                "y": 30,
-                                "width": 65,
-                                "height": 28,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 65,
-                                    "height": 28,
-                                    "style": "edit_value_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 65,
-                                    "height": 28,
-                                    "style": "edit_value_active_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
+                                    "height": 58,
+                                    "style": "edit_value_active_S_center",
+                                    "text": "TRG",
+                                    "enabled": "trigger.isManual",
+                                    "disabledStyle": "edit_value_S_centered"
                                   }
                                 ]
                               },
@@ -6307,87 +6520,120 @@
                               {
                                 "x": 49,
                                 "type": "Select",
-                                "data": "channel.rprog.status",
+                                "data": "trigger.isInitiated",
                                 "y": 133,
-                                "width": 56,
+                                "width": 110,
                                 "height": 24,
                                 "style": "default",
                                 "widgets": [
                                   {
+                                    "type": "Container",
                                     "x": 0,
-                                    "type": "Select",
-                                    "data": "editEnabled",
                                     "y": 0,
-                                    "width": 56,
+                                    "width": 110,
                                     "height": 24,
                                     "style": "default",
                                     "widgets": [
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "",
                                         "x": 0,
+                                        "type": "Select",
+                                        "data": "channel.rprog.status",
                                         "y": 0,
                                         "width": 56,
                                         "height": 24,
-                                        "style": "edit_value_S_centered",
-                                        "activeStyle": "edit_S_focus"
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "x": 0,
+                                            "type": "Select",
+                                            "data": "editEnabled",
+                                            "y": 0,
+                                            "width": 56,
+                                            "height": 24,
+                                            "style": "default",
+                                            "widgets": [
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 56,
+                                                "height": 24,
+                                                "style": "edit_value_S_centered",
+                                                "activeStyle": "edit_S_focus"
+                                              },
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "edit",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 56,
+                                                "height": 24,
+                                                "style": "edit_S",
+                                                "activeStyle": "edit_S_focus"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.monDac",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 56,
+                                            "height": 24,
+                                            "style": "mon_dac_S"
+                                          }
+                                        ]
                                       },
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "edit",
-                                        "x": 0,
+                                        "x": 55,
+                                        "type": "Select",
+                                        "data": "editEnabled",
                                         "y": 0,
-                                        "width": 56,
+                                        "width": 55,
                                         "height": 24,
-                                        "style": "edit_S",
-                                        "activeStyle": "edit_S_focus"
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 55,
+                                            "height": 24,
+                                            "style": "edit_value_S_centered",
+                                            "activeStyle": "edit_S_focus"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 55,
+                                            "height": 24,
+                                            "style": "edit_S",
+                                            "activeStyle": "edit_S_focus"
+                                          }
+                                        ]
                                       }
                                     ]
                                   },
                                   {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.monDac",
-                                    "action": "",
+                                    "type": "Button",
+                                    "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
-                                    "width": 56,
+                                    "width": 110,
                                     "height": 24,
-                                    "style": "mon_dac_S"
-                                  }
-                                ]
-                              },
-                              {
-                                "x": 104,
-                                "type": "Select",
-                                "data": "editEnabled",
-                                "y": 133,
-                                "width": 55,
-                                "height": 24,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 55,
-                                    "height": 24,
-                                    "style": "edit_value_S_centered",
-                                    "activeStyle": "edit_S_focus"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 55,
-                                    "height": 24,
-                                    "style": "edit_S",
-                                    "activeStyle": "edit_S_focus"
+                                    "style": "edit_value_active_S_center",
+                                    "text": "TRG",
+                                    "enabled": "trigger.isManual",
+                                    "disabledStyle": "edit_value_S_centered"
                                   }
                                 ]
                               }
@@ -6881,95 +7127,128 @@
                               {
                                 "x": 258,
                                 "type": "Select",
-                                "data": "channel.rprog.status",
+                                "data": "trigger.isInitiated",
                                 "y": 0,
                                 "width": 62,
-                                "height": 28,
+                                "height": 58,
                                 "style": "default",
                                 "widgets": [
                                   {
+                                    "type": "Container",
                                     "x": 0,
-                                    "type": "Select",
-                                    "data": "editEnabled",
                                     "y": 0,
                                     "width": 62,
-                                    "height": 28,
+                                    "height": 58,
                                     "style": "default",
                                     "widgets": [
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "",
                                         "x": 0,
+                                        "type": "Select",
+                                        "data": "channel.rprog.status",
                                         "y": 0,
                                         "width": 62,
                                         "height": 28,
-                                        "style": "edit_value_S_right",
-                                        "activeStyle": "edit_value_focus_S_right"
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "x": 0,
+                                            "type": "Select",
+                                            "data": "editEnabled",
+                                            "y": 0,
+                                            "width": 62,
+                                            "height": 28,
+                                            "style": "default",
+                                            "widgets": [
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 62,
+                                                "height": 28,
+                                                "style": "edit_value_S_right",
+                                                "activeStyle": "edit_value_focus_S_right"
+                                              },
+                                              {
+                                                "type": "DisplayData",
+                                                "data": "channel.u.edit",
+                                                "action": "edit",
+                                                "x": 0,
+                                                "y": 0,
+                                                "width": 62,
+                                                "height": 28,
+                                                "style": "edit_value_active_S_right",
+                                                "activeStyle": "edit_value_focus_S_right"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.monDac",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 62,
+                                            "height": 28,
+                                            "style": "mon_dac_S"
+                                          }
+                                        ]
                                       },
                                       {
-                                        "type": "DisplayData",
-                                        "data": "channel.u.edit",
-                                        "action": "edit",
+                                        "type": "Rectangle",
                                         "x": 0,
-                                        "y": 0,
+                                        "y": 28,
+                                        "width": 62,
+                                        "height": 2,
+                                        "style": "default_inverse"
+                                      },
+                                      {
+                                        "x": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 30,
                                         "width": 62,
                                         "height": 28,
-                                        "style": "edit_value_active_S_right",
-                                        "activeStyle": "edit_value_focus_S_right"
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 62,
+                                            "height": 28,
+                                            "style": "edit_value_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 62,
+                                            "height": 28,
+                                            "style": "edit_value_active_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          }
+                                        ]
                                       }
                                     ]
                                   },
                                   {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.monDac",
-                                    "action": "",
+                                    "type": "Button",
+                                    "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
                                     "width": 62,
-                                    "height": 28,
-                                    "style": "mon_dac_S"
-                                  }
-                                ]
-                              },
-                              {
-                                "type": "Rectangle",
-                                "x": 258,
-                                "y": 28,
-                                "width": 62,
-                                "height": 2,
-                                "style": "default_inverse"
-                              },
-                              {
-                                "x": 258,
-                                "type": "Select",
-                                "data": "editEnabled",
-                                "y": 30,
-                                "width": 62,
-                                "height": 28,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 62,
-                                    "height": 28,
-                                    "style": "edit_value_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 62,
-                                    "height": 28,
-                                    "style": "edit_value_active_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
+                                    "height": 58,
+                                    "style": "edit_value_active_S_center",
+                                    "text": "TRG",
+                                    "enabled": "trigger.isManual",
+                                    "disabledStyle": "edit_value_S_centered"
                                   }
                                 ]
                               },
@@ -21085,88 +21364,121 @@
                             {
                               "x": 0,
                               "type": "Select",
-                              "data": "channel.rprog.status",
+                              "data": "trigger.isInitiated",
                               "y": 32,
                               "width": 64,
-                              "height": 30,
+                              "height": 60,
                               "style": "default",
                               "widgets": [
                                 {
+                                  "type": "Container",
                                   "x": 0,
-                                  "type": "Select",
-                                  "data": "editEnabled",
                                   "y": 0,
                                   "width": 64,
-                                  "height": 30,
+                                  "height": 60,
                                   "style": "default",
                                   "widgets": [
                                     {
-                                      "type": "DisplayData",
-                                      "data": "channel.u.edit",
-                                      "action": "",
                                       "x": 0,
+                                      "type": "Select",
+                                      "data": "channel.rprog.status",
                                       "y": 0,
                                       "width": 64,
                                       "height": 30,
-                                      "style": "edit_value_S_right",
-                                      "activeStyle": "edit_value_focus_S_right"
+                                      "style": "default",
+                                      "widgets": [
+                                        {
+                                          "x": 0,
+                                          "type": "Select",
+                                          "data": "editEnabled",
+                                          "y": 0,
+                                          "width": 64,
+                                          "height": 30,
+                                          "style": "default",
+                                          "widgets": [
+                                            {
+                                              "type": "DisplayData",
+                                              "data": "channel.u.edit",
+                                              "action": "",
+                                              "x": 0,
+                                              "y": 0,
+                                              "width": 64,
+                                              "height": 30,
+                                              "style": "edit_value_S_right",
+                                              "activeStyle": "edit_value_focus_S_right"
+                                            },
+                                            {
+                                              "type": "DisplayData",
+                                              "data": "channel.u.edit",
+                                              "action": "edit",
+                                              "x": 0,
+                                              "y": 0,
+                                              "width": 64,
+                                              "height": 30,
+                                              "style": "edit_value_active_S_right",
+                                              "activeStyle": "edit_value_focus_S_right"
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "type": "DisplayData",
+                                          "data": "channel.u.monDac",
+                                          "action": "",
+                                          "x": 0,
+                                          "y": 0,
+                                          "width": 64,
+                                          "height": 30,
+                                          "style": "mon_dac_S",
+                                          "activeStyle": ""
+                                        }
+                                      ]
                                     },
                                     {
-                                      "type": "DisplayData",
-                                      "data": "channel.u.edit",
-                                      "action": "edit",
                                       "x": 0,
-                                      "y": 0,
+                                      "type": "Select",
+                                      "data": "editEnabled",
+                                      "y": 30,
                                       "width": 64,
                                       "height": 30,
-                                      "style": "edit_value_active_S_right",
-                                      "activeStyle": "edit_value_focus_S_right"
+                                      "style": "default",
+                                      "widgets": [
+                                        {
+                                          "type": "DisplayData",
+                                          "data": "channel.i.edit",
+                                          "action": "",
+                                          "x": 0,
+                                          "y": 0,
+                                          "width": 64,
+                                          "height": 30,
+                                          "style": "edit_value_S_right",
+                                          "activeStyle": "edit_value_focus_S_right"
+                                        },
+                                        {
+                                          "type": "DisplayData",
+                                          "data": "channel.i.edit",
+                                          "action": "edit",
+                                          "x": 0,
+                                          "y": 0,
+                                          "width": 64,
+                                          "height": 30,
+                                          "style": "edit_value_active_S_right",
+                                          "activeStyle": "edit_value_focus_S_right"
+                                        }
+                                      ]
                                     }
                                   ]
                                 },
                                 {
-                                  "type": "DisplayData",
-                                  "data": "channel.u.monDac",
-                                  "action": "",
+                                  "type": "Button",
+                                  "action": "trigger.generateManual",
                                   "x": 0,
                                   "y": 0,
                                   "width": 64,
-                                  "height": 30,
-                                  "style": "mon_dac_S",
-                                  "activeStyle": ""
-                                }
-                              ]
-                            },
-                            {
-                              "x": 0,
-                              "type": "Select",
-                              "data": "editEnabled",
-                              "y": 62,
-                              "width": 64,
-                              "height": 30,
-                              "style": "default",
-                              "widgets": [
-                                {
-                                  "type": "DisplayData",
-                                  "data": "channel.i.edit",
-                                  "action": "",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 64,
-                                  "height": 30,
-                                  "style": "edit_value_S_right",
-                                  "activeStyle": "edit_value_focus_S_right"
-                                },
-                                {
-                                  "type": "DisplayData",
-                                  "data": "channel.i.edit",
-                                  "action": "edit",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 64,
-                                  "height": 30,
-                                  "style": "edit_value_active_S_right",
-                                  "activeStyle": "edit_value_focus_S_right"
+                                  "height": 60,
+                                  "style": "edit_value_active_S_center",
+                                  "text": "TRG",
+                                  "enabled": "trigger.isManual",
+                                  "disabledStyle": "edit_value_S_centered"
                                 }
                               ]
                             }
@@ -21275,154 +21587,187 @@
                           {
                             "x": 0,
                             "type": "Select",
-                            "data": "channel.isVoltageBalanced",
+                            "data": "trigger.isInitiated",
                             "y": 32,
                             "width": 64,
-                            "height": 30,
+                            "height": 60,
                             "style": "default",
                             "widgets": [
                               {
+                                "type": "Container",
                                 "x": 0,
-                                "type": "Select",
-                                "data": "editEnabled",
                                 "y": 0,
                                 "width": 64,
-                                "height": 30,
+                                "height": 60,
                                 "style": "default",
                                 "widgets": [
                                   {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.edit",
-                                    "action": "",
                                     "x": 0,
+                                    "type": "Select",
+                                    "data": "channel.isVoltageBalanced",
                                     "y": 0,
                                     "width": 64,
                                     "height": 30,
-                                    "style": "edit_value_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
+                                    "style": "default",
+                                    "widgets": [
+                                      {
+                                        "x": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 0,
+                                        "width": 64,
+                                        "height": 30,
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "edit_value_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "edit_value_active_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "x": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 0,
+                                        "width": 64,
+                                        "height": 30,
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "set_value_S_right_balanced",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "set_value_S_right_balanced",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          }
+                                        ]
+                                      }
+                                    ]
                                   },
                                   {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.edit",
-                                    "action": "edit",
                                     "x": 0,
-                                    "y": 0,
+                                    "type": "Select",
+                                    "data": "channel.isCurrentBalanced",
+                                    "y": 30,
                                     "width": 64,
                                     "height": 30,
-                                    "style": "edit_value_active_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
+                                    "style": "default",
+                                    "widgets": [
+                                      {
+                                        "x": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 0,
+                                        "width": 64,
+                                        "height": 30,
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "edit_value_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "edit_value_active_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "x": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 0,
+                                        "width": 64,
+                                        "height": 30,
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "set_value_S_right_balanced",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "set_value_S_right_balanced",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          }
+                                        ]
+                                      }
+                                    ]
                                   }
                                 ]
                               },
                               {
+                                "type": "Button",
+                                "action": "trigger.generateManual",
                                 "x": 0,
-                                "type": "Select",
-                                "data": "editEnabled",
                                 "y": 0,
                                 "width": 64,
-                                "height": 30,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "set_value_S_right_balanced",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "set_value_S_right_balanced",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  }
-                                ]
-                              }
-                            ]
-                          },
-                          {
-                            "x": 0,
-                            "type": "Select",
-                            "data": "channel.isCurrentBalanced",
-                            "y": 62,
-                            "width": 64,
-                            "height": 30,
-                            "style": "default",
-                            "widgets": [
-                              {
-                                "x": 0,
-                                "type": "Select",
-                                "data": "editEnabled",
-                                "y": 0,
-                                "width": 64,
-                                "height": 30,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "edit_value_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "edit_value_active_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  }
-                                ]
-                              },
-                              {
-                                "x": 0,
-                                "type": "Select",
-                                "data": "editEnabled",
-                                "y": 0,
-                                "width": 64,
-                                "height": 30,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "set_value_S_right_balanced",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "set_value_S_right_balanced",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  }
-                                ]
+                                "height": 60,
+                                "style": "edit_value_active_S_center",
+                                "text": "TRG",
+                                "enabled": "trigger.isManual",
+                                "disabledStyle": "edit_value_S_centered"
                               }
                             ]
                           }
@@ -21565,154 +21910,187 @@
                           {
                             "x": 0,
                             "type": "Select",
-                            "data": "channel.isVoltageBalanced",
+                            "data": "trigger.isInitiated",
                             "y": 32,
                             "width": 64,
-                            "height": 30,
+                            "height": 60,
                             "style": "default",
                             "widgets": [
                               {
+                                "type": "Container",
                                 "x": 0,
-                                "type": "Select",
-                                "data": "editEnabled",
                                 "y": 0,
                                 "width": 64,
-                                "height": 30,
+                                "height": 60,
                                 "style": "default",
                                 "widgets": [
                                   {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.edit",
-                                    "action": "",
                                     "x": 0,
+                                    "type": "Select",
+                                    "data": "channel.isVoltageBalanced",
                                     "y": 0,
                                     "width": 64,
                                     "height": 30,
-                                    "style": "edit_value_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
+                                    "style": "default",
+                                    "widgets": [
+                                      {
+                                        "x": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 0,
+                                        "width": 64,
+                                        "height": 30,
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "edit_value_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "edit_value_active_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "x": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 0,
+                                        "width": 64,
+                                        "height": 30,
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "set_value_S_right_balanced",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.u.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "set_value_S_right_balanced",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          }
+                                        ]
+                                      }
+                                    ]
                                   },
                                   {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.edit",
-                                    "action": "edit",
                                     "x": 0,
-                                    "y": 0,
+                                    "type": "Select",
+                                    "data": "channel.isCurrentBalanced",
+                                    "y": 30,
                                     "width": 64,
                                     "height": 30,
-                                    "style": "edit_value_active_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
+                                    "style": "default",
+                                    "widgets": [
+                                      {
+                                        "x": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 0,
+                                        "width": 64,
+                                        "height": 30,
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "edit_value_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "edit_value_active_S_right",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "x": 0,
+                                        "type": "Select",
+                                        "data": "editEnabled",
+                                        "y": 0,
+                                        "width": 64,
+                                        "height": 30,
+                                        "style": "default",
+                                        "widgets": [
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "set_value_S_right_balanced",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          },
+                                          {
+                                            "type": "DisplayData",
+                                            "data": "channel.i.edit",
+                                            "action": "edit",
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 64,
+                                            "height": 30,
+                                            "style": "set_value_S_right_balanced",
+                                            "activeStyle": "edit_value_focus_S_right"
+                                          }
+                                        ]
+                                      }
+                                    ]
                                   }
                                 ]
                               },
                               {
+                                "type": "Button",
+                                "action": "trigger.generateManual",
                                 "x": 0,
-                                "type": "Select",
-                                "data": "editEnabled",
                                 "y": 0,
                                 "width": 64,
-                                "height": 30,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "set_value_S_right_balanced",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.u.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "set_value_S_right_balanced",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  }
-                                ]
-                              }
-                            ]
-                          },
-                          {
-                            "x": 0,
-                            "type": "Select",
-                            "data": "channel.isCurrentBalanced",
-                            "y": 62,
-                            "width": 64,
-                            "height": 30,
-                            "style": "default",
-                            "widgets": [
-                              {
-                                "x": 0,
-                                "type": "Select",
-                                "data": "editEnabled",
-                                "y": 0,
-                                "width": 64,
-                                "height": 30,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "edit_value_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "edit_value_active_S_right",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  }
-                                ]
-                              },
-                              {
-                                "x": 0,
-                                "type": "Select",
-                                "data": "editEnabled",
-                                "y": 0,
-                                "width": 64,
-                                "height": 30,
-                                "style": "default",
-                                "widgets": [
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "set_value_S_right_balanced",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  },
-                                  {
-                                    "type": "DisplayData",
-                                    "data": "channel.i.edit",
-                                    "action": "edit",
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 64,
-                                    "height": 30,
-                                    "style": "set_value_S_right_balanced",
-                                    "activeStyle": "edit_value_focus_S_right"
-                                  }
-                                ]
+                                "height": 60,
+                                "style": "edit_value_active_S_center",
+                                "text": "TRG",
+                                "enabled": "trigger.isManual",
+                                "disabledStyle": "edit_value_S_centered"
                               }
                             ]
                           }
@@ -21874,66 +22252,99 @@
                             {
                               "x": 0,
                               "type": "Select",
-                              "data": "editEnabled",
+                              "data": "trigger.isInitiated",
                               "y": 32,
                               "width": 64,
-                              "height": 30,
+                              "height": 60,
                               "style": "default",
                               "widgets": [
                                 {
-                                  "type": "DisplayData",
-                                  "data": "channel.u.edit",
-                                  "action": "",
+                                  "type": "Container",
                                   "x": 0,
                                   "y": 0,
                                   "width": 64,
-                                  "height": 30,
-                                  "style": "edit_value_S_right",
-                                  "activeStyle": "edit_value_focus_S_right"
+                                  "height": 60,
+                                  "style": "default",
+                                  "widgets": [
+                                    {
+                                      "x": 0,
+                                      "type": "Select",
+                                      "data": "editEnabled",
+                                      "y": 0,
+                                      "width": 64,
+                                      "height": 30,
+                                      "style": "default",
+                                      "widgets": [
+                                        {
+                                          "type": "DisplayData",
+                                          "data": "channel.u.edit",
+                                          "action": "",
+                                          "x": 0,
+                                          "y": 0,
+                                          "width": 64,
+                                          "height": 30,
+                                          "style": "edit_value_S_right",
+                                          "activeStyle": "edit_value_focus_S_right"
+                                        },
+                                        {
+                                          "type": "DisplayData",
+                                          "data": "channel.u.edit",
+                                          "action": "edit",
+                                          "x": 0,
+                                          "y": 0,
+                                          "width": 64,
+                                          "height": 30,
+                                          "style": "edit_value_active_S_right",
+                                          "activeStyle": "edit_value_focus_S_right"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "x": 0,
+                                      "type": "Select",
+                                      "data": "editEnabled",
+                                      "y": 30,
+                                      "width": 64,
+                                      "height": 30,
+                                      "style": "default",
+                                      "widgets": [
+                                        {
+                                          "type": "DisplayData",
+                                          "data": "channel.i.edit",
+                                          "action": "",
+                                          "x": 0,
+                                          "y": 0,
+                                          "width": 64,
+                                          "height": 30,
+                                          "style": "edit_value_S_right",
+                                          "activeStyle": "edit_value_focus_S_right"
+                                        },
+                                        {
+                                          "type": "DisplayData",
+                                          "data": "channel.i.edit",
+                                          "action": "edit",
+                                          "x": 0,
+                                          "y": 0,
+                                          "width": 64,
+                                          "height": 30,
+                                          "style": "edit_value_active_S_right",
+                                          "activeStyle": "edit_value_focus_S_right"
+                                        }
+                                      ]
+                                    }
+                                  ]
                                 },
                                 {
-                                  "type": "DisplayData",
-                                  "data": "channel.u.edit",
-                                  "action": "edit",
+                                  "type": "Button",
+                                  "action": "trigger.generateManual",
                                   "x": 0,
                                   "y": 0,
                                   "width": 64,
-                                  "height": 30,
-                                  "style": "edit_value_active_S_right",
-                                  "activeStyle": "edit_value_focus_S_right"
-                                }
-                              ]
-                            },
-                            {
-                              "x": 0,
-                              "type": "Select",
-                              "data": "editEnabled",
-                              "y": 62,
-                              "width": 64,
-                              "height": 30,
-                              "style": "default",
-                              "widgets": [
-                                {
-                                  "type": "DisplayData",
-                                  "data": "channel.i.edit",
-                                  "action": "",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 64,
-                                  "height": 30,
-                                  "style": "edit_value_S_right",
-                                  "activeStyle": "edit_value_focus_S_right"
-                                },
-                                {
-                                  "type": "DisplayData",
-                                  "data": "channel.i.edit",
-                                  "action": "edit",
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 64,
-                                  "height": 30,
-                                  "style": "edit_value_active_S_right",
-                                  "activeStyle": "edit_value_focus_S_right"
+                                  "height": 60,
+                                  "style": "edit_value_active_S_center",
+                                  "text": "TRG",
+                                  "enabled": "trigger.isManual",
+                                  "disabledStyle": "edit_value_S_centered"
                                 }
                               ]
                             }
@@ -22356,154 +22767,187 @@
           {
             "x": 203,
             "type": "Select",
-            "data": "channel.isVoltageBalanced",
+            "data": "trigger.isInitiated",
             "y": 10,
             "width": 117,
-            "height": 40,
+            "height": 80,
             "style": "default",
             "widgets": [
               {
+                "type": "Container",
                 "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
                 "y": 0,
                 "width": 117,
-                "height": 40,
+                "height": 80,
                 "style": "default",
                 "widgets": [
                   {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "",
                     "x": 0,
+                    "type": "Select",
+                    "data": "channel.isVoltageBalanced",
                     "y": 0,
                     "width": 117,
                     "height": 40,
-                    "style": "edit_value",
-                    "activeStyle": "mon_value_focus"
+                    "style": "default",
+                    "widgets": [
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 40,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 40,
+                            "style": "edit_value",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 40,
+                            "style": "mon_value",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      },
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 40,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 40,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 40,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      }
+                    ]
                   },
                   {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "edit",
                     "x": 0,
-                    "y": 0,
+                    "type": "Select",
+                    "data": "channel.isCurrentBalanced",
+                    "y": 40,
                     "width": 117,
                     "height": 40,
-                    "style": "mon_value",
-                    "activeStyle": "mon_value_focus"
+                    "style": "default",
+                    "widgets": [
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 40,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 40,
+                            "style": "edit_value",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 40,
+                            "style": "mon_value",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      },
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 40,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 40,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 40,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      }
+                    ]
                   }
                 ]
               },
               {
+                "type": "Button",
+                "action": "trigger.generateManual",
                 "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
                 "y": 0,
                 "width": 117,
-                "height": 40,
-                "style": "default",
-                "widgets": [
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 40,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "edit",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 40,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "x": 203,
-            "type": "Select",
-            "data": "channel.isCurrentBalanced",
-            "y": 50,
-            "width": 117,
-            "height": 40,
-            "style": "default",
-            "widgets": [
-              {
-                "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
-                "y": 0,
-                "width": 117,
-                "height": 40,
-                "style": "default",
-                "widgets": [
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 40,
-                    "style": "edit_value",
-                    "activeStyle": "mon_value_focus"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "edit",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 40,
-                    "style": "mon_value",
-                    "activeStyle": "mon_value_focus"
-                  }
-                ]
-              },
-              {
-                "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
-                "y": 0,
-                "width": 117,
-                "height": 40,
-                "style": "default",
-                "widgets": [
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 40,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "edit",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 40,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  }
-                ]
+                "height": 80,
+                "style": "mon_value",
+                "text": "Trigger",
+                "enabled": "trigger.isManual",
+                "disabledStyle": "default"
               }
             ]
           },
@@ -22709,154 +23153,187 @@
           {
             "x": 203,
             "type": "Select",
-            "data": "channel.isVoltageBalanced",
+            "data": "trigger.isInitiated",
             "y": 4,
             "width": 117,
-            "height": 36,
+            "height": 72,
             "style": "default",
             "widgets": [
               {
+                "type": "Container",
                 "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
                 "y": 0,
                 "width": 117,
-                "height": 36,
+                "height": 72,
                 "style": "default",
                 "widgets": [
                   {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "",
                     "x": 0,
+                    "type": "Select",
+                    "data": "channel.isVoltageBalanced",
                     "y": 0,
                     "width": 117,
                     "height": 36,
-                    "style": "edit_value",
-                    "activeStyle": "mon_value_focus"
+                    "style": "default",
+                    "widgets": [
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 36,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "edit_value",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "mon_value",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      },
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 36,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      }
+                    ]
                   },
                   {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "edit",
                     "x": 0,
-                    "y": 0,
+                    "type": "Select",
+                    "data": "channel.isCurrentBalanced",
+                    "y": 36,
                     "width": 117,
                     "height": 36,
-                    "style": "mon_value",
-                    "activeStyle": "mon_value_focus"
+                    "style": "default",
+                    "widgets": [
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 36,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "edit_value",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "mon_value",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      },
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 36,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      }
+                    ]
                   }
                 ]
               },
               {
+                "type": "Button",
+                "action": "trigger.generateManual",
                 "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
                 "y": 0,
                 "width": 117,
-                "height": 36,
-                "style": "default",
-                "widgets": [
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "edit",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "x": 203,
-            "type": "Select",
-            "data": "channel.isCurrentBalanced",
-            "y": 40,
-            "width": 117,
-            "height": 36,
-            "style": "default",
-            "widgets": [
-              {
-                "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
-                "y": 0,
-                "width": 117,
-                "height": 36,
-                "style": "default",
-                "widgets": [
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "edit_value",
-                    "activeStyle": "mon_value_focus"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "edit",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "mon_value",
-                    "activeStyle": "mon_value_focus"
-                  }
-                ]
-              },
-              {
-                "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
-                "y": 0,
-                "width": 117,
-                "height": 36,
-                "style": "default",
-                "widgets": [
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "edit",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  }
-                ]
+                "height": 72,
+                "style": "mon_value",
+                "text": "Trigger",
+                "enabled": "trigger.isManual",
+                "disabledStyle": "default"
               }
             ]
           },
@@ -23424,154 +23901,187 @@
           {
             "x": 203,
             "type": "Select",
-            "data": "channel.isVoltageBalanced",
+            "data": "trigger.isInitiated",
             "y": 4,
             "width": 117,
-            "height": 36,
+            "height": 72,
             "style": "default",
             "widgets": [
               {
+                "type": "Container",
                 "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
                 "y": 0,
                 "width": 117,
-                "height": 36,
+                "height": 72,
                 "style": "default",
                 "widgets": [
                   {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "",
                     "x": 0,
+                    "type": "Select",
+                    "data": "channel.isVoltageBalanced",
                     "y": 0,
                     "width": 117,
                     "height": 36,
-                    "style": "edit_value",
-                    "activeStyle": "mon_value_focus"
+                    "style": "default",
+                    "widgets": [
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 36,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "edit_value",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "mon_value",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      },
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 36,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      }
+                    ]
                   },
                   {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "edit",
                     "x": 0,
-                    "y": 0,
+                    "type": "Select",
+                    "data": "channel.isCurrentBalanced",
+                    "y": 36,
                     "width": 117,
                     "height": 36,
-                    "style": "mon_value",
-                    "activeStyle": "mon_value_focus"
+                    "style": "default",
+                    "widgets": [
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 36,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "edit_value",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "mon_value",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      },
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 36,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      }
+                    ]
                   }
                 ]
               },
               {
+                "type": "Button",
+                "action": "trigger.generateManual",
                 "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
                 "y": 0,
                 "width": 117,
-                "height": 36,
-                "style": "default",
-                "widgets": [
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "edit",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "x": 203,
-            "type": "Select",
-            "data": "channel.isCurrentBalanced",
-            "y": 40,
-            "width": 117,
-            "height": 36,
-            "style": "default",
-            "widgets": [
-              {
-                "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
-                "y": 0,
-                "width": 117,
-                "height": 36,
-                "style": "default",
-                "widgets": [
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "edit_value",
-                    "activeStyle": "mon_value_focus"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "edit",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "mon_value",
-                    "activeStyle": "mon_value_focus"
-                  }
-                ]
-              },
-              {
-                "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
-                "y": 0,
-                "width": 117,
-                "height": 36,
-                "style": "default",
-                "widgets": [
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "edit",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  }
-                ]
+                "height": 72,
+                "style": "mon_value",
+                "text": "Trigger",
+                "enabled": "trigger.isManual",
+                "disabledStyle": "default"
               }
             ]
           },
@@ -23687,154 +24197,187 @@
           {
             "x": 203,
             "type": "Select",
-            "data": "channel.isVoltageBalanced",
+            "data": "trigger.isInitiated",
             "y": 4,
             "width": 117,
-            "height": 36,
+            "height": 72,
             "style": "default",
             "widgets": [
               {
+                "type": "Container",
                 "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
                 "y": 0,
                 "width": 117,
-                "height": 36,
+                "height": 72,
                 "style": "default",
                 "widgets": [
                   {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "",
                     "x": 0,
+                    "type": "Select",
+                    "data": "channel.isVoltageBalanced",
                     "y": 0,
                     "width": 117,
                     "height": 36,
-                    "style": "edit_value",
-                    "activeStyle": "mon_value_focus"
+                    "style": "default",
+                    "widgets": [
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 36,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "edit_value",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "mon_value",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      },
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 36,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.u.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      }
+                    ]
                   },
                   {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "edit",
                     "x": 0,
-                    "y": 0,
+                    "type": "Select",
+                    "data": "channel.isCurrentBalanced",
+                    "y": 36,
                     "width": 117,
                     "height": 36,
-                    "style": "mon_value",
-                    "activeStyle": "mon_value_focus"
+                    "style": "default",
+                    "widgets": [
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 36,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "edit_value",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "mon_value",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      },
+                      {
+                        "x": 0,
+                        "type": "Select",
+                        "data": "editEnabled",
+                        "y": 0,
+                        "width": 117,
+                        "height": 36,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          },
+                          {
+                            "type": "DisplayData",
+                            "data": "channel.i.edit",
+                            "action": "edit",
+                            "x": 0,
+                            "y": 0,
+                            "width": 117,
+                            "height": 36,
+                            "style": "set_value_balanced",
+                            "activeStyle": "mon_value_focus"
+                          }
+                        ]
+                      }
+                    ]
                   }
                 ]
               },
               {
+                "type": "Button",
+                "action": "trigger.generateManual",
                 "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
                 "y": 0,
                 "width": 117,
-                "height": 36,
-                "style": "default",
-                "widgets": [
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.u.edit",
-                    "action": "edit",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "x": 203,
-            "type": "Select",
-            "data": "channel.isCurrentBalanced",
-            "y": 40,
-            "width": 117,
-            "height": 36,
-            "style": "default",
-            "widgets": [
-              {
-                "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
-                "y": 0,
-                "width": 117,
-                "height": 36,
-                "style": "default",
-                "widgets": [
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "edit_value",
-                    "activeStyle": "mon_value_focus"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "edit",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "mon_value",
-                    "activeStyle": "mon_value_focus"
-                  }
-                ]
-              },
-              {
-                "x": 0,
-                "type": "Select",
-                "data": "editEnabled",
-                "y": 0,
-                "width": 117,
-                "height": 36,
-                "style": "default",
-                "widgets": [
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  },
-                  {
-                    "type": "DisplayData",
-                    "data": "channel.i.edit",
-                    "action": "edit",
-                    "x": 0,
-                    "y": 0,
-                    "width": 117,
-                    "height": 36,
-                    "style": "set_value_balanced",
-                    "activeStyle": "mon_value_focus"
-                  }
-                ]
+                "height": 72,
+                "style": "mon_value",
+                "text": "Trigger",
+                "enabled": "trigger.isManual",
+                "disabledStyle": "default"
               }
             ]
           },

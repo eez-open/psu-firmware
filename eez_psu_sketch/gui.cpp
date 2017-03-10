@@ -722,11 +722,6 @@ void onEncoder(uint32_t tickCount, int counter, bool clicked) {
     }
 
     if (clicked) {
-        if (trigger::generateTrigger(trigger::SOURCE_MANUAL, false) != SCPI_ERROR_TRIGGER_IGNORED) {
-            sound::playClick();
-            return;
-        }
-
         if (g_activePage) {
             if (g_activePage->onEncoderClicked()) {
                 return;

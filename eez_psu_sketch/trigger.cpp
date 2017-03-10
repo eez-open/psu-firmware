@@ -257,6 +257,10 @@ bool isIdle() {
     return g_state == STATE_IDLE;
 }
 
+bool isInitiated() {
+    return g_state == STATE_INITIATED;
+}
+
 void abort() {
     list::abort();
     g_state = STATE_IDLE;

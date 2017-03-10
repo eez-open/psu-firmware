@@ -24,6 +24,8 @@
 #include "event_queue.h"
 #include "persist_conf.h"
 #include "channel_dispatcher.h"
+#include "trigger.h"
+#include "sound.h"
 #include "gui_internal.h"
 #include "gui_keypad.h"
 #include "gui_edit_mode.h"
@@ -667,6 +669,13 @@ void action_trigger_toggle_initiate_continuously() {
     ((SysSettingsTriggerPage *)getActivePage())->toggleInitiateContinuously();
 }
 
+void action_trigger_generate_manual() {
+    if (trigger::generateTrigger(trigger::SOURCE_MANUAL, false) != SCPI_ERROR_TRIGGER_IGNORED) {
+        sound::playClick();
+        return;
+    }
+}
+
 
 ACTION actions[] = {
     0,
@@ -822,7 +831,8 @@ ACTION actions[] = {
     action_trigger_select_source,
     action_trigger_edit_delay,
     action_trigger_select_polarity,
-    action_trigger_toggle_initiate_continuously
+    action_trigger_toggle_initiate_continuously,
+    action_trigger_generate_manual
 };
 
 }
