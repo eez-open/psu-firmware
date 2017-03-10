@@ -676,6 +676,10 @@ void action_trigger_generate_manual() {
     }
 }
 
+void action_trigger_show_general_settings() {
+    pushPage(PAGE_ID_SYS_SETTINGS_TRIGGER);
+}
+
 
 ACTION actions[] = {
     0,
@@ -832,7 +836,8 @@ ACTION actions[] = {
     action_trigger_edit_delay,
     action_trigger_select_polarity,
     action_trigger_toggle_initiate_continuously,
-    action_trigger_generate_manual
+    action_trigger_generate_manual,
+    action_trigger_show_general_settings
 };
 
 }

@@ -820,6 +820,11 @@
       "name": "trigger.generateManual",
       "implementationType": "native",
       "implementation": "if (trigger::generateTrigger(trigger::SOURCE_MANUAL, false) != SCPI_ERROR_TRIGGER_IGNORED) {\n    sound::playClick();\n    return;\n}\n"
+    },
+    {
+      "name": "trigger.showGeneralSettings",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_TRIGGER);"
     }
   ],
   "data": [
@@ -13767,6 +13772,16 @@
               "width": 68,
               "height": 204,
               "style": "default"
+            },
+            {
+              "type": "Text",
+              "action": "trigger.showGeneralSettings",
+              "x": 16,
+              "y": 140,
+              "width": 236,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "General trigger settings"
             }
           ]
         }
