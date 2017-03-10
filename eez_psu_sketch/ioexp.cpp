@@ -77,8 +77,8 @@ void IOExpander::init() {
     }
 
     if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
-        reg_write(2 * REG_IODIR + 1, 0); // bits 8-15 are all output
-        reg_write(2 * REG_GPIO + 1, 0);
+        reg_write(2 * REG_IODIR + 1, 0, true); // bits 8-15 are all output
+        reg_write(2 * REG_GPIO + 1, 0, true);
     }
 }
 
@@ -156,18 +156,22 @@ void IOExpander::changeBit(int io_bit, bool set) {
         uint8_t newValue = set ? (gpio1 | (1 << (io_bit - 8))) : (gpio1 & ~(1 << (io_bit - 8)));
 	    if (gpio1 != newValue) {
 		    gpio1 = newValue;
-			reg_write(2 * REG_GPIO + 1, gpio1);
+			reg_write(2 * REG_GPIO + 1, gpio1, true);
 	    }
     }
 }
 
-uint8_t IOExpander::reg_read(uint8_t reg) {
+uint8_t IOExpander::reg_read(uint8_t reg, bool regb) {
     SPI_beginTransaction(MCP23S08_SPI);
     digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.ioexp_pin, LOW);
     SPI.transfer(IOEXP_READ);
     if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
-        SPI.transfer(2 * reg);
+        if (regb) {
+            SPI.transfer(reg);
+        } else {
+            SPI.transfer(2 * reg);
+        }
     } else {
         SPI.transfer(reg);
     }
@@ -178,12 +182,12 @@ uint8_t IOExpander::reg_read(uint8_t reg) {
     return result;
 }
 
-void IOExpander::reg_write(uint8_t reg, uint8_t val) {
+void IOExpander::reg_write(uint8_t reg, uint8_t val, bool regb) {
     SPI_beginTransaction(MCP23S08_SPI);
     digitalWrite(channel.ioexp_pin, LOW);
     SPI.transfer(IOEXP_WRITE);
     if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
-        if (reg % 2) {
+        if (regb) {
             SPI.transfer(reg);
         } else {
             SPI.transfer(2 * reg);

@@ -83,7 +83,7 @@ public:
     static const uint8_t REG_GPIO = 0x09;
     static const uint8_t REG_OLAT = 0x0A;
 
-    static const size_t NUM_REGISTERS = REG_OLAT + 1;
+    static const size_t NUM_REGISTERS = 2 * (REG_OLAT + 1);
 
     psu::TestResult g_testResult;
 
@@ -108,8 +108,8 @@ private:
     uint8_t gpio1;
 
 	uint8_t getRegInitValue(int i);
-    uint8_t reg_read(uint8_t reg);
-    void reg_write(uint8_t reg, uint8_t val);
+    uint8_t reg_read(uint8_t reg, bool regb = false);
+    void reg_write(uint8_t reg, uint8_t val, bool regb = false);
 };
 
 }
