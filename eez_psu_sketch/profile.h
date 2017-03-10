@@ -100,6 +100,7 @@ void getSaveName(const Parameters *profile, char *name);
 bool enableSave(bool enable);
 void save();
 void saveImmediately();
+void flush();
 bool saveAtLocation(int location, char *name = 0);
 
 bool deleteLocation(int location);

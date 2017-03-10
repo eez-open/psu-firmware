@@ -920,6 +920,8 @@ void tick() {
     // the "pow:syst 1" command is executed 
 	sound::tick(tick_usec);
 
+    profile::tick(tick_usec);
+
     serial::tick(tick_usec);
 
 #if OPTION_ETHERNET
@@ -928,9 +930,9 @@ void tick() {
 	    ethernet::tick(tick_usec);
     }
 #endif
-    
-    profile::tick(tick_usec);
 
+    scpi::tick(tick_usec);
+    
 #if OPTION_DISPLAY
 #ifdef EEZ_PSU_SIMULATOR
     if (simulator::front_panel::isOpened()) {

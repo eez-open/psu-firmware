@@ -56,6 +56,9 @@ static const scpi_command_t scpi_commands[] = {
 
 #endif
 
+static bool g_wasActive = false;
+static uint32_t g_timeOfLastActivity;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 void init(scpi_t &scpi_context,
@@ -73,7 +76,20 @@ void init(scpi_t &scpi_context,
     scpi_context.user_context = &scpi_psu_context;
 }
 
+void tick(uint32_t tickCount) {
+    if (g_wasActive) {
+        g_timeOfLastActivity = tickCount;
+        if (g_timeOfLastActivity == 0) {
+            g_timeOfLastActivity = 1;
+        }
+        g_wasActive = false;
+    } else if (g_timeOfLastActivity != 0 && tickCount - g_timeOfLastActivity >= SCPI_IDLE_TIMEOUT * 1000000L) {
+        g_timeOfLastActivity = 0;
+    } 
+}
+
 void input(scpi_t &scpi_context, char ch) {
+    g_wasActive = true;
     //if (ch < 0 || ch > 127) {
     //    // non ASCII, call parser now
     //    SCPI_Input(&scpi_context, 0, 0);
@@ -93,6 +109,7 @@ void input(scpi_t &scpi_context, char ch) {
 }
 
 void input(scpi_t &scpi_context, const char *str, size_t size) {
+    g_wasActive = true;
     //if (ch < 0 || ch > 127) {
     //    // non ASCII, call parser now
     //    SCPI_Input(&scpi_context, 0, 0);
@@ -142,6 +159,9 @@ void resultChoiceName(scpi_t * context, scpi_choice_def_t *choice, int tag) {
     }
 }
 
+bool isIdle() {
+    return g_timeOfLastActivity == 0;
+}
 
 }
 }

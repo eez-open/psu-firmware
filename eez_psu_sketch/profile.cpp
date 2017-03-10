@@ -24,6 +24,7 @@
 #include "channel_dispatcher.h"
 #include "trigger.h"
 #include "list.h"
+#include "scpi_psu.h"
 #if OPTION_SD_CARD
 #include "SD.h"
 #endif
@@ -36,14 +37,13 @@ namespace profile {
 
 static bool g_saveEnabled = true;
 static bool g_saveProfile = false;
-static uint32_t g_saveProfileLastTime; 
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void tick(uint32_t tickCount) {
-    if (persist_conf::devConf.flags.profileAutoRecallEnabled && persist_conf::devConf.profile_auto_recall_location == 0) {
-        if (g_saveProfile && tickCount - g_saveProfileLastTime >= SAVE_PROFILE_0_FREQ * 1000000L) {
-            g_saveProfileLastTime = tickCount;
+    if (persist_conf::devConf.flags.profileAutoRecallEnabled) {
+        if (g_saveProfile && scpi::isIdle()) {
+            DebugTrace("Profile 0 saved!");
             saveAtLocation(0);
             g_saveProfile = false;
         }
@@ -211,7 +211,16 @@ void save() {
 }
 
 void saveImmediately() {
-    if (persist_conf::devConf.flags.profileAutoRecallEnabled && persist_conf::devConf.profile_auto_recall_location == 0) {
+    if (persist_conf::devConf.flags.profileAutoRecallEnabled) {
+        DebugTrace("Profile 0 saved!");
+        saveAtLocation(0);
+        g_saveProfile = false;
+    }
+}
+
+void flush() {
+    if (g_saveProfile && persist_conf::devConf.flags.profileAutoRecallEnabled) {
+        DebugTrace("Profile 0 saved!");
         saveAtLocation(0);
         g_saveProfile = false;
     }

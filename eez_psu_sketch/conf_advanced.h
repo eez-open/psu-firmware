@@ -286,10 +286,8 @@
 #define CSV_SEPARATOR ','
 #define LIST_CSV_FILE_NO_VALUE_CHAR '='
 
-/// Current configuration if changed will be automatically saved
-/// in profile 0 if auto recall of profile 0 is enabled, but not
-/// more often than this frequency in seconds.
-#define SAVE_PROFILE_0_FREQ 60
+/// Time in seconds of SCPI inactivity to declare SCPI to be idle.
+#define SCPI_IDLE_TIMEOUT 30
 
 /// Changed but not confirmed value will be reset to current one
 /// after this timeout in seconds.

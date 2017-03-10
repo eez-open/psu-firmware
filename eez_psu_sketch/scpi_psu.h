@@ -40,12 +40,16 @@ void init(scpi_t &scpi_context,
     int16_t *error_queue_data,
     int16_t error_queue_size);
 
+void tick(uint32_t tickCount);
+
 void input(scpi_t &scpi_context, char ch);
 void input(scpi_t &scpi_context, const char *str, size_t size);
 
 void printError(int_fast16_t err);
 
 void resultChoiceName(scpi_t *context, scpi_choice_def_t *choice, int tag);
+
+bool isIdle();
 
 }
 }
