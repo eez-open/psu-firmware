@@ -186,7 +186,7 @@ void AnalogDigitalConverter::tick(uint32_t tick_usec) {
         start_time = micros();
     }
 #else
-    if (start_reg0 && tick_usec > start_time + ADC_READ_TIME_US) {
+    if (start_reg0 && tick_usec - start_time > ADC_READ_TIME_US) {
         int16_t adc_data = read();
         channel.eventAdcData(adc_data);
 
