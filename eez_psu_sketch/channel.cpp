@@ -56,7 +56,9 @@ const char *CH_BOARD_REVISION_NAMES[] = {
     // CH_BOARD_REVISION_R5B9
     "Power_r5B9",
     // CH_BOARD_REVISION_R5B10
-    "Power_r5B10"
+    "Power_r5B10",
+    // CH_BOARD_REVISION_R5B12
+    "Power_r5B12"
 };
 
 uint16_t CH_BOARD_REVISION_FEATURES[] = {
@@ -68,6 +70,8 @@ uint16_t CH_BOARD_REVISION_FEATURES[] = {
     CH_FEATURE_VOLT | CH_FEATURE_CURRENT | CH_FEATURE_POWER | CH_FEATURE_OE | CH_FEATURE_DPROG | CH_FEATURE_LRIPPLE | CH_FEATURE_RPROG | CH_FEATURE_RPOL,
     // CH_BOARD_REVISION_R5B10
     CH_FEATURE_VOLT | CH_FEATURE_CURRENT | CH_FEATURE_POWER | CH_FEATURE_OE | CH_FEATURE_DPROG | CH_FEATURE_LRIPPLE | CH_FEATURE_RPROG | CH_FEATURE_RPOL,
+    // CH_BOARD_REVISION_R5B12
+    CH_FEATURE_VOLT | CH_FEATURE_CURRENT | CH_FEATURE_POWER | CH_FEATURE_OE | CH_FEATURE_DPROG | CH_FEATURE_LRIPPLE | CH_FEATURE_RPROG | CH_FEATURE_RPOL
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1217,7 +1221,7 @@ bool Channel::isCurrentCalibrationEnabled() {
 }
 
 void Channel::calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max) {
-    if (boardRevision == CH_BOARD_REVISION_R5B6B || boardRevision == CH_BOARD_REVISION_R5B10) {
+    if (boardRevision == CH_BOARD_REVISION_R5B6B || boardRevision == CH_BOARD_REVISION_R5B10 || boardRevision == CH_BOARD_REVISION_R5B12) {
         *min = U_MIN;
         *max = U_MAX;
         return;
@@ -1267,7 +1271,7 @@ void Channel::calibrationFindVoltageRange(float minDac, float minVal, float minA
 }
 
 void Channel::calibrationFindCurrentRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max) {
-    if (boardRevision == CH_BOARD_REVISION_R5B6B || boardRevision == CH_BOARD_REVISION_R5B10) {
+    if (boardRevision == CH_BOARD_REVISION_R5B6B || boardRevision == CH_BOARD_REVISION_R5B10 || boardRevision == CH_BOARD_REVISION_R5B12) {
         *min = I_MIN;
         *max = I_MAX;
         return;
