@@ -13883,7 +13883,7 @@
                         "width": 73,
                         "height": 24,
                         "style": "edit_value_S_centered",
-                        "text": "-"
+                        "text": "\\u0092"
                       },
                       {
                         "type": "DisplayData",
@@ -13916,7 +13916,7 @@
                         "width": 73,
                         "height": 24,
                         "style": "edit_value_S_centered",
-                        "text": "-"
+                        "text": "\\u0092"
                       },
                       {
                         "type": "DisplayData",
@@ -13949,7 +13949,7 @@
                         "width": 73,
                         "height": 24,
                         "style": "edit_value_S_centered",
-                        "text": "-"
+                        "text": "\\u0092"
                       },
                       {
                         "type": "DisplayData",
@@ -30238,6 +30238,39 @@
                 62,
                 15,
                 128
+              ]
+            }
+          },
+          {
+            "encoding": 146,
+            "x": 0,
+            "y": 7,
+            "width": 19,
+            "height": 5,
+            "dx": 19,
+            "source": {
+              "filePath": "fonts\\bdf\\webhostinghub-glyphs.14.bdf",
+              "encoding": 8722
+            },
+            "glyphBitmap": {
+              "width": 19,
+              "height": 5,
+              "pixelArray": [
+                255,
+                255,
+                224,
+                255,
+                255,
+                224,
+                255,
+                255,
+                224,
+                255,
+                255,
+                224,
+                255,
+                255,
+                224
               ]
             }
           }

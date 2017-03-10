@@ -32,6 +32,7 @@
 #include "gui_numeric_keypad.h"
 
 #define INF_TEXT PSTR("\x91")
+#define EMPTY_VALUE PSTR("\x92")
 
 namespace eez {
 namespace psu {
@@ -287,7 +288,7 @@ data::Value ChSettingsListsPage::getData(const data::Cursor &cursor, uint8_t id)
         if (iRow < m_dwellListLength) {
 		    return data::Value(m_dwellList[iRow], data::VALUE_TYPE_FLOAT_SECOND);
         } else {
-            return data::Value(PSTR("-"));
+            return data::Value(EMPTY_VALUE);
         }
 	}
 
@@ -299,7 +300,7 @@ data::Value ChSettingsListsPage::getData(const data::Cursor &cursor, uint8_t id)
         if (iRow < m_voltageListLength) {
 		    return data::Value(m_voltageList[iRow], data::VALUE_TYPE_FLOAT_VOLT);
         } else {
-            return data::Value(PSTR("-"));
+            return data::Value(EMPTY_VALUE);
         }
 	}
 
@@ -311,7 +312,7 @@ data::Value ChSettingsListsPage::getData(const data::Cursor &cursor, uint8_t id)
         if (iRow < m_currentListLength) {
 		    return data::Value(m_currentList[iRow], data::VALUE_TYPE_FLOAT_AMPER);
         } else {
-            return data::Value(PSTR("-"));
+            return data::Value(EMPTY_VALUE);
         }
 	}
 
