@@ -42,7 +42,7 @@ static bool g_saveProfile = false;
 
 void tick(uint32_t tickCount) {
     if (persist_conf::devConf.flags.profileAutoRecallEnabled) {
-        if (g_saveProfile && scpi::isIdle()) {
+        if (g_saveProfile && scpi::isIdle() && !list::isActive()) {
             DebugTrace("Profile 0 saved!");
             saveAtLocation(0);
             g_saveProfile = false;
@@ -219,7 +219,7 @@ void saveImmediately() {
 }
 
 void flush() {
-    if (g_saveProfile && persist_conf::devConf.flags.profileAutoRecallEnabled) {
+    if (g_saveProfile && persist_conf::devConf.flags.profileAutoRecallEnabled && !list::isActive()) {
         DebugTrace("Profile 0 saved!");
         saveAtLocation(0);
         g_saveProfile = false;

@@ -158,8 +158,6 @@ void triggerFinished() {
     } else {
         g_state = STATE_IDLE;
     }
-
-    profile::enableSave(true);
 }
 
 void setTriggerFinished(Channel &channel) {
@@ -215,7 +213,6 @@ int startImmediately() {
     for (int i = 0; i < CH_NUM; ++i) {
         g_triggerInProgress[i] = true;
     }
-    profile::enableSave(false);
 
     for (int i = 0; i < CH_NUM; ++i) {
         Channel& channel = Channel::get(i);

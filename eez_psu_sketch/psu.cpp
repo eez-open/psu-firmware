@@ -761,6 +761,8 @@ void powerDown() {
 
     if (!g_powerIsUp) return;
 
+    trigger::abort();
+
     channel_dispatcher::setType(channel_dispatcher::TYPE_NONE);
 
     for (int i = 0; i < CH_NUM; ++i) {
