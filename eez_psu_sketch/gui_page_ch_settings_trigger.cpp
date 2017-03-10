@@ -636,7 +636,7 @@ int ChSettingsListsPage::getDirty() {
 
 void ChSettingsListsPage::set() {
     if (getDirty()) {
-        if (list::areListLengthsEquivalent(m_dwellListLength, m_voltageListLength, m_currentListLength)) {
+        if (list::areListLengthsEquivalent(m_dwellListLength, m_voltageListLength, m_currentListLength) || getMaxListLength() == 0) {
             trigger::abort();
 
             list::setDwellList(*g_channel, m_dwellList, m_dwellListLength);
@@ -784,6 +784,8 @@ void ChSettingsListsPage::deleteRow() {
         if (iRow < m_currentListLength) {
             --m_currentListLength;
         }
+    
+        ++m_listVersion;
     }
 }
 
@@ -801,6 +803,7 @@ void ChSettingsListsPage::doClearColumn() {
     } else {
         m_currentListLength = iRow;
     }
+    ++m_listVersion;
 }
 
 void ChSettingsListsPage::clearColumn() {
@@ -816,6 +819,7 @@ void ChSettingsListsPage::doDeleteRows() {
     if (iRow < m_dwellListLength) m_dwellListLength = iRow;
     if (iRow < m_voltageListLength) m_voltageListLength = iRow;
     if (iRow < m_currentListLength) m_currentListLength = iRow;
+    ++m_listVersion;
 }
 
 void ChSettingsListsPage::deleteRows() {
@@ -831,6 +835,7 @@ void ChSettingsListsPage::doDeleteAll() {
     m_voltageListLength = 0;
     m_currentListLength = 0;
     m_iCursor = 0;
+    ++m_listVersion;
 }
 
 void ChSettingsListsPage::deleteAll() {
