@@ -1057,6 +1057,10 @@ bool isBlinking(const Cursor &cursor, uint8_t id) {
         return result;
     }
 
+    if (id == DATA_ID_TRIGGER_IS_INITIATED) {
+        return trigger::isInitiated();
+    }
+
     if (g_focusCursor == cursor && g_focusDataId == id && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
         return true;
     }

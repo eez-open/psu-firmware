@@ -3565,6 +3565,7 @@
                                   },
                                   {
                                     "type": "Button",
+                                    "data": "trigger.isInitiated",
                                     "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
@@ -3894,6 +3895,7 @@
                                   },
                                   {
                                     "type": "Button",
+                                    "data": "trigger.isInitiated",
                                     "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
@@ -4625,6 +4627,7 @@
                                   },
                                   {
                                     "type": "Button",
+                                    "data": "trigger.isInitiated",
                                     "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
@@ -4870,6 +4873,7 @@
                                   },
                                   {
                                     "type": "Button",
+                                    "data": "trigger.isInitiated",
                                     "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
@@ -5536,6 +5540,7 @@
                                   },
                                   {
                                     "type": "Button",
+                                    "data": "trigger.isInitiated",
                                     "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
@@ -6215,6 +6220,7 @@
                                   },
                                   {
                                     "type": "Button",
+                                    "data": "trigger.isInitiated",
                                     "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
@@ -6630,6 +6636,7 @@
                                   },
                                   {
                                     "type": "Button",
+                                    "data": "trigger.isInitiated",
                                     "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
@@ -7245,6 +7252,7 @@
                                   },
                                   {
                                     "type": "Button",
+                                    "data": "trigger.isInitiated",
                                     "action": "trigger.generateManual",
                                     "x": 0,
                                     "y": 0,
@@ -21485,6 +21493,7 @@
                                 },
                                 {
                                   "type": "Button",
+                                  "data": "trigger.isInitiated",
                                   "action": "trigger.generateManual",
                                   "x": 0,
                                   "y": 0,
@@ -21774,6 +21783,7 @@
                               },
                               {
                                 "type": "Button",
+                                "data": "trigger.isInitiated",
                                 "action": "trigger.generateManual",
                                 "x": 0,
                                 "y": 0,
@@ -22097,6 +22107,7 @@
                               },
                               {
                                 "type": "Button",
+                                "data": "trigger.isInitiated",
                                 "action": "trigger.generateManual",
                                 "x": 0,
                                 "y": 0,
@@ -22351,6 +22362,7 @@
                                 },
                                 {
                                   "type": "Button",
+                                  "data": "trigger.isInitiated",
                                   "action": "trigger.generateManual",
                                   "x": 0,
                                   "y": 0,
@@ -22954,6 +22966,7 @@
               },
               {
                 "type": "Button",
+                "data": "trigger.isInitiated",
                 "action": "trigger.generateManual",
                 "x": 0,
                 "y": 0,
@@ -23340,6 +23353,7 @@
               },
               {
                 "type": "Button",
+                "data": "trigger.isInitiated",
                 "action": "trigger.generateManual",
                 "x": 0,
                 "y": 0,
@@ -24088,6 +24102,7 @@
               },
               {
                 "type": "Button",
+                "data": "trigger.isInitiated",
                 "action": "trigger.generateManual",
                 "x": 0,
                 "y": 0,
@@ -24384,6 +24399,7 @@
               },
               {
                 "type": "Button",
+                "data": "trigger.isInitiated",
                 "action": "trigger.generateManual",
                 "x": 0,
                 "y": 0,

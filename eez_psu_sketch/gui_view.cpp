@@ -713,11 +713,13 @@ void drawButtonWidget(const WidgetCursor &widgetCursor) {
 
     widgetCursor.currentState->size = sizeof(WidgetState);
     widgetCursor.currentState->flags.enabled = data::get(widgetCursor.cursor, button_widget->enabled).getInt();
+    widgetCursor.currentState->flags.blinking = data::isBlinking(widgetCursor.cursor, widget->data) && g_isBlinkTime;
     widgetCursor.currentState->data = widget->data ? data::get(widgetCursor.cursor, widget->data) : 0;
 
     bool refresh = !widgetCursor.previousState ||
         widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed ||
         widgetCursor.previousState->flags.enabled != widgetCursor.currentState->flags.enabled ||
+        widgetCursor.previousState->flags.blinking != widgetCursor.currentState->flags.blinking ||
         widgetCursor.previousState->data != widgetCursor.currentState->data;
 
     if (refresh) {
@@ -726,18 +728,20 @@ void drawButtonWidget(const WidgetCursor &widgetCursor) {
 
             if (widgetCursor.currentState->data.isString()) {
                 drawText(widgetCursor.currentState->data.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
-                    widgetCursor.currentState->flags.pressed);
+                    widgetCursor.currentState->flags.pressed,
+                    widgetCursor.currentState->flags.blinking);
             } else {
-                char text[64];
-                widgetCursor.currentState->data.toText(text, sizeof(text));
+                DECL_STRING(text, button_widget->text);
                 drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
-                    widgetCursor.currentState->flags.pressed);
+                    widgetCursor.currentState->flags.pressed,
+                    widgetCursor.currentState->flags.blinking);
             }
         } else {
             DECL_STRING(text, button_widget->text);
             DECL_STYLE(style, widgetCursor.currentState->flags.enabled ? widget->style : button_widget->disabledStyle);
             drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
-                widgetCursor.currentState->flags.pressed);
+                widgetCursor.currentState->flags.pressed,
+                widgetCursor.currentState->flags.blinking);
         }
     }
 }
