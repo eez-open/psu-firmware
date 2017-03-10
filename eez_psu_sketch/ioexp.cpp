@@ -183,7 +183,11 @@ void IOExpander::reg_write(uint8_t reg, uint8_t val) {
     digitalWrite(channel.ioexp_pin, LOW);
     SPI.transfer(IOEXP_WRITE);
     if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
-        SPI.transfer(2 * reg);
+        if (reg % 2) {
+            SPI.transfer(reg);
+        } else {
+            SPI.transfer(2 * reg);
+        }
     } else {
         SPI.transfer(reg);
     }
