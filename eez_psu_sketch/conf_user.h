@@ -30,6 +30,10 @@ Use this header file to override anything from conf.h or conf_advanced.h.
     CHANNEL(2, CH_BOARD_REVISION_R5B10_PARAMS, CH_PINS_2, CH_PARAMS_40V_5A) \
 */
 
+// Select Arduino shield r3B4
+//#undef EEZ_PSU_SELECTED_REVISION
+//#define EEZ_PSU_SELECTED_REVISION EEZ_PSU_REVISION_R3B4
+
 // Enable TFT display with SDD1289 controller
 //#undef DISPLAY_TYPE
 //#define DISPLAY_TYPE TFT_320QVT_1289
