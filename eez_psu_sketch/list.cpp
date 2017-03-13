@@ -41,7 +41,7 @@ static struct {
     uint16_t count;
 
     bool changed;
-} g_channelsLists[CH_NUM];
+} g_channelsLists[CH_MAX];
 
 static struct {
     int32_t counter;
