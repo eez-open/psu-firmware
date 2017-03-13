@@ -730,6 +730,12 @@ void drawButtonWidget(const WidgetCursor &widgetCursor) {
                 drawText(widgetCursor.currentState->data.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
                     widgetCursor.currentState->flags.pressed,
                     widgetCursor.currentState->flags.blinking);
+            } else if (widgetCursor.currentState->data.isConstString()) {
+                char text[64];
+                widgetCursor.currentState->data.toText(text, sizeof(text));
+                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                    widgetCursor.currentState->flags.pressed,
+                    widgetCursor.currentState->flags.blinking);
             } else {
                 DECL_STRING(text, button_widget->text);
                 drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,

@@ -133,6 +133,8 @@ struct Value {
 	bool isString() { return type_ == VALUE_TYPE_STR; }
 	const char *asString() { return str_; }
 
+    bool isConstString() { return type_ == VALUE_TYPE_CONST_STR; }
+
 	uint8_t getPageIndex() { return pageInfo_.pageIndex; }
 	uint8_t getNumPages() { return pageInfo_.numPages; }
 
