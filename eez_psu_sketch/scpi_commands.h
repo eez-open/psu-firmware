@@ -112,6 +112,8 @@
     SCPI_COMMAND("SIMUlator:GUI", scpi_cmd_simulatorGui) \
     SCPI_COMMAND("SIMUlator:EXIT", scpi_cmd_simulatorExit) \
     SCPI_COMMAND("SIMUlator:QUIT", scpi_cmd_simulatorQuit) \
+    SCPI_COMMAND("SIMUlator:PIN1", scpi_cmd_simulatorPin1) \
+    SCPI_COMMAND("SIMUlator:PIN1?", scpi_cmd_simulatorPin1Q) \
     SCPI_COMMAND("[SOURce#]:CURRent[:LEVel][:IMMediate][:AMPLitude]", scpi_cmd_sourceCurrentLevelImmediateAmplitude) \
     SCPI_COMMAND("[SOURce#]:CURRent[:LEVel][:IMMediate][:AMPLitude]?", scpi_cmd_sourceCurrentLevelImmediateAmplitudeQ) \
     SCPI_COMMAND("[SOURce#]:VOLTage[:LEVel][:IMMediate][:AMPLitude]", scpi_cmd_sourceVoltageLevelImmediateAmplitude) \

@@ -72641,6 +72641,12 @@
           },
           {
             "name": "SIMUlator:QUIT"
+          },
+          {
+            "name": "SIMUlator:PIN1"
+          },
+          {
+            "name": "SIMUlator:PIN1?"
           }
         ]
       },

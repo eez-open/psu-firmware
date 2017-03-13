@@ -355,6 +355,22 @@ scpi_result_t scpi_cmd_simulatorQuit(scpi_t *context) {
     return scpi_cmd_simulatorExit(context);
 }
 
+scpi_result_t scpi_cmd_simulatorPin1(scpi_t *context) {
+    bool value;
+    if (!SCPI_ParamBool(context, &value, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    digitalWrite(EXT_TRIG, value ? 1 : 0);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_simulatorPin1Q(scpi_t * context) {
+    SCPI_ResultBool(context, digitalRead(EXT_TRIG) ? 1 : 0);
+    return SCPI_RES_OK;
+}
+
 }
 }
 } // namespace eez::psu::scpi
@@ -440,6 +456,15 @@ scpi_result_t scpi_cmd_simulatorQuit(scpi_t *context) {
     return SCPI_RES_ERR;
 }
 
+scpi_result_t scpi_cmd_simulatorPin1(scpi_t *context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_simulatorPin1Q(scpi_t * context) {
+    SCPI_ErrorPush(context, SCPI_ERROR_UNDEFINED_HEADER);
+    return SCPI_RES_ERR;
+}
 
 }
 }

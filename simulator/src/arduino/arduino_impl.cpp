@@ -44,6 +44,9 @@ int digitalRead(uint8_t pin) {
 void digitalWrite(uint8_t pin, uint8_t state) {
     pins[pin] = state;
     chips::select(pin, state);
+    if (interrupt_callbacks[pin]) {
+        interrupt_callbacks[pin]();
+    }
 }
 
 float temp_sensor_cels_to_volt(float cels, float p1_volt, float p1_cels, float p2_volt, float p2_cels) {
