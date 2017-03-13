@@ -21,6 +21,7 @@
 
 #include "calibration.h"
 #include "channel_dispatcher.h"
+#include "profile.h"
 
 namespace eez {
 namespace psu {
@@ -109,6 +110,7 @@ scpi_result_t scpi_cmd_outputTrackState(scpi_t * context) {
 
     if (enable != channel_dispatcher::isTracked()) {
         channel_dispatcher::setType(enable ? channel_dispatcher::TYPE_TRACKED : channel_dispatcher::TYPE_NONE);
+        profile::save();
     }
 
     return SCPI_RES_OK;

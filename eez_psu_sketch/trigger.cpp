@@ -282,7 +282,6 @@ bool isInitiated() {
 void abort() {
     list::abort();
     g_state = STATE_IDLE;
-    profile::enableSave(true);
 }
 
 void tick(uint32_t tick_usec) {

@@ -138,6 +138,7 @@ data::Value ChSettingsAdvCouplingPage::getData(const data::Cursor &cursor, uint8
 
 void ChSettingsAdvCouplingPage::uncouple() {
     channel_dispatcher::setType(channel_dispatcher::TYPE_NONE);
+    profile::save();
 	infoMessageP(PSTR("Channels uncoupled!"));
 }
 
@@ -154,6 +155,7 @@ void ChSettingsAdvCouplingPage::setSeriesInfo() {
 void ChSettingsAdvCouplingPage::setParallel() {
     if (selectedMode == 0) {
         if (channel_dispatcher::setType(channel_dispatcher::TYPE_PARALLEL)) {
+            profile::save();
 	        infoMessageP(PSTR("Channels coupled in parallel!"), popPage);
         }
     }
@@ -162,6 +164,7 @@ void ChSettingsAdvCouplingPage::setParallel() {
 void ChSettingsAdvCouplingPage::setSeries() {
     if (selectedMode == 1) {
         if (channel_dispatcher::setType(channel_dispatcher::TYPE_SERIES)) {
+            profile::save();
     	    infoMessageP(PSTR("Channels coupled in series!"), popPage);
         }
     }
@@ -172,9 +175,11 @@ void ChSettingsAdvCouplingPage::setSeries() {
 void ChSettingsAdvTrackingPage::toggleTrackingMode() {
     if (channel_dispatcher::isTracked()) {
         channel_dispatcher::setType(channel_dispatcher::TYPE_NONE);
+        profile::save();
         infoMessageP(PSTR("Tracking disabled!"));
     } else {
         channel_dispatcher::setType(channel_dispatcher::TYPE_TRACKED);
+        profile::save();
 	    infoMessageP(PSTR("Tracking enabled!"));
     }
 }

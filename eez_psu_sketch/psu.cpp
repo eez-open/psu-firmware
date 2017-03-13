@@ -499,31 +499,47 @@ static bool loadAutoRecallProfile(profile::Parameters *profile, int *location) {
     if (persist_conf::isProfileAutoRecallEnabled()) {
         *location = persist_conf::getProfileAutoRecallLocation();
         if (profile::load(*location, profile)) {
-            bool disableOutputs = false;
+            bool outputEnabled = false;
 
-            if (persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled() || !g_bootTestSuccess) {
-                disableOutputs = true;
-            } else {
-                if (*location != 0) {
-                    profile::Parameters defaultProfile;
-                    if (profile::load(0, &defaultProfile)) {
-                        for (int i = 0; i < CH_NUM; ++i) {
-                            if (!util::equal(profile->channels[i].u_set, defaultProfile.channels[i].u_set, CHANNEL_VALUE_PRECISION) ||
-                                !util::equal(profile->channels[i].i_set, defaultProfile.channels[i].i_set, CHANNEL_VALUE_PRECISION)) {
-                                disableOutputs = true;
-                                event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
-                                break;
-                            }
-                        }
-                    } else {
-                        disableOutputs = true;
-                    }
+            for (int i = 0; i < CH_NUM; ++i) {
+                if (profile->channels[i].flags.output_enabled) {
+                    outputEnabled = true;
+                    break;
                 }
             }
 
-            if (disableOutputs) {
-                for (int i = 0; i < CH_NUM; ++i) {
-                    profile->channels[i].flags.output_enabled = false;
+            if (outputEnabled) {
+                bool disableOutputs = false;
+
+                if (persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled() || !g_bootTestSuccess) {
+                    disableOutputs = true;
+                } else {
+                    if (*location != 0) {
+                        profile::Parameters defaultProfile;
+                        if (profile::load(0, &defaultProfile)) {
+                            if (profile->flags.channelsCoupling != defaultProfile.flags.channelsCoupling) {
+                                disableOutputs = true;
+                                event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
+                            } else {
+                                for (int i = 0; i < CH_NUM; ++i) {
+                                    if (!util::equal(profile->channels[i].u_set, defaultProfile.channels[i].u_set, CHANNEL_VALUE_PRECISION) ||
+                                        !util::equal(profile->channels[i].i_set, defaultProfile.channels[i].i_set, CHANNEL_VALUE_PRECISION)) {
+                                        disableOutputs = true;
+                                        event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
+                                        break;
+                                    }
+                                }
+                            }
+                        } else {
+                            disableOutputs = true;
+                        }
+                    }
+                }
+
+                if (disableOutputs) {
+                    for (int i = 0; i < CH_NUM; ++i) {
+                        profile->channels[i].flags.output_enabled = false;
+                    }
                 }
             }
 

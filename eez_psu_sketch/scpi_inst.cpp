@@ -125,6 +125,7 @@ scpi_result_t scpi_cmd_instrumentCoupleTracking(scpi_t * context) {
     }
 
     channel_dispatcher::setType((channel_dispatcher::Type)type);
+    profile::save();
 
     return SCPI_RES_OK;
 }
