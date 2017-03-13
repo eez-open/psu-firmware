@@ -27,8 +27,7 @@ void eez_psu_R5B12_init() {
     // disable WATCHDOG
     pinMode(WATCHDOG, INPUT);
 
-    //pinMode(WIFI_CE, OUTPUT);
-    pinMode(SYNC_MASTER, INPUT);
+    pinMode(SYNC_MASTER, OUTPUT);
 
     pinMode(FAN_PWM, OUTPUT);
     pinMode(LCD_BRIGHTNESS, OUTPUT);
@@ -74,6 +73,8 @@ void eez_psu_R5B12_init() {
     pinMode(DAC2_SELECT, OUTPUT);
     pinMode(ADC2_SELECT, OUTPUT);
     pinMode(EEPROM_SELECT, OUTPUT);
+    pinMode(LCD_INT, INPUT);
+    pinMode(LCD_PD, OUTPUT);
     pinMode(LCDSD_CS, OUTPUT);
     pinMode(TEMP_ANALOG, INPUT);
     pinMode(PWR_DIRECT, OUTPUT);

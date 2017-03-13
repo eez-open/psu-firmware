@@ -27,8 +27,7 @@ void eez_psu_R3B4_init() {
     // disable WATCHDOG
     pinMode(WATCHDOG, INPUT);
 
-    //pinMode(WIFI_CE, OUTPUT);
-    pinMode(SYNC_MASTER, INPUT);
+    pinMode(SYNC_MASTER, OUTPUT);
 
     pinMode(FAN_PWM, OUTPUT);
     pinMode(LCD_BRIGHTNESS, OUTPUT);
