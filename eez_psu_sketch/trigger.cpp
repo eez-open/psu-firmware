@@ -235,8 +235,10 @@ int startImmediately() {
             if (channel.getVoltageTriggerMode() == TRIGGER_MODE_LIST) {
                 list::executionStart(channel);
             } else {
-                channel_dispatcher::setVoltage(channel, g_levels[i].u);
-                channel_dispatcher::setCurrent(channel, g_levels[i].i);
+                if (channel.getVoltageTriggerMode() == TRIGGER_MODE_STEP) {
+                    channel_dispatcher::setVoltage(channel, g_levels[i].u);
+                    channel_dispatcher::setCurrent(channel, g_levels[i].i);
+                }
                 setTriggerFinished(channel);
             }
         }
