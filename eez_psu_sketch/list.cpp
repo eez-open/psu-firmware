@@ -158,6 +158,10 @@ bool areVoltageAndCurrentListLengthsEquivalent(Channel &channel) {
 
 bool loadList(Channel &channel, const char *filePath, int *err) {
 #if OPTION_SD_CARD
+    if (sd_card::g_testResult != TEST_OK) {
+        return false;
+    }
+
     File file = SD.open(filePath, FILE_READ);
 
     if (!file) {
@@ -270,6 +274,10 @@ bool loadList(Channel &channel, const char *filePath, int *err) {
 
 bool saveList(Channel &channel, const char *filePath, int *err) {
 #if OPTION_SD_CARD
+    if (sd_card::g_testResult != TEST_OK) {
+        return false;
+    }
+
     sd_card::makeParentDir(filePath);
 
     SD.remove(filePath);
