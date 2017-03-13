@@ -167,11 +167,19 @@ void printDirectory(File dir, int level) {
 }
 
 void dir() {
+    if (sd_card::g_testResult != TEST_OK) {
+        return;
+    }
+
     File root = SD.open("/");
     printDirectory(root, 0);
 }
 
 void dumpFile(const char *path) {
+    if (sd_card::g_testResult != TEST_OK) {
+        return;
+    }
+
     File file = SD.open(path, FILE_READ);
 
     if (!file) {
