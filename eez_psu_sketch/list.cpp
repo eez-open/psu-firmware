@@ -156,6 +156,33 @@ bool areVoltageAndCurrentListLengthsEquivalent(Channel &channel) {
     return areListLengthsEquivalent(g_channelsLists[channel.index - 1].voltageListLength, g_channelsLists[channel.index - 1].currentListLength);
 }
 
+int checkLimits() {
+    for (int i = 0; i < CH_NUM; ++i) {
+        Channel &channel = Channel::get(i);
+
+        uint16_t voltageListLength = g_channelsLists[i].voltageListLength;
+        uint16_t currentListLength = g_channelsLists[i].currentListLength;
+
+        for (int j = 0; j < voltageListLength || j < currentListLength; ++j) {
+            float voltage = g_channelsLists[i].voltageList[j % voltageListLength];
+	        if (util::greater(voltage, channel_dispatcher::getULimit(channel), CHANNEL_VALUE_PRECISION)) {
+                return SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
+	        }
+
+            float current = g_channelsLists[i].currentList[j % currentListLength];
+            if (util::greater(current, channel_dispatcher::getILimit(channel), CHANNEL_VALUE_PRECISION)) {
+                return SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
+	        }
+
+	        if (util::greater(voltage * current, channel_dispatcher::getPowerLimit(channel), CHANNEL_VALUE_PRECISION)) {
+                return SCPI_ERROR_POWER_LIMIT_EXCEEDED;
+            }
+        }
+    }
+
+    return 0;
+}
+
 bool loadList(Channel &channel, const char *filePath, int *err) {
 #if OPTION_SD_CARD
     if (sd_card::g_testResult != TEST_OK) {
@@ -395,35 +422,26 @@ void tick(uint32_t tick_usec) {
                 }
 
                 float voltage = g_channelsLists[i].voltageList[g_execution[i].it % g_channelsLists[i].voltageListLength];
-
-	            if (voltage > channel_dispatcher::getULimit(channel)) {
+	            if (util::greater(voltage, channel_dispatcher::getULimit(channel), CHANNEL_VALUE_PRECISION)) {
                     generateError(SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
                     abort();
                     return;
 	            }
 
-	            if (voltage * channel_dispatcher::getISet(channel) > channel_dispatcher::getPowerLimit(channel)) {
+                float current = g_channelsLists[i].currentList[g_execution[i].it % g_channelsLists[i].currentListLength];
+                if (util::greater(current, channel_dispatcher::getILimit(channel), CHANNEL_VALUE_PRECISION)) {
+                    generateError(SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
+                    abort();
+                    return;
+	            }
+
+	            if (util::greater(voltage * current, channel_dispatcher::getPowerLimit(channel), CHANNEL_VALUE_PRECISION)) {
                     generateError(SCPI_ERROR_POWER_LIMIT_EXCEEDED);
                     abort();
                     return;
                 }
 
                 channel_dispatcher::setVoltage(channel, voltage);
-
-                float current = g_channelsLists[i].currentList[g_execution[i].it % g_channelsLists[i].currentListLength];
-
-                if (current > channel_dispatcher::getILimit(channel)) {
-                    generateError(SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
-                    abort();
-                    return;
-	            }
-
-                if (current * channel_dispatcher::getUSet(channel) > channel_dispatcher::getPowerLimit(channel)) {
-                    generateError(SCPI_ERROR_POWER_LIMIT_EXCEEDED);
-                    abort();
-                    return;
-                }
-
                 channel_dispatcher::setCurrent(channel, current);
 
                 uint32_t dwell = (uint32_t)round(g_channelsLists[i].dwellList[g_execution[i].it % g_channelsLists[i].dwellListLength] * 1000000L);

@@ -972,12 +972,12 @@ bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
             return false;
         }
         
-        if (!util::lessOrEqual(value.getFloat(), channel_dispatcher::getULimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
+        if (util::greater(value.getFloat(), channel_dispatcher::getULimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
             if (error) *error = SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
             return false;
         }
         
-        if (!util::lessOrEqual(value.getFloat() * channel_dispatcher::getISet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
+        if (util::greater(value.getFloat() * channel_dispatcher::getISet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
@@ -991,12 +991,12 @@ bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
             return false;
         }
         
-        if (!util::lessOrEqual(value.getFloat(), channel_dispatcher::getILimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
+        if (util::greater(value.getFloat(), channel_dispatcher::getILimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
             if (error) *error = SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
             return false;
         }
         
-        if (!util::lessOrEqual(value.getFloat() * channel_dispatcher::getUSet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
+        if (util::greater(value.getFloat() * channel_dispatcher::getUSet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }

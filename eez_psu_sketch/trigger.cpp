@@ -174,7 +174,7 @@ void setTriggerFinished(Channel &channel) {
     }
 }
 
-int startImmediately() {
+int checkTrigger() {
     for (int i = 0; i < CH_NUM; ++i) {
         Channel& channel = Channel::get(i);
 
@@ -192,21 +192,35 @@ int startImmediately() {
                     if (!list::areListLengthsEquivalent(channel)) {
                         return SCPI_ERROR_LIST_LENGTHS_NOT_EQUIVALENT;
                     }
+
+                    int err = list::checkLimits();
+                    if (err) {
+                        return err;
+                    }
                 } else {
-	                if (g_levels[i].u > channel_dispatcher::getULimit(channel)) {
+	                if (util::greater(g_levels[i].u, channel_dispatcher::getULimit(channel), CHANNEL_VALUE_PRECISION)) {
                         return SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
 	                }
 
-                    if (g_levels[i].i > channel_dispatcher::getILimit(channel)) {
+                    if (util::greater(g_levels[i].i, channel_dispatcher::getILimit(channel), CHANNEL_VALUE_PRECISION)) {
                         return SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
 	                }
 
-	                if (g_levels[i].u * g_levels[i].i > channel_dispatcher::getPowerLimit(channel)) {
+	                if (util::greater(g_levels[i].u * g_levels[i].i, channel_dispatcher::getPowerLimit(channel), CHANNEL_VALUE_PRECISION)) {
                         return SCPI_ERROR_POWER_LIMIT_EXCEEDED;
                     }
                 }
             }
         }
+    }
+
+    return 0;
+}
+
+int startImmediately() {
+    int err = checkTrigger();
+    if (err) {
+        return err;
     }
 
     g_state = STATE_EXECUTING;
@@ -235,6 +249,10 @@ int initiate() {
     if (persist_conf::devConf2.triggerSource == SOURCE_IMMEDIATE) {
         return startImmediately();
     } else {
+        int err = checkTrigger();
+        if (err) {
+            return err;
+        }
         g_state = STATE_INITIATED;
     }
     return SCPI_RES_OK;

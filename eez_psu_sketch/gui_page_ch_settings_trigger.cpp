@@ -440,29 +440,43 @@ void ChSettingsListsPage::doValueSet(float value) {
     uint8_t dataId = getDataIdAtCursor();
 
     if (dataId != DATA_ID_CHANNEL_LIST_DWELL) {
-        float power = value;
-
         int iRow = getRowIndex();
 
+        float power = 0;
+
         if (dataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
-            if (iRow < m_currentListLength) {
-                power *= m_currentList[iRow];
-            } else if (m_currentListLength > 0) {
-                power *= m_currentList[0];
+            if (iRow == 0 && m_voltageListLength <= 1) {
+                for (int i = 0; i < m_currentListLength; ++i) {
+                    if (util::greater(value * m_currentList[i], g_channel->getPowerMaxLimit(), CHANNEL_VALUE_PRECISION)) {
+                        errorMessageP(PSTR("Power limit exceeded"));
+                        return;
+                    }
+                }
             } else {
-                power = 0;
+                if (iRow < m_currentListLength) {
+                    power = value * m_currentList[iRow];
+                } else if (m_currentListLength > 0) {
+                    power = value * m_currentList[0];
+                }
             }
         } else {
-            if (iRow < m_voltageListLength) {
-                power *= m_voltageList[iRow];
-            } else if (m_voltageListLength > 0) {
-                power *= m_voltageList[0];
+            if (iRow == 0 && m_currentListLength <= 1) {
+                for (int i = 0; i < m_voltageListLength; ++i) {
+                    if (util::greater(value * m_voltageList[i], g_channel->getPowerMaxLimit(), CHANNEL_VALUE_PRECISION)) {
+                        errorMessageP(PSTR("Power limit exceeded"));
+                        return;
+                    }
+                }
             } else {
-                power = 0;
+                if (iRow < m_voltageListLength) {
+                    power = value * m_voltageList[iRow];
+                } else if (m_voltageListLength > 0) {
+                    power = value * m_voltageList[0];
+                }
             }
         }
 
-        if (util::greater(power, g_channel->getPowerMaxLimit(), data::getPrecision(data::VALUE_TYPE_FLOAT_WATT))) {
+        if (util::greater(power, g_channel->getPowerMaxLimit(), CHANNEL_VALUE_PRECISION)) {
             errorMessageP(PSTR("Power limit exceeded"));
             return;
         }
