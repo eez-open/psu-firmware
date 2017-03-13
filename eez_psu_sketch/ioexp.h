@@ -74,7 +74,7 @@ public:
     static const uint8_t REG_IODIR = 0x00;
     static const uint8_t REG_IPOL = 0x01;
     static const uint8_t REG_GPINTEN = 0x02;
-    static const uint8_t REG_DEVAL = 0x03;
+    static const uint8_t REG_DEFVAL = 0x03;
     static const uint8_t REG_INTCON = 0x04;
     static const uint8_t REG_IOCON = 0x05;
     static const uint8_t REG_GPPU = 0x06;
@@ -83,7 +83,31 @@ public:
     static const uint8_t REG_GPIO = 0x09;
     static const uint8_t REG_OLAT = 0x0A;
 
-    static const size_t NUM_REGISTERS = 2 * (REG_OLAT + 1);
+    static const uint8_t REG_IODIRA = 0x00;
+    static const uint8_t REG_IPOLA = 0x02;
+    static const uint8_t REG_GPINTENA = 0x04;
+    static const uint8_t REG_DEFVALA = 0x06;
+    static const uint8_t REG_INTCONA = 0x08;
+    static const uint8_t REG_IOCONA = 0x0A;
+    static const uint8_t REG_GPPUA = 0x0C;
+    static const uint8_t REG_INTFA = 0x0E;
+    static const uint8_t REG_INTCAPA = 0x10;
+    static const uint8_t REG_GPIOA = 0x12;
+    static const uint8_t REG_OLATA = 0x14;
+
+    static const uint8_t REG_IODIRB = 0x01;
+    static const uint8_t REG_IPOLB = 0x03;
+    static const uint8_t REG_GPINTENB = 0x05;
+    static const uint8_t REG_DEFVALB = 0x07;
+    static const uint8_t REG_INTCONB = 0x09;
+    static const uint8_t REG_IOCONB = 0x0B;
+    static const uint8_t REG_GPPUB = 0x16;
+    static const uint8_t REG_INTFB = 0x0F;
+    static const uint8_t REG_INTCAPB = 0x11;
+    static const uint8_t REG_GPIOB = 0x13;
+    static const uint8_t REG_OLATB = 0x15;
+
+    static const size_t NUM_REGISTERS = REG_OLATB + 1;
 
     psu::TestResult g_testResult;
 
@@ -104,12 +128,12 @@ public:
 
 private:
     Channel &channel;
-	uint8_t gpio0;
-    uint8_t gpio1;
+	uint8_t gpioa;
+    uint8_t gpiob;
 
 	uint8_t getRegInitValue(int i);
-    uint8_t reg_read(uint8_t reg, bool regb = false);
-    void reg_write(uint8_t reg, uint8_t val, bool regb = false);
+    uint8_t reg_read(uint8_t reg);
+    void reg_write(uint8_t reg, uint8_t val);
 };
 
 }

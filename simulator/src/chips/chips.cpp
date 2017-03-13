@@ -537,7 +537,11 @@ uint8_t IOExpanderChip::transfer(uint8_t data) {
         state = READ_REGISTER_VALUE;
     }
     else if (state == READ_REGISTER_VALUE) {
-        if (register_index == IOExpander::REG_GPIO) {
+        Channel &channel = Channel::get(this == &ioexp_chip1 ? 0 : 1);
+
+        if (channel.boardRevision == CH_BOARD_REVISION_R5B12 && register_index == IOExpander::REG_GPIOA ||
+            channel.boardRevision != CH_BOARD_REVISION_R5B12 && register_index == IOExpander::REG_GPIO) 
+        {
             result = register_values[register_index];
 
             if (pwrgood) {
@@ -546,7 +550,6 @@ uint8_t IOExpanderChip::transfer(uint8_t data) {
                 result &= ~(1 << IOExpander::IO_BIT_IN_PWRGOOD);
             }
 
-            Channel &channel = Channel::get(this == &ioexp_chip1 ? 0 : 1);
             if (channel.getFeatures() & CH_FEATURE_RPOL) {
                 if (!rpol) {
                     result |= 1 << IOExpander::IO_BIT_IN_RPOL;

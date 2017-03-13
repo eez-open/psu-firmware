@@ -26,21 +26,36 @@ namespace psu {
 
 #define IPOL    0B00000000 // no pin is inverted
 #define GPINTEN 0B00000000 // no interrupts
-#define DEVAL   0B00000000 // 
+#define DEFVAL  0B00000000 // 
 #define INTCON  0B00000000 // 
 #define IOCON   0B00100000 // sequential operation disabled, hw addressing disabled
 #define GPPU    0B00100100 // pull up with 100K resistor pins 2 and 5
 
-static const uint8_t REG_VALUES[] = {
+static const uint8_t REG_VALUES_8[] = {
     // reg                   value    test
     IOExpander::REG_IODIR,   0,       1,
     IOExpander::REG_IPOL,    IPOL,    1,
     IOExpander::REG_GPINTEN, GPINTEN, 1,
-    IOExpander::REG_DEVAL,   DEVAL,   1,
+    IOExpander::REG_DEFVAL,  DEFVAL,   1,
     IOExpander::REG_INTCON,  INTCON,  1,
     IOExpander::REG_IOCON,   IOCON,   1,
     IOExpander::REG_GPPU,    GPPU,    1,
     IOExpander::REG_GPIO,    0,       0,
+    0xFF
+};
+
+static const uint8_t REG_VALUES_16[] = {
+    // reg                   value    test
+    IOExpander::REG_IODIRA,   0,       1,
+    IOExpander::REG_IODIRB,   0,       1,
+    IOExpander::REG_IPOLA,    IPOL,    1,
+    IOExpander::REG_GPINTENA, GPINTEN, 1,
+    IOExpander::REG_DEFVALA,  DEFVAL,  1,
+    IOExpander::REG_INTCONA,  INTCON,  1,
+    IOExpander::REG_IOCONA,   IOCON,   1,
+    IOExpander::REG_GPPUA,    GPPU,    1,
+    IOExpander::REG_GPIOA,    0,       0,
+    IOExpander::REG_GPIOB,    0,       0,
     0xFF
 };
 
@@ -57,41 +72,54 @@ IOExpander::IOExpander(
 {
     g_testResult = psu::TEST_SKIPPED;
 
-    gpio0 = channel.ioexp_gpio_init;
-    gpio1 = 0;
+    gpioa = channel.ioexp_gpio_init;
+    gpiob = 0;
 }
 
 uint8_t IOExpander::getRegInitValue(int i) {
-	if (REG_VALUES[i] == IOExpander::REG_IODIR) {
-        return channel.ioexp_iodir;
-    } else if (REG_VALUES[i] == IOExpander::REG_GPIO) {
-        return gpio0;
+    if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
+	    if (REG_VALUES_16[i] == IOExpander::REG_IODIRA) {
+            return channel.ioexp_iodir;
+        } else if (REG_VALUES_16[i] == IOExpander::REG_IODIRB) {
+            return 0; // // bits 8-15 are all output
+        } else if (REG_VALUES_16[i] == IOExpander::REG_GPIOA) {
+            return gpioa;
+        } else if (REG_VALUES_16[i] == IOExpander::REG_GPIOB) {
+            return gpiob;
+        } else {
+            return REG_VALUES_16[i + 1];
+        }
     } else {
-        return REG_VALUES[i + 1];
+	    if (REG_VALUES_8[i] == IOExpander::REG_IODIR) {
+            return channel.ioexp_iodir;
+        } else if (REG_VALUES_8[i] == IOExpander::REG_GPIO) {
+            return gpioa;
+        } else {
+            return REG_VALUES_8[i + 1];
+        }
     }
 }
 
 void IOExpander::init() {
-    for (int i = 0; REG_VALUES[i] != 0xFF; i += 3) {
-		reg_write(REG_VALUES[i], getRegInitValue(i));
-    }
+    const uint8_t *regValues = channel.boardRevision == CH_BOARD_REVISION_R5B12 ? REG_VALUES_16 : REG_VALUES_8;
 
-    if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
-        reg_write(2 * REG_IODIR + 1, 0, true); // bits 8-15 are all output
-        reg_write(2 * REG_GPIO + 1, 0, true);
+    for (int i = 0; regValues[i] != 0xFF; i += 3) {
+		reg_write(regValues[i], getRegInitValue(i));
     }
 }
 
 bool IOExpander::test() {
     g_testResult = psu::TEST_OK;
 
-    for (int i = 0; REG_VALUES[i] != 0xFF; i += 3) {
-        if (REG_VALUES[i] == IOExpander::REG_IODIR || REG_VALUES[i + 2]) {
-            uint8_t value = reg_read(REG_VALUES[i]);
+    const uint8_t *regValues = channel.boardRevision == CH_BOARD_REVISION_R5B12 ? REG_VALUES_16 : REG_VALUES_8;
+
+    for (int i = 0; regValues[i] != 0xFF; i += 3) {
+        if (regValues[i + 2]) {
+            uint8_t value = reg_read(regValues[i]);
             uint8_t compare_with_value = getRegInitValue(i);
             if (value != compare_with_value) {
                 DebugTraceF("Ch%d IO expander reg check failure: reg=%d, expected=%d, got=%d",
-                    channel.index, (int)REG_VALUES[i], (int)compare_with_value, (int)value);
+                    channel.index, (int)regValues[i], (int)compare_with_value, (int)value);
 
                 g_testResult = psu::TEST_FAILED;
                 break;
@@ -137,7 +165,11 @@ void IOExpander::tick(uint32_t tick_usec) {
 }
 
 uint8_t IOExpander::readGpio() {
-	return reg_read(REG_GPIO);
+    if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
+    	return reg_read(REG_GPIOA);
+    } else {
+        return reg_read(REG_GPIO);
+    }
 }
 
 bool IOExpander::testBit(int io_bit) {
@@ -147,34 +179,26 @@ bool IOExpander::testBit(int io_bit) {
 
 void IOExpander::changeBit(int io_bit, bool set) {
     if (io_bit < 8) {
-        uint8_t newValue = set ? (gpio0 | (1 << io_bit)) : (gpio0 & ~(1 << io_bit));
-	    if (gpio0 != newValue) {
-		    gpio0 = newValue;
-			reg_write(REG_GPIO, gpio0);
+        uint8_t newValue = set ? (gpioa | (1 << io_bit)) : (gpioa & ~(1 << io_bit));
+	    if (gpioa != newValue) {
+		    gpioa = newValue;
+			reg_write(channel.boardRevision == CH_BOARD_REVISION_R5B12 ? REG_GPIOA : REG_GPIO, gpioa);
 	    }
     } else {
-        uint8_t newValue = set ? (gpio1 | (1 << (io_bit - 8))) : (gpio1 & ~(1 << (io_bit - 8)));
-	    if (gpio1 != newValue) {
-		    gpio1 = newValue;
-			reg_write(2 * REG_GPIO + 1, gpio1, true);
+        uint8_t newValue = set ? (gpiob | (1 << (io_bit - 8))) : (gpiob & ~(1 << (io_bit - 8)));
+	    if (gpiob != newValue) {
+		    gpiob = newValue;
+			reg_write(REG_GPIOB, gpiob);
 	    }
     }
 }
 
-uint8_t IOExpander::reg_read(uint8_t reg, bool regb) {
+uint8_t IOExpander::reg_read(uint8_t reg) {
     SPI_beginTransaction(MCP23S08_SPI);
     digitalWrite(channel.isolator_pin, ISOLATOR_ENABLE);
     digitalWrite(channel.ioexp_pin, LOW);
     SPI.transfer(IOEXP_READ);
-    if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
-        if (regb) {
-            SPI.transfer(reg);
-        } else {
-            SPI.transfer(2 * reg);
-        }
-    } else {
-        SPI.transfer(reg);
-    }
+    SPI.transfer(reg);
     uint8_t result = SPI.transfer(0);
     digitalWrite(channel.ioexp_pin, HIGH);
     digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
@@ -182,19 +206,11 @@ uint8_t IOExpander::reg_read(uint8_t reg, bool regb) {
     return result;
 }
 
-void IOExpander::reg_write(uint8_t reg, uint8_t val, bool regb) {
+void IOExpander::reg_write(uint8_t reg, uint8_t val) {
     SPI_beginTransaction(MCP23S08_SPI);
     digitalWrite(channel.ioexp_pin, LOW);
     SPI.transfer(IOEXP_WRITE);
-    if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
-        if (regb) {
-            SPI.transfer(reg);
-        } else {
-            SPI.transfer(2 * reg);
-        }
-    } else {
-        SPI.transfer(reg);
-    }
+    SPI.transfer(reg);
     SPI.transfer(val);
     digitalWrite(channel.ioexp_pin, HIGH);
     SPI_endTransaction();
