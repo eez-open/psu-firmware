@@ -1396,15 +1396,21 @@ void Channel::setVoltage(float value) {
 
 void Channel::doSetCurrent(float value) {
     if (boardRevision == CH_BOARD_REVISION_R5B12) {
-        if (!dac.isTesting() && !calibration::isEnabled()) {
-            if (util::greater(value, 0.5, CHANNEL_VALUE_PRECISION)) {
+        if (dac.isTesting() || calibration::isEnabled() || util::greater(value, 0.5, CHANNEL_VALUE_PRECISION)) {
+            if (flags.currentRange500mA) {
                 // 5A
+                flags.currentRange500mA = 0;
                 I_MAX *= 10;
+                CURRENT_GND_OFFSET *= 10;
                 ioexp.changeBit(IOExpander::IO_BIT_5A, true);
                 ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
-            } else {
+            }
+        } else {
+            if (!flags.currentRange500mA) {
                 // 500mA
+                flags.currentRange500mA = 1;
                 I_MAX /= 10;
+                CURRENT_GND_OFFSET /= 10;
                 ioexp.changeBit(IOExpander::IO_BIT_500mA, true);
                 ioexp.changeBit(IOExpander::IO_BIT_5A, false);
             }

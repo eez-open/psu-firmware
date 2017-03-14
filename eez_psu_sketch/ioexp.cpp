@@ -73,7 +73,7 @@ IOExpander::IOExpander(
     g_testResult = psu::TEST_SKIPPED;
 
     gpioa = channel.ioexp_gpio_init;
-    gpiob = 0;
+    gpiob = 0B00000001; // 5A
 }
 
 uint8_t IOExpander::getRegInitValue(int i) {
