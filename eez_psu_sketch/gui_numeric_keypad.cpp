@@ -153,6 +153,22 @@ data::ValueType NumericKeypad::getEditUnit() {
     return m_options.editUnit;
 }
 
+data::ValueType NumericKeypad::getValueUnit() {
+    if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT) {
+        return data::VALUE_TYPE_FLOAT_VOLT;
+    } 
+   
+    if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER) {
+        return data::VALUE_TYPE_FLOAT_AMPER;
+    }
+    
+    if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_SECOND) {
+        return data::VALUE_TYPE_FLOAT_SECOND;
+    }
+    
+    return m_options.editUnit;
+}
+
 char NumericKeypad::getDotSign() {
 	if (m_options.editUnit == data::VALUE_TYPE_TIME_ZONE) {
 		return ':';
@@ -699,9 +715,9 @@ void NumericKeypad::ok() {
 			float value = getValue();
 
 			if (util::less(value, m_options.min, data::getPrecision(m_startValue.getType()))) {
-				errorMessage(0, data::Value::LessThenMinMessage(m_options.min, m_startValue.getType()));
+				errorMessage(0, data::Value::LessThenMinMessage(m_options.min, getValueUnit()));
 			} else if (util::greater(value, m_options.max, data::getPrecision(m_startValue.getType()))) {
-				errorMessage(0, data::Value::GreaterThenMaxMessage(m_options.max, m_startValue.getType()));
+				errorMessage(0, data::Value::GreaterThenMaxMessage(m_options.max, getValueUnit()));
 			} else {
 				((void (*)(float))m_okCallback)(value);
 			}

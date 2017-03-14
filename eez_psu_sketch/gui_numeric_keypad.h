@@ -77,6 +77,7 @@ public:
     bool isEditing();
 
     data::ValueType getEditUnit();
+    data::ValueType getValueUnit();
     void getKeypadText(char *text);
     bool getText(char *text, int count);
     void switchToMilli();

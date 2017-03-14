@@ -180,6 +180,11 @@ void onSetRemarkOk(char *remark) {
 }
 
 void set() {
+    if (!psu::calibration::isEnabled()) {
+        setPage(PAGE_ID_MAIN);
+        return;
+    }
+
     if (g_stepNum < 6) {
         switch (g_stepNum) {
         case 0: psu::calibration::g_voltage.setLevel(psu::calibration::LEVEL_MIN); break;
@@ -225,6 +230,11 @@ void set() {
 }
 
 void previousStep() {
+    if (!psu::calibration::isEnabled()) {
+        setPage(PAGE_ID_MAIN);
+        return;
+    }
+
     if (g_stepNum > 0) {
         --g_stepNum;
         replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP);
@@ -232,6 +242,11 @@ void previousStep() {
 }
 
 void nextStep() {
+    if (!psu::calibration::isEnabled()) {
+        setPage(PAGE_ID_MAIN);
+        return;
+    }
+
     if (g_stepNum == 6) {
         if (!canSave()) {
             errorMessageP(PSTR("Missing calibration data!"));
