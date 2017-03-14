@@ -621,6 +621,7 @@ private:
 #endif
 
     float getDualRangeGndOffset();
+    void calculateNegligibleAdcDiffForCurrent();
 };
 
 }

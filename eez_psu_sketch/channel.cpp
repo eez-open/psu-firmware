@@ -285,7 +285,7 @@ Channel::Channel(
     i.def = I_DEF;
 
     negligibleAdcDiffForVoltage = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (U_MAX - U_MIN)));
-    negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (I_MAX - I_MIN)));
+    calculateNegligibleAdcDiffForCurrent();
 
 #ifdef EEZ_PSU_SIMULATOR
     simulator.load_enabled = true;
@@ -1403,6 +1403,7 @@ void Channel::doSetCurrent(float value) {
                 flags.currentRange500mA = 0;
                 ioexp.changeBit(IOExpander::IO_BIT_5A, true);
                 ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
+                calculateNegligibleAdcDiffForCurrent();
             }
         } else {
             if (!flags.currentRange500mA) {
@@ -1411,6 +1412,7 @@ void Channel::doSetCurrent(float value) {
                 flags.currentRange500mA = 1;
                 ioexp.changeBit(IOExpander::IO_BIT_500mA, true);
                 ioexp.changeBit(IOExpander::IO_BIT_5A, false);
+                calculateNegligibleAdcDiffForCurrent();
             }
         }
     }
@@ -1633,6 +1635,10 @@ float Channel::getDualRangeGndOffset() {
 
 float Channel::getDualRangeMax() {
     return flags.currentRange500mA ? I_MAX / 10 : I_MAX;
+}
+
+void Channel::calculateNegligibleAdcDiffForCurrent() {
+    negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (getDualRangeMax() - I_MIN)));
 }
 
 }
