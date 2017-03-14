@@ -545,6 +545,8 @@ public:
     TriggerMode getCurrentTriggerMode();
     void setCurrentTriggerMode(TriggerMode mode);
 
+    float getDualRangeMax();
+
 private:
     bool delayed_dp_off;
     uint32_t delayed_dp_off_start;
@@ -617,6 +619,8 @@ private:
 #if !CONF_SKIP_PWRGOOD_TEST
     void testPwrgood(uint8_t gpio);
 #endif
+
+    float getDualRangeGndOffset();
 };
 
 }

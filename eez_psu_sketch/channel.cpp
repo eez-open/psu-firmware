@@ -715,7 +715,7 @@ float Channel::remapAdcDataToVoltage(int16_t adc_data) {
 }
 
 float Channel::remapAdcDataToCurrent(int16_t adc_data) {
-    return util::remap((float)adc_data, (float)AnalogDigitalConverter::ADC_MIN, I_MIN, (float)AnalogDigitalConverter::ADC_MAX, I_MAX);
+    return util::remap((float)adc_data, (float)AnalogDigitalConverter::ADC_MIN, I_MIN, (float)AnalogDigitalConverter::ADC_MAX, getDualRangeMax());
 }
 
 int16_t Channel::remapVoltageToAdcData(float value) {
@@ -724,7 +724,7 @@ int16_t Channel::remapVoltageToAdcData(float value) {
 }
 
 int16_t Channel::remapCurrentToAdcData(float value) {
-    float adc_value = util::remap(value, I_MIN, (float)AnalogDigitalConverter::ADC_MIN, I_MAX, (float)AnalogDigitalConverter::ADC_MAX);
+    float adc_value = util::remap(value, I_MIN, (float)AnalogDigitalConverter::ADC_MIN, getDualRangeMax(), (float)AnalogDigitalConverter::ADC_MAX);
     return (int16_t)util::clamp(adc_value, (float)(-AnalogDigitalConverter::ADC_MAX - 1), (float)AnalogDigitalConverter::ADC_MAX);
 }
 
@@ -765,7 +765,7 @@ void Channel::adcDataIsReady(int16_t data) {
             i.mon_adc = data;
         }
 
-        float value = remapAdcDataToCurrent(i.mon_adc) - CURRENT_GND_OFFSET;
+        float value = remapAdcDataToCurrent(i.mon_adc) - getDualRangeGndOffset();
 
         if (isCurrentCalibrationEnabled()) {
             i.mon = util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val);
@@ -820,7 +820,7 @@ void Channel::adcDataIsReady(int16_t data) {
         debug::g_iMonDac[index - 1].set(data);
 #endif
 
-        float value = remapAdcDataToCurrent(data) - CURRENT_GND_OFFSET;
+        float value = remapAdcDataToCurrent(data) - getDualRangeGndOffset();
 
         if (isCurrentCalibrationEnabled()) {
             i.mon_dac = util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val);
@@ -1401,8 +1401,6 @@ void Channel::doSetCurrent(float value) {
                 // 5A
                 DebugTrace("Switched to 5A range");
                 flags.currentRange500mA = 0;
-                I_MAX *= 10;
-                CURRENT_GND_OFFSET *= 10;
                 ioexp.changeBit(IOExpander::IO_BIT_5A, true);
                 ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
             }
@@ -1411,8 +1409,6 @@ void Channel::doSetCurrent(float value) {
                 // 500mA
                 DebugTrace("Switched to 500mA range");
                 flags.currentRange500mA = 1;
-                I_MAX /= 10;
-                CURRENT_GND_OFFSET /= 10;
                 ioexp.changeBit(IOExpander::IO_BIT_500mA, true);
                 ioexp.changeBit(IOExpander::IO_BIT_5A, false);
             }
@@ -1426,7 +1422,7 @@ void Channel::doSetCurrent(float value) {
         value = util::remap(value, cal_conf.i.min.val, cal_conf.i.min.dac, cal_conf.i.max.val, cal_conf.i.max.dac);
     }
 
-    value += CURRENT_GND_OFFSET;
+    value += getDualRangeGndOffset();
 
     dac.set_current(value);
 }
@@ -1631,6 +1627,13 @@ void Channel::setCurrentTriggerMode(TriggerMode mode) {
     flags.currentTriggerMode = mode;
 }
 
+float Channel::getDualRangeGndOffset() {
+    return flags.currentRange500mA ? CURRENT_GND_OFFSET / 10 : CURRENT_GND_OFFSET;
+}
+
+float Channel::getDualRangeMax() {
+    return flags.currentRange500mA ? I_MAX / 10 : I_MAX;
+}
 
 }
 } // namespace eez::psu

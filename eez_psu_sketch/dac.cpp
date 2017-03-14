@@ -164,7 +164,7 @@ void DigitalAnalogConverter::set_voltage(float value) {
 }
 
 void DigitalAnalogConverter::set_current(float value) {
-    set_value(DATA_BUFFER_B, util::remap(value, channel.I_MIN, (float)DAC_MIN, channel.I_MAX, (float)DAC_MAX));
+    set_value(DATA_BUFFER_B, util::remap(value, channel.I_MIN, (float)DAC_MIN, channel. channel.getDualRangeMax(), (float)DAC_MAX));
 }
 
 }
