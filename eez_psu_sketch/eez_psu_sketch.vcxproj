@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -9,62 +9,36 @@
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4F847A6A-0E2D-4DE0-B628-F17E5164B914}</ProjectGuid>
-    <RootNamespace>eez_psu_sketch</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectGuid>{65B2DABC-CFA6-4777-8819-E7FFCBE5F163}</ProjectGuid>
+    <RootNamespace>
+    </RootNamespace>
+    <ProjectName>eez_psu_sketch</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>
+    </PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>
+    </PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -74,23 +48,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\cores\arduino;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\variants\mega;C:\Users\Martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch;C:\Users\Martin\Documents\Arduino\libraries\eez_psu_lib\src;C:\Users\Martin\Documents\Arduino\libraries\eez_psu_lib\src\utility;C:\Users\Martin\Documents\Arduino\libraries\scpi-parser\src;C:\Users\Martin\Documents\Arduino\libraries\scpi-parser\src\utility;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\libraries\SPI;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\libraries\SPI\utility;C:\Users\Martin\Documents\Arduino\libraries\UIPEthernet\src;C:\Users\Martin\Documents\Arduino\libraries\UIPEthernet\src\utility;C:\Users\Martin\Documents\Arduino\libraries\UTFT;C:\Users\Martin\Documents\Arduino\libraries\UTFT\utility;C:\Users\Martin\Desktop\arduino-1.6.5-r2\libraries;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\1wi1bsuq.rmv\Micro Platforms\default\debuggers;C:\Users\Martin\Documents\Arduino\libraries;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\tools\avr/avr/include/;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\tools\avr//avr/include/avr/;C:\Users\Martin\Desktop\arduino-1.6.5-r2\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>C:\Users\Martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch\__vm\.eez_psu_sketch.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__AVR_ATmega2560__;F_CPU=16000000L;ARDUINO=165;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\martin\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.10\cores\arduino;C:\Users\martin\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.10\variants\mega;C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch;C:\Users\martin\Documents\Arduino\libraries\eez_psu_lib\src;C:\Users\martin\Documents\Arduino\libraries\eez_psu_lib\src\utility;C:\Users\martin\Documents\Arduino\libraries\scpi-parser\src;C:\Users\martin\Documents\Arduino\libraries\scpi-parser\src\utility;C:\Users\martin\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.10\libraries\SPI\src;C:\Users\martin\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.10\libraries\SPI\src\utility;C:\Users\martin\Documents\Arduino\libraries\UIPEthernet\src;C:\Users\martin\Documents\Arduino\libraries\UIPEthernet\src\utility;C:\Users\martin\Documents\Arduino\libraries\UTFT;C:\Users\martin\Documents\Arduino\libraries\UTFT\utility;C:\Program Files (x86)\Arduino\libraries;C:\Users\martin\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.10\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\nazyxmxx.3kx\Micro Platforms\default\debuggers;C:\Users\martin\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch\__vm\.eez_psu_sketch.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <PreprocessorDefinitions>__AVR_ATmega2560__;_VMDEBUG=1;F_CPU=16000000L;ARDUINO=10608;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus=201103L;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\libraries\SPI\src;$(ProjectDir)..\..\..\..\..\Documents\Arduino\libraries\scpi-parser\src;$(ProjectDir)..\..\..\..\..\Documents\Arduino\libraries\eez_psu_lib\src;$(ProjectDir)..\..\..\..\..\Documents\Arduino\libraries\Ethernet2\src;$(ProjectDir)..\..\..\..\..\Documents\Arduino\libraries\UTFT_Pro;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\libraries\SD\src;$(ProjectDir)..\..\..\..\..\Documents\Arduino\libraries\Ethernet2\src\utility;$(ProjectDir)..\..\..\..\..\Documents\Arduino\libraries\UIPEthernet\src;$(ProjectDir)..\..\..\..\..\Documents\Arduino\libraries\UIPEthernet\src\utility;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\libraries;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\libraries;$(ProjectDir)..\..\..\..\..\Documents\Arduino\libraries;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino\avr;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino\USB;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x;$(ProjectDir)..\eez_psu_sketch;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\libsam;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\CMSIS\CMSIS\Include\;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\CMSIS\Device\ATMEL\;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\tools\arm-none-eabi-gcc\4.8.3-2014q1\arm-none-eabi\include\c++\4.8.3;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\tools\arm-none-eabi-gcc\4.8.3-2014q1\arm-none-eabi\include\c++\4.8.3\arm-none-eabi\;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\tools\arm-none-eabi-gcc\4.8.3-2014q1\arm-none-eabi\include\;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\tools\arm-none-eabi-gcc\4.8.3-2014q1\lib\gcc\arm-none-eabi\4.8.3\include;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\CMSIS\Device\ATMEL\;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\libsam;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\libsam\include;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\CMSIS\CMSIS\Include\;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\CMSIS\CMSIS\Include\;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\CMSIS\CMSIS\Include\;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\CMSIS\Device\ATMEL\;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\libsam;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\libsam\include;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\tools\g++_arm_none_eabi\arm-none-eabi\include;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\tools\g++_arm_none_eabi\arm_none_eabi\include\;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\tools\g++_arm_none_eabi\lib\gcc\arm-none-eabi\4.4.1\include;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\tools\g++_arm_none_eabi\lib\gcc\arm-none-eabi\4.4.1\include\;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\CMSIS\Device\ATMEL\sam3xa\include\pio;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\libsam\include;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\CMSIS\CMSIS\Include\;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\CMSIS\Device\ATMEL\sam3xa\include;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\libsam;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\CMSIS\Device\ATMEL;$(ProjectDir)..\..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system\CMSIS\Device\ATMEL\sam3xa\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ProjectDir)__vm\.eez_psu_sketch.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <PreprocessorDefinitions>printf=iprintf;F_CPU=84000000L;ARDUINO=10801;ARDUINO_SAM_DUE;ARDUINO_ARCH_SAM;__SAM3X8E__;USB_VID=0x2341;USB_PID=0x003e;USBCON;__cplusplus=201103L;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -110,87 +71,184 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-    </Link>
-  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="VisualMicro" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="eez_psu_sketch.ino">
       <FileType>CppCode</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="actions.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="adc.h">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="arduino_psu.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClInclude Include="arduino_util.h" />
-    <ClInclude Include="bitmaps.h" />
-    <ClInclude Include="buzzer.h" />
-    <ClInclude Include="conf_advanced.h" />
-    <ClInclude Include="conf_channel.h" />
-    <ClInclude Include="conf_user.h" />
-    <ClInclude Include="font.h" />
-    <ClInclude Include="fonts.h" />
-    <ClInclude Include="gesture.h" />
-    <ClInclude Include="gui.h" />
-    <ClInclude Include="gui_data.h" />
-    <ClInclude Include="gui_data_snapshot.h" />
-    <ClInclude Include="gui_edit_mode.h" />
-    <ClInclude Include="gui_edit_mode_keypad.h" />
-    <ClInclude Include="gui_edit_mode_slider.h" />
-    <ClInclude Include="gui_edit_mode_snapshot.h" />
-    <ClInclude Include="gui_edit_mode_step.h" />
-    <ClInclude Include="gui_internal.h" />
-    <ClInclude Include="gui_view.h" />
-    <ClInclude Include="gui_widget_button_group.h" />
-    <ClInclude Include="lcd.h" />
-    <ClInclude Include="profile.h" />
-    <ClInclude Include="scpi_debug.h" />
-    <ClInclude Include="scpi_mem.h" />
-    <ClInclude Include="scpi_params.h" />
-    <ClInclude Include="scpi_regs.h" />
-    <ClInclude Include="sound.h" />
-    <ClInclude Include="board.h" />
-    <ClInclude Include="datetime.h" />
-    <ClInclude Include="bp.h" />
+    <ClInclude Include="arduino_util.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="board.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="bp.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="buzzer.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="calibration.h">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="channel.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="channel_dispatcher.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="conf.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="conf_advanced.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="conf_channel.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="conf_user.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="conf_user_revision.h">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="dac.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="datetime.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="debug.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="devices.h">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="eeprom.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="encoder.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="ethernet.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="event_queue.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="fan.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="font.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gesture.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_calibration.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_data.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_document.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_edit_mode.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_edit_mode_keypad.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_edit_mode_slider.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_edit_mode_step.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_internal.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_keypad.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_numeric_keypad.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_page.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_page_ch_settings_adv.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_page_ch_settings_info.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_page_ch_settings_protection.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_page_ch_settings_trigger.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_page_event_queue.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_page_main.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_page_self_test_result.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_page_sys_info.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_page_sys_settings.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_page_user_profiles.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_password.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_view.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="gui_widget_button_group.h">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="ioexp.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="lcd.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="list.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="ontime.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="persist_conf.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="profile.h">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="psu.h">
@@ -199,118 +257,148 @@
     <ClInclude Include="rtc.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClInclude Include="scpi_appl.h">
+    <ClInclude Include="scpi_commands.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClInclude Include="scpi_cal.h">
-      <FileType>CppCode</FileType>
-    </ClInclude>
-    <ClInclude Include="scpi_core.h">
-      <FileType>CppCode</FileType>
-    </ClInclude>
-    <ClInclude Include="scpi_diag.h">
-      <FileType>CppCode</FileType>
-    </ClInclude>
-    <ClInclude Include="scpi_inst.h">
-      <FileType>CppCode</FileType>
-    </ClInclude>
-    <ClInclude Include="scpi_meas.h">
-      <FileType>CppCode</FileType>
-    </ClInclude>
-    <ClInclude Include="scpi_outp.h">
+    <ClInclude Include="scpi_params.h">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="scpi_psu.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClInclude Include="scpi_sour.h">
-      <FileType>CppCode</FileType>
-    </ClInclude>
-    <ClInclude Include="scpi_stat.h">
-      <FileType>CppCode</FileType>
-    </ClInclude>
-    <ClInclude Include="scpi_syst.h">
+    <ClInclude Include="scpi_regs.h">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="scpi_user_config.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="sd_card.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="serial_psu.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClInclude Include="temperature.h" />
-    <ClInclude Include="temp_sensor.h" />
-    <ClInclude Include="touch.h" />
-    <ClInclude Include="touch_calibration.h" />
-    <ClInclude Include="touch_filter.h" />
+    <ClInclude Include="sound.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="temperature.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="temp_sensor.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="touch.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="touch_calibration.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="touch_filter.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="trigger.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="util.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClInclude Include="Visual Micro\.eez_psu_sketch.vsarduino.h" />
+    <ClInclude Include="watchdog.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="__vm\.eez_psu_sketch.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="actions.cpp" />
     <ClCompile Include="adc.cpp" />
     <ClCompile Include="arduino_util.cpp" />
-    <ClCompile Include="bitmaps.cpp" />
+    <ClCompile Include="board.cpp" />
+    <ClCompile Include="bp.cpp" />
     <ClCompile Include="buzzer.cpp" />
+    <ClCompile Include="calibration.cpp" />
+    <ClCompile Include="channel.cpp" />
+    <ClCompile Include="channel_dispatcher.cpp" />
+    <ClCompile Include="dac.cpp" />
+    <ClCompile Include="datetime.cpp" />
+    <ClCompile Include="debug.cpp" />
+    <ClCompile Include="devices.cpp" />
+    <ClCompile Include="eeprom.cpp" />
+    <ClCompile Include="encoder.cpp" />
+    <ClCompile Include="ethernet.cpp" />
+    <ClCompile Include="event_queue.cpp" />
+    <ClCompile Include="fan.cpp" />
     <ClCompile Include="font.cpp" />
-    <ClCompile Include="fonts.cpp" />
     <ClCompile Include="gesture.cpp" />
     <ClCompile Include="gui.cpp" />
+    <ClCompile Include="gui_calibration.cpp" />
     <ClCompile Include="gui_data.cpp" />
-    <ClCompile Include="gui_data_snapshot.cpp" />
+    <ClCompile Include="gui_document.cpp" />
     <ClCompile Include="gui_edit_mode.cpp" />
     <ClCompile Include="gui_edit_mode_keypad.cpp" />
     <ClCompile Include="gui_edit_mode_slider.cpp" />
     <ClCompile Include="gui_edit_mode_step.cpp" />
+    <ClCompile Include="gui_keypad.cpp" />
+    <ClCompile Include="gui_numeric_keypad.cpp" />
+    <ClCompile Include="gui_page.cpp" />
+    <ClCompile Include="gui_page_ch_settings_adv.cpp" />
+    <ClCompile Include="gui_page_ch_settings_info.cpp" />
+    <ClCompile Include="gui_page_ch_settings_protection.cpp" />
+    <ClCompile Include="gui_page_ch_settings_trigger.cpp" />
+    <ClCompile Include="gui_page_event_queue.cpp" />
+    <ClCompile Include="gui_page_main.cpp" />
+    <ClCompile Include="gui_page_self_test_result.cpp" />
+    <ClCompile Include="gui_page_sys_info.cpp" />
+    <ClCompile Include="gui_page_sys_settings.cpp" />
+    <ClCompile Include="gui_page_user_profiles.cpp" />
+    <ClCompile Include="gui_password.cpp" />
     <ClCompile Include="gui_view.cpp" />
     <ClCompile Include="gui_widget_button_group.cpp" />
-    <ClCompile Include="lcd.cpp" />
-    <ClCompile Include="profile.cpp" />
-    <ClCompile Include="scpi_debug.cpp" />
-    <ClCompile Include="scpi_mem.cpp" />
-    <ClCompile Include="scpi_params.cpp" />
-    <ClCompile Include="scpi_regs.cpp" />
-    <ClCompile Include="sound.cpp" />
-    <ClCompile Include="board.cpp" />
-    <ClCompile Include="datetime.cpp" />
-    <ClCompile Include="bp.cpp" />
-    <ClCompile Include="calibration.cpp" />
-    <ClCompile Include="channel.cpp" />
-    <ClCompile Include="dac.cpp" />
-    <ClCompile Include="debug.cpp" />
-    <ClCompile Include="eeprom.cpp" />
-    <ClCompile Include="ethernet.cpp" />
     <ClCompile Include="ioexp.cpp" />
+    <ClCompile Include="lcd.cpp" />
+    <ClCompile Include="list.cpp" />
+    <ClCompile Include="ontime.cpp" />
     <ClCompile Include="persist_conf.cpp" />
+    <ClCompile Include="profile.cpp" />
     <ClCompile Include="psu.cpp" />
     <ClCompile Include="rtc.cpp" />
     <ClCompile Include="scpi_appl.cpp" />
     <ClCompile Include="scpi_cal.cpp" />
     <ClCompile Include="scpi_core.cpp" />
+    <ClCompile Include="scpi_debug.cpp" />
     <ClCompile Include="scpi_diag.cpp" />
+    <ClCompile Include="scpi_display.cpp" />
     <ClCompile Include="scpi_inst.cpp" />
     <ClCompile Include="scpi_meas.cpp" />
+    <ClCompile Include="scpi_mem.cpp" />
+    <ClCompile Include="scpi_mmem.cpp" />
     <ClCompile Include="scpi_outp.cpp" />
+    <ClCompile Include="scpi_params.cpp" />
     <ClCompile Include="scpi_psu.cpp" />
+    <ClCompile Include="scpi_regs.cpp" />
+    <ClCompile Include="scpi_simu.cpp" />
     <ClCompile Include="scpi_sour.cpp" />
     <ClCompile Include="scpi_stat.cpp" />
     <ClCompile Include="scpi_syst.cpp" />
+    <ClCompile Include="scpi_trigger.cpp" />
+    <ClCompile Include="sd_card.cpp" />
     <ClCompile Include="serial_psu.cpp" />
+    <ClCompile Include="sound.cpp" />
     <ClCompile Include="temperature.cpp" />
     <ClCompile Include="temp_sensor.cpp" />
+    <ClCompile Include="timer.cpp" />
     <ClCompile Include="touch.cpp" />
     <ClCompile Include="touch_calibration.cpp" />
     <ClCompile Include="touch_filter.cpp" />
+    <ClCompile Include="trigger.cpp" />
     <ClCompile Include="util.cpp" />
+    <ClCompile Include="watchdog.cpp" />
   </ItemGroup>
+  <PropertyGroup>
+    <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties arduino.upload.maximum_size="253952" arduino.upload.speed="115200" visualmicro.package.name="arduino" arduino.board.property_bag="name=Arduino/Genuino Mega w/ ATmega2560 (Mega 2560)&#xD;&#xA;vid.0=0x2341&#xD;&#xA;pid.0=0x0010&#xD;&#xA;vid.1=0x2341&#xD;&#xA;pid.1=0x0042&#xD;&#xA;vid.2=0x2A03&#xD;&#xA;pid.2=0x0010&#xD;&#xA;vid.3=0x2A03&#xD;&#xA;pid.3=0x0042&#xD;&#xA;vid.4=0x2341&#xD;&#xA;pid.4=0x0210&#xD;&#xA;vid.5=0x2341&#xD;&#xA;pid.5=0x0242&#xD;&#xA;upload.tool=avrdude&#xD;&#xA;upload.maximum_data_size=8192&#xD;&#xA;bootloader.tool=avrdude&#xD;&#xA;bootloader.low_fuses=0xFF&#xD;&#xA;bootloader.unlock_bits=0x3F&#xD;&#xA;bootloader.lock_bits=0x0F&#xD;&#xA;build.f_cpu=16000000L&#xD;&#xA;build.core=arduino&#xD;&#xA;build.variant=mega&#xD;&#xA;build.board=AVR_MEGA2560&#xD;&#xA;menu.cpu.atmega2560=ATmega2560 (Mega 2560)&#xD;&#xA;menu.cpu.atmega2560.upload.protocol=wiring&#xD;&#xA;menu.cpu.atmega2560.upload.maximum_size=253952&#xD;&#xA;menu.cpu.atmega2560.upload.speed=115200&#xD;&#xA;menu.cpu.atmega2560.bootloader.high_fuses=0xD8&#xD;&#xA;menu.cpu.atmega2560.bootloader.extended_fuses=0xFD&#xD;&#xA;menu.cpu.atmega2560.bootloader.file=stk500v2/stk500boot_v2_mega2560.hex&#xD;&#xA;menu.cpu.atmega2560.build.mcu=atmega2560&#xD;&#xA;menu.cpu.atmega2560.build.board=AVR_MEGA2560&#xD;&#xA;menu.cpu.atmega1280=ATmega1280&#xD;&#xA;menu.cpu.atmega1280.upload.protocol=arduino&#xD;&#xA;menu.cpu.atmega1280.upload.maximum_size=126976&#xD;&#xA;menu.cpu.atmega1280.upload.speed=57600&#xD;&#xA;menu.cpu.atmega1280.bootloader.high_fuses=0xDA&#xD;&#xA;menu.cpu.atmega1280.bootloader.extended_fuses=0xF5&#xD;&#xA;menu.cpu.atmega1280.bootloader.file=atmega/ATmegaBOOT_168_atmega1280.hex&#xD;&#xA;menu.cpu.atmega1280.build.mcu=atmega1280&#xD;&#xA;menu.cpu.atmega1280.build.board=AVR_MEGA&#xD;&#xA;runtime.ide.path=C:\Program Files (x86)\Arduino&#xD;&#xA;build.system.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\system&#xD;&#xA;runtime.ide.version=10606&#xD;&#xA;target_package=arduino&#xD;&#xA;target_platform=avr&#xD;&#xA;runtime.hardware.path=C:\Program Files (x86)\Arduino\hardware\arduino&#xD;&#xA;originalid=mega&#xD;&#xA;intellisense.tools.path={runtime.tools.avr-gcc.path}/&#xD;&#xA;intellisense.include.paths={intellisense.tools.path}avr/include/;{intellisense.tools.path}/avr/include/avr/;{intellisense.tools.path}lib\gcc\avr\4.8.1\include&#xD;&#xA;tools.atprogram.cmd.path=%AVRSTUDIO_EXE_PATH%\atbackend\atprogram&#xD;&#xA;tools.atprogram.cmd.setwinpath=true&#xD;&#xA;tools.atprogram.program.params.verbose=-v&#xD;&#xA;tools.atprogram.program.params.quiet=-q&#xD;&#xA;tools.atprogram.program.pattern=&quot;{cmd.path}&quot; -d {build.mcu} {program.verbose} {program.extra_params} program -c -f &quot;{build.path}\{build.project_name}.hex&quot;&#xD;&#xA;tools.atprogram.program.xpattern=&quot;{cmd.path}&quot; {AVRSTUDIO_BACKEND_CONNECTION} -d {build.mcu} {program.verbose} {program.extra_params} program -c -f &quot;{build.path}\{build.project_name}.hex&quot;&#xD;&#xA;tools.atprogram.erase.params.verbose=-v&#xD;&#xA;tools.atprogram.erase.params.quiet=-q&#xD;&#xA;tools.atprogram.bootloader.params.verbose=-v&#xD;&#xA;tools.atprogram.bootloader.params.quiet=-q&#xD;&#xA;tools.atprogram.bootloader.pattern=&quot;{cmd.path}&quot; -d {build.mcu} {bootloader.verbose}  program -c -f &quot;{runtime.ide.path}/hardware/arduino/avr/bootloaders/{bootloader.file}&quot;&#xD;&#xA;version=1.6.9&#xD;&#xA;compiler.warning_flags=-w&#xD;&#xA;compiler.warning_flags.none=-w&#xD;&#xA;compiler.warning_flags.default=&#xD;&#xA;compiler.warning_flags.more=-Wall&#xD;&#xA;compiler.warning_flags.all=-Wall -Wextra&#xD;&#xA;compiler.path={runtime.tools.avr-gcc.path}/bin/&#xD;&#xA;compiler.c.cmd=avr-gcc&#xD;&#xA;compiler.c.flags=-c -g -Os {compiler.warning_flags} -std=gnu11 -ffunction-sections -fdata-sections -MMD&#xD;&#xA;compiler.c.elf.flags={compiler.warning_flags} -Os -Wl,--gc-sections&#xD;&#xA;compiler.c.elf.cmd=avr-gcc&#xD;&#xA;compiler.S.flags=-c -g -x assembler-with-cpp&#xD;&#xA;compiler.cpp.cmd=avr-g++&#xD;&#xA;compiler.cpp.flags=-c -g -Os {compiler.warning_flags} -std=gnu++11 -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD&#xD;&#xA;compiler.ar.cmd=avr-ar&#xD;&#xA;compiler.ar.flags=rcs&#xD;&#xA;compiler.objcopy.cmd=avr-objcopy&#xD;&#xA;compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0&#xD;&#xA;compiler.elf2hex.flags=-O ihex -R .eeprom&#xD;&#xA;compiler.elf2hex.cmd=avr-objcopy&#xD;&#xA;compiler.ldflags=&#xD;&#xA;compiler.size.cmd=avr-size&#xD;&#xA;build.extra_flags=&#xD;&#xA;compiler.c.extra_flags=&#xD;&#xA;compiler.c.elf.extra_flags=&#xD;&#xA;compiler.S.extra_flags=&#xD;&#xA;compiler.cpp.extra_flags=&#xD;&#xA;compiler.ar.extra_flags=&#xD;&#xA;compiler.objcopy.eep.extra_flags=&#xD;&#xA;compiler.elf2hex.extra_flags=&#xD;&#xA;recipe.c.o.pattern=&quot;{compiler.path}{compiler.c.cmd}&quot; {compiler.c.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {includes} &quot;{source_file}&quot; -o &quot;{object_file}&quot;&#xD;&#xA;recipe.cpp.o.pattern=&quot;{compiler.path}{compiler.cpp.cmd}&quot; {compiler.cpp.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} &quot;{source_file}&quot; -o &quot;{object_file}&quot;&#xD;&#xA;recipe.S.o.pattern=&quot;{compiler.path}{compiler.c.cmd}&quot; {compiler.S.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {includes} &quot;{source_file}&quot; -o &quot;{object_file}&quot;&#xD;&#xA;recipe.ar.pattern=&quot;{compiler.path}{compiler.ar.cmd}&quot; {compiler.ar.flags} {compiler.ar.extra_flags} &quot;{archive_file_path}&quot; &quot;{object_file}&quot;&#xD;&#xA;recipe.c.combine.pattern=&quot;{compiler.path}{compiler.c.elf.cmd}&quot; {compiler.c.elf.flags} -mmcu={build.mcu} {compiler.c.elf.extra_flags} -o &quot;{build.path}/{build.project_name}.elf&quot; {object_files} &quot;{build.path}/{archive_file}&quot; &quot;-L{build.path}&quot; -lm&#xD;&#xA;recipe.objcopy.eep.pattern=&quot;{compiler.path}{compiler.objcopy.cmd}&quot; {compiler.objcopy.eep.flags} {compiler.objcopy.eep.extra_flags} &quot;{build.path}/{build.project_name}.elf&quot; &quot;{build.path}/{build.project_name}.eep&quot;&#xD;&#xA;recipe.objcopy.hex.pattern=&quot;{compiler.path}{compiler.elf2hex.cmd}&quot; {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} &quot;{build.path}/{build.project_name}.elf&quot; &quot;{build.path}/{build.project_name}.hex&quot;&#xD;&#xA;recipe.output.tmp_file={build.project_name}.hex&#xD;&#xA;recipe.output.save_file={build.project_name}.{build.variant}.hex&#xD;&#xA;recipe.size.pattern=&quot;{compiler.path}{compiler.size.cmd}&quot; -A &quot;{build.path}/{build.project_name}.elf&quot;&#xD;&#xA;recipe.size.regex=^(?:\.text|\.data|\.bootloader)\s+([0-9]+).*&#xD;&#xA;recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*&#xD;&#xA;recipe.size.regex.eeprom=^(?:\.eeprom)\s+([0-9]+).*&#xD;&#xA;preproc.includes.flags=-w -x c++ -M -MG -MP&#xD;&#xA;recipe.preproc.includes=&quot;{compiler.path}{compiler.cpp.cmd}&quot; {compiler.cpp.flags} {preproc.includes.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} &quot;{source_file}&quot;&#xD;&#xA;preproc.macros.flags=-w -x c++ -E -CC&#xD;&#xA;recipe.preproc.macros=&quot;{compiler.path}{compiler.cpp.cmd}&quot; {compiler.cpp.flags} {preproc.macros.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} &quot;{source_file}&quot;&#xD;&#xA;tools.avrdude.path={runtime.tools.avrdude.path}&#xD;&#xA;tools.avrdude.cmd.path={path}/bin/avrdude&#xD;&#xA;tools.avrdude.config.path={path}/etc/avrdude.conf&#xD;&#xA;tools.avrdude.upload.params.verbose=-v&#xD;&#xA;tools.avrdude.upload.params.quiet=-q -q&#xD;&#xA;tools.avrdude.upload.pattern=&quot;{cmd.path}&quot; &quot;-C{config.path}&quot; {upload.verbose} -p{build.mcu} -c{upload.protocol} -P{serial.port} -b{upload.speed} -D &quot;-Uflash:w:{build.path}/{build.project_name}.hex:i&quot;&#xD;&#xA;tools.avrdude.program.params.verbose=-v&#xD;&#xA;tools.avrdude.program.params.quiet=-q -q&#xD;&#xA;tools.avrdude.program.pattern=&quot;{cmd.path}&quot; &quot;-C{config.path}&quot; {program.verbose} -p{build.mcu} -c{protocol} {program.extra_params} &quot;-Uflash:w:{build.path}/{build.project_name}.hex:i&quot;&#xD;&#xA;tools.avrdude.erase.params.verbose=-v&#xD;&#xA;tools.avrdude.erase.params.quiet=-q -q&#xD;&#xA;tools.avrdude.erase.pattern=&quot;{cmd.path}&quot; &quot;-C{config.path}&quot; {erase.verbose} -p{build.mcu} -c{protocol} {program.extra_params} -e -Ulock:w:{bootloader.unlock_bits}:m -Uefuse:w:{bootloader.extended_fuses}:m -Uhfuse:w:{bootloader.high_fuses}:m -Ulfuse:w:{bootloader.low_fuses}:m&#xD;&#xA;tools.avrdude.bootloader.params.verbose=-v&#xD;&#xA;tools.avrdude.bootloader.params.quiet=-q -q&#xD;&#xA;tools.avrdude.bootloader.pattern=&quot;{cmd.path}&quot; &quot;-C{config.path}&quot; {bootloader.verbose} -p{build.mcu} -c{protocol} {program.extra_params} &quot;-Uflash:w:{runtime.platform.path}/bootloaders/{bootloader.file}:i&quot; -Ulock:w:{bootloader.lock_bits}:m&#xD;&#xA;build.usb_manufacturer=&quot;Unknown&quot;&#xD;&#xA;build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'&#xD;&#xA;tools.ctags.path={runtime.tools.ctags.path}&#xD;&#xA;tools.ctags.cmd.path={path}/ctags&#xD;&#xA;tools.ctags.pattern=&quot;{cmd.path}&quot; -u --language-force=c++ -f - --c++-kinds=svpf --fields=KSTtzns &quot;{source_file}&quot;&#xD;&#xA;preproc.macros.compatibility_flags={build.mbed_api_include} {build.nRF51822_api_include} {build.ble_api_include} {compiler.libsam.c.flags} {compiler.arm.cmsis.path} {build.variant_system_include}&#xD;&#xA;vm.platform.root.path=C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\zcr1nyrl.p11\Micro Platforms\arduino16x&#xD;&#xA;avrisp.name=AVR ISP&#xD;&#xA;avrisp.communication=serial&#xD;&#xA;avrisp.protocol=stk500v1&#xD;&#xA;avrisp.program.protocol=stk500v1&#xD;&#xA;avrisp.program.tool=avrdude&#xD;&#xA;avrisp.program.extra_params=-P{serial.port}&#xD;&#xA;avrispmkii.name=AVRISP mkII&#xD;&#xA;avrispmkii.communication=usb&#xD;&#xA;avrispmkii.protocol=stk500v2&#xD;&#xA;avrispmkii.program.protocol=stk500v2&#xD;&#xA;avrispmkii.program.tool=avrdude&#xD;&#xA;avrispmkii.program.extra_params=-Pusb&#xD;&#xA;usbtinyisp.name=USBtinyISP&#xD;&#xA;usbtinyisp.protocol=usbtiny&#xD;&#xA;usbtinyisp.program.tool=avrdude&#xD;&#xA;usbtinyisp.program.extra_params=&#xD;&#xA;arduinoisp.name=ArduinoISP&#xD;&#xA;arduinoisp.protocol=arduinoisp&#xD;&#xA;arduinoisp.program.tool=avrdude&#xD;&#xA;arduinoisp.program.extra_params=&#xD;&#xA;usbasp.name=USBasp&#xD;&#xA;usbasp.communication=usb&#xD;&#xA;usbasp.protocol=usbasp&#xD;&#xA;usbasp.program.protocol=usbasp&#xD;&#xA;usbasp.program.tool=avrdude&#xD;&#xA;usbasp.program.extra_params=-Pusb&#xD;&#xA;parallel.name=Parallel Programmer&#xD;&#xA;parallel.protocol=dapa&#xD;&#xA;parallel.force=true&#xD;&#xA;parallel.program.tool=avrdude&#xD;&#xA;parallel.program.extra_params=-F&#xD;&#xA;arduinoasisp.name=Arduino as ISP&#xD;&#xA;arduinoasisp.communication=serial&#xD;&#xA;arduinoasisp.protocol=stk500v1&#xD;&#xA;arduinoasisp.speed=19200&#xD;&#xA;arduinoasisp.program.protocol=stk500v1&#xD;&#xA;arduinoasisp.program.speed=19200&#xD;&#xA;arduinoasisp.program.tool=avrdude&#xD;&#xA;arduinoasisp.program.extra_params=-P{serial.port} -b{program.speed}&#xD;&#xA;usbGemma.name=Arduino Gemma&#xD;&#xA;usbGemma.protocol=arduinogemma&#xD;&#xA;usbGemma.program.tool=avrdude&#xD;&#xA;usbGemma.program.extra_params=&#xD;&#xA;usbGemma.config.path={runtime.platform.path}/bootloaders/gemma/avrdude.conf&#xD;&#xA;stk500.name=Atmel STK500 development board&#xD;&#xA;stk500.communication=serial&#xD;&#xA;stk500.protocol=stk500&#xD;&#xA;stk500.program.protocol=stk500&#xD;&#xA;stk500.program.tool=avrdude&#xD;&#xA;stk500.program.extra_params=-P{serial.port}&#xD;&#xA;buspirate.name=BusPirate as ISP&#xD;&#xA;buspirate.communication=serial&#xD;&#xA;buspirate.protocol=buspirate&#xD;&#xA;buspirate.program.protocol=buspirate&#xD;&#xA;buspirate.program.tool=avrdude&#xD;&#xA;buspirate.program.extra_params=-P{serial.port}&#xD;&#xA;runtime.tools.arm-none-eabi-gcc.path=C:\Users\martin\AppData\Local\arduino15\packages\arduino\tools\arm-none-eabi-gcc\4.8.3-2014q1&#xD;&#xA;runtime.tools.arm-none-eabi-gcc-4.8.3-2014q1.path=C:\Users\martin\AppData\Local\arduino15\packages\arduino\tools\arm-none-eabi-gcc\4.8.3-2014q1&#xD;&#xA;runtime.tools.avrdude.path=C:\Program Files (x86)\Arduino\hardware\tools\avr&#xD;&#xA;runtime.tools.avrdude-6.0.1-arduino5.path=C:\Program Files (x86)\Arduino\hardware\tools\avr&#xD;&#xA;runtime.tools.avr-gcc.path=C:\Program Files (x86)\Arduino\hardware\tools\avr&#xD;&#xA;runtime.tools.avr-gcc-4.8.1-arduino5.path=C:\Program Files (x86)\Arduino\hardware\tools\avr&#xD;&#xA;runtime.tools.bossac.path=C:\Users\martin\AppData\Local\arduino15\packages\arduino\tools\bossac\1.6.1-arduino&#xD;&#xA;runtime.tools.bossac-1.6.1-arduino.path=C:\Users\martin\AppData\Local\arduino15\packages\arduino\tools\bossac\1.6.1-arduino&#xD;&#xA;upload.protocol=wiring&#xD;&#xA;upload.maximum_size=253952&#xD;&#xA;upload.speed=115200&#xD;&#xA;bootloader.high_fuses=0xD8&#xD;&#xA;bootloader.extended_fuses=0xFD&#xD;&#xA;bootloader.file=stk500v2/stk500boot_v2_mega2560.hex&#xD;&#xA;build.mcu=atmega2560&#xD;&#xA;ide.hint=For use with Arduino.cc 1.6.2+ ide&#xD;&#xA;ide.location.key=Arduino16x&#xD;&#xA;ide.location.ide.winreg=Arduino 1.6.x Application&#xD;&#xA;ide.location.sketchbook.winreg=Arduino 1.6.x Sketchbook&#xD;&#xA;ide.location.sketchbook.preferences=sketchbook.path&#xD;&#xA;ide.default.revision_name=1.6.7&#xD;&#xA;ide.default.version=10607&#xD;&#xA;ide.default.package=arduino&#xD;&#xA;ide.default.platform=avr&#xD;&#xA;ide.multiplatform=true&#xD;&#xA;ide.includes=arduino.h&#xD;&#xA;ide.exe_name=arduino&#xD;&#xA;ide.platformswithoutpackage=false&#xD;&#xA;ide.includes.fallback=wprogram.h&#xD;&#xA;ide.extension=ino&#xD;&#xA;ide.extension.fallback=pde&#xD;&#xA;ide.versionGTEQ=160&#xD;&#xA;ide.exe=arduino.exe&#xD;&#xA;ide.hosts=atmel&#xD;&#xA;ide.url=http://arduino.cc/en/Main/Software&#xD;&#xA;ide.help.reference.path=reference\arduino.cc\en\Reference&#xD;&#xA;ide.help.reference.path2=reference\www.arduino.cc\en\Reference&#xD;&#xA;ide.help.reference.serial=reference\www.arduino.cc\en\Serial&#xD;&#xA;vm.debug=true&#xD;&#xA;software=ARDUINO&#xD;&#xA;ssh.user.name=root&#xD;&#xA;ssh.user.default.password=arduino&#xD;&#xA;ssh.host.wwwfiles.path=/www/sd&#xD;&#xA;build.working_directory={runtime.ide.path}&#xD;&#xA;ide.location.preferences.portable={runtime.ide.path}\portable&#xD;&#xA;ide.location.preferences=%VM_APPDATA_LOCAL%\arduino15\preferences.txt&#xD;&#xA;ide.location.preferences_fallback=%VM_APPDATA_ROAMING%\arduino15\preferences.txt&#xD;&#xA;ide.location.contributions=%VM_APPDATA_LOCAL%\arduino15&#xD;&#xA;ide.location.contributions_fallback=%VM_APPDATA_ROAMING%\arduino15&#xD;&#xA;ide.contributions.boards.allow=true&#xD;&#xA;ide.contributions.boards.ignore_unless_rewrite_found=true&#xD;&#xA;ide.contributions.libraries.allow=true&#xD;&#xA;ide.contributions.boards.support.urls.wiki=https://github.com/arduino/Arduino/wiki/Unofficial-list-of-3rd-party-boards-support-urls&#xD;&#xA;ide.create_platforms_from_boardsTXT.teensy=build.core&#xD;&#xA;ide.appid=arduino16x&#xD;&#xA;location.sketchbook=C:\Users\martin\Documents\Arduino&#xD;&#xA;vm.core.include=arduino.h&#xD;&#xA;vm.boardsource.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr&#xD;&#xA;runtime.platform.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr&#xD;&#xA;vm.platformname.name=avr&#xD;&#xA;build.arch=AVR&#xD;&#xA;build.architecture=avr&#xD;&#xA;vmresolved.compiler.path=C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\&#xD;&#xA;vmresolved.tools.path=C:\Program Files (x86)\Arduino\hardware\tools\avr&#xD;&#xA;vm.runtime.compiler.showwarnings=false&#xD;&#xA;vm.runtime.compiler.auto_discover_includes=true&#xD;&#xA;vm.last.buildpath=C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560&#xD;&#xA;vm.build.verbose_build_properties=false&#xD;&#xA;build.source.path=C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch\eez_psu_sketch.ino&#xD;&#xA;build.path=C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560&#xD;&#xA;PreProcessor.HeaderCount=1&#xD;&#xA;PreProcessor.PrototypeCount=4&#xD;&#xA;vm.last.preproc.file.0.file=eez_psu_sketch.ino&#xD;&#xA;vm.last.preproc.file.0.offset=1&#xD;&#xA;vm.last.preproc.file.0.length=1021&#xD;&#xA;vm.last.preproc.file.0.linecount=38&#xD;&#xA;vm.last.preproc.file.0.linestart=0&#xD;&#xA;vm.last.preproc.file.0.lineend=38&#xD;&#xA;vm.last.preproc.file.0.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.1.file=adc.cpp&#xD;&#xA;vm.last.preproc.file.1.offset=0&#xD;&#xA;vm.last.preproc.file.1.length=5758&#xD;&#xA;vm.last.preproc.file.1.linecount=180&#xD;&#xA;vm.last.preproc.file.1.linestart=38&#xD;&#xA;vm.last.preproc.file.1.lineend=218&#xD;&#xA;vm.last.preproc.file.1.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.2.file=adc.h&#xD;&#xA;vm.last.preproc.file.2.offset=0&#xD;&#xA;vm.last.preproc.file.2.length=2256&#xD;&#xA;vm.last.preproc.file.2.linecount=67&#xD;&#xA;vm.last.preproc.file.2.linestart=218&#xD;&#xA;vm.last.preproc.file.2.lineend=285&#xD;&#xA;vm.last.preproc.file.2.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.3.file=arduino_psu.h&#xD;&#xA;vm.last.preproc.file.3.offset=0&#xD;&#xA;vm.last.preproc.file.3.length=1116&#xD;&#xA;vm.last.preproc.file.3.linecount=35&#xD;&#xA;vm.last.preproc.file.3.linestart=285&#xD;&#xA;vm.last.preproc.file.3.lineend=320&#xD;&#xA;vm.last.preproc.file.3.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.4.file=arduino_util.cpp&#xD;&#xA;vm.last.preproc.file.4.offset=0&#xD;&#xA;vm.last.preproc.file.4.length=1098&#xD;&#xA;vm.last.preproc.file.4.linecount=37&#xD;&#xA;vm.last.preproc.file.4.linestart=320&#xD;&#xA;vm.last.preproc.file.4.lineend=357&#xD;&#xA;vm.last.preproc.file.4.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.5.file=arduino_util.h&#xD;&#xA;vm.last.preproc.file.5.offset=0&#xD;&#xA;vm.last.preproc.file.5.length=940&#xD;&#xA;vm.last.preproc.file.5.linecount=31&#xD;&#xA;vm.last.preproc.file.5.linestart=357&#xD;&#xA;vm.last.preproc.file.5.lineend=388&#xD;&#xA;vm.last.preproc.file.5.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.6.file=board.cpp&#xD;&#xA;vm.last.preproc.file.6.offset=0&#xD;&#xA;vm.last.preproc.file.6.length=1282&#xD;&#xA;vm.last.preproc.file.6.linecount=50&#xD;&#xA;vm.last.preproc.file.6.linestart=388&#xD;&#xA;vm.last.preproc.file.6.lineend=438&#xD;&#xA;vm.last.preproc.file.6.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.7.file=board.h&#xD;&#xA;vm.last.preproc.file.7.offset=0&#xD;&#xA;vm.last.preproc.file.7.length=969&#xD;&#xA;vm.last.preproc.file.7.linecount=34&#xD;&#xA;vm.last.preproc.file.7.linestart=438&#xD;&#xA;vm.last.preproc.file.7.lineend=472&#xD;&#xA;vm.last.preproc.file.7.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.8.file=bp.cpp&#xD;&#xA;vm.last.preproc.file.8.offset=0&#xD;&#xA;vm.last.preproc.file.8.length=2260&#xD;&#xA;vm.last.preproc.file.8.linecount=85&#xD;&#xA;vm.last.preproc.file.8.linestart=472&#xD;&#xA;vm.last.preproc.file.8.lineend=557&#xD;&#xA;vm.last.preproc.file.8.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.9.file=bp.h&#xD;&#xA;vm.last.preproc.file.9.offset=0&#xD;&#xA;vm.last.preproc.file.9.length=1596&#xD;&#xA;vm.last.preproc.file.9.linecount=54&#xD;&#xA;vm.last.preproc.file.9.linestart=557&#xD;&#xA;vm.last.preproc.file.9.lineend=611&#xD;&#xA;vm.last.preproc.file.9.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.10.file=buzzer.cpp&#xD;&#xA;vm.last.preproc.file.10.offset=0&#xD;&#xA;vm.last.preproc.file.10.length=3344&#xD;&#xA;vm.last.preproc.file.10.linecount=113&#xD;&#xA;vm.last.preproc.file.10.linestart=611&#xD;&#xA;vm.last.preproc.file.10.lineend=724&#xD;&#xA;vm.last.preproc.file.10.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.11.file=buzzer.h&#xD;&#xA;vm.last.preproc.file.11.offset=0&#xD;&#xA;vm.last.preproc.file.11.length=890&#xD;&#xA;vm.last.preproc.file.11.linecount=30&#xD;&#xA;vm.last.preproc.file.11.linestart=724&#xD;&#xA;vm.last.preproc.file.11.lineend=754&#xD;&#xA;vm.last.preproc.file.11.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.12.file=calibration.cpp&#xD;&#xA;vm.last.preproc.file.12.offset=0&#xD;&#xA;vm.last.preproc.file.12.length=6600&#xD;&#xA;vm.last.preproc.file.12.linecount=254&#xD;&#xA;vm.last.preproc.file.12.linestart=754&#xD;&#xA;vm.last.preproc.file.12.lineend=1008&#xD;&#xA;vm.last.preproc.file.12.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.13.file=calibration.h&#xD;&#xA;vm.last.preproc.file.13.offset=0&#xD;&#xA;vm.last.preproc.file.13.length=2149&#xD;&#xA;vm.last.preproc.file.13.linecount=95&#xD;&#xA;vm.last.preproc.file.13.linestart=1008&#xD;&#xA;vm.last.preproc.file.13.lineend=1103&#xD;&#xA;vm.last.preproc.file.13.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.14.file=channel.cpp&#xD;&#xA;vm.last.preproc.file.14.offset=0&#xD;&#xA;vm.last.preproc.file.14.length=19904&#xD;&#xA;vm.last.preproc.file.14.linecount=638&#xD;&#xA;vm.last.preproc.file.14.linestart=1103&#xD;&#xA;vm.last.preproc.file.14.lineend=1741&#xD;&#xA;vm.last.preproc.file.14.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.15.file=channel.h&#xD;&#xA;vm.last.preproc.file.15.offset=0&#xD;&#xA;vm.last.preproc.file.15.length=12335&#xD;&#xA;vm.last.preproc.file.15.linecount=383&#xD;&#xA;vm.last.preproc.file.15.linestart=1741&#xD;&#xA;vm.last.preproc.file.15.lineend=2124&#xD;&#xA;vm.last.preproc.file.15.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.16.file=conf.h&#xD;&#xA;vm.last.preproc.file.16.offset=0&#xD;&#xA;vm.last.preproc.file.16.length=2408&#xD;&#xA;vm.last.preproc.file.16.linecount=90&#xD;&#xA;vm.last.preproc.file.16.linestart=2124&#xD;&#xA;vm.last.preproc.file.16.lineend=2214&#xD;&#xA;vm.last.preproc.file.16.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.17.file=conf_advanced.h&#xD;&#xA;vm.last.preproc.file.17.offset=0&#xD;&#xA;vm.last.preproc.file.17.length=4714&#xD;&#xA;vm.last.preproc.file.17.linecount=152&#xD;&#xA;vm.last.preproc.file.17.linestart=2214&#xD;&#xA;vm.last.preproc.file.17.lineend=2366&#xD;&#xA;vm.last.preproc.file.17.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.18.file=conf_channel.h&#xD;&#xA;vm.last.preproc.file.18.offset=0&#xD;&#xA;vm.last.preproc.file.18.length=2555&#xD;&#xA;vm.last.preproc.file.18.linecount=50&#xD;&#xA;vm.last.preproc.file.18.linestart=2366&#xD;&#xA;vm.last.preproc.file.18.lineend=2416&#xD;&#xA;vm.last.preproc.file.18.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.19.file=conf_user.h&#xD;&#xA;vm.last.preproc.file.19.offset=0&#xD;&#xA;vm.last.preproc.file.19.length=1059&#xD;&#xA;vm.last.preproc.file.19.linecount=32&#xD;&#xA;vm.last.preproc.file.19.linestart=2416&#xD;&#xA;vm.last.preproc.file.19.lineend=2448&#xD;&#xA;vm.last.preproc.file.19.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.20.file=dac.cpp&#xD;&#xA;vm.last.preproc.file.20.offset=0&#xD;&#xA;vm.last.preproc.file.20.length=5281&#xD;&#xA;vm.last.preproc.file.20.linecount=171&#xD;&#xA;vm.last.preproc.file.20.linestart=2448&#xD;&#xA;vm.last.preproc.file.20.lineend=2619&#xD;&#xA;vm.last.preproc.file.20.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.21.file=dac.h&#xD;&#xA;vm.last.preproc.file.21.offset=0&#xD;&#xA;vm.last.preproc.file.21.length=1395&#xD;&#xA;vm.last.preproc.file.21.linecount=51&#xD;&#xA;vm.last.preproc.file.21.linestart=2619&#xD;&#xA;vm.last.preproc.file.21.lineend=2670&#xD;&#xA;vm.last.preproc.file.21.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.22.file=datetime.cpp&#xD;&#xA;vm.last.preproc.file.22.offset=0&#xD;&#xA;vm.last.preproc.file.22.length=5268&#xD;&#xA;vm.last.preproc.file.22.linecount=155&#xD;&#xA;vm.last.preproc.file.22.linestart=2670&#xD;&#xA;vm.last.preproc.file.22.lineend=2825&#xD;&#xA;vm.last.preproc.file.22.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.23.file=datetime.h&#xD;&#xA;vm.last.preproc.file.23.offset=0&#xD;&#xA;vm.last.preproc.file.23.length=1311&#xD;&#xA;vm.last.preproc.file.23.linecount=42&#xD;&#xA;vm.last.preproc.file.23.linestart=2825&#xD;&#xA;vm.last.preproc.file.23.lineend=2867&#xD;&#xA;vm.last.preproc.file.23.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.24.file=debug.cpp&#xD;&#xA;vm.last.preproc.file.24.offset=0&#xD;&#xA;vm.last.preproc.file.24.length=2694&#xD;&#xA;vm.last.preproc.file.24.linecount=103&#xD;&#xA;vm.last.preproc.file.24.linestart=2867&#xD;&#xA;vm.last.preproc.file.24.lineend=2970&#xD;&#xA;vm.last.preproc.file.24.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.25.file=debug.h&#xD;&#xA;vm.last.preproc.file.25.offset=0&#xD;&#xA;vm.last.preproc.file.25.length=1742&#xD;&#xA;vm.last.preproc.file.25.linecount=77&#xD;&#xA;vm.last.preproc.file.25.linestart=2970&#xD;&#xA;vm.last.preproc.file.25.lineend=3047&#xD;&#xA;vm.last.preproc.file.25.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.26.file=eeprom.cpp&#xD;&#xA;vm.last.preproc.file.26.offset=0&#xD;&#xA;vm.last.preproc.file.26.length=5134&#xD;&#xA;vm.last.preproc.file.26.linecount=173&#xD;&#xA;vm.last.preproc.file.26.linestart=3047&#xD;&#xA;vm.last.preproc.file.26.lineend=3220&#xD;&#xA;vm.last.preproc.file.26.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.27.file=eeprom.h&#xD;&#xA;vm.last.preproc.file.27.offset=0&#xD;&#xA;vm.last.preproc.file.27.length=7930&#xD;&#xA;vm.last.preproc.file.27.linecount=216&#xD;&#xA;vm.last.preproc.file.27.linestart=3220&#xD;&#xA;vm.last.preproc.file.27.lineend=3436&#xD;&#xA;vm.last.preproc.file.27.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.28.file=ethernet.cpp&#xD;&#xA;vm.last.preproc.file.28.offset=0&#xD;&#xA;vm.last.preproc.file.28.length=6449&#xD;&#xA;vm.last.preproc.file.28.linecount=225&#xD;&#xA;vm.last.preproc.file.28.linestart=3436&#xD;&#xA;vm.last.preproc.file.28.lineend=3661&#xD;&#xA;vm.last.preproc.file.28.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.29.file=ethernet.h&#xD;&#xA;vm.last.preproc.file.29.offset=0&#xD;&#xA;vm.last.preproc.file.29.length=999&#xD;&#xA;vm.last.preproc.file.29.linecount=38&#xD;&#xA;vm.last.preproc.file.29.linestart=3661&#xD;&#xA;vm.last.preproc.file.29.lineend=3699&#xD;&#xA;vm.last.preproc.file.29.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.30.file=font.cpp&#xD;&#xA;vm.last.preproc.file.30.offset=0&#xD;&#xA;vm.last.preproc.file.30.length=102183&#xD;&#xA;vm.last.preproc.file.30.linecount=132&#xD;&#xA;vm.last.preproc.file.30.linestart=3699&#xD;&#xA;vm.last.preproc.file.30.lineend=3831&#xD;&#xA;vm.last.preproc.file.30.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.31.file=font.h&#xD;&#xA;vm.last.preproc.file.31.offset=0&#xD;&#xA;vm.last.preproc.file.31.length=1631&#xD;&#xA;vm.last.preproc.file.31.linecount=71&#xD;&#xA;vm.last.preproc.file.31.linestart=3831&#xD;&#xA;vm.last.preproc.file.31.lineend=3902&#xD;&#xA;vm.last.preproc.file.31.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.32.file=ioexp.cpp&#xD;&#xA;vm.last.preproc.file.32.offset=0&#xD;&#xA;vm.last.preproc.file.32.length=5349&#xD;&#xA;vm.last.preproc.file.32.linecount=176&#xD;&#xA;vm.last.preproc.file.32.linestart=3902&#xD;&#xA;vm.last.preproc.file.32.lineend=4078&#xD;&#xA;vm.last.preproc.file.32.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.33.file=ioexp.h&#xD;&#xA;vm.last.preproc.file.33.offset=0&#xD;&#xA;vm.last.preproc.file.33.length=2609&#xD;&#xA;vm.last.preproc.file.33.linecount=92&#xD;&#xA;vm.last.preproc.file.33.linestart=4078&#xD;&#xA;vm.last.preproc.file.33.lineend=4170&#xD;&#xA;vm.last.preproc.file.33.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.34.file=lcd.cpp&#xD;&#xA;vm.last.preproc.file.34.offset=0&#xD;&#xA;vm.last.preproc.file.34.length=4079&#xD;&#xA;vm.last.preproc.file.34.linecount=155&#xD;&#xA;vm.last.preproc.file.34.linestart=4170&#xD;&#xA;vm.last.preproc.file.34.lineend=4325&#xD;&#xA;vm.last.preproc.file.34.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.35.file=lcd.h&#xD;&#xA;vm.last.preproc.file.35.offset=0&#xD;&#xA;vm.last.preproc.file.35.length=1323&#xD;&#xA;vm.last.preproc.file.35.linecount=51&#xD;&#xA;vm.last.preproc.file.35.linestart=4325&#xD;&#xA;vm.last.preproc.file.35.lineend=4376&#xD;&#xA;vm.last.preproc.file.35.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.36.file=persist_conf.cpp&#xD;&#xA;vm.last.preproc.file.36.offset=0&#xD;&#xA;vm.last.preproc.file.36.length=7487&#xD;&#xA;vm.last.preproc.file.36.linecount=223&#xD;&#xA;vm.last.preproc.file.36.linestart=4376&#xD;&#xA;vm.last.preproc.file.36.lineend=4599&#xD;&#xA;vm.last.preproc.file.36.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.37.file=persist_conf.h&#xD;&#xA;vm.last.preproc.file.37.offset=0&#xD;&#xA;vm.last.preproc.file.37.length=3124&#xD;&#xA;vm.last.preproc.file.37.linecount=114&#xD;&#xA;vm.last.preproc.file.37.linestart=4599&#xD;&#xA;vm.last.preproc.file.37.lineend=4713&#xD;&#xA;vm.last.preproc.file.37.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.38.file=profile.cpp&#xD;&#xA;vm.last.preproc.file.38.offset=0&#xD;&#xA;vm.last.preproc.file.38.length=8434&#xD;&#xA;vm.last.preproc.file.38.linecount=246&#xD;&#xA;vm.last.preproc.file.38.linestart=4713&#xD;&#xA;vm.last.preproc.file.38.lineend=4959&#xD;&#xA;vm.last.preproc.file.38.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.39.file=profile.h&#xD;&#xA;vm.last.preproc.file.39.offset=0&#xD;&#xA;vm.last.preproc.file.39.length=2572&#xD;&#xA;vm.last.preproc.file.39.linecount=96&#xD;&#xA;vm.last.preproc.file.39.linestart=4959&#xD;&#xA;vm.last.preproc.file.39.lineend=5055&#xD;&#xA;vm.last.preproc.file.39.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.40.file=psu.cpp&#xD;&#xA;vm.last.preproc.file.40.offset=0&#xD;&#xA;vm.last.preproc.file.40.length=14889&#xD;&#xA;vm.last.preproc.file.40.linecount=510&#xD;&#xA;vm.last.preproc.file.40.linestart=5055&#xD;&#xA;vm.last.preproc.file.40.lineend=5565&#xD;&#xA;vm.last.preproc.file.40.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.41.file=psu.h&#xD;&#xA;vm.last.preproc.file.41.offset=0&#xD;&#xA;vm.last.preproc.file.41.length=1747&#xD;&#xA;vm.last.preproc.file.41.linecount=83&#xD;&#xA;vm.last.preproc.file.41.linestart=5565&#xD;&#xA;vm.last.preproc.file.41.lineend=5648&#xD;&#xA;vm.last.preproc.file.41.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.42.file=rtc.cpp&#xD;&#xA;vm.last.preproc.file.42.offset=0&#xD;&#xA;vm.last.preproc.file.42.length=4534&#xD;&#xA;vm.last.preproc.file.42.linecount=147&#xD;&#xA;vm.last.preproc.file.42.linestart=5648&#xD;&#xA;vm.last.preproc.file.42.lineend=5795&#xD;&#xA;vm.last.preproc.file.42.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.43.file=rtc.h&#xD;&#xA;vm.last.preproc.file.43.offset=0&#xD;&#xA;vm.last.preproc.file.43.length=2315&#xD;&#xA;vm.last.preproc.file.43.linecount=68&#xD;&#xA;vm.last.preproc.file.43.linestart=5795&#xD;&#xA;vm.last.preproc.file.43.lineend=5863&#xD;&#xA;vm.last.preproc.file.43.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.44.file=scpi_appl.cpp&#xD;&#xA;vm.last.preproc.file.44.offset=0&#xD;&#xA;vm.last.preproc.file.44.length=3395&#xD;&#xA;vm.last.preproc.file.44.linecount=120&#xD;&#xA;vm.last.preproc.file.44.linestart=5863&#xD;&#xA;vm.last.preproc.file.44.lineend=5983&#xD;&#xA;vm.last.preproc.file.44.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.45.file=scpi_appl.h&#xD;&#xA;vm.last.preproc.file.45.offset=0&#xD;&#xA;vm.last.preproc.file.45.length=870&#xD;&#xA;vm.last.preproc.file.45.linecount=25&#xD;&#xA;vm.last.preproc.file.45.linestart=5983&#xD;&#xA;vm.last.preproc.file.45.lineend=6008&#xD;&#xA;vm.last.preproc.file.45.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.46.file=scpi_cal.cpp&#xD;&#xA;vm.last.preproc.file.46.offset=0&#xD;&#xA;vm.last.preproc.file.46.length=10821&#xD;&#xA;vm.last.preproc.file.46.linecount=364&#xD;&#xA;vm.last.preproc.file.46.linestart=6008&#xD;&#xA;vm.last.preproc.file.46.lineend=6372&#xD;&#xA;vm.last.preproc.file.46.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.47.file=scpi_cal.h&#xD;&#xA;vm.last.preproc.file.47.offset=0&#xD;&#xA;vm.last.preproc.file.47.length=1596&#xD;&#xA;vm.last.preproc.file.47.linecount=36&#xD;&#xA;vm.last.preproc.file.47.linestart=6372&#xD;&#xA;vm.last.preproc.file.47.lineend=6408&#xD;&#xA;vm.last.preproc.file.47.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.48.file=scpi_core.cpp&#xD;&#xA;vm.last.preproc.file.48.offset=0&#xD;&#xA;vm.last.preproc.file.48.length=3333&#xD;&#xA;vm.last.preproc.file.48.linecount=139&#xD;&#xA;vm.last.preproc.file.48.linestart=6408&#xD;&#xA;vm.last.preproc.file.48.lineend=6547&#xD;&#xA;vm.last.preproc.file.48.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.49.file=scpi_core.h&#xD;&#xA;vm.last.preproc.file.49.offset=0&#xD;&#xA;vm.last.preproc.file.49.length=1442&#xD;&#xA;vm.last.preproc.file.49.linecount=38&#xD;&#xA;vm.last.preproc.file.49.linestart=6547&#xD;&#xA;vm.last.preproc.file.49.lineend=6585&#xD;&#xA;vm.last.preproc.file.49.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.50.file=scpi_debug.cpp&#xD;&#xA;vm.last.preproc.file.50.offset=0&#xD;&#xA;vm.last.preproc.file.50.length=2140&#xD;&#xA;vm.last.preproc.file.50.linecount=72&#xD;&#xA;vm.last.preproc.file.50.linestart=6585&#xD;&#xA;vm.last.preproc.file.50.lineend=6657&#xD;&#xA;vm.last.preproc.file.50.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.51.file=scpi_debug.h&#xD;&#xA;vm.last.preproc.file.51.offset=0&#xD;&#xA;vm.last.preproc.file.51.length=954&#xD;&#xA;vm.last.preproc.file.51.linecount=32&#xD;&#xA;vm.last.preproc.file.51.linestart=6657&#xD;&#xA;vm.last.preproc.file.51.lineend=6689&#xD;&#xA;vm.last.preproc.file.51.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.52.file=scpi_diag.cpp&#xD;&#xA;vm.last.preproc.file.52.offset=0&#xD;&#xA;vm.last.preproc.file.52.length=12527&#xD;&#xA;vm.last.preproc.file.52.linecount=259&#xD;&#xA;vm.last.preproc.file.52.linestart=6689&#xD;&#xA;vm.last.preproc.file.52.lineend=6948&#xD;&#xA;vm.last.preproc.file.52.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.53.file=scpi_diag.h&#xD;&#xA;vm.last.preproc.file.53.offset=0&#xD;&#xA;vm.last.preproc.file.53.length=1143&#xD;&#xA;vm.last.preproc.file.53.linecount=27&#xD;&#xA;vm.last.preproc.file.53.linestart=6948&#xD;&#xA;vm.last.preproc.file.53.lineend=6975&#xD;&#xA;vm.last.preproc.file.53.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.54.file=scpi_inst.cpp&#xD;&#xA;vm.last.preproc.file.54.offset=0&#xD;&#xA;vm.last.preproc.file.54.length=2689&#xD;&#xA;vm.last.preproc.file.54.linecount=95&#xD;&#xA;vm.last.preproc.file.54.linestart=6975&#xD;&#xA;vm.last.preproc.file.54.lineend=7070&#xD;&#xA;vm.last.preproc.file.54.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.55.file=scpi_inst.h&#xD;&#xA;vm.last.preproc.file.55.offset=0&#xD;&#xA;vm.last.preproc.file.55.length=1002&#xD;&#xA;vm.last.preproc.file.55.linecount=27&#xD;&#xA;vm.last.preproc.file.55.linestart=7070&#xD;&#xA;vm.last.preproc.file.55.lineend=7097&#xD;&#xA;vm.last.preproc.file.55.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.56.file=scpi_meas.cpp&#xD;&#xA;vm.last.preproc.file.56.offset=0&#xD;&#xA;vm.last.preproc.file.56.length=2513&#xD;&#xA;vm.last.preproc.file.56.linecount=87&#xD;&#xA;vm.last.preproc.file.56.linestart=7097&#xD;&#xA;vm.last.preproc.file.56.lineend=7184&#xD;&#xA;vm.last.preproc.file.56.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.57.file=scpi_meas.h&#xD;&#xA;vm.last.preproc.file.57.offset=0&#xD;&#xA;vm.last.preproc.file.57.length=1090&#xD;&#xA;vm.last.preproc.file.57.linecount=27&#xD;&#xA;vm.last.preproc.file.57.linestart=7184&#xD;&#xA;vm.last.preproc.file.57.lineend=7211&#xD;&#xA;vm.last.preproc.file.57.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.58.file=scpi_mem.cpp&#xD;&#xA;vm.last.preproc.file.58.offset=0&#xD;&#xA;vm.last.preproc.file.58.length=4614&#xD;&#xA;vm.last.preproc.file.58.linecount=174&#xD;&#xA;vm.last.preproc.file.58.linestart=7211&#xD;&#xA;vm.last.preproc.file.58.lineend=7385&#xD;&#xA;vm.last.preproc.file.58.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.59.file=scpi_mem.h&#xD;&#xA;vm.last.preproc.file.59.offset=0&#xD;&#xA;vm.last.preproc.file.59.length=1535&#xD;&#xA;vm.last.preproc.file.59.linecount=34&#xD;&#xA;vm.last.preproc.file.59.linestart=7385&#xD;&#xA;vm.last.preproc.file.59.lineend=7419&#xD;&#xA;vm.last.preproc.file.59.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.60.file=scpi_outp.cpp&#xD;&#xA;vm.last.preproc.file.60.offset=0&#xD;&#xA;vm.last.preproc.file.60.length=3602&#xD;&#xA;vm.last.preproc.file.60.linecount=141&#xD;&#xA;vm.last.preproc.file.60.linestart=7419&#xD;&#xA;vm.last.preproc.file.60.lineend=7560&#xD;&#xA;vm.last.preproc.file.60.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.61.file=scpi_outp.h&#xD;&#xA;vm.last.preproc.file.61.offset=0&#xD;&#xA;vm.last.preproc.file.61.length=1122&#xD;&#xA;vm.last.preproc.file.61.linecount=29&#xD;&#xA;vm.last.preproc.file.61.linestart=7560&#xD;&#xA;vm.last.preproc.file.61.lineend=7589&#xD;&#xA;vm.last.preproc.file.61.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.62.file=scpi_params.cpp&#xD;&#xA;vm.last.preproc.file.62.offset=0&#xD;&#xA;vm.last.preproc.file.62.length=11359&#xD;&#xA;vm.last.preproc.file.62.linecount=366&#xD;&#xA;vm.last.preproc.file.62.linestart=7589&#xD;&#xA;vm.last.preproc.file.62.lineend=7955&#xD;&#xA;vm.last.preproc.file.62.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.63.file=scpi_params.h&#xD;&#xA;vm.last.preproc.file.63.offset=0&#xD;&#xA;vm.last.preproc.file.63.length=2547&#xD;&#xA;vm.last.preproc.file.63.linecount=53&#xD;&#xA;vm.last.preproc.file.63.linestart=7955&#xD;&#xA;vm.last.preproc.file.63.lineend=8008&#xD;&#xA;vm.last.preproc.file.63.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.64.file=scpi_psu.cpp&#xD;&#xA;vm.last.preproc.file.64.offset=0&#xD;&#xA;vm.last.preproc.file.64.length=3309&#xD;&#xA;vm.last.preproc.file.64.linecount=124&#xD;&#xA;vm.last.preproc.file.64.linestart=8008&#xD;&#xA;vm.last.preproc.file.64.lineend=8132&#xD;&#xA;vm.last.preproc.file.64.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.65.file=scpi_psu.h&#xD;&#xA;vm.last.preproc.file.65.offset=0&#xD;&#xA;vm.last.preproc.file.65.length=1322&#xD;&#xA;vm.last.preproc.file.65.linecount=48&#xD;&#xA;vm.last.preproc.file.65.linestart=8132&#xD;&#xA;vm.last.preproc.file.65.lineend=8180&#xD;&#xA;vm.last.preproc.file.65.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.66.file=scpi_regs.cpp&#xD;&#xA;vm.last.preproc.file.66.offset=0&#xD;&#xA;vm.last.preproc.file.66.length=9693&#xD;&#xA;vm.last.preproc.file.66.linecount=275&#xD;&#xA;vm.last.preproc.file.66.linestart=8180&#xD;&#xA;vm.last.preproc.file.66.lineend=8455&#xD;&#xA;vm.last.preproc.file.66.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.67.file=scpi_regs.h&#xD;&#xA;vm.last.preproc.file.67.offset=0&#xD;&#xA;vm.last.preproc.file.67.length=4115&#xD;&#xA;vm.last.preproc.file.67.linecount=124&#xD;&#xA;vm.last.preproc.file.67.linestart=8455&#xD;&#xA;vm.last.preproc.file.67.lineend=8579&#xD;&#xA;vm.last.preproc.file.67.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.68.file=scpi_sour.cpp&#xD;&#xA;vm.last.preproc.file.68.offset=0&#xD;&#xA;vm.last.preproc.file.68.length=12480&#xD;&#xA;vm.last.preproc.file.68.linecount=429&#xD;&#xA;vm.last.preproc.file.68.linestart=8579&#xD;&#xA;vm.last.preproc.file.68.lineend=9008&#xD;&#xA;vm.last.preproc.file.68.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.69.file=scpi_sour.h&#xD;&#xA;vm.last.preproc.file.69.offset=0&#xD;&#xA;vm.last.preproc.file.69.length=3219&#xD;&#xA;vm.last.preproc.file.69.linecount=48&#xD;&#xA;vm.last.preproc.file.69.linestart=9008&#xD;&#xA;vm.last.preproc.file.69.lineend=9056&#xD;&#xA;vm.last.preproc.file.69.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.70.file=scpi_stat.cpp&#xD;&#xA;vm.last.preproc.file.70.offset=0&#xD;&#xA;vm.last.preproc.file.70.length=10980&#xD;&#xA;vm.last.preproc.file.70.linecount=338&#xD;&#xA;vm.last.preproc.file.70.linestart=9056&#xD;&#xA;vm.last.preproc.file.70.lineend=9394&#xD;&#xA;vm.last.preproc.file.70.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.71.file=scpi_stat.h&#xD;&#xA;vm.last.preproc.file.71.offset=0&#xD;&#xA;vm.last.preproc.file.71.length=3230&#xD;&#xA;vm.last.preproc.file.71.linecount=48&#xD;&#xA;vm.last.preproc.file.71.linestart=9394&#xD;&#xA;vm.last.preproc.file.71.lineend=9442&#xD;&#xA;vm.last.preproc.file.71.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.72.file=scpi_syst.cpp&#xD;&#xA;vm.last.preproc.file.72.offset=0&#xD;&#xA;vm.last.preproc.file.72.length=9084&#xD;&#xA;vm.last.preproc.file.72.linecount=323&#xD;&#xA;vm.last.preproc.file.72.linestart=9442&#xD;&#xA;vm.last.preproc.file.72.lineend=9765&#xD;&#xA;vm.last.preproc.file.72.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.73.file=scpi_syst.h&#xD;&#xA;vm.last.preproc.file.73.offset=0&#xD;&#xA;vm.last.preproc.file.73.length=2567&#xD;&#xA;vm.last.preproc.file.73.linecount=44&#xD;&#xA;vm.last.preproc.file.73.linestart=9765&#xD;&#xA;vm.last.preproc.file.73.lineend=9809&#xD;&#xA;vm.last.preproc.file.73.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.74.file=scpi_user_config.h&#xD;&#xA;vm.last.preproc.file.74.offset=0&#xD;&#xA;vm.last.preproc.file.74.length=4764&#xD;&#xA;vm.last.preproc.file.74.linecount=84&#xD;&#xA;vm.last.preproc.file.74.linestart=9809&#xD;&#xA;vm.last.preproc.file.74.lineend=9893&#xD;&#xA;vm.last.preproc.file.74.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.75.file=serial_psu.cpp&#xD;&#xA;vm.last.preproc.file.75.offset=0&#xD;&#xA;vm.last.preproc.file.75.length=3263&#xD;&#xA;vm.last.preproc.file.75.linecount=121&#xD;&#xA;vm.last.preproc.file.75.linestart=9893&#xD;&#xA;vm.last.preproc.file.75.lineend=10014&#xD;&#xA;vm.last.preproc.file.75.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.76.file=serial_psu.h&#xD;&#xA;vm.last.preproc.file.76.offset=0&#xD;&#xA;vm.last.preproc.file.76.length=947&#xD;&#xA;vm.last.preproc.file.76.linecount=35&#xD;&#xA;vm.last.preproc.file.76.linestart=10014&#xD;&#xA;vm.last.preproc.file.76.lineend=10049&#xD;&#xA;vm.last.preproc.file.76.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.77.file=sound.cpp&#xD;&#xA;vm.last.preproc.file.77.offset=0&#xD;&#xA;vm.last.preproc.file.77.length=4304&#xD;&#xA;vm.last.preproc.file.77.linecount=180&#xD;&#xA;vm.last.preproc.file.77.linestart=10049&#xD;&#xA;vm.last.preproc.file.77.lineend=10229&#xD;&#xA;vm.last.preproc.file.77.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.78.file=sound.h&#xD;&#xA;vm.last.preproc.file.78.offset=0&#xD;&#xA;vm.last.preproc.file.78.length=1067&#xD;&#xA;vm.last.preproc.file.78.linecount=41&#xD;&#xA;vm.last.preproc.file.78.linestart=10229&#xD;&#xA;vm.last.preproc.file.78.lineend=10270&#xD;&#xA;vm.last.preproc.file.78.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.79.file=temp_sensor.cpp&#xD;&#xA;vm.last.preproc.file.79.offset=0&#xD;&#xA;vm.last.preproc.file.79.length=1383&#xD;&#xA;vm.last.preproc.file.79.linecount=44&#xD;&#xA;vm.last.preproc.file.79.linestart=10270&#xD;&#xA;vm.last.preproc.file.79.lineend=10314&#xD;&#xA;vm.last.preproc.file.79.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.80.file=temp_sensor.h&#xD;&#xA;vm.last.preproc.file.80.offset=0&#xD;&#xA;vm.last.preproc.file.80.length=1082&#xD;&#xA;vm.last.preproc.file.80.linecount=44&#xD;&#xA;vm.last.preproc.file.80.linestart=10314&#xD;&#xA;vm.last.preproc.file.80.lineend=10358&#xD;&#xA;vm.last.preproc.file.80.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.81.file=temperature.cpp&#xD;&#xA;vm.last.preproc.file.81.offset=0&#xD;&#xA;vm.last.preproc.file.81.length=4507&#xD;&#xA;vm.last.preproc.file.81.linecount=142&#xD;&#xA;vm.last.preproc.file.81.linestart=10358&#xD;&#xA;vm.last.preproc.file.81.lineend=10500&#xD;&#xA;vm.last.preproc.file.81.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.82.file=temperature.h&#xD;&#xA;vm.last.preproc.file.82.offset=0&#xD;&#xA;vm.last.preproc.file.82.length=1415&#xD;&#xA;vm.last.preproc.file.82.linecount=54&#xD;&#xA;vm.last.preproc.file.82.linestart=10500&#xD;&#xA;vm.last.preproc.file.82.lineend=10554&#xD;&#xA;vm.last.preproc.file.82.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.83.file=touch.cpp&#xD;&#xA;vm.last.preproc.file.83.offset=0&#xD;&#xA;vm.last.preproc.file.83.length=1216&#xD;&#xA;vm.last.preproc.file.83.linecount=53&#xD;&#xA;vm.last.preproc.file.83.linestart=10554&#xD;&#xA;vm.last.preproc.file.83.lineend=10607&#xD;&#xA;vm.last.preproc.file.83.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.84.file=touch.h&#xD;&#xA;vm.last.preproc.file.84.offset=0&#xD;&#xA;vm.last.preproc.file.84.length=278&#xD;&#xA;vm.last.preproc.file.84.linecount=21&#xD;&#xA;vm.last.preproc.file.84.linestart=10607&#xD;&#xA;vm.last.preproc.file.84.lineend=10628&#xD;&#xA;vm.last.preproc.file.84.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.85.file=ui.cpp&#xD;&#xA;vm.last.preproc.file.85.offset=0&#xD;&#xA;vm.last.preproc.file.85.length=4327&#xD;&#xA;vm.last.preproc.file.85.linecount=155&#xD;&#xA;vm.last.preproc.file.85.linestart=10628&#xD;&#xA;vm.last.preproc.file.85.lineend=10783&#xD;&#xA;vm.last.preproc.file.85.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.86.file=ui.h&#xD;&#xA;vm.last.preproc.file.86.offset=0&#xD;&#xA;vm.last.preproc.file.86.length=882&#xD;&#xA;vm.last.preproc.file.86.linecount=31&#xD;&#xA;vm.last.preproc.file.86.linestart=10783&#xD;&#xA;vm.last.preproc.file.86.lineend=10814&#xD;&#xA;vm.last.preproc.file.86.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.87.file=util.cpp&#xD;&#xA;vm.last.preproc.file.87.offset=0&#xD;&#xA;vm.last.preproc.file.87.length=3634&#xD;&#xA;vm.last.preproc.file.87.linecount=135&#xD;&#xA;vm.last.preproc.file.87.linestart=10814&#xD;&#xA;vm.last.preproc.file.87.lineend=10949&#xD;&#xA;vm.last.preproc.file.87.prefix_lines=0&#xD;&#xA;vm.last.preproc.file.88.file=util.h&#xD;&#xA;vm.last.preproc.file.88.offset=0&#xD;&#xA;vm.last.preproc.file.88.length=1457&#xD;&#xA;vm.last.preproc.file.88.linecount=48&#xD;&#xA;vm.last.preproc.file.88.linestart=10949&#xD;&#xA;vm.last.preproc.file.88.lineend=10997&#xD;&#xA;vm.last.preproc.file.88.prefix_lines=0&#xD;&#xA;serial.port.file=COM9&#xD;&#xA;serial.port=COM9&#xD;&#xA;serial.port.num=9&#xD;&#xA;build.project_name=eez_psu_sketch.ino&#xD;&#xA;runtime.vm.ide.platforms.path=C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\zcr1nyrl.p11\Micro Platforms&#xD;&#xA;build.variant.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega&#xD;&#xA;build.core.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino&#xD;&#xA;archive_file=core.a&#xD;&#xA;archive_file_path=C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\core.a&#xD;&#xA;extra.time.local=34293002&#xD;&#xA;vm_all_includes= -I&quot;C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch&quot;  -I&quot;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino&quot;  -I&quot;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega&quot;  -I&quot;C:\Program Files (x86)\Arduino\libraries&quot;  -I&quot;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries&quot;  -I&quot;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\zcr1nyrl.p11\Micro Platforms\default\debuggers&quot;  -I&quot;C:\Users\martin\Documents\Arduino\libraries&quot;  -I&quot;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI&quot;  -I&quot;C:\Users\martin\Documents\Arduino\libraries\UIPEthernet\src&quot;  -I&quot;C:\Users\martin\Documents\Arduino\libraries\scpi-parser\src&quot;  -I&quot;C:\Users\martin\Documents\Arduino\libraries\eez_psu_lib\src&quot;  -I&quot;C:\Users\martin\Documents\Arduino\libraries\UTFT&quot;  -I&quot;C:\Users\martin\Documents\Arduino\libraries\UTouch&quot; &#xD;&#xA;vm_core_includes= -I&quot;C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch&quot;  -I&quot;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino&quot;  -I&quot;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega&quot; &#xD;&#xA;includes= -I&quot;C:\Users\martin\Dropbox\Code\EEZ\psu-firmware\eez_psu_sketch&quot;  -I&quot;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino&quot;  -I&quot;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega&quot;  -I&quot;C:\Program Files (x86)\Arduino\libraries&quot;  -I&quot;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries&quot;  -I&quot;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\zcr1nyrl.p11\Micro Platforms\default\debuggers&quot;  -I&quot;C:\Users\martin\Documents\Arduino\libraries&quot;  -I&quot;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI&quot;  -I&quot;C:\Users\martin\Documents\Arduino\libraries\UIPEthernet\src&quot;  -I&quot;C:\Users\martin\Documents\Arduino\libraries\scpi-parser\src&quot;  -I&quot;C:\Users\martin\Documents\Arduino\libraries\eez_psu_lib\src&quot;  -I&quot;C:\Users\martin\Documents\Arduino\libraries\UTFT&quot;  -I&quot;C:\Users\martin\Documents\Arduino\libraries\UTouch&quot; &#xD;&#xA;build.path_sketch=C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560&#xD;&#xA;build.path_core=C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560&#xD;&#xA;build.path_libraries=C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560&#xD;&#xA;object_file=C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\util.cpp.o&#xD;&#xA;source_file=C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\util.cpp&#xD;&#xA;object_files= &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\eez_psu_lib\eez_psu.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi-parser\impl\error.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi-parser\impl\expression.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi-parser\impl\fifo.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi-parser\impl\ieee488.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi-parser\impl\lexer.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi-parser\impl\minimal.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi-parser\impl\parser.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi-parser\impl\units.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi-parser\impl\utils.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\SPI\SPI.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UIPEthernet\Dhcp.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UIPEthernet\Dns.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UIPEthernet\UIPClient.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UIPEthernet\UIPEthernet.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UIPEthernet\UIPServer.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UIPEthernet\UIPUdp.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UIPEthernet\utility\clock-arch.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UIPEthernet\utility\uip.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UIPEthernet\utility\uip_arp.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UIPEthernet\utility\uip_timer.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UIPEthernet\utility\Enc28J60Network.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UIPEthernet\utility\mempool.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UIPEthernet\utility\uip_debug.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UTFT\DefaultFonts.c.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UTFT\UTFT.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\UTouch\UTouch.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\eez_psu_sketch.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\adc.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\arduino_util.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\board.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\bp.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\buzzer.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\calibration.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\channel.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\dac.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\datetime.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\debug.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\eeprom.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\ethernet.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\font.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\ioexp.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\lcd.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\persist_conf.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\profile.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\psu.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\rtc.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_appl.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_cal.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_core.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_debug.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_diag.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_inst.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_meas.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_mem.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_outp.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_params.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_psu.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_regs.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_sour.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_stat.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\scpi_syst.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\serial_psu.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\sound.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\temp_sensor.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\temperature.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\touch.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\ui.cpp.o&quot;  &quot;C:\Users\martin\AppData\Local\V.Micro\Arduino\Builds\eez_psu_sketch\mega_atmega2560\util.cpp.o&quot; &#xD;&#xA;" visualmicro.application.name="arduino16x" arduino.build.mcu="atmega2560" arduino.upload.protocol="wiring" arduino.build.f_cpu="16000000L" arduino.board.desc="Arduino/Genuino Mega w/ ATmega2560 (Mega 2560)" arduino.board.name="mega_atmega2560" arduino.upload.port="COM9" visualmicro.platform.name="avr" arduino.build.core="arduino" />
-    </VisualStudio>
-  </ProjectExtensions>
 </Project>
