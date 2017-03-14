@@ -1399,6 +1399,7 @@ void Channel::doSetCurrent(float value) {
         if (dac.isTesting() || calibration::isEnabled() || util::greater(value, 0.5, CHANNEL_VALUE_PRECISION)) {
             if (flags.currentRange500mA) {
                 // 5A
+                DebugTrace("Switched to 5A range");
                 flags.currentRange500mA = 0;
                 I_MAX *= 10;
                 CURRENT_GND_OFFSET *= 10;
@@ -1408,6 +1409,7 @@ void Channel::doSetCurrent(float value) {
         } else {
             if (!flags.currentRange500mA) {
                 // 500mA
+                DebugTrace("Switched to 500mA range");
                 flags.currentRange500mA = 1;
                 I_MAX /= 10;
                 CURRENT_GND_OFFSET /= 10;
