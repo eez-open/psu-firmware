@@ -79,6 +79,8 @@ bool DigitalAnalogConverter::test() {
         return true;
     }
 
+    m_testing = true;
+
     bool saveCalibrationEnabled = channel.isCalibrationEnabled();
     channel.calibrationEnableNoEvent(false);
 
@@ -149,6 +151,8 @@ bool DigitalAnalogConverter::test() {
             // TODO
         }
     }
+
+    m_testing = false;
 
     return g_testResult != psu::TEST_FAILED;
 }

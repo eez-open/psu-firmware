@@ -1396,14 +1396,18 @@ void Channel::setVoltage(float value) {
 
 void Channel::doSetCurrent(float value) {
     if (boardRevision == CH_BOARD_REVISION_R5B12) {
-        if (util::greater(value, 0.5, CHANNEL_VALUE_PRECISION)) {
-            // 5A
-            ioexp.changeBit(IOExpander::IO_BIT_5A, true);
-            ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
-        } else {
-            // 500mA
-            ioexp.changeBit(IOExpander::IO_BIT_500mA, true);
-            ioexp.changeBit(IOExpander::IO_BIT_5A, false);
+        if (!dac.isTesting() && !calibration::isEnabled()) {
+            if (util::greater(value, 0.5, CHANNEL_VALUE_PRECISION)) {
+                // 5A
+                I_MAX *= 10;
+                ioexp.changeBit(IOExpander::IO_BIT_5A, true);
+                ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
+            } else {
+                // 500mA
+                I_MAX /= 10;
+                ioexp.changeBit(IOExpander::IO_BIT_500mA, true);
+                ioexp.changeBit(IOExpander::IO_BIT_5A, false);
+            }
         }
     }
 
