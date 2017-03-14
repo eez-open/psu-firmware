@@ -45,11 +45,3 @@ Use this header file to override anything from conf.h or conf_advanced.h.
 // Disable SD card
 //#undef OPTION_SD_CARD
 //#define OPTION_SD_CARD 0
-
-
-#undef CHANNELS
-#define CHANNELS \
-    CHANNEL(1, CH_BOARD_REVISION_R5B12_PARAMS, CH_PINS_1, CH_PARAMS_40V_5A), \
-    CHANNEL(2, CH_BOARD_REVISION_R5B10_PARAMS, CH_PINS_2, CH_PARAMS_40V_5A) \
-
-
