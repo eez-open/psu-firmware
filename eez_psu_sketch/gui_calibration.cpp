@@ -103,21 +103,21 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
     } else if (id == DATA_ID_CAL_CH_I1_MIN) {
         Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
         if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
-            return data::Value(channel.cal_conf.i[0].min.val, data::VALUE_TYPE_FLOAT_AMPER);
+            return data::Value(channel.cal_conf.i[1].min.val, data::VALUE_TYPE_FLOAT_AMPER);
         } else {
             return data::Value(PSTR(""));
         }
     } else if (id == DATA_ID_CAL_CH_I1_MID) {
         Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
         if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
-            return data::Value(channel.cal_conf.i[0].mid.val, data::VALUE_TYPE_FLOAT_AMPER);
+            return data::Value(channel.cal_conf.i[1].mid.val, data::VALUE_TYPE_FLOAT_AMPER);
         } else {
             return data::Value(PSTR(""));
         }
     } else if (id == DATA_ID_CAL_CH_I1_MAX) {
         Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
         if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
-            return data::Value(channel.cal_conf.i[0].max.val, data::VALUE_TYPE_FLOAT_AMPER);
+            return data::Value(channel.cal_conf.i[1].max.val, data::VALUE_TYPE_FLOAT_AMPER);
         } else {
             return data::Value(PSTR(""));
         }
@@ -177,6 +177,12 @@ void onSetOk(float value) {
 
 void showCurrentStep() {
     if (g_stepNum < MAX_STEP_NUM) {
+        if (g_stepNum >= 6 && g_stepNum <= 8) {
+            psu::calibration::selectCurrentRange(1);
+        } else {
+            psu::calibration::selectCurrentRange(0);
+        }
+
         replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP);
     } else {
         replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_FINISH);
@@ -189,8 +195,8 @@ bool canSave() {
 }
 
 void onSetRemarkOk(char *remark) {
-    popPage();
     psu::calibration::setRemark(remark, strlen(remark));
+    popPage();
     if (g_stepNum < MAX_STEP_NUM - 1) {
         nextStep();
     } else {
@@ -246,7 +252,7 @@ void set() {
 
         NumericKeypad *numericKeypad = NumericKeypad::start(0, data::Value(), options, onSetOk, showCurrentStep);
 
-        if (g_stepNum == 0 || g_stepNum == 3) {
+        if (g_stepNum == 0 || g_stepNum == 3 || g_stepNum >= 6 && g_stepNum <= 8) {
             numericKeypad->switchToMilli();
         }
     } else if (g_stepNum == MAX_STEP_NUM - 1) {
@@ -263,7 +269,10 @@ void previousStep() {
 
     if (g_stepNum > 0) {
         --g_stepNum;
-        replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP);
+        if (g_stepNum == 8 && !psu::calibration::currentHasDualRange()) {
+            g_stepNum = 5;
+        }
+        showCurrentStep();
     }
 }
 
@@ -281,7 +290,9 @@ void nextStep() {
     }
 
     ++g_stepNum;
-
+    if (g_stepNum == 6 && !psu::calibration::currentHasDualRange()) {
+        g_stepNum = 9;
+    }
     showCurrentStep();
 }
 

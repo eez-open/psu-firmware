@@ -19314,7 +19314,7 @@
               "y": 204,
               "width": 224,
               "height": 36,
-              "style": "active_button",
+              "style": "non_interactive_button_S",
               "text": "Start calibration wizard"
             },
             {
@@ -25789,18 +25789,6 @@
         "backgroundColor": "#525252",
         "borderSize": 0,
         "borderColor": "#ffffff"
-      },
-      {
-        "name": "active_button",
-        "font": "small",
-        "alignHorizontal": "center",
-        "alignVertical": "center",
-        "color": "#a4a400",
-        "backgroundColor": "#E9F5F9",
-        "borderSize": 0,
-        "borderColor": "#D3D3D3",
-        "paddingHorizontal": 0,
-        "paddingVertical": 0
       }
     ],
     "fonts": [

@@ -752,7 +752,11 @@ void Channel::adcDataIsReady(int16_t data) {
             u.mon_adc = data;
         }
 
+#ifdef EEZ_PSU_SIMULATOR
+        float value = remapAdcDataToVoltage(u.mon_adc);
+#else
         float value = remapAdcDataToVoltage(u.mon_adc) - VOLTAGE_GND_OFFSET;
+#endif
 
         if (isVoltageCalibrationEnabled()) {
             u.mon = util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
@@ -810,8 +814,11 @@ void Channel::adcDataIsReady(int16_t data) {
         debug::g_uMonDac[index - 1].set(data);
 #endif
 
+#ifdef EEZ_PSU_SIMULATOR
+        float value = remapAdcDataToVoltage(data);
+#else
         float value = remapAdcDataToVoltage(data) - VOLTAGE_GND_OFFSET;
-
+#endif
         if (isVoltageCalibrationEnabled()) {
             u.mon_dac = util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
         } else {
@@ -1400,7 +1407,9 @@ void Channel::doSetVoltage(float value) {
         value = util::remap(value, cal_conf.u.min.val, cal_conf.u.min.dac, cal_conf.u.max.val, cal_conf.u.max.dac);
     }
 
+#if !defined(EEZ_PSU_SIMULATOR)
     value += VOLTAGE_GND_OFFSET;
+#endif
 
     dac.set_voltage(value);
 }
@@ -1642,7 +1651,11 @@ void Channel::setCurrentTriggerMode(TriggerMode mode) {
 }
 
 float Channel::getDualRangeGndOffset() {
+#ifdef EEZ_PSU_SIMULATOR
+    return 0;
+#else
     return flags.currentRange == 1 ? (CURRENT_GND_OFFSET / 10) : CURRENT_GND_OFFSET;
+#endif
 }
 
 float Channel::getDualRangeMax() {

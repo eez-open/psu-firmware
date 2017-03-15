@@ -42,7 +42,7 @@ namespace eez {
 namespace psu {
 namespace gui {
 
-char g_stateText[2][MAX_KEYPAD_TEXT_LENGTH + 2];
+static char g_stateText[2][MAX_KEYPAD_TEXT_LENGTH + 2];
 
 ////////////////////////////////////////////////////////////////////////////////
 
