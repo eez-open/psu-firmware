@@ -295,7 +295,7 @@ Channel::Channel(
     uBeforeBalancing = NAN;
     iBeforeBalancing = NAN;
 
-    flags.currentRange500mA = 0;
+    flags.currentRange = 0;
 
     flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
     flags.displayValue2 = DISPLAY_VALUE_CURRENT; 
@@ -506,7 +506,8 @@ void Channel::resetHistory() {
 
 void Channel::clearCalibrationConf() {
     cal_conf.flags.u_cal_params_exists = 0;
-    cal_conf.flags.i_cal_params_exists = 0;
+    cal_conf.flags.i_cal_params_exists_range0 = 0;
+    cal_conf.flags.i_cal_params_exists_range1 = 0;
 
     cal_conf.u.min.dac = cal_conf.u.min.val = cal_conf.u.min.adc = U_CAL_VAL_MIN;
     cal_conf.u.mid.dac = cal_conf.u.mid.val = cal_conf.u.mid.adc = (U_CAL_VAL_MIN + U_CAL_VAL_MAX) / 2;
@@ -514,11 +515,17 @@ void Channel::clearCalibrationConf() {
     cal_conf.u.minPossible = U_MIN;
     cal_conf.u.maxPossible = U_MAX;
     
-    cal_conf.i.min.dac = cal_conf.i.min.val = cal_conf.i.min.adc = I_CAL_VAL_MIN;
-    cal_conf.i.mid.dac = cal_conf.i.mid.val = cal_conf.i.mid.adc = (I_CAL_VAL_MIN + I_CAL_VAL_MAX) / 2;
-    cal_conf.i.max.dac = cal_conf.i.max.val = cal_conf.i.max.adc = I_CAL_VAL_MAX;
-    cal_conf.i.minPossible = I_MIN;
-    cal_conf.i.maxPossible = I_MAX;
+    cal_conf.i[0].min.dac = cal_conf.i[0].min.val = cal_conf.i[0].min.adc = I_CAL_VAL_MIN;
+    cal_conf.i[0].mid.dac = cal_conf.i[0].mid.val = cal_conf.i[0].mid.adc = (I_CAL_VAL_MIN + I_CAL_VAL_MAX) / 2;
+    cal_conf.i[0].max.dac = cal_conf.i[0].max.val = cal_conf.i[0].max.adc = I_CAL_VAL_MAX;
+    cal_conf.i[0].minPossible = I_MIN;
+    cal_conf.i[0].maxPossible = I_MAX;
+
+    cal_conf.i[1].min.dac = cal_conf.i[1].min.val = cal_conf.i[1].min.adc = I_CAL_VAL_MIN / 10;
+    cal_conf.i[1].mid.dac = cal_conf.i[1].mid.val = cal_conf.i[1].mid.adc = (I_CAL_VAL_MIN + I_CAL_VAL_MAX) / 2 / 10;
+    cal_conf.i[1].max.dac = cal_conf.i[1].max.val = cal_conf.i[1].max.adc = I_CAL_VAL_MAX / 10;
+    cal_conf.i[1].minPossible = I_MIN;
+    cal_conf.i[1].maxPossible = I_MAX / 10;
 
     strcpy(cal_conf.calibration_date, "");
     strcpy(cal_conf.calibration_remark, CALIBRATION_REMARK_INIT);
@@ -770,7 +777,11 @@ void Channel::adcDataIsReady(int16_t data) {
         float value = remapAdcDataToCurrent(i.mon_adc) - getDualRangeGndOffset();
 
         if (isCurrentCalibrationEnabled()) {
-            i.mon = util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val);
+            i.mon = util::remap(value,
+                cal_conf.i[flags.currentRange].min.adc,
+                cal_conf.i[flags.currentRange].min.val,
+                cal_conf.i[flags.currentRange].max.adc,
+                cal_conf.i[flags.currentRange].max.val);
         } else {
             i.mon = value;
         }
@@ -825,7 +836,11 @@ void Channel::adcDataIsReady(int16_t data) {
         float value = remapAdcDataToCurrent(data) - getDualRangeGndOffset();
 
         if (isCurrentCalibrationEnabled()) {
-            i.mon_dac = util::remap(value, cal_conf.i.min.adc, cal_conf.i.min.val, cal_conf.i.max.adc, cal_conf.i.max.val);
+            i.mon_dac = util::remap(value,
+                cal_conf.i[flags.currentRange].min.adc,
+                cal_conf.i[flags.currentRange].min.val,
+                cal_conf.i[flags.currentRange].max.adc,
+                cal_conf.i[flags.currentRange].max.val);
         } else {
             i.mon_dac = value;
         }
@@ -1167,12 +1182,12 @@ void Channel::doCalibrationEnable(bool enable) {
         if (u.set > u.max) setVoltage(u.max);
         if (u.limit > u.max) u.limit = u.max;
 
-        i.min = util::floorPrec(cal_conf.i.minPossible, CHANNEL_VALUE_PRECISION);
+        i.min = util::floorPrec(cal_conf.i[0].minPossible, CHANNEL_VALUE_PRECISION);
         if (i.min < I_MIN) i.min = I_MIN;
         if (i.limit < i.min) i.limit = i.min;
         if (i.set < i.min) setCurrent(i.min);
 
-        i.max = util::ceilPrec(cal_conf.i.maxPossible, CHANNEL_VALUE_PRECISION);
+        i.max = util::ceilPrec(cal_conf.i[0].maxPossible, CHANNEL_VALUE_PRECISION);
         if (i.max > I_MAX) i.max = I_MAX;
         if (i.limit > i.max) i.limit = i.max;
         if (i.set > i.max) setCurrent(i.max);
@@ -1213,7 +1228,10 @@ bool Channel::isVoltageCalibrationEnabled() {
 }
 
 bool Channel::isCurrentCalibrationEnabled() {
-    return flags._calEnabled && cal_conf.flags.i_cal_params_exists;
+    return flags._calEnabled && (
+        flags.currentRange == 0 && cal_conf.flags.i_cal_params_exists_range0 ||
+        flags.currentRange == 1 && cal_conf.flags.i_cal_params_exists_range1
+    );
 }
 
 void Channel::calibrationFindVoltageRange(float minDac, float minVal, float minAdc, float maxDac, float maxVal, float maxAdc, float *min, float *max) {
@@ -1275,18 +1293,18 @@ void Channel::calibrationFindCurrentRange(float minDac, float minVal, float minA
 
     flags._calEnabled = true;
 
-    bool i_cal_params_exists = cal_conf.flags.i_cal_params_exists;
-    cal_conf.flags.i_cal_params_exists = true;
+    bool i_cal_params_exists = cal_conf.flags.i_cal_params_exists_range0;
+    cal_conf.flags.i_cal_params_exists_range0 = true;
 
     CalibrationValueConfiguration calValueConf;
-    calValueConf = cal_conf.i;
+    calValueConf = cal_conf.i[0];
 
-    cal_conf.i.min.dac = minDac;
-    cal_conf.i.min.val = minVal;
-    cal_conf.i.min.adc = minAdc;
-    cal_conf.i.max.dac = maxDac;
-    cal_conf.i.max.val = maxVal;
-    cal_conf.i.max.adc = maxAdc;
+    cal_conf.i[0].min.dac = minDac;
+    cal_conf.i[0].min.val = minVal;
+    cal_conf.i[0].min.adc = minAdc;
+    cal_conf.i[0].max.dac = maxDac;
+    cal_conf.i[0].max.val = maxVal;
+    cal_conf.i[0].max.adc = maxAdc;
 
     doSetCurrent(I_MIN);
     delay(100);
@@ -1310,8 +1328,8 @@ void Channel::calibrationFindCurrentRange(float minDac, float minVal, float minA
     //DebugTraceF("MON_ADC=%d", (int)i.mon_adc);
     *max = i.mon;
 
-    cal_conf.flags.i_cal_params_exists = i_cal_params_exists;
-    cal_conf.i = calValueConf;
+    cal_conf.flags.i_cal_params_exists_range0 = i_cal_params_exists;
+    cal_conf.i[0] = calValueConf;
 
     flags._calEnabled = false;
 }
@@ -1398,24 +1416,10 @@ void Channel::setVoltage(float value) {
 
 void Channel::doSetCurrent(float value) {
     if (boardRevision == CH_BOARD_REVISION_R5B12) {
-        if (dac.isTesting() || calibration::isEnabled() || util::greater(value, 0.5, CHANNEL_VALUE_PRECISION)) {
-            if (flags.currentRange500mA) {
-                // 5A
-                DebugTrace("Switched to 5A range");
-                flags.currentRange500mA = 0;
-                ioexp.changeBit(IOExpander::IO_BIT_5A, true);
-                ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
-                calculateNegligibleAdcDiffForCurrent();
-            }
-        } else {
-            if (!flags.currentRange500mA) {
-                // 500mA
-                DebugTrace("Switched to 500mA range");
-                flags.currentRange500mA = 1;
-                ioexp.changeBit(IOExpander::IO_BIT_500mA, true);
-                ioexp.changeBit(IOExpander::IO_BIT_5A, false);
-                calculateNegligibleAdcDiffForCurrent();
-            }
+        if (dac.isTesting()) {
+            setCurrentRange(0);
+        } else if (!calibration::isEnabled()) {
+            setCurrentRange(util::greater(value, 0.5, CHANNEL_VALUE_PRECISION) ? 0 : 1);
         }
     }
 
@@ -1423,7 +1427,11 @@ void Channel::doSetCurrent(float value) {
     i.mon_dac = 0;
 
     if (isCurrentCalibrationEnabled()) {
-        value = util::remap(value, cal_conf.i.min.val, cal_conf.i.min.dac, cal_conf.i.max.val, cal_conf.i.max.dac);
+        value = util::remap(value,
+            cal_conf.i[flags.currentRange].min.val,
+            cal_conf.i[flags.currentRange].min.dac,
+            cal_conf.i[flags.currentRange].max.val,
+            cal_conf.i[flags.currentRange].max.dac);
     }
 
     value += getDualRangeGndOffset();
@@ -1441,7 +1449,9 @@ void Channel::setCurrent(float value) {
 }
 
 bool Channel::isCalibrationExists() {
-    return cal_conf.flags.i_cal_params_exists || cal_conf.flags.u_cal_params_exists;
+    return flags.currentRange == 0 && cal_conf.flags.i_cal_params_exists_range0 || 
+        flags.currentRange == 1 && cal_conf.flags.i_cal_params_exists_range1 ||
+        cal_conf.flags.u_cal_params_exists;
 }
 
 bool Channel::isTripped() {
@@ -1632,15 +1642,36 @@ void Channel::setCurrentTriggerMode(TriggerMode mode) {
 }
 
 float Channel::getDualRangeGndOffset() {
-    return flags.currentRange500mA ? CURRENT_GND_OFFSET / 10 : CURRENT_GND_OFFSET;
+    return flags.currentRange == 1 ? (CURRENT_GND_OFFSET / 10) : CURRENT_GND_OFFSET;
 }
 
 float Channel::getDualRangeMax() {
-    return flags.currentRange500mA ? I_MAX / 10 : I_MAX;
+    return flags.currentRange == 1 ? (I_MAX / 10) : I_MAX;
 }
 
 void Channel::calculateNegligibleAdcDiffForCurrent() {
     negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (getDualRangeMax() - I_MIN)));
+}
+
+void Channel::setCurrentRange(uint8_t currentRange) {
+    if (boardRevision == CH_BOARD_REVISION_R5B12) {
+        if (currentRange != flags.currentRange) {
+            flags.currentRange = currentRange;
+            if (flags.currentRange == 0) {
+                // 5A
+                DebugTrace("Switched to 5A range");
+                ioexp.changeBit(IOExpander::IO_BIT_5A, true);
+                ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
+                calculateNegligibleAdcDiffForCurrent();
+            } else {
+                // 500mA
+                DebugTrace("Switched to 500mA range");
+                ioexp.changeBit(IOExpander::IO_BIT_500mA, true);
+                ioexp.changeBit(IOExpander::IO_BIT_5A, false);
+                calculateNegligibleAdcDiffForCurrent();
+            }
+        }
+    }
 }
 
 }

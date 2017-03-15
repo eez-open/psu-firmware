@@ -1052,7 +1052,7 @@
       "name": "edit_mode_interactive_mode_selector",
       "description": "0: interactive mode\n1: non-interactive mode",
       "type": "enum",
-      "enumItems": "[\n\"Ineractive\",\n\"Non-interactive\"\n]",
+      "enumItems": "[\n\"Interactive\",\n\"Non-interactive\"\n]",
       "defaultValue": "1"
     },
     {
@@ -1194,10 +1194,17 @@
       "defaultValue": "<remark>"
     },
     {
+      "name": "channel.calibration.step.isSetRemarkStep",
+      "description": "",
+      "type": "boolean",
+      "enumItems": "",
+      "defaultValue": "0"
+    },
+    {
       "name": "channel.calibration.step.num",
-      "description": "0 - U min\n1 - U mid\n2 - U max\n3 - I min\n4 - I mid\n5 - I max",
+      "description": "",
       "type": "enum",
-      "enumItems": "[\n\"U min\",\n\"U mid\",\n\"U max\",\n\"I min\",\n\"I mid\",\n\"I max\"\n]",
+      "enumItems": "[\n\"U min\",\n\"U mid\",\n\"U max\",\n\"I 5A min\",\n\"I 5A mid\",\n\"I 5A max\",\n\"I 500mA min\",\n\"I 500mA mid\",\n\"I 500mA max\"\n]",
       "defaultValue": "0"
     },
     {
@@ -1227,32 +1234,47 @@
     {
       "name": "cal_ch_u_min",
       "type": "float",
-      "defaultValue": "0.12 V"
+      "defaultValue": "0.12V"
     },
     {
       "name": "cal_ch_u_mid",
       "type": "float",
-      "defaultValue": "24.81 V"
+      "defaultValue": "24.81V"
     },
     {
       "name": "cal_ch_u_max",
       "type": "float",
-      "defaultValue": "48.12 V"
+      "defaultValue": "48.12V"
     },
     {
-      "name": "cal_ch_i_min",
+      "name": "cal_ch_i0_min",
       "type": "float",
-      "defaultValue": "0.02 A"
+      "defaultValue": "0.02A"
     },
     {
-      "name": "cal_ch_i_mid",
+      "name": "cal_ch_i0_mid",
       "type": "float",
-      "defaultValue": "1.42 A"
+      "defaultValue": "1.42A"
     },
     {
-      "name": "cal_ch_i_max",
+      "name": "cal_ch_i0_max",
       "type": "float",
-      "defaultValue": "3.01 A"
+      "defaultValue": "3.01A"
+    },
+    {
+      "name": "cal_ch_i1_min",
+      "type": "float",
+      "defaultValue": "2mA"
+    },
+    {
+      "name": "cal_ch_i1_mid",
+      "type": "float",
+      "defaultValue": "142mA"
+    },
+    {
+      "name": "cal_ch_i1_max",
+      "type": "float",
+      "defaultValue": "301mA"
     },
     {
       "name": "channel.protection.ovp.state",
@@ -1942,6 +1964,12 @@
     {
       "name": "trigger.isManual",
       "type": "boolean",
+      "defaultValue": "1"
+    },
+    {
+      "name": "channel.currentHasDualRange",
+      "type": "boolean",
+      "enumItems": "",
       "defaultValue": "1"
     }
   ],
@@ -2863,7 +2891,7 @@
                             "x": 0,
                             "y": 0,
                             "width": 240,
-                            "height": 86,
+                            "height": 88,
                             "style": "channel_off_L",
                             "text": "OFF"
                           },
@@ -2873,7 +2901,7 @@
                             "data": "channel.outputMode",
                             "y": 0,
                             "width": 240,
-                            "height": 86,
+                            "height": 88,
                             "style": "default",
                             "widgets": [
                               {
@@ -2883,7 +2911,7 @@
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
-                                "height": 86,
+                                "height": 88,
                                 "style": "mon_value_L"
                               },
                               {
@@ -2893,7 +2921,7 @@
                                 "x": 0,
                                 "y": 0,
                                 "width": 240,
-                                "height": 86,
+                                "height": 88,
                                 "style": "mon_value_L_ur"
                               }
                             ]
@@ -3043,14 +3071,32 @@
               "style": "default",
               "widgets": [
                 {
-                  "type": "Text",
-                  "action": "show_event_queue",
+                  "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 28,
+                  "width": 240,
                   "height": 28,
-                  "style": "default_S",
-                  "text": "\\u0083"
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "action": "show_event_queue",
+                      "x": 0,
+                      "y": 0,
+                      "width": 28,
+                      "height": 28,
+                      "style": "default_S",
+                      "text": "\\u0083"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 28,
+                      "y": 0,
+                      "width": 212,
+                      "height": 28,
+                      "style": "default_inverse"
+                    }
+                  ]
                 },
                 {
                   "type": "DisplayData",
@@ -4109,7 +4155,7 @@
                               {
                                 "type": "Rectangle",
                                 "x": 0,
-                                "y": 85,
+                                "y": 84,
                                 "width": 240,
                                 "height": 4,
                                 "style": "default_inverse"
@@ -6834,7 +6880,7 @@
                               "type": "Rectangle",
                               "x": 159,
                               "y": 52,
-                              "width": 50,
+                              "width": 49,
                               "height": 96,
                               "style": "default_inverse"
                             },
@@ -6853,7 +6899,7 @@
                               "action": "",
                               "x": 160,
                               "y": 100,
-                              "width": 49,
+                              "width": 48,
                               "height": 23,
                               "style": "default_S",
                               "text": "Track"
@@ -8142,7 +8188,7 @@
               "data": "edit_mode_interactive_mode_selector",
               "y": 32,
               "width": 202,
-              "height": 172,
+              "height": 252,
               "style": "default",
               "widgets": [
                 {
@@ -8150,7 +8196,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 202,
-                  "height": 172,
+                  "height": 252,
                   "style": "default",
                   "widgets": [
                     {
@@ -8265,7 +8311,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 202,
-                  "height": 172,
+                  "height": 252,
                   "style": "default",
                   "widgets": [
                     {
@@ -8920,7 +8966,7 @@
               "data": "edit_info",
               "x": 38,
               "y": 0,
-              "width": 200,
+              "width": 202,
               "height": 32,
               "style": "edit_info_S"
             },
@@ -8942,7 +8988,7 @@
               "data": "edit_mode_interactive_mode_selector",
               "y": 32,
               "width": 202,
-              "height": 172,
+              "height": 252,
               "style": "default",
               "widgets": [
                 {
@@ -8950,7 +8996,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 202,
-                  "height": 172,
+                  "height": 252,
                   "style": "default",
                   "widgets": [
                     {
@@ -9065,7 +9111,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 202,
-                  "height": 172,
+                  "height": 252,
                   "style": "default",
                   "widgets": [
                     {
@@ -9626,7 +9672,7 @@
               "type": "Select",
               "data": "edit_mode_interactive_mode_selector",
               "y": 168,
-              "width": 203,
+              "width": 204,
               "height": 36,
               "style": "default",
               "widgets": [
@@ -9757,15 +9803,6 @@
               "height": 36,
               "style": "bottom_button",
               "text": "B"
-            },
-            {
-              "type": "Container",
-              "x": 222,
-              "y": 298,
-              "width": 64,
-              "height": 32,
-              "style": "default_inverse",
-              "widgets": []
             }
           ]
         }
@@ -10421,7 +10458,7 @@
               "type": "Select",
               "data": "EventQueue.multiplePages",
               "y": 284,
-              "width": 192,
+              "width": 204,
               "height": 36,
               "style": "default",
               "widgets": [
@@ -10437,7 +10474,7 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 192,
+                  "width": 204,
                   "height": 36,
                   "style": "default",
                   "widgets": [
@@ -10664,7 +10701,7 @@
               "x": 0,
               "y": 32,
               "width": 320,
-              "height": 210,
+              "height": 208,
               "style": "default",
               "widgets": [
                 {
@@ -11757,7 +11794,7 @@
                       "type": "Text",
                       "x": 42,
                       "y": 0,
-                      "width": 210,
+                      "width": 204,
                       "height": 28,
                       "style": "value_S",
                       "text": "Protection settings"
@@ -11982,7 +12019,7 @@
                       "type": "Text",
                       "x": 42,
                       "y": 0,
-                      "width": 210,
+                      "width": 204,
                       "height": 28,
                       "style": "value_S",
                       "text": "Clear channel protection"
@@ -12171,7 +12208,7 @@
                       "type": "Text",
                       "x": 42,
                       "y": 0,
-                      "width": 210,
+                      "width": 204,
                       "height": 28,
                       "style": "value_S",
                       "text": "Set over-voltage protection"
@@ -12473,7 +12510,7 @@
                       "type": "Text",
                       "x": 42,
                       "y": 0,
-                      "width": 210,
+                      "width": 204,
                       "height": 28,
                       "style": "value_S",
                       "text": "Set over-current protection"
@@ -12851,7 +12888,7 @@
                       "type": "Text",
                       "x": 42,
                       "y": 0,
-                      "width": 210,
+                      "width": 204,
                       "height": 28,
                       "style": "value_S",
                       "text": "Set over-power protection"
@@ -13153,7 +13190,7 @@
                       "type": "Text",
                       "x": 42,
                       "y": 0,
-                      "width": 210,
+                      "width": 204,
                       "height": 28,
                       "style": "value_S",
                       "text": "Set temperature protection"
@@ -13528,7 +13565,7 @@
               "type": "Select",
               "data": "channel.isCoupledOrTracked",
               "y": 0,
-              "width": 246,
+              "width": 252,
               "height": 28,
               "style": "default",
               "widgets": [
@@ -14293,7 +14330,7 @@
                       "type": "Text",
                       "x": 42,
                       "y": 0,
-                      "width": 210,
+                      "width": 204,
                       "height": 28,
                       "style": "value_S",
                       "text": "Advanced settings"
@@ -14520,7 +14557,7 @@
               "type": "Select",
               "data": "channel.isCoupled",
               "y": 112,
-              "width": 180,
+              "width": 236,
               "height": 28,
               "style": "default",
               "widgets": [
@@ -14731,7 +14768,7 @@
                       "type": "Text",
                       "x": 42,
                       "y": 0,
-                      "width": 210,
+                      "width": 204,
                       "height": 28,
                       "style": "value_S",
                       "text": "Low-ripple mode settings"
@@ -15093,7 +15130,7 @@
                       "type": "Text",
                       "x": 42,
                       "y": 0,
-                      "width": 210,
+                      "width": 204,
                       "height": 28,
                       "style": "value_S",
                       "text": "Set remote voltage sense"
@@ -15633,20 +15670,29 @@
               "text": "Set channels coupling mode"
             },
             {
+              "type": "MultilineText",
+              "x": 16,
+              "y": 28,
+              "width": 236,
+              "height": 78,
+              "style": "edit_value_S_left",
+              "text": "Combine channels for higher max. output current or voltage."
+            },
+            {
               "x": 16,
               "type": "Select",
               "data": "channel.coupling.mode",
               "y": 106,
               "width": 236,
-              "height": 94,
+              "height": 76,
               "style": "default",
               "widgets": [
                 {
                   "type": "Container",
                   "x": 0,
-                  "y": 10,
+                  "y": 0,
                   "width": 236,
-                  "height": 84,
+                  "height": 76,
                   "style": "default",
                   "widgets": [
                     {
@@ -15674,9 +15720,9 @@
                 {
                   "type": "Container",
                   "x": 0,
-                  "y": 10,
+                  "y": 0,
                   "width": 236,
-                  "height": 84,
+                  "height": 76,
                   "style": "default",
                   "widgets": [
                     {
@@ -15704,9 +15750,9 @@
                 {
                   "type": "Container",
                   "x": 0,
-                  "y": 10,
+                  "y": 0,
                   "width": 236,
-                  "height": 84,
+                  "height": 76,
                   "style": "default",
                   "widgets": [
                     {
@@ -15736,19 +15782,10 @@
             {
               "type": "Rectangle",
               "x": 16,
-              "y": 192,
+              "y": 182,
               "width": 236,
-              "height": 12,
+              "height": 22,
               "style": "default_inverse"
-            },
-            {
-              "type": "MultilineText",
-              "x": 16,
-              "y": 28,
-              "width": 236,
-              "height": 88,
-              "style": "edit_value_S_left",
-              "text": "Combine channels for higher max. output current or voltage."
             },
             {
               "type": "Text",
@@ -15991,7 +16028,7 @@
                       "type": "Text",
                       "x": 42,
                       "y": 0,
-                      "width": 210,
+                      "width": 204,
                       "height": 28,
                       "style": "value_S",
                       "text": "Display view settings"
@@ -16240,8 +16277,8 @@
               "type": "Select",
               "data": "channel.isCoupledOrTracked",
               "y": 0,
-              "width": 246,
-              "height": 28,
+              "width": 252,
+              "height": 196,
               "style": "default",
               "widgets": [
                 {
@@ -16249,7 +16286,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 252,
-                  "height": 28,
+                  "height": 196,
                   "style": "default",
                   "widgets": [
                     {
@@ -16476,7 +16513,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 252,
-                  "height": 28,
+                  "height": 196,
                   "style": "default",
                   "widgets": [
                     {
@@ -17158,14 +17195,14 @@
               "x": 6,
               "y": 0,
               "width": 246,
-              "height": 32,
+              "height": 33,
               "style": "value_S",
               "text": "System protection settings"
             },
             {
               "type": "MultilineText",
               "x": 16,
-              "y": 32,
+              "y": 33,
               "width": 179,
               "height": 57,
               "style": "edit_value_S_left",
@@ -17176,9 +17213,9 @@
               "type": "Select",
               "data": "sys.shutdownWhenProtectionTripped",
               "action": "",
-              "y": 32,
+              "y": 33,
               "width": 57,
-              "height": 59,
+              "height": 57,
               "style": "edit_value_L",
               "widgets": [
                 {
@@ -17187,7 +17224,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 57,
-                  "height": 59,
+                  "height": 57,
                   "style": "edit_value_active",
                   "text": "No"
                 },
@@ -17197,7 +17234,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 57,
-                  "height": 59,
+                  "height": 57,
                   "style": "edit_value_active",
                   "text": "Yes"
                 }
@@ -17207,9 +17244,9 @@
               "x": 16,
               "type": "Select",
               "data": "sys.shutdownWhenProtectionTripped",
-              "y": 86,
+              "y": 90,
               "width": 236,
-              "height": 59,
+              "height": 57,
               "style": "default",
               "widgets": [
                 {
@@ -17217,13 +17254,13 @@
                   "x": 0,
                   "y": 0,
                   "width": 236,
-                  "height": 59,
+                  "height": 57,
                   "style": "default",
                   "widgets": [
                     {
                       "type": "MultilineText",
                       "x": 0,
-                      "y": 3,
+                      "y": 0,
                       "width": 179,
                       "height": 57,
                       "style": "edit_value_S_left",
@@ -17234,9 +17271,9 @@
                       "type": "Select",
                       "data": "sys.outputProtectionCoupled",
                       "action": "",
-                      "y": 3,
+                      "y": 0,
                       "width": 57,
-                      "height": 59,
+                      "height": 57,
                       "style": "edit_value_L",
                       "widgets": [
                         {
@@ -17245,7 +17282,7 @@
                           "x": 0,
                           "y": 0,
                           "width": 57,
-                          "height": 59,
+                          "height": 57,
                           "style": "edit_value_active",
                           "text": "No"
                         },
@@ -17255,7 +17292,7 @@
                           "x": 0,
                           "y": 0,
                           "width": 57,
-                          "height": 59,
+                          "height": 57,
                           "style": "edit_value_active",
                           "text": "Yes"
                         }
@@ -17268,7 +17305,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 236,
-                  "height": 59,
+                  "height": 57,
                   "style": "default",
                   "widgets": [
                     {
@@ -17276,7 +17313,7 @@
                       "x": 0,
                       "y": 0,
                       "width": 179,
-                      "height": 59,
+                      "height": 57,
                       "style": "default_disabled_S_left",
                       "text": "Switch off all outputs when protection tripped"
                     },
@@ -17287,7 +17324,7 @@
                       "action": "",
                       "y": 0,
                       "width": 57,
-                      "height": 59,
+                      "height": 57,
                       "style": "edit_value_L",
                       "widgets": [
                         {
@@ -17296,7 +17333,7 @@
                           "x": 0,
                           "y": 0,
                           "width": 57,
-                          "height": 59,
+                          "height": 57,
                           "style": "default_disabled",
                           "text": "No"
                         },
@@ -17306,7 +17343,7 @@
                           "x": 0,
                           "y": 0,
                           "width": 57,
-                          "height": 59,
+                          "height": 57,
                           "style": "default_disabled",
                           "text": "Yes"
                         }
@@ -17319,9 +17356,9 @@
             {
               "type": "MultilineText",
               "x": 16,
-              "y": 146,
+              "y": 147,
               "width": 179,
-              "height": 58,
+              "height": 57,
               "style": "edit_value_S_left",
               "text": "Force disabling of all outputs on power up"
             },
@@ -17330,9 +17367,9 @@
               "type": "Select",
               "data": "sys.forceDisablingAllOutputsOnPowerUp",
               "action": "",
-              "y": 146,
+              "y": 147,
               "width": 57,
-              "height": 58,
+              "height": 57,
               "style": "edit_value_L",
               "widgets": [
                 {
@@ -17341,7 +17378,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 57,
-                  "height": 58,
+                  "height": 57,
                   "style": "edit_value_active",
                   "text": "No"
                 },
@@ -17351,7 +17388,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 57,
-                  "height": 58,
+                  "height": 57,
                   "style": "edit_value_active",
                   "text": "Yes"
                 }
@@ -18535,7 +18572,7 @@
               "data": "sys.ethernet.status",
               "y": 62,
               "width": 240,
-              "height": 112,
+              "height": 142,
               "style": "default",
               "widgets": [
                 {
@@ -19087,6 +19124,25 @@
           "widgets": [
             {
               "type": "Text",
+              "data": "channel.shortLabel",
+              "x": 6,
+              "y": 0,
+              "width": 36,
+              "height": 28,
+              "style": "value_S",
+              "text": "Channel protections"
+            },
+            {
+              "type": "Text",
+              "x": 42,
+              "y": 0,
+              "width": 230,
+              "height": 28,
+              "style": "value_S",
+              "text": "Channel callibration settings"
+            },
+            {
+              "type": "Text",
               "x": 16,
               "y": 28,
               "width": 120,
@@ -19129,7 +19185,7 @@
               "data": "channel.calibration.status",
               "y": 80,
               "width": 304,
-              "height": 93,
+              "height": 124,
               "style": "default_inverse",
               "widgets": [
                 {
@@ -19137,7 +19193,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 304,
-                  "height": 93,
+                  "height": 124,
                   "style": "default_inverse"
                 },
                 {
@@ -19145,7 +19201,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 304,
-                  "height": 93,
+                  "height": 124,
                   "style": "default",
                   "widgets": [
                     {
@@ -19189,30 +19245,60 @@
                     },
                     {
                       "type": "Text",
-                      "data": "cal_ch_i_min",
+                      "data": "cal_ch_i0_min",
                       "x": 16,
                       "y": 62,
-                      "width": 60,
+                      "width": 64,
                       "height": 30,
                       "style": "value_S",
                       "text": "Text"
                     },
                     {
                       "type": "Text",
-                      "data": "cal_ch_i_mid",
+                      "data": "cal_ch_i0_mid",
                       "x": 96,
                       "y": 62,
-                      "width": 60,
+                      "width": 64,
                       "height": 30,
                       "style": "value_S",
                       "text": "Text"
                     },
                     {
                       "type": "Text",
-                      "data": "cal_ch_i_max",
+                      "data": "cal_ch_i0_max",
                       "x": 176,
                       "y": 62,
-                      "width": 60,
+                      "width": 64,
+                      "height": 30,
+                      "style": "value_S",
+                      "text": "Text"
+                    },
+                    {
+                      "type": "Text",
+                      "data": "cal_ch_i1_min",
+                      "x": 16,
+                      "y": 94,
+                      "width": 64,
+                      "height": 30,
+                      "style": "value_S",
+                      "text": "Text"
+                    },
+                    {
+                      "type": "Text",
+                      "data": "cal_ch_i1_mid",
+                      "x": 96,
+                      "y": 94,
+                      "width": 64,
+                      "height": 30,
+                      "style": "value_S",
+                      "text": "Text"
+                    },
+                    {
+                      "type": "Text",
+                      "data": "cal_ch_i1_max",
+                      "x": 176,
+                      "y": 94,
+                      "width": 64,
                       "height": 30,
                       "style": "value_S",
                       "text": "Text"
@@ -19224,20 +19310,12 @@
             {
               "type": "Text",
               "action": "sys_settings_cal_ch_wiz_start",
-              "x": 16,
-              "y": 172,
-              "width": 256,
-              "height": 25,
-              "style": "edit_value_active_S_left",
-              "text": "Start calibration wizard"
-            },
-            {
-              "type": "Rectangle",
               "x": 0,
               "y": 204,
               "width": 224,
               "height": 36,
-              "style": "bottom_button_background"
+              "style": "active_button",
+              "text": "Start calibration wizard"
             },
             {
               "type": "Text",
@@ -19258,25 +19336,6 @@
               "height": 36,
               "style": "bottom_button",
               "text": "X"
-            },
-            {
-              "type": "Text",
-              "x": 42,
-              "y": 0,
-              "width": 230,
-              "height": 28,
-              "style": "value_S",
-              "text": "Channel callibration settings"
-            },
-            {
-              "type": "Text",
-              "data": "channel.shortLabel",
-              "x": 6,
-              "y": 0,
-              "width": 36,
-              "height": 28,
-              "style": "value_S",
-              "text": "Channel protections"
             }
           ]
         }
@@ -19317,85 +19376,212 @@
               "text": "Calibration"
             },
             {
-              "type": "Rectangle",
-              "x": 16,
-              "y": 28,
-              "width": 290,
-              "height": 76,
-              "style": "default_inverse"
-            },
-            {
               "x": 16,
               "type": "Select",
-              "data": "channel.calibration.step.num",
+              "data": "channel.calibration.step.isSetRemarkStep",
               "y": 28,
-              "width": 290,
+              "width": 275,
               "height": 76,
               "style": "default",
               "widgets": [
                 {
-                  "type": "MultilineText",
+                  "type": "Container",
                   "x": 0,
                   "y": 0,
                   "width": 275,
                   "height": 76,
-                  "style": "default_S",
-                  "text": "Voltage MIN point calibration    Enter output value measured with external precision instrument"
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "x": 0,
+                      "type": "Select",
+                      "data": "channel.calibration.step.num",
+                      "y": 0,
+                      "width": 275,
+                      "height": 28,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "type": "Text",
+                          "x": 0,
+                          "y": 0,
+                          "width": 275,
+                          "height": 28,
+                          "style": "edit_value_S_left",
+                          "text": "Voltage MIN point calibration"
+                        },
+                        {
+                          "type": "Text",
+                          "x": 0,
+                          "y": 0,
+                          "width": 275,
+                          "height": 28,
+                          "style": "edit_value_S_left",
+                          "text": "Voltage MID point calibration"
+                        },
+                        {
+                          "type": "Text",
+                          "x": 0,
+                          "y": 0,
+                          "width": 275,
+                          "height": 28,
+                          "style": "edit_value_S_left",
+                          "text": "Voltage MAX point calibration"
+                        },
+                        {
+                          "x": 0,
+                          "type": "Select",
+                          "data": "channel.currentHasDualRange",
+                          "y": 0,
+                          "width": 275,
+                          "height": 28,
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "type": "Text",
+                              "x": 0,
+                              "y": 0,
+                              "width": 275,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "Current MIN point calibration"
+                            },
+                            {
+                              "type": "Text",
+                              "x": 0,
+                              "y": 0,
+                              "width": 275,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "Current [0-5A] MIN point cal."
+                            }
+                          ]
+                        },
+                        {
+                          "x": 0,
+                          "type": "Select",
+                          "data": "channel.currentHasDualRange",
+                          "y": 0,
+                          "width": 275,
+                          "height": 28,
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "type": "Text",
+                              "x": 0,
+                              "y": 0,
+                              "width": 275,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "Current MID point calibration"
+                            },
+                            {
+                              "type": "Text",
+                              "x": 0,
+                              "y": 0,
+                              "width": 275,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "Current [0-5A] MID point cal."
+                            }
+                          ]
+                        },
+                        {
+                          "x": 0,
+                          "type": "Select",
+                          "data": "channel.currentHasDualRange",
+                          "y": 0,
+                          "width": 275,
+                          "height": 28,
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "type": "Text",
+                              "x": 0,
+                              "y": 0,
+                              "width": 275,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "Current MAX point calibration"
+                            },
+                            {
+                              "type": "Text",
+                              "x": 0,
+                              "y": 0,
+                              "width": 275,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "Current [0-5A] MAX point cal."
+                            }
+                          ]
+                        },
+                        {
+                          "type": "Text",
+                          "x": 0,
+                          "y": 0,
+                          "width": 275,
+                          "height": 28,
+                          "style": "edit_value_S_left",
+                          "text": "Current [0-500mA] MIN point cal."
+                        },
+                        {
+                          "type": "Text",
+                          "x": 0,
+                          "y": 0,
+                          "width": 275,
+                          "height": 28,
+                          "style": "edit_value_S_left",
+                          "text": "Current [0-500mA] MID point cal."
+                        },
+                        {
+                          "type": "Text",
+                          "x": 0,
+                          "y": 0,
+                          "width": 275,
+                          "height": 28,
+                          "style": "edit_value_S_left",
+                          "text": "Current [0-500mA] MAX point cal."
+                        }
+                      ]
+                    },
+                    {
+                      "type": "MultilineText",
+                      "x": 0,
+                      "y": 28,
+                      "width": 275,
+                      "height": 48,
+                      "style": "default_S",
+                      "text": "Enter output value measured with external precision instrument"
+                    }
+                  ]
                 },
                 {
-                  "type": "MultilineText",
+                  "type": "Container",
                   "x": 0,
                   "y": 0,
                   "width": 275,
                   "height": 76,
-                  "style": "default_S",
-                  "text": "Voltage MID point calibration    Enter output value measured with external precision instrument"
-                },
-                {
-                  "type": "MultilineText",
-                  "x": 0,
-                  "y": 0,
-                  "width": 275,
-                  "height": 76,
-                  "style": "default_S",
-                  "text": "Voltage MAX point calibration    Enter output value measured with external precision instrument"
-                },
-                {
-                  "type": "MultilineText",
-                  "x": 0,
-                  "y": 0,
-                  "width": 275,
-                  "height": 76,
-                  "style": "default_S",
-                  "text": "Current MIN point calibration    Enter output value measured with external precision instrument"
-                },
-                {
-                  "type": "MultilineText",
-                  "x": 0,
-                  "y": 0,
-                  "width": 275,
-                  "height": 76,
-                  "style": "default_S",
-                  "text": "Current MID point calibration    Enter output value measured with external precision instrument"
-                },
-                {
-                  "type": "MultilineText",
-                  "x": 0,
-                  "y": 0,
-                  "width": 275,
-                  "height": 76,
-                  "style": "default_S",
-                  "text": "Current MAX point calibration    Enter output value measured with external precision instrument"
-                },
-                {
-                  "type": "Text",
-                  "data": "",
-                  "x": 0,
-                  "y": 0,
-                  "width": 290,
-                  "height": 32,
-                  "style": "edit_value_S_left",
-                  "text": "Calibration remark (max. 32 char.)"
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "type": "Text",
+                      "data": "",
+                      "x": 0,
+                      "y": 0,
+                      "width": 275,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Calibration remark (max. 32 char.)"
+                    },
+                    {
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 28,
+                      "width": 275,
+                      "height": 48,
+                      "style": "default_inverse"
+                    }
+                  ]
                 }
               ]
             },
@@ -20344,7 +20530,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 304,
-                  "height": 158,
+                  "height": 174,
                   "style": "default",
                   "widgets": [
                     {
@@ -20428,7 +20614,7 @@
                       "x": 0,
                       "y": 158,
                       "width": 304,
-                      "height": 10,
+                      "height": 16,
                       "style": "default_inverse"
                     }
                   ]
@@ -20548,8 +20734,8 @@
               "type": "Container",
               "x": 8,
               "y": 30,
-              "width": 302,
-              "height": 158,
+              "width": 304,
+              "height": 174,
               "style": "default",
               "widgets": [
                 {
@@ -20613,7 +20799,7 @@
                   "x": 0,
                   "y": 84,
                   "width": 304,
-                  "height": 84,
+                  "height": 90,
                   "style": "default_inverse"
                 }
               ]
@@ -20781,7 +20967,7 @@
               "type": "Select",
               "data": "sys.info.fan.status",
               "y": 114,
-              "width": 110,
+              "width": 122,
               "height": 28,
               "style": "default",
               "widgets": [
@@ -21285,7 +21471,7 @@
             "data": "channel.coupling.mode",
             "y": 0,
             "width": 64,
-            "height": 32,
+            "height": 204,
             "style": "default",
             "widgets": [
               {
@@ -21293,7 +21479,7 @@
                 "x": 0,
                 "y": 0,
                 "width": 64,
-                "height": 32,
+                "height": 204,
                 "style": "default",
                 "widgets": [
                   {
@@ -21319,7 +21505,7 @@
                           "x": 0,
                           "y": 0,
                           "width": 64,
-                          "height": 92,
+                          "height": 112,
                           "style": "default_inverse"
                         },
                         {
@@ -21513,7 +21699,7 @@
                           "x": 0,
                           "y": 0,
                           "width": 64,
-                          "height": 92,
+                          "height": 112,
                           "style": "default_inverse"
                         }
                       ]
@@ -21526,7 +21712,7 @@
                 "x": 0,
                 "y": 0,
                 "width": 64,
-                "height": 32,
+                "height": 204,
                 "style": "default",
                 "widgets": [
                   {
@@ -21543,7 +21729,7 @@
                         "x": 0,
                         "y": 0,
                         "width": 64,
-                        "height": 92,
+                        "height": 112,
                         "style": "default_inverse"
                       },
                       {
@@ -21803,7 +21989,7 @@
                         "x": 0,
                         "y": 0,
                         "width": 64,
-                        "height": 92,
+                        "height": 112,
                         "style": "default_inverse"
                       }
                     ]
@@ -21850,7 +22036,7 @@
                 "x": 0,
                 "y": 0,
                 "width": 64,
-                "height": 32,
+                "height": 204,
                 "style": "default",
                 "widgets": [
                   {
@@ -21867,7 +22053,7 @@
                         "x": 0,
                         "y": 0,
                         "width": 64,
-                        "height": 92,
+                        "height": 112,
                         "style": "default_inverse"
                       },
                       {
@@ -22127,7 +22313,7 @@
                         "x": 0,
                         "y": 0,
                         "width": 64,
-                        "height": 92,
+                        "height": 112,
                         "style": "default_inverse"
                       }
                     ]
@@ -22174,7 +22360,7 @@
                 "x": 0,
                 "y": 0,
                 "width": 64,
-                "height": 32,
+                "height": 204,
                 "style": "default",
                 "widgets": [
                   {
@@ -22210,7 +22396,7 @@
                           "x": 0,
                           "y": 0,
                           "width": 64,
-                          "height": 92,
+                          "height": 112,
                           "style": "default_inverse"
                         },
                         {
@@ -22382,7 +22568,7 @@
                           "x": 0,
                           "y": 0,
                           "width": 64,
-                          "height": 92,
+                          "height": 112,
                           "style": "default_inverse"
                         }
                       ]
@@ -23604,7 +23790,7 @@
             "action": "",
             "y": 4,
             "width": 149,
-            "height": 129,
+            "height": 130,
             "style": "default",
             "widgets": [
               {
@@ -25603,6 +25789,18 @@
         "backgroundColor": "#525252",
         "borderSize": 0,
         "borderColor": "#ffffff"
+      },
+      {
+        "name": "active_button",
+        "font": "small",
+        "alignHorizontal": "center",
+        "alignVertical": "center",
+        "color": "#a4a400",
+        "backgroundColor": "#E9F5F9",
+        "borderSize": 0,
+        "borderColor": "#D3D3D3",
+        "paddingHorizontal": 0,
+        "paddingVertical": 0
       }
     ],
     "fonts": [
@@ -72338,6 +72536,9 @@
           },
           {
             "name": "CALibration:CURRent:LEVel"
+          },
+          {
+            "name": "CALibration:CURRent:RANGe"
           },
           {
             "name": "CALibration:PASSword:NEW"

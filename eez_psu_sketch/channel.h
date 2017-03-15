@@ -68,8 +68,10 @@ public:
     struct CalibrationConfigurationFlags {
         /// Is voltage calibrated?
         unsigned u_cal_params_exists : 1; 
-        /// Is current calibrated?
-        unsigned i_cal_params_exists : 1;
+        /// Is current in range 0 (5A) calibrated?
+        unsigned i_cal_params_exists_range0 : 1;
+        /// Is current in range 1 (500mA) calibrated?
+        unsigned i_cal_params_exists_range1 : 1;
     };
 
     /// Calibration parameters for the single point.
@@ -116,8 +118,8 @@ public:
         /// Calibration parameters for the voltage.
         CalibrationValueConfiguration u; 
 
-        /// Calibration parameters for the current.
-        CalibrationValueConfiguration i;
+        /// Calibration parameters for the currents in both ranges.
+        CalibrationValueConfiguration i[2];
 
         /// Date when calibration is saved.
         /// Automatically set if RTC is present.
@@ -169,7 +171,7 @@ public:
         unsigned displayValue2: 2;
         unsigned voltageTriggerMode: 2;
         unsigned currentTriggerMode: 2;
-        unsigned currentRange500mA;
+        unsigned currentRange: 1;
     };
 
     /// Voltage and current data set and measured during runtime.
@@ -546,6 +548,8 @@ public:
     void setCurrentTriggerMode(TriggerMode mode);
 
     float getDualRangeMax();
+
+    void setCurrentRange(uint8_t currentRange);
 
 private:
     bool delayed_dp_off;

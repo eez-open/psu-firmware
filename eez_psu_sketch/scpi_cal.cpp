@@ -37,6 +37,14 @@ scpi_choice_def_t calibration_level_choice[] = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+scpi_choice_def_t calibration_current_range_choice[] = {
+    { "5A",    calibration::CURRENT_RANGE_5A },
+    { "500MA", calibration::CURRENT_RANGE_500MA },
+    SCPI_CHOICE_LIST_END /* termination of option list */
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
 static bool check_password(scpi_t * context) {
     const char *password;
     size_t len;
@@ -181,11 +189,32 @@ scpi_result_t scpi_cmd_calibrationModeQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_cmd_calibrationCurrentData(scpi_t * context) {
-    return calibration_data(context, calibration::g_current);
+    return calibration_data(context, calibration::getCurrent());
 }
 
 scpi_result_t scpi_cmd_calibrationCurrentLevel(scpi_t * context) {
-    return calibration_level(context, calibration::g_current);
+    return calibration_level(context, calibration::getCurrent());
+}
+
+scpi_result_t scpi_cmd_calibrationCurrentRange(scpi_t * context) {
+    if (!calibration::isEnabled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CALIBRATION_STATE_IS_OFF);
+        return SCPI_RES_ERR;
+    }
+
+    if (!calibration::currentHasDualRange()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    int32_t range;
+    if (!SCPI_ParamChoice(context, calibration_current_range_choice, &range, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    calibration::selectCurrentRange(range);
+
+    return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_cmd_calibrationPasswordNew(scpi_t * context) {
@@ -317,11 +346,11 @@ scpi_result_t scpi_cmd_calibrationStateQ(scpi_t * context) {
 }
 
 scpi_result_t scpi_cmd_calibrationVoltageData(scpi_t * context) {
-    return calibration_data(context, calibration::g_voltage);
+    return calibration_data(context, calibration::getVoltage());
 }
 
 scpi_result_t scpi_cmd_calibrationVoltageLevel(scpi_t * context) {
-    return calibration_level(context, calibration::g_voltage);;
+    return calibration_level(context, calibration::getVoltage());;
 }
 
 }

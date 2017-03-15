@@ -24,15 +24,21 @@ namespace psu {
 namespace calibration {
 
 enum Level {
-    LEVEL_NONE = 0,
-    LEVEL_MIN = 1,
-    LEVEL_MID = 2,
-    LEVEL_MAX = 3
+    LEVEL_NONE,
+    LEVEL_MIN,
+    LEVEL_MID,
+    LEVEL_MAX
+};
+
+enum CurrentRange {
+    CURRENT_RANGE_5A,
+    CURRENT_RANGE_500MA
 };
 
 /// Calibration parameters for the voltage or current during calibration procedure.
 struct Value {
     bool voltOrCurr;
+    int8_t currentRange;
 
     int8_t level;
 
@@ -51,7 +57,7 @@ struct Value {
     float minPossible;
     float maxPossible;
 
-    Value(bool voltOrCurr);
+    Value(bool voltOrCurr, int currentRange_ = -1);
 
     void reset();
 
@@ -68,9 +74,6 @@ private:
     float getRange();
 };
 
-extern Value g_voltage;
-extern Value g_current;
-
 bool isEnabled();
 
 /// Start calibration procedure on the channel.
@@ -83,6 +86,12 @@ void stop();
 /// Set U and I to zero for the calibration channel.
 void resetChannelToZero();
 
+bool currentHasDualRange();
+void selectCurrentRange(int8_t range);
+
+Value& getVoltage();
+Value& getCurrent();
+
 /// Is calibration remark is set.
 bool isRemarkSet();
 
@@ -91,12 +100,6 @@ const char *getRemark();
 
 /// Set calibration remark.
 void setRemark(const char *value, size_t len);
-
-/// Are voltage calibration parameters entered?
-bool isVoltageCalibrated();
-
-/// Are current calibration parameters entered?
-bool isCurrentCalibrated();
 
 /// Are all calibration parameters entered?
 bool canSave(int16_t &scpiErr);

@@ -26,6 +26,7 @@
     SCPI_COMMAND("CALibration:CLEar", scpi_cmd_calibrationClear) \
     SCPI_COMMAND("CALibration:CURRent[:DATA]", scpi_cmd_calibrationCurrentData) \
     SCPI_COMMAND("CALibration:CURRent:LEVel", scpi_cmd_calibrationCurrentLevel) \
+    SCPI_COMMAND("CALibration:CURRent:RANGe", scpi_cmd_calibrationCurrentRange) \
     SCPI_COMMAND("CALibration:PASSword:NEW", scpi_cmd_calibrationPasswordNew) \
     SCPI_COMMAND("CALibration:REMark", scpi_cmd_calibrationRemark) \
     SCPI_COMMAND("CALibration:REMark?", scpi_cmd_calibrationRemarkQ) \

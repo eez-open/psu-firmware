@@ -842,6 +842,10 @@ Value get(const Cursor &cursor, uint8_t id) {
         if (id == DATA_ID_CHANNEL_ON_TIME_LAST) {
             return data::Value((uint32_t)channel.onTimeCounter.getLastTime(), data::VALUE_TYPE_ON_TIME_COUNTER);
         }
+
+        if (id == DATA_ID_CHANNEL_CURRENT_HAS_DUAL_RANGE) {
+            return data::Value(channel.boardRevision == CH_BOARD_REVISION_R5B12 ? 1 : 0);
+        }
     }
     
     if (id == DATA_ID_CHANNEL_IS_VOLTAGE_BALANCED) {

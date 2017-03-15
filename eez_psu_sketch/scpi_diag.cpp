@@ -94,6 +94,24 @@ scpi_result_t scpi_cmd_diagnosticInformationAdcQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+void printCalibrationParameters(scpi_t *context, const char *label, bool calParamsExists,  Channel::CalibrationValueConfiguration &calibrationValue, char *buffer) {
+    strcpy(buffer, label); strcat_P(buffer, PSTR("_cal_params_exists=")); util::strcatInt(buffer, calParamsExists);SCPI_ResultText(context, buffer);
+    
+    if (calParamsExists) {
+        strcpy(buffer, label); strcat_P(buffer, PSTR("_min_level=")); util::strcatVoltage(buffer, calibrationValue.min.dac, 6); SCPI_ResultText(context, buffer);
+        strcpy(buffer, label); strcat_P(buffer, PSTR("_min_data=") ); util::strcatVoltage(buffer, calibrationValue.min.val, 6); SCPI_ResultText(context, buffer);
+        strcpy(buffer, label); strcat_P(buffer, PSTR("_min_adc=")  ); util::strcatVoltage(buffer, calibrationValue.min.adc, 6); SCPI_ResultText(context, buffer);
+        strcpy(buffer, label); strcat_P(buffer, PSTR("_mid_level=")); util::strcatVoltage(buffer, calibrationValue.mid.dac, 6); SCPI_ResultText(context, buffer);
+        strcpy(buffer, label); strcat_P(buffer, PSTR("_mid_data=") ); util::strcatVoltage(buffer, calibrationValue.mid.val, 6); SCPI_ResultText(context, buffer);
+        strcpy(buffer, label); strcat_P(buffer, PSTR("_mid_adc=")  ); util::strcatVoltage(buffer, calibrationValue.mid.adc, 6); SCPI_ResultText(context, buffer);
+        strcpy(buffer, label); strcat_P(buffer, PSTR("_max_level=")); util::strcatVoltage(buffer, calibrationValue.max.dac, 6); SCPI_ResultText(context, buffer);
+        strcpy(buffer, label); strcat_P(buffer, PSTR("_max_data=") ); util::strcatVoltage(buffer, calibrationValue.max.val, 6); SCPI_ResultText(context, buffer);
+        strcpy(buffer, label); strcat_P(buffer, PSTR("_max_adc=")  ); util::strcatVoltage(buffer, calibrationValue.max.adc, 6); SCPI_ResultText(context, buffer);
+	    strcpy(buffer, label); strcat_P(buffer, PSTR("_min_range=")  ); util::strcatVoltage(buffer, calibrationValue.minPossible, 6); SCPI_ResultText(context, buffer);
+	    strcpy(buffer, label); strcat_P(buffer, PSTR("_max_range=")  ); util::strcatVoltage(buffer, calibrationValue.maxPossible, 6); SCPI_ResultText(context, buffer);
+    }
+}
+
 scpi_result_t scpi_cmd_diagnosticInformationCalibrationQ(scpi_t * context) {
     Channel *channel = param_channel(context);
     if (!channel) {
@@ -107,42 +125,19 @@ scpi_result_t scpi_cmd_diagnosticInformationCalibrationQ(scpi_t * context) {
             sprintf_P(buffer, PSTR("remark=%s"), calibration::getRemark());
             SCPI_ResultText(context, buffer);
         }
-        print_calibration_value(context, buffer, calibration::g_voltage);
-        print_calibration_value(context, buffer, calibration::g_current);
+        print_calibration_value(context, buffer, calibration::getVoltage());
+        print_calibration_value(context, buffer, calibration::getCurrent());
     }
     else {
         sprintf_P(buffer, PSTR("remark=%s %s"), channel->cal_conf.calibration_date, channel->cal_conf.calibration_remark);
         SCPI_ResultText(context, buffer);
 
-        strcpy_P(buffer, PSTR("u_cal_params_exists=")); util::strcatInt(buffer, channel->cal_conf.flags.u_cal_params_exists); SCPI_ResultText(context, buffer);
-
-        if (channel->cal_conf.flags.u_cal_params_exists) {
-            strcpy_P(buffer, PSTR("u_min_level=")); util::strcatVoltage(buffer, channel->cal_conf.u.min.dac, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("u_min_data=") ); util::strcatVoltage(buffer, channel->cal_conf.u.min.val, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("u_min_adc=")  ); util::strcatVoltage(buffer, channel->cal_conf.u.min.adc, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("u_mid_level=")); util::strcatVoltage(buffer, channel->cal_conf.u.mid.dac, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("u_mid_data=") ); util::strcatVoltage(buffer, channel->cal_conf.u.mid.val, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("u_mid_adc=")  ); util::strcatVoltage(buffer, channel->cal_conf.u.mid.adc, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("u_max_level=")); util::strcatVoltage(buffer, channel->cal_conf.u.max.dac, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("u_max_data=") ); util::strcatVoltage(buffer, channel->cal_conf.u.max.val, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("u_max_adc=")  ); util::strcatVoltage(buffer, channel->cal_conf.u.max.adc, 6); SCPI_ResultText(context, buffer);
-			strcpy_P(buffer, PSTR("u_min_range=")  ); util::strcatVoltage(buffer, channel->cal_conf.u.minPossible, 6); SCPI_ResultText(context, buffer);
-			strcpy_P(buffer, PSTR("u_max_range=")  ); util::strcatVoltage(buffer, channel->cal_conf.u.maxPossible, 6); SCPI_ResultText(context, buffer);
-        }
-
-        strcpy_P(buffer, PSTR("i_cal_params_exists=")); util::strcatInt(buffer, channel->cal_conf.flags.i_cal_params_exists); SCPI_ResultText(context, buffer);
-        if (channel->cal_conf.flags.i_cal_params_exists) {
-            strcpy_P(buffer, PSTR("i_min_level=")); util::strcatCurrent(buffer, channel->cal_conf.i.min.dac, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("i_min_data=") ); util::strcatCurrent(buffer, channel->cal_conf.i.min.val, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("i_min_adc=")  ); util::strcatCurrent(buffer, channel->cal_conf.i.min.adc, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("i_mid_level=")); util::strcatCurrent(buffer, channel->cal_conf.i.mid.dac, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("i_mid_data=") ); util::strcatCurrent(buffer, channel->cal_conf.i.mid.val, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("i_mid_adc=")  ); util::strcatCurrent(buffer, channel->cal_conf.i.mid.adc, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("i_max_level=")); util::strcatCurrent(buffer, channel->cal_conf.i.max.dac, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("i_max_data=") ); util::strcatCurrent(buffer, channel->cal_conf.i.max.val, 6); SCPI_ResultText(context, buffer);
-            strcpy_P(buffer, PSTR("i_max_adc=")  ); util::strcatCurrent(buffer, channel->cal_conf.i.max.adc, 6); SCPI_ResultText(context, buffer);
-			strcpy_P(buffer, PSTR("i_min_range=")  ); util::strcatCurrent(buffer, channel->cal_conf.i.minPossible, 6); SCPI_ResultText(context, buffer);
-			strcpy_P(buffer, PSTR("i_max_range=")  ); util::strcatCurrent(buffer, channel->cal_conf.i.maxPossible, 6); SCPI_ResultText(context, buffer);
+        printCalibrationParameters(context, "u", channel->cal_conf.flags.u_cal_params_exists, channel->cal_conf.u, buffer);
+        if (channel->boardRevision == CH_BOARD_REVISION_R5B12) {
+            printCalibrationParameters(context, "i_5A", channel->cal_conf.flags.i_cal_params_exists_range0, channel->cal_conf.i[0], buffer);
+            printCalibrationParameters(context, "i_500mA", channel->cal_conf.flags.i_cal_params_exists_range1, channel->cal_conf.i[1], buffer);
+        } else {
+            printCalibrationParameters(context, "i", channel->cal_conf.flags.i_cal_params_exists_range0, channel->cal_conf.i[0], buffer);
         }
     }
 

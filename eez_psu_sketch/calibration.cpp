@@ -33,13 +33,19 @@ static bool g_enabled;
 static bool g_remarkSet;
 static char g_remark[CALIBRATION_REMARK_MAX_LENGTH + 1];
 
-Value g_voltage(true);
-Value g_current(false);
+static int8_t g_currentRangeSelected = 0;
+
+static Value g_voltage(true);
+static Value g_currents[] = {
+    Value(false, 0),
+    Value(false, 1)
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Value::Value(bool voltOrCurr_)
+Value::Value(bool voltOrCurr_, int currentRange_)
     : voltOrCurr(voltOrCurr_)
+    , currentRange(currentRange_)
 {
 }
 
@@ -52,9 +58,18 @@ void Value::reset() {
 }
 
 float Value::getRange() {
-    return voltOrCurr ?
-        (g_channel->U_CAL_VAL_MAX - g_channel->U_CAL_VAL_MIN) :
-        (g_channel->I_CAL_VAL_MAX - g_channel->I_CAL_VAL_MIN);
+    float range;
+
+    if (voltOrCurr) {
+        range = g_channel->U_CAL_VAL_MAX - g_channel->U_CAL_VAL_MIN;
+    } else {
+        range = g_channel->I_CAL_VAL_MAX - g_channel->I_CAL_VAL_MIN;
+        if (currentRange == 1) {
+            range /= 10;
+        }
+    }
+
+    return range;
 }
 
 bool Value::checkRange(float value, float adc) {
@@ -80,24 +95,28 @@ float Value::getLevelValue() {
     if (voltOrCurr) {
         if (level == LEVEL_MIN) {
             return g_channel->U_CAL_VAL_MIN;
-        }
-        else if (level == LEVEL_MID) {
+        } else if (level == LEVEL_MID) {
             return g_channel->U_CAL_VAL_MID;
-        }
-        else {
+        } else {
             return g_channel->U_CAL_VAL_MAX;
         }
     }
     else {
+        float value;
+        
         if (level == LEVEL_MIN) {
-            return g_channel->I_CAL_VAL_MIN;
+            value = g_channel->I_CAL_VAL_MIN;
+        } else if (level == LEVEL_MID) {
+            value = g_channel->I_CAL_VAL_MID;
+        } else {
+            value = g_channel->I_CAL_VAL_MAX;
         }
-        else if (level == LEVEL_MID) {
-            return g_channel->I_CAL_VAL_MID;
+
+        if (currentRange == 1) {
+            value /= 10;
         }
-        else {
-            return g_channel->I_CAL_VAL_MAX;
-        }
+
+        return value;
     }
 }
 
@@ -141,8 +160,10 @@ void Value::setData(float data, float adc) {
             DebugTraceF("Voltage range: %lf - %lfV", minPossible, maxPossible);
         }
         else {
-            g_channel->calibrationFindCurrentRange(g_channel->I_CAL_VAL_MIN, min_val, min_adc, g_channel->I_CAL_VAL_MAX, max_val, max_adc, &minPossible, &maxPossible);
-            DebugTraceF("Current range: %lf - %lfA", minPossible, maxPossible);
+            if (currentRange == 0) {
+                g_channel->calibrationFindCurrentRange(g_channel->I_CAL_VAL_MIN, min_val, min_adc, g_channel->I_CAL_VAL_MAX, max_val, max_adc, &minPossible, &maxPossible);
+                DebugTraceF("Current range: %lf - %lfA", minPossible, maxPossible);
+            }
         }
     }
 }
@@ -155,8 +176,13 @@ bool Value::checkMid() {
             g_channel->U_CAL_VAL_MIN, min_val, g_channel->U_CAL_VAL_MAX, max_val);
     }
     else {
-        mid = util::remap(g_channel->I_CAL_VAL_MID,
-            g_channel->I_CAL_VAL_MIN, min_val, g_channel->I_CAL_VAL_MAX, max_val);
+        if (currentRange == 0) {
+            mid = util::remap(g_channel->I_CAL_VAL_MID,
+                g_channel->I_CAL_VAL_MIN, min_val, g_channel->I_CAL_VAL_MAX, max_val);
+        } else {
+            mid = util::remap(g_channel->I_CAL_VAL_MID / 10,
+                g_channel->I_CAL_VAL_MIN / 10, min_val, g_channel->I_CAL_VAL_MAX / 10, max_val);
+        }
     }
 
     return fabsf(mid - mid) <= CALIBRATION_MID_TOLERANCE_PERCENT * (max_val - min_val) / 100.0f;
@@ -178,10 +204,15 @@ void start(Channel *channel_) {
 
     g_enabled = true;
     g_channel = channel_;
+    g_currentRangeSelected = 0;
+    g_channel->setCurrentRange(g_currentRangeSelected);
     g_remarkSet = false;
     g_remark[0] = 0;
 
-    g_current.reset();
+    g_currents[0].reset();
+    if (currentHasDualRange()) {
+        g_currents[1].reset();
+    }
     g_voltage.reset();
 
     g_channel->calibrationEnable(false);
@@ -201,6 +232,23 @@ void stop() {
     resetChannelToZero();
 
     g_channel->setOperBits(OPER_ISUM_CALI, false);
+}
+
+bool currentHasDualRange() {
+    return g_channel->boardRevision == CH_BOARD_REVISION_R5B12;
+}
+
+void selectCurrentRange(int8_t range) {
+    g_currentRangeSelected = range;
+    g_channel->setCurrentRange(range);
+}
+
+Value& getVoltage() {
+    return g_voltage;
+}
+
+Value& getCurrent() {
+    return g_currents[g_currentRangeSelected];
 }
 
 bool isRemarkSet() { 
@@ -235,8 +283,8 @@ bool isVoltageCalibrated() {
     return g_voltage.min_set && g_voltage.mid_set && g_voltage.max_set;
 }
 
-bool isCurrentCalibrated() {
-    return g_current.min_set && g_current.mid_set && g_current.max_set;
+bool isCurrentCalibrated(Value &current) {
+    return current.min_set && current.mid_set && current.max_set;
 }
 
 bool canSave(int16_t &scpiErr) {
@@ -250,23 +298,33 @@ bool canSave(int16_t &scpiErr) {
         return false;
     }
 
-    bool u_calibrated = false;
+    // at least one value should be calibrated
+    bool valueCalibrated = false;
+    
     if (isVoltageCalibrated()) {
         if (!checkCalibrationValue(calibration::g_voltage, scpiErr)) {
             return false;
         }
-        u_calibrated = true;
+        valueCalibrated = true;
     }
 
-    bool i_calibrated = false;
-    if (isCurrentCalibrated()) {
-        if (!checkCalibrationValue(g_current, scpiErr)) {
+    if (isCurrentCalibrated(g_currents[0])) {
+        if (!checkCalibrationValue(g_currents[0], scpiErr)) {
             return false;
         }
-        i_calibrated = true;
+        valueCalibrated = true;
     }
 
-    if (!u_calibrated && !i_calibrated) {
+    if (currentHasDualRange()) {
+        if (isCurrentCalibrated(g_currents[1])) {
+            if (!checkCalibrationValue(g_currents[1], scpiErr)) {
+                return false;
+            }
+            valueCalibrated = true;
+        }
+    }
+
+    if (!valueCalibrated) {
         scpiErr = SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS;
         return false;
     }
@@ -309,25 +367,48 @@ bool save() {
         g_voltage.level = LEVEL_NONE;
     }
 
-    if (isCurrentCalibrated()) {
-        g_channel->cal_conf.flags.i_cal_params_exists = 1;
+    if (isCurrentCalibrated(g_currents[0])) {
+        g_channel->cal_conf.flags.i_cal_params_exists_range0 = 1;
 
-        g_channel->cal_conf.i.min.dac = g_channel->I_CAL_VAL_MIN;
-        g_channel->cal_conf.i.min.val = g_current.min_val;
-        g_channel->cal_conf.i.min.adc = g_current.min_adc;
+        g_channel->cal_conf.i[0].min.dac = g_channel->I_CAL_VAL_MIN;
+        g_channel->cal_conf.i[0].min.val = g_currents[0].min_val;
+        g_channel->cal_conf.i[0].min.adc = g_currents[0].min_adc;
 
-        g_channel->cal_conf.i.mid.dac = g_channel->I_CAL_VAL_MID;
-        g_channel->cal_conf.i.mid.val = g_current.mid_val;
-        g_channel->cal_conf.i.mid.adc = g_current.mid_adc;
+        g_channel->cal_conf.i[0].mid.dac = g_channel->I_CAL_VAL_MID;
+        g_channel->cal_conf.i[0].mid.val = g_currents[0].mid_val;
+        g_channel->cal_conf.i[0].mid.adc = g_currents[0].mid_adc;
 
-        g_channel->cal_conf.i.max.dac = g_channel->I_CAL_VAL_MAX;
-        g_channel->cal_conf.i.max.val = g_current.max_val;
-        g_channel->cal_conf.i.max.adc = g_current.max_adc;
+        g_channel->cal_conf.i[0].max.dac = g_channel->I_CAL_VAL_MAX;
+        g_channel->cal_conf.i[0].max.val = g_currents[0].max_val;
+        g_channel->cal_conf.i[0].max.adc = g_currents[0].max_adc;
 
-        g_channel->cal_conf.i.minPossible = g_current.minPossible;
-        g_channel->cal_conf.i.maxPossible = g_current.maxPossible;
+        g_channel->cal_conf.i[0].minPossible = g_currents[0].minPossible;
+        g_channel->cal_conf.i[0].maxPossible = g_currents[0].maxPossible;
 
-        g_current.level = LEVEL_NONE;
+        g_currents[0].level = LEVEL_NONE;
+    }
+
+    if (currentHasDualRange()) {
+        if (isCurrentCalibrated(g_currents[1])) {
+            g_channel->cal_conf.flags.i_cal_params_exists_range1 = 1;
+
+            g_channel->cal_conf.i[1].min.dac = g_channel->I_CAL_VAL_MIN / 10;
+            g_channel->cal_conf.i[1].min.val = g_currents[1].min_val;
+            g_channel->cal_conf.i[1].min.adc = g_currents[1].min_adc;
+
+            g_channel->cal_conf.i[1].mid.dac = g_channel->I_CAL_VAL_MID / 10;
+            g_channel->cal_conf.i[1].mid.val = g_currents[1].mid_val;
+            g_channel->cal_conf.i[1].mid.adc = g_currents[1].mid_adc;
+
+            g_channel->cal_conf.i[1].max.dac = g_channel->I_CAL_VAL_MAX / 10;
+            g_channel->cal_conf.i[1].max.val = g_currents[1].max_val;
+            g_channel->cal_conf.i[1].max.adc = g_currents[1].max_adc;
+
+            g_channel->cal_conf.i[1].minPossible = g_currents[1].minPossible;
+            g_channel->cal_conf.i[1].maxPossible = g_currents[1].maxPossible;
+
+            g_currents[1].level = LEVEL_NONE;
+        }
     }
 
     resetChannelToZero();
