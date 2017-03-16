@@ -350,7 +350,10 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     else if (IS_OCP_VALUE(this, cpv)) {
         state = prot_conf.flags.i_state;
         //condition = flags.cc_mode && (!flags.cv_mode || fabs(u.mon - u.set) >= CHANNEL_VALUE_PRECISION);
-        condition = util::greaterOrEqual(channel_dispatcher::getIMon(*this), channel_dispatcher::getISet(*this), getPrecision(VALUE_TYPE_FLOAT_AMPER));
+        condition = util::greaterOrEqual(
+            channel_dispatcher::getIMon(*this),
+            channel_dispatcher::getISet(*this),
+            getPrecision(VALUE_TYPE_FLOAT_AMPER));
         delay = prot_conf.i_delay;
         delay -= PROT_DELAY_CORRECTION;
     }

@@ -58,7 +58,7 @@ struct Value {
 	Value(uint8_t value, ValueType type) : type_(type), uint8_(value)  {}
 	Value(uint16_t value, ValueType type) : type_(type), uint16_(value)  {}
 	Value(uint32_t value, ValueType type) : type_(type), uint32_(value)  {}
-    Value(float value, ValueType type) : type_(type), float_(value) {}
+    Value(float value, ValueType type, int numSignificantDecimalDigits = -1);
     Value(const char *str) : type_(VALUE_TYPE_STR), str_(str) {}
 	Value(event_queue::Event *e) : type_(VALUE_TYPE_EVENT), event_(e) {}
     Value(uint8_t value, EnumDefinition enumDefinition) : type_(VALUE_TYPE_ENUM) {
@@ -99,6 +99,7 @@ struct Value {
 
 private:
     uint8_t type_;
+    uint8_t format_;
     union {
         int int_;
 		int16_t int16_;

@@ -801,6 +801,14 @@ void setLoad(Channel &channel, float load) {
 }
 #endif
 
+int getNumSignificantDecimalDigitsForCurrent(Channel &channel) {
+    if (isCoupled() || isTracked()) {
+        return Channel::get(0).boardRevision == CH_BOARD_REVISION_R5B12 ||
+            Channel::get(1).boardRevision == CH_BOARD_REVISION_R5B12 ? CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12 : CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS;
+    } else {
+        return channel.boardRevision == CH_BOARD_REVISION_R5B12 ? CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12 : CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS;
+    }
+}
 
 }
 }

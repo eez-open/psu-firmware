@@ -127,6 +127,8 @@ void setLoadEnabled(Channel &channel, bool state);
 void setLoad(Channel &channel, float load);
 #endif
 
+int getNumSignificantDecimalDigitsForCurrent(Channel &channel);
+
 }
 }
 } // namespace eez::psu::channel_dispatcher

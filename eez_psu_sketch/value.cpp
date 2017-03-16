@@ -56,22 +56,25 @@ const char *getUnitStr(ValueType valueType) {
 }
 
 int getNumSignificantDecimalDigits(ValueType valueType) {
-    if (valueType == VALUE_TYPE_FLOAT_VOLT) return 3;
-    if (valueType == VALUE_TYPE_FLOAT_AMPER) return 3;
-    if (valueType == VALUE_TYPE_FLOAT_WATT) return 3;
-    if (valueType == VALUE_TYPE_FLOAT_SECOND) return 4;
-    if (valueType == VALUE_TYPE_FLOAT_CELSIUS) return 0;
-    if (valueType == VALUE_TYPE_FLOAT_RPM) return 0;
-    if (valueType == VALUE_TYPE_FLOAT_OHM) return 2;
+    if (valueType == VALUE_TYPE_FLOAT_VOLT) return VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS;
+    if (valueType == VALUE_TYPE_FLOAT_AMPER) return CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS;
+    if (valueType == VALUE_TYPE_FLOAT_WATT) return POWER_NUM_SIGNIFICANT_DECIMAL_DIGITS;
+    if (valueType == VALUE_TYPE_FLOAT_SECOND) return DURATION_NUM_SIGNIFICANT_DECIMAL_DIGITS;
+    if (valueType == VALUE_TYPE_FLOAT_CELSIUS) return TEMP_NUM_SIGNIFICANT_DECIMAL_DIGITS;
+    if (valueType == VALUE_TYPE_FLOAT_RPM) return RPM_NUM_SIGNIFICANT_DECIMAL_DIGITS;
+    if (valueType == VALUE_TYPE_FLOAT_OHM) return LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS;
     return 2;
 }
 
 int getNumSignificantDecimalDigitsForCurrent(uint8_t currentRange) {
-    int n = 3;
     if (currentRange == 1) {
-        ++n;
+        return CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12;
     }
-    return n;
+    return CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS;
+}
+
+float getPrecisionFromNumSignificantDecimalDigits(int numSignificantDecimalDigits) {
+    return powf(10.0f, (float)numSignificantDecimalDigits);
 }
 
 float getPrecision(ValueType valueType) {

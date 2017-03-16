@@ -91,6 +91,15 @@ static const data::EnumItem *enumDefinitions[] = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+Value::Value(float value, ValueType type, int numSignificantDecimalDigits) 
+    : type_(type), float_(value)
+{
+    if (numSignificantDecimalDigits == -1) {
+        numSignificantDecimalDigits = getNumSignificantDecimalDigits(type);
+    }
+    format_ = (uint8_t)numSignificantDecimalDigits;
+}
+
 Value Value::ProgmemStr(const char *pstr PROGMEM) {
     Value value;
     value.const_str_ = pstr;
@@ -308,7 +317,7 @@ void Value::toText(char *text, int count) const {
             text[count - 1] = 0;
         } else {
             ValueType valueType = (ValueType)type_;
-            int numSignificantDecimalDigits = getNumSignificantDecimalDigits(valueType);
+            int numSignificantDecimalDigits = format_;
 
             bool milli = false;
 
@@ -330,7 +339,11 @@ void Value::toText(char *text, int count) const {
                 } else if (type_ == VALUE_TYPE_FLOAT_AMPER) {
                     milli = true;
                     valueType = VALUE_TYPE_FLOAT_MILLI_AMPER;
-                    util::strcatInt(text, temp / 10);
+                    if (numSignificantDecimalDigits > 3) {
+                        util::strcatFloat(text, temp / 10.0f, 1);
+                    } else {
+                        util::strcatInt(text, temp / 10);
+                    }
                 } else if (type_ == VALUE_TYPE_FLOAT_WATT) {
                     milli = true;
                     valueType = VALUE_TYPE_FLOAT_MILLI_WATT;
@@ -344,6 +357,10 @@ void Value::toText(char *text, int count) const {
             }
 
             if (!milli) {
+                if (numSignificantDecimalDigits > 3) {
+                    numSignificantDecimalDigits = 3;
+                }
+
                 if (numSignificantDecimalDigits > 2 && util::greater(float_, 9.999f, 3)) {
                     numSignificantDecimalDigits = 2;
                 }
@@ -418,7 +435,7 @@ bool Value::operator ==(const Value &other) const {
     	return util::equal(float_, other.float_, powf(10.0f, 4));
     }
 
-	return util::equal(float_, other.float_, getPrecision((ValueType)type_));
+	return util::equal(float_, other.float_, getPrecisionFromNumSignificantDecimalDigits(format_));
 }
 
 int Value::getInt() const {
@@ -669,13 +686,13 @@ Value get(const Cursor &cursor, uint8_t id) {
             if (strcmp(mode_str, "CC") == 0) {
                 channelSnapshot.monValue = Value(uMon, VALUE_TYPE_FLOAT_VOLT);
             } else if (strcmp(mode_str, "CV") == 0) {
-                channelSnapshot.monValue = Value(iMon, VALUE_TYPE_FLOAT_AMPER);
+                channelSnapshot.monValue = Value(iMon, VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
             } else {
                 channelSnapshot.mode = 1;
                 if (uMon < iMon) {
                     channelSnapshot.monValue = Value(uMon, VALUE_TYPE_FLOAT_VOLT);
                 } else {
-                    channelSnapshot.monValue = Value(iMon, VALUE_TYPE_FLOAT_AMPER);
+                    channelSnapshot.monValue = Value(iMon, VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
                 }
             }
 
@@ -730,23 +747,23 @@ Value get(const Cursor &cursor, uint8_t id) {
         }
 
         if (id == DATA_ID_CHANNEL_I_SET) {
-            return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER);
+            return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
         }
         
         if (id == DATA_ID_CHANNEL_I_EDIT) {
             if (g_focusCursor == cursor && g_focusDataId == DATA_ID_CHANNEL_I_EDIT && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
                 return g_focusEditValue;
             } else {
-                return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER);
+                return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
             }
         }
 
         if (isIMonData(cursor, id)) {
-            return Value(channel_dispatcher::getIMon(channel), VALUE_TYPE_FLOAT_AMPER);
+            return Value(channel_dispatcher::getIMon(channel), VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
         }
 
         if (id == DATA_ID_CHANNEL_I_MON_DAC) {
-            return Value(channel_dispatcher::getIMonDac(channel), VALUE_TYPE_FLOAT_AMPER);
+            return Value(channel_dispatcher::getIMonDac(channel), VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
         }
 
         if (id == DATA_ID_CHANNEL_I_LIMIT) {
@@ -1082,7 +1099,7 @@ Value getEditValue(const Cursor &cursor, uint8_t id) {
     }
         
     if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_EDIT) {
-        return Value(channel_dispatcher::getISetUnbalanced(channel), VALUE_TYPE_FLOAT_AMPER);
+        return Value(channel_dispatcher::getISetUnbalanced(channel), VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
     }
         
     return get(cursor, id);

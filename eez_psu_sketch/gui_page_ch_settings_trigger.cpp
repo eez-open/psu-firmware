@@ -58,7 +58,7 @@ data::Value ChSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t i
 	}
 
 	if (id == DATA_ID_CHANNEL_I_TRIGGER_VALUE) {
-		return data::Value(channel_dispatcher::getTriggerCurrent(*g_channel), VALUE_TYPE_FLOAT_AMPER);
+		return data::Value(channel_dispatcher::getTriggerCurrent(*g_channel), VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(*g_channel));
 	}
 
 	if (id == DATA_ID_CHANNEL_LIST_COUNT) {
@@ -310,7 +310,7 @@ data::Value ChSettingsListsPage::getData(const data::Cursor &cursor, uint8_t id)
 
     if (id == DATA_ID_CHANNEL_LIST_CURRENT) {
         if (iRow < m_currentListLength) {
-		    return data::Value(m_currentList[iRow], VALUE_TYPE_FLOAT_AMPER);
+		    return data::Value(m_currentList[iRow], VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(*g_channel));
         } else {
             return data::Value(EMPTY_VALUE);
         }

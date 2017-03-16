@@ -22,6 +22,7 @@
 
 #include "gui_keypad.h"
 #include "gui_page_user_profiles.h"
+#include "channel_dispatcher.h"
 
 namespace eez {
 namespace psu {
@@ -73,7 +74,7 @@ data::Value UserProfilesPage::getData(const data::Cursor &cursor, uint8_t id) {
 			}
 
 			if (id == DATA_ID_PROFILE_CHANNEL_I_SET) {
-				return data::Value(profile.channels[cursor.i].i_set, VALUE_TYPE_FLOAT_AMPER);
+				return data::Value(profile.channels[cursor.i].i_set, VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(Channel::get(cursor.i)));
 			}
 		}
 	} else if (cursor.i >= 0) {

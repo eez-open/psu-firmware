@@ -18,6 +18,15 @@
 
 #pragma once
 
+#define VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS 3
+#define CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS 3
+#define CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12 4
+#define POWER_NUM_SIGNIFICANT_DECIMAL_DIGITS 3
+#define DURATION_NUM_SIGNIFICANT_DECIMAL_DIGITS 4
+#define TEMP_NUM_SIGNIFICANT_DECIMAL_DIGITS 0
+#define RPM_NUM_SIGNIFICANT_DECIMAL_DIGITS 0
+#define LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS 2
+
 namespace eez {
 namespace psu {
 
@@ -74,6 +83,7 @@ enum ValueType {
 const char *getUnitStr(ValueType valueType);
 int getNumSignificantDecimalDigits(ValueType valueType);
 int getNumSignificantDecimalDigitsForCurrent(uint8_t currentRange);
+float getPrecisionFromNumSignificantDecimalDigits(int numSignificantDecimalDigits);
 float getPrecision(ValueType valueType);
 
 }

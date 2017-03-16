@@ -97,15 +97,7 @@ data::Value NumericKeypad::getData(uint8_t id) {
 	}
 
     if (id == DATA_ID_EDIT_UNIT) {
-        switch (getEditUnit()) {
-        case VALUE_TYPE_FLOAT_VOLT:         return data::Value::ProgmemStr(PSTR("mV")); break;
-        case VALUE_TYPE_FLOAT_MILLI_VOLT:   return data::Value::ProgmemStr(PSTR("V"));  break;
-        case VALUE_TYPE_FLOAT_AMPER:        return data::Value::ProgmemStr(PSTR("mA")); break;
-	    case VALUE_TYPE_FLOAT_MILLI_AMPER:  return data::Value::ProgmemStr(PSTR("A"));  break;
-        case VALUE_TYPE_FLOAT_SECOND:       return data::Value::ProgmemStr(PSTR("ms"));  break;
-	    case VALUE_TYPE_FLOAT_MILLI_SECOND: return data::Value::ProgmemStr(PSTR("s")); break;
-        default:                                  return data::Value::ProgmemStr(PSTR(""));
-        }
+        return getUnitStr(getEditUnit());
     }
 
     if (id == DATA_ID_KEYPAD_OPTION1_ENABLED) {

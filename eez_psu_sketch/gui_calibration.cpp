@@ -103,21 +103,21 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
     } else if (id == DATA_ID_CAL_CH_I1_MIN) {
         Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
         if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
-            return data::Value(channel.cal_conf.i[1].min.val, VALUE_TYPE_FLOAT_AMPER);
+            return data::Value(channel.cal_conf.i[1].min.val, VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
         } else {
             return data::Value(PSTR(""));
         }
     } else if (id == DATA_ID_CAL_CH_I1_MID) {
         Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
         if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
-            return data::Value(channel.cal_conf.i[1].mid.val, VALUE_TYPE_FLOAT_AMPER);
+            return data::Value(channel.cal_conf.i[1].mid.val, VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
         } else {
             return data::Value(PSTR(""));
         }
     } else if (id == DATA_ID_CAL_CH_I1_MAX) {
         Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
         if (channel.boardRevision == CH_BOARD_REVISION_R5B12) {
-            return data::Value(channel.cal_conf.i[1].max.val, VALUE_TYPE_FLOAT_AMPER);
+            return data::Value(channel.cal_conf.i[1].max.val, VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
         } else {
             return data::Value(PSTR(""));
         }
@@ -128,9 +128,12 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
         case 0: return data::Value(psu::calibration::getVoltage().min_val, VALUE_TYPE_FLOAT_VOLT);
         case 1: return data::Value(psu::calibration::getVoltage().mid_val, VALUE_TYPE_FLOAT_VOLT);
         case 2: return data::Value(psu::calibration::getVoltage().max_val, VALUE_TYPE_FLOAT_VOLT);
-        case 3: case 6: return data::Value(psu::calibration::getCurrent().min_val, VALUE_TYPE_FLOAT_AMPER);
-        case 4: case 7: return data::Value(psu::calibration::getCurrent().mid_val, VALUE_TYPE_FLOAT_AMPER);
-        case 5: case 8: return data::Value(psu::calibration::getCurrent().max_val, VALUE_TYPE_FLOAT_AMPER);
+        case 3: return data::Value(psu::calibration::getCurrent().min_val, VALUE_TYPE_FLOAT_AMPER);
+        case 4: return data::Value(psu::calibration::getCurrent().mid_val, VALUE_TYPE_FLOAT_AMPER);
+        case 5: return data::Value(psu::calibration::getCurrent().max_val, VALUE_TYPE_FLOAT_AMPER);
+        case 6: return data::Value(psu::calibration::getCurrent().min_val, VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
+        case 7: return data::Value(psu::calibration::getCurrent().mid_val, VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
+        case 8: return data::Value(psu::calibration::getCurrent().max_val, VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
         case 9: return data::Value(psu::calibration::getRemark());
         }
     } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_STATUS) {
