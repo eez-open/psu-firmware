@@ -35,7 +35,6 @@ struct NumericKeypadOptions {
 	float def;
 
 	struct {
-		unsigned genericNumberKeypad : 1;
 		unsigned option1ButtonEnabled : 1;
 		unsigned option2ButtonEnabled : 1;
 		unsigned signButtonEnabled : 1;
@@ -115,7 +114,6 @@ private:
     float getValue();
     char getDotSign();
     bool isMilli();
-    bool setValue(float value);
     bool isValueValid();
     void digit(int d);
     void dot();

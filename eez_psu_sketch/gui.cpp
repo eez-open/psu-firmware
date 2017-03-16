@@ -417,7 +417,6 @@ void changeLimit(const data::Value& value, float minLimit, float maxLimit, float
 	options.max = maxLimit;
 	options.def = defLimit;
 
-	options.flags.genericNumberKeypad = true;
 	options.enableMaxButton();
 	options.enableDefButton();
 	options.flags.signButtonEnabled = true;

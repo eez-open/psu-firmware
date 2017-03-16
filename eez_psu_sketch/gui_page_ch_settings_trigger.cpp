@@ -99,7 +99,6 @@ void ChSettingsTriggerPage::editVoltageTriggerValue() {
 	options.max = channel_dispatcher::getUMax(*g_channel);
 	options.def = channel_dispatcher::getUMax(*g_channel);
 
-	options.flags.genericNumberKeypad = true;
 	options.enableMaxButton();
 	options.enableDefButton();
 	options.flags.signButtonEnabled = true;
@@ -123,7 +122,6 @@ void ChSettingsTriggerPage::editCurrentTriggerValue() {
 	options.max = channel_dispatcher::getIMax(*g_channel);
 	options.def = channel_dispatcher::getIMax(*g_channel);
 
-	options.flags.genericNumberKeypad = true;
 	options.enableMaxButton();
 	options.enableDefButton();
 	options.flags.signButtonEnabled = true;
@@ -154,7 +152,6 @@ void ChSettingsTriggerPage::editListCount() {
 	options.max = MAX_LIST_COUNT;
 	options.def = 0;
 
-	options.flags.genericNumberKeypad = true;
     options.flags.option1ButtonEnabled = true;
     options.option1ButtonText = INF_TEXT;
     options.option1 = onListCountSetToInfinity;
@@ -514,7 +511,6 @@ void ChSettingsListsPage::edit() {
 	    options.min = min.getFloat();
 	    options.max = max.getFloat();
 
-	    options.flags.genericNumberKeypad = true;
 	    options.flags.signButtonEnabled = true;
 	    options.flags.dotButtonEnabled = true;
 

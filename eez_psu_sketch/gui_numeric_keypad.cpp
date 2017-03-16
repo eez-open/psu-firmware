@@ -73,9 +73,7 @@ void NumericKeypad::init(const char *label, const data::Value& value, NumericKey
     m_startValue = value;
 	m_options = options;
 
-	if (m_options.flags.genericNumberKeypad) {
-		m_maxChars = 16;
-	}
+	m_maxChars = 16;
 
 	reset();
 }
@@ -182,46 +180,12 @@ void NumericKeypad::getKeypadText(char *text) {
 }
 
 bool NumericKeypad::getText(char *text, int count) {
-	if (m_options.flags.genericNumberKeypad) {
-		if (m_state == START) {
-            m_startValue.toText(text, count);
-            return false;
-		}
-        
-        strcpy(text, m_keypadText);
-	} else {
-		if (m_state == START) {
-			*text = 0;
-
-            edit_mode::getCurrentValue().toText(text, count);
-
-			return false;
-		}
-
-		int i = 0;
-
-		if (m_state >= D0 && (m_d0 != 0 || m_state < DOT)) {
-			text[i++] = m_d0 + '0';
-		}
-
-		if (m_state >= D1) {
-			text[i++] = m_d1 + '0';
-		}
-
-		if (!isMilli() && m_state >= DOT) {
-			text[i++] = getDotSign();
-		}
-
-		if (m_state >= D2) {
-			text[i++] = m_d2 + '0';
-		}
-
-		if (m_state >= D3) {
-			text[i++] = m_d3 + '0';
-		}
-
-		text[i] = 0;
+	if (m_state == START) {
+        m_startValue.toText(text, count);
+        return false;
 	}
+        
+    strcpy(text, m_keypadText);
 
 	appendCursor(text);
 
@@ -249,144 +213,39 @@ void NumericKeypad::switchToMilli() {
 }
 
 float NumericKeypad::getValue() {
-	if (m_options.flags.genericNumberKeypad) {
-		const char *p = m_keypadText;
+	const char *p = m_keypadText;
 
-		int a = 0;
-		float b = 0;
-		int sign = 1;
+	int a = 0;
+	float b = 0;
+	int sign = 1;
 
-		if (*p == '-') {
-			sign = -1;
-			++p;
-		} else if (*p == '+') {
-			++p;
-		}
-
-		while (*p && *p != getDotSign()) {
-			a = a * 10 + (*p - '0');
-			++p;
-		}
-
-		if (*p) {
-			const char *q = p + strlen(p) - 1;
-			while (q != p) {
-				b = (b + (*q - '0')) / 10;
-				--q;
-			}
-		}
-
-		float value = sign * (a + b);
-
-		if (isMilli()) {
-			value /= 1000.0f;
-		}
-
-		return value;
-	} else {
-		float value = 0;
-
-		if (m_state >= D0) {
-			value = m_d0 * 1.0f;
-		}
-
-		if (m_state >= D1) {
-			value = value * 10 + m_d1;
-		}
-
-		if (isMilli()) {
-			if (m_state >= D2) {
-				value = value * 10 + m_d2;
-			}
-
-			value /= 1000.0f;
-		}
-		else {
-			value *= 100.0f;
-
-			if (m_state >= D2) {
-				value += m_d2 * 10;
-			}
-
-			if (m_state >= D3) {
-				value += m_d3;
-			}
-
-			value /= 100.0f;
-		}
-
-		return value;
+	if (*p == '-') {
+		sign = -1;
+		++p;
+	} else if (*p == '+') {
+		++p;
 	}
-}
 
-bool NumericKeypad::setValue(float fvalue) {
-	if (m_options.flags.genericNumberKeypad) {
-		return true;
-	} else {
-		if (isMilli()) {
-			long value = (long)floor(fvalue * 1000);
-        
-			if (value > 999) {
-				return false;
-			}
-
-			if (value >= 100) {
-				m_d0 = value / 100;
-				value = value % 100;
-				m_d1 = value / 10;
-				m_d2 = value % 10;
-				m_state = D2;
-			} else if (value >= 10) {
-				m_d0 = value / 10;
-				m_d1 = value % 10;
-				m_state = D1;
-			} else {
-				m_d0  = value;
-				m_state = D0;
-			}
-		} else {
-			long value = (long)round(fvalue * 100);
-        
-			m_d3 = value % 10;
-			if (m_d3 != 0) {
-				m_state = D3;
-            
-				value /= 10;
-				m_d2 = value % 10;
-            
-				value /= 10;
-				m_d1 = value % 10;
-
-				value /= 10;
-				m_d0 = value % 10;
-			} else {
-				value /= 10;
-				m_d2 = value % 10;
-				if (m_d2 != 0) {
-					m_state = D2;
-
-					value /= 10;
-					m_d1 = value % 10;
-
-					value /= 10;
-					m_d0 = value % 10;
-				} else {
-					value /= 10;
-					m_d1 = value % 10;
-
-					m_d0 = value / 10;
-					if (m_d0 == 0) {
-						m_d0 = m_d1;
-						m_state = D0;
-					} else {
-						m_state = D1;
-					}
-				}
-			}
-		}
-
-		return true;
+	while (*p && *p != getDotSign()) {
+		a = a * 10 + (*p - '0');
+		++p;
 	}
+
+	if (*p) {
+		const char *q = p + strlen(p) - 1;
+		while (q != p) {
+			b = (b + (*q - '0')) / 10;
+			--q;
+		}
+	}
+
+	float value = sign * (a + b);
+
+	if (isMilli()) {
+		value /= 1000.0f;
+	}
+
+	return value;
 }
 
 bool NumericKeypad::isValueValid() {
@@ -398,110 +257,37 @@ bool NumericKeypad::isValueValid() {
 }
 
 void NumericKeypad::digit(int d) {
-	if (m_options.flags.genericNumberKeypad) {
-		if (m_state == START || m_state == EMPTY) {
-			m_state = BEFORE_DOT;
-			if (m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
-				if (strlen(m_keypadText) == 0) {
-					appendChar('+');
-				}
+	if (m_state == START || m_state == EMPTY) {
+		m_state = BEFORE_DOT;
+		if (m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
+			if (strlen(m_keypadText) == 0) {
+				appendChar('+');
 			}
-		}
-		appendChar(d + '0');
-	} else {
-		if (m_state == START || m_state == EMPTY) {
-			m_d0 = d;
-			m_state = D0;
-			/*
-			if (!isValueValid()) {
-				toggleEditUnit();
-			} 
-			if (!isValueValid()) {
-				reset();
-				sound::playBeep();
-			}
-			*/
-		}
-		else if (m_state == D0) {
-			m_d1 = d;
-			m_state = D1;
-			/*
-			if (!isValueValid()) {
-				g_state = D0;
-				sound::playBeep();
-			}
-			*/
-		}
-		else if (m_state == DOT || (isMilli() && m_state == D1)) {
-			NumericKeypadState saved_state = m_state;
-			m_d2 = d;
-			m_state = D2;
-			/*
-			if (!isValueValid()) {
-				g_state = saved_state;
-				sound::playBeep();
-			}
-			*/
-		}
-		else if (m_state == D2 && !isMilli()) {
-			m_d3 = d;
-			m_state = D3;
-			/*
-			if (!isValueValid()) {
-				g_state = D2;
-				sound::playBeep();
-			}
-			*/
-		}
-		else {
-			sound::playBeep();
 		}
 	}
+	appendChar(d + '0');
 }
 
 void NumericKeypad::dot() {
-	if (m_options.flags.genericNumberKeypad) {
-		if (!m_options.flags.dotButtonEnabled) {
-			return;
-		}
+	if (!m_options.flags.dotButtonEnabled) {
+		return;
+	}
 
-		if (m_state == EMPTY) {
-			if (m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
-				if (strlen(m_keypadText) == 0) {
-					appendChar('+');
-				}
+	if (m_state == EMPTY) {
+		if (m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
+			if (strlen(m_keypadText) == 0) {
+				appendChar('+');
 			}
-			appendChar('0');
-			m_state = BEFORE_DOT;
 		}
+		appendChar('0');
+		m_state = BEFORE_DOT;
+	}
 
-		if (m_state == BEFORE_DOT) {
-			appendChar(getDotSign());
-			m_state = AFTER_DOT;
-		} else {
-			sound::playBeep();
-		}
+	if (m_state == BEFORE_DOT) {
+		appendChar(getDotSign());
+		m_state = AFTER_DOT;
 	} else {
-		if (isMilli()) {
-			sound::playBeep();
-		} else {
-			if (m_state == START || m_state == EMPTY) {
-				m_d0 = 0;
-				m_d1 = 0;
-				m_state = DOT;
-			}
-			else if (m_state == D0) {
-				m_d1 = m_d0;
-				m_d0 = 0;
-				m_state = DOT;
-			}
-			else if (m_state == D1) {
-				m_state = DOT;
-			}
-			else {
-				sound::playBeep();
-			}
-		}
+		sound::playBeep();
 	}
 }
 
@@ -522,20 +308,8 @@ void NumericKeypad::toggleEditUnit() {
 }
 
 void NumericKeypad::reset() {
-	if (m_options.flags.genericNumberKeypad) {
-		m_state = m_startValue.getType() != VALUE_TYPE_NONE ? START : EMPTY;
-		m_keypadText[0] = 0;
-	} else {
-		m_state = START;
-
-		if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT) {
-			m_options.editUnit = VALUE_TYPE_FLOAT_VOLT;
-		} else if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER) {
-			m_options.editUnit = VALUE_TYPE_FLOAT_AMPER;
-		} else if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND) {
-			m_options.editUnit = VALUE_TYPE_FLOAT_SECOND;
-		}
-	}
+	m_state = m_startValue.getType() != VALUE_TYPE_NONE ? START : EMPTY;
+	m_keypadText[0] = 0;
 }
 
 void NumericKeypad::key(char ch) {
@@ -555,57 +329,23 @@ void NumericKeypad::caps() {
 }
 
 void NumericKeypad::back() {
-	if (m_options.flags.genericNumberKeypad) {
-		int n = strlen(m_keypadText);
-		if (n > 0) {
-			if (m_keypadText[n - 1] == getDotSign()) {
-				m_state = BEFORE_DOT;
-			}
-			m_keypadText[n - 1] = 0;
-			if (n - 1 == 1) {
-				if (m_keypadText[0] == '+' || m_keypadText[0] == '-') {
-					m_state = EMPTY;
-				}
-			} else if (n - 1 == 0) {
+	int n = strlen(m_keypadText);
+	if (n > 0) {
+		if (m_keypadText[n - 1] == getDotSign()) {
+			m_state = BEFORE_DOT;
+		}
+		m_keypadText[n - 1] = 0;
+		if (n - 1 == 1) {
+			if (m_keypadText[0] == '+' || m_keypadText[0] == '-') {
 				m_state = EMPTY;
 			}
-		} else if (m_state == START) {
-            m_state = EMPTY;
-        } else {
-			sound::playBeep();
-		}
-	} else {
-		if (m_state == D3) {
-			m_state = D2;
-		}
-		else if (m_state == D2) {
-			if (isMilli()) {
-				m_state = D1;
-			}
-			else {
-				m_state = DOT;
-			}
-		}
-		else if (m_state == DOT) {
-			if (m_d0 == 0) {
-				m_d0 = m_d1;
-				m_state = D0;
-			}
-			else {
-				m_state = D1;
-			}
-		}
-		else if (m_state == D1) {
-			m_state = D0;
-		}
-		else if (m_state == D0) {
+		} else if (n - 1 == 0) {
 			m_state = EMPTY;
 		}
-		else if (m_state == START) {
-            m_state = EMPTY;
-        } else {
-			sound::playBeep();
-		}
+	} else if (m_state == START) {
+        m_state = EMPTY;
+    } else {
+		sound::playBeep();
 	}
 }
 
@@ -619,7 +359,7 @@ void NumericKeypad::clear() {
 
 void NumericKeypad::sign() {
 	if (m_options.flags.signButtonEnabled) {
-		if (m_options.flags.genericNumberKeypad && m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
+		if (m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
 			if (m_keypadText[0] == 0) {
 				m_keypadText[0] = '-';
 				m_keypadText[1] = 0;
@@ -636,26 +376,10 @@ void NumericKeypad::sign() {
 }
 
 void NumericKeypad::unit() {
-	if (m_options.flags.genericNumberKeypad) {
-        if (m_state == START) {
-            m_state = EMPTY;
-        }
-		toggleEditUnit();
-	} else {
-		float value = getValue();
-		ValueType savedEditUnit = m_options.editUnit;
-
-		toggleEditUnit();
-
-		if (m_state == START) {
-			m_state = EMPTY;
-		} else {
-			if (m_state != EMPTY && !setValue(value)) {
-				m_options.editUnit = savedEditUnit;
-				sound::playBeep();
-			}
-		}
-	}
+    if (m_state == START) {
+        m_state = EMPTY;
+    }
+	toggleEditUnit();
 }
 
 void NumericKeypad::option1() {
@@ -679,35 +403,27 @@ void NumericKeypad::setDefValue() {
 }
 
 void NumericKeypad::ok() {
-	if (m_options.flags.genericNumberKeypad) {
-        if (m_state == START) {
-            ((void (*)(float))m_okCallback)(m_startValue.isFloat() ? m_startValue.getFloat() : m_startValue.getInt());
+    if (m_state == START) {
+        ((void (*)(float))m_okCallback)(m_startValue.isFloat() ? m_startValue.getFloat() : m_startValue.getInt());
 
-            return;
-        } 
+        return;
+    } 
         
-        if (m_state != EMPTY) {
-			float value = getValue();
+    if (m_state != EMPTY) {
+		float value = getValue();
 
-			if (util::less(value, m_options.min, getPrecision(m_startValue.getType()))) {
-				errorMessage(0, data::Value::LessThenMinMessage(m_options.min, getValueUnit()));
-			} else if (util::greater(value, m_options.max, getPrecision(m_startValue.getType()))) {
-				errorMessage(0, data::Value::GreaterThenMaxMessage(m_options.max, getValueUnit()));
-			} else {
-				((void (*)(float))m_okCallback)(value);
-			}
-
-            return;
-        }
-	} else if (m_state != START && m_state != EMPTY) {
-		if (((bool (*)(float))m_okCallback)(getValue())) {
-			reset();
+		if (util::less(value, m_options.min, getPrecision(m_startValue.getType()))) {
+			errorMessage(0, data::Value::LessThenMinMessage(m_options.min, getValueUnit()));
+		} else if (util::greater(value, m_options.max, getPrecision(m_startValue.getType()))) {
+			errorMessage(0, data::Value::GreaterThenMaxMessage(m_options.max, getValueUnit()));
+		} else {
+			((void (*)(float))m_okCallback)(value);
 		}
 
         return;
-	}
+    }
 
-	sound::playBeep();
+    sound::playBeep();
 }
 
 void NumericKeypad::cancel() {
@@ -723,45 +439,39 @@ void NumericKeypad::cancel() {
 #if OPTION_ENCODER
 
 bool NumericKeypad::onEncoder(int counter) {
-    if (m_options.flags.genericNumberKeypad) {
-        if (m_state == START) {
-            if (data::isFloatType(getEditUnit())) {
-                encoder::enableAcceleration(true);
+    if (m_state == START) {
+        if (data::isFloatType(getEditUnit())) {
+            encoder::enableAcceleration(true);
 
-                float newValue = m_startValue.getFloat() + 0.01f * counter;
+            float newValue = m_startValue.getFloat() + 0.01f * counter;
 
-                if (newValue < m_options.min) {
-                    newValue = m_options.min;
-                }
-
-                if (newValue > m_options.max) {
-                    newValue = m_options.max;
-                }
-
-                m_startValue = data::Value(newValue, m_startValue.getType());
-
-                return true;
-            } else if (m_startValue.getType() == VALUE_TYPE_INT) {
-                encoder::enableAcceleration(false);
-
-                int newValue = m_startValue.getInt() + counter;
-
-                if (newValue < (int)m_options.min) {
-                    newValue = (int)m_options.min;
-                }
-
-                if (newValue > (int)m_options.max) {
-                    newValue = (int)m_options.max;
-                }
-
-                m_startValue = data::Value(newValue);
-                
-                return true;
+            if (newValue < m_options.min) {
+                newValue = m_options.min;
             }
-        }
-    } else {
-        if (m_state == START) {
-            return false;
+
+            if (newValue > m_options.max) {
+                newValue = m_options.max;
+            }
+
+            m_startValue = data::Value(newValue, m_startValue.getType());
+
+            return true;
+        } else if (m_startValue.getType() == VALUE_TYPE_INT) {
+            encoder::enableAcceleration(false);
+
+            int newValue = m_startValue.getInt() + counter;
+
+            if (newValue < (int)m_options.min) {
+                newValue = (int)m_options.min;
+            }
+
+            if (newValue > (int)m_options.max) {
+                newValue = (int)m_options.max;
+            }
+
+            m_startValue = data::Value(newValue);
+                
+            return true;
         }
     }
     

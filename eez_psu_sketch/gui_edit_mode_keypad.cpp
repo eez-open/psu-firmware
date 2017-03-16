@@ -50,7 +50,6 @@ void enter(const data::Value& editValue, const data::Value& minValue, data::Valu
 	options.max = maxValue.getFloat();
 	options.def = 0;
 
-	options.flags.genericNumberKeypad = false;
 	options.enableMaxButton();
 	options.enableDefButton();
 	options.flags.signButtonEnabled = true;

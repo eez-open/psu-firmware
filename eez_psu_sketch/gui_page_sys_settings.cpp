@@ -78,8 +78,6 @@ void SysSettingsDateTimePage::edit() {
 
 	options.editUnit = VALUE_TYPE_INT;
 
-	options.flags.genericNumberKeypad = true;
-
 	const char *label = 0;
 
     data::Value value;
@@ -364,7 +362,6 @@ void SysSettingsAuxOtpPage::editLevel() {
 	options.max = maxLevel;
 	options.def = defLevel;
 
-	options.flags.genericNumberKeypad = true;
 	options.enableMaxButton();
 	options.enableDefButton();
 	options.flags.signButtonEnabled = true;
@@ -388,7 +385,6 @@ void SysSettingsAuxOtpPage::editDelay() {
 	options.max = maxDelay;
 	options.def = defaultDelay;
 
-	options.flags.genericNumberKeypad = true;
 	options.enableMaxButton();
 	options.enableDefButton();
 	options.flags.signButtonEnabled = true;
@@ -595,7 +591,6 @@ void SysSettingsTriggerPage::editDelay() {
 	options.min = 0;
 	options.max = 3600;
 
-	options.flags.genericNumberKeypad = true;
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
