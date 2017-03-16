@@ -565,11 +565,6 @@ bool Channel::test() {
     adc.test();
     dac.test();
 
-    if (isOk()) {
-        setVoltage(U_DEF);
-        setCurrent(I_DEF);
-    }
-
     profile::enableSave(last_save_enabled);
     profile::save();
 
