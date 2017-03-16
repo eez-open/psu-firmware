@@ -32,21 +32,24 @@ namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static void print_calibration_value(scpi_t * context, char *buffer, calibration::Value &value) {
+static void printCalibrationValue(scpi_t *context, char *buffer, calibration::Value &value) {
     const char *prefix;
-    void(*strcat_value)(char *str, float value, int precision);
+    void(*strcat_value)(char *str, float value, int numSignificantDecimalDigits);
+    int numSignificantDecimalDigits;
     if (value.voltOrCurr) {
         prefix = PSTR("u");
         strcat_value = util::strcatVoltage;
+        numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT);
     }
     else {
         prefix = PSTR("i");
         strcat_value = util::strcatCurrent;
+        numSignificantDecimalDigits = getNumSignificantDecimalDigitsForCurrent(value.currentRange);
     }
 
-    if (value.min_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_min=")); strcat_value(buffer, value.min_val, FLOAT_TO_STR_NUM_DECIMAL_DIGITS); SCPI_ResultText(context, buffer); }
-    if (value.mid_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_mid=")); strcat_value(buffer, value.mid_val, FLOAT_TO_STR_NUM_DECIMAL_DIGITS); SCPI_ResultText(context, buffer); }
-    if (value.max_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_max=")); strcat_value(buffer, value.max_val, FLOAT_TO_STR_NUM_DECIMAL_DIGITS); SCPI_ResultText(context, buffer); }
+    if (value.min_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_min=")); strcat_value(buffer, value.min_val, numSignificantDecimalDigits); SCPI_ResultText(context, buffer); }
+    if (value.mid_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_mid=")); strcat_value(buffer, value.mid_val, numSignificantDecimalDigits); SCPI_ResultText(context, buffer); }
+    if (value.max_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_max=")); strcat_value(buffer, value.max_val, numSignificantDecimalDigits); SCPI_ResultText(context, buffer); }
 
     strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_level="));
     switch (value.level) {
@@ -58,8 +61,46 @@ static void print_calibration_value(scpi_t * context, char *buffer, calibration:
     SCPI_ResultText(context, buffer);
 
     if (value.level != calibration::LEVEL_NONE) {
-        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_level_value=")); strcat_value(buffer, value.getLevelValue(), FLOAT_TO_STR_NUM_DECIMAL_DIGITS); SCPI_ResultText(context, buffer);
-        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_adc="        )); strcat_value(buffer, value.getAdcValue()  , FLOAT_TO_STR_NUM_DECIMAL_DIGITS); SCPI_ResultText(context, buffer);
+        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_level_value=")); strcat_value(buffer, value.getLevelValue(), numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_adc="        )); strcat_value(buffer, value.getAdcValue()  , numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+    }
+}
+
+void printCalibrationParameters(scpi_t *context, ValueType valueType, uint8_t currentRange, bool calParamsExists, Channel::CalibrationValueConfiguration &calibrationValue, char *buffer) {
+    const char *prefix;
+    void(*strcat_value)(char *str, float value, int precision);
+    int numSignificantDecimalDigits;
+    if (valueType == VALUE_TYPE_FLOAT_VOLT) {
+        prefix = PSTR("u");
+        strcat_value = util::strcatVoltage;
+        numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT);
+    }
+    else {
+        if (currentRange == 0) {
+            prefix = PSTR("i_5A");
+        } else if (currentRange == 1) {
+            prefix = PSTR("i_500mA");
+        } else {
+            prefix = PSTR("i");
+        }
+        strcat_value = util::strcatCurrent;
+        numSignificantDecimalDigits = getNumSignificantDecimalDigitsForCurrent(currentRange);
+    }
+
+    strcpy(buffer, prefix); strcat_P(buffer, PSTR("_cal_params_exists=")); util::strcatInt(buffer, calParamsExists);SCPI_ResultText(context, buffer);
+    
+    if (calParamsExists) {
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_min_level=")); strcat_value(buffer, calibrationValue.min.dac, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_min_data=") ); strcat_value(buffer, calibrationValue.min.val, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_min_adc=")  ); strcat_value(buffer, calibrationValue.min.adc, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_mid_level=")); strcat_value(buffer, calibrationValue.mid.dac, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_mid_data=") ); strcat_value(buffer, calibrationValue.mid.val, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_mid_adc=")  ); strcat_value(buffer, calibrationValue.mid.adc, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_max_level=")); strcat_value(buffer, calibrationValue.max.dac, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_max_data=") ); strcat_value(buffer, calibrationValue.max.val, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_max_adc=")  ); strcat_value(buffer, calibrationValue.max.adc, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+	    strcpy(buffer, prefix); strcat_P(buffer, PSTR("_min_range=")  ); strcat_value(buffer, calibrationValue.minPossible, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+	    strcpy(buffer, prefix); strcat_P(buffer, PSTR("_max_range=")  ); strcat_value(buffer, calibrationValue.maxPossible, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
     }
 }
 
@@ -84,32 +125,14 @@ scpi_result_t scpi_cmd_diagnosticInformationAdcQ(scpi_t * context) {
     SCPI_ResultText(context, buffer);
 
     strcpy_P(buffer, PSTR("I_SET="));
-    util::strcatCurrent(buffer, channel->i.mon_dac);
+    util::strcatCurrent(buffer, channel->i.mon_dac, getNumSignificantDecimalDigitsForCurrent(channel->flags.currentRange));
     SCPI_ResultText(context, buffer);
 
     strcpy_P(buffer, PSTR("I_MON="));
-    util::strcatCurrent(buffer, channel->i.mon);
+    util::strcatCurrent(buffer, channel->i.mon, getNumSignificantDecimalDigitsForCurrent(channel->flags.currentRange));
     SCPI_ResultText(context, buffer);
 
     return SCPI_RES_OK;
-}
-
-void printCalibrationParameters(scpi_t *context, const char *label, bool calParamsExists,  Channel::CalibrationValueConfiguration &calibrationValue, char *buffer) {
-    strcpy(buffer, label); strcat_P(buffer, PSTR("_cal_params_exists=")); util::strcatInt(buffer, calParamsExists);SCPI_ResultText(context, buffer);
-    
-    if (calParamsExists) {
-        strcpy(buffer, label); strcat_P(buffer, PSTR("_min_level=")); util::strcatVoltage(buffer, calibrationValue.min.dac, 6); SCPI_ResultText(context, buffer);
-        strcpy(buffer, label); strcat_P(buffer, PSTR("_min_data=") ); util::strcatVoltage(buffer, calibrationValue.min.val, 6); SCPI_ResultText(context, buffer);
-        strcpy(buffer, label); strcat_P(buffer, PSTR("_min_adc=")  ); util::strcatVoltage(buffer, calibrationValue.min.adc, 6); SCPI_ResultText(context, buffer);
-        strcpy(buffer, label); strcat_P(buffer, PSTR("_mid_level=")); util::strcatVoltage(buffer, calibrationValue.mid.dac, 6); SCPI_ResultText(context, buffer);
-        strcpy(buffer, label); strcat_P(buffer, PSTR("_mid_data=") ); util::strcatVoltage(buffer, calibrationValue.mid.val, 6); SCPI_ResultText(context, buffer);
-        strcpy(buffer, label); strcat_P(buffer, PSTR("_mid_adc=")  ); util::strcatVoltage(buffer, calibrationValue.mid.adc, 6); SCPI_ResultText(context, buffer);
-        strcpy(buffer, label); strcat_P(buffer, PSTR("_max_level=")); util::strcatVoltage(buffer, calibrationValue.max.dac, 6); SCPI_ResultText(context, buffer);
-        strcpy(buffer, label); strcat_P(buffer, PSTR("_max_data=") ); util::strcatVoltage(buffer, calibrationValue.max.val, 6); SCPI_ResultText(context, buffer);
-        strcpy(buffer, label); strcat_P(buffer, PSTR("_max_adc=")  ); util::strcatVoltage(buffer, calibrationValue.max.adc, 6); SCPI_ResultText(context, buffer);
-	    strcpy(buffer, label); strcat_P(buffer, PSTR("_min_range=")  ); util::strcatVoltage(buffer, calibrationValue.minPossible, 6); SCPI_ResultText(context, buffer);
-	    strcpy(buffer, label); strcat_P(buffer, PSTR("_max_range=")  ); util::strcatVoltage(buffer, calibrationValue.maxPossible, 6); SCPI_ResultText(context, buffer);
-    }
 }
 
 scpi_result_t scpi_cmd_diagnosticInformationCalibrationQ(scpi_t * context) {
@@ -125,19 +148,19 @@ scpi_result_t scpi_cmd_diagnosticInformationCalibrationQ(scpi_t * context) {
             sprintf_P(buffer, PSTR("remark=%s"), calibration::getRemark());
             SCPI_ResultText(context, buffer);
         }
-        print_calibration_value(context, buffer, calibration::getVoltage());
-        print_calibration_value(context, buffer, calibration::getCurrent());
+        printCalibrationValue(context, buffer, calibration::getVoltage());
+        printCalibrationValue(context, buffer, calibration::getCurrent());
     }
     else {
         sprintf_P(buffer, PSTR("remark=%s %s"), channel->cal_conf.calibration_date, channel->cal_conf.calibration_remark);
         SCPI_ResultText(context, buffer);
 
-        printCalibrationParameters(context, "u", channel->cal_conf.flags.u_cal_params_exists, channel->cal_conf.u, buffer);
+        printCalibrationParameters(context, VALUE_TYPE_FLOAT_VOLT, -1, channel->cal_conf.flags.u_cal_params_exists, channel->cal_conf.u, buffer);
         if (channel->boardRevision == CH_BOARD_REVISION_R5B12) {
-            printCalibrationParameters(context, "i_5A", channel->cal_conf.flags.i_cal_params_exists_range0, channel->cal_conf.i[0], buffer);
-            printCalibrationParameters(context, "i_500mA", channel->cal_conf.flags.i_cal_params_exists_range1, channel->cal_conf.i[1], buffer);
+            printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, 0, channel->cal_conf.flags.i_cal_params_exists_range0, channel->cal_conf.i[0], buffer);
+            printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, 1, channel->cal_conf.flags.i_cal_params_exists_range1, channel->cal_conf.i[1], buffer);
         } else {
-            printCalibrationParameters(context, "i", channel->cal_conf.flags.i_cal_params_exists_range0, channel->cal_conf.i[0], buffer);
+            printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, -1, channel->cal_conf.flags.i_cal_params_exists_range0, channel->cal_conf.i[0], buffer);
         }
     }
 
@@ -158,8 +181,7 @@ scpi_result_t scpi_cmd_diagnosticInformationProtectionQ(scpi_t * context) {
         SCPI_ResultText(context, buffer);
 
         sprintf_P(buffer, PSTR("CH%d u_level="), channel->index);
-        util::strcatFloat(buffer, channel->prot_conf.u_level);
-        strcat_P(buffer, PSTR(" V"));
+        util::strcatVoltage(buffer, channel->prot_conf.u_level);
         SCPI_ResultText(context, buffer);
 
         // current
@@ -177,8 +199,7 @@ scpi_result_t scpi_cmd_diagnosticInformationProtectionQ(scpi_t * context) {
         SCPI_ResultText(context, buffer);
 
         sprintf_P(buffer, PSTR("CH%d p_level="), channel->index);
-        util::strcatFloat(buffer, channel->prot_conf.p_level);
-        strcat_P(buffer, PSTR(" W"));
+        util::strcatPower(buffer, channel->prot_conf.p_level);
         SCPI_ResultText(context, buffer);
     }
 
@@ -197,7 +218,7 @@ scpi_result_t scpi_cmd_diagnosticInformationProtectionQ(scpi_t * context) {
 		SCPI_ResultText(context, buffer);
 
 		sprintf_P(buffer, PSTR("temp_%s_level="), sensor.name);
-		util::strcatFloat(buffer, sensorTemperature.prot_conf.level);
+		util::strcatFloat(buffer, sensorTemperature.prot_conf.level, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_CELSIUS));
 		strcat_P(buffer, PSTR(" oC"));
 		SCPI_ResultText(context, buffer);
 	}

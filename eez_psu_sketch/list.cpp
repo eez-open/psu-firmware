@@ -165,16 +165,16 @@ int checkLimits() {
 
         for (int j = 0; j < voltageListLength || j < currentListLength; ++j) {
             float voltage = g_channelsLists[i].voltageList[j % voltageListLength];
-	        if (util::greater(voltage, channel_dispatcher::getULimit(channel), CHANNEL_VALUE_PRECISION)) {
+	        if (util::greater(voltage, channel_dispatcher::getULimit(channel), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
                 return SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
 	        }
 
             float current = g_channelsLists[i].currentList[j % currentListLength];
-            if (util::greater(current, channel_dispatcher::getILimit(channel), CHANNEL_VALUE_PRECISION)) {
+            if (util::greater(current, channel_dispatcher::getILimit(channel), getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
                 return SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
 	        }
 
-	        if (util::greater(voltage * current, channel_dispatcher::getPowerLimit(channel), CHANNEL_VALUE_PRECISION)) {
+	        if (util::greater(voltage * current, channel_dispatcher::getPowerLimit(channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
                 return SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             }
         }
@@ -422,20 +422,20 @@ void tick(uint32_t tick_usec) {
                 }
 
                 float voltage = g_channelsLists[i].voltageList[g_execution[i].it % g_channelsLists[i].voltageListLength];
-	            if (util::greater(voltage, channel_dispatcher::getULimit(channel), CHANNEL_VALUE_PRECISION)) {
+	            if (util::greater(voltage, channel_dispatcher::getULimit(channel), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
                     generateError(SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
                     abort();
                     return;
 	            }
 
                 float current = g_channelsLists[i].currentList[g_execution[i].it % g_channelsLists[i].currentListLength];
-                if (util::greater(current, channel_dispatcher::getILimit(channel), CHANNEL_VALUE_PRECISION)) {
+                if (util::greater(current, channel_dispatcher::getILimit(channel), getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
                     generateError(SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
                     abort();
                     return;
 	            }
 
-	            if (util::greater(voltage * current, channel_dispatcher::getPowerLimit(channel), CHANNEL_VALUE_PRECISION)) {
+	            if (util::greater(voltage * current, channel_dispatcher::getPowerLimit(channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
                     generateError(SCPI_ERROR_POWER_LIMIT_EXCEEDED);
                     abort();
                     return;

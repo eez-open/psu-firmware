@@ -437,7 +437,7 @@ void changeVoltageLimit() {
 	float minLimit = channel_dispatcher::getUMin(channel);
 	float maxLimit = channel_dispatcher::getUMax(channel);
 	float defLimit = channel_dispatcher::getUMax(channel);
-    changeLimit(data::Value(channel_dispatcher::getULimit(channel), data::VALUE_TYPE_FLOAT_VOLT), minLimit, maxLimit, defLimit, onSetVoltageLimit);
+    changeLimit(data::Value(channel_dispatcher::getULimit(channel), VALUE_TYPE_FLOAT_VOLT), minLimit, maxLimit, defLimit, onSetVoltageLimit);
 }
 
 void onSetCurrentLimit(float limit) {
@@ -451,7 +451,7 @@ void changeCurrentLimit() {
 	float minLimit = channel_dispatcher::getIMin(channel);
 	float maxLimit = channel_dispatcher::getIMax(channel);
 	float defLimit = channel_dispatcher::getIMax(channel);
-    changeLimit(data::Value(channel_dispatcher::getILimit(channel), data::VALUE_TYPE_FLOAT_AMPER), minLimit, maxLimit, defLimit, onSetCurrentLimit);
+    changeLimit(data::Value(channel_dispatcher::getILimit(channel), VALUE_TYPE_FLOAT_AMPER), minLimit, maxLimit, defLimit, onSetCurrentLimit);
 }
 
 void onSetPowerLimit(float limit) {
@@ -465,13 +465,13 @@ void changePowerLimit() {
 	float minLimit = channel_dispatcher::getPowerMinLimit(channel);
 	float maxLimit = channel_dispatcher::getPowerMaxLimit(channel);
 	float defLimit = channel_dispatcher::getPowerDefaultLimit(channel);
-    changeLimit(data::Value(channel_dispatcher::getPowerLimit(channel), data::VALUE_TYPE_FLOAT_WATT), minLimit, maxLimit, defLimit, onSetPowerLimit);
+    changeLimit(data::Value(channel_dispatcher::getPowerLimit(channel), VALUE_TYPE_FLOAT_WATT), minLimit, maxLimit, defLimit, onSetPowerLimit);
 }
 
 void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callback)()) {
     int errorPageId = PAGE_ID_ERROR_ALERT;
 
-    if (value.getType() == data::VALUE_TYPE_SCPI_ERROR_TEXT) {
+    if (value.getType() == VALUE_TYPE_SCPI_ERROR_TEXT) {
         void (*action)() = 0;
         const char *actionLabel PROGMEM = 0;
 
@@ -667,7 +667,7 @@ bool isFocusWidget(const WidgetCursor &widgetCursor) {
 }
 
 bool isFocusChanged() {
-    return g_focusEditValue.getType() != data::VALUE_TYPE_NONE;
+    return g_focusEditValue.getType() != VALUE_TYPE_NONE;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -789,8 +789,6 @@ void onEncoder(uint32_t tickCount, int counter, bool clicked) {
         }
 
         encoder::enableAcceleration(true);
-        encoder::setMovingSpeedMultiplier(
-            data::getMax(g_focusCursor, g_focusDataId).getFloat() / data::getMax(g_focusCursor, DATA_ID_CHANNEL_U_SET).getFloat());
 
         if (g_activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
             edit_mode_slider::increment(counter);
@@ -800,7 +798,7 @@ void onEncoder(uint32_t tickCount, int counter, bool clicked) {
         if (isEncoderEnabledInActivePage()) {
             data::Value value = data::get(g_focusCursor, g_focusDataId);
 
-            float newValue = value.getFloat() + 0.01f * counter;
+            float newValue = value.getFloat() + (value.getType() == VALUE_TYPE_FLOAT_AMPER ? 0.001f : 0.01f) * counter;
 
             float min = data::getMin(g_focusCursor, g_focusDataId).getFloat();
             if (newValue < min) {

@@ -50,17 +50,17 @@ ChSettingsAdvLRipplePage::ChSettingsAdvLRipplePage() {
 
 data::Value ChSettingsAdvLRipplePage::getData(const data::Cursor &cursor, uint8_t id) {
 	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != data::VALUE_TYPE_NONE) {
+	if (value.getType() != VALUE_TYPE_NONE) {
 		return value;
 	}
 
 	if (id == DATA_ID_CHANNEL_LRIPPLE_MAX_DISSIPATION) {
-		return data::Value(g_channel->SOA_POSTREG_PTOT, data::VALUE_TYPE_FLOAT_WATT);
+		return data::Value(g_channel->SOA_POSTREG_PTOT, VALUE_TYPE_FLOAT_WATT);
 	}
 
 	if (id == DATA_ID_CHANNEL_LRIPPLE_CALCULATED_DISSIPATION) {
         Channel &channel = Channel::get(g_channel->index - 1);
-		return data::Value(channel_dispatcher::getIMon(channel) * (g_channel->SOA_VIN - channel_dispatcher::getUMon(channel)), data::VALUE_TYPE_FLOAT_WATT);
+		return data::Value(channel_dispatcher::getIMon(channel) * (g_channel->SOA_VIN - channel_dispatcher::getUMon(channel)), VALUE_TYPE_FLOAT_WATT);
 	}
 
 	if (id == DATA_ID_CHANNEL_LRIPPLE_AUTO_MODE) {
@@ -194,7 +194,7 @@ ChSettingsAdvViewPage::ChSettingsAdvViewPage() {
 
 data::Value ChSettingsAdvViewPage::getData(const data::Cursor &cursor, uint8_t id) {
 	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != data::VALUE_TYPE_NONE) {
+	if (value.getType() != VALUE_TYPE_NONE) {
 		return value;
 	}
 
@@ -207,7 +207,7 @@ data::Value ChSettingsAdvViewPage::getData(const data::Cursor &cursor, uint8_t i
 	}
 
     if (id == DATA_ID_CHANNEL_DISPLAY_VIEW_SETTINGS_YT_VIEW_RATE) {
-		return data::Value(ytViewRate, data::VALUE_TYPE_FLOAT_SECOND);
+		return data::Value(ytViewRate, VALUE_TYPE_FLOAT_SECOND);
 	}
 
 	return data::Value();
@@ -248,7 +248,7 @@ void ChSettingsAdvViewPage::swapDisplayValues() {
 void ChSettingsAdvViewPage::editYTViewRate() {
 	NumericKeypadOptions options;
 
-	options.editUnit = data::VALUE_TYPE_FLOAT_SECOND;
+	options.editUnit = VALUE_TYPE_FLOAT_SECOND;
 
 	options.min = GUI_YT_VIEW_RATE_MIN;
     options.max = GUI_YT_VIEW_RATE_MAX;
@@ -259,7 +259,7 @@ void ChSettingsAdvViewPage::editYTViewRate() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, data::Value(ytViewRate, data::VALUE_TYPE_FLOAT_SECOND), options, onYTViewRateSet);
+	NumericKeypad::start(0, data::Value(ytViewRate, VALUE_TYPE_FLOAT_SECOND), options, onYTViewRateSet);
 }
 
 int ChSettingsAdvViewPage::getDirty() {

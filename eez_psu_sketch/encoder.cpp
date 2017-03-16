@@ -61,7 +61,6 @@ const uint8_t ttable[7][4] = {
 bool g_accelerationEnabled = true;
 int g_speedDown;
 int g_speedUp;
-float g_speedMultiplier = 1.0f;
 
 volatile uint8_t g_rotationState = 0;
 volatile int g_rotationCounter = 0;
@@ -90,7 +89,7 @@ void abInterruptHandler() {
             g_acceleration = 0;
         }
 
-        int amount = 1 + (int)roundf(g_speedMultiplier * g_acceleration);
+        int amount = 1 + g_acceleration;
         
         if (result == DIR_CW) {
             g_rotationCounter += amount;
@@ -152,13 +151,6 @@ void enableAcceleration(bool enable) {
 void setMovingSpeed(uint8_t down, uint8_t up) {
     g_speedDown = down;
     g_speedUp = up;
-}
-
-void setMovingSpeedMultiplier(float speedMultiplier) {
-    if (g_speedMultiplier != speedMultiplier) {
-        g_speedMultiplier = speedMultiplier;
-        g_acceleration = 0;
-    }
 }
 
 #ifdef EEZ_PSU_SIMULATOR

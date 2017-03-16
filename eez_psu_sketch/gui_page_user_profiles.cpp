@@ -52,7 +52,7 @@ data::Value UserProfilesPage::getData(const data::Cursor &cursor, uint8_t id) {
 		}
 
 		if (id == DATA_ID_PROFILE_LABEL) {
-			return data::Value(g_selectedProfileLocation, data::VALUE_TYPE_USER_PROFILE_LABEL);
+			return data::Value(g_selectedProfileLocation, VALUE_TYPE_USER_PROFILE_LABEL);
 		}
 
 		if (id == DATA_ID_PROFILE_REMARK) {
@@ -69,20 +69,20 @@ data::Value UserProfilesPage::getData(const data::Cursor &cursor, uint8_t id) {
 			}
 
 			if (id == DATA_ID_PROFILE_CHANNEL_U_SET) {
-				return data::Value(profile.channels[cursor.i].u_set, data::VALUE_TYPE_FLOAT_VOLT);
+				return data::Value(profile.channels[cursor.i].u_set, VALUE_TYPE_FLOAT_VOLT);
 			}
 
 			if (id == DATA_ID_PROFILE_CHANNEL_I_SET) {
-				return data::Value(profile.channels[cursor.i].i_set, data::VALUE_TYPE_FLOAT_AMPER);
+				return data::Value(profile.channels[cursor.i].i_set, VALUE_TYPE_FLOAT_AMPER);
 			}
 		}
 	} else if (cursor.i >= 0) {
 		if (id == DATA_ID_PROFILE_LABEL) {
-			return data::Value(cursor.i, data::VALUE_TYPE_USER_PROFILE_LABEL);
+			return data::Value(cursor.i, VALUE_TYPE_USER_PROFILE_LABEL);
 		}
 
 		if (id == DATA_ID_PROFILE_REMARK) {
-			return data::Value(cursor.i, data::VALUE_TYPE_USER_PROFILE_REMARK);
+			return data::Value(cursor.i, VALUE_TYPE_USER_PROFILE_REMARK);
 		}
 	}
 

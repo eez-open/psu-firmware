@@ -92,10 +92,6 @@
 /// and real mid value during calibration.
 #define CALIBRATION_MID_TOLERANCE_PERCENT 1.0f
 
-/// Number of digits after decimal point
-/// in float to string conversion.
-#define FLOAT_TO_STR_NUM_DECIMAL_DIGITS 2
-
 /// Temperature reading interval.
 #define TEMP_SENSOR_READ_EVERY_MS 1000
 

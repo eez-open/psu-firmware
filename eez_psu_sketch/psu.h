@@ -126,7 +126,5 @@ bool isFrontPanelLocked();
 #include "util.h"
 #include "channel.h"
 
-#define CHANNEL_VALUE_PRECISION powf(10.0f, FLOAT_TO_STR_NUM_DECIMAL_DIGITS)
-
 void PSU_boot();
 void PSU_tick();

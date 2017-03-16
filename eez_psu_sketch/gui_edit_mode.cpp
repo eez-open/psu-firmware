@@ -58,7 +58,7 @@ void initEditValue() {
 void enter(int tabIndex_) {
 #if OPTION_ENCODER
     if (!isActive()) {
-        if (!isFocusWidget(g_foundWidgetAtDown) || g_focusEditValue.getType() != data::VALUE_TYPE_NONE) {
+        if (!isFocusWidget(g_foundWidgetAtDown) || g_focusEditValue.getType() != VALUE_TYPE_NONE) {
             DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
             setFocusCursor(g_foundWidgetAtDown.cursor, widget->data);
             return;
@@ -140,11 +140,11 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_EDIT_VALUE) {
        return edit_mode::getEditValue();
     } else if (id == DATA_ID_EDIT_INFO) {
-        return data::Value(0 + editInfoPartOffset, data::VALUE_TYPE_EDIT_INFO);
+        return data::Value(0 + editInfoPartOffset, VALUE_TYPE_EDIT_INFO);
     } else if (id == DATA_ID_EDIT_INFO1) {
-        return data::Value(1 + editInfoPartOffset, data::VALUE_TYPE_EDIT_INFO);
+        return data::Value(1 + editInfoPartOffset, VALUE_TYPE_EDIT_INFO);
     } else if (id == DATA_ID_EDIT_INFO2) {
-        return data::Value(2 + editInfoPartOffset, data::VALUE_TYPE_EDIT_INFO);
+        return data::Value(2 + editInfoPartOffset, VALUE_TYPE_EDIT_INFO);
     } else if (id == DATA_ID_EDIT_MODE_INTERACTIVE_MODE_SELECTOR) {
         return isInteractiveMode() ? 0 : 1;
     } else if (id == DATA_ID_EDIT_STEPS) {
@@ -178,7 +178,7 @@ const data::Value &getMax() {
     return g_maxValue;
 }
 
-data::ValueType getUnit() {
+ValueType getUnit() {
     return g_editValue.getType();
 }
 
@@ -241,9 +241,9 @@ void getInfoText(int part, char *infoText) {
 
         if (part == 0 || part == 2) {
             strcat_P(infoText, PSTR("["));
-		    util::strcatFloat(infoText, g_minValue.getFloat());
+		    util::strcatFloat(infoText, g_minValue.getFloat(), getNumSignificantDecimalDigitsForCurrent(0));
 		    strcat_P(infoText, PSTR("-"));
-		    util::strcatCurrent(infoText, channel_dispatcher::getILimit(Channel::get(g_focusCursor.i)));
+		    util::strcatCurrent(infoText, channel_dispatcher::getILimit(Channel::get(g_focusCursor.i)), getNumSignificantDecimalDigitsForCurrent(0));
 		    strcat_P(infoText, PSTR("]"));
         }
     } else {
@@ -263,7 +263,7 @@ void getInfoText(int part, char *infoText) {
 
         if (part == 0 || part == 2) {
             strcat_P(infoText, PSTR("["));
-            util::strcatFloat(infoText, g_minValue.getFloat());
+            util::strcatFloat(infoText, g_minValue.getFloat(), getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT));
 		    strcat_P(infoText, PSTR("-"));
 		    util::strcatVoltage(infoText, channel_dispatcher::getULimit(Channel::get(g_focusCursor.i)));
 		    strcat_P(infoText, PSTR("]"));

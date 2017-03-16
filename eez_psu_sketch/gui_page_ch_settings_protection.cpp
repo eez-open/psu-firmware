@@ -62,7 +62,7 @@ data::Value ChSettingsProtectionPage::getData(const data::Cursor &cursor, uint8_
 
 data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uint8_t id) {
 	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != data::VALUE_TYPE_NONE) {
+	if (value.getType() != VALUE_TYPE_NONE) {
 		return value;
 	}
 
@@ -104,7 +104,7 @@ data::Value ChSettingsProtectionSetPage::getData(const data::Cursor &cursor, uin
 		        return data::Value(1);
 	        }
 	        if (id == DATA_ID_CHANNEL_TEMP) {
-		        return data::Value(tempSensor.temperature, data::VALUE_TYPE_FLOAT_CELSIUS);
+		        return data::Value(tempSensor.temperature, VALUE_TYPE_FLOAT_CELSIUS);
 	        }
 		} else {
 	        if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
@@ -225,17 +225,17 @@ void ChSettingsProtectionSetPage::editDelay() {
 ChSettingsOvpProtectionPage::ChSettingsOvpProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.u_state ? 1 : 0;
 
-	origLimit = limit = data::Value(channel_dispatcher::getULimit(*g_channel), data::VALUE_TYPE_FLOAT_VOLT);
+	origLimit = limit = data::Value(channel_dispatcher::getULimit(*g_channel), VALUE_TYPE_FLOAT_VOLT);
 	minLimit = channel_dispatcher::getUMin(*g_channel);
 	maxLimit = channel_dispatcher::getUMax(*g_channel);
 	defLimit = channel_dispatcher::getUMax(*g_channel);
 
-	origLevel = level = data::Value(channel_dispatcher::getUProtectionLevel(*g_channel), data::VALUE_TYPE_FLOAT_VOLT);
+	origLevel = level = data::Value(channel_dispatcher::getUProtectionLevel(*g_channel), VALUE_TYPE_FLOAT_VOLT);
 	minLevel = channel_dispatcher::getUSet(*g_channel);
 	maxLevel = channel_dispatcher::getUMax(*g_channel);
 	defLevel = channel_dispatcher::getUMax(*g_channel);
 
-	origDelay = delay = data::Value(g_channel->prot_conf.u_delay, data::VALUE_TYPE_FLOAT_SECOND);
+	origDelay = delay = data::Value(g_channel->prot_conf.u_delay, VALUE_TYPE_FLOAT_SECOND);
 	minDelay = g_channel->OVP_MIN_DELAY;
 	maxDelay = g_channel->OVP_MAX_DELAY;
 	defaultDelay = g_channel->OVP_DEFAULT_DELAY;
@@ -246,7 +246,11 @@ void ChSettingsOvpProtectionPage::onSetParamsOk() {
 }
 
 void ChSettingsOvpProtectionPage::setParams(bool checkLoad) {
-	if (checkLoad && g_channel->isOutputEnabled() && limit.getFloat() < channel_dispatcher::getUMon(*g_channel) && util::greaterOrEqual(channel_dispatcher::getIMon(*g_channel), 0, CHANNEL_VALUE_PRECISION)) {
+	if (checkLoad &&
+        g_channel->isOutputEnabled() &&
+        util::less(limit.getFloat(), channel_dispatcher::getUMon(*g_channel), getPrecision(VALUE_TYPE_FLOAT_VOLT)) &&
+        util::greaterOrEqual(channel_dispatcher::getIMon(*g_channel), 0, getPrecision(VALUE_TYPE_FLOAT_AMPER))) 
+    {
 		areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
 	} else {
 		channel_dispatcher::setVoltageLimit(*g_channel, limit.getFloat());
@@ -260,14 +264,14 @@ void ChSettingsOvpProtectionPage::setParams(bool checkLoad) {
 ChSettingsOcpProtectionPage::ChSettingsOcpProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.i_state ? 1 : 0;
 
-	origLimit = limit = data::Value(channel_dispatcher::getILimit(*g_channel), data::VALUE_TYPE_FLOAT_AMPER);
+	origLimit = limit = data::Value(channel_dispatcher::getILimit(*g_channel), VALUE_TYPE_FLOAT_AMPER);
 	minLimit = channel_dispatcher::getIMin(*g_channel);
 	maxLimit = channel_dispatcher::getIMaxLimit(*g_channel);
 	defLimit = maxLimit;
 
 	origLevel = level = 0;
 
-	origDelay = delay = data::Value(g_channel->prot_conf.i_delay, data::VALUE_TYPE_FLOAT_SECOND);
+	origDelay = delay = data::Value(g_channel->prot_conf.i_delay, VALUE_TYPE_FLOAT_SECOND);
 	minDelay = g_channel->OCP_MIN_DELAY;
 	maxDelay = g_channel->OCP_MAX_DELAY;
 	defaultDelay = g_channel->OCP_DEFAULT_DELAY;
@@ -292,17 +296,17 @@ void ChSettingsOcpProtectionPage::setParams(bool checkLoad) {
 ChSettingsOppProtectionPage::ChSettingsOppProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.p_state ? 1 : 0;
 
-	origLimit = limit = data::Value(channel_dispatcher::getPowerLimit(*g_channel), data::VALUE_TYPE_FLOAT_WATT);
+	origLimit = limit = data::Value(channel_dispatcher::getPowerLimit(*g_channel), VALUE_TYPE_FLOAT_WATT);
 	minLimit = channel_dispatcher::getPowerMinLimit(*g_channel);
 	maxLimit = channel_dispatcher::getPowerMaxLimit(*g_channel);
 	defLimit = channel_dispatcher::getPowerDefaultLimit(*g_channel);
 
-	origLevel = level = data::Value(channel_dispatcher::getPowerProtectionLevel(*g_channel), data::VALUE_TYPE_FLOAT_WATT);
+	origLevel = level = data::Value(channel_dispatcher::getPowerProtectionLevel(*g_channel), VALUE_TYPE_FLOAT_WATT);
 	minLevel = channel_dispatcher::getOppMinLevel(*g_channel);
 	maxLevel = channel_dispatcher::getOppMaxLevel(*g_channel);
 	defLevel = channel_dispatcher::getOppDefaultLevel(*g_channel);
 
-	origDelay = delay = data::Value(g_channel->prot_conf.p_delay, data::VALUE_TYPE_FLOAT_SECOND);
+	origDelay = delay = data::Value(g_channel->prot_conf.p_delay, VALUE_TYPE_FLOAT_SECOND);
 	minDelay = g_channel->OPP_MIN_DELAY;
 	maxDelay = g_channel->OPP_MAX_DELAY;
 	defaultDelay = g_channel->OPP_DEFAULT_DELAY;
@@ -315,7 +319,9 @@ void ChSettingsOppProtectionPage::onSetParamsOk() {
 void ChSettingsOppProtectionPage::setParams(bool checkLoad) {
 	if (checkLoad && g_channel->isOutputEnabled()) {
 		float pMon = channel_dispatcher::getUMon(*g_channel) * channel_dispatcher::getIMon(*g_channel);
-		if (limit.getFloat() < pMon && util::greaterOrEqual(channel_dispatcher::getIMon(*g_channel), 0, CHANNEL_VALUE_PRECISION)) {
+		if (util::less(limit.getFloat(), pMon, getPrecision(VALUE_TYPE_FLOAT_WATT)) &&
+            util::greaterOrEqual(channel_dispatcher::getIMon(*g_channel), 0, getPrecision(VALUE_TYPE_FLOAT_AMPER))) 
+        {
 			areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
 			return;
 		}
@@ -337,12 +343,12 @@ ChSettingsOtpProtectionPage::ChSettingsOtpProtectionPage() {
 	maxLimit = 0;
 	defLimit = 0;
 
-	origLevel = level = data::Value(temperature::getChannelSensorLevel(g_channel), data::VALUE_TYPE_FLOAT_CELSIUS);
+	origLevel = level = data::Value(temperature::getChannelSensorLevel(g_channel), VALUE_TYPE_FLOAT_CELSIUS);
 	minLevel = OTP_AUX_MIN_LEVEL;
 	maxLevel = OTP_AUX_MAX_LEVEL;
 	defLevel = OTP_AUX_DEFAULT_LEVEL;
 
-	origDelay = delay = data::Value(temperature::getChannelSensorDelay(g_channel), data::VALUE_TYPE_FLOAT_SECOND);
+	origDelay = delay = data::Value(temperature::getChannelSensorDelay(g_channel), VALUE_TYPE_FLOAT_SECOND);
 	minDelay = OTP_AUX_MIN_DELAY;
 	maxDelay = OTP_AUX_MAX_DELAY;
 	defaultDelay = OTP_CH_DEFAULT_DELAY;

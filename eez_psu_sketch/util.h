@@ -39,9 +39,10 @@ float clamp(float x, float min, float max);
 
 void strcatInt(char *str, int value);
 void strcatUInt32(char *str, uint32_t value);
-void strcatFloat(char *str, float value, int numSignificantDecimalDigits = FLOAT_TO_STR_NUM_DECIMAL_DIGITS);
-void strcatVoltage(char *str, float value, int numSignificantDecimalDigits = FLOAT_TO_STR_NUM_DECIMAL_DIGITS);
-void strcatCurrent(char *str, float value, int numSignificantDecimalDigits = FLOAT_TO_STR_NUM_DECIMAL_DIGITS);
+void strcatFloat(char *str, float value, int numSignificantDecimalDigits);
+void strcatVoltage(char *str, float value, int numSignificantDecimalDigits = -1);
+void strcatCurrent(char *str, float value, int numSignificantDecimalDigits);
+void strcatPower(char *str, float value);
 void strcatDuration(char *str, float value);
 void strcatLoad(char *str, float value);
 

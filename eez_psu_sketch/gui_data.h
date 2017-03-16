@@ -19,6 +19,7 @@
 #pragma once
 
 #include "event_queue.h"
+#include "value.h"
 
 namespace eez {
 namespace psu {
@@ -45,50 +46,6 @@ extern data::EnumItem g_triggerSourceEnumDefinition[];
 extern data::EnumItem g_triggerPolarityEnumDefinition[];
 
 ////////////////////////////////////////////////////////////////////////////////
-
-enum ValueType {
-    VALUE_TYPE_NONE,
-    VALUE_TYPE_INT,
-    VALUE_TYPE_FLOAT_FIRST,
-	VALUE_TYPE_FLOAT,
-    VALUE_TYPE_FLOAT_VOLT,
-    VALUE_TYPE_FLOAT_AMPER,
-    VALUE_TYPE_FLOAT_MILLI_VOLT,
-    VALUE_TYPE_FLOAT_MILLI_AMPER,
-	VALUE_TYPE_FLOAT_WATT,
-	VALUE_TYPE_FLOAT_SECOND,
-    VALUE_TYPE_FLOAT_MILLI_SECOND,
-	VALUE_TYPE_FLOAT_CELSIUS,
-	VALUE_TYPE_FLOAT_RPM,
-    VALUE_TYPE_FLOAT_LAST,
-    VALUE_TYPE_LESS_THEN_MIN_FLOAT,
-    VALUE_TYPE_GREATER_THEN_MAX_FLOAT = VALUE_TYPE_LESS_THEN_MIN_FLOAT + VALUE_TYPE_FLOAT_LAST - VALUE_TYPE_FLOAT_FIRST,
-    VALUE_TYPE_CONST_STR = VALUE_TYPE_GREATER_THEN_MAX_FLOAT + VALUE_TYPE_FLOAT_LAST - VALUE_TYPE_FLOAT_FIRST,
-    VALUE_TYPE_STR,
-    VALUE_TYPE_CHANNEL_LABEL,
-	VALUE_TYPE_CHANNEL_SHORT_LABEL,
-	VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL,
-	VALUE_TYPE_LESS_THEN_MIN_INT,
-	VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE,
-	VALUE_TYPE_GREATER_THEN_MAX_INT,
-	VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE,
-	VALUE_TYPE_EVENT,
-	VALUE_TYPE_PAGE_INFO,
-	VALUE_TYPE_ON_TIME_COUNTER,
-	VALUE_TYPE_SCPI_ERROR_TEXT,
-	VALUE_TYPE_TIME_ZONE,
-	VALUE_TYPE_YEAR,
-	VALUE_TYPE_MONTH,
-	VALUE_TYPE_DAY,
-	VALUE_TYPE_HOUR,
-	VALUE_TYPE_MINUTE,
-	VALUE_TYPE_SECOND,
-	VALUE_TYPE_USER_PROFILE_LABEL,
-	VALUE_TYPE_USER_PROFILE_REMARK,
-    VALUE_TYPE_EDIT_INFO,
-    VALUE_TYPE_IP_ADDRESS,
-    VALUE_TYPE_ENUM
-};
 
 inline bool isFloatType(ValueType valueType) { 
     return valueType >= VALUE_TYPE_FLOAT_FIRST && valueType <= VALUE_TYPE_FLOAT_LAST;
@@ -227,9 +184,6 @@ Value getHistoryValue(const Cursor &cursor, uint8_t id, int position);
 
 bool isBlinking(const Cursor &cursor, uint8_t id);
 Value getEditValue(const Cursor &cursor, uint8_t id);
-
-int getNumSignificantDecimalDigits(ValueType valueType);
-float getPrecision(ValueType valueType);
 
 }
 }

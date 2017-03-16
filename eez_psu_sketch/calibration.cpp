@@ -76,15 +76,18 @@ bool Value::checkRange(float value, float adc) {
     float levelValue = getLevelValue();
     float range = getRange();
 
+    float allowedDiff = range * CALIBRATION_DATA_TOLERANCE / 100;
     float diff;
 
-    diff = (float)(levelValue - value);
-    if (fabsf(diff) >= range * CALIBRATION_DATA_TOLERANCE / 100) {
+    diff = fabsf(levelValue - value);
+    if (diff > allowedDiff) {
+        DebugTraceF("Data check failed: level=%f, data=%f, diff=%f, allowedDiff=%f", levelValue, value, diff, allowedDiff);
         return false;
     }
 
-    diff = levelValue - adc;
-    if (fabsf(diff) >= range * CALIBRATION_DATA_TOLERANCE / 100) {
+    diff = fabsf(levelValue - adc);
+    if (diff > allowedDiff) {
+        DebugTraceF("ADC check failed: level=%f, adc=%f, diff=%f, allowedDiff=%f", levelValue, adc, diff, allowedDiff);
         return false;
     }
 
@@ -185,7 +188,16 @@ bool Value::checkMid() {
         }
     }
 
-    return fabsf(mid - mid) <= CALIBRATION_MID_TOLERANCE_PERCENT * (max_val - min_val) / 100.0f;
+    float allowedDiff = CALIBRATION_MID_TOLERANCE_PERCENT * (max_val - min_val) / 100.0f;
+
+    float diff = fabsf(mid - mid_val);
+    if (fabsf(mid - mid_val) <= allowedDiff) {
+        return true;
+    } else {
+        DebugTraceF("MID point check failed: mid_level=%f, mid_data=%f, diff=%f, allowedDiff=%f",
+            mid, mid_val, diff, allowedDiff);
+        return false;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

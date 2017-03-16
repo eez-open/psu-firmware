@@ -343,14 +343,14 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     if (IS_OVP_VALUE(this, cpv)) {
         state = flags.rprogEnabled || prot_conf.flags.u_state;
         //condition = flags.cv_mode && (!flags.cc_mode || fabs(i.mon - i.set) >= CHANNEL_VALUE_PRECISION) && (prot_conf.u_level <= u.set);
-        condition = util::greaterOrEqual(channel_dispatcher::getUMon(*this), channel_dispatcher::getUProtectionLevel(*this), CHANNEL_VALUE_PRECISION);
+        condition = util::greaterOrEqual(channel_dispatcher::getUMon(*this), channel_dispatcher::getUProtectionLevel(*this), getPrecision(VALUE_TYPE_FLOAT_VOLT));
         delay = prot_conf.u_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
     else if (IS_OCP_VALUE(this, cpv)) {
         state = prot_conf.flags.i_state;
         //condition = flags.cc_mode && (!flags.cv_mode || fabs(u.mon - u.set) >= CHANNEL_VALUE_PRECISION);
-        condition = util::greaterOrEqual(channel_dispatcher::getIMon(*this), channel_dispatcher::getISet(*this), CHANNEL_VALUE_PRECISION);
+        condition = util::greaterOrEqual(channel_dispatcher::getIMon(*this), channel_dispatcher::getISet(*this), getPrecision(VALUE_TYPE_FLOAT_AMPER));
         delay = prot_conf.i_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
@@ -1179,22 +1179,22 @@ void Channel::doCalibrationEnable(bool enable) {
     flags._calEnabled = enable;
 
     if (enable) {
-        u.min = util::floorPrec(cal_conf.u.minPossible, CHANNEL_VALUE_PRECISION);
+        u.min = util::floorPrec(cal_conf.u.minPossible, getPrecision(VALUE_TYPE_FLOAT_VOLT));
         if (u.min < U_MIN) u.min = U_MIN;
         if (u.limit < u.min) u.limit = u.min;
         if (u.set < u.min) setVoltage(u.min);
         
-        u.max = util::ceilPrec(cal_conf.u.maxPossible, CHANNEL_VALUE_PRECISION);
+        u.max = util::ceilPrec(cal_conf.u.maxPossible, getPrecision(VALUE_TYPE_FLOAT_VOLT));
         if (u.max > U_MAX) u.max = U_MAX;
         if (u.set > u.max) setVoltage(u.max);
         if (u.limit > u.max) u.limit = u.max;
 
-        i.min = util::floorPrec(cal_conf.i[0].minPossible, CHANNEL_VALUE_PRECISION);
+        i.min = util::floorPrec(cal_conf.i[0].minPossible, getPrecision(VALUE_TYPE_FLOAT_AMPER));
         if (i.min < I_MIN) i.min = I_MIN;
         if (i.limit < i.min) i.limit = i.min;
         if (i.set < i.min) setCurrent(i.min);
 
-        i.max = util::ceilPrec(cal_conf.i[0].maxPossible, CHANNEL_VALUE_PRECISION);
+        i.max = util::ceilPrec(cal_conf.i[0].maxPossible, getPrecision(VALUE_TYPE_FLOAT_AMPER));
         if (i.max > I_MAX) i.max = I_MAX;
         if (i.limit > i.max) i.limit = i.max;
         if (i.set > i.max) setCurrent(i.max);
@@ -1428,7 +1428,7 @@ void Channel::doSetCurrent(float value) {
         if (dac.isTesting()) {
             setCurrentRange(0);
         } else if (!calibration::isEnabled()) {
-            setCurrentRange(util::greater(value, 0.5, CHANNEL_VALUE_PRECISION) ? 0 : 1);
+            setCurrentRange(util::greater(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) ? 0 : 1);
         }
     }
 

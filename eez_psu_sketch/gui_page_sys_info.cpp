@@ -31,11 +31,11 @@ namespace gui {
 
 data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id) {
 	if (id == DATA_ID_SYS_ON_TIME_TOTAL) {
-		return data::Value((uint32_t)g_powerOnTimeCounter.getTotalTime(), data::VALUE_TYPE_ON_TIME_COUNTER);
+		return data::Value((uint32_t)g_powerOnTimeCounter.getTotalTime(), VALUE_TYPE_ON_TIME_COUNTER);
 	}
 
 	if (id == DATA_ID_SYS_ON_TIME_LAST) {
-		return data::Value((uint32_t)g_powerOnTimeCounter.getLastTime(), data::VALUE_TYPE_ON_TIME_COUNTER);
+		return data::Value((uint32_t)g_powerOnTimeCounter.getLastTime(), VALUE_TYPE_ON_TIME_COUNTER);
 	}
 
 	if (id == DATA_ID_SYS_INFO_FIRMWARE_VER) {
@@ -54,7 +54,7 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id) {
 		int iChannel = cursor.i >= 0 ? cursor.i : g_channel->index - 1;
 
 		if (id == DATA_ID_CHANNEL_BOARD_INFO_LABEL) {
-			return data::Value(iChannel + 1, data::VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL);
+			return data::Value(iChannel + 1, VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL);
 		}
 
 		if (id == DATA_ID_CHANNEL_BOARD_INFO_REVISION) {
@@ -88,7 +88,7 @@ data::Value SysInfoPage::getData(const data::Cursor &cursor, uint8_t id) {
 		    return data::Value(1);
 	    }
 	    if (id == DATA_ID_SYS_INFO_FAN_SPEED) {
-		    return data::Value((float)fan::g_rpm, data::VALUE_TYPE_FLOAT_RPM);
+		    return data::Value((float)fan::g_rpm, VALUE_TYPE_FLOAT_RPM);
 	    }
 #else
 	    if (id == DATA_ID_SYS_INFO_FAN_STATUS) {

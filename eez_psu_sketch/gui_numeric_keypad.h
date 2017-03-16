@@ -28,7 +28,7 @@ namespace gui {
 struct NumericKeypadOptions {
     NumericKeypadOptions();
 
-	data::ValueType editUnit;
+	ValueType editUnit;
 
 	float min;
 	float max;
@@ -76,8 +76,8 @@ public:
 
     bool isEditing();
 
-    data::ValueType getEditUnit();
-    data::ValueType getValueUnit();
+    ValueType getEditUnit();
+    ValueType getValueUnit();
     void getKeypadText(char *text);
     bool getText(char *text, int count);
     void switchToMilli();

@@ -92,18 +92,18 @@ NumericKeypad *NumericKeypad::start(const char *label, const data::Value& value,
 
 data::Value NumericKeypad::getData(uint8_t id) {
     data::Value value = Keypad::getData(id);
-	if (value.getType() != data::VALUE_TYPE_NONE) {
+	if (value.getType() != VALUE_TYPE_NONE) {
 		return value;
 	}
 
     if (id == DATA_ID_EDIT_UNIT) {
         switch (getEditUnit()) {
-        case data::VALUE_TYPE_FLOAT_VOLT:         return data::Value::ProgmemStr(PSTR("mV")); break;
-        case data::VALUE_TYPE_FLOAT_MILLI_VOLT:   return data::Value::ProgmemStr(PSTR("V"));  break;
-        case data::VALUE_TYPE_FLOAT_AMPER:        return data::Value::ProgmemStr(PSTR("mA")); break;
-	    case data::VALUE_TYPE_FLOAT_MILLI_AMPER:  return data::Value::ProgmemStr(PSTR("A"));  break;
-        case data::VALUE_TYPE_FLOAT_SECOND:       return data::Value::ProgmemStr(PSTR("ms"));  break;
-	    case data::VALUE_TYPE_FLOAT_MILLI_SECOND: return data::Value::ProgmemStr(PSTR("s")); break;
+        case VALUE_TYPE_FLOAT_VOLT:         return data::Value::ProgmemStr(PSTR("mV")); break;
+        case VALUE_TYPE_FLOAT_MILLI_VOLT:   return data::Value::ProgmemStr(PSTR("V"));  break;
+        case VALUE_TYPE_FLOAT_AMPER:        return data::Value::ProgmemStr(PSTR("mA")); break;
+	    case VALUE_TYPE_FLOAT_MILLI_AMPER:  return data::Value::ProgmemStr(PSTR("A"));  break;
+        case VALUE_TYPE_FLOAT_SECOND:       return data::Value::ProgmemStr(PSTR("ms"));  break;
+	    case VALUE_TYPE_FLOAT_MILLI_SECOND: return data::Value::ProgmemStr(PSTR("s")); break;
         default:                                  return data::Value::ProgmemStr(PSTR(""));
         }
     }
@@ -134,12 +134,12 @@ data::Value NumericKeypad::getData(uint8_t id) {
     
     if (id == DATA_ID_KEYPAD_UNIT_ENABLED) {
 		return data::Value(
-			m_options.editUnit == data::VALUE_TYPE_FLOAT_VOLT ||
-			m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT ||
-			m_options.editUnit == data::VALUE_TYPE_FLOAT_AMPER ||
-			m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER ||
-            m_options.editUnit == data::VALUE_TYPE_FLOAT_SECOND ||
-			m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_SECOND ? 1 : 0);
+			m_options.editUnit == VALUE_TYPE_FLOAT_VOLT ||
+			m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT ||
+			m_options.editUnit == VALUE_TYPE_FLOAT_AMPER ||
+			m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER ||
+            m_options.editUnit == VALUE_TYPE_FLOAT_SECOND ||
+			m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND ? 1 : 0);
 	}
 
 	return data::Value();
@@ -149,52 +149,35 @@ bool NumericKeypad::isEditing() {
     return m_state != EMPTY && m_state != START;
 }
 
-data::ValueType NumericKeypad::getEditUnit() {
+ValueType NumericKeypad::getEditUnit() {
     return m_options.editUnit;
 }
 
-data::ValueType NumericKeypad::getValueUnit() {
-    if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT) {
-        return data::VALUE_TYPE_FLOAT_VOLT;
+ValueType NumericKeypad::getValueUnit() {
+    if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT) {
+        return VALUE_TYPE_FLOAT_VOLT;
     } 
    
-    if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER) {
-        return data::VALUE_TYPE_FLOAT_AMPER;
+    if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER) {
+        return VALUE_TYPE_FLOAT_AMPER;
     }
     
-    if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_SECOND) {
-        return data::VALUE_TYPE_FLOAT_SECOND;
+    if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND) {
+        return VALUE_TYPE_FLOAT_SECOND;
     }
     
     return m_options.editUnit;
 }
 
 char NumericKeypad::getDotSign() {
-	if (m_options.editUnit == data::VALUE_TYPE_TIME_ZONE) {
+	if (m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
 		return ':';
 	}
 	return '.';
 }
 
 void NumericKeypad::appendEditUnit(char *text) {
-	// TODO move this to data::Value
-	if (m_options.editUnit == data::VALUE_TYPE_FLOAT_VOLT) {
-		strcat_P(text, PSTR("V"));
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT) {
-		strcat_P(text, PSTR("mV"));
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_AMPER) {
-		strcat_P(text, PSTR("A"));
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER) {
-		strcat_P(text, PSTR("mA"));
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_WATT) {
-		strcat_P(text, PSTR("W"));
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_SECOND) {
-		strcat_P(text, PSTR("s"));
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_SECOND) {
-		strcat_P(text, PSTR("ms"));
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_CELSIUS) {
-		strcat_P(text, PSTR("oC"));
-	}
+	strcat_P(text, getUnitStr(m_options.editUnit));
 }
 
 void NumericKeypad::getKeypadText(char *text) {
@@ -258,18 +241,18 @@ bool NumericKeypad::getText(char *text, int count) {
 ////////////////////////////////////////////////////////////////////////////////
 
 bool NumericKeypad::isMilli() {
-	return m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT ||
-        m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER ||
-        m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_SECOND;
+	return m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT ||
+        m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER ||
+        m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND;
 }
 
 void NumericKeypad::switchToMilli() {
-	if (m_options.editUnit == data::VALUE_TYPE_FLOAT_VOLT) {
-		m_options.editUnit = data::VALUE_TYPE_FLOAT_MILLI_VOLT;
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_AMPER) {
-		m_options.editUnit = data::VALUE_TYPE_FLOAT_MILLI_AMPER;
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_SECOND) {
-		m_options.editUnit = data::VALUE_TYPE_FLOAT_MILLI_SECOND;
+	if (m_options.editUnit == VALUE_TYPE_FLOAT_VOLT) {
+		m_options.editUnit = VALUE_TYPE_FLOAT_MILLI_VOLT;
+	} else if (m_options.editUnit == VALUE_TYPE_FLOAT_AMPER) {
+		m_options.editUnit = VALUE_TYPE_FLOAT_MILLI_AMPER;
+	} else if (m_options.editUnit == VALUE_TYPE_FLOAT_SECOND) {
+		m_options.editUnit = VALUE_TYPE_FLOAT_MILLI_SECOND;
 	}
 }
 
@@ -426,7 +409,7 @@ void NumericKeypad::digit(int d) {
 	if (m_options.flags.genericNumberKeypad) {
 		if (m_state == START || m_state == EMPTY) {
 			m_state = BEFORE_DOT;
-			if (m_options.editUnit == data::VALUE_TYPE_TIME_ZONE) {
+			if (m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
 				if (strlen(m_keypadText) == 0) {
 					appendChar('+');
 				}
@@ -491,7 +474,7 @@ void NumericKeypad::dot() {
 		}
 
 		if (m_state == EMPTY) {
-			if (m_options.editUnit == data::VALUE_TYPE_TIME_ZONE) {
+			if (m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
 				if (strlen(m_keypadText) == 0) {
 					appendChar('+');
 				}
@@ -531,34 +514,34 @@ void NumericKeypad::dot() {
 }
 
 void NumericKeypad::toggleEditUnit() {
-	if (m_options.editUnit == data::VALUE_TYPE_FLOAT_VOLT) {
-		m_options.editUnit = data::VALUE_TYPE_FLOAT_MILLI_VOLT;
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT) {
-		m_options.editUnit = data::VALUE_TYPE_FLOAT_VOLT;
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_AMPER) {
-		m_options.editUnit = data::VALUE_TYPE_FLOAT_MILLI_AMPER;
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER) {
-		m_options.editUnit = data::VALUE_TYPE_FLOAT_AMPER;
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_SECOND) {
-		m_options.editUnit = data::VALUE_TYPE_FLOAT_MILLI_SECOND;
-	} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_SECOND) {
-		m_options.editUnit = data::VALUE_TYPE_FLOAT_SECOND;
+	if (m_options.editUnit == VALUE_TYPE_FLOAT_VOLT) {
+		m_options.editUnit = VALUE_TYPE_FLOAT_MILLI_VOLT;
+	} else if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT) {
+		m_options.editUnit = VALUE_TYPE_FLOAT_VOLT;
+	} else if (m_options.editUnit == VALUE_TYPE_FLOAT_AMPER) {
+		m_options.editUnit = VALUE_TYPE_FLOAT_MILLI_AMPER;
+	} else if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER) {
+		m_options.editUnit = VALUE_TYPE_FLOAT_AMPER;
+	} else if (m_options.editUnit == VALUE_TYPE_FLOAT_SECOND) {
+		m_options.editUnit = VALUE_TYPE_FLOAT_MILLI_SECOND;
+	} else if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND) {
+		m_options.editUnit = VALUE_TYPE_FLOAT_SECOND;
 	}
 }
 
 void NumericKeypad::reset() {
 	if (m_options.flags.genericNumberKeypad) {
-		m_state = m_startValue.getType() != data::VALUE_TYPE_NONE ? START : EMPTY;
+		m_state = m_startValue.getType() != VALUE_TYPE_NONE ? START : EMPTY;
 		m_keypadText[0] = 0;
 	} else {
 		m_state = START;
 
-		if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_VOLT) {
-			m_options.editUnit = data::VALUE_TYPE_FLOAT_VOLT;
-		} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_AMPER) {
-			m_options.editUnit = data::VALUE_TYPE_FLOAT_AMPER;
-		} else if (m_options.editUnit == data::VALUE_TYPE_FLOAT_MILLI_SECOND) {
-			m_options.editUnit = data::VALUE_TYPE_FLOAT_SECOND;
+		if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT) {
+			m_options.editUnit = VALUE_TYPE_FLOAT_VOLT;
+		} else if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER) {
+			m_options.editUnit = VALUE_TYPE_FLOAT_AMPER;
+		} else if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND) {
+			m_options.editUnit = VALUE_TYPE_FLOAT_SECOND;
 		}
 	}
 }
@@ -644,7 +627,7 @@ void NumericKeypad::clear() {
 
 void NumericKeypad::sign() {
 	if (m_options.flags.signButtonEnabled) {
-		if (m_options.flags.genericNumberKeypad && m_options.editUnit == data::VALUE_TYPE_TIME_ZONE) {
+		if (m_options.flags.genericNumberKeypad && m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
 			if (m_keypadText[0] == 0) {
 				m_keypadText[0] = '-';
 				m_keypadText[1] = 0;
@@ -668,7 +651,7 @@ void NumericKeypad::unit() {
 		toggleEditUnit();
 	} else {
 		float value = getValue();
-		data::ValueType savedEditUnit = m_options.editUnit;
+		ValueType savedEditUnit = m_options.editUnit;
 
 		toggleEditUnit();
 
@@ -714,9 +697,9 @@ void NumericKeypad::ok() {
         if (m_state != EMPTY) {
 			float value = getValue();
 
-			if (util::less(value, m_options.min, data::getPrecision(m_startValue.getType()))) {
+			if (util::less(value, m_options.min, getPrecision(m_startValue.getType()))) {
 				errorMessage(0, data::Value::LessThenMinMessage(m_options.min, getValueUnit()));
-			} else if (util::greater(value, m_options.max, data::getPrecision(m_startValue.getType()))) {
+			} else if (util::greater(value, m_options.max, getPrecision(m_startValue.getType()))) {
 				errorMessage(0, data::Value::GreaterThenMaxMessage(m_options.max, getValueUnit()));
 			} else {
 				((void (*)(float))m_okCallback)(value);
@@ -752,7 +735,6 @@ bool NumericKeypad::onEncoder(int counter) {
         if (m_state == START) {
             if (data::isFloatType(getEditUnit())) {
                 encoder::enableAcceleration(true);
-                encoder::setMovingSpeedMultiplier(m_options.max / data::getMax(0, DATA_ID_CHANNEL_U_SET).getFloat());
 
                 float newValue = m_startValue.getFloat() + 0.01f * counter;
 
@@ -767,7 +749,7 @@ bool NumericKeypad::onEncoder(int counter) {
                 m_startValue = data::Value(newValue, m_startValue.getType());
 
                 return true;
-            } else if (m_startValue.getType() == data::VALUE_TYPE_INT) {
+            } else if (m_startValue.getType() == VALUE_TYPE_INT) {
                 encoder::enableAcceleration(false);
 
                 int newValue = m_startValue.getInt() + counter;

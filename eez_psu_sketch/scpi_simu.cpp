@@ -158,7 +158,7 @@ scpi_result_t scpi_cmd_simulatorLoadQ(scpi_t *context) {
         }
     }
 
-    return result_float(context, value);
+    return result_float(context, value, VALUE_TYPE_FLOAT_OHM);
 }
 
 scpi_result_t scpi_cmd_simulatorVoltageProgramExternal(scpi_t *context) {
@@ -203,7 +203,7 @@ scpi_result_t scpi_cmd_simulatorVoltageProgramExternalQ(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    return result_float(context, channel->simulator.getVoltProgExt());
+    return result_float(context, channel->simulator.getVoltProgExt(), VALUE_TYPE_FLOAT_VOLT);
 }
 
 scpi_result_t scpi_cmd_simulatorPwrgood(scpi_t *context) {
@@ -328,7 +328,7 @@ scpi_result_t scpi_cmd_simulatorTemperatureQ(scpi_t *context) {
         }
     }
 
-    return result_float(context, value);
+    return result_float(context, value, VALUE_TYPE_FLOAT_CELSIUS);
 }
 
 scpi_result_t scpi_cmd_simulatorGui(scpi_t *context) {

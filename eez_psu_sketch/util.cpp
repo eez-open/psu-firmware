@@ -71,6 +71,9 @@ void strcatFloat(char *str, float value, int numSignificantDecimalDigits) {
 }
 
 void strcatVoltage(char *str, float value, int numSignificantDecimalDigits) {
+    if (numSignificantDecimalDigits = -1) {
+        numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT);
+    }
     strcatFloat(str, value, numSignificantDecimalDigits);
     strcat(str, "V");
 }
@@ -80,28 +83,35 @@ void strcatCurrent(char *str, float value, int numSignificantDecimalDigits) {
     strcat(str, "A");
 }
 
+void strcatPower(char *str, float value) {
+    strcatFloat(str, value, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_WATT));
+    strcat(str, "W");
+}
+
 void strcatDuration(char *str, float value) {
+    int numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_SECOND);
     if (value > 0.1) {
-        strcatFloat(str, value);
+        strcatFloat(str, value, numSignificantDecimalDigits);
         strcat(str, " s");
     }
     else {
-        strcatFloat(str, value * 1000);
+        strcatFloat(str, value * 1000, numSignificantDecimalDigits - 3);
         strcat(str, " ms");
     }
 }
 
 void strcatLoad(char *str, float value) {
+    int numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_OHM);
     if (value < 1000) {
-        strcatFloat(str, value);
+        strcatFloat(str, value, numSignificantDecimalDigits);
         strcat(str, " ohm");
     }
     else if (value < 1000000){
-        strcatFloat(str, value / 1000);
+        strcatFloat(str, value / 1000, numSignificantDecimalDigits);
         strcat(str, " Kohm");
     }
     else {
-        strcatFloat(str, value / 1000000);
+        strcatFloat(str, value / 1000000, numSignificantDecimalDigits);
         strcat(str, " Mohm");
     }
 }

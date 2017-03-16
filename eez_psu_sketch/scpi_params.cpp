@@ -522,9 +522,9 @@ bool get_power_limit_from_param(scpi_t *context, const scpi_number_t &param, flo
     return true;
 }
 
-scpi_result_t result_float(scpi_t * context, float value) {
+scpi_result_t result_float(scpi_t *context, float value, ValueType valueType) {
     char buffer[32] = { 0 };
-    util::strcatFloat(buffer, value);
+    util::strcatFloat(buffer, value, valueType);
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
     return SCPI_RES_OK;
 }

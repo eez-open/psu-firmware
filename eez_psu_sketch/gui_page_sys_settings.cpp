@@ -45,24 +45,24 @@ SysSettingsDateTimePage::SysSettingsDateTimePage() {
 
 data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t id) {
 	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != data::VALUE_TYPE_NONE) {
+	if (value.getType() != VALUE_TYPE_NONE) {
 		return value;
 	}
 
 	if (id == DATA_ID_SYS_INFO_DATE_TIME_YEAR) {
-		return data::Value(dateTime.year, data::VALUE_TYPE_YEAR);
+		return data::Value(dateTime.year, VALUE_TYPE_YEAR);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_MONTH) {
-		return data::Value(dateTime.month, data::VALUE_TYPE_MONTH);
+		return data::Value(dateTime.month, VALUE_TYPE_MONTH);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_DAY) {
-		return data::Value(dateTime.day, data::VALUE_TYPE_DAY);
+		return data::Value(dateTime.day, VALUE_TYPE_DAY);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_HOUR) {
-		return data::Value(dateTime.hour, data::VALUE_TYPE_HOUR);
+		return data::Value(dateTime.hour, VALUE_TYPE_HOUR);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_MINUTE) {
-		return data::Value(dateTime.minute, data::VALUE_TYPE_MINUTE);
+		return data::Value(dateTime.minute, VALUE_TYPE_MINUTE);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_SECOND) {
-		return data::Value(dateTime.second, data::VALUE_TYPE_SECOND);
+		return data::Value(dateTime.second, VALUE_TYPE_SECOND);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_TIME_ZONE) {
-		return data::Value(timeZone, data::VALUE_TYPE_TIME_ZONE);
+		return data::Value(timeZone, VALUE_TYPE_TIME_ZONE);
 	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_DST) {
 		return data::Value(dst ? 1 : 0);
 	}
@@ -76,7 +76,7 @@ void SysSettingsDateTimePage::edit() {
 
 	NumericKeypadOptions options;
 
-	options.editUnit = data::VALUE_TYPE_INT;
+	options.editUnit = VALUE_TYPE_INT;
 
 	options.flags.genericNumberKeypad = true;
 
@@ -125,7 +125,7 @@ void SysSettingsDateTimePage::edit() {
 		options.min = -12.00;
 		options.max = 14.00;
 		options.def = 0;
-		options.editUnit = data::VALUE_TYPE_TIME_ZONE;
+		options.editUnit = VALUE_TYPE_TIME_ZONE;
 		options.flags.dotButtonEnabled = true;
 		options.flags.signButtonEnabled = true;
 	}
@@ -213,7 +213,7 @@ data::Value SysSettingsEthernetPage::getData(const data::Cursor &cursor, uint8_t
     }
 
     if (id == DATA_ID_SYS_ETHERNET_IP_ADDRESS) {
-        return data::Value(ethernet::getIpAddress(), data::VALUE_TYPE_IP_ADDRESS);
+        return data::Value(ethernet::getIpAddress(), VALUE_TYPE_IP_ADDRESS);
     }
 
     if (id == DATA_ID_SYS_ETHERNET_SCPI_PORT) {
@@ -298,12 +298,12 @@ void SysSettingsProtectionsPage::toggleForceDisablingAllOutputsOnPowerUp() {
 SysSettingsAuxOtpPage::SysSettingsAuxOtpPage() {
 	origState = state = temperature::sensors[temp_sensor::AUX].prot_conf.state ? 1 : 0;
 
-	origLevel = level = data::Value(temperature::sensors[temp_sensor::AUX].prot_conf.level, data::VALUE_TYPE_FLOAT_CELSIUS);
+	origLevel = level = data::Value(temperature::sensors[temp_sensor::AUX].prot_conf.level, VALUE_TYPE_FLOAT_CELSIUS);
 	minLevel = OTP_AUX_MIN_LEVEL;
 	maxLevel = OTP_AUX_MAX_LEVEL;
 	defLevel = OTP_AUX_DEFAULT_LEVEL;
 
-	origDelay = delay = data::Value(temperature::sensors[temp_sensor::AUX].prot_conf.delay, data::VALUE_TYPE_FLOAT_SECOND);
+	origDelay = delay = data::Value(temperature::sensors[temp_sensor::AUX].prot_conf.delay, VALUE_TYPE_FLOAT_SECOND);
 	minDelay = OTP_AUX_MIN_DELAY;
 	maxDelay = OTP_AUX_MAX_DELAY;
 	defaultDelay = OTP_CH_DEFAULT_DELAY;
@@ -311,7 +311,7 @@ SysSettingsAuxOtpPage::SysSettingsAuxOtpPage() {
 
 data::Value SysSettingsAuxOtpPage::getData(const data::Cursor &cursor, uint8_t id) {
 	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != data::VALUE_TYPE_NONE) {
+	if (value.getType() != VALUE_TYPE_NONE) {
 		return value;
 	}
 
@@ -461,7 +461,7 @@ SysSettingsEncoderPage::SysSettingsEncoderPage() {
 
 data::Value SysSettingsEncoderPage::getData(const data::Cursor &cursor, uint8_t id) {
 	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != data::VALUE_TYPE_NONE) {
+	if (value.getType() != VALUE_TYPE_NONE) {
 		return value;
 	}
 
@@ -547,7 +547,7 @@ SysSettingsTriggerPage::SysSettingsTriggerPage() {
 
 data::Value SysSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t id) {
 	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != data::VALUE_TYPE_NONE) {
+	if (value.getType() != VALUE_TYPE_NONE) {
 		return value;
 	}
 
@@ -556,7 +556,7 @@ data::Value SysSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t 
 	}
 
 	if (id == DATA_ID_TRIGGER_DELAY) {
-		return data::Value(m_delay, data::VALUE_TYPE_FLOAT_SECOND);
+		return data::Value(m_delay, VALUE_TYPE_FLOAT_SECOND);
 	}
 
 	if (id == DATA_ID_TRIGGER_POLARITY) {
@@ -589,7 +589,7 @@ void SysSettingsTriggerPage::onDelaySet(float value) {
 void SysSettingsTriggerPage::editDelay() {
     NumericKeypadOptions options;
 
-    options.editUnit = data::VALUE_TYPE_FLOAT_SECOND;
+    options.editUnit = VALUE_TYPE_FLOAT_SECOND;
 
     options.def = 0;
 	options.min = 0;
@@ -599,7 +599,7 @@ void SysSettingsTriggerPage::editDelay() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, data::Value(trigger::getDelay(), data::VALUE_TYPE_FLOAT_SECOND), options, onDelaySet);
+	NumericKeypad::start(0, data::Value(trigger::getDelay(), VALUE_TYPE_FLOAT_SECOND), options, onDelaySet);
 }
 
 void SysSettingsTriggerPage::selectPolarity() {

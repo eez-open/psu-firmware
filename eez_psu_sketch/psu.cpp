@@ -522,8 +522,9 @@ static bool loadAutoRecallProfile(profile::Parameters *profile, int *location) {
                                 event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
                             } else {
                                 for (int i = 0; i < CH_NUM; ++i) {
-                                    if (!util::equal(profile->channels[i].u_set, defaultProfile.channels[i].u_set, CHANNEL_VALUE_PRECISION) ||
-                                        !util::equal(profile->channels[i].i_set, defaultProfile.channels[i].i_set, CHANNEL_VALUE_PRECISION)) {
+                                    if (!util::equal(profile->channels[i].u_set, defaultProfile.channels[i].u_set, getPrecision(VALUE_TYPE_FLOAT_VOLT)) ||
+                                        !util::equal(profile->channels[i].i_set, defaultProfile.channels[i].i_set, getPrecision(VALUE_TYPE_FLOAT_AMPER))) 
+                                    {
                                         disableOutputs = true;
                                         event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
                                         break;

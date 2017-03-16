@@ -252,7 +252,7 @@ scpi_result_t scpi_cmd_systemTemperatureProtectionHighLevelQ(scpi_t * context) {
 		return SCPI_RES_ERR;
     }
 
-    return result_float(context, temperature::sensors[sensor].prot_conf.level);
+    return result_float(context, temperature::sensors[sensor].prot_conf.level, VALUE_TYPE_FLOAT_CELSIUS);
 }
 
 scpi_result_t scpi_cmd_systemTemperatureProtectionHighState(scpi_t * context) {

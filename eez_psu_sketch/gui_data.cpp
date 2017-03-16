@@ -307,12 +307,15 @@ void Value::toText(char *text, int count) const {
             snprintf_P(text, count-1, PSTR("Value is less then %s"), valueText);
             text[count - 1] = 0;
         } else {
-            int numSignificantDecimalDigits = getNumSignificantDecimalDigits((ValueType)type_);
+            ValueType valueType = (ValueType)type_;
+            int numSignificantDecimalDigits = getNumSignificantDecimalDigits(valueType);
 
-            const char *unit = 0;
+            bool milli = false;
 
             int temp = 0;
-            if (numSignificantDecimalDigits == 2) {
+            if (numSignificantDecimalDigits == 1) {
+                temp = ((int)round(float_ * 10)) * 1000;
+            } else if (numSignificantDecimalDigits == 2) {
                 temp = ((int)round(float_ * 100)) * 100;
             } else if (numSignificantDecimalDigits == 3) {
                 temp = ((int)round(float_ * 1000)) * 10;
@@ -321,51 +324,42 @@ void Value::toText(char *text, int count) const {
             }
             if (temp != 0 && temp > -10000 && temp < 10000) {
                 if (type_ == VALUE_TYPE_FLOAT_VOLT) {
-                    unit = "mV";
+                    milli = true;
+                    valueType = VALUE_TYPE_FLOAT_MILLI_VOLT;
                     util::strcatInt(text, temp / 10);
                 } else if (type_ == VALUE_TYPE_FLOAT_AMPER) {
-                    unit = "mA";
+                    milli = true;
+                    valueType = VALUE_TYPE_FLOAT_MILLI_AMPER;
+                    util::strcatInt(text, temp / 10);
+                } else if (type_ == VALUE_TYPE_FLOAT_WATT) {
+                    milli = true;
+                    valueType = VALUE_TYPE_FLOAT_MILLI_WATT;
                     util::strcatInt(text, temp / 10);
                 } else if (type_ == VALUE_TYPE_FLOAT_SECOND) {
-                    unit = "ms";
+                    milli = true;
+                    valueType = VALUE_TYPE_FLOAT_MILLI_SECOND;
                     util::strcatFloat(text, temp / 10.0f, 1);
                     util::removeTrailingZerosFromFloat(text);
                 }
             }
 
-            if (!unit) {
-                if (util::greaterOrEqual(float_, 99.99f, 2)) {
+            if (!milli) {
+                if (numSignificantDecimalDigits > 2 && util::greater(float_, 9.999f, 3)) {
+                    numSignificantDecimalDigits = 2;
+                }
+
+                if (numSignificantDecimalDigits > 1 && util::greater(float_, 99.99f, 2)) {
                     numSignificantDecimalDigits = 1;
                 }
 
                 util::strcatFloat(text, float_, numSignificantDecimalDigits);
 
-                switch (type_) {
-                case VALUE_TYPE_FLOAT_VOLT:
-                    unit = "V";
-                    break;
-                case VALUE_TYPE_FLOAT_AMPER:
-                    unit = "A";
-                    break;
-                case VALUE_TYPE_FLOAT_WATT:
-                    unit = "W";
-                    break;
-                case VALUE_TYPE_FLOAT_SECOND:
+                if (type_ == VALUE_TYPE_FLOAT_SECOND) {
                     util::removeTrailingZerosFromFloat(text);
-                    unit = "s";
-                    break;
-                case VALUE_TYPE_FLOAT_CELSIUS:
-                    unit = "oC";
-                    break;
-                case VALUE_TYPE_FLOAT_RPM:
-                    unit = "rpm";
-                    break;
                 }
             }
 
-            if (unit) {
-                strcat(text, unit);
-            }
+            strcat(text, getUnitStr(valueType));
         }
         break;
     }
@@ -424,7 +418,7 @@ bool Value::operator ==(const Value &other) const {
     	return util::equal(float_, other.float_, powf(10.0f, 4));
     }
 
-	return util::equal(float_, other.float_, CHANNEL_VALUE_PRECISION);
+	return util::equal(float_, other.float_, getPrecision((ValueType)type_));
 }
 
 int Value::getInt() const {
@@ -685,7 +679,7 @@ Value get(const Cursor &cursor, uint8_t id) {
                 }
             }
 
-            channelSnapshot.pMon = util::multiply(uMon, iMon, CHANNEL_VALUE_PRECISION);
+            channelSnapshot.pMon = util::multiply(uMon, iMon, getPrecision(VALUE_TYPE_FLOAT_WATT));
 
             channelSnapshot.lastSnapshotTime = currentTime;
         }
@@ -807,11 +801,11 @@ Value get(const Cursor &cursor, uint8_t id) {
         }
         
         if (id == DATA_ID_CHANNEL_LABEL) {
-            return data::Value(getCurrentChannelIndex(cursor) + 1, data::VALUE_TYPE_CHANNEL_LABEL);
+            return data::Value(getCurrentChannelIndex(cursor) + 1, VALUE_TYPE_CHANNEL_LABEL);
         }
         
         if (id == DATA_ID_CHANNEL_SHORT_LABEL) {
-            return data::Value(getCurrentChannelIndex(cursor) + 1, data::VALUE_TYPE_CHANNEL_SHORT_LABEL);
+            return data::Value(getCurrentChannelIndex(cursor) + 1, VALUE_TYPE_CHANNEL_SHORT_LABEL);
         }
 
         if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
@@ -832,15 +826,15 @@ Value get(const Cursor &cursor, uint8_t id) {
                 temperature = tempSensor.temperature;
             }
 #endif
-            return data::Value(temperature, data::VALUE_TYPE_FLOAT_CELSIUS);
+            return data::Value(temperature, VALUE_TYPE_FLOAT_CELSIUS);
         }
 
         if (id == DATA_ID_CHANNEL_ON_TIME_TOTAL) {
-            return data::Value((uint32_t)channel.onTimeCounter.getTotalTime(), data::VALUE_TYPE_ON_TIME_COUNTER);
+            return data::Value((uint32_t)channel.onTimeCounter.getTotalTime(), VALUE_TYPE_ON_TIME_COUNTER);
         }
 
         if (id == DATA_ID_CHANNEL_ON_TIME_LAST) {
-            return data::Value((uint32_t)channel.onTimeCounter.getLastTime(), data::VALUE_TYPE_ON_TIME_COUNTER);
+            return data::Value((uint32_t)channel.onTimeCounter.getLastTime(), VALUE_TYPE_ON_TIME_COUNTER);
         }
 
         if (id == DATA_ID_CHANNEL_CURRENT_HAS_DUAL_RANGE) {
@@ -891,7 +885,7 @@ Value get(const Cursor &cursor, uint8_t id) {
         if (tempSensor.isInstalled() && tempSensor.isTestOK()) {
             auxTemperature = tempSensor.temperature;
         }
-        return data::Value(auxTemperature, data::VALUE_TYPE_FLOAT_CELSIUS);
+        return data::Value(auxTemperature, VALUE_TYPE_FLOAT_CELSIUS);
     }
 
     if (id == DATA_ID_ALERT_MESSAGE) {
@@ -971,17 +965,17 @@ Value get(const Cursor &cursor, uint8_t id) {
 
 bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_EDIT) {
-        if (!util::between(value.getFloat(), channel_dispatcher::getUMin(Channel::get(cursor.i)), channel_dispatcher::getUMax(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
+        if (!util::between(value.getFloat(), channel_dispatcher::getUMin(Channel::get(cursor.i)), channel_dispatcher::getUMax(Channel::get(cursor.i)), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
             if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
             return false;
         }
         
-        if (util::greater(value.getFloat(), channel_dispatcher::getULimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
+        if (util::greater(value.getFloat(), channel_dispatcher::getULimit(Channel::get(cursor.i)), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
             if (error) *error = SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
             return false;
         }
         
-        if (util::greater(value.getFloat() * channel_dispatcher::getISet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
+        if (util::greater(value.getFloat() * channel_dispatcher::getISet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
@@ -990,17 +984,17 @@ bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
 
         return true;
     } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_EDIT) {
-        if (!util::between(value.getFloat(), channel_dispatcher::getIMin(Channel::get(cursor.i)), channel_dispatcher::getIMax(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
+        if (!util::between(value.getFloat(), channel_dispatcher::getIMin(Channel::get(cursor.i)), channel_dispatcher::getIMax(Channel::get(cursor.i)), getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
             if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
             return false;
         }
         
-        if (util::greater(value.getFloat(), channel_dispatcher::getILimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
+        if (util::greater(value.getFloat(), channel_dispatcher::getILimit(Channel::get(cursor.i)), getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
             if (error) *error = SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
             return false;
         }
         
-        if (util::greater(value.getFloat() * channel_dispatcher::getUSet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), CHANNEL_VALUE_PRECISION)) {
+        if (util::greater(value.getFloat() * channel_dispatcher::getUSet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
@@ -1048,8 +1042,7 @@ Value getHistoryValue(const Cursor &cursor, uint8_t id, int position) {
         float pMon = util::multiply(
             channel_dispatcher::getUMonHistory(Channel::get(cursor.i), position),
             channel_dispatcher::getIMonHistory(Channel::get(cursor.i), position),
-            CHANNEL_VALUE_PRECISION
-        );
+            getPrecision(VALUE_TYPE_FLOAT_WATT));
         return Value(pMon, VALUE_TYPE_FLOAT_WATT);
     }
     return Value();
@@ -1093,16 +1086,6 @@ Value getEditValue(const Cursor &cursor, uint8_t id) {
     }
         
     return get(cursor, id);
-}
-
-int getNumSignificantDecimalDigits(ValueType valueType) {
-    if (valueType == VALUE_TYPE_FLOAT_RPM) return 0;
-    if (valueType == VALUE_TYPE_FLOAT_SECOND) return 4;
-    return FLOAT_TO_STR_NUM_DECIMAL_DIGITS;
-}
-
-float getPrecision(ValueType valueType) {
-    return powf(10.0f, (float)getNumSignificantDecimalDigits(valueType));
 }
 
 }

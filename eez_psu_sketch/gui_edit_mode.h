@@ -40,7 +40,7 @@ const data::Value& getEditValue();
 data::Value getCurrentValue();
 const data::Value &getMin();
 const data::Value &getMax();
-data::ValueType getUnit();
+ValueType getUnit();
 bool setValue(float value);
 
 void getInfoText(int part, char *infoText);

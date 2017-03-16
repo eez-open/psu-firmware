@@ -32,7 +32,6 @@ void read(int &counter, bool &clicked);
 
 void enableAcceleration(bool enable);
 void setMovingSpeed(uint8_t down, uint8_t up);
-void setMovingSpeedMultiplier(float speedMultiplier);
 
 #ifdef EEZ_PSU_SIMULATOR
 void write(int counter, bool clicked);
