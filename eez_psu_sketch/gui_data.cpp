@@ -159,7 +159,6 @@ void Value::formatFloatValue(float &value, ValueType &valueType, int &numSignifi
     if (valueType == VALUE_TYPE_FLOAT_VOLT || valueType == VALUE_TYPE_FLOAT_AMPER || valueType == VALUE_TYPE_FLOAT_WATT || valueType == VALUE_TYPE_FLOAT_SECOND) {
         int n = numSignificantDecimalDigits > 3 ? 3 : numSignificantDecimalDigits;
         if (util::greater(value, -1.0f, getPrecisionFromNumSignificantDecimalDigits(n)) && util::less(value, 1.0f, getPrecisionFromNumSignificantDecimalDigits(n))) {
-            value *= 1000.0f;
             if (type_ == VALUE_TYPE_FLOAT_VOLT) {
                 valueType = VALUE_TYPE_FLOAT_MILLI_VOLT;
                 numSignificantDecimalDigits = 0;
@@ -177,6 +176,7 @@ void Value::formatFloatValue(float &value, ValueType &valueType, int &numSignifi
                 valueType = VALUE_TYPE_FLOAT_MILLI_SECOND;
                 numSignificantDecimalDigits = 1;
             }
+            value *= 1000.0f;
             return;
         }
     }
