@@ -31,7 +31,6 @@ void update();
 void exit();
 bool isInteractiveMode();
 void toggleInteractiveMode();
-bool isInteractiveChanged();
 
 data::Value getData(const data::Cursor &cursor, uint8_t id);
 bool isBlinking(const data::Cursor &cursor, uint8_t id, bool &result);

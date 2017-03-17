@@ -29,12 +29,14 @@ struct NumericKeypadOptions {
     NumericKeypadOptions();
 
 	ValueType editUnit;
+    int numSignificantDecimalDigits;
 
 	float min;
 	float max;
 	float def;
 
 	struct {
+        unsigned checkWhileTyping: 1;
 		unsigned option1ButtonEnabled : 1;
 		unsigned option2ButtonEnabled : 1;
 		unsigned signButtonEnabled : 1;
@@ -77,9 +79,10 @@ public:
 
     ValueType getEditUnit();
     ValueType getValueUnit();
+    void switchToMilli();
+
     void getKeypadText(char *text);
     bool getText(char *text, int count);
-    void switchToMilli();
 
     void key(char ch);
     void space();
@@ -96,6 +99,7 @@ public:
     void cancel();
 
 #if OPTION_ENCODER
+    bool onEncoderClick(int counter);
     bool onEncoder(int counter);
 #endif
 
@@ -114,10 +118,13 @@ private:
     float getValue();
     char getDotSign();
     bool isMilli();
+    ValueType getMilliUnit();
+    ValueType getSwitchToUnit();
+    void toggleEditUnit();
+    int getNumDecimalDigits(); 
     bool isValueValid();
     void digit(int d);
     void dot();
-    void toggleEditUnit();
     void reset();
 };
 

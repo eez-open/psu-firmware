@@ -729,43 +729,45 @@ void onEncoder(uint32_t tickCount, int counter, bool clicked) {
 
         if (isEncoderEnabledInActivePage()) {
             if (g_activePageId == PAGE_ID_EDIT_MODE_KEYPAD || g_activePageId == PAGE_ID_NUMERIC_KEYPAD) {
-                getActiveKeypad()->ok();
-            } else {
-                if (isFocusChanged()) {
-                    // confirmation
-                    int16_t error;
-                    if (!data::set(g_focusCursor, g_focusDataId, g_focusEditValue, &error)) {
-                        errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
-                    } else {
-                        g_focusEditValue = data::Value();
-                    }
-                } else if (edit_mode::isActive() && !edit_mode::isInteractiveMode() && edit_mode::getEditValue() != edit_mode::getCurrentValue()) {
-                    edit_mode::nonInteractiveSet();
-                } else {
-                    // selection
-                    data::Cursor newCursor = g_focusCursor;
-                    int newDataId;
-
-                    if (g_focusDataId == DATA_ID_CHANNEL_U_EDIT) {
-                        newDataId = DATA_ID_CHANNEL_I_EDIT;
-                    } else {
-                        for (int i = 0; i < CH_NUM; ++i) {
-                            newCursor.i = (g_focusCursor.i + 1) % CH_NUM;
-                            if (Channel::get(g_focusCursor.i).isOk()) {
-                                break;
-                            }
-                        }
-                        newDataId = DATA_ID_CHANNEL_U_EDIT;
-                    }
-
-                    setFocusCursor(newCursor, newDataId);
-
-                    if (edit_mode::isActive()) {
-                        edit_mode::update();
-                    }
+                if (((NumericKeypad *)getActiveKeypad())->onEncoderClick(counter)) {
+                    return;
                 }
-                sound::playClick();
+            } 
+            
+            if (isFocusChanged()) {
+                // confirmation
+                int16_t error;
+                if (!data::set(g_focusCursor, g_focusDataId, g_focusEditValue, &error)) {
+                    errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
+                } else {
+                    g_focusEditValue = data::Value();
+                }
+            } else if (edit_mode::isActive() && !edit_mode::isInteractiveMode() && edit_mode::getEditValue() != edit_mode::getCurrentValue()) {
+                edit_mode::nonInteractiveSet();
+            } else {
+                // selection
+                data::Cursor newCursor = g_focusCursor;
+                int newDataId;
+
+                if (g_focusDataId == DATA_ID_CHANNEL_U_EDIT) {
+                    newDataId = DATA_ID_CHANNEL_I_EDIT;
+                } else {
+                    for (int i = 0; i < CH_NUM; ++i) {
+                        newCursor.i = (g_focusCursor.i + 1) % CH_NUM;
+                        if (Channel::get(g_focusCursor.i).isOk()) {
+                            break;
+                        }
+                    }
+                    newDataId = DATA_ID_CHANNEL_U_EDIT;
+                }
+
+                setFocusCursor(newCursor, newDataId);
+
+                if (edit_mode::isActive()) {
+                    edit_mode::update();
+                }
             }
+            sound::playClick();
         }
     }
 

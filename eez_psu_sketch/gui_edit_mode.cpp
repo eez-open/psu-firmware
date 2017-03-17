@@ -20,8 +20,8 @@
 
 #if OPTION_DISPLAY
 
-#include "channel_dispatcher.h"
 #include "sound.h"
+#include "channel_dispatcher.h"
 
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_slider.h"
@@ -241,9 +241,9 @@ void getInfoText(int part, char *infoText) {
 
         if (part == 0 || part == 2) {
             strcat_P(infoText, PSTR("["));
-		    util::strcatFloat(infoText, g_minValue.getFloat(), getNumSignificantDecimalDigitsForCurrent(0));
+		    util::strcatFloat(infoText, g_minValue.getFloat(), 2);
 		    strcat_P(infoText, PSTR("-"));
-		    util::strcatCurrent(infoText, channel_dispatcher::getILimit(Channel::get(g_focusCursor.i)), getNumSignificantDecimalDigitsForCurrent(0));
+		    util::strcatCurrent(infoText, channel_dispatcher::getILimit(Channel::get(g_focusCursor.i)), 2);
 		    strcat_P(infoText, PSTR("]"));
         }
     } else {
@@ -263,9 +263,9 @@ void getInfoText(int part, char *infoText) {
 
         if (part == 0 || part == 2) {
             strcat_P(infoText, PSTR("["));
-            util::strcatFloat(infoText, g_minValue.getFloat(), getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT));
+            util::strcatFloat(infoText, g_minValue.getFloat(), 2);
 		    strcat_P(infoText, PSTR("-"));
-		    util::strcatVoltage(infoText, channel_dispatcher::getULimit(Channel::get(g_focusCursor.i)));
+		    util::strcatVoltage(infoText, channel_dispatcher::getULimit(Channel::get(g_focusCursor.i)), 2);
 		    strcat_P(infoText, PSTR("]"));
         }
     }

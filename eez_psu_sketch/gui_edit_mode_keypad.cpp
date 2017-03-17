@@ -20,11 +20,12 @@
 
 #if OPTION_DISPLAY
 
+#include "sound.h"
+#include "channel_dispatcher.h"
+
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_keypad.h"
 #include "gui_numeric_keypad.h"
-
-#include "sound.h"
 
 namespace eez {
 namespace psu {
@@ -55,7 +56,7 @@ void enter(const data::Value& editValue, const data::Value& minValue, data::Valu
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	g_keypad->init(0, data::Value(), options, (void (*)(float))onKeypadOk, 0);
+	g_keypad->init(0, editValue, options, (void (*)(float))onKeypadOk, 0);
 }
 
 void exit() {

@@ -71,7 +71,7 @@ void strcatFloat(char *str, float value, int numSignificantDecimalDigits) {
 }
 
 void strcatVoltage(char *str, float value, int numSignificantDecimalDigits) {
-    if (numSignificantDecimalDigits = -1) {
+    if (numSignificantDecimalDigits == -1) {
         numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT);
     }
     strcatFloat(str, value, numSignificantDecimalDigits);
