@@ -295,6 +295,9 @@ bool NumericKeypad::isValueValid() {
     int numSignificantDecimalDigits = getNumSignificantDecimalDigits(valueType);
     if (isMilli()) {
         numSignificantDecimalDigits -= 3;
+        if (numSignificantDecimalDigits < 0) {
+            numSignificantDecimalDigits = 0;
+        }
     } else {
         if (util::greater(value, 9.999f, 3)) {
             numSignificantDecimalDigits = 2;
