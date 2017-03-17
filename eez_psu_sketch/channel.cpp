@@ -707,14 +707,6 @@ void Channel::tick(uint32_t tick_usec) {
             historyLastTick += ytViewRateMicroseconds;
         }
     }
-
-    //if (!util::equal(u.set, u.mon_dac, CHANNEL_VALUE_PRECISION)) {
-    //    DebugTraceF("U_SET(%f) <> U_MON_DAC(%f)", u.set, u.mon_dac);
-    //}
-
-    //if (!util::equal(i.set, i.mon_dac, CHANNEL_VALUE_PRECISION)) {
-    //    DebugTraceF("I_SET(%f) <> I_MON_DAC(%f)", i.set, i.mon_dac);
-    //}
 }
 
 float Channel::remapAdcDataToVoltage(int16_t adc_data) {
