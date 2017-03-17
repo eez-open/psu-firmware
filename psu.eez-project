@@ -19397,7 +19397,7 @@
                       "type": "Select",
                       "data": "channel.calibration.step.num",
                       "y": 0,
-                      "width": 275,
+                      "width": 224,
                       "height": 28,
                       "style": "default",
                       "widgets": [
@@ -19405,35 +19405,35 @@
                           "type": "Text",
                           "x": 0,
                           "y": 0,
-                          "width": 275,
+                          "width": 224,
                           "height": 28,
                           "style": "edit_value_S_left",
-                          "text": "Voltage MIN point calibration"
+                          "text": "Voltage MIN point"
                         },
                         {
                           "type": "Text",
                           "x": 0,
                           "y": 0,
-                          "width": 275,
+                          "width": 224,
                           "height": 28,
                           "style": "edit_value_S_left",
-                          "text": "Voltage MID point calibration"
+                          "text": "Voltage MID point"
                         },
                         {
                           "type": "Text",
                           "x": 0,
                           "y": 0,
-                          "width": 275,
+                          "width": 224,
                           "height": 28,
                           "style": "edit_value_S_left",
-                          "text": "Voltage MAX point calibration"
+                          "text": "Voltage MAX point"
                         },
                         {
                           "x": 0,
                           "type": "Select",
                           "data": "channel.currentHasDualRange",
                           "y": 0,
-                          "width": 275,
+                          "width": 224,
                           "height": 28,
                           "style": "default",
                           "widgets": [
@@ -19441,19 +19441,19 @@
                               "type": "Text",
                               "x": 0,
                               "y": 0,
-                              "width": 275,
+                              "width": 224,
                               "height": 28,
                               "style": "edit_value_S_left",
-                              "text": "Current MIN point calibration"
+                              "text": "Current MIN point"
                             },
                             {
                               "type": "Text",
                               "x": 0,
                               "y": 0,
-                              "width": 275,
+                              "width": 224,
                               "height": 28,
                               "style": "edit_value_S_left",
-                              "text": "Current [0-5A] MIN point cal."
+                              "text": "Current [0-5A] MIN point"
                             }
                           ]
                         },
@@ -19462,7 +19462,7 @@
                           "type": "Select",
                           "data": "channel.currentHasDualRange",
                           "y": 0,
-                          "width": 275,
+                          "width": 224,
                           "height": 28,
                           "style": "default",
                           "widgets": [
@@ -19470,19 +19470,19 @@
                               "type": "Text",
                               "x": 0,
                               "y": 0,
-                              "width": 275,
+                              "width": 224,
                               "height": 28,
                               "style": "edit_value_S_left",
-                              "text": "Current MID point calibration"
+                              "text": "Current MID point"
                             },
                             {
                               "type": "Text",
                               "x": 0,
                               "y": 0,
-                              "width": 275,
+                              "width": 224,
                               "height": 28,
                               "style": "edit_value_S_left",
-                              "text": "Current [0-5A] MID point cal."
+                              "text": "Current [0-5A] MID point"
                             }
                           ]
                         },
@@ -19491,7 +19491,7 @@
                           "type": "Select",
                           "data": "channel.currentHasDualRange",
                           "y": 0,
-                          "width": 275,
+                          "width": 224,
                           "height": 28,
                           "style": "default",
                           "widgets": [
@@ -19499,19 +19499,19 @@
                               "type": "Text",
                               "x": 0,
                               "y": 0,
-                              "width": 275,
+                              "width": 224,
                               "height": 28,
                               "style": "edit_value_S_left",
-                              "text": "Current MAX point calibration"
+                              "text": "Current MAX point"
                             },
                             {
                               "type": "Text",
                               "x": 0,
                               "y": 0,
-                              "width": 275,
+                              "width": 224,
                               "height": 28,
                               "style": "edit_value_S_left",
-                              "text": "Current [0-5A] MAX point cal."
+                              "text": "Current [0-5A] MAX point"
                             }
                           ]
                         },
@@ -19519,28 +19519,28 @@
                           "type": "Text",
                           "x": 0,
                           "y": 0,
-                          "width": 275,
+                          "width": 224,
                           "height": 28,
                           "style": "edit_value_S_left",
-                          "text": "Current [0-500mA] MIN point cal."
+                          "text": "Current [0-500mA] MIN point"
                         },
                         {
                           "type": "Text",
                           "x": 0,
                           "y": 0,
-                          "width": 275,
+                          "width": 224,
                           "height": 28,
                           "style": "edit_value_S_left",
-                          "text": "Current [0-500mA] MID point cal."
+                          "text": "Current [0-500mA] MID point"
                         },
                         {
                           "type": "Text",
                           "x": 0,
                           "y": 0,
-                          "width": 275,
+                          "width": 224,
                           "height": 28,
                           "style": "edit_value_S_left",
-                          "text": "Current [0-500mA] MAX point cal."
+                          "text": "Current [0-500mA] MAX point"
                         }
                       ]
                     },
@@ -19700,6 +19700,16 @@
               "height": 36,
               "style": "bottom_button",
               "text": "X"
+            },
+            {
+              "type": "Text",
+              "data": "",
+              "x": 244,
+              "y": 28,
+              "width": 70,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "50mV"
             }
           ]
         }
