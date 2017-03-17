@@ -167,9 +167,10 @@ psu::calibration::Value *getCalibrationValue() {
 void onSetOk(float value) {
     psu::calibration::Value *calibrationValue = getCalibrationValue();
 
+    float dac = calibrationValue->getDacValue();
     float adc = calibrationValue->getAdcValue();
-    if (calibrationValue->checkRange(value, adc)) {
-        calibrationValue->setData(value, adc);
+    if (calibrationValue->checkRange(dac, value, adc)) {
+        calibrationValue->setData(dac, value, adc);
 
         popPage();
         nextStep();

@@ -72,28 +72,6 @@ float Value::getRange() {
     return range;
 }
 
-bool Value::checkRange(float value, float adc) {
-    float levelValue = getLevelValue();
-    float range = getRange();
-
-    float allowedDiff = range * CALIBRATION_DATA_TOLERANCE / 100;
-    float diff;
-
-    diff = fabsf(levelValue - value);
-    if (diff > allowedDiff) {
-        DebugTraceF("Data check failed: level=%f, data=%f, diff=%f, allowedDiff=%f", levelValue, value, diff, allowedDiff);
-        return false;
-    }
-
-    diff = fabsf(levelValue - adc);
-    if (diff > allowedDiff) {
-        DebugTraceF("ADC check failed: level=%f, adc=%f, diff=%f, allowedDiff=%f", levelValue, adc, diff, allowedDiff);
-        return false;
-    }
-
-    return true;
-}
-
 float Value::getLevelValue() {
     if (voltOrCurr) {
         if (level == LEVEL_MIN) {
@@ -123,6 +101,10 @@ float Value::getLevelValue() {
     }
 }
 
+float Value::getDacValue() {
+    return voltOrCurr ? g_channel->u.set : g_channel->i.set;
+}
+
 float Value::getAdcValue() {
     return voltOrCurr ? g_channel->u.mon : g_channel->i.mon;
 }
@@ -140,22 +122,42 @@ void Value::setLevel(int8_t value) {
     }
 }
 
-void Value::setData(float data, float adc) {
+bool Value::checkRange(float dac, float data, float adc) {
+    float range = getRange();
+
+    float allowedDiff = range * CALIBRATION_DATA_TOLERANCE / 100;
+    float diff;
+
+    diff = fabsf(dac - data);
+    if (diff > allowedDiff) {
+        DebugTraceF("Data check failed: level=%f, data=%f, diff=%f, allowedDiff=%f", dac, data, diff, allowedDiff);
+        return false;
+    }
+
+    diff = fabsf(dac - adc);
+    if (diff > allowedDiff) {
+        DebugTraceF("ADC check failed: level=%f, adc=%f, diff=%f, allowedDiff=%f", dac, adc, diff, allowedDiff);
+        return false;
+    }
+
+    return true;
+}
+void Value::setData(float dac, float data, float adc) {
     if (level == LEVEL_MIN) {
         min_set = true;
-        min_dac = voltOrCurr ? g_channel->u.set : g_channel->i.set;
+        min_dac = dac;
         min_val = data;
         min_adc = adc;
     }
     else if (level == LEVEL_MID) {
         mid_set = true;
-        mid_dac = voltOrCurr ? g_channel->u.set : g_channel->i.set;
+        mid_dac = dac;
         mid_val = data;
         mid_adc = adc;
     }
     else {
         max_set = true;
-        max_dac = voltOrCurr ? g_channel->u.set : g_channel->i.set;
+        max_dac = dac;
         max_val = data;
         max_adc = adc;
     }

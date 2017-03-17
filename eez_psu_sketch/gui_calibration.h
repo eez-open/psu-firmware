@@ -25,7 +25,6 @@ namespace psu {
 namespace gui {
 namespace calibration {
 
-void editPassword();
 void start();
 data::Value getData(const data::Cursor &cursor, uint8_t id);
 void set();

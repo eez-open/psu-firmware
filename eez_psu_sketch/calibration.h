@@ -65,12 +65,13 @@ struct Value {
     void reset();
 
     float getLevelValue();
+    float getDacValue();
     float getAdcValue();
 
     void  setLevel(int8_t level);
-    void setData(float data, float adc);
+    bool checkRange(float dac, float data, float adc);
+    void setData(float dac, float data, float adc);
 
-    bool checkRange(float value, float adc);
     bool checkMid();
 
 private:

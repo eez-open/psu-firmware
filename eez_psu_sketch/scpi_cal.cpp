@@ -104,15 +104,16 @@ static scpi_result_t calibration_data(scpi_t * context, calibration::Value &cali
         return SCPI_RES_ERR;
     }
 
+    float dac = calibrationValue.getDacValue();
 	float value = (float)param.value;
     float adc = calibrationValue.getAdcValue();
 
-	if (!calibrationValue.checkRange(value, adc)) {
+	if (!calibrationValue.checkRange(dac, value, adc)) {
         SCPI_ErrorPush(context, SCPI_ERROR_CAL_VALUE_OUT_OF_RANGE);
         return SCPI_RES_ERR;
 	}
     
-	calibrationValue.setData(value, adc);
+	calibrationValue.setData(dac, value, adc);
 
     return SCPI_RES_OK;
 }
