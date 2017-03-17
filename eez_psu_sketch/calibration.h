@@ -43,14 +43,17 @@ struct Value {
     int8_t level;
 
     bool  min_set;
+    float min_dac;
     float min_val;
     float min_adc;
 
     bool  mid_set;
+    float mid_dac;
     float mid_val;
     float mid_adc;
 
     bool  max_set;
+    float max_dac;
     float max_val;
     float max_adc;
 
@@ -75,6 +78,7 @@ private:
 };
 
 bool isEnabled();
+Channel &getCalibrationChannel();
 
 /// Start calibration procedure on the channel.
 /// /param channel Selected channel

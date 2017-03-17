@@ -60,6 +60,7 @@ public:
     virtual data::Value getData(uint8_t id);
 
 protected:
+    char m_stateText[2][MAX_KEYPAD_TEXT_LENGTH + 2];
     char m_label[64];
     char m_keypadText[MAX_KEYPAD_TEXT_LENGTH + 2];
     int m_maxChars;

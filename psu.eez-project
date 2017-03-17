@@ -7951,7 +7951,7 @@
                   "width": 48,
                   "height": 36,
                   "style": "bottom_button",
-                  "text": "X"
+                  "text": "B"
                 }
               ]
             },
@@ -8579,7 +8579,7 @@
                   "width": 48,
                   "height": 36,
                   "style": "bottom_button",
-                  "text": "X"
+                  "text": "B"
                 }
               ]
             },
@@ -9379,7 +9379,7 @@
                   "width": 48,
                   "height": 36,
                   "style": "bottom_button",
-                  "text": "X"
+                  "text": "B"
                 }
               ]
             },

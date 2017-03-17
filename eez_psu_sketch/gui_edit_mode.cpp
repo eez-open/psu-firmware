@@ -22,6 +22,7 @@
 
 #include "sound.h"
 #include "channel_dispatcher.h"
+#include "calibration.h"
 
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_slider.h"
@@ -95,7 +96,11 @@ void enter(int tabIndex_) {
 
     psu::enterTimeCriticalMode();
 
-    setPage(g_tabIndex);
+    if (tabIndex_ != -1) {
+        replacePage(g_tabIndex);
+    } else {
+        pushPage(g_tabIndex);
+    }
 }
 
 void update() {
@@ -107,10 +112,8 @@ void update() {
 void exit() {
     edit_mode_keypad::exit();
 
-    if (getActivePageId() != PAGE_ID_MAIN) {
-        psu::leaveTimeCriticalMode();
-        setPage(PAGE_ID_MAIN);
-    }
+    psu::leaveTimeCriticalMode();
+    popPage();
 }
 
 void nonInteractiveSet() {

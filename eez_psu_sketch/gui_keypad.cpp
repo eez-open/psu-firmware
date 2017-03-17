@@ -42,8 +42,6 @@ namespace eez {
 namespace psu {
 namespace gui {
 
-static char g_stateText[2][MAX_KEYPAD_TEXT_LENGTH + 2];
-
 ////////////////////////////////////////////////////////////////////////////////
 
 Keypad *getActiveKeypad() {
@@ -82,7 +80,7 @@ data::Value Keypad::getData(uint8_t id) {
     if (id == DATA_ID_KEYPAD_CAPS) {
 		return data::Value(m_isUpperCase ? 1 : 0);
 	} else if (id == DATA_ID_KEYPAD_TEXT) {
-        char *text = &g_stateText[getCurrentStateBufferIndex()][0];
+        char *text = &m_stateText[getCurrentStateBufferIndex()][0];
         getKeypadText(text);
         return data::Value(text);
     }

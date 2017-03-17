@@ -22,14 +22,15 @@
 
 #include "datetime.h"
 #include "profile.h"
+#include "channel.h"
+#include "channel_dispatcher.h"
+#include "calibration.h"
+#include "trigger.h"
+
 #include "gui_internal.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_keypad.h"
 #include "gui_edit_mode_step.h"
-#include "channel.h"
-#include "channel_dispatcher.h"
-#include "trigger.h"
-
 #include "gui_calibration.h"
 #include "gui_keypad.h"
 #include "gui_page_ch_settings_trigger.h"
@@ -707,7 +708,13 @@ Value get(const Cursor &cursor, uint8_t id) {
         }
 
         if (id == DATA_ID_EDIT_ENABLED) {
-            return Value(!trigger::isIdle() || getActivePageId() == PAGE_ID_CH_SETTINGS_LISTS ? 0 : 1);
+            if (!trigger::isIdle() || getActivePageId() == PAGE_ID_CH_SETTINGS_LISTS) {
+                return 0;
+            }
+            if (psu::calibration::isEnabled() && psu::calibration::getCalibrationChannel().index != channel.index) {
+                return 0;
+            }
+            return 1;
         }
 
         if (id == DATA_ID_TRIGGER_IS_INITIATED) {
