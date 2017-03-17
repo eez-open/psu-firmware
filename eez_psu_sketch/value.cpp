@@ -23,7 +23,7 @@
 namespace eez {
 namespace psu {
 
-const ValueTypeTraits g_unitToStr[] = {
+ValueTypeTraits g_valueTypeTraits[] = {
     { "",     2                                         , powf(10.0f, 2.0f)                                               },
     { "V",    VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS    , powf(10.0f, (float)VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS)      },
     { "mV",   VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS-3  , powf(10.0f, (float)(VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS-3))  },

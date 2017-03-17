@@ -89,7 +89,7 @@ struct ValueTypeTraits {
 extern ValueTypeTraits g_valueTypeTraits[];
 extern float g_precisions[];
 
-const char *getUnitStr(ValueType valueType) {
+inline const char *getUnitStr(ValueType valueType) {
     return g_valueTypeTraits[valueType - VALUE_TYPE_FLOAT].unitStr; 
 }
 
