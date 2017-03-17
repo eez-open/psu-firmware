@@ -94,12 +94,14 @@ void enter(int tabIndex_) {
         edit_mode_keypad::exit();
     }
 
-    psu::enterTimeCriticalMode();
+    if (!isActive()) {
+        psu::enterTimeCriticalMode();
 
-    if (tabIndex_ != -1) {
-        replacePage(g_tabIndex);
-    } else {
-        pushPage(g_tabIndex);
+        if (tabIndex_ != -1) {
+            replacePage(g_tabIndex);
+        } else {
+            pushPage(g_tabIndex);
+        }
     }
 }
 

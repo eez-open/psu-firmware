@@ -124,6 +124,8 @@ private:
 			uint8_t enumDefinition;
 		} enum_;
     };
+
+    void formatFloatValue(float &value, ValueType &valueType, int &numSignificantDecimalDigits) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

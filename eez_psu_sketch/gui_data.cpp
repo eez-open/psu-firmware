@@ -151,6 +151,49 @@ Value Value::GreaterThenMaxMessage(float float_, ValueType type) {
 	return value;
 }
 
+void Value::formatFloatValue(float &value, ValueType &valueType, int &numSignificantDecimalDigits) const {
+    value = float_;
+    valueType = (ValueType)type_;
+    numSignificantDecimalDigits = format_;
+
+    if (valueType == VALUE_TYPE_FLOAT_VOLT || valueType == VALUE_TYPE_FLOAT_AMPER || valueType == VALUE_TYPE_FLOAT_WATT || valueType == VALUE_TYPE_FLOAT_SECOND) {
+        int n = numSignificantDecimalDigits > 3 ? 3 : numSignificantDecimalDigits;
+        if (util::greater(value, -1.0f, getPrecisionFromNumSignificantDecimalDigits(n)) && util::less(value, 1.0f, getPrecisionFromNumSignificantDecimalDigits(n))) {
+            value *= 1000.0f;
+            if (type_ == VALUE_TYPE_FLOAT_VOLT) {
+                valueType = VALUE_TYPE_FLOAT_MILLI_VOLT;
+                numSignificantDecimalDigits = 0;
+            } else if (type_ == VALUE_TYPE_FLOAT_AMPER) {
+                valueType = VALUE_TYPE_FLOAT_MILLI_AMPER;
+                if (numSignificantDecimalDigits > 3 && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+                    numSignificantDecimalDigits = 1;
+                } else {
+                    numSignificantDecimalDigits = 0;
+                }
+            } else if (type_ == VALUE_TYPE_FLOAT_WATT) {
+                valueType = VALUE_TYPE_FLOAT_MILLI_WATT;
+                numSignificantDecimalDigits = 0;
+            } else if (type_ == VALUE_TYPE_FLOAT_SECOND) {
+                valueType = VALUE_TYPE_FLOAT_MILLI_SECOND;
+                numSignificantDecimalDigits = 1;
+            }
+            return;
+        }
+    }
+
+    if (numSignificantDecimalDigits > 3) {
+        numSignificantDecimalDigits = 3;
+    }
+
+    if (numSignificantDecimalDigits > 2 && util::greater(value, 9.999f, powf(10.0f, 3.0f))) {
+        numSignificantDecimalDigits = 2;
+    }
+
+    if (numSignificantDecimalDigits > 1 && util::greater(value, 99.99f, powf(10.0f, 3.0f))) {
+        numSignificantDecimalDigits = 1;
+    }
+}
+
 void Value::toText(char *text, int count) const {
     text[0] = 0;
 
@@ -317,66 +360,17 @@ void Value::toText(char *text, int count) const {
             snprintf_P(text, count-1, PSTR("Value is less then %s"), valueText);
             text[count - 1] = 0;
         } else {
-            ValueType valueType = (ValueType)type_;
-            int numSignificantDecimalDigits = format_;
+            float value;
+            ValueType valueType;
+            int numSignificantDecimalDigits;
 
-            bool milli = false;
+            formatFloatValue(value, valueType, numSignificantDecimalDigits);
 
-            int temp = 0;
-            if (numSignificantDecimalDigits == 1) {
-                temp = ((int)round(float_ * 10)) * 1000;
-            } else if (numSignificantDecimalDigits == 2) {
-                temp = ((int)round(float_ * 100)) * 100;
-            } else if (numSignificantDecimalDigits == 3) {
-                temp = ((int)round(float_ * 1000)) * 10;
-            } else if (numSignificantDecimalDigits >= 4) {
-                temp = ((int)round(float_ * 10000));
+            text[0] = 0;
+            util::strcatFloat(text, value, numSignificantDecimalDigits);
+            if (type_ == VALUE_TYPE_FLOAT_SECOND) {
+                util::removeTrailingZerosFromFloat(text);
             }
-            if (temp != 0 && temp > -10000 && temp < 10000) {
-                if (type_ == VALUE_TYPE_FLOAT_VOLT) {
-                    milli = true;
-                    valueType = VALUE_TYPE_FLOAT_MILLI_VOLT;
-                    util::strcatInt(text, temp / 10);
-                } else if (type_ == VALUE_TYPE_FLOAT_AMPER) {
-                    milli = true;
-                    valueType = VALUE_TYPE_FLOAT_MILLI_AMPER;
-                    if (numSignificantDecimalDigits > 3) {
-                        util::strcatFloat(text, temp / 10.0f, 1);
-                    } else {
-                        util::strcatInt(text, temp / 10);
-                    }
-                } else if (type_ == VALUE_TYPE_FLOAT_WATT) {
-                    milli = true;
-                    valueType = VALUE_TYPE_FLOAT_MILLI_WATT;
-                    util::strcatInt(text, temp / 10);
-                } else if (type_ == VALUE_TYPE_FLOAT_SECOND) {
-                    milli = true;
-                    valueType = VALUE_TYPE_FLOAT_MILLI_SECOND;
-                    util::strcatFloat(text, temp / 10.0f, 1);
-                    util::removeTrailingZerosFromFloat(text);
-                }
-            }
-
-            if (!milli) {
-                if (numSignificantDecimalDigits > 3) {
-                    numSignificantDecimalDigits = 3;
-                }
-
-                if (numSignificantDecimalDigits > 2 && util::greater(float_, 9.999f, 3)) {
-                    numSignificantDecimalDigits = 2;
-                }
-
-                if (numSignificantDecimalDigits > 1 && util::greater(float_, 99.99f, 2)) {
-                    numSignificantDecimalDigits = 1;
-                }
-
-                util::strcatFloat(text, float_, numSignificantDecimalDigits);
-
-                if (type_ == VALUE_TYPE_FLOAT_SECOND) {
-                    util::removeTrailingZerosFromFloat(text);
-                }
-            }
-
             strcat(text, getUnitStr(valueType));
         }
         break;
@@ -436,7 +430,29 @@ bool Value::operator ==(const Value &other) const {
     	return util::equal(float_, other.float_, powf(10.0f, 4));
     }
 
-	return util::equal(float_, other.float_, getPrecisionFromNumSignificantDecimalDigits(format_));
+    if (float_ == other.float_) {
+        return true;
+    }
+
+    float value;
+    ValueType valueType;
+    int numSignificantDecimalDigits;
+    formatFloatValue(value, valueType, numSignificantDecimalDigits);
+
+    float otherValue;
+    ValueType otherValueType;
+    int otherNumSignificantDecimalDigits;
+    other.formatFloatValue(otherValue, otherValueType, otherNumSignificantDecimalDigits);
+
+    if (valueType != otherValueType) {
+        return false;
+    }
+
+    if (numSignificantDecimalDigits != otherNumSignificantDecimalDigits) {
+        return false;
+    }
+
+    return util::equal(value, otherValue, getPrecisionFromNumSignificantDecimalDigits(numSignificantDecimalDigits));
 }
 
 int Value::getInt() const {

@@ -80,11 +80,34 @@ enum ValueType {
     VALUE_TYPE_ENUM
 };
 
-const char *getUnitStr(ValueType valueType);
-int getNumSignificantDecimalDigits(ValueType valueType);
-int getNumSignificantDecimalDigitsForCurrent(uint8_t currentRange);
-float getPrecisionFromNumSignificantDecimalDigits(int numSignificantDecimalDigits);
-float getPrecision(ValueType valueType);
+struct ValueTypeTraits {
+    const char *unitStr;
+    int numSignificantDecimalDigits;
+    float precision;
+};
+
+extern ValueTypeTraits g_valueTypeTraits[];
+extern float g_precisions[];
+
+const char *getUnitStr(ValueType valueType) {
+    return g_valueTypeTraits[valueType - VALUE_TYPE_FLOAT].unitStr; 
+}
+
+inline int getNumSignificantDecimalDigits(ValueType valueType) { 
+    return g_valueTypeTraits[valueType - VALUE_TYPE_FLOAT].numSignificantDecimalDigits; 
+}
+
+inline int getNumSignificantDecimalDigitsForCurrent(uint8_t currentRange) { 
+    return currentRange == 1 ? CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12 : CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS;
+}
+
+inline float getPrecision(ValueType valueType) { 
+    return g_valueTypeTraits[valueType - VALUE_TYPE_FLOAT].precision; 
+}
+
+inline float getPrecisionFromNumSignificantDecimalDigits(int numSignificantDecimalDigits) {
+    return g_precisions[numSignificantDecimalDigits]; 
+}
 
 }
 } // namespace eez::psu

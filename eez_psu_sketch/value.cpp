@@ -23,63 +23,31 @@
 namespace eez {
 namespace psu {
 
-const char *getUnitStr(ValueType valueType) {
-    switch (valueType) {
-    case VALUE_TYPE_FLOAT_VOLT:
-        return "V";
-    case VALUE_TYPE_FLOAT_MILLI_VOLT:
-        return "mV";
-    case VALUE_TYPE_FLOAT_AMPER:
-        return "A";
-    case VALUE_TYPE_FLOAT_MILLI_AMPER:
-        return "mA";
-    case VALUE_TYPE_FLOAT_WATT:
-        return "W";
-    case VALUE_TYPE_FLOAT_MILLI_WATT:
-        return "mW";
-    case VALUE_TYPE_FLOAT_SECOND:
-        return "s";
-    case VALUE_TYPE_FLOAT_MILLI_SECOND:
-        return "ms";
-    case VALUE_TYPE_FLOAT_CELSIUS:
-        return "oC";
-    case VALUE_TYPE_FLOAT_RPM:
-        return "rpm";
-    case VALUE_TYPE_FLOAT_OHM:
-        return "ohm";
-    case VALUE_TYPE_FLOAT_KOHM:
-        return "Kohm";
-    case VALUE_TYPE_FLOAT_MOHM:
-        return "Mohm";
-    }
-    return "";
-}
+const ValueTypeTraits g_unitToStr[] = {
+    { "",     2                                         , powf(10.0f, 2.0f)                                               },
+    { "V",    VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS    , powf(10.0f, (float)VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS)      },
+    { "mV",   VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS-3  , powf(10.0f, (float)(VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS-3))  },
+    { "A",    CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS    , powf(10.0f, (float)CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS)      },
+    { "mA",   CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS-3  , powf(10.0f, (float)(CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS-3))  },
+    { "W",    POWER_NUM_SIGNIFICANT_DECIMAL_DIGITS      , powf(10.0f, (float)POWER_NUM_SIGNIFICANT_DECIMAL_DIGITS)        },
+    { "mW",   POWER_NUM_SIGNIFICANT_DECIMAL_DIGITS-3    , powf(10.0f, (float)(POWER_NUM_SIGNIFICANT_DECIMAL_DIGITS-3))    },
+    { "s",    DURATION_NUM_SIGNIFICANT_DECIMAL_DIGITS   , powf(10.0f, (float)DURATION_NUM_SIGNIFICANT_DECIMAL_DIGITS)     },
+    { "ms",   DURATION_NUM_SIGNIFICANT_DECIMAL_DIGITS-3 , powf(10.0f, (float)(DURATION_NUM_SIGNIFICANT_DECIMAL_DIGITS-3)) },
+    { "oC",   TEMP_NUM_SIGNIFICANT_DECIMAL_DIGITS       , powf(10.0f, (float)TEMP_NUM_SIGNIFICANT_DECIMAL_DIGITS)         },
+    { "rpm",  RPM_NUM_SIGNIFICANT_DECIMAL_DIGITS        , powf(10.0f, (float)RPM_NUM_SIGNIFICANT_DECIMAL_DIGITS)          },
+    { "ohm",  LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS       , powf(10.0f, (float)LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS)         },
+    { "Kohm", LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS       , powf(10.0f, (float)LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS)         },
+    { "Mohm", LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS       , powf(10.0f, (float)LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS)         }
+};
 
-int getNumSignificantDecimalDigits(ValueType valueType) {
-    if (valueType == VALUE_TYPE_FLOAT_VOLT) return VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS;
-    if (valueType == VALUE_TYPE_FLOAT_AMPER) return CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS;
-    if (valueType == VALUE_TYPE_FLOAT_WATT) return POWER_NUM_SIGNIFICANT_DECIMAL_DIGITS;
-    if (valueType == VALUE_TYPE_FLOAT_SECOND) return DURATION_NUM_SIGNIFICANT_DECIMAL_DIGITS;
-    if (valueType == VALUE_TYPE_FLOAT_CELSIUS) return TEMP_NUM_SIGNIFICANT_DECIMAL_DIGITS;
-    if (valueType == VALUE_TYPE_FLOAT_RPM) return RPM_NUM_SIGNIFICANT_DECIMAL_DIGITS;
-    if (valueType == VALUE_TYPE_FLOAT_OHM) return LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS;
-    return 2;
-}
-
-int getNumSignificantDecimalDigitsForCurrent(uint8_t currentRange) {
-    if (currentRange == 1) {
-        return CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12;
-    }
-    return CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS;
-}
-
-float getPrecisionFromNumSignificantDecimalDigits(int numSignificantDecimalDigits) {
-    return powf(10.0f, (float)numSignificantDecimalDigits);
-}
-
-float getPrecision(ValueType valueType) {
-    return powf(10.0f, (float)getNumSignificantDecimalDigits(valueType));
-}
+float g_precisions[] = {
+    1.0f,
+    10.0f,
+    100.0f,
+    1000.0f,
+    10000.0f,
+    100000.0f
+};
 
 }
 } // namespace eez::psu
