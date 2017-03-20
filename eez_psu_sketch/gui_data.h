@@ -59,6 +59,7 @@ struct Value {
 	Value(uint16_t value, ValueType type) : type_(type), uint16_(value)  {}
 	Value(uint32_t value, ValueType type) : type_(type), uint32_(value)  {}
     Value(float value, ValueType type, int numSignificantDecimalDigits = -1);
+    Value(float value, ValueType type, bool forceNumSignificantDecimalDigits, int numSignificantDecimalDigits);
     Value(const char *str) : type_(VALUE_TYPE_STR), str_(str) {}
 	Value(event_queue::Event *e) : type_(VALUE_TYPE_EVENT), event_(e) {}
     Value(uint8_t value, EnumDefinition enumDefinition) : type_(VALUE_TYPE_ENUM) {

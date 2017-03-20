@@ -101,6 +101,12 @@ Value::Value(float value, ValueType type, int numSignificantDecimalDigits)
     format_ = (uint8_t)numSignificantDecimalDigits;
 }
 
+Value::Value(float value, ValueType type, bool forceNumSignificantDecimalDigits, int numSignificantDecimalDigits) 
+    : type_(type), float_(value)
+{
+    format_ = 0x10 | (uint8_t)numSignificantDecimalDigits;
+}
+
 Value Value::ProgmemStr(const char *pstr PROGMEM) {
     Value value;
     value.const_str_ = pstr;
@@ -163,40 +169,56 @@ bool Value::isMilli() const {
 void Value::formatFloatValue(float &value, ValueType &valueType, int &numSignificantDecimalDigits) const {
     value = float_;
     valueType = (ValueType)type_;
-    numSignificantDecimalDigits = format_;
+    numSignificantDecimalDigits = format_ & 0x0f;
+    bool forceNumSignificantDecimalDigits = format_ & 0x10 ? true : false;
 
     if (isMilli()) {
         if (valueType == VALUE_TYPE_FLOAT_VOLT) {
             valueType = VALUE_TYPE_FLOAT_MILLI_VOLT;
-            numSignificantDecimalDigits = 0;
+            if (!forceNumSignificantDecimalDigits) {
+                numSignificantDecimalDigits = 0;
+            }
         } else if (valueType == VALUE_TYPE_FLOAT_AMPER) {
             valueType = VALUE_TYPE_FLOAT_MILLI_AMPER;
-            if (numSignificantDecimalDigits > 3 && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
-                numSignificantDecimalDigits = 1;
-            } else {
-                numSignificantDecimalDigits = 0;
+            if (!forceNumSignificantDecimalDigits) {
+                if (numSignificantDecimalDigits > 3 && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+                    numSignificantDecimalDigits = 1;
+                } else {
+                    numSignificantDecimalDigits = 0;
+                }
             }
         } else if (valueType == VALUE_TYPE_FLOAT_WATT) {
             valueType = VALUE_TYPE_FLOAT_MILLI_WATT;
-            numSignificantDecimalDigits = 0;
+            if (!forceNumSignificantDecimalDigits) {
+                numSignificantDecimalDigits = 0;
+            }
         } else if (valueType == VALUE_TYPE_FLOAT_SECOND) {
             valueType = VALUE_TYPE_FLOAT_MILLI_SECOND;
-            numSignificantDecimalDigits = 1;
+            if (!forceNumSignificantDecimalDigits) {
+                numSignificantDecimalDigits = 1;
+            }
         }
+
+        if (forceNumSignificantDecimalDigits) {
+            numSignificantDecimalDigits -= 3;
+        }
+
         value *= 1000.0f;
         return;
     }
 
-    if (numSignificantDecimalDigits > 3) {
-        numSignificantDecimalDigits = 3;
-    }
+    if (!forceNumSignificantDecimalDigits) {
+        if (numSignificantDecimalDigits > 3) {
+            numSignificantDecimalDigits = 3;
+        }
 
-    if (numSignificantDecimalDigits > 2 && util::greater(value, 9.999f, powf(10.0f, 3.0f))) {
-        numSignificantDecimalDigits = 2;
-    }
+        if (numSignificantDecimalDigits > 2 && util::greater(value, 9.999f, powf(10.0f, 3.0f))) {
+            numSignificantDecimalDigits = 2;
+        }
 
-    if (numSignificantDecimalDigits > 1 && util::greater(value, 99.99f, powf(10.0f, 3.0f))) {
-        numSignificantDecimalDigits = 1;
+        if (numSignificantDecimalDigits > 1 && util::greater(value, 99.99f, powf(10.0f, 3.0f))) {
+            numSignificantDecimalDigits = 1;
+        }
     }
 }
 

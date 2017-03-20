@@ -140,15 +140,15 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
         return getLevelValue();
     } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_VALUE) {
         switch (g_stepNum) {
-        case 0: return data::Value(psu::calibration::getVoltage().min_val, VALUE_TYPE_FLOAT_VOLT);
-        case 1: return data::Value(psu::calibration::getVoltage().mid_val, VALUE_TYPE_FLOAT_VOLT);
-        case 2: return data::Value(psu::calibration::getVoltage().max_val, VALUE_TYPE_FLOAT_VOLT);
-        case 3: return data::Value(psu::calibration::getCurrent().min_val, VALUE_TYPE_FLOAT_AMPER);
-        case 4: return data::Value(psu::calibration::getCurrent().mid_val, VALUE_TYPE_FLOAT_AMPER);
-        case 5: return data::Value(psu::calibration::getCurrent().max_val, VALUE_TYPE_FLOAT_AMPER);
-        case 6: return data::Value(psu::calibration::getCurrent().min_val, VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
-        case 7: return data::Value(psu::calibration::getCurrent().mid_val, VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
-        case 8: return data::Value(psu::calibration::getCurrent().max_val, VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
+        case 0: return data::Value(psu::calibration::getVoltage().min_val, VALUE_TYPE_FLOAT_VOLT, true, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT) + 1);
+        case 1: return data::Value(psu::calibration::getVoltage().mid_val, VALUE_TYPE_FLOAT_VOLT, true, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT) + 1);
+        case 2: return data::Value(psu::calibration::getVoltage().max_val, VALUE_TYPE_FLOAT_VOLT, true, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT) + 1);
+        case 3: return data::Value(psu::calibration::getCurrent().min_val, VALUE_TYPE_FLOAT_AMPER, true, getNumSignificantDecimalDigitsForCurrent(0) + 1);
+        case 4: return data::Value(psu::calibration::getCurrent().mid_val, VALUE_TYPE_FLOAT_AMPER, true, getNumSignificantDecimalDigitsForCurrent(0) + 1);
+        case 5: return data::Value(psu::calibration::getCurrent().max_val, VALUE_TYPE_FLOAT_AMPER, true, getNumSignificantDecimalDigitsForCurrent(0) + 1);
+        case 6: return data::Value(psu::calibration::getCurrent().min_val, VALUE_TYPE_FLOAT_AMPER, true, getNumSignificantDecimalDigitsForCurrent(1) + 1);
+        case 7: return data::Value(psu::calibration::getCurrent().mid_val, VALUE_TYPE_FLOAT_AMPER, true, getNumSignificantDecimalDigitsForCurrent(1) + 1);
+        case 8: return data::Value(psu::calibration::getCurrent().max_val, VALUE_TYPE_FLOAT_AMPER, true, getNumSignificantDecimalDigitsForCurrent(1) + 1);
         case 9: return data::Value(psu::calibration::getRemark());
         }
     } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_STATUS) {
