@@ -807,7 +807,10 @@ void Channel::adcDataIsReady(int16_t data) {
 #ifdef EEZ_PSU_SIMULATOR
         float value = remapAdcDataToVoltage(data);
 #else
-        float value = remapAdcDataToVoltage(data) - VOLTAGE_GND_OFFSET;
+        float value = remapAdcDataToVoltage(data);
+        if (!isRemoteProgrammingEnabled()) {
+            value -= VOLTAGE_GND_OFFSET;
+        }
 #endif
         if (isVoltageCalibrationEnabled()) {
             u.mon_dac = util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
