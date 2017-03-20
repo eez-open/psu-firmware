@@ -151,35 +151,40 @@ Value Value::GreaterThenMaxMessage(float float_, ValueType type) {
 	return value;
 }
 
+bool Value::isMilli() const {
+    if (type_ == VALUE_TYPE_FLOAT_VOLT || type_ == VALUE_TYPE_FLOAT_AMPER || type_ == VALUE_TYPE_FLOAT_WATT || type_ == VALUE_TYPE_FLOAT_SECOND) {
+        int n = format_ > 3 ? 3 : format_;
+        float precision = getPrecisionFromNumSignificantDecimalDigits(n);
+        return util::greater(float_, -1.0f, precision) && util::less(float_, 1.0f, precision) && !util::equal(float_, 0, precision);
+    }
+    return false;
+}
+
 void Value::formatFloatValue(float &value, ValueType &valueType, int &numSignificantDecimalDigits) const {
     value = float_;
     valueType = (ValueType)type_;
     numSignificantDecimalDigits = format_;
 
-    if (valueType == VALUE_TYPE_FLOAT_VOLT || valueType == VALUE_TYPE_FLOAT_AMPER || valueType == VALUE_TYPE_FLOAT_WATT || valueType == VALUE_TYPE_FLOAT_SECOND) {
-        int n = numSignificantDecimalDigits > 3 ? 3 : numSignificantDecimalDigits;
-        float precision = getPrecisionFromNumSignificantDecimalDigits(n);
-        if (util::greater(value, -1.0f, precision) && util::less(value, 1.0f, precision) && !util::equal(value, 0, precision)) {
-            if (type_ == VALUE_TYPE_FLOAT_VOLT) {
-                valueType = VALUE_TYPE_FLOAT_MILLI_VOLT;
-                numSignificantDecimalDigits = 0;
-            } else if (type_ == VALUE_TYPE_FLOAT_AMPER) {
-                valueType = VALUE_TYPE_FLOAT_MILLI_AMPER;
-                if (numSignificantDecimalDigits > 3 && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
-                    numSignificantDecimalDigits = 1;
-                } else {
-                    numSignificantDecimalDigits = 0;
-                }
-            } else if (type_ == VALUE_TYPE_FLOAT_WATT) {
-                valueType = VALUE_TYPE_FLOAT_MILLI_WATT;
-                numSignificantDecimalDigits = 0;
-            } else if (type_ == VALUE_TYPE_FLOAT_SECOND) {
-                valueType = VALUE_TYPE_FLOAT_MILLI_SECOND;
+    if (isMilli()) {
+        if (valueType == VALUE_TYPE_FLOAT_VOLT) {
+            valueType = VALUE_TYPE_FLOAT_MILLI_VOLT;
+            numSignificantDecimalDigits = 0;
+        } else if (valueType == VALUE_TYPE_FLOAT_AMPER) {
+            valueType = VALUE_TYPE_FLOAT_MILLI_AMPER;
+            if (numSignificantDecimalDigits > 3 && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
                 numSignificantDecimalDigits = 1;
+            } else {
+                numSignificantDecimalDigits = 0;
             }
-            value *= 1000.0f;
-            return;
+        } else if (valueType == VALUE_TYPE_FLOAT_WATT) {
+            valueType = VALUE_TYPE_FLOAT_MILLI_WATT;
+            numSignificantDecimalDigits = 0;
+        } else if (valueType == VALUE_TYPE_FLOAT_SECOND) {
+            valueType = VALUE_TYPE_FLOAT_MILLI_SECOND;
+            numSignificantDecimalDigits = 1;
         }
+        value *= 1000.0f;
+        return;
     }
 
     if (numSignificantDecimalDigits > 3) {

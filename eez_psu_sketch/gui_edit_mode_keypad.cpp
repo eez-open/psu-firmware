@@ -57,6 +57,10 @@ void enter(const data::Value& editValue, const data::Value& minValue, data::Valu
 	options.flags.dotButtonEnabled = true;
 
 	g_keypad->init(0, editValue, options, (void (*)(float))onKeypadOk, 0);
+
+    if (editValue.isMilli()) {
+        g_keypad->switchToMilli();
+    }
 }
 
 void exit() {

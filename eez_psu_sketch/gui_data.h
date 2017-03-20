@@ -97,6 +97,8 @@ struct Value {
 
     int16_t getScpiError() { return int16_; }
 
+    bool isMilli() const;
+
 private:
     uint8_t type_;
     uint8_t format_;
