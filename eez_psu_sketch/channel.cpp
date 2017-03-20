@@ -88,13 +88,13 @@ Channel &Channel::get(int channel_index) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Channel::Value::init(float set, float def_step, float def_limit) {
-    set = set;
+void Channel::Value::init(float set_, float step_, float limit_) {
+    set = set_;
     mon_dac = 0;
     mon_adc = 0;
     mon = 0;
-    step = def_step;
-    limit = def_limit;
+    step = step_;
+    limit = limit_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
