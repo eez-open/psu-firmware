@@ -804,19 +804,25 @@ void Channel::adcDataIsReady(int16_t data) {
         debug::g_uMonDac[index - 1].set(data);
 #endif
 
-#ifdef EEZ_PSU_SIMULATOR
-        float value = remapAdcDataToVoltage(data);
+        float value;
+
+#if !defined(EEZ_PSU_SIMULATOR)
+        value = remapAdcDataToVoltage(data) - VOLTAGE_GND_OFFSET;
 #else
-        float value = remapAdcDataToVoltage(data);
-        if (!isRemoteProgrammingEnabled()) {
-            value -= VOLTAGE_GND_OFFSET;
+        value = remapAdcDataToVoltage(data);
+#endif
+        
+        if (isVoltageCalibrationEnabled()) {
+            value = util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
+        }
+
+#if !defined(EEZ_PSU_SIMULATOR)
+        if (isRemoteProgrammingEnabled()) {
+            value += VOLTAGE_GND_OFFSET;
         }
 #endif
-        if (isVoltageCalibrationEnabled()) {
-            u.mon_dac = util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
-        } else {
-            u.mon_dac = value;
-        }
+
+        u.mon_dac = value;
 
         if (isOutputEnabled() && isRemoteProgrammingEnabled()) {
             nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
