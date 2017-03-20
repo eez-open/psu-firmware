@@ -58,7 +58,7 @@ void Value::reset() {
 
     min_dac = voltOrCurr ? g_channel->U_CAL_VAL_MIN : (currentRange == 0 ? g_channel->I_CAL_VAL_MIN : g_channel->I_CAL_VAL_MIN / 10); 
     mid_dac = voltOrCurr ? g_channel->U_CAL_VAL_MID : (currentRange == 0 ? g_channel->I_CAL_VAL_MID : g_channel->I_CAL_VAL_MID / 10); 
-    max_dac = voltOrCurr ? g_channel->U_CAL_VAL_MAX : (currentRange == 0 ? g_channel->I_CAL_VAL_MIN : g_channel->I_CAL_VAL_MAX / 10); 
+    max_dac = voltOrCurr ? g_channel->U_CAL_VAL_MAX : (currentRange == 0 ? g_channel->I_CAL_VAL_MAX : g_channel->I_CAL_VAL_MAX / 10); 
 }
 
 float Value::getRange() {
