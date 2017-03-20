@@ -39,8 +39,8 @@ scpi_choice_def_t calibration_level_choice[] = {
 ////////////////////////////////////////////////////////////////////////////////
 
 scpi_choice_def_t calibration_current_range_choice[] = {
-    { "5A",    calibration::CURRENT_RANGE_5A },
-    { "500MA", calibration::CURRENT_RANGE_500MA },
+    { "HIGH",    calibration::CURRENT_RANGE_5A },
+    { "LOW", calibration::CURRENT_RANGE_500MA },
     SCPI_CHOICE_LIST_END /* termination of option list */
 };
 
