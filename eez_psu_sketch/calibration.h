@@ -64,11 +64,14 @@ struct Value {
 
     void reset();
 
+    void  setLevel(int8_t level);
+
     float getLevelValue();
     float getDacValue();
     float getAdcValue();
 
-    void  setLevel(int8_t level);
+    void setDacValue(float value);
+
     bool checkRange(float dac, float data, float adc);
     void setData(float dac, float data, float adc);
 

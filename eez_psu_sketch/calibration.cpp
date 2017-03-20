@@ -55,6 +55,10 @@ void Value::reset() {
     min_set = false;
     mid_set = false;
     max_set = false;
+
+    min_dac = voltOrCurr ? g_channel->U_CAL_VAL_MIN : (currentRange == 0 ? g_channel->I_CAL_VAL_MIN : g_channel->I_CAL_VAL_MIN / 10); 
+    mid_dac = voltOrCurr ? g_channel->U_CAL_VAL_MID : (currentRange == 0 ? g_channel->I_CAL_VAL_MID : g_channel->I_CAL_VAL_MID / 10); 
+    max_dac = voltOrCurr ? g_channel->U_CAL_VAL_MAX : (currentRange == 0 ? g_channel->I_CAL_VAL_MIN : g_channel->I_CAL_VAL_MAX / 10); 
 }
 
 float Value::getRange() {
@@ -73,31 +77,12 @@ float Value::getRange() {
 }
 
 float Value::getLevelValue() {
-    if (voltOrCurr) {
-        if (level == LEVEL_MIN) {
-            return g_channel->U_CAL_VAL_MIN;
-        } else if (level == LEVEL_MID) {
-            return g_channel->U_CAL_VAL_MID;
-        } else {
-            return g_channel->U_CAL_VAL_MAX;
-        }
-    }
-    else {
-        float value;
-        
-        if (level == LEVEL_MIN) {
-            value = g_channel->I_CAL_VAL_MIN;
-        } else if (level == LEVEL_MID) {
-            value = g_channel->I_CAL_VAL_MID;
-        } else {
-            value = g_channel->I_CAL_VAL_MAX;
-        }
-
-        if (currentRange == 1) {
-            value /= 10;
-        }
-
-        return value;
+    if (level == LEVEL_MIN) {
+        return min_dac;
+    } else if (level == LEVEL_MID) {
+        return mid_dac;
+    } else {
+        return max_dac;
     }
 }
 
@@ -115,10 +100,25 @@ void Value::setLevel(int8_t value) {
     if (voltOrCurr) {
         g_channel->setVoltage(getLevelValue());
         g_channel->setCurrent(g_channel->I_VOLT_CAL);
-    }
-    else {
+    } else {
         g_channel->setCurrent(getLevelValue());
         g_channel->setVoltage(g_channel->U_CURR_CAL);
+    }
+}
+
+void Value::setDacValue(float value) {
+    if (level == LEVEL_MIN) {
+        min_dac = value;
+    } else if (level == LEVEL_MID) {
+        mid_dac = value;
+    } else {
+        max_dac = value;
+    }
+
+    if (voltOrCurr) {
+        g_channel->setVoltage(value);
+    } else {
+        g_channel->setCurrent(value);
     }
 }
 

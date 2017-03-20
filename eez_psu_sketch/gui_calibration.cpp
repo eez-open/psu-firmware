@@ -39,6 +39,8 @@ static const int MAX_STEP_NUM = 10;
 
 int g_stepNum;
 
+void showCurrentStep();
+
 ////////////////////////////////////////////////////////////////////////////////
 
 void onStartPasswordOk() {
@@ -62,11 +64,25 @@ void onStartPasswordOk() {
     psu::calibration::start(g_channel);
 
     g_stepNum = 0;
-    replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP);
+    showCurrentStep();
 }
 
 void start() {
     checkPassword(PSTR("Password: "), persist_conf::devConf.calibration_password, onStartPasswordOk);
+}
+
+data::Value getLevelValue() {
+    switch (g_stepNum) {
+    case 0: return data::Value(psu::calibration::getVoltage().getDacValue(), VALUE_TYPE_FLOAT_VOLT);
+    case 1: return data::Value(psu::calibration::getVoltage().getDacValue(), VALUE_TYPE_FLOAT_VOLT);
+    case 2: return data::Value(psu::calibration::getVoltage().getDacValue(), VALUE_TYPE_FLOAT_VOLT);
+    case 3: return data::Value(psu::calibration::getCurrent().getDacValue(), VALUE_TYPE_FLOAT_AMPER);
+    case 4: return data::Value(psu::calibration::getCurrent().getDacValue(), VALUE_TYPE_FLOAT_AMPER);
+    case 5: return data::Value(psu::calibration::getCurrent().getDacValue(), VALUE_TYPE_FLOAT_AMPER);
+    case 6: return data::Value(psu::calibration::getCurrent().getDacValue(), VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
+    case 7: return data::Value(psu::calibration::getCurrent().getDacValue(), VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
+    case 8: return data::Value(psu::calibration::getCurrent().getDacValue(), VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
+    }
 }
 
 data::Value getData(const data::Cursor &cursor, uint8_t id) {
@@ -123,6 +139,8 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
         }
     } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_NUM) {
         return data::Value(g_stepNum);
+    } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_LEVEL_VALUE) {
+        return getLevelValue();
     } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_VALUE) {
         switch (g_stepNum) {
         case 0: return data::Value(psu::calibration::getVoltage().min_val, VALUE_TYPE_FLOAT_VOLT);
@@ -157,11 +175,65 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
     return data::Value();
 }
 
+void showCurrentStep() {
+    if (g_stepNum < MAX_STEP_NUM) {
+        switch (g_stepNum) {
+        case 0: psu::calibration::getVoltage().setLevel(psu::calibration::LEVEL_MIN); break;
+        case 1: psu::calibration::getVoltage().setLevel(psu::calibration::LEVEL_MID); break;
+        case 2: psu::calibration::getVoltage().setLevel(psu::calibration::LEVEL_MAX); break;
+        case 3: psu::calibration::selectCurrentRange(0); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MIN); break;
+        case 4: psu::calibration::selectCurrentRange(0); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MID); break;
+        case 5: psu::calibration::selectCurrentRange(0); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MAX); break;
+        case 6: psu::calibration::selectCurrentRange(1); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MIN); break;
+        case 7: psu::calibration::selectCurrentRange(1); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MID); break;
+        case 8: psu::calibration::selectCurrentRange(1); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MAX); break;
+        }
+
+        replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP);
+    } else {
+        replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_FINISH);
+     }
+}
+
 psu::calibration::Value *getCalibrationValue() {
     if (g_stepNum < 3) {
         return &psu::calibration::getVoltage();
     }
     return &psu::calibration::getCurrent();
+}
+
+
+void onSetLevelOk(float value) {
+    getCalibrationValue()->setDacValue(value);
+
+    popPage();
+}
+
+void setLevelValue() {
+    data::Value levelValue = getLevelValue();
+
+    NumericKeypadOptions options;
+
+    options.editUnit = levelValue.getType();
+
+    if (levelValue.getType() == VALUE_TYPE_FLOAT_VOLT) {
+        options.min = g_channel->u.min;
+        options.max = g_channel->u.max;
+    } else {
+        options.min = g_channel->i.min;
+        options.max = g_channel->i.max;
+    }
+
+    options.def = 0;
+
+    options.flags.signButtonEnabled = true;
+    options.flags.dotButtonEnabled = true;
+
+    NumericKeypad *numericKeypad = NumericKeypad::start(0, levelValue, options, onSetLevelOk, showCurrentStep);
+
+    if (g_stepNum == 0 || g_stepNum == 3 || g_stepNum >= 6 && g_stepNum <= 8) {
+        numericKeypad->switchToMilli();
+    }
 }
 
 void onSetOk(float value) {
@@ -176,20 +248,6 @@ void onSetOk(float value) {
         nextStep();
     } else {
         errorMessageP(PSTR("Value out of range!"));
-    }
-}
-
-void showCurrentStep() {
-    if (g_stepNum < MAX_STEP_NUM) {
-        if (g_stepNum >= 6 && g_stepNum <= 8) {
-            psu::calibration::selectCurrentRange(1);
-        } else {
-            psu::calibration::selectCurrentRange(0);
-        }
-
-        replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP);
-    } else {
-        replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_FINISH);
     }
 }
 
@@ -219,18 +277,6 @@ void set() {
     }
 
     if (g_stepNum < MAX_STEP_NUM - 1) {
-        switch (g_stepNum) {
-        case 0: psu::calibration::getVoltage().setLevel(psu::calibration::LEVEL_MIN); break;
-        case 1: psu::calibration::getVoltage().setLevel(psu::calibration::LEVEL_MID); break;
-        case 2: psu::calibration::getVoltage().setLevel(psu::calibration::LEVEL_MAX); break;
-        case 3: psu::calibration::selectCurrentRange(0); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MIN); break;
-        case 4: psu::calibration::selectCurrentRange(0); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MID); break;
-        case 5: psu::calibration::selectCurrentRange(0); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MAX); break;
-        case 6: psu::calibration::selectCurrentRange(1); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MIN); break;
-        case 7: psu::calibration::selectCurrentRange(1); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MID); break;
-        case 8: psu::calibration::selectCurrentRange(1); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MAX); break;
-        }
-    
         psu::calibration::Value *calibrationValue = getCalibrationValue();
 
         NumericKeypadOptions options;

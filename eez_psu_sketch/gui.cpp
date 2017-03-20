@@ -660,7 +660,7 @@ bool isFocusWidget(const WidgetCursor &widgetCursor) {
         return ((ChSettingsListsPage *)g_activePage)->isFocusWidget(widgetCursor);
     } else if (!trigger::isIdle()) {
         return false;
-    } else if (psu::calibration::isEnabled() && psu::calibration::getCalibrationChannel().index != widgetCursor.cursor.i+1) {
+    } else if (psu::calibration::isEnabled()) {
         return false;
     } else {
         DECL_WIDGET(widget, widgetCursor.widgetOffset);

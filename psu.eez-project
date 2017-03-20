@@ -392,6 +392,11 @@
       "implementation": "gui::calibration::set();"
     },
     {
+      "name": "sys_settings_cal_ch_wiz_step_set_level_value",
+      "implementationType": "native",
+      "implementation": "gui::calibration::setLevelValue();"
+    },
+    {
       "name": "sys_settings_cal_ch_wiz_save",
       "implementationType": "native",
       "implementation": "gui::calibration::save();\n"
@@ -1213,6 +1218,11 @@
       "type": "enum",
       "enumItems": "[\n\"Not defined\",\n\"Defined\"\n]",
       "defaultValue": "0"
+    },
+    {
+      "name": "channel.calibration.step.levelValue",
+      "type": "float",
+      "defaultValue": "50mV"
     },
     {
       "name": "channel.calibration.step.value",
@@ -19380,7 +19390,7 @@
               "type": "Select",
               "data": "channel.calibration.step.isSetRemarkStep",
               "y": 28,
-              "width": 275,
+              "width": 304,
               "height": 76,
               "style": "default",
               "widgets": [
@@ -19388,7 +19398,7 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 275,
+                  "width": 304,
                   "height": 76,
                   "style": "default",
                   "widgets": [
@@ -19397,7 +19407,7 @@
                       "type": "Select",
                       "data": "channel.calibration.step.num",
                       "y": 0,
-                      "width": 224,
+                      "width": 230,
                       "height": 28,
                       "style": "default",
                       "widgets": [
@@ -19405,7 +19415,7 @@
                           "type": "Text",
                           "x": 0,
                           "y": 0,
-                          "width": 224,
+                          "width": 230,
                           "height": 28,
                           "style": "edit_value_S_left",
                           "text": "Voltage MIN point"
@@ -19414,7 +19424,7 @@
                           "type": "Text",
                           "x": 0,
                           "y": 0,
-                          "width": 224,
+                          "width": 230,
                           "height": 28,
                           "style": "edit_value_S_left",
                           "text": "Voltage MID point"
@@ -19423,7 +19433,7 @@
                           "type": "Text",
                           "x": 0,
                           "y": 0,
-                          "width": 224,
+                          "width": 230,
                           "height": 28,
                           "style": "edit_value_S_left",
                           "text": "Voltage MAX point"
@@ -19433,7 +19443,7 @@
                           "type": "Select",
                           "data": "channel.currentHasDualRange",
                           "y": 0,
-                          "width": 224,
+                          "width": 230,
                           "height": 28,
                           "style": "default",
                           "widgets": [
@@ -19441,7 +19451,7 @@
                               "type": "Text",
                               "x": 0,
                               "y": 0,
-                              "width": 224,
+                              "width": 230,
                               "height": 28,
                               "style": "edit_value_S_left",
                               "text": "Current MIN point"
@@ -19450,7 +19460,7 @@
                               "type": "Text",
                               "x": 0,
                               "y": 0,
-                              "width": 224,
+                              "width": 230,
                               "height": 28,
                               "style": "edit_value_S_left",
                               "text": "Current [0-5A] MIN point"
@@ -19462,7 +19472,7 @@
                           "type": "Select",
                           "data": "channel.currentHasDualRange",
                           "y": 0,
-                          "width": 224,
+                          "width": 230,
                           "height": 28,
                           "style": "default",
                           "widgets": [
@@ -19470,7 +19480,7 @@
                               "type": "Text",
                               "x": 0,
                               "y": 0,
-                              "width": 224,
+                              "width": 230,
                               "height": 28,
                               "style": "edit_value_S_left",
                               "text": "Current MID point"
@@ -19479,7 +19489,7 @@
                               "type": "Text",
                               "x": 0,
                               "y": 0,
-                              "width": 224,
+                              "width": 230,
                               "height": 28,
                               "style": "edit_value_S_left",
                               "text": "Current [0-5A] MID point"
@@ -19491,7 +19501,7 @@
                           "type": "Select",
                           "data": "channel.currentHasDualRange",
                           "y": 0,
-                          "width": 224,
+                          "width": 230,
                           "height": 28,
                           "style": "default",
                           "widgets": [
@@ -19499,7 +19509,7 @@
                               "type": "Text",
                               "x": 0,
                               "y": 0,
-                              "width": 224,
+                              "width": 230,
                               "height": 28,
                               "style": "edit_value_S_left",
                               "text": "Current MAX point"
@@ -19508,7 +19518,7 @@
                               "type": "Text",
                               "x": 0,
                               "y": 0,
-                              "width": 224,
+                              "width": 230,
                               "height": 28,
                               "style": "edit_value_S_left",
                               "text": "Current [0-5A] MAX point"
@@ -19519,7 +19529,7 @@
                           "type": "Text",
                           "x": 0,
                           "y": 0,
-                          "width": 224,
+                          "width": 230,
                           "height": 28,
                           "style": "edit_value_S_left",
                           "text": "Current [0-500mA] MIN point"
@@ -19528,7 +19538,7 @@
                           "type": "Text",
                           "x": 0,
                           "y": 0,
-                          "width": 224,
+                          "width": 230,
                           "height": 28,
                           "style": "edit_value_S_left",
                           "text": "Current [0-500mA] MID point"
@@ -19537,7 +19547,7 @@
                           "type": "Text",
                           "x": 0,
                           "y": 0,
-                          "width": 224,
+                          "width": 230,
                           "height": 28,
                           "style": "edit_value_S_left",
                           "text": "Current [0-500mA] MAX point"
@@ -19545,10 +19555,21 @@
                       ]
                     },
                     {
+                      "type": "Text",
+                      "data": "channel.calibration.step.levelValue",
+                      "action": "sys_settings_cal_ch_wiz_step_set_level_value",
+                      "x": 230,
+                      "y": 0,
+                      "width": 74,
+                      "height": 28,
+                      "style": "edit_value_active_S_left",
+                      "text": ""
+                    },
+                    {
                       "type": "MultilineText",
                       "x": 0,
                       "y": 28,
-                      "width": 275,
+                      "width": 304,
                       "height": 48,
                       "style": "default_S",
                       "text": "Enter output value measured with external precision instrument"
@@ -19559,7 +19580,7 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 275,
+                  "width": 304,
                   "height": 76,
                   "style": "default",
                   "widgets": [
@@ -19568,7 +19589,7 @@
                       "data": "",
                       "x": 0,
                       "y": 0,
-                      "width": 275,
+                      "width": 304,
                       "height": 28,
                       "style": "edit_value_S_left",
                       "text": "Calibration remark (max. 32 char.)"
@@ -19577,7 +19598,7 @@
                       "type": "Rectangle",
                       "x": 0,
                       "y": 28,
-                      "width": 275,
+                      "width": 304,
                       "height": 48,
                       "style": "default_inverse"
                     }
@@ -19700,16 +19721,6 @@
               "height": 36,
               "style": "bottom_button",
               "text": "X"
-            },
-            {
-              "type": "Text",
-              "data": "",
-              "x": 244,
-              "y": 28,
-              "width": 70,
-              "height": 28,
-              "style": "edit_value_active_S_left",
-              "text": "50mV"
             }
           ]
         }

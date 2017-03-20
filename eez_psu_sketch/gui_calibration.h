@@ -27,6 +27,7 @@ namespace calibration {
 
 void start();
 data::Value getData(const data::Cursor &cursor, uint8_t id);
+void setLevelValue();
 void set();
 void previousStep();
 void nextStep();

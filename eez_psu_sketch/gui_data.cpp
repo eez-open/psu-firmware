@@ -733,7 +733,7 @@ Value get(const Cursor &cursor, uint8_t id) {
             if (!trigger::isIdle() || getActivePageId() == PAGE_ID_CH_SETTINGS_LISTS) {
                 return 0;
             }
-            if (psu::calibration::isEnabled() && psu::calibration::getCalibrationChannel().index != channel.index) {
+            if (psu::calibration::isEnabled()) {
                 return 0;
             }
             return 1;

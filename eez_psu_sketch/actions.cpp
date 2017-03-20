@@ -321,6 +321,10 @@ void action_sys_settings_cal_ch_wiz_step_set() {
     gui::calibration::set();
 }
 
+void action_sys_settings_cal_ch_wiz_step_set_level_value() {
+    gui::calibration::setLevelValue();
+}
+
 void action_sys_settings_cal_ch_wiz_save() {
     gui::calibration::save();
 }
@@ -751,6 +755,7 @@ ACTION actions[] = {
     action_sys_settings_cal_ch_wiz_stop_and_show_previous_page,
     action_sys_settings_cal_ch_wiz_stop_and_show_main_page,
     action_sys_settings_cal_ch_wiz_step_set,
+    action_sys_settings_cal_ch_wiz_step_set_level_value,
     action_sys_settings_cal_ch_wiz_save,
     action_sys_settings_cal_toggle_enable,
     action_ch_settings_prot_clear,
