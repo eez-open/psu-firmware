@@ -20,6 +20,7 @@
 #include "scpi_psu.h"
 
 #include "calibration.h"
+#include "trigger.h"
 #include "channel_dispatcher.h"
 
 namespace eez {
@@ -115,6 +116,8 @@ static scpi_result_t calibration_data(scpi_t * context, calibration::Value &cali
 	}
     
 	calibrationValue.setData(dac, value, adc);
+    
+    calibration::resetChannelToZero();
 
     return SCPI_RES_OK;
 }
@@ -150,6 +153,11 @@ scpi_result_t scpi_cmd_calibrationMode(scpi_t * context) {
 
     if (channel_dispatcher::isTracked()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTE_ERROR_IN_TRACKING_MODE);
+        return SCPI_RES_ERR;
+    }
+
+    if (!trigger::isIdle()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }
 

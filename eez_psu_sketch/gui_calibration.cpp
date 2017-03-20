@@ -173,8 +173,7 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
 }
 
 void showCurrentStep() {
-    psu::calibration::getCalibrationChannel().setCurrent(0);
-    psu::calibration::getCalibrationChannel().setVoltage(0);
+    psu::calibration::resetChannelToZero();
 
     if (g_stepNum < MAX_STEP_NUM) { 
         switch (g_stepNum) {
