@@ -463,6 +463,7 @@ void NumericKeypad::ok() {
         } else {
             ((void (*)(float))m_okCallback)(value);
             m_state = START;
+            m_keypadText[0] = 0;
         }
 
         return;
