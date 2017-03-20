@@ -61,12 +61,7 @@ public:
 
 private:
     Channel &channel;
-#if ADC_USE_INTERRUPTS
-    uint8_t current_sps;
-#endif
-
     uint32_t start_time;
-
     uint8_t adc_timeout_recovery_attempts_counter;
 
     uint8_t getReg1Val();

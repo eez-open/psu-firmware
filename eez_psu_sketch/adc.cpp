@@ -44,18 +44,10 @@ static void adc_interrupt_ch2() {
 
 AnalogDigitalConverter::AnalogDigitalConverter(Channel &channel_) : channel(channel_) {
     g_testResult = psu::TEST_SKIPPED;
-
-#if ADC_USE_INTERRUPTS
-    current_sps = ADC_SPS;
-#endif
 }
 
 uint8_t AnalogDigitalConverter::getReg1Val() {
-#if ADC_USE_INTERRUPTS
-    return (current_sps << 5) | 0B00000000;
-#else
     return (ADC_SPS << 5) | 0B00000000;
-#endif
 }
 
 void AnalogDigitalConverter::init() {
@@ -206,18 +198,8 @@ void AnalogDigitalConverter::start(uint8_t reg0) {
         digitalWrite(channel.adc_pin, LOW);
 
 #if ADC_USE_INTERRUPTS
-        uint8_t sps = psu::isTimeCriticalMode() ? ADC_SPS_TIME_CRITICAL : ADC_SPS;
-        if (sps != current_sps) {
-            current_sps = sps;
-            SPI.transfer(ADC_WR4S0);
-            SPI.transfer(start_reg0);
-            SPI.transfer(getReg1Val());
-            SPI.transfer(ADC_REG2_VAL);
-            SPI.transfer(ADC_REG3_VAL);
-        } else {
-            SPI.transfer(ADC_WR1S0);
-            SPI.transfer(start_reg0);
-        }
+        SPI.transfer(ADC_WR1S0);
+        SPI.transfer(start_reg0);
 #else
         SPI.transfer(ADC_WR1S0);
         SPI.transfer(start_reg0);

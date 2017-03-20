@@ -56,7 +56,7 @@ void initEditValue() {
     g_undoValue = g_editValue;
 }
 
-void enter(int tabIndex_) {
+void enter(int tabIndex) {
 #if OPTION_ENCODER
     if (!isActive()) {
         if (!isFocusWidget(g_foundWidgetAtDown) || g_focusEditValue.getType() != VALUE_TYPE_NONE) {
@@ -67,41 +67,26 @@ void enter(int tabIndex_) {
     }
 #endif
 
-    gui::selectChannel();
-
-    if (tabIndex_ != -1) {
-		g_tabIndex = tabIndex_;
-	}
-
-    data::Cursor newDataCursor;
-    int newDataId;
-    if (tabIndex_ == -1) {
-        newDataCursor = g_foundWidgetAtDown.cursor;
+    if (tabIndex == -1) {
+        gui::selectChannel();
+        data::Cursor newDataCursor = g_foundWidgetAtDown.cursor;
         DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
-        newDataId = widget->data;
+        int newDataId = widget->data;
+        setFocusCursor(newDataCursor, newDataId);
+        update();
+
+        if (!isActive()) {
+            pushPage(g_tabIndex);
+        }
     } else {
-        newDataCursor = g_focusCursor;
-        newDataId = g_focusDataId;
+        g_tabIndex = tabIndex;
+        replacePage(g_tabIndex);
     }
-
-    setFocusCursor(newDataCursor, newDataId);
-
-    update();
 
     if (g_tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
         edit_mode_keypad::enter(g_editValue, g_minValue, g_maxValue);
     } else {
         edit_mode_keypad::exit();
-    }
-
-    if (!isActive()) {
-        psu::enterTimeCriticalMode();
-
-        if (tabIndex_ != -1) {
-            replacePage(g_tabIndex);
-        } else {
-            pushPage(g_tabIndex);
-        }
     }
 }
 
@@ -113,8 +98,6 @@ void update() {
 
 void exit() {
     edit_mode_keypad::exit();
-
-    psu::leaveTimeCriticalMode();
     popPage();
 }
 

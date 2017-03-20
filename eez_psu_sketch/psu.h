@@ -88,10 +88,6 @@ const char *getCpuModel();
 const char *getCpuType();
 const char *getCpuEthernetType();
 
-void enterTimeCriticalMode();
-bool isTimeCriticalMode();
-void leaveTimeCriticalMode();
-
 enum MaxCurrentLimitCause {
     MAX_CURRENT_LIMIT_CAUSE_NONE,
     MAX_CURRENT_LIMIT_CAUSE_FAN,

@@ -69,7 +69,6 @@ static bool g_bootTestSuccess;
 static bool g_powerIsUp = false;
 static bool g_testPowerUpDelay = false;
 static uint32_t g_powerDownTime;
-static bool g_isTimeCriticalMode = false;
 
 static MaxCurrentLimitCause g_maxCurrentLimitCause;
 
@@ -1175,18 +1174,6 @@ const char *getCpuEthernetType() {
 #else
     return "Simulator";
 #endif
-}
-
-void enterTimeCriticalMode() {
-    g_isTimeCriticalMode = true;
-}
-
-bool isTimeCriticalMode() {
-    return g_isTimeCriticalMode;
-}
-
-void leaveTimeCriticalMode() {
-    g_isTimeCriticalMode = false;
 }
 
 bool isMaxCurrentLimited() {
