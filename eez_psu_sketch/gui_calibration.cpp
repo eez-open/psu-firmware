@@ -72,17 +72,13 @@ void start() {
 }
 
 data::Value getLevelValue() {
-    switch (g_stepNum) {
-    case 0: return data::Value(psu::calibration::getVoltage().getDacValue(), VALUE_TYPE_FLOAT_VOLT);
-    case 1: return data::Value(psu::calibration::getVoltage().getDacValue(), VALUE_TYPE_FLOAT_VOLT);
-    case 2: return data::Value(psu::calibration::getVoltage().getDacValue(), VALUE_TYPE_FLOAT_VOLT);
-    case 3: return data::Value(psu::calibration::getCurrent().getDacValue(), VALUE_TYPE_FLOAT_AMPER);
-    case 4: return data::Value(psu::calibration::getCurrent().getDacValue(), VALUE_TYPE_FLOAT_AMPER);
-    case 5: return data::Value(psu::calibration::getCurrent().getDacValue(), VALUE_TYPE_FLOAT_AMPER);
-    case 6: return data::Value(psu::calibration::getCurrent().getDacValue(), VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
-    case 7: return data::Value(psu::calibration::getCurrent().getDacValue(), VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
-    case 8: return data::Value(psu::calibration::getCurrent().getDacValue(), VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
+    if (g_stepNum < 3) {
+        return data::Value(psu::calibration::getVoltage().getLevelValue(), VALUE_TYPE_FLOAT_VOLT);
     }
+    if (g_stepNum < 6) {
+        return data::Value(psu::calibration::getCurrent().getLevelValue(), VALUE_TYPE_FLOAT_AMPER);
+    }
+    return data::Value(psu::calibration::getCurrent().getLevelValue(), VALUE_TYPE_FLOAT_AMPER, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12);
 }
 
 data::Value getData(const data::Cursor &cursor, uint8_t id) {
@@ -176,7 +172,10 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
 }
 
 void showCurrentStep() {
-    if (g_stepNum < MAX_STEP_NUM) {
+    psu::calibration::getCalibrationChannel().setCurrent(0);
+    psu::calibration::getCalibrationChannel().setVoltage(0);
+
+    if (g_stepNum < MAX_STEP_NUM) { 
         switch (g_stepNum) {
         case 0: psu::calibration::getVoltage().setLevel(psu::calibration::LEVEL_MIN); break;
         case 1: psu::calibration::getVoltage().setLevel(psu::calibration::LEVEL_MID); break;
@@ -277,6 +276,12 @@ void set() {
     }
 
     if (g_stepNum < MAX_STEP_NUM - 1) {
+        if (g_stepNum < 3) {
+            psu::calibration::getVoltage().setLevelValue();
+        } else {
+            psu::calibration::getCurrent().setLevelValue();
+        }
+
         psu::calibration::Value *calibrationValue = getCalibrationValue();
 
         NumericKeypadOptions options;

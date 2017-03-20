@@ -64,7 +64,8 @@ struct Value {
 
     void reset();
 
-    void  setLevel(int8_t level);
+    void setLevel(int8_t level);
+    void setLevelValue();
 
     float getLevelValue();
     float getDacValue();

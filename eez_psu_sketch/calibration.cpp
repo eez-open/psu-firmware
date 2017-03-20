@@ -94,9 +94,11 @@ float Value::getAdcValue() {
     return voltOrCurr ? g_channel->u.mon : g_channel->i.mon;
 }
 
-void Value::setLevel(int8_t value) {
+void Value::setLevel(int8_t value) { 
     level = value;
+}
 
+void Value::setLevelValue() {
     if (voltOrCurr) {
         g_channel->setVoltage(getLevelValue());
         g_channel->setCurrent(g_channel->I_VOLT_CAL);

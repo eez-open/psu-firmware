@@ -80,6 +80,7 @@ static scpi_result_t calibration_level(scpi_t * context, calibration::Value &cal
     }
 
     calibrationValue.setLevel(level);
+    calibrationValue.setLevelValue();
 
     return SCPI_RES_OK;
 }
