@@ -308,13 +308,11 @@ void action_sys_settings_cal_ch_wiz_step_next() {
 }
 
 void action_sys_settings_cal_ch_wiz_stop_and_show_previous_page() {
-    gui::calibration::stop();
-    popPage();
+    gui::calibration::stop(popPage);
 }
 
 void action_sys_settings_cal_ch_wiz_stop_and_show_main_page() {
-    gui::calibration::stop();
-    setPage(PAGE_ID_MAIN);
+    gui::calibration::stop(action_show_main_page);
 }
 
 void action_sys_settings_cal_ch_wiz_step_set() {

@@ -379,12 +379,12 @@
     {
       "name": "sys_settings_cal_ch_wiz_stop_and_show_previous_page",
       "implementationType": "native",
-      "implementation": "gui::calibration::stop();\npopPage();"
+      "implementation": "gui::calibration::stop(popPage);\n"
     },
     {
       "name": "sys_settings_cal_ch_wiz_stop_and_show_main_page",
       "implementationType": "native",
-      "implementation": "gui::calibration::stop();\nsetPage(PAGE_ID_MAIN);"
+      "implementation": "gui::calibration::stop(action_show_main_page);\n"
     },
     {
       "name": "sys_settings_cal_ch_wiz_step_set",

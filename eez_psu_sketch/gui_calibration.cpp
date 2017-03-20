@@ -38,6 +38,7 @@ namespace calibration {
 static const int MAX_STEP_NUM = 10;
 
 int g_stepNum;
+void (*g_stopCallback)();
 
 void showCurrentStep();
 
@@ -359,7 +360,7 @@ void save() {
     }
 }
 
-void stop() {
+void finishStop() {
     psu::calibration::stop();
 
     g_channel->outputEnable(false);
@@ -367,6 +368,13 @@ void stop() {
     g_channel->prot_conf.flags.u_state = g_channel->OVP_DEFAULT_STATE;
     g_channel->prot_conf.flags.i_state = g_channel->OCP_DEFAULT_STATE;
     g_channel->prot_conf.flags.p_state = g_channel->OPP_DEFAULT_STATE;
+
+    (*g_stopCallback)();
+}
+
+void stop(void (*callback)()) {
+    g_stopCallback = callback;
+    areYouSure(finishStop);
 }
 
 void toggleEnable() {

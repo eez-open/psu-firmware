@@ -32,7 +32,7 @@ void set();
 void previousStep();
 void nextStep();
 void save();
-void stop();
+void stop(void (*callback)());
 void toggleEnable();
 
 }
