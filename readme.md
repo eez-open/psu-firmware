@@ -3,15 +3,9 @@
 
 ## Introduction
 
-This project has Arduino/Genuino sketch for [Mega2560](https://www.arduino.cc/en/Main/ArduinoBoardMega2560) (8-bit, AVR)
-and [Due](https://www.arduino.cc/en/Main/ArduinoBoardDue) (32-bit, ARM) boards and accompanying libraries for
-the open hardware [EEZ H24005 power supply](http://www.envox.hr/eez/bench-power-supply/psu-introduction.html) firmware.
+This project has Arduino/Genuino sketch for [Mega2560](https://www.arduino.cc/en/Main/ArduinoBoardMega2560) (8-bit, AVR) (not supported in M3 and newer releases!) and [Due](https://www.arduino.cc/en/Main/ArduinoBoardDue) (32-bit, ARM) boards and accompanying libraries for the open hardware [EEZ H24005 power supply](http://www.envox.hr/eez/bench-power-supply/psu-introduction.html) firmware.
 
-The unique feature of this project is a fully featured software simulator that can be used to evaluate all
-firmware features without having physical power supply on disposal.
-The simulator can be complied to run on major platforms such as Windows, Linux or Mac.
-It shares all the code with the Arduino Sketch plus emulation layer for the Arduino API,
-Ethernet library and digital controls used for programming and monitoring EEZ bench power supply.
+The unique feature of this project is a fully featured software simulator that can be used to evaluate all firmware features without having physical power supply on disposal. The simulator can be complied to run on major platforms such as Windows, Linux or Mac. It shares all the code with the Arduino Sketch plus emulation layer for the Arduino API, Ethernet library and digital controls used for programming and monitoring power supply.
 
 ![Simulator GUI Front Panel](doc/simulator_screenshot.png)
 
@@ -21,12 +15,16 @@ Firmware key features:
 - Multiple programmable channels
 - Programming and continuous monitoring of voltage, current and power
 - Voltage and current calibration
-- Various protection mechanisms: OVP (Over Voltage Protection), OCP (Over Current Protection),
-  OPP (Over Power Protection) and OTP (Over Temperature Protection)
+- Tracking and coupling (series, parallel) mode
+- Incremental encoder
+- Multiple input modes using touchscreen (_keypad_, _step_, _slider_)
+- Multiple presentation modes (_numeric_, _bar graphs_, _YT view_)
+- Various protection mechanisms: OVP (Over Voltage Protection), OCP (Over Current Protection), OPP (Over Power Protection) and OTP (Over Temperature Protection)
 - System date and time (using RTC)
 - EEPROM based storage for device configuration, calibration parameters and 10 user profiles.
-- Local GUI control using TFT touch display 
+- Local GUI control using TFT touch display
 - Remote control based on SCPI protocol
+- SD card support
 
 ### Ownership and License
 
@@ -41,13 +39,10 @@ To report an issue, use the [EEZ psu-firmware issue tracker](https://github.com/
 We recommend Arduino IDE version 1.6.x or newer to compile and deploy Arduino sketch to the EEZ bench power supply.
 
 1. Download zip archive from the github repository. 
-2. Copy folders `eez_psu_sketch` and `libraries` from
-the zip archive into Arduino folder on your computer. Arduino folder is e.g. `My Documents\Arduino` on Windows or `Documents/Arduino` on Linux and Mac. 
-3. Open `eez_psu_sketch.ino` in Arduino IDE, check if
-everything is correct with Verify button
+2. Copy folders `eez_psu_sketch` and `libraries` from the zip archive into Arduino folder on your computer. Arduino folder is e.g. `My Documents\Arduino` on Windows or `Documents/Arduino` on Linux and Mac. 
+3. Open `eez_psu_sketch.ino` in Arduino IDE, check if everything is correct with Verify button
 4. Make sure that *Verify after code upload* option is not set (more details [here](https://github.com/arduino/Arduino/issues/5672)) in File... Preferences and upload the sketch using Upload button.
-5. Remote control can be accessed via Telnet client such as [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/) (connection type: raw, port: 5025)
-or serial client that comes with Arduino IDE or any other you like.
+5. Remote control can be accessed via Telnet client such as [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/) (connection type: raw, port: 5025) or serial client that comes with Arduino IDE or any other you like.
 
 ### Simulator
 
@@ -59,8 +54,7 @@ If you are on Windows, there is a pre-build version:
 
 After you build and run simulator, a mouse is used as simulation of finger on the TFT touchscreen display.
 
-Console window can be used to enter SCPI commands [SCPI reference manual](http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-introduction.html).
-SCPI commands can be also send by starting a telnet session to the port 5025:
+Console window can be used to enter SCPI commands [SCPI reference manual](http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-introduction.html). SCPI commands can be also send by starting a telnet session to the port 5025:
 
 ```
 telnet localhost 5025
@@ -68,9 +62,7 @@ telnet localhost 5025
 
 #### Windows
 
-To build simulator from the source code you need Visual Studio 2015. You can use Community Edition which
-is a free version of Visual Studio 2015. Visual Studio solution for the simulator is in
-`simulator\\platform\\Win32\\eez_psu_sim.sln`. Open solution then build and execute simulator with `F5`.
+To build simulator from the source code you need Visual Studio 2015. You can use Community Edition which is a free version of Visual Studio 2015. Visual Studio solution for the simulator is in `simulator\\platform\\Win32\\eez_psu_sim.sln`. Open solution then build and execute simulator with `F5`.
 
 #### Linux
 
@@ -134,7 +126,7 @@ EEZ bench power supply sketch source code can be divided into following layers:
   This layer is using Core layer to implement local and remote control.
   
   Local control is GUI based using TFT touch display. Special tool was developed to assist creation of GUI interface.
-  This layer depends on third party library [UTFT_Pro](https://github.com/itead/ITEADLIB_Arduino_UTFT_Pro) library that we use to draw graphical primitives.
+  This layer depends on third party library (UTFT_Pro derived from Rinky-Dink Electronics [UTFT](http://www.rinkydinkelectronics.com/library.php?id=51)) that we use to draw graphical primitives.
   
   Remote control is based on SCPI protocol. Check [SCPI reference manual](http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-introduction.html) for available commands.
   This layer depends on third party [scpi-parser](https://github.com/j123b567/scpi-parser) library.
@@ -178,7 +170,7 @@ Here are the components of the board layer (all the files are in `eez_psu_sketch
         - read and write
     - Ethernet (`ethernet.cpp` and `ethernet.h`)
         - SCPI over TCP server on port 5025
-        - Requires third party library [UIPEthernet](https://github.com/mvladic/arduino_uip/tree/Arduino_1.5.x)
+        - Requires third party library [UIPEthernet](https://github.com/mvladic/arduino_uip/tree/Arduino_1.5.x) or [Ethernet2](https://github.com/eez-open/Ethernet2)
     - RTC (`rtc.cpp` and `rtc.h`)
         - system date and time
     - Serial (`serial_psu.cpp` and `serial_psu.h`)
@@ -254,8 +246,7 @@ In MVC architecture, **Model** is where all the data that is displayed on the sc
 
 ![EEZ Studio](doc/eez-studio.png)
 
-This tool creates JSON based eez-project file which contains definitions of GUI pages, styles, bitmaps and fonts along with
-data and action definitions.
+This tool creates JSON based eez-project file which contains definitions of GUI pages, styles, bitmaps and fonts along with data and action definitions.
 JSON file is then compiled to C++ source code files (`gui_document.cpp`, `gui_document.h`, `actions.cpp` and `actions.h`)
 that are included as an integral part of the sketch.
 
@@ -269,24 +260,18 @@ Also, there is some utility code that is used, for example, to interact with the
 
 #### Remote control: SCPI
 
-We are using [third party SCPI parser](https://github.com/j123b567/scpi-parser) and have our [own branch](https://github.com/mvladic/scpi-parser) where command definitions could be in AVR PROGMEM that helps preserve some memory space when Arduino Mega board is used.
-(check [avr_progmem](https://github.com/mvladic/scpi-parser/tree/avr_progmem) branch). 
+We are using [third party SCPI parser](https://github.com/j123b567/scpi-parser) and have our [own branch](https://github.com/mvladic/scpi-parser) where command definitions could be in AVR PROGMEM that helps preserve some memory space when Arduino Mega board is used (check [avr_progmem](https://github.com/mvladic/scpi-parser/tree/avr_progmem) branch). 
 
-There are two entry points for the SCPI commands: serial port and TCP server.
-Check `serial_psu.cpp` and `serial_psu.h` to see how SCPI commands are received
-on serial port, and `ethernet.cpp` and `ethernet.h` for the TCP server.
+There are two entry points for the SCPI commands: serial port and TCP server. Check `serial_psu.cpp` and `serial_psu.h` to see how SCPI commands are received on serial port, and `ethernet.cpp` and `ethernet.h` for the TCP server.
 
 Files `scpi_psu.cpp` and `scpi_psu.h` are about SCPI parser initialization and input handling.
 Also, here is defined the scpi_psu_t structure for storing SCPI parser context data specific to EEZ bench power supply.
 
-Parameter types that are repeatedly used in multiple commands (like channel number) are handled
-in `scpi_params.cpp` and `scpi_params.h`.
+Parameter types that are repeatedly used in multiple commands (like channel number) are handled in `scpi_params.cpp` and `scpi_params.h`.
 
 Registers are set/get in `scpi_params.cpp` and `scpi_params.h`.
 
-All other files that starts with `scpi_` in `eez_psu_sketch/` directory are about implementing
-various SCPI commands. Every SCPI subsystem (like APPLy, SOURce, MEASure, SYSTem, etc.) has its
-own pair of scpi_<subsys>.cpp and scpi_<subsys>.h files.
+All other files that starts with `scpi_` in `eez_psu_sketch/` directory are about implementing various SCPI commands. Every SCPI subsystem (like APPLy, SOURce, MEASure, SYSTem, etc.) has its own pair of scpi_<subsys>.cpp and scpi_<subsys>.h files.
 
 ### Simulator Emulation Layer
 
@@ -313,8 +298,8 @@ The following devices are controlled via SPI bus:
 
 - [ADS1120](http://www.ti.com/product/ADS1120) for 15-bit ADC
 - [DAC8552](http://www.ti.com/product/DAC8552) for 16-bit DAC
-- [MCP23S08](https://www.microchip.com/wwwproducts/Devices.aspx?product=MCP23S08) for I/O 8-bit Expander
-- [ENC28J60](https://www.microchip.com/wwwproducts/Devices.aspx?product=ENC28J60) for Ethernet
+- [MCP23S08](https://www.microchip.com/wwwproducts/en/MCP23S08) for I/O 8-bit Expander or 16-bit expander ([MCP23S17](https://www.microchip.com/wwwproducts/en/MCP23S17))
+- [ENC28J60](https://www.microchip.com/wwwproducts/Devices.aspx?product=ENC28J60) and [W5500](http://www.wiznet.io/product-item/w5500/) for Ethernet
 - [AT25256B](http://www.atmel.com/devices/at25256b.aspx) for 256kb EEPROM
 - [PCA21125](www.nxp.com/documents/data_sheet/PCA21125.pdf) for RTC
 - [TLC5925](http://www.ti.com/product/TLC5925) for BP (Binding Posts) option
@@ -323,9 +308,7 @@ These peripherals are emulated in simulator, check the files `chips.cpp` and `ch
 
 #### UIPEthernet Emulation
 
-UIPEthernet library interface is defined in files `UIPClient.h`, `UIPEthernet.h` and `UIPServer.h`;
-this interface is is implemented in file uipethernet_impl.cpp and this implementation is based on
-platform interface defined in ethernet_platform.h. There are two implementations of this platform interface:
+UIPEthernet library interface is defined in files `UIPClient.h`, `UIPEthernet.h` and `UIPServer.h`; this interface is is implemented in file uipethernet_impl.cpp and this implementation is based on platform interface defined in ethernet_platform.h. There are two implementations of this platform interface:
 
 - for the Win32 platform in file `simulator\platform\win32\eez_psu_sim\ethernet_win32.cpp`
 - and for the Linux and Mac platform in file `simulator\platform\linux\src\ethernet_linux.cpp`
@@ -338,13 +321,11 @@ Implementation is using `eez_imgui` dynamic library.
 
 This library is dynamically loaded at runtime, so that simulator can run even if this library is missing (check the `simulator/src/dll.h` for platform independent dynamic library loading).
 
-`eez_imgui` library is very simple [immediate mode](http://www.cse.chalmers.se/edu/year/2011/course/TDA361/Advanced%20Computer%20Graphics/IMGUI.pdf)
-GUI library that supports top level window with following widgets:
+`eez_imgui` library is very simple [immediate mode](http://www.cse.chalmers.se/edu/year/2011/course/TDA361/Advanced%20Computer%20Graphics/IMGUI.pdf) GUI library that supports top level window with following widgets:
 
 - Image
 - On/off image (displays different images depending on boolean flag)
 - Text
 - Button
 
-It is based on [SDL](https://www.libsdl.org/index.php), [SDL Image](https://www.libsdl.org/projects/SDL_image/)
-and [SDL TTF](https://www.libsdl.org/projects/SDL_ttf/).
+It is based on [SDL](https://www.libsdl.org/index.php), [SDL Image](https://www.libsdl.org/projects/SDL_image/) and [SDL TTF](https://www.libsdl.org/projects/SDL_ttf/).
