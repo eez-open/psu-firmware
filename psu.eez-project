@@ -19229,7 +19229,7 @@
                       "x": 16,
                       "y": 30,
                       "width": 64,
-                      "height": 30,
+                      "height": 26,
                       "style": "value_S",
                       "text": "Text"
                     },
@@ -19239,7 +19239,7 @@
                       "x": 96,
                       "y": 30,
                       "width": 64,
-                      "height": 30,
+                      "height": 26,
                       "style": "value_S",
                       "text": "Text"
                     },
@@ -19249,7 +19249,7 @@
                       "x": 176,
                       "y": 30,
                       "width": 64,
-                      "height": 30,
+                      "height": 26,
                       "style": "value_S",
                       "text": "Text"
                     },
@@ -19257,9 +19257,9 @@
                       "type": "Text",
                       "data": "cal_ch_i0_min",
                       "x": 16,
-                      "y": 62,
+                      "y": 56,
                       "width": 64,
-                      "height": 30,
+                      "height": 26,
                       "style": "value_S",
                       "text": "Text"
                     },
@@ -19267,9 +19267,9 @@
                       "type": "Text",
                       "data": "cal_ch_i0_mid",
                       "x": 96,
-                      "y": 62,
+                      "y": 56,
                       "width": 64,
-                      "height": 30,
+                      "height": 26,
                       "style": "value_S",
                       "text": "Text"
                     },
@@ -19277,9 +19277,9 @@
                       "type": "Text",
                       "data": "cal_ch_i0_max",
                       "x": 176,
-                      "y": 62,
+                      "y": 56,
                       "width": 64,
-                      "height": 30,
+                      "height": 26,
                       "style": "value_S",
                       "text": "Text"
                     },
@@ -19287,9 +19287,9 @@
                       "type": "Text",
                       "data": "cal_ch_i1_min",
                       "x": 16,
-                      "y": 94,
+                      "y": 82,
                       "width": 64,
-                      "height": 30,
+                      "height": 26,
                       "style": "value_S",
                       "text": "Text"
                     },
@@ -19297,9 +19297,9 @@
                       "type": "Text",
                       "data": "cal_ch_i1_mid",
                       "x": 96,
-                      "y": 94,
+                      "y": 82,
                       "width": 64,
-                      "height": 30,
+                      "height": 26,
                       "style": "value_S",
                       "text": "Text"
                     },
@@ -19307,9 +19307,9 @@
                       "type": "Text",
                       "data": "cal_ch_i1_max",
                       "x": 176,
-                      "y": 94,
+                      "y": 82,
                       "width": 64,
-                      "height": 30,
+                      "height": 26,
                       "style": "value_S",
                       "text": "Text"
                     }
