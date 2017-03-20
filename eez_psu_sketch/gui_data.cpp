@@ -158,7 +158,8 @@ void Value::formatFloatValue(float &value, ValueType &valueType, int &numSignifi
 
     if (valueType == VALUE_TYPE_FLOAT_VOLT || valueType == VALUE_TYPE_FLOAT_AMPER || valueType == VALUE_TYPE_FLOAT_WATT || valueType == VALUE_TYPE_FLOAT_SECOND) {
         int n = numSignificantDecimalDigits > 3 ? 3 : numSignificantDecimalDigits;
-        if (util::greater(value, -1.0f, getPrecisionFromNumSignificantDecimalDigits(n)) && util::less(value, 1.0f, getPrecisionFromNumSignificantDecimalDigits(n))) {
+        float precision = getPrecisionFromNumSignificantDecimalDigits(n);
+        if (util::greater(value, -1.0f, precision) && util::less(value, 1.0f, precision) && !util::equal(value, 0, precision)) {
             if (type_ == VALUE_TYPE_FLOAT_VOLT) {
                 valueType = VALUE_TYPE_FLOAT_MILLI_VOLT;
                 numSignificantDecimalDigits = 0;
