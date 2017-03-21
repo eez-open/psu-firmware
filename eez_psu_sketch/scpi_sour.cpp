@@ -1020,22 +1020,37 @@ scpi_result_t scpi_cmd_sourceListCurrentLevel(scpi_t *context) {
     float list[MAX_LIST_LENGTH];
     uint16_t listLength = 0;
 
-    while (true) {
+    uint16_t voltageListLength;
+    float *voltageList = list::getCurrentList(*channel, &voltageListLength);
+
+    for (int i = 0; ; ++i) {
         float current;
         if (!SCPI_ParamFloat(context, &current, false)) {
             break;
         }
 
-        if (listLength >MAX_LIST_LENGTH) {
+        if (listLength > MAX_LIST_LENGTH) {
             SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
             return SCPI_RES_ERR;
+        }
+
+	    if (util::greater(current, channel_dispatcher::getIMaxLimit(*channel), getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+            SCPI_ErrorPush(context, SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
+            return SCPI_RES_ERR;
+	    }
+
+        if (voltageListLength > 0) {
+            if (util::greater(current * voltageList[i % voltageListLength], channel_dispatcher::getPowerMaxLimit(*channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
+                SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
+                return SCPI_RES_ERR;
+            }
         }
 
         list[listLength++] = current;
     }
 
     if (listLength == 0) {
-        SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
+        SCPI_ErrorPush(context, SCPI_ERROR_MISSING_PARAMETER);
         return SCPI_RES_ERR;
     }
 
@@ -1086,7 +1101,7 @@ scpi_result_t scpi_cmd_sourceListDwell(scpi_t *context) {
     }
 
     if (listLength == 0) {
-        SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
+        SCPI_ErrorPush(context, SCPI_ERROR_MISSING_PARAMETER);
         return SCPI_RES_ERR;
     }
 
@@ -1122,22 +1137,37 @@ scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
     float list[MAX_LIST_LENGTH];
     uint16_t listLength = 0;
 
-    while (true) {
+    uint16_t currentListLength;
+    float *currentList = list::getCurrentList(*channel, &currentListLength);
+
+    for (int i = 0; ; ++i) {
         float voltage;
         if (!SCPI_ParamFloat(context, &voltage, false)) {
             break;
         }
 
-        if (listLength >MAX_LIST_LENGTH) {
+        if (listLength > MAX_LIST_LENGTH) {
             SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
             return SCPI_RES_ERR;
+        }
+
+	    if (util::greater(voltage, channel_dispatcher::getUMaxLimit(*channel), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+            SCPI_ErrorPush(context, SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
+            return SCPI_RES_ERR;
+	    }
+
+        if (currentListLength > 0) {
+            if (util::greater(voltage * currentList[i % currentListLength], channel_dispatcher::getPowerMaxLimit(*channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
+                SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
+                return SCPI_RES_ERR;
+            }
         }
 
         list[listLength++] = voltage;
     }
 
     if (listLength == 0) {
-        SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
+        SCPI_ErrorPush(context, SCPI_ERROR_MISSING_PARAMETER);
         return SCPI_RES_ERR;
     }
 

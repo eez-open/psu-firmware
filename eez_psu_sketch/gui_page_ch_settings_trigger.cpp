@@ -444,7 +444,7 @@ void ChSettingsListsPage::doValueSet(float value) {
         if (dataId == DATA_ID_CHANNEL_LIST_VOLTAGE) {
             if (iRow == 0 && m_voltageListLength <= 1) {
                 for (int i = 0; i < m_currentListLength; ++i) {
-                    if (util::greater(value * m_currentList[i], g_channel->getPowerMaxLimit(), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
+                    if (util::greater(value * m_currentList[i], channel_dispatcher::getPowerMaxLimit(*g_channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
                         errorMessageP(PSTR("Power limit exceeded"));
                         return;
                     }
@@ -459,7 +459,7 @@ void ChSettingsListsPage::doValueSet(float value) {
         } else {
             if (iRow == 0 && m_currentListLength <= 1) {
                 for (int i = 0; i < m_voltageListLength; ++i) {
-                    if (util::greater(value * m_voltageList[i], g_channel->getPowerMaxLimit(), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
+                    if (util::greater(value * m_voltageList[i], channel_dispatcher::getPowerMaxLimit(*g_channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
                         errorMessageP(PSTR("Power limit exceeded"));
                         return;
                     }
@@ -473,7 +473,7 @@ void ChSettingsListsPage::doValueSet(float value) {
             }
         }
 
-        if (util::greater(power, g_channel->getPowerMaxLimit(), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
+        if (util::greater(power, channel_dispatcher::getPowerMaxLimit(*g_channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
             errorMessageP(PSTR("Power limit exceeded"));
             return;
         }
