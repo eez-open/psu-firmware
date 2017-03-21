@@ -52,8 +52,8 @@ bool get_voltage_limit_from_param(scpi_t *context, const scpi_number_t &param, f
 bool get_current_limit_from_param(scpi_t *context, const scpi_number_t &param, float &value, const Channel *channel, const Channel::Value *cv);
 bool get_power_limit_from_param(scpi_t *context, const scpi_number_t &param, float &value, const Channel *channel, const Channel::Value *cv);
 
-scpi_result_t result_float(scpi_t * context, float value, ValueType valueType);
-bool get_profile_location_param(scpi_t * context, int &location, bool all_locations = false);
+scpi_result_t result_float(scpi_t *context, Channel *channel, float value, ValueType valueType);
+bool get_profile_location_param(scpi_t *context, int &location, bool all_locations = false);
 
 void outputOnTime(scpi_t* context, uint32_t time);
 

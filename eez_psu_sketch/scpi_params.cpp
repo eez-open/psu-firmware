@@ -522,9 +522,17 @@ bool get_power_limit_from_param(scpi_t *context, const scpi_number_t &param, flo
     return true;
 }
 
-scpi_result_t result_float(scpi_t *context, float value, ValueType valueType) {
+scpi_result_t result_float(scpi_t *context, Channel *channel, float value, ValueType valueType) {
     char buffer[32] = { 0 };
-    util::strcatFloat(buffer, value, valueType);
+
+    int numSignificantDecimalDigits;
+    if (channel && channel->boardRevision == CH_BOARD_REVISION_R5B12 && valueType == VALUE_TYPE_FLOAT_AMPER && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+        numSignificantDecimalDigits = CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12;
+    } else {
+        numSignificantDecimalDigits = getNumSignificantDecimalDigits(valueType);
+    }
+
+    util::strcatFloat(buffer, value, numSignificantDecimalDigits);
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
     return SCPI_RES_OK;
 }

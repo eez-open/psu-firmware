@@ -71,7 +71,7 @@ static scpi_result_t set_step(scpi_t * context, Channel::Value *cv, float min_va
 
 }
 
-static scpi_result_t get_source_value(scpi_t *context, ValueType valueType, float value, float min, float max, float def) {
+static scpi_result_t get_source_value(scpi_t *context, Channel &channel, ValueType valueType, float value, float min, float max, float def) {
     int32_t spec;
     if (!SCPI_ParamChoice(context, scpi_special_numbers_def, &spec, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
@@ -94,10 +94,10 @@ static scpi_result_t get_source_value(scpi_t *context, ValueType valueType, floa
         }
     }
 
-    return result_float(context, value, valueType);
+    return result_float(context, &channel, value, valueType);
 }
 
-static scpi_result_t get_source_value(scpi_t *context, ValueType valueType, float value, float def) {
+static scpi_result_t get_source_value(scpi_t *context, Channel &channel, ValueType valueType, float value, float def) {
     int32_t spec;
     if (!SCPI_ParamChoice(context, scpi_special_numbers_def, &spec, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
@@ -114,7 +114,7 @@ static scpi_result_t get_source_value(scpi_t *context, ValueType valueType, floa
         }
     }
 
-    return result_float(context, value, valueType);
+    return result_float(context, &channel, value, valueType);
 }
 
 scpi_result_t get_delay(scpi_t *context, float delay) {
@@ -179,6 +179,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelImmediateAmplitudeQ(scpi_t * context) {
     }
 
     return get_source_value(context,
+        *channel,
         VALUE_TYPE_FLOAT_AMPER,
         channel_dispatcher::getISet(*channel),
         channel_dispatcher::getIMin(*channel),
@@ -235,7 +236,10 @@ scpi_result_t scpi_cmd_sourceVoltageLevelImmediateAmplitudeQ(scpi_t * context) {
 		u = channel_dispatcher::getUSet(*channel);
 	}
 
-    return get_source_value(context, VALUE_TYPE_FLOAT_VOLT, u,
+    return get_source_value(context,
+        *channel,
+        VALUE_TYPE_FLOAT_VOLT,
+        u,
         channel_dispatcher::getUMin(*channel),
         channel_dispatcher::getUMax(*channel),
         channel_dispatcher::getUDef(*channel));
@@ -258,7 +262,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelImmediateStepIncrementQ(scpi_t * contex
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, VALUE_TYPE_FLOAT_AMPER, channel->i.step, channel->I_DEF_STEP);
+    return get_source_value(context, *channel, VALUE_TYPE_FLOAT_AMPER, channel->i.step, channel->I_DEF_STEP);
 }
 
 scpi_result_t scpi_cmd_sourceVoltageLevelImmediateStepIncrement(scpi_t * context) {
@@ -276,7 +280,7 @@ scpi_result_t scpi_cmd_sourceVoltageLevelImmediateStepIncrementQ(scpi_t * contex
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, VALUE_TYPE_FLOAT_VOLT, channel->u.step, channel->U_DEF_STEP);
+    return get_source_value(context, *channel, VALUE_TYPE_FLOAT_VOLT, channel->u.step, channel->U_DEF_STEP);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -365,7 +369,7 @@ scpi_result_t scpi_cmd_sourcePowerProtectionLevelQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
     
-    return get_source_value(context, VALUE_TYPE_FLOAT_WATT, channel_dispatcher::getPowerProtectionLevel(*channel),
+    return get_source_value(context, *channel, VALUE_TYPE_FLOAT_WATT, channel_dispatcher::getPowerProtectionLevel(*channel),
         channel_dispatcher::getOppMinLevel(*channel),
         channel_dispatcher::getOppMaxLevel(*channel),
         channel_dispatcher::getOppDefaultLevel(*channel));
@@ -455,7 +459,7 @@ scpi_result_t scpi_cmd_sourceVoltageProtectionLevelQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
     
-    return get_source_value(context, VALUE_TYPE_FLOAT_VOLT, channel_dispatcher::getUProtectionLevel(*channel),
+    return get_source_value(context, *channel, VALUE_TYPE_FLOAT_VOLT, channel_dispatcher::getUProtectionLevel(*channel),
         channel_dispatcher::getUSet(*channel),
         channel_dispatcher::getUMax(*channel),
         channel_dispatcher::getUMax(*channel));
@@ -746,6 +750,7 @@ scpi_result_t scpi_cmd_sourceCurrentLimitPositiveImmediateAmplitudeQ(scpi_t * co
     }
 
     return get_source_value(context,
+        *channel,
         VALUE_TYPE_FLOAT_AMPER,
         channel_dispatcher::getILimit(*channel),
         0,
@@ -776,6 +781,7 @@ scpi_result_t scpi_cmd_sourceVoltageLimitPositiveImmediateAmplitudeQ(scpi_t * co
     }
 
     return get_source_value(context,
+        *channel,
         VALUE_TYPE_FLOAT_VOLT,
         channel_dispatcher::getULimit(*channel),
         0,
@@ -806,6 +812,7 @@ scpi_result_t scpi_cmd_sourcePowerLimitQ(scpi_t * context) {
     }
 
     return get_source_value(context,
+        *channel,
         VALUE_TYPE_FLOAT_WATT,
         channel_dispatcher::getPowerLimit(*channel),
         channel_dispatcher::getPowerMinLimit(*channel),
@@ -838,6 +845,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelTriggeredAmplitudeQ(scpi_t * context) {
     }
 
     return get_source_value(context, 
+        *channel,
         VALUE_TYPE_FLOAT_AMPER,
         channel_dispatcher::getTriggerCurrent(*channel),
         channel_dispatcher::getIMin(*channel),
@@ -868,6 +876,7 @@ scpi_result_t scpi_cmd_sourceVoltageLevelTriggeredAmplitudeQ(scpi_t * context) {
     }
 
     return get_source_value(context,
+        *channel,
         VALUE_TYPE_FLOAT_VOLT,
         channel_dispatcher::getTriggerVoltage(*channel),
         channel_dispatcher::getUMin(*channel),
