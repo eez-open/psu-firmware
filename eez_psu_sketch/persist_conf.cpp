@@ -49,7 +49,7 @@ enum PersistConfSection {
 ////////////////////////////////////////////////////////////////////////////////
 
 static const uint16_t DEV_CONF_VERSION = 0x0008L;
-static const uint16_t DEV_CONF2_VERSION = 0x0003L;
+static const uint16_t DEV_CONF2_VERSION = 0x0004L;
 static const uint16_t CH_CAL_CONF_VERSION = 0x0003L;
 static const uint16_t PROFILE_VERSION = 0x0008L;
 
@@ -181,10 +181,6 @@ void loadDevice2() {
         eeprom::read((uint8_t *)&devConf2, sizeof(DeviceConfiguration2), get_address(PERSIST_CONF_BLOCK_DEVICE2));
         if (!check_block((BlockHeader *)&devConf2, sizeof(DeviceConfiguration2), DEV_CONF2_VERSION)) {
             initDevice2();
-        } else {
-            if (devConf2.displayBrightness > DISPLAY_BRIGHTNESS_MAX) {
-                devConf2.displayBrightness = DISPLAY_BRIGHTNESS_MAX;
-            }
         }
     }
     else {

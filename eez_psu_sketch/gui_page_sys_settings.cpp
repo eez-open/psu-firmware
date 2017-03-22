@@ -540,7 +540,7 @@ data::Value SysSettingsDisplayPage::getData(const data::Cursor &cursor, uint8_t 
 
 data::Value SysSettingsDisplayPage::getMin(const data::Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
-        return 0;
+        return DISPLAY_BRIGHTNESS_MIN;
     }
 
     return data::Value();
