@@ -21358,7 +21358,7 @@
               "width": 122,
               "height": 32,
               "style": "select_enum_item_popup_item",
-              "text": "Stand-by"
+              "text": "Standby"
             },
             {
               "type": "Text",
@@ -21428,22 +21428,22 @@
           "height": 240,
           "widgets": [
             {
+              "type": "Text",
+              "x": 0,
+              "y": 90,
+              "width": 320,
+              "height": 40,
+              "style": "default",
+              "text": "Entering standby..."
+            },
+            {
               "type": "MultilineText",
-              "x": 43,
+              "x": 44,
               "y": 166,
               "width": 240,
               "height": 50,
               "style": "default_S",
               "text": "Press and hold anywhere on the screen to wake up."
-            },
-            {
-              "type": "MultilineText",
-              "x": 43,
-              "y": 76,
-              "width": 240,
-              "height": 66,
-              "style": "default",
-              "text": "Entering stand-by"
             }
           ]
         }
@@ -21485,19 +21485,19 @@
           "widgets": [
             {
               "type": "Text",
-              "x": 39,
-              "y": 57,
-              "width": 240,
+              "x": 0,
+              "y": 90,
+              "width": 320,
               "height": 40,
               "style": "default",
-              "text": "Stand-by mode"
+              "text": "Standby mode"
             },
             {
               "type": "MultilineText",
-              "x": 39,
-              "y": 150,
+              "x": 44,
+              "y": 166,
               "width": 240,
-              "height": 70,
+              "height": 50,
               "style": "default_S",
               "text": "Press and hold anywhere on the screen to wake up."
             }
