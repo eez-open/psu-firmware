@@ -64,6 +64,7 @@
 #define CONF_GUI_LONG_TAP_TIMEOUT 1000000UL // 1s
 
 #define CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY 250000UL // 250ms
+#define CONF_GUI_KEYPAD_FAST_AUTO_REPEAT_DELAY 100000UL
 
 #define CONF_GUI_TOAST_DURATION_MS 1 * 1000UL // 1sec
 
@@ -125,6 +126,7 @@ uint32_t g_focusEditValueChangedTime;
 ////////////////////////////////////////
 
 static uint32_t g_touchDownTime;
+static uint32_t g_lastFastAutoRepeatEventTime;
 static uint32_t g_lastAutoRepeatEventTime;
 static bool g_longTapGenerated;
 
@@ -132,6 +134,7 @@ enum EventType {
     EVENT_TYPE_TOUCH_DOWN,
     EVENT_TYPE_TOUCH_MOVE,
     EVENT_TYPE_LONG_TAP,
+    EVENT_TYPE_FAST_AUTO_REPEAT,
     EVENT_TYPE_AUTO_REPEAT,
     EVENT_TYPE_TOUCH_UP
 };
@@ -689,6 +692,19 @@ ActionType getAction(WidgetCursor &widgetCursor) {
     }
 }
 
+bool isFastAutoRepeatAction(ActionType action) {
+    return
+        action == ACTION_ID_UP_DOWN;
+}
+
+bool isAutoRepeatAction(ActionType action) {
+    return
+        action == ACTION_ID_KEYPAD_BACK ||
+        action == ACTION_ID_EVENT_QUEUE_PREVIOUS_PAGE ||
+        action == ACTION_ID_EVENT_QUEUE_NEXT_PAGE ||
+        action == ACTION_ID_CHANNEL_LISTS_PREVIOUS_PAGE ||
+        action == ACTION_ID_CHANNEL_LISTS_NEXT_PAGE;
+}
 
 void executeAction(int actionId) {
     sound::playClick();
@@ -928,6 +944,15 @@ int getStartPageId() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void pushEvent(EventType type) {
+    // allow only one EVENT_TYPE_FAST_AUTO_REPEAT in the stack
+    if (type == EVENT_TYPE_FAST_AUTO_REPEAT) {
+        for (int i = 0; i < g_numEvents; ++i) {
+            if (g_events[i].type == EVENT_TYPE_FAST_AUTO_REPEAT) {
+                return;
+            }
+        }
+    }
+
     // allow only one EVENT_TYPE_AUTO_REPEAT in the stack
     if (type == EVENT_TYPE_AUTO_REPEAT) {
         for (int i = 0; i < g_numEvents; ++i) {
@@ -983,6 +1008,7 @@ void touchHandling(uint32_t tick_usec) {
 
         if (touch::event_type == touch::TOUCH_DOWN) {
             g_touchDownTime = tick_usec;
+            g_lastFastAutoRepeatEventTime = tick_usec;
             g_lastAutoRepeatEventTime = tick_usec;
             g_longTapGenerated = false;
             pushEvent(EVENT_TYPE_TOUCH_DOWN);
@@ -993,7 +1019,12 @@ void touchHandling(uint32_t tick_usec) {
                 g_longTapGenerated = true;
                 pushEvent(EVENT_TYPE_LONG_TAP);
             }
-            
+
+            if (tick_usec - g_lastFastAutoRepeatEventTime >= CONF_GUI_KEYPAD_FAST_AUTO_REPEAT_DELAY) {
+                pushEvent(EVENT_TYPE_FAST_AUTO_REPEAT);
+                g_lastFastAutoRepeatEventTime = tick_usec;
+            }
+
             if (tick_usec - g_lastAutoRepeatEventTime >= CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY) {
                 pushEvent(EVENT_TYPE_AUTO_REPEAT);
                 g_lastAutoRepeatEventTime = tick_usec;
@@ -1003,17 +1034,6 @@ void touchHandling(uint32_t tick_usec) {
         }
     }
 }
-
-bool isAutoRepeatAction(ActionType action) {
-    return
-        action == ACTION_ID_KEYPAD_BACK ||
-        action == ACTION_ID_UP_DOWN ||
-        action == ACTION_ID_EVENT_QUEUE_PREVIOUS_PAGE ||
-        action == ACTION_ID_EVENT_QUEUE_NEXT_PAGE ||
-        action == ACTION_ID_CHANNEL_LISTS_PREVIOUS_PAGE ||
-        action == ACTION_ID_CHANNEL_LISTS_NEXT_PAGE;
-}
-
 
 void processEvents() {
     for (int i = 0; i < g_numEvents; ++i) {
@@ -1111,6 +1131,14 @@ void processEvents() {
                         }
                     }
                 }
+            } else if (g_events[i].type == EVENT_TYPE_FAST_AUTO_REPEAT) {
+                if (g_foundWidgetAtDown) {
+                    ActionType action = getAction(g_foundWidgetAtDown);
+                    if (isFastAutoRepeatAction(action)) {
+                        g_touchActionExecuted = true;
+                        executeAction(action);
+                    }
+                }
             } else if (g_events[i].type == EVENT_TYPE_AUTO_REPEAT) {
                 if (g_foundWidgetAtDown) {
                     ActionType action = getAction(g_foundWidgetAtDown);
@@ -1123,7 +1151,7 @@ void processEvents() {
                 if (g_foundWidgetAtDown) {
                     deselectWidget();
                     ActionType action = getAction(g_foundWidgetAtDown);
-                    if (!isLongPressAction(action)) {
+                    if (!isLongPressAction(action) && !g_touchActionExecuted) {
                         executeAction(action);
                     }
                     g_foundWidgetAtDown = 0;

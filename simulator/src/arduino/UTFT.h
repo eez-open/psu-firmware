@@ -28,6 +28,7 @@ namespace arduino {
 
 #define ITDB32S         2   // SSD1289  (16bit)
 #define ITDB32S_V2      33  // ILI9341  (16bit)
+#define CTE32_R2        17
 
 //*********************************
 // COLORS

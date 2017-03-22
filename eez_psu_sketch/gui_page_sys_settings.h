@@ -144,8 +144,12 @@ private:
 
 class SysSettingsDisplayPage : public Page {
 public:
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
+    data::Value getMin(const data::Cursor &cursor, uint8_t id);
+    data::Value getMax(const data::Cursor &cursor, uint8_t id);
+    bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
+
     void turnOff();
-    void editBrightness();
 };
 
 class SysSettingsTriggerPage : public SetPage {

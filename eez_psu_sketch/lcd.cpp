@@ -17,6 +17,7 @@
  */
 
 #include "psu.h"
+#include "util.h"
 
 #if OPTION_DISPLAY
 
@@ -467,19 +468,27 @@ void init() {
 
 void turnOn() {
     if (!g_isOn) {
-	    lcd.setContrast(64);
-	    analogWrite(LCD_BRIGHTNESS, 50);
         g_isOn = true;
+        updateBrightness();
     }
 }
 
 void turnOff() {
     if (g_isOn) {
-	    lcd.setContrast(0);
-	    analogWrite(LCD_BRIGHTNESS, 255);
+        g_isOn = false;
+        updateBrightness();
         lcd.setColor(VGA_BLACK);
         lcd.fillRect(0, 0, lcd.getDisplayXSize()-1, lcd.getDisplayYSize()-1);
-        g_isOn = false;
+    }
+}
+
+void updateBrightness() {
+    if (g_isOn) {
+	    lcd.setContrast(64);
+        analogWrite(LCD_BRIGHTNESS, persist_conf::devConf2.displayBrightness);
+    } else {
+        lcd.setContrast(0);
+        analogWrite(LCD_BRIGHTNESS, 255);
     }
 }
 

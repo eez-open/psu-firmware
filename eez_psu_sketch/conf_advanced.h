@@ -274,3 +274,6 @@
 /// after this timeout in seconds.
 /// See https://github.com/eez-open/psu-firmware/issues/84
 #define ENCODER_CHANGE_TIMEOUT 15
+
+#define DISPLAY_BRIGHTNESS_DEFAULT 50
+#define DISPLAY_BRIGHTNESS_MAX 200

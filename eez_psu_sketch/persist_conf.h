@@ -170,6 +170,7 @@ bool lockFrontPanel(bool lock);
 bool setEncoderSettings(uint8_t confirmationMode, uint8_t movingSpeedDown, uint8_t movingSpeedUp);
 
 bool setDisplayState(unsigned state);
+bool setDisplayBrightness(uint8_t displayBrightness);
 
 }
 }

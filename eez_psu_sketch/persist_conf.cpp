@@ -23,6 +23,9 @@
 #if OPTION_ENCODER
 #include "encoder.h"
 #endif
+#if OPTION_DISPLAY
+#include "lcd.h"
+#endif
 
 #include "gui_internal.h"
 
@@ -170,7 +173,7 @@ static void initDevice2() {
     devConf2.header.version = DEV_CONF2_VERSION;
     devConf2.flags.encoderConfirmationMode = 0;
     devConf2.flags.displayState = 1;
-    devConf2.displayBrightness = 200;
+    devConf2.displayBrightness = DISPLAY_BRIGHTNESS_DEFAULT;
 }
 
 void loadDevice2() {
@@ -178,6 +181,10 @@ void loadDevice2() {
         eeprom::read((uint8_t *)&devConf2, sizeof(DeviceConfiguration2), get_address(PERSIST_CONF_BLOCK_DEVICE2));
         if (!check_block((BlockHeader *)&devConf2, sizeof(DeviceConfiguration2), DEV_CONF2_VERSION)) {
             initDevice2();
+        } else {
+            if (devConf2.displayBrightness > DISPLAY_BRIGHTNESS_MAX) {
+                devConf2.displayBrightness = DISPLAY_BRIGHTNESS_MAX;
+            }
         }
     }
     else {
@@ -581,6 +588,16 @@ bool setDisplayState(unsigned newState) {
     }
 
     return true;
+}
+
+bool setDisplayBrightness(uint8_t displayBrightness) {
+    devConf2.displayBrightness = displayBrightness;
+
+#if OPTION_DISPLAY
+    gui::lcd::updateBrightness();
+#endif
+
+    return saveDevice2();
 }
 
 }

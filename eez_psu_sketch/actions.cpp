@@ -561,10 +561,6 @@ void action_sys_settings_display_turn_off() {
     ((SysSettingsDisplayPage *)getActivePage())->turnOff();
 }
 
-void action_sys_settings_display_edit_brightness() {
-    ((SysSettingsDisplayPage *)getActivePage())->editBrightness();
-}
-
 void action_show_ch_settings_trigger() {
     setPage(PAGE_ID_CH_SETTINGS_TRIGGER);
 }
@@ -813,7 +809,6 @@ ACTION actions[] = {
     action_up_down,
     action_sys_settings_encoder_toggle_confirmation_mode,
     action_sys_settings_display_turn_off,
-    action_sys_settings_display_edit_brightness,
     action_show_ch_settings_trigger,
     action_ch_settings_trigger_edit_trigger_mode,
     action_ch_settings_trigger_edit_voltage_trigger_value,

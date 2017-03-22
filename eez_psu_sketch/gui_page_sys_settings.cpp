@@ -525,11 +525,46 @@ void SysSettingsEncoderPage::set() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void SysSettingsDisplayPage::turnOff() {
-    persist_conf::setDisplayState(0);
+data::Value SysSettingsDisplayPage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = Page::getData(cursor, id);
+	if (value.getType() != VALUE_TYPE_NONE) {
+		return value;
+	}
+
+    if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
+        return data::Value(persist_conf::devConf2.displayBrightness);
+    }
+
+    return data::Value();
 }
 
-void SysSettingsDisplayPage::editBrightness() {
+data::Value SysSettingsDisplayPage::getMin(const data::Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
+        return 0;
+    }
+
+    return data::Value();
+}
+
+data::Value SysSettingsDisplayPage::getMax(const data::Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
+        return DISPLAY_BRIGHTNESS_MAX;
+    }
+
+    return data::Value();
+}
+
+bool SysSettingsDisplayPage::setData(const data::Cursor &cursor, uint8_t id, data::Value value) {
+    if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
+        persist_conf::setDisplayBrightness((uint8_t)value.getInt());
+        return true;
+    }
+
+    return false;
+}
+
+void SysSettingsDisplayPage::turnOff() {
+    persist_conf::setDisplayState(0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

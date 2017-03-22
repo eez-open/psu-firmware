@@ -988,10 +988,6 @@ Value get(const Cursor &cursor, uint8_t id) {
         return data::Value(persist_conf::devConf2.flags.displayState);
     }
 
-    if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
-        return data::Value(persist_conf::devConf2.displayBrightness);
-    }
-
     Page *page = getActivePage();
     if (page) {
         Value value = page->getData(cursor, id);

@@ -51,6 +51,8 @@ extern EEZ_UTFT lcd;
 void init();
 void turnOn();
 void turnOff();
+
+void updateBrightness();
    
 }
 }
