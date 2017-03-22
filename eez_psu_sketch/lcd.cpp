@@ -31,7 +31,7 @@ namespace lcd {
 ////////////////////////////////////////////////////////////////////////////////
 
 #define TFT_320QVT_1289 ITDB32S
-#define TFT_320QVT_9341 ITDB32S_V2
+#define TFT_320QVT_9341 CTE32_R2
 
 EEZ_UTFT lcd(DISPLAY_TYPE, LCD_RS, LCD_WR, LCD_CS, LCD_RESET);
 

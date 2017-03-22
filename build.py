@@ -26,22 +26,6 @@ scpi_parser_dir = os.path.join(os.path.dirname(__file__), 'libraries/scpi-parser
 build_arduino_library.build_scpi_parser_lib(libscpi_dir, scpi_parser_dir)
 build_arduino_library.copy_lib(scpi_parser_dir, 'scpi-parser')
 
-# UIPEthernet
-arduino_uip_dir = os.path.join(os.path.dirname(__file__), '../libraries/arduino_uip')
-UIPEthernet_dir = os.path.join(os.path.dirname(__file__), 'libraries/UIPEthernet')
-build_arduino_library.build_UIPEthernet_lib(arduino_uip_dir, UIPEthernet_dir)
-build_arduino_library.copy_lib(UIPEthernet_dir, 'UIPEthernet')
-
-# Ethernet2
-arduino_Ethernet2_dir = os.path.join(os.path.dirname(__file__), '../libraries/Ethernet2')
-Ethernet2_dir = os.path.join(os.path.dirname(__file__), 'libraries/Ethernet2')
-build_arduino_library.build_Ethernet2_lib(arduino_Ethernet2_dir, Ethernet2_dir)
-build_arduino_library.copy_lib(Ethernet2_dir, 'Ethernet2')
-
 # eez_psu_lib
 eez_psu_lib_dir = os.path.join(os.path.dirname(__file__), 'libraries/eez_psu_lib')
 build_arduino_library.copy_lib(eez_psu_lib_dir, 'eez_psu_lib')
-
-# UTFT_Pro
-utft_dir = os.path.join(os.path.dirname(__file__), 'libraries/UTFT_Pro')
-build_arduino_library.copy_lib(utft_dir, 'UTFT_Pro')
