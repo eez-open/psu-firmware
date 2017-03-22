@@ -485,9 +485,10 @@ void turnOff() {
 void updateBrightness() {
     if (g_isOn) {
 	    lcd.setContrast(64); // no effect on TFT_320QVT_9341
-        analogWrite(LCD_BRIGHTNESS, (int)util::remap(persist_conf::devConf2.displayBrightness, 
-            DISPLAY_BRIGHTNESS_MIN, DISPLAY_BRIGHTNESS_MIN_DAC_VALUE,
-            DISPLAY_BRIGHTNESS_MAX, DISPLAY_BRIGHTNESS_MAX_DAC_VALUE));
+
+        int value = (int)round(util::remapQuad(persist_conf::devConf2.displayBrightness, 1, 196, 20, 106));
+        DebugTraceF("%d", value);
+        analogWrite(LCD_BRIGHTNESS, value);
     } else {
         lcd.setContrast(0); // no effect on TFT_320QVT_9341
         analogWrite(LCD_BRIGHTNESS, 255);

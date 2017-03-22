@@ -26,6 +26,27 @@ float remap(float x, float x1, float y1, float x2, float y2) {
     return y1 + (x - x1) * (y2 - y1) / (x2 - x1);
 }
 
+float remapQuad(float x, float x1, float y1, float x2, float y2) {
+    float t = remap(x, x1, 0, x2, 1);
+    t = t * t;
+    x = remap(t, 0, x1, 1, x2);
+    return remap(x, x1, y1, x2, y2);
+}
+
+float remapCubic(float x, float x1, float y1, float x2, float y2) {
+    float t = remap(x, x1, 0, x2, 1);
+    t = t * t * t;
+    x = remap(t, 0, x1, 1, x2);
+    return remap(x, x1, y1, x2, y2);
+}
+
+float remapExp(float x, float x1, float y1, float x2, float y2) {
+    float t = remap(x, x1, 0, x2, 1);
+    t = t == 0 ? 0 : float(pow(2, 10 * (t - 1)));
+    x = remap(t, 0, x1, 1, x2);
+    return remap(x, x1, y1, x2, y2);
+}
+
 float clamp(float x, float min, float max) {
     if (x <= min) {
         return min;

@@ -35,6 +35,9 @@ namespace psu {
 namespace util {
 
 float remap(float x, float x1, float y1, float x2, float y2);
+float remapQuad(float x, float x1, float y1, float x2, float y2);
+float remapCubic(float x, float x1, float y1, float x2, float y2);
+float remapExp(float x, float x1, float y1, float x2, float y2);
 float clamp(float x, float min, float max);
 
 void strcatInt(char *str, int value);

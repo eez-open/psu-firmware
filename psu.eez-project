@@ -19959,7 +19959,7 @@
               "type": "Text",
               "x": 16,
               "y": 32,
-              "width": 149,
+              "width": 140,
               "height": 28,
               "style": "edit_value_S_left",
               "text": "Brightness:"
@@ -19968,14 +19968,22 @@
               "type": "UpDown",
               "data": "sys.display.brightness",
               "action": "upDown",
-              "x": 165,
+              "x": 156,
               "y": 32,
-              "width": 87,
+              "width": 82,
               "height": 28,
               "style": "edit_value_S_centered",
               "buttonsStyle": "edit_S",
               "downButtonText": "\\u008F",
               "upButtonText": "\\u0090"
+            },
+            {
+              "type": "Rectangle",
+              "x": 238,
+              "y": 32,
+              "width": 14,
+              "height": 28,
+              "style": "default_inverse"
             },
             {
               "type": "Text",
