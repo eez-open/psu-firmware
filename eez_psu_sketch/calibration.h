@@ -77,9 +77,6 @@ struct Value {
     void setData(float dac, float data, float adc);
 
     bool checkMid();
-
-private:
-    float getRange();
 };
 
 bool isEnabled();

@@ -61,21 +61,6 @@ void Value::reset() {
     max_dac = voltOrCurr ? g_channel->U_CAL_VAL_MAX : (currentRange == 0 ? g_channel->I_CAL_VAL_MAX : g_channel->I_CAL_VAL_MAX / 10); 
 }
 
-float Value::getRange() {
-    float range;
-
-    if (voltOrCurr) {
-        range = g_channel->U_CAL_VAL_MAX - g_channel->U_CAL_VAL_MIN;
-    } else {
-        range = g_channel->I_CAL_VAL_MAX - g_channel->I_CAL_VAL_MIN;
-        if (currentRange == 1) {
-            range /= 10;
-        }
-    }
-
-    return range;
-}
-
 float Value::getLevelValue() {
     if (level == LEVEL_MIN) {
         return min_dac;
@@ -125,7 +110,15 @@ void Value::setDacValue(float value) {
 }
 
 bool Value::checkRange(float dac, float data, float adc) {
-    float range = getRange();
+    float range;
+    if (voltOrCurr) {
+        range = g_channel->U_CAL_VAL_MAX - g_channel->U_CAL_VAL_MIN;
+    } else {
+        range = g_channel->I_CAL_VAL_MAX - g_channel->I_CAL_VAL_MIN;
+        if (currentRange == 1) {
+            range /= 2;
+        }
+    }
 
     float allowedDiff = range * CALIBRATION_DATA_TOLERANCE / 100;
     float diff;
