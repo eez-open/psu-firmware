@@ -177,9 +177,9 @@
       "implementation": "dialogCancel();"
     },
     {
-      "name": "turn_off",
+      "name": "standBy",
       "implementationType": "native",
-      "implementation": "// INTENTIONALLY BLANK IMPLEMENTATION"
+      "implementation": "gui::standBy();"
     },
     {
       "name": "show_previous_page",
@@ -687,9 +687,9 @@
       "implementation": "#if OPTION_ENCODER\n((SysSettingsEncoderPage *)getActivePage())->toggleConfirmationMode();\n#endif"
     },
     {
-      "name": "sys.settings.display.turnOff",
+      "name": "turnDisplayOff",
       "implementationType": "native",
-      "implementation": "((SysSettingsDisplayPage *)getActivePage())->turnOff();\n"
+      "implementation": "gui::turnDisplayOff();\n"
     },
     {
       "name": "show_ch_settings_trigger",
@@ -825,6 +825,16 @@
       "name": "trigger.showGeneralSettings",
       "implementationType": "native",
       "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_TRIGGER);"
+    },
+    {
+      "name": "showStandByMenu",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_STAND_BY_MENU);"
+    },
+    {
+      "name": "reset",
+      "implementationType": "native",
+      "implementation": "gui::reset();"
     }
   ],
   "data": [
@@ -3060,7 +3070,7 @@
             },
             {
               "type": "Text",
-              "action": "turn_off",
+              "action": "showStandByMenu",
               "x": 192,
               "y": 284,
               "width": 48,
@@ -7491,7 +7501,7 @@
             },
             {
               "type": "Text",
-              "action": "turn_off",
+              "action": "showStandByMenu",
               "x": 272,
               "y": 204,
               "width": 48,
@@ -19979,7 +19989,7 @@
             },
             {
               "type": "Text",
-              "action": "sys.settings.display.turnOff",
+              "action": "turnDisplayOff",
               "x": 16,
               "y": 88,
               "width": 236,
@@ -21313,6 +21323,74 @@
             }
           ]
         }
+      },
+      {
+        "name": "stand_by_menu",
+        "portrait": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": []
+        },
+        "landscape": {
+          "x": 87,
+          "y": 32,
+          "width": 146,
+          "height": 162,
+          "style": "select_enum_item_popup_container",
+          "widgets": [
+            {
+              "type": "Text",
+              "action": "reset",
+              "x": 12,
+              "y": 76,
+              "width": 122,
+              "height": 32,
+              "style": "select_enum_item_popup_item",
+              "text": "Reset (*RST)"
+            },
+            {
+              "type": "Text",
+              "action": "standBy",
+              "x": 12,
+              "y": 12,
+              "width": 122,
+              "height": 32,
+              "style": "select_enum_item_popup_item",
+              "text": "Stand-by"
+            },
+            {
+              "type": "Text",
+              "action": "turnDisplayOff",
+              "x": 12,
+              "y": 44,
+              "width": 122,
+              "height": 32,
+              "style": "select_enum_item_popup_item",
+              "text": "Display off"
+            },
+            {
+              "type": "Rectangle",
+              "x": 12,
+              "y": 112,
+              "width": 122,
+              "height": 2,
+              "style": "dark_line"
+            },
+            {
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 13,
+              "y": 118,
+              "width": 122,
+              "height": 32,
+              "style": "select_enum_item_popup_item",
+              "text": "Cancel"
+            }
+          ]
+        },
+        "closePageIfTouchedOutside": true
       },
       {
         "name": "entering_standby",
@@ -25810,6 +25888,12 @@
         "backgroundColor": "#525252",
         "borderSize": 0,
         "borderColor": "#ffffff"
+      },
+      {
+        "name": "dark_line",
+        "font": "small",
+        "color": "#2f2f2f",
+        "borderColor": "#2f2f2f"
       }
     ],
     "fonts": [

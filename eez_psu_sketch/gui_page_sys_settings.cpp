@@ -563,10 +563,6 @@ bool SysSettingsDisplayPage::setData(const data::Cursor &cursor, uint8_t id, dat
     return false;
 }
 
-void SysSettingsDisplayPage::turnOff() {
-    persist_conf::setDisplayState(0);
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 
 SysSettingsTriggerPage::SysSettingsTriggerPage() {

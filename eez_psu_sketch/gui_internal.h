@@ -108,6 +108,11 @@ void channelInitiateTrigger();
 void channelSetToFixed();
 void channelEnableOutput();
 
+void standBy();
+void turnDisplayOff();
+void reset();
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // GUI definition document accessor functions
 

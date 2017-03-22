@@ -676,8 +676,7 @@ bool isFocusChanged() {
 ////////////////////////////////////////////////////////////////////////////////
 
 bool isLongPressAction(int actionId) {
-    return actionId == ACTION_ID_TURN_OFF ||
-        actionId == ACTION_ID_SYS_FRONT_PANEL_LOCK || 
+    return actionId == ACTION_ID_SYS_FRONT_PANEL_LOCK || 
         actionId == ACTION_ID_SYS_FRONT_PANEL_UNLOCK;
 }
 
@@ -893,6 +892,20 @@ void channelEnableOutput() {
     channel_dispatcher::outputEnable(channel, true);
 }
 
+void standBy() {
+    showEnteringStandbyPage();
+    changePowerState(false);
+}
+
+void turnDisplayOff() {
+    persist_conf::setDisplayState(0);
+}
+
+void reset() {
+    popPage();
+    psu::reset();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 void init() {
@@ -1098,14 +1111,7 @@ void processEvents() {
                     } else {
                         if (g_foundWidgetAtDown) {
                             ActionType action = getAction(g_foundWidgetAtDown);
-                            if (action == ACTION_ID_TURN_OFF) {
-                                deselectWidget();
-                                g_foundWidgetAtDown = 0;
-                                g_touchActionExecuted = true;
-                                showEnteringStandbyPage();
-                                sound::playClick();
-                                psu::changePowerState(false);
-                            } else if (action == ACTION_ID_SYS_FRONT_PANEL_LOCK || action == ACTION_ID_SYS_FRONT_PANEL_UNLOCK) {
+                            if (action == ACTION_ID_SYS_FRONT_PANEL_LOCK || action == ACTION_ID_SYS_FRONT_PANEL_UNLOCK) {
                                 deselectWidget();
                                 g_foundWidgetAtDown = 0;
                                 g_touchActionExecuted = true;

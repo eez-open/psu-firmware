@@ -145,8 +145,8 @@ void action_cancel() {
     dialogCancel();
 }
 
-void action_turn_off() {
-    // INTENTIONALLY BLANK IMPLEMENTATION
+void action_stand_by() {
+    gui::standBy();
 }
 
 void action_show_previous_page() {
@@ -557,8 +557,8 @@ void action_sys_settings_encoder_toggle_confirmation_mode() {
     #endif
 }
 
-void action_sys_settings_display_turn_off() {
-    ((SysSettingsDisplayPage *)getActivePage())->turnOff();
+void action_turn_display_off() {
+    gui::turnDisplayOff();
 }
 
 void action_show_ch_settings_trigger() {
@@ -678,6 +678,14 @@ void action_trigger_show_general_settings() {
     pushPage(PAGE_ID_SYS_SETTINGS_TRIGGER);
 }
 
+void action_show_stand_by_menu() {
+    pushPage(PAGE_ID_STAND_BY_MENU);
+}
+
+void action_reset() {
+    gui::reset();
+}
+
 
 ACTION actions[] = {
     0,
@@ -706,7 +714,7 @@ ACTION actions[] = {
     action_no,
     action_ok,
     action_cancel,
-    action_turn_off,
+    action_stand_by,
     action_show_previous_page,
     action_show_main_page,
     action_show_event_queue,
@@ -808,7 +816,7 @@ ACTION actions[] = {
     action_error_alert_action,
     action_up_down,
     action_sys_settings_encoder_toggle_confirmation_mode,
-    action_sys_settings_display_turn_off,
+    action_turn_display_off,
     action_show_ch_settings_trigger,
     action_ch_settings_trigger_edit_trigger_mode,
     action_ch_settings_trigger_edit_voltage_trigger_value,
@@ -835,7 +843,9 @@ ACTION actions[] = {
     action_trigger_select_polarity,
     action_trigger_toggle_initiate_continuously,
     action_trigger_generate_manual,
-    action_trigger_show_general_settings
+    action_trigger_show_general_settings,
+    action_show_stand_by_menu,
+    action_reset
 };
 
 }
