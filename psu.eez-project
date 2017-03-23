@@ -6257,7 +6257,7 @@
                                         "widgets": [
                                           {
                                             "type": "DisplayData",
-                                            "data": "channel.u.edit",
+                                            "data": "channel.i.edit",
                                             "action": "",
                                             "x": 0,
                                             "y": 0,
@@ -6268,7 +6268,7 @@
                                           },
                                           {
                                             "type": "DisplayData",
-                                            "data": "channel.u.edit",
+                                            "data": "channel.i.edit",
                                             "action": "edit",
                                             "x": 0,
                                             "y": 0,
