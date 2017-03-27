@@ -49,5 +49,14 @@ float g_precisions[] = {
     100000.0f
 };
 
+const char *getUnitStr(ValueType valueType) {
+    int index = valueType - VALUE_TYPE_FLOAT;
+    if (index >= 0 && index < sizeof(g_valueTypeTraits) / sizeof(ValueTypeTraits)) {
+        return g_valueTypeTraits[index].unitStr; 
+    } else {
+        return "";
+    }
+}
+
 }
 } // namespace eez::psu

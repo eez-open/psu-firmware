@@ -89,9 +89,7 @@ struct ValueTypeTraits {
 extern ValueTypeTraits g_valueTypeTraits[];
 extern float g_precisions[];
 
-inline const char *getUnitStr(ValueType valueType) {
-    return g_valueTypeTraits[valueType - VALUE_TYPE_FLOAT].unitStr; 
-}
+const char *getUnitStr(ValueType valueType);
 
 inline int getNumSignificantDecimalDigits(ValueType valueType) { 
     return g_valueTypeTraits[valueType - VALUE_TYPE_FLOAT].numSignificantDecimalDigits; 
