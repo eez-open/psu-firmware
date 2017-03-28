@@ -57,6 +57,8 @@
     SCPI_COMMAND("DEBUG:ONTime?", scpi_cmd_debugOntimeQ) \
     SCPI_COMMAND("DEBUG:DIR?", scpi_cmd_debugDirQ) \
     SCPI_COMMAND("DEBUG:FILE?", scpi_cmd_debugFileQ) \
+    SCPI_COMMAND("DEBUG:VOLT", scpi_cmd_debugVolt) \
+    SCPI_COMMAND("DEBUG:CURR", scpi_cmd_debugCurr) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:ADC?", scpi_cmd_diagnosticInformationAdcQ) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:CALibration?", scpi_cmd_diagnosticInformationCalibrationQ) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:PROTection?", scpi_cmd_diagnosticInformationProtectionQ) \

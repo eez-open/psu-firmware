@@ -40,12 +40,16 @@ public:
     void set_voltage(float voltage);
     void set_current(float voltage);
 
+    void set_voltage(uint16_t voltage);
+    void set_current(uint16_t current);
+
     bool isTesting() { return m_testing; }
 
 private:
     Channel &channel;
     bool m_testing;
 
+    void set_value(uint8_t buffer, uint16_t value);
     void set_value(uint8_t buffer, float value);
 };
 

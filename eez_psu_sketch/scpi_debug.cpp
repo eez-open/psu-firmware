@@ -134,6 +134,38 @@ scpi_result_t scpi_cmd_debugFileQ(scpi_t *context) {
 #endif
 }
 
+scpi_result_t scpi_cmd_debugVolt(scpi_t *context) {
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    uint32_t value;
+    if (!SCPI_ParamUInt32(context, &value, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel->dac.set_voltage((uint16_t)value);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_debugCurr(scpi_t *context) {
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    uint32_t value;
+    if (!SCPI_ParamUInt32(context, &value, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    channel->dac.set_current((uint16_t)value);
+
+    return SCPI_RES_OK;
+}
+
 }
 }
 } // namespace eez::psu::scpi

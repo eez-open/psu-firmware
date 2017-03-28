@@ -72702,6 +72702,12 @@
           },
           {
             "name": "DEBUG:FILE?"
+          },
+          {
+            "name": "DEBUG:VOLT"
+          },
+          {
+            "name": "DEBUG:CURR"
           }
         ]
       },

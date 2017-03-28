@@ -36,15 +36,13 @@ DigitalAnalogConverter::DigitalAnalogConverter(Channel &channel_) : channel(chan
     g_testResult = psu::TEST_SKIPPED;
 }
 
-void DigitalAnalogConverter::set_value(uint8_t buffer, float value) {
-    uint16_t DAC_value = (uint16_t)util::clamp(round(value), DAC_MIN, DAC_MAX);
-
+void DigitalAnalogConverter::set_value(uint8_t buffer, uint16_t value) {
 #if CONF_DEBUG
     if (buffer == DATA_BUFFER_A) {
-        debug::g_uDac[channel.index - 1].set(DAC_value);
+        debug::g_uDac[channel.index - 1].set(value);
     }
     else {
-        debug::g_iDac[channel.index - 1].set(DAC_value);
+        debug::g_iDac[channel.index - 1].set(value);
     }
 #endif
 
@@ -52,11 +50,15 @@ void DigitalAnalogConverter::set_value(uint8_t buffer, float value) {
     digitalWrite(channel.dac_pin, LOW);
 
     SPI.transfer(buffer);
-    SPI.transfer(DAC_value >> 8); // send first byte
-    SPI.transfer(DAC_value & 0xFF);  // send second byte
+    SPI.transfer(value >> 8); // send first byte
+    SPI.transfer(value & 0xFF);  // send second byte
 
     digitalWrite(channel.dac_pin, HIGH); // Deselect DAC
     SPI_endTransaction();
+}
+
+void DigitalAnalogConverter::set_value(uint8_t buffer, float value) {
+    set_value(buffer, (uint16_t)util::clamp(round(value), DAC_MIN, DAC_MAX));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -165,6 +167,14 @@ void DigitalAnalogConverter::set_voltage(float value) {
 
 void DigitalAnalogConverter::set_current(float value) {
     set_value(DATA_BUFFER_B, util::remap(value, channel.I_MIN, (float)DAC_MIN, channel.getDualRangeMax(), (float)DAC_MAX));
+}
+
+void DigitalAnalogConverter::set_voltage(uint16_t voltage) {
+    set_value(DATA_BUFFER_A, voltage);
+}
+
+void DigitalAnalogConverter::set_current(uint16_t current) {
+    set_value(DATA_BUFFER_B, current);
 }
 
 }
