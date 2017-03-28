@@ -572,7 +572,8 @@ private:
 
     MaxCurrentLimitCause maxCurrentLimitCause;
 
-    int negligibleAdcDiffForVoltage;
+    int negligibleAdcDiffForVoltage2;
+    int negligibleAdcDiffForVoltage3;
     int negligibleAdcDiffForCurrent;
 
     float uHistory[CHANNEL_HISTORY_SIZE];

@@ -284,7 +284,8 @@ Channel::Channel(
     i.max = I_MAX;
     i.def = I_DEF;
 
-    negligibleAdcDiffForVoltage = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (U_MAX - U_MIN)));
+    negligibleAdcDiffForVoltage2 = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (U_MAX - U_MIN))) + 1;
+    negligibleAdcDiffForVoltage3 = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 1000 * (U_MAX - U_MIN))) + 1;
     calculateNegligibleAdcDiffForCurrent();
 
 #ifdef EEZ_PSU_SIMULATOR
@@ -738,8 +739,14 @@ void Channel::adcDataIsReady(int16_t data) {
         debug::g_uMon[index - 1].set(data);
 #endif
 
-        if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage) {
-            u.mon_adc = data;
+        if (util::greaterOrEqual(u.mon_adc, 10.0f, getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+            if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage2) {
+                u.mon_adc = data;
+            }
+        } else {
+            if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage3) {
+                u.mon_adc = data;
+            }
         }
 
 #ifdef EEZ_PSU_SIMULATOR
@@ -1653,7 +1660,11 @@ float Channel::getDualRangeMax() {
 }
 
 void Channel::calculateNegligibleAdcDiffForCurrent() {
-    negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (getDualRangeMax() - I_MIN)));
+    if (flags.currentRange == 1) {
+        negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 10000 * (I_MAX/10 - I_MIN))) + 1;
+    } else {
+        negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 1000 * (I_MAX - I_MIN))) + 1;
+    }
 }
 
 void Channel::setCurrentRange(uint8_t currentRange) {

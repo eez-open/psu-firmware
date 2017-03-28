@@ -116,7 +116,7 @@ bool Value::checkRange(float dac, float data, float adc) {
     } else {
         range = g_channel->I_CAL_VAL_MAX - g_channel->I_CAL_VAL_MIN;
         if (currentRange == 1) {
-            range /= 2;
+            range /= 5;
         }
     }
 
@@ -168,6 +168,7 @@ void Value::setData(float dac, float data, float adc) {
                 DebugTraceF("Current range: %lf - %lfA", minPossible, maxPossible);
             }
         }
+        DebugTraceF("ADC=%f", min_adc);
     }
 }
 
