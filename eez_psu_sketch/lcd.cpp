@@ -487,7 +487,6 @@ void updateBrightness() {
 	    lcd.setContrast(64); // no effect on TFT_320QVT_9341
 
         int value = (int)round(util::remapQuad(persist_conf::devConf2.displayBrightness, 1, 196, 20, 106));
-        DebugTraceF("%d", value);
         analogWrite(LCD_BRIGHTNESS, value);
     } else {
         lcd.setContrast(0); // no effect on TFT_320QVT_9341
