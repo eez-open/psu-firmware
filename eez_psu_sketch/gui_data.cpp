@@ -159,7 +159,7 @@ Value Value::GreaterThenMaxMessage(float float_, ValueType type) {
 
 bool Value::isMilli() const {
     if (type_ == VALUE_TYPE_FLOAT_VOLT || type_ == VALUE_TYPE_FLOAT_AMPER || type_ == VALUE_TYPE_FLOAT_WATT || type_ == VALUE_TYPE_FLOAT_SECOND) {
-        int n = format_ > 3 ? 3 : format_;
+        int n = format_ & 0x0f;
         float precision = getPrecisionFromNumSignificantDecimalDigits(n);
         return util::greater(float_, -1.0f, precision) && util::less(float_, 1.0f, precision) && !util::equal(float_, 0, precision);
     }

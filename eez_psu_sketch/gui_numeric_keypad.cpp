@@ -343,6 +343,11 @@ void NumericKeypad::dot() {
         m_state = BEFORE_DOT;
     }
 
+    if (m_state == START || m_state == EMPTY) {
+        appendChar('0');
+        m_state = BEFORE_DOT;
+    }
+    
     if (m_state == BEFORE_DOT) {
         appendChar(getDotSign());
         m_state = AFTER_DOT;
