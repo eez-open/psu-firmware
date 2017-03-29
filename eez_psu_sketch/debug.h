@@ -73,14 +73,14 @@ class DebugValueVariable : public DebugVariable {
 public:
     DebugValueVariable(const char *name);
    
-    void set(uint32_t value) { m_value = value; }
+    void set(int32_t value) { m_value = value; }
     
     void tick1secPeriod();
     void tick10secPeriod();
     void dump(char *buffer);
 
 private:
-    uint32_t m_value;
+    int32_t m_value;
 };
 
 class DebugDurationForPeriod {
