@@ -65,7 +65,7 @@ static int *point_y;
 static int last_cross_x;
 static int last_cross_y;
 
-void draw_cross(int x, int y, word color) {
+void draw_cross(int x, int y, uint16_t color) {
     last_cross_x = x;
     last_cross_y = y;
 
@@ -75,21 +75,20 @@ void draw_cross(int x, int y, word color) {
     lcd::lcd.drawHLine(x, y + RECT_SIZE / 2, RECT_SIZE - 1);
     lcd::lcd.drawHLine(x, y + RECT_SIZE / 2 + 1, RECT_SIZE - 1);
 
-    lcd::lcd.setColor(VGA_BLACK);
+    lcd::lcd.setColor(COLOR_BLACK);
     lcd::lcd.fillRect(
         x + RECT_SIZE / 2 - 2, y + RECT_SIZE / 2 - 2,
         x + RECT_SIZE / 2 + 3, y + RECT_SIZE / 2 + 3);
 }
 
 void draw_point(int x, int y) {
-    if (x == lcd::lcd.getDisplayXSize() - 1) x -= RECT_SIZE;
-    if (y == lcd::lcd.getDisplayYSize() - 1) y -= RECT_SIZE;
+    if (x == lcd::lcd.getDisplayWidth() - 1) x -= RECT_SIZE;
+    if (y == lcd::lcd.getDisplayHeight() - 1) y -= RECT_SIZE;
     
-    lcd::lcd.setColor(VGA_BLACK);
-    lcd::lcd.clrScr();
-    lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
+    lcd::lcd.setColor(COLOR_BLACK);
+    lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayWidth() - 1, lcd::lcd.getDisplayHeight() - 1);
     
-    draw_cross(x, y, VGA_WHITE);
+    draw_cross(x, y, COLOR_WHITE);
 }
 
 bool read_point() {
@@ -97,7 +96,7 @@ bool read_point() {
         DebugTraceF("Calibration point: %d, %d", touch::x, touch::y);
 
     if (touch::event_type == touch::TOUCH_DOWN) {
-        draw_cross(last_cross_x, last_cross_y, VGA_GREEN);
+        draw_cross(last_cross_x, last_cross_y, COLOR_GREEN);
     } else if (touch::event_type == touch::TOUCH_UP) {
         *point_x = touch::x;
         *point_y = touch::y;
@@ -119,7 +118,7 @@ void init() {
             persist_conf::devConf.touch_screen_cal_trx,
             persist_conf::devConf.touch_screen_cal_try, 
             CONF_GUI_TOUCH_SCREEN_CALIBRATION_M,
-            lcd::lcd.getDisplayXSize(), lcd::lcd.getDisplayYSize()
+            lcd::lcd.getDisplayWidth(), lcd::lcd.getDisplayHeight()
         );
     } else {
         success = false;
@@ -201,21 +200,21 @@ void tick(uint32_t tick_usec) {
         if (read_point()) {
             point_x = &point_brx;
             point_y = &point_bry;
-            draw_point(lcd::lcd.getDisplayXSize() - 1, lcd::lcd.getDisplayYSize() - 1);
+            draw_point(lcd::lcd.getDisplayWidth() - 1, lcd::lcd.getDisplayHeight() - 1);
             mode = MODE_POINT_BR;
         }
     } else if (mode == MODE_POINT_BR) {
         if (read_point()) {
             point_x = &point_trx;
             point_y = &point_try;
-            draw_point(lcd::lcd.getDisplayXSize() - 1, 0);
+            draw_point(lcd::lcd.getDisplayWidth() - 1, 0);
             mode = MODE_POINT_TR;
         }
     } else if (mode == MODE_POINT_TR) {
         if (read_point()) {
             bool success = touch::calibrateTransform(
                 point_tlx, point_tly,  point_brx, point_bry,  point_trx, point_try,
-                CONF_GUI_TOUCH_SCREEN_CALIBRATION_M, lcd::lcd.getDisplayXSize(), lcd::lcd.getDisplayYSize());
+                CONF_GUI_TOUCH_SCREEN_CALIBRATION_M, lcd::lcd.getDisplayWidth(), lcd::lcd.getDisplayHeight());
             if (success) {
 				mode = MODE_FINISHED;
                 yesNoDialog(g_yesNoPageId, PSTR("Save changes?"), dialogYes, dialogNo, dialogCancel);

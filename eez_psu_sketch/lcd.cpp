@@ -3,7 +3,6 @@
  * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
 
@@ -17,12 +16,29 @@
  */
 
 #include "psu.h"
-#include "util.h"
 
 #if OPTION_DISPLAY
 
+#include "util.h"
 #include "lcd.h"
 #include "arduino_util.h"
+
+#ifdef EEZ_PSU_SIMULATOR
+#define cbi(reg, bitmask)
+#define sbi(reg, bitmask)
+#define pulse_high(reg, bitmask)
+#define pulse_low(reg, bitmask)
+#else
+#define cbi(reg, bitmask) *reg &= ~bitmask
+#define sbi(reg, bitmask) *reg |= bitmask
+#define pulse_high(reg, bitmask) sbi(reg, bitmask); cbi(reg, bitmask);
+#define pulse_low(reg, bitmask) cbi(reg, bitmask); sbi(reg, bitmask);
+#endif
+
+#define swap(type, i, j) {type t = i; i = j; j = t;}
+
+#define DISPLAY_MODEL_SSD1289    0
+#define DISPLAY_MODEL_ILI9341_16 1
 
 namespace eez {
 namespace psu {
@@ -31,19 +47,560 @@ namespace lcd {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#define TFT_320QVT_1289 ITDB32S
-#define TFT_320QVT_9341 CTE32_R2
+#define TFT_320QVT_1289 DISPLAY_MODEL_SSD1289
+#define TFT_320QVT_9341 DISPLAY_MODEL_ILI9341_16
 
-EEZ_UTFT lcd(DISPLAY_TYPE, LCD_RS, LCD_WR, LCD_CS, LCD_RESET);
+LCD lcd(DISPLAY_TYPE, LCD_RS, LCD_WR, LCD_CS, LCD_RESET);
 
 ////////////////////////////////////////////////////////////////////////////////
 
-EEZ_UTFT::EEZ_UTFT(byte model, int RS, int WR, int CS, int RST, int SER)
-	: UTFT(model, RS, WR, CS, RST, SER)
-{
+LCD::LCD(uint8_t model, uint8_t RS, uint8_t WR, uint8_t CS, uint8_t RST, uint8_t SER) {
+    displayWidth = 240;
+    displayHeight = 320;
+
+#ifdef EEZ_PSU_SIMULATOR
+    buffer = new uint16_t[displayWidth * displayHeight];
+#else
+    display_model = model;
+
+    this->RS = RS;
+    this->WR = WR;
+    this->CS = CS;
+    this->RST = RST;
+    this->SER = SER;
+
+    setDirectionRegisters();
+
+    P_RS = portOutputRegister(digitalPinToPort(RS));
+    P_WR = portOutputRegister(digitalPinToPort(WR));
+    P_CS = portOutputRegister(digitalPinToPort(CS));
+    P_RST = portOutputRegister(digitalPinToPort(RST));
+
+    B_RS = digitalPinToBitMask(RS);
+    B_WR = digitalPinToBitMask(WR);
+    B_CS = digitalPinToBitMask(CS);
+    B_RST = digitalPinToBitMask(RST);
+#endif
 }
 
-int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int clip_y2, uint8_t encoding, bool fill_background) {
+LCD::~LCD() {
+#ifdef EEZ_PSU_SIMULATOR
+    delete [] buffer;
+#endif
+}
+
+#if !defined(EEZ_PSU_SIMULATOR)
+void LCD::write(char VH, char VL) {
+    REG_PIOA_CODR = 0x0000C080;
+    REG_PIOC_CODR = 0x0000003E;
+    REG_PIOD_CODR = 0x0000064F;
+    REG_PIOA_SODR = ((VH & 0x06) << 13) | ((VL & 0x40) << 1);
+    (VH & 0x01) ? REG_PIOB_SODR = 0x4000000 : REG_PIOB_CODR = 0x4000000;
+    REG_PIOC_SODR = ((VL & 0x01) << 5) | ((VL & 0x02) << 3) | ((VL & 0x04) << 1) | ((VL & 0x08) >> 1) | ((VL & 0x10) >> 3);
+    REG_PIOD_SODR = ((VH & 0x78) >> 3) | ((VH & 0x80) >> 1) | ((VL & 0x20) << 5) | ((VL & 0x80) << 2);
+    pulse_low(P_WR, B_WR);
+}
+
+void LCD::writeCom(char VL) {
+    cbi(P_RS, B_RS);
+    write(0x00, VL);
+}
+
+void LCD::writeData(char VH, char VL) {
+    sbi(P_RS, B_RS);
+    write(VH, VL);
+}
+
+void LCD::writeData(char VL) {
+    sbi(P_RS, B_RS);
+    write(0x00, VL);
+}
+
+void LCD::writeComData(char com1, int dat1) {
+    writeCom(com1);
+    writeData(dat1 >> 8, dat1);
+}
+
+void LCD::setDirectionRegisters() {
+    REG_PIOA_OER = 0x0000c000; //PA14,PA15 enable
+    REG_PIOB_OER = 0x04000000; //PB26 enable
+    REG_PIOD_OER = 0x0000064f; //PD0-3,PD6,PD9-10 enable
+    REG_PIOA_OER = 0x00000080; //PA7 enable
+    REG_PIOC_OER = 0x0000003e; //PC1 - PC5 enable
+}
+
+void LCD::fastFill16(int ch, int cl, long numPixels) {
+    long blocks;
+
+    REG_PIOA_CODR = 0x0000C080;
+    REG_PIOC_CODR = 0x0000003E;
+    REG_PIOD_CODR = 0x0000064F;
+    REG_PIOA_SODR = ((ch & 0x06) << 13) | ((cl & 0x40) << 1);
+    (ch & 0x01) ? REG_PIOB_SODR = 0x4000000 : REG_PIOB_CODR = 0x4000000;
+    REG_PIOC_SODR = ((cl & 0x01) << 5) | ((cl & 0x02) << 3) | ((cl & 0x04) << 1) | ((cl & 0x08) >> 1) | ((cl & 0x10) >> 3);
+    REG_PIOD_SODR = ((ch & 0x78) >> 3) | ((ch & 0x80) >> 1) | ((cl & 0x20) << 5) | ((cl & 0x80) << 2);
+
+    blocks = numPixels / 16;
+    for (int i = 0; i < blocks; i++) {
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+        pulse_low(P_WR, B_WR);
+    }
+    if ((numPixels % 16) != 0) {
+        for (int i = 0; i < (numPixels % 16) + 1; i++) {
+            pulse_low(P_WR, B_WR);
+        }
+    }
+}
+#endif
+
+void LCD::init(uint8_t orientation) {
+    this->orientation = orientation;
+
+#if !defined(EEZ_PSU_SIMULATOR)
+    pinMode(RS, OUTPUT);
+    pinMode(WR, OUTPUT);
+    pinMode(CS, OUTPUT);
+    pinMode(RST, OUTPUT);
+    setDirectionRegisters();
+
+    sbi(P_RST, B_RST);
+    delay(5);
+    cbi(P_RST, B_RST);
+    delay(15);
+    sbi(P_RST, B_RST);
+    delay(15);
+
+    cbi(P_CS, B_CS);
+
+    switch (display_model) {
+    case DISPLAY_MODEL_SSD1289:
+        writeComData(0x00, 0x0001);
+        writeComData(0x03, 0xA8A4);
+        writeComData(0x0C, 0x0000);
+        writeComData(0x0D, 0x080C);
+        writeComData(0x0E, 0x2B00);
+        writeComData(0x1E, 0x00B7);
+        writeComData(0x01, 0x2B3F);
+        writeComData(0x02, 0x0600);
+        writeComData(0x10, 0x0000);
+        writeComData(0x11, 0x6070);
+        writeComData(0x05, 0x0000);
+        writeComData(0x06, 0x0000);
+        writeComData(0x16, 0xEF1C);
+        writeComData(0x17, 0x0003);
+        writeComData(0x07, 0x0233);
+        writeComData(0x0B, 0x0000);
+        writeComData(0x0F, 0x0000);
+        writeComData(0x41, 0x0000);
+        writeComData(0x42, 0x0000);
+        writeComData(0x48, 0x0000);
+        writeComData(0x49, 0x013F);
+        writeComData(0x4A, 0x0000);
+        writeComData(0x4B, 0x0000);
+        writeComData(0x44, 0xEF00);
+        writeComData(0x45, 0x0000);
+        writeComData(0x46, 0x013F);
+        writeComData(0x30, 0x0707);
+        writeComData(0x31, 0x0204);
+        writeComData(0x32, 0x0204);
+        writeComData(0x33, 0x0502);
+        writeComData(0x34, 0x0507);
+        writeComData(0x35, 0x0204);
+        writeComData(0x36, 0x0204);
+        writeComData(0x37, 0x0502);
+        writeComData(0x3A, 0x0302);
+        writeComData(0x3B, 0x0302);
+        writeComData(0x23, 0x0000);
+        writeComData(0x24, 0x0000);
+        writeComData(0x25, 0x8000);
+        writeComData(0x4f, 0x0000);
+        writeComData(0x4e, 0x0000);
+        writeCom(0x22);
+        break;
+
+    case DISPLAY_MODEL_ILI9341_16:
+        writeCom(0xcf);
+        writeData(0x00);
+        writeData(0xc1);
+        writeData(0x30);
+
+        writeCom(0xed);
+        writeData(0x64);
+        writeData(0x03);
+        writeData(0x12);
+        writeData(0x81);
+
+        writeCom(0xcb);
+        writeData(0x39);
+        writeData(0x2c);
+        writeData(0x00);
+        writeData(0x34);
+        writeData(0x02);
+
+        writeCom(0xea);
+        writeData(0x00);
+        writeData(0x00);
+
+        writeCom(0xe8);
+        writeData(0x85);
+        writeData(0x10);
+        writeData(0x79);
+
+        writeCom(0xC0); //Power control
+        writeData(0x23); //VRH[5:0]
+
+        writeCom(0xC1); //Power control
+        writeData(0x11); //SAP[2:0];BT[3:0]
+
+        writeCom(0xC2);
+        writeData(0x11);
+
+        writeCom(0xC5); //VCM control
+        writeData(0x3d);
+        writeData(0x30);
+
+        writeCom(0xc7);
+        writeData(0xaa);
+
+        writeCom(0x3A);
+        writeData(0x55);
+
+        writeCom(0x36); // Memory Access Control
+        writeData(0x08);
+
+        writeCom(0xB1); // Frame Rate Control
+        writeData(0x00);
+        writeData(0x11);
+
+        writeCom(0xB6); // Display Function Control
+        writeData(0x0a);
+        writeData(0xa2);
+
+        writeCom(0xF2); // 3Gamma Function Disable
+        writeData(0x00);
+
+        writeCom(0xF7);
+        writeData(0x20);
+
+        writeCom(0xF1);
+        writeData(0x01);
+        writeData(0x30);
+
+        writeCom(0x26); //Gamma curve selected
+        writeData(0x01);
+
+        writeCom(0xE0); //Set Gamma
+        writeData(0x0f);
+        writeData(0x3f);
+        writeData(0x2f);
+        writeData(0x0c);
+        writeData(0x10);
+        writeData(0x0a);
+        writeData(0x53);
+        writeData(0xd5);
+        writeData(0x40);
+        writeData(0x0a);
+        writeData(0x13);
+        writeData(0x03);
+        writeData(0x08);
+        writeData(0x03);
+        writeData(0x00);
+
+        writeCom(0xE1); //Set Gamma
+        writeData(0x00);
+        writeData(0x00);
+        writeData(0x10);
+        writeData(0x03);
+        writeData(0x0f);
+        writeData(0x05);
+        writeData(0x2c);
+        writeData(0xa2);
+        writeData(0x3f);
+        writeData(0x05);
+        writeData(0x0e);
+        writeData(0x0c);
+        writeData(0x37);
+        writeData(0x3c);
+        writeData(0x0F);
+        writeCom(0x11); //Exit Sleep
+        delay(120);
+        writeCom(0x29); //display on
+        delay(50);
+        break;
+    }
+
+    sbi(P_CS, B_CS);
+#endif
+}
+
+void LCD::setXY(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+#ifdef EEZ_PSU_SIMULATOR
+    this->x1 = x1;
+    this->y1 = y1;
+    this->x2 = x2;
+    this->y2 = y2;
+
+    if (orientation == DISPLAY_ORIENTATION_PORTRAIT) {
+        x = x1;
+        y = y1;
+    } else {
+        x = x2;
+        y = y1;
+    }
+#else
+    if (orientation == DISPLAY_ORIENTATION_LANDSCAPE) {
+        swap(uint16_t, x1, y1);
+        swap(uint16_t, x2, y2);
+        y1 = displayHeight - 1 - y1;
+        y2 = displayHeight - 1 - y2;
+        swap(uint16_t, y1, y2)
+    }
+
+    switch (display_model) {
+    case DISPLAY_MODEL_SSD1289:
+        writeComData(0x44, (x2 << 8) + x1);
+        writeComData(0x45, y1);
+        writeComData(0x46, y2);
+        writeComData(0x4e, x1);
+        writeComData(0x4f, y1);
+        writeCom(0x22);
+        break;
+
+    case DISPLAY_MODEL_ILI9341_16:
+        writeCom(0x2A);
+        writeData(x1 >> 8);
+        writeData(x1);
+        writeData(x2 >> 8);
+        writeData(x2);
+        writeCom(0x2B);
+        writeData(y1 >> 8);
+        writeData(y1);
+        writeData(y2 >> 8);
+        writeData(y2);
+        writeCom(0x2c);
+        break;
+    }
+#endif
+}
+
+void LCD::setColor(uint8_t r, uint8_t g, uint8_t b) {
+    fch = ((r & 248) | g >> 5);
+    fcl = ((g & 28) << 3 | b >> 3);
+}
+
+void LCD::setColor(uint16_t color) {
+    fch = uint8_t(color >> 8);
+    fcl = uint8_t(color & 0xFF);
+}
+
+uint16_t LCD::getColor() {
+    return (fch << 8) | fcl;
+}
+
+void LCD::setBackColor(uint8_t r, uint8_t g, uint8_t b) {
+    bch = ((r & 248) | g >> 5);
+    bcl = ((g & 28) << 3 | b >> 3);
+}
+
+void LCD::setBackColor(uint16_t color) {
+    bch = uint8_t(color >> 8);
+    bcl = uint8_t(color & 0xFF);
+}
+
+uint16_t LCD::getBackColor() {
+    return (bch << 8) | bcl;
+}
+
+int LCD::getDisplayWidth() {
+    return orientation == DISPLAY_ORIENTATION_PORTRAIT ? displayWidth : displayHeight;
+}
+
+int LCD::getDisplayHeight() {
+    return orientation == DISPLAY_ORIENTATION_PORTRAIT ? displayHeight : displayWidth;
+}
+
+void LCD::setPixel(uint16_t color) {
+#ifdef EEZ_PSU_SIMULATOR
+    if (orientation == DISPLAY_ORIENTATION_PORTRAIT) {
+        if (x >= 0 && x < displayWidth && y >= 0 && y < displayHeight) {
+            *(buffer + y * displayWidth + x) = color;
+        }
+        if (++x > x2) {
+            x = x1;
+            if (++y > y2) {
+                y = y1;
+            }
+        }
+    } else {
+        if (x >= 0 && x < displayHeight && y >= 0 && y < displayWidth) {
+            *(buffer + y * displayHeight + x) = color;
+        }
+
+        if (--x < x1) {
+            x = x2;
+        }
+    }
+#else
+    writeData((color >> 8), (color & 0xFF));	// rrrrrggggggbbbbb
+#endif
+}
+
+void LCD::drawPixel(int x, int y) {
+    cbi(P_CS, B_CS);
+    setXY(x, y, x, y);
+    setPixel((fch << 8) | fcl);
+    sbi(P_CS, B_CS);
+}
+
+void LCD::drawRect(int x1, int y1, int x2, int y2) {
+    if (x1 > x2) {
+        swap(int, x1, x2);
+    }
+    if (y1 > y2) {
+        swap(int, y1, y2);
+    }
+
+    drawHLine(x1, y1, x2 - x1);
+    drawHLine(x1, y2, x2 - x1);
+    drawVLine(x1, y1, y2 - y1);
+    drawVLine(x2, y1, y2 - y1);
+}
+
+void LCD::fillRect(int x1, int y1, int x2, int y2) {
+#ifdef EEZ_PSU_SIMULATOR
+    if (orientation == DISPLAY_ORIENTATION_PORTRAIT) {
+        setXY(x1, y1, x2, y2);
+        for (int i = 0; i < (x2 - x1 + 1) * (y2 - y1 + 1); ++i) {
+            setPixel((fch << 8) | fcl);
+        }
+    } else {
+        for (int iy = y1; iy <= y2; ++iy) {
+            setXY(x1, iy, x2, iy);
+            for (int ix = x2; ix >= x1; --ix) {
+                setPixel((fch << 8) | fcl);
+            }
+        }
+    }
+#else
+    if (x1 > x2) {
+        swap(int, x1, x2);
+    }
+    if (y1 > y2) {
+        swap(int, y1, y2);
+    }
+    cbi(P_CS, B_CS);
+    setXY(x1, y1, x2, y2);
+    sbi(P_RS, B_RS);
+    fastFill16(fch, fcl, (long(x2 - x1) + 1) * (long(y2 - y1) + 1));
+    sbi(P_CS, B_CS);
+#endif
+}
+
+void LCD::drawHLine(int x, int y, int l) {
+#ifdef EEZ_PSU_SIMULATOR
+    setXY(x, y, x + l, y);
+    for (int i = 0; i < l + 1; ++i) {
+        setPixel((fch << 8) | fcl);
+    }
+#else
+    if (l < 0) {
+        l = -l;
+        x -= l;
+    }
+    cbi(P_CS, B_CS);
+    setXY(x, y, x + l, y);
+    sbi(P_RS, B_RS);
+    fastFill16(fch, fcl, l);
+    sbi(P_CS, B_CS);
+#endif
+}
+
+void LCD::drawVLine(int x, int y, int l) {
+#ifdef EEZ_PSU_SIMULATOR
+    if (orientation == DISPLAY_ORIENTATION_PORTRAIT) {
+        setXY(x, y, x, y + l);
+        for (int i = 0; i < l + 1; ++i) {
+            setPixel((fch << 8) | fcl);
+        }
+    } else {
+        for (int i = 0; i < l +1 ; ++i) {
+            setXY(x, y + i, x, y + i);
+            setPixel((fch << 8) | fcl);
+        }
+    }
+#else
+    if (l < 0) {
+        l = -l;
+        y -= l;
+    }
+    cbi(P_CS, B_CS);
+    setXY(x, y, x, y + l);
+    sbi(P_RS, B_RS);
+    fastFill16(fch, fcl, l);
+    sbi(P_CS, B_CS);
+#endif
+}
+
+void LCD::drawBitmap(int x, int y, int sx, int sy, uint16_t *data) {
+#ifdef EEZ_PSU_SIMULATOR
+    if (orientation == DISPLAY_ORIENTATION_PORTRAIT) {
+        setXY(x, y, x + sx - 1, y + sy - 1);
+        for (int i = 0; i < sx * sy; ++i) {
+            unsigned char l = *(((uint8_t *)data) + 2 * i + 0);
+            unsigned char h = *(((uint8_t *)data) + 2 * i + 1);
+            setPixel((h << 8) + l);
+        }
+    } else {
+        for (int iy = 0; iy < sy; ++iy) {
+            setXY(x, y + iy, x + sx - 1, y + iy);
+            for (int ix = sx - 1; ix >= 0; --ix) {
+                unsigned char l = *(((uint8_t *)data) + 2 * (iy * sx + ix) + 0);
+                unsigned char h = *(((uint8_t *)data) + 2 * (iy * sx + ix) + 1);
+                setPixel((h << 8) + l);
+            }
+        }
+    }
+#else
+    unsigned int col;
+    int tx, ty, tc, tsx, tsy;
+
+    if (orientation == DISPLAY_ORIENTATION_PORTRAIT) {
+        cbi(P_CS, B_CS);
+        setXY(x, y, x + sx - 1, y + sy - 1);
+        for (tc = 0; tc < (sx*sy); tc++) {
+            col = pgm_read_word(&data[tc]);
+            writeData(col >> 8, col & 0xff);
+        }
+        sbi(P_CS, B_CS);
+    } else {
+        cbi(P_CS, B_CS);
+        for (ty = 0; ty < sy; ty++) {
+            setXY(x, y + ty, x + sx - 1, y + ty);
+            for (tx = sx - 1; tx >= 0; tx--) {
+                col = pgm_read_word(&data[(ty*sx) + tx]);
+                writeData(col >> 8, col & 0xff);
+            }
+        }
+        sbi(P_CS, B_CS);
+    }
+#endif
+}
+
+int8_t LCD::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int clip_y2, uint8_t encoding, bool fill_background) {
     psu::criticalTick();
 
 	font::Glyph glyph;
@@ -59,7 +616,7 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
 
     if (fill_background) {
         // clear pixels around glyph
-        word color = getColor();
+        uint16_t color = getColor();
 
         setColor(getBackColor());
 
@@ -125,13 +682,15 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
     }
 
     if (width > 0 && height > 0) {
-	    clear_bit(P_CS, B_CS);
+#if !defined(EEZ_PSU_SIMULATOR)
+        clear_bit(P_CS, B_CS);
+#endif
 
-#if DISPLAY_TYPE == ITDB32S_V2 && !defined(EEZ_PSU_SIMULATOR)
+#if DISPLAY_TYPE == TFT_320QVT_9341 && !defined(EEZ_PSU_SIMULATOR)
 #if DISPLAY_ORIENTATION != DISPLAY_ORIENTATION_LANDSCAPE
 #error "Only LANDSCAPE display orientation is supported on ITDB32S_V2"
 #endif
-        // optimized drawing for ITDB32S_V2
+        // optimized drawing for ILI9341
 
 #define PIXEL_ON { \
     sbi(P_RS, B_RS); \
@@ -270,10 +829,10 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
             }
         }
 #else
-        word fc = (fch << 8) | fcl;
-        word bc = (bch << 8) | bcl;
+        uint16_t fc = (fch << 8) | fcl;
+        uint16_t bc = (bch << 8) | bcl;
 
-	    if (orient == PORTRAIT) {
+	    if (orientation == DISPLAY_ORIENTATION_PORTRAIT) {
             int numPixels = 0;
 
             setXY(x_glyph, y_glyph, x_glyph + width - 1, y_glyph + height - 1);
@@ -394,14 +953,16 @@ int8_t EEZ_UTFT::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2
 		    }
 	    }
 #endif
+
+#if !defined(EEZ_PSU_SIMULATOR)
 	    set_bit(P_CS, B_CS);
-	    clrXY();
+#endif
     }
 
 	return glyph.dx;
 }
 
-void EEZ_UTFT::drawStr(const char *text, int textLength, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background) {
+void LCD::drawStr(const char *text, int textLength, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background) {
 	this->font = font;
 
     if (textLength == -1) {
@@ -417,7 +978,7 @@ void EEZ_UTFT::drawStr(const char *text, int textLength, int x, int y, int clip_
     }
 }
 
-int8_t EEZ_UTFT::measureGlyph(uint8_t encoding) {
+int8_t LCD::measureGlyph(uint8_t encoding) {
     font::Glyph glyph;
 	font.getGlyph(encoding, glyph);
 	if (!glyph.isFound())
@@ -426,7 +987,7 @@ int8_t EEZ_UTFT::measureGlyph(uint8_t encoding) {
 	return glyph.dx;
 }
 
-int EEZ_UTFT::measureStr(const char *text, int textLength, font::Font &font, int max_width) {
+int LCD::measureStr(const char *text, int textLength, font::Font &font, int max_width) {
 	this->font = font;
 
 	int width = 0;
@@ -459,7 +1020,7 @@ int EEZ_UTFT::measureStr(const char *text, int textLength, font::Font &font, int
 static bool g_isOn = false;
 
 void init() {
-	lcd.InitLCD(DISPLAY_ORIENTATION);
+	lcd.init(DISPLAY_ORIENTATION);
     
     // make sure the screen is off on the beginning
     g_isOn = true;
@@ -477,19 +1038,16 @@ void turnOff() {
     if (g_isOn) {
         g_isOn = false;
         updateBrightness();
-        lcd.setColor(VGA_BLACK);
-        lcd.fillRect(0, 0, lcd.getDisplayXSize()-1, lcd.getDisplayYSize()-1);
+        lcd.setColor(COLOR_BLACK);
+        lcd.fillRect(0, 0, lcd.getDisplayWidth()-1, lcd.getDisplayHeight()-1);
     }
 }
 
 void updateBrightness() {
     if (g_isOn) {
-	    lcd.setContrast(64); // no effect on TFT_320QVT_9341
-
         int value = (int)round(util::remapQuad(persist_conf::devConf2.displayBrightness, 1, 196, 20, 106));
         analogWrite(LCD_BRIGHTNESS, value);
     } else {
-        lcd.setContrast(0); // no effect on TFT_320QVT_9341
         analogWrite(LCD_BRIGHTNESS, 255);
     }
 }

@@ -130,17 +130,17 @@ void SelectFromEnumPage::refresh() {
     numItems = i;
 
     width = containerStyle->padding_horizontal + itemWidth + containerStyle->padding_horizontal;
-    if (width > lcd::lcd.getDisplayXSize()) {
-        width = lcd::lcd.getDisplayXSize();
+    if (width > lcd::lcd.getDisplayWidth()) {
+        width = lcd::lcd.getDisplayWidth();
     }
     
     height = containerStyle->padding_vertical + numItems * itemHeight + containerStyle->padding_vertical;
-    if (height > lcd::lcd.getDisplayYSize()) {
-        height = lcd::lcd.getDisplayYSize();
+    if (height > lcd::lcd.getDisplayHeight()) {
+        height = lcd::lcd.getDisplayHeight();
     }
 
-    x = (lcd::lcd.getDisplayXSize() - width) / 2;
-    y = (lcd::lcd.getDisplayYSize() - height) / 2;
+    x = (lcd::lcd.getDisplayWidth() - width) / 2;
+    y = (lcd::lcd.getDisplayHeight() - height) / 2;
 
     // draw background
     lcd::lcd.setColor(containerStyle->background_color);

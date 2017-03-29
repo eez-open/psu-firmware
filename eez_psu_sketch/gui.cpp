@@ -1086,13 +1086,13 @@ void processEvents() {
         #ifdef CONF_DEBUG
                         int x = g_events[i].x;
                         if (x < 1) x = 1;
-                        else if (x > lcd::lcd.getDisplayXSize() - 2) x = lcd::lcd.getDisplayXSize() - 2;
+                        else if (x > lcd::lcd.getDisplayWidth() - 2) x = lcd::lcd.getDisplayWidth() - 2;
 
                         int y = g_events[i].y;
                         if (y < 1) y = 1;
-                        else if (y > lcd::lcd.getDisplayYSize() - 2) y = lcd::lcd.getDisplayYSize() - 2;
+                        else if (y > lcd::lcd.getDisplayHeight() - 2) y = lcd::lcd.getDisplayHeight() - 2;
 
-                        lcd::lcd.setColor(VGA_WHITE);
+                        lcd::lcd.setColor(COLOR_WHITE);
                         lcd::lcd.fillRect(g_events[i].x - 1, g_events[i].y - 1, g_events[i].x + 1, g_events[i].y + 1);
         #endif
                     } else if (g_foundTouchWidget) {

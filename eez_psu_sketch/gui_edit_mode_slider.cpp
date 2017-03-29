@@ -47,7 +47,7 @@ int touchX() {
 }
 
 int displayXSize() {
-	return scale_is_vertical ? lcd::lcd.getDisplayXSize() : lcd::lcd.getDisplayYSize();
+	return scale_is_vertical ? lcd::lcd.getDisplayWidth() : lcd::lcd.getDisplayHeight();
 }
 
 void increment(int counter) {

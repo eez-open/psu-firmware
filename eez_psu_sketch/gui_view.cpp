@@ -333,7 +333,7 @@ void drawBitmap(uint8_t bitmapIndex, int x, int y, int w, int h, const Style *st
         lcd::lcd.setBackColor(style->background_color);
         lcd::lcd.setColor(style->color);
     }
-    lcd::lcd.drawBitmap(x_offset, y_offset, width, height, (bitmapdatatype)bitmap.pixels, 1);
+    lcd::lcd.drawBitmap(x_offset, y_offset, width, height, (uint16_t*)bitmap.pixels);
 }
 
 void drawRectangle(int x, int y, int w, int h, const Style *style, bool inverse) {

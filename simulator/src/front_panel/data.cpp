@@ -119,17 +119,17 @@ void fillChannelData(ChannelData *data, int ch) {
 
 void fillLocalControlBuffer(Data *data) {
     if (!data->local_control_widget.pixels) {
-        data->local_control_widget.pixels_w = gui::lcd::lcd.getDisplayXSize();
-        data->local_control_widget.pixels_h = gui::lcd::lcd.getDisplayYSize();
+        data->local_control_widget.pixels_w = gui::lcd::lcd.getDisplayWidth();
+        data->local_control_widget.pixels_h = gui::lcd::lcd.getDisplayHeight();
         data->local_control_widget.pixels = new unsigned char[data->local_control_widget.pixels_w * data->local_control_widget.pixels_h * 4];
     }
 
-    word *src = gui::lcd::lcd.buffer;
+    uint16_t *src = gui::lcd::lcd.buffer;
     unsigned char *dst = data->local_control_widget.pixels;
 
     for (int x = 0; x < data->local_control_widget.pixels_w; ++x) {
         for (int y = 0; y < data->local_control_widget.pixels_h; ++y) {
-            word color = *src++; // rrrrrggggggbbbbb
+            uint16_t color = *src++; // rrrrrggggggbbbbb
 
             *dst++ = (unsigned char)((color << 3) & 0xFF);        // blue
             *dst++ = (unsigned char)(((color >> 5) << 2) & 0xFF); // green

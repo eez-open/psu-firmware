@@ -241,9 +241,6 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\lcd.h">
       <Filter>gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\arduino\UTFT.h">
-      <Filter>simulator\arduino</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\arduino_util.h">
       <Filter>board</Filter>
     </ClInclude>
@@ -570,9 +567,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\lcd.cpp">
       <Filter>gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\arduino\UTFT.cpp">
-      <Filter>simulator\arduino</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\arduino_util.cpp">
       <Filter>board</Filter>
