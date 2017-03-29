@@ -33,7 +33,7 @@ namespace lcd {
 
 class LCD {
 public:
-    LCD(uint8_t model, uint8_t RS, uint8_t WR, uint8_t CS, uint8_t RST, uint8_t SER = 0);
+    LCD(uint8_t model, uint8_t RS, uint8_t WR, uint8_t CS, uint8_t RST);
     ~LCD();
 
 #ifdef EEZ_PSU_SIMULATOR
@@ -77,7 +77,7 @@ private:
 #else
     uint8_t display_model;
 
-    uint8_t RS, WR, CS, RST, SER;
+    uint8_t RS, WR, CS, RST;
     volatile uint32_t *P_RS, *P_WR, *P_CS, *P_RST;
     uint16_t B_RS, B_WR, B_CS, B_RST;
 

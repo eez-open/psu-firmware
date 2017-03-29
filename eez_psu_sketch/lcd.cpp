@@ -54,7 +54,7 @@ LCD lcd(DISPLAY_TYPE, LCD_RS, LCD_WR, LCD_CS, LCD_RESET);
 
 ////////////////////////////////////////////////////////////////////////////////
 
-LCD::LCD(uint8_t model, uint8_t RS, uint8_t WR, uint8_t CS, uint8_t RST, uint8_t SER) {
+LCD::LCD(uint8_t model, uint8_t RS, uint8_t WR, uint8_t CS, uint8_t RST) {
     displayWidth = 240;
     displayHeight = 320;
 
@@ -67,7 +67,6 @@ LCD::LCD(uint8_t model, uint8_t RS, uint8_t WR, uint8_t CS, uint8_t RST, uint8_t
     this->WR = WR;
     this->CS = CS;
     this->RST = RST;
-    this->SER = SER;
 
     setDirectionRegisters();
 
@@ -175,6 +174,7 @@ void LCD::init(uint8_t orientation) {
     pinMode(WR, OUTPUT);
     pinMode(CS, OUTPUT);
     pinMode(RST, OUTPUT);
+
     setDirectionRegisters();
 
     sbi(P_RST, B_RST);
