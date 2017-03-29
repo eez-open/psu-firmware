@@ -1205,6 +1205,9 @@ void Channel::doCalibrationEnable(bool enable) {
 
     u.def = u.min;
     i.def = i.min;
+
+    setVoltage(u.set);
+    setCurrent(i.set);
 }
 
 void Channel::calibrationEnable(bool enable) {
