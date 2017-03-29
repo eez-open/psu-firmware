@@ -133,7 +133,7 @@ void Channel::restoreOE() {
 }
 
 char *Channel::getChannelsInfo(char *p) {
-    bool ch_used[CH_NUM];
+    bool ch_used[CH_MAX];
 
     for (int i = 0; i < CH_NUM; ++i) {
         ch_used[i] = false;
@@ -167,7 +167,7 @@ char *Channel::getChannelsInfo(char *p) {
 }
 
 char *Channel::getChannelsInfoShort(char *p) {
-    bool ch_used[CH_NUM];
+    bool ch_used[CH_MAX];
 
     for (int i = 0; i < CH_NUM; ++i) {
         ch_used[i] = false;

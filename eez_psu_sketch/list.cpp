@@ -47,7 +47,7 @@ static struct {
     int32_t counter;
     int16_t it;
     uint32_t nextPointTime;
-} g_execution[CH_NUM];
+} g_execution[CH_MAX];
 
 static bool g_active;
 

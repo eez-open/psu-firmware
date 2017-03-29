@@ -42,7 +42,7 @@ static State g_state;
 static uint32_t g_triggeredTime;
 static uint8_t g_extTrigLastState;
 
-bool g_triggerInProgress[CH_NUM];
+bool g_triggerInProgress[CH_MAX];
 
 void reset() {
     persist_conf::devConf2.triggerDelay = DELAY_DEFAULT;

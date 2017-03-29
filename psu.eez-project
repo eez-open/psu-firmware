@@ -21608,12 +21608,22 @@
                       "style": "default",
                       "widgets": [
                         {
-                          "type": "Rectangle",
+                          "type": "Container",
                           "x": 0,
                           "y": 0,
                           "width": 64,
                           "height": 112,
-                          "style": "default_inverse"
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "type": "Rectangle",
+                              "x": 0,
+                              "y": 0,
+                              "width": 64,
+                              "height": 92,
+                              "style": "default_inverse"
+                            }
+                          ]
                         },
                         {
                           "type": "Container",
@@ -21802,12 +21812,22 @@
                           ]
                         },
                         {
-                          "type": "Rectangle",
+                          "type": "Container",
                           "x": 0,
                           "y": 0,
                           "width": 64,
                           "height": 112,
-                          "style": "default_inverse"
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "type": "Rectangle",
+                              "x": 0,
+                              "y": 0,
+                              "width": 64,
+                              "height": 92,
+                              "style": "default_inverse"
+                            }
+                          ]
                         }
                       ]
                     }
@@ -22499,12 +22519,22 @@
                       "style": "default",
                       "widgets": [
                         {
-                          "type": "Rectangle",
+                          "type": "Container",
                           "x": 0,
                           "y": 0,
                           "width": 64,
                           "height": 112,
-                          "style": "default_inverse"
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "type": "Rectangle",
+                              "x": 0,
+                              "y": 0,
+                              "width": 64,
+                              "height": 92,
+                              "style": "default_inverse"
+                            }
+                          ]
                         },
                         {
                           "type": "Container",
@@ -22671,12 +22701,22 @@
                           ]
                         },
                         {
-                          "type": "Rectangle",
+                          "type": "Container",
                           "x": 0,
                           "y": 0,
                           "width": 64,
                           "height": 112,
-                          "style": "default_inverse"
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "type": "Rectangle",
+                              "x": 0,
+                              "y": 0,
+                              "width": 64,
+                              "height": 92,
+                              "style": "default_inverse"
+                            }
+                          ]
                         }
                       ]
                     }

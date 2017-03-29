@@ -51,7 +51,7 @@ static struct ChannelSnapshot {
     Value monValue;
     float pMon;
     uint32_t lastSnapshotTime;
-} g_channelSnapshot[CH_NUM];
+} g_channelSnapshot[CH_MAX];
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -665,7 +665,7 @@ Where is:
 <platform> - Mega, Due, Simulator or Unknown
 */
 const char *getModelInfo() {
-    static char model_info[CH_NUM * (sizeof("XX V / XX A") - 1) + (CH_NUM - 1) * (sizeof(" - ") - 1) + 1];
+    static char model_info[CH_NUM * (sizeof("XX V / XX A") - 1) + CH_NUM * (sizeof(" - ") - 1) + 1];
 
     if (*model_info == 0) {
         char *p = Channel::getChannelsInfoShort(model_info);

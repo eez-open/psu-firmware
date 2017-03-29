@@ -1225,7 +1225,7 @@ void drawYTGraphWidget(const WidgetCursor &widgetCursor) {
     int numHistoryValues = data::getNumHistoryValues(widget->data);
     int currentHistoryValuePosition = data::getCurrentHistoryValuePosition(widgetCursor.cursor, widget->data);
 
-    static int lastPosition[CH_NUM];
+    static int lastPosition[CH_MAX];
 
     float min1 = data::getMin(widgetCursor.cursor, widget->data).getFloat();
     float max1 = data::getLimit(widgetCursor.cursor, widget->data).getFloat();
