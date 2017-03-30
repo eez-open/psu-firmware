@@ -294,6 +294,10 @@ bool NumericKeypad::isValueValid() {
 }
 
 bool NumericKeypad::checkNumSignificantDecimalDigits() {
+    if (getActivePageId() != PAGE_ID_EDIT_MODE_KEYPAD) {
+        return true;
+    }
+
     float value = getValue();
     ValueType valueType = getValueUnit();
 
