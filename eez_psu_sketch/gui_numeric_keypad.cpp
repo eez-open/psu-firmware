@@ -290,6 +290,11 @@ bool NumericKeypad::isValueValid() {
         return false;
     }
 
+    return true;
+}
+
+bool NumericKeypad::checkNumSignificantDecimalDigits() {
+    float value = getValue();
     ValueType valueType = getValueUnit();
 
     int numSignificantDecimalDigits = getNumSignificantDecimalDigits(valueType);
@@ -322,7 +327,7 @@ void NumericKeypad::digit(int d) {
     }
     appendChar(d + '0');
 
-    if (!isValueValid()) {
+    if (!checkNumSignificantDecimalDigits()) {
         back();
         sound::playBeep();
     }

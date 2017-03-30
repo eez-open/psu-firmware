@@ -123,6 +123,7 @@ private:
     void toggleEditUnit();
     int getNumDecimalDigits(); 
     bool isValueValid();
+    bool checkNumSignificantDecimalDigits();
     void digit(int d);
     void dot();
     void reset();
