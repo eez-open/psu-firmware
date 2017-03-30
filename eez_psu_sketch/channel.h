@@ -345,7 +345,7 @@ public:
         uint8_t cc_led_pin, uint8_t cv_led_pin,
         float U_MIN, float U_DEF, float U_MAX, float U_MAX_CONF, float U_MIN_STEP, float U_DEF_STEP, float U_MAX_STEP, float U_CAL_VAL_MIN, float U_CAL_VAL_MID, float U_CAL_VAL_MAX, float U_CURR_CAL,
         bool OVP_DEFAULT_STATE, float OVP_MIN_DELAY, float OVP_DEFAULT_DELAY, float OVP_MAX_DELAY,
-        float I_MIN, float I_DEF, float I_MAX, float I_MIN_STEP, float I_DEF_STEP, float I_MAX_STEP, float I_CAL_VAL_MIN, float I_CAL_VAL_MID, float I_CAL_VAL_MAX, float I_VOLT_CAL,
+        float I_MIN, float I_DEF, float I_MAX, float I_MAX_CONF, float I_MIN_STEP, float I_DEF_STEP, float I_MAX_STEP, float I_CAL_VAL_MIN, float I_CAL_VAL_MID, float I_CAL_VAL_MAX, float I_VOLT_CAL,
         bool OCP_DEFAULT_STATE, float OCP_MIN_DELAY, float OCP_DEFAULT_DELAY, float OCP_MAX_DELAY,
         bool OPP_DEFAULT_STATE, float OPP_MIN_DELAY, float OPP_DEFAULT_DELAY, float OPP_MAX_DELAY, float OPP_MIN_LEVEL, float OPP_DEFAULT_LEVEL, float OPP_MAX_LEVEL,
         float SOA_VIN, float SOA_PREG_CURR, float SOA_POSTREG_PTOT, float PTOT);
@@ -566,6 +566,7 @@ private:
     float I_MIN;
     float I_DEF;
     float I_MAX;
+    float I_MAX_CONF;
 
     float uBeforeBalancing;
     float iBeforeBalancing;
