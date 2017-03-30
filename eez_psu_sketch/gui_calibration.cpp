@@ -250,18 +250,14 @@ void onSetOk(float value) {
     }
 }
 
-bool canSave() {
-    int16_t scpiErr;
-    return psu::calibration::canSave(scpiErr);
-}
-
 void onSetRemarkOk(char *remark) {
     psu::calibration::setRemark(remark, strlen(remark));
     popPage();
     if (g_stepNum < MAX_STEP_NUM - 1) {
         nextStep();
     } else {
-        if (canSave()) {
+        int16_t scpiErr;
+        if (psu::calibration::canSave(scpiErr)) {
             nextStep();
         } else {
             showCurrentStep();
@@ -337,8 +333,9 @@ void nextStep() {
     }
 
     if (g_stepNum == MAX_STEP_NUM - 1) {
-        if (!canSave()) {
-            errorMessageP(PSTR("Missing calibration data!"));
+        int16_t scpiErr;
+        if (psu::calibration::canSave(scpiErr)) {
+            errorMessage(data::Cursor(psu::calibration::getCalibrationChannel().index - 1), data::Value::ScpiErrorText(scpiErr));
             return;
         }
     }
