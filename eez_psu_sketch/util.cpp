@@ -62,6 +62,11 @@ void strcatInt(char *str, int value) {
     sprintf(str, "%d", value);
 }
 
+void strcatInt32(char *str, int32_t value) {
+    str = str + strlen(str);
+    sprintf(str, "%ld", (long)value);
+}
+
 void strcatUInt32(char *str, uint32_t value) {
     str = str + strlen(str);
     sprintf(str, "%lu", (unsigned long)value);

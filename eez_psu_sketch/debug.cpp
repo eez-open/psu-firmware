@@ -172,7 +172,7 @@ void DebugValueVariable::tick10secPeriod() {
 }
 
 void DebugValueVariable::dump(char *buffer) {
-    util::strcatUInt32(buffer, m_value);
+    util::strcatInt32(buffer, m_value);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

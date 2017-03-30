@@ -41,6 +41,7 @@ float remapExp(float x, float x1, float y1, float x2, float y2);
 float clamp(float x, float min, float max);
 
 void strcatInt(char *str, int value);
+void strcatInt32(char *str, int32_t value);
 void strcatUInt32(char *str, uint32_t value);
 void strcatFloat(char *str, float value, int numSignificantDecimalDigits);
 void strcatVoltage(char *str, float value, int numSignificantDecimalDigits = -1);
