@@ -217,6 +217,10 @@ bool greaterOrEqual(float a, float b, float prec) {
 	return a > b || equal(a, b, prec);
 }
 
+bool greaterOrEqual(float a, float b, ValueType valueType, int channelIndex) {
+	return a > b || equal(a, b, valueType, channelIndex);
+}
+
 bool less(float a, float b, float prec) {
     return a < b && !equal(a, b, prec);
 }
@@ -229,12 +233,24 @@ bool lessOrEqual(float a, float b, float prec) {
 	return a < b || equal(a, b, prec);
 }
 
+bool lessOrEqual(float a, float b, ValueType valueType, int channelIndex) {
+	return a < b || equal(a, b, valueType, channelIndex);
+}
+
 bool equal(float a, float b, float prec) {
+	return roundf(a * prec) == roundf(b * prec);
+}
+
+    float prec = getPrecision(b, valueType, channelIndex);
 	return roundf(a * prec) == roundf(b * prec);
 }
 
 bool between(float x, float a, float b, float prec) {
     return greaterOrEqual(x, a, prec) && lessOrEqual(x, b, prec);
+}
+
+bool between(float x, float a, float b, ValueType valueType, int channelIndex) {
+    return greaterOrEqual(x, a, valueType, channelIndex) && lessOrEqual(x, b, valueType, channelIndex);
 }
 
 float multiply(float a, float b, float prec) {

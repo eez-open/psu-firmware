@@ -1045,17 +1045,17 @@ Value get(const Cursor &cursor, uint8_t id) {
 
 bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_EDIT) {
-        if (!util::between(value.getFloat(), channel_dispatcher::getUMin(Channel::get(cursor.i)), channel_dispatcher::getUMax(Channel::get(cursor.i)), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+        if (!util::between(value.getFloat(), channel_dispatcher::getUMin(Channel::get(cursor.i)), channel_dispatcher::getUMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT, cursor.i)) {
             if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
             return false;
         }
         
-        if (util::greater(value.getFloat(), channel_dispatcher::getULimit(Channel::get(cursor.i)), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+        if (util::greater(value.getFloat(), channel_dispatcher::getULimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT, cursor.i)) {
             if (error) *error = SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
             return false;
         }
         
-        if (util::greater(value.getFloat() * channel_dispatcher::getISet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
+        if (util::greater(value.getFloat() * channel_dispatcher::getISet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT, cursor.i)) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
@@ -1064,17 +1064,17 @@ bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
 
         return true;
     } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_EDIT) {
-        if (!util::between(value.getFloat(), channel_dispatcher::getIMin(Channel::get(cursor.i)), channel_dispatcher::getIMax(Channel::get(cursor.i)), getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+        if (!util::between(value.getFloat(), channel_dispatcher::getIMin(Channel::get(cursor.i)), channel_dispatcher::getIMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER, cursor.i)) {
             if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
             return false;
         }
         
-        if (util::greater(value.getFloat(), channel_dispatcher::getILimit(Channel::get(cursor.i)), getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+        if (util::greater(value.getFloat(), channel_dispatcher::getILimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER, cursor.i)) {
             if (error) *error = SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
             return false;
         }
         
-        if (util::greater(value.getFloat() * channel_dispatcher::getUSet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+        if (util::greater(value.getFloat() * channel_dispatcher::getUSet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT, cursor.i)) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }

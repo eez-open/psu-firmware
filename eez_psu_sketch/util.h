@@ -63,12 +63,16 @@ float roundPrec(float a, float prec);
 bool greater(float a, float b, float prec);
 bool greater(float a, float b, ValueType valueType, int channelIndex = -1);
 bool greaterOrEqual(float a, float b, float prec);
+bool greaterOrEqual(float a, float b, ValueType valueType, int channelIndex = -1);
 bool less(float a, float b, float prec);
 bool less(float a, float b, ValueType valueType, int channelIndex = -1);
 bool lessOrEqual(float a, float b, float prec);
+bool lessOrEqual(float a, float b, ValueType valueType, int channelIndex = -1);
 bool equal(float a, float b, float prec);
+bool equal(float a, float b, ValueType valueType, int channelIndex = -1);
 
 bool between(float x, float a, float b, float prec);
+bool between(float x, float a, float b, ValueType valueType, int channelIndex = -1);
 
 float multiply(float a, float b, float prec);
 
