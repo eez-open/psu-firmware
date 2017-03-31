@@ -241,6 +241,7 @@ bool equal(float a, float b, float prec) {
 	return roundf(a * prec) == roundf(b * prec);
 }
 
+bool equal(float a, float b, ValueType valueType, int channelIndex) {
     float prec = getPrecision(b, valueType, channelIndex);
 	return roundf(a * prec) == roundf(b * prec);
 }
