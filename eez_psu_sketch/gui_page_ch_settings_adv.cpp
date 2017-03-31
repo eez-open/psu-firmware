@@ -55,12 +55,12 @@ data::Value ChSettingsAdvLRipplePage::getData(const data::Cursor &cursor, uint8_
 	}
 
 	if (id == DATA_ID_CHANNEL_LRIPPLE_MAX_DISSIPATION) {
-		return data::Value(g_channel->SOA_POSTREG_PTOT, VALUE_TYPE_FLOAT_WATT);
+		return data::Value(g_channel->SOA_POSTREG_PTOT, VALUE_TYPE_FLOAT_WATT, g_channel->index-1);
 	}
 
 	if (id == DATA_ID_CHANNEL_LRIPPLE_CALCULATED_DISSIPATION) {
         Channel &channel = Channel::get(g_channel->index - 1);
-		return data::Value(channel_dispatcher::getIMon(channel) * (g_channel->SOA_VIN - channel_dispatcher::getUMon(channel)), VALUE_TYPE_FLOAT_WATT);
+		return data::Value(channel_dispatcher::getIMon(channel) * (g_channel->SOA_VIN - channel_dispatcher::getUMon(channel)), VALUE_TYPE_FLOAT_WATT, g_channel->index-1);
 	}
 
 	if (id == DATA_ID_CHANNEL_LRIPPLE_AUTO_MODE) {

@@ -410,8 +410,10 @@ void toastMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, c
     longAlertMessage(PAGE_ID_TOAST3_ALERT, message1, message2, ok_callback);
 }
 
-void changeLimit(const data::Value& value, float minLimit, float maxLimit, float defLimit, void (*onSetLimit)(float)) {
+void changeLimit(Channel& channel,  const data::Value& value, float minLimit, float maxLimit, float defLimit, void (*onSetLimit)(float)) {
 	NumericKeypadOptions options;
+
+    options.channelIndex = channel.index;
 
 	options.editUnit = value.getType();
 
@@ -438,7 +440,7 @@ void changeVoltageLimit() {
 	float minLimit = channel_dispatcher::getUMin(channel);
 	float maxLimit = channel_dispatcher::getUMax(channel);
 	float defLimit = channel_dispatcher::getUMax(channel);
-    changeLimit(data::Value(channel_dispatcher::getULimit(channel), VALUE_TYPE_FLOAT_VOLT), minLimit, maxLimit, defLimit, onSetVoltageLimit);
+    changeLimit(channel, data::Value(channel_dispatcher::getULimit(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1), minLimit, maxLimit, defLimit, onSetVoltageLimit);
 }
 
 void onSetCurrentLimit(float limit) {
@@ -452,7 +454,7 @@ void changeCurrentLimit() {
 	float minLimit = channel_dispatcher::getIMin(channel);
 	float maxLimit = channel_dispatcher::getIMax(channel);
 	float defLimit = channel_dispatcher::getIMax(channel);
-    changeLimit(data::Value(channel_dispatcher::getILimit(channel), VALUE_TYPE_FLOAT_AMPER), minLimit, maxLimit, defLimit, onSetCurrentLimit);
+    changeLimit(channel, data::Value(channel_dispatcher::getILimit(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1), minLimit, maxLimit, defLimit, onSetCurrentLimit);
 }
 
 void onSetPowerLimit(float limit) {
@@ -466,7 +468,7 @@ void changePowerLimit() {
 	float minLimit = channel_dispatcher::getPowerMinLimit(channel);
 	float maxLimit = channel_dispatcher::getPowerMaxLimit(channel);
 	float defLimit = channel_dispatcher::getPowerDefaultLimit(channel);
-    changeLimit(data::Value(channel_dispatcher::getPowerLimit(channel), VALUE_TYPE_FLOAT_WATT), minLimit, maxLimit, defLimit, onSetPowerLimit);
+    changeLimit(channel, data::Value(channel_dispatcher::getPowerLimit(channel), VALUE_TYPE_FLOAT_WATT, channel.index-1), minLimit, maxLimit, defLimit, onSetPowerLimit);
 }
 
 void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callback)()) {
@@ -824,11 +826,11 @@ void onEncoder(uint32_t tickCount, int counter, bool clicked) {
             }
 
             if (persist_conf::devConf2.flags.encoderConfirmationMode) {
-                g_focusEditValue = data::Value(newValue, value.getType());
+                g_focusEditValue = data::Value(newValue, value.getType(), g_focusCursor.i);
                 g_focusEditValueChangedTime = micros();
             } else {
                 int16_t error;
-                if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType()), &error)) {
+                if (!data::set(g_focusCursor, g_focusDataId, data::Value(newValue, value.getType(), g_focusCursor.i), &error)) {
                     errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
                 }
             }

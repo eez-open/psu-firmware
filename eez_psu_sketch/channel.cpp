@@ -1424,7 +1424,7 @@ void Channel::setVoltage(float value) {
 }
 
 void Channel::doSetCurrent(float value) {
-    if (boardRevision == CH_BOARD_REVISION_R5B12) {
+    if (currentHasDualRange()) {
         if (dac.isTesting()) {
             setCurrentRange(0);
         } else if (!calibration::isEnabled()) {
@@ -1675,7 +1675,7 @@ void Channel::calculateNegligibleAdcDiffForCurrent() {
 }
 
 void Channel::setCurrentRange(uint8_t currentRange) {
-    if (boardRevision == CH_BOARD_REVISION_R5B12) {
+    if (currentHasDualRange()) {
         if (currentRange != flags.currentRange) {
             flags.currentRange = currentRange;
             if (flags.currentRange == 0) {

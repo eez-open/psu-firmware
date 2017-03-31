@@ -346,7 +346,6 @@ void SysSettingsAuxOtpPage::toggleState() {
 	state = state ? 0 : 1;
 }
 
-
 void SysSettingsAuxOtpPage::onLevelSet(float value) {
 	popPage();
 	SysSettingsAuxOtpPage *page = (SysSettingsAuxOtpPage *)getActivePage();

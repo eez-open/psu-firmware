@@ -18,6 +18,8 @@
  
 #include "psu.h"
 
+#include "channel_dispatcher.h"
+
 namespace eez {
 namespace psu {
 namespace util {
@@ -96,7 +98,15 @@ void strcatFloat(char *str, float value, int numSignificantDecimalDigits) {
     */
 }
 
-void strcatVoltage(char *str, float value, int numSignificantDecimalDigits) {
+void strcatFloat(char *str, float value, ValueType valueType, int channelIndex) {
+    int numSignificantDecimalDigits = getNumSignificantDecimalDigits(valueType);
+    if (valueType == VALUE_TYPE_FLOAT_AMPER && channelIndex != -1 && channel_dispatcher::currentHasDualRange(Channel::get(channelIndex)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+        ++numSignificantDecimalDigits;
+    }
+    strcatFloat(str, value, numSignificantDecimalDigits);
+}
+
+void strcatVoltage(char *str, float value, int numSignificantDecimalDigits, int channelIndex) {
     if (numSignificantDecimalDigits == -1) {
         numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT);
     }
@@ -104,7 +114,13 @@ void strcatVoltage(char *str, float value, int numSignificantDecimalDigits) {
     strcat(str, "V");
 }
 
-void strcatCurrent(char *str, float value, int numSignificantDecimalDigits) {
+void strcatCurrent(char *str, float value, int numSignificantDecimalDigits, int channelIndex) {
+    if (numSignificantDecimalDigits == -1) {
+        numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_AMPER);
+    }
+    if (channelIndex != -1 && channel_dispatcher::currentHasDualRange(Channel::get(channelIndex)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+        ++numSignificantDecimalDigits;
+    }
     strcatFloat(str, value, numSignificantDecimalDigits);
     strcat(str, "A");
 }
@@ -193,12 +209,20 @@ bool greater(float a, float b, float prec) {
 	return a > b && !equal(a, b, prec);
 }
 
+bool greater(float a, float b, ValueType valueType, int channelIndex) {
+    return a > b && !equal(a, b, getPrecision(b, valueType, channelIndex));
+}
+
 bool greaterOrEqual(float a, float b, float prec) {
 	return a > b || equal(a, b, prec);
 }
 
 bool less(float a, float b, float prec) {
-	return a < b && !equal(a, b, prec);
+    return a < b && !equal(a, b, prec);
+}
+
+bool less(float a, float b, ValueType valueType, int channelIndex) {
+    return a < b && !equal(a, b, getPrecision(b, valueType, channelIndex));
 }
 
 bool lessOrEqual(float a, float b, float prec) {

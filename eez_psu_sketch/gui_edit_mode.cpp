@@ -84,7 +84,7 @@ void enter(int tabIndex) {
     }
 
     if (g_tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
-        edit_mode_keypad::enter(g_editValue, g_minValue, g_maxValue);
+        edit_mode_keypad::enter(Channel::get(g_focusCursor.i), g_editValue, g_minValue, g_maxValue);
     } else {
         edit_mode_keypad::exit();
     }
@@ -171,7 +171,7 @@ ValueType getUnit() {
 }
 
 bool setValue(float value_) {
-    data::Value value = data::Value(value_, getUnit());
+    data::Value value = data::Value(value_, getUnit(), g_focusCursor.i);
     if (g_isInteractiveMode || g_tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
 		int16_t error;
         if (!data::set(g_focusCursor, g_focusDataId, value, &error)) {

@@ -40,10 +40,12 @@ bool onKeypadOk(float value) {
 	return edit_mode::setValue(value);
 }
 
-void enter(const data::Value& editValue, const data::Value& minValue, data::Value& maxValue) {
+void enter(Channel &channel, const data::Value& editValue, const data::Value& minValue, data::Value& maxValue) {
     g_keypad = new NumericKeypad();
 
 	NumericKeypadOptions options;
+
+    options.channelIndex = channel.index - 1;
 
 	options.editUnit = editValue.getType();
 

@@ -34,7 +34,7 @@ scpi_result_t scpi_cmd_measureScalarCurrentDcQ(scpi_t * context) {
     }
 
     char buffer[256] = { 0 };
-    util::strcatFloat(buffer, channel_dispatcher::getIMon(*channel), getNumSignificantDecimalDigitsForCurrent(channel->flags.currentRange));
+    util::strcatFloat(buffer, channel_dispatcher::getIMon(*channel), VALUE_TYPE_FLOAT_AMPER, channel->index-1);
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;

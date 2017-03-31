@@ -95,13 +95,11 @@ inline int getNumSignificantDecimalDigits(ValueType valueType) {
     return g_valueTypeTraits[valueType - VALUE_TYPE_FLOAT].numSignificantDecimalDigits; 
 }
 
-inline int getNumSignificantDecimalDigitsForCurrent(uint8_t currentRange) { 
-    return currentRange == 1 ? CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12 : CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS;
-}
-
 inline float getPrecision(ValueType valueType) { 
     return g_valueTypeTraits[valueType - VALUE_TYPE_FLOAT].precision; 
 }
+
+float getPrecision(float value, ValueType valueType, int channelIndex);
 
 inline float getPrecisionFromNumSignificantDecimalDigits(int numSignificantDecimalDigits) {
     return g_precisions[numSignificantDecimalDigits]; 

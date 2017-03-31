@@ -47,9 +47,9 @@ const Value CONF_GUI_U_STEPS[] = {
 };
 
 const Value CONF_GUI_I_STEPS[] = {
-    Value(0.5f, VALUE_TYPE_FLOAT),
+    Value(0.5f,  VALUE_TYPE_FLOAT),
     Value(0.25f, VALUE_TYPE_FLOAT),
-    Value(0.1f, VALUE_TYPE_FLOAT),
+    Value(0.1f,  VALUE_TYPE_FLOAT),
     Value(0.05f, VALUE_TYPE_FLOAT),
     Value(0.01f, VALUE_TYPE_FLOAT)
 };

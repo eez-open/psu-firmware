@@ -34,22 +34,20 @@ namespace scpi {
 
 static void printCalibrationValue(scpi_t *context, char *buffer, calibration::Value &value) {
     const char *prefix;
-    void(*strcat_value)(char *str, float value, int numSignificantDecimalDigits);
-    int numSignificantDecimalDigits;
+    void(*strcat_value)(char *str, float value, int numSignificantDecimalDigits, int channelIndex);
+    int numSignificantDecimalDigits = 4;
     if (value.voltOrCurr) {
         prefix = PSTR("u");
         strcat_value = util::strcatVoltage;
-        numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT);
     }
     else {
         prefix = PSTR("i");
         strcat_value = util::strcatCurrent;
-        numSignificantDecimalDigits = getNumSignificantDecimalDigitsForCurrent(value.currentRange);
     }
 
-    if (value.min_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_min=")); strcat_value(buffer, value.min_val, numSignificantDecimalDigits); SCPI_ResultText(context, buffer); }
-    if (value.mid_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_mid=")); strcat_value(buffer, value.mid_val, numSignificantDecimalDigits); SCPI_ResultText(context, buffer); }
-    if (value.max_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_max=")); strcat_value(buffer, value.max_val, numSignificantDecimalDigits); SCPI_ResultText(context, buffer); }
+    if (value.min_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_min=")); strcat_value(buffer, value.min_val, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer); }
+    if (value.mid_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_mid=")); strcat_value(buffer, value.mid_val, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer); }
+    if (value.max_set) { strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_max=")); strcat_value(buffer, value.max_val, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer); }
 
     strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_level="));
     switch (value.level) {
@@ -61,19 +59,18 @@ static void printCalibrationValue(scpi_t *context, char *buffer, calibration::Va
     SCPI_ResultText(context, buffer);
 
     if (value.level != calibration::LEVEL_NONE) {
-        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_level_value=")); strcat_value(buffer, value.getLevelValue(), numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
-        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_adc="        )); strcat_value(buffer, value.getAdcValue()  , numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_level_value=")); strcat_value(buffer, value.getLevelValue(), numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
+        strcpy_P(buffer, prefix); strcat_P(buffer, PSTR("_adc="        )); strcat_value(buffer, value.getAdcValue()  , numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
     }
 }
 
 void printCalibrationParameters(scpi_t *context, ValueType valueType, uint8_t currentRange, bool calParamsExists, Channel::CalibrationValueConfiguration &calibrationValue, char *buffer) {
     const char *prefix;
-    void(*strcat_value)(char *str, float value, int precision);
-    int numSignificantDecimalDigits;
+    void(*strcat_value)(char *str, float value, int precision, int channelIndex);
+    int numSignificantDecimalDigits = 4;
     if (valueType == VALUE_TYPE_FLOAT_VOLT) {
         prefix = PSTR("u");
         strcat_value = util::strcatVoltage;
-        numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT);
     }
     else {
         if (currentRange == 0) {
@@ -84,23 +81,22 @@ void printCalibrationParameters(scpi_t *context, ValueType valueType, uint8_t cu
             prefix = PSTR("i");
         }
         strcat_value = util::strcatCurrent;
-        numSignificantDecimalDigits = getNumSignificantDecimalDigitsForCurrent(currentRange);
     }
 
     strcpy(buffer, prefix); strcat_P(buffer, PSTR("_cal_params_exists=")); util::strcatInt(buffer, calParamsExists);SCPI_ResultText(context, buffer);
     
     if (calParamsExists) {
-        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_min_level=")); strcat_value(buffer, calibrationValue.min.dac, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
-        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_min_data=") ); strcat_value(buffer, calibrationValue.min.val, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
-        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_min_adc=")  ); strcat_value(buffer, calibrationValue.min.adc, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
-        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_mid_level=")); strcat_value(buffer, calibrationValue.mid.dac, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
-        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_mid_data=") ); strcat_value(buffer, calibrationValue.mid.val, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
-        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_mid_adc=")  ); strcat_value(buffer, calibrationValue.mid.adc, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
-        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_max_level=")); strcat_value(buffer, calibrationValue.max.dac, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
-        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_max_data=") ); strcat_value(buffer, calibrationValue.max.val, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
-        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_max_adc=")  ); strcat_value(buffer, calibrationValue.max.adc, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
-	    strcpy(buffer, prefix); strcat_P(buffer, PSTR("_min_range=")  ); strcat_value(buffer, calibrationValue.minPossible, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
-	    strcpy(buffer, prefix); strcat_P(buffer, PSTR("_max_range=")  ); strcat_value(buffer, calibrationValue.maxPossible, numSignificantDecimalDigits); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_min_level=")); strcat_value(buffer, calibrationValue.min.dac, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_min_data=") ); strcat_value(buffer, calibrationValue.min.val, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_min_adc=")  ); strcat_value(buffer, calibrationValue.min.adc, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_mid_level=")); strcat_value(buffer, calibrationValue.mid.dac, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_mid_data=") ); strcat_value(buffer, calibrationValue.mid.val, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_mid_adc=")  ); strcat_value(buffer, calibrationValue.mid.adc, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_max_level=")); strcat_value(buffer, calibrationValue.max.dac, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_max_data=") ); strcat_value(buffer, calibrationValue.max.val, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
+        strcpy(buffer, prefix); strcat_P(buffer, PSTR("_max_adc=")  ); strcat_value(buffer, calibrationValue.max.adc, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
+	    strcpy(buffer, prefix); strcat_P(buffer, PSTR("_min_range=")  ); strcat_value(buffer, calibrationValue.minPossible, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
+	    strcpy(buffer, prefix); strcat_P(buffer, PSTR("_max_range=")  ); strcat_value(buffer, calibrationValue.maxPossible, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
     }
 }
 
@@ -125,17 +121,17 @@ scpi_result_t scpi_cmd_diagnosticInformationAdcQ(scpi_t * context) {
     SCPI_ResultText(context, buffer);
 
     strcpy_P(buffer, PSTR("I_SET="));
-    util::strcatCurrent(buffer, channel->i.mon_dac, getNumSignificantDecimalDigitsForCurrent(channel->flags.currentRange));
+    util::strcatCurrent(buffer, channel->i.mon_dac, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_AMPER), channel->index-1);
     SCPI_ResultText(context, buffer);
 
     strcpy_P(buffer, PSTR("I_MON="));
-    util::strcatCurrent(buffer, channel->i.mon, getNumSignificantDecimalDigitsForCurrent(channel->flags.currentRange));
+    util::strcatCurrent(buffer, channel->i.mon, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_AMPER), channel->index-1);
     SCPI_ResultText(context, buffer);
 
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cmd_diagnosticInformationCalibrationQ(scpi_t * context) {
+scpi_result_t scpi_cmd_diagnosticInformationCalibrationQ(scpi_t *context) {
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -156,7 +152,7 @@ scpi_result_t scpi_cmd_diagnosticInformationCalibrationQ(scpi_t * context) {
         SCPI_ResultText(context, buffer);
 
         printCalibrationParameters(context, VALUE_TYPE_FLOAT_VOLT, -1, channel->cal_conf.flags.u_cal_params_exists, channel->cal_conf.u, buffer);
-        if (channel->boardRevision == CH_BOARD_REVISION_R5B12) {
+        if (channel->currentHasDualRange()) {
             printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, 0, channel->cal_conf.flags.i_cal_params_exists_range0, channel->cal_conf.i[0], buffer);
             printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, 1, channel->cal_conf.flags.i_cal_params_exists_range1, channel->cal_conf.i[1], buffer);
         } else {

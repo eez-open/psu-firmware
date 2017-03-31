@@ -44,8 +44,9 @@ void strcatInt(char *str, int value);
 void strcatInt32(char *str, int32_t value);
 void strcatUInt32(char *str, uint32_t value);
 void strcatFloat(char *str, float value, int numSignificantDecimalDigits);
-void strcatVoltage(char *str, float value, int numSignificantDecimalDigits = -1);
-void strcatCurrent(char *str, float value, int numSignificantDecimalDigits);
+void strcatFloat(char *str, float value, ValueType valueType, int channelIndex = -1);
+void strcatVoltage(char *str, float value, int numSignificantDecimalDigits = -1, int channelIndex = -1);
+void strcatCurrent(char *str, float value, int numSignificantDecimalDigits = -1, int channelIndex = -1);
 void strcatPower(char *str, float value);
 void strcatDuration(char *str, float value);
 void strcatLoad(char *str, float value);
@@ -60,8 +61,10 @@ float ceilPrec(float a, float prec);
 float roundPrec(float a, float prec);
 
 bool greater(float a, float b, float prec);
+bool greater(float a, float b, ValueType valueType, int channelIndex = -1);
 bool greaterOrEqual(float a, float b, float prec);
 bool less(float a, float b, float prec);
+bool less(float a, float b, ValueType valueType, int channelIndex = -1);
 bool lessOrEqual(float a, float b, float prec);
 bool equal(float a, float b, float prec);
 

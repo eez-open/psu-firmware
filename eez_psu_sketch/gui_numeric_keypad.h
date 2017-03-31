@@ -28,6 +28,8 @@ namespace gui {
 struct NumericKeypadOptions {
     NumericKeypadOptions();
 
+    int channelIndex;
+
 	ValueType editUnit;
     int numSignificantDecimalDigits;
 

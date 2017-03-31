@@ -151,11 +151,13 @@ void ChSettingsProtectionSetPage::toggleState() {
 void ChSettingsProtectionSetPage::onLimitSet(float value) {
 	popPage();
 	ChSettingsProtectionSetPage *page = (ChSettingsProtectionSetPage *)getActivePage();
-	page->limit = data::Value(value, page->limit.getType());
+	page->limit = data::Value(value, page->limit.getType(), g_channel->index-1);
 }
 
 void ChSettingsProtectionSetPage::editLimit() {
 	NumericKeypadOptions options;
+
+    options.channelIndex = g_channel->index - 1;
 
 	options.editUnit = limit.getType();
 
@@ -174,11 +176,13 @@ void ChSettingsProtectionSetPage::editLimit() {
 void ChSettingsProtectionSetPage::onLevelSet(float value) {
 	popPage();
 	ChSettingsProtectionSetPage *page = (ChSettingsProtectionSetPage *)getActivePage();
-	page->level = data::Value(value, page->level.getType());
+	page->level = data::Value(value, page->level.getType(), g_channel->index-1);
 }
 
 void ChSettingsProtectionSetPage::editLevel() {
 	NumericKeypadOptions options;
+
+    options.channelIndex = g_channel->index - 1;
 
 	options.editUnit = level.getType();
 
@@ -222,12 +226,12 @@ void ChSettingsProtectionSetPage::editDelay() {
 ChSettingsOvpProtectionPage::ChSettingsOvpProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.u_state ? 1 : 0;
 
-	origLimit = limit = data::Value(channel_dispatcher::getULimit(*g_channel), VALUE_TYPE_FLOAT_VOLT);
+	origLimit = limit = data::Value(channel_dispatcher::getULimit(*g_channel), VALUE_TYPE_FLOAT_VOLT, g_channel->index-1);
 	minLimit = channel_dispatcher::getUMin(*g_channel);
 	maxLimit = channel_dispatcher::getUMax(*g_channel);
 	defLimit = channel_dispatcher::getUMax(*g_channel);
 
-	origLevel = level = data::Value(channel_dispatcher::getUProtectionLevel(*g_channel), VALUE_TYPE_FLOAT_VOLT);
+	origLevel = level = data::Value(channel_dispatcher::getUProtectionLevel(*g_channel), VALUE_TYPE_FLOAT_VOLT, g_channel->index-1);
 	minLevel = channel_dispatcher::getUSet(*g_channel);
 	maxLevel = channel_dispatcher::getUMax(*g_channel);
 	defLevel = channel_dispatcher::getUMax(*g_channel);
@@ -261,7 +265,7 @@ void ChSettingsOvpProtectionPage::setParams(bool checkLoad) {
 ChSettingsOcpProtectionPage::ChSettingsOcpProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.i_state ? 1 : 0;
 
-	origLimit = limit = data::Value(channel_dispatcher::getILimit(*g_channel), VALUE_TYPE_FLOAT_AMPER);
+	origLimit = limit = data::Value(channel_dispatcher::getILimit(*g_channel), VALUE_TYPE_FLOAT_AMPER, g_channel->index-1);
 	minLimit = channel_dispatcher::getIMin(*g_channel);
 	maxLimit = channel_dispatcher::getIMaxLimit(*g_channel);
 	defLimit = maxLimit;
@@ -293,12 +297,12 @@ void ChSettingsOcpProtectionPage::setParams(bool checkLoad) {
 ChSettingsOppProtectionPage::ChSettingsOppProtectionPage() {
 	origState = state = g_channel->prot_conf.flags.p_state ? 1 : 0;
 
-	origLimit = limit = data::Value(channel_dispatcher::getPowerLimit(*g_channel), VALUE_TYPE_FLOAT_WATT);
+	origLimit = limit = data::Value(channel_dispatcher::getPowerLimit(*g_channel), VALUE_TYPE_FLOAT_WATT, g_channel->index-1);
 	minLimit = channel_dispatcher::getPowerMinLimit(*g_channel);
 	maxLimit = channel_dispatcher::getPowerMaxLimit(*g_channel);
 	defLimit = channel_dispatcher::getPowerDefaultLimit(*g_channel);
 
-	origLevel = level = data::Value(channel_dispatcher::getPowerProtectionLevel(*g_channel), VALUE_TYPE_FLOAT_WATT);
+	origLevel = level = data::Value(channel_dispatcher::getPowerProtectionLevel(*g_channel), VALUE_TYPE_FLOAT_WATT, g_channel->index-1);
 	minLevel = channel_dispatcher::getOppMinLevel(*g_channel);
 	maxLevel = channel_dispatcher::getOppMaxLevel(*g_channel);
 	defLevel = channel_dispatcher::getOppDefaultLevel(*g_channel);

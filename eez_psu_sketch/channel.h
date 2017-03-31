@@ -547,8 +547,8 @@ public:
     TriggerMode getCurrentTriggerMode();
     void setCurrentTriggerMode(TriggerMode mode);
 
+    bool currentHasDualRange() { return boardRevision == CH_BOARD_REVISION_R5B12; }
     float getDualRangeMax();
-
     void setCurrentRange(uint8_t currentRange);
 
 private:

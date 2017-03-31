@@ -18,6 +18,7 @@
 
 #include "psu.h"
 #include "channel.h"
+#include "channel_dispatcher.h"
 #include "value.h"
 
 namespace eez {
@@ -48,6 +49,28 @@ float g_precisions[] = {
     10000.0f,
     100000.0f
 };
+
+float getPrecision(float value, ValueType valueType, int channelIndex) {
+    int numSignificantDecimalDigits = getNumSignificantDecimalDigits(valueType);
+
+    if (util::greater(value, 99.99f, getPrecisionFromNumSignificantDecimalDigits(2))) {
+        if (numSignificantDecimalDigits > 1) {
+            numSignificantDecimalDigits = 1;
+        }
+    } else if (util::greater(value, 9.999f, getPrecisionFromNumSignificantDecimalDigits(2))) {
+        if (numSignificantDecimalDigits > 2) {
+            numSignificantDecimalDigits = 2;
+        }
+    } else {
+        if (valueType == VALUE_TYPE_FLOAT_AMPER) {
+            if (channelIndex != -1 && channel_dispatcher::currentHasDualRange(Channel::get(channelIndex)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+                ++numSignificantDecimalDigits;
+            }
+        }
+    }
+
+    return getPrecisionFromNumSignificantDecimalDigits(numSignificantDecimalDigits);
+}
 
 const char *getUnitStr(ValueType valueType) {
     int index = valueType - VALUE_TYPE_FLOAT;

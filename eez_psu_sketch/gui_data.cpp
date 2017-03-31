@@ -92,19 +92,26 @@ static const data::EnumItem *enumDefinitions[] = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Value::Value(float value, ValueType type, int numSignificantDecimalDigits) 
+Value::Value(float value, ValueType type)
     : type_(type), float_(value)
 {
-    if (numSignificantDecimalDigits == -1) {
-        numSignificantDecimalDigits = getNumSignificantDecimalDigits(type);
-    }
-    format_ = (uint8_t)numSignificantDecimalDigits;
+    options_ = 0;
 }
 
-Value::Value(float value, ValueType type, bool forceNumSignificantDecimalDigits, int numSignificantDecimalDigits) 
+
+Value::Value(float value, ValueType type, int channelIndex) 
     : type_(type), float_(value)
 {
-    format_ = 0x10 | (uint8_t)numSignificantDecimalDigits;
+    options_ = channelIndex;
+}
+
+Value::Value(float value, ValueType type, int channelIndex, bool extendedPrecision) 
+    : type_(type), float_(value)
+{
+    options_ = channelIndex;
+    if (extendedPrecision) {
+        options_ |= VALUE_OPTIONS_EXTENDED_PRECISION;
+    }
 }
 
 Value Value::ProgmemStr(const char *pstr PROGMEM) {
@@ -159,8 +166,11 @@ Value Value::GreaterThenMaxMessage(float float_, ValueType type) {
 
 bool Value::isMilli() const {
     if (type_ == VALUE_TYPE_FLOAT_VOLT || type_ == VALUE_TYPE_FLOAT_AMPER || type_ == VALUE_TYPE_FLOAT_WATT || type_ == VALUE_TYPE_FLOAT_SECOND) {
-        int n = format_ & 0x0f;
-        float precision = getPrecisionFromNumSignificantDecimalDigits(n);
+        int numSignificantDecimalDigits = getNumSignificantDecimalDigits((ValueType)type_);
+        if (options_ & VALUE_OPTIONS_EXTENDED_PRECISION) {
+            ++numSignificantDecimalDigits;
+        }
+        float precision = getPrecisionFromNumSignificantDecimalDigits(numSignificantDecimalDigits);
         return util::greater(float_, -1.0f, precision) && util::less(float_, 1.0f, precision) && !util::equal(float_, 0, precision);
     }
     return false;
@@ -169,8 +179,14 @@ bool Value::isMilli() const {
 void Value::formatFloatValue(float &value, ValueType &valueType, int &numSignificantDecimalDigits) const {
     value = float_;
     valueType = (ValueType)type_;
-    numSignificantDecimalDigits = format_ & 0x0f;
-    bool forceNumSignificantDecimalDigits = format_ & 0x10 ? true : false;
+    numSignificantDecimalDigits = getNumSignificantDecimalDigits((ValueType)type_);
+
+    bool forceNumSignificantDecimalDigits = false;
+
+    if (options_ & VALUE_OPTIONS_EXTENDED_PRECISION) {
+        ++numSignificantDecimalDigits;
+        forceNumSignificantDecimalDigits = true;
+    }
 
     if (isMilli()) {
         if (valueType == VALUE_TYPE_FLOAT_VOLT) {
@@ -181,7 +197,7 @@ void Value::formatFloatValue(float &value, ValueType &valueType, int &numSignifi
         } else if (valueType == VALUE_TYPE_FLOAT_AMPER) {
             valueType = VALUE_TYPE_FLOAT_MILLI_AMPER;
             if (!forceNumSignificantDecimalDigits) {
-                if (numSignificantDecimalDigits > 3 && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+                if (channel_dispatcher::currentHasDualRange(Channel::get(options_ & VALUE_OPTIONS_CH_MASK)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
                     numSignificantDecimalDigits = 1;
                 } else {
                     numSignificantDecimalDigits = 0;
@@ -212,11 +228,11 @@ void Value::formatFloatValue(float &value, ValueType &valueType, int &numSignifi
             numSignificantDecimalDigits = 3;
         }
 
-        if (numSignificantDecimalDigits > 2 && util::greater(value, 9.999f, powf(10.0f, 3.0f))) {
+        if (numSignificantDecimalDigits > 2 && util::greater(value, 9.999f, getPrecisionFromNumSignificantDecimalDigits(3))) {
             numSignificantDecimalDigits = 2;
         }
 
-        if (numSignificantDecimalDigits > 1 && util::greater(value, 99.99f, powf(10.0f, 3.0f))) {
+        if (numSignificantDecimalDigits > 1 && util::greater(value, 99.99f, getPrecisionFromNumSignificantDecimalDigits(2))) {
             numSignificantDecimalDigits = 1;
         }
     }
@@ -571,11 +587,11 @@ float *getFloatList(uint8_t id) {
 
 Value getMin(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_EDIT || isUMonData(cursor, id)) {
-        return Value(channel_dispatcher::getUMin(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT);
+        return Value(channel_dispatcher::getUMin(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT, cursor.i);
     } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_EDIT || isIMonData(cursor, id)) {
-        return Value(channel_dispatcher::getIMin(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER);
+        return Value(channel_dispatcher::getIMin(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER, cursor.i);
     } else if (isPMonData(cursor, id)) {
-        return Value(channel_dispatcher::getPowerMinLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT);
+        return Value(channel_dispatcher::getPowerMinLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT, cursor.i);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMin();
     }
@@ -593,11 +609,11 @@ Value getMin(const Cursor &cursor, uint8_t id) {
 
 Value getMax(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_EDIT || isUMonData(cursor, id)) {
-        return Value(channel_dispatcher::getUMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT);
+        return Value(channel_dispatcher::getUMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT, cursor.i);
     } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_EDIT || isIMonData(cursor, id)) {
-        return Value(channel_dispatcher::getIMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER);
+        return Value(channel_dispatcher::getIMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER, cursor.i);
     } else if (isPMonData(cursor, id)) {
-        return Value(channel_dispatcher::getPowerMaxLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT);
+        return Value(channel_dispatcher::getPowerMaxLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT, cursor.i);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMax();
     }
@@ -627,11 +643,11 @@ Value getDef(const Cursor &cursor, uint8_t id) {
 
 Value getLimit(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_EDIT || isUMonData(cursor, id)) {
-        return Value(channel_dispatcher::getULimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT);
+        return Value(channel_dispatcher::getULimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT, cursor.i);
     } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_EDIT || isIMonData(cursor, id)) {
-        return Value(channel_dispatcher::getILimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER);
+        return Value(channel_dispatcher::getILimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER, cursor.i);
     } else if (isPMonData(cursor, id)) {
-        return Value(channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT);
+        return Value(channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT, cursor.i);
     }
 
     return Value();
@@ -729,15 +745,15 @@ Value get(const Cursor &cursor, uint8_t id) {
             float uMon = channel_dispatcher::getUMon(channel);
             float iMon = channel_dispatcher::getIMon(channel);
             if (strcmp(mode_str, "CC") == 0) {
-                channelSnapshot.monValue = Value(uMon, VALUE_TYPE_FLOAT_VOLT);
+                channelSnapshot.monValue = Value(uMon, VALUE_TYPE_FLOAT_VOLT, channel.index-1);
             } else if (strcmp(mode_str, "CV") == 0) {
-                channelSnapshot.monValue = Value(iMon, VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
+                channelSnapshot.monValue = Value(iMon, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
             } else {
                 channelSnapshot.mode = 1;
                 if (uMon < iMon) {
-                    channelSnapshot.monValue = Value(uMon, VALUE_TYPE_FLOAT_VOLT);
+                    channelSnapshot.monValue = Value(uMon, VALUE_TYPE_FLOAT_VOLT, channel.index-1);
                 } else {
-                    channelSnapshot.monValue = Value(iMon, VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
+                    channelSnapshot.monValue = Value(iMon, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
                 }
             }
 
@@ -774,55 +790,55 @@ Value get(const Cursor &cursor, uint8_t id) {
         }
         
         if (id == DATA_ID_CHANNEL_U_SET) {
-            return Value(channel_dispatcher::getUSet(channel), VALUE_TYPE_FLOAT_VOLT);
+            return Value(channel_dispatcher::getUSet(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
         }
         
         if (id == DATA_ID_CHANNEL_U_EDIT) {
             if (g_focusCursor == cursor && g_focusDataId == DATA_ID_CHANNEL_U_EDIT && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
                 return g_focusEditValue;
             } else {
-                return Value(channel_dispatcher::getUSet(channel), VALUE_TYPE_FLOAT_VOLT);
+                return Value(channel_dispatcher::getUSet(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
             }
         }
         
         if (isUMonData(cursor, id)) {
-            return Value(channel_dispatcher::getUMon(channel), VALUE_TYPE_FLOAT_VOLT);
+            return Value(channel_dispatcher::getUMon(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
         }
 
         if (id == DATA_ID_CHANNEL_U_MON_DAC) {
-            return Value(channel_dispatcher::getUMonDac(channel), VALUE_TYPE_FLOAT_VOLT);
+            return Value(channel_dispatcher::getUMonDac(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
         }
 
         if (id == DATA_ID_CHANNEL_U_LIMIT) {
-            return Value(channel_dispatcher::getULimit(channel), VALUE_TYPE_FLOAT_VOLT);
+            return Value(channel_dispatcher::getULimit(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
         }
 
         if (id == DATA_ID_CHANNEL_I_SET) {
-            return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
+            return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
         }
         
         if (id == DATA_ID_CHANNEL_I_EDIT) {
             if (g_focusCursor == cursor && g_focusDataId == DATA_ID_CHANNEL_I_EDIT && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
                 return g_focusEditValue;
             } else {
-                return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
+                return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
             }
         }
 
         if (isIMonData(cursor, id)) {
-            return Value(channel_dispatcher::getIMon(channel), VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
+            return Value(channel_dispatcher::getIMon(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
         }
 
         if (id == DATA_ID_CHANNEL_I_MON_DAC) {
-            return Value(channel_dispatcher::getIMonDac(channel), VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
+            return Value(channel_dispatcher::getIMonDac(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
         }
 
         if (id == DATA_ID_CHANNEL_I_LIMIT) {
-            return Value(channel_dispatcher::getILimit(channel), VALUE_TYPE_FLOAT_VOLT);
+            return Value(channel_dispatcher::getILimit(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
         }
 
         if (isPMonData(cursor, id)) {
-            return Value(channelSnapshot.pMon, VALUE_TYPE_FLOAT_WATT);
+            return Value(channelSnapshot.pMon, VALUE_TYPE_FLOAT_WATT, channel.index-1);
         }
 
         if (id == DATA_ID_LRIP) {
@@ -906,7 +922,7 @@ Value get(const Cursor &cursor, uint8_t id) {
         }
 
         if (id == DATA_ID_CHANNEL_CURRENT_HAS_DUAL_RANGE) {
-            return data::Value(channel.boardRevision == CH_BOARD_REVISION_R5B12 ? 1 : 0);
+            return data::Value(channel.currentHasDualRange() ? 1 : 0);
         }
     }
     
@@ -1099,15 +1115,15 @@ int getCurrentHistoryValuePosition(const Cursor &cursor, uint8_t id) {
 
 Value getHistoryValue(const Cursor &cursor, uint8_t id, int position) {
     if (isUMonData(cursor, id)) {
-        return Value(channel_dispatcher::getUMonHistory(Channel::get(cursor.i), position), VALUE_TYPE_FLOAT_VOLT);
+        return Value(channel_dispatcher::getUMonHistory(Channel::get(cursor.i), position), VALUE_TYPE_FLOAT_VOLT, cursor.i);
     } else if (isIMonData(cursor, id)) {
-        return Value(channel_dispatcher::getIMonHistory(Channel::get(cursor.i), position), VALUE_TYPE_FLOAT_AMPER);
+        return Value(channel_dispatcher::getIMonHistory(Channel::get(cursor.i), position), VALUE_TYPE_FLOAT_AMPER, cursor.i);
     } else if (isPMonData(cursor, id)) {
         float pMon = util::multiply(
             channel_dispatcher::getUMonHistory(Channel::get(cursor.i), position),
             channel_dispatcher::getIMonHistory(Channel::get(cursor.i), position),
             getPrecision(VALUE_TYPE_FLOAT_WATT));
-        return Value(pMon, VALUE_TYPE_FLOAT_WATT);
+        return Value(pMon, VALUE_TYPE_FLOAT_WATT, cursor.i);
     }
     return Value();
 }
@@ -1142,11 +1158,11 @@ Value getEditValue(const Cursor &cursor, uint8_t id) {
     Channel &channel = Channel::get(iChannel);
 
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_EDIT) {
-        return Value(channel_dispatcher::getUSetUnbalanced(channel), VALUE_TYPE_FLOAT_VOLT);
+        return Value(channel_dispatcher::getUSetUnbalanced(channel), VALUE_TYPE_FLOAT_VOLT, iChannel);
     }
         
     if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_EDIT) {
-        return Value(channel_dispatcher::getISetUnbalanced(channel), VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(channel));
+        return Value(channel_dispatcher::getISetUnbalanced(channel), VALUE_TYPE_FLOAT_AMPER, iChannel);
     }
         
     return get(cursor, id);

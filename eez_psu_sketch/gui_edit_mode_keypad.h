@@ -28,7 +28,7 @@ class NumericKeypad;
 
 namespace edit_mode_keypad {
 
-void enter(const data::Value& editValue, const data::Value& minValue, data::Value& maxValue);
+void enter(Channel &channel, const data::Value& editValue, const data::Value& minValue, data::Value& maxValue);
 void exit();
 
 extern NumericKeypad *g_keypad;

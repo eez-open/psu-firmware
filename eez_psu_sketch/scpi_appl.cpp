@@ -106,17 +106,17 @@ scpi_result_t scpi_cmd_applyQ(scpi_t * context) {
         sprintf_P(buffer, PSTR("CH%d:"), channel->index);
         util::strcatVoltage(buffer, channel_dispatcher::getUMax(*channel));
         strcat(buffer, "/");
-        util::strcatCurrent(buffer, channel_dispatcher::getIMax(*channel), getNumSignificantDecimalDigitsForCurrent(0));
+        util::strcatCurrent(buffer, channel_dispatcher::getIMax(*channel), getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_AMPER), channel->index-1);
         strcat(buffer, ", ");
 
         util::strcatFloat(buffer, channel_dispatcher::getUSet(*channel), getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT));
         strcat(buffer, ", ");
-        util::strcatFloat(buffer, channel_dispatcher::getISet(*channel), getNumSignificantDecimalDigitsForCurrent(channel->flags.currentRange));
+        util::strcatFloat(buffer, channel_dispatcher::getISet(*channel), VALUE_TYPE_FLOAT_AMPER, channel->index-1);
     }
     else {
         if (current_or_voltage == 0) {
             // return only current
-            util::strcatFloat(buffer, channel_dispatcher::getISet(*channel), getNumSignificantDecimalDigitsForCurrent(channel->flags.currentRange));
+            util::strcatFloat(buffer, channel_dispatcher::getISet(*channel), VALUE_TYPE_FLOAT_AMPER, channel->index-1);
         }
         else {
             // return only voltage

@@ -238,7 +238,7 @@ void stop() {
 }
 
 bool currentHasDualRange() {
-    return g_channel->boardRevision == CH_BOARD_REVISION_R5B12;
+    return g_channel->currentHasDualRange();
 }
 
 void selectCurrentRange(int8_t range) {

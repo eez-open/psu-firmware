@@ -45,6 +45,14 @@ extern data::EnumItem g_channelTriggerModeEnumDefinition[];
 extern data::EnumItem g_triggerSourceEnumDefinition[];
 extern data::EnumItem g_triggerPolarityEnumDefinition[];
 
+enum ValueOptions {
+    VALUE_OPTIONS_CH1 = 0x00,
+    VALUE_OPTIONS_CH2 = 0x01,
+    VALUE_OPTIONS_CH_MASK = 0x03,
+
+    VALUE_OPTIONS_EXTENDED_PRECISION = 0x04
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 
 inline bool isFloatType(ValueType valueType) { 
@@ -58,8 +66,9 @@ struct Value {
 	Value(uint8_t value, ValueType type) : type_(type), uint8_(value)  {}
 	Value(uint16_t value, ValueType type) : type_(type), uint16_(value)  {}
 	Value(uint32_t value, ValueType type) : type_(type), uint32_(value)  {}
-    Value(float value, ValueType type, int numSignificantDecimalDigits = -1);
-    Value(float value, ValueType type, bool forceNumSignificantDecimalDigits, int numSignificantDecimalDigits);
+    Value(float value, ValueType type);
+    Value(float value, ValueType type, int channelIndex);
+    Value(float value, ValueType type, int channelIndex, bool extendedPrecision);
     Value(const char *str) : type_(VALUE_TYPE_STR), str_(str) {}
 	Value(event_queue::Event *e) : type_(VALUE_TYPE_EVENT), event_(e) {}
     Value(uint8_t value, EnumDefinition enumDefinition) : type_(VALUE_TYPE_ENUM) {
@@ -102,7 +111,7 @@ struct Value {
 
 private:
     uint8_t type_;
-    uint8_t format_;
+    uint8_t options_;
     union {
         int int_;
 		int16_t int16_;

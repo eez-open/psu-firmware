@@ -70,11 +70,11 @@ data::Value UserProfilesPage::getData(const data::Cursor &cursor, uint8_t id) {
 			}
 
 			if (id == DATA_ID_PROFILE_CHANNEL_U_SET) {
-				return data::Value(profile.channels[cursor.i].u_set, VALUE_TYPE_FLOAT_VOLT);
+				return data::Value(profile.channels[cursor.i].u_set, VALUE_TYPE_FLOAT_VOLT, cursor.i);
 			}
 
 			if (id == DATA_ID_PROFILE_CHANNEL_I_SET) {
-				return data::Value(profile.channels[cursor.i].i_set, VALUE_TYPE_FLOAT_AMPER, channel_dispatcher::getNumSignificantDecimalDigitsForCurrent(Channel::get(cursor.i)));
+				return data::Value(profile.channels[cursor.i].i_set, VALUE_TYPE_FLOAT_AMPER, cursor.i);
 			}
 		}
 	} else if (cursor.i >= 0) {

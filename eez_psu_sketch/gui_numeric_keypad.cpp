@@ -39,6 +39,8 @@ namespace gui {
 ////////////////////////////////////////////////////////////////////////////////
 
 NumericKeypadOptions::NumericKeypadOptions() {
+    this->channelIndex = -1;
+
     numSignificantDecimalDigits = -1;
 
     flags.checkWhileTyping = false;
@@ -284,8 +286,8 @@ bool NumericKeypad::isValueValid() {
 
     float value = getValue();
 
-    if (util::less(value, m_options.min, getPrecision(m_startValue.getType())) ||
-        util::greater(value, m_options.max, getPrecision(m_startValue.getType())))
+    if (util::less(value, m_options.min, m_startValue.getType(), m_options.channelIndex) ||
+        util::greater(value, m_options.max, m_startValue.getType(), m_options.channelIndex))
     {
         return false;
     }
@@ -470,9 +472,9 @@ void NumericKeypad::ok() {
     if (m_state != EMPTY) {
         float value = getValue();
 
-        if (util::less(value, m_options.min, getPrecision(m_startValue.getType()))) {
+        if (util::less(value, m_options.min, m_startValue.getType(), m_options.channelIndex)) {
             errorMessage(0, data::Value::LessThenMinMessage(m_options.min, getValueUnit()));
-        } else if (util::greater(value, m_options.max, getPrecision(m_startValue.getType()))) {
+        } else if (util::greater(value, m_options.max, m_startValue.getType(), m_options.channelIndex)) {
             errorMessage(0, data::Value::GreaterThenMaxMessage(m_options.max, getValueUnit()));
         } else {
             ((void (*)(float))m_okCallback)(value);
@@ -527,7 +529,7 @@ bool NumericKeypad::onEncoder(int counter) {
                 newValue = m_options.max;
             }
 
-            m_startValue = data::Value(newValue, m_startValue.getType());
+            m_startValue = data::Value(newValue, m_startValue.getType(), m_options.channelIndex);
 
             return true;
         } else if (m_startValue.getType() == VALUE_TYPE_INT) {
