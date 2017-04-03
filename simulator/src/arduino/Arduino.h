@@ -89,6 +89,7 @@ public:
     int write(const char *buffer, int size);
     int print(const char *data);
     int println(int value);
+    int println(float value);
     int println(const char *data);
     int println(IPAddress ipAddress);
     operator bool() { return true; }

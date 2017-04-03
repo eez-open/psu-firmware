@@ -76805,11 +76805,19 @@
           },
           {
             "$eez": false,
-            "name": "DEBUG:VOLT"
+            "name": "DEBUG:VOLTage"
           },
           {
             "$eez": false,
-            "name": "DEBUG:CURR"
+            "name": "DEBUG:CURRent"
+          },
+          {
+            "$eez": false,
+            "name": "DEBUG:MEASure:VOLTage"
+          },
+          {
+            "$eez": false,
+            "name": "DEBUG:MEASure:CURRent"
           }
         ]
       },

@@ -98,6 +98,10 @@ int SimulatorSerial::println(int value) {
     return printf("%d\n", value);
 }
 
+int SimulatorSerial::println(float value) {
+    return printf("%f\n", value);
+}
+
 int SimulatorSerial::println(const char *data) {
     return printf("%s\n", data);
 }

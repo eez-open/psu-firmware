@@ -381,7 +381,7 @@ public:
     /// Called from IO expander interrupt routine.
     /// @param gpio State of IO expander GPIO register.
     /// @param adc_data ADC snapshot data.
-    void eventAdcData(int16_t adc_data);
+    void eventAdcData(int16_t adc_data, bool startAgain = true);
     void eventGpio(uint8_t gpio);
 
     /// Called when device power is turned off, so channel
@@ -596,7 +596,7 @@ private:
     bool isVoltageCalibrationEnabled();
     bool isCurrentCalibrationEnabled();
 
-    void adcDataIsReady(int16_t data);
+    void adcDataIsReady(int16_t data, bool startAgain);
     
     void voltageBalancing();
     void currentBalancing();

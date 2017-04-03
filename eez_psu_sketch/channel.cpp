@@ -728,7 +728,7 @@ int16_t Channel::remapCurrentToAdcData(float value) {
     return (int16_t)util::clamp(adc_value, (float)(-AnalogDigitalConverter::ADC_MAX - 1), (float)AnalogDigitalConverter::ADC_MAX);
 }
 
-void Channel::adcDataIsReady(int16_t data) {
+void Channel::adcDataIsReady(int16_t data, bool startAgain) {
     uint8_t nextStartReg0 = 0;
 
     switch (adc.start_reg0) {
@@ -856,7 +856,9 @@ void Channel::adcDataIsReady(int16_t data) {
     break;
     }
 
-    adc.start(nextStartReg0);
+    if (startAgain) {
+        adc.start(nextStartReg0);
+    }
 }
 
 void Channel::updateCcAndCvSwitch() {
@@ -908,10 +910,10 @@ void Channel::protectionCheck() {
     protectionCheck(opp);
 }
 
-void Channel::eventAdcData(int16_t adc_data) {
+void Channel::eventAdcData(int16_t adc_data, bool startAgain) {
     if (!psu::isPowerUp()) return;
 
-    adcDataIsReady(adc_data);
+    adcDataIsReady(adc_data, startAgain);
     protectionCheck();
 }
 

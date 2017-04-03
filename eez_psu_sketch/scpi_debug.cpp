@@ -18,6 +18,7 @@
  
 #include "psu.h"
 #include "scpi_psu.h"
+#include "watchdog.h"
 
 #if OPTION_SD_CARD
 #include "sd_card.h"
@@ -134,7 +135,7 @@ scpi_result_t scpi_cmd_debugFileQ(scpi_t *context) {
 #endif
 }
 
-scpi_result_t scpi_cmd_debugVolt(scpi_t *context) {
+scpi_result_t scpi_cmd_debugVoltage(scpi_t *context) {
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -150,7 +151,7 @@ scpi_result_t scpi_cmd_debugVolt(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cmd_debugCurr(scpi_t *context) {
+scpi_result_t scpi_cmd_debugCurrent(scpi_t *context) {
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -165,6 +166,63 @@ scpi_result_t scpi_cmd_debugCurr(scpi_t *context) {
 
     return SCPI_RES_OK;
 }
+
+scpi_result_t scpi_cmd_debugMeasureVoltage(scpi_t *context) {
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    while (true) {
+        uint32_t tickCount = micros();
+        watchdog::tick(tickCount);
+
+        float monValue = channel->u.mon;
+
+        channel->adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+
+        Serial.println(monValue);
+
+        int32_t diff = micros() - tickCount;
+        if (diff < 2000) {
+            delayMicroseconds(2000 - diff);
+        }
+
+        int16_t adc_data = channel->adc.read();
+        channel->eventAdcData(adc_data, false);
+    }
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_debugMeasureCurrent(scpi_t *context) {
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    while (true) {
+        uint32_t tickCount = micros();
+        watchdog::tick(tickCount);
+
+        float monValue = channel->i.mon;
+
+        channel->adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
+
+        Serial.println(monValue);
+
+        int32_t diff = micros() - tickCount;
+        if (diff < 2000) {
+            delayMicroseconds(2000 - diff);
+        }
+
+        int16_t adc_data = channel->adc.read();
+        channel->eventAdcData(adc_data, false);
+    }
+
+    return SCPI_RES_OK;
+}
+
 
 }
 }
