@@ -91,17 +91,21 @@ void drawButtons(const Widget* widget, int x, int y, const Style *style, int sel
 void draw(const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
-    widgetCursor.currentState->size = sizeof(WidgetState);
+    widgetCursor.currentState->size = sizeof(ButtonGroupWidgetState);
     widgetCursor.currentState->data = data::get(widgetCursor.cursor, widget->data);
+
+    const data::Value *labels;
+    int count;
+    data::getList(widgetCursor.cursor, widget->data, &labels, count);
+
+    ((ButtonGroupWidgetState *)widgetCursor.currentState)->labels = labels;
 
     bool refresh = !widgetCursor.previousState ||
         widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed ||
-        widgetCursor.previousState->data != widgetCursor.currentState->data;
+        widgetCursor.previousState->data != widgetCursor.currentState->data ||
+        ((ButtonGroupWidgetState *)widgetCursor.previousState)->labels != ((ButtonGroupWidgetState *)widgetCursor.currentState)->labels;
 
     if (refresh) {
-        const data::Value *labels;
-        int count;
-        data::getList(widgetCursor.cursor, widget->data, &labels, count);
         DECL_WIDGET_STYLE(style, widget);
         drawButtons(widget, widgetCursor.x, widgetCursor.y, style, widgetCursor.currentState->data.getInt(), labels, count);
     }

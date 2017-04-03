@@ -160,6 +160,11 @@ struct ToggleButtonWidget {
     OBJ_OFFSET text2;
 };
 
+struct ButtonGroupWidgetState {
+    WidgetState genericState;
+    const data::Value *labels;
+};
+
 struct ScaleWidget {
 	uint8_t needle_position; // SCALE_NEEDLE_POSITION_...
 	uint8_t needle_width;
