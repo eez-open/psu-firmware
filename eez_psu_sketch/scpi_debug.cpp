@@ -217,7 +217,7 @@ scpi_result_t scpi_cmd_debugMeasureCurrent(scpi_t *context) {
         int16_t adc_data = channel->adc.read();
         channel->eventAdcData(adc_data, false);
 
-        Serial.print((int)debug::g_uMon[channel->index - 1].get());
+        Serial.print((int)debug::g_iMon[channel->index - 1].get());
         Serial.print(" ");
         Serial.print(channel->i.mon, 5);
         Serial.println("A");
