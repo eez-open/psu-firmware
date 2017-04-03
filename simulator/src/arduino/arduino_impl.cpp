@@ -94,16 +94,26 @@ int SimulatorSerial::print(const char *data) {
     return write(data, strlen(data));
 }
 
+int SimulatorSerial::println(const char *data) {
+    return printf("%s\n", data);
+}
+
+int SimulatorSerial::print(int value) {
+    return printf("%d", value);
+}
+
 int SimulatorSerial::println(int value) {
     return printf("%d\n", value);
 }
 
-int SimulatorSerial::println(float value) {
-    return printf("%f\n", value);
+int SimulatorSerial::print(float value, int numDigits) {
+    // TODO numDigits
+    return printf("%f", value);
 }
 
-int SimulatorSerial::println(const char *data) {
-    return printf("%s\n", data);
+int SimulatorSerial::println(float value, int numDigits) {
+    // TODO numDigits
+    return printf("%f\n", value);
 }
 
 int SimulatorSerial::println(IPAddress ipAddress) {

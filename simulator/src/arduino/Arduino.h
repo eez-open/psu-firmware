@@ -88,9 +88,11 @@ public:
     void begin(unsigned long baud);
     int write(const char *buffer, int size);
     int print(const char *data);
-    int println(int value);
-    int println(float value);
     int println(const char *data);
+    int print(int value);
+    int println(int value);
+    int print(float value, int numDigits);
+    int println(float value, int numDigits);
     int println(IPAddress ipAddress);
     operator bool() { return true; }
     int available(void);

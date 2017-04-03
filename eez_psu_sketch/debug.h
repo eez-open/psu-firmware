@@ -73,6 +73,7 @@ class DebugValueVariable : public DebugVariable {
 public:
     DebugValueVariable(const char *name);
    
+    int32_t get() { return m_value; }
     void set(int32_t value) { m_value = value; }
     
     void tick1secPeriod();

@@ -177,19 +177,20 @@ scpi_result_t scpi_cmd_debugMeasureVoltage(scpi_t *context) {
         uint32_t tickCount = micros();
         watchdog::tick(tickCount);
 
-        float monValue = channel->u.mon;
-
         channel->adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
-
-        Serial.println(monValue);
-
-        int32_t diff = micros() - tickCount;
-        if (diff < 2000) {
-            delayMicroseconds(2000 - diff);
-        }
-
+        delayMicroseconds(2000);
         int16_t adc_data = channel->adc.read();
         channel->eventAdcData(adc_data, false);
+
+        Serial.print((int)debug::g_uMon[channel->index - 1].get());
+        Serial.print(" ");
+        Serial.print(channel->u.mon, 5);
+        Serial.println("V");
+
+        int32_t diff = micros() - tickCount;
+        if (diff < 48000L) {
+            delayMicroseconds(48000L - diff);
+        }
     }
 
     return SCPI_RES_OK;
@@ -205,19 +206,20 @@ scpi_result_t scpi_cmd_debugMeasureCurrent(scpi_t *context) {
         uint32_t tickCount = micros();
         watchdog::tick(tickCount);
 
-        float monValue = channel->i.mon;
-
         channel->adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
-
-        Serial.println(monValue);
-
-        int32_t diff = micros() - tickCount;
-        if (diff < 2000) {
-            delayMicroseconds(2000 - diff);
-        }
-
+        delayMicroseconds(2000);
         int16_t adc_data = channel->adc.read();
         channel->eventAdcData(adc_data, false);
+
+        Serial.print((int)debug::g_uMon[channel->index - 1].get());
+        Serial.print(" ");
+        Serial.print(channel->i.mon, 5);
+        Serial.println("A");
+
+        int32_t diff = micros() - tickCount;
+        if (diff < 48000L) {
+            delayMicroseconds(48000L - diff);
+        }
     }
 
     return SCPI_RES_OK;
