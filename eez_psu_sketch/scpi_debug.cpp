@@ -19,6 +19,8 @@
 #include "psu.h"
 #include "scpi_psu.h"
 #include "watchdog.h"
+#include "temperature.h"
+#include "fan.h"
 
 #if OPTION_SD_CARD
 #include "sd_card.h"
@@ -176,6 +178,8 @@ scpi_result_t scpi_cmd_debugMeasureVoltage(scpi_t *context) {
     while (true) {
         uint32_t tickCount = micros();
         watchdog::tick(tickCount);
+	    temperature::tick(tickCount);
+	    fan::tick(tickCount);
 
         channel->adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
         delayMicroseconds(2000);
@@ -205,6 +209,8 @@ scpi_result_t scpi_cmd_debugMeasureCurrent(scpi_t *context) {
     while (true) {
         uint32_t tickCount = micros();
         watchdog::tick(tickCount);
+	    temperature::tick(tickCount);
+	    fan::tick(tickCount);
 
         channel->adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
         delayMicroseconds(2000);
