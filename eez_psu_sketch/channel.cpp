@@ -837,6 +837,7 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
         //} else {
         //    u.mon_dac = value;
         //}
+        u.mon_dac = value;
 
         if (isOutputEnabled() && isRemoteProgrammingEnabled()) {
             nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
