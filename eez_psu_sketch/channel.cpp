@@ -831,11 +831,12 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
             value -= VOLTAGE_GND_OFFSET;
         }
 #endif
-        if (isVoltageCalibrationEnabled()) {
-            u.mon_dac = util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
-        } else {
-            u.mon_dac = value;
-        }
+
+        //if (isVoltageCalibrationEnabled()) {
+        //    u.mon_dac = util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
+        //} else {
+        //    u.mon_dac = value;
+        //}
 
         if (isOutputEnabled() && isRemoteProgrammingEnabled()) {
             nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
