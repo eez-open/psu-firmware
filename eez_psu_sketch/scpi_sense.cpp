@@ -38,6 +38,9 @@ scpi_result_t scpi_cmd_senseCurrentDcRangeAuto(scpi_t * context) {
     }
 
     channel->flags.autoRange = enable;
+    if (!channel->flags.autoRange) {
+        channel->setCurrent(channel->i.set);
+    }
     profile::save();
 
     return SCPI_RES_OK;

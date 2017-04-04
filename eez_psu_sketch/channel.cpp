@@ -302,6 +302,8 @@ Channel::Channel(
     flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
     flags.displayValue2 = DISPLAY_VALUE_CURRENT; 
     ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
+
+    autoRangeCheckLastTickCount = 0;
 }
 
 void Channel::protectionEnter(ProtectionValue &cpv) {
@@ -709,6 +711,31 @@ void Channel::tick(uint32_t tick_usec) {
             historyLastTick += ytViewRateMicroseconds;
         }
     }
+
+    if (isOutputEnabled()) {
+        if (autoRangeCheckLastTickCount != 0) {
+            if (tick_usec - autoRangeCheckLastTickCount > 50000L) {
+                if (flags.autoRange && currentHasDualRange() && !dac.isTesting() && !calibration::isEnabled()) {
+                    if (util::greater(i.mon, 0.49, getPrecision(VALUE_TYPE_FLOAT_AMPER)) || isCcMode()) {
+                        if (flags.currentRange == 1) {
+                            doSetCurrent(i.set);
+                        }
+                    } else {
+                        if (flags.currentRange == 0) {
+                            float temp = i.set;
+                            doSetCurrent(0.5);
+                            i.set = temp;
+                        }
+                    }
+                }
+                autoRangeCheckLastTickCount = tick_usec;
+            }
+        } else {
+            autoRangeCheckLastTickCount = tick_usec;
+        }
+    } else {
+        autoRangeCheckLastTickCount = 0;
+    }
 }
 
 float Channel::remapAdcDataToVoltage(int16_t adc_data) {
@@ -785,20 +812,6 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
                 cal_conf.i[flags.currentRange].max.val);
         } else {
             i.mon = value;
-        }
-
-        if (flags.autoRange && currentHasDualRange() && !dac.isTesting() && !calibration::isEnabled()) {
-            if (util::greater(i.mon, 0.505, getPrecision(VALUE_TYPE_FLOAT_AMPER)) || isCcMode()) {
-                if (flags.currentRange == 1) {
-                    doSetCurrent(i.set);
-                }
-            } else if (util::less(i.mon, 0.495, getPrecision(VALUE_TYPE_FLOAT_AMPER)) || isCcMode()) {
-                if (flags.currentRange == 0) {
-                    float temp = i.set;
-                    doSetCurrent(0.5);
-                    i.set = temp;
-                }
-            }
         }
 
         if (isOutputEnabled()) {

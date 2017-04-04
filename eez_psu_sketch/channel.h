@@ -586,6 +586,8 @@ private:
     float VOLTAGE_GND_OFFSET;
     float CURRENT_GND_OFFSET;
 
+    uint32_t autoRangeCheckLastTickCount;
+
     void clearProtectionConf();
     void protectionEnter(ProtectionValue &cpv);
     void protectionCheck(ProtectionValue &cpv);
