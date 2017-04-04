@@ -267,4 +267,6 @@
     SCPI_COMMAND("DISPlay:BRIGhtness", scpi_cmd_displayBrightness) \
     SCPI_COMMAND("DISPlay:BRIGhtness?", scpi_cmd_displayBrightnessQ) \
     SCPI_COMMAND("DISPlay[:WINdow][:STATe]", scpi_cmd_displayWindowState) \
-    SCPI_COMMAND("DISPlay[:WINdow][:STATe]?", scpi_cmd_displayWindowStateQ)
+    SCPI_COMMAND("DISPlay[:WINdow][:STATe]?", scpi_cmd_displayWindowStateQ) \
+    SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe:AUTO", scpi_cmd_senseCurrentDcRangeAuto) \
+    SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe:AUTO?", scpi_cmd_senseCurrentDcRangeAutoQ)

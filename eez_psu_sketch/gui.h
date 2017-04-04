@@ -36,6 +36,8 @@ void showStandbyPage();
 void showEnteringStandbyPage();
 void showEthernetInit();
 
+bool isIdle();
+
 
 }
 }

@@ -77720,6 +77720,20 @@
             "name": "DISPlay[:WINdow][:STATe]?"
           }
         ]
+      },
+      {
+        "$eez": false,
+        "name": "SENSe",
+        "commands": [
+          {
+            "$eez": false,
+            "name": "SENSe:CURRent[:DC]:RANGe:AUTO"
+          },
+          {
+            "$eez": false,
+            "name": "SENSe:CURRent[:DC]:RANGe:AUTO?"
+          }
+        ]
       }
     ],
     "scripts": [

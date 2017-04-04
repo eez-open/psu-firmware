@@ -715,6 +715,9 @@
     <ClCompile Include="..\..\..\..\eez_psu_sketch\value.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_sense.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="eez_psu_sim.rc" />

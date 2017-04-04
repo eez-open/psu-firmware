@@ -297,6 +297,7 @@ Channel::Channel(
     iBeforeBalancing = NAN;
 
     flags.currentRange = 0;
+    flags.autoRange = 0;
 
     flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
     flags.displayValue2 = DISPLAY_VALUE_CURRENT; 
@@ -749,10 +750,11 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
             }
         }
 
-#ifdef EEZ_PSU_SIMULATOR
         float value = remapAdcDataToVoltage(u.mon_adc);
-#else
-        float value = remapAdcDataToVoltage(u.mon_adc) - VOLTAGE_GND_OFFSET;
+#if !defined(EEZ_PSU_SIMULATOR)
+        if (!flags.rprogEnabled) {
+            value -= VOLTAGE_GND_OFFSET;
+        }
 #endif
 
         if (isVoltageCalibrationEnabled()) {
@@ -785,6 +787,20 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
                 cal_conf.i[flags.currentRange].max.val);
         } else {
             i.mon = value;
+        }
+
+        if (flags.autoRange && currentHasDualRange() && !dac.isTesting() && !calibration::isEnabled()) {
+            if (util::greater(i.mon, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) || isCcMode()) {
+                if (flags.currentRange == 1) {
+                    doSetCurrent(i.set);
+                }
+            } else {
+                if (flags.currentRange == 0) {
+                    float temp = i.set;
+                    doSetCurrent(0.5);
+                    i.set = temp;
+                }
+            }
         }
 
         if (isOutputEnabled()) {

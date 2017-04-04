@@ -72,6 +72,8 @@
 
 #define MAX_EVENTS 16
 
+#define IDLE_TIMEOUT_MS 1000
+
 namespace eez {
 namespace psu {
 namespace gui {
@@ -121,6 +123,8 @@ data::Cursor g_focusCursor;
 uint8_t g_focusDataId;
 data::Value g_focusEditValue;
 uint32_t g_focusEditValueChangedTime;
+
+static bool g_idle;
 
 ////////////////////////////////////////
 
@@ -1166,6 +1170,10 @@ void processEvents() {
     g_numEvents = 0;
 }
 
+bool isIdle() {
+    return g_idle;
+}
+
 void tick(uint32_t tick_usec) {
     if (g_activePageId == INTERNAL_PAGE_ID_NONE) {
         processEvents();
@@ -1224,11 +1232,16 @@ void tick(uint32_t tick_usec) {
     int counter;
     bool clicked;
     encoder::read(counter, clicked);
+    if (counter > 0 || clicked) {
+        g_timeOfLastActivity = millis();
+    }
     onEncoder(tick_usec, counter, clicked);
 #endif
 
     //
     uint32_t inactivityPeriod = millis() - g_timeOfLastActivity;
+
+    g_idle = inactivityPeriod >= IDLE_TIMEOUT_MS;
 
 #if GUI_BACK_TO_MAIN_ENABLED
     if (g_activePageId == PAGE_ID_EVENT_QUEUE ||

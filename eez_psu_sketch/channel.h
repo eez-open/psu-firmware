@@ -172,6 +172,7 @@ public:
         unsigned voltageTriggerMode: 2;
         unsigned currentTriggerMode: 2;
         unsigned currentRange: 1;
+        unsigned autoRange: 1;
     };
 
     /// Voltage and current data set and measured during runtime.
