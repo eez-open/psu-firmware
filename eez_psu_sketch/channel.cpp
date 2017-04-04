@@ -752,9 +752,7 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
 
         float value = remapAdcDataToVoltage(u.mon_adc);
 #if !defined(EEZ_PSU_SIMULATOR)
-        if (!flags.rprogEnabled) {
-            value -= VOLTAGE_GND_OFFSET;
-        }
+        value -= VOLTAGE_GND_OFFSET;
 #endif
 
         if (isVoltageCalibrationEnabled()) {
@@ -790,11 +788,11 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
         }
 
         if (flags.autoRange && currentHasDualRange() && !dac.isTesting() && !calibration::isEnabled()) {
-            if (util::greater(i.mon, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) || isCcMode()) {
+            if (util::greater(i.mon, 0.505, getPrecision(VALUE_TYPE_FLOAT_AMPER)) || isCcMode()) {
                 if (flags.currentRange == 1) {
                     doSetCurrent(i.set);
                 }
-            } else {
+            } else if (util::less(i.mon, 0.495, getPrecision(VALUE_TYPE_FLOAT_AMPER)) || isCcMode()) {
                 if (flags.currentRange == 0) {
                     float temp = i.set;
                     doSetCurrent(0.5);
@@ -827,10 +825,11 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
         debug::g_uMonDac[index - 1].set(data);
 #endif
 
-#ifdef EEZ_PSU_SIMULATOR
         float value = remapAdcDataToVoltage(data);
-#else
-        float value = remapAdcDataToVoltage(data) - VOLTAGE_GND_OFFSET;
+#if !defined(EEZ_PSU_SIMULATOR)
+        if (!flags.rprogEnabled) {
+            value -= VOLTAGE_GND_OFFSET;
+        }
 #endif
         if (isVoltageCalibrationEnabled()) {
             u.mon_dac = util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);

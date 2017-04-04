@@ -1232,7 +1232,7 @@ void tick(uint32_t tick_usec) {
     int counter;
     bool clicked;
     encoder::read(counter, clicked);
-    if (counter > 0 || clicked) {
+    if (counter != 0 || clicked) {
         g_timeOfLastActivity = millis();
     }
     onEncoder(tick_usec, counter, clicked);
