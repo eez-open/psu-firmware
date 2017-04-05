@@ -127,7 +127,7 @@ void setLoadEnabled(Channel &channel, bool state);
 void setLoad(Channel &channel, float load);
 #endif
 
-bool currentHasDualRange(Channel &channel);
+bool isCurrentLowRangeAllowed(Channel &channel);
 
 }
 }

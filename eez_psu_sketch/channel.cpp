@@ -296,8 +296,8 @@ Channel::Channel(
     uBeforeBalancing = NAN;
     iBeforeBalancing = NAN;
 
-    flags.currentRange = 0;
-    flags.autoRange = 0;
+    flags.currentCurrentRange = CURRENT_RANGE_HIGH;
+    flags.autoSelectCurrentRange = 0;
 
     flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
     flags.displayValue2 = DISPLAY_VALUE_CURRENT; 
@@ -513,8 +513,8 @@ void Channel::resetHistory() {
 
 void Channel::clearCalibrationConf() {
     cal_conf.flags.u_cal_params_exists = 0;
-    cal_conf.flags.i_cal_params_exists_range0 = 0;
-    cal_conf.flags.i_cal_params_exists_range1 = 0;
+    cal_conf.flags.i_cal_params_exists_range_high = 0;
+    cal_conf.flags.i_cal_params_exists_range_low = 0;
 
     cal_conf.u.min.dac = cal_conf.u.min.val = cal_conf.u.min.adc = U_CAL_VAL_MIN;
     cal_conf.u.mid.dac = cal_conf.u.mid.val = cal_conf.u.mid.adc = (U_CAL_VAL_MIN + U_CAL_VAL_MAX) / 2;
@@ -712,30 +712,7 @@ void Channel::tick(uint32_t tick_usec) {
         }
     }
 
-    if (isOutputEnabled()) {
-        if (autoRangeCheckLastTickCount != 0) {
-            if (tick_usec - autoRangeCheckLastTickCount > 50000L) {
-                if (flags.autoRange && currentHasDualRange() && !dac.isTesting() && !calibration::isEnabled()) {
-                    if (util::greater(i.mon, 0.49, getPrecision(VALUE_TYPE_FLOAT_AMPER)) || isCcMode()) {
-                        if (flags.currentRange == 1) {
-                            doSetCurrent(i.set);
-                        }
-                    } else {
-                        if (flags.currentRange == 0) {
-                            float temp = i.set;
-                            doSetCurrent(0.5);
-                            i.set = temp;
-                        }
-                    }
-                }
-                autoRangeCheckLastTickCount = tick_usec;
-            }
-        } else {
-            autoRangeCheckLastTickCount = tick_usec;
-        }
-    } else {
-        autoRangeCheckLastTickCount = 0;
-    }
+    doAutoSelectCurrentRange(tick_usec);
 }
 
 float Channel::remapAdcDataToVoltage(int16_t adc_data) {
@@ -806,10 +783,10 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
 
         if (isCurrentCalibrationEnabled()) {
             i.mon = util::remap(value,
-                cal_conf.i[flags.currentRange].min.adc,
-                cal_conf.i[flags.currentRange].min.val,
-                cal_conf.i[flags.currentRange].max.adc,
-                cal_conf.i[flags.currentRange].max.val);
+                cal_conf.i[flags.currentCurrentRange].min.adc,
+                cal_conf.i[flags.currentCurrentRange].min.val,
+                cal_conf.i[flags.currentCurrentRange].max.adc,
+                cal_conf.i[flags.currentCurrentRange].max.val);
         } else {
             i.mon = value;
         }
@@ -871,10 +848,10 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
 
         if (isCurrentCalibrationEnabled()) {
             i.mon_dac = util::remap(value,
-                cal_conf.i[flags.currentRange].min.adc,
-                cal_conf.i[flags.currentRange].min.val,
-                cal_conf.i[flags.currentRange].max.adc,
-                cal_conf.i[flags.currentRange].max.val);
+                cal_conf.i[flags.currentCurrentRange].min.adc,
+                cal_conf.i[flags.currentCurrentRange].min.val,
+                cal_conf.i[flags.currentCurrentRange].max.adc,
+                cal_conf.i[flags.currentCurrentRange].max.val);
         } else {
             i.mon_dac = value;
         }
@@ -1268,8 +1245,8 @@ bool Channel::isVoltageCalibrationEnabled() {
 
 bool Channel::isCurrentCalibrationEnabled() {
     return flags._calEnabled && (
-        flags.currentRange == 0 && cal_conf.flags.i_cal_params_exists_range0 ||
-        flags.currentRange == 1 && cal_conf.flags.i_cal_params_exists_range1
+        flags.currentCurrentRange == CURRENT_RANGE_HIGH && cal_conf.flags.i_cal_params_exists_range_high ||
+        flags.currentCurrentRange == CURRENT_RANGE_LOW && cal_conf.flags.i_cal_params_exists_range_low
     );
 }
 
@@ -1332,8 +1309,8 @@ void Channel::calibrationFindCurrentRange(float minDac, float minVal, float minA
 
     flags._calEnabled = true;
 
-    bool i_cal_params_exists = cal_conf.flags.i_cal_params_exists_range0;
-    cal_conf.flags.i_cal_params_exists_range0 = true;
+    bool i_cal_params_exists = cal_conf.flags.i_cal_params_exists_range_high;
+    cal_conf.flags.i_cal_params_exists_range_high = true;
 
     CalibrationValueConfiguration calValueConf;
     calValueConf = cal_conf.i[0];
@@ -1367,7 +1344,7 @@ void Channel::calibrationFindCurrentRange(float minDac, float minVal, float minA
     //DebugTraceF("MON_ADC=%d", (int)i.mon_adc);
     *max = i.mon;
 
-    cal_conf.flags.i_cal_params_exists_range0 = i_cal_params_exists;
+    cal_conf.flags.i_cal_params_exists_range_high = i_cal_params_exists;
     cal_conf.i[0] = calValueConf;
 
     flags._calEnabled = false;
@@ -1456,11 +1433,17 @@ void Channel::setVoltage(float value) {
 }
 
 void Channel::doSetCurrent(float value) {
-    if (currentHasDualRange()) {
+    if (hasSupportForCurrentDualRange()) {
         if (dac.isTesting()) {
             setCurrentRange(0);
         } else if (!calibration::isEnabled()) {
-            setCurrentRange(util::greater(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) ? 0 : 1);
+            if (flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_USE_BOTH) {
+                setCurrentRange(util::greater(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) ? CURRENT_RANGE_HIGH : CURRENT_RANGE_LOW);
+            } else if (flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_ALWAYS_HIGH) {
+                setCurrentRange(CURRENT_RANGE_HIGH);
+            } else {
+                setCurrentRange(CURRENT_RANGE_LOW);
+            }
         }
     }
 
@@ -1473,10 +1456,10 @@ void Channel::doSetCurrent(float value) {
 
     if (isCurrentCalibrationEnabled()) {
         value = util::remap(value,
-            cal_conf.i[flags.currentRange].min.val,
-            cal_conf.i[flags.currentRange].min.dac,
-            cal_conf.i[flags.currentRange].max.val,
-            cal_conf.i[flags.currentRange].max.dac);
+            cal_conf.i[flags.currentCurrentRange].min.val,
+            cal_conf.i[flags.currentCurrentRange].min.dac,
+            cal_conf.i[flags.currentCurrentRange].max.val,
+            cal_conf.i[flags.currentCurrentRange].max.dac);
     }
 
     value += getDualRangeGndOffset();
@@ -1494,8 +1477,8 @@ void Channel::setCurrent(float value) {
 }
 
 bool Channel::isCalibrationExists() {
-    return flags.currentRange == 0 && cal_conf.flags.i_cal_params_exists_range0 || 
-        flags.currentRange == 1 && cal_conf.flags.i_cal_params_exists_range1 ||
+    return flags.currentCurrentRange == CURRENT_RANGE_HIGH && cal_conf.flags.i_cal_params_exists_range_high || 
+        flags.currentCurrentRange == CURRENT_RANGE_LOW && cal_conf.flags.i_cal_params_exists_range_low ||
         cal_conf.flags.u_cal_params_exists;
 }
 
@@ -1607,6 +1590,9 @@ void Channel::setCurrentLimit(float limit) {
 }
 
 float Channel::getMaxCurrentLimit() const {
+    if (hasSupportForCurrentDualRange() && flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_ALWAYS_LOW) {
+        return 0.5f;
+    }
     return isMaxCurrentLimited() ? ERR_MAX_CURRENT : i.max;
 }
 
@@ -1694,23 +1680,53 @@ float Channel::getDualRangeGndOffset() {
 #endif
 }
 
+void Channel::setCurrentRangeSelectionMode(CurrentRangeSelectionMode mode) {
+    flags.currentRangeSelectionMode = mode;
+    profile::save();
+
+    if (flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_ALWAYS_LOW) {
+        if (util::greater(i.set, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+            i.set = 0.5;
+        }
+
+        if (util::greater(i.limit, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+            i.limit = 0.5;
+        }
+    }
+
+    setCurrent(i.set);
+}
+
+void Channel::enableAutoSelectCurrentRange(bool enable) {
+    flags.autoSelectCurrentRange = enable;
+    profile::save();
+
+    if (!flags.autoSelectCurrentRange) {
+        setCurrent(i.set);
+    }
+}
+
+bool Channel::isCurrentLowRangeAllowed() {
+    return hasSupportForCurrentDualRange() && flags.currentRangeSelectionMode != CURRENT_RANGE_SELECTION_ALWAYS_HIGH;
+}
+
 float Channel::getDualRangeMax() {
-    return flags.currentRange == 1 ? (I_MAX / 10) : I_MAX;
+    return flags.currentCurrentRange == CURRENT_RANGE_LOW ? (I_MAX / 10) : I_MAX;
 }
 
 void Channel::calculateNegligibleAdcDiffForCurrent() {
-    if (flags.currentRange == 1) {
+    if (flags.currentCurrentRange == CURRENT_RANGE_LOW) {
         negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 10000 * (I_MAX/10 - I_MIN))) + 1;
     } else {
         negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 1000 * (I_MAX - I_MIN))) + 1;
     }
 }
 
-void Channel::setCurrentRange(uint8_t currentRange) {
-    if (currentHasDualRange()) {
-        if (currentRange != flags.currentRange) {
-            flags.currentRange = currentRange;
-            if (flags.currentRange == 0) {
+void Channel::setCurrentRange(uint8_t currentCurrentRange) {
+    if (hasSupportForCurrentDualRange()) {
+        if (currentCurrentRange != flags.currentCurrentRange) {
+            flags.currentCurrentRange = currentCurrentRange;
+            if (flags.currentCurrentRange == 0) {
                 // 5A
                 DebugTrace("Switched to 5A range");
                 ioexp.changeBit(IOExpander::IO_BIT_5A, true);
@@ -1724,6 +1740,32 @@ void Channel::setCurrentRange(uint8_t currentRange) {
                 calculateNegligibleAdcDiffForCurrent();
             }
         }
+    }
+}
+
+void Channel::doAutoSelectCurrentRange(uint32_t tickCount) {
+    if (isOutputEnabled()) {
+        if (autoRangeCheckLastTickCount != 0) {
+            if (tickCount - autoRangeCheckLastTickCount > 50000L) {
+                if (flags.autoSelectCurrentRange && flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_USE_BOTH && hasSupportForCurrentDualRange() && !dac.isTesting() && !calibration::isEnabled()) {
+                    if (flags.currentCurrentRange == CURRENT_RANGE_LOW) {
+                        if (util::greater(i.set, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) && !isCvMode()) {
+                            doSetCurrent(i.set);
+                        }
+                    } else {
+                        if (util::less(i.mon, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+                            setCurrentRange(1);
+                            dac.set_current((uint16_t)65535);
+                        }
+                    }
+                }
+                autoRangeCheckLastTickCount = tickCount;
+            }
+        } else {
+            autoRangeCheckLastTickCount = tickCount;
+        }
+    } else {
+        autoRangeCheckLastTickCount = 0;
     }
 }
 

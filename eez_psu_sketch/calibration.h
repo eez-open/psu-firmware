@@ -92,7 +92,7 @@ void stop();
 /// Set U and I to zero for the calibration channel.
 void resetChannelToZero();
 
-bool currentHasDualRange();
+bool hasSupportForCurrentDualRange();
 void selectCurrentRange(int8_t range);
 
 Value& getVoltage();

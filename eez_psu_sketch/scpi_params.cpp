@@ -525,11 +525,9 @@ bool get_power_limit_from_param(scpi_t *context, const scpi_number_t &param, flo
 scpi_result_t result_float(scpi_t *context, Channel *channel, float value, ValueType valueType) {
     char buffer[32] = { 0 };
 
-    int numSignificantDecimalDigits;
-    if (channel && channel->currentHasDualRange() && valueType == VALUE_TYPE_FLOAT_AMPER && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
-        numSignificantDecimalDigits = CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS_R5B12;
-    } else {
-        numSignificantDecimalDigits = getNumSignificantDecimalDigits(valueType);
+    int numSignificantDecimalDigits = getNumSignificantDecimalDigits(valueType);
+    if (channel && channel->isCurrentLowRangeAllowed() && valueType == VALUE_TYPE_FLOAT_AMPER && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+        ++numSignificantDecimalDigits;
     }
 
     util::strcatFloat(buffer, value, numSignificantDecimalDigits);

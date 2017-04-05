@@ -58,6 +58,17 @@ enum TriggerMode {
     TRIGGER_MODE_STEP
 };
 
+enum CurrentRangeSelectionMode {
+    CURRENT_RANGE_SELECTION_USE_BOTH,
+    CURRENT_RANGE_SELECTION_ALWAYS_HIGH,
+    CURRENT_RANGE_SELECTION_ALWAYS_LOW
+};
+
+enum CurrentRange {
+    CURRENT_RANGE_HIGH,
+    CURRENT_RANGE_LOW
+};
+
 /// PSU channel.
 class Channel {
     friend class DigitalAnalogConverter;
@@ -69,9 +80,9 @@ public:
         /// Is voltage calibrated?
         unsigned u_cal_params_exists : 1; 
         /// Is current in range 0 (5A) calibrated?
-        unsigned i_cal_params_exists_range0 : 1;
+        unsigned i_cal_params_exists_range_high : 1;
         /// Is current in range 1 (500mA) calibrated?
-        unsigned i_cal_params_exists_range1 : 1;
+        unsigned i_cal_params_exists_range_low : 1;
     };
 
     /// Calibration parameters for the single point.
@@ -171,8 +182,9 @@ public:
         unsigned displayValue2: 2;
         unsigned voltageTriggerMode: 2;
         unsigned currentTriggerMode: 2;
-        unsigned currentRange: 1;
-        unsigned autoRange: 1;
+        unsigned currentRangeSelectionMode: 2; // see enum CurrentRangeSelectionMode
+        unsigned autoSelectCurrentRange: 1; // switch between 5A/0.5A depending on Imon
+        unsigned currentCurrentRange: 1; // 0: 5A, 1:0.5A
     };
 
     /// Voltage and current data set and measured during runtime.
@@ -548,7 +560,12 @@ public:
     TriggerMode getCurrentTriggerMode();
     void setCurrentTriggerMode(TriggerMode mode);
 
-    bool currentHasDualRange() { return boardRevision == CH_BOARD_REVISION_R5B12; }
+    bool hasSupportForCurrentDualRange() const { return boardRevision == CH_BOARD_REVISION_R5B12; }
+    void setCurrentRangeSelectionMode(CurrentRangeSelectionMode mode);
+    CurrentRangeSelectionMode getCurrentRangeSelectionMode() { return (CurrentRangeSelectionMode)flags.currentRangeSelectionMode; }
+    void enableAutoSelectCurrentRange(bool enable);
+    bool isAutoSelectCurrentRangeEnabled() { return flags.autoSelectCurrentRange ? true : false; }
+    bool isCurrentLowRangeAllowed();
     float getDualRangeMax();
     void setCurrentRange(uint8_t currentRange);
 
@@ -585,8 +602,6 @@ private:
 
     float VOLTAGE_GND_OFFSET;
     float CURRENT_GND_OFFSET;
-
-    uint32_t autoRangeCheckLastTickCount;
 
     void clearProtectionConf();
     void protectionEnter(ProtectionValue &cpv);
@@ -631,6 +646,9 @@ private:
 
     float getDualRangeGndOffset();
     void calculateNegligibleAdcDiffForCurrent();
+
+    uint32_t autoRangeCheckLastTickCount;
+    void doAutoSelectCurrentRange(uint32_t tickCount);
 };
 
 }

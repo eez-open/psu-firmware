@@ -49,16 +49,23 @@ private:
 	int status;
 };
 
-class ChSettingsAdvRSensePage : public Page {
+class ChSettingsAdvRemotePage : public Page {
 public:
 	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
-	void toggleStatus();
+	void toggleSense();
+    void toggleProgramming();
 };
 
-class ChSettingsAdvRProgPage : public Page {
+class ChSettingsAdvRangesPage : public Page {
 public:
-	void toggleStatus();
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
+
+	void selectMode();
+    void toggleAutoRanging();
+
+private:
+    static void onModeSet(uint8_t value);
 };
 
 class ChSettingsAdvCouplingPage : public Page {

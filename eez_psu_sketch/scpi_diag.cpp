@@ -152,11 +152,11 @@ scpi_result_t scpi_cmd_diagnosticInformationCalibrationQ(scpi_t *context) {
         SCPI_ResultText(context, buffer);
 
         printCalibrationParameters(context, VALUE_TYPE_FLOAT_VOLT, -1, channel->cal_conf.flags.u_cal_params_exists, channel->cal_conf.u, buffer);
-        if (channel->currentHasDualRange()) {
-            printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, 0, channel->cal_conf.flags.i_cal_params_exists_range0, channel->cal_conf.i[0], buffer);
-            printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, 1, channel->cal_conf.flags.i_cal_params_exists_range1, channel->cal_conf.i[1], buffer);
+        if (channel->hasSupportForCurrentDualRange()) {
+            printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, 0, channel->cal_conf.flags.i_cal_params_exists_range_high, channel->cal_conf.i[0], buffer);
+            printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, 1, channel->cal_conf.flags.i_cal_params_exists_range_low, channel->cal_conf.i[1], buffer);
         } else {
-            printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, -1, channel->cal_conf.flags.i_cal_params_exists_range0, channel->cal_conf.i[0], buffer);
+            printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, -1, channel->cal_conf.flags.i_cal_params_exists_range_high, channel->cal_conf.i[0], buffer);
         }
     }
 

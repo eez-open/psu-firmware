@@ -19,6 +19,7 @@
 #include "psu.h"
 #include "scpi_psu.h"
 #include "profile.h"
+#include "channel_dispatcher.h"
 
 namespace eez {
 namespace psu {
@@ -26,22 +27,115 @@ namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-scpi_result_t scpi_cmd_senseCurrentDcRangeAuto(scpi_t * context) {
+scpi_result_t scpi_cmd_senseCurrentDcRangeUpper(scpi_t * context) {
+    CurrentRangeSelectionMode mode;
+
+    scpi_number_t param;
+    if (!SCPI_ParamNumber(context, scpi_special_numbers_def, &param, true)) {
+        return SCPI_RES_ERR;
+    }
+    if (param.special) {
+        if (param.tag == SCPI_NUM_MIN) {
+            mode = CURRENT_RANGE_SELECTION_ALWAYS_LOW;
+        }
+        else if (param.tag == SCPI_NUM_MAX) {
+            mode = CURRENT_RANGE_SELECTION_ALWAYS_HIGH;
+        }
+        else if (param.tag == SCPI_NUM_DEF) {
+            mode = CURRENT_RANGE_SELECTION_USE_BOTH;
+        }
+        else {
+            SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+            return SCPI_RES_ERR;
+        }
+    } else {
+        if (param.unit != SCPI_UNIT_NONE && param.unit != SCPI_UNIT_AMPER) {
+            SCPI_ErrorPush(context, SCPI_ERROR_INVALID_SUFFIX);
+            return SCPI_RES_ERR;
+        }
+
+        float value = (float)param.value;
+        if (util::equal(value, 0.5f, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+            mode = CURRENT_RANGE_SELECTION_ALWAYS_LOW;
+        } else if (util::equal(value, 5.0f, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+            mode = CURRENT_RANGE_SELECTION_ALWAYS_HIGH;
+        } else {
+            SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+            return SCPI_RES_ERR;
+        }
+    }
+
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
     }
 
+    if (!channel->hasSupportForCurrentDualRange()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    channel->setCurrentRangeSelectionMode(mode);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_senseCurrentDcRangeUpperQ(scpi_t *context) {
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!channel->hasSupportForCurrentDualRange()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    CurrentRangeSelectionMode mode = channel->getCurrentRangeSelectionMode();
+
+    if (mode == CURRENT_RANGE_SELECTION_ALWAYS_LOW) {
+        SCPI_ResultFloat(context, 0.5);
+    } else if (mode == CURRENT_RANGE_SELECTION_ALWAYS_HIGH) {
+        SCPI_ResultFloat(context, 5);
+    } else {
+        SCPI_ResultText(context, "Default");
+    }
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_senseCurrentDcRangeAuto(scpi_t *context) {
     bool enable;
     if (!SCPI_ParamBool(context, &enable, TRUE)) {
         return SCPI_RES_ERR;
     }
 
-    channel->flags.autoRange = enable;
-    if (!channel->flags.autoRange) {
-        channel->setCurrent(channel->i.set);
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
     }
-    profile::save();
+
+    if (!channel->hasSupportForCurrentDualRange()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    channel->enableAutoSelectCurrentRange(enable);
 
     return SCPI_RES_OK;
 }
@@ -52,7 +146,16 @@ scpi_result_t scpi_cmd_senseCurrentDcRangeAutoQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    SCPI_ResultBool(context, channel->flags.autoRange ? true : false);
+    if (!channel->hasSupportForCurrentDualRange()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+    }
+
+    if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+    SCPI_ResultBool(context, channel->isAutoSelectCurrentRangeEnabled());
 
     return SCPI_RES_OK;
 }

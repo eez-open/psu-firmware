@@ -267,12 +267,12 @@ void action_show_ch_settings_adv_lripple() {
     pushPage(PAGE_ID_CH_SETTINGS_ADV_LRIPPLE);
 }
 
-void action_show_ch_settings_adv_rsense() {
-    setPage(PAGE_ID_CH_SETTINGS_ADV_RSENSE);
+void action_show_ch_settings_adv_remote() {
+    setPage(PAGE_ID_CH_SETTINGS_ADV_REMOTE);
 }
 
-void action_show_ch_settings_adv_rprog() {
-    setPage(PAGE_ID_CH_SETTINGS_ADV_RPROG);
+void action_show_ch_settings_adv_ranges() {
+    setPage(PAGE_ID_CH_SETTINGS_ADV_RANGES);
 }
 
 void action_show_ch_settings_adv_tracking() {
@@ -383,12 +383,12 @@ void action_ch_settings_adv_lripple_toggle_auto_mode() {
     ((ChSettingsAdvLRipplePage *)getActivePage())->toggleAutoMode();
 }
 
-void action_ch_settings_adv_rsense_toggle_status() {
-    ((ChSettingsAdvRSensePage *)getActivePage())->toggleStatus();
+void action_ch_settings_adv_remote_toggle_sense() {
+    ((ChSettingsAdvRemotePage *)getActivePage())->toggleSense();
 }
 
-void action_ch_settings_adv_rprog_toggle_status() {
-    ((ChSettingsAdvRProgPage *)getActivePage())->toggleStatus();
+void action_ch_settings_adv_remote_toggle_programming() {
+    ((ChSettingsAdvRemotePage *)getActivePage())->toggleProgramming();
 }
 
 void action_sys_settings_date_time_toggle_dst() {
@@ -686,6 +686,14 @@ void action_reset() {
     gui::reset();
 }
 
+void action_ch_settings_adv_ranges_select_mode() {
+    ((ChSettingsAdvRangesPage *)getActivePage())->selectMode();
+}
+
+void action_ch_settings_adv_ranges_toggle_auto_ranging() {
+    ((ChSettingsAdvRangesPage *)getActivePage())->toggleAutoRanging();
+}
+
 
 ACTION actions[] = {
     0,
@@ -744,8 +752,8 @@ ACTION actions[] = {
     action_show_ch_settings_prot_otp,
     action_show_ch_settings_adv,
     action_show_ch_settings_adv_lripple,
-    action_show_ch_settings_adv_rsense,
-    action_show_ch_settings_adv_rprog,
+    action_show_ch_settings_adv_remote,
+    action_show_ch_settings_adv_ranges,
     action_show_ch_settings_adv_tracking,
     action_show_ch_settings_adv_coupling,
     action_show_ch_settings_info,
@@ -773,8 +781,8 @@ ACTION actions[] = {
     action_event_queue_next_page,
     action_ch_settings_adv_lripple_toggle_status,
     action_ch_settings_adv_lripple_toggle_auto_mode,
-    action_ch_settings_adv_rsense_toggle_status,
-    action_ch_settings_adv_rprog_toggle_status,
+    action_ch_settings_adv_remote_toggle_sense,
+    action_ch_settings_adv_remote_toggle_programming,
     action_sys_settings_date_time_toggle_dst,
     action_show_user_profiles,
     action_show_user_profiles2,
@@ -845,7 +853,9 @@ ACTION actions[] = {
     action_trigger_generate_manual,
     action_trigger_show_general_settings,
     action_show_stand_by_menu,
-    action_reset
+    action_reset,
+    action_ch_settings_adv_ranges_select_mode,
+    action_ch_settings_adv_ranges_toggle_auto_ranging
 };
 
 }

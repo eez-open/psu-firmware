@@ -63,7 +63,7 @@ float getPrecision(float value, ValueType valueType, int channelIndex) {
         }
     } else {
         if (valueType == VALUE_TYPE_FLOAT_AMPER) {
-            if (channelIndex != -1 && channel_dispatcher::currentHasDualRange(Channel::get(channelIndex)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+            if (channelIndex != -1 && channel_dispatcher::isCurrentLowRangeAllowed(Channel::get(channelIndex)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
                 ++numSignificantDecimalDigits;
             }
         }

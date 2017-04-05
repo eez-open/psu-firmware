@@ -34,10 +34,9 @@ namespace gui {
 ////////////////////////////////////////////////////////////////////////////////
 
 data::Value ChSettingsAdvPage::getData(const data::Cursor &cursor, uint8_t id) {
-	if (id == DATA_ID_CHANNEL_RPROG_INSTALLED) {
-		return data::Value(g_channel->getFeatures() & CH_FEATURE_RPROG ? 1 : 0);
+	if (id == DATA_ID_CHANNEL_RANGES_SUPPORTED) {
+		return g_channel->hasSupportForCurrentDualRange() ? 1 : 0;
 	}
-
 	return data::Value();
 }
 
@@ -107,21 +106,55 @@ void ChSettingsAdvLRipplePage::set() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-data::Value ChSettingsAdvRSensePage::getData(const data::Cursor &cursor, uint8_t id) {
+data::Value ChSettingsAdvRemotePage::getData(const data::Cursor &cursor, uint8_t id) {
 	if (id == DATA_ID_CHANNEL_RSENSE_STATUS) {
 		return g_channel->isRemoteSensingEnabled() ? 1 : 0;
+	}
+	if (id == DATA_ID_CHANNEL_RPROG_INSTALLED) {
+		return data::Value(g_channel->getFeatures() & CH_FEATURE_RPROG ? 1 : 0);
 	}
 	return data::Value();
 }
 
-void ChSettingsAdvRSensePage::toggleStatus() {
+void ChSettingsAdvRemotePage::toggleSense() {
 	channel_dispatcher::remoteSensingEnable(*g_channel, !g_channel->isRemoteSensingEnabled());
+}
+
+void ChSettingsAdvRemotePage::toggleProgramming() {
+	g_channel->remoteProgrammingEnable(!g_channel->isRemoteProgrammingEnabled());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void ChSettingsAdvRProgPage::toggleStatus() {
-	g_channel->remoteProgrammingEnable(!g_channel->isRemoteProgrammingEnabled());
+data::Value ChSettingsAdvRangesPage::getData(const data::Cursor &cursor, uint8_t id) {
+	if (id == DATA_ID_CHANNEL_RANGES_MODE) {
+		return data::Value(g_channel->getCurrentRangeSelectionMode(),
+            data::ENUM_DEFINITION_CHANNEL_CURRENT_RANGE_SELECTION_MODE);
+	}
+	
+    if (id == DATA_ID_CHANNEL_RANGES_AUTO_RANGING) {
+		return data::Value(g_channel->isAutoSelectCurrentRangeEnabled() ? 1 : 0);
+	}
+
+    if (id == DATA_ID_CHANNEL_RANGES_CURRENTLY_SELECTED) {
+		return data::Value(g_channel->flags.currentCurrentRange,
+            data::ENUM_DEFINITION_CHANNEL_CURRENT_RANGE);
+	}
+	
+    return data::Value();
+}
+
+void ChSettingsAdvRangesPage::onModeSet(uint8_t value) {
+	popPage();
+    g_channel->setCurrentRangeSelectionMode((CurrentRangeSelectionMode)value);
+}
+
+void ChSettingsAdvRangesPage::selectMode() {
+    pushSelectFromEnumPage(data::g_channelCurrentRangeSelectionMode, g_channel->getCurrentRangeSelectionMode(), -1, onModeSet);
+}
+
+void ChSettingsAdvRangesPage::toggleAutoRanging() {
+    g_channel->enableAutoSelectCurrentRange(!g_channel->isAutoSelectCurrentRangeEnabled());
 }
 
 ////////////////////////////////////////////////////////////////////////////////

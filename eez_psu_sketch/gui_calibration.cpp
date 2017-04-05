@@ -103,19 +103,19 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
     } else if (id == DATA_ID_CAL_CH_I0_MAX) {
         return data::Value(channel.cal_conf.i[0].max.val, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
     } else if (id == DATA_ID_CAL_CH_I1_MIN) {
-        if (channel.currentHasDualRange()) {
+        if (channel.hasSupportForCurrentDualRange()) {
             return data::Value(channel.cal_conf.i[1].min.val, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
         } else {
             return data::Value(PSTR(""));
         }
     } else if (id == DATA_ID_CAL_CH_I1_MID) {
-        if (channel.currentHasDualRange()) {
+        if (channel.hasSupportForCurrentDualRange()) {
             return data::Value(channel.cal_conf.i[1].mid.val, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
         } else {
             return data::Value(PSTR(""));
         }
     } else if (id == DATA_ID_CAL_CH_I1_MAX) {
-        if (channel.currentHasDualRange()) {
+        if (channel.hasSupportForCurrentDualRange()) {
             return data::Value(channel.cal_conf.i[1].max.val, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
         } else {
             return data::Value(PSTR(""));
@@ -309,7 +309,7 @@ void previousStep() {
 
     if (g_stepNum > 0) {
         --g_stepNum;
-        if (g_stepNum == 8 && !psu::calibration::currentHasDualRange()) {
+        if (g_stepNum == 8 && !psu::calibration::hasSupportForCurrentDualRange()) {
             g_stepNum = 5;
         }
         showCurrentStep();
@@ -331,7 +331,7 @@ void nextStep() {
     }
 
     ++g_stepNum;
-    if (g_stepNum == 6 && !psu::calibration::currentHasDualRange()) {
+    if (g_stepNum == 6 && !psu::calibration::hasSupportForCurrentDualRange()) {
         g_stepNum = 9;
     }
     showCurrentStep();

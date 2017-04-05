@@ -100,7 +100,7 @@ void strcatFloat(char *str, float value, int numSignificantDecimalDigits) {
 
 void strcatFloat(char *str, float value, ValueType valueType, int channelIndex) {
     int numSignificantDecimalDigits = getNumSignificantDecimalDigits(valueType);
-    if (valueType == VALUE_TYPE_FLOAT_AMPER && channelIndex != -1 && channel_dispatcher::currentHasDualRange(Channel::get(channelIndex)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+    if (valueType == VALUE_TYPE_FLOAT_AMPER && channelIndex != -1 && channel_dispatcher::isCurrentLowRangeAllowed(Channel::get(channelIndex)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
         ++numSignificantDecimalDigits;
     }
     strcatFloat(str, value, numSignificantDecimalDigits);
@@ -118,7 +118,7 @@ void strcatCurrent(char *str, float value, int numSignificantDecimalDigits, int 
     if (numSignificantDecimalDigits == -1) {
         numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_AMPER);
     }
-    if (channelIndex != -1 && channel_dispatcher::currentHasDualRange(Channel::get(channelIndex)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+    if (channelIndex != -1 && channel_dispatcher::isCurrentLowRangeAllowed(Channel::get(channelIndex)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
         ++numSignificantDecimalDigits;
     }
     strcatFloat(str, value, numSignificantDecimalDigits);

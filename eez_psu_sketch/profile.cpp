@@ -132,7 +132,8 @@ void recallChannelsFromProfile(Parameters *profile, int location) {
             trigger::setCurrent(channel, profile->channels[i].i_triggerValue);
             list::setListCount(channel, profile->channels[i].listCount);
 
-            channel.flags.autoRange = profile->channels[i].flags.autoRange;
+            channel.flags.currentRangeSelectionMode = profile->channels[i].flags.currentRangeSelectionMode;
+            channel.flags.autoSelectCurrentRange = profile->channels[i].flags.autoSelectCurrentRange;
 
 #if OPTION_SD_CARD
             char filePath[MAX_PATH_LENGTH];
@@ -316,7 +317,8 @@ bool saveAtLocation(int location, char *name) {
                 profile.channels[i].i_triggerValue = trigger::getCurrent(channel);
                 profile.channels[i].listCount = list::getListCount(channel);
 
-                profile.channels[i].flags.autoRange = channel.flags.autoRange;
+                profile.channels[i].flags.currentRangeSelectionMode = channel.flags.currentRangeSelectionMode;
+                profile.channels[i].flags.autoSelectCurrentRange = channel.flags.autoSelectCurrentRange;
 
 #if OPTION_SD_CARD
                 if (list::getListsChanged(channel)) {

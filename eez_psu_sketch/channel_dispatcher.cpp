@@ -155,6 +155,9 @@ bool setType(Type value) {
                     }
                 }
 
+                channel.setCurrentRangeSelectionMode(CURRENT_RANGE_SELECTION_USE_BOTH);
+                channel.enableAutoSelectCurrentRange(false);
+
                 channel.resetHistory();
             }
         }
@@ -801,11 +804,11 @@ void setLoad(Channel &channel, float load) {
 }
 #endif
 
-bool currentHasDualRange(Channel &channel) {
+bool isCurrentLowRangeAllowed(Channel &channel) {
     if (isCoupled() || isTracked()) {
-        return Channel::get(0).currentHasDualRange() || Channel::get(1).currentHasDualRange();
+        return Channel::get(0).isCurrentLowRangeAllowed() || Channel::get(1).isCurrentLowRangeAllowed();
     } else {
-        return channel.currentHasDualRange();
+        return channel.isCurrentLowRangeAllowed();
     }
 }
 

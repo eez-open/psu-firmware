@@ -83,11 +83,26 @@ data::EnumItem g_triggerPolarityEnumDefinition[] = {
     {0, 0}
 };
 
+data::EnumItem g_channelCurrentRangeSelectionMode[] = {
+    {CURRENT_RANGE_SELECTION_USE_BOTH, PSTR("Best (default)")},
+    {CURRENT_RANGE_SELECTION_ALWAYS_HIGH, PSTR("5A")},
+    {CURRENT_RANGE_SELECTION_ALWAYS_LOW, PSTR("0.5A")},
+    {0, 0}
+};
+
+data::EnumItem g_channelCurrentRange[] = {
+    {CURRENT_RANGE_HIGH, PSTR("5A")},
+    {CURRENT_RANGE_LOW, PSTR("0.5A")},
+    {0, 0}
+};
+
 static const data::EnumItem *enumDefinitions[] = {
     g_channelDisplayValueEnumDefinition,
     g_channelTriggerModeEnumDefinition,
     g_triggerSourceEnumDefinition,
-    g_triggerPolarityEnumDefinition
+    g_triggerPolarityEnumDefinition,
+    g_channelCurrentRangeSelectionMode,
+    g_channelCurrentRange
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -197,7 +212,7 @@ void Value::formatFloatValue(float &value, ValueType &valueType, int &numSignifi
         } else if (valueType == VALUE_TYPE_FLOAT_AMPER) {
             valueType = VALUE_TYPE_FLOAT_MILLI_AMPER;
             if (!forceNumSignificantDecimalDigits) {
-                if (channel_dispatcher::currentHasDualRange(Channel::get(options_ & VALUE_OPTIONS_CH_MASK)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+                if (channel_dispatcher::isCurrentLowRangeAllowed(Channel::get(options_ & VALUE_OPTIONS_CH_MASK)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
                     numSignificantDecimalDigits = 1;
                 } else {
                     numSignificantDecimalDigits = 0;
@@ -724,6 +739,10 @@ Value get(const Cursor &cursor, uint8_t id) {
         return data::Value(channel_dispatcher::isCoupled() || channel_dispatcher::isTracked() ? 1 : 0);
     }
 
+    if (id == DATA_ID_CHANNEL_COUPLING_IS_SERIES) {
+        return data::Value(channel_dispatcher::isSeries() ? 1 : 0);
+    }
+
     Channel &channel = Channel::get(getCurrentChannelIndex(cursor));
 
     int channelStatus = channel.index > CH_NUM ? 0 : (channel.isOk() ? 1 : 2);
@@ -921,8 +940,8 @@ Value get(const Cursor &cursor, uint8_t id) {
             return data::Value((uint32_t)channel.onTimeCounter.getLastTime(), VALUE_TYPE_ON_TIME_COUNTER);
         }
 
-        if (id == DATA_ID_CHANNEL_CURRENT_HAS_DUAL_RANGE) {
-            return data::Value(channel.currentHasDualRange() ? 1 : 0);
+        if (id == DATA_ID_CHANNEL_HAS_SUPPORT_FOR_CURRENT_DUAL_RANGE) {
+            return data::Value(channel.hasSupportForCurrentDualRange() ? 1 : 0);
         }
     }
     

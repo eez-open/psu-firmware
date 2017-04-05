@@ -394,15 +394,15 @@
     },
     {
       "$eez": false,
-      "name": "show_ch_settings_adv_rsense",
+      "name": "show_ch_settings_adv_remote",
       "implementationType": "native",
-      "implementation": "setPage(PAGE_ID_CH_SETTINGS_ADV_RSENSE);"
+      "implementation": "setPage(PAGE_ID_CH_SETTINGS_ADV_REMOTE);"
     },
     {
       "$eez": false,
-      "name": "show_ch_settings_adv_rprog",
+      "name": "show_ch_settings_adv_ranges",
       "implementationType": "native",
-      "implementation": "setPage(PAGE_ID_CH_SETTINGS_ADV_RPROG);"
+      "implementation": "setPage(PAGE_ID_CH_SETTINGS_ADV_RANGES);"
     },
     {
       "$eez": false,
@@ -568,15 +568,15 @@
     },
     {
       "$eez": false,
-      "name": "ch_settings_adv_rsense_toggle_status",
+      "name": "ch_settings_adv_remote_toggle_sense",
       "implementationType": "native",
-      "implementation": "((ChSettingsAdvRSensePage *)getActivePage())->toggleStatus();"
+      "implementation": "((ChSettingsAdvRemotePage *)getActivePage())->toggleSense();"
     },
     {
       "$eez": false,
-      "name": "ch_settings_adv_rprog_toggle_status",
+      "name": "ch_settings_adv_remote_toggle_programming",
       "implementationType": "native",
-      "implementation": "((ChSettingsAdvRProgPage *)getActivePage())->toggleStatus();"
+      "implementation": "((ChSettingsAdvRemotePage *)getActivePage())->toggleProgramming();"
     },
     {
       "$eez": false,
@@ -1003,6 +1003,18 @@
       "name": "reset",
       "implementationType": "native",
       "implementation": "gui::reset();"
+    },
+    {
+      "$eez": false,
+      "name": "ch.settings.adv.ranges.selectMode",
+      "implementationType": "native",
+      "implementation": "((ChSettingsAdvRangesPage *)getActivePage())->selectMode();"
+    },
+    {
+      "$eez": false,
+      "name": "ch.settings.adv.ranges.toggleAutoRanging",
+      "implementationType": "native",
+      "implementation": "((ChSettingsAdvRangesPage *)getActivePage())->toggleAutoRanging();"
     }
   ],
   "data": [
@@ -1794,6 +1806,14 @@
     },
     {
       "$eez": false,
+      "name": "channel.coupling.isSeries",
+      "description": "",
+      "type": "boolean",
+      "enumItems": "",
+      "defaultValue": "0"
+    },
+    {
+      "$eez": false,
       "name": "sys.onTime.total",
       "description": "",
       "type": "string",
@@ -2351,10 +2371,36 @@
     },
     {
       "$eez": false,
-      "name": "channel.currentHasDualRange",
+      "name": "channel.hasSupportForCurrentDualRange",
       "type": "boolean",
       "enumItems": "",
       "defaultValue": "1"
+    },
+    {
+      "$eez": false,
+      "name": "channel.ranges.supported",
+      "type": "boolean",
+      "enumItems": "",
+      "defaultValue": "1"
+    },
+    {
+      "$eez": false,
+      "name": "channel.ranges.mode",
+      "type": "enum",
+      "enumItems": "[\n\"Best (default)\",\n\"0.5A\",\n\"5A\"\n]",
+      "defaultValue": "Best (default)"
+    },
+    {
+      "$eez": false,
+      "name": "channel.ranges.autoRanging",
+      "type": "boolean",
+      "defaultValue": "0"
+    },
+    {
+      "$eez": false,
+      "name": "channel.ranges.currentlySelected",
+      "type": "string",
+      "defaultValue": "0.5A"
     }
   ],
   "gui": {
@@ -16174,65 +16220,20 @@
             },
             {
               "$eez": false,
+              "type": "Text",
+              "action": "show_ch_settings_adv_remote",
               "x": 16,
-              "type": "Select",
-              "data": "channel.coupling.mode",
               "y": 56,
               "width": 236,
               "height": 28,
-              "style": "default",
-              "widgets": [
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "show_ch_settings_adv_rsense",
-                  "x": 0,
-                  "y": 0,
-                  "width": 236,
-                  "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "Remote sensing"
-                },
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "show_ch_settings_adv_rsense",
-                  "x": 0,
-                  "y": 0,
-                  "width": 236,
-                  "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "Remote sensing"
-                },
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "",
-                  "x": 0,
-                  "y": 0,
-                  "width": 236,
-                  "height": 28,
-                  "style": "default_disabled_S_left",
-                  "text": "Remote sensing \\u008c"
-                },
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "show_ch_settings_adv_rsense",
-                  "x": 0,
-                  "y": 0,
-                  "width": 236,
-                  "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "Remote sensing"
-                }
-              ]
+              "style": "edit_value_active_S_left",
+              "text": "Sensing and programming"
             },
             {
               "$eez": false,
               "x": 16,
               "type": "Select",
-              "data": "channel.rprog.installed",
+              "data": "channel.ranges.supported",
               "y": 84,
               "width": 236,
               "height": 28,
@@ -16241,91 +16242,23 @@
                 {
                   "$eez": false,
                   "type": "Text",
-                  "action": "",
                   "x": 0,
                   "y": 0,
                   "width": 236,
                   "height": 28,
-                  "style": "edit_value_S_left",
-                  "text": "Remote prog. not installed"
+                  "style": "default_disabled_S_left",
+                  "text": "Current ranges (unsupported)"
                 },
                 {
                   "$eez": false,
-                  "type": "Container",
+                  "type": "Text",
+                  "action": "show_ch_settings_adv_ranges",
                   "x": 0,
                   "y": 0,
                   "width": 236,
                   "height": 28,
-                  "style": "default",
-                  "widgets": [
-                    {
-                      "$eez": false,
-                      "x": 0,
-                      "type": "Select",
-                      "data": "channel.coupling.mode",
-                      "y": 0,
-                      "width": 236,
-                      "height": 28,
-                      "style": "default",
-                      "widgets": [
-                        {
-                          "$eez": false,
-                          "type": "Container",
-                          "x": 0,
-                          "y": 0,
-                          "width": 236,
-                          "height": 28,
-                          "style": "default",
-                          "widgets": [
-                            {
-                              "$eez": false,
-                              "type": "Text",
-                              "action": "show_ch_settings_adv_rprog",
-                              "x": 0,
-                              "y": 0,
-                              "width": 236,
-                              "height": 28,
-                              "style": "edit_value_active_S_left",
-                              "text": "Remote programming"
-                            }
-                          ]
-                        },
-                        {
-                          "$eez": false,
-                          "type": "Text",
-                          "action": "",
-                          "x": 0,
-                          "y": 0,
-                          "width": 236,
-                          "height": 28,
-                          "style": "default_disabled_S_left",
-                          "text": "Remote programming \\u008c"
-                        },
-                        {
-                          "$eez": false,
-                          "type": "Text",
-                          "action": "",
-                          "x": 0,
-                          "y": 0,
-                          "width": 236,
-                          "height": 28,
-                          "style": "default_disabled_S_left",
-                          "text": "Remote programming \\u008c"
-                        },
-                        {
-                          "$eez": false,
-                          "type": "Text",
-                          "action": "",
-                          "x": 0,
-                          "y": 0,
-                          "width": 236,
-                          "height": 28,
-                          "style": "default_disabled_S_left",
-                          "text": "Remote programming \\u008c"
-                        }
-                      ]
-                    }
-                  ]
+                  "style": "edit_value_active_S_left",
+                  "text": "Current ranges"
                 }
               ]
             },
@@ -16917,7 +16850,7 @@
       },
       {
         "$eez": false,
-        "name": "ch_settings_adv_rsense",
+        "name": "ch_settings_adv_remote",
         "description": "Output voltage remote sensing information and settings",
         "portrait": {
           "$eez": false,
@@ -16933,6 +16866,7 @@
           "y": 0,
           "width": 320,
           "height": 240,
+          "style": "edit_value_active_S_left",
           "widgets": [
             {
               "$eez": false,
@@ -16972,7 +16906,7 @@
                       "width": 204,
                       "height": 28,
                       "style": "value_S",
-                      "text": "Set remote voltage sense"
+                      "text": "Sensing and programming"
                     }
                   ]
                 },
@@ -17001,84 +16935,202 @@
             },
             {
               "$eez": false,
-              "type": "MultilineText",
+              "type": "Container",
               "x": 16,
               "y": 28,
               "width": 224,
-              "height": 82,
-              "style": "edit_value_S_left",
-              "text": "Output voltage remote sensing is operational only in CV (Constant Voltage) mode."
-            },
-            {
-              "$eez": false,
-              "type": "Rectangle",
-              "x": 240,
-              "y": 28,
-              "width": 12,
-              "height": 82,
-              "style": "default_inverse"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 16,
-              "y": 110,
-              "width": 101,
-              "height": 42,
-              "style": "edit_value_left",
-              "text": "Status:"
-            },
-            {
-              "$eez": false,
-              "x": 117,
-              "type": "Select",
-              "data": "channel.rsense.status",
-              "y": 110,
-              "width": 62,
-              "height": 42,
+              "height": 76,
               "style": "default",
               "widgets": [
                 {
                   "$eez": false,
-                  "type": "Text",
-                  "action": "ch_settings_adv_rsense_toggle_status",
+                  "type": "MultilineText",
                   "x": 0,
                   "y": 0,
-                  "width": 62,
-                  "height": 42,
-                  "style": "edit_value_active_left",
-                  "text": "OFF"
+                  "width": 224,
+                  "height": 49,
+                  "style": "edit_value_S_left",
+                  "text": "Voltage remote sensing (operational only in CV mode)"
                 },
                 {
                   "$eez": false,
                   "type": "Text",
-                  "action": "ch_settings_adv_rsense_toggle_status",
-                  "x": 0,
-                  "y": 0,
-                  "width": 62,
-                  "height": 42,
-                  "style": "edit_value_active_left",
-                  "text": "ON"
+                  "x": 12,
+                  "y": 48,
+                  "width": 68,
+                  "height": 28,
+                  "style": "edit_value_S_left",
+                  "text": "Status:"
+                },
+                {
+                  "$eez": false,
+                  "x": 80,
+                  "type": "Select",
+                  "data": "channel.coupling.isSeries",
+                  "y": 48,
+                  "width": 56,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "x": 0,
+                      "type": "Select",
+                      "data": "channel.rsense.status",
+                      "y": 0,
+                      "width": 56,
+                      "height": 28,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "action": "ch_settings_adv_remote_toggle_sense",
+                          "x": 0,
+                          "y": 0,
+                          "width": 56,
+                          "height": 28,
+                          "style": "edit_value_active_S_left",
+                          "text": "OFF"
+                        },
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "action": "ch_settings_adv_remote_toggle_sense",
+                          "x": 0,
+                          "y": 0,
+                          "width": 56,
+                          "height": 28,
+                          "style": "edit_value_active_S_left",
+                          "text": "ON"
+                        }
+                      ]
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "",
+                      "x": 0,
+                      "y": 0,
+                      "width": 56,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "OFF \\u008c"
+                    }
+                  ]
                 }
               ]
             },
             {
               "$eez": false,
-              "type": "Rectangle",
-              "x": 179,
-              "y": 110,
-              "width": 73,
-              "height": 42,
-              "style": "default_inverse"
-            },
-            {
-              "$eez": false,
-              "type": "Rectangle",
               "x": 16,
-              "y": 152,
-              "width": 236,
-              "height": 52,
-              "style": "default_inverse"
+              "type": "Select",
+              "data": "channel.rprog.installed",
+              "y": 104,
+              "width": 224,
+              "height": 100,
+              "style": "default",
+              "widgets": [
+                {
+                  "$eez": false,
+                  "type": "Text",
+                  "action": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 224,
+                  "height": 100,
+                  "style": "edit_value_S_left",
+                  "text": "Remote prog. not installed"
+                },
+                {
+                  "$eez": false,
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 224,
+                  "height": 100,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "type": "MultilineText",
+                      "x": 0,
+                      "y": 0,
+                      "width": 224,
+                      "height": 72,
+                      "style": "edit_value_S_left",
+                      "text": "Remote voltage programming using external signal source   (+2.5 V for full scale)"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 12,
+                      "y": 72,
+                      "width": 68,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Status:"
+                    },
+                    {
+                      "$eez": false,
+                      "x": 80,
+                      "type": "Select",
+                      "data": "channel.isCoupledOrTracked",
+                      "y": 72,
+                      "width": 56,
+                      "height": 28,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "$eez": false,
+                          "x": 0,
+                          "type": "Select",
+                          "data": "channel.rprog.status",
+                          "y": 0,
+                          "width": 56,
+                          "height": 28,
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "action": "ch_settings_adv_remote_toggle_programming",
+                              "x": 0,
+                              "y": 0,
+                              "width": 56,
+                              "height": 28,
+                              "style": "edit_value_active_S_left",
+                              "text": "OFF"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "action": "ch_settings_adv_remote_toggle_programming",
+                              "x": 0,
+                              "y": 0,
+                              "width": 56,
+                              "height": 28,
+                              "style": "edit_value_active_S_left",
+                              "text": "ON"
+                            }
+                          ]
+                        },
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "action": "",
+                          "x": 0,
+                          "y": 0,
+                          "width": 56,
+                          "height": 28,
+                          "style": "edit_value_S_left",
+                          "text": "OFF \\u008c"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             },
             {
               "$eez": false,
@@ -17158,8 +17210,8 @@
       },
       {
         "$eez": false,
-        "name": "ch_settings_adv_rprog",
-        "description": "Output voltage remote programming information and settings",
+        "name": "ch_settings_adv_ranges",
+        "description": "Output voltage remote sensing information and settings",
         "portrait": {
           "$eez": false,
           "x": 0,
@@ -17174,108 +17226,159 @@
           "y": 0,
           "width": 320,
           "height": 240,
+          "style": "edit_value_active_S_left",
           "widgets": [
             {
               "$eez": false,
-              "type": "Text",
-              "data": "channel.shortLabel",
               "x": 6,
-              "y": 0,
-              "width": 36,
-              "height": 28,
-              "style": "value_S",
-              "text": "Channel protections"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 42,
-              "y": 0,
-              "width": 210,
-              "height": 28,
-              "style": "value_S",
-              "text": "Set remote programming"
-            },
-            {
-              "$eez": false,
-              "type": "MultilineText",
-              "x": 16,
-              "y": 28,
-              "width": 224,
-              "height": 82,
-              "style": "edit_value_S_left",
-              "text": "Use external voltage source (+2.5 V for full scale) to program output voltage."
-            },
-            {
-              "$eez": false,
-              "type": "Rectangle",
-              "x": 240,
-              "y": 28,
-              "width": 12,
-              "height": 82,
-              "style": "default_inverse"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 16,
-              "y": 110,
-              "width": 101,
-              "height": 42,
-              "style": "edit_value_left",
-              "text": "Status:"
-            },
-            {
-              "$eez": false,
-              "x": 117,
               "type": "Select",
-              "data": "channel.rprog.status",
-              "y": 110,
-              "width": 62,
-              "height": 42,
+              "data": "channel.isCoupledOrTracked",
+              "y": 0,
+              "width": 246,
+              "height": 28,
+              "style": "default",
+              "widgets": [
+                {
+                  "$eez": false,
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "data": "channel.shortLabel",
+                      "x": 6,
+                      "y": 0,
+                      "width": 36,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Channel protections"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 42,
+                      "y": 0,
+                      "width": 204,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Current ranges"
+                    }
+                  ]
+                },
+                {
+                  "$eez": false,
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 246,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "Set remote voltage sense"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 16,
+              "y": 28,
+              "width": 115,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Current range:"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "data": "channel.ranges.mode",
+              "action": "ch.settings.adv.ranges.selectMode",
+              "x": 131,
+              "y": 28,
+              "width": 121,
+              "height": 28,
+              "style": "edit_value_active_S_left",
+              "text": "Best (default) / 0.5A / 5A"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 16,
+              "y": 56,
+              "width": 115,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Autoranging:"
+            },
+            {
+              "$eez": false,
+              "x": 131,
+              "type": "Select",
+              "data": "channel.ranges.autoRanging",
+              "y": 56,
+              "width": 48,
+              "height": 28,
               "style": "default",
               "widgets": [
                 {
                   "$eez": false,
                   "type": "Text",
-                  "action": "ch_settings_adv_rprog_toggle_status",
+                  "action": "ch.settings.adv.ranges.toggleAutoRanging",
                   "x": 0,
                   "y": 0,
-                  "width": 62,
-                  "height": 42,
-                  "style": "edit_value_active_left",
+                  "width": 48,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
                   "text": "OFF"
                 },
                 {
                   "$eez": false,
                   "type": "Text",
-                  "action": "ch_settings_adv_rprog_toggle_status",
+                  "action": "ch.settings.adv.ranges.toggleAutoRanging",
                   "x": 0,
                   "y": 0,
-                  "width": 62,
-                  "height": 42,
-                  "style": "edit_value_active_left",
+                  "width": 48,
+                  "height": 28,
+                  "style": "edit_value_active_S_left",
                   "text": "ON"
                 }
               ]
             },
             {
               "$eez": false,
-              "type": "Rectangle",
-              "x": 179,
-              "y": 110,
-              "width": 73,
-              "height": 42,
-              "style": "default_inverse"
+              "type": "Text",
+              "x": 16,
+              "y": 84,
+              "width": 146,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Currently selected:"
             },
             {
               "$eez": false,
-              "type": "Rectangle",
-              "x": 16,
-              "y": 152,
-              "width": 236,
-              "height": 52,
-              "style": "default_inverse"
+              "type": "Text",
+              "data": "channel.ranges.currentlySelected",
+              "x": 162,
+              "y": 84,
+              "width": 90,
+              "height": 28,
+              "style": "value_S",
+              "text": "0.5A"
             },
             {
               "$eez": false,
@@ -21735,7 +21838,7 @@
                           "$eez": false,
                           "x": 0,
                           "type": "Select",
-                          "data": "channel.currentHasDualRange",
+                          "data": "channel.hasSupportForCurrentDualRange",
                           "y": 0,
                           "width": 230,
                           "height": 28,
@@ -21767,7 +21870,7 @@
                           "$eez": false,
                           "x": 0,
                           "type": "Select",
-                          "data": "channel.currentHasDualRange",
+                          "data": "channel.hasSupportForCurrentDualRange",
                           "y": 0,
                           "width": 230,
                           "height": 28,
@@ -21799,7 +21902,7 @@
                           "$eez": false,
                           "x": 0,
                           "type": "Select",
-                          "data": "channel.currentHasDualRange",
+                          "data": "channel.hasSupportForCurrentDualRange",
                           "y": 0,
                           "width": 230,
                           "height": 28,
@@ -77725,6 +77828,14 @@
         "$eez": false,
         "name": "SENSe",
         "commands": [
+          {
+            "$eez": false,
+            "name": "SENSe:CURRent[:DC]:RANGe[:UPPer]"
+          },
+          {
+            "$eez": false,
+            "name": "SENSe:CURRent[:DC]:RANGe[:UPPer]?"
+          },
           {
             "$eez": false,
             "name": "SENSe:CURRent[:DC]:RANGe:AUTO"

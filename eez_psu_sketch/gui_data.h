@@ -32,7 +32,9 @@ enum EnumDefinition {
     ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE,
     ENUM_DEFINITION_CHANNEL_TRIGGER_MODE,
     ENUM_DEFINITION_TRIGGER_SOURCE,
-    ENUM_DEFINITION_TRIGGER_POLARITY
+    ENUM_DEFINITION_TRIGGER_POLARITY,
+    ENUM_DEFINITION_CHANNEL_CURRENT_RANGE_SELECTION_MODE,
+    ENUM_DEFINITION_CHANNEL_CURRENT_RANGE
 };
 
 struct EnumItem {
@@ -44,6 +46,8 @@ extern data::EnumItem g_channelDisplayValueEnumDefinition[];
 extern data::EnumItem g_channelTriggerModeEnumDefinition[];
 extern data::EnumItem g_triggerSourceEnumDefinition[];
 extern data::EnumItem g_triggerPolarityEnumDefinition[];
+extern data::EnumItem g_channelCurrentRangeSelectionMode[];
+extern data::EnumItem g_channelCurrentRange[];
 
 enum ValueOptions {
     VALUE_OPTIONS_CH1 = 0x00,

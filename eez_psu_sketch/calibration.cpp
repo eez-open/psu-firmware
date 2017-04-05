@@ -213,7 +213,7 @@ void start(Channel *channel_) {
     g_remark[0] = 0;
 
     g_currents[0].reset();
-    if (currentHasDualRange()) {
+    if (hasSupportForCurrentDualRange()) {
         g_currents[1].reset();
     }
     g_voltage.reset();
@@ -237,8 +237,8 @@ void stop() {
     g_channel->setOperBits(OPER_ISUM_CALI, false);
 }
 
-bool currentHasDualRange() {
-    return g_channel->currentHasDualRange();
+bool hasSupportForCurrentDualRange() {
+    return g_channel->hasSupportForCurrentDualRange();
 }
 
 void selectCurrentRange(int8_t range) {
@@ -318,7 +318,7 @@ bool canSave(int16_t &scpiErr) {
         valueCalibrated = true;
     }
 
-    if (currentHasDualRange()) {
+    if (hasSupportForCurrentDualRange()) {
         if (isCurrentCalibrated(g_currents[1])) {
             if (!checkCalibrationValue(g_currents[1], scpiErr)) {
                 return false;
@@ -371,7 +371,7 @@ bool save() {
     }
 
     if (isCurrentCalibrated(g_currents[0])) {
-        g_channel->cal_conf.flags.i_cal_params_exists_range0 = 1;
+        g_channel->cal_conf.flags.i_cal_params_exists_range_high = 1;
 
         g_channel->cal_conf.i[0].min.dac = g_currents[0].min_dac;
         g_channel->cal_conf.i[0].min.val = g_currents[0].min_val;
@@ -391,9 +391,9 @@ bool save() {
         g_currents[0].level = LEVEL_NONE;
     }
 
-    if (currentHasDualRange()) {
+    if (hasSupportForCurrentDualRange()) {
         if (isCurrentCalibrated(g_currents[1])) {
-            g_channel->cal_conf.flags.i_cal_params_exists_range1 = 1;
+            g_channel->cal_conf.flags.i_cal_params_exists_range_low = 1;
 
             g_channel->cal_conf.i[1].min.dac = g_currents[1].min_dac;
             g_channel->cal_conf.i[1].min.val = g_currents[1].min_val;
