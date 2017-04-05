@@ -1676,7 +1676,7 @@ float Channel::getDualRangeGndOffset() {
 #ifdef EEZ_PSU_SIMULATOR
     return 0;
 #else
-    return flags.currentRange == 1 ? (CURRENT_GND_OFFSET / 10) : CURRENT_GND_OFFSET;
+    return flags.currentCurrentRange == CURRENT_RANGE_LOW ? (CURRENT_GND_OFFSET / 10) : CURRENT_GND_OFFSET;
 #endif
 }
 
