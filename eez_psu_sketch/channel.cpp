@@ -1739,6 +1739,9 @@ void Channel::setCurrentRange(uint8_t currentCurrentRange) {
                 ioexp.changeBit(IOExpander::IO_BIT_5A, false);
                 calculateNegligibleAdcDiffForCurrent();
             }
+            if (isOutputEnabled()) {
+                adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
+            }
         }
     }
 }
