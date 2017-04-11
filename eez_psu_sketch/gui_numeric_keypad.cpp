@@ -78,6 +78,10 @@ void NumericKeypad::init(const char *label, const data::Value& value, NumericKey
     m_startValue = value;
     m_options = options;
 
+    if (m_startValue.isMilli()) {
+        switchToMilli();
+    }
+
     m_maxChars = 16;
 
     reset();
@@ -133,6 +137,8 @@ data::Value NumericKeypad::getData(uint8_t id) {
             m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT ||
             m_options.editUnit == VALUE_TYPE_FLOAT_AMPER ||
             m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER ||
+            m_options.editUnit == VALUE_TYPE_FLOAT_WATT ||
+            m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_WATT ||
             m_options.editUnit == VALUE_TYPE_FLOAT_SECOND ||
             m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND ? 1 : 0);
     }
@@ -193,6 +199,7 @@ ValueType NumericKeypad::getValueUnit() {
     if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT)   return VALUE_TYPE_FLOAT_VOLT;
     if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER)  return VALUE_TYPE_FLOAT_AMPER;
     if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND) return VALUE_TYPE_FLOAT_SECOND;
+    if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_WATT) return VALUE_TYPE_FLOAT_WATT;
     return m_options.editUnit;
 }
 
@@ -200,12 +207,14 @@ bool NumericKeypad::isMilli() {
     return
         m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT ||
         m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER ||
+        m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_WATT ||
         m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND;
 }
 
 ValueType NumericKeypad::getMilliUnit() {
     if (m_options.editUnit == VALUE_TYPE_FLOAT_VOLT)   return VALUE_TYPE_FLOAT_MILLI_VOLT;
     if (m_options.editUnit == VALUE_TYPE_FLOAT_AMPER)  return VALUE_TYPE_FLOAT_MILLI_AMPER;
+    if (m_options.editUnit == VALUE_TYPE_FLOAT_WATT)   return VALUE_TYPE_FLOAT_MILLI_WATT;
     if (m_options.editUnit == VALUE_TYPE_FLOAT_SECOND) return VALUE_TYPE_FLOAT_MILLI_SECOND;
     return m_options.editUnit;
 }
@@ -219,6 +228,8 @@ ValueType NumericKeypad::getSwitchToUnit() {
     if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT)   return VALUE_TYPE_FLOAT_VOLT;
     if (m_options.editUnit == VALUE_TYPE_FLOAT_AMPER)        return VALUE_TYPE_FLOAT_MILLI_AMPER;
     if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER)  return VALUE_TYPE_FLOAT_AMPER;
+    if (m_options.editUnit == VALUE_TYPE_FLOAT_WATT)         return VALUE_TYPE_FLOAT_MILLI_WATT;
+    if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_WATT)   return VALUE_TYPE_FLOAT_WATT;
     if (m_options.editUnit == VALUE_TYPE_FLOAT_SECOND)       return VALUE_TYPE_FLOAT_MILLI_SECOND;
     if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND) return VALUE_TYPE_FLOAT_SECOND;
     return m_options.editUnit;
