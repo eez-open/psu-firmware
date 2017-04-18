@@ -21228,8 +21228,7 @@
                 "$eez": false,
                 "x": 0,
                 "type": "Select",
-                "data": "channel.calibration.status",
-                "action": "",
+                "data": "channel.status",
                 "y": 0,
                 "width": 290,
                 "height": 65,
@@ -21237,59 +21236,19 @@
                 "widgets": [
                   {
                     "$eez": false,
-                    "type": "Container",
+                    "type": "Rectangle",
                     "x": 0,
                     "y": 0,
                     "width": 290,
                     "height": 65,
-                    "style": "default",
-                    "widgets": [
-                      {
-                        "$eez": false,
-                        "type": "Text",
-                        "data": "channel.shortLabel",
-                        "x": 0,
-                        "y": 0,
-                        "width": 42,
-                        "height": 30,
-                        "style": "edit_value_S_left",
-                        "text": ""
-                      },
-                      {
-                        "$eez": false,
-                        "type": "Text",
-                        "action": "show_sys_settings_cal_ch",
-                        "x": 42,
-                        "y": 0,
-                        "width": 74,
-                        "height": 30,
-                        "style": "edit_value_active_S_left",
-                        "text": "Calibrate"
-                      },
-                      {
-                        "$eez": false,
-                        "type": "Rectangle",
-                        "x": 116,
-                        "y": 0,
-                        "width": 90,
-                        "height": 30,
-                        "style": "default_inverse"
-                      },
-                      {
-                        "$eez": false,
-                        "type": "Rectangle",
-                        "x": 0,
-                        "y": 30,
-                        "width": 290,
-                        "height": 30,
-                        "style": "default_inverse"
-                      }
-                    ]
+                    "style": "default_inverse"
                   },
                   {
                     "$eez": false,
-                    "type": "Container",
                     "x": 0,
+                    "type": "Select",
+                    "data": "channel.calibration.status",
+                    "action": "",
                     "y": 0,
                     "width": 290,
                     "height": 65,
@@ -21297,93 +21256,164 @@
                     "widgets": [
                       {
                         "$eez": false,
-                        "type": "Text",
-                        "data": "channel.shortLabel",
+                        "type": "Container",
                         "x": 0,
                         "y": 0,
-                        "width": 42,
-                        "height": 30,
-                        "style": "edit_value_S_left",
-                        "text": ""
-                      },
-                      {
-                        "$eez": false,
-                        "x": 42,
-                        "type": "Select",
-                        "data": "channel.calibration.state",
-                        "action": "",
-                        "y": 0,
-                        "width": 64,
-                        "height": 30,
+                        "width": 290,
+                        "height": 65,
                         "style": "default",
                         "widgets": [
                           {
                             "$eez": false,
                             "type": "Text",
-                            "action": "sys_settings_cal_toggle_enable",
+                            "data": "channel.shortLabel",
                             "x": 0,
                             "y": 0,
-                            "width": 64,
+                            "width": 42,
                             "height": 30,
-                            "style": "edit_value_active_S_left",
-                            "text": "Enable"
+                            "style": "edit_value_S_left",
+                            "text": ""
                           },
                           {
                             "$eez": false,
                             "type": "Text",
-                            "action": "sys_settings_cal_toggle_enable",
-                            "x": 0,
+                            "action": "show_sys_settings_cal_ch",
+                            "x": 42,
                             "y": 0,
-                            "width": 64,
+                            "width": 74,
                             "height": 30,
                             "style": "edit_value_active_S_left",
-                            "text": "Disable"
+                            "text": "Calibrate"
+                          },
+                          {
+                            "$eez": false,
+                            "type": "Rectangle",
+                            "x": 116,
+                            "y": 0,
+                            "width": 90,
+                            "height": 30,
+                            "style": "default_inverse"
+                          },
+                          {
+                            "$eez": false,
+                            "type": "Rectangle",
+                            "x": 0,
+                            "y": 30,
+                            "width": 290,
+                            "height": 30,
+                            "style": "default_inverse"
                           }
                         ]
                       },
                       {
                         "$eez": false,
-                        "type": "Rectangle",
-                        "x": 106,
-                        "y": 0,
-                        "width": 10,
-                        "height": 30,
-                        "style": "default_inverse"
-                      },
-                      {
-                        "$eez": false,
-                        "type": "Text",
-                        "action": "show_sys_settings_cal_ch",
-                        "x": 116,
-                        "y": 0,
-                        "width": 90,
-                        "height": 30,
-                        "style": "edit_value_active_S_left",
-                        "text": "Recalibrate"
-                      },
-                      {
-                        "$eez": false,
-                        "type": "Text",
-                        "data": "channel.calibration.date",
+                        "type": "Container",
                         "x": 0,
-                        "y": 30,
-                        "width": 96,
-                        "height": 30,
-                        "style": "value_S",
-                        "text": "Date"
-                      },
-                      {
-                        "$eez": false,
-                        "type": "Text",
-                        "data": "channel.calibration.remark",
-                        "x": 96,
-                        "y": 30,
-                        "width": 194,
-                        "height": 30,
-                        "style": "value_S",
-                        "text": "Remark"
+                        "y": 0,
+                        "width": 290,
+                        "height": 65,
+                        "style": "default",
+                        "widgets": [
+                          {
+                            "$eez": false,
+                            "type": "Text",
+                            "data": "channel.shortLabel",
+                            "x": 0,
+                            "y": 0,
+                            "width": 42,
+                            "height": 30,
+                            "style": "edit_value_S_left",
+                            "text": ""
+                          },
+                          {
+                            "$eez": false,
+                            "x": 42,
+                            "type": "Select",
+                            "data": "channel.calibration.state",
+                            "action": "",
+                            "y": 0,
+                            "width": 64,
+                            "height": 30,
+                            "style": "default",
+                            "widgets": [
+                              {
+                                "$eez": false,
+                                "type": "Text",
+                                "action": "sys_settings_cal_toggle_enable",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "edit_value_active_S_left",
+                                "text": "Enable"
+                              },
+                              {
+                                "$eez": false,
+                                "type": "Text",
+                                "action": "sys_settings_cal_toggle_enable",
+                                "x": 0,
+                                "y": 0,
+                                "width": 64,
+                                "height": 30,
+                                "style": "edit_value_active_S_left",
+                                "text": "Disable"
+                              }
+                            ]
+                          },
+                          {
+                            "$eez": false,
+                            "type": "Rectangle",
+                            "x": 106,
+                            "y": 0,
+                            "width": 10,
+                            "height": 30,
+                            "style": "default_inverse"
+                          },
+                          {
+                            "$eez": false,
+                            "type": "Text",
+                            "action": "show_sys_settings_cal_ch",
+                            "x": 116,
+                            "y": 0,
+                            "width": 90,
+                            "height": 30,
+                            "style": "edit_value_active_S_left",
+                            "text": "Recalibrate"
+                          },
+                          {
+                            "$eez": false,
+                            "type": "Text",
+                            "data": "channel.calibration.date",
+                            "x": 0,
+                            "y": 30,
+                            "width": 96,
+                            "height": 30,
+                            "style": "value_S",
+                            "text": "Date"
+                          },
+                          {
+                            "$eez": false,
+                            "type": "Text",
+                            "data": "channel.calibration.remark",
+                            "x": 96,
+                            "y": 30,
+                            "width": 194,
+                            "height": 30,
+                            "style": "value_S",
+                            "text": "Remark"
+                          }
+                        ]
                       }
                     ]
+                  },
+                  {
+                    "$eez": false,
+                    "type": "Rectangle",
+                    "x": 0,
+                    "y": 0,
+                    "width": 290,
+                    "height": 65,
+                    "style": "default_inverse"
                   }
                 ]
               }
@@ -21657,48 +21687,14 @@
             },
             {
               "$eez": false,
+              "type": "Text",
+              "action": "sys_settings_cal_ch_wiz_start",
               "x": 0,
-              "type": "Select",
-              "data": "channel.status",
               "y": 204,
               "width": 224,
               "height": 36,
-              "style": "default",
-              "widgets": [
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "",
-                  "x": 0,
-                  "y": 0,
-                  "width": 224,
-                  "height": 36,
-                  "style": "non_interactive_button_S_disabled",
-                  "text": "Start calibration wizard"
-                },
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "sys_settings_cal_ch_wiz_start",
-                  "x": 0,
-                  "y": 0,
-                  "width": 224,
-                  "height": 36,
-                  "style": "non_interactive_button_S",
-                  "text": "Start calibration wizard"
-                },
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "",
-                  "x": 0,
-                  "y": 0,
-                  "width": 224,
-                  "height": 36,
-                  "style": "non_interactive_button_S_disabled",
-                  "text": "Start calibration wizard"
-                }
-              ]
+              "style": "non_interactive_button_S",
+              "text": "Start calibration wizard"
             },
             {
               "$eez": false,
