@@ -441,8 +441,13 @@ void tick(uint32_t tick_usec) {
                     return;
                 }
 
-                channel_dispatcher::setVoltage(channel, voltage);
-                channel_dispatcher::setCurrent(channel, current);
+                if (channel_dispatcher::getUSet(channel) != voltage) {
+                    channel_dispatcher::setVoltage(channel, voltage);
+                }
+
+                if (channel_dispatcher::getISet(channel) != current) {
+                    channel_dispatcher::setCurrent(channel, current);
+                }
 
                 uint32_t dwell = (uint32_t)round(g_channelsLists[i].dwellList[g_execution[i].it % g_channelsLists[i].dwellListLength] * 1000000L);
                 g_execution[i].nextPointTime = tick_usec + dwell;
