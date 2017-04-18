@@ -1728,13 +1728,13 @@ void Channel::setCurrentRange(uint8_t currentCurrentRange) {
             flags.currentCurrentRange = currentCurrentRange;
             if (flags.currentCurrentRange == 0) {
                 // 5A
-                DebugTrace("Switched to 5A range");
+                //DebugTrace("Switched to 5A range");
                 ioexp.changeBit(IOExpander::IO_BIT_5A, true);
                 ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
                 calculateNegligibleAdcDiffForCurrent();
             } else {
                 // 500mA
-                DebugTrace("Switched to 500mA range");
+                //DebugTrace("Switched to 500mA range");
                 ioexp.changeBit(IOExpander::IO_BIT_500mA, true);
                 ioexp.changeBit(IOExpander::IO_BIT_5A, false);
                 calculateNegligibleAdcDiffForCurrent();
