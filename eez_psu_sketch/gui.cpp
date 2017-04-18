@@ -852,13 +852,15 @@ void channelToggleOutput() {
     if (channel_dispatcher::isTripped(channel)) {
         errorMessageP(PSTR("Channel is tripped!"));
     } else {
+        bool triggerModeEnabled = channel_dispatcher::getVoltageTriggerMode(channel) != TRIGGER_MODE_FIXED ||
+            channel_dispatcher::getCurrentTriggerMode(channel) != TRIGGER_MODE_FIXED;
+
         if (channel.isOutputEnabled()) {
-            trigger::abort();
+            if (triggerModeEnabled) {
+                trigger::abort();
+            }
             channel_dispatcher::outputEnable(channel, false);
         } else {
-            bool triggerModeEnabled = channel_dispatcher::getVoltageTriggerMode(channel) != TRIGGER_MODE_FIXED ||
-                channel_dispatcher::getCurrentTriggerMode(channel) != TRIGGER_MODE_FIXED;
-
             if (triggerModeEnabled && trigger::isIdle()) {
                 g_toggleOutputWidgetCursor = g_foundWidgetAtDown;
                 pushPage(PAGE_ID_CH_START_LIST);
