@@ -787,7 +787,7 @@ Value get(const Cursor &cursor, uint8_t id) {
         }
 
         if (id == DATA_ID_EDIT_ENABLED) {
-            if (!trigger::isIdle() || getActivePageId() == PAGE_ID_CH_SETTINGS_LISTS) {
+            if ((channel_dispatcher::getVoltageTriggerMode(channel) != TRIGGER_MODE_FIXED && !trigger::isIdle()) || getActivePageId() == PAGE_ID_CH_SETTINGS_LISTS) {
                 return 0;
             }
             if (psu::calibration::isEnabled()) {
