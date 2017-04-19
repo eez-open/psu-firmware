@@ -665,7 +665,7 @@ bool wasFocusWidget(const WidgetCursor &widgetCursor) {
 bool isFocusWidget(const WidgetCursor &widgetCursor) {
     if (g_activePageId == PAGE_ID_CH_SETTINGS_LISTS) {
         return ((ChSettingsListsPage *)g_activePage)->isFocusWidget(widgetCursor);
-    } else if (!trigger::isIdle()) {
+    } else if (channel_dispatcher::getVoltageTriggerMode(Channel::get(widgetCursor.cursor.i)) != TRIGGER_MODE_FIXED && !trigger::isIdle()) {
         return false;
     } else if (psu::calibration::isEnabled()) {
         return false;
@@ -677,6 +677,40 @@ bool isFocusWidget(const WidgetCursor &widgetCursor) {
 
 bool isFocusChanged() {
     return g_focusEditValue.getType() != VALUE_TYPE_NONE;
+}
+
+bool isEnabledFocusCursor(data::Cursor& cursor, uint8_t dataId) {
+    Channel &channel = Channel::get(cursor.i);
+    return channel.isOk() && 
+        (channel_dispatcher::getVoltageTriggerMode(channel) == TRIGGER_MODE_FIXED || trigger::isIdle());
+}
+
+void moveToNextFocusCursor() {
+    data::Cursor newCursor = g_focusCursor;
+    uint8_t newDataId = g_focusDataId;
+    bool newCursorFound = false;
+
+    for (int i = 0; i < CH_NUM * 2; ++i) {
+        if (newDataId == DATA_ID_CHANNEL_U_EDIT) {
+            newDataId = DATA_ID_CHANNEL_I_EDIT;
+        } else {
+            newCursor.i = (newCursor.i + 1) % CH_NUM;
+            newDataId = DATA_ID_CHANNEL_U_EDIT;
+        }
+
+        if (isEnabledFocusCursor(newCursor, newDataId)) {
+            newCursorFound = true;
+            break;
+        }
+    }
+
+    if (newCursorFound) {
+        setFocusCursor(newCursor, newDataId);
+
+        if (edit_mode::isActive()) {
+            edit_mode::update();
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -763,27 +797,7 @@ void onEncoder(uint32_t tickCount, int counter, bool clicked) {
             } else if (edit_mode::isActive() && !edit_mode::isInteractiveMode() && edit_mode::getEditValue() != edit_mode::getCurrentValue()) {
                 edit_mode::nonInteractiveSet();
             } else {
-                // selection
-                data::Cursor newCursor = g_focusCursor;
-                int newDataId;
-
-                if (g_focusDataId == DATA_ID_CHANNEL_U_EDIT) {
-                    newDataId = DATA_ID_CHANNEL_I_EDIT;
-                } else {
-                    for (int i = 0; i < CH_NUM; ++i) {
-                        newCursor.i = (g_focusCursor.i + 1) % CH_NUM;
-                        if (Channel::get(g_focusCursor.i).isOk()) {
-                            break;
-                        }
-                    }
-                    newDataId = DATA_ID_CHANNEL_U_EDIT;
-                }
-
-                setFocusCursor(newCursor, newDataId);
-
-                if (edit_mode::isActive()) {
-                    edit_mode::update();
-                }
+                moveToNextFocusCursor();
             }
             sound::playClick();
         }
