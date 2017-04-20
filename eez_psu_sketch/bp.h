@@ -81,6 +81,7 @@ extern psu::TestResult g_testResult;
 
 void init();
 
+bool isStandbyOn();
 void switchStandby(bool on);
 void switchOutput(Channel *channel, bool on);
 void switchSense(Channel *channel, bool on);

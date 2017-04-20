@@ -24185,12 +24185,12 @@
             {
               "$eez": false,
               "type": "Text",
-              "x": 39,
+              "x": 0,
               "y": 57,
-              "width": 240,
+              "width": 320,
               "height": 40,
               "style": "display_off",
-              "text": "Display is OFF"
+              "text": "Display is going OFF"
             },
             {
               "$eez": false,

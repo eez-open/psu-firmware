@@ -31,6 +31,7 @@
 #endif
 #include "trigger.h"
 #include "calibration.h"
+#include "bp.h"
 
 #include "gui.h"
 #include "gui_internal.h"
@@ -1234,6 +1235,8 @@ void tick(uint32_t tick_usec) {
         flush();
         return;
     } else if (persist_conf::devConf2.flags.displayState == 1 && g_activePageId == PAGE_ID_DISPLAY_OFF) {
+        lcd::turnOn();
+        bp::switchStandby(false);
         setPage(PAGE_ID_MAIN);
         return;
     }
@@ -1241,6 +1244,24 @@ void tick(uint32_t tick_usec) {
     processEvents();
 
     if (g_activePageId == PAGE_ID_DISPLAY_OFF) {
+        if (lcd::isOn()) {
+            if (tick_usec - g_showPageTime >= CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT) {
+                lcd::turnOff();
+                g_showPageTime = tick_usec;
+            }
+        } else {
+            if (bp::isStandbyOn()) {
+                if (tick_usec - g_showPageTime >= 250000L) {
+                    bp::switchStandby(false);
+                    g_showPageTime = tick_usec;
+                }
+            } else {
+                if (tick_usec - g_showPageTime >= 1300000L) {
+                    bp::switchStandby(true);
+                    g_showPageTime = tick_usec;
+                }
+            }
+        }
         return;
     }
 

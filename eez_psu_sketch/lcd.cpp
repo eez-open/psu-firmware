@@ -1027,6 +1027,10 @@ void init() {
 	turnOff();
 }
 
+bool isOn() {
+    return g_isOn;
+}
+
 void turnOn() {
     if (!g_isOn) {
         g_isOn = true;

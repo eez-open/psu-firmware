@@ -102,6 +102,7 @@ extern LCD lcd;
 void init();
 void turnOn();
 void turnOff();
+bool isOn();
 
 void updateBrightness();
    

@@ -86,6 +86,10 @@ void init() {
     switchStandby(true);
 }
 
+bool isStandbyOn() {
+    return (g_lastConf & (1 << BP_STANDBY)) ? true : false;
+}
+
 void switchStandby(bool on) {
     set(on ? (1 << BP_STANDBY) : 0);
 }
