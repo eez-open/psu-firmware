@@ -147,7 +147,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelImmediateAmplitude(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (!trigger::isIdle()) {
+    if (channel_dispatcher::getVoltageTriggerMode(*channel) != TRIGGER_MODE_FIXED && !trigger::isIdle()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }
@@ -193,7 +193,7 @@ scpi_result_t scpi_cmd_sourceVoltageLevelImmediateAmplitude(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (!trigger::isIdle()) {
+    if (channel_dispatcher::getVoltageTriggerMode(*channel) != TRIGGER_MODE_FIXED && !trigger::isIdle()) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
         return SCPI_RES_ERR;
     }
@@ -1024,10 +1024,17 @@ scpi_result_t scpi_cmd_sourceListCurrentLevel(scpi_t *context) {
     float *voltageList = list::getCurrentList(*channel, &voltageListLength);
 
     for (int i = 0; ; ++i) {
-        float current;
-        if (!SCPI_ParamFloat(context, &current, false)) {
+        scpi_number_t param;
+        if (!SCPI_ParamNumber(context, 0, &param, false)) {
             break;
         }
+
+        if (param.unit != SCPI_UNIT_NONE && param.unit != SCPI_UNIT_AMPER) {
+            SCPI_ErrorPush(context, SCPI_ERROR_INVALID_SUFFIX);
+            return SCPI_RES_ERR;
+        }
+
+        float current = (float)param.value;
 
         if (listLength > MAX_LIST_LENGTH) {
             SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
@@ -1087,10 +1094,17 @@ scpi_result_t scpi_cmd_sourceListDwell(scpi_t *context) {
     uint16_t listLength = 0;
 
     while (true) {
-        float dwell;
-        if (!SCPI_ParamFloat(context, &dwell, false)) {
+        scpi_number_t param;
+        if (!SCPI_ParamNumber(context, 0, &param, false)) {
             break;
         }
+
+        if (param.unit != SCPI_UNIT_NONE && param.unit != SCPI_UNIT_SECOND) {
+            SCPI_ErrorPush(context, SCPI_ERROR_INVALID_SUFFIX);
+            return SCPI_RES_ERR;
+        }
+
+        float dwell = (float)param.value;
 
         if (listLength >MAX_LIST_LENGTH) {
             SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
@@ -1141,10 +1155,17 @@ scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
     float *currentList = list::getCurrentList(*channel, &currentListLength);
 
     for (int i = 0; ; ++i) {
-        float voltage;
-        if (!SCPI_ParamFloat(context, &voltage, false)) {
+        scpi_number_t param;
+        if (!SCPI_ParamNumber(context, 0, &param, false)) {
             break;
         }
+
+        if (param.unit != SCPI_UNIT_NONE && param.unit != SCPI_UNIT_VOLT) {
+            SCPI_ErrorPush(context, SCPI_ERROR_INVALID_SUFFIX);
+            return SCPI_RES_ERR;
+        }
+
+        float voltage = (float)param.value;
 
         if (listLength > MAX_LIST_LENGTH) {
             SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
