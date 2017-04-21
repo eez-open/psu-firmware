@@ -36,6 +36,10 @@ void showStandbyPage();
 void showEnteringStandbyPage();
 void showEthernetInit();
 
+void setTextMessage(const char *message, unsigned int len);
+void clearTextMessage();
+const char *getTextMessage();
+
 bool isIdle();
 
 

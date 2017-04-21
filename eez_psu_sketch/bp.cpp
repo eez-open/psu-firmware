@@ -91,7 +91,7 @@ bool isStandbyOn() {
 }
 
 void switchStandby(bool on) {
-    set(on ? (1 << BP_STANDBY) : 0);
+    bp_switch(1 << BP_STANDBY, on);
 }
 
 void switchOutput(Channel *channel, bool on) {

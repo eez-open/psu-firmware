@@ -61,6 +61,7 @@
 
 #define CONF_GUI_STANDBY_PAGE_TIMEOUT 10000000UL // 10s
 #define CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT 5000000UL // 5s
+#define CONF_GUI_DISPLAY_OFF_PAGE_TIMEOUT 2000000UL // 2s
 #define CONF_GUI_WELCOME_PAGE_TIMEOUT 2000000UL // 2s
 #define CONF_GUI_LONG_TAP_TIMEOUT 1000000UL // 1s
 
@@ -126,6 +127,9 @@ data::Value g_focusEditValue;
 uint32_t g_focusEditValueChangedTime;
 
 static bool g_idle;
+
+static char g_textMessage[32 + 1];
+static uint8_t g_textMessageVersion;
 
 ////////////////////////////////////////
 
@@ -244,6 +248,11 @@ void doShowPage(int index, Page *page = 0) {
 
     g_showPageTime = micros();
     g_timeOfLastActivity = millis();
+
+    // clear text message if active page is not PAGE_ID_TEXT_MESSAGE
+    if (g_activePageId != PAGE_ID_TEXT_MESSAGE && g_textMessage[0]) {
+        g_textMessage[0] = 0;
+    }
 
     refreshPage();
 }
@@ -413,6 +422,29 @@ void longInfoMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM
 void toastMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, const char *message3 PROGMEM, void (*ok_callback)()) {
     data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE_3, message3, 0);
     longAlertMessage(PAGE_ID_TOAST3_ALERT, message1, message2, ok_callback);
+}
+
+void setTextMessage(const char *message, unsigned int len) {
+    strncpy(g_textMessage, message, len);
+    g_textMessage[len] = 0;
+    ++g_textMessageVersion;
+    if (getActivePageId() != PAGE_ID_TEXT_MESSAGE) {
+        pushPage(PAGE_ID_TEXT_MESSAGE);
+    }
+}
+
+void clearTextMessage() {
+    if (getActivePageId() == PAGE_ID_TEXT_MESSAGE) {
+        popPage();
+    }
+}
+
+const char *getTextMessage() {
+    return g_textMessage;
+}
+
+uint8_t getTextMessageVersion() {
+    return g_textMessageVersion;
 }
 
 void changeLimit(Channel& channel,  const data::Value& value, float minLimit, float maxLimit, float defLimit, void (*onSetLimit)(float)) {
@@ -1192,6 +1224,8 @@ bool isIdle() {
 }
 
 void tick(uint32_t tick_usec) {
+    lcd::tick(tick_usec);
+
     if (g_activePageId == INTERNAL_PAGE_ID_NONE) {
         processEvents();
         return;
@@ -1245,7 +1279,7 @@ void tick(uint32_t tick_usec) {
 
     if (g_activePageId == PAGE_ID_DISPLAY_OFF) {
         if (lcd::isOn()) {
-            if (tick_usec - g_showPageTime >= CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT) {
+            if (tick_usec - g_showPageTime >= CONF_GUI_DISPLAY_OFF_PAGE_TIMEOUT) {
                 lcd::turnOff();
                 g_showPageTime = tick_usec;
             }

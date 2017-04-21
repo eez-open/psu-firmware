@@ -100,6 +100,7 @@ private:
 extern LCD lcd;
 
 void init();
+void tick(uint32_t tickCount);
 void turnOn();
 void turnOff();
 bool isOn();

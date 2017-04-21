@@ -112,6 +112,7 @@ void standBy();
 void turnDisplayOff();
 void reset();
 
+uint8_t getTextMessageVersion();
 
 ////////////////////////////////////////////////////////////////////////////////
 // GUI definition document accessor functions

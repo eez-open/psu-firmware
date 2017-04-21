@@ -27,6 +27,7 @@
 #include "calibration.h"
 #include "trigger.h"
 
+#include "gui.h"
 #include "gui_internal.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_keypad.h"
@@ -407,6 +408,11 @@ void Value::toText(char *text, int count) const {
         break;
     }
 
+    case VALUE_TYPE_TEXT_MESSAGE:
+        strncpy(text, getTextMessage(), count - 1);
+        text[count - 1] = 0;
+        break;
+
     default:
         if (type_ > VALUE_TYPE_GREATER_THEN_MAX_FLOAT) {
             char valueText[64];
@@ -453,7 +459,7 @@ bool Value::operator ==(const Value &other) const {
 		return int16_ == other.int16_;
 	}
 
-	if (type_ >= VALUE_TYPE_MONTH && type_ <= VALUE_TYPE_SECOND) {
+	if (type_ >= VALUE_TYPE_MONTH && type_ <= VALUE_TYPE_SECOND || type_ == VALUE_TYPE_TEXT_MESSAGE) {
 		return uint8_ == other.uint8_;
 	}
 
@@ -1021,6 +1027,10 @@ Value get(const Cursor &cursor, uint8_t id) {
 
     if (id == DATA_ID_SYS_DISPLAY_STATE) {
         return data::Value(persist_conf::devConf2.flags.displayState);
+    }
+
+    if (id == DATA_ID_TEXT_MESSAGE) {
+        return data::Value(getTextMessageVersion(), VALUE_TYPE_TEXT_MESSAGE);
     }
 
     Page *page = getActivePage();

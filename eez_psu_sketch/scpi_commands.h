@@ -266,8 +266,13 @@
     SCPI_COMMAND("*TRG", scpi_cmd_coreTrg) \
     SCPI_COMMAND("DISPlay:BRIGhtness", scpi_cmd_displayBrightness) \
     SCPI_COMMAND("DISPlay:BRIGhtness?", scpi_cmd_displayBrightnessQ) \
+    SCPI_COMMAND("DISPlay:VIEW", scpi_cmd_displayView) \
+    SCPI_COMMAND("DISPlay:VIEW?", scpi_cmd_displayViewQ) \
     SCPI_COMMAND("DISPlay[:WINdow][:STATe]", scpi_cmd_displayWindowState) \
     SCPI_COMMAND("DISPlay[:WINdow][:STATe]?", scpi_cmd_displayWindowStateQ) \
+    SCPI_COMMAND("DISPlay[:WINdow]:TEXT", scpi_cmd_displayWindowText) \
+    SCPI_COMMAND("DISPlay[:WINdow]:TEXT?", scpi_cmd_displayWindowTextQ) \
+    SCPI_COMMAND("DISPlay[:WINdow]:TEXT:CLEar", scpi_cmd_displayWindowTextClear) \
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe[:UPPer]", scpi_cmd_senseCurrentDcRangeUpper) \
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe[:UPPer]?", scpi_cmd_senseCurrentDcRangeUpperQ) \
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe:AUTO", scpi_cmd_senseCurrentDcRangeAuto) \

@@ -23,6 +23,8 @@
 #include "lcd.h"
 #include "arduino_util.h"
 
+#define CONF_LCD_ON_OFF_TRANSITION_TIME 1000000L
+
 #ifdef EEZ_PSU_SIMULATOR
 #define cbi(reg, bitmask)
 #define sbi(reg, bitmask)
@@ -1018,6 +1020,10 @@ int LCD::measureStr(const char *text, int textLength, font::Font &font, int max_
 ////////////////////////////////////////////////////////////////////////////////
 
 static bool g_isOn = false;
+static bool g_onOffTransition;
+static uint32_t g_onOffTransitionStart;
+static uint8_t g_onOffTransitionFromBrightness;
+static uint8_t g_onOffTransitionToBrightness;
 
 void init() {
 	lcd.init(DISPLAY_ORIENTATION);
@@ -1027,30 +1033,54 @@ void init() {
 	turnOff();
 }
 
+void tick(uint32_t tickCount) {
+    if (g_onOffTransition) {
+        int32_t diff = tickCount - g_onOffTransitionStart;
+        if (diff > CONF_LCD_ON_OFF_TRANSITION_TIME) {
+            g_onOffTransition = false;
+            if (!g_isOn) {
+                lcd.setColor(COLOR_BLACK);
+                lcd.fillRect(0, 0, lcd.getDisplayWidth()-1, lcd.getDisplayHeight()-1);
+            }
+            updateBrightness();
+        } else {
+            uint8_t value = (uint8_t)round(util::remap(diff, 0, g_onOffTransitionFromBrightness, CONF_LCD_ON_OFF_TRANSITION_TIME, g_onOffTransitionToBrightness));
+            analogWrite(LCD_BRIGHTNESS, value);
+        }
+    }
+}
+
 bool isOn() {
     return g_isOn;
+}
+
+static uint8_t getBrightness() {
+    return (uint8_t)round(util::remapQuad(persist_conf::devConf2.displayBrightness, 1, 196, 20, 106));
 }
 
 void turnOn() {
     if (!g_isOn) {
         g_isOn = true;
-        updateBrightness();
+        g_onOffTransition = true;
+        g_onOffTransitionStart = micros();
+        g_onOffTransitionFromBrightness = 255;
+        g_onOffTransitionToBrightness = getBrightness();
     }
 }
 
 void turnOff() {
     if (g_isOn) {
         g_isOn = false;
-        updateBrightness();
-        lcd.setColor(COLOR_BLACK);
-        lcd.fillRect(0, 0, lcd.getDisplayWidth()-1, lcd.getDisplayHeight()-1);
+        g_onOffTransition = true;
+        g_onOffTransitionStart = micros();
+        g_onOffTransitionFromBrightness = getBrightness();
+        g_onOffTransitionToBrightness = 255;
     }
 }
 
 void updateBrightness() {
     if (g_isOn) {
-        int value = (int)round(util::remapQuad(persist_conf::devConf2.displayBrightness, 1, 196, 20, 106));
-        analogWrite(LCD_BRIGHTNESS, value);
+        analogWrite(LCD_BRIGHTNESS, getBrightness());
     } else {
         analogWrite(LCD_BRIGHTNESS, 255);
     }

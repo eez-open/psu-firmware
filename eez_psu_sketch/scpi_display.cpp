@@ -21,19 +21,78 @@
 
 #include "persist_conf.h"
 
+#if OPTION_DISPLAY
+#include "gui.h"
+#endif
+
 namespace eez {
 namespace psu {
 namespace scpi {
 
 scpi_result_t scpi_cmd_displayBrightness(scpi_t *context) {
+#if OPTION_DISPLAY
+    int32_t param;
+    if (!SCPI_ParamInt(context, &param, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (param < DISPLAY_BRIGHTNESS_MIN || param > DISPLAY_BRIGHTNESS_MAX) {
+        SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
+        return SCPI_RES_ERR;
+    }
+
+    persist_conf::setDisplayBrightness(param);
+
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
     return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_displayBrightnessQ(scpi_t *context) {
+#if OPTION_DISPLAY
+    SCPI_ResultInt(context, persist_conf::devConf2.displayBrightness);
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
     return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_displayView(scpi_t *context) {
+#if OPTION_DISPLAY
+    int32_t param;
+    if (!SCPI_ParamInt(context, &param, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (param < 1 || param > 4) {
+        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+        return SCPI_RES_ERR;
+    }
+
+    persist_conf::setChannelsViewMode(param - 1);
+
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_displayViewQ(scpi_t *context) {
+#if OPTION_DISPLAY
+    SCPI_ResultInt(context, persist_conf::devConf.flags.channelsViewMode + 1);
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_displayWindowState(scpi_t *context) {
+#if OPTION_DISPLAY
     bool onOff;
     if (!SCPI_ParamBool(context, &onOff, TRUE)) {
         return SCPI_RES_ERR;
@@ -45,11 +104,62 @@ scpi_result_t scpi_cmd_displayWindowState(scpi_t *context) {
     }
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_displayWindowStateQ(scpi_t *context) {
+#if OPTION_DISPLAY
     SCPI_ResultBool(context, persist_conf::devConf2.flags.displayState);
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_displayWindowText(scpi_t *context) {
+#if OPTION_DISPLAY
+    const char *text;
+    size_t len;
+    if (!SCPI_ParamCharacters(context, &text, &len, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (len > 32) {
+        SCPI_ErrorPush(context, SCPI_ERROR_TOO_MUCH_DATA);
+        return SCPI_RES_ERR;
+    }
+
+    gui::setTextMessage(text, len);
+
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_displayWindowTextQ(scpi_t *context) {
+#if OPTION_DISPLAY
+    SCPI_ResultText(context, gui::getTextMessage());
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_displayWindowTextClear(scpi_t *context) {
+#if OPTION_DISPLAY
+    gui::clearTextMessage();
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 }

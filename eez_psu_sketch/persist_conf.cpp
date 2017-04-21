@@ -384,6 +384,11 @@ void toggleChannelsViewMode() {
 	saveDevice();
 }
 
+void setChannelsViewMode(unsigned int channelsViewMode) {
+	devConf.flags.channelsViewMode = channelsViewMode;
+	saveDevice();
+}
+
 void loadChannelCalibration(Channel *channel) {
     if (eeprom::g_testResult == psu::TEST_OK) {
         eeprom::read((uint8_t *)&channel->cal_conf, sizeof(Channel::CalibrationConfiguration), get_address(PERSIST_CONF_BLOCK_CH_CAL, channel));
