@@ -878,12 +878,18 @@ bool isEncoderEnabledInActivePage() {
 }
 
 void onEncoder(uint32_t tickCount, int counter, bool clicked) {
+    // wait for confirmation of changed value ...
     if (isFocusChanged() && tickCount - g_focusEditValueChangedTime >= ENCODER_CHANGE_TIMEOUT * 1000000L) {
+        // ... on timeout discard changed value
         g_focusEditValue = data::Value();
     }
 
     if (isFrontPanelLocked()) {
         return;
+    }
+
+    if (!isEnabledFocusCursor(g_focusCursor, g_focusDataId)) {
+        moveToNextFocusCursor();
     }
 
     if (clicked) {
