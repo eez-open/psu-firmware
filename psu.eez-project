@@ -214,6 +214,13 @@
     },
     {
       "$eez": false,
+      "name": "later",
+      "description": "Yes action in Yes/No dialog",
+      "implementationType": "native",
+      "implementation": "dialogLater();"
+    },
+    {
+      "$eez": false,
       "name": "standBy",
       "implementationType": "native",
       "implementation": "gui::standBy();"
@@ -11775,6 +11782,96 @@
               "width": 280,
               "height": 8,
               "style": "yes_no_background"
+            }
+          ]
+        }
+      },
+      {
+        "$eez": false,
+        "name": "yes_no_later",
+        "description": "",
+        "portrait": {
+          "$eez": false,
+          "x": 0,
+          "y": 104,
+          "width": 240,
+          "height": 112,
+          "style": "error_alert",
+          "widgets": [
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "yes",
+              "x": 90,
+              "y": 72,
+              "width": 60,
+              "height": 32,
+              "style": "default_active_S",
+              "text": "OK"
+            },
+            {
+              "$eez": false,
+              "type": "MultilineText",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 64,
+              "style": "error_alert",
+              "text": "Multiline text"
+            }
+          ]
+        },
+        "landscape": {
+          "$eez": false,
+          "x": 20,
+          "y": 76,
+          "width": 280,
+          "height": 88,
+          "style": "yes_no",
+          "widgets": [
+            {
+              "$eez": false,
+              "type": "Text",
+              "data": "alert_message",
+              "x": 0,
+              "y": 8,
+              "width": 280,
+              "height": 32,
+              "style": "yes_no",
+              "text": ""
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "yes",
+              "x": 54,
+              "y": 48,
+              "width": 48,
+              "height": 32,
+              "style": "yes_no_button",
+              "text": "Yes"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "no",
+              "x": 116,
+              "y": 48,
+              "width": 48,
+              "height": 32,
+              "style": "yes_no_button",
+              "text": "No"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "later",
+              "x": 173,
+              "y": 48,
+              "width": 64,
+              "height": 32,
+              "style": "yes_no_button",
+              "text": "Later"
             }
           ]
         }
@@ -77673,11 +77770,19 @@
           },
           {
             "$eez": false,
+            "name": "SYSTem:DATE:CLEar"
+          },
+          {
+            "$eez": false,
             "name": "SYSTem:DATE?"
           },
           {
             "$eez": false,
             "name": "SYSTem:TIME"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:TIME:CLEar"
           },
           {
             "$eez": false,

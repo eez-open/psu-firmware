@@ -90,7 +90,8 @@ struct DeviceFlags2 {
     unsigned encoderConfirmationMode : 1;
     unsigned displayState: 1;
     unsigned triggerContinuousInitializationEnabled: 1;
-    unsigned reserved: 29;
+    unsigned skipChannelCalibrations: 1;
+    unsigned skipDateTimeSetup: 1;
 };
 
 struct DeviceConfiguration2 {

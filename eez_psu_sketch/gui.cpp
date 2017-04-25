@@ -109,6 +109,7 @@ static WidgetCursor g_foundTouchWidget;
 static void (*g_dialogYesCallback)();
 static void (*g_dialogNoCallback)();
 static void (*g_dialogCancelCallback)();
+static void (*g_dialogLaterCallback)();
 
 static void (*g_errorMessageAction)();
 static int g_errorMessageActionParam;
@@ -130,6 +131,8 @@ static bool g_idle;
 
 static char g_textMessage[32 + 1];
 static uint8_t g_textMessageVersion;
+
+static persist_conf::DeviceFlags2 g_deviceFlags2;
 
 ////////////////////////////////////////
 
@@ -201,6 +204,13 @@ Page *createPageFromId(int pageId) {
 
 bool isActivePageInternal() {
     return g_activePageId < INTERNAL_PAGE_ID_NONE;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void executeAction(int actionId) {
+    sound::playClick();
+    actions[actionId]();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -340,6 +350,7 @@ void showEnteringStandbyPage() {
 }
 
 void showEthernetInit() {
+    lcd::turnOn(true);
     doShowPage(PAGE_ID_ETHERNET_INIT);
     flush();
 }
@@ -374,6 +385,14 @@ void dialogCancel() {
 
 void dialogOk() {
     dialogYes();
+}
+
+void dialogLater() {
+    popPage();
+
+    if (g_dialogLaterCallback) {
+        g_dialogLaterCallback();
+    }
 }
 
 void errorMessageAction() {
@@ -576,6 +595,17 @@ void areYouSureWithMessage(const char *message PROGMEM, void (*yes_callback)()) 
     yesNoDialog(PAGE_ID_ARE_YOU_SURE_WITH_MESSAGE, message, yes_callback, 0, 0);
 }
 
+void yesNoLater(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*later_callback)() = 0) {
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message), 0);
+
+    g_dialogYesCallback = yes_callback;
+    g_dialogNoCallback = no_callback;
+    g_dialogLaterCallback = later_callback;
+
+    pushPage(PAGE_ID_YES_NO_LATER);
+}
+
+
 static bool isChannelTripLastEvent(int i, event_queue::Event &lastEvent) {
     if (lastEvent.eventId == (event_queue::EVENT_ERROR_CH1_OVP_TRIPPED + i * 3) ||
         lastEvent.eventId == (event_queue::EVENT_ERROR_CH1_OCP_TRIPPED + i * 3) ||
@@ -670,6 +700,62 @@ int transformStyle(const Widget *widget) {
     }
 
     return widget->style;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool isChannelCalibrationsDone() {
+    for (int i = 0; i < CH_NUM; ++i) {
+        if (!Channel::get(i).isCalibrationExists()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool isDateTimeSetupDone() {
+    return persist_conf::devConf.flags.dateValid && persist_conf::devConf.flags.timeValid;
+}
+
+void channelCalibrationsYes() {
+    executeAction(ACTION_ID_SHOW_SYS_SETTINGS_CAL);
+}
+
+void channelCalibrationsNo() {
+    persist_conf::devConf2.flags.skipChannelCalibrations = 1;
+    persist_conf::saveDevice2();
+}
+
+void dateTimeYes() {
+    executeAction(ACTION_ID_SHOW_SYS_SETTINGS_DATE_TIME);
+}
+
+void dateTimeNo() {
+    persist_conf::devConf2.flags.skipDateTimeSetup = 1;
+    persist_conf::saveDevice2();
+}
+
+bool showSetupWizardQuestion() {
+    if (!channel_dispatcher::isCoupled() && !channel_dispatcher::isTracked()) {
+        if (!g_deviceFlags2.skipChannelCalibrations) {
+            g_deviceFlags2.skipChannelCalibrations = 1;
+            if (!isChannelCalibrationsDone()) {
+                yesNoLater("Do you want to calibrate channels?", channelCalibrationsYes, channelCalibrationsNo);
+                return true;
+            }
+        }
+    }
+
+    if (!g_deviceFlags2.skipDateTimeSetup) {
+        g_deviceFlags2.skipDateTimeSetup = 1;
+        if (!isDateTimeSetupDone()) {
+            yesNoLater("Do you want to set date and time?", dateTimeYes, dateTimeNo);
+            return true;
+        }
+        return true;
+    }
+
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -770,11 +856,6 @@ bool isAutoRepeatAction(ActionType action) {
         action == ACTION_ID_EVENT_QUEUE_NEXT_PAGE ||
         action == ACTION_ID_CHANNEL_LISTS_PREVIOUS_PAGE ||
         action == ACTION_ID_CHANNEL_LISTS_NEXT_PAGE;
-}
-
-void executeAction(int actionId) {
-    sound::playClick();
-    actions[actionId]();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -964,6 +1045,8 @@ void reset() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void init() {
+    g_deviceFlags2 = persist_conf::devConf2.flags;
+
     setFocusCursor(0, DATA_ID_CHANNEL_U_EDIT);
 
     lcd::init();
@@ -1076,12 +1159,12 @@ void touchHandling(uint32_t tick_usec) {
         } else if (touch::event_type == touch::TOUCH_MOVE) {
             pushEvent(EVENT_TYPE_TOUCH_MOVE);
 
-            if (!g_longTapGenerated && tick_usec - g_touchDownTime >= CONF_GUI_LONG_TAP_TIMEOUT) {
+            if (!g_longTapGenerated && int32_t(tick_usec - g_touchDownTime) >= CONF_GUI_LONG_TAP_TIMEOUT) {
                 g_longTapGenerated = true;
                 pushEvent(EVENT_TYPE_LONG_TAP);
             }
 
-            if (tick_usec - g_lastAutoRepeatEventTime >= CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY) {
+            if (int32_t(tick_usec - g_lastAutoRepeatEventTime) >= CONF_GUI_KEYPAD_AUTO_REPEAT_DELAY) {
                 pushEvent(EVENT_TYPE_AUTO_REPEAT);
                 g_lastAutoRepeatEventTime = tick_usec;
             }
@@ -1232,16 +1315,16 @@ void tick(uint32_t tick_usec) {
     }
 
     // wait some time for transitional pages
-    if (g_activePageId == PAGE_ID_STANDBY && tick_usec - g_showPageTime < CONF_GUI_STANDBY_PAGE_TIMEOUT) {
+    if (g_activePageId == PAGE_ID_STANDBY && int32_t(tick_usec - g_showPageTime) < CONF_GUI_STANDBY_PAGE_TIMEOUT) {
         return;
-    } else if (g_activePageId == PAGE_ID_ENTERING_STANDBY && tick_usec - g_showPageTime < CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT) {
+    } else if (g_activePageId == PAGE_ID_ENTERING_STANDBY && int32_t(tick_usec - g_showPageTime) < CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT) {
         if (!psu::isPowerUp()) {
             uint32_t saved_showPageTime = g_showPageTime;
             showStandbyPage();
             g_showPageTime = saved_showPageTime - (CONF_GUI_STANDBY_PAGE_TIMEOUT - CONF_GUI_ENTERING_STANDBY_PAGE_TIMEOUT);
         }
         return;
-    } else if (g_activePageId == PAGE_ID_WELCOME && tick_usec - g_showPageTime < CONF_GUI_WELCOME_PAGE_TIMEOUT) {
+    } else if (g_activePageId == PAGE_ID_WELCOME && int32_t(tick_usec - g_showPageTime) < CONF_GUI_WELCOME_PAGE_TIMEOUT) {
         return;
     }
 
@@ -1279,24 +1362,30 @@ void tick(uint32_t tick_usec) {
 
     if (g_activePageId == PAGE_ID_DISPLAY_OFF) {
         if (lcd::isOn()) {
-            if (tick_usec - g_showPageTime >= CONF_GUI_DISPLAY_OFF_PAGE_TIMEOUT) {
+            if (int32_t(tick_usec - g_showPageTime) >= CONF_GUI_DISPLAY_OFF_PAGE_TIMEOUT) {
                 lcd::turnOff();
                 g_showPageTime = tick_usec;
             }
         } else {
             if (bp::isStandbyOn()) {
-                if (tick_usec - g_showPageTime >= 250000L) {
+                if (int32_t(tick_usec - g_showPageTime) >= 250000L) {
                     bp::switchStandby(false);
                     g_showPageTime = tick_usec;
                 }
             } else {
-                if (tick_usec - g_showPageTime >= 1300000L) {
+                if (int32_t(tick_usec - g_showPageTime) >= 1300000L) {
                     bp::switchStandby(true);
                     g_showPageTime = tick_usec;
                 }
             }
         }
         return;
+    }
+
+    if (g_activePageId == PAGE_ID_MAIN && int32_t(tick_usec - g_showPageTime) >= 50000L) {
+        if (showSetupWizardQuestion()) {
+            return;
+        }
     }
 
 #if OPTION_ENCODER

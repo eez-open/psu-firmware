@@ -101,7 +101,7 @@ extern LCD lcd;
 
 void init();
 void tick(uint32_t tickCount);
-void turnOn();
+void turnOn(bool withoutTransition = false);
 void turnOff();
 bool isOn();
 

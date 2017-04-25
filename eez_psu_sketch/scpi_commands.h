@@ -208,8 +208,10 @@
     SCPI_COMMAND("SYSTem:POWer", scpi_cmd_systemPower) \
     SCPI_COMMAND("SYSTem:POWer?", scpi_cmd_systemPowerQ) \
     SCPI_COMMAND("SYSTem:DATE", scpi_cmd_systemDate) \
+    SCPI_COMMAND("SYSTem:DATE:CLEar", scpi_cmd_systemDateClear) \
     SCPI_COMMAND("SYSTem:DATE?", scpi_cmd_systemDateQ) \
     SCPI_COMMAND("SYSTem:TIME", scpi_cmd_systemTime) \
+    SCPI_COMMAND("SYSTem:TIME:CLEar", scpi_cmd_systemTimeClear) \
     SCPI_COMMAND("SYSTem:TIME?", scpi_cmd_systemTimeQ) \
     SCPI_COMMAND("SYSTem:BEEPer[:IMMediate]", scpi_cmd_systemBeeperImmediate) \
     SCPI_COMMAND("SYSTem:BEEPer:STATe", scpi_cmd_systemBeeperState) \

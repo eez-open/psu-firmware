@@ -114,6 +114,12 @@ scpi_result_t scpi_cmd_systemDate(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t scpi_cmd_systemDateClear(scpi_t * context) {
+    persist_conf::devConf.flags.dateValid = 0;
+    persist_conf::saveDevice();
+    return SCPI_RES_OK;
+}
+
 scpi_result_t scpi_cmd_systemDateQ(scpi_t * context) {
     uint8_t year, month, day;
     if (!datetime::getDate(year, month, day)) {
@@ -154,6 +160,12 @@ scpi_result_t scpi_cmd_systemTime(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemTimeClear(scpi_t * context) {
+    persist_conf::devConf.flags.timeValid = 0;
+    persist_conf::saveDevice();
     return SCPI_RES_OK;
 }
 

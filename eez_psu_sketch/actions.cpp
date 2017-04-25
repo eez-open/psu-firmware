@@ -145,6 +145,10 @@ void action_cancel() {
     dialogCancel();
 }
 
+void action_later() {
+    dialogLater();
+}
+
 void action_stand_by() {
     gui::standBy();
 }
@@ -722,6 +726,7 @@ ACTION actions[] = {
     action_no,
     action_ok,
     action_cancel,
+    action_later,
     action_stand_by,
     action_show_previous_page,
     action_show_main_page,

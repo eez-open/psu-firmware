@@ -1058,13 +1058,17 @@ static uint8_t getBrightness() {
     return (uint8_t)round(util::remapQuad(persist_conf::devConf2.displayBrightness, 1, 196, 20, 106));
 }
 
-void turnOn() {
+void turnOn(bool withoutTransition) {
     if (!g_isOn) {
         g_isOn = true;
-        g_onOffTransition = true;
-        g_onOffTransitionStart = micros();
-        g_onOffTransitionFromBrightness = 255;
-        g_onOffTransitionToBrightness = getBrightness();
+        if (withoutTransition) {
+            analogWrite(LCD_BRIGHTNESS, getBrightness());
+        } else {
+            g_onOffTransition = true;
+            g_onOffTransitionStart = micros();
+            g_onOffTransitionFromBrightness = 255;
+            g_onOffTransitionToBrightness = getBrightness();
+        }
     }
 }
 

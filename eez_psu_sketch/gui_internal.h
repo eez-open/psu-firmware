@@ -78,6 +78,7 @@ void dialogYes();
 void dialogNo();
 void dialogCancel();
 void dialogOk();
+void dialogLater();
 
 void errorMessageAction();
 
