@@ -760,6 +760,10 @@ float Channel::remapAdcDataToVoltage(int16_t adc_data) {
     return util::remap((float)adc_data, (float)AnalogDigitalConverter::ADC_MIN, U_MIN, (float)AnalogDigitalConverter::ADC_MAX, U_MAX);
 }
 
+float Channel::remapAdcDataToVoltageConf(int16_t adc_data) {
+    return util::remap((float)adc_data, (float)AnalogDigitalConverter::ADC_MIN, U_MIN, (float)AnalogDigitalConverter::ADC_MAX, U_MAX_CONF);
+}
+
 float Channel::remapAdcDataToCurrent(int16_t adc_data) {
     return util::remap((float)adc_data, (float)AnalogDigitalConverter::ADC_MIN, I_MIN, (float)AnalogDigitalConverter::ADC_MAX, getDualRangeMax());
 }
@@ -796,14 +800,22 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
         //}
         u.mon_adc = data;
 
-        float value = remapAdcDataToVoltage(data);
+        float value;
+        if (isVoltageCalibrationEnabled()) {
+
+            value = remapAdcDataToVoltage(data);
 
 #if !defined(EEZ_PSU_SIMULATOR)
-        value -= VOLTAGE_GND_OFFSET;
+            value -= VOLTAGE_GND_OFFSET;
 #endif
 
-        if (isVoltageCalibrationEnabled()) {
             value = util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
+        } else {
+            value = remapAdcDataToVoltageConf(data);
+
+#if !defined(EEZ_PSU_SIMULATOR)
+            value -= VOLTAGE_GND_OFFSET;
+#endif
         }
 
         u.addMonValue(value);
@@ -858,7 +870,7 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
         debug::g_uMonDac[index - 1].set(data);
 #endif
 
-        float value = remapAdcDataToVoltage(data);
+        float value = remapAdcDataToVoltageConf(data);
 
 #if !defined(EEZ_PSU_SIMULATOR)
         if (!flags.rprogEnabled) {
