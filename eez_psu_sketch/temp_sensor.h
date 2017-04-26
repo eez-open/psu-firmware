@@ -59,15 +59,16 @@ enum Type {
 
 class TempSensor {
 public:
-	TempSensor(const char *name, int installed, int pin, float p1_volt, float p1_cels, float p2_volt, float p2_cels, int ch_num, int ques_bit, int scpi_error);
+	TempSensor(uint8_t index_, const char *name, int installed, int pin, int p1_adc, float p1_cels, int p2_adc, float p2_cels, int ch_num, int ques_bit, int scpi_error);
 
+    uint8_t index;
 	psu::TestResult g_testResult;
 	const char *name;
 	int installed;
 	int pin;
-	float p1_volt;
+	int p1_adc;
 	float p1_cels;
-	float p2_volt;
+	int p2_adc;
 	float p2_cels;
 	int ch_num;
 	int ques_bit;

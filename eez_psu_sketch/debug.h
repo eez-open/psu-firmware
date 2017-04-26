@@ -165,6 +165,7 @@ extern DebugValueVariable g_uMonDac[2];
 extern DebugValueVariable g_iDac[2];
 extern DebugValueVariable g_iMon[2];
 extern DebugValueVariable g_iMonDac[2];
+extern DebugValueVariable g_uTemp[3];
 
 extern DebugDurationVariable g_mainLoopDuration;
 #if CONF_DEBUG_VARIABLES

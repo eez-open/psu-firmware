@@ -33,6 +33,11 @@ DebugValueVariable g_uMonDac[2] = { DebugValueVariable("CH1 U_MON_DAC"), DebugVa
 DebugValueVariable g_iDac[2]    = { DebugValueVariable("CH1 I_DAC"),     DebugValueVariable("CH2 I_DAC")     };
 DebugValueVariable g_iMon[2]    = { DebugValueVariable("CH1 I_MON"),     DebugValueVariable("CH2 I_MON")     };
 DebugValueVariable g_iMonDac[2] = { DebugValueVariable("CH1 I_MON_DAC"), DebugValueVariable("CH2 I_MON_DAC") };
+DebugValueVariable g_uTemp[3] = {
+    DebugValueVariable("AUX TEMP"),
+    DebugValueVariable("CH1 TEMP"),
+    DebugValueVariable("CH2 TEMP")
+};
 
 DebugDurationVariable g_mainLoopDuration("MAIN_LOOP_DURATION");
 #if CONF_DEBUG_VARIABLES
@@ -47,6 +52,10 @@ DebugVariable *g_variables[] = {
     &g_iDac[0],    &g_iDac[1],
     &g_iMon[0],    &g_iMon[1],
     &g_iMonDac[0], &g_iMonDac[1],
+
+    &g_uTemp[0],
+    &g_uTemp[1],
+    &g_uTemp[2],
 
     &g_mainLoopDuration,
 #if CONF_DEBUG_VARIABLES

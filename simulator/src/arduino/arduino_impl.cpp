@@ -58,9 +58,8 @@ int analogRead(uint8_t pin) {
         temp_sensor::TempSensor &tempSensor = temp_sensor::sensors[i];
         if (tempSensor.installed && tempSensor.pin == pin) {
             float cels = simulator::getTemperature(i);
-            float volt = util::remap(cels, tempSensor.p1_cels, tempSensor.p1_volt, tempSensor.p2_cels, tempSensor.p2_volt);
-            float adc = util::remap(volt, (float)temp_sensor::MIN_U, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_U, (float)temp_sensor::MAX_ADC); \
-            return (int)util::clamp(adc, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_ADC); \
+            int adc = (int)util::remap(cels, tempSensor.p1_cels, (float)tempSensor.p1_adc, tempSensor.p2_cels, (float)tempSensor.p2_adc);
+            return (int)util::clamp((float)adc, (float)temp_sensor::MIN_ADC, (float)temp_sensor::MAX_ADC);
         }
     }
 

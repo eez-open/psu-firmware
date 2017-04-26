@@ -28,7 +28,7 @@ using namespace scpi;
 namespace temp_sensor {
 
 #define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) \
-	TempSensor(#NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR)
+	TempSensor(NAME, #NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR)
 
 TempSensor sensors[NUM_TEMP_SENSORS] = {
 	TEMP_SENSORS
@@ -38,13 +38,14 @@ TempSensor sensors[NUM_TEMP_SENSORS] = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-TempSensor::TempSensor(const char *name_, int installed_, int pin_, float p1_volt_, float p1_cels_, float p2_volt_, float p2_cels_, int ch_num_, int ques_bit_, int scpi_error_)
-	: name(name_)
+TempSensor::TempSensor(uint8_t index_, const char *name_, int installed_, int pin_, int p1_adc_, float p1_cels_, int p2_adc_, float p2_cels_, int ch_num_, int ques_bit_, int scpi_error_)
+	: index(index_)
+    , name(name_)
 	, installed(installed_)
 	, pin(pin_)
-	, p1_volt(p1_volt_)
+	, p1_adc(p1_adc_)
 	, p1_cels(p1_cels_)
-	, p2_volt(p2_volt_)
+	, p2_adc(p2_adc_)
 	, p2_cels(p2_cels_)
 	, ch_num(ch_num_)
 	, ques_bit(ques_bit_)
@@ -84,9 +85,15 @@ bool TempSensor::test() {
 
 float TempSensor::read() {
 	if (installed) {
-		float value = (float)analogRead(pin);
-		value = util::remap(value, (float)MIN_ADC, (float)MIN_U, (float)MAX_ADC, (float)MAX_U);
-		value = util::remap(value, p1_volt, p1_cels, p2_volt, p2_cels);
+		int adcValue = analogRead(pin);
+
+#if CONF_DEBUG
+        if (index < 3) {
+            debug::g_uTemp[index].set(adcValue);
+        }
+#endif
+
+        float value = util::remap((float)adcValue, (float)p1_adc, p1_cels, (float)p2_adc, p2_cels);
 
 		if (value <= TEMP_SENSOR_MIN_VALID_TEMPERATURE) {
 			g_testResult = psu::TEST_FAILED;
