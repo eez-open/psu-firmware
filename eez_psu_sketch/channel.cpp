@@ -90,11 +90,52 @@ Channel &Channel::get(int channel_index) {
 
 void Channel::Value::init(float set_, float step_, float limit_) {
     set = set_;
-    mon_dac = 0;
-    mon_adc = 0;
-    mon = 0;
     step = step_;
     limit = limit_;
+    resetMonValues();
+}
+
+void Channel::Value::resetMonValues() {
+    mon_adc = 0;
+    mon = 0;
+    mon_dac = 0;
+
+    mon_index = -1;
+    mon_dac_index = -1;
+}
+
+void Channel::Value::addMonValue(float value) {
+    if (mon_index == -1) {
+        mon_index = 0;
+        for (int i = 0; i < NUM_ADC_AVERAGING_VALUES; ++i) {
+            mon_arr[i] = value;
+        }
+        mon_total = NUM_ADC_AVERAGING_VALUES * value;
+        mon = value;
+    } else {
+        mon_total -= mon_arr[mon_index]; 
+        mon_total += value;
+        mon_arr[mon_index] = value;
+        mon_index = (mon_index + 1) % NUM_ADC_AVERAGING_VALUES;
+        mon = mon_total / NUM_ADC_AVERAGING_VALUES;
+    }
+}
+
+void Channel::Value::addMonDacValue(float value) {
+    if (mon_dac_index == -1) {
+        mon_dac_index = 0;
+        for (int i = 0; i < NUM_ADC_AVERAGING_VALUES; ++i) {
+            mon_dac_arr[i] = value;
+        }
+        mon_dac_total = NUM_ADC_AVERAGING_VALUES * value;
+        mon_dac = value;
+    } else {
+        mon_dac_total -= mon_dac_arr[mon_dac_index]; 
+        mon_dac_total += value;
+        mon_dac_arr[mon_dac_index] = value;
+        mon_dac_index = (mon_dac_index + 1) % NUM_ADC_AVERAGING_VALUES;
+        mon_dac = mon_dac_total / NUM_ADC_AVERAGING_VALUES;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -284,9 +325,9 @@ Channel::Channel(
     i.max = I_MAX;
     i.def = I_DEF;
 
-    negligibleAdcDiffForVoltage2 = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (U_MAX - U_MIN))) + 1;
-    negligibleAdcDiffForVoltage3 = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 1000 * (U_MAX - U_MIN))) + 1;
-    calculateNegligibleAdcDiffForCurrent();
+    //negligibleAdcDiffForVoltage2 = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 100 * (U_MAX - U_MIN))) + 1;
+    //negligibleAdcDiffForVoltage3 = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 1000 * (U_MAX - U_MIN))) + 1;
+    //calculateNegligibleAdcDiffForCurrent();
 
 #ifdef EEZ_PSU_SIMULATOR
     simulator.load_enabled = true;
@@ -744,26 +785,28 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
         debug::g_uMon[index - 1].set(data);
 #endif
 
-        if (util::greaterOrEqual(u.mon_adc, 10.0f, getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
-            if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage2) {
-                u.mon_adc = data;
-            }
-        } else {
-            if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage3) {
-                u.mon_adc = data;
-            }
-        }
+        //if (util::greaterOrEqual(u.mon_adc, 10.0f, getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+        //    if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage2) {
+        //        u.mon_adc = data;
+        //    }
+        //} else {
+        //    if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage3) {
+        //        u.mon_adc = data;
+        //    }
+        //}
+        u.mon_adc = data;
 
-        float value = remapAdcDataToVoltage(u.mon_adc);
+        float value = remapAdcDataToVoltage(data);
+
 #if !defined(EEZ_PSU_SIMULATOR)
         value -= VOLTAGE_GND_OFFSET;
 #endif
 
         if (isVoltageCalibrationEnabled()) {
-            u.mon = util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
-        } else {
-            u.mon = value;
+            value = util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
         }
+
+        u.addMonValue(value);
 
         nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_I_MON;
     }
@@ -775,21 +818,22 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
         debug::g_iMon[index - 1].set(data);
 #endif
 
-        if (abs(i.mon_adc - data) > negligibleAdcDiffForCurrent) {
-            i.mon_adc = data;
-        }
+        //if (abs(i.mon_adc - data) > negligibleAdcDiffForCurrent) {
+        //    i.mon_adc = data;
+        //}
+        i.mon_adc = data;
 
-        float value = remapAdcDataToCurrent(i.mon_adc) - getDualRangeGndOffset();
+        float value = remapAdcDataToCurrent(data) - getDualRangeGndOffset();
 
         if (isCurrentCalibrationEnabled()) {
-            i.mon = util::remap(value,
+            value = util::remap(value,
                 cal_conf.i[flags.currentCurrentRange].min.adc,
                 cal_conf.i[flags.currentCurrentRange].min.val,
                 cal_conf.i[flags.currentCurrentRange].max.adc,
                 cal_conf.i[flags.currentCurrentRange].max.val);
-        } else {
-            i.mon = value;
         }
+
+        i.addMonValue(value);
 
         if (isOutputEnabled()) {
             if (isRemoteProgrammingEnabled()) {
@@ -800,10 +844,9 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
             }
         }
         else {
-            u.mon_adc = 0;
-            u.mon = 0;
-            i.mon_adc = 0;
-            i.mon = 0;
+            u.resetMonValues();
+            i.resetMonValues();
+
             nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_SET;
         }
     }
@@ -816,6 +859,7 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
 #endif
 
         float value = remapAdcDataToVoltage(data);
+
 #if !defined(EEZ_PSU_SIMULATOR)
         if (!flags.rprogEnabled) {
             value -= VOLTAGE_GND_OFFSET;
@@ -827,7 +871,8 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
         //} else {
         //    u.mon_dac = value;
         //}
-        u.mon_dac = value;
+
+        u.addMonDacValue(value);
 
         if (isOutputEnabled() && isRemoteProgrammingEnabled()) {
             nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
@@ -846,15 +891,17 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
 
         float value = remapAdcDataToCurrent(data) - getDualRangeGndOffset();
 
-        if (isCurrentCalibrationEnabled()) {
-            i.mon_dac = util::remap(value,
-                cal_conf.i[flags.currentCurrentRange].min.adc,
-                cal_conf.i[flags.currentCurrentRange].min.val,
-                cal_conf.i[flags.currentCurrentRange].max.adc,
-                cal_conf.i[flags.currentCurrentRange].max.val);
-        } else {
-            i.mon_dac = value;
-        }
+        //if (isCurrentCalibrationEnabled()) {
+        //    i.mon_dac = util::remap(value,
+        //        cal_conf.i[flags.currentCurrentRange].min.adc,
+        //        cal_conf.i[flags.currentCurrentRange].min.val,
+        //        cal_conf.i[flags.currentCurrentRange].max.adc,
+        //        cal_conf.i[flags.currentCurrentRange].max.val);
+        //} else {
+        //    i.mon_dac = value;
+        //}
+
+        i.addMonDacValue(value);
 
         if (isOutputEnabled()) {
             nextStartReg0 = AnalogDigitalConverter::ADC_REG0_READ_U_MON;
@@ -1714,13 +1761,13 @@ float Channel::getDualRangeMax() {
     return flags.currentCurrentRange == CURRENT_RANGE_LOW ? (I_MAX / 10) : I_MAX;
 }
 
-void Channel::calculateNegligibleAdcDiffForCurrent() {
-    if (flags.currentCurrentRange == CURRENT_RANGE_LOW) {
-        negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 10000 * (I_MAX/10 - I_MIN))) + 1;
-    } else {
-        negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 1000 * (I_MAX - I_MIN))) + 1;
-    }
-}
+//void Channel::calculateNegligibleAdcDiffForCurrent() {
+//    if (flags.currentCurrentRange == CURRENT_RANGE_LOW) {
+//        negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 10000 * (I_MAX/10 - I_MIN))) + 1;
+//    } else {
+//        negligibleAdcDiffForCurrent = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 1000 * (I_MAX - I_MIN))) + 1;
+//    }
+//}
 
 void Channel::setCurrentRange(uint8_t currentCurrentRange) {
     if (hasSupportForCurrentDualRange()) {
@@ -1731,13 +1778,13 @@ void Channel::setCurrentRange(uint8_t currentCurrentRange) {
                 //DebugTrace("Switched to 5A range");
                 ioexp.changeBit(IOExpander::IO_BIT_5A, true);
                 ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
-                calculateNegligibleAdcDiffForCurrent();
+                //calculateNegligibleAdcDiffForCurrent();
             } else {
                 // 500mA
                 //DebugTrace("Switched to 500mA range");
                 ioexp.changeBit(IOExpander::IO_BIT_500mA, true);
                 ioexp.changeBit(IOExpander::IO_BIT_5A, false);
-                calculateNegligibleAdcDiffForCurrent();
+                //calculateNegligibleAdcDiffForCurrent();
             }
             if (isOutputEnabled()) {
                 adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);

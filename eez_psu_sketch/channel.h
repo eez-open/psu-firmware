@@ -190,9 +190,19 @@ public:
     /// Voltage and current data set and measured during runtime.
     struct Value {
         float set;
-        float mon_dac;
+
         int16_t mon_adc;
+
         float mon;
+        int8_t mon_index;
+        float mon_arr[NUM_ADC_AVERAGING_VALUES];
+        float mon_total;
+
+        float mon_dac;
+        int8_t mon_dac_index;
+        float mon_dac_arr[NUM_ADC_AVERAGING_VALUES];
+        float mon_dac_total;
+
         float step;
         float limit;
 
@@ -201,6 +211,9 @@ public:
         float max;
 
         void init(float set_, float step_, float limit_);
+        void resetMonValues();
+        void addMonDacValue(float value);
+        void addMonValue(float value);
     };
 
     /// Runtime protection binary flags (alarmed, tripped)
@@ -591,9 +604,9 @@ private:
 
     MaxCurrentLimitCause maxCurrentLimitCause;
 
-    int negligibleAdcDiffForVoltage2;
-    int negligibleAdcDiffForVoltage3;
-    int negligibleAdcDiffForCurrent;
+    //int negligibleAdcDiffForVoltage2;
+    //int negligibleAdcDiffForVoltage3;
+    //int negligibleAdcDiffForCurrent;
 
     float uHistory[CHANNEL_HISTORY_SIZE];
     float iHistory[CHANNEL_HISTORY_SIZE];
@@ -645,7 +658,7 @@ private:
 #endif
 
     float getDualRangeGndOffset();
-    void calculateNegligibleAdcDiffForCurrent();
+    //void calculateNegligibleAdcDiffForCurrent();
 
     uint32_t autoRangeCheckLastTickCount;
     void doAutoSelectCurrentRange(uint32_t tickCount);

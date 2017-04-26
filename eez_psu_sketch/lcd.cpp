@@ -1044,7 +1044,7 @@ void tick(uint32_t tickCount) {
             }
             updateBrightness();
         } else {
-            uint8_t value = (uint8_t)round(util::remap(diff, 0, g_onOffTransitionFromBrightness, CONF_LCD_ON_OFF_TRANSITION_TIME, g_onOffTransitionToBrightness));
+            uint8_t value = (uint8_t)round(util::remap((float)diff, 0, (float)g_onOffTransitionFromBrightness, (float)CONF_LCD_ON_OFF_TRANSITION_TIME, (float)g_onOffTransitionToBrightness));
             analogWrite(LCD_BRIGHTNESS, value);
         }
     }
