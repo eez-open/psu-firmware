@@ -51,7 +51,9 @@ void readHeader() {
 }
 
 void writeHeader() {
-    eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
+    if (eeprom::g_testResult == psu::TEST_OK) {
+        eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
+    }
 }
 
 void readEvent(uint16_t eventIndex, Event *e) {
@@ -59,7 +61,9 @@ void readEvent(uint16_t eventIndex, Event *e) {
 }
 
 void writeEvent(uint16_t eventIndex, Event *e) {
-    eeprom::write((uint8_t *)e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + EVENT_HEADER_SIZE + eventIndex * EVENT_SIZE);
+    if (eeprom::g_testResult == psu::TEST_OK) {
+        eeprom::write((uint8_t *)e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + EVENT_HEADER_SIZE + eventIndex * EVENT_SIZE);
+    }
 }
 
 void init() {
