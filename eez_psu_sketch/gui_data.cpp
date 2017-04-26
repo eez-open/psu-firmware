@@ -205,9 +205,14 @@ void Value::formatFloatValue(float &value, ValueType &valueType, int &numSignifi
     }
 
     if (isMilli()) {
+        value *= 1000.0f;
+
         if (valueType == VALUE_TYPE_FLOAT_VOLT) {
             valueType = VALUE_TYPE_FLOAT_MILLI_VOLT;
             if (!forceNumSignificantDecimalDigits) {
+                if (numSignificantDecimalDigits == 2) {
+                    value = roundf(value / 10) * 10;
+                }
                 numSignificantDecimalDigits = 0;
             }
         } else if (valueType == VALUE_TYPE_FLOAT_AMPER) {
@@ -234,9 +239,6 @@ void Value::formatFloatValue(float &value, ValueType &valueType, int &numSignifi
         if (forceNumSignificantDecimalDigits) {
             numSignificantDecimalDigits -= 3;
         }
-
-        value *= 1000.0f;
-        return;
     }
 
     if (!forceNumSignificantDecimalDigits) {
