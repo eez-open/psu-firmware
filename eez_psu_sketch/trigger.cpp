@@ -175,6 +175,8 @@ void setTriggerFinished(Channel &channel) {
 }
 
 int checkTrigger() {
+    bool onlyFixed = true;
+
     for (int i = 0; i < CH_NUM; ++i) {
         Channel& channel = Channel::get(i);
 
@@ -189,6 +191,10 @@ int checkTrigger() {
 	            }
 
                 if (channel.getVoltageTriggerMode() == TRIGGER_MODE_LIST) {
+                    if (list::isListEmpty(channel)) {
+                        return SCPI_ERROR_LIST_IS_EMPTY;
+                    }
+
                     if (!list::areListLengthsEquivalent(channel)) {
                         return SCPI_ERROR_LIST_LENGTHS_NOT_EQUIVALENT;
                     }
@@ -210,8 +216,14 @@ int checkTrigger() {
                         return SCPI_ERROR_POWER_LIMIT_EXCEEDED;
                     }
                 }
+
+                onlyFixed = false;
             }
         }
+    }
+
+    if (onlyFixed) {
+        return SCPI_ERROR_CANNOT_INITIATE_WHILE_IN_FIXED_MODE;
     }
 
     return 0;

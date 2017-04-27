@@ -146,8 +146,12 @@ void recallChannelsFromProfile(Parameters *profile, int location) {
 #if OPTION_SD_CARD
             char filePath[MAX_PATH_LENGTH];
             getChannelProfileListFilePath(channel, location, filePath);
-            list::loadList(channel, filePath, NULL);
-            list::setListsChanged(channel, false);
+            int err;
+            if (list::loadList(channel, filePath, &err)) {
+                list::setListsChanged(channel, false);
+            } else {
+                psu::generateError(err);
+            }
 #endif
 		}
 

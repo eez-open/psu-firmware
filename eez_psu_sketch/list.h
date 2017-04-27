@@ -42,6 +42,8 @@ void setListsChanged(Channel &channel, bool changed);
 uint16_t getListCount(Channel &channel);
 void setListCount(Channel &channel, uint16_t value);
 
+bool isListEmpty(Channel &channel);
+
 bool areListLengthsEquivalent(uint16_t size1, uint16_t size2);
 bool areListLengthsEquivalent(uint16_t size1, uint16_t size2, uint16_t size3);
 bool areListLengthsEquivalent(Channel &channel);

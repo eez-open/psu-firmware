@@ -126,6 +126,12 @@ void setListCount(Channel &channel, uint16_t value) {
     g_channelsLists[channel.index - 1].count = value;
 }
 
+bool isListEmpty(Channel &channel) {
+    return g_channelsLists[channel.index - 1].dwellListLength == 0 &&
+        g_channelsLists[channel.index - 1].voltageListLength == 0 &&
+        g_channelsLists[channel.index - 1].currentListLength == 0;
+}
+
 bool areListLengthsEquivalent(uint16_t size1, uint16_t size2) {
     return size1 != 0 && size2 != 0 && (size1 == 1 || size2 == 1 || size1 == size2);
 }
@@ -189,10 +195,16 @@ bool loadList(Channel &channel, const char *filePath, int *err) {
         return false;
     }
 
+    if (!SD.exists(filePath)) {
+        if (err) {
+            *err = SCPI_ERROR_LIST_NOT_FOUND;
+        }
+        return false;
+    }
+
     File file = SD.open(filePath, FILE_READ);
 
     if (!file) {
-        // TODO more specific error
         if (err) {
             *err = SCPI_ERROR_EXECUTION_ERROR;
         }
