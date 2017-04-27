@@ -43,7 +43,8 @@ struct ChannelFlags {
     unsigned i_triggerMode : 2;
     unsigned currentRangeSelectionMode: 2;
     unsigned autoSelectCurrentRange: 1;
-    unsigned reserved: 11;
+    unsigned listSaved: 1;
+    unsigned reserved: 10;
 };
 
 /// Channel parameters stored in profile.
