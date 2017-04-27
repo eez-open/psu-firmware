@@ -1572,8 +1572,6 @@ void Channel::clearProtection() {
     if (lastEvent.eventId == event_queue::EVENT_ERROR_CH1_OPP_TRIPPED + 3 * (index - 1)) {
         event_queue::markAsRead();
     }
-
-    temperature::clearChannelProtection(this);
 }
 
 void Channel::disableProtection() {
