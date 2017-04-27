@@ -479,7 +479,7 @@ public:
     bool isTripped();
 
     /// Clear channel protection tripp state.
-    void clearProtection();
+    void clearProtection(bool clearOTP = true);
 
     /// Disable protection for this channel
     void disableProtection();

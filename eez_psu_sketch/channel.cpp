@@ -497,7 +497,7 @@ void Channel::reset() {
     // [SOUR[n]]:VOLT:PROT:TRIP? 0
     // [SOUR[n]]:CURR:PROT:TRIP? 0
     // [SOUR[n]]:POW:PROT:TRIP? 0
-    clearProtection();
+    clearProtection(false);
 
     // [SOUR[n]]:VOLT:SENS INTernal
     doRemoteSensingEnable(false);
@@ -1548,7 +1548,7 @@ bool Channel::isTripped() {
         temperature::isAnySensorTripped(this);
 }
 
-void Channel::clearProtection() {
+void Channel::clearProtection(bool clearOTP) {
     event_queue::Event lastEvent;
     event_queue::getLastErrorEvent(&lastEvent);
 
@@ -1571,6 +1571,10 @@ void Channel::clearProtection() {
     setQuesBits(QUES_ISUM_OPP, false);
     if (lastEvent.eventId == event_queue::EVENT_ERROR_CH1_OPP_TRIPPED + 3 * (index - 1)) {
         event_queue::markAsRead();
+    }
+
+    if (clearOTP) {
+        temperature::clearChannelProtection(this);
     }
 }
 
