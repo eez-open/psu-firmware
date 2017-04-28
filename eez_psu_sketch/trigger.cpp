@@ -166,7 +166,9 @@ void onTriggerFinished(Channel &channel) {
 
         switch (channel.getTriggerOnListStop()) {
         case TRIGGER_ON_LIST_STOP_OUTPUT_OFF:
-            channel.outputEnable(false);
+            channel_dispatcher::setVoltage(channel, 0);
+            channel_dispatcher::setCurrent(channel, 0);
+            channel_dispatcher::outputEnable(channel, false);
             break;
         case TRIGGER_ON_LIST_STOP_SET_TO_FIRST_STEP:
             if (!list::setListValue(channel, 0, &err)) {
@@ -179,7 +181,10 @@ void onTriggerFinished(Channel &channel) {
             }
             break;
         case TRIGGER_ON_LIST_STOP_STANDBY:
-            changePowerState(false);
+            channel_dispatcher::setVoltage(channel, 0);
+            channel_dispatcher::setCurrent(channel, 0);
+            channel_dispatcher::outputEnable(channel, false);
+            schedulePowerDown();
             break;
         }
     }

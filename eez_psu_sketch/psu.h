@@ -67,6 +67,7 @@ bool powerUp();
 void powerDown();
 bool isPowerUp();
 bool changePowerState(bool up);
+void schedulePowerDown();
 void powerDownBySensor();
 
 bool reset();

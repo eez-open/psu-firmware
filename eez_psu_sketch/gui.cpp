@@ -1048,7 +1048,6 @@ void channelEnableOutput() {
 }
 
 void standBy() {
-    showEnteringStandbyPage();
     changePowerState(false);
 }
 

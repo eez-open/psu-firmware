@@ -75,7 +75,7 @@ static MaxCurrentLimitCause g_maxCurrentLimitCause;
 ontime::Counter g_powerOnTimeCounter(ontime::ON_TIME_COUNTER_POWER);
 
 volatile bool g_insideInterruptHandler = false;
-static bool g_shutdownOnNextTick;
+static bool g_powerDownOnNextTick;
 
 RLState g_rlState = RL_STATE_LOCAL;
 
@@ -832,6 +832,9 @@ bool changePowerState(bool up) {
         profile::save();
     }
     else {
+#if OPTION_DISPLAY
+        gui::showEnteringStandbyPage();
+#endif
         g_powerIsUp = false;
         profile::saveImmediately();
         g_powerIsUp = true;
@@ -847,8 +850,16 @@ bool changePowerState(bool up) {
     return true;
 }
 
+void schedulePowerDown() {
+    g_powerDownOnNextTick = true;
+}
+
 void powerDownBySensor() {
     if (g_powerIsUp) {
+#if OPTION_DISPLAY
+        gui::showEnteringStandbyPage();
+#endif
+
         for (int i = 0; i < CH_NUM; ++i) {
             Channel::get(i).outputEnable(false);
         }
@@ -887,7 +898,7 @@ void onProtectionTripped() {
     if (isPowerUp()) {
         if (persist_conf::isShutdownWhenProtectionTrippedEnabled()) {
             if (g_insideInterruptHandler) {
-                g_shutdownOnNextTick = true;
+                g_powerDownOnNextTick = true;
                 disableChannels();
             } else {
                 powerDownBySensor();
@@ -905,8 +916,8 @@ void onProtectionTripped() {
 void tick() {
     ++g_mainLoopCounter;
 
-    if (g_shutdownOnNextTick) {
-        g_shutdownOnNextTick = false;
+    if (g_powerDownOnNextTick) {
+        g_powerDownOnNextTick = false;
         powerDownBySensor();
     }
 
