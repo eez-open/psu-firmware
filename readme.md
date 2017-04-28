@@ -1,6 +1,14 @@
 [![GitHub release](https://img.shields.io/github/release/eez-open/psu-firmware.svg)](https://github.com/eez-open/psu-firmware/releases)
 [![license](https://img.shields.io/github/license/eez-open/psu-firmware.svg)](https://github.com/eez-open/psu-firmware/blob/master/LICENSE.TXT)
 
+### Ownership and License
+
+The contributors are listed in CONTRIB.TXT. This project uses the GPL v3 license, see LICENSE.TXT.
+EEZ psu-firmware uses the [C4.1 (Collective Code Construction Contract)](http://rfc.zeromq.org/spec:22) process for contributions.
+To report an issue, use the [EEZ psu-firmware issue tracker](https://github.com/eez-open/psu-firmware/issues).
+
+_If you consider to join us in software development please check first if anything from this [list](https://github.com/eez-open/psu-firmware/milestone/6) you found interesting._
+
 ## Introduction
 
 This project has Arduino/Genuino sketch for [Mega2560](https://www.arduino.cc/en/Main/ArduinoBoardMega2560) (8-bit, AVR) (not supported in M3 and newer releases!) and [Due](https://www.arduino.cc/en/Main/ArduinoBoardDue) (32-bit, ARM) boards and accompanying libraries for the open hardware [EEZ H24005 power supply](http://www.envox.hr/eez/bench-power-supply/psu-introduction.html) firmware.
@@ -25,12 +33,6 @@ Firmware key features:
 - Local GUI control using TFT touch display
 - Remote control based on SCPI protocol
 - SD card support
-
-### Ownership and License
-
-The contributors are listed in CONTRIB.TXT. This project uses the GPL v3 license, see LICENSE.TXT.
-EEZ psu-firmware uses the [C4.1 (Collective Code Construction Contract)](http://rfc.zeromq.org/spec:22) process for contributions.
-To report an issue, use the [EEZ psu-firmware issue tracker](https://github.com/eez-open/psu-firmware/issues).
 
 ## Installation
 
