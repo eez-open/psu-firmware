@@ -267,7 +267,7 @@ void doShowPage(int index, Page *page = 0) {
     refreshPage();
 }
 
-void setPage(int index) {
+void setPage(int pageId) {
     // delete stack
     for (int i = 0; i < g_pageNavigationStackPointer; ++i) {
         if (g_pageNavigationStack[i].activePage) {
@@ -280,14 +280,14 @@ void setPage(int index) {
     g_focusEditValue = data::Value();
 
     //
-    doShowPage(index);
+    doShowPage(pageId);
 }
 
-void replacePage(int index, Page *page) {
-    doShowPage(index, page);
+void replacePage(int pageId, Page *page) {
+    doShowPage(pageId, page);
 }
 
-void pushPage(int index, Page *page) {
+void pushPage(int pageId, Page *page) {
     // push current page on stack
     if (g_activePageId != INTERNAL_PAGE_ID_NONE) {
         if (g_pageNavigationStackPointer == CONF_GUI_PAGE_NAVIGATION_STACK_SIZE) {
@@ -313,7 +313,7 @@ void pushPage(int index, Page *page) {
         ++g_pageNavigationStackPointer;
     }
 
-    doShowPage(index, page);
+    doShowPage(pageId, page);
 }
 
 void popPage() {
@@ -325,6 +325,19 @@ void popPage() {
     } else {
         doShowPage(PAGE_ID_MAIN);
     }
+}
+
+bool isPageActiveOrOnStack(int pageId) {
+    if (g_activePageId == pageId) {
+        return true;
+    }
+
+    for (int i = 0; i < g_pageNavigationStackPointer; ++i) {
+        if (g_pageNavigationStack[i].activePageId == pageId) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void showWelcomePage() {
@@ -782,7 +795,7 @@ bool wasFocusWidget(const WidgetCursor &widgetCursor) {
 }
 
 bool isFocusWidget(const WidgetCursor &widgetCursor) {
-    if (g_activePageId == PAGE_ID_CH_SETTINGS_LISTS) {
+    if (isPageActiveOrOnStack(PAGE_ID_CH_SETTINGS_LISTS)) {
         return ((ChSettingsListsPage *)g_activePage)->isFocusWidget(widgetCursor);
     } else if (channel_dispatcher::getVoltageTriggerMode(Channel::get(widgetCursor.cursor.i)) != TRIGGER_MODE_FIXED && !trigger::isIdle()) {
         return false;

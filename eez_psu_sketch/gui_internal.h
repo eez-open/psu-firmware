@@ -48,10 +48,11 @@ Page *getPreviousPage();
 
 bool isActivePageInternal();
 
-void setPage(int index);
-void replacePage(int index, Page *page = 0);
-void pushPage(int index, Page *page = 0);
+void setPage(int pageId);
+void replacePage(int pageId, Page *page = 0);
+void pushPage(int pageId, Page *page = 0);
 void popPage();
+bool isPageActiveOrOnStack(int pageId);
 
 font::Font styleGetFont(const Style *style);
 void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse, bool dimmed = false);
