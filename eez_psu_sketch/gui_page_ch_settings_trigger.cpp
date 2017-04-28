@@ -756,7 +756,6 @@ void ChSettingsListsPage::showDeleteMenu() {
 
 void ChSettingsListsPage::insertRow(int iRow, int iCopyRow) {
     if (getMaxListLength() < MAX_LIST_LENGTH) {
-        int iRow = getRowIndex();
         for (int i = MAX_LIST_LENGTH - 2; i >= iRow; --i) {
             m_dwellList[i+1] = m_dwellList[i];
             m_voltageList[i+1] = m_voltageList[i];
@@ -765,17 +764,17 @@ void ChSettingsListsPage::insertRow(int iRow, int iCopyRow) {
     
         data::Cursor cursor(getCursorIndexWithinPage());
 
-        if (iRow <= m_dwellListLength) {
+        if (iCopyRow < m_dwellListLength && iRow <= m_dwellListLength) {
             m_dwellList[iRow] = m_dwellList[iCopyRow];
             ++m_dwellListLength;
         }
         
-        if (iRow <= m_voltageListLength) {
+        if (iCopyRow < m_voltageListLength && iRow <= m_voltageListLength) {
             m_voltageList[iRow] = m_voltageList[iCopyRow];
             ++m_voltageListLength;
         }
         
-        if (iRow <= m_currentListLength) {
+        if (iCopyRow < m_currentListLength && iRow <= m_currentListLength) {
             m_currentList[iRow] = m_currentList[iCopyRow];
             ++m_currentListLength;
         }
