@@ -136,7 +136,7 @@ scpi_result_t scpi_cmd_triggerSequenceExitCondition(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cmd_triggerSequenceExitConditionq(scpi_t * context) {
+scpi_result_t scpi_cmd_triggerSequenceExitConditionQ(scpi_t * context) {
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
