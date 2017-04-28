@@ -377,6 +377,7 @@ bool saveList(Channel &channel, const char *filePath, int *err) {
 void executionStart(Channel &channel) {
     g_execution[channel.index - 1].it = -1;
     g_execution[channel.index - 1].counter = g_channelsLists[channel.index - 1].count;
+    g_active = true;
 }
 
 int maxListsSize(Channel &channel) {
