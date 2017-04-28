@@ -378,6 +378,8 @@ void executionStart(Channel &channel) {
     g_execution[channel.index - 1].it = -1;
     g_execution[channel.index - 1].counter = g_channelsLists[channel.index - 1].count;
     g_active = true;
+    channel_dispatcher::setVoltage(channel, 0);
+    channel_dispatcher::setCurrent(channel, 0);
 }
 
 int maxListsSize(Channel &channel) {
