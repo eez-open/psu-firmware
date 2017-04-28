@@ -37,6 +37,8 @@ public:
     void editVoltageTriggerValue();
     void editCurrentTriggerValue();
 
+    void toggleOutputState();
+
     void editListCount();
 
 private:

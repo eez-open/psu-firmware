@@ -61,7 +61,11 @@ data::Value ChSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t i
 		return data::Value(channel_dispatcher::getTriggerCurrent(*g_channel), VALUE_TYPE_FLOAT_AMPER, g_channel->index-1);
 	}
 
-	if (id == DATA_ID_CHANNEL_LIST_COUNT) {
+	if (id == DATA_ID_CHANNEL_TRIGGER_OUTPUT_STATE) {
+		return data::Value(channel_dispatcher::getTriggerOutputState(*g_channel) ? 1 : 0);
+	}
+
+    if (id == DATA_ID_CHANNEL_LIST_COUNT) {
         uint16_t count = list::getListCount(*g_channel);
         if (count > 0) {
     		return data::Value(count);
@@ -130,6 +134,11 @@ void ChSettingsTriggerPage::editCurrentTriggerValue() {
 	options.flags.dotButtonEnabled = true;
 
 	NumericKeypad::start(0, data::Value(trigger::getCurrent(*g_channel), VALUE_TYPE_FLOAT_AMPER, g_channel->index-1), options, onCurrentTriggerValueSet);
+}
+
+void ChSettingsTriggerPage::toggleOutputState() {
+    channel_dispatcher::setTriggerOutputState(*g_channel, !channel_dispatcher::getTriggerOutputState(*g_channel));
+    profile::save();
 }
 
 void ChSettingsTriggerPage::onListCountSet(float value) {

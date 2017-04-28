@@ -538,6 +538,7 @@ void Channel::reset() {
 
     flags.voltageTriggerMode = TRIGGER_MODE_FIXED;
     flags.currentTriggerMode = TRIGGER_MODE_FIXED;
+    flags.triggerOutputState = 1;
     trigger::setVoltage(*this, U_MIN);
     trigger::setCurrent(*this, I_MIN);
     list::resetChannelList(*this);
@@ -1731,6 +1732,14 @@ TriggerMode Channel::getCurrentTriggerMode() {
 
 void Channel::setCurrentTriggerMode(TriggerMode mode) {
     flags.currentTriggerMode = mode;
+}
+
+bool Channel::getTriggerOutputState() {
+    return flags.triggerOutputState ? true : false;
+}
+
+void Channel::setTriggerOutputState(bool enabled) {
+    flags.triggerOutputState = enabled ? 1 : 0;
 }
 
 float Channel::getDualRangeGndOffset() {

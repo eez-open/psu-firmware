@@ -152,6 +152,33 @@ scpi_result_t scpi_cmd_outputProtectionCoupleQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t scpi_cmd_outputStateTriggered(scpi_t *context) {
+    bool enable;
+    if (!SCPI_ParamBool(context, &enable, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    channel_dispatcher::setTriggerOutputState(*channel, enable);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_outputStateTriggeredQ(scpi_t *context) {
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultBool(context, channel_dispatcher::getTriggerOutputState(*channel));
+
+    return SCPI_RES_OK;
+}
+
 }
 }
 } // namespace eez::psu::scpi

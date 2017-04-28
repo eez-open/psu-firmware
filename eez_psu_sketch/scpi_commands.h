@@ -102,6 +102,8 @@
     SCPI_COMMAND("OUTPut:TRACk[:STATe]?", scpi_cmd_outputTrackStateQ) \
     SCPI_COMMAND("OUTPut:PROTection:COUPle", scpi_cmd_outputProtectionCouple) \
     SCPI_COMMAND("OUTPut:PROTection:COUPle?", scpi_cmd_outputProtectionCoupleQ) \
+    SCPI_COMMAND("OUTPut[:STATe]:TRIGgered", scpi_cmd_outputStateTriggered) \
+    SCPI_COMMAND("OUTPut[:STATe]:TRIGgered?", scpi_cmd_outputStateTriggeredQ) \
     SCPI_COMMAND("SIMUlator:LOAD:STATe", scpi_cmd_simulatorLoadState) \
     SCPI_COMMAND("SIMUlator:LOAD:STATe?", scpi_cmd_simulatorLoadStateQ) \
     SCPI_COMMAND("SIMUlator:LOAD", scpi_cmd_simulatorLoad) \

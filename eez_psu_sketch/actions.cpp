@@ -585,6 +585,10 @@ void action_ch_settings_trigger_edit_list_count() {
     ((ChSettingsTriggerPage *)getActivePage())->editListCount();
 }
 
+void action_ch_settings_trigger_toggle_output_state() {
+    ((ChSettingsTriggerPage *)getActivePage())->toggleOutputState();
+}
+
 void action_show_ch_settings_lists() {
     pushPage(PAGE_ID_CH_SETTINGS_LISTS);
 }
@@ -835,6 +839,7 @@ ACTION actions[] = {
     action_ch_settings_trigger_edit_voltage_trigger_value,
     action_ch_settings_trigger_edit_current_trigger_value,
     action_ch_settings_trigger_edit_list_count,
+    action_ch_settings_trigger_toggle_output_state,
     action_show_ch_settings_lists,
     action_show_sys_settings_trigger,
     action_channel_lists_previous_page,

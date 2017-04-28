@@ -182,6 +182,7 @@ public:
         unsigned displayValue2: 2;
         unsigned voltageTriggerMode: 2;
         unsigned currentTriggerMode: 2;
+        unsigned triggerOutputState: 1;
         unsigned currentRangeSelectionMode: 2; // see enum CurrentRangeSelectionMode
         unsigned autoSelectCurrentRange: 1; // switch between 5A/0.5A depending on Imon
         unsigned currentCurrentRange: 1; // 0: 5A, 1:0.5A
@@ -575,6 +576,9 @@ public:
 
     TriggerMode getCurrentTriggerMode();
     void setCurrentTriggerMode(TriggerMode mode);
+
+    bool getTriggerOutputState();
+    void setTriggerOutputState(bool enabled);
 
     bool hasSupportForCurrentDualRange() const { return boardRevision == CH_BOARD_REVISION_R5B12; }
     void setCurrentRangeSelectionMode(CurrentRangeSelectionMode mode);

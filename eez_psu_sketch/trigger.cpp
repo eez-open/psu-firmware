@@ -244,6 +244,8 @@ int startImmediately() {
         Channel& channel = Channel::get(i);
 
         if (i == 0 || !(channel_dispatcher::isCoupled() || channel_dispatcher::isTracked())) {
+            channel_dispatcher::outputEnable(channel, channel_dispatcher::getTriggerOutputState(channel));
+
             if (channel.getVoltageTriggerMode() == TRIGGER_MODE_LIST) {
                 list::executionStart(channel);
             } else {

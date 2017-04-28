@@ -136,6 +136,7 @@ void recallChannelsFromProfile(Parameters *profile, int location) {
         
             channel.flags.voltageTriggerMode = (TriggerMode)profile->channels[i].flags.u_triggerMode;
             channel.flags.currentTriggerMode = (TriggerMode)profile->channels[i].flags.i_triggerMode;
+            channel.flags.triggerOutputState = profile->channels[i].flags.triggerOutputState;
             trigger::setVoltage(channel, profile->channels[i].u_triggerValue);
             trigger::setCurrent(channel, profile->channels[i].i_triggerValue);
             list::setListCount(channel, profile->channels[i].listCount);
@@ -327,6 +328,7 @@ bool saveAtLocation(int location, char *name) {
 
                 profile.channels[i].flags.u_triggerMode = channel.flags.voltageTriggerMode;
                 profile.channels[i].flags.i_triggerMode = channel.flags.currentTriggerMode;
+                profile.channels[i].flags.triggerOutputState = channel.flags.triggerOutputState;
                 profile.channels[i].u_triggerValue = trigger::getVoltage(channel);
                 profile.channels[i].i_triggerValue = trigger::getCurrent(channel);
                 profile.channels[i].listCount = list::getListCount(channel);
