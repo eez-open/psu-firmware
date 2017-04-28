@@ -58,6 +58,14 @@ enum TriggerMode {
     TRIGGER_MODE_STEP
 };
 
+enum TriggerOnListStop {
+    TRIGGER_ON_LIST_STOP_OUTPUT_OFF,
+    TRIGGER_ON_LIST_STOP_SET_TO_FIRST_STEP,
+    TRIGGER_ON_LIST_STOP_SET_TO_LAST_STEP,
+    TRIGGER_ON_LIST_STOP_STANDBY
+};
+
+
 enum CurrentRangeSelectionMode {
     CURRENT_RANGE_SELECTION_USE_BOTH,
     CURRENT_RANGE_SELECTION_ALWAYS_HIGH,
@@ -183,6 +191,7 @@ public:
         unsigned voltageTriggerMode: 2;
         unsigned currentTriggerMode: 2;
         unsigned triggerOutputState: 1;
+        unsigned triggerOnListStop: 3;
         unsigned currentRangeSelectionMode: 2; // see enum CurrentRangeSelectionMode
         unsigned autoSelectCurrentRange: 1; // switch between 5A/0.5A depending on Imon
         unsigned currentCurrentRange: 1; // 0: 5A, 1:0.5A
@@ -579,6 +588,9 @@ public:
 
     bool getTriggerOutputState();
     void setTriggerOutputState(bool enabled);
+
+    TriggerOnListStop getTriggerOnListStop();
+    void setTriggerOnListStop(TriggerOnListStop value);
 
     bool hasSupportForCurrentDualRange() const { return boardRevision == CH_BOARD_REVISION_R5B12; }
     void setCurrentRangeSelectionMode(CurrentRangeSelectionMode mode);

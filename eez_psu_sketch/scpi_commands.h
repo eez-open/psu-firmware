@@ -263,6 +263,8 @@
     SCPI_COMMAND("TRIGger[:SEQuence]:SLOPe?", scpi_cmd_triggerSequenceSlopeQ) \
     SCPI_COMMAND("TRIGger[:SEQuence]:SOURce", scpi_cmd_triggerSequenceSource) \
     SCPI_COMMAND("TRIGger[:SEQuence]:SOURce?", scpi_cmd_triggerSequenceSourceQ) \
+    SCPI_COMMAND("TRIGger[:SEQuence]:EXIT:CONDition", scpi_cmd_triggerSequenceExitCondition) \
+    SCPI_COMMAND("TRIGger[:SEQuence]:EXIT:CONDition?", scpi_cmd_triggerSequenceExitConditionQ) \
     SCPI_COMMAND("INITiate", scpi_cmd_initiate) \
     SCPI_COMMAND("INITiate:CONTinuous", scpi_cmd_initiateContinuous) \
     SCPI_COMMAND("INITiate:CONTinuous?", scpi_cmd_initiateContinuousQ) \

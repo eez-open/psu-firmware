@@ -58,6 +58,10 @@ bool saveList(Channel &channel, const char *filePath, int *err);
 
 void executionStart(Channel &channel);
 
+int maxListsSize(Channel &channel);
+
+bool setListValue(Channel &channel, int16_t it, int *err);
+
 void tick(uint32_t tick_usec);
 
 bool isActive();

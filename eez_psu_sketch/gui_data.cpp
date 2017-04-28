@@ -97,13 +97,22 @@ data::EnumItem g_channelCurrentRange[] = {
     {0, 0}
 };
 
+data::EnumItem g_channelTriggerOnListStop[] = {
+    {TRIGGER_ON_LIST_STOP_OUTPUT_OFF, PSTR("Output OFF")},
+    {TRIGGER_ON_LIST_STOP_SET_TO_FIRST_STEP, PSTR("Set to first step")},
+    {TRIGGER_ON_LIST_STOP_SET_TO_LAST_STEP, PSTR("Set to last step")},
+    {TRIGGER_ON_LIST_STOP_STANDBY, PSTR("Standby")},
+    {0, 0}
+};
+
 static const data::EnumItem *enumDefinitions[] = {
     g_channelDisplayValueEnumDefinition,
     g_channelTriggerModeEnumDefinition,
     g_triggerSourceEnumDefinition,
     g_triggerPolarityEnumDefinition,
     g_channelCurrentRangeSelectionMode,
-    g_channelCurrentRange
+    g_channelCurrentRange,
+    g_channelTriggerOnListStop
 };
 
 ////////////////////////////////////////////////////////////////////////////////

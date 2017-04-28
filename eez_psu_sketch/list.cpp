@@ -398,6 +398,35 @@ int maxListsSize(Channel &channel) {
     return maxSize;
 }
 
+bool setListValue(Channel &channel, int16_t it, int *err) {
+    float voltage = g_channelsLists[channel.index - 1].voltageList[it % g_channelsLists[channel.index - 1].voltageListLength];
+	if (util::greater(voltage, channel_dispatcher::getULimit(channel), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+        *err = SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
+        return false;
+	}
+
+    float current = g_channelsLists[channel.index - 1].currentList[it % g_channelsLists[channel.index - 1].currentListLength];
+    if (util::greater(current, channel_dispatcher::getILimit(channel), getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+        *err = SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
+        return false;
+	}
+
+	if (util::greater(voltage * current, channel_dispatcher::getPowerLimit(channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
+        *err = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
+        return false;
+    }
+
+    if (channel_dispatcher::getUSet(channel) != voltage) {
+        channel_dispatcher::setVoltage(channel, voltage);
+    }
+
+    if (channel_dispatcher::getISet(channel) != current) {
+        channel_dispatcher::setCurrent(channel, current);
+    }
+    
+    return true;
+}
+
 void tick(uint32_t tick_usec) {
 #if CONF_DEBUG_VARIABLES
     debug::g_listTickDuration.tick(tick_usec);
@@ -434,32 +463,11 @@ void tick(uint32_t tick_usec) {
                     g_execution[i].it = 0;
                 }
 
-                float voltage = g_channelsLists[i].voltageList[g_execution[i].it % g_channelsLists[i].voltageListLength];
-	            if (util::greater(voltage, channel_dispatcher::getULimit(channel), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
-                    generateError(SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
+                int err;
+                if (!setListValue(channel, g_execution[i].it, &err)) {
+                    generateError(err);
                     abort();
                     return;
-	            }
-
-                float current = g_channelsLists[i].currentList[g_execution[i].it % g_channelsLists[i].currentListLength];
-                if (util::greater(current, channel_dispatcher::getILimit(channel), getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
-                    generateError(SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
-                    abort();
-                    return;
-	            }
-
-	            if (util::greater(voltage * current, channel_dispatcher::getPowerLimit(channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
-                    generateError(SCPI_ERROR_POWER_LIMIT_EXCEEDED);
-                    abort();
-                    return;
-                }
-
-                if (channel_dispatcher::getUSet(channel) != voltage) {
-                    channel_dispatcher::setVoltage(channel, voltage);
-                }
-
-                if (channel_dispatcher::getISet(channel) != current) {
-                    channel_dispatcher::setCurrent(channel, current);
                 }
 
                 uint32_t dwell = (uint32_t)round(g_channelsLists[i].dwellList[g_execution[i].it % g_channelsLists[i].dwellListLength] * 1000000L);

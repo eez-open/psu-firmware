@@ -34,7 +34,8 @@ enum EnumDefinition {
     ENUM_DEFINITION_TRIGGER_SOURCE,
     ENUM_DEFINITION_TRIGGER_POLARITY,
     ENUM_DEFINITION_CHANNEL_CURRENT_RANGE_SELECTION_MODE,
-    ENUM_DEFINITION_CHANNEL_CURRENT_RANGE
+    ENUM_DEFINITION_CHANNEL_CURRENT_RANGE,
+    ENUM_DEFINITION_CHANNEL_TRIGGER_ON_LIST_STOP
 };
 
 struct EnumItem {
@@ -48,6 +49,7 @@ extern data::EnumItem g_triggerSourceEnumDefinition[];
 extern data::EnumItem g_triggerPolarityEnumDefinition[];
 extern data::EnumItem g_channelCurrentRangeSelectionMode[];
 extern data::EnumItem g_channelCurrentRange[];
+extern data::EnumItem g_channelTriggerOnListStop[];
 
 enum ValueOptions {
     VALUE_OPTIONS_CH1 = 0x00,

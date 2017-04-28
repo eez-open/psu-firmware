@@ -62,6 +62,7 @@ bool setType(Type value) {
                     channel.setVoltageTriggerMode(TRIGGER_MODE_FIXED);
                     channel.setCurrentTriggerMode(TRIGGER_MODE_FIXED);
                     channel.setTriggerOutputState(true);
+                    channel.setTriggerOnListStop(TRIGGER_ON_LIST_STOP_OUTPUT_OFF);
 
                     list::resetChannelList(channel);
 
@@ -154,6 +155,7 @@ bool setType(Type value) {
                         channel.setVoltageTriggerMode(TRIGGER_MODE_FIXED);
                         channel.setCurrentTriggerMode(TRIGGER_MODE_FIXED);
                         channel.setTriggerOutputState(true);
+                        channel.setTriggerOnListStop(TRIGGER_ON_LIST_STOP_OUTPUT_OFF);
                     }
                 }
 
@@ -767,6 +769,22 @@ void setTriggerOutputState(Channel& channel, bool enable) {
         Channel::get(0).setTriggerOutputState(enable);
     } else {
         channel.setTriggerOutputState(enable);
+    }
+}
+
+TriggerOnListStop getTriggerOnListStop(Channel& channel) {
+    if (isCoupled() || isTracked()) {
+        return Channel::get(0).getTriggerOnListStop();
+    } else {
+        return channel.getTriggerOnListStop();
+    }
+}
+
+void setTriggerOnListStop(Channel& channel, TriggerOnListStop value) {
+    if (isCoupled() || isTracked()) {
+        Channel::get(0).setTriggerOnListStop(value);
+    } else {
+        channel.setTriggerOnListStop(value);
     }
 }
 

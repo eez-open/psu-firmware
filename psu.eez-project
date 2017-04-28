@@ -875,6 +875,12 @@
     },
     {
       "$eez": false,
+      "name": "ch.settings.trigger.editOnListStop",
+      "implementationType": "native",
+      "implementation": "((ChSettingsTriggerPage *)getActivePage())->editTriggerOnListStop();"
+    },
+    {
+      "$eez": false,
       "name": "show_ch_settings_lists",
       "implementationType": "native",
       "implementation": "pushPage(PAGE_ID_CH_SETTINGS_LISTS);"
@@ -2232,6 +2238,13 @@
       "enumItems": "",
       "defaultValue": "1",
       "defaultMinValue": 0
+    },
+    {
+      "$eez": false,
+      "name": "channel.trigger.onListStop",
+      "type": "enum",
+      "enumItems": "[\n\"Output OFF\",\n\"Set to first step\",\n\"Set to last step\",\n\"Standby\"\n]",
+      "defaultValue": "Output OFF"
     },
     {
       "$eez": false,
@@ -15481,7 +15494,7 @@
               "type": "Text",
               "x": 16,
               "y": 28,
-              "width": 149,
+              "width": 115,
               "height": 28,
               "style": "edit_value_S_left",
               "text": "Trigger mode:"
@@ -15491,7 +15504,7 @@
               "type": "Text",
               "data": "channel.trigger.mode",
               "action": "ch.settings.trigger.editTriggerMode",
-              "x": 165,
+              "x": 131,
               "y": 28,
               "width": 68,
               "height": 28,
@@ -15504,16 +15517,14 @@
               "data": "channel.trigger.mode",
               "y": 56,
               "width": 236,
-              "height": 56,
+              "height": 112,
               "style": "default",
               "widgets": [
                 {
                   "$eez": false,
                   "type": "Rectangle",
-                  "x": 0,
-                  "y": 0,
                   "width": 236,
-                  "height": 56,
+                  "height": 112,
                   "style": "default_inverse"
                 },
                 {
@@ -15522,7 +15533,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 236,
-                  "height": 56,
+                  "height": 112,
                   "style": "default",
                   "widgets": [
                     {
@@ -15530,7 +15541,7 @@
                       "type": "Text",
                       "x": 0,
                       "y": 0,
-                      "width": 149,
+                      "width": 115,
                       "height": 28,
                       "style": "edit_value_S_left",
                       "text": "List count:"
@@ -15540,7 +15551,7 @@
                       "type": "DisplayData",
                       "data": "channel.list.count",
                       "action": "ch.settings.trigger.editListCount",
-                      "x": 149,
+                      "x": 115,
                       "y": 0,
                       "width": 68,
                       "height": 28,
@@ -15552,7 +15563,7 @@
                       "action": "show_ch_settings_lists",
                       "x": 0,
                       "y": 28,
-                      "width": 149,
+                      "width": 115,
                       "height": 28,
                       "style": "edit_value_active_S_left",
                       "text": "Edit lists"
@@ -15560,11 +15571,72 @@
                     {
                       "$eez": false,
                       "type": "Rectangle",
-                      "x": 149,
+                      "x": 115,
                       "y": 28,
-                      "width": 68,
+                      "width": 102,
                       "height": 28,
                       "style": "default_inverse"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 56,
+                      "width": 115,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Output state:"
+                    },
+                    {
+                      "$eez": false,
+                      "x": 115,
+                      "type": "Select",
+                      "data": "channel.trigger.outputState",
+                      "y": 56,
+                      "width": 68,
+                      "height": 28,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "action": "ch.settings.trigger.toggleOutputState",
+                          "width": 68,
+                          "height": 28,
+                          "style": "edit_value_active_S_left",
+                          "text": "OFF"
+                        },
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "action": "ch.settings.trigger.toggleOutputState",
+                          "width": 68,
+                          "height": 28,
+                          "style": "edit_value_active_S_left",
+                          "text": "ON"
+                        }
+                      ]
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 84,
+                      "width": 115,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "On list stop:"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "data": "channel.trigger.onListStop",
+                      "action": "ch.settings.trigger.editOnListStop",
+                      "x": 115,
+                      "y": 84,
+                      "width": 121,
+                      "height": 28,
+                      "style": "edit_value_active_S_left"
                     }
                   ]
                 },
@@ -15574,7 +15646,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 236,
-                  "height": 56,
+                  "height": 112,
                   "style": "default",
                   "widgets": [
                     {
@@ -15618,6 +15690,46 @@
                       "width": 68,
                       "height": 28,
                       "style": "edit_value_active_S_left"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 56,
+                      "width": 115,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Output state:"
+                    },
+                    {
+                      "$eez": false,
+                      "x": 115,
+                      "type": "Select",
+                      "data": "channel.trigger.outputState",
+                      "y": 56,
+                      "width": 68,
+                      "height": 28,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "action": "ch.settings.trigger.toggleOutputState",
+                          "width": 68,
+                          "height": 28,
+                          "style": "edit_value_active_S_left",
+                          "text": "Off"
+                        },
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "action": "ch.settings.trigger.toggleOutputState",
+                          "width": 68,
+                          "height": 28,
+                          "style": "edit_value_active_S_left",
+                          "text": "On"
+                        }
+                      ]
                     }
                   ]
                 }
@@ -15626,49 +15738,9 @@
             {
               "$eez": false,
               "type": "Text",
-              "x": 16,
-              "y": 112,
-              "width": 119,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Output state:"
-            },
-            {
-              "$eez": false,
-              "x": 165,
-              "type": "Select",
-              "data": "channel.trigger.outputState",
-              "y": 112,
-              "width": 78,
-              "height": 28,
-              "style": "default",
-              "widgets": [
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "ch.settings.trigger.toggleOutputState",
-                  "width": 78,
-                  "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "Off"
-                },
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "ch.settings.trigger.toggleOutputState",
-                  "width": 78,
-                  "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "On"
-                }
-              ]
-            },
-            {
-              "$eez": false,
-              "type": "Text",
               "action": "trigger.showGeneralSettings",
               "x": 16,
-              "y": 140,
+              "y": 168,
               "width": 236,
               "height": 28,
               "style": "edit_value_active_S_left",
@@ -78047,6 +78119,14 @@
           {
             "$eez": false,
             "name": "TRIGger[:SEQuence]:SOURce?"
+          },
+          {
+            "$eez": false,
+            "name": "TRIGger[:SEQuence]:EXIT:CONDition"
+          },
+          {
+            "$eez": false,
+            "name": "TRIGger[:SEQuence]:EXIT:CONDition?"
           },
           {
             "$eez": false,

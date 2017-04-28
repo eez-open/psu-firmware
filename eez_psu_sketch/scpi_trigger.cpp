@@ -20,6 +20,8 @@
 #include "scpi_psu.h"
 
 #include "trigger.h"
+#include "channel_dispatcher.h"
+#include "profile.h"
 
 namespace eez {
 namespace psu {
@@ -101,6 +103,47 @@ scpi_result_t scpi_cmd_triggerSequenceSource(scpi_t * context) {
 
 scpi_result_t scpi_cmd_triggerSequenceSourceQ(scpi_t * context) {
     resultChoiceName(context, sourceChoice, trigger::getSource());
+    return SCPI_RES_OK;
+}
+
+static scpi_choice_def_t triggerOnListStopChoice[] = {
+    { "OFF", TRIGGER_ON_LIST_STOP_OUTPUT_OFF },
+    { "FIRSt", TRIGGER_ON_LIST_STOP_SET_TO_FIRST_STEP },
+    { "LAST", TRIGGER_ON_LIST_STOP_SET_TO_LAST_STEP },
+    { "STANdbay", TRIGGER_ON_LIST_STOP_STANDBY },
+    SCPI_CHOICE_LIST_END /* termination of option list */
+};
+
+scpi_result_t scpi_cmd_triggerSequenceExitCondition(scpi_t * context) {
+    int32_t triggerOnListStop;
+    if (!SCPI_ParamChoice(context, triggerOnListStopChoice, &triggerOnListStop, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!trigger::isIdle()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
+        return SCPI_RES_ERR;
+    }
+
+    channel_dispatcher::setTriggerOnListStop(*channel, (TriggerOnListStop)triggerOnListStop);
+    profile::save();
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_triggerSequenceExitConditionq(scpi_t * context) {
+    Channel *channel = param_channel(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    resultChoiceName(context, triggerOnListStopChoice, channel_dispatcher::getTriggerOnListStop(*channel));
+
     return SCPI_RES_OK;
 }
 

@@ -160,6 +160,31 @@ void triggerFinished() {
     }
 }
 
+void onTriggerFinished(Channel &channel) {
+    if (channel.getVoltageTriggerMode() == TRIGGER_MODE_LIST) {
+        int err;
+
+        switch (channel.getTriggerOnListStop()) {
+        case TRIGGER_ON_LIST_STOP_OUTPUT_OFF:
+            channel.outputEnable(false);
+            break;
+        case TRIGGER_ON_LIST_STOP_SET_TO_FIRST_STEP:
+            if (!list::setListValue(channel, 0, &err)) {
+                generateError(err);
+            }
+            break;
+        case TRIGGER_ON_LIST_STOP_SET_TO_LAST_STEP:
+            if (!list::setListValue(channel, list::maxListsSize(channel) - 1, &err)) {
+                generateError(err);
+            }
+            break;
+        case TRIGGER_ON_LIST_STOP_STANDBY:
+            changePowerState(false);
+            break;
+        }
+    }
+}
+
 void setTriggerFinished(Channel &channel) {
     if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
         for (int i = 0; i < CH_NUM; ++i) {
@@ -168,6 +193,8 @@ void setTriggerFinished(Channel &channel) {
     } else {
         g_triggerInProgress[channel.index - 1] = false;
     }
+
+    onTriggerFinished(channel);
 
     if (isTriggerFinished()) {
         triggerFinished();

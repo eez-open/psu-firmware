@@ -589,6 +589,10 @@ void action_ch_settings_trigger_toggle_output_state() {
     ((ChSettingsTriggerPage *)getActivePage())->toggleOutputState();
 }
 
+void action_ch_settings_trigger_edit_on_list_stop() {
+    ((ChSettingsTriggerPage *)getActivePage())->editTriggerOnListStop();
+}
+
 void action_show_ch_settings_lists() {
     pushPage(PAGE_ID_CH_SETTINGS_LISTS);
 }
@@ -840,6 +844,7 @@ ACTION actions[] = {
     action_ch_settings_trigger_edit_current_trigger_value,
     action_ch_settings_trigger_edit_list_count,
     action_ch_settings_trigger_toggle_output_state,
+    action_ch_settings_trigger_edit_on_list_stop,
     action_show_ch_settings_lists,
     action_show_sys_settings_trigger,
     action_channel_lists_previous_page,

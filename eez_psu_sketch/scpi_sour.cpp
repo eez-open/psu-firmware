@@ -834,6 +834,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelTriggeredAmplitude(scpi_t * context) {
     }
 
     channel_dispatcher::setTriggerCurrent(*channel, current);
+    profile::save();
 
     return SCPI_RES_OK;
 }
@@ -865,6 +866,7 @@ scpi_result_t scpi_cmd_sourceVoltageLevelTriggeredAmplitude(scpi_t * context) {
     }
 
     channel_dispatcher::setTriggerVoltage(*channel, voltage);
+    profile::save();
 
     return SCPI_RES_OK;
 }
@@ -908,6 +910,7 @@ scpi_result_t scpi_cmd_sourceCurrentMode(scpi_t *context) {
     }
 
     channel_dispatcher::setCurrentTriggerMode(*channel, (TriggerMode)triggerMode);
+    profile::save();
 
     return SCPI_RES_OK;
 }
@@ -940,6 +943,7 @@ scpi_result_t scpi_cmd_sourceVoltageMode(scpi_t *context) {
     }
 
     channel_dispatcher::setVoltageTriggerMode(*channel, (TriggerMode)triggerMode);
+    profile::save();
 
     return SCPI_RES_OK;
 }
@@ -996,6 +1000,7 @@ scpi_result_t scpi_cmd_sourceListCount(scpi_t *context) {
     }
 
     list::setListCount(*channel, count);
+    profile::save();
 
     return SCPI_RES_OK;
 }
@@ -1067,6 +1072,7 @@ scpi_result_t scpi_cmd_sourceListCurrentLevel(scpi_t *context) {
     }
 
     list::setCurrentList(*channel, list, listLength);
+    profile::save();
 
     return SCPI_RES_OK;
 }
@@ -1125,6 +1131,7 @@ scpi_result_t scpi_cmd_sourceListDwell(scpi_t *context) {
     }
 
     list::setDwellList(*channel, list, listLength);
+    profile::save();
 
     return SCPI_RES_OK;
 }
@@ -1198,6 +1205,7 @@ scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
     }
 
     list::setVoltageList(*channel, list, listLength);
+    profile::save();
 
     return SCPI_RES_OK;
 }

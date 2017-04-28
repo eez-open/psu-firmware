@@ -119,6 +119,9 @@ void setCurrentTriggerMode(Channel& channel, TriggerMode mode);
 bool getTriggerOutputState(Channel& channel);
 void setTriggerOutputState(Channel& channel, bool enable);
 
+TriggerOnListStop getTriggerOnListStop(Channel& channel);
+void setTriggerOnListStop(Channel& channel, TriggerOnListStop value);
+
 float getTriggerVoltage(Channel& channel);
 void setTriggerVoltage(Channel& channel, float value);
 

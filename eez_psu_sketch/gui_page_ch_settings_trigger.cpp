@@ -65,6 +65,10 @@ data::Value ChSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t i
 		return data::Value(channel_dispatcher::getTriggerOutputState(*g_channel) ? 1 : 0);
 	}
 
+    if (id == DATA_ID_CHANNEL_TRIGGER_ON_LIST_STOP) {
+		return data::Value(channel_dispatcher::getTriggerOnListStop(*g_channel), data::ENUM_DEFINITION_CHANNEL_TRIGGER_ON_LIST_STOP);
+	}
+
     if (id == DATA_ID_CHANNEL_LIST_COUNT) {
         uint16_t count = list::getListCount(*g_channel);
         if (count > 0) {
@@ -139,6 +143,16 @@ void ChSettingsTriggerPage::editCurrentTriggerValue() {
 void ChSettingsTriggerPage::toggleOutputState() {
     channel_dispatcher::setTriggerOutputState(*g_channel, !channel_dispatcher::getTriggerOutputState(*g_channel));
     profile::save();
+}
+
+void ChSettingsTriggerPage::onTriggerOnListStopSet(uint8_t value) {
+	popPage();
+    channel_dispatcher::setTriggerOnListStop(*g_channel, (TriggerOnListStop)value);
+    profile::save();
+}
+
+void ChSettingsTriggerPage::editTriggerOnListStop() {
+    pushSelectFromEnumPage(data::g_channelTriggerOnListStop, channel_dispatcher::getTriggerOnListStop(*g_channel), -1, onTriggerOnListStopSet);
 }
 
 void ChSettingsTriggerPage::onListCountSet(float value) {
