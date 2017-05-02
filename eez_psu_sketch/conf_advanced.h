@@ -280,4 +280,4 @@
 #define DISPLAY_BRIGHTNESS_DEFAULT 20
 
 /// Number of values used for ADC averaging
-#define NUM_ADC_AVERAGING_VALUES 3
+#define NUM_ADC_AVERAGING_VALUES 5
