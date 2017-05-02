@@ -374,11 +374,7 @@ bool saveList(Channel &channel, const char *filePath, int *err) {
 #endif
 }
 
-uint32_t a;
-uint32_t b;
-
 void executionStart(Channel &channel) {
-    a = micros();
     g_execution[channel.index - 1].it = -1;
     g_execution[channel.index - 1].counter = g_channelsLists[channel.index - 1].count;
     g_active = true;
@@ -428,10 +424,6 @@ bool setListValue(Channel &channel, int16_t it, int *err) {
     if (channel_dispatcher::getISet(channel) != current) {
         channel_dispatcher::setCurrent(channel, current);
     }
-
-    if (b == 0) {
-        b = micros();
-    }
     
     return true;
 }
@@ -465,9 +457,6 @@ void tick(uint32_t tick_usec) {
                         if (--g_execution[i].counter == 0) {
                             g_execution[i].counter = -1;
                             trigger::setTriggerFinished(channel);
-                            DebugTraceF("%ld", b - a);
-                            a = 0;
-                            b = 0;
                             return;
                         }
                     }
