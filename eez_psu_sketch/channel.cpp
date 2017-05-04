@@ -338,7 +338,7 @@ Channel::Channel(
     iBeforeBalancing = NAN;
 
     flags.currentCurrentRange = CURRENT_RANGE_HIGH;
-    flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_USE_BOTH;
+    flags.currentRangeSelectionMode = CURRENT_RANGE_SELECTION_USE_BOTH;
     flags.autoSelectCurrentRange = 1;
 
     flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
@@ -538,7 +538,7 @@ void Channel::reset() {
     ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
 
     flags.currentCurrentRange = CURRENT_RANGE_HIGH;
-    flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_USE_BOTH;
+    flags.currentRangeSelectionMode = CURRENT_RANGE_SELECTION_USE_BOTH;
     flags.autoSelectCurrentRange = 1;
 
     flags.voltageTriggerMode = TRIGGER_MODE_FIXED;
