@@ -115,7 +115,7 @@ static void initDevice() {
     strcpy(devConf.calibration_password, CALIBRATION_PASSWORD_DEFAULT);
 
     devConf.flags.isSoundEnabled = 1;
-    devConf.flags.isClickSoundEnabled = 0;
+    devConf.flags.isClickSoundEnabled = 1;
 
     devConf.flags.dateValid = 0;
     devConf.flags.timeValid = 0;
