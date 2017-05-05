@@ -24,6 +24,7 @@
 #include "touch_filter.h"
 #include "lcd.h"
 #include "gui_internal.h"
+#include "sound.h"
 
 #define CONF_GUI_TOUCH_SCREEN_CALIBRATION_M 16
 
@@ -198,6 +199,7 @@ void tick(uint32_t tick_usec) {
         mode = MODE_POINT_TL;
     } else if (mode == MODE_POINT_TL) {
         if (read_point()) {
+            sound::playClick();
             point_x = &point_brx;
             point_y = &point_bry;
             draw_point(lcd::lcd.getDisplayWidth() - 1, lcd::lcd.getDisplayHeight() - 1);
@@ -205,6 +207,7 @@ void tick(uint32_t tick_usec) {
         }
     } else if (mode == MODE_POINT_BR) {
         if (read_point()) {
+            sound::playClick();
             point_x = &point_trx;
             point_y = &point_try;
             draw_point(lcd::lcd.getDisplayWidth() - 1, 0);
@@ -212,6 +215,7 @@ void tick(uint32_t tick_usec) {
         }
     } else if (mode == MODE_POINT_TR) {
         if (read_point()) {
+            sound::playClick();
             bool success = touch::calibrateTransform(
                 point_tlx, point_tly,  point_brx, point_bry,  point_trx, point_try,
                 CONF_GUI_TOUCH_SCREEN_CALIBRATION_M, lcd::lcd.getDisplayWidth(), lcd::lcd.getDisplayHeight());

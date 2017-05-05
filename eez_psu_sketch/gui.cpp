@@ -1432,6 +1432,10 @@ void tick(uint32_t tick_usec) {
     }
 #endif
 
+    if (touch::calibration::isCalibrating()) {
+        return;
+    }
+
     if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
         if (inactivityPeriod >= 20 * 1000UL) {
             touch::calibration::enterCalibrationMode(PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, getStartPageId());
@@ -1446,13 +1450,10 @@ void tick(uint32_t tick_usec) {
         }
     }
 
-    // update screen
-    if (!touch::calibration::isCalibrating()) {
-        drawTick();
+    drawTick();
 
-        g_wasFocusCursor = g_focusCursor;
-        g_wasFocusDataId = g_focusDataId;
-    }
+    g_wasFocusCursor = g_focusCursor;
+    g_wasFocusDataId = g_focusDataId;
 }
 
 }
