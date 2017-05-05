@@ -991,7 +991,7 @@ void Channel::eventAdcData(int16_t adc_data, bool startAgain) {
 }
 
 void Channel::eventGpio(uint8_t gpio) {
-    if (!psu::isPowerUp()) return;
+    if (!isOk()) return;
 
 #if !CONF_SKIP_PWRGOOD_TEST
     testPwrgood(gpio);
