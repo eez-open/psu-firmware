@@ -679,7 +679,7 @@ void Channel::restoreCurrentToValueBeforeBalancing() {
 }
 
 void Channel::tick(uint32_t tick_usec) {
-    if (!isOk) {
+    if (!isOk()) {
         return;
     }
 
