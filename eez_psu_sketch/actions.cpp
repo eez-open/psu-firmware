@@ -248,18 +248,22 @@ void action_show_ch_settings_prot_clear() {
 }
 
 void action_show_ch_settings_prot_ocp() {
+    gui::selectChannel();
     pushPage(PAGE_ID_CH_SETTINGS_PROT_OCP);
 }
 
 void action_show_ch_settings_prot_ovp() {
+    gui::selectChannel();
     pushPage(PAGE_ID_CH_SETTINGS_PROT_OVP);
 }
 
 void action_show_ch_settings_prot_opp() {
+    gui::selectChannel();
     pushPage(PAGE_ID_CH_SETTINGS_PROT_OPP);
 }
 
 void action_show_ch_settings_prot_otp() {
+    gui::selectChannel();
     pushPage(PAGE_ID_CH_SETTINGS_PROT_OTP);
 }
 
@@ -268,6 +272,7 @@ void action_show_ch_settings_adv() {
 }
 
 void action_show_ch_settings_adv_lripple() {
+    gui::selectChannel();
     pushPage(PAGE_ID_CH_SETTINGS_ADV_LRIPPLE);
 }
 
@@ -706,6 +711,10 @@ void action_ch_settings_adv_ranges_toggle_auto_ranging() {
     ((ChSettingsAdvRangesPage *)getActivePage())->toggleAutoRanging();
 }
 
+void action_show_sys_settings_serial() {
+    pushPage(PAGE_ID_SYS_SETTINGS_SERIAL);
+}
+
 
 ACTION actions[] = {
     0,
@@ -870,7 +879,8 @@ ACTION actions[] = {
     action_show_stand_by_menu,
     action_reset,
     action_ch_settings_adv_ranges_select_mode,
-    action_ch_settings_adv_ranges_toggle_auto_ranging
+    action_ch_settings_adv_ranges_toggle_auto_ranging,
+    action_show_sys_settings_serial
 };
 
 }

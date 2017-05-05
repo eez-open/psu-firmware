@@ -26,6 +26,8 @@ using namespace scpi;
 
 namespace serial {
 
+static bool g_isConnected = false;
+
 size_t SCPI_Write(scpi_t *context, const char * data, size_t len) {
     return Serial.write(data, len);
 }
@@ -107,9 +109,14 @@ void init() {
 
 void tick(uint32_t tick_usec) {
     while (Serial.available()) {
+        g_isConnected = true;
         char ch = (char)Serial.read();
         input(scpi_context, ch);
     }
+}
+
+bool isConnected() {
+    return g_isConnected;
 }
 
 }

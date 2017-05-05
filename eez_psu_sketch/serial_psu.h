@@ -29,6 +29,8 @@ extern scpi_t scpi_context;
 void init();
 void tick(uint32_t tick_usec);
 
+bool isConnected();
+
 }
 }
 } // namespace eez::psu::serial

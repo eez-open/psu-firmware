@@ -26,6 +26,7 @@
 #include "channel_dispatcher.h"
 #include "calibration.h"
 #include "trigger.h"
+#include "list.h"
 
 #include "gui.h"
 #include "gui_internal.h"
@@ -35,6 +36,8 @@
 #include "gui_calibration.h"
 #include "gui_keypad.h"
 #include "gui_page_ch_settings_trigger.h"
+#include "serial_psu.h"
+#include "ethernet.h"
 
 #define CONF_GUI_REFRESH_EVERY_MS 250
 
@@ -287,12 +290,12 @@ void Value::toText(char *text, int count) const {
         break;
 
     case VALUE_TYPE_CHANNEL_LABEL:
-        snprintf_P(text, count-1, PSTR("Channel %d:"), int_);
+        snprintf_P(text, count-1, PSTR("Channel %d:"), uint8_);
         text[count - 1] = 0;
         break;
 
     case VALUE_TYPE_CHANNEL_SHORT_LABEL:
-        snprintf_P(text, count-1, PSTR("Ch%d:"), int_);
+        snprintf_P(text, count-1, PSTR("Ch%d:"), uint8_);
         text[count - 1] = 0;
         break;
 
@@ -347,6 +350,17 @@ void Value::toText(char *text, int count) const {
     case VALUE_TYPE_ON_TIME_COUNTER:
         ontime::counterToString(text, count, uint32_);
         break;
+
+    case VALUE_TYPE_COUNTDOWN:
+    {
+        int h = uint32_ / 3600;
+        int r = uint32_ - h * 3600;
+        int m = r / 60;
+        int s = r - m * 60;
+        snprintf_P(text, count-1, PSTR("%02d:%02d:%02d"), h, m, s);
+	    text[count-1] = 0;
+        break;
+    }
 
     case VALUE_TYPE_SCPI_ERROR_TEXT:
         strncpy(text, SCPI_ErrorTranslate(int16_), count - 1);
@@ -462,7 +476,7 @@ bool Value::operator ==(const Value &other) const {
         return true;
     }
 		
-	if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL || type_ == VALUE_TYPE_LESS_THEN_MIN_INT || type_ == VALUE_TYPE_GREATER_THEN_MAX_INT || type_ == VALUE_TYPE_USER_PROFILE_LABEL || type_ == VALUE_TYPE_USER_PROFILE_REMARK || type_ == VALUE_TYPE_EDIT_INFO) {
+	if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL || type_ == VALUE_TYPE_LESS_THEN_MIN_INT || type_ == VALUE_TYPE_GREATER_THEN_MAX_INT || type_ == VALUE_TYPE_USER_PROFILE_LABEL || type_ == VALUE_TYPE_USER_PROFILE_REMARK || type_ == VALUE_TYPE_EDIT_INFO) {
         return int_ == other.int_;
     }
 
@@ -470,7 +484,7 @@ bool Value::operator ==(const Value &other) const {
 		return int16_ == other.int16_;
 	}
 
-	if (type_ >= VALUE_TYPE_MONTH && type_ <= VALUE_TYPE_SECOND || type_ == VALUE_TYPE_TEXT_MESSAGE) {
+	if (type_ >= VALUE_TYPE_MONTH && type_ <= VALUE_TYPE_SECOND || type_ == VALUE_TYPE_TEXT_MESSAGE || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL) {
 		return uint8_ == other.uint8_;
 	}
 
@@ -478,7 +492,7 @@ bool Value::operator ==(const Value &other) const {
 		return uint16_ == other.uint16_;
 	}
 
-	if (type_ == VALUE_TYPE_ON_TIME_COUNTER || type_ == VALUE_TYPE_IP_ADDRESS) {
+	if (type_ == VALUE_TYPE_ON_TIME_COUNTER || type_ == VALUE_TYPE_COUNTDOWN || type_ == VALUE_TYPE_IP_ADDRESS) {
 		return uint32_ == other.uint32_;
 	}
 		
@@ -556,16 +570,6 @@ static bool isIMonData(const Cursor &cursor, uint8_t id) {
 
 static bool isPMonData(const Cursor &cursor, uint8_t id) {
     return id == DATA_ID_CHANNEL_P_MON || isDisplayValue(cursor, id, DISPLAY_VALUE_POWER);
-}
-
-int getCurrentChannelIndex(const Cursor &cursor) {
-    if (cursor.i >= 0) {
-        return cursor.i;
-    } else if (g_channel) {
-        return g_channel->index - 1;
-    } else {
-        return 0;
-    }
 }
 
 int count(uint8_t id) {
@@ -760,208 +764,226 @@ Value get(const Cursor &cursor, uint8_t id) {
         return data::Value(channel_dispatcher::isSeries() ? 1 : 0);
     }
 
-    Channel &channel = Channel::get(getCurrentChannelIndex(cursor));
+    int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : -1);
+    
+    if (iChannel >= 0) {
+        Channel &channel = Channel::get(iChannel);
 
-    int channelStatus = channel.index > CH_NUM ? 0 : (channel.isOk() ? 1 : 2);
+        int channelStatus = channel.index > CH_NUM ? 0 : (channel.isOk() ? 1 : 2);
 
-    if (id == DATA_ID_CHANNEL_STATUS) {
-        return Value(channelStatus);
-    }
-
-    if (channelStatus == 1) {
-        if (id == DATA_ID_CHANNEL_OUTPUT_STATE) {
-            return Value(channel.isOutputEnabled() ? 1 : 0);
+        if (id == DATA_ID_CHANNEL_STATUS) {
+            return Value(channelStatus);
         }
 
-        ChannelSnapshot &channelSnapshot = g_channelSnapshot[channel.index - 1];
-        uint32_t currentTime = micros();
-        if (!channelSnapshot.lastSnapshotTime || currentTime - channelSnapshot.lastSnapshotTime >= CONF_GUI_REFRESH_EVERY_MS * 1000UL) {
-            char *mode_str = channel.getCvModeStr();
-            channelSnapshot.mode = 0;
-            float uMon = channel_dispatcher::getUMon(channel);
-            float iMon = channel_dispatcher::getIMon(channel);
-            if (strcmp(mode_str, "CC") == 0) {
-                channelSnapshot.monValue = Value(uMon, VALUE_TYPE_FLOAT_VOLT, channel.index-1);
-            } else if (strcmp(mode_str, "CV") == 0) {
-                channelSnapshot.monValue = Value(iMon, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
-            } else {
-                channelSnapshot.mode = 1;
-                if (uMon < iMon) {
+        if (channelStatus == 1) {
+            if (id == DATA_ID_CHANNEL_OUTPUT_STATE) {
+                return Value(channel.isOutputEnabled() ? 1 : 0);
+            }
+
+            ChannelSnapshot &channelSnapshot = g_channelSnapshot[channel.index - 1];
+            uint32_t currentTime = micros();
+            if (!channelSnapshot.lastSnapshotTime || currentTime - channelSnapshot.lastSnapshotTime >= CONF_GUI_REFRESH_EVERY_MS * 1000UL) {
+                char *mode_str = channel.getCvModeStr();
+                channelSnapshot.mode = 0;
+                float uMon = channel_dispatcher::getUMon(channel);
+                float iMon = channel_dispatcher::getIMon(channel);
+                if (strcmp(mode_str, "CC") == 0) {
                     channelSnapshot.monValue = Value(uMon, VALUE_TYPE_FLOAT_VOLT, channel.index-1);
-                } else {
+                } else if (strcmp(mode_str, "CV") == 0) {
                     channelSnapshot.monValue = Value(iMon, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
+                } else {
+                    channelSnapshot.mode = 1;
+                    if (uMon < iMon) {
+                        channelSnapshot.monValue = Value(uMon, VALUE_TYPE_FLOAT_VOLT, channel.index-1);
+                    } else {
+                        channelSnapshot.monValue = Value(iMon, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
+                    }
+                }
+
+                channelSnapshot.pMon = util::multiply(uMon, iMon, getPrecision(VALUE_TYPE_FLOAT_WATT));
+
+                channelSnapshot.lastSnapshotTime = currentTime;
+            }
+
+            if (id == DATA_ID_CHANNEL_OUTPUT_MODE) {
+                char *mode_str = channel.getCvModeStr();
+                return Value(channelSnapshot.mode);
+            }
+
+            if (id == DATA_ID_EDIT_ENABLED) {
+                if ((channel_dispatcher::getVoltageTriggerMode(channel) != TRIGGER_MODE_FIXED && !trigger::isIdle()) || isPageActiveOrOnStack(PAGE_ID_CH_SETTINGS_LISTS)) {
+                    return 0;
+                }
+                if (psu::calibration::isEnabled()) {
+                    return 0;
+                }
+                return 1;
+            }
+
+            if (id == DATA_ID_TRIGGER_IS_INITIATED) {
+                return Value(trigger::isInitiated() ? 1 : 0);
+            }
+        
+            if (id == DATA_ID_TRIGGER_IS_MANUAL) {
+                return Value(trigger::getSource() == trigger::SOURCE_MANUAL ? 1 : 0);
+            }
+
+            if (id == DATA_ID_CHANNEL_MON_VALUE) {
+                return channelSnapshot.monValue;
+            }
+        
+            if (id == DATA_ID_CHANNEL_U_SET) {
+                return Value(channel_dispatcher::getUSet(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
+            }
+        
+            if (id == DATA_ID_CHANNEL_U_EDIT) {
+                if (g_focusCursor == cursor && g_focusDataId == DATA_ID_CHANNEL_U_EDIT && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
+                    return g_focusEditValue;
+                } else {
+                    return Value(channel_dispatcher::getUSet(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
+                }
+            }
+        
+            if (isUMonData(cursor, id)) {
+                return Value(channel_dispatcher::getUMon(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
+            }
+
+            if (id == DATA_ID_CHANNEL_U_MON_DAC) {
+                return Value(channel_dispatcher::getUMonDac(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
+            }
+
+            if (id == DATA_ID_CHANNEL_U_LIMIT) {
+                return Value(channel_dispatcher::getULimit(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
+            }
+
+            if (id == DATA_ID_CHANNEL_I_SET) {
+                return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
+            }
+        
+            if (id == DATA_ID_CHANNEL_I_EDIT) {
+                if (g_focusCursor == cursor && g_focusDataId == DATA_ID_CHANNEL_I_EDIT && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
+                    return g_focusEditValue;
+                } else {
+                    return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
                 }
             }
 
-            channelSnapshot.pMon = util::multiply(uMon, iMon, getPrecision(VALUE_TYPE_FLOAT_WATT));
-
-            channelSnapshot.lastSnapshotTime = currentTime;
-        }
-
-        if (id == DATA_ID_CHANNEL_OUTPUT_MODE) {
-            char *mode_str = channel.getCvModeStr();
-            return Value(channelSnapshot.mode);
-        }
-
-        if (id == DATA_ID_EDIT_ENABLED) {
-            if ((channel_dispatcher::getVoltageTriggerMode(channel) != TRIGGER_MODE_FIXED && !trigger::isIdle()) || isPageActiveOrOnStack(PAGE_ID_CH_SETTINGS_LISTS)) {
-                return 0;
+            if (isIMonData(cursor, id)) {
+                return Value(channel_dispatcher::getIMon(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
             }
-            if (psu::calibration::isEnabled()) {
-                return 0;
+
+            if (id == DATA_ID_CHANNEL_I_MON_DAC) {
+                return Value(channel_dispatcher::getIMonDac(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
             }
-            return 1;
-        }
 
-        if (id == DATA_ID_TRIGGER_IS_INITIATED) {
-            return Value(trigger::isInitiated() ? 1 : 0);
-        }
-        
-        if (id == DATA_ID_TRIGGER_IS_MANUAL) {
-            return Value(trigger::getSource() == trigger::SOURCE_MANUAL ? 1 : 0);
-        }
-
-        if (id == DATA_ID_CHANNEL_MON_VALUE) {
-            return channelSnapshot.monValue;
-        }
-        
-        if (id == DATA_ID_CHANNEL_U_SET) {
-            return Value(channel_dispatcher::getUSet(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
-        }
-        
-        if (id == DATA_ID_CHANNEL_U_EDIT) {
-            if (g_focusCursor == cursor && g_focusDataId == DATA_ID_CHANNEL_U_EDIT && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
-                return g_focusEditValue;
-            } else {
-                return Value(channel_dispatcher::getUSet(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
+            if (id == DATA_ID_CHANNEL_I_LIMIT) {
+                return Value(channel_dispatcher::getILimit(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
             }
-        }
-        
-        if (isUMonData(cursor, id)) {
-            return Value(channel_dispatcher::getUMon(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
-        }
 
-        if (id == DATA_ID_CHANNEL_U_MON_DAC) {
-            return Value(channel_dispatcher::getUMonDac(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
-        }
-
-        if (id == DATA_ID_CHANNEL_U_LIMIT) {
-            return Value(channel_dispatcher::getULimit(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
-        }
-
-        if (id == DATA_ID_CHANNEL_I_SET) {
-            return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
-        }
-        
-        if (id == DATA_ID_CHANNEL_I_EDIT) {
-            if (g_focusCursor == cursor && g_focusDataId == DATA_ID_CHANNEL_I_EDIT && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
-                return g_focusEditValue;
-            } else {
-                return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
+            if (isPMonData(cursor, id)) {
+                return Value(channelSnapshot.pMon, VALUE_TYPE_FLOAT_WATT, channel.index-1);
             }
-        }
 
-        if (isIMonData(cursor, id)) {
-            return Value(channel_dispatcher::getIMon(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
-        }
+            if (id == DATA_ID_LRIP) {
+                return Value(channel.flags.lrippleEnabled ? 1 : 0);
+            }
 
-        if (id == DATA_ID_CHANNEL_I_MON_DAC) {
-            return Value(channel_dispatcher::getIMonDac(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
-        }
+            if (id == DATA_ID_CHANNEL_RPROG_STATUS) {
+                return Value(channel.flags.rprogEnabled ? 1 : 0);
+            }
 
-        if (id == DATA_ID_CHANNEL_I_LIMIT) {
-            return Value(channel_dispatcher::getILimit(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
-        }
-
-        if (isPMonData(cursor, id)) {
-            return Value(channelSnapshot.pMon, VALUE_TYPE_FLOAT_WATT, channel.index-1);
-        }
-
-        if (id == DATA_ID_LRIP) {
-            return Value(channel.flags.lrippleEnabled ? 1 : 0);
-        }
-
-        if (id == DATA_ID_CHANNEL_RPROG_STATUS) {
-            return Value(channel.flags.rprogEnabled ? 1 : 0);
-        }
-
-        if (id == DATA_ID_OVP) {
-            unsigned ovp;
-            if (!channel.prot_conf.flags.u_state) ovp = 0;
-            else if (!channel.ovp.flags.tripped) ovp = 1;
-            else ovp = 2;
-            return Value(ovp);
-        }
+            if (id == DATA_ID_OVP) {
+                unsigned ovp;
+                if (!channel.prot_conf.flags.u_state) ovp = 0;
+                else if (!channel.ovp.flags.tripped) ovp = 1;
+                else ovp = 2;
+                return Value(ovp);
+            }
         
-        if (id == DATA_ID_OCP) {
-            unsigned ocp;
-            if (!channel.prot_conf.flags.i_state) ocp = 0;
-            else if (!channel.ocp.flags.tripped) ocp = 1;
-            else ocp = 2;
-            return Value(ocp);
-        }
+            if (id == DATA_ID_OCP) {
+                unsigned ocp;
+                if (!channel.prot_conf.flags.i_state) ocp = 0;
+                else if (!channel.ocp.flags.tripped) ocp = 1;
+                else ocp = 2;
+                return Value(ocp);
+            }
         
-        if (id == DATA_ID_OPP) {
-            unsigned opp;
-            if (!channel.prot_conf.flags.p_state) opp = 0;
-            else if (!channel.opp.flags.tripped) opp = 1;
-            else opp = 2;
-            return Value(opp);
-        }
+            if (id == DATA_ID_OPP) {
+                unsigned opp;
+                if (!channel.prot_conf.flags.p_state) opp = 0;
+                else if (!channel.opp.flags.tripped) opp = 1;
+                else opp = 2;
+                return Value(opp);
+            }
         
-        if (id == DATA_ID_OTP) {
+            if (id == DATA_ID_OTP) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-            return 0;
+                return 0;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
-            temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + channel.index - 1];
-            if (!tempSensor.isInstalled() || !tempSensor.isTestOK() || !tempSensor.prot_conf.state) return 0;
-            else if (!tempSensor.isTripped()) return 1;
-            else return 2;
+                temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + channel.index - 1];
+                if (!tempSensor.isInstalled() || !tempSensor.isTestOK() || !tempSensor.prot_conf.state) return 0;
+                else if (!tempSensor.isTripped()) return 1;
+                else return 2;
 #endif
-        }
+            }
         
-        if (id == DATA_ID_CHANNEL_LABEL) {
-            return data::Value(getCurrentChannelIndex(cursor) + 1, VALUE_TYPE_CHANNEL_LABEL);
-        }
+            if (id == DATA_ID_CHANNEL_LABEL) {
+                return data::Value(channel.index, VALUE_TYPE_CHANNEL_LABEL);
+            }
         
-        if (id == DATA_ID_CHANNEL_SHORT_LABEL) {
-            return data::Value(getCurrentChannelIndex(cursor) + 1, VALUE_TYPE_CHANNEL_SHORT_LABEL);
-        }
+            if (id == DATA_ID_CHANNEL_SHORT_LABEL) {
+                return data::Value(channel.index, VALUE_TYPE_CHANNEL_SHORT_LABEL);
+            }
 
-        if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
+            if (id == DATA_ID_CHANNEL_TEMP_STATUS) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
-            return 2;
+                return 2;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
-            temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + channel.index - 1];
-            if (tempSensor.isInstalled()) return tempSensor.isTestOK() ? 1 : 0;
-            else return 2;
+                temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + channel.index - 1];
+                if (tempSensor.isInstalled()) return tempSensor.isTestOK() ? 1 : 0;
+                else return 2;
 #endif
-        }
+            }
 
-        if (id == DATA_ID_CHANNEL_TEMP) {
-            float temperature = 0;
+            if (id == DATA_ID_CHANNEL_TEMP) {
+                float temperature = 0;
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
-            temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + channel.index - 1];
-            if (tempSensor.isInstalled() && tempSensor.isTestOK()) {
-                temperature = tempSensor.temperature;
-            }
+                temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + channel.index - 1];
+                if (tempSensor.isInstalled() && tempSensor.isTestOK()) {
+                    temperature = tempSensor.temperature;
+                }
 #endif
-            return data::Value(temperature, VALUE_TYPE_FLOAT_CELSIUS);
-        }
+                return data::Value(temperature, VALUE_TYPE_FLOAT_CELSIUS);
+            }
 
-        if (id == DATA_ID_CHANNEL_ON_TIME_TOTAL) {
-            return data::Value((uint32_t)channel.onTimeCounter.getTotalTime(), VALUE_TYPE_ON_TIME_COUNTER);
-        }
+            if (id == DATA_ID_CHANNEL_ON_TIME_TOTAL) {
+                return data::Value((uint32_t)channel.onTimeCounter.getTotalTime(), VALUE_TYPE_ON_TIME_COUNTER);
+            }
 
-        if (id == DATA_ID_CHANNEL_ON_TIME_LAST) {
-            return data::Value((uint32_t)channel.onTimeCounter.getLastTime(), VALUE_TYPE_ON_TIME_COUNTER);
-        }
+            if (id == DATA_ID_CHANNEL_ON_TIME_LAST) {
+                return data::Value((uint32_t)channel.onTimeCounter.getLastTime(), VALUE_TYPE_ON_TIME_COUNTER);
+            }
 
-        if (id == DATA_ID_CHANNEL_HAS_SUPPORT_FOR_CURRENT_DUAL_RANGE) {
-            return data::Value(channel.hasSupportForCurrentDualRange() ? 1 : 0);
+            if (id == DATA_ID_CHANNEL_HAS_SUPPORT_FOR_CURRENT_DUAL_RANGE) {
+                return data::Value(channel.hasSupportForCurrentDualRange() ? 1 : 0);
+            }
+
+            if (id == DATA_ID_CHANNEL_LIST_COUNTDOWN) {
+                int32_t remaining;
+                uint32_t total;
+                if (list::getCurrentDwellTime(channel, remaining, total) && total >= 5000000L) {
+                    if (remaining > 0) {
+                        return Value((uint32_t)(remaining / 1000000L), VALUE_TYPE_COUNTDOWN);
+                    } else {
+                        return Value(0, VALUE_TYPE_COUNTDOWN);
+                    }
+                } else {
+                    return Value();
+                }
+            }
         }
     }
-    
+
     if (id == DATA_ID_CHANNEL_IS_VOLTAGE_BALANCED) {
         if (channel_dispatcher::isSeries()) {
             return Channel::get(0).isVoltageBalanced() || Channel::get(1).isVoltageBalanced() ? 1 : 0;
@@ -1032,6 +1054,10 @@ Value get(const Cursor &cursor, uint8_t id) {
         return data::Value(OPTION_ETHERNET);
     }
 
+    if (id == DATA_ID_SYS_ETHERNET_IS_CONNECTED) {
+        return data::Value(ethernet::isConnected());
+    }
+
     if (id == DATA_ID_SYS_ENCODER_INSTALLED) {
         return data::Value(OPTION_ENCODER);
     }
@@ -1042,6 +1068,10 @@ Value get(const Cursor &cursor, uint8_t id) {
 
     if (id == DATA_ID_TEXT_MESSAGE) {
         return data::Value(getTextMessageVersion(), VALUE_TYPE_TEXT_MESSAGE);
+    }
+
+    if (id == DATA_ID_SERIAL_IS_CONNECTED) {
+        return data::Value(serial::isConnected());
     }
 
     Page *page = getActivePage();

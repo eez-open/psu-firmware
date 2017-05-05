@@ -47,6 +47,8 @@ static struct {
     int32_t counter;
     int16_t it;
     uint32_t nextPointTime;
+    int32_t currentRemainingDwellTime;
+    uint32_t currentTotalDwellTime;
 } g_execution[CH_MAX];
 
 static bool g_active;
@@ -445,8 +447,8 @@ void tick(uint32_t tick_usec) {
             if (g_execution[i].it == -1) {
                 set = true;
             } else {
-                int32_t diff = g_execution[i].nextPointTime - tick_usec;
-                if (diff <= 0) {
+                g_execution[i].currentRemainingDwellTime = g_execution[i].nextPointTime - tick_usec;
+                if (g_execution[i].currentRemainingDwellTime <= 0) {
                     set = true;
                 }
             }
@@ -471,8 +473,8 @@ void tick(uint32_t tick_usec) {
                     return;
                 }
 
-                uint32_t dwell = (uint32_t)round(g_channelsLists[i].dwellList[g_execution[i].it % g_channelsLists[i].dwellListLength] * 1000000L);
-                g_execution[i].nextPointTime = tick_usec + dwell;
+                g_execution[i].currentTotalDwellTime = (uint32_t)round(g_channelsLists[i].dwellList[g_execution[i].it % g_channelsLists[i].dwellListLength] * 1000000L);
+                g_execution[i].nextPointTime = tick_usec + g_execution[i].currentTotalDwellTime;
             }
         }
     }
@@ -480,6 +482,20 @@ void tick(uint32_t tick_usec) {
 
 bool isActive() {
     return g_active;
+}
+
+bool isActive(Channel &channel) {
+    return g_execution[channel.index - 1].counter >= 0;
+}
+
+bool getCurrentDwellTime(Channel &channel, int32_t &remaining, uint32_t &total) {
+    int i = channel.index - 1;
+    if (g_execution[i].counter >= 0) {
+        remaining = g_execution[i].currentRemainingDwellTime;
+        total = g_execution[i].currentTotalDwellTime;
+        return true;
+    }
+    return false;
 }
 
 void abort() {

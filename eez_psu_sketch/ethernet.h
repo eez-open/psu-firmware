@@ -35,6 +35,8 @@ void tick(uint32_t tick_usec);
 
 uint32_t getIpAddress();
 
+bool isConnected();
+
 }
 }
 } // namespace eez::psu::ethernet
