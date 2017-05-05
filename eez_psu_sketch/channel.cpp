@@ -679,6 +679,10 @@ void Channel::restoreCurrentToValueBeforeBalancing() {
 }
 
 void Channel::tick(uint32_t tick_usec) {
+    if (!isOk) {
+        return;
+    }
+
     ioexp.tick(tick_usec);
     adc.tick(tick_usec);
     onTimeCounter.tick(tick_usec);
@@ -730,7 +734,7 @@ void Channel::tick(uint32_t tick_usec) {
 
     // If channel output is off then test PWRGOOD here, otherwise it is tested in Channel::eventGpio method.
 #if !CONF_SKIP_PWRGOOD_TEST
-    if (!isOutputEnabled() && psu::isPowerUp()) {
+    if (!isOutputEnabled()) {
         testPwrgood(ioexp.readGpio());
     }
 #endif
