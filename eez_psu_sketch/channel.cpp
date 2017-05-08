@@ -491,6 +491,10 @@ void Channel::reset() {
     opp.flags.tripped = 0;
     opp.flags.alarmed = 0;
 
+    flags.currentCurrentRange = CURRENT_RANGE_HIGH;
+    flags.currentRangeSelectionMode = CURRENT_RANGE_SELECTION_USE_BOTH;
+    flags.autoSelectCurrentRange = 1;
+
     // CAL:STAT ON if valid calibrating data for both voltage and current exists in the nonvolatile memory, otherwise OFF.
     doCalibrationEnable(isCalibrationExists());
 
@@ -536,10 +540,6 @@ void Channel::reset() {
     flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
     flags.displayValue2 = DISPLAY_VALUE_CURRENT;
     ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
-
-    flags.currentCurrentRange = CURRENT_RANGE_HIGH;
-    flags.currentRangeSelectionMode = CURRENT_RANGE_SELECTION_USE_BOTH;
-    flags.autoSelectCurrentRange = 1;
 
     flags.voltageTriggerMode = TRIGGER_MODE_FIXED;
     flags.currentTriggerMode = TRIGGER_MODE_FIXED;
@@ -1505,7 +1505,7 @@ void Channel::setVoltage(float value) {
 void Channel::doSetCurrent(float value) {
     if (hasSupportForCurrentDualRange()) {
         if (dac.isTesting()) {
-            setCurrentRange(0);
+            setCurrentRange(CURRENT_RANGE_HIGH);
         } else if (!calibration::isEnabled()) {
             if (flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_USE_BOTH) {
                 setCurrentRange(util::greater(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) ? CURRENT_RANGE_HIGH : CURRENT_RANGE_LOW);
