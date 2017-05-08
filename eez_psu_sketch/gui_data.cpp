@@ -357,8 +357,18 @@ void Value::toText(char *text, int count) const {
         int r = uint32_ - h * 3600;
         int m = r / 60;
         int s = r - m * 60;
-        snprintf_P(text, count-1, PSTR("%02d:%02d:%02d"), h, m, s);
-	    text[count-1] = 0;
+
+        if (h > 0) {
+		    snprintf_P(text, count-1, PSTR("%dh %dm"), h, m);
+	    } else if (m > 0) {
+		    snprintf_P(text, count-1, PSTR("%dm %ds"), m, s);
+	    } else {
+		    snprintf_P(text, count-1, PSTR("%ds"), s);
+	    }
+
+        //snprintf_P(text, count-1, PSTR("%02d:%02d:%02d"), h, m, s);
+
+        text[count-1] = 0;
         break;
     }
 
@@ -971,11 +981,11 @@ Value get(const Cursor &cursor, uint8_t id) {
             if (id == DATA_ID_CHANNEL_LIST_COUNTDOWN) {
                 int32_t remaining;
                 uint32_t total;
-                if (list::getCurrentDwellTime(channel, remaining, total) && total >= 5000000L) {
+                if (list::getCurrentDwellTime(channel, remaining, total) && total >= 5) {
                     if (remaining > 0) {
-                        return Value((uint32_t)(remaining / 1000000L), VALUE_TYPE_COUNTDOWN);
+                        return Value((uint32_t)remaining, VALUE_TYPE_COUNTDOWN);
                     } else {
-                        return Value(0, VALUE_TYPE_COUNTDOWN);
+                        return Value((uint32_t)0, VALUE_TYPE_COUNTDOWN);
                     }
                 } else {
                     return Value();

@@ -24,6 +24,8 @@
 #include "sd_card.h"
 #endif
 
+#define CONF_COUNTER_THRESHOLD_IN_SECONDS 5
+
 namespace eez {
 namespace psu {
 namespace list {
@@ -48,7 +50,7 @@ static struct {
     int16_t it;
     uint32_t nextPointTime;
     int32_t currentRemainingDwellTime;
-    uint32_t currentTotalDwellTime;
+    float currentTotalDwellTime;
 } g_execution[CH_MAX];
 
 static bool g_active;
@@ -341,7 +343,7 @@ bool saveList(Channel &channel, const char *filePath, int *err) {
         ++i) 
     {
         if (i < g_channelsLists[channel.index - 1].dwellListLength) {
-            file.print(g_channelsLists[channel.index - 1].dwellList[i], 6);
+            file.print(g_channelsLists[channel.index - 1].dwellList[i], 4);
         } else {
             file.print(LIST_CSV_FILE_NO_VALUE_CHAR);
         }
@@ -349,7 +351,7 @@ bool saveList(Channel &channel, const char *filePath, int *err) {
         file.print(CSV_SEPARATOR);
 
         if (i < g_channelsLists[channel.index - 1].voltageListLength) {
-            file.print(g_channelsLists[channel.index - 1].voltageList[i], 6);
+            file.print(g_channelsLists[channel.index - 1].voltageList[i], 4);
         } else {
             file.print(LIST_CSV_FILE_NO_VALUE_CHAR);
         }
@@ -357,7 +359,7 @@ bool saveList(Channel &channel, const char *filePath, int *err) {
         file.print(CSV_SEPARATOR);
         
         if (i < g_channelsLists[channel.index - 1].currentListLength) {
-            file.print(g_channelsLists[channel.index - 1].currentList[i], 6);
+            file.print(g_channelsLists[channel.index - 1].currentList[i], 4);
         } else {
             file.print(LIST_CSV_FILE_NO_VALUE_CHAR);
         }
@@ -447,7 +449,12 @@ void tick(uint32_t tick_usec) {
             if (g_execution[i].it == -1) {
                 set = true;
             } else {
-                g_execution[i].currentRemainingDwellTime = g_execution[i].nextPointTime - tick_usec;
+                if (g_execution[i].currentTotalDwellTime > CONF_COUNTER_THRESHOLD_IN_SECONDS) {
+                    g_execution[i].currentRemainingDwellTime = g_execution[i].nextPointTime - millis();
+                } else {
+                    g_execution[i].currentRemainingDwellTime = g_execution[i].nextPointTime - tick_usec;
+                }
+
                 if (g_execution[i].currentRemainingDwellTime <= 0) {
                     set = true;
                 }
@@ -473,8 +480,17 @@ void tick(uint32_t tick_usec) {
                     return;
                 }
 
-                g_execution[i].currentTotalDwellTime = (uint32_t)round(g_channelsLists[i].dwellList[g_execution[i].it % g_channelsLists[i].dwellListLength] * 1000000L);
-                g_execution[i].nextPointTime = tick_usec + g_execution[i].currentTotalDwellTime;
+                g_execution[i].currentTotalDwellTime = g_channelsLists[i].dwellList[g_execution[i].it % g_channelsLists[i].dwellListLength];
+                // if dwell time is greater then CONF_COUNTER_THRESHOLD_IN_SECONDS ...
+                if (g_execution[i].currentTotalDwellTime > CONF_COUNTER_THRESHOLD_IN_SECONDS) {
+                    // ... then count in milliseconds
+                    g_execution[i].currentRemainingDwellTime = (uint32_t)round(g_execution[i].currentTotalDwellTime * 1000L);
+                    g_execution[i].nextPointTime = millis() + g_execution[i].currentRemainingDwellTime;
+                } else {
+                    // ... else count in microseconds
+                    g_execution[i].currentRemainingDwellTime = (uint32_t)round(g_execution[i].currentTotalDwellTime * 1000000L);
+                    g_execution[i].nextPointTime = tick_usec + g_execution[i].currentRemainingDwellTime;
+                }
             }
         }
     }
@@ -491,8 +507,12 @@ bool isActive(Channel &channel) {
 bool getCurrentDwellTime(Channel &channel, int32_t &remaining, uint32_t &total) {
     int i = channel.index - 1;
     if (g_execution[i].counter >= 0) {
-        remaining = g_execution[i].currentRemainingDwellTime;
-        total = g_execution[i].currentTotalDwellTime;
+        total = (uint32_t)ceilf(g_execution[i].currentTotalDwellTime);
+        if (g_execution[i].currentTotalDwellTime > CONF_COUNTER_THRESHOLD_IN_SECONDS) {
+            remaining = (uint32_t)ceil(g_execution[i].currentRemainingDwellTime / 1000L);
+        } else {
+            remaining = (uint32_t)ceil(g_execution[i].currentRemainingDwellTime / 1000000L);
+        }
         return true;
     }
     return false;

@@ -76,7 +76,7 @@ void strcatUInt32(char *str, uint32_t value) {
 
 void strcatFloat(char *str, float value, int numSignificantDecimalDigits) {
     // mitigate "-0.00" case
-    float min = (float) (1.0f / pow(10, numSignificantDecimalDigits));
+    float min = (float) (1.0f / pow(10, numSignificantDecimalDigits)) / 2;
     if (fabs(value) < min) {
         value = 0;
     }

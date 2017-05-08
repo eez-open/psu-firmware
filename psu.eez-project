@@ -2466,7 +2466,7 @@
       "$eez": false,
       "name": "channel.list.countdown",
       "type": "string",
-      "defaultValue": "00:00:05"
+      "defaultValue": "23m 45s"
     }
   ],
   "gui": {
