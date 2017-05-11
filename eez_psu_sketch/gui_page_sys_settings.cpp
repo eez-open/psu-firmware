@@ -565,10 +565,9 @@ bool SysSettingsDisplayPage::setData(const data::Cursor &cursor, uint8_t id, dat
 ////////////////////////////////////////////////////////////////////////////////
 
 SysSettingsTriggerPage::SysSettingsTriggerPage() {
-        m_sourceOrig = m_source = trigger::getSource();
-        m_delayOrig = m_delay = trigger::getDelay();
-        m_polarityOrig = m_polarity =trigger::getPolarity();
-        m_initiateContinuouslyOrig = m_initiateContinuously = trigger::isContinuousInitializationEnabled();
+    m_sourceOrig = m_source = trigger::getSource();
+    m_delayOrig = m_delay = trigger::getDelay();
+    m_initiateContinuouslyOrig = m_initiateContinuously = trigger::isContinuousInitializationEnabled();
 }
 
 data::Value SysSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t id) {
@@ -585,10 +584,6 @@ data::Value SysSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t 
 		return data::Value(m_delay, VALUE_TYPE_FLOAT_SECOND);
 	}
 
-	if (id == DATA_ID_TRIGGER_POLARITY) {
-		return data::Value(m_polarity, data::ENUM_DEFINITION_TRIGGER_POLARITY);
-	}
-
 	if (id == DATA_ID_TRIGGER_INITIATE_CONTINUOUSLY) {
         return data::Value(m_initiateContinuously ? 1 : 0);
 	}
@@ -603,7 +598,7 @@ void SysSettingsTriggerPage::onTriggerSourceSet(uint8_t value) {
 }
 
 void SysSettingsTriggerPage::selectSource() {
-    pushSelectFromEnumPage(data::g_triggerSourceEnumDefinition, m_source, -1, onTriggerSourceSet);
+    pushSelectFromEnumPage(data::g_triggerSourceEnumDefinition, m_source, 0, onTriggerSourceSet);
 }
 
 void SysSettingsTriggerPage::onDelaySet(float value) {
@@ -627,25 +622,23 @@ void SysSettingsTriggerPage::editDelay() {
 	NumericKeypad::start(0, data::Value(trigger::getDelay(), VALUE_TYPE_FLOAT_SECOND), options, onDelaySet);
 }
 
-void SysSettingsTriggerPage::selectPolarity() {
-	SysSettingsTriggerPage *page = (SysSettingsTriggerPage*)getActivePage();
-    page->m_polarity = page->m_polarity == trigger::POLARITY_NEGATIVE ? trigger::POLARITY_POSITIVE : trigger::POLARITY_NEGATIVE;
-}
-
 void SysSettingsTriggerPage::toggleInitiateContinuously() {
     m_initiateContinuously = !m_initiateContinuously;
 }
 
 int SysSettingsTriggerPage::getDirty() {
-    return m_sourceOrig != m_source || m_delayOrig != m_delay || m_polarityOrig != m_polarity || m_initiateContinuouslyOrig != m_initiateContinuously;
+    return m_sourceOrig != m_source || m_delayOrig != m_delay || m_initiateContinuouslyOrig != m_initiateContinuously;
 }
 
 void SysSettingsTriggerPage::set() {
     if (getDirty()) {
         trigger::setSource(m_source);
         trigger::setDelay(m_delay);
-        trigger::setPolarity(m_polarity);
         trigger::enableInitiateContinuous(m_initiateContinuously);
+
+        if (m_source == trigger::SOURCE_PIN1) {
+            persist_conf::devConf2.ioPins[0].function = io_pins::FUNCTION_TINPUT;
+        }
 
         persist_conf::saveDevice2();
 
@@ -653,6 +646,79 @@ void SysSettingsTriggerPage::set() {
     }
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+
+SysSettingsIOPinsPage::SysSettingsIOPinsPage() {
+    for (int i = 0; i < 3; ++i) {
+        m_polarityOrig[i] = m_polarity[i] = (io_pins::Polarity) persist_conf::devConf2.ioPins[i].polarity;
+        m_functionOrig[i] = m_function[i] = (io_pins::Function) persist_conf::devConf2.ioPins[i].function;
+    }
+}
+
+data::Value SysSettingsIOPinsPage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = SetPage::getData(cursor, id);
+	if (value.getType() != VALUE_TYPE_NONE) {
+		return value;
+	}
+
+    if (id == DATA_ID_IO_PIN_NUMBER) {
+		return data::Value(cursor.i + 1);
+	}
+
+	if (id == DATA_ID_IO_PIN_POLARITY) {
+		return data::Value(m_polarity[cursor.i], data::ENUM_DEFINITION_IO_PINS_POLARITY);
+	}
+
+	if (id == DATA_ID_IO_PIN_FUNCTION) {
+        if (cursor.i == 0) {
+    		return data::Value(m_function[cursor.i], data::ENUM_DEFINITION_IO_PINS_INPUT_FUNCTION);
+        } else {
+    		return data::Value(m_function[cursor.i], data::ENUM_DEFINITION_IO_PINS_OUTPUT_FUNCTION);
+        }
+	}
+
+    return data::Value();
+}
+
+void SysSettingsIOPinsPage::togglePolarity() {
+    int i = g_foundWidgetAtDown.cursor.i;
+    m_polarity[i] = m_polarity[i] == io_pins::POLARITY_NEGATIVE ? io_pins::POLARITY_POSITIVE : io_pins::POLARITY_NEGATIVE;
+}
+
+void SysSettingsIOPinsPage::onFunctionSet(uint8_t value) {
+    popPage();
+	SysSettingsIOPinsPage *page = (SysSettingsIOPinsPage*)getActivePage();
+    page->m_function[page->pinNumber] = (io_pins::Function)value;
+}
+
+void SysSettingsIOPinsPage::selectFunction() {
+    pinNumber = g_foundWidgetAtDown.cursor.i;
+    pushSelectFromEnumPage(pinNumber == 0 ? data::g_ioPinsInputFunctionEnumDefinition : data::g_ioPinsOutputFunctionEnumDefinition,
+        m_function[pinNumber], 0, onFunctionSet);
+}
+
+int SysSettingsIOPinsPage::getDirty() {
+    for (int i = 0; i < 3; ++i) {
+        if (m_polarityOrig[i] != m_polarity[i] || m_functionOrig[i] != m_function[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void SysSettingsIOPinsPage::set() {
+    if (getDirty()) {
+        for (int i = 0; i < 3; ++i) {
+            persist_conf::devConf2.ioPins[i].polarity = m_polarity[i];
+            persist_conf::devConf2.ioPins[i].function = m_function[i];
+        }
+
+        persist_conf::saveDevice2();
+
+        infoMessageP(PSTR("Digital I/O pin settings saved!"), popPage);
+    }
+}
 
 }
 }

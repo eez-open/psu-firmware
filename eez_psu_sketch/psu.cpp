@@ -58,6 +58,7 @@
 #include "channel_dispatcher.h"
 #include "trigger.h"
 #include "list.h"
+#include "io_pins.h"
 
 namespace eez {
 namespace psu {
@@ -921,7 +922,7 @@ void tick() {
         powerDownBySensor();
     }
 
-	uint32_t tick_usec = micros();
+	uint32_t tick_usec = criticalTick();
 
 #if CONF_DEBUG
     debug::tick(tick_usec);
@@ -993,12 +994,12 @@ void tick() {
 #endif
 }
 
-void criticalTick() {
-    if (!g_powerIsUp) {
-        return;
-    }
-
+uint32_t criticalTick() {
     uint32_t tick_usec = micros();
+
+    if (!g_powerIsUp) {
+        return tick_usec;
+    }
 
     static uint32_t lastTickList = 0;
     if (list::isActive()) {
@@ -1007,6 +1008,7 @@ void criticalTick() {
         } else if (tick_usec - lastTickList >= 250) {
             lastTickList = tick_usec;
             list::tick(tick_usec);
+            io_pins::tick(tick_usec);
         }
     } else {
         lastTickList = 0;
@@ -1021,6 +1023,14 @@ void criticalTick() {
         for (int i = 0; i < CH_NUM; ++i) {
             Channel::get(i).tick(tick_usec);
         }
+    }
+
+    static uint32_t lastTickIoPins = 0;
+    if (lastTickIoPins == 0) {
+        lastTickIoPins = tick_usec;
+    } else if (tick_usec - lastTickIoPins >= 1000) {
+        lastTickIoPins = tick_usec;
+        io_pins::tick(tick_usec);
     }
 
 #if OPTION_DISPLAY
@@ -1040,6 +1050,8 @@ void criticalTick() {
 #endif
 
 #endif
+
+    return tick_usec;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

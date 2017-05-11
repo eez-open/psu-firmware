@@ -183,6 +183,7 @@ Page *createPageFromId(int pageId) {
     case PAGE_ID_SYS_SETTINGS_ETHERNET: return new SysSettingsEthernetPage();
     case PAGE_ID_SYS_SETTINGS_PROTECTIONS: return new SysSettingsProtectionsPage();
     case PAGE_ID_SYS_SETTINGS_TRIGGER: return new SysSettingsTriggerPage();
+    case PAGE_ID_SYS_SETTINGS_IO: return new SysSettingsIOPinsPage();
     case PAGE_ID_SYS_SETTINGS_AUX_OTP: return new SysSettingsAuxOtpPage();
     case PAGE_ID_SYS_SETTINGS_SOUND: return new SysSettingsSoundPage();
 #if OPTION_ENCODER
@@ -368,8 +369,8 @@ void showEthernetInit() {
     flush();
 }
 
-void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t currentValue, uint8_t disabledValue, void (*onSet)(uint8_t)) {
-    pushPage(INTERNAL_PAGE_ID_SELECT_FROM_ENUM, new SelectFromEnumPage(enumDefinition, currentValue, disabledValue, onSet));
+void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t currentValue, bool (*disabledCallback)(uint8_t value), void (*onSet)(uint8_t)) {
+    pushPage(INTERNAL_PAGE_ID_SELECT_FROM_ENUM, new SelectFromEnumPage(enumDefinition, currentValue, disabledCallback, onSet));
 }
 
 void dialogYes() {

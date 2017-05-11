@@ -32,24 +32,29 @@ enum EnumDefinition {
     ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE,
     ENUM_DEFINITION_CHANNEL_TRIGGER_MODE,
     ENUM_DEFINITION_TRIGGER_SOURCE,
-    ENUM_DEFINITION_TRIGGER_POLARITY,
     ENUM_DEFINITION_CHANNEL_CURRENT_RANGE_SELECTION_MODE,
     ENUM_DEFINITION_CHANNEL_CURRENT_RANGE,
-    ENUM_DEFINITION_CHANNEL_TRIGGER_ON_LIST_STOP
+    ENUM_DEFINITION_CHANNEL_TRIGGER_ON_LIST_STOP,
+    ENUM_DEFINITION_IO_PINS_POLARITY,
+    ENUM_DEFINITION_IO_PINS_INPUT_FUNCTION,
+    ENUM_DEFINITION_IO_PINS_OUTPUT_FUNCTION
 };
 
 struct EnumItem {
     uint8_t value;
-    const char *label PROGMEM;
+    const char *menuLabel PROGMEM;
+    const char *widgetLabel PROGMEM;
 };
 
 extern data::EnumItem g_channelDisplayValueEnumDefinition[];
 extern data::EnumItem g_channelTriggerModeEnumDefinition[];
 extern data::EnumItem g_triggerSourceEnumDefinition[];
-extern data::EnumItem g_triggerPolarityEnumDefinition[];
-extern data::EnumItem g_channelCurrentRangeSelectionMode[];
-extern data::EnumItem g_channelCurrentRange[];
-extern data::EnumItem g_channelTriggerOnListStop[];
+extern data::EnumItem g_channelCurrentRangeSelectionModeEnumDefinition[];
+extern data::EnumItem g_channelCurrentRangeEnumDefinition[];
+extern data::EnumItem g_channelTriggerOnListStopEnumDefinition[];
+extern data::EnumItem g_ioPinsPolarityEnumDefinition[];
+extern data::EnumItem g_ioPinsInputFunctionEnumDefinition[];
+extern data::EnumItem g_ioPinsOutputFunctionEnumDefinition[];
 
 enum ValueOptions {
     VALUE_OPTIONS_CH1 = 0x00,

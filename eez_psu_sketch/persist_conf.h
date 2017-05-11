@@ -94,6 +94,11 @@ struct DeviceFlags2 {
     unsigned skipDateTimeSetup: 1;
 };
 
+struct IOPin {
+    unsigned polarity: 1;
+    unsigned function: 7;
+};
+
 struct DeviceConfiguration2 {
     BlockHeader header;
     char systemPassword[PASSWORD_MAX_LENGTH + 1];
@@ -103,8 +108,8 @@ struct DeviceConfiguration2 {
     uint8_t displayBrightness;
     uint8_t triggerSource;
     float triggerDelay;
-    uint8_t triggerPolarity;
-    uint8_t reserverd[87];
+    IOPin ioPins[3];
+    uint8_t reserverd[85];
 };
 
 extern DeviceConfiguration devConf;

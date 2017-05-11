@@ -72,7 +72,7 @@ public:
 
 class SelectFromEnumPage : public InternalPage {
 public:
-    SelectFromEnumPage(const data::EnumItem *enumDefinition_, uint8_t currentValue_, uint8_t disabledValue_, void (*onSet_)(uint8_t));
+    SelectFromEnumPage(const data::EnumItem *enumDefinition_, uint8_t currentValue_, bool (*disabledCallback_)(uint8_t value), void (*onSet_)(uint8_t));
 
     void refresh();
     bool drawTick();
@@ -85,7 +85,7 @@ public:
 private:
     const data::EnumItem *enumDefinition;
     uint8_t currentValue;
-    uint8_t disabledValue;
+    bool (*disabledCallback)(uint8_t value);
     void (*onSet)(uint8_t);
 
     int numItems;
@@ -95,6 +95,8 @@ private:
     int height;
     int itemWidth;
     int itemHeight;
+
+    bool isDisabled(int i);
 
     void getItemPosition(int itemIndex, int &x, int &y);
     void getItemLabel(int itemIndex, char *text, int count);

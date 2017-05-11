@@ -27,6 +27,7 @@
 #include "calibration.h"
 #include "trigger.h"
 #include "list.h"
+#include "io_pins.h"
 
 #include "gui.h"
 #include "gui_internal.h"
@@ -81,26 +82,20 @@ data::EnumItem g_triggerSourceEnumDefinition[] = {
     {0, 0}
 };
 
-data::EnumItem g_triggerPolarityEnumDefinition[] = {
-    {trigger::POLARITY_NEGATIVE, PSTR("Negative")},
-    {trigger::POLARITY_POSITIVE, PSTR("Positive")},
-    {0, 0}
-};
-
-data::EnumItem g_channelCurrentRangeSelectionMode[] = {
+data::EnumItem g_channelCurrentRangeSelectionModeEnumDefinition[] = {
     {CURRENT_RANGE_SELECTION_USE_BOTH, PSTR("Best (default)")},
     {CURRENT_RANGE_SELECTION_ALWAYS_HIGH, PSTR("5A")},
     {CURRENT_RANGE_SELECTION_ALWAYS_LOW, PSTR("0.5A")},
     {0, 0}
 };
 
-data::EnumItem g_channelCurrentRange[] = {
+data::EnumItem g_channelCurrentRangeEnumDefinition[] = {
     {CURRENT_RANGE_HIGH, PSTR("5A")},
     {CURRENT_RANGE_LOW, PSTR("0.5A")},
     {0, 0}
 };
 
-data::EnumItem g_channelTriggerOnListStop[] = {
+data::EnumItem g_channelTriggerOnListStopEnumDefinition[] = {
     {TRIGGER_ON_LIST_STOP_OUTPUT_OFF, PSTR("Output OFF")},
     {TRIGGER_ON_LIST_STOP_SET_TO_FIRST_STEP, PSTR("Set to first step")},
     {TRIGGER_ON_LIST_STOP_SET_TO_LAST_STEP, PSTR("Set to last step")},
@@ -108,15 +103,41 @@ data::EnumItem g_channelTriggerOnListStop[] = {
     {0, 0}
 };
 
+data::EnumItem g_ioPinsPolarityEnumDefinition[] = {
+    {io_pins::POLARITY_NEGATIVE, PSTR("Negative")},
+    {io_pins::POLARITY_POSITIVE, PSTR("Positive")},
+    {0, 0}
+};
+
+data::EnumItem g_ioPinsInputFunctionEnumDefinition[] = {
+    {io_pins::FUNCTION_NONE, PSTR("None")},
+    {io_pins::FUNCTION_INPUT, PSTR("Input")},
+    {io_pins::FUNCTION_INHIBIT, PSTR("Inhibit")},
+    {io_pins::FUNCTION_TINPUT, PSTR("Trigger input"), PSTR("Tinput")},
+    {0, 0}
+};
+
+data::EnumItem g_ioPinsOutputFunctionEnumDefinition[] = {
+    {io_pins::FUNCTION_NONE, PSTR("None")},
+    {io_pins::FUNCTION_OUTPUT, PSTR("Output")},
+    {io_pins::FUNCTION_FAULT, PSTR("Fault")},
+    {io_pins::FUNCTION_ON_COUPLE, PSTR("Channel ON couple"), PSTR("ONcoup")},
+    {io_pins::FUNCTION_TOUTPUT, PSTR("Trigger output"), PSTR("Toutput")},
+    {0, 0}
+};
+
 static const data::EnumItem *enumDefinitions[] = {
     g_channelDisplayValueEnumDefinition,
     g_channelTriggerModeEnumDefinition,
     g_triggerSourceEnumDefinition,
-    g_triggerPolarityEnumDefinition,
-    g_channelCurrentRangeSelectionMode,
-    g_channelCurrentRange,
-    g_channelTriggerOnListStop
+    g_channelCurrentRangeSelectionModeEnumDefinition,
+    g_channelCurrentRangeEnumDefinition,
+    g_channelTriggerOnListStopEnumDefinition,
+    g_ioPinsPolarityEnumDefinition,
+    g_ioPinsInputFunctionEnumDefinition,
+    g_ioPinsOutputFunctionEnumDefinition
 };
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -434,9 +455,13 @@ void Value::toText(char *text, int count) const {
     case VALUE_TYPE_ENUM:
     {
         const EnumItem *enumDefinition = enumDefinitions[enum_.enumDefinition];
-        for (int i = 0; enumDefinition[i].label; ++i) {
+        for (int i = 0; enumDefinition[i].menuLabel; ++i) {
             if (enum_.value == enumDefinition[i].value) {
-                strncpy_P(text, enumDefinition[i].label, count-1);
+                if (enumDefinition[i].widgetLabel) {
+                    strncpy_P(text, enumDefinition[i].widgetLabel, count-1);
+                } else {
+                    strncpy_P(text, enumDefinition[i].menuLabel, count-1);
+                }
                 break;
             }
         }
@@ -593,22 +618,22 @@ int count(uint8_t id) {
         return 6;
     } else if (id == DATA_ID_CHANNEL_LISTS) {
         return LIST_ITEMS_PER_PAGE;
+    } else if (id == DATA_ID_IO_PINS) {
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+        return 3;
+#else
+        return 1;
+#endif
     }
     return 0;
 }
 
 void select(Cursor &cursor, uint8_t id, int index) {
-    if (id == DATA_ID_CHANNELS) {
-        cursor.i = index;
-    } else if (id == DATA_ID_EVENT_QUEUE_EVENTS) {
-        cursor.i = index;
-    } else if (id == DATA_ID_PROFILES_LIST1) {
-        cursor.i = index;
-    } else if (id == DATA_ID_PROFILES_LIST2) {
+    if (id == DATA_ID_PROFILES_LIST2) {
         cursor.i = 4 + index;
     } else if (id == DATA_ID_CHANNEL_COUPLING_MODE) {
         cursor.i = 0;
-    } else if (id == DATA_ID_CHANNEL_LISTS) {
+    } else {
         cursor.i = index;
     }
 }

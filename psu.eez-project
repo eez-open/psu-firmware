@@ -263,6 +263,18 @@
     },
     {
       "$eez": false,
+      "name": "show_sys_settings_trigger",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_TRIGGER);"
+    },
+    {
+      "$eez": false,
+      "name": "show_sys_settings_io",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_IO);"
+    },
+    {
+      "$eez": false,
       "name": "show_sys_settings_date_time",
       "implementationType": "native",
       "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_DATE_TIME);"
@@ -290,6 +302,12 @@
       "name": "show_sys_settings_display",
       "implementationType": "native",
       "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_DISPLAY);"
+    },
+    {
+      "$eez": false,
+      "name": "show_sys_settings_serial",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_SERIAL);"
     },
     {
       "$eez": false,
@@ -389,6 +407,18 @@
     },
     {
       "$eez": false,
+      "name": "show_ch_settings_trigger",
+      "implementationType": "native",
+      "implementation": "setPage(PAGE_ID_CH_SETTINGS_TRIGGER);"
+    },
+    {
+      "$eez": false,
+      "name": "show_ch_settings_lists",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_LISTS);"
+    },
+    {
+      "$eez": false,
       "name": "show_ch_settings_adv",
       "implementationType": "native",
       "implementation": "setPage(PAGE_ID_CH_SETTINGS_ADV);"
@@ -422,6 +452,12 @@
       "name": "show_ch_settings_adv_coupling",
       "implementationType": "native",
       "implementation": "setPage(PAGE_ID_CH_SETTINGS_ADV_COUPLING);"
+    },
+    {
+      "$eez": false,
+      "name": "show_ch_settings_adv_view",
+      "implementationType": "native",
+      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_ADV_VIEW);"
     },
     {
       "$eez": false,
@@ -779,12 +815,6 @@
     },
     {
       "$eez": false,
-      "name": "show_ch_settings_adv_view",
-      "implementationType": "native",
-      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_ADV_VIEW);"
-    },
-    {
-      "$eez": false,
       "name": "ch.settings.adv.view.editDisplayValue1",
       "implementationType": "native",
       "implementation": "((ChSettingsAdvViewPage *)getActivePage())->editDisplayValue1();"
@@ -839,12 +869,6 @@
     },
     {
       "$eez": false,
-      "name": "show_ch_settings_trigger",
-      "implementationType": "native",
-      "implementation": "setPage(PAGE_ID_CH_SETTINGS_TRIGGER);"
-    },
-    {
-      "$eez": false,
       "name": "ch.settings.trigger.editTriggerMode",
       "implementationType": "native",
       "implementation": "((ChSettingsTriggerPage *)getActivePage())->editTriggerMode();"
@@ -878,18 +902,6 @@
       "name": "ch.settings.trigger.editOnListStop",
       "implementationType": "native",
       "implementation": "((ChSettingsTriggerPage *)getActivePage())->editTriggerOnListStop();"
-    },
-    {
-      "$eez": false,
-      "name": "show_ch_settings_lists",
-      "implementationType": "native",
-      "implementation": "pushPage(PAGE_ID_CH_SETTINGS_LISTS);"
-    },
-    {
-      "$eez": false,
-      "name": "show_sys_settings_trigger",
-      "implementationType": "native",
-      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_TRIGGER);"
     },
     {
       "$eez": false,
@@ -989,12 +1001,6 @@
     },
     {
       "$eez": false,
-      "name": "trigger.selectPolarity",
-      "implementationType": "native",
-      "implementation": "((SysSettingsTriggerPage *)getActivePage())->selectPolarity();"
-    },
-    {
-      "$eez": false,
       "name": "trigger.toggleInitiateContinuously",
       "implementationType": "native",
       "implementation": "((SysSettingsTriggerPage *)getActivePage())->toggleInitiateContinuously();"
@@ -1037,9 +1043,15 @@
     },
     {
       "$eez": false,
-      "name": "show_sys_settings_serial",
+      "name": "ioPin.togglePolarity",
       "implementationType": "native",
-      "implementation": "pushPage(PAGE_ID_SYS_SETTINGS_SERIAL);"
+      "implementation": "((SysSettingsIOPinsPage *)getActivePage())->togglePolarity();"
+    },
+    {
+      "$eez": false,
+      "name": "ioPin.selectFunction",
+      "implementationType": "native",
+      "implementation": "((SysSettingsIOPinsPage *)getActivePage())->selectFunction();"
     }
   ],
   "data": [
@@ -2393,13 +2405,6 @@
     },
     {
       "$eez": false,
-      "name": "trigger.polarity",
-      "type": "enum",
-      "enumItems": "[\n\"Negative\",\n\"Positive\"\n]",
-      "defaultValue": "Positive"
-    },
-    {
-      "$eez": false,
       "name": "trigger.initiateContinuously",
       "type": "boolean",
       "enumItems": "",
@@ -2467,6 +2472,33 @@
       "name": "channel.list.countdown",
       "type": "string",
       "defaultValue": "23m 45s"
+    },
+    {
+      "$eez": false,
+      "name": "ioPins",
+      "description": "",
+      "type": "list",
+      "defaultValue": "[{}, {}, {}]"
+    },
+    {
+      "$eez": false,
+      "name": "ioPin.number",
+      "type": "integer",
+      "defaultValue": "1"
+    },
+    {
+      "$eez": false,
+      "name": "ioPin.polarity",
+      "type": "boolean",
+      "enumItems": "",
+      "defaultValue": "1"
+    },
+    {
+      "$eez": false,
+      "name": "ioPin.function",
+      "type": "enum",
+      "enumItems": "[\n\"None\",\n\"Fault\",\n\"Inhibit\",\n\"Couple\",\n\"Tinput\",\n\"Toutput\",\n]",
+      "defaultValue": "Couple"
     }
   ],
   "gui": {
@@ -19511,11 +19543,12 @@
             {
               "$eez": false,
               "type": "Text",
+              "action": "show_sys_settings_io",
               "x": 12,
               "y": 116,
               "width": 240,
               "height": 28,
-              "style": "default_disabled_S_left",
+              "style": "edit_value_active_S_left",
               "text": "Digital I/O"
             },
             {
@@ -20200,7 +20233,7 @@
               "width": 97,
               "height": 28,
               "style": "edit_value_active_S_left",
-              "text": "PIN1"
+              "text": ""
             },
             {
               "$eez": false,
@@ -20244,28 +20277,6 @@
             },
             {
               "$eez": false,
-              "type": "Text",
-              "x": 16,
-              "y": 88,
-              "width": 68,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Polarity:"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "data": "trigger.polarity",
-              "action": "trigger.selectPolarity",
-              "x": 84,
-              "y": 88,
-              "width": 67,
-              "height": 28,
-              "style": "edit_value_active_S_left",
-              "text": "Yes"
-            },
-            {
-              "$eez": false,
               "type": "Rectangle",
               "x": 151,
               "y": 88,
@@ -20277,7 +20288,7 @@
               "$eez": false,
               "type": "Text",
               "x": 16,
-              "y": 116,
+              "y": 88,
               "width": 165,
               "height": 28,
               "style": "edit_value_S_left",
@@ -20288,7 +20299,7 @@
               "x": 181,
               "type": "Select",
               "data": "trigger.initiateContinuously",
-              "y": 116,
+              "y": 88,
               "width": 71,
               "height": 28,
               "style": "default",
@@ -20298,8 +20309,6 @@
                   "type": "Text",
                   "data": "",
                   "action": "trigger.toggleInitiateContinuously",
-                  "x": 0,
-                  "y": 0,
                   "width": 71,
                   "height": 28,
                   "style": "edit_value_active_S_left",
@@ -20310,8 +20319,6 @@
                   "type": "Text",
                   "data": "",
                   "action": "trigger.toggleInitiateContinuously",
-                  "x": 0,
-                  "y": 0,
                   "width": 71,
                   "height": 28,
                   "style": "edit_value_active_S_left",
@@ -20418,6 +20425,109 @@
             },
             {
               "$eez": false,
+              "type": "Text",
+              "x": 6,
+              "y": 44,
+              "width": 71,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Pin #:"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 6,
+              "y": 100,
+              "width": 71,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Polarity:"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 6,
+              "y": 72,
+              "width": 71,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Function:"
+            },
+            {
+              "$eez": false,
+              "type": "List",
+              "data": "ioPins",
+              "x": 77,
+              "y": 44,
+              "width": 175,
+              "height": 84,
+              "style": "default",
+              "listType": "horizontal",
+              "itemWidget": {
+                "$eez": false,
+                "type": "Container",
+                "x": 0,
+                "y": 0,
+                "width": 58,
+                "height": 84,
+                "style": "default",
+                "widgets": [
+                  {
+                    "$eez": false,
+                    "type": "Text",
+                    "data": "ioPin.number",
+                    "width": 58,
+                    "height": 28,
+                    "style": "edit_value_S_centered",
+                    "text": ""
+                  },
+                  {
+                    "$eez": false,
+                    "type": "Text",
+                    "data": "ioPin.function",
+                    "action": "ioPin.selectFunction",
+                    "y": 28,
+                    "width": 58,
+                    "height": 28,
+                    "style": "edit_value_S_centered",
+                    "text": "Pos"
+                  },
+                  {
+                    "$eez": false,
+                    "x": 0,
+                    "type": "Select",
+                    "data": "ioPin.polarity",
+                    "y": 56,
+                    "width": 58,
+                    "height": 28,
+                    "style": "default",
+                    "widgets": [
+                      {
+                        "$eez": false,
+                        "type": "Text",
+                        "action": "ioPin.togglePolarity",
+                        "y": 0,
+                        "width": 58,
+                        "height": 28,
+                        "style": "edit_value_active_S_center",
+                        "text": "Neg"
+                      },
+                      {
+                        "$eez": false,
+                        "type": "Text",
+                        "action": "ioPin.togglePolarity",
+                        "width": 58,
+                        "height": 28,
+                        "style": "edit_value_active_S_center",
+                        "text": "Pos"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "$eez": false,
               "type": "Button",
               "data": "",
               "action": "set",
@@ -20469,46 +20579,6 @@
               "width": 68,
               "height": 204,
               "style": "default"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 16,
-              "y": 42,
-              "width": 236,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Pin #:       1          2          3"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 16,
-              "y": 70,
-              "width": 236,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Enable:    Yes        No       Yes"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 16,
-              "y": 98,
-              "width": 236,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Function: Trig       Out      Out"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 16,
-              "y": 98,
-              "width": 236,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Polarity:  Pos       Neg      Neg"
             }
           ]
         }
@@ -78522,6 +78592,30 @@
           {
             "$eez": false,
             "name": "[SOURce#]:LIST:VOLTage[:LEVel]?"
+          },
+          {
+            "$eez": false,
+            "name": "[SOURce:]DIGital:INPut:DATA?"
+          },
+          {
+            "$eez": false,
+            "name": "[SOURce:]DIGital:OUTPut:DATA"
+          },
+          {
+            "$eez": false,
+            "name": "[SOURce:]DIGital:PIN#:FUNCtion"
+          },
+          {
+            "$eez": false,
+            "name": "[SOURce:]DIGital:PIN#:FUNCtion?"
+          },
+          {
+            "$eez": false,
+            "name": "[SOURce:]DIGital:PIN#:POLarity"
+          },
+          {
+            "$eez": false,
+            "name": "[SOURce:]DIGital:PIN#:POLarity?"
           }
         ]
       },
@@ -78864,14 +78958,6 @@
           {
             "$eez": false,
             "name": "TRIGger[:SEQuence]:DELay?"
-          },
-          {
-            "$eez": false,
-            "name": "TRIGger[:SEQuence]:SLOPe"
-          },
-          {
-            "$eez": false,
-            "name": "TRIGger[:SEQuence]:SLOPe?"
           },
           {
             "$eez": false,

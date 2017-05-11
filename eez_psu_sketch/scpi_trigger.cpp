@@ -20,6 +20,7 @@
 #include "scpi_psu.h"
 
 #include "trigger.h"
+#include "io_pins.h"
 #include "channel_dispatcher.h"
 #include "profile.h"
 
@@ -34,12 +35,6 @@ static scpi_choice_def_t sourceChoice[] = {
     { "IMMediate", trigger::SOURCE_IMMEDIATE },
     { "MANual", trigger::SOURCE_MANUAL },
     { "PIN1", trigger::SOURCE_PIN1 },
-    SCPI_CHOICE_LIST_END
-};
-
-static scpi_choice_def_t polarityChoice[] = {
-    { "POSitive", trigger::POLARITY_POSITIVE },
-    { "NEGative", trigger::POLARITY_NEGATIVE },
     SCPI_CHOICE_LIST_END
 };
 
@@ -72,23 +67,6 @@ scpi_result_t scpi_cmd_triggerSequenceDelayQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cmd_triggerSequenceSlope(scpi_t * context) {
-    int32_t polarity;
-    if (!SCPI_ParamChoice(context, polarityChoice, &polarity, true)) {
-        return SCPI_RES_ERR;
-    }
-
-    trigger::setPolarity((trigger::Polarity)polarity);
-    persist_conf::saveDevice2();
-
-    return SCPI_RES_OK;
-}
-
-scpi_result_t scpi_cmd_triggerSequenceSlopeQ(scpi_t * context) {
-    resultChoiceName(context, polarityChoice, trigger::getPolarity());
-    return SCPI_RES_OK;
-}
-
 scpi_result_t scpi_cmd_triggerSequenceSource(scpi_t * context) {
     int32_t source;
     if (!SCPI_ParamChoice(context, sourceChoice, &source, true)) {
@@ -96,6 +74,11 @@ scpi_result_t scpi_cmd_triggerSequenceSource(scpi_t * context) {
     }
 
     trigger::setSource((trigger::Source)source);
+
+    if (source == trigger::SOURCE_PIN1) {
+        persist_conf::devConf2.ioPins[0].function = io_pins::FUNCTION_TINPUT;
+    }
+
     persist_conf::saveDevice2();
 
     return SCPI_RES_OK;

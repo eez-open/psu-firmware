@@ -22,6 +22,7 @@
 #include "list.h"
 #include "profile.h"
 #include "persist_conf.h"
+#include "io_pins.h"
 
 namespace eez {
 namespace psu {
@@ -47,7 +48,6 @@ bool g_triggerInProgress[CH_MAX];
 void reset() {
     persist_conf::devConf2.triggerDelay = DELAY_DEFAULT;
     persist_conf::devConf2.triggerSource = SOURCE_IMMEDIATE;
-    persist_conf::devConf2.triggerPolarity = POLARITY_POSITIVE;
     persist_conf::devConf2.flags.triggerContinuousInitializationEnabled = false;
 
     persist_conf::saveDevice2();
@@ -57,8 +57,8 @@ void reset() {
 
 void extTrigInterruptHandler() {
     uint8_t state = digitalRead(EXT_TRIG);
-    if (state == 1 && g_extTrigLastState == 0 && persist_conf::devConf2.triggerPolarity == POLARITY_POSITIVE ||
-        state == 0 && g_extTrigLastState == 1 && persist_conf::devConf2.triggerPolarity == POLARITY_NEGATIVE) {
+    if (state == 1 && g_extTrigLastState == 0 && persist_conf::devConf2.ioPins[0].polarity == io_pins::POLARITY_POSITIVE ||
+        state == 0 && g_extTrigLastState == 1 && persist_conf::devConf2.ioPins[0].polarity == io_pins::POLARITY_NEGATIVE) {
         generateTrigger(SOURCE_PIN1, false);
     }
     g_extTrigLastState = state;
@@ -91,14 +91,6 @@ void setSource(Source source) {
 
 Source getSource() {
     return (Source)persist_conf::devConf2.triggerSource;
-}
-
-void setPolarity(Polarity polarity) {
-    persist_conf::devConf2.triggerPolarity = polarity;
-}
-
-Polarity getPolarity() {
-    return (Polarity)persist_conf::devConf2.triggerPolarity;
 }
 
 void setVoltage(Channel &channel, float value) {
@@ -271,6 +263,8 @@ int startImmediately() {
     for (int i = 0; i < CH_NUM; ++i) {
         g_triggerInProgress[i] = true;
     }
+
+    io_pins::onTrigger();
 
     for (int i = 0; i < CH_NUM; ++i) {
         Channel& channel = Channel::get(i);

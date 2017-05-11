@@ -23,6 +23,7 @@
 #include "channel_dispatcher.h"
 #include "trigger.h"
 #include "list.h"
+#include "io_pins.h"
 
 #define I_STATE 1
 #define P_STATE 2
@@ -1219,6 +1220,173 @@ scpi_result_t scpi_cmd_sourceListVoltageLevelQ(scpi_t *context) {
     uint16_t listLength;
     float *list = list::getVoltageList(*channel, &listLength);
     SCPI_ResultArrayFloat(context, list, listLength, SCPI_FORMAT_ASCII);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceDigitalInputDataQ(scpi_t *context) {
+    int32_t pin;
+    if (!SCPI_ParamInt(context, &pin, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (pin != 1) {
+        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+        return SCPI_RES_ERR;
+    }
+
+    SCPI_ResultInt(context, digitalRead(EXT_TRIG));
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceDigitalOutputData(scpi_t *context) {
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+    int32_t pin;
+    if (!SCPI_ParamInt(context, &pin, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (pin != 2 || pin != 3) {
+        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+        return SCPI_RES_ERR;
+    }
+
+    bool state;
+	if (!SCPI_ParamBool(context, &state, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+    if (pin == 2) {
+        digitalWrite(DOUT, state);
+    } else {
+        digitalWrite(DOUT2, state);
+    }
+
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+
+    return SCPI_RES_ERR;
+#endif
+}
+
+static scpi_choice_def_t functionChoice[] = {
+    { "NONE", io_pins::FUNCTION_NONE },
+    { "DINPut", io_pins::FUNCTION_INPUT },
+    { "DOUTput", io_pins::FUNCTION_OUTPUT },
+    { "FAULt", io_pins::FUNCTION_FAULT },
+    { "INHibit", io_pins::FUNCTION_INHIBIT },
+    { "ONCouple", io_pins::FUNCTION_ON_COUPLE },
+    { "TINPut", io_pins::FUNCTION_TINPUT },
+    { "TOUTput", io_pins::FUNCTION_TOUTPUT },
+    SCPI_CHOICE_LIST_END
+};
+
+scpi_result_t scpi_cmd_sourceDigitalPinFunction(scpi_t *context) {
+    int32_t pin;
+    SCPI_CommandNumbers(context, &pin, 1, 1);
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+    if (pin < 1 || pin > 3) {
+        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        return SCPI_RES_ERR;
+    }
+#else
+    if (pin != 1) {
+        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        return SCPI_RES_ERR;
+    }
+#endif
+
+    int32_t function;
+    if (!SCPI_ParamChoice(context, functionChoice, &function, true)) {
+        return SCPI_RES_ERR;
+    }
+    
+    if (pin == 1) {
+        if (function != io_pins::FUNCTION_NONE && function != io_pins::FUNCTION_INPUT && function != io_pins::FUNCTION_INHIBIT && function != io_pins::FUNCTION_TINPUT) {
+            SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+            return SCPI_RES_ERR;
+        }
+    } else {
+        if (function != io_pins::FUNCTION_NONE && function != io_pins::FUNCTION_OUTPUT && function != io_pins::FUNCTION_FAULT && function != io_pins::FUNCTION_ON_COUPLE && function != io_pins::FUNCTION_TOUTPUT) {
+            SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+            return SCPI_RES_ERR;
+        }
+    }
+
+    persist_conf::devConf2.ioPins[pin].function = function;
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceDigitalPinFunctionQ(scpi_t *context) {
+    int32_t pin;
+    SCPI_CommandNumbers(context, &pin, 1, 1);
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+    if (pin < 1 || pin > 3) {
+        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        return SCPI_RES_ERR;
+    }
+#else
+    if (pin != 1) {
+        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        return SCPI_RES_ERR;
+    }
+#endif
+
+    resultChoiceName(context, functionChoice, persist_conf::devConf2.ioPins[pin].function);
+
+    return SCPI_RES_OK;
+}
+
+static scpi_choice_def_t polarityChoice[] = {
+    { "POSitive", io_pins::POLARITY_POSITIVE },
+    { "NEGative", io_pins::POLARITY_NEGATIVE },
+    SCPI_CHOICE_LIST_END
+};
+
+scpi_result_t scpi_cmd_sourceDigitalPinPolarity(scpi_t *context) {
+    int32_t pin;
+    SCPI_CommandNumbers(context, &pin, 1, 1);
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+    if (pin < 1 || pin > 3) {
+        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        return SCPI_RES_ERR;
+    }
+#else
+    if (pin != 1) {
+        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        return SCPI_RES_ERR;
+    }
+#endif
+
+    int32_t polarity;
+    if (!SCPI_ParamChoice(context, polarityChoice, &polarity, true)) {
+        return SCPI_RES_ERR;
+    }
+    
+    persist_conf::devConf2.ioPins[pin].polarity = polarity;
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_sourceDigitalPinPolarityQ(scpi_t *context) {
+    int32_t pin;
+    SCPI_CommandNumbers(context, &pin, 1, 1);
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+    if (pin < 1 || pin > 3) {
+        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        return SCPI_RES_ERR;
+    }
+#else
+    if (pin != 1) {
+        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        return SCPI_RES_ERR;
+    }
+#endif
+
+    resultChoiceName(context, polarityChoice, persist_conf::devConf2.ioPins[pin].polarity);
 
     return SCPI_RES_OK;
 }

@@ -94,12 +94,16 @@ void SetPage::discard() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-SelectFromEnumPage::SelectFromEnumPage(const data::EnumItem *enumDefinition_, uint8_t currentValue_, uint8_t disabledValue_, void (*onSet_)(uint8_t))
+SelectFromEnumPage::SelectFromEnumPage(const data::EnumItem *enumDefinition_, uint8_t currentValue_, bool (*disabledCallback_)(uint8_t value), void (*onSet_)(uint8_t))
     : enumDefinition(enumDefinition_)
     , currentValue(currentValue_)
-    , disabledValue(disabledValue_)
+    , disabledCallback(disabledCallback_)
     , onSet(onSet_)
 {
+}
+
+bool SelectFromEnumPage::isDisabled(int i) {
+    return disabledCallback && disabledCallback(enumDefinition[i].value);
 }
 
 void SelectFromEnumPage::refresh() {
@@ -117,7 +121,7 @@ void SelectFromEnumPage::refresh() {
 
     char text[64];
 
-    for (i = 0; enumDefinition[i].label; ++i) {
+    for (i = 0; enumDefinition[i].menuLabel; ++i) {
         getItemLabel(i, text, sizeof(text));
         int width = lcd::lcd.measureStr(text, -1, font);
         if (width > itemWidth) {
@@ -147,12 +151,12 @@ void SelectFromEnumPage::refresh() {
     lcd::lcd.fillRect(x, y, x + width - 1, y + height - 1);
 
     // draw labels
-    for (i = 0; enumDefinition[i].label; ++i) {
+    for (i = 0; enumDefinition[i].menuLabel; ++i) {
         int xItem, yItem;
         getItemPosition(i, xItem, yItem);
 
         getItemLabel(i, text, sizeof(text));
-        drawText(text, -1, xItem, yItem, itemWidth, itemHeight, i == disabledValue ? disabledItemStyle : itemStyle, false);
+        drawText(text, -1, xItem, yItem, itemWidth, itemHeight, isDisabled(i) ? disabledItemStyle : itemStyle, false);
     }
 }
 
@@ -163,10 +167,10 @@ bool SelectFromEnumPage::drawTick() {
 WidgetCursor SelectFromEnumPage::findWidget(int x, int y) {
     int i;
 
-    for (i = 0; enumDefinition[i].label; ++i) {
+    for (i = 0; enumDefinition[i].menuLabel; ++i) {
         int xItem, yItem;
         getItemPosition(i, xItem, yItem);
-        if (i != disabledValue && x >= xItem && x < xItem + itemWidth && y >= yItem && y < yItem + itemHeight) {
+        if (!isDisabled(i) && x >= xItem && x < xItem + itemWidth && y >= yItem && y < yItem + itemHeight) {
             break;
         }
     }
@@ -219,7 +223,7 @@ void SelectFromEnumPage::getItemLabel(int itemIndex, char *text, int count) {
     
     text[1] = ' ';
 
-    strncpy_P(text + 2, enumDefinition[itemIndex].label, count - 3);
+    strncpy_P(text + 2, enumDefinition[itemIndex].menuLabel, count - 3);
     
     text[count - 1] = 0;
 }

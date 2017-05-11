@@ -178,6 +178,12 @@
     SCPI_COMMAND("[SOURce#]:LIST:DWELl?", scpi_cmd_sourceListDwellQ) \
     SCPI_COMMAND("[SOURce#]:LIST:VOLTage[:LEVel]", scpi_cmd_sourceListVoltageLevel) \
     SCPI_COMMAND("[SOURce#]:LIST:VOLTage[:LEVel]?", scpi_cmd_sourceListVoltageLevelQ) \
+    SCPI_COMMAND("[SOURce:]DIGital:INPut:DATA?", scpi_cmd_sourceDigitalInputDataQ) \
+    SCPI_COMMAND("[SOURce:]DIGital:OUTPut:DATA", scpi_cmd_sourceDigitalOutputData) \
+    SCPI_COMMAND("[SOURce:]DIGital:PIN#:FUNCtion", scpi_cmd_sourceDigitalPinFunction) \
+    SCPI_COMMAND("[SOURce:]DIGital:PIN#:FUNCtion?", scpi_cmd_sourceDigitalPinFunctionQ) \
+    SCPI_COMMAND("[SOURce:]DIGital:PIN#:POLarity", scpi_cmd_sourceDigitalPinPolarity) \
+    SCPI_COMMAND("[SOURce:]DIGital:PIN#:POLarity?", scpi_cmd_sourceDigitalPinPolarityQ) \
     SCPI_COMMAND("STATus:QUEStionable[:EVENt]?", scpi_cmd_statusQuestionableEventQ) \
     SCPI_COMMAND("STATus:QUEStionable:CONDition?", scpi_cmd_statusQuestionableConditionQ) \
     SCPI_COMMAND("STATus:QUEStionable:ENABle", scpi_cmd_statusQuestionableEnable) \
@@ -259,8 +265,6 @@
     SCPI_COMMAND("TRIGger[:SEQuence][:IMMediate]", scpi_cmd_triggerSequenceImmediate) \
     SCPI_COMMAND("TRIGger[:SEQuence]:DELay", scpi_cmd_triggerSequenceDelay) \
     SCPI_COMMAND("TRIGger[:SEQuence]:DELay?", scpi_cmd_triggerSequenceDelayQ) \
-    SCPI_COMMAND("TRIGger[:SEQuence]:SLOPe", scpi_cmd_triggerSequenceSlope) \
-    SCPI_COMMAND("TRIGger[:SEQuence]:SLOPe?", scpi_cmd_triggerSequenceSlopeQ) \
     SCPI_COMMAND("TRIGger[:SEQuence]:SOURce", scpi_cmd_triggerSequenceSource) \
     SCPI_COMMAND("TRIGger[:SEQuence]:SOURce?", scpi_cmd_triggerSequenceSourceQ) \
     SCPI_COMMAND("TRIGger[:SEQuence]:EXIT:CONDition", scpi_cmd_triggerSequenceExitCondition) \

@@ -33,11 +33,6 @@ enum Source {
     SOURCE_PIN1
 };
 
-enum Polarity {
-    POLARITY_NEGATIVE,
-    POLARITY_POSITIVE
-};
-
 void init();
 void reset();
 
@@ -46,9 +41,6 @@ float getDelay();
 
 void setSource(Source source);
 Source getSource();
-
-void setPolarity(Polarity polarity);
-Polarity getPolarity();
 
 void setVoltage(Channel &channel, float value);
 float getVoltage(Channel &channel);

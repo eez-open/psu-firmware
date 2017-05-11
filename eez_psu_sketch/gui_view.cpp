@@ -1752,7 +1752,6 @@ void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, Wid
         if (currentState) ++currentState;
 
         int index = indexValue.getInt();
-        data::select(cursor, widget->data, index);
         DECL_WIDGET_SPECIFIC(ContainerWidget, containerWidget, widget);
         OBJ_OFFSET selectedWidgetOffset = getListItemOffset(containerWidget->widgets, index, sizeof(Widget));
 

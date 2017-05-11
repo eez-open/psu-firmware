@@ -281,3 +281,6 @@
 
 /// Number of values used for ADC averaging
 #define NUM_ADC_AVERAGING_VALUES 5
+
+/// Width of the trigger output pulse, in milliseconds.
+#define CONF_TOUTPUT_PULSE_WIDTH_MS 100

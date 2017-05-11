@@ -22,6 +22,7 @@
 
 #include "datetime.h"
 #include "trigger.h"
+#include "io_pins.h"
 
 namespace eez {
 namespace psu {
@@ -148,8 +149,6 @@ public:
     data::Value getMin(const data::Cursor &cursor, uint8_t id);
     data::Value getMax(const data::Cursor &cursor, uint8_t id);
     bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
-
-    void turnOff();
 };
 
 class SysSettingsTriggerPage : public SetPage {
@@ -160,7 +159,7 @@ public:
 
     void selectSource();
     void editDelay();
-    void selectPolarity();
+    void togglePolarity();
     void toggleInitiateContinuously();
     
 	int getDirty();
@@ -173,14 +172,35 @@ private:
     float m_delayOrig;
     float m_delay;
 
-    trigger::Polarity m_polarityOrig;
-    trigger::Polarity m_polarity;
-
     bool m_initiateContinuouslyOrig;
     bool m_initiateContinuously;
 
     static void onTriggerSourceSet(uint8_t value);
     static void onDelaySet(float value);
+};
+
+class SysSettingsIOPinsPage : public SetPage {
+public:
+    SysSettingsIOPinsPage();
+
+    data::Value getData(const data::Cursor &cursor, uint8_t id);
+
+    void togglePolarity();
+    void selectFunction();
+    
+	int getDirty();
+	void set();
+
+private:
+    int pinNumber;
+
+    io_pins::Polarity m_polarityOrig[3];
+    io_pins::Polarity m_polarity[3];
+
+    io_pins::Function m_functionOrig[3];
+    io_pins::Function m_function[3];
+
+    static void onFunctionSet(uint8_t value);
 };
 
 }

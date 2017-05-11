@@ -150,7 +150,7 @@ void ChSettingsAdvRangesPage::onModeSet(uint8_t value) {
 }
 
 void ChSettingsAdvRangesPage::selectMode() {
-    pushSelectFromEnumPage(data::g_channelCurrentRangeSelectionMode, g_channel->getCurrentRangeSelectionMode(), -1, onModeSet);
+    pushSelectFromEnumPage(data::g_channelCurrentRangeSelectionModeEnumDefinition, g_channel->getCurrentRangeSelectionMode(), 0, onModeSet);
 }
 
 void ChSettingsAdvRangesPage::toggleAutoRanging() {
@@ -246,6 +246,11 @@ data::Value ChSettingsAdvViewPage::getData(const data::Cursor &cursor, uint8_t i
 	return data::Value();
 }
 
+bool ChSettingsAdvViewPage::isDisabledDisplayValue1(uint8_t value) {
+	ChSettingsAdvViewPage *page = (ChSettingsAdvViewPage *)getPreviousPage();
+    return value == page->displayValue2;
+}
+
 void ChSettingsAdvViewPage::onDisplayValue1Set(uint8_t value) {
 	popPage();
 	ChSettingsAdvViewPage *page = (ChSettingsAdvViewPage *)getActivePage();
@@ -253,7 +258,12 @@ void ChSettingsAdvViewPage::onDisplayValue1Set(uint8_t value) {
 }
 
 void ChSettingsAdvViewPage::editDisplayValue1() {
-    pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue1, displayValue2, onDisplayValue1Set);
+    pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue1, isDisabledDisplayValue1, onDisplayValue1Set);
+}
+
+bool ChSettingsAdvViewPage::isDisabledDisplayValue2(uint8_t value) {
+	ChSettingsAdvViewPage *page = (ChSettingsAdvViewPage *)getPreviousPage();
+    return value == page->displayValue1;
 }
 
 void ChSettingsAdvViewPage::onDisplayValue2Set(uint8_t value) {
@@ -263,7 +273,7 @@ void ChSettingsAdvViewPage::onDisplayValue2Set(uint8_t value) {
 }
 
 void ChSettingsAdvViewPage::editDisplayValue2() {
-    pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue2, displayValue1, onDisplayValue2Set);
+    pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue2, isDisabledDisplayValue2, onDisplayValue2Set);
 }
 
 void ChSettingsAdvViewPage::onYTViewRateSet(float value) {

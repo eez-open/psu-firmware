@@ -110,8 +110,10 @@ private:
 
 	float origYTViewRate;
 	float ytViewRate;
-
+    
+    static bool isDisabledDisplayValue1(uint8_t value);
     static void onDisplayValue1Set(uint8_t value);
+    static bool isDisabledDisplayValue2(uint8_t value);
     static void onDisplayValue2Set(uint8_t value);
     static void onYTViewRateSet(float value);
 };

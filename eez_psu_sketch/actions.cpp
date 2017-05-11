@@ -178,6 +178,14 @@ void action_show_sys_settings2() {
     setPage(PAGE_ID_SYS_SETTINGS2);
 }
 
+void action_show_sys_settings_trigger() {
+    pushPage(PAGE_ID_SYS_SETTINGS_TRIGGER);
+}
+
+void action_show_sys_settings_io() {
+    pushPage(PAGE_ID_SYS_SETTINGS_IO);
+}
+
 void action_show_sys_settings_date_time() {
     pushPage(PAGE_ID_SYS_SETTINGS_DATE_TIME);
 }
@@ -197,6 +205,10 @@ void action_show_sys_settings_screen_calibration() {
 
 void action_show_sys_settings_display() {
     pushPage(PAGE_ID_SYS_SETTINGS_DISPLAY);
+}
+
+void action_show_sys_settings_serial() {
+    pushPage(PAGE_ID_SYS_SETTINGS_SERIAL);
 }
 
 void action_show_sys_settings_ethernet() {
@@ -267,6 +279,14 @@ void action_show_ch_settings_prot_otp() {
     pushPage(PAGE_ID_CH_SETTINGS_PROT_OTP);
 }
 
+void action_show_ch_settings_trigger() {
+    setPage(PAGE_ID_CH_SETTINGS_TRIGGER);
+}
+
+void action_show_ch_settings_lists() {
+    pushPage(PAGE_ID_CH_SETTINGS_LISTS);
+}
+
 void action_show_ch_settings_adv() {
     setPage(PAGE_ID_CH_SETTINGS_ADV);
 }
@@ -290,6 +310,10 @@ void action_show_ch_settings_adv_tracking() {
 
 void action_show_ch_settings_adv_coupling() {
     setPage(PAGE_ID_CH_SETTINGS_ADV_COUPLING);
+}
+
+void action_show_ch_settings_adv_view() {
+    pushPage(PAGE_ID_CH_SETTINGS_ADV_VIEW);
 }
 
 void action_show_ch_settings_info() {
@@ -528,10 +552,6 @@ void action_sys_settings_sound_toggle_click() {
     ((SysSettingsSoundPage *)getActivePage())->toggleClickSound();
 }
 
-void action_show_ch_settings_adv_view() {
-    pushPage(PAGE_ID_CH_SETTINGS_ADV_VIEW);
-}
-
 void action_ch_settings_adv_view_edit_display_value1() {
     ((ChSettingsAdvViewPage *)getActivePage())->editDisplayValue1();
 }
@@ -570,10 +590,6 @@ void action_turn_display_off() {
     gui::turnDisplayOff();
 }
 
-void action_show_ch_settings_trigger() {
-    setPage(PAGE_ID_CH_SETTINGS_TRIGGER);
-}
-
 void action_ch_settings_trigger_edit_trigger_mode() {
     ((ChSettingsTriggerPage *)getActivePage())->editTriggerMode();
 }
@@ -596,14 +612,6 @@ void action_ch_settings_trigger_toggle_output_state() {
 
 void action_ch_settings_trigger_edit_on_list_stop() {
     ((ChSettingsTriggerPage *)getActivePage())->editTriggerOnListStop();
-}
-
-void action_show_ch_settings_lists() {
-    pushPage(PAGE_ID_CH_SETTINGS_LISTS);
-}
-
-void action_show_sys_settings_trigger() {
-    pushPage(PAGE_ID_SYS_SETTINGS_TRIGGER);
 }
 
 void action_channel_lists_previous_page() {
@@ -676,10 +684,6 @@ void action_trigger_edit_delay() {
     ((SysSettingsTriggerPage *)getActivePage())->editDelay();
 }
 
-void action_trigger_select_polarity() {
-    ((SysSettingsTriggerPage *)getActivePage())->selectPolarity();
-}
-
 void action_trigger_toggle_initiate_continuously() {
     ((SysSettingsTriggerPage *)getActivePage())->toggleInitiateContinuously();
 }
@@ -711,8 +715,12 @@ void action_ch_settings_adv_ranges_toggle_auto_ranging() {
     ((ChSettingsAdvRangesPage *)getActivePage())->toggleAutoRanging();
 }
 
-void action_show_sys_settings_serial() {
-    pushPage(PAGE_ID_SYS_SETTINGS_SERIAL);
+void action_io_pin_toggle_polarity() {
+    ((SysSettingsIOPinsPage *)getActivePage())->togglePolarity();
+}
+
+void action_io_pin_select_function() {
+    ((SysSettingsIOPinsPage *)getActivePage())->selectFunction();
 }
 
 
@@ -751,11 +759,14 @@ ACTION actions[] = {
     action_show_channel_settings,
     action_show_sys_settings,
     action_show_sys_settings2,
+    action_show_sys_settings_trigger,
+    action_show_sys_settings_io,
     action_show_sys_settings_date_time,
     action_show_sys_settings_cal,
     action_show_sys_settings_cal_ch,
     action_show_sys_settings_screen_calibration,
     action_show_sys_settings_display,
+    action_show_sys_settings_serial,
     action_show_sys_settings_ethernet,
     action_show_sys_settings_protections,
     action_show_sys_settings_aux_otp,
@@ -772,12 +783,15 @@ ACTION actions[] = {
     action_show_ch_settings_prot_ovp,
     action_show_ch_settings_prot_opp,
     action_show_ch_settings_prot_otp,
+    action_show_ch_settings_trigger,
+    action_show_ch_settings_lists,
     action_show_ch_settings_adv,
     action_show_ch_settings_adv_lripple,
     action_show_ch_settings_adv_remote,
     action_show_ch_settings_adv_ranges,
     action_show_ch_settings_adv_tracking,
     action_show_ch_settings_adv_coupling,
+    action_show_ch_settings_adv_view,
     action_show_ch_settings_info,
     action_show_ch_settings_info_cal,
     action_sys_settings_cal_edit_password,
@@ -837,7 +851,6 @@ ACTION actions[] = {
     action_sys_front_panel_unlock,
     action_sys_settings_sound_toggle,
     action_sys_settings_sound_toggle_click,
-    action_show_ch_settings_adv_view,
     action_ch_settings_adv_view_edit_display_value1,
     action_ch_settings_adv_view_edit_display_value2,
     action_ch_settings_adv_view_swap_display_values,
@@ -847,15 +860,12 @@ ACTION actions[] = {
     action_up_down,
     action_sys_settings_encoder_toggle_confirmation_mode,
     action_turn_display_off,
-    action_show_ch_settings_trigger,
     action_ch_settings_trigger_edit_trigger_mode,
     action_ch_settings_trigger_edit_voltage_trigger_value,
     action_ch_settings_trigger_edit_current_trigger_value,
     action_ch_settings_trigger_edit_list_count,
     action_ch_settings_trigger_toggle_output_state,
     action_ch_settings_trigger_edit_on_list_stop,
-    action_show_ch_settings_lists,
-    action_show_sys_settings_trigger,
     action_channel_lists_previous_page,
     action_channel_lists_next_page,
     action_channel_lists_edit,
@@ -872,7 +882,6 @@ ACTION actions[] = {
     action_channel_enable_output,
     action_trigger_select_source,
     action_trigger_edit_delay,
-    action_trigger_select_polarity,
     action_trigger_toggle_initiate_continuously,
     action_trigger_generate_manual,
     action_trigger_show_general_settings,
@@ -880,7 +889,8 @@ ACTION actions[] = {
     action_reset,
     action_ch_settings_adv_ranges_select_mode,
     action_ch_settings_adv_ranges_toggle_auto_ranging,
-    action_show_sys_settings_serial
+    action_io_pin_toggle_polarity,
+    action_io_pin_select_function
 };
 
 }

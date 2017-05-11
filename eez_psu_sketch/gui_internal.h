@@ -58,7 +58,7 @@ font::Font styleGetFont(const Style *style);
 void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse, bool dimmed = false);
 void fillRect(int x, int y, int w, int h);
 
-void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t currentValue, uint8_t disabledValue, void (*onSet)(uint8_t));
+void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t currentValue, bool (*disabledCallback)(uint8_t value), void (*onSet)(uint8_t));
 
 void infoMessage(data::Value value, void (*ok_callback)() = 0);
 void infoMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);

@@ -391,6 +391,9 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\value.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\io_pins.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -717,6 +720,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_sense.cpp">
       <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\io_pins.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

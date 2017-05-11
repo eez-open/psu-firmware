@@ -89,7 +89,7 @@ void ChSettingsTriggerPage::onTriggerModeSet(uint8_t value) {
 }
 
 void ChSettingsTriggerPage::editTriggerMode() {
-    pushSelectFromEnumPage(data::g_channelTriggerModeEnumDefinition, channel_dispatcher::getVoltageTriggerMode(*g_channel), -1, onTriggerModeSet);
+    pushSelectFromEnumPage(data::g_channelTriggerModeEnumDefinition, channel_dispatcher::getVoltageTriggerMode(*g_channel), 0, onTriggerModeSet);
 }
 
 void ChSettingsTriggerPage::onVoltageTriggerValueSet(float value) {
@@ -152,7 +152,7 @@ void ChSettingsTriggerPage::onTriggerOnListStopSet(uint8_t value) {
 }
 
 void ChSettingsTriggerPage::editTriggerOnListStop() {
-    pushSelectFromEnumPage(data::g_channelTriggerOnListStop, channel_dispatcher::getTriggerOnListStop(*g_channel), -1, onTriggerOnListStopSet);
+    pushSelectFromEnumPage(data::g_channelTriggerOnListStopEnumDefinition, channel_dispatcher::getTriggerOnListStop(*g_channel), 0, onTriggerOnListStopSet);
 }
 
 void ChSettingsTriggerPage::onListCountSet(float value) {
