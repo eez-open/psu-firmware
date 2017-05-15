@@ -178,14 +178,15 @@ void AnalogDigitalConverter::tick(uint32_t tick_usec) {
         start_time = micros();
     }
 #else
-    if (start_reg0 && tick_usec - start_time > ADC_READ_TIME_US) {
-        int16_t adc_data = read();
-        channel.eventAdcData(adc_data);
-
+    if (start_reg0) {
+        if (!digitalRead(channel.convend_pin)) {
+            int16_t adc_data = read();
+            channel.eventAdcData(adc_data);
 #if CONF_DEBUG
-        debug::g_adcCounter.inc();
+            debug::g_adcCounter.inc();
 #endif
-}
+        }
+    }
 #endif
 }
 
