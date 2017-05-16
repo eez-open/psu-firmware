@@ -206,10 +206,6 @@ data::Value SysSettingsEthernetPage::getData(const data::Cursor &cursor, uint8_t
     }
 
 #if OPTION_ETHERNET
-    if (id == DATA_ID_SYS_ETHERNET_STATUS) {
-        return data::Value(ethernet::g_testResult);
-    }
-
     if (id == DATA_ID_SYS_ETHERNET_IP_ADDRESS) {
         return data::Value(ethernet::getIpAddress(), VALUE_TYPE_IP_ADDRESS);
     }

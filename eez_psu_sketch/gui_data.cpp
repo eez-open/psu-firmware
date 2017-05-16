@@ -1089,9 +1089,15 @@ Value get(const Cursor &cursor, uint8_t id) {
         return data::Value(OPTION_ETHERNET);
     }
 
+#if OPTION_ETHERNET
+    if (id == DATA_ID_SYS_ETHERNET_STATUS) {
+        return data::Value(ethernet::g_testResult);
+    }
+
     if (id == DATA_ID_SYS_ETHERNET_IS_CONNECTED) {
         return data::Value(ethernet::isConnected());
     }
+#endif
 
     if (id == DATA_ID_SYS_ENCODER_INSTALLED) {
         return data::Value(OPTION_ENCODER);

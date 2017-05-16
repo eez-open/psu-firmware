@@ -4012,7 +4012,7 @@
               "$eez": false,
               "x": 84,
               "type": "Select",
-              "data": "sys.ethernet.isConnected",
+              "data": "sys.ethernet.installed",
               "y": 0,
               "width": 28,
               "height": 28,
@@ -4020,25 +4020,92 @@
               "widgets": [
                 {
                   "$eez": false,
-                  "type": "Text",
-                  "action": "show_sys_settings_ethernet",
+                  "type": "Rectangle",
+                  "action": "",
                   "x": 0,
                   "y": 0,
                   "width": 28,
                   "height": 28,
-                  "style": "prot_indicator_S",
-                  "text": "\\u0095"
+                  "style": "default_inverse"
                 },
                 {
                   "$eez": false,
-                  "type": "Text",
-                  "action": "show_sys_settings_ethernet",
                   "x": 0,
+                  "type": "Select",
+                  "data": "sys.ethernet.status",
                   "y": 0,
                   "width": 28,
                   "height": 28,
-                  "style": "prot_indicator_set_S",
-                  "text": "\\u0095"
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "show_sys_settings_ethernet",
+                      "x": 0,
+                      "y": 0,
+                      "width": 28,
+                      "height": 28,
+                      "style": "prot_indicator_trip_S",
+                      "text": "\\u0095"
+                    },
+                    {
+                      "$eez": false,
+                      "x": 0,
+                      "type": "Select",
+                      "data": "sys.ethernet.isConnected",
+                      "y": 0,
+                      "width": 28,
+                      "height": 28,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "action": "show_sys_settings_ethernet",
+                          "x": 0,
+                          "y": 0,
+                          "width": 28,
+                          "height": 28,
+                          "style": "prot_indicator_S",
+                          "text": "\\u0095"
+                        },
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "action": "show_sys_settings_ethernet",
+                          "x": 0,
+                          "y": 0,
+                          "width": 28,
+                          "height": 28,
+                          "style": "prot_indicator_set_S",
+                          "text": "\\u0095"
+                        }
+                      ]
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "show_sys_settings_ethernet",
+                      "x": 0,
+                      "y": 0,
+                      "width": 28,
+                      "height": 28,
+                      "style": "prot_indicator_S",
+                      "text": "\\u0095"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "show_sys_settings_ethernet",
+                      "x": 0,
+                      "y": 0,
+                      "width": 28,
+                      "height": 28,
+                      "style": "prot_indicator_trip_S",
+                      "text": "\\u0095"
+                    }
+                  ]
                 }
               ]
             },
