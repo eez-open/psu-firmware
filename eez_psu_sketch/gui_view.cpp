@@ -1233,13 +1233,15 @@ void drawYTGraphWidget(const WidgetCursor &widgetCursor) {
     float min2 = data::getMin(widgetCursor.cursor, ytGraphWidget->y2Data).getFloat();
     float max2 = data::getLimit(widgetCursor.cursor, ytGraphWidget->y2Data).getFloat();
 
+    int iChannel = widgetCursor.cursor.i >= 0 ? widgetCursor.cursor.i : 0;
+
     int startPosition;
     int endPosition;
     if (refresh) {
         startPosition = 0;
         endPosition = numHistoryValues;
     } else {
-        startPosition = lastPosition[widgetCursor.cursor.i];
+        startPosition = lastPosition[iChannel];
         if (startPosition == currentHistoryValuePosition) {
             return;
         }
@@ -1293,7 +1295,7 @@ void drawYTGraphWidget(const WidgetCursor &widgetCursor) {
         lcd::lcd.fillRect(x, widgetCursor.y, x2, widgetCursor.y + (int)widget->h - 1);
     }
 
-    lastPosition[widgetCursor.cursor.i] = currentHistoryValuePosition;
+    lastPosition[iChannel] = currentHistoryValuePosition;
 }
 
 void drawUpDownWidget(const WidgetCursor &widgetCursor) {

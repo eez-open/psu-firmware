@@ -20529,6 +20529,15 @@
             },
             {
               "$eez": false,
+              "type": "Rectangle",
+              "x": 135,
+              "y": 44,
+              "width": 116,
+              "height": 84,
+              "style": "default_inverse"
+            },
+            {
+              "$eez": false,
               "type": "List",
               "data": "ioPins",
               "x": 77,
