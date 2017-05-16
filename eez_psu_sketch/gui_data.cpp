@@ -590,9 +590,9 @@ int Value::getInt() const {
 ////////////////////////////////////////////////////////////////////////////////
 
 static bool isDisplayValue(const Cursor &cursor, uint8_t id, DisplayValue displayValue) {
-    return cursor.i >= 0 && 
-        (id == DATA_ID_CHANNEL_DISPLAY_VALUE1 && Channel::get(cursor.i).flags.displayValue1 == displayValue ||
-         id == DATA_ID_CHANNEL_DISPLAY_VALUE2 && Channel::get(cursor.i).flags.displayValue2 == displayValue);
+    int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
+    return id == DATA_ID_CHANNEL_DISPLAY_VALUE1 && Channel::get(iChannel).flags.displayValue1 == displayValue ||
+        id == DATA_ID_CHANNEL_DISPLAY_VALUE2 && Channel::get(iChannel).flags.displayValue2 == displayValue;
 }
 
 static bool isUMonData(const Cursor &cursor, uint8_t id) {
@@ -657,12 +657,14 @@ float *getFloatList(uint8_t id) {
 }
 
 Value getMin(const Cursor &cursor, uint8_t id) {
+    int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
+
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_EDIT || isUMonData(cursor, id)) {
-        return Value(channel_dispatcher::getUMin(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT, cursor.i);
+        return Value(channel_dispatcher::getUMin(Channel::get(iChannel)), VALUE_TYPE_FLOAT_VOLT, iChannel);
     } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_EDIT || isIMonData(cursor, id)) {
-        return Value(channel_dispatcher::getIMin(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER, cursor.i);
+        return Value(channel_dispatcher::getIMin(Channel::get(iChannel)), VALUE_TYPE_FLOAT_AMPER, iChannel);
     } else if (isPMonData(cursor, id)) {
-        return Value(channel_dispatcher::getPowerMinLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT, cursor.i);
+        return Value(channel_dispatcher::getPowerMinLimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_WATT, iChannel);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMin();
     }
@@ -679,12 +681,14 @@ Value getMin(const Cursor &cursor, uint8_t id) {
 }
 
 Value getMax(const Cursor &cursor, uint8_t id) {
+    int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
+
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_EDIT || isUMonData(cursor, id)) {
-        return Value(channel_dispatcher::getUMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT, cursor.i);
+        return Value(channel_dispatcher::getUMax(Channel::get(iChannel)), VALUE_TYPE_FLOAT_VOLT, iChannel);
     } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_EDIT || isIMonData(cursor, id)) {
-        return Value(channel_dispatcher::getIMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER, cursor.i);
+        return Value(channel_dispatcher::getIMax(Channel::get(iChannel)), VALUE_TYPE_FLOAT_AMPER, iChannel);
     } else if (isPMonData(cursor, id)) {
-        return Value(channel_dispatcher::getPowerMaxLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT, cursor.i);
+        return Value(channel_dispatcher::getPowerMaxLimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_WATT, iChannel);
     } else if (id == DATA_ID_EDIT_VALUE) {
         return edit_mode::getMax();
     }
@@ -713,12 +717,14 @@ Value getDef(const Cursor &cursor, uint8_t id) {
 }
 
 Value getLimit(const Cursor &cursor, uint8_t id) {
+    int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
+
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_EDIT || isUMonData(cursor, id)) {
-        return Value(channel_dispatcher::getULimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT, cursor.i);
+        return Value(channel_dispatcher::getULimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_VOLT, iChannel);
     } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_EDIT || isIMonData(cursor, id)) {
-        return Value(channel_dispatcher::getILimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER, cursor.i);
+        return Value(channel_dispatcher::getILimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_AMPER, iChannel);
     } else if (isPMonData(cursor, id)) {
-        return Value(channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT, cursor.i);
+        return Value(channel_dispatcher::getPowerLimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_WATT, iChannel);
     }
 
     return Value();
@@ -799,7 +805,7 @@ Value get(const Cursor &cursor, uint8_t id) {
         return data::Value(channel_dispatcher::isSeries() ? 1 : 0);
     }
 
-    int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : -1);
+    int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
     
     if (iChannel >= 0) {
         Channel &channel = Channel::get(iChannel);
@@ -951,7 +957,7 @@ Value get(const Cursor &cursor, uint8_t id) {
                 return Value(opp);
             }
         
-            if (id == DATA_ID_OTP) {
+            if (id == DATA_ID_OTP_CH) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
                 return 0;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
@@ -1035,7 +1041,7 @@ Value get(const Cursor &cursor, uint8_t id) {
         }
     }
 
-    if (id == DATA_ID_OTP) {
+    if (id == DATA_ID_OTP_AUX) {
         temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::AUX];
         if (!tempSensor.prot_conf.state) return 0;
         else if (!tempSensor.isTripped()) return 1;
@@ -1155,42 +1161,44 @@ Value get(const Cursor &cursor, uint8_t id) {
 }
 
 bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
+    int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
+
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_EDIT) {
-        if (!util::between(value.getFloat(), channel_dispatcher::getUMin(Channel::get(cursor.i)), channel_dispatcher::getUMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT, cursor.i)) {
+        if (!util::between(value.getFloat(), channel_dispatcher::getUMin(Channel::get(iChannel)), channel_dispatcher::getUMax(Channel::get(iChannel)), VALUE_TYPE_FLOAT_VOLT, iChannel)) {
             if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
             return false;
         }
         
-        if (util::greater(value.getFloat(), channel_dispatcher::getULimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT, cursor.i)) {
+        if (util::greater(value.getFloat(), channel_dispatcher::getULimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_VOLT, iChannel)) {
             if (error) *error = SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
             return false;
         }
         
-        if (util::greater(value.getFloat() * channel_dispatcher::getISet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_WATT, cursor.i)) {
+        if (util::greater(value.getFloat() * channel_dispatcher::getISet(Channel::get(iChannel)), channel_dispatcher::getPowerLimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_WATT, iChannel)) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
         
-        channel_dispatcher::setVoltage(Channel::get(cursor.i), value.getFloat());
+        channel_dispatcher::setVoltage(Channel::get(iChannel), value.getFloat());
 
         return true;
     } else if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_EDIT) {
-        if (!util::between(value.getFloat(), channel_dispatcher::getIMin(Channel::get(cursor.i)), channel_dispatcher::getIMax(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER, cursor.i)) {
+        if (!util::between(value.getFloat(), channel_dispatcher::getIMin(Channel::get(iChannel)), channel_dispatcher::getIMax(Channel::get(iChannel)), VALUE_TYPE_FLOAT_AMPER, iChannel)) {
             if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
             return false;
         }
         
-        if (util::greater(value.getFloat(), channel_dispatcher::getILimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_AMPER, cursor.i)) {
+        if (util::greater(value.getFloat(), channel_dispatcher::getILimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_AMPER, iChannel)) {
             if (error) *error = SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
             return false;
         }
         
-        if (util::greater(value.getFloat() * channel_dispatcher::getUSet(Channel::get(cursor.i)), channel_dispatcher::getPowerLimit(Channel::get(cursor.i)), VALUE_TYPE_FLOAT_VOLT, cursor.i)) {
+        if (util::greater(value.getFloat() * channel_dispatcher::getUSet(Channel::get(iChannel)), channel_dispatcher::getPowerLimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_VOLT, iChannel)) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
         
-        channel_dispatcher::setCurrent(Channel::get(cursor.i), value.getFloat());
+        channel_dispatcher::setCurrent(Channel::get(iChannel), value.getFloat());
 
         return true;
     } else if (id == DATA_ID_ALERT_MESSAGE) {
@@ -1221,20 +1229,22 @@ int getNumHistoryValues(uint8_t id) {
 }
 
 int getCurrentHistoryValuePosition(const Cursor &cursor, uint8_t id) {
-    return Channel::get(cursor.i).getCurrentHistoryValuePosition();
+    int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
+    return Channel::get(iChannel).getCurrentHistoryValuePosition();
 }
 
 Value getHistoryValue(const Cursor &cursor, uint8_t id, int position) {
+    int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
     if (isUMonData(cursor, id)) {
-        return Value(channel_dispatcher::getUMonHistory(Channel::get(cursor.i), position), VALUE_TYPE_FLOAT_VOLT, cursor.i);
+        return Value(channel_dispatcher::getUMonHistory(Channel::get(iChannel), position), VALUE_TYPE_FLOAT_VOLT, iChannel);
     } else if (isIMonData(cursor, id)) {
-        return Value(channel_dispatcher::getIMonHistory(Channel::get(cursor.i), position), VALUE_TYPE_FLOAT_AMPER, cursor.i);
+        return Value(channel_dispatcher::getIMonHistory(Channel::get(iChannel), position), VALUE_TYPE_FLOAT_AMPER, iChannel);
     } else if (isPMonData(cursor, id)) {
         float pMon = util::multiply(
-            channel_dispatcher::getUMonHistory(Channel::get(cursor.i), position),
-            channel_dispatcher::getIMonHistory(Channel::get(cursor.i), position),
+            channel_dispatcher::getUMonHistory(Channel::get(iChannel), position),
+            channel_dispatcher::getIMonHistory(Channel::get(iChannel), position),
             getPrecision(VALUE_TYPE_FLOAT_WATT));
-        return Value(pMon, VALUE_TYPE_FLOAT_WATT, cursor.i);
+        return Value(pMon, VALUE_TYPE_FLOAT_WATT, iChannel);
     }
     return Value();
 }
@@ -1257,14 +1267,7 @@ bool isBlinking(const Cursor &cursor, uint8_t id) {
 }
 
 Value getEditValue(const Cursor &cursor, uint8_t id) {
-    int iChannel;
-    if (cursor.i >= 0) {
-        iChannel = cursor.i;
-    } else if (g_channel) {
-        iChannel = g_channel->index - 1;
-    } else {
-        iChannel = 0;
-    }
+    int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
 
     Channel &channel = Channel::get(iChannel);
 

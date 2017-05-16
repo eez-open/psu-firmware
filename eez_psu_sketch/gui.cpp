@@ -548,7 +548,8 @@ void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callb
         void (*action)() = 0;
         const char *actionLabel PROGMEM = 0;
 
-        Channel& channel = Channel::get(cursor.i);
+        int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
+        Channel& channel = Channel::get(iChannel);
 
         if (value.getScpiError() == SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED) {
             if (channel_dispatcher::getULimit(channel) < channel_dispatcher::getUMaxLimit(channel)) {
@@ -576,7 +577,7 @@ void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callb
         if (action) {
             data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE_2, actionLabel, 0);
             g_errorMessageAction = action;
-            g_errorMessageActionParam = cursor.i;
+            g_errorMessageActionParam = iChannel;
             errorPageId = PAGE_ID_ERROR_ALERT_WITH_ACTION;
         }
     }
@@ -796,15 +797,17 @@ bool wasFocusWidget(const WidgetCursor &widgetCursor) {
 }
 
 bool isFocusWidget(const WidgetCursor &widgetCursor) {
+    int iChannel = widgetCursor.cursor.i >= 0 ? widgetCursor.cursor.i : (g_channel ? (g_channel->index - 1) : 0);
+
     if (isPageActiveOrOnStack(PAGE_ID_CH_SETTINGS_LISTS)) {
         return ((ChSettingsListsPage *)g_activePage)->isFocusWidget(widgetCursor);
-    } else if (channel_dispatcher::getVoltageTriggerMode(Channel::get(widgetCursor.cursor.i)) != TRIGGER_MODE_FIXED && !trigger::isIdle()) {
+    } else if (channel_dispatcher::getVoltageTriggerMode(Channel::get(iChannel)) != TRIGGER_MODE_FIXED && !trigger::isIdle()) {
         return false;
     } else if (psu::calibration::isEnabled()) {
         return false;
     } else {
         DECL_WIDGET(widget, widgetCursor.widgetOffset);
-        return widgetCursor.cursor == g_focusCursor && widget->data == g_focusDataId;
+        return (widgetCursor.cursor == -1 || widgetCursor.cursor == g_focusCursor) && widget->data == g_focusDataId;
     }
 }
 
@@ -813,7 +816,8 @@ bool isFocusChanged() {
 }
 
 bool isEnabledFocusCursor(data::Cursor& cursor, uint8_t dataId) {
-    Channel &channel = Channel::get(cursor.i);
+    int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
+    Channel &channel = Channel::get(iChannel);
     return channel.isOk() && 
         (channel_dispatcher::getVoltageTriggerMode(channel) == TRIGGER_MODE_FIXED || trigger::isIdle());
 }
@@ -827,7 +831,9 @@ void moveToNextFocusCursor() {
         if (newDataId == DATA_ID_CHANNEL_U_EDIT) {
             newDataId = DATA_ID_CHANNEL_I_EDIT;
         } else {
-            newCursor.i = (newCursor.i + 1) % CH_NUM;
+            if (!channel_dispatcher::isCoupled() && !channel_dispatcher::isTracked()) {
+                newCursor.i = (newCursor.i + 1) % CH_NUM;
+            }
             newDataId = DATA_ID_CHANNEL_U_EDIT;
         }
 
@@ -996,7 +1002,7 @@ void onEncoder(uint32_t tickCount, int counter, bool clicked) {
 static WidgetCursor g_toggleOutputWidgetCursor;
 
 void channelToggleOutput() {
-    Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i);
+    Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i >= 0 ? g_foundWidgetAtDown.cursor.i : 0);
     if (channel_dispatcher::isTripped(channel)) {
         errorMessageP(PSTR("Channel is tripped!"));
     } else {
@@ -1021,7 +1027,7 @@ void channelToggleOutput() {
 
 void channelInitiateTrigger() {
     popPage();
-    Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i);
+    Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i >= 0 ? g_toggleOutputWidgetCursor.cursor.i : 0);
     int err = trigger::initiate();
     if (err != SCPI_RES_OK) {
         errorMessage(g_toggleOutputWidgetCursor.cursor, data::Value::ScpiErrorText(err));
@@ -1030,7 +1036,7 @@ void channelInitiateTrigger() {
 
 void channelSetToFixed() {
     popPage();
-    Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i);
+    Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i >= 0 ? g_toggleOutputWidgetCursor.cursor.i : 0);
     if (channel_dispatcher::getVoltageTriggerMode(channel) != TRIGGER_MODE_FIXED) {
         channel_dispatcher::setVoltageTriggerMode(channel, TRIGGER_MODE_FIXED);
     }
@@ -1042,7 +1048,7 @@ void channelSetToFixed() {
 
 void channelEnableOutput() {
     popPage();
-    Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i);
+    Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i >= 0 ? g_toggleOutputWidgetCursor.cursor.i : 0);
     channel_dispatcher::outputEnable(channel, true);
 }
 
