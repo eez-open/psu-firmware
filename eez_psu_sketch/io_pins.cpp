@@ -54,6 +54,20 @@ uint8_t isOutputEnabled() {
 }
 
 void tick(uint32_t tickCount) {
+    // execute input pins function
+    persist_conf::IOPin &inputPin = persist_conf::devConf2.ioPins[0];
+    if (inputPin.function == io_pins::FUNCTION_INHIBIT) {
+        int value = digitalRead(EXT_TRIG);
+        if (value && inputPin.polarity == io_pins::POLARITY_POSITIVE || !value && inputPin.polarity == io_pins::POLARITY_NEGATIVE) {
+            for (int i = 0; i < CH_NUM; ++i) {
+                if (Channel::get(i).isOutputEnabled()) {
+                    Channel::get(i).outputEnable(false);
+                }
+            }
+        }
+    }
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     // end trigger output pulse
     if (g_lastState.toutputPulse) {
         int32_t diff = tickCount - g_toutputPulseStartTickCount;
@@ -69,20 +83,6 @@ void tick(uint32_t tickCount) {
         }
     }
 
-    // execute input pins function
-    persist_conf::IOPin &inputPin = persist_conf::devConf2.ioPins[0];
-    if (inputPin.function == io_pins::FUNCTION_INHIBIT) {
-        int value = digitalRead(EXT_TRIG);
-        if (value && inputPin.polarity == io_pins::POLARITY_POSITIVE || !value && inputPin.polarity == io_pins::POLARITY_NEGATIVE) {
-            for (int i = 0; i < CH_NUM; ++i) {
-                if (Channel::get(i).isOutputEnabled()) {
-                    Channel::get(i).outputEnable(false);
-                }
-            }
-        }
-    }
-
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     // execute output pins function
     for (int i = 1; i < 3; ++i) {
         persist_conf::IOPin &outputPin = persist_conf::devConf2.ioPins[i];
@@ -111,6 +111,7 @@ void tick(uint32_t tickCount) {
 }
 
 void onTrigger() {
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     // start trigger output pulse
     for (int i = 1; i < 3; ++i) {
         persist_conf::IOPin &outputPin = persist_conf::devConf2.ioPins[i];
@@ -120,6 +121,7 @@ void onTrigger() {
             g_toutputPulseStartTickCount = micros();
         }
     }
+#endif
 }
 
 }
