@@ -242,7 +242,7 @@ void AnalogDigitalConverter::onInterrupt() {
     channel.eventAdcData(adc_data);
 
 #if CONF_DEBUG
-    debug::adcReadTick(micros());
+    debug::g_adcCounter.inc();
 #endif
 
     g_insideInterruptHandler = false;
