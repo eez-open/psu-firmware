@@ -192,6 +192,8 @@ void tick(uint32_t tick_usec) {
         return;
     }
 
+    Ethernet.maintain();
+
     SPI_beginTransaction(ETHERNET_SPI);
 
     if (g_isConnected) {

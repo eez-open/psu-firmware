@@ -33,6 +33,7 @@ public:
 class SimulatorEthernet {
 public:
     bool begin(uint8_t *mac);
+    uint8_t maintain();
 
     IPAddress localIP();
     IPAddress subnetMask();

@@ -41,6 +41,10 @@ bool SimulatorEthernet::begin(uint8_t *mac) {
     return true;
 }
 
+uint8_t SimulatorEthernet::maintain() {
+    return 0;
+}
+
 IPAddress SimulatorEthernet::localIP() {
     return IPAddress();
 }
