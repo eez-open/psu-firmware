@@ -83,7 +83,45 @@ void bp_switch2(uint16_t maskOn, uint16_t maskOff) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void init() {
+    flashAll();
     switchStandby(true);
+}
+
+void flashAll() {
+    uint16_t savedConf = g_lastConf;
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+    set(
+        (1 << BP_LED_OUT1_PLUS) |
+        (1 << BP_LED_SENSE1_PLUS) |
+        (1 << BP_LED_SENSE1_MINUS) |
+        (1 << BP_LED_OUT1_MINUS) |
+        (1 << BP_LED_OUT2_PLUS) |
+        (1 << BP_LED_SENSE2_PLUS) |
+        (1 << BP_LED_SENSE2_MINUS) |
+        (1 << BP_LED_OUT2_MINUS) |
+        (1 << BP_STANDBY)
+    );
+#elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+    set(
+        (1 << BP_LED_OUT1) |
+        (1 << BP_LED_OUT1_RED) |
+        (1 << BP_LED_SENSE1) |
+        (1 << BP_LED_OUT2) |
+        (1 << BP_LED_SENSE2) |
+        (1 << BP_LED_CV1) |
+        (1 << BP_LED_CC1) |
+        (1 << BP_LED_CV2) |
+        (1 << BP_LED_CC2) |
+        (1 << BP_LED_PROG1) |
+        (1 << BP_LED_PROG2) |
+        (1 << BP_STANDBY)
+    );
+#endif
+
+    delay(CONF_BP_TEST_FLASH_DURATION_MS);
+
+    set(savedConf);
 }
 
 bool isStandbyOn() {

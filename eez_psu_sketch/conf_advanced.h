@@ -284,3 +284,6 @@
 
 /// Width of the trigger output pulse, in milliseconds.
 #define CONF_TOUTPUT_PULSE_WIDTH_MS 100
+
+/// Duration of BP LED's flash during boot and test
+#define CONF_BP_TEST_FLASH_DURATION_MS 500

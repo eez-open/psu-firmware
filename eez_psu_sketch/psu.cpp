@@ -207,6 +207,8 @@ bool test() {
 	fan::test_start();
 #endif
 
+    bp::flashAll();
+
     testResult &= testShield();
     testResult &= testChannels();
 

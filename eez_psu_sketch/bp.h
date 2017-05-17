@@ -81,6 +81,8 @@ extern psu::TestResult g_testResult;
 
 void init();
 
+void flashAll();
+
 bool isStandbyOn();
 void switchStandby(bool on);
 void switchOutput(Channel *channel, bool on);
