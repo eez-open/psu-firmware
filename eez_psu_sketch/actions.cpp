@@ -256,6 +256,7 @@ void action_show_ch_settings_prot() {
 }
 
 void action_show_ch_settings_prot_clear() {
+    gui::selectChannel();
     setPage(PAGE_ID_CH_SETTINGS_PROT_CLEAR);
 }
 

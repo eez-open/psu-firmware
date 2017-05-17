@@ -379,7 +379,7 @@
       "$eez": false,
       "name": "show_ch_settings_prot_clear",
       "implementationType": "native",
-      "implementation": "setPage(PAGE_ID_CH_SETTINGS_PROT_CLEAR);"
+      "implementation": "gui::selectChannel();\nsetPage(PAGE_ID_CH_SETTINGS_PROT_CLEAR);"
     },
     {
       "$eez": false,
@@ -4054,7 +4054,7 @@
                       "y": 0,
                       "width": 28,
                       "height": 28,
-                      "style": "prot_indicator_trip_S",
+                      "style": "button_indicator_error",
                       "text": "\\u0095"
                     },
                     {
@@ -4075,7 +4075,7 @@
                           "y": 0,
                           "width": 28,
                           "height": 28,
-                          "style": "prot_indicator_S",
+                          "style": "button_indicator_off",
                           "text": "\\u0095"
                         },
                         {
@@ -4086,7 +4086,7 @@
                           "y": 0,
                           "width": 28,
                           "height": 28,
-                          "style": "prot_indicator_set_S",
+                          "style": "button_indicator_on",
                           "text": "\\u0095"
                         }
                       ]
@@ -4109,7 +4109,7 @@
                       "y": 0,
                       "width": 28,
                       "height": 28,
-                      "style": "prot_indicator_trip_S",
+                      "style": "button_indicator_error",
                       "text": "\\u0095"
                     }
                   ]
@@ -4353,7 +4353,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_ocp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -4398,7 +4398,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_ovp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -4443,7 +4443,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_otp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -4488,7 +4488,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_opp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -5068,7 +5068,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_ocp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -5113,7 +5113,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_ovp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -5158,7 +5158,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_otp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -5203,7 +5203,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_opp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -5527,7 +5527,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_ocp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -5572,7 +5572,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_ovp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -5617,7 +5617,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_otp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -5662,7 +5662,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_opp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -6170,7 +6170,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_ocp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -6215,7 +6215,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_ovp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -6260,7 +6260,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_otp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -6305,7 +6305,7 @@
                                   {
                                     "$eez": false,
                                     "type": "Text",
-                                    "action": "show_ch_settings_prot_opp",
+                                    "action": "show_ch_settings_prot_clear",
                                     "x": 0,
                                     "y": 0,
                                     "width": 48,
@@ -6892,7 +6892,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_ocp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -6937,7 +6937,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_ovp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -6982,7 +6982,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_otp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -7027,7 +7027,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_opp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -7165,7 +7165,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_ocp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -7210,7 +7210,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_ovp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -7255,7 +7255,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_otp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -7300,7 +7300,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_opp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -8123,7 +8123,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_ocp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -8168,7 +8168,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_ovp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -8213,7 +8213,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_otp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -8258,7 +8258,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_opp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -8407,7 +8407,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_ocp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -8452,7 +8452,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_ovp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -8497,7 +8497,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_otp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -8542,7 +8542,7 @@
                                 {
                                   "$eez": false,
                                   "type": "Text",
-                                  "action": "show_ch_settings_prot_opp",
+                                  "action": "show_ch_settings_prot_clear",
                                   "x": 0,
                                   "y": 0,
                                   "width": 48,
@@ -26715,7 +26715,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_ocp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 48,
@@ -26760,7 +26760,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_ovp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 48,
@@ -26805,7 +26805,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_otp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 48,
@@ -26850,7 +26850,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_opp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 48,
@@ -27567,7 +27567,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_ocp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 45,
@@ -27612,7 +27612,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_ovp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 45,
@@ -27657,7 +27657,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_otp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 45,
@@ -27702,7 +27702,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_opp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 45,
@@ -27971,7 +27971,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_ocp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 48,
@@ -28016,7 +28016,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_ovp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 48,
@@ -28061,7 +28061,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_otp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 48,
@@ -28106,7 +28106,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_opp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 48,
@@ -28743,7 +28743,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_ocp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 45,
@@ -28788,7 +28788,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_ovp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 45,
@@ -28833,7 +28833,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_otp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 45,
@@ -28878,7 +28878,7 @@
               {
                 "$eez": false,
                 "type": "Text",
-                "action": "show_ch_settings_prot_opp",
+                "action": "show_ch_settings_prot_clear",
                 "x": 0,
                 "y": 0,
                 "width": 45,
@@ -30038,6 +30038,46 @@
         "name": "text_message",
         "inheritFrom": "default_S",
         "backgroundColor": "#008080"
+      },
+      {
+        "$eez": false,
+        "name": "button_indicator_off",
+        "inheritFrom": "default",
+        "font": "small",
+        "alignHorizontal": "center",
+        "alignVertical": "center",
+        "color": "#ffff40",
+        "borderSize": 0,
+        "paddingHorizontal": 0,
+        "paddingVertical": 0
+      },
+      {
+        "$eez": false,
+        "name": "button_indicator_on",
+        "inheritFrom": "default",
+        "font": "small",
+        "alignHorizontal": "center",
+        "alignVertical": "center",
+        "color": "#ffff40",
+        "backgroundColor": "#00ff40",
+        "borderSize": 0,
+        "borderColor": "#D3D3D3",
+        "paddingHorizontal": 0,
+        "paddingVertical": 0
+      },
+      {
+        "$eez": false,
+        "name": "button_indicator_error",
+        "inheritFrom": "default",
+        "font": "small",
+        "alignHorizontal": "center",
+        "alignVertical": "center",
+        "color": "#ffff40",
+        "backgroundColor": "#ff0000",
+        "borderSize": 0,
+        "borderColor": "#D3D3D3",
+        "paddingHorizontal": 0,
+        "paddingVertical": 0
       }
     ],
     "fonts": [
