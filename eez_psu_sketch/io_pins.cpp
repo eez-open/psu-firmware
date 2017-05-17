@@ -91,19 +91,23 @@ void tick(uint32_t tickCount) {
             uint8_t tripped = isTripped();
             if (g_lastState.tripped != tripped) {
                 g_lastState.tripped = tripped;
-                digitalWrite(i == 1 ? DOUT : DOUT2, 
-                    tripped && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
+                int pin = i == 1 ? DOUT : DOUT2;
+                int state = tripped && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
                     !tripped && outputPin.polarity == io_pins::POLARITY_NEGATIVE
-                    ? 1 : 0);
+                    ? 1 : 0;
+                digitalWrite(pin, state);
+                DebugTraceF("FUNCTION_FAULT %d %d", pin, state);
             }
         } else if (outputPin.function == io_pins::FUNCTION_ON_COUPLE) {
             uint8_t outputEnabled = isOutputEnabled();
             if (g_lastState.outputEnabled != outputEnabled) {
                 g_lastState.outputEnabled = outputEnabled;
-                digitalWrite(i == 1 ? DOUT : DOUT2, 
-                    outputEnabled && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
+                int pin = i == 1 ? DOUT : DOUT2;
+                int state = outputEnabled && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
                     !outputEnabled && outputPin.polarity == io_pins::POLARITY_NEGATIVE
-                    ? 1 : 0);
+                    ? 1 : 0; 
+                digitalWrite(pin, state);
+                DebugTraceF("FUNCTION_ON_COUPLE %d %d", pin, state);
             }
         }
     }
