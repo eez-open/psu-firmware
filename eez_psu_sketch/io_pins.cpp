@@ -83,28 +83,50 @@ void tick(uint32_t tickCount) {
         }
     }
 
+    enum {
+        UNKNOWN,
+        UNCHANGED,
+        CHANGED
+    } trippedState = UNKNOWN, outputEnabledState = UNKNOWN;
+
     // execute output pins function
     for (int i = 1; i < 3; ++i) {
         persist_conf::IOPin &outputPin = persist_conf::devConf2.ioPins[i];
 
         if (outputPin.function == io_pins::FUNCTION_FAULT) {
-            uint8_t tripped = isTripped();
-            if (g_lastState.tripped != tripped) {
-                g_lastState.tripped = tripped;
+            if (trippedState == UNKNOWN) {
+                uint8_t tripped = isTripped();
+                if (g_lastState.tripped != tripped) {
+                    g_lastState.tripped = tripped;
+                    trippedState = CHANGED;
+                } else {
+                    trippedState = UNCHANGED;
+                }
+            }
+
+            if (trippedState == CHANGED) {
                 int pin = i == 1 ? DOUT : DOUT2;
-                int state = tripped && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
-                    !tripped && outputPin.polarity == io_pins::POLARITY_NEGATIVE
+                int state = g_lastState.tripped && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
+                    !g_lastState.tripped && outputPin.polarity == io_pins::POLARITY_NEGATIVE
                     ? 1 : 0;
                 digitalWrite(pin, state);
                 DebugTraceF("FUNCTION_FAULT %d %d", pin, state);
             }
         } else if (outputPin.function == io_pins::FUNCTION_ON_COUPLE) {
-            uint8_t outputEnabled = isOutputEnabled();
-            if (g_lastState.outputEnabled != outputEnabled) {
-                g_lastState.outputEnabled = outputEnabled;
+            if (outputEnabledState == UNKNOWN) {
+                uint8_t outputEnabled = isOutputEnabled();
+                if (g_lastState.outputEnabled != outputEnabled) {
+                    g_lastState.outputEnabled = outputEnabled;
+                    outputEnabledState = CHANGED;
+                } else {
+                    outputEnabledState = UNCHANGED;
+                }
+            }
+
+            if (outputEnabledState == CHANGED) {
                 int pin = i == 1 ? DOUT : DOUT2;
-                int state = outputEnabled && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
-                    !outputEnabled && outputPin.polarity == io_pins::POLARITY_NEGATIVE
+                int state = g_lastState.outputEnabled && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
+                    !g_lastState.outputEnabled && outputPin.polarity == io_pins::POLARITY_NEGATIVE
                     ? 1 : 0; 
                 digitalWrite(pin, state);
                 DebugTraceF("FUNCTION_ON_COUPLE %d %d", pin, state);
