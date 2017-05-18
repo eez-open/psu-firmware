@@ -11846,6 +11846,85 @@
       },
       {
         "$eez": false,
+        "name": "error_long_alert",
+        "description": "Error message",
+        "portrait": {
+          "$eez": false,
+          "x": 0,
+          "y": 104,
+          "width": 240,
+          "height": 112,
+          "style": "error_alert",
+          "widgets": [
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "yes",
+              "x": 90,
+              "y": 72,
+              "width": 60,
+              "height": 32,
+              "style": "default_active_S",
+              "text": "OK"
+            },
+            {
+              "$eez": false,
+              "type": "MultilineText",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 64,
+              "style": "error_alert",
+              "text": "Multiline text"
+            }
+          ]
+        },
+        "landscape": {
+          "$eez": false,
+          "x": 20,
+          "y": 64,
+          "width": 280,
+          "height": 112,
+          "style": "error_alert",
+          "widgets": [
+            {
+              "$eez": false,
+              "type": "Text",
+              "data": "alert_message",
+              "x": 0,
+              "y": 8,
+              "width": 280,
+              "height": 28,
+              "style": "error_alert",
+              "text": ""
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "data": "alert_message_2",
+              "x": 0,
+              "y": 36,
+              "width": 280,
+              "height": 28,
+              "style": "error_alert",
+              "text": ""
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "ok",
+              "x": 110,
+              "y": 72,
+              "width": 60,
+              "height": 32,
+              "style": "error_alert_button",
+              "text": "OK"
+            }
+          ]
+        }
+      },
+      {
+        "$eez": false,
         "name": "error_alert_with_action",
         "description": "Error message",
         "portrait": {

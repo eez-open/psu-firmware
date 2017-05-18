@@ -71,6 +71,9 @@ void toastMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, c
 void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callback)() = 0);
 void errorMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);
 
+void longErrorMessage(data::Value value1, data::Value value2, void (*ok_callback)() = 0);
+void longErrorMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, void (*ok_callback)() = 0);
+
 void yesNoDialog(int yesNoPageId, const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());
 void areYouSure(void (*yes_callback)());
 void areYouSureWithMessage(const char *message PROGMEM, void (*yes_callback)());

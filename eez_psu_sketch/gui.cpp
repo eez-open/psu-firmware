@@ -452,6 +452,14 @@ void longInfoMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM
     longInfoMessage(data::Value::ProgmemStr(message1), data::Value::ProgmemStr(message2), ok_callback);
 }
 
+void longErrorMessage(data::Value value1, data::Value value2, void (*ok_callback)()) {
+    longAlertMessage(PAGE_ID_ERROR_LONG_ALERT, value1, value2, ok_callback);
+}
+
+void longErrorMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, void (*ok_callback)()) {
+    longErrorMessage(data::Value::ProgmemStr(message1), data::Value::ProgmemStr(message2), ok_callback);
+}
+
 void toastMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, const char *message3 PROGMEM, void (*ok_callback)()) {
     data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE_3, message3, 0);
     longAlertMessage(PAGE_ID_TOAST3_ALERT, message1, message2, ok_callback);
@@ -1455,6 +1463,11 @@ void tick(uint32_t tick_usec) {
             dialogOk();
             return;
         }
+    }
+
+    if (psu::g_rprogAlarm) {
+        psu::g_rprogAlarm = false;
+        longErrorMessage(PSTR("Max. remote prog. voltage exceeded."), PSTR("Please remove it immediately!"));
     }
 
     drawTick();

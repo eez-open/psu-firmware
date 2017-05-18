@@ -80,6 +80,8 @@ static bool g_powerDownOnNextTick;
 
 RLState g_rlState = RL_STATE_LOCAL;
 
+bool g_rprogAlarm = false;
+
 static uint32_t g_mainLoopCounter;
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -114,6 +114,8 @@ enum RLState {
 
 extern RLState g_rlState;
 
+extern bool g_rprogAlarm;
+
 bool isFrontPanelLocked();
 
 }

@@ -359,6 +359,9 @@ void Channel::protectionEnter(ProtectionValue &cpv) {
     int16_t eventId = event_queue::EVENT_ERROR_CH1_OVP_TRIPPED + 3 * (index - 1);
 
     if (IS_OVP_VALUE(this, cpv)) {
+        if (flags.rprogEnabled && util::equal(channel_dispatcher::getUProtectionLevel(*this), channel_dispatcher::getUMax(*this), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+            psu::g_rprogAlarm = true;
+        }
         doRemoteProgrammingEnable(false);
     } else if (IS_OCP_VALUE(this, cpv)) {
         eventId += 1;
