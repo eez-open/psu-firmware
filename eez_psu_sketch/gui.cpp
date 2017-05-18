@@ -819,7 +819,8 @@ bool isEnabledFocusCursor(data::Cursor& cursor, uint8_t dataId) {
     int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
     Channel &channel = Channel::get(iChannel);
     return channel.isOk() && 
-        (channel_dispatcher::getVoltageTriggerMode(channel) == TRIGGER_MODE_FIXED || trigger::isIdle());
+        (channel_dispatcher::getVoltageTriggerMode(channel) == TRIGGER_MODE_FIXED || trigger::isIdle()) &&
+        !(dataId == DATA_ID_CHANNEL_U_EDIT && channel.isRemoteProgrammingEnabled());
 }
 
 void moveToNextFocusCursor() {
