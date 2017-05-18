@@ -110,7 +110,7 @@ void tick(uint32_t tickCount) {
                     !g_lastState.tripped && outputPin.polarity == io_pins::POLARITY_NEGATIVE
                     ? 1 : 0;
                 digitalWrite(pin, state);
-                DebugTraceF("FUNCTION_FAULT %d %d", pin, state);
+                //DebugTraceF("FUNCTION_FAULT %d %d", pin, state);
             }
         } else if (outputPin.function == io_pins::FUNCTION_ON_COUPLE) {
             if (outputEnabledState == UNKNOWN) {
@@ -129,7 +129,7 @@ void tick(uint32_t tickCount) {
                     !g_lastState.outputEnabled && outputPin.polarity == io_pins::POLARITY_NEGATIVE
                     ? 1 : 0; 
                 digitalWrite(pin, state);
-                DebugTraceF("FUNCTION_ON_COUPLE %d %d", pin, state);
+                //DebugTraceF("FUNCTION_ON_COUPLE %d %d", pin, state);
             }
         }
     }
