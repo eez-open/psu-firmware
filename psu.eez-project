@@ -79063,6 +79063,38 @@
           {
             "$eez": false,
             "name": "SYSTem:RWLock"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:SERial:BAUD"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:SERial:BAUD?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:SERial:BITS"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:SERial:BITS?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:SERial:PARity"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:SERial:PARity?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:SERial:SBITs"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:SERial:SBITs?"
           }
         ]
       },
