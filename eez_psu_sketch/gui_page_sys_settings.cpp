@@ -732,7 +732,7 @@ SysSettingsSerialPage::SysSettingsSerialPage() {
 
 data::Value SysSettingsSerialPage::getMin(const data::Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_SERIAL_BAUD) {
-        return 0;
+        return 1;
     }
 
     return data::Value();
@@ -740,7 +740,7 @@ data::Value SysSettingsSerialPage::getMin(const data::Cursor &cursor, uint8_t id
 
 data::Value SysSettingsSerialPage::getMax(const data::Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_SERIAL_BAUD) {
-        return 7;
+        return serial::g_baudsSize;
     }
 
     return data::Value();
@@ -792,7 +792,7 @@ void SysSettingsSerialPage::set() {
         persist_conf::setSerialParity(m_parity);
 
         if (persist_conf::saveDevice2()) {
-            infoMessageP(PSTR("Digital I/O pin settings saved!"), popPage);
+            infoMessageP(PSTR("Serial settings saved!"), popPage);
         }
     }
 }

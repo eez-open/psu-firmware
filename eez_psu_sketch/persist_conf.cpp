@@ -193,6 +193,10 @@ void loadDevice2() {
         initDevice2();
     }
 
+    if (devConf2.serialBaud < 1 || devConf2.serialBaud > serial::g_baudsSize) {
+        devConf2.serialBaud = getIndexFromBaud(SERIAL_SPEED);
+    }
+
 #if OPTION_ENCODER
     if (!devConf2.encoderMovingSpeedDown) {
         devConf2.encoderMovingSpeedDown = encoder::DEFAULT_MOVING_DOWN_SPEED;
@@ -608,16 +612,16 @@ bool setDisplayBrightness(uint8_t displayBrightness) {
 }
 
 int getIndexFromBaud(long baud) {
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < serial::g_baudsSize; ++i) {
         if (serial::g_bauds[i] == baud) {
-            return i;
+            return i + 1;
         }
     }
-    return -1;
+    return 0;
 }
 
 long getBaudFromIndex(int index) {
-    return serial::g_bauds[index];
+    return serial::g_bauds[index - 1];
 }
 
 int getSerialBaudIndex() {

@@ -485,7 +485,7 @@ void Value::toText(char *text, int count) const {
         break;
 
     case VALUE_TYPE_SERIAL_BAUD_INDEX:
-        snprintf_P(text, count-1, PSTR("%ld"), serial::g_bauds[int_]);
+        snprintf_P(text, count-1, PSTR("%ld"), serial::g_bauds[int_ - 1]);
         text[count - 1] = 0;
         break;
 

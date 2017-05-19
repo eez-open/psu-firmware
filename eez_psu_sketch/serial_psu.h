@@ -33,7 +33,8 @@ bool isConnected();
 
 void update();
 
-extern long g_bauds[8];
+extern long g_bauds[];
+extern size_t g_baudsSize;
 
 enum Parity {
     PARITY_NONE,

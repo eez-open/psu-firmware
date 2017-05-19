@@ -758,7 +758,7 @@ scpi_result_t scpi_cmd_systemCommunicateSerialBaud(scpi_t *context) {
     }
 
     int baudIndex = persist_conf::getIndexFromBaud(baud);
-    if (baudIndex == -1) {
+    if (baudIndex == 0) {
         SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
         return SCPI_RES_ERR;
     }

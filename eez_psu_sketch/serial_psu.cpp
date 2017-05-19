@@ -28,7 +28,8 @@ namespace serial {
 
 static bool g_isConnected = false;
 
-long g_bauds[8] = {4800, 7200, 9600, 14400, 19200, 38400, 57600, 115200};
+long g_bauds[] = {4800, 9600, 19200, 38400, 57600, 115200};
+size_t g_baudsSize = sizeof(g_bauds) / sizeof(long);
 
 size_t SCPI_Write(scpi_t *context, const char * data, size_t len) {
     return Serial.write(data, len);
