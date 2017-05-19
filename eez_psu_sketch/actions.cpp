@@ -724,6 +724,10 @@ void action_io_pin_select_function() {
     ((SysSettingsIOPinsPage *)getActivePage())->selectFunction();
 }
 
+void action_serial_select_parity() {
+    ((SysSettingsSerialPage *)getActivePage())->selectParity();
+}
+
 
 ACTION actions[] = {
     0,
@@ -891,7 +895,8 @@ ACTION actions[] = {
     action_ch_settings_adv_ranges_select_mode,
     action_ch_settings_adv_ranges_toggle_auto_ranging,
     action_io_pin_toggle_polarity,
-    action_io_pin_select_function
+    action_io_pin_select_function,
+    action_serial_select_parity
 };
 
 }

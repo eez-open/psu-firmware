@@ -450,6 +450,22 @@ SysSettingsEncoderPage::SysSettingsEncoderPage() {
     origMovingSpeedUp = movingSpeedUp = persist_conf::devConf2.encoderMovingSpeedUp;
 }
 
+data::Value SysSettingsEncoderPage::getMin(const data::Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_SYS_ENCODER_MOVING_DOWN_SPEED || id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
+        return encoder::MIN_MOVING_SPEED;
+    }
+
+    return data::Value();
+}
+
+data::Value SysSettingsEncoderPage::getMax(const data::Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_SYS_ENCODER_MOVING_DOWN_SPEED || id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
+        return encoder::MAX_MOVING_SPEED;
+    }
+
+    return data::Value();
+}
+
 data::Value SysSettingsEncoderPage::getData(const data::Cursor &cursor, uint8_t id) {
 	data::Value value = SetPage::getData(cursor, id);
 	if (value.getType() != VALUE_TYPE_NONE) {
@@ -466,22 +482,6 @@ data::Value SysSettingsEncoderPage::getData(const data::Cursor &cursor, uint8_t 
 
     if (id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
         return data::Value((int)movingSpeedUp);
-    }
-
-    return data::Value();
-}
-
-data::Value SysSettingsEncoderPage::getMin(const data::Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_SYS_ENCODER_MOVING_DOWN_SPEED || id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
-        return encoder::MIN_MOVING_SPEED;
-    }
-
-    return data::Value();
-}
-
-data::Value SysSettingsEncoderPage::getMax(const data::Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_SYS_ENCODER_MOVING_DOWN_SPEED || id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
-        return encoder::MAX_MOVING_SPEED;
     }
 
     return data::Value();
@@ -520,19 +520,6 @@ void SysSettingsEncoderPage::set() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-data::Value SysSettingsDisplayPage::getData(const data::Cursor &cursor, uint8_t id) {
-	data::Value value = Page::getData(cursor, id);
-	if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-    if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
-        return data::Value(persist_conf::devConf2.displayBrightness);
-    }
-
-    return data::Value();
-}
-
 data::Value SysSettingsDisplayPage::getMin(const data::Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
         return DISPLAY_BRIGHTNESS_MIN;
@@ -544,6 +531,19 @@ data::Value SysSettingsDisplayPage::getMin(const data::Cursor &cursor, uint8_t i
 data::Value SysSettingsDisplayPage::getMax(const data::Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
         return DISPLAY_BRIGHTNESS_MAX;
+    }
+
+    return data::Value();
+}
+
+data::Value SysSettingsDisplayPage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = Page::getData(cursor, id);
+	if (value.getType() != VALUE_TYPE_NONE) {
+		return value;
+	}
+
+    if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
+        return data::Value(persist_conf::devConf2.displayBrightness);
     }
 
     return data::Value();
@@ -710,9 +710,84 @@ void SysSettingsIOPinsPage::set() {
             persist_conf::devConf2.ioPins[i].function = m_function[i];
         }
 
-        persist_conf::saveDevice2();
+        if (persist_conf::saveDevice2()) {
+            infoMessageP(PSTR("Digital I/O pin settings saved!"), popPage);
+        }
+    }
+}
 
-        infoMessageP(PSTR("Digital I/O pin settings saved!"), popPage);
+
+////////////////////////////////////////////////////////////////////////////////
+
+SysSettingsSerialPage::SysSettingsSerialPage() {
+    m_baudIndexOrig = m_baudIndex = persist_conf::getSerialBaudIndex();
+    m_parityOrig = m_parity = (serial::Parity)persist_conf::getSerialParity();
+}
+
+data::Value SysSettingsSerialPage::getMin(const data::Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_SERIAL_BAUD) {
+        return 0;
+    }
+
+    return data::Value();
+}
+
+data::Value SysSettingsSerialPage::getMax(const data::Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_SERIAL_BAUD) {
+        return 7;
+    }
+
+    return data::Value();
+}
+
+data::Value SysSettingsSerialPage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = SetPage::getData(cursor, id);
+	if (value.getType() != VALUE_TYPE_NONE) {
+		return value;
+	}
+
+    if (id == DATA_ID_SERIAL_BAUD) {
+		return data::Value((int)m_baudIndex, VALUE_TYPE_SERIAL_BAUD_INDEX);
+	}
+
+	if (id == DATA_ID_SERIAL_PARITY) {
+		return data::Value(m_parity, data::ENUM_DEFINITION_SERIAL_PARITY);
+	}
+
+    return data::Value();
+}
+
+bool SysSettingsSerialPage::setData(const data::Cursor &cursor, uint8_t id, data::Value value) {
+    if (id == DATA_ID_SERIAL_BAUD) {
+        m_baudIndex = (uint8_t)value.getInt();
+        return true;
+    }
+
+    return false;
+}
+
+void SysSettingsSerialPage::onParitySet(uint8_t value) {
+    popPage();
+	SysSettingsSerialPage *page = (SysSettingsSerialPage*)getActivePage();
+    page->m_parity = (serial::Parity)value;
+}
+
+void SysSettingsSerialPage::selectParity() {
+    pushSelectFromEnumPage(data::g_serialParityEnumDefinition, m_parity, 0, onParitySet);
+}
+
+int SysSettingsSerialPage::getDirty() {
+    return m_baudIndexOrig != m_baudIndex || m_parityOrig != m_parity;
+}
+
+void SysSettingsSerialPage::set() {
+    if (getDirty()) {
+        persist_conf::setSerialBaudIndex(m_baudIndex);
+        persist_conf::setSerialParity(m_parity);
+
+        if (persist_conf::saveDevice2()) {
+            infoMessageP(PSTR("Digital I/O pin settings saved!"), popPage);
+        }
     }
 }
 

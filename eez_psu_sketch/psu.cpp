@@ -121,7 +121,6 @@ void init() {
 #endif
 
     bp::init();
-    serial::init();
 
     eeprom::init();
     eeprom::test();
@@ -136,6 +135,8 @@ void init() {
     }
 
     loadConf();
+
+    serial::init();
 
 #if OPTION_DISPLAY
     gui::init();

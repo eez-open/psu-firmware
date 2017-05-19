@@ -23,6 +23,7 @@
 #include "datetime.h"
 #include "trigger.h"
 #include "io_pins.h"
+#include "serial_psu.h"
 
 namespace eez {
 namespace psu {
@@ -120,9 +121,9 @@ class SysSettingsEncoderPage : public SetPage {
 public:
     SysSettingsEncoderPage();
 
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
     data::Value getMin(const data::Cursor &cursor, uint8_t id);
     data::Value getMax(const data::Cursor &cursor, uint8_t id);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
     bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
 
     void toggleConfirmationMode();
@@ -145,9 +146,9 @@ private:
 
 class SysSettingsDisplayPage : public Page {
 public:
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
     data::Value getMin(const data::Cursor &cursor, uint8_t id);
     data::Value getMax(const data::Cursor &cursor, uint8_t id);
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
     bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
 };
 
@@ -201,6 +202,30 @@ private:
     io_pins::Function m_function[3];
 
     static void onFunctionSet(uint8_t value);
+};
+
+class SysSettingsSerialPage : public SetPage {
+public:
+    SysSettingsSerialPage();
+
+    data::Value getMin(const data::Cursor &cursor, uint8_t id);
+    data::Value getMax(const data::Cursor &cursor, uint8_t id);
+    data::Value getData(const data::Cursor &cursor, uint8_t id);
+    bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
+
+    void selectParity();
+    
+	int getDirty();
+	void set();
+
+private:
+    uint8_t m_baudIndexOrig;
+    uint8_t m_baudIndex;
+
+    serial::Parity m_parityOrig;
+    serial::Parity m_parity;
+
+    static void onParitySet(uint8_t value);
 };
 
 }

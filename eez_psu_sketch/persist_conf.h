@@ -105,14 +105,6 @@ struct SerialConf {
     unsigned sbits: 1;
 };
 
-enum {
-    SERIAL_PARITY_NONE,
-    SERIAL_PARITY_EVEN,
-    SERIAL_PARITY_ODD,
-    SERIAL_PARITY_MARK,
-    SERIAL_PARITY_SPACE
-};
-
 struct DeviceConfiguration2 {
     BlockHeader header;
     char systemPassword[PASSWORD_MAX_LENGTH + 1];

@@ -37,7 +37,8 @@ enum EnumDefinition {
     ENUM_DEFINITION_CHANNEL_TRIGGER_ON_LIST_STOP,
     ENUM_DEFINITION_IO_PINS_POLARITY,
     ENUM_DEFINITION_IO_PINS_INPUT_FUNCTION,
-    ENUM_DEFINITION_IO_PINS_OUTPUT_FUNCTION
+    ENUM_DEFINITION_IO_PINS_OUTPUT_FUNCTION,
+    ENUM_DEFINITION_SERIAL_PARITY
 };
 
 struct EnumItem {
@@ -55,6 +56,7 @@ extern data::EnumItem g_channelTriggerOnListStopEnumDefinition[];
 extern data::EnumItem g_ioPinsPolarityEnumDefinition[];
 extern data::EnumItem g_ioPinsInputFunctionEnumDefinition[];
 extern data::EnumItem g_ioPinsOutputFunctionEnumDefinition[];
+extern data::EnumItem g_serialParityEnumDefinition[];
 
 enum ValueOptions {
     VALUE_OPTIONS_CH1 = 0x00,

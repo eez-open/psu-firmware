@@ -28,6 +28,8 @@ namespace serial {
 
 static bool g_isConnected = false;
 
+long g_bauds[8] = {4800, 7200, 9600, 14400, 19200, 38400, 57600, 115200};
+
 size_t SCPI_Write(scpi_t *context, const char * data, size_t len) {
     return Serial.write(data, len);
 }
@@ -86,11 +88,11 @@ scpi_t scpi_context;
 
 UARTClass::UARTModes getConfig() {
     switch(persist_conf::getSerialParity()) {
-    case persist_conf::SERIAL_PARITY_NONE: return UARTClass::Mode_8N1;
-    case persist_conf::SERIAL_PARITY_EVEN: return UARTClass::Mode_8E1;
-    case persist_conf::SERIAL_PARITY_ODD: return UARTClass::Mode_8O1;
-    case persist_conf::SERIAL_PARITY_MARK: return UARTClass::Mode_8M1;
-    case persist_conf::SERIAL_PARITY_SPACE: return UARTClass::Mode_8S1;
+    case PARITY_NONE:  return UARTClass::Mode_8N1;
+    case PARITY_EVEN:  return UARTClass::Mode_8E1;
+    case PARITY_ODD:   return UARTClass::Mode_8O1;
+    case PARITY_MARK:  return UARTClass::Mode_8M1;
+    case PARITY_SPACE: return UARTClass::Mode_8S1;
     }
 
     return UARTClass::Mode_8N1;

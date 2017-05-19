@@ -190,6 +190,7 @@ Page *createPageFromId(int pageId) {
     case PAGE_ID_SYS_SETTINGS_ENCODER: return new SysSettingsEncoderPage();
 #endif
     case PAGE_ID_SYS_SETTINGS_DISPLAY: return new SysSettingsDisplayPage();
+    case PAGE_ID_SYS_SETTINGS_SERIAL: return new SysSettingsSerialPage();
     case PAGE_ID_SYS_INFO:
     case PAGE_ID_SYS_INFO2: return new SysInfoPage();
     case PAGE_ID_USER_PROFILES:

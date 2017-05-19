@@ -28,6 +28,7 @@
 #include "trigger.h"
 #include "list.h"
 #include "io_pins.h"
+#include "serial_psu.h"
 
 #include "gui.h"
 #include "gui_internal.h"
@@ -126,6 +127,15 @@ data::EnumItem g_ioPinsOutputFunctionEnumDefinition[] = {
     {0, 0}
 };
 
+data::EnumItem g_serialParityEnumDefinition[] = {
+    {serial::PARITY_NONE, PSTR("None")},
+    {serial::PARITY_EVEN, PSTR("Even")},
+    {serial::PARITY_ODD, PSTR("Odd")},
+    {serial::PARITY_MARK, PSTR("Mark")},
+    {serial::PARITY_SPACE, PSTR("Space")},
+    {0, 0}
+};
+
 static const data::EnumItem *enumDefinitions[] = {
     g_channelDisplayValueEnumDefinition,
     g_channelTriggerModeEnumDefinition,
@@ -135,7 +145,8 @@ static const data::EnumItem *enumDefinitions[] = {
     g_channelTriggerOnListStopEnumDefinition,
     g_ioPinsPolarityEnumDefinition,
     g_ioPinsInputFunctionEnumDefinition,
-    g_ioPinsOutputFunctionEnumDefinition
+    g_ioPinsOutputFunctionEnumDefinition,
+    g_serialParityEnumDefinition
 };
 
 
@@ -473,6 +484,11 @@ void Value::toText(char *text, int count) const {
         text[count - 1] = 0;
         break;
 
+    case VALUE_TYPE_SERIAL_BAUD_INDEX:
+        snprintf_P(text, count-1, PSTR("%ld"), serial::g_bauds[int_]);
+        text[count - 1] = 0;
+        break;
+
     default:
         if (type_ > VALUE_TYPE_GREATER_THEN_MAX_FLOAT) {
             char valueText[64];
@@ -511,7 +527,7 @@ bool Value::operator ==(const Value &other) const {
         return true;
     }
 		
-	if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL || type_ == VALUE_TYPE_LESS_THEN_MIN_INT || type_ == VALUE_TYPE_GREATER_THEN_MAX_INT || type_ == VALUE_TYPE_USER_PROFILE_LABEL || type_ == VALUE_TYPE_USER_PROFILE_REMARK || type_ == VALUE_TYPE_EDIT_INFO) {
+	if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL || type_ == VALUE_TYPE_LESS_THEN_MIN_INT || type_ == VALUE_TYPE_GREATER_THEN_MAX_INT || type_ == VALUE_TYPE_USER_PROFILE_LABEL || type_ == VALUE_TYPE_USER_PROFILE_REMARK || type_ == VALUE_TYPE_EDIT_INFO || type_ == VALUE_TYPE_SERIAL_BAUD_INDEX) {
         return int_ == other.int_;
     }
 

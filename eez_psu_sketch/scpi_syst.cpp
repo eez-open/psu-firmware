@@ -778,11 +778,11 @@ scpi_result_t scpi_cmd_systemCommunicateSerialBaudQ(scpi_t *context) {
 
 // NONE|ODD|EVEN
 static scpi_choice_def_t parityChoice[] = {
-    { "NONE", persist_conf::SERIAL_PARITY_NONE },
-    { "EVEN", persist_conf::SERIAL_PARITY_EVEN },
-    { "ODD", persist_conf::SERIAL_PARITY_ODD },
-    { "MARK", persist_conf::SERIAL_PARITY_MARK },
-    { "SPACE", persist_conf::SERIAL_PARITY_SPACE },
+    { "NONE",  serial::PARITY_NONE },
+    { "EVEN",  serial::PARITY_EVEN },
+    { "ODD",   serial::PARITY_ODD },
+    { "MARK",  serial::PARITY_MARK },
+    { "SPACE", serial::PARITY_SPACE },
     SCPI_CHOICE_LIST_END
 };
 

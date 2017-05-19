@@ -70,8 +70,6 @@ static const uint32_t ONTIME_MAGIC = 0xA7F31B3CL;
 DeviceConfiguration devConf;
 DeviceConfiguration2 devConf2;
 
-static long g_bauds[8] = {4800, 7200, 9600, 14400, 19200, 38400, 57600, 115200};
-
 ////////////////////////////////////////////////////////////////////////////////
 
 uint32_t calc_checksum(const BlockHeader *block, uint16_t size) {
@@ -180,8 +178,8 @@ static void initDevice2() {
 
     devConf2.displayBrightness = DISPLAY_BRIGHTNESS_DEFAULT;
 
-    devConf2.serialBaud = SERIAL_SPEED;
-    devConf2.serialParity = SERIAL_PARITY_NONE;
+    devConf2.serialBaud = getIndexFromBaud(SERIAL_SPEED);
+    devConf2.serialParity = serial::PARITY_NONE;
 }
 
 void loadDevice2() {
@@ -611,7 +609,7 @@ bool setDisplayBrightness(uint8_t displayBrightness) {
 
 int getIndexFromBaud(long baud) {
     for (int i = 0; i < 8; ++i) {
-        if (g_bauds[i] == baud) {
+        if (serial::g_bauds[i] == baud) {
             return i;
         }
     }
@@ -619,7 +617,7 @@ int getIndexFromBaud(long baud) {
 }
 
 long getBaudFromIndex(int index) {
-    return g_bauds[index];
+    return serial::g_bauds[index];
 }
 
 int getSerialBaudIndex() {
