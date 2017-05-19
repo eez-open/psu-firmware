@@ -744,7 +744,7 @@ void Channel::tick(uint32_t tick_usec) {
 #endif
 
     if (historyPosition == -1) {
-        uHistory[0] = u.mon;
+        uHistory[0] = util::roundPrec(u.mon, VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS);
         iHistory[0] = i.mon;
         for (int i = 1; i < CHANNEL_HISTORY_SIZE; ++i) {
             uHistory[i] = 0;
@@ -757,7 +757,7 @@ void Channel::tick(uint32_t tick_usec) {
         uint32_t ytViewRateMicroseconds = (int)round(ytViewRate * 1000000L); 
 
         while (tick_usec - historyLastTick >= ytViewRateMicroseconds) {
-            uHistory[historyPosition] = u.mon;
+            uHistory[historyPosition] = util::roundPrec(u.mon, VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS);
             iHistory[historyPosition] = i.mon;
                 
             if (++historyPosition == CHANNEL_HISTORY_SIZE) {
