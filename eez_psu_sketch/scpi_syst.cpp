@@ -19,6 +19,7 @@
 #include "psu.h"
 #include "scpi_psu.h"
 
+#include "serial_psu.h"
 #include "datetime.h"
 #include "sound.h"
 #include "profile.h"
@@ -751,10 +752,19 @@ scpi_result_t scpi_cmd_systemRwlock(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemCommunicateSerialBaud(scpi_t *context) {
-    // 4800|7200|9600|14400|19200|38400|57600|115200
-
     int32_t baud;
     if (!SCPI_ParamInt(context, &baud, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    int baudIndex = persist_conf::getIndexFromBaud(baud);
+    if (baudIndex == -1) {
+        SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
+        return SCPI_RES_ERR;
+    }
+
+    if (!persist_conf::setSerialBaudIndex(baudIndex)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
 
@@ -762,33 +772,36 @@ scpi_result_t scpi_cmd_systemCommunicateSerialBaud(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemCommunicateSerialBaudQ(scpi_t *context) {
+    SCPI_ResultInt(context, persist_conf::getBaudFromIndex(persist_conf::getSerialBaudIndex()));
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cmd_systemCommunicateSerialBits(scpi_t *context) {
-    // 5|6|7|8
-    return SCPI_RES_OK;
-}
-
-scpi_result_t scpi_cmd_systemCommunicateSerialBitsQ(scpi_t *context) {
-    return SCPI_RES_OK;
-}
+// NONE|ODD|EVEN
+static scpi_choice_def_t parityChoice[] = {
+    { "NONE", persist_conf::SERIAL_PARITY_NONE },
+    { "EVEN", persist_conf::SERIAL_PARITY_EVEN },
+    { "ODD", persist_conf::SERIAL_PARITY_ODD },
+    { "MARK", persist_conf::SERIAL_PARITY_MARK },
+    { "SPACE", persist_conf::SERIAL_PARITY_SPACE },
+    SCPI_CHOICE_LIST_END
+};
 
 scpi_result_t scpi_cmd_systemCommunicateSerialParity(scpi_t *context) {
-    // NONE|ODD|EVEN
+    int32_t parity;
+    if (!SCPI_ParamChoice(context, parityChoice, &parity, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!persist_conf::setSerialParity(parity)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_cmd_systemCommunicateSerialParityQ(scpi_t *context) {
-    return SCPI_RES_OK;
-}
-
-scpi_result_t scpi_cmd_systemCommunicateSerialSbits(scpi_t *context) {
-    // 1|2
-    return SCPI_RES_OK;
-}
-
-scpi_result_t scpi_cmd_systemCommunicateSerialSbitsQ(scpi_t *context) {
+    resultChoiceName(context, parityChoice, persist_conf::getSerialParity());
     return SCPI_RES_OK;
 }
 

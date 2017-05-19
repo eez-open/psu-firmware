@@ -70,7 +70,7 @@ void delayMicroseconds(uint32_t microseconds);
 
 /// Bare minimum implementation of the Arduino IPAddress class
 class IPAddress {
-    friend class SimulatorSerial;
+    friend class UARTClass;
 
 private:
     union {
@@ -82,10 +82,29 @@ public:
     operator uint32_t() const { return _address.dword; };
 };
 
+#define   US_MR_CHRL_8_BIT (0x3u << 6) // 8 bits
+
+#define   US_MR_NBSTOP_1_BIT (0x0u << 12) // 1 stop bit
+
+#define   UART_MR_PAR_EVEN  (0x0u << 9) // Even parity
+#define   UART_MR_PAR_ODD   (0x1u << 9) // Odd parity
+#define   UART_MR_PAR_SPACE (0x2u << 9) // Space: parity forced to 0
+#define   UART_MR_PAR_MARK  (0x3u << 9) // Mark: parity forced to 1
+#define   UART_MR_PAR_NO    (0x4u << 9) // No parity
+
 /// Bare minimum implementation of the Arduino Serial object
-class SimulatorSerial {
+class UARTClass {
 public:
-    void begin(unsigned long baud);
+    enum UARTModes {
+      Mode_8N1 = US_MR_CHRL_8_BIT | US_MR_NBSTOP_1_BIT | UART_MR_PAR_NO,
+      Mode_8E1 = US_MR_CHRL_8_BIT | US_MR_NBSTOP_1_BIT | UART_MR_PAR_EVEN,
+      Mode_8O1 = US_MR_CHRL_8_BIT | US_MR_NBSTOP_1_BIT | UART_MR_PAR_ODD,
+      Mode_8M1 = US_MR_CHRL_8_BIT | US_MR_NBSTOP_1_BIT | UART_MR_PAR_MARK,
+      Mode_8S1 = US_MR_CHRL_8_BIT | US_MR_NBSTOP_1_BIT | UART_MR_PAR_SPACE
+    };
+
+    void begin(unsigned long baud, UARTModes config = Mode_8N1);
+    void end();
     int write(const char *buffer, int size);
     int print(const char *data);
     int println(const char *data);
@@ -105,7 +124,7 @@ private:
     std::queue<int> input;
 };
 
-extern SimulatorSerial Serial;
+extern UARTClass Serial;
 
 #define PROGMEM
 #define pgm_read_byte_near(address_short) (*(address_short))

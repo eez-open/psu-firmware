@@ -264,12 +264,8 @@
     SCPI_COMMAND("SYSTem:RWLock", scpi_cmd_systemRwlock) \
     SCPI_COMMAND("SYSTem:COMMunicate:SERial:BAUD", scpi_cmd_systemCommunicateSerialBaud) \
     SCPI_COMMAND("SYSTem:COMMunicate:SERial:BAUD?", scpi_cmd_systemCommunicateSerialBaudQ) \
-    SCPI_COMMAND("SYSTem:COMMunicate:SERial:BITS", scpi_cmd_systemCommunicateSerialBits) \
-    SCPI_COMMAND("SYSTem:COMMunicate:SERial:BITS?", scpi_cmd_systemCommunicateSerialBitsQ) \
     SCPI_COMMAND("SYSTem:COMMunicate:SERial:PARity", scpi_cmd_systemCommunicateSerialParity) \
     SCPI_COMMAND("SYSTem:COMMunicate:SERial:PARity?", scpi_cmd_systemCommunicateSerialParityQ) \
-    SCPI_COMMAND("SYSTem:COMMunicate:SERial:SBITs", scpi_cmd_systemCommunicateSerialSbits) \
-    SCPI_COMMAND("SYSTem:COMMunicate:SERial:SBITs?", scpi_cmd_systemCommunicateSerialSbitsQ) \
     SCPI_COMMAND("TRIGger[:SEQuence][:IMMediate]", scpi_cmd_triggerSequenceImmediate) \
     SCPI_COMMAND("TRIGger[:SEQuence]:DELay", scpi_cmd_triggerSequenceDelay) \
     SCPI_COMMAND("TRIGger[:SEQuence]:DELay?", scpi_cmd_triggerSequenceDelayQ) \

@@ -84,8 +84,20 @@ scpi_t scpi_context;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+UARTClass::UARTModes getConfig() {
+    switch(persist_conf::getSerialParity()) {
+    case persist_conf::SERIAL_PARITY_NONE: return UARTClass::Mode_8N1;
+    case persist_conf::SERIAL_PARITY_EVEN: return UARTClass::Mode_8E1;
+    case persist_conf::SERIAL_PARITY_ODD: return UARTClass::Mode_8O1;
+    case persist_conf::SERIAL_PARITY_MARK: return UARTClass::Mode_8M1;
+    case persist_conf::SERIAL_PARITY_SPACE: return UARTClass::Mode_8S1;
+    }
+
+    return UARTClass::Mode_8N1;
+}
+
 void init() {
-    Serial.begin(SERIAL_SPEED);
+    Serial.begin(persist_conf::getBaudFromIndex(persist_conf::getSerialBaudIndex()), getConfig());
 
 #ifdef CONF_WAIT_SERIAL
     while (!Serial);
@@ -117,6 +129,11 @@ void tick(uint32_t tick_usec) {
 
 bool isConnected() {
     return g_isConnected;
+}
+
+void update() {
+    Serial.end();
+    Serial.begin(persist_conf::getBaudFromIndex(persist_conf::getSerialBaudIndex()), getConfig());
 }
 
 }

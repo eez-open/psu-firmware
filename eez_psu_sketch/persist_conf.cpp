@@ -18,6 +18,7 @@
  
 #include "psu.h"
 #include "eeprom.h"
+#include "serial_psu.h"
 #include "event_queue.h"
 #include "profile.h"
 #if OPTION_ENCODER
@@ -68,6 +69,8 @@ static const uint32_t ONTIME_MAGIC = 0xA7F31B3CL;
 
 DeviceConfiguration devConf;
 DeviceConfiguration2 devConf2;
+
+static long g_bauds[8] = {4800, 7200, 9600, 14400, 19200, 38400, 57600, 115200};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -171,9 +174,14 @@ bool saveDevice() {
 static void initDevice2() {
     memset(&devConf2, 0, sizeof(devConf2));
     devConf2.header.version = DEV_CONF2_VERSION;
+
     devConf2.flags.encoderConfirmationMode = 0;
     devConf2.flags.displayState = 1;
+
     devConf2.displayBrightness = DISPLAY_BRIGHTNESS_DEFAULT;
+
+    devConf2.serialBaud = SERIAL_SPEED;
+    devConf2.serialParity = SERIAL_PARITY_NONE;
 }
 
 void loadDevice2() {
@@ -599,6 +607,45 @@ bool setDisplayBrightness(uint8_t displayBrightness) {
 #endif
 
     return saveDevice2();
+}
+
+int getIndexFromBaud(long baud) {
+    for (int i = 0; i < 8; ++i) {
+        if (g_bauds[i] == baud) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+long getBaudFromIndex(int index) {
+    return g_bauds[index];
+}
+
+int getSerialBaudIndex() {
+    return devConf2.serialBaud;
+}
+
+bool setSerialBaudIndex(int baudIndex) {
+    devConf2.serialBaud = (uint8_t)baudIndex;
+    if (saveDevice2()) {
+        serial::update();
+        return true;
+    }
+    return false;
+}
+
+int getSerialParity() {
+    return devConf2.serialParity;
+}
+
+bool setSerialParity(int parity) {
+    devConf2.serialParity = (unsigned)parity;
+    if (saveDevice2()) {
+        serial::update();
+        return true;
+    }
+    return false;
 }
 
 }

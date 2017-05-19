@@ -31,6 +31,8 @@ void tick(uint32_t tick_usec);
 
 bool isConnected();
 
+void update();
+
 }
 }
 } // namespace eez::psu::serial

@@ -99,6 +99,20 @@ struct IOPin {
     unsigned function: 7;
 };
 
+struct SerialConf {
+    unsigned bits: 2;
+    unsigned parity: 2;
+    unsigned sbits: 1;
+};
+
+enum {
+    SERIAL_PARITY_NONE,
+    SERIAL_PARITY_EVEN,
+    SERIAL_PARITY_ODD,
+    SERIAL_PARITY_MARK,
+    SERIAL_PARITY_SPACE
+};
+
 struct DeviceConfiguration2 {
     BlockHeader header;
     char systemPassword[PASSWORD_MAX_LENGTH + 1];
@@ -109,7 +123,9 @@ struct DeviceConfiguration2 {
     uint8_t triggerSource;
     float triggerDelay;
     IOPin ioPins[3];
-    uint8_t reserverd[85];
+    uint8_t serialBaud;
+    uint8_t serialParity;
+    uint8_t reserverd[84];
 };
 
 extern DeviceConfiguration devConf;
@@ -178,6 +194,14 @@ bool setEncoderSettings(uint8_t confirmationMode, uint8_t movingSpeedDown, uint8
 
 bool setDisplayState(unsigned state);
 bool setDisplayBrightness(uint8_t displayBrightness);
+
+int getIndexFromBaud(long baud);
+long getBaudFromIndex(int index);
+int getSerialBaudIndex();
+bool setSerialBaudIndex(int baudIndex);
+
+int getSerialParity();
+bool setSerialParity(int parity);
 
 }
 }

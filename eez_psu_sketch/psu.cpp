@@ -1183,7 +1183,7 @@ const char *getCpuModel() {
     return "Arduino, R5B12";
 #endif
 #else
-    return "Simulator, M2.0";
+    return "Simulator, " FIRMWARE;
 #endif
 }
 

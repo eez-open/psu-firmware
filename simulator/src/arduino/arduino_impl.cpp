@@ -80,42 +80,45 @@ void detachInterrupt(uint8_t interrupt_no) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-SimulatorSerial Serial;
+UARTClass Serial;
 
-void SimulatorSerial::begin(unsigned long baud) {
+void UARTClass::begin(unsigned long baud, UARTModes config) {
 }
 
-int SimulatorSerial::write(const char *buffer, int size) {
+void UARTClass::end() {
+}
+
+int UARTClass::write(const char *buffer, int size) {
     return fwrite(buffer, 1, size, stdout);
 }
 
-int SimulatorSerial::print(const char *data) {
+int UARTClass::print(const char *data) {
     return write(data, strlen(data));
 }
 
-int SimulatorSerial::println(const char *data) {
+int UARTClass::println(const char *data) {
     return printf("%s\n", data);
 }
 
-int SimulatorSerial::print(int value) {
+int UARTClass::print(int value) {
     return printf("%d", value);
 }
 
-int SimulatorSerial::println(int value) {
+int UARTClass::println(int value) {
     return printf("%d\n", value);
 }
 
-int SimulatorSerial::print(float value, int numDigits) {
+int UARTClass::print(float value, int numDigits) {
     // TODO numDigits
     return printf("%f", value);
 }
 
-int SimulatorSerial::println(float value, int numDigits) {
+int UARTClass::println(float value, int numDigits) {
     // TODO numDigits
     return printf("%f\n", value);
 }
 
-int SimulatorSerial::println(IPAddress ipAddress) {
+int UARTClass::println(IPAddress ipAddress) {
     return printf("%d.%d.%d.%d\n",
         ipAddress._address.bytes[0],
         ipAddress._address.bytes[1],
@@ -123,21 +126,21 @@ int SimulatorSerial::println(IPAddress ipAddress) {
         ipAddress._address.bytes[3]);
 }
 
-int SimulatorSerial::available(void) {
+int UARTClass::available(void) {
     return input.size();
 }
 
-int SimulatorSerial::read(void) {
+int UARTClass::read(void) {
     int ch = input.front();
     input.pop();
     return ch;
 }
 
-void SimulatorSerial::put(int ch) {
+void UARTClass::put(int ch) {
     input.push(ch);
 }
 
-void SimulatorSerial::flush() {
+void UARTClass::flush() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
