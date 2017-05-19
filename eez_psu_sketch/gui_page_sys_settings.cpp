@@ -708,6 +708,10 @@ void SysSettingsIOPinsPage::set() {
         for (int i = 0; i < 3; ++i) {
             persist_conf::devConf2.ioPins[i].polarity = m_polarity[i];
             persist_conf::devConf2.ioPins[i].function = m_function[i];
+
+            if (i > 0 && m_function[i] == io_pins::FUNCTION_NONE) {
+                digitalWrite(i == 1 ? DOUT : DOUT2, 0);
+            }
         }
 
         if (persist_conf::saveDevice2()) {

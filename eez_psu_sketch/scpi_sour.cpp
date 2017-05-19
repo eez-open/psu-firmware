@@ -1317,6 +1317,10 @@ scpi_result_t scpi_cmd_sourceDigitalPinFunction(scpi_t *context) {
 
     persist_conf::devConf2.ioPins[pin].function = function;
 
+    if (pin > 0 && function == io_pins::FUNCTION_NONE) {
+        digitalWrite(pin == 1 ? DOUT : DOUT2, 0);
+    }
+
     return SCPI_RES_OK;
 }
 
