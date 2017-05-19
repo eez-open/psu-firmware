@@ -3965,7 +3965,7 @@
               "$eez": false,
               "x": 28,
               "type": "Select",
-              "data": "otp_aux",
+              "data": "sys.temp.aux.status",
               "y": 0,
               "width": 28,
               "height": 28,
@@ -3974,35 +3974,67 @@
                 {
                   "$eez": false,
                   "type": "Text",
-                  "action": "show_sys_settings_aux_otp",
+                  "action": "",
                   "x": 0,
                   "y": 0,
                   "width": 28,
                   "height": 28,
-                  "style": "prot_indicator_S",
+                  "style": "prot_indicator_invalid_S",
                   "text": "\\u0096"
                 },
                 {
                   "$eez": false,
-                  "type": "Text",
-                  "action": "show_sys_settings_aux_otp",
                   "x": 0,
+                  "type": "Select",
+                  "data": "otp_aux",
                   "y": 0,
                   "width": 28,
                   "height": 28,
-                  "style": "prot_indicator_set_S",
-                  "text": "\\u0096"
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "show_sys_settings_aux_otp",
+                      "x": 0,
+                      "y": 0,
+                      "width": 28,
+                      "height": 28,
+                      "style": "prot_indicator_S",
+                      "text": "\\u0096"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "show_sys_settings_aux_otp",
+                      "x": 0,
+                      "y": 0,
+                      "width": 28,
+                      "height": 28,
+                      "style": "prot_indicator_set_S",
+                      "text": "\\u0096"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "show_sys_settings_aux_otp",
+                      "x": 0,
+                      "y": 0,
+                      "width": 28,
+                      "height": 28,
+                      "style": "prot_indicator_trip_S",
+                      "text": "\\u0096"
+                    }
+                  ]
                 },
                 {
                   "$eez": false,
-                  "type": "Text",
-                  "action": "show_sys_settings_aux_otp",
+                  "type": "Rectangle",
                   "x": 0,
                   "y": 0,
                   "width": 28,
                   "height": 28,
-                  "style": "prot_indicator_trip_S",
-                  "text": "\\u0096"
+                  "style": "default_inverse"
                 }
               ]
             },
@@ -29993,6 +30025,18 @@
         "backgroundColor": "#ff0000",
         "borderSize": 0,
         "borderColor": "#D3D3D3",
+        "paddingHorizontal": 0,
+        "paddingVertical": 0
+      },
+      {
+        "$eez": false,
+        "name": "prot_indicator_invalid_S",
+        "inheritFrom": "default",
+        "font": "small",
+        "alignHorizontal": "center",
+        "alignVertical": "center",
+        "color": "#ff0000",
+        "borderSize": 0,
         "paddingHorizontal": 0,
         "paddingVertical": 0
       },
