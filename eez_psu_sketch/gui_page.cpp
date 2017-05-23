@@ -55,9 +55,6 @@ data::Value Page::getDef(const data::Cursor &cursor, uint8_t id) {
 	return data::Value();
 }
 
-void Page::select(data::Cursor &cursor, uint8_t id) {
-}
-
 bool Page::setData(const data::Cursor &cursor, uint8_t id, data::Value value) {
     return false;
 }
@@ -68,9 +65,6 @@ bool Page::onEncoder(int counter) {
 
 bool Page::onEncoderClicked() {
     return false;
-}
-
-void Page::editIpAddressPart() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////

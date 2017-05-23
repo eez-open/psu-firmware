@@ -101,7 +101,11 @@ public:
     SysSettingsEthernetStaticPage();
 
 	data::Value getData(const data::Cursor &cursor, uint8_t id);
-    void select(data::Cursor &cursor, uint8_t id);
+
+    void editIpAddress();
+    void editDns();
+    void editGateway();
+    void editSubnetMask();
 
 	int getDirty();
 	void set();
@@ -126,14 +130,10 @@ private:
     uint32_t m_subnetMaskOrig;
     uint32_t m_subnetMask;
 
-    Field m_editField;
-    uint8_t m_editPartId;
+    uint32_t *m_editAddress;
 
-    uint32_t *getIpAddress(Field field);
-    data::Value getIpAddressPart(const data::Cursor &cursor, uint8_t id);
-    static void onSetPartStatic(float value);
-    void onSetPart(uint8_t value);
-    void editIpAddressPart();
+    void edit(uint32_t &address);
+    static void onAddressSet(uint32_t address);
 };
 
 #endif

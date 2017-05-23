@@ -237,6 +237,10 @@ data::Value SysSettingsEthernetPage::getData(const data::Cursor &cursor, uint8_t
         return data::Value((uint16_t)m_scpiPort, VALUE_TYPE_PORT);
     }
 
+    if (id == DATA_ID_ETHERNET_MAC) {
+        return data::Value(0, VALUE_TYPE_MAC_ADDRESS);
+    }
+
     return data::Value();
 }
 
@@ -269,7 +273,7 @@ void SysSettingsEthernetPage::editScpiPort() {
 
     options.enableDefButton();
 
-	NumericKeypad::start(0, data::Value((uint16_t)m_scpiPort, VALUE_TYPE_PORT), options, onScpiPortSet);
+	NumericKeypad::start(0, data::Value((int)m_scpiPort, VALUE_TYPE_PORT), options, (void (*)(float))onScpiPortSet);
 }
 
 int SysSettingsEthernetPage::getDirty() {
@@ -313,111 +317,50 @@ data::Value SysSettingsEthernetStaticPage::getData(const data::Cursor &cursor, u
     }
 
     if (id == DATA_ID_ETHERNET_DNS) {
-        return data::Value(m_ipAddress, VALUE_TYPE_IP_ADDRESS);
+        return data::Value(m_dns, VALUE_TYPE_IP_ADDRESS);
     }
 
     if (id == DATA_ID_ETHERNET_GATEWAY) {
-        return data::Value(m_ipAddress, VALUE_TYPE_IP_ADDRESS);
+        return data::Value(m_gateway, VALUE_TYPE_IP_ADDRESS);
     }
 
     if (id == DATA_ID_ETHERNET_SUBNET_MASK) {
-        return data::Value(m_ipAddress, VALUE_TYPE_IP_ADDRESS);
-    }
-
-    return getIpAddressPart(cursor, id);
-}
-
-void SysSettingsEthernetStaticPage::select(data::Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_ETHERNET_IP_ADDRESS) {
-        cursor.i = FIELD_IP_ADDRESS;
-    }else if (id == DATA_ID_ETHERNET_DNS) {
-        cursor.i = FIELD_DNS;
-    } else if (id == DATA_ID_ETHERNET_GATEWAY) {
-        cursor.i = FIELD_GATEWAY;
-    } else if (id == DATA_ID_ETHERNET_SUBNET_MASK) {
-        cursor.i = FIELD_SUBNET_MASK;
-    }
-}
-
-uint32_t *SysSettingsEthernetStaticPage::getIpAddress(Field field) {
-    if (field == FIELD_IP_ADDRESS) {
-        return &m_ipAddress;
-    } else if (field == FIELD_DNS) {
-        return &m_dns;
-    } else if (field == FIELD_GATEWAY) {
-        return &m_gateway;
-    } else if (field == FIELD_SUBNET_MASK) {
-        return &m_subnetMask;
-    }
-    return NULL;
-}
-
-data::Value SysSettingsEthernetStaticPage::getIpAddressPart(const data::Cursor &cursor, uint8_t id) {
-    uint32_t *ipAddress = getIpAddress((Field)cursor.i);
-
-    if (ipAddress) {
-        if (id == DATA_ID_IP_ADDRESS_A) {
-            return data::Value(util::getIpAddressPartA(*ipAddress));
-        }
-
-        if (id == DATA_ID_IP_ADDRESS_B) {
-            return data::Value(util::getIpAddressPartB(*ipAddress));
-        }
-
-        if (id == DATA_ID_IP_ADDRESS_C) {
-            return data::Value(util::getIpAddressPartC(*ipAddress));
-        }
-
-        if (id == DATA_ID_IP_ADDRESS_D) {
-            return data::Value(util::getIpAddressPartD(*ipAddress));
-        }
+        return data::Value(m_subnetMask, VALUE_TYPE_IP_ADDRESS);
     }
 
     return data::Value();
 }
 
-void SysSettingsEthernetStaticPage::onSetPartStatic(float value) {
+void SysSettingsEthernetStaticPage::onAddressSet(uint32_t address) {
     popPage();
     SysSettingsEthernetStaticPage *page = (SysSettingsEthernetStaticPage *)getActivePage();
-    page->onSetPart((uint8_t)value);
+    *page->m_editAddress = address;
 }
 
-void SysSettingsEthernetStaticPage::onSetPart(uint8_t value) {
-    uint32_t *ipAddress = getIpAddress(m_editField);
-
-    if (m_editPartId == DATA_ID_IP_ADDRESS_A) {
-        util::setIpAddressPartA(getIpAddress(m_editField), value);
-    }
-
-    if (m_editPartId == DATA_ID_IP_ADDRESS_B) {
-        util::setIpAddressPartB(getIpAddress(m_editField), value);
-    }
-
-    if (m_editPartId == DATA_ID_IP_ADDRESS_C) {
-        util::setIpAddressPartC(getIpAddress(m_editField), value);
-    }
-
-    if (m_editPartId == DATA_ID_IP_ADDRESS_D) {
-        util::setIpAddressPartD(getIpAddress(m_editField), value);
-    }
-}
-
-void SysSettingsEthernetStaticPage::editIpAddressPart() {
-    DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
-
-    m_editField = (Field) g_foundWidgetAtDown.cursor.i;
-    m_editPartId = widget->data;
-
-    data::Value value = getIpAddressPart(g_foundWidgetAtDown.cursor, m_editPartId);
+void SysSettingsEthernetStaticPage::edit(uint32_t &address) {
+    m_editAddress = &address;
 
 	NumericKeypadOptions options;
 
-	options.editUnit = VALUE_TYPE_INT;
+	options.editUnit = VALUE_TYPE_IP_ADDRESS;
 
-	options.min = 0;
-	options.max = 255;
+	NumericKeypad::start(0, data::Value((uint32_t)address, VALUE_TYPE_IP_ADDRESS), options, (void (*)(float))onAddressSet);
+}
 
-	NumericKeypad::start(0, value, options, onSetPartStatic);
+void SysSettingsEthernetStaticPage::editIpAddress() {
+    edit(m_ipAddress);
+}
+
+void SysSettingsEthernetStaticPage::editDns() {
+    edit(m_dns);
+}
+
+void SysSettingsEthernetStaticPage::editGateway() {
+    edit(m_gateway);
+}
+
+void SysSettingsEthernetStaticPage::editSubnetMask() {
+    edit(m_subnetMask);
 }
 
 int SysSettingsEthernetStaticPage::getDirty() {

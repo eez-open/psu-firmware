@@ -721,8 +721,15 @@ bool setEthernetScpiPort(uint16_t scpiPort) {
 }
 
 bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint32_t dns, uint32_t gateway, uint32_t subnetMask, uint16_t scpiPort) {
-    unsigned ethernetEnabled = devConf.flags.ethernetEnabled;
-    devConf.flags.ethernetEnabled = enable ? 1 : 0;
+    unsigned ethernetEnabled = enable ? 1 : 0;
+    if (devConf.flags.ethernetEnabled != ethernetEnabled) {
+        devConf.flags.ethernetEnabled = ethernetEnabled;
+        if (!saveDevice()) {
+            devConf.flags.ethernetEnabled = !ethernetEnabled;
+            return false;
+        }
+		event_queue::pushEvent(devConf.flags.ethernetEnabled ? event_queue::EVENT_INFO_ETHERNET_ENABLED : event_queue::EVENT_INFO_ETHERNET_DISABLED);
+    }
 
     devConf2.flags.ethernetDhcpEnabled = dhcpEnable ? 1 : 0;
 
@@ -733,14 +740,7 @@ bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint3
 
     devConf2.ethernetScpiPort = scpiPort;
 
-    if (saveDevice2()) {
-        if (ethernetEnabled != devConf.flags.ethernetEnabled) {
-		    event_queue::pushEvent(devConf.flags.ethernetEnabled ? event_queue::EVENT_INFO_ETHERNET_ENABLED : event_queue::EVENT_INFO_ETHERNET_DISABLED);
-        }
-        return true;
-    }
-
-    return false;
+    return saveDevice2();
 }
 
 }

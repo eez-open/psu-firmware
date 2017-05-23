@@ -397,12 +397,20 @@ uint32_t getIpAddress(uint8_t a, uint8_t b, uint8_t c, uint8_t d) {
     return ipAddress;
 }
 
-void ipAddressToString(uint32_t &ipAddress, char *ipAddressStr) {
+void ipAddressToString(uint32_t ipAddress, char *ipAddressStr) {
     sprintf(ipAddressStr, "%d.%d.%d.%d",
         getIpAddressPartA(ipAddress),
         getIpAddressPartB(ipAddress),
         getIpAddressPartC(ipAddress),
         getIpAddressPartD(ipAddress));
+}
+
+void macAddressToString(uint8_t *macAddress, char *macAddressStr) {
+    for (int i = 0; i < 6; ++i) {
+        macAddressStr[3*i] = util::hexDigit((macAddress[i] & 0xF0) >> 4);
+        macAddressStr[3*i+1] = util::hexDigit(macAddress[i] & 0xF);
+        macAddressStr[3*i+2] = i < 5 ? '-' : 0;
+    }
 }
 
 char hexDigit(int num) {

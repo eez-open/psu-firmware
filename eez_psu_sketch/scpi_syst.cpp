@@ -823,7 +823,7 @@ scpi_result_t scpi_cmd_systemCommunicateEnable(scpi_t *context) {
     }
 
     int32_t commInterface;
-    if (!SCPI_ParamChoice(context, parityChoice, &commInterface, true)) {
+    if (!SCPI_ParamChoice(context, commInterfaceChoice, &commInterface, true)) {
         return SCPI_RES_ERR;
     }
 
@@ -838,7 +838,7 @@ scpi_result_t scpi_cmd_systemCommunicateEnable(scpi_t *context) {
 
 scpi_result_t scpi_cmd_systemCommunicateEnableQ(scpi_t *context) {
     int32_t commInterface;
-    if (!SCPI_ParamChoice(context, parityChoice, &commInterface, true)) {
+    if (!SCPI_ParamChoice(context, commInterfaceChoice, &commInterface, true)) {
         return SCPI_RES_ERR;
     }
 
@@ -996,15 +996,9 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetPortQ(scpi_t *context) {
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetMacQ(scpi_t *context) {
 #if OPTION_ETHERNET
-    char macStr[18];
-    for (int i = 0; i < 6; ++i) {
-        macStr[3*i] = util::hexDigit((ethernet::g_mac[i] & 0xF0) >> 4);
-        macStr[3*i+1] = util::hexDigit(ethernet::g_mac[i] & 0xF);
-        macStr[3*i+2] = i < 5 ? '-' : 0;
-    }
-
-    SCPI_ResultText(context, macStr);
-
+    char macAddressStr[18];
+    util::macAddressToString(ethernet::g_mac, macAddressStr);
+    SCPI_ResultText(context, macAddressStr);
     return SCPI_RES_OK;
 #else
     SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);

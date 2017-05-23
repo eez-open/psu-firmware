@@ -107,6 +107,7 @@ struct Value {
     bool isFloat() const { return isFloatType((ValueType)type_); }
 
     int getInt() const;
+    uint32_t getUInt32() const;
 
     void toText(char *text, int count) const;
 

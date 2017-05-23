@@ -76,7 +76,12 @@ void NumericKeypad::init(const char *label, const data::Value& value, NumericKey
     Keypad::init(label, (void (*)(char *))ok, cancel);
 
     m_startValue = value;
+
     m_options = options;
+
+    if (value.getType() == VALUE_TYPE_IP_ADDRESS) {
+        m_options.flags.dotButtonEnabled = true;
+    }
 
     if (m_startValue.isMilli()) {
         switchToMilli();
@@ -355,6 +360,15 @@ void NumericKeypad::dot() {
         return;
     }
 
+    if (m_startValue.getType() == VALUE_TYPE_IP_ADDRESS) {
+        if (m_state == EMPTY || m_state == START) {
+            sound::playBeep();
+        } else {
+            appendChar(getDotSign());
+        }
+        return;
+    }
+
     if (m_state == EMPTY) {
         if (m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
             if (strlen(m_keypadText) == 0) {
@@ -475,25 +489,43 @@ void NumericKeypad::setDefValue() {
 
 void NumericKeypad::ok() {
     if (m_state == START) {
-        ((void (*)(float))m_okCallback)(m_startValue.isFloat() ? m_startValue.getFloat() : m_startValue.getInt());
+        if (m_startValue.getType() == VALUE_TYPE_IP_ADDRESS) {
+            ((void (*)(uint32_t))m_okCallback)(m_startValue.getUInt32());
+        } else {
+            ((void (*)(float))m_okCallback)(m_startValue.isFloat() ? m_startValue.getFloat() : m_startValue.getInt());
+        }
 
         return;
     } 
         
     if (m_state != EMPTY) {
-        float value = getValue();
+        if (m_startValue.getType() == VALUE_TYPE_IP_ADDRESS) {
+            uint32_t ipAddress;
+            if (util::parseIpAddress(m_keypadText, strlen(m_keypadText), ipAddress)) {
+                ((void (*)(uint32_t))m_okCallback)(ipAddress);
+                m_state = START;
+                m_keypadText[0] = 0;
+            } else {
+                errorMessageP(PSTR("Invalid IP address format!"));
+            }
 
-        if (util::less(value, m_options.min, m_startValue.getType(), m_options.channelIndex)) {
-            errorMessage(0, data::Value::LessThenMinMessage(m_options.min, getValueUnit()));
-        } else if (util::greater(value, m_options.max, m_startValue.getType(), m_options.channelIndex)) {
-            errorMessage(0, data::Value::GreaterThenMaxMessage(m_options.max, getValueUnit()));
+            return;
         } else {
-            ((void (*)(float))m_okCallback)(value);
-            m_state = START;
-            m_keypadText[0] = 0;
-        }
+            float value = getValue();
 
-        return;
+            if (util::less(value, m_options.min, m_startValue.getType(), m_options.channelIndex)) {
+                errorMessage(0, data::Value::LessThenMinMessage(m_options.min, getValueUnit()));
+            } else if (util::greater(value, m_options.max, m_startValue.getType(), m_options.channelIndex)) {
+                errorMessage(0, data::Value::GreaterThenMaxMessage(m_options.max, getValueUnit()));
+            } else {
+                ((void (*)(float))m_okCallback)(value);
+                m_state = START;
+                m_keypadText[0] = 0;
+                return;
+            }
+
+            return;
+        }
     }
 
     sound::playBeep();

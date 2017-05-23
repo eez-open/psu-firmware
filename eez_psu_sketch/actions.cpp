@@ -469,10 +469,6 @@ void action_toggle_channels_view_mode() {
     persist_conf::toggleChannelsViewMode();
 }
 
-void action_edit_ip_address_part() {
-    getActivePage()->editIpAddressPart();
-}
-
 void action_ethernet_toggle() {
     #if OPTION_ETHERNET
     ((SysSettingsEthernetPage *)getActivePage())->toggle();
@@ -488,6 +484,30 @@ void action_ethernet_toggle_dhcp() {
 void action_ethernet_edit_static_address() {
     #if OPTION_ETHERNET
     ((SysSettingsEthernetPage *)getActivePage())->editStaticAddress();
+    #endif
+}
+
+void action_ethernet_edit_ip_address() {
+    #if OPTION_ETHERNET
+    ((SysSettingsEthernetStaticPage *)getActivePage())->editIpAddress();
+    #endif
+}
+
+void action_ethernet_edit_dns() {
+    #if OPTION_ETHERNET
+    ((SysSettingsEthernetStaticPage *)getActivePage())->editDns();
+    #endif
+}
+
+void action_ethernet_edit_gateway() {
+    #if OPTION_ETHERNET
+    ((SysSettingsEthernetStaticPage *)getActivePage())->editGateway();
+    #endif
+}
+
+void action_ethernet_edit_subnet_mask() {
+    #if OPTION_ETHERNET
+    ((SysSettingsEthernetStaticPage *)getActivePage())->editSubnetMask();
     #endif
 }
 
@@ -859,10 +879,13 @@ ACTION actions[] = {
     action_profile_delete,
     action_profile_edit_remark,
     action_toggle_channels_view_mode,
-    action_edit_ip_address_part,
     action_ethernet_toggle,
     action_ethernet_toggle_dhcp,
     action_ethernet_edit_static_address,
+    action_ethernet_edit_ip_address,
+    action_ethernet_edit_dns,
+    action_ethernet_edit_gateway,
+    action_ethernet_edit_subnet_mask,
     action_ethernet_edit_scpi_port,
     action_ch_settings_adv_coupling_uncouple,
     action_ch_settings_adv_coupling_set_parallel_info,

@@ -455,11 +455,15 @@ void Value::toText(char *text, int count) const {
         edit_mode::getInfoText(int_, text);
         break;
 
+    case VALUE_TYPE_MAC_ADDRESS:
+    {
+        util::macAddressToString(ethernet::g_mac, text);
+        break;
+    }
+
     case VALUE_TYPE_IP_ADDRESS:
     {
-        uint8_t *bytes = (uint8_t *)&uint32_;
-        snprintf_P(text, count-1, PSTR("%d.%d.%d.%d"), (int)bytes[0], (int)bytes[1], (int)bytes[2], (int)bytes[3]);
-        text[count - 1] = 0;
+        util::ipAddressToString(uint32_, text);
         break;
     }
 
@@ -528,7 +532,7 @@ bool Value::operator ==(const Value &other) const {
         return false;
     }
 
-    if (type_ == VALUE_TYPE_NONE || type_ == VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE || type_ == VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE) {
+    if (type_ == VALUE_TYPE_NONE || type_ == VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE || type_ == VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE || type_ == VALUE_TYPE_MAC_ADDRESS) {
         return true;
     }
 		
@@ -608,6 +612,10 @@ int Value::getInt() const {
     return int_; 
 }
 
+uint32_t Value::getUInt32() const {
+    return uint32_; 
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 static bool isDisplayValue(const Cursor &cursor, uint8_t id, DisplayValue displayValue) {
@@ -654,13 +662,8 @@ void select(Cursor &cursor, uint8_t id, int index) {
         cursor.i = 4 + index;
     } else if (id == DATA_ID_CHANNEL_COUPLING_MODE) {
         cursor.i = 0;
-    } else if (index != -1) {
-        cursor.i = index;
     } else {
-        Page *activePage = getActivePage();
-        if (activePage) {
-            activePage->select(cursor, id);
-        }
+        cursor.i = index;
     }
 }
 

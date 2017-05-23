@@ -104,7 +104,9 @@ void ipAddressToArray(uint32_t ipAddress, uint8_t *ipAddressArray);
 uint32_t getIpAddress(uint8_t a, uint8_t b, uint8_t c, uint8_t d);
 
 bool parseIpAddress(const char *ipAddressStr, size_t ipAddressStrLength, uint32_t &ipAddress);
-void ipAddressToString(uint32_t &ipAddress, char *ipAddressStr);
+void ipAddressToString(uint32_t ipAddress, char *ipAddressStr);
+
+void macAddressToString(uint8_t *macAddress, char *macAddressStr);
 
 char hexDigit(int num);
 
