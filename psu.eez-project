@@ -3636,9 +3636,9 @@
             {
               "$eez": false,
               "type": "Rectangle",
-              "x": 0,
+              "x": 192,
               "y": 204,
-              "width": 280,
+              "width": 88,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -3652,6 +3652,60 @@
               "height": 36,
               "style": "bottom_button",
               "text": "X"
+            },
+            {
+              "$eez": false,
+              "x": 144,
+              "type": "Select",
+              "data": "sys.RlState",
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "default",
+              "widgets": [
+                {
+                  "$eez": false,
+                  "type": "Rectangle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 48,
+                  "height": 36,
+                  "style": "bottom_button_background"
+                },
+                {
+                  "$eez": false,
+                  "type": "Text",
+                  "data": "",
+                  "action": "sys.frontPanel.unlock",
+                  "x": 0,
+                  "y": 0,
+                  "width": 48,
+                  "height": 36,
+                  "style": "bottom_button",
+                  "text": "N"
+                },
+                {
+                  "$eez": false,
+                  "type": "Text",
+                  "data": "",
+                  "action": "sys.frontPanel.unlock",
+                  "x": 0,
+                  "y": 0,
+                  "width": 48,
+                  "height": 36,
+                  "style": "bottom_button",
+                  "text": "N"
+                }
+              ]
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 0,
+              "y": 204,
+              "width": 144,
+              "height": 36,
+              "style": "bottom_button_background"
             }
           ]
         }
