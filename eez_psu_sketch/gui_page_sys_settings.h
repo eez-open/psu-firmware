@@ -53,13 +53,90 @@ private:
 	unsigned int dst;
 };
 
-class SysSettingsEthernetPage : public Page {
+#if OPTION_ETHERNET
+
+class SysSettingsEthernetPage : public SetPage {
+    friend class SysSettingsEthernetStaticPage;
+
 public:
+    SysSettingsEthernetPage();
+
 	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
-    static void enable();
-    static void disable();
+    void toggle();
+    void toggleDhcp();
+    void editStaticAddress();
+    void editScpiPort();
+
+	int getDirty();
+	void set();
+
+private:
+    bool m_enabledOrig;
+    bool m_enabled;
+
+    bool m_dhcpEnabledOrig;
+    bool m_dhcpEnabled;
+
+    uint32_t m_ipAddressOrig;
+    uint32_t m_ipAddress;
+
+    uint32_t m_dnsOrig;
+    uint32_t m_dns;
+
+    uint32_t m_gatewayOrig;
+    uint32_t m_gateway;
+
+    uint32_t m_subnetMaskOrig;
+    uint32_t m_subnetMask;
+
+    uint16_t m_scpiPortOrig;
+    uint16_t m_scpiPort;
+
+    static void onScpiPortSet(float value);
 };
+
+class SysSettingsEthernetStaticPage : public SetPage {
+public:
+    SysSettingsEthernetStaticPage();
+
+	data::Value getData(const data::Cursor &cursor, uint8_t id);
+    void select(data::Cursor &cursor, uint8_t id);
+
+	int getDirty();
+	void set();
+
+private:
+    enum Field {
+        FIELD_IP_ADDRESS,
+        FIELD_DNS,
+        FIELD_GATEWAY,
+        FIELD_SUBNET_MASK
+    };
+
+    uint32_t m_ipAddressOrig;
+    uint32_t m_ipAddress;
+
+    uint32_t m_dnsOrig;
+    uint32_t m_dns;
+
+    uint32_t m_gatewayOrig;
+    uint32_t m_gateway;
+
+    uint32_t m_subnetMaskOrig;
+    uint32_t m_subnetMask;
+
+    Field m_editField;
+    uint8_t m_editPartId;
+
+    uint32_t *getIpAddress(Field field);
+    data::Value getIpAddressPart(const data::Cursor &cursor, uint8_t id);
+    static void onSetPartStatic(float value);
+    void onSetPart(uint8_t value);
+    void editIpAddressPart();
+};
+
+#endif
 
 class SysSettingsProtectionsPage : public Page {
 public:
@@ -160,7 +237,6 @@ public:
 
     void selectSource();
     void editDelay();
-    void togglePolarity();
     void toggleInitiateContinuously();
     
 	int getDirty();
@@ -213,12 +289,16 @@ public:
     data::Value getData(const data::Cursor &cursor, uint8_t id);
     bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
 
+    void toggle();
     void selectParity();
     
 	int getDirty();
 	void set();
 
 private:
+    bool m_enabledOrig;
+    bool m_enabled;
+
     uint8_t m_baudIndexOrig;
     uint8_t m_baudIndex;
 

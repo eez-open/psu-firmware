@@ -26,6 +26,7 @@ using namespace scpi;
 
 namespace serial {
 
+psu::TestResult g_testResult = psu::TEST_FAILED;
 static bool g_isConnected = false;
 
 long g_bauds[] = {4800, 9600, 19200, 38400, 57600, 115200};
@@ -100,6 +101,15 @@ UARTClass::UARTModes getConfig() {
 }
 
 void init() {
+    if (g_testResult == TEST_OK) {
+        Serial.end();
+    }
+
+    if (!persist_conf::isSerialEnabled()) {
+        g_testResult = TEST_SKIPPED;
+        return;
+    }
+
     Serial.begin(persist_conf::getBaudFromIndex(persist_conf::getSerialBaudIndex()), getConfig());
 
 #ifdef CONF_WAIT_SERIAL
@@ -120,6 +130,10 @@ void init() {
         &scpi_interface,
         scpi_input_buffer, SCPI_PARSER_INPUT_BUFFER_LENGTH,
         error_queue_data, SCPI_PARSER_ERROR_QUEUE_SIZE + 1);
+
+    g_isConnected = false;
+
+    g_testResult = TEST_OK;
 }
 
 void tick(uint32_t tick_usec) {
@@ -135,8 +149,7 @@ bool isConnected() {
 }
 
 void update() {
-    Serial.end();
-    Serial.begin(persist_conf::getBaudFromIndex(persist_conf::getSerialBaudIndex()), getConfig());
+    init();
 }
 
 }

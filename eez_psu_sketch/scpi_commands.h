@@ -266,6 +266,21 @@
     SCPI_COMMAND("SYSTem:COMMunicate:SERial:BAUD?", scpi_cmd_systemCommunicateSerialBaudQ) \
     SCPI_COMMAND("SYSTem:COMMunicate:SERial:PARity", scpi_cmd_systemCommunicateSerialParity) \
     SCPI_COMMAND("SYSTem:COMMunicate:SERial:PARity?", scpi_cmd_systemCommunicateSerialParityQ) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ENABle", scpi_cmd_systemCommunicateEnable) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ENABle?", scpi_cmd_systemCommunicateEnableQ) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:DHCP", scpi_cmd_systemCommunicateEthernetDhcp) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:DHCP?", scpi_cmd_systemCommunicateEthernetDhcpQ) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:ADDRess", scpi_cmd_systemCommunicateEthernetAddress) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:ADDRess?", scpi_cmd_systemCommunicateEthernetAddressQ) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:DNS", scpi_cmd_systemCommunicateEthernetDns) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:DNS?", scpi_cmd_systemCommunicateEthernetDnsQ) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:GATEway", scpi_cmd_systemCommunicateEthernetGateway) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:GATEway?", scpi_cmd_systemCommunicateEthernetGatewayQ) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:SMASk", scpi_cmd_systemCommunicateEthernetSmask) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:SMASk?", scpi_cmd_systemCommunicateEthernetSmaskQ) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:PORT", scpi_cmd_systemCommunicateEthernetPort) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:PORT?", scpi_cmd_systemCommunicateEthernetPortQ) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:MAC?", scpi_cmd_systemCommunicateEthernetMacQ) \
     SCPI_COMMAND("TRIGger[:SEQuence][:IMMediate]", scpi_cmd_triggerSequenceImmediate) \
     SCPI_COMMAND("TRIGger[:SEQuence]:DELay", scpi_cmd_triggerSequenceDelay) \
     SCPI_COMMAND("TRIGger[:SEQuence]:DELay?", scpi_cmd_triggerSequenceDelayQ) \

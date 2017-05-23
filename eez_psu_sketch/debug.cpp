@@ -97,20 +97,22 @@ static char traceBuffer[256];
 static bool dumpTraceBufferOnNextTick = false;
 
 void DumpTraceBuffer() {
-    Serial.print("**TRACE");
+    if (persist_conf::isSerialEnabled()) {
+        Serial.print("**TRACE");
     
-    char datetime_buffer[20] = { 0 };
-    if (datetime::getDateTimeAsString(datetime_buffer)) {
-        Serial.print(" [");
-        Serial.print(datetime_buffer);
-        Serial.print("]: ");
-    } else {
-        Serial.print(": ");
+        char datetime_buffer[20] = { 0 };
+        if (datetime::getDateTimeAsString(datetime_buffer)) {
+            Serial.print(" [");
+            Serial.print(datetime_buffer);
+            Serial.print("]: ");
+        } else {
+            Serial.print(": ");
+        }
+
+        Serial.println(traceBuffer);
+
+        Serial.flush();
     }
-
-    Serial.println(traceBuffer);
-
-    Serial.flush();
 }
 
 void tick(uint32_t tickCount) {

@@ -40,9 +40,11 @@ public:
     virtual data::Value getMin(const data::Cursor &cursor, uint8_t id);
     virtual data::Value getMax(const data::Cursor &cursor, uint8_t id);
     virtual data::Value getDef(const data::Cursor &cursor, uint8_t id);
+    virtual void select(data::Cursor &cursor, uint8_t id);
     virtual bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
     virtual bool onEncoder(int counter);
     virtual bool onEncoderClicked();
+    virtual void editIpAddressPart();
 };
 
 class SetPage : public Page {

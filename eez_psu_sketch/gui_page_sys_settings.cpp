@@ -27,6 +27,7 @@
 #if OPTION_ENCODER
 #include "encoder.h"
 #endif
+#include "util.h"
 
 #include "gui_page_sys_settings.h"
 #include "gui_numeric_keypad.h"
@@ -200,38 +201,248 @@ void SysSettingsDateTimePage::set() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-data::Value SysSettingsEthernetPage::getData(const data::Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_SYS_ETHERNET_ENABLED) {
-        return data::Value(persist_conf::isEthernetEnabled() ? 1 : 0);
-    }
-
 #if OPTION_ETHERNET
-    if (id == DATA_ID_SYS_ETHERNET_IP_ADDRESS) {
-        return data::Value(ethernet::getIpAddress(), VALUE_TYPE_IP_ADDRESS);
+
+SysSettingsEthernetPage::SysSettingsEthernetPage() {
+    m_enabledOrig = m_enabled = persist_conf::isEthernetEnabled();
+    m_dhcpEnabledOrig = m_dhcpEnabled = persist_conf::isEthernetDhcpEnabled();
+    m_ipAddressOrig = m_ipAddress = persist_conf::devConf2.ethernetIpAddress;
+    m_dnsOrig = m_dns = persist_conf::devConf2.ethernetDns;
+    m_gatewayOrig = m_gateway = persist_conf::devConf2.ethernetGateway;
+    m_subnetMaskOrig = m_subnetMask = persist_conf::devConf2.ethernetSubnetMask;
+    m_scpiPortOrig = m_scpiPort = persist_conf::devConf2.ethernetScpiPort;
+}
+
+data::Value SysSettingsEthernetPage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = SetPage::getData(cursor, id);
+	if (value.getType() != VALUE_TYPE_NONE) {
+		return value;
+	}
+
+    if (id == DATA_ID_ETHERNET_ENABLED) {
+        return data::Value(m_enabled ? 1 : 0);
     }
 
-    if (id == DATA_ID_SYS_ETHERNET_SCPI_PORT) {
-        return TCP_PORT;
+    if (id == DATA_ID_ETHERNET_DHCP) {
+        return data::Value(m_dhcpEnabled ? 1 : 0);
     }
-#endif
+
+    if (m_dhcpEnabled) {
+        if (id == DATA_ID_ETHERNET_IP_ADDRESS) {
+            return data::Value(ethernet::getIpAddress(), VALUE_TYPE_IP_ADDRESS);
+        }
+    }
+
+    if (id == DATA_ID_ETHERNET_SCPI_PORT) {
+        return data::Value((uint16_t)m_scpiPort, VALUE_TYPE_PORT);
+    }
 
     return data::Value();
 }
 
-static void enableEthernet(bool enable) {
-    persist_conf::enableEthernet(enable);
-    longInfoMessageP(
-        PSTR("Turn off and on power or"),
-        PSTR("press reset to apply changes!"));
+void SysSettingsEthernetPage::toggle() {
+    m_enabled = !m_enabled;
 }
 
-void SysSettingsEthernetPage::enable() {
-    enableEthernet(true);
+void SysSettingsEthernetPage::toggleDhcp() {
+    m_dhcpEnabled = !m_dhcpEnabled;
 }
 
-void SysSettingsEthernetPage::disable() {
-    enableEthernet(false);
+void SysSettingsEthernetPage::editStaticAddress() {
+    pushPage(PAGE_ID_SYS_SETTINGS_ETHERNET_STATIC);
 }
+
+void SysSettingsEthernetPage::onScpiPortSet(float value) {
+    popPage();
+    SysSettingsEthernetPage *page = (SysSettingsEthernetPage *)getActivePage();
+    page->m_scpiPort = (uint16_t)value;
+}
+
+void SysSettingsEthernetPage::editScpiPort() {
+	NumericKeypadOptions options;
+
+	options.editUnit = VALUE_TYPE_PORT;
+
+	options.min = 0;
+	options.max = 65535;
+	options.def = TCP_PORT;
+
+    options.enableDefButton();
+
+	NumericKeypad::start(0, data::Value((uint16_t)m_scpiPort, VALUE_TYPE_PORT), options, onScpiPortSet);
+}
+
+int SysSettingsEthernetPage::getDirty() {
+    return
+        m_enabledOrig != m_enabled ||
+        m_dhcpEnabledOrig != m_dhcpEnabled ||
+        m_ipAddressOrig != m_ipAddress ||
+        m_dnsOrig != m_dns ||
+        m_gatewayOrig != m_gateway ||
+        m_subnetMaskOrig != m_subnetMask ||
+        m_scpiPortOrig != m_scpiPort;
+}
+
+void SysSettingsEthernetPage::set() {
+    if (getDirty()) {
+        if (persist_conf::setEthernetSettings(m_enabled, m_dhcpEnabled, m_ipAddress, m_dns, m_gateway, m_subnetMask, m_scpiPort)) {
+            longInfoMessageP(PSTR("Turn off and on power or"), PSTR("press reset to apply changes!"), popPage);
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+SysSettingsEthernetStaticPage::SysSettingsEthernetStaticPage() {
+    SysSettingsEthernetPage *page = (SysSettingsEthernetPage *)getPreviousPage();
+
+    m_ipAddressOrig = m_ipAddress = page->m_ipAddress;
+    m_dnsOrig = m_dns = page->m_dns;
+    m_gatewayOrig = m_gateway = page->m_gateway;
+    m_subnetMaskOrig = m_subnetMask = page->m_subnetMask;
+}
+
+data::Value SysSettingsEthernetStaticPage::getData(const data::Cursor &cursor, uint8_t id) {
+	data::Value value = SetPage::getData(cursor, id);
+	if (value.getType() != VALUE_TYPE_NONE) {
+		return value;
+	}
+
+    if (id == DATA_ID_ETHERNET_IP_ADDRESS) {
+        return data::Value(m_ipAddress, VALUE_TYPE_IP_ADDRESS);
+    }
+
+    if (id == DATA_ID_ETHERNET_DNS) {
+        return data::Value(m_ipAddress, VALUE_TYPE_IP_ADDRESS);
+    }
+
+    if (id == DATA_ID_ETHERNET_GATEWAY) {
+        return data::Value(m_ipAddress, VALUE_TYPE_IP_ADDRESS);
+    }
+
+    if (id == DATA_ID_ETHERNET_SUBNET_MASK) {
+        return data::Value(m_ipAddress, VALUE_TYPE_IP_ADDRESS);
+    }
+
+    return getIpAddressPart(cursor, id);
+}
+
+void SysSettingsEthernetStaticPage::select(data::Cursor &cursor, uint8_t id) {
+    if (id == DATA_ID_ETHERNET_IP_ADDRESS) {
+        cursor.i = FIELD_IP_ADDRESS;
+    }else if (id == DATA_ID_ETHERNET_DNS) {
+        cursor.i = FIELD_DNS;
+    } else if (id == DATA_ID_ETHERNET_GATEWAY) {
+        cursor.i = FIELD_GATEWAY;
+    } else if (id == DATA_ID_ETHERNET_SUBNET_MASK) {
+        cursor.i = FIELD_SUBNET_MASK;
+    }
+}
+
+uint32_t *SysSettingsEthernetStaticPage::getIpAddress(Field field) {
+    if (field == FIELD_IP_ADDRESS) {
+        return &m_ipAddress;
+    } else if (field == FIELD_DNS) {
+        return &m_dns;
+    } else if (field == FIELD_GATEWAY) {
+        return &m_gateway;
+    } else if (field == FIELD_SUBNET_MASK) {
+        return &m_subnetMask;
+    }
+    return NULL;
+}
+
+data::Value SysSettingsEthernetStaticPage::getIpAddressPart(const data::Cursor &cursor, uint8_t id) {
+    uint32_t *ipAddress = getIpAddress((Field)cursor.i);
+
+    if (ipAddress) {
+        if (id == DATA_ID_IP_ADDRESS_A) {
+            return data::Value(util::getIpAddressPartA(*ipAddress));
+        }
+
+        if (id == DATA_ID_IP_ADDRESS_B) {
+            return data::Value(util::getIpAddressPartB(*ipAddress));
+        }
+
+        if (id == DATA_ID_IP_ADDRESS_C) {
+            return data::Value(util::getIpAddressPartC(*ipAddress));
+        }
+
+        if (id == DATA_ID_IP_ADDRESS_D) {
+            return data::Value(util::getIpAddressPartD(*ipAddress));
+        }
+    }
+
+    return data::Value();
+}
+
+void SysSettingsEthernetStaticPage::onSetPartStatic(float value) {
+    popPage();
+    SysSettingsEthernetStaticPage *page = (SysSettingsEthernetStaticPage *)getActivePage();
+    page->onSetPart((uint8_t)value);
+}
+
+void SysSettingsEthernetStaticPage::onSetPart(uint8_t value) {
+    uint32_t *ipAddress = getIpAddress(m_editField);
+
+    if (m_editPartId == DATA_ID_IP_ADDRESS_A) {
+        util::setIpAddressPartA(getIpAddress(m_editField), value);
+    }
+
+    if (m_editPartId == DATA_ID_IP_ADDRESS_B) {
+        util::setIpAddressPartB(getIpAddress(m_editField), value);
+    }
+
+    if (m_editPartId == DATA_ID_IP_ADDRESS_C) {
+        util::setIpAddressPartC(getIpAddress(m_editField), value);
+    }
+
+    if (m_editPartId == DATA_ID_IP_ADDRESS_D) {
+        util::setIpAddressPartD(getIpAddress(m_editField), value);
+    }
+}
+
+void SysSettingsEthernetStaticPage::editIpAddressPart() {
+    DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
+
+    m_editField = (Field) g_foundWidgetAtDown.cursor.i;
+    m_editPartId = widget->data;
+
+    data::Value value = getIpAddressPart(g_foundWidgetAtDown.cursor, m_editPartId);
+
+	NumericKeypadOptions options;
+
+	options.editUnit = VALUE_TYPE_INT;
+
+	options.min = 0;
+	options.max = 255;
+
+	NumericKeypad::start(0, value, options, onSetPartStatic);
+}
+
+int SysSettingsEthernetStaticPage::getDirty() {
+    return
+        m_ipAddressOrig != m_ipAddress ||
+        m_dnsOrig != m_dns ||
+        m_gatewayOrig != m_gateway ||
+        m_subnetMaskOrig != m_subnetMask;
+}
+
+void SysSettingsEthernetStaticPage::set() {
+    if (getDirty()) {
+        SysSettingsEthernetPage *page = (SysSettingsEthernetPage *)getPreviousPage();
+
+        page->m_ipAddress = m_ipAddress;
+        page->m_dns = m_dns;
+        page->m_gateway = m_gateway;
+        page->m_subnetMask = m_subnetMask;
+
+        popPage();
+    }
+}
+
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -726,6 +937,7 @@ void SysSettingsIOPinsPage::set() {
 ////////////////////////////////////////////////////////////////////////////////
 
 SysSettingsSerialPage::SysSettingsSerialPage() {
+    m_enabledOrig = m_enabled = persist_conf::isSerialEnabled();
     m_baudIndexOrig = m_baudIndex = persist_conf::getSerialBaudIndex();
     m_parityOrig = m_parity = (serial::Parity)persist_conf::getSerialParity();
 }
@@ -752,6 +964,10 @@ data::Value SysSettingsSerialPage::getData(const data::Cursor &cursor, uint8_t i
 		return value;
 	}
 
+    if (id == DATA_ID_SERIAL_ENABLED) {
+        return data::Value(m_enabled ? 1 : 0);
+    }
+
     if (id == DATA_ID_SERIAL_BAUD) {
 		return data::Value((int)m_baudIndex, VALUE_TYPE_SERIAL_BAUD_INDEX);
 	}
@@ -772,6 +988,10 @@ bool SysSettingsSerialPage::setData(const data::Cursor &cursor, uint8_t id, data
     return false;
 }
 
+void SysSettingsSerialPage::toggle() {
+    m_enabled = !m_enabled;
+}
+
 void SysSettingsSerialPage::onParitySet(uint8_t value) {
     popPage();
 	SysSettingsSerialPage *page = (SysSettingsSerialPage*)getActivePage();
@@ -783,15 +1003,12 @@ void SysSettingsSerialPage::selectParity() {
 }
 
 int SysSettingsSerialPage::getDirty() {
-    return m_baudIndexOrig != m_baudIndex || m_parityOrig != m_parity;
+    return m_enabledOrig != m_enabled || m_baudIndexOrig != m_baudIndex || m_parityOrig != m_parity;
 }
 
 void SysSettingsSerialPage::set() {
     if (getDirty()) {
-        persist_conf::setSerialBaudIndex(m_baudIndex);
-        persist_conf::setSerialParity(m_parity);
-
-        if (persist_conf::saveDevice2()) {
+        if (persist_conf::setSerialSettings(m_enabled, m_baudIndex, m_parity)) {
             infoMessageP(PSTR("Serial settings saved!"), popPage);
         }
     }

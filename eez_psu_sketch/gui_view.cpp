@@ -1682,7 +1682,11 @@ void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, Wid
     else if (widget->type == WIDGET_TYPE_CUSTOM) {
         DECL_WIDGET_SPECIFIC(CustomWidgetSpecific, customWidgetSpecific, widget);
         DECL_CUSTOM_WIDGET(customWidget, customWidgetSpecific->customWidget);
+
+        int i = cursor.i;
+        data::select(cursor, widget->data, -1);
         enumContainer(customWidget->widgets, x, y, cursor, previousState, currentState, callback);
+        cursor.i = i;
     }
     else if (widget->type == WIDGET_TYPE_LIST) {
         WidgetState *savedCurrentState = currentState;

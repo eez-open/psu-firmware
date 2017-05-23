@@ -463,6 +463,11 @@ void Value::toText(char *text, int count) const {
         break;
     }
 
+    case VALUE_TYPE_PORT:
+        snprintf_P(text, count-1, PSTR("%d"), uint16_);
+        text[count - 1] = 0;
+        break;
+
     case VALUE_TYPE_ENUM:
     {
         const EnumItem *enumDefinition = enumDefinitions[enum_.enumDefinition];
@@ -539,7 +544,7 @@ bool Value::operator ==(const Value &other) const {
 		return uint8_ == other.uint8_;
 	}
 
-	if (type_ == VALUE_TYPE_YEAR) {
+	if (type_ == VALUE_TYPE_YEAR || type_ == VALUE_TYPE_PORT) {
 		return uint16_ == other.uint16_;
 	}
 
@@ -649,8 +654,13 @@ void select(Cursor &cursor, uint8_t id, int index) {
         cursor.i = 4 + index;
     } else if (id == DATA_ID_CHANNEL_COUPLING_MODE) {
         cursor.i = 0;
-    } else {
+    } else if (index != -1) {
         cursor.i = index;
+    } else {
+        Page *activePage = getActivePage();
+        if (activePage) {
+            activePage->select(cursor, id);
+        }
     }
 }
 
@@ -1107,16 +1117,20 @@ Value get(const Cursor &cursor, uint8_t id) {
         return Value(getFirmwareInfo());
     }
 
-    if (id == DATA_ID_SYS_ETHERNET_INSTALLED) {
+    if (id == DATA_ID_SERIAL_STATUS) {
+        return data::Value(serial::g_testResult);
+    }
+
+    if (id == DATA_ID_ETHERNET_INSTALLED) {
         return data::Value(OPTION_ETHERNET);
     }
 
 #if OPTION_ETHERNET
-    if (id == DATA_ID_SYS_ETHERNET_STATUS) {
+    if (id == DATA_ID_ETHERNET_STATUS) {
         return data::Value(ethernet::g_testResult);
     }
 
-    if (id == DATA_ID_SYS_ETHERNET_IS_CONNECTED) {
+    if (id == DATA_ID_ETHERNET_IS_CONNECTED) {
         return data::Value(ethernet::isConnected());
     }
 #endif

@@ -689,15 +689,33 @@
     },
     {
       "$eez": false,
-      "name": "sys_settings_ethernet_enable",
+      "name": "editIpAddressPart",
       "implementationType": "native",
-      "implementation": "SysSettingsEthernetPage::enable();"
+      "implementation": "getActivePage()->editIpAddressPart();"
     },
     {
       "$eez": false,
-      "name": "sys_settings_ethernet_disable",
+      "name": "ethernet.toggle",
       "implementationType": "native",
-      "implementation": "SysSettingsEthernetPage::disable();\n"
+      "implementation": "((SysSettingsEthernetPage *)getActivePage())->toggle();\n"
+    },
+    {
+      "$eez": false,
+      "name": "ethernet.toggleDhcp",
+      "implementationType": "native",
+      "implementation": "((SysSettingsEthernetPage *)getActivePage())->toggleDhcp();\n"
+    },
+    {
+      "$eez": false,
+      "name": "ethernet.editStaticAddress",
+      "implementationType": "native",
+      "implementation": "((SysSettingsEthernetPage *)getActivePage())->editStaticAddress();\n"
+    },
+    {
+      "$eez": false,
+      "name": "ethernet.editScpiPort",
+      "implementationType": "native",
+      "implementation": "((SysSettingsEthernetPage *)getActivePage())->editScpiPort();\n"
     },
     {
       "$eez": false,
@@ -1052,6 +1070,12 @@
       "name": "ioPin.selectFunction",
       "implementationType": "native",
       "implementation": "((SysSettingsIOPinsPage *)getActivePage())->selectFunction();"
+    },
+    {
+      "$eez": false,
+      "name": "serial.toggle",
+      "implementationType": "native",
+      "implementation": "((SysSettingsSerialPage *)getActivePage())->toggle();"
     },
     {
       "$eez": false,
@@ -2102,7 +2126,7 @@
     },
     {
       "$eez": false,
-      "name": "sys.ethernet.installed",
+      "name": "ethernet.installed",
       "description": "0: not installed\n1: installed",
       "type": "enum",
       "enumItems": "[\n\"Not installed\",\n\"Installed\"\n]",
@@ -2110,7 +2134,7 @@
     },
     {
       "$eez": false,
-      "name": "sys.ethernet.enabled",
+      "name": "ethernet.enabled",
       "description": "0: disabled\n1: enabled",
       "type": "enum",
       "enumItems": "[\n\"Disabled\",\n\"Enabled\"\n]",
@@ -2118,7 +2142,7 @@
     },
     {
       "$eez": false,
-      "name": "sys.ethernet.status",
+      "name": "ethernet.status",
       "description": "0: failed\n1: ok\n2: skipped\n3: warning",
       "type": "enum",
       "enumItems": "[\n\"Failed\",\n\"OK\",\n\"Skipped\",\n\"Warning\"\n]",
@@ -2126,25 +2150,52 @@
     },
     {
       "$eez": false,
-      "name": "sys.ethernet.ipAddress",
+      "name": "ethernet.ipAddress",
       "description": "",
       "type": "string",
       "defaultValue": "192.168.1.101"
     },
     {
       "$eez": false,
-      "name": "sys.ethernet.scpiPort",
+      "name": "ethernet.dns",
+      "description": "",
+      "type": "string",
+      "defaultValue": "192.168.1.1"
+    },
+    {
+      "$eez": false,
+      "name": "ethernet.gateway",
+      "description": "",
+      "type": "string",
+      "defaultValue": "192.168.1.1"
+    },
+    {
+      "$eez": false,
+      "name": "ethernet.subnetMask",
+      "description": "",
+      "type": "string",
+      "defaultValue": "255.255.255.0"
+    },
+    {
+      "$eez": false,
+      "name": "ethernet.scpiPort",
       "description": "",
       "type": "integer",
       "defaultValue": "5025"
     },
     {
       "$eez": false,
-      "name": "sys.ethernet.isConnected",
+      "name": "ethernet.isConnected",
       "description": "",
       "type": "boolean",
       "enumItems": "",
       "defaultValue": "1"
+    },
+    {
+      "$eez": false,
+      "name": "ethernet.dhcp",
+      "type": "boolean",
+      "defaultValue": "0"
     },
     {
       "$eez": false,
@@ -2477,9 +2528,37 @@
     },
     {
       "$eez": false,
+      "name": "serial.status",
+      "description": "0: failed\n1: ok\n2: skipped\n3: warning",
+      "type": "enum",
+      "enumItems": "[\n\"Failed\",\n\"OK\",\n\"Skipped\",\n\"Warning\"\n]",
+      "defaultValue": "1"
+    },
+    {
+      "$eez": false,
+      "name": "serial.enabled",
+      "type": "boolean",
+      "defaultValue": "1"
+    },
+    {
+      "$eez": false,
       "name": "serial.isConnected",
       "type": "boolean",
       "defaultValue": "1"
+    },
+    {
+      "$eez": false,
+      "name": "serial.baud",
+      "type": "integer",
+      "enumItems": "",
+      "defaultValue": "115200"
+    },
+    {
+      "$eez": false,
+      "name": "serial.parity",
+      "type": "enum",
+      "enumItems": "[\n\"None\",\n\"Even\",\n\"Odd\",\n\"Mark\",\n\"Space\"\n]",
+      "defaultValue": "None"
     },
     {
       "$eez": false,
@@ -2516,17 +2595,27 @@
     },
     {
       "$eez": false,
-      "name": "serial.baud",
+      "name": "ipAddress.a",
       "type": "integer",
-      "enumItems": "",
-      "defaultValue": "115200"
+      "defaultValue": "192"
     },
     {
       "$eez": false,
-      "name": "serial.parity",
-      "type": "enum",
-      "enumItems": "[\n\"None\",\n\"Even\",\n\"Odd\",\n\"Mark\",\n\"Space\"\n]",
-      "defaultValue": "None"
+      "name": "ipAddress.b",
+      "type": "integer",
+      "defaultValue": "168"
+    },
+    {
+      "$eez": false,
+      "name": "ipAddress.c",
+      "type": "integer",
+      "defaultValue": "1"
+    },
+    {
+      "$eez": false,
+      "name": "ipAddress.d",
+      "type": "integer",
+      "defaultValue": "101"
     }
   ],
   "gui": {
@@ -4042,37 +4131,7 @@
               "$eez": false,
               "x": 56,
               "type": "Select",
-              "data": "serial.isConnected",
-              "y": 0,
-              "width": 28,
-              "height": 28,
-              "style": "default",
-              "widgets": [
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "show_sys_settings_serial",
-                  "width": 28,
-                  "height": 28,
-                  "style": "prot_indicator_S",
-                  "text": "\\u0094"
-                },
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "show_sys_settings_serial",
-                  "width": 28,
-                  "height": 28,
-                  "style": "button_indicator_on",
-                  "text": "\\u0094"
-                }
-              ]
-            },
-            {
-              "$eez": false,
-              "x": 84,
-              "type": "Select",
-              "data": "sys.ethernet.installed",
+              "data": "serial.status",
               "y": 0,
               "width": 28,
               "height": 28,
@@ -4092,7 +4151,79 @@
                   "$eez": false,
                   "x": 0,
                   "type": "Select",
-                  "data": "sys.ethernet.status",
+                  "data": "serial.isConnected",
+                  "y": 0,
+                  "width": 28,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "show_sys_settings_serial",
+                      "width": 28,
+                      "height": 28,
+                      "style": "prot_indicator_S",
+                      "text": "\\u0094"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "show_sys_settings_serial",
+                      "width": 28,
+                      "height": 28,
+                      "style": "button_indicator_on",
+                      "text": "\\u0094"
+                    }
+                  ]
+                },
+                {
+                  "$eez": false,
+                  "type": "Rectangle",
+                  "action": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 28,
+                  "height": 28,
+                  "style": "default_inverse"
+                },
+                {
+                  "$eez": false,
+                  "type": "Rectangle",
+                  "action": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 28,
+                  "height": 28,
+                  "style": "default_inverse"
+                }
+              ]
+            },
+            {
+              "$eez": false,
+              "x": 84,
+              "type": "Select",
+              "data": "ethernet.installed",
+              "y": 0,
+              "width": 28,
+              "height": 28,
+              "style": "default",
+              "widgets": [
+                {
+                  "$eez": false,
+                  "type": "Rectangle",
+                  "action": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 28,
+                  "height": 28,
+                  "style": "default_inverse"
+                },
+                {
+                  "$eez": false,
+                  "x": 0,
+                  "type": "Select",
+                  "data": "ethernet.status",
                   "y": 0,
                   "width": 28,
                   "height": 28,
@@ -4113,7 +4244,7 @@
                       "$eez": false,
                       "x": 0,
                       "type": "Select",
-                      "data": "sys.ethernet.isConnected",
+                      "data": "ethernet.isConnected",
                       "y": 0,
                       "width": 28,
                       "height": 28,
@@ -21315,7 +21446,7 @@
               "$eez": false,
               "x": 12,
               "type": "Select",
-              "data": "sys.ethernet.installed",
+              "data": "ethernet.installed",
               "y": 60,
               "width": 240,
               "height": 28,
@@ -21651,94 +21782,159 @@
             },
             {
               "$eez": false,
-              "type": "Text",
-              "data": "",
               "x": 12,
+              "type": "Select",
+              "data": "serial.enabled",
               "y": 32,
-              "width": 93,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Baud:"
-            },
-            {
-              "$eez": false,
-              "type": "UpDown",
-              "data": "serial.baud",
-              "action": "upDown",
-              "x": 105,
-              "y": 32,
-              "width": 119,
-              "height": 28,
-              "style": "edit_value_S_centered",
-              "buttonsStyle": "edit_S",
-              "downButtonText": "\\u008F",
-              "upButtonText": "\\u0090"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 12,
-              "y": 60,
-              "width": 93,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Parity:"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "data": "serial.parity",
-              "action": "serial.selectParity",
-              "x": 105,
-              "y": 60,
-              "width": 119,
-              "height": 28,
-              "style": "edit_value_active_S_left",
-              "text": ""
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 12,
-              "y": 88,
-              "width": 93,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Bits:"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "data": "",
-              "action": "",
-              "x": 105,
-              "y": 88,
-              "width": 119,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "8"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 12,
-              "y": 116,
-              "width": 93,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Stop bits:"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "data": "",
-              "action": "",
-              "x": 105,
-              "y": 116,
-              "width": 119,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "1"
+              "width": 212,
+              "height": 140,
+              "style": "default",
+              "widgets": [
+                {
+                  "$eez": false,
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 212,
+                  "height": 140,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "serial.toggle",
+                      "x": null,
+                      "y": 0,
+                      "width": 212,
+                      "height": 28,
+                      "style": "edit_value_active_S_left",
+                      "text": "Enable Serial"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 28,
+                      "width": 212,
+                      "height": 112,
+                      "style": "default_inverse"
+                    }
+                  ]
+                },
+                {
+                  "$eez": false,
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 212,
+                  "height": 140,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "serial.toggle",
+                      "x": null,
+                      "y": 0,
+                      "width": 212,
+                      "height": 28,
+                      "style": "edit_value_active_S_left",
+                      "text": "Disable Serial"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "data": "",
+                      "x": 0,
+                      "y": 28,
+                      "width": 93,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Baud:"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "UpDown",
+                      "data": "serial.baud",
+                      "action": "upDown",
+                      "x": 93,
+                      "y": 28,
+                      "width": 119,
+                      "height": 28,
+                      "style": "edit_value_S_centered",
+                      "buttonsStyle": "edit_S",
+                      "downButtonText": "\\u008F",
+                      "upButtonText": "\\u0090"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 56,
+                      "width": 93,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Parity:"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "data": "serial.parity",
+                      "action": "serial.selectParity",
+                      "x": 93,
+                      "y": 56,
+                      "width": 119,
+                      "height": 28,
+                      "style": "edit_value_active_S_left",
+                      "text": ""
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 84,
+                      "width": 93,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Bits:"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "data": "",
+                      "action": "",
+                      "x": 93,
+                      "y": 84,
+                      "width": 119,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "8"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 112,
+                      "width": 93,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Stop bits:"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "data": "",
+                      "action": "",
+                      "x": 93,
+                      "y": 112,
+                      "width": 119,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "1"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "$eez": false,
@@ -21963,44 +22159,10 @@
               "$eez": false,
               "x": 12,
               "type": "Select",
-              "data": "sys.ethernet.enabled",
+              "data": "ethernet.enabled",
               "y": 32,
               "width": 240,
-              "height": 30,
-              "style": "default",
-              "widgets": [
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "sys_settings_ethernet_enable",
-                  "x": 0,
-                  "y": 0,
-                  "width": 240,
-                  "height": 30,
-                  "style": "edit_value_active_S_left",
-                  "text": "Enable Ethernet"
-                },
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "sys_settings_ethernet_disable",
-                  "x": 0,
-                  "y": 0,
-                  "width": 240,
-                  "height": 30,
-                  "style": "edit_value_active_S_left",
-                  "text": "Disable Ethernet"
-                }
-              ]
-            },
-            {
-              "$eez": false,
-              "x": 12,
-              "type": "Select",
-              "data": "sys.ethernet.status",
-              "y": 62,
-              "width": 240,
-              "height": 142,
+              "height": 112,
               "style": "default",
               "widgets": [
                 {
@@ -22009,26 +22171,237 @@
                   "x": 0,
                   "y": 0,
                   "width": 240,
-                  "height": 142,
+                  "height": 112,
                   "style": "default",
                   "widgets": [
                     {
                       "$eez": false,
-                      "type": "Rectangle",
+                      "type": "Text",
+                      "action": "ethernet.toggle",
                       "x": 0,
                       "y": 0,
                       "width": 240,
-                      "height": 112,
+                      "height": 28,
+                      "style": "edit_value_active_S_left",
+                      "text": "Enable Ethernet"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 28,
+                      "width": 240,
+                      "height": 84,
                       "style": "default_inverse"
+                    }
+                  ]
+                },
+                {
+                  "$eez": false,
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 240,
+                  "height": 112,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "ethernet.toggle",
+                      "y": 0,
+                      "width": 240,
+                      "height": 28,
+                      "style": "edit_value_active_S_left",
+                      "text": "Disable Ethernet"
                     },
                     {
                       "$eez": false,
                       "type": "Text",
-                      "action": "sys_settings_ethernet_enable",
                       "x": 0,
-                      "y": 112,
+                      "y": 28,
+                      "width": 95,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "DHCP"
+                    },
+                    {
+                      "$eez": false,
+                      "x": 95,
+                      "type": "Select",
+                      "data": "ethernet.dhcp",
+                      "y": 28,
+                      "width": 60,
+                      "height": 28,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "data": "",
+                          "action": "ethernet.toggleDhcp",
+                          "width": 60,
+                          "height": 28,
+                          "style": "edit_value_active_S_left",
+                          "text": "No"
+                        },
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "data": "",
+                          "action": "ethernet.toggleDhcp",
+                          "width": 60,
+                          "height": 28,
+                          "style": "edit_value_active_S_left",
+                          "text": "Yes"
+                        }
+                      ]
+                    },
+                    {
+                      "$eez": false,
+                      "x": 0,
+                      "type": "Select",
+                      "data": "ethernet.dhcp",
+                      "y": 56,
                       "width": 240,
-                      "height": 30,
+                      "height": 56,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "$eez": false,
+                          "type": "Container",
+                          "x": 0,
+                          "y": 0,
+                          "width": 240,
+                          "height": 56,
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "action": "ethernet.editStaticAddress",
+                              "x": null,
+                              "y": null,
+                              "width": 240,
+                              "height": 28,
+                              "style": "edit_value_active_S_left",
+                              "text": "Edit static address"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "x": 0,
+                              "y": 28,
+                              "width": 95,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "SCPI port:"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "DisplayData",
+                              "data": "ethernet.scpiPort",
+                              "action": "ethernet.editScpiPort",
+                              "x": 95,
+                              "y": 28,
+                              "width": 60,
+                              "height": 28,
+                              "style": "edit_value_active_S_left"
+                            }
+                          ]
+                        },
+                        {
+                          "$eez": false,
+                          "type": "Container",
+                          "x": 0,
+                          "y": 0,
+                          "width": 240,
+                          "height": 56,
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "x": 0,
+                              "y": 0,
+                              "width": 95,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "IP address:"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "DisplayData",
+                              "data": "ethernet.ipAddress",
+                              "x": 95,
+                              "y": 0,
+                              "width": 145,
+                              "height": 28,
+                              "style": "value_S"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "x": 0,
+                              "y": 28,
+                              "width": 95,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "SCPI port:"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "DisplayData",
+                              "data": "ethernet.scpiPort",
+                              "action": "ethernet.editScpiPort",
+                              "x": 95,
+                              "y": 28,
+                              "width": 60,
+                              "height": 28,
+                              "style": "edit_value_active_S_left"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 12,
+              "y": 144,
+              "width": 240,
+              "height": 34,
+              "style": "default_inverse"
+            },
+            {
+              "$eez": false,
+              "x": 6,
+              "type": "Select",
+              "data": "ethernet.status",
+              "y": 178,
+              "width": 246,
+              "height": 26,
+              "style": "default",
+              "widgets": [
+                {
+                  "$eez": false,
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 246,
+                  "height": 26,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "ethernet.toggle",
+                      "width": 246,
+                      "height": 26,
                       "style": "event_error",
                       "text": "\\u0082 Ethernet errror"
                     }
@@ -22039,57 +22412,17 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 240,
-                  "height": 142,
+                  "width": 246,
+                  "height": 26,
                   "style": "default",
                   "widgets": [
                     {
                       "$eez": false,
-                      "type": "Text",
-                      "x": 0,
-                      "y": 0,
-                      "width": 95,
-                      "height": 28,
-                      "style": "edit_value_S_left",
-                      "text": "IP address:"
-                    },
-                    {
-                      "$eez": false,
-                      "type": "DisplayData",
-                      "data": "sys.ethernet.ipAddress",
-                      "x": 95,
-                      "y": 0,
-                      "width": 145,
-                      "height": 28,
-                      "style": "value_S"
-                    },
-                    {
-                      "$eez": false,
-                      "type": "Text",
-                      "x": 0,
-                      "y": 28,
-                      "width": 95,
-                      "height": 28,
-                      "style": "edit_value_S_left",
-                      "text": "SCPI port:"
-                    },
-                    {
-                      "$eez": false,
-                      "type": "DisplayData",
-                      "data": "sys.ethernet.scpiPort",
-                      "x": 95,
-                      "y": 28,
-                      "width": 145,
-                      "height": 28,
-                      "style": "value_S"
-                    },
-                    {
-                      "$eez": false,
                       "type": "Rectangle",
-                      "x": 0,
-                      "y": 56,
-                      "width": 240,
-                      "height": 86,
+                      "x": null,
+                      "y": null,
+                      "width": 246,
+                      "height": 26,
                       "style": "default_inverse"
                     }
                   ]
@@ -22099,38 +22432,19 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 240,
-                  "height": 142,
+                  "width": 246,
+                  "height": 26,
                   "style": "default",
                   "widgets": [
                     {
                       "$eez": false,
-                      "type": "Rectangle",
-                      "x": 0,
-                      "y": 0,
-                      "width": 240,
-                      "height": 94,
-                      "style": "default_inverse"
-                    },
-                    {
-                      "$eez": false,
-                      "type": "MultilineText",
-                      "x": 0,
-                      "y": 94,
-                      "width": 22,
-                      "height": 48,
+                      "type": "Text",
+                      "x": null,
+                      "y": null,
+                      "width": 246,
+                      "height": 26,
                       "style": "event_info",
-                      "text": "\\u0080"
-                    },
-                    {
-                      "$eez": false,
-                      "type": "MultilineText",
-                      "x": 22,
-                      "y": 94,
-                      "width": 218,
-                      "height": 48,
-                      "style": "event_info",
-                      "text": "Ethernet initialization skipped at start"
+                      "text": "\\u0080 Ethernet init. skipped at start"
                     }
                   ]
                 },
@@ -22139,27 +22453,16 @@
                   "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 240,
-                  "height": 142,
+                  "width": 246,
+                  "height": 26,
                   "style": "default",
                   "widgets": [
                     {
                       "$eez": false,
-                      "type": "Rectangle",
-                      "x": 0,
-                      "y": 0,
-                      "width": 240,
-                      "height": 112,
-                      "style": "default_inverse"
-                    },
-                    {
-                      "$eez": false,
                       "type": "Text",
-                      "action": "sys_settings_ethernet_enable",
-                      "x": 0,
-                      "y": 112,
-                      "width": 240,
-                      "height": 30,
+                      "action": "ethernet.toggle",
+                      "width": 246,
+                      "height": 26,
                       "style": "event_warning",
                       "text": "\\u0081 Ethernet not connected"
                     }
@@ -22170,9 +22473,333 @@
             {
               "$eez": false,
               "type": "Rectangle",
+              "x": 197,
+              "y": 204,
+              "width": 27,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 224,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "B"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "$eez": false,
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
+            },
+            {
+              "$eez": false,
+              "type": "Button",
+              "data": "",
+              "action": "set",
               "x": 0,
               "y": 204,
-              "width": 224,
+              "width": 101,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "discard",
+              "x": 101,
+              "y": 204,
+              "width": 96,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
+            }
+          ]
+        }
+      },
+      {
+        "$eez": false,
+        "name": "sys_settings_ethernet_static",
+        "description": "Calibration general information, active calibration settings (CAL:STAT), change password (CAL:PASS:NEW) and enter wizard.",
+        "portrait": {
+          "$eez": false,
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 320,
+          "widgets": [
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 0,
+              "y": 0,
+              "width": 120,
+              "height": 32,
+              "style": "edit_value_S_left",
+              "text": "Password:"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 120,
+              "y": 0,
+              "width": 120,
+              "height": 32,
+              "style": "edit_value_active_S_left",
+              "text": "Change"
+            },
+            {
+              "$eez": false,
+              "type": "List",
+              "data": "channels",
+              "x": 0,
+              "y": 66,
+              "width": 240,
+              "height": 64,
+              "style": "default",
+              "listType": "vertical",
+              "itemWidget": {
+                "$eez": false,
+                "type": "Container",
+                "data": "",
+                "action": "",
+                "x": 0,
+                "y": 0,
+                "width": 240,
+                "height": 32,
+                "style": "default",
+                "widgets": [
+                  {
+                    "$eez": false,
+                    "type": "Text",
+                    "data": "channel.label",
+                    "x": 0,
+                    "y": 0,
+                    "width": 120,
+                    "height": 32,
+                    "style": "edit_value_S_left",
+                    "text": ""
+                  },
+                  {
+                    "$eez": false,
+                    "x": 120,
+                    "type": "Select",
+                    "data": "channel.calibration.status",
+                    "action": "show_sys_settings_cal_ch",
+                    "y": 0,
+                    "width": 120,
+                    "height": 32,
+                    "style": "default",
+                    "widgets": [
+                      {
+                        "$eez": false,
+                        "type": "Text",
+                        "action": "show_sys_settings_cal_ch",
+                        "x": 0,
+                        "y": 0,
+                        "width": 120,
+                        "height": 32,
+                        "style": "edit_value_active_S_left",
+                        "text": "Calibrated"
+                      },
+                      {
+                        "$eez": false,
+                        "type": "Text",
+                        "action": "show_sys_settings_cal_ch",
+                        "x": 0,
+                        "y": 0,
+                        "width": 120,
+                        "height": 32,
+                        "style": "edit_value_active_S_left",
+                        "text": "Not calibrated"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 0,
+              "y": 269,
+              "width": 168,
+              "height": 51,
+              "style": "bottom_button_background"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "show_previous_page",
+              "x": 168,
+              "y": 269,
+              "width": 36,
+              "height": 51,
+              "style": "bottom_button",
+              "text": "B"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 204,
+              "y": 269,
+              "width": 36,
+              "height": 51,
+              "style": "bottom_button",
+              "text": "X"
+            }
+          ]
+        },
+        "landscape": {
+          "$eez": false,
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 240,
+          "widgets": [
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 6,
+              "y": 0,
+              "width": 246,
+              "height": 32,
+              "style": "value_S",
+              "text": "Ethernet static address"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 12,
+              "y": 32,
+              "width": 95,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "IP address:"
+            },
+            {
+              "$eez": false,
+              "type": "Local.IPAddress",
+              "data": "ethernet.ipAddress",
+              "x": 106,
+              "y": 32,
+              "width": 146,
+              "height": 28,
+              "style": "default"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 12,
+              "y": 60,
+              "width": 95,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "DNS:"
+            },
+            {
+              "$eez": false,
+              "type": "Local.IPAddress",
+              "data": "ethernet.dns",
+              "x": 106,
+              "y": 60,
+              "width": 146,
+              "height": 28,
+              "style": "default"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 12,
+              "y": 88,
+              "width": 95,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Gateway:"
+            },
+            {
+              "$eez": false,
+              "type": "Local.IPAddress",
+              "data": "ethernet.gateway",
+              "x": 106,
+              "y": 88,
+              "width": 146,
+              "height": 28,
+              "style": "default"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 12,
+              "y": 116,
+              "width": 95,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Subn. mask:"
+            },
+            {
+              "$eez": false,
+              "type": "Local.IPAddress",
+              "data": "ethernet.subnetMask",
+              "x": 106,
+              "y": 116,
+              "width": 146,
+              "height": 28,
+              "style": "default"
+            },
+            {
+              "$eez": false,
+              "type": "Button",
+              "data": "",
+              "action": "set",
+              "x": 0,
+              "y": 204,
+              "width": 101,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "discard",
+              "x": 101,
+              "y": 204,
+              "width": 96,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 197,
+              "y": 204,
+              "width": 27,
               "height": 36,
               "style": "bottom_button_background"
             },
@@ -29154,6 +29781,92 @@
             "width": 320,
             "height": 3,
             "style": "default_inverse"
+          }
+        ]
+      },
+      {
+        "$eez": false,
+        "name": "IPAddress",
+        "width": 146,
+        "height": 28,
+        "widgets": [
+          {
+            "$eez": false,
+            "type": "Text",
+            "data": "ipAddress.a",
+            "action": "editIpAddressPart",
+            "x": 0,
+            "y": 0,
+            "width": 32,
+            "height": 28,
+            "style": "edit_value_active_S_center",
+            "text": "255"
+          },
+          {
+            "$eez": false,
+            "type": "Text",
+            "x": 32,
+            "y": 0,
+            "width": 6,
+            "height": 28,
+            "style": "edit_value_S_left",
+            "text": "."
+          },
+          {
+            "$eez": false,
+            "type": "Text",
+            "data": "ipAddress.b",
+            "action": "editIpAddressPart",
+            "x": 38,
+            "y": 0,
+            "width": 32,
+            "height": 28,
+            "style": "edit_value_active_S_center",
+            "text": "255"
+          },
+          {
+            "$eez": false,
+            "type": "Text",
+            "x": 70,
+            "y": 0,
+            "width": 6,
+            "height": 28,
+            "style": "edit_value_S_left",
+            "text": "."
+          },
+          {
+            "$eez": false,
+            "type": "Text",
+            "data": "ipAddress.c",
+            "action": "editIpAddressPart",
+            "x": 76,
+            "y": 0,
+            "width": 32,
+            "height": 28,
+            "style": "edit_value_active_S_center",
+            "text": "255"
+          },
+          {
+            "$eez": false,
+            "type": "Text",
+            "x": 108,
+            "y": 0,
+            "width": 6,
+            "height": 28,
+            "style": "edit_value_S_left",
+            "text": "."
+          },
+          {
+            "$eez": false,
+            "type": "Text",
+            "data": "ipAddress.d",
+            "action": "editIpAddressPart",
+            "x": 114,
+            "y": 0,
+            "width": 32,
+            "height": 28,
+            "style": "edit_value_active_S_center",
+            "text": "255"
           }
         ]
       }
@@ -79338,6 +80051,66 @@
           {
             "$eez": false,
             "name": "SYSTem:COMMunicate:SERial:PARity?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ENABle"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ENABle?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:DHCP"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:DHCP?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:ADDRess"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:ADDRess?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:DNS"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:DNS?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:GATEway"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:GATEway?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:SMASk"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:SMASk?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:PORT"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:PORT?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:MAC?"
           }
         ]
       },
@@ -79534,7 +80307,7 @@
       {
         "$eez": false,
         "name": "serial",
-        "code": "scpi> SYSTem:COMMunicate:SERial:BAUD 4800\r\nscpi> SYSTem:COMMunicate:SERial:BAUD?\r\n4800\r\nscpi> SYSTem:COMMunicate:SERial:BAUD 7200\r\nscpi> SYSTem:COMMunicate:SERial:BAUD?\r\n7200\r\nscpi> SYSTem:COMMunicate:SERial:BAUD 9600\r\nscpi> SYSTem:COMMunicate:SERial:BAUD?\r\n9600\r\nscpi> SYSTem:COMMunicate:SERial:BAUD 14400\r\nscpi> SYSTem:COMMunicate:SERial:BAUD?\r\n14400\r\nscpi> SYSTem:COMMunicate:SERial:BAUD 19200\r\nscpi> SYSTem:COMMunicate:SERial:BAUD?\r\n19200\r\nscpi> SYSTem:COMMunicate:SERial:BAUD 38400\r\nscpi> SYSTem:COMMunicate:SERial:BAUD?\r\n38400\r\nscpi> SYSTem:COMMunicate:SERial:BAUD 57600\r\nscpi> SYSTem:COMMunicate:SERial:BAUD?\r\n57600\r\nscpi> SYSTem:COMMunicate:SERial:BAUD 115200\r\nscpi> SYSTem:COMMunicate:SERial:BAUD?\r\n115200\r\nscpi> SYSTem:COMMunicate:SERial:BAUD 200000\r\n**ERROR: -222,\"Data out of range\"\r\nscpi> SYSTem:COMMunicate:SERial:BAUD?\r\n115200\r\nscpi> SYSTem:COMMunicate:SERial:PARity none\r\nscpi> SYSTem:COMMunicate:SERial:PARity?\r\n\"NONE\"\r\nscpi> SYSTem:COMMunicate:SERial:PARity EVEN\r\nscpi> SYSTem:COMMunicate:SERial:PARity?\r\n\"EVEN\"\r\nscpi> SYSTem:COMMunicate:SERial:PARity ODD\r\nscpi> SYSTem:COMMunicate:SERial:PARity?\r\n\"ODD\"\r\nscpi> SYSTem:COMMunicate:SERial:PARity MARK\r\nscpi> SYSTem:COMMunicate:SERial:PARity?\r\n\"MARK\"\r\nscpi> SYSTem:COMMunicate:SERial:PARity SPACE\r\nscpi> SYSTem:COMMunicate:SERial:PARity?\r\n\"SPACE\"\r\nscpi> SYSTem:COMMunicate:SERial:PARity TRT\r\n**ERROR: -224,\"Illegal parameter value\"\r\nscpi> SYSTem:COMMunicate:SERial:PARity?\r\n\"SPACE\"\r\n"
+        "code": "scpi> SYSTem:COMMunicate:SERial:BAUD 4800\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n4800\nscpi> SYSTem:COMMunicate:SERial:BAUD 9600\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n9600\nscpi> SYSTem:COMMunicate:SERial:BAUD 19200\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n19200\nscpi> SYSTem:COMMunicate:SERial:BAUD 38400\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n38400\nscpi> SYSTem:COMMunicate:SERial:BAUD 57600\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n57600\nscpi> SYSTem:COMMunicate:SERial:BAUD 115200\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n115200\nscpi> SYSTem:COMMunicate:SERial:BAUD 200000\n**ERROR: -222,\"Data out of range\"\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n115200\nscpi> SYSTem:COMMunicate:SERial:PARity none\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"NONE\"\nscpi> SYSTem:COMMunicate:SERial:PARity EVEN\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"EVEN\"\nscpi> SYSTem:COMMunicate:SERial:PARity ODD\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"ODD\"\nscpi> SYSTem:COMMunicate:SERial:PARity MARK\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"MARK\"\nscpi> SYSTem:COMMunicate:SERial:PARity SPACE\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"SPACE\"\nscpi> SYSTem:COMMunicate:SERial:PARity TRT\n**ERROR: -224,\"Illegal parameter value\"\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"SPACE\"\n"
       }
     ],
     "playground": {

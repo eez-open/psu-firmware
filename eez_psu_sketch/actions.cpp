@@ -469,12 +469,24 @@ void action_toggle_channels_view_mode() {
     persist_conf::toggleChannelsViewMode();
 }
 
-void action_sys_settings_ethernet_enable() {
-    SysSettingsEthernetPage::enable();
+void action_edit_ip_address_part() {
+    getActivePage()->editIpAddressPart();
 }
 
-void action_sys_settings_ethernet_disable() {
-    SysSettingsEthernetPage::disable();
+void action_ethernet_toggle() {
+    ((SysSettingsEthernetPage *)getActivePage())->toggle();
+}
+
+void action_ethernet_toggle_dhcp() {
+    ((SysSettingsEthernetPage *)getActivePage())->toggleDhcp();
+}
+
+void action_ethernet_edit_static_address() {
+    ((SysSettingsEthernetPage *)getActivePage())->editStaticAddress();
+}
+
+void action_ethernet_edit_scpi_port() {
+    ((SysSettingsEthernetPage *)getActivePage())->editScpiPort();
 }
 
 void action_ch_settings_adv_coupling_uncouple() {
@@ -724,6 +736,10 @@ void action_io_pin_select_function() {
     ((SysSettingsIOPinsPage *)getActivePage())->selectFunction();
 }
 
+void action_serial_toggle() {
+    ((SysSettingsSerialPage *)getActivePage())->toggle();
+}
+
 void action_serial_select_parity() {
     ((SysSettingsSerialPage *)getActivePage())->selectParity();
 }
@@ -835,8 +851,11 @@ ACTION actions[] = {
     action_profile_delete,
     action_profile_edit_remark,
     action_toggle_channels_view_mode,
-    action_sys_settings_ethernet_enable,
-    action_sys_settings_ethernet_disable,
+    action_edit_ip_address_part,
+    action_ethernet_toggle,
+    action_ethernet_toggle_dhcp,
+    action_ethernet_edit_static_address,
+    action_ethernet_edit_scpi_port,
     action_ch_settings_adv_coupling_uncouple,
     action_ch_settings_adv_coupling_set_parallel_info,
     action_ch_settings_adv_coupling_set_series_info,
@@ -896,6 +915,7 @@ ACTION actions[] = {
     action_ch_settings_adv_ranges_toggle_auto_ranging,
     action_io_pin_toggle_polarity,
     action_io_pin_select_function,
+    action_serial_toggle,
     action_serial_select_parity
 };
 

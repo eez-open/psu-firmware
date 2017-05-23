@@ -180,7 +180,10 @@ Page *createPageFromId(int pageId) {
     case PAGE_ID_CH_SETTINGS_LISTS: return new ChSettingsListsPage();
     case PAGE_ID_CH_SETTINGS_INFO: return new ChSettingsInfoPage();
     case PAGE_ID_SYS_SETTINGS_DATE_TIME: return new SysSettingsDateTimePage();
+#if OPTION_ETHERNET
     case PAGE_ID_SYS_SETTINGS_ETHERNET: return new SysSettingsEthernetPage();
+    case PAGE_ID_SYS_SETTINGS_ETHERNET_STATIC: return new SysSettingsEthernetStaticPage();
+#endif
     case PAGE_ID_SYS_SETTINGS_PROTECTIONS: return new SysSettingsProtectionsPage();
     case PAGE_ID_SYS_SETTINGS_TRIGGER: return new SysSettingsTriggerPage();
     case PAGE_ID_SYS_SETTINGS_IO: return new SysSettingsIOPinsPage();

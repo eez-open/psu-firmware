@@ -170,6 +170,11 @@ scpi_result_t scpi_cmd_debugCurrent(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_debugMeasureVoltage(scpi_t *context) {
+    if (persist_conf::isSerialEnabled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;

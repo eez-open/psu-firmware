@@ -25,8 +25,8 @@ namespace psu {
 namespace ethernet {
 
 extern TestResult g_testResult;
-
 extern scpi_t scpi_context;
+extern uint8_t g_mac[];
 
 void init();
 bool test();

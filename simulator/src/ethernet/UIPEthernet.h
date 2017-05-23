@@ -32,7 +32,7 @@ public:
 /// Arduino Ethernet object simulator
 class SimulatorEthernet {
 public:
-    bool begin(uint8_t *mac);
+    bool begin(uint8_t *mac, uint8_t *ipAddress = 0, uint8_t *dns = 0, uint8_t *gateway = 0, uint8_t *subnetMask = 0);
     uint8_t maintain();
 
     IPAddress localIP();

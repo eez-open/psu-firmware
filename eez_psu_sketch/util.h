@@ -87,6 +87,27 @@ bool pointInsideRect(int xPoint, int yPoint, int xRect, int yRect, int wRect, in
 
 void getParentDir(const char *path, char *parentDirPath);
 
+int getIpAddressPartA(uint32_t ipAddress);
+void setIpAddressPartA(uint32_t *ipAddress, uint8_t value);
+
+int getIpAddressPartB(uint32_t ipAddress);
+void setIpAddressPartB(uint32_t *ipAddress, uint8_t value);
+
+int getIpAddressPartC(uint32_t ipAddress);
+void setIpAddressPartC(uint32_t *ipAddress, uint8_t value);
+
+int getIpAddressPartD(uint32_t ipAddress);
+void setIpAddressPartD(uint32_t *ipAddress, uint8_t value);
+
+void ipAddressToArray(uint32_t ipAddress, uint8_t *ipAddressArray);
+
+uint32_t getIpAddress(uint8_t a, uint8_t b, uint8_t c, uint8_t d);
+
+bool parseIpAddress(const char *ipAddressStr, size_t ipAddressStrLength, uint32_t &ipAddress);
+void ipAddressToString(uint32_t &ipAddress, char *ipAddressStr);
+
+char hexDigit(int num);
+
 }
 }
 } // namespace eez::psu::util

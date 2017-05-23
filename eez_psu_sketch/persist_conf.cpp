@@ -50,7 +50,7 @@ enum PersistConfSection {
 ////////////////////////////////////////////////////////////////////////////////
 
 static const uint16_t DEV_CONF_VERSION = 0x0008L;
-static const uint16_t DEV_CONF2_VERSION = 0x0005L;
+static const uint16_t DEV_CONF2_VERSION = 0x0006L;
 static const uint16_t CH_CAL_CONF_VERSION = 0x0003L;
 static const uint16_t PROFILE_VERSION = 0x0008L;
 
@@ -169,6 +169,15 @@ bool saveDevice() {
     return save((BlockHeader *)&devConf, sizeof(DeviceConfiguration), get_address(PERSIST_CONF_BLOCK_DEVICE), DEV_CONF_VERSION);
 }
 
+static void initEthernetSettings() {
+    devConf2.flags.ethernetDhcpEnabled = 1;
+    devConf2.ethernetIpAddress = util::getIpAddress(192, 168, 1, 100);
+    devConf2.ethernetDns = util::getIpAddress(192, 168, 1, 1);
+    devConf2.ethernetGateway = util::getIpAddress(192, 168, 1, 1);
+    devConf2.ethernetSubnetMask = util::getIpAddress(255, 255, 255, 0);
+    devConf2.ethernetScpiPort = TCP_PORT;
+}
+
 static void initDevice2() {
     memset(&devConf2, 0, sizeof(devConf2));
     devConf2.header.version = DEV_CONF2_VERSION;
@@ -180,6 +189,8 @@ static void initDevice2() {
 
     devConf2.serialBaud = getIndexFromBaud(SERIAL_SPEED);
     devConf2.serialParity = serial::PARITY_NONE;
+
+    initEthernetSettings();
 }
 
 void loadDevice2() {
@@ -187,6 +198,11 @@ void loadDevice2() {
         eeprom::read((uint8_t *)&devConf2, sizeof(DeviceConfiguration2), get_address(PERSIST_CONF_BLOCK_DEVICE2));
         if (!check_block((BlockHeader *)&devConf2, sizeof(DeviceConfiguration2), DEV_CONF2_VERSION)) {
             initDevice2();
+        } else {
+            if (devConf2.header.version < 6) {
+                devConf2.flags.serialEnabled = 1;
+                initEthernetSettings();
+            }
         }
     }
     else {
@@ -611,8 +627,17 @@ bool setDisplayBrightness(uint8_t displayBrightness) {
     return saveDevice2();
 }
 
+bool enableSerial(bool enable) {
+    devConf2.flags.serialEnabled = enable ? 1 : 0;
+    return saveDevice2();
+}
+
+bool isSerialEnabled() {
+    return devConf2.flags.serialEnabled ? true : false;
+}
+
 int getIndexFromBaud(long baud) {
-    for (int i = 0; i < serial::g_baudsSize; ++i) {
+    for (size_t i = 0; i < serial::g_baudsSize; ++i) {
         if (serial::g_bauds[i] == baud) {
             return i + 1;
         }
@@ -647,6 +672,74 @@ bool setSerialParity(int parity) {
         serial::update();
         return true;
     }
+    return false;
+}
+
+bool setSerialSettings(bool enabled, int baudIndex, int parity) {
+    devConf2.flags.serialEnabled = enabled;
+    devConf2.serialBaud = (uint8_t)baudIndex;
+    devConf2.serialParity = (unsigned)parity;
+    if (saveDevice2()) {
+        serial::update();
+        return true;
+    }
+    return false;
+}
+
+bool enableEthernetDhcp(bool enable) {
+    devConf2.flags.ethernetDhcpEnabled = enable ? 1 : 0;
+    return saveDevice2();
+}
+
+bool isEthernetDhcpEnabled() {
+    return devConf2.flags.ethernetDhcpEnabled ? true : false;
+}
+
+bool setEthernetIpAddress(uint32_t ipAddress) {
+    devConf2.ethernetIpAddress = ipAddress;
+    return saveDevice2();
+}
+
+bool setEthernetDns(uint32_t dns) {
+    devConf2.ethernetDns = dns;
+    return saveDevice2();
+}
+
+bool setEthernetGateway(uint32_t gateway) {
+    devConf2.ethernetGateway = gateway;
+    return saveDevice2();
+}
+
+bool setEthernetSubnetMask(uint32_t subnetMask) {
+    devConf2.ethernetSubnetMask = subnetMask;
+    return saveDevice2();
+}
+
+bool setEthernetScpiPort(uint16_t scpiPort) {
+    devConf2.ethernetScpiPort = scpiPort;
+    return saveDevice2();
+}
+
+bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint32_t dns, uint32_t gateway, uint32_t subnetMask, uint16_t scpiPort) {
+    unsigned ethernetEnabled = devConf.flags.ethernetEnabled;
+    devConf.flags.ethernetEnabled = enable ? 1 : 0;
+
+    devConf2.flags.ethernetDhcpEnabled = dhcpEnable ? 1 : 0;
+
+    devConf2.ethernetIpAddress = ipAddress;
+    devConf2.ethernetDns = dns;
+    devConf2.ethernetGateway = gateway;
+    devConf2.ethernetSubnetMask = subnetMask;
+
+    devConf2.ethernetScpiPort = scpiPort;
+
+    if (saveDevice2()) {
+        if (ethernetEnabled != devConf.flags.ethernetEnabled) {
+		    event_queue::pushEvent(devConf.flags.ethernetEnabled ? event_queue::EVENT_INFO_ETHERNET_ENABLED : event_queue::EVENT_INFO_ETHERNET_DISABLED);
+        }
+        return true;
+    }
+
     return false;
 }
 

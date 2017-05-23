@@ -44,9 +44,9 @@ namespace ethernet {
 
 psu::TestResult g_testResult = psu::TEST_FAILED;
 
-static uint8_t mac[6] = ETHERNET_MAC_ADDRESS;
+uint8_t g_mac[6] = ETHERNET_MAC_ADDRESS;
 
-static EthernetServer server(TCP_PORT);
+static EthernetServer *server;
 
 static bool g_isConnected = false;
 static EthernetClient g_activeClient;
@@ -101,7 +101,7 @@ scpi_result_t SCPI_Control(scpi_t *context, scpi_ctrl_name_t ctrl, scpi_reg_val_
 scpi_result_t SCPI_Reset(scpi_t *context) {
     char errorOutputBuffer[256];
     strcpy_P(errorOutputBuffer, PSTR("**Reset\r\n"));
-    Serial.println(errorOutputBuffer);
+    ethernet_client_write(g_activeClient, errorOutputBuffer, strlen(errorOutputBuffer));
 
     return psu::reset() ? SCPI_RES_OK : SCPI_RES_ERR;
 }
@@ -145,7 +145,28 @@ void init() {
 
     SPI.beginTransaction(ETHERNET_SPI);
 
-    if (!Ethernet.begin(mac)) {
+    bool result;
+    if (persist_conf::isEthernetDhcpEnabled()) {
+        result = Ethernet.begin(g_mac);
+    } else {
+        uint8_t ipAddress[4];
+        util::ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
+
+        uint8_t dns[4];
+        util::ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
+
+        uint8_t gateway[4];
+        util::ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
+
+        uint8_t subnetMask[4];
+        util::ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
+
+        Ethernet.begin(g_mac, ipAddress, dns, gateway, subnetMask);
+
+        result = 1;
+    }
+
+    if (!result) {
         SPI.endTransaction();
 
         g_testResult = psu::TEST_WARNING;
@@ -155,20 +176,24 @@ void init() {
         return;
     }
 
-    server.begin();
+    server = new EthernetServer(persist_conf::devConf2.ethernetScpiPort);
+
+    server->begin();
 
     SPI.endTransaction();
 
     g_testResult = psu::TEST_OK;
 
-    DebugTraceF("Listening on port %d", (int)TCP_PORT);
+    DebugTraceF("Listening on port %d", (int)persist_conf::devConf2.ethernetScpiPort);
 
 #ifdef EEZ_PSU_ARDUINO
 #if CONF_DEBUG || CONF_DEBUG_LATEST
-    Serial.print("My IP: "); Serial.println(Ethernet.localIP());
-    Serial.print("Netmask: "); Serial.println(Ethernet.subnetMask());
-    Serial.print("GW IP: "); Serial.println(Ethernet.gatewayIP());
-    Serial.print("DNS IP: "); Serial.println(Ethernet.dnsServerIP());
+    if (persist_conf::isEthernetDhcpEnabled() && persist_conf::isSerialEnabled()) {
+        Serial.print("My IP: "); Serial.println(Ethernet.localIP());
+        Serial.print("Netmask: "); Serial.println(Ethernet.subnetMask());
+        Serial.print("GW IP: "); Serial.println(Ethernet.gatewayIP());
+        Serial.print("DNS IP: "); Serial.println(Ethernet.dnsServerIP());
+    }
 #endif
 #endif
 
@@ -204,7 +229,7 @@ void tick(uint32_t tick_usec) {
         }
     }
 
-    EthernetClient client = server.available();
+    EthernetClient client = server->available();
 
     if (client) {
         if (!g_isConnected) {

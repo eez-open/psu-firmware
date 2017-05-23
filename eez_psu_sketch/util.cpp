@@ -303,6 +303,115 @@ void getParentDir(const char *path, char *parentDirPath) {
     parentDirPath[i] = 0;
 }
 
+bool parseIpAddress(const char *ipAddressStr, size_t ipAddressStrLength, uint32_t &ipAddress) {
+    const char *p = ipAddressStr;
+    const char *q = ipAddressStr + ipAddressStrLength;
+
+    uint32_t result = 0;
+
+    for (int i = 0; i < 4; ++i) {
+        if (p == q) {
+            return false;
+        }
+
+        uint32_t part = 0;
+        for (int j = 0; j < 3; ++j) {
+            if (p == q) {
+                if (j > 0 && i == 3) {
+                    break;
+                } else {
+                    return false;
+                }
+            } else if (isDigit(*p)) {
+                part = part * 10 + (*p++ - '0');
+            } else if (j > 0 && *p == '.') {
+                break;
+            } else {
+                return false;
+            }
+        }
+
+        if (part > 255) {
+            return false;
+        }
+
+        if (i < 3 && *p++ != '.' || i == 3 && p != q) {
+            return false;
+        }
+
+        result = (result << 8) + part;
+    }
+
+    ipAddress = result;
+
+    return true;
+}
+
+int getIpAddressPartA(uint32_t ipAddress) {
+    return ipAddress >> 24;
+}
+
+void setIpAddressPartA(uint32_t *ipAddress, uint8_t value) {
+    *ipAddress = (*ipAddress & 0x00FFFFFF) | (value << 24);
+}
+
+int getIpAddressPartB(uint32_t ipAddress) {
+    return (ipAddress & 0xFF0000L) >> 16;
+}
+
+void setIpAddressPartB(uint32_t *ipAddress, uint8_t value) {
+    *ipAddress = (*ipAddress & 0xFF00FFFF) | (value << 16);
+}
+
+int getIpAddressPartC(uint32_t ipAddress) {
+    return (ipAddress & 0xFF00) >> 8;
+}
+
+void setIpAddressPartC(uint32_t *ipAddress, uint8_t value) {
+    *ipAddress = (*ipAddress & 0xFFFF00FF) | (value << 8);
+}
+
+int getIpAddressPartD(uint32_t ipAddress) {
+    return ipAddress & 0xFF;
+}
+
+void setIpAddressPartD(uint32_t *ipAddress, uint8_t value) {
+    *ipAddress = (*ipAddress & 0xFFFFFF00) | value;
+}
+
+void ipAddressToArray(uint32_t ipAddress, uint8_t *ipAddressArray) {
+    ipAddressArray[0] = getIpAddressPartA(ipAddress);
+    ipAddressArray[1] = getIpAddressPartB(ipAddress);
+    ipAddressArray[2] = getIpAddressPartC(ipAddress);
+    ipAddressArray[3] = getIpAddressPartD(ipAddress);
+}
+
+uint32_t getIpAddress(uint8_t a, uint8_t b, uint8_t c, uint8_t d) {
+    uint32_t ipAddress;
+
+    setIpAddressPartA(&ipAddress, a);
+    setIpAddressPartB(&ipAddress, b);
+    setIpAddressPartC(&ipAddress, c);
+    setIpAddressPartD(&ipAddress, d);
+
+    return ipAddress;
+}
+
+void ipAddressToString(uint32_t &ipAddress, char *ipAddressStr) {
+    sprintf(ipAddressStr, "%d.%d.%d.%d",
+        getIpAddressPartA(ipAddress),
+        getIpAddressPartB(ipAddress),
+        getIpAddressPartC(ipAddress),
+        getIpAddressPartD(ipAddress));
+}
+
+char hexDigit(int num) {
+    if (num >= 0 && num <= 9) {
+        return '0' + num;
+    } else {
+        return 'A' + (num - 10);
+    }
+}
 
 }
 }

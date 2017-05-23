@@ -128,16 +128,18 @@ void input(scpi_t &scpi_context, const char *str, size_t size) {
 void printError(int_fast16_t err) {
     sound::playBeep();
 
-    char errorOutputBuffer[256];
+    if (persist_conf::isSerialEnabled()) {
+        char errorOutputBuffer[256];
 
-    char datetime_buffer[20] = { 0 };
-    if (datetime::getDateTimeAsString(datetime_buffer)) {
-        sprintf_P(errorOutputBuffer, PSTR("**ERROR [%s]: %d,\"%s\"\r\n"), datetime_buffer, (int16_t)err, SCPI_ErrorTranslate(err));
-    } else {
-        sprintf_P(errorOutputBuffer, PSTR("**ERROR: %d,\"%s\"\r\n"), (int16_t)err, SCPI_ErrorTranslate(err));
+        char datetime_buffer[20] = { 0 };
+        if (datetime::getDateTimeAsString(datetime_buffer)) {
+            sprintf_P(errorOutputBuffer, PSTR("**ERROR [%s]: %d,\"%s\"\r\n"), datetime_buffer, (int16_t)err, SCPI_ErrorTranslate(err));
+        } else {
+            sprintf_P(errorOutputBuffer, PSTR("**ERROR: %d,\"%s\"\r\n"), (int16_t)err, SCPI_ErrorTranslate(err));
+        }
+
+        Serial.println(errorOutputBuffer);
     }
-
-    Serial.println(errorOutputBuffer);
 }
 
 void resultChoiceName(scpi_t * context, scpi_choice_def_t *choice, int tag) {

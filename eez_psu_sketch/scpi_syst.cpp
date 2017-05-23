@@ -20,6 +20,7 @@
 #include "scpi_psu.h"
 
 #include "serial_psu.h"
+#include "ethernet.h"
 #include "datetime.h"
 #include "sound.h"
 #include "profile.h"
@@ -802,6 +803,207 @@ scpi_result_t scpi_cmd_systemCommunicateSerialParity(scpi_t *context) {
 
 scpi_result_t scpi_cmd_systemCommunicateSerialParityQ(scpi_t *context) {
     resultChoiceName(context, parityChoice, persist_conf::getSerialParity());
+    return SCPI_RES_OK;
+}
+
+// NONE|ODD|EVEN
+static scpi_choice_def_t commInterfaceChoice[] = {
+    { "SERial", 1 },
+    { "ETHernet", 2 },
+    { "NTP", 3 },
+    { "SOCKets", 4 },
+    SCPI_CHOICE_LIST_END
+};
+
+
+scpi_result_t scpi_cmd_systemCommunicateEnable(scpi_t *context) {
+    bool enable;
+    if (!SCPI_ParamBool(context, &enable, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    int32_t commInterface;
+    if (!SCPI_ParamChoice(context, parityChoice, &commInterface, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (commInterface == 1) {
+        persist_conf::enableEthernet(enable);
+    } else if (commInterface == 1) {
+        persist_conf::enableSerial(enable);
+    }
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEnableQ(scpi_t *context) {
+    int32_t commInterface;
+    if (!SCPI_ParamChoice(context, parityChoice, &commInterface, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (commInterface == 1) {
+        SCPI_ResultBool(context, persist_conf::isEthernetEnabled());
+    } else if (commInterface == 1) {
+        SCPI_ResultBool(context, persist_conf::isSerialEnabled());
+    } else {
+        SCPI_ResultBool(context, false);
+    }
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEthernetDhcp(scpi_t *context) {
+    bool enable;
+    if (!SCPI_ParamBool(context, &enable, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    persist_conf::enableEthernetDhcp(enable);
+
+    return SCPI_RES_ERR;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEthernetDhcpQ(scpi_t *context) {
+    SCPI_ResultBool(context, persist_conf::isEthernetDhcpEnabled());
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEthernetAddress(scpi_t *context) {
+    const char *ipAddressStr;
+    size_t ipAddressStrLength;
+
+    if (!SCPI_ParamCharacters(context, &ipAddressStr, &ipAddressStrLength, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    uint32_t ipAddress;
+    if (!util::parseIpAddress(ipAddressStr, ipAddressStrLength, ipAddress)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+        return SCPI_RES_ERR;
+    }
+
+    persist_conf::setEthernetIpAddress(ipAddress);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEthernetAddressQ(scpi_t *context) {
+    char ipAddressStr[16];
+    util::ipAddressToString(persist_conf::devConf2.ethernetIpAddress, ipAddressStr);
+    SCPI_ResultText(context, ipAddressStr);
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEthernetDns(scpi_t *context) {
+    const char *ipAddressStr;
+    size_t ipAddressStrLength;
+
+    if (!SCPI_ParamCharacters(context, &ipAddressStr, &ipAddressStrLength, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    uint32_t ipAddress;
+    if (!util::parseIpAddress(ipAddressStr, ipAddressStrLength, ipAddress)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+        return SCPI_RES_ERR;
+    }
+
+    persist_conf::setEthernetDns(ipAddress);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEthernetDnsQ(scpi_t *context) {
+    char ipAddressStr[16];
+    util::ipAddressToString(persist_conf::devConf2.ethernetDns, ipAddressStr);
+    SCPI_ResultText(context, ipAddressStr);
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEthernetGateway(scpi_t *context) {
+    const char *ipAddressStr;
+    size_t ipAddressStrLength;
+
+    if (!SCPI_ParamCharacters(context, &ipAddressStr, &ipAddressStrLength, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    uint32_t ipAddress;
+    if (!util::parseIpAddress(ipAddressStr, ipAddressStrLength, ipAddress)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+        return SCPI_RES_ERR;
+    }
+
+    persist_conf::setEthernetGateway(ipAddress);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEthernetGatewayQ(scpi_t *context) {
+    char ipAddressStr[16];
+    util::ipAddressToString(persist_conf::devConf2.ethernetGateway, ipAddressStr);
+    SCPI_ResultText(context, ipAddressStr);
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEthernetSmask(scpi_t *context) {
+    const char *ipAddressStr;
+    size_t ipAddressStrLength;
+
+    if (!SCPI_ParamCharacters(context, &ipAddressStr, &ipAddressStrLength, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    uint32_t ipAddress;
+    if (!util::parseIpAddress(ipAddressStr, ipAddressStrLength, ipAddress)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+        return SCPI_RES_ERR;
+    }
+
+    persist_conf::setEthernetSubnetMask(ipAddress);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEthernetSmaskQ(scpi_t *context) {
+    char ipAddressStr[16];
+    util::ipAddressToString(persist_conf::devConf2.ethernetSubnetMask, ipAddressStr);
+    SCPI_ResultText(context, ipAddressStr);
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEthernetPort(scpi_t *context) {
+    int32_t port;
+    if (!SCPI_ParamInt(context, &port, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (port < 0 && port > 65535) {
+        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+        return SCPI_RES_ERR;
+    }
+
+    persist_conf::setEthernetScpiPort((uint16_t)port);
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEthernetPortQ(scpi_t *context) {
+    SCPI_ResultInt(context, persist_conf::devConf2.ethernetScpiPort);
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemCommunicateEthernetMacQ(scpi_t *context) {
+    char macStr[18];
+    for (int i = 0; i < 6; ++i) {
+        macStr[3*i] = util::hexDigit((ethernet::g_mac[i] & 0xF0) >> 4);
+        macStr[3*i+1] = util::hexDigit(ethernet::g_mac[i] & 0xF);
+        macStr[3*i+2] = i < 5 ? '-' : 0;
+    }
+
+    SCPI_ResultText(context, macStr);
+
     return SCPI_RES_OK;
 }
 

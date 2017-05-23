@@ -24,6 +24,7 @@ namespace eez {
 namespace psu {
 namespace serial {
 
+extern TestResult g_testResult;
 extern scpi_t scpi_context;
 
 void init();
