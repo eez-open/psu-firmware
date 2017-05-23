@@ -995,6 +995,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetPortQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetMacQ(scpi_t *context) {
+#if OPTION_ETHERNET
     char macStr[18];
     for (int i = 0; i < 6; ++i) {
         macStr[3*i] = util::hexDigit((ethernet::g_mac[i] & 0xF0) >> 4);
@@ -1005,6 +1006,10 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetMacQ(scpi_t *context) {
     SCPI_ResultText(context, macStr);
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 }

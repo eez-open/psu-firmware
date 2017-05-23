@@ -697,25 +697,25 @@
       "$eez": false,
       "name": "ethernet.toggle",
       "implementationType": "native",
-      "implementation": "((SysSettingsEthernetPage *)getActivePage())->toggle();\n"
+      "implementation": "#if OPTION_ETHERNET\n((SysSettingsEthernetPage *)getActivePage())->toggle();\n#endif\n"
     },
     {
       "$eez": false,
       "name": "ethernet.toggleDhcp",
       "implementationType": "native",
-      "implementation": "((SysSettingsEthernetPage *)getActivePage())->toggleDhcp();\n"
+      "implementation": "#if OPTION_ETHERNET\n((SysSettingsEthernetPage *)getActivePage())->toggleDhcp();\n#endif\n"
     },
     {
       "$eez": false,
       "name": "ethernet.editStaticAddress",
       "implementationType": "native",
-      "implementation": "((SysSettingsEthernetPage *)getActivePage())->editStaticAddress();\n"
+      "implementation": "#if OPTION_ETHERNET\n((SysSettingsEthernetPage *)getActivePage())->editStaticAddress();\n#endif"
     },
     {
       "$eez": false,
       "name": "ethernet.editScpiPort",
       "implementationType": "native",
-      "implementation": "((SysSettingsEthernetPage *)getActivePage())->editScpiPort();\n"
+      "implementation": "#if OPTION_ETHERNET\n((SysSettingsEthernetPage *)getActivePage())->editScpiPort();\n#endif"
     },
     {
       "$eez": false,

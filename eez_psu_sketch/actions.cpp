@@ -474,19 +474,27 @@ void action_edit_ip_address_part() {
 }
 
 void action_ethernet_toggle() {
+    #if OPTION_ETHERNET
     ((SysSettingsEthernetPage *)getActivePage())->toggle();
+    #endif
 }
 
 void action_ethernet_toggle_dhcp() {
+    #if OPTION_ETHERNET
     ((SysSettingsEthernetPage *)getActivePage())->toggleDhcp();
+    #endif
 }
 
 void action_ethernet_edit_static_address() {
+    #if OPTION_ETHERNET
     ((SysSettingsEthernetPage *)getActivePage())->editStaticAddress();
+    #endif
 }
 
 void action_ethernet_edit_scpi_port() {
+    #if OPTION_ETHERNET
     ((SysSettingsEthernetPage *)getActivePage())->editScpiPort();
+    #endif
 }
 
 void action_ch_settings_adv_coupling_uncouple() {
