@@ -90,6 +90,11 @@ void NumericKeypad::init(const char *label, const data::Value& value, NumericKey
     m_maxChars = 16;
 
     reset();
+
+    if (value.getType() == VALUE_TYPE_IP_ADDRESS) {
+        util::ipAddressToString(value.getUInt32(), m_keypadText);
+        m_state = BEFORE_DOT;
+    }
 }
 
 NumericKeypad *NumericKeypad::start(const char *label, const data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)()) {

@@ -828,9 +828,9 @@ scpi_result_t scpi_cmd_systemCommunicateEnable(scpi_t *context) {
     }
 
     if (commInterface == 1) {
-        persist_conf::enableEthernet(enable);
-    } else if (commInterface == 1) {
         persist_conf::enableSerial(enable);
+    } else if (commInterface == 2) {
+        persist_conf::enableEthernet(enable);
     }
 
     return SCPI_RES_OK;
@@ -843,9 +843,9 @@ scpi_result_t scpi_cmd_systemCommunicateEnableQ(scpi_t *context) {
     }
 
     if (commInterface == 1) {
-        SCPI_ResultBool(context, persist_conf::isEthernetEnabled());
-    } else if (commInterface == 1) {
         SCPI_ResultBool(context, persist_conf::isSerialEnabled());
+    } else if (commInterface == 2) {
+        SCPI_ResultBool(context, persist_conf::isEthernetEnabled());
     } else {
         SCPI_ResultBool(context, false);
     }
