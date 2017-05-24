@@ -100,6 +100,7 @@ int getIpAddressPartD(uint32_t ipAddress);
 void setIpAddressPartD(uint32_t *ipAddress, uint8_t value);
 
 void ipAddressToArray(uint32_t ipAddress, uint8_t *ipAddressArray);
+uint32_t arrayToIpAddress(uint8_t *ipAddressArray);
 
 uint32_t getIpAddress(uint8_t a, uint8_t b, uint8_t c, uint8_t d);
 

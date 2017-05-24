@@ -50,7 +50,7 @@ enum PersistConfSection {
 ////////////////////////////////////////////////////////////////////////////////
 
 static const uint16_t DEV_CONF_VERSION = 0x0008L;
-static const uint16_t DEV_CONF2_VERSION = 0x0006L;
+static const uint16_t DEV_CONF2_VERSION = 0x0007L;
 static const uint16_t CH_CAL_CONF_VERSION = 0x0003L;
 static const uint16_t PROFILE_VERSION = 0x0008L;
 
@@ -77,7 +77,7 @@ uint32_t calc_checksum(const BlockHeader *block, uint16_t size) {
 }
 
 bool check_block(const BlockHeader *block, uint16_t size, uint16_t version) {
-    return block->checksum == calc_checksum(block, size) && block->version == version;
+    return block->checksum == calc_checksum(block, size) && block->version <= version;
 }
 
 bool save(BlockHeader *block, uint16_t size, uint16_t address, uint16_t version) {
@@ -199,7 +199,7 @@ void loadDevice2() {
         if (!check_block((BlockHeader *)&devConf2, sizeof(DeviceConfiguration2), DEV_CONF2_VERSION)) {
             initDevice2();
         } else {
-            if (devConf2.header.version < 6) {
+            if (devConf2.header.version < 7) {
                 devConf2.flags.serialEnabled = 1;
                 initEthernetSettings();
             }

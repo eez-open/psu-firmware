@@ -307,7 +307,7 @@ bool parseIpAddress(const char *ipAddressStr, size_t ipAddressStrLength, uint32_
     const char *p = ipAddressStr;
     const char *q = ipAddressStr + ipAddressStrLength;
 
-    uint32_t result = 0;
+    uint8_t ipAddressArray[4];
 
     for (int i = 0; i < 4; ++i) {
         if (p == q) {
@@ -339,44 +339,44 @@ bool parseIpAddress(const char *ipAddressStr, size_t ipAddressStrLength, uint32_
             return false;
         }
 
-        result = (result << 8) + part;
+        ipAddressArray[i] = part;
     }
 
-    ipAddress = result;
+    ipAddress = arrayToIpAddress(ipAddressArray);
 
     return true;
 }
 
 int getIpAddressPartA(uint32_t ipAddress) {
-    return ipAddress >> 24;
+    return ((uint8_t *)&ipAddress)[0];
 }
 
 void setIpAddressPartA(uint32_t *ipAddress, uint8_t value) {
-    *ipAddress = (*ipAddress & 0x00FFFFFF) | (value << 24);
+    ((uint8_t *)ipAddress)[0] = value;
 }
 
 int getIpAddressPartB(uint32_t ipAddress) {
-    return (ipAddress & 0xFF0000L) >> 16;
+    return ((uint8_t *)&ipAddress)[1];
 }
 
 void setIpAddressPartB(uint32_t *ipAddress, uint8_t value) {
-    *ipAddress = (*ipAddress & 0xFF00FFFF) | (value << 16);
+    ((uint8_t *)ipAddress)[1] = value;
 }
 
 int getIpAddressPartC(uint32_t ipAddress) {
-    return (ipAddress & 0xFF00) >> 8;
+    return ((uint8_t *)&ipAddress)[2];
 }
 
 void setIpAddressPartC(uint32_t *ipAddress, uint8_t value) {
-    *ipAddress = (*ipAddress & 0xFFFF00FF) | (value << 8);
+    ((uint8_t *)ipAddress)[2] = value;
 }
 
 int getIpAddressPartD(uint32_t ipAddress) {
-    return ipAddress & 0xFF;
+    return ((uint8_t *)&ipAddress)[3];
 }
 
 void setIpAddressPartD(uint32_t *ipAddress, uint8_t value) {
-    *ipAddress = (*ipAddress & 0xFFFFFF00) | value;
+    ((uint8_t *)ipAddress)[3] = value;
 }
 
 void ipAddressToArray(uint32_t ipAddress, uint8_t *ipAddressArray) {
@@ -384,6 +384,10 @@ void ipAddressToArray(uint32_t ipAddress, uint8_t *ipAddressArray) {
     ipAddressArray[1] = getIpAddressPartB(ipAddress);
     ipAddressArray[2] = getIpAddressPartC(ipAddress);
     ipAddressArray[3] = getIpAddressPartD(ipAddress);
+}
+
+uint32_t arrayToIpAddress(uint8_t *ipAddressArray) {
+    return getIpAddress(ipAddressArray[0], ipAddressArray[1], ipAddressArray[2], ipAddressArray[3]);
 }
 
 uint32_t getIpAddress(uint8_t a, uint8_t b, uint8_t c, uint8_t d) {

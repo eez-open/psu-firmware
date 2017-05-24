@@ -861,7 +861,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDhcp(scpi_t *context) {
 
     persist_conf::enableEthernetDhcp(enable);
 
-    return SCPI_RES_ERR;
+    return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetDhcpQ(scpi_t *context) {
