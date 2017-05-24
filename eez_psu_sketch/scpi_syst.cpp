@@ -890,7 +890,11 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetAddress(scpi_t *context) {
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetAddressQ(scpi_t *context) {
     char ipAddressStr[16];
-    util::ipAddressToString(persist_conf::devConf2.ethernetIpAddress, ipAddressStr);
+    if (persist_conf::devConf2.flags.ethernetDhcpEnabled) {
+        util::ipAddressToString(ethernet::getIpAddress(), ipAddressStr);
+    } else {
+        util::ipAddressToString(persist_conf::devConf2.ethernetIpAddress, ipAddressStr);
+    }
     SCPI_ResultText(context, ipAddressStr);
     return SCPI_RES_OK;
 }
