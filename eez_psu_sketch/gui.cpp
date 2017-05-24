@@ -762,6 +762,16 @@ void dateTimeNo() {
     persist_conf::saveDevice2();
 }
 
+void ethernetYes() {
+    executeAction(ACTION_ID_SHOW_SYS_SETTINGS_ETHERNET);
+}
+
+void ethernetNo() {
+    persist_conf::devConf2.flags.skipEthernetSetup = 1;
+    persist_conf::saveDevice2();
+}
+
+
 bool showSetupWizardQuestion() {
     if (!channel_dispatcher::isCoupled() && !channel_dispatcher::isTracked()) {
         if (!g_deviceFlags2.skipChannelCalibrations) {
@@ -779,7 +789,14 @@ bool showSetupWizardQuestion() {
             yesNoLater("Do you want to set date and time?", dateTimeYes, dateTimeNo);
             return true;
         }
-        return true;
+    }
+
+    if (!g_deviceFlags2.skipEthernetSetup) {
+        g_deviceFlags2.skipEthernetSetup = 1;
+        if (!persist_conf::isEthernetEnabled()) {
+            yesNoLater("Do you want to setup ethernet?", ethernetYes, ethernetNo);
+            return true;
+        }
     }
 
     return false;
@@ -1479,6 +1496,7 @@ void tick(uint32_t tick_usec) {
     g_wasFocusCursor = g_focusCursor;
     g_wasFocusDataId = g_focusDataId;
 }
+
 
 }
 }

@@ -854,6 +854,11 @@ scpi_result_t scpi_cmd_systemCommunicateEnableQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetDhcp(scpi_t *context) {
+    if (!persist_conf::isEthernetEnabled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     bool enable;
     if (!SCPI_ParamBool(context, &enable, TRUE)) {
         return SCPI_RES_ERR;
@@ -865,11 +870,21 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDhcp(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetDhcpQ(scpi_t *context) {
+    if (!persist_conf::isEthernetEnabled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     SCPI_ResultBool(context, persist_conf::isEthernetDhcpEnabled());
     return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetAddress(scpi_t *context) {
+    if (!persist_conf::isEthernetEnabled() || persist_conf::devConf2.flags.ethernetDhcpEnabled) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+    
     const char *ipAddressStr;
     size_t ipAddressStrLength;
 
@@ -889,6 +904,11 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetAddress(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetAddressQ(scpi_t *context) {
+    if (!persist_conf::isEthernetEnabled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     char ipAddressStr[16];
     if (persist_conf::devConf2.flags.ethernetDhcpEnabled) {
         util::ipAddressToString(ethernet::getIpAddress(), ipAddressStr);
@@ -900,6 +920,11 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetAddressQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetDns(scpi_t *context) {
+    if (!persist_conf::isEthernetEnabled() || persist_conf::devConf2.flags.ethernetDhcpEnabled) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+    
     const char *ipAddressStr;
     size_t ipAddressStrLength;
 
@@ -919,13 +944,27 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDns(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetDnsQ(scpi_t *context) {
-    char ipAddressStr[16];
-    util::ipAddressToString(persist_conf::devConf2.ethernetDns, ipAddressStr);
-    SCPI_ResultText(context, ipAddressStr);
+    if (!persist_conf::isEthernetEnabled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    if (persist_conf::devConf2.flags.ethernetDhcpEnabled) {
+        SCPI_ResultText(context, "unknown");
+    } else {
+        char ipAddressStr[16];
+        util::ipAddressToString(persist_conf::devConf2.ethernetDns, ipAddressStr);
+        SCPI_ResultText(context, ipAddressStr);
+    }
     return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetGateway(scpi_t *context) {
+    if (!persist_conf::isEthernetEnabled() || persist_conf::devConf2.flags.ethernetDhcpEnabled) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+    
     const char *ipAddressStr;
     size_t ipAddressStrLength;
 
@@ -945,13 +984,27 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetGateway(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetGatewayQ(scpi_t *context) {
-    char ipAddressStr[16];
-    util::ipAddressToString(persist_conf::devConf2.ethernetGateway, ipAddressStr);
-    SCPI_ResultText(context, ipAddressStr);
+    if (!persist_conf::isEthernetEnabled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    if (persist_conf::devConf2.flags.ethernetDhcpEnabled) {
+        SCPI_ResultText(context, "unknown");
+    } else {
+        char ipAddressStr[16];
+        util::ipAddressToString(persist_conf::devConf2.ethernetGateway, ipAddressStr);
+        SCPI_ResultText(context, ipAddressStr);
+    }
     return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetSmask(scpi_t *context) {
+    if (!persist_conf::isEthernetEnabled() || persist_conf::devConf2.flags.ethernetDhcpEnabled) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+    
     const char *ipAddressStr;
     size_t ipAddressStrLength;
 
@@ -971,13 +1024,27 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetSmask(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetSmaskQ(scpi_t *context) {
-    char ipAddressStr[16];
-    util::ipAddressToString(persist_conf::devConf2.ethernetSubnetMask, ipAddressStr);
-    SCPI_ResultText(context, ipAddressStr);
+    if (!persist_conf::isEthernetEnabled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    if (persist_conf::devConf2.flags.ethernetDhcpEnabled) {
+        SCPI_ResultText(context, "unknown");
+    } else {
+        char ipAddressStr[16];
+        util::ipAddressToString(persist_conf::devConf2.ethernetSubnetMask, ipAddressStr);
+        SCPI_ResultText(context, ipAddressStr);
+    }
     return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetPort(scpi_t *context) {
+    if (!persist_conf::isEthernetEnabled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     int32_t port;
     if (!SCPI_ParamInt(context, &port, TRUE)) {
         return SCPI_RES_ERR;
@@ -994,6 +1061,11 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetPort(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetPortQ(scpi_t *context) {
+    if (!persist_conf::isEthernetEnabled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     SCPI_ResultInt(context, persist_conf::devConf2.ethernetScpiPort);
     return SCPI_RES_OK;
 }

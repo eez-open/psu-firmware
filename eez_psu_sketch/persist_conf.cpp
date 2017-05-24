@@ -688,6 +688,7 @@ bool setSerialSettings(bool enabled, int baudIndex, int parity) {
 
 bool enableEthernetDhcp(bool enable) {
     devConf2.flags.ethernetDhcpEnabled = enable ? 1 : 0;
+    devConf2.flags.skipEthernetSetup = 1;
     return saveDevice2();
 }
 
@@ -697,26 +698,31 @@ bool isEthernetDhcpEnabled() {
 
 bool setEthernetIpAddress(uint32_t ipAddress) {
     devConf2.ethernetIpAddress = ipAddress;
+    devConf2.flags.skipEthernetSetup = 1;
     return saveDevice2();
 }
 
 bool setEthernetDns(uint32_t dns) {
     devConf2.ethernetDns = dns;
+    devConf2.flags.skipEthernetSetup = 1;
     return saveDevice2();
 }
 
 bool setEthernetGateway(uint32_t gateway) {
     devConf2.ethernetGateway = gateway;
+    devConf2.flags.skipEthernetSetup = 1;
     return saveDevice2();
 }
 
 bool setEthernetSubnetMask(uint32_t subnetMask) {
     devConf2.ethernetSubnetMask = subnetMask;
+    devConf2.flags.skipEthernetSetup = 1;
     return saveDevice2();
 }
 
 bool setEthernetScpiPort(uint16_t scpiPort) {
     devConf2.ethernetScpiPort = scpiPort;
+    devConf2.flags.skipEthernetSetup = 1;
     return saveDevice2();
 }
 
@@ -739,6 +745,8 @@ bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint3
     devConf2.ethernetSubnetMask = subnetMask;
 
     devConf2.ethernetScpiPort = scpiPort;
+
+    devConf2.flags.skipEthernetSetup = 1;
 
     return saveDevice2();
 }

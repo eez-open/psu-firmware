@@ -94,6 +94,7 @@ struct DeviceFlags2 {
     unsigned skipDateTimeSetup: 1;
     unsigned serialEnabled: 1;
     unsigned ethernetDhcpEnabled: 1;
+    unsigned skipEthernetSetup: 1;
 };
 
 struct IOPin {
