@@ -50,7 +50,7 @@ enum PersistConfSection {
 ////////////////////////////////////////////////////////////////////////////////
 
 static const uint16_t DEV_CONF_VERSION = 0x0008L;
-static const uint16_t DEV_CONF2_VERSION = 0x0007L;
+static const uint16_t DEV_CONF2_VERSION = 0x0008L;
 static const uint16_t CH_CAL_CONF_VERSION = 0x0003L;
 static const uint16_t PROFILE_VERSION = 0x0008L;
 
@@ -199,9 +199,8 @@ void loadDevice2() {
         if (!check_block((BlockHeader *)&devConf2, sizeof(DeviceConfiguration2), DEV_CONF2_VERSION)) {
             initDevice2();
         } else {
-            if (devConf2.header.version < 7) {
-                devConf2.flags.serialEnabled = 1;
-                initEthernetSettings();
+            if (devConf2.header.version < 8) {
+                initDevice2();
             }
         }
     }
@@ -629,6 +628,7 @@ bool setDisplayBrightness(uint8_t displayBrightness) {
 
 bool enableSerial(bool enable) {
     devConf2.flags.serialEnabled = enable ? 1 : 0;
+    devConf2.flags.skipSerialSetup = 1;
     return saveDevice2();
 }
 
@@ -655,6 +655,7 @@ int getSerialBaudIndex() {
 
 bool setSerialBaudIndex(int baudIndex) {
     devConf2.serialBaud = (uint8_t)baudIndex;
+    devConf2.flags.skipSerialSetup = 1;
     if (saveDevice2()) {
         serial::update();
         return true;
@@ -668,6 +669,7 @@ int getSerialParity() {
 
 bool setSerialParity(int parity) {
     devConf2.serialParity = (unsigned)parity;
+    devConf2.flags.skipSerialSetup = 1;
     if (saveDevice2()) {
         serial::update();
         return true;
@@ -679,6 +681,7 @@ bool setSerialSettings(bool enabled, int baudIndex, int parity) {
     devConf2.flags.serialEnabled = enabled;
     devConf2.serialBaud = (uint8_t)baudIndex;
     devConf2.serialParity = (unsigned)parity;
+    devConf2.flags.skipSerialSetup = 1;
     if (saveDevice2()) {
         serial::update();
         return true;

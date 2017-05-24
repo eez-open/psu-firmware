@@ -762,6 +762,15 @@ void dateTimeNo() {
     persist_conf::saveDevice2();
 }
 
+void serialYes() {
+    executeAction(ACTION_ID_SHOW_SYS_SETTINGS_SERIAL);
+}
+
+void serialNo() {
+    persist_conf::devConf2.flags.skipSerialSetup = 1;
+    persist_conf::saveDevice2();
+}
+
 void ethernetYes() {
     executeAction(ACTION_ID_SHOW_SYS_SETTINGS_ETHERNET);
 }
@@ -770,7 +779,6 @@ void ethernetNo() {
     persist_conf::devConf2.flags.skipEthernetSetup = 1;
     persist_conf::saveDevice2();
 }
-
 
 bool showSetupWizardQuestion() {
     if (!channel_dispatcher::isCoupled() && !channel_dispatcher::isTracked()) {
@@ -787,6 +795,14 @@ bool showSetupWizardQuestion() {
         g_deviceFlags2.skipDateTimeSetup = 1;
         if (!isDateTimeSetupDone()) {
             yesNoLater("Do you want to set date and time?", dateTimeYes, dateTimeNo);
+            return true;
+        }
+    }
+
+    if (!g_deviceFlags2.skipSerialSetup) {
+        g_deviceFlags2.skipSerialSetup = 1;
+        if (!persist_conf::isSerialEnabled()) {
+            yesNoLater("Do you want to setup serial port?", serialYes, serialNo);
             return true;
         }
     }

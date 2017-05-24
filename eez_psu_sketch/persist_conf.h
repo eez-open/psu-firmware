@@ -92,9 +92,10 @@ struct DeviceFlags2 {
     unsigned triggerContinuousInitializationEnabled: 1;
     unsigned skipChannelCalibrations: 1;
     unsigned skipDateTimeSetup: 1;
+    unsigned skipSerialSetup: 1;
+    unsigned skipEthernetSetup: 1;
     unsigned serialEnabled: 1;
     unsigned ethernetDhcpEnabled: 1;
-    unsigned skipEthernetSetup: 1;
 };
 
 struct IOPin {
@@ -125,7 +126,7 @@ struct DeviceConfiguration2 {
     uint32_t ethernetGateway;
     uint32_t ethernetSubnetMask;
     uint16_t ethernetScpiPort;
-    uint8_t reserverd[66];
+    uint8_t reserverd[65];
 };
 
 extern DeviceConfiguration devConf;
