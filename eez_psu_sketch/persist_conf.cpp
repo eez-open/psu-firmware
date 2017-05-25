@@ -190,9 +190,9 @@ static void initDevice2() {
     devConf2.serialBaud = getIndexFromBaud(SERIAL_SPEED);
     devConf2.serialParity = serial::PARITY_NONE;
 
-    strcpy(devConf2.ntpServer, CONF_DEFAULT_NTP_SERVER);
-
     initEthernetSettings();
+
+    strcpy(devConf2.ntpServer, CONF_DEFAULT_NTP_SERVER);
 }
 
 void loadDevice2() {
@@ -200,10 +200,6 @@ void loadDevice2() {
         eeprom::read((uint8_t *)&devConf2, sizeof(DeviceConfiguration2), get_address(PERSIST_CONF_BLOCK_DEVICE2));
         if (!check_block((BlockHeader *)&devConf2, sizeof(DeviceConfiguration2), DEV_CONF2_VERSION)) {
             initDevice2();
-        } else {
-            if (devConf2.header.version < 8) {
-                initDevice2();
-            }
         }
     }
     else {
