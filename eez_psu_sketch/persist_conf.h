@@ -96,6 +96,7 @@ struct DeviceFlags2 {
     unsigned skipEthernetSetup: 1;
     unsigned serialEnabled: 1;
     unsigned ethernetDhcpEnabled: 1;
+    unsigned ntpEnabled: 1;
 };
 
 struct IOPin {
@@ -126,7 +127,8 @@ struct DeviceConfiguration2 {
     uint32_t ethernetGateway;
     uint32_t ethernetSubnetMask;
     uint16_t ethernetScpiPort;
-    uint8_t reserverd[65];
+    char ntpServer[32+1];
+    uint8_t reserverd[32];
 };
 
 extern DeviceConfiguration devConf;
@@ -219,6 +221,11 @@ bool setEthernetSubnetMask(uint32_t subnetMask);
 bool setEthernetScpiPort(uint16_t scpiPort);
 
 bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint32_t dns, uint32_t gateway, uint32_t subnetMask, uint16_t scpiPort);
+
+bool enableNtp(bool enable);
+bool isNtpEnabled();
+
+bool setNtpServer(const char *ntpServer, size_t ntpServerLength);
 
 }
 }

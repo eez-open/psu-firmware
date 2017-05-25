@@ -28,6 +28,9 @@
 #include "encoder.h"
 #endif
 #include "util.h"
+#if OPTION_ETHERNET
+#include "ntp.h"
+#endif
 
 #include "gui_page_sys_settings.h"
 #include "gui_numeric_keypad.h"
@@ -191,7 +194,10 @@ void SysSettingsDateTimePage::set() {
 		}
 		
 		if (dateTime == origDateTime) {
-			event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
+#if OPTION_ETHERNET
+            ntp::reset();
+#endif
+            event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
 		}
 	}
 

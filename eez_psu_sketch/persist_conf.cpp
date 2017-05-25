@@ -754,6 +754,21 @@ bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint3
     return saveDevice2();
 }
 
+bool enableNtp(bool enable) {
+    devConf2.flags.ntpEnabled = enable ? 1 : 0;
+    return saveDevice2();
+}
+
+bool isNtpEnabled() {
+    return devConf2.flags.ntpEnabled ? true : false;
+}
+
+bool setNtpServer(const char *ntpServer, size_t ntpServerLength) {
+    strncpy(devConf2.ntpServer, ntpServer, ntpServerLength);
+    devConf2.ntpServer[ntpServerLength] = 0;
+    return saveDevice2();
+}
+
 }
 }
 } // namespace eez::psu::persist_conf

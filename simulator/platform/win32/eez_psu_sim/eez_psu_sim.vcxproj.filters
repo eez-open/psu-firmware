@@ -394,6 +394,12 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\io_pins.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\ntp.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ethernet\EthernetUdp2.h">
+      <Filter>simulator\ethernet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -723,6 +729,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\io_pins.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\ntp.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ethernet\EthernetUdp2.cpp">
+      <Filter>simulator\ethernet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -811,7 +811,6 @@ static scpi_choice_def_t commInterfaceChoice[] = {
     { "SERial", 1 },
     { "ETHernet", 2 },
     { "NTP", 3 },
-    { "SOCKets", 4 },
     SCPI_CHOICE_LIST_END
 };
 
@@ -831,6 +830,8 @@ scpi_result_t scpi_cmd_systemCommunicateEnable(scpi_t *context) {
         persist_conf::enableSerial(enable);
     } else if (commInterface == 2) {
         persist_conf::enableEthernet(enable);
+    } else if (commInterface == 3) {
+        persist_conf::enableNtp(enable);
     }
 
     return SCPI_RES_OK;
@@ -846,8 +847,8 @@ scpi_result_t scpi_cmd_systemCommunicateEnableQ(scpi_t *context) {
         SCPI_ResultBool(context, persist_conf::isSerialEnabled());
     } else if (commInterface == 2) {
         SCPI_ResultBool(context, persist_conf::isEthernetEnabled());
-    } else {
-        SCPI_ResultBool(context, false);
+    } else if (commInterface == 3) {
+        SCPI_ResultBool(context, persist_conf::isNtpEnabled());
     }
 
     return SCPI_RES_OK;
@@ -1075,6 +1076,42 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetMacQ(scpi_t *context) {
     char macAddressStr[18];
     util::macAddressToString(ethernet::g_mac, macAddressStr);
     SCPI_ResultText(context, macAddressStr);
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_systemCommunicateNtp(scpi_t *context) {
+#if OPTION_ETHERNET
+    const char *ntpServer;
+    size_t ntpServerLength;
+
+    if (!SCPI_ParamCharacters(context, &ntpServer, &ntpServerLength, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    if (ntpServerLength > 32) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CHARACTER_DATA_TOO_LONG);
+        return SCPI_RES_ERR;
+    }
+
+    if (!persist_conf::setNtpServer(ntpServer, ntpServerLength)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_systemCommunicateNtpQ(scpi_t *context) {
+#if OPTION_ETHERNET
+    SCPI_ResultText(context, persist_conf::devConf2.ntpServer);
     return SCPI_RES_OK;
 #else
     SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);

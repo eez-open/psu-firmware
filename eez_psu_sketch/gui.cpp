@@ -791,14 +791,6 @@ bool showSetupWizardQuestion() {
         }
     }
 
-    if (!g_deviceFlags2.skipDateTimeSetup) {
-        g_deviceFlags2.skipDateTimeSetup = 1;
-        if (!isDateTimeSetupDone()) {
-            yesNoLater("Do you want to set date and time?", dateTimeYes, dateTimeNo);
-            return true;
-        }
-    }
-
     if (!g_deviceFlags2.skipSerialSetup) {
         g_deviceFlags2.skipSerialSetup = 1;
         if (!persist_conf::isSerialEnabled()) {
@@ -811,6 +803,14 @@ bool showSetupWizardQuestion() {
         g_deviceFlags2.skipEthernetSetup = 1;
         if (!persist_conf::isEthernetEnabled()) {
             yesNoLater("Do you want to setup ethernet?", ethernetYes, ethernetNo);
+            return true;
+        }
+    }
+
+    if (!g_deviceFlags2.skipDateTimeSetup) {
+        g_deviceFlags2.skipDateTimeSetup = 1;
+        if (!isDateTimeSetupDone()) {
+            yesNoLater("Do you want to set date and time?", dateTimeYes, dateTimeNo);
             return true;
         }
     }

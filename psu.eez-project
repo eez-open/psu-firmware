@@ -80135,6 +80135,14 @@
           {
             "$eez": false,
             "name": "SYSTem:COMMunicate:ETHernet:MAC?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:NTP"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:NTP?"
           }
         ]
       },

@@ -21,6 +21,7 @@
 
 #if OPTION_ETHERNET
 #include "ethernet.h"
+#include "ntp.h"
 #endif
 
 #include "bp.h"
@@ -154,6 +155,7 @@ void init() {
     gui::showEthernetInit();
 #endif
 	ethernet::init();
+    ntp::init();
 #else
 	DebugTrace("Ethernet initialization skipped!");
 #endif
@@ -511,6 +513,8 @@ static bool psuReset() {
 	if (ethernet::g_testResult == TEST_OK) {
         SCPI_ErrorClear(&ethernet::scpi_context);
 	}
+
+    ntp::reset();
 #endif
 
     // TEMP:PROT[AUX]
@@ -1022,6 +1026,8 @@ void tick() {
     if (g_mainLoopCounter % 2 == 0) {
         // tick ethernet every other time
 	    ethernet::tick(tick_usec);
+    } else {
+	    ntp::tick(tick_usec);
     }
 #endif
 

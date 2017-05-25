@@ -165,11 +165,13 @@ bool getDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, uin
     return rtc::readDateTime(year, month, day, hour, minute, second);
 }
 
-bool setDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second) {
+bool setDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second, bool pushChangedEvent) {
     if (rtc::writeDateTime(year, month, day, hour, minute, second)) {
         persist_conf::writeSystemDateTime(year, month, day, hour, minute, second);
         psu::setQuesBits(QUES_TIME, !checkDateTime());
-        event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
+        if (pushChangedEvent) {
+            event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
+        }
         return true;
     }
     return false;
