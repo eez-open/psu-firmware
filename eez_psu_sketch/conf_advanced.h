@@ -288,5 +288,7 @@
 /// Duration of BP LED's flash during boot and test
 #define CONF_BP_TEST_FLASH_DURATION_MS 500
 
+#define CONF_DEFAULT_NTP_SERVER "europe.pool.ntp.org"
+
 /// Query NTP server every 24h
 #define CONF_NTP_PERIOD_SEC 24L * 60 * 60

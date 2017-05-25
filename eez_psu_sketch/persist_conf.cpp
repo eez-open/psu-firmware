@@ -190,6 +190,8 @@ static void initDevice2() {
     devConf2.serialBaud = getIndexFromBaud(SERIAL_SPEED);
     devConf2.serialParity = serial::PARITY_NONE;
 
+    strcpy(devConf2.ntpServer, CONF_DEFAULT_NTP_SERVER);
+
     initEthernetSettings();
 }
 
