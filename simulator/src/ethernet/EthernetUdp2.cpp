@@ -17,7 +17,7 @@
  */
 
 #include "psu.h"
-#include "EthernetUDP2.h"
+#include "EthernetUdp2.h"
 
 namespace eez {
 namespace psu {
