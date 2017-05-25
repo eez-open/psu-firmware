@@ -73,7 +73,7 @@ float getPrecision(float value, ValueType valueType, int channelIndex) {
 }
 
 const char *getUnitStr(ValueType valueType) {
-    int index = valueType - VALUE_TYPE_FLOAT;
+    unsigned int index = valueType - VALUE_TYPE_FLOAT;
     if (index >= 0 && index < sizeof(g_valueTypeTraits) / sizeof(ValueTypeTraits)) {
         return g_valueTypeTraits[index].unitStr; 
     } else {
