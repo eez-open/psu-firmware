@@ -204,6 +204,13 @@ uint32_t now() {
     return makeTime(2000 + year, month, day, hour, minute, second);
 }
 
+uint32_t nowUtc() {
+    uint8_t year, month, day, hour, minute, second;
+    rtc::readDateTime(year, month, day, hour, minute, second);
+    uint32_t now = makeTime(2000 + year, month, day, hour, minute, second);
+    return localToUtc(now, persist_conf::devConf.time_zone, persist_conf::devConf.flags.dst);
+}
+
 uint32_t makeTime(int year, int month, int day, int hour, int minute, int second) {
     // seconds from 1970 till 1 jan 00:00:00 of the given year
     year -= 1970;
@@ -280,6 +287,22 @@ void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay,
 
     resultMonth = month + 1;  // jan is month 1  
     resultDay = time + 1;     // day of month
+}
+
+uint32_t utcToLocal(uint32_t utc, int16_t timeZone, bool dst) {
+    uint32_t local = utc + ((timeZone / 100) * 60 + timeZone % 100) * 60L;
+    if (dst) {
+        local += 3600;
+    }
+    return local;
+}
+
+uint32_t localToUtc(uint32_t local, int16_t timeZone, bool dst) {
+    uint32_t utc = local - ((timeZone / 100) * 60 + timeZone % 100) * 60L;
+    if (dst) {
+        utc -= 3600;
+    }
+    return utc;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

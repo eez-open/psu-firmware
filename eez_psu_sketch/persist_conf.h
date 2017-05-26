@@ -200,32 +200,27 @@ bool setDisplayBrightness(uint8_t displayBrightness);
 
 bool enableSerial(bool enable);
 bool isSerialEnabled();
-
 int getIndexFromBaud(long baud);
 long getBaudFromIndex(int index);
 int getSerialBaudIndex();
 bool setSerialBaudIndex(int baudIndex);
-
 int getSerialParity();
 bool setSerialParity(int parity);
-
 bool setSerialSettings(bool enable, int baudIndex, int parity);
 
 bool enableEthernetDhcp(bool enable);
 bool isEthernetDhcpEnabled();
-
 bool setEthernetIpAddress(uint32_t ipAddress);
 bool setEthernetDns(uint32_t dns);
 bool setEthernetGateway(uint32_t gateway);
 bool setEthernetSubnetMask(uint32_t subnetMask);
 bool setEthernetScpiPort(uint16_t scpiPort);
-
 bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint32_t dns, uint32_t gateway, uint32_t subnetMask, uint16_t scpiPort);
 
 bool enableNtp(bool enable);
 bool isNtpEnabled();
-
 bool setNtpServer(const char *ntpServer, size_t ntpServerLength);
+bool setNtpSettings(bool enable, const char *ntpServer);
 
 }
 }

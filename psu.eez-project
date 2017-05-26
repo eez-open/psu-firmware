@@ -1100,6 +1100,18 @@
       "name": "serial.selectParity",
       "implementationType": "native",
       "implementation": "((SysSettingsSerialPage *)getActivePage())->selectParity();"
+    },
+    {
+      "$eez": false,
+      "name": "ntp.toggle",
+      "implementationType": "native",
+      "implementation": "((SysSettingsDateTimePage *)getActivePage())->toggleNtp();"
+    },
+    {
+      "$eez": false,
+      "name": "ntp.editServer",
+      "implementationType": "native",
+      "implementation": "((SysSettingsDateTimePage *)getActivePage())->editNtpServer();"
     }
   ],
   "data": [
@@ -2016,49 +2028,61 @@
     },
     {
       "$eez": false,
-      "name": "sys.info.dateTime.year",
+      "name": "dateTime.date",
+      "type": "string",
+      "defaultValue": "2016 - 12 - 28"
+    },
+    {
+      "$eez": false,
+      "name": "dateTime.year",
       "type": "integer",
       "defaultValue": "2016"
     },
     {
       "$eez": false,
-      "name": "sys.info.dateTime.month",
+      "name": "dateTime.month",
       "type": "integer",
       "defaultValue": "12"
     },
     {
       "$eez": false,
-      "name": "sys.info.dateTime.day",
+      "name": "dateTime.day",
       "type": "integer",
       "defaultValue": "28"
     },
     {
       "$eez": false,
-      "name": "sys.info.dateTime.hour",
+      "name": "dateTime.time",
+      "type": "string",
+      "defaultValue": "23 : 58 : 48"
+    },
+    {
+      "$eez": false,
+      "name": "dateTime.hour",
       "type": "integer",
       "defaultValue": "23"
     },
     {
       "$eez": false,
-      "name": "sys.info.dateTime.minute",
+      "name": "dateTime.minute",
       "type": "integer",
       "defaultValue": "58"
     },
     {
       "$eez": false,
-      "name": "sys.info.dateTime.second",
+      "name": "dateTime.second",
       "type": "integer",
       "defaultValue": "48"
     },
     {
       "$eez": false,
-      "name": "sys.info.dateTime.timeZone",
+      "name": "dateTime.timeZone",
       "type": "string",
       "defaultValue": "+1 GMT"
     },
     {
       "$eez": false,
-      "name": "sys.info.dateTime.DST",
+      "name": "dateTime.DST",
       "type": "boolean",
       "defaultValue": "1"
     },
@@ -2616,6 +2640,24 @@
       "type": "enum",
       "enumItems": "[\n\"None\",\n\"Fault\",\n\"Inhibit\",\n\"Couple\",\n\"Tinput\",\n\"Toutput\",\n]",
       "defaultValue": "Couple"
+    },
+    {
+      "$eez": false,
+      "name": "ntp.enabled",
+      "type": "boolean",
+      "defaultValue": "1"
+    },
+    {
+      "$eez": false,
+      "name": "ntp.server",
+      "type": "string",
+      "defaultValue": "0.pool.ntp.org"
+    },
+    {
+      "$eez": false,
+      "name": "asyncOperationThrobber",
+      "type": "string",
+      "defaultValue": "|"
     }
   ],
   "gui": {
@@ -12661,6 +12703,75 @@
       },
       {
         "$eez": false,
+        "name": "async_operation_in_progress",
+        "description": "",
+        "portrait": {
+          "$eez": false,
+          "x": 0,
+          "y": 104,
+          "width": 240,
+          "height": 112,
+          "style": "error_alert",
+          "widgets": [
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "yes",
+              "x": 90,
+              "y": 72,
+              "width": 60,
+              "height": 32,
+              "style": "default_active_S",
+              "text": "OK"
+            },
+            {
+              "$eez": false,
+              "type": "MultilineText",
+              "x": 0,
+              "y": 0,
+              "width": 240,
+              "height": 64,
+              "style": "error_alert",
+              "text": "Multiline text"
+            }
+          ]
+        },
+        "landscape": {
+          "$eez": false,
+          "x": 20,
+          "y": 76,
+          "width": 280,
+          "height": 88,
+          "style": "async_operation",
+          "widgets": [
+            {
+              "$eez": false,
+              "type": "Text",
+              "data": "alert_message",
+              "x": 0,
+              "y": 16,
+              "width": 280,
+              "height": 28,
+              "style": "async_operation",
+              "text": ""
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "data": "asyncOperationThrobber",
+              "x": 0,
+              "y": 44,
+              "width": 280,
+              "height": 28,
+              "style": "async_operation",
+              "text": ""
+            }
+          ]
+        },
+        "closePageIfTouchedOutside": true
+      },
+      {
+        "$eez": false,
         "name": "event_queue",
         "portrait": {
           "$eez": false,
@@ -21003,15 +21114,6 @@
           "widgets": [
             {
               "$eez": false,
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
-            {
-              "$eez": false,
               "type": "Text",
               "x": 6,
               "y": 0,
@@ -21022,214 +21124,627 @@
             },
             {
               "$eez": false,
-              "type": "Rectangle",
-              "x": 197,
-              "y": 204,
-              "width": 75,
-              "height": 36,
-              "style": "bottom_button_background"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "action": "show_main_page",
-              "x": 272,
-              "y": 204,
-              "width": 48,
-              "height": 36,
-              "style": "bottom_button",
-              "text": "X"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
               "x": 12,
-              "y": 30,
-              "width": 101,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Date:"
-            },
-            {
-              "$eez": false,
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.year",
-              "action": "edit_field",
-              "x": 113,
-              "y": 30,
-              "width": 48,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 161,
-              "y": 30,
-              "width": 14,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "-"
-            },
-            {
-              "$eez": false,
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.month",
-              "action": "edit_field",
-              "x": 175,
-              "y": 30,
-              "width": 26,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 201,
-              "y": 30,
-              "width": 14,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "-"
-            },
-            {
-              "$eez": false,
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.day",
-              "action": "edit_field",
-              "x": 215,
-              "y": 30,
-              "width": 26,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 12,
-              "y": 58,
-              "width": 101,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Time:"
-            },
-            {
-              "$eez": false,
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.hour",
-              "action": "edit_field",
-              "x": 113,
-              "y": 58,
-              "width": 26,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 139,
-              "y": 58,
-              "width": 12,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": ":"
-            },
-            {
-              "$eez": false,
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.minute",
-              "action": "edit_field",
-              "x": 151,
-              "y": 58,
-              "width": 26,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 177,
-              "y": 58,
-              "width": 12,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": ":"
-            },
-            {
-              "$eez": false,
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.second",
-              "action": "edit_field",
-              "x": 189,
-              "y": 58,
-              "width": 26,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 12,
-              "y": 86,
-              "width": 101,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Time zone:"
-            },
-            {
-              "$eez": false,
-              "type": "DisplayData",
-              "data": "sys.info.dateTime.timeZone",
-              "action": "edit_field",
-              "x": 113,
-              "y": 86,
-              "width": 89,
-              "height": 28,
-              "style": "edit_value_active_S_left"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 12,
-              "y": 114,
-              "width": 101,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "DST:"
-            },
-            {
-              "$eez": false,
-              "x": 113,
               "type": "Select",
-              "data": "sys.info.dateTime.DST",
-              "y": 114,
-              "width": 60,
-              "height": 28,
+              "data": "ethernet.installed",
+              "y": 32,
+              "width": 240,
+              "height": 168,
               "style": "default",
               "widgets": [
                 {
                   "$eez": false,
-                  "type": "Text",
-                  "action": "sys_settings_date_time_toggle_dst",
+                  "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 60,
-                  "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "No"
+                  "width": 240,
+                  "height": 168,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 89,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Date:"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "DisplayData",
+                      "data": "dateTime.year",
+                      "action": "edit_field",
+                      "x": 89,
+                      "y": 0,
+                      "width": 48,
+                      "height": 28,
+                      "style": "edit_value_active_S_left"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 135,
+                      "y": 0,
+                      "width": 14,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "-"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "DisplayData",
+                      "data": "dateTime.month",
+                      "action": "edit_field",
+                      "x": 149,
+                      "y": 0,
+                      "width": 26,
+                      "height": 28,
+                      "style": "edit_value_active_S_left"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 175,
+                      "y": 0,
+                      "width": 14,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "-"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "DisplayData",
+                      "data": "dateTime.day",
+                      "action": "edit_field",
+                      "x": 189,
+                      "y": 0,
+                      "width": 26,
+                      "height": 28,
+                      "style": "edit_value_active_S_left"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Rectangle",
+                      "x": 215,
+                      "y": 0,
+                      "width": 25,
+                      "height": 28,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 28,
+                      "width": 89,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Time:"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "DisplayData",
+                      "data": "dateTime.hour",
+                      "action": "edit_field",
+                      "x": 89,
+                      "y": 28,
+                      "width": 26,
+                      "height": 28,
+                      "style": "edit_value_active_S_left"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 115,
+                      "y": 28,
+                      "width": 12,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": ":"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "DisplayData",
+                      "data": "dateTime.minute",
+                      "action": "edit_field",
+                      "x": 127,
+                      "y": 28,
+                      "width": 26,
+                      "height": 28,
+                      "style": "edit_value_active_S_left"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 153,
+                      "y": 28,
+                      "width": 12,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": ":"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "DisplayData",
+                      "data": "dateTime.second",
+                      "action": "edit_field",
+                      "x": 165,
+                      "y": 28,
+                      "width": 26,
+                      "height": 28,
+                      "style": "edit_value_active_S_left"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Rectangle",
+                      "x": 191,
+                      "y": 28,
+                      "width": 49,
+                      "height": 28,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 56,
+                      "width": 89,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Time zone:"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "DisplayData",
+                      "data": "dateTime.timeZone",
+                      "action": "edit_field",
+                      "x": 89,
+                      "y": 56,
+                      "width": 89,
+                      "height": 28,
+                      "style": "edit_value_active_S_left"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Rectangle",
+                      "x": 178,
+                      "y": 56,
+                      "width": 62,
+                      "height": 28,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 84,
+                      "width": 89,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "DST:"
+                    },
+                    {
+                      "$eez": false,
+                      "x": 89,
+                      "type": "Select",
+                      "data": "dateTime.DST",
+                      "y": 84,
+                      "width": 60,
+                      "height": 28,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "action": "sys_settings_date_time_toggle_dst",
+                          "width": 60,
+                          "height": 28,
+                          "style": "edit_value_active_S_left",
+                          "text": "No"
+                        },
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "action": "sys_settings_date_time_toggle_dst",
+                          "width": 60,
+                          "height": 28,
+                          "style": "edit_value_active_S_left",
+                          "text": "Yes"
+                        }
+                      ]
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Rectangle",
+                      "x": 149,
+                      "y": 84,
+                      "width": 91,
+                      "height": 28,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Rectangle",
+                      "x": 0,
+                      "y": 112,
+                      "width": 240,
+                      "height": 56,
+                      "style": "default_inverse"
+                    }
+                  ]
                 },
                 {
                   "$eez": false,
-                  "type": "Text",
-                  "action": "sys_settings_date_time_toggle_dst",
+                  "type": "Container",
                   "x": 0,
                   "y": 0,
-                  "width": 60,
-                  "height": 28,
-                  "style": "edit_value_active_S_left",
-                  "text": "Yes"
+                  "width": 240,
+                  "height": 168,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "x": 0,
+                      "type": "Select",
+                      "data": "ntp.enabled",
+                      "y": 0,
+                      "width": 240,
+                      "height": 112,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "$eez": false,
+                          "type": "Container",
+                          "x": 0,
+                          "y": 0,
+                          "width": 240,
+                          "height": 112,
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "action": "ntp.toggle",
+                              "x": null,
+                              "y": 0,
+                              "width": 240,
+                              "height": 28,
+                              "style": "edit_value_active_S_left",
+                              "text": "Enable NTP"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Rectangle",
+                              "x": null,
+                              "y": 28,
+                              "width": 240,
+                              "height": 28,
+                              "style": "default_inverse"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "x": 0,
+                              "y": 56,
+                              "width": 89,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "Date:"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "DisplayData",
+                              "data": "dateTime.year",
+                              "action": "edit_field",
+                              "x": 89,
+                              "y": 56,
+                              "width": 48,
+                              "height": 28,
+                              "style": "edit_value_active_S_left"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "x": 135,
+                              "y": 56,
+                              "width": 14,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "-"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "DisplayData",
+                              "data": "dateTime.month",
+                              "action": "edit_field",
+                              "x": 149,
+                              "y": 56,
+                              "width": 26,
+                              "height": 28,
+                              "style": "edit_value_active_S_left"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "x": 175,
+                              "y": 56,
+                              "width": 14,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "-"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "DisplayData",
+                              "data": "dateTime.day",
+                              "action": "edit_field",
+                              "x": 189,
+                              "y": 56,
+                              "width": 26,
+                              "height": 28,
+                              "style": "edit_value_active_S_left"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Rectangle",
+                              "x": 215,
+                              "y": 56,
+                              "width": 25,
+                              "height": 28,
+                              "style": "default_inverse"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "x": 0,
+                              "y": 84,
+                              "width": 89,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "Time:"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "DisplayData",
+                              "data": "dateTime.hour",
+                              "action": "edit_field",
+                              "x": 89,
+                              "y": 84,
+                              "width": 26,
+                              "height": 28,
+                              "style": "edit_value_active_S_left"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "x": 115,
+                              "y": 84,
+                              "width": 12,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": ":"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "DisplayData",
+                              "data": "dateTime.minute",
+                              "action": "edit_field",
+                              "x": 127,
+                              "y": 84,
+                              "width": 26,
+                              "height": 28,
+                              "style": "edit_value_active_S_left"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "x": 153,
+                              "y": 84,
+                              "width": 12,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": ":"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "DisplayData",
+                              "data": "dateTime.second",
+                              "action": "edit_field",
+                              "x": 165,
+                              "y": 84,
+                              "width": 26,
+                              "height": 28,
+                              "style": "edit_value_active_S_left"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Rectangle",
+                              "x": 191,
+                              "y": 84,
+                              "width": 49,
+                              "height": 28,
+                              "style": "default_inverse"
+                            }
+                          ]
+                        },
+                        {
+                          "$eez": false,
+                          "type": "Container",
+                          "x": 0,
+                          "y": 0,
+                          "width": 240,
+                          "height": 112,
+                          "style": "default",
+                          "widgets": [
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "action": "ntp.toggle",
+                              "width": 240,
+                              "height": 28,
+                              "style": "edit_value_active_S_left",
+                              "text": "Disable NTP"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "x": 0,
+                              "y": 28,
+                              "width": 89,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "NTP server:"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "DisplayData",
+                              "data": "ntp.server",
+                              "action": "ntp.editServer",
+                              "x": 89,
+                              "y": 28,
+                              "width": 151,
+                              "height": 28,
+                              "style": "edit_value_active_S_left"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "x": 0,
+                              "y": 56,
+                              "width": 89,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "Date:"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "DisplayData",
+                              "data": "dateTime.date",
+                              "action": "",
+                              "x": 89,
+                              "y": 56,
+                              "width": 151,
+                              "height": 28,
+                              "style": "edit_value_S_left"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "Text",
+                              "x": 0,
+                              "y": 84,
+                              "width": 89,
+                              "height": 28,
+                              "style": "edit_value_S_left",
+                              "text": "Time:"
+                            },
+                            {
+                              "$eez": false,
+                              "type": "DisplayData",
+                              "data": "dateTime.time",
+                              "action": "",
+                              "x": 89,
+                              "y": 84,
+                              "width": 151,
+                              "height": 28,
+                              "style": "edit_value_S_left"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 112,
+                      "width": 89,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Time zone:"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "DisplayData",
+                      "data": "dateTime.timeZone",
+                      "action": "edit_field",
+                      "x": 89,
+                      "y": 112,
+                      "width": 89,
+                      "height": 28,
+                      "style": "edit_value_active_S_left"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Rectangle",
+                      "x": 178,
+                      "y": 112,
+                      "width": 62,
+                      "height": 28,
+                      "style": "default_inverse"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 140,
+                      "width": 89,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "DST:"
+                    },
+                    {
+                      "$eez": false,
+                      "x": 89,
+                      "type": "Select",
+                      "data": "dateTime.DST",
+                      "y": 140,
+                      "width": 60,
+                      "height": 28,
+                      "style": "default",
+                      "widgets": [
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "action": "sys_settings_date_time_toggle_dst",
+                          "width": 60,
+                          "height": 28,
+                          "style": "edit_value_active_S_left",
+                          "text": "No"
+                        },
+                        {
+                          "$eez": false,
+                          "type": "Text",
+                          "action": "sys_settings_date_time_toggle_dst",
+                          "width": 60,
+                          "height": 28,
+                          "style": "edit_value_active_S_left",
+                          "text": "Yes"
+                        }
+                      ]
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Rectangle",
+                      "x": 149,
+                      "y": 140,
+                      "width": 91,
+                      "height": 28,
+                      "style": "default_inverse"
+                    }
+                  ]
                 }
               ]
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 12,
+              "y": 200,
+              "width": 240,
+              "height": 4,
+              "style": "default_inverse"
             },
             {
               "$eez": false,
@@ -21255,6 +21770,35 @@
               "height": 36,
               "style": "non_interactive_button_S",
               "text": " Discard"
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 197,
+              "y": 204,
+              "width": 75,
+              "height": 36,
+              "style": "bottom_button_background"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "show_main_page",
+              "x": 272,
+              "y": 204,
+              "width": 48,
+              "height": 36,
+              "style": "bottom_button",
+              "text": "X"
+            },
+            {
+              "$eez": false,
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
             }
           ]
         }
@@ -31074,6 +31618,12 @@
         "borderColor": "#D3D3D3",
         "paddingHorizontal": 0,
         "paddingVertical": 0
+      },
+      {
+        "$eez": false,
+        "name": "async_operation",
+        "inheritFrom": "default_S",
+        "backgroundColor": "#808000"
       }
     ],
     "fonts": [

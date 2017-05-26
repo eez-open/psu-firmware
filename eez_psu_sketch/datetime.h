@@ -45,8 +45,11 @@ bool setDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t
 bool getDateTimeAsString(char *buffer);
 
 uint32_t now();
+uint32_t nowUtc();
 uint32_t makeTime(int year, int month, int day, int hour, int minute, int second);
 void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay, int &resultHour, int &resultMinute, int &resultSecond);
+uint32_t utcToLocal(uint32_t utc, int16_t timeZone, bool dst);
+uint32_t localToUtc(uint32_t local, int16_t timeZone, bool dst);
 
 struct DateTime {
     uint16_t year;

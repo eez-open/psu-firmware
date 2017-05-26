@@ -26,6 +26,10 @@ void init();
 void tick(uint32_t tickCount);
 void reset();
 
+void testNtpServer(const char *ntpServer);
+// returns true if test is done and sets result to true if successfull
+bool isTestNtpServerDone(bool &testResult);
+
 }
 }
 } // namespace eez::psu::ntp

@@ -772,6 +772,14 @@ void action_serial_select_parity() {
     ((SysSettingsSerialPage *)getActivePage())->selectParity();
 }
 
+void action_ntp_toggle() {
+    ((SysSettingsDateTimePage *)getActivePage())->toggleNtp();
+}
+
+void action_ntp_edit_server() {
+    ((SysSettingsDateTimePage *)getActivePage())->editNtpServer();
+}
+
 
 ACTION actions[] = {
     0,
@@ -947,7 +955,9 @@ ACTION actions[] = {
     action_io_pin_toggle_polarity,
     action_io_pin_select_function,
     action_serial_toggle,
-    action_serial_select_parity
+    action_serial_select_parity,
+    action_ntp_toggle,
+    action_ntp_edit_server
 };
 
 }

@@ -40,17 +40,39 @@ public:
 	int getDirty();
 	void set();
 
+    void toggleNtp();
+    void editNtpServer();
 	void toggleDst();
 
 private:
+    bool origNtpEnabled;
+    bool ntpEnabled;
+
+    char origNtpServer[32+1];
+    char ntpServer[32+1];
+
 	datetime::DateTime origDateTime;
 	datetime::DateTime dateTime;
 
 	int16_t origTimeZone;
 	int16_t timeZone;
 
-	unsigned int origDst;
-	unsigned int dst;
+	bool origDst;
+	bool dst;
+
+#if OPTION_ETHERNET
+    enum {
+        TEST_NTP_SERVER_OPERATION_STATE_INIT = -1,
+        TEST_NTP_SERVER_OPERATION_STATE_STARTED = -2
+    };
+
+    static void onSetNtpServer(char * value);
+
+    static void checkTestNtpServerStatus();
+    void testNtpServer();
+#endif
+
+    void doSet();
 };
 
 #if OPTION_ETHERNET

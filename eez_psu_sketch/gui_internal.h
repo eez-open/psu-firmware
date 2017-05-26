@@ -78,6 +78,8 @@ void yesNoDialog(int yesNoPageId, const char *message PROGMEM, void (*yes_callba
 void areYouSure(void (*yes_callback)());
 void areYouSureWithMessage(const char *message PROGMEM, void (*yes_callback)());
 
+void showAsyncOperationInProgress(const char *message, void (*checkStatus)());
+
 void dialogYes();
 void dialogNo();
 void dialogCancel();

@@ -42,9 +42,19 @@ namespace gui {
 ////////////////////////////////////////////////////////////////////////////////
 
 SysSettingsDateTimePage::SysSettingsDateTimePage() {
-	dateTime = origDateTime = datetime::DateTime::now();
+#if OPTION_ETHERNET
+    ntpEnabled = origNtpEnabled = persist_conf::isNtpEnabled();
+    strcpy(ntpServer, persist_conf::devConf2.ntpServer);
+    strcpy(origNtpServer, persist_conf::devConf2.ntpServer);
+#else
+    ntpEnabled = origNtpEnabled = false;
+    strcpy(ntpServer, '');
+    strcpy(origNtpServer, '');
+#endif
+
+    dateTime = origDateTime = datetime::DateTime::now();
 	timeZone = origTimeZone = persist_conf::devConf.time_zone;
-	dst = origDst = persist_conf::devConf.flags.dst;
+	dst = origDst = persist_conf::devConf.flags.dst ? true : false;
 }
 
 data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t id) {
@@ -53,25 +63,75 @@ data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t
 		return value;
 	}
 
-	if (id == DATA_ID_SYS_INFO_DATE_TIME_YEAR) {
-		return data::Value(dateTime.year, VALUE_TYPE_YEAR);
-	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_MONTH) {
-		return data::Value(dateTime.month, VALUE_TYPE_MONTH);
-	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_DAY) {
-		return data::Value(dateTime.day, VALUE_TYPE_DAY);
-	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_HOUR) {
-		return data::Value(dateTime.hour, VALUE_TYPE_HOUR);
-	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_MINUTE) {
-		return data::Value(dateTime.minute, VALUE_TYPE_MINUTE);
-	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_SECOND) {
-		return data::Value(dateTime.second, VALUE_TYPE_SECOND);
-	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_TIME_ZONE) {
+    if (id == DATA_ID_NTP_ENABLED) {
+        return data::Value(ntpEnabled ? 1 : 0);
+    }
+
+    if (ntpEnabled) {
+        uint32_t nowUtc = datetime::nowUtc();
+        uint32_t nowLocal = datetime::utcToLocal(nowUtc, timeZone, dst);
+
+        if (id == DATA_ID_NTP_SERVER) {
+            return ntpServer;
+        }
+
+        if (id == DATA_ID_DATE_TIME_DATE) {
+            return data::Value(nowLocal, VALUE_TYPE_DATE);
+        }
+
+        if (id == DATA_ID_DATE_TIME_TIME) {
+            return data::Value(nowLocal, VALUE_TYPE_TIME);
+        }
+    } else {
+	    if (id == DATA_ID_DATE_TIME_YEAR) {
+		    return data::Value(dateTime.year, VALUE_TYPE_YEAR);
+	    }
+    
+        if (id == DATA_ID_DATE_TIME_MONTH) {
+		    return data::Value(dateTime.month, VALUE_TYPE_MONTH);
+	    }
+    
+        if (id == DATA_ID_DATE_TIME_DAY) {
+		    return data::Value(dateTime.day, VALUE_TYPE_DAY);
+	    }
+    
+        if (id == DATA_ID_DATE_TIME_HOUR) {
+		    return data::Value(dateTime.hour, VALUE_TYPE_HOUR);
+	    }
+    
+        if (id == DATA_ID_DATE_TIME_MINUTE) {
+		    return data::Value(dateTime.minute, VALUE_TYPE_MINUTE);
+	    }
+    
+        if (id == DATA_ID_DATE_TIME_SECOND) {
+		    return data::Value(dateTime.second, VALUE_TYPE_SECOND);
+	    }
+    }
+    
+    if (id == DATA_ID_DATE_TIME_TIME_ZONE) {
 		return data::Value(timeZone, VALUE_TYPE_TIME_ZONE);
-	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_DST) {
+	}
+    
+    if (id == DATA_ID_DATE_TIME_DST) {
 		return data::Value(dst ? 1 : 0);
 	}
 
 	return data::Value();
+}
+
+void SysSettingsDateTimePage::toggleNtp() {
+    ntpEnabled = !ntpEnabled;
+}
+
+void SysSettingsDateTimePage::onSetNtpServer(char *value) {
+	SysSettingsDateTimePage *page = (SysSettingsDateTimePage*)getPreviousPage();
+    strcpy(page->ntpServer, value);
+
+    popPage();
+}
+
+void SysSettingsDateTimePage::editNtpServer() {
+    Keypad::startPush(0, ntpServer, 32, false, onSetNtpServer, popPage);
 }
 
 void SysSettingsDateTimePage::edit() {
@@ -86,43 +146,43 @@ void SysSettingsDateTimePage::edit() {
 
     data::Value value;
 
-    if (id == DATA_ID_SYS_INFO_DATE_TIME_YEAR) {
+    if (id == DATA_ID_DATE_TIME_YEAR) {
 		label = "Year (2016-2036): ";
 		options.min = 2017;
 		options.max = 2036;
 		options.def = 2017;
         value = data::Value((int)dateTime.year);
-	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_MONTH) {
+	} else if (id == DATA_ID_DATE_TIME_MONTH) {
 		label = "Month (1-12): ";
 		options.min = 1;
 		options.max = 12;
 		options.def = 1;
         value = data::Value((int)dateTime.month);
-	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_DAY) {
+	} else if (id == DATA_ID_DATE_TIME_DAY) {
 		label = "Day (1-31): ";
 		options.min = 1;
 		options.max = 31;
 		options.def = 1;
         value = data::Value((int)dateTime.day);
-	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_HOUR) {
+	} else if (id == DATA_ID_DATE_TIME_HOUR) {
 		label = "Hour (0-23): ";
 		options.min = 0;
 		options.max = 23;
 		options.def = 12;
         value = data::Value((int)dateTime.hour);
-	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_MINUTE) {
+	} else if (id == DATA_ID_DATE_TIME_MINUTE) {
 		label = "Minute (0-59): ";
 		options.min = 0;
 		options.max = 59;
 		options.def = 0;
         value = data::Value((int)dateTime.minute);
-	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_SECOND) {
+	} else if (id == DATA_ID_DATE_TIME_SECOND) {
 		label = "Second (0-59): ";
 		options.min = 0;
 		options.max = 59;
 		options.def = 0;
         value = data::Value((int)dateTime.second);
-	} else if (id == DATA_ID_SYS_INFO_DATE_TIME_TIME_ZONE) {
+	} else if (id == DATA_ID_DATE_TIME_TIME_ZONE) {
 		label = "Time zone: ";
 		options.min = -12.00;
 		options.max = 14.00;
@@ -139,69 +199,133 @@ void SysSettingsDateTimePage::edit() {
 }
 
 void SysSettingsDateTimePage::toggleDst() {
-	dst = dst ? 0 : 1;
+	dst = !dst;
 }
 
 void SysSettingsDateTimePage::setValue(float value) {
-	if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_YEAR) {
+	if (editDataId == DATA_ID_DATE_TIME_YEAR) {
 		dateTime.year = uint16_t(value);
-	} else if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_MONTH) {
+	} else if (editDataId == DATA_ID_DATE_TIME_MONTH) {
 		dateTime.month = uint8_t(value);
-	} else if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_DAY) {
+	} else if (editDataId == DATA_ID_DATE_TIME_DAY) {
 		dateTime.day = uint8_t(value);
-	} else if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_HOUR) {
+	} else if (editDataId == DATA_ID_DATE_TIME_HOUR) {
 		dateTime.hour = uint8_t(value);
-	} else if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_MINUTE) {
+	} else if (editDataId == DATA_ID_DATE_TIME_MINUTE) {
 		dateTime.minute = uint8_t(value);
-	} else if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_SECOND) {
+	} else if (editDataId == DATA_ID_DATE_TIME_SECOND) {
 		dateTime.second = uint8_t(value);
-	} else if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_SECOND) {
+	} else if (editDataId == DATA_ID_DATE_TIME_SECOND) {
 		dateTime.second = uint8_t(value);
-	} else if (editDataId == DATA_ID_SYS_INFO_DATE_TIME_TIME_ZONE) {
+	} else if (editDataId == DATA_ID_DATE_TIME_TIME_ZONE) {
 		timeZone = int16_t(roundf(value * 100));
 	}
 }
 
 int SysSettingsDateTimePage::getDirty() {
-	return (dateTime != origDateTime || timeZone != origTimeZone || dst != origDst) ? 1 : 0;
+	if (ntpEnabled != origNtpEnabled) {
+        return 1;
+    }
+    
+    if (ntpEnabled) {
+        if (strcmp(ntpServer, origNtpServer)) {
+            return 1;
+        }
+    } else {
+        if (dateTime != origDateTime) {
+            return 1;
+        }
+    }
+
+    return (timeZone != origTimeZone || dst != origDst) ? 1 : 0;
 }
 
+#if OPTION_ETHERNET
+
+void SysSettingsDateTimePage::checkTestNtpServerStatus() {
+    bool testResult;
+    if (ntp::isTestNtpServerDone(testResult)) {
+        popPage();
+
+        if (testResult) {
+            SysSettingsDateTimePage *page = (SysSettingsDateTimePage*)getActivePage();
+            page->doSet();
+        } else {
+            errorMessageP(PSTR("Unable to connect to NTP server!"));
+        }
+    }
+}
+
+void SysSettingsDateTimePage::testNtpServer() {
+    ntp::testNtpServer(ntpServer);
+    showAsyncOperationInProgress("Testing NTP server.", checkTestNtpServerStatus);
+}
+#endif
+
+
 void SysSettingsDateTimePage::set() {
-    if (!datetime::isValidDate(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day)) {
-        errorMessageP(PSTR("Invalid date!"));
+#if OPTION_ETHERNET
+    if (ntpEnabled && strcmp(ntpServer, origNtpServer)) {
+        testNtpServer();
         return;
     }
+#endif
 
-    if (!datetime::isValidTime(dateTime.hour, dateTime.minute, dateTime.second)) {
-        errorMessageP(PSTR("Invalid time!"));
-        popPage();
-		return;
+    doSet();
+}
+
+void SysSettingsDateTimePage::doSet() {
+#if OPTION_ETHERNET
+    bool callNtpReset;
+    if (ntpEnabled != origNtpEnabled || strcmp(ntpServer, origNtpServer)) {
+        persist_conf::setNtpSettings(ntpEnabled, ntpServer);
+        callNtpReset = true;
     }
+#endif
+
+    if (!ntpEnabled) {
+        if (!datetime::isValidDate(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day)) {
+            errorMessageP(PSTR("Invalid date!"));
+            return;
+        }
+
+        if (!datetime::isValidTime(dateTime.hour, dateTime.minute, dateTime.second)) {
+            errorMessageP(PSTR("Invalid time!"));
+            popPage();
+		    return;
+        }
 	
-	if (dateTime != origDateTime) {
-		if (!datetime::setDateTime(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, dateTime.second)) {
-			errorMessageP(PSTR("Failed to set system date and time!"));
-			return;
-		}
-	}
+	    if (dateTime != origDateTime) {
+		    if (!datetime::setDateTime(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, dateTime.second)) {
+			    errorMessageP(PSTR("Failed to set system date and time!"));
+			    return;
+		    }
+	    }
+    }
 
 	if (timeZone != origTimeZone || dst != origDst) {
 		persist_conf::devConf.time_zone = timeZone;
-		persist_conf::devConf.flags.dst = dst;
+		persist_conf::devConf.flags.dst = dst ? 1 : 0;
 		if (!persist_conf::saveDevice()) {
 	        errorMessageP(PSTR("Failed to set time zone and DST!"));
 			return;
 		}
 		
-		if (dateTime == origDateTime) {
+		if (ntpEnabled || dateTime == origDateTime) {
 #if OPTION_ETHERNET
-            ntp::reset();
+            callNtpReset = true;
 #endif
             event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
 		}
 	}
 
-	infoMessageP(PSTR("Date and time settings saved!"), popPage);
+#if OPTION_ETHERNET
+    if (callNtpReset) {
+        ntp::reset();
+    }
+#endif
+
+    infoMessageP(PSTR("Date and time settings saved!"), popPage);
 	return;
 }
 

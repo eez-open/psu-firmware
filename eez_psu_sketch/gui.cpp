@@ -134,6 +134,8 @@ static uint8_t g_textMessageVersion;
 
 static persist_conf::DeviceFlags2 g_deviceFlags2;
 
+static void (*g_checkAsyncOperationStatus)();
+
 ////////////////////////////////////////
 
 static uint32_t g_touchDownTime;
@@ -620,6 +622,12 @@ void areYouSure(void (*yes_callback)()) {
 
 void areYouSureWithMessage(const char *message PROGMEM, void (*yes_callback)()) {
     yesNoDialog(PAGE_ID_ARE_YOU_SURE_WITH_MESSAGE, message, yes_callback, 0, 0);
+}
+
+void showAsyncOperationInProgress(const char *message, void (*checkStatus)()) {
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value(message), 0);
+    g_checkAsyncOperationStatus = checkStatus;
+    pushPage(PAGE_ID_ASYNC_OPERATION_IN_PROGRESS);
 }
 
 void yesNoLater(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*later_callback)() = 0) {
@@ -1500,6 +1508,12 @@ void tick(uint32_t tick_usec) {
             dialogOk();
             return;
         }
+    }
+
+    if (g_activePageId == PAGE_ID_ASYNC_OPERATION_IN_PROGRESS) {
+        static char *throbber[] = {"|", "/", "-", "\\", "|", "/", "-", "\\"};
+        data::set(data::Cursor(), DATA_ID_ASYNC_OPERATION_THROBBER, data::Value(throbber[(tick_usec % 1000000) / 125000]), 0);
+        g_checkAsyncOperationStatus();
     }
 
     if (psu::g_rprogAlarm) {

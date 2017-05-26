@@ -767,6 +767,12 @@ bool setNtpServer(const char *ntpServer, size_t ntpServerLength) {
     return saveDevice2();
 }
 
+bool setNtpSettings(bool enable, const char *ntpServer) {
+    devConf2.flags.ntpEnabled = enable ? 1 : 0;
+    strcpy(devConf2.ntpServer, ntpServer);
+    return saveDevice2();
+}
+
 }
 }
 } // namespace eez::psu::persist_conf

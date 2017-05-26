@@ -428,6 +428,24 @@ void Value::toText(char *text, int count) const {
         }
         break;
 
+    case VALUE_TYPE_DATE: 
+        {
+            int year, month, day, hour, minute, second;
+            datetime::breakTime(uint32_, year, month, day, hour, minute, second);
+            snprintf_P(text, count-1, PSTR("%d - %02d - %02d"), year, month, day);
+            text[count - 1] = 0;
+        }
+        break;
+
+    case VALUE_TYPE_TIME: 
+        {
+            int year, month, day, hour, minute, second;
+            datetime::breakTime(uint32_, year, month, day, hour, minute, second);
+            snprintf_P(text, count-1, PSTR("%02d : %02d : %02d"), hour, minute, second);
+            text[count - 1] = 0;
+        }
+        break;
+
     case VALUE_TYPE_YEAR:
         snprintf_P(text, count-1, PSTR("%d"), uint16_);
         text[count - 1] = 0;
@@ -552,7 +570,7 @@ bool Value::operator ==(const Value &other) const {
 		return uint16_ == other.uint16_;
 	}
 
-	if (type_ == VALUE_TYPE_ON_TIME_COUNTER || type_ == VALUE_TYPE_COUNTDOWN || type_ == VALUE_TYPE_IP_ADDRESS) {
+	if (type_ == VALUE_TYPE_ON_TIME_COUNTER || type_ == VALUE_TYPE_COUNTDOWN || type_ == VALUE_TYPE_IP_ADDRESS || type_ == VALUE_TYPE_DATE || type_ == VALUE_TYPE_TIME) {
 		return uint32_ == other.uint32_;
 	}
 		
@@ -1152,6 +1170,11 @@ Value get(const Cursor &cursor, uint8_t id) {
 
     if (id == DATA_ID_SERIAL_IS_CONNECTED) {
         return data::Value(serial::isConnected());
+    }
+
+    if (id == DATA_ID_ASYNC_OPERATION_THROBBER) {
+        static char *throbber[] = {"|", "/", "-", "\\", "|", "/", "-", "\\"};
+        return data::Value(throbber[(millis() % 1000) / 125]);
     }
 
     Page *page = getActivePage();

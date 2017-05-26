@@ -33,7 +33,7 @@
 
 #define CONF_NTP_LOCAL_PORT 8888
 
-#define CONF_PARSE_TIMEOUT_MS 10 * 1000 // 10 second
+#define CONF_PARSE_TIMEOUT_MS 5 * 1000 // 5 second
 #define CONF_TIMEOUT_AFTER_PARSE_SUCCESS_MS CONF_NTP_PERIOD_SEC * 1000L
 #define CONF_TIMEOUT_AFTER_PARSE_ERROR_MS 10 * 60 * 1000L // 10 minutes
 
@@ -51,10 +51,15 @@ static enum {
     START,
     PARSE,
     PARSE_SUCCESS,
-    PARSE_ERROR
+    PARSE_ERROR,
+
+    TEST_START,
+    TEST
 } g_state;
 
 static uint32_t g_lastTickCount;
+
+static const char *g_ntpServerToTest;
 
 // send an NTP request to the time server at the given address
 void sendNtpPacket() {
@@ -76,7 +81,7 @@ void sendNtpPacket() {
 
       // All NTP fields have been given values, now
       // you can send a packet requesting a timestamp:
-      g_udp.beginPacket(persist_conf::devConf2.ntpServer, 123); // NTP requests are to port 123
+      g_udp.beginPacket(g_ntpServerToTest ? g_ntpServerToTest : persist_conf::devConf2.ntpServer, 123); // NTP requests are to port 123
       g_udp.write(packetBuffer, NTP_PACKET_SIZE);
       g_udp.endPacket();
 }
@@ -98,16 +103,12 @@ void readNtpPacket() {
     const uint32_t seventyYears = 2208988800UL;
 
     // Subtract seventy years:
-    uint32_t epoch = secsSince1900 - seventyYears;
+    uint32_t utc = secsSince1900 - seventyYears;
 
-    epoch += ((persist_conf::devConf.time_zone / 100) * 60 + persist_conf::devConf.time_zone % 100) * 60L;
-
-    if (persist_conf::devConf.flags.dst) {
-        epoch += 3600;
-    }
+    uint32_t local = datetime::utcToLocal(utc, persist_conf::devConf.time_zone, persist_conf::devConf.flags.dst);
 
     int year, month, day, hour, minute, second;
-    datetime::breakTime(epoch, year, month, day, hour, minute, second);
+    datetime::breakTime(local, year, month, day, hour, minute, second);
    
     //DebugTraceF("NTP: %d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, second);
 
@@ -171,6 +172,20 @@ void reset() {
     if (g_state == PARSE_SUCCESS || g_state == PARSE_ERROR) {
         g_state = START;
     }
+}
+
+void testNtpServer(const char *ntpServer) {
+    g_ntpServerToTest = ntpServer;
+    g_state = START;
+}
+
+bool isTestNtpServerDone(bool &result) {
+    if (g_state == PARSE_SUCCESS || g_state == PARSE_ERROR) {
+        g_ntpServerToTest = NULL;
+        result = g_state == PARSE_SUCCESS;
+        return true;
+    }
+    return false;
 }
 
 }
