@@ -72,7 +72,7 @@ data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t
         uint32_t nowLocal = datetime::utcToLocal(nowUtc, timeZone, dst);
 
         if (id == DATA_ID_NTP_SERVER) {
-            return ntpServer;
+            return ntpServer[0] ? ntpServer : "<not specified>";
         }
 
         if (id == DATA_ID_DATE_TIME_DATE) {
@@ -228,7 +228,7 @@ int SysSettingsDateTimePage::getDirty() {
     }
     
     if (ntpEnabled) {
-        if (strcmp(ntpServer, origNtpServer)) {
+        if (ntpServer[0] && strcmp(ntpServer, origNtpServer)) {
             return 1;
         }
     } else {
@@ -258,20 +258,21 @@ void SysSettingsDateTimePage::checkTestNtpServerStatus() {
 
 void SysSettingsDateTimePage::testNtpServer() {
     ntp::testNtpServer(ntpServer);
-    showAsyncOperationInProgress("Testing NTP server.", checkTestNtpServerStatus);
+    showAsyncOperationInProgress("Testing NTP server...", checkTestNtpServerStatus);
 }
 #endif
 
 
 void SysSettingsDateTimePage::set() {
+    if (getDirty()) {
 #if OPTION_ETHERNET
-    if (ntpEnabled && strcmp(ntpServer, origNtpServer)) {
-        testNtpServer();
-        return;
-    }
+        if (ntpEnabled && strcmp(ntpServer, origNtpServer)) {
+            testNtpServer();
+            return;
+        }
 #endif
-
-    doSet();
+        doSet();
+    }
 }
 
 void SysSettingsDateTimePage::doSet() {

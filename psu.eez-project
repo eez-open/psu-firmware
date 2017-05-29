@@ -12768,7 +12768,7 @@
             }
           ]
         },
-        "closePageIfTouchedOutside": true
+        "closePageIfTouchedOutside": false
       },
       {
         "$eez": false,

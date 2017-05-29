@@ -34,8 +34,8 @@
 #define CONF_NTP_LOCAL_PORT 8888
 
 #define CONF_PARSE_TIMEOUT_MS 5 * 1000 // 5 second
-#define CONF_TIMEOUT_AFTER_PARSE_SUCCESS_MS CONF_NTP_PERIOD_SEC * 1000L
-#define CONF_TIMEOUT_AFTER_PARSE_ERROR_MS 10 * 60 * 1000L // 10 minutes
+#define CONF_TIMEOUT_AFTER_SUCCESS_MS CONF_NTP_PERIOD_SEC * 1000L
+#define CONF_TIMEOUT_AFTER_ERROR_MS 10 * 60 * 1000L // 10 minutes
 
 namespace eez {
 namespace psu {
@@ -50,16 +50,17 @@ static enum {
     STOPPED,
     START,
     PARSE,
-    PARSE_SUCCESS,
-    PARSE_ERROR,
-
-    TEST_START,
-    TEST
+    SUCCESS,
+    ERROR
 } g_state;
 
 static uint32_t g_lastTickCount;
 
 static const char *g_ntpServerToTest;
+
+const char *getNtpServer() {
+    return g_ntpServerToTest ? g_ntpServerToTest : persist_conf::devConf2.ntpServer;
+}
 
 // send an NTP request to the time server at the given address
 void sendNtpPacket() {
@@ -81,7 +82,7 @@ void sendNtpPacket() {
 
       // All NTP fields have been given values, now
       // you can send a packet requesting a timestamp:
-      g_udp.beginPacket(g_ntpServerToTest ? g_ntpServerToTest : persist_conf::devConf2.ntpServer, 123); // NTP requests are to port 123
+      g_udp.beginPacket(getNtpServer(), 123); // NTP requests are to port 123
       g_udp.write(packetBuffer, NTP_PACKET_SIZE);
       g_udp.endPacket();
 }
@@ -127,7 +128,7 @@ void init() {
 }
 
 void tick(uint32_t tickCount) {
-    if (ethernet::g_testResult == TEST_OK && persist_conf::isNtpEnabled() && persist_conf::devConf2.ntpServer[0]) {
+    if (ethernet::g_testResult == TEST_OK && persist_conf::isNtpEnabled()) {
         if (g_state == STOPPED) {
             begin();
         }
@@ -135,28 +136,31 @@ void tick(uint32_t tickCount) {
         tickCount = millis();
 
         if (g_state == START) {
-            if (persist_conf::isNtpEnabled() && persist_conf::devConf2.ntpServer[0]) {
+            if (persist_conf::isNtpEnabled() && getNtpServer()[0]) {
                 sendNtpPacket();
                 g_state = PARSE;
+                g_lastTickCount = tickCount;
+            } else {
+                g_state = ERROR;
                 g_lastTickCount = tickCount;
             }
         } else if (g_state == PARSE) {
             if (g_udp.parsePacket()) {
                 readNtpPacket();
-                g_state = PARSE_SUCCESS;
+                g_state = SUCCESS;
                 g_lastTickCount = tickCount;
             } else {
                 if (tickCount - g_lastTickCount > CONF_PARSE_TIMEOUT_MS) {
-                    g_state = PARSE_ERROR;
+                    g_state = ERROR;
                     g_lastTickCount = tickCount;
                 }
             }
-        } else if (g_state == PARSE_SUCCESS) {
-            if (tickCount - g_lastTickCount > CONF_TIMEOUT_AFTER_PARSE_SUCCESS_MS) {
+        } else if (g_state == SUCCESS) {
+            if (tickCount - g_lastTickCount > CONF_TIMEOUT_AFTER_SUCCESS_MS) {
                 g_state = START;
             }
-        } else if (g_state == PARSE_ERROR) {
-            if (tickCount - g_lastTickCount > CONF_TIMEOUT_AFTER_PARSE_ERROR_MS) {
+        } else if (g_state == ERROR) {
+            if (tickCount - g_lastTickCount > CONF_TIMEOUT_AFTER_ERROR_MS) {
                 g_state = START;
             }
         }
@@ -169,7 +173,7 @@ void tick(uint32_t tickCount) {
 }
 
 void reset() {
-    if (g_state == PARSE_SUCCESS || g_state == PARSE_ERROR) {
+    if (g_state == SUCCESS || g_state == ERROR) {
         g_state = START;
     }
 }
@@ -180,9 +184,9 @@ void testNtpServer(const char *ntpServer) {
 }
 
 bool isTestNtpServerDone(bool &result) {
-    if (g_state == PARSE_SUCCESS || g_state == PARSE_ERROR) {
+    if (g_state == SUCCESS || g_state == ERROR || g_state == STOPPED) {
         g_ntpServerToTest = NULL;
-        result = g_state == PARSE_SUCCESS;
+        result = g_state == SUCCESS;
         return true;
     }
     return false;
