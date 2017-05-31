@@ -136,7 +136,8 @@ bool dstCheck() {
             
         int year, month, day, hour, minute, second;
         breakTime(now, year, month, day, hour, minute, second);
-        setDateTime(year - 2000, month, day, hour, minute, second);
+        setDateTime(year - 2000, month, day, hour, minute, second, false);
+        event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED_DST);
 
         return true;
     }
