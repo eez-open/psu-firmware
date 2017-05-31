@@ -64,6 +64,7 @@ static const int EVENT_TYPE_ERROR = 3;
     EVENT_INFO(SYSTEM_PASSWORD_CHANGED, 9, "System password changed") \
     EVENT_INFO(CH1_OUTPUT_ENABLED, 10, "Ch1 output on") \
     EVENT_INFO(CH2_OUTPUT_ENABLED, 11, "Ch2 output on") \
+    EVENT_INFO(SYSTEM_DATE_TIME_CHANGED_DST, 12, "Date/time changed (DST)") \
     EVENT_INFO(CH1_OUTPUT_DISABLED, 20, "Ch1 output off") \
     EVENT_INFO(CH2_OUTPUT_DISABLED, 21, "Ch2 output off") \
     EVENT_INFO(CH1_REMOTE_SENSE_ENABLED, 30, "Ch1 remote sense enabled") \
