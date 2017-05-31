@@ -27,6 +27,7 @@ extern psu::TestResult g_testResult;
 
 void init();
 bool test();
+void tick(uint32_t tickCount);
 
 bool isValidDate(uint8_t year, uint8_t month, uint8_t day);
 bool getDate(uint8_t &year, uint8_t &month, uint8_t &day);
@@ -46,10 +47,22 @@ bool getDateTimeAsString(char *buffer);
 
 uint32_t now();
 uint32_t nowUtc();
+
 uint32_t makeTime(int year, int month, int day, int hour, int minute, int second);
 void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay, int &resultHour, int &resultMinute, int &resultSecond);
-uint32_t utcToLocal(uint32_t utc, int16_t timeZone, bool dst);
-uint32_t localToUtc(uint32_t local, int16_t timeZone, bool dst);
+
+enum DstRule {
+    DST_RULE_OFF,
+    DST_RULE_EUROPE,
+    DST_RULE_USA
+};
+
+uint32_t utcToLocal(uint32_t utc, int16_t timeZone, DstRule dstRule);
+uint32_t localToUtc(uint32_t local, int16_t timeZone, DstRule dstRule);
+
+bool isDst(uint32_t local, DstRule dstRule);
+
+uint8_t dayOfWeek(int y, int m, int d);
 
 struct DateTime {
     uint16_t year;

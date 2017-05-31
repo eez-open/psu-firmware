@@ -19,6 +19,7 @@
 #include "psu.h"
 #include "chips.h"
 #include "arduino_internal.h"
+#include "datetime.h"
 
 namespace eez {
 namespace psu {
@@ -314,154 +315,172 @@ uint8_t RtcChip::transfer(uint8_t data) {
         ctrl2 = data;
     }
     else if (state == RD_SECONDS) {
-        result = util::toBCD(getSeconds());
+        result = util::toBCD(getSecond());
         state = RD_MINUTES;
     }
     else if (state == RD_MINUTES) {
-        result = util::toBCD(getMinutes());
+        result = util::toBCD(getMinute());
         state = RD_HOURS;
     }
     else if (state == RD_HOURS) {
-        result = util::toBCD(getHours());
+        result = util::toBCD(getHour());
         state = RD_DAYS;
     }
     else if (state == RD_DAYS) {
-        result = util::toBCD(getDays());
+        result = util::toBCD(getDay());
         state = RD_WEEKDAYS;
     }
     else if (state == RD_WEEKDAYS) {
-        result = util::toBCD(getWeekdays());
+        result = util::toBCD(getWeekday());
         state = RD_MONTHS;
     }
     else if (state == RD_MONTHS) {
-        result = util::toBCD(getMonths());
+        result = util::toBCD(getMonth());
         state = RD_YEARS;
     }
     else if (state == RD_YEARS) {
-        result = util::toBCD(getYears());
+        result = util::toBCD(getYear());
     }
     else if (state == WR_SECONDS) {
-        setSeconds(util::fromBCD(data));
+        setSecond(util::fromBCD(data));
         state = WR_MINUTES;
     }
     else if (state == WR_MINUTES) {
-        setMinutes(util::fromBCD(data));
+        setMinute(util::fromBCD(data));
         state = WR_HOURS;
     }
     else if (state == WR_HOURS) {
-        setHours(util::fromBCD(data));
+        setHour(util::fromBCD(data));
         state = WR_DAYS;
     }
     else if (state == WR_DAYS) {
-        setDays(util::fromBCD(data));
+        setDay(util::fromBCD(data));
         state = WR_WEEKDAYS;
     }
     else if (state == WR_WEEKDAYS) {
-        setWeekdays(util::fromBCD(data));
+        setWeekday(util::fromBCD(data));
         state = WR_MONTHS;
     }
     else if (state == WR_MONTHS) {
-        setMonths(util::fromBCD(data));
+        setMonth(util::fromBCD(data));
         state = WR_YEARS;
     }
     else if (state == WR_YEARS) {
-        setYears(util::fromBCD(data));
+        setYear(util::fromBCD(data));
     }
 
     return result;
 }
 
-void RtcChip::setOffset(time_t offset_) {
+uint32_t RtcChip::nowUtc() {
+    time_t now_time_t = time(0);
+    struct tm *now_tm = gmtime(&now_time_t);
+    return datetime::makeTime(1900 + now_tm->tm_year, now_tm->tm_mon + 1, now_tm->tm_mday, now_tm->tm_hour, now_tm->tm_min, now_tm->tm_sec);
+}
+
+void RtcChip::getTime(uint8_t &result_year, uint8_t &result_month, uint8_t &result_day, uint8_t &result_weekday, uint8_t &result_hour, uint8_t &result_minute, uint8_t &result_second) {
+    int year, month, day, hour, minute, second;
+    datetime::breakTime(offset + nowUtc(), year, month, day, hour, minute, second);
+
+    result_year = uint8_t(year - 2000);
+    result_month = uint8_t(month);
+    result_day = uint8_t(day);
+
+    result_weekday = datetime::dayOfWeek(year, month, day) - 1;
+
+    result_hour = uint8_t(hour);
+    result_minute = uint8_t(minute);
+    result_second = uint8_t(second);
+}
+
+void RtcChip::setOffset(uint32_t offset_) {
+    offset = offset_;
     if (fp != NULL) {
-        offset = offset_;
         fseek(fp, 0, SEEK_SET);
         fwrite(&offset, sizeof(offset), 1, fp);
         fflush(fp);
     }
 }
 
-tm *RtcChip::getTime() {
-    time_t current_time = time(0);
-    time_t last_time = current_time + offset;
-    memcpy(&tm_, localtime(&last_time), sizeof(tm));
-    return &tm_;
+uint8_t RtcChip::getSecond() {
+    uint8_t year, month, day, weekday, hour, minute, second;
+    getTime(year, month, day, weekday, hour, minute, second);
+    return second;
 }
 
-uint8_t RtcChip::getSeconds() {
-    return getTime()->tm_sec;
+void RtcChip::setSecond(uint8_t second_) {
+    uint8_t year, month, day, weekday, hour, minute, second;
+    getTime(year, month, day, weekday, hour, minute, second);
+    setOffset(datetime::makeTime(year + 2000, month, day, hour, minute, second_) - nowUtc());
 }
 
-void RtcChip::setSeconds(uint8_t seconds) {
-    tm *tm_new_time = getTime();
-    tm_new_time->tm_sec = seconds;
-    time_t new_time = mktime(tm_new_time);
-    setOffset(new_time - time(0));
+uint8_t RtcChip::getMinute() {
+    uint8_t year, month, day, weekday, hour, minute, second;
+    getTime(year, month, day, weekday, hour, minute, second);
+    return minute;
 }
 
-uint8_t RtcChip::getMinutes() {
-    return getTime()->tm_min;
+void RtcChip::setMinute(uint8_t minute_) {
+    uint8_t year, month, day, weekday, hour, minute, second;
+    getTime(year, month, day, weekday, hour, minute, second);
+    setOffset(datetime::makeTime(year + 2000, month, day, hour, minute_, second) - nowUtc());
 }
 
-void RtcChip::setMinutes(uint8_t minutes) {
-    tm *tm_new_time = getTime();
-    tm_new_time->tm_min = minutes;
-    time_t new_time = mktime(tm_new_time);
-    setOffset(new_time - time(0));
+uint8_t RtcChip::getHour() {
+    uint8_t year, month, day, weekday, hour, minute, second;
+    getTime(year, month, day, weekday, hour, minute, second);
+    return hour;
 }
 
-uint8_t RtcChip::getHours() {
-    return getTime()->tm_hour;
+void RtcChip::setHour(uint8_t hour_) {
+    uint8_t year, month, day, weekday, hour, minute, second;
+    getTime(year, month, day, weekday, hour, minute, second);
+    setOffset(datetime::makeTime(year + 2000, month, day, hour_, minute, second) - nowUtc());
 }
 
-void RtcChip::setHours(uint8_t hours) {
-    tm *tm_new_time = getTime();
-    tm_new_time->tm_hour = hours;
-    time_t new_time = mktime(tm_new_time);
-    setOffset(new_time - time(0));
+uint8_t RtcChip::getDay() {
+    uint8_t year, month, day, weekday, hour, minute, second;
+    getTime(year, month, day, weekday, hour, minute, second);
+    return day;
 }
 
-uint8_t RtcChip::getDays() {
-    return getTime()->tm_mday;
+void RtcChip::setDay(uint8_t day_) {
+    uint8_t year, month, day, weekday, hour, minute, second;
+    getTime(year, month, day, weekday, hour, minute, second);
+    setOffset(datetime::makeTime(year + 2000, month, day_, hour, minute, second) - nowUtc());
 }
 
-void RtcChip::setDays(uint8_t days) {
-    tm *tm_new_time = getTime();
-    tm_new_time->tm_mday = days;
-    time_t new_time = mktime(tm_new_time);
-    setOffset(new_time - time(0));
+uint8_t RtcChip::getWeekday() {
+    uint8_t year, month, day, weekday, hour, minute, second;
+    getTime(year, month, day, weekday, hour, minute, second);
+    return weekday;
 }
 
-uint8_t RtcChip::getWeekdays() {
-    return getTime()->tm_wday;
+void RtcChip::setWeekday(uint8_t weekdays) {
 }
 
-void RtcChip::setWeekdays(uint8_t weekdays) {
-    tm *tm_new_time = getTime();
-    tm_new_time->tm_wday = weekdays;
-    time_t new_time = mktime(tm_new_time);
-    setOffset(new_time - time(0));
+uint8_t RtcChip::getMonth() {
+    uint8_t year, month, day, weekday, hour, minute, second;
+    getTime(year, month, day, weekday, hour, minute, second);
+    return month;
 }
 
-uint8_t RtcChip::getMonths() {
-    return getTime()->tm_mon + 1;
+void RtcChip::setMonth(uint8_t month_) {
+    uint8_t year, month, day, weekday, hour, minute, second;
+    getTime(year, month, day, weekday, hour, minute, second);
+    setOffset(datetime::makeTime(year + 2000, month_, day, hour, minute, second) - nowUtc());
 }
 
-void RtcChip::setMonths(uint8_t months) {
-    tm *tm_new_time = getTime();
-    tm_new_time->tm_mon = months - 1;
-    time_t new_time = mktime(tm_new_time);
-    setOffset(new_time - time(0));
+uint8_t RtcChip::getYear() {
+    uint8_t year, month, day, weekday, hour, minute, second;
+    getTime(year, month, day, weekday, hour, minute, second);
+    return year;
 }
 
-uint8_t RtcChip::getYears() {
-    return getTime()->tm_year - 100;
-}
-
-void RtcChip::setYears(uint8_t years) {
-    tm *tm_new_time = getTime();
-    tm_new_time->tm_year = years + 100;
-    time_t new_time = mktime(tm_new_time);
-    setOffset(new_time - time(0));
+void RtcChip::setYear(uint8_t year_) {
+    uint8_t year, month, day, weekday, hour, minute, second;
+    getTime(year, month, day, weekday, hour, minute, second);
+    setOffset(datetime::makeTime(year_ + 2000, month, day, hour, minute, second) - nowUtc());
 }
 
 ////////////////////////////////////////////////////////////////////////////////

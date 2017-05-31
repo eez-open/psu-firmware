@@ -26,7 +26,44 @@ namespace eez {
 namespace psu {
 namespace datetime {
 
+#define SECONDS_PER_MINUTE 60UL
+#define SECONDS_PER_HOUR (SECONDS_PER_MINUTE * 60)
+#define SECONDS_PER_DAY (SECONDS_PER_HOUR * 24)
+
+// leap year calulator expects year argument as years offset from 1970
+#define LEAP_YEAR(Y) ( ((1970+Y)>0) && !((1970+Y)%4) && ( ((1970+Y)%100) || !((1970+Y)%400) ) )
+
+////////////////////////////////////////////////////////////////////////////////
+
 psu::TestResult g_testResult = psu::TEST_FAILED;
+
+////////////////////////////////////////////////////////////////////////////////
+
+// API starts months from 1, this array starts from 0
+static const uint8_t monthDays[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+////////////////////////////////////////////////////////////////////////////////
+
+enum Week {Last, First, Second, Third, Fourth}; 
+enum DayOfWeek {Sun=1, Mon, Tue, Wed, Thu, Fri, Sat};
+enum Month {Jan=1, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec};
+
+struct TimeChangeRule {
+    Week week;
+    DayOfWeek dow;
+    uint8_t month;
+    uint8_t hour;
+};
+
+static struct {
+    TimeChangeRule dstStart;
+    TimeChangeRule dstEnd;
+} g_dstRules[] = {
+    { {Last, Sun, Mar, 2}, {Last, Sun, Oct, 2} }, // EUROPE
+    { {Second, Sun, Mar, 2}, {First, Sun, Nov, 1} } // USA
+};
+
+////////////////////////////////////////////////////////////////////////////////
 
 void init() {
 }
@@ -83,6 +120,30 @@ bool isValidTime(uint8_t hour, uint8_t minute, uint8_t second) {
     return true;
 }
 
+bool dstCheck() {
+    uint8_t year, month, day, hour, minute, second;
+    rtc::readDateTime(year, month, day, hour, minute, second);
+    uint32_t now = makeTime(2000 + year, month, day, hour, minute, second);
+
+    bool dst = isDst(now, (DstRule)persist_conf::devConf2.dstRule);
+
+    if (dst != persist_conf::devConf.flags.dst) {
+        if (dst) {
+            now += SECONDS_PER_HOUR;
+        } else {
+            now -= SECONDS_PER_HOUR;
+        }
+            
+        int year, month, day, hour, minute, second;
+        breakTime(now, year, month, day, hour, minute, second);
+        setDateTime(year - 2000, month, day, hour, minute, second);
+
+        return true;
+    }
+
+    return false;
+}
+
 bool test() {
     if (rtc::g_testResult == psu::TEST_OK) {
         uint8_t year, month, day, hour, minute, second;
@@ -100,8 +161,9 @@ bool test() {
                     (int)rtc_hour, (int)rtc_minute, (int)rtc_second);
             } else if (cmp_datetime(year, month, day, hour, minute, second, rtc_year, rtc_month, rtc_day, rtc_hour, rtc_minute, rtc_second) < 0) {
                 g_testResult = psu::TEST_OK;
-                persist_conf::writeSystemDate(rtc_year, rtc_month, rtc_day);
-                persist_conf::writeSystemTime(rtc_hour, rtc_minute, rtc_second);
+                if (!dstCheck()) {
+                    persist_conf::writeSystemDateTime(rtc_year, rtc_month, rtc_day, rtc_hour, rtc_minute, rtc_second);
+                }
             }
             else {
                 g_testResult = psu::TEST_FAILED;
@@ -121,6 +183,15 @@ bool test() {
     psu::setQuesBits(QUES_TIME, g_testResult != psu::TEST_OK);
 
     return g_testResult != psu::TEST_FAILED && g_testResult != psu::TEST_WARNING;
+}
+
+void tick(uint32_t tickCount) {
+    static uint32_t g_lastTickCount;
+    int32_t diff = tickCount - g_lastTickCount;
+    if (diff > 1000000L) {
+        dstCheck();
+        g_lastTickCount = tickCount;
+    }
 }
 
 bool getDate(uint8_t &year, uint8_t &month, uint8_t &day) {
@@ -188,16 +259,6 @@ bool getDateTimeAsString(char *buffer) {
     return false;
 }
 
-#define SECONDS_PER_MINUTE 60UL
-#define SECONDS_PER_HOUR (SECONDS_PER_MINUTE * 60)
-#define SECONDS_PER_DAY (SECONDS_PER_HOUR * 24)
-
-// leap year calulator expects year argument as years offset from 1970
-#define LEAP_YEAR(Y) ( ((1970+Y)>0) && !((1970+Y)%4) && ( ((1970+Y)%100) || !((1970+Y)%400) ) )
-
-// API starts months from 1, this array starts from 0
-static const uint8_t monthDays[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
- 
 uint32_t now() {
     uint8_t year, month, day, hour, minute, second;
     rtc::readDateTime(year, month, day, hour, minute, second);
@@ -208,7 +269,7 @@ uint32_t nowUtc() {
     uint8_t year, month, day, hour, minute, second;
     rtc::readDateTime(year, month, day, hour, minute, second);
     uint32_t now = makeTime(2000 + year, month, day, hour, minute, second);
-    return localToUtc(now, persist_conf::devConf.time_zone, persist_conf::devConf.flags.dst);
+    return localToUtc(now, persist_conf::devConf.time_zone, (DstRule)persist_conf::devConf2.dstRule);
 }
 
 uint32_t makeTime(int year, int month, int day, int hour, int minute, int second) {
@@ -289,18 +350,63 @@ void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay,
     resultDay = time + 1;     // day of month
 }
 
-uint32_t utcToLocal(uint32_t utc, int16_t timeZone, bool dst) {
+uint8_t dayOfWeek(int y, int m, int d) { 
+    static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
+    if (m < 3) {
+        --y;
+    }
+    return (y + y/4 - y/100 + y/400 + t[m - 1] + d) % 7 + 1; 
+}
+
+uint32_t timeChangeRuleToLocal(TimeChangeRule &r, int year) {
+    uint8_t month = r.month;
+    uint8_t week = r.week;
+    if (week == 0) { // Last week == 0
+        if (++month > 12) { // for "Last", go to the next month
+            month = 1;
+            ++year;
+        }
+        week = 1; // and treat as first week of next month, subtract 7 days later
+    }
+
+    uint32_t t = makeTime(year, month, 1, r.hour, 0, 0);
+
+    uint8_t dow = dayOfWeek(year, month, 1);
+
+    t += (7 * (week - 1) + (r.dow - dow + 7) % 7) * SECONDS_PER_DAY;
+    if (r.week == 0) {
+        t -= 7 * SECONDS_PER_DAY; // back up a week if this is a "Last" rule
+    }
+
+    return t;
+}
+
+bool isDst(uint32_t local, DstRule dstRule) {
+    if (dstRule == DST_RULE_OFF) {
+        return false;
+    }
+
+    int year, month, day, hour, minute, second;
+    breakTime(local, year, month, day, hour, minute, second);
+
+    uint32_t dstStart = timeChangeRuleToLocal(g_dstRules[dstRule - 1].dstStart, year);
+    uint32_t dstEnd = timeChangeRuleToLocal(g_dstRules[dstRule - 1].dstEnd, year);
+
+    return local >= dstStart && local < dstEnd;
+}
+
+uint32_t utcToLocal(uint32_t utc, int16_t timeZone, DstRule dstRule) {
     uint32_t local = utc + ((timeZone / 100) * 60 + timeZone % 100) * 60L;
-    if (dst) {
-        local += 3600;
+    if (isDst(local, dstRule)) {
+        local += SECONDS_PER_HOUR;
     }
     return local;
 }
 
-uint32_t localToUtc(uint32_t local, int16_t timeZone, bool dst) {
+uint32_t localToUtc(uint32_t local, int16_t timeZone, DstRule dstRule) {
     uint32_t utc = local - ((timeZone / 100) * 60 + timeZone % 100) * 60L;
-    if (dst) {
-        utc -= 3600;
+    if (isDst(local, dstRule)) {
+        utc -= SECONDS_PER_HOUR;
     }
     return utc;
 }

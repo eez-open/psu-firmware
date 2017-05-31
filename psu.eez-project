@@ -623,9 +623,9 @@
     },
     {
       "$eez": false,
-      "name": "sys_settings_date_time_toggle_dst",
+      "name": "dateTime.selectDstRule",
       "implementationType": "native",
-      "implementation": "((SysSettingsDateTimePage *)getActivePage())->toggleDst();\n"
+      "implementation": "((SysSettingsDateTimePage *)getActivePage())->selectDstRule();\n"
     },
     {
       "$eez": false,
@@ -2083,8 +2083,9 @@
     {
       "$eez": false,
       "name": "dateTime.DST",
-      "type": "boolean",
-      "defaultValue": "1"
+      "type": "enum",
+      "enumItems": "[\n\"Off\",\n\"Europe\",\n\"USA\"\n]",
+      "defaultValue": "Europe"
     },
     {
       "$eez": false,
@@ -21338,7 +21339,7 @@
                         {
                           "$eez": false,
                           "type": "Text",
-                          "action": "sys_settings_date_time_toggle_dst",
+                          "action": "dateTime.selectDstRule",
                           "width": 60,
                           "height": 28,
                           "style": "edit_value_active_S_left",
@@ -21347,7 +21348,7 @@
                         {
                           "$eez": false,
                           "type": "Text",
-                          "action": "sys_settings_date_time_toggle_dst",
+                          "action": "dateTime.selectDstRule",
                           "width": 60,
                           "height": 28,
                           "style": "edit_value_active_S_left",
@@ -21671,16 +21672,16 @@
                       "action": "edit_field",
                       "x": 89,
                       "y": 112,
-                      "width": 89,
+                      "width": 96,
                       "height": 28,
                       "style": "edit_value_active_S_left"
                     },
                     {
                       "$eez": false,
                       "type": "Rectangle",
-                      "x": 178,
+                      "x": 185,
                       "y": 112,
-                      "width": 62,
+                      "width": 55,
                       "height": 28,
                       "style": "default_inverse"
                     },
@@ -21696,40 +21697,22 @@
                     },
                     {
                       "$eez": false,
-                      "x": 89,
-                      "type": "Select",
+                      "type": "Text",
                       "data": "dateTime.DST",
+                      "action": "dateTime.selectDstRule",
+                      "x": 89,
                       "y": 140,
-                      "width": 60,
+                      "width": 96,
                       "height": 28,
-                      "style": "default",
-                      "widgets": [
-                        {
-                          "$eez": false,
-                          "type": "Text",
-                          "action": "sys_settings_date_time_toggle_dst",
-                          "width": 60,
-                          "height": 28,
-                          "style": "edit_value_active_S_left",
-                          "text": "No"
-                        },
-                        {
-                          "$eez": false,
-                          "type": "Text",
-                          "action": "sys_settings_date_time_toggle_dst",
-                          "width": 60,
-                          "height": 28,
-                          "style": "edit_value_active_S_left",
-                          "text": "Yes"
-                        }
-                      ]
+                      "style": "edit_value_active_S_left",
+                      "text": "Yes"
                     },
                     {
                       "$eez": false,
                       "type": "Rectangle",
-                      "x": 149,
+                      "x": 185,
                       "y": 140,
-                      "width": 91,
+                      "width": 55,
                       "height": 28,
                       "style": "default_inverse"
                     }

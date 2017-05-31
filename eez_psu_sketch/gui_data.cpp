@@ -136,6 +136,13 @@ data::EnumItem g_serialParityEnumDefinition[] = {
     {0, 0}
 };
 
+data::EnumItem g_dstRuleEnumDefinition[] = {
+    {datetime::DST_RULE_OFF, PSTR("Off")},
+    {datetime::DST_RULE_EUROPE, PSTR("Europe")},
+    {datetime::DST_RULE_USA, PSTR("USA")},
+    {0, 0}
+};
+
 static const data::EnumItem *enumDefinitions[] = {
     g_channelDisplayValueEnumDefinition,
     g_channelTriggerModeEnumDefinition,
@@ -146,9 +153,9 @@ static const data::EnumItem *enumDefinitions[] = {
     g_ioPinsPolarityEnumDefinition,
     g_ioPinsInputFunctionEnumDefinition,
     g_ioPinsOutputFunctionEnumDefinition,
-    g_serialParityEnumDefinition
+    g_serialParityEnumDefinition,
+    g_dstRuleEnumDefinition
 };
-
 
 ////////////////////////////////////////////////////////////////////////////////
 

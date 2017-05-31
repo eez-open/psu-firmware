@@ -106,7 +106,7 @@ void readNtpPacket() {
     // Subtract seventy years:
     uint32_t utc = secsSince1900 - seventyYears;
 
-    uint32_t local = datetime::utcToLocal(utc, persist_conf::devConf.time_zone, persist_conf::devConf.flags.dst);
+    uint32_t local = datetime::utcToLocal(utc, persist_conf::devConf.time_zone, (datetime::DstRule)persist_conf::devConf2.dstRule);
 
     int year, month, day, hour, minute, second;
     datetime::breakTime(local, year, month, day, hour, minute, second);

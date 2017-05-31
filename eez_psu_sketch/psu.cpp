@@ -1022,6 +1022,8 @@ void tick() {
 
     serial::tick(tick_usec);
 
+    datetime::tick(tick_usec);
+
 #if OPTION_ETHERNET
     if (g_mainLoopCounter % 2 == 0) {
         // tick ethernet every other time

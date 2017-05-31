@@ -56,7 +56,7 @@ struct DeviceFlags {
     unsigned  forceDisablingAllOutputsOnPowerUp : 1;
     unsigned  isFrontPanelLocked: 1;
     unsigned  isClickSoundEnabled : 1;
-    unsigned  reserved: 18;
+    unsigned  reserved2: 18;
 };
 
 /// Device configuration block.
@@ -128,7 +128,8 @@ struct DeviceConfiguration2 {
     uint32_t ethernetSubnetMask;
     uint16_t ethernetScpiPort;
     char ntpServer[32+1];
-    uint8_t reserverd[32];
+    uint8_t dstRule;
+    uint8_t reserverd[31];
 };
 
 extern DeviceConfiguration devConf;

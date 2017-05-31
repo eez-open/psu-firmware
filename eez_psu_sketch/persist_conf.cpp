@@ -27,6 +27,7 @@
 #if OPTION_DISPLAY
 #include "lcd.h"
 #endif
+#include "datetime.h"
 
 #include "gui_internal.h"
 
@@ -120,7 +121,7 @@ static void initDevice() {
 
     devConf.flags.dateValid = 0;
     devConf.flags.timeValid = 0;
-	devConf.flags.dst = 0;
+    devConf.flags.dst = 0;
 
 	devConf.time_zone = 0;
 
@@ -193,6 +194,8 @@ static void initDevice2() {
     initEthernetSettings();
 
     strcpy(devConf2.ntpServer, CONF_DEFAULT_NTP_SERVER);
+
+	devConf2.dstRule = datetime::DST_RULE_OFF;
 }
 
 void loadDevice2() {
@@ -335,11 +338,25 @@ bool readSystemDate(uint8_t &year, uint8_t &month, uint8_t &day) {
     return false;
 }
 
+bool isDst() {
+    return datetime::isDst(
+        datetime::makeTime(
+            2000 + devConf.date_year, devConf.date_month, devConf.date_day, 
+            devConf.time_hour, devConf.time_minute, devConf.time_second
+        ),
+        (datetime::DstRule)devConf2.dstRule
+    );
+}
+
 void writeSystemDate(uint8_t year, uint8_t month, uint8_t day) {
     devConf.date_year = year;
     devConf.date_month = month;
     devConf.date_day = day;
+
     devConf.flags.dateValid = 1;
+
+    devConf.flags.dst = isDst();
+
     saveDevice();
 }
 
@@ -357,7 +374,11 @@ void writeSystemTime(uint8_t hour, uint8_t minute, uint8_t second) {
     devConf.time_hour = hour;
     devConf.time_minute = minute;
     devConf.time_second = second;
+
     devConf.flags.timeValid = 1;
+
+    devConf.flags.dst = isDst();
+
     saveDevice();
 }
 
@@ -365,12 +386,16 @@ void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour,
     devConf.date_year = year;
     devConf.date_month = month;
     devConf.date_day = day;
+
     devConf.flags.dateValid = 1;
     
 	devConf.time_hour = hour;
     devConf.time_minute = minute;
     devConf.time_second = second;
+
     devConf.flags.timeValid = 1;
+
+    devConf.flags.dst = isDst();
 
 	saveDevice();
 }

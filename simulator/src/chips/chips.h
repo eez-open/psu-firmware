@@ -130,39 +130,38 @@ public:
 private:
     FILE *fp;
 
-    time_t offset;
-
-    tm tm_;
+    uint32_t offset;
 
     State state;
 
     uint8_t ctrl1;
     uint8_t ctrl2;
 
-    void setOffset(time_t offset_);
+    uint32_t nowUtc();
 
-    tm *getTime();
+    void getTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &weekday, uint8_t &hour, uint8_t &minute, uint8_t &second);
+    void setOffset(uint32_t offset_);
 
-    uint8_t getSeconds();
-    void setSeconds(uint8_t seconds);
+    uint8_t getSecond();
+    void setSecond(uint8_t second_);
 
-    uint8_t getMinutes();
-    void setMinutes(uint8_t minutes);
+    uint8_t getMinute();
+    void setMinute(uint8_t minute_);
 
-    uint8_t getHours();
-    void setHours(uint8_t hours);
+    uint8_t getHour();
+    void setHour(uint8_t hour_);
 
-    uint8_t getDays();
-    void setDays(uint8_t days);
+    uint8_t getDay();
+    void setDay(uint8_t day_);
 
-    uint8_t getWeekdays();
-    void setWeekdays(uint8_t weekdays);
+    uint8_t getWeekday();
+    void setWeekday(uint8_t weekday_);
 
-    uint8_t getMonths();
-    void setMonths(uint8_t months);
+    uint8_t getMonth();
+    void setMonth(uint8_t month_);
 
-    uint8_t getYears();
-    void setYears(uint8_t years);
+    uint8_t getYear();
+    void setYear(uint8_t year_);
 };
 
 ////////////////////////////////////////////////////////////////////////////////

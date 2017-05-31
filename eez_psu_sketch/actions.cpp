@@ -425,8 +425,8 @@ void action_ch_settings_adv_remote_toggle_programming() {
     ((ChSettingsAdvRemotePage *)getActivePage())->toggleProgramming();
 }
 
-void action_sys_settings_date_time_toggle_dst() {
-    ((SysSettingsDateTimePage *)getActivePage())->toggleDst();
+void action_date_time_select_dst_rule() {
+    ((SysSettingsDateTimePage *)getActivePage())->selectDstRule();
 }
 
 void action_show_user_profiles() {
@@ -876,7 +876,7 @@ ACTION actions[] = {
     action_ch_settings_adv_lripple_toggle_auto_mode,
     action_ch_settings_adv_remote_toggle_sense,
     action_ch_settings_adv_remote_toggle_programming,
-    action_sys_settings_date_time_toggle_dst,
+    action_date_time_select_dst_rule,
     action_show_user_profiles,
     action_show_user_profiles2,
     action_show_user_profile_settings,

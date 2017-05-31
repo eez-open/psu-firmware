@@ -42,7 +42,7 @@ public:
 
     void toggleNtp();
     void editNtpServer();
-	void toggleDst();
+	void selectDstRule();
 
 private:
     bool origNtpEnabled;
@@ -57,8 +57,10 @@ private:
 	int16_t origTimeZone;
 	int16_t timeZone;
 
-	bool origDst;
-	bool dst;
+	datetime::DstRule origDstRule;
+	datetime::DstRule dstRule;
+
+    static void onDstRuleSet(uint8_t value);
 
 #if OPTION_ETHERNET
     enum {

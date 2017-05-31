@@ -54,7 +54,7 @@ SysSettingsDateTimePage::SysSettingsDateTimePage() {
 
     dateTime = origDateTime = datetime::DateTime::now();
 	timeZone = origTimeZone = persist_conf::devConf.time_zone;
-	dst = origDst = persist_conf::devConf.flags.dst ? true : false;
+	dstRule = origDstRule = (datetime::DstRule)persist_conf::devConf2.dstRule;
 }
 
 data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t id) {
@@ -69,7 +69,7 @@ data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t
 
     if (ntpEnabled) {
         uint32_t nowUtc = datetime::nowUtc();
-        uint32_t nowLocal = datetime::utcToLocal(nowUtc, timeZone, dst);
+        uint32_t nowLocal = datetime::utcToLocal(nowUtc, timeZone, dstRule);
 
         if (id == DATA_ID_NTP_SERVER) {
             return ntpServer[0] ? ntpServer : "<not specified>";
@@ -113,7 +113,7 @@ data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t
 	}
     
     if (id == DATA_ID_DATE_TIME_DST) {
-		return data::Value(dst ? 1 : 0);
+		return data::Value(dstRule, data::ENUM_DEFINITION_DST_RULE);
 	}
 
 	return data::Value();
@@ -198,8 +198,14 @@ void SysSettingsDateTimePage::edit() {
 	}
 }
 
-void SysSettingsDateTimePage::toggleDst() {
-	dst = !dst;
+void SysSettingsDateTimePage::onDstRuleSet(uint8_t value) {
+    popPage();
+	SysSettingsDateTimePage *page = (SysSettingsDateTimePage*)getActivePage();
+    page->dstRule = (datetime::DstRule)value;
+}
+
+void SysSettingsDateTimePage::selectDstRule() {
+    pushSelectFromEnumPage(data::g_dstRuleEnumDefinition, dstRule, 0, onDstRuleSet);
 }
 
 void SysSettingsDateTimePage::setValue(float value) {
@@ -237,7 +243,7 @@ int SysSettingsDateTimePage::getDirty() {
         }
     }
 
-    return (timeZone != origTimeZone || dst != origDst) ? 1 : 0;
+    return (timeZone != origTimeZone || dstRule != origDstRule) ? 1 : 0;
 }
 
 #if OPTION_ETHERNET
@@ -276,14 +282,6 @@ void SysSettingsDateTimePage::set() {
 }
 
 void SysSettingsDateTimePage::doSet() {
-#if OPTION_ETHERNET
-    bool callNtpReset;
-    if (ntpEnabled != origNtpEnabled || strcmp(ntpServer, origNtpServer)) {
-        persist_conf::setNtpSettings(ntpEnabled, ntpServer);
-        callNtpReset = true;
-    }
-#endif
-
     if (!ntpEnabled) {
         if (!datetime::isValidDate(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day)) {
             errorMessageP(PSTR("Invalid date!"));
@@ -295,36 +293,37 @@ void SysSettingsDateTimePage::doSet() {
             popPage();
 		    return;
         }
-	
-	    if (dateTime != origDateTime) {
-		    if (!datetime::setDateTime(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, dateTime.second)) {
-			    errorMessageP(PSTR("Failed to set system date and time!"));
-			    return;
-		    }
-	    }
     }
 
-	if (timeZone != origTimeZone || dst != origDst) {
-		persist_conf::devConf.time_zone = timeZone;
-		persist_conf::devConf.flags.dst = dst ? 1 : 0;
-		if (!persist_conf::saveDevice()) {
-	        errorMessageP(PSTR("Failed to set time zone and DST!"));
-			return;
-		}
-		
-		if (ntpEnabled || dateTime == origDateTime) {
 #if OPTION_ETHERNET
-            callNtpReset = true;
+    bool callNtpReset;
+    if (ntpEnabled != origNtpEnabled || strcmp(ntpServer, origNtpServer)) {
+        persist_conf::setNtpSettings(ntpEnabled, ntpServer);
+        callNtpReset = true;
+    }
 #endif
-            event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
-		}
+
+    if (dstRule != origDstRule) {
+		persist_conf::devConf2.dstRule = dstRule;
+		persist_conf::saveDevice2();
+    }
+
+    if (!ntpEnabled && dateTime != origDateTime) {
+		datetime::setDateTime(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, dateTime.second);
+    }
+
+	if (timeZone != origTimeZone) {
+		persist_conf::devConf.time_zone = timeZone;
+		persist_conf::saveDevice();
 	}
 
 #if OPTION_ETHERNET
-    if (callNtpReset) {
-        ntp::reset();
-    }
+    ntp::reset();
 #endif
+
+    if (ntpEnabled || dateTime == origDateTime) {
+        event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
+    }
 
     infoMessageP(PSTR("Date and time settings saved!"), popPage);
 	return;
