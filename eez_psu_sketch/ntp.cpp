@@ -59,7 +59,16 @@ static uint32_t g_lastTickCount;
 static const char *g_ntpServerToTest;
 
 const char *getNtpServer() {
-    return g_ntpServerToTest ? g_ntpServerToTest : persist_conf::devConf2.ntpServer;
+    if (g_ntpServerToTest) {
+        if (g_ntpServerToTest[0]) {
+            return g_ntpServerToTest;
+        }
+    } else {
+        if (persist_conf::isNtpEnabled() && persist_conf::devConf2.ntpServer[0]) {
+            return persist_conf::devConf2.ntpServer;
+        }
+    }
+    return NULL;
 }
 
 // send an NTP request to the time server at the given address
@@ -136,7 +145,7 @@ void tick(uint32_t tickCount) {
         tickCount = millis();
 
         if (g_state == START) {
-            if (persist_conf::isNtpEnabled() && getNtpServer()[0]) {
+            if (getNtpServer()) {
                 sendNtpPacket();
                 g_state = PARSE;
                 g_lastTickCount = tickCount;
