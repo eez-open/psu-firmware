@@ -229,6 +229,10 @@ void SysSettingsDateTimePage::setValue(float value) {
 }
 
 int SysSettingsDateTimePage::getDirty() {
+    if (ntpEnabled && !ntpServer[0]) {
+        return 0;
+    }
+
 	if (ntpEnabled != origNtpEnabled) {
         return 1;
     }

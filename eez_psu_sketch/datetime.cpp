@@ -59,8 +59,8 @@ static struct {
     TimeChangeRule dstStart;
     TimeChangeRule dstEnd;
 } g_dstRules[] = {
-    { {Last, Sun, Mar, 2}, {Last, Sun, Oct, 2} }, // EUROPE
-    { {Second, Sun, Mar, 2}, {First, Sun, Nov, 1} } // USA
+    { {Last, Sun, Mar, 2}, {Last, Sun, Oct, 3} }, // EUROPE
+    { {Second, Sun, Mar, 2}, {First, Sun, Nov, 2} } // USA
 };
 
 ////////////////////////////////////////////////////////////////////////////////
