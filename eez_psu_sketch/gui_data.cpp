@@ -140,7 +140,7 @@ data::EnumItem g_dstRuleEnumDefinition[] = {
     {datetime::DST_RULE_OFF, PSTR("Off")},
     {datetime::DST_RULE_EUROPE, PSTR("Europe")},
     {datetime::DST_RULE_USA, PSTR("USA")},
-    {datetime::DST_RULE_USA, PSTR("Australia")},
+    {datetime::DST_RULE_AUSTRALIA, PSTR("Australia")},
     {0, 0}
 };
 
