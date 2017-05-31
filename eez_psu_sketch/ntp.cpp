@@ -137,7 +137,7 @@ void init() {
 }
 
 void tick(uint32_t tickCount) {
-    if (ethernet::g_testResult == TEST_OK && persist_conf::isNtpEnabled()) {
+    if (ethernet::g_testResult == TEST_OK) {
         if (g_state == STOPPED) {
             begin();
         }
