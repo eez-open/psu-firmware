@@ -54,7 +54,8 @@ void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay,
 enum DstRule {
     DST_RULE_OFF,
     DST_RULE_EUROPE,
-    DST_RULE_USA
+    DST_RULE_USA,
+    DST_RULE_AUSTRALIA
 };
 
 uint32_t utcToLocal(uint32_t utc, int16_t timeZone, DstRule dstRule);

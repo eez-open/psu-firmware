@@ -60,7 +60,8 @@ static struct {
     TimeChangeRule dstEnd;
 } g_dstRules[] = {
     { {Last, Sun, Mar, 2}, {Last, Sun, Oct, 3} }, // EUROPE
-    { {Second, Sun, Mar, 2}, {First, Sun, Nov, 2} } // USA
+    { {Second, Sun, Mar, 2}, {First, Sun, Nov, 2} }, // USA
+    { {First, Sun, Oct, 2}, {First, Sun, Apr, 3} }, // Australia
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -393,7 +394,9 @@ bool isDst(uint32_t local, DstRule dstRule) {
     uint32_t dstStart = timeChangeRuleToLocal(g_dstRules[dstRule - 1].dstStart, year);
     uint32_t dstEnd = timeChangeRuleToLocal(g_dstRules[dstRule - 1].dstEnd, year);
 
-    return local >= dstStart && local < dstEnd;
+    return
+        dstStart < dstEnd && (local >= dstStart && local < dstEnd) ||
+        dstStart > dstEnd && (local >= dstStart || local < dstEnd);
 }
 
 uint32_t utcToLocal(uint32_t utc, int16_t timeZone, DstRule dstRule) {
