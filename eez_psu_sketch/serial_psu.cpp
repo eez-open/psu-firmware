@@ -137,10 +137,12 @@ void init() {
 }
 
 void tick(uint32_t tick_usec) {
-    while (Serial.available()) {
-        g_isConnected = true;
-        char ch = (char)Serial.read();
-        input(scpi_context, ch);
+    if (g_testResult == TEST_OK) {
+        while (Serial.available()) {
+            g_isConnected = true;
+            char ch = (char)Serial.read();
+            input(scpi_context, ch);
+        }
     }
 }
 
