@@ -20,7 +20,10 @@
 #include "scpi_psu.h"
 
 #include "serial_psu.h"
+#if OPTION_ETHERNET
 #include "ethernet.h"
+#include "ntp.h"
+#endif
 #include "datetime.h"
 #include "sound.h"
 #include "profile.h"
@@ -182,6 +185,67 @@ scpi_result_t scpi_cmd_systemTimeQ(scpi_t *context) {
     sprintf_P(buffer, PSTR("%d, %d, %d"), (int)hour, (int)minute, (int)second);
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
+    return SCPI_RES_OK;
+}
+
+// NONE|ODD|EVEN
+static scpi_choice_def_t dstChoice[] = {
+    { "OFF", datetime::DST_RULE_OFF },
+    { "EU", datetime::DST_RULE_EUROPE },
+    { "USA", datetime::DST_RULE_USA },
+    { "AUS", datetime::DST_RULE_AUSTRALIA },
+    SCPI_CHOICE_LIST_END
+};
+
+scpi_result_t scpi_cmd_systemTimeDst(scpi_t *context) {
+    int32_t dstRule;
+    if (!SCPI_ParamChoice(context, dstChoice, &dstRule, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    persist_conf::devConf2.dstRule = (uint8_t)dstRule;
+	persist_conf::saveDevice2();
+
+#if OPTION_ETHERNET
+    ntp::reset();
+#endif
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemTimeDstQ(scpi_t *context) {
+    resultChoiceName(context, dstChoice, persist_conf::devConf2.dstRule);
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemTimeZone(scpi_t *context) {
+    const char *timeZoneStr;
+    size_t timeZoneStrLength;
+
+    if (!SCPI_ParamCharacters(context, &timeZoneStr, &timeZoneStrLength, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    int16_t timeZone;
+    if (!util::parseTimeZone(timeZoneStr, timeZoneStrLength, timeZone)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+        return SCPI_RES_ERR;
+    }
+
+	persist_conf::devConf.time_zone = timeZone;
+	persist_conf::saveDevice();
+
+#if OPTION_ETHERNET
+    ntp::reset();
+#endif
+
+    return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_systemTimeZoneQ(scpi_t *context) {
+    char timeZoneStr[32];
+    util::formatTimeZone(persist_conf::devConf.time_zone, timeZoneStr, 32);
+    SCPI_ResultText(context, timeZoneStr);
     return SCPI_RES_OK;
 }
 
@@ -829,7 +893,12 @@ scpi_result_t scpi_cmd_systemCommunicateEnable(scpi_t *context) {
     if (commInterface == 1) {
         persist_conf::enableSerial(enable);
     } else if (commInterface == 2) {
+#if OPTION_ETHERNET
         persist_conf::enableEthernet(enable);
+#else
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+#endif
     } else if (commInterface == 3) {
         persist_conf::enableNtp(enable);
     }
@@ -846,7 +915,12 @@ scpi_result_t scpi_cmd_systemCommunicateEnableQ(scpi_t *context) {
     if (commInterface == 1) {
         SCPI_ResultBool(context, persist_conf::isSerialEnabled());
     } else if (commInterface == 2) {
+#if OPTION_ETHERNET
         SCPI_ResultBool(context, persist_conf::isEthernetEnabled());
+#else
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        return SCPI_RES_ERR;
+#endif
     } else if (commInterface == 3) {
         SCPI_ResultBool(context, persist_conf::isNtpEnabled());
     }
@@ -855,6 +929,7 @@ scpi_result_t scpi_cmd_systemCommunicateEnableQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetDhcp(scpi_t *context) {
+#if OPTION_ETHERNET
     if (!persist_conf::isEthernetEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -868,9 +943,14 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDhcp(scpi_t *context) {
     persist_conf::enableEthernetDhcp(enable);
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetDhcpQ(scpi_t *context) {
+#if OPTION_ETHERNET
     if (!persist_conf::isEthernetEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -878,9 +958,14 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDhcpQ(scpi_t *context) {
 
     SCPI_ResultBool(context, persist_conf::isEthernetDhcpEnabled());
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetAddress(scpi_t *context) {
+#if OPTION_ETHERNET
     if (!persist_conf::isEthernetEnabled() || persist_conf::devConf2.flags.ethernetDhcpEnabled) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -902,9 +987,14 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetAddress(scpi_t *context) {
     persist_conf::setEthernetIpAddress(ipAddress);
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetAddressQ(scpi_t *context) {
+#if OPTION_ETHERNET
     if (!persist_conf::isEthernetEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -918,9 +1008,14 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetAddressQ(scpi_t *context) {
     }
     SCPI_ResultText(context, ipAddressStr);
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetDns(scpi_t *context) {
+#if OPTION_ETHERNET
     if (!persist_conf::isEthernetEnabled() || persist_conf::devConf2.flags.ethernetDhcpEnabled) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -942,9 +1037,14 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDns(scpi_t *context) {
     persist_conf::setEthernetDns(ipAddress);
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetDnsQ(scpi_t *context) {
+#if OPTION_ETHERNET
     if (!persist_conf::isEthernetEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -958,9 +1058,14 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDnsQ(scpi_t *context) {
         SCPI_ResultText(context, ipAddressStr);
     }
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetGateway(scpi_t *context) {
+#if OPTION_ETHERNET
     if (!persist_conf::isEthernetEnabled() || persist_conf::devConf2.flags.ethernetDhcpEnabled) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -982,9 +1087,14 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetGateway(scpi_t *context) {
     persist_conf::setEthernetGateway(ipAddress);
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetGatewayQ(scpi_t *context) {
+#if OPTION_ETHERNET
     if (!persist_conf::isEthernetEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -998,9 +1108,14 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetGatewayQ(scpi_t *context) {
         SCPI_ResultText(context, ipAddressStr);
     }
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetSmask(scpi_t *context) {
+#if OPTION_ETHERNET
     if (!persist_conf::isEthernetEnabled() || persist_conf::devConf2.flags.ethernetDhcpEnabled) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -1022,9 +1137,14 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetSmask(scpi_t *context) {
     persist_conf::setEthernetSubnetMask(ipAddress);
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetSmaskQ(scpi_t *context) {
+#if OPTION_ETHERNET
     if (!persist_conf::isEthernetEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -1038,9 +1158,14 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetSmaskQ(scpi_t *context) {
         SCPI_ResultText(context, ipAddressStr);
     }
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetPort(scpi_t *context) {
+#if OPTION_ETHERNET
     if (!persist_conf::isEthernetEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -1059,9 +1184,14 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetPort(scpi_t *context) {
     persist_conf::setEthernetScpiPort((uint16_t)port);
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetPortQ(scpi_t *context) {
+#if OPTION_ETHERNET
     if (!persist_conf::isEthernetEnabled()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -1069,6 +1199,10 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetPortQ(scpi_t *context) {
 
     SCPI_ResultInt(context, persist_conf::devConf2.ethernetScpiPort);
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
 }
 
 scpi_result_t scpi_cmd_systemCommunicateEthernetMacQ(scpi_t *context) {

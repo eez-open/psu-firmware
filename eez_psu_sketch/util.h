@@ -111,6 +111,9 @@ void macAddressToString(uint8_t *macAddress, char *macAddressStr);
 
 char hexDigit(int num);
 
+void formatTimeZone(int16_t timeZone, char *text, int count);
+bool parseTimeZone(const char *timeZoneStr, size_t timeZoneLength, int16_t &timeZone);
+
 }
 }
 } // namespace eez::psu::util

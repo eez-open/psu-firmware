@@ -425,6 +425,105 @@ char hexDigit(int num) {
     }
 }
 
+void formatTimeZone(int16_t timeZone, char *text, int count) {
+    if (timeZone == 0) {
+        strncpy_P(text, PSTR("GMT"), count - 1);
+    } else {
+        char sign;
+        int16_t value;
+        if (timeZone > 0) {
+            sign = '+';
+            value = timeZone;
+        } else {
+            sign = '-';
+            value = -timeZone;
+        }
+        snprintf_P(text, count-1, PSTR("%c%02d:%02d GMT"), sign, value / 100, value % 100);
+    }
+    text[count - 1] = 0;
+}
+
+bool parseTimeZone(const char *timeZoneStr, size_t timeZoneLength, int16_t &timeZone) {
+    int state = 0;
+
+    int sign = 1;
+    int integerPart = 0;
+    int fractionPart = 0;
+
+    const char *end = timeZoneStr + timeZoneLength;
+    for (const char *p = timeZoneStr; p < end; ++p) {
+        if (*p == ' ') {
+            continue;
+        }
+
+        if (state == 0) {
+            if (*p == '+') {
+                state = 1;
+            } else if (*p == '-') {
+                sign = -1;
+                state = 1;
+            } else if (isDigit(*p)) {
+                integerPart = *p - '0';
+                state = 2;
+            } else {
+                return false;
+            }
+        } else if (state == 1) {
+            if (isDigit(*p)) {
+                integerPart = (*p - '0');
+                state = 2;
+            } else {
+                return false;
+            }
+        } else if (state == 2) {
+            if (*p == ':') {
+                state = 4;
+            } else if (isDigit(*p)) {
+                integerPart = integerPart * 10 + (*p - '0');
+                state = 3;
+            } else {
+                return false;
+            }
+        } else if (state == 3) {
+            if (*p == ':') {
+                state = 4;
+            } else {
+                return false;
+            }
+        } else if (state == 4) {
+            if (isDigit(*p)) {
+                fractionPart = (*p - '0');
+                state = 5;
+            } else {
+                return false;
+            }
+        } else if (state == 5) {
+            if (isDigit(*p)) {
+                fractionPart = fractionPart * 10 + (*p - '0');
+                state = 6;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    if (state != 2 && state != 3 && state != 6) {
+        return false;
+    }
+
+    int value= sign * (integerPart * 100 + fractionPart);
+
+    if (value < -1200 || value > 1400) {
+        return false;
+    }
+
+    timeZone = (int16_t)value;
+
+    return true;
+}
+
 }
 }
 } // namespace eez::psu::util

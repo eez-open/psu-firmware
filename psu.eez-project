@@ -80431,6 +80431,22 @@
           },
           {
             "$eez": false,
+            "name": "SYSTem:TIME:DST"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:TIME:DST?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:TIME:ZONE"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:TIME:ZONE?"
+          },
+          {
+            "$eez": false,
             "name": "SYSTem:BEEPer[:IMMediate]"
           },
           {

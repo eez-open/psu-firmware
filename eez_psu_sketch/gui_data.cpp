@@ -39,7 +39,9 @@
 #include "gui_keypad.h"
 #include "gui_page_ch_settings_trigger.h"
 #include "serial_psu.h"
+#if OPTION_ETHERNET
 #include "ethernet.h"
+#endif
 
 #define CONF_GUI_REFRESH_EVERY_MS 250
 
@@ -418,22 +420,7 @@ void Value::toText(char *text, int count) const {
         break;
 
     case VALUE_TYPE_TIME_ZONE:
-        if (int16_ == 0) {
-            strncpy_P(text, PSTR("GMT"), count - 1);
-            text[count - 1] = 0;
-        } else {
-            char sign;
-            int16_t value;
-            if (int16_ > 0) {
-                sign = '+';
-                value = int16_;
-            } else {
-                sign = '-';
-                value = -int16_;
-            }
-            snprintf_P(text, count-1, PSTR("%c%02d:%02d GMT"), sign, value / 100, value % 100);
-            text[count - 1] = 0;
-        }
+        util::formatTimeZone(int16_, text, count);
         break;
 
     case VALUE_TYPE_DATE: 
@@ -483,7 +470,11 @@ void Value::toText(char *text, int count) const {
 
     case VALUE_TYPE_MAC_ADDRESS:
     {
+#if OPTION_ETHERNET
         util::macAddressToString(ethernet::g_mac, text);
+#else
+        text[0] = 0;
+#endif
         break;
     }
 

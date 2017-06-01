@@ -221,6 +221,10 @@
     SCPI_COMMAND("SYSTem:TIME", scpi_cmd_systemTime) \
     SCPI_COMMAND("SYSTem:TIME:CLEar", scpi_cmd_systemTimeClear) \
     SCPI_COMMAND("SYSTem:TIME?", scpi_cmd_systemTimeQ) \
+    SCPI_COMMAND("SYSTem:TIME:DST", scpi_cmd_systemTimeDst) \
+    SCPI_COMMAND("SYSTem:TIME:DST?", scpi_cmd_systemTimeDstQ) \
+    SCPI_COMMAND("SYSTem:TIME:ZONE", scpi_cmd_systemTimeZone) \
+    SCPI_COMMAND("SYSTem:TIME:ZONE?", scpi_cmd_systemTimeZoneQ) \
     SCPI_COMMAND("SYSTem:BEEPer[:IMMediate]", scpi_cmd_systemBeeperImmediate) \
     SCPI_COMMAND("SYSTem:BEEPer:STATe", scpi_cmd_systemBeeperState) \
     SCPI_COMMAND("SYSTem:BEEPer:STATe?", scpi_cmd_systemBeeperStateQ) \

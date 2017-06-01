@@ -48,8 +48,8 @@ SysSettingsDateTimePage::SysSettingsDateTimePage() {
     strcpy(origNtpServer, persist_conf::devConf2.ntpServer);
 #else
     ntpEnabled = origNtpEnabled = false;
-    strcpy(ntpServer, '');
-    strcpy(origNtpServer, '');
+    strcpy(ntpServer, "");
+    strcpy(origNtpServer, "");
 #endif
 
     dateTime = origDateTime = datetime::DateTime::now();
@@ -120,19 +120,25 @@ data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t
 }
 
 void SysSettingsDateTimePage::toggleNtp() {
+#if OPTION_ETHERNET
     ntpEnabled = !ntpEnabled;
+#endif
 }
 
+void SysSettingsDateTimePage::editNtpServer() {
+#if OPTION_ETHERNET
+    Keypad::startPush(0, ntpServer, 32, false, onSetNtpServer, popPage);
+#endif
+}
+
+#if OPTION_ETHERNET
 void SysSettingsDateTimePage::onSetNtpServer(char *value) {
 	SysSettingsDateTimePage *page = (SysSettingsDateTimePage*)getPreviousPage();
     strcpy(page->ntpServer, value);
 
     popPage();
 }
-
-void SysSettingsDateTimePage::editNtpServer() {
-    Keypad::startPush(0, ntpServer, 32, false, onSetNtpServer, popPage);
-}
+#endif
 
 void SysSettingsDateTimePage::edit() {
 	DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
