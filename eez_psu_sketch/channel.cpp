@@ -1727,9 +1727,10 @@ void Channel::setPowerLimit(float limit) {
 #if !CONF_SKIP_PWRGOOD_TEST
 void Channel::testPwrgood(uint8_t gpio) {
     if (!(gpio & (1 << IOExpander::IO_BIT_IN_PWRGOOD))) {
+        DebugTraceF("Ch%d PWRGOOD bit changed to 0", index);
+
         gpio = ioexp.readGpio();
         if (!(gpio & (1 << IOExpander::IO_BIT_IN_PWRGOOD))) {
-            DebugTraceF("Ch%d PWRGOOD bit changed to 0", index);
             flags.powerOk = 0;
             psu::generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (index - 1));
             psu::powerDownBySensor();
