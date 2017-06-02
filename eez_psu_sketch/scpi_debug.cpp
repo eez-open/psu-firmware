@@ -21,6 +21,7 @@
 #include "watchdog.h"
 #include "temperature.h"
 #include "fan.h"
+#include "serial_psu.h"
 
 #if OPTION_SD_CARD
 #include "sd_card.h"
@@ -170,7 +171,7 @@ scpi_result_t scpi_cmd_debugCurrent(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_debugMeasureVoltage(scpi_t *context) {
-    if (persist_conf::isSerialEnabled()) {
+    if (serial::g_testResult != TEST_OK) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
@@ -210,6 +211,11 @@ scpi_result_t scpi_cmd_debugMeasureVoltage(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_debugMeasureCurrent(scpi_t *context) {
+    if (serial::g_testResult != TEST_OK) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;

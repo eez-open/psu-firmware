@@ -23,6 +23,7 @@
 
 #include "sound.h"
 #include "datetime.h"
+#include "serial_psu.h"
 
 namespace eez {
 namespace psu {
@@ -128,7 +129,7 @@ void input(scpi_t &scpi_context, const char *str, size_t size) {
 void printError(int_fast16_t err) {
     sound::playBeep();
 
-    if (persist_conf::isSerialEnabled()) {
+    if (serial::g_testResult == TEST_OK) {
         char errorOutputBuffer[256];
 
         char datetime_buffer[20] = { 0 };

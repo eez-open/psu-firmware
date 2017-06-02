@@ -1604,22 +1604,22 @@ void Channel::disableProtection() {
 
 void Channel::setQuesBits(int bit_mask, bool on) {
 	if (serial::g_testResult == TEST_OK) {
-        reg_set_ques_isum_bit(&serial::scpi_context, this, bit_mask, on);
+        reg_set_ques_isum_bit(&serial::g_scpiContext, this, bit_mask, on);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == psu::TEST_OK) {
-        reg_set_ques_isum_bit(&ethernet::scpi_context, this, bit_mask, on);
+        reg_set_ques_isum_bit(&ethernet::g_scpiContext, this, bit_mask, on);
     }
 #endif
 }
 
 void Channel::setOperBits(int bit_mask, bool on) {
 	if (serial::g_testResult == TEST_OK) {
-        reg_set_oper_isum_bit(&serial::scpi_context, this, bit_mask, on);
+        reg_set_oper_isum_bit(&serial::g_scpiContext, this, bit_mask, on);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == psu::TEST_OK) {
-        reg_set_oper_isum_bit(&ethernet::scpi_context, this, bit_mask, on);
+        reg_set_oper_isum_bit(&ethernet::g_scpiContext, this, bit_mask, on);
     }
 #endif
 }

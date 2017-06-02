@@ -233,285 +233,285 @@ bool test() {
 static bool psuReset() {
     // *ESE 0
 	if (serial::g_testResult == TEST_OK) {
-        SCPI_RegSet(&serial::scpi_context, SCPI_REG_ESE, 0);
+        SCPI_RegSet(&serial::g_scpiContext, SCPI_REG_ESE, 0);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        SCPI_RegSet(&ethernet::scpi_context, SCPI_REG_ESE, 0);
+        SCPI_RegSet(&ethernet::g_scpiContext, SCPI_REG_ESE, 0);
 	}
 #endif
 
     // *SRE 0
 	if (serial::g_testResult == TEST_OK) {
-        SCPI_RegSet(&serial::scpi_context, SCPI_REG_ESE, 0);
+        SCPI_RegSet(&serial::g_scpiContext, SCPI_REG_ESE, 0);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        SCPI_RegSet(&ethernet::scpi_context, SCPI_REG_SRE, 0);
+        SCPI_RegSet(&ethernet::g_scpiContext, SCPI_REG_SRE, 0);
 	}
 #endif
 
     // *STB 0
 	if (serial::g_testResult == TEST_OK) {
-        SCPI_RegSet(&serial::scpi_context, SCPI_REG_ESE, 0);
+        SCPI_RegSet(&serial::g_scpiContext, SCPI_REG_ESE, 0);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        SCPI_RegSet(&ethernet::scpi_context, SCPI_REG_STB, 0);
+        SCPI_RegSet(&ethernet::g_scpiContext, SCPI_REG_STB, 0);
 	}
 #endif
 
     // *ESR 0
 	if (serial::g_testResult == TEST_OK) {
-        SCPI_RegSet(&serial::scpi_context, SCPI_REG_ESE, 0);
+        SCPI_RegSet(&serial::g_scpiContext, SCPI_REG_ESE, 0);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        SCPI_RegSet(&ethernet::scpi_context, SCPI_REG_ESR, 0);
+        SCPI_RegSet(&ethernet::g_scpiContext, SCPI_REG_ESR, 0);
 	}
 #endif
 
     // STAT:OPER[:EVEN] 0
 	if (serial::g_testResult == TEST_OK) {
-        SCPI_RegSet(&serial::scpi_context, SCPI_REG_OPER, 0);
+        SCPI_RegSet(&serial::g_scpiContext, SCPI_REG_OPER, 0);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        SCPI_RegSet(&ethernet::scpi_context, SCPI_REG_OPER, 0);
+        SCPI_RegSet(&ethernet::g_scpiContext, SCPI_REG_OPER, 0);
 	}
 #endif
 
     // STAT:OPER:COND 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_REG_OPER_COND, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_REG_OPER_COND, 0);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_REG_OPER_COND, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_REG_OPER_COND, 0);
 	}
 #endif
 
     // STAT:OPER:ENAB 0
 	if (serial::g_testResult == TEST_OK) {
-        SCPI_RegSet(&serial::scpi_context, SCPI_REG_OPERE, 0);
+        SCPI_RegSet(&serial::g_scpiContext, SCPI_REG_OPERE, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        SCPI_RegSet(&ethernet::scpi_context, SCPI_REG_OPERE, 0);
+        SCPI_RegSet(&ethernet::g_scpiContext, SCPI_REG_OPERE, 0);
 	}
 #endif
 
     // STAT:OPER:INST[:EVEN] 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_REG_OPER_INST_EVENT, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_REG_OPER_INST_EVENT, 0);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_REG_OPER_INST_EVENT, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_REG_OPER_INST_EVENT, 0);
 	}
 #endif
 
     // STAT:OPER:INST:COND 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_REG_OPER_INST_COND, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_REG_OPER_INST_COND, 0);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_REG_OPER_INST_COND, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_REG_OPER_INST_COND, 0);
 	}
 #endif
 
     // STAT:OPER:INST:ENAB 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_REG_OPER_INST_ENABLE, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_REG_OPER_INST_ENABLE, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_REG_OPER_INST_ENABLE, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_REG_OPER_INST_ENABLE, 0);
 	}
 #endif
 
     // STAT:OPER:INST:ISUM[:EVEN] 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_CH_REG_OPER_INST_ISUM_EVENT1, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_CH_REG_OPER_INST_ISUM_EVENT1, 0);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_CH_REG_OPER_INST_ISUM_EVENT1, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_CH_REG_OPER_INST_ISUM_EVENT1, 0);
 	}
 #endif
 
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_CH_REG_OPER_INST_ISUM_EVENT2, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_CH_REG_OPER_INST_ISUM_EVENT2, 0);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_CH_REG_OPER_INST_ISUM_EVENT2, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_CH_REG_OPER_INST_ISUM_EVENT2, 0);
 	}
 #endif
 
     // STAT:OPER:INST:ISUM:COND 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_CH_REG_OPER_INST_ISUM_COND1, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_CH_REG_OPER_INST_ISUM_COND1, 0);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_CH_REG_OPER_INST_ISUM_COND1, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_CH_REG_OPER_INST_ISUM_COND1, 0);
 	}
 #endif
 
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_CH_REG_OPER_INST_ISUM_COND2, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_CH_REG_OPER_INST_ISUM_COND2, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_CH_REG_OPER_INST_ISUM_COND2, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_CH_REG_OPER_INST_ISUM_COND2, 0);
 	}
 #endif
 
     // STAT:OPER:INST:ISUM:ENAB 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_CH_REG_OPER_INST_ISUM_ENABLE1, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_CH_REG_OPER_INST_ISUM_ENABLE1, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_CH_REG_OPER_INST_ISUM_ENABLE1, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_CH_REG_OPER_INST_ISUM_ENABLE1, 0);
 	}
 #endif
 
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_CH_REG_OPER_INST_ISUM_ENABLE2, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_CH_REG_OPER_INST_ISUM_ENABLE2, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_CH_REG_OPER_INST_ISUM_ENABLE2, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_CH_REG_OPER_INST_ISUM_ENABLE2, 0);
 	}
 #endif
 
     // STAT:QUES[:EVEN] 0
 	if (serial::g_testResult == TEST_OK) {
-        SCPI_RegSet(&serial::scpi_context, SCPI_REG_QUES, 0);
+        SCPI_RegSet(&serial::g_scpiContext, SCPI_REG_QUES, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        SCPI_RegSet(&ethernet::scpi_context, SCPI_REG_QUES, 0);
+        SCPI_RegSet(&ethernet::g_scpiContext, SCPI_REG_QUES, 0);
 	}
 #endif
 
     // STAT:QUES:COND 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_REG_QUES_COND, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_REG_QUES_COND, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_REG_QUES_COND, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_REG_QUES_COND, 0);
 	}
 #endif
 
     // STAT:QUES:ENAB 0
 	if (serial::g_testResult == TEST_OK) {
-        SCPI_RegSet(&serial::scpi_context, SCPI_REG_QUESE, 0);
+        SCPI_RegSet(&serial::g_scpiContext, SCPI_REG_QUESE, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        SCPI_RegSet(&ethernet::scpi_context, SCPI_REG_QUESE, 0);
+        SCPI_RegSet(&ethernet::g_scpiContext, SCPI_REG_QUESE, 0);
 	}
 #endif
 
     // STAT:QUES:INST[:EVEN] 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_REG_QUES_INST_EVENT, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_REG_QUES_INST_EVENT, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_REG_QUES_INST_EVENT, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_REG_QUES_INST_EVENT, 0);
 	}
 #endif
 
     // STAT:QUES:INST:COND 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_REG_QUES_INST_COND, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_REG_QUES_INST_COND, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_REG_QUES_INST_COND, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_REG_QUES_INST_COND, 0);
 	}
 #endif
 
     // STAT:QUES:INST:ENAB 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_REG_QUES_INST_ENABLE, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_REG_QUES_INST_ENABLE, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_REG_QUES_INST_ENABLE, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_REG_QUES_INST_ENABLE, 0);
 	}
 #endif
 
     // STAT:QUES:INST:ISUM[:EVEN] 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_CH_REG_QUES_INST_ISUM_EVENT1, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_CH_REG_QUES_INST_ISUM_EVENT1, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_CH_REG_QUES_INST_ISUM_EVENT1, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_CH_REG_QUES_INST_ISUM_EVENT1, 0);
 	}
 #endif
 
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_CH_REG_QUES_INST_ISUM_EVENT2, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_CH_REG_QUES_INST_ISUM_EVENT2, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_CH_REG_QUES_INST_ISUM_EVENT2, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_CH_REG_QUES_INST_ISUM_EVENT2, 0);
 	}
 #endif
 
     // STAT:QUES:INST:ISUM:COND 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_CH_REG_QUES_INST_ISUM_COND1, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_CH_REG_QUES_INST_ISUM_COND1, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_CH_REG_QUES_INST_ISUM_COND1, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_CH_REG_QUES_INST_ISUM_COND1, 0);
 	}
 #endif
 
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_CH_REG_QUES_INST_ISUM_COND2, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_CH_REG_QUES_INST_ISUM_COND2, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_CH_REG_QUES_INST_ISUM_COND2, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_CH_REG_QUES_INST_ISUM_COND2, 0);
 	}
 #endif
 
     // STAT:OPER:INST:ISUM:ENAB 0
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_CH_REG_QUES_INST_ISUM_ENABLE1, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_CH_REG_QUES_INST_ISUM_ENABLE1, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_CH_REG_QUES_INST_ISUM_ENABLE1, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_CH_REG_QUES_INST_ISUM_ENABLE1, 0);
 	}
 #endif
 
 	if (serial::g_testResult == TEST_OK) {
-        reg_set(&serial::scpi_context, SCPI_PSU_CH_REG_QUES_INST_ISUM_ENABLE2, 0);
+        reg_set(&serial::g_scpiContext, SCPI_PSU_CH_REG_QUES_INST_ISUM_ENABLE2, 0);
     }
 #if OPTION_ETHERNET
     if (ethernet::g_testResult == TEST_OK) {
-        reg_set(&ethernet::scpi_context, SCPI_PSU_CH_REG_QUES_INST_ISUM_ENABLE2, 0);
+        reg_set(&ethernet::g_scpiContext, SCPI_PSU_CH_REG_QUES_INST_ISUM_ENABLE2, 0);
 	}
 #endif
 
     // SYST:ERR:COUN? 0
 	if (serial::g_testResult == TEST_OK) {
-        SCPI_ErrorClear(&serial::scpi_context);
+        SCPI_ErrorClear(&serial::g_scpiContext);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        SCPI_ErrorClear(&ethernet::scpi_context);
+        SCPI_ErrorClear(&ethernet::g_scpiContext);
 	}
 
     ntp::reset();
@@ -1129,11 +1129,11 @@ uint32_t criticalTick() {
 
 void setEsrBits(int bit_mask) {
 	if (serial::g_testResult == TEST_OK) {
-        SCPI_RegSetBits(&serial::scpi_context, SCPI_REG_ESR, bit_mask);
+        SCPI_RegSetBits(&serial::g_scpiContext, SCPI_REG_ESR, bit_mask);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        SCPI_RegSetBits(&ethernet::scpi_context, SCPI_REG_ESR, bit_mask);
+        SCPI_RegSetBits(&ethernet::g_scpiContext, SCPI_REG_ESR, bit_mask);
 	}
 #endif
 }
@@ -1141,22 +1141,22 @@ void setEsrBits(int bit_mask) {
 
 void setQuesBits(int bit_mask, bool on) {
 	if (serial::g_testResult == TEST_OK) {
-        reg_set_ques_bit(&serial::scpi_context, bit_mask, on);
+        reg_set_ques_bit(&serial::g_scpiContext, bit_mask, on);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        reg_set_ques_bit(&ethernet::scpi_context, bit_mask, on);
+        reg_set_ques_bit(&ethernet::g_scpiContext, bit_mask, on);
 	}
 #endif
 }
 
 void generateError(int16_t error) {
 	if (serial::g_testResult == TEST_OK) {
-        SCPI_ErrorPush(&serial::scpi_context, error);
+        SCPI_ErrorPush(&serial::g_scpiContext, error);
     }
 #if OPTION_ETHERNET
 	if (ethernet::g_testResult == TEST_OK) {
-        SCPI_ErrorPush(&ethernet::scpi_context, error);
+        SCPI_ErrorPush(&ethernet::g_scpiContext, error);
     }
 #endif
 	event_queue::pushEvent(error);

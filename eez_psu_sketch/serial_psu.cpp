@@ -33,7 +33,10 @@ long g_bauds[] = {4800, 9600, 19200, 38400, 57600, 115200};
 size_t g_baudsSize = sizeof(g_bauds) / sizeof(long);
 
 size_t SCPI_Write(scpi_t *context, const char * data, size_t len) {
-    return Serial.write(data, len);
+    if (serial::g_testResult == TEST_OK) {
+        return Serial.write(data, len);
+    }
+    return 0;
 }
 
 scpi_result_t SCPI_Flush(scpi_t *context) {
@@ -48,22 +51,26 @@ int SCPI_Error(scpi_t *context, int_fast16_t err) {
 }
 
 scpi_result_t SCPI_Control(scpi_t *context, scpi_ctrl_name_t ctrl, scpi_reg_val_t val) {
-    char errorOutputBuffer[256];
-    if (SCPI_CTRL_SRQ == ctrl) {
-        sprintf_P(errorOutputBuffer, PSTR("**SRQ: 0x%X (%d)\r\n"), val, val);
+    if (serial::g_testResult == TEST_OK) {
+        char errorOutputBuffer[256];
+        if (SCPI_CTRL_SRQ == ctrl) {
+            sprintf_P(errorOutputBuffer, PSTR("**SRQ: 0x%X (%d)\r\n"), val, val);
+        }
+        else {
+            sprintf_P(errorOutputBuffer, PSTR("**CTRL %02x: 0x%X (%d)\r\n"), ctrl, val, val);
+        }
+        Serial.println(errorOutputBuffer);
     }
-    else {
-        sprintf_P(errorOutputBuffer, PSTR("**CTRL %02x: 0x%X (%d)\r\n"), ctrl, val, val);
-    }
-    Serial.println(errorOutputBuffer);
 
     return SCPI_RES_OK;
 }
 
 scpi_result_t SCPI_Reset(scpi_t *context) {
-    char errorOutputBuffer[256];
-    strcpy_P(errorOutputBuffer, PSTR("**Reset\r\n"));
-    Serial.println(errorOutputBuffer);
+    if (serial::g_testResult == TEST_OK) {
+        char errorOutputBuffer[256];
+        strcpy_P(errorOutputBuffer, PSTR("**Reset\r\n"));
+        Serial.println(errorOutputBuffer);
+    }
 
     return psu::reset() ? SCPI_RES_OK : SCPI_RES_ERR;
 }
@@ -84,7 +91,7 @@ scpi_interface_t scpi_interface = {
 char scpi_input_buffer[SCPI_PARSER_INPUT_BUFFER_LENGTH];
 int16_t error_queue_data[SCPI_PARSER_ERROR_QUEUE_SIZE + 1];
 
-scpi_t scpi_context;
+scpi_t g_scpiContext;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -125,7 +132,7 @@ void init() {
     Serial.println("EEZ PSU serial com ready");
 #endif
 
-    scpi::init(scpi_context,
+    scpi::init(g_scpiContext,
         scpi_psu_context,
         &scpi_interface,
         scpi_input_buffer, SCPI_PARSER_INPUT_BUFFER_LENGTH,
@@ -141,7 +148,7 @@ void tick(uint32_t tick_usec) {
         while (Serial.available()) {
             g_isConnected = true;
             char ch = (char)Serial.read();
-            input(scpi_context, ch);
+            input(g_scpiContext, ch);
         }
     }
 }

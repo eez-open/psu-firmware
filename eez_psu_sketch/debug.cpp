@@ -97,7 +97,7 @@ static char traceBuffer[256];
 static bool dumpTraceBufferOnNextTick = false;
 
 void DumpTraceBuffer() {
-    if (persist_conf::isSerialEnabled()) {
+    if (serial::g_testResult == TEST_OK) {
         Serial.print("**TRACE");
     
         char datetime_buffer[20] = { 0 };

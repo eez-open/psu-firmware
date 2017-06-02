@@ -19,6 +19,7 @@
 #include "psu.h"
 
 #include "persist_conf.h"
+#include "serial_psu.h"
 #include "event_queue.h"
 
 #if OPTION_ETHERNET
@@ -122,7 +123,7 @@ scpi_interface_t scpi_interface = {
 char scpi_input_buffer[SCPI_PARSER_INPUT_BUFFER_LENGTH];
 int16_t error_queue_data[SCPI_PARSER_ERROR_QUEUE_SIZE + 1];
 
-scpi_t scpi_context;
+scpi_t g_scpiContext;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -188,7 +189,7 @@ void init() {
 
 #ifdef EEZ_PSU_ARDUINO
 #if CONF_DEBUG || CONF_DEBUG_LATEST
-    if (persist_conf::isEthernetDhcpEnabled() && persist_conf::isSerialEnabled()) {
+    if (persist_conf::isEthernetDhcpEnabled() && serial::g_testResult == TEST_OK) {
         Serial.print("My IP: "); Serial.println(Ethernet.localIP());
         Serial.print("Netmask: "); Serial.println(Ethernet.subnetMask());
         Serial.print("GW IP: "); Serial.println(Ethernet.gatewayIP());
@@ -197,7 +198,7 @@ void init() {
 #endif
 #endif
 
-    scpi::init(scpi_context,
+    scpi::init(g_scpiContext,
         scpi_psu_context,
         &scpi_interface,
         scpi_input_buffer, SCPI_PARSER_INPUT_BUFFER_LENGTH,
@@ -245,7 +246,7 @@ void tick(uint32_t tick_usec) {
             size = client.read(msg, size);
             if (client == g_activeClient) {
                 SPI_endTransaction();
-                input(scpi_context, (const char *)msg, size);
+                input(g_scpiContext, (const char *)msg, size);
                 SPI_beginTransaction(ETHERNET_SPI);
             }
             else {
