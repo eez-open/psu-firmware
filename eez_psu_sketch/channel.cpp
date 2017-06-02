@@ -1727,11 +1727,16 @@ void Channel::setPowerLimit(float limit) {
 #if !CONF_SKIP_PWRGOOD_TEST
 void Channel::testPwrgood(uint8_t gpio) {
     if (!(gpio & (1 << IOExpander::IO_BIT_IN_PWRGOOD))) {
-        DebugTraceF("Ch%d PWRGOOD bit changed to 0", index);
-        flags.powerOk = 0;
-        psu::generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (index - 1));
-        psu::powerDownBySensor();
-        return;
+        gpio = ioexp.readGpio();
+        if (!(gpio & (1 << IOExpander::IO_BIT_IN_PWRGOOD))) {
+            DebugTraceF("Ch%d PWRGOOD bit changed to 0", index);
+            flags.powerOk = 0;
+            psu::generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (index - 1));
+            psu::powerDownBySensor();
+            return;
+        } else {
+            event_queue::pushEvent(event_queue::EVENT_WARNING_CH1_UNKNOWN_PWRGOOD_STATE + (index - 1));
+        }
     }
 }
 #endif
