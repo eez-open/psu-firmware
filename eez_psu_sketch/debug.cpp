@@ -18,6 +18,7 @@
  
 #include "psu.h"
 #include "datetime.h"
+#include "serial_psu.h"
 
 #if CONF_DEBUG
 
