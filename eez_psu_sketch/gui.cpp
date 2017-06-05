@@ -885,7 +885,9 @@ void moveToNextFocusCursor() {
         if (newDataId == DATA_ID_CHANNEL_U_EDIT) {
             newDataId = DATA_ID_CHANNEL_I_EDIT;
         } else {
-            if (!channel_dispatcher::isCoupled() && !channel_dispatcher::isTracked()) {
+            if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
+                newCursor.i = 0;
+            } else {
                 newCursor.i = (newCursor.i + 1) % CH_NUM;
             }
             newDataId = DATA_ID_CHANNEL_U_EDIT;
@@ -1023,7 +1025,7 @@ void onEncoder(uint32_t tickCount, int counter, bool clicked) {
         }
 
         if (isEncoderEnabledInActivePage()) {
-            data::Value value = data::get(g_focusCursor, g_focusDataId);
+            data::Value value = data::getEditValue(g_focusCursor, g_focusDataId);
 
             float newValue = value.getFloat() + (value.getType() == VALUE_TYPE_FLOAT_AMPER ? 0.001f : 0.01f) * counter;
 

@@ -70,6 +70,9 @@ void enter(int tabIndex) {
     if (tabIndex == -1) {
         gui::selectChannel();
         data::Cursor newDataCursor = g_foundWidgetAtDown.cursor;
+        if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
+            newDataCursor.i = 0;
+        }
         DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
         int newDataId = widget->data;
         setFocusCursor(newDataCursor, newDataId);

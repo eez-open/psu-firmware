@@ -651,7 +651,7 @@ bool Channel::isOk() {
 }
 
 void Channel::voltageBalancing() {
-    DebugTraceF("Channel voltage balancing: CH1_Umon=%f, CH2_Umon=%f", Channel::get(0).u.mon, Channel::get(1).u.mon);
+    //DebugTraceF("Channel voltage balancing: CH1_Umon=%f, CH2_Umon=%f", Channel::get(0).u.mon, Channel::get(1).u.mon);
     if (util::isNaN(uBeforeBalancing)) {
         uBeforeBalancing = u.set;
     }
@@ -659,7 +659,7 @@ void Channel::voltageBalancing() {
 }
 
 void Channel::currentBalancing() {
-    DebugTraceF("CH%d channel current balancing: CH1_Imon=%f, CH2_Imon=%f", index, Channel::get(0).i.mon, Channel::get(1).i.mon);
+    //DebugTraceF("CH%d channel current balancing: CH1_Imon=%f, CH2_Imon=%f", index, Channel::get(0).i.mon, Channel::get(1).i.mon);
     if (util::isNaN(iBeforeBalancing)) {
         iBeforeBalancing = i.set;
     }
@@ -668,16 +668,20 @@ void Channel::currentBalancing() {
 
 void Channel::restoreVoltageToValueBeforeBalancing() {
     if (!util::isNaN(uBeforeBalancing)) {
-        DebugTraceF("Restore voltage to value before balancing: %f", uBeforeBalancing);
+        //DebugTraceF("Restore voltage to value before balancing: %f", uBeforeBalancing);
+        profile::enableSave(false);
         setVoltage(uBeforeBalancing);
+        profile::enableSave(true);
         uBeforeBalancing = NAN;
     }
 }
 
 void Channel::restoreCurrentToValueBeforeBalancing() {
     if (!util::isNaN(iBeforeBalancing)) {
-        DebugTraceF("Restore current to value before balancing: %f", index, iBeforeBalancing);
+        //DebugTraceF("Restore current to value before balancing: %f", index, iBeforeBalancing);
+        profile::enableSave(false);
         setCurrent(iBeforeBalancing);
+        profile::enableSave(true);
         iBeforeBalancing = NAN;
     }
 }
@@ -1830,13 +1834,13 @@ void Channel::setCurrentRange(uint8_t currentCurrentRange) {
             flags.currentCurrentRange = currentCurrentRange;
             if (flags.currentCurrentRange == 0) {
                 // 5A
-                //DebugTrace("Switched to 5A range");
+                //DebugTraceF("CH%d: Switched to 5A range", (int)index);
                 ioexp.changeBit(IOExpander::IO_BIT_5A, true);
                 ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
                 //calculateNegligibleAdcDiffForCurrent();
             } else {
                 // 500mA
-                //DebugTrace("Switched to 500mA range");
+                //DebugTraceF("CH%d: Switched to 500mA range", (int)index);
                 ioexp.changeBit(IOExpander::IO_BIT_500mA, true);
                 ioexp.changeBit(IOExpander::IO_BIT_5A, false);
                 //calculateNegligibleAdcDiffForCurrent();
