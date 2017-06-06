@@ -28456,7 +28456,7 @@
                             "width": 117,
                             "height": 40,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           },
                           {
                             "$eez": false,
@@ -28468,7 +28468,7 @@
                             "width": 117,
                             "height": 40,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           }
                         ]
                       }
@@ -28540,7 +28540,7 @@
                             "width": 117,
                             "height": 40,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           },
                           {
                             "$eez": false,
@@ -28552,7 +28552,7 @@
                             "width": 117,
                             "height": 40,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           }
                         ]
                       }
@@ -28879,7 +28879,7 @@
                             "width": 117,
                             "height": 36,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           },
                           {
                             "$eez": false,
@@ -28891,7 +28891,7 @@
                             "width": 117,
                             "height": 36,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           }
                         ]
                       }
@@ -28963,7 +28963,7 @@
                             "width": 117,
                             "height": 36,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           },
                           {
                             "$eez": false,
@@ -28975,7 +28975,7 @@
                             "width": 117,
                             "height": 36,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           }
                         ]
                       }
@@ -29730,7 +29730,7 @@
                             "width": 117,
                             "height": 36,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           },
                           {
                             "$eez": false,
@@ -29742,7 +29742,7 @@
                             "width": 117,
                             "height": 36,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           }
                         ]
                       }
@@ -29814,7 +29814,7 @@
                             "width": 117,
                             "height": 36,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           },
                           {
                             "$eez": false,
@@ -29826,7 +29826,7 @@
                             "width": 117,
                             "height": 36,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           }
                         ]
                       }
@@ -30055,7 +30055,7 @@
                             "width": 117,
                             "height": 36,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           },
                           {
                             "$eez": false,
@@ -30067,7 +30067,7 @@
                             "width": 117,
                             "height": 36,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           }
                         ]
                       }
@@ -30139,7 +30139,7 @@
                             "width": 117,
                             "height": 36,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           },
                           {
                             "$eez": false,
@@ -30151,7 +30151,7 @@
                             "width": 117,
                             "height": 36,
                             "style": "set_value_balanced",
-                            "activeStyle": "mon_value_focus"
+                            "activeStyle": "set_value_focus_balanced"
                           }
                         ]
                       }
@@ -31312,6 +31312,19 @@
         "alignHorizontal": "center",
         "alignVertical": "center",
         "color": "#c0c000",
+        "borderSize": 0,
+        "paddingHorizontal": 0,
+        "paddingVertical": 0
+      },
+      {
+        "$eez": false,
+        "name": "set_value_focus_balanced",
+        "inheritFrom": "mon_value",
+        "font": "medium",
+        "alignHorizontal": "center",
+        "alignVertical": "center",
+        "color": "#5080ff",
+        "backgroundColor": "#c0c000",
         "borderSize": 0,
         "paddingHorizontal": 0,
         "paddingVertical": 0
