@@ -91,6 +91,7 @@ void errorMessageAction();
 void onLastErrorEventAction();
 
 void lockFrontPanel();
+void unlockFrontPanel();
 
 int transformStyle(const Widget *widget);
 

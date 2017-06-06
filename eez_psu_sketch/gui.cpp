@@ -910,11 +910,6 @@ void moveToNextFocusCursor() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool isLongPressAction(int actionId) {
-    return actionId == ACTION_ID_SYS_FRONT_PANEL_LOCK || 
-        actionId == ACTION_ID_SYS_FRONT_PANEL_UNLOCK;
-}
-
 ActionType getAction(WidgetCursor &widgetCursor) {
     if (isActivePageInternal()) {
         return ((InternalPage *)g_activePage)->getAction(widgetCursor);
@@ -1324,21 +1319,6 @@ void processEvents() {
                     } else if (g_activePageId == PAGE_ID_DISPLAY_OFF) {
                         g_touchActionExecuted = true;
                         persist_conf::setDisplayState(1);
-                    } else {
-                        if (g_foundWidgetAtDown) {
-                            ActionType action = getAction(g_foundWidgetAtDown);
-                            if (action == ACTION_ID_SYS_FRONT_PANEL_LOCK || action == ACTION_ID_SYS_FRONT_PANEL_UNLOCK) {
-                                deselectWidget();
-                                g_foundWidgetAtDown = 0;
-                                g_touchActionExecuted = true;
-                                sound::playClick();
-                                if (isFrontPanelLocked()) {
-                                    unlockFrontPanel();
-                                } else {
-                                    lockFrontPanel();
-                                }
-                            }
-                        }
                     }
                 }
             } else if (g_events[i].type == EVENT_TYPE_AUTO_REPEAT) {
@@ -1353,7 +1333,7 @@ void processEvents() {
                 if (g_foundWidgetAtDown) {
                     deselectWidget();
                     ActionType action = getAction(g_foundWidgetAtDown);
-                    if (!isLongPressAction(action) && !g_touchActionExecuted) {
+                    if (!g_touchActionExecuted) {
                         executeAction(action);
                     }
                     g_foundWidgetAtDown = 0;

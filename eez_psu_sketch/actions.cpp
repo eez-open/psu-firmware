@@ -584,11 +584,11 @@ void action_edit_system_password() {
 }
 
 void action_sys_front_panel_lock() {
-    // INTENTIONALLY BLANK IMPLEMENTATION
+    lockFrontPanel();
 }
 
 void action_sys_front_panel_unlock() {
-    // INTENTIONALLY BLANK IMPLEMENTATION
+    unlockFrontPanel();
 }
 
 void action_sys_settings_sound_toggle() {

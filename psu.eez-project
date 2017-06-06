@@ -835,13 +835,13 @@
       "$eez": false,
       "name": "sys.frontPanel.lock",
       "implementationType": "native",
-      "implementation": "// INTENTIONALLY BLANK IMPLEMENTATION"
+      "implementation": "lockFrontPanel();\r\n"
     },
     {
       "$eez": false,
       "name": "sys.frontPanel.unlock",
       "implementationType": "native",
-      "implementation": "// INTENTIONALLY BLANK IMPLEMENTATION"
+      "implementation": "unlockFrontPanel();\r\n"
     },
     {
       "$eez": false,
