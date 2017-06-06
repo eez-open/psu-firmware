@@ -89,18 +89,13 @@ scpi_result_t scpi_cmd_coreRst(scpi_t * context) {
 * Return SCPI_RES_OK
 */
 scpi_result_t scpi_cmd_coreSav(scpi_t * context) {
-    if (eeprom::g_testResult != psu::TEST_OK) {
-        SCPI_ErrorPush(context, SCPI_ERROR_EXTERNAL_EEPROM_SAVE_FAILED);
-        return SCPI_RES_ERR;
-    }
-
     int location;
     if (!get_profile_location_param(context, location)) {
         return SCPI_RES_ERR;
     }
 
     if (!profile::saveAtLocation(location)) {
-        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        SCPI_ErrorPush(context, SCPI_ERROR_EXTERNAL_EEPROM_SAVE_FAILED);
         return SCPI_RES_ERR;
     }
 

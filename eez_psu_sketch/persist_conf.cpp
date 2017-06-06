@@ -82,12 +82,13 @@ bool check_block(const BlockHeader *block, uint16_t size, uint16_t version) {
 }
 
 bool save(BlockHeader *block, uint16_t size, uint16_t address, uint16_t version) {
-    if (eeprom::g_testResult == psu::TEST_OK) {
-        block->version = version;
-        block->checksum = calc_checksum(block, size);
-        return eeprom::write((const uint8_t *)block, size, address);
+    if (eeprom::g_testResult != psu::TEST_OK) {
+        return false;
     }
-    return true;
+
+    block->version = version;
+    block->checksum = calc_checksum(block, size);
+    return eeprom::write((const uint8_t *)block, size, address);
 }
 
 uint16_t get_address(PersistConfSection section, Channel *channel = 0) {
