@@ -88,7 +88,7 @@ void ChSettingsTriggerPage::onTriggerModeSet(uint8_t value) {
     profile::save();
 
     if (value != TRIGGER_MODE_LIST && list::isActive()) {
-        list::abort();
+        trigger::abort();
     }
 }
 
