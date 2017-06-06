@@ -126,7 +126,7 @@ void UserProfilesPage::onSaveFinish(char *remark, void (*callback)()) {
 	if (profile::saveAtLocation(g_selectedProfileLocation, remark)) {
 		infoMessageP(PSTR("Current parameters saved"), callback);
 	} else {
-		errorMessageP(PSTR("Failed!"));
+		errorMessageP(PSTR("EEPROM save failed!"));
 	}
 }
 
