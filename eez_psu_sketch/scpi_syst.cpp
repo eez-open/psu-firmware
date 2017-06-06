@@ -1205,10 +1205,39 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetPortQ(scpi_t *context) {
 #endif
 }
 
+scpi_result_t scpi_cmd_systemCommunicateEthernetMac(scpi_t *context) {
+#if OPTION_ETHERNET
+    if (!persist_conf::isEthernetEnabled()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
+    
+    const char *macAddressStr;
+    size_t macAddressStrLength;
+
+    if (!SCPI_ParamCharacters(context, &macAddressStr, &macAddressStrLength, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    uint8_t macAddress[6];
+    if (!util::parseMacAddress(macAddressStr, macAddressStrLength, macAddress)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+        return SCPI_RES_ERR;
+    }
+
+    persist_conf::setEthernetMacAddress(macAddress);
+
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
 scpi_result_t scpi_cmd_systemCommunicateEthernetMacQ(scpi_t *context) {
 #if OPTION_ETHERNET
     char macAddressStr[18];
-    util::macAddressToString(ethernet::g_mac, macAddressStr);
+    util::macAddressToString(persist_conf::devConf2.ethernetMacAddress, macAddressStr);
     SCPI_ResultText(context, macAddressStr);
     return SCPI_RES_OK;
 #else

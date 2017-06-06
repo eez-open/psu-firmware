@@ -79,13 +79,19 @@ float multiply(float a, float b, float prec);
 bool isNaN(float x);
 
 bool isDigit(char ch);
+bool isHexDigit(char ch);
 bool isUperCaseLetter(char ch);
+
+char toHexDigit(int num);
+int fromHexDigit(char ch);
 
 void removeTrailingZerosFromFloat(char *str);
 
 bool pointInsideRect(int xPoint, int yPoint, int xRect, int yRect, int wRect, int hRect);
 
 void getParentDir(const char *path, char *parentDirPath);
+
+bool parseMacAddress(const char *macAddressStr, size_t macAddressStrLength, uint8_t *macAddress);
 
 int getIpAddressPartA(uint32_t ipAddress);
 void setIpAddressPartA(uint32_t *ipAddress, uint8_t value);
@@ -108,8 +114,6 @@ bool parseIpAddress(const char *ipAddressStr, size_t ipAddressStrLength, uint32_
 void ipAddressToString(uint32_t ipAddress, char *ipAddressStr);
 
 void macAddressToString(uint8_t *macAddress, char *macAddressStr);
-
-char hexDigit(int num);
 
 void formatTimeZone(int16_t timeZone, char *text, int count);
 bool parseTimeZone(const char *timeZoneStr, size_t timeZoneLength, int16_t &timeZone);

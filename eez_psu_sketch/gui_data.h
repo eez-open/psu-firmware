@@ -84,6 +84,7 @@ struct Value {
     Value(float value, ValueType type);
     Value(float value, ValueType type, int channelIndex);
     Value(float value, ValueType type, int channelIndex, bool extendedPrecision);
+    Value(uint8_t *value, ValueType type) : type_(type), puint8_(value)  {}
     Value(const char *str) : type_(VALUE_TYPE_STR), str_(str) {}
 	Value(event_queue::Event *e) : type_(VALUE_TYPE_EVENT), event_(e) {}
     Value(uint8_t value, EnumDefinition enumDefinition) : type_(VALUE_TYPE_ENUM) {
@@ -137,6 +138,8 @@ private:
 
 		float float_;
         
+        uint8_t *puint8_;
+
 		const char *const_str_ PROGMEM;
         const char *str_;
 		

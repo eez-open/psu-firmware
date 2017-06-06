@@ -91,6 +91,7 @@ public:
     void toggleDhcp();
     void editStaticAddress();
     void editScpiPort();
+    void editMacAddress();
 
 	int getDirty();
 	void set();
@@ -117,7 +118,12 @@ private:
     uint16_t m_scpiPortOrig;
     uint16_t m_scpiPort;
 
-    static void onScpiPortSet(float value);
+    uint8_t m_macAddressOrig[6];
+    uint8_t m_macAddress[6];
+    uint8_t m_macAddressData[2][6];
+
+    static void onSetScpiPort(float value);
+    static void onSetMacAddress(char *value);
 };
 
 class SysSettingsEthernetStaticPage : public SetPage {

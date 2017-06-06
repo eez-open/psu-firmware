@@ -51,7 +51,7 @@ enum PersistConfSection {
 ////////////////////////////////////////////////////////////////////////////////
 
 static const uint16_t DEV_CONF_VERSION = 0x0008L;
-static const uint16_t DEV_CONF2_VERSION = 0x0008L;
+static const uint16_t DEV_CONF2_VERSION = 0x0009L;
 static const uint16_t CH_CAL_CONF_VERSION = 0x0003L;
 static const uint16_t PROFILE_VERSION = 0x0008L;
 
@@ -203,6 +203,11 @@ void loadDevice2() {
         eeprom::read((uint8_t *)&devConf2, sizeof(DeviceConfiguration2), get_address(PERSIST_CONF_BLOCK_DEVICE2));
         if (!check_block((BlockHeader *)&devConf2, sizeof(DeviceConfiguration2), DEV_CONF2_VERSION)) {
             initDevice2();
+        } else {
+            if (devConf2.header.version < 9) {
+                uint8_t macAddress[] = ETHERNET_MAC_ADDRESS;
+                memcpy(devConf2.ethernetMacAddress, macAddress, 6);
+            }   
         }
     }
     else {
@@ -722,6 +727,12 @@ bool isEthernetDhcpEnabled() {
     return devConf2.flags.ethernetDhcpEnabled ? true : false;
 }
 
+bool setEthernetMacAddress(uint8_t macAddress[]) {
+    memcpy(devConf2.ethernetMacAddress, macAddress, 6);
+    devConf2.flags.skipEthernetSetup = 1;
+    return saveDevice2();
+}
+
 bool setEthernetIpAddress(uint32_t ipAddress) {
     devConf2.ethernetIpAddress = ipAddress;
     devConf2.flags.skipEthernetSetup = 1;
@@ -752,7 +763,7 @@ bool setEthernetScpiPort(uint16_t scpiPort) {
     return saveDevice2();
 }
 
-bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint32_t dns, uint32_t gateway, uint32_t subnetMask, uint16_t scpiPort) {
+bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint32_t dns, uint32_t gateway, uint32_t subnetMask, uint16_t scpiPort, uint8_t *macAddress) {
     unsigned ethernetEnabled = enable ? 1 : 0;
     if (devConf.flags.ethernetEnabled != ethernetEnabled) {
         devConf.flags.ethernetEnabled = ethernetEnabled;
@@ -771,6 +782,8 @@ bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint3
     devConf2.ethernetSubnetMask = subnetMask;
 
     devConf2.ethernetScpiPort = scpiPort;
+
+    memcpy(devConf2.ethernetMacAddress, macAddress, 6);
 
     devConf2.flags.skipEthernetSetup = 1;
 

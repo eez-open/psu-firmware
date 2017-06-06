@@ -470,11 +470,7 @@ void Value::toText(char *text, int count) const {
 
     case VALUE_TYPE_MAC_ADDRESS:
     {
-#if OPTION_ETHERNET
-        util::macAddressToString(ethernet::g_mac, text);
-#else
-        text[0] = 0;
-#endif
+        util::macAddressToString(puint8_, text);
         break;
     }
 
@@ -549,7 +545,7 @@ bool Value::operator ==(const Value &other) const {
         return false;
     }
 
-    if (type_ == VALUE_TYPE_NONE || type_ == VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE || type_ == VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE || type_ == VALUE_TYPE_MAC_ADDRESS) {
+    if (type_ == VALUE_TYPE_NONE || type_ == VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE || type_ == VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE) {
         return true;
     }
 		
@@ -572,6 +568,10 @@ bool Value::operator ==(const Value &other) const {
 	if (type_ == VALUE_TYPE_ON_TIME_COUNTER || type_ == VALUE_TYPE_COUNTDOWN || type_ == VALUE_TYPE_IP_ADDRESS || type_ == VALUE_TYPE_DATE || type_ == VALUE_TYPE_TIME) {
 		return uint32_ == other.uint32_;
 	}
+
+    if (type_ == VALUE_TYPE_MAC_ADDRESS) {
+        return memcmp(puint8_, other.puint8_, 6) == 0;
+    }
 		
 	if (type_ == VALUE_TYPE_STR) {
         return strcmp(str_, other.str_) == 0;

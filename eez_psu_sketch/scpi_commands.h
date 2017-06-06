@@ -284,6 +284,7 @@
     SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:SMASk?", scpi_cmd_systemCommunicateEthernetSmaskQ) \
     SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:PORT", scpi_cmd_systemCommunicateEthernetPort) \
     SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:PORT?", scpi_cmd_systemCommunicateEthernetPortQ) \
+    SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:MAC", scpi_cmd_systemCommunicateEthernetMac) \
     SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:MAC?", scpi_cmd_systemCommunicateEthernetMacQ) \
     SCPI_COMMAND("SYSTem:COMMunicate:NTP", scpi_cmd_systemCommunicateNtp) \
     SCPI_COMMAND("SYSTem:COMMunicate:NTP?", scpi_cmd_systemCommunicateNtpQ) \

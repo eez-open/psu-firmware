@@ -701,6 +701,12 @@
     },
     {
       "$eez": false,
+      "name": "ethernet.editMacAddress",
+      "implementationType": "native",
+      "implementation": "#if OPTION_ETHERNET\n((SysSettingsEthernetPage *)getActivePage())->editMacAddress();\n#endif"
+    },
+    {
+      "$eez": false,
       "name": "ethernet.editStaticAddress",
       "implementationType": "native",
       "implementation": "#if OPTION_ETHERNET\n((SysSettingsEthernetPage *)getActivePage())->editStaticAddress();\n#endif"
@@ -22743,7 +22749,7 @@
               "data": "ethernet.enabled",
               "y": 32,
               "width": 240,
-              "height": 112,
+              "height": 140,
               "style": "default",
               "widgets": [
                 {
@@ -22752,7 +22758,7 @@
                   "x": 0,
                   "y": 0,
                   "width": 240,
-                  "height": 112,
+                  "height": 140,
                   "style": "default",
                   "widgets": [
                     {
@@ -22772,7 +22778,7 @@
                       "x": 0,
                       "y": 28,
                       "width": 240,
-                      "height": 84,
+                      "height": 112,
                       "style": "default_inverse"
                     }
                   ]
@@ -22783,13 +22789,14 @@
                   "x": 0,
                   "y": 0,
                   "width": 240,
-                  "height": 112,
+                  "height": 140,
                   "style": "default",
                   "widgets": [
                     {
                       "$eez": false,
                       "type": "Text",
                       "action": "ethernet.toggle",
+                      "x": 0,
                       "y": 0,
                       "width": 240,
                       "height": 28,
@@ -22975,31 +22982,31 @@
                           ]
                         }
                       ]
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 112,
+                      "width": 71,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "MAC:"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "DisplayData",
+                      "data": "ethernet.mac",
+                      "action": "ethernet.editMacAddress",
+                      "x": 71,
+                      "y": 112,
+                      "width": 169,
+                      "height": 28,
+                      "style": "edit_value_active_S_left"
                     }
                   ]
                 }
               ]
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 12,
-              "y": 144,
-              "width": 71,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "MAC:"
-            },
-            {
-              "$eez": false,
-              "type": "DisplayData",
-              "data": "ethernet.mac",
-              "action": "",
-              "x": 83,
-              "y": 144,
-              "width": 169,
-              "height": 28,
-              "style": "edit_value_S_left"
             },
             {
               "$eez": false,
@@ -23105,6 +23112,31 @@
             },
             {
               "$eez": false,
+              "type": "Button",
+              "data": "",
+              "action": "set",
+              "x": 0,
+              "y": 204,
+              "width": 101,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": "~ Set",
+              "enabled": "setPage.dirty",
+              "disabledStyle": "non_interactive_button_S_disabled"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "action": "discard",
+              "x": 101,
+              "y": 204,
+              "width": 96,
+              "height": 36,
+              "style": "non_interactive_button_S",
+              "text": " Discard"
+            },
+            {
+              "$eez": false,
               "type": "Rectangle",
               "x": 197,
               "y": 204,
@@ -23142,31 +23174,6 @@
               "width": 68,
               "height": 204,
               "style": "default"
-            },
-            {
-              "$eez": false,
-              "type": "Button",
-              "data": "",
-              "action": "set",
-              "x": 0,
-              "y": 204,
-              "width": 101,
-              "height": 36,
-              "style": "non_interactive_button_S",
-              "text": "~ Set",
-              "enabled": "setPage.dirty",
-              "disabledStyle": "non_interactive_button_S_disabled"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "action": "discard",
-              "x": 101,
-              "y": 204,
-              "width": 96,
-              "height": 36,
-              "style": "non_interactive_button_S",
-              "text": " Discard"
             }
           ]
         }
@@ -80693,6 +80700,10 @@
           {
             "$eez": false,
             "name": "SYSTem:COMMunicate:ETHernet:PORT?"
+          },
+          {
+            "$eez": false,
+            "name": "SYSTem:COMMunicate:ETHernet:MAC"
           },
           {
             "$eez": false,

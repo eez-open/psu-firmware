@@ -129,7 +129,8 @@ struct DeviceConfiguration2 {
     uint16_t ethernetScpiPort;
     char ntpServer[32+1];
     uint8_t dstRule;
-    uint8_t reserverd[31];
+    uint8_t ethernetMacAddress[6];
+    uint8_t reserverd[25];
 };
 
 extern DeviceConfiguration devConf;
@@ -211,12 +212,13 @@ bool setSerialSettings(bool enable, int baudIndex, int parity);
 
 bool enableEthernetDhcp(bool enable);
 bool isEthernetDhcpEnabled();
+bool setEthernetMacAddress(uint8_t macAddress[]);
 bool setEthernetIpAddress(uint32_t ipAddress);
 bool setEthernetDns(uint32_t dns);
 bool setEthernetGateway(uint32_t gateway);
 bool setEthernetSubnetMask(uint32_t subnetMask);
 bool setEthernetScpiPort(uint16_t scpiPort);
-bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint32_t dns, uint32_t gateway, uint32_t subnetMask, uint16_t scpiPort);
+bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint32_t dns, uint32_t gateway, uint32_t subnetMask, uint16_t scpiPort, uint8_t *macAddress);
 
 bool enableNtp(bool enable);
 bool isNtpEnabled();

@@ -266,8 +266,32 @@ bool isDigit(char ch) {
     return ch >= '0' && ch <= '9';
 }
 
+bool isHexDigit(char ch) {
+    return ch >= '0' && ch <= '9' || ch >= 'a' && ch <= 'f' || ch >= 'A' && ch <= 'F';
+}
+
 bool isUperCaseLetter(char ch) {
     return ch >= 'A' && ch <= 'Z';
+}
+
+char toHexDigit(int num) {
+    if (num >= 0 && num <= 9) {
+        return '0' + num;
+    } else {
+        return 'A' + (num - 10);
+    }
+}
+
+int fromHexDigit(char ch) {
+    if (ch >= '0' && ch <= '9') {
+        return ch - '0';
+    }
+
+    if (ch >= 'a' && ch <= 'f') {
+        return 10 + (ch - 'a');
+    }
+
+    return 10 + (ch - 'A');
 }
 
 void removeTrailingZerosFromFloat(char *str) {
@@ -301,6 +325,46 @@ void getParentDir(const char *path, char *parentDirPath) {
         parentDirPath[i] = path[i];
     }
     parentDirPath[i] = 0;
+}
+
+bool parseMacAddress(const char *macAddressStr, size_t macAddressStrLength, uint8_t *macAddress) {
+    int state = 0;
+    int a;
+    int i = 0;
+    uint8_t resultMacAddress[6];
+
+    const char *end = macAddressStr + macAddressStrLength;
+    for (const char *p = macAddressStr; p < end; ++p) {
+        if (state == 0) {
+            if (*p == '-' || *p == ' ') {
+                continue;
+            } else if (isHexDigit(*p)) {
+                a = fromHexDigit(*p);
+                state = 1;
+            } else {
+                return false;
+            }
+        } else if (state == 1) {
+            if (isHexDigit(*p)) {
+                if (i < 6) {
+                    resultMacAddress[i++] = (a << 4) | fromHexDigit(*p);
+                    state = 0;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+    }
+
+    if (state != 0 || i != 6) {
+        return false;
+    }
+
+    memcpy(macAddress, resultMacAddress, 6);
+
+    return true;
 }
 
 bool parseIpAddress(const char *ipAddressStr, size_t ipAddressStrLength, uint32_t &ipAddress) {
@@ -411,17 +475,9 @@ void ipAddressToString(uint32_t ipAddress, char *ipAddressStr) {
 
 void macAddressToString(uint8_t *macAddress, char *macAddressStr) {
     for (int i = 0; i < 6; ++i) {
-        macAddressStr[3*i] = util::hexDigit((macAddress[i] & 0xF0) >> 4);
-        macAddressStr[3*i+1] = util::hexDigit(macAddress[i] & 0xF);
+        macAddressStr[3*i] = util::toHexDigit((macAddress[i] & 0xF0) >> 4);
+        macAddressStr[3*i+1] = util::toHexDigit(macAddress[i] & 0xF);
         macAddressStr[3*i+2] = i < 5 ? '-' : 0;
-    }
-}
-
-char hexDigit(int num) {
-    if (num >= 0 && num <= 9) {
-        return '0' + num;
-    } else {
-        return 'A' + (num - 10);
     }
 }
 

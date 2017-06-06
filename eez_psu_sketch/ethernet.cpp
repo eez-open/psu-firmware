@@ -45,8 +45,6 @@ namespace ethernet {
 
 psu::TestResult g_testResult = psu::TEST_FAILED;
 
-uint8_t g_mac[6] = ETHERNET_MAC_ADDRESS;
-
 static EthernetServer *server;
 
 static bool g_isConnected = false;
@@ -148,7 +146,7 @@ void init() {
 
     bool result;
     if (persist_conf::isEthernetDhcpEnabled()) {
-        result = Ethernet.begin(g_mac);
+        result = Ethernet.begin(persist_conf::devConf2.ethernetMacAddress);
     } else {
         uint8_t ipAddress[4];
         util::ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
@@ -162,7 +160,7 @@ void init() {
         uint8_t subnetMask[4];
         util::ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
 
-        Ethernet.begin(g_mac, ipAddress, dns, gateway, subnetMask);
+        Ethernet.begin(persist_conf::devConf2.ethernetMacAddress, ipAddress, dns, gateway, subnetMask);
 
         result = 1;
     }

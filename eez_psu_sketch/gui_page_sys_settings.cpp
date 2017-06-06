@@ -351,6 +351,8 @@ SysSettingsEthernetPage::SysSettingsEthernetPage() {
     m_gatewayOrig = m_gateway = persist_conf::devConf2.ethernetGateway;
     m_subnetMaskOrig = m_subnetMask = persist_conf::devConf2.ethernetSubnetMask;
     m_scpiPortOrig = m_scpiPort = persist_conf::devConf2.ethernetScpiPort;
+    memcpy(m_macAddressOrig, persist_conf::devConf2.ethernetMacAddress, 6);
+    memcpy(m_macAddress, persist_conf::devConf2.ethernetMacAddress, 6);
 }
 
 data::Value SysSettingsEthernetPage::getData(const data::Cursor &cursor, uint8_t id) {
@@ -378,7 +380,9 @@ data::Value SysSettingsEthernetPage::getData(const data::Cursor &cursor, uint8_t
     }
 
     if (id == DATA_ID_ETHERNET_MAC) {
-        return data::Value(0, VALUE_TYPE_MAC_ADDRESS);
+        uint8_t *macAddress = &m_macAddressData[getCurrentStateBufferIndex()][0];
+        memcpy(macAddress, m_macAddress, 6);
+        return data::Value(macAddress, VALUE_TYPE_MAC_ADDRESS);
     }
 
     return data::Value();
@@ -396,7 +400,7 @@ void SysSettingsEthernetPage::editStaticAddress() {
     pushPage(PAGE_ID_SYS_SETTINGS_ETHERNET_STATIC);
 }
 
-void SysSettingsEthernetPage::onScpiPortSet(float value) {
+void SysSettingsEthernetPage::onSetScpiPort(float value) {
     popPage();
     SysSettingsEthernetPage *page = (SysSettingsEthernetPage *)getActivePage();
     page->m_scpiPort = (uint16_t)value;
@@ -413,7 +417,26 @@ void SysSettingsEthernetPage::editScpiPort() {
 
     options.enableDefButton();
 
-	NumericKeypad::start(0, data::Value((int)m_scpiPort, VALUE_TYPE_PORT), options, (void (*)(float))onScpiPortSet);
+	NumericKeypad::start(0, data::Value((int)m_scpiPort, VALUE_TYPE_PORT), options, (void (*)(float))onSetScpiPort);
+}
+
+void SysSettingsEthernetPage::onSetMacAddress(char *value) {
+    uint8_t macAddress[6];
+    if (!util::parseMacAddress(value, strlen(value), macAddress)) {
+        errorMessageP(PSTR("Invalid MAC address!"));
+        return;
+    }
+
+	SysSettingsEthernetPage *page = (SysSettingsEthernetPage*)getPreviousPage();
+    memcpy(page->m_macAddress, macAddress, 6);
+
+    popPage();
+}
+
+void SysSettingsEthernetPage::editMacAddress() {
+    char macAddressStr[18];
+    util::macAddressToString(m_macAddress, macAddressStr);
+    Keypad::startPush(0, macAddressStr, 32, false, onSetMacAddress, popPage);
 }
 
 int SysSettingsEthernetPage::getDirty() {
@@ -424,12 +447,13 @@ int SysSettingsEthernetPage::getDirty() {
         m_dnsOrig != m_dns ||
         m_gatewayOrig != m_gateway ||
         m_subnetMaskOrig != m_subnetMask ||
-        m_scpiPortOrig != m_scpiPort;
+        m_scpiPortOrig != m_scpiPort ||
+        memcmp(m_macAddress, m_macAddressOrig, 6) != 0;
 }
 
 void SysSettingsEthernetPage::set() {
     if (getDirty()) {
-        if (persist_conf::setEthernetSettings(m_enabled, m_dhcpEnabled, m_ipAddress, m_dns, m_gateway, m_subnetMask, m_scpiPort)) {
+        if (persist_conf::setEthernetSettings(m_enabled, m_dhcpEnabled, m_ipAddress, m_dns, m_gateway, m_subnetMask, m_scpiPort, m_macAddress)) {
             longInfoMessageP(PSTR("Turn off and on power or"), PSTR("press reset to apply changes!"), popPage);
         }
     }

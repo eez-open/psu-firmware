@@ -481,6 +481,12 @@ void action_ethernet_toggle_dhcp() {
     #endif
 }
 
+void action_ethernet_edit_mac_address() {
+    #if OPTION_ETHERNET
+    ((SysSettingsEthernetPage *)getActivePage())->editMacAddress();
+    #endif
+}
+
 void action_ethernet_edit_static_address() {
     #if OPTION_ETHERNET
     ((SysSettingsEthernetPage *)getActivePage())->editStaticAddress();
@@ -889,6 +895,7 @@ ACTION actions[] = {
     action_toggle_channels_view_mode,
     action_ethernet_toggle,
     action_ethernet_toggle_dhcp,
+    action_ethernet_edit_mac_address,
     action_ethernet_edit_static_address,
     action_ethernet_edit_ip_address,
     action_ethernet_edit_dns,
