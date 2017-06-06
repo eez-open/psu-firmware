@@ -86,6 +86,10 @@ void ChSettingsTriggerPage::onTriggerModeSet(uint8_t value) {
     channel_dispatcher::setVoltageTriggerMode(*g_channel, (TriggerMode)value);
     channel_dispatcher::setCurrentTriggerMode(*g_channel, (TriggerMode)value);
     profile::save();
+
+    if (value != TRIGGER_MODE_LIST && list::isActive()) {
+        list::abort();
+    }
 }
 
 void ChSettingsTriggerPage::editTriggerMode() {
