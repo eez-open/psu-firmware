@@ -195,6 +195,9 @@ static void initDevice2() {
 
     strcpy(devConf2.ntpServer, CONF_DEFAULT_NTP_SERVER);
 
+    uint8_t macAddress[] = ETHERNET_MAC_ADDRESS;
+    memcpy(devConf2.ethernetMacAddress, macAddress, 6);
+
 	devConf2.dstRule = datetime::DST_RULE_OFF;
 }
 
