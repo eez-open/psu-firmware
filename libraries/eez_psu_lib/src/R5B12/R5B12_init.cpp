@@ -115,7 +115,7 @@ void eez_psu_R5B12_init() {
 
     digitalWrite(LCD_CS, LOW); // deselect LCD
     digitalWrite(TOUCH_CS, LOW); // deselect LCD
-    analogWrite(LCD_BRIGHTNESS, 0);
+    analogWrite(LCD_BRIGHTNESS, 255);
     digitalWrite(LCDSD_CS, HIGH);
 
     digitalWrite(DOUT, LOW);

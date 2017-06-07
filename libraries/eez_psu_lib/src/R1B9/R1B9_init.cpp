@@ -107,7 +107,7 @@ void eez_psu_R1B9_init() {
 
     digitalWrite(LCD_CS, LOW); // deselect LCD
     digitalWrite(TOUCH_CS, LOW); // deselect LCD
-    analogWrite(LCD_BRIGHTNESS, 200); // (value from 0 to 255, 0=dark)
+    analogWrite(LCD_BRIGHTNESS, 255);
     digitalWrite(LCDSD_CS, HIGH);
 
     digitalWrite(LED_CC1, LOW);

@@ -111,7 +111,7 @@ void eez_psu_R3B4_init() {
 
     digitalWrite(LCD_CS, LOW); // deselect LCD
     digitalWrite(TOUCH_CS, LOW); // deselect LCD
-    analogWrite(LCD_BRIGHTNESS, 0);
+    analogWrite(LCD_BRIGHTNESS, 255);
     digitalWrite(LCDSD_CS, HIGH);
 
     // Address issue with lack of proper SPI connection on PCB r1B9
