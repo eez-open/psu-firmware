@@ -42,10 +42,80 @@
 #define DISPLAY_MODEL_SSD1289    0
 #define DISPLAY_MODEL_ILI9341_16 1
 
+#define RGB_TO_HIGH_BYTE(R, G, B) (((R) & 248) | (G) >> 5)
+#define RGB_TO_LOW_BYTE(R, G, B) (((G) & 28) << 3 | (B) >> 3)
+
 namespace eez {
 namespace psu {
 namespace gui {
 namespace lcd {
+
+////////////////////////////////////////////////////////////////////////////////
+
+void rgbToHsl(float r, float g, float b, float &h, float &s, float &l) {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+    float min = r;
+    float mid = g;
+    float max = b;
+
+    if (min > mid) {
+        swap(float, min, mid);
+    }
+    if (mid > max) {
+        swap(float, mid, max);
+    }
+    if (min > mid) {
+        swap(float, min, mid);
+    }
+
+    l = (max + min) / 2;
+
+    if (max == min) {
+        h = s = 0; // achromatic
+    } else {
+        float d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+        if (max == r) {
+            h = (g - b) / d + (g < b ? 6 : 0);
+        } else if (max == g) {
+            h = (b - r) / d + 2;
+        } else if (max == b) {
+            h = (r - g) / d + 4;
+        }
+
+        h /= 6;
+    }
+}
+
+float hue2rgb(float p, float q, float t) {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1.0f/6) return p + (q - p) * 6 * t;
+    if (t < 1.0f/2) return q;
+    if (t < 2.0f/3) return p + (q - p) * (2.0f/3 - t) * 6;
+    return p;
+}
+
+void hslToRgb(float h, float s, float l, float &r, float &g, float &b) {
+    if (s == 0) {
+        r = g = b = l; // achromatic
+    } else {
+        float q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        float p = 2 * l - q;
+
+        r = hue2rgb(p, q, h + 1.0f/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1.0f/3);
+    }
+
+    r *= 255;
+    g *= 255;
+    b *= 255;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -399,14 +469,56 @@ void LCD::setXY(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
 #endif
 }
 
+#define FLOAT_TO_COLOR_COMPONENT(F) ((F) < 0 ? 0 : (F) > 255 ? 255 : (uint8_t)(F))
+
+void LCD::updateBackgroundMapToColor() {
+    float h, s, l;
+    rgbToHsl(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B, h, s, l);
+    
+    l = util::remap((float)persist_conf::devConf2.displayBackgroundLuminosityStep, 
+        (float)DISPLAY_BACKGROUND_LUMINOSITY_STEP_MIN, 
+        DISPLAY_BACKGROUND_LUMINOSITY_MIN, 
+        (float)DISPLAY_BACKGROUND_LUMINOSITY_STEP_MAX, 
+        DISPLAY_BACKGROUND_LUMINOSITY_MAX);
+
+    float fr, fg, fb;
+    hslToRgb(h, s, l, fr, fg, fb);
+
+    uint8_t r = FLOAT_TO_COLOR_COMPONENT(fr);
+    uint8_t g = FLOAT_TO_COLOR_COMPONENT(fg);
+    uint8_t b = FLOAT_TO_COLOR_COMPONENT(fb);
+
+    backgroundMapToColorHighByte = RGB_TO_HIGH_BYTE(r, g, b);
+    backgroundMapToColorLowByte = RGB_TO_LOW_BYTE(r, g, b);
+}
+
+void LCD::adjustColor(uint8_t &ch, uint8_t &cl) {
+    if (ch == RGB_TO_HIGH_BYTE(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B) &&
+        cl == RGB_TO_LOW_BYTE(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B)) 
+    {
+        ch = backgroundMapToColorHighByte;
+        cl = backgroundMapToColorLowByte;
+    }
+}
+
+void LCD::adjustForegroundColor() {
+    adjustColor(fch, fcl);
+}
+
+void LCD::adjustBackgroundColor() {
+    adjustColor(bch, bcl);
+}
+
 void LCD::setColor(uint8_t r, uint8_t g, uint8_t b) {
-    fch = ((r & 248) | g >> 5);
-    fcl = ((g & 28) << 3 | b >> 3);
+    fch = RGB_TO_HIGH_BYTE(r, g, b);
+    fcl = RGB_TO_LOW_BYTE(r, g, b);
+    adjustForegroundColor();
 }
 
 void LCD::setColor(uint16_t color) {
     fch = uint8_t(color >> 8);
     fcl = uint8_t(color & 0xFF);
+    adjustForegroundColor();
 }
 
 uint16_t LCD::getColor() {
@@ -414,13 +526,15 @@ uint16_t LCD::getColor() {
 }
 
 void LCD::setBackColor(uint8_t r, uint8_t g, uint8_t b) {
-    bch = ((r & 248) | g >> 5);
-    bcl = ((g & 28) << 3 | b >> 3);
+    bch = RGB_TO_HIGH_BYTE(r, g, b);
+    bcl = RGB_TO_LOW_BYTE(r, g, b);
+    adjustBackgroundColor();
 }
 
 void LCD::setBackColor(uint16_t color) {
     bch = uint8_t(color >> 8);
     bcl = uint8_t(color & 0xFF);
+    adjustBackgroundColor();
 }
 
 uint16_t LCD::getBackColor() {
@@ -562,30 +676,35 @@ void LCD::drawBitmap(int x, int y, int sx, int sy, uint16_t *data) {
     if (orientation == DISPLAY_ORIENTATION_PORTRAIT) {
         setXY(x, y, x + sx - 1, y + sy - 1);
         for (int i = 0; i < sx * sy; ++i) {
-            unsigned char l = *(((uint8_t *)data) + 2 * i + 0);
-            unsigned char h = *(((uint8_t *)data) + 2 * i + 1);
+            uint8_t l = *(((uint8_t *)data) + 2 * i + 0);
+            uint8_t h = *(((uint8_t *)data) + 2 * i + 1);
+            adjustColor(h, l);
             setPixel((h << 8) + l);
         }
     } else {
         for (int iy = 0; iy < sy; ++iy) {
             setXY(x, y + iy, x + sx - 1, y + iy);
             for (int ix = sx - 1; ix >= 0; --ix) {
-                unsigned char l = *(((uint8_t *)data) + 2 * (iy * sx + ix) + 0);
-                unsigned char h = *(((uint8_t *)data) + 2 * (iy * sx + ix) + 1);
+                uint8_t l = *(((uint8_t *)data) + 2 * (iy * sx + ix) + 0);
+                uint8_t h = *(((uint8_t *)data) + 2 * (iy * sx + ix) + 1);
+                adjustColor(h, l);
                 setPixel((h << 8) + l);
             }
         }
     }
 #else
-    unsigned int col;
+    unsigned int color;
     int tx, ty, tc, tsx, tsy;
 
     if (orientation == DISPLAY_ORIENTATION_PORTRAIT) {
         cbi(P_CS, B_CS);
         setXY(x, y, x + sx - 1, y + sy - 1);
         for (tc = 0; tc < (sx*sy); tc++) {
-            col = pgm_read_word(&data[tc]);
-            writeData(col >> 8, col & 0xff);
+            color = pgm_read_word(&data[tc]);
+            uint8_t h = uint8_t(color >> 8);
+            uint8_t l = uint8_t(color & 0xFF);
+            adjustColor(h, l);
+            writeData(h, l);
         }
         sbi(P_CS, B_CS);
     } else {
@@ -593,8 +712,11 @@ void LCD::drawBitmap(int x, int y, int sx, int sy, uint16_t *data) {
         for (ty = 0; ty < sy; ty++) {
             setXY(x, y + ty, x + sx - 1, y + ty);
             for (tx = sx - 1; tx >= 0; tx--) {
-                col = pgm_read_word(&data[(ty*sx) + tx]);
-                writeData(col >> 8, col & 0xff);
+                color = pgm_read_word(&data[(ty*sx) + tx]);
+                uint8_t h = uint8_t(color >> 8);
+                uint8_t l = uint8_t(color & 0xFF);
+                adjustColor(h, l);
+                writeData(h, l);
             }
         }
         sbi(P_CS, B_CS);

@@ -25,6 +25,7 @@
 #include "encoder.h"
 #endif
 #if OPTION_DISPLAY
+#include "gui.h"
 #include "lcd.h"
 #endif
 #include "datetime.h"
@@ -50,10 +51,10 @@ enum PersistConfSection {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static const uint16_t DEV_CONF_VERSION = 0x0008L;
-static const uint16_t DEV_CONF2_VERSION = 0x0009L;
-static const uint16_t CH_CAL_CONF_VERSION = 0x0003L;
-static const uint16_t PROFILE_VERSION = 0x0008L;
+static const uint16_t DEV_CONF_VERSION = 8;
+static const uint16_t DEV_CONF2_VERSION = 10;
+static const uint16_t CH_CAL_CONF_VERSION = 3;
+static const uint16_t PROFILE_VERSION = 8;
 
 static const uint16_t PERSIST_CONF_DEVICE_ADDRESS = 1024;
 static const uint16_t PERSIST_CONF_DEVICE2_ADDRESS = 1536;
@@ -200,6 +201,8 @@ static void initDevice2() {
     memcpy(devConf2.ethernetMacAddress, macAddress, 6);
 
 	devConf2.dstRule = datetime::DST_RULE_OFF;
+
+    devConf2.displayBackgroundLuminosityStep = DISPLAY_BACKGROUND_LUMINOSITY_STEP_DEFAULT;
 }
 
 void loadDevice2() {
@@ -211,7 +214,15 @@ void loadDevice2() {
             if (devConf2.header.version < 9) {
                 uint8_t macAddress[] = ETHERNET_MAC_ADDRESS;
                 memcpy(devConf2.ethernetMacAddress, macAddress, 6);
+            }
+            
+            if (devConf2.header.version < 10) {
+                devConf2.displayBackgroundLuminosityStep = DISPLAY_BACKGROUND_LUMINOSITY_STEP_DEFAULT;
             }   
+
+#if OPTION_DISPLAY
+            gui::lcd::lcd.updateBackgroundMapToColor();
+#endif
         }
     }
     else {
@@ -653,6 +664,17 @@ bool setDisplayBrightness(uint8_t displayBrightness) {
 
 #if OPTION_DISPLAY
     gui::lcd::updateBrightness();
+#endif
+
+    return saveDevice2();
+}
+
+bool setDisplayBackgroundLuminosityStep(uint8_t displayBackgroundLuminosityStep) {
+    devConf2.displayBackgroundLuminosityStep = displayBackgroundLuminosityStep;
+
+#if OPTION_DISPLAY
+    gui::lcd::lcd.updateBackgroundMapToColor();
+    gui::refreshPage();
 #endif
 
     return saveDevice2();

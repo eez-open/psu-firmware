@@ -130,7 +130,8 @@ struct DeviceConfiguration2 {
     char ntpServer[32+1];
     uint8_t dstRule;
     uint8_t ethernetMacAddress[6];
-    uint8_t reserverd[25];
+    uint8_t displayBackgroundLuminosityStep;
+    uint8_t reserverd[24];
 };
 
 extern DeviceConfiguration devConf;
@@ -199,6 +200,7 @@ bool setEncoderSettings(uint8_t confirmationMode, uint8_t movingSpeedDown, uint8
 
 bool setDisplayState(unsigned state);
 bool setDisplayBrightness(uint8_t displayBrightness);
+bool setDisplayBackgroundLuminosityStep(uint8_t displayBackgroundLuminosityStep);
 
 bool enableSerial(bool enable);
 bool isSerialEnabled();

@@ -18,7 +18,9 @@
 
 #pragma once
 
+#if OPTION_ETHERNET
 #include "ethernet.h"
+#endif
 
 namespace eez {
 namespace psu {

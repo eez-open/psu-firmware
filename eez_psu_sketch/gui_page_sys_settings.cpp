@@ -843,12 +843,20 @@ data::Value SysSettingsDisplayPage::getMin(const data::Cursor &cursor, uint8_t i
         return DISPLAY_BRIGHTNESS_MIN;
     }
 
+    if (id == DATA_ID_SYS_DISPLAY_BACKGROUND_LUMINOSITY_STEP) {
+        return DISPLAY_BACKGROUND_LUMINOSITY_STEP_MIN;
+    }
+
     return data::Value();
 }
 
 data::Value SysSettingsDisplayPage::getMax(const data::Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
         return DISPLAY_BRIGHTNESS_MAX;
+    }
+
+    if (id == DATA_ID_SYS_DISPLAY_BACKGROUND_LUMINOSITY_STEP) {
+        return DISPLAY_BACKGROUND_LUMINOSITY_STEP_MAX;
     }
 
     return data::Value();
@@ -864,12 +872,21 @@ data::Value SysSettingsDisplayPage::getData(const data::Cursor &cursor, uint8_t 
         return data::Value(persist_conf::devConf2.displayBrightness);
     }
 
+    if (id == DATA_ID_SYS_DISPLAY_BACKGROUND_LUMINOSITY_STEP) {
+        return data::Value(persist_conf::devConf2.displayBackgroundLuminosityStep);
+    }
+
     return data::Value();
 }
 
 bool SysSettingsDisplayPage::setData(const data::Cursor &cursor, uint8_t id, data::Value value) {
     if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
         persist_conf::setDisplayBrightness((uint8_t)value.getInt());
+        return true;
+    }
+
+    if (id == DATA_ID_SYS_DISPLAY_BACKGROUND_LUMINOSITY_STEP) {
+        persist_conf::setDisplayBackgroundLuminosityStep((uint8_t)value.getInt());
         return true;
     }
 

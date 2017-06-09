@@ -62,6 +62,8 @@ public:
     void drawStr(const char *text, int textLength, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background);
     int measureStr(const char *text, int textLength, font::Font &font, int max_width = 0);
 
+    void updateBackgroundMapToColor();
+
 private:
     uint8_t orientation;
 
@@ -69,6 +71,9 @@ private:
     uint16_t displayHeight;
 
     uint8_t fch, fcl, bch, bcl;
+
+    uint8_t backgroundMapToColorHighByte;
+    uint8_t backgroundMapToColorLowByte;
 
     font::Font font;
 
@@ -95,6 +100,10 @@ private:
 
     int8_t drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int clip_y2, uint8_t encoding, bool fill_background);
     int8_t measureGlyph(uint8_t encoding);
+
+    void adjustColor(uint8_t &ch, uint8_t &cl);
+    void adjustForegroundColor();
+    void adjustBackgroundColor();
 };
 
 extern LCD lcd;
