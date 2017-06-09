@@ -512,9 +512,6 @@ public:
     /// Remap ADC data value to actual voltage value
     float remapAdcDataToVoltage(int16_t adc_data);
 
-    /// Remap ADC data value to actual voltage value (use U_MAX_CONF)
-    float remapAdcDataToVoltageConf(int16_t adc_data);
-
     /// Remap ADC data value to actual current value (use calibration if configured).
     float remapAdcDataToCurrent(int16_t adc_data);
 
