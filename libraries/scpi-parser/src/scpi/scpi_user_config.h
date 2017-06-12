@@ -40,6 +40,7 @@ extern "C" {
     X(SCPI_ERROR_TRIGGER_IGNORED,                           -211, "Trigger ignored")                              \
     X(SCPI_ERROR_DATA_OUT_OF_RANGE,                         -222, "Data out of range")                            \
     X(SCPI_ERROR_TOO_MUCH_DATA,                             -223, "Too much data")                                \
+    X(SCPI_ERROR_DIGITAL_PIN_FUNCTION_MISMATCH,             -230, "Digital pin function mismatch")                \
     X(SCPI_ERROR_HARDWARE_ERROR,                            -240, "Hardware error")                               \
     X(SCPI_ERROR_CH1_FAULT_DETECTED,                        -242, "CH1 fault detected")                           \
 	X(SCPI_ERROR_CH2_FAULT_DETECTED,                        -243, "CH2 fault detected")                           \

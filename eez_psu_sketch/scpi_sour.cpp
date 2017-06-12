@@ -1235,7 +1235,18 @@ scpi_result_t scpi_cmd_sourceDigitalInputDataQ(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    SCPI_ResultInt(context, digitalRead(EXT_TRIG));
+    if (persist_conf::devConf2.ioPins[pin - 1].function != io_pins::FUNCTION_INPUT) {
+        SCPI_ErrorPush(context, SCPI_ERROR_DIGITAL_PIN_FUNCTION_MISMATCH);
+        return SCPI_RES_ERR;
+    }
+
+    bool state = digitalRead(EXT_TRIG) ? true : false;
+
+    if (persist_conf::devConf2.ioPins[pin - 1].polarity == io_pins::POLARITY_NEGATIVE) {
+        state = !state;
+    }
+
+    SCPI_ResultInt(context, state ? 1 : 0);
 
     return SCPI_RES_OK;
 }
@@ -1252,10 +1263,19 @@ scpi_result_t scpi_cmd_sourceDigitalOutputData(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
+    if (persist_conf::devConf2.ioPins[pin - 1].function != io_pins::FUNCTION_OUTPUT) {
+        SCPI_ErrorPush(context, SCPI_ERROR_DIGITAL_PIN_FUNCTION_MISMATCH);
+        return SCPI_RES_ERR;
+    }
+
     bool state;
 	if (!SCPI_ParamBool(context, &state, TRUE)) {
 		return SCPI_RES_ERR;
 	}
+
+    if (persist_conf::devConf2.ioPins[pin - 1].polarity == io_pins::POLARITY_NEGATIVE) {
+        state = !state;
+    }
 
     if (pin == 2) {
         digitalWrite(DOUT, state);
@@ -1286,14 +1306,13 @@ static scpi_choice_def_t functionChoice[] = {
 scpi_result_t scpi_cmd_sourceDigitalPinFunction(scpi_t *context) {
     int32_t pin;
     SCPI_CommandNumbers(context, &pin, 1, 1);
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     if (pin < 1 || pin > 3) {
         SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
         return SCPI_RES_ERR;
     }
-#else
+#if EEZ_PSU_SELECTED_REVISION != EEZ_PSU_REVISION_R5B12
     if (pin != 1) {
-        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
     }
 #endif
@@ -1329,14 +1348,13 @@ scpi_result_t scpi_cmd_sourceDigitalPinFunction(scpi_t *context) {
 scpi_result_t scpi_cmd_sourceDigitalPinFunctionQ(scpi_t *context) {
     int32_t pin;
     SCPI_CommandNumbers(context, &pin, 1, 1);
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     if (pin < 1 || pin > 3) {
         SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
         return SCPI_RES_ERR;
     }
-#else
+#if EEZ_PSU_SELECTED_REVISION != EEZ_PSU_REVISION_R5B12
     if (pin != 1) {
-        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
     }
 #endif
@@ -1355,14 +1373,13 @@ static scpi_choice_def_t polarityChoice[] = {
 scpi_result_t scpi_cmd_sourceDigitalPinPolarity(scpi_t *context) {
     int32_t pin;
     SCPI_CommandNumbers(context, &pin, 1, 1);
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     if (pin < 1 || pin > 3) {
         SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
         return SCPI_RES_ERR;
     }
-#else
+#if EEZ_PSU_SELECTED_REVISION != EEZ_PSU_REVISION_R5B12
     if (pin != 1) {
-        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
     }
 #endif
@@ -1380,14 +1397,13 @@ scpi_result_t scpi_cmd_sourceDigitalPinPolarity(scpi_t *context) {
 scpi_result_t scpi_cmd_sourceDigitalPinPolarityQ(scpi_t *context) {
     int32_t pin;
     SCPI_CommandNumbers(context, &pin, 1, 1);
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     if (pin < 1 || pin > 3) {
         SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
         return SCPI_RES_ERR;
     }
-#else
+#if EEZ_PSU_SELECTED_REVISION != EEZ_PSU_REVISION_R5B12
     if (pin != 1) {
-        SCPI_ErrorPush(context, SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE);
+        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
     }
 #endif

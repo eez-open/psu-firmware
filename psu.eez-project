@@ -21012,7 +21012,7 @@
                     "y": 28,
                     "width": 58,
                     "height": 28,
-                    "style": "edit_value_S_centered",
+                    "style": "edit_value_active_S_center",
                     "text": "Pos"
                   },
                   {
