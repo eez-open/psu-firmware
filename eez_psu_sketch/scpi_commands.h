@@ -178,12 +178,12 @@
     SCPI_COMMAND("[SOURce#]:LIST:DWELl?", scpi_cmd_sourceListDwellQ) \
     SCPI_COMMAND("[SOURce#]:LIST:VOLTage[:LEVel]", scpi_cmd_sourceListVoltageLevel) \
     SCPI_COMMAND("[SOURce#]:LIST:VOLTage[:LEVel]?", scpi_cmd_sourceListVoltageLevelQ) \
-    SCPI_COMMAND("[SOURce:]DIGital:INPut:DATA?", scpi_cmd_sourceDigitalInputDataQ) \
-    SCPI_COMMAND("[SOURce:]DIGital:OUTPut:DATA", scpi_cmd_sourceDigitalOutputData) \
-    SCPI_COMMAND("[SOURce:]DIGital:PIN#:FUNCtion", scpi_cmd_sourceDigitalPinFunction) \
-    SCPI_COMMAND("[SOURce:]DIGital:PIN#:FUNCtion?", scpi_cmd_sourceDigitalPinFunctionQ) \
-    SCPI_COMMAND("[SOURce:]DIGital:PIN#:POLarity", scpi_cmd_sourceDigitalPinPolarity) \
-    SCPI_COMMAND("[SOURce:]DIGital:PIN#:POLarity?", scpi_cmd_sourceDigitalPinPolarityQ) \
+    SCPI_COMMAND("[SOURce]:DIGital:INPut:DATA?", scpi_cmd_sourceDigitalInputDataQ) \
+    SCPI_COMMAND("[SOURce]:DIGital:OUTPut:DATA", scpi_cmd_sourceDigitalOutputData) \
+    SCPI_COMMAND("[SOURce]:DIGital:PIN#:FUNCtion", scpi_cmd_sourceDigitalPinFunction) \
+    SCPI_COMMAND("[SOURce]:DIGital:PIN#:FUNCtion?", scpi_cmd_sourceDigitalPinFunctionQ) \
+    SCPI_COMMAND("[SOURce]:DIGital:PIN#:POLarity", scpi_cmd_sourceDigitalPinPolarity) \
+    SCPI_COMMAND("[SOURce]:DIGital:PIN#:POLarity?", scpi_cmd_sourceDigitalPinPolarityQ) \
     SCPI_COMMAND("STATus:QUEStionable[:EVENt]?", scpi_cmd_statusQuestionableEventQ) \
     SCPI_COMMAND("STATus:QUEStionable:CONDition?", scpi_cmd_statusQuestionableConditionQ) \
     SCPI_COMMAND("STATus:QUEStionable:ENABle", scpi_cmd_statusQuestionableEnable) \

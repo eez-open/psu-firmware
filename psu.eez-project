@@ -80297,27 +80297,27 @@
           },
           {
             "$eez": false,
-            "name": "[SOURce:]DIGital:INPut:DATA?"
+            "name": "[SOURce]:DIGital:INPut:DATA?"
           },
           {
             "$eez": false,
-            "name": "[SOURce:]DIGital:OUTPut:DATA"
+            "name": "[SOURce]:DIGital:OUTPut:DATA"
           },
           {
             "$eez": false,
-            "name": "[SOURce:]DIGital:PIN#:FUNCtion"
+            "name": "[SOURce]:DIGital:PIN#:FUNCtion"
           },
           {
             "$eez": false,
-            "name": "[SOURce:]DIGital:PIN#:FUNCtion?"
+            "name": "[SOURce]:DIGital:PIN#:FUNCtion?"
           },
           {
             "$eez": false,
-            "name": "[SOURce:]DIGital:PIN#:POLarity"
+            "name": "[SOURce]:DIGital:PIN#:POLarity"
           },
           {
             "$eez": false,
-            "name": "[SOURce:]DIGital:PIN#:POLarity?"
+            "name": "[SOURce]:DIGital:PIN#:POLarity?"
           }
         ]
       },
