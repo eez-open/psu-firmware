@@ -24,6 +24,7 @@
 #include "sound.h"
 #include "calibration.h"
 #include "channel_dispatcher.h"
+#include "trigger.h"
 
 #include "gui_password.h"
 #include "gui_calibration.h"
@@ -61,6 +62,8 @@ void onStartPasswordOk() {
     }
 
     g_channel->outputEnable(true);
+
+    trigger::abort();
 
     psu::calibration::start(g_channel);
 
