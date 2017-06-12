@@ -1247,7 +1247,7 @@ scpi_result_t scpi_cmd_sourceDigitalOutputData(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    if (pin != 2 || pin != 3) {
+    if (pin != 2 && pin != 3) {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
@@ -1315,7 +1315,7 @@ scpi_result_t scpi_cmd_sourceDigitalPinFunction(scpi_t *context) {
         }
     }
 
-    persist_conf::devConf2.ioPins[pin].function = function;
+    persist_conf::devConf2.ioPins[pin - 1].function = function;
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     if (pin > 0 && function == io_pins::FUNCTION_NONE) {
@@ -1341,7 +1341,7 @@ scpi_result_t scpi_cmd_sourceDigitalPinFunctionQ(scpi_t *context) {
     }
 #endif
 
-    resultChoiceName(context, functionChoice, persist_conf::devConf2.ioPins[pin].function);
+    resultChoiceName(context, functionChoice, persist_conf::devConf2.ioPins[pin - 1].function);
 
     return SCPI_RES_OK;
 }
@@ -1372,7 +1372,7 @@ scpi_result_t scpi_cmd_sourceDigitalPinPolarity(scpi_t *context) {
         return SCPI_RES_ERR;
     }
     
-    persist_conf::devConf2.ioPins[pin].polarity = polarity;
+    persist_conf::devConf2.ioPins[pin - 1].polarity = polarity;
 
     return SCPI_RES_OK;
 }
@@ -1392,7 +1392,7 @@ scpi_result_t scpi_cmd_sourceDigitalPinPolarityQ(scpi_t *context) {
     }
 #endif
 
-    resultChoiceName(context, polarityChoice, persist_conf::devConf2.ioPins[pin].polarity);
+    resultChoiceName(context, polarityChoice, persist_conf::devConf2.ioPins[pin - 1].polarity);
 
     return SCPI_RES_OK;
 }
