@@ -40,6 +40,7 @@ enum Function {
 
 void tick(uint32_t tickCount);
 void onTrigger();
+void refresh();
 
 }
 }

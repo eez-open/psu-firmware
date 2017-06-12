@@ -53,6 +53,26 @@ uint8_t isOutputEnabled() {
     return 0;
 }
 
+void updateFaultPin(int i) {
+    persist_conf::IOPin &outputPin = persist_conf::devConf2.ioPins[i];
+    int pin = i == 1 ? DOUT : DOUT2;
+    int state = g_lastState.tripped && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
+        !g_lastState.tripped && outputPin.polarity == io_pins::POLARITY_NEGATIVE
+        ? 1 : 0;
+    digitalWrite(pin, state);
+    //DebugTraceF("FUNCTION_FAULT %d %d", pin, state);
+}
+
+void updateOnCouplePin(int i) {
+    persist_conf::IOPin &outputPin = persist_conf::devConf2.ioPins[i];
+    int pin = i == 1 ? DOUT : DOUT2;
+    int state = g_lastState.outputEnabled && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
+        !g_lastState.outputEnabled && outputPin.polarity == io_pins::POLARITY_NEGATIVE
+        ? 1 : 0; 
+    digitalWrite(pin, state);
+    //DebugTraceF("FUNCTION_ON_COUPLE %d %d", pin, state);
+}
+
 void tick(uint32_t tickCount) {
     // execute input pins function
     persist_conf::IOPin &inputPin = persist_conf::devConf2.ioPins[0];
@@ -105,12 +125,7 @@ void tick(uint32_t tickCount) {
             }
 
             if (trippedState == CHANGED) {
-                int pin = i == 1 ? DOUT : DOUT2;
-                int state = g_lastState.tripped && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
-                    !g_lastState.tripped && outputPin.polarity == io_pins::POLARITY_NEGATIVE
-                    ? 1 : 0;
-                digitalWrite(pin, state);
-                //DebugTraceF("FUNCTION_FAULT %d %d", pin, state);
+                updateFaultPin(i);
             }
         } else if (outputPin.function == io_pins::FUNCTION_ON_COUPLE) {
             if (outputEnabledState == UNKNOWN) {
@@ -124,12 +139,7 @@ void tick(uint32_t tickCount) {
             }
 
             if (outputEnabledState == CHANGED) {
-                int pin = i == 1 ? DOUT : DOUT2;
-                int state = g_lastState.outputEnabled && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
-                    !g_lastState.outputEnabled && outputPin.polarity == io_pins::POLARITY_NEGATIVE
-                    ? 1 : 0; 
-                digitalWrite(pin, state);
-                //DebugTraceF("FUNCTION_ON_COUPLE %d %d", pin, state);
+                updateOnCouplePin(i);
             }
         }
     }
@@ -145,6 +155,24 @@ void onTrigger() {
             digitalWrite(i == 1 ? DOUT : DOUT2, outputPin.polarity == io_pins::POLARITY_POSITIVE ? 1 : 0);
             g_lastState.toutputPulse = 1;
             g_toutputPulseStartTickCount = micros();
+        }
+    }
+#endif
+}
+
+void refresh() {
+
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+    // refresh output pins
+    for (int i = 1; i < 3; ++i) {
+        persist_conf::IOPin &outputPin = persist_conf::devConf2.ioPins[i];
+
+        if (outputPin.function == io_pins::FUNCTION_NONE) {
+            digitalWrite(i == 1 ? DOUT : DOUT2, 0);
+        } else if (outputPin.function == io_pins::FUNCTION_FAULT) {
+            updateFaultPin(i);
+        } else if (outputPin.function == io_pins::FUNCTION_ON_COUPLE) {
+            updateOnCouplePin(i);
         }
     }
 #endif

@@ -1336,11 +1336,7 @@ scpi_result_t scpi_cmd_sourceDigitalPinFunction(scpi_t *context) {
 
     persist_conf::devConf2.ioPins[pin - 1].function = function;
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
-    if (pin > 0 && function == io_pins::FUNCTION_NONE) {
-        digitalWrite(pin == 1 ? DOUT : DOUT2, 0);
-    }
-#endif
+    io_pins::refresh();
 
     return SCPI_RES_OK;
 }
@@ -1390,6 +1386,8 @@ scpi_result_t scpi_cmd_sourceDigitalPinPolarity(scpi_t *context) {
     }
     
     persist_conf::devConf2.ioPins[pin - 1].polarity = polarity;
+
+    io_pins::refresh();
 
     return SCPI_RES_OK;
 }
