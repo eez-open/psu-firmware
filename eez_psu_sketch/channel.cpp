@@ -1223,6 +1223,12 @@ void Channel::update() {
         return;
     }
 
+    if (index == 1) {
+        doCalibrationEnable(persist_conf::devConf.flags.ch1CalEnabled && isCalibrationExists());
+    } else if (index == 2) {
+        doCalibrationEnable(persist_conf::devConf.flags.ch2CalEnabled && isCalibrationExists());
+    }
+
     bool last_save_enabled = profile::enableSave(false);
 
     setVoltage(u.set);
@@ -1293,19 +1299,18 @@ void Channel::doCalibrationEnable(bool enable) {
     setCurrent(i.set);
 }
 
-void Channel::calibrationEnable(bool enable) {
-    if (enable != isCalibrationEnabled()) {
-        doCalibrationEnable(enable);
-        event_queue::pushEvent((enable ? event_queue::EVENT_INFO_CH1_CALIBRATION_ENABLED :
+void Channel::calibrationEnable(bool enabled) {
+    if (enabled != isCalibrationEnabled()) {
+        doCalibrationEnable(enabled);
+        event_queue::pushEvent((enabled ? event_queue::EVENT_INFO_CH1_CALIBRATION_ENABLED :
             event_queue::EVENT_WARNING_CH1_CALIBRATION_DISABLED) + index - 1);
-        profile::save();
+        persist_conf::saveCalibrationEnabledFlag(*this, enabled);
     }
 }
 
-void Channel::calibrationEnableNoEvent(bool enable) {
-    if (enable != isCalibrationEnabled()) {
-        doCalibrationEnable(enable);
-        profile::save();
+void Channel::calibrationEnableNoEvent(bool enabled) {
+    if (enabled != isCalibrationEnabled()) {
+        doCalibrationEnable(enabled);
     }
 }
 

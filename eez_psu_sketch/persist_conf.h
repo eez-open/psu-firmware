@@ -44,19 +44,21 @@ struct BlockHeader {
 
 /// Device binary flags stored in DeviceConfiguration.
 struct DeviceFlags {
-    unsigned  isSoundEnabled : 1;
-    unsigned  dateValid : 1;
-    unsigned  timeValid : 1;
-    unsigned  profileAutoRecallEnabled : 1;
-    unsigned  dst : 1;
-    unsigned  channelsViewMode : 3;
-    unsigned  ethernetEnabled : 1;
-    unsigned  outputProtectionCouple : 1;
-    unsigned  shutdownWhenProtectionTripped : 1;
-    unsigned  forceDisablingAllOutputsOnPowerUp : 1;
-    unsigned  isFrontPanelLocked: 1;
-    unsigned  isClickSoundEnabled : 1;
-    unsigned  reserved2: 18;
+    unsigned isSoundEnabled : 1;
+    unsigned dateValid : 1;
+    unsigned timeValid : 1;
+    unsigned profileAutoRecallEnabled : 1;
+    unsigned dst : 1;
+    unsigned channelsViewMode : 3;
+    unsigned ethernetEnabled : 1;
+    unsigned outputProtectionCouple : 1;
+    unsigned shutdownWhenProtectionTripped : 1;
+    unsigned forceDisablingAllOutputsOnPowerUp : 1;
+    unsigned isFrontPanelLocked: 1;
+    unsigned isClickSoundEnabled : 1;
+    unsigned ch1CalEnabled: 1;
+    unsigned ch2CalEnabled: 1;
+    unsigned reserved: 16;
 };
 
 /// Device configuration block.
@@ -176,8 +178,10 @@ void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour,
 void toggleChannelsViewMode();
 void setChannelsViewMode(unsigned int viewMode);
 
-void loadChannelCalibration(Channel *channel);
-bool saveChannelCalibration(Channel *channel);
+void loadChannelCalibration(Channel &channel);
+bool saveChannelCalibration(Channel &channel);
+
+void saveCalibrationEnabledFlag(Channel &channel, bool enabled);
 
 bool loadProfile(int location, profile::Parameters *profile);
 bool saveProfile(int location, profile::Parameters *profile);

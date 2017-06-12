@@ -105,7 +105,6 @@ void recallChannelsFromProfile(Parameters *profile, int location) {
 			channel.simulator.voltProgExt = profile->channels[i].voltProgExt;
 #endif
 
-			channel.calibrationEnable(profile->channels[i].flags.cal_enabled && channel.isCalibrationExists() ? 1 : 0);
 			channel.flags.outputEnabled = profile->channels[i].flags.output_enabled;
 			channel.flags.senseEnabled = profile->channels[i].flags.sense_enabled;
 
@@ -281,7 +280,6 @@ bool saveAtLocation(int location, char *name) {
 
 				profile.channels[i].flags.parameters_are_valid = 1;
 
-				profile.channels[i].flags.cal_enabled = channel.isCalibrationEnabled();
 				profile.channels[i].flags.output_enabled = channel.flags.outputEnabled;
 				profile.channels[i].flags.sense_enabled = channel.flags.senseEnabled;
 

@@ -51,7 +51,7 @@ enum PersistConfSection {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static const uint16_t DEV_CONF_VERSION = 8;
+static const uint16_t DEV_CONF_VERSION = 9;
 static const uint16_t DEV_CONF2_VERSION = 10;
 static const uint16_t CH_CAL_CONF_VERSION = 3;
 static const uint16_t PROFILE_VERSION = 8;
@@ -150,6 +150,9 @@ static void initDevice() {
     devConf.flags.outputProtectionCouple = 0;
     devConf.flags.shutdownWhenProtectionTripped = 0;
     devConf.flags.forceDisablingAllOutputsOnPowerUp = 0;
+
+    devConf.flags.ch1CalEnabled = 1;
+    devConf.flags.ch2CalEnabled = 1;
 }
 
 void loadDevice() {
@@ -161,6 +164,11 @@ void loadDevice() {
 			if (devConf.flags.channelsViewMode < 0 || devConf.flags.channelsViewMode >= NUM_CHANNELS_VIEW_MODES) {
 				devConf.flags.channelsViewMode = 0;
 			}
+
+            if (devConf.header.version < 9) {
+                devConf.flags.ch1CalEnabled = 1;
+                devConf.flags.ch2CalEnabled = 1;
+            }
 		}
     }
     else {
@@ -457,20 +465,31 @@ void setChannelsViewMode(unsigned int channelsViewMode) {
 	saveDevice();
 }
 
-void loadChannelCalibration(Channel *channel) {
+void loadChannelCalibration(Channel &channel) {
     if (eeprom::g_testResult == psu::TEST_OK) {
-        eeprom::read((uint8_t *)&channel->cal_conf, sizeof(Channel::CalibrationConfiguration), get_address(PERSIST_CONF_BLOCK_CH_CAL, channel));
-        if (!check_block((BlockHeader *)&channel->cal_conf, sizeof(Channel::CalibrationConfiguration), CH_CAL_CONF_VERSION)) {
-            channel->clearCalibrationConf();
+        eeprom::read((uint8_t *)&channel.cal_conf, sizeof(Channel::CalibrationConfiguration), get_address(PERSIST_CONF_BLOCK_CH_CAL, &channel));
+        if (!check_block((BlockHeader *)&channel.cal_conf, sizeof(Channel::CalibrationConfiguration), CH_CAL_CONF_VERSION)) {
+            channel.clearCalibrationConf();
         }
     }
     else {
-        channel->clearCalibrationConf();
+        channel.clearCalibrationConf();
     }
 }
 
-bool saveChannelCalibration(Channel *channel) {
-    return save((BlockHeader *)&channel->cal_conf, sizeof(Channel::CalibrationConfiguration), get_address(PERSIST_CONF_BLOCK_CH_CAL, channel), CH_CAL_CONF_VERSION);
+bool saveChannelCalibration(Channel &channel) {
+    return save((BlockHeader *)&channel.cal_conf, sizeof(Channel::CalibrationConfiguration), get_address(PERSIST_CONF_BLOCK_CH_CAL, &channel), CH_CAL_CONF_VERSION);
+}
+
+void saveCalibrationEnabledFlag(Channel &channel, bool enabled) {
+    if (channel.index == 1) {
+        devConf.flags.ch1CalEnabled = enabled ? 1 : 0;
+    } else if (channel.index == 2) {
+        devConf.flags.ch2CalEnabled = enabled ? 1 : 0;
+    } else {
+        return;
+    }
+    saveDevice();
 }
 
 bool loadProfile(int location, profile::Parameters *profile) {

@@ -416,13 +416,13 @@ bool save() {
 
     resetChannelToZero();
 
-    return persist_conf::saveChannelCalibration(g_channel);
+    return persist_conf::saveChannelCalibration(*g_channel);
 }
 
 bool clear(Channel *channel) {
     channel->calibrationEnable(false);
     channel->clearCalibrationConf();
-    return persist_conf::saveChannelCalibration(channel);
+    return persist_conf::saveChannelCalibration(*channel);
 }
 
 }

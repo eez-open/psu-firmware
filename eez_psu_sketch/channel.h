@@ -443,8 +443,8 @@ public:
     bool isOutputEnabled();
 
     /// Enable/disable channel calibration.
-    void calibrationEnable(bool enable);
-    void calibrationEnableNoEvent(bool enable);
+    void calibrationEnable(bool enabled);
+    void calibrationEnableNoEvent(bool enabled);
 
     /// Is channel calibration enabled?
     bool isCalibrationEnabled();

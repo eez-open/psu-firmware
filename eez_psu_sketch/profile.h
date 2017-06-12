@@ -32,7 +32,7 @@ struct ChannelFlags {
     unsigned u_state : 1;
     unsigned i_state : 1;
     unsigned p_state : 1;
-    unsigned cal_enabled : 1;
+    unsigned reserved1 : 1;
     unsigned rprog_enabled : 1;
     unsigned reserverd10 : 1;
     unsigned lripple_auto_enabled : 1;
@@ -46,7 +46,7 @@ struct ChannelFlags {
     unsigned listSaved: 1;
     unsigned triggerOutputState: 1;
     unsigned triggerOnListStop: 3;
-    unsigned reserved: 6;
+    unsigned reserved2: 6;
 };
 
 /// Channel parameters stored in profile.
