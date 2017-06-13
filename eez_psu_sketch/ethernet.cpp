@@ -52,7 +52,7 @@ static EthernetServer *server;
 
 static bool g_isConnected = false;
 static EthernetClient g_activeClient;
-static uint32_t g_lastCheckDhcpLeaseTime;
+//static uint32_t g_lastCheckDhcpLeaseTime;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -206,7 +206,7 @@ void init() {
         scpi_input_buffer, SCPI_PARSER_INPUT_BUFFER_LENGTH,
         error_queue_data, SCPI_PARSER_ERROR_QUEUE_SIZE + 1);
 
-    g_lastCheckDhcpLeaseTime = micros();
+    //g_lastCheckDhcpLeaseTime = micros();
 }
 
 bool test() {
@@ -222,14 +222,17 @@ void tick(uint32_t tick_usec) {
         return;
     }
 
-    int32_t diff = tick_usec - g_lastCheckDhcpLeaseTime;
-    if (diff > CONF_CHECK_DHCP_LEASE_SEC * 1000000L) {
-        // DebugTrace("DHCP lease check");
-        g_lastCheckDhcpLeaseTime = tick_usec;
-        watchdog::disable();
-        Ethernet.maintain();
-        watchdog::enable();
-    }
+    // This code is commented because DHCP lease renewal blocks main thread for 5 or more seconds.
+    //if (persist_conf::devConf2.flags.ethernetDhcpEnabled) {
+    //    int32_t diff = tick_usec - g_lastCheckDhcpLeaseTime;
+    //    if (diff > CONF_CHECK_DHCP_LEASE_SEC * 1000000L) {
+    //        // DebugTrace("DHCP lease check");
+    //        g_lastCheckDhcpLeaseTime = tick_usec;
+    //        watchdog::disable();
+    //        Ethernet.maintain();
+    //        watchdog::enable();
+    //    }
+    //}
 
     SPI_beginTransaction(ETHERNET_SPI);
 
