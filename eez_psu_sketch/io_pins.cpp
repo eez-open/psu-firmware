@@ -53,6 +53,7 @@ uint8_t isOutputEnabled() {
     return 0;
 }
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 void updateFaultPin(int i) {
     persist_conf::IOPin &outputPin = persist_conf::devConf2.ioPins[i];
     int pin = i == 1 ? DOUT : DOUT2;
@@ -72,6 +73,7 @@ void updateOnCouplePin(int i) {
     digitalWrite(pin, state);
     //DebugTraceF("FUNCTION_ON_COUPLE %d %d", pin, state);
 }
+#endif
 
 void tick(uint32_t tickCount) {
     // execute input pins function
@@ -161,7 +163,6 @@ void onTrigger() {
 }
 
 void refresh() {
-
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     // refresh output pins
     for (int i = 1; i < 3; ++i) {
