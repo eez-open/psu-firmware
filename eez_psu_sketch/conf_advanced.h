@@ -299,5 +299,8 @@
 
 #define CONF_DEFAULT_NTP_SERVER "europe.pool.ntp.org"
 
-/// Query NTP server every 24h
+/// Query NTP server every 24 hours
 #define CONF_NTP_PERIOD_SEC 24L * 60 * 60
+
+/// Query NTP server every 10 minutes if error happened last time
+#define CONF_NTP_PERIOD_AFTER_ERROR_SEC 10L * 60

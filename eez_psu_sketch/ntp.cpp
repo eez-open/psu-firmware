@@ -21,6 +21,7 @@
 #include "ethernet.h"
 #include "datetime.h"
 #include "persist_conf.h"
+#include "watchdog.h"
 
 #include <EthernetUdp2.h>
 
@@ -35,7 +36,7 @@
 
 #define CONF_PARSE_TIMEOUT_MS 5 * 1000 // 5 second
 #define CONF_TIMEOUT_AFTER_SUCCESS_MS CONF_NTP_PERIOD_SEC * 1000L
-#define CONF_TIMEOUT_AFTER_ERROR_MS 10 * 60 * 1000L // 10 minutes
+#define CONF_TIMEOUT_AFTER_ERROR_MS CONF_NTP_PERIOD_AFTER_ERROR_SEC * 1000L
 
 namespace eez {
 namespace psu {
@@ -72,7 +73,7 @@ const char *getNtpServer() {
 }
 
 // send an NTP request to the time server at the given address
-void sendNtpPacket() {
+int sendNtpPacket() {
       // set all bytes in the buffer to 0
       memset(packetBuffer, 0, NTP_PACKET_SIZE);
 
@@ -91,14 +92,37 @@ void sendNtpPacket() {
 
       // All NTP fields have been given values, now
       // you can send a packet requesting a timestamp:
-      g_udp.beginPacket(getNtpServer(), 123); // NTP requests are to port 123
-      g_udp.write(packetBuffer, NTP_PACKET_SIZE);
-      g_udp.endPacket();
+      int rc;
+
+      watchdog::disable();
+
+      rc = g_udp.beginPacket(getNtpServer(), 123); // NTP requests are to port 123
+      if (!rc) {
+          watchdog::enable();
+          return -1;
+      }
+
+      int written = g_udp.write(packetBuffer, NTP_PACKET_SIZE);
+      if (written != NTP_PACKET_SIZE) {
+          watchdog::enable();
+          return -2;
+      }
+
+      rc = g_udp.endPacket();
+      if (!rc) {
+          watchdog::enable();
+          return -3;
+      }
+
+      watchdog::enable();
+      return 0;
 }
 
 void readNtpPacket() {
     // We've received a packet, read the data from it
+    watchdog::disable();
     g_udp.read(packetBuffer, NTP_PACKET_SIZE); // read the packet into the buffer
+    watchdog::enable();
 
     // The timestamp starts at byte 40 of the received packet and is four bytes,
     // or two words, long. First, esxtract the two words:
@@ -146,9 +170,17 @@ void tick(uint32_t tickCount) {
 
         if (g_state == START) {
             if (getNtpServer()) {
-                sendNtpPacket();
-                g_state = PARSE;
-                g_lastTickCount = tickCount;
+                //DebugTraceF("sendNtpPacket start %ul", micros());
+                int rc = sendNtpPacket();
+                if (rc >= 0) {
+                    //DebugTraceF("sendNtpPacket success %ul", micros());
+                    g_state = PARSE;
+                    g_lastTickCount = tickCount;
+                } else {
+                    //DebugTraceF("sendNtpPacket fail %d %ul", rc, micros());
+                    g_state = ERROR;
+                    g_lastTickCount = tickCount;
+                }
             } else {
                 g_state = ERROR;
                 g_lastTickCount = tickCount;

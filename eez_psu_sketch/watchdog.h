@@ -28,6 +28,9 @@ void tick(uint32_t tick_usec);
 void printInfo();
 #endif
 
+void enable();
+void disable();
+
 }
 }
 } // namespace eez::psu::watchdog
