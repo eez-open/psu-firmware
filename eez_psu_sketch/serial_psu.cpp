@@ -47,6 +47,7 @@ int SCPI_Error(scpi_t *context, int_fast16_t err) {
     if (err != 0) {
         scpi::printError(err);
     }
+
     return 0;
 }
 
@@ -145,7 +146,7 @@ void init() {
 
 void tick(uint32_t tick_usec) {
     if (g_testResult == TEST_OK) {
-        while (Serial.available()) {
+        for (unsigned i = 0; i < 64 && Serial.available(); ++i) {
             g_isConnected = true;
             char ch = (char)Serial.read();
             input(g_scpiContext, ch);
