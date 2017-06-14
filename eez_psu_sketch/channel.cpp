@@ -98,6 +98,7 @@ void Channel::Value::init(float set_, float step_, float limit_) {
 void Channel::Value::resetMonValues() {
     mon_adc = 0;
     mon = 0;
+    mon_last = 0;
     mon_dac = 0;
 
     mon_index = -1;
@@ -105,6 +106,8 @@ void Channel::Value::resetMonValues() {
 }
 
 void Channel::Value::addMonValue(float value) {
+    mon_last = value;
+
     if (mon_index == -1) {
         mon_index = 0;
         for (int i = 0; i < NUM_ADC_AVERAGING_VALUES; ++i) {
@@ -748,8 +751,8 @@ void Channel::tick(uint32_t tick_usec) {
 #endif
 
     if (historyPosition == -1) {
-        uHistory[0] = util::roundPrec(u.mon, VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS);
-        iHistory[0] = util::roundPrec(i.mon, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS);
+        uHistory[0] = util::roundPrec(u.mon_last, VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS);
+        iHistory[0] = util::roundPrec(i.mon_last, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS);
         for (int i = 1; i < CHANNEL_HISTORY_SIZE; ++i) {
             uHistory[i] = 0;
             iHistory[i] = 0;
@@ -761,8 +764,8 @@ void Channel::tick(uint32_t tick_usec) {
         uint32_t ytViewRateMicroseconds = (int)round(ytViewRate * 1000000L); 
 
         while (tick_usec - historyLastTick >= ytViewRateMicroseconds) {
-            uHistory[historyPosition] = util::roundPrec(u.mon, VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS);
-            iHistory[historyPosition] = util::roundPrec(i.mon, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS);
+            uHistory[historyPosition] = util::roundPrec(u.mon_last, VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS);
+            iHistory[historyPosition] = util::roundPrec(i.mon_last, CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS);
                 
             if (++historyPosition == CHANNEL_HISTORY_SIZE) {
                 historyPosition = 0;

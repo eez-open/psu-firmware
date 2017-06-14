@@ -204,6 +204,7 @@ public:
         int16_t mon_adc;
 
         float mon;
+        float mon_last;
         int8_t mon_index;
         float mon_arr[NUM_ADC_AVERAGING_VALUES];
         float mon_total;
