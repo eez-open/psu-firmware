@@ -241,7 +241,7 @@ bool Value::isMilli() const {
             ++numSignificantDecimalDigits;
         }
         float precision = getPrecisionFromNumSignificantDecimalDigits(numSignificantDecimalDigits);
-        return util::greater(float_, -1.0f, precision) && util::less(float_, 1.0f, precision) && !util::equal(float_, 0, precision);
+        return util::greater(float_, -1.0f, precision) && util::less(float_, 1.0f, precision)/* && !util::equal(float_, 0, precision)*/;
     }
     return false;
 }
