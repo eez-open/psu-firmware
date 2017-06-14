@@ -306,10 +306,8 @@ void SysSettingsDateTimePage::doSet() {
     }
 
 #if OPTION_ETHERNET
-    bool callNtpReset;
     if (ntpEnabled != origNtpEnabled || strcmp(ntpServer, origNtpServer)) {
         persist_conf::setNtpSettings(ntpEnabled, ntpServer);
-        callNtpReset = true;
     }
 #endif
 

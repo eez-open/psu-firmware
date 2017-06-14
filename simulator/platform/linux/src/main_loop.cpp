@@ -61,7 +61,7 @@ int main_loop() {
             switch (msg.msgtype) {
             case NEW_INPUT_MESSAGE:
                 p_ch = (char *)msg.data;
-                scpi::input(serial::scpi_context, *p_ch);
+                Serial.put(*p_ch);
                 delete p_ch;
                 break;
 
