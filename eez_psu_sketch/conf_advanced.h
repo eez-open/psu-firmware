@@ -179,7 +179,7 @@
 #define FAN_SPEED_MEASURMENT_INTERVAL 5000
 
 /// Fan switch-on temperature (in oC)
-#define FAN_MIN_TEMP 55
+#define FAN_MIN_TEMP 50
 
 /// Max. allowed temperature (in oC), if it stays more then FAN_MAX_TEMP_DELAY seconds then main power will be turned off.
 #define FAN_MAX_TEMP 75
