@@ -35,15 +35,19 @@
 #include "rtc.h"
 #include "datetime.h"
 #include "eeprom.h"
+
 #if OPTION_SD_CARD
 #include "sd_card.h"
 #endif
+
 #include "calibration.h"
 #include "profile.h"
+
 #if OPTION_DISPLAY
 #include "gui.h"
 #include "touch.h"
 #endif
+
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 #if OPTION_WATCHDOG
 #include "watchdog.h"
@@ -1058,10 +1062,8 @@ void tick() {
 	updateMasterSync();
 #endif
 
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
-#if OPTION_WATCHDOG
-	watchdog::tick(tick_usec);
-#endif
+#if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
+    watchdog::tick(tick_usec);
 #endif
 }
 

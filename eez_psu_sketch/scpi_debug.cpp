@@ -183,10 +183,8 @@ scpi_result_t scpi_cmd_debugMeasureVoltage(scpi_t *context) {
 
     while (true) {
         uint32_t tickCount = micros();
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
-#if OPTION_WATCHDOG
+#if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
         watchdog::tick(tickCount);
-#endif
 #endif
 	    temperature::tick(tickCount);
 	    fan::tick(tickCount);
@@ -223,10 +221,8 @@ scpi_result_t scpi_cmd_debugMeasureCurrent(scpi_t *context) {
 
     while (true) {
         uint32_t tickCount = micros();
-#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
-#if OPTION_WATCHDOG
+#if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
         watchdog::tick(tickCount);
-#endif
 #endif
 	    temperature::tick(tickCount);
 	    fan::tick(tickCount);

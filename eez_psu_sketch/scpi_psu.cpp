@@ -25,6 +25,10 @@
 #include "datetime.h"
 #include "serial_psu.h"
 
+#if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
+#include "watchdog.h"
+#endif
+
 namespace eez {
 namespace psu {
 namespace scpi {
@@ -141,6 +145,10 @@ void printError(int_fast16_t err) {
 
         Serial.println(errorOutputBuffer);
     }
+
+#if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
+    watchdog::tick(micros());
+#endif
 }
 
 void resultChoiceName(scpi_t * context, scpi_choice_def_t *choice, int tag) {
