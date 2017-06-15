@@ -1856,7 +1856,7 @@ void Channel::doAutoSelectCurrentRange(uint32_t tickCount) {
             if (tickCount - autoRangeCheckLastTickCount > 50000L) {
                 if (flags.autoSelectCurrentRange && flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_USE_BOTH && hasSupportForCurrentDualRange() && !dac.isTesting() && !calibration::isEnabled()) {
                     if (flags.currentCurrentRange == CURRENT_RANGE_LOW) {
-                        if (util::greater(i.set, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) && !isCvMode()) {
+                        if (util::greater(i.set, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) && isCcMode()) {
                             doSetCurrent(i.set);
                         }
                     } else {
