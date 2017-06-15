@@ -304,3 +304,6 @@
 
 /// Query NTP server every 10 minutes if error happened last time
 #define CONF_NTP_PERIOD_AFTER_ERROR_SEC 10L * 60
+
+/// To prevent too fast switching betweeen current ranges
+#define CURRENT_AUTO_RANGE_SWITCHING_DELAY_MS 50
