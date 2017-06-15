@@ -124,9 +124,7 @@ void init() {
     while (!Serial);
 #endif
 
-	while (Serial.available()) {
-        Serial.read();
-    }
+	while (Serial.available());
 
 #ifdef EEZ_PSU_SIMULATOR
     Serial.print("EEZ PSU software simulator ver. ");
