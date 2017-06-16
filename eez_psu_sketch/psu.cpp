@@ -1288,7 +1288,7 @@ void limitMaxCurrent(MaxCurrentLimitCause cause) {
 
 		if (isMaxCurrentLimited()) {
 			for (int i = 0; i < CH_NUM; ++i) {
-				if (Channel::get(i).isOutputEnabled() && Channel::get(i).i.mon > ERR_MAX_CURRENT) {
+				if (Channel::get(i).isOutputEnabled() && Channel::get(i).i.mon_last > ERR_MAX_CURRENT) {
 					Channel::get(i).setCurrent(Channel::get(i).i.min);
 				}
 

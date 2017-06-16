@@ -394,7 +394,7 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     
     if (IS_OVP_VALUE(this, cpv)) {
         state = flags.rprogEnabled || prot_conf.flags.u_state;
-        //condition = flags.cv_mode && (!flags.cc_mode || fabs(i.mon - i.set) >= CHANNEL_VALUE_PRECISION) && (prot_conf.u_level <= u.set);
+        //condition = flags.cv_mode && (!flags.cc_mode || fabs(i.mon_last - i.set) >= CHANNEL_VALUE_PRECISION) && (prot_conf.u_level <= u.set);
         condition = util::greaterOrEqual(channel_dispatcher::getUMon(*this), channel_dispatcher::getUProtectionLevel(*this), getPrecision(VALUE_TYPE_FLOAT_VOLT))
             || flags.rprogEnabled && util::greaterOrEqual(channel_dispatcher::getUMonDac(*this), channel_dispatcher::getUProtectionLevel(*this), getPrecision(VALUE_TYPE_FLOAT_VOLT));
         delay = prot_conf.u_delay;
@@ -402,7 +402,7 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     }
     else if (IS_OCP_VALUE(this, cpv)) {
         state = prot_conf.flags.i_state;
-        //condition = flags.cc_mode && (!flags.cv_mode || fabs(u.mon - u.set) >= CHANNEL_VALUE_PRECISION);
+        //condition = flags.cc_mode && (!flags.cv_mode || fabs(u.mon_last - u.set) >= CHANNEL_VALUE_PRECISION);
         condition = util::greaterOrEqual(
             channel_dispatcher::getIMon(*this),
             channel_dispatcher::getISet(*this),
@@ -423,10 +423,10 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
                     cpv.flags.alarmed = 0;
 
                     //if (IS_OVP_VALUE(this, cpv)) {
-                    //    DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA, I MON=%d mA", (int)flags.cvMode, (int)flags.ccMode, (int)(fabs(i.mon - i.set) * 1000), (int)(i.mon * 1000));
+                    //    DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA, I MON=%d mA", (int)flags.cvMode, (int)flags.ccMode, (int)(fabs(i.mon_last - i.set) * 1000), (int)(i.mon_last * 1000));
                     //}
                     //else if (IS_OCP_VALUE(this, cpv)) {
-                    //    DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.ccMode, (int)flags.cvMode, (int)(fabs(u.mon - u.set) * 1000));
+                    //    DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.ccMode, (int)flags.cvMode, (int)(fabs(u.mon_last - u.set) * 1000));
                     //}
 
                     protectionEnter(cpv);
@@ -439,10 +439,10 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
         }
         else {
             //if (IS_OVP_VALUE(this, cpv)) {
-            //    DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA", (int)flags.cvMode, (int)flags.ccMode, (int)(fabs(i.mon - i.set) * 1000));
+            //    DebugTraceF("OVP condition: CV_MODE=%d, CC_MODE=%d, I DIFF=%d mA", (int)flags.cvMode, (int)flags.ccMode, (int)(fabs(i.mon_last - i.set) * 1000));
             //}
             //else if (IS_OCP_VALUE(this, cpv)) {
-            //    DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.ccMode, (int)flags.cvMode, (int)(fabs(u.mon - u.set) * 1000));
+            //    DebugTraceF("OCP condition: CC_MODE=%d, CV_MODE=%d, U DIFF=%d mV", (int)flags.ccMode, (int)flags.cvMode, (int)(fabs(u.mon_last - u.set) * 1000));
             //}
 
             protectionEnter(cpv);
@@ -654,19 +654,19 @@ bool Channel::isOk() {
 }
 
 void Channel::voltageBalancing() {
-    //DebugTraceF("Channel voltage balancing: CH1_Umon=%f, CH2_Umon=%f", Channel::get(0).u.mon, Channel::get(1).u.mon);
+    //DebugTraceF("Channel voltage balancing: CH1_Umon=%f, CH2_Umon=%f", Channel::get(0).u.mon_last, Channel::get(1).u.mon_last);
     if (util::isNaN(uBeforeBalancing)) {
         uBeforeBalancing = u.set;
     }
-    doSetVoltage((Channel::get(0).u.mon + Channel::get(1).u.mon) / 2);
+    doSetVoltage((Channel::get(0).u.mon_last + Channel::get(1).u.mon_last) / 2);
 }
 
 void Channel::currentBalancing() {
-    //DebugTraceF("CH%d channel current balancing: CH1_Imon=%f, CH2_Imon=%f", index, Channel::get(0).i.mon, Channel::get(1).i.mon);
+    //DebugTraceF("CH%d channel current balancing: CH1_Imon=%f, CH2_Imon=%f", index, Channel::get(0).i.mon_last, Channel::get(1).i.mon_last);
     if (util::isNaN(iBeforeBalancing)) {
         iBeforeBalancing = i.set;
     }
-    doSetCurrent((Channel::get(0).i.mon + Channel::get(1).i.mon) / 2);
+    doSetCurrent((Channel::get(0).i.mon_last + Channel::get(1).i.mon_last) / 2);
 }
 
 void Channel::restoreVoltageToValueBeforeBalancing() {
@@ -713,17 +713,17 @@ void Channel::tick(uint32_t tick_usec) {
     /// and that condition lasts more then DP_NEG_DELAY seconds (default 5 s),
     /// down-programmer circuit has to be switched off.
     if (isOutputEnabled()) {
-        if (u.mon * i.mon >= DP_NEG_LEV || tick_usec < dpNegMonitoringTime) {
+        if (u.mon_last * i.mon_last >= DP_NEG_LEV || tick_usec < dpNegMonitoringTime) {
             dpNegMonitoringTime = tick_usec;
         } else {
             if (tick_usec - dpNegMonitoringTime > DP_NEG_DELAY * 1000000UL) {
                 if (flags.dpOn) {
-                    DebugTraceF("CH%d, neg. P, DP off: %f", index, u.mon * i.mon);
+                    DebugTraceF("CH%d, neg. P, DP off: %f", index, u.mon_last * i.mon_last);
                     dpNegMonitoringTime = tick_usec;
                     psu::generateError(SCPI_ERROR_CH1_DOWN_PROGRAMMER_SWITCHED_OFF + (index - 1));
                     doDpEnable(false);
                 } else {
-                    DebugTraceF("CH%d, neg. P, output off: %f", index, u.mon * i.mon);
+                    DebugTraceF("CH%d, neg. P, output off: %f", index, u.mon_last * i.mon_last);
                     psu::generateError(SCPI_ERROR_CH1_OUTPUT_FAULT_DETECTED - (index - 1));
                     channel_dispatcher::outputEnable(*this, false);
                 }
@@ -1184,11 +1184,11 @@ bool Channel::isLowRippleAllowed(uint32_t tick_usec) {
         delayLowRippleCheck = false;
     }
 
-    if (i.mon > SOA_PREG_CURR || i.mon > SOA_POSTREG_PTOT / (SOA_VIN - u.mon)) {
+    if (i.mon_last > SOA_PREG_CURR || i.mon_last > SOA_POSTREG_PTOT / (SOA_VIN - u.mon_last)) {
         return false;
     }
 
-    if (i.mon * (SOA_VIN - u.mon) > SOA_POSTREG_PTOT) {
+    if (i.mon_last * (SOA_VIN - u.mon_last) > SOA_POSTREG_PTOT) {
         return false;
     }
 
@@ -1515,34 +1515,18 @@ void Channel::setVoltage(float value) {
 }
 
 void Channel::doSetCurrent(float value) {
-    bool switchRangeBefore = false;
-    bool switchRangeAfter = false;
-    bool oldRange = flags.currentCurrentRange;
-    bool newRange = flags.currentCurrentRange;
-
     if (hasSupportForCurrentDualRange()) {
         if (dac.isTesting()) {
             setCurrentRange(CURRENT_RANGE_HIGH);
         } else if (!calibration::isEnabled()) {
             if (flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_USE_BOTH) {
-                newRange = util::greater(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) ? CURRENT_RANGE_HIGH : CURRENT_RANGE_LOW;
-                if (newRange != oldRange) {
-                    if (flags.currentCurrentRange == CURRENT_RANGE_HIGH) {
-                        switchRangeBefore = true;
-                    } else {
-                        switchRangeAfter = true;
-                    }
-                }
+                setCurrentRange(util::greater(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) ? CURRENT_RANGE_HIGH : CURRENT_RANGE_LOW);
             } else if (flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_ALWAYS_HIGH) {
                 setCurrentRange(CURRENT_RANGE_HIGH);
             } else {
                 setCurrentRange(CURRENT_RANGE_LOW);
             }
         }
-    }
-
-    if (newRange != oldRange) {
-        flags.currentCurrentRange = newRange;
     }
 
     i.set = value;
@@ -1562,19 +1546,7 @@ void Channel::doSetCurrent(float value) {
 
     value += getDualRangeGndOffset();
 
-    if (newRange != oldRange) {
-        flags.currentCurrentRange = oldRange;
-    }
-
-    if (switchRangeBefore) {
-        setCurrentRange(newRange);
-    }
-
     dac.set_current(value);
-
-    if (switchRangeAfter) {
-        setCurrentRange(newRange);
-    }
 }
 
 void Channel::setCurrent(float value) {
@@ -1728,7 +1700,7 @@ void Channel::limitMaxCurrent(MaxCurrentLimitCause cause) {
         maxCurrentLimitCause = cause;
 
         if (isMaxCurrentLimited()) {
-            if (isOutputEnabled() && i.mon > ERR_MAX_CURRENT) {
+            if (isOutputEnabled() && i.mon_last > ERR_MAX_CURRENT) {
                 setCurrent(0);
             }
 
@@ -1888,7 +1860,7 @@ void Channel::doAutoSelectCurrentRange(uint32_t tickCount) {
                             doSetCurrent(i.set);
                         }
                     } else {
-                        if (util::less(i.mon, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+                        if (util::less(i.mon_last, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
                             setCurrentRange(1);
                             dac.set_current((uint16_t)65535);
                         }

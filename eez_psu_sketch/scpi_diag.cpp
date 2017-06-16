@@ -117,7 +117,7 @@ scpi_result_t scpi_cmd_diagnosticInformationAdcQ(scpi_t * context) {
     SCPI_ResultText(context, buffer);
 
     strcpy_P(buffer, PSTR("U_MON="));
-    util::strcatVoltage(buffer, channel->u.mon);
+    util::strcatVoltage(buffer, channel->u.mon_last);
     SCPI_ResultText(context, buffer);
 
     strcpy_P(buffer, PSTR("I_SET="));
@@ -125,7 +125,7 @@ scpi_result_t scpi_cmd_diagnosticInformationAdcQ(scpi_t * context) {
     SCPI_ResultText(context, buffer);
 
     strcpy_P(buffer, PSTR("I_MON="));
-    util::strcatCurrent(buffer, channel->i.mon, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_AMPER), channel->index-1);
+    util::strcatCurrent(buffer, channel->i.mon_last, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_AMPER), channel->index-1);
     SCPI_ResultText(context, buffer);
 
     return SCPI_RES_OK;

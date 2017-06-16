@@ -196,7 +196,7 @@ scpi_result_t scpi_cmd_debugMeasureVoltage(scpi_t *context) {
 
         Serial.print((int)debug::g_uMon[channel->index - 1].get());
         Serial.print(" ");
-        Serial.print(channel->u.mon, 5);
+        Serial.print(channel->u.mon_last, 5);
         Serial.println("V");
 
         int32_t diff = micros() - tickCount;
@@ -234,7 +234,7 @@ scpi_result_t scpi_cmd_debugMeasureCurrent(scpi_t *context) {
 
         Serial.print((int)debug::g_iMon[channel->index - 1].get());
         Serial.print(" ");
-        Serial.print(channel->i.mon, 5);
+        Serial.print(channel->i.mon_last, 5);
         Serial.println("A");
 
         int32_t diff = micros() - tickCount;
