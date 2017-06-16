@@ -1526,7 +1526,7 @@ void Channel::doSetCurrent(float value) {
         } else if (!calibration::isEnabled()) {
             if (flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_USE_BOTH) {
                 newRange = util::greater(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) ? CURRENT_RANGE_HIGH : CURRENT_RANGE_LOW;
-                if (newRange != flags.currentCurrentRange) {
+                if (newRange != oldRange) {
                     if (flags.currentCurrentRange == CURRENT_RANGE_HIGH) {
                         switchRangeBefore = true;
                     } else {
@@ -1545,6 +1545,7 @@ void Channel::doSetCurrent(float value) {
         flags.currentCurrentRange = newRange;
     }
 
+    i.set = value;
     i.mon_dac = 0;
 
     if (I_MAX != I_MAX_CONF) {
