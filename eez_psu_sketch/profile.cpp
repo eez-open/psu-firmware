@@ -150,7 +150,9 @@ void recallChannelsFromProfile(Parameters *profile, int location) {
                 getChannelProfileListFilePath(channel, location, filePath);
                 int err;
                 if (list::loadList(channel, filePath, &err)) {
-                    list::setListsChanged(channel, false);
+                    if (location == 0) {
+                        list::setListsChanged(channel, false);
+                    }
                 } else {
                     psu::generateError(err);
                 }
@@ -337,7 +339,7 @@ bool saveAtLocation(int location, char *name) {
                 profile.channels[i].flags.autoSelectCurrentRange = channel.flags.autoSelectCurrentRange;
 
 #if OPTION_SD_CARD
-                if (list::getListsChanged(channel)) {
+                if (location != 0 || list::getListsChanged(channel)) {
                     char filePath[MAX_PATH_LENGTH];
                     getChannelProfileListFilePath(channel, location, filePath);
                     if (list::areListLengthsEquivalent(channel)) {
