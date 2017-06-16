@@ -1515,12 +1515,24 @@ void Channel::setVoltage(float value) {
 }
 
 void Channel::doSetCurrent(float value) {
+    bool switchRangeBefore = false;
+    bool switchRangeAfter = false;
+    bool oldRange = flags.currentCurrentRange;
+    bool newRange = flags.currentCurrentRange;
+
     if (hasSupportForCurrentDualRange()) {
         if (dac.isTesting()) {
             setCurrentRange(CURRENT_RANGE_HIGH);
         } else if (!calibration::isEnabled()) {
             if (flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_USE_BOTH) {
-                setCurrentRange(util::greater(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) ? CURRENT_RANGE_HIGH : CURRENT_RANGE_LOW);
+                newRange = util::greater(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) ? CURRENT_RANGE_HIGH : CURRENT_RANGE_LOW;
+                if (newRange != flags.currentCurrentRange) {
+                    if (flags.currentCurrentRange == CURRENT_RANGE_HIGH) {
+                        switchRangeBefore = true;
+                    } else {
+                        switchRangeAfter = true;
+                    }
+                }
             } else if (flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_ALWAYS_HIGH) {
                 setCurrentRange(CURRENT_RANGE_HIGH);
             } else {
@@ -1529,7 +1541,10 @@ void Channel::doSetCurrent(float value) {
         }
     }
 
-    i.set = value;
+    if (newRange != oldRange) {
+        flags.currentCurrentRange = newRange;
+    }
+
     i.mon_dac = 0;
 
     if (I_MAX != I_MAX_CONF) {
@@ -1546,7 +1561,19 @@ void Channel::doSetCurrent(float value) {
 
     value += getDualRangeGndOffset();
 
+    if (newRange != oldRange) {
+        flags.currentCurrentRange = oldRange;
+    }
+
+    if (switchRangeBefore) {
+        setCurrentRange(newRange);
+    }
+
     dac.set_current(value);
+
+    if (switchRangeAfter) {
+        setCurrentRange(newRange);
+    }
 }
 
 void Channel::setCurrent(float value) {
