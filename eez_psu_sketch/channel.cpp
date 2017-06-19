@@ -103,6 +103,8 @@ void Channel::Value::resetMonValues() {
 
     mon_index = -1;
     mon_dac_index = -1;
+
+    mon_measured = false;
 }
 
 void Channel::Value::addMonValue(float value) {
@@ -122,6 +124,8 @@ void Channel::Value::addMonValue(float value) {
         mon_index = (mon_index + 1) % NUM_ADC_AVERAGING_VALUES;
         mon = mon_total / NUM_ADC_AVERAGING_VALUES;
     }
+
+    mon_measured = true;
 }
 
 void Channel::Value::addMonDacValue(float value) {
@@ -1859,7 +1863,7 @@ void Channel::doAutoSelectCurrentRange(uint32_t tickCount) {
                         if (util::greater(i.set, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) && isCcMode()) {
                             doSetCurrent(i.set);
                         }
-                    } else {
+                    } else if (i.mon_measured) {
                         if (util::less(i.mon_last, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
                             setCurrentRange(1);
                             dac.set_current((uint16_t)65535);

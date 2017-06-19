@@ -203,6 +203,8 @@ public:
 
         int16_t mon_adc;
 
+        bool mon_measured;
+
         float mon;
         float mon_last;
         int8_t mon_index;
