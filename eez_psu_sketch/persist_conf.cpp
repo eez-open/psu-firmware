@@ -198,6 +198,7 @@ static void initDevice2() {
 
     devConf2.displayBrightness = DISPLAY_BRIGHTNESS_DEFAULT;
 
+    devConf2.flags.serialEnabled = 1;
     devConf2.serialBaud = getIndexFromBaud(SERIAL_SPEED);
     devConf2.serialParity = serial::PARITY_NONE;
 
@@ -211,6 +212,9 @@ static void initDevice2() {
 	devConf2.dstRule = datetime::DST_RULE_OFF;
 
     devConf2.displayBackgroundLuminosityStep = DISPLAY_BACKGROUND_LUMINOSITY_STEP_DEFAULT;
+#if OPTION_DISPLAY
+    gui::lcd::lcd.updateBackgroundMapToColor();
+#endif
 }
 
 void loadDevice2() {
@@ -227,7 +231,6 @@ void loadDevice2() {
             if (devConf2.header.version < 10) {
                 devConf2.displayBackgroundLuminosityStep = DISPLAY_BACKGROUND_LUMINOSITY_STEP_DEFAULT;
             }   
-
 #if OPTION_DISPLAY
             gui::lcd::lcd.updateBackgroundMapToColor();
 #endif
