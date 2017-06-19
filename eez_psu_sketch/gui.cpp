@@ -1223,7 +1223,6 @@ void touchHandling(uint32_t tick_usec) {
 
     if (touch::event_type != touch::TOUCH_NONE) {
         g_timeOfLastActivity = millis();
-        profile::flush();
 
         if (touch::event_type == touch::TOUCH_DOWN) {
             g_touchDownTime = tick_usec;

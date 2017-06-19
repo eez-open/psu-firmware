@@ -158,7 +158,6 @@ void onTouchMove() {
 }
 
 void onTouchUp() {
-    test();
 }
 
 }

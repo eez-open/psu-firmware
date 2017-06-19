@@ -240,14 +240,6 @@ void saveImmediately() {
     }
 }
 
-void flush() {
-    if (g_saveProfile && persist_conf::devConf.flags.profileAutoRecallEnabled && !list::isActive() && !calibration::isEnabled()) {
-        DebugTrace("Profile 0 saved!");
-        saveAtLocation(0);
-        g_saveProfile = false;
-    }
-}
-
 bool saveAtLocation(int location, char *name) {
     if (location >= 0 && location < NUM_PROFILE_LOCATIONS) {
         Parameters currentProfile;
