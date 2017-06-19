@@ -134,6 +134,8 @@ int beep_tune[] = {
 
 int *g_play_tune = 0;
 
+bool g_playBeepBeforePowerDownTune;
+
 static void play_tune(int *tune) {
     // iterate over the notes of the melody:
     for (int index = 0; tune[index] != -1; index += 2) {
@@ -152,6 +154,10 @@ static void play_tune(int *tune) {
 
 void tick(uint32_t tick_usec) {
     if (g_play_tune) {
+        if (g_play_tune == power_down_tune && g_playBeepBeforePowerDownTune) {
+            play_tune(beep_tune);
+            g_playBeepBeforePowerDownTune = false;
+        }
         play_tune(g_play_tune);
         g_play_tune = 0;
     }
@@ -165,13 +171,20 @@ void playPowerUp() {
 
 void playPowerDown() {
     if (persist_conf::isSoundEnabled()) {
+        if (g_play_tune == beep_tune) {
+            g_playBeepBeforePowerDownTune = true;
+        }
         g_play_tune = power_down_tune;
     }
 }
 
 void playBeep(bool force) {
     if (force || persist_conf::isSoundEnabled()) {
-        g_play_tune = beep_tune;
+        if (g_play_tune == power_down_tune) {
+            g_playBeepBeforePowerDownTune = true;
+        } else {
+            g_play_tune = beep_tune;
+        }
     }
 }
 

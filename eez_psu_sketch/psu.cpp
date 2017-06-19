@@ -823,6 +823,8 @@ void tick() {
 
     list::tick(tick_usec);
 
+	event_queue::tick(tick_usec);
+
     // if we move this, for example, after ethernet::tick we could get
     // (in certain situations, see #25) PWRGOOD error on channel after
     // the "pow:syst 1" command is executed 
@@ -861,8 +863,6 @@ void tick() {
     }
 #endif
 #endif
-
-	event_queue::tick(tick_usec);
 
 #if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
 	updateMasterSync();
