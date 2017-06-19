@@ -48,17 +48,21 @@ static EthernetUDP g_udp;
 static const int NTP_PACKET_SIZE = 48; // NTP time stamp is in the first 48 bytes of the message
 static byte packetBuffer[ NTP_PACKET_SIZE]; // buffer to hold incoming and outgoing packets
 
-static enum {
+enum State {
     STOPPED,
     START,
     PARSE,
     SUCCESS,
     ERROR
-} g_state;
+};
+
+static State g_state;
 
 static uint32_t g_lastTickCount;
 
 static const char *g_ntpServerToTest;
+
+static bool g_lastWasSuccess;
 
 const char *getNtpServer() {
     if (g_ntpServerToTest) {
@@ -167,11 +171,25 @@ void readNtpPacket() {
 void begin() {
     g_udp.begin(CONF_NTP_LOCAL_PORT);
     g_state = START;
+    g_lastWasSuccess = true;
 }
 
 void init() {
     if (ethernet::g_testResult == TEST_OK && persist_conf::isNtpEnabled() && persist_conf::devConf2.ntpServer[0]) {
         begin();
+    }
+}
+
+void setState(State state) {
+    g_state = state;
+
+    if (g_state == SUCCESS) {
+        g_lastWasSuccess = true;
+    } else if (g_state == ERROR) {
+        if (g_lastWasSuccess) {
+            event_queue::pushEvent(event_queue::EVENT_WARNING_NTP_REFRESH_FAILED);
+        }
+        g_lastWasSuccess = false;
     }
 }
 
@@ -189,54 +207,54 @@ void tick(uint32_t tickCount) {
                 int rc = sendNtpPacket();
                 if (rc >= 0) {
                     //DebugTraceF("sendNtpPacket success %ul", micros());
-                    g_state = PARSE;
+                    setState(PARSE);
                     g_lastTickCount = tickCount;
                 } else {
                     //DebugTraceF("sendNtpPacket fail %d %ul", rc, micros());
-                    g_state = ERROR;
+                    setState(ERROR);
                     g_lastTickCount = tickCount;
                 }
             } else {
-                g_state = ERROR;
+                setState(ERROR);
                 g_lastTickCount = tickCount;
             }
         } else if (g_state == PARSE) {
             if (g_udp.parsePacket()) {
                 readNtpPacket();
-                g_state = SUCCESS;
+                setState(SUCCESS);
                 g_lastTickCount = tickCount;
             } else {
                 if (tickCount - g_lastTickCount > CONF_PARSE_TIMEOUT_MS) {
-                    g_state = ERROR;
+                    setState(ERROR);
                     g_lastTickCount = tickCount;
                 }
             }
         } else if (g_state == SUCCESS) {
             if (tickCount - g_lastTickCount > CONF_TIMEOUT_AFTER_SUCCESS_MS) {
-                g_state = START;
+                setState(START);
             }
         } else if (g_state == ERROR) {
             if (tickCount - g_lastTickCount > CONF_TIMEOUT_AFTER_ERROR_MS) {
-                g_state = START;
+                setState(START);
             }
         }
     } else {
         if (g_state != STOPPED) {
             g_udp.stop();
-            g_state = STOPPED;
+            setState(STOPPED);
         }
     }
 }
 
 void reset() {
     if (g_state == SUCCESS || g_state == ERROR) {
-        g_state = START;
+        setState(START);
     }
 }
 
 void testNtpServer(const char *ntpServer) {
     g_ntpServerToTest = ntpServer;
-    g_state = START;
+    setState(START);
 }
 
 bool isTestNtpServerDone(bool &result) {

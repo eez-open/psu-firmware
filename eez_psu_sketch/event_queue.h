@@ -54,6 +54,7 @@ static const int EVENT_TYPE_ERROR = 3;
     EVENT_WARNING(AUTO_RECALL_VALUES_MISMATCH, 3, "Auto-recall mismatch") \
     EVENT_WARNING(CH1_UNKNOWN_PWRGOOD_STATE, 4, "Ch1 unknown PWRGOOD") \
     EVENT_WARNING(CH2_UNKNOWN_PWRGOOD_STATE, 5, "Ch2 unknown PWRGOOD") \
+    EVENT_WARNING(NTP_REFRESH_FAILED, 6, "NTP refresh failed") \
     EVENT_INFO(WELCOME, 0, "Welcome!") \
     EVENT_INFO(POWER_UP, 1, "Power up") \
     EVENT_INFO(POWER_DOWN, 2, "Power down") \
