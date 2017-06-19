@@ -481,6 +481,8 @@ void Channel::onPowerDown() {
         doLowRippleEnable(false);
     }
 
+    clearProtection(false);
+
     profile::enableSave(last_save_enabled);
 }
 

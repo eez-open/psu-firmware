@@ -19,13 +19,14 @@
 #include "psu.h"
 #include "io_pins.h"
 #include "persist_conf.h"
+#include "fan.h"
 
 namespace eez {
 namespace psu {
 namespace io_pins {
 
 static struct {
-    unsigned tripped: 2;
+    unsigned outputFault: 2;
     unsigned outputEnabled: 2;
     unsigned toutputPulse: 1;
 } g_lastState = {
@@ -35,12 +36,20 @@ static struct {
 
 static uint32_t g_toutputPulseStartTickCount;
 
-uint8_t isTripped() {
-    for (int i = 0; i < CH_NUM; ++i) {
-        if (Channel::get(i).isTripped()) {
+uint8_t isOutputFault() {
+    if (psu::isPowerUp()) {
+        if (fan::g_testResult == TEST_FAILED) {
             return 1;
         }
     }
+
+    for (int i = 0; i < CH_NUM; ++i) {
+        Channel& channel = Channel::get(i);
+        if (channel.isTripped() || !channel.isTestOk()) {
+            return 1;
+        }
+    }
+
     return 0;
 }
 
@@ -57,8 +66,8 @@ uint8_t isOutputEnabled() {
 void updateFaultPin(int i) {
     persist_conf::IOPin &outputPin = persist_conf::devConf2.ioPins[i];
     int pin = i == 1 ? DOUT : DOUT2;
-    int state = g_lastState.tripped && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
-        !g_lastState.tripped && outputPin.polarity == io_pins::POLARITY_NEGATIVE
+    int state = g_lastState.outputFault && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
+        !g_lastState.outputFault && outputPin.polarity == io_pins::POLARITY_NEGATIVE
         ? 1 : 0;
     digitalWrite(pin, state);
     //DebugTraceF("FUNCTION_FAULT %d %d", pin, state);
@@ -117,9 +126,9 @@ void tick(uint32_t tickCount) {
 
         if (outputPin.function == io_pins::FUNCTION_FAULT) {
             if (trippedState == UNKNOWN) {
-                uint8_t tripped = isTripped();
-                if (g_lastState.tripped != tripped) {
-                    g_lastState.tripped = tripped;
+                uint8_t outputFault = isOutputFault();
+                if (g_lastState.outputFault != outputFault) {
+                    g_lastState.outputFault = outputFault;
                     trippedState = CHANGED;
                 } else {
                     trippedState = UNCHANGED;
