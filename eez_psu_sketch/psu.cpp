@@ -668,6 +668,8 @@ void powerDown() {
 
 	event_queue::pushEvent(event_queue::EVENT_INFO_POWER_DOWN);
 
+    io_pins::tick(micros());
+
 	sound::playPowerDown();
 }
 
