@@ -137,7 +137,7 @@ void render(Window *window, Data *data) {
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     window->addImage(RECT(0, 0, 1081, 366), BOARD_IMAGE("front-panel"));
 
-    window->addOnOffImage(RECT(131, 243, 17, 17), data->standby, BOARD_IMAGE("led-blue"), BOARD_IMAGE("led-off"));
+    window->addOnOffImage(RECT(131, 243, 17, 17), data->standby, BOARD_IMAGE("led-orange"), BOARD_IMAGE("led-off"));
 
     window->addOnOffImage(RECT(803, 267, 17, 17), data->coupledOut, BOARD_IMAGE("led-red"), BOARD_IMAGE("led-off"));
     if (data->coupled) {
