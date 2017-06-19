@@ -86,7 +86,7 @@
 
 /// Maximum difference, in percentage, between ADC
 /// and real value during calibration.
-#define CALIBRATION_DATA_TOLERANCE 5.0f
+#define CALIBRATION_DATA_TOLERANCE 10.0f
 
 /// Maximum difference, in percentage, between calculated mid value
 /// and real mid value during calibration.
