@@ -70,7 +70,7 @@ const char *getNtpServer() {
             return g_ntpServerToTest;
         }
     } else {
-        if (persist_conf::isNtpEnabled() && persist_conf::devConf2.ntpServer[0]) {
+        if (persist_conf::devConf2.ntpServer[0]) {
             return persist_conf::devConf2.ntpServer;
         }
     }
@@ -175,7 +175,7 @@ void begin() {
 }
 
 void init() {
-    if (ethernet::g_testResult == TEST_OK && persist_conf::isNtpEnabled() && persist_conf::devConf2.ntpServer[0]) {
+    if (ethernet::g_testResult == TEST_OK && persist_conf::isNtpEnabled()) {
         begin();
     }
 }
@@ -194,7 +194,7 @@ void setState(State state) {
 }
 
 void tick(uint32_t tickCount) {
-    if (ethernet::g_testResult == TEST_OK) {
+    if (ethernet::g_testResult == TEST_OK && persist_conf::isNtpEnabled()) {
         if (g_state == STOPPED) {
             begin();
         }
