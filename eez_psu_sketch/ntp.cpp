@@ -248,12 +248,14 @@ void tick(uint32_t tickCount) {
 
 void reset() {
     if (g_state == SUCCESS || g_state == ERROR) {
+        g_lastWasSuccess = true;
         setState(START);
     }
 }
 
 void testNtpServer(const char *ntpServer) {
     g_ntpServerToTest = ntpServer;
+    g_lastWasSuccess = true;
     setState(START);
 }
 
