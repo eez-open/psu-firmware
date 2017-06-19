@@ -85,7 +85,7 @@ font::Font styleGetFont(const Style *style) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void drawText(const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse, bool blink) {
+void drawText(int pageId, const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse, bool blink) {
     int x1 = x;
     int y1 = y;
     int x2 = x + w - 1;
@@ -145,10 +145,10 @@ void drawText(const char *text, int textLength, int x, int y, int w, int h, cons
         lcd::lcd.setBackColor(style->background_color);
         lcd::lcd.setColor(style->color);
     }
-    lcd::lcd.drawStr(text, textLength, x_offset, y_offset, x1, y1, x2, y2, font, !g_widgetRefresh);
+    lcd::lcd.drawStr(pageId, text, textLength, x_offset, y_offset, x1, y1, x2, y2, font, !g_widgetRefresh);
 }
 
-void drawMultilineText(const char *text, int x, int y, int w, int h, const Style *style, bool inverse) {
+void drawMultilineText(int pageId, const char *text, int x, int y, int w, int h, const Style *style, bool inverse) {
     int x1 = x;
     int y1 = y;
     int x2 = x + w - 1;
@@ -219,7 +219,7 @@ void drawMultilineText(const char *text, int x, int y, int w, int h, const Style
             lcd::lcd.setColor(style->color);
         }
 
-        lcd::lcd.drawStr(text + j, i - j, x, y, x1, y1, x2, y2, font, false);
+        lcd::lcd.drawStr(pageId, text + j, i - j, x, y, x1, y1, x2, y2, font, false);
 
         x += width;
 
@@ -360,7 +360,7 @@ void drawRectangle(int x, int y, int w, int h, const Style *style, bool inverse)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void drawDisplayDataWidget(const WidgetCursor &widgetCursor) {
+void drawDisplayDataWidget(int pageId, const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
     DECL_WIDGET_SPECIFIC(DisplayDataWidget, display_data_widget, widget);
 
@@ -382,13 +382,13 @@ void drawDisplayDataWidget(const WidgetCursor &widgetCursor) {
 
         DECL_STYLE(style, widgetCursor.currentState->flags.focused ? display_data_widget->activeStyle : widget->style);
 
-        drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+        drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
             widgetCursor.currentState->flags.pressed,
             widgetCursor.currentState->flags.blinking);
     }
 }
 
-void drawTextWidget(const WidgetCursor &widgetCursor) {
+void drawTextWidget(int pageId, const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
     widgetCursor.currentState->size = sizeof(WidgetState);
@@ -403,24 +403,24 @@ void drawTextWidget(const WidgetCursor &widgetCursor) {
 
         if (widget->data) {
             if (widgetCursor.currentState->data.isString()) {
-                drawText(widgetCursor.currentState->data.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                drawText(pageId, widgetCursor.currentState->data.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
                     widgetCursor.currentState->flags.pressed);
             } else {
                 char text[64];
                 widgetCursor.currentState->data.toText(text, sizeof(text));
-                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
                     widgetCursor.currentState->flags.pressed);
             }
         } else {
             DECL_WIDGET_SPECIFIC(TextWidget, display_string_widget, widget);
             DECL_STRING(text, display_string_widget->text);
-            drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+            drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
                 widgetCursor.currentState->flags.pressed);
         }
     }
 }
 
-void drawMultilineTextWidget(const WidgetCursor &widgetCursor) {
+void drawMultilineTextWidget(int pageId, const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
     widgetCursor.currentState->size = sizeof(WidgetState);
@@ -435,18 +435,18 @@ void drawMultilineTextWidget(const WidgetCursor &widgetCursor) {
 
         if (widget->data) {
             if (widgetCursor.currentState->data.isString()) {
-                drawMultilineText(widgetCursor.currentState->data.asString(), widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                drawMultilineText(pageId, widgetCursor.currentState->data.asString(), widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
                     widgetCursor.currentState->flags.pressed);
             } else {
                 char text[64];
                 widgetCursor.currentState->data.toText(text, sizeof(text));
-                drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                drawMultilineText(pageId, text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
                     widgetCursor.currentState->flags.pressed);
             }
         } else {
             DECL_WIDGET_SPECIFIC(MultilineTextWidget, display_string_widget, widget);
             DECL_STRING(text, display_string_widget->text);
-            drawMultilineText(text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+            drawMultilineText(pageId, text, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
                 widgetCursor.currentState->flags.pressed);
         }
     }
@@ -707,7 +707,7 @@ void drawScaleWidget(const WidgetCursor &widgetCursor) {
     }
 }
 
-void drawButtonWidget(const WidgetCursor &widgetCursor) {
+void drawButtonWidget(int pageId, const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
     DECL_WIDGET_SPECIFIC(ButtonWidget, button_widget, widget);
 
@@ -727,32 +727,32 @@ void drawButtonWidget(const WidgetCursor &widgetCursor) {
             DECL_STYLE(style, widgetCursor.currentState->flags.enabled ? widget->style : button_widget->disabledStyle);
 
             if (widgetCursor.currentState->data.isString()) {
-                drawText(widgetCursor.currentState->data.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                drawText(pageId, widgetCursor.currentState->data.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
                     widgetCursor.currentState->flags.pressed,
                     widgetCursor.currentState->flags.blinking);
             } else if (widgetCursor.currentState->data.isConstString()) {
                 char text[64];
                 widgetCursor.currentState->data.toText(text, sizeof(text));
-                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
                     widgetCursor.currentState->flags.pressed,
                     widgetCursor.currentState->flags.blinking);
             } else {
                 DECL_STRING(text, button_widget->text);
-                drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+                drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
                     widgetCursor.currentState->flags.pressed,
                     widgetCursor.currentState->flags.blinking);
             }
         } else {
             DECL_STRING(text, button_widget->text);
             DECL_STYLE(style, widgetCursor.currentState->flags.enabled ? widget->style : button_widget->disabledStyle);
-            drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+            drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
                 widgetCursor.currentState->flags.pressed,
                 widgetCursor.currentState->flags.blinking);
         }
     }
 }
 
-void drawToggleButtonWidget(const WidgetCursor &widgetCursor) {
+void drawToggleButtonWidget(int pageId, const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
     widgetCursor.currentState->size = sizeof(WidgetState);
@@ -766,7 +766,7 @@ void drawToggleButtonWidget(const WidgetCursor &widgetCursor) {
         DECL_WIDGET_SPECIFIC(ToggleButtonWidget, toggle_button_widget, widget);
         DECL_STRING(text, widgetCursor.currentState->flags.enabled ? toggle_button_widget->text2 : toggle_button_widget->text1);
         DECL_WIDGET_STYLE(style, widget);
-        drawText(text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
+        drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
             widgetCursor.currentState->flags.pressed);
     }
 }
@@ -827,7 +827,7 @@ void drawLineInBarGraphWidget(const BarGraphWidget *barGraphWidget, int p, OBJ_O
     }
 }
 
-void drawBarGraphWidget(const WidgetCursor &widgetCursor) {
+void drawBarGraphWidget(int pageId, const WidgetCursor &widgetCursor) {
     bool fullScale = true;
 
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
@@ -930,7 +930,10 @@ void drawBarGraphWidget(const WidgetCursor &widgetCursor) {
                     lcd::lcd.fillRect(x, y, x + pText - 1, y + h - 1);
                 }
     
-                drawText(valueText, -1, x + pText, y, wText, h, &textStyle, false);
+                drawText(pageId, valueText, -1, x + pText, y, wText, h, &textStyle, false);
+                if (!isActivePage(pageId)) {
+                    return;
+                }
 
                 // draw background, but do not draw over line 1 and line 2
                 lcd::lcd.setColor(bg);
@@ -965,7 +968,10 @@ void drawBarGraphWidget(const WidgetCursor &widgetCursor) {
                     lcd::lcd.fillRect(x - (pText - 1), y, x, y + h - 1);
                 }
     
-                drawText(valueText, -1, x - (pText + wText - 1), y, wText, h, &textStyle, false);
+                drawText(pageId, valueText, -1, x - (pText + wText - 1), y, wText, h, &textStyle, false);
+                if (!isActivePage(pageId)) {
+                    return;
+                }
 
                 // draw background, but do not draw over line 1 and line 2
                 lcd::lcd.setColor(bg);
@@ -1028,7 +1034,10 @@ void drawBarGraphWidget(const WidgetCursor &widgetCursor) {
                     lcd::lcd.fillRect(x, y, x + w - 1, y + pText - 1);
                 }
     
-                drawText(valueText, -1, x, y + pText, w, hText, &textStyle, false);
+                drawText(pageId, valueText, -1, x, y + pText, w, hText, &textStyle, false);
+                if (!isActivePage(pageId)) {
+                    return;
+                }
 
                 // draw background, but do not draw over line 1 and line 2
                 lcd::lcd.setColor(bg);
@@ -1063,7 +1072,10 @@ void drawBarGraphWidget(const WidgetCursor &widgetCursor) {
                     lcd::lcd.fillRect(x, y - (pText - 1), x + w - 1, y);
                 }
     
-                drawText(valueText, -1, x, y - (pText + hText - 1), w, hText, &textStyle, false);
+                drawText(pageId, valueText, -1, x, y - (pText + hText - 1), w, hText, &textStyle, false);
+                if (!isActivePage(pageId)) {
+                    return;
+                }
 
                 // draw background, but do not draw over line 1 and line 2
                 lcd::lcd.setColor(bg);
@@ -1173,7 +1185,7 @@ void drawYTGraph(
     }
 }
 
-void drawYTGraphWidget(const WidgetCursor &widgetCursor) {
+void drawYTGraphWidget(int pageId, const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
     DECL_WIDGET_SPECIFIC(YTGraphWidget, ytGraphWidget, widget);
     DECL_WIDGET_STYLE(style, widget);
@@ -1204,8 +1216,11 @@ void drawYTGraphWidget(const WidgetCursor &widgetCursor) {
         char text[64];
         widgetCursor.currentState->data.toText(text, sizeof(text));
 
-        drawText(text, -1, widgetCursor.x, widgetCursor.y, textWidth, textHeight, y1Style,
+        drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, textWidth, textHeight, y1Style,
             widgetCursor.currentState->flags.pressed);
+        if (!isActivePage(pageId)) {
+            return;
+        }
     }
 
     // draw second value text
@@ -1215,8 +1230,11 @@ void drawYTGraphWidget(const WidgetCursor &widgetCursor) {
         char text[64];
         ((YTGraphWidgetState *)widgetCursor.currentState)->y2Data.toText(text, sizeof(text));
 
-        drawText(text, -1, widgetCursor.x, widgetCursor.y + textHeight, textWidth, textHeight, y2Style,
+        drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y + textHeight, textWidth, textHeight, y2Style,
             widgetCursor.currentState->flags.pressed);
+        if (!isActivePage(pageId)) {
+            return;
+        }
     }
 
     // draw graph
@@ -1298,7 +1316,7 @@ void drawYTGraphWidget(const WidgetCursor &widgetCursor) {
     lastPosition[iChannel] = currentHistoryValuePosition;
 }
 
-void drawUpDownWidget(const WidgetCursor &widgetCursor) {
+void drawUpDownWidget(int pageId, const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
     DECL_WIDGET_SPECIFIC(UpDownWidget, upDownWidget, widget);
 
@@ -1316,16 +1334,22 @@ void drawUpDownWidget(const WidgetCursor &widgetCursor) {
         font::Font buttonsFont = styleGetFont(buttonsStyle);
         int buttonWidth = buttonsFont.getHeight();
 
-        drawText(downButtonText, -1, widgetCursor.x, widgetCursor.y, buttonWidth, (int)widget->h, buttonsStyle,
+        drawText(pageId, downButtonText, -1, widgetCursor.x, widgetCursor.y, buttonWidth, (int)widget->h, buttonsStyle,
             (widgetCursor.currentState->flags.pressed || g_selectedWidget == widgetCursor) && g_selectedWidget.segment == UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON);
+        if (!isActivePage(pageId)) {
+            return;
+        }
 
         char text[64];
         widgetCursor.currentState->data.toText(text, sizeof(text));
         DECL_STYLE(style, widget->style);
-        drawText(text, -1, widgetCursor.x + buttonWidth, widgetCursor.y, (int)(widget->w - 2 * buttonWidth), (int)widget->h, style, false);
+        drawText(pageId, text, -1, widgetCursor.x + buttonWidth, widgetCursor.y, (int)(widget->w - 2 * buttonWidth), (int)widget->h, style, false);
+        if (!isActivePage(pageId)) {
+            return;
+        }
 
         DECL_STRING(upButtonText, upDownWidget->upButtonText);
-        drawText(upButtonText, -1, widgetCursor.x + widget->w - buttonWidth, widgetCursor.y, buttonWidth, (int)widget->h, buttonsStyle,
+        drawText(pageId, upButtonText, -1, widgetCursor.x + widget->w - buttonWidth, widgetCursor.y, buttonWidth, (int)widget->h, buttonsStyle,
             (widgetCursor.currentState->flags.pressed || g_selectedWidget == widgetCursor) && g_selectedWidget.segment == UP_DOWN_WIDGET_SEGMENT_UP_BUTTON);
     }
 }
@@ -1563,7 +1587,11 @@ void onTouchListGraph(const WidgetCursor &widgetCursor, int xTouch, int yTouch) 
     }
 }
 
-void drawWidget(const WidgetCursor &widgetCursor_) {
+void drawWidget(int pageId, const WidgetCursor &widgetCursor_) {
+    if (pageId != getActivePageId()) {
+        return;
+    }
+
     WidgetCursor widgetCursor = widgetCursor_;
 
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
@@ -1583,29 +1611,29 @@ void drawWidget(const WidgetCursor &widgetCursor_) {
     widgetCursor.currentState->flags.pressed = g_selectedWidget == widgetCursor;
 
     if (widget->type == WIDGET_TYPE_DISPLAY_DATA) {
-        drawDisplayDataWidget(widgetCursor);
+        drawDisplayDataWidget(pageId, widgetCursor);
     } else if (widget->type == WIDGET_TYPE_TEXT) {
-        drawTextWidget(widgetCursor);
+        drawTextWidget(pageId, widgetCursor);
     } else if (widget->type == WIDGET_TYPE_MULTILINE_TEXT) {
-        drawMultilineTextWidget(widgetCursor);
+        drawMultilineTextWidget(pageId, widgetCursor);
     } else if (widget->type == WIDGET_TYPE_RECTANGLE) {
         drawRectangleWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_BITMAP) {
         drawBitmapWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_BUTTON) {
-        drawButtonWidget(widgetCursor);
+        drawButtonWidget(pageId, widgetCursor);
     } else if (widget->type == WIDGET_TYPE_TOGGLE_BUTTON) {
-        drawToggleButtonWidget(widgetCursor);
+        drawToggleButtonWidget(pageId, widgetCursor);
     } else if (widget->type == WIDGET_TYPE_BUTTON_GROUP) {
-        widgetButtonGroup::draw(widgetCursor);
+        widgetButtonGroup::draw(pageId, widgetCursor);
     } else if (widget->type == WIDGET_TYPE_SCALE) {
         drawScaleWidget(widgetCursor);
     } else if (widget->type == WIDGET_TYPE_BAR_GRAPH) {
-        drawBarGraphWidget(widgetCursor);
+        drawBarGraphWidget(pageId, widgetCursor);
     } else if (widget->type == WIDGET_TYPE_YT_GRAPH) {
-        drawYTGraphWidget(widgetCursor);
+        drawYTGraphWidget(pageId, widgetCursor);
     } else if (widget->type == WIDGET_TYPE_UP_DOWN) {
-        drawUpDownWidget(widgetCursor);
+        drawUpDownWidget(pageId, widgetCursor);
     } else if (widget->type == WIDGET_TYPE_LIST_GRAPH) {
         drawListGraphWidget(widgetCursor);
     } 
@@ -1616,7 +1644,7 @@ void refreshWidget(WidgetCursor widgetCursor) {
         ((InternalPage *)getActivePage())->drawWidget(widgetCursor, widgetCursor == g_selectedWidget);
     } else {
         g_widgetRefresh = true;
-        drawWidget(widgetCursor);
+        drawWidget(getActivePageId(), widgetCursor);
         g_widgetRefresh = false;
     }
 }
@@ -1638,9 +1666,13 @@ WidgetState *next(WidgetState *p) {
     return p ? (WidgetState *)(((uint8_t *)p) + p->size) : 0;
 }
 
-void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback);
+void enumWidget(int pageId, OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback);
 
-void enumContainer(List widgets, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
+void enumContainer(int pageId, List widgets, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
+    if (pageId != getActivePageId()) {
+        return;
+    }
+
     WidgetState *savedCurrentState = currentState;
 
     WidgetState *endOfContainerInPreviousState;
@@ -1652,7 +1684,7 @@ void enumContainer(List widgets, int x, int y, data::Cursor &cursor, WidgetState
 
     for (int index = 0; index < widgets.count; ++index) {
         OBJ_OFFSET childWidgetOffset = getListItemOffset(widgets, index, sizeof(Widget));
-        enumWidget(childWidgetOffset, x, y, cursor, previousState, currentState, callback);
+        enumWidget(pageId, childWidgetOffset, x, y, cursor, previousState, currentState, callback);
 
         if (previousState) {
             previousState = next(previousState);
@@ -1667,8 +1699,10 @@ void enumContainer(List widgets, int x, int y, data::Cursor &cursor, WidgetState
     }
 }
 
-void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
-    psu::criticalTick();
+void enumWidget(int pageId, OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
+    if (!psu::criticalTick(pageId)) {
+        return;
+    }
 
     DECL_WIDGET(widget, widgetOffset);
 
@@ -1677,12 +1711,12 @@ void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, Wid
 
     if (widget->type == WIDGET_TYPE_CONTAINER) {
         DECL_WIDGET_SPECIFIC(ContainerWidget, container, widget);
-        enumContainer(container->widgets, x, y, cursor, previousState, currentState, callback);
+        enumContainer(pageId, container->widgets, x, y, cursor, previousState, currentState, callback);
     }
     else if (widget->type == WIDGET_TYPE_CUSTOM) {
         DECL_WIDGET_SPECIFIC(CustomWidgetSpecific, customWidgetSpecific, widget);
         DECL_CUSTOM_WIDGET(customWidget, customWidgetSpecific->customWidget);
-        enumContainer(customWidget->widgets, x, y, cursor, previousState, currentState, callback);
+        enumContainer(pageId, customWidget->widgets, x, y, cursor, previousState, currentState, callback);
     }
     else if (widget->type == WIDGET_TYPE_LIST) {
         WidgetState *savedCurrentState = currentState;
@@ -1705,7 +1739,7 @@ void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, Wid
             if (listWidget->listType == LIST_TYPE_VERTICAL) {
                 DECL_WIDGET(childWidget, childWidgetOffset);
                 if (yOffset < widget->h) {
-                    enumWidget(childWidgetOffset, x + xOffset, y + yOffset, cursor, previousState, currentState, callback);
+                    enumWidget(pageId, childWidgetOffset, x + xOffset, y + yOffset, cursor, previousState, currentState, callback);
                     yOffset += childWidget->h;
                 } else {
                     // TODO: add vertical scroll
@@ -1714,7 +1748,7 @@ void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, Wid
             } else {
                 DECL_WIDGET(childWidget, childWidgetOffset);
                 if (xOffset < widget->w) {
-                    enumWidget(childWidgetOffset, x + xOffset, y + yOffset, cursor, previousState, currentState, callback);
+                    enumWidget(pageId, childWidgetOffset, x + xOffset, y + yOffset, cursor, previousState, currentState, callback);
                     xOffset += childWidget->w;
                 } else {
                     // TODO: add horizontal scroll
@@ -1757,21 +1791,21 @@ void enumWidget(OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, Wid
         DECL_WIDGET_SPECIFIC(ContainerWidget, containerWidget, widget);
         OBJ_OFFSET selectedWidgetOffset = getListItemOffset(containerWidget->widgets, index, sizeof(Widget));
 
-        enumWidget(selectedWidgetOffset, x, y, cursor, previousState, currentState, callback);
+        enumWidget(pageId, selectedWidgetOffset, x, y, cursor, previousState, currentState, callback);
 
         if (currentState) {
             savedCurrentState->size = sizeof(WidgetState) + currentState->size;
         }
     }
     else {
-        callback(WidgetCursor(widgetOffset, x, y, cursor, previousState, currentState));
+        callback(pageId, WidgetCursor(widgetOffset, x, y, cursor, previousState, currentState));
     }
 }
 
-void enumWidgets(int pageIndex, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
+void enumWidgets(int pageId, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
     data::Cursor cursor;
     cursor.reset();
-    enumWidget(getPageOffset(pageIndex), 0, 0, cursor, previousState, currentState, callback);
+    enumWidget(pageId, getPageOffset(pageId), 0, 0, cursor, previousState, currentState, callback);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1856,7 +1890,7 @@ static int g_find_widget_at_x;
 static int g_find_widget_at_y;
 static WidgetCursor g_foundWidget;
 
-void findWidgetStep(const WidgetCursor &widgetCursor) {
+void findWidgetStep(int pageId, const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
     bool inside = 

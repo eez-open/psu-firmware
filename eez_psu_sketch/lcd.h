@@ -59,7 +59,7 @@ public:
     void drawHLine(int x, int y, int l);
     void drawVLine(int x, int y, int l);
     void drawBitmap(int x, int y, int sx, int sy, uint16_t* data);
-    void drawStr(const char *text, int textLength, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background);
+    void drawStr(int pageId, const char *text, int textLength, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background);
     int measureStr(const char *text, int textLength, font::Font &font, int max_width = 0);
 
     void updateBackgroundMapToColor();
@@ -98,7 +98,7 @@ private:
     void setPixel(uint16_t color);
     void setXY(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 
-    int8_t drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int clip_y2, uint8_t encoding, bool fill_background);
+    int8_t drawGlyph(int pageId, int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int clip_y2, uint8_t encoding, bool fill_background);
     int8_t measureGlyph(uint8_t encoding);
 
     void adjustColor(uint8_t &ch, uint8_t &cl);

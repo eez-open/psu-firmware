@@ -156,7 +156,7 @@ void SelectFromEnumPage::refresh() {
         getItemPosition(i, xItem, yItem);
 
         getItemLabel(i, text, sizeof(text));
-        drawText(text, -1, xItem, yItem, itemWidth, itemHeight, isDisabled(i) ? disabledItemStyle : itemStyle, false);
+        drawText(getActivePageId(), text, -1, xItem, yItem, itemWidth, itemHeight, isDisabled(i) ? disabledItemStyle : itemStyle, false);
     }
 }
 
@@ -189,7 +189,7 @@ void SelectFromEnumPage::drawWidget(const WidgetCursor &widgetCursor, bool selec
 
         DECL_STYLE(itemStyle, STYLE_ID_SELECT_ENUM_ITEM_POPUP_ITEM);
 
-        drawText(text, -1, xItem, yItem, itemWidth, itemHeight, itemStyle, selected);
+        drawText(getActivePageId(), text, -1, xItem, yItem, itemWidth, itemHeight, itemStyle, selected);
     }
 }
 

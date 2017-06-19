@@ -28,7 +28,7 @@ namespace psu {
 namespace gui {
 namespace widgetButtonGroup {
 
-void drawButtons(const Widget* widget, int x, int y, const Style *style, int selectedButton, const data::Value *labels, int count) {
+void drawButtons(int pageId, const Widget* widget, int x, int y, const Style *style, int selectedButton, const data::Value *labels, int count) {
     if (widget->w > widget->h) {
         // horizontal orientation
 		lcd::lcd.setColor(style->background_color);
@@ -40,7 +40,10 @@ void drawButtons(const Widget* widget, int x, int y, const Style *style, int sel
         for (int i = 0; i < count; ++i) {
             char text[32];
             labels[i].toText(text, 32);
-            drawText(text, -1, x, y, w, h, style, i == selectedButton);
+            drawText(pageId, text, -1, x, y, w, h, style, i == selectedButton);
+            if (!isActivePage(pageId)) {
+                return;
+            }
             x += w;
         }
     } else {
@@ -69,7 +72,10 @@ void drawButtons(const Widget* widget, int x, int y, const Style *style, int sel
 
 			char text[32];
             labels[i].toText(text, 32);
-            drawText(text, -1, x, y + yOffset, w, labelHeight , style, i == selectedButton);
+            drawText(pageId, text, -1, x, y + yOffset, w, labelHeight , style, i == selectedButton);
+            if (!isActivePage(pageId)) {
+                return;
+            }
 
 			int b = y + yOffset + labelHeight;
 			
@@ -88,7 +94,7 @@ void drawButtons(const Widget* widget, int x, int y, const Style *style, int sel
 	}
 }
 
-void draw(const WidgetCursor &widgetCursor) {
+void draw(int pageId, const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
     widgetCursor.currentState->size = sizeof(ButtonGroupWidgetState);
@@ -107,7 +113,7 @@ void draw(const WidgetCursor &widgetCursor) {
 
     if (refresh) {
         DECL_WIDGET_STYLE(style, widget);
-        drawButtons(widget, widgetCursor.x, widgetCursor.y, style, widgetCursor.currentState->data.getInt(), labels, count);
+        drawButtons(pageId, widget, widgetCursor.x, widgetCursor.y, style, widgetCursor.currentState->data.getInt(), labels, count);
     }
 }
 

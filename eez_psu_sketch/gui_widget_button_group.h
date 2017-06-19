@@ -25,7 +25,7 @@ namespace psu {
 namespace gui {
 namespace widgetButtonGroup {
 
-void draw(const WidgetCursor &widgetCursor);
+void draw(int pageId, const WidgetCursor &widgetCursor);
 void onTouchDown(const WidgetCursor &widgetCursor);
 
 }

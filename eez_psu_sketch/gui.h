@@ -44,6 +44,7 @@ const char *getTextMessage();
 
 bool isIdle();
 
+bool isActivePage(int pageId);
 
 }
 }

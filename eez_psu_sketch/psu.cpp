@@ -668,6 +668,10 @@ void powerDown() {
 
 	event_queue::pushEvent(event_queue::EVENT_INFO_POWER_DOWN);
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+    fan::g_testResult = TEST_OK;
+#endif
+
     io_pins::tick(micros());
 
 	sound::playPowerDown();
@@ -795,7 +799,7 @@ void tick() {
         powerDownBySensor();
     }
 
-	uint32_t tick_usec = criticalTick();
+	uint32_t tick_usec = criticalTick(-1);
 
 #if CONF_DEBUG
     debug::tick(tick_usec);
@@ -869,7 +873,7 @@ void tick() {
 #endif
 }
 
-uint32_t criticalTick() {
+uint32_t criticalTick(int pageId) {
     uint32_t tick_usec = micros();
 
     if (!g_powerIsUp) {
@@ -925,6 +929,10 @@ uint32_t criticalTick() {
 #endif
 
 #endif
+
+    if (pageId != -1) {
+        return gui::isActivePage(pageId);
+    }
 
     return tick_usec;
 }

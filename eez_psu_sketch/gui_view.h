@@ -295,13 +295,13 @@ struct WidgetCursor {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void drawWidget(const WidgetCursor &widgetCursor);
+void drawWidget(int pageId, const WidgetCursor &widgetCursor);
 void refreshWidget(WidgetCursor widgetCursor);
 void selectWidget(WidgetCursor &widgetCursor);
 void deselectWidget();
 void flush();
 
-typedef void(*EnumWidgetsCallback)(const WidgetCursor &widgetCursor);
+typedef void(*EnumWidgetsCallback)(int pageId, const WidgetCursor &widgetCursor);
 void enumWidgets(int pageIndex, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback);
 
 WidgetCursor findWidget(int x, int y);

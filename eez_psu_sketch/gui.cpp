@@ -69,9 +69,6 @@
 
 #define CONF_GUI_TOAST_DURATION_MS 1 * 1000L // 1sec
 
-#define INTERNAL_PAGE_ID_NONE             -1
-#define INTERNAL_PAGE_ID_SELECT_FROM_ENUM -2
-
 #define MAX_EVENTS 16
 
 #define IDLE_TIMEOUT_MS 1000
@@ -224,6 +221,10 @@ void executeAction(int actionId) {
 
 int getActivePageId() {
     return g_activePageId;
+}
+
+bool isActivePage(int pageId) {
+    return pageId == g_activePageId;
 }
 
 Page *getActivePage() {
@@ -934,7 +935,7 @@ bool isAutoRepeatAction(ActionType action) {
 #if OPTION_ENCODER
 static bool g_isEncoderEnabledInActivePage;
 
-void isEncoderEnabledInActivePageCheckWidget(const WidgetCursor &widgetCursor) {
+void isEncoderEnabledInActivePageCheckWidget(int pageId, const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
     if (widget->action == ACTION_ID_EDIT) {
         g_isEncoderEnabledInActivePage = true;

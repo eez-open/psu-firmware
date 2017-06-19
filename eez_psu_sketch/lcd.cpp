@@ -22,6 +22,7 @@
 #include "util.h"
 #include "lcd.h"
 #include "arduino_util.h"
+#include "gui_internal.h"
 
 #define CONF_LCD_ON_OFF_TRANSITION_TIME 1000000L
 
@@ -724,8 +725,10 @@ void LCD::drawBitmap(int x, int y, int sx, int sy, uint16_t *data) {
 #endif
 }
 
-int8_t LCD::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int clip_y2, uint8_t encoding, bool fill_background) {
-    psu::criticalTick();
+int8_t LCD::drawGlyph(int pageId, int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int clip_y2, uint8_t encoding, bool fill_background) {
+    if (!psu::criticalTick(pageId)) {
+        return 0;
+    }
 
 	font::Glyph glyph;
 	font.getGlyph(encoding, glyph);
@@ -881,7 +884,9 @@ int8_t LCD::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int
                 const uint8_t *p_data = glyph.data + offset + iEndByte;
                 for (int iByte = iEndByte; iByte >= iStartByte; --iByte, numPixels += 8) {
                     if (numPixels % 40 == 0) {
-                        psu::criticalTick();
+                        if (!psu::criticalTick(pageId)) {
+                            return 0;
+                        }
                     }
 
                     uint8_t data = *p_data--;
@@ -920,7 +925,9 @@ int8_t LCD::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int
                 const uint8_t *p_data = glyph.data + offset + iEndByte;
                 for (int iByte = iEndByte; iByte >= iStartByte; --iByte, numPixels += 8) {
                     if (numPixels % 120 == 0) {
-                        psu::criticalTick();
+                        if (!psu::criticalTick(pageId)) {
+                            return 0;
+                        }
                     }
 
                     uint8_t data = *p_data--;
@@ -963,7 +970,9 @@ int8_t LCD::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int
 		    for (int iRow = 0; iRow < height; ++iRow, offset += widthInBytes) {
 			    for (int iByte = iStartByte, iCol = iStartCol; iByte < widthInBytes; ++iByte, numPixels += 8) {
                     if (numPixels % 120 == 0) {
-                        psu::criticalTick();
+                        if (!psu::criticalTick(pageId)) {
+                            return 0;
+                        }
                     }
 
                     uint8_t data = arduino_util::prog_read_byte(glyph.data + offset + iByte);
@@ -1020,7 +1029,9 @@ int8_t LCD::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int
 			    setXY(x_glyph, y_glyph + iRow, x_glyph + width - 1, y_glyph + iRow);
 			    for (int iByte = iStartByte + (width + 7) / 8; iByte >= iStartByte; --iByte, numPixels += 8) {
                     if (numPixels % 120 == 0) {
-                        psu::criticalTick();
+                        if (!psu::criticalTick(pageId)) {
+                            return 0;
+                        }
                     }
 
 #if defined(EEZ_PSU_ARDUINO_DUE)
@@ -1086,18 +1097,18 @@ int8_t LCD::drawGlyph(int x1, int y1, int clip_x1, int clip_y1, int clip_x2, int
 	return glyph.dx;
 }
 
-void LCD::drawStr(const char *text, int textLength, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background) {
+void LCD::drawStr(int pageId, const char *text, int textLength, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background) {
 	this->font = font;
 
     if (textLength == -1) {
 	    char encoding;
 	    while ((encoding = *text++) != 0) {
-		    x += drawGlyph(x, y, clip_x1, clip_y1, clip_x2, clip_y2, encoding, fill_background);
+		    x += drawGlyph(pageId, x, y, clip_x1, clip_y1, clip_x2, clip_y2, encoding, fill_background);
 	    }
     } else {
         for (int i = 0; i < textLength && text[i]; ++i) {
             char encoding = text[i];
-		    x += drawGlyph(x, y, clip_x1, clip_y1, clip_x2, clip_y2, encoding, fill_background);
+		    x += drawGlyph(pageId, x, y, clip_x1, clip_y1, clip_x2, clip_y2, encoding, fill_background);
 	    }
     }
 }

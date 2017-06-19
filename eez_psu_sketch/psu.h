@@ -77,7 +77,7 @@ bool test();
 void onProtectionTripped();
 
 void tick();
-uint32_t criticalTick();
+uint32_t criticalTick(int pageId);
 
 void regSet(scpi_reg_name_t name, scpi_reg_val_t val);
 
