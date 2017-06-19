@@ -23,6 +23,7 @@
 #include "profile.h"
 #include "persist_conf.h"
 #include "io_pins.h"
+#include "scpi_regs.h"
 
 namespace eez {
 namespace psu {
@@ -45,6 +46,26 @@ static uint8_t g_extTrigLastState;
 
 bool g_triggerInProgress[CH_MAX];
 
+void setState(State newState) {
+    if (g_state != newState) {
+        if (newState == STATE_INITIATED) {
+            for (int i = 0; i < CH_NUM; ++i) {
+                Channel& channel = Channel::get(i);
+                channel.setOperBits(OPER_ISUM_TRIG, true);
+            }
+        }
+
+        if (g_state == STATE_INITIATED) {
+            for (int i = 0; i < CH_NUM; ++i) {
+                Channel& channel = Channel::get(i);
+                channel.setOperBits(OPER_ISUM_TRIG, false);
+            }
+        }
+
+        g_state = newState;
+    }
+}
+
 void reset() {
     persist_conf::devConf2.triggerDelay = DELAY_DEFAULT;
     persist_conf::devConf2.triggerSource = SOURCE_IMMEDIATE;
@@ -52,7 +73,7 @@ void reset() {
 
     persist_conf::saveDevice2();
 
-    g_state = STATE_IDLE;
+    setState(STATE_IDLE);
 }
 
 void extTrigInterruptHandler() {
@@ -65,7 +86,7 @@ void extTrigInterruptHandler() {
 }
 
 void init() {
-    g_state = STATE_IDLE;
+    setState(STATE_IDLE);
 
     noInterrupts();
     g_extTrigLastState = digitalRead(EXT_TRIG);
@@ -124,7 +145,7 @@ int generateTrigger(Source source, bool checkImmediatelly) {
         return SCPI_ERROR_TRIGGER_IGNORED;
     }
 
-    g_state = STATE_TRIGGERED;
+    setState(STATE_TRIGGERED);
 
     g_triggeredTime = micros() / 1000;
 
@@ -146,9 +167,9 @@ bool isTriggerFinished() {
 
 void triggerFinished() {
     if (persist_conf::devConf2.flags.triggerContinuousInitializationEnabled) {
-        g_state = STATE_INITIATED;
+        setState(STATE_INITIATED);
     } else {
-        g_state = STATE_IDLE;
+        setState(STATE_IDLE);
     }
 }
 
@@ -259,7 +280,7 @@ int startImmediately() {
         return err;
     }
 
-    g_state = STATE_EXECUTING;
+    setState(STATE_EXECUTING);
     for (int i = 0; i < CH_NUM; ++i) {
         g_triggerInProgress[i] = true;
     }
@@ -301,7 +322,7 @@ int initiate() {
         if (err) {
             return err;
         }
-        g_state = STATE_INITIATED;
+        setState(STATE_INITIATED);
     }
     return SCPI_RES_OK;
 }
@@ -329,7 +350,7 @@ bool isInitiated() {
 
 void abort() {
     list::abort();
-    g_state = STATE_IDLE;
+    setState(STATE_IDLE);
 }
 
 void tick(uint32_t tick_usec) {

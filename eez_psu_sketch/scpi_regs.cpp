@@ -120,7 +120,7 @@ scpi_reg_val_t reg_get(scpi_t * context, scpi_psu_reg_name_t name) {
 * @param name - register name
 * @param val - new value
 */
-void reg_set(scpi_t * context, scpi_psu_reg_name_t name, scpi_reg_val_t val) {
+void reg_set(scpi_t *context, scpi_psu_reg_name_t name, scpi_reg_val_t val) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     if ((name >= SCPI_PSU_REG_COUNT) || (psu_context->registers == NULL)) {
@@ -239,6 +239,24 @@ void reg_set_ques_isum_bit(scpi_t *context, Channel *channel, int bit_mask, bool
     else {
         if (val & bit_mask) {
             reg_set(context, reg_name, val & ~bit_mask);
+        }
+    }
+}
+
+void reg_set_oper_bit(scpi_t *context, int bit_mask, bool on) {
+    scpi_reg_val_t val = reg_get(context, SCPI_PSU_REG_OPER_COND);
+    if (on) {
+        if (!(val & bit_mask)) {
+            reg_set(context, SCPI_PSU_REG_OPER_COND, val | bit_mask);
+
+            // set event on raising condition
+            val = SCPI_RegGet(context, SCPI_REG_OPER);
+            SCPI_RegSet(context, SCPI_REG_OPER, val | bit_mask);
+        }
+    }
+    else {
+        if (val & bit_mask) {
+            reg_set(context, SCPI_PSU_REG_OPER_COND, val & ~bit_mask);
         }
     }
 }

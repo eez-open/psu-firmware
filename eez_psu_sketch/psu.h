@@ -79,8 +79,11 @@ void onProtectionTripped();
 void tick();
 uint32_t criticalTick();
 
+void regSet(scpi_reg_name_t name, scpi_reg_val_t val);
+
 void setEsrBits(int bit_mask);
 void setQuesBits(int bit_mask, bool on);
+void setOperBits(int bit_mask, bool on);
 
 void generateError(int16_t error);
 

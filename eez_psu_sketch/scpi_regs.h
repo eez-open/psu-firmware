@@ -116,6 +116,8 @@ int reg_get_ques_isum_bit_mask_for_channel_protection_value(Channel *channel, Ch
 void reg_set_ques_bit(scpi_t *context, int bit_mask, bool on);
 void reg_set_ques_isum_bit(scpi_t * context, Channel *channel, int bit_mask, bool on);
 
+void reg_set_oper_bit(scpi_t *context, int bit_mask, bool on);
+
 void reg_set_oper_isum_bit(scpi_t * context, Channel *channel, int bit_mask, bool on);
 
 }

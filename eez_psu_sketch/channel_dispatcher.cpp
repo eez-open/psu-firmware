@@ -23,6 +23,7 @@
 #include "event_queue.h"
 #include "trigger.h"
 #include "list.h"
+#include "scpi_regs.h"
 
 namespace eez {
 namespace psu {
@@ -177,6 +178,9 @@ bool setType(Type value) {
         } else {
             event_queue::pushEvent(event_queue::EVENT_INFO_CHANNELS_UNCOUPLED);
         }
+
+        psu::setOperBits(OPER_GROUP_PARALLEL, isParallel());
+        psu::setOperBits(OPER_GROUP_SERIAL, isSeries());
 
         delay(100); // Huge pause that allows relay contacts to debounce
     }
