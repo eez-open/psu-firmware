@@ -1361,26 +1361,28 @@ void Channel::calibrationFindVoltageRange(float minDac, float minVal, float minA
     cal_conf.u.max.adc = maxAdc;
 
     doSetVoltage(U_MIN);
+    //DebugTraceF("U_MIN=%f", U_MIN);
     delay(100);
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
     delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
-    //DebugTraceF("DAC=%d", (int)debug::uDac[index-1]);
+    //DebugTraceF("DAC=%d", (int)debug::g_uDac[index-1].get());
     //DebugTraceF("MON_ADC=%d", (int)u.mon_adc);
-    *min = u.mon;
+    *min = u.mon_last;
 
     doSetVoltage(U_MAX);
+    //DebugTraceF("U_MAX=%f", U_MAX);
     delay(200); // guard time, because without load it will require more than 15ms to jump to the max
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
     delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
-    //DebugTraceF("DAC=%d", (int)debug::uDac[index-1]);
+    //DebugTraceF("DAC=%d", (int)debug::g_uDac[index-1].get());
     //DebugTraceF("MON_ADC=%d", (int)u.mon_adc);
-    *max = u.mon;
+    *max = u.mon_last;
 
     cal_conf.flags.u_cal_params_exists = u_cal_params_exists;
     cal_conf.u = calValueConf;
@@ -1411,26 +1413,28 @@ void Channel::calibrationFindCurrentRange(float minDac, float minVal, float minA
     cal_conf.i[0].max.adc = maxAdc;
 
     doSetCurrent(I_MIN);
+    //DebugTraceF("I_MIN=%f", I_MIN);
     delay(100);
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
     delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
-    //DebugTraceF("DAC=%d", (int)debug::iDac[index-1]);
+    //DebugTraceF("DAC=%d", (int)debug::g_iDac[index-1].get());
     //DebugTraceF("MON_ADC=%d", (int)i.mon_adc);
-    *min = i.mon;
+    *min = i.mon_last;
 
     doSetCurrent(I_MAX);
     delay(100);
+    //DebugTraceF("I_MAX=%f", I_MAX);
 #if !ADC_USE_INTERRUPTS
     adc.start(AnalogDigitalConverter::ADC_REG0_READ_I_MON);
     delayMicroseconds(2 * ADC_READ_TIME_US);
     adc.tick(micros());
 #endif
-    //DebugTraceF("DAC=%d", (int)debug::iDac[index-1]);
+    //DebugTraceF("DAC=%d", (int)debug::g_iDac[index-1].get());
     //DebugTraceF("MON_ADC=%d", (int)i.mon_adc);
-    *max = i.mon;
+    *max = i.mon_last;
 
     cal_conf.flags.i_cal_params_exists_range_high = i_cal_params_exists;
     cal_conf.i[0] = calValueConf;

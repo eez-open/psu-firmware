@@ -76,7 +76,7 @@ float Value::getDacValue() {
 }
 
 float Value::getAdcValue() {
-    return voltOrCurr ? g_channel->u.mon : g_channel->i.mon;
+    return voltOrCurr ? g_channel->u.mon_last : g_channel->i.mon_last;
 }
 
 void Value::setLevel(int8_t value) { 
