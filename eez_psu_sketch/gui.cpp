@@ -832,7 +832,7 @@ bool showSetupWizardQuestion() {
 void selectChannel() {
     if (g_foundWidgetAtDown.cursor.i >= 0) {
         g_channel = &Channel::get(g_foundWidgetAtDown.cursor.i);
-    } else {
+    } else if (!g_channel || channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
         g_channel = &Channel::get(0);
     }
 }
