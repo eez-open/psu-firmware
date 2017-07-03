@@ -681,6 +681,8 @@ private:
 
     uint32_t autoRangeCheckLastTickCount;
     void doAutoSelectCurrentRange(uint32_t tickCount);
+
+    void doSetCurrentRange();
 };
 
 }

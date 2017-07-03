@@ -18426,24 +18426,56 @@
             },
             {
               "$eez": false,
-              "type": "Text",
               "x": 16,
+              "type": "Select",
+              "data": "channel.outputState",
               "y": 84,
-              "width": 146,
+              "width": 236,
               "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Currently selected:"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "data": "channel.ranges.currentlySelected",
-              "x": 162,
-              "y": 84,
-              "width": 90,
-              "height": 28,
-              "style": "value_S",
-              "text": "0.5A"
+              "style": "default",
+              "widgets": [
+                {
+                  "$eez": false,
+                  "type": "Rectangle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 236,
+                  "height": 28,
+                  "style": "default_inverse"
+                },
+                {
+                  "$eez": false,
+                  "type": "Container",
+                  "x": 0,
+                  "y": 0,
+                  "width": 236,
+                  "height": 28,
+                  "style": "default",
+                  "widgets": [
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "x": 0,
+                      "y": 0,
+                      "width": 146,
+                      "height": 28,
+                      "style": "edit_value_S_left",
+                      "text": "Currently selected:"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "data": "channel.ranges.currentlySelected",
+                      "x": 146,
+                      "y": 0,
+                      "width": 90,
+                      "height": 28,
+                      "style": "value_S",
+                      "text": "0.5A"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "$eez": false,

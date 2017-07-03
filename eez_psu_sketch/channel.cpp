@@ -1106,6 +1106,10 @@ void Channel::doOutputEnable(bool enable) {
     setOperBits(OPER_ISUM_OE_OFF, !enable);
     bp::switchOutput(this, enable);
 
+    if (hasSupportForCurrentDualRange()) {
+        doSetCurrentRange();
+    }
+
     if (enable) {
         if (getFeatures() & CH_FEATURE_LRIPPLE) {
             outputEnableStartTime = micros();
@@ -1836,23 +1840,33 @@ float Channel::getDualRangeMax() {
 //    }
 //}
 
+void Channel::doSetCurrentRange() {
+    if (flags.outputEnabled) {
+        if (flags.currentCurrentRange == 0) {
+            // 5A
+            //DebugTraceF("CH%d: Switched to 5A range", (int)index);
+            ioexp.changeBit(IOExpander::IO_BIT_5A, true);
+            ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
+            //calculateNegligibleAdcDiffForCurrent();
+        }
+        else {
+            // 500mA
+            //DebugTraceF("CH%d: Switched to 500mA range", (int)index);
+            ioexp.changeBit(IOExpander::IO_BIT_500mA, true);
+            ioexp.changeBit(IOExpander::IO_BIT_5A, false);
+            //calculateNegligibleAdcDiffForCurrent();
+        }
+    } else {
+        ioexp.changeBit(IOExpander::IO_BIT_5A, false);
+        ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
+    }
+}
+
 void Channel::setCurrentRange(uint8_t currentCurrentRange) {
     if (hasSupportForCurrentDualRange()) {
         if (currentCurrentRange != flags.currentCurrentRange) {
             flags.currentCurrentRange = currentCurrentRange;
-            if (flags.currentCurrentRange == 0) {
-                // 5A
-                //DebugTraceF("CH%d: Switched to 5A range", (int)index);
-                ioexp.changeBit(IOExpander::IO_BIT_5A, true);
-                ioexp.changeBit(IOExpander::IO_BIT_500mA, false);
-                //calculateNegligibleAdcDiffForCurrent();
-            } else {
-                // 500mA
-                //DebugTraceF("CH%d: Switched to 500mA range", (int)index);
-                ioexp.changeBit(IOExpander::IO_BIT_500mA, true);
-                ioexp.changeBit(IOExpander::IO_BIT_5A, false);
-                //calculateNegligibleAdcDiffForCurrent();
-            }
+            doSetCurrentRange();
             if (isOutputEnabled()) {
                 adc.start(AnalogDigitalConverter::ADC_REG0_READ_U_MON);
             }
