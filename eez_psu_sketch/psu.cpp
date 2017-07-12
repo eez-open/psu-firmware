@@ -158,7 +158,9 @@ void init() {
 
 #if OPTION_ETHERNET
 #if OPTION_DISPLAY
-    gui::showEthernetInit();
+    if (persist_conf::isEthernetEnabled()) {
+        gui::showEthernetInit();
+    }
 #endif
 	ethernet::init();
     ntp::init();
