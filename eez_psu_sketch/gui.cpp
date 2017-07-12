@@ -114,6 +114,7 @@ static int g_errorMessageActionParam;
 static uint32_t g_showPageTime;
 static uint32_t g_timeOfLastActivity;
 static bool g_touchActionExecuted;
+static bool g_touchActionExecutedAtDown;
 
 Channel *g_channel;
 
@@ -213,8 +214,8 @@ bool isActivePageInternal() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void executeAction(int actionId) {
-    sound::playClick();
     actions[actionId]();
+    sound::playClick();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1256,6 +1257,7 @@ void processEvents() {
         } else {
             if (g_events[i].type == EVENT_TYPE_TOUCH_DOWN) {
                 g_touchActionExecuted = false;
+                g_touchActionExecutedAtDown = false;
                 WidgetCursor foundWidget = findWidget(g_events[i].x, g_events[i].y);
                 g_foundWidgetAtDown = 0;
                 if (foundWidget) {
@@ -1269,7 +1271,12 @@ void processEvents() {
                     }
 
                     if (g_foundWidgetAtDown) {
-                        selectWidget(g_foundWidgetAtDown);
+                        if (getAction(g_foundWidgetAtDown) == ACTION_ID_CHANNEL_TOGGLE_OUTPUT) {
+                            executeAction(ACTION_ID_CHANNEL_TOGGLE_OUTPUT);
+                            g_touchActionExecutedAtDown = true;
+                        } else {
+                            selectWidget(g_foundWidgetAtDown);
+                        }
                     } else {
                         if (!isActivePageInternal()) {
                             DECL_WIDGET(widget, foundWidget.widgetOffset);
@@ -1331,10 +1338,12 @@ void processEvents() {
                 }
             } else if (g_events[i].type == EVENT_TYPE_TOUCH_UP) {
                 if (g_foundWidgetAtDown) {
-                    deselectWidget();
-                    ActionType action = getAction(g_foundWidgetAtDown);
-                    if (!g_touchActionExecuted) {
-                        executeAction(action);
+                    if (!g_touchActionExecutedAtDown) {
+                        deselectWidget();
+                        if (!g_touchActionExecuted) {
+                            ActionType action = getAction(g_foundWidgetAtDown);
+                            executeAction(action);
+                        }
                     }
                     g_foundWidgetAtDown = 0;
                 } else {
