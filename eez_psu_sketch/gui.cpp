@@ -373,7 +373,9 @@ void showEnteringStandbyPage() {
 
 void showEthernetInit() {
     lcd::turnOn(true);
-    doShowPage(PAGE_ID_ETHERNET_INIT);
+    if (persist_conf::isEthernetEnabled()) {
+        doShowPage(PAGE_ID_ETHERNET_INIT);
+    }
     flush();
 }
 
