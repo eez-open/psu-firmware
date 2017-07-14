@@ -336,7 +336,7 @@ void drawBitmap(uint8_t bitmapIndex, int x, int y, int w, int h, const Style *st
     lcd::lcd.drawBitmap(x_offset, y_offset, width, height, (uint16_t*)bitmap.pixels);
 }
 
-void drawRectangle(int x, int y, int w, int h, const Style *style, bool inverse) {
+void drawRectangle(int x, int y, int w, int h, const Style *style, bool inverse, bool ignoreLuminocity = false) {
     if (w > 0 && h > 0) {
         int x1 = x;
         int y1 = y;
@@ -353,7 +353,7 @@ void drawRectangle(int x, int y, int w, int h, const Style *style, bool inverse)
         }
 
         uint16_t color = inverse ? style->background_color : style->color;
-        lcd::lcd.setColor(color);
+        lcd::lcd.setColor(color, ignoreLuminocity);
         lcd::lcd.fillRect(x1, y1, x2, y2);
     }
 }
@@ -779,9 +779,11 @@ void drawRectangleWidget(const WidgetCursor &widgetCursor) {
 
     if (refresh) {
         DECL_WIDGET(widget, widgetCursor.widgetOffset);
+        DECL_WIDGET_SPECIFIC(RectangleWidget, rectangle_widget, widget);
         DECL_WIDGET_STYLE(style, widget);
         drawRectangle(widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
-            widgetCursor.currentState->flags.pressed);
+            rectangle_widget->flags.invertColors ? !widgetCursor.currentState->flags.pressed : widgetCursor.currentState->flags.pressed,
+            rectangle_widget->flags.ignoreLuminosity);
     }
 }
 

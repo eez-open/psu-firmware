@@ -213,7 +213,7 @@ static void initDevice2() {
 
     devConf2.displayBackgroundLuminosityStep = DISPLAY_BACKGROUND_LUMINOSITY_STEP_DEFAULT;
 #if OPTION_DISPLAY
-    gui::lcd::lcd.updateBackgroundMapToColor();
+    gui::lcd::lcd.onLuminocityChanged();
 #endif
 }
 
@@ -232,7 +232,7 @@ void loadDevice2() {
                 devConf2.displayBackgroundLuminosityStep = DISPLAY_BACKGROUND_LUMINOSITY_STEP_DEFAULT;
             }   
 #if OPTION_DISPLAY
-            gui::lcd::lcd.updateBackgroundMapToColor();
+            gui::lcd::lcd.onLuminocityChanged();
 #endif
         }
     }
@@ -695,7 +695,7 @@ bool setDisplayBackgroundLuminosityStep(uint8_t displayBackgroundLuminosityStep)
     devConf2.displayBackgroundLuminosityStep = displayBackgroundLuminosityStep;
 
 #if OPTION_DISPLAY
-    gui::lcd::lcd.updateBackgroundMapToColor();
+    gui::lcd::lcd.onLuminocityChanged();
     gui::refreshPage();
 #endif
 

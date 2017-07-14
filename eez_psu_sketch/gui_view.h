@@ -145,6 +145,15 @@ struct MultilineTextWidget {
     OBJ_OFFSET text;
 };
 
+struct RectangleFlags {
+    unsigned invertColors : 1;
+    unsigned ignoreLuminosity : 1;
+};
+
+struct RectangleWidget {
+    RectangleFlags flags;
+};
+
 struct BitmapWidget {
     uint8_t bitmap;
 };

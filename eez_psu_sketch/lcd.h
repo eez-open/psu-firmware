@@ -46,7 +46,7 @@ public:
     int getDisplayHeight();
 
     void setColor(uint8_t r, uint8_t g, uint8_t b);
-    void setColor(uint16_t color);
+    void setColor(uint16_t color, bool ignoreLuminocity = false);
     uint16_t getColor();
 
     void setBackColor(uint8_t r, uint8_t g, uint8_t b);
@@ -62,7 +62,7 @@ public:
     void drawStr(int pageId, const char *text, int textLength, int x, int y, int clip_x1, int clip_y1, int clip_x2, int clip_y2, font::Font &font, bool fill_background);
     int measureStr(const char *text, int textLength, font::Font &font, int max_width = 0);
 
-    void updateBackgroundMapToColor();
+    void onLuminocityChanged();
 
 private:
     uint8_t orientation;
@@ -71,6 +71,7 @@ private:
     uint16_t displayHeight;
 
     uint8_t fch, fcl, bch, bcl;
+    uint8_t fch_set, fcl_set, bch_set, bcl_set;
 
     uint8_t backgroundMapToColorHighByte;
     uint8_t backgroundMapToColorLowByte;

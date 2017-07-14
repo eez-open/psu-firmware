@@ -24954,7 +24954,7 @@
               "type": "Text",
               "action": "show_sys_settings_screen_calibration",
               "x": 16,
-              "y": 88,
+              "y": 148,
               "width": 236,
               "height": 28,
               "style": "edit_value_active_S_left",
@@ -24965,7 +24965,7 @@
               "type": "Text",
               "action": "turnDisplayOff",
               "x": 16,
-              "y": 116,
+              "y": 176,
               "width": 236,
               "height": 28,
               "style": "edit_value_active_S_left",
@@ -25001,6 +25001,90 @@
               "height": 36,
               "style": "bottom_button",
               "text": "X"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 16,
+              "y": 86,
+              "width": 78,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Backgnd"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 106,
+              "y": 86,
+              "width": 78,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Status"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 184,
+              "y": 86,
+              "width": 78,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Pop up"
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 16,
+              "y": 114,
+              "width": 58,
+              "height": 34,
+              "style": "default",
+              "invertColors": true,
+              "ignoreLuminocity": true
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 106,
+              "y": 114,
+              "width": 29,
+              "height": 34,
+              "style": "toast_alert",
+              "invertColors": true,
+              "ignoreLuminocity": false
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 135,
+              "y": 114,
+              "width": 29,
+              "height": 34,
+              "style": "toast_alert",
+              "invertColors": true,
+              "ignoreLuminocity": true
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 184,
+              "y": 114,
+              "width": 29,
+              "height": 34,
+              "style": "error_alert",
+              "invertColors": true
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 213,
+              "y": 114,
+              "width": 29,
+              "height": 34,
+              "style": "error_alert",
+              "invertColors": true,
+              "ignoreLuminocity": true
             }
           ]
         }

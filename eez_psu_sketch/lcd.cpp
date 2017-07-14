@@ -472,34 +472,66 @@ void LCD::setXY(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
 
 #define FLOAT_TO_COLOR_COMPONENT(F) ((F) < 0 ? 0 : (F) > 255 ? 255 : (uint8_t)(F))
 
-void LCD::updateBackgroundMapToColor() {
-    float h, s, l;
-    rgbToHsl(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B, h, s, l);
-    
-    l = util::remap((float)persist_conf::devConf2.displayBackgroundLuminosityStep, 
-        (float)DISPLAY_BACKGROUND_LUMINOSITY_STEP_MIN, 
-        DISPLAY_BACKGROUND_LUMINOSITY_MIN, 
-        (float)DISPLAY_BACKGROUND_LUMINOSITY_STEP_MAX, 
-        DISPLAY_BACKGROUND_LUMINOSITY_MAX);
+static uint8_t g_colorCache[256][4];
 
-    float fr, fg, fb;
-    hslToRgb(h, s, l, fr, fg, fb);
-
-    uint8_t r = FLOAT_TO_COLOR_COMPONENT(fr);
-    uint8_t g = FLOAT_TO_COLOR_COMPONENT(fg);
-    uint8_t b = FLOAT_TO_COLOR_COMPONENT(fb);
-
-    backgroundMapToColorHighByte = RGB_TO_HIGH_BYTE(r, g, b);
-    backgroundMapToColorLowByte = RGB_TO_LOW_BYTE(r, g, b);
+void LCD::onLuminocityChanged() {
+    // invalidate cache
+    for (int i = 0; i < 256; ++i) {
+        g_colorCache[i][0] = 0;
+        g_colorCache[i][1] = 0;
+        g_colorCache[i][2] = 0;
+        g_colorCache[i][3] = 0;
+    }
 }
 
 void LCD::adjustColor(uint8_t &ch, uint8_t &cl) {
-    if (ch == RGB_TO_HIGH_BYTE(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B) &&
-        cl == RGB_TO_LOW_BYTE(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B)) 
-    {
-        ch = backgroundMapToColorHighByte;
-        cl = backgroundMapToColorLowByte;
+    int i = (ch + cl) >> 1;
+    if (ch == g_colorCache[i][0] && cl == g_colorCache[i][1]) {
+        // cache hit!
+        ch = g_colorCache[i][2];
+        cl = g_colorCache[i][3];
+        return;
     }
+
+    uint8_t r, g, b;
+    r = ch & 248;
+    g = ((ch << 5) | (cl >> 3)) & 252;
+    b = cl << 3;
+
+    float h, s, l;
+    rgbToHsl(r, g, b, h, s, l);
+
+    float a = l < 0.5 ? l : 1 - l;
+    if (a > 0.3f) {
+        a = 0.3f;
+    }
+    float lmin = l - a;
+    float lmax = l + a;
+
+    float lNew = util::remap((float)persist_conf::devConf2.displayBackgroundLuminosityStep,
+        (float)DISPLAY_BACKGROUND_LUMINOSITY_STEP_MIN,
+        lmin,
+        (float)DISPLAY_BACKGROUND_LUMINOSITY_STEP_MAX,
+        lmax);
+
+    float floatR, floatG, floatB;
+    hslToRgb(h, s, lNew, floatR, floatG, floatB);
+
+    r = FLOAT_TO_COLOR_COMPONENT(floatR);
+    g = FLOAT_TO_COLOR_COMPONENT(floatG);
+    b = FLOAT_TO_COLOR_COMPONENT(floatB);
+
+    uint8_t chNew = RGB_TO_HIGH_BYTE(r, g, b);
+    uint8_t clNew = RGB_TO_LOW_BYTE(r, g, b);
+
+    // store new color in the cache
+    g_colorCache[i][0] = ch;
+    g_colorCache[i][1] = cl;
+    g_colorCache[i][2] = chNew;
+    g_colorCache[i][3] = clNew;
+
+    ch = chNew;
+    cl = clNew;
 }
 
 void LCD::adjustForegroundColor() {
@@ -511,35 +543,37 @@ void LCD::adjustBackgroundColor() {
 }
 
 void LCD::setColor(uint8_t r, uint8_t g, uint8_t b) {
-    fch = RGB_TO_HIGH_BYTE(r, g, b);
-    fcl = RGB_TO_LOW_BYTE(r, g, b);
+    fch = fch_set = RGB_TO_HIGH_BYTE(r, g, b);
+    fcl = fcl_set = RGB_TO_LOW_BYTE(r, g, b);
     adjustForegroundColor();
 }
 
-void LCD::setColor(uint16_t color) {
-    fch = uint8_t(color >> 8);
-    fcl = uint8_t(color & 0xFF);
-    adjustForegroundColor();
+void LCD::setColor(uint16_t color, bool ignoreLuminocity) {
+    fch = fch_set = uint8_t(color >> 8);
+    fcl = fcl_set = uint8_t(color & 0xFF);
+    if (!ignoreLuminocity) {
+        adjustForegroundColor();
+    }
 }
 
 uint16_t LCD::getColor() {
-    return (fch << 8) | fcl;
+    return (fch_set << 8) | fcl_set;
 }
 
 void LCD::setBackColor(uint8_t r, uint8_t g, uint8_t b) {
-    bch = RGB_TO_HIGH_BYTE(r, g, b);
-    bcl = RGB_TO_LOW_BYTE(r, g, b);
+    bch = bch_set = RGB_TO_HIGH_BYTE(r, g, b);
+    bcl = bcl_set = RGB_TO_LOW_BYTE(r, g, b);
     adjustBackgroundColor();
 }
 
 void LCD::setBackColor(uint16_t color) {
-    bch = uint8_t(color >> 8);
-    bcl = uint8_t(color & 0xFF);
+    bch = bch_set = uint8_t(color >> 8);
+    bcl = bcl_set = uint8_t(color & 0xFF);
     adjustBackgroundColor();
 }
 
 uint16_t LCD::getBackColor() {
-    return (bch << 8) | bcl;
+    return (bch_set << 8) | bcl_set;
 }
 
 int LCD::getDisplayWidth() {
