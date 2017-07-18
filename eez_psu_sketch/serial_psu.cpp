@@ -120,7 +120,7 @@ void init() {
 
     SERIAL_PORT.begin(persist_conf::getBaudFromIndex(persist_conf::getSerialBaudIndex()), getConfig());
 
-#ifdef CONF_WAIT_SERIAL
+#if CONF_WAIT_SERIAL && !CONF_SERIAL_USE_NATIVE_USB_PORT
     while (!SERIAL_PORT);
 #endif
 
