@@ -25034,56 +25034,56 @@
             },
             {
               "$eez": false,
-              "type": "Rectangle",
+              "type": "Text",
               "x": 16,
               "y": 114,
               "width": 58,
               "height": 34,
-              "style": "default",
-              "invertColors": true,
+              "style": "edit_value_active_S_center",
+              "text": "@",
               "ignoreLuminocity": true
             },
             {
               "$eez": false,
-              "type": "Rectangle",
-              "x": 106,
+              "type": "Text",
+              "x": 100,
               "y": 114,
               "width": 29,
               "height": 34,
               "style": "toast_alert",
-              "invertColors": true,
+              "text": "@",
               "ignoreLuminocity": false
             },
             {
               "$eez": false,
-              "type": "Rectangle",
-              "x": 135,
+              "type": "Text",
+              "x": 129,
               "y": 114,
               "width": 29,
               "height": 34,
               "style": "toast_alert",
-              "invertColors": true,
+              "text": "@",
               "ignoreLuminocity": true
             },
             {
               "$eez": false,
-              "type": "Rectangle",
+              "type": "Text",
               "x": 184,
               "y": 114,
               "width": 29,
               "height": 34,
-              "style": "error_alert",
-              "invertColors": true
+              "style": "error_alert_button",
+              "text": "@"
             },
             {
               "$eez": false,
-              "type": "Rectangle",
+              "type": "Text",
               "x": 213,
               "y": 114,
               "width": 29,
               "height": 34,
-              "style": "error_alert",
-              "invertColors": true,
+              "style": "error_alert_button",
+              "text": "@",
               "ignoreLuminocity": true
             }
           ]

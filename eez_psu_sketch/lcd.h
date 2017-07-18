@@ -50,7 +50,7 @@ public:
     uint16_t getColor();
 
     void setBackColor(uint8_t r, uint8_t g, uint8_t b);
-    void setBackColor(uint16_t color);
+    void setBackColor(uint16_t color, bool ignoreLuminocity = false);
     uint16_t getBackColor();
 
     void drawPixel(int x, int y);
@@ -71,7 +71,6 @@ private:
     uint16_t displayHeight;
 
     uint8_t fch, fcl, bch, bcl;
-    uint8_t fch_set, fcl_set, bch_set, bcl_set;
 
     uint8_t backgroundMapToColorHighByte;
     uint8_t backgroundMapToColorLowByte;

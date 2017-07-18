@@ -485,7 +485,7 @@ void LCD::onLuminocityChanged() {
 }
 
 void LCD::adjustColor(uint8_t &ch, uint8_t &cl) {
-    int i = (ch + cl) >> 1;
+    int i = (ch & 0xF0) | (cl & 0x0F);
     if (ch == g_colorCache[i][0] && cl == g_colorCache[i][1]) {
         // cache hit!
         ch = g_colorCache[i][2];
@@ -543,37 +543,39 @@ void LCD::adjustBackgroundColor() {
 }
 
 void LCD::setColor(uint8_t r, uint8_t g, uint8_t b) {
-    fch = fch_set = RGB_TO_HIGH_BYTE(r, g, b);
-    fcl = fcl_set = RGB_TO_LOW_BYTE(r, g, b);
+    fch = RGB_TO_HIGH_BYTE(r, g, b);
+    fcl = RGB_TO_LOW_BYTE(r, g, b);
     adjustForegroundColor();
 }
 
 void LCD::setColor(uint16_t color, bool ignoreLuminocity) {
-    fch = fch_set = uint8_t(color >> 8);
-    fcl = fcl_set = uint8_t(color & 0xFF);
+    fch = uint8_t(color >> 8);
+    fcl = uint8_t(color & 0xFF);
     if (!ignoreLuminocity) {
         adjustForegroundColor();
     }
 }
 
 uint16_t LCD::getColor() {
-    return (fch_set << 8) | fcl_set;
+    return (fch << 8) | fcl;
 }
 
 void LCD::setBackColor(uint8_t r, uint8_t g, uint8_t b) {
-    bch = bch_set = RGB_TO_HIGH_BYTE(r, g, b);
-    bcl = bcl_set = RGB_TO_LOW_BYTE(r, g, b);
+    bch = RGB_TO_HIGH_BYTE(r, g, b);
+    bcl = RGB_TO_LOW_BYTE(r, g, b);
     adjustBackgroundColor();
 }
 
-void LCD::setBackColor(uint16_t color) {
-    bch = bch_set = uint8_t(color >> 8);
-    bcl = bcl_set = uint8_t(color & 0xFF);
-    adjustBackgroundColor();
+void LCD::setBackColor(uint16_t color, bool ignoreLuminocity) {
+    bch = bch = uint8_t(color >> 8);
+    bcl = bcl = uint8_t(color & 0xFF);
+    if (!ignoreLuminocity) {
+        adjustBackgroundColor();
+    }
 }
 
 uint16_t LCD::getBackColor() {
-    return (bch_set << 8) | bcl_set;
+    return (bch << 8) | bcl;
 }
 
 int LCD::getDisplayWidth() {
@@ -713,7 +715,10 @@ void LCD::drawBitmap(int x, int y, int sx, int sy, uint16_t *data) {
         for (int i = 0; i < sx * sy; ++i) {
             uint8_t l = *(((uint8_t *)data) + 2 * i + 0);
             uint8_t h = *(((uint8_t *)data) + 2 * i + 1);
-            adjustColor(h, l);
+            if (h == RGB_TO_HIGH_BYTE(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B) &&
+                l == RGB_TO_LOW_BYTE(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B)) {
+                adjustColor(h, l);
+            }
             setPixel((h << 8) + l);
         }
     } else {
@@ -722,7 +727,10 @@ void LCD::drawBitmap(int x, int y, int sx, int sy, uint16_t *data) {
             for (int ix = sx - 1; ix >= 0; --ix) {
                 uint8_t l = *(((uint8_t *)data) + 2 * (iy * sx + ix) + 0);
                 uint8_t h = *(((uint8_t *)data) + 2 * (iy * sx + ix) + 1);
-                adjustColor(h, l);
+                if (h == RGB_TO_HIGH_BYTE(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B) &&
+                    l == RGB_TO_LOW_BYTE(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B)) {
+                    adjustColor(h, l);
+                }
                 setPixel((h << 8) + l);
             }
         }
@@ -738,7 +746,10 @@ void LCD::drawBitmap(int x, int y, int sx, int sy, uint16_t *data) {
             color = pgm_read_word(&data[tc]);
             uint8_t h = uint8_t(color >> 8);
             uint8_t l = uint8_t(color & 0xFF);
-            adjustColor(h, l);
+            if (h == RGB_TO_HIGH_BYTE(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B) &&
+                l == RGB_TO_LOW_BYTE(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B)) {
+                adjustColor(h, l);
+            }
             writeData(h, l);
         }
         sbi(P_CS, B_CS);
@@ -750,7 +761,10 @@ void LCD::drawBitmap(int x, int y, int sx, int sy, uint16_t *data) {
                 color = pgm_read_word(&data[(ty*sx) + tx]);
                 uint8_t h = uint8_t(color >> 8);
                 uint8_t l = uint8_t(color & 0xFF);
-                adjustColor(h, l);
+                if (h == RGB_TO_HIGH_BYTE(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B) &&
+                    l == RGB_TO_LOW_BYTE(DISPLAY_BACKGROUND_COLOR_R, DISPLAY_BACKGROUND_COLOR_G, DISPLAY_BACKGROUND_COLOR_B)) {
+                    adjustColor(h, l);
+                }
                 writeData(h, l);
             }
         }
@@ -779,7 +793,7 @@ int8_t LCD::drawGlyph(int pageId, int x1, int y1, int clip_x1, int clip_y1, int 
         // clear pixels around glyph
         uint16_t color = getColor();
 
-        setColor(getBackColor());
+        setColor(getBackColor(), true);
 
         if (x1 < clip_x1) x1 = clip_x1;
         if (y1 < clip_y1) y1 = clip_y1;
@@ -802,7 +816,7 @@ int8_t LCD::drawGlyph(int pageId, int x1, int y1, int clip_x1, int clip_y1, int 
             fillRect(x1, y_glyph + glyph.height, x2, y2);
         }
 
-        setColor(color);
+        setColor(color, true);
     }
     
     // draw glyph pixels

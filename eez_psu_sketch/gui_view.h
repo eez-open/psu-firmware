@@ -137,8 +137,13 @@ struct DisplayDataWidget {
     uint8_t activeStyle;
 };
 
+struct TextFlags {
+    unsigned ignoreLuminosity : 1;
+};
+
 struct TextWidget {
     OBJ_OFFSET text;
+    TextFlags flags;
 };
 
 struct MultilineTextWidget {
