@@ -24875,15 +24875,6 @@
           "widgets": [
             {
               "$eez": false,
-              "type": "Local.Channels",
-              "x": 252,
-              "y": 0,
-              "width": 68,
-              "height": 204,
-              "style": "default"
-            },
-            {
-              "$eez": false,
               "type": "Text",
               "x": 6,
               "y": 0,
@@ -24918,6 +24909,15 @@
             },
             {
               "$eez": false,
+              "type": "Rectangle",
+              "x": 238,
+              "y": 32,
+              "width": 14,
+              "height": 28,
+              "style": "default_inverse"
+            },
+            {
+              "$eez": false,
               "type": "Text",
               "x": 16,
               "y": 60,
@@ -24944,9 +24944,120 @@
               "$eez": false,
               "type": "Rectangle",
               "x": 238,
-              "y": 32,
+              "y": 58,
               "width": 14,
               "height": 28,
+              "style": "default_inverse"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 16,
+              "y": 86,
+              "width": 84,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Backgnd"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 100,
+              "y": 86,
+              "width": 84,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Status"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 184,
+              "y": 86,
+              "width": 68,
+              "height": 28,
+              "style": "edit_value_S_left",
+              "text": "Pop up"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 16,
+              "y": 114,
+              "width": 58,
+              "height": 34,
+              "style": "edit_value_active_S_center",
+              "text": "@",
+              "ignoreLuminocity": true
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 74,
+              "y": 114,
+              "width": 26,
+              "height": 34,
+              "style": "default_inverse"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 100,
+              "y": 114,
+              "width": 29,
+              "height": 34,
+              "style": "toast_alert",
+              "text": "@",
+              "ignoreLuminocity": false
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 129,
+              "y": 114,
+              "width": 29,
+              "height": 34,
+              "style": "toast_alert",
+              "text": "@",
+              "ignoreLuminocity": true
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 158,
+              "y": 114,
+              "width": 26,
+              "height": 34,
+              "style": "default_inverse"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 184,
+              "y": 114,
+              "width": 29,
+              "height": 34,
+              "style": "error_alert_button",
+              "text": "@"
+            },
+            {
+              "$eez": false,
+              "type": "Text",
+              "x": 213,
+              "y": 114,
+              "width": 29,
+              "height": 34,
+              "style": "error_alert_button",
+              "text": "@",
+              "ignoreLuminocity": true
+            },
+            {
+              "$eez": false,
+              "type": "Rectangle",
+              "x": 242,
+              "y": 114,
+              "width": 10,
+              "height": 34,
               "style": "default_inverse"
             },
             {
@@ -25004,87 +25115,12 @@
             },
             {
               "$eez": false,
-              "type": "Text",
-              "x": 16,
-              "y": 86,
-              "width": 78,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Backgnd"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 106,
-              "y": 86,
-              "width": 78,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Status"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 184,
-              "y": 86,
-              "width": 78,
-              "height": 28,
-              "style": "edit_value_S_left",
-              "text": "Pop up"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 16,
-              "y": 114,
-              "width": 58,
-              "height": 34,
-              "style": "edit_value_active_S_center",
-              "text": "@",
-              "ignoreLuminocity": true
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 100,
-              "y": 114,
-              "width": 29,
-              "height": 34,
-              "style": "toast_alert",
-              "text": "@",
-              "ignoreLuminocity": false
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 129,
-              "y": 114,
-              "width": 29,
-              "height": 34,
-              "style": "toast_alert",
-              "text": "@",
-              "ignoreLuminocity": true
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 184,
-              "y": 114,
-              "width": 29,
-              "height": 34,
-              "style": "error_alert_button",
-              "text": "@"
-            },
-            {
-              "$eez": false,
-              "type": "Text",
-              "x": 213,
-              "y": 114,
-              "width": 29,
-              "height": 34,
-              "style": "error_alert_button",
-              "text": "@",
-              "ignoreLuminocity": true
+              "type": "Local.Channels",
+              "x": 252,
+              "y": 0,
+              "width": 68,
+              "height": 204,
+              "style": "default"
             }
           ]
         }
