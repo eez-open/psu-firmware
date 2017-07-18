@@ -81,6 +81,7 @@ void detachInterrupt(uint8_t interrupt_no) {
 ////////////////////////////////////////////////////////////////////////////////
 
 UARTClass Serial;
+UARTClass SerialUSB;
 
 void UARTClass::begin(unsigned long baud, UARTModes config) {
 }

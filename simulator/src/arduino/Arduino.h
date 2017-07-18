@@ -125,6 +125,7 @@ private:
 };
 
 extern UARTClass Serial;
+extern UARTClass SerialUSB;
 
 #define PROGMEM
 #define pgm_read_byte_near(address_short) (*(address_short))

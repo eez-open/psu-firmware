@@ -47,6 +47,12 @@
 
 #include "ontime.h"
 
+#if CONF_SERIAL_USE_NATIVE_USB_PORT
+#define SERIAL_PORT SerialUSB
+#else
+#define SERIAL_PORT Serial
+#endif
+
 /// Namespace for the everything from the EEZ.
 namespace eez {
 /// PSU firmware.

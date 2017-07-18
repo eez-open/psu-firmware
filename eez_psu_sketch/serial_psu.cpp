@@ -34,7 +34,7 @@ size_t g_baudsSize = sizeof(g_bauds) / sizeof(long);
 
 size_t SCPI_Write(scpi_t *context, const char * data, size_t len) {
     if (serial::g_testResult == TEST_OK) {
-        return Serial.write(data, len);
+        return SERIAL_PORT.write(data, len);
     }
     return 0;
 }
@@ -60,7 +60,7 @@ scpi_result_t SCPI_Control(scpi_t *context, scpi_ctrl_name_t ctrl, scpi_reg_val_
         else {
             sprintf_P(errorOutputBuffer, PSTR("**CTRL %02x: 0x%X (%d)\r\n"), ctrl, val, val);
         }
-        Serial.println(errorOutputBuffer);
+        SERIAL_PORT.println(errorOutputBuffer);
     }
 
     return SCPI_RES_OK;
@@ -70,7 +70,7 @@ scpi_result_t SCPI_Reset(scpi_t *context) {
     if (serial::g_testResult == TEST_OK) {
         char errorOutputBuffer[256];
         strcpy_P(errorOutputBuffer, PSTR("**Reset\r\n"));
-        Serial.println(errorOutputBuffer);
+        SERIAL_PORT.println(errorOutputBuffer);
     }
 
     return psu::reset() ? SCPI_RES_OK : SCPI_RES_ERR;
@@ -110,7 +110,7 @@ UARTClass::UARTModes getConfig() {
 
 void init() {
     if (g_testResult == TEST_OK) {
-        Serial.end();
+        SERIAL_PORT.end();
     }
 
     if (!persist_conf::isSerialEnabled()) {
@@ -118,21 +118,21 @@ void init() {
         return;
     }
 
-    Serial.begin(persist_conf::getBaudFromIndex(persist_conf::getSerialBaudIndex()), getConfig());
+    SERIAL_PORT.begin(persist_conf::getBaudFromIndex(persist_conf::getSerialBaudIndex()), getConfig());
 
 #ifdef CONF_WAIT_SERIAL
-    while (!Serial);
+    while (!SERIAL_PORT);
 #endif
 
-	while (Serial.available()) {
-        Serial.read();
+	while (SERIAL_PORT.available()) {
+        SERIAL_PORT.read();
     }
 
 #ifdef EEZ_PSU_SIMULATOR
-    Serial.print("EEZ PSU software simulator ver. ");
-    Serial.println(FIRMWARE);
+    SERIAL_PORT.print("EEZ PSU software simulator ver. ");
+    SERIAL_PORT.println(FIRMWARE);
 #else
-    Serial.println("EEZ PSU serial com ready");
+    SERIAL_PORT.println("EEZ PSU serial com ready");
 #endif
 
     scpi::init(g_scpiContext,
@@ -148,9 +148,9 @@ void init() {
 
 void tick(uint32_t tick_usec) {
     if (g_testResult == TEST_OK) {
-        for (unsigned i = 0; i < 64 && Serial.available(); ++i) {
+        for (unsigned i = 0; i < 64 && SERIAL_PORT.available(); ++i) {
             g_isConnected = true;
-            char ch = (char)Serial.read();
+            char ch = (char)SERIAL_PORT.read();
             input(g_scpiContext, ch);
         }
     }

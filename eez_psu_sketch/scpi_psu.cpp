@@ -143,7 +143,7 @@ void printError(int_fast16_t err) {
             sprintf_P(errorOutputBuffer, PSTR("**ERROR: %d,\"%s\"\r\n"), (int16_t)err, SCPI_ErrorTranslate(err));
         }
 
-        Serial.println(errorOutputBuffer);
+        SERIAL_PORT.println(errorOutputBuffer);
     }
 
 #if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)

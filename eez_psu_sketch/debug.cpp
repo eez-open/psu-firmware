@@ -99,20 +99,20 @@ static bool dumpTraceBufferOnNextTick = false;
 
 void DumpTraceBuffer() {
     if (serial::g_testResult == TEST_OK) {
-        Serial.print("**TRACE");
+        SERIAL_PORT.print("**TRACE");
     
         char datetime_buffer[20] = { 0 };
         if (datetime::getDateTimeAsString(datetime_buffer)) {
-            Serial.print(" [");
-            Serial.print(datetime_buffer);
-            Serial.print("]: ");
+            SERIAL_PORT.print(" [");
+            SERIAL_PORT.print(datetime_buffer);
+            SERIAL_PORT.print("]: ");
         } else {
-            Serial.print(": ");
+            SERIAL_PORT.print(": ");
         }
 
-        Serial.println(traceBuffer);
+        SERIAL_PORT.println(traceBuffer);
 
-        Serial.flush();
+        SERIAL_PORT.flush();
     }
 }
 

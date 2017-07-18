@@ -192,10 +192,10 @@ void init() {
 #ifdef EEZ_PSU_ARDUINO
 #if CONF_DEBUG || CONF_DEBUG_LATEST
     if (persist_conf::isEthernetDhcpEnabled() && serial::g_testResult == TEST_OK) {
-        Serial.print("My IP: "); Serial.println(Ethernet.localIP());
-        Serial.print("Netmask: "); Serial.println(Ethernet.subnetMask());
-        Serial.print("GW IP: "); Serial.println(Ethernet.gatewayIP());
-        Serial.print("DNS IP: "); Serial.println(Ethernet.dnsServerIP());
+        SERIAL_PORT.print("My IP: "); SERIAL_PORT.println(Ethernet.localIP());
+        SERIAL_PORT.print("Netmask: "); SERIAL_PORT.println(Ethernet.subnetMask());
+        SERIAL_PORT.print("GW IP: "); SERIAL_PORT.println(Ethernet.gatewayIP());
+        SERIAL_PORT.print("DNS IP: "); SERIAL_PORT.println(Ethernet.dnsServerIP());
     }
 #endif
 #endif

@@ -61,7 +61,7 @@ int main_loop() {
 
                 switch (msg.message) {
                 case NEW_INPUT_MESSAGE:
-                    Serial.put(msg.wParam);
+                    SERIAL_PORT.put(msg.wParam);
                     break;
                 case WM_QUIT:
                     return 0;
