@@ -27,16 +27,17 @@
 #include "sd_card.h"
 #endif
 
-#if CONF_DEBUG
-
 namespace eez {
 namespace psu {
 
-using namespace debug;
+#if CONF_DEBUG
+    using namespace debug;
+#endif // CONF_DEBUG
 
 namespace scpi {
 
 scpi_result_t scpi_cmd_debug(scpi_t *context) {
+#if CONF_DEBUG
     scpi_number_t param;
     if (SCPI_ParamNumber(context, 0, &param, false)) {
         delay((uint32_t) round(param.value * 1000));
@@ -45,9 +46,14 @@ scpi_result_t scpi_cmd_debug(scpi_t *context) {
     }
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif // CONF_DEBUG
 }
 
 scpi_result_t scpi_cmd_debugQ(scpi_t *context) {
+#if CONF_DEBUG
     char buffer[2048];
 
     Channel::get(0).adcReadAll();
@@ -58,9 +64,14 @@ scpi_result_t scpi_cmd_debugQ(scpi_t *context) {
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif // CONF_DEBUG
 }
 
 scpi_result_t scpi_cmd_debugWdog(scpi_t * context) {
+#if CONF_DEBUG
     if (!OPTION_WATCHDOG) {
         SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
@@ -74,9 +85,14 @@ scpi_result_t scpi_cmd_debugWdog(scpi_t * context) {
 	debug::g_debugWatchdog = enable;
     
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif // CONF_DEBUG
 }
 
 scpi_result_t scpi_cmd_debugWdogQ(scpi_t * context) {
+#if CONF_DEBUG
     if (!OPTION_WATCHDOG) {
         SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
         return SCPI_RES_ERR;
@@ -85,9 +101,14 @@ scpi_result_t scpi_cmd_debugWdogQ(scpi_t * context) {
     SCPI_ResultBool(context, debug::g_debugWatchdog);
     
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif // CONF_DEBUG
 }
 
 scpi_result_t scpi_cmd_debugOntimeQ(scpi_t *context) {
+#if CONF_DEBUG
     char buffer[512] = { 0 };
     char *p = buffer;
 
@@ -104,10 +125,14 @@ scpi_result_t scpi_cmd_debugOntimeQ(scpi_t *context) {
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif // CONF_DEBUG
 }
 
 scpi_result_t scpi_cmd_debugDirQ(scpi_t *context) {
-#if OPTION_SD_CARD
+#if CONF_DEBUG && OPTION_SD_CARD
     sd_card::dir();
     return SCPI_RES_OK;
 #else
@@ -117,7 +142,7 @@ scpi_result_t scpi_cmd_debugDirQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_debugFileQ(scpi_t *context) {
-#if OPTION_SD_CARD
+#if CONF_DEBUG && OPTION_SD_CARD
     const char *param;
     size_t len;
 
@@ -139,6 +164,7 @@ scpi_result_t scpi_cmd_debugFileQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_debugVoltage(scpi_t *context) {
+#if CONF_DEBUG
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -152,9 +178,14 @@ scpi_result_t scpi_cmd_debugVoltage(scpi_t *context) {
     channel->dac.set_voltage((uint16_t)value);
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif // CONF_DEBUG
 }
 
 scpi_result_t scpi_cmd_debugCurrent(scpi_t *context) {
+#if CONF_DEBUG
     Channel *channel = param_channel(context);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -168,9 +199,14 @@ scpi_result_t scpi_cmd_debugCurrent(scpi_t *context) {
     channel->dac.set_current((uint16_t)value);
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif // CONF_DEBUG
 }
 
 scpi_result_t scpi_cmd_debugMeasureVoltage(scpi_t *context) {
+#if CONF_DEBUG
     if (serial::g_testResult != TEST_OK) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -206,9 +242,14 @@ scpi_result_t scpi_cmd_debugMeasureVoltage(scpi_t *context) {
     }
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif // CONF_DEBUG
 }
 
 scpi_result_t scpi_cmd_debugMeasureCurrent(scpi_t *context) {
+#if CONF_DEBUG
     if (serial::g_testResult != TEST_OK) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
@@ -244,11 +285,13 @@ scpi_result_t scpi_cmd_debugMeasureCurrent(scpi_t *context) {
     }
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif // CONF_DEBUG
 }
 
 
 }
 }
 } // namespace eez::psu::scpi
-
-#endif // CONF_DEBUG
