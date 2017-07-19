@@ -119,13 +119,22 @@ scpi_result_t scpi_cmd_instrumentCoupleTracking(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    if (CH_NUM < 2 && type == channel_dispatcher::TYPE_NONE) {
-        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+    if (CH_NUM < 2) {
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
-    channel_dispatcher::setType((channel_dispatcher::Type)type);
-    profile::save();
+    if (!Channel::get(0).isOk() || !Channel::get(1).isOk()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_ERROR);
+        return SCPI_RES_ERR;
+    }
+
+    if (channel_dispatcher::setType((channel_dispatcher::Type)type)) {
+        profile::save();
+    } else {
+        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        return SCPI_RES_ERR;
+    }
 
     return SCPI_RES_OK;
 }

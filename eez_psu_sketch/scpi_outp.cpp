@@ -109,8 +109,22 @@ scpi_result_t scpi_cmd_outputTrackState(scpi_t * context) {
     }
 
     if (enable != channel_dispatcher::isTracked()) {
-        channel_dispatcher::setType(enable ? channel_dispatcher::TYPE_TRACKED : channel_dispatcher::TYPE_NONE);
-        profile::save();
+        if (CH_NUM < 2) {
+            SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
+            return SCPI_RES_ERR;
+        }
+
+        if (!Channel::get(0).isOk() || !Channel::get(1).isOk()) {
+            SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_ERROR);
+            return SCPI_RES_ERR;
+        }
+
+        if (channel_dispatcher::setType(enable ? channel_dispatcher::TYPE_TRACKED : channel_dispatcher::TYPE_NONE)) {
+            profile::save();
+        } else {
+            SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+            return SCPI_RES_ERR;
+        }
     }
 
     return SCPI_RES_OK;
