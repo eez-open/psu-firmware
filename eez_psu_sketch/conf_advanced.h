@@ -306,5 +306,5 @@
 /// To prevent too fast switching betweeen current ranges
 #define CURRENT_AUTO_RANGE_SWITCHING_DELAY_MS 5
 
-/// Change to 1 if you want to use native instead of programming USB port
-#define CONF_SERIAL_USE_NATIVE_USB_PORT 0
+/// Change to 0 if you want to use programming USB port
+#define CONF_SERIAL_USE_NATIVE_USB_PORT 1
