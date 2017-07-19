@@ -831,6 +831,10 @@ Value get(const Cursor &cursor, uint8_t id) {
         return Value(persist_conf::devConf.flags.channelsViewMode);
     }
 
+    if (id == DATA_ID_CHANNEL_COUPLING_IS_ALLOWED) {
+        return data::Value(channel_dispatcher::isCouplingOrTrackingAllowed() ? 1 : 0);
+    }
+
     if (id == DATA_ID_CHANNEL_COUPLING_MODE) {
         return data::Value(channel_dispatcher::getType());
     }

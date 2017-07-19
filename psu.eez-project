@@ -1901,6 +1901,14 @@
     },
     {
       "$eez": false,
+      "name": "channel.coupling.isAllowed",
+      "description": "",
+      "type": "boolean",
+      "enumItems": "",
+      "defaultValue": "1"
+    },
+    {
+      "$eez": false,
       "name": "channel.coupling.mode",
       "description": "",
       "type": "enum",
@@ -17331,7 +17339,7 @@
               "$eez": false,
               "x": 16,
               "type": "Select",
-              "data": "channel.isCoupled",
+              "data": "channel.coupling.isAllowed",
               "y": 112,
               "width": 236,
               "height": 28,
@@ -17339,8 +17347,20 @@
               "widgets": [
                 {
                   "$eez": false,
-                  "type": "Container",
+                  "type": "Text",
+                  "action": "",
                   "x": 0,
+                  "y": 0,
+                  "width": 236,
+                  "height": 28,
+                  "style": "default_disabled_S_left",
+                  "text": "Tracking control"
+                },
+                {
+                  "$eez": false,
+                  "x": 0,
+                  "type": "Select",
+                  "data": "channel.isCoupled",
                   "y": 0,
                   "width": 236,
                   "height": 28,
@@ -17356,9 +17376,32 @@
                       "height": 28,
                       "style": "edit_value_active_S_left",
                       "text": "Tracking control"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "",
+                      "x": 0,
+                      "y": 0,
+                      "width": 236,
+                      "height": 28,
+                      "style": "default_disabled_S_left",
+                      "text": "Tracking control \\u008c"
                     }
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "$eez": false,
+              "x": 16,
+              "type": "Select",
+              "data": "channel.coupling.isAllowed",
+              "y": 140,
+              "width": 236,
+              "height": 28,
+              "style": "default",
+              "widgets": [
                 {
                   "$eez": false,
                   "type": "Text",
@@ -17368,24 +17411,13 @@
                   "width": 236,
                   "height": 28,
                   "style": "default_disabled_S_left",
-                  "text": "Tracking control \\u008c"
-                }
-              ]
-            },
-            {
-              "$eez": false,
-              "x": 16,
-              "type": "Select",
-              "data": "channel.isTracked",
-              "y": 140,
-              "width": 236,
-              "height": 28,
-              "style": "default",
-              "widgets": [
+                  "text": "Coupling settings"
+                },
                 {
                   "$eez": false,
-                  "type": "Container",
                   "x": 0,
+                  "type": "Select",
+                  "data": "channel.isTracked",
                   "y": 0,
                   "width": 236,
                   "height": 28,
@@ -17401,19 +17433,19 @@
                       "height": 28,
                       "style": "edit_value_active_S_left",
                       "text": "Coupling settings"
+                    },
+                    {
+                      "$eez": false,
+                      "type": "Text",
+                      "action": "",
+                      "x": 0,
+                      "y": 0,
+                      "width": 236,
+                      "height": 28,
+                      "style": "default_disabled_S_left",
+                      "text": "Coupling settings \\u008c"
                     }
                   ]
-                },
-                {
-                  "$eez": false,
-                  "type": "Text",
-                  "action": "",
-                  "x": 0,
-                  "y": 0,
-                  "width": 236,
-                  "height": 28,
-                  "style": "default_disabled_S_left",
-                  "text": "Coupling settings \\u008c"
                 }
               ]
             },

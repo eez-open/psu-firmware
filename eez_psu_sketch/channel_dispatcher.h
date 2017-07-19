@@ -35,6 +35,8 @@ enum Type {
     TYPE_TRACKED
 };
 
+bool isCouplingOrTrackingAllowed();
+
 bool setType(Type value);
 Type getType();
 

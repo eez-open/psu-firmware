@@ -31,16 +31,22 @@ namespace channel_dispatcher {
 
 static Type g_channelCoupling = TYPE_NONE;
 
+bool isCouplingOrTrackingAllowed() {
+    if (CH_NUM < 2) {
+        return false;
+    }
+
+    if (!Channel::get(0).isOk() || !Channel::get(1).isOk()) {
+        return false;
+    }
+
+    return true;
+}
+
 bool setType(Type value) {
     if (g_channelCoupling != value) {
-        if (value != TYPE_NONE) {
-            if (CH_NUM < 2) {
-                return false;
-            }
-
-            if (!Channel::get(0).isOk() || !Channel::get(1).isOk()) {
-                return false;
-            }
+        if (value != TYPE_NONE && !isCouplingOrTrackingAllowed()) {
+            return false;
         }
 
         g_channelCoupling = value;
