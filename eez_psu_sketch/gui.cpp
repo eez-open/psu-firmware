@@ -702,7 +702,8 @@ void unlockFrontPanel() {
     }
 }
 
-bool isWidgetActionEnabled(const Widget *widget) {
+bool isWidgetActionEnabled(const WidgetCursor &widgetCursor) {
+    DECL_WIDGET(widget, widgetCursor.widgetOffset);
     if (widget->action) {
         if (isFrontPanelLocked()) {
             if (g_activePageId == PAGE_ID_INFO_ALERT || g_activePageId == PAGE_ID_ERROR_ALERT || g_activePageId == PAGE_ID_KEYPAD ||
@@ -711,6 +712,13 @@ bool isWidgetActionEnabled(const Widget *widget) {
             }
 
             if (widget->action != ACTION_ID_SYS_FRONT_PANEL_UNLOCK) {
+                return false;
+            }
+        }
+
+        if (widget->type == WIDGET_TYPE_BUTTON) {
+            DECL_WIDGET_SPECIFIC(ButtonWidget, buttonWidget, widget);
+            if (!data::get(widgetCursor.cursor, buttonWidget->enabled).getInt()) {
                 return false;
             }
         }
@@ -1266,8 +1274,7 @@ void processEvents() {
                     if (isActivePageInternal()) {
                         g_foundWidgetAtDown = foundWidget;
                     } else {
-                        DECL_WIDGET(widget, foundWidget.widgetOffset);
-                        if (isWidgetActionEnabled(widget)) {
+                        if (isWidgetActionEnabled(foundWidget)) {
                             g_foundWidgetAtDown = foundWidget;
                         }
                     }
