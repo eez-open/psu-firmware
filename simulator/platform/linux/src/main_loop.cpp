@@ -61,7 +61,7 @@ int main_loop() {
             switch (msg.msgtype) {
             case NEW_INPUT_MESSAGE:
                 p_ch = (char *)msg.data;
-                Serial.put(*p_ch);
+                SERIAL_PORT.put(*p_ch);
                 delete p_ch;
                 break;
 

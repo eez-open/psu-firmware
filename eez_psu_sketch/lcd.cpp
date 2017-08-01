@@ -485,6 +485,10 @@ void LCD::onLuminocityChanged() {
 }
 
 void LCD::adjustColor(uint8_t &ch, uint8_t &cl) {
+    if (persist_conf::devConf2.displayBackgroundLuminosityStep == DISPLAY_BACKGROUND_LUMINOSITY_STEP_DEFAULT) {
+        return;
+    }
+
     int i = (ch & 0xF0) | (cl & 0x0F);
     if (ch == g_colorCache[i][0] && cl == g_colorCache[i][1]) {
         // cache hit!
@@ -567,8 +571,8 @@ void LCD::setBackColor(uint8_t r, uint8_t g, uint8_t b) {
 }
 
 void LCD::setBackColor(uint16_t color, bool ignoreLuminocity) {
-    bch = bch = uint8_t(color >> 8);
-    bcl = bcl = uint8_t(color & 0xFF);
+    bch = uint8_t(color >> 8);
+    bcl = uint8_t(color & 0xFF);
     if (!ignoreLuminocity) {
         adjustBackgroundColor();
     }
