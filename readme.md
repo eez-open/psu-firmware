@@ -42,9 +42,10 @@ We recommend Arduino IDE version 1.6.x or newer to compile and deploy Arduino sk
 
 1. Download zip archive from the github repository. 
 2. Copy folders `eez_psu_sketch` and `libraries` from the zip archive into Arduino folder on your computer. Arduino folder is e.g. `My Documents\Arduino` on Windows or `Documents/Arduino` on Linux and Mac. 
-3. Open `eez_psu_sketch.ino` in Arduino IDE, check if everything is correct with Verify button
-4. Make sure that *Verify after code upload* option is not set (more details [here](https://github.com/arduino/Arduino/issues/5672)) in File... Preferences and upload the sketch using Upload button.
-5. Remote control can be accessed via Telnet client such as [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/) (connection type: raw, port: 5025) or serial client that comes with Arduino IDE or any other you like.
+3. Download Ethernet2 library from [here](https://github.com/eez-open/Ethernet2) and copy it to the `libraries` folder.
+4. Open `eez_psu_sketch.ino` in Arduino IDE, check if everything is correct with Verify button
+5. Make sure that *Verify after code upload* option is not set (more details [here](https://github.com/arduino/Arduino/issues/5672)) in File... Preferences and upload the sketch using Upload button.
+6. Remote control can be accessed via Telnet client such as [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/) (connection type: raw, port: 5025) or serial client that comes with Arduino IDE or any other you like.
 
 ### Simulator
 
