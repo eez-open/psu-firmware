@@ -136,13 +136,15 @@ void printError(int_fast16_t err) {
     if (serial::g_testResult == TEST_OK) {
         char errorOutputBuffer[256];
 
+        SERIAL_PORT.print("**ERROR");
+
         char datetime_buffer[20] = { 0 };
         if (datetime::getDateTimeAsString(datetime_buffer)) {
-            sprintf_P(errorOutputBuffer, PSTR("**ERROR [%s]: %d,\"%s\"\r\n"), datetime_buffer, (int16_t)err, SCPI_ErrorTranslate(err));
-        } else {
-            sprintf_P(errorOutputBuffer, PSTR("**ERROR: %d,\"%s\"\r\n"), (int16_t)err, SCPI_ErrorTranslate(err));
+            sprintf_P(errorOutputBuffer, PSTR(" [%s]"), datetime_buffer);
+            SERIAL_PORT.print(errorOutputBuffer);
         }
 
+        sprintf_P(errorOutputBuffer, PSTR(": %d,\"%s\""), (int16_t)err, SCPI_ErrorTranslate(err));
         SERIAL_PORT.println(errorOutputBuffer);
     }
 
