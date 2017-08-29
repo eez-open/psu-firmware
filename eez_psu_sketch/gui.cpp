@@ -1458,7 +1458,7 @@ void tick(uint32_t tick_usec) {
         return;
     }
 
-    if (g_activePageId == PAGE_ID_MAIN && int32_t(tick_usec - g_showPageTime) >= 50000L) {
+    if (!isFrontPanelLocked() && g_activePageId == PAGE_ID_MAIN && int32_t(tick_usec - g_showPageTime) >= 50000L) {
         if (showSetupWizardQuestion()) {
             return;
         }
