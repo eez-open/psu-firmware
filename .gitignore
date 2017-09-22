@@ -5,3 +5,8 @@ simulator/platform/win32/eez_psu_sim.VC.db
 *.opendb
 *.eez-studio-cache
 psu.eez-project-ui-state
+.pioenvs
+.piolibdeps
+.vscode/c_cpp_properties.json
+.travis.yml
+lib/readme.txt
