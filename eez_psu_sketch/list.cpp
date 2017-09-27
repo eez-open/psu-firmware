@@ -23,6 +23,7 @@
 #if OPTION_SD_CARD
 #include "sd_card.h"
 #endif
+#include "io_pins.h"
 
 #define CONF_COUNTER_THRESHOLD_IN_SECONDS 5
 
@@ -51,6 +52,7 @@ static struct {
     uint32_t nextPointTime;
     int32_t currentRemainingDwellTime;
     float currentTotalDwellTime;
+    uint32_t lastTickCount;
 } g_execution[CH_MAX];
 
 static bool g_active;
@@ -449,54 +451,67 @@ void tick(uint32_t tick_usec) {
 
             g_active = true;
 
-            bool set = false;
+            unsigned long currentTime = millis();
 
-            if (g_execution[i].it == -1) {
-                set = true;
+            uint32_t tickCount;
+            if (g_execution[i].currentTotalDwellTime > CONF_COUNTER_THRESHOLD_IN_SECONDS) {
+                tickCount = millis();
             } else {
-                if (g_execution[i].currentTotalDwellTime > CONF_COUNTER_THRESHOLD_IN_SECONDS) {
-                    g_execution[i].currentRemainingDwellTime = g_execution[i].nextPointTime - millis();
-                } else {
-                    g_execution[i].currentRemainingDwellTime = g_execution[i].nextPointTime - tick_usec;
-                }
-
-                if (g_execution[i].currentRemainingDwellTime <= 0) {
-                    set = true;
-                }
+                tickCount = tick_usec;
             }
 
-            if (set) {
-                if (++g_execution[i].it == maxListsSize(channel)) {
-                    if (g_execution[i].counter > 0) {
-                        if (--g_execution[i].counter == 0) {
-                            g_execution[i].counter = -1;
-                            trigger::setTriggerFinished(channel);
-                            return;
+            if (io_pins::isInhibited()) {
+                if (g_execution[i].it != -1) {
+                    g_execution[i].nextPointTime += tickCount - g_execution[i].lastTickCount;
+                }
+            } else {
+                bool set = false;
+
+                if (g_execution[i].it == -1) {
+                    set = true;
+                } else {
+                    g_execution[i].currentRemainingDwellTime = g_execution[i].nextPointTime - tickCount;
+
+                    if (g_execution[i].currentRemainingDwellTime <= 0) {
+                        set = true;
+                    }
+                }
+
+                if (set) {
+                    if (++g_execution[i].it == maxListsSize(channel)) {
+                        if (g_execution[i].counter > 0) {
+                            if (--g_execution[i].counter == 0) {
+                                g_execution[i].counter = -1;
+                                trigger::setTriggerFinished(channel);
+                                return;
+                            }
                         }
+
+                        g_execution[i].it = 0;
                     }
 
-                    g_execution[i].it = 0;
-                }
+                    int err;
+                    if (!setListValue(channel, g_execution[i].it, &err)) {
+                        generateError(err);
+                        abort();
+                        return;
+                    }
 
-                int err;
-                if (!setListValue(channel, g_execution[i].it, &err)) {
-                    generateError(err);
-                    abort();
-                    return;
-                }
-
-                g_execution[i].currentTotalDwellTime = g_channelsLists[i].dwellList[g_execution[i].it % g_channelsLists[i].dwellListLength];
-                // if dwell time is greater then CONF_COUNTER_THRESHOLD_IN_SECONDS ...
-                if (g_execution[i].currentTotalDwellTime > CONF_COUNTER_THRESHOLD_IN_SECONDS) {
-                    // ... then count in milliseconds
-                    g_execution[i].currentRemainingDwellTime = (uint32_t)round(g_execution[i].currentTotalDwellTime * 1000L);
-                    g_execution[i].nextPointTime = millis() + g_execution[i].currentRemainingDwellTime;
-                } else {
-                    // ... else count in microseconds
-                    g_execution[i].currentRemainingDwellTime = (uint32_t)round(g_execution[i].currentTotalDwellTime * 1000000L);
-                    g_execution[i].nextPointTime = tick_usec + g_execution[i].currentRemainingDwellTime;
+                    g_execution[i].currentTotalDwellTime = g_channelsLists[i].dwellList[g_execution[i].it % g_channelsLists[i].dwellListLength];
+                    // if dwell time is greater then CONF_COUNTER_THRESHOLD_IN_SECONDS ...
+                    if (g_execution[i].currentTotalDwellTime > CONF_COUNTER_THRESHOLD_IN_SECONDS) {
+                        // ... then count in milliseconds
+                        g_execution[i].currentRemainingDwellTime = (uint32_t)round(g_execution[i].currentTotalDwellTime * 1000L);
+                        g_execution[i].nextPointTime = millis() + g_execution[i].currentRemainingDwellTime;
+                    } else {
+                        // ... else count in microseconds
+                        g_execution[i].currentRemainingDwellTime = (uint32_t)round(g_execution[i].currentTotalDwellTime * 1000000L);
+                        g_execution[i].nextPointTime = tick_usec + g_execution[i].currentRemainingDwellTime;
+                    }
                 }
             }
+
+            g_execution[i].lastTickCount = tickCount;
         }
     }
 }

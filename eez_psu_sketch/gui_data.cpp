@@ -1180,6 +1180,15 @@ Value get(const Cursor &cursor, uint8_t id) {
         return data::Value(throbber[(millis() % 1000) / 125]);
     }
 
+    if (id == DATA_ID_IO_PINS_INHIBIT_STATE) {
+        persist_conf::IOPin &inputPin = persist_conf::devConf2.ioPins[0];
+        if (inputPin.function == io_pins::FUNCTION_INHIBIT) {
+            return data::Value(io_pins::isInhibited() ? 1 : 0);
+        } else {
+            return data::Value(2);
+        }
+    }
+
     Page *page = getActivePage();
     if (page) {
         Value value = page->getData(cursor, id);
@@ -1320,6 +1329,11 @@ bool isBlinking(const Cursor &cursor, uint8_t id) {
 
     if (g_focusCursor == cursor && g_focusDataId == id && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
         return true;
+    }
+
+    if (id == DATA_ID_IO_PINS_INHIBIT_STATE) {
+        persist_conf::IOPin &inputPin = persist_conf::devConf2.ioPins[0];
+        return inputPin.function == io_pins::FUNCTION_INHIBIT && io_pins::isInhibited();
     }
 
     return false;

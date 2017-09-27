@@ -40,6 +40,7 @@
 #include "channel_dispatcher.h"
 #include "list.h"
 #include "trigger.h"
+#include "io_pins.h"
 
 namespace eez {
 namespace psu {
@@ -1091,17 +1092,7 @@ void Channel::doDpEnable(bool enable) {
     }
 }
 
-void Channel::doOutputEnable(bool enable) {
-    if (!psu::g_isBooted) {
-        flags.afterBootOutputEnabled = enable;
-        return;
-    }
-
-    if (enable && !isOk()) {
-        return;
-    }
-
-    flags.outputEnabled = enable;
+void Channel::executeOutputEnable(bool enable) {
     ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, enable);
     setOperBits(OPER_ISUM_OE_OFF, !enable);
     bp::switchOutput(this, enable);
@@ -1149,6 +1140,33 @@ void Channel::doOutputEnable(bool enable) {
         onTimeCounter.start();
     } else {
         onTimeCounter.stop();
+    }
+}
+
+void Channel::doOutputEnable(bool enable) {
+    if (!psu::g_isBooted) {
+        flags.afterBootOutputEnabled = enable;
+        return;
+    }
+
+    if (enable && !isOk()) {
+        return;
+    }
+
+    flags.outputEnabled = enable;
+
+    if (!io_pins::isInhibited()) {
+        executeOutputEnable(enable);
+    }
+}
+
+void Channel::onInhibitedChanged(bool inhibited) {
+    if (isOutputEnabled()) {
+        if (inhibited) {
+            executeOutputEnable(false);
+        } else {
+            executeOutputEnable(true);
+        }
     }
 }
 

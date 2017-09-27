@@ -29,9 +29,12 @@ static struct {
     unsigned outputFault: 2;
     unsigned outputEnabled: 2;
     unsigned toutputPulse: 1;
+    unsigned inhibited : 1;
 } g_lastState = {
     2,
-    2
+    2,
+    0,
+    0
 };
 
 static uint32_t g_toutputPulseStartTickCount;
@@ -89,11 +92,11 @@ void tick(uint32_t tickCount) {
     persist_conf::IOPin &inputPin = persist_conf::devConf2.ioPins[0];
     if (inputPin.function == io_pins::FUNCTION_INHIBIT) {
         int value = digitalRead(EXT_TRIG);
-        if (value && inputPin.polarity == io_pins::POLARITY_POSITIVE || !value && inputPin.polarity == io_pins::POLARITY_NEGATIVE) {
+        unsigned inhibited = value && inputPin.polarity == io_pins::POLARITY_POSITIVE || !value && inputPin.polarity == io_pins::POLARITY_NEGATIVE ? 1 : 0;
+        if (inhibited != g_lastState.inhibited) {
+            g_lastState.inhibited = inhibited;
             for (int i = 0; i < CH_NUM; ++i) {
-                if (Channel::get(i).isOutputEnabled()) {
-                    Channel::get(i).outputEnable(false);
-                }
+                Channel::get(i).onInhibitedChanged(inhibited ? true : false);
             }
         }
     }
@@ -186,6 +189,10 @@ void refresh() {
         }
     }
 #endif
+}
+
+bool isInhibited() {
+    return g_lastState.inhibited ? true : false;
 }
 
 }

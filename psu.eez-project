@@ -2227,6 +2227,12 @@
       "defaultValue": "[{}, {}, {}]"
     },
     {
+      "name": "ioPins.inhibitState",
+      "type": "enum",
+      "enumItems": "[\n\"Off\",\n\"On\",\n\"Not used\"\n]",
+      "defaultValue": "1"
+    },
+    {
       "name": "ioPin.number",
       "type": "integer",
       "defaultValue": "1"
@@ -3756,12 +3762,43 @@
               ]
             },
             {
-              "type": "Rectangle",
               "x": 112,
+              "type": "Select",
+              "data": "ioPins.inhibitState",
               "y": 0,
               "width": 30,
               "height": 28,
-              "style": "default_inverse"
+              "style": "default",
+              "widgets": [
+                {
+                  "type": "Text",
+                  "action": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 30,
+                  "height": 28,
+                  "style": "default_S",
+                  "text": "\\u0097"
+                },
+                {
+                  "type": "Text",
+                  "action": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 30,
+                  "height": 28,
+                  "style": "prot_indicator_blink_S",
+                  "text": "\\u0097"
+                },
+                {
+                  "type": "Rectangle",
+                  "x": 0,
+                  "y": 0,
+                  "width": 30,
+                  "height": 28,
+                  "style": "default_inverse"
+                }
+              ]
             },
             {
               "type": "List",
@@ -28346,6 +28383,18 @@
         "paddingVertical": 0
       },
       {
+        "name": "prot_indicator_blink_S",
+        "inheritFrom": "default",
+        "font": "small",
+        "alignHorizontal": "center",
+        "alignVertical": "center",
+        "color": "#ff0000",
+        "borderSize": 0,
+        "paddingHorizontal": 0,
+        "paddingVertical": 0,
+        "blink": true
+      },
+      {
         "name": "set_value_balanced",
         "inheritFrom": "default",
         "font": "medium",
@@ -33549,6 +33598,81 @@
                 128,
                 31,
                 0
+              ]
+            }
+          },
+          {
+            "encoding": 151,
+            "x": 0,
+            "y": -2,
+            "width": 19,
+            "height": 19,
+            "dx": 19,
+            "source": {
+              "filePath": "fonts\\bdf\\webhostinghub-glyphs.14.bdf",
+              "encoding": 61674
+            },
+            "glyphBitmap": {
+              "width": 19,
+              "height": 19,
+              "pixelArray": [
+                192,
+                0,
+                0,
+                231,
+                128,
+                0,
+                127,
+                192,
+                0,
+                63,
+                224,
+                0,
+                63,
+                192,
+                0,
+                127,
+                224,
+                0,
+                127,
+                240,
+                0,
+                126,
+                112,
+                0,
+                126,
+                1,
+                0,
+                63,
+                3,
+                128,
+                23,
+                7,
+                192,
+                3,
+                15,
+                192,
+                0,
+                31,
+                192,
+                0,
+                63,
+                192,
+                0,
+                127,
+                128,
+                0,
+                255,
+                128,
+                0,
+                127,
+                192,
+                0,
+                60,
+                224,
+                0,
+                0,
+                96
               ]
             }
           }
@@ -76453,7 +76577,7 @@
     "scripts": [
       {
         "name": "sour:volt",
-        "code": "scpi> inst ch1\nscpi> volt 5\nscpi> volt\n5.00\n"
+        "code": "scpi> inst ch1\nscpi> volt 5\nscpi> volt?\n5.00\n"
       },
       {
         "name": "test1",
@@ -76512,6 +76636,11 @@
         "code": "scpi> SYSTem:COMMunicate:SERial:BAUD 4800\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n4800\nscpi> SYSTem:COMMunicate:SERial:BAUD 9600\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n9600\nscpi> SYSTem:COMMunicate:SERial:BAUD 19200\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n19200\nscpi> SYSTem:COMMunicate:SERial:BAUD 38400\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n38400\nscpi> SYSTem:COMMunicate:SERial:BAUD 57600\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n57600\nscpi> SYSTem:COMMunicate:SERial:BAUD 115200\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n115200\nscpi> SYSTem:COMMunicate:SERial:BAUD 200000\n**ERROR: -222,\"Data out of range\"\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n115200\nscpi> SYSTem:COMMunicate:SERial:PARity none\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"NONE\"\nscpi> SYSTem:COMMunicate:SERial:PARity EVEN\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"EVEN\"\nscpi> SYSTem:COMMunicate:SERial:PARity ODD\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"ODD\"\nscpi> SYSTem:COMMunicate:SERial:PARity MARK\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"MARK\"\nscpi> SYSTem:COMMunicate:SERial:PARity SPACE\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"SPACE\"\nscpi> SYSTem:COMMunicate:SERial:PARity TRT\n**ERROR: -224,\"Illegal parameter value\"\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"SPACE\"\n"
       }
     ],
-    "playground": {}
+    "terminal": {
+      "scpiTerminalAdapter": {
+        "selected": false,
+        "expanded": false
+      }
+    }
   }
 }

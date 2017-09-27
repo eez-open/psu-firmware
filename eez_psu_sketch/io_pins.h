@@ -42,6 +42,8 @@ void tick(uint32_t tickCount);
 void onTrigger();
 void refresh();
 
+bool isInhibited();
+
 }
 }
 } // namespace eez::psu::io_pins

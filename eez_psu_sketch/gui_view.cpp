@@ -60,7 +60,7 @@ int getCurrentStateBufferIndex() {
 ////////////////////////////////////////////////////////////////////////////////
 
 bool styleHasBorder(const Style *style) {
-    return style->flags & STYLE_FLAGS_BORDER;
+    return style->flags & STYLE_FLAGS_BORDER ? true : false;
 }
 
 bool styleIsHorzAlignLeft(const Style *style) {
@@ -82,6 +82,11 @@ bool styleIsVertAlignBottom(const Style *style) {
 font::Font styleGetFont(const Style *style) {
     return font::Font(style->font > 0 ? fonts[style->font - 1] : 0);
 }
+
+bool styleIsBlink(const Style *style) {
+    return style->flags & STYLE_FLAGS_BLINK ? true : false;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -390,32 +395,34 @@ void drawDisplayDataWidget(int pageId, const WidgetCursor &widgetCursor) {
 
 void drawTextWidget(int pageId, const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
+    DECL_WIDGET_STYLE(style, widget);
 
     widgetCursor.currentState->size = sizeof(WidgetState);
+    widgetCursor.currentState->flags.blinking = styleIsBlink(style) && g_isBlinkTime;
     widgetCursor.currentState->data = widget->data ? data::get(widgetCursor.cursor, widget->data) : 0;
 
     bool refresh = !widgetCursor.previousState ||
         widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed ||
+        widgetCursor.previousState->flags.blinking != widgetCursor.currentState->flags.blinking ||
         widgetCursor.previousState->data != widgetCursor.currentState->data;
 
     if (refresh) {
-        DECL_WIDGET_STYLE(style, widget);
         DECL_WIDGET_SPECIFIC(TextWidget, display_string_widget, widget);
 
         if (widget->data) {
             if (widgetCursor.currentState->data.isString()) {
                 drawText(pageId, widgetCursor.currentState->data.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
-                    widgetCursor.currentState->flags.pressed, false, display_string_widget->flags.ignoreLuminosity);
+                    widgetCursor.currentState->flags.pressed, widgetCursor.currentState->flags.blinking, display_string_widget->flags.ignoreLuminosity);
             } else {
                 char text[64];
                 widgetCursor.currentState->data.toText(text, sizeof(text));
                 drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
-                    widgetCursor.currentState->flags.pressed, false, display_string_widget->flags.ignoreLuminosity);
+                    widgetCursor.currentState->flags.pressed, widgetCursor.currentState->flags.blinking, display_string_widget->flags.ignoreLuminosity);
             }
         } else {
             DECL_STRING(text, display_string_widget->text);
             drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
-                widgetCursor.currentState->flags.pressed, false, display_string_widget->flags.ignoreLuminosity);
+                widgetCursor.currentState->flags.pressed, widgetCursor.currentState->flags.blinking, display_string_widget->flags.ignoreLuminosity);
         }
     }
 }

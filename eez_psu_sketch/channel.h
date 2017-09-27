@@ -445,6 +445,9 @@ public:
     /// Is channel output enabled?
     bool isOutputEnabled();
 
+    /// Enable/disable channel output depending on inhibited state
+    void onInhibitedChanged(bool inhibited);
+
     /// Enable/disable channel calibration.
     void calibrationEnable(bool enabled);
     void calibrationEnableNoEvent(bool enabled);
@@ -661,6 +664,7 @@ private:
     void setCvMode(bool cv_mode);
     void updateCcAndCvSwitch();
     
+    void executeOutputEnable(bool enable);
     void doOutputEnable(bool enable);
     
     void doRemoteSensingEnable(bool enable);

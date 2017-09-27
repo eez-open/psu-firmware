@@ -10,3 +10,5 @@ psu.eez-project-ui-state
 .vscode/c_cpp_properties.json
 .travis.yml
 lib/readme.txt
+.clang_complete
+.gcc-flags.json
