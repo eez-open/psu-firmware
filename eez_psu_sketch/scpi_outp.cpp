@@ -22,7 +22,6 @@
 #include "calibration.h"
 #include "channel_dispatcher.h"
 #include "profile.h"
-#include "io_pins.h"
 
 namespace eez {
 namespace psu {
@@ -89,17 +88,6 @@ scpi_result_t scpi_cmd_outputStateQ(scpi_t * context) {
     }
 
     SCPI_ResultBool(context, channel->isOutputEnabled());
-
-    return SCPI_RES_OK;
-}
-
-scpi_result_t scpi_cmd_outputStateInhibitQ(scpi_t * context) {
-    Channel *channel = param_channel(context);
-    if (!channel) {
-        return SCPI_RES_ERR;
-    }
-
-    SCPI_ResultBool(context, io_pins::isInhibited());
 
     return SCPI_RES_OK;
 }

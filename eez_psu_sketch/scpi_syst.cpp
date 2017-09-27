@@ -31,6 +31,7 @@
 #if OPTION_DISPLAY
 #include "gui.h"
 #endif
+#include "io_pins.h"
 
 namespace eez {
 namespace psu {
@@ -1280,6 +1281,11 @@ scpi_result_t scpi_cmd_systemCommunicateNtpQ(scpi_t *context) {
     SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
     return SCPI_RES_ERR;
 #endif
+}
+
+scpi_result_t scpi_cmd_systemInhibitQ(scpi_t * context) {
+    SCPI_ResultBool(context, io_pins::isInhibited());
+    return SCPI_RES_OK;
 }
 
 }

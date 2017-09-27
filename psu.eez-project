@@ -75908,9 +75908,6 @@
           },
           {
             "name": "OUTPut[:STATe]:TRIGgered?"
-          },
-          {
-            "name": "OUTPut[:STATe]:INHibit?"
           }
         ]
       },
@@ -76483,6 +76480,9 @@
           },
           {
             "name": "SYSTem:COMMunicate:NTP?"
+          },
+          {
+            "name": "SYSTem:INHibit?"
           }
         ]
       },
@@ -76639,11 +76639,6 @@
         "code": "scpi> SYSTem:COMMunicate:SERial:BAUD 4800\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n4800\nscpi> SYSTem:COMMunicate:SERial:BAUD 9600\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n9600\nscpi> SYSTem:COMMunicate:SERial:BAUD 19200\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n19200\nscpi> SYSTem:COMMunicate:SERial:BAUD 38400\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n38400\nscpi> SYSTem:COMMunicate:SERial:BAUD 57600\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n57600\nscpi> SYSTem:COMMunicate:SERial:BAUD 115200\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n115200\nscpi> SYSTem:COMMunicate:SERial:BAUD 200000\n**ERROR: -222,\"Data out of range\"\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n115200\nscpi> SYSTem:COMMunicate:SERial:PARity none\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"NONE\"\nscpi> SYSTem:COMMunicate:SERial:PARity EVEN\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"EVEN\"\nscpi> SYSTem:COMMunicate:SERial:PARity ODD\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"ODD\"\nscpi> SYSTem:COMMunicate:SERial:PARity MARK\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"MARK\"\nscpi> SYSTem:COMMunicate:SERial:PARity SPACE\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"SPACE\"\nscpi> SYSTem:COMMunicate:SERial:PARity TRT\n**ERROR: -224,\"Illegal parameter value\"\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"SPACE\"\n"
       }
     ],
-    "terminal": {
-      "scpiTerminalAdapter": {
-        "selected": false,
-        "expanded": false
-      }
-    }
+    "terminal": {}
   }
 }

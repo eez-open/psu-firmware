@@ -104,7 +104,6 @@
     SCPI_COMMAND("OUTPut:PROTection:COUPle?", scpi_cmd_outputProtectionCoupleQ) \
     SCPI_COMMAND("OUTPut[:STATe]:TRIGgered", scpi_cmd_outputStateTriggered) \
     SCPI_COMMAND("OUTPut[:STATe]:TRIGgered?", scpi_cmd_outputStateTriggeredQ) \
-    SCPI_COMMAND("OUTPut[:STATe]:INHibit?", scpi_cmd_outputStateInhibitQ) \
     SCPI_COMMAND("SIMUlator:LOAD:STATe", scpi_cmd_simulatorLoadState) \
     SCPI_COMMAND("SIMUlator:LOAD:STATe?", scpi_cmd_simulatorLoadStateQ) \
     SCPI_COMMAND("SIMUlator:LOAD", scpi_cmd_simulatorLoad) \
@@ -289,6 +288,7 @@
     SCPI_COMMAND("SYSTem:COMMunicate:ETHernet:MAC?", scpi_cmd_systemCommunicateEthernetMacQ) \
     SCPI_COMMAND("SYSTem:COMMunicate:NTP", scpi_cmd_systemCommunicateNtp) \
     SCPI_COMMAND("SYSTem:COMMunicate:NTP?", scpi_cmd_systemCommunicateNtpQ) \
+    SCPI_COMMAND("SYSTem:INHibit?", scpi_cmd_systemInhibitQ) \
     SCPI_COMMAND("TRIGger[:SEQuence][:IMMediate]", scpi_cmd_triggerSequenceImmediate) \
     SCPI_COMMAND("TRIGger[:SEQuence]:DELay", scpi_cmd_triggerSequenceDelay) \
     SCPI_COMMAND("TRIGger[:SEQuence]:DELay?", scpi_cmd_triggerSequenceDelayQ) \
