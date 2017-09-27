@@ -75908,6 +75908,9 @@
           },
           {
             "name": "OUTPut[:STATe]:TRIGgered?"
+          },
+          {
+            "name": "OUTPut[:STATe]:INHibit?"
           }
         ]
       },

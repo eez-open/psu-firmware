@@ -89,15 +89,16 @@ void updateOnCouplePin(int i) {
 
 void tick(uint32_t tickCount) {
     // execute input pins function
+    unsigned inhibited = 0;
     persist_conf::IOPin &inputPin = persist_conf::devConf2.ioPins[0];
     if (inputPin.function == io_pins::FUNCTION_INHIBIT) {
         int value = digitalRead(EXT_TRIG);
-        unsigned inhibited = value && inputPin.polarity == io_pins::POLARITY_POSITIVE || !value && inputPin.polarity == io_pins::POLARITY_NEGATIVE ? 1 : 0;
-        if (inhibited != g_lastState.inhibited) {
-            g_lastState.inhibited = inhibited;
-            for (int i = 0; i < CH_NUM; ++i) {
-                Channel::get(i).onInhibitedChanged(inhibited ? true : false);
-            }
+        inhibited = value && inputPin.polarity == io_pins::POLARITY_POSITIVE || !value && inputPin.polarity == io_pins::POLARITY_NEGATIVE ? 1 : 0;
+    }
+    if (inhibited != g_lastState.inhibited) {
+        g_lastState.inhibited = inhibited;
+        for (int i = 0; i < CH_NUM; ++i) {
+            Channel::get(i).onInhibitedChanged(inhibited ? true : false);
         }
     }
 
