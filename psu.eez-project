@@ -2661,6 +2661,7 @@
     "pages": [
       {
         "name": "ethernet_init",
+        "description": "Startup information about Ethernet communication initialization",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -2689,6 +2690,7 @@
       },
       {
         "name": "screen_calibration_intro",
+        "description": "Touchscreen calibration introduction",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -2743,6 +2745,7 @@
       },
       {
         "name": "screen_calibration_yes_no",
+        "description": "Touchscreen calibration confirmation",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -2830,6 +2833,7 @@
       },
       {
         "name": "screen_calibration_yes_no_cancel",
+        "description": "Touchscreen calibration confirmation with cancel",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -2927,7 +2931,7 @@
       },
       {
         "name": "welcome",
-        "description": "Welcome screen, display channels and firmware revision",
+        "description": "Welcome screen, display channels capacity and firmware revision",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -8231,7 +8235,7 @@
       },
       {
         "name": "main_help",
-        "description": "Redefined main menu",
+        "description": "Main menu help page",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -8302,7 +8306,7 @@
       },
       {
         "name": "edit_mode_keypad",
-        "description": "Value edit mode: keypad",
+        "description": "Keypad value edit mode",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -8891,7 +8895,7 @@
       },
       {
         "name": "edit_mode_step",
-        "description": "Value edit mode: step",
+        "description": "Step value edit mode",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -9612,6 +9616,7 @@
       },
       {
         "name": "edit_mode_step_help",
+        "description": "Step value edit mode help page",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -9692,7 +9697,7 @@
       },
       {
         "name": "edit_mode_slider",
-        "description": "Value edit mode: slider",
+        "description": "Slider value edit mode",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -10471,6 +10476,7 @@
       },
       {
         "name": "edit_mode_slider_help",
+        "description": "Slider value edit mode help page",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -10551,7 +10557,7 @@
       },
       {
         "name": "info_alert",
-        "description": "Info message",
+        "description": "Info message, single line",
         "portrait": {
           "x": 0,
           "y": 104,
@@ -10612,7 +10618,7 @@
       },
       {
         "name": "info_long_alert",
-        "description": "Info message",
+        "description": "Info message, two line",
         "portrait": {
           "x": 0,
           "y": 104,
@@ -10754,7 +10760,7 @@
       },
       {
         "name": "error_alert",
-        "description": "Error message",
+        "description": "Error message, single line",
         "portrait": {
           "x": 0,
           "y": 104,
@@ -10815,7 +10821,7 @@
       },
       {
         "name": "error_long_alert",
-        "description": "Error message",
+        "description": "Error message, two line",
         "portrait": {
           "x": 0,
           "y": 104,
@@ -10886,7 +10892,7 @@
       },
       {
         "name": "error_alert_with_action",
-        "description": "Error message",
+        "description": "Error message, two line with action",
         "portrait": {
           "x": 0,
           "y": 104,
@@ -11009,7 +11015,7 @@
       },
       {
         "name": "yes_no",
-        "description": "Info message",
+        "description": "Confirmation message",
         "portrait": {
           "x": 0,
           "y": 104,
@@ -11080,7 +11086,7 @@
       },
       {
         "name": "are_you_sure_with_message",
-        "description": "Info message",
+        "description": "Confirmation message with additional information",
         "portrait": {
           "x": 0,
           "y": 104,
@@ -11201,7 +11207,7 @@
       },
       {
         "name": "yes_no_later",
-        "description": "",
+        "description": "Confirmation message with option Later",
         "portrait": {
           "x": 0,
           "y": 104,
@@ -11282,7 +11288,7 @@
       },
       {
         "name": "text_message",
-        "description": "",
+        "description": "Textual message",
         "portrait": {
           "x": 0,
           "y": 104,
@@ -11334,7 +11340,7 @@
       },
       {
         "name": "async_operation_in_progress",
-        "description": "",
+        "description": "Async operation in progress (e.g. NTP server connection)",
         "portrait": {
           "x": 0,
           "y": 104,
@@ -11396,6 +11402,7 @@
       },
       {
         "name": "event_queue",
+        "description": "Event viewer queue",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -13171,7 +13178,7 @@
       },
       {
         "name": "ch_settings_prot_ovp",
-        "description": "Define selected protection values\n",
+        "description": "Channel over-voltage protection settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -13473,7 +13480,7 @@
       },
       {
         "name": "ch_settings_prot_ocp",
-        "description": "Define selected protection values\n",
+        "description": "Channel over-current protection settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -13811,7 +13818,7 @@
       },
       {
         "name": "ch_settings_prot_opp",
-        "description": "Define selected protection values\n",
+        "description": "Channel over-power protection settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -14113,7 +14120,7 @@
       },
       {
         "name": "ch_settings_prot_otp",
-        "description": "Define selected protection values\n",
+        "description": "Channel over-temperature protection settings\n",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -14514,7 +14521,7 @@
       },
       {
         "name": "ch_settings_trigger",
-        "description": "",
+        "description": "Channel trigger settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -14890,7 +14897,7 @@
       },
       {
         "name": "ch_settings_lists",
-        "description": "",
+        "description": "Channel LIST settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -15184,6 +15191,7 @@
       },
       {
         "name": "ch_settings_lists_insert_menu",
+        "description": "Channel LIST insert menu",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -15226,6 +15234,7 @@
       },
       {
         "name": "ch_settings_lists_delete_menu",
+        "description": "Channel LIST delete menu",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -15292,6 +15301,7 @@
       },
       {
         "name": "ch_start_list",
+        "description": "Channel start LIST menu",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -15342,7 +15352,7 @@
       },
       {
         "name": "ch_settings_adv",
-        "description": "Set advanced channel's options such as remote sensing, remote programming, triggering, calibration, tracking/coupling, Low ripple mode, output limits",
+        "description": "Set advanced channel's options",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -15699,7 +15709,7 @@
       },
       {
         "name": "ch_settings_adv_lripple",
-        "description": "Low-ripple mode of operation information and settings",
+        "description": "Lower ripple mode of operation information and settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -16061,7 +16071,7 @@
       },
       {
         "name": "ch_settings_adv_remote",
-        "description": "Output voltage remote sensing information and settings",
+        "description": "Output voltage remote sensing and programming settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -16387,7 +16397,7 @@
       },
       {
         "name": "ch_settings_adv_ranges",
-        "description": "Output voltage remote sensing information and settings",
+        "description": "Channel current ranges settings (Power board r5B12 only)",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -16640,7 +16650,7 @@
       },
       {
         "name": "ch_settings_adv_tracking",
-        "description": "Output voltage remote sensing information and settings",
+        "description": "Channels tracking mode of operation settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -16807,7 +16817,7 @@
       },
       {
         "name": "ch_settings_adv_coupling",
-        "description": "Output voltage remote programming information and settings",
+        "description": "Channels coupling mode of operation settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -17019,7 +17029,7 @@
       },
       {
         "name": "ch_settings_adv_coupling_info",
-        "description": "Output voltage remote programming information and settings",
+        "description": "Channel coupling information page",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -17144,7 +17154,7 @@
       },
       {
         "name": "ch_settings_adv_view",
-        "description": "Define selected protection values\n",
+        "description": "Channel display view settings\n",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -17419,7 +17429,7 @@
       },
       {
         "name": "ch_settings_info",
-        "description": "Retrieve channel's informations such as how long channel output is active, sensor temperature, self-test result and calibration status (CAL:STAT command). \"Calib. params:\" can be ON, OFF, Uncalibrated, Corrupted. Selecting this option when it's uncalibrated or calibration data is corrupted will lead to Calibration wizzard.",
+        "description": "Retrieve channel's informations such as how long channel output is active, sensor temperature, self-test result and calibration status (CAL:STAT command). \"Calib. params:\" can be ON, OFF, Uncalibrated, Corrupted. Selecting this option when it's uncalibrated or calibration data is corrupted will lead to Calibration wizard.",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -18113,7 +18123,7 @@
       },
       {
         "name": "sys_settings_aux_otp",
-        "description": "Define selected protection values\n",
+        "description": "AUX temperature sensor settings\n",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -18597,7 +18607,7 @@
       },
       {
         "name": "sys_settings_trigger",
-        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
+        "description": "General trigger settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -18794,7 +18804,7 @@
       },
       {
         "name": "sys_settings_io",
-        "description": "Define selected protection values\n",
+        "description": "Digital I/O pin settings\n",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -19008,7 +19018,7 @@
       },
       {
         "name": "sys_settings_date_time",
-        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
+        "description": "Date and time and NTP server settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -19632,7 +19642,7 @@
       },
       {
         "name": "sys_settings_encoder",
-        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
+        "description": "Encoder settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -19810,7 +19820,7 @@
       },
       {
         "name": "sys_settings2",
-        "description": "System settings. Some of options will require that all channels outputs are turned off. In that case output status will not be displayed on the right.",
+        "description": "System settings page 2 (serial, Ethernet, calibraton, display, sound, system password)",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -20015,7 +20025,7 @@
       },
       {
         "name": "sys_settings_serial",
-        "description": "",
+        "description": "Serial (via USB) settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -20355,7 +20365,7 @@
       },
       {
         "name": "sys_settings_ethernet",
-        "description": "Calibration general information, active calibration settings (CAL:STAT), change password (CAL:PASS:NEW) and enter wizard.",
+        "description": "Ethernet settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -20886,7 +20896,7 @@
       },
       {
         "name": "sys_settings_ethernet_static",
-        "description": "Calibration general information, active calibration settings (CAL:STAT), change password (CAL:PASS:NEW) and enter wizard.",
+        "description": "Ethernet static address settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -21531,7 +21541,7 @@
       },
       {
         "name": "sys_settings_cal_ch",
-        "description": "Calibration general information, active calibration settings (CAL:STAT), change password (CAL:PASS:NEW) and enter wizard.",
+        "description": "Channel callibration settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -21765,7 +21775,7 @@
       },
       {
         "name": "sys_settings_cal_ch_wiz_step",
-        "description": "Calibration wizard step 1: select channel",
+        "description": "Channel calibration wizard steps",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -22140,7 +22150,7 @@
       },
       {
         "name": "sys_settings_cal_ch_wiz_finish",
-        "description": "Calibration wizard step 1: select channel",
+        "description": "Channel calibration wizard final step",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -22247,6 +22257,7 @@
       },
       {
         "name": "sys_settings_screen_calibration",
+        "description": "Touchscreen calibration",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -22330,7 +22341,7 @@
       },
       {
         "name": "sys_settings_display",
-        "description": "Output voltage remote programming information and settings",
+        "description": "Display settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -22574,7 +22585,7 @@
       },
       {
         "name": "sys_settings_sound",
-        "description": "Output voltage remote programming information and settings",
+        "description": "Sound settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -22734,7 +22745,7 @@
       },
       {
         "name": "sys_settings_diag",
-        "description": "Calibration general information, active calibration settings (CAL:STAT), change password (CAL:PASS:NEW) and enter wizard.",
+        "description": "",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -22956,7 +22967,7 @@
       },
       {
         "name": "user_profiles2",
-        "description": "User profiles information and settings",
+        "description": "User profiles information and settings page 2",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -23040,7 +23051,7 @@
       },
       {
         "name": "user_profile_settings",
-        "description": "User profiles information and settings",
+        "description": "User profile information and settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -23263,7 +23274,7 @@
       },
       {
         "name": "user_profile_0_settings",
-        "description": "User profiles information and settings",
+        "description": "Default profile information and settings",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -23412,7 +23423,7 @@
       },
       {
         "name": "sys_info",
-        "description": "System information. ",
+        "description": "System information",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -23673,7 +23684,7 @@
       },
       {
         "name": "sys_info2",
-        "description": "System information. ",
+        "description": "System information page 2",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -23870,6 +23881,7 @@
       },
       {
         "name": "stand_by_menu",
+        "description": "Standby menu",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -23938,7 +23950,7 @@
       },
       {
         "name": "entering_standby",
-        "description": "Information about entering stand-by mode",
+        "description": "Information about entering standby mode",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -24034,7 +24046,7 @@
       },
       {
         "name": "standby",
-        "description": "Stand-by mode page that is displayed when power is applied and last known PSU state was stand-by.",
+        "description": "Standby mode page that is displayed when power is applied and last known PSU state was standby.",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -24090,6 +24102,7 @@
       },
       {
         "name": "display_off",
+        "description": "Information that display is turning off",
         "portrait": {
           "x": 0,
           "y": 0,
@@ -33429,21 +33442,21 @@
               "width": 13,
               "height": 19,
               "pixelArray": [
-                6,
+                15,
                 0,
-                6,
-                0,
-                7,
+                15,
                 0,
                 15,
                 0,
                 6,
                 0,
                 6,
+                0,
+                6,
                 120,
                 6,
                 120,
-                198,
+                230,
                 120,
                 230,
                 32,
@@ -33465,7 +33478,7 @@
                 0,
                 15,
                 0,
-                6,
+                15,
                 0
               ]
             }
@@ -33616,63 +33629,63 @@
               "width": 19,
               "height": 19,
               "pixelArray": [
-                192,
-                0,
-                0,
-                231,
-                128,
-                0,
                 127,
-                192,
-                0,
-                63,
-                224,
-                0,
-                63,
-                192,
-                0,
-                127,
-                224,
-                0,
-                127,
-                240,
-                0,
-                126,
-                112,
-                0,
-                126,
-                1,
-                0,
-                63,
-                3,
-                128,
-                23,
-                7,
-                192,
-                3,
-                15,
-                192,
-                0,
-                31,
-                192,
-                0,
-                63,
-                192,
-                0,
-                127,
-                128,
-                0,
                 255,
+                192,
                 128,
                 0,
-                127,
+                32,
+                0,
+                0,
+                0,
+                108,
+                108,
+                192,
+                108,
+                108,
+                192,
+                108,
+                108,
+                192,
+                110,
+                108,
+                192,
+                110,
+                108,
+                192,
+                111,
+                108,
+                192,
+                109,
+                111,
+                192,
+                109,
+                239,
+                192,
+                108,
+                236,
+                192,
+                108,
+                236,
+                192,
+                108,
+                108,
+                192,
+                108,
+                108,
+                192,
+                108,
+                108,
                 192,
                 0,
-                60,
-                224,
                 0,
                 0,
-                96
+                128,
+                0,
+                32,
+                127,
+                255,
+                192
               ]
             }
           }
@@ -76639,6 +76652,11 @@
         "code": "scpi> SYSTem:COMMunicate:SERial:BAUD 4800\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n4800\nscpi> SYSTem:COMMunicate:SERial:BAUD 9600\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n9600\nscpi> SYSTem:COMMunicate:SERial:BAUD 19200\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n19200\nscpi> SYSTem:COMMunicate:SERial:BAUD 38400\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n38400\nscpi> SYSTem:COMMunicate:SERial:BAUD 57600\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n57600\nscpi> SYSTem:COMMunicate:SERial:BAUD 115200\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n115200\nscpi> SYSTem:COMMunicate:SERial:BAUD 200000\n**ERROR: -222,\"Data out of range\"\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n115200\nscpi> SYSTem:COMMunicate:SERial:PARity none\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"NONE\"\nscpi> SYSTem:COMMunicate:SERial:PARity EVEN\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"EVEN\"\nscpi> SYSTem:COMMunicate:SERial:PARity ODD\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"ODD\"\nscpi> SYSTem:COMMunicate:SERial:PARity MARK\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"MARK\"\nscpi> SYSTem:COMMunicate:SERial:PARity SPACE\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"SPACE\"\nscpi> SYSTem:COMMunicate:SERial:PARity TRT\n**ERROR: -224,\"Illegal parameter value\"\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"SPACE\"\n"
       }
     ],
-    "terminal": {}
+    "terminal": {
+      "scpiTerminalAdapter": {
+        "selected": false,
+        "expanded": false
+      }
+    }
   }
 }
