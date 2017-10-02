@@ -15,23 +15,23 @@ This project has Arduino/Genuino sketch for [Mega2560](https://www.arduino.cc/en
 
 The unique feature of this project is a fully featured software simulator that can be used to evaluate all firmware features without having physical power supply on disposal. The simulator can be complied to run on major platforms such as Windows, Linux or Mac. It shares all the code with the Arduino Sketch plus emulation layer for the Arduino API, Ethernet library and digital controls used for programming and monitoring power supply.
 
-![Simulator GUI Front Panel](doc/simulator_screenshot.png)
+![Main page](doc/main_page_overview.png)
 
 Firmware key features:
 
 - [SCPI 1999.0](http://www.ivifoundation.org/scpi/) command set for remote control over Serial (via USB) and TCP
-- Multiple programmable channels
-- Programming and continuous monitoring of voltage, current and power
+- Multiple Power channels profiles
+- Voltage, current and power settings and continous monitoring
 - Voltage and current calibration
 - Tracking and coupling (series, parallel) mode
+- Programming lists of voltage, current and dwell time
 - Incremental encoder
 - Multiple input modes using touchscreen (_keypad_, _step_, _slider_)
 - Multiple presentation modes (_numeric_, _bar graphs_, _YT view_)
 - Various protection mechanisms: OVP (Over Voltage Protection), OCP (Over Current Protection), OPP (Over Power Protection) and OTP (Over Temperature Protection)
-- System date and time (using RTC)
-- EEPROM based storage for device configuration, calibration parameters and 10 user profiles.
+- System date and time (RTC, NTP)
+- EEPROM based storage for device configuration, calibration parameters and 10 user profiles
 - Local GUI control using TFT touch display
-- Remote control based on SCPI protocol
 - SD card support
 
 ## Installation
@@ -48,6 +48,8 @@ We recommend Arduino IDE version 1.6.x or newer to compile and deploy Arduino sk
 6. Remote control can be accessed via Telnet client such as [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/) (connection type: raw, port: 5025) or serial client that comes with Arduino IDE or any other you like.
 
 ### Simulator
+
+![Simulator GUI Front Panel](doc/simulator_screenshot.png)
 
 Here we will explain how to build simulator from source code on Windows, Linux and Mac.
 
