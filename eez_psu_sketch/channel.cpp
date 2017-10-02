@@ -354,6 +354,10 @@ Channel::Channel(
     ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
 
     autoRangeCheckLastTickCount = 0;
+
+    flags.cvMode = 0;
+    flags.ccMode = 0;
+    updateCcAndCvSwitch();
 }
 
 void Channel::protectionEnter(ProtectionValue &cpv) {
@@ -968,6 +972,8 @@ void Channel::setCcMode(bool cc_mode) {
     if (cc_mode != flags.ccMode) {
         flags.ccMode = cc_mode;
 
+        updateCcAndCvSwitch();
+
         setOperBits(OPER_ISUM_CC, cc_mode);
         setQuesBits(QUES_ISUM_VOLT, cc_mode);
 
@@ -1030,9 +1036,10 @@ void Channel::eventGpio(uint8_t gpio) {
         }
     }
 
-    setCvMode(gpio & (1 << IOExpander::IO_BIT_IN_CV_ACTIVE) ? true : false);
-    setCcMode(gpio & (1 << IOExpander::IO_BIT_IN_CC_ACTIVE) ? true : false);
-    updateCcAndCvSwitch();
+    if (!io_pins::isInhibited()) {
+        setCvMode(gpio & (1 << IOExpander::IO_BIT_IN_CV_ACTIVE) ? true : false);
+        setCcMode(gpio & (1 << IOExpander::IO_BIT_IN_CC_ACTIVE) ? true : false);
+    }
 }
 
 void Channel::adcReadMonDac() {
@@ -1119,7 +1126,6 @@ void Channel::executeOutputEnable(bool enable) {
 
         setCvMode(false);
         setCcMode(false);
-        updateCcAndCvSwitch();
 
         if (calibration::isEnabled()) {
             calibration::stop();
