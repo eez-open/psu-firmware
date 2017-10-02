@@ -63,7 +63,7 @@ float TempSensor::doRead() {
         debug::g_uTemp[index].set(adcValue);
     }
 #endif
-    float value = util::remap((float)adcValue, (float)p1_adc, p1_cels, (float)p2_adc, p2_cels);\
+    float value = util::remap((float)adcValue, (float)p1_adc, p1_cels, (float)p2_adc, p2_cels);
     return value;
 }
 
