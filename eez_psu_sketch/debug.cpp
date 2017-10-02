@@ -110,7 +110,22 @@ void DumpTraceBuffer() {
             SERIAL_PORT.print(": ");
         }
 
-        SERIAL_PORT.println(traceBuffer);
+        size_t len = strlen(traceBuffer);
+        if (len > 64) {
+            // dump trace buffer using chunks of 64 bytes
+            const size_t CHUNK_SIZE = 64;
+            const char *end = traceBuffer + len;
+            const char *p = traceBuffer;
+            const char *q = traceBuffer + CHUNK_SIZE;
+            do {
+                SERIAL_PORT.write(p, CHUNK_SIZE);
+                p = q;
+                q += CHUNK_SIZE;
+            } while (q < end);
+            SERIAL_PORT.println(p);
+        } else {
+            SERIAL_PORT.println(traceBuffer);
+        }
 
         SERIAL_PORT.flush();
     }

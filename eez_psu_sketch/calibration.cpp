@@ -178,7 +178,7 @@ bool Value::checkMid() {
     float allowedDiff = CALIBRATION_MID_TOLERANCE_PERCENT * (max_val - min_val) / 100.0f;
 
     float diff = fabsf(mid - mid_val);
-    if (fabsf(mid - mid_val) <= allowedDiff) {
+    if (diff <= allowedDiff) {
         return true;
     } else {
         DebugTraceF("MID point check failed: mid_level=%f, mid_data=%f, diff=%f, allowedDiff=%f",
