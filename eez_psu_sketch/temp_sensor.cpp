@@ -56,9 +56,20 @@ TempSensor::TempSensor(uint8_t index_, const char *name_, int installed_, int pi
 void TempSensor::init() {
 }
 
+float TempSensor::doRead() {
+    int adcValue = analogRead(pin);
+#if CONF_DEBUG
+    if (index < 3) {
+        debug::g_uTemp[index].set(adcValue);
+    }
+#endif
+    float value = util::remap((float)adcValue, (float)p1_adc, p1_cels, (float)p2_adc, p2_cels);\
+    return value;
+}
+
 bool TempSensor::test() {
 	if (installed) {
-		if (read() > TEMP_SENSOR_MIN_VALID_TEMPERATURE) {
+		if (doRead() > TEMP_SENSOR_MIN_VALID_TEMPERATURE) {
 			g_testResult = psu::TEST_OK;
 		} else {
 			g_testResult = psu::TEST_FAILED;
@@ -85,15 +96,7 @@ bool TempSensor::test() {
 
 float TempSensor::read() {
 	if (installed) {
-		int adcValue = analogRead(pin);
-
-#if CONF_DEBUG
-        if (index < 3) {
-            debug::g_uTemp[index].set(adcValue);
-        }
-#endif
-
-        float value = util::remap((float)adcValue, (float)p1_adc, p1_cels, (float)p2_adc, p2_cels);
+        float value = doRead();
 
 		if (value <= TEMP_SENSOR_MIN_VALID_TEMPERATURE) {
 			g_testResult = psu::TEST_FAILED;
