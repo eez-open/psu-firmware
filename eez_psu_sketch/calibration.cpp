@@ -181,7 +181,8 @@ bool Value::checkMid() {
     if (diff <= allowedDiff) {
         return true;
     } else {
-        DebugTraceF("MID point check failed: mid_level=%f, mid_data=%f, diff=%f, allowedDiff=%f",
+        DebugTraceF("%s MID point check failed: level=%f, data=%f, diff=%f, allowedDiff=%f",
+            voltOrCurr ? "Volt" : (currentRange == 0 ? "HI Curr" : "LO Curr"),
             mid, mid_val, diff, allowedDiff);
         return false;
     }
