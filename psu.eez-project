@@ -76119,7 +76119,7 @@
         ]
       },
       {
-        "name": "APPLy",
+        "name": "STATus",
         "commands": [
           {
             "name": "STATus:QUEStionable[:EVENt]?"
