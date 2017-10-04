@@ -690,10 +690,13 @@ bool setDisplayBackgroundLuminosityStep(uint8_t displayBackgroundLuminosityStep)
 }
 
 bool enableSerial(bool enable) {
-    devConf2.flags.serialEnabled = enable ? 1 : 0;
-    devConf2.flags.skipSerialSetup = 1;
-    saveDevice2();
-    serial::update();
+    unsigned serialEnabled = enable ? 1 : 0;
+    if (!devConf2.flags.skipSerialSetup || devConf.flags.ethernetEnabled != serialEnabled) {
+        devConf2.flags.serialEnabled = serialEnabled;
+        devConf2.flags.skipSerialSetup = 1;
+        saveDevice2();
+        serial::update();
+    }
     return true;
 }
 
@@ -719,10 +722,13 @@ int getSerialBaudIndex() {
 }
 
 bool setSerialBaudIndex(int baudIndex) {
-    devConf2.serialBaud = (uint8_t)baudIndex;
-    devConf2.flags.skipSerialSetup = 1;
-    saveDevice2();
-    serial::update();
+    uint8_t serialBaud = (uint8_t)baudIndex;
+    if (!devConf2.flags.skipSerialSetup || devConf2.serialBaud != serialBaud) {
+        devConf2.serialBaud = serialBaud;
+        devConf2.flags.skipSerialSetup = 1;
+        saveDevice2();
+        serial::update();
+    }
     return true;
 }
 
@@ -731,28 +737,46 @@ int getSerialParity() {
 }
 
 bool setSerialParity(int parity) {
-    devConf2.serialParity = (unsigned)parity;
-    devConf2.flags.skipSerialSetup = 1;
-    saveDevice2();
-    serial::update();
+    unsigned serialParity = (unsigned)parity;
+    if (!devConf2.flags.skipSerialSetup || devConf2.serialParity != serialParity) {
+        devConf2.serialParity = serialParity;
+        devConf2.flags.skipSerialSetup = 1;
+        saveDevice2();
+        serial::update();
+    }
     return true;
 }
 
 bool setSerialSettings(bool enabled, int baudIndex, int parity) {
-    devConf2.flags.serialEnabled = enabled;
-    devConf2.serialBaud = (uint8_t)baudIndex;
-    devConf2.serialParity = (unsigned)parity;
-    devConf2.flags.skipSerialSetup = 1;
-    saveDevice2();
-    serial::update();
+    unsigned serialEnabled = enabled ? 1 : 0;
+    uint8_t serialBaud = (uint8_t)baudIndex;
+    unsigned serialParity = (unsigned)parity;
+    if (
+        !devConf2.flags.skipSerialSetup || 
+        devConf.flags.ethernetEnabled != serialEnabled || 
+        devConf2.serialBaud != serialBaud || 
+        devConf2.serialParity != serialParity
+    ) {
+        devConf2.flags.serialEnabled = enabled;
+        devConf2.serialBaud = serialBaud;
+        devConf2.serialParity = serialParity;
+        devConf2.flags.skipSerialSetup = 1;
+        saveDevice2();
+        serial::update();
+    }
     return true;
 }
 
 bool enableEthernet(bool enable) {
-    devConf.flags.ethernetEnabled = enable ? 1 : 0;
-    saveDevice();
-    event_queue::pushEvent(enable ? event_queue::EVENT_INFO_ETHERNET_ENABLED : event_queue::EVENT_INFO_ETHERNET_DISABLED);
-    ethernet::update();
+    unsigned ethernetEnabled = enable ? 1 : 0;
+    if (!devConf2.flags.skipEthernetSetup || devConf.flags.ethernetEnabled != ethernetEnabled) {
+        devConf.flags.ethernetEnabled = ethernetEnabled;
+        saveDevice();
+        devConf2.flags.skipEthernetSetup = 1;
+        saveDevice2();
+        event_queue::pushEvent(enable ? event_queue::EVENT_INFO_ETHERNET_ENABLED : event_queue::EVENT_INFO_ETHERNET_DISABLED);
+        ethernet::update();
+    }
     return true;
 }
 
@@ -761,10 +785,13 @@ bool isEthernetEnabled() {
 }
 
 bool enableEthernetDhcp(bool enable) {
-    devConf2.flags.ethernetDhcpEnabled = enable ? 1 : 0;
-    devConf2.flags.skipEthernetSetup = 1;
-    saveDevice2();
-    ethernet::update();
+    unsigned ethernetDhcpEnabled = enable ? 1 : 0;
+    if (!devConf2.flags.skipEthernetSetup || devConf2.flags.ethernetDhcpEnabled != ethernetDhcpEnabled) {
+        devConf2.flags.ethernetDhcpEnabled = ethernetDhcpEnabled;
+        devConf2.flags.skipEthernetSetup = 1;
+        saveDevice2();
+        ethernet::update();
+    }
     return true;
 }
 
@@ -773,76 +800,99 @@ bool isEthernetDhcpEnabled() {
 }
 
 bool setEthernetMacAddress(uint8_t macAddress[]) {
-    memcpy(devConf2.ethernetMacAddress, macAddress, 6);
-    devConf2.flags.skipEthernetSetup = 1;
-    saveDevice2();
-    ethernet::update();
+    if (!devConf2.flags.skipEthernetSetup || memcmp(devConf2.ethernetMacAddress, macAddress, 6) != 0) {
+        memcpy(devConf2.ethernetMacAddress, macAddress, 6);
+        devConf2.flags.skipEthernetSetup = 1;
+        saveDevice2();
+        ethernet::update();
+    }
     return true;
 }
 
 bool setEthernetIpAddress(uint32_t ipAddress) {
-    devConf2.ethernetIpAddress = ipAddress;
-    devConf2.flags.skipEthernetSetup = 1;
-    saveDevice2();
-    ethernet::update();
+    if (!devConf2.flags.skipEthernetSetup || devConf2.ethernetIpAddress != ipAddress) {
+        devConf2.ethernetIpAddress = ipAddress;
+        devConf2.flags.skipEthernetSetup = 1;
+        saveDevice2();
+        ethernet::update();
+    }
     return true;
 }
 
 bool setEthernetDns(uint32_t dns) {
-    devConf2.ethernetDns = dns;
-    devConf2.flags.skipEthernetSetup = 1;
-    saveDevice2();
-    ethernet::update();
+    if (!devConf2.flags.skipEthernetSetup || devConf2.ethernetDns != dns) {
+        devConf2.ethernetDns = dns;
+        devConf2.flags.skipEthernetSetup = 1;
+        saveDevice2();
+        ethernet::update();
+    }
     return true;
 }
 
 bool setEthernetGateway(uint32_t gateway) {
-    devConf2.ethernetGateway = gateway;
-    devConf2.flags.skipEthernetSetup = 1;
-    saveDevice2();
-    ethernet::update();
+    if (!devConf2.flags.skipEthernetSetup || devConf2.ethernetGateway != gateway) {
+        devConf2.ethernetGateway = gateway;
+        devConf2.flags.skipEthernetSetup = 1;
+        saveDevice2();
+        ethernet::update();
+    }
     return true;
 }
 
 bool setEthernetSubnetMask(uint32_t subnetMask) {
-    devConf2.ethernetSubnetMask = subnetMask;
-    devConf2.flags.skipEthernetSetup = 1;
-    saveDevice2();
-    ethernet::update();
+    if (!devConf2.flags.skipEthernetSetup || devConf2.ethernetSubnetMask != subnetMask) {
+        devConf2.ethernetSubnetMask = subnetMask;
+        devConf2.flags.skipEthernetSetup = 1;
+        saveDevice2();
+        ethernet::update();
+    }
     return true;
 }
 
 bool setEthernetScpiPort(uint16_t scpiPort) {
-    devConf2.ethernetScpiPort = scpiPort;
-    devConf2.flags.skipEthernetSetup = 1;
-    saveDevice2();
-    ethernet::update();
+    if (!devConf2.flags.skipEthernetSetup || devConf2.ethernetScpiPort != scpiPort) {
+        devConf2.ethernetScpiPort = scpiPort;
+        devConf2.flags.skipEthernetSetup = 1;
+        saveDevice2();
+        ethernet::update();
+    }
     return true;
 }
 
 bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint32_t dns, uint32_t gateway, uint32_t subnetMask, uint16_t scpiPort, uint8_t *macAddress) {
     unsigned ethernetEnabled = enable ? 1 : 0;
-    if (devConf.flags.ethernetEnabled != ethernetEnabled) {
-        devConf.flags.ethernetEnabled = ethernetEnabled;
-        saveDevice();
-		event_queue::pushEvent(devConf.flags.ethernetEnabled ? event_queue::EVENT_INFO_ETHERNET_ENABLED : event_queue::EVENT_INFO_ETHERNET_DISABLED);
+    unsigned ethernetDhcpEnabled = enable ? 1 : 0;
+
+    if (
+        !devConf2.flags.skipEthernetSetup || 
+        devConf.flags.ethernetEnabled != ethernetEnabled || 
+        devConf2.flags.ethernetDhcpEnabled != ethernetDhcpEnabled ||
+        memcmp(devConf2.ethernetMacAddress, macAddress, 6) != 0 ||
+        devConf2.ethernetIpAddress != ipAddress ||
+        devConf2.ethernetDns != dns ||
+        devConf2.ethernetGateway != gateway ||
+        devConf2.ethernetSubnetMask != subnetMask ||
+        devConf2.ethernetScpiPort != scpiPort
+    ) {
+
+        if (devConf.flags.ethernetEnabled != ethernetEnabled) {
+            devConf.flags.ethernetEnabled = ethernetEnabled;
+            saveDevice();
+            event_queue::pushEvent(devConf.flags.ethernetEnabled ? event_queue::EVENT_INFO_ETHERNET_ENABLED : event_queue::EVENT_INFO_ETHERNET_DISABLED);
+        }
+
+        devConf2.flags.ethernetDhcpEnabled = ethernetDhcpEnabled;
+        memcpy(devConf2.ethernetMacAddress, macAddress, 6);
+        devConf2.ethernetIpAddress = ipAddress;
+        devConf2.ethernetDns = dns;
+        devConf2.ethernetGateway = gateway;
+        devConf2.ethernetSubnetMask = subnetMask;
+        devConf2.ethernetScpiPort = scpiPort;
+        devConf2.flags.skipEthernetSetup = 1;
+        saveDevice2();
+
+        ethernet::update();
     }
-
-    devConf2.flags.ethernetDhcpEnabled = dhcpEnable ? 1 : 0;
-
-    devConf2.ethernetIpAddress = ipAddress;
-    devConf2.ethernetDns = dns;
-    devConf2.ethernetGateway = gateway;
-    devConf2.ethernetSubnetMask = subnetMask;
-
-    devConf2.ethernetScpiPort = scpiPort;
-
-    memcpy(devConf2.ethernetMacAddress, macAddress, 6);
-
-    devConf2.flags.skipEthernetSetup = 1;
-
-    saveDevice2();
-    ethernet::update();
 
     return true;
 }
