@@ -102,7 +102,7 @@ bool setType(Type value) {
 #endif
                     }
 
-                    if (isTracked() || isCoupled) {
+                    if (isTracked() || isCoupled()) {
                         channel.prot_conf.flags.u_state = Channel::get(0).prot_conf.flags.u_state || Channel::get(1).prot_conf.flags.u_state ? 1 : 0;
                         channel.prot_conf.u_level = MIN(Channel::get(0).prot_conf.u_level, Channel::get(1).prot_conf.u_level);
                         channel.prot_conf.u_delay = MIN(Channel::get(0).prot_conf.u_delay, Channel::get(1).prot_conf.u_delay);
