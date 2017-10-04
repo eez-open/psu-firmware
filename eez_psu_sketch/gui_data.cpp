@@ -986,7 +986,7 @@ Value get(const Cursor &cursor, uint8_t id) {
             if (id == DATA_ID_OVP) {
                 unsigned ovp;
                 if (!channel.prot_conf.flags.u_state) ovp = 0;
-                else if (!channel.ovp.flags.tripped) ovp = 1;
+                else if (!channel_dispatcher::isOvpTripped(channel)) ovp = 1;
                 else ovp = 2;
                 return Value(ovp);
             }
@@ -994,7 +994,7 @@ Value get(const Cursor &cursor, uint8_t id) {
             if (id == DATA_ID_OCP) {
                 unsigned ocp;
                 if (!channel.prot_conf.flags.i_state) ocp = 0;
-                else if (!channel.ocp.flags.tripped) ocp = 1;
+                else if (!channel_dispatcher::isOcpTripped(channel)) ocp = 1;
                 else ocp = 2;
                 return Value(ocp);
             }
@@ -1002,7 +1002,7 @@ Value get(const Cursor &cursor, uint8_t id) {
             if (id == DATA_ID_OPP) {
                 unsigned opp;
                 if (!channel.prot_conf.flags.p_state) opp = 0;
-                else if (!channel.opp.flags.tripped) opp = 1;
+                else if (!channel_dispatcher::isOppTripped(channel)) opp = 1;
                 else opp = 2;
                 return Value(opp);
             }
@@ -1013,7 +1013,7 @@ Value get(const Cursor &cursor, uint8_t id) {
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
                 temperature::TempSensorTemperature &tempSensor = temperature::sensors[temp_sensor::CH1 + channel.index - 1];
                 if (!tempSensor.isInstalled() || !tempSensor.isTestOK() || !tempSensor.prot_conf.state) return 0;
-                else if (!tempSensor.isTripped()) return 1;
+                else if (!channel_dispatcher::isOtpTripped(channel)) return 1;
                 else return 2;
 #endif
             }

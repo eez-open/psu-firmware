@@ -383,16 +383,6 @@ void Channel::protectionEnter(ProtectionValue &cpv) {
 
     event_queue::pushEvent(eventId);
 
-    if (channel_dispatcher::isCoupled() && index == 1) {
-        if (IS_OVP_VALUE(this, cpv)) {
-            Channel::get(1).protectionEnter(Channel::get(1).ovp);
-        } else if (IS_OCP_VALUE(this, cpv)) {
-            Channel::get(1).protectionEnter(Channel::get(1).ocp);
-        } else {
-            Channel::get(1).protectionEnter(Channel::get(1).opp);
-        }
-    }
-
     onProtectionTripped();
 }
 

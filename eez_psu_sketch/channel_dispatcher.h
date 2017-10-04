@@ -104,6 +104,11 @@ bool isTripped(Channel& channel);
 void clearProtection(Channel& channel);
 void disableProtection(Channel& channel);
 
+bool isOvpTripped(Channel& channel);
+bool isOcpTripped(Channel& channel);
+bool isOppTripped(Channel& channel);
+bool isOtpTripped(Channel& channel);
+
 void clearOtpProtection(int sensor);
 void setOtpParameters(Channel &channel, int state, float level, float delay);
 void setOtpState(int sensor, int state);

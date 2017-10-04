@@ -74,44 +74,18 @@ bool setType(Type value) {
                     list::resetChannelList(channel);
 
                     if (isTracked()) {
+                        channel.setVoltageLimit(MIN(Channel::get(0).getVoltageLimit(), Channel::get(1).getVoltageLimit()));
                         if (i != 0) {
-                            Channel &channel1 = Channel::get(0);
-
-                            channel.setVoltageLimit(channel1.getVoltageLimit());
-                            channel.setVoltage(channel1.u.set);
-
-                            channel.setCurrentLimit(channel1.getCurrentLimit());
-                            channel.setCurrent(channel1.i.set);
-
-                            trigger::setVoltage(channel, channel1.u.def);
-                            trigger::setCurrent(channel, channel1.i.def);
-
-                            channel.prot_conf.flags.u_state = channel1.prot_conf.flags.u_state;
-                            channel.prot_conf.u_level = channel1.prot_conf.u_level;
-                            channel.prot_conf.u_delay = channel1.prot_conf.u_delay;
-
-                            channel.prot_conf.flags.i_state = channel1.prot_conf.flags.i_state;
-                            channel.prot_conf.i_delay = channel1.prot_conf.i_delay;
-
-                            channel.prot_conf.flags.p_state = channel1.prot_conf.flags.p_state;
-                            channel.prot_conf.p_level = channel1.prot_conf.p_level;
-                            channel.prot_conf.p_delay = channel1.prot_conf.p_delay;
-
-                            temperature::sensors[temp_sensor::CH1 + channel.index - 1].prot_conf.state =
-                                temperature::sensors[temp_sensor::CH1].prot_conf.state;
-
-                            temperature::sensors[temp_sensor::CH1 + channel.index - 1].prot_conf.level =
-                                temperature::sensors[temp_sensor::CH1].prot_conf.level;
-            
-                            temperature::sensors[temp_sensor::CH1 + channel.index - 1].prot_conf.delay =
-                                temperature::sensors[temp_sensor::CH1].prot_conf.delay;
-                        } else {
-                            channel.setVoltageLimit(MIN(Channel::get(0).getVoltageLimit(), Channel::get(1).getVoltageLimit()));
-                            channel.setCurrentLimit(MIN(Channel::get(0).getCurrentLimit(), Channel::get(1).getCurrentLimit()));
-
-                            trigger::setVoltage(channel, channel.u.def);
-                            trigger::setCurrent(channel, channel.i.def);
+                            channel.setVoltage(Channel::get(0).u.set);
                         }
+
+                        channel.setCurrentLimit(MIN(Channel::get(0).getCurrentLimit(), Channel::get(1).getCurrentLimit()));
+                        if (i != 0) {
+                            channel.setCurrent(Channel::get(0).i.set);
+                        }
+
+                        trigger::setVoltage(channel, Channel::get(0).u.def);
+                        trigger::setCurrent(channel, Channel::get(0).i.def);
                     } else {
                         channel.setVoltage(getUMin(channel));
                         channel.setVoltageLimit(MIN(Channel::get(0).getVoltageLimit(), Channel::get(1).getVoltageLimit()));
@@ -122,6 +96,13 @@ bool setType(Type value) {
                         trigger::setVoltage(channel, getUMin(channel));
                         trigger::setCurrent(channel, getIMin(channel));
 
+#ifdef EEZ_PSU_SIMULATOR
+                        channel.simulator.setLoadEnabled(false);
+                        channel.simulator.setLoad(Channel::get(0).simulator.getLoad());
+#endif
+                    }
+
+                    if (isTracked() || isCoupled) {
                         channel.prot_conf.flags.u_state = Channel::get(0).prot_conf.flags.u_state || Channel::get(1).prot_conf.flags.u_state ? 1 : 0;
                         channel.prot_conf.u_level = MIN(Channel::get(0).prot_conf.u_level, Channel::get(1).prot_conf.u_level);
                         channel.prot_conf.u_delay = MIN(Channel::get(0).prot_conf.u_delay, Channel::get(1).prot_conf.u_delay);
@@ -140,15 +121,10 @@ bool setType(Type value) {
                         temperature::sensors[temp_sensor::CH1 + channel.index - 1].prot_conf.level =
                             MIN(temperature::sensors[temp_sensor::CH1].prot_conf.level,
                                 temperature::sensors[temp_sensor::CH2].prot_conf.level);
-            
+
                         temperature::sensors[temp_sensor::CH1 + channel.index - 1].prot_conf.delay =
                             MIN(temperature::sensors[temp_sensor::CH1].prot_conf.delay,
                                 temperature::sensors[temp_sensor::CH2].prot_conf.delay);
-
-#ifdef EEZ_PSU_SIMULATOR
-                        channel.simulator.setLoadEnabled(false);
-                        channel.simulator.setLoad(Channel::get(0).simulator.getLoad());
-#endif
                     }
                 }
 
@@ -662,6 +638,38 @@ void disableProtection(Channel& channel) {
         Channel::get(1).disableProtection();
     } else {
         channel.disableProtection();
+    }
+}
+
+bool isOvpTripped(Channel& channel) {
+    if (isCoupled() || isTracked()) {
+        return Channel::get(0).ovp.flags.tripped || Channel::get(1).ovp.flags.tripped;
+    } else {
+        return channel.ovp.flags.tripped;
+    }
+}
+
+bool isOcpTripped(Channel& channel) {
+    if (isCoupled() || isTracked()) {
+        return Channel::get(0).ocp.flags.tripped || Channel::get(1).ocp.flags.tripped;
+    } else {
+        return channel.ocp.flags.tripped;
+    }
+}
+
+bool isOppTripped(Channel& channel) {
+    if (isCoupled() || isTracked()) {
+        return Channel::get(0).opp.flags.tripped || Channel::get(1).opp.flags.tripped;
+    } else {
+        return channel.opp.flags.tripped;
+    }
+}
+
+bool isOtpTripped(Channel& channel) {
+    if (isCoupled() || isTracked()) {
+        return temperature::sensors[temp_sensor::CH1].isTripped() || temperature::sensors[temp_sensor::CH2].isTripped();
+    } else {
+        return temperature::sensors[temp_sensor::CH1 + channel.index - 1].isTripped();
     }
 }
 
