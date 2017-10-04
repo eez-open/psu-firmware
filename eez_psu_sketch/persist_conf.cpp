@@ -346,19 +346,6 @@ bool isClickSoundEnabled() {
     return devConf.flags.isClickSoundEnabled ? true : false;
 }
 
-bool enableEthernet(bool enable) {
-    devConf.flags.ethernetEnabled = enable ? 1 : 0;
-    if (saveDevice()) {
-		event_queue::pushEvent(enable ? event_queue::EVENT_INFO_ETHERNET_ENABLED : event_queue::EVENT_INFO_ETHERNET_DISABLED);
-		return true;
-	}
-	return false;
-}
-
-bool isEthernetEnabled() {
-    return devConf.flags.ethernetEnabled ? true : false;
-}
-
 bool readSystemDate(uint8_t &year, uint8_t &month, uint8_t &day) {
     if (devConf.flags.dateValid) {
         year = devConf.date_year;
@@ -705,7 +692,9 @@ bool setDisplayBackgroundLuminosityStep(uint8_t displayBackgroundLuminosityStep)
 bool enableSerial(bool enable) {
     devConf2.flags.serialEnabled = enable ? 1 : 0;
     devConf2.flags.skipSerialSetup = 1;
-    return saveDevice2();
+    saveDevice2();
+    serial::update();
+    return true;
 }
 
 bool isSerialEnabled() {
@@ -732,11 +721,9 @@ int getSerialBaudIndex() {
 bool setSerialBaudIndex(int baudIndex) {
     devConf2.serialBaud = (uint8_t)baudIndex;
     devConf2.flags.skipSerialSetup = 1;
-    if (saveDevice2()) {
-        serial::update();
-        return true;
-    }
-    return false;
+    saveDevice2();
+    serial::update();
+    return true;
 }
 
 int getSerialParity() {
@@ -746,11 +733,9 @@ int getSerialParity() {
 bool setSerialParity(int parity) {
     devConf2.serialParity = (unsigned)parity;
     devConf2.flags.skipSerialSetup = 1;
-    if (saveDevice2()) {
-        serial::update();
-        return true;
-    }
-    return false;
+    saveDevice2();
+    serial::update();
+    return true;
 }
 
 bool setSerialSettings(bool enabled, int baudIndex, int parity) {
@@ -758,17 +743,29 @@ bool setSerialSettings(bool enabled, int baudIndex, int parity) {
     devConf2.serialBaud = (uint8_t)baudIndex;
     devConf2.serialParity = (unsigned)parity;
     devConf2.flags.skipSerialSetup = 1;
-    if (saveDevice2()) {
-        serial::update();
-        return true;
-    }
-    return false;
+    saveDevice2();
+    serial::update();
+    return true;
+}
+
+bool enableEthernet(bool enable) {
+    devConf.flags.ethernetEnabled = enable ? 1 : 0;
+    saveDevice();
+    event_queue::pushEvent(enable ? event_queue::EVENT_INFO_ETHERNET_ENABLED : event_queue::EVENT_INFO_ETHERNET_DISABLED);
+    ethernet::update();
+    return true;
+}
+
+bool isEthernetEnabled() {
+    return devConf.flags.ethernetEnabled ? true : false;
 }
 
 bool enableEthernetDhcp(bool enable) {
     devConf2.flags.ethernetDhcpEnabled = enable ? 1 : 0;
     devConf2.flags.skipEthernetSetup = 1;
-    return saveDevice2();
+    saveDevice2();
+    ethernet::update();
+    return true;
 }
 
 bool isEthernetDhcpEnabled() {
@@ -778,47 +775,56 @@ bool isEthernetDhcpEnabled() {
 bool setEthernetMacAddress(uint8_t macAddress[]) {
     memcpy(devConf2.ethernetMacAddress, macAddress, 6);
     devConf2.flags.skipEthernetSetup = 1;
-    return saveDevice2();
+    saveDevice2();
+    ethernet::update();
+    return true;
 }
 
 bool setEthernetIpAddress(uint32_t ipAddress) {
     devConf2.ethernetIpAddress = ipAddress;
     devConf2.flags.skipEthernetSetup = 1;
-    return saveDevice2();
+    saveDevice2();
+    ethernet::update();
+    return true;
 }
 
 bool setEthernetDns(uint32_t dns) {
     devConf2.ethernetDns = dns;
     devConf2.flags.skipEthernetSetup = 1;
-    return saveDevice2();
+    saveDevice2();
+    ethernet::update();
+    return true;
 }
 
 bool setEthernetGateway(uint32_t gateway) {
     devConf2.ethernetGateway = gateway;
     devConf2.flags.skipEthernetSetup = 1;
-    return saveDevice2();
+    saveDevice2();
+    ethernet::update();
+    return true;
 }
 
 bool setEthernetSubnetMask(uint32_t subnetMask) {
     devConf2.ethernetSubnetMask = subnetMask;
     devConf2.flags.skipEthernetSetup = 1;
-    return saveDevice2();
+    saveDevice2();
+    ethernet::update();
+    return true;
 }
 
 bool setEthernetScpiPort(uint16_t scpiPort) {
     devConf2.ethernetScpiPort = scpiPort;
     devConf2.flags.skipEthernetSetup = 1;
-    return saveDevice2();
+    saveDevice2();
+    ethernet::update();
+    return true;
 }
 
 bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint32_t dns, uint32_t gateway, uint32_t subnetMask, uint16_t scpiPort, uint8_t *macAddress) {
     unsigned ethernetEnabled = enable ? 1 : 0;
     if (devConf.flags.ethernetEnabled != ethernetEnabled) {
         devConf.flags.ethernetEnabled = ethernetEnabled;
-        if (!saveDevice()) {
-            devConf.flags.ethernetEnabled = !ethernetEnabled;
-            return false;
-        }
+        saveDevice();
 		event_queue::pushEvent(devConf.flags.ethernetEnabled ? event_queue::EVENT_INFO_ETHERNET_ENABLED : event_queue::EVENT_INFO_ETHERNET_DISABLED);
     }
 
@@ -835,7 +841,10 @@ bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint3
 
     devConf2.flags.skipEthernetSetup = 1;
 
-    return saveDevice2();
+    saveDevice2();
+    ethernet::update();
+
+    return true;
 }
 
 bool enableNtp(bool enable) {

@@ -36,6 +36,8 @@ uint32_t getIpAddress();
 
 bool isConnected();
 
+void update();  
+
 }
 }
 } // namespace eez::psu::ethernet

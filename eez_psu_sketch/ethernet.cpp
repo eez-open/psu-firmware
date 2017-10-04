@@ -284,6 +284,18 @@ bool isConnected() {
     return g_isConnected;
 }
 
+void update() {
+    if (g_isConnected) {
+        if (g_activeClient.connected()) {
+            g_activeClient.stop();
+            g_activeClient = EthernetClient();
+        }
+        g_isConnected = false;
+    }
+
+    g_testResult = psu::TEST_WARNING;
+}
+
 }
 }
 } // namespace eez::psu::ethernet
