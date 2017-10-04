@@ -44,6 +44,7 @@ public:
     void editListCount();
 
 private:
+    static void onFinishTriggerModeSet();
     static void onTriggerModeSet(uint8_t value);
 
     static void onTriggerOnListStopSet(uint8_t value);

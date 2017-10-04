@@ -38,6 +38,8 @@ namespace eez {
 namespace psu {
 namespace gui {
 
+static uint8_t g_newTriggerMode;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 ChSettingsTriggerPage::ChSettingsTriggerPage() {
@@ -81,14 +83,24 @@ data::Value ChSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t i
     return data::Value();
 }
 
-void ChSettingsTriggerPage::onTriggerModeSet(uint8_t value) {
-	popPage();
-    channel_dispatcher::setVoltageTriggerMode(*g_channel, (TriggerMode)value);
-    channel_dispatcher::setCurrentTriggerMode(*g_channel, (TriggerMode)value);
+void ChSettingsTriggerPage::onFinishTriggerModeSet() {
+    trigger::abort();
+    channel_dispatcher::setVoltageTriggerMode(*g_channel, (TriggerMode)g_newTriggerMode);
+    channel_dispatcher::setCurrentTriggerMode(*g_channel, (TriggerMode)g_newTriggerMode);
     profile::save();
+}
 
-    if (value != TRIGGER_MODE_LIST && list::isActive()) {
-        trigger::abort();
+void ChSettingsTriggerPage::onTriggerModeSet(uint8_t value) {
+    popPage();
+
+    if (channel_dispatcher::getVoltageTriggerMode(*g_channel) != value || channel_dispatcher::getCurrentTriggerMode(*g_channel) != value) {
+        g_newTriggerMode = value;
+
+        if (trigger::isInitiated() || list::isActive()) {
+            yesNoDialog(PAGE_ID_YES_NO, PSTR("Trigger is active. Are you sure?"), onFinishTriggerModeSet, 0, 0);
+        } else {
+            onFinishTriggerModeSet();
+        }
     }
 }
 
