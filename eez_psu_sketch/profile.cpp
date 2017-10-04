@@ -105,7 +105,7 @@ void recallChannelsFromProfile(Parameters *profile, int location) {
 			channel.simulator.voltProgExt = profile->channels[i].voltProgExt;
 #endif
 
-			channel.flags.outputEnabled = profile->channels[i].flags.output_enabled;
+			channel.flags.outputEnabled = channel.isTripped() ? 0 : profile->channels[i].flags.output_enabled;
 			channel.flags.senseEnabled = profile->channels[i].flags.sense_enabled;
 
 			if (channel.getFeatures() & CH_FEATURE_RPROG) {
