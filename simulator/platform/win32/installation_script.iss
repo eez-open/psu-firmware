@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "EEZ PSU Simulator"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.2"
 #define MyAppPublisher "Envox d.o.o."
 #define MyAppURL "http://www.envox.hr/eez/bench-power-supply/psu-introduction.html"
 #define MyAppExeName "eez_psu_sim.exe"
