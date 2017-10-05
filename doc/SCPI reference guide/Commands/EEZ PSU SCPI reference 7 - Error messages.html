@@ -1,0 +1,860 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title></title>
+		<style type="text/css">
+			/* Reset */
+			ol, ul { margin: 0; padding: 0; }
+			li { list-style-position: outside; }
+			
+			/* Paragraphs and texts */
+			.Heading_1 { margin-top: 4.23mm; margin-bottom: 2.12mm; font-size: 14.0pt; font-weight: bold; color: #0066cc; }
+			.Heading_2 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 12.0pt; font-weight: bold; font-style: italic; color: #0066cc; }
+			.Heading_3 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 11.0pt; font-weight: bold; color: #0066cc; }
+			.List_1_End { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-bottom: 3mm; text-indent: -6mm; }
+			.List_1_Start { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-top: 3mm; text-indent: -6mm; }
+			p { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
+			li { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
+			.cmd_code { text-align: left; font-family: "Courier New"; }
+			.cmd_code_End { text-align: left; margin-bottom: 1.99mm; font-family: "Courier New"; }
+			.cmd_code_Start { text-align: left; margin-top: 1.99mm; font-family: "Courier New"; }
+			.cmd_code_single { text-align: left; margin-top: 1.99mm; margin-bottom: 1.99mm; font-family: "Courier New"; }
+			.table_header { text-align: center; }
+			.backtick { font-family: "Courier New"; font-size: 10.0pt; font-weight: normal; font-style: normal; background-color: #dddddd; }
+			
+			/* Footnotes & endnotes */
+			#webpub_footnotes_divider { clear: both; margin-top: 2em; width: 25%; border-top: 1px solid black; }
+			#webpub_footnotes { font-size: 80%; text-align: justify; }
+			#webpub_footnotes td.label { text-align: right; vertical-align: top; }
+			#webpub_footnotes td.content { }
+			a.webpub_footnote { font-size: 80%; vertical-align: super; }
+			#webpub_endnotes_divider { clear: both; margin-top: 2em; width: 25%; border-top: 3px double black; }
+			#webpub_endnotes { font-size: 80%; text-align: justify; }
+			#webpub_endnotes td.label { text-align: right; vertical-align: top; }
+			#webpub_endnotes td.content { }
+			a.webpub_endnote { font-size: 80%; vertical-align: super; }
+			
+		</style>
+	</head>
+	<body>
+		<p class="Heading_1">7. <a name="__RefHeading__5776_1776152697"></a><a name="_error messages"></a>Error messages<a name="__RefHeading__5776_1776152697"></a></p>
+		<p>The system-defined error/event numbers are chosen on an enumerated (“1 of N”) basis. The SCPI-defined error/event numbers and the &lt;error/event_description&gt; portions of the full queue item are listed here. The first error/event described in each class (for example, -100, -200, -300, -400) is a “generic” error.</p>
+		<p class="Heading_2">7.1. <a name="command_err"></a>Command Error [-199, -100]</p>
+		<p>An &lt;error/event number&gt; in the range [-199, -100] indicates that a syntax error has been detected by the PSU’s SCPI command parser. The occurrence of an error in this class cause the command error bit (CME, bit 5) in the Standard Event Status Register (see <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-registers-and-queues.html#std_even_stat_reg"><span style="text-decoration: underline;">Section 3.1</span></a>) to be set.</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 170mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #ffcc00; width: 38%;">
+					<p class="table_header">Return string</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #ffcc00; width: 62%;">
+					<p class="table_header">Description</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">0,&quot;No error&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>The queue is completely empty. Every error/event in the queue has been read, or the queue was purposely cleared by a power-on event, *CLS, etc.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">−100,&quot;Command error&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Generic syntax error.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-101,&quot;Invalid character&quot; </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>An invalid character was found in the command string. There may be a character such as #, $, or % in the command keyword or within a parameter. </p>
+					<p>&#160;</p>
+					<p>Example: </p>
+					<p class="cmd_code_single">OUTP:STAT #ON </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-103,&quot;Invalid separator&quot; </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>An invalid separator was found in the command string. There may be a comma instead of a colon, semicolon, or blank space, or a blank space instead of a comma. </p>
+					<p>&#160;</p>
+					<p>Example: </p>
+					<p class="cmd_code_single">TRIG:SOUR,BUS</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-104,&quot;Data type error&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>The wrong parameter type was found in the command string. A string might have been sent when a string was expected, or vice versa. </p>
+					<p>&#160;</p>
+					<p>Example (the password must be a quoted string):</p>
+					<p class="cmd_code_single">CAL ON, 123</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-108,&quot;Parameter not allowed&quot; </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>More parameters were received than expected for the command. There may be an extra parameter, or parameter added to a command that does not accept a parameter.</p>
+					<p>&#160;</p>
+					<p>Example: </p>
+					<p class="cmd_code_single">INST CH1, CH2</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-109,&quot;Missing parameter&quot; </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>Fewer parameters were received than expected for the command. One or more parameters that are required for this command was not received.</p>
+					<p>&#160;</p>
+					<p>Example: </p>
+					<p class="cmd_code_single">APPL</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-113,&quot;Undefined header&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>A command was received that is not valid for this PSU. The command may have been misspelled, or it may not be a valid command. Short forms of commands, may contain up to four letters.</p>
+					<p>&#160;</p>
+					<p>Example:</p>
+					<p class="cmd_code_single">MEASU:CURR?</p>
+				</td>
+			</tr>
+			<tr style="height: 9.9mm; background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-114,&quot;Header suffix out of range&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>The numeric suffix attached to a command header is not one of the allowable values.</p>
+					<p>&#160;</p>
+					<p>Example: </p>
+					<p class="cmd_code_single">STAT:QUES:INST:ISUM3?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-131,&quot;Invalid suffix&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>A suffix was incorrectly specified for a numeric parameter. It may have been misspelled.</p>
+					<p>&#160;</p>
+					<p>Example (use A instead of V): </p>
+					<p class="cmd_code_single">VOLT 3A</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-138,&quot;Suffix not allowed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>A suffix was received following a numeric parameter which does not accept a suffix.</p>
+					<p>&#160;</p>
+					<p>Example (SEC is not a valid suffix):</p>
+					<p class="cmd_code_single">STAT:QUES:ENAB 10 SEC</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-151,&quot;Invalid string data&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>An invalid character string was received. Check to see if you have enclosed the character string in single or double quotes.</p>
+					<p>&#160;</p>
+					<p>Example: </p>
+					<p class="cmd_code_single">DISP:TEXT ’ON</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">7.2. <a name="exec_err"></a>Execution Error [-299, -200]</p>
+		<p>An &lt;error/event number&gt; in the range [-299, -200] indicates an error has been detected by the PSU’s execution control block. The occurrence of any error in this class sets the execution error bit (EXE, bit 4) in the Standard Event Status Register (see <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-registers-and-queues.html#std_even_stat_reg"><span style="text-decoration: underline;">Section 3.1</span></a>). One of the following events has occurred:</p>
+		<ul>
+			<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">A &lt;PROGRAM DATA&gt; element following a header was evaluated by the PSU as outside of its legal input range, or as otherwise inconsistent with the PSU’s capabilities.</li>
+			<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">A valid program message could not be properly executed.  Probably due to some PSU condition.</li>
+		</ul>
+		<p>Execution errors will be reported by the PSU after rounding and expression evaluation has taken place. Rounding a numeric data element, for example, will not be reported as an execution error. Events that generate execution errors will not generate Command Errors, device-specific errors, or Query Errors; see the other error definitions in this section.</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #ffcc00; width: 38%;">
+					<p class="table_header">Return string</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #ffcc00; width: 62%;">
+					<p class="table_header">Description</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-200,&quot;Execution error&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>This is the generic execution error when more specific error is not assigned in the case that command execution failed.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-221,&quot;Settings conflict&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Indicates that a legal program data element was parsed but could not be executed due to the current device state. </p>
+					<p>&#160;</p>
+					<p>Example (an attempt to enter low ripple mode while remote programming is activated):</p>
+					<p class="cmd_code_Start">VOLT:PROG EXT</p>
+					<p class="cmd_code_End">LRIP ON</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-222,&quot;Data out of range&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>A numeric parameter value is outside the valid range for the command. </p>
+					<p>&#160;</p>
+					<p>Example:</p>
+					<p class="cmd_code_single">VOLT 166</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-223,&quot;Too much data&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>A character string was received but could not be executed because the string length was more than 32 characters. This error can be generated by the CALibration:REMark command.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-224,&quot;Illegal parameter value&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>A discrete parameter was received which was not a valid choice for the command. You may have used an invalid parameter choice.</p>
+					<p>&#160;</p>
+					<p>Example:</p>
+					<p class="cmd_code_single">VOLT ON </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-230,&quot;Digital pin function mismatch&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Operation with digital pin is not possible due to incorrect function definition.</p>
+					<p>&#160;</p>
+					<p>Example:</p>
+					<p class="cmd_code_Start">DIG:PIN1:FUNC INH</p>
+					<p class="cmd_code">DIG:INP:DATA? 1</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-240,&quot;Hardware error&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>Command or query could not be executed because failure is detected during power-up self-test. Use the *TST? command to query self-test results. See also <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-error-messages.html#self-test_err_msg"><span style="text-decoration: underline;">Section 7.3.1</span></a></p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-241,&quot;Option not installed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Command or query could not be executed because of missing PSU hardware.</p>
+					<p>&#160;</p>
+					<p>Example (remote sense cannot be activated when BP_OPTION is false):</p>
+					<p class="cmd_code_single">OUTP:SENS ON</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-242,&quot;CH1 fault detected&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>A POWERGOOD signal failure has been detected on Channel 1. If such a condition has happened, PSU firmware will be immediately put into the stand-by mode.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-243,&quot;CH2 fault detected&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>A POWERGOOD signal failure has been detected on Channel 2. If such condition has happened, the PSU firmware will be immediately put into the stand-by mode.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-245,&quot;CH1 output fault detected&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>A prohibited state has been detected on the Channel 1 output (e.g., negative power is measured for extended period of time). The Channel 1 output will be turned off.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-246,&quot;CH2 output fault detected&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>A prohibited state has been detected on the Channel 2 output (e.g., negative power is measured for extended period of time). The Channel 2 output will be turned off.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-250,&quot;Mass storage error&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>Indicates that a SD card error occurred. This error message is generated when the firmware cannot detect the more specific errors described for errors -251 through -258.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-251,&quot;Missing mass storage&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Command or query could not be executed because of missing mass storage; SD card option was not installed. </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-252,&quot;Missing media&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>Command or query could not be executed because of a missing SD card.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-253,&quot;Corrupt media&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Command or query could not be executed because of corrupt media; for example, bad SD card or wrong format.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-254,&quot;Media full&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>Command or query could not be executed because the SD card is full.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-256,&quot;File name not found&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Command or query could not be executed because the file name on the device media was not found; for example, an attempt was made to read or copy a nonexistent file.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-257,&quot;File name error&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>Command or query could not be executed because the file name on the device media was in error; for example, an attempt was made to copy to a duplicate file name. </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-258,&quot;Media protected&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Command or query could not be executed because the SD card access is locked (MMEMory:LOCK command).</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">7.3. <a name="device_err"></a>Device-Specific Error [-399, -300], [1, 32767] </p>
+		<p>An &lt;error/event number&gt; in the range [-399, -300] or [1, 32767] indicates that the PSU has detected an error which is not a command error, a query error, or an execution error.  Most likely, some PSU operations did not properly complete, possibly due to an abnormal hardware or firmware condition. These codes are also used for self-test response errors. The occurrence of any error in this class sets the device-specific error bit (DDE, bit 3) in the Standard Event Status Register (see <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-registers-and-queues.html#std_even_stat_reg"><span style="text-decoration: underline;">Section 3.1</span></a>). </p>
+		<p>&#160;</p>
+		<p>Events that generate device-specific errors do not generate command errors, execution errors, or query errors; see the other error definitions in this section.</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #ffcc00; width: 38%;">
+					<p class="table_header">Return string</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #ffcc00; width: 62%;">
+					<p class="table_header">Description</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-211,&quot;Trigger ignored&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>A *TRG was received but the trigger was ignored. The trigger source should be set to the BUS and the trigger subsystem should be initiated by the INITiate[:IMMidate] command.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-213,&quot;Init ignored&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>An INITiate command was received but could not be executed because a measurement was already in progress.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-220,&quot;Cannot set range&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>The measurement range cannot be set because the currently measured value is higher then range max value. </p>
+					<p>&#160;</p>
+					<p>Example:</p>
+					<p class="cmd_code_Start">CURR?</p>
+					<p class="cmd_code_End">2.33</p>
+					<p class="cmd_code">SENS:CURR:RANG 0.5</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-310,&quot;System error&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>An internal firmware error has been detected.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-330,&quot;Self-test failed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>The PSU’s complete self-test failed from the remote interface (*TST? command). In addition to this error, more specific self-test errors are also reported. See also <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-error-messages.html#self-test_err_msg"><span style="text-decoration: underline;">Section </span></a><a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-error-messages.html#self-test_err_msg"><span style="text-decoration: underline;">7.3.1</span></a></p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-350,&quot;Queue overflow&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>The error queue is full because more than 16 errors have occurred. No additional errors will be stored until errors have been removed from the queue. The error queue is cleared when power has been turned off, or after a *CLS (clear status) command has been executed.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">-363,&quot;Input buffer overrun&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Input buffer overrun. The Serial or Ethernet port input buffer has lost data due to an overflow.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">100,&quot;Channel not found&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>A non existing channel number has been specified.</p>
+					<p>&#160;</p>
+					<p>Example:</p>
+					<p class="cmd_code_Start">SOUR3:VOLT?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">101,&quot;Calibration mode is off&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Calibration is not enabled. The PSU will not accept calibration commands.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">102,&quot;Invalid cal password&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>The calibration password is incorrect.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">104,&quot;Bad sequence of cal commands&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Calibration commands have not been entered in the proper sequence.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">105,&quot;Cal password too long&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>A calibration password was received which contained more than 16 characters.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">106,&quot;Cal password too short&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>A calibration password was received which contained less than 4 characters.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">107,&quot;Cal value out of range&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>The specified calibration value (CALibration:CURRent:DATA or CALibration:VOLTage:DATA) is not valid for the PSU's present measurement function and range.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">108,&quot;Cal output disabled&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>The Calibration operation has been aborted by sending the OUTPut OFF command during an output calibration.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">109,&quot;Invalid cal data&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>One or more calibration data values are impossible or out of range, and will prohibit the calibration parameters calculation. </p>
+					<p>&#160;</p>
+					<p>For example the MID value is lower then MIN, or the MIN value is higher then MAX, or the MID value is so out of accepted tolerance that it cannot be predicted with newly calculated calibration parameters. </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">110,&quot;Cal params missing or corrupted&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Calibration parameters activation started by the CALibration:STATe ON, &quot;&lt;password&gt;&quot; command failed because calibration has never been conducted or existing parameters are corrupted. </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">111,&quot;No new cal data exists&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>There was an attempt to save calibration data with the CALibration:SAVE command without calibration data. </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">122,&quot;Invalid sys password&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>The system password received is incorrect.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">125,&quot;Sys password too long&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>A system password was received which contained more than 16 characters.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">126,&quot;Sys password too short&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>A system password was received which contained less than 4 characters.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #ffffff; width: 38%;">
+					<p class="cmd_code">150,&quot;Power limit exceeded&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #ffffff; width: 62%;">
+					<p>The product of voltage and current exceeds channel power limitation. </p>
+					<p>&#160;</p>
+					<p>For example if channel power limit is 160&#160;W and the following sequence is executed:</p>
+					<p class="cmd_code_Start">VOLT 38</p>
+					<p class="cmd_code">CURR 4.4</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">151,&quot;Voltage limit exceeded&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Set voltage exceeds channel capability. </p>
+					<p>&#160;</p>
+					<p>Example:</p>
+					<p class="cmd_code_Start">VOLT 60</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">152,&quot;Current limit exceeded&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>Set current exceeds channel capability. </p>
+					<p>&#160;</p>
+					<p>Example:</p>
+					<p class="cmd_code_Start">CURR 5.5</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">201,&quot;Cannot execute before clearing protection&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Example:  a command such as OUTP ON cannot be executed on a channel where one or more protections will be tripped.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">270,&quot;CH1 ADC timeout detected&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>Channel 1 has been switched off after 3 consecutive ADC timeouts were detected.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">304,&quot;Incompatible transient modes&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>For example, VOLTage and CURRent cannot be in both STEP and LIST modes at the same time (see [SOURce[&lt;n&gt;]]:CURRent:MODE and [SOURce[&lt;n&gt;]]:VOLTage:MODE)</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">306,&quot;Too many list points&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>Too many list points have been specified.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">307,&quot;List lengths are not equivalent&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>One or more lists are not the same length. </p>
+					<p>&#160;</p>
+					<p>For example, number of CURRent steps is not equal to one or number of VOLTage steps</p>
+					<p class="cmd_code_Start">LIST:VOLT 0, 5, 10, 15, 20</p>
+					<p class="cmd_code">LIST:CURR 1, 2</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">308,&quot;Cannot be changed while transient trigger is initiated&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>An attempt to change a setting which cannot be changed while the instrument is waiting for or executing a trigger sequence.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">309,&quot;Cannot initiate while in fixed mode&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Cannot initiate transient generator. Either the VOLTage or CURRent function is set to FIXed mode.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">310,&quot;List not found&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>A list cannot be found on the SD card.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">311,&quot;List is empty&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>A list cannot be started because it’s empty.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">312,&quot;Cannot execute when the channels are coupled&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>Cannot execute a command when the channel outputs are coupled.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">313,&quot;Cannot execute in tracking mode&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>Cannot execute a command when the tracking mode is active.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">320,&quot;Firmware update error&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>An attempt to upload firmware via LAN has failed due to communication error, checksum error, etc.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">400,&quot;Cannot load empty profile&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>An attempt has been made to recall an empty or erased user profile with *RCL command.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">500,&quot;Down-programmer on CH1 switched off&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>The down programmer has been switched off because a negative output power (<span class="backtick">DP_NEG_LEV</span>) has been measured on Channel 1 that has lasted more then <span class="backtick">DP_NEG_DELAY</span> seconds.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">501,&quot;Down-programmer on CH2 switched off&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>The down programmer has been switched off because a negative output power (<span class="backtick">DP_NEG_LEV</span>) has been measured on Channel 2 that has lasted more then <span class="backtick">DP_NEG_DELAY</span> seconds.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">505,&quot;External voltage on CH1 detected&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>An external voltage has been measured (e.g., from a battery or other power source intentionally or mistakenly left connected) on Channel 1 while output is switched from off to on.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
+					<p class="cmd_code">506,&quot;External voltage on CH2 detected&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
+					<p>An external voltage has been measured (e.g., from a battery or other power source intentionally or mistakenly left connected) on Channel 2 while output is switched from off to on.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">615,&quot;External EEPROM save failed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>If non-volatile memory (an external EEPROM) is not installed, damaged or not responsive, and <span class="backtick">OPTION_EXT_EEPROM</span> is set to 1 (<span class="backtick">conf.h</span>) this error will be reported.</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_3">7.3.1. <a name="__RefHeading__10051_1925441995"></a><a name="self-test_err_msg"></a>Self-Test Error Messages<a name="__RefHeading__10051_1925441995"></a></p>
+		<p>During power-up, the PSU will start self-test sequences when communication with all SPI devices that is marked as installed will be established. The scope of the self-test depends on device capability and it could vary from simply reading device registers, and waiting for expected responses to more complex operations such as setting DAC registers and reading back those values using the ADC (if ADC test passed). Every test failure will be announced by an error beep, and one error message per failed test will be inserted into the error queue. The device-specific error bit (DDE, bit 3) in the Standard Event Status Register (see <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-registers-and-queues.html#std_even_stat_reg"><span style="text-decoration: underline;">Section 3.1</span></a>) will also be set.</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #ffcc00; width: 37%;">
+					<p class="table_header">Return string</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #ffcc00; width: 63%;">
+					<p class="table_header">Description</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">210,&quot;CH1 IOEXP test failed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p>Communication with the Channel 1 I/O expander is not possible. Probably because the I/O expander is not functional.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 37%;">
+					<p class="cmd_code">211,&quot;CH2 IOEXP test failed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 63%;">
+					<p>Communication with the Channel 2 I/O expander is not possible. Probably because the I/O expander is not functional.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">220,&quot;CH1 ADC test failed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p>Communication with the Channel 1 ADC is not possible. Probably because values written into various registers are not equal to the returned values.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 37%;">
+					<p class="cmd_code">221,&quot;CH2 ADC test failed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 63%;">
+					<p>Communication with the Channel 2 ADC is not possible. Probably because values written into various registers are not equal to the returned values.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">230,&quot;CH1 DAC test failed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p>The Channel 1 DAC is not functional.  Possibly because communication has failed, or because there's a difference between the test voltage data sent to the Channel 1 DAC and that read back.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 37%;">
+					<p class="cmd_code">231,&quot;CH2 DAC test failed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 63%;">
+					<p>The Channel 2 DAC is not functional.  Possibly because communication has failed, or because there's a difference between the test voltage data sent to the Channel 2 DAC and that read back.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">240,&quot;External EEPROM test failed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p>The non-volatile memory on the Arduino board has failed the checksum integrity test.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 37%;">
+					<p class="cmd_code">250,&quot;RTC test failed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 63%;">
+					<p>The RTC (real time clock) on the Arduino board is not present,  or the date or time values returned are not valid, or the last datetime value stored into non-volatile memory is greater then RTC datetime.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">260,&quot;Ethernet test failed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p>The Ethernet controller on the Arduino Shield board test failed.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 37%;">
+					<p class="cmd_code">630,&quot;Fan test failed&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 63%;">
+					<p>The measured fan speed during the self-test procedure is not within expected range.</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<p>For example, if SPI-bus cable is accidentally not connected, or wrongly wired, on Channel 1 two errors will be generated and placed into the error queue which can be checked using the following command sequence:</p>
+		<p>&#160;</p>
+		<p class="cmd_code_Start">SYST:ERR:COUN?</p>
+		<p class="cmd_code_End">2</p>
+		<p class="cmd_code">SYST:ERR?</p>
+		<p class="cmd_code_End">210,&quot;CH1 IOEXP test failed&quot; </p>
+		<p class="cmd_code">SYST:ERR?</p>
+		<p class="cmd_code_End">220,&quot;CH1 ADC test failed&quot; </p>
+		<p>&#160;</p>
+		<p>&#160;</p>
+		<p>&#160;</p>
+		<p>&#160;</p>
+	</body>
+</html>

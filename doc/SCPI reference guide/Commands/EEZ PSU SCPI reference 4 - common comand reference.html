@@ -1,0 +1,872 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title></title>
+		<style type="text/css">
+			/* Reset */
+			ol, ul { margin: 0; padding: 0; }
+			li { list-style-position: outside; }
+			
+			/* Paragraphs and texts */
+			.Default_ntt { }
+			.Heading_1 { margin-top: 4.23mm; margin-bottom: 2.12mm; font-size: 14.0pt; font-weight: bold; color: #0066cc; }
+			.Heading_2 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 12.0pt; font-weight: bold; font-style: italic; color: #0066cc; }
+			.List_1 { text-align: left; margin-left: 10mm; margin-right: 1.99mm; text-indent: -6mm; }
+			.List_1_End { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-bottom: 3mm; text-indent: -6mm; }
+			.List_1_Start { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-top: 3mm; text-indent: -6mm; }
+			p { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
+			li { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
+			.cmd_code { text-align: left; font-family: "Courier New"; }
+			.cmd_code_End { text-align: left; margin-bottom: 1.99mm; font-family: "Courier New"; }
+			.cmd_code_Start { text-align: left; margin-top: 1.99mm; font-family: "Courier New"; }
+			.cmd_code_single { text-align: left; margin-top: 1.99mm; margin-bottom: 1.99mm; font-family: "Courier New"; }
+			.cmd_root { text-align: left; color: #0066cc; }
+			.note { font-style: italic; }
+			.scpi0 { text-align: left; }
+			.table_header { text-align: center; }
+			
+			/* Footnotes & endnotes */
+			#webpub_footnotes_divider { clear: both; margin-top: 2em; width: 25%; border-top: 1px solid black; }
+			#webpub_footnotes { font-size: 80%; text-align: justify; }
+			#webpub_footnotes td.label { text-align: right; vertical-align: top; }
+			#webpub_footnotes td.content { }
+			a.webpub_footnote { font-size: 80%; vertical-align: super; }
+			#webpub_endnotes_divider { clear: both; margin-top: 2em; width: 25%; border-top: 3px double black; }
+			#webpub_endnotes { font-size: 80%; text-align: justify; }
+			#webpub_endnotes td.label { text-align: right; vertical-align: top; }
+			#webpub_endnotes td.content { }
+			a.webpub_endnote { font-size: 80%; vertical-align: super; }
+			
+		</style>
+	</head>
+	<body>
+		<p class="Heading_1">4. <a name="__RefHeading__6099_1338916529"></a><a name="_ieee488"></a>Common command reference<a name="__RefHeading__6099_1338916529"></a></p>
+		<p>This section summarizes the mandatory subset of IEEE 488.2 commands required for any SCPI compliant instrument.</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 25%;">
+					<p class="table_header">Common command</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 75%;">
+					<p class="table_header">Description</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0"><a href="#cls"><span style="text-decoration: underline;">*CLS</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Clears all status data structures</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0"><a href="#ese"><span style="text-decoration: underline;">*ESE {&lt;value&gt;}</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Programs the Standard Event Status Enable register bits</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0"><a href="#esr"><span style="text-decoration: underline;">*ESR?</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Reads the Standard Event Status Register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0"><a href="#idn"><span style="text-decoration: underline;">*IDN?</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Returns the UNIQUE identification of the PSU</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0"><a href="#opc"><span style="text-decoration: underline;">*OPC</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Operation Complete Command used for program synchronization</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0"><a href="#rcl"><span style="text-decoration: underline;">*RCL {&lt;profile&gt;}</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Recalls the PSU state stored in the specified storage location</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0"><a href="#rst"><span style="text-decoration: underline;">*RST</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Reset PSU to the initial state</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0"><a href="#sav"><span style="text-decoration: underline;">*SAV {&lt;profile&gt;}</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p class="Default_ntt">Stores the current PSU state in the specified storage location</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0"><a href="#stb"><span style="text-decoration: underline;">*STB?</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Reads the Status Byte register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0"><a href="#trg"><span style="text-decoration: underline;">*TRG</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Generates a software trigger</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0"><a href="#tst"><span style="text-decoration: underline;">*TST?</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Returns Self-Test results</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0"><a href="#wai"><span style="text-decoration: underline;">*WAI</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p class="scpi0">Waits until all pending commands are completed</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">4.1. *<a name="cls"></a>CLS<a name="cls"></a></p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p>Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_root">*CLS</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>Clear Status Command. This command clears all status data structures in the PSU:</p>
+					<ul>
+						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">Standard Event Status Register</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">OPERation Event Status Register</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">QUEStionable Event Status Register</li>
+						<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">Error/Event Queue</li>
+					</ul>
+					<p class="Default_ntt" style="text-align: left;">The corresponding condition and enable registers are unaffected. If *CLS immediately follows a program message terminator (&lt;NL&gt;), then the output queue and the MAV bit are also cleared. </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>None</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>*ESR?</p>
+					<p>STATus:OPERation[:EVENt]</p>
+					<p>STATus:OPERation:INSTrument[:EVENt]</p>
+					<p>STATus:OPERation:INSTrument:ISUMmary[&lt;n&gt;][:EVENt]</p>
+					<p>STATus:QUEStionable[:EVENt]</p>
+					<p>STATus:QUEStionable:INSTrument[:EVENt]</p>
+					<p>STATus:QUEStionable:INSTrument:ISUMmary[&lt;n&gt;][:EVENt]</p>
+					<p>SYSTem:ERRor</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">4.2. *<a name="ese"></a>ESE<a name="ese"></a></p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Syntax</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_root">*ESE {&lt;value&gt;}</p>
+					<p class="cmd_root">*ESE?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Description</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>Standard Event Status Enable Command. This command sets the Standard Event Status Enable register bits in the PSU. Those settings determine which events of the Standard Event Status Event register (see <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-common-command-reference.html#esr"><span style="text-decoration: underline;">*ESR?</span></a>) are allowed to set the ESB (Event Summary Bit) of the Status Byte register. A 1 in the bit position enables the corresponding event. All of the enabled events of the Standard Event Status Event Register are logically ORed sets the Event Summary Bit (ESB) of the Status Byte Register.</p>
+					<p>A STATus:PRESet command does not clear the bits in the Status Byte register.</p>
+					<p>See also <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-registers-and-queues.html#std_even_stat_reg"><span style="text-decoration: underline;">Section 3.1</span></a> in this document.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Parameters</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 11%;">
+					<p style="text-align: center;">Name</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 20%;">
+					<p style="text-align: center;">Type</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 36%;">
+					<p style="text-align: center;">Range</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 18%;">
+					<p style="text-align: center;">Default</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 11%;">
+					<p>&lt;value&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 20%;">
+					<p style="text-align: center;">Numeric</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p>0 – 255 (A decimal value which corresponds to the binary-weighted sum of the bits in the register. See also table in <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-registers-and-queues.html#std_even_stat_reg"><span style="text-decoration: underline;">Section 3.1</span></a>).</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
+					<p style="text-align: center;">None</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>The query reads the enable register and returns a decimal value which corresponds to the binary-weighted sum of all bits set in the register.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>To enable bit 2 (decimal value = 4), bit 3 (decimal value = 8), and bit 7 (decimal value = 128), the corresponding decimal value would be 140 (4 + 8 + 128):</p>
+					<p class="cmd_code_single">*ESE 140</p>
+					<p>Read value of the Standard Event Status Enable register:</p>
+					<p class="cmd_code_Start">*ESE?</p>
+					<p class="cmd_code">140</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Errors</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_code">-200,&quot;Execution error&quot;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>*CLS</p>
+					<p>*RST</p>
+					<p>STATus:PRESet</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">4.3. *<a name="esr"></a>ESR<a name="esr"></a>?</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_root">*ESR?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>Standard Event Status Register (see <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-registers-and-queues.html#stat_byte_reg"><span style="text-decoration: underline;">Section 3.2</span></a>) Query. Reading the Standard Event Status Event register clears it.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>The PSU returns a decimal value which corresponds to the binary-weighted sum of all bits in the register. </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>If ERRor (bit 2) is set:</p>
+					<p class="cmd_code_Start">ESR?</p>
+					<p class="cmd_code">4</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">4.4. *<a name="idn"></a>IDN<a name="idn"></a>?</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_root">*IDN?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>Identification query for the UNIQUE identification of the PSU. (see also IEEE 488.2 10.14).</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>The following system parameters will be displayed: &lt;vendor&gt;, &lt;model&gt;, &lt;serial number&gt;, &lt;firmware&gt;. The &lt;model&gt; include information about the CPU in use in brackets and could be Mega, Due or Simulator. More information about the simulator can be found in <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-simulator.html"><span style="text-decoration: underline;">Section 9</span></a>.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_code">*IDN?</p>
+					<p class="cmd_code_Start">EEZ,PSU 2/50/03 (Due),00001,M1.0.96 </p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">4.5. *<a name="opc"></a>OPC<a name="opc"></a></p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_root">*OPC</p>
+					<p class="cmd_root">*OPC?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>Operation Complete Command. The command is mainly used for program synchronization. It causes the PSU to set the OPC bit (bit 0) of the Standard Event Status register when the PSU has completed all pending operations *OPC. Pending operations are complete when:</p>
+					<ul>
+						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">All commands sent before *OPC is received, including paralleled commands, have been completed. Most commands are sequential and are completed before the next command is executed. Commands that affect output voltage, current, or state, relays, and trigger actions are executed in parallel with subsequent commands. *OPC provides notification that all parallel commands have completed.</li>
+						<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">All triggered actions are completed.</li>
+					</ul>
+					<p>Query whether the current operation is completed and the query returns 1.</p>
+					<p>See also IEEE 488.2 Section 12.5 – 12.8. </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>Query causes the PSU to place a 1 in the output buffer when all pending operations are completed. *OPC? does not suspend processing of commands.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_code">*OPC?</p>
+					<p class="cmd_code_End">1</p>
+					<p>if current operation is not completed:</p>
+					<p class="cmd_code_Start">*OPC?</p>
+					<p class="cmd_code">0</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">4.6. *<a name="rcl"></a>RCL<a name="rcl"></a></p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Syntax</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_root">*RCL {&lt;profile&gt;}</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Description</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>This command recalls the PSU state stored in the specified storage location. The PSU has ten storage locations in non-volatile memory to store PSU states.</p>
+					<p>It is not possible to recall the PSU state from a storage location that is empty or was deleted. When the firmware is started for the first time, storage locations 1 through 9 are empty (location 0 has the power-on state).</p>
+					<p>&#160;</p>
+					<p class="note">The PSU uses location 0 to automatically save the state of the PSU at power down.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Parameters</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 21%;">
+					<p style="text-align: center;">Name</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 21%;">
+					<p style="text-align: center;">Type</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 24%;">
+					<p style="text-align: center;">Range</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 18%;">
+					<p style="text-align: center;">Default</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
+					<p>&lt;profile&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
+					<p style="text-align: center;">Numeric</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 24%;">
+					<p style="text-align: center;">0 – 9 </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
+					<p style="text-align: center;">None</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>None</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_code">*RCL 2</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>*SAV</p>
+					<p>MEMory:STATe:DELete</p>
+					<p>MEMory:STATe:RECall:AUTO</p>
+					<p>MEMory:STATe:RECall:SELect</p>
+					<p>SYSTem:POWer</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">4.7. *<a name="rst"></a>RST<a name="rst"></a></p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_root">*RST</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>Reset Command. Restores the PSU to its initial state (as predefined in the PSU firmware, see <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-parameters-and-settings.html#reset_settings"><span style="text-decoration: underline;">Section 8.2</span></a>) and clears the error queue. The reset command does NOT affect calibration data, nor any of saved configuration profiles (0 to 9). </p>
+					<p>When *RST is issued, all outputs are set to OFF, and voltage and current are programmed to 0. The power up sequence is started. All SPI peripherals are reinitialize except the controller if an active Ethernet connection exists.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>None</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_code">*RST</p>
+					<p class="cmd_code">MEMory:RECall:AUTO</p>
+					<p class="cmd_code">SYSTem:POWer</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="Default_ntt">*RST</p>
+					<p class="Default_ntt">*SAV</p>
+					<p class="Default_ntt">MEMory:STATe:CATalog?</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">4.8. *<a name="sav"></a>SAV<a name="sav"></a></p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Syntax</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_root">*SAV {&lt;profile&gt;}</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Description</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="Default_ntt">This command stores the current instrument state in the specified storage location. Any state previously stored in the same location is overwritten without generating any errors. The PSU has nine storage locations in non-volatile memory which are available to the user for storing PSU states. The following channel and system parameters are  stored in the non-volatile memory:</p>
+					<ul>
+						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">Calibration status (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-calibrate.html#cal_stat"><span style="text-decoration: underline;">CALibration:STATe</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Output enable state (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-output.html#outp"><span style="text-decoration: underline;">OUTPut[:STATe]</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Output track state (OUTPut:TRACk[:STATe])</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Channel coupling state (INSTrument:COUPle:TRACking)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Low ripple state (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_lrip"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:LRIPple</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Low ripple auto mode (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_lrip_auto"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:LRIPple:AUTO</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Remote sense state (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_volt_sens"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:VOLTage:SENSe[:SOURce]</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Output voltage (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_volt"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:VOLTage</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Output voltage limit (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_volt_lim"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:VOLTage:LIMit</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Output voltage step (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_volt_step"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:VOLTage:STEP</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">OVP status (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_curr_prot_stat"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:VOLTage:PROTection:STATe</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">OVP delay (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_volt_prot_del"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:VOLTage:PROTection:DELay</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Output current (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_curr"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:CURRent</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Output current limit (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_curr_lim"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:CURRent:LIMit</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Output current step (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_curr_step"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:CURRent:STEP</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">OCP status (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_curr_prot_stat"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:CURRent:PROTection:STATe</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">OCP delay (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_curr_prot_del"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:CURRent:PROTection:DELay</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Output power limit (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_pow_lim"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:POWer:LIMit</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">OPP level (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_pow_prot"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:POWer:PROTection[:LEVel]</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">OPP status (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_pow_prot_stat"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:POWer:PROTection:STATe</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">OPP delay (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-source.html#sour_volt_prot_del"><span style="text-decoration: underline;">[SOURce[&lt;n&gt;]]:POWer:PROTection:DELay</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">OTP level (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-system.html#syst_temp_prot"><span style="text-decoration: underline;">SYSTem:TEMPerature:PROTection[:HIGH][:LEVel]</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">OTP status (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-system.html#syst_temp_prot_stat"><span style="text-decoration: underline;">SYSTem:TEMPerature:PROTection[:HIGH]:STATe</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">OTP delay (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-system.html#syst_temp_prot_del"><span style="text-decoration: underline;">SYSTem:TEMPerature:PROTection[:HIGH]:DELay</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Power on state (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-system.html#syst_pow"><span style="text-decoration: underline;">SYSTem:POWer</span></a>)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Simulator load value (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-simulator.html#simu_load"><span style="text-decoration: underline;">SIMUlator:LOAD</span></a>)</li>
+						<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">Simulator load connection (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-simulator.html#simu_load_stat"><span style="text-decoration: underline;">SIMUlator:LOAD:STATe</span></a>)</li>
+					</ul>
+					<p class="Default_ntt">Users can assign an arbitrary name to each of locations 1 through 9 using the <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-memory.html#mem_stat_name"><span style="text-decoration: underline;">MEMory:STATe:NAME</span></a> command.</p>
+					<p class="Default_ntt">&#160;</p>
+					<p class="Default_ntt">A reset (<a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-common-command-reference.html#rst"><span style="text-decoration: underline;">*RST</span></a> command) does not affect the configurations stored in memory. Once a state is stored, it remains constant until it is overwritten using this command or specifically deleted using the <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-memory.html#mem_stat_del"><span style="text-decoration: underline;">MEMory:STATe:DELete</span></a> command. </p>
+					<p class="Default_ntt">&#160;</p>
+					<p class="note">The PSU uses location 0 to automatically hold the state of the PSU at power down.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td rowspan="2" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Parameters</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 21%;">
+					<p style="text-align: center;">Name</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 21%;">
+					<p style="text-align: center;">Type</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 21%;">
+					<p style="text-align: center;">Range</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 21%;">
+					<p style="text-align: center;">Default</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
+					<p>&lt;profile&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
+					<p style="text-align: center;">Numeric</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
+					<p style="text-align: center;">1 – 9 </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
+					<p style="text-align: center;">None</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="Default_ntt">None</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_code">*SAV 2</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="Default_ntt">*RCL</p>
+					<p class="Default_ntt">*RST</p>
+					<p class="Default_ntt">MEMory:STATe:CATalog?</p>
+					<p class="Default_ntt">MEMory:STATe:NAME</p>
+					<p class="Default_ntt">MEMory:STATe:DELete</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">4.9. *<a name="stb"></a>STB<a name="stb"></a>?</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_root">*STB?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>Read Status Byte Query. This query reads the Status Byte register (see <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-registers-and-queues.html#stat_byte_reg"><span style="text-decoration: underline;">Section 3.2</span></a>), which contains the status summary bits and the Output Queue MAV bit. The Status Byte is a read-only register and its bits are not cleared when it is read.</p>
+					<p>&#160;</p>
+					<p>A serial poll also returns the value of the Status Byte register, except that bit 6 returns Request for Service (RQS) instead of Master Status Summary (MSS). A serial poll clears RQS, but not MSS. When the MSS bit is set, the PSU has one or more reasons for requesting service.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>The PSU returns a decimal value which corresponds to the binary-weighted sum of all bits in the register. </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>If OPER (bit 7) is set:</p>
+					<p class="cmd_code_Start">*STB?</p>
+					<p class="cmd_code">128</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>*SRE</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">4.10. *<a name="trg"></a>TRG<a name="trg"></a></p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_root">*TRG</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>This command generates a trigger to the trigger subsystem which has selected a bus </p>
+					<p>(software) trigger as its source (TRIGger[:SEQuence]:SOURce BUS).</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>None</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>Generate a trigger operation after 5 seconds:</p>
+					<p class="cmd_code_Start">TRIG:SOUR BUS</p>
+					<p class="cmd_code">TRIG:DEL 5</p>
+					<p class="cmd_code">INIT</p>
+					<p class="cmd_code">*TRG</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Errors</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_code">-211, &quot;Trigger ignored&quot;</p>
+					<p class="cmd_code">304,&quot;Incompatible transient modes&quot;</p>
+					<p class="cmd_code">307,&quot;List lengths are not equivalent&quot;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>*WAI</p>
+					<p>ABORt</p>
+					<p>INITiate</p>
+					<p>TRIGger[:SEQuence]:DELay</p>
+					<p>TRIGger[:SEQuence]:SOURce</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">4.11. *<a name="tst"></a>TST<a name="tst"></a>?</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p>Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_root">*TST?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p>Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>Self-Test Query. The self-test query causes an internal self-test, and places a response into the Output Queue indicating whether or not the PSU completed the self-test without detected errors.</p>
+					<p>&#160;</p>
+					<p class="note">Note: All all terminal connections must be removed while the internal self-test is being performed.</p>
+					<p class="note">&#160;</p>
+					<p class="note"><span style="font-style: normal;">If an active Ethernet connection exists, testing of </span><span style="font-style: normal;">the </span><span style="font-style: normal;">Ethernet controller will be skipped. You can use </span><a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-diagnostic.html#diag_test"><span style="font-style: normal; text-decoration: underline;">DIAGnostic[:INFOrmation]:TEST?</span></a><span style="font-style: normal;"> for </span><span style="font-style: normal;">to produce a</span><span style="font-style: normal;"> detailed report of the latest self-test. </span></p>
+					<p class="note" style="font-style: normal;">&#160;</p>
+					<p class="note" style="font-style: normal;">If a fan is installed, and not running, this command will start it for the short time to obtain speed information.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p>Return</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>0 or 1 depends of the self-test results. See also <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-diagnostic.html#diag_test"><span style="text-decoration: underline;">DIAGnostic[:INFOrmation]:TEST?</span></a>.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>If all tests passed:</p>
+					<p class="cmd_code_Start">*TST?</p>
+					<p class="cmd_code_End">0</p>
+					<p>If one or more tests failed:</p>
+					<p class="cmd_code_Start">*TST?</p>
+					<p class="cmd_code">1</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>DIAGnostic[:INFOrmation]:TEST?</p>
+					<p>SYSTem:BEEP:STATe</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">4.12. <a name="wai"></a>*WAI</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p>Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_root">*WAI (not implemented yet)</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p>Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>The Wait-to-Continue Command causes the PSU to wait until all pending commands are completed before executing any other commands. </p>
+					<p>&#160;</p>
+					<p>Pending operations are as defined under the *OPC command. </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p>Return</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>None</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>For example, the *WAI command can be used to make a voltage measurement after an OUTPut ON command has completed:</p>
+					<p class="cmd_code_single">OUTPut ON;*WAI;:MEASure:VOLTage?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>*OPC</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+	</body>
+</html>

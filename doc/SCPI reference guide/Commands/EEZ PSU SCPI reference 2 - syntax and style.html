@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title></title>
+		<style type="text/css">
+			/* Reset */
+			ol, ul { margin: 0; padding: 0; }
+			li { list-style-position: outside; }
+			
+			/* Paragraphs and texts */
+			.Heading_1 { margin-top: 4.23mm; margin-bottom: 2.12mm; font-size: 14.0pt; font-weight: bold; color: #0066cc; }
+			.Heading_2 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 12.0pt; font-weight: bold; font-style: italic; color: #0066cc; }
+			.Heading_3 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 11.0pt; font-weight: bold; color: #0066cc; }
+			.List_1 { text-align: left; margin-left: 10mm; margin-right: 1.99mm; text-indent: -6mm; }
+			.List_1_End { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-bottom: 3mm; text-indent: -6mm; }
+			.List_1_Start { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-top: 3mm; text-indent: -6mm; }
+			p { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
+			li { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
+			.Text_body { margin-bottom: 2.12mm; }
+			.cmd_code_End { text-align: left; margin-bottom: 1.99mm; font-family: "Courier New"; }
+			.cmd_code_Start { text-align: left; margin-top: 1.99mm; font-family: "Courier New"; }
+			.cmd_code_single { text-align: left; margin-top: 1.99mm; margin-bottom: 1.99mm; font-family: "Courier New"; }
+			.scpi0 { text-align: left; }
+			.scpi1 { text-align: left; margin-left: 4.99mm; }
+			.scpi2 { text-align: left; margin-left: 10mm; }
+			.scpi3 { text-align: left; margin-left: 14.99mm; }
+			.table_header { text-align: center; }
+			
+			/* Footnotes & endnotes */
+			#webpub_footnotes_divider { clear: both; margin-top: 2em; width: 25%; border-top: 1px solid black; }
+			#webpub_footnotes { font-size: 80%; text-align: justify; }
+			#webpub_footnotes td.label { text-align: right; vertical-align: top; }
+			#webpub_footnotes td.content { }
+			a.webpub_footnote { font-size: 80%; vertical-align: super; }
+			#webpub_endnotes_divider { clear: both; margin-top: 2em; width: 25%; border-top: 3px double black; }
+			#webpub_endnotes { font-size: 80%; text-align: justify; }
+			#webpub_endnotes td.label { text-align: right; vertical-align: top; }
+			#webpub_endnotes td.content { }
+			a.webpub_endnote { font-size: 80%; vertical-align: super; }
+			
+		</style>
+	</head>
+	<body>
+		<p class="Heading_1">2. <a name="_syntax and style"></a>Syntax and style</p>
+		<p>Throughout this document, the following conventions are used for the SCPI command syntax:</p>
+		<ul>
+			<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">Square brackets ([]) indicate optional keywords or parameters. The braces are not sent with the command string.</li>
+			<li class="List_1" style="text-indent: 0; list-style-type: disc;">Braces ({}) enclose parameters within a command string.</li>
+			<li class="List_1" style="text-indent: 0; list-style-type: disc;">Triangle brackets (&lt;&gt;) indicate that you must substitute a value or a code for the enclosed parameter.</li>
+			<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">A vertical bar (|) separates one of two or more alternative parameters.</li>
+		</ul>
+		<p class="Heading_2">2.1. Root Specifier</p>
+		<p>When it precedes the first header of a message unit, the colon becomes the root specifier. It tells the command parser that this is the root or the top node of the command tree.</p>
+		<p class="Heading_2">2.2. Command termination</p>
+		<p>A command string sent to the PSU must terminate with a &lt;new line&gt;character. A &lt;carriage return&gt;</p>
+		<p>followed by a &lt;new line&gt;is also accepted. Command string termination will always reset the current SCPI command path to the root level.</p>
+		<p class="Heading_2">2.3. Command separators</p>
+		<p>A colon (:) is used to separate a command keyword from a lower-level keyword as shown below:</p>
+		<p class="cmd_code_single">SOURce1:CURRent:PROTection:STATe</p>
+		<p>A semicolon (;) is used to separate two commands within the same subsystem, and can also minimize typing. For example, sending the following command string,</p>
+		<p class="cmd_code_single">SOURce1:VOLTage 20;CURRent 300mA</p>
+		<p>is the same as sending the following two commands:</p>
+		<p class="cmd_code_Start">SOURce1:VOLTage 20</p>
+		<p class="cmd_code_End">SOURce1:CURRent 1.5</p>
+		<p>Use a colon and a semicolon to link commands from different subsystems. For example, in the following command string, an error is generated if you do not use the colon and semicolon:</p>
+		<p class="cmd_code_Start">SYSTem:BEEP;:SOURce1:CURRent 2.5</p>
+		<p class="Heading_2">2.4. Querying parameter settings</p>
+		<p>You can query the value of most parameters by adding a question mark (?) to the command. For example, the following command sets the output voltage to 45.5V:</p>
+		<p class="cmd_code_single">VOLTage 45.5</p>
+		<p>You can query the value by executing:</p>
+		<p class="cmd_code_single">VOLTage?</p>
+		<p>If error is occurred use <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-system.html#syst_err"><span style="text-decoration: underline;">SYSTem:ERRor[:NEXT]?</span></a> to get more information about error.</p>
+		<p class="Heading_2">2.5. Using the MIN, MAX, and DEF Parameters </p>
+		<p class="Text_body">For many commands, you can substitute &quot;MIN&quot; or &quot;MAX&quot; in place of a parameter. In some cases you may also substitute &quot;DEF&quot;. For example, consider the following command: </p>
+		<p class="Text_body">[SOURce[&lt;n&gt;]]:VOLTage[:LEVel][:IMMediate][:AMPLitude] {&lt;voltage&gt;|MIN|DEF|MAX|UP|DOWN}</p>
+		<p class="Text_body">Instead of selecting a specific value for the &lt;voltage&gt; parameter, you can substitute MIN to set the voltage to its minimum value, MAX to set the voltage to its maximum value, or DEF to set the voltage to its default value. For list of parameter values see <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-parameters-and-settings.html#programming_parameters"><span style="text-decoration: underline;">Section 8.1</span></a></p>
+		<p class="Heading_2">2.6. Command and message types</p>
+		<p>SCPI commands can be divided to <span style="font-weight: bold;">common</span> and <span style="font-weight: bold;">subsystem</span> commands.</p>
+		<ul>
+			<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">Common commands are defined by the IEEE 488.2 standard to perform common interface functions. They begin with an * and consist of three letters (command) or three letters and a ? (query). Description of supported common commands can be found in <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-common-command-reference.html"><span style="text-decoration: underline;">Section 4</span></a></li>
+			<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">Subsystem commands are specific to instrument (PSU in this case) functions. They can be a single command or a group of commands. The groups are comprised of commands that extend one or more levels below the root. See <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference.html"><span style="text-decoration: underline;">Section 5</span></a> for commands that is created in accordance to the SCPI 1999.0 standard. Commands that is not defined by SCPI 1999.0 is labeled &quot;unclassified&quot; and are presented in <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-device-specific-unclassified-commands.html"><span style="text-decoration: underline;">Section 6</span></a></li>
+		</ul>
+		<p>There are two types of SCPI messages, <span style="font-weight: bold;">program</span> and <span style="font-weight: bold;">response</span>.</p>
+		<ul>
+			<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">A program message consists of one or more properly formatted SCPI commands sent from the controller to the instrument. The message, which may be sent at any time, requests the instrument to perform some action.</li>
+			<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">A response message consists of data in a specific SCPI format sent from the instrument to the controller. The instrument sends the message only in response to a <span style="font-weight: bold;">query</span> header.</li>
+		</ul>
+		<p class="Heading_2">2.7. Required Commands</p>
+		<p>The following commands are required in all SCPI instruments (see SCPI 1999.0 Section 4.2.1):</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 36%;">
+					<p class="table_header">&#160;</p>
+					<p class="table_header">Mnemonic</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 34%;">
+					<p class="table_header">SCPI 1999.0 Command<br>Reference Section</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 30%;">
+					<p class="table_header">SCPI 1999.0 Syntax<br>and Style Section</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi0">:SYSTem</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi1">:ERRor</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>21.8</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi2">[:NEXT]?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>21.8.3e</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>1996</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi1">:VERSion?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>19.16</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>1991</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi0">:STATus</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>18</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>5</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi1">:OPERation</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi2">[:EVENt]?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p class="scpi2">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi2">:CONDition?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi2">:ENABle</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi2">:ENABle?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi1">:QUEStionable</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi2">[:EVENt]?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p class="scpi2">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi2">:CONDition?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi3">:ENABle</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi3">:ENABle?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p class="scpi1">:PRESet</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 30%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_3">2.7.1. Base functionality for the Power supply instrument class</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 46%;">
+					<p class="table_header">SCPI Command</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 54%;">
+					<p class="table_header">Description</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi0">OUTPut</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">[:STATe] &lt;bool&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Enables the specified output channel(s)</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi0">[SOURce[&lt;n&gt;]]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">CURRent</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">[:LEVel] </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi3">[:IMMediate][:AMPLitude] &lt;current&gt; </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Sets the output current </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">VOLTage </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">[:LEVel] </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi3">[:IMMediate][:AMPLitude] &lt;voltage&gt; </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Sets the output voltage </p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<p>All SCPI power supplies shall implement the status reporting structure. STATus Subsystem defines the commands which shall be used to control the status reporting structure. </p>
+		<p>For a power supply, the bits of interest in the QUEStionable status structure are VOLTage and CURRent. When a power supply is operating as a voltage source, bit 1 (CURRent) shall be set. When a power supply is operating as a current source, bit 0 (VOLTage) shall be set. When the output is unregulated, both bits shall be set (for example, while the output is changing to a new programmed value).</p>
+		<p class="Heading_2">2.8. Multiple Commands in a Message</p>
+		<p>Multiple SCPI commands can be combined and sent as a single message with one message terminator. There are two important considerations when sending several commands within a single message:</p>
+		<ul>
+			<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">Use a semicolon to separate commands within a message.</li>
+			<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">There is an implied header path that affects how commands are interpreted by the PSU.</li>
+		</ul>
+		<p>The header path can be thought of as a string that gets inserted before each command within a message. For the first command in a message, the header path is a null string. For each subsequent command the header path is defined as the characters that make up the headers of the previous command in the message up to and including the last colon separator. An example of a message with two commands is:</p>
+		<p class="cmd_code_single">OUTPut:STATe ON,CH1;PROTection:CLEar CH1</p>
+		<p>which shows the use of the semicolon separating the two commands, and also illustrates the header path concept. Note that with the second command, the leading header OUTPut was omitted because after the OUTPut:STATe ON command, the header path became defined as OUTPut and thus the instrument interpreted the second command as:</p>
+		<p class="cmd_code_single">OUTPut:PROTection:CLEar CH1</p>
+		<p>In fact, it would have been syntactically incorrect to include the OUTPut explicitly in the second command, since the result after combining it with the header path would be:</p>
+		<p class="cmd_code_single">OUTPut:OUTPut:PROTection:CLEar CH1</p>
+		<p>which is incorrect.</p>
+		<p>&#160;</p>
+		<p>You can combine common commands (IEEE488) with subsystem commands in the same message. Treat the common command as a message unit by separating it with a semicolon (the message unit separator). Common commands do not affect the header path; you may insert them anywhere in the message.</p>
+		<p class="cmd_code_single">*TST?;SYSTem:ERRor?</p>
+		<p class="Heading_2">2.9. Moving Among Subsystems</p>
+		<p>In order to combine commands from different subsystems, you need to be able to reset the header path to a null string within a message. You do this by beginning the command with a colon (:), which discards any previous header path. For example, you could clear the output protection and check the status of the Operation Condition register in one message by using a root specifier as follows:</p>
+		<p class="cmd_code_single">OUTPut:PROTection:CLEar CH1;:STATus:OPERation:CONDition?</p>
+		<p>The following message shows how to combine commands from different subsystems as well as within the same subsystem:</p>
+		<p class="cmd_code_single">SOURce1:VOLTage:LEVel 7.5;:VOLTage:PROTection:DELay 10;:CURRent:LEVel 0.5</p>
+		<p>Note the use of the optional header LEVel to maintain the correct path within the subsystems, and the use of the root specifier to move between subsystems.</p>
+		<p class="Heading_2">2.10. SCPI parameter types</p>
+		<p>The SCPI language defines several different data formats to be used in program messages and response messages:</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 9%;">
+					<p>Numeric</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 91%;">
+					<p>Commands that require numeric parameters will accept all commonly used representations of numbers like integer (also known as NR1 format specified in ANSI X3.42-1990) or decimal representations of numbers including optional signs, decimal points (NR2 format), and scientific notation (i.e. 10E3 or NR3 format). Special values for numeric parameters like MINimum, MAXimum, and DEFault are also accepted. You can also send engineering unit suffixes (V, A, or SEC) with numeric parameters. If only specific numeric values are accepted, the PSU will automatically round the input numeric parameters. The following command uses a numeric parameter:</p>
+					<p class="cmd_code_single">VOLT:STEP {&lt;step&gt;}</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 9%;">
+					<p>Discrete</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 91%;">
+					<p>Used to program settings that have a limited number of values such as BUS and IMM or CH1 and CH2. Query responses will always return the short form in all uppercase letters. The following command uses discrete parameters:</p>
+					<p class="cmd_code_single">CAL:CURR:LEV {MIN|MID|MAX}</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 9%;">
+					<p>Boolean</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 91%;">
+					<p>Represent a single binary condition that is either true or false. For a false condition, the PSU will accept OFF or 0. For a true condition, the PSU will accept ON or any nonzero value (i.e. 1 but also 2.34 or -3). When you query a Boolean setting, the PSU will always return 0 or 1. The following command uses a Boolean parameter:</p>
+					<p class="cmd_code_single">OUTP {OFF|ON}</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 9%;">
+					<p>String </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 91%;">
+					<p>Can contain virtually any set of ASCII characters. A string must begin and end with matching quotes, either with a single quote or with a double quote. You can include the quote delimiter as part of the string by typing it twice without any characters in between. The following command uses a string parameter:</p>
+					<p class="cmd_code_single">CAL:REM &lt;quoted string&gt;</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<p>&#160;</p>
+		<p>&#160;</p>
+	</body>
+</html>

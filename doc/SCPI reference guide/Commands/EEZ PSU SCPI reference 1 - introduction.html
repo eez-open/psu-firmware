@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title></title>
+		<style type="text/css">
+			/* Reset */
+			ol, ul { margin: 0; padding: 0; }
+			li { list-style-position: outside; }
+			
+			/* Paragraphs and texts */
+			.Heading_1 { margin-top: 4.23mm; margin-bottom: 2.12mm; font-size: 14.0pt; font-weight: bold; color: #0066cc; }
+			.Heading_2 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 12.0pt; font-weight: bold; font-style: italic; color: #0066cc; }
+			.List_1 { text-align: left; margin-left: 10mm; margin-right: 1.99mm; text-indent: -6mm; }
+			.List_1_End { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-bottom: 3mm; text-indent: -6mm; }
+			.List_1_Start { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-top: 3mm; text-indent: -6mm; }
+			p { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
+			li { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
+			.note { font-style: italic; }
+			
+			/* Footnotes & endnotes */
+			#webpub_footnotes_divider { clear: both; margin-top: 2em; width: 25%; border-top: 1px solid black; }
+			#webpub_footnotes { font-size: 80%; text-align: justify; }
+			#webpub_footnotes td.label { text-align: right; vertical-align: top; }
+			#webpub_footnotes td.content { }
+			a.webpub_footnote { font-size: 80%; vertical-align: super; }
+			#webpub_endnotes_divider { clear: both; margin-top: 2em; width: 25%; border-top: 3px double black; }
+			#webpub_endnotes { font-size: 80%; text-align: justify; }
+			#webpub_endnotes td.label { text-align: right; vertical-align: top; }
+			#webpub_endnotes td.content { }
+			a.webpub_endnote { font-size: 80%; vertical-align: super; }
+			
+		</style>
+	</head>
+	<body>
+		<p class="Heading_1">1. <a name="_introduction"></a>Introduction</p>
+		<p>This manual contains reference information for programming the open hardware/open source EEZ programmable PSU (Power Supply Unit) over the remote interface using the SCPI programming language.</p>
+		<p>The SCPI (<span style="font-style: italic;">Standard Commands for Programmable Instruments</span>, often pronounced “skippy”) is an open standard freely available on the <a href="http://www.ivifoundation.org/scpi/" target="_blank"><span style="text-decoration: underline;">IVI Foundation</span></a> web pages. The current version is SCPI 1999.0.</p>
+		<p>SCPI is a pure software standard, and can be used over many communication interfaces. SCPI communications are ASCII text, and therefore can be supported in programs written in almost any computer language, such as C, C++, etc.</p>
+		<p>&#160;</p>
+		<p>The physical communications link is not defined by SCPI. It was originally created with the IEEE 488 (GPIB) environment in mind, but it can also be used with RS-232 (serial), Ethernet, USB, VXIbus, HiSLIP, etc. The EEZ PSU supports Serial (via USB) and Ethernet communication.</p>
+		<p>The application software that uses SCPI commands is called a <span style="font-style: italic;">Controller</span> and that in a SCPI enabled device – such as the EEZ PSU – is called an <span style="font-style: italic;">Instrument</span>.</p>
+		<p>&#160;</p>
+		<p class="note">Please note that IEEE 488 standard documents are not freely available, and when it's mentioned in this manual we do so only for reference purposes.  Those who with to research the GPIB for better understanding or possible modification/improvement of the PSU remote control may wish to purchase standards documents from the IEEE. </p>
+		<p class="Heading_2">1.1. About SCPI</p>
+		<p>The SCPI 1999.0 standard document says (Section 1.3) the goal of SCPI is to reduce Automatic Test Equipment (ATE) program development time. SCPI does this goal by providing a consistent programming environment for instrument control and data usage. This is achieved by use of defined program messages, instrument responses, and data formats across all SCPI instruments, regardless of manufacturer.</p>
+		<p>A consistent program environment uses the same commands and parameters to control instruments that have the same function.</p>
+		<p>SCPI programming consistency is both vertical and horizontal. Vertical programming consistency defines program messages within an instrument class. An example of vertical consistency is using the same command for reading DC voltage from different multimeters supporting SCPI. Horizontal consistency uses the same command to control similar functions across instrument classes. For example, the trigger command would be the same for trigger functions found in conforming counters, oscilloscopes, function generators, etc.</p>
+		<p>A key to consistent programming is the reduction of multiple ways to control similar instrument functions. The philosophy of SCPI is that the same instrument functions are to be controlled by the same SCPI commands. To simplify learning, SCPI uses industry-standard names, and terms that are manufacturer and customer supported.</p>
+		<p>SCPI is designed to be expanded with new defined commands in the future without causing programming problems. As new instruments are introduced, the intent is to maintain program compatibility with existing SCPI instruments.</p>
+		<p>&#160;</p>
+		<p>&#160;</p>
+		<p>Additional links:</p>
+		<ul>
+			<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">Wikipedia <a href="https://en.wikipedia.org/wiki/Standard_Commands_for_Programmable_Instruments" target="_blank"><span style="text-decoration: underline;">SCPI</span></a></li>
+			<li class="List_1" style="text-indent: 0; list-style-type: disc;">Technopedia <a href="https://www.techopedia.com/definition/21951/standard-commands-for-programmable-instruments-scpi" target="_blank"><span style="text-decoration: underline;">Standard Commands For Programmable Instruments (SCPI)</span></a></li>
+			<li class="List_1" style="text-indent: 0; list-style-type: disc;">Wikipedia <a href="https://en.wikipedia.org/wiki/IEEE-488" target="_blank"><span style="text-decoration: underline;">IEEE-488</span></a></li>
+			<li class="List_1" style="text-indent: 0; list-style-type: disc;">Keysight (ex. Agilent) <a href="http://www.keysight.com/main/redirector.jspx?action=ref&amp;lc=eng&amp;cc=HR&amp;nfr=&amp;ckey=1708060&amp;cname=EDITORIAL" target="_blank"><span style="text-decoration: underline;">Developing a SCPI command set</span></a></li>
+			<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">NI (National Instrument) <a href="http://www.ni.com/white-paper/3388/en/" target="_blank"><span style="text-decoration: underline;">GPIB Hardware and Software Specifications</span></a></li>
+		</ul>
+		<p>Implementation links:</p>
+		<ul>
+			<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;"><a href="https://j123b567.github.io/scpi-parser/" target="_blank"><span style="text-decoration: underline;">Open source SCPI device</span></a> library</li>
+			<li class="List_1" style="text-indent: 0; list-style-type: disc;">Keysight (ex. Agilent) <a href="http://cp.literature.agilent.com/litweb/pdf/5989-6717EN.pdf" target="_blank"><span style="text-decoration: underline;">Application Note 1465-29</span></a></li>
+			<li class="List_1" style="text-indent: 0; list-style-type: disc;">Keysight (ex. Agilent) <a href="http://www.keysight.com/en/pd-2036130/command-expert?cc=US&amp;lc=eng" target="_blank"><span style="text-decoration: underline;">Command Expert</span></a></li>
+		</ul>
+		<p>&#160;</p>
+		<p>&#160;</p>
+		<p>&#160;</p>
+		<p>&#160;</p>
+		<p>&#160;</p>
+		<p>&#160;</p>
+		<p>&#160;</p>
+		<p>&#160;</p>
+	</body>
+</html>

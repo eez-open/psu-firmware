@@ -1,0 +1,1263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title></title>
+		<style type="text/css">
+			/* Reset */
+			ol, ul { margin: 0; padding: 0; }
+			li { list-style-position: outside; }
+			
+			/* Paragraphs and texts */
+			.Heading_1 { margin-top: 4.23mm; margin-bottom: 2.12mm; font-size: 14.0pt; font-weight: bold; color: #0066cc; }
+			.Heading_2 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 12.0pt; font-weight: bold; font-style: italic; color: #0066cc; }
+			.List_1 { text-align: left; margin-left: 10mm; margin-right: 1.99mm; text-indent: -6mm; }
+			.List_1_End { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-bottom: 3mm; text-indent: -6mm; }
+			.List_1_Start { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-top: 3mm; text-indent: -6mm; }
+			p { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
+			li { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
+			.cmd_code { text-align: left; font-family: "Courier New"; }
+			.table_body { font-style: italic; }
+			.table_header { text-align: center; }
+			
+			/* Footnotes & endnotes */
+			#webpub_footnotes_divider { clear: both; margin-top: 2em; width: 25%; border-top: 1px solid black; }
+			#webpub_footnotes { font-size: 80%; text-align: justify; }
+			#webpub_footnotes td.label { text-align: right; vertical-align: top; }
+			#webpub_footnotes td.content { }
+			a.webpub_footnote { font-size: 80%; vertical-align: super; }
+			#webpub_endnotes_divider { clear: both; margin-top: 2em; width: 25%; border-top: 3px double black; }
+			#webpub_endnotes { font-size: 80%; text-align: justify; }
+			#webpub_endnotes td.label { text-align: right; vertical-align: top; }
+			#webpub_endnotes td.content { }
+			a.webpub_endnote { font-size: 80%; vertical-align: super; }
+			
+		</style>
+	</head>
+	<body>
+		<p class="Heading_1">10. <a name="_programming examples"></a>Programming examples</p>
+		<p class="Heading_2">10.1. Set channel output values and working with the OCP</p>
+		<p>This is a SCPI commands sequence that sets a voltage, current, and the over-current protection (OCP) on the channel two:</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">INST?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Check currently selected output</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">INST CH2</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Select channel two as current channel</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">VOLT 10</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Set output voltage</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">CURR</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Set output current</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">CURR:PROT:STAT?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Check OCP status</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">CURR:PROT:STAT 1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Enable OCP</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">CURR:PROT:DEL 100ms</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Set OCP delay</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP 1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Enable output</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">MEAS?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Measure output voltage</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">10.00</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">MEAS:CURR?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Measure output current</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">0.00</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Current is zero since no load is connected</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<p>If <a href="http://www.envox.hr/eez/bench-power-supply/psu-digital-control/psu-scpi-reference-manual/psu-scpi-simulator.html"><span style="text-decoration: underline;">soft</span></a><a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-simulator.html"><span style="text-decoration: underline;">ware simulator</span></a> is used, connection of the load can be also simulated:</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">SIMU:LOAD 20</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Define connected load impedance</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">MEAS?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Measure voltage once again</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">10.00</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">MEAS:CURR?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Measure current once again</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">0.50</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Measured current</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<p>The following command sequence could be used to test channel mode with load previously defined and after the load impedance is lowered enough that output current reach programmed value. The OCP has to be disabled because previously defined 100ms delay does not give us enough time to execute the whole sequence for testing channel mode and output voltage and current values:</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP:MODE?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Check mode of operation</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">&quot;CV&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">The channel is in constant-voltage mode since output current is below previously programmed level</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">SIMU:LOAD?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Check load value</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">10</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">CURR:PROT:STAT?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Check OCP status</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">CURR:PROT:STAT OFF</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Disable OCP</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">SIMU:LOAD 4</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Decrease load impedance</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP:MODE?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Check once again mode of operation</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">&quot;CC&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Channel enters constant-current mode since I<span style="vertical-align: sub;">max</span> = U / R = 10 / 4 = 2.5A and current is limited to the 1A</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">MEAS:CURR?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Measure output current</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">1.00</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">MEAS?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Measure output voltage</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">4.00</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Output voltage is decreased since U = I * R = 1 * 4 = 4V</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<p>The OCP will “trip” when output current reach programmed value and channel stay in the CC mode for more then programmed OCP delay time. To test that with e.g. the <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-simulator.html"><span style="text-decoration: underline;">software simulator</span></a> we’ll disable channel output first, enable OCP and when change channel output back to enabled state:</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP OFF</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Disable channel output</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">CURR:PROT:TRIP?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Check OCP status</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">OCP is not activated</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">CURR:PROT:STAT ON</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Enable OCP</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">VOLT?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Check programmed output voltage</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">10.00</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">CURR?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Check programmed output current</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">1.00</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">SIMU:LOAD?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Check simulated load value</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">4</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP ON</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Enable channel output</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">CURR:PROT:TRIP?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Check OCP status once again</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">OCP has been tripped</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Check channel output state</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Channel output is changed to OFF stated by the OCP</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<p>The channel output state cannot be changed to enabled until any of protection is active. We have to clear protection first. If the same load that caused the first protection trip is still connected the channel output will be disabled immediately after the protection programmed delay time expired. Therefore we also have to disconnect load or disable protection. The later method will be used in the command sequence that follows:</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP ON</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">First attempt to enable channel output</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">This attempt failed, the channel output remain disabled</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP:PROT:CLE</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Channel protections reset</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP ON</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Second to enable channel output</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Channel output was enabled for a short time (100ms) and returns back to OFF state</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">CURR:PROT:TRIP?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Check OCP status</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">OCP has been tripped</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP:PROT:CLE</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Reset channel protections once again</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">CURR:PROT:STAT OFF</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Disable OCP</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP ON</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Third attempt to enable channel output</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Output is finally enabled</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">OUTP:MODE?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 27%;">
+					<p class="cmd_code">&quot;CC&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 73%;">
+					<p class="table_body">Channel enters CC mode of operation </p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">10.2. <a name="__RefHeading__270367_2069274779"></a><a name="calibration"></a>Voltage and current calibration<a name="__RefHeading__270367_2069274779"></a></p>
+		<p>For optimum calibration results the following condition are recommended:</p>
+		<ul>
+			<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">the calibration ambient temperature is stable and between 20 °C and 30 °C.</li>
+			<li class="List_1" style="text-indent: 0; list-style-type: disc;">ambient relative humidity is less than 80%.</li>
+			<li class="List_1" style="text-indent: 0; list-style-type: disc;">Allow a one hour warm-up period before verification or calibration (use e.g. SYST:CHAN:INFO:ONT:LAST? or SYST:CPU:INFO:ONT:LAST? to get that info).</li>
+			<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">Use short and thick cables to connect test setups.</li>
+		</ul>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #ffcc00; width: 6%;">
+					<p class="table_header">Step</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #ffcc00; width: 28%;">
+					<p class="table_header">Commands</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #ffcc00; width: 65%;">
+					<p class="table_header">Description</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">*RST</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">2</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">SYST:RWL</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">Make sure that PSU is in remote mode and cannot be unlock from local console (TFT display)</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">3</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">INST {CH1|CH2}; OUTP ON</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">Select the channel to be calibrated and enable the channel output.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">4</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">VOLT:PROT:STAT OFF</p>
+					<p class="cmd_code">CURR:PROT:STAT OFF</p>
+					<p class="cmd_code">POW:PROT:STAT OFF</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">Disable if required the voltage, current and power protections.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">5</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">CAL ON, &quot;&lt;password&gt;&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">PSU enters calibration mode on the channel selected in step 1. Both voltage and current on the selected channel are set to the MINimum value. The VOLT? and CURR? commands can be optionally used here to test channel output values.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">6</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">For voltage calibration, connect a digital voltmeter (DVM) across the PSU’s output terminals.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">7</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">CAL:VOLT:LEV MIN</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">Set the channel to the low-end (MIN) calibration point.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">8</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">CAL:VOLT 81.8MV</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">Enter the reading you obtained from the external DVM.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">9</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">CAL:VOLT:LEV MID</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">Set the channel to the middle (MID) calibration point.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">10</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">CAL:VOLT 19.68</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">Enter the reading you obtained from the DVM.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">11</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">CAL:VOLT:LEV MAX</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">Set the channel to the high (MAX) calibration point.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">12</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">CAL:VOLT 39.2</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">Enter the reading you obtained from the DVM.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">13</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">For current calibration, connect current monitoring resistor (shunt) across the output terminals and connect the DVM across the shunt resistor. Its resistance has to be less then 5&#160;Ω and rated for 25&#160;W or more for measuring MAX current level. </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">14</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">Repeat step 7 through step 12 by substituting CURR for VOLT for current calibration. For example, CAL:CURR:LEV MIN.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">15</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">CAL_CURR:RANG LOW</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body"><span style="font-style: normal;">Power board r5B12 only</span>: for low current range (i.e. 0&#160;–&#160;500&#160;mA) calibration use this command to change the range and repeat once again procedure mentioned in step 14.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">16</p>
+					<p style="text-align: center;">&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">CAL:REM &quot;&lt;string&gt;&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">Record calibration information such as next calibration due date for future reference. The calibration string may contain up to 40 characters. You don’t need to enter current date and time since that information will be recorded automatically.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">17</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">CAL:SAVE</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">Save to non-volatile memory new calibration data.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">18</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">CAL OFF, &quot;&lt;password&gt;&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">PSU exit calibration mode. Both voltage and current on the selected channel are again set to the MINimum value.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 6%;">
+					<p style="text-align: center;">19</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 28%;">
+					<p class="cmd_code">SYST:REM</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 65%;">
+					<p class="table_body">Enable local console unlock. Alternatively SYST:LOC can be executed to make local console enabled again.</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">10.3. Working with profiles</p>
+		<p>The following command sequence could be used to store current set of parameters to the profile location 4 in the non-volatile memory:</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">MEM:STAT:VAL? 4</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Check to see if profile selected location is empty</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">MEM:STAT:NAME? 4</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">We can also check that by querying profile location name</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">&quot;--Not used--&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">INST CH1 </p>
+					<p class="cmd_code">VOLT?;:CURR?;:OUTP? </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Examine currently programmed output values of the first channel</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">0.00;0.00;0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">INST CH2</p>
+					<p class="cmd_code">VOLT?;:CURR?;:OUTP? </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Examine currently programmed output values of the second channel</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">0.00;0.00;0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">VOLT 12;:CURR 300mA</p>
+					<p class="cmd_code">INST CH1</p>
+					<p class="cmd_code">VOLT 12;:CURR 300mA</p>
+					<p class="cmd_code">OUTP 1;:OUTP 1, CH2</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Reprogram both channel output values that will be stored as a new profile</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">*SAV 4</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">All profile parameters is now storing on the selected location</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">MEM:STAT:NAME? 4</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Check profile name</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">&quot;&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">MEM:STAT:NAME 4, &quot;Dual 12V/300mA, Output ON&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Set the profile name (only ASCII characters are allowed!)</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">MEM:STAT:NAME? 4</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Check the profile name once again</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">&quot;Dual 12V/300ma, Output ON&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<p>We can now turn the PSU off (when it enters the Stand-by mode) turn it on again and check some of the  programmed parameters:</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">SYST:POW 0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">The PSU enters the Stand-by mode</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">SYST:POW 1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Returns back from the Stand-by mode. Please note that this command can be executed with the minimum of 5 seconds delay otherwise a -200,&quot;Execution error&quot; will be generated (you can check that with the SYST:ERR? command) </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">VOLT?;:CURR?;:OUTP?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Query programmed voltage, current and output state of the currently selected channel</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">0.00;0.00;0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Returned data indicate that previously saved values in profile number 4 were not used</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">*RCL 4</p>
+					<p class="cmd_code">VOLT?;:CURR?;:OUTP?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Recall parameters from desired location and execute query once again</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">12.00;0.30;1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">The channel output values are now programmed using the selected profile</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<p>We can automate above mentioned process that channel profile parameters stored in non-volatile memory are using on power up. First we’ll check what is a current status of automatic recall and what profile will be used in the case of automatic recall:</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">MEM:STAT:REC:AUTO?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Query status of automatic profile recall during power on sequence</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Automatic recall is turned off</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">MEM:STAT:REC:AUTO ON</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Turn on automatic recall</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">MEM:STAT:REC:SEL?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Query which profile will be used when automatic recall is turned on</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Selected profile was 0</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">MEM:STAT:REC:SEL 4</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Change power on profile to 4</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">SYST:POW 0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Switch the PSU to the Stand-by mode once again</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">SYST:POW 1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Returns back from the Stand-by mode. Again wait at least 5 seconds before enters this command</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">VOLT?;:CURR?;:OUTP?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">Query programmed voltage, current and output state of the currently selected channel</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 34%;">
+					<p class="cmd_code">12.00;0.30;1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 66%;">
+					<p class="table_body">The channel output values are programmed using the selected profile</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">10.4. Get identification info and self-test results</p>
+		<p>The PSU’s identification information could be beneficial when more then one instrument are controlled. Additionally in the following example information about self-test will be queried:</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p class="cmd_code">*IDN?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="table_body">Query identification string</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p class="cmd_code">EEZ,1/50/03-1/40/05 (Due),00001,M1.0.93</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="table_body">PSU with two different channels is identified, the  first channel is 0-50V/3A and the second is 0-40V/5A. Serial number is 00001, and firmware version M1.0.93</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p class="cmd_code">*TST?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="table_body">Execute self-test and query result</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p class="cmd_code">0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="table_body">Self-test is passed</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p class="cmd_code">DIAG:TEST?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="table_body">Query additional information about self-test</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p class="cmd_code">&quot;1, EEPROM, installed, passed&quot;,&quot;1, Ethernet, installed, passed&quot;,&quot;1, RTC, installed, passed&quot;,&quot;1, DateTime, installed, passed&quot;,&quot;2, BP option, installed, skipped&quot;,&quot;1, CH1 IOEXP, installed, passed&quot;,&quot;1, CH1 DAC, installed, passed&quot;,&quot;1, CH1 ADC, installed, passed&quot;,&quot;1, CH2 IOEXP, installed, passed&quot;,&quot;1, CH2 DAC, installed, passed&quot;,&quot;1, CH2 ADC, installed, passed&quot; </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="table_body">&#160;</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<p>The self-test could be performed even when the PSU is in the Stand-by mode. We’ll first switch the PSU into the Stand-by mode. At the end of this example we are using additional diagnostic command that allows us to query information about channel’s ADC measurements.</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p class="cmd_code">SYST:POW 0</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="table_body">The PSU enters the Stand-by mode</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p class="cmd_code">DIAG:TEST?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="table_body">Query additional information about self-test</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p class="cmd_code">&quot;1, EEPROM, installed, passed&quot;,&quot;1, Ethernet, installed, passed&quot;,&quot;1, RTC, installed, passed&quot;,&quot;1, DateTime, installed, passed&quot;,&quot;2, BP option, installed, skipped&quot; </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="table_body">Only Arduino Shield +BP module diagnostic information is returned</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p class="cmd_code">SYST:POW 1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="table_body">Returns back from the Stand-by mode</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p class="cmd_code">DIAG:ADC?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="table_body">Additional information about currently selected channel ADC inputs</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p class="cmd_code">&quot;U_SET=12.02 V&quot;,&quot;U_MON=12.00 V&quot;,&quot;I_SET=0.30 A&quot;,&quot;I_MON=0.00 A&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="table_body">U_SET and I_SET are measured values of the DAC outputs, U_MON and I_MON are actual output values. I_MON is 0 because no load is connected. A small difference between set and actual output voltage exists because calibration data are currently in use.</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<p class="Heading_2">10.5. Programming output voltage using the list of values</p>
+		<p>The PSU comes with simple “arbitary waveform generator” functionality that can be accomplished using the LIST commands. The following example changes in the loop output voltage between five output values each half a second long while current is set to 3&#160;A.</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">INST CH1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p class="table_body">Select the channel that has to be programmed</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">VOLT:MODE LIST</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p class="table_body">Set voltage programming mode to the list of values</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">LIST:VOLT 5, 10, 20, 40, 0 </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p class="table_body">Define sequence of output voltage (could be up to 256 steps)</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">CURR:MODE LIST</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p class="table_body">Set current programming mode to the list of values.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">LIST:CURR 3</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p class="table_body">Only one output current value is defined. Single value or number of values equivalent to other parameters (LIST:VOLT and LIST:DWEL) is allowed.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">LIST:DWEL 0.5</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p class="table_body">Only one value for the duration of each step is chosen. Single value or number of values equivalent to other parameters (LIST:VOLT and LIST:CURR) is allowed.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">LIST:COUN INF</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p class="table_body">Repeat continuously LIST sequence</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">TRIG:SOUR IMM</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p class="table_body">Define type of trigger. In this case the list execution will start immediately after INIT command is received.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 37%;">
+					<p class="cmd_code">INIT</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 63%;">
+					<p class="table_body">Start the trigger.</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<p>Resulting output voltage and current waveform with connected load of 15&#160;Ω is shown on the picture below.</p>
+		<p>&#160;</p>
+		<div style="text-align: center; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+<a href="http://www.envox.hr/eez/images/scpi_example_list.png">			<img src="images/scpi_example_list.png" alt="scpi_example_list.png" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; width: 84.67mm; height: 63.5mm;"/>
+</a>		</div>
+		<p>&#160;</p>
+	</body>
+</html>
