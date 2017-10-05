@@ -1064,6 +1064,11 @@ void onEncoder(uint32_t tickCount, int counter, bool clicked) {
 
 static WidgetCursor g_toggleOutputWidgetCursor;
 
+void channelReinitiateTrigger() {
+    trigger::abort();
+    channelInitiateTrigger();
+}
+
 void channelToggleOutput() {
     Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i >= 0 ? g_foundWidgetAtDown.cursor.i : 0);
     if (channel_dispatcher::isTripped(channel)) {
@@ -1075,12 +1080,24 @@ void channelToggleOutput() {
         if (channel.isOutputEnabled()) {
             if (triggerModeEnabled) {
                 trigger::abort();
+                for (int i = 0; i < CH_NUM; ++i) {
+                    channel_dispatcher::outputEnable(Channel::get(i), false);
+                }
+            } else {
+                channel_dispatcher::outputEnable(channel, false);
             }
-            channel_dispatcher::outputEnable(channel, false);
         } else {
-            if (triggerModeEnabled && trigger::isIdle()) {
-                g_toggleOutputWidgetCursor = g_foundWidgetAtDown;
-                pushPage(PAGE_ID_CH_START_LIST);
+            if (triggerModeEnabled) {
+                if (trigger::isIdle()) {
+                    g_toggleOutputWidgetCursor = g_foundWidgetAtDown;
+                    pushPage(PAGE_ID_CH_START_LIST);
+                } else if (trigger::isInitiated()) {
+                    trigger::abort();
+                    g_toggleOutputWidgetCursor = g_foundWidgetAtDown;
+                    pushPage(PAGE_ID_CH_START_LIST);
+                } else {
+                    yesNoDialog(PAGE_ID_YES_NO, PSTR("Trigger is active. Re-initiate trigger?"), channelReinitiateTrigger, 0, 0);
+                }
             } else {
                 channel_dispatcher::outputEnable(channel, true);
             }

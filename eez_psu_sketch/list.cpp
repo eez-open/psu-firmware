@@ -444,7 +444,7 @@ void tick(uint32_t tick_usec) {
     for (int i = 0; i < CH_NUM; ++i) {
         Channel &channel = Channel::get(i);
         if (g_execution[i].counter >= 0) {
-            if (channel.isTripped()) {
+            if (channel_dispatcher::isTripped(channel)) {
                 abort();
                 return;
             }

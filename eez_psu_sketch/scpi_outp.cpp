@@ -22,6 +22,7 @@
 #include "calibration.h"
 #include "channel_dispatcher.h"
 #include "profile.h"
+#include "trigger.h"
 
 namespace eez {
 namespace psu {
@@ -64,6 +65,15 @@ scpi_result_t scpi_cmd_outputState(scpi_t * context) {
 
     if (enable != channel->isOutputEnabled()) {
         if (enable) {
+            if (channel_dispatcher::getVoltageTriggerMode(*channel) != TRIGGER_MODE_FIXED && !trigger::isIdle()) {
+                if (trigger::isInitiated()) {
+                    trigger::abort();
+                } else {
+                    SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
+                    return SCPI_RES_ERR;
+                }
+            }
+
             if (channel_dispatcher::isTripped(*channel)) {
                 SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_EXECUTE_BEFORE_CLEARING_PROTECTION);
                 return SCPI_RES_OK;
