@@ -75678,37 +75678,37 @@
         "name": "DEBUG",
         "commands": [
           {
-            "name": "DEBUG"
+            "name": "DEBUg"
           },
           {
-            "name": "DEBUG?"
+            "name": "DEBUg?"
           },
           {
-            "name": "DEBUG:WDOG"
+            "name": "DEBUg:WDOG"
           },
           {
-            "name": "DEBUG:WDOG?"
+            "name": "DEBUg:WDOG?"
           },
           {
-            "name": "DEBUG:ONTime?"
+            "name": "DEBUg:ONTime?"
           },
           {
-            "name": "DEBUG:DIR?"
+            "name": "DEBUg:DIR?"
           },
           {
-            "name": "DEBUG:FILE?"
+            "name": "DEBUg:FILE?"
           },
           {
-            "name": "DEBUG:VOLTage"
+            "name": "DEBUg:VOLTage"
           },
           {
-            "name": "DEBUG:CURRent"
+            "name": "DEBUg:CURRent"
           },
           {
-            "name": "DEBUG:MEASure:VOLTage"
+            "name": "DEBUg:MEASure:VOLTage"
           },
           {
-            "name": "DEBUG:MEASure:CURRent"
+            "name": "DEBUg:MEASure:CURRent"
           }
         ]
       },
@@ -76471,7 +76471,7 @@
             "name": "TRIGger[:SEQuence]:EXIT:CONDition?"
           },
           {
-            "name": "INITiate"
+            "name": "INITiate[:IMMediate]"
           },
           {
             "name": "INITiate:CONTinuous"
