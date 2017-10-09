@@ -29,7 +29,6 @@
     SCPI_COMMAND("DEBUg:CURRent", scpi_cmd_debugCurrent) \
     SCPI_COMMAND("DEBUg:MEASure:VOLTage", scpi_cmd_debugMeasureVoltage) \
     SCPI_COMMAND("DEBUg:MEASure:CURRent", scpi_cmd_debugMeasureCurrent) \
-    SCPI_COMMAND("SIMUlator:EXIT", scpi_cmd_simulatorExit) \
     SCPI_COMMAND("SYSTem:DATE:CLEar", scpi_cmd_systemDateClear) \
     SCPI_COMMAND("SYSTem:TIME:CLEar", scpi_cmd_systemTimeClear) \
     SCPI_COMMAND("SYSTem:SERial", scpi_cmd_systemSerial) \
@@ -313,4 +312,5 @@
     SCPI_COMMAND("SIMUlator:TEMPerature", scpi_cmd_simulatorTemperature) \
     SCPI_COMMAND("SIMUlator:TEMPerature?", scpi_cmd_simulatorTemperatureQ) \
     SCPI_COMMAND("SIMUlator:VOLTage:PROGram:EXTernal", scpi_cmd_simulatorVoltageProgramExternal) \
-    SCPI_COMMAND("SIMUlator:VOLTage:PROGram:EXTernal?", scpi_cmd_simulatorVoltageProgramExternalQ)
+    SCPI_COMMAND("SIMUlator:VOLTage:PROGram:EXTernal?", scpi_cmd_simulatorVoltageProgramExternalQ) \
+    SCPI_COMMAND("SIMUlator:EXIT", scpi_cmd_simulatorExit)

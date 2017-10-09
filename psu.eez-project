@@ -75602,14 +75602,6 @@
         ]
       },
       {
-        "name": "SIMUlator",
-        "commands": [
-          {
-            "name": "SIMUlator:EXIT"
-          }
-        ]
-      },
-      {
         "name": "SYSTem",
         "commands": [
           {
@@ -76881,6 +76873,10 @@
           {
             "name": "SIMUlator:VOLTage:PROGram:EXTernal?",
             "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_volt_prog"
+          },
+          {
+            "name": "SIMUlator:EXIT",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_exit"
           }
         ]
       },
