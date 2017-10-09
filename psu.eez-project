@@ -1,5 +1,8 @@
 {
   "settings": {
+    "general": {
+      "scpiHelpFolder": "doc\\SCPI reference guide\\Commands"
+    },
     "build": {
       "configurations": [
         {
@@ -75751,10 +75754,10 @@
             "name": "INSTrument:COUPle:TRACking?"
           },
           {
-            "name": "INSTrument:DISPlay:TRACe#"
+            "name": "INSTrument:DISPlay:TRACe[<n>]"
           },
           {
-            "name": "INSTrument:DISPlay:TRACe#?"
+            "name": "INSTrument:DISPlay:TRACe[<n>]?"
           },
           {
             "name": "INSTrument:DISPlay:TRACe:SWAP"
@@ -75826,10 +75829,10 @@
         "name": "MMEMory",
         "commands": [
           {
-            "name": "MMEMory:LOAD:LIST#"
+            "name": "MMEMory:LOAD:LIST<n>"
           },
           {
-            "name": "MMEMory:STORe:LIST#"
+            "name": "MMEMory:STORe:LIST<n>"
           }
         ]
       },
@@ -75928,175 +75931,175 @@
         "name": "SOURce",
         "commands": [
           {
-            "name": "[SOURce#]:CURRent[:LEVel][:IMMediate][:AMPLitude]"
+            "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate][:AMPLitude]"
           },
           {
-            "name": "[SOURce#]:CURRent[:LEVel][:IMMediate][:AMPLitude]?"
+            "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate][:AMPLitude]?"
           },
           {
-            "name": "[SOURce#]:VOLTage[:LEVel][:IMMediate][:AMPLitude]"
+            "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate][:AMPLitude]"
           },
           {
-            "name": "[SOURce#]:VOLTage[:LEVel][:IMMediate][:AMPLitude]?"
+            "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate][:AMPLitude]?"
           },
           {
-            "name": "[SOURce#]:CURRent[:LEVel][:IMMediate]:STEP[:INCRement]"
+            "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate]:STEP[:INCRement]"
           },
           {
-            "name": "[SOURce#]:CURRent[:LEVel][:IMMediate]:STEP[:INCRement]?"
+            "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate]:STEP[:INCRement]?"
           },
           {
-            "name": "[SOURce#]:VOLTage[:LEVel][:IMMediate]:STEP[:INCRement]"
+            "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate]:STEP[:INCRement]"
           },
           {
-            "name": "[SOURce#]:VOLTage[:LEVel][:IMMediate]:STEP[:INCRement]?"
+            "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate]:STEP[:INCRement]?"
           },
           {
-            "name": "[SOURce#]:CURRent:PROTection:DELay[:TIME]"
+            "name": "[SOURce[<n>]]:CURRent:PROTection:DELay[:TIME]"
           },
           {
-            "name": "[SOURce#]:CURRent:PROTection:DELay[:TIME]?"
+            "name": "[SOURce[<n>]]:CURRent:PROTection:DELay[:TIME]?"
           },
           {
-            "name": "[SOURce#]:CURRent:PROTection:STATe"
+            "name": "[SOURce[<n>]]:CURRent:PROTection:STATe"
           },
           {
-            "name": "[SOURce#]:CURRent:PROTection:STATe?"
+            "name": "[SOURce[<n>]]:CURRent:PROTection:STATe?"
           },
           {
-            "name": "[SOURce#]:CURRent:PROTection:TRIPped?"
+            "name": "[SOURce[<n>]]:CURRent:PROTection:TRIPped?"
           },
           {
-            "name": "[SOURce#]:POWer:PROTection[:LEVel]"
+            "name": "[SOURce[<n>]]:POWer:PROTection[:LEVel]"
           },
           {
-            "name": "[SOURce#]:POWer:PROTection[:LEVel]?"
+            "name": "[SOURce[<n>]]:POWer:PROTection[:LEVel]?"
           },
           {
-            "name": "[SOURce#]:POWer:PROTection:DELay[:TIME]"
+            "name": "[SOURce[<n>]]:POWer:PROTection:DELay[:TIME]"
           },
           {
-            "name": "[SOURce#]:POWer:PROTection:DELay[:TIME]?"
+            "name": "[SOURce[<n>]]:POWer:PROTection:DELay[:TIME]?"
           },
           {
-            "name": "[SOURce#]:POWer:PROTection:STATe"
+            "name": "[SOURce[<n>]]:POWer:PROTection:STATe"
           },
           {
-            "name": "[SOURce#]:POWer:PROTection:STATe?"
+            "name": "[SOURce[<n>]]:POWer:PROTection:STATe?"
           },
           {
-            "name": "[SOURce#]:POWer:PROTection:TRIPped?"
+            "name": "[SOURce[<n>]]:POWer:PROTection:TRIPped?"
           },
           {
-            "name": "[SOURce#]:VOLTage:PROTection[:LEVel]"
+            "name": "[SOURce[<n>]]:VOLTage:PROTection[:LEVel]"
           },
           {
-            "name": "[SOURce#]:VOLTage:PROTection[:LEVel]?"
+            "name": "[SOURce[<n>]]:VOLTage:PROTection[:LEVel]?"
           },
           {
-            "name": "[SOURce#]:VOLTage:PROTection:DELay[:TIME]"
+            "name": "[SOURce[<n>]]:VOLTage:PROTection:DELay[:TIME]"
           },
           {
-            "name": "[SOURce#]:VOLTage:PROTection:DELay[:TIME]?"
+            "name": "[SOURce[<n>]]:VOLTage:PROTection:DELay[:TIME]?"
           },
           {
-            "name": "[SOURce#]:VOLTage:PROTection:STATe"
+            "name": "[SOURce[<n>]]:VOLTage:PROTection:STATe"
           },
           {
-            "name": "[SOURce#]:VOLTage:PROTection:STATe?"
+            "name": "[SOURce[<n>]]:VOLTage:PROTection:STATe?"
           },
           {
-            "name": "[SOURce#]:VOLTage:PROTection:TRIPped?"
+            "name": "[SOURce[<n>]]:VOLTage:PROTection:TRIPped?"
           },
           {
-            "name": "[SOURce#]:VOLTage:SENSe[:SOURce]"
+            "name": "[SOURce[<n>]]:VOLTage:SENSe[:SOURce]"
           },
           {
-            "name": "[SOURce#]:VOLTage:SENSe[:SOURce]?"
+            "name": "[SOURce[<n>]]:VOLTage:SENSe[:SOURce]?"
           },
           {
-            "name": "[SOURce#]:VOLTage:PROGram[:SOURce]"
+            "name": "[SOURce[<n>]]:VOLTage:PROGram[:SOURce]"
           },
           {
-            "name": "[SOURce#]:VOLTage:PROGram[:SOURce]?"
+            "name": "[SOURce[<n>]]:VOLTage:PROGram[:SOURce]?"
           },
           {
-            "name": "[SOURce#]:LRIPple"
+            "name": "[SOURce[<n>]]:LRIPple"
           },
           {
-            "name": "[SOURce#]:LRIPple?"
+            "name": "[SOURce[<n>]]:LRIPple?"
           },
           {
-            "name": "[SOURce#]:LRIPple:AUTO"
+            "name": "[SOURce[<n>]]:LRIPple:AUTO"
           },
           {
-            "name": "[SOURce#]:LRIPple:AUTO?"
+            "name": "[SOURce[<n>]]:LRIPple:AUTO?"
           },
           {
-            "name": "[SOURce#]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]"
+            "name": "[SOURce[<n>]]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]"
           },
           {
-            "name": "[SOURce#]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]?"
+            "name": "[SOURce[<n>]]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]?"
           },
           {
-            "name": "[SOURce#]:VOLTage:LIMit[:POSitive][:IMMediate][:AMPLitude]"
+            "name": "[SOURce[<n>]]:VOLTage:LIMit[:POSitive][:IMMediate][:AMPLitude]"
           },
           {
-            "name": "[SOURce#]:VOLTage:LIMit[:POSitive][:IMMediate][:AMPLitude]?"
+            "name": "[SOURce[<n>]]:VOLTage:LIMit[:POSitive][:IMMediate][:AMPLitude]?"
           },
           {
-            "name": "[SOURce#]:POWer:LIMit"
+            "name": "[SOURce[<n>]]:POWer:LIMit"
           },
           {
-            "name": "[SOURce#]:POWer:LIMit?"
+            "name": "[SOURce[<n>]]:POWer:LIMit?"
           },
           {
-            "name": "[SOURce#]:CURRent[:LEVel]:TRIGgered[:AMPLitude]"
+            "name": "[SOURce[<n>]]:CURRent[:LEVel]:TRIGgered[:AMPLitude]"
           },
           {
-            "name": "[SOURce#]:CURRent[:LEVel]:TRIGgered[:AMPLitude]?"
+            "name": "[SOURce[<n>]]:CURRent[:LEVel]:TRIGgered[:AMPLitude]?"
           },
           {
-            "name": "[SOURce#]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]"
+            "name": "[SOURce[<n>]]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]"
           },
           {
-            "name": "[SOURce#]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]?"
+            "name": "[SOURce[<n>]]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]?"
           },
           {
-            "name": "[SOURce#]:CURRent:MODE"
+            "name": "[SOURce[<n>]]:CURRent:MODE"
           },
           {
-            "name": "[SOURce#]:CURRent:MODE?"
+            "name": "[SOURce[<n>]]:CURRent:MODE?"
           },
           {
-            "name": "[SOURce#]:VOLTage:MODE"
+            "name": "[SOURce[<n>]]:VOLTage:MODE"
           },
           {
-            "name": "[SOURce#]:VOLTage:MODE?"
+            "name": "[SOURce[<n>]]:VOLTage:MODE?"
           },
           {
-            "name": "[SOURce#]:LIST:COUNt"
+            "name": "[SOURce[<n>]]:LIST:COUNt"
           },
           {
-            "name": "[SOURce#]:LIST:COUNt?"
+            "name": "[SOURce[<n>]]:LIST:COUNt?"
           },
           {
-            "name": "[SOURce#]:LIST:CURRent[:LEVel]"
+            "name": "[SOURce[<n>]]:LIST:CURRent[:LEVel]"
           },
           {
-            "name": "[SOURce#]:LIST:CURRent[:LEVel]?"
+            "name": "[SOURce[<n>]]:LIST:CURRent[:LEVel]?"
           },
           {
-            "name": "[SOURce#]:LIST:DWELl"
+            "name": "[SOURce[<n>]]:LIST:DWELl"
           },
           {
-            "name": "[SOURce#]:LIST:DWELl?"
+            "name": "[SOURce[<n>]]:LIST:DWELl?"
           },
           {
-            "name": "[SOURce#]:LIST:VOLTage[:LEVel]"
+            "name": "[SOURce[<n>]]:LIST:VOLTage[:LEVel]"
           },
           {
-            "name": "[SOURce#]:LIST:VOLTage[:LEVel]?"
+            "name": "[SOURce[<n>]]:LIST:VOLTage[:LEVel]?"
           },
           {
             "name": "[SOURce]:DIGital:INPut:DATA?"
@@ -76105,16 +76108,16 @@
             "name": "[SOURce]:DIGital:OUTPut:DATA"
           },
           {
-            "name": "[SOURce]:DIGital:PIN#:FUNCtion"
+            "name": "[SOURce]:DIGital:PIN<n>:FUNCtion"
           },
           {
-            "name": "[SOURce]:DIGital:PIN#:FUNCtion?"
+            "name": "[SOURce]:DIGital:PIN<n>:FUNCtion?"
           },
           {
-            "name": "[SOURce]:DIGital:PIN#:POLarity"
+            "name": "[SOURce]:DIGital:PIN<n>:POLarity"
           },
           {
-            "name": "[SOURce]:DIGital:PIN#:POLarity?"
+            "name": "[SOURce]:DIGital:PIN<n>:POLarity?"
           }
         ]
       },
@@ -76170,28 +76173,28 @@
             "name": "STATus:OPERation:INSTrument:ENABle?"
           },
           {
-            "name": "STATus:QUEStionable:INSTrument:ISUMmary#[:EVENt]?"
+            "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>][:EVENt]?"
           },
           {
-            "name": "STATus:QUEStionable:INSTrument:ISUMmary#:CONDition?"
+            "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>]:CONDition?"
           },
           {
-            "name": "STATus:QUEStionable:INSTrument:ISUMmary#:ENABle"
+            "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>]:ENABle"
           },
           {
-            "name": "STATus:QUEStionable:INSTrument:ISUMmary#:ENABle?"
+            "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>]:ENABle?"
           },
           {
-            "name": "STATus:OPERation:INSTrument:ISUMmary#[:EVENt]?"
+            "name": "STATus:OPERation:INSTrument:ISUMmary[<n>][:EVENt]?"
           },
           {
-            "name": "STATus:OPERation:INSTrument:ISUMmary#:CONDition?"
+            "name": "STATus:OPERation:INSTrument:ISUMmary[<n>]:CONDition?"
           },
           {
-            "name": "STATus:OPERation:INSTrument:ISUMmary#:ENABle"
+            "name": "STATus:OPERation:INSTrument:ISUMmary[<n>]:ENABle"
           },
           {
-            "name": "STATus:OPERation:INSTrument:ISUMmary#:ENABle?"
+            "name": "STATus:OPERation:INSTrument:ISUMmary[<n>]:ENABle?"
           },
           {
             "name": "STATus:PREset"
@@ -76307,7 +76310,7 @@
             "name": "SYSTem:CHANnel:INFOrmation:ONTime:TOTal?"
           },
           {
-            "name": "SYSTem:CHANnel:INFOrmation:ONTime:LASt?"
+            "name": "SYSTem:CHANnel:INFOrmation:ONTime:LAST?"
           },
           {
             "name": "SYSTem:CHANnel:MODel?"
@@ -76322,7 +76325,7 @@
             "name": "SYSTem:CPU:INFOrmation:ONTime:TOTal?"
           },
           {
-            "name": "SYSTem:CPU:INFOrmation:ONTime:LASt?"
+            "name": "SYSTem:CPU:INFOrmation:ONTime:LAST?"
           },
           {
             "name": "SYSTem:CPU:MODel?"
