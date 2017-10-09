@@ -75567,121 +75567,10 @@
   "scpi": {
     "subsystems": [
       {
-        "name": "APPLy",
-        "commands": [
-          {
-            "name": "APPLy"
-          },
-          {
-            "name": "APPLy?"
-          }
-        ]
-      },
-      {
-        "name": "CALibration",
-        "commands": [
-          {
-            "name": "CALibration[:MODE]"
-          },
-          {
-            "name": "CALibration[:MODE]?"
-          },
-          {
-            "name": "CALibration:CLEar"
-          },
-          {
-            "name": "CALibration:CURRent[:DATA]"
-          },
-          {
-            "name": "CALibration:CURRent:LEVel"
-          },
-          {
-            "name": "CALibration:CURRent:RANGe"
-          },
-          {
-            "name": "CALibration:PASSword:NEW"
-          },
-          {
-            "name": "CALibration:REMark"
-          },
-          {
-            "name": "CALibration:REMark?"
-          },
-          {
-            "name": "CALibration:SAVE"
-          },
-          {
-            "name": "CALibration:STATe"
-          },
-          {
-            "name": "CALibration:STATe?"
-          },
-          {
-            "name": "CALibration:VOLTage[:DATA]"
-          },
-          {
-            "name": "CALibration:VOLTage:LEVel"
-          }
-        ]
-      },
-      {
-        "name": "*",
-        "commands": [
-          {
-            "name": "*CLS"
-          },
-          {
-            "name": "*ESE"
-          },
-          {
-            "name": "*ESE?"
-          },
-          {
-            "name": "*ESR?"
-          },
-          {
-            "name": "*IDN?"
-          },
-          {
-            "name": "*OPC"
-          },
-          {
-            "name": "*OPC?"
-          },
-          {
-            "name": "*RCL"
-          },
-          {
-            "name": "*RST"
-          },
-          {
-            "name": "*SAV"
-          },
-          {
-            "name": "*SRE"
-          },
-          {
-            "name": "*SRE?"
-          },
-          {
-            "name": "*STB?"
-          },
-          {
-            "name": "*TST?"
-          },
-          {
-            "name": "*WAI"
-          }
-        ]
-      },
-      {
         "name": "DEBUG",
         "commands": [
           {
             "name": "DEBUg"
-          },
-          {
-            "name": "DEBUg?"
           },
           {
             "name": "DEBUg:WDOG"
@@ -75713,491 +75602,10 @@
         ]
       },
       {
-        "name": "DIAGnostic",
-        "commands": [
-          {
-            "name": "DIAGnostic[:INFOrmation]:ADC?"
-          },
-          {
-            "name": "DIAGnostic[:INFOrmation]:CALibration?"
-          },
-          {
-            "name": "DIAGnostic[:INFOrmation]:PROTection?"
-          },
-          {
-            "name": "DIAGnostic[:INFOrmation]:TEST?"
-          },
-          {
-            "name": "DIAGnostic[:INFOrmation]:FAN?"
-          }
-        ]
-      },
-      {
-        "name": "INSTrument",
-        "commands": [
-          {
-            "name": "INSTrument[:SELect]"
-          },
-          {
-            "name": "INSTrument[:SELect]?"
-          },
-          {
-            "name": "INSTrument:NSELect"
-          },
-          {
-            "name": "INSTrument:NSELect?"
-          },
-          {
-            "name": "INSTrument:COUPle:TRACking"
-          },
-          {
-            "name": "INSTrument:COUPle:TRACking?"
-          },
-          {
-            "name": "INSTrument:DISPlay:TRACe[<n>]"
-          },
-          {
-            "name": "INSTrument:DISPlay:TRACe[<n>]?"
-          },
-          {
-            "name": "INSTrument:DISPlay:TRACe:SWAP"
-          },
-          {
-            "name": "INSTrument:DISPlay:YT:RATE"
-          },
-          {
-            "name": "INSTrument:DISPlay:YT:RATE?"
-          }
-        ]
-      },
-      {
-        "name": "MEASure",
-        "commands": [
-          {
-            "name": "MEASure[:SCALar][:VOLTage][:DC]?"
-          },
-          {
-            "name": "MEASure[:SCALar]:CURRent[:DC]?"
-          },
-          {
-            "name": "MEASure[:SCALar]:POWer[:DC]?"
-          },
-          {
-            "name": "MEASure[:SCALar]:TEMPerature[:THERmistor][:DC]?"
-          }
-        ]
-      },
-      {
-        "name": "MEMory",
-        "commands": [
-          {
-            "name": "MEMory:NSTates?"
-          },
-          {
-            "name": "MEMory:STATe:CATalog?"
-          },
-          {
-            "name": "MEMory:STATe:DELete"
-          },
-          {
-            "name": "MEMory:STATe:DELete:ALL"
-          },
-          {
-            "name": "MEMory:STATe:NAME"
-          },
-          {
-            "name": "MEMory:STATe:NAME?"
-          },
-          {
-            "name": "MEMory:STATe:RECall:AUTO"
-          },
-          {
-            "name": "MEMory:STATe:RECall:AUTO?"
-          },
-          {
-            "name": "MEMory:STATe:RECall:SELect"
-          },
-          {
-            "name": "MEMory:STATe:RECall:SELect?"
-          },
-          {
-            "name": "MEMory:STATe:VALid?"
-          }
-        ]
-      },
-      {
-        "name": "MMEMory",
-        "commands": [
-          {
-            "name": "MMEMory:LOAD:LIST<n>"
-          },
-          {
-            "name": "MMEMory:STORe:LIST<n>"
-          }
-        ]
-      },
-      {
-        "name": "OUTPut",
-        "commands": [
-          {
-            "name": "OUTPut:MODE?"
-          },
-          {
-            "name": "OUTPut:PROTection:CLEar"
-          },
-          {
-            "name": "OUTPut[:STATe]"
-          },
-          {
-            "name": "OUTPut[:STATe]?"
-          },
-          {
-            "name": "OUTPut:TRACk[:STATe]"
-          },
-          {
-            "name": "OUTPut:TRACk[:STATe]?"
-          },
-          {
-            "name": "OUTPut:PROTection:COUPle"
-          },
-          {
-            "name": "OUTPut:PROTection:COUPle?"
-          },
-          {
-            "name": "OUTPut[:STATe]:TRIGgered"
-          },
-          {
-            "name": "OUTPut[:STATe]:TRIGgered?"
-          }
-        ]
-      },
-      {
         "name": "SIMUlator",
         "commands": [
           {
-            "name": "SIMUlator:LOAD:STATe"
-          },
-          {
-            "name": "SIMUlator:LOAD:STATe?"
-          },
-          {
-            "name": "SIMUlator:LOAD"
-          },
-          {
-            "name": "SIMUlator:LOAD?"
-          },
-          {
-            "name": "SIMUlator:VOLTage:PROGram:EXTernal"
-          },
-          {
-            "name": "SIMUlator:VOLTage:PROGram:EXTernal?"
-          },
-          {
-            "name": "SIMUlator:PWRGood"
-          },
-          {
-            "name": "SIMUlator:PWRGood?"
-          },
-          {
-            "name": "SIMUlator:RPOL"
-          },
-          {
-            "name": "SIMUlator:RPOL?"
-          },
-          {
-            "name": "SIMUlator:TEMPerature"
-          },
-          {
-            "name": "SIMUlator:TEMPerature?"
-          },
-          {
-            "name": "SIMUlator:GUI"
-          },
-          {
             "name": "SIMUlator:EXIT"
-          },
-          {
-            "name": "SIMUlator:QUIT"
-          },
-          {
-            "name": "SIMUlator:PIN1"
-          },
-          {
-            "name": "SIMUlator:PIN1?"
-          }
-        ]
-      },
-      {
-        "name": "SOURce",
-        "commands": [
-          {
-            "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate][:AMPLitude]"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate][:AMPLitude]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate][:AMPLitude]"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate][:AMPLitude]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate]:STEP[:INCRement]"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate]:STEP[:INCRement]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate]:STEP[:INCRement]"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate]:STEP[:INCRement]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent:PROTection:DELay[:TIME]"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent:PROTection:DELay[:TIME]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent:PROTection:STATe"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent:PROTection:STATe?"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent:PROTection:TRIPped?"
-          },
-          {
-            "name": "[SOURce[<n>]]:POWer:PROTection[:LEVel]"
-          },
-          {
-            "name": "[SOURce[<n>]]:POWer:PROTection[:LEVel]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:POWer:PROTection:DELay[:TIME]"
-          },
-          {
-            "name": "[SOURce[<n>]]:POWer:PROTection:DELay[:TIME]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:POWer:PROTection:STATe"
-          },
-          {
-            "name": "[SOURce[<n>]]:POWer:PROTection:STATe?"
-          },
-          {
-            "name": "[SOURce[<n>]]:POWer:PROTection:TRIPped?"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:PROTection[:LEVel]"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:PROTection[:LEVel]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:PROTection:DELay[:TIME]"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:PROTection:DELay[:TIME]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:PROTection:STATe"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:PROTection:STATe?"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:PROTection:TRIPped?"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:SENSe[:SOURce]"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:SENSe[:SOURce]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:PROGram[:SOURce]"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:PROGram[:SOURce]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:LRIPple"
-          },
-          {
-            "name": "[SOURce[<n>]]:LRIPple?"
-          },
-          {
-            "name": "[SOURce[<n>]]:LRIPple:AUTO"
-          },
-          {
-            "name": "[SOURce[<n>]]:LRIPple:AUTO?"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:LIMit[:POSitive][:IMMediate][:AMPLitude]"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:LIMit[:POSitive][:IMMediate][:AMPLitude]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:POWer:LIMit"
-          },
-          {
-            "name": "[SOURce[<n>]]:POWer:LIMit?"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent[:LEVel]:TRIGgered[:AMPLitude]"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent[:LEVel]:TRIGgered[:AMPLitude]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent:MODE"
-          },
-          {
-            "name": "[SOURce[<n>]]:CURRent:MODE?"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:MODE"
-          },
-          {
-            "name": "[SOURce[<n>]]:VOLTage:MODE?"
-          },
-          {
-            "name": "[SOURce[<n>]]:LIST:COUNt"
-          },
-          {
-            "name": "[SOURce[<n>]]:LIST:COUNt?"
-          },
-          {
-            "name": "[SOURce[<n>]]:LIST:CURRent[:LEVel]"
-          },
-          {
-            "name": "[SOURce[<n>]]:LIST:CURRent[:LEVel]?"
-          },
-          {
-            "name": "[SOURce[<n>]]:LIST:DWELl"
-          },
-          {
-            "name": "[SOURce[<n>]]:LIST:DWELl?"
-          },
-          {
-            "name": "[SOURce[<n>]]:LIST:VOLTage[:LEVel]"
-          },
-          {
-            "name": "[SOURce[<n>]]:LIST:VOLTage[:LEVel]?"
-          },
-          {
-            "name": "[SOURce]:DIGital:INPut:DATA?"
-          },
-          {
-            "name": "[SOURce]:DIGital:OUTPut:DATA"
-          },
-          {
-            "name": "[SOURce]:DIGital:PIN<n>:FUNCtion"
-          },
-          {
-            "name": "[SOURce]:DIGital:PIN<n>:FUNCtion?"
-          },
-          {
-            "name": "[SOURce]:DIGital:PIN<n>:POLarity"
-          },
-          {
-            "name": "[SOURce]:DIGital:PIN<n>:POLarity?"
-          }
-        ]
-      },
-      {
-        "name": "STATus",
-        "commands": [
-          {
-            "name": "STATus:QUEStionable[:EVENt]?"
-          },
-          {
-            "name": "STATus:QUEStionable:CONDition?"
-          },
-          {
-            "name": "STATus:QUEStionable:ENABle"
-          },
-          {
-            "name": "STATus:QUEStionable:ENABle?"
-          },
-          {
-            "name": "STATus:OPERation[:EVENt]?"
-          },
-          {
-            "name": "STATus:OPERation:CONDition?"
-          },
-          {
-            "name": "STATus:OPERation:ENABle"
-          },
-          {
-            "name": "STATus:OPERation:ENABle?"
-          },
-          {
-            "name": "STATus:QUEStionable:INSTrument[:EVENt]?"
-          },
-          {
-            "name": "STATus:QUEStionable:INSTrument:CONDition?"
-          },
-          {
-            "name": "STATus:QUEStionable:INSTrument:ENABle"
-          },
-          {
-            "name": "STATus:QUEStionable:INSTrument:ENABle?"
-          },
-          {
-            "name": "STATus:OPERation:INSTrument[:EVENt]?"
-          },
-          {
-            "name": "STATus:OPERation:INSTrument:CONDition?"
-          },
-          {
-            "name": "STATus:OPERation:INSTrument:ENABle"
-          },
-          {
-            "name": "STATus:OPERation:INSTrument:ENABle?"
-          },
-          {
-            "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>][:EVENt]?"
-          },
-          {
-            "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>]:CONDition?"
-          },
-          {
-            "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>]:ENABle"
-          },
-          {
-            "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>]:ENABle?"
-          },
-          {
-            "name": "STATus:OPERation:INSTrument:ISUMmary[<n>][:EVENt]?"
-          },
-          {
-            "name": "STATus:OPERation:INSTrument:ISUMmary[<n>]:CONDition?"
-          },
-          {
-            "name": "STATus:OPERation:INSTrument:ISUMmary[<n>]:ENABle"
-          },
-          {
-            "name": "STATus:OPERation:INSTrument:ISUMmary[<n>]:ENABle?"
-          },
-          {
-            "name": "STATus:PREset"
           }
         ]
       },
@@ -76205,336 +75613,1281 @@
         "name": "SYSTem",
         "commands": [
           {
-            "name": "SYSTem:CAPability?"
-          },
-          {
-            "name": "SYSTem:ERRor[:NEXT]?"
-          },
-          {
-            "name": "SYSTem:ERRor:COUNt?"
-          },
-          {
-            "name": "SYSTem:VERSion?"
-          },
-          {
-            "name": "SYSTem:POWer"
-          },
-          {
-            "name": "SYSTem:POWer?"
-          },
-          {
-            "name": "SYSTem:DATE"
-          },
-          {
             "name": "SYSTem:DATE:CLEar"
           },
           {
-            "name": "SYSTem:DATE?"
-          },
-          {
-            "name": "SYSTem:TIME"
-          },
-          {
             "name": "SYSTem:TIME:CLEar"
-          },
-          {
-            "name": "SYSTem:TIME?"
-          },
-          {
-            "name": "SYSTem:TIME:DST"
-          },
-          {
-            "name": "SYSTem:TIME:DST?"
-          },
-          {
-            "name": "SYSTem:TIME:ZONE"
-          },
-          {
-            "name": "SYSTem:TIME:ZONE?"
-          },
-          {
-            "name": "SYSTem:BEEPer[:IMMediate]"
-          },
-          {
-            "name": "SYSTem:BEEPer:STATe"
-          },
-          {
-            "name": "SYSTem:BEEPer:STATe?"
-          },
-          {
-            "name": "SYSTem:BEEPer:KEY:STATe"
-          },
-          {
-            "name": "SYSTem:BEEPer:KEY:STATe?"
-          },
-          {
-            "name": "SYSTem:TEMPerature:PROTection[:HIGH]:CLEar"
-          },
-          {
-            "name": "SYSTem:TEMPerature:PROTection[:HIGH][:LEVel]"
-          },
-          {
-            "name": "SYSTem:TEMPerature:PROTection[:HIGH][:LEVel]?"
-          },
-          {
-            "name": "SYSTem:TEMPerature:PROTection[:HIGH]:STATe"
-          },
-          {
-            "name": "SYSTem:TEMPerature:PROTection[:HIGH]:STATe?"
-          },
-          {
-            "name": "SYSTem:TEMPerature:PROTection[:HIGH]:DELay[:TIME]"
-          },
-          {
-            "name": "SYSTem:TEMPerature:PROTection[:HIGH]:DELay[:TIME]?"
-          },
-          {
-            "name": "SYSTem:TEMPerature:PROTection[:HIGH]:TRIPped?"
-          },
-          {
-            "name": "SYSTem:CHANnel[:COUNt]?"
-          },
-          {
-            "name": "SYSTem:CHANnel:INFOrmation:CURRent?"
-          },
-          {
-            "name": "SYSTem:CHANnel:INFOrmation:POWer?"
-          },
-          {
-            "name": "SYSTem:CHANnel:INFOrmation:PROGram?"
-          },
-          {
-            "name": "SYSTem:CHANnel:INFOrmation:VOLTage?"
-          },
-          {
-            "name": "SYSTem:CHANnel:INFOrmation:ONTime:TOTal?"
-          },
-          {
-            "name": "SYSTem:CHANnel:INFOrmation:ONTime:LAST?"
-          },
-          {
-            "name": "SYSTem:CHANnel:MODel?"
-          },
-          {
-            "name": "SYSTem:CPU:INFOrmation:ETHernet:TYPE?"
-          },
-          {
-            "name": "SYSTem:CPU:INFOrmation:TYPE?"
-          },
-          {
-            "name": "SYSTem:CPU:INFOrmation:ONTime:TOTal?"
-          },
-          {
-            "name": "SYSTem:CPU:INFOrmation:ONTime:LAST?"
-          },
-          {
-            "name": "SYSTem:CPU:MODel?"
-          },
-          {
-            "name": "SYSTem:CPU:OPTion?"
           },
           {
             "name": "SYSTem:SERial"
           },
           {
             "name": "SYSTem:SERial?"
-          },
-          {
-            "name": "SYSTem:POWer:PROTection:TRIP"
-          },
-          {
-            "name": "SYSTem:POWer:PROTection:TRIP?"
-          },
-          {
-            "name": "SYSTem:PON:OUTPut:DISable"
-          },
-          {
-            "name": "SYSTem:PON:OUTPut:DISable?"
-          },
-          {
-            "name": "SYSTem:PASSword:NEW"
-          },
-          {
-            "name": "SYSTem:PASSword:FPANel:RESet"
-          },
-          {
-            "name": "SYSTem:PASSword:CALibrate:RESet"
-          },
-          {
-            "name": "SYSTem:KLOCk"
-          },
-          {
-            "name": "SYSTem:COMMunicate:RLSTate"
-          },
-          {
-            "name": "SYSTem:LOCal"
-          },
-          {
-            "name": "SYSTem:REMote"
-          },
-          {
-            "name": "SYSTem:RWLock"
-          },
-          {
-            "name": "SYSTem:COMMunicate:SERial:BAUD"
-          },
-          {
-            "name": "SYSTem:COMMunicate:SERial:BAUD?"
-          },
-          {
-            "name": "SYSTem:COMMunicate:SERial:PARity"
-          },
-          {
-            "name": "SYSTem:COMMunicate:SERial:PARity?"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ENABle"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ENABle?"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:DHCP"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:DHCP?"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:ADDRess"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:ADDRess?"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:DNS"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:DNS?"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:GATEway"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:GATEway?"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:SMASk"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:SMASk?"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:PORT"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:PORT?"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:MAC"
-          },
-          {
-            "name": "SYSTem:COMMunicate:ETHernet:MAC?"
-          },
-          {
-            "name": "SYSTem:COMMunicate:NTP"
-          },
-          {
-            "name": "SYSTem:COMMunicate:NTP?"
-          },
-          {
-            "name": "SYSTem:INHibit?"
           }
         ]
       },
       {
-        "name": "TRIGger",
+        "name": "1. Introduction",
+        "helpLink": "EEZ PSU SCPI reference 1 - introduction.html",
+        "commands": []
+      },
+      {
+        "name": "2. Syntax and style",
+        "helpLink": "EEZ PSU SCPI reference 2 - syntax and style.html",
+        "commands": []
+      },
+      {
+        "name": "3. Registers and queues",
+        "helpLink": "EEZ PSU SCPI reference 3 - registers and queue.html",
+        "commands": []
+      },
+      {
+        "name": "4. Common command reference",
+        "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html",
         "commands": [
           {
-            "name": "TRIGger[:SEQuence][:IMMediate]"
+            "name": "*CLS",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#cls"
           },
           {
-            "name": "TRIGger[:SEQuence]:DELay"
+            "name": "*ESE",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#ese"
           },
           {
-            "name": "TRIGger[:SEQuence]:DELay?"
+            "name": "*ESE?",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#ese"
           },
           {
-            "name": "TRIGger[:SEQuence]:SOURce"
+            "name": "*ESR?",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#esr"
           },
           {
-            "name": "TRIGger[:SEQuence]:SOURce?"
+            "name": "*IDN?",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#idn"
           },
           {
-            "name": "TRIGger[:SEQuence]:EXIT:CONDition"
+            "name": "*OPC",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#opc"
           },
           {
-            "name": "TRIGger[:SEQuence]:EXIT:CONDition?"
+            "name": "*OPC?",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#opc"
           },
           {
-            "name": "INITiate[:IMMediate]"
+            "name": "*RCL",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#rcl"
           },
           {
-            "name": "INITiate:CONTinuous"
+            "name": "*RST",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#rst"
           },
           {
-            "name": "INITiate:CONTinuous?"
+            "name": "*SAV",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#sav"
           },
           {
-            "name": "ABORt"
+            "name": "*SRE",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#sre"
           },
           {
-            "name": "*TRG"
+            "name": "*SRE?",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#sre"
+          },
+          {
+            "name": "*STB?",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#stb"
+          },
+          {
+            "name": "*TRG",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#trg"
+          },
+          {
+            "name": "*TST?",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#tst"
+          },
+          {
+            "name": "*WAI",
+            "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#wai"
           }
         ]
       },
       {
-        "name": "DISPlay",
+        "name": "5.1. ABORT",
+        "helpLink": "EEZ PSU SCPI reference 5.1 - ABORt.html",
         "commands": [
           {
-            "name": "DISPlay:BRIGhtness"
-          },
-          {
-            "name": "DISPlay:BRIGhtness?"
-          },
-          {
-            "name": "DISPlay:VIEW"
-          },
-          {
-            "name": "DISPlay:VIEW?"
-          },
-          {
-            "name": "DISPlay[:WINdow][:STATe]"
-          },
-          {
-            "name": "DISPlay[:WINdow][:STATe]?"
-          },
-          {
-            "name": "DISPlay[:WINdow]:TEXT"
-          },
-          {
-            "name": "DISPlay[:WINdow]:TEXT?"
-          },
-          {
-            "name": "DISPlay[:WINdow]:TEXT:CLEar"
+            "name": "ABORt",
+            "helpLink": "EEZ PSU SCPI reference 5.1 - ABORt.html#abor"
           }
         ]
       },
       {
-        "name": "SENSe",
+        "name": "5.2. CALibrate",
+        "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html",
         "commands": [
           {
-            "name": "SENSe:CURRent[:DC]:RANGe[:UPPer]"
+            "name": "CALibration:CLEar",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_cle"
           },
           {
-            "name": "SENSe:CURRent[:DC]:RANGe[:UPPer]?"
+            "name": "CALibration:CURRent:LEVel",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_curr_lev"
           },
           {
-            "name": "SENSe:CURRent[:DC]:RANGe:AUTO"
+            "name": "CALibration:CURRent:RANGe",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_curr_rang"
           },
           {
-            "name": "SENSe:CURRent[:DC]:RANGe:AUTO?"
+            "name": "CALibration:CURRent[:DATA]",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_curr"
+          },
+          {
+            "name": "CALibration:PASSword:NEW",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_pass_new"
+          },
+          {
+            "name": "CALibration:REMark",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_rem"
+          },
+          {
+            "name": "CALibration:REMark?",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_rem"
+          },
+          {
+            "name": "CALibration:SAVE",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_save"
+          },
+          {
+            "name": "CALibration:STATe",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_stat"
+          },
+          {
+            "name": "CALibration:STATe?",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_stat"
+          },
+          {
+            "name": "CALibration:VOLTage:LEVel",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_volt_lev"
+          },
+          {
+            "name": "CALibration:VOLTage[:DATA]",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_volt"
+          },
+          {
+            "name": "CALibration[:MODE]",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_mode"
+          },
+          {
+            "name": "CALibration[:MODE]?",
+            "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_mode"
           }
         ]
+      },
+      {
+        "name": "5.3. DIAGnostic",
+        "helpLink": "EEZ PSU SCPI reference 5.3 - DIAGnostic.html",
+        "commands": [
+          {
+            "name": "DIAGnostic[:INFOrmation]:ADC?",
+            "helpLink": "EEZ PSU SCPI reference 5.3 - DIAGnostic.html#diag_adc"
+          },
+          {
+            "name": "DIAGnostic[:INFOrmation]:CALibration?",
+            "helpLink": "EEZ PSU SCPI reference 5.3 - DIAGnostic.html#diag_cal"
+          },
+          {
+            "name": "DIAGnostic[:INFOrmation]:FAN?",
+            "helpLink": "EEZ PSU SCPI reference 5.3 - DIAGnostic.html#diag_fan"
+          },
+          {
+            "name": "DIAGnostic[:INFOrmation]:PROTection?",
+            "helpLink": "EEZ PSU SCPI reference 5.3 - DIAGnostic.html#diag_prot"
+          },
+          {
+            "name": "DIAGnostic[:INFOrmation]:TEST?",
+            "helpLink": "EEZ PSU SCPI reference 5.3 - DIAGnostic.html#diag_test"
+          }
+        ]
+      },
+      {
+        "name": "5.4. DISPlay",
+        "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html",
+        "commands": [
+          {
+            "name": "DISPlay:BRIGhtness",
+            "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_brig"
+          },
+          {
+            "name": "DISPlay:BRIGhtness?",
+            "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_brig"
+          },
+          {
+            "name": "DISPlay:VIEW",
+            "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_view"
+          },
+          {
+            "name": "DISPlay:VIEW?",
+            "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_view"
+          },
+          {
+            "name": "DISPlay[:WINdow]:TEXT",
+            "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_text"
+          },
+          {
+            "name": "DISPlay[:WINdow]:TEXT:CLEar",
+            "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_text_cle"
+          },
+          {
+            "name": "DISPlay[:WINdow]:TEXT?",
+            "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_text"
+          },
+          {
+            "name": "DISPlay[:WINdow][:STATe]",
+            "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_stat"
+          },
+          {
+            "name": "DISPlay[:WINdow][:STATe]?",
+            "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_stat"
+          }
+        ]
+      },
+      {
+        "name": "5.5. FETCh",
+        "helpLink": "EEZ PSU SCPI reference 5.5 - FETCh.html",
+        "commands": []
+      },
+      {
+        "name": "5.6. INITiate",
+        "helpLink": "EEZ PSU SCPI reference 5.6 - INITiate.html",
+        "commands": [
+          {
+            "name": "INITiate:CONTinuous",
+            "helpLink": "EEZ PSU SCPI reference 5.6 - INITiate.html#init_cont"
+          },
+          {
+            "name": "INITiate:CONTinuous?",
+            "helpLink": "EEZ PSU SCPI reference 5.6 - INITiate.html#init_cont"
+          },
+          {
+            "name": "INITiate[:IMMediate]",
+            "helpLink": "EEZ PSU SCPI reference 5.6 - INITiate.html#init"
+          }
+        ]
+      },
+      {
+        "name": "5.7. INSTrument",
+        "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html",
+        "commands": [
+          {
+            "name": "INSTrument:COUPle:TRACking",
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_coup"
+          },
+          {
+            "name": "INSTrument:COUPle:TRACking?",
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_coup"
+          },
+          {
+            "name": "INSTrument:DISPlay:TRACe:SWAP",
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_disp_trac_swap"
+          },
+          {
+            "name": "INSTrument:DISPlay:TRACe[<n>]",
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_disp_trac"
+          },
+          {
+            "name": "INSTrument:DISPlay:TRACe[<n>]?",
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_disp_trac"
+          },
+          {
+            "name": "INSTrument:DISPlay:YT:RATE",
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_disp_yt_rate"
+          },
+          {
+            "name": "INSTrument:DISPlay:YT:RATE?",
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_disp_yt_rate"
+          },
+          {
+            "name": "INSTrument:NSELect",
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_nsel"
+          },
+          {
+            "name": "INSTrument:NSELect?",
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_nsel"
+          },
+          {
+            "name": "INSTrument[:SELect]",
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_sel"
+          },
+          {
+            "name": "INSTrument[:SELect]?",
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_sel"
+          }
+        ]
+      },
+      {
+        "name": "5.8. MEASure",
+        "helpLink": "EEZ PSU SCPI reference 5.8 - MEASure.html",
+        "commands": [
+          {
+            "name": "MEASure[:SCALar]:CURRent[:DC]?",
+            "helpLink": "EEZ PSU SCPI reference 5.8 - MEASure.html#meas_curr"
+          },
+          {
+            "name": "MEASure[:SCALar]:POWer[:DC]?",
+            "helpLink": "EEZ PSU SCPI reference 5.8 - MEASure.html#meas_pow"
+          },
+          {
+            "name": "MEASure[:SCALar]:TEMPerature[:THERmistor][:DC]?",
+            "helpLink": "EEZ PSU SCPI reference 5.8 - MEASure.html#meas_temp"
+          },
+          {
+            "name": "MEASure[:SCALar][:VOLTage][:DC]?",
+            "helpLink": "EEZ PSU SCPI reference 5.8 - MEASure.html#meas_volt"
+          }
+        ]
+      },
+      {
+        "name": "5.9. MEMory",
+        "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html",
+        "commands": [
+          {
+            "name": "MEMory:NSTates?",
+            "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_nst"
+          },
+          {
+            "name": "MEMory:STATe:CATalog?",
+            "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_cat"
+          },
+          {
+            "name": "MEMory:STATe:DELete",
+            "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_del"
+          },
+          {
+            "name": "MEMory:STATe:DELete:ALL",
+            "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_del"
+          },
+          {
+            "name": "MEMory:STATe:NAME",
+            "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_name"
+          },
+          {
+            "name": "MEMory:STATe:NAME?",
+            "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_name"
+          },
+          {
+            "name": "MEMory:STATe:RECall:AUTO",
+            "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_rec_auto"
+          },
+          {
+            "name": "MEMory:STATe:RECall:AUTO?",
+            "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_rec_auto"
+          },
+          {
+            "name": "MEMory:STATe:RECall:SELect",
+            "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_rec_sel"
+          },
+          {
+            "name": "MEMory:STATe:RECall:SELect?",
+            "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_rec_sel"
+          },
+          {
+            "name": "MEMory:STATe:VALid?",
+            "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_val"
+          }
+        ]
+      },
+      {
+        "name": "5.10. MMEMory",
+        "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html",
+        "commands": [
+          {
+            "name": "MMEMory:LOAD:LIST<n>",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_load_list"
+          },
+          {
+            "name": "MMEMory:STORe:LIST<n>",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_stor_list"
+          }
+        ]
+      },
+      {
+        "name": "5.11. OUTPut",
+        "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html",
+        "commands": [
+          {
+            "name": "OUTPut:MODE?",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_mode"
+          },
+          {
+            "name": "OUTPut:PROTection:CLEar",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_cle"
+          },
+          {
+            "name": "OUTPut:PROTection:COUPle",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_coup"
+          },
+          {
+            "name": "OUTPut:PROTection:COUPle?",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_coup"
+          },
+          {
+            "name": "OUTPut:TRACk[:STATe]",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_trac"
+          },
+          {
+            "name": "OUTPut:TRACk[:STATe]?",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_trac"
+          },
+          {
+            "name": "OUTPut[:STATe]",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp"
+          },
+          {
+            "name": "OUTPut[:STATe]:TRIGgered",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_trig"
+          },
+          {
+            "name": "OUTPut[:STATe]:TRIGgered?",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_trig"
+          },
+          {
+            "name": "OUTPut[:STATe]?",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp"
+          }
+        ]
+      },
+      {
+        "name": "5.12. SENSe",
+        "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html",
+        "commands": [
+          {
+            "name": "SENSe:CURRent[:DC]:RANGe:AUTO",
+            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_curr_rang_auto"
+          },
+          {
+            "name": "SENSe:CURRent[:DC]:RANGe:AUTO?",
+            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_curr_rang_auto"
+          },
+          {
+            "name": "SENSe:CURRent[:DC]:RANGe[:UPPer]",
+            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_curr_rang"
+          },
+          {
+            "name": "SENSe:CURRent[:DC]:RANGe[:UPPer]?",
+            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_curr_rang"
+          }
+        ]
+      },
+      {
+        "name": "5.13. SOURce",
+        "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html",
+        "commands": [
+          {
+            "name": "[SOURce[<n>]]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_lim"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_lim"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent:MODE",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_mode"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent:MODE?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_mode"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent:PROTection:DELay[:TIME]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_prot_del"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent:PROTection:DELay[:TIME]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_prot_del"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent:PROTection:STATe",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_prot_stat"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent:PROTection:STATe?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_prot_stat"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent:PROTection:TRIPped?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_prot_trip"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent[:LEVel]:TRIGgered[:AMPLitude]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_trig"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent[:LEVel]:TRIGgered[:AMPLitude]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_trig"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate]:STEP[:INCRement]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_step"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate]:STEP[:INCRement]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_step"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate][:AMPLitude]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr"
+          },
+          {
+            "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate][:AMPLitude]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr"
+          },
+          {
+            "name": "[SOURce[<n>]]:LIST:COUNt",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_count"
+          },
+          {
+            "name": "[SOURce[<n>]]:LIST:COUNt?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_count"
+          },
+          {
+            "name": "[SOURce[<n>]]:LIST:CURRent[:LEVel]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_curr"
+          },
+          {
+            "name": "[SOURce[<n>]]:LIST:CURRent[:LEVel]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_curr"
+          },
+          {
+            "name": "[SOURce[<n>]]:LIST:DWELl",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_dwel"
+          },
+          {
+            "name": "[SOURce[<n>]]:LIST:DWELl?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_dwel"
+          },
+          {
+            "name": "[SOURce[<n>]]:LIST:VOLTage[:LEVel]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_volt"
+          },
+          {
+            "name": "[SOURce[<n>]]:LIST:VOLTage[:LEVel]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_volt"
+          },
+          {
+            "name": "[SOURce[<n>]]:LRIPple",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_lrip"
+          },
+          {
+            "name": "[SOURce[<n>]]:LRIPple:AUTO",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_lrip_auto"
+          },
+          {
+            "name": "[SOURce[<n>]]:LRIPple:AUTO?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_lrip_auto"
+          },
+          {
+            "name": "[SOURce[<n>]]:LRIPple?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_lrip"
+          },
+          {
+            "name": "[SOURce[<n>]]:POWer:LIMit",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_lim"
+          },
+          {
+            "name": "[SOURce[<n>]]:POWer:LIMit?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_lim"
+          },
+          {
+            "name": "[SOURce[<n>]]:POWer:PROTection:DELay[:TIME]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot_del"
+          },
+          {
+            "name": "[SOURce[<n>]]:POWer:PROTection:DELay[:TIME]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot_del"
+          },
+          {
+            "name": "[SOURce[<n>]]:POWer:PROTection:STATe",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot_stat"
+          },
+          {
+            "name": "[SOURce[<n>]]:POWer:PROTection:STATe?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot_stat"
+          },
+          {
+            "name": "[SOURce[<n>]]:POWer:PROTection:TRIPped?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot_trip"
+          },
+          {
+            "name": "[SOURce[<n>]]:POWer:PROTection[:LEVel]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot"
+          },
+          {
+            "name": "[SOURce[<n>]]:POWer:PROTection[:LEVel]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:LIMit[:POSitive][:IMMediate][:AMPLitude]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_lim"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:LIMit[:POSitive][:IMMediate][:AMPLitude]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_lim"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:MODE",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_mode"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:MODE?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_mode"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:PROGram[:SOURce]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prog"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:PROGram[:SOURce]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prog"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:PROTection:DELay[:TIME]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot_del"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:PROTection:DELay[:TIME]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot_del"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:PROTection:STATe",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot_stat"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:PROTection:STATe?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot_stat"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:PROTection:TRIPped?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot_trip"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:PROTection[:LEVel]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:PROTection[:LEVel]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:SENSe[:SOURce]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_sens"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage:SENSe[:SOURce]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_sens"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_trig"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_trig"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate]:STEP[:INCRement]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_step"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate]:STEP[:INCRement]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_step"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate][:AMPLitude]",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt"
+          },
+          {
+            "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate][:AMPLitude]?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt"
+          },
+          {
+            "name": "[SOURce]:DIGital:INPut:DATA?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_inp_data"
+          },
+          {
+            "name": "[SOURce]:DIGital:OUTPut:DATA",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_outp_data"
+          },
+          {
+            "name": "[SOURce]:DIGital:PIN<n>:FUNCtion",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_pin_func"
+          },
+          {
+            "name": "[SOURce]:DIGital:PIN<n>:FUNCtion?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_pin_func"
+          },
+          {
+            "name": "[SOURce]:DIGital:PIN<n>:POLarity",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_pin_pol"
+          },
+          {
+            "name": "[SOURce]:DIGital:PIN<n>:POLarity?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_pin_pol"
+          }
+        ]
+      },
+      {
+        "name": "5.14. STATus ",
+        "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html",
+        "commands": [
+          {
+            "name": "STATus:OPERation:CONDition?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_cond"
+          },
+          {
+            "name": "STATus:OPERation:ENABle",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_enab"
+          },
+          {
+            "name": "STATus:OPERation:ENABle?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_enab"
+          },
+          {
+            "name": "STATus:OPERation:INSTrument:CONDition?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_inst_cond"
+          },
+          {
+            "name": "STATus:OPERation:INSTrument:ENABle",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_inst_enab"
+          },
+          {
+            "name": "STATus:OPERation:INSTrument:ENABle?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_inst_enab"
+          },
+          {
+            "name": "STATus:OPERation:INSTrument:ISUMmary[<n>]:CONDition?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_inst_isum_cond"
+          },
+          {
+            "name": "STATus:OPERation:INSTrument:ISUMmary[<n>]:ENABle",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_inst_isum_enab"
+          },
+          {
+            "name": "STATus:OPERation:INSTrument:ISUMmary[<n>]:ENABle?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_inst_isum_enab"
+          },
+          {
+            "name": "STATus:OPERation:INSTrument:ISUMmary[<n>][:EVENt]?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_inst_isum"
+          },
+          {
+            "name": "STATus:OPERation:INSTrument[:EVENt]?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_inst"
+          },
+          {
+            "name": "STATus:OPERation[:EVENt]?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper"
+          },
+          {
+            "name": "STATus:PREset",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_pre"
+          },
+          {
+            "name": "STATus:QUEStionable:CONDition?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_cond"
+          },
+          {
+            "name": "STATus:QUEStionable:ENABle",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_enab"
+          },
+          {
+            "name": "STATus:QUEStionable:ENABle?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_enab"
+          },
+          {
+            "name": "STATus:QUEStionable:INSTrument:CONDition?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_inst_cond"
+          },
+          {
+            "name": "STATus:QUEStionable:INSTrument:ENABle",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_inst_enab"
+          },
+          {
+            "name": "STATus:QUEStionable:INSTrument:ENABle?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_inst_enab"
+          },
+          {
+            "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>]:CONDition?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_inst_isum_cond"
+          },
+          {
+            "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>]:ENABle",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_inst_isum_enab"
+          },
+          {
+            "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>]:ENABle?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_inst_isum_enab"
+          },
+          {
+            "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>][:EVENt]?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_inst_isum"
+          },
+          {
+            "name": "STATus:QUEStionable:INSTrument[:EVENt]?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_inst"
+          },
+          {
+            "name": "STATus:QUEStionable[:EVENt]?",
+            "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques"
+          }
+        ]
+      },
+      {
+        "name": "5.15. SYSTem",
+        "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html",
+        "commands": [
+          {
+            "name": "SYSTem:BEEPer:KEY:STATe",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_beep_key_stat"
+          },
+          {
+            "name": "SYSTem:BEEPer:KEY:STATe?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_beep_key_stat"
+          },
+          {
+            "name": "SYSTem:BEEPer:STATe",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_beep_stat"
+          },
+          {
+            "name": "SYSTem:BEEPer:STATe?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_beep_stat"
+          },
+          {
+            "name": "SYSTem:BEEPer[:IMMediate]",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_beep"
+          },
+          {
+            "name": "SYSTem:CAPability?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cap"
+          },
+          {
+            "name": "SYSTem:CHANnel:INFOrmation:CURRent?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_curr"
+          },
+          {
+            "name": "SYSTem:CHANnel:INFOrmation:ONTime:LAST?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_ont_last"
+          },
+          {
+            "name": "SYSTem:CHANnel:INFOrmation:ONTime:TOTal?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_ont_tot"
+          },
+          {
+            "name": "SYSTem:CHANnel:INFOrmation:POWer?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_pow"
+          },
+          {
+            "name": "SYSTem:CHANnel:INFOrmation:PROGram?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_prog"
+          },
+          {
+            "name": "SYSTem:CHANnel:INFOrmation:VOLTage?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_volt"
+          },
+          {
+            "name": "SYSTem:CHANnel:MODel?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_mod"
+          },
+          {
+            "name": "SYSTem:CHANnel[:COUNt]?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_coun"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ENABle",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_enab"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ENABle?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_enab"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:ADDRess",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_addr"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:ADDRess?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_addr"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:DHCP",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_dhcp"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:DHCP?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_dhcp"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:DNS",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_dns"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:DNS?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_dns"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:GATEway",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_gate"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:GATEway?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_gate"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:MAC",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_mac"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:MAC?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_mac"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:PORT",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_port"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:PORT?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_port"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:SMASk",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_smas"
+          },
+          {
+            "name": "SYSTem:COMMunicate:ETHernet:SMASk?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_smas"
+          },
+          {
+            "name": "SYSTem:COMMunicate:NTP",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_ntp"
+          },
+          {
+            "name": "SYSTem:COMMunicate:NTP?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_ntp"
+          },
+          {
+            "name": "SYSTem:COMMunicate:RLSTate",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_rlst"
+          },
+          {
+            "name": "SYSTem:COMMunicate:SERial:BAUD",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_ser_baud"
+          },
+          {
+            "name": "SYSTem:COMMunicate:SERial:BAUD?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_ser_baud"
+          },
+          {
+            "name": "SYSTem:COMMunicate:SERial:PARity",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_ser_par"
+          },
+          {
+            "name": "SYSTem:COMMunicate:SERial:PARity?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_ser_par"
+          },
+          {
+            "name": "SYSTem:CPU:INFOrmation:ETHernet:TYPE?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cpu_eth_type"
+          },
+          {
+            "name": "SYSTem:CPU:INFOrmation:ONTime:LAST?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cpu_ont_last"
+          },
+          {
+            "name": "SYSTem:CPU:INFOrmation:ONTime:TOTal?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cpu_ont_tot"
+          },
+          {
+            "name": "SYSTem:CPU:INFOrmation:TYPE?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cpu_type"
+          },
+          {
+            "name": "SYSTem:CPU:MODel?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cpu_mod"
+          },
+          {
+            "name": "SYSTem:CPU:OPTion?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cpu_opt"
+          },
+          {
+            "name": "SYSTem:DATE",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_date"
+          },
+          {
+            "name": "SYSTem:DATE?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_date"
+          },
+          {
+            "name": "SYSTem:ERRor:COUNt?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_err_coun"
+          },
+          {
+            "name": "SYSTem:ERRor[:NEXT]?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#__RefHeading__23078_295952897"
+          },
+          {
+            "name": "SYSTem:INHibit?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_inh"
+          },
+          {
+            "name": "SYSTem:KLOCk",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_kloc"
+          },
+          {
+            "name": "SYSTem:LOCal",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_loc"
+          },
+          {
+            "name": "SYSTem:PASSword:CALibrate:RESet",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pass_cal_res"
+          },
+          {
+            "name": "SYSTem:PASSword:FPANel:RESet",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pass_fpan_res"
+          },
+          {
+            "name": "SYSTem:PASSword:NEW",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pass_new"
+          },
+          {
+            "name": "SYSTem:PON:OUTPut:DISable",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pon_outp_dis"
+          },
+          {
+            "name": "SYSTem:PON:OUTPut:DISable?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pon_outp_dis"
+          },
+          {
+            "name": "SYSTem:POWer",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pow"
+          },
+          {
+            "name": "SYSTem:POWer:PROTection:TRIP",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pow_prot_trip"
+          },
+          {
+            "name": "SYSTem:POWer:PROTection:TRIP?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pow_prot_trip"
+          },
+          {
+            "name": "SYSTem:POWer?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pow"
+          },
+          {
+            "name": "SYSTem:REMote",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_rem"
+          },
+          {
+            "name": "SYSTem:RWLock",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_rwl"
+          },
+          {
+            "name": "SYSTem:TEMPerature:PROTection[:HIGH]:CLEar",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot_cle"
+          },
+          {
+            "name": "SYSTem:TEMPerature:PROTection[:HIGH]:DELay[:TIME]",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot_del"
+          },
+          {
+            "name": "SYSTem:TEMPerature:PROTection[:HIGH]:DELay[:TIME]?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot_del"
+          },
+          {
+            "name": "SYSTem:TEMPerature:PROTection[:HIGH]:STATe",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot_stat"
+          },
+          {
+            "name": "SYSTem:TEMPerature:PROTection[:HIGH]:STATe?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot_stat"
+          },
+          {
+            "name": "SYSTem:TEMPerature:PROTection[:HIGH]:TRIPped?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot_trip"
+          },
+          {
+            "name": "SYSTem:TEMPerature:PROTection[:HIGH][:LEVel]",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot"
+          },
+          {
+            "name": "SYSTem:TEMPerature:PROTection[:HIGH][:LEVel]?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot"
+          },
+          {
+            "name": "SYSTem:TIME",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_time"
+          },
+          {
+            "name": "SYSTem:TIME:DST",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_time_dst"
+          },
+          {
+            "name": "SYSTem:TIME:DST?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_time_dst"
+          },
+          {
+            "name": "SYSTem:TIME:ZONE",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_time_zone"
+          },
+          {
+            "name": "SYSTem:TIME:ZONE?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_time_zone"
+          },
+          {
+            "name": "SYSTem:TIME?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_time"
+          },
+          {
+            "name": "SYSTem:VERSion?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_vers"
+          }
+        ]
+      },
+      {
+        "name": "5.16. TRIGger",
+        "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html",
+        "commands": [
+          {
+            "name": "TRIGger[:SEQuence]:DELay",
+            "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html#trig_del"
+          },
+          {
+            "name": "TRIGger[:SEQuence]:DELay?",
+            "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html#trig_del"
+          },
+          {
+            "name": "TRIGger[:SEQuence]:EXIT:CONDition",
+            "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html#trig_exit_cond"
+          },
+          {
+            "name": "TRIGger[:SEQuence]:EXIT:CONDition?",
+            "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html#trig_exit_cond"
+          },
+          {
+            "name": "TRIGger[:SEQuence]:SOURce",
+            "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html#trig_sour"
+          },
+          {
+            "name": "TRIGger[:SEQuence]:SOURce?",
+            "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html#trig_sour"
+          },
+          {
+            "name": "TRIGger[:SEQuence][:IMMediate]",
+            "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html#trig_imm"
+          }
+        ]
+      },
+      {
+        "name": "6. Device-specific (unclassified) commands",
+        "helpLink": "EEZ PSU SCPI reference 6 - Device-specific commands.html",
+        "commands": [
+          {
+            "name": "APPLy",
+            "helpLink": "EEZ PSU SCPI reference 6 - Device-specific commands.html#__RefNumPara__11998_1238896024"
+          },
+          {
+            "name": "APPLy?",
+            "helpLink": "EEZ PSU SCPI reference 6 - Device-specific commands.html#__RefNumPara__11998_1238896024"
+          },
+          {
+            "name": "DEBUg?",
+            "helpLink": "EEZ PSU SCPI reference 6 - Device-specific commands.html#debug"
+          }
+        ]
+      },
+      {
+        "name": "7. Error messages",
+        "helpLink": "EEZ PSU SCPI reference 7 - Error messages.html",
+        "commands": []
+      },
+      {
+        "name": "8. Parameters and settings",
+        "helpLink": "EEZ PSU SCPI reference 8 - Parameters and settings.html",
+        "commands": []
+      },
+      {
+        "name": "9. Software simulator",
+        "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html",
+        "commands": [
+          {
+            "name": "SIMUlator:GUI",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_gui"
+          },
+          {
+            "name": "SIMUlator:LOAD",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_load"
+          },
+          {
+            "name": "SIMUlator:LOAD:STATe",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_load_stat"
+          },
+          {
+            "name": "SIMUlator:LOAD:STATe?",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_load_stat"
+          },
+          {
+            "name": "SIMUlator:LOAD?",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_load"
+          },
+          {
+            "name": "SIMUlator:PIN1",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_pin1"
+          },
+          {
+            "name": "SIMUlator:PIN1?",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_pin1"
+          },
+          {
+            "name": "SIMUlator:PWRGood",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_pwrg"
+          },
+          {
+            "name": "SIMUlator:PWRGood?",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_pwrg"
+          },
+          {
+            "name": "SIMUlator:QUIT",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_quit"
+          },
+          {
+            "name": "SIMUlator:RPOL",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_rpol"
+          },
+          {
+            "name": "SIMUlator:RPOL?",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_rpol"
+          },
+          {
+            "name": "SIMUlator:TEMPerature",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_temp"
+          },
+          {
+            "name": "SIMUlator:TEMPerature?",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_temp"
+          },
+          {
+            "name": "SIMUlator:VOLTage:PROGram:EXTernal",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_volt_prog"
+          },
+          {
+            "name": "SIMUlator:VOLTage:PROGram:EXTernal?",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_volt_prog"
+          }
+        ]
+      },
+      {
+        "name": "10. Programming examples",
+        "helpLink": "EEZ PSU SCPI reference 10 - Programming examples.html",
+        "commands": []
       }
     ],
     "scripts": [

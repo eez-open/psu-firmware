@@ -130,7 +130,7 @@ scpi_result_t scpi_cmd_triggerSequenceExitConditionQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cmd_initiate(scpi_t * context) {
+scpi_result_t scpi_cmd_initiateImmediate(scpi_t * context) {
     int result = trigger::initiate();
     if (result != SCPI_RES_OK) {
         SCPI_ErrorPush(context, result);
