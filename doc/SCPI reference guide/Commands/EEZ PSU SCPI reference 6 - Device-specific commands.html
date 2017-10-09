@@ -11,14 +11,14 @@
 			
 			/* Paragraphs and texts */
 			.Default_ntt { }
-			.Heading_1 { margin-top: 4.23mm; margin-bottom: 2.12mm; font-size: 14.0pt; font-weight: bold; color: #0066cc; }
-			.Heading_3 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 11.0pt; font-weight: bold; color: #0066cc; }
+			.Heading_1 { margin-top: 4,23mm; margin-bottom: 2,12mm; font-size: 14.0pt; font-weight: bold; color: #0066cc; }
+			.Heading_3 { margin-left: 7,62mm; margin-top: 4,5mm; margin-bottom: 2,5mm; text-indent: -7,62mm; font-size: 11.0pt; font-weight: bold; color: #0066cc; }
 			p { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
 			li { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
-			.Text_body { margin-bottom: 2.12mm; }
+			.Text_body { margin-bottom: 2,12mm; }
 			.cmd_code { text-align: left; font-family: "Courier New"; }
-			.cmd_code_Start { text-align: left; margin-top: 1.99mm; font-family: "Courier New"; }
-			.cmd_code_single { text-align: left; margin-top: 1.99mm; margin-bottom: 1.99mm; font-family: "Courier New"; }
+			.cmd_code_Start { text-align: left; margin-top: 1,99mm; font-family: "Courier New"; }
+			.cmd_code_single { text-align: left; margin-top: 1,99mm; margin-bottom: 1,99mm; font-family: "Courier New"; }
 			.cmd_root { text-align: left; color: #0066cc; }
 			
 			/* Footnotes & endnotes */
@@ -38,16 +38,15 @@
 	<body>
 		<p class="Heading_1">6. <a name="_device specific"></a>Device-specific (unclassified) commands</p>
 		<p>The commands in this section are specific to the PSU, and so are not included in the 1999.0 version of the SCPI standard. However, these commands are designed with the SCPI standard in mind, and they follow all of the command syntax rules defined by the standard.</p>
-		<p class="Heading_3">6.1.1. <a name="__RefNumPara__11998_1238896024"></a><a name="apply"></a>APPLy<a name="__RefNumPara__11998_1238896024"></a></p>
+		<p class="Heading_3">6.1.1. <a name="apply"></a><a name="__RefNumPara__11998_1238896024"></a>APPLy<a name="__RefNumPara__11998_1238896024"></a></p>
 		<p class="Text_body">The APPLy command provides the most straightforward method to program the PSU remotely.</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_root">APPLy {&lt;channel&gt;}</p>
-					<p class="cmd_root">[,&lt;voltage&gt;|MINimum|MAXimum|DEF[,&lt;current&gt;|MINimum|MAXimum|DEFault]]</p>
+					<p class="cmd_root">APPLy {&lt;channel&gt;} [,&lt;voltage&gt;|MINimum|MAXimum|DEF[,&lt;current&gt;|MINimum|MAXimum|DEFault]]</p>
 					<p class="cmd_root">APPLy? {&lt;channel&gt;}[, &lt;param&gt;]</p>
 				</td>
 			</tr>
@@ -181,14 +180,14 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">6.1.2. <a name="debug"></a>DEBUG</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<p class="Heading_3">6.1.2. <a name="debug"></a>DEBUg</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_root">DEBUG?</p>
+					<p class="cmd_root">DEBUg?</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -204,7 +203,7 @@
 					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_code">DEBUG?</p>
+					<p class="cmd_code">DEBU?</p>
 					<p class="cmd_code_Start">CH1 U_DAC = 0</p>
 					<p class="cmd_code">CH2 U_DAC = 32768</p>
 					<p class="cmd_code">CH1 U_MON = 0</p>

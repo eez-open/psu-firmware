@@ -613,7 +613,7 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
-					<p class="scpi4"><a href="#syst_temp_prot_cle"><span style="text-decoration: underline;">:CLEar[, {&lt;sensor&gt;}]</span></a></p>
+					<p class="scpi4"><a href="#syst_temp_prot_cle"><span style="text-decoration: underline;">:CLEar</span></a><a href="#syst_temp_prot_cle"><span style="text-decoration: underline;"> </span></a><a href="#syst_temp_prot_cle"><span style="text-decoration: underline;">[</span></a><a href="#syst_temp_prot_cle"><span style="text-decoration: underline;">, {&lt;sensor&gt;}]</span></a></p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
 					<p>Clears the latched protection status of the over-temperature protection (OTP)</p>
@@ -1175,7 +1175,7 @@
 					<p>Syntax</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_root">SYSTem:CHANnel:INFOrmation:POWEer? [&lt;channel&gt;]</p>
+					<p class="cmd_root">SYSTem:CHANnel:INFOrmation:POWer? [&lt;channel&gt;]</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -2900,14 +2900,14 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.36. <a name="syst_inh"></a>SYStem:INHibit?</p>
+		<p class="Heading_3">5.15.36. <a name="syst_inh"></a>SYSTem:INHibit?</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_root">SYStem:INHibit?</p>
+					<p class="cmd_root">SYSTem:INHibit?</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -2915,7 +2915,7 @@
 					<p>Description</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>Use this command to query PSU’s inhibit state that is controlled with digital input (see [SOURce:]DIGital:PIN&lt;n&gt;:FUNCtion command). When PSU is in inhibited state, all channel’s output will be disabled (OFF) and triggered action (e.g. LIST) will be paused.</p>
+					<p>Use this command to query PSU’s inhibit state that is controlled with digital input (see [SOURce]:DIGital:PIN&lt;n&gt;:FUNCtion command). When PSU is in inhibited state, all channel’s output will be disabled (OFF) and triggered action (e.g. LIST) will be paused.</p>
 					<p>&#160;</p>
 					<p>Channel output state command (OUTPut[:STATe]) can be used when PSU is in inhibited mode but it will not affect output (i.e. change it to enable state).</p>
 				</td>
@@ -2943,7 +2943,7 @@
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
 					<p>OUTPut[:STATe] {&lt;bool&gt;} [, &lt;channel&gt;]</p>
-					<p>[SOURce:]DIGital:PIN&lt;n&gt;:FUNCtion</p>
+					<p>[SOURce]:DIGital:PIN&lt;n&gt;:FUNCtion</p>
 				</td>
 			</tr>
 		</table>
@@ -3502,8 +3502,8 @@
 					<p>Syntax</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH][:LEVel] {&lt;temperature&gt;, &lt;sensor&gt;}</p>
-					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH][:LEVel]? &lt;sensor&gt;</p>
+					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH][:LEVel] {&lt;temperature&gt;[, &lt;sensor&gt;]}</p>
+					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH][:LEVel]? [, {&lt;sensor&gt;}]</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -3600,7 +3600,7 @@
 					<p>Syntax</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH]:CLEar[, {&lt;sensor&gt;}]</p>
+					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH]:CLEar [, {&lt;sensor&gt;}]</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -3668,7 +3668,7 @@
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
 					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH]:DELay[:TIME] {&lt;delay&gt;[, &lt;sensor&gt;]}</p>
-					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH]:DELay[:TIME]?[, {&lt;sensor&gt;}]</p>
+					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH]:DELay[:TIME]? [, {&lt;sensor&gt;}]</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -3759,7 +3759,7 @@
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
 					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH]:STATe {&lt;bool&gt;[, &lt;sensor&gt;]}</p>
-					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH]:STATe?[, {&lt;sensor&gt;}]</p>
+					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH]:STATe? [, {&lt;sensor&gt;}]</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -3849,7 +3849,7 @@
 					<p>Syntax</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH]:TRIPped?[, {&lt;sensor&gt;}]</p>
+					<p class="cmd_root">SYSTem:TEMPerature:PROTection[:HIGH]:TRIPped? [, {&lt;sensor&gt;}]</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -4186,14 +4186,14 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.55. SYSTem:VERSion?</p>
+		<p class="Heading_3">5.15.55. <a name="syst_vers"></a>SYSTem:VERSion?</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_root"><a name="syst_vers"></a>SYSTem:VERSion?</p>
+					<p class="cmd_root">SYSTem:VERSion?</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
