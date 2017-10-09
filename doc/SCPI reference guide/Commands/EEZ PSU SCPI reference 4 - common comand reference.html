@@ -120,6 +120,14 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0"><a href="#sre"><span style="text-decoration: underline;">*</span></a><a href="#sre"><span style="text-decoration: underline;">SRE</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Enables bits in the Status Byte enable register.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
 					<p class="scpi0"><a href="#stb"><span style="text-decoration: underline;">*STB?</span></a></p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
@@ -151,7 +159,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_2">4.1. *<a name="cls"></a>CLS<a name="cls"></a></p>
+		<p class="Heading_2">4.1. <a name="cls"></a>*CLS</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
@@ -200,7 +208,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_2">4.2. *<a name="ese"></a>ESE<a name="ese"></a></p>
+		<p class="Heading_2">4.2. <a name="ese"></a>*ESE</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
@@ -289,12 +297,13 @@
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
 					<p>*CLS</p>
+					<p>*ESR</p>
 					<p>*RST</p>
 					<p>STATus:PRESet</p>
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_2">4.3. *<a name="esr"></a>ESR<a name="esr"></a>?</p>
+		<p class="Heading_2">4.3. <a name="esr"></a>*ESR?</p>
 		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
@@ -331,7 +340,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_2">4.4. *<a name="idn"></a>IDN<a name="idn"></a>?</p>
+		<p class="Heading_2">4.4. <a name="idn"></a>*IDN?</p>
 		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
@@ -354,7 +363,7 @@
 					<p class="Default_ntt">Return</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
-					<p>The following system parameters will be displayed: &lt;vendor&gt;, &lt;model&gt;, &lt;serial number&gt;, &lt;firmware&gt;. The &lt;model&gt; include information about the CPU in use in brackets and could be Mega, Due or Simulator. More information about the simulator can be found in <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-simulator.html"><span style="text-decoration: underline;">Section 9</span></a>.</p>
+					<p>The following system parameters will be displayed: &lt;vendor&gt;, &lt;model&gt;, &lt;serial number&gt;, &lt;firmware&gt;. The &lt;model&gt; include information about the CPU in use in brackets and could be <span style="font-style: italic;">Due</span> or <span style="font-style: italic;">Simulator</span>. More information about the simulator can be found in <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-simulator.html"><span style="text-decoration: underline;">Section 9</span></a>.</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -363,11 +372,11 @@
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
 					<p class="cmd_code">*IDN?</p>
-					<p class="cmd_code_Start">EEZ,PSU 2/50/03 (Due),00001,M1.0.96 </p>
+					<p class="cmd_code_Start">Envox,EEZ H24005 (Due),CS17001,v1.1</p>
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_2">4.5. *<a name="opc"></a>OPC<a name="opc"></a></p>
+		<p class="Heading_2">4.5. <a name="opc"></a>*OPC</p>
 		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
@@ -413,7 +422,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_2">4.6. *<a name="rcl"></a>RCL<a name="rcl"></a></p>
+		<p class="Heading_2">4.6. <a name="rcl"></a>*RCL</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
@@ -497,7 +506,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_2">4.7. *<a name="rst"></a>RST<a name="rst"></a></p>
+		<p class="Heading_2">4.7. <a name="rst"></a>*RST</p>
 		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
@@ -545,7 +554,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_2">4.8. *<a name="sav"></a>SAV<a name="sav"></a></p>
+		<p class="Heading_2">4.8. <a name="sav"></a>*SAV</p>
 		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
@@ -657,7 +666,51 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_2">4.9. *<a name="stb"></a>STB<a name="stb"></a>?</p>
+		<p class="Heading_2">4.9. <a name="sre"></a>*SRE</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_root">*SRE {&lt;value&gt;}</p>
+					<p class="cmd_root">*SRE?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>Enable bits in the Status Byte enable register (see <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-registers-and-queues.html#stat_byte_reg"><span style="text-decoration: underline;">Section 3.2</span></a>).</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>Query the Status Byte enable register. The PSU returns a decimal value which corresponds to the binary-weighted sum of all bits set in the enable register.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_code">*SRE 32</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p>*STB</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_2">4.10. <a name="stb"></a>*STB?</p>
 		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
@@ -704,7 +757,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_2">4.10. *<a name="trg"></a>TRG<a name="trg"></a></p>
+		<p class="Heading_2">4.11. <a name="trg"></a>*TRG</p>
 		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
@@ -766,7 +819,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_2">4.11. *<a name="tst"></a>TST<a name="tst"></a>?</p>
+		<p class="Heading_2">4.12. <a name="tst"></a>*TST?</p>
 		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
@@ -785,7 +838,7 @@
 					<p>&#160;</p>
 					<p class="note">Note: All all terminal connections must be removed while the internal self-test is being performed.</p>
 					<p class="note">&#160;</p>
-					<p class="note"><span style="font-style: normal;">If an active Ethernet connection exists, testing of </span><span style="font-style: normal;">the </span><span style="font-style: normal;">Ethernet controller will be skipped. You can use </span><a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-diagnostic.html#diag_test"><span style="font-style: normal; text-decoration: underline;">DIAGnostic[:INFOrmation]:TEST?</span></a><span style="font-style: normal;"> for </span><span style="font-style: normal;">to produce a</span><span style="font-style: normal;"> detailed report of the latest self-test. </span></p>
+					<p class="note"><span style="font-style: normal;">If an active Ethernet connection exists, testing of the Ethernet controller will be skipped. You can use </span><a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-subsystem-command-reference/psu-scpi-diagnostic.html#diag_test"><span style="font-style: normal; text-decoration: underline;">DIAGnostic[:INFOrmation]:TEST?</span></a><span style="font-style: normal;"> for to produce a detailed report of the latest self-test. </span></p>
 					<p class="note" style="font-style: normal;">&#160;</p>
 					<p class="note" style="font-style: normal;">If a fan is installed, and not running, this command will start it for the short time to obtain speed information.</p>
 				</td>
@@ -821,7 +874,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_2">4.12. <a name="wai"></a>*WAI</p>
+		<p class="Heading_2">4.13. <a name="wai"></a>*WAI</p>
 		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">

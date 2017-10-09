@@ -21,6 +21,7 @@
 			.cmd_code_Start { text-align: left; margin-top: 1.99mm; font-family: "Courier New"; }
 			.cmd_code_single { text-align: left; margin-top: 1.99mm; margin-bottom: 1.99mm; font-family: "Courier New"; }
 			.cmd_root { text-align: left; color: #0066cc; }
+			.html-code { background-color: #ffff00; }
 			.note { font-style: italic; }
 			.scpi0 { text-align: left; }
 			.scpi1 { text-align: left; margin-left: 4.99mm; }
@@ -159,6 +160,14 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 47%;">
+					<p class="scpi1"><a href="#simu_quit"><span style="text-decoration: underline;">:</span></a><a href="#simu_quit"><span style="text-decoration: underline;">QUIT</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 53%;">
+					<p>Closes simulator</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 47%;">
 					<p class="scpi1"><a href="#simu_rpol"><span style="text-decoration: underline;">:RPOL {&lt;bool&gt;}</span></a></p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 53%;">
@@ -182,7 +191,6 @@
 				</td>
 			</tr>
 		</table>
-		<p>&#160;</p>
 		<p class="Heading_3">9.1.1. <a name="simu_exit"></a>SIMUlator:EXIT</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
@@ -199,14 +207,6 @@
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
 					<p>This command close all Simulator windows (terminal and GUI if started).</p>
-				</td>
-			</tr>
-			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
-					<p class="Default_ntt">Return</p>
-				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>None</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -234,14 +234,6 @@
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
 					<p>This command starts the GUI simulation in a new window (see Fig. 3 and Fig. 4).</p>
-				</td>
-			</tr>
-			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
-					<p class="Default_ntt">Return</p>
-				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>None</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -593,7 +585,34 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">9.1.7. <a name="simu_rpol"></a>SIMUlator:RPOL</p>
+		<p class="Heading_3">9.1.7. <a name="simu_quit"></a>SIMUlator:QUIT</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_root">SIMUlator:QUIT</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>Same as SIMUlator:EXIT</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">SIMU:QUIT</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_3">9.1.8. <a name="simu_rpol"></a>SIMUlator:RPOL</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -682,7 +701,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">9.1.8. <a name="simu_temp"></a>SIMUlator:TEMPerature</p>
+		<p class="Heading_3">9.1.9. <a name="simu_temp"></a>SIMUlator:TEMPerature</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -775,7 +794,7 @@
 			</tr>
 		</table>
 		<p>&#160;</p>
-		<p class="Heading_3">9.1.9. <a name="simu_volt_prog"></a>SIMUlator:VOLTage:PROGram:EXTernal</p>
+		<p class="Heading_3">9.1.10. <a name="simu_volt_prog"></a>SIMUlator:VOLTage:PROGram:EXTernal</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -863,6 +882,9 @@
 				</td>
 			</tr>
 		</table>
+		<p>&#160;</p>
+		{jd_file file==1}
+		<p>&#160;</p>
 		<p>&#160;</p>
 	</body>
 </html>
