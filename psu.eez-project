@@ -1,7 +1,7 @@
 {
   "settings": {
     "general": {
-      "scpiHelpFolder": "doc\\SCPI reference guide\\Commands"
+      "scpiHelpFolder": "doc/SCPI reference guide/Commands"
     },
     "build": {
       "configurations": [
