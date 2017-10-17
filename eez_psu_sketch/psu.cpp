@@ -1046,51 +1046,6 @@ void SPI_endTransaction() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#define MODEL_PREFIX "PSU"
-
-#if defined(EEZ_PSU_SIMULATOR)
-#define PLATFORM "Simulator"
-#elif defined(EEZ_PSU_ARDUINO_MEGA)
-#define PLATFORM "Mega"
-#elif defined(EEZ_PSU_ARDUINO_DUE)
-#define PLATFORM "Due"
-#endif
-
-#define MODEL_NUM_CHARS (sizeof(MODEL_PREFIX) - 1 + CH_NUM * sizeof("X/XX/XX") + 2 + sizeof(PLATFORM))
-
-/*
-We are auto generating model name from the channels definition:
-
-<cnt>/<volt>/<curr>[-<cnt2>/<volt2>/<curr2>] (<platform>)
-
-Where is:
-
-<cnt>      - number of the equivalent channels
-<volt>     - max. voltage
-<curr>     - max. curr
-<platform> - Mega, Due, Simulator or Unknown
-*/
-const char *getModelName() {
-    static char model_name[MODEL_NUM_CHARS + 1];
-
-    if (*model_name == 0) {
-        strcat(model_name, MODEL_PREFIX);
-
-        char *p = model_name + strlen(model_name);
-
-		p = Channel::getChannelsInfo(p);
-
-        *p++ = ' ';
-        *p++ = '(';
-        strcpy(p, PLATFORM);
-        p += sizeof(PLATFORM) - 1;
-        *p++ += ')';
-        *p = 0;
-    }
-
-    return model_name;
-}
-
 const char *getCpuModel() {
 #if defined(EEZ_PSU_ARDUINO)
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
@@ -1106,7 +1061,13 @@ const char *getCpuModel() {
 }
 
 const char *getCpuType() {
-    return PLATFORM;
+#if defined(EEZ_PSU_SIMULATOR)
+    return "Simulator";
+#elif defined(EEZ_PSU_ARDUINO_MEGA)
+    return "Mega";
+#elif defined(EEZ_PSU_ARDUINO_DUE)
+    return "Due";
+#endif
 }
 
 const char *getCpuEthernetType() {

@@ -1,7 +1,7 @@
 {
   "settings": {
     "general": {
-      "scpiHelpFolder": "doc/SCPI reference guide/Commands"
+      "scpiDocFolder": "doc\\SCPI reference guide\\Commands"
     },
     "build": {
       "configurations": [
@@ -15,7 +15,25 @@
         },
         {
           "name": "R5B12",
-          "screenOrientation": "landscape"
+          "image": "images/EEZ_H24005_front_panel.png",
+          "screenOrientation": "landscape",
+          "moduleName": "eez_h24005_due",
+          "idn": "Envox,EEZ H24005 (Due)",
+          "idfName": "EEZ H24005 Due",
+          "idfShortName": "H24005",
+          "idfFirmwareVersion": "1.1",
+          "idfGuid": "d2283db7-1e5f-4020-aa2b-bedeee6343a2",
+          "idfRevisionNumber": "0",
+          "idfDescription": "EEZ H24005 power supply",
+          "idfSupportedModels": "H24005",
+          "idfRevisionComments": "Initial version",
+          "sdlFriendlyName": "EEZ H24005"
+        },
+        {
+          "name": "Simulator",
+          "screenOrientation": "landscape",
+          "moduleName": "eez_h24005_simulator",
+          "idn": "Envox,EEZ H24005 (Simulator)"
         }
       ],
       "files": [

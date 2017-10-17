@@ -75,7 +75,7 @@ void init(scpi_t &scpi_context,
     int16_t error_queue_size)
 {
     SCPI_Init(&scpi_context, scpi_commands, interface, scpi_units_def,
-        MANUFACTURER, psu::getModelName(), persist_conf::devConf.serialNumber, FIRMWARE,
+        IDN_MANUFACTURER, IDN_MODEL, persist_conf::devConf.serialNumber, FIRMWARE,
         input_buffer, input_buffer_length, error_queue_data, error_queue_size);
 
     scpi_context.user_context = &scpi_psu_context;

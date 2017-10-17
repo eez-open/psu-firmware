@@ -26,10 +26,17 @@
 #define PSU_SERIAL   "0000000"
 
 /// Firmware version.
-#define FIRMWARE     "v1.02"
+#define FIRMWARE     "v1.1"
 
-/// Manufacturer description text.
-#define MANUFACTURER "EEZ"
+/// Manufacturer description text used for *IDN?
+#define IDN_MANUFACTURER "Envox"
+
+/// Model description text used for *IDN?
+#ifdef EEZ_PSU_SIMULATOR
+#define IDN_MODEL "EEZ H24005 (Simulator)"
+#else
+#define IDN_MODEL "EEZ H24005 (Due)"
+#endif
 
 /// SCPI TCP server port.
 #define TCP_PORT 5025
