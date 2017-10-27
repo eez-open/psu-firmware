@@ -15,7 +15,7 @@
         },
         {
           "name": "R5B12",
-          "image": "images/EEZ_H24005_front_panel.png",
+          "image": "images/due-front-panel.png",
           "screenOrientation": "landscape",
           "moduleName": "eez_h24005_due",
           "idn": "Envox,EEZ H24005 (Due)",
@@ -27,13 +27,25 @@
           "idfDescription": "EEZ H24005 power supply",
           "idfSupportedModels": "H24005",
           "idfRevisionComments": "Initial version",
+          "idfAuthor": "Envox",
           "sdlFriendlyName": "EEZ H24005"
         },
         {
           "name": "Simulator",
+          "image": "images/simulator-front-panel.png",
           "screenOrientation": "landscape",
           "moduleName": "eez_h24005_simulator",
-          "idn": "Envox,EEZ H24005 (Simulator)"
+          "idn": "Envox,EEZ H24005 (Simulator)",
+          "idfName": "EEZ H24005 Simulator",
+          "idfShortName": "H24005sim",
+          "idfFirmwareVersion": "1.1",
+          "idfGuid": "6f5029f7-a785-445d-af5b-9b66fa13eeca",
+          "idfRevisionNumber": "0",
+          "idfDescription": "Simulator for EEZ H24005 power supply",
+          "idfSupportedModels": "H24005",
+          "idfRevisionComments": "Initial version",
+          "idfAuthor": "Envox",
+          "sdlFriendlyName": "EEZ H24005 simulator"
         }
       ],
       "files": [
