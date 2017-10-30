@@ -131,13 +131,16 @@ bool dstCheck() {
     if (dst != persist_conf::devConf.flags.dst) {
         if (dst) {
             now += SECONDS_PER_HOUR;
+            if (!isDst(now, (DstRule)persist_conf::devConf2.dstRule)) {
+                return false;
+            }
         } else {
             now -= SECONDS_PER_HOUR;
         }
-            
+
         int year, month, day, hour, minute, second;
         breakTime(now, year, month, day, hour, minute, second);
-        setDateTime(year - 2000, month, day, hour, minute, second, false);
+        setDateTime(year - 2000, month, day, hour, minute, second, false, dst ? 1 : 0);
         event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED_DST);
 
         return true;
@@ -164,7 +167,7 @@ bool test() {
             } else if (cmp_datetime(year, month, day, hour, minute, second, rtc_year, rtc_month, rtc_day, rtc_hour, rtc_minute, rtc_second) < 0) {
                 g_testResult = psu::TEST_OK;
                 if (!dstCheck()) {
-                    persist_conf::writeSystemDateTime(rtc_year, rtc_month, rtc_day, rtc_hour, rtc_minute, rtc_second);
+                    persist_conf::writeSystemDateTime(rtc_year, rtc_month, rtc_day, rtc_hour, rtc_minute, rtc_second, 2);
                 }
             }
             else {
@@ -210,9 +213,9 @@ bool checkDateTime() {
     return false;
 }
 
-bool setDate(uint8_t year, uint8_t month, uint8_t day) {
+bool setDate(uint8_t year, uint8_t month, uint8_t day, unsigned dst) {
     if (rtc::writeDate(year, month, day)) {
-        persist_conf::writeSystemDate(year, month, day);
+        persist_conf::writeSystemDate(year, month, day, dst);
         psu::setQuesBits(QUES_TIME, !checkDateTime());
         event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
         return true;
@@ -224,9 +227,9 @@ bool getTime(uint8_t &hour, uint8_t &minute, uint8_t &second) {
     return rtc::readTime(hour, minute, second);
 }
 
-bool setTime(uint8_t hour, uint8_t minute, uint8_t second) {
+bool setTime(uint8_t hour, uint8_t minute, uint8_t second, unsigned dst) {
     if (rtc::writeTime(hour, minute, second)) {
-        persist_conf::writeSystemTime(hour, minute, second);
+        persist_conf::writeSystemTime(hour, minute, second, dst);
         psu::setQuesBits(QUES_TIME, !checkDateTime());
         event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
         return true;
@@ -238,9 +241,9 @@ bool getDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, uin
     return rtc::readDateTime(year, month, day, hour, minute, second);
 }
 
-bool setDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second, bool pushChangedEvent) {
+bool setDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second, bool pushChangedEvent, unsigned dst) {
     if (rtc::writeDateTime(year, month, day, hour, minute, second)) {
-        persist_conf::writeSystemDateTime(year, month, day, hour, minute, second);
+        persist_conf::writeSystemDateTime(year, month, day, hour, minute, second, dst);
         psu::setQuesBits(QUES_TIME, !checkDateTime());
         if (pushChangedEvent) {
             event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);

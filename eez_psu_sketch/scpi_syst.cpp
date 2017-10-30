@@ -112,7 +112,7 @@ scpi_result_t scpi_cmd_systemDate(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    if (!datetime::setDate((uint8_t)year, (uint8_t)month, (uint8_t)day)) {
+    if (!datetime::setDate((uint8_t)year, (uint8_t)month, (uint8_t)day, 2)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
@@ -161,7 +161,7 @@ scpi_result_t scpi_cmd_systemTime(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    if (!datetime::setTime((uint8_t)hour, (uint8_t)minute, (uint8_t)second)) {
+    if (!datetime::setTime((uint8_t)hour, (uint8_t)minute, (uint8_t)second, 2)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }

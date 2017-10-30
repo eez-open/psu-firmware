@@ -165,7 +165,7 @@ void readNtpPacket() {
    
     //DebugTraceF("NTP: %d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, second);
 
-    datetime::setDateTime(year - 2000, month, day, hour, minute, second, false);
+    datetime::setDateTime(year - 2000, month, day, hour, minute, second, false, 2);
 }
 
 void begin() {

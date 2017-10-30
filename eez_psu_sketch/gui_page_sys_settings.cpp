@@ -317,7 +317,7 @@ void SysSettingsDateTimePage::doSet() {
     }
 
     if (!ntpEnabled && dateTime != origDateTime) {
-		datetime::setDateTime(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, dateTime.second);
+		datetime::setDateTime(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, dateTime.second, true, 2);
     }
 
 	if (timeZone != origTimeZone) {

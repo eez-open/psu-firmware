@@ -31,14 +31,14 @@ void tick(uint32_t tickCount);
 
 bool isValidDate(uint8_t year, uint8_t month, uint8_t day);
 bool getDate(uint8_t &year, uint8_t &month, uint8_t &day);
-bool setDate(uint8_t year, uint8_t month, uint8_t day);
+bool setDate(uint8_t year, uint8_t month, uint8_t day, unsigned dst);
 
 bool isValidTime(uint8_t hour, uint8_t minute, uint8_t second);
 bool getTime(uint8_t &hour, uint8_t &minute, uint8_t &second);
-bool setTime(uint8_t hour, uint8_t minute, uint8_t second);
+bool setTime(uint8_t hour, uint8_t minute, uint8_t second, unsigned dst);
 
 bool getDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, uint8_t &minute, uint8_t &second);
-bool setDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second, bool pushChangedEvent = true);
+bool setDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second, bool pushChangedEvent, unsigned dst);
 
 /// Returns date time as string in format YYYY-MM-DD HH:MM:SS.
 /// \param buffer Pointer to the buffer of at least 20 characters. 

@@ -366,14 +366,24 @@ bool isDst() {
     );
 }
 
-void writeSystemDate(uint8_t year, uint8_t month, uint8_t day) {
+void setDst(unsigned dst) {
+    if (dst == 0) {
+        devConf.flags.dst = 0;
+    } else if (dst == 1) {
+        devConf.flags.dst = 1;
+    } else {
+        devConf.flags.dst = isDst();
+    }
+}
+
+void writeSystemDate(uint8_t year, uint8_t month, uint8_t day, unsigned dst) {
     devConf.date_year = year;
     devConf.date_month = month;
     devConf.date_day = day;
 
     devConf.flags.dateValid = 1;
 
-    devConf.flags.dst = isDst();
+    setDst(dst);
 
     saveDevice();
 }
@@ -388,19 +398,19 @@ bool readSystemTime(uint8_t &hour, uint8_t &minute, uint8_t &second) {
     return false;
 }
 
-void writeSystemTime(uint8_t hour, uint8_t minute, uint8_t second) {
+void writeSystemTime(uint8_t hour, uint8_t minute, uint8_t second, unsigned dst) {
     devConf.time_hour = hour;
     devConf.time_minute = minute;
     devConf.time_second = second;
 
     devConf.flags.timeValid = 1;
 
-    devConf.flags.dst = isDst();
+    setDst(dst);
 
     saveDevice();
 }
 
-void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second) {
+void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second, unsigned dst) {
     devConf.date_year = year;
     devConf.date_month = month;
     devConf.date_day = day;
@@ -413,7 +423,7 @@ void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour,
 
     devConf.flags.timeValid = 1;
 
-    devConf.flags.dst = isDst();
+    setDst(dst);
 
 	saveDevice();
 }

@@ -163,17 +163,17 @@ bool enableEthernet(bool enable);
 bool isEthernetEnabled();
 
 bool readSystemDate(uint8_t &year, uint8_t &month, uint8_t &day);
-void writeSystemDate(uint8_t year, uint8_t month, uint8_t day);
+void writeSystemDate(uint8_t year, uint8_t month, uint8_t day, unsigned dst);
+
+bool readSystemTime(uint8_t &hour, uint8_t &minute, uint8_t &second);
+void writeSystemTime(uint8_t hour, uint8_t minute, uint8_t second, unsigned dst);
+
+void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second, unsigned dst);
 
 bool enableProfileAutoRecall(bool enable);
 bool isProfileAutoRecallEnabled();
 bool setProfileAutoRecallLocation(int location);
 int getProfileAutoRecallLocation();
-
-bool readSystemTime(uint8_t &hour, uint8_t &minute, uint8_t &second);
-void writeSystemTime(uint8_t hour, uint8_t minute, uint8_t second);
-
-void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second);
 
 void toggleChannelsViewMode();
 void setChannelsViewMode(unsigned int viewMode);
