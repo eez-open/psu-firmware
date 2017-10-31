@@ -51,8 +51,7 @@ SysSettingsDateTimePage::SysSettingsDateTimePage() {
     strcpy(ntpServer, "");
     strcpy(origNtpServer, "");
 #endif
-
-    dateTime = origDateTime = datetime::DateTime::now();
+    dateTimeModified = false;
 	timeZone = origTimeZone = persist_conf::devConf.time_zone;
 	dstRule = origDstRule = (datetime::DstRule)persist_conf::devConf2.dstRule;
 }
@@ -83,6 +82,10 @@ data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t
             return data::Value(nowLocal, VALUE_TYPE_TIME);
         }
     } else {
+        if (!dateTimeModified) {
+            dateTime = datetime::DateTime::now();
+        }
+
 	    if (id == DATA_ID_DATE_TIME_YEAR) {
 		    return data::Value(dateTime.year, VALUE_TYPE_YEAR);
 	    }
@@ -217,18 +220,22 @@ void SysSettingsDateTimePage::selectDstRule() {
 void SysSettingsDateTimePage::setValue(float value) {
 	if (editDataId == DATA_ID_DATE_TIME_YEAR) {
 		dateTime.year = uint16_t(value);
+        dateTimeModified = true;
 	} else if (editDataId == DATA_ID_DATE_TIME_MONTH) {
 		dateTime.month = uint8_t(value);
+        dateTimeModified = true;
 	} else if (editDataId == DATA_ID_DATE_TIME_DAY) {
 		dateTime.day = uint8_t(value);
+        dateTimeModified = true;
 	} else if (editDataId == DATA_ID_DATE_TIME_HOUR) {
 		dateTime.hour = uint8_t(value);
+        dateTimeModified = true;
 	} else if (editDataId == DATA_ID_DATE_TIME_MINUTE) {
 		dateTime.minute = uint8_t(value);
+        dateTimeModified = true;
 	} else if (editDataId == DATA_ID_DATE_TIME_SECOND) {
 		dateTime.second = uint8_t(value);
-	} else if (editDataId == DATA_ID_DATE_TIME_SECOND) {
-		dateTime.second = uint8_t(value);
+        dateTimeModified = true;
 	} else if (editDataId == DATA_ID_DATE_TIME_TIME_ZONE) {
 		timeZone = int16_t(roundf(value * 100));
 	}
@@ -248,7 +255,7 @@ int SysSettingsDateTimePage::getDirty() {
             return 1;
         }
     } else {
-        if (dateTime != origDateTime) {
+        if (dateTimeModified) {
             return 1;
         }
     }
@@ -316,7 +323,7 @@ void SysSettingsDateTimePage::doSet() {
 		persist_conf::saveDevice2();
     }
 
-    if (!ntpEnabled && dateTime != origDateTime) {
+    if (!ntpEnabled && dateTimeModified) {
 		datetime::setDateTime(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, dateTime.second, true, 2);
     }
 
@@ -329,7 +336,7 @@ void SysSettingsDateTimePage::doSet() {
     ntp::reset();
 #endif
 
-    if (ntpEnabled || dateTime == origDateTime) {
+    if (ntpEnabled || !dateTimeModified) {
         event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
     }
 

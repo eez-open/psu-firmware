@@ -51,8 +51,8 @@ private:
     char origNtpServer[32+1];
     char ntpServer[32+1];
 
-	datetime::DateTime origDateTime;
-	datetime::DateTime dateTime;
+    bool dateTimeModified;
+    datetime::DateTime dateTime;
 
 	int16_t origTimeZone;
 	int16_t timeZone;
