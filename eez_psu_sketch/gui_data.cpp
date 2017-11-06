@@ -1242,7 +1242,7 @@ bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
             return false;
         }
         
-        if (util::greater(value.getFloat() * channel_dispatcher::getISet(Channel::get(iChannel)), channel_dispatcher::getPowerLimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_WATT, iChannel)) {
+        if (util::greater(value.getFloat() * channel_dispatcher::getISetUnbalanced(Channel::get(iChannel)), channel_dispatcher::getPowerLimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_WATT, iChannel)) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
@@ -1261,7 +1261,7 @@ bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
             return false;
         }
         
-        if (util::greater(value.getFloat() * channel_dispatcher::getUSet(Channel::get(iChannel)), channel_dispatcher::getPowerLimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_VOLT, iChannel)) {
+        if (util::greater(value.getFloat() * channel_dispatcher::getUSetUnbalanced(Channel::get(iChannel)), channel_dispatcher::getPowerLimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_VOLT, iChannel)) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
