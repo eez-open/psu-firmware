@@ -50,7 +50,7 @@ void tick() {
     }
 
     if (!g_guiOrEncoderInactivityTimeMaxed) {
-        uint32_t guiOrEncoderInactivityPeriod = getGuiAndEncoderInactivityPeriod(tickCount);
+        uint32_t guiOrEncoderInactivityPeriod = getGuiAndEncoderInactivityPeriod();
         if (guiOrEncoderInactivityPeriod >= MAX_GUI_OR_ENCODER_INACTIVITY_TIME) {
             g_guiOrEncoderInactivityTimeMaxed = true;
         }
@@ -76,11 +76,11 @@ void noteEncoderActivity() {
     g_timeOfLastGuiOrEncoderActivity = g_timeOfLastActivity;
 }
 
-uint32_t getGuiAndEncoderInactivityPeriod(uint32_t tickCount) {
+uint32_t getGuiAndEncoderInactivityPeriod() {
     if (g_guiOrEncoderInactivityTimeMaxed) {
         return MAX_GUI_OR_ENCODER_INACTIVITY_TIME;
     } else {
-        return (tickCount - g_timeOfLastGuiOrEncoderActivity) / 1000;
+        return (micros() - g_timeOfLastGuiOrEncoderActivity) / 1000;
     }
 }
 

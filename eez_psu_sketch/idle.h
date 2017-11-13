@@ -30,7 +30,7 @@ void noteGuiActivity();
 
 void noteEncoderActivity();
 
-uint32_t getGuiAndEncoderInactivityPeriod(uint32_t tickCount);
+uint32_t getGuiAndEncoderInactivityPeriod();
 
 bool isIdle();
 

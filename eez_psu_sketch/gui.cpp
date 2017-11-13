@@ -1485,7 +1485,7 @@ void tick(uint32_t tick_usec) {
 #endif
 
     //
-    uint32_t inactivityPeriod = idle::getGuiAndEncoderInactivityPeriod(tick_usec);
+    uint32_t inactivityPeriod = idle::getGuiAndEncoderInactivityPeriod();
 
 #if GUI_BACK_TO_MAIN_ENABLED
     if (g_activePageId == PAGE_ID_EVENT_QUEUE ||
