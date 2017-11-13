@@ -57,6 +57,8 @@
 #include "front_panel/control.h"
 #endif
 
+#include "idle.h"
+
 #define CONF_GUI_PAGE_NAVIGATION_STACK_SIZE 5
 
 #define CONF_GUI_STANDBY_PAGE_TIMEOUT 10000000L // 10s
@@ -70,8 +72,6 @@
 #define CONF_GUI_TOAST_DURATION_MS 2000L
 
 #define MAX_EVENTS 16
-
-#define IDLE_TIMEOUT_MS 1000
 
 namespace eez {
 namespace psu {
@@ -112,7 +112,6 @@ static void (*g_errorMessageAction)();
 static int g_errorMessageActionParam;
 
 static uint32_t g_showPageTime;
-static uint32_t g_timeOfLastActivity;
 static bool g_touchActionExecuted;
 static bool g_touchActionExecutedAtDown;
 
@@ -124,8 +123,6 @@ data::Cursor g_focusCursor;
 uint8_t g_focusDataId;
 data::Value g_focusEditValue;
 uint32_t g_focusEditValueChangedTime;
-
-static bool g_idle;
 
 static char g_textMessage[32 + 1];
 static uint8_t g_textMessageVersion;
@@ -266,7 +263,7 @@ void doShowPage(int index, Page *page = 0) {
     }
 
     g_showPageTime = micros();
-    g_timeOfLastActivity = millis();
+    idle::noteGuiActivity();
 
     // clear text message if active page is not PAGE_ID_TEXT_MESSAGE
     if (g_activePageId != PAGE_ID_TEXT_MESSAGE && g_textMessage[0]) {
@@ -1250,7 +1247,7 @@ void touchHandling(uint32_t tick_usec) {
     }
 
     if (touch::event_type != touch::TOUCH_NONE) {
-        g_timeOfLastActivity = millis();
+        idle::noteGuiActivity();
 
         if (touch::event_type == touch::TOUCH_DOWN) {
             g_touchDownTime = tick_usec;
@@ -1395,10 +1392,6 @@ void processEvents() {
     g_numEvents = 0;
 }
 
-bool isIdle() {
-    return g_idle;
-}
-
 void tick(uint32_t tick_usec) {
     lcd::tick(tick_usec);
 
@@ -1486,15 +1479,13 @@ void tick(uint32_t tick_usec) {
     bool clicked;
     encoder::read(counter, clicked);
     if (counter != 0 || clicked) {
-        g_timeOfLastActivity = millis();
+        idle::noteEncoderActivity();
     }
     onEncoder(tick_usec, counter, clicked);
 #endif
 
     //
-    uint32_t inactivityPeriod = millis() - g_timeOfLastActivity;
-
-    g_idle = inactivityPeriod >= IDLE_TIMEOUT_MS;
+    uint32_t inactivityPeriod = idle::getGuiAndEncoderInactivityPeriod(tick_usec);
 
 #if GUI_BACK_TO_MAIN_ENABLED
     if (g_activePageId == PAGE_ID_EVENT_QUEUE ||

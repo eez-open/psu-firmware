@@ -64,6 +64,7 @@
 #include "trigger.h"
 #include "list.h"
 #include "io_pins.h"
+#include "idle.h"
 
 namespace eez {
 namespace psu {
@@ -845,7 +846,7 @@ void tick() {
     }
 #endif
 
-    scpi::tick(tick_usec);
+    idle::tick();
     
 #if OPTION_DISPLAY
 #ifdef EEZ_PSU_SIMULATOR

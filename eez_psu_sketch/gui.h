@@ -42,8 +42,6 @@ void setTextMessage(const char *message, unsigned int len);
 void clearTextMessage();
 const char *getTextMessage();
 
-bool isIdle();
-
 bool isActivePage(int pageId);
 
 }

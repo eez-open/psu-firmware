@@ -49,8 +49,6 @@ void printError(int_fast16_t err);
 
 void resultChoiceName(scpi_t *context, scpi_choice_def_t *choice, int tag);
 
-bool isIdle();
-
 }
 }
 } // namespace eez::psu::scpi

@@ -29,9 +29,7 @@
 #if OPTION_SD_CARD
 #include "SD.h"
 #endif
-#if OPTION_DISPLAY
-#include "gui.h"
-#endif
+#include "idle.h"
 
 namespace eez {
 namespace psu {
@@ -46,16 +44,10 @@ static bool g_saveProfile = false;
 
 void tick(uint32_t tickCount) {
     if (persist_conf::devConf.flags.profileAutoRecallEnabled) {
-        if (g_saveProfile && scpi::isIdle() && !list::isActive() && !calibration::isEnabled()) {
-#if OPTION_DISPLAY
-            if (gui::isIdle()) {
-#endif
-                DebugTrace("Profile 0 saved!");
-                saveAtLocation(0);
-                g_saveProfile = false;
-#if OPTION_DISPLAY
-            }
-#endif
+        if (g_saveProfile && !list::isActive() && !calibration::isEnabled() && idle::isIdle()) {
+            DebugTrace("Profile 0 saved!");
+            saveAtLocation(0);
+            g_saveProfile = false; 
         }
     }
 }

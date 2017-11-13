@@ -400,6 +400,9 @@
     <ClInclude Include="..\..\..\src\ethernet\EthernetUdp2.h">
       <Filter>simulator\ethernet</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\idle.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -735,6 +738,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\ethernet\EthernetUdp2.cpp">
       <Filter>simulator\ethernet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\idle.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
