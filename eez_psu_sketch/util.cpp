@@ -580,6 +580,15 @@ bool parseTimeZone(const char *timeZoneStr, size_t timeZoneLength, int16_t &time
     return true;
 }
 
+void replaceCharacter(char *str, char ch, char repl) {
+    while (*str) {
+        if (*str == ch) {
+            *str = repl;
+        }
+        ++str;
+    }
+}
+
 }
 }
 } // namespace eez::psu::util

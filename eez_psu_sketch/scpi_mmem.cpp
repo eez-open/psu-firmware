@@ -22,6 +22,10 @@
 #include "trigger.h"
 #include "list.h"
 
+#if OPTION_SD_CARD
+#include "sd_card.h"
+#endif
+
 namespace eez {
 namespace psu {
 namespace scpi {
@@ -112,6 +116,129 @@ scpi_result_t scpi_cmd_mmemoryStoreList(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
+bool getFilePath(scpi_t *context, char *filePath) {
+    const char *filePathParam;
+    size_t filePathParamLen;
+    if (SCPI_ParamCharacters(context, &filePathParam, &filePathParamLen, false)) {
+        if (filePathParamLen > MAX_PATH_LENGTH) {
+            SCPI_ErrorPush(context, SCPI_ERROR_CHARACTER_DATA_TOO_LONG);
+            return false;
+        }
+        strncpy(filePath, filePathParam, filePathParamLen);
+        filePath[filePathParamLen] = 0;
+    } else {
+        if (SCPI_ParamErrorOccurred(context)) {
+            return false;
+        }
+
+        strcpy(filePath, "/");
+    }
+
+    util::replaceCharacter(filePath, '\\', '/');
+
+    return true;
+}
+
+
+void catalogCallback(void *param, const char *name, sd_card::FileType type, size_t size) {
+    scpi_t *context = (scpi_t *)param;
+
+    char buffer[MAX_PATH_LENGTH + 6 + 10 + 1];
+
+    // max. MAX_PATH_LENGTH characters
+    size_t nameLength = strlen(name);
+    size_t position;
+    if (nameLength > MAX_PATH_LENGTH) {
+        strncpy(buffer, name, MAX_PATH_LENGTH);
+        position = MAX_PATH_LENGTH;
+    } else {
+        strcpy(buffer, name);
+        position = nameLength;
+    }
+    
+    // max. 6 characters
+    switch (type) {
+    case sd_card::FILE_TYPE_BIN:
+        strcpy(buffer + position, ",BIN,");
+        position += 5;
+        break;
+    
+    default:
+        strcpy(buffer + position, ",FOLD,");
+        position += 6;
+        break;
+    }
+
+    // max. 10 characters (for 4294967296)
+    sprintf(buffer + position, "%lu", (unsigned long)size);
+
+    SCPI_ResultText(context, buffer);
+
+    psu::tick();
+}
+
+scpi_result_t scpi_cmd_mmemoryCatalogQ(scpi_t *context) {
+#if OPTION_SD_CARD
+    char dirPath[MAX_PATH_LENGTH + 1];
+    if (!getFilePath(context, dirPath)) {
+        return SCPI_RES_ERR;
+    }
+
+    int err;
+    if (!sd_card::catalog(dirPath, context, catalogCallback, &err)) {
+        if (err != 0) {
+            SCPI_ErrorPush(context, err);
+        }
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+void uploadCallback(void *param, const void *buffer, size_t size) {
+    if (buffer == NULL && size == 0) {
+        return;
+    }
+
+    scpi_t *context = (scpi_t *)param;
+
+    if (buffer == NULL && size > 0) {
+        SCPI_ResultArbitraryBlockHeader(context, size);
+        return;
+    }
+
+    SCPI_ResultArbitraryBlockData(context, buffer, size);
+
+    psu::tick();
+}
+
+scpi_result_t scpi_cmd_mmemoryUploadQ(scpi_t *context) {
+#if OPTION_SD_CARD
+    char filePath[MAX_PATH_LENGTH + 1];
+    if (!getFilePath(context, filePath)) {
+        return SCPI_RES_ERR;
+    }
+
+    int err;
+    if (!sd_card::upload(filePath, context, uploadCallback, &err)) {
+        if (err != 0) {
+            SCPI_ErrorPush(context, err);
+        }
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+
 }
 }
-} // namespace eez::psu::scpi
+} // namespace eez::psu::scpi 

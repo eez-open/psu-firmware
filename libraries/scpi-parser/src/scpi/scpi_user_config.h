@@ -62,6 +62,8 @@ extern "C" {
 	X(SCPI_ERROR_CH2_FAULT_DETECTED,                        -243, "CH2 fault detected")                           \
     X(SCPI_ERROR_CH1_OUTPUT_FAULT_DETECTED,                 -245, "CH1 output fault detected")                    \
 	X(SCPI_ERROR_CH2_OUTPUT_FAULT_DETECTED,                 -246, "CH2 output fault detected")                    \
+    X(SCPI_ERROR_MASS_STORAGE_ERROR,                        -250, "Mass storage error")                           \
+    X(SCPI_ERROR_FILE_NAME_NOT_FOUND,                       -256, "File name not found")                          \
     X(SCPI_ERROR_CHANNEL_NOT_FOUND,                          100, "Channel not found")                            \
     X(SCPI_ERROR_CALIBRATION_STATE_IS_OFF,                   101, "Calibration state is off")                     \
     X(SCPI_ERROR_INVALID_CAL_PASSWORD,                       102, "Invalid cal password")                         \

@@ -131,38 +131,6 @@ scpi_result_t scpi_cmd_debugOntimeQ(scpi_t *context) {
 #endif // CONF_DEBUG
 }
 
-scpi_result_t scpi_cmd_debugDirQ(scpi_t *context) {
-#if CONF_DEBUG && OPTION_SD_CARD
-    sd_card::dir();
-    return SCPI_RES_OK;
-#else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
-    return SCPI_RES_ERR;
-#endif
-}
-
-scpi_result_t scpi_cmd_debugFileQ(scpi_t *context) {
-#if CONF_DEBUG && OPTION_SD_CARD
-    const char *param;
-    size_t len;
-
-    if (!SCPI_ParamCharacters(context, &param, &len, true)) {
-        return SCPI_RES_ERR;
-    }
-
-    char path[MAX_PATH_LENGTH];
-    strncpy(path, param, len);
-    path[len] = 0;
-
-    sd_card::dumpFile(path);
-
-    return SCPI_RES_OK;
-#else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
-    return SCPI_RES_ERR;
-#endif
-}
-
 scpi_result_t scpi_cmd_debugVoltage(scpi_t *context) {
 #if CONF_DEBUG
     Channel *channel = param_channel(context);

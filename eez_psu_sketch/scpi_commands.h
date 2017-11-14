@@ -23,8 +23,6 @@
     SCPI_COMMAND("DEBUg:WDOG", scpi_cmd_debugWdog) \
     SCPI_COMMAND("DEBUg:WDOG?", scpi_cmd_debugWdogQ) \
     SCPI_COMMAND("DEBUg:ONTime?", scpi_cmd_debugOntimeQ) \
-    SCPI_COMMAND("DEBUg:DIR?", scpi_cmd_debugDirQ) \
-    SCPI_COMMAND("DEBUg:FILE?", scpi_cmd_debugFileQ) \
     SCPI_COMMAND("DEBUg:VOLTage", scpi_cmd_debugVoltage) \
     SCPI_COMMAND("DEBUg:CURRent", scpi_cmd_debugCurrent) \
     SCPI_COMMAND("DEBUg:MEASure:VOLTage", scpi_cmd_debugMeasureVoltage) \
@@ -109,6 +107,8 @@
     SCPI_COMMAND("MEMory:STATe:VALid?", scpi_cmd_memoryStateValidQ) \
     SCPI_COMMAND("MMEMory:LOAD:LIST#", scpi_cmd_mmemoryLoadList) \
     SCPI_COMMAND("MMEMory:STORe:LIST#", scpi_cmd_mmemoryStoreList) \
+    SCPI_COMMAND("MMEMory:CATalog?", scpi_cmd_mmemoryCatalogQ) \
+    SCPI_COMMAND("MMEMory:UPLoad?", scpi_cmd_mmemoryUploadQ) \
     SCPI_COMMAND("OUTPut:MODE?", scpi_cmd_outputModeQ) \
     SCPI_COMMAND("OUTPut:PROTection:CLEar", scpi_cmd_outputProtectionClear) \
     SCPI_COMMAND("OUTPut:PROTection:COUPle", scpi_cmd_outputProtectionCouple) \

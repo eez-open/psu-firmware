@@ -132,80 +132,65 @@ bool makeParentDir(const char *filePath) {
     return SD.mkdir(dirPath);
 }
 
-#if CONF_DEBUG
+bool catalog(const char *dirPath, void *param, void (*callback)(void *param, const char *name, FileType type, size_t size), int *err) {
+    if (sd_card::g_testResult != TEST_OK) {
+        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
 
-#define MAX_LEVEL 8
+    File dir = SD.open(dirPath);
+    if (!dir) {
+        *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        return false;
+    }
 
-void printDirectory(File dir, int level) {
-    // Begin at the start of the directory
     dir.rewindDirectory();
-    
+
     while (true) {
         File entry = dir.openNextFile();
         if (!entry) {
-            break;
-        }
-        
-        const char *INDENTATION = "    ";
-        char indentation[MAX_LEVEL*sizeof(INDENTATION) + 1];
-        indentation[0] = 0;
-        for (uint8_t i = 0; i < level; ++i) {
-            strcat(indentation, INDENTATION);
+            return true;
         }
 
         if (entry.isDirectory()) {
-            DebugTraceF("%s%s/", indentation, entry.name());
-            if (level < MAX_LEVEL) {
-                printDirectory(entry, level+1);
-            }
+            callback(param, entry.name(), FILE_TYPE_FOLD, entry.size());
         } else {
-            DebugTraceF("%s%s\t\t%d", indentation, entry.name(), entry.size());
+            callback(param, entry.name(), FILE_TYPE_BIN, entry.size());
         }
 
         entry.close();
     }
 }
 
-void dir() {
+bool upload(const char *filePath, void *param, void (*callback)(void *param, const void *buffer, size_t size), int *err) {
     if (sd_card::g_testResult != TEST_OK) {
-        return;
+        return false;
     }
 
-    File root = SD.open("/");
-    printDirectory(root, 0);
-}
-
-void dumpFile(const char *path) {
-    if (sd_card::g_testResult != TEST_OK) {
-        return;
-    }
-
-    File file = SD.open(path, FILE_READ);
+    File file = SD.open(filePath, FILE_READ);
 
     if (!file) {
-        DebugTrace("**ERROR File not found!");
-        return;
+        *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        return false;
     }
 
-    char line[256];
-    int i = 0;
+    callback(param, NULL, file.size());
 
-    while (file.available()) {
-        int c = file.read();
-        if (c == '\n') {
-            line[i] = 0;
-            DebugTrace(line);
-            i = 0;
-        } else {
-            if (i < 255) {
-                line[i++] = c;
-            }
+    const size_t CHUNK_SIZE = 64;
+    uint8_t buffer[CHUNK_SIZE];
+
+    while (true) {
+        int size = file.read(buffer, CHUNK_SIZE);
+        callback(param, buffer, size);
+        if (size < CHUNK_SIZE) {
+            break;
         }
     }
+
+    callback(param, NULL, 0);
+
+    return true;
 }
-
-#endif
-
 
 }
 }

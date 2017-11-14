@@ -75612,12 +75612,6 @@
             "name": "DEBUg:ONTime?"
           },
           {
-            "name": "DEBUg:DIR?"
-          },
-          {
-            "name": "DEBUg:FILE?"
-          },
-          {
             "name": "DEBUg:VOLTage"
           },
           {
@@ -76029,6 +76023,14 @@
           {
             "name": "MMEMory:STORe:LIST<n>",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_stor_list"
+          },
+          {
+            "name": "MMEMory:CATalog?",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_cat"
+          },
+          {
+            "name": "MMEMory:UPLoad?",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_upl"
           }
         ]
       },

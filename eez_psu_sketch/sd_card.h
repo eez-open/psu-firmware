@@ -26,6 +26,11 @@ namespace sd_card {
 
 extern TestResult g_testResult;
 
+enum FileType {
+    FILE_TYPE_BIN,
+    FILE_TYPE_FOLD
+};
+
 void init();
 bool test();
 
@@ -35,12 +40,8 @@ bool match(File& file, char c);
 
 bool makeParentDir(const char *filePath);
 
-#if CONF_DEBUG
-void dir();
-void dumpFile(const char *path);
-#endif
-
-
+bool catalog(const char *dirPath, void *param, void (*callback)(void *param, const char *name, FileType type, size_t size), int *err);
+bool upload(const char *filePath, void *param, void (*callback)(void *param, const void *buffer, size_t size), int *err);
 
 }
 }

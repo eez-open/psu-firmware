@@ -102,6 +102,7 @@ public:
     bool seek(uint32_t pos);
     int peek();
     int read();
+    int read(void *buf, uint16_t nbyte);
 
     void print(float value, int numDecimalDigits);
     void print(char value);
@@ -151,9 +152,9 @@ void FileImpl::init() {
 
 void FileImpl::open() {
     if (m_mode == FILE_WRITE) {
-        m_fp = fopen(getRealPath().c_str(), "w");
+        m_fp = fopen(getRealPath().c_str(), "wb");
     } else {
-        m_fp = fopen(getRealPath().c_str(), "r");
+        m_fp = fopen(getRealPath().c_str(), "rb");
     }
 }
 
@@ -309,6 +310,10 @@ int FileImpl::read() {
     return getc(m_fp);
 }
 
+int FileImpl::read(void *buf, uint16_t nbyte) {
+    return fread(buf, 1, nbyte, m_fp);
+}
+
 void FileImpl::print(float value, int numDecimalDigits) {
     fprintf(m_fp, "%.*f", numDecimalDigits, value);
 }
@@ -386,6 +391,10 @@ int File::peek() {
 
 int File::read() {
     return m_impl->read();
+}
+
+int File::read(void *buf, uint16_t nbyte) {
+    return m_impl->read(buf, nbyte);
 }
 
 void File::print(float value, int numDecimalDigits) {

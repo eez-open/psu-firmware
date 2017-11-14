@@ -55,6 +55,7 @@ public:
     bool seek(uint32_t pos);
     int peek();
     int read();
+    int read(void *buf, uint16_t nbyte);
 
     void print(float value, int numDecimalDigits);
     void print(char value);
