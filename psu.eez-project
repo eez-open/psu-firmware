@@ -76031,6 +76031,18 @@
           {
             "name": "MMEMory:UPLoad?",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_upl"
+          },
+          {
+            "name": "MMEMory:DOWNload:DATA",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_down_data"
+          },
+          {
+            "name": "MMEMory:DOWNload:FNAMe",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_down_fnam"
+          },
+          {
+            "name": "MMEMory:DELete",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_del"
           }
         ]
       },

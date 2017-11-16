@@ -103,6 +103,7 @@ public:
     int peek();
     int read();
     int read(void *buf, uint16_t nbyte);
+    size_t write(const uint8_t *buf, size_t size);
 
     void print(float value, int numDecimalDigits);
     void print(char value);
@@ -152,7 +153,7 @@ void FileImpl::init() {
 
 void FileImpl::open() {
     if (m_mode == FILE_WRITE) {
-        m_fp = fopen(getRealPath().c_str(), "wb");
+        m_fp = fopen(getRealPath().c_str(), "ab");
     } else {
         m_fp = fopen(getRealPath().c_str(), "rb");
     }
@@ -314,6 +315,10 @@ int FileImpl::read(void *buf, uint16_t nbyte) {
     return fread(buf, 1, nbyte, m_fp);
 }
 
+size_t FileImpl::write(const uint8_t *buf, size_t size) {
+    return fwrite(buf, 1, size, m_fp);
+}
+
 void FileImpl::print(float value, int numDecimalDigits) {
     fprintf(m_fp, "%.*f", numDecimalDigits, value);
 }
@@ -395,6 +400,10 @@ int File::read() {
 
 int File::read(void *buf, uint16_t nbyte) {
     return m_impl->read(buf, nbyte);
+}
+
+size_t File::write(const uint8_t *buf, size_t size) {
+    return m_impl->write(buf, size);
 }
 
 void File::print(float value, int numDecimalDigits) {

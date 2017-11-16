@@ -35,6 +35,8 @@ namespace eez {
 namespace psu {
 namespace scpi {
 
+bool g_busy;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 #define SCPI_COMMAND(P, C) scpi_result_t C(scpi_t * context);
@@ -89,6 +91,8 @@ void input(scpi_t &scpi_context, char ch) {
     //    return;
     //}
 
+    g_busy = true;
+
     int result = SCPI_Input(&scpi_context, &ch, 1);
     if (result == -1) {
         // TODO we need better buffer overrun handling here
@@ -99,10 +103,14 @@ void input(scpi_t &scpi_context, char ch) {
         // input buffer is now empty, feed it
         SCPI_Input(&scpi_context, &ch, 1);
     }
+
+    g_busy = false;
 }
 
 void input(scpi_t &scpi_context, const char *str, size_t size) {
     idle::noteScpiActivity();
+
+    g_busy = true;
 
     //if (ch < 0 || ch > 127) {
     //    // non ASCII, call parser now
@@ -117,6 +125,8 @@ void input(scpi_t &scpi_context, const char *str, size_t size) {
         // call parser now
         SCPI_Input(&scpi_context, 0, 0);
     }
+
+    g_busy = false;
 }
 
 void printError(int_fast16_t err) {

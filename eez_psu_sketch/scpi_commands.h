@@ -109,6 +109,9 @@
     SCPI_COMMAND("MMEMory:STORe:LIST#", scpi_cmd_mmemoryStoreList) \
     SCPI_COMMAND("MMEMory:CATalog?", scpi_cmd_mmemoryCatalogQ) \
     SCPI_COMMAND("MMEMory:UPLoad?", scpi_cmd_mmemoryUploadQ) \
+    SCPI_COMMAND("MMEMory:DOWNload:DATA", scpi_cmd_mmemoryDownloadData) \
+    SCPI_COMMAND("MMEMory:DOWNload:FNAMe", scpi_cmd_mmemoryDownloadFname) \
+    SCPI_COMMAND("MMEMory:DELete", scpi_cmd_mmemoryDelete) \
     SCPI_COMMAND("OUTPut:MODE?", scpi_cmd_outputModeQ) \
     SCPI_COMMAND("OUTPut:PROTection:CLEar", scpi_cmd_outputProtectionClear) \
     SCPI_COMMAND("OUTPut:PROTection:COUPle", scpi_cmd_outputProtectionCouple) \

@@ -164,6 +164,7 @@ bool catalog(const char *dirPath, void *param, void (*callback)(void *param, con
 
 bool upload(const char *filePath, void *param, void (*callback)(void *param, const void *buffer, size_t size), int *err) {
     if (sd_card::g_testResult != TEST_OK) {
+        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;
     }
 
@@ -187,7 +188,52 @@ bool upload(const char *filePath, void *param, void (*callback)(void *param, con
         }
     }
 
+    file.close();
+
     callback(param, NULL, 0);
+
+    return true;
+}
+
+bool download(const char *filePath, const void *buffer, size_t size, int *err) {
+    if (sd_card::g_testResult != TEST_OK) {
+        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    File file = SD.open(filePath, FILE_WRITE);
+
+    if (!file) {
+        *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        return false;
+    }
+
+    size_t written = file.write((const uint8_t *)buffer, size);
+    file.close();
+
+    if (written != size) {
+        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    return true;
+}
+
+bool deleteFile(const char *filePath, int *err) {
+    if (sd_card::g_testResult != TEST_OK) {
+        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    if (!SD.exists(filePath)) {
+        *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        return false;
+    }
+
+    if (!SD.remove(filePath)) {
+        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
 
     return true;
 }

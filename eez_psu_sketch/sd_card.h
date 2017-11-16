@@ -42,6 +42,8 @@ bool makeParentDir(const char *filePath);
 
 bool catalog(const char *dirPath, void *param, void (*callback)(void *param, const char *name, FileType type, size_t size), int *err);
 bool upload(const char *filePath, void *param, void (*callback)(void *param, const void *buffer, size_t size), int *err);
+bool download(const char *filePath, const void *buffer, size_t size, int *err);
+bool deleteFile(const char *filePath, int *err);
 
 }
 }

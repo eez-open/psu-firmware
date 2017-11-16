@@ -56,6 +56,7 @@ public:
     int peek();
     int read();
     int read(void *buf, uint16_t nbyte);
+    size_t write(const uint8_t *buf, size_t size);
 
     void print(float value, int numDecimalDigits);
     void print(char value);

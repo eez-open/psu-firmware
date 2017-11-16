@@ -222,6 +222,10 @@ void tick(uint32_t tick_usec) {
         return;
     }
 
+    if (scpi::g_busy) {
+        return;
+    }
+
     // This code is commented because DHCP lease renewal blocks main thread for 5 or more seconds.
     //if (persist_conf::devConf2.flags.ethernetDhcpEnabled) {
     //    int32_t diff = tick_usec - g_lastCheckDhcpLeaseTime;
