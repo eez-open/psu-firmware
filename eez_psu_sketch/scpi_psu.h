@@ -31,7 +31,8 @@ struct scpi_psu_t {
     scpi_reg_val_t *registers;
     uint8_t selected_channel_index;
 #if OPTION_SD_CARD
-    char filePath[MAX_PATH_LENGTH + 1];
+    char currentDirectory[MAX_PATH_LENGTH + 1];
+    char downloadFilePath[MAX_PATH_LENGTH + 1];
 #endif
 };
 

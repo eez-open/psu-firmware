@@ -76017,12 +76017,16 @@
         "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html",
         "commands": [
           {
-            "name": "MMEMory:LOAD:LIST<n>",
-            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_load_list"
+            "name": "MMEMory:CDIRectory",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_cdir"
           },
           {
-            "name": "MMEMory:STORe:LIST<n>",
-            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_stor_list"
+            "name": "MMEMory:CDIRectory?",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_cdir"
+          },
+          {
+            "name": "MMEMory:CATalog:LENgth?",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_cat_len"
           },
           {
             "name": "MMEMory:CATalog?",
@@ -76041,8 +76045,60 @@
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_down_fnam"
           },
           {
+            "name": "MMEMory:MOVE",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_move"
+          },
+          {
+            "name": "MMEMory:COPY",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_copy"
+          },
+          {
             "name": "MMEMory:DELete",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_del"
+          },
+          {
+            "name": "MMEMory:MDIRectory",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_mdir"
+          },
+          {
+            "name": "MMEMory:RDIRectory",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_rdir"
+          },
+          {
+            "name": "MMEMory:DATE?",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_date"
+          },
+          {
+            "name": "MMEMory:TIME?",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_time"
+          },
+          {
+            "name": "MMEMory:LOCK",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_lock"
+          },
+          {
+            "name": "MMEMory:LOCK?",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_lock"
+          },
+          {
+            "name": "MMEMory:UNLock",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_unl"
+          },
+          {
+            "name": "MMEMory:LOAD:LIST<n>",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_load_list"
+          },
+          {
+            "name": "MMEMory:STORe:LIST<n>",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_stor_list"
+          },
+          {
+            "name": "MMEMory:LOAD:STATe",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_load_stat"
+          },
+          {
+            "name": "MMEMory:STORe:STATe",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_stor_stat"
           }
         ]
       },

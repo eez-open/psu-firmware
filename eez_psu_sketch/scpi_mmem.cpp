@@ -33,60 +33,119 @@ namespace scpi {
 ////////////////////////////////////////////////////////////////////////////////
 
 #if OPTION_SD_CARD
+void cleanupPath(char *filePath) {
+    util::replaceCharacter(filePath, '\\', '/');
 
-bool getFileNameParam(scpi_t *context, char *filePath, int *err) {
-    const char *param;
-    size_t len;
+    char *q = filePath;
 
-    if (!SCPI_ParamCharacters(context, &param, &len, true)) {
-        *err = 0;
-        return false;
+    for (char *p = filePath; *p; ++p) {
+        if (*p == '\\') {
+            *p = '/';
+        }
+
+        if (*p == '/' && (p > filePath && *(p - 1) == '/')) {
+            // '//' -> '/'
+            continue;
+        } else if (*p == '.') {
+            if (!*(p + 1)) {
+                // '<...>/.' -> '<...>'
+                break;
+            } else if (*(p + 1) == '/') {
+                // '<...>/./<...>' -> '<...>/<...>'
+                ++p;
+                continue;
+            } else if (*(p + 1) == '.') {
+                // '<...>/something/..<...>' -> '<...>/<...>'
+                q -= 2;
+                while (true) {
+                    if (q < filePath) {
+                        q = filePath;
+                        break;
+                    }
+                    if (*q == '/') {
+                        break;
+                    }
+                    --q;
+                }
+                ++p;
+                continue;
+            }
+        }
+
+        *q++ = *p;
     }
 
-    if (len > 8) {
-        *err = SCPI_ERROR_CHARACTER_DATA_TOO_LONG;
-        return false;
+    // remove trailing '/'
+    if (q > filePath && *(q - 1) == '/') {
+        --q;
     }
 
-    char fileName[8 + 1];
-    strncpy(fileName, param, len);
-    fileName[len] = 0;
+    // if empty then make it '/'
+    if (q == filePath) {
+        *q++ = '/';
+    }
+    
+    *q = 0;
+}
 
-    strcpy(filePath, LISTS_DIR);
-    strcat(filePath, PATH_SEPARATOR);
-    strcat(filePath, fileName);
-    strcat(filePath, LIST_FILE_EXTENSION);
+bool getFilePath(scpi_t *context, char *filePath, bool mandatory) {
+    scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
+
+    const char *filePathParam;
+    size_t filePathParamLen;
+    if (SCPI_ParamCharacters(context, &filePathParam, &filePathParamLen, mandatory)) {
+        if (filePathParamLen > MAX_PATH_LENGTH) {
+            SCPI_ErrorPush(context, SCPI_ERROR_CHARACTER_DATA_TOO_LONG);
+            return false;
+        }
+
+        // is it absolute file path?
+        if (filePathParam[0] == '/' || filePathParam[0] == '\\') {
+            // yes
+            strncpy(filePath, filePathParam, filePathParamLen);
+            filePath[filePathParamLen] = 0;
+        } else {
+            // no, combine with current directory to get absolute path
+            size_t currentDirectoryLen = strlen(psuContext->currentDirectory);
+            size_t filePathLen = currentDirectoryLen + 1 + filePathParamLen;
+            if (filePathLen > MAX_PATH_LENGTH) {
+                SCPI_ErrorPush(context, SCPI_ERROR_CHARACTER_DATA_TOO_LONG);
+                return false;
+            }
+            strncpy(filePath, psuContext->currentDirectory, currentDirectoryLen);
+            filePath[currentDirectoryLen] = '/';
+            strncpy(filePath + currentDirectoryLen + 1, filePathParam, filePathParamLen);
+            filePath[filePathLen] = 0;
+        }
+    } else {
+        if (SCPI_ParamErrorOccurred(context)) {
+            return false;
+        }
+        strcpy(filePath, psuContext->currentDirectory);
+    }
+
+    cleanupPath(filePath);
 
     return true;
 }
 
-#endif
-
-scpi_result_t scpi_cmd_mmemoryLoadList(scpi_t *context) {
+scpi_result_t scpi_cmd_mmemoryCdirectory(scpi_t *context) {
 #if OPTION_SD_CARD
-    Channel *channel = set_channel_from_command_number(context);
-    if (!channel) {
+    char dirPath[MAX_PATH_LENGTH + 1];
+    if (!getFilePath(context, dirPath, true)) {
         return SCPI_RES_ERR;
     }
 
-    if (!trigger::isIdle()) {
-        SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
-        return SCPI_RES_ERR;
-    }
-
-    char filePath[MAX_PATH_LENGTH];
     int err;
-    if (!getFileNameParam(context, filePath, &err)) {
+    if (!sd_card::exists(dirPath, &err)) {
         if (err != 0) {
             SCPI_ErrorPush(context, err);
         }
         return SCPI_RES_ERR;
     }
 
-    if (!list::loadList(*channel, filePath, &err)) {
-        SCPI_ErrorPush(context, err);
-        return SCPI_RES_ERR;
-    }
+    scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
+    strcpy(psuContext->currentDirectory, dirPath);
 
     return SCPI_RES_OK;
 #else
@@ -95,30 +154,13 @@ scpi_result_t scpi_cmd_mmemoryLoadList(scpi_t *context) {
 #endif
 }
 
-scpi_result_t scpi_cmd_mmemoryStoreList(scpi_t *context) {
+scpi_result_t scpi_cmd_mmemoryCdirectoryQ(scpi_t *context) {
 #if OPTION_SD_CARD
-	Channel *channel = set_channel_from_command_number(context);
-    if (!channel) {
-        return SCPI_RES_ERR;
-    }
-
-    if (!list::areListLengthsEquivalent(*channel)) {
-        SCPI_ErrorPush(context, SCPI_ERROR_LIST_LENGTHS_NOT_EQUIVALENT);
-        return SCPI_RES_ERR;
-    }
-
-    char filePath[MAX_PATH_LENGTH];
-    int err;
-    if (!getFileNameParam(context, filePath, &err)) {
-        if (err != 0) {
-            SCPI_ErrorPush(context, err);
-        }
-        return SCPI_RES_ERR;
-    }
-
-    if (!list::saveList(*channel, filePath, &err)) {
-        SCPI_ErrorPush(context, err);
-        return SCPI_RES_ERR;
+    scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
+    if (psuContext->currentDirectory[0]) {
+        SCPI_ResultText(context, psuContext->currentDirectory);
+    } else {
+        SCPI_ResultText(context, "/");
     }
 
     return SCPI_RES_OK;
@@ -129,30 +171,6 @@ scpi_result_t scpi_cmd_mmemoryStoreList(scpi_t *context) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
-#if OPTION_SD_CARD
-bool getFilePath(scpi_t *context, char *filePath) {
-    const char *filePathParam;
-    size_t filePathParamLen;
-    if (SCPI_ParamCharacters(context, &filePathParam, &filePathParamLen, false)) {
-        if (filePathParamLen > MAX_PATH_LENGTH) {
-            SCPI_ErrorPush(context, SCPI_ERROR_CHARACTER_DATA_TOO_LONG);
-            return false;
-        }
-        strncpy(filePath, filePathParam, filePathParamLen);
-        filePath[filePathParamLen] = 0;
-    } else {
-        if (SCPI_ParamErrorOccurred(context)) {
-            return false;
-        }
-
-        strcpy(filePath, "/");
-    }
-
-    util::replaceCharacter(filePath, '\\', '/');
-
-    return true;
-}
 
 void catalogCallback(void *param, const char *name, sd_card::FileType type, size_t size) {
     scpi_t *context = (scpi_t *)param;
@@ -195,7 +213,7 @@ void catalogCallback(void *param, const char *name, sd_card::FileType type, size
 scpi_result_t scpi_cmd_mmemoryCatalogQ(scpi_t *context) {
 #if OPTION_SD_CARD
     char dirPath[MAX_PATH_LENGTH + 1];
-    if (!getFilePath(context, dirPath)) {
+    if (!getFilePath(context, dirPath, false)) {
         return SCPI_RES_ERR;
     }
 
@@ -213,6 +231,8 @@ scpi_result_t scpi_cmd_mmemoryCatalogQ(scpi_t *context) {
     return SCPI_RES_ERR;
 #endif
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 #if OPTION_SD_CARD
 void uploadCallback(void *param, const void *buffer, size_t size) {
@@ -236,7 +256,7 @@ void uploadCallback(void *param, const void *buffer, size_t size) {
 scpi_result_t scpi_cmd_mmemoryUploadQ(scpi_t *context) {
 #if OPTION_SD_CARD
     char filePath[MAX_PATH_LENGTH + 1];
-    if (!getFilePath(context, filePath)) {
+    if (!getFilePath(context, filePath, true)) {
         return SCPI_RES_ERR;
     }
 
@@ -255,12 +275,13 @@ scpi_result_t scpi_cmd_mmemoryUploadQ(scpi_t *context) {
 #endif
 }
 
+////////////////////////////////////////////////////////////////////////////////
 
 scpi_result_t scpi_cmd_mmemoryDownloadFname(scpi_t *context) {
 #if OPTION_SD_CARD
     scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
 
-    if (!getFilePath(context, psuContext->filePath)) {
+    if (!getFilePath(context, psuContext->downloadFilePath, true)) {
         return SCPI_RES_ERR;
     }
 
@@ -275,7 +296,7 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
 #if OPTION_SD_CARD
     scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
 
-    if (psuContext->filePath[0] == 0) {
+    if (psuContext->downloadFilePath[0] == 0) {
         SCPI_ErrorPush(context, SCPI_ERROR_FILE_NAME_ERROR);
         return SCPI_RES_ERR;
     }
@@ -287,7 +308,7 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
     }
 
     int err;
-    if (!sd_card::download(psuContext->filePath, buffer, size, &err)) {
+    if (!sd_card::download(psuContext->downloadFilePath, buffer, size, &err)) {
         if (err != 0) {
             SCPI_ErrorPush(context, err);
         }
@@ -301,10 +322,12 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
 #endif
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 scpi_result_t scpi_cmd_mmemoryDelete(scpi_t *context) {
 #if OPTION_SD_CARD
     char filePath[MAX_PATH_LENGTH + 1];
-    if (!getFilePath(context, filePath)) {
+    if (!getFilePath(context, filePath, true)) {
         return SCPI_RES_ERR;
     }
 
@@ -317,6 +340,176 @@ scpi_result_t scpi_cmd_mmemoryDelete(scpi_t *context) {
     }
 
     return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+scpi_result_t scpi_cmd_mmemoryLoadList(scpi_t *context) {
+#if OPTION_SD_CARD
+    Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!trigger::isIdle()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
+        return SCPI_RES_ERR;
+    }
+
+    char filePath[MAX_PATH_LENGTH + 1];
+    if (!getFilePath(context, filePath, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    int err;
+    if (!list::loadList(*channel, filePath, &err)) {
+        SCPI_ErrorPush(context, err);
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryStoreList(scpi_t *context) {
+#if OPTION_SD_CARD
+	Channel *channel = set_channel_from_command_number(context);
+    if (!channel) {
+        return SCPI_RES_ERR;
+    }
+
+    if (!list::areListLengthsEquivalent(*channel)) {
+        SCPI_ErrorPush(context, SCPI_ERROR_LIST_LENGTHS_NOT_EQUIVALENT);
+        return SCPI_RES_ERR;
+    }
+
+    char filePath[MAX_PATH_LENGTH + 1];
+    if (!getFilePath(context, filePath, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    int err;
+    if (!list::saveList(*channel, filePath, &err)) {
+        SCPI_ErrorPush(context, err);
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryCatalogLengthQ(scpi_t *context) {
+#if OPTION_SD_CARD
+    return SCPI_RES_ERR;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryMove(scpi_t *context) {
+#if OPTION_SD_CARD
+    return SCPI_RES_ERR;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryCopy(scpi_t *context) {
+#if OPTION_SD_CARD
+    return SCPI_RES_ERR;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryMdirectory(scpi_t *context) {
+#if OPTION_SD_CARD
+    return SCPI_RES_ERR;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryRdirectory(scpi_t *context) {
+#if OPTION_SD_CARD
+    return SCPI_RES_ERR;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryDateQ(scpi_t *context) {
+#if OPTION_SD_CARD
+    return SCPI_RES_ERR;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryTimeQ(scpi_t *context) {
+#if OPTION_SD_CARD
+    return SCPI_RES_ERR;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryLock(scpi_t *context) {
+#if OPTION_SD_CARD
+    return SCPI_RES_ERR;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryLockQ(scpi_t *context) {
+#if OPTION_SD_CARD
+    return SCPI_RES_ERR;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryUnlock(scpi_t *context) {
+#if OPTION_SD_CARD
+    return SCPI_RES_ERR;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryLoadState(scpi_t *context) {
+#if OPTION_SD_CARD
+    return SCPI_RES_ERR;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryStoreState(scpi_t *context) {
+#if OPTION_SD_CARD
+    return SCPI_RES_ERR;
 #else
     SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
     return SCPI_RES_ERR;

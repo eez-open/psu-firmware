@@ -56,11 +56,13 @@ std::string getRealPath(const char *path) {
     
     realPath = "sd_card";
 
-    if (path[0] != '/') {
-        realPath += "/";
-    }
+    if (path[0]) {
+        if (path[0] != '/') {
+            realPath += "/";
+        }
 
-    realPath += path;
+        realPath += path;
+    }
 
     // remove trailing slash
     if (realPath[realPath.size() - 1] == '/') {
@@ -179,11 +181,14 @@ std::string FileImpl::getRealPath() {
 }
 
 FileImpl::operator bool() {
-    if (m_fp) return true;
+    if (m_fp) {
+        return true;
+    }
 
     if (m_path.length() == 0) {
         return false;
     }
+
     return pathExists(m_path.c_str());
 }
 

@@ -132,6 +132,20 @@ bool makeParentDir(const char *filePath) {
     return SD.mkdir(dirPath);
 }
 
+bool exists(const char *dirPath, int *err) {
+    if (sd_card::g_testResult != TEST_OK) {
+        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    if (!SD.exists(dirPath)) {
+        *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        return false;
+    }
+
+    return true;
+}
+
 bool catalog(const char *dirPath, void *param, void (*callback)(void *param, const char *name, FileType type, size_t size), int *err) {
     if (sd_card::g_testResult != TEST_OK) {
         *err = SCPI_ERROR_MASS_STORAGE_ERROR;
@@ -177,7 +191,7 @@ bool upload(const char *filePath, void *param, void (*callback)(void *param, con
 
     callback(param, NULL, file.size());
 
-    const size_t CHUNK_SIZE = 64;
+    const int CHUNK_SIZE = 64;
     uint8_t buffer[CHUNK_SIZE];
 
     while (true) {
