@@ -20,6 +20,23 @@
 
 #include <string>
 
+#define SD_SCK_HZ(maxSpeed) SPISettings(maxSpeed, MSBFIRST, SPI_MODE0)
+// SPI divisor constants
+/** Set SCK to max rate of F_CPU/2. */
+#define SPI_FULL_SPEED SD_SCK_MHZ(50)
+/** Set SCK rate to F_CPU/3 for Due */
+#define SPI_DIV3_SPEED SD_SCK_HZ(F_CPU/3)
+/** Set SCK rate to F_CPU/4. */
+#define SPI_HALF_SPEED SD_SCK_HZ(F_CPU/4)
+/** Set SCK rate to F_CPU/6 for Due */
+#define SPI_DIV6_SPEED SD_SCK_HZ(F_CPU/6)
+/** Set SCK rate to F_CPU/8. */
+#define SPI_QUARTER_SPEED SD_SCK_HZ(F_CPU/8)
+/** Set SCK rate to F_CPU/16. */
+#define SPI_EIGHTH_SPEED SD_SCK_HZ(F_CPU/16)
+/** Set SCK rate to F_CPU/32. */
+#define SPI_SIXTEENTH_SPEED SD_SCK_HZ(F_CPU/32)
+
 namespace eez {
 namespace psu {
 namespace simulator {
@@ -32,7 +49,7 @@ namespace arduino {
 class FileImpl;
 
 class File {
-    friend class SimulatorSD;
+    friend class SdFat;
 
 public:
     File();
@@ -44,7 +61,7 @@ public:
     void close();
 
     operator bool();
-    const char *name();
+    bool getName(char *name, size_t size);
     uint32_t size();
     bool isDirectory();
 
@@ -65,16 +82,14 @@ private:
     FileImpl *m_impl;
 };
 
-class SimulatorSD {
+class SdFat {
 public:
-    bool begin(uint8_t cs);
+    bool begin(uint8_t cs, SPISettings spiSettings = SPI_FULL_SPEED);
     File open(const char *path, uint8_t mode = FILE_READ);
     bool exists(const char *path);
     bool mkdir(const char *path);
     bool remove(const char *path);
 };
-
-extern SimulatorSD SD;
 
 }
 }

@@ -201,7 +201,7 @@ bool loadList(Channel &channel, const char *filePath, int *err) {
         return false;
     }
 
-    if (!SD.exists(filePath)) {
+    if (!sd_card::exists(filePath, NULL)) {
         if (err) {
             *err = SCPI_ERROR_LIST_NOT_FOUND;
         }
@@ -325,7 +325,7 @@ bool saveList(Channel &channel, const char *filePath, int *err) {
 
     sd_card::makeParentDir(filePath);
 
-    SD.remove(filePath);
+    sd_card::deleteFile(filePath, NULL);
 
     File file = SD.open(filePath, FILE_WRITE);
 

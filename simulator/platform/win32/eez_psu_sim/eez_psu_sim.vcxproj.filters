@@ -373,9 +373,6 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\trigger.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\arduino\SD.h">
-      <Filter>simulator\arduino</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\sd_card.h">
       <Filter>board</Filter>
     </ClInclude>
@@ -402,6 +399,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\idle.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\arduino\SdFat.h">
+      <Filter>simulator\arduino</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -706,9 +706,6 @@
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_trigger.cpp">
       <Filter>scpi\commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\arduino\SD.cpp">
-      <Filter>simulator\arduino</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\sd_card.cpp">
       <Filter>board</Filter>
     </ClCompile>
@@ -741,6 +738,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\idle.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\arduino\SdFat.cpp">
+      <Filter>simulator\arduino</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

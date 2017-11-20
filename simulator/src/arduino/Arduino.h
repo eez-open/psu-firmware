@@ -21,6 +21,7 @@
 #include <stdint.h>
 #include <queue>
 
+#define F_CPU 80
 typedef uint8_t byte;
 
 namespace eez {

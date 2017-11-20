@@ -22,6 +22,8 @@
 
 #include "sd_card.h"
 
+SdFat SD;
+
 namespace eez {
 namespace psu {
 namespace sd_card {
@@ -31,9 +33,12 @@ TestResult g_testResult = TEST_FAILED;
 ////////////////////////////////////////////////////////////////////////////////
 
 void init() {
-    if (!SD.begin(LCDSD_CS)) {
+    if (!SD.begin(LCDSD_CS, SPI_DIV3_SPEED)) {
         g_testResult = TEST_FAILED;
     } else {
+#ifdef EEZ_PSU_SIMULATOR
+        makeParentDir("/");
+#endif
         g_testResult = TEST_OK;
     }
 }
@@ -134,12 +139,12 @@ bool makeParentDir(const char *filePath) {
 
 bool exists(const char *dirPath, int *err) {
     if (sd_card::g_testResult != TEST_OK) {
-        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;
     }
 
     if (!SD.exists(dirPath)) {
-        *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
         return false;
     }
 
@@ -148,13 +153,13 @@ bool exists(const char *dirPath, int *err) {
 
 bool catalog(const char *dirPath, void *param, void (*callback)(void *param, const char *name, FileType type, size_t size), int *err) {
     if (sd_card::g_testResult != TEST_OK) {
-        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;
     }
 
     File dir = SD.open(dirPath);
     if (!dir) {
-        *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
         return false;
     }
 
@@ -166,10 +171,12 @@ bool catalog(const char *dirPath, void *param, void (*callback)(void *param, con
             return true;
         }
 
+        char name[MAX_PATH_LENGTH + 1] = {0};
+        entry.getName(name, MAX_PATH_LENGTH);
         if (entry.isDirectory()) {
-            callback(param, entry.name(), FILE_TYPE_FOLD, entry.size());
+            callback(param, name, FILE_TYPE_FOLD, entry.size());
         } else {
-            callback(param, entry.name(), FILE_TYPE_BIN, entry.size());
+            callback(param, name, FILE_TYPE_BIN, entry.size());
         }
 
         entry.close();
@@ -178,14 +185,14 @@ bool catalog(const char *dirPath, void *param, void (*callback)(void *param, con
 
 bool upload(const char *filePath, void *param, void (*callback)(void *param, const void *buffer, size_t size), int *err) {
     if (sd_card::g_testResult != TEST_OK) {
-        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;
     }
 
     File file = SD.open(filePath, FILE_READ);
 
     if (!file) {
-        *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
         return false;
     }
 
@@ -211,14 +218,14 @@ bool upload(const char *filePath, void *param, void (*callback)(void *param, con
 
 bool download(const char *filePath, const void *buffer, size_t size, int *err) {
     if (sd_card::g_testResult != TEST_OK) {
-        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;
     }
 
     File file = SD.open(filePath, FILE_WRITE);
 
     if (!file) {
-        *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
         return false;
     }
 
@@ -226,7 +233,7 @@ bool download(const char *filePath, const void *buffer, size_t size, int *err) {
     file.close();
 
     if (written != size) {
-        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;
     }
 
@@ -235,17 +242,17 @@ bool download(const char *filePath, const void *buffer, size_t size, int *err) {
 
 bool deleteFile(const char *filePath, int *err) {
     if (sd_card::g_testResult != TEST_OK) {
-        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;
     }
 
     if (!SD.exists(filePath)) {
-        *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
         return false;
     }
 
     if (!SD.remove(filePath)) {
-        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;
     }
 

@@ -17,7 +17,7 @@
  */
 
 #include "psu.h"
-#include "SD.h"
+#include "SdFat.h"
 #include "util.h"
 
 #ifdef _WIN32
@@ -46,8 +46,6 @@ namespace eez {
 namespace psu {
 namespace simulator {
 namespace arduino {
-
-SimulatorSD SD;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -83,7 +81,7 @@ bool pathExists(const char *path) {
 
 class FileImpl {
     friend class File;
-    friend class SimulatorSD;
+    friend class SdFat;
 
 public:
     FileImpl();
@@ -91,7 +89,7 @@ public:
     ~FileImpl();
 
     operator bool();
-    const char *name();
+    bool getName(char *name, size_t size);
     uint32_t size();
     bool isDirectory();
 
@@ -192,8 +190,10 @@ FileImpl::operator bool() {
     return pathExists(m_path.c_str());
 }
 
-const char *FileImpl::name() {
-    return strrchr(m_path.c_str(), '/');
+bool FileImpl::getName(char *name, size_t size) {
+    strncpy(name, strrchr(m_path.c_str(), '/'), size);
+    name[size] = 0;
+    return true;
 }
 
 uint32_t FileImpl::size() {
@@ -367,8 +367,8 @@ File::operator bool() {
     return m_impl->operator bool();
 }
 
-const char *File::name() {
-    return m_impl->name();
+bool File::getName(char *name, size_t size) {
+    return m_impl->getName(name, size);
 }
 
 uint32_t File::size() {
@@ -421,7 +421,7 @@ void File::print(char value) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool SimulatorSD::begin(uint8_t cs) {
+bool SdFat::begin(uint8_t cs, SPISettings spiSettings) {
 #ifdef EEZ_PSU_SIMULATOR
     // make sure SD card root path exists
     mkdir("/");
@@ -429,17 +429,17 @@ bool SimulatorSD::begin(uint8_t cs) {
     return File("/");
 }
 
-File SimulatorSD::open(const char *path, uint8_t mode) {
+File SdFat::open(const char *path, uint8_t mode) {
     File file(path, mode);
     file.m_impl->open();
     return file;
 }
 
-bool SimulatorSD::exists(const char *path) {
+bool SdFat::exists(const char *path) {
     return pathExists(path);
 }
 
-bool SimulatorSD::mkdir(const char *path) {
+bool SdFat::mkdir(const char *path) {
     if (pathExists(path)) {
         return true;
     }
@@ -464,7 +464,7 @@ bool SimulatorSD::mkdir(const char *path) {
     return result == 0 || result == EEXIST;
 }
 
-bool SimulatorSD::remove(const char *path) {
+bool SdFat::remove(const char *path) {
     std::string realPath = getRealPath(path);
     return ::remove(realPath.c_str()) == 0;
 }

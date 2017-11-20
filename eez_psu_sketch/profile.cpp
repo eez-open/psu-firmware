@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "profile.h"
 #include "persist_conf.h"
@@ -27,7 +27,7 @@
 #include "calibration.h"
 #include "scpi_psu.h"
 #if OPTION_SD_CARD
-#include "SD.h"
+#include "sd_card.h"
 #endif
 #include "idle.h"
 
@@ -47,7 +47,7 @@ void tick(uint32_t tickCount) {
         if (g_saveProfile && !list::isActive() && !calibration::isEnabled() && idle::isIdle()) {
             DebugTrace("Profile 0 saved!");
             saveAtLocation(0);
-            g_saveProfile = false; 
+            g_saveProfile = false;
         }
     }
 }
@@ -124,7 +124,7 @@ void recallChannelsFromProfile(Parameters *profile, int location) {
             if (channel.ytViewRate == 0) {
                 channel.ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
             }
-        
+
             channel.flags.voltageTriggerMode = (TriggerMode)profile->channels[i].flags.u_triggerMode;
             channel.flags.currentTriggerMode = (TriggerMode)profile->channels[i].flags.i_triggerMode;
             channel.flags.triggerOutputState = profile->channels[i].flags.triggerOutputState;
@@ -330,7 +330,7 @@ bool saveAtLocation(int location, char *name) {
                         list::saveList(channel, filePath, NULL);
                         profile.channels[i].flags.listSaved = 1;
                     } else {
-                        SD.remove(filePath);
+                        sd_card::deleteFile(filePath, NULL);
                     }
                 } else {
                     if (currentProfile.flags.isValid) {

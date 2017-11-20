@@ -270,7 +270,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\libraries\scpi-parser\src\scpi\utils.h" />
     <ClInclude Include="..\..\..\src\arduino\Arduino.h" />
     <ClInclude Include="..\..\..\src\arduino\arduino_internal.h" />
-    <ClInclude Include="..\..\..\src\arduino\SD.h" />
+    <ClInclude Include="..\..\..\src\arduino\SdFat.h" />
     <ClInclude Include="..\..\..\src\arduino\SPI.h" />
     <ClInclude Include="..\..\..\src\chips\chips.h" />
     <ClInclude Include="..\..\..\src\dll.h" />
@@ -389,7 +389,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\units.c" />
     <ClCompile Include="..\..\..\..\libraries\scpi-parser\src\impl\utils.c" />
     <ClCompile Include="..\..\..\src\arduino\arduino_impl.cpp" />
-    <ClCompile Include="..\..\..\src\arduino\SD.cpp" />
+    <ClCompile Include="..\..\..\src\arduino\SdFat.cpp" />
     <ClCompile Include="..\..\..\src\chips\chips.cpp" />
     <ClCompile Include="..\..\..\src\ethernet\EthernetUdp2.cpp" />
     <ClCompile Include="..\..\..\src\ethernet\uipethernet_impl.cpp" />
