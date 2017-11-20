@@ -40,12 +40,13 @@ Firmware key features:
 
 We recommend Arduino IDE version 1.6.x or newer to compile and deploy Arduino sketch to the EEZ bench power supply.
 
-1. Download zip archive from the github repository. 
-2. Copy folders `eez_psu_sketch` and `libraries` from the zip archive into Arduino folder on your computer. Arduino folder is e.g. `My Documents\Arduino` on Windows or `Documents/Arduino` on Linux and Mac. 
+1. Download zip archive from the github repository.
+2. Copy folders `eez_psu_sketch` and `libraries` from the zip archive into Arduino folder on your computer. Arduino folder is e.g. `My Documents\Arduino` on Windows or `Documents/Arduino` on Linux and Mac.
 3. Download Ethernet2 library from [here](https://github.com/eez-open/Ethernet2) and copy it to the `libraries` folder.
-4. Open `eez_psu_sketch.ino` in Arduino IDE, check if everything is correct with Verify button
-5. Make sure that *Verify after code upload* option is not set (more details [here](https://github.com/arduino/Arduino/issues/5672)) in File... Preferences and upload the sketch using Upload button.
-6. Remote control can be accessed via Telnet client such as [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/) (connection type: raw, port: 5025) or serial client that comes with Arduino IDE or any other you like.
+4. Dowload SdFat library from [here](https://github.com/greiman/SdFat) and copy it to the `libraries` folder.
+5. Open `eez_psu_sketch.ino` in Arduino IDE, check if everything is correct with Verify button
+6. Make sure that *Verify after code upload* option is not set (more details [here](https://github.com/arduino/Arduino/issues/5672)) in File... Preferences and upload the sketch using Upload button.
+7. Remote control can be accessed via Telnet client such as [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/) (connection type: raw, port: 5025) or serial client that comes with Arduino IDE or any other you like.
 
 ### Simulator
 
@@ -116,23 +117,23 @@ Just as in case of Arduino sketch mentioned above that runs on real hardware you
 EEZ bench power supply sketch source code can be divided into following layers:
 
 - Board
-  
+
   Talks directly to the hardware, i.e. [Arduino Shield +BP module](http://www.envox.hr/eez/bench-power-supply/psu-digital-control.html) (EEPROM, RTC, Ethernet, TLC5925) and [post-regulators](http://www.envox.hr/eez/bench-power-supply/psu-post-regulator.html) (ADC, DAC, IO Expander).
   Part of this layer is eez_psu_lib, a small Arduino library with [definition of all pins](http://www.envox.hr/eez/bench-power-supply/psu-digital-control/psu-arduino-shield-pin-mapping.html) used by EEZ bench power supply.
   This layer depends on Arduino platform API and third party UIPEthernet library.
 
 - Core
-  
+
   Implementation of EEZ bench power supply firmware functionality, for example Channel abstraction.
-  It doesn't work directly with the hardware but uses the board layer, so it doesn't depends on Arduino platform API. 
+  It doesn't work directly with the hardware but uses the board layer, so it doesn't depends on Arduino platform API.
 
 - Control
-  
+
   This layer is using Core layer to implement local and remote control.
-  
+
   Local control is GUI based using TFT touch display. Special tool was developed to assist creation of GUI interface.
   This layer depends on third party library (UTFT_Pro derived from Rinky-Dink Electronics [UTFT](http://www.rinkydinkelectronics.com/library.php?id=51)) that we use to draw graphical primitives.
-  
+
   Remote control is based on SCPI protocol. Check [SCPI reference manual](http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-introduction.html) for available commands.
   This layer depends on third party [scpi-parser](https://github.com/j123b567/scpi-parser) library.
 
@@ -140,7 +141,7 @@ Additionally, simulator introduces two additional layers:
 
 - Simulator Emulation Layer
 
-  This layer is simulator's replacement for the Arduino platform and consists of: 
+  This layer is simulator's replacement for the Arduino platform and consists of:
   - Arduino platform API emulation.
   - [SPI](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus) peripherals emulation.
   - UIPEthernet library emulation.
@@ -155,7 +156,7 @@ Communication between layers is unidirectional with some exceptions:
 
 - IO Expander to Core.
 
-  IO Expander interrupt handler sends GPIO register and ADC snapshot to the Core layer.  
+  IO Expander interrupt handler sends GPIO register and ADC snapshot to the Core layer.
 
 ![Architecture](doc/architecture.png)
 
@@ -255,17 +256,17 @@ This tool creates JSON based eez-project file which contains definitions of GUI 
 JSON file is then compiled to C++ source code files (`gui_document.cpp`, `gui_document.h`, `actions.cpp` and `actions.h`)
 that are included as an integral part of the sketch.
 
-**Controller** is the glue code between Model and View. It is implemented in the all the files that start with "gui_" prefix. 
+**Controller** is the glue code between Model and View. It is implemented in the all the files that start with "gui_" prefix.
 
 Also, there is some utility code that is used, for example, to interact with the hardware:
 
 - `lcd.cpp`, `lcd.h` and UTFT_Pro is used to draw graphical primitives on the screen.
-- `touch.cpp` and `touch.h` is used to get data from the touch hardware. Input from the touch hardware is filtered using `touch_filter.cpp` and `touch_filter.h` - check [this](https://www.youtube.com/watch?v=jofIdGx2gTg) and [this](https://www.youtube.com/watch?v=_mrBomMLKiI) video. 
-- `font.cpp` and `font.h` is used to to access font definitions created with EEZ Studio.  
+- `touch.cpp` and `touch.h` is used to get data from the touch hardware. Input from the touch hardware is filtered using `touch_filter.cpp` and `touch_filter.h` - check [this](https://www.youtube.com/watch?v=jofIdGx2gTg) and [this](https://www.youtube.com/watch?v=_mrBomMLKiI) video.
+- `font.cpp` and `font.h` is used to to access font definitions created with EEZ Studio.
 
 #### Remote control: SCPI
 
-We are using [third party SCPI parser](https://github.com/j123b567/scpi-parser) and have our [own branch](https://github.com/mvladic/scpi-parser) where command definitions could be in AVR PROGMEM that helps preserve some memory space when Arduino Mega board is used (check [avr_progmem](https://github.com/mvladic/scpi-parser/tree/avr_progmem) branch). 
+We are using [third party SCPI parser](https://github.com/j123b567/scpi-parser) and have our [own branch](https://github.com/mvladic/scpi-parser) where command definitions could be in AVR PROGMEM that helps preserve some memory space when Arduino Mega board is used (check [avr_progmem](https://github.com/mvladic/scpi-parser/tree/avr_progmem) branch).
 
 There are two entry points for the SCPI commands: serial port and TCP server. Check `serial_psu.cpp` and `serial_psu.h` to see how SCPI commands are received on serial port, and `ethernet.cpp` and `ethernet.h` for the TCP server.
 
