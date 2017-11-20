@@ -21,6 +21,7 @@
 #include <string>
 
 #define SD_SCK_HZ(maxSpeed) SPISettings(maxSpeed, MSBFIRST, SPI_MODE0)
+#define SD_SCK_MHZ(maxMhz) SPISettings(1000000UL*maxMhz, MSBFIRST, SPI_MODE0)
 // SPI divisor constants
 /** Set SCK to max rate of F_CPU/2. */
 #define SPI_FULL_SPEED SD_SCK_MHZ(50)
