@@ -168,7 +168,7 @@ bool exists(const char *dirPath, int *err) {
     return true;
 }
 
-bool catalog(const char *dirPath, void *param, void (*callback)(void *param, const char *name, FileType type, size_t size), int *err) {
+bool catalog(const char *dirPath, void *param, void (*callback)(void *param, const char *name, const char *type, size_t size), int *err) {
     if (sd_card::g_testResult != TEST_OK) {
         if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;
@@ -191,13 +191,13 @@ bool catalog(const char *dirPath, void *param, void (*callback)(void *param, con
         char name[MAX_PATH_LENGTH + 1] = {0};
         entry.getName(name, MAX_PATH_LENGTH);
         if (entry.isDirectory()) {
-            callback(param, name, FILE_TYPE_FOLD, entry.size());
+            callback(param, name, "FOLD", entry.size());
         } else if (util::endsWith(name, list::LIST_EXT)) {
-            callback(param, name, FILE_TYPE_TXT, entry.size());
+            callback(param, name, "LIST", entry.size());
         } else if (util::endsWith(name, profile::PROFILE_EXT)) {
-            callback(param, name, FILE_TYPE_STAT, entry.size());
+            callback(param, name, "PROF", entry.size());
         } else {
-            callback(param, name, FILE_TYPE_BIN, entry.size());
+            callback(param, name, "BIN", entry.size());
         }
 
         entry.close();

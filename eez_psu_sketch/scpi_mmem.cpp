@@ -179,10 +179,10 @@ scpi_result_t scpi_cmd_mmemoryCdirectoryQ(scpi_t *context) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void catalogCallback(void *param, const char *name, sd_card::FileType type, size_t size) {
+void catalogCallback(void *param, const char *name, const char *type, size_t size) {
     scpi_t *context = (scpi_t *)param;
 
-    char buffer[MAX_PATH_LENGTH + 6 + 10 + 1];
+    char buffer[MAX_PATH_LENGTH + 10 + 10 + 1];
 
     // max. MAX_PATH_LENGTH characters
     size_t nameLength = strlen(name);
@@ -195,18 +195,11 @@ void catalogCallback(void *param, const char *name, sd_card::FileType type, size
         position = nameLength;
     }
     
-    // max. 6 characters
-    switch (type) {
-    case sd_card::FILE_TYPE_BIN:
-        strcpy(buffer + position, ",BIN,");
-        position += 5;
-        break;
-    
-    default:
-        strcpy(buffer + position, ",FOLD,");
-        position += 6;
-        break;
-    }
+    // max. 10 characters
+    buffer[position++] = ',';
+    strcpy(buffer + position, type);
+    position += strlen(type);
+    buffer[position++] = ',';
 
     // max. 10 characters (for 4294967296)
     sprintf(buffer + position, "%lu", (unsigned long)size);
