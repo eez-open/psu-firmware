@@ -37,6 +37,7 @@
 #include <dirent.h>
 #include <sys/stat.h> // mkdir
 #include <errno.h>
+#include <unistd.h>
 
 #endif
 
@@ -531,7 +532,11 @@ bool SdFat::mkdir(const char *path) {
 
 bool SdFat::rmdir(const char *path) {
     std::string realPath = getRealPath(path);
+#ifdef _WIN32
     int result = ::_rmdir(realPath.c_str());
+#else
+    int result = ::rmdir(realPath.c_str());
+#endif
     return result == 0;
 }
 

@@ -333,9 +333,9 @@ bool copyFile(const char *sourcePath, const char *destinationPath, int *err) {
 
     while (true) {
         int size = sourceFile.read(buffer, CHUNK_SIZE);
-        
+
         size_t written = destinationFile.write((const uint8_t *)buffer, size);
-        if (written != size) {
+        if (size < 0 || written != (size_t)size) {
 #if OPTION_DISPLAY
             gui::hideProgressPage();
 #endif
