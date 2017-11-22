@@ -76166,11 +76166,11 @@
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_stor_list"
           },
           {
-            "name": "MMEMory:LOAD:STATe",
+            "name": "MMEMory:LOAD:PROFile",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_load_stat"
           },
           {
-            "name": "MMEMory:STORe:STATe",
+            "name": "MMEMory:STORe:PROFile",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_stor_stat"
           }
         ]

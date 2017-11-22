@@ -124,8 +124,8 @@
     SCPI_COMMAND("MMEMory:UNLock", scpi_cmd_mmemoryUnlock) \
     SCPI_COMMAND("MMEMory:LOAD:LIST#", scpi_cmd_mmemoryLoadList) \
     SCPI_COMMAND("MMEMory:STORe:LIST#", scpi_cmd_mmemoryStoreList) \
-    SCPI_COMMAND("MMEMory:LOAD:STATe", scpi_cmd_mmemoryLoadState) \
-    SCPI_COMMAND("MMEMory:STORe:STATe", scpi_cmd_mmemoryStoreState) \
+    SCPI_COMMAND("MMEMory:LOAD:PROFile", scpi_cmd_mmemoryLoadProfile) \
+    SCPI_COMMAND("MMEMory:STORe:PROFile", scpi_cmd_mmemoryStoreProfile) \
     SCPI_COMMAND("OUTPut:MODE?", scpi_cmd_outputModeQ) \
     SCPI_COMMAND("OUTPut:PROTection:CLEar", scpi_cmd_outputProtectionClear) \
     SCPI_COMMAND("OUTPut:PROTection:COUPle", scpi_cmd_outputProtectionCouple) \

@@ -25,7 +25,7 @@ namespace psu {
 /// PSU configuration profiles (save, recall, ...).
 namespace profile {
 
-static const char *PROFILE_EXT = ".conf";
+static const char *PROFILE_EXT = ".profile";
 
 /// Channel binary flags stored in profile.
 struct ChannelFlags {

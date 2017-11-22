@@ -676,7 +676,7 @@ scpi_result_t scpi_cmd_mmemoryStoreList(scpi_t *context) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-scpi_result_t scpi_cmd_mmemoryLoadState(scpi_t *context) {
+scpi_result_t scpi_cmd_mmemoryLoadProfile(scpi_t *context) {
 #if OPTION_SD_CARD
     char filePath[MAX_PATH_LENGTH + 1];
     if (!getFilePath(context, filePath, true)) {
@@ -696,7 +696,7 @@ scpi_result_t scpi_cmd_mmemoryLoadState(scpi_t *context) {
 #endif
 }
 
-scpi_result_t scpi_cmd_mmemoryStoreState(scpi_t *context) {
+scpi_result_t scpi_cmd_mmemoryStoreProfile(scpi_t *context) {
 #if OPTION_SD_CARD
     if (persist_conf::isSdLocked()) {
         SCPI_ErrorPush(context, SCPI_ERROR_MEDIA_PROTECTED);
