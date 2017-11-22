@@ -557,6 +557,23 @@ void outputOnTime(scpi_t* context, uint32_t time) {
 	SCPI_ResultText(context, str);
 }
 
+bool checkPassword(scpi_t *context, const char *againstPassword) {
+    const char *password;
+    size_t len;
+
+    if (!SCPI_ParamCharacters(context, &password, &len, true)) {
+        return false;
+    }
+
+	size_t nPassword = strlen(againstPassword);
+    if (nPassword != len || strncmp(password, againstPassword, len) != 0) {
+        SCPI_ErrorPush(context, SCPI_ERROR_INVALID_CAL_PASSWORD);
+        return false;
+    }
+
+    return true;
+}
+
 }
 }
 } // namespace eez::psu::scpi

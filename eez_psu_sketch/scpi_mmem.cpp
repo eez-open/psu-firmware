@@ -561,7 +561,12 @@ scpi_result_t scpi_cmd_mmemoryTimeQ(scpi_t *context) {
 
 scpi_result_t scpi_cmd_mmemoryLock(scpi_t *context) {
 #if OPTION_SD_CARD
+    if (!checkPassword(context, persist_conf::devConf.calibration_password)) {
+        return SCPI_RES_ERR;
+    }
+
     persist_conf::setSdLocked(true);
+
     return SCPI_RES_OK;
 #else
     SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
@@ -581,7 +586,12 @@ scpi_result_t scpi_cmd_mmemoryLockQ(scpi_t *context) {
 
 scpi_result_t scpi_cmd_mmemoryUnlock(scpi_t *context) {
 #if OPTION_SD_CARD
+    if (!checkPassword(context, persist_conf::devConf.calibration_password)) {
+        return SCPI_RES_ERR;
+    }
+
     persist_conf::setSdLocked(false);
+
     return SCPI_RES_OK;
 #else
     SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);

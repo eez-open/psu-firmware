@@ -690,25 +690,8 @@ scpi_result_t scpi_cmd_systemPonOutputDisableQ(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-static bool check_password(scpi_t *context) {
-    const char *password;
-    size_t len;
-
-    if (!SCPI_ParamCharacters(context, &password, &len, true)) {
-        return false;
-    }
-
-	size_t nPassword = strlen(persist_conf::devConf2.systemPassword);
-    if (nPassword != len || strncmp(persist_conf::devConf2.systemPassword, password, len) != 0) {
-        SCPI_ErrorPush(context, SCPI_ERROR_INVALID_SYS_PASSWORD);
-        return false;
-    }
-
-    return true;
-}
-
 scpi_result_t scpi_cmd_systemPasswordNew(scpi_t *context) {
-    if (!check_password(context)) {
+    if (!checkPassword(context, persist_conf::devConf.calibration_password)) {
         return SCPI_RES_ERR;
     }
 
