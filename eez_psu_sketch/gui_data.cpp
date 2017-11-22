@@ -53,6 +53,7 @@ namespace data {
 Value g_alertMessage;
 Value g_alertMessage2;
 Value g_alertMessage3;
+Value g_progress;
 
 static struct ChannelSnapshot {
     unsigned int mode;
@@ -1178,6 +1179,10 @@ Value get(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_ASYNC_OPERATION_THROBBER) {
         static char *throbber[] = {"|", "/", "-", "\\", "|", "/", "-", "\\"};
         return data::Value(throbber[(millis() % 1000) / 125]);
+    }
+
+    if (id == DATA_ID_PROGRESS) {
+        return g_progress;
     }
 
     if (id == DATA_ID_IO_PINS_INHIBIT_STATE) {

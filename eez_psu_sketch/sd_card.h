@@ -44,9 +44,16 @@ bool makeParentDir(const char *filePath);
 
 bool exists(const char *dirPath, int *err);
 bool catalog(const char *dirPath, void *param, void (*callback)(void *param, const char *name, FileType type, size_t size), int *err);
+bool catalogLength(const char *dirPath, size_t *length, int *err);
 bool upload(const char *filePath, void *param, void (*callback)(void *param, const void *buffer, size_t size), int *err);
 bool download(const char *filePath, const void *buffer, size_t size, int *err);
+bool moveFile(const char *sourcePath, const char *destinationPath, int *err);
+bool copyFile(const char *sourcePath, const char *destinationPath, int *err);
 bool deleteFile(const char *filePath, int *err);
+bool makeDir(const char *dirPath, int *err);
+bool removeDir(const char *dirPath, int *err);
+bool getDate(const char *filePath, uint8_t &year, uint8_t &month, uint8_t &day, int *err);
+bool getTime(const char *filePath, uint8_t &hour, uint8_t &minute, uint8_t &second, int *err);
 
 }
 }

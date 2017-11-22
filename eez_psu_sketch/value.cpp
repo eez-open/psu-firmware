@@ -38,7 +38,8 @@ ValueTypeTraits g_valueTypeTraits[] = {
     { "rpm",  RPM_NUM_SIGNIFICANT_DECIMAL_DIGITS        , powf(10.0f, (float)RPM_NUM_SIGNIFICANT_DECIMAL_DIGITS)          },
     { "ohm",  LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS       , powf(10.0f, (float)LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS)         },
     { "Kohm", LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS       , powf(10.0f, (float)LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS)         },
-    { "Mohm", LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS       , powf(10.0f, (float)LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS)         }
+    { "Mohm", LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS       , powf(10.0f, (float)LOAD_NUM_SIGNIFICANT_DECIMAL_DIGITS)         },
+    { "%",    PERCENT_NUM_SIGNIFICANT_DECIMAL_DIGITS    , powf(10.0f, (float)PERCENT_NUM_SIGNIFICANT_DECIMAL_DIGITS)      }
 };
 
 float g_precisions[] = {

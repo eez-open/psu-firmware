@@ -20,6 +20,8 @@
 #include "SdFat.h"
 #include "util.h"
 
+#include <time.h>
+
 #ifdef _WIN32
 
 #undef INPUT
@@ -94,6 +96,8 @@ public:
     bool isDirectory();
 
     void close();
+
+    bool dirEntry(dir_t* dir);
 
     void rewindDirectory();
     File openNextFile(uint8_t mode = READ_ONLY);
@@ -239,6 +243,48 @@ void FileImpl::close() {
     m_path = "";
 }
 
+bool FileImpl::dirEntry(dir_t* dir) {
+    time_t mtime;
+
+#ifdef _WIN32
+    HANDLE hFile = CreateFileA(getRealPath().c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (hFile == INVALID_HANDLE_VALUE) {
+        return false;
+    }
+
+    FILETIME lastWriteTime;
+    BOOL result = GetFileTime(hFile, NULL, NULL, &lastWriteTime);
+
+    CloseHandle(hFile);
+
+    if (!result) {
+        return false;
+    }
+
+    ULARGE_INTEGER ull;
+
+    ull.LowPart = lastWriteTime.dwLowDateTime;
+    ull.HighPart = lastWriteTime.dwHighDateTime;
+
+    mtime = ull.QuadPart / 10000000ULL - 11644473600ULL;
+#else
+    struct stat st = {0};
+    int ret = lstat(getRealPath().c_str(), &st);
+    if (ret == -1) {
+        return false;
+    }
+    
+    mtime = st.st_mtime;
+#endif
+
+    struct tm *tmmtime = gmtime(&mtime);
+
+    dir->lastWriteDate = FAT_DATE(tmmtime->tm_year + 1900, tmmtime->tm_mon + 1, tmmtime->tm_mday);
+    dir->lastWriteTime = FAT_TIME(tmmtime->tm_hour, tmmtime->tm_min, tmmtime->tm_sec);
+
+    return true;
+}
+
 void FileImpl::rewindDirectory() {
 #ifdef _WIN32
     if (m_hFind != INVALID_HANDLE_VALUE) {
@@ -359,8 +405,16 @@ File &File::operator =(const File &file) {
 File::~File() {
     m_impl->unref();
 }
+
 void File::close() {
     return m_impl->close();
+}
+
+void File::dateTimeCallback(void (*dateTime)(uint16_t* date, uint16_t* time)) {
+}
+
+bool File::dirEntry(dir_t* dir) {
+    return m_impl->dirEntry(dir);
 }
 
 File::operator bool() {
@@ -439,6 +493,17 @@ bool SdFat::exists(const char *path) {
     return pathExists(path);
 }
 
+bool SdFat::rename(const char *sourcePath, const char *destinationPath) {
+    std::string realSourcePath = getRealPath(sourcePath);
+    std::string realDestinationPath = getRealPath(destinationPath);
+    return ::rename(realSourcePath.c_str(), realDestinationPath.c_str()) == 0;
+}
+
+bool SdFat::remove(const char *path) {
+    std::string realPath = getRealPath(path);
+    return ::remove(realPath.c_str()) == 0;
+}
+
 bool SdFat::mkdir(const char *path) {
     if (pathExists(path)) {
         return true;
@@ -464,9 +529,10 @@ bool SdFat::mkdir(const char *path) {
     return result == 0 || result == EEXIST;
 }
 
-bool SdFat::remove(const char *path) {
+bool SdFat::rmdir(const char *path) {
     std::string realPath = getRealPath(path);
-    return ::remove(realPath.c_str()) == 0;
+    int result = ::_rmdir(realPath.c_str());
+    return result == 0;
 }
 
 }

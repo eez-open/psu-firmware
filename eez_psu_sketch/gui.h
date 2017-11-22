@@ -38,6 +38,10 @@ void showStandbyPage();
 void showEnteringStandbyPage();
 void showEthernetInit();
 
+void showProgressPage();
+bool updateProgressPage(size_t processedSoFar, size_t totalSize);
+void hideProgressPage();
+
 void setTextMessage(const char *message, unsigned int len);
 void clearTextMessage();
 const char *getTextMessage();

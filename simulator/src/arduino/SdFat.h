@@ -38,6 +38,18 @@
 /** Set SCK rate to F_CPU/32. */
 #define SPI_SIXTEENTH_SPEED SD_SCK_HZ(F_CPU/32)
 
+#define FAT_DATE(year, month, day) ((((year) - 1980) << 9) | ((month) << 5) | (day))
+
+#define FAT_YEAR(date) (1980 + ((date) >> 9))
+#define FAT_MONTH(date) (((date) >> 5) & 0XF)
+#define FAT_DAY(date) ((date) & 0X1F)
+
+#define FAT_TIME(hour, minute, second) (((hour) << 11) | ((minute) << 5) | ((second) >> 1))
+
+#define FAT_HOUR(time) ((time) >> 11)
+#define FAT_MINUTE(time) (((time) >> 5) & 0X3F)
+#define FAT_SECOND(time) (2*((time) & 0X1F))
+
 namespace eez {
 namespace psu {
 namespace simulator {
@@ -48,6 +60,11 @@ namespace arduino {
 #define READ_ONLY  3 // O_RDONLY
 
 class FileImpl;
+
+struct dir_t {
+    uint16_t lastWriteTime;
+    uint16_t lastWriteDate;
+};
 
 class File {
     friend class SdFat;
@@ -60,6 +77,10 @@ public:
 
     ~File();
     void close();
+
+    static void dateTimeCallback(void (*dateTime)(uint16_t* date, uint16_t* time));
+
+    bool dirEntry(dir_t* dir);
 
     operator bool();
     bool getName(char *name, size_t size);
@@ -88,9 +109,13 @@ public:
     bool begin(uint8_t cs, SPISettings spiSettings = SPI_FULL_SPEED);
     File open(const char *path, uint8_t mode = FILE_READ);
     bool exists(const char *path);
-    bool mkdir(const char *path);
+    bool rename(const char *sourcePath, const char *destinationPath);
     bool remove(const char *path);
+    bool mkdir(const char *path);
+    bool rmdir(const char *path);
 };
+
+typedef File SdFile;
 
 }
 }

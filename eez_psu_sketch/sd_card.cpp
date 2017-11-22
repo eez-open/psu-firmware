@@ -21,6 +21,11 @@
 #if OPTION_SD_CARD
 
 #include "sd_card.h"
+#include "datetime.h"
+
+#if OPTION_DISPLAY
+#include "gui.h"
+#endif
 
 SdFat SD;
 
@@ -32,6 +37,13 @@ TestResult g_testResult = TEST_FAILED;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void dateTime(uint16_t* date, uint16_t* time) {
+    int year, month, day, hour, minute, second;
+    datetime::breakTime(datetime::nowUtc(), year, month, day, hour, minute, second);
+    *date = FAT_DATE(year, month, day);
+    *time = FAT_TIME(hour, minute, second);
+}
+
 void init() {
     if (!SD.begin(LCDSD_CS, SPI_DIV3_SPEED)) {
         g_testResult = TEST_FAILED;
@@ -40,6 +52,8 @@ void init() {
         makeParentDir("/");
 #endif
         g_testResult = TEST_OK;
+
+        SdFile::dateTimeCallback(dateTime);
     }
 }
 
@@ -183,6 +197,34 @@ bool catalog(const char *dirPath, void *param, void (*callback)(void *param, con
     }
 }
 
+bool catalogLength(const char *dirPath, size_t *length, int *err) {
+    if (sd_card::g_testResult != TEST_OK) {
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    File dir = SD.open(dirPath);
+    if (!dir) {
+        if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        return false;
+    }
+
+    *length = 0;
+
+    dir.rewindDirectory();
+
+    while (true) {
+        File entry = dir.openNextFile();
+        if (!entry) {
+            break;
+        }
+        ++(*length);
+        entry.close();
+    }
+
+    return true;
+}
+
 bool upload(const char *filePath, void *param, void (*callback)(void *param, const void *buffer, size_t size), int *err) {
     if (sd_card::g_testResult != TEST_OK) {
         if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
@@ -240,6 +282,108 @@ bool download(const char *filePath, const void *buffer, size_t size, int *err) {
     return true;
 }
 
+bool moveFile(const char *sourcePath, const char *destinationPath, int *err) {
+    if (sd_card::g_testResult != TEST_OK) {
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    if (!SD.exists(sourcePath)) {
+        if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        return false;
+    }
+
+    if (!SD.rename(sourcePath, destinationPath)) {
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    return true;
+}
+
+bool copyFile(const char *sourcePath, const char *destinationPath, int *err) {
+    if (sd_card::g_testResult != TEST_OK) {
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    File sourceFile = SD.open(sourcePath, FILE_READ);
+
+    if (!sourceFile) {
+        if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        return false;
+    }
+
+    File destinationFile = SD.open(destinationPath, FILE_WRITE);
+
+    if (!destinationFile) {
+        sourceFile.close();
+        if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        return false;
+    }
+
+#if OPTION_DISPLAY
+    gui::showProgressPage();
+#endif
+
+    const int CHUNK_SIZE = 512;
+    uint8_t buffer[CHUNK_SIZE];
+    size_t totalSize = sourceFile.size();
+    size_t totalWritten = 0;
+
+    while (true) {
+        int size = sourceFile.read(buffer, CHUNK_SIZE);
+        
+        size_t written = destinationFile.write((const uint8_t *)buffer, size);
+        if (written != size) {
+#if OPTION_DISPLAY
+            gui::hideProgressPage();
+#endif
+            sourceFile.close();
+            destinationFile.close();
+            deleteFile(destinationPath, NULL);
+            if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+            return false;
+        }
+
+        totalWritten += written;
+
+#if OPTION_DISPLAY
+        if (!gui::updateProgressPage(totalWritten, totalSize)) {
+            sourceFile.close();
+            destinationFile.close();
+
+            deleteFile(destinationPath, NULL);
+            if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+
+            gui::hideProgressPage();
+            return false;
+        }
+#endif
+
+        if (size < CHUNK_SIZE) {
+            break;
+        }
+
+        psu::tick();
+    }
+
+    sourceFile.close();
+    destinationFile.close();
+
+#if OPTION_DISPLAY
+    gui::hideProgressPage();
+#endif
+
+    if (totalWritten != totalSize) {
+        deleteFile(destinationPath, NULL);
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    return true;
+}
+
 bool deleteFile(const char *filePath, int *err) {
     if (sd_card::g_testResult != TEST_OK) {
         if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
@@ -258,6 +402,124 @@ bool deleteFile(const char *filePath, int *err) {
 
     return true;
 }
+
+bool makeDir(const char *dirPath, int *err) {
+    if (sd_card::g_testResult != TEST_OK) {
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    if (!SD.mkdir(dirPath)) {
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    return true;
+}
+
+bool removeDir(const char *dirPath, int *err) {
+    if (sd_card::g_testResult != TEST_OK) {
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    if (!SD.rmdir(dirPath)) {
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    return true;
+}
+
+void getDateTime(
+    dir_t *d,
+    uint8_t *resultYear, uint8_t *resultMonth, uint8_t *resultDay,
+    uint8_t *resultHour, uint8_t *resultMinute, uint8_t *resultSecond
+) {
+    int year = FAT_YEAR(d->lastWriteDate);
+    int month = FAT_MONTH(d->lastWriteDate);
+    int day = FAT_DAY(d->lastWriteDate);
+
+    int hour = FAT_HOUR(d->lastWriteTime);
+    int minute = FAT_MINUTE(d->lastWriteTime);
+    int second = FAT_SECOND(d->lastWriteTime);
+
+    uint32_t utc = datetime::makeTime(year, month, day, hour, minute, second);
+    uint32_t local = datetime::utcToLocal(utc, persist_conf::devConf.time_zone, (datetime::DstRule)persist_conf::devConf2.dstRule);
+    datetime::breakTime(local, year, month, day, hour, minute, second);
+
+    if (resultYear) {
+        *resultYear = (uint8_t)(year - 2000);
+        *resultMonth = (uint8_t)month;
+        *resultDay = (uint8_t)day;
+    }
+
+    if (resultHour) {
+        *resultHour = (uint8_t)hour;
+        *resultMinute = (uint8_t)minute;
+        *resultSecond = (uint8_t)second;
+    }
+}
+
+bool getDate(const char *filePath, uint8_t &year, uint8_t &month, uint8_t &day, int *err) {
+    if (sd_card::g_testResult != TEST_OK) {
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    File file = SD.open(filePath, FILE_READ);
+
+    if (!file) {
+        if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        return false;
+    }
+
+    dir_t d;
+    bool result = file.dirEntry(&d);
+    file.close();
+
+    if (!result) {
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    getDateTime(&d, &year, &month, &day, NULL, NULL, NULL);
+
+    return true;
+}
+
+bool getTime(const char *filePath, uint8_t &hour, uint8_t &minute, uint8_t &second, int *err) {
+    if (sd_card::g_testResult != TEST_OK) {
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    if (!SD.exists(filePath)) {
+        if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        return false;
+    }
+
+    File file = SD.open(filePath, FILE_READ);
+
+    if (!file) {
+        if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+        return false;
+    }
+
+    dir_t d;
+    bool result = file.dirEntry(&d);
+    file.close();
+
+    if (!result) {
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
+
+    getDateTime(&d, NULL, NULL, NULL, &hour, &minute, &second);
+
+    return true;
+}
+
 
 }
 }
