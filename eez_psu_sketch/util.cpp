@@ -589,6 +589,16 @@ void replaceCharacter(char *str, char ch, char repl) {
     }
 }
 
+bool endsWith(const char *str, const char *suffix) {
+    if (!str || !suffix)
+        return false;
+    size_t strLen = strlen(str);
+    size_t suffixLen = strlen(suffix);
+    if (suffixLen > strLen)
+        return false;
+    return strncmp(str + strLen - suffixLen, suffix, suffixLen) == 0;
+}
+
 }
 }
 } // namespace eez::psu::util

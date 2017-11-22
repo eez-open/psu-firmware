@@ -130,6 +130,12 @@ bool getFilePath(scpi_t *context, char *filePath, bool mandatory) {
     return true;
 }
 
+void addExtension(char *filePath, const char *ext) {
+    if (!util::endsWith(filePath, ext)) {
+        strcat(filePath, ext);
+    }
+}
+
 scpi_result_t scpi_cmd_mmemoryCdirectory(scpi_t *context) {
 #if OPTION_SD_CARD
     char dirPath[MAX_PATH_LENGTH + 1];
@@ -648,10 +654,14 @@ scpi_result_t scpi_cmd_mmemoryStoreList(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    char filePath[MAX_PATH_LENGTH + 1];
+    const char *EXT = ".list";
+
+    char filePath[MAX_PATH_LENGTH + sizeof(EXT) + 1];
     if (!getFilePath(context, filePath, true)) {
         return SCPI_RES_ERR;
     }
+
+    addExtension(filePath, EXT);
 
     int err;
     if (!list::saveList(*channel, filePath, &err)) {
@@ -695,10 +705,14 @@ scpi_result_t scpi_cmd_mmemoryStoreState(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    char filePath[MAX_PATH_LENGTH + 1];
+    const char *EXT = ".conf";
+
+    char filePath[MAX_PATH_LENGTH + sizeof(EXT) + 1];
     if (!getFilePath(context, filePath, true)) {
         return SCPI_RES_ERR;
     }
+
+    addExtension(filePath, EXT);
 
     int err;
     if (!profile::saveToFile(filePath, &err)) {
