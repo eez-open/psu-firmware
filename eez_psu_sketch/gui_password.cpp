@@ -93,7 +93,7 @@ static void onNewPasswordOk(char *text) {
     
     if (!isOk) {
         // invalid password, return to keypad
-        if (err == SCPI_ERROR_SYS_PASSWORD_TOO_SHORT || err == SCPI_ERROR_CAL_PASSWORD_TOO_SHORT) {
+        if (err == SCPI_ERROR_PASSWORD_TOO_SHORT || err == SCPI_ERROR_PASSWORD_TOO_SHORT) {
             errorMessageP(PSTR("Password too short!"));
         } else {
             errorMessageP(PSTR("Password too long!"));

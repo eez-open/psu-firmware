@@ -691,7 +691,7 @@ scpi_result_t scpi_cmd_systemPonOutputDisableQ(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemPasswordNew(scpi_t *context) {
-    if (!checkPassword(context, persist_conf::devConf.calibration_password)) {
+    if (!checkPassword(context, persist_conf::devConf2.systemPassword)) {
         return SCPI_RES_ERR;
     }
 

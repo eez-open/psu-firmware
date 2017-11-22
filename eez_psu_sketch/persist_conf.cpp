@@ -260,12 +260,12 @@ bool saveDevice2() {
 
 bool isSystemPasswordValid(const char *new_password, size_t new_password_len, int16_t &err) {
     if (new_password_len < PASSWORD_MIN_LENGTH) {
-		err = SCPI_ERROR_SYS_PASSWORD_TOO_SHORT;
+		err = SCPI_ERROR_PASSWORD_TOO_SHORT;
 		return false;
     }
 
     if (new_password_len > PASSWORD_MAX_LENGTH) {
-		err = SCPI_ERROR_SYS_PASSWORD_TOO_LONG;
+		err = SCPI_ERROR_PASSWORD_TOO_LONG;
         return false;
     }
 
@@ -284,12 +284,12 @@ bool changeSystemPassword(const char *new_password, size_t new_password_len) {
 
 bool isCalibrationPasswordValid(const char *new_password, size_t new_password_len, int16_t &err) {
     if (new_password_len < PASSWORD_MIN_LENGTH) {
-		err = SCPI_ERROR_CAL_PASSWORD_TOO_SHORT;
+		err = SCPI_ERROR_PASSWORD_TOO_SHORT;
 		return false;
     }
 
     if (new_password_len > PASSWORD_MAX_LENGTH) {
-		err = SCPI_ERROR_CAL_PASSWORD_TOO_LONG;
+		err = SCPI_ERROR_PASSWORD_TOO_LONG;
         return false;
     }
 

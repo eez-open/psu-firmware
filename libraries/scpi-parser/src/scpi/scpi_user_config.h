@@ -68,17 +68,14 @@ extern "C" {
     X(SCPI_ERROR_MEDIA_PROTECTED,                           -258, "Media protected")                              \
     X(SCPI_ERROR_CHANNEL_NOT_FOUND,                          100, "Channel not found")                            \
     X(SCPI_ERROR_CALIBRATION_STATE_IS_OFF,                   101, "Calibration state is off")                     \
-    X(SCPI_ERROR_INVALID_CAL_PASSWORD,                       102, "Invalid cal password")                         \
+    X(SCPI_ERROR_INVALID_PASSWORD,                           102, "Invalid password")                             \
     X(SCPI_ERROR_BAD_SEQUENCE_OF_CALIBRATION_COMMANDS,       104, "Bad sequence of calibration commands")         \
-    X(SCPI_ERROR_CAL_PASSWORD_TOO_LONG,                      105, "Cal password too long")                        \
-    X(SCPI_ERROR_CAL_PASSWORD_TOO_SHORT,                     106, "Cal password too short")                       \
+    X(SCPI_ERROR_PASSWORD_TOO_LONG,                          105, "Password too long")                            \
+    X(SCPI_ERROR_PASSWORD_TOO_SHORT,                         106, "Password too short")                           \
     X(SCPI_ERROR_CAL_VALUE_OUT_OF_RANGE,                     107, "Cal value out of range")                       \
     X(SCPI_ERROR_CAL_OUTPUT_DISABLED,                        108, "Cal output disabled")                          \
     X(SCPI_ERROR_INVALID_CAL_DATA,                           109, "Invalid cal data")                             \
     X(SCPI_ERROR_CAL_PARAMS_MISSING,                         110, "Cal params missing or corrupted")              \
-    X(SCPI_ERROR_INVALID_SYS_PASSWORD,                       122, "Invalid sys password")                         \
-    X(SCPI_ERROR_SYS_PASSWORD_TOO_LONG,                      125, "Sys password too long")                        \
-    X(SCPI_ERROR_SYS_PASSWORD_TOO_SHORT,                     126, "Sys password too short")                       \
     X(SCPI_ERROR_POWER_LIMIT_EXCEEDED,                       150, "Power limit exceeded")                         \
 	X(SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED,                     151, "Voltage limit exceeded")                       \
 	X(SCPI_ERROR_CURRENT_LIMIT_EXCEEDED,                     152, "Current limit exceeded")                       \

@@ -567,7 +567,7 @@ bool checkPassword(scpi_t *context, const char *againstPassword) {
 
 	size_t nPassword = strlen(againstPassword);
     if (nPassword != len || strncmp(password, againstPassword, len) != 0) {
-        SCPI_ErrorPush(context, SCPI_ERROR_INVALID_CAL_PASSWORD);
+        SCPI_ErrorPush(context, SCPI_ERROR_INVALID_PASSWORD);
         return false;
     }
 
