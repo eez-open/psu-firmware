@@ -75670,52 +75670,6 @@
   "scpi": {
     "subsystems": [
       {
-        "name": "DEBUG",
-        "commands": [
-          {
-            "name": "DEBUg"
-          },
-          {
-            "name": "DEBUg:WDOG"
-          },
-          {
-            "name": "DEBUg:WDOG?"
-          },
-          {
-            "name": "DEBUg:ONTime?"
-          },
-          {
-            "name": "DEBUg:VOLTage"
-          },
-          {
-            "name": "DEBUg:CURRent"
-          },
-          {
-            "name": "DEBUg:MEASure:VOLTage"
-          },
-          {
-            "name": "DEBUg:MEASure:CURRent"
-          }
-        ]
-      },
-      {
-        "name": "SYSTem",
-        "commands": [
-          {
-            "name": "SYSTem:DATE:CLEar"
-          },
-          {
-            "name": "SYSTem:TIME:CLEar"
-          },
-          {
-            "name": "SYSTem:SERial"
-          },
-          {
-            "name": "SYSTem:SERial?"
-          }
-        ]
-      },
-      {
         "name": "1. Introduction",
         "helpLink": "EEZ PSU SCPI reference 1 - introduction.html",
         "commands": []
@@ -75869,6 +75823,35 @@
           {
             "name": "CALibration[:MODE]?",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_mode"
+          }
+        ]
+      },
+      {
+        "name": "DEBUG",
+        "commands": [
+          {
+            "name": "DEBUg"
+          },
+          {
+            "name": "DEBUg:WDOG"
+          },
+          {
+            "name": "DEBUg:WDOG?"
+          },
+          {
+            "name": "DEBUg:ONTime?"
+          },
+          {
+            "name": "DEBUg:VOLTage"
+          },
+          {
+            "name": "DEBUg:CURRent"
+          },
+          {
+            "name": "DEBUg:MEASure:VOLTage"
+          },
+          {
+            "name": "DEBUg:MEASure:CURRent"
           }
         ]
       },
@@ -76914,6 +76897,23 @@
           {
             "name": "SYSTem:VERSion?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_vers"
+          }
+        ]
+      },
+      {
+        "name": "SYSTem",
+        "commands": [
+          {
+            "name": "SYSTem:DATE:CLEar"
+          },
+          {
+            "name": "SYSTem:TIME:CLEar"
+          },
+          {
+            "name": "SYSTem:SERial"
+          },
+          {
+            "name": "SYSTem:SERial?"
           }
         ]
       },

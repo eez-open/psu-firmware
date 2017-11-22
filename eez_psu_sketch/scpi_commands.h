@@ -19,18 +19,6 @@
 #pragma once
 
 #define SCPI_COMMANDS \
-    SCPI_COMMAND("DEBUg", scpi_cmd_debug) \
-    SCPI_COMMAND("DEBUg:WDOG", scpi_cmd_debugWdog) \
-    SCPI_COMMAND("DEBUg:WDOG?", scpi_cmd_debugWdogQ) \
-    SCPI_COMMAND("DEBUg:ONTime?", scpi_cmd_debugOntimeQ) \
-    SCPI_COMMAND("DEBUg:VOLTage", scpi_cmd_debugVoltage) \
-    SCPI_COMMAND("DEBUg:CURRent", scpi_cmd_debugCurrent) \
-    SCPI_COMMAND("DEBUg:MEASure:VOLTage", scpi_cmd_debugMeasureVoltage) \
-    SCPI_COMMAND("DEBUg:MEASure:CURRent", scpi_cmd_debugMeasureCurrent) \
-    SCPI_COMMAND("SYSTem:DATE:CLEar", scpi_cmd_systemDateClear) \
-    SCPI_COMMAND("SYSTem:TIME:CLEar", scpi_cmd_systemTimeClear) \
-    SCPI_COMMAND("SYSTem:SERial", scpi_cmd_systemSerial) \
-    SCPI_COMMAND("SYSTem:SERial?", scpi_cmd_systemSerialQ) \
     SCPI_COMMAND("*CLS", scpi_cmd_coreCls) \
     SCPI_COMMAND("*ESE", scpi_cmd_coreEse) \
     SCPI_COMMAND("*ESE?", scpi_cmd_coreEseQ) \
@@ -62,6 +50,14 @@
     SCPI_COMMAND("CALibration:VOLTage[:DATA]", scpi_cmd_calibrationVoltageData) \
     SCPI_COMMAND("CALibration[:MODE]", scpi_cmd_calibrationMode) \
     SCPI_COMMAND("CALibration[:MODE]?", scpi_cmd_calibrationModeQ) \
+    SCPI_COMMAND("DEBUg", scpi_cmd_debug) \
+    SCPI_COMMAND("DEBUg:WDOG", scpi_cmd_debugWdog) \
+    SCPI_COMMAND("DEBUg:WDOG?", scpi_cmd_debugWdogQ) \
+    SCPI_COMMAND("DEBUg:ONTime?", scpi_cmd_debugOntimeQ) \
+    SCPI_COMMAND("DEBUg:VOLTage", scpi_cmd_debugVoltage) \
+    SCPI_COMMAND("DEBUg:CURRent", scpi_cmd_debugCurrent) \
+    SCPI_COMMAND("DEBUg:MEASure:VOLTage", scpi_cmd_debugMeasureVoltage) \
+    SCPI_COMMAND("DEBUg:MEASure:CURRent", scpi_cmd_debugMeasureCurrent) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:ADC?", scpi_cmd_diagnosticInformationAdcQ) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:CALibration?", scpi_cmd_diagnosticInformationCalibrationQ) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:FAN?", scpi_cmd_diagnosticInformationFanQ) \
@@ -304,6 +300,10 @@
     SCPI_COMMAND("SYSTem:TIME:ZONE?", scpi_cmd_systemTimeZoneQ) \
     SCPI_COMMAND("SYSTem:TIME?", scpi_cmd_systemTimeQ) \
     SCPI_COMMAND("SYSTem:VERSion?", scpi_cmd_systemVersionQ) \
+    SCPI_COMMAND("SYSTem:DATE:CLEar", scpi_cmd_systemDateClear) \
+    SCPI_COMMAND("SYSTem:TIME:CLEar", scpi_cmd_systemTimeClear) \
+    SCPI_COMMAND("SYSTem:SERial", scpi_cmd_systemSerial) \
+    SCPI_COMMAND("SYSTem:SERial?", scpi_cmd_systemSerialQ) \
     SCPI_COMMAND("TRIGger[:SEQuence]:DELay", scpi_cmd_triggerSequenceDelay) \
     SCPI_COMMAND("TRIGger[:SEQuence]:DELay?", scpi_cmd_triggerSequenceDelayQ) \
     SCPI_COMMAND("TRIGger[:SEQuence]:EXIT:CONDition", scpi_cmd_triggerSequenceExitCondition) \
