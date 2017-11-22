@@ -23,6 +23,9 @@
 #include "sd_card.h"
 #include "datetime.h"
 
+#include "list.h"
+#include "profile.h"
+
 #if OPTION_DISPLAY
 #include "gui.h"
 #endif
@@ -189,6 +192,10 @@ bool catalog(const char *dirPath, void *param, void (*callback)(void *param, con
         entry.getName(name, MAX_PATH_LENGTH);
         if (entry.isDirectory()) {
             callback(param, name, FILE_TYPE_FOLD, entry.size());
+        } else if (util::endsWith(name, list::LIST_EXT)) {
+            callback(param, name, FILE_TYPE_TXT, entry.size());
+        } else if (util::endsWith(name, profile::PROFILE_EXT)) {
+            callback(param, name, FILE_TYPE_STAT, entry.size());
         } else {
             callback(param, name, FILE_TYPE_BIN, entry.size());
         }

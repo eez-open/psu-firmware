@@ -30,6 +30,8 @@ extern TestResult g_testResult;
 
 enum FileType {
     FILE_TYPE_BIN,
+    FILE_TYPE_TXT,
+    FILE_TYPE_STAT,
     FILE_TYPE_FOLD
 };
 

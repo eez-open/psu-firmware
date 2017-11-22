@@ -22,6 +22,8 @@ namespace eez {
 namespace psu {
 namespace list {
 
+static const char *LIST_EXT = ".list";
+
 void init();
 
 void resetChannelList(Channel &channel);

@@ -654,14 +654,12 @@ scpi_result_t scpi_cmd_mmemoryStoreList(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    const char *EXT = ".list";
-
-    char filePath[MAX_PATH_LENGTH + sizeof(EXT) + 1];
+    char filePath[MAX_PATH_LENGTH + sizeof(list::LIST_EXT) + 1];
     if (!getFilePath(context, filePath, true)) {
         return SCPI_RES_ERR;
     }
 
-    addExtension(filePath, EXT);
+    addExtension(filePath, list::LIST_EXT);
 
     int err;
     if (!list::saveList(*channel, filePath, &err)) {
@@ -705,14 +703,12 @@ scpi_result_t scpi_cmd_mmemoryStoreState(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    const char *EXT = ".conf";
-
-    char filePath[MAX_PATH_LENGTH + sizeof(EXT) + 1];
+    char filePath[MAX_PATH_LENGTH + sizeof(profile::PROFILE_EXT) + 1];
     if (!getFilePath(context, filePath, true)) {
         return SCPI_RES_ERR;
     }
 
-    addExtension(filePath, EXT);
+    addExtension(filePath, profile::PROFILE_EXT);
 
     int err;
     if (!profile::saveToFile(filePath, &err)) {
