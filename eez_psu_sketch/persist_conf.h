@@ -99,6 +99,7 @@ struct DeviceFlags2 {
     unsigned serialEnabled: 1;
     unsigned ethernetDhcpEnabled: 1;
     unsigned ntpEnabled: 1;
+    unsigned sdLocked: 1;
 };
 
 struct IOPin {
@@ -135,6 +136,11 @@ struct DeviceConfiguration2 {
     uint8_t displayBackgroundLuminosityStep;
     uint8_t reserverd[24];
 };
+
+static const uint16_t PROFILE_VERSION = 8;
+
+bool check_block(const BlockHeader *block, uint16_t size, uint16_t version);
+uint32_t calc_checksum(const BlockHeader *block, uint16_t size);
 
 extern DeviceConfiguration devConf;
 extern DeviceConfiguration2 devConf2;
@@ -230,6 +236,9 @@ bool enableNtp(bool enable);
 bool isNtpEnabled();
 bool setNtpServer(const char *ntpServer, size_t ntpServerLength);
 bool setNtpSettings(bool enable, const char *ntpServer);
+
+bool setSdLocked(bool sdLocked);
+bool isSdLocked();
 
 }
 }

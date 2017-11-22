@@ -97,6 +97,7 @@ void tick(uint32_t tick_usec);
 void recallChannelsFromProfile(Parameters *profile, int location);
 bool recallFromProfile(Parameters *profile, int location);
 bool recall(int location);
+bool recallFromFile(const char *filePath, int *err);
 
 bool load(int location, Parameters *profile);
 
@@ -105,7 +106,8 @@ void getSaveName(const Parameters *profile, char *name);
 bool enableSave(bool enable);
 void save();
 void saveImmediately();
-bool saveAtLocation(int location, char *name = 0);
+bool saveAtLocation(int location, const char *name = 0);
+bool saveToFile(const char *filePath, int *err);
 
 bool deleteLocation(int location);
 bool deleteAll();

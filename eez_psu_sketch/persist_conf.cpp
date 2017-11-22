@@ -54,7 +54,6 @@ enum PersistConfSection {
 static const uint16_t DEV_CONF_VERSION = 9;
 static const uint16_t DEV_CONF2_VERSION = 10;
 static const uint16_t CH_CAL_CONF_VERSION = 3;
-static const uint16_t PROFILE_VERSION = 8;
 
 static const uint16_t PERSIST_CONF_DEVICE_ADDRESS = 1024;
 static const uint16_t PERSIST_CONF_DEVICE2_ADDRESS = 1536;
@@ -926,6 +925,15 @@ bool setNtpSettings(bool enable, const char *ntpServer) {
     devConf2.flags.ntpEnabled = enable ? 1 : 0;
     strcpy(devConf2.ntpServer, ntpServer);
     return saveDevice2();
+}
+
+bool setSdLocked(bool sdLocked) {
+    devConf2.flags.sdLocked = sdLocked ? 1 : 0;
+    return saveDevice2();
+}
+
+bool isSdLocked() {
+    return devConf2.flags.sdLocked ? true : false;
 }
 
 }

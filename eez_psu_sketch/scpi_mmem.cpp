@@ -21,6 +21,7 @@
 
 #include "trigger.h"
 #include "list.h"
+#include "profile.h"
 
 #if OPTION_SD_CARD
 #include "sd_card.h"
@@ -319,6 +320,11 @@ scpi_result_t scpi_cmd_mmemoryDownloadFname(scpi_t *context) {
 
 scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
 #if OPTION_SD_CARD
+    if (persist_conf::isSdLocked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_MEDIA_PROTECTED);
+        return SCPI_RES_ERR;
+    }
+
     scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
 
     if (psuContext->downloadFilePath[0] == 0) {
@@ -351,6 +357,11 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
 
 scpi_result_t scpi_cmd_mmemoryMove(scpi_t *context) {
 #if OPTION_SD_CARD
+    if (persist_conf::isSdLocked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_MEDIA_PROTECTED);
+        return SCPI_RES_ERR;
+    }
+
     char sourcePath[MAX_PATH_LENGTH + 1];
     if (!getFilePath(context, sourcePath, true)) {
         return SCPI_RES_ERR;
@@ -378,6 +389,11 @@ scpi_result_t scpi_cmd_mmemoryMove(scpi_t *context) {
 
 scpi_result_t scpi_cmd_mmemoryCopy(scpi_t *context) {
 #if OPTION_SD_CARD
+    if (persist_conf::isSdLocked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_MEDIA_PROTECTED);
+        return SCPI_RES_ERR;
+    }
+
     char sourcePath[MAX_PATH_LENGTH + 1];
     if (!getFilePath(context, sourcePath, true)) {
         return SCPI_RES_ERR;
@@ -406,6 +422,11 @@ scpi_result_t scpi_cmd_mmemoryCopy(scpi_t *context) {
 
 scpi_result_t scpi_cmd_mmemoryDelete(scpi_t *context) {
 #if OPTION_SD_CARD
+    if (persist_conf::isSdLocked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_MEDIA_PROTECTED);
+        return SCPI_RES_ERR;
+    }
+
     char filePath[MAX_PATH_LENGTH + 1];
     if (!getFilePath(context, filePath, true)) {
         return SCPI_RES_ERR;
@@ -428,6 +449,11 @@ scpi_result_t scpi_cmd_mmemoryDelete(scpi_t *context) {
 
 scpi_result_t scpi_cmd_mmemoryMdirectory(scpi_t *context) {
 #if OPTION_SD_CARD
+    if (persist_conf::isSdLocked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_MEDIA_PROTECTED);
+        return SCPI_RES_ERR;
+    }
+
     char dirPath[MAX_PATH_LENGTH + 1];
     if (!getFilePath(context, dirPath, false)) {
         return SCPI_RES_ERR;
@@ -450,6 +476,11 @@ scpi_result_t scpi_cmd_mmemoryMdirectory(scpi_t *context) {
 
 scpi_result_t scpi_cmd_mmemoryRdirectory(scpi_t *context) {
 #if OPTION_SD_CARD
+    if (persist_conf::isSdLocked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_MEDIA_PROTECTED);
+        return SCPI_RES_ERR;
+    }
+
     char dirPath[MAX_PATH_LENGTH + 1];
     if (!getFilePath(context, dirPath, false)) {
         return SCPI_RES_ERR;
@@ -528,6 +559,38 @@ scpi_result_t scpi_cmd_mmemoryTimeQ(scpi_t *context) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+scpi_result_t scpi_cmd_mmemoryLock(scpi_t *context) {
+#if OPTION_SD_CARD
+    persist_conf::setSdLocked(true);
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryLockQ(scpi_t *context) {
+#if OPTION_SD_CARD
+    SCPI_ResultBool(context, persist_conf::isSdLocked());
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryUnlock(scpi_t *context) {
+#if OPTION_SD_CARD
+    persist_conf::setSdLocked(false);
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    return SCPI_RES_ERR;
+#endif
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 scpi_result_t scpi_cmd_mmemoryLoadList(scpi_t *context) {
 #if OPTION_SD_CARD
     Channel *channel = set_channel_from_command_number(context);
@@ -560,7 +623,12 @@ scpi_result_t scpi_cmd_mmemoryLoadList(scpi_t *context) {
 
 scpi_result_t scpi_cmd_mmemoryStoreList(scpi_t *context) {
 #if OPTION_SD_CARD
-	Channel *channel = set_channel_from_command_number(context);
+    if (persist_conf::isSdLocked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_MEDIA_PROTECTED);
+        return SCPI_RES_ERR;
+    }
+
+    Channel *channel = set_channel_from_command_number(context);
     if (!channel) {
         return SCPI_RES_ERR;
     }
@@ -588,36 +656,22 @@ scpi_result_t scpi_cmd_mmemoryStoreList(scpi_t *context) {
 #endif
 }
 
-scpi_result_t scpi_cmd_mmemoryLock(scpi_t *context) {
-#if OPTION_SD_CARD
-    return SCPI_RES_ERR;
-#else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
-    return SCPI_RES_ERR;
-#endif
-}
-
-scpi_result_t scpi_cmd_mmemoryLockQ(scpi_t *context) {
-#if OPTION_SD_CARD
-    return SCPI_RES_ERR;
-#else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
-    return SCPI_RES_ERR;
-#endif
-}
-
-scpi_result_t scpi_cmd_mmemoryUnlock(scpi_t *context) {
-#if OPTION_SD_CARD
-    return SCPI_RES_ERR;
-#else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
-    return SCPI_RES_ERR;
-#endif
-}
+////////////////////////////////////////////////////////////////////////////////
 
 scpi_result_t scpi_cmd_mmemoryLoadState(scpi_t *context) {
 #if OPTION_SD_CARD
-    return SCPI_RES_ERR;
+    char filePath[MAX_PATH_LENGTH + 1];
+    if (!getFilePath(context, filePath, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    int err;
+    if (!profile::recallFromFile(filePath, &err)) {
+        SCPI_ErrorPush(context, err);
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
 #else
     SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
     return SCPI_RES_ERR;
@@ -626,7 +680,23 @@ scpi_result_t scpi_cmd_mmemoryLoadState(scpi_t *context) {
 
 scpi_result_t scpi_cmd_mmemoryStoreState(scpi_t *context) {
 #if OPTION_SD_CARD
-    return SCPI_RES_ERR;
+    if (persist_conf::isSdLocked()) {
+        SCPI_ErrorPush(context, SCPI_ERROR_MEDIA_PROTECTED);
+        return SCPI_RES_ERR;
+    }
+
+    char filePath[MAX_PATH_LENGTH + 1];
+    if (!getFilePath(context, filePath, true)) {
+        return SCPI_RES_ERR;
+    }
+
+    int err;
+    if (!profile::saveToFile(filePath, &err)) {
+        SCPI_ErrorPush(context, err);
+        return SCPI_RES_ERR;
+    }
+
+    return SCPI_RES_OK;
 #else
     SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
     return SCPI_RES_ERR;

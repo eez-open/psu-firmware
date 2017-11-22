@@ -198,6 +198,7 @@ int checkLimits() {
 bool loadList(Channel &channel, const char *filePath, int *err) {
 #if OPTION_SD_CARD
     if (sd_card::g_testResult != TEST_OK) {
+        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;
     }
 
@@ -320,6 +321,7 @@ bool loadList(Channel &channel, const char *filePath, int *err) {
 bool saveList(Channel &channel, const char *filePath, int *err) {
 #if OPTION_SD_CARD
     if (sd_card::g_testResult != TEST_OK) {
+        *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;
     }
 

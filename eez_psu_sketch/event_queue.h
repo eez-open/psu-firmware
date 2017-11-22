@@ -112,7 +112,7 @@ static const int EVENT_TYPE_ERROR = 3;
     EVENT_INFO(FORCE_DISABLING_ALL_OUTPUTS_ON_POWERUP_DISABLED, 101, "Force disabling outputs disabled") \
     EVENT_INFO(FRONT_PANEL_LOCKED, 102, "Front panel locked") \
     EVENT_INFO(FRONT_PANEL_UNLOCKED, 103, "Front panel unlocked") \
-    
+    EVENT_INFO(RECALL_FROM_FILE, 104, "Recall from file") \
 
 #define EVENT_ERROR_START_ID 10000
 #define EVENT_WARNING_START_ID 12000
