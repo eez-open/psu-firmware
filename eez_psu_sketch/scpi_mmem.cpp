@@ -328,6 +328,8 @@ scpi_result_t scpi_cmd_mmemoryDownloadFname(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
+    psuContext->firstDataFlag = true;
+
     return SCPI_RES_OK;
 #else
     SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
@@ -356,12 +358,14 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
     }
 
     int err;
-    if (!sd_card::download(psuContext->downloadFilePath, buffer, size, &err)) {
+    if (!sd_card::download(psuContext->downloadFilePath, psuContext->firstDataFlag, buffer, size, &err)) {
         if (err != 0) {
             SCPI_ErrorPush(context, err);
         }
         return SCPI_RES_ERR;
     }
+
+    psuContext->firstDataFlag = false;
 
     return SCPI_RES_OK;
 #else

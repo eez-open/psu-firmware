@@ -33,6 +33,7 @@ struct scpi_psu_t {
 #if OPTION_SD_CARD
     char currentDirectory[MAX_PATH_LENGTH + 1];
     char downloadFilePath[MAX_PATH_LENGTH + 1];
+    bool firstDataFlag;
 #endif
 };
 

@@ -90,6 +90,8 @@ public:
     void rewindDirectory();
     File openNextFile(uint8_t mode = READ_ONLY);
 
+    bool truncate(uint32_t length);
+
     bool available();
     bool seek(uint32_t pos);
     int peek();

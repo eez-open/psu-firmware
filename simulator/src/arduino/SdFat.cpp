@@ -29,8 +29,8 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-
 #include <direct.h>
+#include <io.h>
 
 #else
 
@@ -103,6 +103,8 @@ public:
 
     void rewindDirectory();
     File openNextFile(uint8_t mode = READ_ONLY);
+
+    bool truncate(uint32_t length);
 
     bool available();
     bool seek(uint32_t pos);
@@ -344,6 +346,14 @@ bool FileImpl::seek(uint32_t pos) {
     return fseek(m_fp, pos, SEEK_SET) == 0;
 }
 
+bool FileImpl::truncate(uint32_t length) {
+#ifdef _WIN32
+    return _chsize(_fileno(m_fp), length) == 0;
+#else
+    return ftruncate(fileno(m_fp), length) == 0
+#endif
+}
+
 bool FileImpl::available() {
     return peek() != EOF;
 }
@@ -441,6 +451,10 @@ void File::rewindDirectory() {
 
 File File::openNextFile(uint8_t mode) {
     return m_impl->openNextFile(mode);
+}
+
+bool File::truncate(uint32_t length) {
+    return m_impl->truncate(length);
 }
 
 bool File::available() {

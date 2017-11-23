@@ -265,13 +265,18 @@ bool upload(const char *filePath, void *param, void (*callback)(void *param, con
     return true;
 }
 
-bool download(const char *filePath, const void *buffer, size_t size, int *err) {
+bool download(const char *filePath, bool truncate, const void *buffer, size_t size, int *err) {
     if (sd_card::g_testResult != TEST_OK) {
         if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;
     }
 
     File file = SD.open(filePath, FILE_WRITE);
+
+    if (truncate && !file.truncate(0)) {
+        if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+        return false;
+    }
 
     if (!file) {
         if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
