@@ -38,6 +38,7 @@
 #include <sys/stat.h> // mkdir
 #include <errno.h>
 #include <unistd.h>
+#include <sys/statvfs.h>
 
 #endif
 
@@ -538,6 +539,22 @@ bool SdFat::rmdir(const char *path) {
     int result = ::rmdir(realPath.c_str());
 #endif
     return result == 0;
+}
+
+bool SdFat::getInfo(uint64_t &usedSpace, uint64_t &freeSpace) {
+#ifdef _WIN32
+    DWORD sectorsPerCluster, bytesPerSector, numberOfFreeClusters, totalNumberOfClusters;
+    GetDiskFreeSpaceA(getRealPath("").c_str(), &sectorsPerCluster, &bytesPerSector, &numberOfFreeClusters, &totalNumberOfClusters);
+    usedSpace = uint64_t(bytesPerSector) * sectorsPerCluster * (totalNumberOfClusters - numberOfFreeClusters);
+    freeSpace = uint64_t(bytesPerSector) * sectorsPerCluster * numberOfFreeClusters;
+    return true;
+#else
+    statvfs buf;
+    statvfs(getRealPath("").c_str(), &buf);
+    usedSpace = uint64_t(buf.f_bsize) * (buf.f_bavail - buf.f_bfree);
+    freeSpace = uint64_t(buf.f_bsize) * buf.f_bfree;
+    return false;
+#endif
 }
 
 }

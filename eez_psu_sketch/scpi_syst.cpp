@@ -880,7 +880,7 @@ scpi_result_t scpi_cmd_systemCommunicateEnable(scpi_t *context) {
 #if OPTION_ETHERNET
         persist_conf::enableEthernet(enable);
 #else
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
 #endif
     } else if (commInterface == 3) {
@@ -902,7 +902,7 @@ scpi_result_t scpi_cmd_systemCommunicateEnableQ(scpi_t *context) {
 #if OPTION_ETHERNET
         SCPI_ResultBool(context, persist_conf::isEthernetEnabled());
 #else
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
 #endif
     } else if (commInterface == 3) {
@@ -928,7 +928,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDhcp(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -943,7 +943,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDhcpQ(scpi_t *context) {
     SCPI_ResultBool(context, persist_conf::isEthernetDhcpEnabled());
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -972,7 +972,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetAddress(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -993,7 +993,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetAddressQ(scpi_t *context) {
     SCPI_ResultText(context, ipAddressStr);
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -1022,7 +1022,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDns(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -1043,7 +1043,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDnsQ(scpi_t *context) {
     }
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -1072,7 +1072,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetGateway(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -1093,7 +1093,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetGatewayQ(scpi_t *context) {
     }
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -1122,7 +1122,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetSmask(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -1143,7 +1143,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetSmaskQ(scpi_t *context) {
     }
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -1169,7 +1169,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetPort(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -1184,7 +1184,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetPortQ(scpi_t *context) {
     SCPI_ResultInt(context, persist_conf::devConf2.ethernetScpiPort);
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -1213,7 +1213,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetMac(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -1225,7 +1225,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetMacQ(scpi_t *context) {
     SCPI_ResultText(context, macAddressStr);
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -1251,7 +1251,7 @@ scpi_result_t scpi_cmd_systemCommunicateNtp(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -1261,7 +1261,7 @@ scpi_result_t scpi_cmd_systemCommunicateNtpQ(scpi_t *context) {
     SCPI_ResultText(context, persist_conf::devConf2.ntpServer);
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }

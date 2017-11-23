@@ -47,7 +47,7 @@ scpi_result_t scpi_cmd_debug(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif // CONF_DEBUG
 }
@@ -65,7 +65,7 @@ scpi_result_t scpi_cmd_debugQ(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif // CONF_DEBUG
 }
@@ -73,7 +73,7 @@ scpi_result_t scpi_cmd_debugQ(scpi_t *context) {
 scpi_result_t scpi_cmd_debugWdog(scpi_t * context) {
 #if CONF_DEBUG
     if (!OPTION_WATCHDOG) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -86,7 +86,7 @@ scpi_result_t scpi_cmd_debugWdog(scpi_t * context) {
     
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif // CONF_DEBUG
 }
@@ -94,7 +94,7 @@ scpi_result_t scpi_cmd_debugWdog(scpi_t * context) {
 scpi_result_t scpi_cmd_debugWdogQ(scpi_t * context) {
 #if CONF_DEBUG
     if (!OPTION_WATCHDOG) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -102,7 +102,7 @@ scpi_result_t scpi_cmd_debugWdogQ(scpi_t * context) {
     
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif // CONF_DEBUG
 }
@@ -126,7 +126,7 @@ scpi_result_t scpi_cmd_debugOntimeQ(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif // CONF_DEBUG
 }
@@ -147,7 +147,7 @@ scpi_result_t scpi_cmd_debugVoltage(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif // CONF_DEBUG
 }
@@ -168,7 +168,7 @@ scpi_result_t scpi_cmd_debugCurrent(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif // CONF_DEBUG
 }
@@ -211,7 +211,7 @@ scpi_result_t scpi_cmd_debugMeasureVoltage(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif // CONF_DEBUG
 }
@@ -254,7 +254,7 @@ scpi_result_t scpi_cmd_debugMeasureCurrent(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif // CONF_DEBUG
 }

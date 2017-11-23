@@ -45,7 +45,7 @@ scpi_result_t scpi_cmd_displayBrightness(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -55,7 +55,7 @@ scpi_result_t scpi_cmd_displayBrightnessQ(scpi_t *context) {
     SCPI_ResultInt(context, persist_conf::devConf2.displayBrightness);
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -76,7 +76,7 @@ scpi_result_t scpi_cmd_displayView(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -86,7 +86,7 @@ scpi_result_t scpi_cmd_displayViewQ(scpi_t *context) {
     SCPI_ResultInt(context, persist_conf::devConf.flags.channelsViewMode + 1);
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -105,7 +105,7 @@ scpi_result_t scpi_cmd_displayWindowState(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -115,7 +115,7 @@ scpi_result_t scpi_cmd_displayWindowStateQ(scpi_t *context) {
     SCPI_ResultBool(context, persist_conf::devConf2.flags.displayState);
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -137,7 +137,7 @@ scpi_result_t scpi_cmd_displayWindowText(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -147,7 +147,7 @@ scpi_result_t scpi_cmd_displayWindowTextQ(scpi_t *context) {
     SCPI_ResultText(context, gui::getTextMessage());
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }
@@ -157,7 +157,7 @@ scpi_result_t scpi_cmd_displayWindowTextClear(scpi_t *context) {
     gui::clearTextMessage();
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
 #endif
 }

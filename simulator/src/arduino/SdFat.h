@@ -113,6 +113,8 @@ public:
     bool remove(const char *path);
     bool mkdir(const char *path);
     bool rmdir(const char *path);
+
+    bool getInfo(uint64_t &usedSpace, uint64_t &freeSpace);
 };
 
 typedef File SdFile;

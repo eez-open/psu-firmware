@@ -71,7 +71,7 @@ scpi_result_t scpi_cmd_senseCurrentDcRangeUpper(scpi_t * context) {
     }
 
     if (!channel->hasSupportForCurrentDualRange()) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -92,7 +92,7 @@ scpi_result_t scpi_cmd_senseCurrentDcRangeUpperQ(scpi_t *context) {
     }
 
     if (!channel->hasSupportForCurrentDualRange()) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -126,7 +126,7 @@ scpi_result_t scpi_cmd_senseCurrentDcRangeAuto(scpi_t *context) {
     }
 
     if (!channel->hasSupportForCurrentDualRange()) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -147,7 +147,7 @@ scpi_result_t scpi_cmd_senseCurrentDcRangeAutoQ(scpi_t * context) {
     }
 
     if (!channel->hasSupportForCurrentDualRange()) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 

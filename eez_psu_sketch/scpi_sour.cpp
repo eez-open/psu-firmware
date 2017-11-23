@@ -534,7 +534,7 @@ scpi_result_t scpi_cmd_sourceVoltageSenseSource(scpi_t * context) {
     }
 
     if (!OPTION_BP) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -560,7 +560,7 @@ scpi_result_t scpi_cmd_sourceVoltageSenseSourceQ(scpi_t * context) {
     }
 
     if (!OPTION_BP) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -591,7 +591,7 @@ scpi_result_t scpi_cmd_sourceVoltageProgramSource(scpi_t * context) {
     }
 
     if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -622,7 +622,7 @@ scpi_result_t scpi_cmd_sourceVoltageProgramSourceQ(scpi_t * context) {
     }
 
     if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -643,7 +643,7 @@ scpi_result_t scpi_cmd_sourceLripple(scpi_t * context) {
     }
 
     if (!(channel->getFeatures() & CH_FEATURE_LRIPPLE)) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -672,7 +672,7 @@ scpi_result_t scpi_cmd_sourceLrippleQ(scpi_t * context) {
     }
 
     if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -693,7 +693,7 @@ scpi_result_t scpi_cmd_sourceLrippleAuto(scpi_t * context) {
     }
 
     if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -719,7 +719,7 @@ scpi_result_t scpi_cmd_sourceLrippleAutoQ(scpi_t * context) {
     }
 
     if (!(channel->getFeatures() & CH_FEATURE_LRIPPLE)) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -1285,7 +1285,7 @@ scpi_result_t scpi_cmd_sourceDigitalOutputData(scpi_t *context) {
 
     return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
 
     return SCPI_RES_ERR;
 #endif
@@ -1312,7 +1312,7 @@ scpi_result_t scpi_cmd_sourceDigitalPinFunction(scpi_t *context) {
     }
 #if EEZ_PSU_SELECTED_REVISION != EEZ_PSU_REVISION_R5B12
     if (pin != 1) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 #endif
@@ -1350,7 +1350,7 @@ scpi_result_t scpi_cmd_sourceDigitalPinFunctionQ(scpi_t *context) {
     }
 #if EEZ_PSU_SELECTED_REVISION != EEZ_PSU_REVISION_R5B12
     if (pin != 1) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 #endif
@@ -1375,7 +1375,7 @@ scpi_result_t scpi_cmd_sourceDigitalPinPolarity(scpi_t *context) {
     }
 #if EEZ_PSU_SELECTED_REVISION != EEZ_PSU_REVISION_R5B12
     if (pin != 1) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 #endif
@@ -1401,7 +1401,7 @@ scpi_result_t scpi_cmd_sourceDigitalPinPolarityQ(scpi_t *context) {
     }
 #if EEZ_PSU_SELECTED_REVISION != EEZ_PSU_REVISION_R5B12
     if (pin != 1) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 #endif

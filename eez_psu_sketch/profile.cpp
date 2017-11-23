@@ -239,7 +239,7 @@ bool recallFromFile(const char *filePath, int *err) {
     event_queue::pushEvent(event_queue::EVENT_INFO_RECALL_FROM_FILE);
     return true;
 #else
-    if (err) *err = SCPI_ERROR_OPTION_NOT_INSTALLED;
+    if (err) *err = SCPI_ERROR_HARDWARE_MISSING;
     return false;
 #endif
 }
@@ -464,7 +464,7 @@ bool saveToFile(const char *filePath, int *err) {
     return true;
 #else
     if (err) {
-        *err = SCPI_ERROR_OPTION_NOT_INSTALLED;
+        *err = SCPI_ERROR_HARDWARE_MISSING;
     }
     return false;
 #endif

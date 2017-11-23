@@ -178,7 +178,7 @@ scpi_result_t scpi_cmd_simulatorVoltageProgramExternal(scpi_t *context) {
     }
 
     if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -199,7 +199,7 @@ scpi_result_t scpi_cmd_simulatorVoltageProgramExternalQ(scpi_t *context) {
     }
 
     if (!(channel->getFeatures() & CH_FEATURE_RPROG)) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 
@@ -250,7 +250,7 @@ scpi_result_t scpi_cmd_simulatorRpol(scpi_t *context) {
     }
 
     if (channel->getFeatures() & CH_FEATURE_RPOL) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
     
@@ -271,7 +271,7 @@ scpi_result_t scpi_cmd_simulatorRpolQ(scpi_t *context) {
     }
 
     if (channel->getFeatures() & CH_FEATURE_RPOL) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 

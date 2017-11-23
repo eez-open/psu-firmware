@@ -76089,6 +76089,9 @@
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_cat"
           },
           {
+            "name": "MMEMory:INFOrmation?"
+          },
+          {
             "name": "MMEMory:UPLoad?",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_upl"
           },

@@ -50,6 +50,8 @@ bool removeDir(const char *dirPath, int *err);
 bool getDate(const char *filePath, uint8_t &year, uint8_t &month, uint8_t &day, int *err);
 bool getTime(const char *filePath, uint8_t &hour, uint8_t &minute, uint8_t &second, int *err);
 
+bool getInfo(uint64_t &usedSpace, uint64_t &freeSpace);
+
 }
 }
 } // namespace eez::psu::sd_card

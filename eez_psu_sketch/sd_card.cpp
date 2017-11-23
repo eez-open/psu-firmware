@@ -527,6 +527,17 @@ bool getTime(const char *filePath, uint8_t &hour, uint8_t &minute, uint8_t &seco
     return true;
 }
 
+bool getInfo(uint64_t &usedSpace, uint64_t &freeSpace) {
+#ifdef EEZ_PSU_SIMULATOR
+    return SD.getInfo(usedSpace, freeSpace);
+#else
+    uint64_t clusterCount = SD.vol()->clusterCount();
+    uint64_t freeClusterCount = SD.vol()->freeClusterCount(psu::tick);
+    usedSpace = 512 * (clusterCount - freeClusterCount) * SD.vol()->blocksPerCluster();
+    freeSpace = 512 * freeClusterCount * SD.vol()->blocksPerCluster();
+    return true;
+#endif
+}
 
 }
 }

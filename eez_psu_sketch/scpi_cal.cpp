@@ -196,7 +196,7 @@ scpi_result_t scpi_cmd_calibrationCurrentRange(scpi_t * context) {
     }
 
     if (!calibration::hasSupportForCurrentDualRange()) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
 

@@ -118,13 +118,13 @@ bool param_temp_sensor(scpi_t *context, int32_t &sensor) {
         }
         sensor = temp_sensor::AUX;
 #else
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
 		return false;
 #endif
     }
 
 	if (!temp_sensor::sensors[sensor].installed) {
-        SCPI_ErrorPush(context, SCPI_ERROR_OPTION_NOT_INSTALLED);
+        SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
 		return false;
 	}
 

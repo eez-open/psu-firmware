@@ -105,6 +105,7 @@
     SCPI_COMMAND("MMEMory:CDIRectory?", scpi_cmd_mmemoryCdirectoryQ) \
     SCPI_COMMAND("MMEMory:CATalog:LENgth?", scpi_cmd_mmemoryCatalogLengthQ) \
     SCPI_COMMAND("MMEMory:CATalog?", scpi_cmd_mmemoryCatalogQ) \
+    SCPI_COMMAND("MMEMory:INFOrmation?", scpi_cmd_mmemoryInformationQ) \
     SCPI_COMMAND("MMEMory:UPLoad?", scpi_cmd_mmemoryUploadQ) \
     SCPI_COMMAND("MMEMory:DOWNload:DATA", scpi_cmd_mmemoryDownloadData) \
     SCPI_COMMAND("MMEMory:DOWNload:FNAMe", scpi_cmd_mmemoryDownloadFname) \
