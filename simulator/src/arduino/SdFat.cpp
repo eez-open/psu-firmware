@@ -350,7 +350,7 @@ bool FileImpl::truncate(uint32_t length) {
 #ifdef _WIN32
     return _chsize(_fileno(m_fp), length) == 0;
 #else
-    return ftruncate(fileno(m_fp), length) == 0
+    return ftruncate(fileno(m_fp), length) == 0;
 #endif
 }
 
