@@ -549,11 +549,11 @@ bool SdFat::getInfo(uint64_t &usedSpace, uint64_t &freeSpace) {
     freeSpace = uint64_t(bytesPerSector) * sectorsPerCluster * numberOfFreeClusters;
     return true;
 #else
-    statvfs buf;
+    struct statvfs buf;
     statvfs(getRealPath("").c_str(), &buf);
-    usedSpace = uint64_t(buf.f_bsize) * (buf.f_bavail - buf.f_bfree);
+    usedSpace = uint64_t(buf.f_bsize) * (buf.f_blocks - buf.f_bfree);
     freeSpace = uint64_t(buf.f_bsize) * buf.f_bfree;
-    return false;
+    return true;
 #endif
 }
 
