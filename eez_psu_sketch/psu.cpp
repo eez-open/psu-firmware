@@ -312,11 +312,12 @@ static bool psuReset() {
 
     // SYST:ERR:COUN? 0
 	if (serial::g_testResult == TEST_OK) {
-        SCPI_ErrorClear(&serial::g_scpiContext);
+        scpi::resetContext(&serial::g_scpiContext);
     }
+
 #if OPTION_ETHERNET
-	if (ethernet::g_testResult == TEST_OK) {
-        SCPI_ErrorClear(&ethernet::g_scpiContext);
+    if (ethernet::g_testResult == TEST_OK) {
+        scpi::resetContext(&ethernet::g_scpiContext);
 	}
 
     ntp::reset();

@@ -152,7 +152,7 @@ void printError(int_fast16_t err) {
 #endif
 }
 
-void resultChoiceName(scpi_t * context, scpi_choice_def_t *choice, int tag) {
+void resultChoiceName(scpi_t *context, scpi_choice_def_t *choice, int tag) {
     for (; choice->name; ++choice) {
         if (choice->tag == tag) {
             char text[64];
@@ -169,6 +169,17 @@ void resultChoiceName(scpi_t * context, scpi_choice_def_t *choice, int tag) {
             break;
         }
     }
+}
+
+void resetContext(scpi_t *context) {
+    scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
+
+    psuContext->selected_channel_index = 0;
+
+    psuContext->currentDirectory[0] = 0;
+    psuContext->downloadFilePath[0] = 0;
+
+    SCPI_ErrorClear(context);
 }
 
 }

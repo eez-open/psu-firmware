@@ -53,6 +53,8 @@ void resultChoiceName(scpi_t *context, scpi_choice_def_t *choice, int tag);
 
 extern bool g_busy;
 
+void resetContext(scpi_t *context);
+
 }
 }
 } // namespace eez::psu::scpi
