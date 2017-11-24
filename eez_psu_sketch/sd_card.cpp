@@ -260,7 +260,7 @@ bool upload(const char *filePath, void *param, void (*callback)(void *param, con
 
     file.close();
 
-    callback(param, NULL, 0);
+    callback(param, NULL, -1);
 
     return true;
 }

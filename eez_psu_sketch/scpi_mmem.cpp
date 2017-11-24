@@ -279,13 +279,13 @@ scpi_result_t scpi_cmd_mmemoryInformationQ(scpi_t *context) {
 
 #if OPTION_SD_CARD
 void uploadCallback(void *param, const void *buffer, size_t size) {
-    if (buffer == NULL && size == 0) {
+    if (buffer == NULL && size == -1) {
         return;
     }
 
     scpi_t *context = (scpi_t *)param;
 
-    if (buffer == NULL && size > 0) {
+    if (buffer == NULL) {
         SCPI_ResultArbitraryBlockHeader(context, size);
         return;
     }
