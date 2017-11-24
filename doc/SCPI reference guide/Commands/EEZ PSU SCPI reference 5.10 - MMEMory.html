@@ -11,22 +11,22 @@
 			
 			/* Paragraphs and texts */
 			.Default_ntt { }
-			.Heading_2 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 12.0pt; font-weight: bold; font-style: italic; color: #0066cc; }
-			.Heading_3 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 11.0pt; font-weight: bold; color: #0066cc; }
-			.List_1_Cont. { text-align: left; margin-left: 10mm; margin-right: 1.99mm; text-indent: -6mm; }
-			.List_1_End { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-bottom: 3mm; text-indent: -6mm; }
-			.List_1_Start { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-top: 3mm; text-indent: -6mm; }
+			.Heading_2 { margin-left: 7,62mm; margin-top: 4,5mm; margin-bottom: 2,5mm; text-indent: -7,62mm; font-size: 12.0pt; font-weight: bold; font-style: italic; color: #0066cc; }
+			.Heading_3 { margin-left: 7,62mm; margin-top: 4,5mm; margin-bottom: 2,5mm; text-indent: -7,62mm; font-size: 11.0pt; font-weight: bold; color: #0066cc; }
+			.List_1_Cont. { text-align: left; margin-left: 10mm; margin-right: 1,99mm; text-indent: -6mm; }
+			.List_1_End { text-align: left; margin-left: 10mm; margin-right: 1,99mm; margin-bottom: 3mm; text-indent: -6mm; }
+			.List_1_Start { text-align: left; margin-left: 10mm; margin-right: 1,99mm; margin-top: 3mm; text-indent: -6mm; }
 			p { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
 			li { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
 			.cmd_code { text-align: left; font-family: "Courier New"; }
-			.cmd_code_Start { text-align: left; margin-top: 1.99mm; font-family: "Courier New"; }
-			.cmd_code_single { text-align: left; margin-top: 1.99mm; margin-bottom: 1.99mm; font-family: "Courier New"; }
+			.cmd_code_Start { text-align: left; margin-top: 1,99mm; font-family: "Courier New"; }
+			.cmd_code_single { text-align: left; margin-top: 1,99mm; margin-bottom: 1,99mm; font-family: "Courier New"; }
 			.cmd_root { text-align: left; color: #0066cc; }
 			.note { font-style: italic; }
 			.scpi0 { text-align: left; }
-			.scpi1 { text-align: left; margin-left: 4.99mm; }
+			.scpi1 { text-align: left; margin-left: 4,99mm; }
 			.scpi2 { text-align: left; margin-left: 10mm; }
-			.scpi3 { text-align: left; margin-left: 14.99mm; }
+			.scpi3 { text-align: left; margin-left: 14,99mm; }
 			.table_header { text-align: center; }
 			
 			/* Footnotes & endnotes */
@@ -47,7 +47,7 @@
 		<p class="Heading_2">5.10. <a name="_mmemory"></a>MMEMory</p>
 		<p>The MMEMory commands are used to store, read or delete file in the PSU’s SD card. It can also query SD card information. In addition it is used for storing and recalling values used by [SOURce[&lt;n&gt;]]:LIST subsystem. File and directory (folder) names cannot contain the following characters:\&#160;/&#160;:&#160;*&#160;?&#160;&quot;&#160;&lt;&#160;&gt;&#160;|</p>
 		<p>&#160;</p>
-		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 175,02mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 41%;">
 					<p class="table_header">SCPI command</p>
@@ -122,7 +122,7 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 41%;">
-					<p class="scpi2"><a href="#mmem_down_data"><span style="text-decoration: underline;">:DATA {#&lt;length&gt;,&lt;encoding&gt;,&lt;block&gt;}</span></a></p>
+					<p class="scpi2"><a href="#mmem_down_data"><span style="text-decoration: underline;">:DATA {#&lt;length-digits&gt;&lt;length&gt;&lt;block&gt;}</span></a></p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 59%;">
 					<p>Downloads data from the host computer</p>
@@ -134,6 +134,14 @@
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 59%;">
 					<p>Creates or opens the specified filename for download data</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 41%;">
+					<p class="scpi1"><a href="#mmem_info"><span style="text-decoration: underline;">:</span></a><a href="#mmem_info"><span style="text-decoration: underline;">INFOrmation?</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 59%;">
+					<p>Returns used and free space</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -154,10 +162,10 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 41%;">
-					<p class="scpi2"><a href="#mmem_load_stat"><span style="text-decoration: underline;">:STATe {&lt;filename&gt;}</span></a></p>
+					<p class="scpi2"><a href="#mmem_load_prof"><span style="text-decoration: underline;">:</span></a><a href="#mmem_load_prof"><span style="text-decoration: underline;">PROFile {&lt;filename&gt;}</span></a></p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 59%;">
-					<p class="scpi3" style="margin-left: 0;">Loads the instrument setup</p>
+					<p class="scpi3" style="margin-left: 0;">Loads stored user profile</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -210,10 +218,10 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 41%;">
-					<p class="scpi2"><a href="#mmem_stor_stat"><span style="text-decoration: underline;">:STATe {&lt;filename&gt;}</span></a></p>
+					<p class="scpi2"><a href="#mmem_stor_prof"><span style="text-decoration: underline;">:</span></a><a href="#mmem_stor_prof"><span style="text-decoration: underline;">PROFile {&lt;filename&gt;}</span></a></p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 59%;">
-					<p class="scpi3" style="margin-left: 0;">Saves the instrument setup</p>
+					<p class="scpi3" style="margin-left: 0;">Saves specified user profile</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -242,7 +250,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.10.1. <a name="mmem_cat"></a>MMEMory:CATalog</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -256,11 +264,11 @@
 					<p>Description</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>Returns the SD card usage and availability. Also returns the list of files and directories (folders) names, types and sizes in the current or specified directory. Number of items (files/directories) corresponds to the value returned by the MMEMory:CATalog:LENgth? command. </p>
+					<p>Returns the list of files and directories (folders) names, types and sizes in the current or specified directory. Number of items (files/directories) corresponds to the value returned by the MMEMory:CATalog:LENgth? command. </p>
 					<p>&#160;</p>
 					<p>To read out the information in the root directory (folder), specify &quot;\&quot; (backslash) or &quot;/&quot;. If &lt;directory&gt; is not set, this function is applied to the current directory. If directory=&lt;path&gt;, this function is applied to &lt;current directory&gt;\&lt;path&gt;.</p>
 					<p>&#160;</p>
-					<p>Error occurs if the specified directory does not exist or is set to hidden or system.</p>
+					<p>Error occurs if the specified directory does not exist.</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -299,27 +307,16 @@
 					<p>Return</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>Returns &lt;UsedMemory&gt;, &lt;FreeMemory&gt;, &lt;FileList&gt; where:</p>
+					<p>Returns all files in the directory as list of comma delimited quoted strings of &lt;filename&gt;, &lt;filetype&gt; and &lt;filesize&gt;. The following file types are supported:</p>
 					<ul>
-						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">UsedMemory – total amount of storage currently used in the directory in bytes,</li>
-						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">FreeMemory – total amount of storage available in the directory, in bytes) and </li>
-						<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">FileList – all files in the directory as list of comma delimited quoted strings of &lt;filename&gt;, &lt;filetype&gt; and &lt;filesize&gt;. </li>
-					</ul>
-					<p>The following file types are supported:</p>
-					<ul>
-						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">ASC – textual data</li>
-						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">BIN – binary data</li>
+						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">BIN – binary data</li>
+						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">CSV – textual data (comma separated)</li>
 						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">FOLD – directory (folder)</li>
+						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">LIST – LIST program data</li>
+						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">LOG – trace (display) or logged data (file extension .log)</li>
+						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">PROF – user profile data (file extension .profile)</li>
 						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">STAT – instrument (setting) state or user profiles (file extension .conf)</li>
-						<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">TRAC – trace (display) or logged data (file extension .list)</li>
 					</ul>
-					<p>Files stored on the SD card are organized in the following directories tree:</p>
-					<p>&#160;</p>
-					<p>\</p>
-					<p>\</p>
-					<p>\</p>
-					<p><span style="background-color: #fff200;">Many vendors use “drive letter” for various media like USB: or INT:</span></p>
-					<p><span style="background-color: #fff200;">Maybe we should use INT: (internal) for SD card.</span></p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -327,11 +324,11 @@
 					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_code">MMEM:CAT? &quot;USER\TEST&quot;</p>
-					<p class="cmd_code_Start">450440512,5000133440,&quot;test.001,BIN,33400&quot;,&quot;test.002,BIN,1203&quot;,&quot;old_test1,BIN,440550&quot;,&quot;\OLD,FOLD,12450&quot;,&quot;\old2,FOLD,4450036&quot;</p>
+					<p class="cmd_code">MMEM:CAT?</p>
+					<p class="cmd_code_Start">&quot;USER,FOLD,0&quot;,&quot;SCPI.PDF,BIN,1274844&quot;,&quot;SCH5B13A.PDF,BIN,296589&quot;,&quot;Documents,FOLD,0&quot;,&quot;Lists,FOLD,0&quot;,&quot;Videos,FOLD,0&quot;,&quot;profile0.profile,PROF,264&quot;</p>
 					<p class="cmd_code">&#160;</p>
-					<p class="cmd_code">MMEMCAT? &quot;USER\TEST\test*&quot;</p>
-					<p class="cmd_code_Start">450440512,5000133440,&quot;test.001,BIN,33400&quot;,&quot;test.002,BIN,1203&quot;</p>
+					<p class="cmd_code">MMEM:CAT? &quot;USER&quot;</p>
+					<p class="cmd_code_Start">&quot;LST_2_3.CSV,BIN,88&quot;,&quot;FERY2.PDF,BIN,2443&quot;</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -351,13 +348,14 @@
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
 					<p>MMEMory:CATalog:LENgth?</p>
+					<p>MMEMory:INFOrmation?</p>
 					<p>MMEMory:DATE?</p>
 					<p>MMEMory:TIME?</p>
 				</td>
 			</tr>
 		</table>
 		<p class="Heading_3">5.10.2. <a name="mmem_cat_len"></a>MMEMory:CATalog:LENgth</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -413,13 +411,13 @@
 					<p>The query command returns number (NR1) of items (files and directories).</p>
 				</td>
 			</tr>
-			<tr style="height: 9.97mm; background: transparent;">
+			<tr style="height: 9,97mm; background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_code">MMEM:CAT? &quot;USER\TEST&quot;</p>
-					<p class="cmd_code_Start">5</p>
+					<p class="cmd_code">MMEM:CAT:LEN? &quot;USER&quot;</p>
+					<p class="cmd_code_Start">2</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -440,7 +438,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.10.3. <a name="mmem_cdir"></a>MMEMory:CDIRectory</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -504,9 +502,9 @@
 					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_code">MMEM:CDIR &quot;TEST\Test folder2&quot;</p>
+					<p class="cmd_code">MMEM:CDIR &quot;TEST/Test folder2&quot;</p>
 					<p class="cmd_code">MMEM:CDIR?</p>
-					<p class="cmd_code_Start">&quot;TEST\Test folder2&quot;</p>
+					<p class="cmd_code_Start">&quot;TEST/Test folder2&quot;</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -530,7 +528,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.10.4. <a name="mmem_copy"></a>MMEMory:COPY</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -545,7 +543,7 @@
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
 					<p>Makes a copy of an existing file in the current directory. The file names must include any file extension.</p>
-					<p>If &lt;destination&gt; is a file name, the copy file is created in the current directory. When &lt;destination&gt; is a &lt;path&gt; (e.g. “test lists\test022”) the source file is duplicated in &lt;current directory&gt;\&lt;path&gt;.</p>
+					<p>If &lt;destination&gt; is a file name, the copy file is created in the current directory. When &lt;destination&gt; is a &lt;path&gt; (e.g. “test lists/test022”) the source file is duplicated in &lt;current directory&gt;/&lt;path&gt;.</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -598,7 +596,7 @@
 					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_code">MMEM:COPY &quot;test.bin&quot;, &quot;new2\test_new.bin&quot;</p>
+					<p class="cmd_code">MMEM:COPY &quot;test.bin&quot;, &quot;new2/test_new.bin&quot;</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -626,7 +624,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.10.5. <a name="mmem_date"></a>MMEMory:DATE</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -709,7 +707,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.10.6. <a name="mmem_del"></a>MMEMory:DELete</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -787,13 +785,13 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.10.7. <a name="mmem_down_data"></a>MMEMory:DOWNload:DATA</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_root">MMEMory:DOWNload:DATA {#&lt;length&gt;#&lt;encoding&gt;#&lt;data&gt;}</p>
+					<p class="cmd_root">MMEMory:DOWNload:DATA {#&lt;length-digits&gt;&lt;length&gt;&lt;block&gt;}</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -801,10 +799,13 @@
 					<p>Description</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>Downloads data from the host computer to a file in the SD card. The filename must have been previously specified by MMEMory:DOWNload:FNAMe.</p>
-					<p>The data in &lt;block&gt; is written to the select file, and any data previously stored in the file is lost. </p>
-					<p>&#160;</p>
-					<p class="note">While transfer is in progress all channels will be turned off similar to standby mode.</p>
+					<p>Downloads data from the host computer to a file in the SD card. This is a multiple steps process:</p>
+					<ul>
+						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">The filename must have been previously specified by MMEMory:DOWNload:FNAMe. </li>
+						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">The data can be transferred in single or more blocks. Receiving of first block will erase all previously stored, and each consecutive block will be appended to the end</li>
+						<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">Download is finished when MMEMory:DOWNload:FNAMe with empty name was sent</li>
+					</ul>
+					<p class="note">Use MMEMory:INFOrmation? command first to check available space.</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -814,10 +815,10 @@
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 16%;">
 					<p style="text-align: center;">Name</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 18%;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 19%;">
 					<p style="text-align: center;">Type</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 36%;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 35%;">
 					<p style="text-align: center;">Range</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 18%;">
@@ -826,13 +827,13 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
-					<p>&lt;length&gt;</p>
+					<p>&lt;length-digits&gt;</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 19%;">
 					<p style="text-align: center;">Numeric (NR1)</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
-					<p style="text-align: center;"><span style="background-color: #ffff00;">Define max length!!!</span></p>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 35%;">
+					<p>&lt;length&gt; number of digits (e.g. 2 for two digit number)</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
 					<p style="text-align: center;">–</p>
@@ -840,27 +841,27 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
-					<p>&lt;encoding&gt;</p>
+					<p>&lt;length&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 19%;">
+					<p style="text-align: center;">Numeric (NR1)</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 35%;">
+					<p>Limited only with available space on SD card</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
-					<p style="text-align: center;">Discrete</p>
-				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
-					<p style="text-align: center;">BASE64, BIN</p>
-				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
-					<p style="text-align: center;">BASE64</p>
+					<p style="text-align: center;">–</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
 					<p>&lt;block&gt;</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 19%;">
 					<p style="text-align: center;">Discrete</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
-					<p style="text-align: left;">Only exact size is allowed as defined with &lt;length&gt; and &lt;encoding&gt;</p>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 35%;">
+					<p style="text-align: left;">Only exact size is allowed as defined with &lt;length&gt;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
 					<p style="text-align: center;">–</p>
@@ -871,9 +872,10 @@
 					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="Default_ntt">Downloads text <span style="font-style: italic;">Hello world</span> encoded as Base64 and store into the file &quot;test file&quot; in the current directory:</p>
+					<p class="Default_ntt">Downloads text <span style="font-style: italic;">Hello world</span> and store into the file &quot;test file&quot; in the current directory. Digit 2  denotes two digits of data length (11).</p>
 					<p class="cmd_code_Start">MMEM:DOWN:FNAM &quot;test file&quot;</p>
-					<p class="cmd_code">MMEM:DOWN:DATA #16,BASE64,SGVsbG8gd29ybGQ=</p>
+					<p class="cmd_code">MMEM:DOWN:DATA #211Hello world</p>
+					<p class="cmd_code">MMEM:DOWN:FNAM &quot;&quot;</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -884,7 +886,6 @@
 					<p class="cmd_code">-253,&quot;Corrupt media&quot;</p>
 					<p class="cmd_code">-254,&quot;Media full&quot;</p>
 					<p class="cmd_code">-258,&quot;Media protected&quot;</p>
-					<p class="Default_ntt"><span style="background-color: #fff200;">We need here an error if communication is interrupted? Maybe we can use for that one of standard SCPI erros for block data: -160,&quot;Block data error&quot; or -161,&quot;Invalid block data&quot;</span></p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -893,11 +894,13 @@
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
 					<p>MMEMory:DOWNload:FNAMe</p>
+					<p>MMEMory:INFOrmation?</p>
+					<p>MMEMory:LOCK</p>
 				</td>
 			</tr>
 		</table>
 		<p class="Heading_3">5.10.8. <a name="mmem_down_fnam"></a>MMEMory:DOWNload:FNAMe</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -970,8 +973,52 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.9. <a name="mmem_load_list"></a>MMEMory:LOAD:LIST</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<p class="Heading_3">5.10.9. <a name="mmem_info"></a><a name="mmem_load_list"></a>MMEMory:INFOrmation</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_root">MMEMory:INFOrmation?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p><span style="color: #000000;">Use t</span><span style="color: #000000;">his command </span><span style="color: #000000;">to find out</span><span style="color: #000000;"> </span>total amount of storage currently used and storage available on the SD card. The sum of that two amounts represents SD card capacity in bytes.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>The command returns used space and free space as two comma separated integers. </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">MMEM:INFO?</p>
+					<p class="cmd_code_Start">3932160,7732461568</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>MMEMory:DOWNload:DATA</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_3">5.10.10. MMEMory:LOAD:LIST</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -1036,6 +1083,7 @@
 					<p class="Default_ntt">Errors</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">-200,&quot;Execution error&quot;</p>
 					<p class="cmd_code">-256,&quot;File name not found&quot;</p>
 				</td>
 			</tr>
@@ -1052,14 +1100,14 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.10. <a name="mmem_load_stat"></a>MMEMory:LOAD:STATe</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<p class="Heading_3">5.10.11. <a name="mmem_load_prof"></a>MMEMory:LOAD:PROFile</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_root">MMEMory:LOAD:STATe {&lt;filename&gt;}</p>
+					<p class="cmd_root">MMEMory:LOAD:PROFile {&lt;filename&gt;}</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1067,7 +1115,7 @@
 					<p>Description</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>This command loads the PSU state (i.e. user profile 0) from a state file. </p>
+					<p>This command loads data from user profile file to the user profile 0.</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1106,7 +1154,7 @@
 					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_code">MMEM:LOAD:STAT &quot;New params.conf&quot;</p>
+					<p class="cmd_code">MMEM:LOAD:PROF &quot;old settings.profile&quot;</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1125,12 +1173,12 @@
 					<p>*RCL</p>
 					<p>*SAV</p>
 					<p>MEMory:STATe:RECall:AUTO</p>
-					<p>MMEMory:STORe:STATe</p>
+					<p>MMEMory:STORe:PROFile</p>
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.11. <a name="mmem_lock"></a>MMEMory:LOCK</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<p class="Heading_3">5.10.12. <a name="mmem_lock"></a>MMEMory:LOCK</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -1173,7 +1221,7 @@
 					<p style="text-align: center;">Quoted string</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
-					<p style="text-align: center;">4 to 16 characters</p>
+					<p style="text-align: center;">System password (4 to 16 characters)</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
 					<p style="text-align: center;">–</p>
@@ -1192,8 +1240,9 @@
 					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">MMEM:LOCK &quot;test123&quot;</p>
 					<p class="cmd_code">MMEM:LOCK?</p>
-					<p class="cmd_code_Start">0</p>
+					<p class="cmd_code_Start">1</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1214,8 +1263,8 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.12. <a name="mmem_mdir"></a>MMEMory:MDIRectory</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<p class="Heading_3">5.10.13. <a name="mmem_mdir"></a>MMEMory:MDIRectory</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -1229,7 +1278,7 @@
 					<p>Description</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>This command creates a new directory. If directory=&lt;path&gt;, this command creates a &lt;current directory&gt;\&lt;path&gt; directory.</p>
+					<p>This command creates a new directory. If directory=&lt;path&gt;, this command creates a &lt;current directory&gt;/&lt;path&gt; directory.</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1289,8 +1338,8 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.13. <a name="mmem_move"></a>MMEMory:MOVE</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<p class="Heading_3">5.10.14. <a name="mmem_move"></a>MMEMory:MOVE</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -1304,7 +1353,7 @@
 					<p>Description</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>This command moves or renames an existing file. If destination is a file name, the source file is renamed to the new file name in the current directory. When destination=&lt;path&gt;, the source file is moved to &lt;current directory&gt;\&lt;path&gt;.</p>
+					<p>This command moves or renames an existing file. If destination is a file name, the source file is renamed to the new file name in the current directory. When destination=&lt;path&gt;, the source file is moved to &lt;current directory&gt;/&lt;path&gt;.</p>
 					<p>&#160;</p>
 					<p>Error occurs if the source file does not exist or the destination file already exists.</p>
 				</td>
@@ -1381,8 +1430,8 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.14. <a name="mmem_rdir"></a>MMEMory:RDIRectory</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<p class="Heading_3">5.10.15. <a name="mmem_rdir"></a>MMEMory:RDIRectory</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -1439,7 +1488,7 @@
 					<p class="cmd_code_single">&quot;Test folder2&quot;</p>
 					<p class="cmd_code">MMEM:CAT:LEN?</p>
 					<p class="cmd_code_single">0</p>
-					<p class="cmd_code">RDIR &quot;Test folder2&quot;</p>
+					<p class="cmd_code">MMEM:RDIR &quot;Test folder2&quot;</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1447,6 +1496,7 @@
 					<p class="Default_ntt">Errors</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">-250,&quot;Mass storage error&quot;</p>
 					<p class="cmd_code">-258,&quot;Media protected&quot;</p>
 				</td>
 			</tr>
@@ -1461,8 +1511,8 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.15. <a name="mmem_stor_list"></a>MMEMory:STORe:LIST</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<p class="Heading_3">5.10.16. <a name="mmem_stor_list"></a>MMEMory:STORe:LIST</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -1515,7 +1565,7 @@
 					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_code">MMEM:STOR:LIST1 &quot;DC/DC conv testing.list&quot;</p>
+					<p class="cmd_code">MMEM:STOR:LIST1 &quot;DC_DC conv testing.list&quot;</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1539,14 +1589,14 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.16. <a name="mmem_stor_stat"></a>MMEMory:STORe:STATe</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<p class="Heading_3">5.10.17. <a name="mmem_stor_prof"></a>MMEMory:STORe:PROFile</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_root">MMEMory:STORe:STATe {&lt;filename&gt;}</p>
+					<p class="cmd_root">MMEMory:STORe:PROFile {&lt;filename&gt;}</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1593,7 +1643,7 @@
 					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_code">MMEM:STOR:STAT &quot;another config.conf&quot;</p>
+					<p class="cmd_code">MMEM:STOR:PROF &quot;Both channels 5V_3A.profile&quot;</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1609,12 +1659,15 @@
 					<p class="Default_ntt">Related Commands</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>MMEMory:LOAD:LIST[&lt;n&gt;]</p>
+					<p>*RCL</p>
+					<p>*SAV</p>
+					<p>MEMory:STATe:RECall:AUTO</p>
+					<p>MMEMory:LOAD:PROFile</p>
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.17. <a name="mmem_time"></a>MMEMory:TIME</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<p class="Heading_3">5.10.18. <a name="mmem_time"></a>MMEMory:TIME</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -1696,8 +1749,8 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.18. <a name="mmem_unl"></a>MMEMory:UNLock</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<p class="Heading_3">5.10.19. <a name="mmem_unl"></a>MMEMory:UNLock</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -1739,7 +1792,7 @@
 					<p style="text-align: center;">Quoted string</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
-					<p style="text-align: center;">4 to 16 characters</p>
+					<p style="text-align: center;">System password (4 to 16 characters)</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
 					<p style="text-align: center;">–</p>
@@ -1775,8 +1828,8 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.19. <a name="mmem_upl"></a>MMEMory:UPLoad</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+		<p class="Heading_3">5.10.20. <a name="mmem_upl"></a>MMEMory:UPLoad</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -1790,9 +1843,8 @@
 					<p>Description</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>&#160;</p>
-					<p>&#160;</p>
-					<p class="note">While transfer is in progress all channels will be turned off similar to standby mode.</p>
+					<p>This command uploads the contents of a file from the instrument to the host computer.</p>
+					<p>The format for &lt;file&gt; is &quot;[&lt;path&gt;]&lt;file_name&gt;&quot;, where &lt;path&gt; must be an absolute folder path. If &lt;path&gt; is omitted, the folder specified by the MMEMory:CDIRectory command is used. Absolute paths begin with a &quot;\&quot; or &quot;/&quot; and start at the root folder of SD card.</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1814,13 +1866,13 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
-					<p>&lt;password&gt;</p>
+					<p>&lt;filename&gt;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
 					<p style="text-align: center;">Quoted string</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
-					<p style="text-align: left;">File name, either / (slash) or \ (backslash) can be used as the path separator. 1 to 255 characters</p>
+					<p style="text-align: left;">File name or directory name, either / (slash) or \ (backslash) can be used as the path separator. 1 to 255 characters</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
 					<p style="text-align: center;">–</p>
@@ -1831,7 +1883,7 @@
 					<p class="Default_ntt">Return</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>&#160;</p>
+					<p>The query returns the file contents are returned as an IEEE 488.2 definite-length block.</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1839,7 +1891,8 @@
 					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_code">&#160;</p>
+					<p class="cmd_code">MMEM:UPL? &quot;test file&quot;</p>
+					<p class="cmd_code_Start">#211Hello world</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1847,7 +1900,7 @@
 					<p class="Default_ntt">Errors</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_code">&#160;</p>
+					<p class="cmd_code">-257,&quot;File name error&quot;</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1855,7 +1908,7 @@
 					<p class="Default_ntt">Related Commands</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>&#160;</p>
+					<p>MMEMory:DOWNload:DATA</p>
 				</td>
 			</tr>
 		</table>
