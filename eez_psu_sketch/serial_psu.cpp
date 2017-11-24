@@ -34,7 +34,9 @@ size_t g_baudsSize = sizeof(g_bauds) / sizeof(long);
 
 size_t SCPI_Write(scpi_t *context, const char * data, size_t len) {
     if (serial::g_testResult == TEST_OK) {
-        return SERIAL_PORT.write(data, len);
+        for (size_t i = 0; i < len; i += 64) {
+            SERIAL_PORT.write(data + i, MIN(64, len - i));
+        }
     }
     return 0;
 }
