@@ -929,7 +929,7 @@ Value get(const Cursor &cursor, uint8_t id) {
             }
         
             if (id == DATA_ID_CHANNEL_U_EDIT) {
-                if (g_focusCursor == cursor && g_focusDataId == DATA_ID_CHANNEL_U_EDIT && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
+                if ((g_focusCursor == cursor || channel_dispatcher::isCoupled()) && g_focusDataId == DATA_ID_CHANNEL_U_EDIT && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
                     return g_focusEditValue;
                 } else {
                     return Value(channel_dispatcher::getUSet(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
@@ -953,7 +953,7 @@ Value get(const Cursor &cursor, uint8_t id) {
             }
         
             if (id == DATA_ID_CHANNEL_I_EDIT) {
-                if (g_focusCursor == cursor && g_focusDataId == DATA_ID_CHANNEL_I_EDIT && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
+                if ((g_focusCursor == cursor || channel_dispatcher::isCoupled()) && g_focusDataId == DATA_ID_CHANNEL_I_EDIT && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
                     return g_focusEditValue;
                 } else {
                     return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
@@ -1332,7 +1332,7 @@ bool isBlinking(const Cursor &cursor, uint8_t id) {
         return trigger::isInitiated();
     }
 
-    if (g_focusCursor == cursor && g_focusDataId == id && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
+    if ((g_focusCursor == cursor || channel_dispatcher::isCoupled()) && g_focusDataId == id && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
         return true;
     }
 
