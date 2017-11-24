@@ -1048,7 +1048,12 @@ void onEncoder(uint32_t tickCount, int counter, bool clicked) {
         }
 
         if (isEncoderEnabledInActivePage()) {
-            data::Value value = data::getEditValue(g_focusCursor, g_focusDataId);
+            data::Value value;
+            if (persist_conf::devConf2.flags.encoderConfirmationMode && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
+                value = g_focusEditValue;
+            } else {
+                value = data::getEditValue(g_focusCursor, g_focusDataId);
+            }
 
             float newValue = value.getFloat() + (value.getType() == VALUE_TYPE_FLOAT_AMPER ? 0.001f : 0.01f) * counter;
 
