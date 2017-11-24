@@ -120,7 +120,7 @@ int available() {
     if (client_socket == -1) return 0;
 
     char x;
-    int iResult = ::recv(client_socket, &x, 1, MSG_PEEK);
+    int iResult = ::recv(client_socket, &x, SCPI_PARSER_INPUT_BUFFER_LENGTH / 2, MSG_PEEK);
     if (iResult > 0) {
         return iResult;
     }
