@@ -96,7 +96,7 @@ bool getFilePath(scpi_t *context, char *filePath, bool mandatory) {
     size_t filePathParamLen;
     if (SCPI_ParamCharacters(context, &filePathParam, &filePathParamLen, mandatory)) {
         if (filePathParamLen > MAX_PATH_LENGTH) {
-            SCPI_ErrorPush(context, SCPI_ERROR_CHARACTER_DATA_TOO_LONG);
+            SCPI_ErrorPush(context, SCPI_ERROR_FILE_NAME_ERROR);
             return false;
         }
 
@@ -110,7 +110,7 @@ bool getFilePath(scpi_t *context, char *filePath, bool mandatory) {
             size_t currentDirectoryLen = strlen(psuContext->currentDirectory);
             size_t filePathLen = currentDirectoryLen + 1 + filePathParamLen;
             if (filePathLen > MAX_PATH_LENGTH) {
-                SCPI_ErrorPush(context, SCPI_ERROR_CHARACTER_DATA_TOO_LONG);
+                SCPI_ErrorPush(context, SCPI_ERROR_FILE_NAME_ERROR);
                 return false;
             }
             strncpy(filePath, psuContext->currentDirectory, currentDirectoryLen);
