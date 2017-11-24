@@ -119,8 +119,8 @@ bool connected() {
 int available() {
     if (client_socket == -1) return 0;
 
-    char x;
-    int iResult = ::recv(client_socket, &x, SCPI_PARSER_INPUT_BUFFER_LENGTH / 2, MSG_PEEK);
+    char buffer[SCPI_PARSER_INPUT_BUFFER_LENGTH / 2];
+    int iResult = ::recv(client_socket, buffer, SCPI_PARSER_INPUT_BUFFER_LENGTH / 2, MSG_PEEK);
     if (iResult > 0) {
         return iResult;
     }
