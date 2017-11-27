@@ -704,7 +704,7 @@ void Channel::tick(uint32_t tick_usec) {
     }
 
     // turn off DP after delay
-    if (delayed_dp_off && (micros() - delayed_dp_off_start) >= DP_OFF_DELAY_PERIOD * 1000000L) {
+    if (delayed_dp_off && tick_usec - delayed_dp_off_start >= DP_OFF_DELAY_PERIOD * 1000000L) {
         delayed_dp_off = false;
         doDpEnable(false);
     }
