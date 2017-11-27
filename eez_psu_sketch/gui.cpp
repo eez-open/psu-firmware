@@ -1068,7 +1068,7 @@ void onEncoder(uint32_t tickCount, int counter, bool clicked) {
             }
 
             if (persist_conf::devConf2.flags.encoderConfirmationMode) {
-                g_focusEditValue = data::Value(newValue, value.getType(), g_focusCursor.i);
+                g_focusEditValue = data::Value(newValue, value.getType(), g_focusCursor.i > 0 ? g_focusCursor.i : 0);
                 g_focusEditValueChangedTime = micros();
             } else {
                 int16_t error;
