@@ -174,7 +174,7 @@ void resultChoiceName(scpi_t *context, scpi_choice_def_t *choice, int tag) {
 void resetContext(scpi_t *context) {
     scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
 
-    psuContext->selected_channel_index = 0;
+    psuContext->selected_channel_index = 1;
 
     psuContext->currentDirectory[0] = 0;
     psuContext->downloadFilePath[0] = 0;
