@@ -77125,5 +77125,23 @@
       }
     ],
     "terminal": {}
+  },
+  "shortcuts": {
+    "shortcuts": [
+      {
+        "id": "ca4d247a-392e-4d73-9e9e-ffcca7e583bd",
+        "name": "IDN",
+        "action": {
+          "type": "scpi-commands",
+          "data": "*IDN?"
+        },
+        "keybinding": "f1",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 0,
+        "toolbarButtonColor": "#4C99A6",
+        "requiresConfirmation": false,
+        "selected": true
+      }
+    ]
   }
 }
