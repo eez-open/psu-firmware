@@ -75639,21 +75639,40 @@
   },
   "idf": [
     {
+      "name": "R3B4",
+      "buildConfiguration": "R3B4",
+      "image": "images/r3b4-front-panel.png",
+      "screenOrientation": "landscape",
+      "moduleName": "eez_h24005_r3b4",
+      "idn": "Envox,EEZ H24005 (Due)",
+      "idfName": "EEZ H24005 r3B4",
+      "idfShortName": "H24005-R3B4",
+      "idfFirmwareVersion": "1.1",
+      "idfGuid": "d0964223-a599-43f6-8aa2-4eb52f76a395",
+      "idfRevisionNumber": "0",
+      "idfDescription": "EEZ H24005 two channel power supply",
+      "idfSupportedModels": "H24005 r3B4",
+      "idfRevisionComments": "Initial version",
+      "idfAuthor": "Envox",
+      "sdlFriendlyName": "EEZ H24005 r3B4"
+    },
+    {
       "name": "R5B12",
       "buildConfiguration": "R5B12",
-      "image": "images/due-front-panel.png",
-      "moduleName": "eez_h24005_due",
+      "image": "images/r5b12-front-panel.png",
+      "screenOrientation": "landscape",
+      "moduleName": "eez_h24005_r5b12",
       "idn": "Envox,EEZ H24005 (Due)",
-      "idfName": "EEZ H24005 Due",
-      "idfShortName": "H24005",
+      "idfName": "EEZ H24005 r5B12",
+      "idfShortName": "H24005-R5B12",
       "idfFirmwareVersion": "1.1",
       "idfGuid": "d2283db7-1e5f-4020-aa2b-bedeee6343a2",
       "idfRevisionNumber": "0",
-      "idfDescription": "EEZ H24005 power supply",
-      "idfSupportedModels": "H24005",
+      "idfDescription": "EEZ H24005 two channel power supply",
+      "idfSupportedModels": "H24005 r5B12",
       "idfRevisionComments": "Initial version",
       "idfAuthor": "Envox",
-      "sdlFriendlyName": "EEZ H24005"
+      "sdlFriendlyName": "EEZ H24005 r5B12"
     },
     {
       "name": "Simulator",
@@ -75767,6 +75786,39 @@
           {
             "name": "ABORt",
             "helpLink": "EEZ PSU SCPI reference 5.1 - ABORt.html#abor"
+          },
+          {
+            "name": "ABORt:ELOG",
+            "helpLink": "EEZ PSU SCPI reference 5.1 - ABORt.html#abor_elog"
+          }
+        ]
+      },
+      {
+        "name": "DEBUG",
+        "commands": [
+          {
+            "name": "DEBUg"
+          },
+          {
+            "name": "DEBUg:WDOG"
+          },
+          {
+            "name": "DEBUg:WDOG?"
+          },
+          {
+            "name": "DEBUg:ONTime?"
+          },
+          {
+            "name": "DEBUg:VOLTage"
+          },
+          {
+            "name": "DEBUg:CURRent"
+          },
+          {
+            "name": "DEBUg:MEASure:VOLTage"
+          },
+          {
+            "name": "DEBUg:MEASure:CURRent"
           }
         ]
       },
@@ -75829,35 +75881,6 @@
           {
             "name": "CALibration[:MODE]?",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_mode"
-          }
-        ]
-      },
-      {
-        "name": "DEBUG",
-        "commands": [
-          {
-            "name": "DEBUg"
-          },
-          {
-            "name": "DEBUg:WDOG"
-          },
-          {
-            "name": "DEBUg:WDOG?"
-          },
-          {
-            "name": "DEBUg:ONTime?"
-          },
-          {
-            "name": "DEBUg:VOLTage"
-          },
-          {
-            "name": "DEBUg:CURRent"
-          },
-          {
-            "name": "DEBUg:MEASure:VOLTage"
-          },
-          {
-            "name": "DEBUg:MEASure:CURRent"
           }
         ]
       },
@@ -75932,7 +75955,16 @@
       {
         "name": "5.5. FETCh",
         "helpLink": "EEZ PSU SCPI reference 5.5 - FETCh.html",
-        "commands": []
+        "commands": [
+          {
+            "name": "FETCh:AHOur?",
+            "helpLink": "EEZ PSU SCPI reference 5.5 - FETCh.html#fetc_aho"
+          },
+          {
+            "name": "FETCh:WHOur?",
+            "helpLink": "EEZ PSU SCPI reference 5.5 - FETCh.html#fetc_who"
+          }
+        ]
       },
       {
         "name": "5.6. INITiate",
@@ -75999,6 +76031,14 @@
           {
             "name": "INSTrument[:SELect]?",
             "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_sel"
+          },
+          {
+            "name": "INSTrument:COUPle:TRIGger",
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_coup_trig"
+          },
+          {
+            "name": "INSTrument:COUPle:TRIGger?",
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_coup_trig"
           }
         ]
       },
@@ -76210,6 +76250,22 @@
           {
             "name": "OUTPut[:STATe]?",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp"
+          },
+          {
+            "name": "OUTPut:DPRog",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_dpr"
+          },
+          {
+            "name": "OUTPut:DPRog?",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_dpr"
+          },
+          {
+            "name": "OUTPut:PROTection:MEASure",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_meas"
+          },
+          {
+            "name": "OUTPut:PROTection:MEASure?",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_meas"
           }
         ]
       },
@@ -76232,6 +76288,14 @@
           {
             "name": "SENSe:CURRent[:DC]:RANGe[:UPPer]?",
             "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_curr_rang"
+          },
+          {
+            "name": "SENSe:AHOur:RESet",
+            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_aho_res"
+          },
+          {
+            "name": "SENSe:WHOur:RESet",
+            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_who_res"
           }
         ]
       },
@@ -76476,6 +76540,10 @@
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_outp_data"
           },
           {
+            "name": "[SOURce]:DIGital:OUTPut:DATA?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_outp_data"
+          },
+          {
             "name": "[SOURce]:DIGital:PIN<n>:FUNCtion",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_pin_func"
           },
@@ -76628,6 +76696,10 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cap"
           },
           {
+            "name": "SYSTem:CHANnel:INFOrmation:AHOur:TOTal?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_aho"
+          },
+          {
             "name": "SYSTem:CHANnel:INFOrmation:CURRent?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_curr"
           },
@@ -76652,6 +76724,10 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_volt"
           },
           {
+            "name": "SYSTem:CHANnel:INFOrmation:WHOur:TOTal?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_who"
+          },
+          {
             "name": "SYSTem:CHANnel:MODel?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_mod"
           },
@@ -76661,8 +76737,7 @@
           },
           {
             "name": "SYSTem:COMMunicate:ENABle",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_enab",
-            "usedIn": []
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_enab"
           },
           {
             "name": "SYSTem:COMMunicate:ENABle?",
@@ -76734,6 +76809,10 @@
           },
           {
             "name": "SYSTem:COMMunicate:RLSTate",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_rlst"
+          },
+          {
+            "name": "SYSTem:COMMunicate:RLSTate?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_rlst"
           },
           {
@@ -77125,16 +77204,171 @@
     "shortcuts": [
       {
         "id": "ca4d247a-392e-4d73-9e9e-ffcca7e583bd",
-        "name": "IDN",
+        "name": "Outputs OFF",
         "action": {
           "type": "scpi-commands",
-          "data": "*IDN?"
+          "data": "OUTP OFF, CH1\nOUTP OFF, CH2"
         },
         "keybinding": "f1",
         "showInToolbar": true,
-        "toolbarButtonPosition": 0,
-        "toolbarButtonColor": "#4C99A6",
-        "requiresConfirmation": false
+        "toolbarButtonPosition": 1,
+        "toolbarButtonColor": "#78C36A",
+        "requiresConfirmation": false,
+        "selected": false
+      },
+      {
+        "id": "30044bf3-ee58-4138-e6ae-e36052820245",
+        "name": "Outputs ON",
+        "action": {
+          "type": "scpi-commands",
+          "data": "OUTP ON, CH1\nOUTP ON, CH2"
+        },
+        "keybinding": "f2",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 2,
+        "toolbarButtonColor": "#E665A0",
+        "requiresConfirmation": false,
+        "selected": false
+      },
+      {
+        "id": "bbe8f05b-cb07-4142-efe6-840a8f2f9163",
+        "name": "Tracking mode ON",
+        "action": {
+          "type": "scpi-commands",
+          "data": "OUTP:TRAC ON"
+        },
+        "keybinding": "f3",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 3,
+        "toolbarButtonColor": "#727b84",
+        "requiresConfirmation": false,
+        "selected": false
+      },
+      {
+        "id": "88db9b28-1d1c-4096-938c-8142151201cc",
+        "name": "Tracking mode OFF",
+        "action": {
+          "type": "scpi-commands",
+          "data": "OUTP:TRAC OFF"
+        },
+        "keybinding": "f4",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 4,
+        "toolbarButtonColor": "#727b84",
+        "requiresConfirmation": false,
+        "selected": false
+      },
+      {
+        "id": "8c02fc6b-d3e8-432a-d9b6-9a9f59e04d02",
+        "name": "Series",
+        "action": {
+          "type": "scpi-commands",
+          "data": "INST:COUP:TRAC SER"
+        },
+        "keybinding": "f5",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 5,
+        "toolbarButtonColor": "#EE8C3E",
+        "requiresConfirmation": false,
+        "selected": true
+      },
+      {
+        "id": "838f16b3-56f0-4f91-8811-c13af4bced1b",
+        "name": "Parallel",
+        "action": {
+          "type": "scpi-commands",
+          "data": "INST:COUP:TRAC PAR"
+        },
+        "keybinding": "f6",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 6,
+        "toolbarButtonColor": "#EE8C3E",
+        "requiresConfirmation": false,
+        "selected": false
+      },
+      {
+        "id": "f954d38f-719c-4087-d4e0-5ce3eb39ec9b",
+        "name": "Uncoupled",
+        "action": {
+          "type": "scpi-commands",
+          "data": "INST:COUP:TRAC NONE"
+        },
+        "keybinding": "f7",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 7,
+        "toolbarButtonColor": "#78C36A",
+        "requiresConfirmation": false,
+        "selected": false
+      },
+      {
+        "id": "6f8d7576-0694-413d-de1e-7d37c143ba3c",
+        "name": "Power on",
+        "action": {
+          "type": "scpi-commands",
+          "data": "SYST:POW ON"
+        },
+        "keybinding": "f11",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 11,
+        "toolbarButtonColor": "#7BC3D4",
+        "requiresConfirmation": false,
+        "selected": false
+      },
+      {
+        "id": "8513f9c4-6bd4-4e48-c3a0-730c966a6a64",
+        "name": "Standby",
+        "action": {
+          "type": "scpi-commands",
+          "data": "SYST:POW OFF"
+        },
+        "keybinding": "f12",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 12,
+        "toolbarButtonColor": "#7BC3D4",
+        "requiresConfirmation": false,
+        "selected": false
+      },
+      {
+        "id": "fb1dafad-63ed-403b-a10e-4a09c30c3e85",
+        "name": "Init",
+        "action": {
+          "type": "scpi-commands",
+          "data": "INIT"
+        },
+        "keybinding": "f8",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 8,
+        "toolbarButtonColor": "#C1D751",
+        "requiresConfirmation": false,
+        "selected": false
+      },
+      {
+        "id": "a4e4d6f7-c8e5-4072-c32a-0fe68abbcbf3",
+        "name": "Abort",
+        "action": {
+          "type": "scpi-commands",
+          "data": "ABOR"
+        },
+        "keybinding": "f9",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 9,
+        "toolbarButtonColor": "#C1D751",
+        "requiresConfirmation": false,
+        "selected": false
+      },
+      {
+        "id": "acc0e50c-fa06-4b3c-85c7-830e5bb9a0c7",
+        "name": "Clear protections",
+        "action": {
+          "type": "scpi-commands",
+          "data": "OUTP:PROT:CLE CH1\nOUTP:PROT:CLE CH2"
+        },
+        "keybinding": "f10",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 10,
+        "toolbarButtonColor": "#F2D74A",
+        "requiresConfirmation": true,
+        "selected": false
       }
     ]
   }

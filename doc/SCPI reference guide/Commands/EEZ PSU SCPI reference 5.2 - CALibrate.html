@@ -11,20 +11,20 @@
 			
 			/* Paragraphs and texts */
 			.Default_ntt { }
-			.Heading_2 { margin-left: 7,62mm; margin-top: 4,5mm; margin-bottom: 2,5mm; text-indent: -7,62mm; font-size: 12.0pt; font-weight: bold; font-style: italic; color: #0066cc; }
-			.Heading_3 { margin-left: 7,62mm; margin-top: 4,5mm; margin-bottom: 2,5mm; text-indent: -7,62mm; font-size: 11.0pt; font-weight: bold; color: #0066cc; }
-			.List_1_End { text-align: left; margin-left: 10mm; margin-right: 1,99mm; margin-bottom: 3mm; text-indent: -6mm; }
-			.List_1_Start { text-align: left; margin-left: 10mm; margin-right: 1,99mm; margin-top: 3mm; text-indent: -6mm; }
+			.Heading_2 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 12.0pt; font-weight: bold; font-style: italic; color: #0066cc; }
+			.Heading_3 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 11.0pt; font-weight: bold; color: #0066cc; }
+			.List_1_End { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-bottom: 3mm; text-indent: -6mm; }
+			.List_1_Start { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-top: 3mm; text-indent: -6mm; }
 			p { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
 			li { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
 			.cmd_code { text-align: left; font-family: "Courier New"; }
-			.cmd_code_End { text-align: left; margin-bottom: 1,99mm; font-family: "Courier New"; }
-			.cmd_code_Start { text-align: left; margin-top: 1,99mm; font-family: "Courier New"; }
-			.cmd_code_single { text-align: left; margin-top: 1,99mm; margin-bottom: 1,99mm; font-family: "Courier New"; }
+			.cmd_code_End { text-align: left; margin-bottom: 1.99mm; font-family: "Courier New"; }
+			.cmd_code_Start { text-align: left; margin-top: 1.99mm; font-family: "Courier New"; }
+			.cmd_code_single { text-align: left; margin-top: 1.99mm; margin-bottom: 1.99mm; font-family: "Courier New"; }
 			.cmd_root { text-align: left; color: #0066cc; }
 			.note { font-style: italic; }
 			.scpi0 { text-align: left; }
-			.scpi1 { text-align: left; margin-left: 4,99mm; }
+			.scpi1 { text-align: left; margin-left: 4.99mm; }
 			.scpi2 { text-align: left; margin-left: 10mm; }
 			.table_header { text-align: center; }
 			
@@ -47,7 +47,7 @@
 		<p>This subsystem provides commands for the PSU calibration. Only one channel can be calibrated at a time. If calibration mode has not been enabled with CALibrate:STATe, the calibration commands will generate an error. Use CALibrate:SAVE to save any changes, otherwise all changes will be lost on exit from calibration mode. Within the same calibration session both output voltage and current can be calibrated for the currently selected channel. </p>
 		<p>Calibration cannot start if channel output is not enabled (OUTPut[:STATe] ON). During calibration process three points has to be entered: MIN, MID and MAX. But in practice two point calibration is performed to re-scale the output programmed and measured values by correcting both slope and offset errors. MID point is used only as an additional validation that between entered MIN and MAX values it’s possible to “draw” a line within allowed minor tolerance.</p>
 		<p>&#160;</p>
-		<table style="border-collapse: collapse; background: transparent; width: 175,02mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 46%;">
 					<p class="table_header">SCPI Command</p>
@@ -170,7 +170,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.2.1. <a name="cal_mode"></a>CALibration[:MODE]</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -277,7 +277,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.2.2. <a name="cal_cle"></a>CALibration:CLEar</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -368,7 +368,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.2.3. <a name="cal_curr"></a>CALibration:CURRent[:DATA]</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -444,7 +444,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.2.4. <a name="cal_curr_lev"></a>CALibration:CURRent:LEVel</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -534,7 +534,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.2.5. <a name="cal_curr_rang"></a>CALibration:CURRent:RANGe</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -619,7 +619,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.2.6. <a name="cal_pass_new"></a>CALibration:PASSword:NEW</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -713,7 +713,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.2.7. <a name="cal_rem"></a>CALibration:REMark</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -807,7 +807,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.2.8. <a name="cal_save"></a>CALibration:SAVE</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -853,7 +853,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.2.9. <a name="cal_stat"></a>CALibration:STATe</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -936,7 +936,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.2.10. <a name="cal_volt"></a>CALibration:VOLTage[:DATA]</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
@@ -1023,7 +1023,7 @@
 			</tr>
 		</table>
 		<p class="Heading_3">5.2.11. <a name="cal_volt_lev"></a>CALibration:VOLTage:LEVel</p>
-		<table style="border-collapse: collapse; background: transparent; width: 169,92mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Syntax</p>
