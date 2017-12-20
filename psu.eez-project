@@ -15,37 +15,11 @@
         },
         {
           "name": "R5B12",
-          "image": "images/due-front-panel.png",
-          "screenOrientation": "landscape",
-          "moduleName": "eez_h24005_due",
-          "idn": "Envox,EEZ H24005 (Due)",
-          "idfName": "EEZ H24005 Due",
-          "idfShortName": "H24005",
-          "idfFirmwareVersion": "1.1",
-          "idfGuid": "d2283db7-1e5f-4020-aa2b-bedeee6343a2",
-          "idfRevisionNumber": "0",
-          "idfDescription": "EEZ H24005 power supply",
-          "idfSupportedModels": "H24005",
-          "idfRevisionComments": "Initial version",
-          "idfAuthor": "Envox",
-          "sdlFriendlyName": "EEZ H24005"
+          "screenOrientation": "landscape"
         },
         {
           "name": "Simulator",
-          "image": "images/simulator-front-panel.png",
-          "screenOrientation": "landscape",
-          "moduleName": "eez_h24005_simulator",
-          "idn": "Envox,EEZ H24005 (Simulator)",
-          "idfName": "EEZ H24005 Simulator",
-          "idfShortName": "H24005sim",
-          "idfFirmwareVersion": "1.1",
-          "idfGuid": "6f5029f7-a785-445d-af5b-9b66fa13eeca",
-          "idfRevisionNumber": "0",
-          "idfDescription": "Simulator for EEZ H24005 power supply",
-          "idfSupportedModels": "H24005",
-          "idfRevisionComments": "Initial version",
-          "idfAuthor": "Envox",
-          "sdlFriendlyName": "EEZ H24005 simulator"
+          "screenOrientation": "landscape"
         }
       ],
       "files": [
@@ -75667,6 +75641,42 @@
       }
     ]
   },
+  "idf": [
+    {
+      "name": "R5B12",
+      "buildConfiguration": "R5B12",
+      "image": "images/due-front-panel.png",
+      "moduleName": "eez_h24005_due",
+      "idn": "Envox,EEZ H24005 (Due)",
+      "idfName": "EEZ H24005 Due",
+      "idfShortName": "H24005",
+      "idfFirmwareVersion": "1.1",
+      "idfGuid": "d2283db7-1e5f-4020-aa2b-bedeee6343a2",
+      "idfRevisionNumber": "0",
+      "idfDescription": "EEZ H24005 power supply",
+      "idfSupportedModels": "H24005",
+      "idfRevisionComments": "Initial version",
+      "idfAuthor": "Envox",
+      "sdlFriendlyName": "EEZ H24005"
+    },
+    {
+      "name": "Simulator",
+      "buildConfiguration": "Simulator",
+      "image": "images/simulator-front-panel.png",
+      "moduleName": "eez_h24005_simulator",
+      "idn": "Envox,EEZ H24005 (Simulator)",
+      "idfName": "EEZ H24005 Simulator",
+      "idfShortName": "H24005sim",
+      "idfFirmwareVersion": "1.1",
+      "idfGuid": "6f5029f7-a785-445d-af5b-9b66fa13eeca",
+      "idfRevisionNumber": "0",
+      "idfDescription": "Simulator for EEZ H24005 power supply",
+      "idfSupportedModels": "H24005",
+      "idfRevisionComments": "Initial version",
+      "idfAuthor": "Envox",
+      "sdlFriendlyName": "EEZ H24005 simulator"
+    }
+  ],
   "scpi": {
     "subsystems": [
       {
@@ -76988,71 +76998,122 @@
         "commands": [
           {
             "name": "SIMUlator:GUI",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_gui"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_gui",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:LOAD",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_load"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_load",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:LOAD:STATe",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_load_stat"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_load_stat",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:LOAD:STATe?",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_load_stat"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_load_stat",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:LOAD?",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_load"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_load",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:PIN1",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_pin1"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_pin1",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:PIN1?",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_pin1"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_pin1",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:PWRGood",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_pwrg"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_pwrg",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:PWRGood?",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_pwrg"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_pwrg",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:QUIT",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_quit"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_quit",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:RPOL",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_rpol"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_rpol",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:RPOL?",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_rpol"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_rpol",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:TEMPerature",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_temp"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_temp",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:TEMPerature?",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_temp"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_temp",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:VOLTage:PROGram:EXTernal",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_volt_prog"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_volt_prog",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:VOLTage:PROGram:EXTernal?",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_volt_prog"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_volt_prog",
+            "usedIn": [
+              "Simulator"
+            ]
           },
           {
             "name": "SIMUlator:EXIT",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_exit"
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_exit",
+            "usedIn": [
+              "Simulator"
+            ]
           }
         ]
       },
@@ -77061,70 +77122,7 @@
         "helpLink": "EEZ PSU SCPI reference 10 - Programming examples.html",
         "commands": []
       }
-    ],
-    "scripts": [
-      {
-        "name": "sour:volt",
-        "code": "scpi> inst ch1\nscpi> volt 5\nscpi> volt?\n5.00\n"
-      },
-      {
-        "name": "test1",
-        "code": "// this is comment line\nscpi> *idn?\nEEZ,PSU /.*/\nscpi> debug?\n// use /.*/ to match anything\nmax_loop_duration: /.*/\nlast_loop_duration: /.*/\navg_loop_duration: /.*/\ntotal_adc_read_counter: /.*/\nlast_adc_read_counter: /.*/\nCH1: u_dac=/.*/, u_mon_dac=/.*/, u_mon=/.*/, i_dac=/.*/, i_mon_dac=/.*/, i_mon=/.*/\nCH2: u_dac=/.*/, u_mon_dac=/.*/, u_mon=/.*/, i_dac=/.*/, i_mon_dac=/.*/, i_mon=/.*/\nscpi> diag:add?\n**ERROR/.*/: -113,\"Undefined header\"\nscpi> diag:adc?\n\"U_SET=/.*/V\",\"U_MON=/.*/V\",\"I_SET=/.*/A\",\"I_MON=/.*/A\""
-      },
-      {
-        "name": "test_list",
-        "code": "scpi> SOURce1:LIST:VOLTage:LEVel 5.0, 10.00, 15.00, 20.00\nscpi> SOURce1:LIST:VOLTage:LEVel?\n5,10,15,20\nscpi> SOURce1:LIST:CURRent:LEVel 0.5, 1.0, 1.5, 2.0\nscpi> SOURce1:LIST:CURRent:LEVel?\n0.5,1,1.5,2\nscpi> SOURce1:LIST:DWELl 0.1\nscpi> SOURce1:LIST:DWELl?\n0.1"
-      },
-      {
-        "name": "test_list_count",
-        "code": "scpi> SOURce1:LIST:COUNt 5\nscpi> SOURce1:LIST:COUNt?\n5\n\nscpi> SOURce1:LIST:COUNt 0\nscpi> SOURce1:LIST:COUNt?\n0\n\nscpi> SOURce1:LIST:COUNt 255\nscpi> SOURce1:LIST:COUNt?\n255\n\nscpi> SOURce1:LIST:COUNt -1\n**ERROR: -222,\"Data out of range\"\n\nscpi> SOURce1:LIST:COUNt 65536\n**ERROR: -222,\"Data out of range\"\n\nscpi> SOURce1:LIST:COUNt INF\nscpi> SOURce1:LIST:COUNt?\n0\n"
-      },
-      {
-        "name": "test_trigger_mode",
-        "code": "scpi> SOURce1:VOLTage:MODE LIST\nscpi> SOURce1:VOLTage:MODE?\n\"LIST\"\n\nscpi> SOURce1:VOLTage:MODE STEP\nscpi> SOURce1:VOLTage:MODE?\n\"STEP\"\n\nscpi> SOURce1:CURRENT:MODE LIST\nscpi> SOURce1:CURRent:MODE?\n\"LIST\"\n\nscpi> SOURce1:CURrent:MODE STEP\nscpi> SOURce1:CURRent:MODE?\n\"STEP\"\n\nscpi> SOURce2:CURrent:MODE LIST\nscpi> SOURce2:CURRent:MODE?\n\"LIST\"\n\nscpi> SOURce1:CURrent:MODE DUMMY\n**ERROR: -224,\"Illegal parameter value\""
-      },
-      {
-        "name": "test_error_304_Incompatible_transient_modes",
-        "code": "scpi> ABORT\n\nscpi> LIST:VOLTage:LEVel 10.00, 20.00\nscpi> LIST:CURRent:LEVel 1.00\nscpi> LIST:DWELl 0.1\nscpi> SOURce1:VOLTage:MODE LIST\nscpi> SOURce1:VOLTage:MODE?\n\"LIST\"\n\nscpi> SOURce1:CURRENT:MODE STEP\nscpi> SOURce1:CURRent:MODE?\n\"STEP\"\n\nscpi> TRIGger:SEQuence:IMMediate\n**ERROR: 304,\"Incompatible transient modes\""
-      },
-      {
-        "name": "list_volt",
-        "code": "scpi> ABORT\nscpi> LIST:COUNt 0\nscpi> OUTPUT:TRIG 1, ch1\nscpi> SOURce1:VOLTage:MODE LIST\nscpi> SOURce1:CURRent:MODE LIST\nscpi> SOURce2:VOLTage:MODE FIXED\nscpi> SOURce2:CURRent:MODE FIXED\nscpi> SOURce1:LIST:VOLTage:LEVel 0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,3.0,3.1,3.2,3.3,3.4,3.5,3.6,3.7,3.8,3.9,4.0,4.1,4.2,4.3,4.4,4.5,4.6,4.7,4.8,4.9,5.0,5.1,5.2,5.3,5.4,5.5,5.6,5.7,5.8,5.9,6.0,6.1,6.2,6.3,6.4,6.5,6.6,6.7,6.8,6.9,7.0,7.1,7.2,7.3,7.4,7.5,7.6,7.7,7.8,7.9,8.0,8.1,8.2,8.3,8.4,8.5,8.6,8.7,8.8,8.9,9.0,9.1,9.2,9.3,9.4,9.5,9.6,9.7,9.8,9.9,10.0,10.1,10.2,10.3,10.4,10.5,10.6,10.7,10.8,10.9,11.0,11.1,11.2,11.3,11.4,11.5,11.6,11.7,11.8,11.9,12.0,12.1,12.2,12.3,12.4,12.5,12.6,12.7,12.8,12.9,13.0,13.1,13.2,13.3,13.4,13.5,13.6,13.7,13.8,13.9,14.0,14.1,14.2,14.3,14.4,14.5,14.6,14.7,14.8,14.9,15.0,15.1,15.2,15.3,15.4,15.5,15.6,15.7,15.8,15.9,16.0,16.1,16.2,16.3,16.4,16.5,16.6,16.7,16.8,16.9,17.0,17.1,17.2,17.3,17.4,17.5,17.6,17.7,17.8,17.9,18.0,18.1,18.2,18.3,18.4,18.5,18.6,18.7,18.8,18.9,19.0,19.1,19.2,19.3,19.4,19.5,19.6,19.7,19.8,19.9,20.0,20.1,20.2,20.3,20.4,20.5,20.6,20.7,20.8,20.9,21.0,21.1,21.2,21.3,21.4,21.5,21.6,21.7,21.8,21.9,22.0,22.1,22.2,22.3,22.4,22.5,22.6,22.7,22.8,22.9,23.0,23.1,23.2,23.3,23.4,23.5,23.6,23.7,23.8,23.9,24.0,24.1,24.2,24.3,24.4,24.5,24.6,24.7,24.8,24.9,25.0,25.1,25.2,25.3,25.4,25.5\nscpi> SOURce1:LIST:CURRent:LEVel 2.0\nscpi> SOURce1:LIST:DWELl 0.01\nscpi> TRIGger:SEQuence:IMMediate"
-      },
-      {
-        "name": "list_curr",
-        "code": "scpi> ABORT\nscpi> LIST:COUNt 1\nscpi> OUTPUT:TRIG 1, ch1\nscpi> SOURce1:VOLTage:MODE FIXED\nscpi> SOURce1:CURRent:MODE LIST\nscpi> SOURce2:VOLTage:MODE FIXED\nscpi> SOURce2:CURRent:MODE FIXED\nscpi> SOURce1:LIST:CURRent:LEVel 0.0,0.02,0.04,0.05,0.07,0.09,0.11,0.13,0.14,0.16,0.18,0.2,0.22,0.23,0.25,0.27,0.29,0.31,0.32,0.34,0.36,0.38,0.4,0.41,0.43,0.45,0.47,0.49,0.5,0.52,0.54,0.56,0.58,0.59,0.61,0.63,0.65,0.67,0.68,0.7,0.72,0.74,0.76,0.77,0.79,0.81,0.83,0.85,0.86,0.88,0.9,0.92,0.94,0.95,0.97,0.99,1.01,1.03,1.04,1.06,1.08,1.1,1.12,1.13,1.15,1.17,1.19,1.21,1.22,1.24,1.26,1.28,1.3,1.31,1.33,1.35,1.37,1.39,1.4,1.42,1.44,1.46,1.48,1.49,1.51,1.53,1.55,1.57,1.58,1.6,1.62,1.64,1.66,1.67,1.69,1.71,1.73,1.75,1.76,1.78,1.8,1.82,1.84,1.85,1.87,1.89,1.91,1.93,1.94,1.96,1.98,2.0,2.02,2.03,2.05,2.07,2.09,2.11,2.12,2.14,2.16,2.18,2.2,2.21,2.23,2.25,2.27,2.29,2.3,2.32,2.34,2.36,2.38,2.39,2.41,2.43,2.45,2.47,2.48,2.5,2.52,2.54,2.56,2.57,2.59,2.61,2.63,2.65,2.66,2.68,2.7,2.72,2.74,2.75,2.77,2.79,2.81,2.83,2.84,2.86,2.88,2.9,2.92,2.93,2.95,2.97,2.99,3.01,3.02,3.04,3.06,3.08,3.1,3.11,3.13,3.15,3.17,3.19,3.2,3.22,3.24,3.26,3.28,3.29,3.31,3.33,3.35,3.37,3.38,3.4,3.42,3.44,3.46,3.47,3.49,3.51,3.53,3.55,3.56,3.58,3.6,3.62,3.64,3.65,3.67,3.69,3.71,3.73,3.74,3.76,3.78,3.8,3.82,3.83,3.85,3.87,3.89,3.91,3.92,3.94,3.96,3.98,4.0,4.01,4.03,4.05,4.07,4.09,4.1,4.12,4.14,4.16,4.18,4.19,4.21,4.23,4.25,4.27,4.28,4.3,4.32,4.34,4.36,4.37,4.39,4.41,4.43,4.45,4.46,4.48,4.5,4.52,4.54,4.55,4.57,4.59\nscpi> SOURce1:LIST:DWELl 0.01\nscpi> TRIGger:SEQuence:IMMediate"
-      },
-      {
-        "name": "list_sinewave (120 points)",
-        "code": "// Sinewave generation example\n//\n// Resolution 1 ms (120 points)\n// Max. frequency: 8.33 Hz (120 ms)\n// Amplitude: +/-10 V\n// DC offset: 20 V\n//\nscpi> ABORt\nscpi> OUTPUT:TRIG 1\nscpi> LIST:COUNt INF\nscpi> VOLTage:MODE LIST\nscpi> CURRent:MODE LIST\nscpi> LIST:VOLTage:LEVel 20.00, 20.52, 21.05, 21.56, 22.08, 22.59, 23.09, 23.58, 24.07, 24.54, 25.00, 25.45, 25.88, 26.29, 26.69, 27.07, 27.43, 27.77, 28.09, 28.39, 28.66, 28.91, 29.14, 29.34, 29.51, 29.66, 29.78, 29.88, 29.95, 29.99, 30.00, 29.99, 29.95, 29.88, 29.78, 29.66, 29.51, 29.34, 29.14, 28.91, 28.66, 28.39, 28.09, 27.77, 27.43, 27.07, 26.69, 26.29, 25.88, 25.45, 25.00, 24.54, 24.07, 23.58, 23.09, 22.59, 22.08, 21.56, 21.05, 20.52, 20.00, 19.48, 18.95, 18.44, 17.92, 17.41, 16.91, 16.42, 15.93, 15.46, 15.00, 14.55, 14.12, 13.71, 13.31, 12.93, 12.57, 12.23, 11.91, 11.61, 11.34, 11.09, 10.86, 10.66, 10.49, 10.34, 10.22, 10.12, 10.05, 10.01, 10.00, 10.01, 10.05, 10.12, 10.22, 10.34, 10.49, 10.66, 10.86, 11.09, 11.34, 11.61, 11.91, 12.23, 12.57, 12.93, 13.31, 13.71, 14.12, 14.55, 15.00, 15.46, 15.93, 16.42, 16.91, 17.41, 17.92, 18.44, 18.95, 19.48\nscpi> LIST:DWELl 0.001\nscpi> LIST:CURRent:LEVel 0.1\nscpi> TRIGger:SEQuence:IMMediate"
-      },
-      {
-        "name": "list_squarewave",
-        "code": "// Stepwave generation example\n//\n// Resolution 5 ms (2 points)\n// Max. frequency: 100 Hz (10 ms)\n// Amplitude: 5 /20 V\n// Step: 15 V\n//\nscpi> *RST\nscpi> OUTPUT:TRIG 1\nscpi> ABORt\nscpi> LIST:COUNt INF\nscpi> VOLTage:MODE LIST\nscpi> CURRent:MODE LIST\nscpi> LIST:VOLTage:LEVel 5, 20\nscpi> LIST:DWELl 0.005\nscpi> LIST:CURRent:LEVel 1\nscpi> TRIGger:SEQuence:IMMediate"
-      },
-      {
-        "name": "list_sinewave (48 points)",
-        "code": "// Sinewave generation example\n//\n// Resolution 1 ms (48 points)\n// Max. frequency: 20.83 Hz (48 ms)\n// Amplitude: +/-10 V\n// DC offset: 20 V\n//\nscpi> ABORt\nscpi> OUTPUT:TRIG 1\nscpi> LIST:COUNt INF\nscpi> VOLTage:MODE LIST\nscpi> CURRent:MODE LIST\nscpi> LIST:VOLTage:LEVel 20.00, 21.31, 22.59, 23.83, 25.00, 26.09, 27.07, 27.93, 28.66, 29.24, 29.66, 29.91, 30.00, 29.91, 29.66, 29.24, 28.66, 27.93, 27.07, 26.09, 25.00, 23.83, 22.59, 21.31, 20.00, 18.69, 17.41, 16.17, 15.00, 13.91, 12.93, 12.07, 11.34, 10.76, 10.34, 10.09, 10.00, 10.09, 10.34, 10.76, 11.34, 12.07, 12.93, 13.91, 15.00, 16.17, 17.41, 18.69\nscpi> LIST:CURRent:LEVel 1\nscpi> LIST:DWELl 0.001\nscpi> TRIGger:SEQuence:IMMediate"
-      },
-      {
-        "name": "list_step",
-        "code": "// Stepwave generation example\n//\n// Resolution 10 ms (9 points)\n// Max. frequency: 11.11 Hz (90 ms)\n// Amplitude: 0.02 to 40 V\n// Step: 5 V\n//\nscpi> *RST\nscpi> ABORt\nscpi> OUTPUT:TRIG 1\nscpi> LIST:COUNt INF\nscpi> VOLTage:MODE LIST\nscpi> CURRent:MODE LIST\nscpi> LIST:VOLTage:LEVel 0.02, 5, 10, 15, 20, 25, 30, 35, 40\nscpi> LIST:DWELl 0.01\nscpi> LIST:CURRent:LEVel 1\nscpi> TRIGger:SEQuence:IMMediate"
-      },
-      {
-        "name": "list_sinewave (48 points) 2 channels",
-        "code": "// Sinewave generation example\n//\n// Resolution 1 ms (48 points)\n// Max. frequency: 20.83 Hz (48 ms)\n// Amplitude: +/-10 V\n// DC offset: 20 V\n//\nscpi> ABORt\nscpi> INST ch1\nscpi> LIST:COUNt INF\nscpi> VOLTage:MODE LIST\nscpi> CURRent:MODE LIST\nscpi> LIST:VOLTage:LEVel 20.00, 21.31, 22.59, 23.83, 25.00, 26.09, 27.07, 27.93, 28.66, 29.24, 29.66, 29.91, 30.00, 29.91, 29.66, 29.24, 28.66, 27.93, 27.07, 26.09, 25.00, 23.83, 22.59, 21.31, 20.00, 18.69, 17.41, 16.17, 15.00, 13.91, 12.93, 12.07, 11.34, 10.76, 10.34, 10.09, 10.00, 10.09, 10.34, 10.76, 11.34, 12.07, 12.93, 13.91, 15.00, 16.17, 17.41, 18.69\nscpi> LIST:CURRent:LEVel 1\nscpi> LIST:DWELl 0.001\nscpi> OUTPUT:TRIG 1\nscpi> INST ch2\nscpi> LIST:COUNt INF\nscpi> VOLTage:MODE LIST\nscpi> CURRent:MODE LIST\nscpi> LIST:VOLTage:LEVel 20.00, 21.31, 22.59, 23.83, 25.00, 26.09, 27.07, 27.93, 28.66, 29.24, 29.66, 29.91, 30.00, 29.91, 29.66, 29.24, 28.66, 27.93, 27.07, 26.09, 25.00, 23.83, 22.59, 21.31, 20.00, 18.69, 17.41, 16.17, 15.00, 13.91, 12.93, 12.07, 11.34, 10.76, 10.34, 10.09, 10.00, 10.09, 10.34, 10.76, 11.34, 12.07, 12.93, 13.91, 15.00, 16.17, 17.41, 18.69\nscpi> LIST:CURRent:LEVel 1\nscpi> LIST:DWELl 0.001\nscpi> OUTPUT:TRIG 1\nscpi> TRIGger:SEQuence:IMMediate"
-      },
-      {
-        "name": "list_1",
-        "code": "scpi> LIST:VOLTage:LEVel 20.00, 20.52, 21.05, 21.56, 22.08, 22.59, 23.09, 23.58, 24.07, 24.54, 25.00, 25.45, 25.88, 26.29, 26.69, 27.07, 27.43, 27.77, 28.09, 28.39, 28.66, 28.91, 29.14, 29.34, 29.51, 29.66, 29.78, 29.88, 29.95, 29.99, 30.00, 29.99, 29.95, 29.88, 29.78, 29.66, 29.51, 29.34, 29.14, 28.91, 28.66, 28.39, 28.09, 27.77, 27.43, 27.07, 26.69, 26.29, 25.88, 25.45, 25.00, 24.54, 24.07, 23.58, 23.09, 22.59, 22.08, 21.56, 21.05, 20.52, 20.00, 19.48, 18.95, 18.44, 17.92, 17.41, 16.91, 16.42, 15.93, 15.46, 15.00, 14.55, 14.12, 13.71, 13.31, 12.93, 12.57, 12.23, 11.91, 11.61, 11.34, 11.09, 10.86, 10.66, 10.49, 10.34, 10.22, 10.12, 10.05, 10.01, 10.00, 10.01, 10.05, 10.12, 10.22, 10.34, 10.49, 10.66, 10.86, 11.09, 11.34, 11.61, 11.91, 12.23, 12.57, 12.93, 13.31, 13.71, 14.12, 14.55, 15.00, 15.46, 15.93, 16.42, 16.91, 17.41, 17.92, 18.44, 18.95, 19.48\nscpi> LIST:DWELl 0.001\nscpi> LIST:CURRent:LEVel 0.1\n"
-      },
-      {
-        "name": "serial",
-        "code": "scpi> SYSTem:COMMunicate:SERial:BAUD 4800\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n4800\nscpi> SYSTem:COMMunicate:SERial:BAUD 9600\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n9600\nscpi> SYSTem:COMMunicate:SERial:BAUD 19200\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n19200\nscpi> SYSTem:COMMunicate:SERial:BAUD 38400\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n38400\nscpi> SYSTem:COMMunicate:SERial:BAUD 57600\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n57600\nscpi> SYSTem:COMMunicate:SERial:BAUD 115200\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n115200\nscpi> SYSTem:COMMunicate:SERial:BAUD 200000\n**ERROR: -222,\"Data out of range\"\nscpi> SYSTem:COMMunicate:SERial:BAUD?\n115200\nscpi> SYSTem:COMMunicate:SERial:PARity none\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"NONE\"\nscpi> SYSTem:COMMunicate:SERial:PARity EVEN\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"EVEN\"\nscpi> SYSTem:COMMunicate:SERial:PARity ODD\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"ODD\"\nscpi> SYSTem:COMMunicate:SERial:PARity MARK\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"MARK\"\nscpi> SYSTem:COMMunicate:SERial:PARity SPACE\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"SPACE\"\nscpi> SYSTem:COMMunicate:SERial:PARity TRT\n**ERROR: -224,\"Illegal parameter value\"\nscpi> SYSTem:COMMunicate:SERial:PARity?\n\"SPACE\"\n"
-      }
-    ],
-    "terminal": {}
+    ]
   },
   "shortcuts": {
     "shortcuts": [
