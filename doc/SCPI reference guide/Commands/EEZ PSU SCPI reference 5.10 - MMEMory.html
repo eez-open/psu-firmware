@@ -13,7 +13,7 @@
 			.Default_ntt { }
 			.Heading_2 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 12.0pt; font-weight: bold; font-style: italic; color: #0066cc; }
 			.Heading_3 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 11.0pt; font-weight: bold; color: #0066cc; }
-			.List_1_Cont. { text-align: left; margin-left: 10mm; margin-right: 1.99mm; text-indent: -6mm; }
+			.List_1 { text-align: left; margin-left: 10mm; margin-right: 1.99mm; text-indent: -6mm; }
 			.List_1_End { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-bottom: 3mm; text-indent: -6mm; }
 			.List_1_Start { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-top: 3mm; text-indent: -6mm; }
 			p { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
@@ -310,12 +310,12 @@
 					<p>Returns all files in the directory as list of comma delimited quoted strings of &lt;filename&gt;, &lt;filetype&gt; and &lt;filesize&gt;. The following file types are supported:</p>
 					<ul>
 						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">BIN – binary data</li>
-						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">CSV – textual data (comma separated)</li>
-						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">FOLD – directory (folder)</li>
-						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">LIST – LIST program data</li>
-						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">LOG – trace (display) or logged data (file extension .log)</li>
-						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">PROF – user profile data (file extension .profile)</li>
-						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">STAT – instrument (setting) state or user profiles (file extension .conf)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">CSV – textual data (comma separated)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">FOLD – directory (folder)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">LIST – LIST program data</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">LOG – trace (display) or logged data (file extension .log)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">PROF – user profile data (file extension .profile)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">STAT – instrument (setting) state or user profiles (file extension .conf)</li>
 					</ul>
 				</td>
 			</tr>
@@ -802,7 +802,7 @@
 					<p>Downloads data from the host computer to a file in the SD card. This is a multiple steps process:</p>
 					<ul>
 						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">The filename must have been previously specified by MMEMory:DOWNload:FNAMe. </li>
-						<li class="List_1_Cont." style="text-indent: 0; list-style-type: disc;">The data can be transferred in single or more blocks. Receiving of first block will erase all previously stored, and each consecutive block will be appended to the end</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">The data can be transferred in single or more blocks. Receiving of first block will erase all previously stored, and each consecutive block will be appended to the end</li>
 						<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">Download is finished when MMEMory:DOWNload:FNAMe with empty name was sent</li>
 					</ul>
 					<p class="note">Use MMEMory:INFOrmation? command first to check available space.</p>
@@ -1408,7 +1408,12 @@
 					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_code">MMEM:MOVE &quot;old name&quot;, &quot;new name&quot;</p>
+					<p>Rename file:</p>
+					<p class="cmd_code_single">MMEM:MOVE &quot;old name&quot;,&quot;new name&quot;</p>
+					<p>Move file from current directory to “/Test” directory:</p>
+					<p class="cmd_code_single">MMEM:MOVE &quot;new name&quot;,&quot;/Test/new name&quot;</p>
+					<p>Move and rename file:</p>
+					<p class="cmd_code_single">MMEM:MOVE &quot;/Test/new name&quot;,&quot;/Documents/new doc&quot;</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">

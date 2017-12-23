@@ -75789,7 +75789,8 @@
           },
           {
             "name": "ABORt:ELOG",
-            "helpLink": "EEZ PSU SCPI reference 5.1 - ABORt.html#abor_elog"
+            "helpLink": "EEZ PSU SCPI reference 5.1 - ABORt.html#abor_elog",
+            "usedIn": []
           }
         ]
       },
@@ -75958,11 +75959,13 @@
         "commands": [
           {
             "name": "FETCh:AHOur?",
-            "helpLink": "EEZ PSU SCPI reference 5.5 - FETCh.html#fetc_aho"
+            "helpLink": "EEZ PSU SCPI reference 5.5 - FETCh.html#fetc_aho",
+            "usedIn": []
           },
           {
             "name": "FETCh:WHOur?",
-            "helpLink": "EEZ PSU SCPI reference 5.5 - FETCh.html#fetc_who"
+            "helpLink": "EEZ PSU SCPI reference 5.5 - FETCh.html#fetc_who",
+            "usedIn": []
           }
         ]
       },
@@ -76034,11 +76037,13 @@
           },
           {
             "name": "INSTrument:COUPle:TRIGger",
-            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_coup_trig"
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_coup_trig",
+            "usedIn": []
           },
           {
             "name": "INSTrument:COUPle:TRIGger?",
-            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_coup_trig"
+            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_coup_trig",
+            "usedIn": []
           }
         ]
       },
@@ -76253,19 +76258,23 @@
           },
           {
             "name": "OUTPut:DPRog",
-            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_dpr"
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_dpr",
+            "usedIn": []
           },
           {
             "name": "OUTPut:DPRog?",
-            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_dpr"
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_dpr",
+            "usedIn": []
           },
           {
             "name": "OUTPut:PROTection:MEASure",
-            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_meas"
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_meas",
+            "usedIn": []
           },
           {
             "name": "OUTPut:PROTection:MEASure?",
-            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_meas"
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_meas",
+            "usedIn": []
           }
         ]
       },
@@ -76291,11 +76300,13 @@
           },
           {
             "name": "SENSe:AHOur:RESet",
-            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_aho_res"
+            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_aho_res",
+            "usedIn": []
           },
           {
             "name": "SENSe:WHOur:RESet",
-            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_who_res"
+            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_who_res",
+            "usedIn": []
           }
         ]
       },
@@ -76697,7 +76708,8 @@
           },
           {
             "name": "SYSTem:CHANnel:INFOrmation:AHOur:TOTal?",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_aho"
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_aho",
+            "usedIn": []
           },
           {
             "name": "SYSTem:CHANnel:INFOrmation:CURRent?",
@@ -76725,7 +76737,8 @@
           },
           {
             "name": "SYSTem:CHANnel:INFOrmation:WHOur:TOTal?",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_who"
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_who",
+            "usedIn": []
           },
           {
             "name": "SYSTem:CHANnel:MODel?",
@@ -77213,8 +77226,7 @@
         "showInToolbar": true,
         "toolbarButtonPosition": 1,
         "toolbarButtonColor": "#78C36A",
-        "requiresConfirmation": false,
-        "selected": false
+        "requiresConfirmation": false
       },
       {
         "id": "30044bf3-ee58-4138-e6ae-e36052820245",
@@ -77227,8 +77239,7 @@
         "showInToolbar": true,
         "toolbarButtonPosition": 2,
         "toolbarButtonColor": "#E665A0",
-        "requiresConfirmation": false,
-        "selected": false
+        "requiresConfirmation": false
       },
       {
         "id": "bbe8f05b-cb07-4142-efe6-840a8f2f9163",
@@ -77241,8 +77252,7 @@
         "showInToolbar": true,
         "toolbarButtonPosition": 3,
         "toolbarButtonColor": "#727b84",
-        "requiresConfirmation": false,
-        "selected": false
+        "requiresConfirmation": false
       },
       {
         "id": "88db9b28-1d1c-4096-938c-8142151201cc",
@@ -77255,8 +77265,7 @@
         "showInToolbar": true,
         "toolbarButtonPosition": 4,
         "toolbarButtonColor": "#727b84",
-        "requiresConfirmation": false,
-        "selected": false
+        "requiresConfirmation": false
       },
       {
         "id": "8c02fc6b-d3e8-432a-d9b6-9a9f59e04d02",
@@ -77269,8 +77278,7 @@
         "showInToolbar": true,
         "toolbarButtonPosition": 5,
         "toolbarButtonColor": "#EE8C3E",
-        "requiresConfirmation": false,
-        "selected": true
+        "requiresConfirmation": false
       },
       {
         "id": "838f16b3-56f0-4f91-8811-c13af4bced1b",
@@ -77283,8 +77291,7 @@
         "showInToolbar": true,
         "toolbarButtonPosition": 6,
         "toolbarButtonColor": "#EE8C3E",
-        "requiresConfirmation": false,
-        "selected": false
+        "requiresConfirmation": false
       },
       {
         "id": "f954d38f-719c-4087-d4e0-5ce3eb39ec9b",
@@ -77297,8 +77304,7 @@
         "showInToolbar": true,
         "toolbarButtonPosition": 7,
         "toolbarButtonColor": "#78C36A",
-        "requiresConfirmation": false,
-        "selected": false
+        "requiresConfirmation": false
       },
       {
         "id": "6f8d7576-0694-413d-de1e-7d37c143ba3c",
@@ -77311,8 +77317,7 @@
         "showInToolbar": true,
         "toolbarButtonPosition": 11,
         "toolbarButtonColor": "#7BC3D4",
-        "requiresConfirmation": false,
-        "selected": false
+        "requiresConfirmation": false
       },
       {
         "id": "8513f9c4-6bd4-4e48-c3a0-730c966a6a64",
@@ -77325,8 +77330,7 @@
         "showInToolbar": true,
         "toolbarButtonPosition": 12,
         "toolbarButtonColor": "#7BC3D4",
-        "requiresConfirmation": false,
-        "selected": false
+        "requiresConfirmation": false
       },
       {
         "id": "fb1dafad-63ed-403b-a10e-4a09c30c3e85",
@@ -77339,8 +77343,7 @@
         "showInToolbar": true,
         "toolbarButtonPosition": 8,
         "toolbarButtonColor": "#C1D751",
-        "requiresConfirmation": false,
-        "selected": false
+        "requiresConfirmation": false
       },
       {
         "id": "a4e4d6f7-c8e5-4072-c32a-0fe68abbcbf3",
@@ -77353,8 +77356,7 @@
         "showInToolbar": true,
         "toolbarButtonPosition": 9,
         "toolbarButtonColor": "#C1D751",
-        "requiresConfirmation": false,
-        "selected": false
+        "requiresConfirmation": false
       },
       {
         "id": "acc0e50c-fa06-4b3c-85c7-830e5bb9a0c7",
@@ -77367,8 +77369,7 @@
         "showInToolbar": true,
         "toolbarButtonPosition": 10,
         "toolbarButtonColor": "#F2D74A",
-        "requiresConfirmation": true,
-        "selected": false
+        "requiresConfirmation": true
       }
     ]
   }

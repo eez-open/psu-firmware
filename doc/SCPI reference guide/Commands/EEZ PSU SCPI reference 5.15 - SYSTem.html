@@ -13,7 +13,7 @@
 			.Default_ntt { }
 			.Heading_2 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 12.0pt; font-weight: bold; font-style: italic; color: #0066cc; }
 			.Heading_3 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 11.0pt; font-weight: bold; color: #0066cc; }
-			.List_1_Cont_ { text-align: left; margin-left: 10mm; margin-right: 1.99mm; text-indent: -6mm; }
+			.List_1 { text-align: left; margin-left: 10mm; margin-right: 1.99mm; text-indent: -6mm; }
 			.List_1_End { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-bottom: 3mm; text-indent: -6mm; }
 			.List_1_Start { text-align: left; margin-left: 10mm; margin-right: 1.99mm; margin-top: 3mm; text-indent: -6mm; }
 			p { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
@@ -798,8 +798,8 @@
 					<p>When the beeper is enabled, the PSU generates audible sound in any of the following situations:</p>
 					<ul>
 						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">the power is turns on or off (see SYSTem:POWer),</li>
-						<li class="List_1_Cont_" style="text-indent: 0; list-style-type: disc;">when error occurs during front panel operation or remote operation (see <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-error-messages.html"><span style="text-decoration: underline;">Section 7</span></a> for the list of error messages),</li>
-						<li class="List_1_Cont_" style="text-indent: 0; list-style-type: disc;">self-test is failed and</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">when error occurs during front panel operation or remote operation (see <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-error-messages.html"><span style="text-decoration: underline;">Section 7</span></a> for the list of error messages),</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">self-test is failed and</li>
 						<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">any of the protection function is “tripped”</li>
 					</ul>
 				</td>
@@ -1247,11 +1247,11 @@
 					<p>This query returns names of all channel board functionality that can be controlled by firmware. Depending of the board model (see the SYSTem:CHANnel:MODel? query) various combination of the following features can be returned:</p>
 					<ul>
 						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">Volt – program the output voltage while channel is in the CV mode of operation (see [SOURce[&lt;n&gt;]]:VOLTage and APPLy commands)</li>
-						<li class="List_1_Cont_" style="text-indent: 0; list-style-type: disc;">Current – program the output current while channel is in the CC mode of operation (see [SOURce[&lt;n&gt;]]:CURRent and APPLy commands)</li>
-						<li class="List_1_Cont_" style="text-indent: 0; list-style-type: disc;">Power – set max. allowed output power regardless of the channel mode of operation (see [SOURce[&lt;n&gt;]]:POWer:LIMit)</li>
-						<li class="List_1_Cont_" style="text-indent: 0; list-style-type: disc;">OE – set channel power output (see OUTPut[:STATe])</li>
-						<li class="List_1_Cont_" style="text-indent: 0; list-style-type: disc;">Dprog – control down-programmer circuit (see OUTPut:DPRog)</li>
-						<li class="List_1_Cont_" style="text-indent: 0; list-style-type: disc;">LRipple – set low power mode of operation when SMPS pre-regulator is switched off (see OUTPut:LRIPple)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Current – program the output current while channel is in the CC mode of operation (see [SOURce[&lt;n&gt;]]:CURRent and APPLy commands)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Power – set max. allowed output power regardless of the channel mode of operation (see [SOURce[&lt;n&gt;]]:POWer:LIMit)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">OE – set channel power output (see OUTPut[:STATe])</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">Dprog – control down-programmer circuit (see OUTPut:DPRog)</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">LRipple – set low power mode of operation when SMPS pre-regulator is switched off (see OUTPut:LRIPple)</li>
 						<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">Rprog – control output voltage programming source (see [SOURce[&lt;n&gt;]]:VOLTage:PROGram[:SOURce])</li>
 					</ul>
 				</td>
@@ -2211,7 +2211,7 @@
 					<p>This command configures the remote/local state of the PSU according to the following settings:</p>
 					<ul>
 						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">LOCal – The PSU is set to front panel and remote interface control.</li>
-						<li class="List_1_Cont_" style="text-indent: 0; list-style-type: disc;">REMote – The PSU is set to front panel and remote interface control.</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">REMote – The PSU is set to front panel and remote interface control.</li>
 						<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">RWLock – The front panel keys are disabled. The PSU can only be controlled via the remote interface. This programmable setting is completely independent from the front panel lock/unlock function that is available from the front panel menu. If you use this command to lock the front panel, the front panel will be unlocked when AC power is cycled.</li>
 					</ul>
 					<p>The LOCal parameter is the same as SYSTem:LOCal, the REMote parameter is the same as SYSTem:REMote, and the RWLock parameter is the same as SYSTem:RWLock.</p>
