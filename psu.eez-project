@@ -75786,11 +75786,6 @@
           {
             "name": "ABORt",
             "helpLink": "EEZ PSU SCPI reference 5.1 - ABORt.html#abor"
-          },
-          {
-            "name": "ABORt:ELOG",
-            "helpLink": "EEZ PSU SCPI reference 5.1 - ABORt.html#abor_elog",
-            "usedIn": []
           }
         ]
       },
@@ -75956,18 +75951,7 @@
       {
         "name": "5.5. FETCh",
         "helpLink": "EEZ PSU SCPI reference 5.5 - FETCh.html",
-        "commands": [
-          {
-            "name": "FETCh:AHOur?",
-            "helpLink": "EEZ PSU SCPI reference 5.5 - FETCh.html#fetc_aho",
-            "usedIn": []
-          },
-          {
-            "name": "FETCh:WHOur?",
-            "helpLink": "EEZ PSU SCPI reference 5.5 - FETCh.html#fetc_who",
-            "usedIn": []
-          }
-        ]
+        "commands": []
       },
       {
         "name": "5.6. INITiate",
@@ -76034,16 +76018,6 @@
           {
             "name": "INSTrument[:SELect]?",
             "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_sel"
-          },
-          {
-            "name": "INSTrument:COUPle:TRIGger",
-            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_coup_trig",
-            "usedIn": []
-          },
-          {
-            "name": "INSTrument:COUPle:TRIGger?",
-            "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_coup_trig",
-            "usedIn": []
           }
         ]
       },
@@ -76255,26 +76229,6 @@
           {
             "name": "OUTPut[:STATe]?",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp"
-          },
-          {
-            "name": "OUTPut:DPRog",
-            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_dpr",
-            "usedIn": []
-          },
-          {
-            "name": "OUTPut:DPRog?",
-            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_dpr",
-            "usedIn": []
-          },
-          {
-            "name": "OUTPut:PROTection:MEASure",
-            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_meas",
-            "usedIn": []
-          },
-          {
-            "name": "OUTPut:PROTection:MEASure?",
-            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_meas",
-            "usedIn": []
           }
         ]
       },
@@ -76297,16 +76251,6 @@
           {
             "name": "SENSe:CURRent[:DC]:RANGe[:UPPer]?",
             "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_curr_rang"
-          },
-          {
-            "name": "SENSe:AHOur:RESet",
-            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_aho_res",
-            "usedIn": []
-          },
-          {
-            "name": "SENSe:WHOur:RESet",
-            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_who_res",
-            "usedIn": []
           }
         ]
       },
@@ -76551,10 +76495,6 @@
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_outp_data"
           },
           {
-            "name": "[SOURce]:DIGital:OUTPut:DATA?",
-            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_outp_data"
-          },
-          {
             "name": "[SOURce]:DIGital:PIN<n>:FUNCtion",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_pin_func"
           },
@@ -76707,11 +76647,6 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cap"
           },
           {
-            "name": "SYSTem:CHANnel:INFOrmation:AHOur:TOTal?",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_aho",
-            "usedIn": []
-          },
-          {
             "name": "SYSTem:CHANnel:INFOrmation:CURRent?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_curr"
           },
@@ -76734,11 +76669,6 @@
           {
             "name": "SYSTem:CHANnel:INFOrmation:VOLTage?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_volt"
-          },
-          {
-            "name": "SYSTem:CHANnel:INFOrmation:WHOur:TOTal?",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_who",
-            "usedIn": []
           },
           {
             "name": "SYSTem:CHANnel:MODel?",
@@ -76822,10 +76752,6 @@
           },
           {
             "name": "SYSTem:COMMunicate:RLSTate",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_rlst"
-          },
-          {
-            "name": "SYSTem:COMMunicate:RLSTate?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_rlst"
           },
           {

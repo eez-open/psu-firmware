@@ -36,7 +36,6 @@
     SCPI_COMMAND("*TST?", scpi_cmd_coreTstQ) \
     SCPI_COMMAND("*WAI", scpi_cmd_coreWai) \
     SCPI_COMMAND("ABORt", scpi_cmd_abort) \
-    SCPI_COMMAND("ABORt:ELOG", scpi_cmd_abortElog) \
     SCPI_COMMAND("DEBUg", scpi_cmd_debug) \
     SCPI_COMMAND("DEBUg:WDOG", scpi_cmd_debugWdog) \
     SCPI_COMMAND("DEBUg:WDOG?", scpi_cmd_debugWdogQ) \
@@ -73,8 +72,6 @@
     SCPI_COMMAND("DISPlay[:WINdow]:TEXT?", scpi_cmd_displayWindowTextQ) \
     SCPI_COMMAND("DISPlay[:WINdow][:STATe]", scpi_cmd_displayWindowState) \
     SCPI_COMMAND("DISPlay[:WINdow][:STATe]?", scpi_cmd_displayWindowStateQ) \
-    SCPI_COMMAND("FETCh:AHOur?", scpi_cmd_fetchAhourQ) \
-    SCPI_COMMAND("FETCh:WHOur?", scpi_cmd_fetchWhourQ) \
     SCPI_COMMAND("INITiate:CONTinuous", scpi_cmd_initiateContinuous) \
     SCPI_COMMAND("INITiate:CONTinuous?", scpi_cmd_initiateContinuousQ) \
     SCPI_COMMAND("INITiate[:IMMediate]", scpi_cmd_initiateImmediate) \
@@ -89,8 +86,6 @@
     SCPI_COMMAND("INSTrument:NSELect?", scpi_cmd_instrumentNselectQ) \
     SCPI_COMMAND("INSTrument[:SELect]", scpi_cmd_instrumentSelect) \
     SCPI_COMMAND("INSTrument[:SELect]?", scpi_cmd_instrumentSelectQ) \
-    SCPI_COMMAND("INSTrument:COUPle:TRIGger", scpi_cmd_instrumentCoupleTrigger) \
-    SCPI_COMMAND("INSTrument:COUPle:TRIGger?", scpi_cmd_instrumentCoupleTriggerQ) \
     SCPI_COMMAND("MEASure[:SCALar]:CURRent[:DC]?", scpi_cmd_measureScalarCurrentDcQ) \
     SCPI_COMMAND("MEASure[:SCALar]:POWer[:DC]?", scpi_cmd_measureScalarPowerDcQ) \
     SCPI_COMMAND("MEASure[:SCALar]:TEMPerature[:THERmistor][:DC]?", scpi_cmd_measureScalarTemperatureThermistorDcQ) \
@@ -138,16 +133,10 @@
     SCPI_COMMAND("OUTPut[:STATe]:TRIGgered", scpi_cmd_outputStateTriggered) \
     SCPI_COMMAND("OUTPut[:STATe]:TRIGgered?", scpi_cmd_outputStateTriggeredQ) \
     SCPI_COMMAND("OUTPut[:STATe]?", scpi_cmd_outputStateQ) \
-    SCPI_COMMAND("OUTPut:DPRog", scpi_cmd_outputDprog) \
-    SCPI_COMMAND("OUTPut:DPRog?", scpi_cmd_outputDprogQ) \
-    SCPI_COMMAND("OUTPut:PROTection:MEASure", scpi_cmd_outputProtectionMeasure) \
-    SCPI_COMMAND("OUTPut:PROTection:MEASure?", scpi_cmd_outputProtectionMeasureQ) \
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe:AUTO", scpi_cmd_senseCurrentDcRangeAuto) \
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe:AUTO?", scpi_cmd_senseCurrentDcRangeAutoQ) \
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe[:UPPer]", scpi_cmd_senseCurrentDcRangeUpper) \
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe[:UPPer]?", scpi_cmd_senseCurrentDcRangeUpperQ) \
-    SCPI_COMMAND("SENSe:AHOur:RESet", scpi_cmd_senseAhourReset) \
-    SCPI_COMMAND("SENSe:WHOur:RESet", scpi_cmd_senseWhourReset) \
     SCPI_COMMAND("[SOURce#]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]", scpi_cmd_sourceCurrentLimitPositiveImmediateAmplitude) \
     SCPI_COMMAND("[SOURce#]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]?", scpi_cmd_sourceCurrentLimitPositiveImmediateAmplitudeQ) \
     SCPI_COMMAND("[SOURce#]:CURRent:MODE", scpi_cmd_sourceCurrentMode) \
@@ -207,7 +196,6 @@
     SCPI_COMMAND("[SOURce#]:VOLTage[:LEVel][:IMMediate][:AMPLitude]?", scpi_cmd_sourceVoltageLevelImmediateAmplitudeQ) \
     SCPI_COMMAND("[SOURce]:DIGital:INPut:DATA?", scpi_cmd_sourceDigitalInputDataQ) \
     SCPI_COMMAND("[SOURce]:DIGital:OUTPut:DATA", scpi_cmd_sourceDigitalOutputData) \
-    SCPI_COMMAND("[SOURce]:DIGital:OUTPut:DATA?", scpi_cmd_sourceDigitalOutputDataQ) \
     SCPI_COMMAND("[SOURce]:DIGital:PIN#:FUNCtion", scpi_cmd_sourceDigitalPinFunction) \
     SCPI_COMMAND("[SOURce]:DIGital:PIN#:FUNCtion?", scpi_cmd_sourceDigitalPinFunctionQ) \
     SCPI_COMMAND("[SOURce]:DIGital:PIN#:POLarity", scpi_cmd_sourceDigitalPinPolarity) \
@@ -243,14 +231,12 @@
     SCPI_COMMAND("SYSTem:BEEPer:STATe?", scpi_cmd_systemBeeperStateQ) \
     SCPI_COMMAND("SYSTem:BEEPer[:IMMediate]", scpi_cmd_systemBeeperImmediate) \
     SCPI_COMMAND("SYSTem:CAPability?", scpi_cmd_systemCapabilityQ) \
-    SCPI_COMMAND("SYSTem:CHANnel:INFOrmation:AHOur:TOTal?", scpi_cmd_systemChannelInformationAhourTotalQ) \
     SCPI_COMMAND("SYSTem:CHANnel:INFOrmation:CURRent?", scpi_cmd_systemChannelInformationCurrentQ) \
     SCPI_COMMAND("SYSTem:CHANnel:INFOrmation:ONTime:LAST?", scpi_cmd_systemChannelInformationOntimeLastQ) \
     SCPI_COMMAND("SYSTem:CHANnel:INFOrmation:ONTime:TOTal?", scpi_cmd_systemChannelInformationOntimeTotalQ) \
     SCPI_COMMAND("SYSTem:CHANnel:INFOrmation:POWer?", scpi_cmd_systemChannelInformationPowerQ) \
     SCPI_COMMAND("SYSTem:CHANnel:INFOrmation:PROGram?", scpi_cmd_systemChannelInformationProgramQ) \
     SCPI_COMMAND("SYSTem:CHANnel:INFOrmation:VOLTage?", scpi_cmd_systemChannelInformationVoltageQ) \
-    SCPI_COMMAND("SYSTem:CHANnel:INFOrmation:WHOur:TOTal?", scpi_cmd_systemChannelInformationWhourTotalQ) \
     SCPI_COMMAND("SYSTem:CHANnel:MODel?", scpi_cmd_systemChannelModelQ) \
     SCPI_COMMAND("SYSTem:CHANnel[:COUNt]?", scpi_cmd_systemChannelCountQ) \
     SCPI_COMMAND("SYSTem:COMMunicate:ENABle", scpi_cmd_systemCommunicateEnable) \
@@ -272,7 +258,6 @@
     SCPI_COMMAND("SYSTem:COMMunicate:NTP", scpi_cmd_systemCommunicateNtp) \
     SCPI_COMMAND("SYSTem:COMMunicate:NTP?", scpi_cmd_systemCommunicateNtpQ) \
     SCPI_COMMAND("SYSTem:COMMunicate:RLSTate", scpi_cmd_systemCommunicateRlstate) \
-    SCPI_COMMAND("SYSTem:COMMunicate:RLSTate?", scpi_cmd_systemCommunicateRlstateQ) \
     SCPI_COMMAND("SYSTem:COMMunicate:SERial:BAUD", scpi_cmd_systemCommunicateSerialBaud) \
     SCPI_COMMAND("SYSTem:COMMunicate:SERial:BAUD?", scpi_cmd_systemCommunicateSerialBaudQ) \
     SCPI_COMMAND("SYSTem:COMMunicate:SERial:PARity", scpi_cmd_systemCommunicateSerialParity) \
