@@ -39,6 +39,8 @@ static struct {
 
 static uint32_t g_toutputPulseStartTickCount;
 
+static bool g_digitalOutputPinState[2] = { false, false };
+
 uint8_t isOutputFault() {
     if (psu::isPowerUp()) {
         if (fan::g_testResult == TEST_FAILED) {
@@ -194,6 +196,24 @@ void refresh() {
 
 bool isInhibited() {
     return g_lastState.inhibited ? true : false;
+}
+
+void setDigitalOutputPinState(int pin, bool state) {
+	g_digitalOutputPinState[pin - 2] = state;
+
+	if (persist_conf::devConf2.ioPins[pin - 1].polarity == io_pins::POLARITY_NEGATIVE) {
+		state = !state;
+	}
+
+	if (pin == 2) {
+		digitalWrite(DOUT, state);
+	} else {
+		digitalWrite(DOUT2, state);
+	}
+}
+
+bool getDigitalOutputPinState(int pin) {
+	return g_digitalOutputPinState[pin - 2];
 }
 
 }

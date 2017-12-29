@@ -770,6 +770,11 @@ scpi_result_t scpi_cmd_systemCommunicateRlstate(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
+scpi_result_t scpi_cmd_systemCommunicateRlstateQ(scpi_t *context) {
+	resultChoiceName(context, rlStateChoice, g_rlState);
+	return SCPI_RES_OK;
+}
+
 scpi_result_t scpi_cmd_systemLocal(scpi_t *context) {
     g_rlState = RL_STATE_LOCAL;
 

@@ -44,6 +44,9 @@ void refresh();
 
 bool isInhibited();
 
+void setDigitalOutputPinState(int pin, bool state);
+bool getDigitalOutputPinState(int pin);
+
 }
 }
 } // namespace eez::psu::io_pins

@@ -1273,15 +1273,7 @@ scpi_result_t scpi_cmd_sourceDigitalOutputData(scpi_t *context) {
 		return SCPI_RES_ERR;
 	}
 
-    if (persist_conf::devConf2.ioPins[pin - 1].polarity == io_pins::POLARITY_NEGATIVE) {
-        state = !state;
-    }
-
-    if (pin == 2) {
-        digitalWrite(DOUT, state);
-    } else {
-        digitalWrite(DOUT2, state);
-    }
+	io_pins::setDigitalOutputPinState(pin, state);
 
     return SCPI_RES_OK;
 #else
@@ -1290,6 +1282,34 @@ scpi_result_t scpi_cmd_sourceDigitalOutputData(scpi_t *context) {
     return SCPI_RES_ERR;
 #endif
 }
+
+scpi_result_t scpi_cmd_sourceDigitalOutputDataQ(scpi_t *context) {
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+	int32_t pin;
+	if (!SCPI_ParamInt(context, &pin, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+	if (pin != 2 && pin != 3) {
+		SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+		return SCPI_RES_ERR;
+	}
+
+	if (persist_conf::devConf2.ioPins[pin - 1].function != io_pins::FUNCTION_OUTPUT) {
+		SCPI_ErrorPush(context, SCPI_ERROR_DIGITAL_PIN_FUNCTION_MISMATCH);
+		return SCPI_RES_ERR;
+	}
+
+	SCPI_ResultBool(context, io_pins::getDigitalOutputPinState(pin));
+
+	return SCPI_RES_OK;
+#else
+	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
+
+	return SCPI_RES_ERR;
+#endif
+}
+
 
 static scpi_choice_def_t functionChoice[] = {
     { "NONE", io_pins::FUNCTION_NONE },

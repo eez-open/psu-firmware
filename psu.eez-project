@@ -76509,6 +76509,10 @@
           {
             "name": "[SOURce]:DIGital:PIN<n>:POLarity?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_pin_pol"
+          },
+          {
+            "name": "[SOURce]:DIGital:OUTPut:DATA?",
+            "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_dig_outp_data"
           }
         ]
       },
@@ -76925,6 +76929,10 @@
           {
             "name": "SYSTem:VERSion?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_vers"
+          },
+          {
+            "name": "SYSTem:COMMunicate:RLSTate?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_rlst"
           }
         ]
       },
