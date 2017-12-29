@@ -19,6 +19,7 @@
 			p { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
 			li { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
 			.cmd_code { text-align: left; font-family: "Courier New"; }
+			.cmd_code_End { text-align: left; margin-bottom: 1.99mm; font-family: "Courier New"; }
 			.cmd_code_Start { text-align: left; margin-top: 1.99mm; font-family: "Courier New"; }
 			.cmd_code_single { text-align: left; margin-top: 1.99mm; margin-bottom: 1.99mm; font-family: "Courier New"; }
 			.cmd_root { text-align: left; color: #0066cc; }
@@ -441,6 +442,54 @@
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
 					<p>Sets the date of the system clock</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="scpi1">:DIGital</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="scpi2"><a href="#syst_dig_inp_data"><span style="text-decoration: underline;">:INPut:DATA? [&lt;pin&gt;]</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p>Reads the state of the digital port pins</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="scpi2"><a href="#syst_dig_outp_data"><span style="text-decoration: underline;">:OUTPut:DATA [&lt;pin&gt;] {&lt;state&gt;}</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p>Sets the state of the digital port pins</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="scpi2">:PIN&lt;n&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="scpi3"><a href="#syst_dig_pin_func"><span style="text-decoration: underline;">:FUNCtion {&lt;function&gt;}</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p>Sets the selected pin’s function</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 49%;">
+					<p class="scpi3"><a href="#syst_dig_pin_pol"><span style="text-decoration: underline;">:POLarity {&lt;polarity&gt;}</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p>Sets the selected pin’s polarity</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -2807,7 +2856,408 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.34. <a name="__RefHeading__23078_295952897"></a><a name="syst_err"></a>SYSTem:ERRor<a name="__RefHeading__23078_295952897"></a></p>
+		<p class="Heading_3">5.15.34. <a name="syst_dig_inp_data"></a>SYSTem:DIGital:INPut:DATA</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Syntax</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_root">SYSTem:DIGital:INPut:DATA? [&lt;pin&gt;]</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Description</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>This query reads the state of the digital control port.</p>
+					<p class="note">Applies only to pin 1. </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Return</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>The query returns the value of the state of input pin.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td rowspan="2" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Parameters</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Name</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Type</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Range</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Default</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p>&lt;pin&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Numeric (NR1)</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">1</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code_End">SYST:DIG:INP:DATA? 1</p>
+					<p class="cmd_code">1</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>SYSTem:DIGital:PIN&lt;n&gt;:FUNCtion</p>
+					<p>SYSTem:DIGital:PIN&lt;n&gt;:POLarity</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_3">5.15.35. <a name="syst_dig_outp_data"></a>SYSTem:DIGital:OUTPut:DATA</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Syntax</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_root">SYSTem:DIGital:OUTPut:DATA [&lt;pin&gt;] {&lt;state&gt;}</p>
+					<p class="cmd_root">SYSTem:DIGital:OUTPut:DATA? [&lt;pin&gt;]</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Description</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>This command sets the output data on the digital output pin.</p>
+					<p class="note">Applies only to pin 2 and pin 3. This command is supported on Arduino Shield r5B11 or newer revision.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Return</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>The query returns the last programmed value on the selected pin.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td rowspan="2" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Parameters</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Name</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Type</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Range</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Default</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p>&lt;pin&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Numeric (NR1)</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">2 – 3</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">–</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p>&lt;state&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Discrete</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">ON|OFF|0|1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">–</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code_single">SYST:DIG:OUTP:DATA 2 0</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Errors</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">-114,&quot;Header suffix out of range&quot;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>SYSTem:DIGital:PIN&lt;n&gt;:FUNCtion</p>
+					<p>SYSTem:DIGital:PIN&lt;n&gt;:POLarity</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_3">5.15.36. <a name="syst_dig_pin_func"></a>SYSTem:DIGital:PIN&lt;n&gt;:FUNCtion</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Syntax</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_root">SYSTem:DIGital:PIN&lt;n&gt;:FUNCtion {&lt;function&gt;}</p>
+					<p class="cmd_root">SYSTem:DIGital:PIN&lt;n&gt;:FUNCtion?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Description</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>Use this command to set function of the selected digital port pin. The pin function is saved in non-volatile memory.</p>
+					<p>&#160;</p>
+					<p class="note">All input functions applies only to pin1 and all output functions applies only to pin 2 and pin 3.</p>
+					<ul>
+						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">DINPut – The pin is in digital input mode.</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">DOUTput – The pin is in digital output mode.</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">FAULt – Setting FAULt means that pin functions as an isolated fault output. The fault signal is true when any output is in a protected state (from OCP, OVP, OTP, OPP) or Fan fault is detected.</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">INHibit – When pin is configured as an inhibit input, a true signal at the pin will disable all output channels.</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">ONCouple – output pin synchronize channel output state.</li>
+						<li class="List_1" style="text-indent: 0; list-style-type: disc;">TINPut – The pin is configured as a trigger input. When configured as a trigger input, the pin can be selected as the source for trigger signals. See TRIGger[:SEQuence]:SOURce.</li>
+						<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">TOUTput – This allows a BUS trigger to be sent to any digital port pin that has been configured as a trigger output. A trigger out pulse is generated when the state is on and a bus trigger is received. A BUS trigger is generated using the *TRG command.</li>
+					</ul>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Return</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>The query command returns DINP, DOUT, FAUL, INH or TINP.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td rowspan="2" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Parameters</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Name</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Type</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Range</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Default</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p>&lt;n&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Numeric (NR1)</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">1 – 3</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">–</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p>&lt;function&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Discrete</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: left;">DINP|DOUT|FAUL|INH|ONC|TINP|TOUT</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">–</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">SYST:DIG:PIN1:FUNC INH</p>
+					<p class="cmd_code">SYST:DIG:PIN2:FUNC FAUL</p>
+					<p class="cmd_code">SYST:DIG:PIN3:FUNC ONC</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Errors</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">-114,&quot;Header suffix out of range&quot;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>TRIGger[:SEQuence]:SOURce</p>
+					<p>SYSTem:DIGital:INPut:DATA</p>
+					<p>SYSTem:DIGital:OUTPut:DATA</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_3">5.15.37. <a name="syst_dig_pin_pol"></a>SYSTem:DIGital:PIN&lt;n&gt;:POLarity</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Syntax</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_root">SYSTem:DIGital:PIN&lt;n&gt;:POLarity {&lt;polarity&gt;}</p>
+					<p class="cmd_root">SYSTem:DIGital:PIN&lt;n&gt;:POLarity?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Description</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>This command sets the polarity of the selected digital port pin. The pin polarity is saved in non-volatile memory.</p>
+					<ul>
+						<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">POSitive – a logical true signal is a voltage high at the pin. For trigger inputs and outputs, POSitive means a rising edge.</li>
+						<li class="List_1_End" style="text-indent: 0; list-style-type: disc;">NEGative – a logical true signal is a voltage low at the pin. For trigger inputs and outputs, NEGative means a falling edge.</li>
+					</ul>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Return</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>The query command returns POS or NEG.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td rowspan="2" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Parameters</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Name</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Type</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Range</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Default</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p>&lt;n&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Numeric (NR1)</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">1 – 3</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">–</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p>&lt;polarity&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">Discrete</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: left;">POSitive|NEGative</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 22%;">
+					<p style="text-align: center;">–</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">SYST:DIG:PIN1:POL POS</p>
+					<p class="cmd_code">SYST:DIG:PIN2:POL NEG</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Errors</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">-114,&quot;Header suffix out of range&quot;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>TRIGger[:SEQuence]:SOURce</p>
+					<p>SYSTem:DIGital:INPut:DATA</p>
+					<p>SYSTem:DIGital:OUTPut:DATA</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_3">5.15.38. <a name="__RefHeading__23078_295952897"></a><a name="syst_err"></a>SYSTem:ERRor<a name="__RefHeading__23078_295952897"></a></p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -2864,7 +3314,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.35. <a name="syst_err_coun"></a>SYSTem:ERRor:COUNt?</p>
+		<p class="Heading_3">5.15.39. <a name="syst_err_coun"></a>SYSTem:ERRor:COUNt?</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -2902,7 +3352,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.36. <a name="syst_inh"></a>SYSTem:INHibit?</p>
+		<p class="Heading_3">5.15.40. <a name="syst_inh"></a>SYSTem:INHibit?</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -2949,7 +3399,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.37. <a name="syst_kloc"></a>SYSTem:KLOCk</p>
+		<p class="Heading_3">5.15.41. <a name="syst_kloc"></a>SYSTem:KLOCk</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -2986,7 +3436,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.38. <a name="syst_loc"></a>SYSTem:LOCal</p>
+		<p class="Heading_3">5.15.42. <a name="syst_loc"></a>SYSTem:LOCal</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3023,7 +3473,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.39. <a name="syst_pass_cal_res"></a>SYSTem:PASSword:CALibrate:RESet</p>
+		<p class="Heading_3">5.15.43. <a name="syst_pass_cal_res"></a>SYSTem:PASSword:CALibrate:RESet</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3059,7 +3509,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.40. <a name="syst_pass_fpan_res"></a>SYSTem:PASSword:FPANel:RESet</p>
+		<p class="Heading_3">5.15.44. <a name="syst_pass_fpan_res"></a>SYSTem:PASSword:FPANel:RESet</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3095,7 +3545,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.41. <a name="syst_pass_new"></a>SYSTem:PASSword:NEW</p>
+		<p class="Heading_3">5.15.45. <a name="syst_pass_new"></a>SYSTem:PASSword:NEW</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3186,7 +3636,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.42. <a name="syst_pon_outp_dis"></a>SYSTem:PON:OUTPut:DISable</p>
+		<p class="Heading_3">5.15.46. <a name="syst_pon_outp_dis"></a>SYSTem:PON:OUTPut:DISable</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3267,7 +3717,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.43. <a name="syst_pow"></a>SYSTem:POWer</p>
+		<p class="Heading_3">5.15.47. <a name="syst_pow"></a>SYSTem:POWer</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3346,7 +3796,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.44. <a name="syst_pow_prot_trip"></a>SYSTem:POWer:PROTection:TRIP</p>
+		<p class="Heading_3">5.15.48. <a name="syst_pow_prot_trip"></a>SYSTem:POWer:PROTection:TRIP</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3422,7 +3872,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.45. <a name="syst_rem"></a>SYSTem:REMote</p>
+		<p class="Heading_3">5.15.49. <a name="syst_rem"></a>SYSTem:REMote</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3460,7 +3910,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.46. <a name="syst_rwl"></a>SYSTem:RWLock</p>
+		<p class="Heading_3">5.15.50. <a name="syst_rwl"></a>SYSTem:RWLock</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3497,7 +3947,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.47. <a name="syst_temp_prot"></a>SYSTem:TEMPerature:PROTection[:HIGH][:LEVel]</p>
+		<p class="Heading_3">5.15.51. <a name="syst_temp_prot"></a>SYSTem:TEMPerature:PROTection[:HIGH][:LEVel]</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3595,7 +4045,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.48. <a name="syst_temp_prot_cle"></a>SYSTem:TEMPerature:PROTection[:HIGH]:CLEar</p>
+		<p class="Heading_3">5.15.52. <a name="syst_temp_prot_cle"></a>SYSTem:TEMPerature:PROTection[:HIGH]:CLEar</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3662,7 +4112,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.49. <a name="syst_temp_prot_del"></a>SYSTem:TEMPerature:PROTection[:HIGH]:DELay[:TIME]</p>
+		<p class="Heading_3">5.15.53. <a name="syst_temp_prot_del"></a>SYSTem:TEMPerature:PROTection[:HIGH]:DELay[:TIME]</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3753,7 +4203,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.50. <a name="syst_temp_prot_stat"></a>SYSTem:TEMPerature:PROTection[:HIGH]:STATe </p>
+		<p class="Heading_3">5.15.54. <a name="syst_temp_prot_stat"></a>SYSTem:TEMPerature:PROTection[:HIGH]:STATe </p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3844,7 +4294,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.51. <a name="syst_temp_prot_trip"></a>SYSTem:TEMPerature:PROTection[:HIGH]:TRIPped?</p>
+		<p class="Heading_3">5.15.55. <a name="syst_temp_prot_trip"></a>SYSTem:TEMPerature:PROTection[:HIGH]:TRIPped?</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -3921,7 +4371,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.52. <a name="syst_time"></a>SYSTem:TIME</p>
+		<p class="Heading_3">5.15.56. <a name="syst_time"></a>SYSTem:TIME</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -4030,7 +4480,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.53. <a name="syst_time_dst"></a>SYSTem:TIME:DST</p>
+		<p class="Heading_3">5.15.57. <a name="syst_time_dst"></a>SYSTem:TIME:DST</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -4109,7 +4559,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.54. <a name="syst_time_zone"></a>SYSTem:TIME:ZONE</p>
+		<p class="Heading_3">5.15.58. <a name="syst_time_zone"></a>SYSTem:TIME:ZONE</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -4188,7 +4638,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.15.55. <a name="syst_vers"></a>SYSTem:VERSion?</p>
+		<p class="Heading_3">5.15.59. <a name="syst_vers"></a>SYSTem:VERSion?</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
