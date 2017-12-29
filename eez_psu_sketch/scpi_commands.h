@@ -194,13 +194,6 @@
     SCPI_COMMAND("[SOURce#]:VOLTage[:LEVel][:IMMediate]:STEP[:INCRement]?", scpi_cmd_sourceVoltageLevelImmediateStepIncrementQ) \
     SCPI_COMMAND("[SOURce#]:VOLTage[:LEVel][:IMMediate][:AMPLitude]", scpi_cmd_sourceVoltageLevelImmediateAmplitude) \
     SCPI_COMMAND("[SOURce#]:VOLTage[:LEVel][:IMMediate][:AMPLitude]?", scpi_cmd_sourceVoltageLevelImmediateAmplitudeQ) \
-    SCPI_COMMAND("[SOURce]:DIGital:INPut:DATA?", scpi_cmd_sourceDigitalInputDataQ) \
-    SCPI_COMMAND("[SOURce]:DIGital:OUTPut:DATA", scpi_cmd_sourceDigitalOutputData) \
-    SCPI_COMMAND("[SOURce]:DIGital:PIN#:FUNCtion", scpi_cmd_sourceDigitalPinFunction) \
-    SCPI_COMMAND("[SOURce]:DIGital:PIN#:FUNCtion?", scpi_cmd_sourceDigitalPinFunctionQ) \
-    SCPI_COMMAND("[SOURce]:DIGital:PIN#:POLarity", scpi_cmd_sourceDigitalPinPolarity) \
-    SCPI_COMMAND("[SOURce]:DIGital:PIN#:POLarity?", scpi_cmd_sourceDigitalPinPolarityQ) \
-    SCPI_COMMAND("[SOURce]:DIGital:OUTPut:DATA?", scpi_cmd_sourceDigitalOutputDataQ) \
     SCPI_COMMAND("STATus:OPERation:CONDition?", scpi_cmd_statusOperationConditionQ) \
     SCPI_COMMAND("STATus:OPERation:ENABle", scpi_cmd_statusOperationEnable) \
     SCPI_COMMAND("STATus:OPERation:ENABle?", scpi_cmd_statusOperationEnableQ) \
@@ -303,6 +296,13 @@
     SCPI_COMMAND("SYSTem:TIME?", scpi_cmd_systemTimeQ) \
     SCPI_COMMAND("SYSTem:VERSion?", scpi_cmd_systemVersionQ) \
     SCPI_COMMAND("SYSTem:COMMunicate:RLSTate?", scpi_cmd_systemCommunicateRlstateQ) \
+    SCPI_COMMAND("SYSTem:DIGital:INPut:DATA?", scpi_cmd_systemDigitalInputDataQ) \
+    SCPI_COMMAND("SYSTem:DIGital:OUTPut:DATA", scpi_cmd_systemDigitalOutputData) \
+    SCPI_COMMAND("SYSTem:DIGital:OUTPut:DATA?", scpi_cmd_systemDigitalOutputDataQ) \
+    SCPI_COMMAND("SYSTem:DIGital:PIN#:FUNCtion", scpi_cmd_systemDigitalPinFunction) \
+    SCPI_COMMAND("SYSTem:DIGital:PIN#:FUNCtion?", scpi_cmd_systemDigitalPinFunctionQ) \
+    SCPI_COMMAND("SYSTem:DIGital:PIN#:POLarity", scpi_cmd_systemDigitalPinPolarity) \
+    SCPI_COMMAND("SYSTem:DIGital:PIN#:POLarity?", scpi_cmd_systemDigitalPinPolarityQ) \
     SCPI_COMMAND("SYSTem:DATE:CLEar", scpi_cmd_systemDateClear) \
     SCPI_COMMAND("SYSTem:TIME:CLEar", scpi_cmd_systemTimeClear) \
     SCPI_COMMAND("SYSTem:SERial", scpi_cmd_systemSerial) \
