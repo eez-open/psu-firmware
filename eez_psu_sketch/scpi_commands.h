@@ -123,16 +123,16 @@
     SCPI_COMMAND("MMEMory:TIME?", scpi_cmd_mmemoryTimeQ) \
     SCPI_COMMAND("MMEMory:UNLock", scpi_cmd_mmemoryUnlock) \
     SCPI_COMMAND("MMEMory:UPLoad?", scpi_cmd_mmemoryUploadQ) \
+    SCPI_COMMAND("OUTPut[:STATe]", scpi_cmd_outputState) \
+    SCPI_COMMAND("OUTPut[:STATe]?", scpi_cmd_outputStateQ) \
+    SCPI_COMMAND("OUTPut[:STATe]:TRIGgered", scpi_cmd_outputStateTriggered) \
+    SCPI_COMMAND("OUTPut[:STATe]:TRIGgered?", scpi_cmd_outputStateTriggeredQ) \
     SCPI_COMMAND("OUTPut:MODE?", scpi_cmd_outputModeQ) \
     SCPI_COMMAND("OUTPut:PROTection:CLEar", scpi_cmd_outputProtectionClear) \
     SCPI_COMMAND("OUTPut:PROTection:COUPle", scpi_cmd_outputProtectionCouple) \
     SCPI_COMMAND("OUTPut:PROTection:COUPle?", scpi_cmd_outputProtectionCoupleQ) \
     SCPI_COMMAND("OUTPut:TRACk[:STATe]", scpi_cmd_outputTrackState) \
     SCPI_COMMAND("OUTPut:TRACk[:STATe]?", scpi_cmd_outputTrackStateQ) \
-    SCPI_COMMAND("OUTPut[:STATe]", scpi_cmd_outputState) \
-    SCPI_COMMAND("OUTPut[:STATe]:TRIGgered", scpi_cmd_outputStateTriggered) \
-    SCPI_COMMAND("OUTPut[:STATe]:TRIGgered?", scpi_cmd_outputStateTriggeredQ) \
-    SCPI_COMMAND("OUTPut[:STATe]?", scpi_cmd_outputStateQ) \
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe:AUTO", scpi_cmd_senseCurrentDcRangeAuto) \
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe:AUTO?", scpi_cmd_senseCurrentDcRangeAutoQ) \
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe[:UPPer]", scpi_cmd_senseCurrentDcRangeUpper) \
@@ -252,6 +252,7 @@
     SCPI_COMMAND("SYSTem:COMMunicate:NTP", scpi_cmd_systemCommunicateNtp) \
     SCPI_COMMAND("SYSTem:COMMunicate:NTP?", scpi_cmd_systemCommunicateNtpQ) \
     SCPI_COMMAND("SYSTem:COMMunicate:RLSTate", scpi_cmd_systemCommunicateRlstate) \
+    SCPI_COMMAND("SYSTem:COMMunicate:RLSTate?", scpi_cmd_systemCommunicateRlstateQ) \
     SCPI_COMMAND("SYSTem:COMMunicate:SERial:BAUD", scpi_cmd_systemCommunicateSerialBaud) \
     SCPI_COMMAND("SYSTem:COMMunicate:SERial:BAUD?", scpi_cmd_systemCommunicateSerialBaudQ) \
     SCPI_COMMAND("SYSTem:COMMunicate:SERial:PARity", scpi_cmd_systemCommunicateSerialParity) \
@@ -264,6 +265,13 @@
     SCPI_COMMAND("SYSTem:CPU:OPTion?", scpi_cmd_systemCpuOptionQ) \
     SCPI_COMMAND("SYSTem:DATE", scpi_cmd_systemDate) \
     SCPI_COMMAND("SYSTem:DATE?", scpi_cmd_systemDateQ) \
+    SCPI_COMMAND("SYSTem:DIGital:INPut:DATA?", scpi_cmd_systemDigitalInputDataQ) \
+    SCPI_COMMAND("SYSTem:DIGital:OUTPut:DATA", scpi_cmd_systemDigitalOutputData) \
+    SCPI_COMMAND("SYSTem:DIGital:OUTPut:DATA?", scpi_cmd_systemDigitalOutputDataQ) \
+    SCPI_COMMAND("SYSTem:DIGital:PIN#:FUNCtion", scpi_cmd_systemDigitalPinFunction) \
+    SCPI_COMMAND("SYSTem:DIGital:PIN#:FUNCtion?", scpi_cmd_systemDigitalPinFunctionQ) \
+    SCPI_COMMAND("SYSTem:DIGital:PIN#:POLarity", scpi_cmd_systemDigitalPinPolarity) \
+    SCPI_COMMAND("SYSTem:DIGital:PIN#:POLarity?", scpi_cmd_systemDigitalPinPolarityQ) \
     SCPI_COMMAND("SYSTem:ERRor:COUNt?", scpi_cmd_systemErrorCountQ) \
     SCPI_COMMAND("SYSTem:ERRor[:NEXT]?", scpi_cmd_systemErrorNextQ) \
     SCPI_COMMAND("SYSTem:INHibit?", scpi_cmd_systemInhibitQ) \
@@ -295,14 +303,6 @@
     SCPI_COMMAND("SYSTem:TIME:ZONE?", scpi_cmd_systemTimeZoneQ) \
     SCPI_COMMAND("SYSTem:TIME?", scpi_cmd_systemTimeQ) \
     SCPI_COMMAND("SYSTem:VERSion?", scpi_cmd_systemVersionQ) \
-    SCPI_COMMAND("SYSTem:COMMunicate:RLSTate?", scpi_cmd_systemCommunicateRlstateQ) \
-    SCPI_COMMAND("SYSTem:DIGital:INPut:DATA?", scpi_cmd_systemDigitalInputDataQ) \
-    SCPI_COMMAND("SYSTem:DIGital:OUTPut:DATA", scpi_cmd_systemDigitalOutputData) \
-    SCPI_COMMAND("SYSTem:DIGital:OUTPut:DATA?", scpi_cmd_systemDigitalOutputDataQ) \
-    SCPI_COMMAND("SYSTem:DIGital:PIN#:FUNCtion", scpi_cmd_systemDigitalPinFunction) \
-    SCPI_COMMAND("SYSTem:DIGital:PIN#:FUNCtion?", scpi_cmd_systemDigitalPinFunctionQ) \
-    SCPI_COMMAND("SYSTem:DIGital:PIN#:POLarity", scpi_cmd_systemDigitalPinPolarity) \
-    SCPI_COMMAND("SYSTem:DIGital:PIN#:POLarity?", scpi_cmd_systemDigitalPinPolarityQ) \
     SCPI_COMMAND("SYSTem:DATE:CLEar", scpi_cmd_systemDateClear) \
     SCPI_COMMAND("SYSTem:TIME:CLEar", scpi_cmd_systemTimeClear) \
     SCPI_COMMAND("SYSTem:SERial", scpi_cmd_systemSerial) \

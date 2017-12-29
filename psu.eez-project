@@ -76191,6 +76191,22 @@
         "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html",
         "commands": [
           {
+            "name": "OUTPut[:STATe]",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp"
+          },
+          {
+            "name": "OUTPut[:STATe]?",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp"
+          },
+          {
+            "name": "OUTPut[:STATe]:TRIGgered",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_trig"
+          },
+          {
+            "name": "OUTPut[:STATe]:TRIGgered?",
+            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_trig"
+          },
+          {
             "name": "OUTPut:MODE?",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_mode"
           },
@@ -76213,22 +76229,6 @@
           {
             "name": "OUTPut:TRACk[:STATe]?",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_trac"
-          },
-          {
-            "name": "OUTPut[:STATe]",
-            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp"
-          },
-          {
-            "name": "OUTPut[:STATe]:TRIGgered",
-            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_trig"
-          },
-          {
-            "name": "OUTPut[:STATe]:TRIGgered?",
-            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_trig"
-          },
-          {
-            "name": "OUTPut[:STATe]?",
-            "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp"
           }
         ]
       },
@@ -76731,6 +76731,10 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_rlst"
           },
           {
+            "name": "SYSTem:COMMunicate:RLSTate?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_rlst"
+          },
+          {
             "name": "SYSTem:COMMunicate:SERial:BAUD",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_ser_baud"
           },
@@ -76777,6 +76781,34 @@
           {
             "name": "SYSTem:DATE?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_date"
+          },
+          {
+            "name": "SYSTem:DIGital:INPut:DATA?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_inp_data"
+          },
+          {
+            "name": "SYSTem:DIGital:OUTPut:DATA",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_outp_data"
+          },
+          {
+            "name": "SYSTem:DIGital:OUTPut:DATA?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_outp_data"
+          },
+          {
+            "name": "SYSTem:DIGital:PIN<n>:FUNCtion",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_pin_func"
+          },
+          {
+            "name": "SYSTem:DIGital:PIN<n>:FUNCtion?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_pin_func"
+          },
+          {
+            "name": "SYSTem:DIGital:PIN<n>:POLarity",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_pin_pol"
+          },
+          {
+            "name": "SYSTem:DIGital:PIN<n>:POLarity?",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_pin_pol"
           },
           {
             "name": "SYSTem:ERRor:COUNt?",
@@ -76901,38 +76933,6 @@
           {
             "name": "SYSTem:VERSion?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_vers"
-          },
-          {
-            "name": "SYSTem:COMMunicate:RLSTate?",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_rlst"
-          },
-          {
-            "name": "SYSTem:DIGital:INPut:DATA?",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_inp_data"
-          },
-          {
-            "name": "SYSTem:DIGital:OUTPut:DATA",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_outp_data"
-          },
-          {
-            "name": "SYSTem:DIGital:OUTPut:DATA?",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_outp_data"
-          },
-          {
-            "name": "SYSTem:DIGital:PIN<n>:FUNCtion",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_pin_func"
-          },
-          {
-            "name": "SYSTem:DIGital:PIN<n>:FUNCtion?",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_pin_func"
-          },
-          {
-            "name": "SYSTem:DIGital:PIN<n>:POLarity",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_pin_pol"
-          },
-          {
-            "name": "SYSTem:DIGital:PIN<n>:POLarity?",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_pin_pol"
           }
         ]
       },
