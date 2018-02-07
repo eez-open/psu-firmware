@@ -24,7 +24,7 @@
 #include "channel_dispatcher.h"
 
 #if OPTION_DISPLAY
-#include "touch.h"
+#include "gui_internal.h"
 #endif
 
 namespace eez {
@@ -352,7 +352,7 @@ scpi_result_t scpi_cmd_calibrationVoltageLevel(scpi_t * context) {
 
 scpi_result_t scpi_cmd_calibrateScreenInit(scpi_t * context) {
 #if OPTION_DISPLAY
-	gui::touch::calibration::enterCalibrationMode();
+	gui::setPage(gui::PAGE_ID_SCREEN_CALIBRATION_INTRO);
 	return SCPI_RES_OK;
 #else
 	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
