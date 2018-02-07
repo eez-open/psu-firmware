@@ -1022,7 +1022,8 @@ void Channel::eventGpio(uint8_t gpio) {
         if (rpol && isOutputEnabled()) {
             channel_dispatcher::outputEnable(*this, false);
             event_queue::pushEvent(event_queue::EVENT_ERROR_CH1_REMOTE_SENSE_REVERSE_POLARITY_DETECTED + index - 1);
-            return;
+			onProtectionTripped();
+			return;
         }
     }
 
