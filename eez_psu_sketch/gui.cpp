@@ -71,6 +71,8 @@
 
 #define CONF_GUI_TOAST_DURATION_MS 2000L
 
+#define CONF_GUI_ENTER_CALIBRATION_MODE_TIMEOUT 30000000L // 30s
+
 #define MAX_EVENTS 16
 
 namespace eez {
@@ -1260,6 +1262,8 @@ void pushEvent(EventType type) {
     }
 }
 
+void processEvents();
+
 void touchHandling(uint32_t tick_usec) {
     if (touch::calibration::isCalibrating()) {
         touch::calibration::tick(tick_usec);
@@ -1290,6 +1294,12 @@ void touchHandling(uint32_t tick_usec) {
                 pushEvent(EVENT_TYPE_AUTO_REPEAT);
                 g_lastAutoRepeatEventTime = tick_usec;
             }
+
+			if (int32_t(tick_usec - g_touchDownTime) >= CONF_GUI_ENTER_CALIBRATION_MODE_TIMEOUT) {
+				if (!g_foundWidgetAtDown || !isAutoRepeatAction(getAction(g_foundWidgetAtDown))) {
+					touch::calibration::enterCalibrationMode();
+				}
+			}
         } else if (touch::event_type == touch::TOUCH_UP) {
             pushEvent(EVENT_TYPE_TOUCH_UP);
         }

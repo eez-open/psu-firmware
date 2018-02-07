@@ -66,6 +66,8 @@ static int *point_y;
 static int last_cross_x;
 static int last_cross_y;
 
+static bool g_wasDown = false;
+
 void draw_cross(int x, int y, uint16_t color) {
     last_cross_x = x;
     last_cross_y = y;
@@ -97,8 +99,10 @@ bool read_point() {
         DebugTraceF("Calibration point: %d, %d", touch::x, touch::y);
 
     if (touch::event_type == touch::TOUCH_DOWN) {
+		g_wasDown = true;
         draw_cross(last_cross_x, last_cross_y, COLOR_GREEN);
-    } else if (touch::event_type == touch::TOUCH_UP) {
+    } else if (g_wasDown && touch::event_type == touch::TOUCH_UP) {
+		g_wasDown = false;
         *point_x = touch::x;
         *point_y = touch::y;
         return true;

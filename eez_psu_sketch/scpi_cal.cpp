@@ -23,6 +23,10 @@
 #include "trigger.h"
 #include "channel_dispatcher.h"
 
+#if OPTION_DISPLAY
+#include "touch.h"
+#endif
+
 namespace eez {
 namespace psu {
 namespace scpi {
@@ -344,6 +348,16 @@ scpi_result_t scpi_cmd_calibrationVoltageData(scpi_t * context) {
 
 scpi_result_t scpi_cmd_calibrationVoltageLevel(scpi_t * context) {
     return calibration_level(context, calibration::getVoltage());;
+}
+
+scpi_result_t scpi_cmd_calibrateScreenInit(scpi_t * context) {
+#if OPTION_DISPLAY
+	gui::touch::calibration::enterCalibrationMode();
+	return SCPI_RES_OK;
+#else
+	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
+	return SCPI_RES_ERR;
+#endif
 }
 
 }
