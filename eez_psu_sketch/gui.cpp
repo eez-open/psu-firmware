@@ -1297,7 +1297,8 @@ void touchHandling(uint32_t tick_usec) {
 
 			if (int32_t(tick_usec - g_touchDownTime) >= CONF_GUI_ENTER_CALIBRATION_MODE_TIMEOUT) {
 				if (!g_foundWidgetAtDown || !isAutoRepeatAction(getAction(g_foundWidgetAtDown))) {
-					touch::calibration::enterCalibrationMode();
+					g_touchActionExecuted = true;
+					setPage(PAGE_ID_SCREEN_CALIBRATION_INTRO);
 				}
 			}
         } else if (touch::event_type == touch::TOUCH_UP) {
@@ -1309,8 +1310,12 @@ void touchHandling(uint32_t tick_usec) {
 void processEvents() {
     for (int i = 0; i < g_numEvents; ++i) {
         if (g_activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
-            if (g_events[i].type == EVENT_TYPE_TOUCH_UP) {
-                touch::calibration::enterCalibrationMode(PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, getStartPageId());
+			if (g_events[i].type == EVENT_TYPE_TOUCH_DOWN) {
+				g_touchActionExecuted = false;
+			} else if (g_events[i].type == EVENT_TYPE_TOUCH_UP) {
+				if (!g_touchActionExecuted) {
+					touch::calibration::enterCalibrationMode(PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, getStartPageId());
+				}
             }
         } else {
             if (g_events[i].type == EVENT_TYPE_TOUCH_DOWN) {
