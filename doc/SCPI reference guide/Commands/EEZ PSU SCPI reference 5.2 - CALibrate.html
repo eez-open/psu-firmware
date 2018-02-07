@@ -43,8 +43,8 @@
 		</style>
 	</head>
 	<body>
-		<p class="Heading_2">5.2. <a name="_calibrate"></a>CALibrate</p>
-		<p>This subsystem provides commands for the PSU calibration. Only one channel can be calibrated at a time. If calibration mode has not been enabled with CALibrate:STATe, the calibration commands will generate an error. Use CALibrate:SAVE to save any changes, otherwise all changes will be lost on exit from calibration mode. Within the same calibration session both output voltage and current can be calibrated for the currently selected channel. </p>
+		<p class="Heading_2">5.2. <a name="_calibrate"></a>CALibration</p>
+		<p>This subsystem provides commands for the PSU calibration. Only one channel can be calibrated at a time. If calibration mode has not been enabled with CALibration:STATe, the calibration commands will generate an error. Use CALibration:SAVE to save any changes, otherwise all changes will be lost on exit from calibration mode. Within the same calibration session both output voltage and current can be calibrated for the currently selected channel. </p>
 		<p>Calibration cannot start if channel output is not enabled (OUTPut[:STATe] ON). During calibration process three points has to be entered: MIN, MID and MAX. But in practice two point calibration is performed to re-scale the output programmed and measured values by correcting both slope and offset errors. MID point is used only as an additional validation that between entered MIN and MAX values it’s possible to “draw” a line within allowed minor tolerance.</p>
 		<p>&#160;</p>
 		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
@@ -58,7 +58,7 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
-					<p class="scpi0"><a href="#cal_mode"><span style="text-decoration: underline;">CALibrate[:MODE] {&lt;bool&gt;, &lt;password&gt;}</span></a></p>
+					<p class="scpi0"><a href="#cal_mode"><span style="text-decoration: underline;">CALibration[:MODE] {&lt;bool&gt;, &lt;password&gt;}</span></a></p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
 					<p>Enables/disables calibration mode</p>
@@ -134,6 +134,14 @@
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
 					<p>Saves the new cal constants in non-volatile memory</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1"><a href="#cal_scr"><span style="text-decoration: underline;">:</span></a><a href="#cal_scr"><span style="text-decoration: underline;">SCReen:INIT</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Initiates touchscreen calibration procedure</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -634,7 +642,7 @@
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
 					<p>Enter a new calibration password. To change the password, first unsecure the PSU using the old password. Then, the new code has to be entered. The calibration code may contain up to 16 characters over the remote interface. Minimum length is 4 characters.</p>
-					<p>The new password is automatically stored in non-volatile memory and does not have to be stored with CALibrate:SAVE.</p>
+					<p>The new password is automatically stored in non-volatile memory and does not have to be stored with CALibration:SAVE.</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -852,7 +860,44 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.2.9. <a name="cal_stat"></a>CALibration:STATe</p>
+		<p class="Heading_3">5.2.9. <a name="cal_scr"></a>CALibration:SCReen:INIT</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_root">CALibration:SCReen:INIT</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>Use this command to initiate calibration procedure when touchscreen calibration data are lost or corrupted. Calibration has to be performed locally on the PSU.</p>
+					<p>&#160;</p>
+					<p class="note">New calibration procedure can be initiated also by touching the screen and hold for more then 30 seconds.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>None</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">CAL:SCR:INIT</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_3">5.2.10. <a name="cal_stat"></a>CALibration:STATe</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -935,7 +980,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.2.10. <a name="cal_volt"></a>CALibration:VOLTage[:DATA]</p>
+		<p class="Heading_3">5.2.11. <a name="cal_volt"></a>CALibration:VOLTage[:DATA]</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -1022,7 +1067,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.2.11. <a name="cal_volt_lev"></a>CALibration:VOLTage:LEVel</p>
+		<p class="Heading_3">5.2.12. <a name="cal_volt_lev"></a>CALibration:VOLTage:LEVel</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -1112,7 +1157,6 @@
 				</td>
 			</tr>
 		</table>
-		<p>&#160;</p>
 		<p>&#160;</p>
 		<p>&#160;</p>
 	</body>
