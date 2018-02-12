@@ -19,6 +19,8 @@
 #include "psu.h"
 #include "serial_psu.h"
 
+#define CONF_CHUNK_SIZE 64
+
 namespace eez {
 namespace psu {
 
@@ -154,11 +156,15 @@ void init() {
 
 void tick(uint32_t tick_usec) {
     if (g_testResult == TEST_OK) {
-        for (unsigned i = 0; i < 64 && SERIAL_PORT.available(); ++i) {
-            g_isConnected = true;
-            char ch = (char)SERIAL_PORT.read();
-            input(g_scpiContext, ch);
+		char buffer[CONF_CHUNK_SIZE];
+		unsigned i;
+        for (i = 0; i < CONF_CHUNK_SIZE && SERIAL_PORT.available(); ++i) {
+			buffer[i] = (char)SERIAL_PORT.read();
         }
+		if (i > 0) {
+			g_isConnected = true;
+			input(g_scpiContext, buffer, i);
+		}
     }
 }
 
