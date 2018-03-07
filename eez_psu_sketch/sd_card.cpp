@@ -47,8 +47,21 @@ void dateTime(uint16_t* date, uint16_t* time) {
     *time = FAT_TIME(hour, minute, second);
 }
 
+bool g_cardBeginResult;
+bool g_fsBeginResult;
+
 void init() {
-    if (!SD.begin(LCDSD_CS, SPI_DIV3_SPEED)) {
+	bool initResult;
+
+#ifdef EEZ_PSU_SIMULATOR
+	initResult = SD.begin(LCDSD_CS, SPI_DIV3_SPEED);
+#else
+	g_cardBeginResult = SD.cardBegin(LCDSD_CS, SPI_DIV3_SPEED);
+	g_fsBeginResult = SD.fsBegin();
+	initResult = g_cardBeginResult && g_fsBeginResult;
+#endif
+
+    if (!initResult) {
         g_testResult = TEST_FAILED;
     } else {
 #ifdef EEZ_PSU_SIMULATOR
@@ -68,7 +81,10 @@ void dumpInfo(char *buffer) {
 #ifndef EEZ_PSU_SIMULATOR
 	FatVolume* vol = SD.vol();
 	
-	sprintf(buffer + strlen(buffer), "SD Volume is FAT %d\n", int(vol->fatType()));
+	sprintf(buffer + strlen(buffer), "SD volume is FAT %d\n", int(vol->fatType()));
+
+	sprintf(buffer + strlen(buffer), "SD card begin result: %d\n", int(g_cardBeginResult));
+	sprintf(buffer + strlen(buffer), "SD fs begin result: %d\n", int(g_fsBeginResult));
 
 	sprintf(buffer + strlen(buffer), "SD blocks per cluster: %d\n", int(vol->blocksPerCluster()));
 	sprintf(buffer + strlen(buffer), "SD cluster count: %d\n", int(vol->clusterCount()));
