@@ -58,7 +58,6 @@
     SCPI_COMMAND("CALibration:VOLTage[:DATA]", scpi_cmd_calibrationVoltageData) \
     SCPI_COMMAND("CALibration[:MODE]", scpi_cmd_calibrationMode) \
     SCPI_COMMAND("CALibration[:MODE]?", scpi_cmd_calibrationModeQ) \
-    SCPI_COMMAND("CALibrate:SCReen:INIT", scpi_cmd_calibrateScreenInit) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:ADC?", scpi_cmd_diagnosticInformationAdcQ) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:CALibration?", scpi_cmd_diagnosticInformationCalibrationQ) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:FAN?", scpi_cmd_diagnosticInformationFanQ) \

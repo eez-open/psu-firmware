@@ -64,6 +64,56 @@ bool test() {
     return g_testResult != TEST_FAILED;
 }
 
+void dumpInfo(char *buffer) {
+#ifndef EEZ_PSU_SIMULATOR
+	FatVolume* vol = SD.vol();
+	
+	sprintf(buffer + strlen(buffer), "SD Volume is FAT %d\n", int(vol->fatType()));
+
+	sprintf(buffer + strlen(buffer), "SD blocks per cluster: %d\n", int(vol->blocksPerCluster()));
+	sprintf(buffer + strlen(buffer), "SD cluster count: %d\n", int(vol->clusterCount()));
+	sprintf(buffer + strlen(buffer), "SD fat start block: %d\n", int(vol->fatStartBlock()));
+	sprintf(buffer + strlen(buffer), "SD fat count: %d\n", int(vol->fatCount()));
+	sprintf(buffer + strlen(buffer), "SD blocks per fat: %d\n", int(vol->blocksPerFat()));
+	sprintf(buffer + strlen(buffer), "SD root dir start: %d\n", int(vol->rootDirStart()));
+	sprintf(buffer + strlen(buffer), "SD data start block: %d\n", int(vol->dataStartBlock()));
+
+	csd_t csd;
+	if (!SD.card()->readCSD(&csd)) {
+		sprintf(buffer + strlen(buffer), "SD readCSD failed\n");
+		return;
+	}
+
+	uint8_t eraseSingleBlock;
+	uint32_t eraseSize;
+
+	if (csd.v1.csd_ver == 0) {
+		eraseSingleBlock = csd.v1.erase_blk_en;
+		eraseSize = (csd.v1.sector_size_high << 1) | csd.v1.sector_size_low;
+	} else if (csd.v2.csd_ver == 1) {
+		eraseSingleBlock = csd.v2.erase_blk_en;
+		eraseSize = (csd.v2.sector_size_high << 1) | csd.v2.sector_size_low;
+	} else {
+		sprintf(buffer + strlen(buffer), "SD csd version error\n");
+		return;
+	}
+	eraseSize++;
+
+	uint32_t cardSize = SD.card()->cardSize();
+	sprintf(buffer + strlen(buffer), "SD card size: %d MB\n", int(0.000512 * cardSize));
+
+	sprintf(buffer + strlen(buffer), "SD flash erase size: %d blocks\n", int(eraseSize));
+
+	if (eraseSingleBlock) {
+		sprintf(buffer + strlen(buffer), "SD erase single block\n");
+	}
+
+	if (vol->dataStartBlock() % eraseSize) {
+		sprintf(buffer + strlen(buffer), "SD data area is not aligned on flash erase boundaries! Download and use formatter from www.sdcard.org!\n");
+	}
+#endif
+}
+
 #ifndef isSpace
 bool isSpace(int c) {
     return c == '\r' || c == '\n' || c == '\t' || c == ' ';

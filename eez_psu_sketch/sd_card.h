@@ -31,6 +31,8 @@ extern TestResult g_testResult;
 void init();
 bool test();
 
+void dumpInfo(char *buffer);
+
 void matchZeroOrMoreSpaces(File& file);
 bool match(File& file, float &result);
 bool match(File& file, char c);

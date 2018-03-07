@@ -31,6 +31,9 @@ char *ramstart = (char *)0x20070000;
 char *ramend = (char *)0x20088000;
 #endif
 
+#if OPTION_SD_CARD
+#include "sd_card.h"
+#endif
 
 #if CONF_DEBUG
 
@@ -90,9 +93,11 @@ void dumpVariables(char *buffer) {
         strcat(buffer, " = ");
         g_variables[i]->dump(buffer);
         strcat(buffer, "\n");
-    }
+	}
 
 #ifndef EEZ_PSU_SIMULATOR
+	psu::criticalTick(-1);
+
 	char *heapend = sbrk(0);
 	register char * stack_ptr asm("sp");
 	struct mallinfo mi = mallinfo();
@@ -101,6 +106,11 @@ void dumpVariables(char *buffer) {
 	sprintf(buffer + strlen(buffer), "Stack ram used %d\n", ramend - stack_ptr);
 	sprintf(buffer + strlen(buffer), "My guess at free mem: %d\n", stack_ptr - heapend + mi.fordblks);
 #endif 
+
+#if OPTION_SD_CARD
+	psu::criticalTick(-1);
+	sd_card::dumpInfo(buffer);
+#endif
 }
 
 }

@@ -23,10 +23,6 @@
 #include "fan.h"
 #include "serial_psu.h"
 
-#if OPTION_SD_CARD
-#include "sd_card.h"
-#endif
-
 namespace eez {
 namespace psu {
 
@@ -54,7 +50,7 @@ scpi_result_t scpi_cmd_debug(scpi_t *context) {
 
 scpi_result_t scpi_cmd_debugQ(scpi_t *context) {
 #if CONF_DEBUG
-    char buffer[2048];
+    char buffer[4096];
 
     Channel::get(0).adcReadAll();
     Channel::get(1).adcReadAll();
