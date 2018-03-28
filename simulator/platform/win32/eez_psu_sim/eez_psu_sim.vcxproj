@@ -186,6 +186,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\datetime.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\debug.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\devices.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\dlog.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\eeprom.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\encoder.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\ethernet.h" />
@@ -225,6 +226,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\ntp.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\ontime.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\persist_conf.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\pid.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\profile.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\psu.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\rtc.h" />
@@ -301,6 +303,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\datetime.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\debug.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\devices.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\dlog.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\eeprom.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\encoder.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\ethernet.cpp" />
@@ -339,6 +342,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\ntp.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\ontime.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\persist_conf.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\pid.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\profile.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\psu.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\rtc.cpp" />
@@ -348,6 +352,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_debug.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_diag.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_display.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_dlog.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_inst.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_meas.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_mem.cpp" />

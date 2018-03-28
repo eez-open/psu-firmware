@@ -38,6 +38,7 @@
 
 #if OPTION_SD_CARD
 #include "sd_card.h"
+#include "dlog.h"
 #endif
 
 #include "calibration.h"
@@ -653,6 +654,9 @@ void powerDown() {
     if (!g_powerIsUp) return;
 
     trigger::abort();
+#ifdef OPTION_SD_CARD
+	dlog::abort();
+#endif
 
     channel_dispatcher::setType(channel_dispatcher::TYPE_NONE);
 
@@ -894,6 +898,10 @@ uint32_t criticalTick(int pageId) {
     } else {
         lastTickList = 0;
     }
+
+#ifdef OPTION_SD_CARD
+	dlog::tick(tick_usec);
+#endif
 
     static uint32_t lastTickAdc = 0;
     if (lastTickAdc == 0) {

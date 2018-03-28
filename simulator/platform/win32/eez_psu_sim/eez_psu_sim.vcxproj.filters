@@ -403,6 +403,12 @@
     <ClInclude Include="..\..\..\src\arduino\SdFat.h">
       <Filter>simulator\arduino</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\dlog.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\pid.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_loop.cpp">
@@ -741,6 +747,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\arduino\SdFat.cpp">
       <Filter>simulator\arduino</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_dlog.cpp">
+      <Filter>scpi\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\dlog.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\pid.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

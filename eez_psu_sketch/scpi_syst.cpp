@@ -725,7 +725,7 @@ scpi_result_t scpi_cmd_systemPasswordFpanelReset(scpi_t *context) {
     return SCPI_RES_OK;
 }
 
-scpi_result_t scpi_cmd_systemPasswordCalibrateReset(scpi_t *context) {
+scpi_result_t scpi_cmd_systemPasswordCalibrationReset(scpi_t *context) {
     if (!persist_conf::changeCalibrationPassword(CALIBRATION_PASSWORD_DEFAULT, strlen(CALIBRATION_PASSWORD_DEFAULT))) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;

@@ -36,6 +36,7 @@
     SCPI_COMMAND("*TST?", scpi_cmd_coreTstQ) \
     SCPI_COMMAND("*WAI", scpi_cmd_coreWai) \
     SCPI_COMMAND("ABORt", scpi_cmd_abort) \
+    SCPI_COMMAND("ABORt:DLOG", scpi_cmd_abortDlog) \
     SCPI_COMMAND("DEBUg", scpi_cmd_debug) \
     SCPI_COMMAND("DEBUg:WDOG", scpi_cmd_debugWdog) \
     SCPI_COMMAND("DEBUg:WDOG?", scpi_cmd_debugWdogQ) \
@@ -58,6 +59,7 @@
     SCPI_COMMAND("CALibration:VOLTage[:DATA]", scpi_cmd_calibrationVoltageData) \
     SCPI_COMMAND("CALibration[:MODE]", scpi_cmd_calibrationMode) \
     SCPI_COMMAND("CALibration[:MODE]?", scpi_cmd_calibrationModeQ) \
+    SCPI_COMMAND("CALibration:SCReen:INIT", scpi_cmd_calibrationScreenInit) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:ADC?", scpi_cmd_diagnosticInformationAdcQ) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:CALibration?", scpi_cmd_diagnosticInformationCalibrationQ) \
     SCPI_COMMAND("DIAGnostic[:INFOrmation]:FAN?", scpi_cmd_diagnosticInformationFanQ) \
@@ -75,6 +77,7 @@
     SCPI_COMMAND("INITiate:CONTinuous", scpi_cmd_initiateContinuous) \
     SCPI_COMMAND("INITiate:CONTinuous?", scpi_cmd_initiateContinuousQ) \
     SCPI_COMMAND("INITiate[:IMMediate]", scpi_cmd_initiateImmediate) \
+    SCPI_COMMAND("INITiate:DLOG", scpi_cmd_initiateDlog) \
     SCPI_COMMAND("INSTrument:COUPle:TRACking", scpi_cmd_instrumentCoupleTracking) \
     SCPI_COMMAND("INSTrument:COUPle:TRACking?", scpi_cmd_instrumentCoupleTrackingQ) \
     SCPI_COMMAND("INSTrument:DISPlay:TRACe:SWAP", scpi_cmd_instrumentDisplayTraceSwap) \
@@ -137,6 +140,12 @@
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe:AUTO?", scpi_cmd_senseCurrentDcRangeAutoQ) \
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe[:UPPer]", scpi_cmd_senseCurrentDcRangeUpper) \
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe[:UPPer]?", scpi_cmd_senseCurrentDcRangeUpperQ) \
+    SCPI_COMMAND("SENSe:DLOG:FUNCtion:CURRent", scpi_cmd_senseDlogFunctionCurrent) \
+    SCPI_COMMAND("SENSe:DLOG:FUNCtion:VOLTage", scpi_cmd_senseDlogFunctionVoltage) \
+    SCPI_COMMAND("SENSe:DLOG:PERiod", scpi_cmd_senseDlogPeriod) \
+    SCPI_COMMAND("SENSe:DLOG:PERiod?", scpi_cmd_senseDlogPeriodQ) \
+    SCPI_COMMAND("SENSe:DLOG:TIME", scpi_cmd_senseDlogTime) \
+    SCPI_COMMAND("SENSe:DLOG:TIME?", scpi_cmd_senseDlogTimeQ) \
     SCPI_COMMAND("[SOURce#]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]", scpi_cmd_sourceCurrentLimitPositiveImmediateAmplitude) \
     SCPI_COMMAND("[SOURce#]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]?", scpi_cmd_sourceCurrentLimitPositiveImmediateAmplitudeQ) \
     SCPI_COMMAND("[SOURce#]:CURRent:MODE", scpi_cmd_sourceCurrentMode) \
@@ -277,7 +286,6 @@
     SCPI_COMMAND("SYSTem:INHibit?", scpi_cmd_systemInhibitQ) \
     SCPI_COMMAND("SYSTem:KLOCk", scpi_cmd_systemKlock) \
     SCPI_COMMAND("SYSTem:LOCal", scpi_cmd_systemLocal) \
-    SCPI_COMMAND("SYSTem:PASSword:CALibrate:RESet", scpi_cmd_systemPasswordCalibrateReset) \
     SCPI_COMMAND("SYSTem:PASSword:FPANel:RESet", scpi_cmd_systemPasswordFpanelReset) \
     SCPI_COMMAND("SYSTem:PASSword:NEW", scpi_cmd_systemPasswordNew) \
     SCPI_COMMAND("SYSTem:PON:OUTPut:DISable", scpi_cmd_systemPonOutputDisable) \
@@ -303,6 +311,7 @@
     SCPI_COMMAND("SYSTem:TIME:ZONE?", scpi_cmd_systemTimeZoneQ) \
     SCPI_COMMAND("SYSTem:TIME?", scpi_cmd_systemTimeQ) \
     SCPI_COMMAND("SYSTem:VERSion?", scpi_cmd_systemVersionQ) \
+    SCPI_COMMAND("SYSTem:PASSword:CALibration:RESet", scpi_cmd_systemPasswordCalibrationReset) \
     SCPI_COMMAND("SYSTem:DATE:CLEar", scpi_cmd_systemDateClear) \
     SCPI_COMMAND("SYSTem:TIME:CLEar", scpi_cmd_systemTimeClear) \
     SCPI_COMMAND("SYSTem:SERial", scpi_cmd_systemSerial) \
@@ -314,6 +323,9 @@
     SCPI_COMMAND("TRIGger[:SEQuence]:SOURce", scpi_cmd_triggerSequenceSource) \
     SCPI_COMMAND("TRIGger[:SEQuence]:SOURce?", scpi_cmd_triggerSequenceSourceQ) \
     SCPI_COMMAND("TRIGger[:SEQuence][:IMMediate]", scpi_cmd_triggerSequenceImmediate) \
+    SCPI_COMMAND("TRIGger:DLOG[:IMMediate]", scpi_cmd_triggerDlogImmediate) \
+    SCPI_COMMAND("TRIGger:DLOG:SOURce", scpi_cmd_triggerDlogSource) \
+    SCPI_COMMAND("TRIGger:DLOG:SOURce?", scpi_cmd_triggerDlogSourceQ) \
     SCPI_COMMAND("APPLy", scpi_cmd_apply) \
     SCPI_COMMAND("APPLy?", scpi_cmd_applyQ) \
     SCPI_COMMAND("DEBUg?", scpi_cmd_debugQ) \

@@ -180,7 +180,7 @@
 #define TEMP_SENSOR_MIN_VALID_TEMPERATURE -5
 
 /// Interval at which fan speed should be adjusted
-#define FAN_SPEED_ADJUSTMENT_INTERVAL 10000
+#define FAN_SPEED_ADJUSTMENT_INTERVAL 500
 
 /// Interval at which fan speed should be measured
 #define FAN_SPEED_MEASURMENT_INTERVAL 5000

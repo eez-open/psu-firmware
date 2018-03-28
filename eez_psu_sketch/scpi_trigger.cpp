@@ -23,6 +23,9 @@
 #include "io_pins.h"
 #include "channel_dispatcher.h"
 #include "profile.h"
+#if OPTION_SD_CARD
+#include "dlog.h"
+#endif
 
 namespace eez {
 namespace psu {
@@ -176,6 +179,50 @@ scpi_result_t scpi_cmd_coreTrg(scpi_t * context) {
         return SCPI_RES_ERR;
     }
     return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_triggerDlogImmediate(scpi_t * context) {
+#if OPTION_SD_CARD
+	int result = dlog::startImmediately();
+	if (result != SCPI_RES_OK) {
+		SCPI_ErrorPush(context, result);
+		return SCPI_RES_ERR;
+	}
+	return SCPI_RES_OK;
+#else
+	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
+	return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_triggerDlogSource(scpi_t * context) {
+#if OPTION_SD_CARD
+	int32_t source;
+	if (!SCPI_ParamChoice(context, sourceChoice, &source, true)) {
+		return SCPI_RES_ERR;
+	}
+
+	dlog::g_triggerSource = (trigger::Source)source;
+
+	if (source == trigger::SOURCE_PIN1) {
+		persist_conf::devConf2.ioPins[0].function = io_pins::FUNCTION_TINPUT;
+	}
+
+	return SCPI_RES_OK;
+#else
+	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
+	return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_triggerDlogSourceQ(scpi_t * context) {
+#if OPTION_SD_CARD
+	resultChoiceName(context, sourceChoice, dlog::g_triggerSource);
+	return SCPI_RES_OK;
+#else
+	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
+	return SCPI_RES_ERR;
+#endif
 }
 
 }
