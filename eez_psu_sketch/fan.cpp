@@ -19,14 +19,21 @@
 #include "psu.h"
 #include "temperature.h"
 #include "scpi_psu.h"
+#include "pid.h"
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 
 #include "fan.h"
 
+#define FAN_PID_KP 0.4
+#define FAN_PID_KI 0.4
+#define FAN_PID_KD 0.05
+
 namespace eez {
 namespace psu {
 namespace fan {
+
+////////////////////////////////////////////////////////////////////////////////
 
 enum RpmMeasureState {
     RPM_MEASURE_STATE_START,
@@ -47,6 +54,11 @@ static float g_fanSpeed = FAN_MIN_PWM;
 
 static uint32_t g_fanSpeedLastMeasuredTick = 0;
 static uint32_t g_fanSpeedLastAdjustedTick = 0;
+
+static double g_pidTemp;
+static double g_pidDuty;
+static double g_pidTarget = FAN_MIN_TEMP;
+static PID g_fanPID(&g_pidTemp, &g_pidDuty, &g_pidTarget, FAN_PID_KP, FAN_PID_KI, FAN_PID_KD, REVERSE);
 
 volatile int g_rpm = 0;
 
@@ -120,6 +132,10 @@ void finish_rpm_measure() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void init() {
+	g_fanPID.SetSampleTime(FAN_SPEED_ADJUSTMENT_INTERVAL);
+	g_fanPID.SetOutputLimits(0, 255);
+	g_fanPID.SetMode(AUTOMATIC);
+
     g_rpmMeasureInterruptNumber = digitalPinToInterrupt(FAN_SENSE);
     SPI_usingInterrupt(g_rpmMeasureInterruptNumber);
     //attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
@@ -190,12 +206,10 @@ void tick(uint32_t tick_usec) {
         float max_channel_temperature = temperature::getMaxChannelTemperature();
         //DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
 
-        float fanSpeedNew = util::remap(max_channel_temperature, FAN_MIN_TEMP, FAN_MIN_PWM, FAN_MAX_TEMP, FAN_MAX_PWM);
-        if (fanSpeedNew >= FAN_MIN_PWM) {
-            if (g_fanSpeed == 0) {
-                g_fanSpeed = FAN_MIN_PWM;
-            } 
-            g_fanSpeed = g_fanSpeed + 0.1f * (fanSpeedNew - g_fanSpeed);
+		g_pidTemp = max_channel_temperature;
+		g_fanPID.Compute();
+        if (g_pidDuty >= FAN_MIN_PWM) {
+            g_fanSpeed = (float)g_pidDuty;
         } else {
             g_fanSpeed = 0;
         }
