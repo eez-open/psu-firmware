@@ -356,6 +356,11 @@ static bool psuReset() {
     //
     list::reset();
 
+	//
+#if OPTION_SD_CARD
+	dlog::reset();
+#endif
+
     // SYST:POW ON
     if (powerUp()) {
         for (int i = 0; i < CH_NUM; ++i) {

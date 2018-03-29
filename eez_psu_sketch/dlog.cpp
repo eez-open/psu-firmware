@@ -305,6 +305,21 @@ void tick(uint32_t tickCount) {
 	}
 }
 
+void reset() {
+	abort();
+
+	for (int i = 0; i < CH_NUM; ++i) {
+		g_logVoltage[i] = 0;
+		g_logCurrent[i] = 0;
+		g_logPower[i] = 0;
+	}
+
+	g_period = PERIOD_DEFAULT;
+	g_time = TIME_DEFAULT;
+	g_triggerSource = trigger::SOURCE_IMMEDIATE;
+	g_filePath[0] = 0;
+}
+
 }
 }
 } // namespace eez::psu::dlog

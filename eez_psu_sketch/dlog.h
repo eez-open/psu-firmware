@@ -48,6 +48,7 @@ int startImmediately();
 void abort();
 
 void tick(uint32_t tick_usec);
+void reset();
 
 }
 }
