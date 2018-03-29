@@ -35,10 +35,12 @@ extern float g_period;
 
 static const float TIME_MIN = 1.0f;
 static const float TIME_MAX = 86400000.0f;
-static const float TIME_DEFAULT = 1.0f;
+static const float TIME_DEFAULT = 60.0f;
 extern float g_time;
 
 extern trigger::Source g_triggerSource;
+
+extern double g_currentTime;
 
 bool isIdle();
 bool isInitiated();

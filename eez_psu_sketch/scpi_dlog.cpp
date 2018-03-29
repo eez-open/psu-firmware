@@ -88,6 +88,22 @@ scpi_result_t scpi_cmd_senseDlogFunctionVoltage(scpi_t * context) {
 #endif
 }
 
+scpi_result_t scpi_cmd_senseDlogFunctionVoltageQ(scpi_t * context) {
+#if OPTION_SD_CARD
+	Channel *channel = param_channel(context);
+	if (!channel) {
+		return SCPI_RES_ERR;
+	}
+
+	SCPI_ResultBool(context, dlog::g_logVoltage[channel->index - 1]);
+
+	return SCPI_RES_OK;
+#else
+	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
+	return SCPI_RES_ERR;
+#endif
+}
+
 scpi_result_t scpi_cmd_senseDlogFunctionCurrent(scpi_t * context) {
 #if OPTION_SD_CARD
 	bool enable;
@@ -114,6 +130,22 @@ scpi_result_t scpi_cmd_senseDlogFunctionCurrent(scpi_t * context) {
 #endif
 }
 
+scpi_result_t scpi_cmd_senseDlogFunctionCurrentQ(scpi_t * context) {
+#if OPTION_SD_CARD
+	Channel *channel = param_channel(context);
+	if (!channel) {
+		return SCPI_RES_ERR;
+	}
+
+	SCPI_ResultBool(context, dlog::g_logCurrent[channel->index - 1]);
+
+	return SCPI_RES_OK;
+#else
+	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
+	return SCPI_RES_ERR;
+#endif
+}
+
 scpi_result_t scpi_cmd_senseDlogFunctionPower(scpi_t * context) {
 #if OPTION_SD_CARD
 	bool enable;
@@ -132,6 +164,22 @@ scpi_result_t scpi_cmd_senseDlogFunctionPower(scpi_t * context) {
 	}
 
 	dlog::g_logPower[channel->index - 1] = enable;
+
+	return SCPI_RES_OK;
+#else
+	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
+	return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_senseDlogFunctionPowerQ(scpi_t * context) {
+#if OPTION_SD_CARD
+	Channel *channel = param_channel(context);
+	if (!channel) {
+		return SCPI_RES_ERR;
+	}
+
+	SCPI_ResultBool(context, dlog::g_logPower[channel->index - 1]);
 
 	return SCPI_RES_OK;
 #else

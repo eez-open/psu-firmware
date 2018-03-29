@@ -1383,6 +1383,17 @@
       "name": "progress",
       "type": "float",
       "defaultValue": "12.34%"
+    },
+    {
+      "name": "viewStatus",
+      "type": "enum",
+      "enumItems": "[\n\"None\",\n\"List\",\n\"DLog\"\n]",
+      "defaultValue": "2"
+    },
+    {
+      "name": "dlog.status",
+      "type": "string",
+      "defaultValue": "Dlog trigger waiting "
     }
   ],
   "actions": [
@@ -3813,33 +3824,71 @@
               ]
             },
             {
-              "type": "List",
+              "type": "Select",
               "style": "default",
-              "data": "channels",
+              "data": "viewStatus",
               "x": 142,
               "y": 0,
               "width": 150,
               "height": 28,
-              "itemWidget": {
-                "type": "Container",
-                "style": "default",
-                "x": 0,
-                "y": 0,
-                "width": 75,
-                "height": 28,
-                "widgets": [
-                  {
-                    "type": "DisplayData",
-                    "style": "default_S",
-                    "data": "channel.list.countdown",
+              "widgets": [
+                {
+                  "type": "Rectangle",
+                  "style": "default_inverse",
+                  "x": 0,
+                  "y": 0,
+                  "width": 150,
+                  "height": 28
+                },
+                {
+                  "type": "List",
+                  "style": "default",
+                  "data": "channels",
+                  "x": 0,
+                  "y": 0,
+                  "width": 150,
+                  "height": 28,
+                  "itemWidget": {
+                    "type": "Container",
+                    "style": "default",
                     "x": 0,
                     "y": 0,
                     "width": 75,
-                    "height": 28
-                  }
-                ]
-              },
-              "listType": "horizontal"
+                    "height": 28,
+                    "widgets": [
+                      {
+                        "type": "DisplayData",
+                        "style": "default_S",
+                        "data": "channel.list.countdown",
+                        "x": 0,
+                        "y": 0,
+                        "width": 75,
+                        "height": 28
+                      }
+                    ]
+                  },
+                  "listType": "horizontal"
+                },
+                {
+                  "type": "Container",
+                  "style": "default",
+                  "x": 0,
+                  "y": 0,
+                  "width": 150,
+                  "height": 28,
+                  "widgets": [
+                    {
+                      "type": "DisplayData",
+                      "style": "default_S_left",
+                      "data": "dlog.status",
+                      "x": 0,
+                      "y": 0,
+                      "width": 150,
+                      "height": 28
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "Text",
@@ -27950,6 +27999,12 @@
         "name": "default_S",
         "inheritFrom": "default",
         "font": "small"
+      },
+      {
+        "name": "default_S_left",
+        "inheritFrom": "default",
+        "font": "small",
+        "alignHorizontal": "left"
       },
       {
         "name": "edit_info_S",
@@ -76266,10 +76321,22 @@
             "name": "SENSe:DLOG:FUNCtion:CURRent"
           },
           {
+            "name": "SENSe:DLOG:FUNCtion:CURRent?",
+            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_dlog_func_curr"
+          },
+          {
             "name": "SENSe:DLOG:FUNCtion:VOLTage"
           },
           {
+            "name": "SENSe:DLOG:FUNCtion:VOLTage?",
+            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_dlog_func_volt"
+          },
+          {
             "name": "SENSe:DLOG:FUNCtion:POWer"
+          },
+          {
+            "name": "SENSe:DLOG:FUNCtion:POWer?",
+            "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_dlog_func_pow"
           },
           {
             "name": "SENSe:DLOG:PERiod"

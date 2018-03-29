@@ -48,6 +48,7 @@
 
 #define CONF_GUI_REFRESH_EVERY_MS 250
 #define CONF_DLOG_COLOR 62464
+#define CONF_LIST_COUNDOWN_DISPLAY_THRESHOLD 5 // 5 seconds
 
 namespace eez {
 namespace psu {
@@ -315,6 +316,25 @@ void Value::formatFloatValue(float &value, ValueType &valueType, int &numSignifi
     }
 }
 
+void printTime(uint32_t time, char *text, int count) {
+	int h = time / 3600;
+	int r = time - h * 3600;
+	int m = r / 60;
+	int s = r - m * 60;
+
+	if (h > 0) {
+		snprintf_P(text, count - 1, PSTR("%dh %dm"), h, m);
+	}
+	else if (m > 0) {
+		snprintf_P(text, count - 1, PSTR("%dm %ds"), m, s);
+	}
+	else {
+		snprintf_P(text, count - 1, PSTR("%ds"), s);
+	}
+
+	text[count - 1] = 0;
+}
+
 void Value::toText(char *text, int count) const {
     text[0] = 0;
 
@@ -398,26 +418,9 @@ void Value::toText(char *text, int count) const {
         ontime::counterToString(text, count, uint32_);
         break;
 
-    case VALUE_TYPE_COUNTDOWN:
-    {
-        int h = uint32_ / 3600;
-        int r = uint32_ - h * 3600;
-        int m = r / 60;
-        int s = r - m * 60;
-
-        if (h > 0) {
-		    snprintf_P(text, count-1, PSTR("%dh %dm"), h, m);
-	    } else if (m > 0) {
-		    snprintf_P(text, count-1, PSTR("%dm %ds"), m, s);
-	    } else {
-		    snprintf_P(text, count-1, PSTR("%ds"), s);
-	    }
-
-        //snprintf_P(text, count-1, PSTR("%02d:%02d:%02d"), h, m, s);
-
-        text[count-1] = 0;
+	case VALUE_TYPE_COUNTDOWN:
+		printTime(uint32_, text, count);
         break;
-    }
 
     case VALUE_TYPE_SCPI_ERROR_TEXT:
         strncpy(text, SCPI_ErrorTranslate(int16_), count - 1);
@@ -516,6 +519,11 @@ void Value::toText(char *text, int count) const {
         text[count - 1] = 0;
         break;
 
+	case VALUE_TYPE_DLOG_STATUS:
+		strcpy(text, PSTR("Dlog: "));
+		printTime(uint32_, text + 6, count - 6);
+		break;
+
     default:
         if (type_ > VALUE_TYPE_GREATER_THEN_MAX_FLOAT) {
             char valueText[64];
@@ -570,7 +578,7 @@ bool Value::operator ==(const Value &other) const {
 		return uint16_ == other.uint16_;
 	}
 
-	if (type_ == VALUE_TYPE_ON_TIME_COUNTER || type_ == VALUE_TYPE_COUNTDOWN || type_ == VALUE_TYPE_IP_ADDRESS || type_ == VALUE_TYPE_DATE || type_ == VALUE_TYPE_TIME) {
+	if (type_ == VALUE_TYPE_ON_TIME_COUNTER || type_ == VALUE_TYPE_COUNTDOWN || type_ == VALUE_TYPE_IP_ADDRESS || type_ == VALUE_TYPE_DATE || type_ == VALUE_TYPE_TIME || type_ == VALUE_TYPE_DLOG_STATUS) {
 		return uint32_ == other.uint32_;
 	}
 
@@ -1067,12 +1075,8 @@ Value get(const Cursor &cursor, uint8_t id) {
             if (id == DATA_ID_CHANNEL_LIST_COUNTDOWN) {
                 int32_t remaining;
                 uint32_t total;
-                if (list::getCurrentDwellTime(channel, remaining, total) && total >= 5) {
-                    if (remaining > 0) {
-                        return Value((uint32_t)remaining, VALUE_TYPE_COUNTDOWN);
-                    } else {
-                        return Value((uint32_t)0, VALUE_TYPE_COUNTDOWN);
-                    }
+                if (list::getCurrentDwellTime(channel, remaining, total) && total >= CONF_LIST_COUNDOWN_DISPLAY_THRESHOLD) {
+                    return Value((uint32_t)remaining, VALUE_TYPE_COUNTDOWN);
                 } else {
                     return Value();
                 }
@@ -1197,6 +1201,37 @@ Value get(const Cursor &cursor, uint8_t id) {
             return data::Value(2);
         }
     }
+
+	if (id == DATA_ID_VIEW_STATUS) {
+#if OPTION_SD_CARD
+		bool listStatusVisible = list::anyCounterVisible(CONF_LIST_COUNDOWN_DISPLAY_THRESHOLD);
+		bool dlogStatusVisible = !dlog::isIdle();
+		if (listStatusVisible && dlogStatusVisible) {
+			return data::Value(micros() % (2 * 1000000UL) < 1000000UL ? 1 : 2);
+		}
+		else if (listStatusVisible) {
+			return data::Value(1);
+		}
+		else if (dlogStatusVisible) {
+			return data::Value(2);
+		}
+#else
+		if (list::anyCounterVisible()) {
+			return data::Value(1);
+		}
+#endif
+		return data::Value(0);
+	}
+
+#if OPTION_SD_CARD
+	if (id == DATA_ID_DLOG_STATUS) {
+		if (dlog::isInitiated()) {
+			return data::Value(PSTR("Dlog trigger waiting"));
+		} else if (!dlog::isIdle()) {
+			return data::Value((uint32_t)floor(dlog::g_currentTime), VALUE_TYPE_DLOG_STATUS);
+		}
+	}
+#endif
 
     Page *page = getActivePage();
     if (page) {
@@ -1366,21 +1401,19 @@ Value getEditValue(const Cursor &cursor, uint8_t id) {
 
 uint16_t getWidgetBackgroundColor(const WidgetCursor& widgetCursor, const Style* style) {
 #if OPTION_SD_CARD
-	if (!dlog::isIdle()) {
-		DECL_WIDGET(widget, widgetCursor.widgetOffset);
-		int iChannel = widgetCursor.cursor.i >= 0 ? widgetCursor.cursor.i : (g_channel ? (g_channel->index - 1) : 0);
-		if (widget->data == DATA_ID_CHANNEL_U_EDIT || widget->data == DATA_ID_CHANNEL_U_MON_DAC) {
-			if (dlog::g_logVoltage[iChannel]) {
-				return CONF_DLOG_COLOR;
-			}
-		} else if (widget->data == DATA_ID_CHANNEL_I_EDIT) {
-			if (dlog::g_logCurrent[iChannel]) {
-				return CONF_DLOG_COLOR;
-			}
-		} else if (widget->data == DATA_ID_CHANNEL_P_MON) {
-			if (dlog::g_logPower[iChannel]) {
-				return CONF_DLOG_COLOR;
-			}
+	DECL_WIDGET(widget, widgetCursor.widgetOffset);
+	int iChannel = widgetCursor.cursor.i >= 0 ? widgetCursor.cursor.i : (g_channel ? (g_channel->index - 1) : 0);
+	if (widget->data == DATA_ID_CHANNEL_U_EDIT || widget->data == DATA_ID_CHANNEL_U_MON_DAC) {
+		if (dlog::g_logVoltage[iChannel]) {
+			return CONF_DLOG_COLOR;
+		}
+	} else if (widget->data == DATA_ID_CHANNEL_I_EDIT) {
+		if (dlog::g_logCurrent[iChannel]) {
+			return CONF_DLOG_COLOR;
+		}
+	} else if (widget->data == DATA_ID_CHANNEL_P_MON) {
+		if (dlog::g_logPower[iChannel]) {
+			return CONF_DLOG_COLOR;
 		}
 	}
 #endif

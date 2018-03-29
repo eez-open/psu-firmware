@@ -526,6 +526,15 @@ bool isActive(Channel &channel) {
     return g_execution[channel.index - 1].counter >= 0;
 }
 
+bool anyCounterVisible(uint32_t totalThreshold) {
+	for (int i = 0; i < CH_NUM; ++i) {
+		if (g_execution[i].counter >= 0 && (uint32_t)ceilf(g_execution[i].currentTotalDwellTime) >= totalThreshold) {
+			return true;
+		}
+	}
+	return false;
+}
+
 bool getCurrentDwellTime(Channel &channel, int32_t &remaining, uint32_t &total) {
     int i = channel.index - 1;
     if (g_execution[i].counter >= 0) {

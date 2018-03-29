@@ -68,6 +68,7 @@ void tick(uint32_t tick_usec);
 
 bool isActive();
 
+bool anyCounterVisible(uint32_t totalThreshold);
 bool getCurrentDwellTime(Channel &channel, int32_t &remaining, uint32_t &total);
 
 void abort();

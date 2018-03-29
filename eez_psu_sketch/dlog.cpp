@@ -51,6 +51,7 @@ uint32_t g_lastTickCount;
 uint32_t g_seconds;
 uint32_t g_micros;
 uint32_t g_iSample;
+double g_currentTime;
 double g_nextTime;
 
 void setState(State newState) {
@@ -199,6 +200,7 @@ int startImmediately() {
 	g_seconds = 0;
 	g_micros = 0;
 	g_iSample = 0;
+	g_currentTime = 0;
 	g_nextTime = 0;
 
 	log(g_lastTickCount);
@@ -215,6 +217,8 @@ void finishLogging() {
 void abort() {
 	if (g_state == STATE_EXECUTING) {
 		finishLogging();
+	} else if (g_state == STATE_INITIATED || g_state == STATE_TRIGGERED) {
+		setState(STATE_IDLE);
 	}
 }
 
@@ -227,14 +231,14 @@ void log(uint32_t tickCount) {
 		g_micros -= 1000000;
 	}
 
-	double t = g_seconds + g_micros * 1E-6;
+	g_currentTime = g_seconds + g_micros * 1E-6;
 
-	if (t >= g_nextTime) {
-		float dt = (float)(t - g_nextTime);
+	if (g_currentTime >= g_nextTime) {
+		float dt = (float)(g_currentTime - g_nextTime);
 
 		while (1) {
 			g_nextTime = ++g_iSample * g_period;
-			if (t < g_nextTime || g_nextTime > g_time) {
+			if (g_currentTime < g_nextTime || g_nextTime > g_time) {
 				break;
 			}
 
