@@ -4860,7 +4860,7 @@
                                 "x": 240,
                                 "y": 60,
                                 "width": 80,
-                                "height": 28
+                                "height": 26
                               },
                               {
                                 "type": "Rectangle",
@@ -4869,6 +4869,14 @@
                                 "y": 84,
                                 "width": 240,
                                 "height": 4
+                              },
+                              {
+                                "type": "Rectangle",
+                                "style": "default_inverse",
+                                "x": 240,
+                                "y": 86,
+                                "width": 80,
+                                "height": 2
                               }
                             ]
                           },
@@ -5866,7 +5874,7 @@
                                 "x": 240,
                                 "y": 60,
                                 "width": 80,
-                                "height": 28
+                                "height": 26
                               },
                               {
                                 "type": "Rectangle",
@@ -5875,6 +5883,14 @@
                                 "y": 85,
                                 "width": 240,
                                 "height": 3
+                              },
+                              {
+                                "type": "Rectangle",
+                                "style": "default_inverse",
+                                "x": 240,
+                                "y": 86,
+                                "width": 80,
+                                "height": 2
                               }
                             ]
                           },
