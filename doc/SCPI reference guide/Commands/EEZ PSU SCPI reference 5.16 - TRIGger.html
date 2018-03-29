@@ -44,7 +44,7 @@
 	</head>
 	<body>
 		<p class="Heading_2">5.16. <a name="_trigger"></a>TRIGger</p>
-		<p>The PSU's triggering system allows a change in output voltage and current when receiving a trigger, to select a trigger source, and to insert a trigger. Triggering the PSU is a multi-step process, for example:</p>
+		<p>The PSU's triggering system allows a change in output voltage, current or start internal data logging when receiving a trigger, to select a trigger source, and to insert a trigger. Triggering the PSU is a multi-step process, for example:</p>
 		<ul>
 			<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">An output has to be selected (the INSTrument:SELect command) following by configuring the PSU for the triggered output level by using CURRent:TRIGgered and VOLTage:TRIGgered commands.</li>
 			<li class="List_1" style="text-indent: 0; list-style-type: disc;">The source from which the PSU will accept the trigger must be specified. The PSU could accept e.g. a BUS (software) trigger or an IMMediate trigger from the remote interface.</li>
@@ -82,7 +82,7 @@
 					<p class="scpi2"><a href="#trig_imm"><span style="text-decoration: underline;">[:IMMediate]</span></a></p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
-					<p>&#160;</p>
+					<p>Starts the trigger immediately</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -115,6 +115,30 @@
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
 					<p>Sets the trigger source</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:DLOG</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2"><a href="#trig_dlog"><span style="text-decoration: underline;">[:IMMediate]</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3"><a href="#trig_dlog_sour"><span style="text-decoration: underline;">:SOURce {&lt;source&gt;}</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the internal data logger trigger source</p>
 				</td>
 			</tr>
 		</table>
@@ -174,7 +198,7 @@
 				</td>
 			</tr>
 			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+				<td rowspan="2" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Parameters</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 24%;">
@@ -191,9 +215,6 @@
 				</td>
 			</tr>
 			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
-					<p>&#160;</p>
-				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 24%;">
 					<p>&lt;delay&gt;</p>
 				</td>
@@ -221,14 +242,6 @@
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
 					<p class="cmd_code">TRIG:DEL 10</p>
-				</td>
-			</tr>
-			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
-					<p class="Default_ntt">Related Commands</p>
-				</td>
-				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p>&#160;</p>
 				</td>
 			</tr>
 		</table>
@@ -412,6 +425,124 @@
 					<p>APPLy</p>
 					<p>INITialize</p>
 					<p>TRIGger[:SEQuence][:IMMediate]</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_3">5.16.5. <a name="trig_dlog"></a>TRIGger:DLOG[:IMMediate]</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Syntax</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_root">TRIGger:DLOG[:IMMediate]</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Description</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>The command sends an immediate trigger signal to the data logger. This will trigger the internal data log session regardless of the selected trigger source. You must initiate (see the INIT:DLOG command) the data logger before you trigger it.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">TRIG:DLOG</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>*TRG</p>
+					<p>INITialize:DLOG</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_3">5.16.6. <a name="trig_dlog_sour"></a>TRIGger:DLOG:SOURce</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Syntax</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_root">TRIGger:DLOG:SOURce {&lt;source&gt;}</p>
+					<p class="cmd_root">TRIGger:DLOG:SOURce?</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Description</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>The command selects the trigger source for the data logger in the same fashion as the TRIGger[:SEQuence]:SOURce command.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Parameters</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 24%;">
+					<p style="text-align: center;">Name</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 21%;">
+					<p style="text-align: center;">Type</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 26%;">
+					<p style="text-align: center;">Range</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 16%;">
+					<p style="text-align: center;">Default</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 24%;">
+					<p>&lt;source&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
+					<p style="text-align: center;">Discrete</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 26%;">
+					<p style="text-align: center;">BUS|IMM|MAN|PIN1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p style="text-align: center;">–</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Return</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>The query command returns the programmed trigger subsystem source.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">TRIG:DLOG:SOUR PIN1</p>
+					<p class="cmd_code">TRIG:SOUR?</p>
+					<p class="cmd_code_Start">PIN1</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>INITialize</p>
+					<p>TRIGger[:SEQuence]:SOURce</p>
+					<p>TRIGger:DLOG[:IMMediate]</p>
 				</td>
 			</tr>
 		</table>
