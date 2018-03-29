@@ -1,0 +1,2420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title></title>
+		<style type="text/css">
+			/* Reset */
+			ol, ul { margin: 0; padding: 0; }
+			li { list-style-position: outside; }
+			
+			/* Paragraphs and texts */
+			.Default_ntt { }
+			.Heading_1 { margin-top: 4.23mm; margin-bottom: 2.12mm; font-size: 14.0pt; font-weight: bold; color: #0066cc; }
+			p { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
+			li { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
+			.scpi0 { text-align: left; }
+			.scpi1 { text-align: left; margin-left: 4.99mm; }
+			.scpi2 { text-align: left; margin-left: 10mm; }
+			.scpi3 { text-align: left; margin-left: 14.99mm; }
+			.scpi4 { text-align: left; margin-left: 20mm; }
+			.scpi5 { margin-left: 24.99mm; }
+			.table_header { text-align: center; }
+			
+			/* Footnotes & endnotes */
+			#webpub_footnotes_divider { clear: both; margin-top: 2em; width: 25%; border-top: 1px solid black; }
+			#webpub_footnotes { font-size: 80%; text-align: justify; }
+			#webpub_footnotes td.label { text-align: right; vertical-align: top; }
+			#webpub_footnotes td.content { }
+			a.webpub_footnote { font-size: 80%; vertical-align: super; }
+			#webpub_endnotes_divider { clear: both; margin-top: 2em; width: 25%; border-top: 3px double black; }
+			#webpub_endnotes { font-size: 80%; text-align: justify; }
+			#webpub_endnotes td.label { text-align: right; vertical-align: top; }
+			#webpub_endnotes td.content { }
+			a.webpub_endnote { font-size: 80%; vertical-align: super; }
+			
+		</style>
+	</head>
+	<body>
+		<p class="Heading_1">SCPI commands summary</p>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 25%;">
+					<p class="table_header">Common command</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 75%;">
+					<p class="table_header">Description</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0">*CLS</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Clears all status data structures</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0">*ESE {&lt;value&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Programs the Standard Event Status Enable register bits</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0">*ESR?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Reads the Standard Event Status Register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0">*IDN?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Returns the UNIQUE identification of the PSU</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0">*OPC</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Operation Complete Command used for program synchronization</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0">*RCL {&lt;profile&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Recalls the PSU state stored in the specified storage location</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0">*RST</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Reset PSU to the initial state</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0">*SAV {&lt;profile&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p class="Default_ntt">Stores the current PSU state in the specified storage location</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0">*STB?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Reads the Status Byte register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0">*TRG</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Generates a software trigger</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0">*TST?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p>Returns Self-Test results</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 25%;">
+					<p class="scpi0">*WAI</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 75%;">
+					<p class="scpi0">Waits until all pending commands are completed</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 46%;">
+					<p class="table_header">SCPI Command</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 54%;">
+					<p class="table_header">Description</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi0">ABORt</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Resets the trigger system to the Idle state</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:DLOG</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p class="scpi0">Stops the internal data logging session</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi0">CALibrate[:MODE] {&lt;bool&gt;, &lt;password&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Enables/disables calibration mode</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:CLEar {&lt;password&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Clears all calibration parameters</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:CURRent</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">[:DATA] {&lt;new value&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Enters the calibration value</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:LEVel {&lt;level&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Calibrates the output current programming</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:RANGe {&lt;range&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Sets current range for multiple current range model</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:PASSword</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:NEW {&lt;old&gt;, &lt;new&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Changes calibration password</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:REMark {&lt;string&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Saves calibration information </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:SAVE</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Saves the new cal constants in non-volatile memory</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:STATe {&lt;bool&gt;, &lt;password&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Enables calibration parameters</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:VOLTage</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">[:DATA] {&lt;new value&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Enters the calibration value</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:LEVel {&lt;level&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Calibrates the output voltage programming</p>
+				</td>
+			</tr>
+		</table>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi0">DIAGnostic</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">[:INFOrmation]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:ADC?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Returns the latest values acquired by ADC</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:CALibration?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Returns a list of the calibration parameters</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:FAN?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Returns status of the cooling fan.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:PROTection?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Returns the information about all protections.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:TEST?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Returns results of the most recent self-test</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi0">DISPlay</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:BRIGhtness {&lt;value&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Sets the intensity of the front panel TFT display</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:MODE {&lt;mode&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Sets the main page appearance</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">[:WINdow] </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">[:STATe] {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Sets the front panel TFT display state</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:TEXT {&lt;message&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Displays a message on the front panel TFT display</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi3">:CLEar</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Clear a message on the front panel TFT display</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi0">INITiate</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">[:IMMediate]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Completes one full trigger cycle</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:DLOG {&lt;filename&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Enables internal data log session</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:CONTinuous {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Enables/disables continuous transient triggers</p>
+				</td>
+			</tr>
+		</table>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi0">INSTrument</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">[:SELect] {&lt;channel&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Selects the output to be programmed</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:COUPle</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p class="scpi1" style="margin-left: 0;">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:TRACking {&lt;type&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p class="scpi1" style="margin-left: 0;">Selects independent, parallel-tracking, or series-tracking mode</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:DISPlay</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:TRACe[&lt;n&gt;] {&lt;value&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Selects output value on the specified display trace</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi3">:SWAP</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Swaps positions of selected output values</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:YT</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi3">:RATE {&lt;duration&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Selects YT view sample duration</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:NSELect {&lt;channel&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Selects the output to be programmed </p>
+				</td>
+			</tr>
+		</table>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi0">MEASure</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">[:SCALar]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:CURRent</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi3">[:DC]? [&lt;channel&gt;]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Takes a measurement; returns the average current</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:POWer</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi3">[:DC]? [&lt;channel&gt;]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Takes a measurement; returns the average power</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:TEMPerature</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi3">[:DC]? {&lt;sensor&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Takes a measurement; returns the average temperature</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">[:VOLTage]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi3">[:DC]? [&lt;channel&gt;]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Takes a measurement; returns the average voltage</p>
+				</td>
+			</tr>
+		</table>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi0">MEMory</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:NSTates?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Returns total number of state storage memory locations</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi1">:STATe</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:CATalog?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Lists the names associated with all ten state storage locations</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:DELete {&lt;profile&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Deletes the contents of a state storage location</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi3">:ALL</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Deletes the contents of all state storage locations</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:NAME {&lt;profile&gt;, &lt;name&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Assigns a custom name to a state storage locations</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:RECall</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi3">:AUTO {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Specifies whether the power-down state is recalled from location 0 on power-on</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi3">:SELect {&lt;profile&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Specifies which PSU state will be used at power on</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
+					<p class="scpi2">:VALid? {&lt;profile&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
+					<p>Determines whether a storage location contains a valid state</p>
+				</td>
+			</tr>
+		</table>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi0">MMEMory</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:CATalog [&lt;directory&gt;]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns a list of items in the specified directory (folder)</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:LENgth [&lt;directory&gt;]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the number of items in the specified directory</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:CDIRectory {&lt;directory&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Changes the current directory</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:COPY {&lt;source&gt;}, {&lt;destination&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">Copies &lt;source&gt; to &lt;destination&gt;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:DATE? {&lt;filename&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns date that the specified file was last saved</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:DELete {&lt;filename&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Deletes an existing file</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:DOWNload</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:DATA :DATA {#&lt;length&gt;,&lt;encoding&gt;,&lt;block&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Downloads data from the host computer</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:FNAMe {&lt;filename&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Creates or opens the specified filename for download data</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:LOAD</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:LIST[&lt;n&gt;] {&lt;filename&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">Loads stored LIST to the specified channel</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:PROFile {&lt;filename&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">Loads stored user profile</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:STATe {&lt;filename&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">Loads the instrument setup</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:LOCK {&lt;password&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets write protection</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:MDIRectory {&lt;directory&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">Makes a new directory</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:MOVE {&lt;source&gt;}, {&lt;destination&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">Moves or renames &lt;source&gt; to &lt;destination&gt;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:RDIRectory {&lt;directory&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">Removes the specified directory</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:STORe</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:LIST[&lt;n&gt;] {&lt;filename&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">Saves specified channel LIST </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:PROFile {&lt;filename&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">Saves specified user profile</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:STATe {&lt;filename&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">Saves the instrument setup</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:TIME? {&lt;filename&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns time that the specified file was last saved</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:UNLock {&lt;password&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">Clears write protection</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:UPLoad? {&lt;filename&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi3" style="margin-left: 0;">Uploads data to the host computer</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi0">OUTPut</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">[:STATe] {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables the specified output channel(s)</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">TRIGgered {&lt;bool&gt;} [, &lt;channel&gt;]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi2" style="margin-left: 0;">Controls channel output state with trigger</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:MODE?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the channel mode of operation</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:PROTection</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:CLEar</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Resets latched protection</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:COUPle {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi2" style="margin-left: 0;">Enables channel coupling for protection faults</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:TRACk[:STATe] {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables channels to operate in the track mode</p>
+				</td>
+			</tr>
+		</table>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi0">SIMUlator</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:EXIT</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Closes simulator</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:GUI</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Starts simulator’s GUI</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:LOAD {&lt;value&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets value of the virtual load</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:STATe {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>“Connects” virtual load to the channel output</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:PIN1 {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets value of the PIN1 input</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:PWRGood {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the PWRGOOD signal state</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:RPOL {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the RPOL signal state</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:TEMP {&lt;value&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the temperature sensor value</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:VOLT:PROG:EXT {&lt;voltage&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the output voltage when channel is in external programming mode</p>
+				</td>
+			</tr>
+		</table>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi0">SENSe</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:CURRent</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">[:DC] </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">RANGe[:UPPer] {&lt;range&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Selects a DC current measurement range</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">AUTO {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables/disables seamless measurement auto ranging</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:DLOG</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:FUNCtion</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:CURRent {&lt;bool&gt;}, {&lt;channel&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables/disables current internal data logging</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:VOLTage {&lt;bool&gt;}, {&lt;channel&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables/disables voltage internal data logging</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:PERiod {&lt;time&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the sample period for internal data logging</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:TIME {&lt;time&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the sample duration for internal data logging</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi0">[SOURce[&lt;n&gt;]] </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:CURRent</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">[:LEVel] </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">[:IMMediate][:AMPLitude] {&lt;current&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the output current </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">:STEP[:INCRement] {&lt;step&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the step of the current change</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:TRIGgered [:AMPLitude] {&lt;current&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the triggered output current </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:LIMit</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">[:POSitive][:IMMediate][:AMPLitude] {&lt;current&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the output current limit</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:PROTection</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:DELay </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">[:TIME] {&lt;time&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the over-current protection (OCP) programming delay </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:STATe {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables/disables over-current protection on the selected channel </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:TRIPped?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns status of over-current protection activation</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:LIST</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:COUNt</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the number of times that the list is executed</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:CURRent[:LEVel]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Specifies the current setting for each list step</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:DWELl</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Specifies the dwell time for each list step</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:VOLTage[:LEVel]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Specifies the voltage setting for each list step</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:LRIPple {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets low output ripple (noise) mode of operation</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:AUTO {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets automatic changing to the low output ripple (noise) mode of operation</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:POWer</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:LIMit {&lt;power&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the output power limit</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:PROTection[:LEVel]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the over-power protection (OPP) level</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:DELay </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">[:TIME] {&lt;time&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the over-power protection programming delay </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:STATe {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables/disables over-power protection on the selected channel </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:TRIPped?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns status of over-power protection activation</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:VOLTage </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">[:LEVel] </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">[:IMMediate][:AMPLitude] {&lt;voltage&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the output voltage </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">:STEP[:INCRement] {&lt;step&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the step of the voltage change</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:TRIGgered [:AMPLitude] {&lt;voltage&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p class="scpi4" style="margin-left: 0;">Sets the triggered output voltage</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:LIMit</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">[:POSitive][:IMMediate][:AMPLitude] {&lt;voltage&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the output voltage limit</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:PROGram[:SOURce] {&lt;source&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets voltage programming source</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:PROTection[:LEVel]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the over-voltage protection (OVP) level</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:DELay </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">[:TIME] {&lt;time&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the over-voltage protection (OVP) programming delay </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:STATe {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables/disables over-voltage protection on the selected channel </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:TRIPped?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns status of over-voltage protection activation</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:SENSe[:SOURce] {&lt;source&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets voltage sense inputs source</p>
+				</td>
+			</tr>
+		</table>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi0">STATus</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:OPERation</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">[:EVENt]?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the value of the Operation Event register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:CONDition?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the value of the Operation Instrument Condition register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:ENABle {&lt;value&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables specific bits in the Operation Event register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:INSTrument[&lt;n&gt;]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">[:EVENt]?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the value of the Operation Instrument Event register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:CONDition?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the value of the Operation Instrument Condition register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:ENABle {&lt;value&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables specific bits in the Operation Instrument Event register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:ISUMmary&lt;n&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">[:EVENt]?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the value of the Operation Instrument Isummary Event register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">:CONDition?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the value of the Operation Instrument Isummary Condition register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">:ENABle {&lt;value&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables specific bits in the Operation Instrument Isummary Event register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:PREset</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Presets all enable registers to power-on state</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:QUEStionable</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">[:EVENt]?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the value of the Questionable Event register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:CONDition?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the value of the Questionable Condition register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:ENABle {&lt;value&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables specific bits in the Questionable Event register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:INSTrument[&lt;n&gt;]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">[:EVENt]?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the value of the Questionable Instrument Event register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:CONDition?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the value of the Questionable Instrument Condition register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:ENABle {&lt;value&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables specific bits in the Questionable Instrument Event register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:ISUMmary&lt;n&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">[:EVENt]?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the value of the Questionable Instrument Isummary Event register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">:CONDition?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the value of the Questionable Instrument Isummary Condition register</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">:ENABle {&lt;value&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables specific bits in the Questionable Instrument Isummary Event register</p>
+				</td>
+			</tr>
+		</table>
+		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi0">SYSTem</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:BEEPer[:IMMediate]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Issues a single beep immediately</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:STATe {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables beeper function</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:KEY</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:STATe {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables click tone for local control</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:CAPability?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns an &lt;instrument_specifier&gt;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:CHANnel</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">[:COUNt]?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the number of output channels</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:INFOrmation</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:AHOur</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">TOTal?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns channel’s total delivered energy in Ah</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:CURRent?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns output current capability</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:ONtime</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">LAST?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns time passed after last output enable</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">TOTal?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns channel’s total active time</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:POWer?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns output power capability</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:PROGram?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns programmable features of the channel</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:VOLTage?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns output voltage capability</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:WHOur</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">TOTal?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns channel’s total delivered energy in Wh</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:MODel?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the channel model identification</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:COMMunicate</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:ENABle {&lt;bool&gt;, &lt;interface&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables the remote interface </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:ETHernet</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:ADDRess {&lt;ip_address&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the static LAN (IP) address</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:DHCP {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables the use of the Dynamic Host Configuration Protocol (DHCP)</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:DNS &lt;ip_address&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the IP address of the DNS server.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:GATEway {&lt;ip_address&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the IP address of the default gateway</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:MAC?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the MAC address</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:PORT {&lt;number&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the port number</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:SMASk {&lt;mask&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the static subnet mask</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:NTP {&lt;server&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Set s NTP service server address</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:RLSTate {&lt;state&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Places the instrument in remote or local mode</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:SERial</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:BAUD {&lt;speed&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the baud rate (speed)</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:PARity {&lt;parity&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the parity mode</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">CPU</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:INFOrmation</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:ETHernet</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">:TYPE?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the type of Ethernet controller</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:ONtime</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">LAST?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns time passed after last power on</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">TOTal?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns PSU’s total active time</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:TYPE?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the type of CPU</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:MODel?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the control board model identification</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:OPTion?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns information about installed options on the control board</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:DATE {&lt;yyyy&gt;,&lt;mm&gt;,&lt;dd&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the date of the system clock</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:DIGital</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:INPut:DATA? [&lt;pin&gt;]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Reads the state of the digital port pins</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:OUTPut:DATA [&lt;pin&gt;] {&lt;state&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the state of the digital port pins</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:PIN&lt;n&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:FUNCtion {&lt;function&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the selected pin’s function</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:POLarity {&lt;polarity&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the selected pin’s polarity</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:TOUTput</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:BUS[:ENABle] {&lt;Bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables/disables BUS-generated triggers on digital pins</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:ERRor</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">[:NEXT]?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Queries and clears errors from the error queue</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:COUNt?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Queries the error/event queue for the number of unread items</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:INHibit?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Queries system inhibit state</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:KLOCk</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Disables front panel [lock/unlock] icon</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:LOCal</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Places the PSU in the local mode</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:PASSword</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:CALibration</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:RESet</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Resets the calibration password to initial value</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:FPANel</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:RESet</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Resets the front panel lock password to initial value</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:NEW {&lt;old&gt;, &lt;new&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Changes system password</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:POWer {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enters the PSU into the Stand-by mode</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:PROTection:TRIP {&lt;bool&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enters the PSU into the Stand-by mode in case of protection trip</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:REMote</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Places the PSU in the remote mode</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:RWLock</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Places the PSU in the remote mode and disables front panel [lock/unlock] icon</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:TEMPerature</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:PROTection </p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">[:HIGH]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">[:LEVel] {&lt;temperature&gt;[, &lt;sensor&gt;]}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the OTP value</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">:CLEar [, {&lt;sensor&gt;}]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Clears the latched protection status of the over-temperature protection (OTP)</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">:DELay</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets time-out period</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi5">[:TIME] {&lt;delay&gt;[, &lt;sensor&gt;]}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the OTP programming delay</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">:STATe {&lt;bool&gt;[, &lt;sensor&gt;]}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Enables/disables OTP on the selected temperature sensor </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi4">:TRIPped? [&lt;sensor&gt;]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns status of OTP activation</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:TIME {&lt;hh&gt;,&lt;mm&gt;,&lt;ss&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the time of the system clock</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:DTS {rules}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Defines daylight saving time (DST) rules </p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:ZONE {zone}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Defines time zone</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:VERSion?</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Returns the SCPI version number</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi0">TRIGger</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 1px solid #000000; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">[:SEQuence]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">[:IMMediate]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:DELay {&lt;delay&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the time delay between the detection of a trigger event and the start of any corresponding trigger action</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:EXIT</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:CONDition {&lt;condition}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets channel’s condition when LIST execution stopped</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">:SOURce {&lt;source&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the trigger source</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi1">:DLOG</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi2">[:IMMediate]</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>&#160;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 42%;">
+					<p class="scpi3">:SOURce {&lt;source&gt;}</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 58%;">
+					<p>Sets the internal data logger trigger source</p>
+				</td>
+			</tr>
+		</table>
+		<p>&#160;</p>
+		<p>&#160;</p>
+	</body>
+</html>
