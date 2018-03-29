@@ -76269,6 +76269,9 @@
             "name": "SENSe:DLOG:FUNCtion:VOLTage"
           },
           {
+            "name": "SENSe:DLOG:FUNCtion:POWer"
+          },
+          {
             "name": "SENSe:DLOG:PERiod"
           },
           {

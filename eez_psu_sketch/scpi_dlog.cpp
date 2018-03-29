@@ -114,6 +114,32 @@ scpi_result_t scpi_cmd_senseDlogFunctionCurrent(scpi_t * context) {
 #endif
 }
 
+scpi_result_t scpi_cmd_senseDlogFunctionPower(scpi_t * context) {
+#if OPTION_SD_CARD
+	bool enable;
+	if (!SCPI_ParamBool(context, &enable, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+	Channel *channel = param_channel(context);
+	if (!channel) {
+		return SCPI_RES_ERR;
+	}
+
+	if (!dlog::isIdle()) {
+		SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_CHANGE_TRANSIENT_TRIGGER);
+		return SCPI_RES_ERR;
+	}
+
+	dlog::g_logPower[channel->index - 1] = enable;
+
+	return SCPI_RES_OK;
+#else
+	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
+	return SCPI_RES_ERR;
+#endif
+}
+
 scpi_result_t scpi_cmd_senseDlogPeriod(scpi_t * context) {
 #if OPTION_SD_CARD
 	scpi_number_t param;

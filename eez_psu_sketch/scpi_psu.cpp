@@ -176,8 +176,10 @@ void resetContext(scpi_t *context) {
 
     psuContext->selected_channel_index = 1;
 
+#if OPTION_SD_CARD
     psuContext->currentDirectory[0] = 0;
     psuContext->downloadFilePath[0] = 0;
+#endif
 
     SCPI_ErrorClear(context);
 }

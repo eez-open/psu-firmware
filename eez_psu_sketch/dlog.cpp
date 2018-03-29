@@ -32,6 +32,7 @@ namespace dlog {
 
 bool g_logVoltage[CH_NUM];
 bool g_logCurrent[CH_NUM];
+bool g_logPower[CH_NUM];
 float g_period = PERIOD_DEFAULT;
 float g_time = TIME_DEFAULT;
 trigger::Source g_triggerSource = trigger::SOURCE_IMMEDIATE;
@@ -46,10 +47,20 @@ enum State {
 static State g_state = STATE_IDLE;
 
 File g_file;
-uint32_t g_nextTickCount;
+uint32_t g_lastTickCount;
+uint32_t g_seconds;
+uint32_t g_micros;
+uint32_t g_iSample;
+double g_nextTime;
 
 void setState(State newState) {
 	if (g_state != newState) {
+		if (newState == STATE_EXECUTING) {
+			psu::setOperBits(OPER_DLOG, true);
+		} else if (g_state == STATE_EXECUTING) {
+			psu::setOperBits(OPER_DLOG, false);
+		}
+			
 		g_state = newState;
 	}
 }
@@ -57,7 +68,7 @@ void setState(State newState) {
 int checkDlogParameters() {
 	bool somethingToLog;
 	for (int i = 0; i < CH_NUM; ++i) {
-		if (g_logVoltage[i] || g_logCurrent[i]) {
+		if (g_logVoltage[i] || g_logCurrent[i] || g_logPower[i]) {
 			somethingToLog = true;
 			break;
 		}
@@ -76,6 +87,10 @@ int checkDlogParameters() {
 
 bool isIdle() {
 	return g_state == STATE_IDLE;
+}
+
+bool isInitiated() {
+	return g_state == STATE_INITIATED;
 }
 
 int initiate(const char *filePath) {
@@ -99,12 +114,28 @@ int initiate(const char *filePath) {
 	return error;
 }
 
-#define MAGIC1  0x3A92C491L
-#define MAGIC2  0x1C5CBAE8L
+void triggerGenerated(bool startImmediatelly) {
+	if (startImmediatelly) {
+		int err = startImmediately();
+		if (err != SCPI_RES_OK) {
+			generateError(err);
+		}
+	} else {
+		setState(STATE_TRIGGERED);
+	}
+}
+
+#define MAGIC1  0x2D5A4545L
+#define MAGIC2  0x474F4C44L
 #define VERSION 0x00000001L
 
 void writeUint8(uint8_t value) {
 	g_file.write((const uint8_t *)&value, 1);
+}
+
+void writeUint16(uint16_t value) {
+	writeUint8(value & 0xFF);
+	writeUint8((value >> 8) & 0xFF);
 }
 
 void writeUint32(uint32_t value) {
@@ -137,56 +168,140 @@ int startImmediately() {
 
 	writeUint32(MAGIC1);
 	writeUint32(MAGIC2);
-	writeUint32(VERSION);
-	uint32_t flag = 0;
-	for (int i = 0; i < CH_NUM; ++i) {
-		if (g_logVoltage[i]) {
-			flag |= 0x01 << (i * 2);
+	
+	writeUint16(VERSION);
+	
+	if (CONF_DLOG_JITTER) {
+		writeUint16(1);
+	} else {
+		writeUint16(0);
+	}
+	
+	uint32_t columns = 0;
+	for (int iChannel = 0; iChannel < CH_NUM; ++iChannel) {
+		if (g_logVoltage[iChannel]) {
+			columns |= 1 << (4 * iChannel);
 		}
-		if (g_logCurrent[i]){
-			flag |= 0x02 << (i * 2);
+		if (g_logCurrent[iChannel]){
+			columns |= 2 << (4 * iChannel);
+		}
+		if (g_logPower[iChannel]) {
+			columns |= 4 << (4 * iChannel);
 		}
 	}
-	writeUint32(flag);
+	writeUint32(columns);
+
 	writeFloat(g_period);
 	writeFloat(g_time);
 	writeUint32(datetime::nowUtc());
 
-	g_nextTickCount = micros();
-	log(g_nextTickCount);
+	g_lastTickCount = micros();
+	g_seconds = 0;
+	g_micros = 0;
+	g_iSample = 0;
+	g_nextTime = 0;
+
+	log(g_lastTickCount);
 
 	return SCPI_RES_OK;
 }
 
+void finishLogging() {
+	setState(STATE_IDLE);
+	g_file.close();
+
+}
+
 void abort() {
 	if (g_state == STATE_EXECUTING) {
-		setState(STATE_IDLE);
-		g_file.close();
+		finishLogging();
 	}
 }
 
 void log(uint32_t tickCount) {
-	writeUint32(tickCount - g_nextTickCount);
+	g_micros += tickCount - g_lastTickCount;
+	g_lastTickCount = tickCount;
 
-	for (int i = 0; i < CH_NUM; ++i) {
-		Channel &channel = Channel::get(i);
-		if (g_logVoltage[i]) {
-			writeFloat(channel_dispatcher::getUMon(channel));
-		}
-		if (g_logCurrent[i]) {
-			writeFloat(channel_dispatcher::getIMon(channel));
-		}
+	if (g_micros >= 1000000) {
+		++g_seconds;
+		g_micros -= 1000000;
 	}
 
-	// @todo we need more precision here
-	g_nextTickCount += floor(g_period * 1000000L);
+	double t = g_seconds + g_micros * 1E-6;
+
+	if (t >= g_nextTime) {
+		float dt = (float)(t - g_nextTime);
+
+		while (1) {
+			g_nextTime = ++g_iSample * g_period;
+			if (t < g_nextTime || g_nextTime > g_time) {
+				break;
+			}
+
+			// we missed a sample, write NAN
+#ifdef DLOG_JITTER
+			writeFloat(NAN);
+#endif
+			for (int i = 0; i < CH_NUM; ++i) {
+				Channel &channel = Channel::get(i);
+				if (g_logVoltage[i]) {
+					writeFloat(NAN);
+				}
+				if (g_logCurrent[i]) {
+					writeFloat(NAN);
+				}
+				if (g_logPower[i]) {
+					writeFloat(NAN);
+				}
+			}
+		}
+
+
+		// write sample
+#ifdef DLOG_JITTER
+		writeFloat(dt);
+#endif
+		for (int i = 0; i < CH_NUM; ++i) {
+			Channel &channel = Channel::get(i);
+
+			float uMon;
+			float iMon;
+
+			if (g_logVoltage[i]) {
+				uMon = channel_dispatcher::getUMon(channel);
+				writeFloat(uMon);
+			}
+
+			if (g_logCurrent[i]) {
+				iMon = channel_dispatcher::getIMon(channel);
+				writeFloat(iMon);
+			}
+
+			if (g_logPower[i]) {
+				if (!g_logVoltage[i]) {
+					uMon = channel_dispatcher::getUMon(channel);
+				}
+				if (!g_logCurrent[i]) {
+					iMon = channel_dispatcher::getIMon(channel);
+				}
+				writeFloat(uMon * iMon);
+			}
+		}
+
+		if (g_nextTime > g_time) {
+			finishLogging();
+		}
+	}
 }
 
 void tick(uint32_t tickCount) {
-	if (g_state == STATE_EXECUTING) {
-		if (tickCount > g_nextTickCount) {
-			log(tickCount);
+	if (g_state == STATE_TRIGGERED) {
+		int err = startImmediately();
+		if (err != SCPI_RES_OK) {
+			generateError(err);
 		}
+	} else if (g_state == STATE_EXECUTING) {
+		log(tickCount);
 	}
 }
 

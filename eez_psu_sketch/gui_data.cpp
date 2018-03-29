@@ -42,8 +42,12 @@
 #if OPTION_ETHERNET
 #include "ethernet.h"
 #endif
+#if OPTION_SD_CARD
+#include "dlog.h"
+#endif
 
 #define CONF_GUI_REFRESH_EVERY_MS 250
+#define CONF_DLOG_COLOR 62464
 
 namespace eez {
 namespace psu {
@@ -1360,9 +1364,32 @@ Value getEditValue(const Cursor &cursor, uint8_t id) {
     return get(cursor, id);
 }
 
+uint16_t getWidgetBackgroundColor(const WidgetCursor& widgetCursor, const Style* style) {
+#if OPTION_SD_CARD
+	if (!dlog::isIdle()) {
+		DECL_WIDGET(widget, widgetCursor.widgetOffset);
+		int iChannel = widgetCursor.cursor.i >= 0 ? widgetCursor.cursor.i : (g_channel ? (g_channel->index - 1) : 0);
+		if (widget->data == DATA_ID_CHANNEL_U_EDIT || widget->data == DATA_ID_CHANNEL_U_MON_DAC) {
+			if (dlog::g_logVoltage[iChannel]) {
+				return CONF_DLOG_COLOR;
+			}
+		} else if (widget->data == DATA_ID_CHANNEL_I_EDIT) {
+			if (dlog::g_logCurrent[iChannel]) {
+				return CONF_DLOG_COLOR;
+			}
+		} else if (widget->data == DATA_ID_CHANNEL_P_MON) {
+			if (dlog::g_logPower[iChannel]) {
+				return CONF_DLOG_COLOR;
+			}
+		}
+	}
+#endif
+	return style->background_color;
+}
+
 }
 }
 }
 } // namespace eez::psu::ui::data
 
-#endif
+#endif // OPTION_DISPLAY

@@ -41,6 +41,8 @@ void addExtension(char *filePath, const char *ext) {
     }
 }
 
+#endif
+
 scpi_result_t scpi_cmd_mmemoryCdirectory(scpi_t *context) {
 #if OPTION_SD_CARD
     char dirPath[MAX_PATH_LENGTH + 1];
@@ -113,7 +115,7 @@ void catalogCallback(void *param, const char *name, const char *type, size_t siz
 
     psu::tick();
 }
-#endif
+
 
 scpi_result_t scpi_cmd_mmemoryCatalogQ(scpi_t *context) {
 #if OPTION_SD_CARD

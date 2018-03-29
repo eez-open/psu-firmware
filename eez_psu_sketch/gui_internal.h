@@ -60,7 +60,7 @@ void popPage();
 bool isPageActiveOrOnStack(int pageId);
 
 font::Font styleGetFont(const Style *style);
-void drawText(int pageId, const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse, bool dimmed = false, bool ignoreLuminocity = false);
+void drawText(int pageId, const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse, bool dimmed = false, bool ignoreLuminocity = false, uint16_t *overrideBackgroundColor = 0);
 void fillRect(int x, int y, int w, int h);
 
 void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t currentValue, bool (*disabledCallback)(uint8_t value), void (*onSet)(uint8_t));

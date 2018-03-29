@@ -35,6 +35,7 @@ namespace scpi {
 //
 #define OPER_GROUP_PARALLEL (1 << 8)    /* GROUp PARAllel */
 #define OPER_GROUP_SERIAL   (1 << 9)    /* GROUp SERIal */
+#define OPER_DLOG           (1 << 10)   /* DLog is active */
 #define OPER_ISUM           (1 << 13)   /* INSTrument Summary */
 
 //

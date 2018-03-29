@@ -142,6 +142,7 @@
     SCPI_COMMAND("SENSe:CURRent[:DC]:RANGe[:UPPer]?", scpi_cmd_senseCurrentDcRangeUpperQ) \
     SCPI_COMMAND("SENSe:DLOG:FUNCtion:CURRent", scpi_cmd_senseDlogFunctionCurrent) \
     SCPI_COMMAND("SENSe:DLOG:FUNCtion:VOLTage", scpi_cmd_senseDlogFunctionVoltage) \
+    SCPI_COMMAND("SENSe:DLOG:FUNCtion:POWer", scpi_cmd_senseDlogFunctionPower) \
     SCPI_COMMAND("SENSe:DLOG:PERiod", scpi_cmd_senseDlogPeriod) \
     SCPI_COMMAND("SENSe:DLOG:PERiod?", scpi_cmd_senseDlogPeriodQ) \
     SCPI_COMMAND("SENSe:DLOG:TIME", scpi_cmd_senseDlogTime) \

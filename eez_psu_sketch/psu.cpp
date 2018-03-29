@@ -654,7 +654,7 @@ void powerDown() {
     if (!g_powerIsUp) return;
 
     trigger::abort();
-#ifdef OPTION_SD_CARD
+#if OPTION_SD_CARD
 	dlog::abort();
 #endif
 
@@ -899,7 +899,7 @@ uint32_t criticalTick(int pageId) {
         lastTickList = 0;
     }
 
-#ifdef OPTION_SD_CARD
+#if OPTION_SD_CARD
 	dlog::tick(tick_usec);
 #endif
 

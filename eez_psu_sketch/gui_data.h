@@ -24,6 +24,10 @@
 namespace eez {
 namespace psu {
 namespace gui {
+
+struct WidgetCursor;
+struct Style;
+
 namespace data {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -219,6 +223,8 @@ Value getHistoryValue(const Cursor &cursor, uint8_t id, int position);
 
 bool isBlinking(const Cursor &cursor, uint8_t id);
 Value getEditValue(const Cursor &cursor, uint8_t id);
+
+uint16_t getWidgetBackgroundColor(const WidgetCursor& widgetCursor, const Style* style);
 
 }
 }

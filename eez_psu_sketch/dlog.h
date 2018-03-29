@@ -26,6 +26,7 @@ namespace dlog {
 
 extern bool g_logVoltage[CH_NUM];
 extern bool g_logCurrent[CH_NUM];
+extern bool g_logPower[CH_NUM];
 
 static const float PERIOD_MIN = 0.02f;
 static const float PERIOD_MAX = 120.0f;
@@ -40,8 +41,9 @@ extern float g_time;
 extern trigger::Source g_triggerSource;
 
 bool isIdle();
+bool isInitiated();
 int initiate(const char *filePath);
-int generateTrigger(trigger::Source source, bool checkImmediatelly = true);
+void triggerGenerated(bool startImmediatelly = true);
 int startImmediately();
 void abort();
 

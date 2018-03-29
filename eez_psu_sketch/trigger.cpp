@@ -25,6 +25,10 @@
 #include "io_pins.h"
 #include "scpi_regs.h"
 
+#if OPTION_SD_CARD
+#include "dlog.h"
+#endif
+
 namespace eez {
 namespace psu {
 namespace trigger {
@@ -137,21 +141,36 @@ void check(uint32_t currentTime) {
 }
 
 int generateTrigger(Source source, bool checkImmediatelly) {
-    if (persist_conf::devConf2.triggerSource != source) {
-        return SCPI_ERROR_TRIGGER_IGNORED;
-    }
-    
-    if (g_state != STATE_INITIATED) {
-        return SCPI_ERROR_TRIGGER_IGNORED;
+	bool seqTriggered = persist_conf::devConf2.triggerSource == source && g_state == STATE_INITIATED;
+#if OPTION_SD_CARD
+	bool dlogTriggered = dlog::g_triggerSource == source && dlog::isInitiated();
+#endif
+
+	if (!seqTriggered) {
+#if OPTION_SD_CARD
+		if (!dlogTriggered) {
+			return SCPI_ERROR_TRIGGER_IGNORED;
+		}
+#else
+		return SCPI_ERROR_TRIGGER_IGNORED;
+#endif
     }
 
-    setState(STATE_TRIGGERED);
+#if OPTION_SD_CARD
+	if (dlogTriggered) {
+		dlog::triggerGenerated(checkImmediatelly);
+	}
+#endif
 
-    g_triggeredTime = micros() / 1000;
+	if (seqTriggered) {
+		setState(STATE_TRIGGERED);
 
-    if (checkImmediatelly) {
-        check(g_triggeredTime);
-    }
+		g_triggeredTime = micros() / 1000;
+
+		if (checkImmediatelly) {
+			check(g_triggeredTime);
+		}
+	}
 
     return SCPI_RES_OK;
 }
