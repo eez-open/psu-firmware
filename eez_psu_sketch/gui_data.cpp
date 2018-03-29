@@ -925,11 +925,23 @@ Value get(const Cursor &cursor, uint8_t id) {
             }
 
             if (id == DATA_ID_TRIGGER_IS_INITIATED) {
-                return Value(trigger::isInitiated() ? 1 : 0);
+				bool isInitiated = trigger::isInitiated();
+#ifdef OPTION_SD_CARD
+				if (!isInitiated && dlog::isInitiated()) {
+					isInitiated = true;
+				}
+#endif
+                return Value(isInitiated ? 1 : 0);
             }
         
             if (id == DATA_ID_TRIGGER_IS_MANUAL) {
-                return Value(trigger::getSource() == trigger::SOURCE_MANUAL ? 1 : 0);
+				bool isManual = trigger::getSource() == trigger::SOURCE_MANUAL;
+#ifdef OPTION_SD_CARD
+				if (!isManual && dlog::g_triggerSource == trigger::SOURCE_MANUAL) {
+					isManual = true;
+				}
+#endif
+                return Value(isManual ? 1 : 0);
             }
 
             if (id == DATA_ID_CHANNEL_MON_VALUE) {
