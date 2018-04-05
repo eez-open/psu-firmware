@@ -67,6 +67,8 @@ static int g_rpmMeasureInterruptNumber;
 static volatile RpmMeasureState g_rpmMeasureState = RPM_MEASURE_STATE_FINISHED;
 static uint32_t g_rpmMeasureT1;
 
+static const uint32_t FAN_RPM_MEASURE_TIME = 100000L / FAN_NOMINAL_RPM;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 int dt_to_rpm(uint32_t dt) {
@@ -167,7 +169,7 @@ bool test() {
         g_fanSpeedPWM = saved_fan_speed_pwm;
 #endif
 
-        for (int i = 0; i < 25 && g_rpmMeasureState != RPM_MEASURE_STATE_MEASURED; ++i) {
+        for (int i = 0; i < FAN_RPM_MEASURE_TIME && g_rpmMeasureState != RPM_MEASURE_STATE_MEASURED; ++i) {
             delay(1);
         }
 
@@ -249,7 +251,7 @@ void tick(uint32_t tick_usec) {
                 finish_rpm_measure();
                 //DebugTraceF("RPM=%d", g_rpm);
             } else if (rpmMeasureState != RPM_MEASURE_STATE_FINISHED) {
-                if (diff >= 50 * 1000L) {
+				if (tick_usec - g_fanSpeedLastMeasuredTick >= 2 * FAN_RPM_MEASURE_TIME * 1000L) {
                     // measure timeout, interrupt measurement
                     g_rpmMeasureState = RPM_MEASURE_STATE_MEASURED;
                     g_rpm = 0;
