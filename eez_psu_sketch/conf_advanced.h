@@ -192,10 +192,13 @@
 #define FAN_MAX_TEMP 75
 
 ///  PWM value for min. fan speed (12) 
-#define FAN_MIN_PWM 15
+#define FAN_MIN_PWM 1
 
 /// PWM value for max. fan speed (255)
 #define FAN_MAX_PWM 255
+
+/// Min. PWM after which fan failed will be asserted if RPM is not measured
+#define FAN_FAILED_THRESHOLD 15
 
 /// Max. allowed output current (in ampers) if fan or temp. sensor is invalid.
 #define ERR_MAX_CURRENT 2.0f

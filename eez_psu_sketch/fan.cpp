@@ -49,7 +49,8 @@ TestResult g_testResult = psu::TEST_FAILED;
 
 static uint32_t g_testStartTime;
 
-static int g_fanSpeedPWM = 0;
+bool g_fanManualControl = false;
+int g_fanSpeedPWM = 0;
 static float g_fanSpeed = FAN_MIN_PWM;
 
 static uint32_t g_fanSpeedLastMeasuredTick = 0;
@@ -201,44 +202,49 @@ void tick(uint32_t tick_usec) {
         return;
     }
 
-    // adjust fan speed depending on max. channel temperature
-    if (tick_usec - g_fanSpeedLastAdjustedTick >= FAN_SPEED_ADJUSTMENT_INTERVAL * 1000L) {
-        float max_channel_temperature = temperature::getMaxChannelTemperature();
-        //DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
+	if (!g_fanManualControl) {
+		// adjust fan speed depending on max. channel temperature
+		if (tick_usec - g_fanSpeedLastAdjustedTick >= FAN_SPEED_ADJUSTMENT_INTERVAL * 1000L) {
+			float max_channel_temperature = temperature::getMaxChannelTemperature();
+			//DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
 
-		g_pidTemp = max_channel_temperature;
-		g_fanPID.Compute();
-        if (g_pidDuty >= FAN_MIN_PWM) {
-            g_fanSpeed = (float)g_pidDuty;
-        } else {
-            g_fanSpeed = 0;
-        }
+			g_pidTemp = max_channel_temperature;
+			g_fanPID.Compute();
+			if (g_pidDuty >= FAN_MIN_PWM) {
+				g_fanSpeed = (float)g_pidDuty;
+			}
+			else {
+				g_fanSpeed = 0;
+			}
 
-        int newFanSpeedPWM = (int)g_fanSpeed;
-        if (newFanSpeedPWM < FAN_MIN_PWM) {
-            newFanSpeedPWM = 0;
-        } else if (newFanSpeedPWM > FAN_MAX_PWM) {
-            newFanSpeedPWM = FAN_MAX_PWM;
-        }
+			int newFanSpeedPWM = (int)g_fanSpeed;
+			if (newFanSpeedPWM < FAN_MIN_PWM) {
+				newFanSpeedPWM = 0;
+			}
+			else if (newFanSpeedPWM > FAN_MAX_PWM) {
+				newFanSpeedPWM = FAN_MAX_PWM;
+			}
 
-        if (newFanSpeedPWM != g_fanSpeedPWM) {
-            g_fanSpeedPWM = newFanSpeedPWM;
+			if (newFanSpeedPWM != g_fanSpeedPWM) {
+				g_fanSpeedPWM = newFanSpeedPWM;
 
-            if (g_fanSpeedPWM > 0) {
-                //DebugTraceF("fanSpeed PWM: %d", g_fanSpeedPWM);
-    
-                g_fanSpeedLastMeasuredTick = tick_usec;
-            } else {
-                //DebugTrace("fanSpeed OFF");
-            }
+				if (g_fanSpeedPWM > 0) {
+					//DebugTraceF("fanSpeed PWM: %d", g_fanSpeedPWM);
 
-            if (g_rpmMeasureState == RPM_MEASURE_STATE_FINISHED) {
-                analogWrite(FAN_PWM, g_fanSpeedPWM);
-            }
-        }
+					g_fanSpeedLastMeasuredTick = tick_usec;
+				}
+				else {
+					//DebugTrace("fanSpeed OFF");
+				}
 
-        g_fanSpeedLastAdjustedTick = tick_usec;
-    }
+				if (g_rpmMeasureState == RPM_MEASURE_STATE_FINISHED) {
+					analogWrite(FAN_PWM, g_fanSpeedPWM);
+				}
+			}
+
+			g_fanSpeedLastAdjustedTick = tick_usec;
+		}
+	}
 
     // measure fan speed
 #if FAN_OPTION_RPM_MEASUREMENT
@@ -258,7 +264,7 @@ void tick(uint32_t tick_usec) {
                     g_rpm = 0;
                     finish_rpm_measure();
 
-                    if (g_fanSpeedPWM != 0) {
+                    if (g_fanSpeedPWM >= FAN_FAILED_THRESHOLD) {
                         g_testResult = psu::TEST_FAILED;
                         psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
                         psu::setQuesBits(QUES_FAN, true);

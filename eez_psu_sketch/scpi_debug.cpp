@@ -22,6 +22,7 @@
 #include "temperature.h"
 #include "fan.h"
 #include "serial_psu.h"
+#include "fan.h"
 
 namespace eez {
 namespace psu {
@@ -255,6 +256,34 @@ scpi_result_t scpi_cmd_debugMeasureCurrent(scpi_t *context) {
 #endif // CONF_DEBUG
 }
 
+scpi_result_t scpi_cmd_debugFan(scpi_t * context) {
+	int32_t fanSpeed;
+	if (!SCPI_ParamInt(context, &fanSpeed, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+	if (fanSpeed < 0) {
+		fan::g_fanManualControl = false;
+	}
+	else {
+		fan::g_fanManualControl = true;
+
+		if (fanSpeed > 255) {
+			fanSpeed = 255;
+		}
+
+		fan::g_fanSpeedPWM = fanSpeed;
+		analogWrite(FAN_PWM, fan::g_fanSpeedPWM);
+	}
+
+	return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_debugFanQ(scpi_t * context) {
+	SCPI_ResultInt(context, fan::g_fanSpeedPWM);
+
+	return SCPI_RES_OK;
+}
 
 }
 }

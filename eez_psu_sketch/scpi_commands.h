@@ -45,6 +45,8 @@
     SCPI_COMMAND("DEBUg:CURRent", scpi_cmd_debugCurrent) \
     SCPI_COMMAND("DEBUg:MEASure:VOLTage", scpi_cmd_debugMeasureVoltage) \
     SCPI_COMMAND("DEBUg:MEASure:CURRent", scpi_cmd_debugMeasureCurrent) \
+    SCPI_COMMAND("DEBUg:FAN", scpi_cmd_debugFan) \
+    SCPI_COMMAND("DEBUg:FAN?", scpi_cmd_debugFanQ) \
     SCPI_COMMAND("CALibration:CLEar", scpi_cmd_calibrationClear) \
     SCPI_COMMAND("CALibration:CURRent:LEVel", scpi_cmd_calibrationCurrentLevel) \
     SCPI_COMMAND("CALibration:CURRent:RANGe", scpi_cmd_calibrationCurrentRange) \

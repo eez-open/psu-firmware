@@ -25,6 +25,9 @@ namespace fan {
 extern psu::TestResult g_testResult;
 extern volatile int g_rpm;
 
+extern bool g_fanManualControl;
+extern int g_fanSpeedPWM;
+
 void init();
 void test_start();
 bool test();

@@ -75889,6 +75889,12 @@
           },
           {
             "name": "DEBUg:MEASure:CURRent"
+          },
+          {
+            "name": "DEBUg:FAN"
+          },
+          {
+            "name": "DEBUg:FAN?"
           }
         ]
       },
