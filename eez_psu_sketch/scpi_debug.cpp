@@ -301,7 +301,7 @@ scpi_result_t scpi_cmd_debugFanPid(scpi_t * context) {
 		return SCPI_RES_ERR;
 	}
 
-	int POn;
+	int32_t POn;
 	if (!SCPI_ParamInt(context, &POn, TRUE)) {
 		return SCPI_RES_ERR;
 	}
