@@ -197,6 +197,12 @@
 /// PWM value for max. fan speed (255)
 #define FAN_MAX_PWM 255
 
+/// FAN PID controller parameters
+#define FAN_PID_KP 0.1
+#define FAN_PID_KI 0.05
+#define FAN_PID_KD 0
+#define FAN_PID_POn 1 // PoM: 0, PoE: 1, see http://brettbeauregard.com/blog/2017/06/introducing-proportional-on-measurement/
+
 /// Min. PWM after which fan failed will be asserted if RPM is not measured
 #define FAN_FAILED_THRESHOLD 15
 

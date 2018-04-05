@@ -25,11 +25,6 @@
 
 #include "fan.h"
 
-#define FAN_PID_KP 0.4
-#define FAN_PID_KI 0.4
-#define FAN_PID_KD 0.05
-#define FAN_PID_POn P_ON_E // P_ON_M: 0, P_ON_E: 1
-
 namespace eez {
 namespace psu {
 namespace fan {
