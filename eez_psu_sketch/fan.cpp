@@ -207,45 +207,45 @@ void tick(uint32_t tick_usec) {
     }
 
 	if (!g_fanManualControl) {
-		// adjust fan speed depending on max. channel temperature
-		if (tick_usec - g_fanSpeedLastAdjustedTick >= FAN_SPEED_ADJUSTMENT_INTERVAL * 1000L) {
-			float max_channel_temperature = temperature::getMaxChannelTemperature();
-			//DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
+		if (g_rpmMeasureState == RPM_MEASURE_STATE_FINISHED) {
+			// adjust fan speed depending on max. channel temperature
+			if (tick_usec - g_fanSpeedLastAdjustedTick >= FAN_SPEED_ADJUSTMENT_INTERVAL * 1000L) {
+				float max_channel_temperature = temperature::getMaxChannelTemperature();
+				//DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
 
-			g_pidTemp = max_channel_temperature;
-			g_fanPID.Compute();
-			if (g_pidDuty >= FAN_MIN_PWM) {
-				g_fanSpeed = (float)g_pidDuty;
-			}
-			else {
-				g_fanSpeed = 0;
-			}
-
-			int newFanSpeedPWM = (int)g_fanSpeed;
-			if (newFanSpeedPWM < FAN_MIN_PWM) {
-				newFanSpeedPWM = 0;
-			}
-			else if (newFanSpeedPWM > FAN_MAX_PWM) {
-				newFanSpeedPWM = FAN_MAX_PWM;
-			}
-
-			if (newFanSpeedPWM != g_fanSpeedPWM) {
-				g_fanSpeedPWM = newFanSpeedPWM;
-
-				if (g_fanSpeedPWM > 0) {
-					DebugTraceF("fanSpeed PWM: %d", g_fanSpeedPWM);
-					g_fanSpeedLastMeasuredTick = tick_usec - FAN_SPEED_MEASURMENT_INTERVAL * 1000L;
+				g_pidTemp = max_channel_temperature;
+				g_fanPID.Compute();
+				if (g_pidDuty >= FAN_MIN_PWM) {
+					g_fanSpeed = (float)g_pidDuty;
 				}
 				else {
-					DebugTrace("fanSpeed OFF");
+					g_fanSpeed = 0;
 				}
 
-				if (g_rpmMeasureState == RPM_MEASURE_STATE_FINISHED) {
+				int newFanSpeedPWM = (int)g_fanSpeed;
+				if (newFanSpeedPWM < FAN_MIN_PWM) {
+					newFanSpeedPWM = 0;
+				}
+				else if (newFanSpeedPWM > FAN_MAX_PWM) {
+					newFanSpeedPWM = FAN_MAX_PWM;
+				}
+
+				if (newFanSpeedPWM != g_fanSpeedPWM) {
+					g_fanSpeedPWM = newFanSpeedPWM;
+
+					if (g_fanSpeedPWM > 0) {
+						//DebugTraceF("fanSpeed PWM: %d", g_fanSpeedPWM);
+						g_fanSpeedLastMeasuredTick = tick_usec - FAN_SPEED_MEASURMENT_INTERVAL * 1000L;
+					}
+					else {
+						//DebugTrace("fanSpeed OFF");
+					}
+
 					analogWrite(FAN_PWM, g_fanSpeedPWM);
 				}
-			}
 
-			g_fanSpeedLastAdjustedTick = tick_usec;
+				g_fanSpeedLastAdjustedTick = tick_usec;
+			}
 		}
 	}
 
