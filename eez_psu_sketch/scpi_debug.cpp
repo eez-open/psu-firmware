@@ -301,15 +301,20 @@ scpi_result_t scpi_cmd_debugFanPid(scpi_t * context) {
 		return SCPI_RES_ERR;
 	}
 
-	fan::setPidTunings(Kp, Ki, Kd);
+	int POn;
+	if (!SCPI_ParamInt(context, &POn, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+	fan::setPidTunings(Kp, Ki, Kd, POn);
 
 	return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_cmd_debugFanPidQ(scpi_t * context) {
-	double Kp[3] = { fan::g_Kp, fan::g_Ki, fan::g_Kd };
+	double Kp[4] = { fan::g_Kp, fan::g_Ki, fan::g_Kd, fan::g_POn * 1.0f };
 
-	SCPI_ResultArrayDouble(context, Kp, 3, SCPI_FORMAT_ASCII);
+	SCPI_ResultArrayDouble(context, Kp, 4, SCPI_FORMAT_ASCII);
 
 	return SCPI_RES_OK;
 }

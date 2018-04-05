@@ -36,8 +36,9 @@ extern int g_fanSpeedPWM;
 extern double g_Kp;
 extern double g_Ki;
 extern double g_Kd;
+extern int g_POn;
 
-void setPidTunings(double Kp, double Ki, double Kd);
+void setPidTunings(double Kp, double Ki, double Kd, int POn);
 
 }
 }

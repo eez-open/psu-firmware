@@ -28,6 +28,7 @@
 #define FAN_PID_KP 0.4
 #define FAN_PID_KI 0.4
 #define FAN_PID_KD 0.05
+#define FAN_PID_POn P_ON_E // P_ON_M: 0, P_ON_E: 1
 
 namespace eez {
 namespace psu {
@@ -54,16 +55,16 @@ int g_fanSpeedPWM = 0;
 static float g_fanSpeed = FAN_MIN_PWM;
 
 static uint32_t g_fanSpeedLastMeasuredTick = 0;
-static uint32_t g_fanSpeedLastAdjustedTick = 0;
 
 double g_Kp = FAN_PID_KP;
 double g_Ki = FAN_PID_KI;
 double g_Kd = FAN_PID_KD;
+int g_POn = FAN_PID_POn;
 
 static double g_pidTemp;
 static double g_pidDuty;
 static double g_pidTarget = FAN_MIN_TEMP;
-static PID g_fanPID(&g_pidTemp, &g_pidDuty, &g_pidTarget, FAN_PID_KP, FAN_PID_KI, FAN_PID_KD, REVERSE);
+static PID g_fanPID(&g_pidTemp, &g_pidDuty, &g_pidTarget, FAN_PID_KP, FAN_PID_KI, FAN_PID_KD, FAN_PID_POn, REVERSE);
 
 volatile int g_rpm = 0;
 
@@ -209,18 +210,11 @@ void tick(uint32_t tick_usec) {
 	if (!g_fanManualControl) {
 		if (g_rpmMeasureState == RPM_MEASURE_STATE_FINISHED) {
 			// adjust fan speed depending on max. channel temperature
-			if (tick_usec - g_fanSpeedLastAdjustedTick >= FAN_SPEED_ADJUSTMENT_INTERVAL * 1000L) {
-				float max_channel_temperature = temperature::getMaxChannelTemperature();
-				//DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
-
-				g_pidTemp = max_channel_temperature;
-				g_fanPID.Compute();
-				if (g_pidDuty >= FAN_MIN_PWM) {
-					g_fanSpeed = (float)g_pidDuty;
-				}
-				else {
-					g_fanSpeed = 0;
-				}
+			float max_channel_temperature = temperature::getMaxChannelTemperature();
+			//DebugTraceF("max_channel_temperature: %f", max_channel_temperature);
+			g_pidTemp = max_channel_temperature;
+			if (g_fanPID.Compute()) {
+				g_fanSpeed = g_pidDuty >= FAN_MIN_PWM ? (float)g_pidDuty : 0;
 
 				int newFanSpeedPWM = (int)g_fanSpeed;
 				if (newFanSpeedPWM < FAN_MIN_PWM) {
@@ -243,8 +237,6 @@ void tick(uint32_t tick_usec) {
 
 					analogWrite(FAN_PWM, g_fanSpeedPWM);
 				}
-
-				g_fanSpeedLastAdjustedTick = tick_usec;
 			}
 		}
 	}
@@ -285,12 +277,13 @@ void tick(uint32_t tick_usec) {
 #endif
 }
 
-void setPidTunings(double Kp, double Ki, double Kd) {
+void setPidTunings(double Kp, double Ki, double Kd, int POn) {
 	g_Kp = Kp;
 	g_Ki = Ki;
 	g_Kd = Kd;
+	g_POn = POn;
 
-	g_fanPID.SetTunings(g_Kp, g_Ki, g_Kd);
+	g_fanPID.SetTunings(g_Kp, g_Ki, g_Kd, g_POn);
 }
 
 }
