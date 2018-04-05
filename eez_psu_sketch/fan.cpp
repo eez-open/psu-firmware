@@ -233,12 +233,11 @@ void tick(uint32_t tick_usec) {
 				g_fanSpeedPWM = newFanSpeedPWM;
 
 				if (g_fanSpeedPWM > 0) {
-					//DebugTraceF("fanSpeed PWM: %d", g_fanSpeedPWM);
-
-					g_fanSpeedLastMeasuredTick = tick_usec;
+					DebugTraceF("fanSpeed PWM: %d", g_fanSpeedPWM);
+					g_fanSpeedLastMeasuredTick = tick_usec - FAN_SPEED_MEASURMENT_INTERVAL * 1000L;
 				}
 				else {
-					//DebugTrace("fanSpeed OFF");
+					DebugTrace("fanSpeed OFF");
 				}
 
 				if (g_rpmMeasureState == RPM_MEASURE_STATE_FINISHED) {
@@ -253,7 +252,8 @@ void tick(uint32_t tick_usec) {
     // measure fan speed
 #if FAN_OPTION_RPM_MEASUREMENT
     if (g_fanSpeedPWM != 0) {
-        if (tick_usec - g_fanSpeedLastMeasuredTick >= FAN_SPEED_MEASURMENT_INTERVAL * 1000L) {
+		int32_t diff = tick_usec - g_fanSpeedLastMeasuredTick;
+        if (diff >= FAN_SPEED_MEASURMENT_INTERVAL * 1000L) {
             g_fanSpeedLastMeasuredTick = tick_usec;
             start_rpm_measure();
         } else {
@@ -262,7 +262,7 @@ void tick(uint32_t tick_usec) {
                 finish_rpm_measure();
                 //DebugTraceF("RPM=%d", g_rpm);
             } else if (rpmMeasureState != RPM_MEASURE_STATE_FINISHED) {
-                if (tick_usec - g_fanSpeedLastMeasuredTick >= 50 * 1000L) {
+                if (diff >= 50 * 1000L) {
                     // measure timeout, interrupt measurement
                     g_rpmMeasureState = RPM_MEASURE_STATE_MEASURED;
                     g_rpm = 0;
