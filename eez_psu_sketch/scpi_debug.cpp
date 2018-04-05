@@ -285,6 +285,36 @@ scpi_result_t scpi_cmd_debugFanQ(scpi_t * context) {
 	return SCPI_RES_OK;
 }
 
+scpi_result_t scpi_cmd_debugFanPid(scpi_t * context) {
+	double Kp;
+	if (!SCPI_ParamDouble(context, &Kp, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+	double Ki;
+	if (!SCPI_ParamDouble(context, &Ki, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+	double Kd;
+	if (!SCPI_ParamDouble(context, &Kd, TRUE)) {
+		return SCPI_RES_ERR;
+	}
+
+	fan::setPidTunings(Kp, Ki, Kd);
+
+	return SCPI_RES_OK;
+}
+
+scpi_result_t scpi_cmd_debugFanPidQ(scpi_t * context) {
+	double Kp[3] = { fan::g_Kp, fan::g_Ki, fan::g_Kd };
+
+	SCPI_ResultArrayDouble(context, Kp, 3, SCPI_FORMAT_ASCII);
+
+	return SCPI_RES_OK;
+}
+
+
 }
 }
 } // namespace eez::psu::scpi

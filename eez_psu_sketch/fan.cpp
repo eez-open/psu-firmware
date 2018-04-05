@@ -56,6 +56,10 @@ static float g_fanSpeed = FAN_MIN_PWM;
 static uint32_t g_fanSpeedLastMeasuredTick = 0;
 static uint32_t g_fanSpeedLastAdjustedTick = 0;
 
+double g_Kp = FAN_PID_KP;
+double g_Ki = FAN_PID_KI;
+double g_Kd = FAN_PID_KD;
+
 static double g_pidTemp;
 static double g_pidDuty;
 static double g_pidTarget = FAN_MIN_TEMP;
@@ -279,6 +283,14 @@ void tick(uint32_t tick_usec) {
 #else
     g_rpm = 0;
 #endif
+}
+
+void setPidTunings(double Kp, double Ki, double Kd) {
+	g_Kp = Kp;
+	g_Ki = Ki;
+	g_Kd = Kd;
+
+	g_fanPID.SetTunings(g_Kp, g_Ki, g_Kd);
 }
 
 }

@@ -75895,6 +75895,12 @@
           },
           {
             "name": "DEBUg:FAN?"
+          },
+          {
+            "name": "DEBUg:FAN:PID"
+          },
+          {
+            "name": "DEBUg:FAN:PID?"
           }
         ]
       },
