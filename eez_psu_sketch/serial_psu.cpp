@@ -29,7 +29,6 @@ using namespace scpi;
 namespace serial {
 
 psu::TestResult g_testResult = psu::TEST_FAILED;
-static bool g_isConnected = false;
 
 long g_bauds[] = {4800, 9600, 19200, 38400, 57600, 115200};
 size_t g_baudsSize = sizeof(g_bauds) / sizeof(long);
@@ -149,8 +148,6 @@ void init() {
         scpi_input_buffer, SCPI_PARSER_INPUT_BUFFER_LENGTH,
         error_queue_data, SCPI_PARSER_ERROR_QUEUE_SIZE + 1);
 
-    g_isConnected = false;
-
     g_testResult = TEST_OK;
 }
 
@@ -162,14 +159,13 @@ void tick(uint32_t tick_usec) {
 			buffer[i] = (char)SERIAL_PORT.read();
         }
 		if (i > 0) {
-			g_isConnected = true;
 			input(g_scpiContext, buffer, i);
 		}
     }
 }
 
 bool isConnected() {
-    return g_isConnected;
+    return (bool)SERIAL_PORT;
 }
 
 void update() {
