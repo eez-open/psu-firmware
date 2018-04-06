@@ -762,7 +762,7 @@ bool setSerialSettings(bool enabled, int baudIndex, int parity) {
     unsigned serialParity = (unsigned)parity;
     if (
         !devConf2.flags.skipSerialSetup || 
-        devConf.flags.ethernetEnabled != serialEnabled || 
+		devConf2.flags.serialEnabled != serialEnabled ||
         devConf2.serialBaud != serialBaud || 
         devConf2.serialParity != serialParity
     ) {
