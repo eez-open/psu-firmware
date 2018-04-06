@@ -211,7 +211,11 @@ int startImmediately() {
 void finishLogging() {
 	setState(STATE_IDLE);
 	g_file.close();
-
+	for (int i = 0; i < CH_NUM; ++i) {
+		g_logVoltage[i] = 0;
+		g_logCurrent[i] = 0;
+		g_logPower[i] = 0;
+	}
 }
 
 void abort() {
