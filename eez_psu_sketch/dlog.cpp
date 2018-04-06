@@ -276,21 +276,21 @@ void log(uint32_t tickCount) {
 			float iMon;
 
 			if (g_logVoltage[i]) {
-				uMon = channel_dispatcher::getUMon(channel);
+				uMon = channel_dispatcher::getUMonLast(channel);
 				writeFloat(uMon);
 			}
 
 			if (g_logCurrent[i]) {
-				iMon = channel_dispatcher::getIMon(channel);
+				iMon = channel_dispatcher::getIMonLast(channel);
 				writeFloat(iMon);
 			}
 
 			if (g_logPower[i]) {
 				if (!g_logVoltage[i]) {
-					uMon = channel_dispatcher::getUMon(channel);
+					uMon = channel_dispatcher::getUMonLast(channel);
 				}
 				if (!g_logCurrent[i]) {
-					iMon = channel_dispatcher::getIMon(channel);
+					iMon = channel_dispatcher::getIMonLast(channel);
 				}
 				writeFloat(uMon * iMon);
 			}
