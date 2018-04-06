@@ -112,6 +112,7 @@ public:
     int read();
     int read(void *buf, uint16_t nbyte);
     size_t write(const uint8_t *buf, size_t size);
+	void sync();
 
     void print(float value, int numDecimalDigits);
     void print(char value);
@@ -382,6 +383,11 @@ size_t FileImpl::write(const uint8_t *buf, size_t size) {
     return fwrite(buf, 1, size, m_fp);
 }
 
+void FileImpl::sync( {
+	fflush(m_fp);
+}
+
+
 void FileImpl::print(float value, int numDecimalDigits) {
     fprintf(m_fp, "%.*f", numDecimalDigits, value);
 }
@@ -479,6 +485,10 @@ int File::read(void *buf, uint16_t nbyte) {
 
 size_t File::write(const uint8_t *buf, size_t size) {
     return m_impl->write(buf, size);
+}
+
+void File::sync() {
+	return m_impl->sync();
 }
 
 void File::print(float value, int numDecimalDigits) {

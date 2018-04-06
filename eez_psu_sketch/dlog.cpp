@@ -295,6 +295,9 @@ void log(uint32_t tickCount) {
 		if (g_nextTime > g_time) {
 			finishLogging();
 		}
+		else {
+			g_file.sync();
+		}
 	}
 }
 
