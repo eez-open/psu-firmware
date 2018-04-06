@@ -226,6 +226,8 @@ void abort() {
 	}
 }
 
+static uint32_t g_maxDuration = 0;
+
 void log(uint32_t tickCount) {
 	g_micros += tickCount - g_lastTickCount;
 	g_lastTickCount = tickCount;
@@ -238,6 +240,8 @@ void log(uint32_t tickCount) {
 	g_currentTime = g_seconds + g_micros * 1E-6;
 
 	if (g_currentTime >= g_nextTime) {
+		uint32_t start = micros();
+
 		float dt = (float)(g_currentTime - g_nextTime);
 
 		while (1) {
@@ -301,6 +305,14 @@ void log(uint32_t tickCount) {
 		}
 		else {
 			g_file.sync();
+		}
+
+		uint32_t end = micros();
+
+		uint32_t duration = end - start;
+		if (duration > g_maxDuration) {
+			g_maxDuration = duration;
+			DebugTraceF("Max. SD time: %ld usec", g_maxDuration);
 		}
 	}
 }
