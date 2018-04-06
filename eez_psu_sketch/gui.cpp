@@ -1104,7 +1104,11 @@ void channelToggleOutput() {
             if (triggerModeEnabled) {
                 trigger::abort();
                 for (int i = 0; i < CH_NUM; ++i) {
-                    channel_dispatcher::outputEnable(Channel::get(i), false);
+					Channel& channel = Channel::get(i);
+					if (channel_dispatcher::getVoltageTriggerMode(channel) != TRIGGER_MODE_FIXED ||
+						channel_dispatcher::getCurrentTriggerMode(channel) != TRIGGER_MODE_FIXED) {
+						channel_dispatcher::outputEnable(Channel::get(i), false);
+					}
                 }
             } else {
                 channel_dispatcher::outputEnable(channel, false);

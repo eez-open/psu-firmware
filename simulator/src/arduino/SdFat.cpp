@@ -383,7 +383,7 @@ size_t FileImpl::write(const uint8_t *buf, size_t size) {
     return fwrite(buf, 1, size, m_fp);
 }
 
-void FileImpl::sync( {
+void FileImpl::sync() {
 	fflush(m_fp);
 }
 
