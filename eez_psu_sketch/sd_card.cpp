@@ -51,6 +51,7 @@ void dateTime(uint16_t* date, uint16_t* time) {
 bool g_cardBeginResult;
 int g_cardBeginErrorCode;
 bool g_fsBeginResult;
+int g_fsBeginErrorCode;
 #endif
 
 void init() {
@@ -62,6 +63,9 @@ void init() {
 	g_cardBeginResult = SD.cardBegin(LCDSD_CS, SPI_DIV3_SPEED);
 	if (g_cardBeginResult) {
 		g_fsBeginResult = SD.fsBegin();
+		if (!g_fsBeginResult) {
+			g_fsBeginErrorCode = SD.fsBeginErrorCode();
+		}
 	} else {
 		g_cardBeginErrorCode = SD.cardErrorCode();
 	}
@@ -95,6 +99,9 @@ void dumpInfo(char *buffer) {
 		sprintf(buffer + strlen(buffer), "SD card begin result error: %d\n", g_cardBeginErrorCode);
 	}
 	sprintf(buffer + strlen(buffer), "SD fs begin result: %d\n", int(g_fsBeginResult));
+	if (!g_fsBeginResult) {
+		sprintf(buffer + strlen(buffer), "SD fs begin result error: %d\n", g_fsBeginErrorCode);
+	}
 
 	sprintf(buffer + strlen(buffer), "SD blocks per cluster: %d\n", int(vol->blocksPerCluster()));
 	sprintf(buffer + strlen(buffer), "SD cluster count: %d\n", int(vol->clusterCount()));
