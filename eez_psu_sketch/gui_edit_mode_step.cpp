@@ -54,7 +54,9 @@ const Value CONF_GUI_I_STEPS[] = {
     Value(0.01f, VALUE_TYPE_FLOAT)
 };
 
-static int g_stepIndex[2] = {2, 2};
+static int g_stepIndex[CH_NUM][2];
+
+static const int DEFAULT_INDEX = 3;
 
 static bool g_changed;
 static int g_startPos;
@@ -67,14 +69,6 @@ float getStepValue() {
     }
 }
 
-int getStepIndex() {
-	if (edit_mode::getUnit() == VALUE_TYPE_FLOAT_VOLT) {
-		return g_stepIndex[0];
-	} else {
-		return g_stepIndex[1];
-	}
-}
-
 void getStepValues(const data::Value **labels, int &count) {
     if (edit_mode::getUnit() == VALUE_TYPE_FLOAT_VOLT) {
         *labels = CONF_GUI_U_STEPS;
@@ -85,12 +79,28 @@ void getStepValues(const data::Value **labels, int &count) {
     }
 }
 
-void setStepIndex(int value) {
+int getStepIndex() {
+	int value;
 	if (edit_mode::getUnit() == VALUE_TYPE_FLOAT_VOLT) {
-		g_stepIndex[0] = value;
+		value = g_stepIndex[g_focusCursor.i][0];
 	}
 	else {
-		g_stepIndex[1] = value;
+		value = g_stepIndex[g_focusCursor.i][1];
+	}
+
+	if (value == 0) {
+		value = DEFAULT_INDEX;
+	}
+
+	return value - 1;
+}
+
+void setStepIndex(int value) {
+	if (edit_mode::getUnit() == VALUE_TYPE_FLOAT_VOLT) {
+		g_stepIndex[g_focusCursor.i][0] = value + 1;
+	}
+	else {
+		g_stepIndex[g_focusCursor.i][1] = value + 1;
 	}
 }
 
