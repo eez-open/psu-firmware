@@ -150,6 +150,7 @@ void writeFloat(float value) {
 	writeUint32(*((uint32_t *)&value));
 }
 
+static bool g_guard = false;
 static uint32_t g_maxDuration;
 static uint32_t g_minDuration;
 
@@ -334,7 +335,11 @@ void tick(uint32_t tickCount) {
 			generateError(err);
 		}
 	} else if (g_state == STATE_EXECUTING) {
-		log(tickCount);
+		if (!g_guard) {
+			g_guard = true;
+			log(tickCount);
+			g_guard = false;
+		}
 	}
 }
 
