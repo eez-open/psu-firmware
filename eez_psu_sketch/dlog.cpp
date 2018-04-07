@@ -150,6 +150,8 @@ void writeFloat(float value) {
 	writeUint32(*((uint32_t *)&value));
 }
 
+static uint32_t g_maxDuration = 0;
+
 int startImmediately() {
 	int err = checkDlogParameters();
 	if (err) {
@@ -203,6 +205,8 @@ int startImmediately() {
 	g_currentTime = 0;
 	g_nextTime = 0;
 
+	g_maxDuration = 0;
+
 	log(g_lastTickCount);
 
 	return SCPI_RES_OK;
@@ -225,8 +229,6 @@ void abort() {
 		setState(STATE_IDLE);
 	}
 }
-
-static uint32_t g_maxDuration = 0;
 
 void log(uint32_t tickCount) {
 	g_micros += tickCount - g_lastTickCount;
