@@ -24,6 +24,9 @@
 #include "sd_card.h"
 #include "datetime.h"
 #include "channel_dispatcher.h"
+#if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
+#include "watchdog.h"
+#endif
 #include "dlog.h"
 
 namespace eez {
@@ -311,7 +314,13 @@ void log(uint32_t tickCount) {
 			finishLogging();
 		}
 		else {
-			//g_file.sync();
+#if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
+			watchdog::disable();
+#endif
+			g_file.sync();
+#if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
+			watchdog::enable();
+#endif
 		}
 
 		uint32_t end = micros();
