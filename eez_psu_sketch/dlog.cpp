@@ -270,6 +270,8 @@ void log(uint32_t tickCount) {
 					writeFloat(NAN);
 				}
 			}
+
+			psu::criticalTick(micros());
 		}
 
 
