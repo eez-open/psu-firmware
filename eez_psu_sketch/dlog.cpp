@@ -311,7 +311,7 @@ void log(uint32_t tickCount) {
 			finishLogging();
 		}
 		else {
-			g_file.sync();
+			//g_file.sync();
 		}
 
 		uint32_t end = micros();
