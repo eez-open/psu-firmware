@@ -150,7 +150,8 @@ void writeFloat(float value) {
 	writeUint32(*((uint32_t *)&value));
 }
 
-static uint32_t g_maxDuration = 0;
+static uint32_t g_maxDuration;
+static uint32_t g_minDuration;
 
 int startImmediately() {
 	int err = checkDlogParameters();
@@ -206,6 +207,7 @@ int startImmediately() {
 	g_nextTime = 0;
 
 	g_maxDuration = 0;
+	g_minDuration = 1000000;
 
 	log(g_lastTickCount);
 
@@ -312,6 +314,10 @@ void log(uint32_t tickCount) {
 		uint32_t end = micros();
 
 		uint32_t duration = end - start;
+		if (duration < g_minDuration) {
+			g_minDuration = duration;
+			DebugTraceF("Min. SD time: %ld usec", g_minDuration);
+		}
 		if (duration > g_maxDuration) {
 			g_maxDuration = duration;
 			DebugTraceF("Max. SD time: %ld usec", g_maxDuration);
