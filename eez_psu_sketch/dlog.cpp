@@ -70,7 +70,7 @@ void setState(State newState) {
 }
 
 int checkDlogParameters() {
-	bool somethingToLog;
+	bool somethingToLog = false;
 	for (int i = 0; i < CH_NUM; ++i) {
 		if (g_logVoltage[i] || g_logCurrent[i] || g_logPower[i]) {
 			somethingToLog = true;
@@ -153,7 +153,6 @@ void writeFloat(float value) {
 	writeUint32(*((uint32_t *)&value));
 }
 
-static bool g_guard = false;
 static uint32_t g_maxDuration;
 static uint32_t g_minDuration;
 
@@ -248,6 +247,10 @@ void log(uint32_t tickCount) {
 	g_currentTime = g_seconds + g_micros * 1E-6;
 
 	if (g_currentTime >= g_nextTime) {
+#if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
+		watchdog::disable();
+#endif
+
 		uint32_t start = micros();
 
 		float dt = (float)(g_currentTime - g_nextTime);
@@ -274,8 +277,6 @@ void log(uint32_t tickCount) {
 					writeFloat(NAN);
 				}
 			}
-
-			psu::criticalTick(micros());
 		}
 
 
@@ -314,13 +315,7 @@ void log(uint32_t tickCount) {
 			finishLogging();
 		}
 		else {
-#if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
-			watchdog::disable();
-#endif
 			g_file.sync();
-#if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
-			watchdog::enable();
-#endif
 		}
 
 		uint32_t end = micros();
@@ -334,6 +329,10 @@ void log(uint32_t tickCount) {
 			g_maxDuration = duration;
 			DebugTraceF("Max. SD time: %ld usec", g_maxDuration);
 		}
+
+#if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
+		watchdog::enable();
+#endif
 	}
 }
 
@@ -344,11 +343,7 @@ void tick(uint32_t tickCount) {
 			generateError(err);
 		}
 	} else if (g_state == STATE_EXECUTING) {
-		if (!g_guard) {
-			g_guard = true;
-			log(tickCount);
-			g_guard = false;
-		}
+		log(tickCount);
 	}
 }
 
