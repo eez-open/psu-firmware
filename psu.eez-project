@@ -75859,7 +75859,8 @@
             "helpLink": "EEZ PSU SCPI reference 5.1 - ABORt.html#abor"
           },
           {
-            "name": "ABORt:DLOG"
+            "name": "ABORt:DLOG",
+            "helpLink": "EEZ PSU SCPI reference 5.1 - ABORt.html#abor_dlog"
           }
         ]
       },
@@ -76060,7 +76061,8 @@
             "helpLink": "EEZ PSU SCPI reference 5.6 - INITiate.html#init"
           },
           {
-            "name": "INITiate:DLOG"
+            "name": "INITiate:DLOG",
+            "helpLink": "EEZ PSU SCPI reference 5.6 - INITiate.html#init_dlog"
           }
         ]
       },
@@ -77382,7 +77384,7 @@
           "type": "scpi-commands",
           "data": "SYST:POW ON"
         },
-        "keybinding": "f11",
+        "keybinding": "",
         "showInToolbar": true,
         "toolbarButtonPosition": 11,
         "toolbarButtonColor": "#7BC3D4",
@@ -77395,7 +77397,7 @@
           "type": "scpi-commands",
           "data": "SYST:POW OFF"
         },
-        "keybinding": "f12",
+        "keybinding": "",
         "showInToolbar": true,
         "toolbarButtonPosition": 12,
         "toolbarButtonColor": "#7BC3D4",
@@ -77439,6 +77441,48 @@
         "toolbarButtonPosition": 10,
         "toolbarButtonColor": "#F2D74A",
         "requiresConfirmation": true
+      },
+      {
+        "id": "6bb41d10-15a9-478f-da75-dbccd0a0f38a",
+        "name": "Dlog start",
+        "action": {
+          "type": "javascript",
+          "data": "var defaultValues = storage.getItem(\"EezDlogValues\", {\n    ch1voltage: true,\n    ch1current: true,\n    ch1power: false,\n    ch2voltage: true,\n    ch2current: true,\n    ch2power: false,\n    period: 0.02,\n    time: 10,\n    file: \"file.dlog\"\n});\n\nvar values = await input({\n    title: \"Start Dlog\",\n    fields: [\n        { \n            name: \"ch1voltage\",\n            displayName: \"Log channel 1 voltage\",\n            type: \"boolean\"\n        },\n        { \n            name: \"ch1current\",\n            displayName: \"Log channel 1 current\",\n            type: \"boolean\"\n        },\n        { \n            name: \"ch1power\",\n            displayName: \"Log channel 1 power\",\n            type: \"boolean\"\n        },\n        { \n            name: \"ch2voltage\",\n            displayName: \"Log channel 2 voltage\",\n            type: \"boolean\"\n        },\n        { \n            name: \"ch2current\",\n            displayName: \"Log channel 2 current\",\n            type: \"boolean\"\n        },\n        { \n            name: \"ch2power\",\n            displayName: \"Log channel 2 power\",\n            type: \"boolean\"\n        },\n        { \n            name: \"period\",\n            type: \"number\"\n        },\n        { \n            name: \"time\",\n            type: \"number\"\n        },\n        { \n            name: \"file\",\n            type: \"string\"\n        }\n    ]\n}, defaultValues);\n\nif (!values) {\n    return;\n}\n\nstorage.setItem(\"EezDlogValues\", values);\n\nsession.scriptParameters = values;\n\nconnection.acquire();\n\nconnection.command(`SENS:DLOG:FUNC:VOLT ${values.ch1voltage ? \"ON\" : \"OFF\"}, ch1`);\nconnection.command(`SENS:DLOG:FUNC:CURR ${values.ch1current ? \"ON\" : \"OFF\"}, ch1`);\nconnection.command(`SENS:DLOG:FUNC:POW ${values.ch1power ? \"ON\" : \"OFF\"}, ch1`);\n\nconnection.command(`SENS:DLOG:FUNC:VOLT ${values.ch2voltage ? \"ON\" : \"OFF\"}, ch2`);\nconnection.command(`SENS:DLOG:FUNC:CURR ${values.ch2current ? \"ON\" : \"OFF\"}, ch2`);\nconnection.command(`SENS:DLOG:FUNC:POW ${values.ch2power ? \"ON\" : \"OFF\"}, ch2`);\n\nconnection.command(`SENS:DLOG:PER ${values.period}`);\nconnection.command(`SENS:DLOG:TIME ${values.time}`);\nconnection.command(\"TRIG:DLOG:SOUR IMM\");\nconnection.command(`INIT:DLOG \"${values.file}\"`);\n\nconnection.release();\n"
+        },
+        "keybinding": "",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 13,
+        "toolbarButtonColor": "#727b84",
+        "requiresConfirmation": false,
+        "selected": false
+      },
+      {
+        "id": "18412fce-3b1b-4992-b516-d65d625da4b9",
+        "name": "Dlog abort",
+        "action": {
+          "type": "scpi-commands",
+          "data": "ABORt:DLOG"
+        },
+        "keybinding": "",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 15,
+        "toolbarButtonColor": "#727b84",
+        "requiresConfirmation": false,
+        "selected": false
+      },
+      {
+        "id": "2b8c457b-2011-4b90-e850-9c6f4abca12a",
+        "name": "Dlog upload",
+        "action": {
+          "type": "javascript",
+          "data": "var defaultValues = storage.getItem(\"EezDlogValues\", {\n    file: \"file.dlog\"\n});\n\nvar values = await input({\n    title: \"Start Dlog\",\n    fields: [\n        { \n            name: \"file\",\n            type: \"string\"\n        }\n    ]\n}, {\n    file: defaultValues.file\n});\n\nif (!values) {\n    return;\n}\n\nsession.scriptParameters = values;\n\nconnection.acquire();\n\nvar file = await connection.query(`MMEMory:UPLoad? \"${values.file}\"`);\n\nsession.add(file);\n\nconnection.release();\n"
+        },
+        "keybinding": "",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 14,
+        "toolbarButtonColor": "#727b84",
+        "requiresConfirmation": false,
+        "selected": true
       }
     ]
   }
