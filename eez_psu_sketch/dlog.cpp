@@ -56,6 +56,7 @@ uint32_t g_micros;
 uint32_t g_iSample;
 double g_currentTime;
 double g_nextTime;
+uint32_t g_lastSyncTickCount;
 
 void setState(State newState) {
 	if (g_state != newState) {
@@ -153,9 +154,6 @@ void writeFloat(float value) {
 	writeUint32(*((uint32_t *)&value));
 }
 
-static uint32_t g_maxDuration;
-static uint32_t g_minDuration;
-
 int startImmediately() {
 	int err = checkDlogParameters();
 	if (err) {
@@ -208,9 +206,7 @@ int startImmediately() {
 	g_iSample = 0;
 	g_currentTime = 0;
 	g_nextTime = 0;
-
-	g_maxDuration = 0;
-	g_minDuration = 1000000;
+	g_lastSyncTickCount = g_lastTickCount;
 
 	log(g_lastTickCount);
 
@@ -250,8 +246,6 @@ void log(uint32_t tickCount) {
 #if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
 		watchdog::disable();
 #endif
-
-		uint32_t start = micros();
 
 		float dt = (float)(g_currentTime - g_nextTime);
 
@@ -315,19 +309,11 @@ void log(uint32_t tickCount) {
 			finishLogging();
 		}
 		else {
-			g_file.sync();
-		}
-
-		uint32_t end = micros();
-
-		uint32_t duration = end - start;
-		if (duration < g_minDuration) {
-			g_minDuration = duration;
-			DebugTraceF("Min. SD time: %ld usec", g_minDuration);
-		}
-		if (duration > g_maxDuration) {
-			g_maxDuration = duration;
-			DebugTraceF("Max. SD time: %ld usec", g_maxDuration);
+			int32_t diff = tickCount - g_lastSyncTickCount;
+			if (diff > CONF_DLOG_SYNC_FILE_TIME * 1000000L) {
+				g_lastSyncTickCount = tickCount;
+				g_file.sync();
+			}
 		}
 
 #if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
