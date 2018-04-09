@@ -54,7 +54,11 @@ scpi_result_t SCPI_Flush(scpi_t *context) {
 int SCPI_Error(scpi_t *context, int_fast16_t err) {
     if (err != 0) {
         scpi::printError(err);
-    }
+
+		if (err == SCPI_ERROR_INPUT_BUFFER_OVERRUN) {
+			scpi::onBufferOverrun(*context);
+		}
+	}
 
     return 0;
 }
@@ -86,10 +90,10 @@ scpi_result_t SCPI_Reset(scpi_t *context) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-scpi_reg_val_t scpi_psu_regs[SCPI_PSU_REG_COUNT];
-scpi_psu_t scpi_psu_context = { scpi_psu_regs, 1 };
+static scpi_reg_val_t g_scpiPsuRegs[SCPI_PSU_REG_COUNT];
+static scpi_psu_t g_scpiPsuContext = { g_scpiPsuRegs, 1 };
 
-scpi_interface_t scpi_interface = {
+static scpi_interface_t g_scpiInterface = {
     SCPI_Error,
     SCPI_Write,
     SCPI_Control,
@@ -97,8 +101,8 @@ scpi_interface_t scpi_interface = {
     SCPI_Reset,
 };
 
-char scpi_input_buffer[SCPI_PARSER_INPUT_BUFFER_LENGTH];
-int16_t error_queue_data[SCPI_PARSER_ERROR_QUEUE_SIZE + 1];
+static char g_scpiInputBuffer[SCPI_PARSER_INPUT_BUFFER_LENGTH];
+static int16_t g_errorQueueData[SCPI_PARSER_ERROR_QUEUE_SIZE + 1];
 
 scpi_t g_scpiContext;
 
@@ -144,10 +148,10 @@ void init() {
 #endif
 
     scpi::init(g_scpiContext,
-        scpi_psu_context,
-        &scpi_interface,
-        scpi_input_buffer, SCPI_PARSER_INPUT_BUFFER_LENGTH,
-        error_queue_data, SCPI_PARSER_ERROR_QUEUE_SIZE + 1);
+        g_scpiPsuContext,
+        &g_scpiInterface,
+        g_scpiInputBuffer, SCPI_PARSER_INPUT_BUFFER_LENGTH,
+        g_errorQueueData, SCPI_PARSER_ERROR_QUEUE_SIZE + 1);
 
     g_testResult = TEST_OK;
 }

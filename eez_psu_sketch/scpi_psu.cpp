@@ -82,49 +82,38 @@ void init(scpi_t &scpi_context,
     scpi_context.user_context = &scpi_psu_context;
 }
 
-void input(scpi_t &scpi_context, char ch) {
-    idle::noteScpiActivity();
-
-    //if (ch < 0 || ch > 127) {
-    //    // non ASCII, call parser now
-    //    SCPI_Input(&scpi_context, 0, 0);
-    //    return;
-    //}
-
-    g_busy = true;
-
-    int result = SCPI_Input(&scpi_context, &ch, 1);
-    if (result == -1) {
-        // TODO we need better buffer overrun handling here
-
-        // call parser now
-        SCPI_Input(&scpi_context, 0, 0);
-
-        // input buffer is now empty, feed it
-        SCPI_Input(&scpi_context, &ch, 1);
-    }
-
-    g_busy = false;
+void onBufferOverrun(scpi_t &context) {
+	SCPI_Input(&context, 0, 0);
+	scpi_psu_t *psu_context = (scpi_psu_t *)context.user_context;
+	psu_context->isBufferOverrun = true;
+	psu_context->bufferOverrunTime = micros();
+	DebugTrace("detected");
 }
 
-void input(scpi_t &scpi_context, const char *str, size_t size) {
+void input(scpi_t &context, const char *str, size_t size) {
     idle::noteScpiActivity();
+
+	scpi_psu_t *psu_context = (scpi_psu_t *)context.user_context;
+	if (psu_context->isBufferOverrun) {
+		// wait for 500ms of idle input to declare buffer overrun finished
+		uint32_t tickCount = micros();
+		int32_t diff = tickCount - psu_context->bufferOverrunTime;
+		if (diff > 500000) {
+			psu_context->isBufferOverrun = false;
+			DebugTrace("cleaned");
+		} else {
+			psu_context->bufferOverrunTime = tickCount;
+			DebugTrace("ignored");
+			return;
+		}
+	}
 
     g_busy = true;
 
-    //if (ch < 0 || ch > 127) {
-    //    // non ASCII, call parser now
-    //    SCPI_Input(&scpi_context, 0, 0);
-    //    return;
-    //}
-
-    int result = SCPI_Input(&scpi_context, str, size);
-    if (result == -1) {
-        // TODO we need better buffer overrun handling here
-
-        // call parser now
-        SCPI_Input(&scpi_context, 0, 0);
-    }
+	int result = SCPI_Input(&context, str, size);
+	if (result == -1) {
+		onBufferOverrun(context);
+	}
 
     g_busy = false;
 }

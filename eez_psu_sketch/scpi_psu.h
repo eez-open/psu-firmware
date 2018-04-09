@@ -35,6 +35,8 @@ struct scpi_psu_t {
     char downloadFilePath[MAX_PATH_LENGTH + 1];
     bool firstDataFlag;
 #endif
+	bool isBufferOverrun;
+	uint32_t bufferOverrunTime;
 };
 
 void init(scpi_t &scpi_context,
@@ -45,8 +47,9 @@ void init(scpi_t &scpi_context,
     int16_t *error_queue_data,
     int16_t error_queue_size);
 
-void input(scpi_t &scpi_context, char ch);
 void input(scpi_t &scpi_context, const char *str, size_t size);
+
+void onBufferOverrun(scpi_t &context);
 
 void printError(int_fast16_t err);
 
