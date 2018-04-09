@@ -121,10 +121,6 @@ void init() {
         return;
     }
 
-    if (scpi::g_busy) {
-        return;
-    }
-
     SERIAL_PORT.begin(persist_conf::getBaudFromIndex(persist_conf::getSerialBaudIndex()), getConfig());
 
 #if CONF_WAIT_SERIAL && !CONF_SERIAL_USE_NATIVE_USB_PORT

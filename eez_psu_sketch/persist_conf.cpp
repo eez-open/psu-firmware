@@ -700,7 +700,7 @@ bool setDisplayBackgroundLuminosityStep(uint8_t displayBackgroundLuminosityStep)
 
 bool enableSerial(bool enable) {
     unsigned serialEnabled = enable ? 1 : 0;
-    if (!devConf2.flags.skipSerialSetup || devConf.flags.ethernetEnabled != serialEnabled) {
+    if (!devConf2.flags.skipSerialSetup || devConf2.flags.serialEnabled != serialEnabled) {
         devConf2.flags.serialEnabled = serialEnabled;
         devConf2.flags.skipSerialSetup = 1;
         saveDevice2();
