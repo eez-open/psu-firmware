@@ -1042,7 +1042,7 @@ scpi_result_t scpi_cmd_sourceListCurrentLevel(scpi_t *context) {
 
         float current = (float)param.value;
 
-        if (listLength > MAX_LIST_LENGTH) {
+        if (listLength >= MAX_LIST_LENGTH) {
             SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
             return SCPI_RES_ERR;
         }
@@ -1175,7 +1175,7 @@ scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
 
         float voltage = (float)param.value;
 
-        if (listLength > MAX_LIST_LENGTH) {
+        if (listLength >= MAX_LIST_LENGTH) {
             SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
             return SCPI_RES_ERR;
         }
