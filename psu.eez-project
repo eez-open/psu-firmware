@@ -11506,9 +11506,9 @@
         },
         "landscape": {
           "x": 40,
-          "y": 76,
+          "y": 58,
           "width": 240,
-          "height": 88,
+          "height": 124,
           "style": "async_operation",
           "widgets": [
             {
@@ -11516,7 +11516,7 @@
               "style": "async_operation",
               "data": "progress",
               "x": 0,
-              "y": 13,
+              "y": 44,
               "width": 240,
               "height": 28,
               "text": ""
@@ -11526,10 +11526,20 @@
               "style": "async_operation_action",
               "action": "cancel",
               "x": 70,
-              "y": 47,
+              "y": 80,
               "width": 100,
               "height": 28,
-              "text": "Cancel"
+              "text": "Abort"
+            },
+            {
+              "type": "Text",
+              "style": "async_operation",
+              "data": "alert_message",
+              "x": 0,
+              "y": 16,
+              "width": 240,
+              "height": 28,
+              "text": ""
             }
           ]
         },

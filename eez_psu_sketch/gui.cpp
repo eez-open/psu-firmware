@@ -633,7 +633,8 @@ void showAsyncOperationInProgress(const char *message, void (*checkStatus)()) {
     pushPage(PAGE_ID_ASYNC_OPERATION_IN_PROGRESS);
 }
 
-void showProgressPage() {
+void showProgressPage(const char *message) {
+	data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value(message), 0);
     g_dialogCancelCallback = NULL;
     pushPage(PAGE_ID_PROGRESS);
 }

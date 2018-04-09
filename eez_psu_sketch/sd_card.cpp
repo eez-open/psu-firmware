@@ -328,15 +328,38 @@ bool upload(const char *filePath, void *param, void (*callback)(void *param, con
         return false;
     }
 
-    callback(param, NULL, file.size());
+	bool result = true;
+
+	size_t totalSize = file.size();
+
+#if OPTION_DISPLAY
+	gui::showProgressPage("Uploading...");
+	size_t uploaded = 0;
+#endif
+
+	*err = SCPI_RES_OK;
+
+    callback(param, NULL, totalSize);
 
     const int CHUNK_SIZE = 64;
     uint8_t buffer[CHUNK_SIZE];
 
     while (true) {
         int size = file.read(buffer, CHUNK_SIZE);
-        callback(param, buffer, size);
-        if (size < CHUNK_SIZE) {
+
+		callback(param, buffer, size);
+
+#if OPTION_DISPLAY
+		uploaded += size;
+		if (!gui::updateProgressPage(uploaded, totalSize)) {
+			gui::hideProgressPage();
+			if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+			result = false;
+			break;
+		}
+#endif
+
+		if (size < CHUNK_SIZE) {
             break;
         }
     }
@@ -345,7 +368,11 @@ bool upload(const char *filePath, void *param, void (*callback)(void *param, con
 
     callback(param, NULL, -1);
 
-    return true;
+#if OPTION_DISPLAY
+	gui::hideProgressPage();
+#endif
+
+    return result;
 }
 
 bool download(const char *filePath, bool truncate, const void *buffer, size_t size, int *err) {
@@ -418,7 +445,7 @@ bool copyFile(const char *sourcePath, const char *destinationPath, int *err) {
     }
 
 #if OPTION_DISPLAY
-    gui::showProgressPage();
+    gui::showProgressPage("Copying...");
 #endif
 
     const int CHUNK_SIZE = 512;
