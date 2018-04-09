@@ -212,11 +212,16 @@ scpi_result_t scpi_cmd_mmemoryUploadQ(scpi_t *context) {
 
     int err;
     if (!sd_card::upload(filePath, context, uploadCallback, &err)) {
-        if (err != 0) {
+		event_queue::pushEvent(event_queue::EVENT_ERROR_FILE_UPLOAD_FAILED);
+
+		if (err != 0) {
             SCPI_ErrorPush(context, err);
         }
-        return SCPI_RES_ERR;
+        
+		return SCPI_RES_ERR;
     }
+
+	event_queue::pushEvent(event_queue::EVENT_INFO_FILE_UPLOAD_SUCCEEDED);
 
     return SCPI_RES_OK;
 #else
@@ -234,6 +239,10 @@ scpi_result_t scpi_cmd_mmemoryDownloadFname(scpi_t *context) {
     if (!getFilePath(context, psuContext->downloadFilePath, true)) {
         return SCPI_RES_ERR;
     }
+
+	if (!psuContext->firstDataFlag) {
+		event_queue::pushEvent(event_queue::EVENT_INFO_FILE_DOWNLOAD_SUCCEEDED);
+	}
 
     psuContext->firstDataFlag = true;
 
@@ -266,10 +275,13 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
 
     int err;
     if (!sd_card::download(psuContext->downloadFilePath, psuContext->firstDataFlag, buffer, size, &err)) {
+		event_queue::pushEvent(event_queue::EVENT_ERROR_FILE_DOWNLOAD_FAILED);
+
         if (err != 0) {
             SCPI_ErrorPush(context, err);
         }
-        return SCPI_RES_ERR;
+
+		return SCPI_RES_ERR;
     }
 
     psuContext->firstDataFlag = false;

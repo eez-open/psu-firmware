@@ -43,6 +43,8 @@ static const int EVENT_TYPE_ERROR = 3;
     EVENT_ERROR(CH2_OVP_TRIPPED,  3, "Ch2 OVP tripped") \
     EVENT_ERROR(CH2_OCP_TRIPPED,  4, "Ch2 OCP tripped") \
     EVENT_ERROR(CH2_OPP_TRIPPED,  5, "Ch2 OPP tripped") \
+	EVENT_ERROR(FILE_UPLOAD_FAILED,  6, "File upload failed") \
+	EVENT_ERROR(FILE_DOWNLOAD_FAILED,  7, "File download failed") \
     EVENT_ERROR(AUX_OTP_TRIPPED, 39, "AUX OTP tripped") \
     EVENT_ERROR(CH1_OTP_TRIPPED,  40, "CH1 OTP tripped") \
     EVENT_ERROR(CH2_OTP_TRIPPED,  41, "CH2 OTP tripped") \
@@ -113,6 +115,8 @@ static const int EVENT_TYPE_ERROR = 3;
     EVENT_INFO(FRONT_PANEL_LOCKED, 102, "Front panel locked") \
     EVENT_INFO(FRONT_PANEL_UNLOCKED, 103, "Front panel unlocked") \
     EVENT_INFO(RECALL_FROM_FILE, 104, "Recall from file") \
+	EVENT_INFO(FILE_UPLOAD_SUCCEEDED,  105, "File upload succeeded") \
+	EVENT_INFO(FILE_DOWNLOAD_SUCCEEDED,  106, "File download succeeded") \
 
 #define EVENT_ERROR_START_ID 10000
 #define EVENT_WARNING_START_ID 12000
