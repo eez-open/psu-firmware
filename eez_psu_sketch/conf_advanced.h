@@ -336,3 +336,6 @@
 
 /// During data logging call file.sync every N seconds
 #define CONF_DLOG_SYNC_FILE_TIME 10 // 10 seconds
+
+/// Size of serial port output buffer
+#define CONF_SERIAL_BUFFER_SIZE 64

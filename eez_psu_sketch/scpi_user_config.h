@@ -66,6 +66,7 @@ extern "C" {
     X(SCPI_ERROR_FILE_NAME_NOT_FOUND,                       -256, "File name not found")                          \
     X(SCPI_ERROR_FILE_NAME_ERROR,                           -257, "File name error")                              \
     X(SCPI_ERROR_MEDIA_PROTECTED,                           -258, "Media protected")                              \
+	X(SCPI_ERROR_FILE_TRANSFER_ABORTED,                     -259, "File transfer aborted")                        \
     X(SCPI_ERROR_CHANNEL_NOT_FOUND,                          100, "Channel not found")                            \
     X(SCPI_ERROR_CALIBRATION_STATE_IS_OFF,                   101, "Calibration state is off")                     \
     X(SCPI_ERROR_INVALID_PASSWORD,                           102, "Invalid password")                             \
@@ -88,7 +89,7 @@ extern "C" {
     X(SCPI_ERROR_CH2_DAC_TEST_FAILED,                        231, "CH2 DAC test failed")                          \
     X(SCPI_ERROR_EXT_EEPROM_TEST_FAILED,                     240, "External EEPROM test failed")                  \
     X(SCPI_ERROR_RTC_TEST_FAILED,                            250, "RTC test failed")                              \
-    X(SCPI_ERROR_ETHERNET_TEST_FAILED,                       260, "Ethernet test failed")                         \
+	X(SCPI_ERROR_ETHERNET_TEST_FAILED,                       260, "Ethernet test failed")                         \
     X(SCPI_ERROR_CH1_ADC_TIMEOUT_DETECTED,                   270, "CH1 ADC timeout detected")                     \
     X(SCPI_ERROR_CH2_ADC_TIMEOUT_DETECTED,                   271, "CH2 ADC timeout detected")                     \
     X(SCPI_ERROR_INCOMPATIBLE_TRANSIENT_MODES,               304, "Incompatible transient modes")                 \

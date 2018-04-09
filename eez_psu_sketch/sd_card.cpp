@@ -341,7 +341,7 @@ bool upload(const char *filePath, void *param, void (*callback)(void *param, con
 
     callback(param, NULL, totalSize);
 
-    const int CHUNK_SIZE = 64;
+    const int CHUNK_SIZE = CONF_SERIAL_BUFFER_SIZE;
     uint8_t buffer[CHUNK_SIZE];
 
     while (true) {
@@ -353,7 +353,8 @@ bool upload(const char *filePath, void *param, void (*callback)(void *param, con
 		uploaded += size;
 		if (!gui::updateProgressPage(uploaded, totalSize)) {
 			gui::hideProgressPage();
-			if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
+			event_queue::pushEvent(event_queue::EVENT_WARNING_FILE_UPLOAD_ABORTED);
+			if (err) *err = SCPI_ERROR_FILE_TRANSFER_ABORTED;
 			result = false;
 			break;
 		}

@@ -212,7 +212,9 @@ scpi_result_t scpi_cmd_mmemoryUploadQ(scpi_t *context) {
 
     int err;
     if (!sd_card::upload(filePath, context, uploadCallback, &err)) {
-		event_queue::pushEvent(event_queue::EVENT_ERROR_FILE_UPLOAD_FAILED);
+		if (err != SCPI_ERROR_FILE_TRANSFER_ABORTED) {
+			event_queue::pushEvent(event_queue::EVENT_ERROR_FILE_UPLOAD_FAILED);
+		}
 
 		if (err != 0) {
             SCPI_ErrorPush(context, err);
