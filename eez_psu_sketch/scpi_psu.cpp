@@ -87,7 +87,6 @@ void onBufferOverrun(scpi_t &context) {
 	scpi_psu_t *psu_context = (scpi_psu_t *)context.user_context;
 	psu_context->isBufferOverrun = true;
 	psu_context->bufferOverrunTime = micros();
-	DebugTrace("detected");
 }
 
 void input(scpi_t &context, const char *str, size_t size) {
@@ -100,10 +99,8 @@ void input(scpi_t &context, const char *str, size_t size) {
 		int32_t diff = tickCount - psu_context->bufferOverrunTime;
 		if (diff > 500000) {
 			psu_context->isBufferOverrun = false;
-			DebugTrace("cleaned");
 		} else {
 			psu_context->bufferOverrunTime = tickCount;
-			DebugTrace("ignored");
 			return;
 		}
 	}
