@@ -77473,7 +77473,7 @@
         "name": "Dlog upload",
         "action": {
           "type": "javascript",
-          "data": "var defaultValues = storage.getItem(\"EezDlogValues\", {\n    file: \"file.dlog\"\n});\n\nvar values = await input({\n    title: \"Upload Dlog\",\n    fields: [\n        { \n            name: \"file\",\n            type: \"string\"\n        }\n    ]\n}, {\n    file: defaultValues.file\n});\n\nif (!values) {\n    session.deleteScriptLogEntry();\n    return;\n}\n\nsession.scriptParameters = values;\n\nconnection.acquire();\n\nawait connection.query(`MMEMory:UPLoad? \"${values.file}\"`);\n\nconnection.release();\n"
+          "data": "var defaultValues = storage.getItem(\"EezDlogValues\", {\n    file: \"file.dlog\"\n});\n\nvar values = await input({\n    title: \"Upload Dlog\",\n    fields: [\n        { \n            name: \"file\",\n            type: \"string\"\n        }\n    ]\n}, {\n    file: defaultValues.file\n});\n\nif (!values) {\n    session.deleteScriptLogEntry();\n    return;\n}\n\nsession.scriptParameters = values;\n\nconnection.acquire();\n\nvar file = await connection.query(`MMEMory:UPLoad? \"${values.file}\"`);\nif (!file.transferSucceeded) {\n    session.scriptError = \"Upload failed.\";\n}\n\nconnection.release();\n"
         },
         "keybinding": "",
         "showInToolbar": true,
