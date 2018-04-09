@@ -1113,7 +1113,7 @@ scpi_result_t scpi_cmd_sourceListDwell(scpi_t *context) {
 
         float dwell = (float)param.value;
 
-        if (listLength >MAX_LIST_LENGTH) {
+        if (listLength >= MAX_LIST_LENGTH) {
             SCPI_ErrorPush(context, SCPI_ERROR_TOO_MANY_LIST_POINTS);
             return SCPI_RES_ERR;
         }
