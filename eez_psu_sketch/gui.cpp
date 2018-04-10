@@ -645,7 +645,12 @@ void showProgressPage(const char *message) {
 
 bool updateProgressPage(size_t processedSoFar, size_t totalSize) {
     if (g_activePageId == PAGE_ID_PROGRESS) {
-        data::g_progress = data::Value((int)round((processedSoFar * 1.0f / totalSize) * 100.0f), VALUE_TYPE_PERCENTAGE);
+		if (totalSize > 0) {
+			data::g_progress = data::Value((int)round((processedSoFar * 1.0f / totalSize) * 100.0f), VALUE_TYPE_PERCENTAGE);
+		}
+		else {
+			data::g_progress = data::Value(processedSoFar, VALUE_TYPE_SIZE);
+		}
         return true;
     }
     return false;

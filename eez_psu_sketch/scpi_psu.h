@@ -32,8 +32,6 @@ struct scpi_psu_t {
     uint8_t selected_channel_index;
 #if OPTION_SD_CARD
     char currentDirectory[MAX_PATH_LENGTH + 1];
-    char downloadFilePath[MAX_PATH_LENGTH + 1];
-    bool downloading;
 #endif
 	bool isBufferOverrun;
 	uint32_t bufferOverrunTime;

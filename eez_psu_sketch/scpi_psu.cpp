@@ -80,9 +80,9 @@ void init(scpi_t &scpi_context,
         input_buffer, input_buffer_length, error_queue_data, error_queue_size);
 
 	scpi_psu_context.selected_channel_index = 1;
+#if OPTION_SD_CARD
 	scpi_psu_context.currentDirectory[0] = 0;
-	scpi_psu_context.downloadFilePath[0] = 0;
-	scpi_psu_context.downloading = false;
+#endif
 	scpi_psu_context.isBufferOverrun = false;
 	scpi_psu_context.bufferOverrunTime =  0;
 
@@ -175,7 +175,6 @@ void resetContext(scpi_t *context) {
 
 #if OPTION_SD_CARD
     psuContext->currentDirectory[0] = 0;
-    psuContext->downloadFilePath[0] = 0;
 #endif
 
     SCPI_ErrorClear(context);

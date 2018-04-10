@@ -524,6 +524,11 @@ void Value::toText(char *text, int count) const {
 		text[count - 1] = 0;
 		break;
 
+	case VALUE_TYPE_SIZE:
+		snprintf_P(text, count - 1, PSTR("%ld"), uint32_);
+		text[count - 1] = 0;
+		break;
+
 	case VALUE_TYPE_DLOG_STATUS:
 		strcpy(text, PSTR("Dlog: "));
 		printTime(uint32_, text + 6, count - 6);
@@ -583,7 +588,7 @@ bool Value::operator ==(const Value &other) const {
 		return uint16_ == other.uint16_;
 	}
 
-	if (type_ == VALUE_TYPE_ON_TIME_COUNTER || type_ == VALUE_TYPE_COUNTDOWN || type_ == VALUE_TYPE_IP_ADDRESS || type_ == VALUE_TYPE_DATE || type_ == VALUE_TYPE_TIME || type_ == VALUE_TYPE_DLOG_STATUS) {
+	if (type_ == VALUE_TYPE_ON_TIME_COUNTER || type_ == VALUE_TYPE_COUNTDOWN || type_ == VALUE_TYPE_IP_ADDRESS || type_ == VALUE_TYPE_DATE || type_ == VALUE_TYPE_TIME || type_ == VALUE_TYPE_DLOG_STATUS || type_ == VALUE_TYPE_SIZE) {
 		return uint32_ == other.uint32_;
 	}
 

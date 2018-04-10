@@ -238,44 +238,74 @@ scpi_result_t scpi_cmd_mmemoryUploadQ(scpi_t *context) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void startDownloading(scpi_psu_t *psuContext) {
+#if OPTION_SD_CARD
+static char g_downloadFilePath[MAX_PATH_LENGTH + 1];
+static uint32_t g_downloadSize;
+static bool g_downloading;
+static uint32_t g_downloaded;
+
+void startDownloading() {
+	g_downloading = true;
+	g_downloaded = 0;
 #if OPTION_DISPLAY
-	gui::showAsyncOperationInProgress("Downloading...");
+	gui::showProgressPage("Downloading...");
 #endif
-	psuContext->downloading = true;
 }
 
-void finishDownloading(scpi_psu_t *psuContext, int16_t eventId) {
+void finishDownloading(int16_t eventId) {
 	if (eventId != event_queue::EVENT_INFO_FILE_DOWNLOAD_SUCCEEDED) {
-		sd_card::deleteFile(psuContext->downloadFilePath, 0);
+		sd_card::deleteFile(g_downloadFilePath, 0);
 	}
 	event_queue::pushEvent(eventId);
 #if OPTION_DISPLAY
-	gui::hideAsyncOperationInProgress();
+	gui::hideProgressPage();
 #endif
-	psuContext->downloading = false;
-	psuContext->downloadFilePath[0] = 0;
+	g_downloading = false;
+	g_downloadFilePath[0] = 0;
 }
+#endif
 
 scpi_result_t scpi_cmd_mmemoryDownloadFname(scpi_t *context) {
 #if OPTION_SD_CARD
-    scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
-
-	if (psuContext->downloading) {
-		finishDownloading(psuContext, event_queue::EVENT_INFO_FILE_DOWNLOAD_SUCCEEDED);
-		return SCPI_RES_OK;
-	}
-
-	if (!getFilePath(context, psuContext->downloadFilePath, true)) {
+	if (!getFilePath(context, g_downloadFilePath, true)) {
 		return SCPI_RES_ERR;
 	}
 
-    return SCPI_RES_OK;
+	if (g_downloading) {
+		finishDownloading(event_queue::EVENT_INFO_FILE_DOWNLOAD_SUCCEEDED);
+		return SCPI_RES_OK;
+	}
+
+	g_downloadSize = 0;
+
+	return SCPI_RES_OK;
 #else
-    SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
-    return SCPI_RES_ERR;
+	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
+	return SCPI_RES_ERR;
 #endif
 }
+
+scpi_result_t scpi_cmd_mmemoryDownloadSize(scpi_t *context) {
+#if OPTION_SD_CARD
+	uint32_t size;
+	if (!SCPI_ParamUInt32(context, &size, true)) {
+		return SCPI_RES_ERR;
+	}
+
+	if (size > 2147483648L) {
+		SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+		return SCPI_RES_ERR;
+	}
+	
+	g_downloadSize = size;
+
+	return SCPI_RES_OK;
+#else
+	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
+	return SCPI_RES_ERR;
+#endif
+}
+
 
 scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
 #if OPTION_SD_CARD
@@ -284,9 +314,7 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
-
-    if (psuContext->downloadFilePath[0] == 0) {
+    if (g_downloadFilePath[0] == 0) {
         SCPI_ErrorPush(context, SCPI_ERROR_FILE_NAME_ERROR);
         return SCPI_RES_ERR;
     }
@@ -297,19 +325,29 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-	bool downloading = psuContext->downloading;
+	bool downloading = g_downloading;
 	if (!downloading) {
-		startDownloading(psuContext);
+		startDownloading();
 	}
 
     int err;
-    if (!sd_card::download(psuContext->downloadFilePath, !downloading, buffer, size, &err)) {
-		finishDownloading(psuContext, event_queue::EVENT_ERROR_FILE_DOWNLOAD_FAILED);
+    if (!sd_card::download(g_downloadFilePath, !downloading, buffer, size, &err)) {
+		finishDownloading(event_queue::EVENT_ERROR_FILE_DOWNLOAD_FAILED);
         if (err != 0) {
             SCPI_ErrorPush(context, err);
         }
 		return SCPI_RES_ERR;
     }
+
+#if OPTION_DISPLAY
+	g_downloaded += size;
+
+	if (!gui::updateProgressPage(g_downloaded, g_downloadSize)) {
+		finishDownloading(event_queue::EVENT_WARNING_FILE_DOWNLOAD_ABORTED);
+		SCPI_ErrorPush(context, SCPI_ERROR_FILE_TRANSFER_ABORTED);
+		return SCPI_RES_ERR;
+	}
+#endif
 
     return SCPI_RES_OK;
 #else
@@ -320,8 +358,7 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
 
 scpi_result_t scpi_cmd_mmemoryDownloadAbort(scpi_t *context) {
 #if OPTION_SD_CARD
-	scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
-	finishDownloading(psuContext, event_queue::EVENT_WARNING_FILE_DOWNLOAD_ABORTED);
+	finishDownloading(event_queue::EVENT_WARNING_FILE_DOWNLOAD_ABORTED);
 	return SCPI_RES_OK;
 #else
 	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
