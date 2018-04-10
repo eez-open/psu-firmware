@@ -122,7 +122,7 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 41%;">
-					<p class="scpi2">:ABORt</p>
+					<p class="scpi2"><a href="#mmem_abor"><span style="text-decoration: underline;">:</span></a><a href="#mmem_abor"><span style="text-decoration: underline;">ABORt</span></a></p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 59%;">
 					<p>Aborts current download session</p>
@@ -142,6 +142,14 @@
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 59%;">
 					<p>Creates or opens the specified filename for download data</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 41%;">
+					<p class="scpi2"><a href="#mmem_down_size"><span style="text-decoration: underline;">:</span></a><a href="#mmem_down_size"><span style="text-decoration: underline;">SIZE {&lt;filesize&gt;}</span></a></p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 59%;">
+					<p>Sets information about file size used for progress bar</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -1016,7 +1024,74 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.10. <a name="mmem_info"></a>MMEMory:INFOrmation</p>
+		<p class="Heading_3">5.10.10. <a name="mmem_down_size"></a>MMEMory:DOWNload:SIZE</p>
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Syntax</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_root">MMEMory:DOWNload:SIZE {&lt;filesize&gt;}</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Description</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>This command define filesize used by progress bar displayed on the local console during the file transfer. If filesize is not provided, progress bar will not be displayed.</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td rowspan="2" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p>Parameters</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 16%;">
+					<p style="text-align: center;">Name</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 18%;">
+					<p style="text-align: center;">Type</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 36%;">
+					<p style="text-align: center;">Range</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 18%;">
+					<p style="text-align: center;">Default</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p>&lt;filesize&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
+					<p style="text-align: center;">Numeric (NR1)</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
+					<p>0 to 2.147.483.648 (2&#160;GiB) as limited by SD Card FAT</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
+					<p style="text-align: center;">0</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p class="cmd_code">MMEMory:DOWNload:SIZE 124000</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+					<p class="Default_ntt">Related Commands</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
+					<p>MMEMory:DOWNload:DATA</p>
+					<p>MMEMory:DOWNload:FNAMe</p>
+				</td>
+			</tr>
+		</table>
+		<p class="Heading_3">5.10.11. <a name="mmem_info"></a>MMEMory:INFOrmation</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -1060,7 +1135,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.11. <a name="mmem_load_list"></a>MMEMory:LOAD:LIST</p>
+		<p class="Heading_3">5.10.12. <a name="mmem_load_list"></a>MMEMory:LOAD:LIST</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -1143,7 +1218,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.12. <a name="mmem_load_prof"></a>MMEMory:LOAD:PROFile</p>
+		<p class="Heading_3">5.10.13. <a name="mmem_load_prof"></a>MMEMory:LOAD:PROFile</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -1220,7 +1295,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.13. <a name="mmem_lock"></a>MMEMory:LOCK</p>
+		<p class="Heading_3">5.10.14. <a name="mmem_lock"></a>MMEMory:LOCK</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -1306,7 +1381,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.14. <a name="mmem_mdir"></a>MMEMory:MDIRectory</p>
+		<p class="Heading_3">5.10.15. <a name="mmem_mdir"></a>MMEMory:MDIRectory</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -1381,7 +1456,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.15. <a name="mmem_move"></a>MMEMory:MOVE</p>
+		<p class="Heading_3">5.10.16. <a name="mmem_move"></a>MMEMory:MOVE</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -1478,7 +1553,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.16. <a name="mmem_rdir"></a>MMEMory:RDIRectory</p>
+		<p class="Heading_3">5.10.17. <a name="mmem_rdir"></a>MMEMory:RDIRectory</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -1559,7 +1634,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.17. <a name="mmem_stor_list"></a>MMEMory:STORe:LIST</p>
+		<p class="Heading_3">5.10.18. <a name="mmem_stor_list"></a>MMEMory:STORe:LIST</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -1637,7 +1712,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.18. <a name="mmem_stor_prof"></a>MMEMory:STORe:PROFile</p>
+		<p class="Heading_3">5.10.19. <a name="mmem_stor_prof"></a>MMEMory:STORe:PROFile</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -1714,7 +1789,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.19. <a name="mmem_time"></a>MMEMory:TIME</p>
+		<p class="Heading_3">5.10.20. <a name="mmem_time"></a>MMEMory:TIME</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -1797,7 +1872,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.20. <a name="mmem_unl"></a>MMEMory:UNLock</p>
+		<p class="Heading_3">5.10.21. <a name="mmem_unl"></a>MMEMory:UNLock</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
@@ -1876,7 +1951,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">5.10.21. <a name="mmem_upl"></a>MMEMory:UPLoad</p>
+		<p class="Heading_3">5.10.22. <a name="mmem_upl"></a>MMEMory:UPLoad</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
