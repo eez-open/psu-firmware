@@ -57,7 +57,7 @@
 			<p class="Caption">Fig. 1: Summary of status structure registers</p>
 		</div>
 		<p>&#160;</p>
-		<p class="Heading_2">3.1. <a name="__RefHeading__5462_1776152697"></a><a name="__RefNumPara__5224_1776698109"></a><a name="std_even_stat_reg"></a>Standard Event Status Register<a name="__RefHeading__5462_1776152697"></a><a name="__RefNumPara__5224_1776698109"></a></p>
+		<p class="Heading_2">3.1. <a name="__RefNumPara__5224_1776698109"></a><a name="__RefHeading__5462_1776152697"></a><a name="std_even_stat_reg"></a>Standard Event Status Register<a name="__RefNumPara__5224_1776698109"></a><a name="__RefHeading__5462_1776152697"></a></p>
 		<p>An status register group is consist of Condition, Event and Enable registers (see Fig. 1):</p>
 		<ul>
 			<li class="List_1_Start" style="text-indent: 0; list-style-type: disc;">The Condition register is a read-only register, which holds the live (unlatched) operational status of the instrument. Reading the Condition register does not clear it.</li>
@@ -175,7 +175,7 @@
 					<p style="text-align: center;">64</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 78%;">
-					<p>User Request (URQ) – This event bit indicates that the PSU input device (TFT Touch screen) has been for any reason activated. The setting of this event-bit occur regardless of the IEEE 488.1 Remote/Local state of the device (not implemented yet)</p>
+					<p>User Request (URQ) – This event bit indicates that the PSU input device (TFT Touch screen) has been for any reason activated. The setting of this event-bit occur regardless of the IEEE 488.1 Remote/Local state of the device (<span style="font-style: italic;">not implemented yet</span>)</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -202,7 +202,7 @@
 			</tr>
 		</table>
 		<p>&#160;</p>
-		<p class="Heading_2">3.2. <a name="__RefHeading__6866_1044300784"></a><a name="__RefNumPara__7055_1776698109"></a><a name="stat_byte_reg"></a>Status Byte Register<a name="__RefHeading__6866_1044300784"></a><a name="__RefNumPara__7055_1776698109"></a></p>
+		<p class="Heading_2">3.2. <a name="__RefNumPara__7055_1776698109"></a><a name="__RefHeading__6866_1044300784"></a><a name="stat_byte_reg"></a>Status Byte Register<a name="__RefNumPara__7055_1776698109"></a><a name="__RefHeading__6866_1044300784"></a></p>
 		<p>The Status Byte summary register reports conditions from the other status registers (see Fig. 1). Query data that is waiting in the PSU’s output buffer is immediately reported through the &quot;Message Available&quot; (MAV) bit (bit 4) of the Status Byte register. Bits in the summary register are NOT latched. Clearing an event register will clear the corresponding bits in the Status Byte summary register. Reading all messages in the output buffer, including any pending queries, will clear the message available bit (MAV).</p>
 		<p>The Status Byte summary register is cleared when the *CLS (clear status) command has been executed.</p>
 		<p>The Status Byte enable register (request service) is cleared when the *SRE 0 command has been executed.</p>
@@ -511,7 +511,7 @@
 					<p style="text-align: center;">16</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 78%;">
-					<p>MEASuring – Channel is performing measurement (not implemented yet)</p>
+					<p>MEASuring – Channel is performing measurement (<span style="font-style: italic;">not implemented yet)</span></p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -722,7 +722,7 @@
 		</table>
 		<p>&#160;</p>
 		<p>The Questionable Status Enable register is cleared when the STAT:QUES:ENAB 0 command is executed. The *CLS command can be also used to clear the register.</p>
-		<p class="Heading_3">3.4.1. <a name="__RefHeading__17188_670294931"></a><a name="__RefNumPara__35965_1442645923"></a><a name="ques_inst_stat_reg"></a>Questionable INSTrument Status register<a name="__RefHeading__17188_670294931"></a><a name="__RefNumPara__35965_1442645923"></a></p>
+		<p class="Heading_3">3.4.1. <a name="__RefNumPara__35965_1442645923"></a><a name="__RefHeading__17188_670294931"></a><a name="ques_inst_stat_reg"></a>Questionable INSTrument Status register<a name="__RefNumPara__35965_1442645923"></a><a name="__RefHeading__17188_670294931"></a></p>
 		<p>Bit definition for QUEStionable INSTrument register:</p>
 		<p>&#160;</p>
 		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
@@ -782,7 +782,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="Heading_3">3.4.2. <a name="__RefNumPara__35967_1442645923"></a><a name="__RefHeading__17192_670294931"></a><a name="ques_isum_stat_reg"></a>Questionable Instrument SUMmary status register<a name="__RefNumPara__35967_1442645923"></a><a name="__RefHeading__17192_670294931"></a></p>
+		<p class="Heading_3">3.4.2. <a name="__RefHeading__17192_670294931"></a><a name="__RefNumPara__35967_1442645923"></a><a name="ques_isum_stat_reg"></a>Questionable Instrument SUMmary status register<a name="__RefHeading__17192_670294931"></a><a name="__RefNumPara__35967_1442645923"></a></p>
 		<p>There are two questionable instrument summary registers, one for each PSU output. These registers provide information about voltage and current regulation. </p>
 		<p>Bit definition for QUEStionable INSTrument SUMmary register:</p>
 		<p>&#160;</p>
