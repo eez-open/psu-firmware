@@ -242,13 +242,16 @@ scpi_result_t scpi_cmd_mmemoryUploadQ(scpi_t *context) {
 static char g_downloadFilePath[MAX_PATH_LENGTH + 1];
 static uint32_t g_downloadSize;
 static bool g_downloading;
+static bool g_aborted;
 static uint32_t g_downloaded;
+
+void abortDownloading();
 
 void startDownloading() {
 	g_downloading = true;
 	g_downloaded = 0;
 #if OPTION_DISPLAY
-	gui::showProgressPage("Downloading...");
+	gui::showProgressPage("Downloading...", abortDownloading);
 #endif
 }
 
@@ -262,6 +265,11 @@ void finishDownloading(int16_t eventId) {
 #endif
 	g_downloading = false;
 	g_downloadFilePath[0] = 0;
+}
+
+void abortDownloading() {
+	finishDownloading(event_queue::EVENT_WARNING_FILE_DOWNLOAD_ABORTED);
+	g_aborted = true;
 }
 #endif
 
@@ -277,6 +285,7 @@ scpi_result_t scpi_cmd_mmemoryDownloadFname(scpi_t *context) {
 	}
 
 	g_downloadSize = 0;
+	g_aborted = false;
 
 	return SCPI_RES_OK;
 #else
@@ -314,6 +323,11 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
+	if (g_aborted) {
+		SCPI_ErrorPush(context, SCPI_ERROR_FILE_TRANSFER_ABORTED);
+		return SCPI_RES_ERR;
+	}
+
     if (g_downloadFilePath[0] == 0) {
         SCPI_ErrorPush(context, SCPI_ERROR_FILE_NAME_ERROR);
         return SCPI_RES_ERR;
@@ -341,12 +355,7 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
 
 #if OPTION_DISPLAY
 	g_downloaded += size;
-
-	if (!gui::updateProgressPage(g_downloaded, g_downloadSize)) {
-		finishDownloading(event_queue::EVENT_WARNING_FILE_DOWNLOAD_ABORTED);
-		SCPI_ErrorPush(context, SCPI_ERROR_FILE_TRANSFER_ABORTED);
-		return SCPI_RES_ERR;
-	}
+	gui::updateProgressPage(g_downloaded, g_downloadSize);
 #endif
 
     return SCPI_RES_OK;
@@ -358,7 +367,7 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
 
 scpi_result_t scpi_cmd_mmemoryDownloadAbort(scpi_t *context) {
 #if OPTION_SD_CARD
-	finishDownloading(event_queue::EVENT_WARNING_FILE_DOWNLOAD_ABORTED);
+	abortDownloading();
 	return SCPI_RES_OK;
 #else
 	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);

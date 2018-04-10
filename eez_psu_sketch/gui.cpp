@@ -637,9 +637,9 @@ void hideAsyncOperationInProgress() {
 	popPage();
 }
 
-void showProgressPage(const char *message) {
+void showProgressPage(const char *message, void (*abortCallback)()) {
 	data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value(message), 0);
-    g_dialogCancelCallback = NULL;
+    g_dialogCancelCallback = abortCallback;
     pushPage(PAGE_ID_PROGRESS);
 }
 
@@ -649,7 +649,7 @@ bool updateProgressPage(size_t processedSoFar, size_t totalSize) {
 			data::g_progress = data::Value((int)round((processedSoFar * 1.0f / totalSize) * 100.0f), VALUE_TYPE_PERCENTAGE);
 		}
 		else {
-			data::g_progress = data::Value(processedSoFar, VALUE_TYPE_SIZE);
+			data::g_progress = data::Value((uint32_t)processedSoFar, VALUE_TYPE_SIZE);
 		}
         return true;
     }

@@ -41,7 +41,7 @@ void showEthernetInit();
 void showAsyncOperationInProgress(const char *message, void (*checkStatus)() = 0);
 void hideAsyncOperationInProgress();
 
-void showProgressPage(const char *message);
+void showProgressPage(const char *message, void (*abortCallback)() = 0);
 bool updateProgressPage(size_t processedSoFar, size_t totalSize);
 void hideProgressPage();
 
