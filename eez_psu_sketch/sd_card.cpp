@@ -384,6 +384,11 @@ bool download(const char *filePath, bool truncate, const void *buffer, size_t si
 
     File file = SD.open(filePath, FILE_WRITE);
 
+	if (!file) {
+		if (err) *err = SCPI_ERROR_FILE_NAME_NOT_FOUND;
+		return false;
+	}
+
     if (truncate && !file.truncate(0)) {
         if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;
