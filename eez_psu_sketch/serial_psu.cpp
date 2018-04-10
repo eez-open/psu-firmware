@@ -91,7 +91,7 @@ scpi_result_t SCPI_Reset(scpi_t *context) {
 ////////////////////////////////////////////////////////////////////////////////
 
 static scpi_reg_val_t g_scpiPsuRegs[SCPI_PSU_REG_COUNT];
-static scpi_psu_t g_scpiPsuContext = { g_scpiPsuRegs, 1 };
+static scpi_psu_t g_scpiPsuContext = { g_scpiPsuRegs };
 
 static scpi_interface_t g_scpiInterface = {
     SCPI_Error,

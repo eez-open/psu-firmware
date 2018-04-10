@@ -32,6 +32,7 @@
 #include "ntp.h"
 #endif
 
+#include "gui.h"
 #include "gui_page_sys_settings.h"
 #include "gui_numeric_keypad.h"
 

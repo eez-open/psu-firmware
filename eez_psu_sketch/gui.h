@@ -38,6 +38,9 @@ void showStandbyPage();
 void showEnteringStandbyPage();
 void showEthernetInit();
 
+void showAsyncOperationInProgress(const char *message, void (*checkStatus)() = 0);
+void hideAsyncOperationInProgress();
+
 void showProgressPage(const char *message);
 bool updateProgressPage(size_t processedSoFar, size_t totalSize);
 void hideProgressPage();

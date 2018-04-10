@@ -27,6 +27,10 @@
 #include "sd_card.h"
 #endif
 
+#if OPTION_DISPLAY
+#include "gui.h"
+#endif
+
 namespace eez {
 namespace psu {
 namespace scpi {
@@ -244,6 +248,9 @@ scpi_result_t scpi_cmd_mmemoryDownloadFname(scpi_t *context) {
 
 	if (!psuContext->firstDataFlag) {
 		event_queue::pushEvent(event_queue::EVENT_INFO_FILE_DOWNLOAD_SUCCEEDED);
+#if OPTION_DISPLAY
+		gui::hideAsyncOperationInProgress();
+#endif
 	}
 
     psuContext->firstDataFlag = true;
@@ -275,6 +282,12 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
+	if (psuContext->firstDataFlag) {
+#if OPTION_DISPLAY
+		gui::showAsyncOperationInProgress("Downloading...");
+#endif
+	}
+
     int err;
     if (!sd_card::download(psuContext->downloadFilePath, psuContext->firstDataFlag, buffer, size, &err)) {
 		event_queue::pushEvent(event_queue::EVENT_ERROR_FILE_DOWNLOAD_FAILED);
@@ -286,7 +299,7 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
 		return SCPI_RES_ERR;
     }
 
-    psuContext->firstDataFlag = false;
+	psuContext->firstDataFlag = false;
 
     return SCPI_RES_OK;
 #else

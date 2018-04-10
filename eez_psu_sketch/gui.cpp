@@ -633,6 +633,10 @@ void showAsyncOperationInProgress(const char *message, void (*checkStatus)()) {
     pushPage(PAGE_ID_ASYNC_OPERATION_IN_PROGRESS);
 }
 
+void hideAsyncOperationInProgress() {
+	popPage();
+}
+
 void showProgressPage(const char *message) {
 	data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value(message), 0);
     g_dialogCancelCallback = NULL;
@@ -641,7 +645,7 @@ void showProgressPage(const char *message) {
 
 bool updateProgressPage(size_t processedSoFar, size_t totalSize) {
     if (g_activePageId == PAGE_ID_PROGRESS) {
-        data::g_progress = data::Value((processedSoFar * 1.0f / totalSize) * 100.0f, VALUE_TYPE_FLOAT_PERCENTAGE);
+        data::g_progress = data::Value((int)round((processedSoFar * 1.0f / totalSize) * 100.0f), VALUE_TYPE_PERCENTAGE);
         return true;
     }
     return false;
@@ -1565,7 +1569,9 @@ void tick(uint32_t tick_usec) {
     if (g_activePageId == PAGE_ID_ASYNC_OPERATION_IN_PROGRESS) {
         static char *throbber[] = {"|", "/", "-", "\\", "|", "/", "-", "\\"};
         data::set(data::Cursor(), DATA_ID_ASYNC_OPERATION_THROBBER, data::Value(throbber[(tick_usec % 1000000) / 125000]), 0);
-        g_checkAsyncOperationStatus();
+		if (g_checkAsyncOperationStatus) {
+			g_checkAsyncOperationStatus();
+		}
     }
 
     if (psu::g_rprogAlarm) {

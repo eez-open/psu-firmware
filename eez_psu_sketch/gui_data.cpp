@@ -519,6 +519,11 @@ void Value::toText(char *text, int count) const {
         text[count - 1] = 0;
         break;
 
+	case VALUE_TYPE_PERCENTAGE:
+		snprintf_P(text, count - 1, PSTR("%d%%"), int_);
+		text[count - 1] = 0;
+		break;
+
 	case VALUE_TYPE_DLOG_STATUS:
 		strcpy(text, PSTR("Dlog: "));
 		printTime(uint32_, text + 6, count - 6);
@@ -562,7 +567,7 @@ bool Value::operator ==(const Value &other) const {
         return true;
     }
 		
-	if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL || type_ == VALUE_TYPE_LESS_THEN_MIN_INT || type_ == VALUE_TYPE_GREATER_THEN_MAX_INT || type_ == VALUE_TYPE_USER_PROFILE_LABEL || type_ == VALUE_TYPE_USER_PROFILE_REMARK || type_ == VALUE_TYPE_EDIT_INFO || type_ == VALUE_TYPE_SERIAL_BAUD_INDEX) {
+	if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL || type_ == VALUE_TYPE_LESS_THEN_MIN_INT || type_ == VALUE_TYPE_GREATER_THEN_MAX_INT || type_ == VALUE_TYPE_USER_PROFILE_LABEL || type_ == VALUE_TYPE_USER_PROFILE_REMARK || type_ == VALUE_TYPE_EDIT_INFO || type_ == VALUE_TYPE_SERIAL_BAUD_INDEX || type_ == VALUE_TYPE_PERCENTAGE) {
         return int_ == other.int_;
     }
 

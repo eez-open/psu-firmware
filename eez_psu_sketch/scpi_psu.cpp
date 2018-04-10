@@ -79,6 +79,13 @@ void init(scpi_t &scpi_context,
         IDN_MANUFACTURER, IDN_MODEL, persist_conf::devConf.serialNumber, FIRMWARE,
         input_buffer, input_buffer_length, error_queue_data, error_queue_size);
 
+	scpi_psu_context.selected_channel_index = 1;
+	scpi_psu_context.currentDirectory[0] = 0;
+	scpi_psu_context.downloadFilePath[0] = 0;
+	scpi_psu_context.firstDataFlag = true;
+	scpi_psu_context.isBufferOverrun = false;
+	scpi_psu_context.bufferOverrunTime =  0;
+
     scpi_context.user_context = &scpi_psu_context;
 }
 
