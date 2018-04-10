@@ -58,6 +58,7 @@ static const int EVENT_TYPE_ERROR = 3;
     EVENT_WARNING(CH2_UNKNOWN_PWRGOOD_STATE, 5, "Ch2 unknown PWRGOOD") \
     EVENT_WARNING(NTP_REFRESH_FAILED, 6, "NTP refresh failed") \
 	EVENT_WARNING(FILE_UPLOAD_ABORTED, 7, "File upload aborted") \
+	EVENT_WARNING(FILE_DOWNLOAD_ABORTED, 8, "File download aborted") \
     EVENT_INFO(WELCOME, 0, "Welcome!") \
     EVENT_INFO(POWER_UP, 1, "Power up") \
     EVENT_INFO(POWER_DOWN, 2, "Power down") \

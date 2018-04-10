@@ -251,9 +251,8 @@ scpi_result_t scpi_cmd_mmemoryDownloadFname(scpi_t *context) {
 #if OPTION_DISPLAY
 		gui::hideAsyncOperationInProgress();
 #endif
+		psuContext->firstDataFlag = true;
 	}
-
-    psuContext->firstDataFlag = true;
 
     return SCPI_RES_OK;
 #else
@@ -282,15 +281,24 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-	if (psuContext->firstDataFlag) {
+	bool firstDataFlag = psuContext->firstDataFlag;
+
+	if (firstDataFlag) {
 #if OPTION_DISPLAY
 		gui::showAsyncOperationInProgress("Downloading...");
 #endif
+		psuContext->firstDataFlag = false;
 	}
 
     int err;
-    if (!sd_card::download(psuContext->downloadFilePath, psuContext->firstDataFlag, buffer, size, &err)) {
+    if (!sd_card::download(psuContext->downloadFilePath, firstDataFlag, buffer, size, &err)) {
+		sd_card::deleteFile(psuContext->downloadFilePath, 0);
 		event_queue::pushEvent(event_queue::EVENT_ERROR_FILE_DOWNLOAD_FAILED);
+#if OPTION_DISPLAY
+		gui::hideAsyncOperationInProgress();
+#endif
+		psuContext->firstDataFlag = true;
+		psuContext->downloadFilePath[0] = 0;
 
         if (err != 0) {
             SCPI_ErrorPush(context, err);
@@ -299,12 +307,37 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
 		return SCPI_RES_ERR;
     }
 
-	psuContext->firstDataFlag = false;
-
     return SCPI_RES_OK;
 #else
     SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
     return SCPI_RES_ERR;
+#endif
+}
+
+scpi_result_t scpi_cmd_mmemoryDownloadAbort(scpi_t *context) {
+#if OPTION_SD_CARD
+	if (persist_conf::isSdLocked()) {
+		SCPI_ErrorPush(context, SCPI_ERROR_MEDIA_PROTECTED);
+		return SCPI_RES_ERR;
+	}
+
+	scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
+
+	if (!psuContext->firstDataFlag) {
+		sd_card::deleteFile(psuContext->downloadFilePath, 0);
+		event_queue::pushEvent(event_queue::EVENT_WARNING_FILE_DOWNLOAD_ABORTED);
+#if OPTION_DISPLAY
+		gui::hideAsyncOperationInProgress();
+#endif
+		psuContext->firstDataFlag = true;
+	}
+
+	psuContext->downloadFilePath[0] = 0;
+
+	return SCPI_RES_OK;
+#else
+	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
+	return SCPI_RES_ERR;
 #endif
 }
 

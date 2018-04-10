@@ -117,6 +117,7 @@
     SCPI_COMMAND("MMEMory:DELete", scpi_cmd_mmemoryDelete) \
     SCPI_COMMAND("MMEMory:DOWNload:DATA", scpi_cmd_mmemoryDownloadData) \
     SCPI_COMMAND("MMEMory:DOWNload:FNAMe", scpi_cmd_mmemoryDownloadFname) \
+    SCPI_COMMAND("MMEMory:DOWNload:ABORt", scpi_cmd_mmemoryDownloadAbort) \
     SCPI_COMMAND("MMEMory:INFOrmation?", scpi_cmd_mmemoryInformationQ) \
     SCPI_COMMAND("MMEMory:LOAD:LIST#", scpi_cmd_mmemoryLoadList) \
     SCPI_COMMAND("MMEMory:LOAD:PROFile", scpi_cmd_mmemoryLoadProfile) \

@@ -76239,6 +76239,10 @@
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_down_fnam"
           },
           {
+            "name": "MMEMory:DOWNload:ABORt",
+            "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_abor"
+          },
+          {
             "name": "MMEMory:INFOrmation?"
           },
           {
