@@ -269,7 +269,7 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
-					<p class="cmd_code">-241,&quot;Option not installed&quot;-241,&quot;Hardware missing&quot;</p>
+					<p class="cmd_code">-241,&quot;Hardware missing&quot;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
 					<p>Command or query could not be executed because of missing PSU hardware.</p>
@@ -320,34 +320,34 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
-					<p class="cmd_code"><span style="background-color: #fff200;">-251</span><span style="background-color: #fff200;">,&quot;</span><span style="background-color: #fff200;">Missing mass storage</span><span style="background-color: #fff200;">&quot;</span></p>
+					<p class="cmd_code">-251,&quot;Missing mass storage&quot;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
-					<p><span style="background-color: #fff200;">Command or query could not be executed because of missing mass storage; SD card option was not installed. </span></p>
+					<p>Command or query could not be executed because of missing mass storage; SD card option was not installed. (Not implemented yet)</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
-					<p class="cmd_code"><span style="background-color: #fff200;">-252</span><span style="background-color: #fff200;">,&quot;</span><span style="background-color: #fff200;">Missing media</span><span style="background-color: #fff200;">&quot;</span></p>
+					<p class="cmd_code">-252,&quot;Missing media&quot;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
-					<p><span style="background-color: #fff200;">Command or query could not be executed because of a missing SD card.</span></p>
+					<p>Command or query could not be executed because of a missing SD card. (Not implemented yet)</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
-					<p class="cmd_code"><span style="background-color: #fff200;">-253</span><span style="background-color: #fff200;">,&quot;</span><span style="background-color: #fff200;">Corrupt media</span><span style="background-color: #fff200;">&quot;</span></p>
+					<p class="cmd_code">-253,&quot;Corrupt media&quot;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
-					<p><span style="background-color: #fff200;">Command or query could not be executed because of corrupt media; for example, bad SD card or wrong format.</span></p>
+					<p>Command or query could not be executed because of corrupt media; for example, bad SD card or wrong format. (Not implemented yet)</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
-					<p class="cmd_code"><span style="background-color: #fff200;">-25</span><span style="background-color: #fff200;">4</span><span style="background-color: #fff200;">,&quot;</span><span style="background-color: #fff200;">Media full</span><span style="background-color: #fff200;">&quot;</span></p>
+					<p class="cmd_code">-254,&quot;Media full&quot;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
-					<p><span style="background-color: #fff200;">Command or query could not be executed because the SD card is full.</span></p>
+					<p>Command or query could not be executed because the SD card is full. (Not implemented yet)</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -372,6 +372,14 @@
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
 					<p>Command or query could not be executed because the SD card access is locked (MMEMory:LOCK command).</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
+					<p class="cmd_code">-259,&quot;File transfer aborted&quot;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
+					<p>Command or query for file transfer is aborted before transfer is completed.</p>
 				</td>
 			</tr>
 		</table>
@@ -471,7 +479,7 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
-					<p class="cmd_code">102,&quot;Invalid cal password&quot;</p>
+					<p class="cmd_code">102,&quot;Invalid password&quot;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
 					<p>The calibration password is incorrect.</p>
@@ -487,7 +495,7 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 38%;">
-					<p class="cmd_code">105,&quot;PCal password too long&quot;</p>
+					<p class="cmd_code">105,&quot;Password too long&quot;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
 					<p>A calibration password was received which contained more than 16 characters.</p>
@@ -495,7 +503,7 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 38%;">
-					<p class="cmd_code">106,&quot;PCal password too short&quot;</p>
+					<p class="cmd_code">106,&quot;Password too short&quot;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
 					<p>A calibration password was received which contained less than 4 characters.</p>
@@ -674,7 +682,7 @@
 					<p class="cmd_code">320,&quot;Firmware update error&quot;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
-					<p>An attempt to upload firmware via LAN has failed due to communication error, checksum error, etc.</p>
+					<p>An attempt to upload firmware via LAN has failed due to communication error, checksum error, etc. (<span style="font-style: italic;">Not implemented yet</span>).</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -706,7 +714,7 @@
 					<p class="cmd_code">505,&quot;External voltage on CH1 detected&quot;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 62%;">
-					<p>An external voltage has been measured (e.g., from a battery or other power source intentionally or mistakenly left connected) on Channel 1 while output is switched from off to on.</p>
+					<p>An external voltage has been measured (e.g., from a battery or other power source intentionally or mistakenly left connected) on Channel 1 while output is switched from off to on.  (<span style="font-style: italic;">Not implemented yet</span>).</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -714,7 +722,7 @@
 					<p class="cmd_code">506,&quot;External voltage on CH2 detected&quot;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background-color: #e6e6ff; width: 62%;">
-					<p>An external voltage has been measured (e.g., from a battery or other power source intentionally or mistakenly left connected) on Channel 2 while output is switched from off to on.</p>
+					<p>An external voltage has been measured (e.g., from a battery or other power source intentionally or mistakenly left connected) on Channel 2 while output is switched from off to on.  (<span style="font-style: italic;">Not implemented yet</span>).</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
