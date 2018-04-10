@@ -82,15 +82,19 @@ void init(scpi_t &scpi_context,
 	scpi_psu_context.selected_channel_index = 1;
 	scpi_psu_context.currentDirectory[0] = 0;
 	scpi_psu_context.downloadFilePath[0] = 0;
-	scpi_psu_context.firstDataFlag = true;
+	scpi_psu_context.downloading = false;
 	scpi_psu_context.isBufferOverrun = false;
 	scpi_psu_context.bufferOverrunTime =  0;
 
     scpi_context.user_context = &scpi_psu_context;
 }
 
-void onBufferOverrun(scpi_t &context) {
+void emptyBuffer(scpi_t &context) {
 	SCPI_Input(&context, 0, 0);
+}
+
+void onBufferOverrun(scpi_t &context) {
+	emptyBuffer(context);
 	scpi_psu_t *psu_context = (scpi_psu_t *)context.user_context;
 	psu_context->isBufferOverrun = true;
 	psu_context->bufferOverrunTime = micros();

@@ -259,6 +259,7 @@ void tick(uint32_t tick_usec) {
             client.flush();
             g_activeClient = client;
             g_isConnected = true;
+			scpi::emptyBuffer(g_scpiContext);
             DebugTrace("A new ethernet client detected!");
         }
 

@@ -238,20 +238,36 @@ scpi_result_t scpi_cmd_mmemoryUploadQ(scpi_t *context) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void startDownloading(scpi_psu_t *psuContext) {
+#if OPTION_DISPLAY
+	gui::showAsyncOperationInProgress("Downloading...");
+#endif
+	psuContext->downloading = true;
+}
+
+void finishDownloading(scpi_psu_t *psuContext, int16_t eventId) {
+	if (eventId != event_queue::EVENT_INFO_FILE_DOWNLOAD_SUCCEEDED) {
+		sd_card::deleteFile(psuContext->downloadFilePath, 0);
+	}
+	event_queue::pushEvent(eventId);
+#if OPTION_DISPLAY
+	gui::hideAsyncOperationInProgress();
+#endif
+	psuContext->downloading = false;
+	psuContext->downloadFilePath[0] = 0;
+}
+
 scpi_result_t scpi_cmd_mmemoryDownloadFname(scpi_t *context) {
 #if OPTION_SD_CARD
     scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
 
-    if (!getFilePath(context, psuContext->downloadFilePath, true)) {
-        return SCPI_RES_ERR;
-    }
+	if (psuContext->downloading) {
+		finishDownloading(psuContext, event_queue::EVENT_INFO_FILE_DOWNLOAD_SUCCEEDED);
+		return SCPI_RES_OK;
+	}
 
-	if (!psuContext->firstDataFlag) {
-		event_queue::pushEvent(event_queue::EVENT_INFO_FILE_DOWNLOAD_SUCCEEDED);
-#if OPTION_DISPLAY
-		gui::hideAsyncOperationInProgress();
-#endif
-		psuContext->firstDataFlag = true;
+	if (!getFilePath(context, psuContext->downloadFilePath, true)) {
+		return SCPI_RES_ERR;
 	}
 
     return SCPI_RES_OK;
@@ -281,29 +297,17 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-	bool firstDataFlag = psuContext->firstDataFlag;
-
-	if (firstDataFlag) {
-#if OPTION_DISPLAY
-		gui::showAsyncOperationInProgress("Downloading...");
-#endif
-		psuContext->firstDataFlag = false;
+	bool downloading = psuContext->downloading;
+	if (!downloading) {
+		startDownloading(psuContext);
 	}
 
     int err;
-    if (!sd_card::download(psuContext->downloadFilePath, firstDataFlag, buffer, size, &err)) {
-		sd_card::deleteFile(psuContext->downloadFilePath, 0);
-		event_queue::pushEvent(event_queue::EVENT_ERROR_FILE_DOWNLOAD_FAILED);
-#if OPTION_DISPLAY
-		gui::hideAsyncOperationInProgress();
-#endif
-		psuContext->firstDataFlag = true;
-		psuContext->downloadFilePath[0] = 0;
-
+    if (!sd_card::download(psuContext->downloadFilePath, !downloading, buffer, size, &err)) {
+		finishDownloading(psuContext, event_queue::EVENT_ERROR_FILE_DOWNLOAD_FAILED);
         if (err != 0) {
             SCPI_ErrorPush(context, err);
         }
-
 		return SCPI_RES_ERR;
     }
 
@@ -316,24 +320,8 @@ scpi_result_t scpi_cmd_mmemoryDownloadData(scpi_t *context) {
 
 scpi_result_t scpi_cmd_mmemoryDownloadAbort(scpi_t *context) {
 #if OPTION_SD_CARD
-	if (persist_conf::isSdLocked()) {
-		SCPI_ErrorPush(context, SCPI_ERROR_MEDIA_PROTECTED);
-		return SCPI_RES_ERR;
-	}
-
 	scpi_psu_t *psuContext = (scpi_psu_t *)context->user_context;
-
-	if (!psuContext->firstDataFlag) {
-		sd_card::deleteFile(psuContext->downloadFilePath, 0);
-		event_queue::pushEvent(event_queue::EVENT_WARNING_FILE_DOWNLOAD_ABORTED);
-#if OPTION_DISPLAY
-		gui::hideAsyncOperationInProgress();
-#endif
-		psuContext->firstDataFlag = true;
-	}
-
-	psuContext->downloadFilePath[0] = 0;
-
+	finishDownloading(psuContext, event_queue::EVENT_WARNING_FILE_DOWNLOAD_ABORTED);
 	return SCPI_RES_OK;
 #else
 	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);

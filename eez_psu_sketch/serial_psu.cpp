@@ -106,6 +106,8 @@ static int16_t g_errorQueueData[SCPI_PARSER_ERROR_QUEUE_SIZE + 1];
 
 scpi_t g_scpiContext;
 
+static bool g_isConnected;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 UARTClass::UARTModes getConfig() {
@@ -158,19 +160,33 @@ void init() {
 
 void tick(uint32_t tick_usec) {
     if (g_testResult == TEST_OK) {
-		char buffer[CONF_CHUNK_SIZE];
-		unsigned i;
-        for (i = 0; i < CONF_CHUNK_SIZE && SERIAL_PORT.available(); ++i) {
-			buffer[i] = (char)SERIAL_PORT.read();
-        }
-		if (i > 0) {
-			input(g_scpiContext, buffer, i);
+		bool isConnected = (bool)SERIAL_PORT;
+
+		if (isConnected != g_isConnected) {
+			g_isConnected = isConnected;
+			if (g_isConnected) {
+				scpi::emptyBuffer(g_scpiContext);
+			}
+		}
+
+		if (g_isConnected) {
+			size_t n = SERIAL_PORT.available();
+			if (n > 0) {
+				char buffer[CONF_CHUNK_SIZE];
+				if (n > CONF_CHUNK_SIZE) {
+					n = CONF_CHUNK_SIZE;
+				}
+				for (size_t i = 0; i < n; ++i) {
+					buffer[i] = (char)SERIAL_PORT.read();
+				}
+				input(g_scpiContext, buffer, n);
+			}
 		}
     }
 }
 
 bool isConnected() {
-    return (bool)SERIAL_PORT;
+    return g_testResult == TEST_OK && g_isConnected;
 }
 
 void update() {

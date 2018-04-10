@@ -33,7 +33,7 @@ struct scpi_psu_t {
 #if OPTION_SD_CARD
     char currentDirectory[MAX_PATH_LENGTH + 1];
     char downloadFilePath[MAX_PATH_LENGTH + 1];
-    bool firstDataFlag;
+    bool downloading;
 #endif
 	bool isBufferOverrun;
 	uint32_t bufferOverrunTime;
@@ -49,6 +49,7 @@ void init(scpi_t &scpi_context,
 
 void input(scpi_t &scpi_context, const char *str, size_t size);
 
+void emptyBuffer(scpi_t &context);
 void onBufferOverrun(scpi_t &context);
 
 void printError(int_fast16_t err);
