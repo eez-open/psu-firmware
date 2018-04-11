@@ -119,19 +119,19 @@
     SCPI_COMMAND("MMEMory:DOWNload:FNAMe", scpi_cmd_mmemoryDownloadFname) \
     SCPI_COMMAND("MMEMory:DOWNload:SIZE", scpi_cmd_mmemoryDownloadSize) \
     SCPI_COMMAND("MMEMory:DOWNload:ABORt", scpi_cmd_mmemoryDownloadAbort) \
-    SCPI_COMMAND("MMEMory:INFOrmation?", scpi_cmd_mmemoryInformationQ) \
     SCPI_COMMAND("MMEMory:LOAD:LIST#", scpi_cmd_mmemoryLoadList) \
-    SCPI_COMMAND("MMEMory:LOAD:PROFile", scpi_cmd_mmemoryLoadProfile) \
     SCPI_COMMAND("MMEMory:LOCK", scpi_cmd_mmemoryLock) \
     SCPI_COMMAND("MMEMory:LOCK?", scpi_cmd_mmemoryLockQ) \
     SCPI_COMMAND("MMEMory:MDIRectory", scpi_cmd_mmemoryMdirectory) \
     SCPI_COMMAND("MMEMory:MOVE", scpi_cmd_mmemoryMove) \
     SCPI_COMMAND("MMEMory:RDIRectory", scpi_cmd_mmemoryRdirectory) \
     SCPI_COMMAND("MMEMory:STORe:LIST#", scpi_cmd_mmemoryStoreList) \
-    SCPI_COMMAND("MMEMory:STORe:PROFile", scpi_cmd_mmemoryStoreProfile) \
     SCPI_COMMAND("MMEMory:TIME?", scpi_cmd_mmemoryTimeQ) \
     SCPI_COMMAND("MMEMory:UNLock", scpi_cmd_mmemoryUnlock) \
     SCPI_COMMAND("MMEMory:UPLoad?", scpi_cmd_mmemoryUploadQ) \
+    SCPI_COMMAND("MMEMory:INFOrmation?", scpi_cmd_mmemoryInformationQ) \
+    SCPI_COMMAND("MMEMory:LOAD:PROFile", scpi_cmd_mmemoryLoadProfile) \
+    SCPI_COMMAND("MMEMory:STORe:PROFile", scpi_cmd_mmemoryStoreProfile) \
     SCPI_COMMAND("OUTPut[:STATe]", scpi_cmd_outputState) \
     SCPI_COMMAND("OUTPut[:STATe]?", scpi_cmd_outputStateQ) \
     SCPI_COMMAND("OUTPut[:STATe]:TRIGgered", scpi_cmd_outputStateTriggered) \
