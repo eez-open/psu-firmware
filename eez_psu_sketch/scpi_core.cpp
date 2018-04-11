@@ -70,7 +70,7 @@ scpi_result_t scpi_cmd_coreRcl(scpi_t * context) {
     }
     
     if (!profile::recall(location)) {
-        SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
+        SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_LOAD_EMPTY_PROFILE);
         return SCPI_RES_ERR;
     }
 
