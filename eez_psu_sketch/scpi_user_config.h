@@ -101,6 +101,7 @@ extern "C" {
     X(SCPI_ERROR_LIST_IS_EMPTY,                              311, "List is empty")                                \
     X(SCPI_ERROR_EXECUTE_ERROR_CHANNELS_ARE_COUPLED,         312, "Cannot execute when the channels are coupled") \
     X(SCPI_ERROR_EXECUTE_ERROR_IN_TRACKING_MODE,             313, "Cannot execute in tracking mode")              \
+	X(SCPI_ERROR_CANNOT_LOAD_EMPTY_PROFILE,                  400, "Cannot load empty profile")                    \
     X(SCPI_ERROR_CH1_DOWN_PROGRAMMER_SWITCHED_OFF,           500, "Down-programmer on CH1 switched off")          \
     X(SCPI_ERROR_CH2_DOWN_PROGRAMMER_SWITCHED_OFF,           501, "Down-programmer on CH2 switched off")          \
     X(SCPI_ERROR_EXTERNAL_EEPROM_SAVE_FAILED,                615, "External EEPROM save failed")                  \
