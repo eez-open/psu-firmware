@@ -2289,6 +2289,65 @@
       "implementation": "((SysSettingsDateTimePage *)getActivePage())->editNtpServer();"
     }
   ],
+  "extensionDefinitions": [
+    {
+      "name": "R3B4",
+      "buildConfiguration": "R3B4",
+      "image": "images/r3b4-front-panel.png",
+      "moduleName": "eez_h24005_r3b4",
+      "idn": "Envox,EEZ H24005 (Due)",
+      "idfName": "EEZ H24005 r3B4",
+      "idfShortName": "H24005-R3B4",
+      "idfGuid": "d0964223-a599-43f6-8aa2-4eb52f76a395",
+      "idfDescription": "EEZ H24005 two channel power supply",
+      "idfSupportedModels": "H24005 r3B4",
+      "idfAuthor": "Envox",
+      "sdlFriendlyName": "EEZ H24005 r3B4",
+      "inheritFrom": "Common"
+    },
+    {
+      "name": "R5B12",
+      "buildConfiguration": "R5B12",
+      "image": "images/r5b12-front-panel.png",
+      "moduleName": "eez_h24005_r5b12",
+      "idn": "Envox,EEZ H24005 (Due)",
+      "idfName": "EEZ H24005 r5B12",
+      "idfShortName": "H24005-R5B12",
+      "idfGuid": "d2283db7-1e5f-4020-aa2b-bedeee6343a2",
+      "idfDescription": "EEZ H24005 two channel power supply",
+      "idfSupportedModels": "H24005 r5B12",
+      "idfAuthor": "Envox",
+      "sdlFriendlyName": "EEZ H24005 r5B12",
+      "inheritFrom": "Common"
+    },
+    {
+      "name": "Simulator",
+      "doNotBuild": false,
+      "buildConfiguration": "Simulator",
+      "image": "images/simulator-front-panel.png",
+      "moduleName": "eez_h24005_simulator",
+      "idn": "Envox,EEZ H24005 (Simulator)",
+      "idfName": "EEZ H24005 Simulator",
+      "idfShortName": "H24005sim",
+      "idfGuid": "6f5029f7-a785-445d-af5b-9b66fa13eeca",
+      "idfDescription": "Simulator for EEZ H24005 power supply",
+      "idfSupportedModels": "H24005",
+      "idfAuthor": "Envox",
+      "sdlFriendlyName": "EEZ H24005 simulator",
+      "inheritFrom": "Common"
+    },
+    {
+      "name": "Common",
+      "doNotBuild": true,
+      "buildConfiguration": "",
+      "screenOrientation": "landscape",
+      "properties": "{\n  \"ethernetPort\": 5025,\n  \"channels\": [\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5\n    },\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5\n    }\n  ],\n  \"lists\": {}\n}",
+      "idfFirmwareVersion": "1.1",
+      "idfRevisionNumber": "0",
+      "idfRevisionComments": "Initial version",
+      "idfAuthor": "Envox"
+    }
+  ],
   "gui": {
     "storyboard": {
       "pages": [
@@ -75718,65 +75777,6 @@
       }
     ]
   },
-  "idf": [
-    {
-      "name": "R3B4",
-      "buildConfiguration": "R3B4",
-      "image": "images/r3b4-front-panel.png",
-      "moduleName": "eez_h24005_r3b4",
-      "idn": "Envox,EEZ H24005 (Due)",
-      "idfName": "EEZ H24005 r3B4",
-      "idfShortName": "H24005-R3B4",
-      "idfGuid": "d0964223-a599-43f6-8aa2-4eb52f76a395",
-      "idfDescription": "EEZ H24005 two channel power supply",
-      "idfSupportedModels": "H24005 r3B4",
-      "idfAuthor": "Envox",
-      "sdlFriendlyName": "EEZ H24005 r3B4",
-      "inheritFrom": "Common"
-    },
-    {
-      "name": "R5B12",
-      "buildConfiguration": "R5B12",
-      "image": "images/r5b12-front-panel.png",
-      "moduleName": "eez_h24005_r5b12",
-      "idn": "Envox,EEZ H24005 (Due)",
-      "idfName": "EEZ H24005 r5B12",
-      "idfShortName": "H24005-R5B12",
-      "idfGuid": "d2283db7-1e5f-4020-aa2b-bedeee6343a2",
-      "idfDescription": "EEZ H24005 two channel power supply",
-      "idfSupportedModels": "H24005 r5B12",
-      "idfAuthor": "Envox",
-      "sdlFriendlyName": "EEZ H24005 r5B12",
-      "inheritFrom": "Common"
-    },
-    {
-      "name": "Simulator",
-      "doNotBuild": false,
-      "buildConfiguration": "Simulator",
-      "image": "images/simulator-front-panel.png",
-      "moduleName": "eez_h24005_simulator",
-      "idn": "Envox,EEZ H24005 (Simulator)",
-      "idfName": "EEZ H24005 Simulator",
-      "idfShortName": "H24005sim",
-      "idfGuid": "6f5029f7-a785-445d-af5b-9b66fa13eeca",
-      "idfDescription": "Simulator for EEZ H24005 power supply",
-      "idfSupportedModels": "H24005",
-      "idfAuthor": "Envox",
-      "sdlFriendlyName": "EEZ H24005 simulator",
-      "inheritFrom": "Common"
-    },
-    {
-      "name": "Common",
-      "doNotBuild": true,
-      "buildConfiguration": "",
-      "screenOrientation": "landscape",
-      "customPropertiesJSON": "{\n  \"ethernetPort\": 5025,\n  \"channels\": [\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5\n    },\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5\n    }\n  ],\n  \"lists\": {}\n}",
-      "idfFirmwareVersion": "1.1",
-      "idfRevisionNumber": "0",
-      "idfRevisionComments": "Initial version",
-      "idfAuthor": "Envox"
-    }
-  ],
   "scpi": {
     "subsystems": [
       {
