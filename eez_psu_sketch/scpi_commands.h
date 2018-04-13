@@ -37,18 +37,6 @@
     SCPI_COMMAND("*WAI", scpi_cmd_coreWai) \
     SCPI_COMMAND("ABORt", scpi_cmd_abort) \
     SCPI_COMMAND("ABORt:DLOG", scpi_cmd_abortDlog) \
-    SCPI_COMMAND("DEBUg", scpi_cmd_debug) \
-    SCPI_COMMAND("DEBUg:WDOG", scpi_cmd_debugWdog) \
-    SCPI_COMMAND("DEBUg:WDOG?", scpi_cmd_debugWdogQ) \
-    SCPI_COMMAND("DEBUg:ONTime?", scpi_cmd_debugOntimeQ) \
-    SCPI_COMMAND("DEBUg:VOLTage", scpi_cmd_debugVoltage) \
-    SCPI_COMMAND("DEBUg:CURRent", scpi_cmd_debugCurrent) \
-    SCPI_COMMAND("DEBUg:MEASure:VOLTage", scpi_cmd_debugMeasureVoltage) \
-    SCPI_COMMAND("DEBUg:MEASure:CURRent", scpi_cmd_debugMeasureCurrent) \
-    SCPI_COMMAND("DEBUg:FAN", scpi_cmd_debugFan) \
-    SCPI_COMMAND("DEBUg:FAN?", scpi_cmd_debugFanQ) \
-    SCPI_COMMAND("DEBUg:FAN:PID", scpi_cmd_debugFanPid) \
-    SCPI_COMMAND("DEBUg:FAN:PID?", scpi_cmd_debugFanPidQ) \
     SCPI_COMMAND("CALibration:CLEar", scpi_cmd_calibrationClear) \
     SCPI_COMMAND("CALibration:CURRent:LEVel", scpi_cmd_calibrationCurrentLevel) \
     SCPI_COMMAND("CALibration:CURRent:RANGe", scpi_cmd_calibrationCurrentRange) \
@@ -296,6 +284,7 @@
     SCPI_COMMAND("SYSTem:INHibit?", scpi_cmd_systemInhibitQ) \
     SCPI_COMMAND("SYSTem:KLOCk", scpi_cmd_systemKlock) \
     SCPI_COMMAND("SYSTem:LOCal", scpi_cmd_systemLocal) \
+    SCPI_COMMAND("SYSTem:PASSword:CALibration:RESet", scpi_cmd_systemPasswordCalibrationReset) \
     SCPI_COMMAND("SYSTem:PASSword:FPANel:RESet", scpi_cmd_systemPasswordFpanelReset) \
     SCPI_COMMAND("SYSTem:PASSword:NEW", scpi_cmd_systemPasswordNew) \
     SCPI_COMMAND("SYSTem:PON:OUTPut:DISable", scpi_cmd_systemPonOutputDisable) \
@@ -321,11 +310,6 @@
     SCPI_COMMAND("SYSTem:TIME:ZONE?", scpi_cmd_systemTimeZoneQ) \
     SCPI_COMMAND("SYSTem:TIME?", scpi_cmd_systemTimeQ) \
     SCPI_COMMAND("SYSTem:VERSion?", scpi_cmd_systemVersionQ) \
-    SCPI_COMMAND("SYSTem:PASSword:CALibration:RESet", scpi_cmd_systemPasswordCalibrationReset) \
-    SCPI_COMMAND("SYSTem:DATE:CLEar", scpi_cmd_systemDateClear) \
-    SCPI_COMMAND("SYSTem:TIME:CLEar", scpi_cmd_systemTimeClear) \
-    SCPI_COMMAND("SYSTem:SERial", scpi_cmd_systemSerial) \
-    SCPI_COMMAND("SYSTem:SERial?", scpi_cmd_systemSerialQ) \
     SCPI_COMMAND("TRIGger[:SEQuence]:DELay", scpi_cmd_triggerSequenceDelay) \
     SCPI_COMMAND("TRIGger[:SEQuence]:DELay?", scpi_cmd_triggerSequenceDelayQ) \
     SCPI_COMMAND("TRIGger[:SEQuence]:EXIT:CONDition", scpi_cmd_triggerSequenceExitCondition) \
@@ -339,6 +323,7 @@
     SCPI_COMMAND("APPLy", scpi_cmd_apply) \
     SCPI_COMMAND("APPLy?", scpi_cmd_applyQ) \
     SCPI_COMMAND("DEBUg?", scpi_cmd_debugQ) \
+    SCPI_COMMAND("SIMUlator:EXIT", scpi_cmd_simulatorExit) \
     SCPI_COMMAND("SIMUlator:GUI", scpi_cmd_simulatorGui) \
     SCPI_COMMAND("SIMUlator:LOAD", scpi_cmd_simulatorLoad) \
     SCPI_COMMAND("SIMUlator:LOAD:STATe", scpi_cmd_simulatorLoadState) \
@@ -355,4 +340,19 @@
     SCPI_COMMAND("SIMUlator:TEMPerature?", scpi_cmd_simulatorTemperatureQ) \
     SCPI_COMMAND("SIMUlator:VOLTage:PROGram:EXTernal", scpi_cmd_simulatorVoltageProgramExternal) \
     SCPI_COMMAND("SIMUlator:VOLTage:PROGram:EXTernal?", scpi_cmd_simulatorVoltageProgramExternalQ) \
-    SCPI_COMMAND("SIMUlator:EXIT", scpi_cmd_simulatorExit)
+    SCPI_COMMAND("DEBUg", scpi_cmd_debug) \
+    SCPI_COMMAND("DEBUg:WDOG", scpi_cmd_debugWdog) \
+    SCPI_COMMAND("DEBUg:WDOG?", scpi_cmd_debugWdogQ) \
+    SCPI_COMMAND("DEBUg:ONTime?", scpi_cmd_debugOntimeQ) \
+    SCPI_COMMAND("DEBUg:VOLTage", scpi_cmd_debugVoltage) \
+    SCPI_COMMAND("DEBUg:CURRent", scpi_cmd_debugCurrent) \
+    SCPI_COMMAND("DEBUg:MEASure:VOLTage", scpi_cmd_debugMeasureVoltage) \
+    SCPI_COMMAND("DEBUg:MEASure:CURRent", scpi_cmd_debugMeasureCurrent) \
+    SCPI_COMMAND("DEBUg:FAN", scpi_cmd_debugFan) \
+    SCPI_COMMAND("DEBUg:FAN?", scpi_cmd_debugFanQ) \
+    SCPI_COMMAND("DEBUg:FAN:PID", scpi_cmd_debugFanPid) \
+    SCPI_COMMAND("DEBUg:FAN:PID?", scpi_cmd_debugFanPidQ) \
+    SCPI_COMMAND("SYSTem:DATE:CLEar", scpi_cmd_systemDateClear) \
+    SCPI_COMMAND("SYSTem:TIME:CLEar", scpi_cmd_systemTimeClear) \
+    SCPI_COMMAND("SYSTem:SERial", scpi_cmd_systemSerial) \
+    SCPI_COMMAND("SYSTem:SERial?", scpi_cmd_systemSerialQ)

@@ -438,7 +438,7 @@
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
 					<p>This command recalls the PSU state stored in the specified storage location. The PSU has ten storage locations in non-volatile memory to store PSU states.</p>
-					<p>It is not possible to recall the PSU state from a storage location that is empty or was deleted. When the firmware is started for the first time, storage locations 1 through 9 are empty (location 0 has the power-on state).</p>
+					<p>It is not possible to recall the PSU state from a storage location that is empty or was deleted (Error 400 will be generated). When the firmware is started for the first time, storage locations 1 through 9 are empty (location 0 has the power-on state).</p>
 					<p>&#160;</p>
 					<p class="note">The PSU uses location 0 to automatically save the state of the PSU at power down.</p>
 				</td>
@@ -491,6 +491,14 @@
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
 					<p class="cmd_code">*RCL 2</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Errors</p>
+				</td>
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+					<p class="cmd_code">400,<a name="__DdeLink__91056_114573492"></a>&quot;<a name="__DdeLink__91056_114573492"></a>Cannot load empty profile&quot;</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">

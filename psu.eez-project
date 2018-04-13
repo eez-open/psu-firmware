@@ -7,18 +7,21 @@
       "configurations": [
         {
           "name": "R3B4",
+          "description": "Early prototype",
           "screenOrientation": "landscape",
-          "properties": "{\n  \"ethernetPort\": 5025,\n  \"channels\": [\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5\n    },\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5\n    }\n  ],\n  \"lists\": {}\n}"
+          "properties": "{\n  \"ethernetPort\": 5025,\n  \"channels\": [\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5,\n      \"maxPower\": 155\n    },\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5,\n      \"maxPower\": 155\n    }\n  ],\n  \"lists\": {}\n}"
         },
         {
           "name": "R5B12",
+          "description": "CrowdSupply crowdfunding version",
           "screenOrientation": "landscape",
-          "properties": "{\n  \"ethernetPort\": 5025,\n  \"channels\": [\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5\n    },\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5\n    }\n  ],\n  \"lists\": {}\n}"
+          "properties": "{\n  \"ethernetPort\": 5025,\n  \"channels\": [\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5,\n      \"maxPower\": 155\n    },\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5,\n      \"maxPower\": 155\n    }\n  ],\n  \"lists\": {}\n}"
         },
         {
           "name": "Simulator",
+          "description": "Cross-platfrom simulator for EEZ PSU",
           "screenOrientation": "landscape",
-          "properties": "{\n  \"ethernetPort\": 5025,\n  \"channels\": [\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5\n    },\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5\n    }\n  ],\n  \"lists\": {}\n}"
+          "properties": "{\n  \"ethernetPort\": 5025,\n  \"channels\": [\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5,\n      \"maxPower\": 155\n    },\n    {\n      \"maxVoltage\": 40,\n      \"maxCurrent\": 5,\n      \"maxPower\": 155\n    }\n  ],\n  \"lists\": {}\n}"
         }
       ],
       "files": [
@@ -2297,18 +2300,14 @@
       "name": "R3B4",
       "buildConfiguration": "R3B4",
       "image": "images/r3b4-front-panel.png",
-      "screenOrientation": "landscape",
       "moduleName": "eez_h24005_r3b4",
       "idn": "Envox,EEZ H24005 (Due)",
       "properties": "",
       "idfName": "EEZ H24005 r3B4",
       "idfShortName": "H24005-R3B4",
-      "idfFirmwareVersion": "1.1",
       "idfGuid": "d0964223-a599-43f6-8aa2-4eb52f76a395",
-      "idfRevisionNumber": "0",
       "idfDescription": "EEZ H24005 two channel power supply",
       "idfSupportedModels": "H24005 r3B4",
-      "idfRevisionComments": "Initial version",
       "idfAuthor": "Envox",
       "sdlFriendlyName": "EEZ H24005 r3B4"
     },
@@ -2316,18 +2315,13 @@
       "name": "R5B12",
       "buildConfiguration": "R5B12",
       "image": "images/r5b12-front-panel.png",
-      "screenOrientation": "landscape",
       "moduleName": "eez_h24005_r5b12",
       "idn": "Envox,EEZ H24005 (Due)",
-      "properties": "",
       "idfName": "EEZ H24005 r5B12",
       "idfShortName": "H24005-R5B12",
-      "idfFirmwareVersion": "1.1",
       "idfGuid": "d2283db7-1e5f-4020-aa2b-bedeee6343a2",
-      "idfRevisionNumber": "0",
       "idfDescription": "EEZ H24005 two channel power supply",
       "idfSupportedModels": "H24005 r5B12",
-      "idfRevisionComments": "Initial version",
       "idfAuthor": "Envox",
       "sdlFriendlyName": "EEZ H24005 r5B12"
     },
@@ -2336,18 +2330,13 @@
       "doNotBuild": false,
       "buildConfiguration": "Simulator",
       "image": "images/simulator-front-panel.png",
-      "screenOrientation": "landscape",
       "moduleName": "eez_h24005_simulator",
       "idn": "Envox,EEZ H24005 (Simulator)",
-      "properties": "",
       "idfName": "EEZ H24005 Simulator",
       "idfShortName": "H24005sim",
-      "idfFirmwareVersion": "1.1",
       "idfGuid": "6f5029f7-a785-445d-af5b-9b66fa13eeca",
-      "idfRevisionNumber": "0",
       "idfDescription": "Simulator for EEZ H24005 power supply",
       "idfSupportedModels": "H24005",
-      "idfRevisionComments": "Initial version",
       "idfAuthor": "Envox",
       "sdlFriendlyName": "EEZ H24005 simulator"
     }
@@ -75883,47 +75872,6 @@
         ]
       },
       {
-        "name": "DEBUG",
-        "commands": [
-          {
-            "name": "DEBUg"
-          },
-          {
-            "name": "DEBUg:WDOG"
-          },
-          {
-            "name": "DEBUg:WDOG?"
-          },
-          {
-            "name": "DEBUg:ONTime?"
-          },
-          {
-            "name": "DEBUg:VOLTage"
-          },
-          {
-            "name": "DEBUg:CURRent"
-          },
-          {
-            "name": "DEBUg:MEASure:VOLTage"
-          },
-          {
-            "name": "DEBUg:MEASure:CURRent"
-          },
-          {
-            "name": "DEBUg:FAN"
-          },
-          {
-            "name": "DEBUg:FAN?"
-          },
-          {
-            "name": "DEBUg:FAN:PID"
-          },
-          {
-            "name": "DEBUg:FAN:PID?"
-          }
-        ]
-      },
-      {
         "name": "5.2. CALibration",
         "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html",
         "commands": [
@@ -76058,7 +76006,7 @@
         ]
       },
       {
-        "name": "5.5. FETCh",
+        "name": "5.5. FETCh (not implemented yet)",
         "helpLink": "EEZ PSU SCPI reference 5.5 - FETCh.html",
         "commands": []
       },
@@ -76986,6 +76934,10 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_loc"
           },
           {
+            "name": "SYSTem:PASSword:CALibration:RESet",
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pass_cal_res"
+          },
+          {
             "name": "SYSTem:PASSword:FPANel:RESet",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pass_fpan_res"
           },
@@ -77084,27 +77036,6 @@
           {
             "name": "SYSTem:VERSion?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_vers"
-          },
-          {
-            "name": "SYSTem:PASSword:CALibration:RESet",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pass_cal_res"
-          }
-        ]
-      },
-      {
-        "name": "SYSTem",
-        "commands": [
-          {
-            "name": "SYSTem:DATE:CLEar"
-          },
-          {
-            "name": "SYSTem:TIME:CLEar"
-          },
-          {
-            "name": "SYSTem:SERial"
-          },
-          {
-            "name": "SYSTem:SERial?"
           }
         ]
       },
@@ -77183,6 +77114,13 @@
         "name": "9. Software simulator",
         "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html",
         "commands": [
+          {
+            "name": "SIMUlator:EXIT",
+            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_exit",
+            "usedIn": [
+              "Simulator"
+            ]
+          },
           {
             "name": "SIMUlator:GUI",
             "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_gui",
@@ -77294,13 +77232,6 @@
             "usedIn": [
               "Simulator"
             ]
-          },
-          {
-            "name": "SIMUlator:EXIT",
-            "helpLink": "EEZ PSU SCPI reference 9 - Software simulator.html#simu_exit",
-            "usedIn": [
-              "Simulator"
-            ]
           }
         ]
       },
@@ -77308,6 +77239,64 @@
         "name": "10. Programming examples",
         "helpLink": "EEZ PSU SCPI reference 10 - Programming examples.html",
         "commands": []
+      },
+      {
+        "name": "DEBUG (not listed)",
+        "commands": [
+          {
+            "name": "DEBUg"
+          },
+          {
+            "name": "DEBUg:WDOG"
+          },
+          {
+            "name": "DEBUg:WDOG?"
+          },
+          {
+            "name": "DEBUg:ONTime?"
+          },
+          {
+            "name": "DEBUg:VOLTage"
+          },
+          {
+            "name": "DEBUg:CURRent"
+          },
+          {
+            "name": "DEBUg:MEASure:VOLTage"
+          },
+          {
+            "name": "DEBUg:MEASure:CURRent"
+          },
+          {
+            "name": "DEBUg:FAN"
+          },
+          {
+            "name": "DEBUg:FAN?"
+          },
+          {
+            "name": "DEBUg:FAN:PID"
+          },
+          {
+            "name": "DEBUg:FAN:PID?"
+          }
+        ]
+      },
+      {
+        "name": "SYSTem (not listed)",
+        "commands": [
+          {
+            "name": "SYSTem:DATE:CLEar"
+          },
+          {
+            "name": "SYSTem:TIME:CLEar"
+          },
+          {
+            "name": "SYSTem:SERial"
+          },
+          {
+            "name": "SYSTem:SERial?"
+          }
+        ]
       }
     ]
   },
