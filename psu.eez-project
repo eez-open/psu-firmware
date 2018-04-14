@@ -2300,8 +2300,7 @@
       "name": "R3B4",
       "buildConfiguration": "R3B4",
       "image": "images/r3b4-front-panel.png",
-      "screenOrientation": "landscape",
-      "moduleName": "eez_h24005_r3b4",
+      "extensionName": "eez_h24005_r3b4",
       "idn": "Envox,EEZ H24005 (Due)",
       "properties": "",
       "idfName": "EEZ H24005 r3B4",
@@ -2319,8 +2318,7 @@
       "name": "R5B12",
       "buildConfiguration": "R5B12",
       "image": "images/r5b12-front-panel.png",
-      "screenOrientation": "landscape",
-      "moduleName": "eez_h24005_r5b12",
+      "extensionName": "eez_h24005_r5b12",
       "idn": "Envox,EEZ H24005 (Due)",
       "idfName": "EEZ H24005 r5B12",
       "idfShortName": "H24005-R5B12",
@@ -2338,8 +2336,7 @@
       "doNotBuild": false,
       "buildConfiguration": "Simulator",
       "image": "images/simulator-front-panel.png",
-      "screenOrientation": "landscape",
-      "moduleName": "eez_h24005_simulator",
+      "extensionName": "eez_h24005_simulator",
       "idn": "Envox,EEZ H24005 (Simulator)",
       "idfName": "EEZ H24005 Simulator",
       "idfShortName": "H24005sim",
@@ -76903,11 +76900,19 @@
           },
           {
             "name": "SYSTem:DIGital:OUTPut:DATA",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_outp_data"
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_outp_data",
+            "usedIn": [
+              "R5B12",
+              "Simulator"
+            ]
           },
           {
             "name": "SYSTem:DIGital:OUTPut:DATA?",
-            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_outp_data"
+            "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_outp_data",
+            "usedIn": [
+              "R5B12",
+              "Simulator"
+            ]
           },
           {
             "name": "SYSTem:DIGital:PIN<n>:FUNCtion",
