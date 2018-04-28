@@ -16,6 +16,23 @@
 PID::PID(double* Input, double* Output, double* Setpoint,
 	double Kp, double Ki, double Kd, int POn, int ControllerDirection)
 {
+	init(Input, Output, Setpoint, Kp, Ki, Kd, POn, ControllerDirection);
+}
+
+/*Constructor (...)*********************************************************
+*    To allow backwards compatability for v1.1, or for people that just want
+*    to use Proportional on Error without explicitly saying so
+***************************************************************************/
+
+PID::PID(double* Input, double* Output, double* Setpoint,
+	double Kp, double Ki, double Kd, int ControllerDirection)
+{
+	init(Input, Output, Setpoint, Kp, Ki, Kd, P_ON_E, ControllerDirection);
+}
+
+void PID::init(double* Input, double* Output, double* Setpoint,
+	double Kp, double Ki, double Kd, int POn, int ControllerDirection)
+{
 	myOutput = Output;
 	myInput = Input;
 	mySetpoint = Setpoint;
@@ -30,18 +47,6 @@ PID::PID(double* Input, double* Output, double* Setpoint,
 	PID::SetTunings(Kp, Ki, Kd, POn);
 
 	lastTime = millis() - SampleTime;
-}
-
-/*Constructor (...)*********************************************************
-*    To allow backwards compatability for v1.1, or for people that just want
-*    to use Proportional on Error without explicitly saying so
-***************************************************************************/
-
-PID::PID(double* Input, double* Output, double* Setpoint,
-	double Kp, double Ki, double Kd, int ControllerDirection)
-	:PID::PID(Input, Output, Setpoint, Kp, Ki, Kd, P_ON_E, ControllerDirection)
-{
-
 }
 
 
