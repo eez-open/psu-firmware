@@ -263,7 +263,7 @@ int checkTrigger() {
                         return SCPI_ERROR_LIST_LENGTHS_NOT_EQUIVALENT;
                     }
 
-                    int err = list::checkLimits();
+                    int err = list::checkLimits(i);
                     if (err) {
                         return err;
                     }

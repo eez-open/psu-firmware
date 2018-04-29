@@ -53,7 +53,7 @@ bool areVoltageAndDwellListLengthsEquivalent(Channel &channel);
 bool areCurrentAndDwellListLengthsEquivalent(Channel &channel);
 bool areVoltageAndCurrentListLengthsEquivalent(Channel &channel);
 
-int checkLimits();
+int checkLimits(int iChannel);
 
 bool loadList(Channel &channel, const char *filePath, int *err);
 bool saveList(Channel &channel, const char *filePath, int *err);
