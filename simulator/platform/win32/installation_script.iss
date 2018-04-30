@@ -23,8 +23,8 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=C:\Users\mvladic\Dropbox\Code\EEZ\psu-firmware\LICENSE.TXT
-OutputDir=C:\Users\mvladic\Dropbox\Code\EEZ\psu-firmware\simulator\platform\win32\Installation
+LicenseFile=..\..\..\LICENSE.TXT
+OutputDir=..\..\..\simulator\platform\win32\Installation
 OutputBaseFilename=setup
 Compression=lzma
 SolidCompression=yes
@@ -37,17 +37,17 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\Users\mvladic\Dropbox\Code\EEZ\psu-firmware\simulator\platform\win32\Release\eez_psu_sim.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\mvladic\Dropbox\Code\EEZ\psu-firmware\simulator\platform\win32\Release\eez_imgui.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\mvladic\Dropbox\Code\EEZ\psu-firmware\simulator\platform\win32\Release\libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\mvladic\Dropbox\Code\EEZ\psu-firmware\simulator\platform\win32\Release\libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\mvladic\Dropbox\Code\EEZ\psu-firmware\simulator\platform\win32\Release\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\mvladic\Dropbox\Code\EEZ\psu-firmware\simulator\platform\win32\Release\SDL2_image.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\mvladic\Dropbox\Code\EEZ\psu-firmware\simulator\platform\win32\Release\SDL2_ttf.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\mvladic\Dropbox\Code\EEZ\psu-firmware\simulator\platform\win32\Release\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\mvladic\Dropbox\Code\EEZ\psu-firmware\simulator\fonts\*"; DestDir: "{app}\fonts"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\mvladic\Dropbox\Code\EEZ\psu-firmware\simulator\images\*"; DestDir: "{app}\images"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\mvladic\Dropbox\Code\EEZ\psu-firmware\doc\SCPI reference guide\EEZ PSU SCPI reference guide.pdf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\..\simulator\platform\win32\Release\eez_psu_sim.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\..\simulator\platform\win32\Release\eez_imgui.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\..\simulator\platform\win32\Release\libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\..\simulator\platform\win32\Release\libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\..\simulator\platform\win32\Release\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\..\simulator\platform\win32\Release\SDL2_image.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\..\simulator\platform\win32\Release\SDL2_ttf.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\..\simulator\platform\win32\Release\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\..\simulator\fonts\*"; DestDir: "{app}\fonts"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\..\..\simulator\images\*"; DestDir: "{app}\images"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\..\..\doc\SCPI reference guide\EEZ PSU SCPI reference guide.pdf"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
