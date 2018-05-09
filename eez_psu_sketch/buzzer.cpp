@@ -19,7 +19,7 @@
 #include "psu.h"
 #include "buzzer.h"
 
-#if defined (_VARIANT_ARDUINO_DUE_X_)
+#if defined(EEZ_PSU_ARDUINO_DUE)
 /*
 Tone generator
 v1  use timer, and toggle any digital pin in ISR

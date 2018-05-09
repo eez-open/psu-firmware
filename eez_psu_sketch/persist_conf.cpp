@@ -777,6 +777,7 @@ bool setSerialSettings(bool enabled, int baudIndex, int parity) {
 }
 
 bool enableEthernet(bool enable) {
+#if OPTION_ETHERNET
     unsigned ethernetEnabled = enable ? 1 : 0;
     if (!devConf2.flags.skipEthernetSetup || devConf.flags.ethernetEnabled != ethernetEnabled) {
         devConf.flags.ethernetEnabled = ethernetEnabled;
@@ -787,6 +788,9 @@ bool enableEthernet(bool enable) {
         ethernet::update();
     }
     return true;
+#else
+    return false;
+#endif
 }
 
 bool isEthernetEnabled() {
@@ -794,6 +798,7 @@ bool isEthernetEnabled() {
 }
 
 bool enableEthernetDhcp(bool enable) {
+#if OPTION_ETHERNET
     unsigned ethernetDhcpEnabled = enable ? 1 : 0;
     if (!devConf2.flags.skipEthernetSetup || devConf2.flags.ethernetDhcpEnabled != ethernetDhcpEnabled) {
         devConf2.flags.ethernetDhcpEnabled = ethernetDhcpEnabled;
@@ -802,6 +807,9 @@ bool enableEthernetDhcp(bool enable) {
         ethernet::update();
     }
     return true;
+#else
+    return false;
+#endif
 }
 
 bool isEthernetDhcpEnabled() {
@@ -809,6 +817,7 @@ bool isEthernetDhcpEnabled() {
 }
 
 bool setEthernetMacAddress(uint8_t macAddress[]) {
+#if OPTION_ETHERNET
     if (!devConf2.flags.skipEthernetSetup || memcmp(devConf2.ethernetMacAddress, macAddress, 6) != 0) {
         memcpy(devConf2.ethernetMacAddress, macAddress, 6);
         devConf2.flags.skipEthernetSetup = 1;
@@ -816,9 +825,13 @@ bool setEthernetMacAddress(uint8_t macAddress[]) {
         ethernet::update();
     }
     return true;
+#else
+    return false;
+#endif
 }
 
 bool setEthernetIpAddress(uint32_t ipAddress) {
+#if OPTION_ETHERNET
     if (!devConf2.flags.skipEthernetSetup || devConf2.ethernetIpAddress != ipAddress) {
         devConf2.ethernetIpAddress = ipAddress;
         devConf2.flags.skipEthernetSetup = 1;
@@ -826,19 +839,27 @@ bool setEthernetIpAddress(uint32_t ipAddress) {
         ethernet::update();
     }
     return true;
+#else
+    return false;
+#endif
 }
 
 bool setEthernetDns(uint32_t dns) {
-    if (!devConf2.flags.skipEthernetSetup || devConf2.ethernetDns != dns) {
+#if OPTION_ETHERNET
+	if (!devConf2.flags.skipEthernetSetup || devConf2.ethernetDns != dns) {
         devConf2.ethernetDns = dns;
         devConf2.flags.skipEthernetSetup = 1;
         saveDevice2();
         ethernet::update();
     }
     return true;
+#else
+    return false;
+#endif
 }
 
 bool setEthernetGateway(uint32_t gateway) {
+#if OPTION_ETHERNET
     if (!devConf2.flags.skipEthernetSetup || devConf2.ethernetGateway != gateway) {
         devConf2.ethernetGateway = gateway;
         devConf2.flags.skipEthernetSetup = 1;
@@ -846,9 +867,13 @@ bool setEthernetGateway(uint32_t gateway) {
         ethernet::update();
     }
     return true;
+#else
+    return false;
+#endif
 }
 
 bool setEthernetSubnetMask(uint32_t subnetMask) {
+#if OPTION_ETHERNET
     if (!devConf2.flags.skipEthernetSetup || devConf2.ethernetSubnetMask != subnetMask) {
         devConf2.ethernetSubnetMask = subnetMask;
         devConf2.flags.skipEthernetSetup = 1;
@@ -856,9 +881,13 @@ bool setEthernetSubnetMask(uint32_t subnetMask) {
         ethernet::update();
     }
     return true;
+#else
+    return false;
+#endif
 }
 
 bool setEthernetScpiPort(uint16_t scpiPort) {
+#if OPTION_ETHERNET
     if (!devConf2.flags.skipEthernetSetup || devConf2.ethernetScpiPort != scpiPort) {
         devConf2.ethernetScpiPort = scpiPort;
         devConf2.flags.skipEthernetSetup = 1;
@@ -866,9 +895,13 @@ bool setEthernetScpiPort(uint16_t scpiPort) {
         ethernet::update();
     }
     return true;
+#else
+    return false;
+#endif
 }
 
 bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint32_t dns, uint32_t gateway, uint32_t subnetMask, uint16_t scpiPort, uint8_t *macAddress) {
+#if OPTION_ETHERNET
     unsigned ethernetEnabled = enable ? 1 : 0;
     unsigned ethernetDhcpEnabled = enable ? 1 : 0;
 
@@ -904,6 +937,9 @@ bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint3
     }
 
     return true;
+#else
+    return false;
+#endif
 }
 
 bool enableNtp(bool enable) {

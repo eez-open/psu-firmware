@@ -20,12 +20,12 @@
 
 #include "temperature.h"
 
+#define PROFILE_EXT ".profile"
+
 namespace eez {
 namespace psu {
 /// PSU configuration profiles (save, recall, ...).
 namespace profile {
-
-static const char *PROFILE_EXT = ".profile";
 
 /// Channel binary flags stored in profile.
 struct ChannelFlags {

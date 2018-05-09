@@ -86,11 +86,6 @@ using namespace lcd;
 Styles *g_styles;
 Document *g_document;
 
-#if defined(EEZ_PSU_ARDUINO_MEGA)
-static Styles g_stylesBuffer;
-static Document g_documentBuffer;
-#endif
-
 static int g_activePageId;
 static Page *g_activePage;
 
@@ -449,27 +444,27 @@ void infoMessage(data::Value value, void (*ok_callback)()) {
     alertMessage(PAGE_ID_INFO_ALERT, value, ok_callback);
 }
 
-void infoMessageP(const char *message PROGMEM, void (*ok_callback)()) {
-    alertMessage(PAGE_ID_INFO_ALERT, data::Value::ProgmemStr(message), ok_callback);
+void infoMessageP(const char *message, void (*ok_callback)()) {
+    alertMessage(PAGE_ID_INFO_ALERT, data::Value(message), ok_callback);
 }
 
 void longInfoMessage(data::Value value1, data::Value value2, void (*ok_callback)()) {
     longAlertMessage(PAGE_ID_INFO_LONG_ALERT, value1, value2, ok_callback);
 }
 
-void longInfoMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, void (*ok_callback)()) {
-    longInfoMessage(data::Value::ProgmemStr(message1), data::Value::ProgmemStr(message2), ok_callback);
+void longInfoMessageP(const char *message1, const char *message2, void (*ok_callback)()) {
+    longInfoMessage(data::Value(message1), data::Value(message2), ok_callback);
 }
 
 void longErrorMessage(data::Value value1, data::Value value2, void (*ok_callback)()) {
     longAlertMessage(PAGE_ID_ERROR_LONG_ALERT, value1, value2, ok_callback);
 }
 
-void longErrorMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, void (*ok_callback)()) {
-    longErrorMessage(data::Value::ProgmemStr(message1), data::Value::ProgmemStr(message2), ok_callback);
+void longErrorMessageP(const char *message1, const char *message2, void (*ok_callback)()) {
+    longErrorMessage(data::Value(message1), data::Value(message2), ok_callback);
 }
 
-void toastMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, const char *message3 PROGMEM, void (*ok_callback)()) {
+void toastMessageP(const char *message1, const char *message2, const char *message3, void (*ok_callback)()) {
     data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE_3, message3, 0);
     longAlertMessage(PAGE_ID_TOAST3_ALERT, message1, message2, ok_callback);
 }
@@ -519,7 +514,7 @@ void changeLimit(Channel& channel,  const data::Value& value, float minLimit, fl
 void onSetVoltageLimit(float limit) {
     Channel& channel = Channel::get(g_errorMessageActionParam);
     channel_dispatcher::setVoltageLimit(channel, limit);
-    infoMessageP(PSTR("Voltage limit changed!"), popPage);
+    infoMessageP("Voltage limit changed!", popPage);
 }
 
 void changeVoltageLimit() {
@@ -533,7 +528,7 @@ void changeVoltageLimit() {
 void onSetCurrentLimit(float limit) {
     Channel& channel = Channel::get(g_errorMessageActionParam);
     channel_dispatcher::setCurrentLimit(channel, limit);
-    infoMessageP(PSTR("Current limit changed!"), popPage);
+    infoMessageP("Current limit changed!", popPage);
 }
 
 void changeCurrentLimit() {
@@ -547,7 +542,7 @@ void changeCurrentLimit() {
 void onSetPowerLimit(float limit) {
     Channel& channel = Channel::get(g_errorMessageActionParam);
     channel_dispatcher::setPowerLimit(channel, limit);
-    infoMessageP(PSTR("Power limit changed!"), popPage);
+    infoMessageP("Power limit changed!", popPage);
 }
 
 void changePowerLimit() {
@@ -563,7 +558,7 @@ void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callb
 
     if (value.getType() == VALUE_TYPE_SCPI_ERROR_TEXT) {
         void (*action)() = 0;
-        const char *actionLabel PROGMEM = 0;
+        const char *actionLabel = 0;
 
         int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
         Channel& channel = Channel::get(iChannel);
@@ -571,21 +566,21 @@ void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callb
         if (value.getScpiError() == SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED) {
             if (channel_dispatcher::getULimit(channel) < channel_dispatcher::getUMaxLimit(channel)) {
                 action = changeVoltageLimit;
-                actionLabel = PSTR("Change voltage limit");
+                actionLabel = "Change voltage limit";
             } else {
                 errorPageId = PAGE_ID_ERROR_TOAST_ALERT;
             }
         } else if (value.getScpiError() == SCPI_ERROR_CURRENT_LIMIT_EXCEEDED) {
             if (channel_dispatcher::getILimit(channel) < channel_dispatcher::getIMaxLimit(channel)) {
                 action = changeCurrentLimit;
-                actionLabel = PSTR("Change current limit");
+                actionLabel = "Change current limit";
             } else {
                 errorPageId = PAGE_ID_ERROR_TOAST_ALERT;
             }
         } else if (value.getScpiError() == SCPI_ERROR_POWER_LIMIT_EXCEEDED) {
             if (channel_dispatcher::getPowerLimit(channel) < channel_dispatcher::getPowerMaxLimit(channel)) {
                 action = changePowerLimit;
-                actionLabel = PSTR("Change power limit");
+                actionLabel = "Change power limit";
             } else {
                 errorPageId = PAGE_ID_ERROR_TOAST_ALERT;
             }
@@ -604,13 +599,13 @@ void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callb
 }
 
 
-void errorMessageP(const char *message PROGMEM, void (*ok_callback)()) {
-    alertMessage(PAGE_ID_ERROR_ALERT, data::Value::ProgmemStr(message), ok_callback);
+void errorMessageP(const char *message, void (*ok_callback)()) {
+    alertMessage(PAGE_ID_ERROR_ALERT, data::Value(message), ok_callback);
     sound::playBeep();
 }
 
-void yesNoDialog(int yesNoPageId, const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
-    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message), 0);
+void yesNoDialog(int yesNoPageId, const char *message, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)()) {
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value(message), 0);
 
     g_dialogYesCallback = yes_callback;
     g_dialogNoCallback = no_callback;
@@ -620,10 +615,10 @@ void yesNoDialog(int yesNoPageId, const char *message PROGMEM, void (*yes_callba
 }
 
 void areYouSure(void (*yes_callback)()) {
-    yesNoDialog(PAGE_ID_YES_NO, PSTR("Are you sure?"), yes_callback, 0, 0);
+    yesNoDialog(PAGE_ID_YES_NO, "Are you sure?", yes_callback, 0, 0);
 }
 
-void areYouSureWithMessage(const char *message PROGMEM, void (*yes_callback)()) {
+void areYouSureWithMessage(const char *message, void (*yes_callback)()) {
     yesNoDialog(PAGE_ID_ARE_YOU_SURE_WITH_MESSAGE, message, yes_callback, 0, 0);
 }
 
@@ -662,8 +657,8 @@ void hideProgressPage() {
     }
 }
 
-void yesNoLater(const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*later_callback)() = 0) {
-    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value::ProgmemStr(message), 0);
+void yesNoLater(const char *message, void (*yes_callback)(), void (*no_callback)(), void (*later_callback)() = 0) {
+    data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value(message), 0);
 
     g_dialogYesCallback = yes_callback;
     g_dialogNoCallback = no_callback;
@@ -677,7 +672,7 @@ static bool isChannelTripLastEvent(int i, event_queue::Event &lastEvent) {
     if (lastEvent.eventId == (event_queue::EVENT_ERROR_CH1_OVP_TRIPPED + i * 3) ||
         lastEvent.eventId == (event_queue::EVENT_ERROR_CH1_OCP_TRIPPED + i * 3) ||
         lastEvent.eventId == (event_queue::EVENT_ERROR_CH1_OPP_TRIPPED + i * 3) ||
-        lastEvent.eventId == (event_queue::EVENT_ERROR_CH1_OTP_TRIPPED + i)) 
+        lastEvent.eventId == (event_queue::EVENT_ERROR_CH1_OTP_TRIPPED + i))
     {
         return Channel::get(i).isTripped();
     }
@@ -706,17 +701,17 @@ static void doUnlockFrontPanel() {
     popPage();
 
     if (persist_conf::lockFrontPanel(false)) {
-        infoMessageP(PSTR("Front panel is unlocked!"));
+        infoMessageP("Front panel is unlocked!");
     }
 }
 
 static void checkPasswordToUnlockFrontPanel() {
-    checkPassword(PSTR("Password: "), persist_conf::devConf2.systemPassword, doUnlockFrontPanel);
+    checkPassword("Password: ", persist_conf::devConf2.systemPassword, doUnlockFrontPanel);
 }
 
 void lockFrontPanel() {
     if (persist_conf::lockFrontPanel(true)) {
-        infoMessageP(PSTR("Front panel is locked!"));
+        infoMessageP("Front panel is locked!");
     }
 }
 
@@ -725,7 +720,7 @@ void unlockFrontPanel() {
         checkPasswordToUnlockFrontPanel();
     } else {
         if (persist_conf::lockFrontPanel(false)) {
-            infoMessageP(PSTR("Front panel is unlocked!"));
+            infoMessageP("Front panel is unlocked!");
         }
     }
 }
@@ -847,6 +842,7 @@ bool showSetupWizardQuestion() {
         }
     }
 
+#if OPTION_ETHERNET
     if (!g_deviceFlags2.skipEthernetSetup) {
         g_deviceFlags2.skipEthernetSetup = 1;
         if (!persist_conf::isEthernetEnabled()) {
@@ -854,6 +850,7 @@ bool showSetupWizardQuestion() {
             return true;
         }
     }
+#endif
 
     if (!g_deviceFlags2.skipDateTimeSetup) {
         g_deviceFlags2.skipDateTimeSetup = 1;
@@ -911,7 +908,7 @@ bool isFocusChanged() {
 bool isEnabledFocusCursor(data::Cursor& cursor, uint8_t dataId) {
     int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
     Channel &channel = Channel::get(iChannel);
-    return channel.isOk() && 
+    return channel.isOk() &&
         (channel_dispatcher::getVoltageTriggerMode(channel) == TRIGGER_MODE_FIXED || trigger::isIdle()) &&
         !(dataId == DATA_ID_CHANNEL_U_EDIT && channel.isRemoteProgrammingEnabled());
 }
@@ -1015,8 +1012,8 @@ void onEncoder(uint32_t tickCount, int counter, bool clicked) {
                 if (((NumericKeypad *)getActiveKeypad())->onEncoderClick(counter)) {
                     return;
                 }
-            } 
-            
+            }
+
             if (isFocusChanged()) {
                 // confirmation
                 int16_t error;
@@ -1046,7 +1043,7 @@ void onEncoder(uint32_t tickCount, int counter, bool clicked) {
                 return;
             }
         }
-    
+
         if (g_activePageId == PAGE_ID_EDIT_MODE_STEP) {
             edit_mode_step::onEncoder(counter);
             return;
@@ -1105,7 +1102,7 @@ void channelReinitiateTrigger() {
 void channelToggleOutput() {
     Channel& channel = Channel::get(g_foundWidgetAtDown.cursor.i >= 0 ? g_foundWidgetAtDown.cursor.i : 0);
     if (channel_dispatcher::isTripped(channel)) {
-        errorMessageP(PSTR("Channel is tripped!"));
+        errorMessageP("Channel is tripped!");
     } else {
         bool triggerModeEnabled = channel_dispatcher::getVoltageTriggerMode(channel) != TRIGGER_MODE_FIXED ||
             channel_dispatcher::getCurrentTriggerMode(channel) != TRIGGER_MODE_FIXED;
@@ -1133,7 +1130,7 @@ void channelToggleOutput() {
                     g_toggleOutputWidgetCursor = g_foundWidgetAtDown;
                     pushPage(PAGE_ID_CH_START_LIST);
                 } else {
-                    yesNoDialog(PAGE_ID_YES_NO, PSTR("Trigger is active. Re-initiate trigger?"), channelReinitiateTrigger, 0, 0);
+                    yesNoDialog(PAGE_ID_YES_NO, "Trigger is active. Re-initiate trigger?", channelReinitiateTrigger, 0, 0);
                 }
             } else {
                 channel_dispatcher::outputEnable(channel, true);
@@ -1205,16 +1202,8 @@ void init() {
     g_activePageId = INTERNAL_PAGE_ID_NONE;
     g_activePage = 0;
 
-#if defined(EEZ_PSU_ARDUINO_MEGA)
-    arduino_util::prog_read_buffer(styles, (uint8_t *)&g_stylesBuffer, sizeof(Styles));
-    g_styles = &g_stylesBuffer;
-
-    arduino_util::prog_read_buffer(pages, (uint8_t *)&g_documentBuffer, sizeof(Document));
-    g_document = &g_documentBuffer;
-#else
     g_styles = (Styles *)styles;
     g_document = (Document *)document;
-#endif
 }
 
 int getStartPageId() {
@@ -1249,7 +1238,7 @@ void pushEvent(EventType type) {
     // ignore EVENT_TYPE_TOUCH_MOVE if it is the same as the last event
     if (type == EVENT_TYPE_TOUCH_MOVE) {
         if (g_numEvents > 0 && g_events[g_numEvents-1].type == EVENT_TYPE_TOUCH_MOVE &&
-            g_events[g_numEvents-1].x == touch::x || g_events[g_numEvents-1].y == touch::y) {
+            g_events[g_numEvents-1].x == touch::g_x && g_events[g_numEvents-1].y == touch::g_y) {
             return;
         }
     }
@@ -1270,8 +1259,8 @@ void pushEvent(EventType type) {
     if (g_numEvents < MAX_EVENTS) {
         // push new event on the stack
         g_events[g_numEvents].type = type;
-        g_events[g_numEvents].x = touch::x;
-        g_events[g_numEvents].y = touch::y;
+        g_events[g_numEvents].x = touch::g_x;
+        g_events[g_numEvents].y = touch::g_y;
         ++g_numEvents;
     }
 }
@@ -1288,15 +1277,15 @@ void touchHandling(uint32_t tick_usec) {
         return;
     }
 
-    if (touch::event_type != touch::TOUCH_NONE) {
+    if (touch::g_eventType != touch::TOUCH_NONE) {
         idle::noteGuiActivity();
 
-        if (touch::event_type == touch::TOUCH_DOWN) {
+        if (touch::g_eventType == touch::TOUCH_DOWN) {
             g_touchDownTime = tick_usec;
             g_lastAutoRepeatEventTime = tick_usec;
             g_longTapGenerated = false;
             pushEvent(EVENT_TYPE_TOUCH_DOWN);
-        } else if (touch::event_type == touch::TOUCH_MOVE) {
+        } else if (touch::g_eventType == touch::TOUCH_MOVE) {
             pushEvent(EVENT_TYPE_TOUCH_MOVE);
 
             if (!g_longTapGenerated && int32_t(tick_usec - g_touchDownTime) >= CONF_GUI_LONG_TAP_TIMEOUT) {
@@ -1315,7 +1304,7 @@ void touchHandling(uint32_t tick_usec) {
 					setPage(PAGE_ID_SCREEN_CALIBRATION_INTRO);
 				}
 			}
-        } else if (touch::event_type == touch::TOUCH_UP) {
+        } else if (touch::g_eventType == touch::TOUCH_UP) {
             pushEvent(EVENT_TYPE_TOUCH_UP);
         }
     }
@@ -1366,7 +1355,7 @@ void processEvents() {
                                 g_foundTouchWidget = foundWidget;
                                 onTouchListGraph(g_foundTouchWidget, g_events[i].x, g_events[i].y);
                                 sound::playClick();
-                            } 
+                            }
                         }
                     }
                 }
@@ -1390,7 +1379,6 @@ void processEvents() {
                         lcd::lcd.fillRect(g_events[i].x - 1, g_events[i].y - 1, g_events[i].x + 1, g_events[i].y + 1);
         #endif
                     } else if (g_foundTouchWidget) {
-                        DECL_WIDGET(widget, g_foundTouchWidget.widgetOffset);
                         onTouchListGraph(g_foundTouchWidget, g_events[i].x, g_events[i].y);
                     }
                 }
@@ -1572,8 +1560,7 @@ void tick(uint32_t tick_usec) {
     }
 
     if (g_activePageId == PAGE_ID_ASYNC_OPERATION_IN_PROGRESS) {
-        static char *throbber[] = {"|", "/", "-", "\\", "|", "/", "-", "\\"};
-        data::set(data::Cursor(), DATA_ID_ASYNC_OPERATION_THROBBER, data::Value(throbber[(tick_usec % 1000000) / 125000]), 0);
+        data::set(data::Cursor(), DATA_ID_ASYNC_OPERATION_THROBBER, data::Value(data::g_throbber[(tick_usec % 1000000) / 125000]), 0);
 		if (g_checkAsyncOperationStatus) {
 			g_checkAsyncOperationStatus();
 		}
@@ -1581,7 +1568,7 @@ void tick(uint32_t tick_usec) {
 
     if (psu::g_rprogAlarm) {
         psu::g_rprogAlarm = false;
-        longErrorMessage(PSTR("Max. remote prog. voltage exceeded."), PSTR("Please remove it immediately!"));
+        longErrorMessage("Max. remote prog. voltage exceeded.", "Please remove it immediately!");
     }
 
     drawTick();

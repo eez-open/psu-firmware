@@ -30,11 +30,11 @@ void counterToString(char *str, size_t count, uint32_t counterTime) {
 	if (counterTime >= 24 * 60) {
 		uint32_t d = counterTime / (24 * 60);
 		counterTime -= d * (24 * 60);
-		snprintf_P(str, count-1, PSTR("%dd %dh %dm"), int(d), int(counterTime / 60), int(counterTime % 60));
+		snprintf(str, count-1, "%dd %dh %dm", int(d), int(counterTime / 60), int(counterTime % 60));
 	} else if (counterTime >= 60) {
-		snprintf_P(str, count-1, PSTR("%dh %dm"), int(counterTime / 60), int(counterTime % 60));
+		snprintf(str, count-1, "%dh %dm", int(counterTime / 60), int(counterTime % 60));
 	} else {
-		snprintf_P(str, count-1, PSTR("%dm"), int(counterTime));
+		snprintf(str, count-1, "%dm", int(counterTime));
 	}
 
 	str[count-1] = 0;
@@ -42,9 +42,10 @@ void counterToString(char *str, size_t count, uint32_t counterTime) {
 
 Counter::Counter(int type_)
 	: typeAndIsActive(type_)
+	, totalTime(0)
 	, lastTime(0)
-	, writeInterval(WRITE_ONTIME_INTERVAL * MIN_TO_MS)
 	, fractionTime(0)
+	, writeInterval(WRITE_ONTIME_INTERVAL * MIN_TO_MS)
 {
 }
 

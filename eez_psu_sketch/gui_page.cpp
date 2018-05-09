@@ -223,7 +223,7 @@ void SelectFromEnumPage::getItemLabel(int itemIndex, char *text, int count) {
     
     text[1] = ' ';
 
-    strncpy_P(text + 2, enumDefinition[itemIndex].menuLabel, count - 3);
+    strncpy(text + 2, enumDefinition[itemIndex].menuLabel, count - 3);
     
     text[count - 1] = 0;
 }

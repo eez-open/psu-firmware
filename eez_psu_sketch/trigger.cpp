@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "trigger.h"
 #include "channel_dispatcher.h"
-#include "list.h"
+#include "list_program.h"
 #include "profile.h"
 #include "persist_conf.h"
 #include "io_pins.h"
@@ -82,8 +82,8 @@ void reset() {
 
 void extTrigInterruptHandler() {
     uint8_t state = digitalRead(EXT_TRIG);
-    if (state == 1 && g_extTrigLastState == 0 && persist_conf::devConf2.ioPins[0].polarity == io_pins::POLARITY_POSITIVE ||
-        state == 0 && g_extTrigLastState == 1 && persist_conf::devConf2.ioPins[0].polarity == io_pins::POLARITY_NEGATIVE) {
+    if ((state == 1 && g_extTrigLastState == 0 && persist_conf::devConf2.ioPins[0].polarity == io_pins::POLARITY_POSITIVE) ||
+        (state == 0 && g_extTrigLastState == 1 && persist_conf::devConf2.ioPins[0].polarity == io_pins::POLARITY_NEGATIVE)) {
         generateTrigger(SOURCE_PIN1, false);
     }
     g_extTrigLastState = state;

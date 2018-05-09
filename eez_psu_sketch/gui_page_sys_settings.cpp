@@ -275,7 +275,7 @@ void SysSettingsDateTimePage::checkTestNtpServerStatus() {
             SysSettingsDateTimePage *page = (SysSettingsDateTimePage*)getActivePage();
             page->doSet();
         } else {
-            errorMessageP(PSTR("Unable to connect to NTP server!"));
+            errorMessageP("Unable to connect to NTP server!");
         }
     }
 }
@@ -302,12 +302,12 @@ void SysSettingsDateTimePage::set() {
 void SysSettingsDateTimePage::doSet() {
     if (!ntpEnabled) {
         if (!datetime::isValidDate(uint8_t(dateTime.year - 2000), dateTime.month, dateTime.day)) {
-            errorMessageP(PSTR("Invalid date!"));
+            errorMessageP("Invalid date!");
             return;
         }
 
         if (!datetime::isValidTime(dateTime.hour, dateTime.minute, dateTime.second)) {
-            errorMessageP(PSTR("Invalid time!"));
+            errorMessageP("Invalid time!");
             popPage();
 		    return;
         }
@@ -341,7 +341,7 @@ void SysSettingsDateTimePage::doSet() {
         event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
     }
 
-    infoMessageP(PSTR("Date and time settings saved!"), popPage);
+    infoMessageP("Date and time settings saved!", popPage);
 	return;
 }
 
@@ -429,7 +429,7 @@ void SysSettingsEthernetPage::editScpiPort() {
 void SysSettingsEthernetPage::onSetMacAddress(char *value) {
     uint8_t macAddress[6];
     if (!util::parseMacAddress(value, strlen(value), macAddress)) {
-        errorMessageP(PSTR("Invalid MAC address!"));
+        errorMessageP("Invalid MAC address!");
         return;
     }
 
@@ -460,7 +460,7 @@ int SysSettingsEthernetPage::getDirty() {
 void SysSettingsEthernetPage::set() {
     if (getDirty()) {
         if (persist_conf::setEthernetSettings(m_enabled, m_dhcpEnabled, m_ipAddress, m_dns, m_gateway, m_subnetMask, m_scpiPort, m_macAddress)) {
-            longInfoMessageP(PSTR("Turn off and on power or"), PSTR("press reset to apply changes!"), popPage);
+            longInfoMessageP("Turn off and on power or", "press reset to apply changes!", popPage);
         }
     }
 }
@@ -578,11 +578,11 @@ data::Value SysSettingsProtectionsPage::getData(const data::Cursor &cursor, uint
 void SysSettingsProtectionsPage::toggleOutputProtectionCouple() {
     if (persist_conf::isOutputProtectionCoupleEnabled()) {
         if (persist_conf::enableOutputProtectionCouple(false)) {
-            infoMessageP(PSTR("Output protection decoupled!"));
+            infoMessageP("Output protection decoupled!");
         }
     } else {
         if (persist_conf::enableOutputProtectionCouple(true)) {
-            infoMessageP(PSTR("Output protection coupled!"));
+            infoMessageP("Output protection coupled!");
         }
     }
 }
@@ -590,11 +590,11 @@ void SysSettingsProtectionsPage::toggleOutputProtectionCouple() {
 void SysSettingsProtectionsPage::toggleShutdownWhenProtectionTripped() {
     if (persist_conf::isShutdownWhenProtectionTrippedEnabled()) {
         if (persist_conf::enableShutdownWhenProtectionTripped(false)) {
-            infoMessageP(PSTR("Shutdown when tripped disabled!"));
+            infoMessageP("Shutdown when tripped disabled!");
         }
     } else {
         if (persist_conf::enableShutdownWhenProtectionTripped(true)) {
-            infoMessageP(PSTR("Shutdown when tripped enabled!"));
+            infoMessageP("Shutdown when tripped enabled!");
         }
     }
 }
@@ -602,11 +602,11 @@ void SysSettingsProtectionsPage::toggleShutdownWhenProtectionTripped() {
 void SysSettingsProtectionsPage::toggleForceDisablingAllOutputsOnPowerUp() {
     if (persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled()) {
         if (persist_conf::enableForceDisablingAllOutputsOnPowerUp(false)) {
-            infoMessageP(PSTR("Force disabling outputs disabled!"));
+            infoMessageP("Force disabling outputs disabled!");
         }
     } else {
         if (persist_conf::enableForceDisablingAllOutputsOnPowerUp(true)) {
-            infoMessageP(PSTR("Force disabling outputs enabled!"));
+            infoMessageP("Force disabling outputs enabled!");
         }
     }
 }
@@ -718,12 +718,12 @@ void SysSettingsAuxOtpPage::setParams() {
     temperature::sensors[temp_sensor::AUX].prot_conf.delay = delay.getFloat();
 
     profile::save();
-    infoMessageP(PSTR("Aux temp. protection changed!"), popPage);
+    infoMessageP("Aux temp. protection changed!", popPage);
 }
 
 void SysSettingsAuxOtpPage::clear() {
     temperature::sensors[temp_sensor::AUX].clearProtection();
-    infoMessageP(PSTR("Cleared!"), popPage);
+    infoMessageP("Cleared!", popPage);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -743,11 +743,11 @@ data::Value SysSettingsSoundPage::getData(const data::Cursor &cursor, uint8_t id
 void SysSettingsSoundPage::toggleSound() {
     if (persist_conf::isSoundEnabled()) {
         if (persist_conf::enableSound(false)) {
-            infoMessageP(PSTR("Sound disabled!"));
+            infoMessageP("Sound disabled!");
         }
     } else {
         if (persist_conf::enableSound(true)) {
-            infoMessageP(PSTR("Sound enabled!"));
+            infoMessageP("Sound enabled!");
         }
     }
 }
@@ -755,11 +755,11 @@ void SysSettingsSoundPage::toggleSound() {
 void SysSettingsSoundPage::toggleClickSound() {
     if (persist_conf::isClickSoundEnabled()) {
         if (persist_conf::enableClickSound(false)) {
-            infoMessageP(PSTR("Click sound disabled!"));
+            infoMessageP("Click sound disabled!");
         }
     } else {
         if (persist_conf::enableClickSound(true)) {
-            infoMessageP(PSTR("Click sound enabled!"));
+            infoMessageP("Click sound enabled!");
         }
     }
 }
@@ -836,7 +836,7 @@ int SysSettingsEncoderPage::getDirty() {
 void SysSettingsEncoderPage::set() {
 	if (getDirty()) {
         persist_conf::setEncoderSettings(confirmationMode, movingSpeedDown, movingSpeedUp);
-		infoMessageP(PSTR("Encoder settings changed!"), popPage);
+		infoMessageP("Encoder settings changed!", popPage);
 	}
 }
 
@@ -979,7 +979,7 @@ void SysSettingsTriggerPage::set() {
 
         persist_conf::saveDevice2();
 
-        infoMessageP(PSTR("Trigger settings saved!"), popPage);
+        infoMessageP("Trigger settings saved!", popPage);
     }
 }
 
@@ -1052,7 +1052,7 @@ void SysSettingsIOPinsPage::set() {
         }
 
         if (persist_conf::saveDevice2()) {
-            infoMessageP(PSTR("Digital I/O pin settings saved!"), popPage);
+            infoMessageP("Digital I/O pin settings saved!", popPage);
         }
 
         io_pins::refresh();
@@ -1135,7 +1135,7 @@ int SysSettingsSerialPage::getDirty() {
 void SysSettingsSerialPage::set() {
     if (getDirty()) {
         if (persist_conf::setSerialSettings(m_enabled, m_baudIndex, m_parity)) {
-            infoMessageP(PSTR("Serial settings saved!"), popPage);
+            infoMessageP("Serial settings saved!", popPage);
         }
     }
 }

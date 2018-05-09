@@ -21,7 +21,6 @@
 #if OPTION_DISPLAY
 
 #include "font.h"
-#include "arduino_util.h"
 
 namespace eez {
 namespace psu {
@@ -46,15 +45,18 @@ offset
 Font::Font() : fontData(0) {
 }
 
-Font::Font(const uint8_t *data PROGMEM) : fontData(data) {
+Font::Font(const uint8_t *data) : fontData(data) {
 }
 
 uint8_t Font::getByte(int offset) {
-    return arduino_util::prog_read_byte(fontData + offset);
+    return *(fontData + offset);
 }
 
 uint16_t Font::getWord(int offset) {
-    return arduino_util::prog_read_word(fontData + offset);
+    const uint8_t *p = fontData + offset;
+    uint8_t h = *p++;
+    uint8_t l = *p;
+    return (((uint16_t)h) << 8) + l;
 }
 
 uint8_t Font::getAscent() {
@@ -77,8 +79,8 @@ uint8_t Font::getHeight() {
     return getAscent() + getDescent();
 }
 
-const uint8_t * PROGMEM Font::findGlyphData(uint8_t requested_encoding) {
-    const uint8_t *p PROGMEM = fontData;
+const uint8_t *Font::findGlyphData(uint8_t requested_encoding) {
+    const uint8_t *p = fontData;
 
     uint8_t start = getEncodingStart();
     uint8_t end = getEncodingEnd();
@@ -105,11 +107,11 @@ void Font::fillGlyphParameters(Glyph &glyph) {
     Note: byte 0 == 255 indicates empty glyph
     */
 
-    glyph.dx = arduino_util::prog_read_byte(glyph.data + 0);
-    glyph.width = arduino_util::prog_read_byte(glyph.data + 1);
-    glyph.height = arduino_util::prog_read_byte(glyph.data + 2);
-    glyph.x = arduino_util::prog_read_byte(glyph.data + 3);
-    glyph.y = arduino_util::prog_read_byte(glyph.data + 4);
+    glyph.dx = *((uint8_t *)(glyph.data + 0));
+    glyph.width = *((uint8_t *)(glyph.data + 1));
+    glyph.height = *((uint8_t *)(glyph.data + 2));
+    glyph.x = *((uint8_t *)(glyph.data + 3));
+    glyph.y = *((uint8_t *)(glyph.data + 4));
 }
 
 void Font::getGlyph(uint8_t requested_encoding, Glyph &glyph) {

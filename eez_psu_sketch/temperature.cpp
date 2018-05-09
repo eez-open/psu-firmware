@@ -168,8 +168,8 @@ bool isAllowedToPowerUp() {
 ////////////////////////////////////////////////////////////////////////////////
 
 TempSensorTemperature::TempSensorTemperature(int sensorIndex_)
-	: sensorIndex(sensorIndex_)
-	, temperature(NAN)
+	: temperature(NAN)
+	, sensorIndex(sensorIndex_)
 {
 }
 

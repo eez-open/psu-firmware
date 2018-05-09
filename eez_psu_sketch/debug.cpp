@@ -201,7 +201,7 @@ void Trace(const char *format, ...) {
 
     va_list args;
     va_start(args, format);
-    vsnprintf_P(traceBuffer, sizeof(traceBuffer), format, args);
+    vsnprintf(traceBuffer, sizeof(traceBuffer), format, args);
 
     if (g_insideInterruptHandler) {
         dumpTraceBufferOnNextTick = true;
@@ -237,7 +237,7 @@ void DebugValueVariable::dump(char *buffer) {
 ////////////////////////////////////////////////////////////////////////////////
 
 DebugDurationForPeriod::DebugDurationForPeriod() 
-    : m_min(4294967295)
+    : m_min(4294967295UL)
     , m_max(0)
     , m_total(0)
     , m_count(0)
@@ -268,7 +268,7 @@ void DebugDurationForPeriod::tickPeriod() {
         m_avgLast = 0;
     }
 
-    m_min = 4294967295;
+    m_min = 4294967295UL;
     m_max = 0;
     m_total = 0;
     m_count = 0;
@@ -287,7 +287,7 @@ void DebugDurationForPeriod::dump(char *buffer) {
 
 DebugDurationVariable::DebugDurationVariable(const char *name) 
     : DebugVariable(name) 
-    , m_minTotal(4294967295)
+    , m_minTotal(4294967295UL)
     , m_maxTotal(0)
 {
 }

@@ -22,22 +22,5 @@
 
 #pragma GCC diagnostic ignored "-Wunused-variable"
 
-#if defined(EEZ_PSU_ARDUINO_DUE)
-
-#ifndef strncmp_P
-#define strncmp_P(a, b, c) strncmp((a), (b), (c))
-#endif
-
-#ifndef snprintf_P
-#define snprintf_P snprintf
-#endif
-
-#ifndef vsnprintf_P
-#define vsnprintf_P vsnprintf
-#endif
-
-#ifndef strncpy_P
-#define strncpy_P strncpy
-#endif
-
-#endif
+#include "Arduino.h"
+#include "SPI.h"

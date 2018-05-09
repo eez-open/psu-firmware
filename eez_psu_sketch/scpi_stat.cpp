@@ -313,8 +313,6 @@ scpi_result_t scpi_cmd_statusOperationInstrumentIsummaryEnableQ(scpi_t * context
 }
 
 scpi_result_t scpi_cmd_statusPreset(scpi_t * context) {
-    scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
-
     SCPI_RegSet(context, SCPI_REG_ESE, 0);
 
     SCPI_RegSet(context, SCPI_REG_QUESE, 0);

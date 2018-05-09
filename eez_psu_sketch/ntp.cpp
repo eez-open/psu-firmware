@@ -17,21 +17,23 @@
  */
 
 #include "psu.h"
+
+#if OPTION_ETHERNET
+
 #include "ntp.h"
 #include "ethernet.h"
 #include "datetime.h"
 #include "persist_conf.h"
+
 #if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
 #include "watchdog.h"
 #endif
-#include <EthernetUdp2.h>
 
-#if OPTION_ETHERNET
+#include <EthernetUdp2.h>
 
 // Some time servers:
 // - time.google.com
 // - time.nist.gov
-
 
 #define CONF_NTP_LOCAL_PORT 8888
 

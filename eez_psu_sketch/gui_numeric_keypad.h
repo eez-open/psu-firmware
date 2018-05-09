@@ -45,10 +45,10 @@ struct NumericKeypadOptions {
 		unsigned dotButtonEnabled : 1;
 	} flags;
 
-    const char *option1ButtonText PROGMEM;
+    const char *option1ButtonText;
     void (*option1)();
     
-    const char *option2ButtonText PROGMEM;
+    const char *option2ButtonText;
     void (*option2)();
 
     void enableMaxButton();

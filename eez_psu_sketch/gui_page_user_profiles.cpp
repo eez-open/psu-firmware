@@ -98,7 +98,7 @@ void UserProfilesPage::showProfile() {
 void UserProfilesPage::toggleAutoRecall() {
 	bool enable = persist_conf::isProfileAutoRecallEnabled() ? false : true;
 	if (!persist_conf::enableProfileAutoRecall(enable)) {
-		errorMessageP(PSTR("Failed!"));
+		errorMessageP("Failed!");
 	}
 }
 
@@ -107,7 +107,7 @@ void UserProfilesPage::toggleIsAutoRecallLocation() {
 		if (persist_conf::setProfileAutoRecallLocation(g_selectedProfileLocation)) {
 			profile::load(g_selectedProfileLocation, &profile);
 		} else {
-			errorMessageP(PSTR("Failed!"));
+			errorMessageP("Failed!");
 		}
 	}
 }
@@ -115,18 +115,18 @@ void UserProfilesPage::toggleIsAutoRecallLocation() {
 void UserProfilesPage::recall() {
 	if (g_selectedProfileLocation > 0 && profile::isValid(g_selectedProfileLocation)) {
 	    if (profile::recall(g_selectedProfileLocation)) {
-			infoMessageP(PSTR("Profile parameters loaded"));
+			infoMessageP("Profile parameters loaded");
 		} else {
-			errorMessageP(PSTR("Failed!"));
+			errorMessageP("Failed!");
 		}
 	}
 }
 
 void UserProfilesPage::onSaveFinish(char *remark, void (*callback)()) {
 	if (profile::saveAtLocation(g_selectedProfileLocation, remark)) {
-		infoMessageP(PSTR("Current parameters saved"), callback);
+		infoMessageP("Current parameters saved", callback);
 	} else {
-		errorMessageP(PSTR("EEPROM save failed!"));
+		errorMessageP("EEPROM save failed!");
 	}
 }
 
@@ -158,9 +158,9 @@ void UserProfilesPage::save() {
 void UserProfilesPage::onDeleteProfileYes() {
 	if (g_selectedProfileLocation > 0 && profile::isValid(g_selectedProfileLocation)) {
 		if (profile::deleteLocation(g_selectedProfileLocation)) {
-			infoMessageP(PSTR("Profile deleted"));
+			infoMessageP("Profile deleted");
 		} else {
-			errorMessageP(PSTR("Failed!"));
+			errorMessageP("Failed!");
 		}
 	}
 }
@@ -173,9 +173,9 @@ void UserProfilesPage::deleteProfile() {
 
 void UserProfilesPage::onEditRemarkOk(char *newRemark) {
 	if (profile::setName(g_selectedProfileLocation, newRemark, strlen(newRemark))) {
-		infoMessageP(PSTR("Remark changed"), popPage);
+		infoMessageP("Remark changed", popPage);
 	} else {
-		errorMessageP(PSTR("Failed!"), popPage);
+		errorMessageP("Failed!", popPage);
 	}
 }
 

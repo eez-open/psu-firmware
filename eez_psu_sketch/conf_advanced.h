@@ -32,8 +32,10 @@
 #define IDN_MANUFACTURER "Envox"
 
 /// Model description text used for *IDN?
-#ifdef EEZ_PSU_SIMULATOR
+#if defined(EEZ_PSU_SIMULATOR)
 #define IDN_MODEL "EEZ H24005 (Simulator)"
+#elif defined(EEZ_PSU_STM32)
+#define IDN_MODEL "EEZ H24005 (STM32)"
 #else
 #define IDN_MODEL "EEZ H24005 (Due)"
 #endif
@@ -65,11 +67,7 @@
 
 /// How many times per second will ADC take snapshot value?
 /// 0: 20 SPS, 1: 45 SPS, 2: 90 SPS, 3: 175 SPS, 4: 330 SPS, 5: 600 SPS, 6: 1000 SPS
-#ifdef EEZ_PSU_ARDUINO_MEGA
-#define ADC_SPS 2
-#else
 #define ADC_SPS 5
-#endif
 #define ADC_SPS_TIME_CRITICAL 5 // used when time/performance critical operation is running
 
 /// Duration, in milliseconds, from the last ADC interrupt

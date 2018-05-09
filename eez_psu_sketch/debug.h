@@ -38,8 +38,8 @@ void Trace(const char *format, ...);
 } // namespace eez::psu::debug
 
 
-#define DebugTrace(message) debug::Trace(PSTR(message))
-#define DebugTraceF(format, ...) debug::Trace(PSTR(format), __VA_ARGS__)
+#define DebugTrace(message) debug::Trace(message)
+#define DebugTraceF(format, ...) debug::Trace(format, __VA_ARGS__)
 
 #else // NO DEBUG
 

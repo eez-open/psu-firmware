@@ -39,15 +39,6 @@ extern "C" {
 
 #define USE_COMMAND_TAGS 0
 
-#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
-#define USE_64K_PROGMEM_FOR_CMD_LIST 1
-#define USE_FULL_PROGMEM_FOR_CMD_LIST 0
-#define SCPI_MAX_CMD_PATTERN_SIZE 128
-#define USE_64K_PROGMEM_FOR_ERROR_MESSAGES 1
-#define USE_FULL_PROGMEM_FOR_ERROR_MESSAGES 0
-#define SCPI_MAX_ERROR_MESSAGE_SIZE 64
-#endif
-
 #define USE_USER_ERROR_LIST 1
 #define LIST_OF_USER_ERRORS \
     X(SCPI_ERROR_HEADER_SUFFIX_OUTOFRANGE,                  -114, "Header suffix out of range")                   \

@@ -292,6 +292,7 @@ public:
     uint8_t convend_pin;
     uint8_t adc_pin;
     uint8_t dac_pin;
+
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     uint8_t bp_led_out_plus;
     uint8_t bp_led_out_minus;
@@ -300,12 +301,19 @@ public:
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     uint8_t bp_led_out;
     uint8_t bp_led_sense;
+    uint8_t bp_relay_sense;
     uint8_t bp_led_prog;
 #endif
-    uint8_t bp_relay_sense;
     uint8_t cc_led_pin;
     uint8_t cv_led_pin;
 
+private:
+    float U_MIN;
+    float U_DEF;
+    float U_MAX;
+    float U_MAX_CONF;
+
+public:
     float U_MIN_STEP;
     float U_DEF_STEP;
     float U_MAX_STEP;
@@ -319,6 +327,13 @@ public:
     float OVP_DEFAULT_DELAY;
     float OVP_MAX_DELAY;
 
+private:
+    float I_MIN;
+    float I_DEF;
+    float I_MAX;
+    float I_MAX_CONF;
+
+public:
     float I_MIN_STEP;
     float I_DEF_STEP;
     float I_MAX_STEP;
@@ -513,7 +528,7 @@ public:
     bool isCcMode() { return flags.ccMode && !flags.cvMode; }
 
     /// Returns "CC", "CV" or "UR"
-    char *getCvModeStr();
+    const char *getCvModeStr();
 
     /// Remap ADC data value to actual voltage value
     float remapAdcDataToVoltage(int16_t adc_data);
@@ -610,16 +625,6 @@ private:
     bool delayLowRippleCheck;
     uint32_t outputEnableStartTime;
     uint32_t dpNegMonitoringTime;
-
-    float U_MIN;
-    float U_DEF;
-    float U_MAX;
-    float U_MAX_CONF;
-
-    float I_MIN;
-    float I_DEF;
-    float I_MAX;
-    float I_MAX_CONF;
 
     float uBeforeBalancing;
     float iBeforeBalancing;

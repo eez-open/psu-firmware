@@ -92,7 +92,7 @@ void Keypad::getKeypadText(char *text) {
 	char *textPtr = text;
 
 	if (m_label) {
-		strcpy_P(textPtr, m_label);
+		strcpy(textPtr, m_label);
 		textPtr += strlen(m_label);
 	}
 
@@ -230,10 +230,10 @@ void Keypad::appendCursor(char *text) {
     }
 
     if (m_cursor) {
-        strcat_P(text, PSTR(CONF_GUI_KEYPAD_CURSOR_ON));
+        strcat(text, CONF_GUI_KEYPAD_CURSOR_ON);
     }
     else {
-        strcat_P(text, PSTR(CONF_GUI_KEYPAD_CURSOR_OFF));
+        strcat(text, CONF_GUI_KEYPAD_CURSOR_OFF);
     }
 }
 

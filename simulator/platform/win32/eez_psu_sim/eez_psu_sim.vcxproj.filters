@@ -241,13 +241,7 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\lcd.h">
       <Filter>gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\arduino_util.h">
-      <Filter>board</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\touch.h">
-      <Filter>gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\gesture.h">
       <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_data.h">
@@ -379,7 +373,7 @@
     <ClInclude Include="..\..\..\..\eez_psu_sketch\scpi_commands.h">
       <Filter>scpi</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\list.h">
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\list_program.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_page_ch_settings_trigger.h">
@@ -586,13 +580,7 @@
     <ClCompile Include="..\..\..\..\eez_psu_sketch\lcd.cpp">
       <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\arduino_util.cpp">
-      <Filter>board</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\touch.cpp">
-      <Filter>gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\gesture.cpp">
       <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui.cpp">
@@ -718,7 +706,7 @@
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_mmem.cpp">
       <Filter>scpi\commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\list.cpp">
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\list_program.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\scpi_display.cpp">

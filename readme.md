@@ -269,7 +269,7 @@ Also, there is some utility code that is used, for example, to interact with the
 
 #### Remote control: SCPI
 
-We are using [third party SCPI parser](https://github.com/j123b567/scpi-parser) and have our [own branch](https://github.com/mvladic/scpi-parser) where command definitions could be in AVR PROGMEM that helps preserve some memory space when Arduino Mega board is used (check [avr_progmem](https://github.com/mvladic/scpi-parser/tree/avr_progmem) branch).
+We are using our [branch](https://github.com/mvladic/scpi-parser) of [third party SCPI parser](https://github.com/j123b567/scpi-parser).
 
 There are two entry points for the SCPI commands: serial port and TCP server. Check `serial_psu.cpp` and `serial_psu.h` to see how SCPI commands are received on serial port, and `ethernet.cpp` and `ethernet.h` for the TCP server.
 

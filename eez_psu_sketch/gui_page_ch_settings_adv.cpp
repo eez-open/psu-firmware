@@ -86,13 +86,13 @@ void ChSettingsAdvLRipplePage::toggleStatus() {
 }
 
 int ChSettingsAdvLRipplePage::getDirty() {
-	return (origAutoMode != autoMode || g_channel->isLowRippleAllowed(micros()) && origStatus != status) ? 1 : 0;
+	return (origAutoMode != autoMode || (g_channel->isLowRippleAllowed(micros()) && origStatus != status)) ? 1 : 0;
 }
 
 void ChSettingsAdvLRipplePage::set() {
 	if (getDirty()) {
 		if (!channel_dispatcher::lowRippleEnable(*g_channel, status ? true : false)) {
-			errorMessageP(PSTR("Failed to change LRipple status!"));
+			errorMessageP("Failed to change LRipple status!");
 			return;
 		}
 	
@@ -100,7 +100,7 @@ void ChSettingsAdvLRipplePage::set() {
 
 		profile::save();
 	
-		infoMessageP(PSTR("LRipple params changed!"), actions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
+		infoMessageP("LRipple params changed!", actions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
 	}
 }
 
@@ -172,7 +172,7 @@ data::Value ChSettingsAdvCouplingPage::getData(const data::Cursor &cursor, uint8
 void ChSettingsAdvCouplingPage::uncouple() {
     channel_dispatcher::setType(channel_dispatcher::TYPE_NONE);
     profile::save();
-	infoMessageP(PSTR("Channels uncoupled!"));
+	infoMessageP("Channels uncoupled!");
 }
 
 void ChSettingsAdvCouplingPage::setParallelInfo() {
@@ -189,7 +189,7 @@ void ChSettingsAdvCouplingPage::setParallel() {
     if (selectedMode == 0) {
         if (channel_dispatcher::setType(channel_dispatcher::TYPE_PARALLEL)) {
             profile::save();
-	        infoMessageP(PSTR("Channels coupled in parallel!"), popPage);
+	        infoMessageP("Channels coupled in parallel!", popPage);
         }
     }
 }
@@ -198,7 +198,7 @@ void ChSettingsAdvCouplingPage::setSeries() {
     if (selectedMode == 1) {
         if (channel_dispatcher::setType(channel_dispatcher::TYPE_SERIES)) {
             profile::save();
-    	    infoMessageP(PSTR("Channels coupled in series!"), popPage);
+    	    infoMessageP("Channels coupled in series!", popPage);
         }
     }
 }
@@ -209,11 +209,11 @@ void ChSettingsAdvTrackingPage::toggleTrackingMode() {
     if (channel_dispatcher::isTracked()) {
         channel_dispatcher::setType(channel_dispatcher::TYPE_NONE);
         profile::save();
-        infoMessageP(PSTR("Tracking disabled!"));
+        infoMessageP("Tracking disabled!");
     } else {
         channel_dispatcher::setType(channel_dispatcher::TYPE_TRACKED);
         profile::save();
-	    infoMessageP(PSTR("Tracking enabled!"));
+	    infoMessageP("Tracking enabled!");
     }
 }
 
@@ -312,7 +312,7 @@ void ChSettingsAdvViewPage::set() {
 	if (getDirty()) {
         channel_dispatcher::setDisplayViewSettings(*g_channel, displayValue1, displayValue2, ytViewRate);
 		profile::save();
-		infoMessageP(PSTR("View settings changed!"), actions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
+		infoMessageP("View settings changed!", actions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
 	}
 }
 

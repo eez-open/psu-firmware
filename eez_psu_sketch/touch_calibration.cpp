@@ -95,13 +95,13 @@ void draw_point(int x, int y) {
 }
 
 bool read_point() {
-    if (touch::event_type == touch::TOUCH_DOWN) {
+    if (touch::g_eventType == touch::TOUCH_DOWN) {
 		g_wasDown = true;
         draw_cross(last_cross_x, last_cross_y, COLOR_GREEN);
-    } else if (g_wasDown && touch::event_type == touch::TOUCH_UP) {
+    } else if (g_wasDown && touch::g_eventType == touch::TOUCH_UP) {
 		g_wasDown = false;
-        *point_x = touch::x;
-        *point_y = touch::y;
+        *point_x = touch::g_x;
+        *point_y = touch::g_y;
         return true;
     }
 
@@ -222,10 +222,10 @@ void tick(uint32_t tick_usec) {
                 CONF_GUI_TOUCH_SCREEN_CALIBRATION_M, lcd::lcd.getDisplayWidth(), lcd::lcd.getDisplayHeight());
             if (success) {
 				mode = MODE_FINISHED;
-                yesNoDialog(g_yesNoPageId, PSTR("Save changes?"), dialogYes, dialogNo, dialogCancel);
+                yesNoDialog(g_yesNoPageId, "Save changes?", dialogYes, dialogNo, dialogCancel);
             } else {
                 mode = MODE_FINISHED;
-                toastMessageP(PSTR("Received data is invalid due to"), PSTR("imprecise pointing or"), PSTR("communication problem!"), startAgain);
+                toastMessageP("Received data is invalid due to", "imprecise pointing or", "communication problem!", startAgain);
             }
         }
     }

@@ -52,13 +52,13 @@ NumericKeypadOptions::NumericKeypadOptions() {
 
 void NumericKeypadOptions::enableMaxButton() {
     flags.option1ButtonEnabled = true;
-    option1ButtonText = PSTR("max");
+    option1ButtonText = "max";
     option1 = maxOption;
 }
 
 void NumericKeypadOptions::enableDefButton() {
     flags.option2ButtonEnabled = true;
-    option2ButtonText = PSTR("def");
+    option2ButtonText = "def";
     option2 = defOption;
 }
 
@@ -122,7 +122,7 @@ data::Value NumericKeypad::getData(uint8_t id) {
     }
     
     if (id == DATA_ID_KEYPAD_OPTION1_TEXT) {
-        return data::Value(m_options.flags.option1ButtonEnabled ? m_options.option1ButtonText : PSTR(""));
+        return data::Value(m_options.flags.option1ButtonEnabled ? m_options.option1ButtonText : "");
     }
 
     if (id == DATA_ID_KEYPAD_OPTION2_ENABLED) {
@@ -130,7 +130,7 @@ data::Value NumericKeypad::getData(uint8_t id) {
     }
     
     if (id == DATA_ID_KEYPAD_OPTION2_TEXT) {
-        return data::Value(m_options.flags.option2ButtonEnabled ? m_options.option2ButtonText : PSTR(""));
+        return data::Value(m_options.flags.option2ButtonEnabled ? m_options.option2ButtonText : "");
     }
 
     if (id == DATA_ID_KEYPAD_DOT_ENABLED) {
@@ -168,12 +168,12 @@ char NumericKeypad::getDotSign() {
 }
 
 void NumericKeypad::appendEditUnit(char *text) {
-    strcat_P(text, getUnitStr(m_options.editUnit));
+    strcat(text, getUnitStr(m_options.editUnit));
 }
 
 void NumericKeypad::getKeypadText(char *text) {
     if (m_label) {
-        strcpy_P(text, m_label);
+        strcpy(text, m_label);
         text += strlen(m_label);
     }
 
@@ -511,7 +511,7 @@ void NumericKeypad::ok() {
                 m_state = START;
                 m_keypadText[0] = 0;
             } else {
-                errorMessageP(PSTR("Invalid IP address format!"));
+                errorMessageP("Invalid IP address format!");
             }
 
             return;

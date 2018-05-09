@@ -27,6 +27,11 @@ psu::TestResult g_testResult = psu::TEST_FAILED;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+static const uint16_t EEPROM_TEST_ADDRESS = 0;
+static const uint16_t EEPROM_TEST_BUFFER_SIZE = 64;
+
+////////////////////////////////////////////////////////////////////////////////
+
 void send_address(uint16_t address) {
     SPI.transfer((uint8_t)(address >> 8)); // MSByte
     SPI.transfer((uint8_t)(address));      // LSByte

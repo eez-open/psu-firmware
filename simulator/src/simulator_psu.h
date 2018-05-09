@@ -18,8 +18,6 @@
 
 #pragma once
 
-#define EEZ_PSU_ARDUINO_DUE
-
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #else
@@ -33,24 +31,13 @@
 #include <math.h>
 #include <stdarg.h>
 
-#define PSTR(U) U
-#define strcpy_P strcpy
-#define strncpy_P strncpy
-#define strcat_P strcat
-#define sprintf_P sprintf
-#define snprintf_P snprintf
-#define vsnprintf_P vsnprintf
-#define strcmp_P strcmp
-#define strncmp_P strncmp
+#include "Arduino.h"
+#include "SPI.h"
 
 extern void eez_psu_init();
 
-#define interrupts() 0
-#define noInterrupts() 0
-
 namespace eez {
 namespace psu {
-/// Firmware simulator.
 namespace simulator {
 
 void init();

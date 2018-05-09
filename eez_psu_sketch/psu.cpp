@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "serial_psu.h"
 
@@ -63,7 +63,7 @@
 #include "event_queue.h"
 #include "channel_dispatcher.h"
 #include "trigger.h"
-#include "list.h"
+#include "list_program.h"
 #include "io_pins.h"
 #include "idle.h"
 
@@ -107,7 +107,7 @@ static void psuRegSet(scpi_psu_reg_name_t name, scpi_reg_val_t val);
 void loadConf() {
     // loads global configuration parameters
     persist_conf::loadDevice();
- 
+
     // loads global configuration parameters block 2
     persist_conf::loadDevice2();
 
@@ -402,7 +402,7 @@ static bool loadAutoRecallProfile(profile::Parameters *profile, int *location) {
                             } else {
                                 for (int i = 0; i < CH_NUM; ++i) {
                                     if (!util::equal(profile->channels[i].u_set, defaultProfile.channels[i].u_set, getPrecision(VALUE_TYPE_FLOAT_VOLT)) ||
-                                        !util::equal(profile->channels[i].i_set, defaultProfile.channels[i].i_set, getPrecision(VALUE_TYPE_FLOAT_AMPER))) 
+                                        !util::equal(profile->channels[i].i_set, defaultProfile.channels[i].i_set, getPrecision(VALUE_TYPE_FLOAT_AMPER)))
                                     {
                                         disableOutputs = true;
                                         event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
@@ -717,7 +717,7 @@ bool changePowerState(bool up) {
 	        }
             profile::recallChannelsFromProfile(&profile, location);
         }
-    
+
         profile::save();
     }
     else {
@@ -838,7 +838,7 @@ void tick() {
 
     // if we move this, for example, after ethernet::tick we could get
     // (in certain situations, see #25) PWRGOOD error on channel after
-    // the "pow:syst 1" command is executed 
+    // the "pow:syst 1" command is executed
 	sound::tick(tick_usec);
 
     profile::tick(tick_usec);
@@ -857,7 +857,7 @@ void tick() {
 #endif
 
     idle::tick();
-    
+
 #if OPTION_DISPLAY
 #ifdef EEZ_PSU_SIMULATOR
     if (simulator::front_panel::isOpened()) {
@@ -1070,18 +1070,20 @@ const char *getCpuModel() {
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     return "Arduino, R5B12";
 #endif
-#else
+#elif defined(EEZ_PSU_SIMULATOR)
     return "Simulator, " FIRMWARE;
+#elif defined(EEZ_PSU_STM32)
+    return "STM32, " FIRMWARE;
 #endif
 }
 
 const char *getCpuType() {
-#if defined(EEZ_PSU_SIMULATOR)
-    return "Simulator";
-#elif defined(EEZ_PSU_ARDUINO_MEGA)
-    return "Mega";
-#elif defined(EEZ_PSU_ARDUINO_DUE)
+#if defined(EEZ_PSU_ARDUINO_DUE)
     return "Due";
+#elif defined(EEZ_PSU_SIMULATOR)
+    return "Simulator";
+#elif defined(EEZ_PSU_STM32)
+    return "STM32";
 #endif
 }
 
@@ -1092,8 +1094,10 @@ const char *getCpuEthernetType() {
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     return "W5500";
 #endif
-#else
+#elif defined(EEZ_PSU_SIMULATOR)
     return "Simulator";
+#elif defined(EEZ_PSU_STM32)
+    return "None";
 #endif
 }
 
@@ -1227,15 +1231,12 @@ void updateMasterSync() {
 }
 } // namespace eez::psu
 
-
 #if defined(EEZ_PSU_ARDUINO)
-
-void PSU_boot() { 
-    eez::psu::boot(); 
+void PSU_boot() {
+    eez::psu::boot();
 }
 
-void PSU_tick() { 
-    eez::psu::tick (); 
+void PSU_tick() {
+    eez::psu::tick ();
 }
-
-#endif 
+#endif

@@ -66,9 +66,9 @@ IOExpander::IOExpander(
     uint8_t IO_BIT_OUT_SET_100_PERCENT_,
     uint8_t IO_BIT_OUT_EXT_PROG_
 )
-    : channel(channel_)
-    , IO_BIT_OUT_SET_100_PERCENT(IO_BIT_OUT_SET_100_PERCENT_)
+    : IO_BIT_OUT_SET_100_PERCENT(IO_BIT_OUT_SET_100_PERCENT_)
     , IO_BIT_OUT_EXT_PROG(IO_BIT_OUT_EXT_PROG_)
+	, channel(channel_)
 {
     g_testResult = psu::TEST_SKIPPED;
 

@@ -71,8 +71,8 @@ uint8_t isOutputEnabled() {
 void updateFaultPin(int i) {
     persist_conf::IOPin &outputPin = persist_conf::devConf2.ioPins[i];
     int pin = i == 1 ? DOUT : DOUT2;
-    int state = g_lastState.outputFault && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
-        !g_lastState.outputFault && outputPin.polarity == io_pins::POLARITY_NEGATIVE
+    int state = (g_lastState.outputFault && outputPin.polarity == io_pins::POLARITY_POSITIVE) ||
+        (!g_lastState.outputFault && outputPin.polarity == io_pins::POLARITY_NEGATIVE)
         ? 1 : 0;
     digitalWrite(pin, state);
     //DebugTraceF("FUNCTION_FAULT %d %d", pin, state);
@@ -81,8 +81,8 @@ void updateFaultPin(int i) {
 void updateOnCouplePin(int i) {
     persist_conf::IOPin &outputPin = persist_conf::devConf2.ioPins[i];
     int pin = i == 1 ? DOUT : DOUT2;
-    int state = g_lastState.outputEnabled && outputPin.polarity == io_pins::POLARITY_POSITIVE ||  
-        !g_lastState.outputEnabled && outputPin.polarity == io_pins::POLARITY_NEGATIVE
+    int state = (g_lastState.outputEnabled && outputPin.polarity == io_pins::POLARITY_POSITIVE) ||
+        (!g_lastState.outputEnabled && outputPin.polarity == io_pins::POLARITY_NEGATIVE)
         ? 1 : 0; 
     digitalWrite(pin, state);
     //DebugTraceF("FUNCTION_ON_COUPLE %d %d", pin, state);
@@ -95,7 +95,7 @@ void tick(uint32_t tickCount) {
     persist_conf::IOPin &inputPin = persist_conf::devConf2.ioPins[0];
     if (inputPin.function == io_pins::FUNCTION_INHIBIT) {
         int value = digitalRead(EXT_TRIG);
-        inhibited = value && inputPin.polarity == io_pins::POLARITY_POSITIVE || !value && inputPin.polarity == io_pins::POLARITY_NEGATIVE ? 1 : 0;
+        inhibited = (value && inputPin.polarity == io_pins::POLARITY_POSITIVE) || (!value && inputPin.polarity == io_pins::POLARITY_NEGATIVE) ? 1 : 0;
     }
     if (inhibited != g_lastState.inhibited) {
         g_lastState.inhibited = inhibited;

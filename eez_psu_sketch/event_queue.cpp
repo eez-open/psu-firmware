@@ -96,7 +96,7 @@ void doPushEvent(int16_t eventId) {
     }
 
     int eventType = getEventType(&e);
-    if (eventType == EVENT_TYPE_ERROR || eventType == EVENT_TYPE_WARNING && eventQueue.lastErrorEventIndex == NULL_INDEX) {
+    if (eventType == EVENT_TYPE_ERROR || (eventType == EVENT_TYPE_WARNING && eventQueue.lastErrorEventIndex == NULL_INDEX)) {
         eventQueue.lastErrorEventIndex = eventQueue.head;
         g_lastErrorEventChanged = true;
     }
@@ -164,7 +164,7 @@ const char *getEventMessage(Event *e) {
 #define EVENT_SCPI_ERROR(ID, TEXT)
 #define EVENT_ERROR(NAME, ID, TEXT)
 #define EVENT_WARNING(NAME, ID, TEXT)
-#define EVENT_INFO(NAME, ID, TEXT) case EVENT_INFO_START_ID + ID: p_message = PSTR(TEXT); break;
+#define EVENT_INFO(NAME, ID, TEXT) case EVENT_INFO_START_ID + ID: p_message = TEXT; break;
             LIST_OF_EVENTS
 #undef EVENT_SCPI_ERROR
 #undef EVENT_INFO
@@ -175,7 +175,7 @@ const char *getEventMessage(Event *e) {
         switch (e->eventId) {
 #define EVENT_SCPI_ERROR(ID, TEXT)
 #define EVENT_ERROR(NAME, ID, TEXT)
-#define EVENT_WARNING(NAME, ID, TEXT) case EVENT_WARNING_START_ID + ID: p_message = PSTR(TEXT); break;
+#define EVENT_WARNING(NAME, ID, TEXT) case EVENT_WARNING_START_ID + ID: p_message = TEXT; break;
 #define EVENT_INFO(NAME, ID, TEXT)
             LIST_OF_EVENTS
 #undef EVENT_SCPI_ERROR
@@ -187,10 +187,10 @@ const char *getEventMessage(Event *e) {
         }
     } else {
         switch (e->eventId) {
-#define EVENT_SCPI_ERROR(ID, TEXT) case ID: p_message = PSTR(TEXT); break;
+#define EVENT_SCPI_ERROR(ID, TEXT) case ID: p_message = TEXT; break;
 #define EVENT_INFO(NAME, ID, TEXT)
 #define EVENT_WARNING(NAME, ID, TEXT)
-#define EVENT_ERROR(NAME, ID, TEXT) case EVENT_ERROR_START_ID + ID: p_message = PSTR(TEXT); break;
+#define EVENT_ERROR(NAME, ID, TEXT) case EVENT_ERROR_START_ID + ID: p_message = TEXT; break;
             LIST_OF_EVENTS
 #undef EVENT_SCPI_ERROR
 #undef EVENT_INFO
@@ -202,7 +202,7 @@ const char *getEventMessage(Event *e) {
     }
 
     if (p_message) {
-        strncpy_P(message, p_message, sizeof(message) - 1);
+        strncpy(message, p_message, sizeof(message) - 1);
         message[sizeof(message) - 1] = 0;
         return message;
     }

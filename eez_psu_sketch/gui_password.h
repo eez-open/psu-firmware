@@ -22,7 +22,7 @@ namespace eez {
 namespace psu {
 namespace gui {
 
-void checkPassword(const char *label PROGMEM, const char *password, void (*ok)());
+void checkPassword(const char *label, const char *password, void (*ok)());
 
 void editSystemPassword();
 void editCalibrationPassword();

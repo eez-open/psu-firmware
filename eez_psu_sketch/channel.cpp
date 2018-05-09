@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "serial_psu.h"
 
@@ -38,7 +38,7 @@
 #include "profile.h"
 #include "event_queue.h"
 #include "channel_dispatcher.h"
-#include "list.h"
+#include "list_program.h"
 #include "trigger.h"
 #include "io_pins.h"
 
@@ -64,7 +64,7 @@ const char *CH_BOARD_REVISION_NAMES[] = {
 
 uint16_t CH_BOARD_REVISION_FEATURES[] = {
     // CH_BOARD_REVISION_R4B43A
-    CH_FEATURE_VOLT | CH_FEATURE_CURRENT | CH_FEATURE_OE, 
+    CH_FEATURE_VOLT | CH_FEATURE_CURRENT | CH_FEATURE_OE,
     // CH_BOARD_REVISION_R5B6B
     CH_FEATURE_VOLT | CH_FEATURE_CURRENT | CH_FEATURE_POWER | CH_FEATURE_OE | CH_FEATURE_DPROG | CH_FEATURE_LRIPPLE | CH_FEATURE_RPROG,
     // CH_BOARD_REVISION_R5B9
@@ -119,7 +119,7 @@ void Channel::Value::addMonValue(float value) {
         mon_total = NUM_ADC_AVERAGING_VALUES * value;
         mon = value;
     } else {
-        mon_total -= mon_arr[mon_index]; 
+        mon_total -= mon_arr[mon_index];
         mon_total += value;
         mon_arr[mon_index] = value;
         mon_index = (mon_index + 1) % NUM_ADC_AVERAGING_VALUES;
@@ -138,7 +138,7 @@ void Channel::Value::addMonDacValue(float value) {
         mon_dac_total = NUM_ADC_AVERAGING_VALUES * value;
         mon_dac = value;
     } else {
-        mon_dac_total -= mon_dac_arr[mon_dac_index]; 
+        mon_dac_total -= mon_dac_arr[mon_dac_index];
         mon_dac_total += value;
         mon_dac_arr[mon_dac_index] = value;
         mon_dac_index = (mon_dac_index + 1) % NUM_ADC_AVERAGING_VALUES;
@@ -208,7 +208,7 @@ char *Channel::getChannelsInfo(char *p) {
                 *p++ += '-';
             }
 
-            p += sprintf_P(p, PSTR("%d/%02d/%02d"), count, (int)floor(Channel::get(i).U_MAX), (int)floor(Channel::get(i).I_MAX));
+            p += sprintf(p, "%d/%02d/%02d", count, (int)floor(Channel::get(i).U_MAX), (int)floor(Channel::get(i).I_MAX));
         }
     }
 
@@ -243,7 +243,7 @@ char *Channel::getChannelsInfoShort(char *p) {
                 *p++ += ' ';
             }
 
-            p += sprintf_P(p, PSTR("%d V / %d A"), (int)floor(Channel::get(i).U_MAX), (int)floor(Channel::get(i).I_MAX));
+            p += sprintf(p, "%d V / %d A", (int)floor(Channel::get(i).U_MAX), (int)floor(Channel::get(i).I_MAX));
         }
     }
 
@@ -302,8 +302,10 @@ Channel::Channel(
     bool OPP_DEFAULT_STATE_, float OPP_MIN_DELAY_, float OPP_DEFAULT_DELAY_, float OPP_MAX_DELAY_, float OPP_MIN_LEVEL_, float OPP_DEFAULT_LEVEL_, float OPP_MAX_LEVEL_,
     float SOA_VIN_, float SOA_PREG_CURR_, float SOA_POSTREG_PTOT_, float PTOT_
     )
+
     :
-    index(index_),
+
+	index(index_),
     boardRevision(boardRevision_), ioexp_iodir(ioexp_iodir_), ioexp_gpio_init(ioexp_gpio_init_),
     isolator_pin(isolator_pin_), ioexp_pin(ioexp_pin_), convend_pin(convend_pin_), adc_pin(adc_pin_), dac_pin(dac_pin_),
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
@@ -350,7 +352,7 @@ Channel::Channel(
     flags.autoSelectCurrentRange = 1;
 
     flags.displayValue1 = DISPLAY_VALUE_VOLTAGE;
-    flags.displayValue2 = DISPLAY_VALUE_CURRENT; 
+    flags.displayValue2 = DISPLAY_VALUE_CURRENT;
     ytViewRate = GUI_YT_VIEW_RATE_DEFAULT;
 
     autoRangeCheckLastTickCount = 0;
@@ -390,12 +392,12 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     bool state;
     bool condition;
     float delay;
-    
+
     if (IS_OVP_VALUE(this, cpv)) {
         state = flags.rprogEnabled || prot_conf.flags.u_state;
         //condition = flags.cv_mode && (!flags.cc_mode || fabs(i.mon_last - i.set) >= CHANNEL_VALUE_PRECISION) && (prot_conf.u_level <= u.set);
         condition = util::greaterOrEqual(channel_dispatcher::getUMon(*this), channel_dispatcher::getUProtectionLevel(*this), getPrecision(VALUE_TYPE_FLOAT_VOLT))
-            || flags.rprogEnabled && util::greaterOrEqual(channel_dispatcher::getUMonDac(*this), channel_dispatcher::getUProtectionLevel(*this), getPrecision(VALUE_TYPE_FLOAT_VOLT));
+            || (flags.rprogEnabled && util::greaterOrEqual(channel_dispatcher::getUMonDac(*this), channel_dispatcher::getUProtectionLevel(*this), getPrecision(VALUE_TYPE_FLOAT_VOLT)));
         delay = prot_conf.u_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
@@ -524,10 +526,10 @@ void Channel::reset() {
         doLowRippleEnable(false);
     }
 
-    // [SOUR[n]]:VOLT:PROT:DEL 
+    // [SOUR[n]]:VOLT:PROT:DEL
     // [SOUR[n]]:VOLT:PROT:STAT
     // [SOUR[n]]:CURR:PROT:DEL
-    // [SOUR[n]]:CURR:PROT:STAT 
+    // [SOUR[n]]:CURR:PROT:STAT
     // [SOUR[n]]:POW:PROT[:LEV]
     // [SOUR[n]]:POW:PROT:DEL
     // [SOUR[n]]:POW:PROT:STAT -> set all to default
@@ -577,7 +579,7 @@ void Channel::clearCalibrationConf() {
     cal_conf.u.max.dac = cal_conf.u.max.val = cal_conf.u.max.adc = U_CAL_VAL_MAX;
     cal_conf.u.minPossible = U_MIN;
     cal_conf.u.maxPossible = U_MAX;
-    
+
     cal_conf.i[0].min.dac = cal_conf.i[0].min.val = cal_conf.i[0].min.adc = I_CAL_VAL_MIN;
     cal_conf.i[0].mid.dac = cal_conf.i[0].mid.val = cal_conf.i[0].mid.adc = (I_CAL_VAL_MIN + I_CAL_VAL_MAX) / 2;
     cal_conf.i[0].max.dac = cal_conf.i[0].max.val = cal_conf.i[0].max.adc = I_CAL_VAL_MAX;
@@ -758,16 +760,16 @@ void Channel::tick(uint32_t tick_usec) {
             uHistory[i] = 0;
             iHistory[i] = 0;
         }
-            
+
         historyPosition = 1;
         historyLastTick = tick_usec;
     } else {
-        uint32_t ytViewRateMicroseconds = (int)round(ytViewRate * 1000000L); 
+        uint32_t ytViewRateMicroseconds = (int)round(ytViewRate * 1000000L);
 
         while (tick_usec - historyLastTick >= ytViewRateMicroseconds) {
             uHistory[historyPosition] = util::roundPrec(u.mon_last, getPrecisionFromNumSignificantDecimalDigits(VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS));
             iHistory[historyPosition] = util::roundPrec(i.mon_last, getPrecisionFromNumSignificantDecimalDigits(CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS));
-                
+
             if (++historyPosition == CHANNEL_HISTORY_SIZE) {
                 historyPosition = 0;
             }
@@ -1297,7 +1299,7 @@ void Channel::doCalibrationEnable(bool enable) {
         if (u.min < U_MIN) u.min = U_MIN;
         if (u.limit < u.min) u.limit = u.min;
         if (u.set < u.min) setVoltage(u.min);
-        
+
         u.max = util::ceilPrec(cal_conf.u.maxPossible, getPrecision(VALUE_TYPE_FLOAT_VOLT));
         if (u.max > U_MAX) u.max = U_MAX;
         if (u.set > u.max) setVoltage(u.max);
@@ -1352,8 +1354,8 @@ bool Channel::isVoltageCalibrationEnabled() {
 
 bool Channel::isCurrentCalibrationEnabled() {
     return flags._calEnabled && (
-        flags.currentCurrentRange == CURRENT_RANGE_HIGH && cal_conf.flags.i_cal_params_exists_range_high ||
-        flags.currentCurrentRange == CURRENT_RANGE_LOW && cal_conf.flags.i_cal_params_exists_range_low
+        (flags.currentCurrentRange == CURRENT_RANGE_HIGH && cal_conf.flags.i_cal_params_exists_range_high) ||
+        (flags.currentCurrentRange == CURRENT_RANGE_LOW && cal_conf.flags.i_cal_params_exists_range_low)
     );
 }
 
@@ -1588,8 +1590,8 @@ void Channel::setCurrent(float value) {
 }
 
 bool Channel::isCalibrationExists() {
-    return flags.currentCurrentRange == CURRENT_RANGE_HIGH && cal_conf.flags.i_cal_params_exists_range_high || 
-        flags.currentCurrentRange == CURRENT_RANGE_LOW && cal_conf.flags.i_cal_params_exists_range_low ||
+    return (flags.currentCurrentRange == CURRENT_RANGE_HIGH && cal_conf.flags.i_cal_params_exists_range_high) ||
+        (flags.currentCurrentRange == CURRENT_RANGE_LOW && cal_conf.flags.i_cal_params_exists_range_low) ||
         cal_conf.flags.u_cal_params_exists;
 }
 
@@ -1661,7 +1663,7 @@ void Channel::setOperBits(int bit_mask, bool on) {
 #endif
 }
 
-char *Channel::getCvModeStr() {
+const char *Channel::getCvModeStr() {
     if (isCvMode()) return "CV";
     else if (isCcMode()) return "CC";
     else return "UR";

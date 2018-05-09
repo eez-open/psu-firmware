@@ -244,9 +244,6 @@ namespace eez {
 namespace psu {
 namespace eeprom {
 
-static const uint16_t EEPROM_TEST_ADDRESS = 0;
-static const uint16_t EEPROM_TEST_BUFFER_SIZE = 64;
-
 // opcodes
 static const uint8_t WREN = 6;
 static const uint8_t WRDI = 4;
@@ -257,9 +254,7 @@ static const uint8_t WRITE = 2;
 
 static const uint16_t EEPROM_ONTIME_START_ADDRESS = 64;
 static const uint16_t EEPROM_ONTIME_SIZE = 64;
-
 static const uint16_t EEPROM_START_ADDRESS = 1024;
-
 static const uint16_t EEPROM_EVENT_QUEUE_START_ADDRESS = 16384;
 
 void init();

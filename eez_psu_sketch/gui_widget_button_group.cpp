@@ -53,7 +53,7 @@ void drawButtons(int pageId, const Widget* widget, int x, int y, const Style *st
 
 		int bottom = y + widget->h - 1;
 		int topPadding = (widget->h - h * count) / 2;
-		
+
 		if (topPadding > 0) {
 			lcd::lcd.setColor(style->background_color);
 			lcd::lcd.fillRect(x, y, x + widget->w - 1, y + topPadding - 1);
@@ -78,9 +78,9 @@ void drawButtons(int pageId, const Widget* widget, int x, int y, const Style *st
             }
 
 			int b = y + yOffset + labelHeight;
-			
+
 			y += h;
-        
+
 			if (b < y) {
 				lcd::lcd.setColor(style->background_color);
 				lcd::lcd.fillRect(x, b, x + widget->w - 1, y - 1);
@@ -129,11 +129,11 @@ void onTouchDown(const WidgetCursor &widgetCursor) {
         int w = widget->w / count;
         int x = widgetCursor.x + (widget->w - w * count) / 2;
 
-        selectedButton = (touch::x - x) / w;
+        selectedButton = (touch::g_x - x) / w;
     } else {
         int h = widget->h / count;
         int y = widgetCursor.y + (widget->h - h * count) / 2;
-        selectedButton = (touch::y - y) / h;
+        selectedButton = (touch::g_y - y) / h;
     }
 
     if (selectedButton >= 0 && selectedButton < count) {

@@ -20,6 +20,10 @@
 
 #include "font.h"
 
+#if defined(EEZ_PSU_STM32)
+#include "stm32f4xx.h"
+#endif
+
 namespace eez {
 namespace psu {
 namespace gui {
@@ -36,7 +40,11 @@ public:
     LCD(uint8_t model, uint8_t RS, uint8_t WR, uint8_t CS, uint8_t RST);
     ~LCD();
 
-#ifdef EEZ_PSU_SIMULATOR
+#if defined(EEZ_PSU_SIMULATOR)
+    uint16_t *buffer;
+#endif
+
+#if defined(EEZ_PSU_STM32)
     uint16_t *buffer;
 #endif
 
@@ -67,8 +75,10 @@ public:
 private:
     uint8_t orientation;
 
-    uint16_t displayWidth;
-    uint16_t displayHeight;
+	uint16_t nativeDisplayWidth;
+	uint16_t nativeDisplayHeight;
+	uint16_t displayWidth;
+	uint16_t displayHeight;
 
     uint8_t fch, fcl, bch, bcl;
 
@@ -77,7 +87,7 @@ private:
 
     font::Font font;
 
-#ifdef EEZ_PSU_SIMULATOR
+#if defined(EEZ_PSU_SIMULATOR) || defined(EEZ_PSU_STM32)
     uint16_t x, y, x1, y1, x2, y2;
 #else
     uint8_t display_model;
@@ -115,7 +125,7 @@ void turnOff();
 bool isOn();
 
 void updateBrightness();
-   
+
 }
 }
 }

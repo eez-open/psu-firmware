@@ -22,8 +22,6 @@ namespace eez {
 namespace psu {
 namespace gui {
 
-#pragma pack(push, 1)
-
 #define STYLE_FLAGS_BORDER 1
 #define STYLE_FLAGS_HORZ_ALIGN 6
 #define STYLE_FLAGS_HORZ_ALIGN_LEFT 0
@@ -71,6 +69,10 @@ typedef uint16_t OBJ_OFFSET;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#pragma pack(push, 1)
+
+////////////////////////////////////////////////////////////////////////////////
+
 struct List {
     uint8_t count;
     OBJ_OFFSET first;
@@ -106,20 +108,6 @@ struct Widget {
     uint16_t h;
     uint8_t style;
     OBJ_OFFSET specific;
-};
-
-struct WidgetStateFlags {
-    unsigned pressed: 1;
-    unsigned focused: 1;
-    unsigned blinking: 1;
-    unsigned enabled: 1;
-};
-
-struct WidgetState {
-    uint16_t size;
-    WidgetStateFlags flags;
-    data::Value data;
-	uint16_t backgroundColor;
 };
 
 struct ContainerWidget {
@@ -176,11 +164,6 @@ struct ToggleButtonWidget {
     OBJ_OFFSET text2;
 };
 
-struct ButtonGroupWidgetState {
-    WidgetState genericState;
-    const data::Value *labels;
-};
-
 struct ScaleWidget {
 	uint8_t needle_position; // SCALE_NEEDLE_POSITION_...
 	uint8_t needle_width;
@@ -196,21 +179,10 @@ struct BarGraphWidget {
 	uint8_t line2Style;
 };
 
-struct BarGraphWidgetState {
-    WidgetState genericState;
-    data::Value line1Data;
-    data::Value line2Data;
-};
-
 struct YTGraphWidget {
 	uint8_t y1Style;
 	uint8_t y2Data;
 	uint8_t y2Style;
-};
-
-struct YTGraphWidgetState {
-    WidgetState genericState;
-    data::Value y2Data;
 };
 
 enum UpDownWidgetSegment {
@@ -223,11 +195,6 @@ struct UpDownWidget {
 	uint8_t buttonsStyle;
 	OBJ_OFFSET downButtonText;
 	OBJ_OFFSET upButtonText;
-};
-
-struct ListGraphWidgetState {
-    WidgetState genericState;
-    data::Value cursorData;
 };
 
 struct ListGraphWidget {
@@ -270,7 +237,54 @@ struct Document {
     List pages;
 };
 
+////////////////////////////////////////////////////////////////////////////////
+
 #pragma pack(pop)
+
+////////////////////////////////////////////////////////////////////////////////
+
+#ifdef EEZ_PSU_ARDUINO
+#pragma pack(push, 1)
+#endif
+
+struct WidgetStateFlags {
+    unsigned pressed: 1;
+    unsigned focused: 1;
+    unsigned blinking: 1;
+    unsigned enabled: 1;
+};
+
+struct WidgetState {
+    uint16_t size;
+    WidgetStateFlags flags;
+    data::Value data;
+	uint16_t backgroundColor;
+};
+
+struct ButtonGroupWidgetState {
+    WidgetState genericState;
+    const data::Value *labels;
+};
+
+struct BarGraphWidgetState {
+    WidgetState genericState;
+    data::Value line1Data;
+    data::Value line2Data;
+};
+
+struct YTGraphWidgetState {
+    WidgetState genericState;
+    data::Value y2Data;
+};
+
+struct ListGraphWidgetState {
+    WidgetState genericState;
+    data::Value cursorData;
+};
+
+#ifdef EEZ_PSU_ARDUINO
+#pragma pack(pop)
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 

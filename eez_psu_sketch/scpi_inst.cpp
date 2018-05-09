@@ -74,7 +74,7 @@ scpi_result_t scpi_cmd_instrumentSelectQ(scpi_t * context) {
     scpi_psu_t *psu_context = (scpi_psu_t *)context->user_context;
 
     char buffer[256] = { 0 };
-    sprintf_P(buffer, PSTR("CH%d"), (int)psu_context->selected_channel_index);
+    sprintf(buffer, "CH%d", (int)psu_context->selected_channel_index);
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;
@@ -149,11 +149,11 @@ scpi_result_t scpi_cmd_instrumentCoupleTrackingQ(scpi_t * context) {
 
     channel_dispatcher::Type type = channel_dispatcher::getType();
     if (type == channel_dispatcher::TYPE_PARALLEL) {
-        strcpy_P(result, PSTR("PARALLEL"));
+        strcpy(result, "PARALLEL");
     } else if (type == channel_dispatcher::TYPE_SERIES) {
-        strcpy_P(result, PSTR("SERIES"));
+        strcpy(result, "SERIES");
     } else {
-        strcpy_P(result, PSTR("NONE"));
+        strcpy(result, "NONE");
     }
 
     SCPI_ResultText(context, result);
@@ -217,11 +217,11 @@ scpi_result_t scpi_cmd_instrumentDisplayTraceQ(scpi_t * context) {
     char result[16];
 
     if (traceValue == DISPLAY_VALUE_VOLTAGE) {
-        strcpy_P(result, PSTR("VOLT"));
+        strcpy(result, "VOLT");
     } else if (traceValue == DISPLAY_VALUE_CURRENT) {
-        strcpy_P(result, PSTR("CURR"));
+        strcpy(result, "CURR");
     } else {
-        strcpy_P(result, PSTR("POW"));
+        strcpy(result, "POW");
     }
 
     SCPI_ResultText(context, result);

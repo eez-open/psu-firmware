@@ -43,27 +43,11 @@ bool g_busy;
 SCPI_COMMANDS
 #undef SCPI_COMMAND
 
-#if USE_64K_PROGMEM_FOR_CMD_LIST
-
-#define SCPI_COMMAND(P, C) static const char C ## _pattern[] PROGMEM = P;
-SCPI_COMMANDS
-#undef SCPI_COMMAND
-
-#define SCPI_COMMAND(P, C) {C ## _pattern, C},
-static const scpi_command_t scpi_commands[] PROGMEM = {
-    SCPI_COMMANDS
-    SCPI_CMD_LIST_END
-};
-
-#else
-
 #define SCPI_COMMAND(P, C) {P, C},
 static const scpi_command_t scpi_commands[] = {
     SCPI_COMMANDS
     SCPI_CMD_LIST_END
 };
-
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -136,11 +120,11 @@ void printError(int_fast16_t err) {
 
         char datetime_buffer[20] = { 0 };
         if (datetime::getDateTimeAsString(datetime_buffer)) {
-            sprintf_P(errorOutputBuffer, PSTR(" [%s]"), datetime_buffer);
+            sprintf(errorOutputBuffer, " [%s]", datetime_buffer);
             SERIAL_PORT.print(errorOutputBuffer);
         }
 
-        sprintf_P(errorOutputBuffer, PSTR(": %d,\"%s\""), (int16_t)err, SCPI_ErrorTranslate(err));
+        sprintf(errorOutputBuffer, ": %d,\"%s\"", (int16_t)err, SCPI_ErrorTranslate(err));
         SERIAL_PORT.println(errorOutputBuffer);
     }
 

@@ -169,7 +169,7 @@ bool test() {
         g_fanSpeedPWM = saved_fan_speed_pwm;
 #endif
 
-        for (int i = 0; i < FAN_RPM_MEASURE_TIME && g_rpmMeasureState != RPM_MEASURE_STATE_MEASURED; ++i) {
+        for (uint32_t i = 0; i < FAN_RPM_MEASURE_TIME && g_rpmMeasureState != RPM_MEASURE_STATE_MEASURED; ++i) {
             delay(1);
         }
 

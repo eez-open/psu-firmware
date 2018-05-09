@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "channel_dispatcher.h"
 #include "bp.h"
 #include "temperature.h"
 #include "event_queue.h"
 #include "trigger.h"
-#include "list.h"
+#include "list_program.h"
 #include "scpi_regs.h"
 
 namespace eez {
@@ -174,25 +174,25 @@ Type getType() {
     return g_channelCoupling;
 }
 
-float getUSet(const Channel &channel) { 
+float getUSet(const Channel &channel) {
     if (isSeries()) {
         return Channel::get(0).u.set + Channel::get(1).u.set;
     }
     return channel.u.set;
 }
 
-float getUSetUnbalanced(const Channel &channel) { 
+float getUSetUnbalanced(const Channel &channel) {
     if (isSeries()) {
         return Channel::get(0).getUSetUnbalanced() + Channel::get(1).getUSetUnbalanced();
     }
     return channel.u.set;
 }
 
-float getUMon(const Channel &channel) { 
+float getUMon(const Channel &channel) {
     if (isSeries()) {
         return Channel::get(0).u.mon + Channel::get(1).u.mon;
     }
-    return channel.u.mon; 
+    return channel.u.mon;
 }
 
 float getUMonLast(const Channel &channel) {
@@ -206,14 +206,14 @@ float getUMonHistory(const Channel &channel, int position) {
     if (isSeries()) {
         return Channel::get(0).getUMonHistory(position) + Channel::get(1).getUMonHistory(position);
     }
-    return channel.getUMonHistory(position); 
+    return channel.getUMonHistory(position);
 }
 
-float getUMonDac(const Channel &channel) { 
+float getUMonDac(const Channel &channel) {
     if (isSeries()) {
         return Channel::get(0).u.mon_dac + Channel::get(1).u.mon_dac;
     }
-    return channel.u.mon_dac; 
+    return channel.u.mon_dac;
 }
 
 float getULimit(const Channel &channel) {
@@ -334,25 +334,25 @@ void setOvpDelay(Channel &channel, float delay) {
     }
 }
 
-float getISet(const Channel &channel) { 
+float getISet(const Channel &channel) {
     if (isParallel()) {
         return Channel::get(0).i.set + Channel::get(1).i.set;
     }
-    return channel.i.set; 
+    return channel.i.set;
 }
 
-float getISetUnbalanced(const Channel &channel) { 
+float getISetUnbalanced(const Channel &channel) {
     if (isParallel()) {
         return Channel::get(0).getISetUnbalanced() + Channel::get(1).getISetUnbalanced();
     }
-    return channel.i.set; 
+    return channel.i.set;
 }
 
-float getIMon(const Channel &channel) { 
+float getIMon(const Channel &channel) {
     if (isParallel()) {
         return Channel::get(0).i.mon + Channel::get(1).i.mon;
     }
-    return channel.i.mon; 
+    return channel.i.mon;
 }
 
 float getIMonLast(const Channel &channel) {
@@ -366,14 +366,14 @@ float getIMonHistory(const Channel &channel, int position) {
     if (isParallel()) {
         return Channel::get(0).getIMonHistory(position) + Channel::get(1).getIMonHistory(position);
     }
-    return channel.getIMonHistory(position); 
+    return channel.getIMonHistory(position);
 }
 
-float getIMonDac(const Channel &channel) { 
+float getIMonDac(const Channel &channel) {
     if (isParallel()) {
         return Channel::get(0).i.mon_dac + Channel::get(1).i.mon_dac;
     }
-    return channel.i.mon_dac; 
+    return channel.i.mon_dac;
 }
 
 float getILimit(const Channel &channel) {

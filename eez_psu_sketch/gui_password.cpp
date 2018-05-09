@@ -43,7 +43,7 @@ static void checkPasswordOkCallback(char *text) {
         g_checkPasswordOkCallback();
     } else {
         // entered password doesn't match, 
-        errorMessageP(PSTR("Invalid password!"), popPage);
+        errorMessageP("Invalid password!", popPage);
     }
 }
 
@@ -58,7 +58,7 @@ static void onRetypeNewPasswordOk(char *text) {
     size_t textLen = strlen(text);
     if (strlen(g_newPassword) != textLen || strncmp(g_newPassword, text, textLen) != 0) {
         // retyped new password doesn't match
-        errorMessageP(PSTR("Password doesn't match!"), popPage);
+        errorMessageP("Password doesn't match!", popPage);
         return;
     }
     
@@ -72,12 +72,12 @@ static void onRetypeNewPasswordOk(char *text) {
 
     if (!isChanged) {
         // failed to save changed password
-        errorMessageP(PSTR("Failed to change password!"), popPage);
+        errorMessageP("Failed to change password!", popPage);
         return;
     }
 
     // success
-    infoMessageP(PSTR("Password changed!"), popPage);
+    infoMessageP("Password changed!", popPage);
 }
 
 static void onNewPasswordOk(char *text) {
@@ -94,34 +94,34 @@ static void onNewPasswordOk(char *text) {
     if (!isOk) {
         // invalid password, return to keypad
         if (err == SCPI_ERROR_PASSWORD_TOO_SHORT || err == SCPI_ERROR_PASSWORD_TOO_SHORT) {
-            errorMessageP(PSTR("Password too short!"));
+            errorMessageP("Password too short!");
         } else {
-            errorMessageP(PSTR("Password too long!"));
+            errorMessageP("Password too long!");
         }
         return;
     }
 
     strcpy(g_newPassword, text);
-    Keypad::startReplace(PSTR("Retype new password: "), 0, PASSWORD_MAX_LENGTH, true, onRetypeNewPasswordOk, popPage);
+    Keypad::startReplace("Retype new password: ", 0, PASSWORD_MAX_LENGTH, true, onRetypeNewPasswordOk, popPage);
 }
 
 static void onOldPasswordOk() {
-    Keypad::startReplace(PSTR("New password: "), 0, PASSWORD_MAX_LENGTH, true, onNewPasswordOk, popPage);
+    Keypad::startReplace("New password: ", 0, PASSWORD_MAX_LENGTH, true, onNewPasswordOk, popPage);
 }
 
 static void editPassword(const char *oldPassword) {
     g_oldPassword = oldPassword;
 
     if (strlen(g_oldPassword)) {
-        checkPassword(PSTR("Current password: "), onOldPasswordOk);
+        checkPassword("Current password: ", onOldPasswordOk);
     } else {
-        Keypad::startPush(PSTR("New password: "), 0, PASSWORD_MAX_LENGTH, true, onNewPasswordOk, popPage);
+        Keypad::startPush("New password: ", 0, PASSWORD_MAX_LENGTH, true, onNewPasswordOk, popPage);
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void checkPassword(const char *label PROGMEM, const char *password, void (*ok)()) {
+void checkPassword(const char *label, const char *password, void (*ok)()) {
     if (strlen(password) == 0) {
         ok();
     } else {

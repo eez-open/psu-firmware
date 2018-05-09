@@ -35,13 +35,11 @@ enum EventType {
     TOUCH_UP
 };
 
-extern EventType event_type;
-extern int x;
-extern int y;
+extern EventType g_eventType;
+extern int g_x;
+extern int g_y;
 
-extern bool directIsPressed();
-
-#ifdef EEZ_PSU_SIMULATOR
+#if defined(EEZ_PSU_SIMULATOR) || defined(EEZ_PSU_STM32)
 void touch_write(bool is_pressed, int x, int y);
 #endif
 

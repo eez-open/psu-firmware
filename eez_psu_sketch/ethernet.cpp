@@ -81,7 +81,7 @@ scpi_result_t SCPI_Flush(scpi_t * context) {
 int SCPI_Error(scpi_t *context, int_fast16_t err) {
     if (err != 0) {
         char errorOutputBuffer[256];
-        sprintf_P(errorOutputBuffer, PSTR("**ERROR: %d,\"%s\"\r\n"), (int16_t)err, SCPI_ErrorTranslate(err));
+        sprintf(errorOutputBuffer, "**ERROR: %d,\"%s\"\r\n", (int16_t)err, SCPI_ErrorTranslate(err));
         ethernet_client_write(g_activeClient, errorOutputBuffer, strlen(errorOutputBuffer));
 
 		if (err == SCPI_ERROR_INPUT_BUFFER_OVERRUN) {
@@ -95,9 +95,9 @@ int SCPI_Error(scpi_t *context, int_fast16_t err) {
 scpi_result_t SCPI_Control(scpi_t *context, scpi_ctrl_name_t ctrl, scpi_reg_val_t val) {
     char outputBuffer[256];
     if (SCPI_CTRL_SRQ == ctrl) {
-        sprintf_P(outputBuffer, PSTR("**SRQ: 0x%X (%d)\r\n"), val, val);
+        sprintf(outputBuffer, "**SRQ: 0x%X (%d)\r\n", val, val);
     } else {
-        sprintf_P(outputBuffer, PSTR("**CTRL %02x: 0x%X (%d)\r\n"), ctrl, val, val);
+        sprintf(outputBuffer, "**CTRL %02x: 0x%X (%d)\r\n", ctrl, val, val);
     }
 
     ethernet_client_write(g_activeClient, outputBuffer, strlen(outputBuffer));
@@ -107,7 +107,7 @@ scpi_result_t SCPI_Control(scpi_t *context, scpi_ctrl_name_t ctrl, scpi_reg_val_
 
 scpi_result_t SCPI_Reset(scpi_t *context) {
     char errorOutputBuffer[256];
-    strcpy_P(errorOutputBuffer, PSTR("**Reset\r\n"));
+    strcpy(errorOutputBuffer, "**Reset\r\n");
     ethernet_client_write(g_activeClient, errorOutputBuffer, strlen(errorOutputBuffer));
 
     return psu::reset() ? SCPI_RES_OK : SCPI_RES_ERR;

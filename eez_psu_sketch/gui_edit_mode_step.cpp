@@ -153,9 +153,9 @@ void onEncoder(int counter) {
 void test() {
     if (!g_changed) {
 #if DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT
-        int d = start_pos - touch::y;
+        int d = start_pos - touch::g_y;
 #else
-        int d = touch::x - g_startPos;
+        int d = touch::g_x - g_startPos;
 #endif
         if (abs(d) >= CONF_GUI_EDIT_MODE_STEP_THRESHOLD_PX) {
             increment(d > 0 ? 1 : -1, true);
@@ -165,9 +165,9 @@ void test() {
 
 void onTouchDown() {
 #if DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT
-    start_pos = touch::y;
+    start_pos = touch::g_y;
 #else
-	g_startPos = touch::x;
+	g_startPos = touch::g_x;
 #endif
     g_changed = false;
 }

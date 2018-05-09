@@ -72,7 +72,7 @@ void onStartPasswordOk() {
 }
 
 void start() {
-    checkPassword(PSTR("Password: "), persist_conf::devConf.calibration_password, onStartPasswordOk);
+    checkPassword("Password: ", persist_conf::devConf.calibration_password, onStartPasswordOk);
 }
 
 data::Value getLevelValue() {
@@ -109,19 +109,19 @@ data::Value getData(const data::Cursor &cursor, uint8_t id) {
         if (channel.hasSupportForCurrentDualRange()) {
             return data::Value(channel.cal_conf.i[1].min.val, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
         } else {
-            return data::Value(PSTR(""));
+            return data::Value("");
         }
     } else if (id == DATA_ID_CAL_CH_I1_MID) {
         if (channel.hasSupportForCurrentDualRange()) {
             return data::Value(channel.cal_conf.i[1].mid.val, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
         } else {
-            return data::Value(PSTR(""));
+            return data::Value("");
         }
     } else if (id == DATA_ID_CAL_CH_I1_MAX) {
         if (channel.hasSupportForCurrentDualRange()) {
             return data::Value(channel.cal_conf.i[1].max.val, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
         } else {
-            return data::Value(PSTR(""));
+            return data::Value("");
         }
     } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_NUM) {
         return data::Value(g_stepNum);
@@ -221,7 +221,7 @@ void setLevelValue() {
 
     NumericKeypad *numericKeypad = NumericKeypad::start(0, levelValue, options, onSetLevelOk, showCurrentStep);
 
-    if (g_stepNum == 0 || g_stepNum == 3 || g_stepNum >= 6 && g_stepNum <= 8) {
+    if (g_stepNum == 0 || g_stepNum == 3 || (g_stepNum >= 6 && g_stepNum <= 8)) {
         numericKeypad->switchToMilli();
     }
 }
@@ -237,7 +237,7 @@ void onSetOk(float value) {
         popPage();
         nextStep();
     } else {
-        errorMessageP(PSTR("Value out of range!"));
+        errorMessageP("Value out of range!");
     }
 }
 
@@ -295,7 +295,7 @@ void set() {
 
         NumericKeypad *numericKeypad = NumericKeypad::start(0, data::Value(), options, onSetOk, showCurrentStep);
 
-        if (g_stepNum == 0 || g_stepNum == 3 || g_stepNum >= 6 && g_stepNum <= 8) {
+        if (g_stepNum == 0 || g_stepNum == 3 || (g_stepNum >= 6 && g_stepNum <= 8)) {
             numericKeypad->switchToMilli();
         }
     } else if (g_stepNum == MAX_STEP_NUM - 1) {
@@ -343,9 +343,9 @@ void nextStep() {
 void save() {
     if (psu::calibration::save()) {
         psu::calibration::stop();
-        infoMessageP(PSTR("Calibration data saved!"), popPage);
+        infoMessageP("Calibration data saved!", popPage);
     } else {
-        errorMessageP(PSTR("Save failed!"));
+        errorMessageP("Save failed!");
     }
 }
 

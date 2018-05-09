@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
-#include "list.h"
+#include "list_program.h"
 #include "trigger.h"
 #include "channel_dispatcher.h"
 #if OPTION_SD_CARD
@@ -341,8 +341,8 @@ bool saveList(Channel &channel, const char *filePath, int *err) {
         int i = 0;
         i < g_channelsLists[channel.index - 1].dwellListLength ||
         i < g_channelsLists[channel.index - 1].voltageListLength ||
-        i < g_channelsLists[channel.index - 1].currentListLength; 
-        ++i) 
+        i < g_channelsLists[channel.index - 1].currentListLength;
+        ++i)
     {
         if (i < g_channelsLists[channel.index - 1].dwellListLength) {
             file.print(g_channelsLists[channel.index - 1].dwellList[i], 4);
@@ -357,9 +357,9 @@ bool saveList(Channel &channel, const char *filePath, int *err) {
         } else {
             file.print(LIST_CSV_FILE_NO_VALUE_CHAR);
         }
-        
+
         file.print(CSV_SEPARATOR);
-        
+
         if (i < g_channelsLists[channel.index - 1].currentListLength) {
             file.print(g_channelsLists[channel.index - 1].currentList[i], 4);
         } else {
@@ -430,7 +430,7 @@ bool setListValue(Channel &channel, int16_t it, int *err) {
     if (channel_dispatcher::getISet(channel) != current) {
         channel_dispatcher::setCurrent(channel, current);
     }
-    
+
     return true;
 }
 
@@ -450,8 +450,6 @@ void tick(uint32_t tick_usec) {
             }
 
             g_active = true;
-
-            unsigned long currentTime = millis();
 
             uint32_t tickCount;
             if (g_execution[i].currentTotalDwellTime > CONF_COUNTER_THRESHOLD_IN_SECONDS) {

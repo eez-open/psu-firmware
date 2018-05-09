@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "scpi_psu.h"
 
 #include "trigger.h"
-#include "list.h"
+#include "list_program.h"
 #include "profile.h"
 
 #if OPTION_SD_CARD
@@ -105,7 +105,7 @@ void catalogCallback(void *param, const char *name, const char *type, size_t siz
         strcpy(buffer, name);
         position = nameLength;
     }
-    
+
     // max. 10 characters
     buffer[position++] = ',';
     strcpy(buffer + position, type);
@@ -223,7 +223,7 @@ scpi_result_t scpi_cmd_mmemoryUploadQ(scpi_t *context) {
 		if (err != 0) {
             SCPI_ErrorPush(context, err);
         }
-        
+
 		return SCPI_RES_ERR;
     }
 
@@ -305,7 +305,7 @@ scpi_result_t scpi_cmd_mmemoryDownloadSize(scpi_t *context) {
 		SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
 		return SCPI_RES_ERR;
 	}
-	
+
 	g_downloadSize = size;
 
 	return SCPI_RES_OK;
@@ -542,7 +542,7 @@ scpi_result_t scpi_cmd_mmemoryDateQ(scpi_t *context) {
     }
 
     char buffer[16] = { 0 };
-    sprintf_P(buffer, PSTR("%d, %d, %d"), (int)(year + 2000), (int)month, (int)day);
+    sprintf(buffer, "%d, %d, %d", (int)(year + 2000), (int)month, (int)day);
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;
@@ -569,7 +569,7 @@ scpi_result_t scpi_cmd_mmemoryTimeQ(scpi_t *context) {
     }
 
     char buffer[16] = { 0 };
-    sprintf_P(buffer, PSTR("%d, %d, %d"), (int)hour, (int)minute, (int)second);
+    sprintf(buffer, "%d, %d, %d", (int)hour, (int)minute, (int)second);
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;
@@ -670,12 +670,12 @@ scpi_result_t scpi_cmd_mmemoryStoreList(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    char filePath[MAX_PATH_LENGTH + sizeof(list::LIST_EXT) + 1];
+    char filePath[MAX_PATH_LENGTH + sizeof(LIST_EXT) + 1];
     if (!getFilePath(context, filePath, true)) {
         return SCPI_RES_ERR;
     }
 
-    addExtension(filePath, list::LIST_EXT);
+    addExtension(filePath, LIST_EXT);
 
     int err;
     if (!list::saveList(*channel, filePath, &err)) {
@@ -719,12 +719,12 @@ scpi_result_t scpi_cmd_mmemoryStoreProfile(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    char filePath[MAX_PATH_LENGTH + sizeof(profile::PROFILE_EXT) + 1];
+    char filePath[MAX_PATH_LENGTH + sizeof(PROFILE_EXT) + 1];
     if (!getFilePath(context, filePath, true)) {
         return SCPI_RES_ERR;
     }
 
-    addExtension(filePath, profile::PROFILE_EXT);
+    addExtension(filePath, PROFILE_EXT);
 
     int err;
     if (!profile::saveToFile(filePath, &err)) {
@@ -741,4 +741,4 @@ scpi_result_t scpi_cmd_mmemoryStoreProfile(scpi_t *context) {
 
 }
 }
-} // namespace eez::psu::scpi 
+} // namespace eez::psu::scpi

@@ -41,7 +41,7 @@ namespace scpi {
 
 scpi_result_t scpi_cmd_systemCapabilityQ(scpi_t *context) {
     char text[sizeof(STR_SYST_CAP)];
-    strcpy_P(text, PSTR(STR_SYST_CAP));
+    strcpy(text, STR_SYST_CAP);
     SCPI_ResultText(context, text);
     
     return SCPI_RES_OK;
@@ -134,7 +134,7 @@ scpi_result_t scpi_cmd_systemDateQ(scpi_t *context) {
     }
 
     char buffer[16] = { 0 };
-    sprintf_P(buffer, PSTR("%d, %d, %d"), (int)(year + 2000), (int)month, (int)day);
+    sprintf(buffer, "%d, %d, %d", (int)(year + 2000), (int)month, (int)day);
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;
@@ -183,7 +183,7 @@ scpi_result_t scpi_cmd_systemTimeQ(scpi_t *context) {
     }
 
     char buffer[16] = { 0 };
-    sprintf_P(buffer, PSTR("%d, %d, %d"), (int)hour, (int)minute, (int)second);
+    sprintf(buffer, "%d, %d, %d", (int)hour, (int)minute, (int)second);
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
 
     return SCPI_RES_OK;

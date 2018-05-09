@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 
 #include "channel_dispatcher.h"
@@ -75,27 +75,48 @@ void strcatUInt32(char *str, uint32_t value) {
 }
 
 void strcatFloat(char *str, float value, int numSignificantDecimalDigits) {
-    // mitigate "-0.00" case
-    float min = (float) (1.0f / pow(10, numSignificantDecimalDigits)) / 2;
-    if (fabs(value) < min) {
-        value = 0;
-    }
+	for (int i = 0; i < numSignificantDecimalDigits; ++i) {
+		value *= 10;
+	}
 
-    str = str + strlen(str);
+	int intValue = (int)roundf(value);
 
-#if defined(_VARIANT_ARDUINO_DUE_X_) || defined(EEZ_PSU_SIMULATOR)
-    sprintf(str, "%.*f", numSignificantDecimalDigits, value);
-#else
-    dtostrf(value, 0, precision, str);
-#endif
+	str = str + strlen(str);
 
-    // remove trailing zeros
-    /*
-    str = str + strlen(str) - 1;
-    while (*str == '0' && *(str - 1) != '.') {
-        *str-- = 0;
-    }
-    */
+	if (intValue != 0) {
+		if (intValue < 0) {
+			*str++ = '-';
+			intValue = -intValue;
+		}
+
+		char strR[32];
+		int i = 0;
+
+		while (intValue > 0 || i < numSignificantDecimalDigits) {
+			int d = intValue % 10;
+
+			strR[i++] = '0' + d;
+
+			if (i == numSignificantDecimalDigits) {
+				strR[i++] = '.';
+			}
+
+			intValue /= 10;
+		}
+
+		if (strR[i - 1] == '.') {
+			strR[i++] = '0';
+		}
+
+		for (int j = i - 1; j >= 0; --j) {
+			*str++ = strR[j];
+		}
+	}
+	else {
+		*str++ = '0';
+	}
+
+	*str = 0;
 }
 
 void strcatFloat(char *str, float value, ValueType valueType, int channelIndex) {
@@ -267,7 +288,7 @@ bool isDigit(char ch) {
 }
 
 bool isHexDigit(char ch) {
-    return ch >= '0' && ch <= '9' || ch >= 'a' && ch <= 'f' || ch >= 'A' && ch <= 'F';
+    return (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
 }
 
 bool isUperCaseLetter(char ch) {
@@ -295,7 +316,6 @@ int fromHexDigit(char ch) {
 }
 
 void removeTrailingZerosFromFloat(char *str) {
-    int n = strlen(str);
     for (int i = strlen(str) - 1; i >= 0; --i) {
         if (str[i] == '0') {
             str[i] = 0;
@@ -399,7 +419,7 @@ bool parseIpAddress(const char *ipAddressStr, size_t ipAddressStrLength, uint32_
             return false;
         }
 
-        if (i < 3 && *p++ != '.' || i == 3 && p != q) {
+        if ((i < 3 && *p++ != '.') || (i == 3 && p != q)) {
             return false;
         }
 
@@ -483,7 +503,7 @@ void macAddressToString(uint8_t *macAddress, char *macAddressStr) {
 
 void formatTimeZone(int16_t timeZone, char *text, int count) {
     if (timeZone == 0) {
-        strncpy_P(text, PSTR("GMT"), count - 1);
+        strncpy(text, "GMT", count - 1);
     } else {
         char sign;
         int16_t value;
@@ -494,7 +514,7 @@ void formatTimeZone(int16_t timeZone, char *text, int count) {
             sign = '-';
             value = -timeZone;
         }
-        snprintf_P(text, count-1, PSTR("%c%02d:%02d GMT"), sign, value / 100, value % 100);
+        snprintf(text, count-1, "%c%02d:%02d GMT", sign, value / 100, value % 100);
     }
     text[count - 1] = 0;
 }

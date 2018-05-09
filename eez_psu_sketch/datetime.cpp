@@ -256,7 +256,7 @@ bool setDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t
 bool getDateTimeAsString(char *buffer) {
     uint8_t year, month, day, hour, minute, second;
     if (datetime::getDate(year, month, day) && datetime::getTime(hour, minute, second)) {
-        sprintf_P(buffer, PSTR("%d-%02d-%02d %02d:%02d:%02d"),
+        sprintf(buffer, "%d-%02d-%02d %02d:%02d:%02d",
             (int)(year + 2000), (int)month, (int)day,
             (int)hour, (int)minute, (int)second);
         return true;
@@ -397,9 +397,8 @@ bool isDst(uint32_t local, DstRule dstRule) {
     uint32_t dstStart = timeChangeRuleToLocal(g_dstRules[dstRule - 1].dstStart, year);
     uint32_t dstEnd = timeChangeRuleToLocal(g_dstRules[dstRule - 1].dstEnd, year);
 
-    return
-        dstStart < dstEnd && (local >= dstStart && local < dstEnd) ||
-        dstStart > dstEnd && (local >= dstStart || local < dstEnd);
+    return (dstStart < dstEnd && (local >= dstStart && local < dstEnd)) ||
+        (dstStart > dstEnd && (local >= dstStart || local < dstEnd));
 }
 
 uint32_t utcToLocal(uint32_t utc, int16_t timeZone, DstRule dstRule) {

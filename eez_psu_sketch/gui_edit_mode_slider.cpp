@@ -39,11 +39,11 @@ static int last_scale;
 ////////////////////////////////////////////////////////////////////////////////
 
 int touchY() {
-	return scale_is_vertical ? touch::y : touch::x;
+	return scale_is_vertical ? touch::g_y : touch::g_x;
 }
 
 int touchX() {
-	return scale_is_vertical ? touch::x : touch::y;
+	return scale_is_vertical ? touch::g_x : touch::g_y;
 }
 
 int displayXSize() {

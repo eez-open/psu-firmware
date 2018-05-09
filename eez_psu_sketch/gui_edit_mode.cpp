@@ -218,46 +218,46 @@ void getInfoText(int part, char *infoText) {
     if (dataId == DATA_ID_CHANNEL_I_EDIT) {
         if (part == 0 || part == 1) {
             if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
-                strcpy_P(infoText, PSTR("Set current"));
+                strcpy(infoText, "Set current");
             } else {
-		        sprintf_P(infoText, PSTR("Set Ch%d current"), channel.index);
+		        sprintf(infoText, "Set Ch%d current", channel.index);
             }
         } else {
             *infoText = 0;
         }
 
         if (part == 0) {
-            strcat_P(infoText, PSTR(" "));
+            strcat(infoText, " ");
         }
 
         if (part == 0 || part == 2) {
-            strcat_P(infoText, PSTR("["));
+            strcat(infoText, "[");
 		    util::strcatFloat(infoText, g_minValue.getFloat(), 2);
-		    strcat_P(infoText, PSTR("-"));
+		    strcat(infoText, "-");
 		    util::strcatCurrent(infoText, channel_dispatcher::getILimit(Channel::get(g_focusCursor.i)), 2);
-		    strcat_P(infoText, PSTR("]"));
+		    strcat(infoText, "]");
         }
     } else {
         if (part == 0 || part == 1) {
             if (channel_dispatcher::isCoupled() || channel_dispatcher::isTracked()) {
-                strcpy_P(infoText, PSTR("Set voltage"));
+                strcpy(infoText, "Set voltage");
             } else {
-    		    sprintf_P(infoText, PSTR("Set Ch%d voltage"), channel.index);
+    		    sprintf(infoText, "Set Ch%d voltage", channel.index);
             }
         } else {
             *infoText = 0;
         }
 
         if (part == 0) {
-            strcat_P(infoText, PSTR(" "));
+            strcat(infoText, " ");
         }
 
         if (part == 0 || part == 2) {
-            strcat_P(infoText, PSTR("["));
+            strcat(infoText, "[");
             util::strcatFloat(infoText, g_minValue.getFloat(), 2);
-		    strcat_P(infoText, PSTR("-"));
+		    strcat(infoText, "-");
 		    util::strcatVoltage(infoText, channel_dispatcher::getULimit(Channel::get(g_focusCursor.i)), 2);
-		    strcat_P(infoText, PSTR("]"));
+		    strcat(infoText, "]");
         }
     }
 }

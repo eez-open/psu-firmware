@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "scpi_psu.h"
 
 #include "profile.h"
 #include "channel_dispatcher.h"
 #include "trigger.h"
-#include "list.h"
+#include "list_program.h"
 #include "io_pins.h"
 
 #define I_STATE 1
@@ -298,9 +298,9 @@ scpi_result_t scpi_cmd_sourceCurrentProtectionDelayTime(scpi_t * context) {
     }
 
     channel_dispatcher::setOcpDelay(*channel, delay);
-    
+
     profile::save();
-    
+
     return SCPI_RES_OK;
 }
 
@@ -318,7 +318,7 @@ scpi_result_t scpi_cmd_sourceCurrentProtectionState(scpi_t *context) {
     if (!channel) {
         return SCPI_RES_ERR;
     }
-    
+
 	bool state;
 	if (!SCPI_ParamBool(context, &state, TRUE)) {
 		return SCPI_RES_ERR;
@@ -343,7 +343,7 @@ scpi_result_t scpi_cmd_sourceCurrentProtectionTrippedQ(scpi_t * context) {
     if (!channel) {
         return SCPI_RES_ERR;
     }
-    
+
     return get_tripped(context, channel->ocp);
 }
 
@@ -369,7 +369,7 @@ scpi_result_t scpi_cmd_sourcePowerProtectionLevelQ(scpi_t * context) {
     if (!channel) {
         return SCPI_RES_ERR;
     }
-    
+
     return get_source_value(context, *channel, VALUE_TYPE_FLOAT_WATT, channel_dispatcher::getPowerProtectionLevel(*channel),
         channel_dispatcher::getOppMinLevel(*channel),
         channel_dispatcher::getOppMaxLevel(*channel),
@@ -388,9 +388,9 @@ scpi_result_t scpi_cmd_sourcePowerProtectionDelayTime(scpi_t * context) {
     }
 
     channel_dispatcher::setOppDelay(*channel, delay);
-    
+
     profile::save();
-    
+
     return SCPI_RES_OK;
 }
 
@@ -408,7 +408,7 @@ scpi_result_t scpi_cmd_sourcePowerProtectionState(scpi_t * context) {
     if (!channel) {
         return SCPI_RES_ERR;
     }
-    
+
 	bool state;
 	if (!SCPI_ParamBool(context, &state, TRUE)) {
 		return SCPI_RES_ERR;
@@ -424,7 +424,7 @@ scpi_result_t scpi_cmd_sourcePowerProtectionStateQ(scpi_t * context) {
     if (!channel) {
         return SCPI_RES_ERR;
     }
-    
+
     return get_state(context, channel, P_STATE);
 }
 
@@ -459,7 +459,7 @@ scpi_result_t scpi_cmd_sourceVoltageProtectionLevelQ(scpi_t * context) {
     if (!channel) {
         return SCPI_RES_ERR;
     }
-    
+
     return get_source_value(context, *channel, VALUE_TYPE_FLOAT_VOLT, channel_dispatcher::getUProtectionLevel(*channel),
         channel_dispatcher::getUSet(*channel),
         channel_dispatcher::getUMax(*channel),
@@ -478,9 +478,9 @@ scpi_result_t scpi_cmd_sourceVoltageProtectionDelayTime(scpi_t * context) {
     }
 
     channel_dispatcher::setOvpDelay(*channel, delay);
-    
+
     profile::save();
-    
+
     return SCPI_RES_OK;
 }
 
@@ -498,7 +498,7 @@ scpi_result_t scpi_cmd_sourceVoltageProtectionState(scpi_t * context) {
     if (!channel) {
         return SCPI_RES_ERR;
     }
-    
+
 	bool state;
 	if (!SCPI_ParamBool(context, &state, TRUE)) {
 		return SCPI_RES_ERR;
@@ -514,7 +514,7 @@ scpi_result_t scpi_cmd_sourceVoltageProtectionStateQ(scpi_t * context) {
     if (!channel) {
         return SCPI_RES_ERR;
     }
-    
+
     return get_state(context, channel, U_STATE);
 }
 
@@ -846,7 +846,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelTriggeredAmplitudeQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, 
+    return get_source_value(context,
         *channel,
         VALUE_TYPE_FLOAT_AMPER,
         channel_dispatcher::getTriggerCurrent(*channel),

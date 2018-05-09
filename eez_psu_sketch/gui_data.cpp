@@ -26,7 +26,7 @@
 #include "channel_dispatcher.h"
 #include "calibration.h"
 #include "trigger.h"
-#include "list.h"
+#include "list_program.h"
 #include "io_pins.h"
 #include "serial_psu.h"
 
@@ -55,6 +55,8 @@ namespace psu {
 namespace gui {
 namespace data {
 
+char g_throbber[8] = {'|', '/', '-', '\\', '|', '/', '-', '\\'};
+
 Value g_alertMessage;
 Value g_alertMessage2;
 Value g_alertMessage3;
@@ -70,85 +72,85 @@ static struct ChannelSnapshot {
 ////////////////////////////////////////////////////////////////////////////////
 
 data::EnumItem g_channelDisplayValueEnumDefinition[] = {
-    {DISPLAY_VALUE_VOLTAGE, PSTR("Voltage (V)")},
-    {DISPLAY_VALUE_CURRENT, PSTR("Current (A)")},
-    {DISPLAY_VALUE_POWER, PSTR("Power (W)")},
+    {DISPLAY_VALUE_VOLTAGE, "Voltage (V)"},
+    {DISPLAY_VALUE_CURRENT, "Current (A)"},
+    {DISPLAY_VALUE_POWER, "Power (W)"},
     {0, 0}
 };
 
 data::EnumItem g_channelTriggerModeEnumDefinition[] = {
-    {TRIGGER_MODE_FIXED, PSTR("Fixed")},
-    {TRIGGER_MODE_LIST, PSTR("List")},
-    {TRIGGER_MODE_STEP, PSTR("Step")},
+    {TRIGGER_MODE_FIXED, "Fixed"},
+    {TRIGGER_MODE_LIST, "List"},
+    {TRIGGER_MODE_STEP, "Step"},
     {0, 0}
 };
 
 data::EnumItem g_triggerSourceEnumDefinition[] = {
-    {trigger::SOURCE_BUS, PSTR("Bus")},
-    {trigger::SOURCE_IMMEDIATE, PSTR("Immediate")},
-    {trigger::SOURCE_MANUAL, PSTR("Manual")},
-    {trigger::SOURCE_PIN1, PSTR("Pin1")},
+    {trigger::SOURCE_BUS, "Bus"},
+    {trigger::SOURCE_IMMEDIATE, "Immediate"},
+    {trigger::SOURCE_MANUAL, "Manual"},
+    {trigger::SOURCE_PIN1, "Pin1"},
     {0, 0}
 };
 
 data::EnumItem g_channelCurrentRangeSelectionModeEnumDefinition[] = {
-    {CURRENT_RANGE_SELECTION_USE_BOTH, PSTR("Best (default)")},
-    {CURRENT_RANGE_SELECTION_ALWAYS_HIGH, PSTR("5A")},
-    {CURRENT_RANGE_SELECTION_ALWAYS_LOW, PSTR("0.5A")},
+    {CURRENT_RANGE_SELECTION_USE_BOTH, "Best (default)"},
+    {CURRENT_RANGE_SELECTION_ALWAYS_HIGH, "5A"},
+    {CURRENT_RANGE_SELECTION_ALWAYS_LOW, "0.5A"},
     {0, 0}
 };
 
 data::EnumItem g_channelCurrentRangeEnumDefinition[] = {
-    {CURRENT_RANGE_HIGH, PSTR("5A")},
-    {CURRENT_RANGE_LOW, PSTR("0.5A")},
+    {CURRENT_RANGE_HIGH, "5A"},
+    {CURRENT_RANGE_LOW, "0.5A"},
     {0, 0}
 };
 
 data::EnumItem g_channelTriggerOnListStopEnumDefinition[] = {
-    {TRIGGER_ON_LIST_STOP_OUTPUT_OFF, PSTR("Output OFF")},
-    {TRIGGER_ON_LIST_STOP_SET_TO_FIRST_STEP, PSTR("Set to first step")},
-    {TRIGGER_ON_LIST_STOP_SET_TO_LAST_STEP, PSTR("Set to last step")},
-    {TRIGGER_ON_LIST_STOP_STANDBY, PSTR("Standby")},
+    {TRIGGER_ON_LIST_STOP_OUTPUT_OFF, "Output OFF"},
+    {TRIGGER_ON_LIST_STOP_SET_TO_FIRST_STEP, "Set to first step"},
+    {TRIGGER_ON_LIST_STOP_SET_TO_LAST_STEP, "Set to last step"},
+    {TRIGGER_ON_LIST_STOP_STANDBY, "Standby"},
     {0, 0}
 };
 
 data::EnumItem g_ioPinsPolarityEnumDefinition[] = {
-    {io_pins::POLARITY_NEGATIVE, PSTR("Negative")},
-    {io_pins::POLARITY_POSITIVE, PSTR("Positive")},
+    {io_pins::POLARITY_NEGATIVE, "Negative"},
+    {io_pins::POLARITY_POSITIVE, "Positive"},
     {0, 0}
 };
 
 data::EnumItem g_ioPinsInputFunctionEnumDefinition[] = {
-    {io_pins::FUNCTION_NONE, PSTR("None")},
-    {io_pins::FUNCTION_INPUT, PSTR("Input")},
-    {io_pins::FUNCTION_INHIBIT, PSTR("Inhibit")},
-    {io_pins::FUNCTION_TINPUT, PSTR("Trigger input"), PSTR("Tinput")},
+    {io_pins::FUNCTION_NONE, "None"},
+    {io_pins::FUNCTION_INPUT, "Input"},
+    {io_pins::FUNCTION_INHIBIT, "Inhibit"},
+    {io_pins::FUNCTION_TINPUT, "Trigger input", "Tinput"},
     {0, 0}
 };
 
 data::EnumItem g_ioPinsOutputFunctionEnumDefinition[] = {
-    {io_pins::FUNCTION_NONE, PSTR("None")},
-    {io_pins::FUNCTION_OUTPUT, PSTR("Output")},
-    {io_pins::FUNCTION_FAULT, PSTR("Fault")},
-    {io_pins::FUNCTION_ON_COUPLE, PSTR("Channel ON couple"), PSTR("ONcoup")},
-    {io_pins::FUNCTION_TOUTPUT, PSTR("Trigger output"), PSTR("Toutput")},
+    {io_pins::FUNCTION_NONE, "None"},
+    {io_pins::FUNCTION_OUTPUT, "Output"},
+    {io_pins::FUNCTION_FAULT, "Fault"},
+    {io_pins::FUNCTION_ON_COUPLE, "Channel ON couple", "ONcoup"},
+    {io_pins::FUNCTION_TOUTPUT, "Trigger output", "Toutput"},
     {0, 0}
 };
 
 data::EnumItem g_serialParityEnumDefinition[] = {
-    {serial::PARITY_NONE, PSTR("None")},
-    {serial::PARITY_EVEN, PSTR("Even")},
-    {serial::PARITY_ODD, PSTR("Odd")},
-    {serial::PARITY_MARK, PSTR("Mark")},
-    {serial::PARITY_SPACE, PSTR("Space")},
+    {serial::PARITY_NONE, "None"},
+    {serial::PARITY_EVEN, "Even"},
+    {serial::PARITY_ODD, "Odd"},
+    {serial::PARITY_MARK, "Mark"},
+    {serial::PARITY_SPACE, "Space"},
     {0, 0}
 };
 
 data::EnumItem g_dstRuleEnumDefinition[] = {
-    {datetime::DST_RULE_OFF, PSTR("Off")},
-    {datetime::DST_RULE_EUROPE, PSTR("Europe")},
-    {datetime::DST_RULE_USA, PSTR("USA")},
-    {datetime::DST_RULE_AUSTRALIA, PSTR("Australia")},
+    {datetime::DST_RULE_OFF, "Off"},
+    {datetime::DST_RULE_EUROPE, "Europe"},
+    {datetime::DST_RULE_USA, "USA"},
+    {datetime::DST_RULE_AUSTRALIA, "Australia"},
     {0, 0}
 };
 
@@ -175,26 +177,19 @@ Value::Value(float value, ValueType type)
 }
 
 
-Value::Value(float value, ValueType type, int channelIndex) 
+Value::Value(float value, ValueType type, int channelIndex)
     : type_(type), float_(value)
 {
     options_ = channelIndex;
 }
 
-Value::Value(float value, ValueType type, int channelIndex, bool extendedPrecision) 
+Value::Value(float value, ValueType type, int channelIndex, bool extendedPrecision)
     : type_(type), float_(value)
 {
     options_ = channelIndex;
     if (extendedPrecision) {
         options_ |= VALUE_OPTIONS_EXTENDED_PRECISION;
     }
-}
-
-Value Value::ProgmemStr(const char *pstr PROGMEM) {
-    Value value;
-    value.const_str_ = pstr;
-    value.type_ = VALUE_TYPE_CONST_STR;
-    return value;
 }
 
 Value Value::PageInfo(uint8_t pageIndex, uint8_t numPages) {
@@ -246,8 +241,23 @@ bool Value::isMilli() const {
         if (options_ & VALUE_OPTIONS_EXTENDED_PRECISION) {
             ++numSignificantDecimalDigits;
         }
+
+        float value = float_;
+        float min = -1.0f;
+        float max = 1.0f;
         float precision = getPrecisionFromNumSignificantDecimalDigits(numSignificantDecimalDigits);
-        return util::greater(float_, -1.0f, precision) && util::less(float_, 1.0f, precision)/* && !util::equal(float_, 0, precision)*/;
+
+        bool gt = util::greater(value, min, precision);
+        if (!gt) {
+        	return false;
+        }
+
+        bool ls = util::less(value, max, precision);
+        if (!ls) {
+        	return false;
+        }
+
+        return  true;
     }
     return false;
 }
@@ -323,13 +333,13 @@ void printTime(uint32_t time, char *text, int count) {
 	int s = r - m * 60;
 
 	if (h > 0) {
-		snprintf_P(text, count - 1, PSTR("%dh %dm"), h, m);
+		snprintf(text, count - 1, "%dh %dm", h, m);
 	}
 	else if (m > 0) {
-		snprintf_P(text, count - 1, PSTR("%dm %ds"), m, s);
+		snprintf(text, count - 1, "%dm %ds", m, s);
 	}
 	else {
-		snprintf_P(text, count - 1, PSTR("%ds"), s);
+		snprintf(text, count - 1, "%ds", s);
 	}
 
 	text[count - 1] = 0;
@@ -346,52 +356,47 @@ void Value::toText(char *text, int count) const {
         util::strcatInt(text, int_);
         break;
 
-    case VALUE_TYPE_CONST_STR:
-        strncpy_P(text, const_str_, count - 1);
-        text[count - 1] = 0;
-        break;
-
     case VALUE_TYPE_STR:
         strncpy(text, str_, count - 1);
         text[count - 1] = 0;
         break;
 
     case VALUE_TYPE_CHANNEL_LABEL:
-        snprintf_P(text, count-1, PSTR("Channel %d:"), uint8_);
+        snprintf(text, count-1, "Channel %d:", uint8_);
         text[count - 1] = 0;
         break;
 
     case VALUE_TYPE_CHANNEL_SHORT_LABEL:
-        snprintf_P(text, count-1, PSTR("Ch%d:"), uint8_);
+        snprintf(text, count-1, "Ch%d:", uint8_);
         text[count - 1] = 0;
         break;
 
     case VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL:
-        snprintf_P(text, count-1, PSTR("CH%d board:"), int_);
+        snprintf(text, count-1, "CH%d board:", int_);
         text[count - 1] = 0;
         break;
 
     case VALUE_TYPE_LESS_THEN_MIN_INT:
-        snprintf_P(text, count-1, PSTR("Value is less then %d"), int_);
+        snprintf(text, count-1, "Value is less then %d", int_);
         text[count - 1] = 0;
         break;
 
     case VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE:
-        strncpy_P(text, PSTR("Value is less then -12:00"), count-1);
+        strncpy(text, "Value is less then -12:00", count-1);
         text[count - 1] = 0;
         break;
 
     case VALUE_TYPE_GREATER_THEN_MAX_INT:
-        snprintf_P(text, count-1, PSTR("Value is greater then %d"), int_);
+        snprintf(text, count-1, "Value is greater then %d", int_);
         text[count - 1] = 0;
         break;
 
     case VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE:
-        strncpy_P(text, PSTR("Value is greater then +14:00"), count-1);
+        strncpy(text, "Value is greater then +14:00", count-1);
         text[count - 1] = 0;
         break;
 
-    case VALUE_TYPE_EVENT: 
+    case VALUE_TYPE_EVENT:
         {
             int year, month, day, hour, minute, second;
             datetime::breakTime(event_->dateTime, year, month, day, hour, minute, second);
@@ -400,9 +405,9 @@ void Value::toText(char *text, int count) const {
             datetime::breakTime(datetime::now(), yearNow, monthNow, dayNow, hourNow, minuteNow, secondNow);
 
             if (yearNow == year && monthNow == month && dayNow == day) {
-                snprintf_P(text, count-1, PSTR("%c [%02d:%02d:%02d] %s"), 127 + event_queue::getEventType(event_), hour, minute, second, event_queue::getEventMessage(event_));
+                snprintf(text, count-1, "%c [%02d:%02d:%02d] %s", 127 + event_queue::getEventType(event_), hour, minute, second, event_queue::getEventMessage(event_));
             } else {
-                snprintf_P(text, count-1, PSTR("%c [%02d-%02d-%02d] %s"), 127 + event_queue::getEventType(event_), day, month, year % 100, event_queue::getEventMessage(event_));
+                snprintf(text, count-1, "%c [%02d-%02d-%02d] %s", 127 + event_queue::getEventType(event_), day, month, year % 100, event_queue::getEventMessage(event_));
             }
 
             text[count - 1] = 0;
@@ -410,7 +415,7 @@ void Value::toText(char *text, int count) const {
         break;
 
     case VALUE_TYPE_PAGE_INFO:
-        snprintf_P(text, count-1, PSTR("Page #%d of %d"), pageInfo_.pageIndex + 1, pageInfo_.numPages);
+        snprintf(text, count-1, "Page #%d of %d", pageInfo_.pageIndex + 1, pageInfo_.numPages);
         text[count - 1] = 0;
         break;
 
@@ -431,26 +436,26 @@ void Value::toText(char *text, int count) const {
         util::formatTimeZone(int16_, text, count);
         break;
 
-    case VALUE_TYPE_DATE: 
+    case VALUE_TYPE_DATE:
         {
             int year, month, day, hour, minute, second;
             datetime::breakTime(uint32_, year, month, day, hour, minute, second);
-            snprintf_P(text, count-1, PSTR("%d - %02d - %02d"), year, month, day);
+            snprintf(text, count-1, "%d - %02d - %02d", year, month, day);
             text[count - 1] = 0;
         }
         break;
 
-    case VALUE_TYPE_TIME: 
+    case VALUE_TYPE_TIME:
         {
             int year, month, day, hour, minute, second;
             datetime::breakTime(uint32_, year, month, day, hour, minute, second);
-            snprintf_P(text, count-1, PSTR("%02d : %02d : %02d"), hour, minute, second);
+            snprintf(text, count-1, "%02d : %02d : %02d", hour, minute, second);
             text[count - 1] = 0;
         }
         break;
 
     case VALUE_TYPE_YEAR:
-        snprintf_P(text, count-1, PSTR("%d"), uint16_);
+        snprintf(text, count-1, "%d", uint16_);
         text[count - 1] = 0;
         break;
 
@@ -459,12 +464,12 @@ void Value::toText(char *text, int count) const {
     case VALUE_TYPE_HOUR:
     case VALUE_TYPE_MINUTE:
     case VALUE_TYPE_SECOND:
-        snprintf_P(text, count-1, PSTR("%02d"), uint8_);
+        snprintf(text, count-1, "%02d", uint8_);
         text[count - 1] = 0;
         break;
 
     case VALUE_TYPE_USER_PROFILE_LABEL:
-        snprintf_P(text, count-1, PSTR("[ %d ]"), int_);
+        snprintf(text, count-1, "[ %d ]", int_);
         text[count - 1] = 0;
         break;
 
@@ -489,7 +494,7 @@ void Value::toText(char *text, int count) const {
     }
 
     case VALUE_TYPE_PORT:
-        snprintf_P(text, count-1, PSTR("%d"), uint16_);
+        snprintf(text, count-1, "%d", uint16_);
         text[count - 1] = 0;
         break;
 
@@ -499,9 +504,9 @@ void Value::toText(char *text, int count) const {
         for (int i = 0; enumDefinition[i].menuLabel; ++i) {
             if (enum_.value == enumDefinition[i].value) {
                 if (enumDefinition[i].widgetLabel) {
-                    strncpy_P(text, enumDefinition[i].widgetLabel, count-1);
+                    strncpy(text, enumDefinition[i].widgetLabel, count-1);
                 } else {
-                    strncpy_P(text, enumDefinition[i].menuLabel, count-1);
+                    strncpy(text, enumDefinition[i].menuLabel, count-1);
                 }
                 break;
             }
@@ -515,22 +520,22 @@ void Value::toText(char *text, int count) const {
         break;
 
     case VALUE_TYPE_SERIAL_BAUD_INDEX:
-        snprintf_P(text, count-1, PSTR("%ld"), serial::g_bauds[int_ - 1]);
+        snprintf(text, count-1, "%ld", serial::g_bauds[int_ - 1]);
         text[count - 1] = 0;
         break;
 
 	case VALUE_TYPE_PERCENTAGE:
-		snprintf_P(text, count - 1, PSTR("%d%%"), int_);
+		snprintf(text, count - 1, "%d%%", int_);
 		text[count - 1] = 0;
 		break;
 
 	case VALUE_TYPE_SIZE:
-		snprintf_P(text, count - 1, PSTR("%ld"), uint32_);
+		snprintf(text, count - 1, "%ld", uint32_);
 		text[count - 1] = 0;
 		break;
 
 	case VALUE_TYPE_DLOG_STATUS:
-		strcpy(text, PSTR("Dlog: "));
+		strcpy(text, "Dlog: ");
 		printTime(uint32_, text + 6, count - 6);
 		break;
 
@@ -538,12 +543,12 @@ void Value::toText(char *text, int count) const {
         if (type_ > VALUE_TYPE_GREATER_THEN_MAX_FLOAT) {
             char valueText[64];
             Value(float_, ValueType(type_ - VALUE_TYPE_GREATER_THEN_MAX_FLOAT + VALUE_TYPE_FLOAT)).toText(valueText, sizeof(text));
-            snprintf_P(text, count-1, PSTR("Value is greater then %s"), valueText);
+            snprintf(text, count-1, "Value is greater then %s", valueText);
             text[count - 1] = 0;
         } else if (type_ > VALUE_TYPE_LESS_THEN_MIN_FLOAT) {
             char valueText[64];
             Value(float_, ValueType(type_ - VALUE_TYPE_LESS_THEN_MIN_FLOAT + VALUE_TYPE_FLOAT)).toText(valueText, sizeof(text));
-            snprintf_P(text, count-1, PSTR("Value is less then %s"), valueText);
+            snprintf(text, count-1, "Value is less then %s", valueText);
             text[count - 1] = 0;
         } else {
             float value;
@@ -571,7 +576,7 @@ bool Value::operator ==(const Value &other) const {
     if (type_ == VALUE_TYPE_NONE || type_ == VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE || type_ == VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE) {
         return true;
     }
-		
+
 	if (type_ == VALUE_TYPE_INT || type_ == VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL || type_ == VALUE_TYPE_LESS_THEN_MIN_INT || type_ == VALUE_TYPE_GREATER_THEN_MAX_INT || type_ == VALUE_TYPE_USER_PROFILE_LABEL || type_ == VALUE_TYPE_USER_PROFILE_REMARK || type_ == VALUE_TYPE_EDIT_INFO || type_ == VALUE_TYPE_SERIAL_BAUD_INDEX || type_ == VALUE_TYPE_PERCENTAGE) {
         return int_ == other.int_;
     }
@@ -580,7 +585,7 @@ bool Value::operator ==(const Value &other) const {
 		return int16_ == other.int16_;
 	}
 
-	if (type_ >= VALUE_TYPE_MONTH && type_ <= VALUE_TYPE_SECOND || type_ == VALUE_TYPE_TEXT_MESSAGE || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL) {
+	if ((type_ >= VALUE_TYPE_MONTH && type_ <= VALUE_TYPE_SECOND) || type_ == VALUE_TYPE_TEXT_MESSAGE || type_ == VALUE_TYPE_CHANNEL_LABEL || type_ == VALUE_TYPE_CHANNEL_SHORT_LABEL) {
 		return uint8_ == other.uint8_;
 	}
 
@@ -595,19 +600,15 @@ bool Value::operator ==(const Value &other) const {
     if (type_ == VALUE_TYPE_MAC_ADDRESS) {
         return memcmp(puint8_, other.puint8_, 6) == 0;
     }
-		
+
 	if (type_ == VALUE_TYPE_STR) {
         return strcmp(str_, other.str_) == 0;
     }
 
-	if (type_ == VALUE_TYPE_CONST_STR) {
-        return const_str_ == other.const_str_;
-    }
-		
 	if (type_ == VALUE_TYPE_EVENT) {
         return event_->dateTime == other.event_->dateTime && event_->eventId == other.event_->eventId;
     }
-		
+
 	if (type_ == VALUE_TYPE_PAGE_INFO) {
 		return pageInfo_.pageIndex == other.pageInfo_.pageIndex && pageInfo_.numPages == other.pageInfo_.numPages;
 	}
@@ -615,7 +616,7 @@ bool Value::operator ==(const Value &other) const {
     if (type_ == VALUE_TYPE_ENUM) {
         return enum_.enumDefinition == other.enum_.enumDefinition && enum_.value == other.enum_.value;
     }
-    
+
     if (type_ == VALUE_TYPE_FLOAT_SECOND) {
     	return util::equal(float_, other.float_, powf(10.0f, 4));
     }
@@ -649,19 +650,19 @@ int Value::getInt() const {
     if (type_ == VALUE_TYPE_ENUM) {
         return enum_.value;
     }
-    return int_; 
+    return int_;
 }
 
 uint32_t Value::getUInt32() const {
-    return uint32_; 
+    return uint32_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 static bool isDisplayValue(const Cursor &cursor, uint8_t id, DisplayValue displayValue) {
     int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
-    return id == DATA_ID_CHANNEL_DISPLAY_VALUE1 && Channel::get(iChannel).flags.displayValue1 == displayValue ||
-        id == DATA_ID_CHANNEL_DISPLAY_VALUE2 && Channel::get(iChannel).flags.displayValue2 == displayValue;
+    return (id == DATA_ID_CHANNEL_DISPLAY_VALUE1 && Channel::get(iChannel).flags.displayValue1 == displayValue) ||
+        (id == DATA_ID_CHANNEL_DISPLAY_VALUE2 && Channel::get(iChannel).flags.displayValue2 == displayValue);
 }
 
 static bool isUMonData(const Cursor &cursor, uint8_t id) {
@@ -838,12 +839,12 @@ const char *getModelInfo() {
 }
 
 const char *getFirmwareInfo() {
-    static const char FIRMWARE_LABEL[] PROGMEM = "Firmware: ";
+    static const char FIRMWARE_LABEL[] = "Firmware: ";
     static char firmware_info[sizeof(FIRMWARE_LABEL) - 1 + sizeof(FIRMWARE) - 1 + 1];
 
     if (*firmware_info == 0) {
-        strcat_P(firmware_info, FIRMWARE_LABEL);
-        strcat_P(firmware_info, PSTR(FIRMWARE));
+        strcat(firmware_info, FIRMWARE_LABEL);
+        strcat(firmware_info, FIRMWARE);
     }
 
     return firmware_info;
@@ -879,7 +880,7 @@ Value get(const Cursor &cursor, uint8_t id) {
     }
 
     int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
-    
+
     if (iChannel >= 0) {
         Channel &channel = Channel::get(iChannel);
 
@@ -897,7 +898,7 @@ Value get(const Cursor &cursor, uint8_t id) {
             ChannelSnapshot &channelSnapshot = g_channelSnapshot[channel.index - 1];
             uint32_t currentTime = micros();
             if (!channelSnapshot.lastSnapshotTime || currentTime - channelSnapshot.lastSnapshotTime >= CONF_GUI_REFRESH_EVERY_MS * 1000UL) {
-                char *mode_str = channel.getCvModeStr();
+                const char *mode_str = channel.getCvModeStr();
                 channelSnapshot.mode = 0;
                 float uMon = channel_dispatcher::getUMon(channel);
                 float iMon = channel_dispatcher::getIMon(channel);
@@ -920,7 +921,6 @@ Value get(const Cursor &cursor, uint8_t id) {
             }
 
             if (id == DATA_ID_CHANNEL_OUTPUT_MODE) {
-                char *mode_str = channel.getCvModeStr();
                 return Value(channelSnapshot.mode);
             }
 
@@ -936,17 +936,17 @@ Value get(const Cursor &cursor, uint8_t id) {
 
             if (id == DATA_ID_TRIGGER_IS_INITIATED) {
 				bool isInitiated = trigger::isInitiated();
-#ifdef OPTION_SD_CARD
+#if OPTION_SD_CARD
 				if (!isInitiated && dlog::isInitiated()) {
 					isInitiated = true;
 				}
 #endif
                 return Value(isInitiated ? 1 : 0);
             }
-        
+
             if (id == DATA_ID_TRIGGER_IS_MANUAL) {
 				bool isManual = trigger::getSource() == trigger::SOURCE_MANUAL;
-#ifdef OPTION_SD_CARD
+#if OPTION_SD_CARD
 				if (!isManual && dlog::g_triggerSource == trigger::SOURCE_MANUAL) {
 					isManual = true;
 				}
@@ -957,11 +957,11 @@ Value get(const Cursor &cursor, uint8_t id) {
             if (id == DATA_ID_CHANNEL_MON_VALUE) {
                 return channelSnapshot.monValue;
             }
-        
+
             if (id == DATA_ID_CHANNEL_U_SET) {
                 return Value(channel_dispatcher::getUSet(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
             }
-        
+
             if (id == DATA_ID_CHANNEL_U_EDIT) {
                 if ((g_focusCursor == cursor || channel_dispatcher::isCoupled()) && g_focusDataId == DATA_ID_CHANNEL_U_EDIT && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
                     return g_focusEditValue;
@@ -969,7 +969,7 @@ Value get(const Cursor &cursor, uint8_t id) {
                     return Value(channel_dispatcher::getUSet(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
                 }
             }
-        
+
             if (isUMonData(cursor, id)) {
                 return Value(channel_dispatcher::getUMon(channel), VALUE_TYPE_FLOAT_VOLT, channel.index-1);
             }
@@ -985,7 +985,7 @@ Value get(const Cursor &cursor, uint8_t id) {
             if (id == DATA_ID_CHANNEL_I_SET) {
                 return Value(channel_dispatcher::getISet(channel), VALUE_TYPE_FLOAT_AMPER, channel.index-1);
             }
-        
+
             if (id == DATA_ID_CHANNEL_I_EDIT) {
                 if ((g_focusCursor == cursor || channel_dispatcher::isCoupled()) && g_focusDataId == DATA_ID_CHANNEL_I_EDIT && g_focusEditValue.getType() != VALUE_TYPE_NONE) {
                     return g_focusEditValue;
@@ -1025,7 +1025,7 @@ Value get(const Cursor &cursor, uint8_t id) {
                 else ovp = 2;
                 return Value(ovp);
             }
-        
+
             if (id == DATA_ID_OCP) {
                 unsigned ocp;
                 if (!channel.prot_conf.flags.i_state) ocp = 0;
@@ -1033,7 +1033,7 @@ Value get(const Cursor &cursor, uint8_t id) {
                 else ocp = 2;
                 return Value(ocp);
             }
-        
+
             if (id == DATA_ID_OPP) {
                 unsigned opp;
                 if (!channel.prot_conf.flags.p_state) opp = 0;
@@ -1041,7 +1041,7 @@ Value get(const Cursor &cursor, uint8_t id) {
                 else opp = 2;
                 return Value(opp);
             }
-        
+
             if (id == DATA_ID_OTP_CH) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
                 return 0;
@@ -1052,11 +1052,11 @@ Value get(const Cursor &cursor, uint8_t id) {
                 else return 2;
 #endif
             }
-        
+
             if (id == DATA_ID_CHANNEL_LABEL) {
                 return data::Value(channel.index, VALUE_TYPE_CHANNEL_LABEL);
             }
-        
+
             if (id == DATA_ID_CHANNEL_SHORT_LABEL) {
                 return data::Value(channel.index, VALUE_TYPE_CHANNEL_SHORT_LABEL);
             }
@@ -1155,7 +1155,7 @@ Value get(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_ALERT_MESSAGE) {
         return g_alertMessage;
     }
-    
+
     if (id == DATA_ID_ALERT_MESSAGE_2) {
         return g_alertMessage2;
     }
@@ -1167,7 +1167,7 @@ Value get(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_MODEL_INFO) {
         return Value(getModelInfo());
     }
-    
+
     if (id == DATA_ID_FIRMWARE_INFO) {
         return Value(getFirmwareInfo());
     }
@@ -1207,8 +1207,7 @@ Value get(const Cursor &cursor, uint8_t id) {
     }
 
     if (id == DATA_ID_ASYNC_OPERATION_THROBBER) {
-        static char *throbber[] = {"|", "/", "-", "\\", "|", "/", "-", "\\"};
-        return data::Value(throbber[(millis() % 1000) / 125]);
+        return data::Value(g_throbber[(millis() % 1000) / 125]);
     }
 
     if (id == DATA_ID_PROGRESS) {
@@ -1238,7 +1237,7 @@ Value get(const Cursor &cursor, uint8_t id) {
 			return data::Value(2);
 		}
 #else
-		if (list::anyCounterVisible()) {
+		if (list::anyCounterVisible(CONF_LIST_COUNDOWN_DISPLAY_THRESHOLD)) {
 			return data::Value(1);
 		}
 #endif
@@ -1248,7 +1247,7 @@ Value get(const Cursor &cursor, uint8_t id) {
 #if OPTION_SD_CARD
 	if (id == DATA_ID_DLOG_STATUS) {
 		if (dlog::isInitiated()) {
-			return data::Value(PSTR("Dlog trigger waiting"));
+			return data::Value("Dlog trigger waiting");
 		} else if (!dlog::isIdle()) {
 			return data::Value((uint32_t)floor(dlog::g_currentTime), VALUE_TYPE_DLOG_STATUS);
 		}
@@ -1302,17 +1301,17 @@ bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
             if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
             return false;
         }
-        
+
         if (util::greater(value.getFloat(), channel_dispatcher::getULimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_VOLT, iChannel)) {
             if (error) *error = SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
             return false;
         }
-        
+
         if (util::greater(value.getFloat() * channel_dispatcher::getISetUnbalanced(Channel::get(iChannel)), channel_dispatcher::getPowerLimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_WATT, iChannel)) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
-        
+
         channel_dispatcher::setVoltage(Channel::get(iChannel), value.getFloat());
 
         return true;
@@ -1321,17 +1320,17 @@ bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error) {
             if (error) *error = SCPI_ERROR_DATA_OUT_OF_RANGE;
             return false;
         }
-        
+
         if (util::greater(value.getFloat(), channel_dispatcher::getILimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_AMPER, iChannel)) {
             if (error) *error = SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
             return false;
         }
-        
+
         if (util::greater(value.getFloat() * channel_dispatcher::getUSetUnbalanced(Channel::get(iChannel)), channel_dispatcher::getPowerLimit(Channel::get(iChannel)), VALUE_TYPE_FLOAT_VOLT, iChannel)) {
             if (error) *error = SCPI_ERROR_POWER_LIMIT_EXCEEDED;
             return false;
         }
-        
+
         channel_dispatcher::setCurrent(Channel::get(iChannel), value.getFloat());
 
         return true;
@@ -1413,11 +1412,11 @@ Value getEditValue(const Cursor &cursor, uint8_t id) {
     if (id == DATA_ID_CHANNEL_U_SET || id == DATA_ID_CHANNEL_U_EDIT) {
         return Value(channel_dispatcher::getUSetUnbalanced(channel), VALUE_TYPE_FLOAT_VOLT, iChannel);
     }
-        
+
     if (id == DATA_ID_CHANNEL_I_SET || id == DATA_ID_CHANNEL_I_EDIT) {
         return Value(channel_dispatcher::getISetUnbalanced(channel), VALUE_TYPE_FLOAT_AMPER, iChannel);
     }
-        
+
     return get(cursor, id);
 }
 

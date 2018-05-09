@@ -23,7 +23,7 @@
 #include "event_queue.h"
 #include "channel_dispatcher.h"
 #include "trigger.h"
-#include "list.h"
+#include "list_program.h"
 #include "calibration.h"
 #include "scpi_psu.h"
 #if OPTION_SD_CARD
@@ -35,7 +35,7 @@ namespace eez {
 namespace psu {
 namespace profile {
 
-#define AUTO_NAME_PREFIX PSTR("Saved at ")
+#define AUTO_NAME_PREFIX "Saved at "
 
 static bool g_saveEnabled = true;
 static bool g_saveProfile = false;
@@ -255,8 +255,8 @@ bool load(int location, Parameters *profile) {
 }
 
 void getSaveName(const Parameters *profile, char *name) {
-	if (!profile->flags.isValid || strncmp_P(profile->name, AUTO_NAME_PREFIX, strlen(AUTO_NAME_PREFIX)) == 0) {
-		strcpy_P(name, AUTO_NAME_PREFIX);
+	if (!profile->flags.isValid || strncmp(profile->name, AUTO_NAME_PREFIX, strlen(AUTO_NAME_PREFIX)) == 0) {
+		strcpy(name, AUTO_NAME_PREFIX);
 		datetime::getDateTimeAsString(name + strlen(AUTO_NAME_PREFIX));
 	} else {
 		strcpy(name, profile->name);

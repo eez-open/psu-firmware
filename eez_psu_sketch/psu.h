@@ -18,27 +18,32 @@
  
 #pragma once
 
-#if !defined(EEZ_PSU_ARDUINO) && !defined(EEZ_PSU_SIMULATOR)
+#if !defined(EEZ_PSU_ARDUINO) && !defined(EEZ_PSU_SIMULATOR) && !defined(EEZ_PSU_STM32)
 #define EEZ_PSU_ARDUINO
+#endif
+
+#ifdef EEZ_PSU_ARDUINO
+#include "arduino_psu.h"
 #endif
 
 #ifdef EEZ_PSU_SIMULATOR
 #include "simulator_psu.h"
 #endif
 
-#include "Arduino.h"
-#include "SPI.h"
+#ifdef EEZ_PSU_STM32
+#include "stm32_psu.h"
+#endif
 
 #include "eez_psu_rev.h"
-
-#ifdef EEZ_PSU_ARDUINO
-#include "arduino_psu.h"
-#endif
 
 #include "conf.h"
 
 #ifdef EEZ_PSU_SIMULATOR
 #include "simulator_conf.h"
+#endif
+
+#ifdef EEZ_PSU_STM32
+#include "stm32_conf.h"
 #endif
 
 #include "eez_psu.h"
@@ -133,5 +138,7 @@ bool isFrontPanelLocked();
 #include "util.h"
 #include "channel.h"
 
+#if defined(EEZ_PSU_ARDUINO)
 void PSU_boot();
 void PSU_tick();
+#endif

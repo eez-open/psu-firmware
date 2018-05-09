@@ -24,6 +24,9 @@
 #define F_CPU 80
 typedef uint8_t byte;
 
+#define interrupts() (void)0
+#define noInterrupts() (void)0
+
 namespace eez {
 namespace psu {
 namespace simulator {
@@ -127,9 +130,6 @@ private:
 
 extern UARTClass Serial;
 extern UARTClass SerialUSB;
-
-#define PROGMEM
-#define pgm_read_byte_near(address_short) (*(address_short))
 
 }
 }

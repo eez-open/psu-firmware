@@ -207,17 +207,15 @@ void touch_write(bool is_pressed, int x, int y) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-EventType event_type = TOUCH_NONE;
-int x = -1;
-int y = -1;
+EventType g_eventType = TOUCH_NONE;
+int g_x = -1;
+int g_y = -1;
 
 uint32_t last_tick_usec = 0;
 
 void init() {
     touch_init();
     calibration::init();
-
-    DebugTrace("Touch modification ENABLED");
 }
 
 void tick(uint32_t tick_usec) {
@@ -234,32 +232,27 @@ void tick(uint32_t tick_usec) {
 
     if (touch_is_pressed) {
         if (touch_x != -1 && touch_y != -1) {
-            x = touch_x;
-            y = touch_y;
+            g_x = touch_x;
+            g_y = touch_y;
 
-            if (event_type == TOUCH_NONE || event_type == TOUCH_UP) {
-                event_type = TOUCH_DOWN;
+            if (g_eventType == TOUCH_NONE || g_eventType == TOUCH_UP) {
+                g_eventType = TOUCH_DOWN;
             } else {
-                if (event_type == TOUCH_DOWN) {
-                    event_type = TOUCH_MOVE;
+                if (g_eventType == TOUCH_DOWN) {
+                    g_eventType = TOUCH_MOVE;
                 }
             }
             return;
         }
     }
 
-    if (event_type == TOUCH_DOWN || event_type == TOUCH_MOVE) {
-        event_type = TOUCH_UP;
-    } else if (event_type == TOUCH_UP) {
-        event_type = TOUCH_NONE;
-        x = -1;
-        y = -1;
+    if (g_eventType == TOUCH_DOWN || g_eventType == TOUCH_MOVE) {
+        g_eventType = TOUCH_UP;
+    } else if (g_eventType == TOUCH_UP) {
+        g_eventType = TOUCH_NONE;
+        g_x = -1;
+        g_y = -1;
     }
-}
-
-bool directIsPressed() {
-    touch_read();
-    return touch_is_pressed;
 }
 
 }

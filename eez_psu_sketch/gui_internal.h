@@ -21,7 +21,6 @@
 #include "lcd.h"
 #include "font.h"
 #include "touch.h"
-#include "gesture.h"
 
 #include "gui_data.h"
 #include "gui_view.h"
@@ -29,10 +28,6 @@
 
 #include "actions.h"
 #include "gui_document.h"
-
-#if defined(EEZ_PSU_ARDUINO_MEGA)
-#include "arduino_util.h"
-#endif
 
 namespace eez {
 namespace psu {
@@ -66,22 +61,22 @@ void fillRect(int x, int y, int w, int h);
 void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t currentValue, bool (*disabledCallback)(uint8_t value), void (*onSet)(uint8_t));
 
 void infoMessage(data::Value value, void (*ok_callback)() = 0);
-void infoMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);
+void infoMessageP(const char *message, void (*ok_callback)() = 0);
 
 void longInfoMessage(data::Value value1, data::Value value2, void (*ok_callback)() = 0);
-void longInfoMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, void (*ok_callback)() = 0);
+void longInfoMessageP(const char *message1, const char *message2, void (*ok_callback)() = 0);
 
-void toastMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, const char *message3 PROGMEM, void (*ok_callback)() = 0);
+void toastMessageP(const char *message1, const char *message2, const char *message3, void (*ok_callback)() = 0);
 
 void errorMessage(const data::Cursor& cursor, data::Value value, void (*ok_callback)() = 0);
-void errorMessageP(const char *message PROGMEM, void (*ok_callback)() = 0);
+void errorMessageP(const char *message, void (*ok_callback)() = 0);
 
 void longErrorMessage(data::Value value1, data::Value value2, void (*ok_callback)() = 0);
-void longErrorMessageP(const char *message1 PROGMEM, const char *message2 PROGMEM, void (*ok_callback)() = 0);
+void longErrorMessageP(const char *message1, const char *message2, void (*ok_callback)() = 0);
 
-void yesNoDialog(int yesNoPageId, const char *message PROGMEM, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());
+void yesNoDialog(int yesNoPageId, const char *message, void (*yes_callback)(), void (*no_callback)(), void (*cancel_callback)());
 void areYouSure(void (*yes_callback)());
-void areYouSureWithMessage(const char *message PROGMEM, void (*yes_callback)());
+void areYouSureWithMessage(const char *message, void (*yes_callback)());
 
 void dialogYes();
 void dialogNo();
@@ -153,43 +148,6 @@ inline OBJ_OFFSET getPageOffset(int pageID) {
     return getListItemOffset(g_document->pages, pageID, sizeof(Widget));
 }
 
-#if defined(EEZ_PSU_ARDUINO_MEGA)
-
-#define DECL_WIDGET_STYLE(var, widget) DECL_STYLE(var, (widget)->style)
-
-#define DECL_STYLE(var, styleId) \
-    Style var##_buffer; \
-    arduino_util::prog_read_buffer(styles + getStyleOffset(styleId), (uint8_t *)&var##_buffer, sizeof(Style)); \
-    const Style *var = &var##_buffer
-
-#define DECL_WIDGET(var, widgetOffset) \
-    Widget var##_buffer; \
-    arduino_util::prog_read_buffer(document + (widgetOffset), (uint8_t *)&var##_buffer, sizeof(Widget)); \
-    const Widget *var = &var##_buffer
-
-#define DECL_WIDGET_SPECIFIC(type, var, widget) \
-    type var##_buffer; \
-    arduino_util::prog_read_buffer(document + (widget)->specific, (uint8_t *)&var##_buffer, sizeof(type)); \
-    const type *var = &var##_buffer
-
-#define DECL_STRING(var, offset) \
-    char var##_buffer[128]; \
-    strncpy_P(var##_buffer, (const char *)(document + (offset)), sizeof(var##_buffer) - 1); \
-    var##_buffer[sizeof(var##_buffer) - 1] = 0; \
-    const char *var = var##_buffer
-
-#define DECL_BITMAP(var, offset) \
-    Bitmap var##_buffer; \
-    arduino_util::prog_read_buffer(document + (offset), (uint8_t *)&var##_buffer, sizeof(Bitmap)); \
-    const Bitmap *var = &var##_buffer
-
-#define DECL_STRUCT_WITH_OFFSET(Struct, var, offset) \
-    Struct var##_buffer; \
-    arduino_util::prog_read_buffer(document + (offset), (uint8_t *)&var##_buffer, sizeof(Struct)); \
-    const Struct *var = &var##_buffer
-
-#else
-
 #define DECL_WIDGET_STYLE(var, widget) DECL_STYLE(var, transformStyle(widget))
 #define DECL_STYLE(var, styleID) const Style *var = (const Style *)(styles + getStyleOffset(styleID))
 
@@ -200,8 +158,6 @@ inline OBJ_OFFSET getPageOffset(int pageID) {
 #define DECL_STRING(var, offset) const char *var = (const char *)(document + (offset))
 #define DECL_BITMAP(var, offset) const Bitmap *var = (const Bitmap *)(document + (offset))
 #define DECL_STRUCT_WITH_OFFSET(Struct, var, offset) const Struct *var = (const Struct *)(document + (offset))
-
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 

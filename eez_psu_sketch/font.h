@@ -26,7 +26,7 @@ namespace font {
 static const int GLYPH_HEADER_SIZE = 5;
 
 struct Glyph {
-    const uint8_t *data PROGMEM;
+    const uint8_t *data;
 
     int8_t dx;
     int8_t x;
@@ -38,10 +38,10 @@ struct Glyph {
 };
 
 struct Font {
-    const uint8_t *fontData PROGMEM;
+    const uint8_t *fontData;
 
     Font();
-    Font(const uint8_t *data PROGMEM);
+    Font(const uint8_t *data);
 
     void getGlyph(uint8_t requested_encoding, Glyph &glyph);
     
@@ -52,11 +52,11 @@ struct Font {
 private:
     uint8_t getByte(int offset);
     uint16_t getWord(int offset);
-    
+
     uint8_t getEncodingStart();
     uint8_t getEncodingEnd();
 
-    const uint8_t * PROGMEM findGlyphData(uint8_t requested_encoding);
+    const uint8_t * findGlyphData(uint8_t requested_encoding);
     void fillGlyphParameters(Glyph &glyph);
 };
 }

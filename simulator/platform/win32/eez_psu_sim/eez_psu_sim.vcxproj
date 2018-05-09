@@ -170,7 +170,6 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
   <ItemGroup>
     <ClInclude Include="..\..\..\..\eez_psu_sketch\actions.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\adc.h" />
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\arduino_util.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\board.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\bp.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\buzzer.h" />
@@ -193,7 +192,6 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\event_queue.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\fan.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\font.h" />
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\gesture.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_calibration.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_data.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\gui_document.h" />
@@ -222,7 +220,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClInclude Include="..\..\..\..\eez_psu_sketch\ioexp.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\io_pins.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\lcd.h" />
-    <ClInclude Include="..\..\..\..\eez_psu_sketch\list.h" />
+    <ClInclude Include="..\..\..\..\eez_psu_sketch\list_program.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\ntp.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\ontime.h" />
     <ClInclude Include="..\..\..\..\eez_psu_sketch\persist_conf.h" />
@@ -292,7 +290,6 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
   <ItemGroup>
     <ClCompile Include="..\..\..\..\eez_psu_sketch\actions.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\adc.cpp" />
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\arduino_util.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\board.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\bp.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\buzzer.cpp" />
@@ -310,7 +307,6 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\event_queue.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\fan.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\font.cpp" />
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\gesture.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_calibration.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_data.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\gui_document.cpp" />
@@ -338,7 +334,7 @@ copy "..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
     <ClCompile Include="..\..\..\..\eez_psu_sketch\ioexp.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\io_pins.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\lcd.cpp" />
-    <ClCompile Include="..\..\..\..\eez_psu_sketch\list.cpp" />
+    <ClCompile Include="..\..\..\..\eez_psu_sketch\list_program.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\ntp.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\ontime.cpp" />
     <ClCompile Include="..\..\..\..\eez_psu_sketch\persist_conf.cpp" />

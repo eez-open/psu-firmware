@@ -106,7 +106,7 @@ void drawText(int pageId, const char *text, int textLength, int x, int y, int w,
     }
 
     font::Font font = styleGetFont(style);
-    
+
     int width = lcd::lcd.measureStr(text, textLength, font, x2 - x1 + 1);
     int height = font.getHeight();
 
@@ -177,7 +177,7 @@ void drawMultilineText(int pageId, const char *text, int x, int y, int w, int h,
 
     font::Font font = styleGetFont(style);
     int height = (int)(0.9 * font.getHeight());
-    
+
     font::Glyph space_glyph;
     font.getGlyph(' ', space_glyph);
     int space_width = space_glyph.dx;
@@ -382,7 +382,7 @@ void drawDisplayDataWidget(int pageId, const WidgetCursor &widgetCursor) {
 	DECL_STYLE(style, widgetCursor.currentState->flags.focused ? display_data_widget->activeStyle : widget->style);
 
     widgetCursor.currentState->flags.blinking = data::isBlinking(widgetCursor.cursor, widget->data) && g_isBlinkTime;
-    widgetCursor.currentState->data = data::get(widgetCursor.cursor, 
+    widgetCursor.currentState->data = data::get(widgetCursor.cursor,
         widgetCursor.currentState->flags.focused && getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD ? DATA_ID_KEYPAD_TEXT : widget->data);
 	widgetCursor.currentState->backgroundColor = data::getWidgetBackgroundColor(widgetCursor, style);
 
@@ -645,8 +645,6 @@ void drawScaleWidget(const WidgetCursor &widgetCursor) {
         float max = data::getMax(widgetCursor.cursor, widget->data).getFloat();
 
         DECL_WIDGET_STYLE(style, widget);
-        font::Font font = styleGetFont(style);
-        int fontHeight = font.getAscent();
 
         DECL_WIDGET_SPECIFIC(ScaleWidget, scale_widget, widget);
 
@@ -682,7 +680,7 @@ void drawScaleWidget(const WidgetCursor &widgetCursor) {
         static int edit_mode_slider_scale_last_y_value;
 
         if (widget->data != DATA_ID_EDIT_VALUE) {
-            // draw entire scale 
+            // draw entire scale
             drawScale(widget, scale_widget, style, y_from_min, y_from_max, y_min, y_max, y_value, f, d, true);
         }
         else {
@@ -722,7 +720,7 @@ void drawScaleWidget(const WidgetCursor &widgetCursor) {
         if (widget->data == DATA_ID_EDIT_VALUE) {
             edit_mode_slider::scale_is_vertical = vertical;
             edit_mode_slider::scale_width = vertical ? widget->w : widget->h;
-            edit_mode_slider::scale_height = (max - min) * f; 
+            edit_mode_slider::scale_height = (max - min) * f;
         }
     }
 }
@@ -748,12 +746,6 @@ void drawButtonWidget(int pageId, const WidgetCursor &widgetCursor) {
 
             if (widgetCursor.currentState->data.isString()) {
                 drawText(pageId, widgetCursor.currentState->data.asString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
-                    widgetCursor.currentState->flags.pressed,
-                    widgetCursor.currentState->flags.blinking);
-            } else if (widgetCursor.currentState->data.isConstString()) {
-                char text[64];
-                widgetCursor.currentState->data.toText(text, sizeof(text));
-                drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
                     widgetCursor.currentState->flags.pressed,
                     widgetCursor.currentState->flags.blinking);
             } else {
@@ -873,7 +865,7 @@ void drawBarGraphWidget(int pageId, const WidgetCursor &widgetCursor) {
         const int h = widget->h;
 
         float min = data::getMin(widgetCursor.cursor, widget->data).getFloat();
-        float max = fullScale ? 
+        float max = fullScale ?
             ((BarGraphWidgetState *)widgetCursor.currentState)->line2Data.getFloat() :
             data::getMax(widgetCursor.cursor, widget->data).getFloat();
 
@@ -884,12 +876,12 @@ void drawBarGraphWidget(int pageId, const WidgetCursor &widgetCursor) {
         // calc bar  position (monitored value)
         int pValue = calcValuePosInBarGraphWidget(widgetCursor.currentState->data, min, max, d);
 
-        // calc line 1 position (set value) 
+        // calc line 1 position (set value)
         int pLine1 = calcValuePosInBarGraphWidget(((BarGraphWidgetState *)widgetCursor.currentState)->line1Data, min, max, d);
 
         int pLine2;
         if (!fullScale) {
-            // calc line 2 position (limit value) 
+            // calc line 2 position (limit value)
             pLine2 = calcValuePosInBarGraphWidget(((BarGraphWidgetState *)widgetCursor.currentState)->line2Data, min, max, d);
 
             // make sure line positions don't overlap
@@ -912,7 +904,7 @@ void drawBarGraphWidget(int pageId, const WidgetCursor &widgetCursor) {
         if (barGraphWidget->textStyle) {
             DECL_STYLE(textStyleInner, barGraphWidget->textStyle);
             memcpy(&textStyle, textStyleInner, sizeof(Style));
-    
+
             inverseColor = textStyle.background_color;
         } else {
             inverseColor = style->background_color;
@@ -928,10 +920,10 @@ void drawBarGraphWidget(int pageId, const WidgetCursor &widgetCursor) {
             int wText = 0;
             if (barGraphWidget->textStyle) {
                 font::Font font = styleGetFont(&textStyle);
-    
+
                 widgetCursor.currentState->data.toText(valueText, sizeof(valueText));
                 wText = lcd::lcd.measureStr(valueText, -1, font, w);
-                
+
                 int padding = textStyle.padding_horizontal;
                 wText += padding;
 
@@ -951,7 +943,7 @@ void drawBarGraphWidget(int pageId, const WidgetCursor &widgetCursor) {
                     lcd::lcd.setColor(fg);
                     lcd::lcd.fillRect(x, y, x + pText - 1, y + h - 1);
                 }
-    
+
                 drawText(pageId, valueText, -1, x + pText, y, wText, h, &textStyle, false);
                 if (!isActivePage(pageId)) {
                     return;
@@ -989,7 +981,7 @@ void drawBarGraphWidget(int pageId, const WidgetCursor &widgetCursor) {
                     lcd::lcd.setColor(fg);
                     lcd::lcd.fillRect(x - (pText - 1), y, x, y + h - 1);
                 }
-    
+
                 drawText(pageId, valueText, -1, x - (pText + wText - 1), y, wText, h, &textStyle, false);
                 if (!isActivePage(pageId)) {
                     return;
@@ -1032,10 +1024,10 @@ void drawBarGraphWidget(int pageId, const WidgetCursor &widgetCursor) {
             int hText = 0;
             if (barGraphWidget->textStyle) {
                 font::Font font = styleGetFont(&textStyle);
-    
+
                 widgetCursor.currentState->data.toText(valueText, sizeof(valueText));
                 hText = font.getHeight();
-                
+
                 int padding = textStyle.padding_vertical;
                 hText += padding;
 
@@ -1055,7 +1047,7 @@ void drawBarGraphWidget(int pageId, const WidgetCursor &widgetCursor) {
                     lcd::lcd.setColor(fg);
                     lcd::lcd.fillRect(x, y, x + w - 1, y + pText - 1);
                 }
-    
+
                 drawText(pageId, valueText, -1, x, y + pText, w, hText, &textStyle, false);
                 if (!isActivePage(pageId)) {
                     return;
@@ -1093,7 +1085,7 @@ void drawBarGraphWidget(int pageId, const WidgetCursor &widgetCursor) {
                     lcd::lcd.setColor(fg);
                     lcd::lcd.fillRect(x, y - (pText - 1), x + w - 1, y);
                 }
-    
+
                 drawText(pageId, valueText, -1, x, y - (pText + hText - 1), w, hText, &textStyle, false);
                 if (!isActivePage(pageId)) {
                     return;
@@ -1137,7 +1129,7 @@ int getYValue(
     const WidgetCursor &widgetCursor, const Widget *widget,
     uint8_t data, float min, float max,
     int position
-    ) 
+    )
 {
     float value = data::getHistoryValue(widgetCursor.cursor, data, position).getFloat();
     int y = (int)floor(widget->h * (value - min) / (max - min));
@@ -1154,7 +1146,7 @@ void drawYTGraph(
     uint8_t data1, float min1, float max1, uint16_t data1Color,
     uint8_t data2, float min2, float max2, uint16_t data2Color,
     uint16_t color, uint16_t backgroundColor
-    ) 
+    )
 {
     for (int position = startPosition; position < endPosition; ++position) {
         if (position < graphWidth) {
@@ -1293,12 +1285,12 @@ void drawYTGraphWidget(int pageId, const WidgetCursor &widgetCursor) {
             startPosition, endPosition,
             currentHistoryValuePosition, numHistoryValues,
             textWidth, graphWidth,
-            widget->data, min1, max1, y1Style->color, 
+            widget->data, min1, max1, y1Style->color,
             ytGraphWidget->y2Data, min2, max2, y2Style->color,
             widgetCursor.currentState->flags.pressed ? style->color: style->background_color,
             widgetCursor.currentState->flags.pressed ? style->background_color : style->color);
     } else {
-        drawYTGraph(widgetCursor, widget, 
+        drawYTGraph(widgetCursor, widget,
             startPosition, numHistoryValues,
             currentHistoryValuePosition, numHistoryValues,
             textWidth, graphWidth,
@@ -1447,7 +1439,7 @@ void drawListGraphWidget(const WidgetCursor &widgetCursor) {
         int dwellListLength = data::getListLength(listGraphWidget->dwellData);
         if (dwellListLength > 0) {
             float *dwellList = data::getFloatList(listGraphWidget->dwellData);
-        
+
             const Style *styles[2] = {
                 y1Style,
                 y2Style
@@ -1457,17 +1449,17 @@ void drawListGraphWidget(const WidgetCursor &widgetCursor) {
                 data::getListLength(listGraphWidget->y1Data),
                 data::getListLength(listGraphWidget->y2Data)
             };
-            
+
             float *list[2] = {
                 data::getFloatList(listGraphWidget->y1Data),
                 data::getFloatList(listGraphWidget->y2Data)
             };
-            
+
             float min[2] = {
                 data::getMin(widgetCursor.cursor, listGraphWidget->y1Data).getFloat(),
                 data::getMin(widgetCursor.cursor, listGraphWidget->y2Data).getFloat()
             };
-            
+
             float max[2] = {
                 data::getMax(widgetCursor.cursor, listGraphWidget->y1Data).getFloat(),
                 data::getMax(widgetCursor.cursor, listGraphWidget->y2Data).getFloat()
@@ -1622,7 +1614,7 @@ void drawWidget(int pageId, const WidgetCursor &widgetCursor_) {
     if (widgetCursor.currentState == 0) {
         widgetCursor.currentState = (WidgetState *)&state;
     } else {
-        //static uint16_t g_maxStateSize = 0; 
+        //static uint16_t g_maxStateSize = 0;
         //uint16_t stateSize = (uint8_t *)widgetCursor.currentState - (getCurrentStateBufferIndex() == 0 ? &g_stateBuffer[0][0] : &g_stateBuffer[1][0]);
         //if (stateSize > g_maxStateSize) {
         //    g_maxStateSize = stateSize;
@@ -1658,7 +1650,7 @@ void drawWidget(int pageId, const WidgetCursor &widgetCursor_) {
         drawUpDownWidget(pageId, widgetCursor);
     } else if (widget->type == WIDGET_TYPE_LIST_GRAPH) {
         drawListGraphWidget(widgetCursor);
-    } 
+    }
 }
 
 void refreshWidget(WidgetCursor widgetCursor) {
@@ -1697,7 +1689,7 @@ void enumContainer(int pageId, List widgets, int x, int y, data::Cursor &cursor,
 
     WidgetState *savedCurrentState = currentState;
 
-    WidgetState *endOfContainerInPreviousState;
+    WidgetState *endOfContainerInPreviousState = 0;
     if (previousState) endOfContainerInPreviousState = next(previousState);
 
     // move to the first child widget state
@@ -1712,7 +1704,7 @@ void enumContainer(int pageId, List widgets, int x, int y, data::Cursor &cursor,
             previousState = next(previousState);
             if (previousState >= endOfContainerInPreviousState) previousState = 0;
         }
-        
+
         currentState = next(currentState);
     }
 
@@ -1743,7 +1735,7 @@ void enumWidget(int pageId, OBJ_OFFSET widgetOffset, int x, int y, data::Cursor 
     else if (widget->type == WIDGET_TYPE_LIST) {
         WidgetState *savedCurrentState = currentState;
 
-        WidgetState *endOfContainerInPreviousState;
+        WidgetState *endOfContainerInPreviousState = 0;
         if (previousState) endOfContainerInPreviousState = next(previousState);
 
         // move to the first child widget state
@@ -1782,7 +1774,7 @@ void enumWidget(int pageId, OBJ_OFFSET widgetOffset, int x, int y, data::Cursor 
                 previousState = next(previousState);
                 if (previousState >= endOfContainerInPreviousState) previousState = 0;
             }
-        
+
             currentState = next(currentState);
         }
 
@@ -1794,6 +1786,9 @@ void enumWidget(int pageId, OBJ_OFFSET widgetOffset, int x, int y, data::Cursor 
     }
     else if (widget->type == WIDGET_TYPE_SELECT) {
         data::Value indexValue = data::get(cursor, widget->data);
+        if (indexValue.getType() == VALUE_TYPE_NONE) {
+        	indexValue = data::Value(0);
+        }
 
         if (currentState) {
             currentState->data = indexValue;
@@ -1826,7 +1821,6 @@ void enumWidget(int pageId, OBJ_OFFSET widgetOffset, int x, int y, data::Cursor 
 
 void enumWidgets(int pageId, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
     data::Cursor cursor;
-    cursor.reset();
     enumWidget(pageId, getPageOffset(pageId), 0, 0, cursor, previousState, currentState, callback);
 }
 
@@ -1858,7 +1852,7 @@ void clearBackground() {
 
 void drawActivePage(bool refresh) {
     g_wasBlinkTime = g_isBlinkTime;
-    g_isBlinkTime = (micros() % (2 * CONF_GUI_BLINK_TIME)) > CONF_GUI_BLINK_TIME && touch::event_type == touch::TOUCH_NONE;
+    g_isBlinkTime = (micros() % (2 * CONF_GUI_BLINK_TIME)) > CONF_GUI_BLINK_TIME && touch::g_eventType == touch::TOUCH_NONE;
 
     if (refresh) {
         g_previousState = 0;
@@ -1915,7 +1909,7 @@ static WidgetCursor g_foundWidget;
 void findWidgetStep(int pageId, const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
-    bool inside = 
+    bool inside =
         g_find_widget_at_x >= widgetCursor.x &&
         g_find_widget_at_x < widgetCursor.x + (int)widget->w &&
         g_find_widget_at_y >= widgetCursor.y &&

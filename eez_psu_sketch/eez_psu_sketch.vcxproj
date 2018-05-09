@@ -89,9 +89,6 @@
     <ClInclude Include="arduino_psu.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClInclude Include="arduino_util.h">
-      <FileType>CppCode</FileType>
-    </ClInclude>
     <ClInclude Include="board.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -153,9 +150,6 @@
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="font.h">
-      <FileType>CppCode</FileType>
-    </ClInclude>
-    <ClInclude Include="gesture.h">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="gui.h">
@@ -239,7 +233,7 @@
     <ClInclude Include="lcd.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClInclude Include="list.h">
+    <ClInclude Include="list_program.h">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="ontime.h">
@@ -313,7 +307,6 @@
   <ItemGroup>
     <ClCompile Include="actions.cpp" />
     <ClCompile Include="adc.cpp" />
-    <ClCompile Include="arduino_util.cpp" />
     <ClCompile Include="board.cpp" />
     <ClCompile Include="bp.cpp" />
     <ClCompile Include="buzzer.cpp" />
@@ -330,7 +323,6 @@
     <ClCompile Include="event_queue.cpp" />
     <ClCompile Include="fan.cpp" />
     <ClCompile Include="font.cpp" />
-    <ClCompile Include="gesture.cpp" />
     <ClCompile Include="gui.cpp" />
     <ClCompile Include="gui_calibration.cpp" />
     <ClCompile Include="gui_data.cpp" />
@@ -357,7 +349,7 @@
     <ClCompile Include="gui_widget_button_group.cpp" />
     <ClCompile Include="ioexp.cpp" />
     <ClCompile Include="lcd.cpp" />
-    <ClCompile Include="list.cpp" />
+    <ClCompile Include="list_program.cpp" />
     <ClCompile Include="ontime.cpp" />
     <ClCompile Include="persist_conf.cpp" />
     <ClCompile Include="profile.cpp" />

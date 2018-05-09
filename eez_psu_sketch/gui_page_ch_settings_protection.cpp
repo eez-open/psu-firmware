@@ -36,7 +36,7 @@ namespace gui {
 void ChSettingsProtectionPage::clear() {
 	channel_dispatcher::clearProtection(*g_channel);
 
-	infoMessageP(PSTR("Cleared!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
+	infoMessageP("Cleared!", actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
 }
 
 void onClearAndDisableYes() {
@@ -44,7 +44,7 @@ void onClearAndDisableYes() {
 	channel_dispatcher::disableProtection(*g_channel);
 	profile::save();
 
-	infoMessageP(PSTR("Cleared and disabled!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
+	infoMessageP("Cleared and disabled!", actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
 }
 
 void ChSettingsProtectionPage::clearAndDisable() {
@@ -132,7 +132,7 @@ int ChSettingsProtectionSetPage::getDirty() {
 void ChSettingsProtectionSetPage::onSetFinish(bool showInfo) {
 	profile::save();
 	if (showInfo) {
-		infoMessageP(PSTR("Protection params changed!"), actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
+		infoMessageP("Protection params changed!", actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]);
 	} else {
 		actions[ACTION_ID_SHOW_CH_SETTINGS_PROT]();
 	}
@@ -252,7 +252,7 @@ void ChSettingsOvpProtectionPage::setParams(bool checkLoad) {
         util::less(limit.getFloat(), channel_dispatcher::getUMon(*g_channel), getPrecision(VALUE_TYPE_FLOAT_VOLT)) &&
         util::greaterOrEqual(channel_dispatcher::getIMon(*g_channel), 0, getPrecision(VALUE_TYPE_FLOAT_AMPER))) 
     {
-		areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
+		areYouSureWithMessage("This change will affect current load.", onSetParamsOk);
 	} else {
 		channel_dispatcher::setVoltageLimit(*g_channel, limit.getFloat());
         channel_dispatcher::setOvpParameters(*g_channel, state, level.getFloat(), delay.getFloat());
@@ -284,7 +284,7 @@ void ChSettingsOcpProtectionPage::onSetParamsOk() {
 
 void ChSettingsOcpProtectionPage::setParams(bool checkLoad) {
 	if (checkLoad && g_channel->isOutputEnabled() && limit.getFloat() < channel_dispatcher::getIMon(*g_channel)) {
-		areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
+		areYouSureWithMessage("This change will affect current load.", onSetParamsOk);
 	} else {
 		channel_dispatcher::setCurrentLimit(*g_channel, limit.getFloat());
         channel_dispatcher::setOcpParameters(*g_channel, state, delay.getFloat());
@@ -323,7 +323,7 @@ void ChSettingsOppProtectionPage::setParams(bool checkLoad) {
 		if (util::less(limit.getFloat(), pMon, getPrecision(VALUE_TYPE_FLOAT_WATT)) &&
             util::greaterOrEqual(channel_dispatcher::getIMon(*g_channel), 0, getPrecision(VALUE_TYPE_FLOAT_AMPER))) 
         {
-			areYouSureWithMessage(PSTR("This change will affect current load."), onSetParamsOk);
+			areYouSureWithMessage("This change will affect current load.", onSetParamsOk);
 			return;
 		}
 	}

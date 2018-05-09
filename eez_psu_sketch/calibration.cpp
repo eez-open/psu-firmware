@@ -341,7 +341,7 @@ bool save() {
     uint8_t month;
     uint8_t day;
     if (datetime::getDate(year, month, day)) {
-        sprintf_P(g_channel->cal_conf.calibration_date, PSTR("%d%02d%02d"), (int)(2000 + year), (int)month, (int)day);
+        sprintf(g_channel->cal_conf.calibration_date, "%d%02d%02d", (int)(2000 + year), (int)month, (int)day);
     }
     else {
         strcpy(g_channel->cal_conf.calibration_date, "");

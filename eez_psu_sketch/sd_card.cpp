@@ -23,7 +23,7 @@
 #include "sd_card.h"
 #include "datetime.h"
 
-#include "list.h"
+#include "list_program.h"
 #include "profile.h"
 
 #if OPTION_DISPLAY
@@ -91,7 +91,7 @@ bool test() {
 void dumpInfo(char *buffer) {
 #ifndef EEZ_PSU_SIMULATOR
 	FatVolume* vol = SD.vol();
-	
+
 	sprintf(buffer + strlen(buffer), "SD volume is FAT %d\n", int(vol->fatType()));
 
 	sprintf(buffer + strlen(buffer), "SD card begin result: %d\n", int(g_cardBeginResult));
@@ -275,9 +275,9 @@ bool catalog(const char *dirPath, void *param, void (*callback)(void *param, con
         entry.getName(name, MAX_PATH_LENGTH);
         if (entry.isDirectory()) {
             callback(param, name, "FOLD", entry.size());
-        } else if (util::endsWith(name, list::LIST_EXT)) {
+        } else if (util::endsWith(name, LIST_EXT)) {
             callback(param, name, "LIST", entry.size());
-        } else if (util::endsWith(name, profile::PROFILE_EXT)) {
+        } else if (util::endsWith(name, PROFILE_EXT)) {
             callback(param, name, "PROF", entry.size());
         } else {
             callback(param, name, "BIN", entry.size());

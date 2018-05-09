@@ -23,7 +23,7 @@
 #include "profile.h"
 #include "channel_dispatcher.h"
 #include "trigger.h"
-#include "list.h"
+#include "list_program.h"
 #if OPTION_ENCODER
 #include "encoder.h"
 #endif
@@ -31,8 +31,8 @@
 #include "gui_page_ch_settings_trigger.h"
 #include "gui_numeric_keypad.h"
 
-#define INF_TEXT PSTR("\x91")
-#define EMPTY_VALUE PSTR("\x92")
+#define INF_TEXT "\x91"
+#define EMPTY_VALUE "\x92"
 
 namespace eez {
 namespace psu {
@@ -97,7 +97,7 @@ void ChSettingsTriggerPage::onTriggerModeSet(uint8_t value) {
         g_newTriggerMode = value;
 
         if (trigger::isInitiated() || list::isActive()) {
-            yesNoDialog(PAGE_ID_YES_NO, PSTR("Trigger is active. Are you sure?"), onFinishTriggerModeSet, 0, 0);
+            yesNoDialog(PAGE_ID_YES_NO, "Trigger is active. Are you sure?", onFinishTriggerModeSet, 0, 0);
         } else {
             onFinishTriggerModeSet();
         }
@@ -203,8 +203,8 @@ void ChSettingsTriggerPage::editListCount() {
 ////////////////////////////////////////////////////////////////////////////////
 
 ChSettingsListsPage::ChSettingsListsPage()
-    : m_iCursor(0)
-    , m_listVersion(0)
+    : m_listVersion(0)
+    , m_iCursor(0)
 {
     float *dwellList = list::getDwellList(*g_channel, &m_dwellListLength);
     memcpy(m_dwellList, dwellList, m_dwellListLength * sizeof(float));
@@ -221,7 +221,7 @@ int ChSettingsListsPage::getListLength(uint8_t id) {
 	if (id == DATA_ID_CHANNEL_LISTS) {
 		return getMaxListLength();
 	}
-    
+
     if (id == DATA_ID_CHANNEL_LIST_DWELL) {
         return m_dwellListLength;
     }
@@ -427,11 +427,11 @@ float ChSettingsListsPage::getFocusedValue() {
     data::Cursor cursor(getCursorIndexWithinPage());
 
     data::Value value = data::get(cursor, getDataIdAtCursor());
-    
+
     if (value.getType() == VALUE_TYPE_STR) {
         value = data::getDef(cursor, getDataIdAtCursor());
     }
-        
+
     return value.getFloat();
 }
 
@@ -447,7 +447,7 @@ void ChSettingsListsPage::setFocusedValue(float value) {
         util::lessOrEqual(value, max.getFloat(), getPrecision(max.getType())))
     {
         int iRow = getRowIndex();
-    
+
         if (dataId == DATA_ID_CHANNEL_LIST_DWELL) {
             m_dwellList[iRow] = value;
             if (iRow >= m_dwellListLength) {
@@ -464,7 +464,7 @@ void ChSettingsListsPage::setFocusedValue(float value) {
                 m_currentListLength = iRow + 1;
             }
         }
-        
+
         ++m_listVersion;
     }
 }
@@ -486,7 +486,7 @@ void ChSettingsListsPage::doValueSet(float value) {
             if (iRow == 0 && m_voltageListLength <= 1) {
                 for (int i = 0; i < m_currentListLength; ++i) {
                     if (util::greater(value * m_currentList[i], channel_dispatcher::getPowerMaxLimit(*g_channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
-                        errorMessageP(PSTR("Power limit exceeded"));
+                        errorMessageP("Power limit exceeded");
                         return;
                     }
                 }
@@ -501,7 +501,7 @@ void ChSettingsListsPage::doValueSet(float value) {
             if (iRow == 0 && m_currentListLength <= 1) {
                 for (int i = 0; i < m_voltageListLength; ++i) {
                     if (util::greater(value * m_voltageList[i], channel_dispatcher::getPowerMaxLimit(*g_channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
-                        errorMessageP(PSTR("Power limit exceeded"));
+                        errorMessageP("Power limit exceeded");
                         return;
                     }
                 }
@@ -515,7 +515,7 @@ void ChSettingsListsPage::doValueSet(float value) {
         }
 
         if (util::greater(power, channel_dispatcher::getPowerMaxLimit(*g_channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
-            errorMessageP(PSTR("Power limit exceeded"));
+            errorMessageP("Power limit exceeded");
             return;
         }
     }
@@ -558,7 +558,7 @@ void ChSettingsListsPage::edit() {
 	    options.flags.dotButtonEnabled = true;
 
         char label[64];
-        strcpy_P(label, PSTR("["));
+        strcpy(label, "[");
         if (dataId == DATA_ID_CHANNEL_LIST_DWELL) {
             char dwell[64];
             min.toText(dwell, sizeof(dwell));
@@ -566,7 +566,7 @@ void ChSettingsListsPage::edit() {
         } else {
 		    util::strcatFloat(label, options.min, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_SECOND));
         }
-		strcat_P(label, PSTR("-"));
+		strcat(label, "-");
         if (dataId == DATA_ID_CHANNEL_LIST_DWELL) {
             char dwell[64];
             max.toText(dwell, sizeof(dwell));
@@ -576,7 +576,7 @@ void ChSettingsListsPage::edit() {
         } else {
     		util::strcatCurrent(label, options.max);
         }
-		strcat_P(label, PSTR("]: "));
+		strcat(label, "]: ");
 
 	    NumericKeypad::start(label, value, options, onValueSet);
     } else {
@@ -611,7 +611,7 @@ uint16_t ChSettingsListsPage::getMaxListLength() {
     if (m_voltageListLength > size) {
         size = m_voltageListLength;
     }
-    
+
     if (m_currentListLength > size) {
         size = m_currentListLength;
     }
@@ -698,16 +698,16 @@ void ChSettingsListsPage::set() {
 
             profile::saveImmediately();
 
-            infoMessageP(PSTR("Lists changed!"), popPage);
+            infoMessageP("Lists changed!", popPage);
         } else {
-            errorMessageP(PSTR("List lengths are not equivalent!"));
+            errorMessageP("List lengths are not equivalent!");
         }
     }
 }
 
 void ChSettingsListsPage::discard() {
     if (getDirty()) {
-        areYouSureWithMessage(PSTR("You have unsaved changes!"), popPage);
+        areYouSureWithMessage("You have unsaved changes!", popPage);
     } else {
         popPage();
     }
@@ -735,7 +735,7 @@ bool ChSettingsListsPage::onEncoderClicked() {
             m_iCursor += 1;
             return true;
         }
-            
+
         if (iRow <= m_currentListLength) {
             m_iCursor += 2;
             return true;
@@ -777,19 +777,19 @@ void ChSettingsListsPage::insertRow(int iRow, int iCopyRow) {
             m_voltageList[i+1] = m_voltageList[i];
             m_currentList[i+1] = m_currentList[i];
         }
-    
+
         data::Cursor cursor(getCursorIndexWithinPage());
 
         if (iCopyRow < m_dwellListLength && iRow <= m_dwellListLength) {
             m_dwellList[iRow] = m_dwellList[iCopyRow];
             ++m_dwellListLength;
         }
-        
+
         if (iCopyRow < m_voltageListLength && iRow <= m_voltageListLength) {
             m_voltageList[iRow] = m_voltageList[iCopyRow];
             ++m_voltageListLength;
         }
-        
+
         if (iCopyRow < m_currentListLength && iRow <= m_currentListLength) {
             m_currentList[iRow] = m_currentList[iCopyRow];
             ++m_currentListLength;
@@ -812,18 +812,17 @@ void ChSettingsListsPage::insertRowBelow() {
 
 void ChSettingsListsPage::deleteRow() {
     int iRow = getRowIndex();
-    int maxListLength = getMaxListLength();
     if (iRow < getMaxListLength()) {
         for (int i = iRow+1; i < MAX_LIST_LENGTH; ++i) {
             m_dwellList[i-1] = m_dwellList[i];
             m_voltageList[i-1] = m_voltageList[i];
             m_currentList[i-1] = m_currentList[i];
         }
-    
+
         if (iRow < m_dwellListLength) {
             --m_dwellListLength;
         }
-        
+
         if (iRow < m_voltageListLength) {
             --m_voltageListLength;
         }
@@ -831,7 +830,7 @@ void ChSettingsListsPage::deleteRow() {
         if (iRow < m_currentListLength) {
             --m_currentListLength;
         }
-    
+
         ++m_listVersion;
     }
 }
@@ -854,7 +853,7 @@ void ChSettingsListsPage::doClearColumn() {
 }
 
 void ChSettingsListsPage::clearColumn() {
-    yesNoDialog(PAGE_ID_YES_NO, PSTR("Are you sure?"), onClearColumn, 0, 0);
+    yesNoDialog(PAGE_ID_YES_NO, "Are you sure?", onClearColumn, 0, 0);
 }
 
 void ChSettingsListsPage::onDeleteRows() {
@@ -870,7 +869,7 @@ void ChSettingsListsPage::doDeleteRows() {
 }
 
 void ChSettingsListsPage::deleteRows() {
-    yesNoDialog(PAGE_ID_YES_NO, PSTR("Are you sure?"), onDeleteRows, 0, 0);
+    yesNoDialog(PAGE_ID_YES_NO, "Are you sure?", onDeleteRows, 0, 0);
 }
 
 void ChSettingsListsPage::onDeleteAll() {
@@ -886,7 +885,7 @@ void ChSettingsListsPage::doDeleteAll() {
 }
 
 void ChSettingsListsPage::deleteAll() {
-    yesNoDialog(PAGE_ID_YES_NO, PSTR("Are you sure?"), onDeleteAll, 0, 0);
+    yesNoDialog(PAGE_ID_YES_NO, "Are you sure?", onDeleteAll, 0, 0);
 }
 
 }
