@@ -29,19 +29,11 @@ namespace psu {
 namespace gui {
 
 void SelfTestResultPage::pageWillAppear() {
-	selfTestResult = devices::getSelfTestResultString();
+	m_selfTestResult = devices::getSelfTestResultString();
 }
 
 void SelfTestResultPage::pageDidDisappear() {
-	free(selfTestResult);
-}
-
-data::Value SelfTestResultPage::getData(const data::Cursor &cursor, uint8_t id) {
-	if (id == DATA_ID_SELF_TEST_RESULT) {
-		return data::Value(selfTestResult);
-	}
-
-	return data::Value();
+	free(m_selfTestResult);
 }
 
 }

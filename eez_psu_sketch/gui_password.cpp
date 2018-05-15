@@ -22,7 +22,7 @@
 
 #include "persist_conf.h"
 
-#include "gui_internal.h"
+#include "gui_psu.h"
 #include "gui_password.h"
 #include "gui_keypad.h"
 
@@ -42,7 +42,7 @@ static void checkPasswordOkCallback(char *text) {
     if (nPassword == nText && strncmp(g_oldPassword, text, nText) == 0) {
         g_checkPasswordOkCallback();
     } else {
-        // entered password doesn't match, 
+        // entered password doesn't match,
         errorMessageP("Invalid password!", popPage);
     }
 }
@@ -61,7 +61,7 @@ static void onRetypeNewPasswordOk(char *text) {
         errorMessageP("Password doesn't match!", popPage);
         return;
     }
-    
+
     bool isChanged;
 
     if (g_oldPassword == persist_conf::devConf2.systemPassword) {
@@ -90,7 +90,7 @@ static void onNewPasswordOk(char *text) {
     } else {
         isOk = persist_conf::isCalibrationPasswordValid(text, textLength, err);
     }
-    
+
     if (!isOk) {
         // invalid password, return to keypad
         if (err == SCPI_ERROR_PASSWORD_TOO_SHORT || err == SCPI_ERROR_PASSWORD_TOO_SHORT) {

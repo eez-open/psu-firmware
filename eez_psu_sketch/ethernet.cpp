@@ -25,14 +25,35 @@
 
 #if OPTION_ETHERNET
 
-#if defined(EEZ_PSU_SIMULATOR) || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+
+#if defined(EEZ_PLATFORM_SIMULATOR) || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+
+#if defined(EEZ_PLATFORM_SIMULATOR)
+#include "platform/simulator/ethernet/UIPEthernet.h"
+#include "platform/simulator/ethernet/UIPServer.h"
+#include "platform/simulator/ethernet/UIPClient.h"
+#endif
+
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 #include <UIPEthernet.h>
 #include <UIPServer.h>
 #include <UIPClient.h>
+#endif
+
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
+
+#if defined(EEZ_PLATFORM_SIMULATOR)
+#include "platform/simulator/ethernet/Ethernet2.h"
+#include "platform/simulator/ethernet/EthernetServer.h"
+#include "platform/simulator/ethernet/EthernetClient.h"
+#endif
+
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 #include <Ethernet2.h>
 #include <EthernetServer.h>
 #include <EthernetClient.h>
+#endif
+
 #endif
 
 #include "ethernet.h"
@@ -139,11 +160,11 @@ void init() {
         return;
     }
 
-#ifdef EEZ_PSU_ARDUINO
+#ifdef EEZ_PLATFORM_ARDUINO_DUE
     DebugTrace("Ethernet initialization started...");
 #endif
 
-#if defined(EEZ_PSU_SIMULATOR) || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+#if defined(EEZ_PLATFORM_SIMULATOR) || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     Enc28J60Network::setControlCS(ETH_SELECT);
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     Ethernet.init(ETH_SELECT);
@@ -157,16 +178,16 @@ void init() {
         result = Ethernet.begin(persist_conf::devConf2.ethernetMacAddress);
     } else {
         uint8_t ipAddress[4];
-        util::ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
+        ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
 
         uint8_t dns[4];
-        util::ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
+        ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
 
         uint8_t gateway[4];
-        util::ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
+        ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
 
         uint8_t subnetMask[4];
-        util::ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
+        ipAddressToArray(persist_conf::devConf2.ethernetIpAddress, ipAddress);
 
         Ethernet.begin(persist_conf::devConf2.ethernetMacAddress, ipAddress, dns, gateway, subnetMask);
 
@@ -193,7 +214,7 @@ void init() {
 
     DebugTraceF("Listening on port %d", (int)persist_conf::devConf2.ethernetScpiPort);
 
-#ifdef EEZ_PSU_ARDUINO
+#ifdef EEZ_PLATFORM_ARDUINO_DUE
 #if CONF_DEBUG || CONF_DEBUG_LATEST
     if (persist_conf::isEthernetDhcpEnabled() && serial::g_testResult == TEST_OK) {
         SERIAL_PORT.print("My IP: "); SERIAL_PORT.println(Ethernet.localIP());

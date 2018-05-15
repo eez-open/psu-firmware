@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "buzzer.h"
 
-#if defined(EEZ_PSU_ARDUINO_DUE)
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 /*
 Tone generator
 v1  use timer, and toggle any digital pin in ISR

@@ -22,12 +22,12 @@
 
 #include "sd_card.h"
 #include "datetime.h"
-
+#include "event_queue.h"
 #include "list_program.h"
 #include "profile.h"
 
 #if OPTION_DISPLAY
-#include "gui.h"
+#include "gui_psu.h"
 #endif
 
 SdFat SD;
@@ -47,7 +47,7 @@ void dateTime(uint16_t* date, uint16_t* time) {
     *time = FAT_TIME(hour, minute, second);
 }
 
-#ifndef EEZ_PSU_SIMULATOR
+#ifndef EEZ_PLATFORM_SIMULATOR
 bool g_cardBeginResult;
 int g_cardBeginErrorCode;
 bool g_fsBeginResult;
@@ -57,7 +57,7 @@ int g_fsBeginErrorCode;
 void init() {
 	bool initResult;
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
 	initResult = SD.begin(LCDSD_CS, SPI_DIV3_SPEED);
 #else
 	g_cardBeginResult = SD.cardBegin(LCDSD_CS, SPI_DIV3_SPEED);
@@ -75,7 +75,7 @@ void init() {
     if (!initResult) {
         g_testResult = TEST_FAILED;
     } else {
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
         makeParentDir("/");
 #endif
         g_testResult = TEST_OK;
@@ -89,7 +89,7 @@ bool test() {
 }
 
 void dumpInfo(char *buffer) {
-#ifndef EEZ_PSU_SIMULATOR
+#ifndef EEZ_PLATFORM_SIMULATOR
 	FatVolume* vol = SD.vol();
 
 	sprintf(buffer + strlen(buffer), "SD volume is FAT %d\n", int(vol->fatType()));
@@ -233,7 +233,7 @@ bool match(File& file, float &result) {
 
 bool makeParentDir(const char *filePath) {
     char dirPath[MAX_PATH_LENGTH];
-    util::getParentDir(filePath, dirPath);
+    getParentDir(filePath, dirPath);
     return SD.mkdir(dirPath);
 }
 
@@ -275,9 +275,9 @@ bool catalog(const char *dirPath, void *param, void (*callback)(void *param, con
         entry.getName(name, MAX_PATH_LENGTH);
         if (entry.isDirectory()) {
             callback(param, name, "FOLD", entry.size());
-        } else if (util::endsWith(name, LIST_EXT)) {
+        } else if (endsWith(name, LIST_EXT)) {
             callback(param, name, "LIST", entry.size());
-        } else if (util::endsWith(name, PROFILE_EXT)) {
+        } else if (endsWith(name, PROFILE_EXT)) {
             callback(param, name, "PROF", entry.size());
         } else {
             callback(param, name, "BIN", entry.size());
@@ -649,7 +649,7 @@ bool getTime(const char *filePath, uint8_t &hour, uint8_t &minute, uint8_t &seco
 }
 
 bool getInfo(uint64_t &usedSpace, uint64_t &freeSpace) {
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     return SD.getInfo(usedSpace, freeSpace);
 #else
     uint64_t clusterCount = SD.vol()->clusterCount();

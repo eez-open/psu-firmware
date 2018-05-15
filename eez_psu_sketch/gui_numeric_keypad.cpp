@@ -27,7 +27,8 @@
 
 #include "channel_dispatcher.h"
 
-#include "gui_internal.h"
+#include "gui_psu.h"
+#include "gui_data.h"
 #include "gui_keypad.h"
 #include "gui_numeric_keypad.h"
 #include "gui_edit_mode.h"
@@ -48,6 +49,8 @@ NumericKeypadOptions::NumericKeypadOptions() {
     flags.option2ButtonEnabled = false;
     flags.signButtonEnabled = false;
     flags.dotButtonEnabled = false;
+
+	editValueUnit = UNIT_UNKNOWN;
 }
 
 void NumericKeypadOptions::enableMaxButton() {
@@ -92,68 +95,19 @@ void NumericKeypad::init(const char *label, const data::Value& value, NumericKey
     reset();
 
     if (value.getType() == VALUE_TYPE_IP_ADDRESS) {
-        util::ipAddressToString(value.getUInt32(), m_keypadText);
+        ipAddressToString(value.getUInt32(), m_keypadText);
         m_state = BEFORE_DOT;
     }
 }
 
 NumericKeypad *NumericKeypad::start(const char *label, const data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)()) {
     NumericKeypad *page = new NumericKeypad();
-    
+
     page->init(label, value, options, ok, cancel);
 
     pushPage(PAGE_ID_NUMERIC_KEYPAD, page);
-    
+
     return page;
-}
-
-data::Value NumericKeypad::getData(uint8_t id) {
-    data::Value value = Keypad::getData(id);
-    if (value.getType() != VALUE_TYPE_NONE) {
-        return value;
-    }
-
-    if (id == DATA_ID_EDIT_UNIT) {
-        return getUnitStr(getSwitchToUnit());
-    }
-
-    if (id == DATA_ID_KEYPAD_OPTION1_ENABLED) {
-        return data::Value(m_options.flags.option1ButtonEnabled ? 1 : 0);
-    }
-    
-    if (id == DATA_ID_KEYPAD_OPTION1_TEXT) {
-        return data::Value(m_options.flags.option1ButtonEnabled ? m_options.option1ButtonText : "");
-    }
-
-    if (id == DATA_ID_KEYPAD_OPTION2_ENABLED) {
-        return data::Value(m_options.flags.option2ButtonEnabled ? 1 : 0);
-    }
-    
-    if (id == DATA_ID_KEYPAD_OPTION2_TEXT) {
-        return data::Value(m_options.flags.option2ButtonEnabled ? m_options.option2ButtonText : "");
-    }
-
-    if (id == DATA_ID_KEYPAD_DOT_ENABLED) {
-        return data::Value(m_options.flags.dotButtonEnabled ? 1 : 0);
-    }
-    
-    if (id == DATA_ID_KEYPAD_SIGN_ENABLED) {
-        return data::Value(m_options.flags.signButtonEnabled ? 1 : 0);
-    }
-    
-    if (id == DATA_ID_KEYPAD_UNIT_ENABLED) {
-        return data::Value(
-            m_options.editUnit == VALUE_TYPE_FLOAT_VOLT ||
-            m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT ||
-            m_options.editUnit == VALUE_TYPE_FLOAT_AMPER ||
-            m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER ||
-            m_options.editUnit == VALUE_TYPE_FLOAT_WATT ||
-            m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_WATT ||
-            m_options.editUnit == VALUE_TYPE_FLOAT_SECOND ||
-            m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND ? 1 : 0);
-    }
-
-    return data::Value();
 }
 
 bool NumericKeypad::isEditing() {
@@ -161,14 +115,14 @@ bool NumericKeypad::isEditing() {
 }
 
 char NumericKeypad::getDotSign() {
-    if (m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
+    if (m_startValue.getType() == VALUE_TYPE_TIME_ZONE) {
         return ':';
     }
     return '.';
 }
 
 void NumericKeypad::appendEditUnit(char *text) {
-    strcat(text, getUnitStr(m_options.editUnit));
+    strcat(text, getUnitName(m_options.editValueUnit));
 }
 
 void NumericKeypad::getKeypadText(char *text) {
@@ -189,7 +143,7 @@ bool NumericKeypad::getText(char *text, int count) {
         }
         return false;
     }
-        
+
     strcpy(text, m_keypadText);
 
     appendCursor(text);
@@ -201,52 +155,52 @@ bool NumericKeypad::getText(char *text, int count) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-ValueType NumericKeypad::getEditUnit() {
-    return m_options.editUnit;
+Unit NumericKeypad::getEditUnit() {
+    return m_options.editValueUnit;
 }
 
-ValueType NumericKeypad::getValueUnit() {
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT)   return VALUE_TYPE_FLOAT_VOLT;
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER)  return VALUE_TYPE_FLOAT_AMPER;
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND) return VALUE_TYPE_FLOAT_SECOND;
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_WATT) return VALUE_TYPE_FLOAT_WATT;
-    return m_options.editUnit;
+Unit NumericKeypad::getValueUnit() {
+    if (m_options.editValueUnit == UNIT_MILLI_VOLT)   return UNIT_VOLT;
+    if (m_options.editValueUnit == UNIT_MILLI_AMPER)  return UNIT_AMPER;
+    if (m_options.editValueUnit == UNIT_MILLI_SECOND) return UNIT_SECOND;
+    if (m_options.editValueUnit == UNIT_MILLI_WATT) return UNIT_WATT;
+    return m_options.editValueUnit;
 }
 
 bool NumericKeypad::isMilli() {
     return
-        m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT ||
-        m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER ||
-        m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_WATT ||
-        m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND;
+        m_options.editValueUnit == UNIT_MILLI_VOLT ||
+        m_options.editValueUnit == UNIT_MILLI_AMPER ||
+        m_options.editValueUnit == UNIT_MILLI_WATT ||
+        m_options.editValueUnit == UNIT_MILLI_SECOND;
 }
 
-ValueType NumericKeypad::getMilliUnit() {
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_VOLT)   return VALUE_TYPE_FLOAT_MILLI_VOLT;
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_AMPER)  return VALUE_TYPE_FLOAT_MILLI_AMPER;
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_WATT)   return VALUE_TYPE_FLOAT_MILLI_WATT;
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_SECOND) return VALUE_TYPE_FLOAT_MILLI_SECOND;
-    return m_options.editUnit;
+Unit NumericKeypad::getMilliUnit() {
+    if (m_options.editValueUnit == UNIT_VOLT)   return UNIT_MILLI_VOLT;
+    if (m_options.editValueUnit == UNIT_AMPER)  return UNIT_MILLI_AMPER;
+    if (m_options.editValueUnit == UNIT_WATT)   return UNIT_MILLI_WATT;
+    if (m_options.editValueUnit == UNIT_SECOND) return UNIT_MILLI_SECOND;
+    return m_options.editValueUnit;
 }
 
 void NumericKeypad::switchToMilli() {
-    m_options.editUnit = getMilliUnit();
+    m_options.editValueUnit = getMilliUnit();
 }
 
-ValueType NumericKeypad::getSwitchToUnit() {
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_VOLT)         return VALUE_TYPE_FLOAT_MILLI_VOLT;
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_VOLT)   return VALUE_TYPE_FLOAT_VOLT;
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_AMPER)        return VALUE_TYPE_FLOAT_MILLI_AMPER;
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_AMPER)  return VALUE_TYPE_FLOAT_AMPER;
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_WATT)         return VALUE_TYPE_FLOAT_MILLI_WATT;
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_WATT)   return VALUE_TYPE_FLOAT_WATT;
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_SECOND)       return VALUE_TYPE_FLOAT_MILLI_SECOND;
-    if (m_options.editUnit == VALUE_TYPE_FLOAT_MILLI_SECOND) return VALUE_TYPE_FLOAT_SECOND;
-    return m_options.editUnit;
+Unit NumericKeypad::getSwitchToUnit() {
+    if (m_options.editValueUnit == UNIT_VOLT)         return UNIT_MILLI_VOLT;
+    if (m_options.editValueUnit == UNIT_MILLI_VOLT)   return UNIT_VOLT;
+    if (m_options.editValueUnit == UNIT_AMPER)        return UNIT_MILLI_AMPER;
+    if (m_options.editValueUnit == UNIT_MILLI_AMPER)  return UNIT_AMPER;
+    if (m_options.editValueUnit == UNIT_WATT)         return UNIT_MILLI_WATT;
+    if (m_options.editValueUnit == UNIT_MILLI_WATT)   return UNIT_WATT;
+    if (m_options.editValueUnit == UNIT_SECOND)       return UNIT_MILLI_SECOND;
+    if (m_options.editValueUnit == UNIT_MILLI_SECOND) return UNIT_SECOND;
+    return m_options.editValueUnit;
 }
 
 void NumericKeypad::toggleEditUnit() {
-    m_options.editUnit = getSwitchToUnit();
+    m_options.editValueUnit = getSwitchToUnit();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -307,8 +261,8 @@ bool NumericKeypad::isValueValid() {
 
     float value = getValue();
 
-    if (util::less(value, m_options.min, m_startValue.getType(), m_options.channelIndex) ||
-        util::greater(value, m_options.max, m_startValue.getType(), m_options.channelIndex))
+    if (less(value, m_options.min, m_startValue.getUnit(), m_options.channelIndex) ||
+        greater(value, m_options.max, m_startValue.getUnit(), m_options.channelIndex))
     {
         return false;
     }
@@ -322,21 +276,21 @@ bool NumericKeypad::checkNumSignificantDecimalDigits() {
     }
 
     float value = getValue();
-    ValueType valueType = getValueUnit();
+    Unit unit = getValueUnit();
 
-    int numSignificantDecimalDigits = getNumSignificantDecimalDigits(valueType);
+    int numSignificantDecimalDigits = getNumSignificantDecimalDigits(unit);
     if (isMilli()) {
         numSignificantDecimalDigits -= 3;
         if (numSignificantDecimalDigits < 0) {
             numSignificantDecimalDigits = 0;
         }
     } else {
-        if (util::greater(value, 9.999f, 3)) {
+        if (mw::greater(value, 9.999f, 3)) {
             numSignificantDecimalDigits = 2;
         }
     }
 
-    if (valueType == VALUE_TYPE_FLOAT_AMPER && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+    if (unit == UNIT_AMPER && mw::lessOrEqual(value, 0.5, getPrecision(UNIT_AMPER))) {
         ++numSignificantDecimalDigits;
     }
 
@@ -346,7 +300,7 @@ bool NumericKeypad::checkNumSignificantDecimalDigits() {
 void NumericKeypad::digit(int d) {
     if (m_state == START || m_state == EMPTY) {
         m_state = BEFORE_DOT;
-        if (m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
+        if (m_startValue.getType() == VALUE_TYPE_TIME_ZONE) {
             if (strlen(m_keypadText) == 0) {
                 appendChar('+');
             }
@@ -375,7 +329,7 @@ void NumericKeypad::dot() {
     }
 
     if (m_state == EMPTY) {
-        if (m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
+        if (m_startValue.getType() == VALUE_TYPE_TIME_ZONE) {
             if (strlen(m_keypadText) == 0) {
                 appendChar('+');
             }
@@ -388,7 +342,7 @@ void NumericKeypad::dot() {
         appendChar('0');
         m_state = BEFORE_DOT;
     }
-    
+
     if (m_state == BEFORE_DOT) {
         appendChar(getDotSign());
         m_state = AFTER_DOT;
@@ -449,7 +403,7 @@ void NumericKeypad::clear() {
 
 void NumericKeypad::sign() {
     if (m_options.flags.signButtonEnabled) {
-        if (m_options.editUnit == VALUE_TYPE_TIME_ZONE) {
+        if (m_startValue.getType() == VALUE_TYPE_TIME_ZONE) {
             if (m_keypadText[0] == 0) {
                 m_keypadText[0] = '-';
                 m_keypadText[1] = 0;
@@ -496,17 +450,19 @@ void NumericKeypad::ok() {
     if (m_state == START) {
         if (m_startValue.getType() == VALUE_TYPE_IP_ADDRESS) {
             ((void (*)(uint32_t))m_okCallback)(m_startValue.getUInt32());
-        } else {
+		} else if (m_startValue.getType() == VALUE_TYPE_TIME_ZONE) {
+			((void(*)(float))m_okCallback)(m_startValue.getInt() / 100.0f);
+		} else {
             ((void (*)(float))m_okCallback)(m_startValue.isFloat() ? m_startValue.getFloat() : m_startValue.getInt());
         }
 
         return;
-    } 
-        
+    }
+
     if (m_state != EMPTY) {
         if (m_startValue.getType() == VALUE_TYPE_IP_ADDRESS) {
             uint32_t ipAddress;
-            if (util::parseIpAddress(m_keypadText, strlen(m_keypadText), ipAddress)) {
+            if (parseIpAddress(m_keypadText, strlen(m_keypadText), ipAddress)) {
                 ((void (*)(uint32_t))m_okCallback)(ipAddress);
                 m_state = START;
                 m_keypadText[0] = 0;
@@ -518,10 +474,10 @@ void NumericKeypad::ok() {
         } else {
             float value = getValue();
 
-            if (util::less(value, m_options.min, m_startValue.getType(), m_options.channelIndex)) {
-                errorMessage(0, data::Value::LessThenMinMessage(m_options.min, getValueUnit()));
-            } else if (util::greater(value, m_options.max, m_startValue.getType(), m_options.channelIndex)) {
-                errorMessage(0, data::Value::GreaterThenMaxMessage(m_options.max, getValueUnit()));
+            if (less(value, m_options.min, m_startValue.getUnit(), m_options.channelIndex)) {
+                errorMessage(0, MakeLessThenMinMessageValue(m_options.min, m_startValue));
+            } else if (greater(value, m_options.max, m_startValue.getUnit(), m_options.channelIndex)) {
+                errorMessage(0, MakeGreaterThenMaxMessageValue(m_options.max, m_startValue));
             } else {
                 ((void (*)(float))m_okCallback)(value);
                 m_state = START;
@@ -540,7 +496,7 @@ void NumericKeypad::cancel() {
     void (*cancel)() = m_cancelCallback;
 
     popPage();
-    
+
     if (cancel) {
         cancel();
     }
@@ -548,12 +504,12 @@ void NumericKeypad::cancel() {
 
 #if OPTION_ENCODER
 
-bool NumericKeypad::onEncoderClick(int counter) {
+bool NumericKeypad::onEncoderClicked() {
     if (m_state == START) {
         if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD) {
             return false;
         }
-    } 
+    }
     ok();
     return true;
 }
@@ -563,8 +519,8 @@ bool NumericKeypad::onEncoder(int counter) {
         if (getActivePageId() == PAGE_ID_EDIT_MODE_KEYPAD) {
             return false;
         }
-        
-        if (data::isFloatType(getEditUnit())) {
+
+        if (m_startValue.getType() == VALUE_TYPE_FLOAT) {
             encoder::enableAcceleration(true);
 
             float newValue = m_startValue.getFloat() + 0.01f * counter;
@@ -577,7 +533,7 @@ bool NumericKeypad::onEncoder(int counter) {
                 newValue = m_options.max;
             }
 
-            m_startValue = data::Value(newValue, m_startValue.getType(), m_options.channelIndex);
+            m_startValue = MakeValue(newValue, m_startValue.getUnit(), m_options.channelIndex);
 
             return true;
         } else if (m_startValue.getType() == VALUE_TYPE_INT) {
@@ -594,15 +550,15 @@ bool NumericKeypad::onEncoder(int counter) {
             }
 
             m_startValue = data::Value(newValue);
-                
+
             return true;
         }
     }
-    
+
     sound::playBeep();
     return true;
 }
- 
+
 #endif
 
 }

@@ -72,7 +72,7 @@ static scpi_result_t set_step(scpi_t * context, Channel::Value *cv, float min_va
 
 }
 
-static scpi_result_t get_source_value(scpi_t *context, Channel &channel, ValueType valueType, float value, float min, float max, float def) {
+static scpi_result_t get_source_value(scpi_t *context, Channel &channel, Unit unit, float value, float min, float max, float def) {
     int32_t spec;
     if (!SCPI_ParamChoice(context, scpi_special_numbers_def, &spec, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
@@ -95,10 +95,10 @@ static scpi_result_t get_source_value(scpi_t *context, Channel &channel, ValueTy
         }
     }
 
-    return result_float(context, &channel, value, valueType);
+    return result_float(context, &channel, value, unit);
 }
 
-static scpi_result_t get_source_value(scpi_t *context, Channel &channel, ValueType valueType, float value, float def) {
+static scpi_result_t get_source_value(scpi_t *context, Channel &channel, Unit unit, float value, float def) {
     int32_t spec;
     if (!SCPI_ParamChoice(context, scpi_special_numbers_def, &spec, false)) {
         if (SCPI_ParamErrorOccurred(context)) {
@@ -115,7 +115,7 @@ static scpi_result_t get_source_value(scpi_t *context, Channel &channel, ValueTy
         }
     }
 
-    return result_float(context, &channel, value, valueType);
+    return result_float(context, &channel, value, unit);
 }
 
 scpi_result_t get_delay(scpi_t *context, float delay) {
@@ -158,12 +158,12 @@ scpi_result_t scpi_cmd_sourceCurrentLevelImmediateAmplitude(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-	if (util::greater(current, channel_dispatcher::getILimit(*channel), getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+	if (mw::greater(current, channel_dispatcher::getILimit(*channel), getPrecision(UNIT_AMPER))) {
         SCPI_ErrorPush(context, SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
 	}
 
-    if (util::greater(current * channel_dispatcher::getUSetUnbalanced(*channel), channel_dispatcher::getPowerLimit(*channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
+    if (mw::greater(current * channel_dispatcher::getUSetUnbalanced(*channel), channel_dispatcher::getPowerLimit(*channel), getPrecision(UNIT_WATT))) {
         SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
     }
@@ -181,7 +181,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelImmediateAmplitudeQ(scpi_t * context) {
 
     return get_source_value(context,
         *channel,
-        VALUE_TYPE_FLOAT_AMPER,
+		UNIT_AMPER,
         channel_dispatcher::getISet(*channel),
         channel_dispatcher::getIMin(*channel),
         channel_dispatcher::getIMax(*channel),
@@ -209,12 +209,12 @@ scpi_result_t scpi_cmd_sourceVoltageLevelImmediateAmplitude(scpi_t * context) {
         return SCPI_RES_ERR;
 	}
 
-	if (util::greater(voltage, channel_dispatcher::getULimit(*channel), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+	if (mw::greater(voltage, channel_dispatcher::getULimit(*channel), getPrecision(UNIT_VOLT))) {
         SCPI_ErrorPush(context, SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
 	}
 
-	if (util::greater(voltage * channel_dispatcher::getISetUnbalanced(*channel), channel_dispatcher::getPowerLimit(*channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
+	if (mw::greater(voltage * channel_dispatcher::getISetUnbalanced(*channel), channel_dispatcher::getPowerLimit(*channel), getPrecision(UNIT_WATT))) {
         SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
     }
@@ -239,7 +239,7 @@ scpi_result_t scpi_cmd_sourceVoltageLevelImmediateAmplitudeQ(scpi_t * context) {
 
     return get_source_value(context,
         *channel,
-        VALUE_TYPE_FLOAT_VOLT,
+		UNIT_VOLT,
         u,
         channel_dispatcher::getUMin(*channel),
         channel_dispatcher::getUMax(*channel),
@@ -263,7 +263,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelImmediateStepIncrementQ(scpi_t * contex
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, *channel, VALUE_TYPE_FLOAT_AMPER, channel->i.step, channel->I_DEF_STEP);
+    return get_source_value(context, *channel, UNIT_AMPER, channel->i.step, channel->I_DEF_STEP);
 }
 
 scpi_result_t scpi_cmd_sourceVoltageLevelImmediateStepIncrement(scpi_t * context) {
@@ -281,7 +281,7 @@ scpi_result_t scpi_cmd_sourceVoltageLevelImmediateStepIncrementQ(scpi_t * contex
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, *channel, VALUE_TYPE_FLOAT_VOLT, channel->u.step, channel->U_DEF_STEP);
+    return get_source_value(context, *channel, UNIT_VOLT, channel->u.step, channel->U_DEF_STEP);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -370,7 +370,7 @@ scpi_result_t scpi_cmd_sourcePowerProtectionLevelQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, *channel, VALUE_TYPE_FLOAT_WATT, channel_dispatcher::getPowerProtectionLevel(*channel),
+    return get_source_value(context, *channel, UNIT_WATT, channel_dispatcher::getPowerProtectionLevel(*channel),
         channel_dispatcher::getOppMinLevel(*channel),
         channel_dispatcher::getOppMaxLevel(*channel),
         channel_dispatcher::getOppDefaultLevel(*channel));
@@ -460,7 +460,7 @@ scpi_result_t scpi_cmd_sourceVoltageProtectionLevelQ(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    return get_source_value(context, *channel, VALUE_TYPE_FLOAT_VOLT, channel_dispatcher::getUProtectionLevel(*channel),
+    return get_source_value(context, *channel, UNIT_VOLT, channel_dispatcher::getUProtectionLevel(*channel),
         channel_dispatcher::getUSet(*channel),
         channel_dispatcher::getUMax(*channel),
         channel_dispatcher::getUMax(*channel));
@@ -752,7 +752,7 @@ scpi_result_t scpi_cmd_sourceCurrentLimitPositiveImmediateAmplitudeQ(scpi_t * co
 
     return get_source_value(context,
         *channel,
-        VALUE_TYPE_FLOAT_AMPER,
+        UNIT_AMPER,
         channel_dispatcher::getILimit(*channel),
         0,
         channel_dispatcher::getIMaxLimit(*channel),
@@ -783,7 +783,7 @@ scpi_result_t scpi_cmd_sourceVoltageLimitPositiveImmediateAmplitudeQ(scpi_t * co
 
     return get_source_value(context,
         *channel,
-        VALUE_TYPE_FLOAT_VOLT,
+        UNIT_VOLT,
         channel_dispatcher::getULimit(*channel),
         0,
         channel_dispatcher::getUMaxLimit(*channel),
@@ -814,7 +814,7 @@ scpi_result_t scpi_cmd_sourcePowerLimitQ(scpi_t * context) {
 
     return get_source_value(context,
         *channel,
-        VALUE_TYPE_FLOAT_WATT,
+        UNIT_WATT,
         channel_dispatcher::getPowerLimit(*channel),
         channel_dispatcher::getPowerMinLimit(*channel),
         channel_dispatcher::getPowerMaxLimit(*channel),
@@ -848,7 +848,7 @@ scpi_result_t scpi_cmd_sourceCurrentLevelTriggeredAmplitudeQ(scpi_t * context) {
 
     return get_source_value(context,
         *channel,
-        VALUE_TYPE_FLOAT_AMPER,
+        UNIT_AMPER,
         channel_dispatcher::getTriggerCurrent(*channel),
         channel_dispatcher::getIMin(*channel),
         channel_dispatcher::getIMax(*channel),
@@ -880,7 +880,7 @@ scpi_result_t scpi_cmd_sourceVoltageLevelTriggeredAmplitudeQ(scpi_t * context) {
 
     return get_source_value(context,
         *channel,
-        VALUE_TYPE_FLOAT_VOLT,
+        UNIT_VOLT,
         channel_dispatcher::getTriggerVoltage(*channel),
         channel_dispatcher::getUMin(*channel),
         channel_dispatcher::getUMax(*channel),
@@ -1047,13 +1047,13 @@ scpi_result_t scpi_cmd_sourceListCurrentLevel(scpi_t *context) {
             return SCPI_RES_ERR;
         }
 
-	    if (util::greater(current, channel_dispatcher::getIMaxLimit(*channel), getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+	    if (mw::greater(current, channel_dispatcher::getIMaxLimit(*channel), getPrecision(UNIT_AMPER))) {
             SCPI_ErrorPush(context, SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
             return SCPI_RES_ERR;
 	    }
 
         if (voltageListLength > 0) {
-            if (util::greater(current * voltageList[i % voltageListLength], channel_dispatcher::getPowerMaxLimit(*channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
+            if (mw::greater(current * voltageList[i % voltageListLength], channel_dispatcher::getPowerMaxLimit(*channel), getPrecision(UNIT_WATT))) {
                 SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
                 return SCPI_RES_ERR;
             }
@@ -1180,13 +1180,13 @@ scpi_result_t scpi_cmd_sourceListVoltageLevel(scpi_t *context) {
             return SCPI_RES_ERR;
         }
 
-	    if (util::greater(voltage, channel_dispatcher::getUMaxLimit(*channel), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+	    if (mw::greater(voltage, channel_dispatcher::getUMaxLimit(*channel), getPrecision(UNIT_VOLT))) {
             SCPI_ErrorPush(context, SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
             return SCPI_RES_ERR;
 	    }
 
         if (currentListLength > 0) {
-            if (util::greater(voltage * currentList[i % currentListLength], channel_dispatcher::getPowerMaxLimit(*channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
+            if (mw::greater(voltage * currentList[i % currentListLength], channel_dispatcher::getPowerMaxLimit(*channel), getPrecision(UNIT_WATT))) {
                 SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
                 return SCPI_RES_ERR;
             }

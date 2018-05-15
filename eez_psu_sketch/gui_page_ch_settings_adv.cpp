@@ -24,8 +24,11 @@
 #include "channel_dispatcher.h"
 #include "trigger.h"
 
+#include "gui_psu.h"
+#include "gui_data.h"
 #include "gui_page_ch_settings_adv.h"
 #include "gui_numeric_keypad.h"
+#include "actions.h"
 
 namespace eez {
 namespace psu {
@@ -33,48 +36,9 @@ namespace gui {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-data::Value ChSettingsAdvPage::getData(const data::Cursor &cursor, uint8_t id) {
-	if (id == DATA_ID_CHANNEL_RANGES_SUPPORTED) {
-		return g_channel->hasSupportForCurrentDualRange() ? 1 : 0;
-	}
-	return data::Value();
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 ChSettingsAdvLRipplePage::ChSettingsAdvLRipplePage() {
 	origAutoMode = autoMode = g_channel->isLowRippleAutoEnabled();
 	origStatus = status = g_channel->isLowRippleEnabled();
-}
-
-data::Value ChSettingsAdvLRipplePage::getData(const data::Cursor &cursor, uint8_t id) {
-	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-	if (id == DATA_ID_CHANNEL_LRIPPLE_MAX_DISSIPATION) {
-		return data::Value(g_channel->SOA_POSTREG_PTOT, VALUE_TYPE_FLOAT_WATT, g_channel->index-1);
-	}
-
-	if (id == DATA_ID_CHANNEL_LRIPPLE_CALCULATED_DISSIPATION) {
-        Channel &channel = Channel::get(g_channel->index - 1);
-		return data::Value(channel_dispatcher::getIMon(channel) * (g_channel->SOA_VIN - channel_dispatcher::getUMon(channel)), VALUE_TYPE_FLOAT_WATT, g_channel->index-1);
-	}
-
-	if (id == DATA_ID_CHANNEL_LRIPPLE_AUTO_MODE) {
-		return autoMode;
-	}
-
-	if (id == DATA_ID_CHANNEL_LRIPPLE_IS_ALLOWED) {
-		return g_channel->isLowRippleAllowed(micros());
-	}
-
-    if (id == DATA_ID_CHANNEL_LRIPPLE_STATUS) {
-		return g_channel->isLowRippleAllowed(micros()) ? status : false;
-	}
-
-	return data::Value();
 }
 
 void ChSettingsAdvLRipplePage::toggleAutoMode() {
@@ -95,26 +59,16 @@ void ChSettingsAdvLRipplePage::set() {
 			errorMessageP("Failed to change LRipple status!");
 			return;
 		}
-	
+
 		channel_dispatcher::lowRippleAutoEnable(*g_channel, autoMode ? true : false);
 
 		profile::save();
-	
-		infoMessageP("LRipple params changed!", actions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
+
+		infoMessageP("LRipple params changed!", g_actionExecFunctions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
 	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
-data::Value ChSettingsAdvRemotePage::getData(const data::Cursor &cursor, uint8_t id) {
-	if (id == DATA_ID_CHANNEL_RSENSE_STATUS) {
-		return g_channel->isRemoteSensingEnabled() ? 1 : 0;
-	}
-	if (id == DATA_ID_CHANNEL_RPROG_INSTALLED) {
-		return data::Value(g_channel->getFeatures() & CH_FEATURE_RPROG ? 1 : 0);
-	}
-	return data::Value();
-}
 
 void ChSettingsAdvRemotePage::toggleSense() {
 	channel_dispatcher::remoteSensingEnable(*g_channel, !g_channel->isRemoteSensingEnabled());
@@ -126,31 +80,13 @@ void ChSettingsAdvRemotePage::toggleProgramming() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-data::Value ChSettingsAdvRangesPage::getData(const data::Cursor &cursor, uint8_t id) {
-	if (id == DATA_ID_CHANNEL_RANGES_MODE) {
-		return data::Value(g_channel->getCurrentRangeSelectionMode(),
-            data::ENUM_DEFINITION_CHANNEL_CURRENT_RANGE_SELECTION_MODE);
-	}
-	
-    if (id == DATA_ID_CHANNEL_RANGES_AUTO_RANGING) {
-		return data::Value(g_channel->isAutoSelectCurrentRangeEnabled() ? 1 : 0);
-	}
-
-    if (id == DATA_ID_CHANNEL_RANGES_CURRENTLY_SELECTED) {
-		return data::Value(g_channel->flags.currentCurrentRange,
-            data::ENUM_DEFINITION_CHANNEL_CURRENT_RANGE);
-	}
-	
-    return data::Value();
-}
-
 void ChSettingsAdvRangesPage::onModeSet(uint8_t value) {
 	popPage();
     g_channel->setCurrentRangeSelectionMode((CurrentRangeSelectionMode)value);
 }
 
 void ChSettingsAdvRangesPage::selectMode() {
-    pushSelectFromEnumPage(data::g_channelCurrentRangeSelectionModeEnumDefinition, g_channel->getCurrentRangeSelectionMode(), 0, onModeSet);
+    pushSelectFromEnumPage(g_channelCurrentRangeSelectionModeEnumDefinition, g_channel->getCurrentRangeSelectionMode(), 0, onModeSet);
 }
 
 void ChSettingsAdvRangesPage::toggleAutoRanging() {
@@ -160,14 +96,6 @@ void ChSettingsAdvRangesPage::toggleAutoRanging() {
 ////////////////////////////////////////////////////////////////////////////////
 
 int ChSettingsAdvCouplingPage::selectedMode = 0;
-
-data::Value ChSettingsAdvCouplingPage::getData(const data::Cursor &cursor, uint8_t id) {
-	if (id == DATA_ID_CHANNEL_COUPLING_SELECTED_MODE) {
-		return data::Value(selectedMode);
-	}
-
-	return data::Value();
-}
 
 void ChSettingsAdvCouplingPage::uncouple() {
     channel_dispatcher::setType(channel_dispatcher::TYPE_NONE);
@@ -225,27 +153,6 @@ ChSettingsAdvViewPage::ChSettingsAdvViewPage() {
     origYTViewRate = ytViewRate = g_channel->ytViewRate;
 }
 
-data::Value ChSettingsAdvViewPage::getData(const data::Cursor &cursor, uint8_t id) {
-	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-	if (id == DATA_ID_CHANNEL_DISPLAY_VIEW_SETTINGS_DISPLAY_VALUE1) {
-		return data::Value(displayValue1, data::ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE);
-	}
-
-	if (id == DATA_ID_CHANNEL_DISPLAY_VIEW_SETTINGS_DISPLAY_VALUE2) {
-		return data::Value(displayValue2, data::ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE);
-	}
-
-    if (id == DATA_ID_CHANNEL_DISPLAY_VIEW_SETTINGS_YT_VIEW_RATE) {
-		return data::Value(ytViewRate, VALUE_TYPE_FLOAT_SECOND);
-	}
-
-	return data::Value();
-}
-
 bool ChSettingsAdvViewPage::isDisabledDisplayValue1(uint8_t value) {
 	ChSettingsAdvViewPage *page = (ChSettingsAdvViewPage *)getPreviousPage();
     return value == page->displayValue2;
@@ -258,7 +165,7 @@ void ChSettingsAdvViewPage::onDisplayValue1Set(uint8_t value) {
 }
 
 void ChSettingsAdvViewPage::editDisplayValue1() {
-    pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue1, isDisabledDisplayValue1, onDisplayValue1Set);
+    pushSelectFromEnumPage(g_channelDisplayValueEnumDefinition, displayValue1, isDisabledDisplayValue1, onDisplayValue1Set);
 }
 
 bool ChSettingsAdvViewPage::isDisabledDisplayValue2(uint8_t value) {
@@ -273,7 +180,7 @@ void ChSettingsAdvViewPage::onDisplayValue2Set(uint8_t value) {
 }
 
 void ChSettingsAdvViewPage::editDisplayValue2() {
-    pushSelectFromEnumPage(data::g_channelDisplayValueEnumDefinition, displayValue2, isDisabledDisplayValue2, onDisplayValue2Set);
+    pushSelectFromEnumPage(g_channelDisplayValueEnumDefinition, displayValue2, isDisabledDisplayValue2, onDisplayValue2Set);
 }
 
 void ChSettingsAdvViewPage::onYTViewRateSet(float value) {
@@ -291,7 +198,7 @@ void ChSettingsAdvViewPage::swapDisplayValues() {
 void ChSettingsAdvViewPage::editYTViewRate() {
 	NumericKeypadOptions options;
 
-	options.editUnit = VALUE_TYPE_FLOAT_SECOND;
+	options.editValueUnit = UNIT_SECOND;
 
 	options.min = GUI_YT_VIEW_RATE_MIN;
     options.max = GUI_YT_VIEW_RATE_MAX;
@@ -301,7 +208,7 @@ void ChSettingsAdvViewPage::editYTViewRate() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, data::Value(ytViewRate, VALUE_TYPE_FLOAT_SECOND), options, onYTViewRateSet);
+	NumericKeypad::start(0, MakeValue(ytViewRate, UNIT_SECOND), options, onYTViewRateSet);
 }
 
 int ChSettingsAdvViewPage::getDirty() {
@@ -312,7 +219,7 @@ void ChSettingsAdvViewPage::set() {
 	if (getDirty()) {
         channel_dispatcher::setDisplayViewSettings(*g_channel, displayValue1, displayValue2, ytViewRate);
 		profile::save();
-		infoMessageP("View settings changed!", actions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
+		infoMessageP("View settings changed!", g_actionExecFunctions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
 	}
 }
 

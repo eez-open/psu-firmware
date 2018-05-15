@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
 #include "persist_conf.h"
@@ -137,7 +137,7 @@ void setTriggerVoltage(Channel& channel, float value);
 float getTriggerCurrent(Channel& channel);
 void setTriggerCurrent(Channel& channel, float value);
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
 void setLoadEnabled(Channel &channel, bool state);
 void setLoad(Channel &channel, float load);
 #endif

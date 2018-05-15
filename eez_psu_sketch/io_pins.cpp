@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "io_pins.h"
 #include "persist_conf.h"
@@ -83,7 +83,7 @@ void updateOnCouplePin(int i) {
     int pin = i == 1 ? DOUT : DOUT2;
     int state = (g_lastState.outputEnabled && outputPin.polarity == io_pins::POLARITY_POSITIVE) ||
         (!g_lastState.outputEnabled && outputPin.polarity == io_pins::POLARITY_NEGATIVE)
-        ? 1 : 0; 
+        ? 1 : 0;
     digitalWrite(pin, state);
     //DebugTraceF("FUNCTION_ON_COUPLE %d %d", pin, state);
 }

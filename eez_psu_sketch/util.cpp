@@ -17,608 +17,119 @@
  */
 
 #include "psu.h"
-
 #include "channel_dispatcher.h"
 
 namespace eez {
 namespace psu {
-namespace util {
 
-float remap(float x, float x1, float y1, float x2, float y2) {
-    return y1 + (x - x1) * (y2 - y1) / (x2 - x1);
-}
-
-float remapQuad(float x, float x1, float y1, float x2, float y2) {
-    float t = remap(x, x1, 0, x2, 1);
-    t = t * t;
-    x = remap(t, 0, x1, 1, x2);
-    return remap(x, x1, y1, x2, y2);
-}
-
-float remapCubic(float x, float x1, float y1, float x2, float y2) {
-    float t = remap(x, x1, 0, x2, 1);
-    t = t * t * t;
-    x = remap(t, 0, x1, 1, x2);
-    return remap(x, x1, y1, x2, y2);
-}
-
-float remapExp(float x, float x1, float y1, float x2, float y2) {
-    float t = remap(x, x1, 0, x2, 1);
-    t = t == 0 ? 0 : float(pow(2, 10 * (t - 1)));
-    x = remap(t, 0, x1, 1, x2);
-    return remap(x, x1, y1, x2, y2);
-}
-
-float clamp(float x, float min, float max) {
-    if (x <= min) {
-        return min;
-    }
-    if (x >= max) {
-        return max;
-    }
-    return x;
-}
-
-void strcatInt(char *str, int value) {
-    str = str + strlen(str);
-    sprintf(str, "%d", value);
-}
-
-void strcatInt32(char *str, int32_t value) {
-    str = str + strlen(str);
-    sprintf(str, "%ld", (long)value);
-}
-
-void strcatUInt32(char *str, uint32_t value) {
-    str = str + strlen(str);
-    sprintf(str, "%lu", (unsigned long)value);
-}
-
-void strcatFloat(char *str, float value, int numSignificantDecimalDigits) {
-	for (int i = 0; i < numSignificantDecimalDigits; ++i) {
-		value *= 10;
-	}
-
-	int intValue = (int)roundf(value);
-
-	str = str + strlen(str);
-
-	if (intValue != 0) {
-		if (intValue < 0) {
-			*str++ = '-';
-			intValue = -intValue;
-		}
-
-		char strR[32];
-		int i = 0;
-
-		while (intValue > 0 || i < numSignificantDecimalDigits) {
-			int d = intValue % 10;
-
-			strR[i++] = '0' + d;
-
-			if (i == numSignificantDecimalDigits) {
-				strR[i++] = '.';
-			}
-
-			intValue /= 10;
-		}
-
-		if (strR[i - 1] == '.') {
-			strR[i++] = '0';
-		}
-
-		for (int j = i - 1; j >= 0; --j) {
-			*str++ = strR[j];
-		}
-	}
-	else {
-		*str++ = '0';
-	}
-
-	*str = 0;
-}
-
-void strcatFloat(char *str, float value, ValueType valueType, int channelIndex) {
-    int numSignificantDecimalDigits = getNumSignificantDecimalDigits(valueType);
-    if (valueType == VALUE_TYPE_FLOAT_AMPER && channelIndex != -1 && channel_dispatcher::isCurrentLowRangeAllowed(Channel::get(channelIndex)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+void strcatFloatValue(char *str, float value, Unit unit, int channelIndex) {
+    int numSignificantDecimalDigits = getNumSignificantDecimalDigits(unit);
+    if (
+		unit == UNIT_AMPER &&
+		channelIndex != -1 &&
+		channel_dispatcher::isCurrentLowRangeAllowed(Channel::get(channelIndex)) &&
+		mw::lessOrEqual(value, 0.5, getPrecision(UNIT_AMPER)))
+	{
         ++numSignificantDecimalDigits;
     }
-    strcatFloat(str, value, numSignificantDecimalDigits);
+	strcatFloat(str, value, numSignificantDecimalDigits);
 }
 
 void strcatVoltage(char *str, float value, int numSignificantDecimalDigits, int channelIndex) {
     if (numSignificantDecimalDigits == -1) {
-        numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT);
+        numSignificantDecimalDigits = getNumSignificantDecimalDigits(UNIT_VOLT);
     }
-    strcatFloat(str, value, numSignificantDecimalDigits);
+	strcatFloat(str, value, numSignificantDecimalDigits);
     strcat(str, "V");
 }
 
 void strcatCurrent(char *str, float value, int numSignificantDecimalDigits, int channelIndex) {
     if (numSignificantDecimalDigits == -1) {
-        numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_AMPER);
+        numSignificantDecimalDigits = getNumSignificantDecimalDigits(UNIT_AMPER);
     }
-    if (channelIndex != -1 && channel_dispatcher::isCurrentLowRangeAllowed(Channel::get(channelIndex)) && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+    if (channelIndex != -1 && channel_dispatcher::isCurrentLowRangeAllowed(Channel::get(channelIndex)) && mw::lessOrEqual(value, 0.5, getPrecision(UNIT_AMPER))) {
         ++numSignificantDecimalDigits;
     }
-    strcatFloat(str, value, numSignificantDecimalDigits);
+	strcatFloat(str, value, numSignificantDecimalDigits);
     strcat(str, "A");
 }
 
 void strcatPower(char *str, float value) {
-    strcatFloat(str, value, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_WATT));
-    strcat(str, "W");
+	strcatFloat(str, value, getNumSignificantDecimalDigits(UNIT_WATT));
+	strcat(str, "W");
 }
 
 void strcatDuration(char *str, float value) {
-    int numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_SECOND);
-    if (value > 0.1) {
-        strcatFloat(str, value, numSignificantDecimalDigits);
-        strcat(str, " s");
-    }
-    else {
-        strcatFloat(str, value * 1000, numSignificantDecimalDigits - 3);
-        strcat(str, " ms");
-    }
+	int numSignificantDecimalDigits = getNumSignificantDecimalDigits(UNIT_SECOND);
+	if (value > 0.1) {
+		strcatFloat(str, value, numSignificantDecimalDigits);
+		strcat(str, " s");
+	} else {
+		strcatFloat(str, value * 1000, numSignificantDecimalDigits - 3);
+		strcat(str, " ms");
+	}
 }
 
 void strcatLoad(char *str, float value) {
-    int numSignificantDecimalDigits = getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_OHM);
-    if (value < 1000) {
-        strcatFloat(str, value, numSignificantDecimalDigits);
-        strcat(str, " ohm");
-    }
-    else if (value < 1000000){
-        strcatFloat(str, value / 1000, numSignificantDecimalDigits);
-        strcat(str, " Kohm");
-    }
-    else {
-        strcatFloat(str, value / 1000000, numSignificantDecimalDigits);
-        strcat(str, " Mohm");
-    }
+	int numSignificantDecimalDigits = getNumSignificantDecimalDigits(UNIT_OHM);
+	if (value < 1000) {
+		strcatFloat(str, value, numSignificantDecimalDigits);
+		strcat(str, " ohm");
+	} else if (value < 1000000) {
+		strcatFloat(str, value / 1000, numSignificantDecimalDigits);
+		strcat(str, " Kohm");
+	} else {
+		strcatFloat(str, value / 1000000, numSignificantDecimalDigits);
+		strcat(str, " Mohm");
+	}
 }
 
-/*
-From http://www.hackersdelight.org/hdcodetxt/crc.c.txt:
+float getPrecision(float value, Unit unit, int channelIndex) {
+	int numSignificantDecimalDigits = getNumSignificantDecimalDigits(unit);
 
-This is the basic CRC-32 calculation with some optimization but no
-table lookup. The the byte reversal is avoided by shifting the crc reg
-right instead of left and by using a reversed 32-bit word to represent
-the polynomial.
-When compiled to Cyclops with GCC, this function executes in 8 + 72n
-instructions, where n is the number of bytes in the input message. It
-should be doable in 4 + 61n instructions.
-If the inner loop is strung out (approx. 5*8 = 40 instructions),
-it would take about 6 + 46n instructions.
-*/
+	if (mw::greater(value, 99.99f, getPrecisionFromNumSignificantDecimalDigits(2))) {
+		if (numSignificantDecimalDigits > 1) {
+			numSignificantDecimalDigits = 1;
+		}
+	} else if (mw::greater(value, 9.999f, getPrecisionFromNumSignificantDecimalDigits(2))) {
+		if (numSignificantDecimalDigits > 2) {
+			numSignificantDecimalDigits = 2;
+		}
+	} else {
+		if (unit == UNIT_AMPER) {
+			if (channelIndex != -1 && channel_dispatcher::isCurrentLowRangeAllowed(Channel::get(channelIndex)) && mw::lessOrEqual(value, 0.5, getPrecision(UNIT_AMPER))) {
+				++numSignificantDecimalDigits;
+			}
+		}
+	}
 
-uint32_t crc32(const uint8_t *mem_block, size_t block_size) {
-    uint32_t crc = 0xFFFFFFFF;
-    for (size_t i = 0; i < block_size; ++i) {
-        uint32_t byte = mem_block[i];            // Get next byte.
-        crc = crc ^ byte;
-        for (int j = 0; j < 8; ++j) {    // Do eight times.
-            uint32_t mask = -((int32_t)crc & 1);
-            crc = (crc >> 1) ^ (0xEDB88320 & mask);
-        }
-    }
-    return ~crc;
+	return getPrecisionFromNumSignificantDecimalDigits(numSignificantDecimalDigits);
 }
 
-uint8_t toBCD(uint8_t bin) {
-    return ((bin / 10) << 4) | (bin % 10);
+bool greater(float a, float b, Unit unit, int channelIndex) {
+	return a > b && !mw::equal(a, b, getPrecision(b, unit, channelIndex));
 }
 
-uint8_t fromBCD(uint8_t bcd) {
-    return ((bcd >> 4) & 0xF) * 10 + (bcd & 0xF);
+bool greaterOrEqual(float a, float b, Unit unit, int channelIndex) {
+	return a > b || equal(a, b, unit, channelIndex);
 }
 
-float floorPrec(float a, float prec) {
-    return floorf(a * prec) / prec;
+bool less(float a, float b, Unit unit, int channelIndex) {
+	return a < b && !mw::equal(a, b, getPrecision(b, unit, channelIndex));
 }
 
-float ceilPrec(float a, float prec) {
-    return ceilf(a * prec) / prec;
+bool lessOrEqual(float a, float b, Unit unit, int channelIndex) {
+	return a < b || equal(a, b, unit, channelIndex);
 }
 
-float roundPrec(float a, float prec) {
-    return roundf(a * prec) / prec;
-}
-
-bool greater(float a, float b, float prec) {
-	return a > b && !equal(a, b, prec);
-}
-
-bool greater(float a, float b, ValueType valueType, int channelIndex) {
-    return a > b && !equal(a, b, getPrecision(b, valueType, channelIndex));
-}
-
-bool greaterOrEqual(float a, float b, float prec) {
-	return a > b || equal(a, b, prec);
-}
-
-bool greaterOrEqual(float a, float b, ValueType valueType, int channelIndex) {
-	return a > b || equal(a, b, valueType, channelIndex);
-}
-
-bool less(float a, float b, float prec) {
-    return a < b && !equal(a, b, prec);
-}
-
-bool less(float a, float b, ValueType valueType, int channelIndex) {
-    return a < b && !equal(a, b, getPrecision(b, valueType, channelIndex));
-}
-
-bool lessOrEqual(float a, float b, float prec) {
-	return a < b || equal(a, b, prec);
-}
-
-bool lessOrEqual(float a, float b, ValueType valueType, int channelIndex) {
-	return a < b || equal(a, b, valueType, channelIndex);
-}
-
-bool equal(float a, float b, float prec) {
+bool equal(float a, float b, Unit unit, int channelIndex) {
+	float prec = getPrecision(b, unit, channelIndex);
 	return roundf(a * prec) == roundf(b * prec);
 }
 
-bool equal(float a, float b, ValueType valueType, int channelIndex) {
-    float prec = getPrecision(b, valueType, channelIndex);
-	return roundf(a * prec) == roundf(b * prec);
+bool between(float x, float a, float b, Unit unit, int channelIndex) {
+	return greaterOrEqual(x, a, unit, channelIndex) && lessOrEqual(x, b, unit, channelIndex);
 }
 
-bool between(float x, float a, float b, float prec) {
-    return greaterOrEqual(x, a, prec) && lessOrEqual(x, b, prec);
-}
-
-bool between(float x, float a, float b, ValueType valueType, int channelIndex) {
-    return greaterOrEqual(x, a, valueType, channelIndex) && lessOrEqual(x, b, valueType, channelIndex);
-}
-
-float multiply(float a, float b, float prec) {
-	return roundPrec(a, prec) * roundPrec(b, prec);
-}
-
-bool isNaN(float x) {
-	return x != x;
-}
-
-bool isDigit(char ch) {
-    return ch >= '0' && ch <= '9';
-}
-
-bool isHexDigit(char ch) {
-    return (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
-}
-
-bool isUperCaseLetter(char ch) {
-    return ch >= 'A' && ch <= 'Z';
-}
-
-char toHexDigit(int num) {
-    if (num >= 0 && num <= 9) {
-        return '0' + num;
-    } else {
-        return 'A' + (num - 10);
-    }
-}
-
-int fromHexDigit(char ch) {
-    if (ch >= '0' && ch <= '9') {
-        return ch - '0';
-    }
-
-    if (ch >= 'a' && ch <= 'f') {
-        return 10 + (ch - 'a');
-    }
-
-    return 10 + (ch - 'A');
-}
-
-void removeTrailingZerosFromFloat(char *str) {
-    for (int i = strlen(str) - 1; i >= 0; --i) {
-        if (str[i] == '0') {
-            str[i] = 0;
-        } else {
-            if (str[i] == '.') {
-                str[i] = 0;
-            }
-            break;
-        }
-    }
-}
-
-bool pointInsideRect(int xPoint, int yPoint, int xRect, int yRect, int wRect, int hRect) {
-    return xPoint >= xRect && xPoint < xRect + wRect &&
-        yPoint >= yRect && yPoint < yRect + hRect;
-}
-
-void getParentDir(const char *path, char *parentDirPath) {
-    int lastPathSeparatorIndex;
-
-    for (lastPathSeparatorIndex = strlen(path) - 1;
-        lastPathSeparatorIndex >= 0 && path[lastPathSeparatorIndex] != PATH_SEPARATOR[0];
-        --lastPathSeparatorIndex);
-
-    int i;
-    for (i = 0; i < lastPathSeparatorIndex; ++i) {
-        parentDirPath[i] = path[i];
-    }
-    parentDirPath[i] = 0;
-}
-
-bool parseMacAddress(const char *macAddressStr, size_t macAddressStrLength, uint8_t *macAddress) {
-    int state = 0;
-    int a;
-    int i = 0;
-    uint8_t resultMacAddress[6];
-
-    const char *end = macAddressStr + macAddressStrLength;
-    for (const char *p = macAddressStr; p < end; ++p) {
-        if (state == 0) {
-            if (*p == '-' || *p == ' ') {
-                continue;
-            } else if (isHexDigit(*p)) {
-                a = fromHexDigit(*p);
-                state = 1;
-            } else {
-                return false;
-            }
-        } else if (state == 1) {
-            if (isHexDigit(*p)) {
-                if (i < 6) {
-                    resultMacAddress[i++] = (a << 4) | fromHexDigit(*p);
-                    state = 0;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
-    }
-
-    if (state != 0 || i != 6) {
-        return false;
-    }
-
-    memcpy(macAddress, resultMacAddress, 6);
-
-    return true;
-}
-
-bool parseIpAddress(const char *ipAddressStr, size_t ipAddressStrLength, uint32_t &ipAddress) {
-    const char *p = ipAddressStr;
-    const char *q = ipAddressStr + ipAddressStrLength;
-
-    uint8_t ipAddressArray[4];
-
-    for (int i = 0; i < 4; ++i) {
-        if (p == q) {
-            return false;
-        }
-
-        uint32_t part = 0;
-        for (int j = 0; j < 3; ++j) {
-            if (p == q) {
-                if (j > 0 && i == 3) {
-                    break;
-                } else {
-                    return false;
-                }
-            } else if (isDigit(*p)) {
-                part = part * 10 + (*p++ - '0');
-            } else if (j > 0 && *p == '.') {
-                break;
-            } else {
-                return false;
-            }
-        }
-
-        if (part > 255) {
-            return false;
-        }
-
-        if ((i < 3 && *p++ != '.') || (i == 3 && p != q)) {
-            return false;
-        }
-
-        ipAddressArray[i] = part;
-    }
-
-    ipAddress = arrayToIpAddress(ipAddressArray);
-
-    return true;
-}
-
-int getIpAddressPartA(uint32_t ipAddress) {
-    return ((uint8_t *)&ipAddress)[0];
-}
-
-void setIpAddressPartA(uint32_t *ipAddress, uint8_t value) {
-    ((uint8_t *)ipAddress)[0] = value;
-}
-
-int getIpAddressPartB(uint32_t ipAddress) {
-    return ((uint8_t *)&ipAddress)[1];
-}
-
-void setIpAddressPartB(uint32_t *ipAddress, uint8_t value) {
-    ((uint8_t *)ipAddress)[1] = value;
-}
-
-int getIpAddressPartC(uint32_t ipAddress) {
-    return ((uint8_t *)&ipAddress)[2];
-}
-
-void setIpAddressPartC(uint32_t *ipAddress, uint8_t value) {
-    ((uint8_t *)ipAddress)[2] = value;
-}
-
-int getIpAddressPartD(uint32_t ipAddress) {
-    return ((uint8_t *)&ipAddress)[3];
-}
-
-void setIpAddressPartD(uint32_t *ipAddress, uint8_t value) {
-    ((uint8_t *)ipAddress)[3] = value;
-}
-
-void ipAddressToArray(uint32_t ipAddress, uint8_t *ipAddressArray) {
-    ipAddressArray[0] = getIpAddressPartA(ipAddress);
-    ipAddressArray[1] = getIpAddressPartB(ipAddress);
-    ipAddressArray[2] = getIpAddressPartC(ipAddress);
-    ipAddressArray[3] = getIpAddressPartD(ipAddress);
-}
-
-uint32_t arrayToIpAddress(uint8_t *ipAddressArray) {
-    return getIpAddress(ipAddressArray[0], ipAddressArray[1], ipAddressArray[2], ipAddressArray[3]);
-}
-
-uint32_t getIpAddress(uint8_t a, uint8_t b, uint8_t c, uint8_t d) {
-    uint32_t ipAddress;
-
-    setIpAddressPartA(&ipAddress, a);
-    setIpAddressPartB(&ipAddress, b);
-    setIpAddressPartC(&ipAddress, c);
-    setIpAddressPartD(&ipAddress, d);
-
-    return ipAddress;
-}
-
-void ipAddressToString(uint32_t ipAddress, char *ipAddressStr) {
-    sprintf(ipAddressStr, "%d.%d.%d.%d",
-        getIpAddressPartA(ipAddress),
-        getIpAddressPartB(ipAddress),
-        getIpAddressPartC(ipAddress),
-        getIpAddressPartD(ipAddress));
-}
-
-void macAddressToString(uint8_t *macAddress, char *macAddressStr) {
-    for (int i = 0; i < 6; ++i) {
-        macAddressStr[3*i] = util::toHexDigit((macAddress[i] & 0xF0) >> 4);
-        macAddressStr[3*i+1] = util::toHexDigit(macAddress[i] & 0xF);
-        macAddressStr[3*i+2] = i < 5 ? '-' : 0;
-    }
-}
-
-void formatTimeZone(int16_t timeZone, char *text, int count) {
-    if (timeZone == 0) {
-        strncpy(text, "GMT", count - 1);
-    } else {
-        char sign;
-        int16_t value;
-        if (timeZone > 0) {
-            sign = '+';
-            value = timeZone;
-        } else {
-            sign = '-';
-            value = -timeZone;
-        }
-        snprintf(text, count-1, "%c%02d:%02d GMT", sign, value / 100, value % 100);
-    }
-    text[count - 1] = 0;
-}
-
-bool parseTimeZone(const char *timeZoneStr, size_t timeZoneLength, int16_t &timeZone) {
-    int state = 0;
-
-    int sign = 1;
-    int integerPart = 0;
-    int fractionPart = 0;
-
-    const char *end = timeZoneStr + timeZoneLength;
-    for (const char *p = timeZoneStr; p < end; ++p) {
-        if (*p == ' ') {
-            continue;
-        }
-
-        if (state == 0) {
-            if (*p == '+') {
-                state = 1;
-            } else if (*p == '-') {
-                sign = -1;
-                state = 1;
-            } else if (isDigit(*p)) {
-                integerPart = *p - '0';
-                state = 2;
-            } else {
-                return false;
-            }
-        } else if (state == 1) {
-            if (isDigit(*p)) {
-                integerPart = (*p - '0');
-                state = 2;
-            } else {
-                return false;
-            }
-        } else if (state == 2) {
-            if (*p == ':') {
-                state = 4;
-            } else if (isDigit(*p)) {
-                integerPart = integerPart * 10 + (*p - '0');
-                state = 3;
-            } else {
-                return false;
-            }
-        } else if (state == 3) {
-            if (*p == ':') {
-                state = 4;
-            } else {
-                return false;
-            }
-        } else if (state == 4) {
-            if (isDigit(*p)) {
-                fractionPart = (*p - '0');
-                state = 5;
-            } else {
-                return false;
-            }
-        } else if (state == 5) {
-            if (isDigit(*p)) {
-                fractionPart = fractionPart * 10 + (*p - '0');
-                state = 6;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    if (state != 2 && state != 3 && state != 6) {
-        return false;
-    }
-
-    int value= sign * (integerPart * 100 + fractionPart);
-
-    if (value < -1200 || value > 1400) {
-        return false;
-    }
-
-    timeZone = (int16_t)value;
-
-    return true;
-}
-
-void replaceCharacter(char *str, char ch, char repl) {
-    while (*str) {
-        if (*str == ch) {
-            *str = repl;
-        }
-        ++str;
-    }
-}
-
-bool endsWith(const char *str, const char *suffix) {
-    if (!str || !suffix)
-        return false;
-    size_t strLen = strlen(str);
-    size_t suffixLen = strlen(suffix);
-    if (suffixLen > strLen)
-        return false;
-    return strncmp(str + strLen - suffixLen, suffix, suffixLen) == 0;
-}
-
-}
 }
 } // namespace eez::psu::util

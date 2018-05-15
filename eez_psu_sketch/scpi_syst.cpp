@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "scpi_psu.h"
 
@@ -29,7 +29,7 @@
 #include "profile.h"
 #include "channel_dispatcher.h"
 #if OPTION_DISPLAY
-#include "gui.h"
+#include "gui_psu.h"
 #endif
 #include "io_pins.h"
 
@@ -43,7 +43,7 @@ scpi_result_t scpi_cmd_systemCapabilityQ(scpi_t *context) {
     char text[sizeof(STR_SYST_CAP)];
     strcpy(text, STR_SYST_CAP);
     SCPI_ResultText(context, text);
-    
+
     return SCPI_RES_OK;
 }
 
@@ -228,7 +228,7 @@ scpi_result_t scpi_cmd_systemTimeZone(scpi_t *context) {
     }
 
     int16_t timeZone;
-    if (!util::parseTimeZone(timeZoneStr, timeZoneStrLength, timeZone)) {
+    if (!parseTimeZone(timeZoneStr, timeZoneStrLength, timeZone)) {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
@@ -245,7 +245,7 @@ scpi_result_t scpi_cmd_systemTimeZone(scpi_t *context) {
 
 scpi_result_t scpi_cmd_systemTimeZoneQ(scpi_t *context) {
     char timeZoneStr[32];
-    util::formatTimeZone(persist_conf::devConf.time_zone, timeZoneStr, 32);
+    formatTimeZone(persist_conf::devConf.time_zone, timeZoneStr, 32);
     SCPI_ResultText(context, timeZoneStr);
     return SCPI_RES_OK;
 }
@@ -331,7 +331,7 @@ scpi_result_t scpi_cmd_systemTemperatureProtectionHighLevelQ(scpi_t *context) {
 		return SCPI_RES_ERR;
     }
 
-    return result_float(context, 0, temperature::sensors[sensor].prot_conf.level, VALUE_TYPE_FLOAT_CELSIUS);
+    return result_float(context, 0, temperature::sensors[sensor].prot_conf.level, UNIT_CELSIUS);
 }
 
 scpi_result_t scpi_cmd_systemTemperatureProtectionHighState(scpi_t *context) {
@@ -436,7 +436,7 @@ scpi_result_t scpi_cmd_systemChannelInformationProgramQ(scpi_t *context) {
     }
 
     uint16_t features = channel->getFeatures();
-    
+
     char strFeatures[64] = {0};
 
     if (features & CH_FEATURE_VOLT) {
@@ -959,7 +959,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetAddress(scpi_t *context) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
-    
+
     const char *ipAddressStr;
     size_t ipAddressStrLength;
 
@@ -968,7 +968,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetAddress(scpi_t *context) {
     }
 
     uint32_t ipAddress;
-    if (!util::parseIpAddress(ipAddressStr, ipAddressStrLength, ipAddress)) {
+    if (!parseIpAddress(ipAddressStr, ipAddressStrLength, ipAddress)) {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
@@ -991,9 +991,9 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetAddressQ(scpi_t *context) {
 
     char ipAddressStr[16];
     if (persist_conf::devConf2.flags.ethernetDhcpEnabled) {
-        util::ipAddressToString(ethernet::getIpAddress(), ipAddressStr);
+        ipAddressToString(ethernet::getIpAddress(), ipAddressStr);
     } else {
-        util::ipAddressToString(persist_conf::devConf2.ethernetIpAddress, ipAddressStr);
+        ipAddressToString(persist_conf::devConf2.ethernetIpAddress, ipAddressStr);
     }
     SCPI_ResultText(context, ipAddressStr);
     return SCPI_RES_OK;
@@ -1009,7 +1009,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDns(scpi_t *context) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
-    
+
     const char *ipAddressStr;
     size_t ipAddressStrLength;
 
@@ -1018,7 +1018,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDns(scpi_t *context) {
     }
 
     uint32_t ipAddress;
-    if (!util::parseIpAddress(ipAddressStr, ipAddressStrLength, ipAddress)) {
+    if (!parseIpAddress(ipAddressStr, ipAddressStrLength, ipAddress)) {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
@@ -1043,7 +1043,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetDnsQ(scpi_t *context) {
         SCPI_ResultText(context, "unknown");
     } else {
         char ipAddressStr[16];
-        util::ipAddressToString(persist_conf::devConf2.ethernetDns, ipAddressStr);
+        ipAddressToString(persist_conf::devConf2.ethernetDns, ipAddressStr);
         SCPI_ResultText(context, ipAddressStr);
     }
     return SCPI_RES_OK;
@@ -1059,7 +1059,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetGateway(scpi_t *context) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
-    
+
     const char *ipAddressStr;
     size_t ipAddressStrLength;
 
@@ -1068,7 +1068,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetGateway(scpi_t *context) {
     }
 
     uint32_t ipAddress;
-    if (!util::parseIpAddress(ipAddressStr, ipAddressStrLength, ipAddress)) {
+    if (!parseIpAddress(ipAddressStr, ipAddressStrLength, ipAddress)) {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
@@ -1093,7 +1093,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetGatewayQ(scpi_t *context) {
         SCPI_ResultText(context, "unknown");
     } else {
         char ipAddressStr[16];
-        util::ipAddressToString(persist_conf::devConf2.ethernetGateway, ipAddressStr);
+        ipAddressToString(persist_conf::devConf2.ethernetGateway, ipAddressStr);
         SCPI_ResultText(context, ipAddressStr);
     }
     return SCPI_RES_OK;
@@ -1109,7 +1109,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetSmask(scpi_t *context) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
-    
+
     const char *ipAddressStr;
     size_t ipAddressStrLength;
 
@@ -1118,7 +1118,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetSmask(scpi_t *context) {
     }
 
     uint32_t ipAddress;
-    if (!util::parseIpAddress(ipAddressStr, ipAddressStrLength, ipAddress)) {
+    if (!parseIpAddress(ipAddressStr, ipAddressStrLength, ipAddress)) {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
@@ -1143,7 +1143,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetSmaskQ(scpi_t *context) {
         SCPI_ResultText(context, "unknown");
     } else {
         char ipAddressStr[16];
-        util::ipAddressToString(persist_conf::devConf2.ethernetSubnetMask, ipAddressStr);
+        ipAddressToString(persist_conf::devConf2.ethernetSubnetMask, ipAddressStr);
         SCPI_ResultText(context, ipAddressStr);
     }
     return SCPI_RES_OK;
@@ -1200,7 +1200,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetMac(scpi_t *context) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
-    
+
     const char *macAddressStr;
     size_t macAddressStrLength;
 
@@ -1209,7 +1209,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetMac(scpi_t *context) {
     }
 
     uint8_t macAddress[6];
-    if (!util::parseMacAddress(macAddressStr, macAddressStrLength, macAddress)) {
+    if (!parseMacAddress(macAddressStr, macAddressStrLength, macAddress)) {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
@@ -1226,7 +1226,7 @@ scpi_result_t scpi_cmd_systemCommunicateEthernetMac(scpi_t *context) {
 scpi_result_t scpi_cmd_systemCommunicateEthernetMacQ(scpi_t *context) {
 #if OPTION_ETHERNET
     char macAddressStr[18];
-    util::macAddressToString(persist_conf::devConf2.ethernetMacAddress, macAddressStr);
+    macAddressToString(persist_conf::devConf2.ethernetMacAddress, macAddressStr);
     SCPI_ResultText(context, macAddressStr);
     return SCPI_RES_OK;
 #else

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "scpi_psu.h"
 
@@ -38,11 +38,11 @@ static void printCalibrationValue(scpi_t *context, char *buffer, calibration::Va
     int numSignificantDecimalDigits = 4;
     if (value.voltOrCurr) {
         prefix = "u";
-        strcat_value = util::strcatVoltage;
+        strcat_value = strcatVoltage;
     }
     else {
         prefix = "i";
-        strcat_value = util::strcatCurrent;
+        strcat_value = strcatCurrent;
     }
 
     if (value.min_set) { strcpy(buffer, prefix); strcat(buffer, "_min="); strcat_value(buffer, value.min_val, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer); }
@@ -64,13 +64,13 @@ static void printCalibrationValue(scpi_t *context, char *buffer, calibration::Va
     }
 }
 
-void printCalibrationParameters(scpi_t *context, ValueType valueType, uint8_t currentRange, bool calParamsExists, Channel::CalibrationValueConfiguration &calibrationValue, char *buffer) {
+void printCalibrationParameters(scpi_t *context, Unit unit, uint8_t currentRange, bool calParamsExists, Channel::CalibrationValueConfiguration &calibrationValue, char *buffer) {
     const char *prefix;
     void(*strcat_value)(char *str, float value, int precision, int channelIndex);
     int numSignificantDecimalDigits = 4;
-    if (valueType == VALUE_TYPE_FLOAT_VOLT) {
+    if (unit == UNIT_VOLT) {
         prefix = "u";
-        strcat_value = util::strcatVoltage;
+        strcat_value = strcatVoltage;
     }
     else {
         if (currentRange == 0) {
@@ -80,11 +80,11 @@ void printCalibrationParameters(scpi_t *context, ValueType valueType, uint8_t cu
         } else {
             prefix = "i";
         }
-        strcat_value = util::strcatCurrent;
+        strcat_value = strcatCurrent;
     }
 
-    strcpy(buffer, prefix); strcat(buffer, "_cal_params_exists="); util::strcatInt(buffer, calParamsExists);SCPI_ResultText(context, buffer);
-    
+    strcpy(buffer, prefix); strcat(buffer, "_cal_params_exists="); strcatInt(buffer, calParamsExists);SCPI_ResultText(context, buffer);
+
     if (calParamsExists) {
         strcpy(buffer, prefix); strcat(buffer, "_min_level="); strcat_value(buffer, calibrationValue.min.dac, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
         strcpy(buffer, prefix); strcat(buffer, "_min_data=" ); strcat_value(buffer, calibrationValue.min.val, numSignificantDecimalDigits, -1); SCPI_ResultText(context, buffer);
@@ -113,19 +113,19 @@ scpi_result_t scpi_cmd_diagnosticInformationAdcQ(scpi_t * context) {
     char buffer[64] = { 0 };
 
     strcpy(buffer, "U_SET=");
-    util::strcatVoltage(buffer, channel->u.mon_dac);
+    strcatVoltage(buffer, channel->u.mon_dac);
     SCPI_ResultText(context, buffer);
 
     strcpy(buffer, "U_MON=");
-    util::strcatVoltage(buffer, channel->u.mon_last);
+    strcatVoltage(buffer, channel->u.mon_last);
     SCPI_ResultText(context, buffer);
 
     strcpy(buffer, "I_SET=");
-    util::strcatCurrent(buffer, channel->i.mon_dac, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_AMPER), channel->index-1);
+    strcatCurrent(buffer, channel->i.mon_dac, getNumSignificantDecimalDigits(UNIT_AMPER), channel->index-1);
     SCPI_ResultText(context, buffer);
 
     strcpy(buffer, "I_MON=");
-    util::strcatCurrent(buffer, channel->i.mon_last, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_AMPER), channel->index-1);
+    strcatCurrent(buffer, channel->i.mon_last, getNumSignificantDecimalDigits(UNIT_AMPER), channel->index-1);
     SCPI_ResultText(context, buffer);
 
     return SCPI_RES_OK;
@@ -151,12 +151,12 @@ scpi_result_t scpi_cmd_diagnosticInformationCalibrationQ(scpi_t *context) {
         sprintf(buffer, "remark=%s %s", channel->cal_conf.calibration_date, channel->cal_conf.calibration_remark);
         SCPI_ResultText(context, buffer);
 
-        printCalibrationParameters(context, VALUE_TYPE_FLOAT_VOLT, -1, channel->cal_conf.flags.u_cal_params_exists, channel->cal_conf.u, buffer);
+        printCalibrationParameters(context, UNIT_VOLT, -1, channel->cal_conf.flags.u_cal_params_exists, channel->cal_conf.u, buffer);
         if (channel->hasSupportForCurrentDualRange()) {
-            printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, 0, channel->cal_conf.flags.i_cal_params_exists_range_high, channel->cal_conf.i[0], buffer);
-            printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, 1, channel->cal_conf.flags.i_cal_params_exists_range_low, channel->cal_conf.i[1], buffer);
+            printCalibrationParameters(context, UNIT_AMPER, 0, channel->cal_conf.flags.i_cal_params_exists_range_high, channel->cal_conf.i[0], buffer);
+            printCalibrationParameters(context, UNIT_AMPER, 1, channel->cal_conf.flags.i_cal_params_exists_range_low, channel->cal_conf.i[1], buffer);
         } else {
-            printCalibrationParameters(context, VALUE_TYPE_FLOAT_AMPER, -1, channel->cal_conf.flags.i_cal_params_exists_range_high, channel->cal_conf.i[0], buffer);
+            printCalibrationParameters(context, UNIT_AMPER, -1, channel->cal_conf.flags.i_cal_params_exists_range_high, channel->cal_conf.i[0], buffer);
         }
     }
 
@@ -173,29 +173,29 @@ scpi_result_t scpi_cmd_diagnosticInformationProtectionQ(scpi_t * context) {
         sprintf(buffer, "CH%d u_tripped=%d", channel->index, (int)channel->ovp.flags.tripped         ); SCPI_ResultText(context, buffer);
         sprintf(buffer, "CH%d u_state=%d"  , channel->index, (int)channel->prot_conf.flags.u_state   ); SCPI_ResultText(context, buffer);
         sprintf(buffer, "CH%d u_delay="    , channel->index);
-        util::strcatDuration(buffer, channel->prot_conf.u_delay);
+        strcatDuration(buffer, channel->prot_conf.u_delay);
         SCPI_ResultText(context, buffer);
 
         sprintf(buffer, "CH%d u_level=", channel->index);
-        util::strcatVoltage(buffer, channel->prot_conf.u_level);
+        strcatVoltage(buffer, channel->prot_conf.u_level);
         SCPI_ResultText(context, buffer);
 
         // current
         sprintf(buffer, "CH%d i_tripped=%d", channel->index, (int)channel->ocp.flags.tripped         ); SCPI_ResultText(context, buffer);
         sprintf(buffer, "CH%d i_state=%d"  , channel->index, (int)channel->prot_conf.flags.i_state   ); SCPI_ResultText(context, buffer);
         sprintf(buffer, "CH%d i_delay="    , channel->index);
-        util::strcatDuration(buffer, channel->prot_conf.i_delay);
+        strcatDuration(buffer, channel->prot_conf.i_delay);
         SCPI_ResultText(context, buffer);
 
         // power
         sprintf(buffer, "CH%d p_tripped=%d", channel->index, (int)channel->opp.flags.tripped         ); SCPI_ResultText(context, buffer);
         sprintf(buffer, "CH%d p_state=%d"  , channel->index, (int)channel->prot_conf.flags.p_state   ); SCPI_ResultText(context, buffer);
         sprintf(buffer, "CH%d p_delay="    , channel->index);
-        util::strcatDuration(buffer, channel->prot_conf.p_delay);
+        strcatDuration(buffer, channel->prot_conf.p_delay);
         SCPI_ResultText(context, buffer);
 
         sprintf(buffer, "CH%d p_level=", channel->index);
-        util::strcatPower(buffer, channel->prot_conf.p_level);
+        strcatPower(buffer, channel->prot_conf.p_level);
         SCPI_ResultText(context, buffer);
     }
 
@@ -210,11 +210,11 @@ scpi_result_t scpi_cmd_diagnosticInformationProtectionQ(scpi_t * context) {
 		SCPI_ResultText(context, buffer);
 
 		sprintf(buffer, "temp_%s_delay=", sensor.name);
-		util::strcatDuration(buffer, sensorTemperature.prot_conf.delay);
+		strcatDuration(buffer, sensorTemperature.prot_conf.delay);
 		SCPI_ResultText(context, buffer);
 
 		sprintf(buffer, "temp_%s_level=", sensor.name);
-		util::strcatFloat(buffer, sensorTemperature.prot_conf.level, getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_CELSIUS));
+		strcatFloat(buffer, sensorTemperature.prot_conf.level, getNumSignificantDecimalDigits(UNIT_CELSIUS));
 		strcat(buffer, " oC");
 		SCPI_ResultText(context, buffer);
 	}
@@ -236,7 +236,7 @@ scpi_result_t scpi_cmd_diagnosticInformationTestQ(scpi_t * context) {
 //    sprintf(buffer, "%d, EEPROM, %s, %s",
 //        eeprom::g_testResult, get_installed_str(OPTION_EXT_EEPROM), get_test_result_str(eeprom::g_testResult));
 //    SCPI_ResultText(context, buffer);
-//    
+//
 //    sprintf(buffer, "%d, Ethernet, %s, %s",
 //        ethernet::g_testResult, get_installed_str(OPTION_ETHERNET), get_test_result_str(ethernet::g_testResult));
 //    SCPI_ResultText(context, buffer);
@@ -244,7 +244,7 @@ scpi_result_t scpi_cmd_diagnosticInformationTestQ(scpi_t * context) {
 //    sprintf(buffer, "%d, RTC, %s, %s",
 //        rtc::g_testResult, get_installed_str(OPTION_EXT_RTC), get_test_result_str(rtc::g_testResult));
 //    SCPI_ResultText(context, buffer);
-//    
+//
 //    sprintf(buffer, "%d, DateTime, %s, %s",
 //        datetime::g_testResult, get_installed_str(true), get_test_result_str(datetime::g_testResult));
 //    SCPI_ResultText(context, buffer);

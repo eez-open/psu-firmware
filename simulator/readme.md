@@ -1,3 +1,0 @@
-# Simulator
-
-Hello, world!

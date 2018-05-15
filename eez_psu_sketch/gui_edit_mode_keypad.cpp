@@ -28,6 +28,10 @@
 #include "gui_numeric_keypad.h"
 
 namespace eez {
+
+// @todo remove this
+using namespace mw::gui;
+
 namespace psu {
 namespace gui {
 namespace edit_mode_keypad {
@@ -47,7 +51,7 @@ void enter(Channel &channel, const data::Value& editValue, const data::Value& mi
 
     options.channelIndex = channel.index - 1;
 
-	options.editUnit = editValue.getType();
+	options.editValueUnit = editValue.getUnit();
 
 	options.min = minValue.getFloat();
 	options.max = maxValue.getFloat();

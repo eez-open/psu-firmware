@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "gui_internal.h"
+#include "mw_gui_data.h"
 
 namespace eez {
 namespace psu {
@@ -28,7 +28,7 @@ class NumericKeypad;
 
 namespace edit_mode_keypad {
 
-void enter(Channel &channel, const data::Value& editValue, const data::Value& minValue, data::Value& maxValue);
+void enter(Channel &channel, const eez::mw::gui::data::Value& editValue, const eez::mw::gui::data::Value& minValue, eez::mw::gui::data::Value& maxValue);
 void exit();
 
 extern NumericKeypad *g_keypad;

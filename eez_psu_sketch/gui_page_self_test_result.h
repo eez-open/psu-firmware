@@ -15,24 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
-#include "gui_page.h"
+#include "mw_gui_page.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 
-class SelfTestResultPage : public Page {
+class SelfTestResultPage : public mw::gui::Page {
 public:
 	void pageWillAppear();
 	void pageDidDisappear();
 
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-
-private:
-	char *selfTestResult;
+	char *m_selfTestResult;
 };
 
 }

@@ -252,7 +252,7 @@ char *Channel::getChannelsInfoShort(char *p) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
 
 void Channel::Simulator::setLoadEnabled(bool value) {
     load_enabled = value;
@@ -339,7 +339,7 @@ Channel::Channel(
     //negligibleAdcDiffForVoltage3 = (int)((AnalogDigitalConverter::ADC_MAX - AnalogDigitalConverter::ADC_MIN) / (2 * 1000 * (U_MAX - U_MIN))) + 1;
     //calculateNegligibleAdcDiffForCurrent();
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     simulator.load_enabled = true;
     simulator.load = 10;
 #endif
@@ -373,7 +373,7 @@ void Channel::protectionEnter(ProtectionValue &cpv) {
     int16_t eventId = event_queue::EVENT_ERROR_CH1_OVP_TRIPPED + 3 * (index - 1);
 
     if (IS_OVP_VALUE(this, cpv)) {
-        if (flags.rprogEnabled && util::equal(channel_dispatcher::getUProtectionLevel(*this), channel_dispatcher::getUMax(*this), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+        if (flags.rprogEnabled && mw::equal(channel_dispatcher::getUProtectionLevel(*this), channel_dispatcher::getUMax(*this), getPrecision(UNIT_VOLT))) {
             psu::g_rprogAlarm = true;
         }
         doRemoteProgrammingEnable(false);
@@ -396,18 +396,18 @@ void Channel::protectionCheck(ProtectionValue &cpv) {
     if (IS_OVP_VALUE(this, cpv)) {
         state = flags.rprogEnabled || prot_conf.flags.u_state;
         //condition = flags.cv_mode && (!flags.cc_mode || fabs(i.mon_last - i.set) >= CHANNEL_VALUE_PRECISION) && (prot_conf.u_level <= u.set);
-        condition = util::greaterOrEqual(channel_dispatcher::getUMon(*this), channel_dispatcher::getUProtectionLevel(*this), getPrecision(VALUE_TYPE_FLOAT_VOLT))
-            || (flags.rprogEnabled && util::greaterOrEqual(channel_dispatcher::getUMonDac(*this), channel_dispatcher::getUProtectionLevel(*this), getPrecision(VALUE_TYPE_FLOAT_VOLT)));
+        condition = mw::greaterOrEqual(channel_dispatcher::getUMon(*this), channel_dispatcher::getUProtectionLevel(*this), getPrecision(UNIT_VOLT))
+            || (flags.rprogEnabled && mw::greaterOrEqual(channel_dispatcher::getUMonDac(*this), channel_dispatcher::getUProtectionLevel(*this), getPrecision(UNIT_VOLT)));
         delay = prot_conf.u_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
     else if (IS_OCP_VALUE(this, cpv)) {
         state = prot_conf.flags.i_state;
         //condition = flags.cc_mode && (!flags.cv_mode || fabs(u.mon_last - u.set) >= CHANNEL_VALUE_PRECISION);
-        condition = util::greaterOrEqual(
+        condition = mw::greaterOrEqual(
             channel_dispatcher::getIMon(*this),
             channel_dispatcher::getISet(*this),
-            getPrecision(VALUE_TYPE_FLOAT_AMPER));
+            getPrecision(UNIT_AMPER));
         delay = prot_conf.i_delay;
         delay -= PROT_DELAY_CORRECTION;
     }
@@ -559,7 +559,7 @@ void Channel::reset() {
     trigger::setCurrent(*this, I_MIN);
     list::resetChannelList(*this);
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     simulator.setLoadEnabled(false);
     simulator.load = 10;
 #endif
@@ -658,7 +658,7 @@ bool Channel::isOk() {
 
 void Channel::voltageBalancing() {
     //DebugTraceF("Channel voltage balancing: CH1_Umon=%f, CH2_Umon=%f", Channel::get(0).u.mon_last, Channel::get(1).u.mon_last);
-    if (util::isNaN(uBeforeBalancing)) {
+    if (isNaN(uBeforeBalancing)) {
         uBeforeBalancing = u.set;
     }
     doSetVoltage((Channel::get(0).u.mon_last + Channel::get(1).u.mon_last) / 2);
@@ -666,14 +666,14 @@ void Channel::voltageBalancing() {
 
 void Channel::currentBalancing() {
     //DebugTraceF("CH%d channel current balancing: CH1_Imon=%f, CH2_Imon=%f", index, Channel::get(0).i.mon_last, Channel::get(1).i.mon_last);
-    if (util::isNaN(iBeforeBalancing)) {
+    if (isNaN(iBeforeBalancing)) {
         iBeforeBalancing = i.set;
     }
     doSetCurrent((Channel::get(0).i.mon_last + Channel::get(1).i.mon_last) / 2);
 }
 
 void Channel::restoreVoltageToValueBeforeBalancing() {
-    if (!util::isNaN(uBeforeBalancing)) {
+    if (!isNaN(uBeforeBalancing)) {
         //DebugTraceF("Restore voltage to value before balancing: %f", uBeforeBalancing);
         profile::enableSave(false);
         setVoltage(uBeforeBalancing);
@@ -683,7 +683,7 @@ void Channel::restoreVoltageToValueBeforeBalancing() {
 }
 
 void Channel::restoreCurrentToValueBeforeBalancing() {
-    if (!util::isNaN(iBeforeBalancing)) {
+    if (!isNaN(iBeforeBalancing)) {
         //DebugTraceF("Restore current to value before balancing: %f", index, iBeforeBalancing);
         profile::enableSave(false);
         setCurrent(iBeforeBalancing);
@@ -754,8 +754,8 @@ void Channel::tick(uint32_t tick_usec) {
 #endif
 
     if (historyPosition == -1) {
-        uHistory[0] = util::roundPrec(u.mon_last, getPrecisionFromNumSignificantDecimalDigits(VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS));
-        iHistory[0] = util::roundPrec(i.mon_last, getPrecisionFromNumSignificantDecimalDigits(CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS));
+        uHistory[0] = roundPrec(u.mon_last, getPrecisionFromNumSignificantDecimalDigits(VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS));
+        iHistory[0] = roundPrec(i.mon_last, getPrecisionFromNumSignificantDecimalDigits(CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS));
         for (int i = 1; i < CHANNEL_HISTORY_SIZE; ++i) {
             uHistory[i] = 0;
             iHistory[i] = 0;
@@ -767,8 +767,8 @@ void Channel::tick(uint32_t tick_usec) {
         uint32_t ytViewRateMicroseconds = (int)round(ytViewRate * 1000000L);
 
         while (tick_usec - historyLastTick >= ytViewRateMicroseconds) {
-            uHistory[historyPosition] = util::roundPrec(u.mon_last, getPrecisionFromNumSignificantDecimalDigits(VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS));
-            iHistory[historyPosition] = util::roundPrec(i.mon_last, getPrecisionFromNumSignificantDecimalDigits(CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS));
+            uHistory[historyPosition] = roundPrec(u.mon_last, getPrecisionFromNumSignificantDecimalDigits(VOLTAGE_NUM_SIGNIFICANT_DECIMAL_DIGITS));
+            iHistory[historyPosition] = roundPrec(i.mon_last, getPrecisionFromNumSignificantDecimalDigits(CURRENT_NUM_SIGNIFICANT_DECIMAL_DIGITS));
 
             if (++historyPosition == CHANNEL_HISTORY_SIZE) {
                 historyPosition = 0;
@@ -782,21 +782,21 @@ void Channel::tick(uint32_t tick_usec) {
 }
 
 float Channel::remapAdcDataToVoltage(int16_t adc_data) {
-    return util::remap((float)adc_data, (float)AnalogDigitalConverter::ADC_MIN, U_MIN, (float)AnalogDigitalConverter::ADC_MAX, U_MAX_CONF);
+    return remap((float)adc_data, (float)AnalogDigitalConverter::ADC_MIN, U_MIN, (float)AnalogDigitalConverter::ADC_MAX, U_MAX_CONF);
 }
 
 float Channel::remapAdcDataToCurrent(int16_t adc_data) {
-    return util::remap((float)adc_data, (float)AnalogDigitalConverter::ADC_MIN, I_MIN, (float)AnalogDigitalConverter::ADC_MAX, getDualRangeMax());
+    return remap((float)adc_data, (float)AnalogDigitalConverter::ADC_MIN, I_MIN, (float)AnalogDigitalConverter::ADC_MAX, getDualRangeMax());
 }
 
 int16_t Channel::remapVoltageToAdcData(float value) {
-    float adc_value = util::remap(value, U_MIN, (float)AnalogDigitalConverter::ADC_MIN, U_MAX, (float)AnalogDigitalConverter::ADC_MAX);
-    return (int16_t)util::clamp(adc_value, (float)(-AnalogDigitalConverter::ADC_MAX - 1), (float)AnalogDigitalConverter::ADC_MAX);
+    float adc_value = remap(value, U_MIN, (float)AnalogDigitalConverter::ADC_MIN, U_MAX, (float)AnalogDigitalConverter::ADC_MAX);
+    return (int16_t)clamp(adc_value, (float)(-AnalogDigitalConverter::ADC_MAX - 1), (float)AnalogDigitalConverter::ADC_MAX);
 }
 
 int16_t Channel::remapCurrentToAdcData(float value) {
-    float adc_value = util::remap(value, I_MIN, (float)AnalogDigitalConverter::ADC_MIN, getDualRangeMax(), (float)AnalogDigitalConverter::ADC_MAX);
-    return (int16_t)util::clamp(adc_value, (float)(-AnalogDigitalConverter::ADC_MAX - 1), (float)AnalogDigitalConverter::ADC_MAX);
+    float adc_value = remap(value, I_MIN, (float)AnalogDigitalConverter::ADC_MIN, getDualRangeMax(), (float)AnalogDigitalConverter::ADC_MAX);
+    return (int16_t)clamp(adc_value, (float)(-AnalogDigitalConverter::ADC_MAX - 1), (float)AnalogDigitalConverter::ADC_MAX);
 }
 
 void Channel::adcDataIsReady(int16_t data, bool startAgain) {
@@ -810,7 +810,7 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
         debug::g_uMon[index - 1].set(data);
 #endif
 
-        //if (util::greaterOrEqual(u.mon_adc, 10.0f, getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+        //if (greaterOrEqual(u.mon_adc, 10.0f, getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
         //    if (abs(u.mon_adc - data) > negligibleAdcDiffForVoltage2) {
         //        u.mon_adc = data;
         //    }
@@ -826,15 +826,15 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
 
             value = remapAdcDataToVoltage(data);
 
-#if !defined(EEZ_PSU_SIMULATOR)
+#if !defined(EEZ_PLATFORM_SIMULATOR)
             value -= VOLTAGE_GND_OFFSET;
 #endif
 
-            value = util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
+            value = remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
         } else {
             value = remapAdcDataToVoltage(data);
 
-#if !defined(EEZ_PSU_SIMULATOR)
+#if !defined(EEZ_PLATFORM_SIMULATOR)
             value -= VOLTAGE_GND_OFFSET;
 #endif
         }
@@ -859,7 +859,7 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
         float value = remapAdcDataToCurrent(data) - getDualRangeGndOffset();
 
         if (isCurrentCalibrationEnabled()) {
-            value = util::remap(value,
+            value = remap(value,
                 cal_conf.i[flags.currentCurrentRange].min.adc,
                 cal_conf.i[flags.currentCurrentRange].min.val,
                 cal_conf.i[flags.currentCurrentRange].max.adc,
@@ -893,14 +893,14 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
 
         float value = remapAdcDataToVoltage(data);
 
-#if !defined(EEZ_PSU_SIMULATOR)
+#if !defined(EEZ_PLATFORM_SIMULATOR)
         if (!flags.rprogEnabled) {
             value -= VOLTAGE_GND_OFFSET;
         }
 #endif
 
         //if (isVoltageCalibrationEnabled()) {
-        //    u.mon_dac = util::remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
+        //    u.mon_dac = remap(value, cal_conf.u.min.adc, cal_conf.u.min.val, cal_conf.u.max.adc, cal_conf.u.max.val);
         //} else {
         //    u.mon_dac = value;
         //}
@@ -925,7 +925,7 @@ void Channel::adcDataIsReady(int16_t data, bool startAgain) {
         float value = remapAdcDataToCurrent(data) - getDualRangeGndOffset();
 
         //if (isCurrentCalibrationEnabled()) {
-        //    i.mon_dac = util::remap(value,
+        //    i.mon_dac = remap(value,
         //        cal_conf.i[flags.currentCurrentRange].min.adc,
         //        cal_conf.i[flags.currentCurrentRange].min.val,
         //        cal_conf.i[flags.currentCurrentRange].max.adc,
@@ -1295,22 +1295,22 @@ void Channel::doCalibrationEnable(bool enable) {
     flags._calEnabled = enable;
 
     if (enable) {
-        u.min = util::floorPrec(cal_conf.u.minPossible, getPrecision(VALUE_TYPE_FLOAT_VOLT));
+        u.min = floorPrec(cal_conf.u.minPossible, getPrecision(UNIT_VOLT));
         if (u.min < U_MIN) u.min = U_MIN;
         if (u.limit < u.min) u.limit = u.min;
         if (u.set < u.min) setVoltage(u.min);
 
-        u.max = util::ceilPrec(cal_conf.u.maxPossible, getPrecision(VALUE_TYPE_FLOAT_VOLT));
+        u.max = ceilPrec(cal_conf.u.maxPossible, getPrecision(UNIT_VOLT));
         if (u.max > U_MAX) u.max = U_MAX;
         if (u.set > u.max) setVoltage(u.max);
         if (u.limit > u.max) u.limit = u.max;
 
-        i.min = util::floorPrec(cal_conf.i[0].minPossible, getPrecision(VALUE_TYPE_FLOAT_AMPER));
+        i.min = floorPrec(cal_conf.i[0].minPossible, getPrecision(UNIT_AMPER));
         if (i.min < I_MIN) i.min = I_MIN;
         if (i.limit < i.min) i.limit = i.min;
         if (i.set < i.min) setCurrent(i.min);
 
-        i.max = util::ceilPrec(cal_conf.i[0].maxPossible, getPrecision(VALUE_TYPE_FLOAT_AMPER));
+        i.max = ceilPrec(cal_conf.i[0].maxPossible, getPrecision(UNIT_AMPER));
         if (i.max > I_MAX) i.max = I_MAX;
         if (i.limit > i.max) i.limit = i.max;
         if (i.set > i.max) setCurrent(i.max);
@@ -1522,14 +1522,14 @@ void Channel::doSetVoltage(float value) {
     }
 
     if (U_MAX != U_MAX_CONF) {
-        value = util::remap(value, 0, 0, U_MAX_CONF, U_MAX);
+        value = remap(value, 0, 0, U_MAX_CONF, U_MAX);
     }
 
     if (isVoltageCalibrationEnabled()) {
-        value = util::remap(value, cal_conf.u.min.val, cal_conf.u.min.dac, cal_conf.u.max.val, cal_conf.u.max.dac);
+        value = remap(value, cal_conf.u.min.val, cal_conf.u.min.dac, cal_conf.u.max.val, cal_conf.u.max.dac);
     }
 
-#if !defined(EEZ_PSU_SIMULATOR)
+#if !defined(EEZ_PLATFORM_SIMULATOR)
     value += VOLTAGE_GND_OFFSET;
 #endif
 
@@ -1551,7 +1551,7 @@ void Channel::doSetCurrent(float value) {
             setCurrentRange(CURRENT_RANGE_HIGH);
         } else if (!calibration::isEnabled()) {
             if (flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_USE_BOTH) {
-                setCurrentRange(util::greater(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) ? CURRENT_RANGE_HIGH : CURRENT_RANGE_LOW);
+                setCurrentRange(mw::greater(value, 0.5, getPrecision(UNIT_AMPER)) ? CURRENT_RANGE_HIGH : CURRENT_RANGE_LOW);
             } else if (flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_ALWAYS_HIGH) {
                 setCurrentRange(CURRENT_RANGE_HIGH);
             } else {
@@ -1564,11 +1564,11 @@ void Channel::doSetCurrent(float value) {
     i.mon_dac = 0;
 
     if (I_MAX != I_MAX_CONF) {
-        value = util::remap(value, 0, 0, I_MAX_CONF, I_MAX);
+        value = remap(value, 0, 0, I_MAX_CONF, I_MAX);
     }
 
     if (isCurrentCalibrationEnabled()) {
-        value = util::remap(value,
+        value = remap(value,
             cal_conf.i[flags.currentCurrentRange].min.val,
             cal_conf.i[flags.currentCurrentRange].min.dac,
             cal_conf.i[flags.currentCurrentRange].max.val,
@@ -1808,7 +1808,7 @@ void Channel::setTriggerOnListStop(TriggerOnListStop value) {
 }
 
 float Channel::getDualRangeGndOffset() {
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     return 0;
 #else
     return flags.currentCurrentRange == CURRENT_RANGE_LOW ? (CURRENT_GND_OFFSET / 10) : CURRENT_GND_OFFSET;
@@ -1820,11 +1820,11 @@ void Channel::setCurrentRangeSelectionMode(CurrentRangeSelectionMode mode) {
     profile::save();
 
     if (flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_ALWAYS_LOW) {
-        if (util::greater(i.set, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+        if (mw::greater(i.set, 0.5, getPrecision(UNIT_AMPER))) {
             i.set = 0.5;
         }
 
-        if (util::greater(i.limit, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+        if (mw::greater(i.limit, 0.5, getPrecision(UNIT_AMPER))) {
             i.limit = 0.5;
         }
     }
@@ -1897,11 +1897,11 @@ void Channel::doAutoSelectCurrentRange(uint32_t tickCount) {
             if (tickCount - autoRangeCheckLastTickCount > CURRENT_AUTO_RANGE_SWITCHING_DELAY_MS * 1000L) {
                 if (flags.autoSelectCurrentRange && flags.currentRangeSelectionMode == CURRENT_RANGE_SELECTION_USE_BOTH && hasSupportForCurrentDualRange() && !dac.isTesting() && !calibration::isEnabled()) {
                     if (flags.currentCurrentRange == CURRENT_RANGE_LOW) {
-                        if (util::greater(i.set, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER)) && isCcMode()) {
+                        if (mw::greater(i.set, 0.5, getPrecision(UNIT_AMPER)) && isCcMode()) {
                             doSetCurrent(i.set);
                         }
                     } else if (i.mon_measured) {
-                        if (util::less(i.mon_last, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+                        if (mw::less(i.mon_last, 0.5, getPrecision(UNIT_AMPER))) {
                             setCurrentRange(1);
                             dac.set_current((uint16_t)65535);
                         }

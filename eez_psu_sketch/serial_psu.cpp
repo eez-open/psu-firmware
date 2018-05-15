@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "serial_psu.h"
 
@@ -43,7 +43,7 @@ size_t SCPI_Write(scpi_t *context, const char * data, size_t len) {
 			written += size;
         }
     }
-    
+
 	return written;
 }
 
@@ -142,7 +142,7 @@ void init() {
         SERIAL_PORT.read();
     }
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     SERIAL_PORT.print("EEZ PSU software simulator ver. ");
     SERIAL_PORT.println(FIRMWARE);
 #else

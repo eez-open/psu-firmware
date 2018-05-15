@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "ioexp.h"
 
@@ -26,8 +26,8 @@ namespace psu {
 
 #define IPOL    0B00000000 // no pin is inverted
 #define GPINTEN 0B00000000 // no interrupts
-#define DEFVAL  0B00000000 // 
-#define INTCON  0B00000000 // 
+#define DEFVAL  0B00000000 //
+#define INTCON  0B00000000 //
 #define IOCON   0B00100000 // sequential operation disabled, hw addressing disabled
 #define GPPU    0B00100100 // pull up with 100K resistor pins 2 and 5
 
@@ -62,7 +62,7 @@ static const uint8_t REG_VALUES_16[] = {
 ////////////////////////////////////////////////////////////////////////////////
 
 IOExpander::IOExpander(
-    Channel &channel_, 
+    Channel &channel_,
     uint8_t IO_BIT_OUT_SET_100_PERCENT_,
     uint8_t IO_BIT_OUT_EXT_PROG_
 )

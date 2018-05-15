@@ -15,25 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
-#include "gui_page.h"
+#include "mw_gui_page.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 
-class ChSettingsAdvPage : public Page {
-public:
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-};
-
 class ChSettingsAdvLRipplePage : public SetPage {
 public:
 	ChSettingsAdvLRipplePage();
-
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
 	int getDirty();
 	void set();
@@ -41,26 +34,22 @@ public:
 	void toggleAutoMode();
 	void toggleStatus();
 
+	int autoMode;
+	int status;
+
 private:
 	int origAutoMode;
-	int autoMode;
-
     int origStatus;
-	int status;
 };
 
 class ChSettingsAdvRemotePage : public Page {
 public:
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-
 	void toggleSense();
     void toggleProgramming();
 };
 
 class ChSettingsAdvRangesPage : public Page {
 public:
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-
 	void selectMode();
     void toggleAutoRanging();
 
@@ -70,15 +59,12 @@ private:
 
 class ChSettingsAdvCouplingPage : public Page {
 public:
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-
     void uncouple();
     void setParallelInfo();
     void setSeriesInfo();
     void setParallel();
     void setSeries();
 
-private:
     static int selectedMode;
 };
 
@@ -91,8 +77,6 @@ class ChSettingsAdvViewPage : public SetPage {
 public:
 	ChSettingsAdvViewPage();
 
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-
     void editDisplayValue1();
     void editDisplayValue2();
     void swapDisplayValues();
@@ -101,16 +85,15 @@ public:
 	int getDirty();
 	void set();
 
+	uint8_t displayValue1;
+	uint8_t displayValue2;
+	float ytViewRate;
+
 private:
 	uint8_t origDisplayValue1;
-	uint8_t displayValue1;
-
 	uint8_t origDisplayValue2;
-	uint8_t displayValue2;
-
 	float origYTViewRate;
-	float ytViewRate;
-    
+
     static bool isDisabledDisplayValue1(uint8_t value);
     static void onDisplayValue1Set(uint8_t value);
     static bool isDisabledDisplayValue2(uint8_t value);

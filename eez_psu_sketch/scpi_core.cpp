@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "scpi_psu.h"
 
@@ -68,7 +68,7 @@ scpi_result_t scpi_cmd_coreRcl(scpi_t * context) {
     if (!get_profile_location_param(context, location)) {
         return SCPI_RES_ERR;
     }
-    
+
     if (!profile::recall(location)) {
         SCPI_ErrorPush(context, SCPI_ERROR_CANNOT_LOAD_EMPTY_PROFILE);
         return SCPI_RES_ERR;

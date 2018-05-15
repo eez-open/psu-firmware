@@ -19,12 +19,12 @@
 #include "psu.h"
 #include "scpi_psu.h"
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
 
-#include "simulator_psu.h"
-#include "chips.h"
+#include "platform/simulator/psu.h"
+#include "platform/simulator/chips/chips.h"
 #if OPTION_DISPLAY
-#include "front_panel/control.h"
+#include "platform/simulator/front_panel/control.h"
 #endif
 
 #include "channel_dispatcher.h"
@@ -115,7 +115,7 @@ scpi_result_t scpi_cmd_simulatorLoad(scpi_t *context) {
     if (!get_resistance_param(context, value)) {
         return SCPI_RES_ERR;
     }
-    
+
     Channel *channel = param_channel(context, FALSE, TRUE);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -158,7 +158,7 @@ scpi_result_t scpi_cmd_simulatorLoadQ(scpi_t *context) {
         }
     }
 
-    return result_float(context, channel, value, VALUE_TYPE_FLOAT_OHM);
+    return result_float(context, channel, value, UNIT_OHM);
 }
 
 scpi_result_t scpi_cmd_simulatorVoltageProgramExternal(scpi_t *context) {
@@ -171,7 +171,7 @@ scpi_result_t scpi_cmd_simulatorVoltageProgramExternal(scpi_t *context) {
     if (!get_voltage_param(context, value, 0, 0)) {
         return SCPI_RES_ERR;
     }
-    
+
     Channel *channel = param_channel(context, FALSE, TRUE);
     if (!channel) {
         return SCPI_RES_ERR;
@@ -203,7 +203,7 @@ scpi_result_t scpi_cmd_simulatorVoltageProgramExternalQ(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    return result_float(context, channel, channel->simulator.getVoltProgExt(), VALUE_TYPE_FLOAT_VOLT);
+    return result_float(context, channel, channel->simulator.getVoltProgExt(), UNIT_VOLT);
 }
 
 scpi_result_t scpi_cmd_simulatorPwrgood(scpi_t *context) {
@@ -253,7 +253,7 @@ scpi_result_t scpi_cmd_simulatorRpol(scpi_t *context) {
         SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
         return SCPI_RES_ERR;
     }
-    
+
     chips::IOExpanderChip::setRPol(channel->ioexp_pin, on);
 
     return SCPI_RES_OK;
@@ -328,7 +328,7 @@ scpi_result_t scpi_cmd_simulatorTemperatureQ(scpi_t *context) {
         }
     }
 
-    return result_float(context, 0, value, VALUE_TYPE_FLOAT_CELSIUS);
+    return result_float(context, 0, value, UNIT_CELSIUS);
 }
 
 scpi_result_t scpi_cmd_simulatorGui(scpi_t *context) {

@@ -24,11 +24,16 @@
 #include "gui_page_user_profiles.h"
 #include "channel_dispatcher.h"
 
+#include "gui_psu.h"
+#include "app_gui_document.h"
+
+using namespace eez::app::gui;
+
 namespace eez {
 namespace psu {
 namespace gui {
 
-static int g_selectedProfileLocation;
+int g_selectedProfileLocation;
 
 void UserProfilesPage::pageWillAppear() {
 	if (getActivePageId() == PAGE_ID_USER_PROFILE_0_SETTINGS || getActivePageId() == PAGE_ID_USER_PROFILE_SETTINGS) {
@@ -36,58 +41,6 @@ void UserProfilesPage::pageWillAppear() {
 	} else {
 		g_selectedProfileLocation = -1;
 	}
-}
-
-data::Value UserProfilesPage::getData(const data::Cursor &cursor, uint8_t id) {
-	if (id == DATA_ID_PROFILES_AUTO_RECALL_STATUS) {
-		return data::Value(persist_conf::isProfileAutoRecallEnabled());
-	}
-
-	if (id == DATA_ID_PROFILES_AUTO_RECALL_LOCATION) {
-		return data::Value(persist_conf::getProfileAutoRecallLocation());
-	}
-
-	if (g_selectedProfileLocation != -1) {
-		if (id == DATA_ID_PROFILE_STATUS) {
-			return data::Value(profile::isValid(g_selectedProfileLocation) ? 1 : 0);
-		}
-
-		if (id == DATA_ID_PROFILE_LABEL) {
-			return data::Value(g_selectedProfileLocation, VALUE_TYPE_USER_PROFILE_LABEL);
-		}
-
-		if (id == DATA_ID_PROFILE_REMARK) {
-			return data::Value(profile.name);
-		}
-
-		if (id == DATA_ID_PROFILE_IS_AUTO_RECALL_LOCATION) {
-			return data::Value(persist_conf::getProfileAutoRecallLocation() == g_selectedProfileLocation ? 1 : 0);
-		}
-
-		if (cursor.i >= 0 && cursor.i < CH_MAX) {
-			if (id == DATA_ID_PROFILE_CHANNEL_OUTPUT_STATE) {
-				return data::Value(profile.channels[cursor.i].flags.output_enabled);
-			}
-
-			if (id == DATA_ID_PROFILE_CHANNEL_U_SET) {
-				return data::Value(profile.channels[cursor.i].u_set, VALUE_TYPE_FLOAT_VOLT, cursor.i);
-			}
-
-			if (id == DATA_ID_PROFILE_CHANNEL_I_SET) {
-				return data::Value(profile.channels[cursor.i].i_set, VALUE_TYPE_FLOAT_AMPER, cursor.i);
-			}
-		}
-	} else if (cursor.i >= 0) {
-		if (id == DATA_ID_PROFILE_LABEL) {
-			return data::Value(cursor.i, VALUE_TYPE_USER_PROFILE_LABEL);
-		}
-
-		if (id == DATA_ID_PROFILE_REMARK) {
-			return data::Value(cursor.i, VALUE_TYPE_USER_PROFILE_REMARK);
-		}
-	}
-
-	return data::Value();
 }
 
 void UserProfilesPage::showProfile() {

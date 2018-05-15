@@ -22,21 +22,22 @@
 
 #include "touch.h"
 #include "touch_filter.h"
-#include "lcd.h"
-#include "gui_internal.h"
+#include "mw_gui_lcd.h"
+#include "gui_psu.h"
 #include "sound.h"
 
 #define CONF_GUI_TOUCH_SCREEN_CALIBRATION_M 16
 
+////////////////////////////////////////////////////////////////////////////////
+
+using namespace eez::mw::gui::touch;
+
 namespace eez {
 namespace psu {
 namespace gui {
-namespace touch {
-namespace calibration {
+namespace touch_calibration {
 
 const int RECT_SIZE = 2 * CONF_GUI_TOUCH_SCREEN_CALIBRATION_M;
-
-////////////////////////////////////////////////////////////////////////////////
 
 static int g_yesNoPageId;
 static int g_nextPageId;
@@ -72,36 +73,36 @@ void draw_cross(int x, int y, uint16_t color) {
     last_cross_x = x;
     last_cross_y = y;
 
-    lcd::lcd.setColor(color);
-    lcd::lcd.drawVLine(x + RECT_SIZE / 2, y, RECT_SIZE - 1);
-    lcd::lcd.drawVLine(x + RECT_SIZE / 2 + 1, y, RECT_SIZE - 1);
-    lcd::lcd.drawHLine(x, y + RECT_SIZE / 2, RECT_SIZE - 1);
-    lcd::lcd.drawHLine(x, y + RECT_SIZE / 2 + 1, RECT_SIZE - 1);
+    lcd::setColor(color);
+    lcd::drawVLine(x + RECT_SIZE / 2, y, RECT_SIZE - 1);
+    lcd::drawVLine(x + RECT_SIZE / 2 + 1, y, RECT_SIZE - 1);
+    lcd::drawHLine(x, y + RECT_SIZE / 2, RECT_SIZE - 1);
+    lcd::drawHLine(x, y + RECT_SIZE / 2 + 1, RECT_SIZE - 1);
 
-    lcd::lcd.setColor(COLOR_BLACK);
-    lcd::lcd.fillRect(
+    lcd::setColor(COLOR_BLACK);
+    lcd::fillRect(
         x + RECT_SIZE / 2 - 2, y + RECT_SIZE / 2 - 2,
         x + RECT_SIZE / 2 + 3, y + RECT_SIZE / 2 + 3);
 }
 
 void draw_point(int x, int y) {
-    if (x == lcd::lcd.getDisplayWidth() - 1) x -= RECT_SIZE;
-    if (y == lcd::lcd.getDisplayHeight() - 1) y -= RECT_SIZE;
-    
-    lcd::lcd.setColor(COLOR_BLACK);
-    lcd::lcd.fillRect(0, 0, lcd::lcd.getDisplayWidth() - 1, lcd::lcd.getDisplayHeight() - 1);
-    
+    if (x == lcd::getDisplayWidth() - 1) x -= RECT_SIZE;
+    if (y == lcd::getDisplayHeight() - 1) y -= RECT_SIZE;
+
+    lcd::setColor(COLOR_BLACK);
+    lcd::fillRect(0, 0, lcd::getDisplayWidth() - 1, lcd::getDisplayHeight() - 1);
+
     draw_cross(x, y, COLOR_WHITE);
 }
 
 bool read_point() {
-    if (touch::g_eventType == touch::TOUCH_DOWN) {
+    if (g_eventType == TOUCH_DOWN) {
 		g_wasDown = true;
         draw_cross(last_cross_x, last_cross_y, COLOR_GREEN);
-    } else if (g_wasDown && touch::g_eventType == touch::TOUCH_UP) {
+    } else if (g_wasDown && g_eventType == TOUCH_UP) {
 		g_wasDown = false;
-        *point_x = touch::g_x;
-        *point_y = touch::g_y;
+        *point_x = g_x;
+        *point_y = g_y;
         return true;
     }
 
@@ -110,17 +111,17 @@ bool read_point() {
 
 void init() {
     bool success;
-    
+
     if (persist_conf::devConf.touch_screen_cal_orientation == DISPLAY_ORIENTATION) {
         success = touch::calibrateTransform(
             persist_conf::devConf.touch_screen_cal_tlx,
-            persist_conf::devConf.touch_screen_cal_tly, 
+            persist_conf::devConf.touch_screen_cal_tly,
             persist_conf::devConf.touch_screen_cal_brx,
-            persist_conf::devConf.touch_screen_cal_bry, 
+            persist_conf::devConf.touch_screen_cal_bry,
             persist_conf::devConf.touch_screen_cal_trx,
-            persist_conf::devConf.touch_screen_cal_try, 
+            persist_conf::devConf.touch_screen_cal_try,
             CONF_GUI_TOUCH_SCREEN_CALIBRATION_M,
-            lcd::lcd.getDisplayWidth(), lcd::lcd.getDisplayHeight()
+            lcd::getDisplayWidth(), lcd::getDisplayHeight()
         );
     } else {
         success = false;
@@ -152,7 +153,7 @@ void leaveCalibrationMode() {
     if (g_nextPageId == -1) {
         popPage();
     } else {
-        setPage(g_nextPageId);
+        showPage(g_nextPageId);
     }
 
 	Channel::restoreOE();
@@ -203,7 +204,7 @@ void tick(uint32_t tick_usec) {
             sound::playClick();
             point_x = &point_brx;
             point_y = &point_bry;
-            draw_point(lcd::lcd.getDisplayWidth() - 1, lcd::lcd.getDisplayHeight() - 1);
+            draw_point(lcd::getDisplayWidth() - 1, lcd::getDisplayHeight() - 1);
             mode = MODE_POINT_BR;
         }
     } else if (mode == MODE_POINT_BR) {
@@ -211,7 +212,7 @@ void tick(uint32_t tick_usec) {
             sound::playClick();
             point_x = &point_trx;
             point_y = &point_try;
-            draw_point(lcd::lcd.getDisplayWidth() - 1, 0);
+            draw_point(lcd::getDisplayWidth() - 1, 0);
             mode = MODE_POINT_TR;
         }
     } else if (mode == MODE_POINT_TR) {
@@ -219,7 +220,7 @@ void tick(uint32_t tick_usec) {
             sound::playClick();
             bool success = touch::calibrateTransform(
                 point_tlx, point_tly,  point_brx, point_bry,  point_trx, point_try,
-                CONF_GUI_TOUCH_SCREEN_CALIBRATION_M, lcd::lcd.getDisplayWidth(), lcd::lcd.getDisplayHeight());
+                CONF_GUI_TOUCH_SCREEN_CALIBRATION_M, lcd::getDisplayWidth(), lcd::getDisplayHeight());
             if (success) {
 				mode = MODE_FINISHED;
                 yesNoDialog(g_yesNoPageId, "Save changes?", dialogYes, dialogNo, dialogCancel);
@@ -234,7 +235,6 @@ void tick(uint32_t tick_usec) {
 }
 }
 }
-}
-} // namespace eez::psu::ui::touch::calibration
+} // namespace eez::psu::gui::touch_calibration
 
 #endif

@@ -22,21 +22,40 @@
 
 #include "touch.h"
 #include "touch_filter.h"
+#include "touch_calibration.h"
 
 #define CONF_GUI_TOUCH_READ_FREQ_MS 10
+
+ ////////////////////////////////////////////////////////////////////////////////
+
+namespace eez {
+namespace mw {
+namespace gui {
+namespace touch {
+
+EventType g_eventType = TOUCH_NONE;
+int g_x = -1;
+int g_y = -1;
+
+}
+}
+}
+} // eez::mw::gui::touch
+
+////////////////////////////////////////////////////////////////////////////////
+
+using namespace eez::mw::gui::touch;
 
 namespace eez {
 namespace psu {
 namespace gui {
 namespace touch {
 
-////////////////////////////////////////////////////////////////////////////////
-
 bool touch_is_pressed = false;
 int touch_x = -1;
 int touch_y = -1;
 
-#ifdef EEZ_PSU_ARDUINO
+#ifdef EEZ_PLATFORM_ARDUINO_DUE
 
 #define cbi(reg, bitmask) *reg &= ~bitmask
 #define sbi(reg, bitmask) *reg |= bitmask
@@ -65,8 +84,8 @@ regsize B_CLK, B_CS, B_DIN, B_DOUT, B_IRQ;
                 sbi(P_DIN, B_DIN);
             else
                 cbi(P_DIN, B_DIN);
-            temp = temp << 1; 
-            cbi(P_CLK, B_CLK);                
+            temp = temp << 1;
+            cbi(P_CLK, B_CLK);
             sbi(P_CLK, B_CLK);
         }
     }
@@ -76,7 +95,7 @@ regsize B_CLK, B_CS, B_DIN, B_DOUT, B_IRQ;
         for (byte count = 0; count < 12; count++) {
             data <<= 1;
             sbi(P_CLK, B_CLK);
-            cbi(P_CLK, B_CLK);                
+            cbi(P_CLK, B_CLK);
             if (rbi(P_DOUT, B_DOUT))
                 data++;
         }
@@ -91,7 +110,7 @@ regsize B_CLK, B_CS, B_DIN, B_DOUT, B_IRQ;
                 digitalWrite(TOUCH_DIN, HIGH);
             else
                 digitalWrite(TOUCH_DIN, LOW);
-            temp = temp << 1; 
+            temp = temp << 1;
             digitalWrite(TOUCH_SCLK, LOW);
             digitalWrite(TOUCH_SCLK, HIGH);
         }
@@ -141,22 +160,22 @@ void touch_init() {
 }
 
 void touch_read() {
-	cbi(P_CS, B_CS);                    
+	cbi(P_CS, B_CS);
 
     pinMode(TOUCH_IRQ,  INPUT);
 
     // read pressure
-    touch_is_pressed = !rbi(P_IRQ, B_IRQ); 
+    touch_is_pressed = !rbi(P_IRQ, B_IRQ);
     if (touch_is_pressed) {
         // read X
-        touch_WriteData(0x90);        
+        touch_WriteData(0x90);
         pulse_high(P_CLK, B_CLK);
         touch_x = touch_ReadData();
 
         touch_is_pressed = !rbi(P_IRQ, B_IRQ);
         if (touch_is_pressed) {
             // read Y
-            touch_WriteData(0xD0);      
+            touch_WriteData(0xD0);
             pulse_high(P_CLK, B_CLK);
             touch_y = touch_ReadData();
 
@@ -178,7 +197,7 @@ void touch_read() {
         touch_y = -1;
     }
     pinMode(TOUCH_IRQ, OUTPUT);
-    
+
 	sbi(P_CS, B_CS);
 }
 
@@ -207,15 +226,11 @@ void touch_write(bool is_pressed, int x, int y) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-EventType g_eventType = TOUCH_NONE;
-int g_x = -1;
-int g_y = -1;
-
 uint32_t last_tick_usec = 0;
 
 void init() {
     touch_init();
-    calibration::init();
+	touch_calibration::init();
 }
 
 void tick(uint32_t tick_usec) {
@@ -233,7 +248,7 @@ void tick(uint32_t tick_usec) {
     if (touch_is_pressed) {
         if (touch_x != -1 && touch_y != -1) {
             g_x = touch_x;
-            g_y = touch_y;
+			g_y = touch_y;
 
             if (g_eventType == TOUCH_NONE || g_eventType == TOUCH_UP) {
                 g_eventType = TOUCH_DOWN;
@@ -258,6 +273,6 @@ void tick(uint32_t tick_usec) {
 }
 }
 }
-} // namespace eez::psu::ui::touch
+} // namespace eez::psu::gui::touch
 
 #endif

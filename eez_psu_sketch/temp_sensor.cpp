@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "temp_sensor.h"
 #include "scpi_regs.h"
@@ -63,7 +63,7 @@ float TempSensor::doRead() {
         debug::g_uTemp[index].set(adcValue);
     }
 #endif
-    float value = util::remap((float)adcValue, (float)p1_adc, p1_cels, (float)p2_adc, p2_cels);
+    float value = remap((float)adcValue, (float)p1_adc, p1_cels, (float)p2_adc, p2_cels);
     return value;
 }
 

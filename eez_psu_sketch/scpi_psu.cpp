@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "scpi_psu.h"
 
@@ -141,7 +141,7 @@ void resultChoiceName(scpi_t *context, scpi_choice_def_t *choice, int tag) {
             // copy choice name while upper case letter or digit, examples: IMMediate -> IMM, PIN1 -> PIN1
             const char *src = choice->name;
             char *dst = text;
-            while (*src && (util::isUperCaseLetter(*src) || util::isDigit(*src))) {
+            while (*src && (isUperCaseLetter(*src) || isDigit(*src))) {
                 *dst++ = *src++;
             }
             *dst = 0;

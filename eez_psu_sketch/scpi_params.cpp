@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "scpi_psu.h"
 #include "temp_sensor.h"
@@ -221,7 +221,7 @@ bool get_voltage_from_param(scpi_t *context, const scpi_number_t &param, float &
         }
 
         value = (float)param.value;
-		
+
 		if (channel) {
 			if (value < channel_dispatcher::getUMin(*channel) || value > channel_dispatcher::getUMax(*channel)) {
 				SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
@@ -453,7 +453,7 @@ bool get_voltage_limit_from_param(scpi_t *context, const scpi_number_t &param, f
         }
 
         value = (float)param.value;
-		
+
 		if (value < channel_dispatcher::getUMin(*channel) || value > channel_dispatcher::getUMaxLimit(*channel)) {
 			SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
 			return false;
@@ -489,7 +489,7 @@ bool get_current_limit_from_param(scpi_t *context, const scpi_number_t &param, f
         }
 
         value = (float)param.value;
-        
+
         if (value < channel_dispatcher::getIMin(*channel) || value > channel_dispatcher::getIMaxLimit(*channel)) {
             SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
             return false;
@@ -522,7 +522,7 @@ bool get_power_limit_from_param(scpi_t *context, const scpi_number_t &param, flo
         }
 
         value = (float)param.value;
-        
+
         if (value < channel_dispatcher::getPowerMinLimit(*channel) || value > channel_dispatcher::getPowerMaxLimit(*channel)) {
             SCPI_ErrorPush(context, SCPI_ERROR_DATA_OUT_OF_RANGE);
             return false;
@@ -532,15 +532,15 @@ bool get_power_limit_from_param(scpi_t *context, const scpi_number_t &param, flo
     return true;
 }
 
-scpi_result_t result_float(scpi_t *context, Channel *channel, float value, ValueType valueType) {
+scpi_result_t result_float(scpi_t *context, Channel *channel, float value, Unit unit) {
     char buffer[32] = { 0 };
 
-    int numSignificantDecimalDigits = getNumSignificantDecimalDigits(valueType);
-    if (channel && channel->isCurrentLowRangeAllowed() && valueType == VALUE_TYPE_FLOAT_AMPER && util::lessOrEqual(value, 0.5, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+    int numSignificantDecimalDigits = getNumSignificantDecimalDigits(unit);
+    if (channel && channel->isCurrentLowRangeAllowed() && unit == UNIT_AMPER && mw::lessOrEqual(value, 0.5, getPrecision(UNIT_AMPER))) {
         ++numSignificantDecimalDigits;
     }
 
-    util::strcatFloat(buffer, value, numSignificantDecimalDigits);
+    strcatFloat(buffer, value, numSignificantDecimalDigits);
     SCPI_ResultCharacters(context, buffer, strlen(buffer));
     return SCPI_RES_OK;
 }
@@ -587,7 +587,7 @@ bool checkPassword(scpi_t *context, const char *againstPassword) {
 #if OPTION_SD_CARD
 
 void cleanupPath(char *filePath) {
-	util::replaceCharacter(filePath, '\\', '/');
+	replaceCharacter(filePath, '\\', '/');
 
 	char *q = filePath;
 

@@ -22,13 +22,14 @@
 #include "trigger.h"
 #include "list_program.h"
 #include "profile.h"
+#include "event_queue.h"
 
 #if OPTION_SD_CARD
 #include "sd_card.h"
 #endif
 
 #if OPTION_DISPLAY
-#include "gui.h"
+#include "gui_psu.h"
 #endif
 
 namespace eez {
@@ -40,7 +41,7 @@ namespace scpi {
 #if OPTION_SD_CARD
 
 void addExtension(char *filePath, const char *ext) {
-    if (!util::endsWith(filePath, ext)) {
+    if (!endsWith(filePath, ext)) {
         strcat(filePath, ext);
     }
 }

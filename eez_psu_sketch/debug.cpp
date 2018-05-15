@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "datetime.h"
 #include "serial_psu.h"
 
-#ifndef EEZ_PSU_SIMULATOR
+#ifndef EEZ_PLATFORM_SIMULATOR
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -95,7 +95,7 @@ void dumpVariables(char *buffer) {
         strcat(buffer, "\n");
 	}
 
-#ifndef EEZ_PSU_SIMULATOR
+#ifndef EEZ_PLATFORM_SIMULATOR
 	psu::criticalTick(-1);
 
 	char *heapend = sbrk(0);
@@ -105,7 +105,7 @@ void dumpVariables(char *buffer) {
 	sprintf(buffer + strlen(buffer), "Program static ram used %d\n", &_end - ramstart);
 	sprintf(buffer + strlen(buffer), "Stack ram used %d\n", ramend - stack_ptr);
 	sprintf(buffer + strlen(buffer), "My guess at free mem: %d\n", stack_ptr - heapend + mi.fordblks);
-#endif 
+#endif
 
 #if OPTION_SD_CARD
 	psu::criticalTick(-1);
@@ -132,7 +132,7 @@ static bool dumpTraceBufferOnNextTick = false;
 void DumpTraceBuffer() {
     if (serial::g_testResult == TEST_OK) {
         SERIAL_PORT.print("**TRACE");
-    
+
         char datetime_buffer[20] = { 0 };
         if (datetime::getDateTimeAsString(datetime_buffer)) {
             SERIAL_PORT.print(" [");
@@ -231,12 +231,12 @@ void DebugValueVariable::tick10secPeriod() {
 }
 
 void DebugValueVariable::dump(char *buffer) {
-    util::strcatInt32(buffer, m_value);
+    strcatInt32(buffer, m_value);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-DebugDurationForPeriod::DebugDurationForPeriod() 
+DebugDurationForPeriod::DebugDurationForPeriod()
     : m_min(4294967295UL)
     , m_max(0)
     , m_total(0)
@@ -276,17 +276,17 @@ void DebugDurationForPeriod::tickPeriod() {
 
 
 void DebugDurationForPeriod::dump(char *buffer) {
-    util::strcatUInt32(buffer, m_minLast);
+    strcatUInt32(buffer, m_minLast);
     strcat(buffer, " ");
-    util::strcatUInt32(buffer, m_avgLast);
+    strcatUInt32(buffer, m_avgLast);
     strcat(buffer, " ");
-    util::strcatUInt32(buffer, m_maxLast);
+    strcatUInt32(buffer, m_maxLast);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-DebugDurationVariable::DebugDurationVariable(const char *name) 
-    : DebugVariable(name) 
+DebugDurationVariable::DebugDurationVariable(const char *name)
+    : DebugVariable(name)
     , m_minTotal(4294967295UL)
     , m_maxTotal(0)
 {
@@ -334,9 +334,9 @@ void DebugDurationVariable::dump(char *buffer) {
 
     strcat(buffer, " / ");
 
-    util::strcatUInt32(buffer, m_minTotal);
+    strcatUInt32(buffer, m_minTotal);
     strcat(buffer, " ");
-    util::strcatUInt32(buffer, m_maxTotal);
+    strcatUInt32(buffer, m_maxTotal);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -356,7 +356,7 @@ void DebugCounterForPeriod::tickPeriod() {
 }
 
 void DebugCounterForPeriod::dump(char *buffer) {
-    util::strcatUInt32(buffer, m_lastCounter);
+    strcatUInt32(buffer, m_lastCounter);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -388,7 +388,7 @@ void DebugCounterVariable::dump(char *buffer) {
 
     strcat(buffer, " / ");
 
-    util::strcatUInt32(buffer, m_totalCounter);
+    strcatUInt32(buffer, m_totalCounter);
 }
 
 }

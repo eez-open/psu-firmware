@@ -20,60 +20,16 @@
 
 #if OPTION_DISPLAY
 
+#include "event_queue.h"
 #include "gui_page_event_queue.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 
-event_queue::Event g_stateEvents[2][event_queue::EVENTS_PER_PAGE];
-
 void EventQueuePage::pageWillAppear() {
 	event_queue::moveToFirstPage();
 	event_queue::markAsRead();
-}
-
-data::Value EventQueuePage::getData(const data::Cursor &cursor, uint8_t id) {
-	if (cursor.i >= 0 && (id == DATA_ID_EVENT_QUEUE_EVENTS_TYPE || id == DATA_ID_EVENT_QUEUE_EVENTS_MESSAGE)) {
-        event_queue::Event *event = &g_stateEvents[getCurrentStateBufferIndex()][cursor.i];
-
-        int n = event_queue::getActivePageNumEvents();
-        if (cursor.i < n) {
-    		event_queue::getActivePageEvent(cursor.i, event);
-		} else {
-            event->eventId = event_queue::EVENT_TYPE_NONE;
-		}
-
-        if (id == DATA_ID_EVENT_QUEUE_EVENTS_TYPE) {
-            return data::Value(event_queue::getEventType(event));
-		} 
-		
-		if (id == DATA_ID_EVENT_QUEUE_EVENTS_MESSAGE) {
-			return data::Value(event);
-		}
-	}
-
-	if (id == DATA_ID_EVENT_QUEUE_MULTIPLE_PAGES) {
-        data::Value eventQueuePageInfo = data::Value::PageInfo(event_queue::getActivePageIndex(), event_queue::getNumPages());
-		return data::Value(eventQueuePageInfo.getNumPages() > 1 ? 1 : 0);
-	}
-
-	if (id == DATA_ID_EVENT_QUEUE_PREVIOUS_PAGE_ENABLED) {
-        data::Value eventQueuePageInfo = data::Value::PageInfo(event_queue::getActivePageIndex(), event_queue::getNumPages());
-		return data::Value(eventQueuePageInfo.getPageIndex() > 0 ? 1 : 0);
-	}
-
-	if (id == DATA_ID_EVENT_QUEUE_NEXT_PAGE_ENABLED) {
-		data::Value eventQueuePageInfo = data::Value::PageInfo(event_queue::getActivePageIndex(), event_queue::getNumPages());
-        return data::Value(eventQueuePageInfo.getPageIndex() < eventQueuePageInfo.getNumPages() - 1 ? 1 : 0);
-	}
-
-	if (id == DATA_ID_EVENT_QUEUE_PAGE_INFO) {
-        data::Value eventQueuePageInfo = data::Value::PageInfo(event_queue::getActivePageIndex(), event_queue::getNumPages());
-		return eventQueuePageInfo;
-	}
-
-	return data::Value();
 }
 
 }

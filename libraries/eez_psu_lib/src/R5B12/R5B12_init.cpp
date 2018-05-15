@@ -16,7 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if defined(EEZ_PLATFORM_SIMULATOR)
+#include "eez/psu/platform/simulator/arduino/SPI.h"
+#else
 #include <SPI.h>
+#endif
+
 #include "R5B12_pins.h"
 
 void eez_psu_R5B12_init() {
@@ -123,7 +128,7 @@ void eez_psu_R5B12_init() {
     digitalWrite(EXTSD_CS, HIGH);
 
     // Address issue with lack of proper SPI connection on PCB r1B9
-#if defined(EEZ_PSU_ARDUINO_DUE)
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
     pinMode(50, INPUT);
     pinMode(51, INPUT);
     pinMode(52, INPUT);

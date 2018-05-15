@@ -24,7 +24,7 @@
 #define EEZ_PSU_REVISION_R5B12  3
 
 #if defined(_VARIANT_ARDUINO_DUE_X_)
-#define EEZ_PSU_ARDUINO_DUE
+#define EEZ_PLATFORM_ARDUINO_DUE
 #endif
 
 #endif // EEZ_PSU_REV_H

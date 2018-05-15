@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "eeprom.h"
 #include "serial_psu.h"
@@ -25,12 +25,13 @@
 #include "encoder.h"
 #endif
 #if OPTION_DISPLAY
-#include "gui.h"
+#include "gui_psu.h"
 #include "lcd.h"
 #endif
+#if OPTION_ETHERNET
+#include "ethernet.h"
+#endif
 #include "datetime.h"
-
-#include "gui_internal.h"
 
 #define NUM_CHANNELS_VIEW_MODES 4
 
@@ -74,7 +75,7 @@ DeviceConfiguration2 devConf2;
 ////////////////////////////////////////////////////////////////////////////////
 
 uint32_t calc_checksum(const BlockHeader *block, uint16_t size) {
-    return util::crc32(((const uint8_t *)block) + sizeof(uint32_t), size - sizeof(uint32_t));
+    return crc32(((const uint8_t *)block) + sizeof(uint32_t), size - sizeof(uint32_t));
 }
 
 bool check_block(const BlockHeader *block, uint16_t size, uint16_t version) {
@@ -139,12 +140,12 @@ static void initDevice() {
 
 	devConf.flags.channelsViewMode = 0;
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     devConf.gui_opened = true;
     devConf.flags.ethernetEnabled = 1;
 #else
     devConf.flags.ethernetEnabled = 0;
-#endif // EEZ_PSU_SIMULATOR
+#endif // EEZ_PLATFORM_SIMULATOR
 
     devConf.flags.outputProtectionCouple = 0;
     devConf.flags.shutdownWhenProtectionTripped = 0;
@@ -181,10 +182,10 @@ bool saveDevice() {
 
 static void initEthernetSettings() {
     devConf2.flags.ethernetDhcpEnabled = 1;
-    devConf2.ethernetIpAddress = util::getIpAddress(192, 168, 1, 100);
-    devConf2.ethernetDns = util::getIpAddress(192, 168, 1, 1);
-    devConf2.ethernetGateway = util::getIpAddress(192, 168, 1, 1);
-    devConf2.ethernetSubnetMask = util::getIpAddress(255, 255, 255, 0);
+    devConf2.ethernetIpAddress = getIpAddress(192, 168, 1, 100);
+    devConf2.ethernetDns = getIpAddress(192, 168, 1, 1);
+    devConf2.ethernetGateway = getIpAddress(192, 168, 1, 1);
+    devConf2.ethernetSubnetMask = getIpAddress(255, 255, 255, 0);
     devConf2.ethernetScpiPort = TCP_PORT;
 }
 
@@ -212,7 +213,7 @@ static void initDevice2() {
 
     devConf2.displayBackgroundLuminosityStep = DISPLAY_BACKGROUND_LUMINOSITY_STEP_DEFAULT;
 #if OPTION_DISPLAY
-    gui::lcd::lcd.onLuminocityChanged();
+    gui::lcd::onLuminocityChanged();
 #endif
 }
 
@@ -226,12 +227,12 @@ void loadDevice2() {
                 uint8_t macAddress[] = ETHERNET_MAC_ADDRESS;
                 memcpy(devConf2.ethernetMacAddress, macAddress, 6);
             }
-            
+
             if (devConf2.header.version < 10) {
                 devConf2.displayBackgroundLuminosityStep = DISPLAY_BACKGROUND_LUMINOSITY_STEP_DEFAULT;
-            }   
+            }
 #if OPTION_DISPLAY
-            gui::lcd::lcd.onLuminocityChanged();
+            gui::lcd::onLuminocityChanged();
 #endif
         }
     }
@@ -358,7 +359,7 @@ bool readSystemDate(uint8_t &year, uint8_t &month, uint8_t &day) {
 bool isDst() {
     return datetime::isDst(
         datetime::makeTime(
-            2000 + devConf.date_year, devConf.date_month, devConf.date_day, 
+            2000 + devConf.date_year, devConf.date_month, devConf.date_day,
             devConf.time_hour, devConf.time_minute, devConf.time_second
         ),
         (datetime::DstRule)devConf2.dstRule
@@ -415,7 +416,7 @@ void writeSystemDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour,
     devConf.date_day = day;
 
     devConf.flags.dateValid = 1;
-    
+
 	devConf.time_hour = hour;
     devConf.time_minute = minute;
     devConf.time_second = second;
@@ -517,7 +518,7 @@ uint32_t readTotalOnTime(int type) {
 		}
 		return buffer[1];
 	}
-	
+
 	if (buffer[3] == ONTIME_MAGIC && buffer[4] == buffer[5]) {
 		return buffer[4];
 	}
@@ -691,7 +692,7 @@ bool setDisplayBackgroundLuminosityStep(uint8_t displayBackgroundLuminosityStep)
     devConf2.displayBackgroundLuminosityStep = displayBackgroundLuminosityStep;
 
 #if OPTION_DISPLAY
-    gui::lcd::lcd.onLuminocityChanged();
+    gui::lcd::onLuminocityChanged();
     gui::refreshPage();
 #endif
 
@@ -761,9 +762,9 @@ bool setSerialSettings(bool enabled, int baudIndex, int parity) {
     uint8_t serialBaud = (uint8_t)baudIndex;
     unsigned serialParity = (unsigned)parity;
     if (
-        !devConf2.flags.skipSerialSetup || 
+        !devConf2.flags.skipSerialSetup ||
 		devConf2.flags.serialEnabled != serialEnabled ||
-        devConf2.serialBaud != serialBaud || 
+        devConf2.serialBaud != serialBaud ||
         devConf2.serialParity != serialParity
     ) {
         devConf2.flags.serialEnabled = enabled;
@@ -903,11 +904,11 @@ bool setEthernetScpiPort(uint16_t scpiPort) {
 bool setEthernetSettings(bool enable, bool dhcpEnable, uint32_t ipAddress, uint32_t dns, uint32_t gateway, uint32_t subnetMask, uint16_t scpiPort, uint8_t *macAddress) {
 #if OPTION_ETHERNET
     unsigned ethernetEnabled = enable ? 1 : 0;
-    unsigned ethernetDhcpEnabled = enable ? 1 : 0;
+    unsigned ethernetDhcpEnabled = dhcpEnable ? 1 : 0;
 
     if (
-        !devConf2.flags.skipEthernetSetup || 
-        devConf.flags.ethernetEnabled != ethernetEnabled || 
+        !devConf2.flags.skipEthernetSetup ||
+        devConf.flags.ethernetEnabled != ethernetEnabled ||
         devConf2.flags.ethernetDhcpEnabled != ethernetDhcpEnabled ||
         memcmp(devConf2.ethernetMacAddress, macAddress, 6) != 0 ||
         devConf2.ethernetIpAddress != ipAddress ||

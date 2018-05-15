@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "adc.h"
 #include "channel_dispatcher.h"
@@ -73,7 +73,7 @@ void AnalogDigitalConverter::init() {
 
     uint8_t reg1_val = getReg1Val();
     SPI.transfer(reg1_val);
-    
+
     SPI.transfer(ADC_REG2_VAL);
     SPI.transfer(ADC_REG3_VAL);
 

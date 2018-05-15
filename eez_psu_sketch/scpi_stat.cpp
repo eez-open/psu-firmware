@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "scpi_psu.h"
 
@@ -54,7 +54,7 @@ scpi_result_t scpi_cmd_statusQuestionableEnable(scpi_t * context) {
 scpi_result_t scpi_cmd_statusQuestionableEnableQ(scpi_t * context) {
     /* return value */
     SCPI_ResultInt32(context, SCPI_RegGet(context, SCPI_REG_QUESE));
- 
+
     return SCPI_RES_OK;
 }
 

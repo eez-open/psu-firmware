@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
-#include "gui_page.h"
+#include "mw_gui_page.h"
 
 #include "datetime.h"
 #include "trigger.h"
@@ -33,8 +33,6 @@ class SysSettingsDateTimePage : public SetPage {
 public:
 	SysSettingsDateTimePage();
 
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-
 	void edit();
 	void setValue(float value);
 	int getDirty();
@@ -44,21 +42,18 @@ public:
     void editNtpServer();
 	void selectDstRule();
 
+	bool ntpEnabled;
+	char ntpServer[32 + 1];
+	datetime::DateTime dateTime;
+	int16_t timeZone;
+	datetime::DstRule dstRule;
+	bool dateTimeModified;
+
 private:
     bool origNtpEnabled;
-    bool ntpEnabled;
-
     char origNtpServer[32+1];
-    char ntpServer[32+1];
-
-    bool dateTimeModified;
-    datetime::DateTime dateTime;
-
 	int16_t origTimeZone;
-	int16_t timeZone;
-
 	datetime::DstRule origDstRule;
-	datetime::DstRule dstRule;
 
     static void onDstRuleSet(uint8_t value);
 
@@ -85,8 +80,6 @@ class SysSettingsEthernetPage : public SetPage {
 public:
     SysSettingsEthernetPage();
 
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-
     void toggle();
     void toggleDhcp();
     void editStaticAddress();
@@ -96,12 +89,16 @@ public:
 	int getDirty();
 	void set();
 
+	bool m_enabled;
+	bool m_dhcpEnabled;
+	uint16_t m_scpiPort;
+
+	uint8_t m_macAddress[6];
+
 private:
     bool m_enabledOrig;
-    bool m_enabled;
 
     bool m_dhcpEnabledOrig;
-    bool m_dhcpEnabled;
 
     uint32_t m_ipAddressOrig;
     uint32_t m_ipAddress;
@@ -116,11 +113,8 @@ private:
     uint32_t m_subnetMask;
 
     uint16_t m_scpiPortOrig;
-    uint16_t m_scpiPort;
 
     uint8_t m_macAddressOrig[6];
-    uint8_t m_macAddress[6];
-    uint8_t m_macAddressData[2][6];
 
     static void onSetScpiPort(float value);
     static void onSetMacAddress(char *value);
@@ -130,8 +124,6 @@ class SysSettingsEthernetStaticPage : public SetPage {
 public:
     SysSettingsEthernetStaticPage();
 
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-
     void editIpAddress();
     void editDns();
     void editGateway();
@@ -139,6 +131,11 @@ public:
 
 	int getDirty();
 	void set();
+
+	uint32_t m_ipAddress;
+	uint32_t m_dns;
+	uint32_t m_gateway;
+	uint32_t m_subnetMask;
 
 private:
     enum Field {
@@ -149,16 +146,12 @@ private:
     };
 
     uint32_t m_ipAddressOrig;
-    uint32_t m_ipAddress;
 
     uint32_t m_dnsOrig;
-    uint32_t m_dns;
 
     uint32_t m_gatewayOrig;
-    uint32_t m_gateway;
 
     uint32_t m_subnetMaskOrig;
-    uint32_t m_subnetMask;
 
     uint32_t *m_editAddress;
 
@@ -170,8 +163,6 @@ private:
 
 class SysSettingsProtectionsPage : public Page {
 public:
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-
     static void toggleOutputProtectionCouple();
     static void toggleShutdownWhenProtectionTripped();
     static void toggleForceDisablingAllOutputsOnPowerUp();
@@ -180,8 +171,6 @@ public:
 class SysSettingsAuxOtpPage : public SetPage {
 public:
     SysSettingsAuxOtpPage();
-
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
 	int getDirty();
 	void set();
@@ -192,18 +181,19 @@ public:
 
     static void clear();
 
+	int state;
+	data::Value level;
+	data::Value delay;
+
 protected:
 	int origState;
-	int state;
 
 	data::Value origLevel;
-	data::Value level;
 	float minLevel;
 	float maxLevel;
 	float defLevel;
 
 	data::Value origDelay;
-	data::Value delay;
 	float minDelay;
 	float maxDelay;
 	float defaultDelay;
@@ -216,8 +206,6 @@ protected:
 
 class SysSettingsSoundPage : public Page {
 public:
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-
     static void toggleSound();
     static void toggleClickSound();
 };
@@ -228,59 +216,42 @@ class SysSettingsEncoderPage : public SetPage {
 public:
     SysSettingsEncoderPage();
 
-    data::Value getMin(const data::Cursor &cursor, uint8_t id);
-    data::Value getMax(const data::Cursor &cursor, uint8_t id);
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-    bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
-
     void toggleConfirmationMode();
 
 	int getDirty();
 	void set();
 
+	uint8_t confirmationMode;
+	uint8_t movingSpeedDown;
+	uint8_t movingSpeedUp;
+
 private:
     uint8_t origConfirmationMode;
-    uint8_t confirmationMode;
-
     uint8_t origMovingSpeedDown;
-    uint8_t movingSpeedDown;
-
     uint8_t origMovingSpeedUp;
-    uint8_t movingSpeedUp;
 };
 
 #endif
-
-class SysSettingsDisplayPage : public Page {
-public:
-    data::Value getMin(const data::Cursor &cursor, uint8_t id);
-    data::Value getMax(const data::Cursor &cursor, uint8_t id);
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-    bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
-};
 
 class SysSettingsTriggerPage : public SetPage {
 public:
     SysSettingsTriggerPage();
 
-    data::Value getData(const data::Cursor &cursor, uint8_t id);
-
     void selectSource();
     void editDelay();
     void toggleInitiateContinuously();
-    
+
 	int getDirty();
 	void set();
 
+	trigger::Source m_source;
+	float m_delay;
+	bool m_initiateContinuously;
+
 private:
     trigger::Source m_sourceOrig;
-    trigger::Source m_source;
-
     float m_delayOrig;
-    float m_delay;
-
     bool m_initiateContinuouslyOrig;
-    bool m_initiateContinuously;
 
     static void onTriggerSourceSet(uint8_t value);
     static void onDelaySet(float value);
@@ -290,22 +261,20 @@ class SysSettingsIOPinsPage : public SetPage {
 public:
     SysSettingsIOPinsPage();
 
-    data::Value getData(const data::Cursor &cursor, uint8_t id);
-
     void togglePolarity();
     void selectFunction();
-    
+
 	int getDirty();
 	void set();
+
+	io_pins::Polarity m_polarity[3];
+	io_pins::Function m_function[3];
 
 private:
     int pinNumber;
 
     io_pins::Polarity m_polarityOrig[3];
-    io_pins::Polarity m_polarity[3];
-
     io_pins::Function m_functionOrig[3];
-    io_pins::Function m_function[3];
 
     static void onFunctionSet(uint8_t value);
 };
@@ -314,26 +283,20 @@ class SysSettingsSerialPage : public SetPage {
 public:
     SysSettingsSerialPage();
 
-    data::Value getMin(const data::Cursor &cursor, uint8_t id);
-    data::Value getMax(const data::Cursor &cursor, uint8_t id);
-    data::Value getData(const data::Cursor &cursor, uint8_t id);
-    bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
-
     void toggle();
     void selectParity();
-    
+
 	int getDirty();
 	void set();
 
+	bool m_enabled;
+	uint8_t m_baudIndex;
+	serial::Parity m_parity;
+
 private:
     bool m_enabledOrig;
-    bool m_enabled;
-
     uint8_t m_baudIndexOrig;
-    uint8_t m_baudIndex;
-
     serial::Parity m_parityOrig;
-    serial::Parity m_parity;
 
     static void onParitySet(uint8_t value);
 };

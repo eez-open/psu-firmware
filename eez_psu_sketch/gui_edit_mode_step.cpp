@@ -25,6 +25,7 @@
 #endif
 
 #include "sound.h"
+#include "gui_psu.h"
 #include "gui_data.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_step.h"
@@ -38,20 +39,20 @@ namespace edit_mode_step {
 
 using data::Value;
 
-const Value CONF_GUI_U_STEPS[] = {
-    Value(5.0f, VALUE_TYPE_FLOAT),
-    Value(2.0f, VALUE_TYPE_FLOAT),
-    Value(1.0f, VALUE_TYPE_FLOAT),
-    Value(0.5f, VALUE_TYPE_FLOAT),
-    Value(0.1f, VALUE_TYPE_FLOAT)
+static const Value CONF_GUI_U_STEPS[] = {
+    data::Value(5.0f, UNIT_UNKNOWN, 2),
+	data::Value(2.0f, UNIT_UNKNOWN, 2),
+	data::Value(1.0f, UNIT_UNKNOWN, 2),
+	data::Value(0.5f, UNIT_UNKNOWN, 2),
+	data::Value(0.1f, UNIT_UNKNOWN, 2)
 };
 
-const Value CONF_GUI_I_STEPS[] = {
-    Value(0.5f,  VALUE_TYPE_FLOAT),
-    Value(0.25f, VALUE_TYPE_FLOAT),
-    Value(0.1f,  VALUE_TYPE_FLOAT),
-    Value(0.05f, VALUE_TYPE_FLOAT),
-    Value(0.01f, VALUE_TYPE_FLOAT)
+static const Value CONF_GUI_I_STEPS[] = {
+	data::Value(0.5f,  UNIT_UNKNOWN, 2),
+	data::Value(0.25f, UNIT_UNKNOWN, 2),
+	data::Value(0.1f,  UNIT_UNKNOWN, 2),
+	data::Value(0.05f, UNIT_UNKNOWN, 2),
+	data::Value(0.01f, UNIT_UNKNOWN, 2)
 };
 
 static int g_stepIndex[CH_NUM][2];
@@ -62,26 +63,32 @@ static bool g_changed;
 static int g_startPos;
 
 float getStepValue() {
-    if (edit_mode::getUnit() == VALUE_TYPE_FLOAT_VOLT) {
+    if (edit_mode::getUnit() == UNIT_VOLT) {
         return CONF_GUI_U_STEPS[getStepIndex()].getFloat();
     } else {
         return CONF_GUI_I_STEPS[getStepIndex()].getFloat();
     }
 }
 
-void getStepValues(const data::Value **labels, int &count) {
-    if (edit_mode::getUnit() == VALUE_TYPE_FLOAT_VOLT) {
-        *labels = CONF_GUI_U_STEPS;
-        count = sizeof(CONF_GUI_U_STEPS) / sizeof(Value);
+int getStepValuesCount() {
+	if (edit_mode::getUnit() == UNIT_VOLT) {
+		return sizeof(CONF_GUI_U_STEPS) / sizeof(Value);
+	} else {
+		return sizeof(CONF_GUI_I_STEPS) / sizeof(Value);
+	}
+}
+
+const data::Value *getStepValues() {
+    if (edit_mode::getUnit() == UNIT_VOLT) {
+        return CONF_GUI_U_STEPS;
     } else {
-        *labels = CONF_GUI_I_STEPS;
-        count = sizeof(CONF_GUI_I_STEPS) / sizeof(Value);
+        return CONF_GUI_I_STEPS;
     }
 }
 
 int getStepIndex() {
 	int value;
-	if (edit_mode::getUnit() == VALUE_TYPE_FLOAT_VOLT) {
+	if (edit_mode::getUnit() == UNIT_VOLT) {
 		value = g_stepIndex[g_focusCursor.i][0];
 	}
 	else {
@@ -96,7 +103,7 @@ int getStepIndex() {
 }
 
 void setStepIndex(int value) {
-	if (edit_mode::getUnit() == VALUE_TYPE_FLOAT_VOLT) {
+	if (edit_mode::getUnit() == UNIT_VOLT) {
 		g_stepIndex[g_focusCursor.i][0] = value + 1;
 	}
 	else {

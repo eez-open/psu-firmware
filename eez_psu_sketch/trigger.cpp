@@ -268,15 +268,15 @@ int checkTrigger() {
                         return err;
                     }
                 } else {
-	                if (util::greater(g_levels[i].u, channel_dispatcher::getULimit(channel), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+	                if (mw::greater(g_levels[i].u, channel_dispatcher::getULimit(channel), getPrecision(UNIT_VOLT))) {
                         return SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED;
 	                }
 
-                    if (util::greater(g_levels[i].i, channel_dispatcher::getILimit(channel), getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+                    if (mw::greater(g_levels[i].i, channel_dispatcher::getILimit(channel), getPrecision(UNIT_AMPER))) {
                         return SCPI_ERROR_CURRENT_LIMIT_EXCEEDED;
 	                }
 
-	                if (util::greater(g_levels[i].u * g_levels[i].i, channel_dispatcher::getPowerLimit(channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
+	                if (mw::greater(g_levels[i].u * g_levels[i].i, channel_dispatcher::getPowerLimit(channel), getPrecision(UNIT_WATT))) {
                         return SCPI_ERROR_POWER_LIMIT_EXCEEDED;
                     }
                 }

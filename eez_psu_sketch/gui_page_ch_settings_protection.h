@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
-#include "gui_page.h"
+#include "mw_gui_page.h"
 
 namespace eez {
 namespace psu {
@@ -28,14 +28,10 @@ class ChSettingsProtectionPage : public Page {
 public:
 	static void clear();
 	static void clearAndDisable();
-
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
 };
 
 class ChSettingsProtectionSetPage : public SetPage {
 public:
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-
 	int getDirty();
 	void set();
 
@@ -44,24 +40,25 @@ public:
 	void editLevel();
 	void editDelay();
 
+	int state;
+	data::Value limit;
+	data::Value level;
+	data::Value delay;
+
 protected:
 	int origState;
-	int state;
 
 	data::Value origLimit;
-	data::Value limit;
 	float minLimit;
 	float maxLimit;
 	float defLimit;
 
 	data::Value origLevel;
-	data::Value level;
 	float minLevel;
 	float maxLevel;
 	float defLevel;
 
 	data::Value origDelay;
-	data::Value delay;
 	float minDelay;
 	float maxDelay;
 	float defaultDelay;

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "scpi_psu.h"
 #include "profile.h"
@@ -55,9 +55,9 @@ scpi_result_t scpi_cmd_senseCurrentDcRangeUpper(scpi_t * context) {
         }
 
         float value = (float)param.value;
-        if (util::equal(value, 0.5f, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+        if (mw::equal(value, 0.5f, getPrecision(UNIT_AMPER))) {
             mode = CURRENT_RANGE_SELECTION_ALWAYS_LOW;
-        } else if (util::equal(value, 5.0f, getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+        } else if (mw::equal(value, 5.0f, getPrecision(UNIT_AMPER))) {
             mode = CURRENT_RANGE_SELECTION_ALWAYS_HIGH;
         } else {
             SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);

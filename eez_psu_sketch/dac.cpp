@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "dac.h"
 
@@ -58,7 +58,7 @@ void DigitalAnalogConverter::set_value(uint8_t buffer, uint16_t value) {
 }
 
 void DigitalAnalogConverter::set_value(uint8_t buffer, float value) {
-    set_value(buffer, (uint16_t)util::clamp(round(value), DAC_MIN, DAC_MAX));
+    set_value(buffer, (uint16_t)clamp(round(value), DAC_MIN, DAC_MAX));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -162,11 +162,11 @@ bool DigitalAnalogConverter::test() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void DigitalAnalogConverter::set_voltage(float value) {
-    set_value(DATA_BUFFER_A, util::remap(value, channel.U_MIN, (float)DAC_MIN, channel.U_MAX, (float)DAC_MAX));
+    set_value(DATA_BUFFER_A, remap(value, channel.U_MIN, (float)DAC_MIN, channel.U_MAX, (float)DAC_MAX));
 }
 
 void DigitalAnalogConverter::set_current(float value) {
-    set_value(DATA_BUFFER_B, util::remap(value, channel.I_MIN, (float)DAC_MIN, channel.getDualRangeMax(), (float)DAC_MAX));
+    set_value(DATA_BUFFER_B, remap(value, channel.I_MIN, (float)DAC_MIN, channel.getDualRangeMax(), (float)DAC_MAX));
 }
 
 void DigitalAnalogConverter::set_voltage(uint16_t voltage) {

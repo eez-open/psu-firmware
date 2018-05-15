@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
 #include "temperature.h"
@@ -70,7 +70,7 @@ struct ChannelParameters {
     float u_triggerValue;
     float i_triggerValue;
     uint16_t listCount;
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     bool load_enabled;
     float load;
 	float voltProgExt;

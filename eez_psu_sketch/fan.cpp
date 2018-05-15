@@ -78,7 +78,7 @@ int dt_to_rpm(uint32_t dt) {
 }
 
 int pwm_to_rpm(int pwm) {
-    return (int)util::remap((float)pwm, FAN_MIN_PWM, 0, FAN_MAX_PWM, FAN_NOMINAL_RPM);
+    return (int)remap((float)pwm, FAN_MIN_PWM, 0, FAN_MAX_PWM, FAN_NOMINAL_RPM);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -92,7 +92,7 @@ void start_rpm_measure() {
     attachInterrupt(g_rpmMeasureInterruptNumber, rpm_measure_interrupt_handler, CHANGE);
     g_rpmMeasureState = RPM_MEASURE_STATE_START;
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     g_rpmMeasureState = RPM_MEASURE_STATE_MEASURED;
     g_rpm = pwm_to_rpm(g_fanSpeedPWM);
 #endif
@@ -158,14 +158,14 @@ bool test() {
             delay(300 - time_since_test_start);
         }
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
         int saved_fan_speed_pwm = g_fanSpeedPWM;
         g_fanSpeedPWM = FAN_MAX_PWM;
 #endif
 
         start_rpm_measure();
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
         g_fanSpeedPWM = saved_fan_speed_pwm;
 #endif
 

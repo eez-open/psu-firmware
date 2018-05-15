@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "scpi_psu.h"
 
@@ -24,7 +24,7 @@
 #include "channel_dispatcher.h"
 
 #if OPTION_DISPLAY
-#include "gui_internal.h"
+#include "mw_gui_internal.h"
 #endif
 
 namespace eez {
@@ -101,9 +101,9 @@ static scpi_result_t calibration_data(scpi_t * context, calibration::Value &cali
         SCPI_ErrorPush(context, SCPI_ERROR_CAL_VALUE_OUT_OF_RANGE);
         return SCPI_RES_ERR;
 	}
-    
+
 	calibrationValue.setData(dac, value, adc);
-    
+
     calibration::resetChannelToZero();
 
     return SCPI_RES_OK;
@@ -352,7 +352,7 @@ scpi_result_t scpi_cmd_calibrationVoltageLevel(scpi_t * context) {
 
 scpi_result_t scpi_cmd_calibrationScreenInit(scpi_t * context) {
 #if OPTION_DISPLAY
-	gui::setPage(gui::PAGE_ID_SCREEN_CALIBRATION_INTRO);
+	gui::setPage(app::gui::PAGE_ID_SCREEN_CALIBRATION_INTRO);
 	return SCPI_RES_OK;
 #else
 	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);

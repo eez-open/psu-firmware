@@ -26,6 +26,8 @@
 #include "channel_dispatcher.h"
 #include "trigger.h"
 
+#include "gui_psu.h"
+#include "gui_data.h"
 #include "gui_password.h"
 #include "gui_calibration.h"
 #include "gui_keypad.h"
@@ -36,8 +38,6 @@ namespace psu {
 namespace gui {
 namespace calibration {
 
-static const int MAX_STEP_NUM = 10;
-
 int g_stepNum;
 void (*g_stopCallback)();
 
@@ -47,7 +47,7 @@ void showCurrentStep();
 
 void onStartPasswordOk() {
     g_channel->outputEnable(false);
-    
+
     g_channel->clearProtection();
     g_channel->prot_conf.flags.u_state = 0;
     g_channel->prot_conf.flags.i_state = 0;
@@ -77,94 +77,15 @@ void start() {
 
 data::Value getLevelValue() {
     if (g_stepNum < 3) {
-        return data::Value(psu::calibration::getVoltage().getLevelValue(), VALUE_TYPE_FLOAT_VOLT, g_channel->index-1);
+        return MakeValue(psu::calibration::getVoltage().getLevelValue(), UNIT_VOLT, g_channel->index-1);
     }
-    return data::Value(psu::calibration::getCurrent().getLevelValue(), VALUE_TYPE_FLOAT_AMPER, g_channel->index-1);
-}
-
-data::Value getData(const data::Cursor &cursor, uint8_t id) {
-    Channel &channel = cursor.i == -1 ? *g_channel : Channel::get(cursor.i);
-
-    if (id == DATA_ID_CHANNEL_CALIBRATION_STATUS) {
-        return data::Value(channel.isCalibrationExists() ? 1 : 0);
-    } else if (id == DATA_ID_CHANNEL_CALIBRATION_STATE) {
-        return data::Value(channel.isCalibrationEnabled() ? 1 : 0);
-    } else if (id == DATA_ID_CHANNEL_CALIBRATION_DATE) {
-        return data::Value(channel.cal_conf.calibration_date);
-    } else if (id == DATA_ID_CHANNEL_CALIBRATION_REMARK) {
-        return data::Value(channel.cal_conf.calibration_remark);
-    } else if (id == DATA_ID_CAL_CH_U_MIN) {
-        return data::Value(channel.cal_conf.u.min.val, VALUE_TYPE_FLOAT_VOLT, channel.index-1);
-    } else if (id == DATA_ID_CAL_CH_U_MID) {
-        return data::Value(channel.cal_conf.u.mid.val, VALUE_TYPE_FLOAT_VOLT, channel.index-1);
-    } else if (id == DATA_ID_CAL_CH_U_MAX) {
-        return data::Value(channel.cal_conf.u.max.val, VALUE_TYPE_FLOAT_VOLT, channel.index-1);
-    } else if (id == DATA_ID_CAL_CH_I0_MIN) {
-        return data::Value(channel.cal_conf.i[0].min.val, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
-    } else if (id == DATA_ID_CAL_CH_I0_MID) {
-        return data::Value(channel.cal_conf.i[0].mid.val, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
-    } else if (id == DATA_ID_CAL_CH_I0_MAX) {
-        return data::Value(channel.cal_conf.i[0].max.val, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
-    } else if (id == DATA_ID_CAL_CH_I1_MIN) {
-        if (channel.hasSupportForCurrentDualRange()) {
-            return data::Value(channel.cal_conf.i[1].min.val, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
-        } else {
-            return data::Value("");
-        }
-    } else if (id == DATA_ID_CAL_CH_I1_MID) {
-        if (channel.hasSupportForCurrentDualRange()) {
-            return data::Value(channel.cal_conf.i[1].mid.val, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
-        } else {
-            return data::Value("");
-        }
-    } else if (id == DATA_ID_CAL_CH_I1_MAX) {
-        if (channel.hasSupportForCurrentDualRange()) {
-            return data::Value(channel.cal_conf.i[1].max.val, VALUE_TYPE_FLOAT_AMPER, channel.index-1);
-        } else {
-            return data::Value("");
-        }
-    } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_NUM) {
-        return data::Value(g_stepNum);
-    } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_LEVEL_VALUE) {
-        return getLevelValue();
-    } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_VALUE) {
-        switch (g_stepNum) {
-        case 0: return data::Value(psu::calibration::getVoltage().min_val, VALUE_TYPE_FLOAT_VOLT, channel.index-1, true);
-        case 1: return data::Value(psu::calibration::getVoltage().mid_val, VALUE_TYPE_FLOAT_VOLT, channel.index-1, true);
-        case 2: return data::Value(psu::calibration::getVoltage().max_val, VALUE_TYPE_FLOAT_VOLT, channel.index-1, true);
-        case 3: return data::Value(psu::calibration::getCurrent().min_val, VALUE_TYPE_FLOAT_AMPER, channel.index-1, true);
-        case 4: return data::Value(psu::calibration::getCurrent().mid_val, VALUE_TYPE_FLOAT_AMPER, channel.index-1, true);
-        case 5: return data::Value(psu::calibration::getCurrent().max_val, VALUE_TYPE_FLOAT_AMPER, channel.index-1, true);
-        case 6: return data::Value(psu::calibration::getCurrent().min_val, VALUE_TYPE_FLOAT_AMPER, channel.index-1, true);
-        case 7: return data::Value(psu::calibration::getCurrent().mid_val, VALUE_TYPE_FLOAT_AMPER, channel.index-1, true);
-        case 8: return data::Value(psu::calibration::getCurrent().max_val, VALUE_TYPE_FLOAT_AMPER, channel.index-1, true);
-        case 9: return data::Value(psu::calibration::getRemark());
-        }
-    } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_STATUS) {
-        switch (g_stepNum) {
-        case 0: return data::Value(psu::calibration::getVoltage().min_set ? 1 : 0);
-        case 1: return data::Value(psu::calibration::getVoltage().mid_set ? 1 : 0);
-        case 2: return data::Value(psu::calibration::getVoltage().max_set ? 1 : 0);
-        case 3: case 6: return data::Value(psu::calibration::getCurrent().min_set ? 1 : 0);
-        case 4: case 7: return data::Value(psu::calibration::getCurrent().mid_set ? 1 : 0);
-        case 5: case 8: return data::Value(psu::calibration::getCurrent().max_set ? 1 : 0);
-        case 9: return data::Value(psu::calibration::isRemarkSet() ? 1 : 0);
-        }
-    } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_PREV_ENABLED) {
-        return data::Value(g_stepNum > 0 ? 1 : 0);
-    } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_NEXT_ENABLED) {
-        return data::Value(g_stepNum < MAX_STEP_NUM ? 1 : 0);
-    } else if (id == DATA_ID_CHANNEL_CALIBRATION_STEP_IS_SET_REMARK_STEP) {
-        return data::Value(g_stepNum == MAX_STEP_NUM - 1 ? 1 : 0);
-    }
-
-    return data::Value();
+    return MakeValue(psu::calibration::getCurrent().getLevelValue(), UNIT_AMPER, g_channel->index-1);
 }
 
 void showCurrentStep() {
     psu::calibration::resetChannelToZero();
 
-    if (g_stepNum < MAX_STEP_NUM) { 
+    if (g_stepNum < MAX_STEP_NUM) {
         switch (g_stepNum) {
         case 0: psu::calibration::getVoltage().setLevel(psu::calibration::LEVEL_MIN); break;
         case 1: psu::calibration::getVoltage().setLevel(psu::calibration::LEVEL_MID); break;
@@ -204,9 +125,9 @@ void setLevelValue() {
 
     options.channelIndex = psu::calibration::getCalibrationChannel().index - 1;
 
-    options.editUnit = levelValue.getType();
+    options.editValueUnit = levelValue.getUnit();
 
-    if (levelValue.getType() == VALUE_TYPE_FLOAT_VOLT) {
+    if (levelValue.getUnit() == UNIT_VOLT) {
         options.min = g_channel->u.min;
         options.max = g_channel->u.max;
     } else {
@@ -276,13 +197,13 @@ void set() {
         options.channelIndex = psu::calibration::getCalibrationChannel().index - 1;
 
         if (calibrationValue == &psu::calibration::getVoltage()) {
-            options.editUnit = VALUE_TYPE_FLOAT_VOLT;
+            options.editValueUnit = UNIT_VOLT;
 
             options.min = g_channel->u.min;
             options.max = g_channel->u.max;
 
         } else {
-            options.editUnit = VALUE_TYPE_FLOAT_AMPER;
+            options.editValueUnit = UNIT_AMPER;
 
             options.min = g_channel->i.min;
             options.max = g_channel->i.max;
@@ -328,7 +249,7 @@ void nextStep() {
     if (g_stepNum == MAX_STEP_NUM - 1) {
         int16_t scpiErr;
         if (!psu::calibration::canSave(scpiErr)) {
-            errorMessage(data::Cursor(psu::calibration::getCalibrationChannel().index - 1), data::Value::ScpiErrorText(scpiErr));
+            errorMessage(data::Cursor(psu::calibration::getCalibrationChannel().index - 1), data::MakeScpiErrorValue(scpiErr));
             return;
         }
     }
@@ -353,7 +274,7 @@ void finishStop() {
     psu::calibration::stop();
 
     g_channel->outputEnable(false);
-    
+
     g_channel->prot_conf.flags.u_state = g_channel->OVP_DEFAULT_STATE;
     g_channel->prot_conf.flags.i_state = g_channel->OCP_DEFAULT_STATE;
     g_channel->prot_conf.flags.p_state = g_channel->OPP_DEFAULT_STATE;

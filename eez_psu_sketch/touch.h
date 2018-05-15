@@ -18,32 +18,21 @@
 
 #pragma once
 
-#include "touch_calibration.h"
+#include "mw_gui_touch.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 namespace touch {
 
-extern void init();
-extern void tick(uint32_t tick_usec);
+void init();
+void tick(uint32_t tick_usec);
 
-enum EventType {
-    TOUCH_NONE,
-    TOUCH_DOWN,
-    TOUCH_MOVE,
-    TOUCH_UP
-};
-
-extern EventType g_eventType;
-extern int g_x;
-extern int g_y;
-
-#if defined(EEZ_PSU_SIMULATOR) || defined(EEZ_PSU_STM32)
+#if defined(EEZ_PLATFORM_SIMULATOR) || defined(EEZ_PLATFORM_STM32)
 void touch_write(bool is_pressed, int x, int y);
 #endif
 
 }
 }
 }
-} // namespace eez::psu::ui::touch
+} // namespace eez::psu::gui::touch

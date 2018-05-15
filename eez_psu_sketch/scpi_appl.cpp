@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "scpi_psu.h"
 #include "channel_dispatcher.h"
@@ -62,17 +62,17 @@ scpi_result_t scpi_cmd_apply(scpi_t *context) {
         call_set_current = true;
     }
 
-	if (util::greater(voltage, channel_dispatcher::getULimit(*channel), getPrecision(VALUE_TYPE_FLOAT_VOLT))) {
+	if (mw::greater(voltage, channel_dispatcher::getULimit(*channel), getPrecision(UNIT_VOLT))) {
         SCPI_ErrorPush(context, SCPI_ERROR_VOLTAGE_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
 	}
 
-	if (call_set_current && util::greater(current, channel_dispatcher::getILimit(*channel), getPrecision(VALUE_TYPE_FLOAT_AMPER))) {
+	if (call_set_current && mw::greater(current, channel_dispatcher::getILimit(*channel), getPrecision(UNIT_AMPER))) {
         SCPI_ErrorPush(context, SCPI_ERROR_CURRENT_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
 	}
 
-    if (util::greater(voltage * (call_set_current ? current : channel_dispatcher::getISet(*channel)), channel_dispatcher::getPowerLimit(*channel), getPrecision(VALUE_TYPE_FLOAT_WATT))) {
+    if (mw::greater(voltage * (call_set_current ? current : channel_dispatcher::getISet(*channel)), channel_dispatcher::getPowerLimit(*channel), getPrecision(UNIT_WATT))) {
         SCPI_ErrorPush(context, SCPI_ERROR_POWER_LIMIT_EXCEEDED);
         return SCPI_RES_ERR;
     }
@@ -104,23 +104,23 @@ scpi_result_t scpi_cmd_applyQ(scpi_t * context) {
 
         // return both current and voltage
         sprintf(buffer, "CH%d:", channel->index);
-        util::strcatVoltage(buffer, channel_dispatcher::getUMax(*channel));
+        strcatVoltage(buffer, channel_dispatcher::getUMax(*channel));
         strcat(buffer, "/");
-        util::strcatCurrent(buffer, channel_dispatcher::getIMax(*channel), getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_AMPER), channel->index-1);
+        strcatCurrent(buffer, channel_dispatcher::getIMax(*channel), getNumSignificantDecimalDigits(UNIT_AMPER), channel->index-1);
         strcat(buffer, ", ");
 
-        util::strcatFloat(buffer, channel_dispatcher::getUSet(*channel), getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT));
+        strcatFloat(buffer, channel_dispatcher::getUSet(*channel), getNumSignificantDecimalDigits(UNIT_VOLT));
         strcat(buffer, ", ");
-        util::strcatFloat(buffer, channel_dispatcher::getISet(*channel), VALUE_TYPE_FLOAT_AMPER, channel->index-1);
+        strcatFloatValue(buffer, channel_dispatcher::getISet(*channel), UNIT_AMPER, channel->index-1);
     }
     else {
         if (current_or_voltage == 0) {
             // return only current
-            util::strcatFloat(buffer, channel_dispatcher::getISet(*channel), VALUE_TYPE_FLOAT_AMPER, channel->index-1);
+            strcatFloatValue(buffer, channel_dispatcher::getISet(*channel), UNIT_AMPER, channel->index-1);
         }
         else {
             // return only voltage
-            util::strcatFloat(buffer, channel_dispatcher::getUSet(*channel), getNumSignificantDecimalDigits(VALUE_TYPE_FLOAT_VOLT));
+            strcatFloat(buffer, channel_dispatcher::getUSet(*channel), getNumSignificantDecimalDigits(UNIT_VOLT));
         }
     }
 

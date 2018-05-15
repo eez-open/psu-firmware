@@ -15,20 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
-#include "gui_page.h"
+#include "mw_gui_page.h"
 #include "profile.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 
-class UserProfilesPage : public Page {
+extern int g_selectedProfileLocation;
+
+class UserProfilesPage : public mw::gui::Page {
 public:
 	void pageWillAppear();
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
 	void showProfile();
 
@@ -39,9 +40,9 @@ public:
 	void deleteProfile();
 	void editRemark();
 
-private:
 	profile::Parameters profile;
 
+private:
 	static void onSaveFinish(char *remark = 0, void (*callback)() = 0);
 	static void onSaveEditRemarkOk(char *remark);
 	static void onSaveYes();

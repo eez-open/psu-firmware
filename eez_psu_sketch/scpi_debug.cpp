@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "scpi_psu.h"
 #include "watchdog.h"
@@ -80,7 +80,7 @@ scpi_result_t scpi_cmd_debugWdog(scpi_t * context) {
     }
 
 	debug::g_debugWatchdog = enable;
-    
+
     return SCPI_RES_OK;
 #else
     SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
@@ -96,7 +96,7 @@ scpi_result_t scpi_cmd_debugWdogQ(scpi_t * context) {
     }
 
     SCPI_ResultBool(context, debug::g_debugWatchdog);
-    
+
     return SCPI_RES_OK;
 #else
     SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);

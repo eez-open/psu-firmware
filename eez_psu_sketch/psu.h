@@ -15,36 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
-#if !defined(EEZ_PSU_ARDUINO) && !defined(EEZ_PSU_SIMULATOR) && !defined(EEZ_PSU_STM32)
-#define EEZ_PSU_ARDUINO
-#endif
-
-#ifdef EEZ_PSU_ARDUINO
-#include "arduino_psu.h"
-#endif
-
-#ifdef EEZ_PSU_SIMULATOR
-#include "simulator_psu.h"
-#endif
-
-#ifdef EEZ_PSU_STM32
-#include "stm32_psu.h"
-#endif
-
-#include "eez_psu_rev.h"
-
-#include "conf.h"
-
-#ifdef EEZ_PSU_SIMULATOR
-#include "simulator_conf.h"
-#endif
-
-#ifdef EEZ_PSU_STM32
-#include "stm32_conf.h"
-#endif
+#include "app_conf.h"
 
 #include "eez_psu.h"
 
@@ -88,7 +62,7 @@ bool test();
 void onProtectionTripped();
 
 void tick();
-uint32_t criticalTick(int pageId);
+bool criticalTick(int pageId);
 
 void regSet(scpi_reg_name_t name, scpi_reg_val_t val);
 
@@ -134,11 +108,16 @@ bool isFrontPanelLocked();
 }
 } // namespace eez::psu
 
+#include "mw_mw.h"
+#include "mw_util.h"
+using namespace eez::mw;
+
 #include "debug.h"
 #include "util.h"
+#include "unit.h"
 #include "channel.h"
 
-#if defined(EEZ_PSU_ARDUINO)
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 void PSU_boot();
 void PSU_tick();
 #endif

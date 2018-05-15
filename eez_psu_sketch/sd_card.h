@@ -18,7 +18,13 @@
 
 #pragma once
 
+#if defined(EEZ_PLATFORM_SIMULATOR)
+#include "platform/simulator/arduino/SdFat.h"
+#endif
+
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 #include <SdFat.h>
+#endif
 
 extern SdFat SD;
 

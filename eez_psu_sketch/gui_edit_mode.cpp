@@ -24,6 +24,8 @@
 #include "channel_dispatcher.h"
 #include "calibration.h"
 
+#include "gui_psu.h"
+#include "gui_data.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_slider.h"
 #include "gui_edit_mode_step.h"
@@ -97,6 +99,12 @@ void update() {
     initEditValue();
     g_minValue = data::getMin(g_focusCursor, g_focusDataId);
     g_maxValue = data::getMax(g_focusCursor, g_focusDataId);
+	if (edit_mode_keypad::g_keypad) {
+		edit_mode_keypad::g_keypad->m_options.editValueUnit = g_editValue.getUnit();
+		if (g_editValue.isMilli()) {
+			edit_mode_keypad::g_keypad->switchToMilli();
+		}
+	}
 }
 
 void exit() {
@@ -107,7 +115,7 @@ void exit() {
 void nonInteractiveSet() {
 	int16_t error;
 	if (!data::set(g_focusCursor, g_focusDataId, g_editValue, &error)) {
-		errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
+		errorMessage(g_focusCursor, data::MakeScpiErrorValue(error));
 	}
 }
 
@@ -123,34 +131,6 @@ bool isInteractiveMode() {
 void toggleInteractiveMode() {
     g_isInteractiveMode = !g_isInteractiveMode;
     initEditValue();
-}
-
-data::Value getData(const data::Cursor &cursor, uint8_t id) {
-    int editInfoPartOffset = g_focusCursor.i * 6 + (g_focusDataId == DATA_ID_CHANNEL_U_EDIT ? 0 : 1) * 3;
-
-    if (id == DATA_ID_EDIT_VALUE) {
-       return edit_mode::getEditValue();
-    } else if (id == DATA_ID_EDIT_INFO) {
-        return data::Value(0 + editInfoPartOffset, VALUE_TYPE_EDIT_INFO);
-    } else if (id == DATA_ID_EDIT_INFO1) {
-        return data::Value(1 + editInfoPartOffset, VALUE_TYPE_EDIT_INFO);
-    } else if (id == DATA_ID_EDIT_INFO2) {
-        return data::Value(2 + editInfoPartOffset, VALUE_TYPE_EDIT_INFO);
-    } else if (id == DATA_ID_EDIT_MODE_INTERACTIVE_MODE_SELECTOR) {
-        return isInteractiveMode() ? 0 : 1;
-    } else if (id == DATA_ID_EDIT_STEPS) {
-        return edit_mode_step::getStepIndex();
-    }
-
-    return data::Value();
-}
-
-bool isBlinking(const data::Cursor &cursor, uint8_t id, bool &result) {
-    if (id == DATA_ID_EDIT_VALUE) {
-        result = !isInteractiveMode() && (edit_mode::getEditValue() != edit_mode::getCurrentValue());
-        return true;
-    }
-    return false;
 }
 
 const data::Value& getEditValue() {
@@ -169,16 +149,16 @@ const data::Value &getMax() {
     return g_maxValue;
 }
 
-ValueType getUnit() {
-    return g_editValue.getType();
+Unit getUnit() {
+    return g_editValue.getUnit();
 }
 
 bool setValue(float value_) {
-    data::Value value = data::Value(value_, getUnit(), g_focusCursor.i);
+    data::Value value = MakeValue(value_, getUnit(), g_focusCursor.i);
     if (g_isInteractiveMode || g_tabIndex == PAGE_ID_EDIT_MODE_KEYPAD) {
 		int16_t error;
         if (!data::set(g_focusCursor, g_focusDataId, value, &error)) {
-			errorMessage(g_focusCursor, data::Value::ScpiErrorText(error));
+			errorMessage(g_focusCursor, data::MakeScpiErrorValue(error));
             return false;
         }
     }
@@ -202,9 +182,9 @@ void getInfoText(int part, char *infoText) {
     // ...
 
     int iChannel = part / 6;
-    
+
     part %= 6;
-    
+
     int dataId;
     if (part / 3 == 0) {
         dataId = DATA_ID_CHANNEL_U_EDIT;
@@ -232,9 +212,9 @@ void getInfoText(int part, char *infoText) {
 
         if (part == 0 || part == 2) {
             strcat(infoText, "[");
-		    util::strcatFloat(infoText, g_minValue.getFloat(), 2);
+		    strcatFloat(infoText, g_minValue.getFloat(), 2);
 		    strcat(infoText, "-");
-		    util::strcatCurrent(infoText, channel_dispatcher::getILimit(Channel::get(g_focusCursor.i)), 2);
+		    strcatCurrent(infoText, channel_dispatcher::getILimit(Channel::get(g_focusCursor.i)), 2);
 		    strcat(infoText, "]");
         }
     } else {
@@ -254,9 +234,9 @@ void getInfoText(int part, char *infoText) {
 
         if (part == 0 || part == 2) {
             strcat(infoText, "[");
-            util::strcatFloat(infoText, g_minValue.getFloat(), 2);
+            strcatFloat(infoText, g_minValue.getFloat(), 2);
 		    strcat(infoText, "-");
-		    util::strcatVoltage(infoText, channel_dispatcher::getULimit(Channel::get(g_focusCursor.i)), 2);
+		    strcatVoltage(infoText, channel_dispatcher::getULimit(Channel::get(g_focusCursor.i)), 2);
 		    strcat(infoText, "]");
         }
     }

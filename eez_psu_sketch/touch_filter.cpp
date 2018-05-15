@@ -26,10 +26,10 @@
 // Thanks to: http://dlbeer.co.nz/articles/tsf.html
 //
 
-#ifdef EEZ_PSU_ARDUINO
+#ifdef EEZ_PLATFORM_ARDUINO_DUE
 #define CONF_GUI_TOUCH_FILTER_N 5
 #define CONF_GUI_TOUCH_FILTER_D 10
-#ifdef EEZ_PSU_ARDUINO_DUE
+#ifdef EEZ_PLATFORM_ARDUINO_DUE
 #define CONF_GUI_TOUCH_FILTER_P 10
 #else
 #define CONF_GUI_TOUCH_FILTER_P 10
@@ -176,8 +176,8 @@ typedef SampleFilter<CONF_GUI_TOUCH_FILTER_N, CONF_GUI_TOUCH_FILTER_D, CONF_GUI_
 
 class ScreenTransform {
 public:
-    ScreenTransform() { 
-        reset(); 
+    ScreenTransform() {
+        reset();
     }
 
     bool calibrate(const Point& tl, const Point& br, const Point& tr, int m, const Point& d) {

@@ -23,13 +23,20 @@
 #include "ntp.h"
 #include "ethernet.h"
 #include "datetime.h"
+#include "event_queue.h"
 #include "persist_conf.h"
 
 #if OPTION_WATCHDOG && (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12)
 #include "watchdog.h"
 #endif
 
+#if defined(EEZ_PLATFORM_SIMULATOR)
+#include "platform/simulator/ethernet/EthernetUdp2.h"
+#endif
+
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 #include <EthernetUdp2.h>
+#endif
 
 // Some time servers:
 // - time.google.com
@@ -164,7 +171,7 @@ void readNtpPacket() {
 
     int year, month, day, hour, minute, second;
     datetime::breakTime(local, year, month, day, hour, minute, second);
-   
+
     //DebugTraceF("NTP: %d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, second);
 
     datetime::setDateTime(year - 2000, month, day, hour, minute, second, false, 2);

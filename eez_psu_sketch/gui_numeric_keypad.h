@@ -15,10 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
-#include "gui_internal.h"
 #include "gui_keypad.h"
 
 namespace eez {
@@ -30,7 +29,7 @@ struct NumericKeypadOptions {
 
     int channelIndex;
 
-	ValueType editUnit;
+	Unit editValueUnit;
     int numSignificantDecimalDigits;
 
 	float min;
@@ -47,7 +46,7 @@ struct NumericKeypadOptions {
 
     const char *option1ButtonText;
     void (*option1)();
-    
+
     const char *option2ButtonText;
     void (*option2)();
 
@@ -74,13 +73,13 @@ enum NumericKeypadState {
 
 class NumericKeypad : public Keypad {
 public:
-    void init(const char *label, const data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)());
-    static NumericKeypad *start(const char *label, const data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)() = 0);
+    void init(const char *label, const eez::mw::gui::data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)());
+    static NumericKeypad *start(const char *label, const eez::mw::gui::data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)() = 0);
 
     bool isEditing();
 
-    ValueType getEditUnit();
-    ValueType getValueUnit();
+    Unit getEditUnit();
+    Unit getValueUnit();
     void switchToMilli();
 
     void getKeypadText(char *text);
@@ -101,29 +100,29 @@ public:
     void cancel();
 
 #if OPTION_ENCODER
-    bool onEncoderClick(int counter);
+    bool onEncoderClicked();
     bool onEncoder(int counter);
 #endif
 
-    data::Value getData(uint8_t id);
+	Unit getSwitchToUnit();
+
+	NumericKeypadOptions m_options;
 
 private:
-    data::Value m_startValue;
+	eez::mw::gui::data::Value m_startValue;
     NumericKeypadState m_state;
     int m_d0;
     int m_d1;
     int m_d2;
     int m_d3;
-    NumericKeypadOptions m_options;
 
     void appendEditUnit(char *text);
     float getValue();
     char getDotSign();
     bool isMilli();
-    ValueType getMilliUnit();
-    ValueType getSwitchToUnit();
+    Unit getMilliUnit();
     void toggleEditUnit();
-    int getNumDecimalDigits(); 
+    int getNumDecimalDigits();
     bool isValueValid();
     bool checkNumSignificantDecimalDigits();
     void digit(int d);

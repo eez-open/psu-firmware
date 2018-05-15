@@ -25,11 +25,11 @@
 #include "trigger.h"
 #include "list_program.h"
 #include "calibration.h"
+#include "idle.h"
 #include "scpi_psu.h"
 #if OPTION_SD_CARD
 #include "sd_card.h"
 #endif
-#include "idle.h"
 
 namespace eez {
 namespace psu {
@@ -56,9 +56,9 @@ void getChannelProfileListFilePath(Channel &channel, int location, char *filePat
     strcpy(filePath, PROFILES_DIR);
     strcat(filePath, PATH_SEPARATOR);
     strcat(filePath, "LST_");
-    util::strcatInt(filePath, channel.index);
+    strcatInt(filePath, channel.index);
     strcat(filePath, "_");
-    util::strcatInt(filePath, location);
+    strcatInt(filePath, location);
     strcat(filePath, LIST_FILE_EXTENSION);
 }
 
@@ -91,7 +91,7 @@ void recallChannelsFromProfile(Parameters *profile, int location) {
 
 			channel.p_limit = profile->channels[i].p_limit;
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
 			channel.simulator.load_enabled = profile->channels[i].load_enabled;
 			channel.simulator.load = profile->channels[i].load;
 			channel.simulator.voltProgExt = profile->channels[i].voltProgExt;
@@ -350,7 +350,7 @@ void fillProfile(Parameters *pProfile, int location, const char *name, const Par
             profile.channels[i].flags.displayValue2 = channel.flags.displayValue2;
             profile.channels[i].ytViewRate = channel.ytViewRate;
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
 			profile.channels[i].load_enabled = channel.simulator.load_enabled;
 			profile.channels[i].load = channel.simulator.load;
 			profile.channels[i].voltProgExt = channel.simulator.voltProgExt;

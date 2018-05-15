@@ -32,9 +32,13 @@
 #include "ntp.h"
 #endif
 
-#include "gui.h"
+#include "gui_psu.h"
+#include "gui_data.h"
+#include "mw_gui_gui.h"
 #include "gui_page_sys_settings.h"
 #include "gui_numeric_keypad.h"
+
+using namespace eez::app::gui;
 
 namespace eez {
 namespace psu {
@@ -55,72 +59,6 @@ SysSettingsDateTimePage::SysSettingsDateTimePage() {
     dateTimeModified = false;
 	timeZone = origTimeZone = persist_conf::devConf.time_zone;
 	dstRule = origDstRule = (datetime::DstRule)persist_conf::devConf2.dstRule;
-}
-
-data::Value SysSettingsDateTimePage::getData(const data::Cursor &cursor, uint8_t id) {
-	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-    if (id == DATA_ID_NTP_ENABLED) {
-        return data::Value(ntpEnabled ? 1 : 0);
-    }
-
-    if (ntpEnabled) {
-        uint32_t nowUtc = datetime::nowUtc();
-        uint32_t nowLocal = datetime::utcToLocal(nowUtc, timeZone, dstRule);
-
-        if (id == DATA_ID_NTP_SERVER) {
-            return ntpServer[0] ? ntpServer : "<not specified>";
-        }
-
-        if (id == DATA_ID_DATE_TIME_DATE) {
-            return data::Value(nowLocal, VALUE_TYPE_DATE);
-        }
-
-        if (id == DATA_ID_DATE_TIME_TIME) {
-            return data::Value(nowLocal, VALUE_TYPE_TIME);
-        }
-    } else {
-        if (!dateTimeModified) {
-            dateTime = datetime::DateTime::now();
-        }
-
-	    if (id == DATA_ID_DATE_TIME_YEAR) {
-		    return data::Value(dateTime.year, VALUE_TYPE_YEAR);
-	    }
-    
-        if (id == DATA_ID_DATE_TIME_MONTH) {
-		    return data::Value(dateTime.month, VALUE_TYPE_MONTH);
-	    }
-    
-        if (id == DATA_ID_DATE_TIME_DAY) {
-		    return data::Value(dateTime.day, VALUE_TYPE_DAY);
-	    }
-    
-        if (id == DATA_ID_DATE_TIME_HOUR) {
-		    return data::Value(dateTime.hour, VALUE_TYPE_HOUR);
-	    }
-    
-        if (id == DATA_ID_DATE_TIME_MINUTE) {
-		    return data::Value(dateTime.minute, VALUE_TYPE_MINUTE);
-	    }
-    
-        if (id == DATA_ID_DATE_TIME_SECOND) {
-		    return data::Value(dateTime.second, VALUE_TYPE_SECOND);
-	    }
-    }
-    
-    if (id == DATA_ID_DATE_TIME_TIME_ZONE) {
-		return data::Value(timeZone, VALUE_TYPE_TIME_ZONE);
-	}
-    
-    if (id == DATA_ID_DATE_TIME_DST) {
-		return data::Value(dstRule, data::ENUM_DEFINITION_DST_RULE);
-	}
-
-	return data::Value();
 }
 
 void SysSettingsDateTimePage::toggleNtp() {
@@ -149,8 +87,6 @@ void SysSettingsDateTimePage::edit() {
 	int id = widget->data;
 
 	NumericKeypadOptions options;
-
-	options.editUnit = VALUE_TYPE_INT;
 
 	const char *label = 0;
 
@@ -197,9 +133,9 @@ void SysSettingsDateTimePage::edit() {
 		options.min = -12.00;
 		options.max = 14.00;
 		options.def = 0;
-		options.editUnit = VALUE_TYPE_TIME_ZONE;
 		options.flags.dotButtonEnabled = true;
 		options.flags.signButtonEnabled = true;
+		value = data::Value(timeZone, VALUE_TYPE_TIME_ZONE);
 	}
 
 	if (label) {
@@ -215,7 +151,7 @@ void SysSettingsDateTimePage::onDstRuleSet(uint8_t value) {
 }
 
 void SysSettingsDateTimePage::selectDstRule() {
-    pushSelectFromEnumPage(data::g_dstRuleEnumDefinition, dstRule, 0, onDstRuleSet);
+    pushSelectFromEnumPage(g_dstRuleEnumDefinition, dstRule, 0, onDstRuleSet);
 }
 
 void SysSettingsDateTimePage::setValue(float value) {
@@ -250,7 +186,7 @@ int SysSettingsDateTimePage::getDirty() {
 	if (ntpEnabled != origNtpEnabled) {
         return 1;
     }
-    
+
     if (ntpEnabled) {
         if (ntpServer[0] && strcmp(ntpServer, origNtpServer)) {
             return 1;
@@ -361,39 +297,6 @@ SysSettingsEthernetPage::SysSettingsEthernetPage() {
     memcpy(m_macAddress, persist_conf::devConf2.ethernetMacAddress, 6);
 }
 
-data::Value SysSettingsEthernetPage::getData(const data::Cursor &cursor, uint8_t id) {
-	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-    if (id == DATA_ID_ETHERNET_ENABLED) {
-        return data::Value(m_enabled ? 1 : 0);
-    }
-
-    if (id == DATA_ID_ETHERNET_DHCP) {
-        return data::Value(m_dhcpEnabled ? 1 : 0);
-    }
-
-    if (m_dhcpEnabled) {
-        if (id == DATA_ID_ETHERNET_IP_ADDRESS) {
-            return data::Value(ethernet::getIpAddress(), VALUE_TYPE_IP_ADDRESS);
-        }
-    }
-
-    if (id == DATA_ID_ETHERNET_SCPI_PORT) {
-        return data::Value((uint16_t)m_scpiPort, VALUE_TYPE_PORT);
-    }
-
-    if (id == DATA_ID_ETHERNET_MAC) {
-        uint8_t *macAddress = &m_macAddressData[getCurrentStateBufferIndex()][0];
-        memcpy(macAddress, m_macAddress, 6);
-        return data::Value(macAddress, VALUE_TYPE_MAC_ADDRESS);
-    }
-
-    return data::Value();
-}
-
 void SysSettingsEthernetPage::toggle() {
     m_enabled = !m_enabled;
 }
@@ -415,8 +318,6 @@ void SysSettingsEthernetPage::onSetScpiPort(float value) {
 void SysSettingsEthernetPage::editScpiPort() {
 	NumericKeypadOptions options;
 
-	options.editUnit = VALUE_TYPE_PORT;
-
 	options.min = 0;
 	options.max = 65535;
 	options.def = TCP_PORT;
@@ -428,7 +329,7 @@ void SysSettingsEthernetPage::editScpiPort() {
 
 void SysSettingsEthernetPage::onSetMacAddress(char *value) {
     uint8_t macAddress[6];
-    if (!util::parseMacAddress(value, strlen(value), macAddress)) {
+    if (!parseMacAddress(value, strlen(value), macAddress)) {
         errorMessageP("Invalid MAC address!");
         return;
     }
@@ -441,7 +342,7 @@ void SysSettingsEthernetPage::onSetMacAddress(char *value) {
 
 void SysSettingsEthernetPage::editMacAddress() {
     char macAddressStr[18];
-    util::macAddressToString(m_macAddress, macAddressStr);
+    macAddressToString(m_macAddress, macAddressStr);
     Keypad::startPush(0, macAddressStr, 32, false, onSetMacAddress, popPage);
 }
 
@@ -476,31 +377,6 @@ SysSettingsEthernetStaticPage::SysSettingsEthernetStaticPage() {
     m_subnetMaskOrig = m_subnetMask = page->m_subnetMask;
 }
 
-data::Value SysSettingsEthernetStaticPage::getData(const data::Cursor &cursor, uint8_t id) {
-	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-    if (id == DATA_ID_ETHERNET_IP_ADDRESS) {
-        return data::Value(m_ipAddress, VALUE_TYPE_IP_ADDRESS);
-    }
-
-    if (id == DATA_ID_ETHERNET_DNS) {
-        return data::Value(m_dns, VALUE_TYPE_IP_ADDRESS);
-    }
-
-    if (id == DATA_ID_ETHERNET_GATEWAY) {
-        return data::Value(m_gateway, VALUE_TYPE_IP_ADDRESS);
-    }
-
-    if (id == DATA_ID_ETHERNET_SUBNET_MASK) {
-        return data::Value(m_subnetMask, VALUE_TYPE_IP_ADDRESS);
-    }
-
-    return data::Value();
-}
-
 void SysSettingsEthernetStaticPage::onAddressSet(uint32_t address) {
     popPage();
     SysSettingsEthernetStaticPage *page = (SysSettingsEthernetStaticPage *)getActivePage();
@@ -511,8 +387,6 @@ void SysSettingsEthernetStaticPage::edit(uint32_t &address) {
     m_editAddress = &address;
 
 	NumericKeypadOptions options;
-
-	options.editUnit = VALUE_TYPE_IP_ADDRESS;
 
 	NumericKeypad::start(0, data::Value((uint32_t)address, VALUE_TYPE_IP_ADDRESS), options, (void (*)(float))onAddressSet);
 }
@@ -559,22 +433,6 @@ void SysSettingsEthernetStaticPage::set() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-data::Value SysSettingsProtectionsPage::getData(const data::Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_SYS_OUTPUT_PROTECTION_COUPLED) {
-        return data::Value(persist_conf::isOutputProtectionCoupleEnabled() ? 1 : 0);
-    }
-
-    if (id == DATA_ID_SYS_SHUTDOWN_WHEN_PROTECTION_TRIPPED) {
-        return data::Value(persist_conf::isShutdownWhenProtectionTrippedEnabled() ? 1 : 0);
-    }
-
-    if (id == DATA_ID_SYS_FORCE_DISABLING_ALL_OUTPUTS_ON_POWER_UP) {
-        return data::Value(persist_conf::isForceDisablingAllOutputsOnPowerUpEnabled() ? 1 : 0);
-    }
-
-    return data::Value();
-}
-
 void SysSettingsProtectionsPage::toggleOutputProtectionCouple() {
     if (persist_conf::isOutputProtectionCoupleEnabled()) {
         if (persist_conf::enableOutputProtectionCouple(false)) {
@@ -616,40 +474,15 @@ void SysSettingsProtectionsPage::toggleForceDisablingAllOutputsOnPowerUp() {
 SysSettingsAuxOtpPage::SysSettingsAuxOtpPage() {
 	origState = state = temperature::sensors[temp_sensor::AUX].prot_conf.state ? 1 : 0;
 
-	origLevel = level = data::Value(temperature::sensors[temp_sensor::AUX].prot_conf.level, VALUE_TYPE_FLOAT_CELSIUS);
+	origLevel = level = MakeValue(temperature::sensors[temp_sensor::AUX].prot_conf.level, UNIT_CELSIUS);
 	minLevel = OTP_AUX_MIN_LEVEL;
 	maxLevel = OTP_AUX_MAX_LEVEL;
 	defLevel = OTP_AUX_DEFAULT_LEVEL;
 
-	origDelay = delay = data::Value(temperature::sensors[temp_sensor::AUX].prot_conf.delay, VALUE_TYPE_FLOAT_SECOND);
+	origDelay = delay = MakeValue(temperature::sensors[temp_sensor::AUX].prot_conf.delay, UNIT_SECOND);
 	minDelay = OTP_AUX_MIN_DELAY;
 	maxDelay = OTP_AUX_MAX_DELAY;
 	defaultDelay = OTP_CH_DEFAULT_DELAY;
-}
-
-data::Value SysSettingsAuxOtpPage::getData(const data::Cursor &cursor, uint8_t id) {
-	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-	if (id == DATA_ID_SYS_TEMP_AUX_OTP_STATE) {
-		return state;
-	}
-
-    if (id == DATA_ID_SYS_TEMP_AUX_OTP_LEVEL) {
-		return level;
-	}
-
-	if (id == DATA_ID_SYS_TEMP_AUX_OTP_DELAY) {
-		return delay;
-	}
-
-	if (id == DATA_ID_SYS_TEMP_AUX_OTP_IS_TRIPPED) {
-		return temperature::sensors[temp_sensor::AUX].isTripped() ? 1 : 0;
-	}
-
-	return data::Value();
 }
 
 int SysSettingsAuxOtpPage::getDirty() {
@@ -669,13 +502,13 @@ void SysSettingsAuxOtpPage::toggleState() {
 void SysSettingsAuxOtpPage::onLevelSet(float value) {
 	popPage();
 	SysSettingsAuxOtpPage *page = (SysSettingsAuxOtpPage *)getActivePage();
-	page->level = data::Value(value, page->level.getType());
+	page->level = MakeValue(value, page->level.getUnit());
 }
 
 void SysSettingsAuxOtpPage::editLevel() {
 	NumericKeypadOptions options;
 
-	options.editUnit = level.getType();
+	options.editValueUnit = level.getUnit();
 
 	options.min = minLevel;
 	options.max = maxLevel;
@@ -692,13 +525,13 @@ void SysSettingsAuxOtpPage::editLevel() {
 void SysSettingsAuxOtpPage::onDelaySet(float value) {
 	popPage();
 	SysSettingsAuxOtpPage *page = (SysSettingsAuxOtpPage *)getActivePage();
-	page->delay = data::Value(value, page->delay.getType());
+	page->delay = MakeValue(value, page->delay.getUnit());
 }
 
 void SysSettingsAuxOtpPage::editDelay() {
 	NumericKeypadOptions options;
 
-	options.editUnit = delay.getType();
+	options.editValueUnit = delay.getUnit();
 
 	options.min = minDelay;
 	options.max = maxDelay;
@@ -727,18 +560,6 @@ void SysSettingsAuxOtpPage::clear() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
-data::Value SysSettingsSoundPage::getData(const data::Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_SYS_SOUND_IS_ENABLED) {
-        return data::Value(persist_conf::isSoundEnabled() ? 1 : 0);
-    }
-
-    if (id == DATA_ID_SYS_SOUND_IS_CLICK_ENABLED) {
-        return data::Value(persist_conf::isClickSoundEnabled() ? 1 : 0);
-    }
-
-    return data::Value();
-}
 
 void SysSettingsSoundPage::toggleSound() {
     if (persist_conf::isSoundEnabled()) {
@@ -774,57 +595,6 @@ SysSettingsEncoderPage::SysSettingsEncoderPage() {
     origMovingSpeedUp = movingSpeedUp = persist_conf::devConf2.encoderMovingSpeedUp;
 }
 
-data::Value SysSettingsEncoderPage::getMin(const data::Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_SYS_ENCODER_MOVING_DOWN_SPEED || id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
-        return encoder::MIN_MOVING_SPEED;
-    }
-
-    return data::Value();
-}
-
-data::Value SysSettingsEncoderPage::getMax(const data::Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_SYS_ENCODER_MOVING_DOWN_SPEED || id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
-        return encoder::MAX_MOVING_SPEED;
-    }
-
-    return data::Value();
-}
-
-data::Value SysSettingsEncoderPage::getData(const data::Cursor &cursor, uint8_t id) {
-	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-    if (id == DATA_ID_SYS_ENCODER_CONFIRMATION_MODE) {
-        return data::Value((int)confirmationMode);
-    }
-
-    if (id == DATA_ID_SYS_ENCODER_MOVING_DOWN_SPEED) {
-        return data::Value((int)movingSpeedDown);
-    }
-
-    if (id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
-        return data::Value((int)movingSpeedUp);
-    }
-
-    return data::Value();
-}
-
-bool SysSettingsEncoderPage::setData(const data::Cursor &cursor, uint8_t id, data::Value value) {
-    if (id == DATA_ID_SYS_ENCODER_MOVING_DOWN_SPEED) {
-        movingSpeedDown = (uint8_t)value.getInt();
-        return true;
-    }
-
-    if (id == DATA_ID_SYS_ENCODER_MOVING_UP_SPEED) {
-        movingSpeedUp = (uint8_t)value.getInt();
-        return true;
-    }
-
-    return false;
-}
-
 void SysSettingsEncoderPage::toggleConfirmationMode() {
     confirmationMode = confirmationMode ? 0 : 1;
 }
@@ -844,88 +614,10 @@ void SysSettingsEncoderPage::set() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-data::Value SysSettingsDisplayPage::getMin(const data::Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
-        return DISPLAY_BRIGHTNESS_MIN;
-    }
-
-    if (id == DATA_ID_SYS_DISPLAY_BACKGROUND_LUMINOSITY_STEP) {
-        return DISPLAY_BACKGROUND_LUMINOSITY_STEP_MIN;
-    }
-
-    return data::Value();
-}
-
-data::Value SysSettingsDisplayPage::getMax(const data::Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
-        return DISPLAY_BRIGHTNESS_MAX;
-    }
-
-    if (id == DATA_ID_SYS_DISPLAY_BACKGROUND_LUMINOSITY_STEP) {
-        return DISPLAY_BACKGROUND_LUMINOSITY_STEP_MAX;
-    }
-
-    return data::Value();
-}
-
-data::Value SysSettingsDisplayPage::getData(const data::Cursor &cursor, uint8_t id) {
-	data::Value value = Page::getData(cursor, id);
-	if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-    if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
-        return data::Value(persist_conf::devConf2.displayBrightness);
-    }
-
-    if (id == DATA_ID_SYS_DISPLAY_BACKGROUND_LUMINOSITY_STEP) {
-        return data::Value(persist_conf::devConf2.displayBackgroundLuminosityStep);
-    }
-
-    return data::Value();
-}
-
-bool SysSettingsDisplayPage::setData(const data::Cursor &cursor, uint8_t id, data::Value value) {
-    if (id == DATA_ID_SYS_DISPLAY_BRIGHTNESS) {
-        persist_conf::setDisplayBrightness((uint8_t)value.getInt());
-        return true;
-    }
-
-    if (id == DATA_ID_SYS_DISPLAY_BACKGROUND_LUMINOSITY_STEP) {
-        persist_conf::setDisplayBackgroundLuminosityStep((uint8_t)value.getInt());
-        return true;
-    }
-
-    return false;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 SysSettingsTriggerPage::SysSettingsTriggerPage() {
     m_sourceOrig = m_source = trigger::getSource();
     m_delayOrig = m_delay = trigger::getDelay();
     m_initiateContinuouslyOrig = m_initiateContinuously = trigger::isContinuousInitializationEnabled();
-}
-
-data::Value SysSettingsTriggerPage::getData(const data::Cursor &cursor, uint8_t id) {
-	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-	if (id == DATA_ID_TRIGGER_SOURCE) {
-		return data::Value(m_source, data::ENUM_DEFINITION_TRIGGER_SOURCE);
-	}
-
-	if (id == DATA_ID_TRIGGER_DELAY) {
-		return data::Value(m_delay, VALUE_TYPE_FLOAT_SECOND);
-	}
-
-	if (id == DATA_ID_TRIGGER_INITIATE_CONTINUOUSLY) {
-        return data::Value(m_initiateContinuously ? 1 : 0);
-	}
-
-    return data::Value();
 }
 
 void SysSettingsTriggerPage::onTriggerSourceSet(uint8_t value) {
@@ -935,7 +627,7 @@ void SysSettingsTriggerPage::onTriggerSourceSet(uint8_t value) {
 }
 
 void SysSettingsTriggerPage::selectSource() {
-    pushSelectFromEnumPage(data::g_triggerSourceEnumDefinition, m_source, 0, onTriggerSourceSet);
+    pushSelectFromEnumPage(g_triggerSourceEnumDefinition, m_source, 0, onTriggerSourceSet);
 }
 
 void SysSettingsTriggerPage::onDelaySet(float value) {
@@ -947,7 +639,7 @@ void SysSettingsTriggerPage::onDelaySet(float value) {
 void SysSettingsTriggerPage::editDelay() {
     NumericKeypadOptions options;
 
-    options.editUnit = VALUE_TYPE_FLOAT_SECOND;
+    options.editValueUnit = UNIT_SECOND;
 
     options.def = 0;
 	options.min = 0;
@@ -956,7 +648,7 @@ void SysSettingsTriggerPage::editDelay() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, data::Value(trigger::getDelay(), VALUE_TYPE_FLOAT_SECOND), options, onDelaySet);
+	NumericKeypad::start(0, MakeValue(trigger::getDelay(), UNIT_SECOND), options, onDelaySet);
 }
 
 void SysSettingsTriggerPage::toggleInitiateContinuously() {
@@ -993,31 +685,6 @@ SysSettingsIOPinsPage::SysSettingsIOPinsPage() {
     }
 }
 
-data::Value SysSettingsIOPinsPage::getData(const data::Cursor &cursor, uint8_t id) {
-	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-    if (id == DATA_ID_IO_PIN_NUMBER) {
-		return data::Value(cursor.i + 1);
-	}
-
-	if (id == DATA_ID_IO_PIN_POLARITY) {
-		return data::Value(m_polarity[cursor.i], data::ENUM_DEFINITION_IO_PINS_POLARITY);
-	}
-
-	if (id == DATA_ID_IO_PIN_FUNCTION) {
-        if (cursor.i == 0) {
-    		return data::Value(m_function[cursor.i], data::ENUM_DEFINITION_IO_PINS_INPUT_FUNCTION);
-        } else {
-    		return data::Value(m_function[cursor.i], data::ENUM_DEFINITION_IO_PINS_OUTPUT_FUNCTION);
-        }
-	}
-
-    return data::Value();
-}
-
 void SysSettingsIOPinsPage::togglePolarity() {
     int i = g_foundWidgetAtDown.cursor.i;
     m_polarity[i] = m_polarity[i] == io_pins::POLARITY_NEGATIVE ? io_pins::POLARITY_POSITIVE : io_pins::POLARITY_NEGATIVE;
@@ -1031,7 +698,7 @@ void SysSettingsIOPinsPage::onFunctionSet(uint8_t value) {
 
 void SysSettingsIOPinsPage::selectFunction() {
     pinNumber = g_foundWidgetAtDown.cursor.i;
-    pushSelectFromEnumPage(pinNumber == 0 ? data::g_ioPinsInputFunctionEnumDefinition : data::g_ioPinsOutputFunctionEnumDefinition,
+    pushSelectFromEnumPage(pinNumber == 0 ? g_ioPinsInputFunctionEnumDefinition : g_ioPinsOutputFunctionEnumDefinition,
         m_function[pinNumber], 0, onFunctionSet);
 }
 
@@ -1068,52 +735,6 @@ SysSettingsSerialPage::SysSettingsSerialPage() {
     m_parityOrig = m_parity = (serial::Parity)persist_conf::getSerialParity();
 }
 
-data::Value SysSettingsSerialPage::getMin(const data::Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_SERIAL_BAUD) {
-        return 1;
-    }
-
-    return data::Value();
-}
-
-data::Value SysSettingsSerialPage::getMax(const data::Cursor &cursor, uint8_t id) {
-    if (id == DATA_ID_SERIAL_BAUD) {
-        return serial::g_baudsSize;
-    }
-
-    return data::Value();
-}
-
-data::Value SysSettingsSerialPage::getData(const data::Cursor &cursor, uint8_t id) {
-	data::Value value = SetPage::getData(cursor, id);
-	if (value.getType() != VALUE_TYPE_NONE) {
-		return value;
-	}
-
-    if (id == DATA_ID_SERIAL_ENABLED) {
-        return data::Value(m_enabled ? 1 : 0);
-    }
-
-    if (id == DATA_ID_SERIAL_BAUD) {
-		return data::Value((int)m_baudIndex, VALUE_TYPE_SERIAL_BAUD_INDEX);
-	}
-
-	if (id == DATA_ID_SERIAL_PARITY) {
-		return data::Value(m_parity, data::ENUM_DEFINITION_SERIAL_PARITY);
-	}
-
-    return data::Value();
-}
-
-bool SysSettingsSerialPage::setData(const data::Cursor &cursor, uint8_t id, data::Value value) {
-    if (id == DATA_ID_SERIAL_BAUD) {
-        m_baudIndex = (uint8_t)value.getInt();
-        return true;
-    }
-
-    return false;
-}
-
 void SysSettingsSerialPage::toggle() {
     m_enabled = !m_enabled;
 }
@@ -1125,7 +746,7 @@ void SysSettingsSerialPage::onParitySet(uint8_t value) {
 }
 
 void SysSettingsSerialPage::selectParity() {
-    pushSelectFromEnumPage(data::g_serialParityEnumDefinition, m_parity, 0, onParitySet);
+    pushSelectFromEnumPage(g_serialParityEnumDefinition, m_parity, 0, onParitySet);
 }
 
 int SysSettingsSerialPage::getDirty() {

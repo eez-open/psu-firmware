@@ -90,7 +90,7 @@ void abInterruptHandler() {
         }
 
         int amount = 1 + g_acceleration;
-        
+
         if (result == DIR_CW) {
             g_rotationCounter += amount;
         } else if (result == DIR_CCW) {
@@ -153,7 +153,7 @@ void setMovingSpeed(uint8_t down, uint8_t up) {
     g_speedUp = up;
 }
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
 void write(int counter, bool clicked) {
     if (counter != 0) {
         g_rotationCounter += counter;

@@ -65,7 +65,7 @@ void setState(State newState) {
 		} else if (g_state == STATE_EXECUTING) {
 			psu::setOperBits(OPER_DLOG, false);
 		}
-			
+
 		g_state = newState;
 	}
 }
@@ -173,15 +173,15 @@ int startImmediately() {
 
 	writeUint32(MAGIC1);
 	writeUint32(MAGIC2);
-	
+
 	writeUint16(VERSION);
-	
+
 	if (CONF_DLOG_JITTER) {
 		writeUint16(1);
 	} else {
 		writeUint16(0);
 	}
-	
+
 	uint32_t columns = 0;
 	for (int iChannel = 0; iChannel < CH_NUM; ++iChannel) {
 		if (g_logVoltage[iChannel]) {

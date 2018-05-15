@@ -1,230 +1,96 @@
-/*
-* EEZ PSU Firmware
-* Copyright (C) 2015-present, Envox d.o.o.
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #pragma once
 
 #include "event_queue.h"
-#include "value.h"
+#include "mw_gui_data.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 
-struct WidgetCursor;
-struct Style;
-
-namespace data {
-
-extern char g_throbber[8];
-
-////////////////////////////////////////////////////////////////////////////////
-
 enum EnumDefinition {
-    ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE,
-    ENUM_DEFINITION_CHANNEL_TRIGGER_MODE,
-    ENUM_DEFINITION_TRIGGER_SOURCE,
-    ENUM_DEFINITION_CHANNEL_CURRENT_RANGE_SELECTION_MODE,
-    ENUM_DEFINITION_CHANNEL_CURRENT_RANGE,
-    ENUM_DEFINITION_CHANNEL_TRIGGER_ON_LIST_STOP,
-    ENUM_DEFINITION_IO_PINS_POLARITY,
-    ENUM_DEFINITION_IO_PINS_INPUT_FUNCTION,
-    ENUM_DEFINITION_IO_PINS_OUTPUT_FUNCTION,
-    ENUM_DEFINITION_SERIAL_PARITY,
-    ENUM_DEFINITION_DST_RULE
+	ENUM_DEFINITION_CHANNEL_DISPLAY_VALUE,
+	ENUM_DEFINITION_CHANNEL_TRIGGER_MODE,
+	ENUM_DEFINITION_TRIGGER_SOURCE,
+	ENUM_DEFINITION_CHANNEL_CURRENT_RANGE_SELECTION_MODE,
+	ENUM_DEFINITION_CHANNEL_CURRENT_RANGE,
+	ENUM_DEFINITION_CHANNEL_TRIGGER_ON_LIST_STOP,
+	ENUM_DEFINITION_IO_PINS_POLARITY,
+	ENUM_DEFINITION_IO_PINS_INPUT_FUNCTION,
+	ENUM_DEFINITION_IO_PINS_OUTPUT_FUNCTION,
+	ENUM_DEFINITION_SERIAL_PARITY,
+	ENUM_DEFINITION_DST_RULE
 };
 
-struct EnumItem {
-    uint8_t value;
-    const char *menuLabel;
-    const char *widgetLabel;
+using mw::gui::data::EnumItem;
+
+extern EnumItem g_channelDisplayValueEnumDefinition[];
+extern EnumItem g_channelTriggerModeEnumDefinition[];
+extern EnumItem g_triggerSourceEnumDefinition[];
+extern EnumItem g_channelCurrentRangeSelectionModeEnumDefinition[];
+extern EnumItem g_channelCurrentRangeEnumDefinition[];
+extern EnumItem g_channelTriggerOnListStopEnumDefinition[];
+extern EnumItem g_ioPinsPolarityEnumDefinition[];
+extern EnumItem g_ioPinsInputFunctionEnumDefinition[];
+extern EnumItem g_ioPinsOutputFunctionEnumDefinition[];
+extern EnumItem g_serialParityEnumDefinition[];
+extern EnumItem g_dstRuleEnumDefinition[];
+
+enum UserValueType {
+	VALUE_TYPE_LESS_THEN_MIN_FLOAT = VALUE_TYPE_USER,
+	VALUE_TYPE_GREATER_THEN_MAX_FLOAT,
+	VALUE_TYPE_CHANNEL_LABEL,
+	VALUE_TYPE_CHANNEL_SHORT_LABEL,
+	VALUE_TYPE_CHANNEL_BOARD_INFO_LABEL,
+	VALUE_TYPE_LESS_THEN_MIN_INT,
+	VALUE_TYPE_LESS_THEN_MIN_TIME_ZONE,
+	VALUE_TYPE_GREATER_THEN_MAX_INT,
+	VALUE_TYPE_GREATER_THEN_MAX_TIME_ZONE,
+	VALUE_TYPE_EVENT,
+	VALUE_TYPE_PAGE_INFO,
+	VALUE_TYPE_ON_TIME_COUNTER,
+	VALUE_TYPE_COUNTDOWN,
+	VALUE_TYPE_TIME_ZONE,
+	VALUE_TYPE_DATE,
+	VALUE_TYPE_YEAR,
+	VALUE_TYPE_MONTH,
+	VALUE_TYPE_DAY,
+	VALUE_TYPE_TIME,
+	VALUE_TYPE_HOUR,
+	VALUE_TYPE_MINUTE,
+	VALUE_TYPE_SECOND,
+	VALUE_TYPE_USER_PROFILE_LABEL,
+	VALUE_TYPE_USER_PROFILE_REMARK,
+	VALUE_TYPE_EDIT_INFO,
+	VALUE_TYPE_MAC_ADDRESS,
+	VALUE_TYPE_IP_ADDRESS,
+	VALUE_TYPE_PORT,
+	VALUE_TYPE_TEXT_MESSAGE,
+	VALUE_TYPE_SERIAL_BAUD_INDEX,
+	VALUE_TYPE_PERCENTAGE,
+	VALUE_TYPE_SIZE,
+	VALUE_TYPE_DLOG_STATUS,
+	VALUE_TYPE_VALUE_LIST,
+	VALUE_TYPE_FLOAT_LIST
 };
 
-extern data::EnumItem g_channelDisplayValueEnumDefinition[];
-extern data::EnumItem g_channelTriggerModeEnumDefinition[];
-extern data::EnumItem g_triggerSourceEnumDefinition[];
-extern data::EnumItem g_channelCurrentRangeSelectionModeEnumDefinition[];
-extern data::EnumItem g_channelCurrentRangeEnumDefinition[];
-extern data::EnumItem g_channelTriggerOnListStopEnumDefinition[];
-extern data::EnumItem g_ioPinsPolarityEnumDefinition[];
-extern data::EnumItem g_ioPinsInputFunctionEnumDefinition[];
-extern data::EnumItem g_ioPinsOutputFunctionEnumDefinition[];
-extern data::EnumItem g_serialParityEnumDefinition[];
-extern data::EnumItem g_dstRuleEnumDefinition[];
+using mw::gui::data::Value;
 
-enum ValueOptions {
-    VALUE_OPTIONS_CH1 = 0x00,
-    VALUE_OPTIONS_CH2 = 0x01,
-    VALUE_OPTIONS_CH_MASK = 0x03,
-
-    VALUE_OPTIONS_EXTENDED_PRECISION = 0x04
-};
-
-////////////////////////////////////////////////////////////////////////////////
-
-inline bool isFloatType(ValueType valueType) {
-    return valueType >= VALUE_TYPE_FLOAT_FIRST && valueType <= VALUE_TYPE_FLOAT_LAST;
-}
-
-struct Value {
-    Value() : type_(VALUE_TYPE_NONE) { uint32_ = 0; }
-    Value(int value) : type_(VALUE_TYPE_INT), int_(value)  {}
-	Value(int value, ValueType type) : type_(type), int_(value)  {}
-	Value(uint8_t value, ValueType type) : type_(type), uint8_(value)  {}
-	Value(uint16_t value, ValueType type) : type_(type), uint16_(value)  {}
-	Value(uint32_t value, ValueType type) : type_(type), uint32_(value)  {}
-    Value(float value, ValueType type);
-    Value(float value, ValueType type, int channelIndex);
-    Value(float value, ValueType type, int channelIndex, bool extendedPrecision);
-    Value(uint8_t *value, ValueType type) : type_(type), puint8_(value)  {}
-    Value(const char *str) : type_(VALUE_TYPE_STR), str_(str) {}
-	Value(event_queue::Event *e) : type_(VALUE_TYPE_EVENT), event_(e) {}
-    Value(uint8_t value, EnumDefinition enumDefinition) : type_(VALUE_TYPE_ENUM) {
-        enum_.value = value;
-        enum_.enumDefinition = enumDefinition;
-    }
-
-	static Value PageInfo(uint8_t pageIndex, uint8_t numPages);
-	static Value ScpiErrorText(int16_t errorCode);
-	static Value LessThenMinMessage(float float_, ValueType type);
-	static Value GreaterThenMaxMessage(float float_, ValueType type);
-
-	bool operator ==(const Value &other) const;
-
-    bool operator !=(const Value &other) const {
-        return !(*this == other);
-    }
-
-    float getFloat() const { return float_; }
-
-    ValueType getType() const { return (ValueType)type_; }
-    bool isFloat() const { return isFloatType((ValueType)type_); }
-
-    int getInt() const;
-    uint32_t getUInt32() const;
-
-    void toText(char *text, int count) const;
-
-	bool isString() { return type_ == VALUE_TYPE_STR; }
-	const char *asString() { return str_; }
-
-	uint8_t getPageIndex() { return pageInfo_.pageIndex; }
-	uint8_t getNumPages() { return pageInfo_.numPages; }
-
-    int16_t getScpiError() { return int16_; }
-
-    bool isMilli() const;
-
-private:
-    uint8_t type_;
-    uint8_t options_;
-    union {
-        int int_;
-		int16_t int16_;
-		uint8_t uint8_;
-		uint16_t uint16_;
-		uint32_t uint32_;
-
-		float float_;
-
-        uint8_t *puint8_;
-
-        const char *str_;
-
-		event_queue::Event *event_;
-
-		struct {
-			uint8_t pageIndex;
-			uint8_t numPages;
-		} pageInfo_;
-
-		struct {
-			uint8_t value;
-			uint8_t enumDefinition;
-		} enum_;
-    };
-
-    void formatFloatValue(float &value, ValueType &valueType, int &numSignificantDecimalDigits) const;
-};
-
-////////////////////////////////////////////////////////////////////////////////
-
-struct Cursor {
-    int i;
-
-    Cursor() {
-        i = -1;
-    }
-
-    Cursor(int i, int j = -1) {
-        this->i = i;
-    }
-
-    operator bool() {
-        return i != -1;
-    }
-
-    bool operator != (const Cursor& rhs) const {
-        return !(*this == rhs);
-    }
-
-    bool operator == (const Cursor& rhs) const {
-        return i == rhs.i;
-    }
-
-	void reset() {
-		i = -1;
-	}
-};
-
-////////////////////////////////////////////////////////////////////////////////
+Value MakeValue(float value, Unit unit, int channelIndex = -1, bool extendedPrecision = false);
+Value MakeValueListValue(const Value *values);
+Value MakeFloatListValue(float *pFloat);
+Value MakeEventValue(psu::event_queue::Event *e);
+Value MakePageInfoValue(uint8_t pageIndex, uint8_t numPages);
+Value MakeLessThenMinMessageValue(float float_, const Value& value_);
+Value MakeGreaterThenMaxMessageValue(float float_, const Value& value_);
+Value MakeMacAddressValue(uint8_t* macAddress);
 
 extern Value g_alertMessage;
 extern Value g_alertMessage2;
 extern Value g_alertMessage3;
 extern Value g_progress;
 
-int count(uint8_t id);
-void select(Cursor &cursor, uint8_t id, int index);
-
-int getListLength(uint8_t id);
-float *getFloatList(uint8_t id);
-
-Value getMin(const Cursor &cursor, uint8_t id);
-Value getMax(const Cursor &cursor, uint8_t id);
-Value getDef(const Cursor &cursor, uint8_t id);
-Value getLimit(const Cursor &cursor, uint8_t id);
-ValueType getUnit(const Cursor &cursor, uint8_t id);
-
-void getList(const Cursor &cursor, uint8_t id, const Value **labels, int &count);
-
-Value get(const Cursor &cursor, uint8_t id);
-bool set(const Cursor &cursor, uint8_t id, Value value, int16_t *error);
-
-int getNumHistoryValues(uint8_t id);
-int getCurrentHistoryValuePosition(const Cursor &cursor, uint8_t id);
-Value getHistoryValue(const Cursor &cursor, uint8_t id, int position);
-
-bool isBlinking(const Cursor &cursor, uint8_t id);
-Value getEditValue(const Cursor &cursor, uint8_t id);
-
-uint16_t getWidgetBackgroundColor(const WidgetCursor& widgetCursor, const Style* style);
+extern char g_throbber[8];
 
 }
 }
-}
-} // namespace eez::psu::ui::data
+} // eez::psu::gui

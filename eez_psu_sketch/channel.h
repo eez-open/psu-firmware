@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
 #include "persist_conf.h"
@@ -86,7 +86,7 @@ public:
     /// Binary flags for the channel calibration configuration.
     struct CalibrationConfigurationFlags {
         /// Is voltage calibrated?
-        unsigned u_cal_params_exists : 1; 
+        unsigned u_cal_params_exists : 1;
         /// Is current in range 0 (5A) calibrated?
         unsigned i_cal_params_exists_range_high : 1;
         /// Is current in range 1 (500mA) calibrated?
@@ -135,14 +135,14 @@ public:
         CalibrationConfigurationFlags flags;
 
         /// Calibration parameters for the voltage.
-        CalibrationValueConfiguration u; 
+        CalibrationValueConfiguration u;
 
         /// Calibration parameters for the currents in both ranges.
         CalibrationValueConfiguration i[2];
 
         /// Date when calibration is saved.
         /// Automatically set if RTC is present.
-        /// Format is YYYYMMDD. 
+        /// Format is YYYYMMDD.
         char calibration_date[8 + 1];
 
         /// Remark about calibration set by user.
@@ -235,13 +235,13 @@ public:
         unsigned tripped : 1;
     };
 
-    /// Runtime protection values    
+    /// Runtime protection values
     struct ProtectionValue {
         ProtectionFlags flags;
         uint32_t alarm_started;
     };
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     /// Per channel simulator data
     struct Simulator {
         bool oe;
@@ -263,7 +263,7 @@ public:
         void setVoltProgExt(float value);
         float getVoltProgExt();
     };
-#endif // EEZ_PSU_SIMULATOR
+#endif // EEZ_PLATFORM_SIMULATOR
 
     /// Get channel instance
     /// \param channel_index Zero based channel index, greater then or equal to 0 and less then CH_MAX.
@@ -383,9 +383,9 @@ public:
 
     float ytViewRate;
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     Simulator simulator;
-#endif // EEZ_PSU_SIMULATOR
+#endif // EEZ_PLATFORM_SIMULATOR
 
     Channel(
         uint8_t index,
@@ -419,10 +419,10 @@ public:
 
     /// Is channel power ok (state of PWRGOOD bit in IO Expander)?
     bool isPowerOk();
-    
+
     /// Is channel test failed?
     bool isTestFailed();
-    
+
     /// Is channel test ok?
     bool isTestOk();
 
@@ -574,8 +574,8 @@ public:
 
     /// Set current max. limit to ERR_MAX_CURRENT
     void limitMaxCurrent(MaxCurrentLimitCause cause);
-    
-    /// Unset current max. limit 
+
+    /// Unset current max. limit
     void unlimitMaxCurrent();
 
     /// Returns currently set power limit
@@ -587,8 +587,8 @@ public:
     /// Change power limit, it will adjust U_SET or I_SET if necessary.
     void setPowerLimit(float limit);
 
-    bool isVoltageBalanced() { return !util::isNaN(uBeforeBalancing); }
-    bool isCurrentBalanced() { return !util::isNaN(iBeforeBalancing); }
+    bool isVoltageBalanced() { return !isNaN(uBeforeBalancing); }
+    bool isCurrentBalanced() { return !isNaN(iBeforeBalancing); }
     float getUSetUnbalanced() { return isVoltageBalanced() ? uBeforeBalancing : u.set; }
     float getISetUnbalanced() { return isCurrentBalanced() ? iBeforeBalancing : i.set; }
 
@@ -655,7 +655,7 @@ private:
     bool isCurrentCalibrationEnabled();
 
     void adcDataIsReady(int16_t data, bool startAgain);
-    
+
     void voltageBalancing();
     void currentBalancing();
 
@@ -668,10 +668,10 @@ private:
     void setCcMode(bool cc_mode);
     void setCvMode(bool cv_mode);
     void updateCcAndCvSwitch();
-    
+
     void executeOutputEnable(bool enable);
     void doOutputEnable(bool enable);
-    
+
     void doRemoteSensingEnable(bool enable);
     void doRemoteProgrammingEnable(bool enable);
 

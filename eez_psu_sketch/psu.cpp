@@ -45,7 +45,7 @@
 #include "profile.h"
 
 #if OPTION_DISPLAY
-#include "gui.h"
+#include "gui_psu.h"
 #include "touch.h"
 #endif
 
@@ -56,8 +56,8 @@
 #include "fan.h"
 #endif
 
-#ifdef EEZ_PSU_SIMULATOR
-#include "front_panel/control.h"
+#ifdef EEZ_PLATFORM_SIMULATOR
+#include "platform/simulator/front_panel/control.h"
 #endif
 
 #include "event_queue.h"
@@ -95,7 +95,7 @@ static uint32_t g_mainLoopCounter;
 
 static bool testShield();
 
-#if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
+#if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PLATFORM_SIMULATOR)
 static void startMasterSync();
 static void updateMasterSync();
 #endif
@@ -125,7 +125,7 @@ void init() {
 
     analogWrite(LCD_BRIGHTNESS, 255);
 
-#if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
+#if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PLATFORM_SIMULATOR)
 	startMasterSync();
 #endif
 
@@ -401,8 +401,8 @@ static bool loadAutoRecallProfile(profile::Parameters *profile, int *location) {
                                 event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
                             } else {
                                 for (int i = 0; i < CH_NUM; ++i) {
-                                    if (!util::equal(profile->channels[i].u_set, defaultProfile.channels[i].u_set, getPrecision(VALUE_TYPE_FLOAT_VOLT)) ||
-                                        !util::equal(profile->channels[i].i_set, defaultProfile.channels[i].i_set, getPrecision(VALUE_TYPE_FLOAT_AMPER)))
+                                    if (!mw::equal(profile->channels[i].u_set, defaultProfile.channels[i].u_set, getPrecision(UNIT_VOLT)) ||
+                                        !mw::equal(profile->channels[i].i_set, defaultProfile.channels[i].i_set, getPrecision(UNIT_AMPER)))
                                     {
                                         disableOutputs = true;
                                         event_queue::pushEvent(event_queue::EVENT_WARNING_AUTO_RECALL_VALUES_MISMATCH);
@@ -497,9 +497,9 @@ void boot() {
 //    DebugTraceF("%d", offsetof(DeviceConfiguration, touch_screen_cal_bry));         // 56
 //    DebugTraceF("%d", offsetof(DeviceConfiguration, touch_screen_cal_trx));         // 58
 //    DebugTraceF("%d", offsetof(DeviceConfiguration, touch_screen_cal_try));         // 60
-//#ifdef EEZ_PSU_SIMULATOR
+//#ifdef EEZ_PLATFORM_SIMULATOR
 //    DebugTraceF("%d", offsetof(DeviceConfiguration, gui_opened));                   // 62
-//#endif // EEZ_PSU_SIMULATOR
+//#endif // EEZ_PLATFORM_SIMULATOR
 //
 //    DebugTraceF("%d", sizeof(DeviceConfiguration2));                                // 128
 //
@@ -550,11 +550,11 @@ void boot() {
 //    DebugTraceF("%d", offsetof(ChannelParameters, p_limit));                        // 40
 //    DebugTraceF("%d", offsetof(ChannelParameters, p_delay));                        // 44
 //    DebugTraceF("%d", offsetof(ChannelParameters, p_level));                        // 48
-//#ifdef EEZ_PSU_SIMULATOR
+//#ifdef EEZ_PLATFORM_SIMULATOR
 //    DebugTraceF("%d", offsetof(ChannelParameters, load_enabled));                   // 52
 //    DebugTraceF("%d", offsetof(ChannelParameters, load));                           // 56
 //    DebugTraceF("%d", offsetof(ChannelParameters, voltProgExt));                    // 60
-//#endif // EEZ_PSU_SIMULATOR
+//#endif // EEZ_PLATFORM_SIMULATOR
 //
 //    using namespace temperature;
 //
@@ -810,7 +810,9 @@ void tick() {
         powerDownBySensor();
     }
 
-	uint32_t tick_usec = criticalTick(-1);
+	criticalTick(-1);
+
+	uint32_t tick_usec = micros();
 
 #if CONF_DEBUG
     debug::tick(tick_usec);
@@ -859,7 +861,7 @@ void tick() {
     idle::tick();
 
 #if OPTION_DISPLAY
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     if (simulator::front_panel::isOpened()) {
 #endif
         gui::touch::tick(tick_usec);
@@ -870,12 +872,12 @@ void tick() {
             tick_usec = micros();
             gui::tick(tick_usec);
         }
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     }
 #endif
 #endif
 
-#if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
+#if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PLATFORM_SIMULATOR)
 	updateMasterSync();
 #endif
 
@@ -884,12 +886,12 @@ void tick() {
 #endif
 }
 
-uint32_t criticalTick(int pageId) {
-    uint32_t tick_usec = micros();
-
+bool criticalTick(int pageId) {
     if (!g_powerIsUp) {
-        return tick_usec;
+        return true;
     }
+
+	uint32_t tick_usec = micros();
 
     static uint32_t lastTickList = 0;
     if (list::isActive()) {
@@ -929,7 +931,7 @@ uint32_t criticalTick(int pageId) {
 
 #if OPTION_DISPLAY
     static uint32_t lastTickTouch = 0;
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     if (simulator::front_panel::isOpened()) {
 #endif
         if (lastTickTouch == 0) {
@@ -939,17 +941,16 @@ uint32_t criticalTick(int pageId) {
             gui::touch::tick(tick_usec);
             gui::touchHandling(tick_usec);
         }
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
     }
 #endif
 
+	if (pageId != -1) {
+		return gui::isActivePage(pageId);
+	}
 #endif
 
-    if (pageId != -1) {
-        return gui::isActivePage(pageId);
-    }
-
-    return tick_usec;
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1041,7 +1042,7 @@ void SPI_beginTransaction(SPISettings &settings) {
     else if (&settings == &TLC5925_SPI)  { SPI.setClockDivider(SPI_CLOCK_DIV4); SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE0); }
     else if (&settings == &PCA21125_SPI) { SPI.setClockDivider(SPI_CLOCK_DIV4); SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE0); }
     else if (&settings == &AT25256B_SPI) { SPI.setClockDivider(SPI_CLOCK_DIV4); SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE0); }
-#if defined(EEZ_PSU_ARDUINO_DUE)
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
     else if (&settings == &ETHERNET_SPI) { SPI.setClockDivider(10);             SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE0); }
 #else
     else if (&settings == &ETHERNET_SPI) { SPI.setClockDivider(SPI_CLOCK_DIV2); SPI.setBitOrder(MSBFIRST); SPI.setDataMode(SPI_MODE0); }
@@ -1062,7 +1063,7 @@ void SPI_endTransaction() {
 ////////////////////////////////////////////////////////////////////////////////
 
 const char *getCpuModel() {
-#if defined(EEZ_PSU_ARDUINO)
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     return "Arduino, R1B9";
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4
@@ -1070,33 +1071,33 @@ const char *getCpuModel() {
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     return "Arduino, R5B12";
 #endif
-#elif defined(EEZ_PSU_SIMULATOR)
+#elif defined(EEZ_PLATFORM_SIMULATOR)
     return "Simulator, " FIRMWARE;
-#elif defined(EEZ_PSU_STM32)
+#elif defined(EEZ_PLATFORM_STM32)
     return "STM32, " FIRMWARE;
 #endif
 }
 
 const char *getCpuType() {
-#if defined(EEZ_PSU_ARDUINO_DUE)
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
     return "Due";
-#elif defined(EEZ_PSU_SIMULATOR)
+#elif defined(EEZ_PLATFORM_SIMULATOR)
     return "Simulator";
-#elif defined(EEZ_PSU_STM32)
+#elif defined(EEZ_PLATFORM_STM32)
     return "STM32";
 #endif
 }
 
 const char *getCpuEthernetType() {
-#if defined(EEZ_PSU_ARDUINO)
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     return "ENC28J60";
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     return "W5500";
 #endif
-#elif defined(EEZ_PSU_SIMULATOR)
+#elif defined(EEZ_PLATFORM_SIMULATOR)
     return "Simulator";
-#elif defined(EEZ_PSU_STM32)
+#elif defined(EEZ_PLATFORM_STM32)
     return "None";
 #endif
 }
@@ -1135,7 +1136,7 @@ bool isFrontPanelLocked() {
     return g_rlState != RL_STATE_LOCAL;
 }
 
-#if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PSU_SIMULATOR)
+#if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PLATFORM_SIMULATOR)
 static bool g_masterSyncStarted;
 static Tc *g_chTC;
 static uint32_t g_chNo;
@@ -1231,7 +1232,7 @@ void updateMasterSync() {
 }
 } // namespace eez::psu
 
-#if defined(EEZ_PSU_ARDUINO)
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 void PSU_boot() {
     eez::psu::boot();
 }

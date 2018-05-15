@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "datetime.h"
 #include "rtc.h"
@@ -44,7 +44,7 @@ static const uint8_t monthDays[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30,
 
 ////////////////////////////////////////////////////////////////////////////////
 
-enum Week {Last, First, Second, Third, Fourth}; 
+enum Week {Last, First, Second, Third, Fourth};
 enum DayOfWeek {Sun=1, Mon, Tue, Wed, Thu, Fri, Sat};
 enum Month {Jan=1, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec};
 
@@ -288,10 +288,10 @@ uint32_t makeTime(int year, int month, int day, int hour, int minute, int second
             seconds += SECONDS_PER_DAY; // add extra days for leap years
         }
     }
-  
+
     // add days for this year, months start from 1
     for (int i = 1; i < month; i++) {
-        if ((i == 2) && LEAP_YEAR(year)) { 
+        if ((i == 2) && LEAP_YEAR(year)) {
             seconds += SECONDS_PER_DAY * 29;
         } else {
             seconds += SECONDS_PER_DAY * monthDays[i - 1];  // monthDay array starts from 0
@@ -301,8 +301,8 @@ uint32_t makeTime(int year, int month, int day, int hour, int minute, int second
     seconds += hour * SECONDS_PER_HOUR;
     seconds += minute * SECONDS_PER_MINUTE;
     seconds += second;
-    
-    return seconds; 
+
+    return seconds;
 }
 
 void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay, int &resultHour, int &resultMinute, int &resultSecond) {
@@ -319,17 +319,17 @@ void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay,
 
     resultHour = time % 24;
     time /= 24; // now it is days
-  
-    year = 0;  
+
+    year = 0;
     days = 0;
     while ((unsigned)(days += (LEAP_YEAR(year) ? 366 : 365)) <= time) {
         year++;
     }
-    resultYear = year + 1970; // year is offset from 1970 
-  
+    resultYear = year + 1970; // year is offset from 1970
+
     days -= LEAP_YEAR(year) ? 366 : 365;
     time -= days; // now it is days in this year, starting at 0
-  
+
     days = 0;
     month = 0;
     monthLength = 0;
@@ -343,7 +343,7 @@ void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay,
         } else {
             monthLength = monthDays[month];
         }
-    
+
         if (time >= monthLength) {
             time -= monthLength;
         } else {
@@ -351,16 +351,16 @@ void breakTime(uint32_t time, int &resultYear, int &resultMonth, int &resultDay,
         }
     }
 
-    resultMonth = month + 1;  // jan is month 1  
+    resultMonth = month + 1;  // jan is month 1
     resultDay = time + 1;     // day of month
 }
 
-uint8_t dayOfWeek(int y, int m, int d) { 
+uint8_t dayOfWeek(int y, int m, int d) {
     static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
     if (m < 3) {
         --y;
     }
-    return (y + y/4 - y/100 + y/400 + t[m - 1] + d) % 7 + 1; 
+    return (y + y/4 - y/100 + y/400 + t[m - 1] + d) % 7 + 1;
 }
 
 uint32_t timeChangeRuleToLocal(TimeChangeRule &r, int year) {

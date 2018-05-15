@@ -15,22 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
-#include "gui_page.h"
+#include "mw_gui_page.h"
 
 namespace eez {
 namespace psu {
 namespace gui {
 
-namespace data {
-    struct Snapshot;
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 
-class Keypad : public Page {
+class Keypad : public mw::gui::Page {
 public:
     Keypad();
 
@@ -53,11 +49,16 @@ public:
     virtual void cancel();
 
     virtual void getKeypadText(char *text);
+	mw::gui::data::Value getKeypadTextValue();
 
     void appendChar(char c);
     void appendCursor(char *text);
 
-    virtual data::Value getData(uint8_t id);
+	virtual Unit getSwitchToUnit() {
+		return UNIT_UNKNOWN;
+	}
+
+	bool m_isUpperCase;
 
 protected:
     char m_stateText[2][MAX_KEYPAD_TEXT_LENGTH + 2];
@@ -70,7 +71,6 @@ protected:
     void init(const char *label, void (*ok)(char *), void (*cancel)());
 
 private:
-    bool m_isUpperCase;
     bool m_isPassword;
     uint32_t m_lastKeyAppendTime;
     bool m_cursor;

@@ -96,7 +96,7 @@ bool setType(Type value) {
                         trigger::setVoltage(channel, getUMin(channel));
                         trigger::setCurrent(channel, getIMin(channel));
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
                         channel.simulator.setLoadEnabled(false);
                         channel.simulator.setLoad(Channel::get(0).simulator.getLoad());
 #endif
@@ -852,7 +852,7 @@ void setTriggerCurrent(Channel& channel, float value) {
     }
 }
 
-#ifdef EEZ_PSU_SIMULATOR
+#ifdef EEZ_PLATFORM_SIMULATOR
 void setLoadEnabled(Channel &channel, bool state) {
     if (isCoupled()) {
         Channel::get(0).simulator.setLoadEnabled(state);

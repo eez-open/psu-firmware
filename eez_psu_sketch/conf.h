@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 /** @file conf_example.h
 @brief Compile time configuration.
 */
@@ -39,10 +39,10 @@ option.
 // Data rate in bits per second (baud) for serial data transmission.
 #define SERIAL_SPEED 115200
 
-/// Enable all debug trace to the serial port. 
+/// Enable all debug trace to the serial port.
 #define CONF_DEBUG 1
 
-/// Enable only some of the debug trace to the serial port. 
+/// Enable only some of the debug trace to the serial port.
 #define CONF_DEBUG_LATEST 1
 
 /// Enable debug variables
@@ -88,7 +88,7 @@ option.
 #define CH_NUM 2
 
 /// Channels configuration.
-/// 
+///
 #define CHANNELS \
     CHANNEL(1, CH_BOARD_REVISION_R5B12_PARAMS, CH_PINS_1, CH_PARAMS_40V_5A), \
     CHANNEL(2, CH_BOARD_REVISION_R5B12_PARAMS, CH_PINS_2, CH_PARAMS_40V_5A)

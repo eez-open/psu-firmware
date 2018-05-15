@@ -23,7 +23,7 @@
 
 #include "sound.h"
 
-#include "gui_internal.h"
+#include "gui_psu.h"
 #include "gui_keypad.h"
 #include "gui_numeric_keypad.h"
 #include "gui_edit_mode_keypad.h"
@@ -76,15 +76,10 @@ void Keypad::init(const char *label_, void (*ok)(char *), void (*cancel)()) {
 	m_lastCursorChangeTime = micros();
 }
 
-data::Value Keypad::getData(uint8_t id) {
-    if (id == DATA_ID_KEYPAD_CAPS) {
-		return data::Value(m_isUpperCase ? 1 : 0);
-	} else if (id == DATA_ID_KEYPAD_TEXT) {
-        char *text = &m_stateText[getCurrentStateBufferIndex()][0];
-        getKeypadText(text);
-        return data::Value(text);
-    }
-    return data::Value();
+data::Value Keypad::getKeypadTextValue() {
+	char *text = &m_stateText[getCurrentStateBufferIndex()][0];
+	getKeypadText(text);
+	return data::Value(text);
 }
 
 void Keypad::getKeypadText(char *text) {

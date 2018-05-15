@@ -16,7 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if defined(EEZ_PLATFORM_SIMULATOR)
+#include "eez/psu/platform/simulator/arduino/SPI.h"
+#else
 #include <SPI.h>
+#endif
+
 #include "eez_psu.h"
 
 SPISettings MCP23S08_SPI(4000000, MSBFIRST, SPI_MODE0); // IO EXPANDER
@@ -26,7 +31,7 @@ SPISettings TLC5925_SPI(4000000, MSBFIRST, SPI_MODE0); // Binding Post
 SPISettings PCA21125_SPI(4000000, MSBFIRST, SPI_MODE0); // RTC
 SPISettings AT25256B_SPI(4000000, MSBFIRST, SPI_MODE0); // EEPROM
 
-#if defined(EEZ_PSU_ARDUINO_DUE)
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 SPISettings ETHERNET_SPI(F_CPU / 10, MSBFIRST, SPI_MODE0);
 #else
 SPISettings ETHERNET_SPI(8000000, MSBFIRST, SPI_MODE0);

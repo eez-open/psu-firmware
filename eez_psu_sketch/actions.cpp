@@ -20,13 +20,13 @@
 
 #if OPTION_DISPLAY
 
-#include "actions.h"
 #include "event_queue.h"
 #include "persist_conf.h"
 #include "channel_dispatcher.h"
 #include "trigger.h"
 #include "sound.h"
-#include "gui_internal.h"
+#include "gui_psu.h"
+#include "actions.h"
 #include "gui_keypad.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_keypad.h"
@@ -37,6 +37,7 @@
 #include "gui_page_user_profiles.h"
 #include "gui_password.h"
 #include "gui_page_ch_settings_trigger.h"
+#include "touch_calibration.h"
 
 namespace eez {
 namespace psu {
@@ -126,7 +127,7 @@ void action_keypad_option2() {
 }
 
 void action_touch_screen_calibration() {
-    touch::calibration::enterCalibrationMode();
+    touch_calibration::enterCalibrationMode();
 }
 
 void action_yes() {
@@ -615,10 +616,6 @@ void action_ch_settings_adv_view_edit_ytview_rate() {
     ((ChSettingsAdvViewPage *)getActivePage())->editYTViewRate();
 }
 
-void action_select_enum_item() {
-    ((SelectFromEnumPage *)getActivePage())->selectEnumItem();
-}
-
 void action_error_alert_action() {
     errorMessageAction();
 }
@@ -787,7 +784,7 @@ void action_ntp_edit_server() {
 }
 
 
-ACTION actions[] = {
+ActionExecFunc g_actionExecFunctions[] = {
     0,
     action_channel_toggle_output,
     action_edit,
@@ -925,7 +922,6 @@ ACTION actions[] = {
     action_ch_settings_adv_view_edit_display_value2,
     action_ch_settings_adv_view_swap_display_values,
     action_ch_settings_adv_view_edit_ytview_rate,
-    action_select_enum_item,
     action_error_alert_action,
     action_up_down,
     action_sys_settings_encoder_toggle_confirmation_mode,

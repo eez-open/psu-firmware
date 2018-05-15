@@ -15,12 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
-#include "gui_page.h"
+#include "mw_gui_page.h"
 
 #define LIST_ITEMS_PER_PAGE 4
+#define INF_TEXT "\x91"
+#define EMPTY_VALUE "\x92"
 
 namespace eez {
 namespace psu {
@@ -29,8 +31,6 @@ namespace gui {
 class ChSettingsTriggerPage : public Page {
 public:
 	ChSettingsTriggerPage();
-
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
 
     void editTriggerMode();
 
@@ -60,14 +60,6 @@ class ChSettingsListsPage : public SetPage {
 public:
 	ChSettingsListsPage();
 
-    int getListLength(uint8_t id);
-    float *getFloatList(uint8_t id);
-    data::Value getMin(const data::Cursor &cursor, uint8_t id);
-    data::Value getMax(const data::Cursor &cursor, uint8_t id);
-    data::Value getDef(const data::Cursor &cursor, uint8_t id);
-	data::Value getData(const data::Cursor &cursor, uint8_t id);
-    bool setData(const data::Cursor &cursor, uint8_t id, data::Value value);
-
     void previousPage();
     void nextPage();
 
@@ -93,29 +85,30 @@ public:
     void deleteRows();
     void deleteAll();
 
+	uint16_t getMaxListLength();
+	int getPageIndex();
+	uint16_t getNumPages();
+	int getRowIndex();
+	void moveCursorToFirstAvailableCell();
+
+	int m_listVersion;
+
+	float m_voltageList[MAX_LIST_LENGTH];
+	uint16_t m_voltageListLength;
+
+	float m_currentList[MAX_LIST_LENGTH];
+	uint16_t m_currentListLength;
+
+	float m_dwellList[MAX_LIST_LENGTH];
+	uint16_t m_dwellListLength;
+
+	int m_iCursor;
+
 private:
-    int m_listVersion;
-
-    float m_voltageList[MAX_LIST_LENGTH];
-    uint16_t m_voltageListLength;
-
-    float m_currentList[MAX_LIST_LENGTH];
-    uint16_t m_currentListLength;
-
-    float m_dwellList[MAX_LIST_LENGTH];
-    uint16_t m_dwellListLength;
-
-    int m_iCursor;
-
-    int getRowIndex();
     int getColumnIndex();
-    int getPageIndex();
-    uint16_t getMaxListLength();
-    uint16_t getNumPages();
     int getCursorIndexWithinPage();
     uint8_t getDataIdAtCursor();
     int getCursorIndex(const data::Cursor &cursor, uint8_t id);
-    void moveCursorToFirstAvailableCell();
 
     bool isFocusedValueEmpty();
     float getFocusedValue();

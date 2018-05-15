@@ -199,7 +199,7 @@ bool TempSensorTemperature::isChannelSensor(Channel *channel) {
 
 float TempSensorTemperature::measure() {
     float newTemperature = temp_sensor::sensors[sensorIndex].read();
-	if (util::isNaN(temperature)) {
+	if (isNaN(temperature)) {
 		temperature = newTemperature;
 	} else {
 		temperature = temperature + 0.1f * (newTemperature - temperature);
@@ -278,7 +278,7 @@ void TempSensorTemperature::protection_enter() {
 			Channel::get(i).outputEnable(false);
 		}
 	}
-	
+
     set_otp_reg(true);
 
 	event_queue::pushEvent(event_queue::EVENT_ERROR_AUX_OTP_TRIPPED + sensorIndex);

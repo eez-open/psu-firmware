@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "scpi_psu.h"
 
 #include "persist_conf.h"
 
 #if OPTION_DISPLAY
-#include "gui.h"
+#include "gui_psu.h"
 #endif
 
 namespace eez {

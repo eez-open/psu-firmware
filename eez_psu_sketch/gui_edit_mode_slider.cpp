@@ -21,6 +21,8 @@
 #if OPTION_DISPLAY
 
 #include "gui_edit_mode.h"
+#include "touch.h"
+#include "mw_gui_lcd.h"
 
 namespace eez {
 namespace psu {
@@ -39,15 +41,18 @@ static int last_scale;
 ////////////////////////////////////////////////////////////////////////////////
 
 int touchY() {
-	return scale_is_vertical ? touch::g_y : touch::g_x;
+	using namespace eez::mw::gui::touch;
+	return scale_is_vertical ? g_y : g_x;
 }
 
 int touchX() {
-	return scale_is_vertical ? touch::g_x : touch::g_y;
+	using namespace eez::mw::gui::touch;
+	return scale_is_vertical ? g_x : g_y;
 }
 
 int displayXSize() {
-	return scale_is_vertical ? lcd::lcd.getDisplayWidth() : lcd::lcd.getDisplayHeight();
+	using namespace eez::mw::gui::lcd;
+	return scale_is_vertical ? getDisplayWidth() : getDisplayHeight();
 }
 
 void increment(int counter) {

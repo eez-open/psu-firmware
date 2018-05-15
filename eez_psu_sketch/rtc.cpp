@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "rtc.h"
 
@@ -92,11 +92,11 @@ bool readDate(uint8_t &year, uint8_t &month, uint8_t &day) {
 
     uint8_t data[4];
     readRegisters(RD_DAYS, sizeof(data), data);
-    
-    day = util::fromBCD(data[0]);
-    month = util::fromBCD(data[2]);
-    year = util::fromBCD(data[3]);
-    
+
+    day = fromBCD(data[0]);
+    month = fromBCD(data[2]);
+    year = fromBCD(data[3]);
+
     return true;
 }
 
@@ -106,10 +106,10 @@ bool writeDate(uint8_t year, uint8_t month, uint8_t day) {
     }
 
     uint8_t data[4] = {
-        util::toBCD(day),
+        toBCD(day),
         0,
-        util::toBCD(month),
-        util::toBCD(year),
+        toBCD(month),
+        toBCD(year),
     };
 
     writeRegisters(WR_DAYS, sizeof(data), data);
@@ -121,14 +121,14 @@ bool readTime(uint8_t &hour, uint8_t &minute, uint8_t &second) {
     if (g_testResult != psu::TEST_OK) {
         return false;
     }
-    
+
     uint8_t data[3];
     readRegisters(RD_SECONDS, sizeof(data), data);
-    
-    second = util::fromBCD(data[0] & 0x7F);
-    minute = util::fromBCD(data[1]);
-    hour = util::fromBCD(data[2]);
-    
+
+    second = fromBCD(data[0] & 0x7F);
+    minute = fromBCD(data[1]);
+    hour = fromBCD(data[2]);
+
     return true;
 }
 
@@ -138,13 +138,13 @@ bool writeTime(uint8_t hour, uint8_t minute, uint8_t second) {
     }
 
     uint8_t data[3] = {
-        util::toBCD(second),
-        util::toBCD(minute),
-        util::toBCD(hour)
+        toBCD(second),
+        toBCD(minute),
+        toBCD(hour)
     };
-    
+
     writeRegisters(WR_SECONDS, sizeof(data), data);
-    
+
     return true;
 }
 
@@ -152,17 +152,17 @@ bool readDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, ui
     if (g_testResult != psu::TEST_OK) {
         return false;
     }
-    
+
     uint8_t data[7];
     readRegisters(RD_SECONDS, sizeof(data), data);
-    
-    second = util::fromBCD(data[0] & 0x7F);
-    minute = util::fromBCD(data[1]);
-    hour = util::fromBCD(data[2]);
-    day = util::fromBCD(data[3]);
-    month = util::fromBCD(data[5]);
-    year = util::fromBCD(data[6]);
-    
+
+    second = fromBCD(data[0] & 0x7F);
+    minute = fromBCD(data[1]);
+    hour = fromBCD(data[2]);
+    day = fromBCD(data[3]);
+    month = fromBCD(data[5]);
+    year = fromBCD(data[6]);
+
     return true;
 }
 
@@ -172,13 +172,13 @@ bool writeDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8
     }
 
     uint8_t data[7] = {
-        util::toBCD(second),
-        util::toBCD(minute),
-        util::toBCD(hour),
-        util::toBCD(day),
+        toBCD(second),
+        toBCD(minute),
+        toBCD(hour),
+        toBCD(day),
         0,
-        util::toBCD(month),
-        util::toBCD(year),
+        toBCD(month),
+        toBCD(year),
     };
 
     writeRegisters(WR_SECONDS, sizeof(data), data);

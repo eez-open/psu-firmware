@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "gui_internal.h"
+#include "mw_gui_data.h"
 
 namespace eez {
 namespace psu {
@@ -32,14 +32,11 @@ void exit();
 bool isInteractiveMode();
 void toggleInteractiveMode();
 
-data::Value getData(const data::Cursor &cursor, uint8_t id);
-bool isBlinking(const data::Cursor &cursor, uint8_t id, bool &result);
-
-const data::Value& getEditValue();
-data::Value getCurrentValue();
-const data::Value &getMin();
-const data::Value &getMax();
-ValueType getUnit();
+const eez::mw::gui::data::Value& getEditValue();
+eez::mw::gui::data::Value getCurrentValue();
+const eez::mw::gui::data::Value &getMin();
+const eez::mw::gui::data::Value &getMax();
+Unit getUnit();
 bool setValue(float value);
 
 void getInfoText(int part, char *infoText);

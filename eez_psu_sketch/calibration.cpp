@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "psu.h"
 #include "calibration.h"
 #include "scpi_psu.h"
@@ -56,9 +56,9 @@ void Value::reset() {
     mid_set = false;
     max_set = false;
 
-    min_dac = voltOrCurr ? g_channel->U_CAL_VAL_MIN : (currentRange == 0 ? g_channel->I_CAL_VAL_MIN : g_channel->I_CAL_VAL_MIN / 10); 
-    mid_dac = voltOrCurr ? g_channel->U_CAL_VAL_MID : (currentRange == 0 ? g_channel->I_CAL_VAL_MID : g_channel->I_CAL_VAL_MID / 10); 
-    max_dac = voltOrCurr ? g_channel->U_CAL_VAL_MAX : (currentRange == 0 ? g_channel->I_CAL_VAL_MAX : g_channel->I_CAL_VAL_MAX / 10); 
+    min_dac = voltOrCurr ? g_channel->U_CAL_VAL_MIN : (currentRange == 0 ? g_channel->I_CAL_VAL_MIN : g_channel->I_CAL_VAL_MIN / 10);
+    mid_dac = voltOrCurr ? g_channel->U_CAL_VAL_MID : (currentRange == 0 ? g_channel->I_CAL_VAL_MID : g_channel->I_CAL_VAL_MID / 10);
+    max_dac = voltOrCurr ? g_channel->U_CAL_VAL_MAX : (currentRange == 0 ? g_channel->I_CAL_VAL_MAX : g_channel->I_CAL_VAL_MAX / 10);
 }
 
 float Value::getLevelValue() {
@@ -79,7 +79,7 @@ float Value::getAdcValue() {
     return voltOrCurr ? g_channel->u.mon_last : g_channel->i.mon_last;
 }
 
-void Value::setLevel(int8_t value) { 
+void Value::setLevel(int8_t value) {
     level = value;
 }
 
@@ -173,7 +173,7 @@ void Value::setData(float dac, float data, float adc) {
 }
 
 bool Value::checkMid() {
-    float mid = util::remap(mid_dac, min_dac, min_val, max_dac, max_val);
+    float mid = remap(mid_dac, min_dac, min_val, max_dac, max_val);
 
     float allowedDiff = CALIBRATION_MID_TOLERANCE_PERCENT * (max_val - min_val) / 100.0f;
 
@@ -196,7 +196,7 @@ void resetChannelToZero() {
 }
 
 bool isEnabled() {
-    return g_enabled; 
+    return g_enabled;
 }
 
 Channel &getCalibrationChannel() {
@@ -255,12 +255,12 @@ Value& getCurrent() {
     return g_currents[g_currentRangeSelected];
 }
 
-bool isRemarkSet() { 
-    return g_remarkSet; 
+bool isRemarkSet() {
+    return g_remarkSet;
 }
 
-const char *getRemark() { 
-    return g_remark; 
+const char *getRemark() {
+    return g_remark;
 }
 
 void setRemark(const char *value, size_t len) {
@@ -304,7 +304,7 @@ bool canSave(int16_t &scpiErr) {
 
     // at least one value should be calibrated
     bool valueCalibrated = false;
-    
+
     if (isVoltageCalibrated()) {
         if (!checkCalibrationValue(calibration::g_voltage, scpiErr)) {
             return false;
