@@ -12,3 +12,5 @@ psu.eez-project-ui-state
 lib/readme.txt
 .clang_complete
 .gcc-flags.json
+build/eez_psu_32F429IDISCOVERY_true_studio_project/Debug
+build/eez_psu_32F429IDISCOVERY_true_studio_project/Release
