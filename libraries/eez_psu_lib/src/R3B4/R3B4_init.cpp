@@ -16,11 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if defined(EEZ_PLATFORM_SIMULATOR)
-#include "eez/psu/platform/simulator/arduino/SPI.h"
-#else
 #include <SPI.h>
-#endif
 
 #include "R3B4_pins.h"
 

@@ -86,7 +86,7 @@ void Keypad::getKeypadText(char *text) {
 	// text
 	char *textPtr = text;
 
-	if (m_label) {
+	if (*m_label) {
 		strcpy(textPtr, m_label);
 		textPtr += strlen(m_label);
 	}
@@ -146,7 +146,7 @@ void Keypad::startReplace(const char *label, const char *text, int maxChars_, bo
 
 void Keypad::appendChar(char c) {
 	int n = strlen(m_keypadText);
-	if (n < m_maxChars && (n + (m_label ? strlen(m_label) : 0)) < MAX_KEYPAD_TEXT_LENGTH) {
+	if (n < m_maxChars && (n + (*m_label ? strlen(m_label) : 0)) < MAX_KEYPAD_TEXT_LENGTH) {
 		m_keypadText[n] = c;
 		m_keypadText[n + 1] = 0;
 		m_lastKeyAppendTime = micros();

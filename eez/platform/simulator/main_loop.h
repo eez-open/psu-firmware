@@ -20,5 +20,9 @@
 
 #define TICK_TIMEOUT 1
 
+void app_init();
+void app_tick();
+void app_serial_put(int ch);
+
 int main_loop();
 void main_loop_exit();

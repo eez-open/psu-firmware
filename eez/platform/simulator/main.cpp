@@ -16,17 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "eez/psu/psu.h"
 #include "eez/platform/simulator/main_loop.h"
 #if OPTION_DISPLAY
 #include "eez/psu/platform/simulator/front_panel/control.h"
 #endif
 
-using namespace eez::psu;
-
 int main() {
-    simulator::init();
-    boot();
+    app_init();
     main_loop();
 #if OPTION_DISPLAY
     simulator::front_panel::close();

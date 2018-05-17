@@ -23,7 +23,7 @@
 #include "eez/platform/simulator/imgui/window.h"
 #include "eez/psu/persist_conf.h"
 #if OPTION_ENCODER
-#include "eez/psu/encoder.h"
+#include "eez/psu/platform/simulator/encoder.h"
 #endif
 
 #ifdef _WIN32

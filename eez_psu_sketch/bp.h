@@ -97,6 +97,8 @@ void cvLedSwitch(Channel *channel, bool on);
 void ccLedSwitch(Channel *channel, bool on);
 #endif
 
+void set(uint16_t conf);
+
 }
 }
 } // namespace eez::psu::bp

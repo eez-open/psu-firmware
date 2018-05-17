@@ -4,3 +4,4 @@ eez_imgui.so
 .eez_psu_sim
 EEPROM.state
 RTC.state
+eez_psu_sim.dSYM

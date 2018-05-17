@@ -21,7 +21,7 @@
 #include "eez/psu/platform/simulator/ethernet/UIPEthernet.h"
 #include "eez/psu/platform/simulator/ethernet/UIPServer.h"
 #include "eez/psu/platform/simulator/ethernet/UIPClient.h"
-#include "eez/psu/platform/simulator/ethernet/ethernet_platform.h"
+#include "eez/platform/simulator/ethernet.h"
 
 namespace eez {
 namespace psu {
@@ -68,7 +68,7 @@ EthernetServer::EthernetServer(int port_) : port(port_), client(true) {
 }
 
 void EthernetServer::begin() {
-    bind_result = ethernet_platform::bind(port);
+    bind_result = platform::ethernet::bind(port);
 }
 
 EthernetClient EthernetServer::available() {
@@ -85,30 +85,30 @@ EthernetClient::EthernetClient(bool valid_) : valid(valid_) {
 }
 
 bool EthernetClient::connected() {
-    return ethernet_platform::connected();
+    return platform::ethernet::connected();
 }
 
 EthernetClient::operator bool() {
-    return valid && ethernet_platform::client_available();
+    return valid && platform::ethernet::client_available();
 }
 
 size_t EthernetClient::available() {
-    return ethernet_platform::available();
+    return platform::ethernet::available();
 }
 
 size_t EthernetClient::read(uint8_t* buffer, size_t buffer_size) {
-    return ethernet_platform::read((char *)buffer, (int)buffer_size);
+    return platform::ethernet::read((char *)buffer, (int)buffer_size);
 }
 
 size_t EthernetClient::write(const char *buffer, size_t buffer_size) {
-    return ethernet_platform::write(buffer, (int)buffer_size);
+    return platform::ethernet::write(buffer, (int)buffer_size);
 }
 
 void EthernetClient::flush() {
 }
 
 void EthernetClient::stop() {
-    ethernet_platform::stop();
+    platform::ethernet::stop();
 }
 
 }

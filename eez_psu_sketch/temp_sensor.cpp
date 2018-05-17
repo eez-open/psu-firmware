@@ -57,7 +57,8 @@ void TempSensor::init() {
 }
 
 float TempSensor::doRead() {
-    int adcValue = analogRead(pin);
+    int adcValue = temperatureRead(pin);
+
 #if CONF_DEBUG
     if (index < 3) {
         debug::g_uTemp[index].set(adcValue);

@@ -34,20 +34,11 @@
     <Filter Include="eez\psu\platform\simulator">
       <UniqueIdentifier>{ee2b3777-93d3-4176-96bf-5077bfd2c9b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="eez\psu\platform\simulator\arduino">
-      <UniqueIdentifier>{f3269912-3c8b-4508-8772-70235e27dd72}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="eez\psu\platform\simulator\chips">
-      <UniqueIdentifier>{1ae5bb8b-a1bc-4a03-a699-838a88ccb560}</UniqueIdentifier>
-    </Filter>
     <Filter Include="eez\psu\platform\simulator\ethernet">
       <UniqueIdentifier>{31993c25-84bf-4d92-b2ad-fd5902e5c934}</UniqueIdentifier>
     </Filter>
     <Filter Include="eez\psu\platform\simulator\front_panel">
       <UniqueIdentifier>{c019abd4-361c-4169-a7a9-6d94c464f1e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="eez\psu\platform\simulator\win32">
-      <UniqueIdentifier>{64f2a217-f740-413a-8909-006a2194c1f0}</UniqueIdentifier>
     </Filter>
     <Filter Include="eez\mw\gui">
       <UniqueIdentifier>{1926c74d-0d3c-4306-b225-02eb3a800e03}</UniqueIdentifier>
@@ -67,17 +58,8 @@
     <Filter Include="libraries\scpi-parser\scpi">
       <UniqueIdentifier>{00adcd0a-2227-43f0-8e1c-b74d35c30045}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libraries\eez_psu_lib">
-      <UniqueIdentifier>{6bed30a2-d9f3-4213-b612-3b191c203246}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libraries\eez_psu_lib\R1B9">
-      <UniqueIdentifier>{de8ae015-6692-4209-b1fc-1a01cb2ee263}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libraries\eez_psu_lib\R3B4">
-      <UniqueIdentifier>{48551f99-f232-4374-af11-1ec39adc3967}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libraries\eez_psu_lib\R5B12">
-      <UniqueIdentifier>{f03ef73a-cbad-4ee4-8c61-78b1a42dc6e3}</UniqueIdentifier>
+    <Filter Include="eez\platform\simulator\win32">
+      <UniqueIdentifier>{38c4896a-c880-45e5-aa31-4933ff421735}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -89,15 +71,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\psu.cpp">
       <Filter>eez\psu\platform\simulator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\arduino\arduino_impl.cpp">
-      <Filter>eez\psu\platform\simulator\arduino</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\arduino\SdFat.cpp">
-      <Filter>eez\psu\platform\simulator\arduino</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\chips\chips.cpp">
-      <Filter>eez\psu\platform\simulator\chips</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\ethernet\EthernetUdp2.cpp">
       <Filter>eez\psu\platform\simulator\ethernet</Filter>
@@ -113,12 +86,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\front_panel\render.cpp">
       <Filter>eez\psu\platform\simulator\front_panel</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ethernet_win32.cpp">
-      <Filter>eez\psu\platform\simulator\win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\main_loop.cpp">
-      <Filter>eez\psu\platform\simulator\win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\platform\simulator\imgui\texture.cpp">
       <Filter>eez\platform\simulator\imgui</Filter>
@@ -243,18 +210,6 @@
     <ClCompile Include="..\..\..\..\..\actions.cpp">
       <Filter>eez\psu</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\adc.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\board.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\bp.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\buzzer.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\calibration.cpp">
       <Filter>eez\psu</Filter>
     </ClCompile>
@@ -262,9 +217,6 @@
       <Filter>eez\psu</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\channel_dispatcher.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\dac.cpp">
       <Filter>eez\psu</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\datetime.cpp">
@@ -279,28 +231,16 @@
     <ClCompile Include="..\..\..\..\..\dlog.cpp">
       <Filter>eez\psu</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\eeprom.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\encoder.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\ethernet.cpp">
       <Filter>eez\psu</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\event_queue.cpp">
       <Filter>eez\psu</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\fan.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\idle.cpp">
       <Filter>eez\psu</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\io_pins.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\ioexp.cpp">
       <Filter>eez\psu</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\lcd.cpp">
@@ -325,9 +265,6 @@
       <Filter>eez\psu</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\psu.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\rtc.cpp">
       <Filter>eez\psu</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\sd_card.cpp">
@@ -366,9 +303,6 @@
     <ClCompile Include="..\..\..\..\..\util.cpp">
       <Filter>eez\psu</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\watchdog.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\mw\unit.cpp">
       <Filter>eez\mw</Filter>
     </ClCompile>
@@ -386,18 +320,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\mw\gui\view.cpp">
       <Filter>eez\mw\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\eez_psu.cpp">
-      <Filter>libraries\eez_psu_lib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\R5B12\R5B12_init.cpp">
-      <Filter>libraries\eez_psu_lib\R5B12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\R3B4\R3B4_init.cpp">
-      <Filter>libraries\eez_psu_lib\R3B4</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\R1B9\R1B9_init.cpp">
-      <Filter>libraries\eez_psu_lib\R1B9</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\error.c">
       <Filter>libraries\scpi-parser\impl</Filter>
@@ -435,6 +357,60 @@
     <ClCompile Include="..\..\..\..\..\..\mw\gui\gui.cpp">
       <Filter>eez\mw\gui</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\platform\simulator\win32\main_loop.cpp">
+      <Filter>eez\platform\simulator\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\platform\simulator\win32\ethernet.cpp">
+      <Filter>eez\platform\simulator\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\SdFat.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\adc.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\bp.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\dac.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\eeprom.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ioexp.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\rtc.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\serial.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\fan.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\encoder.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\io_pins.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\temp_sensor.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\buzzer.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\board.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\bp.cpp">
+      <Filter>eez\psu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\watchdog.cpp">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\platform\simulator\beeper.h">
@@ -451,21 +427,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\psu.h">
       <Filter>eez\psu\platform\simulator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\arduino\Arduino.h">
-      <Filter>eez\psu\platform\simulator\arduino</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\arduino\SdFat.h">
-      <Filter>eez\psu\platform\simulator\arduino</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\arduino\SPI.h">
-      <Filter>eez\psu\platform\simulator\arduino</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\chips\chips.h">
-      <Filter>eez\psu\platform\simulator\chips</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\ethernet\ethernet_platform.h">
-      <Filter>eez\psu\platform\simulator\ethernet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\ethernet\EthernetUdp2.h">
       <Filter>eez\psu\platform\simulator\ethernet</Filter>
@@ -737,24 +698,6 @@
     <ClInclude Include="..\..\..\..\..\..\mw\gui\view.h">
       <Filter>eez\mw\gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\arduino\internal.h">
-      <Filter>eez\psu\platform\simulator\arduino</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\eez_psu.h">
-      <Filter>libraries\eez_psu_lib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\eez_psu_rev.h">
-      <Filter>libraries\eez_psu_lib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\R5B12\R5B12_pins.h">
-      <Filter>libraries\eez_psu_lib\R5B12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\R3B4\R3B4_pins.h">
-      <Filter>libraries\eez_psu_lib\R3B4</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\R1B9\R1B9_pins.h">
-      <Filter>libraries\eez_psu_lib\R1B9</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\fifo_private.h">
       <Filter>libraries\scpi-parser\impl</Filter>
     </ClInclude>
@@ -820,6 +763,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\mw\gui\touch.h">
       <Filter>eez\mw\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\platform\simulator\ethernet.h">
+      <Filter>eez\platform\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\SdFat.h">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\serial.h">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\bp.h">
+      <Filter>eez\psu\platform\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\encoder.h">
+      <Filter>eez\psu\platform\simulator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

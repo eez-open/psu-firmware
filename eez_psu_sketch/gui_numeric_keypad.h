@@ -111,10 +111,6 @@ public:
 private:
 	eez::mw::gui::data::Value m_startValue;
     NumericKeypadState m_state;
-    int m_d0;
-    int m_d1;
-    int m_d2;
-    int m_d3;
 
     void appendEditUnit(char *text);
     float getValue();

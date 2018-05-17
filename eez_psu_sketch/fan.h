@@ -40,6 +40,8 @@ extern int g_POn;
 
 void setPidTunings(double Kp, double Ki, double Kd, int POn);
 
+void setFanPwm(int pwm);
+
 }
 }
 } // namespace eez::psu::fan

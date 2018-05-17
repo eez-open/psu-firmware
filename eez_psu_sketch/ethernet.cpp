@@ -25,7 +25,6 @@
 
 #if OPTION_ETHERNET
 
-
 #if defined(EEZ_PLATFORM_SIMULATOR) || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 
 #if defined(EEZ_PLATFORM_SIMULATOR)
@@ -78,9 +77,13 @@ static EthernetClient g_activeClient;
 ////////////////////////////////////////////////////////////////////////////////
 
 size_t ethernet_client_write(EthernetClient &client, const char *data, size_t len) {
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
     SPI_beginTransaction(ETHERNET_SPI);
+#endif
     size_t size = client.write(data, len);
-    SPI_endTransaction();
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+	SPI_endTransaction();
+#endif
 
     return size;
 }
@@ -164,14 +167,15 @@ void init() {
     DebugTrace("Ethernet initialization started...");
 #endif
 
-#if defined(EEZ_PLATFORM_SIMULATOR) || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
     Enc28J60Network::setControlCS(ETH_SELECT);
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
     Ethernet.init(ETH_SELECT);
     Ethernet.setDhcpTimeout(ETHERNET_DHCP_TIMEOUT * 1000UL);
 #endif
-
-    SPI.beginTransaction(ETHERNET_SPI);
+	SPI.beginTransaction(ETHERNET_SPI);
+#endif
 
     bool result;
     if (persist_conf::isEthernetDhcpEnabled()) {
@@ -195,7 +199,9 @@ void init() {
     }
 
     if (!result) {
-        SPI.endTransaction();
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+		SPI.endTransaction();
+#endif
 
         g_testResult = psu::TEST_WARNING;
         DebugTrace("Ethernet not connected!");
@@ -208,7 +214,9 @@ void init() {
 
     server->begin();
 
-    SPI.endTransaction();
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+	SPI.endTransaction();
+#endif
 
     g_testResult = psu::TEST_OK;
 
@@ -263,7 +271,9 @@ void tick(uint32_t tick_usec) {
     //    }
     //}
 
-    SPI_beginTransaction(ETHERNET_SPI);
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+	SPI_beginTransaction(ETHERNET_SPI);
+#endif
 
     if (g_isConnected) {
         if (!g_activeClient.connected()) {
@@ -289,21 +299,31 @@ void tick(uint32_t tick_usec) {
             uint8_t* msg = (uint8_t*)malloc(size);
             size = client.read(msg, size);
             if (client == g_activeClient) {
-                SPI_endTransaction();
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+				SPI_endTransaction();
+#endif
                 input(g_scpiContext, (const char *)msg, size);
-                SPI_beginTransaction(ETHERNET_SPI);
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+				SPI_beginTransaction(ETHERNET_SPI);
+#endif
             }
             else {
-                SPI_endTransaction();
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+				SPI_endTransaction();
+#endif
                 ethernet_client_write_str(client, "**ERROR: another client already connected\r\n");
-                SPI_beginTransaction(ETHERNET_SPI);
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+				SPI_beginTransaction(ETHERNET_SPI);
+#endif
                 DebugTrace("Another client detected and ignored!");
             }
             free(msg);
         }
     }
 
-    SPI_endTransaction();
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+	SPI_endTransaction();
+#endif
 }
 
 uint32_t getIpAddress() {

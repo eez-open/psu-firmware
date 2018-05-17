@@ -23,9 +23,8 @@
 #include "eez/psu/gui/psu.h"
 
 #include "eez/psu/platform/simulator/front_panel/data.h"
-#include "eez/psu/platform/simulator/arduino/internal.h"
-#include "eez/psu/platform/simulator/chips/chips.h"
 #include "eez/psu/bp.h"
+#include "eez/psu/platform/simulator/bp.h"
 #include "eez/mw/gui/lcd.h"
 #include "eez/psu/touch.h"
 #include "eez/psu/channel_dispatcher.h"
@@ -43,32 +42,32 @@ void fillChannelData(ChannelData *data, int ch) {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
             data->cv = pins[LED_CV1] ? true : false;
             data->cc = pins[LED_CC1] ? true : false;
-            data->out_plus = chips::bp_chip.getValue() & (1 << BP_LED_OUT1_PLUS) ? true : false;
-            data->sense_plus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE1_PLUS) ? true : false;
-            data->sense_minus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE1_MINUS) ? true : false;
-            data->out_minus = chips::bp_chip.getValue() & (1 << BP_LED_OUT1_MINUS) ? true : false;
+            data->out_plus = bp::g_lastConf & (1 << BP_LED_OUT1_PLUS) ? true : false;
+            data->sense_plus = bp::g_lastConf & (1 << BP_LED_SENSE1_PLUS) ? true : false;
+            data->sense_minus = bp::g_lastConf & (1 << BP_LED_SENSE1_MINUS) ? true : false;
+            data->out_minus = bp::g_lastConf & (1 << BP_LED_OUT1_MINUS) ? true : false;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
-            data->cv = chips::bp_chip.getValue() & (1 << BP_LED_CV1) ? true : false;
-            data->cc = chips::bp_chip.getValue() & (1 << BP_LED_CC1) ? true : false;
-            data->out = chips::bp_chip.getValue() & (1 << BP_LED_OUT1) ? true : false;
-            data->sense = chips::bp_chip.getValue() & (1 << BP_LED_SENSE1) ? true : false;
-            data->prog = chips::bp_chip.getValue() & (1 << BP_LED_PROG1) ? true : false;
+            data->cv = bp::g_lastConf & (1 << BP_LED_CV1) ? true : false;
+            data->cc = bp::g_lastConf & (1 << BP_LED_CC1) ? true : false;
+            data->out = bp::g_lastConf & (1 << BP_LED_OUT1) ? true : false;
+            data->sense = bp::g_lastConf & (1 << BP_LED_SENSE1) ? true : false;
+            data->prog = bp::g_lastConf & (1 << BP_LED_PROG1) ? true : false;
 #endif
         }
         else {
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
             data->cv = pins[LED_CV2] ? true : false;
             data->cc = pins[LED_CC2] ? true : false;
-            data->out_plus = chips::bp_chip.getValue() & (1 << BP_LED_OUT2_PLUS) ? true : false;
-            data->sense_plus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE2_PLUS) ? true : false;
-            data->sense_minus = chips::bp_chip.getValue() & (1 << BP_LED_SENSE2_MINUS) ? true : false;
-            data->out_minus = chips::bp_chip.getValue() & (1 << BP_LED_OUT2_MINUS) ? true : false;
+            data->out_plus = bp::g_lastConf & (1 << BP_LED_OUT2_PLUS) ? true : false;
+            data->sense_plus = bp::g_lastConf & (1 << BP_LED_SENSE2_PLUS) ? true : false;
+            data->sense_minus = bp::g_lastConf & (1 << BP_LED_SENSE2_MINUS) ? true : false;
+            data->out_minus = bp::g_lastConf & (1 << BP_LED_OUT2_MINUS) ? true : false;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
-            data->cv = chips::bp_chip.getValue() & (1 << BP_LED_CV2) ? true : false;
-            data->cc = chips::bp_chip.getValue() & (1 << BP_LED_CC2) ? true : false;
-            data->out = chips::bp_chip.getValue() & (1 << BP_LED_OUT2) ? true : false;
-            data->sense = chips::bp_chip.getValue() & (1 << BP_LED_SENSE2) ? true : false;
-            data->prog = chips::bp_chip.getValue() & (1 << BP_LED_PROG2) ? true : false;
+            data->cv = bp::g_lastConf & (1 << BP_LED_CV2) ? true : false;
+            data->cc = bp::g_lastConf & (1 << BP_LED_CC2) ? true : false;
+            data->out = bp::g_lastConf & (1 << BP_LED_OUT2) ? true : false;
+            data->sense = bp::g_lastConf & (1 << BP_LED_SENSE2) ? true : false;
+            data->prog = bp::g_lastConf & (1 << BP_LED_PROG2) ? true : false;
 #endif
         }
 
@@ -143,12 +142,12 @@ void fillLocalControlBuffer(Data *data) {
 }
 
 void fillData(Data *data) {
-    uint16_t bp_value = chips::bp_chip.getValue();
+    uint16_t bp_value = bp::g_lastConf;
 
     data->standby = bp_value & (1 << BP_STANDBY) ? true : false;
 
     data->coupled = channel_dispatcher::isCoupled();
-    data->coupledOut = chips::bp_chip.getValue() & (1 << BP_LED_OUT1_RED) ? true : false;
+    data->coupledOut = bp::g_lastConf & (1 << BP_LED_OUT1_RED) ? true : false;
 
     fillChannelData(&data->ch1, 1);
     fillChannelData(&data->ch2, 2);

@@ -87,6 +87,10 @@ private:
 
 extern TempSensor sensors[NUM_TEMP_SENSORS];
 
+////////////////////////////////////////////////////////////////////////////////
+
+int temperatureRead(int pin);
+
 }
 }
 } // namespace eez::psu::temp_sensor

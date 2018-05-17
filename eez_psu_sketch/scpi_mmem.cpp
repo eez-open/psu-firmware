@@ -190,7 +190,7 @@ scpi_result_t scpi_cmd_mmemoryInformationQ(scpi_t *context) {
 ////////////////////////////////////////////////////////////////////////////////
 
 #if OPTION_SD_CARD
-void uploadCallback(void *param, const void *buffer, size_t size) {
+void uploadCallback(void *param, const void *buffer, int size) {
     if (buffer == NULL && size == -1) {
         return;
     }

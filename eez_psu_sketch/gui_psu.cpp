@@ -315,7 +315,7 @@ void onEncoder(int tickCount, int counter, bool clicked) {
 		moveToNextFocusCursor();
 	}
 
-	if (counter > 0) {
+	if (counter != 0) {
 		if (isFrontPanelLocked()) {
 			return;
 		}

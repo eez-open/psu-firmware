@@ -25,27 +25,10 @@ namespace bp {
 
 psu::TestResult g_testResult = psu::TEST_SKIPPED;
 
-static uint16_t g_lastConf;
+uint16_t g_lastConf;
 static int g_channelCouplingType;
 
 ////////////////////////////////////////////////////////////////////////////////
-
-void set(uint16_t conf) {
-    if (OPTION_BP) {
-        SPI_beginTransaction(TLC5925_SPI);
-        digitalWrite(BP_OE, HIGH);
-        digitalWrite(BP_SELECT, LOW);
-        SPI.transfer(conf >> 8);
-        SPI.transfer(conf & 0xFF);
-        g_lastConf = conf;
-        digitalWrite(BP_SELECT, HIGH);
-        digitalWrite(BP_SELECT, LOW);
-        digitalWrite(BP_OE, LOW);
-        SPI_endTransaction();
-
-        //DebugTraceF("BP 0x%04x", (int)conf);
-    }
-}
 
 void bp_switch(uint16_t mask, bool on) {
     uint16_t conf = g_lastConf;

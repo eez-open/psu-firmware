@@ -47,6 +47,9 @@ bool isInhibited();
 void setDigitalOutputPinState(int pin, bool state);
 bool getDigitalOutputPinState(int pin);
 
+int ioPinRead(int pin);
+void ioPinWrite(int pin, int state);
+
 }
 }
 } // namespace eez::psu::io_pins

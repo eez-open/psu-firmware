@@ -600,7 +600,7 @@ bool compare_SIZE_value(const Value& a, const Value&b) {
 }
 
 void SIZE_value_to_text(const Value& value, char *text, int count) {
-	snprintf(text, count - 1, "%ld", value.getUInt32());
+	snprintf(text, count - 1, "%u", value.getUInt32());
 	text[count - 1] = 0;
 }
 

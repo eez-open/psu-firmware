@@ -1292,7 +1292,7 @@ scpi_result_t scpi_cmd_systemDigitalInputDataQ(scpi_t *context) {
 		return SCPI_RES_ERR;
 	}
 
-	bool state = digitalRead(EXT_TRIG) ? true : false;
+	bool state = io_pins::ioPinRead(EXT_TRIG) ? true : false;
 
 	if (persist_conf::devConf2.ioPins[pin - 1].polarity == io_pins::POLARITY_NEGATIVE) {
 		state = !state;

@@ -121,9 +121,10 @@ void loadConf() {
 
 void init() {
     // initialize shield
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
     eez_psu_init();
-
     analogWrite(LCD_BRIGHTNESS, 255);
+#endif
 
 #if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_SYNC_MASTER && !defined(EEZ_PLATFORM_SIMULATOR)
 	startMasterSync();
@@ -1025,6 +1026,8 @@ void generateError(int16_t error) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+
 void SPI_usingInterrupt(uint8_t interruptNumber) {
 #if REPLACE_SPI_TRANSACTIONS_IMPLEMENTATION
 #else
@@ -1059,6 +1062,8 @@ void SPI_endTransaction() {
     SPI.endTransaction();
 #endif
 }
+
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1238,6 +1243,6 @@ void PSU_boot() {
 }
 
 void PSU_tick() {
-    eez::psu::tick ();
+    eez::psu::tick();
 }
 #endif

@@ -17,17 +17,16 @@
  */
 
 #include "eez/psu/psu.h"
-#include "eez/psu/scpi/psu.h"
 
 #ifdef EEZ_PLATFORM_SIMULATOR
 
+#include "eez/psu/scpi/psu.h"
 #include "eez/psu/platform/simulator/psu.h"
-#include "eez/psu/platform/simulator/chips/chips.h"
 #if OPTION_DISPLAY
 #include "eez/psu/platform/simulator/front_panel/control.h"
 #endif
-
 #include "eez/psu/channel_dispatcher.h"
+#include "eez/psu/io_pins.h"
 
 namespace eez {
 namespace psu {
@@ -217,7 +216,7 @@ scpi_result_t scpi_cmd_simulatorPwrgood(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    chips::IOExpanderChip::setPwrgood(channel->ioexp_pin, on);
+    simulator::setPwrgood(channel->ioexp_pin, on);
 
     return SCPI_RES_OK;
 }
@@ -228,7 +227,7 @@ scpi_result_t scpi_cmd_simulatorPwrgoodQ(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    SCPI_ResultBool(context, chips::IOExpanderChip::getPwrgood(channel->ioexp_pin));
+    SCPI_ResultBool(context, simulator::getPwrgood(channel->ioexp_pin));
 
     return SCPI_RES_OK;
 }
@@ -254,7 +253,7 @@ scpi_result_t scpi_cmd_simulatorRpol(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    chips::IOExpanderChip::setRPol(channel->ioexp_pin, on);
+	simulator::setRPol(channel->ioexp_pin, on);
 
     return SCPI_RES_OK;
 }
@@ -275,7 +274,7 @@ scpi_result_t scpi_cmd_simulatorRpolQ(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    SCPI_ResultBool(context, chips::IOExpanderChip::getRPol(channel->ioexp_pin));
+    SCPI_ResultBool(context, simulator::getRPol(channel->ioexp_pin));
 
     return SCPI_RES_OK;
 }
@@ -361,13 +360,13 @@ scpi_result_t scpi_cmd_simulatorPin1(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    digitalWrite(EXT_TRIG, value ? 1 : 0);
+	io_pins::ioPinWrite(EXT_TRIG, value ? 1 : 0);
 
     return SCPI_RES_OK;
 }
 
 scpi_result_t scpi_cmd_simulatorPin1Q(scpi_t * context) {
-    SCPI_ResultBool(context, digitalRead(EXT_TRIG) ? 1 : 0);
+    SCPI_ResultBool(context, io_pins::ioPinRead(EXT_TRIG) ? 1 : 0);
     return SCPI_RES_OK;
 }
 

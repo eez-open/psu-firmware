@@ -31,7 +31,7 @@
 #elif defined(EEZ_PLATFORM_SIMULATOR)
 #include "eez/psu/platform/simulator/psu.h"
 #elif defined(EEZ_PLATFORM_STM32)
-#include "stm32_psu.h"
+#include "eez/psu/platform/stm32/psu.h"
 #endif
 
 #include "eez_psu_rev.h"
@@ -40,5 +40,5 @@
 #if defined(EEZ_PLATFORM_SIMULATOR)
 #include "eez/psu/platform/simulator/conf.h"
 #elif defined(EEZ_PLATFORM_STM32)
-#include "stm32_conf.h"
+#include "eez/psu/platform/stm32/conf.h"
 #endif

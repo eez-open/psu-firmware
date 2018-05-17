@@ -34,7 +34,7 @@
 #define CONF_GUI_BLINK_TIME 400000UL // 400ms
 #define CONF_GUI_YT_GRAPH_BLANK_PIXELS_AFTER_CURSOR 10
 
-#define CONF_MAX_STATE_SIZE 2048
+#define CONF_MAX_STATE_SIZE 4096
 
 namespace eez {
 namespace mw {

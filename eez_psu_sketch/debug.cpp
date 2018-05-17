@@ -349,10 +349,14 @@ void DebugCounterForPeriod::inc() {
 }
 
 void DebugCounterForPeriod::tickPeriod() {
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
     noInterrupts();
+#endif
     m_lastCounter = m_counter;
     m_counter = 0;
-    interrupts();
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+	interrupts();
+#endif
 }
 
 void DebugCounterForPeriod::dump(char *buffer) {

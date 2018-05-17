@@ -165,8 +165,6 @@ static const uint16_t displayHeight = nativeDisplayWidth;
 
 static uint8_t g_colorCache[256][4];
 static uint8_t fch, fcl, bch, bcl;
-static uint8_t backgroundMapToColorHighByte;
-static uint8_t backgroundMapToColorLowByte;
 
 static font::Font g_font;
 
@@ -391,8 +389,8 @@ void tick(uint32_t tickCount) {
 			}
 			updateBrightness();
 		} else {
-			uint8_t value = (uint8_t)round(remap((float)diff, 0, (float)g_onOffTransitionFromBrightness, (float)CONF_LCD_ON_OFF_TRANSITION_TIME, (float)g_onOffTransitionToBrightness));
 #if defined(EEZ_PLATFORM_ARDUINO_DUE)
+			uint8_t value = (uint8_t)round(remap((float)diff, 0, (float)g_onOffTransitionFromBrightness, (float)CONF_LCD_ON_OFF_TRANSITION_TIME, (float)g_onOffTransitionToBrightness));
 			analogWrite(LCD_BRIGHTNESS, value);
 #endif
 		}

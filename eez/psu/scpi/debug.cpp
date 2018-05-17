@@ -273,7 +273,7 @@ scpi_result_t scpi_cmd_debugFan(scpi_t * context) {
 		}
 
 		fan::g_fanSpeedPWM = fanSpeed;
-		analogWrite(FAN_PWM, fan::g_fanSpeedPWM);
+		fan::setFanPwm(fan::g_fanSpeedPWM);
 	}
 
 	return SCPI_RES_OK;

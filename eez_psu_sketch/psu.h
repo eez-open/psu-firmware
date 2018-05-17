@@ -20,7 +20,9 @@
 
 #include "app_conf.h"
 
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 #include "eez_psu.h"
+#endif
 
 #include <scpi-parser.h>
 
@@ -89,9 +91,11 @@ void unlimitMaxCurrent();
 extern ontime::Counter g_powerOnTimeCounter;
 extern volatile bool g_insideInterruptHandler;
 
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 void SPI_usingInterrupt(uint8_t interruptNumber);
 void SPI_beginTransaction(SPISettings &settings);
 void SPI_endTransaction();
+#endif
 
 enum RLState {
     RL_STATE_LOCAL = 0,

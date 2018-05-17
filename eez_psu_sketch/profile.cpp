@@ -301,7 +301,9 @@ void fillProfile(Parameters *pProfile, int location, const char *name, const Par
 		}
     }
 
-    noInterrupts();
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+	noInterrupts();
+#endif
 
     profile.flags.powerIsUp = psu::isPowerUp();
 
@@ -407,7 +409,9 @@ void fillProfile(Parameters *pProfile, int location, const char *name, const Par
 		}
 	}
 
-    interrupts();
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
+	interrupts();
+#endif
 }
 
 bool saveAtLocation(int location, const char *name) {

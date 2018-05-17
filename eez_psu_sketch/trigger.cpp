@@ -46,7 +46,9 @@ enum State {
 };
 static State g_state;
 static uint32_t g_triggeredTime;
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 static uint8_t g_extTrigLastState;
+#endif
 
 bool g_triggerInProgress[CH_MAX];
 
@@ -80,6 +82,7 @@ void reset() {
     setState(STATE_IDLE);
 }
 
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
 void extTrigInterruptHandler() {
     uint8_t state = digitalRead(EXT_TRIG);
     if ((state == 1 && g_extTrigLastState == 0 && persist_conf::devConf2.ioPins[0].polarity == io_pins::POLARITY_POSITIVE) ||
@@ -88,14 +91,17 @@ void extTrigInterruptHandler() {
     }
     g_extTrigLastState = state;
 }
+#endif
 
 void init() {
     setState(STATE_IDLE);
 
+#if defined(EEZ_PLATFORM_ARDUINO_DUE)
     noInterrupts();
     g_extTrigLastState = digitalRead(EXT_TRIG);
     attachInterrupt(digitalPinToInterrupt(EXT_TRIG), extTrigInterruptHandler, CHANGE);
     interrupts();
+#endif
 
     if (isContinuousInitializationEnabled()) {
         initiate();

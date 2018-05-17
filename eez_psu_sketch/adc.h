@@ -62,7 +62,9 @@ public:
 private:
     Channel &channel;
     uint32_t start_time;
+#if ADC_USE_INTERRUPTS
     uint8_t adc_timeout_recovery_attempts_counter;
+#endif
 
     uint8_t getReg1Val();
 };

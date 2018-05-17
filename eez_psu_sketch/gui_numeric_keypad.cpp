@@ -126,7 +126,7 @@ void NumericKeypad::appendEditUnit(char *text) {
 }
 
 void NumericKeypad::getKeypadText(char *text) {
-    if (m_label) {
+    if (*m_label) {
         strcpy(text, m_label);
         text += strlen(m_label);
     }

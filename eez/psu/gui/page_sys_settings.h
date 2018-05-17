@@ -146,16 +146,12 @@ private:
     };
 
     uint32_t m_ipAddressOrig;
-
     uint32_t m_dnsOrig;
-
     uint32_t m_gatewayOrig;
-
     uint32_t m_subnetMaskOrig;
-
     uint32_t *m_editAddress;
 
-    void edit(uint32_t &address);
+    void editAddress(uint32_t &address);
     static void onAddressSet(uint32_t address);
 };
 

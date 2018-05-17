@@ -65,7 +65,7 @@ void beep(double freq, int duration) {
     beep_data.v = 0;
 
     SDL_AudioSpec desiredSpec;
-    
+
     SDL_memset(&desiredSpec, 0, sizeof(desiredSpec));
 
     desiredSpec.freq = FREQUENCY;

@@ -19,10 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\eez_psu.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\R1B9\R1B9_init.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\R3B4\R3B4_init.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\R5B12\R5B12_init.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\error.c" />
     <ClCompile Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\expression.c" />
     <ClCompile Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\fifo.c" />
@@ -45,24 +41,19 @@
     <ClCompile Include="..\..\..\..\..\..\platform\simulator\imgui\texture.cpp" />
     <ClCompile Include="..\..\..\..\..\..\platform\simulator\imgui\window.cpp" />
     <ClCompile Include="..\..\..\..\..\..\platform\simulator\main.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\platform\simulator\win32\ethernet.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\platform\simulator\win32\main_loop.cpp" />
     <ClCompile Include="..\..\..\..\..\actions.cpp" />
-    <ClCompile Include="..\..\..\..\..\adc.cpp" />
-    <ClCompile Include="..\..\..\..\..\board.cpp" />
     <ClCompile Include="..\..\..\..\..\bp.cpp" />
-    <ClCompile Include="..\..\..\..\..\buzzer.cpp" />
     <ClCompile Include="..\..\..\..\..\calibration.cpp" />
     <ClCompile Include="..\..\..\..\..\channel.cpp" />
     <ClCompile Include="..\..\..\..\..\channel_dispatcher.cpp" />
-    <ClCompile Include="..\..\..\..\..\dac.cpp" />
     <ClCompile Include="..\..\..\..\..\datetime.cpp" />
     <ClCompile Include="..\..\..\..\..\debug.cpp" />
     <ClCompile Include="..\..\..\..\..\devices.cpp" />
     <ClCompile Include="..\..\..\..\..\dlog.cpp" />
-    <ClCompile Include="..\..\..\..\..\eeprom.cpp" />
-    <ClCompile Include="..\..\..\..\..\encoder.cpp" />
     <ClCompile Include="..\..\..\..\..\ethernet.cpp" />
     <ClCompile Include="..\..\..\..\..\event_queue.cpp" />
-    <ClCompile Include="..\..\..\..\..\fan.cpp" />
     <ClCompile Include="..\..\..\..\..\gui\calibration.cpp" />
     <ClCompile Include="..\..\..\..\..\gui\data.cpp" />
     <ClCompile Include="..\..\..\..\..\gui\edit_mode.cpp" />
@@ -81,7 +72,6 @@
     <ClCompile Include="..\..\..\..\..\gui\password.cpp" />
     <ClCompile Include="..\..\..\..\..\gui\psu.cpp" />
     <ClCompile Include="..\..\..\..\..\idle.cpp" />
-    <ClCompile Include="..\..\..\..\..\ioexp.cpp" />
     <ClCompile Include="..\..\..\..\..\io_pins.cpp" />
     <ClCompile Include="..\..\..\..\..\lcd.cpp" />
     <ClCompile Include="..\..\..\..\..\list_program.cpp" />
@@ -91,7 +81,6 @@
     <ClCompile Include="..\..\..\..\..\pid.cpp" />
     <ClCompile Include="..\..\..\..\..\profile.cpp" />
     <ClCompile Include="..\..\..\..\..\psu.cpp" />
-    <ClCompile Include="..\..\..\..\..\rtc.cpp" />
     <ClCompile Include="..\..\..\..\..\scpi\appl.cpp" />
     <ClCompile Include="..\..\..\..\..\scpi\cal.cpp" />
     <ClCompile Include="..\..\..\..\..\scpi\core.cpp" />
@@ -125,25 +114,29 @@
     <ClCompile Include="..\..\..\..\..\trigger.cpp" />
     <ClCompile Include="..\..\..\..\..\unit.cpp" />
     <ClCompile Include="..\..\..\..\..\util.cpp" />
-    <ClCompile Include="..\..\..\..\..\watchdog.cpp" />
-    <ClCompile Include="..\..\..\arduino\arduino_impl.cpp" />
-    <ClCompile Include="..\..\..\arduino\SdFat.cpp" />
-    <ClCompile Include="..\..\..\chips\chips.cpp" />
+    <ClCompile Include="..\..\..\adc.cpp" />
+    <ClCompile Include="..\..\..\board.cpp" />
+    <ClCompile Include="..\..\..\bp.cpp" />
+    <ClCompile Include="..\..\..\buzzer.cpp" />
+    <ClCompile Include="..\..\..\dac.cpp" />
+    <ClCompile Include="..\..\..\eeprom.cpp" />
+    <ClCompile Include="..\..\..\encoder.cpp" />
     <ClCompile Include="..\..\..\ethernet\EthernetUdp2.cpp" />
     <ClCompile Include="..\..\..\ethernet\uipethernet_impl.cpp" />
+    <ClCompile Include="..\..\..\fan.cpp" />
     <ClCompile Include="..\..\..\front_panel\control.cpp" />
     <ClCompile Include="..\..\..\front_panel\data.cpp" />
     <ClCompile Include="..\..\..\front_panel\render.cpp" />
+    <ClCompile Include="..\..\..\ioexp.cpp" />
+    <ClCompile Include="..\..\..\io_pins.cpp" />
     <ClCompile Include="..\..\..\psu.cpp" />
-    <ClCompile Include="..\..\ethernet_win32.cpp" />
-    <ClCompile Include="..\..\main_loop.cpp" />
+    <ClCompile Include="..\..\..\rtc.cpp" />
+    <ClCompile Include="..\..\..\SdFat.cpp" />
+    <ClCompile Include="..\..\..\serial.cpp" />
+    <ClCompile Include="..\..\..\temp_sensor.cpp" />
+    <ClCompile Include="..\..\..\watchdog.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\eez_psu.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\eez_psu_rev.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\R1B9\R1B9_pins.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\R3B4\R3B4_pins.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\libraries\eez_psu_lib\src\R5B12\R5B12_pins.h" />
     <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\fifo_private.h" />
     <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\lexer_private.h" />
     <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\parser_private.h" />
@@ -177,6 +170,7 @@
     <ClInclude Include="..\..\..\..\..\..\mw\unit.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\util.h" />
     <ClInclude Include="..\..\..\..\..\..\platform\simulator\beeper.h" />
+    <ClInclude Include="..\..\..\..\..\..\platform\simulator\ethernet.h" />
     <ClInclude Include="..\..\..\..\..\..\platform\simulator\imgui\texture.h" />
     <ClInclude Include="..\..\..\..\..\..\platform\simulator\imgui\window.h" />
     <ClInclude Include="..\..\..\..\..\..\platform\simulator\imgui\window_impl.h" />
@@ -252,14 +246,10 @@
     <ClInclude Include="..\..\..\..\..\unit.h" />
     <ClInclude Include="..\..\..\..\..\util.h" />
     <ClInclude Include="..\..\..\..\..\watchdog.h" />
-    <ClInclude Include="..\..\..\arduino\Arduino.h" />
-    <ClInclude Include="..\..\..\arduino\internal.h" />
-    <ClInclude Include="..\..\..\arduino\SdFat.h" />
-    <ClInclude Include="..\..\..\arduino\SPI.h" />
-    <ClInclude Include="..\..\..\chips\chips.h" />
+    <ClInclude Include="..\..\..\bp.h" />
     <ClInclude Include="..\..\..\conf.h" />
+    <ClInclude Include="..\..\..\encoder.h" />
     <ClInclude Include="..\..\..\ethernet\EthernetUdp2.h" />
-    <ClInclude Include="..\..\..\ethernet\ethernet_platform.h" />
     <ClInclude Include="..\..\..\ethernet\UIPClient.h" />
     <ClInclude Include="..\..\..\ethernet\UIPEthernet.h" />
     <ClInclude Include="..\..\..\ethernet\UIPServer.h" />
@@ -267,6 +257,8 @@
     <ClInclude Include="..\..\..\front_panel\data.h" />
     <ClInclude Include="..\..\..\front_panel\render.h" />
     <ClInclude Include="..\..\..\psu.h" />
+    <ClInclude Include="..\..\..\SdFat.h" />
+    <ClInclude Include="..\..\..\serial.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\scpi.g" />

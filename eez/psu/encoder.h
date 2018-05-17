@@ -33,10 +33,6 @@ void read(int &counter, bool &clicked);
 void enableAcceleration(bool enable);
 void setMovingSpeed(uint8_t down, uint8_t up);
 
-#ifdef EEZ_PLATFORM_SIMULATOR
-void write(int counter, bool clicked);
-#endif
-
 }
 }
 } // namespace eez::psu::encoder

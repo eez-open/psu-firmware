@@ -383,7 +383,7 @@ void SysSettingsEthernetStaticPage::onAddressSet(uint32_t address) {
     *page->m_editAddress = address;
 }
 
-void SysSettingsEthernetStaticPage::edit(uint32_t &address) {
+void SysSettingsEthernetStaticPage::editAddress(uint32_t &address) {
     m_editAddress = &address;
 
 	NumericKeypadOptions options;
@@ -392,19 +392,19 @@ void SysSettingsEthernetStaticPage::edit(uint32_t &address) {
 }
 
 void SysSettingsEthernetStaticPage::editIpAddress() {
-    edit(m_ipAddress);
+    editAddress(m_ipAddress);
 }
 
 void SysSettingsEthernetStaticPage::editDns() {
-    edit(m_dns);
+    editAddress(m_dns);
 }
 
 void SysSettingsEthernetStaticPage::editGateway() {
-    edit(m_gateway);
+    editAddress(m_gateway);
 }
 
 void SysSettingsEthernetStaticPage::editSubnetMask() {
-    edit(m_subnetMask);
+    editAddress(m_subnetMask);
 }
 
 int SysSettingsEthernetStaticPage::getDirty() {

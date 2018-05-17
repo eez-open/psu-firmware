@@ -58,7 +58,7 @@ void init() {
 	bool initResult;
 
 #ifdef EEZ_PLATFORM_SIMULATOR
-	initResult = SD.begin(LCDSD_CS, SPI_DIV3_SPEED);
+	initResult = SD.begin();
 #else
 	g_cardBeginResult = SD.cardBegin(LCDSD_CS, SPI_DIV3_SPEED);
 	if (g_cardBeginResult) {
@@ -315,7 +315,7 @@ bool catalogLength(const char *dirPath, size_t *length, int *err) {
     return true;
 }
 
-bool upload(const char *filePath, void *param, void (*callback)(void *param, const void *buffer, size_t size), int *err) {
+bool upload(const char *filePath, void *param, void (*callback)(void *param, const void *buffer, int size), int *err) {
     if (sd_card::g_testResult != TEST_OK) {
         if (err) *err = SCPI_ERROR_MASS_STORAGE_ERROR;
         return false;

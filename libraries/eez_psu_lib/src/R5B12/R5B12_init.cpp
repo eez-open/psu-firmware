@@ -16,13 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if defined(EEZ_PLATFORM_SIMULATOR)
-#include "eez/psu/platform/simulator/arduino/SPI.h"
-#elif defined(EEZ_PLATFORM_STM32)
-#include "eez/psu/platform/stm32/SPI.h"
-#else
 #include <SPI.h>
-#endif
 
 #include "R5B12_pins.h"
 

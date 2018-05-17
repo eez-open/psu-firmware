@@ -94,8 +94,6 @@ public:
     void dump(char *buffer);
 
 private:
-    uint32_t m_lastTickCount;
-
     uint32_t m_min;
     uint32_t m_max;
     uint32_t m_total;
@@ -104,7 +102,6 @@ private:
     uint32_t m_minLast;
     uint32_t m_maxLast;
     uint32_t m_avgLast;
-
 };
 
 class DebugDurationVariable : public DebugVariable {
