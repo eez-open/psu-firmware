@@ -21,7 +21,7 @@
 #include "eez/psu/platform/simulator/ethernet/UIPEthernet.h"
 #include "eez/psu/platform/simulator/ethernet/UIPServer.h"
 #include "eez/psu/platform/simulator/ethernet/UIPClient.h"
-#include "eez/platform/simulator/ethernet.h"
+#include "eez/mw/platform/simulator/ethernet.h"
 
 namespace eez {
 namespace psu {

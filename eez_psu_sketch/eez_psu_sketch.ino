@@ -36,10 +36,10 @@
 #endif
 
 void setup() {
-    PSU_boot();
+    eez_app_boot();
 }
 
 void loop() {
-    PSU_tick();
+    eez_app_tick();
 }
 

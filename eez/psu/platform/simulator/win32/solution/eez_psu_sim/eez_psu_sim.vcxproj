@@ -32,17 +32,26 @@
     <ClCompile Include="..\..\..\..\..\..\mw\gui\data.cpp" />
     <ClCompile Include="..\..\..\..\..\..\mw\gui\font.cpp" />
     <ClCompile Include="..\..\..\..\..\..\mw\gui\gui.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\lcd.cpp" />
     <ClCompile Include="..\..\..\..\..\..\mw\gui\page.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\touch.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\touch_filter.cpp" />
     <ClCompile Include="..\..\..\..\..\..\mw\gui\view.cpp" />
     <ClCompile Include="..\..\..\..\..\..\mw\gui\widget_button_group.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\lcd.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\beeper.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\encoder.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\control.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\data.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\imgui\texture.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\imgui\window.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\main.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\platform.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\touch.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\win32\ethernet.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\win32\main_loop.cpp" />
     <ClCompile Include="..\..\..\..\..\..\mw\unit.cpp" />
     <ClCompile Include="..\..\..\..\..\..\mw\util.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\platform\simulator\beeper.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\platform\simulator\imgui\texture.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\platform\simulator\imgui\window.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\platform\simulator\main.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\platform\simulator\win32\ethernet.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\platform\simulator\win32\main_loop.cpp" />
     <ClCompile Include="..\..\..\..\..\actions.cpp" />
     <ClCompile Include="..\..\..\..\..\bp.cpp" />
     <ClCompile Include="..\..\..\..\..\calibration.cpp" />
@@ -71,6 +80,7 @@
     <ClCompile Include="..\..\..\..\..\gui\page_user_profiles.cpp" />
     <ClCompile Include="..\..\..\..\..\gui\password.cpp" />
     <ClCompile Include="..\..\..\..\..\gui\psu.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\touch_calibration.cpp" />
     <ClCompile Include="..\..\..\..\..\idle.cpp" />
     <ClCompile Include="..\..\..\..\..\io_pins.cpp" />
     <ClCompile Include="..\..\..\..\..\lcd.cpp" />
@@ -108,9 +118,6 @@
     <ClCompile Include="..\..\..\..\..\temperature.cpp" />
     <ClCompile Include="..\..\..\..\..\temp_sensor.cpp" />
     <ClCompile Include="..\..\..\..\..\timer.cpp" />
-    <ClCompile Include="..\..\..\..\..\touch.cpp" />
-    <ClCompile Include="..\..\..\..\..\touch_calibration.cpp" />
-    <ClCompile Include="..\..\..\..\..\touch_filter.cpp" />
     <ClCompile Include="..\..\..\..\..\trigger.cpp" />
     <ClCompile Include="..\..\..\..\..\unit.cpp" />
     <ClCompile Include="..\..\..\..\..\util.cpp" />
@@ -120,11 +127,9 @@
     <ClCompile Include="..\..\..\buzzer.cpp" />
     <ClCompile Include="..\..\..\dac.cpp" />
     <ClCompile Include="..\..\..\eeprom.cpp" />
-    <ClCompile Include="..\..\..\encoder.cpp" />
     <ClCompile Include="..\..\..\ethernet\EthernetUdp2.cpp" />
     <ClCompile Include="..\..\..\ethernet\uipethernet_impl.cpp" />
     <ClCompile Include="..\..\..\fan.cpp" />
-    <ClCompile Include="..\..\..\front_panel\control.cpp" />
     <ClCompile Include="..\..\..\front_panel\data.cpp" />
     <ClCompile Include="..\..\..\front_panel\render.cpp" />
     <ClCompile Include="..\..\..\ioexp.cpp" />
@@ -156,6 +161,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi\utils.h" />
     <ClInclude Include="..\..\..\..\..\..\app\conf.h" />
     <ClInclude Include="..\..\..\..\..\..\app\gui\document.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\encoder.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\gui\data.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\gui\font.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\gui\gui.h" />
@@ -164,18 +170,26 @@
     <ClInclude Include="..\..\..\..\..\..\mw\gui\lcd.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\gui\page.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\gui\touch.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\touch_filter.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\gui\view.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\gui\widget_button_group.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\mw.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\lcd.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\beeper.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\encoder.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\ethernet.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\control.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\data.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\render.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\imgui\texture.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\imgui\window.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\imgui\window_impl.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\main_loop.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\platform.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\thread.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\touch.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\unit.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\util.h" />
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\beeper.h" />
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\ethernet.h" />
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\imgui\texture.h" />
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\imgui\window.h" />
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\imgui\window_impl.h" />
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\main_loop.h" />
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\thread.h" />
     <ClInclude Include="..\..\..\..\..\actions.h" />
     <ClInclude Include="..\..\..\..\..\adc.h" />
     <ClInclude Include="..\..\..\..\..\board.h" />
@@ -195,7 +209,6 @@
     <ClInclude Include="..\..\..\..\..\devices.h" />
     <ClInclude Include="..\..\..\..\..\dlog.h" />
     <ClInclude Include="..\..\..\..\..\eeprom.h" />
-    <ClInclude Include="..\..\..\..\..\encoder.h" />
     <ClInclude Include="..\..\..\..\..\ethernet.h" />
     <ClInclude Include="..\..\..\..\..\event_queue.h" />
     <ClInclude Include="..\..\..\..\..\fan.h" />
@@ -216,6 +229,7 @@
     <ClInclude Include="..\..\..\..\..\gui\page_user_profiles.h" />
     <ClInclude Include="..\..\..\..\..\gui\password.h" />
     <ClInclude Include="..\..\..\..\..\gui\psu.h" />
+    <ClInclude Include="..\..\..\..\..\gui\touch_calibration.h" />
     <ClInclude Include="..\..\..\..\..\idle.h" />
     <ClInclude Include="..\..\..\..\..\ioexp.h" />
     <ClInclude Include="..\..\..\..\..\io_pins.h" />
@@ -239,23 +253,17 @@
     <ClInclude Include="..\..\..\..\..\temperature.h" />
     <ClInclude Include="..\..\..\..\..\temp_sensor.h" />
     <ClInclude Include="..\..\..\..\..\timer.h" />
-    <ClInclude Include="..\..\..\..\..\touch.h" />
-    <ClInclude Include="..\..\..\..\..\touch_calibration.h" />
-    <ClInclude Include="..\..\..\..\..\touch_filter.h" />
     <ClInclude Include="..\..\..\..\..\trigger.h" />
     <ClInclude Include="..\..\..\..\..\unit.h" />
     <ClInclude Include="..\..\..\..\..\util.h" />
     <ClInclude Include="..\..\..\..\..\watchdog.h" />
     <ClInclude Include="..\..\..\bp.h" />
     <ClInclude Include="..\..\..\conf.h" />
-    <ClInclude Include="..\..\..\encoder.h" />
     <ClInclude Include="..\..\..\ethernet\EthernetUdp2.h" />
     <ClInclude Include="..\..\..\ethernet\UIPClient.h" />
     <ClInclude Include="..\..\..\ethernet\UIPEthernet.h" />
     <ClInclude Include="..\..\..\ethernet\UIPServer.h" />
-    <ClInclude Include="..\..\..\front_panel\control.h" />
     <ClInclude Include="..\..\..\front_panel\data.h" />
-    <ClInclude Include="..\..\..\front_panel\render.h" />
     <ClInclude Include="..\..\..\psu.h" />
     <ClInclude Include="..\..\..\SdFat.h" />
     <ClInclude Include="..\..\..\serial.h" />
@@ -333,7 +341,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>EEZ_PLATFORM_SIMULATOR;USE_FULL_ERROR_LIST=0;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../../../../..;../../../../../../../libraries/scpi-parser/src;../../../../../../../libraries/eez_psu_lib/src;../../third_party/SDL2/include;../../third_party/SDL2_image/include;../../third_party/SDL2_ttf/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../../../../..;../../../../../../../libraries/scpi-parser/src;../../../../../../mw/platform/simulator/win32/third_party/SDL2/include;../../../../../../mw/platform/simulator/win32/third_party/SDL2_image/include;../../../../../../mw/platform/simulator/win32/third_party/SDL2_ttf/include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <ObjectFileName>$(IntDir)/eez/psu/platform/simulator/win32/solution/eez_psi_sim/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
@@ -341,15 +349,16 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(TargetDir);../../third_party/SDL2/lib/x86;../../third_party/SDL2_image/lib/x86;../../third_party/SDL2_ttf/lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(TargetDir);../../../../../../mw/platform/simulator/win32/third_party/SDL2/lib/x86;../../../../../../mw/platform/simulator/win32/third_party/SDL2_image/lib/x86;../../../../../../mw/platform/simulator/win32/third_party/SDL2_ttf/lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy "..\..\third_party\SDL2\lib\x86\SDL2.dll" $(TargetDir)
-copy "..\..\third_party\SDL2_image\lib\x86\SDL2_image.dll" $(TargetDir)
-copy "..\..\third_party\SDL2_image\lib\x86\zlib1.dll" $(TargetDir)
-copy "..\..\third_party\SDL2_image\lib\x86\libpng16-16.dll" $(TargetDir)
-copy "..\..\third_party\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)"
-copy "..\..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
+      <Command>
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2\lib\x86\SDL2.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_image\lib\x86\SDL2_image.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_image\lib\x86\zlib1.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_image\lib\x86\libpng16-16.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)"
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -375,7 +384,7 @@ copy "..\..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>EEZ_PLATFORM_SIMULATOR;USE_FULL_ERROR_LIST=0;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../../../../..;../../../../../../../libraries/scpi-parser/src;../../../../../../../libraries/eez_psu_lib/src;../../third_party/SDL2/include;../../third_party/SDL2_image/include;../../third_party/SDL2_ttf/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../../../../..;../../../../../../../libraries/scpi-parser/src;../../../../../../mw/platform/simulator/win32/third_party/SDL2/include;../../../../../../mw/platform/simulator/win32/third_party/SDL2_image/include;../../../../../../mw/platform/simulator/win32/third_party/SDL2_ttf/include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <ObjectFileName>$(IntDir)/eez/psu/platform/simulator/win32/solution/eez_psi_sim/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
@@ -385,15 +394,16 @@ copy "..\..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(TargetDir);../../third_party/SDL2/lib/x86;../../third_party/SDL2_image/lib/x86;../../third_party/SDL2_ttf/lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(TargetDir);../../../../../../mw/platform/simulator/win32/third_party/SDL2/lib/x86;../../../../../../mw/platform/simulator/win32/third_party/SDL2_image/lib/x86;../../../../../../mw/platform/simulator/win32/third_party/SDL2_ttf/lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy "..\..\third_party\SDL2\lib\x86\SDL2.dll" $(TargetDir)
-copy "..\..\third_party\SDL2_image\lib\x86\SDL2_image.dll" $(TargetDir)
-copy "..\..\third_party\SDL2_image\lib\x86\zlib1.dll" $(TargetDir)
-copy "..\..\third_party\SDL2_image\lib\x86\libpng16-16.dll" $(TargetDir)
-copy "..\..\third_party\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)"
-copy "..\..\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
+      <Command>
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2\lib\x86\SDL2.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_image\lib\x86\SDL2_image.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_image\lib\x86\zlib1.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_image\lib\x86\libpng16-16.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)"
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

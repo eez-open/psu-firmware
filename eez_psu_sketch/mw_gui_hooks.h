@@ -36,6 +36,8 @@ bool isWidgetActionEnabledHook(const Widget *widget, bool &result);
 int transformStyleHook(const Widget *widget);
 bool isAutoRepeatActionHook(int action);
 
+void flushGuiUpdate();
+
 void onTouchDownHook(const WidgetCursor& foundWidget, int xTouch, int yTouch);
 void onTouchMoveHook(int xTouch, int yTouch);
 bool onLongTouchHook();

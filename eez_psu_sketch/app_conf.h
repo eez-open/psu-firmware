@@ -34,7 +34,6 @@
 #include "platform/stm32/psu.h"
 #endif
 
-#include "eez_psu_rev.h"
 #include "conf.h"
 
 #if defined(EEZ_PLATFORM_SIMULATOR)

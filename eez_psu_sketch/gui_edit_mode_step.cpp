@@ -21,7 +21,7 @@
 #if OPTION_DISPLAY
 
 #if OPTION_ENCODER
-#include "encoder.h"
+#include "mw_encoder.h"
 #endif
 
 #include "sound.h"

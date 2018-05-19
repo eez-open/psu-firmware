@@ -17,8 +17,12 @@
  */
 
 #include "eez/psu/psu.h"
-#include "eez/psu/platform/simulator/front_panel/render.h"
-#include "eez/platform/simulator/imgui/window.h"
+
+#if OPTION_DISPLAY
+
+#include "eez/mw/platform/simulator/front_panel/render.h"
+#include "eez/mw/platform/simulator/imgui/window.h"
+#include "eez/psu/platform/simulator/front_panel/data.h"
 
 using namespace eez::platform::simulator::imgui;
 
@@ -198,3 +202,23 @@ void render(Window *window, Data *data) {
 }
 }
 } // namespace eez::psu::simulator::front_panel;
+
+namespace eez {
+namespace platform {
+namespace simulator {
+namespace front_panel {
+
+imgui::WindowDefinition *getWindowDefinition(int w, int h) {
+	return psu::simulator::front_panel::getWindowDefinition(w, h);
+}
+
+void render(platform::simulator::imgui::Window *window, void *data) {
+	psu::simulator::front_panel::render(window, (psu::simulator::front_panel::Data *)data);
+}
+
+}
+}
+}
+} // namespace eez::platform::simulator::front_panel;
+
+#endif

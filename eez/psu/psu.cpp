@@ -46,7 +46,7 @@
 
 #if OPTION_DISPLAY
 #include "eez/psu/gui/psu.h"
-#include "eez/psu/touch.h"
+#include "eez/mw/gui/touch.h"
 #endif
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
@@ -57,7 +57,7 @@
 #endif
 
 #ifdef EEZ_PLATFORM_SIMULATOR
-#include "eez/psu/platform/simulator/front_panel/control.h"
+#include "eez/mw/platform/simulator/front_panel/control.h"
 #endif
 
 #include "eez/psu/event_queue.h"
@@ -498,9 +498,6 @@ void boot() {
 //    DebugTraceF("%d", offsetof(DeviceConfiguration, touch_screen_cal_bry));         // 56
 //    DebugTraceF("%d", offsetof(DeviceConfiguration, touch_screen_cal_trx));         // 58
 //    DebugTraceF("%d", offsetof(DeviceConfiguration, touch_screen_cal_try));         // 60
-//#ifdef EEZ_PLATFORM_SIMULATOR
-//    DebugTraceF("%d", offsetof(DeviceConfiguration, gui_opened));                   // 62
-//#endif // EEZ_PLATFORM_SIMULATOR
 //
 //    DebugTraceF("%d", sizeof(DeviceConfiguration2));                                // 128
 //
@@ -863,7 +860,7 @@ void tick() {
 
 #if OPTION_DISPLAY
 #ifdef EEZ_PLATFORM_SIMULATOR
-    if (simulator::front_panel::isOpened()) {
+    if (platform::simulator::front_panel::isOpened()) {
 #endif
         gui::touch::tick(tick_usec);
         gui::touchHandling(tick_usec);
@@ -933,7 +930,7 @@ bool criticalTick(int pageId) {
 #if OPTION_DISPLAY
     static uint32_t lastTickTouch = 0;
 #ifdef EEZ_PLATFORM_SIMULATOR
-    if (simulator::front_panel::isOpened()) {
+    if (platform::simulator::front_panel::isOpened()) {
 #endif
         if (lastTickTouch == 0) {
             lastTickTouch = tick_usec;
@@ -1236,13 +1233,3 @@ void updateMasterSync() {
 
 }
 } // namespace eez::psu
-
-#if defined(EEZ_PLATFORM_ARDUINO_DUE)
-void PSU_boot() {
-    eez::psu::boot();
-}
-
-void PSU_tick() {
-    eez::psu::tick();
-}
-#endif

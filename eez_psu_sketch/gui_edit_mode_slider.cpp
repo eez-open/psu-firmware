@@ -21,7 +21,7 @@
 #if OPTION_DISPLAY
 
 #include "gui_edit_mode.h"
-#include "touch.h"
+#include "mw_gui_touch.h"
 #include "mw_gui_lcd.h"
 
 namespace eez {

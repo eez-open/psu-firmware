@@ -38,19 +38,7 @@
 									<listOptionValue builtIn="false" value="__packed=__attribute__((__packed__))"/>
 									<listOptionValue builtIn="false" value="__weak=__attribute__((weak))"/>
 								</option>
-								<option id="com.atollic.truestudio.as.general.incpath.1694548302" name="Include path" superClass="com.atollic.truestudio.as.general.incpath" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/BSP/STM32F429I-Discovery}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/CMSIS/Device/ST/STM32F4xx/Include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/CMSIS/Include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../..&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/libraries/eez_psu_lib/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/libraries/scpi-parser/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Core/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/psu/platform/stm32/usb&quot;"/>
-								</option>
+								<option id="com.atollic.truestudio.as.general.incpath.1694548302" name="Include path" superClass="com.atollic.truestudio.as.general.incpath" useByScannerDiscovery="false" valueType="includePath"/>
 								<inputType id="com.atollic.truestudio.as.input.512636982" name="Input" superClass="com.atollic.truestudio.as.input"/>
 							</tool>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1664061498" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc">
@@ -62,18 +50,18 @@
 									<listOptionValue builtIn="false" value="EEZ_PLATFORM_STM32"/>
 								</option>
 								<option id="com.atollic.truestudio.gcc.directories.select.1489788766" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/BSP/STM32F429I-Discovery}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/CMSIS/Device/ST/STM32F4xx/Include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/CMSIS/Include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/BSP/STM32F429I-Discovery}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/CMSIS/Device/ST/STM32F4xx/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/CMSIS/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../..&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/libraries/eez_psu_lib/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/libraries/scpi-parser/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Core/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/psu/platform/stm32/system&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/psu/platform/stm32/usb&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Core/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/mw/platform/stm32/system&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/mw/platform/stm32/usb&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1395444888" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.542545966" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32F429ZI" valueType="enumerated"/>
@@ -103,18 +91,18 @@
 									<listOptionValue builtIn="false" value="EEZ_PLATFORM_STM32"/>
 								</option>
 								<option id="com.atollic.truestudio.gpp.directories.select.1600050841" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/BSP/STM32F429I-Discovery}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/CMSIS/Device/ST/STM32F4xx/Include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/CMSIS/Include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/BSP/STM32F429I-Discovery}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/CMSIS/Device/ST/STM32F4xx/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/CMSIS/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../..&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/libraries/eez_psu_lib/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/libraries/scpi-parser/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Core/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/psu/platform/stm32/system&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/psu/platform/stm32/usb&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Core/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/mw/platform/stm32/system&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/mw/platform/stm32/usb&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1310935001" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1688567691" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32F429ZI" valueType="enumerated"/>
@@ -144,12 +132,7 @@
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.1304436765" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="com.atollic.truestudio.exe.debug.2036165126.1420542755" name="temp_sensor.cpp" rcbsApplicability="disable" resourcePath="eez/psu/temp_sensor.cpp" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gpp.1640932793.354314626">
-						<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.1640932793.354314626" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.1640932793">
-							<inputType id="com.atollic.truestudio.gpp.input.702139067" superClass="com.atollic.truestudio.gpp.input"/>
-						</tool>
-					</fileInfo>
-					<folderInfo id="com.atollic.truestudio.exe.debug.2036165126.645748818" name="/" resourcePath="eez/platform/stm32/Utilities/Fonts">
+					<folderInfo id="com.atollic.truestudio.exe.debug.2036165126.645748818" name="/" resourcePath="eez/mw/platform/stm32/Utilities/Fonts">
 						<toolChain id="com.atollic.truestudio.exe.debug.toolchain.631312024" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain" unusedChildren="">
 							<option id="com.atollic.truestudio.general.runtimelib.2035291644.1341161426" name="Runtime Library" superClass="com.atollic.truestudio.general.runtimelib.2035291644"/>
 							<option id="com.atollic.truestudio.toolchain_options.mcu.1842683582.23135249" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu.1842683582"/>
@@ -171,7 +154,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="libraries/eez_psu_lib|eez/platform/stm32/Utilities/Fonts/font8.c|eez/platform/stm32/Utilities/Fonts/font24.c|eez/platform/stm32/Utilities/Fonts/font20.c|eez/platform/stm32/Utilities/Fonts/font16.c|eez/platform/stm32/Utilities/Fonts/font12.c|eez/psu/eeprom.cpp|eez/psu/rtc.cpp|eez/psu/ioexp.cpp|eez/psu/dac.cpp|eez/psu/adc.cpp|eez/platform/simulator|eez/psu/platform/arduino_due|eez/psu/platform/simulator|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="libraries/eez_psu_lib|eez/mw/platform/stm32/Utilities/Fonts/font8.c|eez/mw/platform/stm32/Utilities/Fonts/font24.c|eez/mw/platform/stm32/Utilities/Fonts/font20.c|eez/mw/platform/stm32/Utilities/Fonts/font16.c|eez/mw/platform/stm32/Utilities/Fonts/font12.c|eez/psu/eeprom.cpp|eez/psu/rtc.cpp|eez/psu/ioexp.cpp|eez/psu/dac.cpp|eez/psu/adc.cpp|eez/mw/platform/simulator|eez/psu/platform/arduino_due|eez/psu/platform/simulator|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -212,19 +195,7 @@
 									<listOptionValue builtIn="false" value="__packed=__attribute__((__packed__))"/>
 									<listOptionValue builtIn="false" value="__weak=__attribute__((weak))"/>
 								</option>
-								<option id="com.atollic.truestudio.as.general.incpath.1931288370" name="Include path" superClass="com.atollic.truestudio.as.general.incpath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/BSP/STM32F429I-Discovery}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/CMSIS/Device/ST/STM32F4xx/Include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/CMSIS/Include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../..&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/libraries/eez_psu_lib/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/libraries/scpi-parser/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Core/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/psu/platform/stm32/usb&quot;"/>
-								</option>
+								<option id="com.atollic.truestudio.as.general.incpath.1931288370" name="Include path" superClass="com.atollic.truestudio.as.general.incpath" valueType="includePath"/>
 								<inputType id="com.atollic.truestudio.as.input.294525744" name="Input" superClass="com.atollic.truestudio.as.input"/>
 							</tool>
 							<tool id="com.atollic.truestudio.exe.release.toolchain.gcc.1001516451" name="C Compiler" superClass="com.atollic.truestudio.exe.release.toolchain.gcc">
@@ -236,18 +207,18 @@
 									<listOptionValue builtIn="false" value="EEZ_PLATFORM_STM32"/>
 								</option>
 								<option id="com.atollic.truestudio.gcc.directories.select.1944976936" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/BSP/STM32F429I-Discovery}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/CMSIS/Device/ST/STM32F4xx/Include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/CMSIS/Include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/BSP/STM32F429I-Discovery}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/CMSIS/Device/ST/STM32F4xx/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/CMSIS/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../..&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/libraries/eez_psu_lib/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/libraries/scpi-parser/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Core/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/psu/platform/stm32/system&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/psu/platform/stm32/usb&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Core/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/mw/platform/stm32/system&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/mw/platform/stm32/usb&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.222059366" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.705880340" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F429ZI" valueType="enumerated"/>
@@ -276,18 +247,18 @@
 									<listOptionValue builtIn="false" value="EEZ_PLATFORM_STM32"/>
 								</option>
 								<option id="com.atollic.truestudio.gpp.directories.select.1880647719" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/BSP/STM32F429I-Discovery}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/CMSIS/Device/ST/STM32F4xx/Include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/CMSIS/Include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/BSP/STM32F429I-Discovery}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/CMSIS/Device/ST/STM32F4xx/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/CMSIS/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../..&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/libraries/eez_psu_lib/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/libraries/scpi-parser/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Core/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/psu/platform/stm32/system&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/psu/platform/stm32/usb&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eez_psu_32F429IDISCOVERY_true_studio_project/eez/mw/platform/stm32/Middlewares/ST/STM32_USB_Device_Library/Core/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/mw/platform/stm32/system&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../eez/mw/platform/stm32/usb&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1381955366" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.2118103682" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F429ZI" valueType="enumerated"/>

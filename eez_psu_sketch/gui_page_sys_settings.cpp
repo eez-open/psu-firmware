@@ -25,7 +25,7 @@
 #include "temperature.h"
 #include "profile.h"
 #if OPTION_ENCODER
-#include "encoder.h"
+#include "mw_encoder.h"
 #endif
 #include "util.h"
 #if OPTION_ETHERNET

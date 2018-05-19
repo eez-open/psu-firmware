@@ -21,7 +21,7 @@
 #if OPTION_DISPLAY
 
 #include "eez/psu/gui/edit_mode.h"
-#include "eez/psu/touch.h"
+#include "eez/mw/gui/touch.h"
 #include "eez/mw/gui/lcd.h"
 
 namespace eez {

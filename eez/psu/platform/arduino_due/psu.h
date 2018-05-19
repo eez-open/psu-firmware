@@ -22,3 +22,5 @@
 
 #include "Arduino.h"
 #include "SPI.h"
+
+#include "eez_psu_rev.h"

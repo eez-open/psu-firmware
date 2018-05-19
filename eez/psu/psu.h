@@ -120,8 +120,3 @@ using namespace eez::mw;
 #include "eez/psu/util.h"
 #include "eez/psu/unit.h"
 #include "eez/psu/channel.h"
-
-#if defined(EEZ_PLATFORM_ARDUINO_DUE)
-void PSU_boot();
-void PSU_tick();
-#endif

@@ -18,22 +18,12 @@
 
 #include "eez/psu/psu.h"
 
-#include "stm32f4xx_hal.h"
+#include "eez/psu/psu.h"
 
-////////////////////////////////////////////////////////////////////////////////
-
-uint32_t millis() {
-    return HAL_GetTick();
+void eez_app_boot() {
+    eez::psu::boot();
 }
 
-uint32_t micros() {
-	return HAL_GetTick() * 1000;
-}
-
-void delay(uint32_t millis) {
-	HAL_Delay(millis);
-}
-
-void delayMicroseconds(uint32_t microseconds) {
-	HAL_Delay(microseconds);
+void eez_app_tick() {
+    eez::psu::tick();
 }

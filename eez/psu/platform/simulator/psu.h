@@ -33,7 +33,13 @@
 #include <stdarg.h>
 #include <queue>
 
+#include "eez/mw/platform/simulator/platform.h"
+
 ////////////////////////////////////////////////////////////////////////////////
+
+#define EEZ_PSU_REVISION_R1B9   1
+#define EEZ_PSU_REVISION_R3B4   2
+#define EEZ_PSU_REVISION_R5B12  3
 
 static const uint8_t EXT_TRIG = 0;
 static const uint8_t DOUT = 1;
@@ -55,13 +61,6 @@ static const uint8_t NTC2 = 60;
 #define CONVEND2 1
 #define ADC2_SELECT 1
 #define DAC2_SELECT 1
-
-////////////////////////////////////////////////////////////////////////////////
-
-uint32_t millis();
-uint32_t micros();
-void delay(uint32_t millis);
-void delayMicroseconds(uint32_t microseconds);
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -255,7 +255,7 @@ bool isPageActiveOrOnStack(int pageId) {
 void showPage(int pageId) {
 	if (g_activePageId != pageId) {
 		setPage(pageId);
-		flush();
+		flushGuiUpdate();
 	}
 }
 

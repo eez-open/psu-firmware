@@ -24,7 +24,7 @@
 #include "eez/psu/channel_dispatcher.h"
 #include "eez/psu/dlog.h"
 #if OPTION_ENCODER
-#include "eez/psu/encoder.h"
+#include "eez/mw/encoder.h"
 #endif
 #if OPTION_ETHERNET
 #include "eez/psu/ethernet.h"

@@ -25,7 +25,7 @@
 #include "trigger.h"
 #include "list_program.h"
 #if OPTION_ENCODER
-#include "encoder.h"
+#include "mw_encoder.h"
 #endif
 
 #include "gui_psu.h"

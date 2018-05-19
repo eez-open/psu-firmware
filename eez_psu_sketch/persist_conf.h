@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
 namespace eez {
@@ -82,9 +82,6 @@ struct DeviceConfiguration {
     int16_t touch_screen_cal_bry;
     int16_t touch_screen_cal_trx;
     int16_t touch_screen_cal_try;
-#ifdef EEZ_PLATFORM_SIMULATOR
-    bool gui_opened;
-#endif // EEZ_PLATFORM_SIMULATOR
 };
 
 /// Device binary flags stored in DeviceConfiguration.

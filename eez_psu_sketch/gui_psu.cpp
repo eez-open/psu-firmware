@@ -20,10 +20,13 @@
 
 #if OPTION_DISPLAY
 
+#include "mw_gui_gui.h"
+#include "mw_gui_touch.h"
+#include "mw_gui_lcd.h"
+#include "app_gui_document.h"
+#include "actions.h"
 #include "gui_psu.h"
 #include "gui_data.h"
-#include "actions.h"
-#include "app_gui_document.h"
 #include "gui_password.h"
 #include "gui_edit_mode.h"
 #include "gui_edit_mode_slider.h"
@@ -37,8 +40,6 @@
 #include "gui_page_ch_settings_adv.h"
 #include "gui_page_sys_settings.h"
 #include "gui_page_user_profiles.h"
-#include "lcd.h"
-#include "mw_gui_lcd.h"
 #include "idle.h"
 #include "channel_dispatcher.h"
 #include "bp.h"
@@ -48,13 +49,10 @@
 #include "devices.h"
 #include "temperature.h"
 #include "calibration.h"
-#include "touch.h"
-#include "touch_calibration.h"
-#include "mw_gui_gui.h"
-#include "mw_gui_touch.h"
+#include "gui_touch_calibration.h"
 
 #if OPTION_ENCODER
-#include "encoder.h"
+#include "mw_encoder.h"
 #endif
 
 #if OPTION_SD_CARD
@@ -62,7 +60,7 @@
 #endif
 
 #ifdef EEZ_PLATFORM_SIMULATOR
-#include "platform/simulator/front_panel/control.h"
+#include "mw_platform/simulator/front_panel/control.h"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -429,7 +427,7 @@ void init() {
 	lcd::init();
 
 #ifdef EEZ_PLATFORM_SIMULATOR
-	eez::psu::simulator::front_panel::open();
+	platform::simulator::front_panel::open();
 #endif
 
 	touch::init();
@@ -1099,6 +1097,16 @@ bool isAutoRepeatActionHook(int action) {
 		action == ACTION_ID_EVENT_QUEUE_NEXT_PAGE ||
 		action == ACTION_ID_CHANNEL_LISTS_PREVIOUS_PAGE ||
 		action == ACTION_ID_CHANNEL_LISTS_NEXT_PAGE;
+}
+
+void flushGuiUpdate() {
+	drawTick();
+
+#ifdef EEZ_PLATFORM_SIMULATOR
+	if (platform::simulator::front_panel::isOpened()) {
+		platform::simulator::front_panel::tick();
+	}
+#endif
 }
 
 void onTouchDownHook(const WidgetCursor& foundWidget, int xTouch, int yTouch) {

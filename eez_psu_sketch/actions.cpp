@@ -37,7 +37,7 @@
 #include "gui_page_user_profiles.h"
 #include "gui_password.h"
 #include "gui_page_ch_settings_trigger.h"
-#include "touch_calibration.h"
+#include "gui_touch_calibration.h"
 
 namespace eez {
 namespace psu {

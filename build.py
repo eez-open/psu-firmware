@@ -70,6 +70,7 @@ SKETCH_SOURCE_DIRS = [
     { "path": "eez/app/gui",                  "prefix": "app_gui_" },
     { "path": "eez/mw",                       "prefix": "mw_"      },
     { "path": "eez/mw/gui",                   "prefix": "mw_gui_"  },
+    { "path": "eez/mw/platform/arduino_due",  "prefix": "arduino_"  },
     { "path": "eez/psu",                      "prefix": ""         },
     { "path": "eez/psu/gui",                  "prefix": "gui_"     },
     { "path": "eez/psu/platform/arduino_due", "prefix": "arduino_" },

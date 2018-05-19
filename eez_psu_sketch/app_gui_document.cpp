@@ -16,7 +16,7 @@
 * along with this program.  If not, see http://www.gnu.org/licenses.
 */
 
-#include "psu.h"
+#include "mw_mw.h"
 
 #if OPTION_DISPLAY
 

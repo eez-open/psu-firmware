@@ -20,7 +20,7 @@
 
 #if OPTION_ENCODER
 
-#include "encoder.h"
+#include "mw_encoder.h"
 
 #define CONF_ENCODER_ACCELERATION_DECREMENT_PER_MS 1
 #define CONF_ENCODER_ACCELERATION_INCREMENT_FACTOR 2
@@ -29,7 +29,7 @@
 #define CONF_ENCODER_SWITCH_DURATION_MAX 1000000
 
 namespace eez {
-namespace psu {
+namespace mw {
 namespace encoder {
 
 // Half-step mode?
@@ -155,6 +155,6 @@ void setMovingSpeed(uint8_t down, uint8_t up) {
 
 }
 }
-} // namespace eez::psu::encoder
+} // namespace eez::mw::encoder
 
 #endif

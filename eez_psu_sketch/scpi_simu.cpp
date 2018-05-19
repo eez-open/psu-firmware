@@ -23,7 +23,7 @@
 #include "scpi_psu.h"
 #include "platform/simulator/psu.h"
 #if OPTION_DISPLAY
-#include "platform/simulator/front_panel/control.h"
+#include "mw_platform/simulator/front_panel/control.h"
 #endif
 #include "channel_dispatcher.h"
 #include "io_pins.h"
@@ -332,7 +332,7 @@ scpi_result_t scpi_cmd_simulatorTemperatureQ(scpi_t *context) {
 
 scpi_result_t scpi_cmd_simulatorGui(scpi_t *context) {
 #if OPTION_DISPLAY
-    if (!simulator::front_panel::open()) {
+    if (!platform::simulator::front_panel::open()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }

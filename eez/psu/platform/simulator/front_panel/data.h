@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "eez/platform/simulator/imgui/window.h"
+#include "eez/mw/platform/simulator/front_panel/data.h"
 
 namespace eez {
 namespace psu {
@@ -45,7 +45,7 @@ struct ChannelData {
 };
 
 /// Data presented in GUI front panel.
-struct Data {
+struct Data : public platform::simulator::front_panel::Data {
     bool standby;
 
     bool coupled;
@@ -56,11 +56,9 @@ struct Data {
 
     bool reset;
 
-	platform::simulator::imgui::UserWidget local_control_widget;
+	void fill();
+	void process();
 };
-
-void fillData(Data *data);
-void processData(Data *data);
 
 }
 }

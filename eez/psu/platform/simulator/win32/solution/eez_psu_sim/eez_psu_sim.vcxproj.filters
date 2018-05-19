@@ -13,20 +13,11 @@
     <Filter Include="eez\mw">
       <UniqueIdentifier>{4bb5e970-f1a5-4714-b7a1-4fe4e218482f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="eez\platform">
-      <UniqueIdentifier>{dd995ffc-593e-43d2-9605-861038a2b788}</UniqueIdentifier>
-    </Filter>
     <Filter Include="eez\psu\gui">
       <UniqueIdentifier>{4ddf0c7b-8fb8-45f6-8279-d49e8e54d0d5}</UniqueIdentifier>
     </Filter>
     <Filter Include="eez\psu\scpi">
       <UniqueIdentifier>{07015d49-025d-46d7-91ce-35b842198741}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="eez\platform\simulator">
-      <UniqueIdentifier>{692bc98b-4f59-40b7-8b90-576b841b964e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="eez\platform\simulator\imgui">
-      <UniqueIdentifier>{eea1bd92-e51c-4b59-8fba-72ef8822075b}</UniqueIdentifier>
     </Filter>
     <Filter Include="eez\psu\platform">
       <UniqueIdentifier>{f9fc9ea5-5ad3-4635-a290-7887b6f729fe}</UniqueIdentifier>
@@ -58,17 +49,23 @@
     <Filter Include="libraries\scpi-parser\scpi">
       <UniqueIdentifier>{00adcd0a-2227-43f0-8e1c-b74d35c30045}</UniqueIdentifier>
     </Filter>
-    <Filter Include="eez\platform\simulator\win32">
+    <Filter Include="eez\mw\platform">
+      <UniqueIdentifier>{dd995ffc-593e-43d2-9605-861038a2b788}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="eez\mw\platform\simulator">
+      <UniqueIdentifier>{692bc98b-4f59-40b7-8b90-576b841b964e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="eez\mw\platform\simulator\imgui">
+      <UniqueIdentifier>{eea1bd92-e51c-4b59-8fba-72ef8822075b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="eez\mw\platform\simulator\win32">
       <UniqueIdentifier>{38c4896a-c880-45e5-aa31-4933ff421735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="eez\mw\platform\simulator\front-panel">
+      <UniqueIdentifier>{c8f6e5a4-b7a0-4b1c-8b29-760134b89741}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\platform\simulator\beeper.cpp">
-      <Filter>eez\platform\simulator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\platform\simulator\main.cpp">
-      <Filter>eez\platform\simulator</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\psu.cpp">
       <Filter>eez\psu\platform\simulator</Filter>
     </ClCompile>
@@ -77,21 +74,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\ethernet\uipethernet_impl.cpp">
       <Filter>eez\psu\platform\simulator\ethernet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\front_panel\control.cpp">
-      <Filter>eez\psu\platform\simulator\front_panel</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\front_panel\data.cpp">
-      <Filter>eez\psu\platform\simulator\front_panel</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\front_panel\render.cpp">
-      <Filter>eez\psu\platform\simulator\front_panel</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\platform\simulator\imgui\texture.cpp">
-      <Filter>eez\platform\simulator\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\platform\simulator\imgui\window.cpp">
-      <Filter>eez\platform\simulator\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\gui\calibration.cpp">
       <Filter>eez\psu\gui</Filter>
@@ -285,15 +267,6 @@
     <ClCompile Include="..\..\..\..\..\timer.cpp">
       <Filter>eez\psu</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\touch.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\touch_calibration.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\touch_filter.cpp">
-      <Filter>eez\psu</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\trigger.cpp">
       <Filter>eez\psu</Filter>
     </ClCompile>
@@ -357,12 +330,6 @@
     <ClCompile Include="..\..\..\..\..\..\mw\gui\gui.cpp">
       <Filter>eez\mw\gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\platform\simulator\win32\main_loop.cpp">
-      <Filter>eez\platform\simulator\win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\platform\simulator\win32\ethernet.cpp">
-      <Filter>eez\platform\simulator\win32</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\SdFat.cpp">
       <Filter>eez\psu\platform\simulator</Filter>
     </ClCompile>
@@ -390,9 +357,6 @@
     <ClCompile Include="..\..\..\fan.cpp">
       <Filter>eez\psu\platform\simulator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\encoder.cpp">
-      <Filter>eez\psu\platform\simulator</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\io_pins.cpp">
       <Filter>eez\psu\platform\simulator</Filter>
     </ClCompile>
@@ -411,17 +375,62 @@
     <ClCompile Include="..\..\..\watchdog.cpp">
       <Filter>eez\psu\platform\simulator</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\front_panel\data.cpp">
+      <Filter>eez\psu\platform\simulator\front_panel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\front_panel\render.cpp">
+      <Filter>eez\psu\platform\simulator\front_panel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\gui\touch_calibration.cpp">
+      <Filter>eez\psu\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\touch.cpp">
+      <Filter>eez\mw\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\touch_filter.cpp">
+      <Filter>eez\mw\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\lcd.cpp">
+      <Filter>eez\mw\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\lcd.cpp">
+      <Filter>eez\mw\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\beeper.cpp">
+      <Filter>eez\mw\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\main.cpp">
+      <Filter>eez\mw\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\touch.cpp">
+      <Filter>eez\mw\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\control.cpp">
+      <Filter>eez\mw\platform\simulator\front-panel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\data.cpp">
+      <Filter>eez\mw\platform\simulator\front-panel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\imgui\texture.cpp">
+      <Filter>eez\mw\platform\simulator\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\imgui\window.cpp">
+      <Filter>eez\mw\platform\simulator\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\win32\ethernet.cpp">
+      <Filter>eez\mw\platform\simulator\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\win32\main_loop.cpp">
+      <Filter>eez\mw\platform\simulator\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\platform.cpp">
+      <Filter>eez\mw\platform\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\encoder.cpp">
+      <Filter>eez\mw\platform\simulator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\beeper.h">
-      <Filter>eez\platform\simulator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\main_loop.h">
-      <Filter>eez\platform\simulator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\thread.h">
-      <Filter>eez\platform\simulator</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\conf.h">
       <Filter>eez\psu\platform\simulator</Filter>
     </ClInclude>
@@ -439,24 +448,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\ethernet\UIPServer.h">
       <Filter>eez\psu\platform\simulator\ethernet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\front_panel\control.h">
-      <Filter>eez\psu\platform\simulator\front_panel</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\front_panel\data.h">
-      <Filter>eez\psu\platform\simulator\front_panel</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\front_panel\render.h">
-      <Filter>eez\psu\platform\simulator\front_panel</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\imgui\texture.h">
-      <Filter>eez\platform\simulator\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\imgui\window.h">
-      <Filter>eez\platform\simulator\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\imgui\window_impl.h">
-      <Filter>eez\platform\simulator\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\app\conf.h">
       <Filter>eez\app</Filter>
@@ -584,9 +575,6 @@
     <ClInclude Include="..\..\..\..\..\eeprom.h">
       <Filter>eez\psu</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\encoder.h">
-      <Filter>eez\psu</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\ethernet.h">
       <Filter>eez\psu</Filter>
     </ClInclude>
@@ -648,15 +636,6 @@
       <Filter>eez\psu</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\timer.h">
-      <Filter>eez\psu</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\touch.h">
-      <Filter>eez\psu</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\touch_calibration.h">
-      <Filter>eez\psu</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\touch_filter.h">
       <Filter>eez\psu</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\trigger.h">
@@ -764,9 +743,6 @@
     <ClInclude Include="..\..\..\..\..\..\mw\gui\touch.h">
       <Filter>eez\mw\gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\platform\simulator\ethernet.h">
-      <Filter>eez\platform\simulator</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\SdFat.h">
       <Filter>eez\psu\platform\simulator</Filter>
     </ClInclude>
@@ -776,8 +752,59 @@
     <ClInclude Include="..\..\..\bp.h">
       <Filter>eez\psu\platform\simulator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\encoder.h">
-      <Filter>eez\psu\platform\simulator</Filter>
+    <ClInclude Include="..\..\..\front_panel\data.h">
+      <Filter>eez\psu\platform\simulator\front_panel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\gui\touch_calibration.h">
+      <Filter>eez\psu\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\touch_filter.h">
+      <Filter>eez\mw\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\lcd.h">
+      <Filter>eez\mw\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\beeper.h">
+      <Filter>eez\mw\platform\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\encoder.h">
+      <Filter>eez\mw\platform\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\ethernet.h">
+      <Filter>eez\mw\platform\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\main_loop.h">
+      <Filter>eez\mw\platform\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\thread.h">
+      <Filter>eez\mw\platform\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\touch.h">
+      <Filter>eez\mw\platform\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\control.h">
+      <Filter>eez\mw\platform\simulator\front-panel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\data.h">
+      <Filter>eez\mw\platform\simulator\front-panel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\render.h">
+      <Filter>eez\mw\platform\simulator\front-panel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\imgui\texture.h">
+      <Filter>eez\mw\platform\simulator\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\imgui\window.h">
+      <Filter>eez\mw\platform\simulator\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\imgui\window_impl.h">
+      <Filter>eez\mw\platform\simulator\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\platform.h">
+      <Filter>eez\mw\platform\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\encoder.h">
+      <Filter>eez\mw</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

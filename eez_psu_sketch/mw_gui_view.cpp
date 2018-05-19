@@ -26,15 +26,11 @@
 #include "mw_gui_widget_button_group.h"
 #include "mw_gui_page.h"
 
-#ifdef EEZ_PLATFORM_SIMULATOR
-#include "platform/simulator/front_panel/control.h"
-#endif
-
 #define CONF_GUI_ENUM_WIDGETS_STACK_SIZE 5
 #define CONF_GUI_BLINK_TIME 400000UL // 400ms
 #define CONF_GUI_YT_GRAPH_BLANK_PIXELS_AFTER_CURSOR 10
 
-#define CONF_MAX_STATE_SIZE 2048
+#define CONF_MAX_STATE_SIZE 4096
 
 namespace eez {
 namespace mw {
@@ -1769,16 +1765,6 @@ void refreshPage() {
 	} else {
 		g_refreshPageOnNextTick = true;
 	}
-}
-
-void flush() {
-	drawTick();
-
-#ifdef EEZ_PLATFORM_SIMULATOR
-	if (eez::psu::simulator::front_panel::isOpened()) {
-		eez::psu::simulator::front_panel::tick();
-	}
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////

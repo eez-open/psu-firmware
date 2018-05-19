@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "mw_gui_touch.h"
+
 namespace eez {
 namespace mw {
 namespace gui {
@@ -33,6 +35,11 @@ enum EventType {
 extern EventType g_eventType;
 extern int g_x;
 extern int g_y;
+
+void init();
+void tick(uint32_t tickCount);
+
+void read(bool &isPressed, int &x, int &y);
 
 }
 }

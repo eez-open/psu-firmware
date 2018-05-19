@@ -20,10 +20,13 @@
 
 #if OPTION_DISPLAY
 
+#include "eez/mw/gui/gui.h"
+#include "eez/mw/gui/touch.h"
+#include "eez/mw/gui/lcd.h"
+#include "eez/app/gui/document.h"
+#include "eez/psu/actions.h"
 #include "eez/psu/gui/psu.h"
 #include "eez/psu/gui/data.h"
-#include "eez/psu/actions.h"
-#include "eez/app/gui/document.h"
 #include "eez/psu/gui/password.h"
 #include "eez/psu/gui/edit_mode.h"
 #include "eez/psu/gui/edit_mode_slider.h"
@@ -37,8 +40,6 @@
 #include "eez/psu/gui/page_ch_settings_adv.h"
 #include "eez/psu/gui/page_sys_settings.h"
 #include "eez/psu/gui/page_user_profiles.h"
-#include "eez/psu/lcd.h"
-#include "eez/mw/gui/lcd.h"
 #include "eez/psu/idle.h"
 #include "eez/psu/channel_dispatcher.h"
 #include "eez/psu/bp.h"
@@ -48,13 +49,10 @@
 #include "eez/psu/devices.h"
 #include "eez/psu/temperature.h"
 #include "eez/psu/calibration.h"
-#include "eez/psu/touch.h"
-#include "eez/psu/touch_calibration.h"
-#include "eez/mw/gui/gui.h"
-#include "eez/mw/gui/touch.h"
+#include "eez/psu/gui/touch_calibration.h"
 
 #if OPTION_ENCODER
-#include "eez/psu/encoder.h"
+#include "eez/mw/encoder.h"
 #endif
 
 #if OPTION_SD_CARD
@@ -62,7 +60,7 @@
 #endif
 
 #ifdef EEZ_PLATFORM_SIMULATOR
-#include "eez/psu/platform/simulator/front_panel/control.h"
+#include "eez/mw/platform/simulator/front_panel/control.h"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -429,7 +427,7 @@ void init() {
 	lcd::init();
 
 #ifdef EEZ_PLATFORM_SIMULATOR
-	eez::psu::simulator::front_panel::open();
+	platform::simulator::front_panel::open();
 #endif
 
 	touch::init();
@@ -1099,6 +1097,16 @@ bool isAutoRepeatActionHook(int action) {
 		action == ACTION_ID_EVENT_QUEUE_NEXT_PAGE ||
 		action == ACTION_ID_CHANNEL_LISTS_PREVIOUS_PAGE ||
 		action == ACTION_ID_CHANNEL_LISTS_NEXT_PAGE;
+}
+
+void flushGuiUpdate() {
+	drawTick();
+
+#ifdef EEZ_PLATFORM_SIMULATOR
+	if (platform::simulator::front_panel::isOpened()) {
+		platform::simulator::front_panel::tick();
+	}
+#endif
 }
 
 void onTouchDownHook(const WidgetCursor& foundWidget, int xTouch, int yTouch) {

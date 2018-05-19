@@ -25,7 +25,7 @@
 #include "eez/psu/trigger.h"
 #include "eez/psu/list_program.h"
 #if OPTION_ENCODER
-#include "eez/psu/encoder.h"
+#include "eez/mw/encoder.h"
 #endif
 
 #include "eez/psu/gui/psu.h"

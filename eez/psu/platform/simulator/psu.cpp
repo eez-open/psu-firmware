@@ -18,10 +18,10 @@
 
 #include "eez/psu/psu.h"
 #if OPTION_DISPLAY
-#include "eez/psu/platform/simulator/front_panel/control.h"
+#include "eez/mw/platform/simulator/front_panel/control.h"
 #endif
 
-#include "eez/platform/simulator/main_loop.h"
+#include "eez/mw/platform/simulator/main_loop.h"
 
 // for home directory (see getConfFilePath)
 #ifdef _WIN32
@@ -30,7 +30,7 @@
 #include <Windows.h>
 #pragma warning(push)
 #pragma warning(disable: 4091)
-#include <Shlobj.h> 
+#include <Shlobj.h>
 #pragma warning(pop)
 #include <direct.h>
 #else
@@ -39,72 +39,6 @@
 #include <sys/stat.h>
 #include <pwd.h>
 #endif
-
-////////////////////////////////////////////////////////////////////////////////
-
-#ifdef _WIN32
-#undef INPUT
-#undef OUTPUT
-#include <Windows.h>
-#else
-#include <sys/time.h>
-#include <time.h>
-#endif
-
-uint32_t millis() {
-#ifdef _WIN32
-	return GetTickCount();
-#else
-	timeval tv;
-	gettimeofday(&tv, NULL);
-	uint64_t micros = tv.tv_sec*(uint64_t)1000000 + tv.tv_usec;
-	return (uint32_t)(micros / 1000);
-#endif
-}
-
-uint32_t micros() {
-#ifdef _WIN32
-	static bool firstTime = true;
-	static unsigned __int64 frequency;
-	static unsigned __int64 startTime;
-
-	if (firstTime) {
-		firstTime = false;
-		QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
-		QueryPerformanceCounter((LARGE_INTEGER *)&startTime);
-
-		return 0;
-	} else {
-		unsigned __int64 time;
-		QueryPerformanceCounter((LARGE_INTEGER *)&time);
-
-		unsigned __int64 diff = (time - startTime) * 1000000L / frequency;
-
-		return (uint32_t)(diff % 4294967296);
-	}
-
-#else
-	timeval tv;
-	gettimeofday(&tv, NULL);
-	uint64_t micros = tv.tv_sec*(uint64_t)1000000 + tv.tv_usec;
-	return (uint32_t)(micros % 4294967296);
-#endif
-}
-
-void delay(uint32_t millis) {
-	delayMicroseconds(millis * 1000);
-}
-
-void delayMicroseconds(uint32_t microseconds) {
-#ifdef _WIN32
-	Sleep(microseconds / 1000);
-#else
-	timespec ts;
-	ts.tv_sec = microseconds / 1000000;
-	ts.tv_nsec = (microseconds % 1000000) * 1000;
-	nanosleep(&ts, 0);
-#endif
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -173,14 +107,14 @@ void init() {
 	}
 
 #if OPTION_DISPLAY
-	front_panel::tick();
+	platform::simulator::front_panel::tick();
 #endif
 }
 
 void tick() {
     psu::tick();
 #if OPTION_DISPLAY
-    front_panel::tick();
+	platform::simulator::front_panel::tick();
 #endif
 }
 
@@ -227,7 +161,7 @@ void setCC(int pin, bool on) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void exit() {
-    main_loop_exit();
+    eez_app_main_loop_exit();
 }
 
 } // namespace simulator
@@ -235,15 +169,21 @@ void exit() {
 }
 } // namespace eez::psu
 
-void app_init() {
+void eez_app_boot() {
 	eez::psu::simulator::init();
 	eez::psu::boot();
 }
 
-void app_tick() {
+void eez_app_tick() {
 	eez::psu::simulator::tick();
 }
 
-void app_serial_put(int ch) {
+void eez_app_serial_put(int ch) {
 	SERIAL_PORT.put(ch);
+}
+
+void eez_app_exit() {
+#if OPTION_DISPLAY
+    eez::platform::simulator::front_panel::close();
+#endif
 }

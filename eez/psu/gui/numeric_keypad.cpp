@@ -21,7 +21,7 @@
 #if OPTION_DISPLAY
 
 #if OPTION_ENCODER
-#include "eez/psu/encoder.h"
+#include "eez/mw/encoder.h"
 #endif
 #include "eez/psu/sound.h"
 

@@ -28,9 +28,12 @@
 #include "app_conf.h"
 
 #if defined(EEZ_PLATFORM_ARDUINO_DUE)
-#include "Arduino.h"
-#else
-uint32_t micros();
-void delay(uint32_t millis);
+#include "arduino_platform.h"
+#elif defined(EEZ_PLATFORM_SIMULATOR)
+#include "mw_platform/simulator/platform.h"
+#elif defined(EEZ_PLATFORM_STM32)
+#include "mw_platform/stm32/platform.h"
 #endif
 
+void eez_app_boot();
+void eez_app_tick();

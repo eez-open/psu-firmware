@@ -21,12 +21,9 @@
 #if OPTION_DISPLAY
 
 #include "eez/psu/gui/psu.h"
-
 #include "eez/psu/platform/simulator/front_panel/data.h"
 #include "eez/psu/bp.h"
 #include "eez/psu/platform/simulator/bp.h"
-#include "eez/mw/gui/lcd.h"
-#include "eez/psu/touch.h"
 #include "eez/psu/channel_dispatcher.h"
 
 namespace eez {
@@ -34,6 +31,7 @@ namespace psu {
 namespace simulator {
 namespace front_panel {
 
+static Data g_data;
 static char str_load[2][128];
 
 void fillChannelData(ChannelData *data, int ch) {
@@ -118,41 +116,18 @@ void fillChannelData(ChannelData *data, int ch) {
     }
 }
 
-void fillLocalControlBuffer(Data *data) {
-    if (!data->local_control_widget.pixels) {
-        data->local_control_widget.pixels_w = lcd::getDisplayWidth();
-        data->local_control_widget.pixels_h = lcd::getDisplayHeight();
-        data->local_control_widget.pixels = new unsigned char[data->local_control_widget.pixels_w * data->local_control_widget.pixels_h * 4];
-    }
+void Data::fill() {
+	platform::simulator::front_panel::Data::fill();
 
-    uint16_t *src = lcd::getBuffer();
-    unsigned char *dst = data->local_control_widget.pixels;
-
-    for (int x = 0; x < data->local_control_widget.pixels_w; ++x) {
-        for (int y = 0; y < data->local_control_widget.pixels_h; ++y) {
-            uint16_t color = *src++; // rrrrrggggggbbbbb
-
-            *dst++ = (unsigned char)((color << 3) & 0xFF);        // blue
-            *dst++ = (unsigned char)(((color >> 5) << 2) & 0xFF); // green
-            *dst++ = (unsigned char)((color >> 11) << 3);         // red
-
-            *dst++ = 255;
-        }
-    }
-}
-
-void fillData(Data *data) {
     uint16_t bp_value = bp::g_lastConf;
 
-    data->standby = bp_value & (1 << BP_STANDBY) ? true : false;
+    standby = bp_value & (1 << BP_STANDBY) ? true : false;
 
-    data->coupled = channel_dispatcher::isCoupled();
-    data->coupledOut = bp::g_lastConf & (1 << BP_LED_OUT1_RED) ? true : false;
+	coupled = channel_dispatcher::isCoupled();
+	coupledOut = bp::g_lastConf & (1 << BP_LED_OUT1_RED) ? true : false;
 
-    fillChannelData(&data->ch1, 1);
-    fillChannelData(&data->ch2, 2);
-
-    fillLocalControlBuffer(data);
+    fillChannelData(&ch1, 1);
+    fillChannelData(&ch2, 2);
 }
 
 void processChannelData(ChannelData *data, int ch) {
@@ -192,38 +167,22 @@ void processChannelData(ChannelData *data, int ch) {
     }
 }
 
-void processData(Data *data) {
+void Data::process() {
+	platform::simulator::front_panel::Data::process();
+
     static bool reseting = false;
 
-    if (data->reset) {
+    if (reset) {
         if (!reseting) {
             reseting = true;
-            reset();
+            psu::reset();
             reseting = false;
         }
     }
 
     //
-    processChannelData(&data->ch1, 1);
-    processChannelData(&data->ch2, 2);
-
-    //
-    bool is_down = false;
-    int x = -1;
-    int y = -1;
-
-    if (data->local_control_widget.mouseData.button1IsPressed &&
-        data->local_control_widget.mouseData.button1DownX >= 0 &&
-        data->local_control_widget.mouseData.button1DownX < data->local_control_widget.w &&
-        data->local_control_widget.mouseData.button1DownY >= 0 &&
-        data->local_control_widget.mouseData.button1DownY < data->local_control_widget.h)
-    {
-        is_down = true;
-        x = (int)round(data->local_control_widget.mouseData.x / (1.0 * data->local_control_widget.w / data->local_control_widget.pixels_w));
-        y = (int)round(data->local_control_widget.mouseData.y / (1.0 * data->local_control_widget.h / data->local_control_widget.pixels_h));
-    }
-
-    eez::psu::gui::touch::touch_write(is_down, x, y);
+    processChannelData(&ch1, 1);
+    processChannelData(&ch2, 2);
 }
 
 }
@@ -231,5 +190,18 @@ void processData(Data *data) {
 }
 } // namespace eez::psu::simulator::front_panel;
 
+namespace eez {
+namespace platform {
+namespace simulator {
+namespace front_panel {
+
+Data *getData() {
+    return &psu::simulator::front_panel::g_data;
+}
+
+}
+}
+}
+} // namespace eez::platform::simulator::front_panel;
 
 #endif

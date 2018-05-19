@@ -26,10 +26,6 @@
 #include "eez/mw/gui/widget_button_group.h"
 #include "eez/mw/gui/page.h"
 
-#ifdef EEZ_PLATFORM_SIMULATOR
-#include "eez/psu/platform/simulator/front_panel/control.h"
-#endif
-
 #define CONF_GUI_ENUM_WIDGETS_STACK_SIZE 5
 #define CONF_GUI_BLINK_TIME 400000UL // 400ms
 #define CONF_GUI_YT_GRAPH_BLANK_PIXELS_AFTER_CURSOR 10
@@ -1570,6 +1566,8 @@ void deselectWidget() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+static int cnt = 0;
+
 WidgetState *next(WidgetState *p) {
 	return p ? (WidgetState *)(((uint8_t *)p) + p->size) : 0;
 }
@@ -1608,6 +1606,7 @@ void enumContainer(int pageId, List widgets, int x, int y, data::Cursor &cursor,
 }
 
 void enumWidget(int pageId, OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
+	++cnt;
 	if (!executeCriticalTasks(pageId)) {
 		return;
 	}
@@ -1732,6 +1731,8 @@ void clearBackground() {
 }
 
 void drawActivePage(bool refresh) {
+	cnt = 0;
+
 	g_wasBlinkTime = g_isBlinkTime;
 	g_isBlinkTime = (micros() % (2 * CONF_GUI_BLINK_TIME)) > CONF_GUI_BLINK_TIME && touch::g_eventType == touch::TOUCH_NONE;
 
@@ -1744,6 +1745,8 @@ void drawActivePage(bool refresh) {
 	}
 
 	enumWidgets(getActivePageId(), g_previousState, g_currentState, drawWidget);
+
+	printf("cnt=%d", cnt);
 }
 
 static bool g_refreshPageOnNextTick;
@@ -1769,16 +1772,6 @@ void refreshPage() {
 	} else {
 		g_refreshPageOnNextTick = true;
 	}
-}
-
-void flush() {
-	drawTick();
-
-#ifdef EEZ_PLATFORM_SIMULATOR
-	if (eez::psu::simulator::front_panel::isOpened()) {
-		eez::psu::simulator::front_panel::tick();
-	}
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////

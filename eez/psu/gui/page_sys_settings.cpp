@@ -25,7 +25,7 @@
 #include "eez/psu/temperature.h"
 #include "eez/psu/profile.h"
 #if OPTION_ENCODER
-#include "eez/psu/encoder.h"
+#include "eez/mw/encoder.h"
 #endif
 #include "eez/psu/util.h"
 #if OPTION_ETHERNET

@@ -22,11 +22,10 @@
 #include "eez/psu/event_queue.h"
 #include "eez/psu/profile.h"
 #if OPTION_ENCODER
-#include "eez/psu/encoder.h"
+#include "eez/mw/encoder.h"
 #endif
 #if OPTION_DISPLAY
 #include "eez/psu/gui/psu.h"
-#include "eez/psu/lcd.h"
 #endif
 #if OPTION_ETHERNET
 #include "eez/psu/ethernet.h"
@@ -141,7 +140,6 @@ static void initDevice() {
 	devConf.flags.channelsViewMode = 0;
 
 #ifdef EEZ_PLATFORM_SIMULATOR
-    devConf.gui_opened = true;
     devConf.flags.ethernetEnabled = 1;
 #else
     devConf.flags.ethernetEnabled = 0;

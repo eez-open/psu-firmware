@@ -1,5 +1,4 @@
 eez_psu_sim
-eez_imgui.so
 *.o
 .eez_psu_sim
 EEPROM.state

@@ -18,7 +18,7 @@
 
 #include "eez/psu/psu.h"
 #include "eez/psu/buzzer.h"
-#include "eez/platform/simulator/beeper.h"
+#include "eez/mw/platform/simulator/beeper.h"
 
 namespace eez {
 namespace psu {
