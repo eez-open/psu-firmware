@@ -25,7 +25,7 @@
 #include "mw_gui_data.h"
 #include "mw_gui_view.h"
 
-#include "app_gui_document.h"
+#include "gui_document.h"
 using namespace eez::app::gui;
 
 

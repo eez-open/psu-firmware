@@ -33,7 +33,7 @@
 #define CONF_GUI_EDIT_MODE_STEP_THRESHOLD_PX 5
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 namespace edit_mode_step {
 
@@ -189,6 +189,6 @@ void onTouchUp() {
 }
 }
 }
-} // namespace eez::psu::gui::edit_mode_step
+} // namespace eez::app::gui::edit_mode_step
 
 #endif

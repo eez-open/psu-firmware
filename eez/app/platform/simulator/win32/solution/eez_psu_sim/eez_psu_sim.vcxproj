@@ -1,0 +1,429 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\error.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\expression.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\fifo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\ieee488.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\lexer.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\minimal.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\parser.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\units.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\utils.c" />
+    <ClCompile Include="..\..\..\..\..\..\app\gui\document.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\data.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\font.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\gui.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\lcd.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\page.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\touch.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\touch_filter.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\view.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget_button_group.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\lcd.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\beeper.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\encoder.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\control.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\data.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\imgui\texture.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\imgui\window.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\main.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\platform.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\touch.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\win32\ethernet.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\platform\simulator\win32\main_loop.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\unit.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\mw\util.cpp" />
+    <ClCompile Include="..\..\..\..\..\actions.cpp" />
+    <ClCompile Include="..\..\..\..\..\bp.cpp" />
+    <ClCompile Include="..\..\..\..\..\calibration.cpp" />
+    <ClCompile Include="..\..\..\..\..\channel.cpp" />
+    <ClCompile Include="..\..\..\..\..\channel_dispatcher.cpp" />
+    <ClCompile Include="..\..\..\..\..\datetime.cpp" />
+    <ClCompile Include="..\..\..\..\..\debug.cpp" />
+    <ClCompile Include="..\..\..\..\..\devices.cpp" />
+    <ClCompile Include="..\..\..\..\..\dlog.cpp" />
+    <ClCompile Include="..\..\..\..\..\ethernet.cpp" />
+    <ClCompile Include="..\..\..\..\..\event_queue.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\calibration.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\data.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\edit_mode.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\edit_mode_keypad.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\edit_mode_slider.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\edit_mode_step.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\keypad.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\numeric_keypad.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\page_ch_settings_adv.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\page_ch_settings_protection.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\page_ch_settings_trigger.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\page_event_queue.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\page_self_test_result.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\page_sys_settings.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\page_user_profiles.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\password.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\psu.cpp" />
+    <ClCompile Include="..\..\..\..\..\gui\touch_calibration.cpp" />
+    <ClCompile Include="..\..\..\..\..\idle.cpp" />
+    <ClCompile Include="..\..\..\..\..\io_pins.cpp" />
+    <ClCompile Include="..\..\..\..\..\lcd.cpp" />
+    <ClCompile Include="..\..\..\..\..\list_program.cpp" />
+    <ClCompile Include="..\..\..\..\..\ntp.cpp" />
+    <ClCompile Include="..\..\..\..\..\ontime.cpp" />
+    <ClCompile Include="..\..\..\..\..\persist_conf.cpp" />
+    <ClCompile Include="..\..\..\..\..\pid.cpp" />
+    <ClCompile Include="..\..\..\..\..\profile.cpp" />
+    <ClCompile Include="..\..\..\..\..\psu.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\appl.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\cal.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\core.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\debug.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\diag.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\display.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\dlog.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\inst.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\meas.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\mem.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\mmem.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\outp.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\params.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\psu.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\regs.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\sense.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\simu.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\sour.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\stat.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\syst.cpp" />
+    <ClCompile Include="..\..\..\..\..\scpi\trigger.cpp" />
+    <ClCompile Include="..\..\..\..\..\sd_card.cpp" />
+    <ClCompile Include="..\..\..\..\..\serial_psu.cpp" />
+    <ClCompile Include="..\..\..\..\..\sound.cpp" />
+    <ClCompile Include="..\..\..\..\..\temperature.cpp" />
+    <ClCompile Include="..\..\..\..\..\temp_sensor.cpp" />
+    <ClCompile Include="..\..\..\..\..\timer.cpp" />
+    <ClCompile Include="..\..\..\..\..\trigger.cpp" />
+    <ClCompile Include="..\..\..\..\..\unit.cpp" />
+    <ClCompile Include="..\..\..\..\..\util.cpp" />
+    <ClCompile Include="..\..\..\adc.cpp" />
+    <ClCompile Include="..\..\..\board.cpp" />
+    <ClCompile Include="..\..\..\bp.cpp" />
+    <ClCompile Include="..\..\..\buzzer.cpp" />
+    <ClCompile Include="..\..\..\dac.cpp" />
+    <ClCompile Include="..\..\..\eeprom.cpp" />
+    <ClCompile Include="..\..\..\ethernet\EthernetUdp2.cpp" />
+    <ClCompile Include="..\..\..\ethernet\uipethernet_impl.cpp" />
+    <ClCompile Include="..\..\..\fan.cpp" />
+    <ClCompile Include="..\..\..\front_panel\data.cpp" />
+    <ClCompile Include="..\..\..\front_panel\render.cpp" />
+    <ClCompile Include="..\..\..\ioexp.cpp" />
+    <ClCompile Include="..\..\..\io_pins.cpp" />
+    <ClCompile Include="..\..\..\psu.cpp" />
+    <ClCompile Include="..\..\..\rtc.cpp" />
+    <ClCompile Include="..\..\..\SdFat.cpp" />
+    <ClCompile Include="..\..\..\serial.cpp" />
+    <ClCompile Include="..\..\..\temp_sensor.cpp" />
+    <ClCompile Include="..\..\..\watchdog.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\fifo_private.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\lexer_private.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\parser_private.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\utils_private.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi-parser.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi\config.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi\constants.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi\error.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi\expression.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi\ieee488.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi\minimal.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi\parser.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi\scpi.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi\scpi_user_config.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi\types.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi\units.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\scpi\utils.h" />
+    <ClInclude Include="..\..\..\..\..\..\app\gui\document.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\encoder.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\data.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\font.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\gui.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\hooks.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\internal.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\lcd.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\page.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\touch.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\touch_filter.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\view.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget_button_group.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\mw.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\lcd.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\beeper.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\encoder.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\ethernet.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\control.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\data.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\front_panel\render.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\imgui\texture.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\imgui\window.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\imgui\window_impl.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\main_loop.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\platform.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\thread.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\platform\simulator\touch.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\unit.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\util.h" />
+    <ClInclude Include="..\..\..\..\..\actions.h" />
+    <ClInclude Include="..\..\..\..\..\adc.h" />
+    <ClInclude Include="..\..\..\..\..\board.h" />
+    <ClInclude Include="..\..\..\..\..\bp.h" />
+    <ClInclude Include="..\..\..\..\..\buzzer.h" />
+    <ClInclude Include="..\..\..\..\..\calibration.h" />
+    <ClInclude Include="..\..\..\..\..\channel.h" />
+    <ClInclude Include="..\..\..\..\..\channel_dispatcher.h" />
+    <ClInclude Include="..\..\..\..\..\conf.h" />
+    <ClInclude Include="..\..\..\..\..\conf_advanced.h" />
+    <ClInclude Include="..\..\..\..\..\conf_channel.h" />
+    <ClInclude Include="..\..\..\..\..\conf_mw.h" />
+    <ClInclude Include="..\..\..\..\..\conf_user.h" />
+    <ClInclude Include="..\..\..\..\..\conf_user_revision.h" />
+    <ClInclude Include="..\..\..\..\..\dac.h" />
+    <ClInclude Include="..\..\..\..\..\datetime.h" />
+    <ClInclude Include="..\..\..\..\..\debug.h" />
+    <ClInclude Include="..\..\..\..\..\devices.h" />
+    <ClInclude Include="..\..\..\..\..\dlog.h" />
+    <ClInclude Include="..\..\..\..\..\eeprom.h" />
+    <ClInclude Include="..\..\..\..\..\ethernet.h" />
+    <ClInclude Include="..\..\..\..\..\event_queue.h" />
+    <ClInclude Include="..\..\..\..\..\fan.h" />
+    <ClInclude Include="..\..\..\..\..\gui\calibration.h" />
+    <ClInclude Include="..\..\..\..\..\gui\data.h" />
+    <ClInclude Include="..\..\..\..\..\gui\edit_mode.h" />
+    <ClInclude Include="..\..\..\..\..\gui\edit_mode_keypad.h" />
+    <ClInclude Include="..\..\..\..\..\gui\edit_mode_slider.h" />
+    <ClInclude Include="..\..\..\..\..\gui\edit_mode_step.h" />
+    <ClInclude Include="..\..\..\..\..\gui\keypad.h" />
+    <ClInclude Include="..\..\..\..\..\gui\numeric_keypad.h" />
+    <ClInclude Include="..\..\..\..\..\gui\page_ch_settings_adv.h" />
+    <ClInclude Include="..\..\..\..\..\gui\page_ch_settings_protection.h" />
+    <ClInclude Include="..\..\..\..\..\gui\page_ch_settings_trigger.h" />
+    <ClInclude Include="..\..\..\..\..\gui\page_event_queue.h" />
+    <ClInclude Include="..\..\..\..\..\gui\page_self_test_result.h" />
+    <ClInclude Include="..\..\..\..\..\gui\page_sys_settings.h" />
+    <ClInclude Include="..\..\..\..\..\gui\page_user_profiles.h" />
+    <ClInclude Include="..\..\..\..\..\gui\password.h" />
+    <ClInclude Include="..\..\..\..\..\gui\psu.h" />
+    <ClInclude Include="..\..\..\..\..\gui\touch_calibration.h" />
+    <ClInclude Include="..\..\..\..\..\idle.h" />
+    <ClInclude Include="..\..\..\..\..\ioexp.h" />
+    <ClInclude Include="..\..\..\..\..\io_pins.h" />
+    <ClInclude Include="..\..\..\..\..\list_program.h" />
+    <ClInclude Include="..\..\..\..\..\ntp.h" />
+    <ClInclude Include="..\..\..\..\..\ontime.h" />
+    <ClInclude Include="..\..\..\..\..\persist_conf.h" />
+    <ClInclude Include="..\..\..\..\..\pid.h" />
+    <ClInclude Include="..\..\..\..\..\profile.h" />
+    <ClInclude Include="..\..\..\..\..\psu.h" />
+    <ClInclude Include="..\..\..\..\..\rtc.h" />
+    <ClInclude Include="..\..\..\..\..\scpi\commands.h" />
+    <ClInclude Include="..\..\..\..\..\scpi\params.h" />
+    <ClInclude Include="..\..\..\..\..\scpi\psu.h" />
+    <ClInclude Include="..\..\..\..\..\scpi\regs.h" />
+    <ClInclude Include="..\..\..\..\..\scpi\user_config.h" />
+    <ClInclude Include="..\..\..\..\..\sd_card.h" />
+    <ClInclude Include="..\..\..\..\..\serial_psu.h" />
+    <ClInclude Include="..\..\..\..\..\sound.h" />
+    <ClInclude Include="..\..\..\..\..\temperature.h" />
+    <ClInclude Include="..\..\..\..\..\temp_sensor.h" />
+    <ClInclude Include="..\..\..\..\..\timer.h" />
+    <ClInclude Include="..\..\..\..\..\trigger.h" />
+    <ClInclude Include="..\..\..\..\..\unit.h" />
+    <ClInclude Include="..\..\..\..\..\util.h" />
+    <ClInclude Include="..\..\..\..\..\watchdog.h" />
+    <ClInclude Include="..\..\..\bp.h" />
+    <ClInclude Include="..\..\..\conf.h" />
+    <ClInclude Include="..\..\..\ethernet\EthernetUdp2.h" />
+    <ClInclude Include="..\..\..\ethernet\UIPClient.h" />
+    <ClInclude Include="..\..\..\ethernet\UIPEthernet.h" />
+    <ClInclude Include="..\..\..\ethernet\UIPServer.h" />
+    <ClInclude Include="..\..\..\front_panel\data.h" />
+    <ClInclude Include="..\..\..\psu.h" />
+    <ClInclude Include="..\..\..\SdFat.h" />
+    <ClInclude Include="..\..\..\serial.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\scpi.g" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D2CF2C08-BF54-42FD-9D75-D4799F0652B6}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>eez_psu_sim</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>EEZ_PLATFORM_SIMULATOR;USE_FULL_ERROR_LIST=0;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../../../../../..;../../../../../../../libraries/scpi-parser/src;../../../../../../mw/platform/simulator/win32/third_party/SDL2/include;../../../../../../mw/platform/simulator/win32/third_party/SDL2_image/include;../../../../../../mw/platform/simulator/win32/third_party/SDL2_ttf/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ObjectFileName>$(IntDir)/eez/app/platform/simulator/win32/solution/eez_psi_sim/%(RelativeDir)/</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TargetDir);../../../../../../mw/platform/simulator/win32/third_party/SDL2/lib/x86;../../../../../../mw/platform/simulator/win32/third_party/SDL2_image/lib/x86;../../../../../../mw/platform/simulator/win32/third_party/SDL2_ttf/lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2\lib\x86\SDL2.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_image\lib\x86\SDL2_image.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_image\lib\x86\zlib1.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_image\lib\x86\libpng16-16.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)"
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>EEZ_PLATFORM_SIMULATOR;USE_FULL_ERROR_LIST=0;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../../../../../..;../../../../../../../libraries/scpi-parser/src;../../../../../../mw/platform/simulator/win32/third_party/SDL2/include;../../../../../../mw/platform/simulator/win32/third_party/SDL2_image/include;../../../../../../mw/platform/simulator/win32/third_party/SDL2_ttf/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ObjectFileName>$(IntDir)/eez/app/platform/simulator/win32/solution/eez_psi_sim/%(RelativeDir)/</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TargetDir);../../../../../../mw/platform/simulator/win32/third_party/SDL2/lib/x86;../../../../../../mw/platform/simulator/win32/third_party/SDL2_image/lib/x86;../../../../../../mw/platform/simulator/win32/third_party/SDL2_ttf/lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2\lib\x86\SDL2.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_image\lib\x86\SDL2_image.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_image\lib\x86\zlib1.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_image\lib\x86\libpng16-16.dll" $(TargetDir)
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)"
+copy "..\..\..\..\..\..\mw\platform\simulator\win32\third_party\SDL2_ttf\lib\x86\libfreetype-6.dll" "$(OutDir)"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

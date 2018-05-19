@@ -25,7 +25,7 @@
 #include "gui_page_self_test_result.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 void SelfTestResultPage::pageWillAppear() {
@@ -38,6 +38,6 @@ void SelfTestResultPage::pageDidDisappear() {
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui
 
 #endif

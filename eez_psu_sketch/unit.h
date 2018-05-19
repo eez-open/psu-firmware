@@ -30,10 +30,10 @@
 #include "mw_unit.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 int getNumSignificantDecimalDigits(Unit unit);
 float getPrecision(Unit unit);
 
 }
-} // eez::psu
+} // eez::app

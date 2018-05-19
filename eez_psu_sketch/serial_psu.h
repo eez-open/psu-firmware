@@ -21,7 +21,7 @@
 #include "scpi_psu.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace serial {
 
 extern TestResult g_testResult;
@@ -48,4 +48,4 @@ enum Parity {
 
 }
 }
-} // namespace eez::psu::serial
+} // namespace eez::app::serial

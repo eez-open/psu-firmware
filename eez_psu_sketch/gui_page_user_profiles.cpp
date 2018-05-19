@@ -25,12 +25,12 @@
 #include "channel_dispatcher.h"
 
 #include "gui_psu.h"
-#include "app_gui_document.h"
+#include "gui_document.h"
 
 using namespace eez::app::gui;
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 int g_selectedProfileLocation;
@@ -142,6 +142,6 @@ void UserProfilesPage::editRemark() {
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui
 
 #endif

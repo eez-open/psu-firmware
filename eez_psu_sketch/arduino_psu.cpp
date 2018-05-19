@@ -18,9 +18,9 @@
 #include "psu.h"
 
 void eez_app_boot() {
-    eez::psu::boot();
+    eez::app::boot();
 }
 
 void eez_app_tick() {
-    eez::psu::tick();
+    eez::app::tick();
 }

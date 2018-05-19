@@ -60,13 +60,13 @@
 #define CONF_CHECK_DHCP_LEASE_SEC 60
 
 namespace eez {
-namespace psu {
+namespace app {
 
 using namespace scpi;
 
 namespace ethernet {
 
-psu::TestResult g_testResult = psu::TEST_FAILED;
+TestResult g_testResult = TEST_FAILED;
 
 static EthernetServer *server;
 
@@ -134,7 +134,7 @@ scpi_result_t SCPI_Reset(scpi_t *context) {
     strcpy(errorOutputBuffer, "**Reset\r\n");
     ethernet_client_write(g_activeClient, errorOutputBuffer, strlen(errorOutputBuffer));
 
-    return psu::reset() ? SCPI_RES_OK : SCPI_RES_ERR;
+    return reset() ? SCPI_RES_OK : SCPI_RES_ERR;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -159,7 +159,7 @@ scpi_t g_scpiContext;
 
 void init() {
     if (!persist_conf::isEthernetEnabled()) {
-        g_testResult = psu::TEST_SKIPPED;
+        g_testResult = TEST_SKIPPED;
         return;
     }
 
@@ -203,7 +203,7 @@ void init() {
 		SPI.endTransaction();
 #endif
 
-        g_testResult = psu::TEST_WARNING;
+        g_testResult = TEST_WARNING;
         DebugTrace("Ethernet not connected!");
         event_queue::pushEvent(event_queue::EVENT_WARNING_ETHERNET_NOT_CONNECTED);
 
@@ -218,7 +218,7 @@ void init() {
 	SPI.endTransaction();
 #endif
 
-    g_testResult = psu::TEST_OK;
+    g_testResult = TEST_OK;
 
     DebugTraceF("Listening on port %d", (int)persist_conf::devConf2.ethernetScpiPort);
 
@@ -243,15 +243,15 @@ void init() {
 }
 
 bool test() {
-    if (g_testResult == psu::TEST_FAILED) {
-        psu::generateError(SCPI_ERROR_ETHERNET_TEST_FAILED);
+    if (g_testResult == TEST_FAILED) {
+        generateError(SCPI_ERROR_ETHERNET_TEST_FAILED);
     }
 
-    return g_testResult != psu::TEST_FAILED;
+    return g_testResult != TEST_FAILED;
 }
 
 void tick(uint32_t tick_usec) {
-    if (g_testResult != psu::TEST_OK) {
+    if (g_testResult != TEST_OK) {
         return;
     }
 
@@ -343,11 +343,11 @@ void update() {
         g_isConnected = false;
     }
 
-    g_testResult = psu::TEST_WARNING;
+    g_testResult = TEST_WARNING;
 }
 
 }
 }
-} // namespace eez::psu::ethernet
+} // namespace eez::app::ethernet
 
 #endif

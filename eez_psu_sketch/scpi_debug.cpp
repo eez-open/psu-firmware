@@ -25,7 +25,7 @@
 #include "fan.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 #if CONF_DEBUG
     using namespace debug;
@@ -322,4 +322,4 @@ scpi_result_t scpi_cmd_debugFanPidQ(scpi_t * context) {
 
 }
 }
-} // namespace eez::psu::scpi
+} // namespace eez::app::scpi

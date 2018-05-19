@@ -49,7 +49,7 @@
 #define CONF_TIMEOUT_AFTER_ERROR_MS CONF_NTP_PERIOD_AFTER_ERROR_SEC * 1000L
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace ntp {
 
 static EthernetUDP g_udp;
@@ -279,6 +279,6 @@ bool isTestNtpServerDone(bool &result) {
 
 }
 }
-} // namespace eez::psu::ntp
+} // namespace eez::app::ntp
 
 #endif

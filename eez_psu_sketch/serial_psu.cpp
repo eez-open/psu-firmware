@@ -22,13 +22,13 @@
 #define CONF_CHUNK_SIZE CONF_SERIAL_BUFFER_SIZE
 
 namespace eez {
-namespace psu {
+namespace app {
 
 using namespace scpi;
 
 namespace serial {
 
-psu::TestResult g_testResult = psu::TEST_FAILED;
+TestResult g_testResult = TEST_FAILED;
 
 long g_bauds[] = {4800, 9600, 19200, 38400, 57600, 115200};
 size_t g_baudsSize = sizeof(g_bauds) / sizeof(long);
@@ -85,7 +85,7 @@ scpi_result_t SCPI_Reset(scpi_t *context) {
         SERIAL_PORT.println(errorOutputBuffer);
     }
 
-    return psu::reset() ? SCPI_RES_OK : SCPI_RES_ERR;
+    return reset() ? SCPI_RES_OK : SCPI_RES_ERR;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -195,4 +195,4 @@ void update() {
 
 }
 }
-} // namespace eez::psu::serial
+} // namespace eez::app::serial

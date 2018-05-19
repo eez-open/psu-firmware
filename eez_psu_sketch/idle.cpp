@@ -23,7 +23,7 @@
 #include "scpi_psu.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace idle {
 
 enum ActivityType {
@@ -90,4 +90,4 @@ bool isIdle() {
 
 }
 }
-} // namespace eez::psu::idle
+} // namespace eez::app::idle

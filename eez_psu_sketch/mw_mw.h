@@ -25,15 +25,15 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "app_conf.h"
-
 #if defined(EEZ_PLATFORM_ARDUINO_DUE)
-#include "arduino_platform.h"
+#include "me_arduino_platform.h"
 #elif defined(EEZ_PLATFORM_SIMULATOR)
 #include "mw_platform/simulator/platform.h"
 #elif defined(EEZ_PLATFORM_STM32)
 #include "mw_platform/stm32/platform.h"
 #endif
+
+#include "conf_mw.h"
 
 void eez_app_boot();
 void eez_app_tick();

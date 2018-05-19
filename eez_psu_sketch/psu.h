@@ -18,11 +18,9 @@
 
 #pragma once
 
-#include "app_conf.h"
-
-#if defined(EEZ_PLATFORM_ARDUINO_DUE)
-#include "eez_psu.h"
-#endif
+#include "mw_mw.h"
+#include "mw_util.h"
+using namespace eez::mw;
 
 #include <scpi-parser.h>
 
@@ -37,7 +35,7 @@
 /// Namespace for the everything from the EEZ.
 namespace eez {
 /// PSU firmware.
-namespace psu {
+namespace app {
 
 enum TestResult {
     TEST_FAILED = 0,
@@ -110,11 +108,7 @@ extern bool g_rprogAlarm;
 bool isFrontPanelLocked();
 
 }
-} // namespace eez::psu
-
-#include "mw_mw.h"
-#include "mw_util.h"
-using namespace eez::mw;
+} // namespace eez::app
 
 #include "debug.h"
 #include "util.h"

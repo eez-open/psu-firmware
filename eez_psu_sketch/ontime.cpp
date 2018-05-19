@@ -23,7 +23,7 @@
 #define MIN_TO_MS (60L * 1000L)
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace ontime {
 
 void counterToString(char *str, size_t count, uint32_t counterTime) {
@@ -105,4 +105,4 @@ uint32_t Counter::getLastTime() {
 
 }
 }
-} // namespace eez::psu::ontime
+} // namespace eez::app::ontime

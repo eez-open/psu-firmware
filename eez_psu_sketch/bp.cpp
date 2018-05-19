@@ -20,10 +20,10 @@
 #include "bp.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace bp {
 
-psu::TestResult g_testResult = psu::TEST_SKIPPED;
+TestResult g_testResult = TEST_SKIPPED;
 
 uint16_t g_lastConf;
 static int g_channelCouplingType;
@@ -175,4 +175,4 @@ void switchChannelCoupling(int channelCouplingType) {
 
 }
 }
-} // namespace eez::psu::bp
+} // namespace eez::app::bp

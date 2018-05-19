@@ -31,7 +31,7 @@
 #include "actions.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -296,6 +296,6 @@ void ChSettingsOtpProtectionPage::setParams(bool checkLoad) {
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui
 
 #endif

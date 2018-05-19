@@ -20,7 +20,7 @@
 #include "scpi_psu.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace scpi {
 
 /**
@@ -283,4 +283,4 @@ void reg_set_oper_isum_bit(scpi_t *context, Channel *channel, int bit_mask, bool
 
 }
 }
-} // namespace eez::psu::scpi
+} // namespace eez::app::scpi

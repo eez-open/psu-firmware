@@ -23,7 +23,7 @@
 #endif
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace board {
 
 void powerUp() {
@@ -60,4 +60,4 @@ void ccLedSwitch(Channel *channel, bool on) {
 
 }
 }
-} // namespace eez::psu::board
+} // namespace eez::app::board

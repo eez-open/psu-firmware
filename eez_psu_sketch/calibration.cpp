@@ -23,7 +23,7 @@
 #include "channel_dispatcher.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace calibration {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -428,4 +428,4 @@ bool clear(Channel *channel) {
 
 }
 }
-} // namespace eez::psu::calibration
+} // namespace eez::app::calibration

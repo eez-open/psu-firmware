@@ -26,7 +26,7 @@
 #include "fan.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace fan {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@ enum RpmMeasureState {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-TestResult g_testResult = psu::TEST_FAILED;
+TestResult g_testResult = TEST_FAILED;
 
 static uint32_t g_testStartTime;
 
@@ -175,32 +175,32 @@ bool test() {
 
         if (g_rpmMeasureState == RPM_MEASURE_STATE_MEASURED) {
             finish_rpm_measure();
-            g_testResult = psu::TEST_OK;
+            g_testResult = TEST_OK;
             DebugTraceF("Fan RPM: %d", g_rpm);
         } else {
             // measure timeout, interrupt measurement
             g_rpmMeasureState = RPM_MEASURE_STATE_MEASURED;
             g_rpm = 0;
             finish_rpm_measure();
-            g_testResult = psu::TEST_FAILED;
+            g_testResult = TEST_FAILED;
         }
     } else {
-        g_testResult = psu::TEST_SKIPPED;
+        g_testResult = TEST_SKIPPED;
     }
 
-    if (g_testResult == psu::TEST_FAILED) {
-        psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
-        psu::setQuesBits(QUES_FAN, true);
-        psu::limitMaxCurrent(MAX_CURRENT_LIMIT_CAUSE_FAN);
+    if (g_testResult == TEST_FAILED) {
+        generateError(SCPI_ERROR_FAN_TEST_FAILED);
+        setQuesBits(QUES_FAN, true);
+        limitMaxCurrent(MAX_CURRENT_LIMIT_CAUSE_FAN);
     } else {
-        psu::unlimitMaxCurrent();
+        unlimitMaxCurrent();
     }
 
-    return g_testResult != psu::TEST_FAILED;
+    return g_testResult != TEST_FAILED;
 }
 
 void tick(uint32_t tick_usec) {
-    if (g_testResult != psu::TEST_OK) {
+    if (g_testResult != TEST_OK) {
         return;
     }
 
@@ -258,10 +258,10 @@ void tick(uint32_t tick_usec) {
                     finish_rpm_measure();
 
                     if (g_fanSpeedPWM >= FAN_FAILED_THRESHOLD) {
-                        g_testResult = psu::TEST_FAILED;
-                        psu::generateError(SCPI_ERROR_FAN_TEST_FAILED);
-                        psu::setQuesBits(QUES_FAN, true);
-                        psu::limitMaxCurrent(MAX_CURRENT_LIMIT_CAUSE_FAN);
+                        g_testResult = TEST_FAILED;
+                        generateError(SCPI_ERROR_FAN_TEST_FAILED);
+                        setQuesBits(QUES_FAN, true);
+                        limitMaxCurrent(MAX_CURRENT_LIMIT_CAUSE_FAN);
                     }
                 }
             }
@@ -289,6 +289,6 @@ void setFanPwm(int pwm) {
 
 }
 }
-} // namespace eez::psu::fan
+} // namespace eez::app::fan
 
 #endif

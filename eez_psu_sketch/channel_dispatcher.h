@@ -25,7 +25,7 @@
 #include "temp_sensor.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace channel_dispatcher {
 
 enum Type {
@@ -146,4 +146,4 @@ bool isCurrentLowRangeAllowed(Channel &channel);
 
 }
 }
-} // namespace eez::psu::channel_dispatcher
+} // namespace eez::app::channel_dispatcher

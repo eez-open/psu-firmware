@@ -68,7 +68,7 @@
 #include "idle.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 using namespace scpi;
 
@@ -1232,4 +1232,4 @@ void updateMasterSync() {
 
 
 }
-} // namespace eez::psu
+} // namespace eez::app

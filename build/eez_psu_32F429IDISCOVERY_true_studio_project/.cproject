@@ -154,7 +154,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="libraries/eez_psu_lib|eez/mw/platform/stm32/Utilities/Fonts/font8.c|eez/mw/platform/stm32/Utilities/Fonts/font24.c|eez/mw/platform/stm32/Utilities/Fonts/font20.c|eez/mw/platform/stm32/Utilities/Fonts/font16.c|eez/mw/platform/stm32/Utilities/Fonts/font12.c|eez/psu/eeprom.cpp|eez/psu/rtc.cpp|eez/psu/ioexp.cpp|eez/psu/dac.cpp|eez/psu/adc.cpp|eez/mw/platform/simulator|eez/psu/platform/arduino_due|eez/psu/platform/simulator|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="libraries/eez_psu_lib|eez/mw/platform/stm32/Utilities/Fonts/font8.c|eez/mw/platform/stm32/Utilities/Fonts/font24.c|eez/mw/platform/stm32/Utilities/Fonts/font20.c|eez/mw/platform/stm32/Utilities/Fonts/font16.c|eez/mw/platform/stm32/Utilities/Fonts/font12.c|eez/app/eeprom.cpp|eez/app/rtc.cpp|eez/app/ioexp.cpp|eez/app/dac.cpp|eez/app/adc.cpp|eez/mw/platform/simulator|eez/app/platform/arduino_due|eez/app/platform/simulator|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

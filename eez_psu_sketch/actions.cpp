@@ -40,7 +40,7 @@
 #include "gui_touch_calibration.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 using namespace gui;
 
@@ -331,39 +331,39 @@ void action_sys_settings_cal_edit_password() {
 }
 
 void action_sys_settings_cal_ch_wiz_start() {
-    gui::calibration::start();
+    gui::calibration_wizard::start();
 }
 
 void action_sys_settings_cal_ch_wiz_step_previous() {
-    gui::calibration::previousStep();
+    gui::calibration_wizard::previousStep();
 }
 
 void action_sys_settings_cal_ch_wiz_step_next() {
-    gui::calibration::nextStep();
+    gui::calibration_wizard::nextStep();
 }
 
 void action_sys_settings_cal_ch_wiz_stop_and_show_previous_page() {
-    gui::calibration::stop(popPage);
+    gui::calibration_wizard::stop(popPage);
 }
 
 void action_sys_settings_cal_ch_wiz_stop_and_show_main_page() {
-    gui::calibration::stop(action_show_main_page);
+    gui::calibration_wizard::stop(action_show_main_page);
 }
 
 void action_sys_settings_cal_ch_wiz_step_set() {
-    gui::calibration::set();
+    gui::calibration_wizard::set();
 }
 
 void action_sys_settings_cal_ch_wiz_step_set_level_value() {
-    gui::calibration::setLevelValue();
+    gui::calibration_wizard::setLevelValue();
 }
 
 void action_sys_settings_cal_ch_wiz_save() {
-    gui::calibration::save();
+    gui::calibration_wizard::save();
 }
 
 void action_sys_settings_cal_toggle_enable() {
-    gui::calibration::toggleEnable();
+    gui::calibration_wizard::toggleEnable();
 }
 
 void action_ch_settings_prot_clear() {
@@ -964,6 +964,6 @@ ActionExecFunc g_actionExecFunctions[] = {
 };
 
 }
-} // namespace eez::psu
+} // namespace eez::app
 
 #endif

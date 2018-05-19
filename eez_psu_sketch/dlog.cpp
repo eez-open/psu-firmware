@@ -30,7 +30,7 @@
 #include "dlog.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace dlog {
 
 bool g_logVoltage[CH_NUM];
@@ -61,9 +61,9 @@ uint32_t g_lastSyncTickCount;
 void setState(State newState) {
 	if (g_state != newState) {
 		if (newState == STATE_EXECUTING) {
-			psu::setOperBits(OPER_DLOG, true);
+			setOperBits(OPER_DLOG, true);
 		} else if (g_state == STATE_EXECUTING) {
-			psu::setOperBits(OPER_DLOG, false);
+			setOperBits(OPER_DLOG, false);
 		}
 
 		g_state = newState;
@@ -350,6 +350,6 @@ void reset() {
 
 }
 }
-} // namespace eez::psu::dlog
+} // namespace eez::app::dlog
 
 #endif // OPTION_SD_CARD

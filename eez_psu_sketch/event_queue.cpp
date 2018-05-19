@@ -23,7 +23,7 @@
 #include "event_queue.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace event_queue {
 
 static const uint32_t MAGIC = 0xD8152FC3L;
@@ -51,7 +51,7 @@ void readHeader() {
 }
 
 void writeHeader() {
-    if (eeprom::g_testResult == psu::TEST_OK) {
+    if (eeprom::g_testResult == TEST_OK) {
         eeprom::write((uint8_t *)&eventQueue, sizeof(EventQueueHeader), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS);
     }
 }
@@ -61,7 +61,7 @@ void readEvent(uint16_t eventIndex, Event *e) {
 }
 
 void writeEvent(uint16_t eventIndex, Event *e) {
-    if (eeprom::g_testResult == psu::TEST_OK) {
+    if (eeprom::g_testResult == TEST_OK) {
         eeprom::write((uint8_t *)e, sizeof(Event), eeprom::EEPROM_EVENT_QUEUE_START_ADDRESS + EVENT_HEADER_SIZE + eventIndex * EVENT_SIZE);
     }
 }
@@ -265,4 +265,4 @@ int getActivePageIndex() {
 
 }
 }
-} // namespace eez::psu::event_queue
+} // namespace eez::app::event_queue

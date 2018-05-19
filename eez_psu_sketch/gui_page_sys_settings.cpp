@@ -41,7 +41,7 @@
 using namespace eez::app::gui;
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -763,6 +763,6 @@ void SysSettingsSerialPage::set() {
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui
 
 #endif

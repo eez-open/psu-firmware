@@ -22,10 +22,9 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-
-#include "eez/app/conf.h"
 
 #if defined(EEZ_PLATFORM_ARDUINO_DUE)
 #include "eez/mw/platform/arduino_due/platform.h"
@@ -34,6 +33,8 @@
 #elif defined(EEZ_PLATFORM_STM32)
 #include "eez/mw/platform/stm32/platform.h"
 #endif
+
+#include "eez/app/conf_mw.h"
 
 void eez_app_boot();
 void eez_app_tick();

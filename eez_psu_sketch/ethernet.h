@@ -21,7 +21,7 @@
 #include "scpi_psu.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace ethernet {
 
 extern TestResult g_testResult;
@@ -40,4 +40,4 @@ void update();
 
 }
 }
-} // namespace eez::psu::ethernet
+} // namespace eez::app::ethernet

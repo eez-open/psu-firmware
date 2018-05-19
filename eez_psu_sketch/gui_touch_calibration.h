@@ -18,12 +18,12 @@
 
 #pragma once
 
-#include "app_gui_document.h"
+#include "gui_document.h"
 
 using namespace eez::mw::gui;
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 namespace touch_calibration {
 
@@ -36,4 +36,4 @@ void tick(uint32_t tick_usec);
 }
 }
 }
-} // namespace eez::psu::gui::touch_calibration
+} // namespace eez::app::gui::touch_calibration

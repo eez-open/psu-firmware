@@ -20,7 +20,7 @@
 #include "unit.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 int getNumSignificantDecimalDigits(Unit unit) {
 	static int g_numSignificantDecimalDigits[] = {
@@ -68,4 +68,4 @@ float getPrecision(Unit unit) {
 
 
 }
-} // namespace eez::psu::util
+} // namespace eez::app::util

@@ -21,7 +21,7 @@
 #include "timer.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace ontime {
 
 void counterToString(char *str, size_t count, uint32_t counterTime);
@@ -59,4 +59,4 @@ private:
 
 }
 }
-} // namespace eez::psu::ontime
+} // namespace eez::app::ontime

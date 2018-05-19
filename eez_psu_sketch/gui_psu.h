@@ -21,7 +21,7 @@
 #include "mw_gui_gui.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 using namespace mw::gui;
 
@@ -102,4 +102,4 @@ bool isFocusChanged();
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui

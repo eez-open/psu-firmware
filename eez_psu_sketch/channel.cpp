@@ -43,7 +43,7 @@
 #include "io_pins.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 using namespace scpi;
 
@@ -374,7 +374,7 @@ void Channel::protectionEnter(ProtectionValue &cpv) {
 
     if (IS_OVP_VALUE(this, cpv)) {
         if (flags.rprogEnabled && mw::equal(channel_dispatcher::getUProtectionLevel(*this), channel_dispatcher::getUMax(*this), getPrecision(UNIT_VOLT))) {
-            psu::g_rprogAlarm = true;
+            g_rprogAlarm = true;
         }
         doRemoteProgrammingEnable(false);
     } else if (IS_OCP_VALUE(this, cpv)) {
@@ -641,19 +641,19 @@ bool Channel::isPowerOk() {
 }
 
 bool Channel::isTestFailed() {
-    return ioexp.g_testResult == psu::TEST_FAILED ||
-        adc.g_testResult == psu::TEST_FAILED ||
-        dac.g_testResult == psu::TEST_FAILED;
+    return ioexp.g_testResult == TEST_FAILED ||
+        adc.g_testResult == TEST_FAILED ||
+        dac.g_testResult == TEST_FAILED;
 }
 
 bool Channel::isTestOk() {
-    return ioexp.g_testResult == psu::TEST_OK &&
-        adc.g_testResult == psu::TEST_OK &&
-        dac.g_testResult == psu::TEST_OK;
+    return ioexp.g_testResult == TEST_OK &&
+        adc.g_testResult == TEST_OK &&
+        dac.g_testResult == TEST_OK;
 }
 
 bool Channel::isOk() {
-    return psu::isPowerUp() && isPowerOk() && isTestOk();
+    return isPowerUp() && isPowerOk() && isTestOk();
 }
 
 void Channel::voltageBalancing() {
@@ -723,11 +723,11 @@ void Channel::tick(uint32_t tick_usec) {
                 if (flags.dpOn) {
                     DebugTraceF("CH%d, neg. P, DP off: %f", index, u.mon_last * i.mon_last);
                     dpNegMonitoringTime = tick_usec;
-                    psu::generateError(SCPI_ERROR_CH1_DOWN_PROGRAMMER_SWITCHED_OFF + (index - 1));
+                    generateError(SCPI_ERROR_CH1_DOWN_PROGRAMMER_SWITCHED_OFF + (index - 1));
                     doDpEnable(false);
                 } else {
                     DebugTraceF("CH%d, neg. P, output off: %f", index, u.mon_last * i.mon_last);
-                    psu::generateError(SCPI_ERROR_CH1_OUTPUT_FAULT_DETECTED - (index - 1));
+                    generateError(SCPI_ERROR_CH1_OUTPUT_FAULT_DETECTED - (index - 1));
                     channel_dispatcher::outputEnable(*this, false);
                 }
             } else if (tick_usec - dpNegMonitoringTime > 500 * 1000UL) {
@@ -1000,7 +1000,7 @@ void Channel::protectionCheck() {
 }
 
 void Channel::eventAdcData(int16_t adc_data, bool startAgain) {
-    if (!psu::isPowerUp()) return;
+    if (!isPowerUp()) return;
 
     adcDataIsReady(adc_data, startAgain);
     protectionCheck();
@@ -1143,7 +1143,7 @@ void Channel::executeOutputEnable(bool enable) {
 }
 
 void Channel::doOutputEnable(bool enable) {
-    if (!psu::g_isBooted) {
+    if (!g_isBooted) {
         flags.afterBootOutputEnabled = enable;
         return;
     }
@@ -1288,7 +1288,7 @@ void Channel::afterBootOutputEnable() {
 }
 
 bool Channel::isOutputEnabled() {
-    return psu::isPowerUp() && flags.outputEnabled;
+    return isPowerUp() && flags.outputEnabled;
 }
 
 void Channel::doCalibrationEnable(bool enable) {
@@ -1646,7 +1646,7 @@ void Channel::setQuesBits(int bit_mask, bool on) {
         reg_set_ques_isum_bit(&serial::g_scpiContext, this, bit_mask, on);
     }
 #if OPTION_ETHERNET
-    if (ethernet::g_testResult == psu::TEST_OK) {
+    if (ethernet::g_testResult == TEST_OK) {
         reg_set_ques_isum_bit(&ethernet::g_scpiContext, this, bit_mask, on);
     }
 #endif
@@ -1657,7 +1657,7 @@ void Channel::setOperBits(int bit_mask, bool on) {
         reg_set_oper_isum_bit(&serial::g_scpiContext, this, bit_mask, on);
     }
 #if OPTION_ETHERNET
-    if (ethernet::g_testResult == psu::TEST_OK) {
+    if (ethernet::g_testResult == TEST_OK) {
         reg_set_oper_isum_bit(&ethernet::g_scpiContext, this, bit_mask, on);
     }
 #endif
@@ -1720,8 +1720,8 @@ bool Channel::isMaxCurrentLimited() const {
 }
 
 MaxCurrentLimitCause Channel::getMaxCurrentLimitCause() const {
-    if (psu::isMaxCurrentLimited()) {
-        return psu::getMaxCurrentLimitCause();
+    if (isMaxCurrentLimited()) {
+        return getMaxCurrentLimitCause();
     }
     return maxCurrentLimitCause;
 }
@@ -1768,8 +1768,8 @@ void Channel::testPwrgood(uint8_t gpio) {
     if (!(gpio & (1 << IOExpander::IO_BIT_IN_PWRGOOD))) {
         DebugTraceF("Ch%d PWRGOOD bit changed to 0", index);
         flags.powerOk = 0;
-        psu::generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (index - 1));
-        psu::powerDownBySensor();
+        generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (index - 1));
+        powerDownBySensor();
         return;
     }
 }
@@ -1918,4 +1918,4 @@ void Channel::doAutoSelectCurrentRange(uint32_t tickCount) {
 }
 
 }
-} // namespace eez::psu
+} // namespace eez::app

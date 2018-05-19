@@ -30,7 +30,7 @@
 #endif
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace trigger {
 
 static struct {
@@ -386,4 +386,4 @@ void tick(uint32_t tick_usec) {
 
 }
 }
-} // namespace eez::psu::trigger
+} // namespace eez::app::trigger

@@ -21,7 +21,7 @@
 #include "mw_gui_page.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 class ChSettingsProtectionPage : public Page {
@@ -114,4 +114,4 @@ protected:
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui

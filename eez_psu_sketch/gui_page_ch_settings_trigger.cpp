@@ -34,7 +34,7 @@
 #include "gui_numeric_keypad.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 static uint8_t g_newTriggerMode;
@@ -667,6 +667,6 @@ void ChSettingsListsPage::deleteAll() {
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui
 
 #endif

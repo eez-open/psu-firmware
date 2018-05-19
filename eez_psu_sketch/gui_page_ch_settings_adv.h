@@ -21,7 +21,7 @@
 #include "mw_gui_page.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 class ChSettingsAdvLRipplePage : public SetPage {
@@ -103,4 +103,4 @@ private:
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui

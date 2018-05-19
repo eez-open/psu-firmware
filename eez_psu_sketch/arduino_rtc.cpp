@@ -20,10 +20,10 @@
 #include "rtc.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace rtc {
 
-psu::TestResult g_testResult = psu::TEST_FAILED;
+TestResult g_testResult = TEST_FAILED;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -62,31 +62,31 @@ bool test() {
         writeRegisters(WR_CONTROL_1, 2, ctrl_reg_values);
         readRegisters(RD_CONTROL_1, 2, ctrl_reg_values);
 
-        g_testResult = psu::TEST_OK;
+        g_testResult = TEST_OK;
 
         if (ctrl_reg_values[0] != CONTROL_1_VALUE) {
             DebugTraceF("RTC test failed Control 1: w=%d, r=%d", (int)CONTROL_1_VALUE, (int)ctrl_reg_values[0]);
-            g_testResult = psu::TEST_FAILED;
+            g_testResult = TEST_FAILED;
         }
 
         if (ctrl_reg_values[1] != CONTROL_2_VALUE) {
             DebugTraceF("RTC test failed Control 2: w=%d, r=%d", (int)CONTROL_2_VALUE, (int)ctrl_reg_values[1]);
-            g_testResult = psu::TEST_FAILED;
+            g_testResult = TEST_FAILED;
         }
     }
     else {
-        g_testResult = psu::TEST_SKIPPED;
+        g_testResult = TEST_SKIPPED;
     }
 
-    if (g_testResult == psu::TEST_FAILED) {
-        psu::generateError(SCPI_ERROR_RTC_TEST_FAILED);
+    if (g_testResult == TEST_FAILED) {
+        generateError(SCPI_ERROR_RTC_TEST_FAILED);
     }
 
-    return g_testResult != psu::TEST_FAILED;
+    return g_testResult != TEST_FAILED;
 }
 
 bool readDate(uint8_t &year, uint8_t &month, uint8_t &day) {
-    if (g_testResult != psu::TEST_OK) {
+    if (g_testResult != TEST_OK) {
         return false;
     }
 
@@ -101,7 +101,7 @@ bool readDate(uint8_t &year, uint8_t &month, uint8_t &day) {
 }
 
 bool writeDate(uint8_t year, uint8_t month, uint8_t day) {
-    if (g_testResult != psu::TEST_OK) {
+    if (g_testResult != TEST_OK) {
         return false;
     }
 
@@ -118,7 +118,7 @@ bool writeDate(uint8_t year, uint8_t month, uint8_t day) {
 }
 
 bool readTime(uint8_t &hour, uint8_t &minute, uint8_t &second) {
-    if (g_testResult != psu::TEST_OK) {
+    if (g_testResult != TEST_OK) {
         return false;
     }
 
@@ -133,7 +133,7 @@ bool readTime(uint8_t &hour, uint8_t &minute, uint8_t &second) {
 }
 
 bool writeTime(uint8_t hour, uint8_t minute, uint8_t second) {
-    if (g_testResult != psu::TEST_OK) {
+    if (g_testResult != TEST_OK) {
         return false;
     }
 
@@ -149,7 +149,7 @@ bool writeTime(uint8_t hour, uint8_t minute, uint8_t second) {
 }
 
 bool readDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, uint8_t &minute, uint8_t &second) {
-    if (g_testResult != psu::TEST_OK) {
+    if (g_testResult != TEST_OK) {
         return false;
     }
 
@@ -167,7 +167,7 @@ bool readDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, ui
 }
 
 bool writeDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second) {
-    if (g_testResult != psu::TEST_OK) {
+    if (g_testResult != TEST_OK) {
         return false;
     }
 
@@ -188,4 +188,4 @@ bool writeDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8
 
 }
 }
-} // namespace eez::psu::rtc
+} // namespace eez::app::rtc

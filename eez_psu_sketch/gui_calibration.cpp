@@ -34,9 +34,9 @@
 #include "gui_numeric_keypad.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
-namespace calibration {
+namespace calibration_wizard {
 
 int g_stepNum;
 void (*g_stopCallback)();
@@ -65,7 +65,7 @@ void onStartPasswordOk() {
 
     trigger::abort();
 
-    psu::calibration::start(g_channel);
+    calibration::start(g_channel);
 
     g_stepNum = 0;
     showCurrentStep();
@@ -77,25 +77,25 @@ void start() {
 
 data::Value getLevelValue() {
     if (g_stepNum < 3) {
-        return MakeValue(psu::calibration::getVoltage().getLevelValue(), UNIT_VOLT, g_channel->index-1);
+        return MakeValue(calibration::getVoltage().getLevelValue(), UNIT_VOLT, g_channel->index-1);
     }
-    return MakeValue(psu::calibration::getCurrent().getLevelValue(), UNIT_AMPER, g_channel->index-1);
+    return MakeValue(calibration::getCurrent().getLevelValue(), UNIT_AMPER, g_channel->index-1);
 }
 
 void showCurrentStep() {
-    psu::calibration::resetChannelToZero();
+    calibration::resetChannelToZero();
 
     if (g_stepNum < MAX_STEP_NUM) {
         switch (g_stepNum) {
-        case 0: psu::calibration::getVoltage().setLevel(psu::calibration::LEVEL_MIN); break;
-        case 1: psu::calibration::getVoltage().setLevel(psu::calibration::LEVEL_MID); break;
-        case 2: psu::calibration::getVoltage().setLevel(psu::calibration::LEVEL_MAX); break;
-        case 3: psu::calibration::selectCurrentRange(0); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MIN); break;
-        case 4: psu::calibration::selectCurrentRange(0); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MID); break;
-        case 5: psu::calibration::selectCurrentRange(0); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MAX); break;
-        case 6: psu::calibration::selectCurrentRange(1); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MIN); break;
-        case 7: psu::calibration::selectCurrentRange(1); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MID); break;
-        case 8: psu::calibration::selectCurrentRange(1); psu::calibration::getCurrent().setLevel(psu::calibration::LEVEL_MAX); break;
+        case 0: calibration::getVoltage().setLevel(calibration::LEVEL_MIN); break;
+        case 1: calibration::getVoltage().setLevel(calibration::LEVEL_MID); break;
+        case 2: calibration::getVoltage().setLevel(calibration::LEVEL_MAX); break;
+        case 3: calibration::selectCurrentRange(0); calibration::getCurrent().setLevel(calibration::LEVEL_MIN); break;
+        case 4: calibration::selectCurrentRange(0); calibration::getCurrent().setLevel(calibration::LEVEL_MID); break;
+        case 5: calibration::selectCurrentRange(0); calibration::getCurrent().setLevel(calibration::LEVEL_MAX); break;
+        case 6: calibration::selectCurrentRange(1); calibration::getCurrent().setLevel(calibration::LEVEL_MIN); break;
+        case 7: calibration::selectCurrentRange(1); calibration::getCurrent().setLevel(calibration::LEVEL_MID); break;
+        case 8: calibration::selectCurrentRange(1); calibration::getCurrent().setLevel(calibration::LEVEL_MAX); break;
         }
 
         replacePage(PAGE_ID_SYS_SETTINGS_CAL_CH_WIZ_STEP);
@@ -104,11 +104,11 @@ void showCurrentStep() {
      }
 }
 
-psu::calibration::Value *getCalibrationValue() {
+calibration::Value *getCalibrationValue() {
     if (g_stepNum < 3) {
-        return &psu::calibration::getVoltage();
+        return &calibration::getVoltage();
     }
-    return &psu::calibration::getCurrent();
+    return &calibration::getCurrent();
 }
 
 
@@ -123,7 +123,7 @@ void setLevelValue() {
 
     NumericKeypadOptions options;
 
-    options.channelIndex = psu::calibration::getCalibrationChannel().index - 1;
+    options.channelIndex = calibration::getCalibrationChannel().index - 1;
 
     options.editValueUnit = levelValue.getUnit();
 
@@ -148,7 +148,7 @@ void setLevelValue() {
 }
 
 void onSetOk(float value) {
-    psu::calibration::Value *calibrationValue = getCalibrationValue();
+    calibration::Value *calibrationValue = getCalibrationValue();
 
     float dac = calibrationValue->getDacValue();
     float adc = calibrationValue->getAdcValue();
@@ -163,13 +163,13 @@ void onSetOk(float value) {
 }
 
 void onSetRemarkOk(char *remark) {
-    psu::calibration::setRemark(remark, strlen(remark));
+    calibration::setRemark(remark, strlen(remark));
     popPage();
     if (g_stepNum < MAX_STEP_NUM - 1) {
         nextStep();
     } else {
         int16_t scpiErr;
-        if (psu::calibration::canSave(scpiErr)) {
+        if (calibration::canSave(scpiErr)) {
             nextStep();
         } else {
             showCurrentStep();
@@ -178,25 +178,25 @@ void onSetRemarkOk(char *remark) {
 }
 
 void set() {
-    if (!psu::calibration::isEnabled()) {
+    if (!calibration::isEnabled()) {
         setPage(PAGE_ID_MAIN);
         return;
     }
 
     if (g_stepNum < MAX_STEP_NUM - 1) {
         if (g_stepNum < 3) {
-            psu::calibration::getVoltage().setLevelValue();
+            calibration::getVoltage().setLevelValue();
         } else {
-            psu::calibration::getCurrent().setLevelValue();
+            calibration::getCurrent().setLevelValue();
         }
 
-        psu::calibration::Value *calibrationValue = getCalibrationValue();
+        calibration::Value *calibrationValue = getCalibrationValue();
 
         NumericKeypadOptions options;
 
-        options.channelIndex = psu::calibration::getCalibrationChannel().index - 1;
+        options.channelIndex = calibration::getCalibrationChannel().index - 1;
 
-        if (calibrationValue == &psu::calibration::getVoltage()) {
+        if (calibrationValue == &calibration::getVoltage()) {
             options.editValueUnit = UNIT_VOLT;
 
             options.min = g_channel->u.min;
@@ -220,20 +220,20 @@ void set() {
             numericKeypad->switchToMilli();
         }
     } else if (g_stepNum == MAX_STEP_NUM - 1) {
-        psu::calibration::resetChannelToZero();
-        Keypad::startPush(0, psu::calibration::isRemarkSet() ? psu::calibration::getRemark() : 0, CALIBRATION_REMARK_MAX_LENGTH, false, onSetRemarkOk, popPage);
+        calibration::resetChannelToZero();
+        Keypad::startPush(0, calibration::isRemarkSet() ? calibration::getRemark() : 0, CALIBRATION_REMARK_MAX_LENGTH, false, onSetRemarkOk, popPage);
     }
 }
 
 void previousStep() {
-    if (!psu::calibration::isEnabled()) {
+    if (!calibration::isEnabled()) {
         setPage(PAGE_ID_MAIN);
         return;
     }
 
     if (g_stepNum > 0) {
         --g_stepNum;
-        if (g_stepNum == 8 && !psu::calibration::hasSupportForCurrentDualRange()) {
+        if (g_stepNum == 8 && !calibration::hasSupportForCurrentDualRange()) {
             g_stepNum = 5;
         }
         showCurrentStep();
@@ -241,29 +241,29 @@ void previousStep() {
 }
 
 void nextStep() {
-    if (!psu::calibration::isEnabled()) {
+    if (!calibration::isEnabled()) {
         setPage(PAGE_ID_MAIN);
         return;
     }
 
     if (g_stepNum == MAX_STEP_NUM - 1) {
         int16_t scpiErr;
-        if (!psu::calibration::canSave(scpiErr)) {
-            errorMessage(data::Cursor(psu::calibration::getCalibrationChannel().index - 1), data::MakeScpiErrorValue(scpiErr));
+        if (!calibration::canSave(scpiErr)) {
+            errorMessage(data::Cursor(calibration::getCalibrationChannel().index - 1), data::MakeScpiErrorValue(scpiErr));
             return;
         }
     }
 
     ++g_stepNum;
-    if (g_stepNum == 6 && !psu::calibration::hasSupportForCurrentDualRange()) {
+    if (g_stepNum == 6 && !calibration::hasSupportForCurrentDualRange()) {
         g_stepNum = 9;
     }
     showCurrentStep();
 }
 
 void save() {
-    if (psu::calibration::save()) {
-        psu::calibration::stop();
+    if (calibration::save()) {
+        calibration::stop();
         infoMessageP("Calibration data saved!", popPage);
     } else {
         errorMessageP("Save failed!");
@@ -271,7 +271,7 @@ void save() {
 }
 
 void finishStop() {
-    psu::calibration::stop();
+    calibration::stop();
 
     g_channel->outputEnable(false);
 
@@ -295,6 +295,6 @@ void toggleEnable() {
 }
 }
 }
-} // namespace eez::psu::gui::calibration
+} // namespace eez::app::gui::calibration_wizard
 
 #endif

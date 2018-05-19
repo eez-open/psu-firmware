@@ -21,7 +21,7 @@
 #include "mw_gui_data.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 namespace edit_mode {
 
@@ -47,4 +47,4 @@ void nonInteractiveDiscard();
 }
 }
 }
-} // namespace eez::psu::gui::edit_mode
+} // namespace eez::app::gui::edit_mode

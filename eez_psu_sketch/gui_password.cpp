@@ -27,7 +27,7 @@
 #include "gui_keypad.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 static void (*g_checkPasswordOkCallback)();
@@ -140,6 +140,6 @@ void editCalibrationPassword() {
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui
 
 #endif

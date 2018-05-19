@@ -29,7 +29,7 @@
 #define IS_OPP_VALUE(channel, cpv) (&cpv == &channel->opp)
 
 namespace eez {
-namespace psu {
+namespace app {
 
 namespace calibration {
 struct Value;
@@ -695,4 +695,4 @@ private:
 };
 
 }
-} // namespace eez::psu
+} // namespace eez::app

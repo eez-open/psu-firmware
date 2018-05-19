@@ -20,7 +20,7 @@
 #include "timer.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 Interval::Interval(uint32_t interval_msec)
 	: interval_usec(interval_msec * 1000L)
@@ -47,4 +47,4 @@ bool Interval::test(uint32_t tick_usec) {
 }
 
 }
-} // namespace eez::psu
+} // namespace eez::app

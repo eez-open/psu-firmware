@@ -16,10 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @file conf_example.h
-@brief Compile time configuration.
-*/
-
 /** @page conf_h Configuration
 @brief Compile time configuration.
 This file is used to define compile time configuration options.
@@ -28,10 +24,6 @@ option.
 */
 
 #pragma once
-
-#include "conf_user_revision.h"
-
-#include "conf_channel.h"
 
 /// Wait until serial port is ready before starting firmware.
 #define CONF_WAIT_SERIAL 0
@@ -116,6 +108,3 @@ option.
 
 /// Default channel OTP level
 #define OTP_CH_DEFAULT_LEVEL 75.0f
-
-#include "conf_advanced.h"
-#include "conf_user.h"

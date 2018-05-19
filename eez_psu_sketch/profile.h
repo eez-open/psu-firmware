@@ -23,7 +23,7 @@
 #define PROFILE_EXT ".profile"
 
 namespace eez {
-namespace psu {
+namespace app {
 /// PSU configuration profiles (save, recall, ...).
 namespace profile {
 
@@ -121,4 +121,4 @@ void getName(int location, char *name, int count);
 
 }
 }
-} // namespace eez::psu::profile
+} // namespace eez::app::profile

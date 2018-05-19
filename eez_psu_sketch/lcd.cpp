@@ -28,11 +28,11 @@ namespace gui {
 namespace lcd {
 
 uint8_t getDisplayBackgroundLuminosityStep() {
-	return eez::psu::persist_conf::devConf2.displayBackgroundLuminosityStep;
+	return eez::app::persist_conf::devConf2.displayBackgroundLuminosityStep;
 }
 
 uint8_t getDisplayBrightness() {
-	return eez::psu::persist_conf::devConf2.displayBrightness;
+	return eez::app::persist_conf::devConf2.displayBrightness;
 }
 
 uint8_t getBrightness() {

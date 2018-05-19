@@ -28,7 +28,7 @@
 #define CONF_COUNTER_THRESHOLD_IN_SECONDS 5
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace list {
 
 static struct {
@@ -553,4 +553,4 @@ void abort() {
 
 }
 }
-} // namespace eez::psu::list
+} // namespace eez::app::list

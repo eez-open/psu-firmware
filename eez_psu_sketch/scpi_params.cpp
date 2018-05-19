@@ -22,7 +22,7 @@
 #include "channel_dispatcher.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -56,7 +56,7 @@ bool check_channel(scpi_t *context, int32_t ch) {
         return false;
     }
 
-    if (!psu::isPowerUp()) {
+    if (!isPowerUp()) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return false;
     }
@@ -691,4 +691,4 @@ bool getFilePath(scpi_t *context, char *filePath, bool mandatory) {
 
 }
 }
-} // namespace eez::psu::scpi
+} // namespace eez::app::scpi

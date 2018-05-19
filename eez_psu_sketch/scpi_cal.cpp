@@ -24,11 +24,11 @@
 #include "channel_dispatcher.h"
 
 #if OPTION_DISPLAY
-#include "mw_gui_internal.h"
+#include "mw_gui_gui.h"
 #endif
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -352,7 +352,7 @@ scpi_result_t scpi_cmd_calibrationVoltageLevel(scpi_t * context) {
 
 scpi_result_t scpi_cmd_calibrationScreenInit(scpi_t * context) {
 #if OPTION_DISPLAY
-	gui::setPage(app::gui::PAGE_ID_SCREEN_CALIBRATION_INTRO);
+	mw::gui::showPage(app::gui::PAGE_ID_SCREEN_CALIBRATION_INTRO);
 	return SCPI_RES_OK;
 #else
 	SCPI_ErrorPush(context, SCPI_ERROR_HARDWARE_MISSING);
@@ -362,4 +362,4 @@ scpi_result_t scpi_cmd_calibrationScreenInit(scpi_t * context) {
 
 }
 }
-} // namespace eez::psu::scpi
+} // namespace eez::app::scpi

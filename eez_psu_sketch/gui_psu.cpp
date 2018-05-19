@@ -23,7 +23,7 @@
 #include "mw_gui_gui.h"
 #include "mw_gui_touch.h"
 #include "mw_gui_lcd.h"
-#include "app_gui_document.h"
+#include "gui_document.h"
 #include "actions.h"
 #include "gui_psu.h"
 #include "gui_data.h"
@@ -72,12 +72,12 @@
 #define CONF_GUI_TOAST_DURATION_MS 2000L
 #define CONF_DLOG_COLOR 62464
 
-using namespace eez::psu::gui;
+using namespace eez::app::gui;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 static persist_conf::DeviceFlags2 g_deviceFlags2;
@@ -480,7 +480,7 @@ void tick(uint32_t tickCount) {
 	}
 
 	// turn the screen off if power is down
-	if (!psu::isPowerUp()) {
+	if (!isPowerUp()) {
 		turnScreenOff();
 		return;
 	}
@@ -544,8 +544,8 @@ void tick(uint32_t tickCount) {
 		}
 	}
 
-	if (psu::g_rprogAlarm) {
-		psu::g_rprogAlarm = false;
+	if (g_rprogAlarm) {
+		g_rprogAlarm = false;
 		longErrorMessage("Max. remote prog. voltage exceeded.", "Please remove it immediately!");
 	}
 
@@ -814,10 +814,10 @@ void showProgressPage(const char *message, void(*abortCallback)()) {
 bool updateProgressPage(size_t processedSoFar, size_t totalSize) {
 	if (getActivePageId() == PAGE_ID_PROGRESS) {
 		if (totalSize > 0) {
-			psu::gui::g_progress = data::Value((int)round((processedSoFar * 1.0f / totalSize) * 100.0f), VALUE_TYPE_PERCENTAGE);
+			gui::g_progress = data::Value((int)round((processedSoFar * 1.0f / totalSize) * 100.0f), VALUE_TYPE_PERCENTAGE);
 		}
 		else {
-			psu::gui::g_progress = data::Value((uint32_t)processedSoFar, VALUE_TYPE_SIZE);
+			gui::g_progress = data::Value((uint32_t)processedSoFar, VALUE_TYPE_SIZE);
 		}
 		return true;
 	}
@@ -917,7 +917,7 @@ void turnDisplayOff() {
 
 void reset() {
 	popPage();
-	psu::reset();
+	app::reset();
 }
 
 void selectChannel() {
@@ -1042,11 +1042,11 @@ void onTouchListGraph(const WidgetCursor &widgetCursor, int xTouch, int yTouch) 
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui
 
 ////////////////////////////////////////////////////////////////////////////////
 
-using namespace eez::psu;
+using namespace eez::app;
 
 namespace eez {
 namespace mw {
@@ -1158,7 +1158,7 @@ bool onLongTouchHook() {
 	int activePageId = getActivePageId();
 
 	if (activePageId == INTERNAL_PAGE_ID_NONE || activePageId == PAGE_ID_STANDBY) {
-		psu::changePowerState(true);
+		changePowerState(true);
 		return true;
 	}
 
@@ -1291,7 +1291,7 @@ Page *createPageFromId(int pageId) {
 }
 
 void onPageChanged() {
-	psu::gui::lcd::turnOn();
+	gui::lcd::turnOn();
 
 	// clear text message if active page is not PAGE_ID_TEXT_MESSAGE
 	if (getActivePageId() != PAGE_ID_TEXT_MESSAGE && g_textMessage[0]) {
@@ -1370,7 +1370,7 @@ bool isFocusWidget(const WidgetCursor &widgetCursor) {
 		return false;
 	}
 
-	if (psu::calibration::isEnabled()) {
+	if (calibration::isEnabled()) {
 		return false;
 	}
 

@@ -22,7 +22,7 @@
 #include "scpi_params.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 /// SCPI commands.
 namespace scpi {
 
@@ -60,4 +60,4 @@ void resetContext(scpi_t *context);
 
 }
 }
-} // namespace eez::psu::scpi
+} // namespace eez::app::scpi

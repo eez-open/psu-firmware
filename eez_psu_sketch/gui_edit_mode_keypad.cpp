@@ -32,7 +32,7 @@ namespace eez {
 // @todo remove this
 using namespace mw::gui;
 
-namespace psu {
+namespace app {
 namespace gui {
 namespace edit_mode_keypad {
 
@@ -75,6 +75,6 @@ void exit() {
 }
 }
 }
-} // namespace eez::psu::gui::edit_mode_keypad
+} // namespace eez::app::gui::edit_mode_keypad
 
 #endif

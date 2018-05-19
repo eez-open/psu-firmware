@@ -26,7 +26,7 @@
 #include "serial_psu.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 class SysSettingsDateTimePage : public SetPage {
@@ -299,4 +299,4 @@ private:
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui

@@ -20,7 +20,7 @@
 #include "bp.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace bp {
 
 extern uint16_t g_lastConf;
@@ -44,4 +44,4 @@ void set(uint16_t conf) {
 
 }
 }
-} // namespace eez::psu::bp
+} // namespace eez::app::bp

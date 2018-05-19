@@ -27,7 +27,7 @@
 #endif
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -250,7 +250,7 @@ scpi_result_t scpi_cmd_diagnosticInformationTestQ(scpi_t * context) {
 //    SCPI_ResultText(context, buffer);
 //
 //    sprintf(buffer, "%d, BP option, %s, %s",
-//        psu::TEST_SKIPPED, get_installed_str(OPTION_BP), get_test_result_str(psu::TEST_SKIPPED));
+//        TEST_SKIPPED, get_installed_str(OPTION_BP), get_test_result_str(TEST_SKIPPED));
 //    SCPI_ResultText(context, buffer);
 //
 //	for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
@@ -266,20 +266,20 @@ scpi_result_t scpi_cmd_diagnosticInformationTestQ(scpi_t * context) {
 //    SCPI_ResultText(context, buffer);
 //#endif
 //
-//	if (psu::isPowerUp()) {
+//	if (isPowerUp()) {
 //        for (int i = 0; i < CH_NUM; ++i) {
 //            Channel *channel = &Channel::get(i);
 //
 //            sprintf(buffer, "%d, CH%d IOEXP, installed, %s",
-//                channel->ioexp.g_testResult, channel->index, get_test_result_str((psu::TestResult)channel->ioexp.g_testResult));
+//                channel->ioexp.g_testResult, channel->index, get_test_result_str((TestResult)channel->ioexp.g_testResult));
 //            SCPI_ResultText(context, buffer);
 //
 //            sprintf(buffer, "%d, CH%d DAC, installed, %s",
-//                channel->dac.g_testResult, channel->index, get_test_result_str((psu::TestResult)channel->dac.g_testResult));
+//                channel->dac.g_testResult, channel->index, get_test_result_str((TestResult)channel->dac.g_testResult));
 //            SCPI_ResultText(context, buffer);
 //
 //            sprintf(buffer, "%d, CH%d ADC, installed, %s",
-//                channel->adc.g_testResult, channel->index, get_test_result_str((psu::TestResult)channel->adc.g_testResult));
+//                channel->adc.g_testResult, channel->index, get_test_result_str((TestResult)channel->adc.g_testResult));
 //            SCPI_ResultText(context, buffer);
 //        }
 //    }
@@ -299,4 +299,4 @@ scpi_result_t scpi_cmd_diagnosticInformationFanQ(scpi_t * context) {
 
 }
 }
-} // namespace eez::psu::scpi
+} // namespace eez::app::scpi

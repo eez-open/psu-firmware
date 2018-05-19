@@ -35,7 +35,7 @@
 #define NUM_CHANNELS_VIEW_MODES 4
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace persist_conf {
 
 static const uint16_t PERSIST_CONF_START_ADDRESS = eeprom::EEPROM_START_ADDRESS;
@@ -82,7 +82,7 @@ bool check_block(const BlockHeader *block, uint16_t size, uint16_t version) {
 }
 
 bool save(BlockHeader *block, uint16_t size, uint16_t address, uint16_t version) {
-    if (eeprom::g_testResult != psu::TEST_OK) {
+    if (eeprom::g_testResult != TEST_OK) {
         return false;
     }
 
@@ -154,7 +154,7 @@ static void initDevice() {
 }
 
 void loadDevice() {
-    if (eeprom::g_testResult == psu::TEST_OK) {
+    if (eeprom::g_testResult == TEST_OK) {
         eeprom::read((uint8_t *)&devConf, sizeof(DeviceConfiguration), get_address(PERSIST_CONF_BLOCK_DEVICE));
         if (!check_block((BlockHeader *)&devConf, sizeof(DeviceConfiguration), DEV_CONF_VERSION)) {
             initDevice();
@@ -216,7 +216,7 @@ static void initDevice2() {
 }
 
 void loadDevice2() {
-    if (eeprom::g_testResult == psu::TEST_OK) {
+    if (eeprom::g_testResult == TEST_OK) {
         eeprom::read((uint8_t *)&devConf2, sizeof(DeviceConfiguration2), get_address(PERSIST_CONF_BLOCK_DEVICE2));
         if (!check_block((BlockHeader *)&devConf2, sizeof(DeviceConfiguration2), DEV_CONF2_VERSION)) {
             initDevice2();
@@ -464,7 +464,7 @@ void setChannelsViewMode(unsigned int channelsViewMode) {
 }
 
 void loadChannelCalibration(Channel &channel) {
-    if (eeprom::g_testResult == psu::TEST_OK) {
+    if (eeprom::g_testResult == TEST_OK) {
         eeprom::read((uint8_t *)&channel.cal_conf, sizeof(Channel::CalibrationConfiguration), get_address(PERSIST_CONF_BLOCK_CH_CAL, &channel));
         if (!check_block((BlockHeader *)&channel.cal_conf, sizeof(Channel::CalibrationConfiguration), CH_CAL_CONF_VERSION)) {
             channel.clearCalibrationConf();
@@ -491,7 +491,7 @@ void saveCalibrationEnabledFlag(Channel &channel, bool enabled) {
 }
 
 bool loadProfile(int location, profile::Parameters *profile) {
-    if (eeprom::g_testResult == psu::TEST_OK) {
+    if (eeprom::g_testResult == TEST_OK) {
         eeprom::read((uint8_t *)profile, sizeof(profile::Parameters), get_profile_address(location));
         return check_block((BlockHeader *)profile, sizeof(profile::Parameters), PROFILE_VERSION);
     }
@@ -973,4 +973,4 @@ bool isSdLocked() {
 
 }
 }
-} // namespace eez::psu::persist_conf
+} // namespace eez::app::persist_conf

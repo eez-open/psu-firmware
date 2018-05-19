@@ -34,7 +34,7 @@
 #include "io_pins.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ scpi_result_t scpi_cmd_systemPower(scpi_t *context) {
     }
 #endif
 
-    if (!psu::changePowerState(up)) {
+    if (!changePowerState(up)) {
         SCPI_ErrorPush(context, SCPI_ERROR_EXECUTION_ERROR);
         return SCPI_RES_ERR;
     }
@@ -81,7 +81,7 @@ scpi_result_t scpi_cmd_systemPower(scpi_t *context) {
 }
 
 scpi_result_t scpi_cmd_systemPowerQ(scpi_t *context) {
-    SCPI_ResultBool(context, psu::isPowerUp());
+    SCPI_ResultBool(context, isPowerUp());
     return SCPI_RES_OK;
 }
 
@@ -1486,4 +1486,4 @@ scpi_result_t scpi_cmd_systemDigitalPinPolarityQ(scpi_t *context) {
 
 }
 }
-} // namespace eez::psu::scpi
+} // namespace eez::app::scpi

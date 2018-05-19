@@ -21,7 +21,7 @@
 #include "mw_gui_page.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 class SelfTestResultPage : public mw::gui::Page {
@@ -34,4 +34,4 @@ public:
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui

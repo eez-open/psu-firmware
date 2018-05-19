@@ -21,7 +21,7 @@
 #include "mw_gui_data.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 class NumericKeypad;
@@ -36,4 +36,4 @@ extern NumericKeypad *g_keypad;
 }
 }
 }
-} // namespace eez::psu::gui::edit_mode_keypad
+} // namespace eez::app::gui::edit_mode_keypad

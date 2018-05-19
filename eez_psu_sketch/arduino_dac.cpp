@@ -20,7 +20,7 @@
 #include "dac.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +33,7 @@ static const uint16_t DAC_MAX = (1L << DAC_RES) - 1;
 ////////////////////////////////////////////////////////////////////////////////
 
 DigitalAnalogConverter::DigitalAnalogConverter(Channel &channel_) : channel(channel_) {
-    g_testResult = psu::TEST_SKIPPED;
+    g_testResult = TEST_SKIPPED;
 }
 
 void DigitalAnalogConverter::set_value(uint8_t buffer, uint16_t value) {
@@ -67,17 +67,17 @@ void DigitalAnalogConverter::init() {
 }
 
 bool DigitalAnalogConverter::test() {
-    g_testResult = psu::TEST_OK;
+    g_testResult = TEST_OK;
 
-    if (channel.ioexp.g_testResult != psu::TEST_OK) {
+    if (channel.ioexp.g_testResult != TEST_OK) {
         DebugTraceF("Ch%d DAC test skipped because of IO expander", channel.index);
-        g_testResult = psu::TEST_SKIPPED;
+        g_testResult = TEST_SKIPPED;
         return true;
     }
 
-    if (channel.adc.g_testResult != psu::TEST_OK) {
+    if (channel.adc.g_testResult != TEST_OK) {
         DebugTraceF("Ch%d DAC test skipped because of ADC", channel.index);
-        g_testResult = psu::TEST_SKIPPED;
+        g_testResult = TEST_SKIPPED;
         return true;
     }
 
@@ -91,7 +91,7 @@ bool DigitalAnalogConverter::test() {
     channel.flags.outputEnabled = 0;
     channel.ioexp.changeBit(IOExpander::IO_BIT_OUT_OUTPUT_ENABLE, false);
 
-    g_testResult = psu::TEST_OK;
+    g_testResult = TEST_OK;
 
     // set U on DAC and check it on ADC
     float u_set = channel.u.max / 2;
@@ -110,7 +110,7 @@ bool DigitalAnalogConverter::test() {
     float u_mon = channel.u.mon_dac;
     float u_diff = u_mon - u_set;
     if (fabsf(u_diff) > u_set * DAC_TEST_TOLERANCE / 100) {
-        g_testResult = psu::TEST_FAILED;
+        g_testResult = TEST_FAILED;
 
         DebugTraceF("Ch%d DAC test, U_set failure: expected=%d, got=%d, abs diff=%d",
             channel.index,
@@ -122,7 +122,7 @@ bool DigitalAnalogConverter::test() {
     float i_mon = channel.i.mon_dac;
     float i_diff = i_mon - i_set;
     if (fabsf(i_diff) > i_set * DAC_TEST_TOLERANCE / 100) {
-        g_testResult = psu::TEST_FAILED;
+        g_testResult = TEST_FAILED;
 
         DebugTraceF("Ch%d DAC test, I_set failure: expected=%d, got=%d, abs diff=%d",
             channel.index,
@@ -142,12 +142,12 @@ bool DigitalAnalogConverter::test() {
     channel.setVoltage(u_set_save);
     channel.setCurrent(i_set_save);
 
-    if (g_testResult == psu::TEST_FAILED) {
+    if (g_testResult == TEST_FAILED) {
         if (channel.index == 1) {
-            psu::generateError(SCPI_ERROR_CH1_DAC_TEST_FAILED);
+            generateError(SCPI_ERROR_CH1_DAC_TEST_FAILED);
         }
         else if (channel.index == 2) {
-            psu::generateError(SCPI_ERROR_CH2_DAC_TEST_FAILED);
+            generateError(SCPI_ERROR_CH2_DAC_TEST_FAILED);
         }
         else {
             // TODO
@@ -156,7 +156,7 @@ bool DigitalAnalogConverter::test() {
 
     m_testing = false;
 
-    return g_testResult != psu::TEST_FAILED;
+    return g_testResult != TEST_FAILED;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -178,4 +178,4 @@ void DigitalAnalogConverter::set_current(uint16_t current) {
 }
 
 }
-} // namespace eez::psu
+} // namespace eez::app

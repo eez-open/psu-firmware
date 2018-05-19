@@ -33,7 +33,7 @@
 #include "gui_numeric_keypad.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 namespace edit_mode {
 
@@ -245,6 +245,6 @@ void getInfoText(int part, char *infoText) {
 }
 }
 }
-} // namespace eez::psu::gui::edit_mode
+} // namespace eez::app::gui::edit_mode
 
 #endif

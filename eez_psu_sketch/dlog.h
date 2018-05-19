@@ -21,7 +21,7 @@
 #include "trigger.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace dlog {
 
 extern bool g_logVoltage[CH_NUM];
@@ -54,4 +54,4 @@ void reset();
 
 }
 }
-} // namespace eez::psu::dlog
+} // namespace eez::app::dlog

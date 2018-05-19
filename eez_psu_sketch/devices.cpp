@@ -38,7 +38,7 @@
 #endif
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace devices {
 
 #define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) { #NAME" temp", INSTALLED, &temp_sensor::sensors[temp_sensor::NAME].g_testResult }
@@ -133,12 +133,12 @@ const char *getInstalledString(bool installed) {
     return "not installed";
 }
 
-const char *getTestResultString(psu::TestResult g_testResult) {
-    if (g_testResult == psu::TEST_OK)
+const char *getTestResultString(TestResult g_testResult) {
+    if (g_testResult == TEST_OK)
         return "passed";
-    if (g_testResult == psu::TEST_SKIPPED)
+    if (g_testResult == TEST_SKIPPED)
         return "skipped";
-    if (g_testResult == psu::TEST_WARNING)
+    if (g_testResult == TEST_WARNING)
         return "warning";
     return "failed";
 }
@@ -146,4 +146,4 @@ const char *getTestResultString(psu::TestResult g_testResult) {
 
 }
 }
-} // namespace eez::psu::devices
+} // namespace eez::app::devices

@@ -53,7 +53,7 @@
 #define CONF_GUI_REFRESH_EVERY_MS 250
 #define CONF_LIST_COUNDOWN_DISPLAY_THRESHOLD 5 // 5 seconds
 
-using namespace eez::psu::gui;
+using namespace eez::app::gui;
 
 namespace eez {
 namespace mw {
@@ -80,7 +80,7 @@ const EnumItem *g_enumDefinitions[] = {
 } // eez::mw::gui::data
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 using namespace eez::mw::gui;
@@ -208,7 +208,7 @@ Value MakeFloatListValue(float *pFloat) {
 	return value;
 }
 
-Value MakeEventValue(psu::event_queue::Event *e) {
+Value MakeEventValue(event_queue::Event *e) {
 	Value value;
 	value.type_ = VALUE_TYPE_EVENT;
 	value.options_ = 0;
@@ -283,8 +283,8 @@ void printTime(uint32_t time, char *text, int count) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-psu::event_queue::Event *getEventFromValue(const Value& value) {
-	return (psu::event_queue::Event *)value.getVoidPointer();
+event_queue::Event *getEventFromValue(const Value& value) {
+	return (event_queue::Event *)value.getVoidPointer();
 }
 
 uint8_t getPageIndexFromValue(const Value& value) {
@@ -631,7 +631,7 @@ void FLOAT_LIST_value_to_text(const Value& value, char *text, int count) {
 
 }
 }
-} // eez::psu::gui
+} // eez::app::gui
 
 int g_x;
 
@@ -722,7 +722,7 @@ ValueToTextFunction g_userValueToTextFunctions[] = {
 } // eez::mw::gui::data
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 Value g_alertMessage;
@@ -797,11 +797,11 @@ Page *getUserProfilesPage() {
 
 }
 }
-} // eez::psu::gui
+} // eez::app::gui
 
 ////////////////////////////////////////////////////////////////////////////////
 
-using namespace eez::psu;
+using namespace eez::app;
 
 namespace eez {
 namespace app {
@@ -815,7 +815,7 @@ void data_edit_enabled(data::DataOperationEnum operation, data::Cursor &cursor, 
 		if ((channel_dispatcher::getVoltageTriggerMode(channel) != TRIGGER_MODE_FIXED && !trigger::isIdle()) || isPageActiveOrOnStack(PAGE_ID_CH_SETTINGS_LISTS)) {
 			value = 0;
 		}
-		if (psu::calibration::isEnabled()) {
+		if (app::calibration::isEnabled()) {
 			value = 0;
 		}
 		value = 1;
@@ -1189,25 +1189,25 @@ void data_otp_aux(data::DataOperationEnum operation, data::Cursor &cursor, data:
 
 void data_alert_message(data::DataOperationEnum operation, data::Cursor &cursor, data::Value &value) {
 	if (operation == data::DATA_OPERATION_GET) {
-		value = psu::gui::g_alertMessage;
+		value = gui::g_alertMessage;
 	} else if (operation == data::DATA_OPERATION_SET) {
-		psu::gui::g_alertMessage = value;
+		gui::g_alertMessage = value;
 	}
 }
 
 void data_alert_message_2(data::DataOperationEnum operation, data::Cursor &cursor, data::Value &value) {
 	if (operation == data::DATA_OPERATION_GET) {
-		value = psu::gui::g_alertMessage2;
+		value = gui::g_alertMessage2;
 	} else if (operation == data::DATA_OPERATION_SET) {
-		psu::gui::g_alertMessage2 = value;
+		gui::g_alertMessage2 = value;
 	}
 }
 
 void data_alert_message_3(data::DataOperationEnum operation, data::Cursor &cursor, data::Value &value) {
 	if (operation == data::DATA_OPERATION_GET) {
-		value = psu::gui::g_alertMessage3;
+		value = gui::g_alertMessage3;
 	} else if (operation == data::DATA_OPERATION_SET) {
-		psu::gui::g_alertMessage3 = value;
+		gui::g_alertMessage3 = value;
 	}
 }
 
@@ -1506,63 +1506,63 @@ void data_channel_calibration_remark(data::DataOperationEnum operation, data::Cu
 
 void data_channel_calibration_step_is_set_remark_step(data::DataOperationEnum operation, data::Cursor &cursor, data::Value &value) {
 	if (operation == data::DATA_OPERATION_GET) {
-		value = psu::gui::calibration::g_stepNum == psu::gui::calibration::MAX_STEP_NUM - 1;
+		value = gui::calibration_wizard::g_stepNum == gui::calibration_wizard::MAX_STEP_NUM - 1;
 	}
 }
 
 void data_channel_calibration_step_num(data::DataOperationEnum operation, data::Cursor &cursor, data::Value &value) {
 	if (operation == data::DATA_OPERATION_GET) {
-		value = data::Value(psu::gui::calibration::g_stepNum);
+		value = data::Value(gui::calibration_wizard::g_stepNum);
 	}
 }
 
 void data_channel_calibration_step_status(data::DataOperationEnum operation, data::Cursor &cursor, data::Value &value) {
 	if (operation == data::DATA_OPERATION_GET) {
-		switch (psu::gui::calibration::g_stepNum) {
-		case 0: value = psu::calibration::getVoltage().min_set; break;
-		case 1: value = psu::calibration::getVoltage().mid_set; break;
-		case 2: value = psu::calibration::getVoltage().max_set; break;
-		case 3: case 6: value = psu::calibration::getCurrent().min_set; break;
-		case 4: case 7: value = psu::calibration::getCurrent().mid_set; break;
-		case 5: case 8: value = psu::calibration::getCurrent().max_set; break;
-		case 9: value = psu::calibration::isRemarkSet(); break;
+		switch (gui::calibration_wizard::g_stepNum) {
+		case 0: value = app::calibration::getVoltage().min_set; break;
+		case 1: value = app::calibration::getVoltage().mid_set; break;
+		case 2: value = app::calibration::getVoltage().max_set; break;
+		case 3: case 6: value = app::calibration::getCurrent().min_set; break;
+		case 4: case 7: value = app::calibration::getCurrent().mid_set; break;
+		case 5: case 8: value = app::calibration::getCurrent().max_set; break;
+		case 9: value = app::calibration::isRemarkSet(); break;
 		}
 	}
 }
 
 void data_channel_calibration_step_level_value(data::DataOperationEnum operation, data::Cursor &cursor, data::Value &value) {
 	if (operation == data::DATA_OPERATION_GET) {
-		value = psu::gui::calibration::getLevelValue();
+		value = gui::calibration_wizard::getLevelValue();
 	}
 }
 
 void data_channel_calibration_step_value(data::DataOperationEnum operation, data::Cursor &cursor, data::Value &value) {
 	if (operation == data::DATA_OPERATION_GET) {
 		int iChannel = cursor.i >= 0 ? cursor.i : (g_channel ? (g_channel->index - 1) : 0);
-		switch (psu::gui::calibration::g_stepNum) {
-		case 0: value = MakeValue(psu::calibration::getVoltage().min_val, UNIT_VOLT, iChannel, true); break;
-		case 1: value = MakeValue(psu::calibration::getVoltage().mid_val, UNIT_VOLT, iChannel, true); break;
-		case 2: value = MakeValue(psu::calibration::getVoltage().max_val, UNIT_VOLT, iChannel, true); break;
-		case 3: value = MakeValue(psu::calibration::getCurrent().min_val, UNIT_AMPER, iChannel, true); break;
-		case 4: value = MakeValue(psu::calibration::getCurrent().mid_val, UNIT_AMPER, iChannel, true); break;
-		case 5: value = MakeValue(psu::calibration::getCurrent().max_val, UNIT_AMPER, iChannel, true); break;
-		case 6: value = MakeValue(psu::calibration::getCurrent().min_val, UNIT_AMPER, iChannel, true); break;
-		case 7: value = MakeValue(psu::calibration::getCurrent().mid_val, UNIT_AMPER, iChannel, true); break;
-		case 8: value = MakeValue(psu::calibration::getCurrent().max_val, UNIT_AMPER, iChannel, true); break;
-		case 9: value = data::Value(psu::calibration::getRemark()); break;
+		switch (gui::calibration_wizard::g_stepNum) {
+		case 0: value = MakeValue(app::calibration::getVoltage().min_val, UNIT_VOLT, iChannel, true); break;
+		case 1: value = MakeValue(app::calibration::getVoltage().mid_val, UNIT_VOLT, iChannel, true); break;
+		case 2: value = MakeValue(app::calibration::getVoltage().max_val, UNIT_VOLT, iChannel, true); break;
+		case 3: value = MakeValue(app::calibration::getCurrent().min_val, UNIT_AMPER, iChannel, true); break;
+		case 4: value = MakeValue(app::calibration::getCurrent().mid_val, UNIT_AMPER, iChannel, true); break;
+		case 5: value = MakeValue(app::calibration::getCurrent().max_val, UNIT_AMPER, iChannel, true); break;
+		case 6: value = MakeValue(app::calibration::getCurrent().min_val, UNIT_AMPER, iChannel, true); break;
+		case 7: value = MakeValue(app::calibration::getCurrent().mid_val, UNIT_AMPER, iChannel, true); break;
+		case 8: value = MakeValue(app::calibration::getCurrent().max_val, UNIT_AMPER, iChannel, true); break;
+		case 9: value = data::Value(app::calibration::getRemark()); break;
 		}
 	}
 }
 
 void data_channel_calibration_step_prev_enabled(data::DataOperationEnum operation, data::Cursor &cursor, data::Value &value) {
 	if (operation == data::DATA_OPERATION_GET) {
-		value = psu::gui::calibration::g_stepNum > 0;
+		value = gui::calibration_wizard::g_stepNum > 0;
 	}
 }
 
 void data_channel_calibration_step_next_enabled(data::DataOperationEnum operation, data::Cursor &cursor, data::Value &value) {
 	if (operation == data::DATA_OPERATION_GET) {
-		value = psu::gui::calibration::g_stepNum < psu::gui::calibration::MAX_STEP_NUM;
+		value = gui::calibration_wizard::g_stepNum < gui::calibration_wizard::MAX_STEP_NUM;
 	}
 }
 
@@ -3136,7 +3136,7 @@ void data_ntp_server(data::DataOperationEnum operation, data::Cursor &cursor, da
 
 void data_async_operation_throbber(data::DataOperationEnum operation, data::Cursor &cursor, data::Value &value) {
 	if (operation == data::DATA_OPERATION_GET) {
-		value = data::Value(psu::gui::g_throbber[(millis() % 1000) / 125]);
+		value = data::Value(gui::g_throbber[(millis() % 1000) / 125]);
 	}
 }
 
@@ -3154,7 +3154,7 @@ void data_sys_display_background_luminosity_step(data::DataOperationEnum operati
 
 void data_progress(data::DataOperationEnum operation, data::Cursor &cursor, data::Value &value) {
 	if (operation == data::DATA_OPERATION_GET) {
-		value = psu::gui::g_progress;
+		value = gui::g_progress;
 	}
 }
 

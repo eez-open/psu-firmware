@@ -99,7 +99,7 @@ void TC3_Handler(void) {
 }
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace buzzer {
 
 void tone(uint32_t frequency, int32_t duration) {
@@ -108,4 +108,4 @@ void tone(uint32_t frequency, int32_t duration) {
 
 }
 }
-} // namespace eez::psu::buzzer
+} // namespace eez::app::buzzer

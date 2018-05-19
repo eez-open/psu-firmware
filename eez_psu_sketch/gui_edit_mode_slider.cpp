@@ -25,7 +25,7 @@
 #include "mw_gui_lcd.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 namespace edit_mode_slider {
 
@@ -118,6 +118,6 @@ void onTouchUp() {
 }
 }
 }
-} // namespace eez::psu::gui::edit_mode_slider
+} // namespace eez::app::gui::edit_mode_slider
 
 #endif

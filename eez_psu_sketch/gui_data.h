@@ -4,7 +4,7 @@
 #include "mw_gui_data.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 enum EnumDefinition {
@@ -78,7 +78,7 @@ using mw::gui::data::Value;
 Value MakeValue(float value, Unit unit, int channelIndex = -1, bool extendedPrecision = false);
 Value MakeValueListValue(const Value *values);
 Value MakeFloatListValue(float *pFloat);
-Value MakeEventValue(psu::event_queue::Event *e);
+Value MakeEventValue(event_queue::Event *e);
 Value MakePageInfoValue(uint8_t pageIndex, uint8_t numPages);
 Value MakeLessThenMinMessageValue(float float_, const Value& value_);
 Value MakeGreaterThenMaxMessageValue(float float_, const Value& value_);
@@ -93,4 +93,4 @@ extern char g_throbber[8];
 
 }
 }
-} // eez::psu::gui
+} // eez::app::gui

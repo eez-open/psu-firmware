@@ -34,15 +34,15 @@
           "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2017-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"eez/mw/mw.h\"\n\n#if OPTION_DISPLAY\n\n#include \"eez/app/gui/document.h\"\n\nnamespace eez {\nnamespace app {\nnamespace gui {\n    \n//${eez-studio DATA_ARRAY_DEF}\n\n//${eez-studio GUI_FONTS_DEF}\n\n//${eez-studio GUI_BITMAPS_DEF}\n\n//${eez-studio GUI_STYLES_DEF}\n\n#if DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_PORTRAIT\n//${eez-studio GUI_DOCUMENT_PORTRAIT_DEF}\n#elif DISPLAY_ORIENTATION == DISPLAY_ORIENTATION_LANDSCAPE\n//${eez-studio GUI_DOCUMENT_LANDSCAPE_DEF}\n#endif\n\n}\n}\n} // namespace eez::app::gui\n\n#endif"
         },
         {
-          "fileName": "psu/actions.h",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2017-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#pragma once\n\nnamespace eez {\nnamespace psu {\n\n//${eez-studio ACTIONS_ENUM}\n\n//${eez-studio ACTIONS_ARRAY_DECL}\n\n}\n} // namespace eez::psu\n"
+          "fileName": "app/actions.h",
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2017-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#pragma once\n\nnamespace eez {\nnamespace app {\n\n//${eez-studio ACTIONS_ENUM}\n\n//${eez-studio ACTIONS_ARRAY_DECL}\n\n}\n} // namespace eez::app\n"
         },
         {
-          "fileName": "psu/actions.cpp",
-          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2017-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"eez/psu/psu.h\"\n\n#if OPTION_DISPLAY\n\n#include \"eez/psu/event_queue.h\"\n#include \"eez/psu/persist_conf.h\"\n#include \"eez/psu/channel_dispatcher.h\"\n#include \"eez/psu/trigger.h\"\n#include \"eez/psu/sound.h\"\n#include \"eez/psu/gui/psu.h\"\n#include \"eez/psu/actions.h\"\n#include \"eez/psu/gui/keypad.h\"\n#include \"eez/psu/gui/edit_mode.h\"\n#include \"eez/psu/gui/edit_mode_keypad.h\"\n#include \"eez/psu/gui/calibration.h\"\n#include \"eez/psu/gui/page_ch_settings_protection.h\"\n#include \"eez/psu/gui/page_ch_settings_adv.h\"\n#include \"eez/psu/gui/page_sys_settings.h\"\n#include \"eez/psu/gui/page_user_profiles.h\"\n#include \"eez/psu/gui/password.h\"\n#include \"eez/psu/gui/page_ch_settings_trigger.h\"\n#include \"eez/psu/touch_calibration.h\"\n\nnamespace eez {\nnamespace psu {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::psu\n\n#endif"
+          "fileName": "app/actions.cpp",
+          "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2017-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#include \"eez/app/psu.h\"\n\n#if OPTION_DISPLAY\n\n#include \"eez/app/event_queue.h\"\n#include \"eez/app/persist_conf.h\"\n#include \"eez/app/channel_dispatcher.h\"\n#include \"eez/app/trigger.h\"\n#include \"eez/app/sound.h\"\n#include \"eez/app/gui/psu.h\"\n#include \"eez/app/actions.h\"\n#include \"eez/app/gui/keypad.h\"\n#include \"eez/app/gui/edit_mode.h\"\n#include \"eez/app/gui/edit_mode_keypad.h\"\n#include \"eez/app/gui/calibration.h\"\n#include \"eez/app/gui/page_ch_settings_protection.h\"\n#include \"eez/app/gui/page_ch_settings_adv.h\"\n#include \"eez/app/gui/page_sys_settings.h\"\n#include \"eez/app/gui/page_user_profiles.h\"\n#include \"eez/app/gui/password.h\"\n#include \"eez/app/gui/page_ch_settings_trigger.h\"\n#include \"eez/app/touch_calibration.h\"\n\nnamespace eez {\nnamespace app {\n\nusing namespace gui;\n\n//${eez-studio ACTIONS_FUNCS_DEF}\n\n//${eez-studio ACTIONS_ARRAY_DEF}\n\n}\n} // namespace eez::app\n\n#endif"
         },
         {
-          "fileName": "psu/scpi/commands.h",
+          "fileName": "app/scpi/commands.h",
           "template": "/*\n* EEZ PSU Firmware\n* Copyright (C) 2017-present, Envox d.o.o.\n*\n* This program is free software: you can redistribute it and/or modify\n* it under the terms of the GNU General Public License as published by\n* the Free Software Foundation, either version 3 of the License, or\n* (at your option) any later version.\n\n* This program is distributed in the hope that it will be useful,\n* but WITHOUT ANY WARRANTY; without even the implied warranty of\n* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n* GNU General Public License for more details.\n\n* You should have received a copy of the GNU General Public License\n* along with this program.  If not, see http://www.gnu.org/licenses.\n*/\n\n#pragma once\n\n//${eez-studio SCPI_COMMANDS_DECL}\n"
         }
       ],
@@ -1755,47 +1755,47 @@
     {
       "name": "sys_settings_cal_ch_wiz_start",
       "implementationType": "native",
-      "implementation": "gui::calibration::start();"
+      "implementation": "gui::calibration_wizard::start();"
     },
     {
       "name": "sys_settings_cal_ch_wiz_step_previous",
       "implementationType": "native",
-      "implementation": "gui::calibration::previousStep();"
+      "implementation": "gui::calibration_wizard::previousStep();"
     },
     {
       "name": "sys_settings_cal_ch_wiz_step_next",
       "implementationType": "native",
-      "implementation": "gui::calibration::nextStep();"
+      "implementation": "gui::calibration_wizard::nextStep();"
     },
     {
       "name": "sys_settings_cal_ch_wiz_stop_and_show_previous_page",
       "implementationType": "native",
-      "implementation": "gui::calibration::stop(popPage);\n"
+      "implementation": "gui::calibration_wizard::stop(popPage);\n"
     },
     {
       "name": "sys_settings_cal_ch_wiz_stop_and_show_main_page",
       "implementationType": "native",
-      "implementation": "gui::calibration::stop(action_show_main_page);\n"
+      "implementation": "gui::calibration_wizard::stop(action_show_main_page);\n"
     },
     {
       "name": "sys_settings_cal_ch_wiz_step_set",
       "implementationType": "native",
-      "implementation": "gui::calibration::set();"
+      "implementation": "gui::calibration_wizard::set();"
     },
     {
       "name": "sys_settings_cal_ch_wiz_step_set_level_value",
       "implementationType": "native",
-      "implementation": "gui::calibration::setLevelValue();"
+      "implementation": "gui::calibration_wizard::setLevelValue();"
     },
     {
       "name": "sys_settings_cal_ch_wiz_save",
       "implementationType": "native",
-      "implementation": "gui::calibration::save();\n"
+      "implementation": "gui::calibration_wizard::save();\n"
     },
     {
       "name": "sys_settings_cal_toggle_enable",
       "implementationType": "native",
-      "implementation": "gui::calibration::toggleEnable();\n"
+      "implementation": "gui::calibration_wizard::toggleEnable();\n"
     },
     {
       "name": "ch_settings_prot_clear",

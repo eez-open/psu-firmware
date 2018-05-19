@@ -20,7 +20,7 @@
 #include "temp_sensor.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace temp_sensor {
 
 int temperatureRead(int pin) {
@@ -29,4 +29,4 @@ int temperatureRead(int pin) {
 
 }
 }
-} // namespace eez::psu::temp_sensor
+} // namespace eez::app::temp_sensor

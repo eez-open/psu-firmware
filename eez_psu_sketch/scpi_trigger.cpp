@@ -28,7 +28,7 @@
 #endif
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -227,4 +227,4 @@ scpi_result_t scpi_cmd_triggerDlogSourceQ(scpi_t * context) {
 
 }
 }
-} // namespace eez::psu::scpi
+} // namespace eez::app::scpi

@@ -32,7 +32,7 @@
 #include "channel_dispatcher.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace temperature {
 
 #define TEMP_SENSOR(NAME, INSTALLED, PIN, CAL_POINTS, CH_NUM, QUES_REG_BIT, SCPI_ERROR) \
@@ -81,7 +81,7 @@ void tick(uint32_t tick_usec) {
 		for (int i = 0; i < temp_sensor::NUM_TEMP_SENSORS; ++i) {
 			temp_sensor::TempSensor &sensor = temp_sensor::sensors[i];
 			if (sensor.ch_num >= 0) {
-				if (sensor.g_testResult == psu::TEST_OK) {
+				if (sensor.g_testResult == TEST_OK) {
 					temperature::TempSensorTemperature &sensorTemperature = temperature::sensors[i];
 					if (sensorTemperature.temperature > max_channel_temperature) {
 						max_channel_temperature = sensorTemperature.temperature;
@@ -99,7 +99,7 @@ void tick(uint32_t tick_usec) {
 			if (tick_usec - max_temp_start_tick > FAN_MAX_TEMP_DELAY * 1000000L) {
 				// turn off power
 				force_power_down = true;
-				psu::changePowerState(false);
+				changePowerState(false);
 			}
 		} else if (max_channel_temperature <= FAN_MAX_TEMP - FAN_MAX_TEMP_DROP) {
 			force_power_down = false;
@@ -226,7 +226,7 @@ void TempSensorTemperature::set_otp_reg(bool on) {
 	if (temp_sensor::sensors[sensorIndex].ch_num >= 0) {
 		Channel::get(temp_sensor::sensors[sensorIndex].ch_num).setQuesBits(temp_sensor::sensors[sensorIndex].ques_bit, on);
 	} else {
-		psu::setQuesBits(temp_sensor::sensors[sensorIndex].ques_bit, on);
+		setQuesBits(temp_sensor::sensors[sensorIndex].ques_bit, on);
 	}
 }
 
@@ -286,4 +286,4 @@ void TempSensorTemperature::protection_enter() {
 
 }
 }
-} // namespace eez::psu::temperature
+} // namespace eez::app::temperature

@@ -23,7 +23,7 @@
 #include "scpi_psu.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace datetime {
 
 #define SECONDS_PER_MINUTE 60UL
@@ -35,7 +35,7 @@ namespace datetime {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-psu::TestResult g_testResult = psu::TEST_FAILED;
+TestResult g_testResult = TEST_FAILED;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -150,44 +150,44 @@ bool dstCheck() {
 }
 
 bool test() {
-    if (rtc::g_testResult == psu::TEST_OK) {
+    if (rtc::g_testResult == TEST_OK) {
         uint8_t year, month, day, hour, minute, second;
         if (persist_conf::readSystemDate(year, month, day) && persist_conf::readSystemTime(hour, minute, second)) {
             uint8_t rtc_year, rtc_month, rtc_day, rtc_hour, rtc_minute, rtc_second;
             rtc::readDateTime(rtc_year, rtc_month, rtc_day, rtc_hour, rtc_minute, rtc_second);
 
             if (!isValidDate(2000 + rtc_year, rtc_month, rtc_day)) {
-                g_testResult = psu::TEST_FAILED;
+                g_testResult = TEST_FAILED;
                 DebugTraceF("RTC test failed, invalid date format detected (%d-%02d-%02d)",
                     (int)(2000 + rtc_year), (int)rtc_month, (int)rtc_day);
             } else if (!isValidTime(rtc_hour, rtc_minute, rtc_second)) {
-                g_testResult = psu::TEST_FAILED;
+                g_testResult = TEST_FAILED;
                 DebugTraceF("RTC test failed, invalid time format detected (%02d:%02d:%02d)",
                     (int)rtc_hour, (int)rtc_minute, (int)rtc_second);
             } else if (cmp_datetime(year, month, day, hour, minute, second, rtc_year, rtc_month, rtc_day, rtc_hour, rtc_minute, rtc_second) < 0) {
-                g_testResult = psu::TEST_OK;
+                g_testResult = TEST_OK;
                 if (!dstCheck()) {
                     persist_conf::writeSystemDateTime(rtc_year, rtc_month, rtc_day, rtc_hour, rtc_minute, rtc_second, 2);
                 }
             }
             else {
-                g_testResult = psu::TEST_FAILED;
+                g_testResult = TEST_FAILED;
                 DebugTraceF("RTC test failed, RTC time (%d-%02d-%02d %02d:%02d:%02d) older then or equal to EEPROM time (%d-%02d-%02d %02d:%02d:%02d)",
                     (int)(2000 + rtc_year), (int)rtc_month, (int)rtc_day, (int)rtc_hour, (int)rtc_minute, (int)rtc_second,
                     (int)(2000 + year), (int)month, (int)day, (int)hour, (int)minute, (int)second);
             }
         }
         else {
-            g_testResult = psu::TEST_SKIPPED;
+            g_testResult = TEST_SKIPPED;
         }
     }
     else {
-        g_testResult = psu::TEST_SKIPPED;
+        g_testResult = TEST_SKIPPED;
     }
 
-    psu::setQuesBits(QUES_TIME, g_testResult != psu::TEST_OK);
+    setQuesBits(QUES_TIME, g_testResult != TEST_OK);
 
-    return g_testResult != psu::TEST_FAILED && g_testResult != psu::TEST_WARNING;
+    return g_testResult != TEST_FAILED && g_testResult != TEST_WARNING;
 }
 
 void tick(uint32_t tickCount) {
@@ -216,7 +216,7 @@ bool checkDateTime() {
 bool setDate(uint8_t year, uint8_t month, uint8_t day, unsigned dst) {
     if (rtc::writeDate(year, month, day)) {
         persist_conf::writeSystemDate(year, month, day, dst);
-        psu::setQuesBits(QUES_TIME, !checkDateTime());
+        setQuesBits(QUES_TIME, !checkDateTime());
         event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
         return true;
     }
@@ -230,7 +230,7 @@ bool getTime(uint8_t &hour, uint8_t &minute, uint8_t &second) {
 bool setTime(uint8_t hour, uint8_t minute, uint8_t second, unsigned dst) {
     if (rtc::writeTime(hour, minute, second)) {
         persist_conf::writeSystemTime(hour, minute, second, dst);
-        psu::setQuesBits(QUES_TIME, !checkDateTime());
+        setQuesBits(QUES_TIME, !checkDateTime());
         event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
         return true;
     }
@@ -244,7 +244,7 @@ bool getDateTime(uint8_t &year, uint8_t &month, uint8_t &day, uint8_t &hour, uin
 bool setDateTime(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second, bool pushChangedEvent, unsigned dst) {
     if (rtc::writeDateTime(year, month, day, hour, minute, second)) {
         persist_conf::writeSystemDateTime(year, month, day, hour, minute, second, dst);
-        psu::setQuesBits(QUES_TIME, !checkDateTime());
+        setQuesBits(QUES_TIME, !checkDateTime());
         if (pushChangedEvent) {
             event_queue::pushEvent(event_queue::EVENT_INFO_SYSTEM_DATE_TIME_CHANGED);
         }
@@ -456,4 +456,4 @@ bool DateTime::operator !=(const DateTime &rhs) {
 
 }
 }
-}; // namespace eez::psu::datetime
+}; // namespace eez::app::datetime

@@ -23,7 +23,7 @@
 #include "profile.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +123,7 @@ scpi_result_t scpi_cmd_coreStbQ(scpi_t * context) {
 * Return SCPI_RES_OK
 */
 scpi_result_t scpi_cmd_coreTstQ(scpi_t * context) {
-    SCPI_ResultInt(context, psu::test() ? 0 : 1);
+    SCPI_ResultInt(context, test() ? 0 : 1);
 
     return SCPI_RES_OK;
 }
@@ -135,4 +135,4 @@ scpi_result_t scpi_cmd_coreWai(scpi_t * context) {
 
 }
 }
-} // namespace eez::psu::scpi
+} // namespace eez::app::scpi

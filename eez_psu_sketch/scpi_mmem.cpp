@@ -33,7 +33,7 @@
 #endif
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace scpi {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ void catalogCallback(void *param, const char *name, const char *type, size_t siz
 
     SCPI_ResultText(context, buffer);
 
-    psu::tick();
+    tick();
 }
 
 
@@ -204,7 +204,7 @@ void uploadCallback(void *param, const void *buffer, int size) {
 
     SCPI_ResultArbitraryBlockData(context, buffer, size);
 
-    psu::tick();
+    tick();
 }
 #endif
 
@@ -742,4 +742,4 @@ scpi_result_t scpi_cmd_mmemoryStoreProfile(scpi_t *context) {
 
 }
 }
-} // namespace eez::psu::scpi
+} // namespace eez::app::scpi

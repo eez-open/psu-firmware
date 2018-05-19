@@ -22,7 +22,7 @@
 #include "fan.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace io_pins {
 
 static struct {
@@ -42,7 +42,7 @@ static uint32_t g_toutputPulseStartTickCount;
 static bool g_digitalOutputPinState[2] = { false, false };
 
 uint8_t isOutputFault() {
-    if (psu::isPowerUp()) {
+    if (isPowerUp()) {
         if (fan::g_testResult == TEST_FAILED) {
             return 1;
         }
@@ -218,4 +218,4 @@ bool getDigitalOutputPinState(int pin) {
 
 }
 }
-} // namespace eez::psu::io_pins
+} // namespace eez::app::io_pins

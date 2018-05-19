@@ -22,7 +22,7 @@
 #include "profile.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 extern int g_selectedProfileLocation;
@@ -52,4 +52,4 @@ private:
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui

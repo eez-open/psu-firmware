@@ -25,7 +25,7 @@
 #define EMPTY_VALUE "\x92"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 class ChSettingsTriggerPage : public Page {
@@ -130,4 +130,4 @@ private:
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui

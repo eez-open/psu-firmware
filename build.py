@@ -66,15 +66,13 @@ def copy_lib(src_lib_dir, dst_name):
         return False
 
 SKETCH_SOURCE_DIRS = [
-    { "path": "eez/app",                      "prefix": "app_"     },
-    { "path": "eez/app/gui",                  "prefix": "app_gui_" },
-    { "path": "eez/mw",                       "prefix": "mw_"      },
-    { "path": "eez/mw/gui",                   "prefix": "mw_gui_"  },
-    { "path": "eez/mw/platform/arduino_due",  "prefix": "arduino_"  },
-    { "path": "eez/psu",                      "prefix": ""         },
-    { "path": "eez/psu/gui",                  "prefix": "gui_"     },
-    { "path": "eez/psu/platform/arduino_due", "prefix": "arduino_" },
-    { "path": "eez/psu/scpi",                 "prefix": "scpi_"    }
+    { "path": "eez/app",                      "prefix": ""            },
+    { "path": "eez/app/gui",                  "prefix": "gui_"        },
+    { "path": "eez/app/platform/arduino_due", "prefix": "arduino_"    },
+    { "path": "eez/app/scpi",                 "prefix": "scpi_"       },
+    { "path": "eez/mw",                       "prefix": "mw_"         },
+    { "path": "eez/mw/gui",                   "prefix": "mw_gui_"     },
+    { "path": "eez/mw/platform/arduino_due",  "prefix": "me_arduino_" }
 ]
 
 def transform_source_line(line):

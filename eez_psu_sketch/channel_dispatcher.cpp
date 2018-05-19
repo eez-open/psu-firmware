@@ -26,7 +26,7 @@
 #include "scpi_regs.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace channel_dispatcher {
 
 static Type g_channelCoupling = TYPE_NONE;
@@ -161,8 +161,8 @@ bool setType(Type value) {
             event_queue::pushEvent(event_queue::EVENT_INFO_CHANNELS_UNCOUPLED);
         }
 
-        psu::setOperBits(OPER_GROUP_PARALLEL, isParallel());
-        psu::setOperBits(OPER_GROUP_SERIAL, isSeries());
+        setOperBits(OPER_GROUP_PARALLEL, isParallel());
+        setOperBits(OPER_GROUP_SERIAL, isSeries());
 
         delay(100); // Huge pause that allows relay contacts to debounce
     }
@@ -882,4 +882,4 @@ bool isCurrentLowRangeAllowed(Channel &channel) {
 
 }
 }
-} // namespace eez::psu::channel_dispatcher
+} // namespace eez::app::channel_dispatcher

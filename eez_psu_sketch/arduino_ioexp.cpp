@@ -20,7 +20,7 @@
 #include "ioexp.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -70,7 +70,7 @@ IOExpander::IOExpander(
     , IO_BIT_OUT_EXT_PROG(IO_BIT_OUT_EXT_PROG_)
 	, channel(channel_)
 {
-    g_testResult = psu::TEST_SKIPPED;
+    g_testResult = TEST_SKIPPED;
 
     gpioa = channel.ioexp_gpio_init;
     gpiob = 0B00000001; // 5A
@@ -109,7 +109,7 @@ void IOExpander::init() {
 }
 
 bool IOExpander::test() {
-    g_testResult = psu::TEST_OK;
+    g_testResult = TEST_OK;
 
     const uint8_t *regValues = channel.boardRevision == CH_BOARD_REVISION_R5B12 ? REG_VALUES_16 : REG_VALUES_8;
 
@@ -121,18 +121,18 @@ bool IOExpander::test() {
                 DebugTraceF("Ch%d IO expander reg check failure: reg=%d, expected=%d, got=%d",
                     channel.index, (int)regValues[i], (int)compare_with_value, (int)value);
 
-                g_testResult = psu::TEST_FAILED;
+                g_testResult = TEST_FAILED;
                 break;
             }
         }
     }
 
-    if (g_testResult == psu::TEST_OK) {
+    if (g_testResult == TEST_OK) {
 #if !CONF_SKIP_PWRGOOD_TEST
         channel.flags.powerOk = testBit(IO_BIT_IN_PWRGOOD);
         if (!channel.flags.powerOk) {
             DebugTraceF("Ch%d power fault", channel.index);
-            psu::generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (channel.index - 1));
+            generateError(SCPI_ERROR_CH1_FAULT_DETECTED - (channel.index - 1));
         }
 #else
 		channel.flags.powerOk = 1;
@@ -142,19 +142,19 @@ bool IOExpander::test() {
         channel.flags.powerOk = 0;
     }
 
-    if (g_testResult == psu::TEST_FAILED) {
+    if (g_testResult == TEST_FAILED) {
         if (channel.index == 1) {
-            psu::generateError(SCPI_ERROR_CH1_IOEXP_TEST_FAILED);
+            generateError(SCPI_ERROR_CH1_IOEXP_TEST_FAILED);
         }
         else if (channel.index == 2) {
-            psu::generateError(SCPI_ERROR_CH2_IOEXP_TEST_FAILED);
+            generateError(SCPI_ERROR_CH2_IOEXP_TEST_FAILED);
         }
         else {
             // TODO
         }
     }
 
-    return g_testResult != psu::TEST_FAILED;
+    return g_testResult != TEST_FAILED;
 }
 
 void IOExpander::tick(uint32_t tick_usec) {
@@ -217,4 +217,4 @@ void IOExpander::reg_write(uint8_t reg, uint8_t val) {
 }
 
 }
-} // namespace eez::psu
+} // namespace eez::app

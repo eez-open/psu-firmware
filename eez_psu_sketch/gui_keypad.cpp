@@ -39,7 +39,7 @@
 #define CONF_GUI_KEYPAD_PASSWORD_LAST_CHAR_VISIBLE_DURATION 500000UL
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -234,6 +234,6 @@ void Keypad::appendCursor(char *text) {
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui
 
 #endif

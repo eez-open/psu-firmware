@@ -21,7 +21,7 @@
 #include "scpi_regs.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 using namespace scpi;
 
@@ -71,28 +71,28 @@ float TempSensor::doRead() {
 bool TempSensor::test() {
 	if (installed) {
 		if (doRead() > TEMP_SENSOR_MIN_VALID_TEMPERATURE) {
-			g_testResult = psu::TEST_OK;
+			g_testResult = TEST_OK;
 		} else {
-			g_testResult = psu::TEST_FAILED;
+			g_testResult = TEST_FAILED;
 		}
 	} else {
-		g_testResult = psu::TEST_SKIPPED;
+		g_testResult = TEST_SKIPPED;
 	}
 
-    if (g_testResult == psu::TEST_FAILED) {
+    if (g_testResult == TEST_FAILED) {
 		if (ch_num >= 0) {
 			// set channel current max. limit to ERR_MAX_CURRENT if sensor is faulty
 			Channel::get(ch_num).limitMaxCurrent(MAX_CURRENT_LIMIT_CAUSE_TEMPERATURE);
 		}
 
-		psu::generateError(scpi_error);
+		generateError(scpi_error);
     } else {
 		if (ch_num >= 0) {
 			Channel::get(ch_num).unlimitMaxCurrent();
 		}
 	}
 
-	return g_testResult != psu::TEST_FAILED;
+	return g_testResult != TEST_FAILED;
 }
 
 float TempSensor::read() {
@@ -100,14 +100,14 @@ float TempSensor::read() {
         float value = doRead();
 
 		if (value <= TEMP_SENSOR_MIN_VALID_TEMPERATURE) {
-			g_testResult = psu::TEST_FAILED;
+			g_testResult = TEST_FAILED;
 
 			if (ch_num >= 0) {
 				// set channel current max. limit to ERR_MAX_CURRENT if sensor is faulty
 				Channel::get(ch_num).limitMaxCurrent(MAX_CURRENT_LIMIT_CAUSE_TEMPERATURE);
 			}
 
-			psu::generateError(scpi_error);
+			generateError(scpi_error);
 		}
 
 		return value;
@@ -118,4 +118,4 @@ float TempSensor::read() {
 
 }
 }
-} // namespace eez::psu::temp_sensor
+} // namespace eez::app::temp_sensor

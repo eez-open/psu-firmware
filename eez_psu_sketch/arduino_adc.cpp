@@ -21,7 +21,7 @@
 #include "channel_dispatcher.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -43,7 +43,7 @@ static void adc_interrupt_ch2() {
 ////////////////////////////////////////////////////////////////////////////////
 
 AnalogDigitalConverter::AnalogDigitalConverter(Channel &channel_) : channel(channel_) {
-    g_testResult = psu::TEST_SKIPPED;
+    g_testResult = TEST_SKIPPED;
 }
 
 uint8_t AnalogDigitalConverter::getReg1Val() {
@@ -96,36 +96,36 @@ bool AnalogDigitalConverter::test() {
     digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);
     SPI_endTransaction();
 
-    g_testResult = psu::TEST_OK;
+    g_testResult = TEST_OK;
 
     if (reg1 != getReg1Val()) {
         DebugTraceF("Ch%d ADC test failed reg1: expected=%d, got=%d", channel.index, getReg1Val(), reg1);
-        g_testResult = psu::TEST_FAILED;
+        g_testResult = TEST_FAILED;
     }
 
     if (reg2 != ADC_REG2_VAL) {
         DebugTraceF("Ch%d ADC test failed reg2: expected=%d, got=%d", channel.index, ADC_REG2_VAL, reg2);
-        g_testResult = psu::TEST_FAILED;
+        g_testResult = TEST_FAILED;
     }
 
     if (reg3 != ADC_REG3_VAL) {
         DebugTraceF("Ch%d ADC test failed reg3: expected=%d, got=%d", channel.index, ADC_REG3_VAL, reg3);
-        g_testResult = psu::TEST_FAILED;
+        g_testResult = TEST_FAILED;
     }
 
-    if (g_testResult == psu::TEST_FAILED) {
+    if (g_testResult == TEST_FAILED) {
         if (channel.index == 1) {
-            psu::generateError(SCPI_ERROR_CH1_ADC_TEST_FAILED);
+            generateError(SCPI_ERROR_CH1_ADC_TEST_FAILED);
         }
         else if (channel.index == 2) {
-            psu::generateError(SCPI_ERROR_CH2_ADC_TEST_FAILED);
+            generateError(SCPI_ERROR_CH2_ADC_TEST_FAILED);
         }
         else {
             // TODO
         }
     }
 
-    return g_testResult != psu::TEST_FAILED;
+    return g_testResult != TEST_FAILED;
 }
 
 void AnalogDigitalConverter::tick(uint32_t tick_usec) {
@@ -151,10 +151,10 @@ void AnalogDigitalConverter::tick(uint32_t tick_usec) {
                 }
                 else {
                     if (channel.index == 1) {
-                        psu::generateError(SCPI_ERROR_CH1_ADC_TIMEOUT_DETECTED);
+                        generateError(SCPI_ERROR_CH1_ADC_TIMEOUT_DETECTED);
                     }
                     else if (channel.index == 2) {
-                        psu::generateError(SCPI_ERROR_CH2_ADC_TIMEOUT_DETECTED);
+                        generateError(SCPI_ERROR_CH2_ADC_TIMEOUT_DETECTED);
                     }
                     else {
                         // TODO
@@ -250,4 +250,4 @@ void AnalogDigitalConverter::onInterrupt() {
 #endif
 
 }
-} // namespace eez::psu
+} // namespace eez::app

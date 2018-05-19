@@ -24,7 +24,7 @@
 #include "gui_page_event_queue.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 void EventQueuePage::pageWillAppear() {
@@ -34,6 +34,6 @@ void EventQueuePage::pageWillAppear() {
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui
 
 #endif

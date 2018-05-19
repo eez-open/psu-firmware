@@ -20,7 +20,7 @@
 #include "channel_dispatcher.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 void strcatFloatValue(char *str, float value, Unit unit, int channelIndex) {
     int numSignificantDecimalDigits = getNumSignificantDecimalDigits(unit);
@@ -132,4 +132,4 @@ bool between(float x, float a, float b, Unit unit, int channelIndex) {
 }
 
 }
-} // namespace eez::psu::util
+} // namespace eez::app::util

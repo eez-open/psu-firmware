@@ -34,7 +34,7 @@
 #include "gui_edit_mode.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace gui {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -563,6 +563,6 @@ bool NumericKeypad::onEncoder(int counter) {
 
 }
 }
-} // namespace eez::psu::gui
+} // namespace eez::app::gui
 
 #endif

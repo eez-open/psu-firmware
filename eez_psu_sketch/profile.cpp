@@ -32,7 +32,7 @@
 #endif
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace profile {
 
 #define AUTO_NAME_PREFIX "Saved at "
@@ -146,7 +146,7 @@ void recallChannelsFromProfile(Parameters *profile, int location) {
                         list::setListsChanged(channel, false);
                     }
                 } else {
-                    psu::generateError(err);
+                    generateError(err);
                 }
             }
 #endif
@@ -167,8 +167,8 @@ bool recallFromProfile(Parameters *profile, int location) {
 		memcpy(&temperature::sensors[i].prot_conf, profile->temp_prot + i, sizeof(temperature::ProtectionConfiguration));
 	}
 
-    if (profile->flags.powerIsUp) result &= psu::powerUp();
-    else psu::powerDown();
+    if (profile->flags.powerIsUp) result &= powerUp();
+    else powerDown();
 
     recallChannelsFromProfile(profile, location);
 
@@ -305,7 +305,7 @@ void fillProfile(Parameters *pProfile, int location, const char *name, const Par
 	noInterrupts();
 #endif
 
-    profile.flags.powerIsUp = psu::isPowerUp();
+    profile.flags.powerIsUp = isPowerUp();
 
     for (int i = 0; i < CH_MAX; ++i) {
 		if (i < CH_NUM) {
@@ -533,4 +533,4 @@ void getName(int location, char *name, int count) {
 
 }
 }
-} // namespace eez::psu::profile
+} // namespace eez::app::profile

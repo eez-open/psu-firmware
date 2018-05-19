@@ -21,7 +21,7 @@
 #include "temp_sensor.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 
 class Channel;
 
@@ -87,4 +87,4 @@ extern TempSensorTemperature sensors[temp_sensor::NUM_TEMP_SENSORS];
 
 }
 }
-} // namespace eez::psu::temperature
+} // namespace eez::app::temperature

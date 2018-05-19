@@ -20,10 +20,10 @@
 #include "eeprom.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace eeprom {
 
-psu::TestResult g_testResult = psu::TEST_FAILED;
+TestResult g_testResult = TEST_FAILED;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -177,26 +177,26 @@ bool test() {
         read(test_buffer, EEPROM_TEST_BUFFER_SIZE, EEPROM_TEST_ADDRESS);
 
         // compare it
-        g_testResult = psu::TEST_OK;
+        g_testResult = TEST_OK;
         for (uint16_t i = 0; i < EEPROM_TEST_BUFFER_SIZE; ++i) {
             if (test_buffer[i] != i % 32) {
                 DebugTraceF("EEPROM test failed at index: %d", i);
-                g_testResult = psu::TEST_FAILED;
+                g_testResult = TEST_FAILED;
                 break;
             }
         }
     }
     else {
-        g_testResult = psu::TEST_SKIPPED;
+        g_testResult = TEST_SKIPPED;
     }
 
-    if (g_testResult == psu::TEST_FAILED) {
-        psu::generateError(SCPI_ERROR_EXT_EEPROM_TEST_FAILED);
+    if (g_testResult == TEST_FAILED) {
+        generateError(SCPI_ERROR_EXT_EEPROM_TEST_FAILED);
     }
 
-    return g_testResult != psu::TEST_FAILED;
+    return g_testResult != TEST_FAILED;
 }
 
 }
 }
-} // namespace eez::psu::eeprom
+} // namespace eez::app::eeprom

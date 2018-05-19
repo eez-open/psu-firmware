@@ -29,7 +29,7 @@
 extern SdFat SD;
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace sd_card {
 
 extern TestResult g_testResult;
@@ -62,4 +62,4 @@ bool getInfo(uint64_t &usedSpace, uint64_t &freeSpace);
 
 }
 }
-} // namespace eez::psu::sd_card
+} // namespace eez::app::sd_card

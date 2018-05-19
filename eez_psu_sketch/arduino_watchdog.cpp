@@ -23,7 +23,7 @@
 #if (EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12) && OPTION_WATCHDOG
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace watchdog {
 
 static bool watchdogEnabled = false;
@@ -89,6 +89,6 @@ void printInfo() {
 
 }
 }
-} // namespace eez::psu::watchdog
+} // namespace eez::app::watchdog
 
 #endif

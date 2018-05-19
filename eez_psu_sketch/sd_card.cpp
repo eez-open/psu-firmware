@@ -33,7 +33,7 @@
 SdFat SD;
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace sd_card {
 
 TestResult g_testResult = TEST_FAILED;
@@ -493,7 +493,7 @@ bool copyFile(const char *sourcePath, const char *destinationPath, int *err) {
             break;
         }
 
-        psu::tick();
+        tick();
     }
 
     sourceFile.close();
@@ -653,7 +653,7 @@ bool getInfo(uint64_t &usedSpace, uint64_t &freeSpace) {
     return SD.getInfo(usedSpace, freeSpace);
 #else
     uint64_t clusterCount = SD.vol()->clusterCount();
-    uint64_t freeClusterCount = SD.vol()->freeClusterCount(psu::tick);
+    uint64_t freeClusterCount = SD.vol()->freeClusterCount(tick);
     usedSpace = 512 * (clusterCount - freeClusterCount) * SD.vol()->blocksPerCluster();
     freeSpace = 512 * freeClusterCount * SD.vol()->blocksPerCluster();
     return true;
@@ -662,6 +662,6 @@ bool getInfo(uint64_t &usedSpace, uint64_t &freeSpace) {
 
 }
 }
-} // namespace eez::psu::sd_card
+} // namespace eez::app::sd_card
 
 #endif

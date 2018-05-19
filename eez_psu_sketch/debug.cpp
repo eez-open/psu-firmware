@@ -40,7 +40,7 @@ char *ramend = (char *)0x20088000;
 #define AVG_LOOP_DURATION_N 100
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace debug {
 
 DebugValueVariable g_uDac[2]    = { DebugValueVariable("CH1 U_DAC"),     DebugValueVariable("CH2 U_DAC")     };
@@ -96,7 +96,7 @@ void dumpVariables(char *buffer) {
 	}
 
 #ifndef EEZ_PLATFORM_SIMULATOR
-	psu::criticalTick(-1);
+	criticalTick(-1);
 
 	char *heapend = sbrk(0);
 	register char * stack_ptr asm("sp");
@@ -108,14 +108,14 @@ void dumpVariables(char *buffer) {
 #endif
 
 #if OPTION_SD_CARD
-	psu::criticalTick(-1);
+	criticalTick(-1);
 	sd_card::dumpInfo(buffer);
 #endif
 }
 
 }
 }
-} // namespace eez::psu::debug
+} // namespace eez::app::debug
 
 #endif // CONF_DEBUG
 
@@ -123,7 +123,7 @@ void dumpVariables(char *buffer) {
 #if CONF_DEBUG || CONF_DEBUG_LATEST
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace debug {
 
 static char traceBuffer[256];
@@ -397,6 +397,6 @@ void DebugCounterVariable::dump(char *buffer) {
 
 }
 }
-} // namespace eez::psu::debug
+} // namespace eez::app::debug
 
 #endif // CONF_DEBUG || CONF_DEBUG_LATEST

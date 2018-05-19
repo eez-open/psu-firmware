@@ -111,7 +111,7 @@
 #define NOTE_DS8 4978
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace sound {
 
 int power_up_tune[] = {
@@ -196,4 +196,4 @@ void playClick() {
 
 }
 }
-} // namespace eez::psu::sound
+} // namespace eez::app::sound

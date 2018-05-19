@@ -20,7 +20,7 @@
 #include "io_pins.h"
 
 namespace eez {
-namespace psu {
+namespace app {
 namespace io_pins {
 
 int ioPinRead(int pin) {
@@ -33,4 +33,4 @@ void ioPinWrite(int pin, int state) {
 
 }
 }
-} // namespace eez::psu::io_pins
+} // namespace eez::app::io_pins
