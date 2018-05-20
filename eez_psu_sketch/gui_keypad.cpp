@@ -27,6 +27,7 @@
 #include "gui_keypad.h"
 #include "gui_numeric_keypad.h"
 #include "gui_edit_mode_keypad.h"
+#include "mw_gui_widget/text.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable:4996)

@@ -54,33 +54,16 @@ namespace gui {
 #define WIDGET_TYPE_UP_DOWN 16
 #define WIDGET_TYPE_LIST_GRAPH 17
 
-#define LIST_TYPE_VERTICAL 1
-#define LIST_TYPE_HORIZONTAL 2
-
-#define SCALE_NEEDLE_POSITION_LEFT 1
-#define SCALE_NEEDLE_POSITION_RIGHT 2
-#define SCALE_NEEDLE_POSITION_TOP 3
-#define SCALE_NEEDLE_POSITION_BOTTOM 4
-
-#define BAR_GRAPH_ORIENTATION_LEFT_RIGHT 1
-#define BAR_GRAPH_ORIENTATION_RIGHT_LEFT 2
-#define BAR_GRAPH_ORIENTATION_TOP_BOTTOM 3
-#define BAR_GRAPH_ORIENTATION_BOTTOM_TOP 4
-
 typedef uint16_t OBJ_OFFSET;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma pack(push, 1)
 
-////////////////////////////////////////////////////////////////////////////////
-
 struct List {
     uint8_t count;
     OBJ_OFFSET first;
 };
-
-////////////////////////////////////////////////////////////////////////////////
 
 struct Style {
     uint8_t font;
@@ -94,11 +77,7 @@ struct Style {
 
 typedef List Styles;
 
-////////////////////////////////////////////////////////////////////////////////
-
 typedef uint8_t ActionType;
-
-////////////////////////////////////////////////////////////////////////////////
 
 struct Widget {
     uint8_t type;
@@ -110,107 +89,6 @@ struct Widget {
     uint16_t h;
     uint8_t style;
     OBJ_OFFSET specific;
-};
-
-struct ContainerWidget {
-    List widgets;
-};
-
-struct ListWidget {
-	uint8_t listType; // LIST_TYPE_VERTICAL or LIST_TYPE_HORIZONTAL
-    OBJ_OFFSET item_widget;
-};
-
-struct SelectWidget {
-    List widgets;
-};
-
-struct DisplayDataWidget {
-    uint8_t activeStyle;
-};
-
-struct TextFlags {
-    unsigned ignoreLuminosity : 1;
-};
-
-struct TextWidget {
-    OBJ_OFFSET text;
-    TextFlags flags;
-};
-
-struct MultilineTextWidget {
-    OBJ_OFFSET text;
-};
-
-struct RectangleFlags {
-    unsigned invertColors : 1;
-    unsigned ignoreLuminosity : 1;
-};
-
-struct RectangleWidget {
-    RectangleFlags flags;
-};
-
-struct BitmapWidget {
-    uint8_t bitmap;
-};
-
-struct ButtonWidget {
-	OBJ_OFFSET text;
-	uint8_t enabled;
-	uint8_t disabledStyle;
-};
-
-struct ToggleButtonWidget {
-    OBJ_OFFSET text1;
-    OBJ_OFFSET text2;
-};
-
-struct ScaleWidget {
-	uint8_t needle_position; // SCALE_NEEDLE_POSITION_...
-	uint8_t needle_width;
-    uint8_t needle_height;
-};
-
-struct BarGraphWidget {
-	uint8_t orientation; // BAR_GRAPH_ORIENTATION_...
-	uint8_t textStyle;
-	uint8_t line1Data;
-	uint8_t line1Style;
-	uint8_t line2Data;
-	uint8_t line2Style;
-};
-
-struct YTGraphWidget {
-	uint8_t y1Style;
-	uint8_t y2Data;
-	uint8_t y2Style;
-};
-
-enum UpDownWidgetSegment {
-    UP_DOWN_WIDGET_SEGMENT_TEXT,
-    UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON,
-    UP_DOWN_WIDGET_SEGMENT_UP_BUTTON
-};
-
-struct UpDownWidget {
-	uint8_t buttonsStyle;
-	OBJ_OFFSET downButtonText;
-	OBJ_OFFSET upButtonText;
-};
-
-struct ListGraphWidget {
-    uint8_t dwellData;
-    uint8_t y1Data;
-	uint8_t y1Style;
-    uint8_t y2Data;
-	uint8_t y2Style;
-    uint8_t cursorData;
-    uint8_t cursorStyle;
-};
-
-struct CustomWidgetSpecific {
-	uint8_t customWidget;
 };
 
 struct Rect {
@@ -226,20 +104,14 @@ struct PageWidget {
     uint8_t closePageIfTouchedOutside;
 };
 
-////////////////////////////////////////////////////////////////////////////////
-
 struct CustomWidget {
     List widgets;
 };
-
-////////////////////////////////////////////////////////////////////////////////
 
 struct Document {
     List customWidgets;
     List pages;
 };
-
-////////////////////////////////////////////////////////////////////////////////
 
 #pragma pack(pop)
 
@@ -261,27 +133,6 @@ struct WidgetState {
     WidgetStateFlags flags;
     data::Value data;
 	uint16_t backgroundColor;
-};
-
-struct ButtonGroupWidgetState {
-    WidgetState genericState;
-    const data::Value *labels;
-};
-
-struct BarGraphWidgetState {
-    WidgetState genericState;
-    data::Value line1Data;
-    data::Value line2Data;
-};
-
-struct YTGraphWidgetState {
-    WidgetState genericState;
-    data::Value y2Data;
-};
-
-struct ListGraphWidgetState {
-    WidgetState genericState;
-    data::Value cursorData;
 };
 
 #ifdef EEZ_PLATFORM_ARDUINO_DUE
@@ -327,18 +178,25 @@ struct WidgetCursor {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void drawWidget(int pageId, const WidgetCursor &widgetCursor);
-void refreshWidget(WidgetCursor widgetCursor);
+WidgetCursor& getSelectedWidget();
 void selectWidget(WidgetCursor &widgetCursor);
 void deselectWidget();
 
+bool isBlinkTime();
+
 typedef void(*EnumWidgetsCallback)(int pageId, const WidgetCursor &widgetCursor);
-void enumWidgets(int pageIndex, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback);
+void enumWidgets(int pageId, EnumWidgetsCallback callback);
 
 WidgetCursor findWidget(int x, int y);
 void drawTick();
 
 int getCurrentStateBufferIndex();
+
+typedef void (*OnTouchDownFunctionType)(const WidgetCursor &widgetCursor, int xTouch, int yTouch);
+extern OnTouchDownFunctionType g_onTouchDownFunctions[];
+
+typedef void (*OnTouchMoveFunctionType)(const WidgetCursor &widgetCursor, int xTouch, int yTouch);
+extern OnTouchMoveFunctionType g_onTouchMoveFunctions[];
 
 }
 }

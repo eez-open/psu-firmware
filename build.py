@@ -1,6 +1,6 @@
 '''
 EEZ PSU Firmware
-Copyright (C) 2015 Envox d.o.o.
+Copyright (C) 2015-present Envox d.o.o.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ SKETCH_SOURCE_DIRS = [
     { "path": "eez/app/scpi",                 "prefix": "scpi_"       },
     { "path": "eez/mw",                       "prefix": "mw_"         },
     { "path": "eez/mw/gui",                   "prefix": "mw_gui_"     },
-    { "path": "eez/mw/platform/arduino_due",  "prefix": "me_arduino_" }
+    { "path": "eez/mw/platform/arduino_due",  "prefix": "mw_arduino_" }
 ]
 
 def transform_source_line(line):

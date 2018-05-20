@@ -20,9 +20,9 @@
 
 #if OPTION_DISPLAY
 
-#include "mw_gui_gui.h"
-#include "mw_gui_widget_button_group.h"
 #include "mw_util.h"
+#include "mw_gui_gui.h"
+#include "mw_gui_widget/button.h"
 
 #define CONF_GUI_PAGE_NAVIGATION_STACK_SIZE 5
 #define CONF_GUI_LONG_TOUCH_TIMEOUT 1000000L // 1s
@@ -57,6 +57,8 @@ WidgetCursor g_foundWidgetAtDown;
 uint32_t g_showPageTime;
 static bool g_touchActionExecuted;
 static bool g_touchActionExecutedAtDown;
+
+static WidgetCursor g_foundTouchWidget;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -394,17 +396,25 @@ void processEvents() {
                     }
                 } else {
                     if (!isActivePageInternal()) {
-                        DECL_WIDGET(widget, foundWidget.widgetOffset);
-						if (foundWidget && widget->type == WIDGET_TYPE_BUTTON_GROUP) {
-                            widgetButtonGroup::onTouchDown(foundWidget);
-                        } else {
+						DECL_WIDGET(widget, foundWidget.widgetOffset);
+						if (foundWidget && g_onTouchDownFunctions[widget->type]) {
+							g_foundTouchWidget = foundWidget;
+							g_onTouchDownFunctions[widget->type](g_foundTouchWidget, g_events[i].x, g_events[i].y);
+						} else {
 							onTouchDownHook(foundWidget, g_events[i].x, g_events[i].y);
 						}
                     }
                 }
             }
         } else if (g_events[i].type == EVENT_TYPE_TOUCH_MOVE) {
-            if (!g_foundWidgetAtDown) {
+			if (g_foundWidgetAtDown) {
+				if (!isActivePageInternal()) {
+					DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
+					if (g_onTouchMoveFunctions[widget->type]) {
+						g_onTouchMoveFunctions[widget->type](g_foundTouchWidget, g_events[i].x, g_events[i].y);
+					}
+				}
+			} else {
 				onTouchMoveHook(g_events[i].x, g_events[i].y);
             }
         } else if (g_events[i].type == EVENT_TYPE_LONG_TOUCH) {

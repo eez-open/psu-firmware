@@ -20,18 +20,11 @@
 
 #if OPTION_DISPLAY
 
-#include "eez/app/sound.h"
-#include "eez/app/channel_dispatcher.h"
-
 #include "eez/app/gui/edit_mode.h"
 #include "eez/app/gui/edit_mode_keypad.h"
 #include "eez/app/gui/numeric_keypad.h"
 
 namespace eez {
-
-// @todo remove this
-using namespace mw::gui;
-
 namespace app {
 namespace gui {
 namespace edit_mode_keypad {
@@ -44,7 +37,7 @@ bool onKeypadOk(float value) {
 	return edit_mode::setValue(value);
 }
 
-void enter(Channel &channel, const data::Value& editValue, const data::Value& minValue, data::Value& maxValue) {
+void enter(Channel &channel, const mw::gui::data::Value& editValue, const mw::gui::data::Value& minValue, mw::gui::data::Value& maxValue) {
     g_keypad = new NumericKeypad();
 
 	NumericKeypadOptions options;

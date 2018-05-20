@@ -27,6 +27,7 @@
 #include "eez/app/gui/keypad.h"
 #include "eez/app/gui/numeric_keypad.h"
 #include "eez/app/gui/edit_mode_keypad.h"
+#include "eez/mw/gui/widget/text.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable:4996)

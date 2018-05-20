@@ -22,11 +22,12 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 
 #if defined(EEZ_PLATFORM_ARDUINO_DUE)
-#include "me_arduino_platform.h"
+#include "mw_arduino_platform.h"
 #elif defined(EEZ_PLATFORM_SIMULATOR)
 #include "mw_platform/simulator/platform.h"
 #elif defined(EEZ_PLATFORM_STM32)

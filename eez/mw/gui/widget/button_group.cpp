@@ -22,12 +22,11 @@
 
 #include "eez/mw/util.h"
 #include "eez/mw/gui/gui.h"
-#include "eez/mw/gui/widget_button_group.h"
+#include "eez/mw/gui/widget/button_group.h"
 
 namespace eez {
 namespace mw {
 namespace gui {
-namespace widgetButtonGroup {
 
 void drawButtons(int pageId, const Widget* widget, int x, int y, const Style *style, int selectedButton, const data::Value *labels, int count) {
     if (widget->w > widget->h) {
@@ -95,7 +94,7 @@ void drawButtons(int pageId, const Widget* widget, int x, int y, const Style *st
 	}
 }
 
-void draw(int pageId, const WidgetCursor &widgetCursor) {
+void ButtonGroupWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
     widgetCursor.currentState->size = sizeof(ButtonGroupWidgetState);
@@ -118,7 +117,7 @@ void draw(int pageId, const WidgetCursor &widgetCursor) {
     }
 }
 
-void onTouchDown(const WidgetCursor &widgetCursor) {
+void ButtonGroupWidget_onTouchDown(const WidgetCursor &widgetCursor, int xTouch, int yTouch) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
     const data::Value *labels;
@@ -130,11 +129,11 @@ void onTouchDown(const WidgetCursor &widgetCursor) {
         int w = widget->w / count;
         int x = widgetCursor.x + (widget->w - w * count) / 2;
 
-        selectedButton = (touch::g_x - x) / w;
+        selectedButton = (xTouch - x) / w;
     } else {
         int h = widget->h / count;
         int y = widgetCursor.y + (widget->h - h * count) / 2;
-        selectedButton = (touch::g_y - y) / h;
+        selectedButton = (yTouch - y) / h;
     }
 
     if (selectedButton >= 0 && selectedButton < count) {
@@ -143,10 +142,8 @@ void onTouchDown(const WidgetCursor &widgetCursor) {
     }
 }
 
-
 }
 }
-}
-} // namespace eez::mw::gui::widget_button_group
+} // namespace eez::mw::gui
 
 #endif

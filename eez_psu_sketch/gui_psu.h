@@ -86,8 +86,6 @@ extern Channel *g_channel;
 
 void onLastErrorEventAction();
 
-void onTouchListGraph(const WidgetCursor &widgetCursor, int xTouch, int yTouch);
-
 void errorMessageAction();
 void lockFrontPanel();
 void unlockFrontPanel();

@@ -22,6 +22,7 @@
 #include "mw_util.h"
 using namespace eez::mw;
 
+#include <stdarg.h>
 #include <scpi-parser.h>
 
 #include "ontime.h"

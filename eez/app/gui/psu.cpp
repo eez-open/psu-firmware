@@ -92,8 +92,6 @@ static void(*g_dialogNoCallback)();
 static void(*g_dialogCancelCallback)();
 static void(*g_dialogLaterCallback)();
 static WidgetCursor g_toggleOutputWidgetCursor;
-static WidgetCursor g_foundTouchWidget;
-
 
 void yesNoLater(const char *message, void(*yes_callback)(), void(*no_callback)(), void(*later_callback)() = 0) {
 	data::set(data::Cursor(), DATA_ID_ALERT_MESSAGE, data::Value(message), 0);
@@ -264,7 +262,7 @@ void isEncoderEnabledInActivePageCheckWidget(int pageId, const WidgetCursor &wid
 bool isEncoderEnabledInActivePage() {
 	// encoder is enabled if active page contains widget with "edit" action
 	g_isEncoderEnabledInActivePage = false;
-	enumWidgets(getActivePageId(), 0, 0, isEncoderEnabledInActivePageCheckWidget);
+	enumWidgets(getActivePageId(), isEncoderEnabledInActivePageCheckWidget);
 	return g_isEncoderEnabledInActivePage;
 }
 
@@ -989,57 +987,6 @@ void onLastErrorEventAction() {
 	}
 }
 
-void onTouchListGraph(const WidgetCursor &widgetCursor, int xTouch, int yTouch) {
-	DECL_WIDGET(widget, widgetCursor.widgetOffset);
-	DECL_WIDGET_SPECIFIC(ListGraphWidget, listGraphWidget, widget);
-
-	if (xTouch < widgetCursor.x || xTouch >= widgetCursor.x + (int)widget->w) return;
-	if (yTouch < widgetCursor.y || yTouch >= widgetCursor.y + (int)widget->h) return;
-
-	int dwellListLength = data::getFloatListLength(listGraphWidget->dwellData);
-	if (dwellListLength > 0) {
-		int iCursor = -1;
-
-		float *dwellList = data::getFloatList(listGraphWidget->dwellData);
-
-		int maxListLength = data::getFloatListLength(widget->data);
-
-		float dwellSum = 0;
-		for (int i = 0; i < maxListLength; ++i) {
-			if (i < dwellListLength) {
-				dwellSum += dwellList[i];
-			} else {
-				dwellSum += dwellList[dwellListLength - 1];
-			}
-		}
-
-		float currentDwellSum = 0;
-		int xPrev = widgetCursor.x;
-		for (int i = 0; i < maxListLength; ++i) {
-			currentDwellSum += i < dwellListLength ? dwellList[i] : dwellList[dwellListLength - 1];
-			int x1 = xPrev;
-			int x2;
-			if (i == maxListLength - 1) {
-				x2 = widgetCursor.x + (int)widget->w - 1;
-			} else {
-				x2 = widgetCursor.x + int(currentDwellSum * (int)widget->w / dwellSum);
-			}
-			if (x2 < x1) x2 = x1;
-			if (x2 >= widgetCursor.x + (int)widget->w) x2 = widgetCursor.x + (int)widget->w - 1;
-
-			if (xTouch >= x1 && xTouch < x2) {
-				int iCurrentCursor = data::get(widgetCursor.cursor, listGraphWidget->cursorData).getInt();
-				iCursor = i * 3 + iCurrentCursor % 3;
-				break;
-			}
-		}
-
-		if (iCursor >= 0) {
-			data::set(widgetCursor.cursor, listGraphWidget->cursorData, data::Value(iCursor), 0);
-		}
-	}
-}
-
 }
 }
 } // namespace eez::app::gui
@@ -1079,8 +1026,8 @@ int transformStyleHook(const Widget *widget) {
 			return STYLE_ID_DEFAULT_S;
 		} else if (widget->style == STYLE_ID_MON_VALUE) {
 			return STYLE_ID_DEFAULT;
-		} else if (widget->style == STYLE_ID_CHANNEL_OFF_LANDSCAPE) {
-			return STYLE_ID_DEFAULT_L_LANDSCAPE;
+		} else if (widget->style == STYLE_ID_CHANNEL_OFF) {
+			return STYLE_ID_CHANNEL_OFF_DISABLED;
 		} else if (widget->style == STYLE_ID_EDIT_VALUE_ACTIVE_S_RIGHT) {
 			return STYLE_ID_EDIT_VALUE_S_RIGHT;
 		}
@@ -1110,18 +1057,11 @@ void flushGuiUpdate() {
 }
 
 void onTouchDownHook(const WidgetCursor& foundWidget, int xTouch, int yTouch) {
-	DECL_WIDGET(widget, foundWidget.widgetOffset);
-	if (foundWidget && widget->type == WIDGET_TYPE_LIST_GRAPH) {
-		g_foundTouchWidget = foundWidget;
-		onTouchListGraph(g_foundTouchWidget, xTouch, yTouch);
-		sound::playClick();
-	} else {
-		int activePageId = getActivePageId();
-		if (activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
-			edit_mode_slider::onTouchDown();
-		} else if (activePageId == PAGE_ID_EDIT_MODE_STEP) {
-			edit_mode_step::onTouchDown();
-		}
+	int activePageId = getActivePageId();
+	if (activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+		edit_mode_slider::onTouchDown();
+	} else if (activePageId == PAGE_ID_EDIT_MODE_STEP) {
+		edit_mode_step::onTouchDown();
 	}
 }
 
@@ -1141,15 +1081,11 @@ void onTouchMoveHook(int xTouch, int yTouch) {
 		lcd::fillRect(x - 1, y - 1, x + 1, y + 1);
 #endif
 	} else {
-		if (g_foundTouchWidget) {
-			onTouchListGraph(g_foundTouchWidget, xTouch, yTouch);
-		} else {
-			int activePageId = getActivePageId();
-			if (activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
-				edit_mode_slider::onTouchMove();
-			} else if (activePageId == PAGE_ID_EDIT_MODE_STEP) {
-				edit_mode_step::onTouchMove();
-			}
+		int activePageId = getActivePageId();
+		if (activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+			edit_mode_slider::onTouchMove();
+		} else if (activePageId == PAGE_ID_EDIT_MODE_STEP) {
+			edit_mode_step::onTouchMove();
 		}
 	}
 }

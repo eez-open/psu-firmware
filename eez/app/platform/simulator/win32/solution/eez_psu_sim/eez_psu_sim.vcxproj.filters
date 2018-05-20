@@ -58,6 +58,9 @@
     <Filter Include="eez\app\scpi">
       <UniqueIdentifier>{07015d49-025d-46d7-91ce-35b842198741}</UniqueIdentifier>
     </Filter>
+    <Filter Include="eez\mw\gui\widget">
+      <UniqueIdentifier>{86dc9f0e-ba7b-49ed-952c-ba5fd1fd025f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\scpi\appl.cpp">
@@ -133,9 +136,6 @@
       <Filter>eez\mw\gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\mw\gui\page.cpp">
-      <Filter>eez\mw\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget_button_group.cpp">
       <Filter>eez\mw\gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\mw\gui\view.cpp">
@@ -423,6 +423,60 @@
     <ClCompile Include="..\..\..\front_panel\render.cpp">
       <Filter>eez\app\platform\simulator\front_panel</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\bar_graph.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\bitmap.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\button.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\button_group.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\container.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\custom.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\display_data.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\list.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\list_graph.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\multiline_text.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\rectangle.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\scale.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\select.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\text.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\toggle_button.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\up_down.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\widget\yt_graph.cpp">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\mw\gui\draw.cpp">
+      <Filter>eez\mw\gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\scpi\commands.h">
@@ -459,9 +513,6 @@
       <Filter>eez\mw\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\mw\gui\page.h">
-      <Filter>eez\mw\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget_button_group.h">
       <Filter>eez\mw\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\mw\gui\view.h">
@@ -796,6 +847,60 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\conf_mw.h">
       <Filter>eez\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\bar_graph.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\bitmap.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\button.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\button_group.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\container.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\custom.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\display_data.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\list.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\list_graph.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\multiline_text.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\rectangle.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\scale.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\select.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\text.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\toggle_button.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\up_down.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\widget\yt_graph.h">
+      <Filter>eez\mw\gui\widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\draw.h">
+      <Filter>eez\mw\gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
