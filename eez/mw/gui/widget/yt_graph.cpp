@@ -22,6 +22,7 @@
 
 #include "eez/mw/util.h"
 #include "eez/mw/gui/gui.h"
+#include "eez/mw/gui/draw.h"
 #include "eez/mw/gui/widget/yt_graph.h"
 
 #define CONF_GUI_YT_GRAPH_BLANK_PIXELS_AFTER_CURSOR 10
@@ -134,7 +135,7 @@ void YTGraphWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 		widgetCursor.currentState->data.toText(text, sizeof(text));
 
 		drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, textWidth, textHeight, y1Style,
-			widgetCursor.currentState->flags.pressed);
+			widgetCursor.currentState->flags.pressed, false, false, NULL);
 		if (!isActivePage(pageId)) {
 			return;
 		}
@@ -148,7 +149,7 @@ void YTGraphWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 		((YTGraphWidgetState *)widgetCursor.currentState)->y2Data.toText(text, sizeof(text));
 
 		drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y + textHeight, textWidth, textHeight, y2Style,
-			widgetCursor.currentState->flags.pressed);
+			widgetCursor.currentState->flags.pressed, false, false, NULL);
 		if (!isActivePage(pageId)) {
 			return;
 		}

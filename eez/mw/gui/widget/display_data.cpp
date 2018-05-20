@@ -22,6 +22,7 @@
 
 #include "eez/mw/util.h"
 #include "eez/mw/gui/gui.h"
+#include "eez/mw/gui/draw.h"
 #include "eez/mw/gui/widget/display_data.h"
 
 namespace eez {

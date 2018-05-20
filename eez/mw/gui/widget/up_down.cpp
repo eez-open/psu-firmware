@@ -24,10 +24,20 @@
 #include "eez/mw/gui/gui.h"
 #include "eez/mw/gui/widget/up_down.h"
 #include "eez/mw/gui/draw.h"
+#include "eez/mw/gui/draw.h"
 
 namespace eez {
 namespace mw {
 namespace gui {
+
+enum UpDownWidgetSegment {
+	UP_DOWN_WIDGET_SEGMENT_TEXT,
+	UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON,
+	UP_DOWN_WIDGET_SEGMENT_UP_BUTTON
+};
+
+UpDownWidgetSegment g_segment;
+WidgetCursor g_selectedWidget;
 
 void UpDownWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 	DECL_WIDGET(widget, widgetCursor.widgetOffset);
@@ -35,6 +45,7 @@ void UpDownWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 
 	widgetCursor.currentState->size = sizeof(WidgetState);
 	widgetCursor.currentState->data = data::get(widgetCursor.cursor, widget->data);
+	widgetCursor.currentState->flags.pressed = g_selectedWidget == widgetCursor;
 
 	bool refresh = !widgetCursor.previousState ||
 		widgetCursor.previousState->flags.pressed != widgetCursor.currentState->flags.pressed ||
@@ -47,10 +58,9 @@ void UpDownWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 		font::Font buttonsFont = styleGetFont(buttonsStyle);
 		int buttonWidth = buttonsFont.getHeight();
 
-		WidgetCursor& selectedWidget = getSelectedWidget();
-
 		drawText(pageId, downButtonText, -1, widgetCursor.x, widgetCursor.y, buttonWidth, (int)widget->h, buttonsStyle,
-			(widgetCursor.currentState->flags.pressed || selectedWidget == widgetCursor) && selectedWidget.segment == UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON);
+			widgetCursor.currentState->flags.pressed && g_segment == UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON,
+			false, false, NULL);
 		if (!isActivePage(pageId)) {
 			return;
 		}
@@ -58,45 +68,62 @@ void UpDownWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 		char text[64];
 		widgetCursor.currentState->data.toText(text, sizeof(text));
 		DECL_STYLE(style, widget->style);
-		drawText(pageId, text, -1, widgetCursor.x + buttonWidth, widgetCursor.y, (int)(widget->w - 2 * buttonWidth), (int)widget->h, style, false);
+		drawText(pageId, text, -1, widgetCursor.x + buttonWidth, widgetCursor.y, (int)(widget->w - 2 * buttonWidth), (int)widget->h, style, false, false, false, NULL);
 		if (!isActivePage(pageId)) {
 			return;
 		}
 
 		DECL_STRING(upButtonText, upDownWidget->upButtonText);
 		drawText(pageId, upButtonText, -1, widgetCursor.x + widget->w - buttonWidth, widgetCursor.y, buttonWidth, (int)widget->h, buttonsStyle,
-			(widgetCursor.currentState->flags.pressed || selectedWidget == widgetCursor) && selectedWidget.segment == UP_DOWN_WIDGET_SEGMENT_UP_BUTTON);
+			widgetCursor.currentState->flags.pressed && g_segment == UP_DOWN_WIDGET_SEGMENT_UP_BUTTON, false, false, NULL);
 	}
 }
 
-void upDown() {
-	if (g_foundWidgetAtDown) {
-		DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
-		if (widget->type == WIDGET_TYPE_UP_DOWN) {
-			int value = data::get(g_foundWidgetAtDown.cursor, widget->data).getInt();
+void upDown(const WidgetCursor &widgetCursor, UpDownWidgetSegment segment) {
+	g_segment = segment;
 
-			int newValue = value;
+	DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
-			if (g_foundWidgetAtDown.segment == UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON) {
-				--newValue;
-			} else if (g_foundWidgetAtDown.segment == UP_DOWN_WIDGET_SEGMENT_UP_BUTTON) {
-				++newValue;
-			}
+	int value = data::get(widgetCursor.cursor, widget->data).getInt();
 
-			int min = data::getMin(g_foundWidgetAtDown.cursor, widget->data).getInt();
-			if (newValue < min) {
-				newValue = min;
-			}
+	int newValue = value;
 
-			int max = data::getMax(g_foundWidgetAtDown.cursor, widget->data).getInt();
-			if (newValue > max) {
-				newValue = max;
-			}
+	if (g_segment == UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON) {
+		--newValue;
+	} else if (g_segment == UP_DOWN_WIDGET_SEGMENT_UP_BUTTON) {
+		++newValue;
+	}
 
-			if (newValue != value) {
-				data::set(g_foundWidgetAtDown.cursor, widget->data, newValue, 0);
-			}
+	int min = data::getMin(widgetCursor.cursor, widget->data).getInt();
+	if (newValue < min) {
+		newValue = min;
+	}
+
+	int max = data::getMax(widgetCursor.cursor, widget->data).getInt();
+	if (newValue > max) {
+		newValue = max;
+	}
+
+	if (newValue != value) {
+		data::set(widgetCursor.cursor, widget->data, newValue, 0);
+	}
+}
+
+void UpDownWidget_onTouch(const WidgetCursor &widgetCursor, Event &touchEvent) {
+	DECL_WIDGET(widget, widgetCursor.widgetOffset);
+
+	if (touchEvent.type == EVENT_TYPE_TOUCH_DOWN || touchEvent.type == EVENT_TYPE_AUTO_REPEAT) {
+		if (touchEvent.type == EVENT_TYPE_TOUCH_DOWN) {
+			g_selectedWidget = widgetCursor;
 		}
+
+		if (touchEvent.x < widgetCursor.x + widget->w / 2) {
+			upDown(widgetCursor, UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON);
+		} else {
+			upDown(widgetCursor, UP_DOWN_WIDGET_SEGMENT_UP_BUTTON);
+		}
+	} else if (touchEvent.type == EVENT_TYPE_TOUCH_UP) {
+		g_selectedWidget = 0;
 	}
 }
 

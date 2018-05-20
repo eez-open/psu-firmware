@@ -22,6 +22,7 @@ namespace eez {
 namespace mw {
 namespace gui {
 
+font::Font styleGetFont(const Style *style);
 bool styleIsBlink(const Style *style);
 
 void drawText(int pageId, const char *text, int textLength, 

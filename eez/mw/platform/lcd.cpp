@@ -60,6 +60,8 @@ void turnOn(bool withoutTransition) {
 }
 
 void turnOff() {
+	setColor(COLOR_BLACK);
+	fillRect(0, 0, g_displayWidth - 1, g_displayHeight - 1);
 }
 
 void updateBrightness() {

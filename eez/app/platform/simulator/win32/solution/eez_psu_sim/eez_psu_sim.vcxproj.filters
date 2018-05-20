@@ -902,6 +902,9 @@
     <ClInclude Include="..\..\..\..\..\..\mw\gui\draw.h">
       <Filter>eez\mw\gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\event.h">
+      <Filter>eez\mw\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\..\..\libraries\scpi-parser\src\impl\scpi.g">

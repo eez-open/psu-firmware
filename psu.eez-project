@@ -2093,11 +2093,6 @@
       "implementation": "errorMessageAction();"
     },
     {
-      "name": "upDown",
-      "implementationType": "native",
-      "implementation": "upDown();"
-    },
-    {
       "name": "sys.settings.encoder.toggleConfirmationMode",
       "implementationType": "native",
       "implementation": "#if OPTION_ENCODER\n((SysSettingsEncoderPage *)getActivePage())->toggleConfirmationMode();\n#endif"
@@ -17793,7 +17788,7 @@
               "type": "UpDown",
               "style": "edit_value_S_centered",
               "data": "sys.encoder.movingUpSpeed",
-              "action": "upDown",
+              "action": "",
               "x": 120,
               "y": 101,
               "width": 87,
@@ -17815,7 +17810,7 @@
               "type": "UpDown",
               "style": "edit_value_S_centered",
               "data": "sys.encoder.movingDownSpeed",
-              "action": "upDown",
+              "action": "",
               "x": 120,
               "y": 139,
               "width": 87,
@@ -18167,7 +18162,7 @@
                       "type": "UpDown",
                       "style": "edit_value_S_centered",
                       "data": "serial.baud",
-                      "action": "upDown",
+                      "action": "",
                       "x": 93,
                       "y": 28,
                       "width": 119,
@@ -19983,7 +19978,7 @@
               "type": "UpDown",
               "style": "edit_value_S_centered",
               "data": "sys.display.brightness",
-              "action": "upDown",
+              "action": "",
               "x": 156,
               "y": 32,
               "width": 82,
@@ -20013,7 +20008,7 @@
               "type": "UpDown",
               "style": "edit_value_S_centered",
               "data": "sys.display.backgroundLuminosityStep",
-              "action": "upDown",
+              "action": "",
               "x": 156,
               "y": 60,
               "width": 82,

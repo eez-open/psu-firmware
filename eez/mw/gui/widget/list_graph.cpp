@@ -179,61 +179,65 @@ void ListGraphWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 	}
 }
 
-void listGraphWidget_onTouchDown(const WidgetCursor &widgetCursor, int xTouch, int yTouch) {
-	DECL_WIDGET(widget, widgetCursor.widgetOffset);
-	DECL_WIDGET_SPECIFIC(ListGraphWidget, listGraphWidget, widget);
+void ListGraphWidget_onTouch(const WidgetCursor &widgetCursor, Event &touchEvent) {
+	if (touchEvent.type == EVENT_TYPE_TOUCH_DOWN || touchEvent.type == EVENT_TYPE_TOUCH_MOVE) {
+		DECL_WIDGET(widget, widgetCursor.widgetOffset);
+		DECL_WIDGET_SPECIFIC(ListGraphWidget, listGraphWidget, widget);
 
-	if (xTouch < widgetCursor.x || xTouch >= widgetCursor.x + (int)widget->w) return;
-	if (yTouch < widgetCursor.y || yTouch >= widgetCursor.y + (int)widget->h) return;
-
-	int dwellListLength = data::getFloatListLength(listGraphWidget->dwellData);
-	if (dwellListLength > 0) {
-		int iCursor = -1;
-
-		float *dwellList = data::getFloatList(listGraphWidget->dwellData);
-
-		int maxListLength = data::getFloatListLength(widget->data);
-
-		float dwellSum = 0;
-		for (int i = 0; i < maxListLength; ++i) {
-			if (i < dwellListLength) {
-				dwellSum += dwellList[i];
-			} else {
-				dwellSum += dwellList[dwellListLength - 1];
-			}
+		if (touchEvent.x < widgetCursor.x || touchEvent.x >= widgetCursor.x + (int)widget->w) {
+			return;
+		}
+		if (touchEvent.y < widgetCursor.y || touchEvent.y >= widgetCursor.y + (int)widget->h) {
+			return;
 		}
 
-		float currentDwellSum = 0;
-		int xPrev = widgetCursor.x;
-		for (int i = 0; i < maxListLength; ++i) {
-			currentDwellSum += i < dwellListLength ? dwellList[i] : dwellList[dwellListLength - 1];
-			int x1 = xPrev;
-			int x2;
-			if (i == maxListLength - 1) {
-				x2 = widgetCursor.x + (int)widget->w - 1;
-			} else {
-				x2 = widgetCursor.x + int(currentDwellSum * (int)widget->w / dwellSum);
-			}
-			if (x2 < x1) x2 = x1;
-			if (x2 >= widgetCursor.x + (int)widget->w) x2 = widgetCursor.x + (int)widget->w - 1;
+		int dwellListLength = data::getFloatListLength(listGraphWidget->dwellData);
+		if (dwellListLength > 0) {
+			int iCursor = -1;
 
-			if (xTouch >= x1 && xTouch < x2) {
-				int iCurrentCursor = data::get(widgetCursor.cursor, listGraphWidget->cursorData).getInt();
-				iCursor = i * 3 + iCurrentCursor % 3;
-				break;
-			}
-		}
+			float *dwellList = data::getFloatList(listGraphWidget->dwellData);
 
-		if (iCursor >= 0) {
-			data::set(widgetCursor.cursor, listGraphWidget->cursorData, data::Value(iCursor), 0);
+			int maxListLength = data::getFloatListLength(widget->data);
+
+			float dwellSum = 0;
+			for (int i = 0; i < maxListLength; ++i) {
+				if (i < dwellListLength) {
+					dwellSum += dwellList[i];
+				} else {
+					dwellSum += dwellList[dwellListLength - 1];
+				}
+			}
+
+			float currentDwellSum = 0;
+			int xPrev = widgetCursor.x;
+			for (int i = 0; i < maxListLength; ++i) {
+				currentDwellSum += i < dwellListLength ? dwellList[i] : dwellList[dwellListLength - 1];
+				int x1 = xPrev;
+				int x2;
+				if (i == maxListLength - 1) {
+					x2 = widgetCursor.x + (int)widget->w - 1;
+				} else {
+					x2 = widgetCursor.x + int(currentDwellSum * (int)widget->w / dwellSum);
+				}
+				if (x2 < x1) x2 = x1;
+				if (x2 >= widgetCursor.x + (int)widget->w) x2 = widgetCursor.x + (int)widget->w - 1;
+
+				if (touchEvent.x >= x1 && touchEvent.x < x2) {
+					int iCurrentCursor = data::get(widgetCursor.cursor, listGraphWidget->cursorData).getInt();
+					iCursor = i * 3 + iCurrentCursor % 3;
+					break;
+				}
+			}
+
+			if (iCursor >= 0) {
+				data::set(widgetCursor.cursor, listGraphWidget->cursorData, data::Value(iCursor), 0);
+
+				if (touchEvent.type == EVENT_TYPE_TOUCH_DOWN) {
+					playClickSound();
+				}
+			}
 		}
 	}
-
-	playClickSound();
-}
-
-void listGraphWidget_onTouchMove(const WidgetCursor &widgetCursor, int xTouch, int yTouch) {
-	listGraphWidget_onTouchDown(widgetCursor, xTouch, yTouch);
 }
 
 }

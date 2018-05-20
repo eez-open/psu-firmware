@@ -46,7 +46,7 @@ static Page *g_activePage;
 
 static int g_previousPageId;
 
-static struct Event {
+static struct {
     int activePageId;
     Page *activePage;
 } g_pageNavigationStack[CONF_GUI_PAGE_NAVIGATION_STACK_SIZE];
@@ -58,31 +58,15 @@ uint32_t g_showPageTime;
 static bool g_touchActionExecuted;
 static bool g_touchActionExecutedAtDown;
 
-static WidgetCursor g_foundTouchWidget;
-
-////////////////////////////////////////////////////////////////////////////////
+static OnTouchFunctionType g_onTouchFunction;
 
 static uint32_t g_touchDownTime;
 static uint32_t g_lastAutoRepeatEventTime;
 static bool g_longTouchGenerated;
 static bool g_extraLongTouchGenerated;
 
-enum EventType {
-    EVENT_TYPE_TOUCH_DOWN,
-    EVENT_TYPE_TOUCH_MOVE,
-    EVENT_TYPE_LONG_TOUCH,
-	EVENT_TYPE_EXTRA_LONG_TOUCH,
-	EVENT_TYPE_FAST_AUTO_REPEAT,
-    EVENT_TYPE_AUTO_REPEAT,
-	EVENT_TYPE_TOUCH_UP
-};
-
 static int g_numEvents;
-static struct {
-    EventType type;
-    int x;
-    int y;
-} g_events[MAX_EVENTS];
+static Event g_events[MAX_EVENTS];
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -268,7 +252,6 @@ void pushSelectFromEnumPage(const data::EnumItem *enumDefinition, uint8_t curren
 bool isWidgetActionEnabled(const WidgetCursor &widgetCursor) {
     DECL_WIDGET(widget, widgetCursor.widgetOffset);
     if (widget->action) {
-
 		bool result;
 		if (isWidgetActionEnabledHook(widget, result)) {
 			return result;
@@ -370,99 +353,91 @@ void gui_touchHandling(uint32_t tick_usec) {
     }
 }
 
+void onInternalPageTouch(const WidgetCursor &widgetCursor, Event &touchEvent) {
+	if (touchEvent.type == EVENT_TYPE_TOUCH_DOWN) {
+		if (g_foundWidgetAtDown) {
+			if (isWidgetActionEnabled(g_foundWidgetAtDown)) {
+				selectWidget(g_foundWidgetAtDown);
+			}
+		}
+	} else if (touchEvent.type == EVENT_TYPE_TOUCH_UP) {
+		if (g_foundWidgetAtDown) {
+			if (isWidgetActionEnabled(g_foundWidgetAtDown)) {
+				deselectWidget();
+				int action = getAction(g_foundWidgetAtDown);
+				executeAction(action);
+			}
+		} else {
+			DECL_WIDGET(page, getPageOffset(getActivePageId()));
+			DECL_WIDGET_SPECIFIC(PageWidget, pageSpecific, page);
+			if (pageSpecific->closePageIfTouchedOutside) {
+				if (!pointInsideRect(touchEvent.x, touchEvent.y, page->x, page->y, page->w, page->h)) {
+					popPage();
+				}
+			}
+		}
+	}
+}
+
+void onWidgetDefaultTouch(const WidgetCursor &widgetCursor, Event &touchEvent) {
+	if (touchEvent.type == EVENT_TYPE_TOUCH_DOWN) {
+		g_touchActionExecuted = false;
+		g_touchActionExecutedAtDown = false;
+
+		int action = getAction(g_foundWidgetAtDown);
+		if (testExecuteActionOnTouchDownHook(action)) {
+			executeAction(action);
+			g_touchActionExecutedAtDown = true;
+		} else {
+			selectWidget(g_foundWidgetAtDown);
+		}
+	} else if (touchEvent.type == EVENT_TYPE_AUTO_REPEAT) {
+		int action = getAction(g_foundWidgetAtDown);
+		if (isAutoRepeatActionHook(action)) {
+			g_touchActionExecuted = true;
+			executeAction(action);
+		}
+	} else if (touchEvent.type == EVENT_TYPE_TOUCH_UP) {
+		if (!g_touchActionExecutedAtDown) {
+			deselectWidget();
+			if (!g_touchActionExecuted) {
+				int action = getAction(g_foundWidgetAtDown);
+				executeAction(action);
+			}
+		}
+	}
+}
+
 void processEvents() {
     for (int i = 0; i < g_numEvents; ++i) {
         if (g_events[i].type == EVENT_TYPE_TOUCH_DOWN) {
-            g_touchActionExecuted = false;
-            g_touchActionExecutedAtDown = false;
-            WidgetCursor foundWidget = findWidget(g_events[i].x, g_events[i].y);
-            g_foundWidgetAtDown = 0;
-            if (foundWidget) {
-                if (isActivePageInternal()) {
-                    g_foundWidgetAtDown = foundWidget;
-                } else {
-                    if (isWidgetActionEnabled(foundWidget)) {
-                        g_foundWidgetAtDown = foundWidget;
-                    }
-                }
+			g_foundWidgetAtDown = findWidget(g_events[i].x, g_events[i].y);
 
-                if (g_foundWidgetAtDown) {
-					int action = getAction(g_foundWidgetAtDown);
-                    if (testExecuteActionOnTouchDownHook(action)) {
-                        executeAction(action);
-                        g_touchActionExecutedAtDown = true;
-                    } else {
-                        selectWidget(g_foundWidgetAtDown);
-                    }
+			g_onTouchFunction = NULL;
+
+			if (isActivePageInternal()) {
+				g_onTouchFunction = onInternalPageTouch;
+			} else if (g_foundWidgetAtDown) {
+				DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
+				if (widget->action) {
+					if (isWidgetActionEnabled(g_foundWidgetAtDown)) {
+						g_onTouchFunction = onWidgetDefaultTouch;
+					}
                 } else {
-                    if (!isActivePageInternal()) {
-						DECL_WIDGET(widget, foundWidget.widgetOffset);
-						if (foundWidget && g_onTouchDownFunctions[widget->type]) {
-							g_foundTouchWidget = foundWidget;
-							g_onTouchDownFunctions[widget->type](g_foundTouchWidget, g_events[i].x, g_events[i].y);
-						} else {
-							onTouchDownHook(foundWidget, g_events[i].x, g_events[i].y);
-						}
-                    }
+					g_onTouchFunction = g_onTouchFunctions[widget->type];
                 }
-            }
-        } else if (g_events[i].type == EVENT_TYPE_TOUCH_MOVE) {
-			if (g_foundWidgetAtDown) {
-				if (!isActivePageInternal()) {
-					DECL_WIDGET(widget, g_foundWidgetAtDown.widgetOffset);
-					if (g_onTouchMoveFunctions[widget->type]) {
-						g_onTouchMoveFunctions[widget->type](g_foundTouchWidget, g_events[i].x, g_events[i].y);
-					}
-				}
-			} else {
-				onTouchMoveHook(g_events[i].x, g_events[i].y);
-            }
-        } else if (g_events[i].type == EVENT_TYPE_LONG_TOUCH) {
-            if (!g_touchActionExecuted) {
-				if (!g_foundWidgetAtDown || !isAutoRepeatActionHook(getAction(g_foundWidgetAtDown))) {
-					if (onLongTouchHook()) {
-						g_touchActionExecuted = true;
-					}
-				}
-            }
-		} else if (g_events[i].type == EVENT_TYPE_EXTRA_LONG_TOUCH) {
-			if (!g_touchActionExecuted) {
-				if (!g_foundWidgetAtDown || !isAutoRepeatActionHook(getAction(g_foundWidgetAtDown))) {
-					if (onExtraLongTouchHook()) {
-						g_touchActionExecuted = true;
-					}
-				}
 			}
-		} else if (g_events[i].type == EVENT_TYPE_AUTO_REPEAT) {
-            if (g_foundWidgetAtDown) {
-                int action = getAction(g_foundWidgetAtDown);
-                if (isAutoRepeatActionHook(action)) {
-                    g_touchActionExecuted = true;
-                    executeAction(action);
-                }
-            }
-        } else if (g_events[i].type == EVENT_TYPE_TOUCH_UP) {
-            if (g_foundWidgetAtDown) {
-                if (!g_touchActionExecutedAtDown) {
-                    deselectWidget();
-                    if (!g_touchActionExecuted) {
-                        int action = getAction(g_foundWidgetAtDown);
-                        executeAction(action);
-                    }
-                }
-                g_foundWidgetAtDown = 0;
-            } else {
-                if (!onTouchUpHook()) {
-                    DECL_WIDGET(page, getPageOffset(getActivePageId()));
-                    DECL_WIDGET_SPECIFIC(PageWidget, pageSpecific, page);
-                    if (pageSpecific->closePageIfTouchedOutside) {
-                        if (!pointInsideRect(g_events[i].x, g_events[i].y, page->x, page->y, page->w, page->h)) {
-                            popPage();
-                        }
-                    }
-                }
-            }
+
+			if (!g_onTouchFunction) {
+				g_onTouchFunction = onPageTouchHook;
+			}
         }
+
+		g_onTouchFunction(g_foundWidgetAtDown, g_events[i]);
+
+		if (g_events[i].type == EVENT_TYPE_TOUCH_UP) {
+			g_foundWidgetAtDown = 0;
+		}
     }
 
     g_numEvents = 0;
@@ -478,7 +453,7 @@ void gui_init() {
 
 void gui_tick(uint32_t tick_usec) {
     processEvents();
-    drawTick();
+	drawTick();
 }
 
 

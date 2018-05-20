@@ -36,8 +36,7 @@ struct ButtonGroupWidgetState {
 #endif
 
 void ButtonGroupWidget_draw(int pageId, const WidgetCursor &widgetCursor);
-
-void ButtonGroupWidget_onTouchDown(const WidgetCursor &widgetCursor, int xTouch, int yTouch);
+void ButtonGroupWidget_onTouch(const WidgetCursor &widgetCursor, Event &touchEvent);
 
 }
 }

@@ -22,6 +22,7 @@
 
 #include "eez/mw/util.h"
 #include "eez/mw/gui/gui.h"
+#include "eez/mw/gui/draw.h"
 #include "eez/mw/gui/widget/button.h"
 
 namespace eez {
@@ -50,19 +51,19 @@ void ButtonWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 			if (widgetCursor.currentState->data.isString()) {
 				drawText(pageId, widgetCursor.currentState->data.getString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
 					widgetCursor.currentState->flags.pressed,
-					widgetCursor.currentState->flags.blinking);
+					widgetCursor.currentState->flags.blinking, false, NULL);
 			} else {
 				DECL_STRING(text, button_widget->text);
 				drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
 					widgetCursor.currentState->flags.pressed,
-					widgetCursor.currentState->flags.blinking);
+					widgetCursor.currentState->flags.blinking, false, NULL);
 			}
 		} else {
 			DECL_STRING(text, button_widget->text);
 			DECL_STYLE(style, widgetCursor.currentState->flags.enabled ? widget->style : button_widget->disabledStyle);
 			drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
 				widgetCursor.currentState->flags.pressed,
-				widgetCursor.currentState->flags.blinking);
+				widgetCursor.currentState->flags.blinking, false, NULL);
 		}
 	}
 }

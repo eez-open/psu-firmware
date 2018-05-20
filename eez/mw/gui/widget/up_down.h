@@ -22,12 +22,6 @@ namespace eez {
 namespace mw {
 namespace gui {
 
-enum UpDownWidgetSegment {
-    UP_DOWN_WIDGET_SEGMENT_TEXT,
-    UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON,
-    UP_DOWN_WIDGET_SEGMENT_UP_BUTTON
-};
-
 #pragma pack(push, 1)
 
 struct UpDownWidget {
@@ -39,6 +33,7 @@ struct UpDownWidget {
 #pragma pack(pop)
 
 void UpDownWidget_draw(int pageId, const WidgetCursor &widgetCursor);
+void UpDownWidget_onTouch(const WidgetCursor &widgetCursor, Event &touchEvent);
 
 }
 }

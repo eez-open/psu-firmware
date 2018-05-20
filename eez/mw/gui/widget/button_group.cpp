@@ -22,6 +22,7 @@
 
 #include "eez/mw/util.h"
 #include "eez/mw/gui/gui.h"
+#include "eez/mw/gui/draw.h"
 #include "eez/mw/gui/widget/button_group.h"
 
 namespace eez {
@@ -40,7 +41,7 @@ void drawButtons(int pageId, const Widget* widget, int x, int y, const Style *st
         for (int i = 0; i < count; ++i) {
             char text[32];
             labels[i].toText(text, 32);
-            drawText(pageId, text, -1, x, y, w, h, style, i == selectedButton);
+            drawText(pageId, text, -1, x, y, w, h, style, i == selectedButton, false, false, NULL);
             if (!isActivePage(pageId)) {
                 return;
             }
@@ -72,7 +73,7 @@ void drawButtons(int pageId, const Widget* widget, int x, int y, const Style *st
 
 			char text[32];
             labels[i].toText(text, 32);
-            drawText(pageId, text, -1, x, y + yOffset, w, labelHeight , style, i == selectedButton);
+            drawText(pageId, text, -1, x, y + yOffset, w, labelHeight , style, i == selectedButton, false, false, NULL);
             if (!isActivePage(pageId)) {
                 return;
             }
@@ -117,29 +118,31 @@ void ButtonGroupWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
     }
 }
 
-void ButtonGroupWidget_onTouchDown(const WidgetCursor &widgetCursor, int xTouch, int yTouch) {
-    DECL_WIDGET(widget, widgetCursor.widgetOffset);
+void ButtonGroupWidget_onTouch(const WidgetCursor &widgetCursor, Event &touchEvent) {
+	if (touchEvent.type == EVENT_TYPE_TOUCH_DOWN) {
+		DECL_WIDGET(widget, widgetCursor.widgetOffset);
 
-    const data::Value *labels;
-    int count;
-    data::getList(widgetCursor.cursor, widget->data, &labels, count);
+		const data::Value *labels;
+		int count;
+		data::getList(widgetCursor.cursor, widget->data, &labels, count);
 
-    int selectedButton;
-    if (widget->w > widget->h) {
-        int w = widget->w / count;
-        int x = widgetCursor.x + (widget->w - w * count) / 2;
+		int selectedButton;
+		if (widget->w > widget->h) {
+			int w = widget->w / count;
+			int x = widgetCursor.x + (widget->w - w * count) / 2;
 
-        selectedButton = (xTouch - x) / w;
-    } else {
-        int h = widget->h / count;
-        int y = widgetCursor.y + (widget->h - h * count) / 2;
-        selectedButton = (yTouch - y) / h;
-    }
+			selectedButton = (touchEvent.x - x) / w;
+		} else {
+			int h = widget->h / count;
+			int y = widgetCursor.y + (widget->h - h * count) / 2;
+			selectedButton = (touchEvent.y - y) / h;
+		}
 
-    if (selectedButton >= 0 && selectedButton < count) {
-        data::set(widgetCursor.cursor, widget->data, selectedButton, 0);
-        playClickSound();
-    }
+		if (selectedButton >= 0 && selectedButton < count) {
+			data::set(widgetCursor.cursor, widget->data, selectedButton, 0);
+			playClickSound();
+		}
+	}
 }
 
 }

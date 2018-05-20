@@ -1,6 +1,6 @@
 /*
  * EEZ Middleware
- * Copyright (C) 2018-present, Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,43 +15,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #pragma once
 
 namespace eez {
 namespace mw {
 namespace gui {
 
-#pragma pack(push, 1)
-
-struct ListGraphWidget {
-    uint8_t dwellData;
-    uint8_t y1Data;
-	uint8_t y1Style;
-    uint8_t y2Data;
-	uint8_t y2Style;
-    uint8_t cursorData;
-    uint8_t cursorStyle;
+enum EventType {
+	EVENT_TYPE_TOUCH_DOWN,
+	EVENT_TYPE_TOUCH_MOVE,
+	EVENT_TYPE_LONG_TOUCH,
+	EVENT_TYPE_EXTRA_LONG_TOUCH,
+	EVENT_TYPE_FAST_AUTO_REPEAT,
+	EVENT_TYPE_AUTO_REPEAT,
+	EVENT_TYPE_TOUCH_UP
 };
 
-#pragma pack(pop)
-
-#ifdef EEZ_PLATFORM_ARDUINO_DUE
-#pragma pack(push, 1)
-#endif
-
-struct ListGraphWidgetState {
-    WidgetState genericState;
-    data::Value cursorData;
+struct Event {
+	EventType type;
+	int x;
+	int y;
+	bool handled;
 };
-
-#ifdef EEZ_PLATFORM_ARDUINO_DUE
-#pragma pack(pop)
-#endif
-
-void ListGraphWidget_draw(int pageId, const WidgetCursor &widgetCursor);
-void ListGraphWidget_onTouch(const WidgetCursor &widgetCursor, Event &touchEvent);
 
 }
 }
-} // namespace eez::mw::gui
+} // namespace eez::mw:gui

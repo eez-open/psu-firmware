@@ -49,17 +49,17 @@ void TextWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 		if (widget->data) {
 			if (widgetCursor.currentState->data.isString()) {
 				drawText(pageId, widgetCursor.currentState->data.getString(), -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
-					widgetCursor.currentState->flags.pressed, widgetCursor.currentState->flags.blinking, display_string_widget->flags.ignoreLuminosity);
+					widgetCursor.currentState->flags.pressed, widgetCursor.currentState->flags.blinking, display_string_widget->flags.ignoreLuminosity, NULL);
 			} else {
 				char text[64];
 				widgetCursor.currentState->data.toText(text, sizeof(text));
 				drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
-					widgetCursor.currentState->flags.pressed, widgetCursor.currentState->flags.blinking, display_string_widget->flags.ignoreLuminosity);
+					widgetCursor.currentState->flags.pressed, widgetCursor.currentState->flags.blinking, display_string_widget->flags.ignoreLuminosity, NULL);
 			}
 		} else {
 			DECL_STRING(text, display_string_widget->text);
 			drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
-				widgetCursor.currentState->flags.pressed, widgetCursor.currentState->flags.blinking, display_string_widget->flags.ignoreLuminosity);
+				widgetCursor.currentState->flags.pressed, widgetCursor.currentState->flags.blinking, display_string_widget->flags.ignoreLuminosity, NULL);
 		}
 	}
 }

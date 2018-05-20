@@ -63,6 +63,7 @@ static bool g_refreshPageOnNextTick;
 static int g_findWidgetAtX;
 static int g_findWidgetAtY;
 static WidgetCursor g_foundWidget;
+static Rect g_foundWidgetBounds;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -88,7 +89,7 @@ static DrawFunctionType g_drawWidgetFunctions[] = {
 	ListGraphWidget_draw, // WIDGET_TYPE_LIST_GRAPH
 };
 
-extern OnTouchDownFunctionType g_onTouchDownFunctions[] = {
+extern OnTouchFunctionType g_onTouchFunctions[] = {
 	NULL, // WIDGET_TYPE_NONE
 	NULL, // WIDGET_TYPE_CONTAINER
 	NULL, // WIDGET_TYPE_LIST
@@ -100,34 +101,13 @@ extern OnTouchDownFunctionType g_onTouchDownFunctions[] = {
 	NULL, // WIDGET_TYPE_BITMAP
 	NULL, // WIDGET_TYPE_BUTTON
 	NULL, // WIDGET_TYPE_TOGGLE_BUTTON
-	ButtonGroupWidget_onTouchDown, // WIDGET_TYPE_BUTTON_GROUP
+	ButtonGroupWidget_onTouch, // WIDGET_TYPE_BUTTON_GROUP
 	NULL, // WIDGET_TYPE_SCALE
 	NULL, // WIDGET_TYPE_BAR_GRAPH
 	NULL, // WIDGET_TYPE_CUSTOM
 	NULL, // WIDGET_TYPE_YT_GRAPH
-	NULL, // WIDGET_TYPE_UP_DOWN
-	listGraphWidget_onTouchDown, // WIDGET_TYPE_LIST_GRAPH
-};
-
-extern OnTouchMoveFunctionType g_onTouchMoveFunctions[] = {
-	NULL, // WIDGET_TYPE_NONE
-	NULL, // WIDGET_TYPE_CONTAINER
-	NULL, // WIDGET_TYPE_LIST
-	NULL, // WIDGET_TYPE_SELECT
-	NULL, // WIDGET_TYPE_DISPLAY_DATA
-	NULL, // WIDGET_TYPE_TEXT
-	NULL, // WIDGET_TYPE_MULTILINE_TEXT
-	NULL, // WIDGET_TYPE_RECTANGLE
-	NULL, // WIDGET_TYPE_BITMAP
-	NULL, // WIDGET_TYPE_BUTTON
-	NULL, // WIDGET_TYPE_TOGGLE_BUTTON
-	NULL, // WIDGET_TYPE_BUTTON_GROUP
-	NULL, // WIDGET_TYPE_SCALE
-	NULL, // WIDGET_TYPE_BAR_GRAPH
-	NULL, // WIDGET_TYPE_CUSTOM
-	NULL, // WIDGET_TYPE_YT_GRAPH
-	NULL, // WIDGET_TYPE_UP_DOWN
-	listGraphWidget_onTouchMove, // WIDGET_TYPE_LIST_GRAPH
+	UpDownWidget_onTouch, // WIDGET_TYPE_UP_DOWN
+	ListGraphWidget_onTouch, // WIDGET_TYPE_LIST_GRAPH
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -371,6 +351,10 @@ void drawActivePage(bool refresh) {
 }
 
 void drawTick() {
+	if (getActivePageId() == INTERNAL_PAGE_ID_NONE) {
+		return;
+	}
+
 	g_wasBlinkTime = g_isBlinkTime;
 	g_isBlinkTime = (micros() % (2 * CONF_GUI_BLINK_TIME)) > CONF_GUI_BLINK_TIME && touch::g_eventType == touch::TOUCH_NONE;
 
@@ -409,15 +393,6 @@ void findWidgetStep(int pageId, const WidgetCursor &widgetCursor) {
 
 	if (inside) {
 		g_foundWidget = widgetCursor;
-
-		// @todo move this to up-down widget
-		if (widget->type == WIDGET_TYPE_UP_DOWN) {
-			if (g_findWidgetAtX < widgetCursor.x + widget->w / 2) {
-				g_foundWidget.segment = UP_DOWN_WIDGET_SEGMENT_DOWN_BUTTON;
-			} else {
-				g_foundWidget.segment = UP_DOWN_WIDGET_SEGMENT_UP_BUTTON;
-			}
-		}
 	}
 }
 

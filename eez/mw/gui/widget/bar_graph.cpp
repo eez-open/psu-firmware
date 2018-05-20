@@ -22,6 +22,7 @@
 
 #include "eez/mw/util.h"
 #include "eez/mw/gui/gui.h"
+#include "eez/mw/gui/draw.h"
 #include "eez/mw/gui/widget/bar_graph.h"
 
 namespace eez {
@@ -158,7 +159,7 @@ void BarGraphWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 					lcd::fillRect(x, y, x + pText - 1, y + h - 1);
 				}
 
-				drawText(pageId, valueText, -1, x + pText, y, wText, h, &textStyle, false);
+				drawText(pageId, valueText, -1, x + pText, y, wText, h, &textStyle, false, false, false, NULL);
 				if (!isActivePage(pageId)) {
 					return;
 				}
@@ -196,7 +197,7 @@ void BarGraphWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 					lcd::fillRect(x - (pText - 1), y, x, y + h - 1);
 				}
 
-				drawText(pageId, valueText, -1, x - (pText + wText - 1), y, wText, h, &textStyle, false);
+				drawText(pageId, valueText, -1, x - (pText + wText - 1), y, wText, h, &textStyle, false, false, false, NULL);
 				if (!isActivePage(pageId)) {
 					return;
 				}
@@ -262,7 +263,7 @@ void BarGraphWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 					lcd::fillRect(x, y, x + w - 1, y + pText - 1);
 				}
 
-				drawText(pageId, valueText, -1, x, y + pText, w, hText, &textStyle, false);
+				drawText(pageId, valueText, -1, x, y + pText, w, hText, &textStyle, false, false, false, NULL);
 				if (!isActivePage(pageId)) {
 					return;
 				}
@@ -300,7 +301,7 @@ void BarGraphWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 					lcd::fillRect(x, y - (pText - 1), x + w - 1, y);
 				}
 
-				drawText(pageId, valueText, -1, x, y - (pText + hText - 1), w, hText, &textStyle, false);
+				drawText(pageId, valueText, -1, x, y - (pText + hText - 1), w, hText, &textStyle, false, false, false, NULL);
 				if (!isActivePage(pageId)) {
 					return;
 				}

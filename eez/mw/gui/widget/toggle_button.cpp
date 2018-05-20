@@ -22,6 +22,7 @@
 
 #include "eez/mw/util.h"
 #include "eez/mw/gui/gui.h"
+#include "eez/mw/gui/draw.h"
 #include "eez/mw/gui/widget/toggle_button.h"
 
 namespace eez {
@@ -43,7 +44,7 @@ void ToggleButtonWidget_draw(int pageId, const WidgetCursor &widgetCursor) {
 		DECL_STRING(text, widgetCursor.currentState->flags.enabled ? toggle_button_widget->text2 : toggle_button_widget->text1);
 		DECL_WIDGET_STYLE(style, widget);
 		drawText(pageId, text, -1, widgetCursor.x, widgetCursor.y, (int)widget->w, (int)widget->h, style,
-			widgetCursor.currentState->flags.pressed);
+			widgetCursor.currentState->flags.pressed, false, false, NULL);
 	}
 }
 

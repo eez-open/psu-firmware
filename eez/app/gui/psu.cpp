@@ -1039,7 +1039,6 @@ int transformStyleHook(const Widget *widget) {
 bool isAutoRepeatActionHook(int action) {
 	return
 		action == ACTION_ID_KEYPAD_BACK ||
-		action == ACTION_ID_UP_DOWN ||
 		action == ACTION_ID_EVENT_QUEUE_PREVIOUS_PAGE ||
 		action == ACTION_ID_EVENT_QUEUE_NEXT_PAGE ||
 		action == ACTION_ID_CHANNEL_LISTS_PREVIOUS_PAGE ||
@@ -1056,80 +1055,62 @@ void flushGuiUpdate() {
 #endif
 }
 
-void onTouchDownHook(const WidgetCursor& foundWidget, int xTouch, int yTouch) {
-	int activePageId = getActivePageId();
-	if (activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
-		edit_mode_slider::onTouchDown();
-	} else if (activePageId == PAGE_ID_EDIT_MODE_STEP) {
-		edit_mode_step::onTouchDown();
-	}
-}
-
-void onTouchMoveHook(int xTouch, int yTouch) {
-	int activePageId = getActivePageId();
-	if (activePageId == PAGE_ID_SCREEN_CALIBRATION_YES_NO || activePageId == PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL) {
-#ifdef CONF_DEBUG
-		int x = xTouch;
-		if (x < 1) x = 1;
-		else if (x > lcd::getDisplayWidth() - 2) x = lcd::getDisplayWidth() - 2;
-
-		int y = yTouch;
-		if (y < 1) y = 1;
-		else if (y > lcd::getDisplayHeight() - 2) y = lcd::getDisplayHeight() - 2;
-
-		lcd::setColor(COLOR_WHITE);
-		lcd::fillRect(x - 1, y - 1, x + 1, y + 1);
-#endif
-	} else {
+void onPageTouchHook(const WidgetCursor& foundWidget, Event& touchEvent) {
+	if (touchEvent.type == EVENT_TYPE_TOUCH_DOWN) {
 		int activePageId = getActivePageId();
 		if (activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
-			edit_mode_slider::onTouchMove();
+			edit_mode_slider::onTouchDown();
 		} else if (activePageId == PAGE_ID_EDIT_MODE_STEP) {
-			edit_mode_step::onTouchMove();
+			edit_mode_step::onTouchDown();
+		}
+	} else if (touchEvent.type == EVENT_TYPE_TOUCH_MOVE) {
+		int activePageId = getActivePageId();
+		if (activePageId == PAGE_ID_SCREEN_CALIBRATION_YES_NO || activePageId == PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL) {
+#ifdef CONF_DEBUG
+			int x = touchEvent.x;
+			if (x < 1) x = 1;
+			else if (x > lcd::getDisplayWidth() - 2) x = lcd::getDisplayWidth() - 2;
+
+			int y = touchEvent.y;
+			if (y < 1) y = 1;
+			else if (y > lcd::getDisplayHeight() - 2) y = lcd::getDisplayHeight() - 2;
+
+			lcd::setColor(COLOR_WHITE);
+			lcd::fillRect(x - 1, y - 1, x + 1, y + 1);
+#endif
+		} else {
+			int activePageId = getActivePageId();
+			if (activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+				edit_mode_slider::onTouchMove();
+			} else if (activePageId == PAGE_ID_EDIT_MODE_STEP) {
+				edit_mode_step::onTouchMove();
+			}
+		}
+	} else if (touchEvent.type == EVENT_TYPE_LONG_TOUCH) {
+		int activePageId = getActivePageId();
+		if (activePageId == INTERNAL_PAGE_ID_NONE || activePageId == PAGE_ID_STANDBY) {
+			changePowerState(true);
+			touchEvent.handled = true;
+		} else if (activePageId == PAGE_ID_DISPLAY_OFF) {
+			persist_conf::setDisplayState(1);
+			touchEvent.handled = true;
+		}
+	} else if (touchEvent.type == EVENT_TYPE_EXTRA_LONG_TOUCH) {
+		setPage(PAGE_ID_SCREEN_CALIBRATION_INTRO);
+		touchEvent.handled = true;
+	} else if (touchEvent.type == EVENT_TYPE_TOUCH_UP) {
+		int activePageId = getActivePageId();
+		if (activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
+			touch_calibration::enterCalibrationMode(PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, getStartPageId());
+			touchEvent.handled = true;
+		} else if (activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
+			edit_mode_slider::onTouchUp();
+			touchEvent.handled = true;
+		} else if (activePageId == PAGE_ID_EDIT_MODE_STEP) {
+			edit_mode_step::onTouchUp();
+			touchEvent.handled = true;
 		}
 	}
-}
-
-bool onLongTouchHook() {
-	int activePageId = getActivePageId();
-
-	if (activePageId == INTERNAL_PAGE_ID_NONE || activePageId == PAGE_ID_STANDBY) {
-		changePowerState(true);
-		return true;
-	}
-
-	if (activePageId == PAGE_ID_DISPLAY_OFF) {
-		persist_conf::setDisplayState(1);
-		return true;
-	}
-
-	return false;
-}
-
-bool onExtraLongTouchHook() {
-	setPage(PAGE_ID_SCREEN_CALIBRATION_INTRO);
-	return true;
-}
-
-bool onTouchUpHook() {
-	int activePageId = getActivePageId();
-
-	if (activePageId == PAGE_ID_SCREEN_CALIBRATION_INTRO) {
-		touch_calibration::enterCalibrationMode(PAGE_ID_SCREEN_CALIBRATION_YES_NO_CANCEL, getStartPageId());
-		return true;
-	}
-
-	if (activePageId == PAGE_ID_EDIT_MODE_SLIDER) {
-		edit_mode_slider::onTouchUp();
-		return true;
-	}
-
-	if (activePageId == PAGE_ID_EDIT_MODE_STEP) {
-		edit_mode_step::onTouchUp();
-		return true;
-	}
-
-	return false;
 }
 
 bool testExecuteActionOnTouchDownHook(int action) {

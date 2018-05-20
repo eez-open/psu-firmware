@@ -38,11 +38,7 @@ bool isAutoRepeatActionHook(int action);
 
 void flushGuiUpdate();
 
-void onTouchDownHook(const WidgetCursor& foundWidget, int xTouch, int yTouch);
-void onTouchMoveHook(int xTouch, int yTouch);
-bool onLongTouchHook();
-bool onExtraLongTouchHook();
-bool onTouchUpHook();
+void onPageTouchHook(const WidgetCursor& foundWidget, Event& touchEvent);
 
 bool testExecuteActionOnTouchDownHook(int action);
 void executeUserActionHook(int actionId);

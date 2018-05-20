@@ -22,7 +22,6 @@
 #include "eez/mw/gui/font.h"
 #include "eez/mw/gui/touch.h"
 
-#include "eez/mw/gui/data.h"
 #include "eez/mw/gui/view.h"
 
 #include "eez/app/gui/document.h"
@@ -48,11 +47,6 @@ bool isActivePageInternal();
 void setPage(int pageId);
 void replacePage(int pageId, Page *page = 0);
 bool isPageActiveOrOnStack(int pageId);
-
-font::Font styleGetFont(const Style *style);
-void drawText(int pageId, const char *text, int textLength, int x, int y, int w, int h, const Style *style, bool inverse, bool dimmed = false, bool ignoreLuminocity = false, uint16_t *overrideBackgroundColor = 0);
-
-void upDown();
 
 ////////////////////////////////////////////////////////////////////////////////
 // GUI definition document accessor functions

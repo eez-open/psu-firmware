@@ -180,6 +180,7 @@
     <ClInclude Include="..\..\..\..\..\..\mw\encoder.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\gui\data.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\gui\draw.h" />
+    <ClInclude Include="..\..\..\..\..\..\mw\gui\event.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\gui\font.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\gui\gui.h" />
     <ClInclude Include="..\..\..\..\..\..\mw\gui\hooks.h" />
