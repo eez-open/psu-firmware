@@ -22,6 +22,7 @@
 
 #include "mw_gui_gui.h"
 #include "mw_gui_page.h"
+#include "mw_gui_draw.h"
 
 namespace eez {
 namespace mw {
@@ -122,7 +123,7 @@ void SelectFromEnumPage::refresh() {
         getItemPosition(i, xItem, yItem);
 
         getItemLabel(i, text, sizeof(text));
-        drawText(getActivePageId(), text, -1, xItem, yItem, itemWidth, itemHeight, isDisabled(i) ? disabledItemStyle : itemStyle, false);
+        drawText(getActivePageId(), text, -1, xItem, yItem, itemWidth, itemHeight, isDisabled(i) ? disabledItemStyle : itemStyle, false, false, false, NULL);
     }
 }
 
@@ -155,7 +156,7 @@ void SelectFromEnumPage::drawWidget(const WidgetCursor &widgetCursor, bool selec
 
 		const Style *itemStyle = getSelectFromEnumItemStyle();
 
-        drawText(getActivePageId(), text, -1, xItem, yItem, itemWidth, itemHeight, itemStyle, selected);
+        drawText(getActivePageId(), text, -1, xItem, yItem, itemWidth, itemHeight, itemStyle, selected, false, false, NULL);
     }
 }
 

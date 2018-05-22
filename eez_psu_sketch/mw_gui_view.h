@@ -19,6 +19,7 @@
 #pragma once
 
 #include "mw_gui_data.h"
+#include "mw_gui_event.h"
 
 namespace eez {
 namespace mw {
@@ -146,7 +147,6 @@ struct WidgetCursor {
     int x;
     int y;
     data::Cursor cursor;
-    int segment;
     WidgetState *previousState;
     WidgetState *currentState;
 
@@ -192,11 +192,8 @@ void drawTick();
 
 int getCurrentStateBufferIndex();
 
-typedef void (*OnTouchDownFunctionType)(const WidgetCursor &widgetCursor, int xTouch, int yTouch);
-extern OnTouchDownFunctionType g_onTouchDownFunctions[];
-
-typedef void (*OnTouchMoveFunctionType)(const WidgetCursor &widgetCursor, int xTouch, int yTouch);
-extern OnTouchMoveFunctionType g_onTouchMoveFunctions[];
+typedef void (*OnTouchFunctionType)(const WidgetCursor &widgetCursor, Event &touchEvent);
+extern OnTouchFunctionType g_onTouchFunctions[];
 
 }
 }

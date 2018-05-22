@@ -1,6 +1,6 @@
 /*
  * EEZ Middleware
- * Copyright (C) 2015-present, Envox d.o.o.
+ * Copyright (C) 2018-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,30 +15,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+ 
 #pragma once
 
 namespace eez {
 namespace mw {
 namespace gui {
 
-font::Font styleGetFont(const Style *style);
-bool styleIsBlink(const Style *style);
+#ifdef EEZ_PLATFORM_ARDUINO_DUE
+#pragma pack(push, 1)
+#endif
 
-void drawText(int pageId, const char *text, int textLength, 
-    int x, int y, int w, int h, 
-    const Style *style, bool inverse, bool blink, bool ignoreLuminocity, uint16_t *overrideBackgroundColor);
+struct ButtonGroupWidgetState {
+    WidgetState genericState;
+    const data::Value *labels;
+};
 
-void drawMultilineText(int pageId, const char *text, 
-    int x, int y, int w, int h, 
-    const Style *style, bool inverse);
+#ifdef EEZ_PLATFORM_ARDUINO_DUE
+#pragma pack(pop)
+#endif
 
-void drawBitmap(uint8_t bitmapIndex, 
-    int x, int y, int w, int h, 
-    const Style *style, bool inverse);
-
-void drawRectangle(int x, int y, int w, int h, 
-    const Style *style, bool inverse, bool ignoreLuminocity);
+void ButtonGroupWidget_draw(int pageId, const WidgetCursor &widgetCursor);
+void ButtonGroupWidget_onTouch(const WidgetCursor &widgetCursor, Event &touchEvent);
 
 }
 }

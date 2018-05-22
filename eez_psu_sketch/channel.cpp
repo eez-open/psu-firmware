@@ -1720,8 +1720,8 @@ bool Channel::isMaxCurrentLimited() const {
 }
 
 MaxCurrentLimitCause Channel::getMaxCurrentLimitCause() const {
-    if (isMaxCurrentLimited()) {
-        return getMaxCurrentLimitCause();
+    if (app::isMaxCurrentLimited()) {
+        return app::getMaxCurrentLimitCause();
     }
     return maxCurrentLimitCause;
 }

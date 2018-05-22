@@ -620,10 +620,6 @@ void action_error_alert_action() {
     errorMessageAction();
 }
 
-void action_up_down() {
-    upDown();
-}
-
 void action_sys_settings_encoder_toggle_confirmation_mode() {
     #if OPTION_ENCODER
     ((SysSettingsEncoderPage *)getActivePage())->toggleConfirmationMode();
@@ -923,7 +919,6 @@ ActionExecFunc g_actionExecFunctions[] = {
     action_ch_settings_adv_view_swap_display_values,
     action_ch_settings_adv_view_edit_ytview_rate,
     action_error_alert_action,
-    action_up_down,
     action_sys_settings_encoder_toggle_confirmation_mode,
     action_turn_display_off,
     action_ch_settings_trigger_edit_trigger_mode,

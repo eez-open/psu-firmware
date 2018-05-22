@@ -22,24 +22,23 @@ namespace eez {
 namespace mw {
 namespace gui {
 
-font::Font styleGetFont(const Style *style);
-bool styleIsBlink(const Style *style);
+enum EventType {
+	EVENT_TYPE_TOUCH_DOWN,
+	EVENT_TYPE_TOUCH_MOVE,
+	EVENT_TYPE_LONG_TOUCH,
+	EVENT_TYPE_EXTRA_LONG_TOUCH,
+	EVENT_TYPE_FAST_AUTO_REPEAT,
+	EVENT_TYPE_AUTO_REPEAT,
+	EVENT_TYPE_TOUCH_UP
+};
 
-void drawText(int pageId, const char *text, int textLength, 
-    int x, int y, int w, int h, 
-    const Style *style, bool inverse, bool blink, bool ignoreLuminocity, uint16_t *overrideBackgroundColor);
-
-void drawMultilineText(int pageId, const char *text, 
-    int x, int y, int w, int h, 
-    const Style *style, bool inverse);
-
-void drawBitmap(uint8_t bitmapIndex, 
-    int x, int y, int w, int h, 
-    const Style *style, bool inverse);
-
-void drawRectangle(int x, int y, int w, int h, 
-    const Style *style, bool inverse, bool ignoreLuminocity);
+struct Event {
+	EventType type;
+	int x;
+	int y;
+	bool handled;
+};
 
 }
 }
-} // namespace eez::mw::gui
+} // namespace eez::mw:gui

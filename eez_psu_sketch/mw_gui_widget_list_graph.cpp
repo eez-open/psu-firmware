@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "eez/mw/mw.h"
+#include "mw_mw.h"
 
 #if OPTION_DISPLAY
 
-#include "eez/mw/gui/gui.h"
-#include "eez/mw/gui/widget/list_graph.h"
+#include "mw_gui_gui.h"
+#include "mw_gui_widget_list_graph.h"
 
 namespace eez {
 namespace mw {

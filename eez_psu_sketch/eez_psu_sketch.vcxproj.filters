@@ -1,0 +1,504 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="eez_psu_sketch.ino" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="__vm\.eez_psu_sketch.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="actions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="adc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arduino_psu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arduino_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="board.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="buzzer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="calibration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="channel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="channel_dispatcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="conf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="conf_advanced.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="conf_channel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="conf_user.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="conf_user_revision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dac.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="datetime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="devices.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eeprom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="encoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ethernet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="event_queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gesture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_calibration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_document.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_edit_mode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_edit_mode_keypad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_edit_mode_slider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_edit_mode_step.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_internal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_keypad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_numeric_keypad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_page.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_page_ch_settings_adv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_page_ch_settings_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_page_ch_settings_protection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_page_ch_settings_trigger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_page_event_queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_page_main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_page_self_test_result.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_page_sys_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_page_sys_settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_page_user_profiles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_password.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_view.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_widget_button_group.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ioexp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lcd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ontime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="persist_conf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="profile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="psu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rtc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_commands.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_params.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_psu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_regs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scpi_user_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sd_card.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="serial_psu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="temperature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="temp_sensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="touch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="touch_calibration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="touch_filter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="trigger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="watchdog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="actions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="adc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arduino_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="board.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="buzzer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="calibration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="channel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="channel_dispatcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dac.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="datetime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="devices.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eeprom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="encoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ethernet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="event_queue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gesture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_calibration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_data.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_document.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_edit_mode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_edit_mode_keypad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_edit_mode_slider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_edit_mode_step.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_keypad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_numeric_keypad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_page.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_page_ch_settings_adv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_page_ch_settings_info.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_page_ch_settings_protection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_page_ch_settings_trigger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_page_event_queue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_page_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_page_self_test_result.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_page_sys_info.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_page_sys_settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_page_user_profiles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_password.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_view.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_widget_button_group.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ioexp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lcd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="list.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ontime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="persist_conf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="profile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="psu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rtc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_appl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_cal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_core.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_diag.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_display.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_inst.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_meas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_mem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_mmem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_outp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_params.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_psu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_regs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_simu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_sour.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_stat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_syst.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scpi_trigger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sd_card.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="serial_psu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="temperature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="temp_sensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="touch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="touch_calibration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="touch_filter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="trigger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="watchdog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
