@@ -58,9 +58,9 @@ void init() {
 	bool initResult;
 
 #ifdef EEZ_PSU_SIMULATOR
-	initResult = SD.begin(LCDSD_CS, SPI_DIV3_SPEED);
+	initResult = SD.begin(LCDSD_CS, SPI_HALF_SPEED);
 #else
-	g_cardBeginResult = SD.cardBegin(LCDSD_CS, SPI_DIV3_SPEED);
+	g_cardBeginResult = SD.cardBegin(LCDSD_CS, SPI_HALF_SPEED);
 	if (g_cardBeginResult) {
 		g_fsBeginResult = SD.fsBegin();
 		if (!g_fsBeginResult) {
