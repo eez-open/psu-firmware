@@ -301,8 +301,8 @@ HAL_StatusTypeDef HAL_SPI_Init(SPI_HandleTypeDef *hspi)
 
   hspi->State = HAL_SPI_STATE_BUSY;
 
-  /* Disable the selected SPI peripheral */
-  __HAL_SPI_DISABLE(hspi);
+	  /* Disable the selected SPI peripheral */
+	  __HAL_SPI_DISABLE(hspi);
 
   /*----------------------- SPIx CR1 & CR2 Configuration ---------------------*/
   /* Configure : SPI Mode, Communication Mode, Data size, Clock polarity and phase, NSS management,

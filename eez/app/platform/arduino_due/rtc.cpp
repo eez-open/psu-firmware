@@ -54,7 +54,7 @@ void init() {
 
 bool test() {
     if (OPTION_EXT_RTC) {
-        byte ctrl_reg_values[2] = {
+        uint8_t ctrl_reg_values[2] = {
             CONTROL_1_VALUE,
             CONTROL_2_VALUE
         };

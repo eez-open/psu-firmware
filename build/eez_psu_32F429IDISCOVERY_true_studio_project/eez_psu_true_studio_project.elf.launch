@@ -8,7 +8,7 @@
 <intAttribute key="com.atollic.hardwaredebug.launch.portNumber" value="61234"/>
 <stringAttribute key="com.atollic.hardwaredebug.launch.remoteCommand" value="target extended-remote"/>
 <stringAttribute key="com.atollic.hardwaredebug.launch.runCommands" value="# Set flash parallelism mode to 32, 16, or 8 bit when using STM32 F2/F4 microcontrollers&#10;# 2=32 bit, 1=16 bit and 0=8 bit parallelism mode&#10;monitor flash set_parallelism_mode 2&#10;&#10;# Set character encoding&#10;set host-charset CP1252&#10;set target-charset CP1252&#10;&#10;# Load the program executable&#10;load&#9;&#9;&#10;&#10;# Reset the chip to get to a known state. Remove &quot;monitor reset&quot; command &#10;#  if the code is not located at default address and does not run by reset. &#10;monitor reset&#10;&#10;# Enable Debug connection in low power modes (DBGMCU-&gt;CR)&#10;set *0xE0042004 = (*0xE0042004) | 0x7&#10;&#10;# Set a breakpoint at main().&#10;tbreak main&#10;&#10;# Run to the breakpoint.&#10;continue"/>
-<stringAttribute key="com.atollic.hardwaredebug.launch.serverParam" value="-p 61234 -l 1 -d -s"/>
+<stringAttribute key="com.atollic.hardwaredebug.launch.serverParam" value="-p 61234 -l 1 -d -s -i 066EFF535353897167061432"/>
 <booleanAttribute key="com.atollic.hardwaredebug.launch.startServer" value="true"/>
 <booleanAttribute key="com.atollic.hardwaredebug.launch.swd_mode" value="true"/>
 <stringAttribute key="com.atollic.hardwaredebug.launch.swv_port" value="61235"/>
@@ -19,8 +19,9 @@
 <booleanAttribute key="com.atollic.hardwaredebug.launch.useRemoteTarget" value="true"/>
 <booleanAttribute key="com.atollic.hardwaredebug.launch.verify_flash_download" value="true"/>
 <booleanAttribute key="com.atollic.hardwaredebug.stlink.enable_logging" value="false"/>
-<booleanAttribute key="com.atollic.hardwaredebug.stlink.stlink_check_serial_number" value="false"/>
-<stringAttribute key="com.atollic.hardwaredebug.stlink.stlink_txt_serial_number" value=""/>
+<stringAttribute key="com.atollic.hardwaredebug.stlink.log_file" value=""/>
+<booleanAttribute key="com.atollic.hardwaredebug.stlink.stlink_check_serial_number" value="true"/>
+<stringAttribute key="com.atollic.hardwaredebug.stlink.stlink_txt_serial_number" value="066EFF535353897167061432"/>
 <stringAttribute key="org.eclipse.cdt.dsf.gdb.DEBUG_NAME" value="${TOOLCHAIN_PATH}/arm-atollic-eabi-gdb"/>
 <intAttribute key="org.eclipse.cdt.launch.ATTR_BUILD_BEFORE_LAUNCH_ATTR" value="2"/>
 <stringAttribute key="org.eclipse.cdt.launch.DEBUGGER_REGISTER_GROUPS" value=""/>
@@ -34,6 +35,6 @@
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>
 </listAttribute>
-<stringAttribute key="org.eclipse.dsf.launch.MEMORY_BLOCKS" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#13;&#10;&lt;memoryBlockExpressionList context=&quot;reserved-for-future-use&quot;&gt;&#13;&#10;&lt;gdbmemoryBlockExpression address=&quot;537065192&quot; label=&quot;0x2002f6e8&quot;/&gt;&#13;&#10;&lt;/memoryBlockExpressionList&gt;&#13;&#10;"/>
+<stringAttribute key="org.eclipse.dsf.launch.MEMORY_BLOCKS" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#10;&lt;memoryBlockExpressionList context=&quot;reserved-for-future-use&quot;&gt;&#10;&lt;gdbmemoryBlockExpression address=&quot;537065192&quot; label=&quot;0x2002f6e8&quot;/&gt;&#10;&lt;/memoryBlockExpressionList&gt;&#10;"/>
 <stringAttribute key="process_factory_id" value="org.eclipse.cdt.dsf.gdb.GdbProcessFactory"/>
 </launchConfiguration>

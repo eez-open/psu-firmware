@@ -60,7 +60,7 @@ void init() {
 #ifdef EEZ_PLATFORM_SIMULATOR
 	initResult = SD.begin();
 #else
-	g_cardBeginResult = SD.cardBegin(LCDSD_CS, SPI_DIV3_SPEED);
+	g_cardBeginResult = SD.cardBegin(LCDSD_CS, SPI_HALF_SPEED);
 	if (g_cardBeginResult) {
 		g_fsBeginResult = SD.fsBegin();
 		if (!g_fsBeginResult) {

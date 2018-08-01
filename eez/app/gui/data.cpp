@@ -3169,13 +3169,16 @@ void data_view_status(data::DataOperationEnum operation, data::Cursor &cursor, d
 			value = 1;
 		} else if (dlogStatusVisible) {
 			value = 2;
+		} else {
+			value = 0;
 		}
 #else
 		if (list::anyCounterVisible(CONF_LIST_COUNDOWN_DISPLAY_THRESHOLD)) {
 			value = 1;
+		} else {
+			value = 0;
 		}
 #endif
-		value = 0;
 	}
 }
 

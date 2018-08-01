@@ -1,6 +1,6 @@
 /*
  * EEZ PSU Firmware
- * Copyright (C) 2018-present, Envox d.o.o.
+ * Copyright (C) 2015-present, Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,17 +18,32 @@
 
 #pragma once
 
-#undef OPTION_ETHERNET
-#define OPTION_ETHERNET 0
+#include "stm32f4xx_hal.h"
 
-#undef OPTION_SD_CARD
-#define OPTION_SD_CARD 0
+#define HIGH 1
+#define LOW 0
 
-#undef OPTION_FAN
-#define OPTION_FAN 0
+#define ISOLATOR_DISABLE LOW
+#define ISOLATOR_ENABLE  HIGH
 
-#undef OPTION_EEPROM
-#define OPTION_EEPROM 0
+namespace eez {
+namespace app {
 
-#undef CH_NUM
-#define CH_NUM 1
+extern SPI_HandleTypeDef MCP23S08_SPI;
+extern SPI_HandleTypeDef DAC8552_SPI;
+extern SPI_HandleTypeDef ADS1120_SPI;
+
+void SPI_beginTransaction(SPI_HandleTypeDef& spiHandle);
+void SPI_endTransaction();
+
+void digitalWrite(int pin, int state);
+
+class SPIClass {
+public:
+	uint8_t transfer(uint8_t value);
+};
+
+extern SPIClass SPI;
+
+}
+} // namespace eez::app

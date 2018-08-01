@@ -68,8 +68,6 @@ I2C_HandleTypeDef hi2c3;
 
 LTDC_HandleTypeDef hltdc;
 
-SPI_HandleTypeDef hspi5;
-
 TIM_HandleTypeDef htim1;
 
 UART_HandleTypeDef huart1;
@@ -78,7 +76,6 @@ SDRAM_HandleTypeDef hsdram1;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -89,9 +86,9 @@ static void MX_DMA2D_Init(void);
 static void MX_FMC_Init(void);
 static void MX_I2C3_Init(void);
 //static void MX_LTDC_Init(void);
-static void MX_SPI5_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_USART1_UART_Init(void);
+static void MX_SPI4_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -135,7 +132,6 @@ int main(void)
   MX_FMC_Init();
   MX_I2C3_Init();
   //MX_LTDC_Init();
-  MX_SPI5_Init();
   MX_TIM1_Init();
   MX_USART1_UART_Init();
   MX_USB_DEVICE_Init();
@@ -188,6 +184,7 @@ int main(void)
   /* USER CODE END 3 */
 
 }
+
 
 /**
   * @brief System Clock Configuration
@@ -361,30 +358,6 @@ static void MX_I2C3_Init(void)
 //
 //}
 
-/* SPI5 init function */
-static void MX_SPI5_Init(void)
-{
-
-  /* SPI5 parameter configuration*/
-  hspi5.Instance = SPI5;
-  hspi5.Init.Mode = SPI_MODE_MASTER;
-  hspi5.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi5.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi5.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi5.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi5.Init.NSS = SPI_NSS_SOFT;
-  hspi5.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
-  hspi5.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi5.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi5.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi5.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi5) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-}
-
 /* TIM1 init function */
 static void MX_TIM1_Init(void)
 {
@@ -485,14 +458,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct;
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
-  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOE, IOEXP_Pin|ADC_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, NCS_MEMS_SPI_Pin|CSX_Pin|OTG_FS_PSO_Pin, GPIO_PIN_RESET);
@@ -505,6 +481,24 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOG, LD3_Pin|LD4_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(DAC_GPIO_Port, DAC_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : IOEXP_Pin ADC_Pin */
+  GPIO_InitStruct.Pin = IOEXP_Pin|ADC_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : SPI5_SCK_Pin SPI5_MISO_Pin SPI5_MOSI_Pin */
+  GPIO_InitStruct.Pin = SPI5_SCK_Pin|SPI5_MISO_Pin|SPI5_MOSI_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = GPIO_AF5_SPI5;
+  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
   /*Configure GPIO pins : NCS_MEMS_SPI_Pin CSX_Pin OTG_FS_PSO_Pin */
   GPIO_InitStruct.Pin = NCS_MEMS_SPI_Pin|CSX_Pin|OTG_FS_PSO_Pin;
@@ -558,6 +552,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : DAC_Pin */
+  GPIO_InitStruct.Pin = DAC_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(DAC_GPIO_Port, &GPIO_InitStruct);
 }
 
 /* USER CODE BEGIN 4 */

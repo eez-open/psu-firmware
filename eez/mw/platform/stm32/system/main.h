@@ -59,6 +59,10 @@
 
 /* Private define ------------------------------------------------------------*/
 
+#define IOEXP_Pin GPIO_PIN_3
+#define IOEXP_GPIO_Port GPIOE
+#define ADC_Pin GPIO_PIN_4
+#define ADC_GPIO_Port GPIOE
 #define PC14_OSC32_IN_Pin GPIO_PIN_14
 #define PC14_OSC32_IN_GPIO_Port GPIOC
 #define PC15_OSC32_OUT_Pin GPIO_PIN_15
@@ -231,6 +235,8 @@
 #define LD4_GPIO_Port GPIOG
 #define SDNCAS_Pin GPIO_PIN_15
 #define SDNCAS_GPIO_Port GPIOG
+#define DAC_Pin GPIO_PIN_4
+#define DAC_GPIO_Port GPIOB
 #define SDCKE1_Pin GPIO_PIN_5
 #define SDCKE1_GPIO_Port GPIOB
 #define SDNE1_Pin GPIO_PIN_6

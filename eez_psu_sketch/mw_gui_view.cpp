@@ -179,7 +179,7 @@ WidgetState *next(WidgetState *p) {
 
 void enumWidget(int pageId, OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback);
 
-void enumContainer(int pageId, List widgets, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
+void enumContainer(int pageId, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback, List widgets) {
 	if (pageId != getActivePageId()) {
 		return;
 	}
@@ -210,6 +210,90 @@ void enumContainer(int pageId, List widgets, int x, int y, data::Cursor &cursor,
 	}
 }
 
+void enumList(int pageId, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback, const Widget *widget) {
+	WidgetState *savedCurrentState = currentState;
+
+	WidgetState *endOfContainerInPreviousState = 0;
+	if (previousState) endOfContainerInPreviousState = next(previousState);
+
+	// move to the first child widget state
+	if (previousState) ++previousState;
+	if (currentState) ++currentState;
+
+	int xOffset = 0;
+	int yOffset = 0;
+	for (int index = 0; index < data::count(widget->data); ++index) {
+		data::select(cursor, widget->data, index);
+
+		DECL_WIDGET_SPECIFIC(ListWidget, listWidget, widget);
+		OBJ_OFFSET childWidgetOffset = listWidget->item_widget;
+
+		if (listWidget->listType == LIST_TYPE_VERTICAL) {
+			DECL_WIDGET(childWidget, childWidgetOffset);
+			if (yOffset < widget->h) {
+				enumWidget(pageId, childWidgetOffset, x + xOffset, y + yOffset, cursor, previousState, currentState, callback);
+				yOffset += childWidget->h;
+			} else {
+				// TODO: add vertical scroll
+				break;
+			}
+		} else {
+			DECL_WIDGET(childWidget, childWidgetOffset);
+			if (xOffset < widget->w) {
+				enumWidget(pageId, childWidgetOffset, x + xOffset, y + yOffset, cursor, previousState, currentState, callback);
+				xOffset += childWidget->w;
+			} else {
+				// TODO: add horizontal scroll
+				break;
+			}
+		}
+
+		if (previousState) {
+			previousState = next(previousState);
+			if (previousState >= endOfContainerInPreviousState) previousState = 0;
+		}
+
+		currentState = next(currentState);
+	}
+
+	if (currentState) {
+		savedCurrentState->size = ((uint8_t *)currentState) - ((uint8_t *)savedCurrentState);
+	}
+
+	data::select(cursor, widget->data, -1);
+}
+
+void enumSelect(int pageId, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback, const Widget *widget) {
+	data::Value indexValue = data::get(cursor, widget->data);
+	if (indexValue.getType() == VALUE_TYPE_NONE) {
+		indexValue = data::Value(0);
+	}
+
+	if (currentState) {
+		currentState->data = indexValue;
+	}
+
+	if (previousState && previousState->data != currentState->data) {
+		previousState = 0;
+	}
+
+	WidgetState *savedCurrentState = currentState;
+
+	// move to the selected widget state
+	if (previousState) ++previousState;
+	if (currentState) ++currentState;
+
+	int index = indexValue.getInt();
+	DECL_WIDGET_SPECIFIC(ContainerWidget, containerWidget, widget);
+	OBJ_OFFSET selectedWidgetOffset = getListItemOffset(containerWidget->widgets, index, sizeof(Widget));
+
+	enumWidget(pageId, selectedWidgetOffset, x, y, cursor, previousState, currentState, callback);
+
+	if (currentState) {
+		savedCurrentState->size = sizeof(WidgetState) + currentState->size;
+	}
+}
+
 void enumWidget(int pageId, OBJ_OFFSET widgetOffset, int x, int y, data::Cursor &cursor, WidgetState *previousState, WidgetState *currentState, EnumWidgetsCallback callback) {
 	if (!executeCriticalTasks(pageId)) {
 		return;
@@ -222,91 +306,15 @@ void enumWidget(int pageId, OBJ_OFFSET widgetOffset, int x, int y, data::Cursor 
 
 	if (widget->type == WIDGET_TYPE_CONTAINER) {
 		DECL_WIDGET_SPECIFIC(ContainerWidget, container, widget);
-		enumContainer(pageId, container->widgets, x, y, cursor, previousState, currentState, callback);
+		enumContainer(pageId, x, y, cursor, previousState, currentState, callback, container->widgets);
 	} else if (widget->type == WIDGET_TYPE_CUSTOM) {
 		DECL_WIDGET_SPECIFIC(CustomWidgetSpecific, customWidgetSpecific, widget);
 		DECL_CUSTOM_WIDGET(customWidget, customWidgetSpecific->customWidget);
-		enumContainer(pageId, customWidget->widgets, x, y, cursor, previousState, currentState, callback);
+		enumContainer(pageId, x, y, cursor, previousState, currentState, callback, customWidget->widgets);
 	} else if (widget->type == WIDGET_TYPE_LIST) {
-		WidgetState *savedCurrentState = currentState;
-
-		WidgetState *endOfContainerInPreviousState = 0;
-		if (previousState) endOfContainerInPreviousState = next(previousState);
-
-		// move to the first child widget state
-		if (previousState) ++previousState;
-		if (currentState) ++currentState;
-
-		int xOffset = 0;
-		int yOffset = 0;
-		for (int index = 0; index < data::count(widget->data); ++index) {
-			data::select(cursor, widget->data, index);
-
-			DECL_WIDGET_SPECIFIC(ListWidget, listWidget, widget);
-			OBJ_OFFSET childWidgetOffset = listWidget->item_widget;
-
-			if (listWidget->listType == LIST_TYPE_VERTICAL) {
-				DECL_WIDGET(childWidget, childWidgetOffset);
-				if (yOffset < widget->h) {
-					enumWidget(pageId, childWidgetOffset, x + xOffset, y + yOffset, cursor, previousState, currentState, callback);
-					yOffset += childWidget->h;
-				} else {
-					// TODO: add vertical scroll
-					break;
-				}
-			} else {
-				DECL_WIDGET(childWidget, childWidgetOffset);
-				if (xOffset < widget->w) {
-					enumWidget(pageId, childWidgetOffset, x + xOffset, y + yOffset, cursor, previousState, currentState, callback);
-					xOffset += childWidget->w;
-				} else {
-					// TODO: add horizontal scroll
-					break;
-				}
-			}
-
-			if (previousState) {
-				previousState = next(previousState);
-				if (previousState >= endOfContainerInPreviousState) previousState = 0;
-			}
-
-			currentState = next(currentState);
-		}
-
-		if (currentState) {
-			savedCurrentState->size = ((uint8_t *)currentState) - ((uint8_t *)savedCurrentState);
-		}
-
-		data::select(cursor, widget->data, -1);
+		enumList(pageId, x, y, cursor, previousState, currentState, callback, widget);
 	} else if (widget->type == WIDGET_TYPE_SELECT) {
-		data::Value indexValue = data::get(cursor, widget->data);
-		if (indexValue.getType() == VALUE_TYPE_NONE) {
-			indexValue = data::Value(0);
-		}
-
-		if (currentState) {
-			currentState->data = indexValue;
-		}
-
-		if (previousState && previousState->data != currentState->data) {
-			previousState = 0;
-		}
-
-		WidgetState *savedCurrentState = currentState;
-
-		// move to the selected widget state
-		if (previousState) ++previousState;
-		if (currentState) ++currentState;
-
-		int index = indexValue.getInt();
-		DECL_WIDGET_SPECIFIC(ContainerWidget, containerWidget, widget);
-		OBJ_OFFSET selectedWidgetOffset = getListItemOffset(containerWidget->widgets, index, sizeof(Widget));
-
-		enumWidget(pageId, selectedWidgetOffset, x, y, cursor, previousState, currentState, callback);
-
-		if (currentState) {
-			savedCurrentState->size = sizeof(WidgetState) + currentState->size;
-		}
+		enumSelect(pageId, x, y, cursor, previousState, currentState, callback, widget);
 	} else {
 		callback(pageId, WidgetCursor(widgetOffset, x, y, cursor, previousState, currentState));
 	}

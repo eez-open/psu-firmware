@@ -37,10 +37,10 @@ namespace touch {
 volatile uint32_t *P_CLK, *P_CS, *P_DIN, *P_DOUT, *P_IRQ;
 uint32_t B_CLK, B_CS, B_DIN, B_DOUT, B_IRQ;
 
-void touch_WriteData(byte data) {
-    byte temp = data;
+void touch_WriteData(uint8_t data) {
+    uint8_t temp = data;
     cbi(P_CLK, B_CLK);
-    for (byte count = 0; count < 8; count++) {
+    for (uint8_t count = 0; count < 8; count++) {
         if(temp & 0x80)
             digitalWrite(TOUCH_DIN, HIGH);
         else
@@ -53,7 +53,7 @@ void touch_WriteData(byte data) {
 
 word touch_ReadData() {
     word data = 0;
-    for (byte count = 0; count < 12; count++) {
+    for (uint8_t count = 0; count < 12; count++) {
         data <<= 1;
         digitalWrite(TOUCH_SCLK, HIGH);
         digitalWrite(TOUCH_SCLK, LOW);

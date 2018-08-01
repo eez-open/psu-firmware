@@ -35,5 +35,5 @@ void delay(uint32_t millis) {
 }
 
 void delayMicroseconds(uint32_t microseconds) {
-	HAL_Delay(microseconds);
+	HAL_Delay((uint32_t)ceilf(microseconds / 1000.0f));
 }

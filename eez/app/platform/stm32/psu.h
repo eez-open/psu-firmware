@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include "spi.h"
 #include <queue>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -36,16 +37,16 @@ static const uint8_t NTC1 = 59;
 static const uint8_t NTC2 = 60;
 
 #define ISOLATOR1_EN 0
-#define IO_EXPANDER1 0
-#define CONVEND1 0
-#define ADC1_SELECT 0
-#define DAC1_SELECT 0
+#define IO_EXPANDER1 1
+#define CONVEND1 2
+#define ADC1_SELECT 3
+#define DAC1_SELECT 4
 
-#define ISOLATOR2_EN 1
-#define IO_EXPANDER2 1
-#define CONVEND2 1
-#define ADC2_SELECT 1
-#define DAC2_SELECT 1
+#define ISOLATOR2_EN 5
+#define IO_EXPANDER2 6
+#define CONVEND2 7
+#define ADC2_SELECT 8
+#define DAC2_SELECT 9
 
 ////////////////////////////////////////////////////////////////////////////////
 
