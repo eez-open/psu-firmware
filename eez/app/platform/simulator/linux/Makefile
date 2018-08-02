@@ -38,7 +38,7 @@ CXXSOURCES = \
 	../../../../app/platform/simulator/front_panel/*.cpp \
 	../../../../app/scpi/*.cpp
 
-LINKERFLAGS = -ldl -lpthread `sdl2-config --libs` -lSDL2_image -lSDL2_ttf
+LINKERFLAGS = -lpthread `sdl2-config --libs` -lSDL2_image -lSDL2_ttf
 
 # rules
 
