@@ -1,6 +1,6 @@
 /*
- * EEZ PSU Firmware
- * Copyright (C) 2015-present, Envox d.o.o.
+ * EEZ Middleware
+ * Copyright (C) 2015 Envox d.o.o.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,23 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "eez/mw/mw.h"
+#include "eez/mw/platform/simulator/main_loop.h"
 
-#undef OPTION_ETHERNET
-#if defined(__EMSCRIPTEN__)
-#define OPTION_ETHERNET 0
-#else
-#define OPTION_ETHERNET 1
-#endif
+#include <emscripten.h>
 
-// SIMULATOR SPECIFC CONFIG
-#define SIM_LOAD_MIN 0
-#define SIM_LOAD_DEF 1000.0f
-#define SIM_LOAD_MAX 10000000.0F
+#include <stdlib.h>
+#include <stdio.h>
 
-#define SIM_TEMP_MIN 0
-#define SIM_TEMP_DEF 25.0f
-#define SIM_TEMP_MAX 120.0f
+static int cnt = 0;
 
-#define SIM_FRONT_PANEL_LARGE_MODE_MIN_WIDTH 2560
+int eez_app_main_loop() {
+    emscripten_set_main_loop(eez_app_tick, 0, 1);
+}
 
+void eez_app_main_loop_exit() {
+    printf("eez_app_main_loop_exit");
+}

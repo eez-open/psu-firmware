@@ -56,6 +56,9 @@ void audio_callback(void *userdata, Uint8 *_stream, int _length) {
 }
 
 void beep(double freq, int duration) {
+#if defined(__EMSCRIPTEN__)
+    // TODO
+#else
     SDL_InitSubSystem(SDL_INIT_AUDIO);
 
     BeepData beep_data;
@@ -91,6 +94,7 @@ void beep(double freq, int duration) {
 
         SDL_CloseAudioDevice(dev);
     }
+#endif
 }
 
 }
